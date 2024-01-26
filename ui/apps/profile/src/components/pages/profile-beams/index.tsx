@@ -6,6 +6,7 @@ import {
   hasOwn,
   mapBeamEntryData,
   useAnalytics,
+  useNsfwToggling,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
 import { BeamCard, BeamFeed } from '@akashaorg/ui-lib-feed';
@@ -19,6 +20,7 @@ const ProfileBeamsPage: React.FC<ProfileBeamsPageProps> = props => {
   const { getRoutingPlugin } = useRootComponentProps();
   const [analyticsActions] = useAnalytics();
   const navigateTo = React.useRef(getRoutingPlugin().navigateTo);
+  const { showNsfw } = useNsfwToggling();
 
   return (
     <Stack direction="column" spacing="gap-y-4" fullWidth>
@@ -34,7 +36,7 @@ const ProfileBeamsPage: React.FC<ProfileBeamsPageProps> = props => {
           </ScrollTopWrapper>
         )}
         renderItem={itemData => {
-          if (hasOwn(itemData.node, 'content'))
+          if (hasOwn(itemData.node, 'content') && (showNsfw || (!itemData.node.nsfw && !showNsfw)))
             return (
               <BeamCard
                 entryData={mapBeamEntryData(itemData.node)}
