@@ -1,24 +1,27 @@
-import React, { useEffect, useRef } from 'react';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import React, { ReactElement, useEffect, useRef } from 'react';
+import InfiniteScroll from '../../InfiniteScroll';
+import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import Entry from '../Entry';
-import EmptyEntry from '../Entry/EmptyEntry';
-import { tw } from '@twind/core';
 import { useIntersection } from 'react-use';
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils';
 import { AkashaFollowers } from '@akashaorg/typings/lib/ui';
-import { EngagementProps } from '../types';
+import { ENTRY_HEIGHT, EngagementProps } from '../types';
 
 export type FollowersProps = {
   followers: AkashaFollowers;
+  publicImgPath?: string;
+  emptyEntryTitleLabel: ReactElement;
+  emptyEntryBodyLabel: ReactElement;
 } & EngagementProps;
 
 const Followers: React.FC<FollowersProps> = ({
-  followList,
+  publicImgPath,
   authenticatedDID,
+  followList,
   followers,
   profileAnchorLink,
-  loadMore,
+  emptyEntryTitleLabel,
+  emptyEntryBodyLabel,
   onLoadMore,
   transformSource,
   renderFollowElement,
@@ -38,9 +41,12 @@ const Followers: React.FC<FollowersProps> = ({
 
   if (isEmptyEntry) {
     return (
-      <div className={tw('mt-12')}>
-        <EmptyEntry type="followers" />
-      </div>
+      <InfoCard
+        titleLabel={emptyEntryTitleLabel}
+        bodyLabel={emptyEntryBodyLabel}
+        publicImgPath={publicImgPath}
+        assetName="longbeam-notfound"
+      />
     );
   }
 
@@ -53,13 +59,15 @@ const Followers: React.FC<FollowersProps> = ({
   )}`;
 
   return (
-    <Stack spacing="gap-y-4">
-      {followers.map((engagement, index, engagements) => (
-        <Stack
-          direction="row"
-          key={`${engagement?.id}-${index}`}
-          customStyle={index + 1 !== engagements.length ? borderBottomStyle : ''}
-        >
+    <InfiniteScroll
+      totalElements={followers.length}
+      itemHeight={ENTRY_HEIGHT}
+      overScan={1}
+      onLoadMore={onLoadMore}
+    >
+      {({ index, itemIndex, itemsSize }) => {
+        const engagement = followers[itemIndex];
+        return (
           <Entry
             profileAnchorLink={profileAnchorLink}
             profileIds={{
@@ -77,13 +85,11 @@ const Followers: React.FC<FollowersProps> = ({
                 : null
             }
             onProfileClick={onProfileClick}
+            customStyle={index + 1 !== itemsSize ? borderBottomStyle : ''}
           />
-        </Stack>
-      ))}
-      <Stack customStyle="mx-auto" ref={loadMoreRef}>
-        {loadMore && <Spinner />}
-      </Stack>
-    </Stack>
+        );
+      }}
+    </InfiniteScroll>
   );
 };
 

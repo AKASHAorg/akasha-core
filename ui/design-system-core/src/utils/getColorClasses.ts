@@ -9,18 +9,18 @@ export function getColorClasses(color: Color, directive: string) {
 }
 
 function getBaseColorClasses(color: Color, directive?: string) {
-  if (typeof color === 'string' && isValidColor(color)) {
+  if (color && typeof color === 'string' && isValidColor(color)) {
     return directive ? `${directive}-${color}` : color;
   }
 
-  if (typeof color === 'object' && 'light' in color) {
+  if (color && typeof color === 'object' && 'light' in color) {
     const light = color.light;
     const dark = color.dark;
 
     return directive ? `${directive}-${light} dark:${directive}-${dark}` : `${light} dark:${dark}`;
   }
 
-  if (typeof color === 'object' && 'from' in color) {
+  if (color && typeof color === 'object' && 'from' in color) {
     const gradient = color.gradient;
     const from = color.from;
     const via = color.via;

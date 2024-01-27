@@ -119,7 +119,7 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
       {!latestTopicsError && (
         <ErrorBoundary
           errorObj={{
-            type: t('script-error'),
+            type: 'script-error',
             title: t('Error in latest topics widget'),
           }}
           logger={logger}
@@ -147,7 +147,7 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
       {!latestProfilesReq.isError && (
         <ErrorBoundary
           errorObj={{
-            type: t('script-error'),
+            type: 'script-error',
             title: t('Error in latest profiles widget'),
           }}
           logger={logger}

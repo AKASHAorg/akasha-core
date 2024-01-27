@@ -36,7 +36,7 @@ export const ModerationValueCardVariants: Story = {
   render: () => (
     <Stack direction="column" spacing="gap-y-2" customStyle="w-[40%]">
       {variants.map((variant, idx) => (
-        <ModerationValueCard key={idx} {...variant} />
+        <ModerationValueCard key={variant.label + idx} publicImgPath="" {...variant} />
       ))}
     </Stack>
   ),

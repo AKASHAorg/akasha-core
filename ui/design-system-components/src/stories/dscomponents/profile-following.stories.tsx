@@ -21,6 +21,7 @@ const commonProps = {
   ownerUserName: 'espressolover',
   profileAnchorLink: '#',
   loadMore: false,
+  publicImgPath: '',
   onLoadMore: () => ({}),
   transformSource: () => ({
     src: 'https://placebeard.it/360x360',
@@ -36,13 +37,14 @@ const followingData = {
   createdAt: Date.now(),
   name: 'Latte Lover',
   did: { id: 'did:key:73FaD4201494x0rt17B9892i9fae4d52fe3BD377', isViewer: true },
-  followers: null,
   followersCount: 0,
 };
 
 const variants: FollowingProps[] = [
   {
     ...commonProps,
+    emptyEntryTitleLabel: <>This user is not following anyone yet</>,
+    emptyEntryBodyLabel: <></>,
     following: [
       {
         id: '1',
@@ -54,13 +56,17 @@ const variants: FollowingProps[] = [
   },
   {
     ...commonProps,
+    emptyEntryTitleLabel: <>This user is not following anyone yet</>,
+    emptyEntryBodyLabel: <></>,
     following: [],
   },
-
   {
     ...commonProps,
+    emptyEntryTitleLabel: <>You have no following yet</>,
+    emptyEntryBodyLabel: (
+      <>Interact with apps, to get people who are interested in your content to follow you</>
+    ),
     following: [],
-    viewerIsOwner: false,
   },
 ];
 

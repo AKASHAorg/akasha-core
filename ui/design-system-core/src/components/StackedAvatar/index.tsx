@@ -20,7 +20,7 @@ const StackedAvatar: React.FC<StackedAvatarProps> = props => {
   const renderStack = (level: number) => {
     const zIndex = level + 1;
 
-    const className = apply`inline-flex z-${zIndex} -ml-${zIndex > 1 ? '3' : '0'}`;
+    const className = apply`inline-flex z-[${zIndex}] -ml-${zIndex > 1 ? '3' : '0'}`;
 
     return (
       <div className={tw(className)}>

@@ -37,7 +37,7 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
   const apolloClient = useApolloClient();
 
   const { data: ownInterestsQueryData, loading } = useGetInterestsByDidQuery({
-    variables: { id: authenticatedDID },
+    variables: { id: profileId },
     skip: !isLoggedIn,
   });
   const ownInterests = useMemo(() => {
@@ -71,8 +71,8 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
 
   if (loading || authenticating) return <ProfileInterestsLoading />;
 
-  const handleInterestClick = topic => {
-    //subscribe only if logged in user hasn't subscribed before otherwise navigate to the topic page
+  const handleInterestClick = (topic: { value: string; labelType: string }) => {
+    // subscribe only if logged in user hasn't subscribed before otherwise navigate to the topic page
     if (!activeInterests.find(interest => interest.value === topic.value)) {
       const newActiveInterests = [...activeInterests, topic];
 
@@ -83,7 +83,7 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
     }
     navigateTo?.({
       appName: '@akashaorg/app-akasha-integration',
-      getNavigationUrl: navRoutes => `${navRoutes.Tags}/${topic}`,
+      getNavigationUrl: navRoutes => `${navRoutes.Tags}/${topic.value}`,
     });
   };
 
