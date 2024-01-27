@@ -2,14 +2,15 @@ import * as React from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { TrashIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import BlockStatusToolbar, { IBlockStatusToolbar } from '../BlockStatusToolbar';
 
-export type BlockHeaderProps = {
+export interface BlockHeaderProps extends IBlockStatusToolbar {
   icon?: JSX.Element;
   handleRemoveBlock?: () => void;
-};
+}
 
 export const BlockHeader: React.FC<BlockHeaderProps> = props => {
-  const { icon, handleRemoveBlock } = props;
+  const { icon, handleRemoveBlock, ...rest } = props;
   return (
     <Stack direction="row" justify="between">
       <Stack
@@ -19,6 +20,7 @@ export const BlockHeader: React.FC<BlockHeaderProps> = props => {
       >
         <Icon size="sm" icon={icon} />
       </Stack>
+      <BlockStatusToolbar {...rest} />
       <button onClick={handleRemoveBlock}>
         <Stack
           align="center"

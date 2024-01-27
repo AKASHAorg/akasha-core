@@ -14,7 +14,7 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { ContentBlockExtension } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
 import { Header } from './header';
 import { Footer } from './footer';
-import { BlockHeader } from './block-header';
+import { BlockHeader } from '@akashaorg/design-system-components/lib/components/BlockHeader';
 import { useBlocksPublishing } from './use-blocks-publishing';
 
 export type uiState = 'editor' | 'tags' | 'blocks';
@@ -193,6 +193,12 @@ export const BeamEditor: React.FC = () => {
               <Stack padding={16} direction="column" spacing="gap-2">
                 <BlockHeader
                   icon={block.icon}
+                  blockCreationStatus={block.status}
+                  errorLabel={t('Block creation failed.')}
+                  successLabel={t('Block Created Successfully!')}
+                  creatingBlockLabel={t('Creating Block...')}
+                  retryLabel={t('Retry')}
+                  handleRetry={handleBeamPublish}
                   handleRemoveBlock={() => removeBlockFromList(block.order)}
                 />
                 <ContentBlockExtension

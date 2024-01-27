@@ -6,7 +6,7 @@ import {
   AkashaIndexedStreamEdge,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { EdgeArea, Virtualizer, VirtualizerProps } from '../virtual-list';
-import { useBeamsByTag } from '@akashaorg/ui-awf-hooks/lib/ use-beams-by-tag';
+import { useBeamsByTag } from '@akashaorg/ui-awf-hooks/lib/use-beams-by-tag';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { RestoreItem } from '../virtual-list/use-scroll-state';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';

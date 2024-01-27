@@ -81,7 +81,10 @@ export const decodeb64SlateContent = (
  * Utility to serialize slate content to base64
  */
 export const serializeSlateToBase64 = (slateContent: unknown) => {
-  return window.btoa(toBinary(JSON.stringify(slateContent)));
+  const stringified = JSON.stringify(slateContent);
+  const binary = toBinary(stringified);
+  const serialized = window.btoa(binary);
+  return serialized;
 };
 
 /**

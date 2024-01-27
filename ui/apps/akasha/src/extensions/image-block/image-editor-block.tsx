@@ -273,10 +273,10 @@ export const ImageEditorBlock = (
   };
 
   const handleCaptionClick = () => {
-    setShowCaption(!showCaption);
-    if (!showCaption) {
+    if (showCaption === true) {
       setCaption('');
     }
+    setShowCaption(!showCaption);
   };
 
   const handleLeftAlignClick = () => {
