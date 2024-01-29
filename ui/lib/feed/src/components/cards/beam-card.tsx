@@ -87,10 +87,6 @@ const BeamCard: React.FC<BeamCardProps> = props => {
           secondLine: t('All reflections are disabled.'),
         },
       }}
-      nsfw={{
-        sensitiveContentLabel: t('Sensitive Content!'),
-        clickToViewLabel: t('Click to View'),
-      }}
       showHiddenContent={showHiddenContent}
       itemType={EntityTypes.BEAM}
       transformSource={transformSource}
