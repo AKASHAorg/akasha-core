@@ -39,8 +39,8 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
   const [newContent, setNewContent] = useState(null);
   const [edit, setEdit] = useState(false);
   //@TODO
-  const [mentionQuery, setMentionQuery] = useState(null);
-  const [tagQuery, setTagQuery] = useState(null);
+  const [, setMentionQuery] = useState(null);
+  const [, setTagQuery] = useState(null);
   const [editorState, setEditorState] = useState(null);
 
   const sdk = getSDK();
@@ -120,9 +120,6 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
       },
     });
   };
-
-  // @TODO: fix author name
-  const entryAuthorName = undefined;
 
   if (editInProgress && newContent) {
     return (

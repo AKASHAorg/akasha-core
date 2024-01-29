@@ -37,7 +37,7 @@ const Accordion: React.FC<AccordionProps> = props => {
         {titleNode}
         <Icon
           accentColor={true}
-          customStyle="h-4, w-4 secondaryDark"
+          customStyle="h-4, w-4"
           icon={open ? <ChevronUpIcon /> : <ChevronDownIcon />}
         />
       </Stack>

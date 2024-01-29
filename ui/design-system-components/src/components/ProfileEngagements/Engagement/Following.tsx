@@ -1,50 +1,41 @@
-import React, { useEffect, useRef } from 'react';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import React, { ReactElement } from 'react';
+import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import Entry from '../Entry';
-import EmptyEntry from '../Entry/EmptyEntry';
-import { tw } from '@twind/core';
-import { useIntersection } from 'react-use';
+import InfiniteScroll from '../../InfiniteScroll';
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils';
 import { AkashaFollowing } from '@akashaorg/typings/lib/ui';
-import { EngagementProps } from '../types';
+import { ENTRY_HEIGHT, EngagementProps } from '../types';
 
 export type FollowingProps = {
   following: AkashaFollowing;
-  ownerUserName: string;
-  viewerIsOwner: boolean;
+  publicImgPath?: string;
+  emptyEntryTitleLabel: ReactElement;
+  emptyEntryBodyLabel: ReactElement;
 } & EngagementProps;
 
 const Following: React.FC<FollowingProps> = ({
+  publicImgPath,
   authenticatedDID,
   followList,
   following,
   profileAnchorLink,
-  ownerUserName,
-  viewerIsOwner,
-  loadMore,
+  emptyEntryTitleLabel,
+  emptyEntryBodyLabel,
   onLoadMore,
   transformSource,
   renderFollowElement,
   onProfileClick,
 }) => {
-  const loadMoreRef = useRef(null);
-  const intersection = useIntersection(loadMoreRef, {
-    threshold: 0,
-  });
   const isEmptyEntry = following.length === 0;
-
-  useEffect(() => {
-    if (intersection?.isIntersecting) {
-      onLoadMore();
-    }
-  }, [intersection, onLoadMore]);
 
   if (isEmptyEntry) {
     return (
-      <div className={tw('mt-12')}>
-        <EmptyEntry type="following" userName={ownerUserName} viewerIsOwner={viewerIsOwner} />
-      </div>
+      <InfoCard
+        titleLabel={emptyEntryTitleLabel}
+        bodyLabel={emptyEntryBodyLabel}
+        publicImgPath={publicImgPath}
+        assetName="longbeam-notfound"
+      />
     );
   }
 
@@ -57,16 +48,21 @@ const Following: React.FC<FollowingProps> = ({
   )}`;
 
   return (
-    <Stack spacing="gap-y-4">
-      {following.map((engagement, index, engagements) => (
-        <Stack
-          direction="row"
-          key={`${engagement?.id}-${index}`}
-          customStyle={index + 1 !== engagements.length ? borderBottomStyle : ''}
-        >
+    <InfiniteScroll
+      totalElements={following.length}
+      itemHeight={ENTRY_HEIGHT}
+      overScan={1}
+      onLoadMore={onLoadMore}
+    >
+      {({ index, itemIndex, itemsSize }) => {
+        const engagement = following[itemIndex];
+        return (
           <Entry
             profileAnchorLink={profileAnchorLink}
-            profileIds={{ id: engagement?.profile?.id, did: engagement?.profile?.did.id }}
+            profileIds={{
+              id: engagement?.profile?.id,
+              did: engagement?.profile?.did.id,
+            }}
             avatar={engagement?.profile?.avatar}
             name={engagement?.profile?.name}
             followId={followList.get(engagement?.profile?.id)?.id}
@@ -76,13 +72,11 @@ const Following: React.FC<FollowingProps> = ({
               authenticatedDID !== engagement?.profile?.did.id ? renderFollowElement : null
             }
             onProfileClick={onProfileClick}
+            customStyle={index + 1 !== itemsSize ? borderBottomStyle : ''}
           />
-        </Stack>
-      ))}
-      <Stack customStyle="mx-auto" ref={loadMoreRef}>
-        {loadMore && <Spinner />}
-      </Stack>
-    </Stack>
+        );
+      }}
+    </InfiniteScroll>
   );
 };
 

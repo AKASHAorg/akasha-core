@@ -106,7 +106,7 @@ const AppRoutes: React.FC<unknown> = () => {
 
   const errorBoundaryProps: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
     errorObj: {
-      type: t('script-error'),
+      type: 'script-error',
       title: t('Error in settings app'),
     },
     logger,

@@ -19,7 +19,6 @@ export const BaseProfileSearchCard: Story = {
       followLabel="follow"
       followingLabel="following"
       unfollowLabel="unfollow"
-      profileAnchorLink="/profile"
       isFollowing={false}
       profileData={profileData}
       handleFollow={() => ({})}

@@ -5,7 +5,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { EntityTypes } from '@akashaorg/typings/lib/ui';
 
 const meta: Meta<EntryCardProps> = {
-  title: 'DSComponents/Card/EntryCard',
+  title: 'DSComponents/Cards/EntryCard',
   component: EntryCard,
 };
 
@@ -34,7 +34,7 @@ export const BaseEntryCard: Story = {
         loading: false,
         error: error,
       }}
-      itemType={EntityTypes.REFLECT}
+      itemType={EntityTypes?.REFLECT}
       slateContent={[
         {
           type: 'paragraph',
@@ -73,7 +73,7 @@ export const DelistedEntryCardOthers: Story = {
       }}
       removed={{
         author: {
-          firstPart: 'AKASHA world members won’t be able to see the content ',
+          firstPart: "AKASHA world members won't be able to see the content",
           secondPart: 'of your reflection because you have violated the following ',
           thirdPart: { url: '', content: 'Code of Conduct.' },
           tapToViewLabel: 'Tap to view',
@@ -83,7 +83,7 @@ export const DelistedEntryCardOthers: Story = {
           secondLine: 'All reflections are disabled.',
         },
       }}
-      itemType={EntityTypes.REFLECT}
+      itemType={EntityTypes?.REFLECT}
       slateContent={[]}
       onContentClick={() => ({})}
       onMentionClick={() => ({})}
@@ -121,7 +121,7 @@ export const DelistedEntryCardAuthor: Story = {
           secondLine: 'All reflections are disabled.',
         },
       }}
-      itemType={EntityTypes.REFLECT}
+      itemType={EntityTypes?.REFLECT}
       slateContent={[]}
       onContentClick={() => ({})}
       onMentionClick={() => ({})}
@@ -163,7 +163,7 @@ export const NSFWCard: Story = {
         sensitiveContentLabel: 'Sensitive Content!',
         clickToViewLabel: 'Click to View',
       }}
-      itemType={EntityTypes.REFLECT}
+      itemType={EntityTypes?.REFLECT}
       slateContent={[
         {
           type: 'image',

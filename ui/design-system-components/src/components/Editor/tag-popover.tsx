@@ -1,8 +1,9 @@
 import * as React from 'react';
+import { ITag } from '@akashaorg/typings/lib/ui';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Portal } from './helpers';
 import { tw, tx } from '@twind/core';
-import { ITag } from '@akashaorg/typings/lib/ui';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export interface ITagPopover {
   postsLabel?: string;
@@ -25,13 +26,9 @@ export const TagPopover: React.FC<ITagPopover> = React.forwardRef((props, ref) =
         ref={ref}
       >
         {values.map((value, i) => (
-          <div
-            className={tx(
-              `p-2 cursor-pointer p-1 rounded-sm max-w-xs min-w-[12rem] truncate hover:text-secondary ${
-                i === currentIndex && 'bg-grey3'
-              }`,
-            )}
+          <Button
             key={i}
+            plain={true}
             onClick={() => {
               handleSelect(i);
             }}
@@ -39,11 +36,19 @@ export const TagPopover: React.FC<ITagPopover> = React.forwardRef((props, ref) =
               setIndex(i);
             }}
           >
-            <Text>{`#${value.name}`}</Text>
-            <Text customStyle={'text-sm'} variant={'subtitle1'}>
-              {`${value.totalPosts} ${postsLabel}`}
-            </Text>
-          </div>
+            <div
+              className={tx(
+                `p-2 cursor-pointer p-1 rounded-sm max-w-xs min-w-[12rem] truncate hover:text(secondaryLight dark:secondaryDark) ${
+                  i === currentIndex && 'bg-grey3'
+                }`,
+              )}
+            >
+              <Text>{`#${value.name}`}</Text>
+              <Text customStyle={'text-sm'} variant={'subtitle1'}>
+                {`${value.totalPosts} ${postsLabel}`}
+              </Text>
+            </div>
+          </Button>
         ))}
       </div>
     </Portal>

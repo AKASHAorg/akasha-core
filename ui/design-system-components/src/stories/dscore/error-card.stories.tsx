@@ -21,6 +21,7 @@ export const BaseErrorCard: Story = {
       buttonLabel="Connect a wallet"
       textMarginBottom={true}
       hasButton={true}
+      publicImgPath=""
     />
   ),
 };
