@@ -11,7 +11,7 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 export type OverviewCTA = {
   label: string;
   url: string;
-  icon: React.ReactElement;
+  icon?: React.ReactElement;
 };
 
 export type ModerationIntroCardProps = {
@@ -85,10 +85,20 @@ const ModerationIntroCard: React.FC<ModerationIntroCardProps> = props => {
         )}
 
         {overviewCTAArr && overviewCTAArr.length > 0 && (
-          <Stack direction="row" justify="between" customStyle="md:px-20">
+          <Stack
+            direction={codeOfConductLabel ? 'row' : 'column'}
+            justify="between"
+            customStyle="md:px-20"
+            {...(!codeOfConductLabel && { spacing: 'gap-y-4' })}
+          >
             {overviewCTAArr.map(({ url, label, icon }) => (
-              <Stack key={label + icon} customStyle="grid gap-1 grid-cols-1 w-[30%]">
-                <Icon size="sm" accentColor={true} icon={icon} customStyle="mx-auto my-0" />
+              <Stack
+                key={label + icon}
+                customStyle={codeOfConductLabel ? 'grid gap-1 grid-cols-1 w-[30%]' : ''}
+              >
+                {icon && (
+                  <Icon size="sm" accentColor={true} icon={icon} customStyle="mx-auto my-0" />
+                )}
 
                 <Anchor
                   href={url}

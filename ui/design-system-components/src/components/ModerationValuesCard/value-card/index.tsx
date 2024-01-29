@@ -1,8 +1,10 @@
 import React from 'react';
 import { tw } from '@twind/core';
 
-import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 export type ModerationValueCardProps = {
   publicImgPath?: string;
@@ -31,19 +33,18 @@ const ModerationValueCard: React.FC<ModerationValueCardProps> = props => {
 
   return (
     <Button plain={true} onClick={onClick}>
-      <div
-        className={tw(`bg-grey9 dark:bg-grey3 rounded-2xl cursor-pointer ${isMini ? 'h-32' : ''}`)}
+      <Card
+        padding="p-0"
+        customStyle={`rounded-2xl cursor-pointer ${isMini ? 'bg(grey9 dark:grey3) h-32' : ''}`}
       >
-        <div
-          className={tw(`flex flex-col h-full p-${isMini ? '3' : '4'} items-center justify-evenly`)}
-        >
-          <div className={tw(`w-${isMini ? '16' : '72'} h-${isMini ? '16' : '72'}`)}>
+        <Stack align="center" justify="evenly" spacing="gap-y-4" padding={isMini ? 'p-3' : 'p-4'}>
+          <Stack customStyle={`w-${isMini ? '16' : '72'} h-${isMini ? '16' : '72'}`}>
             <img
               alt={assetName}
               className={tw('object-contain')}
               src={`${publicImgPath}/${assetName}.${assetExtension}`}
             />
-          </div>
+          </Stack>
 
           <Text
             variant={isMini ? 'footnotes1' : 'h5'}
@@ -56,18 +57,20 @@ const ModerationValueCard: React.FC<ModerationValueCardProps> = props => {
           >
             {label}
           </Text>
+
           {!isMini && (
-            <div className={tw('flex flex-col w-full')}>
+            <>
               {description && (
                 <Text variant="body2" align="center">
                   {description}
                 </Text>
               )}
+
               {ctaLabel && (
                 <a
                   href={ctaUrl}
                   className={tw(
-                    'text-sm self-end font-bold no-underline text-secondaryLight dark:text-secondaryDark',
+                    'text-sm self-end font-bold no-underline text(secondaryLight dark:secondaryDark)',
                   )}
                   target="_blank"
                   rel="noreferrer noopener"
@@ -75,10 +78,10 @@ const ModerationValueCard: React.FC<ModerationValueCardProps> = props => {
                   {ctaLabel}
                 </a>
               )}
-            </div>
+            </>
           )}
-        </div>
-      </div>
+        </Stack>
+      </Card>
     </Button>
   );
 };
