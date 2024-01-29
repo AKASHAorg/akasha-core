@@ -62,7 +62,6 @@ const BeamFeed = (props: BeamFeedProps) => {
     hasPreviousPage,
     fetchInitialData,
     onReset,
-    filterNsfwBeams,
     isLoading,
     hasErrors,
     errors,
@@ -153,10 +152,7 @@ const BeamFeed = (props: BeamFeedProps) => {
             (itemData => {
               if (!hasOwn(itemData.node, 'content')) {
                 return (
-                  <BeamContentResolver
-                    beamId={itemData.node.beamID}
-                    filterNsfwBeams={filterNsfwBeams}
-                  />
+                  <BeamContentResolver beamId={itemData.node.beamID} cursor={itemData.cursor} />
                 );
               }
             })

@@ -12,10 +12,10 @@ import EntryLoadingPlaceholder from '@akashaorg/design-system-components/lib/com
 
 export type BeamContentResolverProps = {
   beamId: string;
-  filterNsfwBeams?: (beamID: string) => void;
+  cursor?: string;
 };
 
-const BeamContentResolver: React.FC<BeamContentResolverProps> = ({ beamId, filterNsfwBeams }) => {
+const BeamContentResolver: React.FC<BeamContentResolverProps> = ({ beamId, cursor }) => {
   const { beam, isLoading } = useIndividualBeam({ beamId });
   const { getRoutingPlugin } = useRootComponentProps();
   const { data: loginData, loading: authenticating } = useGetLogin();
@@ -25,9 +25,12 @@ const BeamContentResolver: React.FC<BeamContentResolverProps> = ({ beamId, filte
   if (isLoading) return <EntryLoadingPlaceholder />;
 
   if (beam && hasOwn(beam, 'id')) {
+    // if (beam.id === 'kjzl6kcym7w8y9x3qvi8q4ry7xytr14ijnc7as4j0oyfwkplvgjkgvk0zzhs08g') {
+    //   console.log('error', beam);
+    // }
     if ((beam.nsfw && !isLoggedIn && !authenticating) || (beam.nsfw && !showNsfw)) {
-      filterNsfwBeams(beamId);
-      return null;
+      console.log('beamid', beamId);
+      //  return null;
     }
 
     return (

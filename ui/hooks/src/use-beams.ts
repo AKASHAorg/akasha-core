@@ -16,6 +16,8 @@ import type {
 import { ApolloError } from '@apollo/client';
 import { hasOwn } from './utils/has-own';
 import getSDK from '@akashaorg/awf-sdk';
+import { useNsfwToggling } from './use-nsfw';
+import { useGetLogin } from './use-login.new';
 
 export type UseBeamsOptions = {
   overscan: number;
@@ -38,6 +40,9 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
 
   const [errors, setErrors] = React.useState<(ApolloError | Error)[]>([]);
   const sdk = getSDK();
+  const { showNsfw } = useNsfwToggling();
+  const { data: loginData, loading: authenticating } = useGetLogin();
+  const isLoggedIn = !!loginData?.id;
 
   const mergedVars: GetBeamsQueryVariables = React.useMemo(() => {
     const vars: {
@@ -48,8 +53,12 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
       sorting: { ...defaultSorting, ...(sorting ?? {}) },
     };
     if (filters) {
-      vars.filters = filters;
+      vars.filters = {
+        ...filters,
+        and: [{ where: { status: { isNull: true } } }],
+      };
     }
+
     return vars;
   }, [sorting, filters]);
 
@@ -106,37 +115,6 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
     },
     [beamCursors],
   );
-
-  const filterNsfwBeams = React.useCallback((beamID: string) => {
-    setState(
-      prev =>
-        ({
-          beams: prev.beams
-            .map(beam => {
-              if (hasOwn(beam.node, 'beamID') && beam.node.beamID !== beamID) {
-                return beam;
-              }
-              return null;
-            })
-            .filter(beam => beam !== null && beam.cursor),
-          pageInfo: {
-            ...prev.pageInfo,
-          },
-        }) as {
-          /* needs a better type assertion approach to get rid of a typescript error message */
-          beams:
-            | Exclude<
-                GetBeamStreamQuery['node'],
-                Record<string, never>
-              >['akashaBeamStreamList']['edges']
-            | Exclude<
-                GetBeamsByAuthorDidQuery['node'],
-                Record<string, never>
-              >['akashaBeamList']['edges'];
-          pageInfo?: PageInfo;
-        },
-    );
-  }, []);
 
   const queryClient = React.useRef(beamsQuery.client);
 
@@ -268,21 +246,43 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
 
   const fetchInitialData = React.useCallback(
     async (restoreItem?: { key: string; offsetTop: number }) => {
-      if (beamsQuery.called) return;
+      if ((beamsQuery.called && !(!isLoggedIn && !authenticating && showNsfw)) || authenticating)
+        return;
 
       const initialVars: GetBeamStreamQueryVariables & GetBeamsByAuthorDidQueryVariables = {
+        ...mergedVars,
         sorting: { createdAt: SortOrder.Desc },
         id: did ?? undefined,
         indexer: did ? undefined : sdk.services.gql.indexingDID,
       };
 
+      if (!showNsfw || !isLoggedIn) {
+        initialVars.filters = {
+          and: [{ where: { status: { isNull: true } } }],
+        };
+      }
+
+      if (showNsfw && isLoggedIn) {
+        initialVars.filters = null;
+      }
+
       if (restoreItem) {
         initialVars.sorting = { createdAt: SortOrder.Asc };
         initialVars.after = restoreItem.key;
       }
+
       await fetchInitialBeams(initialVars);
     },
-    [beamsQuery.called, did, fetchInitialBeams],
+    [
+      authenticating,
+      beamsQuery.called,
+      did,
+      fetchInitialBeams,
+      isLoggedIn,
+      mergedVars,
+      sdk.services.gql.indexingDID,
+      showNsfw,
+    ],
   );
 
   React.useEffect(() => {
@@ -293,6 +293,15 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
       unsub();
     };
   }, [fetchInitialData]);
+
+  React.useEffect(() => {
+    if (!isLoggedIn && !authenticating && showNsfw) {
+      beamCursors.clear();
+    }
+    if (!authenticating || showNsfw || isLoggedIn) {
+      fetchInitialData();
+    }
+  }, [showNsfw, isLoggedIn, authenticating]);
 
   const handleReset = async () => {
     setState({ beams: [] });
@@ -308,7 +317,6 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
     fetchInitialData,
     fetchNextPage,
     fetchPreviousPage,
-    filterNsfwBeams,
     isLoading: beamsQuery.loading,
     hasNextPage: state.pageInfo?.hasNextPage,
     hasPreviousPage: state.pageInfo?.hasPreviousPage,
