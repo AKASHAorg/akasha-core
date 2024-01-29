@@ -30,7 +30,7 @@ describe('<Overview /> component', () => {
 
   it('should render component', async () => {
     expect(componentWrapper.getByText(/Overview/i)).toBeInTheDocument();
-    expect(componentWrapper.getByText(/Welcome to Vibe/i)).toBeInTheDocument();
+    expect(componentWrapper.getByText(/Welcome to/i)).toBeInTheDocument();
   });
 
   it('renders an image with correct src', () => {

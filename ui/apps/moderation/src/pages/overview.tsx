@@ -55,6 +55,39 @@ export const Overview: React.FC<OverviewPageProps> = props => {
     });
   };
 
+  const overviewCTAArr = isAuthorised
+    ? [
+        {
+          label: t('CoC discussions'),
+          url: externalLinks.discourse.CoC,
+          icon: <SparklesIcon />,
+        },
+        {
+          label: t('Moderation thoughts'),
+          url: externalLinks.discord,
+          icon: <ChatBubbleOvalLeftEllipsisIcon />,
+        },
+        {
+          label: t('Send us a message'),
+          url: externalLinks.email,
+          icon: <EnvelopeIcon />,
+        },
+      ]
+    : [
+        {
+          label: `📖 ${t('Our Code of Conduct')} ✨`,
+          url: externalLinks.discourse.CoC,
+        },
+        {
+          label: `🗣️ ${t('Code of Conduct Discussions')} 🚀`,
+          url: externalLinks.discourse.CoC,
+        },
+        {
+          label: `👉🏼 ${t('Vibes Thoughts')} 🧠`,
+          url: externalLinks.discord,
+        },
+      ];
+
   return (
     <Stack spacing="gap-y-4">
       {isAuthorised && (
@@ -71,28 +104,18 @@ export const Overview: React.FC<OverviewPageProps> = props => {
       )}
       <ModerationIntroCard
         titleLabel={t('Overview')}
-        introLabel={t('Welcome to Vibe')}
-        subtitleLabel={t(
-          'Vibe facilitates cooperation and prevents abuse. The app is open and transparent. Take part in the process of governing this community.',
-        )}
-        codeOfConductLabel={t('Read our Code of Conduct')}
-        overviewCTAArr={[
-          {
-            label: t('CoC discussions'),
-            url: externalLinks.discourse.CoC,
-            icon: <SparklesIcon />,
-          },
-          {
-            label: t('Moderation thoughts'),
-            url: externalLinks.discord,
-            icon: <ChatBubbleOvalLeftEllipsisIcon />,
-          },
-          {
-            label: t('Send us a message'),
-            url: externalLinks.email,
-            icon: <EnvelopeIcon />,
-          },
-        ]}
+        introLabel={`${t('Welcome to AKASHA')} ${isAuthorised ? t('Moderation') : t('Vibe')}`}
+        subtitleLabel={
+          isAuthorised
+            ? t(
+                'The Moderation app facilitates cooperation and prevents abuse. The app is open and transparent. Take part in the process of governing this community.',
+              )
+            : t(
+                "The Vibe app encourages collaboration while safeguarding against misuse. It's an open and transparent platform, inviting you to actively participate in shaping our community's governance.",
+              )
+        }
+        {...(isAuthorised && { codeOfConductLabel: t('Read our Code of Conduct') })}
+        overviewCTAArr={overviewCTAArr}
         onCodeOfConductClick={handleCodeOfConductClick}
       />
 
