@@ -80,10 +80,6 @@ const ReflectionCard: React.FC<ReflectCardProps> = props => {
           secondLine: t('All reflections are disabled.'),
         },
       }}
-      nsfw={{
-        sensitiveContentLabel: t('Sensitive Content!'),
-        clickToViewLabel: t('Click to View'),
-      }}
       itemType={EntityTypes.REFLECT}
       transformSource={transformSource}
       onReflect={onReflect}
