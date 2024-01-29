@@ -13,7 +13,6 @@ import {
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import ReadOnlyEditor from '../../ReadOnlyEditor';
 import AuthorProfileLoading from '../EntryCardLoading/author-profile-loading';
-import NSFW, { NSFWProps } from '../NSFW';
 import Menu from '@akashaorg/design-system-core/lib/components/Menu';
 import {
   formatDate,
@@ -62,7 +61,6 @@ export type EntryCardProps = {
     others: OthersRemovedMessage;
   };
   editLabel?: string;
-  nsfw?: Omit<NSFWProps, 'onClickToView'>;
   profileAnchorLink?: string;
   repliesAnchorLink?: string;
   disableReporting?: boolean;
@@ -100,7 +98,6 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     removed,
     notEditableLabel,
     editLabel,
-    nsfw,
     profileAnchorLink,
     repliesAnchorLink,
     disableReporting,
@@ -126,11 +123,8 @@ const EntryCard: React.FC<EntryCardProps> = props => {
   } = props;
 
   const profileRef: React.Ref<HTMLDivElement> = React.useRef(null);
-  const [showNSFWContent, setShowNSFWContent] = useState(false);
-  const showNSFWCard = entryData.nsfw && !showNSFWContent;
   const showHiddenStyle = showHiddenContent ? '' : 'max-h-[50rem]';
-  const contentClickableStyle =
-    contentClickable && !showNSFWCard ? 'cursor-pointer' : 'cursor-default';
+  const contentClickableStyle = 'cursor-default';
   const menuItems: ListItem[] = [
     ...(!isViewer
       ? [
@@ -234,11 +228,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
         />
       )}
       {entryData.active && (
-        <Card
-          onClick={showNSFWCard ? null : onContentClick}
-          customStyle={contentClickableStyle}
-          type="plain"
-        >
+        <Card onClick={onContentClick} customStyle={contentClickableStyle} type="plain">
           <Stack
             align="center"
             justify="start"
@@ -246,16 +236,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
             data-testid="entry-content"
             fullWidth={true}
           >
-            {showNSFWCard && (
-              <NSFW
-                {...nsfw}
-                onClickToView={event => {
-                  event.stopPropagation();
-                  setShowNSFWContent(true);
-                }}
-              />
-            )}
-            {(!entryData.nsfw || showNSFWContent) && (
+            {
               <Stack justifySelf="start" alignSelf="start" align="start" fullWidth={true}>
                 {rest.itemType === EntityTypes.REFLECT ? (
                   <ReadOnlyEditor
@@ -274,7 +255,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
                   ))
                 )}
               </Stack>
-            )}
+            }
             {showHiddenContent && entryData.tags?.length > 0 && (
               <Stack
                 padding={{ y: 16 }}
