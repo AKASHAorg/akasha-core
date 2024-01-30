@@ -185,14 +185,14 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
         )
       }
       activeOverlay={activeOverlay}
+      plain={plain}
+      customStyle={customStyle}
       onClickAvatar={handleClickAvatar}
       onClickCoverImage={handleClickCoverImage}
       onCloseOverlay={handleCloseOverlay}
       onClickProfileName={handleClickProfileName}
-      plain={plain}
       handleEdit={handleEdit}
       transformSource={transformSource}
-      customStyle={customStyle}
     />
   );
 };

@@ -3,10 +3,10 @@ import { TopbarTest } from './partials/topbar.spec';
 import { TrendingWidgetTest } from './partials/trendingWidget.spec';
 import { DismissableNotificationCard } from './partials/layout-widget.spec';
 
-describe('Feed Page', () => {
-  context('Feed Page', () => {
+describe('Global Antenna Page', () => {
+  context('Global Antenna Page', () => {
     beforeEach(() => {
-      cy.visit('/@akashaorg/app-akasha-integration/feed', { timeout: TIMEOUT });
+      cy.visit('/@akashaorg/app-akasha-integration/antenna', { timeout: TIMEOUT });
     });
     describe('Should test top bar', () => TopbarTest());
     describe('Should test trending widget', () => TrendingWidgetTest());
