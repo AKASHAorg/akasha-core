@@ -20,7 +20,7 @@ import {
   NotificationTypes,
 } from '@akashaorg/typings/lib/ui';
 
-const SnackBarNotification = (_: RootExtensionProps) => {
+const SnackBarNotification: React.FC<RootExtensionProps> = () => {
   const { uiEvents, getRoutingPlugin } = useRootComponentProps();
   const [message, setMessage] = useState('');
   const [appTitle, setAppTitle] = useState(null);
