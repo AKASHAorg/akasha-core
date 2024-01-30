@@ -36,7 +36,12 @@ export const PasswordFieldVariants: Story = {
   render: () => (
     <Stack direction="column" spacing="gap-y-2" customStyle="w-[25%]">
       {variants.map((variant, idx) => (
-        <PasswordField key={idx} {...variant} placeholderLabel="Enter your password" />
+        <PasswordField
+          key={idx}
+          id={String(variant.strengthLevel + idx)}
+          {...variant}
+          placeholderLabel="Enter your password"
+        />
       ))}
     </Stack>
   ),

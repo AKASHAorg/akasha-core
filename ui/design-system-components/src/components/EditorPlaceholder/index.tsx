@@ -38,7 +38,11 @@ const EditorPlaceholder: React.FC<EditorPlaceholderType> = props => {
             profileId={profileId}
             size="sm"
           />
-          <Text variant="subtitle2" {...(isReflection && { color: 'grey7' })} truncate={true}>
+          <Text
+            variant="subtitle2"
+            {...(isReflection && { color: 'grey7' })}
+            customStyle={`${!isReflection ? 'max-w([9.5rem] md:fit)' : ''} whitespace-normal`}
+          >
             {placeholderLabel}
           </Text>
         </div>

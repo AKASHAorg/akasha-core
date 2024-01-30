@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useClickAway } from 'react-use';
 import { tw } from '@twind/core';
 
+import Button from '../Button';
 import Icon from '../Icon';
 import { CalendarIcon } from '../Icon/hero-icons-outline';
 import Text from '../Text';
@@ -72,22 +73,27 @@ const DatePicker: React.FC = () => {
   return (
     <div title="date-picker" className={tw('w-full md:w-80')}>
       <div className={tw('relative')}>
-        <div
+        <Button
+          plain={true}
           onClick={() => {
             setShowDatepicker(() => !showDatepicker);
             setShowMonthpicker(false);
           }}
-          className={tw(
-            `flex justify-start items-center border([1px] grey8) dark:border([1px] grey5) rounded-lg px-2 w-auto h-8 cursor-pointer ${
-              showDatepicker && 'border(2 secondaryLight) dark:border(2 secondaryDark)'
-            })`,
-          )}
         >
-          <Icon icon={<CalendarIcon />} accentColor={true} />
-          <Text variant="body2" color={{ light: 'black', dark: 'grey6' }} customStyle="ml-2">
-            {datepickerValue.toString()}
-          </Text>
-        </div>
+          <div
+            className={tw(
+              `flex justify-start items-center border([1px] grey8) dark:border([1px] grey5) rounded-lg px-2 w-auto h-8 cursor-pointer ${
+                showDatepicker ? 'border(2 secondaryLight) dark:border(2 secondaryDark)' : ''
+              })`,
+            )}
+          >
+            <Icon icon={<CalendarIcon />} accentColor={true} />
+            <Text variant="body2" color={{ light: 'black', dark: 'grey6' }} customStyle="ml-2">
+              {datepickerValue.toString()}
+            </Text>
+          </div>
+        </Button>
+
         <div ref={wrapperRef} className="w-full h-full">
           {showDatepicker && (
             <DateSelector

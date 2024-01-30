@@ -17,29 +17,29 @@ type Story = StoryObj<SnackbarProps>;
 const variants: SnackbarProps[] = [
   {
     title: 'Info Snackbar',
-    type: NotificationTypes.Info,
+    type: NotificationTypes?.Info,
   },
   {
     title: 'Alert Snackbar',
     description: 'Some important information will appear here',
-    type: NotificationTypes.Alert,
+    type: NotificationTypes?.Alert,
     actionButtonLabel: 'OK',
   },
   {
     title: 'Success Alert Snackbar',
     description: 'Some important information will appear here',
-    type: NotificationTypes.Success,
+    type: NotificationTypes?.Success,
     actionButtonLabel: 'OK',
   },
   {
     title: 'Caution Alert Snackbar',
     description: 'Some important information will appear here',
-    type: NotificationTypes.Caution,
+    type: NotificationTypes?.Caution,
     actionButtonLabel: 'OK',
   },
   {
     title: 'Success Info Snackbar',
-    type: NotificationTypes.Success,
+    type: NotificationTypes?.Success,
     icon: <CheckCircleIcon />,
   },
 ];

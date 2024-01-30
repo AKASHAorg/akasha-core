@@ -11,6 +11,7 @@ export type TabListProps = {
   selected: number;
   tabListDivider?: boolean;
   labelTextVariant?: TextProps['variant'];
+  customStyle?: string;
   onChange: (selectedIndex: number, previousIndex: number) => void;
 };
 
@@ -19,6 +20,7 @@ const TabList: React.FC<TabListProps> = ({
   selected,
   tabListDivider,
   labelTextVariant,
+  customStyle = '',
   onChange,
 }) => {
   const baseStyle = 'group p-2';
@@ -41,7 +43,9 @@ const TabList: React.FC<TabListProps> = ({
     : '';
 
   return (
-    <div className={tw(apply`grid grid-cols-${labels.length} ${tabListDividerStyle}`)}>
+    <div
+      className={tw(apply`grid grid-cols-${labels.length} ${tabListDividerStyle} ${customStyle}`)}
+    >
       {labels.map((label, index) => (
         <Button
           key={label}

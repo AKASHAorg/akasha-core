@@ -9,9 +9,9 @@ export type InfoCardProps = {
   assetExtension?: string;
   publicImgPath?: string;
   titleLabel: ReactNode;
+  bodyLabel?: ReactNode;
   titleVariant?: TextProps['variant'];
   bodyVariant?: TextProps['variant'];
-  bodyLabel?: ReactNode;
   customWidthStyle?: string;
 };
 

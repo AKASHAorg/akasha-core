@@ -10,40 +10,42 @@ export interface FooterProps {
   handleBeamPublish: () => void;
   handleClickAddBlock: () => void;
   handleClickTags: () => void;
-  handleAddTags: () => void;
+  handleClickSave: () => void;
   handleClickCancel: () => void;
-  isPublishing?: boolean;
-  disablePublishing?: boolean;
+  blocksLabel?: string;
   tagsLabel?: string;
   publishLabel?: string;
-  addLabel?: string;
+  saveTagsLabel?: string;
   addBlockLabel?: string;
   cancelLabel?: string;
-  blocksLabel?: string;
   blocksNumber?: number;
+  maxBlocks?: number;
   tagsNumber?: number;
-  tagValue?: string;
+  maxTags?: number;
+  disableTagsSave?: boolean;
+  disableBeamPublishing?: boolean;
 }
 
 export const Footer: React.FC<FooterProps> = props => {
   const {
     uiState,
-    handleAddTags,
+    handleClickSave,
     handleClickAddBlock,
     handleClickTags,
     handleBeamPublish,
     handleClickCancel,
-    addLabel,
-    addBlockLabel,
+    blocksLabel,
     tagsLabel,
     publishLabel,
+    saveTagsLabel,
+    addBlockLabel,
     cancelLabel,
-    blocksLabel,
     blocksNumber = 0,
+    maxBlocks = 10,
     tagsNumber = 0,
-    tagValue,
-    isPublishing,
-    disablePublishing,
+    maxTags = 10,
+    disableTagsSave = false,
+    disableBeamPublishing = false,
   } = props;
 
   const renderContent = () => {
@@ -51,23 +53,27 @@ export const Footer: React.FC<FooterProps> = props => {
       case 'blocks':
         return (
           <>
-            <Text>{`${blocksNumber}/10 ${blocksLabel}`}</Text>
-            <Stack direction="row" spacing="gap-2">
-              <Button variant="secondary" label={cancelLabel} onClick={handleClickCancel} />
-            </Stack>
+            <Text
+              variant="footnotes2"
+              color="grey7"
+            >{`${blocksNumber}/${maxBlocks} ${blocksLabel}`}</Text>
+            <Button variant="secondary" label={cancelLabel} onClick={handleClickCancel} />
           </>
         );
       case 'tags':
         return (
           <>
-            <Text>{`${tagsNumber}/10 ${tagsLabel}`}</Text>
+            <Text
+              variant="footnotes2"
+              color="grey7"
+            >{`${tagsNumber}/${maxTags} ${tagsLabel}`}</Text>
             <Stack direction="row" spacing="gap-2">
               <Button variant="text" label={cancelLabel} onClick={handleClickCancel} />
               <Button
                 variant="primary"
-                disabled={isPublishing || tagValue.length < 1}
-                label={addLabel}
-                onClick={handleAddTags}
+                disabled={disableTagsSave}
+                label={saveTagsLabel}
+                onClick={handleClickSave}
               />
             </Stack>
           </>
@@ -83,11 +89,26 @@ export const Footer: React.FC<FooterProps> = props => {
               greyBg={true}
               label={addBlockLabel}
             />
-            <Stack direction="row" spacing="gap-2">
-              <Button variant="text" label={tagsLabel} onClick={handleClickTags} />
+            <Stack direction="row" spacing="gap-4" align="center">
+              <Stack direction="row" spacing="gap-2" align="center">
+                <Stack
+                  align="center"
+                  justify="center"
+                  customStyle="w-[18px] h-[18px] rounded-[3px]"
+                  background={{ light: 'grey9', dark: 'grey5' }}
+                >
+                  <Text
+                    variant="footnotes2"
+                    color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                  >
+                    {tagsNumber}
+                  </Text>
+                </Stack>
+                <Button variant="text" label={tagsLabel} onClick={handleClickTags} />
+              </Stack>
               <Button
                 variant="primary"
-                disabled={isPublishing || disablePublishing}
+                disabled={disableBeamPublishing}
                 label={publishLabel}
                 onClick={handleBeamPublish}
               />
@@ -102,6 +123,7 @@ export const Footer: React.FC<FooterProps> = props => {
       padding={16}
       fullWidth
       justify="between"
+      align="center"
       direction="row"
       customStyle="rounded-b-xl"
       background={{ light: 'white', dark: 'grey2' }}

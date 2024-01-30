@@ -18,7 +18,6 @@ export type ProfileSearchCardProps = {
   followLabel: string;
   unfollowLabel: string;
   descriptionLabel?: string;
-  profileAnchorLink?: string;
   onClickProfile?: () => void;
   showPostCount?: boolean;
   isViewer?: boolean;
@@ -35,32 +34,24 @@ const ProfileSearchCard: React.FC<ProfileSearchCardProps> = props => {
     followLabel,
     unfollowLabel,
     isViewer,
-    profileAnchorLink,
     onClickProfile,
     transformSource,
   } = props;
 
   return (
     <Stack align="center" justify="between" customStyle={'py-2'}>
-      <a
-        onClick={e => {
-          e.preventDefault();
-          return false;
-        }}
-        href={`${profileAnchorLink}/${profileData.did.id}`}
-      >
-        <ProfileAvatarButton
-          onClick={onClickProfile}
-          label={profileData.name}
-          size="md"
-          avatar={transformSource(profileData?.avatar?.default)}
-          alternativeAvatars={profileData?.avatar?.alternatives?.map(alternative =>
-            transformSource(alternative),
-          )}
-          truncateText={false}
-          profileId={profileData.did.id}
-        />
-      </a>
+      <ProfileAvatarButton
+        onClick={onClickProfile}
+        label={profileData.name}
+        size="md"
+        avatar={transformSource(profileData?.avatar?.default)}
+        alternativeAvatars={profileData?.avatar?.alternatives?.map(alternative =>
+          transformSource(alternative),
+        )}
+        truncateText={false}
+        profileId={profileData.did.id}
+      />
+
       {!isViewer && (
         <div>
           <DuplexButton

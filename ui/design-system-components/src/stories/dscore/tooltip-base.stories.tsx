@@ -32,7 +32,7 @@ const variants: TooltipProps[] = [
   },
 ];
 
-const childrenNode = <Text color="white">Hover to learn more</Text>;
+const childrenNode = <Text>Hover to learn more</Text>;
 
 const ControlledTooltipComponent = () => {
   const [showToolTip, setShowTooltip] = useState(false);

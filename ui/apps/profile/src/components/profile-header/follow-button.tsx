@@ -1,6 +1,6 @@
 import React from 'react';
 import FollowProfileButton from '../follow-profile-button';
-import { useGetFollowDocumentsByDidSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import { useGetFollowDocumentsByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { hasOwn, useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 
@@ -15,7 +15,8 @@ const FollowButton: React.FC<FollowButtonProps> = props => {
   const authenticatedDID = loginData?.id;
   const isLoggedIn = !!loginData?.id;
 
-  const { data, error } = useGetFollowDocumentsByDidSuspenseQuery({
+  const { data, error } = useGetFollowDocumentsByDidQuery({
+    fetchPolicy: 'cache-and-network',
     variables: {
       id: authenticatedDID,
       following: [profileID],

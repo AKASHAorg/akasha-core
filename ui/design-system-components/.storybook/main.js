@@ -1,5 +1,6 @@
 module.exports = {
-  stories: ['../src/**/*.stories.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
+  stories: ['../src/**/*.stories.@(js|jsx|ts|tsx)'],
+  staticDirs: ['../../build/images'],
   addons: [],
   framework: '@storybook/react-webpack5',
   webpackFinal: async config => {

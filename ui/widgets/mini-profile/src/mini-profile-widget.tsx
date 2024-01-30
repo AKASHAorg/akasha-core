@@ -84,7 +84,7 @@ const ProfileCardWidget: React.FC<unknown> = () => {
   return (
     <ErrorBoundary
       errorObj={{
-        type: t('script-error'),
+        type: 'script-error',
         title: t('Error in my-apps widget'),
       }}
       logger={logger}
