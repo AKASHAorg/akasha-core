@@ -125,7 +125,7 @@ export const Dashboard: React.FC<DashboardProps> = props => {
       ]}
       maxApplicantsLabel={t('Maximum Number of Applicant')}
       maxApplicantsIntroLabel={t(
-        'You can change the maximum number of moderator applications so that you can have better control of the process',
+        'The current maximum number of moderators will limit the number of applications until you set it to a higher / lower number.',
       )}
       currentNumberLabel={t('Current number')}
       maxApplicants={65}

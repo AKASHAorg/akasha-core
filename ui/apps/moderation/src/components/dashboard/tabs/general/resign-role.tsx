@@ -34,7 +34,13 @@ const ResignRole: React.FC<ResignRoleProps> = props => {
             <Text customStyle="text-[0.875rem] leading-[1.375rem] font-light">{`(${optionalLabel})`}</Text>
           </Stack>
 
-          <TextField placeholder={reasonPlaceholderLabel} type="multiline" />
+          <TextField
+            placeholder={reasonPlaceholderLabel}
+            type="multiline"
+            onChange={() => {
+              /** */
+            }}
+          />
         </Stack>
 
         <Text>{textLine2Label}</Text>

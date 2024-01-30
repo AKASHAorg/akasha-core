@@ -1,7 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useModerationCategory } from '@akashaorg/ui-awf-hooks';
+import { useModerationCategory, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 
 import EditCategories from '../components/dashboard/tabs/general/categories';
 
@@ -11,6 +12,8 @@ import { reasons } from '../utils/reasons';
 
 export const EditCategoriesPage: React.FC<BasePageProps> = props => {
   const { navigateTo } = props;
+
+  const { uiEvents } = useRootComponentProps();
 
   const { t } = useTranslation('app-moderation-ewa');
 
@@ -34,9 +37,12 @@ export const EditCategoriesPage: React.FC<BasePageProps> = props => {
   };
 
   const handleConfirmButtonClick = () => {
-    navigateTo?.({
-      appName: '@akashaorg/app-moderation-ewa',
-      getNavigationUrl: routes => routes[DASHBOARD],
+    uiEvents.next({
+      event: NotificationEvents.ShowNotification,
+      data: {
+        type: NotificationTypes.Success,
+        message: t('Categories updated successfully'),
+      },
     });
   };
 
@@ -48,7 +54,7 @@ export const EditCategoriesPage: React.FC<BasePageProps> = props => {
       allCategoriesLabel={allCategoriesLabel}
       allCategoriesSelected={categories.length === moderationCategories.length}
       cancelButtonLabel={t('Cancel')}
-      confirmButtonLabel={t('Confirm')}
+      confirmButtonLabel={t('Confirm Change')}
       onPillClick={handleCategoryClick}
       onCancelButtonClick={handleCancelButtonClick}
       onConfirmButtonClick={handleConfirmButtonClick}

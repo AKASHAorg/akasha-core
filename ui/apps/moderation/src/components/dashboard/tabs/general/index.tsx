@@ -60,19 +60,25 @@ export const GeneralTab: React.FC<GeneralTabProps> = props => {
   return (
     <Stack spacing="gap-y-4">
       <Stack direction="row" align="center" justify="between">
-        <Text weight="bold">{moderatorSinceLabel}</Text>
-        <Text color="grey4">{dayjs(moderatorSince).format('DD-MMM-YYYY')}</Text>
+        <Text variant="button-md" weight="bold">
+          {moderatorSinceLabel}
+        </Text>
+        <Text variant="footnotes2" color="grey4">
+          {dayjs(moderatorSince).format('DD-MMM-YYYY')}
+        </Text>
       </Stack>
 
       <Divider />
 
       <Stack>
         <Stack direction="row" align="center" justify="between">
-          <Text weight="bold">{moderationCategoriesLabel}</Text>
+          <Text variant="button-md" weight="bold">
+            {moderationCategoriesLabel}
+          </Text>
 
           <Button plain={true} onClick={onButtonClick(EDIT_CATEGORIES)}>
             <Text
-              variant="button-sm"
+              variant="button-md"
               weight="bold"
               color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
             >
@@ -95,11 +101,13 @@ export const GeneralTab: React.FC<GeneralTabProps> = props => {
 
       <Stack spacing="gap-y-3">
         <Stack direction="row" align="center" justify="between">
-          <Text weight="bold">{contactInfoLabel}</Text>
+          <Text variant="button-md" weight="bold">
+            {contactInfoLabel}
+          </Text>
 
           <Button plain={true} onClick={onButtonClick(EDIT_CONTACT_INFO)}>
             <Text
-              variant="button-sm"
+              variant="button-md"
               weight="bold"
               color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
             >
@@ -108,7 +116,7 @@ export const GeneralTab: React.FC<GeneralTabProps> = props => {
           </Button>
         </Stack>
 
-        <Text>{contactInfoIntroLabel}</Text>
+        <Text variant="footnotes2">{contactInfoIntroLabel}</Text>
 
         <Stack spacing="gap-y-2">
           {contactInfo.map(({ icon, solid, value }) => (
@@ -119,10 +127,10 @@ export const GeneralTab: React.FC<GeneralTabProps> = props => {
                 variant="primary"
                 greyBg={true}
                 iconOnly={true}
-                size="sm"
+                size="xs"
               />
 
-              <Text>{value}</Text>
+              <Text variant="footnotes2">{value}</Text>
             </Stack>
           ))}
         </Stack>
@@ -134,11 +142,13 @@ export const GeneralTab: React.FC<GeneralTabProps> = props => {
         <>
           <Stack spacing="gap-y-3">
             <Stack direction="row" align="center" justify="between">
-              <Text weight="bold">{maxApplicantsLabel}</Text>
+              <Text variant="button-md" weight="bold">
+                {maxApplicantsLabel}
+              </Text>
 
               <Button plain={true} onClick={onButtonClick(EDIT_MAX_APPLICANTS)}>
                 <Text
-                  variant="button-sm"
+                  variant="button-md"
                   weight="bold"
                   color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
                 >
@@ -147,14 +157,15 @@ export const GeneralTab: React.FC<GeneralTabProps> = props => {
               </Button>
             </Stack>
 
-            <Text>{maxApplicantsIntroLabel}</Text>
+            <Text variant="footnotes2">{maxApplicantsIntroLabel}</Text>
 
             <Stack direction="row" spacing="gap-x-3">
               <Text
+                variant="button-md"
                 weight="bold"
                 color={{ light: 'black', dark: 'grey6' }}
               >{`${currentNumberLabel}:`}</Text>
-              <Text>{maxApplicants}</Text>
+              <Text variant="button-md">{maxApplicants}</Text>
             </Stack>
           </Stack>
 
@@ -163,8 +174,10 @@ export const GeneralTab: React.FC<GeneralTabProps> = props => {
       )}
 
       <Stack spacing="gap-y-3">
-        <Text weight="bold">{moderationDutiesLabel}</Text>
-        <Text>{moderationDutiesDescLabel}</Text>
+        <Text variant="button-md" weight="bold">
+          {moderationDutiesLabel}
+        </Text>
+        <Text variant="footnotes2">{moderationDutiesDescLabel}</Text>
 
         <Button
           size="md"

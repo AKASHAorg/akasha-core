@@ -1,6 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
+
 import EditMaxApplicants from '../components/dashboard/tabs/general/max-applicants';
 
 import { BasePageProps } from './dashboard';
@@ -8,6 +11,8 @@ import { DASHBOARD } from '../routes';
 
 export const EditMaxApplicantsPage: React.FC<BasePageProps> = props => {
   const { navigateTo } = props;
+
+  const { uiEvents } = useRootComponentProps();
 
   const { t } = useTranslation('app-moderation-ewa');
 
@@ -19,9 +24,12 @@ export const EditMaxApplicantsPage: React.FC<BasePageProps> = props => {
   };
 
   const handleConfirmButtonClick = () => {
-    navigateTo?.({
-      appName: '@akashaorg/app-moderation-ewa',
-      getNavigationUrl: routes => routes[DASHBOARD],
+    uiEvents.next({
+      event: NotificationEvents.ShowNotification,
+      data: {
+        type: NotificationTypes.Success,
+        message: t('Maximum applicants limit updated successfully'),
+      },
     });
   };
 
