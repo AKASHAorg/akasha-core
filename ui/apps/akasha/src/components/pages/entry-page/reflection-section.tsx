@@ -26,7 +26,6 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
   const { getRoutingPlugin } = useRootComponentProps();
   const location = useLocation();
   const navigateTo = getRoutingPlugin().navigateTo;
-  const pendingReflectRef = useRef(null);
 
   const onNavigate = (reflectionId: string, reflect?: boolean) => {
     navigateTo(
@@ -72,12 +71,10 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
               beamId={beamId}
               reflectToId={reflectionId}
               showEditorInitialValue={isReflecting}
-              pendingReflectRef={pendingReflectRef}
             />
           )}
         </Stack>
       </Stack>
-      <Card ref={pendingReflectRef} type="plain" />
     </Stack>
   );
 };

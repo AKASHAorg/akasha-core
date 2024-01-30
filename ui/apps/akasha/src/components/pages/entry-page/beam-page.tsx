@@ -9,6 +9,7 @@ import { useParams } from 'react-router-dom';
 import {
   hasOwn,
   mapBeamEntryData,
+  mapReflectEntryData,
   useAnalytics,
   useGetLogin,
   useRootComponentProps,
@@ -17,7 +18,9 @@ import { useTranslation } from 'react-i18next';
 import { EntityTypes } from '@akashaorg/typings/lib/ui';
 import { ReflectFeed, ReflectionPreview } from '@akashaorg/ui-lib-feed';
 import { useGetBeamByIdSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { EditableReflectionResolver } from '@akashaorg/ui-lib-feed/lib/components/editable-reflection/editable-reflection-resolver';
+import EditableReflection from '@akashaorg/ui-lib-feed/lib/components/editable-reflection';
+import { PendingReflect } from '../../reflect-editor/pending-reflect';
+import { usePendingReflections } from '@akashaorg/ui-awf-hooks/lib/use-pending-reflections';
 
 const BeamPage: React.FC<unknown> = () => {
   const { beamId } = useParams<{
@@ -32,6 +35,7 @@ const BeamPage: React.FC<unknown> = () => {
   const beamReq = useGetBeamByIdSuspenseQuery({
     variables: { id: beamId },
   });
+  const { pendingReflections } = usePendingReflections();
   const entryData = React.useMemo(() => {
     if (beamReq.data && hasOwn(beamReq.data, 'node') && hasOwn(beamReq.data.node, 'id')) {
       return beamReq.data.node;
@@ -55,27 +59,49 @@ const BeamPage: React.FC<unknown> = () => {
 
   return (
     <Card padding="p-0" margin="mb-4">
-      <React.Suspense fallback={<EntrySectionLoading />}>
-        <BeamSection
-          beamId={beamId}
-          entryData={mapBeamEntryData(entryData)}
-          isLoggedIn={isLoggedIn}
-          showLoginModal={showLoginModal}
-        />
-      </React.Suspense>
       <Stack spacing="gap-y-2">
         <ReflectFeed
+          header={
+            <React.Suspense fallback={<EntrySectionLoading />}>
+              <BeamSection
+                beamId={beamId}
+                entryData={mapBeamEntryData(entryData)}
+                isLoggedIn={isLoggedIn}
+                showLoginModal={showLoginModal}
+              />
+              {pendingReflections
+                .filter(content => !hasOwn(content, 'reflection') && content.beamID === beamId)
+                .map((content, index) => (
+                  <PendingReflect key={`pending-${index}-${beamId}`} entryData={content} />
+                ))}
+            </React.Suspense>
+          }
           queryKey={`reflect-feed-${beamId}`}
+          filters={{ where: { reflection: { isNull: true } } }}
           estimatedHeight={120}
           renderItem={itemData => (
             <>
               <Divider />
-              <EditableReflectionResolver
-                beamID={itemData.node.beamID}
-                reflectID={itemData.node.reflectionID}
+              <EditableReflection
+                entryData={mapReflectEntryData(itemData.node)}
+                reflectToId={beamId}
+                contentClickable={true}
+                onContentClick={() =>
+                  navigateTo({
+                    appName: '@akashaorg/app-akasha-integration',
+                    getNavigationUrl: navRoutes => `${navRoutes.Reflect}/${itemData.node.id}`,
+                  })
+                }
+                onReflect={() =>
+                  navigateTo({
+                    appName: '@akashaorg/app-akasha-integration',
+                    getNavigationUrl: navRoutes =>
+                      `${navRoutes.Reflect}/${itemData.node.id}${navRoutes.Reflect}`,
+                  })
+                }
               />
               <ReflectionPreview
-                reflectionId={itemData.node.reflectionID}
+                reflectionId={itemData.node.id}
                 onNavigate={(options: { id: string; reflect?: boolean }) => {
                   navigateTo({
                     appName: '@akashaorg/app-akasha-integration',

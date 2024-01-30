@@ -23,16 +23,16 @@ import {
 } from '@akashaorg/typings/lib/ui';
 import { createPortal } from 'react-dom';
 import { PendingReflect } from './pending-reflect';
+import { usePendingReflections } from '@akashaorg/ui-awf-hooks/lib/use-pending-reflections';
 
 export type ReflectEditorProps = {
   beamId: string;
   reflectToId: string;
   showEditorInitialValue: boolean;
-  pendingReflectRef: MutableRefObject<HTMLDivElement>;
 };
 
 const ReflectEditor: React.FC<ReflectEditorProps> = props => {
-  const { beamId, reflectToId, showEditorInitialValue, pendingReflectRef } = props;
+  const { beamId, reflectToId, showEditorInitialValue } = props;
   const { t } = useTranslation('app-akasha-integration');
   const [analyticsActions] = useAnalytics();
   const { uiEvents } = useRootComponentProps();
@@ -61,6 +61,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
     },
   });
   const [indexReflection, indexReflectionMutation] = useIndexReflectionMutation();
+  const { addPendingReflection, pendingReflections } = usePendingReflections();
 
   const authenticatedProfileDataReq = useGetLoginProfile();
   const disablePublishing = useMemo(
@@ -110,8 +111,12 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
       isReply: true,
       ...reflection,
     };
-
-    setNewContent({ ...content, id: null, authorId: null });
+    setNewContent({ ...content, authorId: null, id: null });
+    addPendingReflection({
+      ...content,
+      id: `pending-reflection-${pendingReflections.length}`,
+      authorId: authenticatedProfile.did.id,
+    });
 
     const response = await publishReflection({
       variables: {
@@ -120,6 +125,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         },
       },
     });
+
     if (response.data?.createAkashaReflect) {
       const indexingVars = await getSDK().api.auth.prepareIndexedID(
         response.data.createAkashaReflect.document.id,
@@ -167,15 +173,15 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         getTags={setTagQuery}
         transformSource={transformSource}
       />
-      {(publishReflectionMutation.loading || indexReflectionMutation.loading) &&
-        newContent &&
-        pendingReflectRef.current &&
-        createPortal(
-          <PendingReflect
-            entryData={{ ...newContent, id: null, authorId: authenticatedProfile?.did?.id }}
-          />,
-          pendingReflectRef.current,
-        )}
+      {/*{(publishReflectionMutation.loading || indexReflectionMutation.loading) &&*/}
+      {/*  newContent &&*/}
+      {/*  pendingReflectRef.current &&*/}
+      {/*  createPortal(*/}
+      {/*    <PendingReflect*/}
+      {/*      entryData={{ ...newContent, id: null, authorId: authenticatedProfile?.did?.id }}*/}
+      {/*    />,*/}
+      {/*    pendingReflectRef.current,*/}
+      {/*  )}*/}
     </>
   );
 };
