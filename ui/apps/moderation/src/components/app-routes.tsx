@@ -78,7 +78,7 @@ const AppRoutes: React.FC<unknown> = () => {
   const errorBoundaryProps: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
     errorObj: {
       type: 'script-error',
-      title: t('Error in vibe app'),
+      title: t('Error in Vibes app'),
     },
     logger,
   };

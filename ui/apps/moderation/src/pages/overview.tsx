@@ -104,14 +104,14 @@ export const Overview: React.FC<OverviewPageProps> = props => {
       )}
       <ModerationIntroCard
         titleLabel={t('Overview')}
-        introLabel={`${t('Welcome to AKASHA')} ${isAuthorised ? t('Moderation') : t('Vibe')}`}
+        introLabel={`${t('Welcome to AKASHA')} ${isAuthorised ? t('Moderation') : t('Vibes')}`}
         subtitleLabel={
           isAuthorised
             ? t(
                 'The Moderation app facilitates cooperation and prevents abuse. The app is open and transparent. Take part in the process of governing this community.',
               )
             : t(
-                "The Vibe app encourages collaboration while safeguarding against misuse. It's an open and transparent platform, inviting you to actively participate in shaping our community's governance.",
+                "The Vibes app encourages collaboration while safeguarding against misuse. It's an open and transparent platform, inviting you to actively participate in shaping our community's governance.",
               )
         }
         {...(isAuthorised && { codeOfConductLabel: t('Read our Code of Conduct') })}

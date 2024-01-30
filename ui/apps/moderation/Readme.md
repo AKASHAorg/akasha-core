@@ -1,6 +1,6 @@
-# Vibe App
+# Vibes App
 
-> Vibe for AKASHA World
+> Vibes for AKASHA World
 ## Table of contents
 
 - [Table of contents](#table-of-contents)
@@ -12,7 +12,7 @@
 
 ## Background
 
-Vibe adds moderation-related functionalities of reporting/moderating offensive/abusive contents and maintaining a log of moderated items, to the AKASHA World. It consists of components, services and widgets which are standalone elements interacting with each other to form a wholesome system.
+Vibes app adds moderation-related functionalities of reporting/moderating offensive/abusive contents and maintaining a log of moderated items, to the AKASHA World. It consists of components, services and widgets which are standalone elements interacting with each other to form a wholesome system.
 
 ## Components
 

@@ -25,8 +25,8 @@ export const BaseModerationIntroCard: Story = {
       <ModerationIntroCard
         publicImgPath=""
         titleLabel="Overview"
-        introLabel="Welcome to Vibe"
-        subtitleLabel="Vibe facilitates cooperation and prevents abuse. The app is open and transparent. Take part in the process of governing this community."
+        introLabel="Welcome to AKASHA Vibes"
+        subtitleLabel="Vibes app facilitates cooperation and prevents abuse. The app is open and transparent. Take part in the process of governing this community."
         codeOfConductLabel="Read our Code of Conduct"
         overviewCTAArr={[
           {
