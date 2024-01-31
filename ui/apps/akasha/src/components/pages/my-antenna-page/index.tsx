@@ -8,15 +8,15 @@ import { useTranslation } from 'react-i18next';
 import { ModalNavigationOptions, Profile } from '@akashaorg/typings/lib/ui';
 import { useGetInterestsByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { BeamContentResolver, BeamFeed } from '@akashaorg/ui-lib-feed';
+import { BeamContentResolver, TagFeed } from '@akashaorg/ui-lib-feed';
 
-export type MyFeedPageProps = {
+export type MyAntennaPageProps = {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
   authenticatedProfile?: Profile;
 };
 const MY_ANTENNA_OVERSCAN = 10;
 
-const MyFeedPage: React.FC<MyFeedPageProps> = props => {
+const MyAntennaPage: React.FC<MyAntennaPageProps> = props => {
   const { authenticatedProfile, showLoginModal } = props;
   const { getRoutingPlugin } = useRootComponentProps();
   const navigateTo = React.useRef(getRoutingPlugin().navigateTo);
@@ -40,8 +40,9 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
       return showLoginModal();
     }
     navigateTo.current?.({
-      appName: '@akashaorg/app-search',
-      getNavigationUrl: navRoutes => `${navRoutes.Onboarding}`,
+      appName: '@akashaorg/app-profile',
+      getNavigationUrl: navRoutes =>
+        `${navRoutes.rootRoute}/${authenticatedProfile?.did.id}${navRoutes.interests}`,
     });
   };
 
@@ -52,10 +53,9 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
       </Helmet.Helmet>
       <Stack customStyle="mb-2">
         <StartCard
-          title={t('My Feed')}
           heading={t('Add some magic to your feed 🪄')}
           description={t(
-            'To create your unique feed view, subscribe to your favourite topics and find wonderful people to follow in our community. ',
+            `Personalize your antenna! Pick favorite topics, and enjoy beams tailored to your interests. Don't miss a thing!`,
           )}
           secondaryDescription={t('Your customized view of AKASHA World')}
           image="/images/news-feed.webp"
@@ -66,23 +66,23 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
           onClickCTA={handleCTAClick}
         />
       </Stack>
-      <BeamFeed
-        queryKey={'app-akasha-integration_my-antenna'}
-        estimatedHeight={150}
-        itemSpacing={8}
-        scrollerOptions={{ overscan: MY_ANTENNA_OVERSCAN }}
-        scrollTopIndicator={(listRect, onScrollToTop) => (
-          <ScrollTopWrapper placement={listRect.left}>
-            <ScrollTopButton hide={false} onClick={onScrollToTop} />
-          </ScrollTopWrapper>
-        )}
-        renderItem={itemData => {
-          if (!hasOwn(itemData.node, 'content'))
-            return <BeamContentResolver beamId={itemData.node.beamID} />;
-        }}
-      />
+      {userHasSubscriptions && (
+        <TagFeed
+          queryKey={'antenna_my-antenna'}
+          estimatedHeight={150}
+          itemSpacing={8}
+          tag={tagSubsData?.topics.map(topic => topic.value)}
+          scrollerOptions={{ overscan: MY_ANTENNA_OVERSCAN }}
+          scrollTopIndicator={(listRect, onScrollToTop) => (
+            <ScrollTopWrapper placement={listRect.left}>
+              <ScrollTopButton hide={false} onClick={onScrollToTop} />
+            </ScrollTopWrapper>
+          )}
+          renderItem={itemData => <BeamContentResolver beamId={itemData.node.stream} />}
+        />
+      )}
     </Stack>
   );
 };
 
-export default MyFeedPage;
+export default MyAntennaPage;

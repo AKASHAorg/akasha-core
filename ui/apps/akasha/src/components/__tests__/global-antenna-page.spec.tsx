@@ -1,5 +1,5 @@
 import React from 'react';
-import FeedPage from '../pages/feed-page/feed-page';
+import GlobalAntennaPage from '../pages/global-antenna-page';
 
 import { screen, renderWithAllProviders, genAppProps, genUser } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
@@ -15,11 +15,15 @@ class ResizeObserver {
     return;
   }
 }
-describe('< FeedPage /> component', () => {
+describe('< GlobalAntennaPage /> component', () => {
   global.ResizeObserver = ResizeObserver;
   const BaseComponent = ({ authenticatedProfile }) => (
     <AnalyticsProvider {...genAppProps()}>
-      <FeedPage showLoginModal={jest.fn()} authenticatedProfile={authenticatedProfile} />
+      <GlobalAntennaPage
+        isLoggedIn={true}
+        showLoginModal={jest.fn()}
+        authenticatedProfile={authenticatedProfile}
+      />
     </AnalyticsProvider>
   );
 

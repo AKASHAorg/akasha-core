@@ -33,14 +33,14 @@ export type HeaderProps = {
   metadata?: ReactElement;
   actionElement?: ReactElement;
   activeOverlay?: 'avatar' | 'coverImage' | null;
-  onClickAvatar: () => void;
-  onClickCoverImage: () => void;
-  onCloseOverlay: () => void;
-  onClickProfileName: () => void;
   plain?: boolean;
   customStyle?: string;
   handleEdit?: () => void;
   transformSource: (src: Image) => Image;
+  onClickAvatar: () => void;
+  onClickCoverImage: () => void;
+  onCloseOverlay: () => void;
+  onClickProfileName: () => void;
 };
 
 const Header: React.FC<HeaderProps> = ({
@@ -59,14 +59,14 @@ const Header: React.FC<HeaderProps> = ({
   metadata,
   actionElement,
   activeOverlay = null,
-  onClickAvatar,
-  onClickCoverImage,
-  onCloseOverlay,
-  onClickProfileName,
   plain = false,
   customStyle = '',
   handleEdit,
   transformSource,
+  onClickAvatar,
+  onClickCoverImage,
+  onCloseOverlay,
+  onClickProfileName,
 }) => {
   const transformedAvatar = transformSource(avatar?.default);
   const transformedCoverImage = transformSource(background?.default);
