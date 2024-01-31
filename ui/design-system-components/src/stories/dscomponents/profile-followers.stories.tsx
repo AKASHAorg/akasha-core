@@ -19,7 +19,7 @@ const commonProps = {
   profileAnchorLink: '#',
   loadMore: false,
   publicImgPath: '',
-  onLoadMore: () => ({}),
+  onLoadMore: () => Promise.resolve({}),
   transformSource: () => ({
     src: 'https://placebeard.it/360x360',
     width: 360,

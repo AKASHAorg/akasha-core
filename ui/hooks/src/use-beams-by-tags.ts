@@ -13,7 +13,7 @@ import type {
 import { ApolloError } from '@apollo/client';
 import { hasOwn } from './utils/has-own';
 
-export const useBeamsByTag = (tag: string) => {
+export const useBeamsByTags = (tag: string | string[]) => {
   const sdk = getSDK();
   const [state, setState] = React.useState<{
     beams: Exclude<
@@ -25,6 +25,13 @@ export const useBeamsByTag = (tag: string) => {
 
   const [errors, setErrors] = React.useState<(ApolloError | Error)[]>([]);
 
+  const tagsFilters =
+    typeof tag === 'string'
+      ? { where: { indexValue: { equalTo: tag } } }
+      : {
+          or: tag?.map(_tag => ({ where: { indexValue: { equalTo: _tag } } })) || [],
+        };
+
   const [fetchBeams, beamsQuery] = useGetIndexedStreamLazyQuery({
     variables: {
       indexer: sdk.services.gql.indexingDID,
@@ -34,8 +41,8 @@ export const useBeamsByTag = (tag: string) => {
         and: [
           { where: { streamType: { equalTo: AkashaIndexedStreamStreamType.Beam } } },
           { where: { indexType: { equalTo: sdk.services.gql.labelTypes.TAG } } },
-          { where: { indexValue: { equalTo: tag } } },
           { where: { active: { equalTo: true } } },
+          tagsFilters,
         ],
       },
     },
@@ -168,7 +175,7 @@ export const useBeamsByTag = (tag: string) => {
       }
       await fetchInitialBeams(initialVars);
     },
-    [beamsQuery.called, fetchInitialBeams, tag],
+    [beamsQuery.called, fetchInitialBeams],
   );
 
   React.useEffect(() => {
@@ -192,7 +199,7 @@ export const useBeamsByTag = (tag: string) => {
   React.useEffect(() => {
     setState({ beams: [] });
     fetchInitialData(true);
-  }, [tag]);
+  }, []);
 
   return {
     beams: state.beams,
