@@ -9,7 +9,7 @@ import PaginatedTable from '../components/transparency-log/paginated-table';
 
 import { PaginatedItem, contentTypeMap } from './transparency-log';
 
-import { BasePageProps } from './dashboard';
+import { BasePageProps } from './overview';
 import { generateModerators, formatDate, generateTenureInfoLabel } from '../utils';
 
 export const ModeratorDetailPage: React.FC<BasePageProps> = props => {

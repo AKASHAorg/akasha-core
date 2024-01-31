@@ -10,7 +10,7 @@ import Dropdown from '@akashaorg/design-system-core/lib/components/Dropdown';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-import { BasePageProps } from './dashboard';
+import { BasePageProps } from './overview';
 import PaginatedTable from '../components/transparency-log/paginated-table';
 import NoFlaggedItems from '../components/transparency-log/no-flagged-items';
 

@@ -5,8 +5,9 @@
 
 - [Table of contents](#table-of-contents)
 - [Background](#background)
-- [Components](#components)
-  - [Dashboard](#dashboard)
+- [Pages](#pages)
+  - [Overview](#overview)
+  - [Moderators](#moderators)
   - [Transparency Log](#transparency-log)
   - [Error Cards](#error-cards)
 
@@ -14,12 +15,15 @@
 
 Vibes app adds moderation-related functionalities of reporting/moderating offensive/abusive contents and maintaining a log of moderated items, to the AKASHA World. It consists of components, services and widgets which are standalone elements interacting with each other to form a wholesome system.
 
-## Components
+## Pages
 
-The core components include:
+The core pages include:
 
-### Dashboard
-> The Dashboard consists of the [General](src/components/dashboard/tabs/general), [Activity](src/components/dashboard/tabs/activity), (and [Applications](src/components/dashboard/tabs/applications), if admin) tabs.
+### Overview
+> The Overview page shows a brief intro to the Vibe app and also presents the core values.
+
+### Moderators
+> The Moderators page shows a tabbed list of all moderators according to their status.
 
 ### Transparency Log
 > The Transparency Log is a scrollable list  of moderated (kept/delisted) entries only. Its route is unrestricted and requires no authentication.

@@ -9,7 +9,7 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import { ReportItem, ReportItemConfirmation } from '../components/report';
 
-import { BasePageProps } from './dashboard';
+import { BasePageProps } from './overview';
 import { HOME } from '../routes';
 import { reportDetailsSubtitles, reasons, externalLinks } from '../utils';
 

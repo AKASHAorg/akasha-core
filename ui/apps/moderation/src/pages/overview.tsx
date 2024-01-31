@@ -1,6 +1,13 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { NavigateToParams } from '@akashaorg/typings/lib/ui';
+
+import {
+  SparklesIcon,
+  ChatBubbleOvalLeftEllipsisIcon,
+  EnvelopeIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ModerationIntroCard from '@akashaorg/design-system-components/lib/components/ModerationIntroCard';
 import ModerationValuesCard from '@akashaorg/design-system-components/lib/components/ModerationValuesCard';
@@ -8,15 +15,14 @@ import ModerationValuesCard from '@akashaorg/design-system-components/lib/compon
 import BecomeModeratorCard from '../components/overview/become-moderator-card';
 import HelloModeratorCard from '../components/overview/hello-moderator-card';
 
-import { BasePageProps } from './dashboard';
 import { BECOME_MODERATOR, CHECK_APPLICATION_STATUS } from '../routes';
 import { values } from '../services/values';
 import { externalLinks } from '../utils';
-import {
-  SparklesIcon,
-  ChatBubbleOvalLeftEllipsisIcon,
-  EnvelopeIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+
+export type BasePageProps = {
+  user?: string | null;
+  navigateTo: (args: NavigateToParams) => void;
+};
 
 export enum ApplicationStatusType {
   review = 'Under Review',
@@ -25,12 +31,12 @@ export enum ApplicationStatusType {
 }
 
 export type OverviewPageProps = BasePageProps & {
-  isAuthorised: boolean;
+  isModerator: boolean;
   applicationStatus: ApplicationStatusType | null;
 };
 
 export const Overview: React.FC<OverviewPageProps> = props => {
-  const { isAuthorised, applicationStatus, navigateTo } = props;
+  const { isModerator, applicationStatus, navigateTo } = props;
   const { t } = useTranslation('app-moderation-ewa');
 
   const handleCodeOfConductClick = () => {
@@ -55,7 +61,7 @@ export const Overview: React.FC<OverviewPageProps> = props => {
     });
   };
 
-  const overviewCTAArr = isAuthorised
+  const overviewCTAArr = isModerator
     ? [
         {
           label: t('CoC discussions'),
@@ -90,7 +96,7 @@ export const Overview: React.FC<OverviewPageProps> = props => {
 
   return (
     <Stack spacing="gap-y-4">
-      {isAuthorised && (
+      {isModerator && (
         <HelloModeratorCard
           titleLabel={t('Hello Moderator!')}
           subtitleLabel={t(
@@ -104,9 +110,9 @@ export const Overview: React.FC<OverviewPageProps> = props => {
       )}
       <ModerationIntroCard
         titleLabel={t('Overview')}
-        introLabel={`${t('Welcome to AKASHA')} ${isAuthorised ? t('Moderation') : t('Vibes')}`}
+        introLabel={`${t('Welcome to AKASHA')} ${isModerator ? t('Moderation') : t('Vibes')}`}
         subtitleLabel={
-          isAuthorised
+          isModerator
             ? t(
                 'The Moderation app facilitates cooperation and prevents abuse. The app is open and transparent. Take part in the process of governing this community.',
               )
@@ -114,7 +120,7 @@ export const Overview: React.FC<OverviewPageProps> = props => {
                 "The Vibes app encourages collaboration while safeguarding against misuse. It's an open and transparent platform, inviting you to actively participate in shaping our community's governance.",
               )
         }
-        {...(isAuthorised && { codeOfConductLabel: t('Read our Code of Conduct') })}
+        {...(isModerator && { codeOfConductLabel: t('Read our Code of Conduct') })}
         overviewCTAArr={overviewCTAArr}
         onCodeOfConductClick={handleCodeOfConductClick}
       />
@@ -122,7 +128,7 @@ export const Overview: React.FC<OverviewPageProps> = props => {
       {/**
        * if logged user is not a moderator, show this prompt
        */}
-      {!isAuthorised && (
+      {!isModerator && (
         <BecomeModeratorCard
           titleLabel={t('Keep our Community Safe')}
           subtitleLabel={t(

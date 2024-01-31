@@ -9,7 +9,7 @@ import BMSelectCategory from '../components/moderator/become-moderator/select-ca
 import BMContactInfo from '../components/moderator/become-moderator/contact-info';
 import BMConfirmation from '../components/moderator/become-moderator/confirmation';
 
-import { BasePageProps } from './dashboard';
+import { BasePageProps } from './overview';
 import { HOME } from '../routes';
 import { reasons } from '../utils/reasons';
 import { BMConfirmationSubtitles, BMIntroSubtitles } from '../utils';
@@ -42,15 +42,11 @@ export const BecomeModeratorPage: React.FC<BasePageProps> = props => {
     allCategoriesLabel,
   });
 
-  const handleCodeOfConductClick = () => () => {
+  const handleCodeOfConductClick = () => {
     navigateTo({
       appName: '@akashaorg/app-legal',
       getNavigationUrl: routes => routes.codeOfConduct,
     });
-  };
-
-  const handleFillFromProfileClick = () => {
-    /** do something */
   };
 
   const handleCheckBoxClick = pos => () => {
@@ -153,7 +149,9 @@ export const BecomeModeratorPage: React.FC<BasePageProps> = props => {
           checkedState={checkedState}
           cancelButtonLabel={t('Cancel')}
           confirmButtonLabel={t('Submit')}
-          onFillFromProfileClick={handleFillFromProfileClick}
+          onFillFromProfileClick={() => {
+            /** */
+          }}
           onCheckBoxClick={handleCheckBoxClick}
           onCancelButtonClick={handleCancelButtonClick}
           onConfirmButtonClick={handleConfirmButtonClick}

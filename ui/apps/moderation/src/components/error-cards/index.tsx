@@ -1,3 +1,1 @@
-import NoItemsFound from './no-items-found';
-
-export { NoItemsFound };
+export * from './no-items-found';

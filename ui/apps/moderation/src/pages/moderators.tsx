@@ -10,7 +10,7 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ModeratorDetailMiniCard from '../components/moderator/mini-card';
 
 import { generateTenureInfoLabel } from '../utils';
-import { BasePageProps } from './dashboard';
+import { BasePageProps } from './overview';
 
 export const Moderators: React.FC<BasePageProps> = props => {
   const { navigateTo } = props;

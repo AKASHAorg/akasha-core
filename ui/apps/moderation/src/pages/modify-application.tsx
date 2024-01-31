@@ -5,7 +5,7 @@ import { useModerationCategory } from '@akashaorg/ui-awf-hooks';
 
 import ModifyApplication from '../components/moderator/become-moderator/modify-application';
 
-import { BasePageProps } from './dashboard';
+import { BasePageProps } from './overview';
 import { CHECK_APPLICATION_STATUS, HOME } from '../routes';
 import { reasons } from '../utils';
 

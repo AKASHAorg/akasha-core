@@ -8,7 +8,7 @@ import {
 } from '@akashaorg/typings/lib/ui';
 import React from 'react';
 import { Vibe } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
-import routes, { DASHBOARD, HISTORY, HOME, MODERATORS } from './routes';
+import routes, { HISTORY, HOME, MODERATORS } from './routes';
 
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
   loadingFn: () => import('./components'),
@@ -31,20 +31,14 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
         type: MenuItemType.Internal,
       },
       {
-        label: DASHBOARD,
-        index: 1,
-        route: routes[DASHBOARD],
-        type: MenuItemType.Internal,
-      },
-      {
         label: MODERATORS,
-        index: 2,
+        index: 1,
         route: routes[MODERATORS],
         type: MenuItemType.Internal,
       },
       {
         label: HISTORY,
-        index: 3,
+        index: 2,
         route: routes[HISTORY],
         type: MenuItemType.Internal,
       },

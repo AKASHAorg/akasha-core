@@ -1,16 +1,17 @@
 import React from 'react';
+import { Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import ApplicationStatus from '../components/moderator/become-moderator/application-status';
 
-import { BasePageProps } from './dashboard';
-import { ApplicationStatusType } from './overview';
+import { ApplicationStatusType, BasePageProps } from './overview';
 
 import {
   applicationApprovedSubtitles,
   applicationRejectedSubtitles,
   applicationUnderReviewSubtitles,
 } from '../utils';
+import routes, { HOME } from '../routes';
 
 export type ApplicationStatusPageProps = BasePageProps & {
   applicationStatus: ApplicationStatusType | null;
@@ -45,12 +46,17 @@ export const ApplicationStatusPage: React.FC<ApplicationStatusPageProps> = props
     });
   };
 
+  // return to home page (overview) if no application status
+  if (!applicationStatus) {
+    return <Navigate to={routes[HOME]} replace />;
+  }
+
   return (
     <ApplicationStatus
       label={t('Application Status')}
-      assetName={content.assetName}
+      assetName={content?.assetName}
       titleLabel={t('{{applicationStatus}}', { applicationStatus: applicationStatus })}
-      subtitleLabels={content.subtitle.map((subtitle: { [key: string]: string }) => ({
+      subtitleLabels={content?.subtitle.map((subtitle: { [key: string]: string }) => ({
         ...subtitle,
         label: t('{{label}}', { label: subtitle.label }),
       }))}

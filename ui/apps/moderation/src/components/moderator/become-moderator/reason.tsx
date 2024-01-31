@@ -23,7 +23,14 @@ const BMSelectReason: React.FC<BMSelectReasonProps> = props => {
         {subtitleLabel}
       </Text>
 
-      <TextField caption={reasonCaption} placeholder={reasonPlaceholderLabel} type="multiline" />
+      <TextField
+        caption={reasonCaption}
+        placeholder={reasonPlaceholderLabel}
+        type="multiline"
+        onChange={() => {
+          /** */
+        }}
+      />
     </SteppedActionWrapper>
   );
 };
