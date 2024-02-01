@@ -18,6 +18,7 @@ import {
   ApplicationStatusPage,
   ModifyApplicationPage,
   ReportItemPage,
+  ApplicationStatusType,
 } from '../pages';
 import routes, {
   HOME,
@@ -31,6 +32,7 @@ import routes, {
   MODIFY_APPLICATION,
   REPORT_ITEM,
 } from '../routes';
+import { generateModerators } from '../utils';
 
 const AppRoutes: React.FC<unknown> = () => {
   const { baseRouteName, logger, getRoutingPlugin } = useRootComponentProps();
@@ -42,13 +44,14 @@ const AppRoutes: React.FC<unknown> = () => {
   const checkModeratorQuery = { data: 200 }; // modify to connect to actual hook
 
   const checkModeratorResp = checkModeratorQuery.data;
-
   const isModerator = useMemo(() => checkModeratorResp === 200, [checkModeratorResp]);
 
-  const applicationStatus = null;
+  const getModeratorsQuery = { data: generateModerators(), isFetching: false };
+  const allModerators = getModeratorsQuery.data;
+
+  const applicationStatus = ApplicationStatusType.approved;
 
   const navigateTo = getRoutingPlugin().navigateTo;
-
   const authenticatedDid = authenticatedProfile?.did.id;
 
   const errorBoundaryProps: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
@@ -89,7 +92,11 @@ const AppRoutes: React.FC<unknown> = () => {
             path={routes[MODERATORS]}
             element={
               <ErrorBoundary {...errorBoundaryProps}>
-                <Moderators navigateTo={navigateTo} />
+                <Moderators
+                  isFetchingModerators={getModeratorsQuery.isFetching}
+                  moderators={allModerators}
+                  navigateTo={navigateTo}
+                />
               </ErrorBoundary>
             }
           />

@@ -1,51 +1,34 @@
 import React from 'react';
+import { transformSource } from '@akashaorg/ui-awf-hooks';
+import { Moderator } from '@akashaorg/typings/lib/ui';
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
+import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
-import { formatDate } from '../../utils';
-import { Moderator } from '@akashaorg/typings/lib/ui';
+import { formatDate, getModeratorStatusIndicator } from '../../utils';
 import { EnvelopeIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { Discord } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
-import { transformSource } from '@akashaorg/ui-awf-hooks';
 
 export type ModeratorDetailCardProps = {
   moderator: Moderator;
   tenureInfoLabel: string;
   viewProfileLabel: string;
-  dismissModeratorLabel: string;
-  dismissModeratorDescLabel: string;
-  onClickDismissModerator: () => void;
 };
 
 const ModeratorDetailCard: React.FC<ModeratorDetailCardProps> = props => {
-  const {
-    moderator,
-    tenureInfoLabel,
-    viewProfileLabel,
-    dismissModeratorLabel,
-    dismissModeratorDescLabel,
-    onClickDismissModerator,
-  } = props;
+  const { moderator, tenureInfoLabel, viewProfileLabel } = props;
 
   const textStyle = 'max-w([12.5rem] md:[7.5rem]) w-fit cursor-default';
 
-  const moderatorStatusIndicator = `${
-    moderator.status === 'active'
-      ? 'bg-success'
-      : moderator.status === 'revoked'
-      ? 'bg(errorLight dark:errorDark)'
-      : 'bg(warningLight dark:warningDark)'
-  }`;
-
   return (
     <Card padding={16} customStyle="space-y-4">
-      <Stack justify="between">
-        <Stack customStyle="flex space-x-2 items-center w([50%] md:[30%])">
+      <Stack direction="row" justify="between">
+        <Stack direction="row" spacing="gap-x-2" align="center" customStyle="w([50%] md:[30%])">
           <Avatar
             avatar={transformSource(moderator?.avatar?.default)}
             alternativeAvatars={moderator?.avatar?.alternatives?.map(alternative =>
@@ -62,21 +45,17 @@ const ModeratorDetailCard: React.FC<ModeratorDetailCardProps> = props => {
               >{`${moderator.name}`}</Text>
             </Tooltip>
 
-            <Tooltip content={`${moderator.name}`} placement="right">
-              <Text
-                variant="button-md"
-                weight="normal"
-                truncate={true}
-                customStyle={textStyle}
-                color={{ light: 'grey4', dark: 'grey7' }}
-              >{`${moderator.name}`}</Text>
-            </Tooltip>
+            <DidField did={moderator.did.id} />
           </Stack>
         </Stack>
 
         <Stack>
-          <Stack align="center" spacing="gap-x-1.5">
-            <Stack customStyle={`w-1.5 h-1.5 rounded-full ${moderatorStatusIndicator}`} />
+          <Stack direction="row" align="center" spacing="gap-x-1.5">
+            <Stack
+              customStyle={`w-1.5 h-1.5 rounded-full ${getModeratorStatusIndicator(
+                moderator.status,
+              )}`}
+            />
             <Text variant="button-md" weight="normal" customStyle="capitalize">
               {moderator.status}
             </Text>
@@ -96,11 +75,11 @@ const ModeratorDetailCard: React.FC<ModeratorDetailCardProps> = props => {
 
       <Divider />
 
-      <Stack justify="between">
+      <Stack direction="row" justify="between">
         <Button label={viewProfileLabel} />
 
         {moderator.social && (
-          <Stack spacing="gap-x-2">
+          <Stack direction="row" spacing="gap-x-2">
             {moderator.social?.discord && (
               <AppIcon placeholderIcon={<Discord />} solid={true} accentColor={true} />
             )}
@@ -110,22 +89,6 @@ const ModeratorDetailCard: React.FC<ModeratorDetailCardProps> = props => {
             )}
           </Stack>
         )}
-      </Stack>
-
-      <Divider />
-
-      <Stack>
-        <Text variant="button-md" weight="bold">
-          {dismissModeratorLabel}
-        </Text>
-
-        <Text variant="footnotes2">{dismissModeratorDescLabel}</Text>
-
-        <Button
-          label={dismissModeratorLabel}
-          customStyle="self-end"
-          onClick={onClickDismissModerator}
-        />
       </Stack>
     </Card>
   );

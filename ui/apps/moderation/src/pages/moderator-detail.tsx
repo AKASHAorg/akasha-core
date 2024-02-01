@@ -1,5 +1,4 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -19,11 +18,6 @@ export const ModeratorDetailPage: React.FC<BasePageProps> = props => {
 
   const [curPage, setCurPage] = React.useState<number>(1);
 
-  /**
-   * get the profileId from parm and use this to fetch the moderator detail
-   */
-  const { moderatorProfileId } = useParams<{ moderatorProfileId: string }>();
-
   const moderator = generateModerators()[1];
 
   const tenureInfoLabel = generateTenureInfoLabel(moderator.status);
@@ -42,13 +36,6 @@ export const ModeratorDetailPage: React.FC<BasePageProps> = props => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [logItemsQuery.data]);
-
-  const handleClickDismissModerator = () => {
-    navigateTo?.({
-      appName: '@akashaorg/app-moderation-ewa',
-      getNavigationUrl: () => `/moderator/${moderatorProfileId}/dismiss`,
-    });
-  };
 
   const handleClickPage = (page: number) => () => {
     setCurPage(page);
@@ -87,11 +74,6 @@ export const ModeratorDetailPage: React.FC<BasePageProps> = props => {
         moderator={moderator}
         viewProfileLabel={t('View Profile')}
         tenureInfoLabel={t('{{tenureInfoLabel}}', { tenureInfoLabel })}
-        dismissModeratorLabel={t('Dismiss Moderator')}
-        dismissModeratorDescLabel={t(
-          "You can dismiss this moderator anytime if they have been inactive or if they violated AKASHA's code of conduct",
-        )}
-        onClickDismissModerator={handleClickDismissModerator}
       />
 
       <PaginatedTable

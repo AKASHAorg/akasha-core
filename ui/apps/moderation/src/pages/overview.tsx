@@ -64,7 +64,7 @@ export const Overview: React.FC<OverviewPageProps> = props => {
   const overviewCTAArr = isModerator
     ? [
         {
-          label: t('CoC discussions'),
+          label: t('Code of Conduct discussions'),
           url: externalLinks.discourse.CoC,
           icon: <SparklesIcon />,
         },

@@ -1,11 +1,13 @@
 import React from 'react';
+
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
+import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
-import { formatDate } from '../../utils';
+import { formatDate, getModeratorStatusIndicator } from '../../utils';
 import { Moderator } from '@akashaorg/typings/lib/ui';
 import { ChevronRightIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { transformSource } from '@akashaorg/ui-awf-hooks';
@@ -24,20 +26,14 @@ const ModeratorDetailMiniCard: React.FC<ModeratorDetailMiniCardProps> = props =>
 
   const textStyle = 'max-w([12.5rem] md:[7.5rem]) w-fit cursor-default';
 
-  const moderatorStatusIndicator = `${
-    moderator.status === 'active'
-      ? 'bg-success'
-      : moderator.status === 'revoked'
-      ? 'bg-(errorLight dark:errorDark)'
-      : 'bg-(warningLight dark:warningDark)'
-  }`;
-
   return (
-    <Stack customStyle={`py-4 flex-none ${borderBottomStyle}`}>
+    <Stack padding="py-4" direction="row" customStyle={`flex-none ${borderBottomStyle}`}>
       <Stack
+        direction="row"
         spacing="gap-x-2"
         align="start"
-        customStyle=" w([50%] md:[30%]) px-4 border(r-1 solid grey8 dark:grey3)"
+        padding="px-4"
+        customStyle=" w([50%] md:[35%]) border(r-1 solid grey8 dark:grey3)"
       >
         <Avatar
           avatar={transformSource(moderator?.avatar?.default)}
@@ -52,18 +48,14 @@ const ModeratorDetailMiniCard: React.FC<ModeratorDetailMiniCardProps> = props =>
             </Text>
           </Tooltip>
 
-          <Tooltip content={`${moderator.name}`} placement="right">
-            <Text
-              variant="button-md"
-              weight="normal"
-              truncate={true}
-              customStyle={textStyle}
-              color={{ light: 'grey4', dark: 'grey7' }}
-            >{`${moderator.name}`}</Text>
-          </Tooltip>
+          <DidField did={moderator.did.id} />
 
-          <Stack align="center" spacing="gap-x-1.5">
-            <Stack customStyle={`w-1.5 h-1.5 rounded-full ${moderatorStatusIndicator}`} />
+          <Stack direction="row" align="center" spacing="gap-x-1.5">
+            <Stack
+              customStyle={`w-1.5 h-1.5 rounded-full ${getModeratorStatusIndicator(
+                moderator.status,
+              )}`}
+            />
             <Text variant="button-md" weight="normal" customStyle="capitalize">
               {moderator.status}
             </Text>
@@ -71,13 +63,19 @@ const ModeratorDetailMiniCard: React.FC<ModeratorDetailMiniCardProps> = props =>
         </Stack>
       </Stack>
 
-      <Stack justify="between" align="center" customStyle="w([50%] md:[70%]) px-4">
+      <Stack
+        direction="row"
+        padding="px-4"
+        justify="between"
+        align="center"
+        customStyle="w([50%] md:[65%])"
+      >
         <Stack>
-          <Text variant="button-md" weight="normal" color={{ light: 'grey4', dark: 'grey6' }}>
+          <Text variant="button-md" weight="normal" color={{ light: 'grey4', dark: 'grey7' }}>
             {tenureInfoLabel}:
           </Text>
 
-          <Text variant="button-md" weight="normal" color={{ light: 'grey4', dark: 'grey6' }}>
+          <Text variant="button-md" weight="normal" color={{ light: 'grey4', dark: 'grey7' }}>
             {moderator.status === 'active'
               ? formatDate(new Date(moderator.createdAt))
               : formatDate(moderator.moderatorEndDate)}
