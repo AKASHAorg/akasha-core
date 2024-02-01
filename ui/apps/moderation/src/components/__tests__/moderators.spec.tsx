@@ -3,9 +3,16 @@ import * as React from 'react';
 import { renderWithAllProviders, act, cleanup } from '@akashaorg/af-testing';
 
 import { Moderators } from '../../pages';
+import { generateModerators } from '../../utils';
 
 describe('<Moderators /> component', () => {
-  const Base = <Moderators navigateTo={jest.fn()} />;
+  const Base = (
+    <Moderators
+      isFetchingModerators={false}
+      moderators={generateModerators()}
+      navigateTo={jest.fn()}
+    />
+  );
 
   let componentWrapper = renderWithAllProviders(<></>, {});
 
