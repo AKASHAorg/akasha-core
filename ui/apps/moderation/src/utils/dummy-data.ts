@@ -8,7 +8,15 @@ const randomDateBetweenValues = (start = 'Jan 01 2020', end = 'Dec 31 2022') => 
 };
 
 const moderatorStatus = ['active', 'resigned', 'revoked'];
-const moderatorNames = ['Mike Torello', 'April Curtis', 'Murdock', 'B.A. Baracus'];
+const moderatorNames = [
+  'Mike Torello',
+  'April Curtis',
+  'Murdock',
+  'B.A. Baracus',
+  'Capt. Trunk',
+  'Lynn Tanner',
+  'Angelina Jill',
+];
 
 export const generateModerators = () => {
   const moderators = moderatorNames.map((name, idx) => {
@@ -22,7 +30,7 @@ export const generateModerators = () => {
       createdAt: randomDateBetweenValues(),
       active: isAdmin ? true : status === 'active',
       admin: isAdmin,
-      did: { id },
+      did: { id: `did:pkh:eip155:5:0xadc81c196296322f9910c060b9ec7917dfbc7c${idx}b` },
       name: name,
       status: isAdmin ? 'active' : status,
       social: {
