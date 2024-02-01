@@ -1,4 +1,5 @@
 import React from 'react';
+import getSDK from '@akashaorg/awf-sdk';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -13,23 +14,51 @@ import {
   mapReflectEntryData,
   useAnalytics,
   useGetLogin,
+  useNsfwToggling,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { EntityTypes } from '@akashaorg/typings/lib/ui';
 import { ReflectFeed, ReflectionPreview } from '@akashaorg/ui-lib-feed';
-import { useGetBeamByIdSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import {
+  useGetBeamByIdSuspenseQuery,
+  useGetBeamStreamQuery,
+} from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import { AkashaBeamStreamModerationStatus } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 
 const BeamPage: React.FC<unknown> = () => {
   const { beamId } = useParams<{
     beamId: string;
   }>();
+  const sdk = getSDK();
   const { t } = useTranslation('app-akasha-integration');
   const { getRoutingPlugin, navigateToModal, getTranslationPlugin } = useRootComponentProps();
-  const { data } = useGetLogin();
+  const { data, loading: authenticating } = useGetLogin();
+  const { showNsfw } = useNsfwToggling();
   const [analyticsActions] = useAnalytics();
   const isLoggedIn = !!data?.id;
   const navigateTo = getRoutingPlugin().navigateTo;
+
+  const beamStreamCheckQuery = useGetBeamStreamQuery({
+    variables: {
+      first: 1,
+      indexer: sdk.services.gql.indexingDID,
+      filters: { where: { beamID: { equalTo: beamId } } },
+    },
+  });
+
+  const moderationData = React.useMemo(() => {
+    if (
+      beamStreamCheckQuery.data &&
+      hasOwn(beamStreamCheckQuery.data, 'node') &&
+      hasOwn(beamStreamCheckQuery.data.node, 'akashaBeamStreamList') &&
+      hasOwn(beamStreamCheckQuery.data.node.akashaBeamStreamList.edges[0].node, 'status')
+    ) {
+      return beamStreamCheckQuery.data.node.akashaBeamStreamList.edges[0].node.status;
+    }
+  }, [beamStreamCheckQuery]);
+
   const beamReq = useGetBeamByIdSuspenseQuery({
     variables: { id: beamId },
   });
@@ -42,6 +71,36 @@ const BeamPage: React.FC<unknown> = () => {
   const showLoginModal = () => {
     navigateToModal({ name: 'login' });
   };
+
+  const showNsfwCard = React.useMemo(() => {
+    if (
+      moderationData === AkashaBeamStreamModerationStatus.Nsfw &&
+      (!showNsfw || (!isLoggedIn && !authenticating))
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }, [authenticating, isLoggedIn, moderationData, showNsfw]);
+
+  React.useEffect(() => {
+    console.log(
+      'showNsfwCard beampage',
+      showNsfwCard,
+      'showNsfw',
+      showNsfw,
+      'isLoggedIn',
+      isLoggedIn,
+      'authenticating',
+      authenticating,
+      'moderationData',
+      moderationData,
+    );
+  }, [showNsfwCard, showNsfw, isLoggedIn, authenticating, moderationData]);
+
+  if (beamStreamCheckQuery.loading) {
+    return <Spinner />;
+  }
 
   if (beamReq.error) {
     return (
@@ -62,6 +121,7 @@ const BeamPage: React.FC<unknown> = () => {
           entryData={mapBeamEntryData(entryData)}
           isLoggedIn={isLoggedIn}
           showLoginModal={showLoginModal}
+          showNSFWCard={showNsfwCard}
         />
       </React.Suspense>
       <Stack spacing="gap-y-2">

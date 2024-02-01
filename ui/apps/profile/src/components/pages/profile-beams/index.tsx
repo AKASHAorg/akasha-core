@@ -6,6 +6,7 @@ import {
   hasOwn,
   mapBeamEntryData,
   useAnalytics,
+  useGetLogin,
   useNsfwToggling,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
@@ -21,6 +22,8 @@ const ProfileBeamsPage: React.FC<ProfileBeamsPageProps> = props => {
   const [analyticsActions] = useAnalytics();
   const navigateTo = React.useRef(getRoutingPlugin().navigateTo);
   const { showNsfw } = useNsfwToggling();
+  const { data } = useGetLogin();
+  const isLoggedIn = !!data?.id;
 
   return (
     <Stack direction="column" spacing="gap-y-4" fullWidth>
@@ -54,6 +57,8 @@ const ProfileBeamsPage: React.FC<ProfileBeamsPageProps> = props => {
                       `${navRoutes.Beam}/${itemData.node.id}${navRoutes.Reflect}`,
                   })
                 }
+                showNSFWCard={false}
+                isLoggedIn={isLoggedIn}
               />
             );
         }}

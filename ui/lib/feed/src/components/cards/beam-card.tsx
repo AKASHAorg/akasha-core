@@ -21,11 +21,22 @@ type BeamCardProps = Pick<
   | 'showHiddenContent'
 > & {
   entryData: BeamEntryData;
+  showNSFWCard: boolean;
+  showLoginModal?: () => void;
+  isLoggedIn: boolean;
 };
 
 const BeamCard: React.FC<BeamCardProps> = props => {
   const { t } = useTranslation('ui-lib-feed');
-  const { entryData, onReflect, showHiddenContent, ...rest } = props;
+  const {
+    entryData,
+    onReflect,
+    showHiddenContent,
+    showNSFWCard,
+    showLoginModal,
+    isLoggedIn,
+    ...rest
+  } = props;
   const { getRoutingPlugin } = useRootComponentProps();
   const { getTranslationPlugin } = useRootComponentProps();
   const { data } = useGetLogin();
@@ -87,7 +98,14 @@ const BeamCard: React.FC<BeamCardProps> = props => {
           secondLine: t('All reflections are disabled.'),
         },
       }}
+      nsfw={{
+        sensitiveContentLabel: t('Sensitive Content!'),
+        clickToViewLabel: t('Click to View'),
+      }}
       showHiddenContent={showHiddenContent}
+      showNSFWCard={showNSFWCard}
+      showLoginModal={showLoginModal}
+      isLoggedIn={isLoggedIn}
       itemType={EntityTypes.BEAM}
       transformSource={transformSource}
       onAvatarClick={onAvatarClick}

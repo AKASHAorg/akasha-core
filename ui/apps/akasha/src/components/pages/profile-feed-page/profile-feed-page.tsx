@@ -67,6 +67,8 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
                       `${navRoutes.Beam}/${itemData.node.id}${navRoutes.Reflect}`,
                   })
                 }
+                showNSFWCard={false}
+                isLoggedIn={true}
               />
             );
         }}

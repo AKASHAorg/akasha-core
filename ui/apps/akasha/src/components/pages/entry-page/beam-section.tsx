@@ -16,11 +16,12 @@ type BeamSectionProps = {
   beamId: string;
   entryData: BeamEntryData;
   isLoggedIn: boolean;
+  showNSFWCard: boolean;
   showLoginModal: () => void;
 };
 
 const BeamSection: React.FC<BeamSectionProps> = props => {
-  const { beamId, entryData, isLoggedIn, showLoginModal } = props;
+  const { beamId, entryData, isLoggedIn, showNSFWCard, showLoginModal } = props;
   const { t } = useTranslation('app-akasha-integration');
   const { getRoutingPlugin } = useRootComponentProps();
   const location = useLocation();
@@ -52,6 +53,9 @@ const BeamSection: React.FC<BeamSectionProps> = props => {
           noWrapperCard={true}
           contentClickable={false}
           showHiddenContent={true}
+          showNSFWCard={showNSFWCard}
+          showLoginModal={showLoginModal}
+          isLoggedIn={isLoggedIn}
           onReflect={() => {
             onNavigate(entryData?.id, !isReflecting);
           }}

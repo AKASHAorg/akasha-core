@@ -12,11 +12,6 @@ import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoade
 import { RestoreItem } from '../virtual-list/use-scroll-state';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import type {
-  GetBeamStreamQuery,
-  GetBeamsByAuthorDidQuery,
-  GetBeamsQuery,
-} from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 import { hasOwn } from '@akashaorg/ui-awf-hooks';
 import BeamContentResolver from './beam-content-resolver';
 

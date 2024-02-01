@@ -13,6 +13,7 @@ import {
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import ReadOnlyEditor from '../../ReadOnlyEditor';
 import AuthorProfileLoading from '../EntryCardLoading/author-profile-loading';
+import NSFW, { NSFWProps } from '../NSFW';
 import Menu from '@akashaorg/design-system-core/lib/components/Menu';
 import {
   formatDate,
@@ -61,15 +62,18 @@ export type EntryCardProps = {
     others: OthersRemovedMessage;
   };
   editLabel?: string;
+  nsfw?: Omit<NSFWProps, 'onClickToView'>;
   profileAnchorLink?: string;
   repliesAnchorLink?: string;
   disableReporting?: boolean;
   isViewer?: boolean;
+  isLoggedIn: boolean;
   hidePublishTime?: boolean;
   disableActions?: boolean;
   noWrapperCard?: boolean;
   hideActionButtons?: boolean;
   showHiddenContent?: boolean;
+  showNSFWCard?: boolean;
   contentClickable?: boolean;
   lastEntry?: boolean;
   hover?: boolean;
@@ -85,6 +89,7 @@ export type EntryCardProps = {
   onEntryRemove?: (itemId: string) => void;
   onEntryFlag?: () => void;
   onEdit?: () => void;
+  showLoginModal?: () => void;
   transformSource: (src: Image) => Image;
 } & (BeamProps | ReflectProps);
 
@@ -98,15 +103,18 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     removed,
     notEditableLabel,
     editLabel,
+    nsfw,
     profileAnchorLink,
     repliesAnchorLink,
     disableReporting,
     isViewer,
+    isLoggedIn,
     hidePublishTime,
     disableActions,
     noWrapperCard = false,
     hideActionButtons,
     showHiddenContent,
+    showNSFWCard,
     contentClickable,
     editable = true,
     lastEntry,
@@ -119,12 +127,15 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     onReflect,
     onEdit,
     transformSource,
+    showLoginModal,
     ...rest
   } = props;
 
   const profileRef: React.Ref<HTMLDivElement> = React.useRef(null);
+  const [showNSFWContent, setShowNSFWContent] = useState(!showNSFWCard);
   const showHiddenStyle = showHiddenContent ? '' : 'max-h-[50rem]';
-  const contentClickableStyle = 'cursor-default';
+  const contentClickableStyle =
+    contentClickable && !showNSFWCard ? 'cursor-pointer' : 'cursor-default';
   const menuItems: ListItem[] = [
     ...(!isViewer
       ? [
@@ -228,7 +239,11 @@ const EntryCard: React.FC<EntryCardProps> = props => {
         />
       )}
       {entryData.active && (
-        <Card onClick={onContentClick} customStyle={contentClickableStyle} type="plain">
+        <Card
+          onClick={showNSFWCard ? null : onContentClick}
+          customStyle={contentClickableStyle}
+          type="plain"
+        >
           <Stack
             align="center"
             justify="start"
@@ -236,7 +251,20 @@ const EntryCard: React.FC<EntryCardProps> = props => {
             data-testid="entry-content"
             fullWidth={true}
           >
-            {
+            {showNSFWCard && !showNSFWContent && (
+              <NSFW
+                {...nsfw}
+                onClickToView={event => {
+                  event.stopPropagation();
+                  if (!isLoggedIn) {
+                    if (showLoginModal && typeof showLoginModal === 'function') showLoginModal();
+                  } else {
+                    setShowNSFWContent(true);
+                  }
+                }}
+              />
+            )}
+            {showNSFWContent && (
               <Stack justifySelf="start" alignSelf="start" align="start" fullWidth={true}>
                 {rest.itemType === EntityTypes.REFLECT ? (
                   <ReadOnlyEditor
@@ -255,7 +283,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
                   ))
                 )}
               </Stack>
-            }
+            )}
             {showHiddenContent && entryData.tags?.length > 0 && (
               <Stack
                 padding={{ y: 16 }}

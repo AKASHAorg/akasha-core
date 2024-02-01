@@ -37,6 +37,7 @@ const BeamContentResolver: React.FC<BeamContentResolverProps> = ({ beamId, curso
       <BeamCard
         entryData={mapBeamEntryData(beam)}
         contentClickable={true}
+        showNSFWCard={false}
         onContentClick={() =>
           getRoutingPlugin().navigateTo({
             appName: '@akashaorg/app-akasha-integration',
@@ -49,6 +50,7 @@ const BeamContentResolver: React.FC<BeamContentResolverProps> = ({ beamId, curso
             getNavigationUrl: navRoutes => `${navRoutes.Beam}/${beam.id}${navRoutes.Reflect}`,
           })
         }
+        isLoggedIn={isLoggedIn}
       />
     );
   }
