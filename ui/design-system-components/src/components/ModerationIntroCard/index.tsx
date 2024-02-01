@@ -41,7 +41,7 @@ const ModerationIntroCard: React.FC<ModerationIntroCardProps> = props => {
 
   return (
     <Card padding={16}>
-      <Stack customStyle="grid gap-4 grid-cols-1">
+      <Stack spacing="gap-4" customStyle="grid grid-cols-1">
         <Text variant="h5" align="center">
           {titleLabel}
         </Text>
@@ -62,14 +62,14 @@ const ModerationIntroCard: React.FC<ModerationIntroCardProps> = props => {
           </Text>
         )}
 
-        {subtitleLabel && (
-          <Text variant="subtitle2" align="center">
-            {subtitleLabel}
-          </Text>
-        )}
+        <Stack justify="center" spacing="gap-y-1">
+          {subtitleLabel && (
+            <Text variant="subtitle2" align="center">
+              {subtitleLabel}
+            </Text>
+          )}
 
-        {codeOfConductLabel && (
-          <Stack justify="center">
+          {codeOfConductLabel && (
             <Button plain={true} onClick={onCodeOfConductClick}>
               <Text
                 variant="subtitle2"
@@ -81,8 +81,8 @@ const ModerationIntroCard: React.FC<ModerationIntroCardProps> = props => {
                 {codeOfConductLabel}
               </Text>
             </Button>
-          </Stack>
-        )}
+          )}
+        </Stack>
 
         {overviewCTAArr && overviewCTAArr.length > 0 && (
           <Stack
