@@ -5,24 +5,23 @@ import {
   useAnalytics,
   useRootComponentProps,
   transformSource,
-  mapBeamEntryData,
   hasOwn,
 } from '@akashaorg/ui-awf-hooks';
+import { BeamContentResolver, BeamFeed } from '@akashaorg/ui-lib-feed';
 import routes, { EDITOR } from '../../../routes';
 import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
-import { BeamCard, BeamContentResolver, BeamFeed } from '@akashaorg/ui-lib-feed';
 
-export type FeedPageProps = {
+export type GlobalAntennaPageProps = {
   isLoggedIn: boolean;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
   authenticatedProfile?: Profile;
 };
 
-const FeedPage: React.FC<FeedPageProps> = props => {
+const GlobalAntennaPage: React.FC<GlobalAntennaPageProps> = props => {
   const { authenticatedProfile, isLoggedIn } = props;
   const { getRoutingPlugin } = useRootComponentProps();
   const { t } = useTranslation('app-akasha-integration');
@@ -76,4 +75,4 @@ const FeedPage: React.FC<FeedPageProps> = props => {
   );
 };
 
-export default FeedPage;
+export default GlobalAntennaPage;
