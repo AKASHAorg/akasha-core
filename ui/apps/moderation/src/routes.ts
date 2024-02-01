@@ -9,15 +9,17 @@ export const CHECK_APPLICATION_STATUS = 'Check Application Status';
 export const MODIFY_APPLICATION = 'Modify Application';
 export const REPORT_ITEM = 'Report Item';
 
+export const baseHistoryUrl = '/history';
 export const baseOverviewUrl = '/overview';
+export const baseModeratorsUrl = '/moderators';
 export const baseApplicationUrl = '/application';
 
 export default {
   [HOME]: baseOverviewUrl,
-  [MODERATORS]: '/moderators',
-  [VIEW_MODERATOR]: '/moderator/:moderatorProfileId',
-  [HISTORY]: '/history',
-  [HISTORY_ITEM]: '/history/:itemId',
+  [MODERATORS]: baseModeratorsUrl,
+  [VIEW_MODERATOR]: `${baseModeratorsUrl}/:moderatorProfileId`,
+  [HISTORY]: baseHistoryUrl,
+  [HISTORY_ITEM]: `${baseHistoryUrl}/:itemId`,
   [MODERATION_VALUE]: `${baseOverviewUrl}/values/:value`,
   [BECOME_MODERATOR]: '/become-a-moderator',
   [CHECK_APPLICATION_STATUS]: `${baseApplicationUrl}/status`,
