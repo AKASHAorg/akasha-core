@@ -5,7 +5,6 @@ import {
   useGetLogin,
   useIndividualBeam,
   useRootComponentProps,
-  useNsfwToggling,
 } from '@akashaorg/ui-awf-hooks';
 import BeamCard from './cards/beam-card';
 import EntryLoadingPlaceholder from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
@@ -20,19 +19,10 @@ const BeamContentResolver: React.FC<BeamContentResolverProps> = ({ beamId, curso
   const { getRoutingPlugin } = useRootComponentProps();
   const { data: loginData, loading: authenticating } = useGetLogin();
   const isLoggedIn = !!loginData?.id;
-  const { showNsfw } = useNsfwToggling();
 
   if (isLoading) return <EntryLoadingPlaceholder />;
 
   if (beam && hasOwn(beam, 'id')) {
-    // if (beam.id === 'kjzl6kcym7w8y9x3qvi8q4ry7xytr14ijnc7as4j0oyfwkplvgjkgvk0zzhs08g') {
-    //   console.log('error', beam);
-    // }
-    if ((beam.nsfw && !isLoggedIn && !authenticating) || (beam.nsfw && !showNsfw)) {
-      console.log('beamid', beamId);
-      //  return null;
-    }
-
     return (
       <BeamCard
         entryData={mapBeamEntryData(beam)}

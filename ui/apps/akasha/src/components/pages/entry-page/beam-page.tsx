@@ -83,21 +83,6 @@ const BeamPage: React.FC<unknown> = () => {
     }
   }, [authenticating, isLoggedIn, moderationData, showNsfw]);
 
-  React.useEffect(() => {
-    console.log(
-      'showNsfwCard beampage',
-      showNsfwCard,
-      'showNsfw',
-      showNsfw,
-      'isLoggedIn',
-      isLoggedIn,
-      'authenticating',
-      authenticating,
-      'moderationData',
-      moderationData,
-    );
-  }, [showNsfwCard, showNsfw, isLoggedIn, authenticating, moderationData]);
-
   if (beamStreamCheckQuery.loading) {
     return <Spinner />;
   }
