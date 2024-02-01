@@ -12,7 +12,7 @@ export function useNsfwToggling() {
   const currentNsfwSelection = JSON.parse(window.localStorage.getItem(NsfwChoice));
 
   const [showNsfw, setShowNsfw] = useState<boolean>(
-    currentNsfwSelection === null ? true : currentNsfwSelection,
+    currentNsfwSelection === null ? false : currentNsfwSelection,
   );
 
   const toggleShowNsfw = showNsfw => {
