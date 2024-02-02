@@ -70,9 +70,13 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         action: 'Reflect Published',
       });
     },
-    onError: () => {
+    onError: async () => {
       setShowEditor(true);
-      setEditorState(newContent.content.flatMap(item => decodeb64SlateContent(item.value)));
+      setEditorState(
+        Promise.all(
+          newContent.content.flatMap(async item => await decodeb64SlateContent(item.value)),
+        ),
+      );
 
       const notifMsg = t(`Something went wrong.`);
       _uiEvents.current.next({
