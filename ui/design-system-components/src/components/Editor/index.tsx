@@ -64,7 +64,6 @@ export type EditorBoxProps = {
   emojiPlaceholderLabel?: string;
   disableActionLabel?: string;
   disablePublish?: boolean;
-  embedEntryData?: IEntryData;
   minHeight?: string;
   withMeter?: boolean;
   withToolbar?: boolean;
@@ -104,7 +103,6 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
     disableActionLabel,
     disablePublish,
     onPublish,
-    embedEntryData,
     minHeight,
     withMeter,
     withToolbar,
@@ -238,7 +236,6 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
 
     const metadata: IMetadata = {
       app: publishingApp,
-      quote: embedEntryData,
       linkPreview: linkPreviewState,
       tags: [],
       mentions: [],
@@ -604,11 +601,6 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
               linkPreviewData={linkPreviewState}
               handleDeletePreview={handleDeletePreview}
             />
-          )}
-          {embedEntryData && (
-            <Stack padding="py-4">
-              <EmbedBox embedEntryData={embedEntryData} transformSource={transformSource} />
-            </Stack>
           )}
         </Stack>
       </Stack>

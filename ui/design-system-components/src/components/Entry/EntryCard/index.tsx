@@ -39,7 +39,7 @@ type BeamProps = {
 };
 
 type ReflectProps = {
-  slateContent: Descendant[];
+  slateContent: Promise<Descendant[]>;
   itemType: EntityTypes.REFLECT;
   navigateTo?: (args: NavigateToParams) => void;
 };

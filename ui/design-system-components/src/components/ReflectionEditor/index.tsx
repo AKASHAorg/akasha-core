@@ -35,7 +35,6 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
     showCancelButton,
     cancelButtonLabel,
     editorState = editorDefaultValue,
-    embedEntryData,
     showDraft,
     background,
     customStyle = '',
@@ -110,7 +109,6 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
             editorState={editorState}
             cancelButtonLabel={cancelButtonLabel}
             showCancelButton={showCancelButton}
-            embedEntryData={embedEntryData}
             showDraft={showDraft}
             setEditorState={setEditorState}
             onPublish={handlePublish}

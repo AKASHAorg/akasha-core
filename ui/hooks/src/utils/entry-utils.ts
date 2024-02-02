@@ -33,58 +33,81 @@ export type CommentPublishObject = {
   };
 };
 
-function toBinary(data: string) {
-  const codeUnits = new Uint16Array(data.length);
-  for (let i = 0; i < codeUnits.length; i++) {
-    codeUnits[i] = data.charCodeAt(i);
-  }
-  return String.fromCharCode(...new Uint8Array(codeUnits.buffer));
-}
-
-function fromBinary(binary: string) {
-  let result = binary;
-
-  const bytes = new Uint8Array(binary.length);
-  for (let i = 0; i < bytes.length; i++) {
-    bytes[i] = binary.charCodeAt(i);
-  }
-  result = String.fromCharCode(...new Uint16Array(bytes.buffer));
-
-  return result;
-}
-
 /**
  * Utility to decode base64 slate content
  */
-export const decodeb64SlateContent = (
-  base64Content: string,
-  logger?: Logger,
-  handleOldSlateFormat?: boolean,
-) => {
-  const stringContent = window.atob(base64Content);
-  let result;
+export const decodeb64SlateContent = async (base64Content: string, logger?: Logger) => {
   try {
-    const stringified = fromBinary(stringContent);
-    result = JSON.parse(stringified);
+    const contentBuffer = base64ToArrayBuffer(base64Content);
+    const decompressed = await decompress(contentBuffer, 'gzip', logger);
+    const result = JSON.parse(decompressed);
+    return result;
   } catch (err) {
     if (logger) {
       logger.error(`Error parsing content: ${err.message}`);
     }
   }
-  if (handleOldSlateFormat && !Array.isArray(result)) {
-    result = JSON.parse(stringContent);
-  }
-  return result;
 };
 
 /**
- * Utility to serialize slate content to base64
+ * Utility to encode slate content to base64
  */
-export const serializeSlateToBase64 = (slateContent: unknown) => {
+export const encodeSlateToBase64 = async (slateContent: unknown) => {
   const stringified = JSON.stringify(slateContent);
-  const binary = toBinary(stringified);
-  const serialized = window.btoa(binary);
-  return serialized;
+  const compressed = await compress(stringified);
+  const result = arrayBufferToBase64(compressed);
+  return result;
+};
+
+const arrayBufferToBase64 = (buffer: ArrayBuffer): string => {
+  let binary = '';
+  const bytes = new Uint8Array(buffer);
+  const len = bytes.byteLength;
+  for (let i = 0; i < len; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return window.btoa(binary);
+};
+
+const base64ToArrayBuffer = base64 => {
+  const binaryString = window.atob(base64);
+  const bytes = new Uint8Array(binaryString.length);
+  for (let i = 0; i < binaryString.length; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+  return bytes.buffer;
+};
+
+export const compress = (
+  str: string,
+  encoding = 'gzip' as CompressionFormat,
+): Promise<ArrayBuffer> => {
+  const byteArray = new TextEncoder().encode(str);
+  const cs = new CompressionStream(encoding);
+  const writer = cs.writable.getWriter();
+  writer.write(byteArray);
+  writer.close();
+  const result = new Response(cs.readable).arrayBuffer();
+  return result;
+};
+
+export const decompress = async (
+  byteArray: ArrayBuffer,
+  encoding = 'gzip' as CompressionFormat,
+  logger?: Logger,
+): Promise<string> => {
+  try {
+    const cs = new DecompressionStream(encoding);
+    const writer = cs.writable.getWriter();
+    writer.write(byteArray);
+    writer.close();
+    const arrayBuffer = await new Response(cs.readable).arrayBuffer();
+    return new TextDecoder().decode(arrayBuffer);
+  } catch (err) {
+    if (logger) {
+      logger.error(`Error decompressing] content: ${err.message}`);
+    }
+  }
 };
 
 /**

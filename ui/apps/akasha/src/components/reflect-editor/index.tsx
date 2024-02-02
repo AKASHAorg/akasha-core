@@ -3,7 +3,7 @@ import ReflectionEditor from '@akashaorg/design-system-components/lib/components
 import getSDK from '@akashaorg/awf-sdk';
 import {
   transformSource,
-  serializeSlateToBase64,
+  encodeSlateToBase64,
   useAnalytics,
   decodeb64SlateContent,
   useGetLoginProfile,
@@ -92,7 +92,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
 
   const authenticatedProfile = authenticatedProfileDataReq?.akashaProfile;
 
-  const handlePublish = (data: IPublishData) => {
+  const handlePublish = async (data: IPublishData) => {
     const reflection = isReflectOfReflection ? { reflection: reflectToId } : {};
     const content = {
       active: true,
@@ -101,7 +101,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         {
           label: data.metadata.app,
           propertyType: 'slate-block',
-          value: serializeSlateToBase64(data.slateContent),
+          value: await encodeSlateToBase64(data.slateContent),
         },
       ],
       createdAt: new Date().toISOString(),

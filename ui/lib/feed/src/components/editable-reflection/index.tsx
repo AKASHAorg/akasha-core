@@ -8,7 +8,7 @@ import {
   decodeb64SlateContent,
   getLinkPreview,
   transformSource,
-  serializeSlateToBase64,
+  encodeSlateToBase64,
   useAnalytics,
   useRootComponentProps,
   useGetLoginProfile,
@@ -52,7 +52,13 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
   const tagSearch = null;
 
   useEffect(() => {
-    setEditorState(entryData.content.flatMap(item => decodeb64SlateContent(item.value)));
+    async () => {
+      setEditorState(
+        await Promise.all(
+          entryData.content.flatMap(async item => await decodeb64SlateContent(item.value)),
+        ),
+      );
+    };
   }, [entryData.content]);
 
   const [editReflection, { loading: editInProgress }] = useUpdateAkashaReflectMutation({
@@ -100,12 +106,12 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
     'minutes',
   );
 
-  const handleEdit = (data: IPublishData) => {
+  const handleEdit = async (data: IPublishData) => {
     const content = [
       {
         label: data.metadata.app,
         propertyType: 'slate-block',
-        value: serializeSlateToBase64(data.slateContent),
+        value: await encodeSlateToBase64(data.slateContent),
       },
     ];
     setNewContent(content);

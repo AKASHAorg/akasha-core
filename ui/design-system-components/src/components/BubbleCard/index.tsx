@@ -13,7 +13,7 @@ export type BubbleCardProps = {
   locale: string;
   senderName?: string;
   youLabel: string;
-  content?: Descendant[];
+  content?: Promise<Descendant[]>;
   isFromLoggedUser?: boolean;
   chatTimestamp?: string;
   handleMentionClick?: (id: string) => void;
