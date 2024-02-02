@@ -8,8 +8,8 @@ import {
 } from '@akashaorg/af-testing';
 import { PendingReflect } from '../reflect-editor/pending-reflect';
 
-describe('< PendingReflect /> component', async () => {
-  const reflectionData = await genReflectionData();
+describe('< PendingReflect /> component', () => {
+  const reflectionData = genReflectionData();
 
   const BaseComponent = (
     <PendingReflect
