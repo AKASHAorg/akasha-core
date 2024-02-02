@@ -142,26 +142,6 @@ const CustomEditor = {
     Transforms.move(editor);
   },
 
-  // insertImage(
-  //   editor: Editor,
-  //   url: string,
-  //   fallbackUrl: string,
-  //   size: {
-  //     width: string;
-  //     height: string;
-  //     naturalWidth: string;
-  //     naturalHeight: string;
-  //   },
-  // ) {
-  //   const text = { text: '' };
-  //   const image: ImageElement = { url, fallbackUrl, size, type: 'image', children: [text] };
-  //   // move selection to the end before inserting to make sure image is last element
-  //   Transforms.select(editor, Editor.end(editor, []));
-  //   Transforms.insertNodes(editor, image);
-  //   // give slate time to render the image element
-  //   requestAnimationFrame(() => moveSelectionBeforeImage(editor));
-  // },
-
   deleteImage(editor: Editor, element: Element) {
     const path = ReactEditor.findPath(editor, element);
     Transforms.removeNodes(editor, {

@@ -73,7 +73,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
     onError: async () => {
       setShowEditor(true);
       setEditorState(
-        Promise.all(
+        await Promise.all(
           newContent.content.flatMap(async item => await decodeb64SlateContent(item.value)),
         ),
       );
