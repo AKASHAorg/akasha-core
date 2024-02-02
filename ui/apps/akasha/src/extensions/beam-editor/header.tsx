@@ -8,14 +8,22 @@ export interface HeaderProps {
   uiState: uiState;
   handleNsfwCheckbox: () => void;
   isNsfw: boolean;
+  indeterminate: boolean;
   addBlockLabel?: string;
   addTagsLabel?: string;
   beamEditorLabel?: string;
 }
 
 export const Header: React.FC<HeaderProps> = props => {
-  const { uiState, handleNsfwCheckbox, isNsfw, addBlockLabel, addTagsLabel, beamEditorLabel } =
-    props;
+  const {
+    uiState,
+    indeterminate,
+    handleNsfwCheckbox,
+    isNsfw,
+    addBlockLabel,
+    addTagsLabel,
+    beamEditorLabel,
+  } = props;
 
   const renderTitle = () => {
     switch (uiState) {
@@ -45,6 +53,7 @@ export const Header: React.FC<HeaderProps> = props => {
           value="nsfw"
           handleChange={handleNsfwCheckbox}
           isSelected={isNsfw}
+          indeterminate={indeterminate}
         />
       )}
     </Stack>

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import Parcel from 'single-spa-react/parcel';
 import {
@@ -35,13 +35,15 @@ export type ContentBlockExtensionProps = {
     blockID: string;
   };
   blockRef?: React.RefObject<BlockInstanceMethods>;
+  hideContent?: boolean;
+  children?: (props: GetContentBlockByIdQuery['node']) => React.ReactElement;
 };
 
 export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
-  const { blockRef, mode, editMode, readMode } = props;
+  const { blockRef, mode, editMode, readMode, hideContent = false, children } = props;
   const { getExtensionsPlugin, getContext } = useRootComponentProps();
-  const contentBlockStoreRef = React.useRef(getExtensionsPlugin()?.contentBlockStore);
-  const [state, setState] = React.useState<{
+  const contentBlockStoreRef = useRef(getExtensionsPlugin()?.contentBlockStore);
+  const [state, setState] = useState<{
     parcels: (MatchingBlock & { config: ParcelConfigObject })[];
     isMatched: boolean;
   }>({
@@ -49,7 +51,7 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
     isMatched: false,
   });
 
-  React.useLayoutEffect(() => {
+  useLayoutEffect(() => {
     if (!contentBlockStoreRef.current && !!getExtensionsPlugin()) {
       contentBlockStoreRef.current = getExtensionsPlugin().contentBlockStore;
     }
@@ -57,7 +59,7 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
 
   const [fetchBlockInfo, blockInfoQuery] = useGetContentBlockByIdLazyQuery();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (readMode?.blockID) {
       fetchBlockInfo({
         variables: {
@@ -192,18 +194,23 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
             id={`${mode}_${matchingBlock.blockInfo.propertyType}_${index}`}
             key={`${mode}_${matchingBlock.blockInfo.propertyType}_${index}`}
           >
-            <Parcel
-              config={{ ...matchingBlock.config }}
-              {...getContext()}
-              blockInfo={{
-                ...matchingBlock.blockInfo,
-                mode,
-                externalHandler: editMode?.externalHandler,
-              }}
-              blockData={matchingBlock.blockData}
-              blockRef={blockRef}
-              content={matchingBlock.content}
-            />
+            {children?.({
+              ...matchingBlock.blockData,
+            })}
+            {!hideContent && (
+              <Parcel
+                config={{ ...matchingBlock.config }}
+                {...getContext()}
+                blockInfo={{
+                  ...matchingBlock.blockInfo,
+                  mode,
+                  externalHandler: editMode?.externalHandler,
+                }}
+                blockData={matchingBlock.blockData}
+                blockRef={blockRef}
+                content={matchingBlock.content}
+              />
+            )}
           </Stack>
         );
       })}

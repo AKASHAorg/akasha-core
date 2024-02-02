@@ -6,6 +6,7 @@ import {
   type ContentBlockRootProps,
   NotificationTypes,
   NotificationEvents,
+  CreateContentBlock,
 } from '@akashaorg/typings/lib/ui';
 import { useCreateContentBlockMutation } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import {
@@ -73,65 +74,72 @@ export const ImageEditorBlock = (
   const [caption, setCaption] = React.useState('');
   const [showEditModal, setShowEditModal] = React.useState(false);
 
-  const createBlock = React.useCallback(async () => {
-    const imageData = {
-      images: contentBlockImages.map(imageObj => {
-        return {
-          src: imageObj?.src,
-          size: imageObj?.size,
-          name: imageObj?.name,
-        };
-      }),
-      caption,
-      align: alignState,
-    };
-    const content = JSON.stringify(imageData);
-    const contentBlockValue: AkashaContentBlockLabeledValueInput = {
-      label: props.blockInfo.appName,
-      propertyType: props.blockInfo.propertyType,
-      value: content,
-    };
-    try {
-      const resp = await createContentBlock({
-        variables: {
-          i: {
-            content: {
-              // @TODO: replace this mock appVersionID
-              appVersionID: TEST_APP_VERSION_ID,
-              createdAt: new Date().toISOString(),
-              content: [contentBlockValue],
-              active: true,
-              kind: AkashaContentBlockBlockDef.Other,
+  const createBlock = React.useCallback(
+    async ({ nsfw }: CreateContentBlock) => {
+      const imageData = {
+        images: contentBlockImages.map(imageObj => {
+          return {
+            src: imageObj?.src,
+            size: imageObj?.size,
+            name: imageObj?.name,
+          };
+        }),
+        caption,
+        align: alignState,
+      };
+      const content = JSON.stringify(imageData);
+      const contentBlockValue: AkashaContentBlockLabeledValueInput = {
+        label: props.blockInfo.appName,
+        propertyType: props.blockInfo.propertyType,
+        value: content,
+      };
+      try {
+        const resp = await createContentBlock({
+          variables: {
+            i: {
+              content: {
+                // @TODO: replace this mock appVersionID
+                appVersionID: TEST_APP_VERSION_ID,
+                createdAt: new Date().toISOString(),
+                content: [contentBlockValue],
+                active: true,
+                kind: AkashaContentBlockBlockDef.Other,
+                nsfw,
+              },
             },
           },
-        },
-        context: { source: sdk.current.services.gql.contextSources.composeDB },
-      });
-      return {
-        response: { blockID: resp.data.createAkashaContentBlock.document.id },
-        blockInfo: props.blockInfo,
-        retryCount: retryCount.current,
-      };
-    } catch (err) {
-      console.error('error creating content block', err);
-      return {
-        response: {
-          blockID: null,
-          error: err.message,
-        },
-        blockInfo: props.blockInfo,
-        retryCount: retryCount.current,
-      };
-    }
-  }, [alignState, caption, createContentBlock, contentBlockImages, props.blockInfo]);
+          context: { source: sdk.current.services.gql.contextSources.composeDB },
+        });
+        return {
+          response: { blockID: resp.data.createAkashaContentBlock.document.id },
+          blockInfo: props.blockInfo,
+          retryCount: retryCount.current,
+        };
+      } catch (err) {
+        console.error('error creating content block', err);
+        return {
+          response: {
+            blockID: null,
+            error: err.message,
+          },
+          blockInfo: props.blockInfo,
+          retryCount: retryCount.current,
+        };
+      }
+    },
+    [alignState, caption, createContentBlock, contentBlockImages, props.blockInfo],
+  );
 
-  const retryCreate = React.useCallback(async () => {
-    if (contentBlockQuery.called) {
-      contentBlockQuery.reset();
-    }
-    retryCount.current += 1;
-    return createBlock();
-  }, [contentBlockQuery, createBlock]);
+  const retryCreate = React.useCallback(
+    async (arg: CreateContentBlock) => {
+      if (contentBlockQuery.called) {
+        contentBlockQuery.reset();
+      }
+      retryCount.current += 1;
+      return createBlock(arg);
+    },
+    [contentBlockQuery, createBlock],
+  );
 
   useImperativeHandle(
     props.blockRef,
