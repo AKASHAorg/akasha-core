@@ -1,4 +1,5 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -6,36 +7,33 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ModeratorDetailCard from '../components/moderator';
 import PaginatedTable from '../components/transparency-log/paginated-table';
 
-import { PaginatedItem, contentTypeMap } from './transparency-log';
+import { contentTypeMap } from './transparency-log';
 
 import { BasePageProps } from './overview';
-import { generateModerators, formatDate, generateTenureInfoLabel } from '../utils';
+import {
+  generateModerators,
+  formatDate,
+  generateTenureInfoLabel,
+  generateModerationHistory,
+} from '../utils';
 
 export const ModeratorDetailPage: React.FC<BasePageProps> = props => {
   const { navigateTo } = props;
 
-  const [pages, setPages] = React.useState<PaginatedItem[]>([]);
+  const [pages] = React.useState([generateModerationHistory()]);
 
   const [curPage, setCurPage] = React.useState<number>(1);
+
+  /**
+   * get the profileId from parm and use this to fetch the moderator detail
+   */
+  const { moderatorProfileId } = useParams<{ moderatorProfileId: string }>();
 
   const moderator = generateModerators()[1];
 
   const tenureInfoLabel = generateTenureInfoLabel(moderator.status);
 
   const { t } = useTranslation('app-moderation-ewa');
-
-  const logItemsQuery = { data: null };
-
-  React.useEffect(() => {
-    if (logItemsQuery.data) {
-      const results = logItemsQuery.data.pages[0].results;
-
-      setPages([...pages, results]);
-
-      // logItemsQuery.fetchNextPage();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [logItemsQuery.data]);
 
   const handleClickPage = (page: number) => () => {
     setCurPage(page);
