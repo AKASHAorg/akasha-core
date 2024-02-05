@@ -5,6 +5,8 @@ import {
   type AkashaBeamStreamSortingInput,
   type PageInfo,
   SortOrder,
+  AkashaBeamStreamModerationStatus,
+  AkashaBeamFiltersInput,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import type {
   GetBeamsQueryVariables,
@@ -44,19 +46,16 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
   const { data: loginData, loading: authenticating } = useGetLogin();
   const isLoggedIn = !!loginData?.id;
 
-  const mergedVars: GetBeamsQueryVariables = React.useMemo(() => {
+  const mergedVars: GetBeamStreamQueryVariables | GetBeamsQueryVariables = React.useMemo(() => {
     const vars: {
       sorting?: AkashaBeamStreamSortingInput;
-      filters?: AkashaBeamStreamFiltersInput;
+      filters?: AkashaBeamStreamFiltersInput | AkashaBeamFiltersInput;
       id?: string;
     } = {
       sorting: { ...defaultSorting, ...(sorting ?? {}) },
     };
     if (filters) {
-      vars.filters = {
-        ...filters,
-        and: [{ where: { status: { isNull: true } } }],
-      };
+      vars.filters = filters;
     }
 
     return vars;
@@ -257,13 +256,38 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
       };
 
       if (!showNsfw || !isLoggedIn) {
-        initialVars.filters = {
-          and: [{ where: { status: { isNull: true } } }],
-        };
+        if (!did) {
+          initialVars.filters = {
+            or: [
+              { where: { status: { equalTo: AkashaBeamStreamModerationStatus.Ok } } },
+              { where: { status: { isNull: true } } },
+            ],
+          } as AkashaBeamStreamFiltersInput;
+        } else {
+          initialVars.filters = {
+            where: { nsfw: { equalTo: false } },
+          };
+        }
       }
 
       if (showNsfw && isLoggedIn) {
-        initialVars.filters = null;
+        if (!did) {
+          (initialVars.filters as AkashaBeamStreamFiltersInput) = {
+            or: [
+              {
+                where: {
+                  status: {
+                    in: [
+                      AkashaBeamStreamModerationStatus.Ok,
+                      AkashaBeamStreamModerationStatus.Nsfw,
+                    ],
+                  },
+                },
+              },
+              { where: { status: { isNull: true } } },
+            ],
+          };
+        }
       }
 
       if (restoreItem) {
