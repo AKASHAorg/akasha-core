@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { ReactElement, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import Parcel from 'single-spa-react/parcel';
 import {
@@ -36,7 +36,7 @@ export type ContentBlockExtensionProps = {
   };
   blockRef?: React.RefObject<BlockInstanceMethods>;
   hideContent?: boolean;
-  children?: (props: GetContentBlockByIdQuery['node']) => React.ReactElement;
+  children?: (props: GetContentBlockByIdQuery['node']) => ReactElement;
 };
 
 export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
@@ -69,7 +69,7 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
     }
   }, [fetchBlockInfo, readMode?.blockID]);
 
-  const matchingBlocks: MatchingBlock[] = React.useMemo(() => {
+  const matchingBlocks: MatchingBlock[] = useMemo(() => {
     if (!contentBlockStoreRef.current) return [];
     switch (mode) {
       case ContentBlockModes.EDIT:
@@ -85,7 +85,7 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
     }
   }, [mode, editMode, blockInfoQuery.data]);
 
-  React.useLayoutEffect(() => {
+  useLayoutEffect(() => {
     const resolveConfigs = async () => {
       const newBlocks = [];
 
@@ -128,7 +128,7 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
     }
   }, [blockInfoQuery.called, blockInfoQuery.loading, matchingBlocks, mode, state]);
 
-  const appInfo = React.useMemo(() => {
+  const appInfo = useMemo(() => {
     if (blockInfoQuery.called && !blockInfoQuery.loading) {
       if (
         blockInfoQuery.data?.node &&
