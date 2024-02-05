@@ -12,7 +12,7 @@ import { reasons } from '../utils';
 export const ModifyApplicationPage: React.FC<BasePageProps> = props => {
   const { navigateTo } = props;
 
-  const { t } = useTranslation('app-moderation-ewa');
+  const { t } = useTranslation('app-vibes');
 
   const moderationCategories = reasons.map(({ title }) => ({
     value: title,
@@ -28,7 +28,7 @@ export const ModifyApplicationPage: React.FC<BasePageProps> = props => {
 
   const handleCancelButtonClick = () => {
     navigateTo?.({
-      appName: '@akashaorg/app-moderation-ewa',
+      appName: '@akashaorg/app-vibes',
       getNavigationUrl: routes => routes[CHECK_APPLICATION_STATUS],
     });
   };
@@ -38,7 +38,7 @@ export const ModifyApplicationPage: React.FC<BasePageProps> = props => {
      * handle update
      */
     return navigateTo?.({
-      appName: '@akashaorg/app-moderation-ewa',
+      appName: '@akashaorg/app-vibes',
       getNavigationUrl: routes => routes[HOME],
     });
   };

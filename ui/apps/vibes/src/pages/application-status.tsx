@@ -20,7 +20,7 @@ export type ApplicationStatusPageProps = BasePageProps & {
 export const ApplicationStatusPage: React.FC<ApplicationStatusPageProps> = props => {
   const { applicationStatus, navigateTo } = props;
 
-  const { t } = useTranslation('app-moderation-ewa');
+  const { t } = useTranslation('app-vibes');
 
   const contentMap = {
     [ApplicationStatusType.review]: {
@@ -41,7 +41,7 @@ export const ApplicationStatusPage: React.FC<ApplicationStatusPageProps> = props
 
   const handleLinkClick = (link: string) => () => {
     navigateTo?.({
-      appName: '@akashaorg/app-moderation-ewa',
+      appName: '@akashaorg/app-vibes',
       getNavigationUrl: routes => routes[link],
     });
   };

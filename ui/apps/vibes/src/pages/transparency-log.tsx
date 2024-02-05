@@ -36,7 +36,7 @@ export const TransparencyLog: React.FC<BasePageProps> = props => {
   const [filterByCategory, setfilterByCategory] = useState(null);
   const [curPage, setCurPage] = useState<number>(1);
 
-  const { t } = useTranslation('app-moderation-ewa');
+  const { t } = useTranslation('app-vibes');
 
   const decisionPlaceholderLabel = t('Decision');
   const categoryPlaceholderLabel = t('Category');
@@ -84,7 +84,7 @@ export const TransparencyLog: React.FC<BasePageProps> = props => {
 
   const handleRowClick = (id: string) => {
     navigateTo?.({
-      appName: '@akashaorg/app-moderation-ewa',
+      appName: '@akashaorg/app-vibes',
       getNavigationUrl: navRoutes => `${navRoutes['Transparency Log']}/${id}`,
     });
   };

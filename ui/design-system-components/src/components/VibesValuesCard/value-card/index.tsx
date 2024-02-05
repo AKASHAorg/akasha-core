@@ -6,7 +6,7 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
-export type ModerationValueCardProps = {
+export type VibesValueCardProps = {
   publicImgPath?: string;
   assetExtension?: string;
   assetName: string;
@@ -18,7 +18,7 @@ export type ModerationValueCardProps = {
   onClick?: () => void;
 };
 
-const ModerationValueCard: React.FC<ModerationValueCardProps> = props => {
+const VibesValueCard: React.FC<VibesValueCardProps> = props => {
   const {
     publicImgPath = '/images',
     assetExtension = 'webp',
@@ -86,4 +86,4 @@ const ModerationValueCard: React.FC<ModerationValueCardProps> = props => {
   );
 };
 
-export default ModerationValueCard;
+export default VibesValueCard;

@@ -1,27 +1,27 @@
 import React from 'react';
 import { tw } from '@twind/core';
 
-import ModerationValueCard from './value-card';
+import VibesValueCard from './value-card';
 
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-type ModerationValue = {
+type VibesValue = {
   path: string;
   title: string;
   assetName: string;
   description: string;
 };
-export interface ModerationValuesCardProps {
+export interface VibesValuesCardProps {
   titleLabel: string;
   subtitleLabel: string;
   ctaLabel: string;
   ctaUrl: string;
-  values: ModerationValue[];
-  onValueClick: (path: ModerationValue['path']) => () => void;
+  values: VibesValue[];
+  onValueClick: (path: VibesValue['path']) => () => void;
 }
 
-const ModerationValuesCard: React.FC<ModerationValuesCardProps> = props => {
+const VibesValuesCard: React.FC<VibesValuesCardProps> = props => {
   const { titleLabel, subtitleLabel, ctaLabel, ctaUrl, values, onValueClick } = props;
 
   return (
@@ -36,7 +36,7 @@ const ModerationValuesCard: React.FC<ModerationValuesCardProps> = props => {
         </Text>
         <div className={tw('grid gap-4 grid-cols-2 md:grid-cols-3')}>
           {values.map((value, idx) => (
-            <ModerationValueCard
+            <VibesValueCard
               key={value.title + idx}
               isMini={true}
               label={value.title}
@@ -95,4 +95,4 @@ const ModerationValuesCard: React.FC<ModerationValuesCardProps> = props => {
   );
 };
 
-export default ModerationValuesCard;
+export default VibesValuesCard;

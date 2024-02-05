@@ -13,7 +13,7 @@ import {
   ModeratorDetailPage,
   TransparencyLog,
   TransparencyLogItem,
-  ModerationValue,
+  VibesValue,
   BecomeModeratorPage,
   ApplicationStatusPage,
   ModifyApplicationPage,
@@ -36,7 +36,7 @@ import { generateModerators } from '../utils';
 
 const AppRoutes: React.FC<unknown> = () => {
   const { baseRouteName, logger, getRoutingPlugin } = useRootComponentProps();
-  const { t } = useTranslation('app-moderation-ewa');
+  const { t } = useTranslation('app-vibes');
   const authenticatedProfileReq = useGetLoginProfile();
 
   const authenticatedProfile = authenticatedProfileReq?.akashaProfile;
@@ -44,7 +44,8 @@ const AppRoutes: React.FC<unknown> = () => {
   const checkModeratorQuery = { data: 200 }; // modify to connect to actual hook
 
   const checkModeratorResp = checkModeratorQuery.data;
-  const isModerator = useMemo(() => checkModeratorResp === 200, [checkModeratorResp]);
+  // const isModerator = useMemo(() => checkModeratorResp === 200, [checkModeratorResp]);
+  const isModerator = false;
 
   const getModeratorsQuery = { data: generateModerators(), isFetching: false };
   const allModerators = getModeratorsQuery.data;
@@ -83,7 +84,7 @@ const AppRoutes: React.FC<unknown> = () => {
             path={routes[MODERATION_VALUE]}
             element={
               <ErrorBoundary {...errorBoundaryProps}>
-                <ModerationValue />
+                <VibesValue />
               </ErrorBoundary>
             }
           />
@@ -108,7 +109,6 @@ const AppRoutes: React.FC<unknown> = () => {
               </ErrorBoundary>
             }
           />
-
           <Route
             path={routes[HISTORY]}
             element={

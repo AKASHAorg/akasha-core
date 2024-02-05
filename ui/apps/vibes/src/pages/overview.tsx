@@ -9,8 +9,8 @@ import {
   EnvelopeIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import ModerationIntroCard from '@akashaorg/design-system-components/lib/components/ModerationIntroCard';
-import ModerationValuesCard from '@akashaorg/design-system-components/lib/components/ModerationValuesCard';
+import VibesIntroCard from '@akashaorg/design-system-components/lib/components/VibesIntroCard';
+import VibesValuesCard from '@akashaorg/design-system-components/lib/components/VibesValuesCard';
 
 import BecomeModeratorCard from '../components/overview/become-moderator-card';
 import HelloModeratorCard from '../components/overview/hello-moderator-card';
@@ -37,7 +37,7 @@ export type OverviewPageProps = BasePageProps & {
 
 export const Overview: React.FC<OverviewPageProps> = props => {
   const { isModerator, applicationStatus, navigateTo } = props;
-  const { t } = useTranslation('app-moderation-ewa');
+  const { t } = useTranslation('app-vibes');
 
   const handleCodeOfConductClick = () => {
     navigateTo({
@@ -48,14 +48,14 @@ export const Overview: React.FC<OverviewPageProps> = props => {
 
   const handleValueClick = (path: string) => () => {
     navigateTo({
-      appName: '@akashaorg/app-moderation-ewa',
+      appName: '@akashaorg/app-vibes',
       getNavigationUrl: () => `/overview/values/${path}`,
     });
   };
 
   const handleClickApply = () => {
     navigateTo({
-      appName: '@akashaorg/app-moderation-ewa',
+      appName: '@akashaorg/app-vibes',
       getNavigationUrl: routes =>
         applicationStatus ? routes[CHECK_APPLICATION_STATUS] : routes[BECOME_MODERATOR],
     });
@@ -108,7 +108,7 @@ export const Overview: React.FC<OverviewPageProps> = props => {
           moderationFAQUrl={externalLinks.discourse.CoC}
         />
       )}
-      <ModerationIntroCard
+      <VibesIntroCard
         titleLabel={t('Overview')}
         introLabel={`${t('Welcome to AKASHA')} ${isModerator ? t('Moderation') : t('Vibes')}`}
         subtitleLabel={
@@ -139,7 +139,7 @@ export const Overview: React.FC<OverviewPageProps> = props => {
         />
       )}
 
-      <ModerationValuesCard
+      <VibesValuesCard
         titleLabel={t('Our Values')}
         subtitleLabel={t('The principles guiding our behaviour')}
         ctaLabel={t('Propose your own')}

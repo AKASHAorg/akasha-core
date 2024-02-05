@@ -52,7 +52,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
   const allowedApps = React.useMemo(
     () => [
       '@akashaorg/app-akasha-integration',
-      '@akashaorg/app-moderation-ewa',
+      '@akashaorg/app-vibes',
       '@akashaorg/app-extensions',
     ],
     [],

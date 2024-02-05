@@ -1,6 +1,6 @@
 export * from './application-status';
 export * from './become-moderator';
-export * from './moderation-value';
+export * from './vibes-value';
 export * from './moderator-detail';
 export * from './moderators';
 export * from './modify-application';

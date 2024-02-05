@@ -14,7 +14,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   loadingFn: () => import('./components'),
   mountsIn: opts.layoutConfig?.pluginSlotId,
   logo: { type: LogoTypeSource.ICON, value: <Vibe /> },
-  i18nNamespace: ['app-moderation-ewa'],
+  i18nNamespace: ['app-vibes'],
   routes: {
     ...routes,
   },

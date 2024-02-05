@@ -2,20 +2,20 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import ModerationValueCard from '@akashaorg/design-system-components/lib/components/ModerationValuesCard/value-card';
+import VibesValueCard from '@akashaorg/design-system-components/lib/components/VibesValuesCard/value-card';
 
 import { values } from '../services/values';
 import { externalLinks } from '../utils';
 
-export const ModerationValue: React.FC = () => {
-  const { t } = useTranslation('app-moderation-ewa');
+export const VibesValue: React.FC = () => {
+  const { t } = useTranslation('app-vibes');
 
   const { value } = useParams();
 
   const activeValue = values.find(v => v.path === value);
 
   return (
-    <ModerationValueCard
+    <VibesValueCard
       label={t('{{label}}', { label: activeValue.title })}
       assetName={activeValue.assetName}
       description={t('{{description}}', { description: activeValue.description })}

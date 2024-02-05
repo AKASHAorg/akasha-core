@@ -2,27 +2,25 @@ import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { tw } from '@twind/core';
 
-import ModerationIntroCard, {
-  ModerationIntroCardProps,
-} from '../../components/ModerationIntroCard';
+import VibesIntroCard, { VibesIntroCardProps } from '../../components/VibesIntroCard';
 import {
   SparklesIcon,
   ChatBubbleOvalLeftEllipsisIcon,
   EnvelopeIcon,
 } from '@heroicons/react/24/outline';
 
-const meta: Meta<ModerationIntroCardProps> = {
-  title: 'DSComponents/Moderation/ModerationIntroCard',
-  component: ModerationIntroCard,
+const meta: Meta<VibesIntroCardProps> = {
+  title: 'DSComponents/Vibes/VibesIntroCard',
+  component: VibesIntroCard,
 };
 
 export default meta;
-type Story = StoryObj<ModerationIntroCardProps>;
+type Story = StoryObj<VibesIntroCardProps>;
 
-export const BaseModerationIntroCard: Story = {
+export const BaseVibesIntroCard: Story = {
   render: () => (
     <div className={tw('w-[50%]')}>
-      <ModerationIntroCard
+      <VibesIntroCard
         publicImgPath=""
         titleLabel="Overview"
         introLabel="Welcome to AKASHA Vibes"
@@ -35,7 +33,7 @@ export const BaseModerationIntroCard: Story = {
             icon: <SparklesIcon />,
           },
           {
-            label: 'Moderation thoughts',
+            label: 'Vibes thoughts',
             url: '',
             icon: <ChatBubbleOvalLeftEllipsisIcon />,
           },

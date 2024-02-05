@@ -3,17 +3,15 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
-import ModerationValueCard, {
-  ModerationValueCardProps,
-} from '../../components/ModerationValuesCard/value-card';
+import VibesValueCard, { VibesValueCardProps } from '../../components/VibesValuesCard/value-card';
 
-const meta: Meta<ModerationValueCardProps> = {
-  title: 'DSComponents/Moderation/ModerationValueCard',
-  component: ModerationValueCard,
+const meta: Meta<VibesValueCardProps> = {
+  title: 'DSComponents/Vibes/VibesValueCard',
+  component: VibesValueCard,
 };
 
 export default meta;
-type Story = StoryObj<ModerationValueCardProps>;
+type Story = StoryObj<VibesValueCardProps>;
 
 const variants = [
   {
@@ -32,11 +30,11 @@ const variants = [
   },
 ];
 
-export const ModerationValueCardVariants: Story = {
+export const VibesValueCardVariants: Story = {
   render: () => (
     <Stack direction="column" spacing="gap-y-2" customStyle="w-[40%]">
       {variants.map((variant, idx) => (
-        <ModerationValueCard key={variant.label + idx} publicImgPath="" {...variant} />
+        <VibesValueCard key={variant.label + idx} publicImgPath="" {...variant} />
       ))}
     </Stack>
   ),

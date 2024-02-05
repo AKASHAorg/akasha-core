@@ -14,7 +14,7 @@ export type OverviewCTA = {
   icon?: React.ReactElement;
 };
 
-export type ModerationIntroCardProps = {
+export type VibesIntroCardProps = {
   assetName?: string;
   assetExtension?: string;
   titleLabel: string;
@@ -26,7 +26,7 @@ export type ModerationIntroCardProps = {
   onCodeOfConductClick?: () => void;
 };
 
-const ModerationIntroCard: React.FC<ModerationIntroCardProps> = props => {
+const VibesIntroCard: React.FC<VibesIntroCardProps> = props => {
   const {
     assetName = 'vibe-overview',
     titleLabel,
@@ -116,4 +116,4 @@ const ModerationIntroCard: React.FC<ModerationIntroCardProps> = props => {
   );
 };
 
-export default ModerationIntroCard;
+export default VibesIntroCard;

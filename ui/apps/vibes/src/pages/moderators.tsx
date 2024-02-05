@@ -24,7 +24,7 @@ export const Moderators: React.FC<ModeratorPageProps> = props => {
 
   const [activeTab, setActiveTab] = useState<number>(0);
 
-  const { t } = useTranslation('app-moderation-ewa');
+  const { t } = useTranslation('app-vibes');
 
   const tabs = ['All', 'Active', 'Resigned', 'Revoked'];
 
@@ -34,7 +34,7 @@ export const Moderators: React.FC<ModeratorPageProps> = props => {
 
   const handleViewModerator = (profileId: string) => {
     navigateTo?.({
-      appName: '@akashaorg/app-moderation-ewa',
+      appName: '@akashaorg/app-vibes',
       getNavigationUrl: () => `/moderators/${profileId}`,
     });
   };

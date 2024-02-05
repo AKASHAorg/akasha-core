@@ -26,7 +26,7 @@ export const BecomeModeratorPage: React.FC<BasePageProps> = props => {
 
   const [checkedState, setCheckedState] = React.useState(Array(checks.length).fill(false));
 
-  const { t } = useTranslation('app-moderation-ewa');
+  const { t } = useTranslation('app-vibes');
 
   const stepLabels = ['intro', 'select_categories', 'contact_info'];
 
@@ -56,14 +56,14 @@ export const BecomeModeratorPage: React.FC<BasePageProps> = props => {
 
   const handleLinkClick = (link: string) => () => {
     navigateTo?.({
-      appName: '@akashaorg/app-moderation-ewa',
+      appName: '@akashaorg/app-vibes',
       getNavigationUrl: routes => routes[link],
     });
   };
 
   const handleCancelButtonClick = () => {
     navigateTo?.({
-      appName: '@akashaorg/app-moderation-ewa',
+      appName: '@akashaorg/app-vibes',
       getNavigationUrl: routes => routes[HOME],
     });
   };
@@ -71,7 +71,7 @@ export const BecomeModeratorPage: React.FC<BasePageProps> = props => {
   const handleConfirmButtonClick = () => {
     if (activeStep === 4) {
       return navigateTo?.({
-        appName: '@akashaorg/app-moderation-ewa',
+        appName: '@akashaorg/app-vibes',
         getNavigationUrl: routes => routes[HOME],
       });
     }

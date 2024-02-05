@@ -20,7 +20,7 @@ export const ReportItemPage: React.FC<BasePageProps> = props => {
 
   const { itemType } = useParams();
 
-  const { t } = useTranslation('app-moderation-ewa');
+  const { t } = useTranslation('app-vibes');
 
   const moderationCategories = reasons.map(({ title }) => ({
     value: title,
@@ -47,7 +47,7 @@ export const ReportItemPage: React.FC<BasePageProps> = props => {
       return setStep(0);
     }
     navigateTo?.({
-      appName: '@akashaorg/app-moderation-ewa',
+      appName: '@akashaorg/app-vibes',
       getNavigationUrl: routes => routes[HOME],
     });
   };

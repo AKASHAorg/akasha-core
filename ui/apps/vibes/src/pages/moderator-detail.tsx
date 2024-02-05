@@ -33,7 +33,7 @@ export const ModeratorDetailPage: React.FC<BasePageProps> = props => {
 
   const tenureInfoLabel = generateTenureInfoLabel(moderator.status);
 
-  const { t } = useTranslation('app-moderation-ewa');
+  const { t } = useTranslation('app-vibes');
 
   const handleClickPage = (page: number) => () => {
     setCurPage(page);
@@ -53,7 +53,7 @@ export const ModeratorDetailPage: React.FC<BasePageProps> = props => {
 
   const handleRowClick = (id: string) => {
     navigateTo?.({
-      appName: '@akashaorg/app-moderation-ewa',
+      appName: '@akashaorg/app-vibes',
       getNavigationUrl: navRoutes => `${navRoutes['Transparency Log']}/${id}`,
     });
   };

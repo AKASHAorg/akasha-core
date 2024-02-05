@@ -1,9 +1,9 @@
 {
-  "name": "@akashaorg/app-moderation-ewa",
+  "name": "@akashaorg/app-vibes",
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "The AKASHA Foundation developed this app to ensure safe, healthy and active Community experience on Ethereum World.",
+  "description": "The AKASHA Foundation developed this app to ensure safe, healthy and active Community experience on Akasha World.",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "contributors": [
     "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)",
@@ -31,7 +31,7 @@
     "tsc": "tsc --build",
     "prepare": "yarn run tsc",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.cjs",
-    "postpack": "copyfiles -f ./dist/* ../../build/apps/moderation",
+    "postpack": "copyfiles -f ./dist/* ../../build/apps/vibes",
     "watch": "webpack --config webpack.config.cjs --watch",
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },

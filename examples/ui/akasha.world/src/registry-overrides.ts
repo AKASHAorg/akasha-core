@@ -31,9 +31,9 @@ const overrides = [
     ...missingRequiredFields,
   },
   {
-    name: '@akashaorg/app-moderation-ewa',
+    name: '@akashaorg/app-vibes',
     integrationType: INTEGRATION_TYPES.APPLICATION,
-    sources: [`/apps/moderation/index.js`],
+    sources: [`/apps/vibes/index.js`],
     ...missingRequiredFields,
   },
   {
