@@ -73,14 +73,10 @@ const BeamPage: React.FC<unknown> = () => {
   };
 
   const showNsfwCard = React.useMemo(() => {
-    if (
+    return (
       moderationData === AkashaBeamStreamModerationStatus.Nsfw &&
       (!showNsfw || (!isLoggedIn && !authenticating))
-    ) {
-      return true;
-    } else {
-      return false;
-    }
+    );
   }, [authenticating, isLoggedIn, moderationData, showNsfw]);
 
   if (beamStreamCheckQuery.loading) {
