@@ -205,13 +205,22 @@ export const BeamEditor: React.FC = () => {
         addBlockLabel={t('Add a Block')}
         beamEditorLabel={t('Beam Editor')}
         addTagsLabel={t('Add Tags')}
-        isNsfw={isNsfw}
-        indeterminate={
-          blocksWithActiveNsfw.length && blocksWithActiveNsfw.length < blocksInUse.length
-        }
-        handleNsfwCheckbox={handleNsfwCheckbox}
         uiState={uiState}
-      />
+      >
+        {uiState === 'editor' && (
+          <Checkbox
+            id="nsfw"
+            label={'NSFW'}
+            name="nsfw"
+            value="nsfw"
+            handleChange={handleNsfwCheckbox}
+            isSelected={isNsfw}
+            indeterminate={
+              blocksWithActiveNsfw.length && blocksWithActiveNsfw.length < blocksInUse.length
+            }
+          />
+        )}
+      </Header>
       <Stack customStyle="relative h-full overflow-hidden">
         <Stack customStyle="overflow-auto h-full">
           {blocksInUse.map((block, idx) => (
