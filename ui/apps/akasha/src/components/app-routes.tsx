@@ -105,6 +105,7 @@ const AppRoutes: React.FC<unknown> = () => {
           element={
             <ErrorBoundary {...errorBoundaryProps}>
               <ProfileFeedPage
+                isLoggedIn={isLoggedIn}
                 authenticatedProfile={authenticatedProfile}
                 showLoginModal={showLoginModal}
               />

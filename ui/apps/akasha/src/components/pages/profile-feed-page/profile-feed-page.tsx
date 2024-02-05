@@ -11,12 +11,13 @@ import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 export type ProfilePageProps = {
+  isLoggedIn: boolean;
   authenticatedProfile: Profile;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
 const ProfileFeedPage = (props: ProfilePageProps) => {
-  const { authenticatedProfile } = props;
+  const { isLoggedIn, authenticatedProfile } = props;
 
   const { t } = useTranslation('app-akasha-integration');
   const { did } = useParams<{ did: string }>();
@@ -68,7 +69,7 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
                   })
                 }
                 showNSFWCard={false}
-                isLoggedIn={true}
+                isLoggedIn={isLoggedIn}
               />
             );
         }}
