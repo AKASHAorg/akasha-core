@@ -75,17 +75,20 @@ export const BeamEditor: React.FC = () => {
   const handleNsfwCheckbox = () => {
     setIsNsfw(!isNsfw);
     const numberOfBlocks = blocksInUse.length;
+    const newNsfwBlocks = new Map();
 
     if (!isNsfw) {
       for (let key = 0; key < numberOfBlocks; key++) {
-        setNsfwBlocks(new Map(nsfwBlocks.set(key, true)));
+        newNsfwBlocks.set(key, true);
       }
+      setNsfwBlocks(newNsfwBlocks);
       return;
     }
 
     for (let key = 0; key < numberOfBlocks; key++) {
-      setNsfwBlocks(new Map(nsfwBlocks.set(key, false)));
+      newNsfwBlocks.set(key, false);
     }
+    setNsfwBlocks(newNsfwBlocks);
   };
 
   const handleAddBlockBtn = () => {
