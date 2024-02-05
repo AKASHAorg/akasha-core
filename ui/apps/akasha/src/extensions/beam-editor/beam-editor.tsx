@@ -15,7 +15,6 @@ import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import SearchBar from '@akashaorg/design-system-components/lib/components/SearchBar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import range from 'lodash/range';
 import { ContentBlockExtension } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
 import { Header } from './header';
 import { Footer } from './footer';
@@ -75,17 +74,18 @@ export const BeamEditor: React.FC = () => {
 
   const handleNsfwCheckbox = () => {
     setIsNsfw(!isNsfw);
+    const numberOfBlocks = blocksInUse.length;
 
     if (!isNsfw) {
-      range(0, blocksInUse.length).forEach(key => {
+      for (let key = 0; key < numberOfBlocks; key++) {
         setNsfwBlocks(new Map(nsfwBlocks.set(key, true)));
-      });
+      }
       return;
     }
 
-    range(0, blocksInUse.length).forEach(key => {
+    for (let key = 0; key < numberOfBlocks; key++) {
       setNsfwBlocks(new Map(nsfwBlocks.set(key, false)));
-    });
+    }
   };
 
   const handleAddBlockBtn = () => {
