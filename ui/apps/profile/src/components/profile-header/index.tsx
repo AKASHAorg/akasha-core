@@ -3,8 +3,8 @@ import routes, { EDIT } from '../../routes';
 import FollowButton from './follow-button';
 import Badge from '@akashaorg/design-system-core/lib/components/Badge';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import {
   FlagIcon,
   LinkIcon,
@@ -29,6 +29,7 @@ import {
   hasOwn,
 } from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import { EighteenPlus } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 
 type ProfileHeaderProps = {
   profileId: string;
@@ -173,13 +174,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
           >
             <Badge background={{ light: 'errorLight', dark: 'errorDark' }}>
               {/*@TODO: The following is a placeholder until proper icon is found */}
-              <Text
-                variant="footnotes2"
-                color={{ light: 'white', dark: 'black' }}
-                customStyle="leading-[9px] text-[9px]"
-              >
-                {t('18+')}
-              </Text>
+              <Icon size="xs" icon={<EighteenPlus />} color="white" solid />
             </Badge>
           </Tooltip>
         )

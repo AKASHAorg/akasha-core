@@ -1,21 +1,17 @@
-import * as React from 'react';
+import React, { PropsWithChildren } from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
 import { uiState } from './beam-editor';
 
 export interface HeaderProps {
   uiState: uiState;
-  handleNsfwCheckbox: () => void;
-  isNsfw: boolean;
   addBlockLabel?: string;
   addTagsLabel?: string;
   beamEditorLabel?: string;
 }
 
-export const Header: React.FC<HeaderProps> = props => {
-  const { uiState, handleNsfwCheckbox, isNsfw, addBlockLabel, addTagsLabel, beamEditorLabel } =
-    props;
+export const Header: React.FC<PropsWithChildren<HeaderProps>> = props => {
+  const { uiState, addBlockLabel, addTagsLabel, beamEditorLabel, children } = props;
 
   const renderTitle = () => {
     switch (uiState) {
@@ -36,17 +32,7 @@ export const Header: React.FC<HeaderProps> = props => {
       align="center"
     >
       <Text variant="h4">{renderTitle()}</Text>
-
-      {uiState === 'editor' && (
-        <Checkbox
-          id="nsfw"
-          label={'NSFW'}
-          name="nsfw"
-          value="nsfw"
-          handleChange={handleNsfwCheckbox}
-          isSelected={isNsfw}
-        />
-      )}
+      {children}
     </Stack>
   );
 };
