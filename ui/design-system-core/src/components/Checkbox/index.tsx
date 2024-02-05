@@ -69,7 +69,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
     : getColorClasses(labelColor, 'text');
   const inputColor = getInputColor(isDisabled, error);
   const checkmarkColor = getCheckmarkColor(isDisabled, error);
-  const minusMarkColor = isDisabled ? 'bg-grey6 dark:bg-grey5' : 'bg-grey4 dark:bg-white';
+  const minusMarkColor = isDisabled ? 'bg-grey6 dark:bg-grey5' : 'bg-white';
   const bgColor = getBgColor(isDisabled, isSelected, error);
   const checkboxSizes =
     size === 'small'
