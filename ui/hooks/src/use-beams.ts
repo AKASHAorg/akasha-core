@@ -162,6 +162,17 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
         if (!results.data) return;
         const extracted = extractData(results.data);
 
+        /**
+         * handle the case where we are requesting the items created before a
+         * specific beam (previous beams). In this case the property
+         *  pageInfo.hasPreviousPage on the response will always be false and
+         * hasNextPage will be true if there are more newer items than requested
+         *  (the equivalent of hasPreviousPage)
+         *
+         * Note: setting hasNextPage to true here will only trigger one more call
+         * to fetchNextPage and it will
+         * set the actual value inside that function
+         **/
         if (variables?.after) {
           extracted.pageInfo = {
             startCursor: extracted.pageInfo.endCursor,
