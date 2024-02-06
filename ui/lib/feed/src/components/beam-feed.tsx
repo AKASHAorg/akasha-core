@@ -8,6 +8,7 @@ import {
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { EdgeArea, Virtualizer, VirtualizerProps } from '../virtual-list';
 import { useBeams } from '@akashaorg/ui-awf-hooks/lib/use-beams';
+import { useBeamsByDid } from '@akashaorg/ui-awf-hooks/lib/use-beams-by-did';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { RestoreItem } from '../virtual-list/use-scroll-state';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
@@ -49,6 +50,8 @@ const BeamFeed = (props: BeamFeedProps) => {
     did,
   } = props;
 
+  const fetchBeams = did ? useBeamsByDid : useBeams;
+
   const {
     beams,
     fetchNextPage,
@@ -60,7 +63,7 @@ const BeamFeed = (props: BeamFeedProps) => {
     isLoading,
     hasErrors,
     errors,
-  } = useBeams({
+  } = fetchBeams({
     overscan: scrollerOptions.overscan,
     sorting,
     filters,
@@ -128,7 +131,7 @@ const BeamFeed = (props: BeamFeedProps) => {
         />
       )}
       {!hasErrors && (
-        <Virtualizer<ReturnType<typeof useBeams>['beams'][0]>
+        <Virtualizer<ReturnType<typeof fetchBeams>['beams'][0]>
           header={header}
           footer={footer}
           restorationKey={queryKey}
@@ -146,9 +149,7 @@ const BeamFeed = (props: BeamFeedProps) => {
             renderItem ??
             (itemData => {
               if (!hasOwn(itemData.node, 'content')) {
-                return (
-                  <BeamContentResolver beamId={itemData.node.beamID} cursor={itemData.cursor} />
-                );
+                return <BeamContentResolver beamId={itemData.node.beamID} showNSFWCard={false} />;
               }
             })
           }

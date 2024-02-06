@@ -240,7 +240,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
       )}
       {entryData.active && (
         <Card
-          onClick={showNSFWCard ? null : onContentClick}
+          onClick={!showNSFWContent ? null : onContentClick}
           customStyle={contentClickableStyle}
           type="plain"
         >

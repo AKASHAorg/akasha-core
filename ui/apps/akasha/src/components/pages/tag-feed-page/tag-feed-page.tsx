@@ -186,7 +186,9 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
             <ScrollTopButton hide={false} onClick={onScrollToTop} />
           </ScrollTopWrapper>
         )}
-        renderItem={itemData => <BeamContentResolver beamId={itemData.node.stream} />}
+        renderItem={itemData => (
+          <BeamContentResolver beamId={itemData.node.stream} showLoginModal={showLoginModal} />
+        )}
       />
     </Stack>
   );

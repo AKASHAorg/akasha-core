@@ -1,23 +1,26 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { hasOwn, mapBeamEntryData, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import {
+  hasOwn,
+  mapBeamEntryData,
+  useGetLogin,
+  useRootComponentProps,
+} from '@akashaorg/ui-awf-hooks';
 import { BeamCard, BeamContentResolver, BeamFeed } from '@akashaorg/ui-lib-feed';
 import type { ModalNavigationOptions, Profile } from '@akashaorg/typings/lib/ui';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
-import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 export type ProfilePageProps = {
-  isLoggedIn: boolean;
   authenticatedProfile: Profile;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
 const ProfileFeedPage = (props: ProfilePageProps) => {
-  const { isLoggedIn, authenticatedProfile } = props;
+  const { authenticatedProfile } = props;
 
   const { t } = useTranslation('app-akasha-integration');
   const { did } = useParams<{ did: string }>();
@@ -68,8 +71,7 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
                       `${navRoutes.Beam}/${itemData.node.id}${navRoutes.Reflect}`,
                   })
                 }
-                showNSFWCard={false}
-                isLoggedIn={isLoggedIn}
+                showNSFWCard={itemData.node?.nsfw}
               />
             );
         }}
