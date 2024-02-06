@@ -2,9 +2,9 @@ import React from 'react';
 import EntryCard, {
   EntryCardProps,
 } from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
-import { ContentBlockExtension } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
+import ContentBlock from './content-block';
 import { transformSource, hasOwn, sortByKey, useGetLogin } from '@akashaorg/ui-awf-hooks';
-import { ContentBlockModes, EntityTypes, BeamEntryData } from '@akashaorg/typings/lib/ui';
+import { EntityTypes, BeamEntryData } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { useTranslation } from 'react-i18next';
@@ -106,7 +106,11 @@ const BeamCard: React.FC<BeamCardProps> = props => {
     >
       {({ blockID }) => (
         <React.Suspense fallback={<></>}>
-          <ContentBlockExtension readMode={{ blockID }} mode={ContentBlockModes.READONLY} />
+          <ContentBlock
+            blockID={blockID}
+            authenticatedDID={authenticatedDID}
+            showHiddenContent={showHiddenContent}
+          />
         </React.Suspense>
       )}
     </EntryCard>

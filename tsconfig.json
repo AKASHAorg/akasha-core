@@ -90,9 +90,6 @@
       "path": "./ui/apps/articles"
     },
     {
-      "path": "./ui/apps/dev-dashboard"
-    },
-    {
       "path": "./sdk"
     },
     {
