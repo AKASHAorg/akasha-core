@@ -199,7 +199,7 @@ export const useBeamsByTags = (tag: string | string[]) => {
   React.useEffect(() => {
     setState({ beams: [] });
     fetchInitialData(true);
-  }, []);
+  }, [tag]);
 
   return {
     beams: state.beams,
