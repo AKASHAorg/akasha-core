@@ -1,54 +1,47 @@
 import React from 'react';
-import { useGetBeamStreamLazyQuery } from './generated/apollo';
+import { useGetBeamsByAuthorDidLazyQuery } from './generated/apollo';
 import {
-  type AkashaBeamStreamFiltersInput,
-  type AkashaBeamStreamSortingInput,
   type PageInfo,
   SortOrder,
-  AkashaBeamStreamModerationStatus,
+  AkashaBeamFiltersInput,
+  AkashaBeamSortingInput,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import type {
-  GetBeamStreamQuery,
-  GetBeamStreamQueryVariables,
+  GetBeamsByAuthorDidQuery,
+  GetBeamsByAuthorDidQueryVariables,
+  GetBeamsQueryVariables,
 } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 import { ApolloError } from '@apollo/client';
 import { hasOwn } from './utils/has-own';
-import getSDK from '@akashaorg/awf-sdk';
-import { useNsfwToggling } from './use-nsfw';
-import { useGetLogin } from './use-login.new';
 
-export type UseBeamsOptions = {
+export type UseBeamsByDidOptions = {
   overscan: number;
-  filters?: AkashaBeamStreamFiltersInput;
-  sorting?: AkashaBeamStreamSortingInput;
+  filters?: AkashaBeamFiltersInput;
+  sorting?: AkashaBeamSortingInput;
+  did: string;
 };
 
-const defaultSorting: AkashaBeamStreamSortingInput = {
+const defaultSorting: AkashaBeamSortingInput = {
   createdAt: SortOrder.Desc,
 };
 
-export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
+export const useBeamsByDid = ({ overscan, filters, sorting, did }: UseBeamsByDidOptions) => {
   const [state, setState] = React.useState<{
     beams: Exclude<
-      GetBeamStreamQuery['node'],
+      GetBeamsByAuthorDidQuery['node'],
       Record<string, never>
-    >['akashaBeamStreamList']['edges'];
+    >['akashaBeamList']['edges'];
     pageInfo?: PageInfo;
   }>({ beams: [] });
 
   const [errors, setErrors] = React.useState<(ApolloError | Error)[]>([]);
-  const sdk = getSDK();
-  const { showNsfw } = useNsfwToggling();
-  const { data: loginData, loading: authenticating } = useGetLogin();
-  const isLoggedIn = !!loginData?.id;
 
-  const mergedVars: GetBeamStreamQueryVariables = React.useMemo(() => {
+  const mergedVars: GetBeamsQueryVariables = React.useMemo(() => {
     const vars: {
-      indexer: string;
-      sorting?: AkashaBeamStreamSortingInput;
-      filters?: AkashaBeamStreamFiltersInput;
+      sorting?: AkashaBeamSortingInput;
+      filters?: AkashaBeamFiltersInput | AkashaBeamFiltersInput;
+      id?: string;
     } = {
-      indexer: sdk.services.gql.indexingDID,
       sorting: { ...defaultSorting, ...(sorting ?? {}) },
     };
     if (filters) {
@@ -56,11 +49,12 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
     }
 
     return vars;
-  }, [sdk.services.gql.indexingDID, sorting, filters]);
+  }, [sorting, filters]);
 
-  const [fetchBeams, beamsQuery] = useGetBeamStreamLazyQuery({
+  const [fetchBeams, beamsQuery] = useGetBeamsByAuthorDidLazyQuery({
     variables: {
       ...mergedVars,
+      id: did,
       first: overscan,
     },
   });
@@ -69,21 +63,19 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
 
   const extractData = React.useCallback(
     (
-      results: GetBeamStreamQuery,
+      results: GetBeamsByAuthorDidQuery,
     ): {
       edges: Exclude<
-        GetBeamStreamQuery['node'],
+        GetBeamsByAuthorDidQuery['node'],
         Record<string, never>
-      >['akashaBeamStreamList']['edges'];
+      >['akashaBeamList']['edges'];
 
       pageInfo: PageInfo;
     } => {
-      if (hasOwn(results, 'node') && results.node && hasOwn(results.node, 'akashaBeamStreamList')) {
+      if (hasOwn(results, 'node') && hasOwn(results.node, 'akashaBeamList')) {
         return {
-          edges: results.node.akashaBeamStreamList.edges.filter(
-            edge => !beamCursors.has(edge.cursor),
-          ),
-          pageInfo: results.node.akashaBeamStreamList.pageInfo,
+          edges: results.node.akashaBeamList.edges.filter(edge => !beamCursors.has(edge.cursor)),
+          pageInfo: results.node.akashaBeamList.pageInfo,
         };
       }
     },
@@ -97,11 +89,13 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
 
     const variables = {
       variables: {
+        id: did,
         after: lastCursor,
         sorting: { createdAt: SortOrder.Desc },
-        indexer: sdk.services.gql.indexingDID,
+        indexer: undefined,
       },
     };
+
     try {
       const results = await beamsQuery.fetchMore(variables);
       if (results.error) {
@@ -152,7 +146,7 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
   };
 
   const fetchInitialBeams = React.useCallback(
-    async (variables?: GetBeamStreamQueryVariables) => {
+    async (variables?: GetBeamsByAuthorDidQueryVariables) => {
       try {
         const results = await fetchBeams({ variables });
         if (results.error) {
@@ -181,38 +175,13 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
 
   const fetchInitialData = React.useCallback(
     async (restoreItem?: { key: string; offsetTop: number }) => {
-      if ((beamsQuery.called && !(!isLoggedIn && !authenticating && showNsfw)) || authenticating)
-        return;
+      if (beamsQuery.called) return;
 
-      const initialVars: GetBeamStreamQueryVariables = {
+      const initialVars: GetBeamsByAuthorDidQueryVariables = {
         ...mergedVars,
         sorting: { createdAt: SortOrder.Desc },
-        indexer: sdk.services.gql.indexingDID,
+        id: did ?? undefined,
       };
-
-      if (!showNsfw || !isLoggedIn) {
-        initialVars.filters = {
-          or: [
-            { where: { status: { equalTo: AkashaBeamStreamModerationStatus.Ok } } },
-            { where: { status: { isNull: true } } },
-          ],
-        };
-      }
-
-      if (showNsfw && isLoggedIn) {
-        initialVars.filters = {
-          or: [
-            {
-              where: {
-                status: {
-                  in: [AkashaBeamStreamModerationStatus.Ok, AkashaBeamStreamModerationStatus.Nsfw],
-                },
-              },
-            },
-            { where: { status: { isNull: true } } },
-          ],
-        };
-      }
 
       if (restoreItem) {
         initialVars.sorting = { createdAt: SortOrder.Asc };
@@ -221,15 +190,7 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
 
       await fetchInitialBeams(initialVars);
     },
-    [
-      authenticating,
-      beamsQuery.called,
-      fetchInitialBeams,
-      isLoggedIn,
-      mergedVars,
-      sdk.services.gql.indexingDID,
-      showNsfw,
-    ],
+    [beamsQuery.called, did, fetchInitialBeams, mergedVars],
   );
 
   React.useEffect(() => {
@@ -240,15 +201,6 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
       unsub();
     };
   }, [fetchInitialData]);
-
-  React.useEffect(() => {
-    if (!isLoggedIn && !authenticating && showNsfw) {
-      beamCursors.clear();
-    }
-    if (!authenticating || showNsfw || isLoggedIn) {
-      fetchInitialData();
-    }
-  }, [showNsfw, isLoggedIn, authenticating]);
 
   const handleReset = async () => {
     setState({ beams: [] });
