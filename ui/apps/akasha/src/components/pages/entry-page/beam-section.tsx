@@ -55,7 +55,6 @@ const BeamSection: React.FC<BeamSectionProps> = props => {
           showHiddenContent={true}
           showNSFWCard={showNSFWCard}
           showLoginModal={showLoginModal}
-          isLoggedIn={isLoggedIn}
           onReflect={() => {
             onNavigate(entryData?.id, !isReflecting);
           }}

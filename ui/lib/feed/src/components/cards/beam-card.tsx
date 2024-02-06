@@ -23,20 +23,11 @@ type BeamCardProps = Pick<
   entryData: BeamEntryData;
   showNSFWCard: boolean;
   showLoginModal?: () => void;
-  isLoggedIn: boolean;
 };
 
 const BeamCard: React.FC<BeamCardProps> = props => {
   const { t } = useTranslation('ui-lib-feed');
-  const {
-    entryData,
-    onReflect,
-    showHiddenContent,
-    showNSFWCard,
-    showLoginModal,
-    isLoggedIn,
-    ...rest
-  } = props;
+  const { entryData, onReflect, showHiddenContent, showNSFWCard, showLoginModal, ...rest } = props;
   const { getRoutingPlugin } = useRootComponentProps();
   const { getTranslationPlugin } = useRootComponentProps();
   const { data } = useGetLogin();
@@ -105,7 +96,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       showHiddenContent={showHiddenContent}
       showNSFWCard={showNSFWCard}
       showLoginModal={showLoginModal}
-      isLoggedIn={isLoggedIn}
+      isLoggedIn={!!authenticatedDID}
       itemType={EntityTypes.BEAM}
       transformSource={transformSource}
       onAvatarClick={onAvatarClick}

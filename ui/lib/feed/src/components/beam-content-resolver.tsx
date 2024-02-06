@@ -8,17 +8,21 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 import BeamCard from './cards/beam-card';
 import EntryLoadingPlaceholder from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
+import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 
 export type BeamContentResolverProps = {
   beamId: string;
-  cursor?: string;
+  showNSFWCard?: boolean;
+  showLoginModal?: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
-const BeamContentResolver: React.FC<BeamContentResolverProps> = ({ beamId, cursor }) => {
+const BeamContentResolver: React.FC<BeamContentResolverProps> = ({
+  beamId,
+  showNSFWCard,
+  showLoginModal,
+}) => {
   const { beam, isLoading } = useIndividualBeam({ beamId });
   const { getRoutingPlugin } = useRootComponentProps();
-  const { data: loginData, loading: authenticating } = useGetLogin();
-  const isLoggedIn = !!loginData?.id;
 
   if (isLoading) return <EntryLoadingPlaceholder />;
 
@@ -27,7 +31,8 @@ const BeamContentResolver: React.FC<BeamContentResolverProps> = ({ beamId, curso
       <BeamCard
         entryData={mapBeamEntryData(beam)}
         contentClickable={true}
-        showNSFWCard={false}
+        showNSFWCard={showNSFWCard ?? beam.nsfw}
+        showLoginModal={showLoginModal}
         onContentClick={() =>
           getRoutingPlugin().navigateTo({
             appName: '@akashaorg/app-akasha-integration',
@@ -40,7 +45,6 @@ const BeamContentResolver: React.FC<BeamContentResolverProps> = ({ beamId, curso
             getNavigationUrl: navRoutes => `${navRoutes.Beam}/${beam.id}${navRoutes.Reflect}`,
           })
         }
-        isLoggedIn={isLoggedIn}
       />
     );
   }

@@ -28,7 +28,7 @@ const AppRoutes: React.FC<unknown> = () => {
   const { baseRouteName, logger, navigateToModal } = useRootComponentProps();
   const { t } = useTranslation('app-akasha-integration');
   const _navigateToModal = React.useRef(navigateToModal);
-  const { data } = useGetLogin();
+  const { data, loading: authenticating } = useGetLogin();
   const authenticatedProfileReq = useGetLoginProfile();
 
   const isLoggedIn = !!data?.id;
@@ -105,7 +105,6 @@ const AppRoutes: React.FC<unknown> = () => {
           element={
             <ErrorBoundary {...errorBoundaryProps}>
               <ProfileFeedPage
-                isLoggedIn={isLoggedIn}
                 authenticatedProfile={authenticatedProfile}
                 showLoginModal={showLoginModal}
               />
