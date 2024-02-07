@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import EntryCard, {
   EntryCardProps,
 } from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import ContentBlock from './content-block';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import ActionButtons from './action-buttons';
 import { transformSource, hasOwn, sortByKey, useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { EntityTypes, BeamEntryData } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
@@ -29,6 +32,9 @@ const BeamCard: React.FC<BeamCardProps> = props => {
   const { getRoutingPlugin } = useRootComponentProps();
   const { getTranslationPlugin } = useRootComponentProps();
   const { data } = useGetLogin();
+  const [appName, setAppName] = useState('');
+  const [blockNameMap, setBlockNameMap] = useState(new Map());
+  const [showBlockName, setShowBlockName] = useState(false);
   const navigateTo = getRoutingPlugin().navigateTo;
   const authenticatedDID = data?.id;
 
@@ -97,17 +103,45 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       onAvatarClick={onAvatarClick}
       onTagClick={onTagClick}
       onReflect={onReflect}
+      actionsRight={
+        <ActionButtons
+          appName={appName}
+          showBlockName={showBlockName}
+          showHiddenContent={showHiddenContent}
+          onShowBlockName={() => {
+            setShowBlockName(!showBlockName);
+          }}
+        />
+      }
       {...rest}
     >
-      {({ blockID }) => (
-        <React.Suspense fallback={<></>}>
-          <ContentBlock
-            blockID={blockID}
-            authenticatedDID={authenticatedDID}
-            showHiddenContent={showHiddenContent}
-          />
-        </React.Suspense>
-      )}
+      {({ blockID }) => {
+        const blockName = blockNameMap.get(blockID);
+        return (
+          <React.Suspense fallback={<></>}>
+            <Stack spacing="gap-y-0" fullWidth>
+              {showBlockName && blockName && (
+                <Text
+                  variant="footnotes2"
+                  weight="normal"
+                  color={{ light: 'grey7', dark: 'grey6' }}
+                >
+                  {t('{{blockName}}', { blockName })}
+                </Text>
+              )}
+              <ContentBlock
+                blockID={blockID}
+                authenticatedDID={authenticatedDID}
+                showHiddenContent={showHiddenContent}
+                onBlockInfoChange={blockInfo => {
+                  setAppName(blockInfo?.appName);
+                  setBlockNameMap(new Map(blockNameMap.set(blockID, blockInfo?.blockName)));
+                }}
+              />
+            </Stack>
+          </React.Suspense>
+        );
+      }}
     </EntryCard>
   );
 };
