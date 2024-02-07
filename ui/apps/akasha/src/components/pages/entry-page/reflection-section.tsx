@@ -48,15 +48,17 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
   return (
     <Stack ref={wrapperRef}>
       <Stack spacing="gap-y-2">
-        <EditableReflection
-          entryData={entryData}
-          contentClickable={false}
-          reflectToId={entryData.id}
-          onReflect={() => {
-            onNavigate(entryData?.id, !isReflecting);
-          }}
-        />
-        <Divider />
+        <Stack>
+          <EditableReflection
+            entryData={entryData}
+            contentClickable={false}
+            reflectToId={entryData.id}
+            onReflect={() => {
+              onNavigate(entryData?.id, !isReflecting);
+            }}
+          />
+          <Divider />
+        </Stack>
         <Stack padding="px-2 pb-2">
           {!isLoggedIn && (
             <EditorPlaceholder

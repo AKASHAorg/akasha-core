@@ -2,7 +2,6 @@ import React from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { Blocks } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import { Antenna } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
@@ -30,16 +29,16 @@ const ActionButtons: React.FC<ActionButtonsProps> = props => {
       )}
       {showHiddenContent && (
         <Button onClick={onShowBlockName} plain>
-          <Card
+          <Stack
+            align="center"
+            justify="center"
             background={
               showBlockName ? { light: 'secondaryLight/30', dark: 'grey5' } : 'transparent'
             }
-            radius="rounded-full"
-            padding="p-2"
-            elevation="none"
+            customStyle="rounded-full h-6 w-6"
           >
-            <Icon icon={<Blocks />} accentColor={true} />
-          </Card>
+            <Icon icon={<Blocks />} accentColor={true} customStyle={showBlockName ? 'h-3.5' : ''} />
+          </Stack>
         </Button>
       )}
     </>

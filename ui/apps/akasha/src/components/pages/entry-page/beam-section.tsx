@@ -47,16 +47,18 @@ const BeamSection: React.FC<BeamSectionProps> = props => {
   return (
     <Stack ref={wrapperRef}>
       <Stack spacing="gap-y-2">
-        <BeamCard
-          entryData={entryData}
-          noWrapperCard={true}
-          contentClickable={false}
-          showHiddenContent={true}
-          onReflect={() => {
-            onNavigate(entryData?.id, !isReflecting);
-          }}
-        />
-        <Divider />
+        <Stack>
+          <BeamCard
+            entryData={entryData}
+            noWrapperCard={true}
+            contentClickable={false}
+            showHiddenContent={true}
+            onReflect={() => {
+              onNavigate(entryData?.id, !isReflecting);
+            }}
+          />
+          <Divider />
+        </Stack>
         <Stack padding="px-2 pb-2">
           {!isLoggedIn && (
             <EditorPlaceholder
