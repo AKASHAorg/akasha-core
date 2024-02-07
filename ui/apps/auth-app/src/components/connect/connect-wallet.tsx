@@ -161,7 +161,7 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
     signOutCall.current(selectedProvider);
   };
 
-  const textColor = { light: 'grey4', dark: 'grey7' } as Color;
+  const textColor: Color = { light: 'grey4', dark: 'grey7' };
 
   return (
     <Stack spacing="gap-y-8">
