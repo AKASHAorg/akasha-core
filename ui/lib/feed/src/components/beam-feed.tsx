@@ -149,6 +149,9 @@ const BeamFeed = (props: BeamFeedProps) => {
             renderItem ??
             (itemData => {
               if (!hasOwn(itemData.node, 'content')) {
+                /* Set the showNSFWCard prop to false so as to prevent the
+                 * NSFW beams from being displayed in the antenna feed when NSFW setting is off.
+                 */
                 return <BeamContentResolver beamId={itemData.node.beamID} showNSFWCard={false} />;
               }
             })

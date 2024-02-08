@@ -192,6 +192,14 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
 
   const fetchInitialData = React.useCallback(
     async (restoreItem?: { key: string; offsetTop: number }) => {
+      /**
+       * !(!isLoggedIn && !authenticating && showNsfw) translates to: the user is logged in and
+       * has their NSFW setting off. The whole condition means to return from the function
+       * immediately if:
+       * 1. The beamsQuery has run before (the data has been fetched with default filter that
+       * filters out NSFW content) and the user is logged in and their NSFW setting is off.
+       * 2. The app is still waiting for authentication data from the hook.
+       **/
       if ((beamsQuery.called && !(!isLoggedIn && !authenticating && showNsfw)) || authenticating)
         return;
 
@@ -201,6 +209,9 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
         indexer: sdk.services.gql.indexingDID,
       };
 
+      /**
+       * Set the filter for logged-out users and users who toggled off nsfw content.
+       **/
       if (!showNsfw || !isLoggedIn) {
         initialVars.filters = {
           or: [
@@ -210,6 +221,9 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
         };
       }
 
+      /**
+       * Set the filter for users who are logged in and want to see nsfw content.
+       **/
       if (showNsfw && isLoggedIn) {
         initialVars.filters = {
           or: [
@@ -253,6 +267,14 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
   }, [fetchInitialData]);
 
   React.useEffect(() => {
+    /**
+     * Reset the beamCursors in case the user logs out and has the NSFW setting on
+     * so as to be able to accept the updated data in the `extractData` function
+     *  when the hook refetches again (Specificallly for dealing with the filter condition
+     *  `!beamCursors.has(edge.cursor)` because if not resetted, no data will be extracted
+     * from the function because the existing beamCursors will contain the data.cursor).
+     * Maybe a better approach?
+     **/
     if (!isLoggedIn && !authenticating && showNsfw) {
       beamCursors.clear();
     }

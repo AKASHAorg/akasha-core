@@ -40,6 +40,9 @@ const BeamPage: React.FC<unknown> = () => {
   const isLoggedIn = !!data?.id;
   const navigateTo = getRoutingPlugin().navigateTo;
 
+  /**
+   * Fetch beam data from the Indexed Stream
+   */
   const beamStreamCheckQuery = useGetBeamStreamQuery({
     variables: {
       first: 1,
@@ -48,6 +51,9 @@ const BeamPage: React.FC<unknown> = () => {
     },
   });
 
+  /**
+   * Check the current moderation status of the beam
+   */
   const moderationData = React.useMemo(() => {
     if (
       beamStreamCheckQuery.data &&
@@ -72,6 +78,13 @@ const BeamPage: React.FC<unknown> = () => {
     navigateToModal({ name: 'login' });
   };
 
+  /**
+   * showNsfwCard is used to determine whether to show the overlay for nsfw
+   * content on individual beam pages. It is true if the beam in question is marked as nsfw and the
+   * following conditions are met:
+   * 1. The user toggled off NSFW content in their settings, or
+   * 2. The user is not logged in.
+   */
   const showNsfwCard = React.useMemo(() => {
     return (
       moderationData === AkashaBeamStreamModerationStatus.Nsfw &&

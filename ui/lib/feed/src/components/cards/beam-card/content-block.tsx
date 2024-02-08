@@ -6,6 +6,7 @@ import { hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { ContentBlockExtension } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
 import { ContentBlockModes } from '@akashaorg/typings/lib/ui';
 import { useTranslation } from 'react-i18next';
+import { useNsfwToggling } from '@akashaorg/ui-awf-hooks';
 
 type ContentBlockType = {
   blockID: string;
@@ -15,11 +16,26 @@ type ContentBlockType = {
 const ContentBlock: React.FC<ContentBlockType> = props => {
   const { blockID, authenticatedDID, showHiddenContent } = props;
   const { t } = useTranslation('ui-lib-feed');
+
+  /*   get user's NSFW settings from the hook
+   */
+  const { showNsfw } = useNsfwToggling();
+
+  /*   internal state for showing the NSFW content behind the overlay, default to false
+   */
   const [showNsfwContent, setShowNsfwContent] = useState(false);
+  /*   flag that will get updated with real nsfw property from the block
+   * (through the onNsfwChange function call)
+   */
   const [nsfw, setNsfw] = useState(false);
   const { navigateToModal } = useRootComponentProps();
 
-  const showNSFWCard = nsfw && (!showNsfwContent || !authenticatedDID);
+  /* Show NSFW card (overlay) only when all the following conditions are met:
+   * 1. The block is marked as NSFW
+   * 2. The user toggled off NSFW content in their settings
+   * 3. The user is not logged in or the showNsfwContent is false
+   */
+  const showNSFWCard = nsfw && !showNsfw && (!showNsfwContent || !authenticatedDID);
 
   const showLoginModal = () => {
     navigateToModal({ name: 'login' });
@@ -40,6 +56,10 @@ const ContentBlock: React.FC<ContentBlockType> = props => {
               setNsfw(nsfw);
             }}
           >
+            {/* showHiddenContent is the flag used to hide nsfw blocks in the
+             * feed when NSFW settings is off and shows the overlay over it when
+             * on beam page (default to true in BeamSection(beam page), otherwise false)
+             *  */}
             {showHiddenContent && showNSFWCard && (
               <Card
                 background={{ light: 'white', dark: 'grey3' }}

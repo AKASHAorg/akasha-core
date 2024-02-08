@@ -2,7 +2,6 @@ import React from 'react';
 import {
   hasOwn,
   mapBeamEntryData,
-  useGetLogin,
   useIndividualBeam,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
@@ -31,6 +30,10 @@ const BeamContentResolver: React.FC<BeamContentResolverProps> = ({
       <BeamCard
         entryData={mapBeamEntryData(beam)}
         contentClickable={true}
+        /* Display the overlay according to the passed prop showNSFWCard
+         * or the nsfw property of the beam object just fetched through the
+         * useIndividualBeam hook (see BeamFeed).
+         * */
         showNSFWCard={showNSFWCard ?? beam.nsfw}
         showLoginModal={showLoginModal}
         onContentClick={() =>

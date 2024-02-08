@@ -132,6 +132,12 @@ const EntryCard: React.FC<EntryCardProps> = props => {
   } = props;
 
   const profileRef: React.Ref<HTMLDivElement> = React.useRef(null);
+
+  /* showNSFWContent determines whether to display the content underneath the
+   * overlay, so if the showNSFWCard prop is true (which means to show the
+   * overlay), showNSFWContent should be false. It is later toggled through an
+   * onClickToView handler.
+   */
   const [showNSFWContent, setShowNSFWContent] = useState(!showNSFWCard);
   const showHiddenStyle = showHiddenContent ? '' : 'max-h-[50rem]';
   const contentClickableStyle =
