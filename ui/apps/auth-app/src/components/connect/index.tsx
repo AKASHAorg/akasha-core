@@ -72,7 +72,7 @@ const Connect: React.FC<unknown> = () => {
   };
 
   return (
-    <Card>
+    <Card padding="px-4 py-6">
       <Routes>
         <Route path="*" element={<ChooseProvider />} />
 

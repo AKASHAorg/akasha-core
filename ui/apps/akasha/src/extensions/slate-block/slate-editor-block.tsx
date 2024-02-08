@@ -1,4 +1,4 @@
-import React, { useImperativeHandle } from 'react';
+import React, { RefObject, useCallback, useImperativeHandle, useRef, useState } from 'react';
 import EditorBox from '@akashaorg/design-system-components/lib/components/Editor';
 import {
   encodeSlateToBase64,
@@ -9,6 +9,7 @@ import {
 import type {
   BlockInstanceMethods,
   ContentBlockRootProps,
+  CreateContentBlock,
   IEntryData,
   RootExtensionProps,
 } from '@akashaorg/typings/lib/ui';
@@ -24,13 +25,13 @@ import getSDK from '@akashaorg/awf-sdk';
 const TEST_APP_VERSION_ID = 'kjzl6kcym7w8y8af3kd0lwkkk2m1nxtchlvcikbak748md3m3gplz1ori3s1j5f';
 
 export const SlateEditorBlock = (
-  props: ContentBlockRootProps & { blockRef?: React.RefObject<BlockInstanceMethods> },
+  props: ContentBlockRootProps & { blockRef?: RefObject<BlockInstanceMethods> },
 ) => {
   const { name } = useRootComponentProps<RootExtensionProps>();
   const { data } = useGetLogin();
   const authenticatedDID = data?.id;
-  const retryCount = React.useRef<number>();
-  const sdk = React.useRef(getSDK());
+  const retryCount = useRef<number>();
+  const sdk = useRef(getSDK());
 
   const [createContentBlock, contentBlockQuery] = useCreateContentBlockMutation();
 
@@ -44,56 +45,63 @@ export const SlateEditorBlock = (
   const canSaveDraft = !props.blockInfo.mode; //action === 'post' || action === 'repost';
   const draftPostData = canSaveDraft ? postDraft.get() : null;
 
-  const [editorState, setEditorState] = React.useState(draftPostData);
+  const [editorState, setEditorState] = useState(draftPostData);
 
-  const createBlock = React.useCallback(async () => {
-    const content = encodeSlateToBase64(editorState);
-    const contentBlockValue: AkashaContentBlockLabeledValueInput = {
-      label: props.blockInfo.appName,
-      propertyType: props.blockInfo.propertyType,
-      value: content,
-    };
-    try {
-      const resp = await createContentBlock({
-        variables: {
-          i: {
-            content: {
-              // @TODO: replace this mock appVersionID
-              appVersionID: TEST_APP_VERSION_ID,
-              createdAt: new Date().toISOString(),
-              content: [contentBlockValue],
-              active: true,
-              kind: AkashaContentBlockBlockDef.Text,
+  const createBlock = useCallback(
+    async ({ nsfw }: CreateContentBlock) => {
+      const content = encodeSlateToBase64(editorState);
+      const contentBlockValue: AkashaContentBlockLabeledValueInput = {
+        label: props.blockInfo.appName,
+        propertyType: props.blockInfo.propertyType,
+        value: content,
+      };
+      try {
+        const resp = await createContentBlock({
+          variables: {
+            i: {
+              content: {
+                // @TODO: replace this mock appVersionID
+                appVersionID: TEST_APP_VERSION_ID,
+                createdAt: new Date().toISOString(),
+                content: [contentBlockValue],
+                active: true,
+                kind: AkashaContentBlockBlockDef.Text,
+                nsfw,
+              },
             },
           },
-        },
-        context: { source: sdk.current.services.gql.contextSources.composeDB },
-      });
-      return {
-        response: { blockID: resp.data.createAkashaContentBlock.document.id },
-        blockInfo: props.blockInfo,
-        retryCount: retryCount.current,
-      };
-    } catch (err) {
-      console.error('error creating content block', err);
-      return {
-        response: {
-          blockID: null,
-          error: err.message,
-        },
-        blockInfo: props.blockInfo,
-        retryCount: retryCount.current,
-      };
-    }
-  }, [createContentBlock, editorState, props.blockInfo]);
+          context: { source: sdk.current.services.gql.contextSources.composeDB },
+        });
+        return {
+          response: { blockID: resp.data.createAkashaContentBlock.document.id },
+          blockInfo: props.blockInfo,
+          retryCount: retryCount.current,
+        };
+      } catch (err) {
+        console.error('error creating content block', err);
+        return {
+          response: {
+            blockID: null,
+            error: err.message,
+          },
+          blockInfo: props.blockInfo,
+          retryCount: retryCount.current,
+        };
+      }
+    },
+    [createContentBlock, editorState, props.blockInfo],
+  );
 
-  const retryCreate = React.useCallback(() => {
-    if (contentBlockQuery.called) {
-      contentBlockQuery.reset();
-    }
-    retryCount.current += 1;
-    return createBlock();
-  }, [contentBlockQuery, createBlock]);
+  const retryCreate = useCallback(
+    (arg: CreateContentBlock) => {
+      if (contentBlockQuery.called) {
+        contentBlockQuery.reset();
+      }
+      retryCount.current += 1;
+      return createBlock(arg);
+    },
+    [contentBlockQuery, createBlock],
+  );
 
   useImperativeHandle(
     props.blockRef,

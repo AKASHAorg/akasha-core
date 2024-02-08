@@ -1,8 +1,7 @@
 import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Walletconnect } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
@@ -28,41 +27,24 @@ const ChooseProvider: React.FC<unknown> = () => {
     });
   };
 
-  const termsUrl = routingPlugin.current?.getUrlForApp({
-    appName: '@akashaorg/app-legal',
-    getNavigationUrl: appRoutes => appRoutes.termsOfService,
-  });
-
-  const privacyUrl = routingPlugin.current?.getUrlForApp({
-    appName: '@akashaorg/app-legal',
-    getNavigationUrl: appRoutes => appRoutes.privacyPolicy,
-  });
-
-  const cocUrl = routingPlugin.current?.getUrlForApp({
-    appName: '@akashaorg/app-legal',
-    getNavigationUrl: appRoutes => appRoutes.codeOfConduct,
-  });
-
-  const renderAnchor = (url: string, title: string) => (
-    <Anchor href={url} title={title} weight="bold">
-      {title}
-    </Anchor>
-  );
-
   return (
-    <Stack testId="providers-list" spacing="gap-y-16">
+    <Stack testId="providers-list" spacing="gap-y-6">
       <Text variant="h5" align="center">
         {`✨ ${t('Welcome to AKASHA World')} ✨`}
       </Text>
 
-      <Stack spacing="gap-y-4">
+      <Stack alignSelf="center" customStyle="h-40 w-40">
+        <Image customStyle="object-contain" src="/images/auth.webp" />
+      </Stack>
+
+      <Stack spacing="gap-y-2" customStyle="md:px-4">
         <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey7' }}>
           {t('Connect your wallet')}
         </Text>
 
         <Web3ConnectCard
           leftIconType={<Walletconnect />}
-          subtitleLabel={t('Connect with Web3Modal')}
+          subtitleLabel={t('Connect your wallet using MetaMask, WalletConnect, Coinbase etc ...')}
           titleLabel="Web3Modal"
           handleClick={handleProviderClick}
           iconColor="self-color"
@@ -72,13 +54,13 @@ const ChooseProvider: React.FC<unknown> = () => {
         />
       </Stack>
 
-      <Stack spacing="gap-y-4">
-        <Divider />
-        <Text align="center" variant="footnotes2" color={{ light: 'grey4', dark: 'grey7' }}>
-          {t('By connecting to AKASHA world, you agree to our ')}
-          {renderAnchor(termsUrl, t('Terms & Conditions,'))}{' '}
-          {renderAnchor(privacyUrl, t('Privacy Policy'))} {t('and')}{' '}
-          {renderAnchor(cocUrl, t('Code of Conduct'))}
+      <Stack customStyle="md:px-4">
+        <Text
+          align="center"
+          variant="button-sm"
+          color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+        >
+          {t('Powered by Web3Modal')}
         </Text>
       </Stack>
     </Stack>
