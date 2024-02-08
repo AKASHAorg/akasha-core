@@ -50,11 +50,9 @@ const EditProfile: React.FC<EditProfileProps> = ({
   const {
     control,
     setValue,
-    getValues,
-    resetField,
     handleSubmit,
     trigger,
-    formState: { isDirty, isValid },
+    formState: { dirtyFields, isValid },
   } = useForm<EditProfileFormValues>({
     defaultValues,
     resolver: zodResolver(schema),
@@ -64,19 +62,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
   const onSave = (formValues: EditProfileFormValues) =>
     saveButton.handleClick({ ...formValues, links: formValues.links?.filter(link => link) || [] });
 
-  const isFormDirty = () => {
-    const links = getValues('links')?.filter(link => link) || [];
-
-    if (
-      links.length !== defaultValues.links?.length /*Compute isDirty for links accurately*/ ||
-      getValues('avatar') ||
-      getValues('coverImage')
-    ) {
-      return true;
-    }
-
-    return isDirty;
-  };
+  const isFormDirty = Object.keys(dirtyFields).length;
 
   return (
     <form onSubmit={handleSubmit(onSave)} className={tw(apply`h-full ${customStyle}`)}>
@@ -94,8 +80,6 @@ const EditProfile: React.FC<EditProfileProps> = ({
         <SocialLinks
           {...rest}
           onDeleteLink={async () => {
-            //compute form state accurately as a result of the following function calls ... react-hook-form is very bad at handling the state for unregistered component
-            resetField('links');
             await trigger();
           }}
           control={control}
@@ -112,7 +96,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
             variant="primary"
             label={saveButton.label}
             loading={saveButton.loading}
-            disabled={isValid ? !isFormDirty() : true}
+            disabled={isValid ? !isFormDirty : true}
             onClick={handleSubmit(onSave)}
             type="submit"
           />

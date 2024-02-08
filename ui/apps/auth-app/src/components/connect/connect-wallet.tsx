@@ -20,7 +20,6 @@ import { ArrowsRightLeftIcon } from '@akashaorg/design-system-core/lib/component
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import type { Color } from '@akashaorg/design-system-core/lib/components/types/common.types';
 
 export type ConnectWalletProps = {
   selectedProvider: EthProviders;
@@ -161,7 +160,7 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
     signOutCall.current(selectedProvider);
   };
 
-  const textColor: Color = { light: 'grey4', dark: 'grey7' };
+  const textColor = { light: 'grey4', dark: 'grey7' } as const;
 
   return (
     <Stack spacing="gap-y-8">
