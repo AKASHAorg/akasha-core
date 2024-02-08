@@ -164,6 +164,7 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
         }
       }
     }
+
     if (isMounted && prevRestorationKey.current !== restorationKey) {
       prevRestorationKey.current = restorationKey;
       fetchInitialData();

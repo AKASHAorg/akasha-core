@@ -2,8 +2,8 @@ import * as React from 'react';
 import { useRoutingEvents } from './use-routing-events';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { ExtensionInterface, ExtensionStorePlugin } from '@akashaorg/typings/lib/ui';
-import Parcel from 'single-spa-react/parcel';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { RootParcel } from './root-parcel';
 
 export type ExtensionComponentProps<D> = {
   name: string;
@@ -76,7 +76,7 @@ export const Extension = <D,>(props: ExtensionComponentProps<D>) => {
       {isLoading && loadingIndicator}
       {isEmpty && emptyIndicator}
       {parcelConfigs.map(parcel => (
-        <Parcel
+        <RootParcel
           key={parcel.extension.appName}
           config={{ ...parcel.config, name: `${parcel.extension.appName}_${name}` }}
           {...getContext()}
