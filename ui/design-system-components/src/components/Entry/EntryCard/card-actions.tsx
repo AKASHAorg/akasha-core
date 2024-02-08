@@ -15,7 +15,7 @@ export type CardActionProps = {
 const CardActions: React.FC<CardActionProps> = props => {
   const { itemId, repliesAnchorLink, disableActions, actionsRight, onReflect } = props;
   return (
-    <Stack direction="row" align="end" justify="end" spacing="gap-x-2">
+    <Stack direction="row" align="center" justify="end" spacing="gap-x-2">
       <>{actionsRight}</>
       <Anchor
         href={`${repliesAnchorLink}/${itemId}`}
