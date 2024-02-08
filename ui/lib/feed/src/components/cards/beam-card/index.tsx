@@ -11,6 +11,7 @@ import { EntityTypes, BeamEntryData } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { useTranslation } from 'react-i18next';
+import { Transition } from '@headlessui/react';
 
 type BeamCardProps = Pick<
   EntryCardProps,
@@ -120,7 +121,15 @@ const BeamCard: React.FC<BeamCardProps> = props => {
         return (
           <React.Suspense fallback={<></>}>
             <Stack spacing="gap-y-0" fullWidth>
-              {showBlockName && blockName && (
+              <Transition
+                enter="transition-[height] ease-out duration-300"
+                enterFrom="h-0"
+                enterTo="h-[18px]"
+                leave="transition-[height] ease-in duration-300"
+                leaveFrom="h-[18px]"
+                leaveTo="h-0"
+                show={showBlockName && !!blockName}
+              >
                 <Text
                   variant="footnotes2"
                   weight="normal"
@@ -128,7 +137,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
                 >
                   {t('{{blockName}}', { blockName })}
                 </Text>
-              )}
+              </Transition>
               <ContentBlock
                 blockID={blockID}
                 authenticatedDID={authenticatedDID}

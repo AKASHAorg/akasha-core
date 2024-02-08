@@ -17,6 +17,9 @@ type ActionButtonsProps = {
 const ActionButtons: React.FC<ActionButtonsProps> = props => {
   const { appName, showHiddenContent, showBlockName, onShowBlockName } = props;
   const { t } = useTranslation('ui-lib-feed');
+  const showBlockNameStyle = `${
+    showBlockName ? 'rounded-full h-9 w-9' : ''
+  } transition-all ease-linear duration-300`;
   return (
     <>
       {appName && (
@@ -35,9 +38,9 @@ const ActionButtons: React.FC<ActionButtonsProps> = props => {
             background={
               showBlockName ? { light: 'secondaryLight/30', dark: 'grey5' } : 'transparent'
             }
-            customStyle="rounded-full h-6 w-6"
+            customStyle={showBlockNameStyle}
           >
-            <Icon icon={<Blocks />} accentColor={true} customStyle={showBlockName ? 'h-3.5' : ''} />
+            <Icon icon={<Blocks />} accentColor={true} />
           </Stack>
         </Button>
       )}
