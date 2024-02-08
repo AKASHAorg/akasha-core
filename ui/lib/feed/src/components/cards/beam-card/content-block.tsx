@@ -30,12 +30,18 @@ const ContentBlock: React.FC<ContentBlockType> = props => {
   const [nsfw, setNsfw] = useState(false);
   const { navigateToModal } = useRootComponentProps();
 
-  /* Show NSFW card (overlay) only when all the following conditions are met:
-   * 1. The block is marked as NSFW
-   * 2. The user toggled off NSFW content in their settings
-   * 3. The user is not logged in or the showNsfwContent is false
+  /* Show NSFW card (overlay) only when the block is marked as NSFW and any of
+   * the following conditions are met:
+   * 1. The user toggled off NSFW content in their settings or is not logged in, or
+   * 2. The showNsfwContent flag is false
+   * If the user is logged in and has their NSFW setting turned on, we will never show
+   * thie overlay, regardless of whether the block is NSFW or not (showNSFWCard is always
+   * false).
    */
-  const showNSFWCard = nsfw && !showNsfw && (!showNsfwContent || !authenticatedDID);
+  const showNSFWCard =
+    showNsfw && !!authenticatedDID
+      ? false
+      : nsfw && (!showNsfw || !authenticatedDID) && !showNsfwContent;
 
   const showLoginModal = () => {
     navigateToModal({ name: 'login' });
