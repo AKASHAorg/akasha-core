@@ -70,13 +70,9 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         action: 'Reflect Published',
       });
     },
-    onError: async () => {
+    onError: () => {
       setShowEditor(true);
-      setEditorState(
-        await Promise.all(
-          newContent.content.flatMap(async item => decodeb64SlateContent(item.value)),
-        ),
-      );
+      setEditorState(newContent.content.flatMap(item => decodeb64SlateContent(item.value)));
 
       const notifMsg = t(`Something went wrong.`);
       _uiEvents.current.next({
@@ -96,7 +92,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
 
   const authenticatedProfile = authenticatedProfileDataReq?.akashaProfile;
 
-  const handlePublish = async (data: IPublishData) => {
+  const handlePublish = (data: IPublishData) => {
     const reflection = isReflectOfReflection ? { reflection: reflectToId } : {};
     const content = {
       active: true,
@@ -105,7 +101,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         {
           label: data.metadata.app,
           propertyType: 'slate-block',
-          value: await encodeSlateToBase64(data.slateContent),
+          value: encodeSlateToBase64(data.slateContent),
         },
       ],
       createdAt: new Date().toISOString(),

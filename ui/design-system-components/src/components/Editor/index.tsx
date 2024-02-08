@@ -46,7 +46,6 @@ import { renderElement, renderLeaf } from './renderers';
 import { withMentions, withTags, withLinks } from './plugins';
 
 import { MarkButton, BlockButton } from './formatting-buttons';
-import EmbedBox from '../EmbedBox';
 import LinkPreview from '../LinkPreview';
 
 const MAX_LENGTH = 500;

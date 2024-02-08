@@ -1,4 +1,5 @@
 import faker from 'faker';
+import { toBinary } from '../utils/toBinary';
 import { genBeamData } from './beam';
 
 const genAuthor = () => ({ id: faker.datatype.uuid(), isViewer: false });
@@ -16,8 +17,7 @@ const genReflectionData = () => {
       {
         label: 'AkashaApp',
         propertyType: 'slate-block',
-        value:
-          'H4sIAAAAAAAAE4uuViqpLEhVslIqSCxKTC9KLMhQ0lFKzsjMSSlKzVOyiq5WKkmtKFGyUgpKTctJTS7JzM9TSM7PK0nNK1Gqja2NBQDYB++jQQAAAA==',
+        value: window.btoa(toBinary(JSON.stringify({ text: 'Reflection content' }))),
       },
     ],
     mentions: [],

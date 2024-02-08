@@ -61,9 +61,7 @@ const ReflectionCard: React.FC<ReflectCardProps> = props => {
       authorProfile={{ data: profileData, loading, error }}
       locale={locale}
       profileAnchorLink="/@akashaorg/app-profile"
-      slateContent={Promise.all(
-        entryData.content.flatMap(async item => await decodeb64SlateContent(item.value)),
-      )}
+      slateContent={entryData.content.flatMap(item => decodeb64SlateContent(item.value))}
       noWrapperCard={true}
       flagAsLabel={t('Report')}
       editLabel={t('Edit')}

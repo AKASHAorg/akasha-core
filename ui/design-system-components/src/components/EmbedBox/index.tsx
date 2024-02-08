@@ -7,7 +7,7 @@ import { Descendant } from 'slate';
 
 export interface IEmbedEntryBox {
   embedEntryAuthorData: AkashaProfile;
-  slateContent: Promise<Descendant[]>;
+  slateContent: Descendant[];
   transformSource: (src: Image) => Image;
 }
 

@@ -53,11 +53,7 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
 
   useEffect(() => {
     async () => {
-      setEditorState(
-        await Promise.all(
-          entryData.content.flatMap(async item => await decodeb64SlateContent(item.value)),
-        ),
-      );
+      setEditorState(entryData.content.flatMap(item => decodeb64SlateContent(item.value)));
     };
   }, [entryData.content]);
 
@@ -106,12 +102,12 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
     'minutes',
   );
 
-  const handleEdit = async (data: IPublishData) => {
+  const handleEdit = (data: IPublishData) => {
     const content = [
       {
         label: data.metadata.app,
         propertyType: 'slate-block',
-        value: await encodeSlateToBase64(data.slateContent),
+        value: encodeSlateToBase64(data.slateContent),
       },
     ];
     setNewContent(content);

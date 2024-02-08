@@ -47,7 +47,7 @@ export const SlateEditorBlock = (
   const [editorState, setEditorState] = React.useState(draftPostData);
 
   const createBlock = React.useCallback(async () => {
-    const content = await encodeSlateToBase64(editorState);
+    const content = encodeSlateToBase64(editorState);
     const contentBlockValue: AkashaContentBlockLabeledValueInput = {
       label: props.blockInfo.appName,
       propertyType: props.blockInfo.propertyType,

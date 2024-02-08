@@ -6,7 +6,7 @@ import { renderElement, renderLeaf } from '../Editor/renderers';
 import { editorDefaultValue } from '../Editor/initialValue';
 
 export interface IReadOnlyEditor {
-  content: Promise<Descendant[]>;
+  content: Descendant[];
   disabled?: boolean;
   handleMentionClick?: (id: string) => void;
   handleTagClick?: (name: string) => void;
@@ -23,7 +23,7 @@ export interface IReadOnlyEditor {
 const ReadOnlyEditor: React.FC<IReadOnlyEditor> = props => {
   const { content, handleMentionClick, handleTagClick, handleLinkClick } = props;
 
-  const [value, setValue] = React.useState(editorDefaultValue);
+  const [value, setValue] = React.useState(content || editorDefaultValue);
 
   /**
    * initialise the editor with required plugins to parse content
@@ -34,11 +34,8 @@ const ReadOnlyEditor: React.FC<IReadOnlyEditor> = props => {
   );
 
   React.useEffect(() => {
-    async () => {
-      const slateContent = await content;
-      editor.children = slateContent;
-      setValue(slateContent);
-    };
+    editor.children = content;
+    setValue(content);
   }, [editor, content]);
 
   return (
