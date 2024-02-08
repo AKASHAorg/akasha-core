@@ -180,7 +180,7 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
               onEntryRemove={handleEntryRemove}
               onEntryFlag={handleEntryFlag(itemData.id, EntityTypes.BEAM)}
               hideActionButtons={hideActionButtons}
-              actionsRightExt={<Extension name={`entry-card-actions-right_${id}`} />}
+              actionsRight={<Extension name={`entry-card-actions-right_${id}`} />}
               transformSource={transformSource}
             >
               {({ blockID }) => <Extension name={`${blockID}_content_block`} />}

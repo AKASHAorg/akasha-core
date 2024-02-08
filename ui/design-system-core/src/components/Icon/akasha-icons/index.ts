@@ -41,6 +41,7 @@ import Vibe from './vibe';
 import Walletconnect from './walletconnect';
 import Widget from './widget';
 import EighteenPlus from './eighteen-plus';
+import Blocks from './blocks';
 
 /**
  * maintain alphabetical order for custom icon names
@@ -88,6 +89,7 @@ export type CustomIconTypes = Extract<
   | 'Walletconnect'
   | 'Widget'
   | 'EighteenPlus'
+  | 'Blocks'
 >;
 
 export {
@@ -132,4 +134,5 @@ export {
   Walletconnect,
   Widget,
   EighteenPlus,
+  Blocks,
 };

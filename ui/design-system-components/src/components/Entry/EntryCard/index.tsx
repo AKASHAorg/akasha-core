@@ -78,7 +78,7 @@ export type EntryCardProps = {
   lastEntry?: boolean;
   hover?: boolean;
   editable?: boolean;
-  actionsRightExt?: ReactNode;
+  actionsRight?: ReactNode;
   customStyle?: CSSProperties;
   ref?: Ref<HTMLDivElement>;
   onReflect?: () => void;
@@ -119,7 +119,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     editable = true,
     lastEntry,
     hover,
-    actionsRightExt,
+    actionsRight,
     onAvatarClick,
     onTagClick,
     onContentClick,
@@ -270,8 +270,14 @@ const EntryCard: React.FC<EntryCardProps> = props => {
                 }}
               />
             )}
-            {showNSFWContent && (
-              <Stack justifySelf="start" alignSelf="start" align="start" fullWidth={true}>
+            {(!entryData.nsfw || showNSFWContent) /* need change */ && (
+              <Stack
+                justifySelf="start"
+                alignSelf="start"
+                align="start"
+                spacing="gap-y-1"
+                fullWidth={true}
+              >
                 {rest.itemType === EntityTypes.REFLECT ? (
                   <ReadOnlyEditor
                     content={rest.slateContent}
@@ -320,7 +326,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
           itemId={entryData.id}
           repliesAnchorLink={repliesAnchorLink}
           disableActions={disableActions || !entryData.active}
-          actionsRightExt={actionsRightExt}
+          actionsRight={actionsRight}
           onReflect={onReflect}
         />
       )}

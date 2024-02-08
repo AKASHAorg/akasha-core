@@ -117,28 +117,36 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
      * change network to requiredNetwork,
      * avoid spamming the user with errors
      */
-    switchToRequiredNetwork().catch(err => {
-      let errorTitle = t("Switch Your Wallet's Network");
-      let errorSubtitle = t(
-        'The selected provider does not support changing networks, please manually change it to {{requiredNetworkName}}',
-        { requiredNetworkName },
-      );
-      if (err.code === PROVIDER_ERROR_CODES.UserRejected) {
-        errorTitle = t('Request Rejected!');
-        errorSubtitle = t(
-          'You have rejected the change network request. Please change it manually or try again.',
+    switchToRequiredNetwork()
+      .then(() => {
+        /**
+         * reset error state and trigger connect wallet modal
+         */
+        setErrors([]);
+        connectWalletCall.mutate();
+      })
+      .catch(err => {
+        let errorTitle = t("Switch Your Wallet's Network");
+        let errorSubtitle = t(
+          'The selected provider does not support changing networks, please manually change it to {{requiredNetworkName}}',
+          { requiredNetworkName },
         );
-      }
-      if (errors.find(err => err.title === errorTitle)) {
-        return;
-      }
-      setErrors(prevState => {
-        if (prevState.find(err => err.title === errorTitle)) {
-          return [...prevState, { title: errorTitle, subtitle: errorSubtitle }];
+        if (err.code === PROVIDER_ERROR_CODES.UserRejected) {
+          errorTitle = t('Request Rejected!');
+          errorSubtitle = t(
+            'You have rejected the change network request. Please change it manually or try again.',
+          );
         }
-        return prevState;
+        if (errors.find(err => err.title === errorTitle)) {
+          return;
+        }
+        setErrors(prevState => {
+          if (prevState.find(err => err.title === errorTitle)) {
+            return [...prevState, { title: errorTitle, subtitle: errorSubtitle }];
+          }
+          return prevState;
+        });
       });
-    });
   };
 
   const handleSignInRetry = () => {
@@ -151,6 +159,8 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
     // disconnect wallet
     signOutCall.current(selectedProvider);
   };
+
+  const textColor = { light: 'grey4', dark: 'grey7' } as const;
 
   return (
     <Stack spacing="gap-y-8">
@@ -167,8 +177,8 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
           placeholderIcon={<Walletconnect />}
           background={{ gradient: 'gradient-to-b', from: 'orange-50', to: 'orange-200' }}
           radius={24}
-          size={{ width: 120, height: 120 }}
-          backgroundSize={120}
+          size={{ width: 80, height: 80 }}
+          backgroundSize={80}
           iconColor="self-color"
         />
         <IndicatorDots isSuccess={isLoggedIn} hasErrors={hasErrors} />
@@ -178,7 +188,7 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
           background={{ gradient: 'gradient-to-b', from: 'blue-200', to: 'red-200' }}
           radius={24}
           size={{ width: 54, height: 54 }}
-          backgroundSize={120}
+          backgroundSize={80}
           iconColor="black"
         />
       </Stack>
@@ -193,7 +203,7 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
         <ConnectErrorCard
           title={t('Request Rejected!')}
           message={signInError.message}
-          action={{ onClick: handleSignInRetry, label: t('Retry Network') }}
+          action={{ onClick: handleSignInRetry, label: t('Retry Request') }}
         />
       )}
 
@@ -209,7 +219,7 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
                 <Text variant="h6" weight="bold" align="center">
                   {isLoggedIn ? t('Authorized 🙌🏽') : t('Authorizing')}
                 </Text>
-                <Text variant="body1" align="center" color={{ light: 'grey4', dark: 'grey7' }}>
+                <Text variant="body1" align="center" color={textColor}>
                   {isLoggedIn
                     ? t('You have successfully connected and authorized your address')
                     : t('You will be prompted with 1 signature')}
@@ -220,7 +230,7 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
                 <Text variant="button-sm" weight="bold" align="center">
                   {t('Your Address')}
                 </Text>
-                <Text variant="subtitle2" align="center" color={{ light: 'grey4', dark: 'grey7' }}>
+                <Text variant="subtitle2" align="center" color={textColor} customStyle="break-all">
                   {connectWalletCall.data}
                 </Text>
               </Stack>
@@ -228,11 +238,12 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
           )}
           <Stack align="center" justify="center">
             <Card onClick={handleDisconnect} type="plain">
-              <Stack align="center" spacing="gap-x-2">
+              <Stack align="center" spacing="gap-x-2" customStyle="md:flex-row">
                 <Icon icon={<ArrowsRightLeftIcon />} accentColor={true} />
                 <Text
                   variant="button-lg"
                   color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                  align="center"
                 >
                   {t('Disconnect or change the way to connect')}
                 </Text>

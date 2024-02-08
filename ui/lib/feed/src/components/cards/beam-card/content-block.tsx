@@ -1,20 +1,22 @@
-import React, { useState } from 'react';
+import React, { PropsWithChildren, useEffect, useRef, useState } from 'react';
 import NSFW from '@akashaorg/design-system-components/lib/components/Entry/NSFW';
-import NSFWBlock from './nsfw-block';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import { hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { ContentBlockExtension } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
 import { ContentBlockModes } from '@akashaorg/typings/lib/ui';
 import { useTranslation } from 'react-i18next';
 import { useNsfwToggling } from '@akashaorg/ui-awf-hooks';
+import { useBlockData } from './use-block-data';
 
 type ContentBlockType = {
   blockID: string;
   authenticatedDID: string;
-  showHiddenContent: boolean /*@TODO: better use apollo filters than this flag to filter our block content */;
+  showHiddenContent: boolean;
+  onBlockInfoChange?: (blockInfo: { blockName: string; appName: string }) => void;
 };
 const ContentBlock: React.FC<ContentBlockType> = props => {
-  const { blockID, authenticatedDID, showHiddenContent } = props;
+  const { blockID, authenticatedDID, showHiddenContent, onBlockInfoChange } = props;
   const { t } = useTranslation('ui-lib-feed');
 
   /*   get user's NSFW settings from the hook
@@ -27,8 +29,9 @@ const ContentBlock: React.FC<ContentBlockType> = props => {
   /*   flag that will get updated with real nsfw property from the block
    * (through the onNsfwChange function call)
    */
-  const [nsfw, setNsfw] = useState(false);
+  const { nsfw, blockName, appName, addBlockData, addBlockInfo } = useBlockData();
   const { navigateToModal } = useRootComponentProps();
+  const _onBlockInfoChange = useRef(onBlockInfoChange);
 
   /* Show NSFW card (overlay) only when the block is marked as NSFW and any of
    * the following conditions are met:
@@ -47,51 +50,80 @@ const ContentBlock: React.FC<ContentBlockType> = props => {
     navigateToModal({ name: 'login' });
   };
 
+  useEffect(() => {
+    _onBlockInfoChange.current?.({ appName: APP_NAME_TO_DISPLAY_NAME_MAP[appName], blockName });
+  }, [appName, blockName]);
+
   return (
     <ContentBlockExtension
       hideContent={showNSFWCard}
       readMode={{ blockID }}
       mode={ContentBlockModes.READONLY}
     >
-      {blockData => {
-        const nsfw = blockData && hasOwn(blockData, 'id') ? blockData.nsfw : false;
+      {({ blockData, blockInfo }) => {
         return (
-          <NSFWBlock
-            nsfw={nsfw}
-            onNsfwChange={() => {
-              setNsfw(nsfw);
-            }}
+          <BlockWrapper
+            addBlockData={() => addBlockData(hasOwn(blockData, 'id') ? blockData : null)}
+            addBlockInfo={() => addBlockInfo(blockInfo)}
           >
-            {/* showHiddenContent is the flag used to hide nsfw blocks in the
-             * feed when NSFW settings is off and shows the overlay over it when
-             * on beam page (default to true in BeamSection(beam page), otherwise false)
-             *  */}
-            {showHiddenContent && showNSFWCard && (
-              <Card
-                background={{ light: 'white', dark: 'grey3' }}
-                elevation="2"
-                margin="my-3.5"
-                padding="p-2"
-                customStyle="w-fit h-[60px]"
-              >
-                <NSFW
-                  clickToViewLabel={t('Click to View')}
-                  sensitiveContentLabel={t('Sensitive Content!')}
-                  onClickToView={() => {
-                    if (!authenticatedDID) {
-                      showLoginModal();
-                      return;
-                    }
-                    setShowNsfwContent(true);
-                  }}
-                />
-              </Card>
-            )}
-          </NSFWBlock>
+            <Stack
+              justify="center"
+              direction="row"
+              background={{ light: 'grey9', dark: 'grey5' }}
+              customStyle="rounded-[10px]"
+            >
+              {/* showHiddenContent is the flag used to hide nsfw blocks in the
+               * feed when NSFW settings is off and shows the overlay over it when
+               * on beam page (default to true in BeamSection(beam page), otherwise false)
+               *  */}
+              {showHiddenContent && showNSFWCard && (
+                <Card
+                  background={{ light: 'white', dark: 'grey3' }}
+                  elevation="2"
+                  margin="m-3.5"
+                  padding="p-2"
+                  customStyle="w-fit h-[60px]"
+                >
+                  <NSFW
+                    clickToViewLabel={t('Click to View')}
+                    sensitiveContentLabel={t('Sensitive Content!')}
+                    onClickToView={() => {
+                      if (!authenticatedDID) {
+                        showLoginModal();
+                        return;
+                      }
+                      setShowNsfwContent(true);
+                    }}
+                  />
+                </Card>
+              )}
+            </Stack>
+          </BlockWrapper>
         );
       }}
     </ContentBlockExtension>
   );
+};
+
+type BlockWrapperProps = {
+  addBlockData: () => void;
+  addBlockInfo: () => void;
+};
+const BlockWrapper: React.FC<PropsWithChildren<BlockWrapperProps>> = ({
+  addBlockData,
+  addBlockInfo,
+  children,
+}) => {
+  useEffect(() => {
+    addBlockData();
+    addBlockInfo();
+  }, [addBlockData, addBlockInfo]);
+  return <>{children}</>;
+};
+
+//@TODO fetch app's display name from content block hook
+const APP_NAME_TO_DISPLAY_NAME_MAP = {
+  '@akashaorg/app-akasha-integration': 'Antenna',
 };
 
 export default ContentBlock;

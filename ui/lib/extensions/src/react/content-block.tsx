@@ -36,7 +36,10 @@ export type ContentBlockExtensionProps = {
   };
   blockRef?: React.RefObject<BlockInstanceMethods>;
   hideContent?: boolean;
-  children?: (props: GetContentBlockByIdQuery['node']) => ReactElement;
+  children?: (props: {
+    blockData: MatchingBlock['blockData'];
+    blockInfo: MatchingBlock['blockInfo'];
+  }) => ReactElement;
 };
 
 export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
@@ -195,7 +198,8 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
             key={`${mode}_${matchingBlock.blockInfo.propertyType}_${index}`}
           >
             {children?.({
-              ...matchingBlock.blockData,
+              blockData: matchingBlock.blockData,
+              blockInfo: matchingBlock.blockInfo,
             })}
             {!hideContent && (
               <Parcel
