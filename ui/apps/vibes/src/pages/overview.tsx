@@ -1,21 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
 import { NavigateToParams } from '@akashaorg/typings/lib/ui';
-
-import {
-  SparklesIcon,
-  ChatBubbleOvalLeftEllipsisIcon,
-  EnvelopeIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import VibesIntroCard from '@akashaorg/design-system-components/lib/components/VibesIntroCard';
 import VibesValuesCard from '@akashaorg/design-system-components/lib/components/VibesValuesCard';
-
 import BecomeModeratorCard from '../components/overview/become-moderator-card';
-import HelloModeratorCard from '../components/overview/hello-moderator-card';
-
-import { BECOME_MODERATOR, CHECK_APPLICATION_STATUS } from '../routes';
 import { values } from '../services/values';
 import { externalLinks } from '../utils';
 
@@ -24,19 +13,12 @@ export type BasePageProps = {
   navigateTo: (args: NavigateToParams) => void;
 };
 
-export enum ApplicationStatusType {
-  review = 'Under Review',
-  approved = 'Approved!',
-  rejected = 'Rejected',
-}
-
 export type OverviewPageProps = BasePageProps & {
   isModerator: boolean;
-  applicationStatus: ApplicationStatusType | null;
 };
 
 export const Overview: React.FC<OverviewPageProps> = props => {
-  const { isModerator, applicationStatus, navigateTo } = props;
+  const { isModerator, navigateTo } = props;
   const { t } = useTranslation('app-vibes');
 
   const handleCodeOfConductClick = () => {
@@ -53,76 +35,31 @@ export const Overview: React.FC<OverviewPageProps> = props => {
     });
   };
 
-  const handleClickApply = () => {
-    navigateTo({
-      appName: '@akashaorg/app-vibes',
-      getNavigationUrl: routes =>
-        applicationStatus ? routes[CHECK_APPLICATION_STATUS] : routes[BECOME_MODERATOR],
-    });
-  };
-
-  const overviewCTAArr = isModerator
-    ? [
-        {
-          label: t('Code of Conduct discussions'),
-          url: externalLinks.discourse.CoC,
-          icon: <SparklesIcon />,
-        },
-        {
-          label: t('Moderation thoughts'),
-          url: externalLinks.discord,
-          icon: <ChatBubbleOvalLeftEllipsisIcon />,
-        },
-        {
-          label: t('Send us a message'),
-          url: externalLinks.email,
-          icon: <EnvelopeIcon />,
-        },
-      ]
-    : [
-        {
-          label: `📖 ${t('Our Code of Conduct')} ✨`,
-          url: externalLinks.discourse.CoC,
-        },
-        {
-          label: `🗣️ ${t('Code of Conduct Discussions')} 🚀`,
-          url: externalLinks.discourse.CoC,
-        },
-        {
-          label: `👉🏼 ${t('Vibes Thoughts')} 🧠`,
-          url: externalLinks.discord,
-        },
-      ];
+  const overviewCTAArr = [
+    {
+      label: `📖 ${t('Our Code of Conduct')} ✨`,
+      url: externalLinks.discourse.CoC,
+      handler: handleCodeOfConductClick,
+    },
+    {
+      label: `🗣️ ${t('Code of Conduct Discussions')} 🚀`,
+      url: externalLinks.discourse.CoC,
+    },
+    {
+      label: `👉🏼 ${t('Vibes Thoughts')} 🧠`,
+      url: externalLinks.discord,
+    },
+  ];
 
   return (
     <Stack spacing="gap-y-4">
-      {isModerator && (
-        <HelloModeratorCard
-          titleLabel={t('Hello Moderator!')}
-          subtitleLabel={t(
-            'In this section you will find some useful moderation documentation and FAQs',
-          )}
-          moderatorGuideLabel={t("Moderator's Guide")}
-          moderatorGuideUrl={externalLinks.discourse.CoC}
-          moderationFAQLabel={t('Moderation FAQs')}
-          moderationFAQUrl={externalLinks.discourse.CoC}
-        />
-      )}
       <VibesIntroCard
         titleLabel={t('Overview')}
-        introLabel={`${t('Welcome to AKASHA')} ${isModerator ? t('Moderation') : t('Vibes')}`}
-        subtitleLabel={
-          isModerator
-            ? t(
-                'The Moderation app facilitates cooperation and prevents abuse. The app is open and transparent. Take part in the process of governing this community.',
-              )
-            : t(
-                "The Vibes app encourages collaboration while safeguarding against misuse. It's an open and transparent platform, inviting you to actively participate in shaping our community's governance.",
-              )
-        }
-        {...(isModerator && { codeOfConductLabel: t('Read our Code of Conduct') })}
+        introLabel={`${t('Welcome to AKASHA Vibes')}`}
+        subtitleLabel={t(
+          "The Vibes app encourages collaboration while safeguarding against misuse. It's an open and transparent platform, inviting you to actively participate in shaping our community's governance.",
+        )}
         overviewCTAArr={overviewCTAArr}
-        onCodeOfConductClick={handleCodeOfConductClick}
       />
 
       {/**
@@ -130,12 +67,14 @@ export const Overview: React.FC<OverviewPageProps> = props => {
        */}
       {!isModerator && (
         <BecomeModeratorCard
-          titleLabel={t('Keep our Community Safe')}
-          subtitleLabel={t(
-            'You can help us keep the community safer by applying to be a moderator!',
-          )}
-          buttonLabel={applicationStatus ? t('Check your application') : t('Apply')}
-          onClickApply={handleClickApply}
+          titleLabel={t('Become a Moderator')}
+          subtitleLabel={`🌈 ${t(
+            'Dive into Akasha World as a moderator! Contribute, guide our community, and create impact. Your journey starts here',
+          )}`}
+          buttonLabel={t('Apply Now!')}
+          onClickApply={() => {
+            /** */
+          }}
         />
       )}
 

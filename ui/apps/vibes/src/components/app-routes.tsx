@@ -14,11 +14,7 @@ import {
   TransparencyLog,
   TransparencyLogItem,
   VibesValue,
-  BecomeModeratorPage,
-  ApplicationStatusPage,
-  ModifyApplicationPage,
   ReportItemPage,
-  ApplicationStatusType,
 } from '../pages';
 import routes, {
   HOME,
@@ -27,9 +23,6 @@ import routes, {
   HISTORY,
   HISTORY_ITEM,
   MODERATION_VALUE,
-  BECOME_MODERATOR,
-  CHECK_APPLICATION_STATUS,
-  MODIFY_APPLICATION,
   REPORT_ITEM,
 } from '../routes';
 import { generateModerators } from '../utils';
@@ -41,16 +34,13 @@ const AppRoutes: React.FC<unknown> = () => {
 
   const authenticatedProfile = authenticatedProfileReq?.akashaProfile;
 
-  const checkModeratorQuery = { data: 200 }; // modify to connect to actual hook
+  const checkModeratorQuery = { data: null }; // modify to connect to actual hook
 
   const checkModeratorResp = checkModeratorQuery.data;
-  // const isModerator = useMemo(() => checkModeratorResp === 200, [checkModeratorResp]);
-  const isModerator = false;
+  const isModerator = useMemo(() => checkModeratorResp === 200, [checkModeratorResp]);
 
   const getModeratorsQuery = { data: generateModerators(), isFetching: false };
   const allModerators = getModeratorsQuery.data;
-
-  const applicationStatus = ApplicationStatusType.approved;
 
   const navigateTo = getRoutingPlugin().navigateTo;
   const authenticatedDid = authenticatedProfile?.did.id;
@@ -74,7 +64,6 @@ const AppRoutes: React.FC<unknown> = () => {
                 <Overview
                   user={authenticatedDid}
                   isModerator={isModerator}
-                  applicationStatus={applicationStatus}
                   navigateTo={navigateTo}
                 />
               </ErrorBoundary>
@@ -122,33 +111,6 @@ const AppRoutes: React.FC<unknown> = () => {
             element={
               <ErrorBoundary {...errorBoundaryProps}>
                 <TransparencyLogItem />
-              </ErrorBoundary>
-            }
-          />
-          <Route
-            path={routes[BECOME_MODERATOR]}
-            element={
-              <ErrorBoundary {...errorBoundaryProps}>
-                <BecomeModeratorPage user={authenticatedDid} navigateTo={navigateTo} />
-              </ErrorBoundary>
-            }
-          />
-          <Route
-            path={routes[CHECK_APPLICATION_STATUS]}
-            element={
-              <ErrorBoundary {...errorBoundaryProps}>
-                <ApplicationStatusPage
-                  applicationStatus={applicationStatus}
-                  navigateTo={navigateTo}
-                />
-              </ErrorBoundary>
-            }
-          />
-          <Route
-            path={routes[MODIFY_APPLICATION]}
-            element={
-              <ErrorBoundary {...errorBoundaryProps}>
-                <ModifyApplicationPage navigateTo={navigateTo} />
               </ErrorBoundary>
             }
           />
