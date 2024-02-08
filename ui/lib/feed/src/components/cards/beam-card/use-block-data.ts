@@ -1,8 +1,7 @@
 import { MatchingBlock } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
 import { useState } from 'react';
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-type WithoutEmpty<T> = T extends T ? ({} extends T ? never : T) : never;
+type WithoutEmpty<T> = T extends T ? (NonNullable<unknown> extends T ? never : T) : never;
 
 export const useBlockData = () => {
   const [nsfw, setNsfw] = useState(false);
