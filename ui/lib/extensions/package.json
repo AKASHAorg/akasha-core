@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@akashaorg/design-system-core": "*",
+    "@akashaorg/design-system-components": "*",
     "@akashaorg/ui-awf-hooks": "*"
   },
   "devDependencies": {

@@ -157,7 +157,7 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
   ]);
 
   const createContentBlocks = React.useCallback(
-    async (nsfw: boolean, editorTags: string[]) => {
+    async (nsfw: boolean, editorTags: string[], blocksWithActiveNsfw: Map<number, boolean>) => {
       setIsPublishing(true);
       setIsNsfw(nsfw);
       setEditorTags(editorTags);
@@ -169,7 +169,9 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
             ...prev.slice(idx + 1),
           ]);
           try {
-            const data = await block.blockRef.current.createBlock();
+            const data = await block.blockRef.current.createBlock({
+              nsfw: !!blocksWithActiveNsfw.get(idx),
+            });
             if (data.response && data.response.blockID) {
               setBlocksInUse(prev => [
                 ...prev.slice(0, idx),
@@ -189,7 +191,9 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
               ...prev,
               new Error(`Failed to create content blocks: ${err.message}`),
             ]);
-            const data = await block.blockRef.current.createBlock();
+            const data = await block.blockRef.current.createBlock({
+              nsfw: !!blocksWithActiveNsfw.get(idx),
+            });
             if (data.response) {
               setBlocksInUse(prev => [
                 ...prev.slice(0, idx),

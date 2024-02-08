@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState, useRef, ChangeEvent, KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
@@ -6,6 +6,7 @@ import { type ContentBlock, ContentBlockModes } from '@akashaorg/typings/lib/ui'
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
 import {
   TrashIcon,
   XMarkIcon,
@@ -40,13 +41,14 @@ export const BeamEditor: React.FC = () => {
     },
   });
 
-  const [uiState, setUiState] = React.useState<uiState>('editor');
-  const [isNsfw, setIsNsfw] = React.useState(false);
+  const [uiState, setUiState] = useState<uiState>('editor');
+  const [isNsfw, setIsNsfw] = useState(false);
 
-  const [tagValue, setTagValue] = React.useState('');
-  const [editorTags, setEditorTags] = React.useState([]);
-  const [newTags, setNewTags] = React.useState([]);
-  const [errorMessage, setErrorMessage] = React.useState(null);
+  const [tagValue, setTagValue] = useState('');
+  const [editorTags, setEditorTags] = useState([]);
+  const [newTags, setNewTags] = useState([]);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [nsfwBlocks, setNsfwBlocks] = useState(new Map<number, boolean>());
 
   const onBlockSelectAfter = (newSelection: ContentBlock) => {
     if (!newSelection?.propertyType) {
@@ -56,12 +58,12 @@ export const BeamEditor: React.FC = () => {
   };
 
   const handleBeamPublish = () => {
-    createContentBlocks(isNsfw, editorTags);
+    createContentBlocks(isNsfw, editorTags, nsfwBlocks);
   };
 
-  const bottomRef = React.useRef<HTMLDivElement>(null);
+  const bottomRef = useRef<HTMLDivElement>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (blocksInUse.length) {
       bottomRef.current?.scrollIntoView({
         behavior: 'smooth',
@@ -72,6 +74,21 @@ export const BeamEditor: React.FC = () => {
 
   const handleNsfwCheckbox = () => {
     setIsNsfw(!isNsfw);
+    const numberOfBlocks = blocksInUse.length;
+    const newNsfwBlocks = new Map();
+
+    if (!isNsfw) {
+      for (let key = 0; key < numberOfBlocks; key++) {
+        newNsfwBlocks.set(key, true);
+      }
+      setNsfwBlocks(newNsfwBlocks);
+      return;
+    }
+
+    for (let key = 0; key < numberOfBlocks; key++) {
+      newNsfwBlocks.set(key, false);
+    }
+    setNsfwBlocks(newNsfwBlocks);
   };
 
   const handleAddBlockBtn = () => {
@@ -105,13 +122,13 @@ export const BeamEditor: React.FC = () => {
 
   const allTags = [...new Set([...editorTags, ...newTags])];
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const tag = e.currentTarget.value;
     if (targetKeys.includes(tag.charAt(tag.length - 1))) return;
     setTagValue(tag);
   };
 
-  const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
     if (newTags.length === 10) {
       setErrorMessage('Tags limit reached');
     } else if (tagValue.length > 30) {
@@ -170,10 +187,20 @@ export const BeamEditor: React.FC = () => {
     setUiState('editor');
   };
 
-  const [disablePublishing, setDisablePublishing] = React.useState(false);
+  const [disablePublishing, setDisablePublishing] = useState(false);
   const handleDisablePublishing = (value: boolean) => {
     setDisablePublishing(value);
   };
+
+  const blocksWithActiveNsfw = [...nsfwBlocks].filter(([, value]) => !!value);
+
+  useEffect(() => {
+    if (blocksWithActiveNsfw.length && blocksWithActiveNsfw.length === blocksInUse.length) {
+      setIsNsfw(true);
+      return;
+    }
+    setIsNsfw(false);
+  }, [blocksWithActiveNsfw, blocksInUse]);
 
   return (
     <Card customStyle="divide(y grey9 dark:grey3) h-[80vh] justify-between" padding={0}>
@@ -181,24 +208,48 @@ export const BeamEditor: React.FC = () => {
         addBlockLabel={t('Add a Block')}
         beamEditorLabel={t('Beam Editor')}
         addTagsLabel={t('Add Tags')}
-        isNsfw={isNsfw}
-        handleNsfwCheckbox={handleNsfwCheckbox}
         uiState={uiState}
-      />
+      >
+        {uiState === 'editor' && (
+          <Checkbox
+            id="nsfw"
+            label={'NSFW'}
+            name="nsfw"
+            value="nsfw"
+            handleChange={handleNsfwCheckbox}
+            isSelected={isNsfw}
+            indeterminate={
+              blocksWithActiveNsfw.length && blocksWithActiveNsfw.length < blocksInUse.length
+            }
+          />
+        )}
+      </Header>
       <Stack customStyle="relative h-full overflow-hidden">
         <Stack customStyle="overflow-auto h-full">
           {blocksInUse.map((block, idx) => (
             <div key={`${block.key}`} id={`${block.propertyType}-${idx}`}>
               <Stack padding={16} direction="column" spacing="gap-2">
                 <Stack direction="row" justify="between">
-                  <Stack
-                    align="center"
-                    justify="center"
-                    customStyle={
-                      'h-6 w-6 group relative rounded-full bg(secondaryLight/30 dark:secondaryDark)'
-                    }
-                  >
-                    <Icon size="xs" icon={block.icon} />
+                  <Stack direction="row" spacing="gap-x-1">
+                    <Stack
+                      align="center"
+                      justify="center"
+                      customStyle={
+                        'h-6 w-6 group relative rounded-full bg(secondaryLight/30 dark:secondaryDark)'
+                      }
+                    >
+                      <Icon size="xs" icon={block.icon} />
+                    </Stack>
+                    <Checkbox
+                      id="nsfw"
+                      label={'NSFW'}
+                      name="nsfw"
+                      value="nsfw"
+                      handleChange={() => {
+                        setNsfwBlocks(new Map(nsfwBlocks.set(idx, !nsfwBlocks.get(idx))));
+                      }}
+                      isSelected={!!nsfwBlocks.get(idx)}
+                    />
                   </Stack>
                   <button onClick={() => removeBlockFromList(block.order)}>
                     <Stack

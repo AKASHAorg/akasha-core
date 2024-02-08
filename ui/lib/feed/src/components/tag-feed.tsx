@@ -1,39 +1,34 @@
 import * as React from 'react';
-import { useTranslation } from 'react-i18next';
-import { AnalyticsEventData } from '@akashaorg/typings/lib/ui';
-import {
-  AkashaIndexedStreamFiltersInput,
-  AkashaIndexedStreamEdge,
-} from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { EdgeArea, Virtualizer, VirtualizerProps } from '../virtual-list';
-import { useBeamsByTag } from '@akashaorg/ui-awf-hooks/lib/use-beams-by-tag';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import { RestoreItem } from '../virtual-list/use-scroll-state';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
+import { useTranslation } from 'react-i18next';
+import { AnalyticsEventData } from '@akashaorg/typings/lib/ui';
+import { AkashaIndexedStreamEdge } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { EdgeArea, Virtualizer, VirtualizerProps } from '../virtual-list';
+import { useBeamsByTags } from '@akashaorg/ui-awf-hooks/lib/use-beams-by-tags';
+import { RestoreItem } from '../virtual-list/use-scroll-state';
 
 export type TagFeedProps = {
   className?: string;
-  trackEvent?: (data: AnalyticsEventData['data']) => void;
   scrollerOptions?: { overscan: number };
   queryKey: string;
   newItemsPublishedLabel?: string;
-  filters?: AkashaIndexedStreamFiltersInput;
-  scrollTopIndicator?: VirtualizerProps<unknown>['scrollTopIndicator'];
-  renderItem: VirtualizerProps<AkashaIndexedStreamEdge>['renderItem'];
   estimatedHeight?: VirtualizerProps<unknown>['estimatedHeight'];
   itemSpacing?: VirtualizerProps<unknown>['itemSpacing'];
   header?: VirtualizerProps<unknown>['header'];
   footer?: VirtualizerProps<unknown>['footer'];
+  tag: string | string[];
+  trackEvent?: (data: AnalyticsEventData['data']) => void;
+  scrollTopIndicator?: VirtualizerProps<unknown>['scrollTopIndicator'];
+  renderItem: VirtualizerProps<AkashaIndexedStreamEdge>['renderItem'];
   loadingIndicator?: VirtualizerProps<unknown>['loadingIndicator'];
-  tag: string;
 };
 
 const TagFeed = (props: TagFeedProps) => {
   const {
     scrollerOptions = { overscan: 5 },
-    filters,
     scrollTopIndicator,
     renderItem,
     queryKey,
@@ -59,7 +54,7 @@ const TagFeed = (props: TagFeedProps) => {
     isLoading,
     hasErrors,
     errors,
-  } = useBeamsByTag(tag);
+  } = useBeamsByTags(tag);
 
   const lastCursors = React.useRef({ next: null, prev: null });
   const prevBeams = React.useRef([]);
@@ -139,7 +134,7 @@ const TagFeed = (props: TagFeedProps) => {
       )}
 
       {!hasErrors && tag && (
-        <Virtualizer<ReturnType<typeof useBeamsByTag>['beams'][0]>
+        <Virtualizer<ReturnType<typeof useBeamsByTags>['beams'][0]>
           header={header}
           footer={footer}
           requestStatus={{

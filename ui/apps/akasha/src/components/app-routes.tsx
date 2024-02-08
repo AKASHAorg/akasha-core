@@ -6,15 +6,23 @@ import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import ErrorBoundary, {
   ErrorBoundaryProps,
 } from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
-import FeedPage from './pages/feed-page/feed-page';
-import MyFeedPage from './pages/my-feed-page/my-feed-page';
+import GlobalAntennaPage from './pages/global-antenna-page';
+import MyAntennaPage from './pages/my-antenna-page';
 import ProfileFeedPage from './pages/profile-feed-page/profile-feed-page';
 import BeamPage from './pages/entry-page/beam-page';
 import ReflectionPage from './pages/entry-page/reflection-page';
 import TagFeedPage from './pages/tag-feed-page/tag-feed-page';
 import EditorPage from './pages/editor-page/editor-page';
 import EntrySectionLoading from './pages/entry-page/entry-section-loading';
-import routes, { FEED, MY_FEED, PROFILE_FEED, BEAM, REFLECT, TAGS, EDITOR } from '../routes';
+import routes, {
+  GLOBAL_ANTENNA,
+  MY_ANTENNA,
+  PROFILE_FEED,
+  BEAM,
+  REFLECT,
+  TAGS,
+  EDITOR,
+} from '../routes';
 
 const AppRoutes: React.FC<unknown> = () => {
   const { baseRouteName, logger, navigateToModal } = useRootComponentProps();
@@ -42,10 +50,10 @@ const AppRoutes: React.FC<unknown> = () => {
     <Router basename={baseRouteName}>
       <Routes>
         <Route
-          path={routes[FEED]}
+          path={routes[GLOBAL_ANTENNA]}
           element={
             <ErrorBoundary {...errorBoundaryProps}>
-              <FeedPage
+              <GlobalAntennaPage
                 isLoggedIn={isLoggedIn}
                 authenticatedProfile={authenticatedProfile}
                 showLoginModal={showLoginModal}
@@ -54,10 +62,10 @@ const AppRoutes: React.FC<unknown> = () => {
           }
         />
         <Route
-          path={routes[MY_FEED]}
+          path={routes[MY_ANTENNA]}
           element={
             <ErrorBoundary {...errorBoundaryProps}>
-              <MyFeedPage
+              <MyAntennaPage
                 authenticatedProfile={authenticatedProfile}
                 showLoginModal={showLoginModal}
               />
@@ -131,7 +139,7 @@ const AppRoutes: React.FC<unknown> = () => {
             </ErrorBoundary>
           }
         />
-        <Route path="/" element={<Navigate to={routes[FEED]} replace />} />
+        <Route path="/" element={<Navigate to={routes[GLOBAL_ANTENNA]} replace />} />
       </Routes>
     </Router>
   );

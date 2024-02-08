@@ -35,7 +35,7 @@ const Web3ConnectCard: React.FC<TWeb3ConnectCardProps> = props => {
       radius={8}
       padding="p-2"
       accentBorder={true}
-      customStyle="select-none"
+      customStyle="select-none hover:bg(secondaryLight/10 dark:secondaryDark/10)"
       onClick={handleClick}
       fullWidth
     >

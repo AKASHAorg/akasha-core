@@ -12,7 +12,6 @@ import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoade
 import { RestoreItem } from '../virtual-list/use-scroll-state';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import type { GetBeamsQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 
 export type BeamFeedProps = {
   className?: string;

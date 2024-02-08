@@ -1,5 +1,5 @@
 import 'systemjs-webpack-interop/auto-public-path';
-import routes, { BEAM, FEED, MY_FEED, PROFILE_FEED, REFLECT, TAGS } from './routes';
+import routes, { BEAM, GLOBAL_ANTENNA, MY_ANTENNA, PROFILE_FEED, REFLECT, TAGS } from './routes';
 import {
   IAppConfig,
   IntegrationRegistrationOptions,
@@ -41,8 +41,8 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
    * other apps to navigate
    */
   routes: {
-    defaultRoute: routes[FEED],
-    [MY_FEED]: routes[MY_FEED],
+    defaultRoute: routes[GLOBAL_ANTENNA],
+    [MY_ANTENNA]: routes[MY_ANTENNA],
     [PROFILE_FEED]: routes[PROFILE_FEED],
     [BEAM]: routes[BEAM],
     [TAGS]: routes[TAGS],
@@ -58,15 +58,15 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     area: [MenuItemAreaType.AppArea],
     subRoutes: [
       {
-        label: 'General',
+        label: GLOBAL_ANTENNA,
         index: 0,
-        route: routes[FEED],
+        route: routes[GLOBAL_ANTENNA],
         type: MenuItemType.Internal,
       },
       {
-        label: MY_FEED,
+        label: MY_ANTENNA,
         index: 1,
-        route: routes[MY_FEED],
+        route: routes[MY_ANTENNA],
         type: MenuItemType.Internal,
       },
     ],

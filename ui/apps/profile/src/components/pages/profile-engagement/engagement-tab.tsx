@@ -47,7 +47,7 @@ const EngagementTab: React.FC<PropsWithChildren<EngagementTabProps>> = props => 
         }}
         customStyle="sticky bg(white dark:grey2) top-52 z-50"
       />
-      <Stack padding="px-4" customStyle="mt-4">
+      <Stack padding="px-4 pb-4" customStyle="mt-4">
         {children}
       </Stack>
     </>

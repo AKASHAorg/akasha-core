@@ -29,9 +29,7 @@
       "targets": {
         "build": {
           "builder": "@nrwl/workspace:run-commands",
-          "outputs": [
-            "sdk/dist"
-          ],
+          "outputs": ["sdk/dist"],
           "options": {
             "command": "yarn build",
             "cwd": "sdk",
@@ -49,9 +47,7 @@
           "builder": "@nrwl/workspace:run-commands",
           "outputPath": "ui/build/design-system-core",
           "options": {
-            "commands": [
-              "yarn run pack"
-            ],
+            "commands": ["yarn run pack"],
             "cwd": "ui/design-system-core",
             "parallel": false
           }
@@ -67,9 +63,7 @@
           "builder": "@nrwl/workspace:run-commands",
           "outputPath": "ui/build/design-system-components",
           "options": {
-            "commands": [
-              "yarn run pack"
-            ],
+            "commands": ["yarn run pack"],
             "cwd": "ui/design-system-components",
             "parallel": false
           }
@@ -83,14 +77,9 @@
       "targets": {
         "build": {
           "builder": "@nrwl/workspace:run-commands",
-          "outputs": [
-            "ui/build/hooks"
-          ],
+          "outputs": ["ui/build/hooks"],
           "options": {
-            "commands": [
-              "yarn run pack",
-              "yarn postpack"
-            ],
+            "commands": ["yarn run pack", "yarn postpack"],
             "cwd": "ui/hooks",
             "parallel": false
           }
@@ -104,14 +93,9 @@
       "targets": {
         "build": {
           "builder": "@nrwl/workspace:run-commands",
-          "outputs": [
-            "ui/build/app-loader"
-          ],
+          "outputs": ["ui/build/app-loader"],
           "options": {
-            "commands": [
-              "yarn run pack",
-              "yarn postpack"
-            ],
+            "commands": ["yarn run pack", "yarn postpack"],
             "cwd": "ui/app-loader",
             "parallel": false
           }
@@ -126,9 +110,7 @@
         "build": {
           "builder": "@nrwl/workspace:run-commands",
           "options": {
-            "commands": [
-              "yarn build"
-            ],
+            "commands": ["yarn build"],
             "cwd": "tests",
             "parallel": false
           }
@@ -142,14 +124,9 @@
       "targets": {
         "build": {
           "builder": "@nrwl/workspace:run-commands",
-          "outputs": [
-            "ui/build/widgets/analytics"
-          ],
+          "outputs": ["ui/build/widgets/analytics"],
           "options": {
-            "commands": [
-              "yarn run pack",
-              "yarn postpack"
-            ],
+            "commands": ["yarn run pack", "yarn postpack"],
             "cwd": "ui/widgets/analytics",
             "parallel": false
           }
@@ -191,14 +168,9 @@
       "targets": {
         "build": {
           "builder": "@nrwl/workspace:run-commands",
-          "outputs": [
-            "ui/build/widgets/mini-profile"
-          ],
+          "outputs": ["ui/build/widgets/mini-profile"],
           "options": {
-            "commands": [
-              "yarn run pack",
-              "yarn postpack"
-            ],
+            "commands": ["yarn run pack", "yarn postpack"],
             "cwd": "ui/widgets/mini-profile",
             "parallel": false
           }
@@ -218,14 +190,9 @@
       "targets": {
         "build": {
           "builder": "@nrwl/workspace:run-commands",
-          "outputs": [
-            "ui/build/widgets/my-apps"
-          ],
+          "outputs": ["ui/build/widgets/my-apps"],
           "options": {
-            "commands": [
-              "yarn run pack",
-              "yarn postpack"
-            ],
+            "commands": ["yarn run pack", "yarn postpack"],
             "cwd": "ui/widgets/my-apps",
             "parallel": false
           }
@@ -245,14 +212,9 @@
       "targets": {
         "build": {
           "builder": "@nrwl/workspace:run-commands",
-          "outputs": [
-            "ui/build/widgets/sidebar"
-          ],
+          "outputs": ["ui/build/widgets/sidebar"],
           "options": {
-            "commands": [
-              "yarn run pack",
-              "yarn postpack"
-            ],
+            "commands": ["yarn run pack", "yarn postpack"],
             "cwd": "ui/widgets/sidebar",
             "parallel": false
           }
@@ -272,14 +234,9 @@
       "targets": {
         "build": {
           "builder": "@nrwl/workspace:run-commands",
-          "outputs": [
-            "ui/build/widgets/top-bar"
-          ],
+          "outputs": ["ui/build/widgets/top-bar"],
           "options": {
-            "commands": [
-              "yarn run pack",
-              "yarn postpack"
-            ],
+            "commands": ["yarn run pack", "yarn postpack"],
             "cwd": "ui/widgets/top-bar",
             "parallel": false
           }
@@ -299,14 +256,9 @@
       "targets": {
         "build": {
           "builder": "@nrwl/workspace:run-commands",
-          "outputs": [
-            "ui/build/widgets/trending"
-          ],
+          "outputs": ["ui/build/widgets/trending"],
           "options": {
-            "commands": [
-              "yarn run pack",
-              "yarn postpack"
-            ],
+            "commands": ["yarn run pack", "yarn postpack"],
             "cwd": "ui/widgets/trending",
             "parallel": false
           }
@@ -326,14 +278,9 @@
       "targets": {
         "build": {
           "builder": "@nrwl/workspace:run-commands",
-          "outputs": [
-            "ui/apps/akasha"
-          ],
+          "outputs": ["ui/apps/akasha"],
           "options": {
-            "commands": [
-              "yarn run pack",
-              "yarn postpack"
-            ],
+            "commands": ["yarn run pack", "yarn postpack"],
             "cwd": "ui/apps/akasha",
             "parallel": false
           }
@@ -353,14 +300,9 @@
       "targets": {
         "build": {
           "builder": "@nrwl/workspace:run-commands",
-          "outputs": [
-            "ui/apps/extensions"
-          ],
+          "outputs": ["ui/apps/extensions"],
           "options": {
-            "commands": [
-              "yarn run pack",
-              "yarn postpack"
-            ],
+            "commands": ["yarn run pack", "yarn postpack"],
             "cwd": "ui/apps/extensions",
             "parallel": false
           }
@@ -380,14 +322,9 @@
       "targets": {
         "build": {
           "builder": "@nrwl/workspace:run-commands",
-          "outputs": [
-            "ui/apps/auth-app"
-          ],
+          "outputs": ["ui/apps/auth-app"],
           "options": {
-            "commands": [
-              "yarn run pack",
-              "yarn postpack"
-            ],
+            "commands": ["yarn run pack", "yarn postpack"],
             "cwd": "ui/apps/auth-app",
             "parallel": false
           }
@@ -407,14 +344,9 @@
       "targets": {
         "build": {
           "builder": "@nrwl/workspace:run-commands",
-          "outputs": [
-            "ui/apps/lists"
-          ],
+          "outputs": ["ui/apps/lists"],
           "options": {
-            "commands": [
-              "yarn run pack",
-              "yarn postpack"
-            ],
+            "commands": ["yarn run pack", "yarn postpack"],
             "cwd": "ui/apps/lists",
             "parallel": false
           }
@@ -434,14 +366,9 @@
       "targets": {
         "build": {
           "builder": "@nrwl/workspace:run-commands",
-          "outputs": [
-            "ui/apps/legal"
-          ],
+          "outputs": ["ui/apps/legal"],
           "options": {
-            "commands": [
-              "yarn run pack",
-              "yarn postpack"
-            ],
+            "commands": ["yarn run pack", "yarn postpack"],
             "cwd": "ui/apps/legal",
             "parallel": false
           }
@@ -461,14 +388,9 @@
       "targets": {
         "build": {
           "builder": "@nrwl/workspace:run-commands",
-          "outputs": [
-            "ui/apps/messaging"
-          ],
+          "outputs": ["ui/apps/messaging"],
           "options": {
-            "commands": [
-              "yarn run pack",
-              "yarn postpack"
-            ],
+            "commands": ["yarn run pack", "yarn postpack"],
             "cwd": "ui/apps/messaging",
             "parallel": false
           }
@@ -488,14 +410,9 @@
       "targets": {
         "build": {
           "builder": "@nrwl/workspace:run-commands",
-          "outputs": [
-            "ui/apps/moderation"
-          ],
+          "outputs": ["ui/apps/moderation"],
           "options": {
-            "commands": [
-              "yarn run pack",
-              "yarn postpack"
-            ],
+            "commands": ["yarn run pack", "yarn postpack"],
             "cwd": "ui/apps/moderation",
             "parallel": false
           }
@@ -515,14 +432,9 @@
       "targets": {
         "build": {
           "builder": "@nrwl/workspace:run-commands",
-          "outputs": [
-            "ui/apps/notifications"
-          ],
+          "outputs": ["ui/apps/notifications"],
           "options": {
-            "commands": [
-              "yarn run pack",
-              "yarn postpack"
-            ],
+            "commands": ["yarn run pack", "yarn postpack"],
             "cwd": "ui/apps/notifications",
             "parallel": false
           }
@@ -542,14 +454,9 @@
       "targets": {
         "build": {
           "builder": "@nrwl/workspace:run-commands",
-          "outputs": [
-            "ui/apps/profile"
-          ],
+          "outputs": ["ui/apps/profile"],
           "options": {
-            "commands": [
-              "yarn run pack",
-              "yarn postpack"
-            ],
+            "commands": ["yarn run pack", "yarn postpack"],
             "cwd": "ui/apps/profile",
             "parallel": false
           }
@@ -569,14 +476,9 @@
       "targets": {
         "build": {
           "builder": "@nrwl/workspace:run-commands",
-          "outputs": [
-            "ui/apps/search"
-          ],
+          "outputs": ["ui/apps/search"],
           "options": {
-            "commands": [
-              "yarn run pack",
-              "yarn postpack"
-            ],
+            "commands": ["yarn run pack", "yarn postpack"],
             "cwd": "ui/apps/search",
             "parallel": false
           }
@@ -596,14 +498,9 @@
       "targets": {
         "build": {
           "builder": "@nrwl/workspace:run-commands",
-          "outputs": [
-            "ui/apps/settings-app"
-          ],
+          "outputs": ["ui/apps/settings-app"],
           "options": {
-            "commands": [
-              "yarn run pack",
-              "yarn postpack"
-            ],
+            "commands": ["yarn run pack", "yarn postpack"],
             "cwd": "ui/apps/settings-app",
             "parallel": false
           }
@@ -623,14 +520,9 @@
       "targets": {
         "build": {
           "builder": "@nrwl/workspace:run-commands",
-          "outputs": [
-            "ui/apps/articles"
-          ],
+          "outputs": ["ui/apps/articles"],
           "options": {
-            "commands": [
-              "yarn run pack",
-              "yarn postpack"
-            ],
+            "commands": ["yarn run pack", "yarn postpack"],
             "cwd": "ui/apps/articles",
             "parallel": false
           }
@@ -643,33 +535,6 @@
         }
       }
     },
-    "@akashaorg/app-dev-dashboard": {
-      "root": "ui/apps/dev-dashboard",
-      "sourceRoot": "ui/apps/dev-dashboard/src",
-      "projectType": "application",
-      "targets": {
-        "build": {
-          "builder": "@nrwl/workspace:run-commands",
-          "outputs": [
-            "ui/apps/dev-dashboard"
-          ],
-          "options": {
-            "commands": [
-              "yarn run pack",
-              "yarn postpack"
-            ],
-            "cwd": "ui/apps/dev-dashboard",
-            "parallel": false
-          }
-        },
-        "extract:translations": {
-          "builder": "./tools/executors/i18n:extract",
-          "options": {
-            "cwd": "ui/apps/dev-dashboard"
-          }
-        }
-      }
-    },
     "@akashaorg/app-routing": {
       "root": "ui/apps/routing",
       "sourceRoot": "ui/apps/routing/src",
@@ -677,13 +542,9 @@
       "targets": {
         "build": {
           "builder": "@nrwl/workspace:run-commands",
-          "outputs": [
-            "ui/apps/routing"
-          ],
+          "outputs": ["ui/apps/routing"],
           "options": {
-            "commands": [
-              "yarn run pack"
-            ],
+            "commands": ["yarn run pack"],
             "cwd": "ui/apps/routing",
             "parallel": false
           }
@@ -698,9 +559,7 @@
         "build": {
           "builder": "@nrwl/workspace:run-commands",
           "options": {
-            "commands": [
-              "yarn build"
-            ],
+            "commands": ["yarn build"],
             "cwd": "examples/ui/akasha.world",
             "parallel": false
           }
@@ -708,9 +567,7 @@
         "start": {
           "builder": "@nrwl/workspace:run-commands",
           "options": {
-            "commands": [
-              "yarn start"
-            ],
+            "commands": ["yarn start"],
             "cwd": "examples/ui/akasha.world"
           }
         }

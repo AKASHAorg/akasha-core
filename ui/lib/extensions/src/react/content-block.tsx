@@ -1,6 +1,5 @@
-import * as React from 'react';
+import React, { ReactElement, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import Parcel from 'single-spa-react/parcel';
 import {
   type BlockInstanceMethods,
   type ContentBlockExtensionInterface,
@@ -36,11 +35,16 @@ export type ContentBlockExtensionProps = {
     blockID: string;
   };
   blockRef?: React.RefObject<BlockInstanceMethods>;
+  hideContent?: boolean;
+  children?: (props: {
+    blockData: MatchingBlock['blockData'];
+    blockInfo: MatchingBlock['blockInfo'];
+  }) => ReactElement;
   onError?: (error: Error) => void;
 };
 
 export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
-  const { blockRef, mode, editMode, readMode, onError } = props;
+  const { blockRef, mode, editMode, readMode, onError, hideContent, children } = props;
   const { getExtensionsPlugin, getContext, logger } = useRootComponentProps();
   const contentBlockStoreRef = React.useRef(getExtensionsPlugin()?.contentBlockStore);
   const [state, setState] = React.useState<{
@@ -51,7 +55,7 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
     isMatched: false,
   });
 
-  React.useLayoutEffect(() => {
+  useLayoutEffect(() => {
     if (!contentBlockStoreRef.current && !!getExtensionsPlugin()) {
       contentBlockStoreRef.current = getExtensionsPlugin().contentBlockStore;
     }
@@ -59,7 +63,7 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
 
   const [fetchBlockInfo, blockInfoQuery] = useGetContentBlockByIdLazyQuery();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (readMode?.blockID) {
       fetchBlockInfo({
         variables: {
@@ -69,7 +73,7 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
     }
   }, [fetchBlockInfo, readMode?.blockID]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     return () => {
       setState({
         isMatched: false,
@@ -78,7 +82,7 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
     };
   }, []);
 
-  const matchingBlocks: MatchingBlock[] = React.useMemo(() => {
+  const matchingBlocks: MatchingBlock[] = useMemo(() => {
     if (!contentBlockStoreRef.current) return [];
     switch (mode) {
       case ContentBlockModes.EDIT:
@@ -94,7 +98,7 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
     }
   }, [mode, editMode, blockInfoQuery.data]);
 
-  React.useLayoutEffect(() => {
+  useLayoutEffect(() => {
     const resolveConfigs = async () => {
       const newBlocks = [];
 
@@ -137,7 +141,7 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
     }
   }, [blockInfoQuery.called, blockInfoQuery.loading, matchingBlocks, mode, state]);
 
-  const appInfo = React.useMemo(() => {
+  const appInfo = useMemo(() => {
     if (blockInfoQuery.called && !blockInfoQuery.loading) {
       if (
         blockInfoQuery.data?.node &&
@@ -213,24 +217,31 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
             id={`${mode}_${matchingBlock.blockInfo.propertyType}_${index}`}
             key={`${mode}_${matchingBlock.blockInfo.propertyType}_${index}`}
           >
-            <RootParcel
-              config={{
-                ...matchingBlock.config,
-                name: `${matchingBlock.blockInfo.appName}_${matchingBlock.blockInfo.propertyType}_${index}`,
-              }}
-              {...getContext()}
-              blockInfo={{
-                ...matchingBlock.blockInfo,
-                mode,
-                externalHandler: editMode?.externalHandler,
-              }}
-              blockData={matchingBlock.blockData}
-              blockRef={blockRef}
-              content={matchingBlock.content}
-              handleError={handleParcelError(
-                `${matchingBlock.blockInfo.appName}_${matchingBlock.blockInfo.propertyType}_${index}`,
-              )}
-            />
+            {!hideContent && (
+              <RootParcel
+                config={{
+                  ...matchingBlock.config,
+                  name: `${matchingBlock.blockInfo.appName}_${matchingBlock.blockInfo.propertyType}_${index}`,
+                }}
+                {...getContext()}
+                blockInfo={{
+                  ...matchingBlock.blockInfo,
+                  mode,
+                  externalHandler: editMode?.externalHandler,
+                }}
+                blockData={matchingBlock.blockData}
+                blockRef={blockRef}
+                content={matchingBlock.content}
+                handleError={handleParcelError(
+                  `${matchingBlock.blockInfo.appName}_${matchingBlock.blockInfo.propertyType}_${index}`,
+                )}
+              />
+            )}
+
+            {children?.({
+              blockData: matchingBlock.blockData,
+              blockInfo: matchingBlock.blockInfo,
+            })}
           </Stack>
         );
       })}

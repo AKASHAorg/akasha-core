@@ -43,13 +43,17 @@ export type ContentBlockRegisterEvent = {
   data?: (ContentBlockExtensionInterface & { appName: string })[];
 };
 
+export type CreateContentBlock = {
+  nsfw: boolean;
+};
+
 export type BlockInstanceMethods = {
-  createBlock: () => Promise<{
+  createBlock: (arg: CreateContentBlock) => Promise<{
     response: { blockID: string; error?: string };
     blockInfo: BlockInfo;
     retryCount?: number;
   }>;
-  retryBlockCreation: () => Promise<{
+  retryBlockCreation: (arg: CreateContentBlock) => Promise<{
     response: { blockID: string; error?: string };
     blockInfo: BlockInfo;
     retryCount?: number;
