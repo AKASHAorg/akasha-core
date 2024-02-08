@@ -18,16 +18,18 @@ describe('useCommonProjectionItem', () => {
     mockIsAtTop.mockReturnValue(true);
     const { result: renderResult, unmount } = renderHook(() => {
       return useCommonProjectionItem({
+        isInitialPlacement: false,
+        stateItems: [],
+        viewportRect: dummyRect,
         isAtTop: mockIsAtTop,
         hasPreviousPage: false,
-        projection: [],
+        getProjection: () => [],
         itemList: [],
         getItemHeights: () => new Map(),
         getItemHeight: () => mockEstimatedHeight,
       });
     });
-    const result = renderResult.current(new Rect(500, 980), true);
-    expect(result).toBeUndefined();
+    expect(renderResult.current).toBeUndefined();
     unmount();
   });
 
@@ -35,18 +37,20 @@ describe('useCommonProjectionItem', () => {
     mockIsAtTop.mockReturnValue(false);
     const { result: renderResult, unmount } = renderHook(() => {
       return useCommonProjectionItem({
+        isInitialPlacement: false,
+        stateItems: [],
+        viewportRect: dummyRect,
         isAtTop: mockIsAtTop,
         hasPreviousPage: false,
-        projection: createMockProjection(mockItemList, mockMountedItems),
+        getProjection: () => createMockProjection(mockItemList, mockMountedItems),
         itemList: mockItemList,
         getItemHeights: () => new Map(),
         getItemHeight: () => mockEstimatedHeight,
       });
     });
-    const result = renderResult.current(new Rect(500, 980), false);
-    expect(result).toBeDefined();
-    expect(result.key).toEqual(mockItemList[0].key);
-    expect(result.start).toEqual(0);
+    expect(renderResult.current).toBeDefined();
+    expect(renderResult.current.key).toEqual(mockItemList[0].key);
+    expect(renderResult.current.start).toEqual(0);
     unmount();
   });
 
@@ -54,19 +58,20 @@ describe('useCommonProjectionItem', () => {
     mockIsAtTop.mockReturnValue(true);
     const { result: renderResult, unmount } = renderHook(() =>
       useCommonProjectionItem({
+        isInitialPlacement: false,
+        stateItems: mockMountedItems,
+        viewportRect: dummyRect,
         isAtTop: mockIsAtTop,
         hasPreviousPage: false,
-        projection: createMockProjection(mockItemList, mockMountedItems),
+        getProjection: () => createMockProjection(mockItemList, mockMountedItems),
         itemList: mockItemList,
         getItemHeights: () => new Map(mockMountedItems.map(it => [it.key, it.height])),
         getItemHeight: itemKey => mockMountedItems.find(it => it.key === itemKey).height,
       }),
     );
 
-    const result = renderResult.current(dummyRect, true);
-
-    expect(result.key).toEqual(mockMountedItems[0].key);
-    expect(result.start).toEqual(mockMountedItems[0].start);
+    expect(renderResult.current.key).toEqual(mockMountedItems[0].key);
+    expect(renderResult.current.start).toEqual(mockMountedItems[0].start);
     unmount();
   });
 
@@ -75,18 +80,24 @@ describe('useCommonProjectionItem', () => {
 
     const { result: renderResult, unmount } = renderHook(() =>
       useCommonProjectionItem({
+        isInitialPlacement: false,
+        stateItems: mockMountedItems,
+        viewportRect: dummyRect,
         isAtTop: mockIsAtTop,
         hasPreviousPage: false,
-        projection: createMockProjection(mockItemList, mockMountedItems),
+        getProjection: () => createMockProjection(mockItemList, mockMountedItems),
         itemList: mockItemList,
         getItemHeights: () => new Map(mockMountedItems.map(it => [it.key, it.height])),
         getItemHeight: itemKey => mockMountedItems.find(it => it.key === itemKey).height,
       }),
     );
 
-    const result = renderResult.current(dummyRect, false);
-
-    expect(result).toEqual({ ...mockMountedItems[0], height: 0, maybeRef: false, visible: false });
+    expect(renderResult.current).toEqual({
+      ...mockMountedItems[0],
+      height: 0,
+      maybeRef: false,
+      visible: false,
+    });
     unmount();
   });
 
@@ -94,16 +105,19 @@ describe('useCommonProjectionItem', () => {
     mockIsAtTop.mockReturnValue(false);
     const { result: renderResult, unmount } = renderHook(() => {
       return useCommonProjectionItem({
+        isInitialPlacement: false,
+        stateItems: mockMountedItems,
+        viewportRect: new Rect(1000, 980),
         isAtTop: mockIsAtTop,
         hasPreviousPage: false,
-        projection: createMockProjection(mockItemList, mockMountedItems),
+        getProjection: () => createMockProjection(mockItemList, mockMountedItems),
         itemList: mockItemList,
         getItemHeights: () => new Map(mockMountedItems.map(it => [it.key, it.height])),
         getItemHeight: itemKey => mockMountedItems.find(it => it.key === itemKey).height,
       });
     });
-    const result = renderResult.current(new Rect(1000, 980), false);
-    expect(result).toBeDefined();
+
+    expect(renderResult.current).toBeDefined();
     unmount();
   });
 
@@ -111,25 +125,29 @@ describe('useCommonProjectionItem', () => {
     mockIsAtTop.mockReturnValue(false);
     const mockedMounted = generateMountedItems(10, 1000);
     const mockedItemList = generateItemList(50);
+    const scrolledViewportRect = new Rect(1885, 980);
 
     const { result: renderResult, unmount } = renderHook(() =>
       useCommonProjectionItem({
+        isInitialPlacement: false,
+        stateItems: mockMountedItems,
+        viewportRect: scrolledViewportRect,
         isAtTop: mockIsAtTop,
         hasPreviousPage: false,
-        projection: createMockProjection(mockedItemList, mockedMounted),
+        getProjection: () => createMockProjection(mockedItemList, mockedMounted),
         itemList: mockedItemList,
         getItemHeights: () => new Map(mockedMounted.map(it => [it.key, it.height])),
         getItemHeight: itemKey => mockedMounted.find(it => it.key === itemKey).height,
       }),
     );
-    const viewportRect = new Rect(1885, 980);
-    const result = renderResult.current(viewportRect, false);
-    expect(result).toBeDefined();
+    expect(renderResult.current).toBeDefined();
     const item = mockedMounted.find(
-      it => it.start <= viewportRect.getTop() && it.start + it.height >= viewportRect.getTop(),
+      it =>
+        it.start <= scrolledViewportRect.getTop() &&
+        it.start + it.height >= scrolledViewportRect.getTop(),
     );
-    expect(result.start).toEqual(item.start);
-    expect(result.key).toEqual(item.key);
+    expect(renderResult.current.start).toEqual(item.start);
+    expect(renderResult.current.key).toEqual(item.key);
     unmount();
   });
 });

@@ -1,17 +1,29 @@
 import * as React from 'react';
 import { VirtualDataItem } from './virtual-item-renderer';
 
+const SESSION_STORAGE_KEY = 'vlist-scroll-restoration';
+
 export type RestoreItem = {
   key: string;
   offsetTop: number;
 };
 
 const getScrollState = (restoreKey: string) => {
-  const state = window.history.state;
-  if (!state || !state.virtualListPosition) return { loaded: true };
-  const scrollState = state.virtualListPosition[restoreKey];
+  const sessionState = sessionStorage.getItem(SESSION_STORAGE_KEY);
+  let state = null;
+
+  if (sessionState) {
+    state = JSON.parse(sessionState);
+  }
+
+  if (!state || !state[restoreKey]) return { loaded: true };
+
+  const scrollState = state[restoreKey];
+
   if (!scrollState) return { loaded: true };
+
   const savedItems = scrollState.items;
+
   if (savedItems.length > 0) {
     return {
       ...scrollState,
@@ -37,22 +49,19 @@ export const useScrollState = (restoreKey: string) => {
       restoreKeyRef.current = restoreKey;
     }
   }, [restoreKey]);
-  const prevSavedItems = React.useRef<RestoreItem[]>();
+
   const save = (restoreItems: RestoreItem[], measurementsCache: Map<string, number>) => {
-    if (typeof window !== 'undefined' && window.history) {
-      if (prevSavedItems.current && prevSavedItems.current === restoreItems) return;
-      prevSavedItems.current = restoreItems;
-      window.history.replaceState(
-        Object.assign(window.history.state ?? {}, {
-          virtualListPosition: {
-            ...(window.history.state?.virtualListPosition || {}),
-            [restoreKey]: {
-              items: restoreItems,
-              measurementsCache: Object.fromEntries(measurementsCache),
-            },
+    if (typeof window !== 'undefined' && window.sessionStorage) {
+      const currentStorage = JSON.parse(sessionStorage.getItem(SESSION_STORAGE_KEY)) || {};
+      sessionStorage.setItem(
+        SESSION_STORAGE_KEY,
+        JSON.stringify({
+          ...currentStorage,
+          [restoreKey]: {
+            items: restoreItems,
+            measurementsCache: Object.fromEntries(measurementsCache),
           },
         }),
-        '',
       );
     }
   };

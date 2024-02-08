@@ -1,10 +1,7 @@
 import * as React from 'react';
-import { fireEvent, render } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { Virtualizer, VirtualizerProps } from '../index';
 import '@testing-library/jest-dom';
-import { act } from '@testing-library/react-hooks';
-import * as commonProjectionHook from '../use-common-projection-item';
-import { generateMountedItems } from './test-utils';
 
 class ResizeObserver {
   observe() {
@@ -36,11 +33,13 @@ describe('Virtualizer', () => {
     onEdgeDetectorChange: mockEdgeDetectorChangeFn,
     hasNextPage: false,
     hasPreviousPage: false,
-    isLoading: false,
+    requestStatus: {
+      isLoading: false,
+      called: false,
+    },
   };
   let rendered;
-  const mockCommonItem = generateMountedItems(1)[0];
-  const mockCommonProjectionFn = jest.fn(() => mockCommonItem);
+
   beforeEach(() => {
     global.scrollTo = jest.fn();
     global.scrollBy = jest.fn();
@@ -55,43 +54,29 @@ describe('Virtualizer', () => {
         setBottomOffset: jest.fn(),
       })),
     }));
-    (
-      jest.spyOn(
-        commonProjectionHook,
-        'useCommonProjectionItem',
-      ) as unknown as jest.SpyInstance<jest.Mock>
-    ).mockReturnValue(mockCommonProjectionFn);
 
     rendered = render(<Virtualizer {...mockProps} />);
   });
+
   afterEach(() => {
     jest.clearAllMocks();
     global.scrollTo(0, 0);
     rendered = undefined;
   });
+
   it('renders container on first render', () => {
     const { container } = rendered;
 
     expect(container.querySelector(`#${restorationKey}`)).toBeInTheDocument();
     // header + footer
     expect(container.querySelector(`#${restorationKey}`).childElementCount).toEqual(2);
+    rendered.unmount();
   });
 
   it('calls onFetchInitialData if itemList is empty', () => {
     const { rerender } = rendered;
     rerender(<Virtualizer {...{ ...mockProps, items: [] }} />);
     expect(mockProps.onFetchInitialData).toBeCalledTimes(1);
-  });
-
-  it('it sets the state on update and calls the callback function (and update)', async () => {
-    jest.useFakeTimers();
-
-    act(() => {
-      fireEvent.scroll(window, { target: { clientY: 458 } });
-      jest.advanceTimersByTime(500);
-    });
-
-    expect(mockCommonProjectionFn).toHaveBeenCalled();
-    expect(mockEdgeDetectorChangeFn).toHaveBeenCalled();
+    rendered.unmount();
   });
 });

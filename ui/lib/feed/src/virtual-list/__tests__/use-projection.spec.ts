@@ -9,35 +9,46 @@ import { Rect } from '../rect';
 //   getVisibleItemsSlice: jest.fn(),
 // }));
 
+const DEFAULT_OVERSCAN = 5;
+const DEFAULT_HEIGHT_AVERAGE = 120;
+
 describe('useProjection', () => {
   const mockItems: VirtualItem[] = generateMountedItems(20);
   const mockItemList = generateItemList(20);
   const mockIsAtTop = jest.fn();
   const defaultIsAtTop = mockIsAtTop.mockReturnValue(false);
   const mockProps: UseProjectionProps<unknown> = {
-    mountedItems: mockItems,
     itemList: mockItemList,
     isInitialPlacement: false,
     isAtTop: defaultIsAtTop,
     getItemHeights: () => new Map(mockItems.map(mit => [mit.key, mit.height])),
-    overscan: 5,
+    overscan: DEFAULT_OVERSCAN,
     getDistanceFromTop: (itemKey, itemList) => itemList.findIndex(it => it.key === itemKey) * 250,
-    hasNextPage: true,
-    hasPreviousPage: false,
     getItemHeight: (itemKey: string) => mockItems.find(it => it.key === itemKey).height,
-    getItemHeightAverage: () => 120,
+    getItemHeightAverage: () => DEFAULT_HEIGHT_AVERAGE,
   };
 
   it('should render projections correctly', () => {
     const { result: renderResult } = renderHook(() => useProjection(mockProps));
-    expect(renderResult.current.projection).toHaveLength(mockItems.length);
+    expect(
+      renderResult.current.getProjection(
+        mockItems,
+        mockItems.map((it, index) => ({
+          key: it.key,
+          data: it,
+          render: () => null,
+          maybeRef: true,
+          index,
+        })),
+      ),
+    ).toHaveLength(mockItems.length);
   });
 
   it('should calculate next projection correctly', () => {
     const { result: renderResult } = renderHook(() => useProjection(mockProps));
     let getNextProjectionResult: ReturnType<typeof renderResult.current.getNextProjection>;
     const startItem: VirtualItem = {
-      key: 'start-key',
+      key: mockItemList[0].key,
       start: 0,
       height: 100,
       visible: false,
@@ -45,7 +56,22 @@ describe('useProjection', () => {
     };
 
     const viewportRect = new Rect(250, 980);
-    const alreadyRendered = false;
+    const minOffscreenHeight = Math.floor(viewportRect.getTop() + DEFAULT_HEIGHT_AVERAGE);
+    const maxOffscreenHeight = Math.floor(
+      viewportRect.getTop() + DEFAULT_OVERSCAN * DEFAULT_HEIGHT_AVERAGE,
+    );
+
+    const expectedMinRect = new Rect(
+      viewportRect.getTop() - minOffscreenHeight,
+      viewportRect.getHeight() + 2 * minOffscreenHeight,
+    );
+
+    const expectedMaxRect = new Rect(
+      viewportRect.getTop(),
+      viewportRect.getHeight() + 2 * maxOffscreenHeight,
+    );
+
+    const alreadyRendered = true;
     act(() => {
       getNextProjectionResult = renderResult.current.getNextProjection(
         startItem,
@@ -53,8 +79,24 @@ describe('useProjection', () => {
         alreadyRendered,
       );
     });
+    expect(getNextProjectionResult.allItems.length).toEqual(mockItemList.length);
+    expect(
+      getNextProjectionResult.nextRendered[getNextProjectionResult.nextRendered.length - 1].start,
+    ).toBeLessThan(expectedMinRect.getHeight());
 
-    console.log(getNextProjectionResult);
+    const lastIndex = getNextProjectionResult.allItems.findIndex(
+      it =>
+        it.key ===
+        getNextProjectionResult.nextRendered[getNextProjectionResult.nextRendered.length - 1].key,
+    );
+
+    expect(getNextProjectionResult.allItems[lastIndex + 1].start).toBeGreaterThanOrEqual(
+      expectedMinRect.getHeight(),
+    );
+    expect(getNextProjectionResult.slice.current).toMatchObject({
+      start: 0,
+      end: getNextProjectionResult.nextRendered.length,
+    });
   });
 
   it('should calculate projection correction correctly', () => {

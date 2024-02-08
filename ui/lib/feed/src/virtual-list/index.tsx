@@ -70,7 +70,7 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
   const keyExtractorRef = React.useRef(itemKeyExtractor);
   const itemRendererRef = React.useRef(renderItem);
   const scrollRestore = useScrollState(restorationKey);
-  const prevRestorationKey = React.useRef(restorationKey);
+  const prevRestorationKey = React.useRef(null);
 
   const itemList: VirtualDataItem<T>[] = React.useMemo(() => {
     const itemList: VirtualDataItem<T>[] = [];
@@ -143,27 +143,15 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
           onFetchInitialData();
         }
       }
-      if (
-        requestStatus.called &&
-        !requestStatus.isLoading &&
-        prevRestorationKey.current !== restorationKey
-      ) {
-        onFetchInitialData(scrollRestore.getLastItem());
-        prevRestorationKey.current = restorationKey;
-      }
     }
-  }, [
-    itemList,
-    onFetchInitialData,
-    requestStatus.called,
-    requestStatus.isLoading,
-    restorationKey,
-    scrollRestore,
-  ]);
+  }, [itemList, onFetchInitialData, requestStatus.called, requestStatus.isLoading, scrollRestore]);
 
   React.useEffect(() => {
     if (!isMounted) {
-      // load scroll restoration
+      if (itemList.length > 0 && scrollRestore.scrollState.loaded) {
+        setIsMounted(true);
+        return;
+      }
       fetchInitialData();
       if (
         itemList.length > 0 &&
@@ -175,11 +163,9 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
           window.history.scrollRestoration = 'manual';
         }
       }
-      if (itemList.length > 0 && scrollRestore.scrollState.loaded) {
-        setIsMounted(true);
-      }
     }
     if (isMounted && prevRestorationKey.current !== restorationKey) {
+      prevRestorationKey.current = restorationKey;
       fetchInitialData();
     }
   }, [fetchInitialData, isMounted, itemList, onFetchInitialData, restorationKey, scrollRestore]);

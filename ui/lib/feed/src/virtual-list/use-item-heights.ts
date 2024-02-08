@@ -13,51 +13,40 @@ export const useItemHeights = (props: UseItemHeightsProps) => {
   const { measurementsCache, estimatedHeight, overscan } = props;
   const itemRendererApis = React.useRef(new Map());
   const overscanRef = React.useRef(overscan);
-  const itemHeights = React.useMemo(
-    () => measurementsCache ?? new Map<string, number>(),
-    [measurementsCache],
-  );
+  const itemHeights = React.useRef(measurementsCache ?? new Map<string, number>());
   const itemHeightAverage = React.useRef(estimatedHeight);
   const batchedHeightUpdates = React.useRef(new Set());
 
-  const getItemHeights = React.useCallback(() => itemHeights, [itemHeights]);
+  const getItemHeights = React.useCallback(() => itemHeights.current, [itemHeights]);
 
-  const getItemHeight = React.useCallback(
-    (itemKey: string) => {
-      let itemHeight = itemHeightAverage.current;
-      if (itemHeights.has(itemKey)) {
-        itemHeight = itemHeights.get(itemKey);
-      }
-      return pxToDPR(itemHeight, dpr);
-    },
-    [itemHeights],
-  );
+  const getItemHeight = React.useCallback((itemKey: string) => {
+    let itemHeight = itemHeightAverage.current;
+    if (itemHeights.current.has(itemKey)) {
+      itemHeight = itemHeights.current.get(itemKey);
+    }
+    return pxToDPR(itemHeight, dpr);
+  }, []);
+
   const computeAvgItemHeight = (newHeight: number, listSize: number) => {
     itemHeightAverage.current = (itemHeightAverage.current * (listSize - 1) + newHeight) / listSize;
   };
 
-  const updateItemHeight = React.useCallback(
-    (itemKey: string, newHeight: number) => {
-      if (itemHeights.has(itemKey)) {
-        if (itemHeights.get(itemKey) !== newHeight) {
-          console.log('updating existing item height', newHeight, itemHeights.get(itemKey));
-          itemHeights.set(itemKey, newHeight);
-          computeAvgItemHeight(newHeight, itemHeights.size);
-        }
+  const updateItemHeight = React.useCallback((itemKey: string, newHeight: number) => {
+    if (itemHeights.current.has(itemKey)) {
+      if (itemHeights.current.get(itemKey) !== newHeight) {
+        itemHeights.current.set(itemKey, newHeight);
+        computeAvgItemHeight(newHeight, itemHeights.current.size);
       }
-      if (!itemHeights.has(itemKey)) {
-        itemHeights.set(itemKey, newHeight);
-        computeAvgItemHeight(newHeight, itemHeights.size);
-      }
-    },
-    [itemHeights],
-  );
-  const hasMeasuredHeights = React.useCallback(
-    (items: VirtualItem[]) => {
-      return items.some(item => itemHeights.has(item.key));
-    },
-    [itemHeights],
-  );
+    }
+    if (!itemHeights.current.has(itemKey)) {
+      itemHeights.current.set(itemKey, newHeight);
+      computeAvgItemHeight(newHeight, itemHeights.current.size);
+    }
+  }, []);
+
+  const hasMeasuredHeights = React.useCallback((items: VirtualItem[]) => {
+    return items.some(item => itemHeights.current.has(item.key));
+  }, []);
 
   const handleItemHeightChange = React.useCallback(
     (
@@ -66,14 +55,14 @@ export const useItemHeights = (props: UseItemHeightsProps) => {
       mountedItems: VirtualItem[],
       update: (debug?: string) => void,
     ) => {
-      if (itemHeights.has(itemKey) && itemHeights.get(itemKey) === newHeight) {
+      if (itemHeights.current.has(itemKey) && itemHeights.current.get(itemKey) === newHeight) {
         return;
       }
       batchedHeightUpdates.current.add(itemKey);
       // only update when items in state are resized
       if (
         mountedItems.some(
-          item => itemHeights.has(item.key) || batchedHeightUpdates.current.has(item.key),
+          item => itemHeights.current.has(item.key) || batchedHeightUpdates.current.has(item.key),
         ) ||
         batchedHeightUpdates.current.size >= overscanRef.current
       ) {
@@ -81,7 +70,7 @@ export const useItemHeights = (props: UseItemHeightsProps) => {
         batchedHeightUpdates.current.clear();
       }
     },
-    [itemHeights],
+    [],
   );
 
   const getItemDistanceFromTop = React.useCallback(
@@ -89,10 +78,9 @@ export const useItemHeights = (props: UseItemHeightsProps) => {
       const idx = itemList.findIndex(it => it.key === itemKey);
       if (idx > 0) {
         const sliced = itemList.slice(0, idx);
-        const distance = sliced.reduce((distance, item) => {
+        return sliced.reduce((distance, item) => {
           return getItemHeight(item.key) + distance;
         }, 0);
-        return distance;
       }
       return 0;
     },
