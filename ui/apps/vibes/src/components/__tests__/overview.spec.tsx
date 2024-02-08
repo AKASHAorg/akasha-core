@@ -2,16 +2,10 @@ import * as React from 'react';
 
 import { renderWithAllProviders, act, cleanup } from '@akashaorg/af-testing';
 
-import { ApplicationStatusType, Overview } from '../../pages';
+import { Overview } from '../../pages';
 
 describe('<Overview /> component', () => {
-  const Base = (
-    <Overview
-      navigateTo={jest.fn()}
-      isAuthorised={true}
-      applicationStatus={ApplicationStatusType.approved}
-    />
-  );
+  const Base = <Overview isModerator={false} navigateTo={jest.fn()} />;
 
   const assetName = 'vibe-overview';
 
