@@ -1,21 +1,25 @@
 import { Moderator, ModeratorApplicantData, Profile } from '@akashaorg/typings/lib/ui';
 
-const randomDateBetweenValues = (start = 'Jan 01 2020', end = 'Dec 31 2022') => {
+const randomDateBetweenValues = (start = 'Jan 01 2020', end = 'Dec 31 2020') => {
   const timeStart = new Date(start).getTime();
   const timeEnd = new Date(end).getTime();
 
   return new Date(timeStart + Math.random() * (timeEnd - timeStart));
 };
 
-const moderatorStatus = ['active', 'resigned', 'revoked'];
+const moderatorStatus = ['active', 'resigned', 'dismissed'];
+
 const moderatorNames = [
-  'Mike Torello',
-  'April Curtis',
-  'Murdock',
-  'B.A. Baracus',
-  'Capt. Trunk',
-  'Lynn Tanner',
-  'Angelina Jill',
+  'Jane Doe',
+  'Chance Herwitz',
+  'Erin Bator',
+  'Erin Dokidis',
+  'Madelyn Philips',
+  'Miracle Vetrovs',
+  'Carla Dorwart',
+  'Aspen Korsgaard',
+  'Desirae Botosh',
+  'Randy Torff',
 ];
 
 export const generateModerators = () => {
@@ -23,6 +27,7 @@ export const generateModerators = () => {
     const id = (Math.random() + 1).toString(36).substring(2);
 
     const status = moderatorStatus[Math.floor(Math.random() * moderatorStatus.length)];
+
     const isAdmin = idx === 0;
 
     return {
@@ -33,11 +38,14 @@ export const generateModerators = () => {
       did: { id: `did:pkh:eip155:5:0xadc81c196296322f9910c060b9ec7917dfbc7c${idx}b` },
       name: name,
       status: isAdmin ? 'active' : status,
+      moderatedItems: Math.floor(Math.random() * 106) + 75,
       social: {
         discord: id,
         email: id,
       },
-      ...(status !== 'active' && { moderatorEndDate: new Date('Dec 31 2021').toISOString() }),
+      ...(status !== 'active' && {
+        moderatorEndDate: randomDateBetweenValues('Jan 01 2021', 'Dec 31 2022'),
+      }),
     };
   });
 
@@ -134,15 +142,15 @@ export const generateApplicationsHistory = () => {
 };
 
 const moderationHistoryItems = [
-  'post',
-  'reply',
-  'reply',
-  'account',
-  'reply',
-  'post',
-  'post',
-  'reply',
-  'account',
+  'beam',
+  'reflect',
+  'reflect',
+  'profile',
+  'reflect',
+  'beam',
+  'beam',
+  'reflect',
+  'profile',
 ];
 
 export const generateModerationHistory = () => {

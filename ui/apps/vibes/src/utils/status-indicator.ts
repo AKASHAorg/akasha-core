@@ -1,5 +1,7 @@
-export const getModeratorStatusIndicator = (status: string) => {
+import { ModeratorStatus } from '@akashaorg/typings/lib/ui';
+
+export const getModeratorStatusIndicator = (status: ModeratorStatus) => {
   if (status === 'active') return 'bg-success';
-  if (status === 'revoked') return 'bg-(errorLight dark:errorDark)';
+  if (status === 'dismissed') return 'bg-(errorLight dark:errorDark)';
   return 'bg-(warningLight dark:warningDark)';
 };

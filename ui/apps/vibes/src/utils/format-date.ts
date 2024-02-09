@@ -6,6 +6,6 @@ import dayjs from 'dayjs';
  * @param format -  valid format, (optional)
  * @returns string
  */
-export const formatDate = (date: string | Date, format = 'MMM YYYY') => {
+export const formatDate = (date: string | Date, format = 'DD MMM YYYY') => {
   return dayjs(date).format(format);
 };

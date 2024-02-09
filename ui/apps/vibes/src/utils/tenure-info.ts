@@ -1,9 +1,11 @@
+import { ModeratorStatus } from '@akashaorg/typings/lib/ui';
+
 /**
  * Generates tenure info, given the status of the moderator
- * @param status - moderator status (active or resigned or revoked)
+ * @param status - moderator status
  * @returns string
  */
-export const generateTenureInfoLabel = (status: 'active' | 'resigned' | 'revoked') => {
+export const generateTenureInfoLabel = (status: ModeratorStatus) => {
   if (status === 'active') return 'Moderator since';
-  else return `${status[0].toUpperCase() + status.slice(1)} on`;
+  else return 'Moderation Period';
 };
