@@ -19,22 +19,24 @@ const ContentBlock: React.FC<ContentBlockType> = props => {
   const { blockID, authenticatedDID, showHiddenContent, onBlockInfoChange } = props;
   const { t } = useTranslation('ui-lib-feed');
 
-  /*   get user's NSFW settings from the hook
+  /*
+   * get user's NSFW settings from the hook
    */
   const { showNsfw } = useNsfwToggling();
 
-  /*   internal state for showing the NSFW content behind the overlay, default to false
+  /*
+   * internal state for showing the NSFW content behind the overlay, default to false
    */
   const [showNsfwContent, setShowNsfwContent] = useState(false);
-  /*   flag that will get updated with real nsfw property from the block
-   * (through the onNsfwChange function call)
+  /*
+   * Get all the block's data from the hook, including the nsfw property
    */
   const { nsfw, blockName, appName, addBlockData, addBlockInfo } = useBlockData();
   const { navigateToModal } = useRootComponentProps();
   const _onBlockInfoChange = useRef(onBlockInfoChange);
 
   /* Show NSFW card (overlay) only when the block is marked as NSFW and any of
-   * the following conditions are met:
+   * the following conditions is met:
    * 1. The user toggled off NSFW content in their settings or is not logged in, or
    * 2. The showNsfwContent flag is false
    * If the user is logged in and has their NSFW setting turned on, we will never show
