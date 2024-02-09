@@ -177,6 +177,7 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
             getMentions={setMentionQuery}
             getTags={setTagQuery}
             transformSource={transformSource}
+            encodingFunction={encodeSlateToBase64}
           />
           {/*@TODO reflect error logic goes here */}
         </div>
