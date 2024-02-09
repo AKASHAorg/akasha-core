@@ -154,6 +154,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         getMentions={setMentionQuery}
         getTags={setTagQuery}
         transformSource={transformSource}
+        encodingFunction={encodeSlateToBase64}
       />
       {publishing &&
         newContent &&

@@ -7,10 +7,7 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
-import {
-  TrashIcon,
-  XMarkIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { XMarkIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import SearchBar from '@akashaorg/design-system-components/lib/components/SearchBar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';

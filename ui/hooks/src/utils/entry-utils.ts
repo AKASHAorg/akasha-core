@@ -1,7 +1,7 @@
 import { Logger } from '@akashaorg/awf-sdk';
 import { Comment } from '@akashaorg/typings/lib/sdk/graphql-types';
 import type { PostResultFragment } from '@akashaorg/typings/lib/sdk/graphql-operation-types';
-import type { BeamEntryData, ReflectEntryData } from '@akashaorg/typings/lib/ui';
+import type { BeamEntryData, ReflectEntryData, SlateDescendant } from '@akashaorg/typings/lib/ui';
 import { AkashaBeam, AkashaReflect } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import getSDK from '@akashaorg/awf-sdk';
 
@@ -52,7 +52,7 @@ export const decodeb64SlateContent = (base64Content: string, logger?: Logger) =>
 /**
  * Utility to encode slate content to base64
  */
-export const encodeSlateToBase64 = (slateContent: unknown) => {
+export const encodeSlateToBase64 = (slateContent: SlateDescendant[]) => {
   const stringified = JSON.stringify(slateContent);
   const binary = toBinary(stringified);
   const encoded = window.btoa(binary);

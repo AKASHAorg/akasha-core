@@ -47,6 +47,7 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
     handleSaveLinkPreviewDraft,
     onClear,
     transformSource,
+    encodingFunction,
   } = props;
 
   const [showEditor, setShowEditor] = useState(showEditorInitialValue);
@@ -120,6 +121,7 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
             onCancelClick={onCancelClick}
             transformSource={transformSource}
             customStyle="p-2"
+            encodingFunction={encodingFunction}
           />
         </Card>
       )}

@@ -48,7 +48,9 @@ import { withMentions, withTags, withLinks } from './plugins';
 import { MarkButton, BlockButton } from './formatting-buttons';
 import LinkPreview from '../LinkPreview';
 
-const MAX_LENGTH = 500;
+const MAX_TEXT_LENGTH = 500;
+// this is to account for the limitations on the ceramic storage side
+const MAX_ENCODED_LENGTH = 6000;
 
 /**
  * @param uploadRequest - upload a file and returns a promise that resolves to an array
@@ -87,6 +89,7 @@ export type EditorBoxProps = {
   getMentions: (query: string) => void;
   getTags: (query: string) => void;
   handleDisablePublish?: (value: boolean) => void;
+  encodingFunction: (value: Descendant[]) => string;
 };
 
 /* eslint-disable complexity */
@@ -121,6 +124,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
     transformSource,
     customStyle = '',
     handleDisablePublish,
+    encodingFunction,
   } = props;
 
   const mentionPopoverRef: React.RefObject<HTMLDivElement> = useRef(null);
@@ -270,7 +274,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
    */
   const handleChange = (value: Descendant[]) => {
     let textLength = 0;
-
+    let encodedNodeLength = 0;
     /**
      * include tags, mentions and links in the text length
      * keeps track of the number of images in the content
@@ -294,11 +298,25 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
       }
     })(value);
 
-    /** disable publishing if no images/text or text too long */
-    if (textLength > 0 && textLength <= MAX_LENGTH) {
+    (function computeEncodedNodeLength(nodeArr: Descendant[]) {
+      if (nodeArr.length) {
+        encodedNodeLength = encodingFunction(nodeArr).length;
+      }
+    })(value);
+
+    /** disable publishing if encoded content length or text are too long */
+    if (
+      textLength > 0 &&
+      textLength <= MAX_TEXT_LENGTH &&
+      encodedNodeLength <= MAX_ENCODED_LENGTH
+    ) {
       setPublishDisabledInternal(false);
       handleDisablePublish?.(false);
-    } else if (textLength === 0 || textLength > MAX_LENGTH) {
+    } else if (
+      textLength === 0 ||
+      textLength > MAX_TEXT_LENGTH ||
+      encodedNodeLength > MAX_ENCODED_LENGTH
+    ) {
       setPublishDisabledInternal(true);
       handleDisablePublish?.(true);
     }
@@ -579,7 +597,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
                 </Stack>
               )}
               <Stack direction="row" align="center" spacing="gap-x-2">
-                {withMeter && <EditorMeter value={letterCount} max={MAX_LENGTH} />}
+                {withMeter && <EditorMeter value={letterCount} max={MAX_TEXT_LENGTH} />}
                 {showCancelButton && <Button label={cancelButtonLabel} onClick={onCancelClick} />}
                 {showPostButton && (
                   <Button

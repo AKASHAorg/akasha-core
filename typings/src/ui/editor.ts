@@ -1,4 +1,4 @@
-import { BaseEditor } from 'slate';
+import { BaseEditor, Descendant } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { HistoryEditor } from 'slate-history';
 import { Profile } from './profile';
@@ -73,6 +73,7 @@ export type CustomText = {
 };
 
 export type CustomEditor = BaseEditor & ReactEditor & HistoryEditor;
+export type SlateDescendant = Descendant;
 
 declare module 'slate' {
   interface CustomTypes {

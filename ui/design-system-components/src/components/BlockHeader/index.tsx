@@ -16,21 +16,25 @@ export const BlockHeader: React.FC<BlockHeaderProps> = props => {
   const { icon, handleRemoveBlock, handleNsfwChange, isNsfwCheckboxSelected, ...rest } = props;
   return (
     <Stack direction="row" justify="between">
-      <Stack
-        align="center"
-        justify="center"
-        customStyle={'h-8 w-8 group relative rounded-full bg(secondaryLight/30 dark:secondaryDark)'}
-      >
-        <Icon size="sm" icon={icon} />
+      <Stack direction="row" spacing="gap-x-1" align="center">
+        <Stack
+          align="center"
+          justify="center"
+          customStyle={
+            'h-8 w-8 group relative rounded-full bg(secondaryLight/30 dark:secondaryDark)'
+          }
+        >
+          <Icon size="sm" icon={icon} />
+        </Stack>
+        <Checkbox
+          id="nsfw"
+          label={'NSFW'}
+          name="nsfw"
+          value="nsfw"
+          handleChange={handleNsfwChange}
+          isSelected={isNsfwCheckboxSelected}
+        />
       </Stack>
-      <Checkbox
-        id="nsfw"
-        label={'NSFW'}
-        name="nsfw"
-        value="nsfw"
-        handleChange={handleNsfwChange}
-        isSelected={isNsfwCheckboxSelected}
-      />
       <BlockStatusToolbar {...rest} />
       <button onClick={handleRemoveBlock}>
         <Stack

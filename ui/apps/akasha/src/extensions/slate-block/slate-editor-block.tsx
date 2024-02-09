@@ -142,6 +142,7 @@ export const SlateEditorBlock = (
       showPostButton={false}
       transformSource={transformSource}
       handleDisablePublish={props.blockInfo?.externalHandler}
+      encodingFunction={encodeSlateToBase64}
     />
   );
 };
