@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 import ModeratorDetailCard from '../components/moderator';
+import InfoCard from '../components/moderator/info-card';
 import PaginatedTable from '../components/transparency-log/paginated-table';
 
 import { contentTypeMap } from './transparency-log';
@@ -15,6 +16,7 @@ import {
   formatDate,
   generateTenureInfoLabel,
   generateModerationHistory,
+  generateDismissalReason,
 } from '../utils';
 
 export const ModeratorDetailPage: React.FC<BasePageProps> = props => {
@@ -66,8 +68,21 @@ export const ModeratorDetailPage: React.FC<BasePageProps> = props => {
       el.contentID,
     ]) ?? [];
 
+  const dismissalReason = generateDismissalReason();
+
   return (
     <Stack spacing="gap-y-4">
+      {moderator.status === 'dismissed' && (
+        <InfoCard
+          titleLabel={`${t('Moderator Dismissed')} - ${t('{{title}}', {
+            title: dismissalReason.title,
+          })}`}
+          subtitleLabel={t('{{subtitle}}', {
+            subtitle: dismissalReason.subtitle,
+          })}
+        />
+      )}
+
       <ModeratorDetailCard
         moderator={moderator}
         viewProfileLabel={t('View Profile')}
