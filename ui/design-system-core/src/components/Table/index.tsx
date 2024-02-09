@@ -64,7 +64,11 @@ const Table: React.FC<TableProps> = props => {
   return (
     <>
       {tableTitle && (
-        <Stack fullWidth={true} customStyle="py-4 px-5">
+        <Stack
+          padding="py-4 px-5"
+          fullWidth={true}
+          customStyle="border(b-1 solid grey8 dark:grey5)"
+        >
           <Text weight="bold" align="center">
             {tableTitle}
           </Text>
