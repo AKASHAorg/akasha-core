@@ -298,6 +298,7 @@ export const VirtualListRenderer = React.forwardRef(
             newState => {
               const scrollCorrection = -projectionWithCorrection.offset;
               let vpRect: Rect | undefined = viewportRect;
+              console.log('correction on', _debugFrom, 'is', scrollCorrection);
               if (scrollCorrection !== 0) {
                 viewport.scrollBy(scrollCorrection);
                 vpRect = viewport.getRelativeToRootNode(rootNodeRef.current);
