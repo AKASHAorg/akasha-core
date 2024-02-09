@@ -162,7 +162,12 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
     },
     [logger, onError],
   );
-
+  const blockId = React.useMemo(() => {
+    if (readMode.blockID) {
+      return readMode.blockID;
+    }
+    return 0;
+  }, [readMode]);
   return (
     <React.Suspense
       fallback={
@@ -214,14 +219,14 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
         return (
           <Stack
             fullWidth
-            id={`${mode}_${matchingBlock.blockInfo.propertyType}_${index}`}
-            key={`${mode}_${matchingBlock.blockInfo.propertyType}_${index}`}
+            id={`${mode}_${matchingBlock.blockInfo.propertyType}_${blockId}_${index}`}
+            key={`${mode}_${matchingBlock.blockInfo.propertyType}_${blockId}_${index}`}
           >
             {!hideContent && (
               <RootParcel
                 config={{
                   ...matchingBlock.config,
-                  name: `${matchingBlock.blockInfo.appName}_${matchingBlock.blockInfo.propertyType}_${index}`,
+                  name: `${matchingBlock.blockInfo.appName}_${matchingBlock.blockInfo.propertyType}_${blockId}_${index}`,
                 }}
                 {...getContext()}
                 blockInfo={{
@@ -233,7 +238,7 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
                 blockRef={blockRef}
                 content={matchingBlock.content}
                 handleError={handleParcelError(
-                  `${matchingBlock.blockInfo.appName}_${matchingBlock.blockInfo.propertyType}_${index}`,
+                  `${matchingBlock.blockInfo.appName}_${matchingBlock.blockInfo.propertyType}_${blockId}_${index}`,
                 )}
               />
             )}

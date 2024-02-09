@@ -132,9 +132,9 @@ export const useProjection = <T>(props: UseProjectionProps<T>) => {
 
   const getNextProjection = React.useCallback(
     (startItem: VirtualItem, viewportRect: Rect, alreadyRendered: boolean) => {
-      const minOffscreenHeight = Math.floor(viewportRect.getTop() + getItemHeightAverage());
+      const minOffscreenHeight = Math.floor(viewportRect.getHeight() + getItemHeightAverage());
       const maxOffscreenHeight = Math.floor(
-        viewportRect.getTop() + overscan * getItemHeightAverage(),
+        viewportRect.getHeight() + overscan * getItemHeightAverage(),
       );
 
       const minViewportRect = new Rect(

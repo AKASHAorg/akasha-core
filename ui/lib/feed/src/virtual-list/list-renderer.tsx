@@ -300,6 +300,7 @@ export const VirtualListRenderer = React.forwardRef(
             newState => {
               const scrollCorrection = -projectionWithCorrection.offset;
               let vpRect: Rect | undefined = viewportRect;
+              console.log('correction on', _debugFrom, 'is', scrollCorrection);
               if (scrollCorrection !== 0) {
                 viewport.scrollBy(scrollCorrection);
                 vpRect = viewport.getRelativeToRootNode(rootNodeRef.current);
@@ -427,7 +428,7 @@ export const VirtualListRenderer = React.forwardRef(
     }, []);
 
     const resizeObserver = useResizeObserver();
-
+    const batchedHeightUpdates = React.useRef(new Set());
     const handleItemHeightChange = React.useCallback(
       (itemKey: string, newHeight: number) => {
         const delta = newHeight - getItemHeight(itemKey);
@@ -435,9 +436,24 @@ export const VirtualListRenderer = React.forwardRef(
         if (animatingItems.current.has(itemKey)) {
           return RAFUpdate('animating item changed');
         }
-        onItemHeightChange(itemKey, newHeight, state.mounted, update);
+        const itemHeights = getItemHeights();
+        if (itemHeights.has(itemKey) && itemHeights.get(itemKey) === newHeight) {
+          return;
+        }
+        batchedHeightUpdates.current.add(itemKey);
+        // only update when items in state are resized
+        if (
+          state.mounted.every(
+            item => itemHeights.has(item.key) || batchedHeightUpdates.current.has(item.key),
+          ) ||
+          batchedHeightUpdates.current.size >= overscan
+        ) {
+          update('item height update');
+          batchedHeightUpdates.current.clear();
+        }
+        // onItemHeightChange(itemKey, newHeight, state.mounted, update);
       },
-      [RAFUpdate, getItemHeight, onItemHeightChange, state.mounted, update],
+      [RAFUpdate, getItemHeight, getItemHeights, overscan, state.mounted, update],
     );
 
     const setRootRef = (node: HTMLDivElement) => {

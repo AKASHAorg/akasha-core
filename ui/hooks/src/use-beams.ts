@@ -139,7 +139,16 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
       setState(
         prev =>
           ({
-            beams: [...prev.beams, ...edges],
+            beams: [
+              ...prev.beams,
+              ...edges.filter(edge => {
+                const isNewBeam = !prev.beams.some(beam => beam.cursor === edge.cursor);
+                if (!isNewBeam) {
+                  console.warn('on fetchNextPage, beam cursor:', edge.cursor, 'already added!');
+                }
+                return isNewBeam;
+              }),
+            ],
             pageInfo: {
               ...prev.pageInfo,
               endCursor: pageInfo.endCursor,
@@ -179,10 +188,20 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
       }
       if (!results.data) return;
       const { edges, pageInfo } = extractData(results.data);
+
       setState(
         prev =>
           ({
-            beams: [...edges.reverse(), ...prev.beams],
+            beams: [
+              ...edges.reverse().filter(edge => {
+                const isNewBeam = !prev.beams.some(beam => beam.cursor === edge.cursor);
+                if (!isNewBeam) {
+                  console.warn('on fetch prev page, beam cursor', edge.cursor, 'already added!');
+                }
+                return isNewBeam;
+              }),
+              ...prev.beams,
+            ],
             pageInfo: {
               ...prev.pageInfo,
               startCursor: pageInfo.endCursor,

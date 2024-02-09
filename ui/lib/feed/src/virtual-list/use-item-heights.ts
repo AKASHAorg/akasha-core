@@ -45,7 +45,7 @@ export const useItemHeights = (props: UseItemHeightsProps) => {
   }, []);
 
   const hasMeasuredHeights = React.useCallback((items: VirtualItem[]) => {
-    return items.some(item => itemHeights.current.has(item.key));
+    return items.every(item => itemHeights.current.has(item.key));
   }, []);
 
   const handleItemHeightChange = React.useCallback(
@@ -61,7 +61,7 @@ export const useItemHeights = (props: UseItemHeightsProps) => {
       batchedHeightUpdates.current.add(itemKey);
       // only update when items in state are resized
       if (
-        mountedItems.some(
+        mountedItems.every(
           item => itemHeights.current.has(item.key) || batchedHeightUpdates.current.has(item.key),
         ) ||
         batchedHeightUpdates.current.size >= overscanRef.current
