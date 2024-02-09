@@ -71,11 +71,13 @@ export const ModeratorDetailPage: React.FC<BasePageProps> = props => {
       <ModeratorDetailCard
         moderator={moderator}
         viewProfileLabel={t('View Profile')}
+        moderatedLabel={t('Moderated')}
+        moderatedItemsLabel={t('items')}
         tenureInfoLabel={t('{{tenureInfoLabel}}', { tenureInfoLabel })}
       />
 
       <PaginatedTable
-        tableTitle={t('Moderation Activity')}
+        tableTitle={t('Moderation History')}
         rows={trimmedRows}
         hasIcons={true}
         clickableRows={true}

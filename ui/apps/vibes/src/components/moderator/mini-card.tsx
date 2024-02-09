@@ -16,11 +16,12 @@ export type ModeratorDetailMiniCardProps = {
   moderator: Moderator;
   hasBorderBottom: boolean;
   tenureInfoLabel: string;
+  moderatedItemsLabel: string;
   onCardClick: (profileId: string) => void;
 };
 
 const ModeratorDetailMiniCard: React.FC<ModeratorDetailMiniCardProps> = props => {
-  const { moderator, hasBorderBottom, tenureInfoLabel, onCardClick } = props;
+  const { moderator, hasBorderBottom, tenureInfoLabel, moderatedItemsLabel, onCardClick } = props;
 
   const borderBottomStyle = `${hasBorderBottom ? 'border(b-1 solid grey8 dark:grey3)' : ''}`;
 
@@ -33,7 +34,7 @@ const ModeratorDetailMiniCard: React.FC<ModeratorDetailMiniCardProps> = props =>
         spacing="gap-x-2"
         align="start"
         padding="px-4"
-        customStyle=" w([50%] md:[35%]) border(r-1 solid grey8 dark:grey3)"
+        customStyle="w([50%] md:[45%])"
       >
         <Avatar
           avatar={transformSource(moderator?.avatar?.default)}
@@ -42,24 +43,20 @@ const ModeratorDetailMiniCard: React.FC<ModeratorDetailMiniCardProps> = props =>
           )}
         />
         <Stack>
-          <Tooltip content={moderator.name} placement="right">
-            <Text variant="body2" weight="bold" truncate={true} customStyle={textStyle}>
-              {moderator.name}
-            </Text>
-          </Tooltip>
-
-          <DidField did={moderator.did.id} />
-
-          <Stack direction="row" align="center" spacing="gap-x-1.5">
+          <Stack direction="row" align="center" spacing="gap-x-1">
+            <Tooltip content={moderator.name} placement="right">
+              <Text variant="body2" weight="bold" truncate={true} customStyle={textStyle}>
+                {moderator.name}
+              </Text>
+            </Tooltip>
             <Stack
               customStyle={`w-1.5 h-1.5 rounded-full ${getModeratorStatusIndicator(
                 moderator.status,
               )}`}
             />
-            <Text variant="button-md" weight="normal" customStyle="capitalize">
-              {moderator.status}
-            </Text>
           </Stack>
+
+          <DidField did={moderator.did.id} />
         </Stack>
       </Stack>
 
@@ -68,16 +65,16 @@ const ModeratorDetailMiniCard: React.FC<ModeratorDetailMiniCardProps> = props =>
         padding="px-4"
         justify="between"
         align="center"
-        customStyle="w([50%] md:[65%])"
+        customStyle="w([50%] md:[55%])"
       >
         <Stack>
-          <Text variant="button-md" weight="normal" color={{ light: 'grey4', dark: 'grey7' }}>
+          <Text variant="footnotes2" weight="normal" color={{ light: 'grey4', dark: 'grey7' }}>
             {tenureInfoLabel}:
           </Text>
 
-          <Text variant="button-md" weight="normal" color={{ light: 'grey4', dark: 'grey7' }}>
+          <Text variant="footnotes2" weight="normal">
             {moderator.status === 'active'
-              ? formatDate(new Date(moderator.createdAt))
+              ? `${moderator.moderatedItems} ${moderatedItemsLabel}`
               : formatDate(moderator.moderatorEndDate)}
           </Text>
         </Stack>

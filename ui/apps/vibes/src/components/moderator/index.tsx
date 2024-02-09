@@ -1,7 +1,6 @@
 import React from 'react';
 import { transformSource } from '@akashaorg/ui-awf-hooks';
 import { Moderator } from '@akashaorg/typings/lib/ui';
-import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
@@ -11,17 +10,18 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import { formatDate, getModeratorStatusIndicator } from '../../utils';
-import { EnvelopeIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import { Discord } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 
 export type ModeratorDetailCardProps = {
   moderator: Moderator;
   tenureInfoLabel: string;
+  moderatedLabel: string;
+  moderatedItemsLabel: string;
   viewProfileLabel: string;
 };
 
 const ModeratorDetailCard: React.FC<ModeratorDetailCardProps> = props => {
-  const { moderator, tenureInfoLabel, viewProfileLabel } = props;
+  const { moderator, tenureInfoLabel, moderatedLabel, moderatedItemsLabel, viewProfileLabel } =
+    props;
 
   const textStyle = 'max-w([12.5rem] md:[7.5rem]) w-fit cursor-default';
 
@@ -36,59 +36,54 @@ const ModeratorDetailCard: React.FC<ModeratorDetailCardProps> = props => {
             )}
           />
           <Stack>
-            <Tooltip content={moderator.name} placement="right">
-              <Text
-                variant="button-lg"
-                weight="bold"
-                truncate={true}
-                customStyle={textStyle}
-              >{`${moderator.name}`}</Text>
-            </Tooltip>
+            <Stack direction="row" align="center" spacing="gap-x-1">
+              <Tooltip content={moderator.name} placement="right">
+                <Text
+                  variant="body2"
+                  weight="bold"
+                  customStyle={textStyle}
+                >{`${moderator.name}`}</Text>
+              </Tooltip>
+              <Stack
+                customStyle={`w-1.5 h-1.5 rounded-full ${getModeratorStatusIndicator(
+                  moderator.status,
+                )}`}
+              />
+            </Stack>
 
             <DidField did={moderator.did.id} />
           </Stack>
         </Stack>
 
-        <Stack>
-          <Stack direction="row" align="center" spacing="gap-x-1.5">
-            <Stack
-              customStyle={`w-1.5 h-1.5 rounded-full ${getModeratorStatusIndicator(
-                moderator.status,
-              )}`}
-            />
-            <Text variant="button-md" weight="normal" customStyle="capitalize">
-              {moderator.status}
-            </Text>
-          </Stack>
-
-          <Text variant="button-md" weight="normal" color={{ light: 'grey4', dark: 'grey6' }}>
-            {tenureInfoLabel}:
-          </Text>
-
-          <Text variant="button-md" weight="normal" color={{ light: 'grey4', dark: 'grey6' }}>
-            {moderator.status === 'active'
-              ? formatDate(new Date(moderator.createdAt).toISOString())
-              : formatDate(moderator.moderatorEndDate)}
-          </Text>
-        </Stack>
+        <Button label={viewProfileLabel} />
       </Stack>
 
       <Divider />
 
       <Stack direction="row" justify="between">
-        <Button label={viewProfileLabel} />
+        <Stack>
+          <Text variant="footnotes2" weight="normal" color={{ light: 'grey4', dark: 'grey6' }}>
+            {tenureInfoLabel}:
+          </Text>
 
-        {moderator.social && (
-          <Stack direction="row" spacing="gap-x-2">
-            {moderator.social?.discord && (
-              <AppIcon placeholderIcon={<Discord />} solid={true} accentColor={true} />
-            )}
+          <Text variant="footnotes2" weight="normal">
+            {moderator.status === 'active'
+              ? formatDate(new Date(moderator.createdAt).toISOString())
+              : `${formatDate(moderator.createdAt, 'MMM YYYY')} - ${formatDate(
+                  moderator.moderatorEndDate,
+                )}`}
+          </Text>
+        </Stack>
 
-            {moderator.social?.email && (
-              <AppIcon placeholderIcon={<EnvelopeIcon />} accentColor={true} />
-            )}
-          </Stack>
-        )}
+        <Stack>
+          <Text variant="footnotes2" weight="normal" color={{ light: 'grey4', dark: 'grey6' }}>
+            {moderatedLabel}:
+          </Text>
+
+          <Text variant="footnotes2" weight="normal">
+            {`${moderator.moderatedItems} ${moderatedItemsLabel}`}
+          </Text>
+        </Stack>
       </Stack>
     </Card>
   );

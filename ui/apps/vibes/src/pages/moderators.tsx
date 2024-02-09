@@ -11,7 +11,7 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import ModeratorDetailMiniCard from '../components/moderator/mini-card';
 
-import { generateTenureInfoLabel } from '../utils';
+import { generateModeratorStatusLabel } from '../utils';
 import { BasePageProps } from './overview';
 
 export type ModeratorPageProps = BasePageProps & {
@@ -26,10 +26,10 @@ export const Moderators: React.FC<ModeratorPageProps> = props => {
 
   const { t } = useTranslation('app-vibes');
 
-  const tabs = ['All', 'Active', 'Resigned', 'Revoked'];
+  const tabs = ['Active', 'Resigned', 'Dismissed'];
 
-  const filteredModeratorsList = moderators?.filter(moderator =>
-    tabs[activeTab] === 'All' ? moderator : moderator.status === tabs[activeTab].toLowerCase(),
+  const filteredModeratorsList = moderators?.filter(
+    moderator => moderator.status === tabs[activeTab].toLowerCase(),
   );
 
   const handleViewModerator = (profileId: string) => {
@@ -64,13 +64,14 @@ export const Moderators: React.FC<ModeratorPageProps> = props => {
         <Stack>
           <Stack fullWidth={true} customStyle="h-full overflow-y-scroll">
             {filteredModeratorsList?.map((moderator, idx) => {
-              const tenureInfoLabel = generateTenureInfoLabel(moderator.status);
+              const tenureInfoLabel = generateModeratorStatusLabel(moderator.status);
 
               return (
                 <ModeratorDetailMiniCard
                   key={moderator.did.id + moderator.name}
                   moderator={moderator}
                   hasBorderBottom={idx < filteredModeratorsList.length - 1}
+                  moderatedItemsLabel={t('items')}
                   tenureInfoLabel={t('{{tenureInfoLabel}}', { tenureInfoLabel })}
                   onCardClick={handleViewModerator}
                 />

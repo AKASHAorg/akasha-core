@@ -21,9 +21,9 @@ export type PaginatedItem = IModerationLogItem[];
 export const DEFAULT_LIMIT = 10;
 
 export const contentTypeMap = {
-  account: 'Account',
-  reply: 'Reply',
-  post: 'Post',
+  profile: 'Profile',
+  reflect: 'Reflect',
+  beam: 'Beam',
 };
 
 export const TransparencyLog: React.FC<BasePageProps> = props => {
