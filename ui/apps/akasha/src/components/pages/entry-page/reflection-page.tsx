@@ -9,6 +9,7 @@ import ReflectFeed from '@akashaorg/ui-lib-feed/lib/components/reflect-feed';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import { useParams } from 'react-router-dom';
 import {
+  createReactiveVar,
   hasOwn,
   mapReflectEntryData,
   useAnalytics,
@@ -16,7 +17,7 @@ import {
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
-import { EntityTypes } from '@akashaorg/typings/lib/ui';
+import { EntityTypes, type ReflectEntryData } from '@akashaorg/typings/lib/ui';
 import { useGetReflectionByIdSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { ReflectionPreview } from '@akashaorg/ui-lib-feed';
 import EditableReflection from '@akashaorg/ui-lib-feed/lib/components/editable-reflection';
@@ -34,7 +35,8 @@ const ReflectionPage: React.FC<unknown> = () => {
   const isLoggedIn = !!data?.id;
   const navigateTo = getRoutingPlugin().navigateTo;
   const reflectionReq = useGetReflectionByIdSuspenseQuery({ variables: { id: reflectionId } });
-  const { pendingReflections } = usePendingReflections();
+  const pendingReflectionsVar = createReactiveVar<ReflectEntryData[]>([]);
+  const { pendingReflections } = usePendingReflections(pendingReflectionsVar);
   const entryData = React.useMemo(() => {
     if (
       reflectionReq.data &&
@@ -74,6 +76,7 @@ const ReflectionPage: React.FC<unknown> = () => {
     <Card padding="p-0" margin="mb-4">
       <Stack spacing="gap-y-2">
         <ReflectFeed
+          pendingReflectionsVar={pendingReflectionsVar}
           header={
             <>
               <BackToOriginalBeam
@@ -87,6 +90,7 @@ const ReflectionPage: React.FC<unknown> = () => {
                   entryData={mapReflectEntryData(entryData)}
                   isLoggedIn={isLoggedIn}
                   showLoginModal={showLoginModal}
+                  pendingReflectionsVar={pendingReflectionsVar}
                 />
               </React.Suspense>
               {pendingReflections

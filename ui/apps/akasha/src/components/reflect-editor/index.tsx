@@ -8,6 +8,7 @@ import {
   decodeb64SlateContent,
   useGetLoginProfile,
   useRootComponentProps,
+  createReactiveVar,
 } from '@akashaorg/ui-awf-hooks';
 import {
   useCreateReflectMutation,
@@ -21,18 +22,17 @@ import {
   NotificationEvents,
   ReflectEntryData,
 } from '@akashaorg/typings/lib/ui';
-import { createPortal } from 'react-dom';
-import { PendingReflect } from './pending-reflect';
 import { usePendingReflections } from '@akashaorg/ui-awf-hooks/lib/use-pending-reflections';
 
 export type ReflectEditorProps = {
   beamId: string;
   reflectToId: string;
   showEditorInitialValue: boolean;
+  pendingReflectionsVar: ReturnType<typeof createReactiveVar<ReflectEntryData[]>>;
 };
 
 const ReflectEditor: React.FC<ReflectEditorProps> = props => {
-  const { beamId, reflectToId, showEditorInitialValue } = props;
+  const { beamId, reflectToId, showEditorInitialValue, pendingReflectionsVar } = props;
   const { t } = useTranslation('app-akasha-integration');
   const [analyticsActions] = useAnalytics();
   const { uiEvents } = useRootComponentProps();
@@ -61,7 +61,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
     },
   });
   const [indexReflection, indexReflectionMutation] = useIndexReflectionMutation();
-  const { addPendingReflection, pendingReflections } = usePendingReflections();
+  const { addPendingReflection, pendingReflections } = usePendingReflections(pendingReflectionsVar);
 
   const authenticatedProfileDataReq = useGetLoginProfile();
   const disablePublishing = useMemo(

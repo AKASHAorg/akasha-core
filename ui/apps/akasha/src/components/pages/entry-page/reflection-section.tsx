@@ -1,16 +1,15 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ReflectEditor from '../../reflect-editor';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
 import EditableReflection from '@akashaorg/ui-lib-feed/lib/components/editable-reflection';
 import routes, { REFLECT } from '../../../routes';
 import { useTranslation } from 'react-i18next';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
 import { ReflectEntryData } from '@akashaorg/typings/lib/ui';
 import { useLocation } from 'react-router-dom';
-import { transformSource, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { createReactiveVar, transformSource, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 type ReflectionSectionProps = {
   beamId: string;
@@ -18,10 +17,12 @@ type ReflectionSectionProps = {
   entryData: ReflectEntryData;
   isLoggedIn: boolean;
   showLoginModal: () => void;
+  pendingReflectionsVar: ReturnType<typeof createReactiveVar<ReflectEntryData[]>>;
 };
 
 const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
-  const { beamId, reflectionId, entryData, isLoggedIn, showLoginModal } = props;
+  const { beamId, reflectionId, entryData, isLoggedIn, showLoginModal, pendingReflectionsVar } =
+    props;
   const { t } = useTranslation('app-akasha-integration');
   const { getRoutingPlugin } = useRootComponentProps();
   const location = useLocation();
@@ -73,6 +74,7 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
               beamId={beamId}
               reflectToId={reflectionId}
               showEditorInitialValue={isReflecting}
+              pendingReflectionsVar={pendingReflectionsVar}
             />
           )}
         </Stack>

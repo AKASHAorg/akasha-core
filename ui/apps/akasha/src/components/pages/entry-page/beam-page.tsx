@@ -7,6 +7,7 @@ import BeamSection from './beam-section';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import { useParams } from 'react-router-dom';
 import {
+  createReactiveVar,
   hasOwn,
   mapBeamEntryData,
   mapReflectEntryData,
@@ -15,7 +16,7 @@ import {
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
-import { EntityTypes } from '@akashaorg/typings/lib/ui';
+import { EntityTypes, type ReflectEntryData } from '@akashaorg/typings/lib/ui';
 import { ReflectFeed, ReflectionPreview } from '@akashaorg/ui-lib-feed';
 import { useGetBeamByIdSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import EditableReflection from '@akashaorg/ui-lib-feed/lib/components/editable-reflection';
@@ -35,7 +36,8 @@ const BeamPage: React.FC<unknown> = () => {
   const beamReq = useGetBeamByIdSuspenseQuery({
     variables: { id: beamId },
   });
-  const { pendingReflections } = usePendingReflections();
+  const pendingReflectionsVar = createReactiveVar<ReflectEntryData[]>([]);
+  const { pendingReflections } = usePendingReflections(pendingReflectionsVar);
   const entryData = React.useMemo(() => {
     if (beamReq.data && hasOwn(beamReq.data, 'node') && hasOwn(beamReq.data.node, 'id')) {
       return beamReq.data.node;
@@ -61,6 +63,7 @@ const BeamPage: React.FC<unknown> = () => {
     <Card padding="p-0" margin="mb-4">
       <Stack spacing="gap-y-2">
         <ReflectFeed
+          pendingReflectionsVar={pendingReflectionsVar}
           header={
             <React.Suspense fallback={<EntrySectionLoading />}>
               <BeamSection
@@ -68,6 +71,7 @@ const BeamPage: React.FC<unknown> = () => {
                 entryData={mapBeamEntryData(entryData)}
                 isLoggedIn={isLoggedIn}
                 showLoginModal={showLoginModal}
+                pendingReflectionsVar={pendingReflectionsVar}
               />
               {pendingReflections
                 .filter(content => !hasOwn(content, 'reflection') && content.beamID === beamId)
