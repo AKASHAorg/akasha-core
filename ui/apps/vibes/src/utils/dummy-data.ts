@@ -7,6 +7,24 @@ const randomDateBetweenValues = (start = 'Jan 01 2020', end = 'Dec 31 2020') => 
   return new Date(timeStart + Math.random() * (timeEnd - timeStart));
 };
 
+export const dismissalReasons: { title: string; subtitle: string }[] = [
+  {
+    title: 'Breach of Trust',
+    subtitle:
+      'Dismissed for compromising community trust by misusing power, showing bias, or leaking confidential information.',
+  },
+  {
+    title: 'Neglect of Duties',
+    subtitle:
+      'Dismissed for failing to engage actively with moderation tasks, neglecting responsibilities, and not upholding community standards consistently.',
+  },
+  {
+    title: 'Inappropriate Behaviour',
+    subtitle:
+      'Dismissed for engaging in or condoning inappropriate behavior, violating guidelines, or creating a hostile environment for members',
+  },
+];
+
 const moderatorStatus = ['active', 'resigned', 'dismissed'];
 
 const moderatorNames = [
