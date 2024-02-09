@@ -56,9 +56,9 @@ describe('useProjection', () => {
     };
 
     const viewportRect = new Rect(250, 980);
-    const minOffscreenHeight = Math.floor(viewportRect.getTop() + DEFAULT_HEIGHT_AVERAGE);
+    const minOffscreenHeight = Math.floor(viewportRect.getHeight() + DEFAULT_HEIGHT_AVERAGE);
     const maxOffscreenHeight = Math.floor(
-      viewportRect.getTop() + DEFAULT_OVERSCAN * DEFAULT_HEIGHT_AVERAGE,
+      viewportRect.getHeight() + DEFAULT_OVERSCAN * DEFAULT_HEIGHT_AVERAGE,
     );
 
     const expectedMinRect = new Rect(
@@ -91,7 +91,7 @@ describe('useProjection', () => {
     );
 
     expect(getNextProjectionResult.allItems[lastIndex + 1].start).toBeGreaterThanOrEqual(
-      expectedMinRect.getHeight(),
+      expectedMinRect.getBottom(),
     );
     expect(getNextProjectionResult.slice.current).toMatchObject({
       start: 0,

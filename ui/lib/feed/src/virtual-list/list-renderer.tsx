@@ -91,13 +91,11 @@ export const VirtualListRenderer = React.forwardRef(
       measureItemHeights,
       setItemRendererInterface,
       hasMeasuredHeights,
-      onItemHeightChange,
       getItemDistanceFromTop,
     } = useItemHeights({
       measurementsCache,
       estimatedHeight,
       itemSpacing,
-      overscan,
     });
 
     const beforeStateUpdates = React.useRef<'update' | 'RAFUpdate'>();
@@ -122,7 +120,7 @@ export const VirtualListRenderer = React.forwardRef(
       }
     }, [viewport, header]);
 
-    const { getListPadding, getListOffset, hasCorrection } = useList({
+    const { getListOffset, hasCorrection } = useList({
       itemList,
       documentViewportHeight: viewport.getDocumentViewportHeight(),
       viewportHeight: viewport.getRect().getHeight(),

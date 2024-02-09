@@ -6,16 +6,13 @@ export type UseItemHeightsProps = {
   measurementsCache: Map<string, number>;
   estimatedHeight: number;
   itemSpacing: number;
-  overscan: number;
 };
 
 export const useItemHeights = (props: UseItemHeightsProps) => {
-  const { measurementsCache, estimatedHeight, overscan } = props;
+  const { measurementsCache, estimatedHeight } = props;
   const itemRendererApis = React.useRef(new Map());
-  const overscanRef = React.useRef(overscan);
   const itemHeights = React.useRef(measurementsCache ?? new Map<string, number>());
   const itemHeightAverage = React.useRef(estimatedHeight);
-  const batchedHeightUpdates = React.useRef(new Set());
 
   const getItemHeights = React.useCallback(() => itemHeights.current, [itemHeights]);
 
@@ -47,31 +44,6 @@ export const useItemHeights = (props: UseItemHeightsProps) => {
   const hasMeasuredHeights = React.useCallback((items: VirtualItem[]) => {
     return items.every(item => itemHeights.current.has(item.key));
   }, []);
-
-  const handleItemHeightChange = React.useCallback(
-    (
-      itemKey: string,
-      newHeight: number,
-      mountedItems: VirtualItem[],
-      update: (debug?: string) => void,
-    ) => {
-      if (itemHeights.current.has(itemKey) && itemHeights.current.get(itemKey) === newHeight) {
-        return;
-      }
-      batchedHeightUpdates.current.add(itemKey);
-      // only update when items in state are resized
-      if (
-        mountedItems.every(
-          item => itemHeights.current.has(item.key) || batchedHeightUpdates.current.has(item.key),
-        ) ||
-        batchedHeightUpdates.current.size >= overscanRef.current
-      ) {
-        update('item height update');
-        batchedHeightUpdates.current.clear();
-      }
-    },
-    [],
-  );
 
   const getItemDistanceFromTop = React.useCallback(
     (itemKey: string, itemList: VirtualDataItem<unknown>[]) => {
@@ -107,7 +79,6 @@ export const useItemHeights = (props: UseItemHeightsProps) => {
     hasMeasuredHeights,
     getItemDistanceFromTop,
     getItemHeightAverage,
-    onItemHeightChange: handleItemHeightChange,
     setItemRendererInterface,
     measureItemHeights,
   };
