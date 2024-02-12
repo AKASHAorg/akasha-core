@@ -152,6 +152,7 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
             emojiPlaceholderLabel={t('Search')}
             disableActionLabel={t('Authenticating')}
             placeholderButtonLabel={t('Reflect')}
+            maxEncodedLengthErrLabel={t('Text block exceeds line limit, please review!')}
             editorState={editorState}
             showEditorInitialValue={true}
             showCancelButton={true}

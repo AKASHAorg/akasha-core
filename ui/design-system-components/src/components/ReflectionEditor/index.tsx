@@ -26,6 +26,7 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
     placeholderLabel,
     emojiPlaceholderLabel,
     disableActionLabel,
+    maxEncodedLengthErrLabel,
     disablePublish,
     linkPreview,
     mentions,
@@ -102,6 +103,7 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
             placeholderLabel={placeholderLabel}
             emojiPlaceholderLabel={emojiPlaceholderLabel}
             disableActionLabel={disableActionLabel}
+            maxEncodedLengthErrLabel={maxEncodedLengthErrLabel}
             disablePublish={disablePublish}
             linkPreview={linkPreview}
             mentions={mentions}

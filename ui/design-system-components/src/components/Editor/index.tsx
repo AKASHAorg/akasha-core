@@ -23,6 +23,8 @@ import {
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import {
   BoldAlt,
@@ -34,7 +36,10 @@ import {
   AlignTextLeft,
   AlignTextRight,
 } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
-import { ArrowPathIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import {
+  ArrowPathIcon,
+  ExclamationTriangleIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import EditorMeter from '@akashaorg/design-system-core/lib/components/EditorMeter';
 
 import { CustomEditor } from './helpers';
@@ -64,6 +69,7 @@ export type EditorBoxProps = {
   placeholderLabel?: string;
   emojiPlaceholderLabel?: string;
   disableActionLabel?: string;
+  maxEncodedLengthErrLabel?: string;
   disablePublish?: boolean;
   minHeight?: string;
   withMeter?: boolean;
@@ -103,6 +109,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
     actionLabel,
     placeholderLabel,
     disableActionLabel,
+    maxEncodedLengthErrLabel,
     disablePublish,
     onPublish,
     minHeight,
@@ -137,6 +144,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
   const [letterCount, setLetterCount] = useState(0);
 
   const [publishDisabledInternal, setPublishDisabledInternal] = useState(true);
+  const [showMaxEncodedLengthErr, setShowMaxEncodedLengthErr] = useState(false);
 
   const [linkPreviewState, setLinkPreviewState] = useState(linkPreview);
   const [linkPreviewUploading, setLinkPreviewUploading] = useState(false);
@@ -319,6 +327,12 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
     ) {
       setPublishDisabledInternal(true);
       handleDisablePublish?.(true);
+    }
+
+    if (encodedNodeLength <= MAX_ENCODED_LENGTH) {
+      setShowMaxEncodedLengthErr(false);
+    } else if (encodedNodeLength > MAX_ENCODED_LENGTH) {
+      setShowMaxEncodedLengthErr(true);
     }
 
     if (typeof setLetterCount === 'function') {
@@ -618,6 +632,22 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
               linkPreviewData={linkPreviewState}
               handleDeletePreview={handleDeletePreview}
             />
+          )}
+          {showMaxEncodedLengthErr && (
+            <Stack
+              direction="row"
+              align="center"
+              background={{ light: 'errorLight/30', dark: 'errorDark/30' }}
+              fullWidth
+              customStyle="rounded"
+              padding={16}
+            >
+              <Icon
+                icon={<ExclamationTriangleIcon />}
+                color={{ light: 'errorLight', dark: 'errorDark' }}
+              />
+              <Text>{maxEncodedLengthErrLabel}</Text>
+            </Stack>
           )}
         </Stack>
       </Stack>

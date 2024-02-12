@@ -6,6 +6,7 @@ import {
   useGetLogin,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
+import { useTranslation } from 'react-i18next';
 import type {
   BlockInstanceMethods,
   ContentBlockRootProps,
@@ -32,6 +33,8 @@ export const SlateEditorBlock = (
   const authenticatedDID = data?.id;
   const retryCount = useRef<number>();
   const sdk = useRef(getSDK());
+
+  const { t } = useTranslation('app-akasha-integration');
 
   const [createContentBlock, contentBlockQuery] = useCreateContentBlockMutation();
 
@@ -118,6 +121,7 @@ export const SlateEditorBlock = (
       showAvatar={false}
       profileId={'profileId'}
       placeholderLabel={'write here'}
+      maxEncodedLengthErrLabel={t('Text block exceeds line limit, please review!')}
       onPublish={() => {
         // void
       }}

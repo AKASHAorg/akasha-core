@@ -133,6 +133,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         cancelButtonLabel={t('Cancel')}
         emojiPlaceholderLabel={t('Search')}
         disableActionLabel={t('Authenticating')}
+        maxEncodedLengthErrLabel={t('Text block exceeds line limit, please review!')}
         editorState={editorState}
         showEditorInitialValue={showEditor}
         avatar={authenticatedProfile?.avatar}
