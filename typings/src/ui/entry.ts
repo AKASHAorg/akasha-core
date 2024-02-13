@@ -82,7 +82,9 @@ export type EntryData = {
   tags?: string[];
 };
 
-export type BeamEntryData = EntryData & { content: AkashaBeam['content'] };
+export type BeamEntryData = EntryData & { content: AkashaBeam['content'] } & {
+  reflectionsCount?: number;
+};
 
 export type ReflectEntryData = EntryData & {
   content: AkashaReflect['content'];
