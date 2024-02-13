@@ -1,4 +1,9 @@
 import { Moderator, ModeratorApplicantData, Profile } from '@akashaorg/typings/lib/ui';
+import { reasons } from './reasons';
+import {
+  TransparencyLogItem,
+  TransparencyLogItemType,
+} from '../components/transparency-log/log-item';
 
 const randomDateBetweenValues = (start = 'Jan 01 2020', end = 'Dec 31 2020') => {
   const timeStart = new Date(start).getTime();
@@ -159,30 +164,35 @@ export const generateApplicationsHistory = () => {
   return logItems;
 };
 
-const moderationHistoryItems = [
-  'beam',
-  'reflect',
-  'reflect',
-  'profile',
-  'reflect',
-  'beam',
-  'beam',
-  'reflect',
-  'profile',
+const moderationHistoryItems: TransparencyLogItemType[] = [
+  'Beam',
+  'Reflection',
+  'Reflection',
+  'Profile',
+  'Reflection',
+  'Beam',
+  'Beam',
+  'Reflection',
+  'Profile',
+  'Profile',
 ];
 
 export const generateModerationHistory = () => {
   const logItems = moderationHistoryItems.map((type, idx) => {
     const id = (Math.random() + 1).toString(36).substring(2);
+    const moderationStatus = ['Kept', 'Delisted', ...(type === 'Profile' ? ['Suspended'] : [])];
 
     return {
       id: `${idx + 1}`,
-      contentID: id,
-      moderatedDate: randomDateBetweenValues(),
-      contentType: type,
-      delisted: idx % 2 === 0,
+      type,
+      contentId: id,
+      reportedDate: randomDateBetweenValues('Jan 01 2020', 'Dec 31 2021'),
+      moderatedDate: randomDateBetweenValues('Jan 01 2022', 'Dec 31 2023'),
+      status: moderationStatus[Math.floor(Math.random() * moderationStatus.length)],
+      reports: 6,
+      reason: reasons[Math.floor(Math.random() * reasons.length)].title,
     };
   });
 
-  return logItems;
+  return logItems as TransparencyLogItem[];
 };
