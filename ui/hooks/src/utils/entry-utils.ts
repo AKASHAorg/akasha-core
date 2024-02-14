@@ -105,7 +105,10 @@ export const mapReflectEntryData = (
  * Utility to map beam entry data
  */
 export const mapBeamEntryData = (
-  beam?: Pick<AkashaBeam, 'id' | 'active' | 'createdAt' | 'content' | 'nsfw' | 'tags'> & {
+  beam?: Pick<
+    AkashaBeam,
+    'id' | 'active' | 'createdAt' | 'content' | 'nsfw' | 'tags' | 'reflectionsCount'
+  > & {
     author: { id: string };
   },
 ): BeamEntryData => {
@@ -121,5 +124,6 @@ export const mapBeamEntryData = (
     tags: beam?.tags
       ?.filter(labeledTag => labeledTag.labelType === sdk.services.gql.labelTypes.TAG)
       .map(labeledTag => labeledTag.value),
+    reflectionsCount: beam?.reflectionsCount,
   };
 };
