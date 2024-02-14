@@ -3,7 +3,7 @@ import ReflectionEditor from '@akashaorg/design-system-components/lib/components
 import getSDK from '@akashaorg/awf-sdk';
 import {
   transformSource,
-  serializeSlateToBase64,
+  encodeSlateToBase64,
   useAnalytics,
   decodeb64SlateContent,
   useGetLoginProfile,
@@ -101,7 +101,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         {
           label: data.metadata.app,
           propertyType: 'slate-block',
-          value: serializeSlateToBase64(data.slateContent),
+          value: encodeSlateToBase64(data.slateContent),
         },
       ],
       createdAt: new Date().toISOString(),
@@ -133,6 +133,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         cancelButtonLabel={t('Cancel')}
         emojiPlaceholderLabel={t('Search')}
         disableActionLabel={t('Authenticating')}
+        maxEncodedLengthErrLabel={t('Text block exceeds line limit, please review!')}
         editorState={editorState}
         showEditorInitialValue={showEditor}
         avatar={authenticatedProfile?.avatar}
@@ -154,6 +155,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         getMentions={setMentionQuery}
         getTags={setTagQuery}
         transformSource={transformSource}
+        encodingFunction={encodeSlateToBase64}
       />
       {publishing &&
         newContent &&

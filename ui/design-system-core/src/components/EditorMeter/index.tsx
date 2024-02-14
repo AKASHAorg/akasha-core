@@ -31,14 +31,14 @@ const EditorMeter: React.FC<EditorMeterProps> = props => {
   return (
     <Meter
       max={max}
-      size={24}
+      size={32}
       thickness={2}
       value={value}
       background={background}
       progressBg={progressStyle}
       customStyle={customStyle}
     >
-      {displayCounter && (
+      {displayCounter !== null && (
         <Text variant="footnotes2" color={progressStyle} weight="normal">
           {displayCounter}
         </Text>

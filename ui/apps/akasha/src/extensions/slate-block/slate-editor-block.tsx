@@ -1,11 +1,12 @@
 import React, { RefObject, useCallback, useImperativeHandle, useRef, useState } from 'react';
 import EditorBox from '@akashaorg/design-system-components/lib/components/Editor';
 import {
-  serializeSlateToBase64,
+  encodeSlateToBase64,
   transformSource,
   useGetLogin,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
+import { useTranslation } from 'react-i18next';
 import type {
   BlockInstanceMethods,
   ContentBlockRootProps,
@@ -33,6 +34,8 @@ export const SlateEditorBlock = (
   const retryCount = useRef<number>();
   const sdk = useRef(getSDK());
 
+  const { t } = useTranslation('app-akasha-integration');
+
   const [createContentBlock, contentBlockQuery] = useCreateContentBlockMutation();
 
   const postDraft = new Draft<IEntryData['slateContent']>({
@@ -49,7 +52,7 @@ export const SlateEditorBlock = (
 
   const createBlock = useCallback(
     async ({ nsfw }: CreateContentBlock) => {
-      const content = serializeSlateToBase64(editorState);
+      const content = encodeSlateToBase64(editorState);
       const contentBlockValue: AkashaContentBlockLabeledValueInput = {
         label: props.blockInfo.appName,
         propertyType: props.blockInfo.propertyType,
@@ -118,6 +121,7 @@ export const SlateEditorBlock = (
       showAvatar={false}
       profileId={'profileId'}
       placeholderLabel={'write here'}
+      maxEncodedLengthErrLabel={t('Text block exceeds line limit, please review!')}
       onPublish={() => {
         // void
       }}
@@ -133,6 +137,7 @@ export const SlateEditorBlock = (
       // mentions={mentions}
       // tags={tags}
       withMeter={true}
+      withToolbar={true}
       editorState={editorState}
       setEditorState={(value: IEntryData['slateContent']) => {
         setEditorState(value);
@@ -141,6 +146,7 @@ export const SlateEditorBlock = (
       showPostButton={false}
       transformSource={transformSource}
       handleDisablePublish={props.blockInfo?.externalHandler}
+      encodingFunction={encodeSlateToBase64}
     />
   );
 };
