@@ -9,7 +9,7 @@ export const SlateReadonlyBlock = (
 ) => {
   const content = decodeb64SlateContent(props.content.value, props.logger);
   return (
-    <Stack align={'start'}>
+    <Stack>
       <ReadOnlyEditor content={content} />
     </Stack>
   );
