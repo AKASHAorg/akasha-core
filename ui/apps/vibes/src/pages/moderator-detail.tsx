@@ -1,5 +1,4 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -7,8 +6,6 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ModeratorDetailCard from '../components/moderator';
 import InfoCard from '../components/moderator/info-card';
 import PaginatedTable from '../components/transparency-log/paginated-table';
-
-import { contentTypeMap } from './transparency-log';
 
 import { BasePageProps } from './overview';
 import {
@@ -27,15 +24,14 @@ export const ModeratorDetailPage: React.FC<BasePageProps> = props => {
   const [curPage, setCurPage] = React.useState<number>(1);
 
   /**
-   * get the profileId from parm and use this to fetch the moderator detail
+   * get the profileId from param and use this to fetch the moderator details
    */
-  const { moderatorProfileId } = useParams<{ moderatorProfileId: string }>();
+  // const { moderatorProfileId } = useParams<{ moderatorProfileId: string }>();
+  const { t } = useTranslation('app-vibes');
 
   const moderator = generateModerators()[1];
 
   const tenureInfoLabel = generateTenureInfoLabel(moderator.status);
-
-  const { t } = useTranslation('app-vibes');
 
   const handleClickPage = (page: number) => () => {
     setCurPage(page);
@@ -63,9 +59,9 @@ export const ModeratorDetailPage: React.FC<BasePageProps> = props => {
   const trimmedRows =
     pages[curPage - 1]?.map(el => [
       formatDate(el.moderatedDate, 'DD MMM YYYY'),
-      t('{{type}}', { type: contentTypeMap[el.contentType] }),
-      el.delisted ? t('Delisted') : t('Kept'),
-      el.contentID,
+      t('{{type}}', { type: el.type }),
+      t('{{status}}', { status: el.status }),
+      el.contentId,
     ]) ?? [];
 
   const dismissalReason = generateDismissalReason();

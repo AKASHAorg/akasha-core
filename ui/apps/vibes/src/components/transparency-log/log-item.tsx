@@ -91,7 +91,7 @@ const TransparencyLogItemCard: React.FC<TransparencyLogItemCardProps> = props =>
 
       <Stack padding="p-4" spacing="gap-y-2">
         <Text variant="body1" color={textColor}>
-          {`A ${item.type} has been ${item.status === 'Delisted' ? 'delisted' : 'reported'} for`}
+          {`This ${item.type} has been ${item.status === 'Delisted' ? 'delisted' : 'reported'} for`}
         </Text>
         <Stack
           direction="row"
@@ -108,7 +108,7 @@ const TransparencyLogItemCard: React.FC<TransparencyLogItemCardProps> = props =>
             </Text>
           </Stack>
 
-          <Stack padding="p-2" customStyle="border(l-1 solid white)">
+          <Stack padding="p-2" customStyle="border(l-1 solid white dark:grey2)">
             <Text variant="footnotes2" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
               {item.reason}
             </Text>

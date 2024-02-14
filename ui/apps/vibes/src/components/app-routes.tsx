@@ -102,7 +102,7 @@ const AppRoutes: React.FC<unknown> = () => {
             path={routes[HISTORY]}
             element={
               <ErrorBoundary {...errorBoundaryProps}>
-                <TransparencyLog user={authenticatedDid} navigateTo={navigateTo} />
+                <TransparencyLog />
               </ErrorBoundary>
             }
           />
