@@ -469,6 +469,22 @@
         }
       }
     },
+    "@akashaorg/app-routing": {
+      "root": "ui/apps/routing",
+      "sourceRoot": "ui/apps/routing/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": ["ui/apps/routing"],
+          "options": {
+            "commands": ["yarn run pack"],
+            "cwd": "ui/apps/routing",
+            "parallel": false
+          }
+        }
+      }
+    },
     "@akashaorg/app-search": {
       "root": "ui/apps/search",
       "sourceRoot": "ui/apps/search/src",
@@ -535,18 +551,24 @@
         }
       }
     },
-    "@akashaorg/app-routing": {
-      "root": "ui/apps/routing",
-      "sourceRoot": "ui/apps/routing/src",
+    "@akashaorg/app-vibes-console": {
+      "root": "ui/apps/vibes-console",
+      "sourceRoot": "ui/apps/vibes-console/src",
       "projectType": "application",
       "targets": {
         "build": {
           "builder": "@nrwl/workspace:run-commands",
-          "outputs": ["ui/apps/routing"],
+          "outputs": ["ui/apps/vibes-console"],
           "options": {
-            "commands": ["yarn run pack"],
-            "cwd": "ui/apps/routing",
+            "commands": ["yarn run pack", "yarn postpack"],
+            "cwd": "ui/apps/vibes-console",
             "parallel": false
+          }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/apps/vibes-console"
           }
         }
       }
