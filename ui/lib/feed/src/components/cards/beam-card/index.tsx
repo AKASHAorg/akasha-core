@@ -30,8 +30,7 @@ type BeamCardProps = Pick<
 const BeamCard: React.FC<BeamCardProps> = props => {
   const { t } = useTranslation('ui-lib-feed');
   const { entryData, onReflect, showHiddenContent, ...rest } = props;
-  const { getRoutingPlugin } = useRootComponentProps();
-  const { getTranslationPlugin } = useRootComponentProps();
+  const { getRoutingPlugin, getTranslationPlugin } = useRootComponentProps();
   const { data } = useGetLogin();
   const [appName, setAppName] = useState('');
   const [blockNameMap, setBlockNameMap] = useState(new Map());

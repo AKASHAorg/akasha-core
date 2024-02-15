@@ -1,7 +1,7 @@
 import { Logger } from '@akashaorg/awf-sdk';
 import { Comment } from '@akashaorg/typings/lib/sdk/graphql-types';
 import type { PostResultFragment } from '@akashaorg/typings/lib/sdk/graphql-operation-types';
-import type { BeamEntryData, ReflectEntryData } from '@akashaorg/typings/lib/ui';
+import type { BeamEntryData, ReflectEntryData, SlateDescendant } from '@akashaorg/typings/lib/ui';
 import { AkashaBeam, AkashaReflect } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import getSDK from '@akashaorg/awf-sdk';
 
@@ -33,6 +33,32 @@ export type CommentPublishObject = {
   };
 };
 
+/**
+ * Utility to decode base64 slate content
+ */
+export const decodeb64SlateContent = (base64Content: string, logger?: Logger) => {
+  try {
+    const stringContent = window.atob(base64Content);
+    const stringified = fromBinary(stringContent);
+    const result = JSON.parse(stringified);
+    return result;
+  } catch (err) {
+    if (logger) {
+      logger.error(`Error parsing content: ${err.message}`);
+    }
+  }
+};
+
+/**
+ * Utility to encode slate content to base64
+ */
+export const encodeSlateToBase64 = (slateContent: SlateDescendant[]) => {
+  const stringified = JSON.stringify(slateContent);
+  const binary = toBinary(stringified);
+  const encoded = window.btoa(binary);
+  return encoded;
+};
+
 function toBinary(data: string) {
   const codeUnits = new Uint16Array(data.length);
   for (let i = 0; i < codeUnits.length; i++) {
@@ -52,37 +78,6 @@ function fromBinary(binary: string) {
 
   return result;
 }
-
-/**
- * Utility to decode base64 slate content
- */
-export const decodeb64SlateContent = (
-  base64Content: string,
-  logger?: Logger,
-  handleOldSlateFormat?: boolean,
-) => {
-  const stringContent = window.atob(base64Content);
-  let result;
-  try {
-    const stringified = fromBinary(stringContent);
-    result = JSON.parse(stringified);
-  } catch (err) {
-    if (logger) {
-      logger.error(`Error parsing content: ${err.message}`);
-    }
-  }
-  if (handleOldSlateFormat && !Array.isArray(result)) {
-    result = JSON.parse(stringContent);
-  }
-  return result;
-};
-
-/**
- * Utility to serialize slate content to base64
- */
-export const serializeSlateToBase64 = (slateContent: unknown) => {
-  return window.btoa(toBinary(JSON.stringify(slateContent)));
-};
 
 /**
  * Utility to map reflect entry data

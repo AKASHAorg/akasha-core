@@ -10,7 +10,7 @@ export interface IBlockStatusToolbar {
   successLabel?: string;
   errorLabel?: string;
   retryLabel?: string;
-  blockCreationStatus: 'creating' | 'success' | 'error';
+  blockCreationStatus: 'pending' | 'success' | 'error';
   handleRetry?: () => void;
 }
 
@@ -23,48 +23,49 @@ const BlockStatusToolbar: React.FC<IBlockStatusToolbar> = props => {
     blockCreationStatus,
     handleRetry,
   } = props;
-  if (blockCreationStatus === 'creating') {
+
+  if (blockCreationStatus === 'pending') {
     return (
-      <Stack direction="row" spacing="gap-2">
+      <Stack direction="row" align="center" spacing="gap-2">
         <Stack
           align="center"
           justify="center"
-          customStyle={'h-6 w-6 group relative rounded-full bg(grey9 dark:grey5)'}
+          customStyle={'h-8 w-8 group relative rounded-full bg(grey9 dark:grey5)'}
         >
-          <Icon size="xs" icon={<ArrowPathIcon />} rotateAnimation={true} />
+          <Icon size="sm" icon={<ArrowPathIcon />} rotateAnimation={true} />
         </Stack>
         <Text>{creatingBlockLabel}</Text>
       </Stack>
     );
   } else if (blockCreationStatus === 'success') {
     return (
-      <Stack direction="row" spacing="gap-2">
+      <Stack direction="row" align="center" spacing="gap-2">
         <Stack
           align="center"
           justify="center"
-          customStyle={'h-6 w-6 group relative rounded-full bg-success/30'}
+          customStyle={'h-8 w-8 group relative rounded-full bg-success/30'}
         >
-          <Icon size="xs" icon={<CheckIcon />} color={{ light: 'success', dark: 'success' }} />
+          <Icon size="sm" icon={<CheckIcon />} color={{ light: 'success', dark: 'success' }} />
         </Stack>
         <Text color={{ light: 'success', dark: 'success' }}>{successLabel}</Text>
       </Stack>
     );
   } else if (blockCreationStatus === 'error') {
     return (
-      <Stack direction="row" spacing="gap-2">
+      <Stack direction="row" align="center" spacing="gap-2">
         <Stack
           align="center"
           justify="center"
-          customStyle={'h-6 w-6 group relative rounded-full bg(errorLight/30 dark:errorDark/30)'}
+          customStyle={'h-8 w-8 group relative rounded-full bg(errorLight/30 dark:errorDark/30)'}
         >
           <Icon
-            size="xs"
+            size="sm"
             icon={<ExclamationTriangleIcon />}
             color={{ light: 'errorLight', dark: 'errorDark' }}
           />
         </Stack>
         <Text color={{ light: 'errorLight', dark: 'errorDark' }}>{errorLabel}</Text>
-        <Button variant="text" onClick={handleRetry} label={retryLabel} />
+        {!!handleRetry && <Button variant="text" onClick={handleRetry} label={retryLabel} />}
       </Stack>
     );
   }

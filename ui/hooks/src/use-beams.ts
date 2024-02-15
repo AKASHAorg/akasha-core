@@ -37,7 +37,7 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
   }>({ beams: [] });
 
   const [errors, setErrors] = React.useState<(ApolloError | Error)[]>([]);
-  const sdk = getSDK();
+  const indexingDID = React.useRef(getSDK().services.gql.indexingDID);
 
   const mergedVars: GetBeamsQueryVariables = React.useMemo(() => {
     const vars: {
@@ -67,7 +67,7 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
           ...mergedVars,
           first: overscan,
           id: undefined,
-          indexer: sdk.services.gql.indexingDID,
+          indexer: indexingDID.current,
         } satisfies GetBeamStreamQueryVariables & GetBeamsByAuthorDidQueryVariables),
   });
 
@@ -125,7 +125,7 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
           variables: {
             after: lastCursor,
             sorting: { createdAt: SortOrder.Desc },
-            indexer: sdk.services.gql.indexingDID,
+            indexer: indexingDID.current,
           },
         };
     try {
@@ -139,7 +139,16 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
       setState(
         prev =>
           ({
-            beams: [...prev.beams, ...edges],
+            beams: [
+              ...prev.beams,
+              ...edges.filter(edge => {
+                const isNewBeam = !prev.beams.some(beam => beam.cursor === edge.cursor);
+                if (!isNewBeam) {
+                  console.warn('on fetchNextPage, beam cursor:', edge.cursor, 'already added!');
+                }
+                return isNewBeam;
+              }),
+            ],
             pageInfo: {
               ...prev.pageInfo,
               endCursor: pageInfo.endCursor,
@@ -179,10 +188,20 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
       }
       if (!results.data) return;
       const { edges, pageInfo } = extractData(results.data);
+
       setState(
         prev =>
           ({
-            beams: [...edges.reverse(), ...prev.beams],
+            beams: [
+              ...edges.reverse().filter(edge => {
+                const isNewBeam = !prev.beams.some(beam => beam.cursor === edge.cursor);
+                if (!isNewBeam) {
+                  console.warn('on fetch prev page, beam cursor', edge.cursor, 'already added!');
+                }
+                return isNewBeam;
+              }),
+              ...prev.beams,
+            ],
             pageInfo: {
               ...prev.pageInfo,
               startCursor: pageInfo.endCursor,
@@ -237,12 +256,16 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
 
   const fetchInitialData = React.useCallback(
     async (restoreItem?: { key: string; offsetTop: number }) => {
-      if (beamsQuery.called) return;
+      if (state.beams.length) {
+        setState({
+          beams: [],
+        });
+      }
 
       const initialVars: GetBeamStreamQueryVariables & GetBeamsByAuthorDidQueryVariables = {
         sorting: { createdAt: SortOrder.Desc },
         id: did ?? undefined,
-        indexer: did ? undefined : sdk.services.gql.indexingDID,
+        indexer: did ? undefined : indexingDID.current,
       };
 
       if (restoreItem) {
@@ -251,7 +274,7 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
       }
       await fetchInitialBeams(initialVars);
     },
-    [beamsQuery.called, did, fetchInitialBeams],
+    [did, fetchInitialBeams, state.beams.length],
   );
 
   React.useEffect(() => {
@@ -278,6 +301,7 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
     fetchNextPage,
     fetchPreviousPage,
     isLoading: beamsQuery.loading,
+    called: beamsQuery.called,
     hasNextPage: state.pageInfo?.hasNextPage,
     hasPreviousPage: state.pageInfo?.hasPreviousPage,
     onReset: handleReset,

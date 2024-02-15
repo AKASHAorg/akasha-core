@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOMClient from 'react-dom/client';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import singleSpaReact from 'single-spa-react';
 import {
@@ -155,7 +155,7 @@ const SnackBarNotification: React.FC<RootExtensionProps> = () => {
 
 const reactLifecycles = singleSpaReact({
   React,
-  ReactDOMClient: ReactDOM,
+  ReactDOMClient,
   rootComponent: withProviders(SnackBarNotification),
   errorBoundary: (error, errorInfo, props: RootExtensionProps) => {
     if (props.logger) {

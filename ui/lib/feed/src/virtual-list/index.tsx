@@ -34,8 +34,11 @@ export type VirtualizerProps<T> = {
   onEdgeDetectorChange: UseEdgeDetectorProps['onEdgeDetectorChange'];
   hasNextPage?: boolean;
   hasPreviousPage?: boolean;
-  isLoading?: boolean;
-  queryCalled?: boolean;
+  offsetTop?: number;
+  requestStatus: {
+    called: boolean;
+    isLoading: boolean;
+  };
 };
 
 const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
@@ -56,24 +59,24 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
     footer,
     hasNextPage,
     hasPreviousPage,
-    isLoading,
-    queryCalled,
+    offsetTop,
+    requestStatus,
     emptyListIndicator,
   } = props;
 
   const vlistRef = React.useRef<VirtualListInterface>();
   const [isMounted, setIsMounted] = React.useState(false);
-  const deferredIsMounted = React.useDeferredValue(isMounted);
 
   const keyExtractorRef = React.useRef(itemKeyExtractor);
   const itemRendererRef = React.useRef(renderItem);
   const scrollRestore = useScrollState(restorationKey);
+  const prevRestorationKey = React.useRef(null);
 
   const itemList: VirtualDataItem<T>[] = React.useMemo(() => {
     const itemList: VirtualDataItem<T>[] = [];
     if (header) {
       itemList.push(
-        createVirtualDataItem(HEADER_COMPONENT, HEADER_COMPONENT as T, false, () => header),
+        createVirtualDataItem(HEADER_COMPONENT, HEADER_COMPONENT as T, true, () => header),
       );
     }
 
@@ -107,11 +110,11 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
       itemList: VirtualItem[],
       mountedItems: VirtualItem[],
       viewportRect: Rect,
-      averageItemHeight: number,
+      getItemHeightAverage: () => number,
       measurementsCache: Map<string, number>,
       isNewUpdate: boolean,
     ) => {
-      edgeDetector.update(itemList, mountedItems, viewportRect, averageItemHeight, isNewUpdate);
+      edgeDetector.update(itemList, mountedItems, viewportRect, getItemHeightAverage, isNewUpdate);
       if (!isMounted) return;
       if (vlistRef.current.isAtTop()) {
         return scrollRestore.save([], new Map());
@@ -128,21 +131,28 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
   );
 
   const restoreStartItem = React.useRef<RestoreItem>();
-  const isFetchingInitialData = React.useRef(false);
 
-  React.useEffect(() => {
-    if (!isMounted) {
-      // load scroll restoration
-      if (scrollRestore.scrollState.loaded && !isFetchingInitialData.current) {
+  const fetchInitialData = React.useCallback(() => {
+    if (scrollRestore.scrollState.loaded) {
+      if (!requestStatus.called && !requestStatus.isLoading) {
         const restoreItem = scrollRestore.getLastItem();
-        isFetchingInitialData.current = true;
-        const listItem = itemList.filter(it => it.maybeRef);
-        if (restoreItem && listItem.length === 0) {
+        const listItems = itemList.filter(it => it.maybeRef && it.key !== HEADER_COMPONENT);
+        if (restoreItem && listItems.length === 0) {
           onFetchInitialData(restoreItem);
-        } else if (listItem.length === 0) {
+        } else if (listItems.length === 0) {
           onFetchInitialData();
         }
       }
+    }
+  }, [itemList, onFetchInitialData, requestStatus.called, requestStatus.isLoading, scrollRestore]);
+
+  React.useEffect(() => {
+    if (!isMounted) {
+      if (itemList.length > 0 && scrollRestore.scrollState.loaded) {
+        setIsMounted(true);
+        return;
+      }
+      fetchInitialData();
       if (
         itemList.length > 0 &&
         scrollRestore.scrollState.loaded &&
@@ -153,12 +163,13 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
           window.history.scrollRestoration = 'manual';
         }
       }
-      if (itemList.length > 0 && scrollRestore.scrollState.loaded) {
-        isFetchingInitialData.current = false;
-        setIsMounted(true);
-      }
     }
-  }, [isMounted, itemList, onFetchInitialData, scrollRestore]);
+
+    if (isMounted && prevRestorationKey.current !== restorationKey) {
+      prevRestorationKey.current = restorationKey;
+      fetchInitialData();
+    }
+  }, [fetchInitialData, isMounted, itemList, onFetchInitialData, restorationKey, scrollRestore]);
 
   const scrollRestorationType = React.useMemo(() => {
     if (typeof window !== 'undefined') {
@@ -168,12 +179,14 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
     return 'auto';
   }, []);
 
-  if (!items.length && queryCalled && !isLoading && emptyListIndicator) return emptyListIndicator;
+  if (!items.length && requestStatus.called && !requestStatus.isLoading && emptyListIndicator) {
+    return emptyListIndicator;
+  }
 
   return (
     <>
-      {!deferredIsMounted && loadingIndicator && loadingIndicator()}
-      {deferredIsMounted && (
+      {!isMounted && loadingIndicator && loadingIndicator()}
+      {isMounted && (
         <VirtualListRenderer
           restorationKey={restorationKey}
           ref={vlistRef}
@@ -188,8 +201,9 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
           scrollTopIndicator={scrollTopIndicator}
           hasNextPage={hasNextPage}
           hasPreviousPage={hasPreviousPage}
-          isLoading={isLoading}
+          isLoading={requestStatus.isLoading}
           loadingIndicator={loadingIndicator}
+          offsetTop={offsetTop}
         />
       )}
     </>

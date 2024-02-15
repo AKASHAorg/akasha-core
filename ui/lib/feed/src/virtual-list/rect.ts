@@ -19,11 +19,13 @@ export class Rect {
       (targetTop >= this.getTop() && targetTop < this.getBottom())
     );
   };
+
   translateRelativeTo = (node: HTMLElement) => {
     if (node) {
       return this.translate(-node.getBoundingClientRect().top);
     }
   };
+
   translate = (top: number, height = 0) => {
     return new Rect(this.getTop() + top, this.getHeight() + height);
   };

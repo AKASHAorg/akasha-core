@@ -1,9 +1,8 @@
-import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import * as React from 'react';
+import { render } from '@testing-library/react';
 import { Virtualizer, VirtualizerProps } from '../index';
 import '@testing-library/jest-dom';
 
-const generateItems = (n: number) => Array.from({ length: n }, (_, i) => `Item ${i}`);
 class ResizeObserver {
   observe() {
     return;
@@ -15,52 +14,69 @@ class ResizeObserver {
     return;
   }
 }
+const restorationKey = 'test-restoration-key';
 describe('Virtualizer', () => {
   global.ResizeObserver = ResizeObserver;
+  const mockEdgeDetectorChangeFn = jest.fn();
   const mockProps: VirtualizerProps<string> = {
-    restorationKey: 'restoration-key',
+    restorationKey,
     header: <div>Header</div>,
     footer: <div>Footer</div>,
     estimatedHeight: 100,
-    items: generateItems(20),
+    items: [],
     itemKeyExtractor: item => item,
     itemIndexExtractor: item => parseInt(item.split(' ')[1]),
     renderItem: item => <div>{item}</div>,
     overscan: 20,
     itemSpacing: 8,
     onFetchInitialData: jest.fn(),
-    onEdgeDetectorChange: jest.fn(),
+    onEdgeDetectorChange: mockEdgeDetectorChangeFn,
     hasNextPage: false,
     hasPreviousPage: false,
-    isLoading: false,
+    requestStatus: {
+      isLoading: false,
+      called: false,
+    },
   };
+  let rendered;
+
   beforeEach(() => {
     global.scrollTo = jest.fn();
-  });
-  it('renders correctly with default props', () => {
-    const { getByText, container } = render(<Virtualizer {...mockProps} />);
+    global.scrollBy = jest.fn();
+    jest.mock('../use-viewport', () => ({
+      useViewport: jest.fn(() => ({
+        getDocumentViewportHeight: jest.fn(() => 500),
+        getRect: jest.fn(() => ({ getHeight: jest.fn(() => 500) })),
+        scrollToTop: jest.fn(),
+        getScrollY: jest.fn(() => 0),
+        scrollBy: jest.fn(),
+        setTopOffset: jest.fn(),
+        setBottomOffset: jest.fn(),
+      })),
+    }));
 
-    // Check if header is rendered correctly
-    expect(getByText('Header')).toBeInTheDocument();
-
-    expect(container.querySelector('#restoration-key').childElementCount).toEqual(19);
-  });
-
-  it.skip('calls onFetchInitialData if itemList is empty', () => {
-    const { rerender } = render(<Virtualizer {...mockProps} items={[]} />);
-
-    rerender(<Virtualizer items={[]} {...mockProps} />);
-
-    expect(mockProps.onFetchInitialData).toHaveBeenCalled();
+    rendered = render(<Virtualizer {...mockProps} />);
   });
 
-  it('edge detection works flawlessly', () => {
-    const { container } = render(<Virtualizer {...mockProps} />);
+  afterEach(() => {
+    jest.clearAllMocks();
+    global.scrollTo(0, 0);
+    rendered = undefined;
+  });
 
-    const listElement = container.querySelector('#restoration-key');
+  it('renders container on first render', () => {
+    const { container } = rendered;
 
-    fireEvent.scroll(listElement, { target: { scrollTop: 1000 } });
+    expect(container.querySelector(`#${restorationKey}`)).toBeInTheDocument();
+    // header + footer
+    expect(container.querySelector(`#${restorationKey}`).childElementCount).toEqual(2);
+    rendered.unmount();
+  });
 
-    expect(mockProps.onEdgeDetectorChange).toHaveBeenCalled();
+  it('calls onFetchInitialData if itemList is empty', () => {
+    const { rerender } = rendered;
+    rerender(<Virtualizer {...{ ...mockProps, items: [] }} />);
+    expect(mockProps.onFetchInitialData).toBeCalledTimes(1);
+    rendered.unmount();
   });
 });

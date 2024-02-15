@@ -1,4 +1,4 @@
-import { BaseEditor } from 'slate';
+import { BaseEditor, Descendant } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { HistoryEditor } from 'slate-history';
 import { Profile } from './profile';
@@ -7,20 +7,12 @@ export type EmptyText = {
   text: string;
 };
 
-export type ImageElement = {
-  type: 'image';
+export type LinkElement = {
+  type: 'link';
+  align?: 'left' | 'center' | 'right';
   url: string;
-  fallbackUrl?: string;
-  size: {
-    width: string;
-    height: string;
-    naturalWidth: string;
-    naturalHeight: string;
-  };
   children: EmptyText[];
 };
-
-export type LinkElement = { type: 'link'; url: string; children: EmptyText[] };
 
 export type MentionElement = {
   type: 'mention';
@@ -28,6 +20,7 @@ export type MentionElement = {
   id?: string;
   children?: EmptyText[];
   did: Profile['did'];
+  align?: 'left' | 'center' | 'right';
 };
 
 export type TagElement = {
@@ -35,30 +28,52 @@ export type TagElement = {
   name: string;
   totalPosts: number;
   children: EmptyText[];
+  align?: 'left' | 'center' | 'right';
 };
 
 export type ParagraphElement = {
   type: 'paragraph';
+  align?: 'left' | 'center' | 'right';
+  children: CustomText[];
+};
+
+export type ListItemElement = {
+  type: 'list-item';
+  align?: 'left' | 'center' | 'right';
+  children: CustomText[];
+};
+
+export type BulletedListElement = {
+  type: 'bulleted-list';
+  align?: 'left' | 'center' | 'right';
+  children: CustomText[];
+};
+
+export type NumberedListElement = {
+  type: 'numbered-list';
+  align?: 'left' | 'center' | 'right';
   children: CustomText[];
 };
 
 export type CustomElement =
-  | ImageElement
   | LinkElement
   | MentionElement
   | TagElement
-  | ParagraphElement;
+  | ParagraphElement
+  | ListItemElement
+  | BulletedListElement
+  | NumberedListElement;
 
 export type CustomText = {
   bold?: boolean;
   italic?: boolean;
-  code?: boolean;
-  underlined?: boolean;
+  underline?: boolean;
   disabled?: boolean;
   text: string;
 };
 
 export type CustomEditor = BaseEditor & ReactEditor & HistoryEditor;
+export type SlateDescendant = Descendant;
 
 declare module 'slate' {
   interface CustomTypes {

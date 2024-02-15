@@ -137,7 +137,10 @@ const TagFeed = (props: TagFeedProps) => {
         <Virtualizer<ReturnType<typeof useBeamsByTags>['beams'][0]>
           header={header}
           footer={footer}
-          queryCalled={called}
+          requestStatus={{
+            called,
+            isLoading,
+          }}
           emptyListIndicator={emptyListCard}
           restorationKey={queryKey}
           itemSpacing={itemSpacing}
@@ -154,7 +157,6 @@ const TagFeed = (props: TagFeedProps) => {
           loadingIndicator={loadingIndicatorRef.current}
           hasNextPage={hasNextPage}
           hasPreviousPage={hasPreviousPage}
-          isLoading={isLoading}
         />
       )}
     </>

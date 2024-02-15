@@ -29,6 +29,7 @@ export type BeamFeedProps = {
   footer?: VirtualizerProps<unknown>['footer'];
   loadingIndicator?: VirtualizerProps<unknown>['loadingIndicator'];
   did?: string;
+  offsetTop?: number;
 };
 
 const BeamFeed = (props: BeamFeedProps) => {
@@ -45,6 +46,7 @@ const BeamFeed = (props: BeamFeedProps) => {
     header,
     footer,
     did,
+    offsetTop,
   } = props;
 
   const {
@@ -55,6 +57,7 @@ const BeamFeed = (props: BeamFeedProps) => {
     hasPreviousPage,
     fetchInitialData,
     onReset,
+    called,
     isLoading,
     hasErrors,
     errors,
@@ -144,7 +147,8 @@ const BeamFeed = (props: BeamFeedProps) => {
           loadingIndicator={loadingIndicatorRef.current}
           hasNextPage={hasNextPage}
           hasPreviousPage={hasPreviousPage}
-          isLoading={isLoading}
+          offsetTop={offsetTop}
+          requestStatus={{ called, isLoading }}
         />
       )}
     </>

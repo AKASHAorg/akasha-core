@@ -57,6 +57,7 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
       key: number;
       status?: 'success' | 'pending' | 'error';
       response?: { blockID: string; error?: string };
+      disablePublish?: boolean;
     })[]
   >([]);
 
@@ -255,6 +256,19 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
     });
   };
 
+  const updateBlockDisablePublishState = (value: boolean, index: number) => {
+    setBlocksInUse(prev => {
+      const next = prev.map(elem => {
+        if (elem.order === index) {
+          return { ...elem, disablePublish: value };
+        } else {
+          return elem;
+        }
+      });
+      return next;
+    });
+  };
+
   const formattedErrors = React.useMemo(() => {
     const err = [];
     if (errors.length) {
@@ -276,6 +290,7 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
     blocksInUse,
     addBlockToList,
     removeBlockFromList,
+    updateBlockDisablePublishState,
     availableBlocks,
     errors: formattedErrors,
     isLoading: beamIndexQuery.loading || createBeamQuery.loading,
