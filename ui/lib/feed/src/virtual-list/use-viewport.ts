@@ -1,28 +1,31 @@
 import * as React from 'react';
 import { Rect } from './rect';
+import { dpr, isWindow, pxToDPR } from '../utils';
 
 export type UseViewportProps = {
   initialRect?: Rect;
   offsetTop: number;
+  offsetBottom: number;
+};
+
+const getScrollY = () => {
+  if (isWindow()) {
+    return -1 * window.document.documentElement.getBoundingClientRect().top;
+  }
+  return 0;
 };
 
 export const useViewport = (props: UseViewportProps) => {
-  const { initialRect, offsetTop } = props;
-
-  const isWindow = React.useRef(typeof window !== 'undefined');
-  const dpr = React.useRef(isWindow.current ? window.devicePixelRatio ?? 1 : 1);
-  const bottomOffset = React.useRef(0);
-  const topOffset = React.useRef(0);
-  const stateRef = React.useRef<{ rect: Rect; offsetTop: number }>({
+  const { initialRect, offsetTop, offsetBottom } = props;
+  const stateRef = React.useRef<{ rect: Rect; offsetTop: number; offsetBottom: number }>({
     rect: initialRect, // it's assigned below
     offsetTop: offsetTop,
+    offsetBottom: offsetBottom,
   });
-
-  const pxToDPR = React.useRef((px: number, dpr: number) => Math.ceil(px * dpr) / dpr);
 
   if (!stateRef.current.rect) {
     const clientHeight = Math.ceil(window.document.documentElement.clientHeight);
-    const height = Math.max(0, clientHeight - stateRef.current.offsetTop);
+    const height = Math.max(0, clientHeight - offsetTop);
     stateRef.current.rect = new Rect(stateRef.current.offsetTop, height);
   }
 
@@ -34,7 +37,7 @@ export const useViewport = (props: UseViewportProps) => {
 
   const getDocumentViewportHeight = (): number => {
     if (initialRect) return initialRect.getHeight();
-    if (isWindow) return document.documentElement.clientHeight;
+    if (isWindow()) return document.documentElement.clientHeight;
     return 0;
   };
 
@@ -42,18 +45,12 @@ export const useViewport = (props: UseViewportProps) => {
     if (!rootNode) return 0;
     const rect = rootNode.getBoundingClientRect();
     const top = stateRef.current.rect.getTop();
-    return pxToDPR.current(rect.top - top, dpr.current);
+    return pxToDPR(rect.top - top, dpr);
   };
 
-  const getScrollY = () => {
-    if (isWindow.current) {
-      return -1 * window.document.documentElement.getBoundingClientRect().top;
-    }
-    return 0;
-  };
   const scrollTo = (x: number, y: number) => {
     const offset = y - getScrollY();
-    if (isWindow.current) {
+    if (isWindow()) {
       window.scrollTo(x, offset);
     }
   };
@@ -62,30 +59,40 @@ export const useViewport = (props: UseViewportProps) => {
   };
 
   const setTopOffset = (offset: number) => {
-    topOffset.current = offset;
+    stateRef.current.offsetTop = offset;
   };
   const setBottomOffset = (offset: number) => {
-    bottomOffset.current = offset;
+    stateRef.current.offsetBottom = offset;
+  };
+
+  const getRelativeToRootNode = (rootNode: HTMLElement) => {
+    return stateRef.current.rect.translateRelativeTo(rootNode);
   };
 
   return {
     state: stateRef.current,
-    getRect: () => new Rect(stateRef.current.rect.getTop(), stateRef.current.rect.getHeight()),
+    getRect: () => {
+      const clientHeight = isWindow() ? window.document.documentElement.clientHeight : 0;
+
+      return new Rect(
+        stateRef.current.rect.getTop(),
+        Math.max(0, clientHeight - stateRef.current.offsetTop - stateRef.current.offsetBottom),
+      );
+    },
     resizeRect,
     getDocumentViewportHeight,
     getOffsetCorrection,
-    pxToDPR: pxToDPR.current,
-    dpr: dpr.current,
     scrollBy: (amount: number) => {
-      if (!isWindow.current) return;
+      if (!isWindow()) return;
       window.scrollBy(0, amount);
     },
     setBottomOffset,
-    getBottomOffset: () => bottomOffset.current,
+    getBottomOffset: () => stateRef.current.offsetBottom,
     setTopOffset,
     scrollTo,
     scrollToTop,
-    getTopOffset: () => topOffset.current,
+    getTopOffset: () => stateRef.current.offsetTop,
     getScrollY,
+    getRelativeToRootNode,
   };
 };

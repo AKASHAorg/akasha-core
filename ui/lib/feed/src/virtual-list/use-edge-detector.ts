@@ -74,13 +74,13 @@ export const useEdgeDetector = (props: UseEdgeDetectorProps) => {
   const update = React.useCallback(
     (
       itemList: VirtualItem[],
-      rendered: VirtualItem[],
+      _rendered: VirtualItem[],
       viewportRect: Rect,
-      averageItemHeight: number,
+      getItemHeightAverage: () => number,
       isNewUpdate: boolean,
     ) => {
       if (!isNewUpdate) return;
-      const overscanHeight = overscan * averageItemHeight;
+      const overscanHeight = overscan * getItemHeightAverage();
       const filteredItems = itemList.filter(it => it.maybeRef);
       if (!filteredItems.length && !detectorState.current.newArea) {
         detectorState.current = {
