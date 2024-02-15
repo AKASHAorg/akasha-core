@@ -1,6 +1,6 @@
 import * as React from 'react';
 import singleSpaReact from 'single-spa-react';
-import ReactDOM from 'react-dom';
+import ReactDOMClient from 'react-dom/client';
 import { RootExtensionProps, EntityTypes, AnalyticsCategories } from '@akashaorg/typings/lib/ui';
 import {
   withProviders,
@@ -82,7 +82,7 @@ const BookmarkButtonWrapper = (props: RootExtensionProps<CardSaveButtonExtension
 
 const reactLifecycles = singleSpaReact({
   React,
-  ReactDOMClient: ReactDOM,
+  ReactDOMClient,
   rootComponent: withProviders(BookmarkButtonWrapper),
   errorBoundary: (err, errorInfo, props: RootExtensionProps<CardSaveButtonExtensionData>) => {
     if (props.logger) {

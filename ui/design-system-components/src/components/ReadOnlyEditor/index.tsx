@@ -3,6 +3,7 @@ import { createEditor, Descendant } from 'slate';
 import { Slate, withReact, Editable, RenderElementProps } from 'slate-react';
 import { withMentions, withTags, withLinks } from '../Editor/plugins';
 import { renderElement, renderLeaf } from '../Editor/renderers';
+import { editorDefaultValue } from '../Editor/initialValue';
 
 export interface IReadOnlyEditor {
   content: Descendant[];
@@ -22,7 +23,7 @@ export interface IReadOnlyEditor {
 const ReadOnlyEditor: React.FC<IReadOnlyEditor> = props => {
   const { content, handleMentionClick, handleTagClick, handleLinkClick } = props;
 
-  const [value, setValue] = React.useState(content);
+  const [value, setValue] = React.useState(content || editorDefaultValue);
 
   /**
    * initialise the editor with required plugins to parse content

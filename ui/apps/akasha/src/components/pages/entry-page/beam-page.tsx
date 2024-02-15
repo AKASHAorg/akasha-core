@@ -5,9 +5,9 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import EntrySectionLoading from './entry-section-loading';
 import BeamSection from './beam-section';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import EditableReflection from '@akashaorg/ui-lib-feed/lib/components/editable-reflection';
 import { useParams } from 'react-router-dom';
 import {
+  createReactiveVar,
   hasOwn,
   mapBeamEntryData,
   mapReflectEntryData,
@@ -16,9 +16,12 @@ import {
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
-import { EntityTypes } from '@akashaorg/typings/lib/ui';
+import { EntityTypes, type ReflectEntryData } from '@akashaorg/typings/lib/ui';
 import { ReflectFeed, ReflectionPreview } from '@akashaorg/ui-lib-feed';
 import { useGetBeamByIdSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import EditableReflection from '@akashaorg/ui-lib-feed/lib/components/editable-reflection';
+import { PendingReflect } from '../../reflect-editor/pending-reflect';
+import { usePendingReflections } from '@akashaorg/ui-awf-hooks/lib/use-pending-reflections';
 
 const BeamPage: React.FC<unknown> = () => {
   const { beamId } = useParams<{
@@ -33,6 +36,8 @@ const BeamPage: React.FC<unknown> = () => {
   const beamReq = useGetBeamByIdSuspenseQuery({
     variables: { id: beamId },
   });
+  const pendingReflectionsVar = createReactiveVar<ReflectEntryData[]>([]);
+  const { pendingReflections } = usePendingReflections(pendingReflectionsVar);
   const entryData = React.useMemo(() => {
     if (beamReq.data && hasOwn(beamReq.data, 'node') && hasOwn(beamReq.data.node, 'id')) {
       return beamReq.data.node;
@@ -56,16 +61,25 @@ const BeamPage: React.FC<unknown> = () => {
 
   return (
     <Card padding="p-0" margin="mb-4">
-      <React.Suspense fallback={<EntrySectionLoading />}>
-        <BeamSection
-          beamId={beamId}
-          entryData={mapBeamEntryData(entryData)}
-          isLoggedIn={isLoggedIn}
-          showLoginModal={showLoginModal}
-        />
-      </React.Suspense>
       <Stack spacing="gap-y-2">
         <ReflectFeed
+          pendingReflectionsVar={pendingReflectionsVar}
+          header={
+            <React.Suspense fallback={<EntrySectionLoading />}>
+              <BeamSection
+                beamId={beamId}
+                entryData={mapBeamEntryData(entryData)}
+                isLoggedIn={isLoggedIn}
+                showLoginModal={showLoginModal}
+                pendingReflectionsVar={pendingReflectionsVar}
+              />
+              {pendingReflections
+                .filter(content => !hasOwn(content, 'reflection') && content.beamID === beamId)
+                .map((content, index) => (
+                  <PendingReflect key={`pending-${index}-${beamId}`} entryData={content} />
+                ))}
+            </React.Suspense>
+          }
           queryKey={`reflect-feed-${beamId}`}
           filters={{ where: { reflection: { isNull: true } } }}
           estimatedHeight={120}

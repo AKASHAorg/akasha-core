@@ -40,7 +40,8 @@
     "test:libs": "nx run @akashaorg/ui-lib-feed:test",
     "test:all": "yarn test:design-system-core && yarn test:design-system-components && yarn test:hooks && yarn test:libs",
     "push:integrations": "node build/integrations_bucket_store.js",
-    "sdk:graphql:generate": "nx run-many --target=graphql:generate --projects=@akashaorg/awf-sdk --output-style=stream"
+    "sdk:graphql:generate": "nx run-many --target=graphql:generate --projects=@akashaorg/awf-sdk --output-style=stream",
+    "pack:antenna": "nx run-many --target=build --projects=@akashaorg/ui-lib-feed,@akashaorg/design-system-core,@akashaorg/design-system-components,@akashaorg/app-akasha-integration"
   },
   "devDependencies": {
     "@babel/core": "7.19.0",

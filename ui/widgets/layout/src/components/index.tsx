@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOMClient from 'react-dom/client';
 import singleSpaReact from 'single-spa-react';
 import { RootComponentProps } from '@akashaorg/typings/lib/ui';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
@@ -16,7 +16,7 @@ import LayoutWidget from './layout-widget';
 
 const reactLifecycles = singleSpaReact({
   React,
-  ReactDOMClient: ReactDOM,
+  ReactDOMClient,
   rootComponent: withProviders(LayoutWidget),
   errorBoundary: (error, errorInfo, props: RootComponentProps) => {
     if (props.logger) {

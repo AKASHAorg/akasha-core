@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOMClient from 'react-dom/client';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import singleSpaReact from 'single-spa-react';
 import FollowProfileButton from '../components/follow-profile-button';
@@ -40,7 +40,7 @@ const App = (props: RootExtensionProps<FollowProfileButtonExtensionData>) => {
 
 const reactLifecycles = singleSpaReact({
   React,
-  ReactDOMClient: ReactDOM,
+  ReactDOMClient,
   rootComponent: withProviders(App),
   errorBoundary: (
     error,

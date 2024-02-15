@@ -2,8 +2,8 @@ import * as React from 'react';
 import { useRoutingEvents } from './use-routing-events';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { ExtensionInterface, ExtensionStorePlugin } from '@akashaorg/typings/lib/ui';
-import Parcel from 'single-spa-react/parcel';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { RootParcel } from './root-parcel';
 
 export type ExtensionComponentProps<D> = {
   name: string;
@@ -23,7 +23,7 @@ export const Extension = <D,>(props: ExtensionComponentProps<D>) => {
     customStyle = '',
     extensionData,
   } = props;
-  const { getExtensionsPlugin, getContext } = useRootComponentProps();
+  const { getExtensionsPlugin, getContext, logger } = useRootComponentProps();
   const extensionStore = React.useRef<ExtensionStorePlugin>(getExtensionsPlugin().extensionStore);
   const [parcelConfigs, setParcelConfigs] = React.useState([]);
   const [isEmpty, setIsEmpty] = React.useState(false);
@@ -50,7 +50,7 @@ export const Extension = <D,>(props: ExtensionComponentProps<D>) => {
           const config = await extension.loadingFn();
           newExtensions.push({ config, extension });
         } catch (err) {
-          console.error(extension, `Failed to load extension. ${err.message}`);
+          logger.error(`Failed to load extension ${extension}: ${err.message}`);
           onError?.(extension);
         }
       }
@@ -59,12 +59,15 @@ export const Extension = <D,>(props: ExtensionComponentProps<D>) => {
     };
 
     loadConfigs().catch();
-  }, [extensions, onError]);
+  }, [extensions, logger, onError]);
 
-  const handleParcelError =
+  const handleParcelError = React.useCallback(
     (extension: ExtensionInterface & { appName: string }) => (err: Error) => {
+      if (logger) logger.error(`Error in ${extension.appName}_${name}: ${err}`);
       onError?.(extension, `Failed to mount. ${err.message}`);
-    };
+    },
+    [logger, name, onError],
+  );
 
   const isLoading = extensions.length > parcelConfigs.length && !isEmpty;
 
@@ -73,9 +76,9 @@ export const Extension = <D,>(props: ExtensionComponentProps<D>) => {
       {isLoading && loadingIndicator}
       {isEmpty && emptyIndicator}
       {parcelConfigs.map(parcel => (
-        <Parcel
+        <RootParcel
           key={parcel.extension.appName}
-          config={{ ...parcel.config, name: `${parcel.extension.appName}#${name}` }}
+          config={{ ...parcel.config, name: `${parcel.extension.appName}_${name}` }}
           {...getContext()}
           extensionData={extensionData}
           handleError={handleParcelError(parcel.extension)}
