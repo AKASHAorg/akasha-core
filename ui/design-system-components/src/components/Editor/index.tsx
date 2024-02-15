@@ -22,7 +22,24 @@ import {
 
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import { ArrowPathIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+
+import {
+  BoldAlt,
+  Italic,
+  Underline,
+  ListNumbered,
+  ListBulleted,
+  AlignTextCenter,
+  AlignTextLeft,
+  AlignTextRight,
+} from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
+import {
+  ArrowPathIcon,
+  ExclamationTriangleIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import EditorMeter from '@akashaorg/design-system-core/lib/components/EditorMeter';
 
 import { CustomEditor } from './helpers';
@@ -33,11 +50,12 @@ import { editorDefaultValue } from './initialValue';
 import { renderElement, renderLeaf } from './renderers';
 import { withMentions, withTags, withLinks } from './plugins';
 
-import EmbedBox from '../EmbedBox';
+import { MarkButton, BlockButton } from './formatting-buttons';
 import LinkPreview from '../LinkPreview';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
-const MAX_LENGTH = 500;
+const MAX_TEXT_LENGTH = 500;
+// this is to account for the limitations on the ceramic storage side
+const MAX_ENCODED_LENGTH = 6000;
 
 /**
  * @param uploadRequest - upload a file and returns a promise that resolves to an array
@@ -51,10 +69,11 @@ export type EditorBoxProps = {
   placeholderLabel?: string;
   emojiPlaceholderLabel?: string;
   disableActionLabel?: string;
+  maxEncodedLengthErrLabel?: string;
   disablePublish?: boolean;
-  embedEntryData?: IEntryData;
   minHeight?: string;
   withMeter?: boolean;
+  withToolbar?: boolean;
   linkPreview?: IEntryData['linkPreview'];
   mentions?: Profile[];
   tags?: { name: string; totalPosts: number }[];
@@ -75,7 +94,8 @@ export type EditorBoxProps = {
   getLinkPreview?: (url: string) => Promise<IEntryData['linkPreview']>;
   getMentions: (query: string) => void;
   getTags: (query: string) => void;
-  handleDisablePublish?: (value: any) => void;
+  handleDisablePublish?: (value: boolean) => void;
+  encodingFunction: (value: Descendant[]) => string;
 };
 
 /* eslint-disable complexity */
@@ -89,11 +109,12 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
     actionLabel,
     placeholderLabel,
     disableActionLabel,
+    maxEncodedLengthErrLabel,
     disablePublish,
     onPublish,
-    embedEntryData,
     minHeight,
     withMeter,
+    withToolbar,
     linkPreview,
     getLinkPreview,
     getMentions,
@@ -110,6 +131,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
     transformSource,
     customStyle = '',
     handleDisablePublish,
+    encodingFunction,
   } = props;
 
   const mentionPopoverRef: React.RefObject<HTMLDivElement> = useRef(null);
@@ -122,6 +144,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
   const [letterCount, setLetterCount] = useState(0);
 
   const [publishDisabledInternal, setPublishDisabledInternal] = useState(true);
+  const [showMaxEncodedLengthErr, setShowMaxEncodedLengthErr] = useState(false);
 
   const [linkPreviewState, setLinkPreviewState] = useState(linkPreview);
   const [linkPreviewUploading, setLinkPreviewUploading] = useState(false);
@@ -224,7 +247,6 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
 
     const metadata: IMetadata = {
       app: publishingApp,
-      quote: embedEntryData,
       linkPreview: linkPreviewState,
       tags: [],
       mentions: [],
@@ -260,7 +282,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
    */
   const handleChange = (value: Descendant[]) => {
     let textLength = 0;
-
+    let encodedNodeLength = 0;
     /**
      * include tags, mentions and links in the text length
      * keeps track of the number of images in the content
@@ -284,13 +306,33 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
       }
     })(value);
 
-    /** disable publishing if no images/text or text too long */
-    if (textLength > 0 && textLength <= MAX_LENGTH) {
+    (function computeEncodedNodeLength(nodeArr: Descendant[]) {
+      if (nodeArr.length) {
+        encodedNodeLength = encodingFunction(nodeArr).length;
+      }
+    })(value);
+
+    /** disable publishing if encoded content length or text are too long */
+    if (
+      textLength > 0 &&
+      textLength <= MAX_TEXT_LENGTH &&
+      encodedNodeLength <= MAX_ENCODED_LENGTH
+    ) {
       setPublishDisabledInternal(false);
       handleDisablePublish?.(false);
-    } else if (textLength === 0 || textLength > MAX_LENGTH) {
+    } else if (
+      textLength === 0 ||
+      textLength > MAX_TEXT_LENGTH ||
+      encodedNodeLength > MAX_ENCODED_LENGTH
+    ) {
       setPublishDisabledInternal(true);
       handleDisablePublish?.(true);
+    }
+
+    if (encodedNodeLength <= MAX_ENCODED_LENGTH) {
+      setShowMaxEncodedLengthErr(false);
+    } else if (encodedNodeLength > MAX_ENCODED_LENGTH) {
+      setShowMaxEncodedLengthErr(true);
     }
 
     if (typeof setLetterCount === 'function') {
@@ -494,7 +536,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
         direction="row"
         justify="start"
         spacing="gap-x-2"
-        customStyle={`h-full ${minHeight && `min-h-[${minHeight}]`}`}
+        customStyle={`h-full ${showAvatar && `w-11/12`} ${minHeight && `min-h-[${minHeight}]`}`}
         fullWidth
       >
         {showAvatar && (
@@ -546,6 +588,42 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
                 setIndex={setIndex}
               />
             )}
+            <Stack
+              padding={'pt-2'}
+              direction="row"
+              justify={withToolbar ? 'between' : 'end'}
+              fullWidth
+            >
+              {withToolbar && (
+                <Stack direction="row">
+                  <MarkButton format="bold" icon={<BoldAlt />} style={'rounded-l-sm'} />
+                  <MarkButton format="italic" icon={<Italic />} />
+                  <MarkButton format="underline" icon={<Underline />} />
+                  <BlockButton format="left" icon={<AlignTextLeft />} />
+                  <BlockButton format="center" icon={<AlignTextCenter />} />
+                  <BlockButton format="right" icon={<AlignTextRight />} />
+                  <BlockButton format="numbered-list" icon={<ListNumbered />} />
+                  <BlockButton
+                    format="bulleted-list"
+                    icon={<ListBulleted />}
+                    style={'rounded-r-sm'}
+                  />
+                </Stack>
+              )}
+              <Stack direction="row" align="center" spacing="gap-x-2">
+                {withMeter && <EditorMeter value={letterCount} max={MAX_TEXT_LENGTH} />}
+                {showCancelButton && <Button label={cancelButtonLabel} onClick={onCancelClick} />}
+                {showPostButton && (
+                  <Button
+                    variant={'primary'}
+                    icon={disablePublish ? <ArrowPathIcon /> : null}
+                    label={disablePublish ? disableActionLabel : actionLabel}
+                    onClick={handlePublish}
+                    disabled={publishDisabled}
+                  />
+                )}
+              </Stack>
+            </Stack>
           </Slate>
 
           {(linkPreviewState || linkPreviewUploading) && (
@@ -555,25 +633,21 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
               handleDeletePreview={handleDeletePreview}
             />
           )}
-          {embedEntryData && (
-            <Stack padding="py-4">
-              <EmbedBox embedEntryData={embedEntryData} transformSource={transformSource} />
+          {showMaxEncodedLengthErr && (
+            <Stack
+              direction="row"
+              align="center"
+              background={{ light: 'errorLight/30', dark: 'errorDark/30' }}
+              fullWidth
+              customStyle="rounded"
+              padding={16}
+            >
+              <Icon
+                icon={<ExclamationTriangleIcon />}
+                color={{ light: 'errorLight', dark: 'errorDark' }}
+              />
+              <Text>{maxEncodedLengthErrLabel}</Text>
             </Stack>
-          )}
-        </Stack>
-      </Stack>
-      <Stack direction="row" justify="end" fullWidth>
-        <Stack direction="row" align="center" spacing="gap-x-2">
-          {withMeter && <EditorMeter value={letterCount} max={MAX_LENGTH} />}
-          {showCancelButton && <Button label={cancelButtonLabel} onClick={onCancelClick} />}
-          {showPostButton && (
-            <Button
-              variant={'primary'}
-              icon={disablePublish ? <ArrowPathIcon /> : null}
-              label={disablePublish ? disableActionLabel : actionLabel}
-              onClick={handlePublish}
-              disabled={publishDisabled}
-            />
           )}
         </Stack>
       </Stack>

@@ -2,7 +2,7 @@ import React from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import {
-  AlignJustify,
+  Caption,
   AlignCenter,
   AlignLeft,
   AlignRight,
@@ -41,56 +41,56 @@ const ImageBlockToolbar: React.FC<ImageBlockToolbar> = props => {
           <Stack
             align="center"
             justify="center"
-            customStyle="relative w-6 h-6 rounded-l-sm"
+            customStyle="relative w-8 h-8 rounded-l-sm"
             background={
               showCaption
                 ? { light: 'secondaryLight/30', dark: 'grey7' }
                 : { light: 'grey8', dark: 'grey5' }
             }
           >
-            <Icon icon={<AlignJustify />} customStyle="absolute" />
+            <Icon size="lg" icon={<Caption />} customStyle="absolute" accentColor />
           </Stack>
         </button>
         <button onClick={handleLeftAlignClick}>
           <Stack
             align="center"
             justify="center"
-            customStyle="relative w-6 h-6"
+            customStyle="relative w-8 h-8"
             background={
               alignState === 'start'
                 ? { light: 'secondaryLight/30', dark: 'grey7' }
                 : { light: 'grey8', dark: 'grey5' }
             }
           >
-            <Icon icon={<AlignLeft />} customStyle="absolute" />
+            <Icon size="lg" icon={<AlignLeft />} customStyle="absolute" accentColor />
           </Stack>
         </button>
         <button onClick={handleCenterAlignClick}>
           <Stack
             align="center"
             justify="center"
-            customStyle="relative w-6 h-6"
+            customStyle="relative w-8 h-8"
             background={
               alignState === 'center'
                 ? { light: 'secondaryLight/30', dark: 'grey7' }
                 : { light: 'grey8', dark: 'grey5' }
             }
           >
-            <Icon icon={<AlignCenter />} customStyle="absolute" />
+            <Icon size="lg" icon={<AlignCenter />} customStyle="absolute" accentColor />
           </Stack>
         </button>
         <button onClick={handleRightAlignClick}>
           <Stack
             align="center"
             justify="center"
-            customStyle="relative w-6 h-6 rounded-r-sm"
+            customStyle="relative w-8 h-8 rounded-r-sm"
             background={
               alignState === 'end'
                 ? { light: 'secondaryLight/30', dark: 'grey7' }
                 : { light: 'grey8', dark: 'grey5' }
             }
           >
-            <Icon icon={<AlignRight />} customStyle="absolute" />
+            <Icon size="lg" icon={<AlignRight />} customStyle="absolute" accentColor />
           </Stack>
         </button>
       </Stack>
@@ -99,18 +99,18 @@ const ImageBlockToolbar: React.FC<ImageBlockToolbar> = props => {
           <Stack
             align="center"
             justify="center"
-            customStyle={'h-6 w-6 group relative rounded-full bg(grey9 dark:grey5)'}
+            customStyle={'h-8 w-8 group relative rounded-full bg(grey9 dark:grey5)'}
           >
-            <Icon size="xs" icon={<PencilIcon />} accentColor />
+            <Icon size="md" icon={<PencilIcon />} accentColor />
           </Stack>
         </button>
         <button onClick={handleAddClick}>
           <Stack
             align="center"
             justify="center"
-            customStyle={'h-6 w-6 group relative rounded-full bg(grey9 dark:grey5)'}
+            customStyle={'h-8 w-8 group relative rounded-full bg(grey9 dark:grey5)'}
           >
-            <Icon size="xs" icon={<PlusIcon />} accentColor />
+            <Icon size="md" icon={<PlusIcon />} accentColor />
           </Stack>
         </button>
       </Stack>

@@ -7,9 +7,9 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 export const SlateReadonlyBlock = (
   props: ContentBlockRootProps & { blockRef?: React.RefObject<BlockInstanceMethods> },
 ) => {
-  const content = decodeb64SlateContent(props.content.value);
+  const content = decodeb64SlateContent(props.content.value, props.logger);
   return (
-    <Stack align={'start'}>
+    <Stack>
       <ReadOnlyEditor content={content} />
     </Stack>
   );

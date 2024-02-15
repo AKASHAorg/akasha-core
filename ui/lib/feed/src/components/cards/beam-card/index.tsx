@@ -73,6 +73,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
   return (
     <EntryCard
       entryData={entryData}
+      reflectionsCount={entryData?.reflectionsCount}
       authorProfile={{ data: profileData, loading, error }}
       locale={locale}
       repliesAnchorLink="/@akashaorg/app-akasha-integration/beam"
