@@ -1,7 +1,13 @@
-export const HOME = 'Overview';
+export const HOME = 'Applications';
+export const REVIEW_HUB = 'Content Review Hub';
+export const SETTINGS = 'Console Panel';
 
-export const baseDashboardUrl = '/overview';
+export const baseApplicationsUrl = '/applications';
+export const baseReviewHubUrl = '/dashboard';
+export const baseSettingsUrl = '/settings';
 
 export default {
-  [HOME]: baseDashboardUrl,
+  [HOME]: baseApplicationsUrl,
+  [REVIEW_HUB]: baseReviewHubUrl,
+  [SETTINGS]: baseSettingsUrl,
 };

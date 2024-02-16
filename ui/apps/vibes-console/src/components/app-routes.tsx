@@ -7,16 +7,12 @@ import ErrorBoundary, {
 } from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
-import { Dashboard } from '../pages';
-import routes, { HOME } from '../routes';
+import { Applications, Dashboard, Settings } from '../pages';
+import routes, { HOME, REVIEW_HUB, SETTINGS } from '../routes';
 
 const AppRoutes: React.FC<unknown> = () => {
-  const { baseRouteName, logger, getRoutingPlugin } = useRootComponentProps();
+  const { baseRouteName, logger } = useRootComponentProps();
   const { t } = useTranslation('app-vibes-console');
-
-  const isAuthorised = true;
-
-  const navigateTo = getRoutingPlugin().navigateTo;
 
   const errorBoundaryProps: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
     errorObj: {
@@ -34,7 +30,23 @@ const AppRoutes: React.FC<unknown> = () => {
             path={routes[HOME]}
             element={
               <ErrorBoundary {...errorBoundaryProps}>
-                <Dashboard isAuthorised={isAuthorised} navigateTo={navigateTo} />
+                <Applications />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={routes[REVIEW_HUB]}
+            element={
+              <ErrorBoundary {...errorBoundaryProps}>
+                <Dashboard />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={routes[SETTINGS]}
+            element={
+              <ErrorBoundary {...errorBoundaryProps}>
+                <Settings />
               </ErrorBoundary>
             }
           />
