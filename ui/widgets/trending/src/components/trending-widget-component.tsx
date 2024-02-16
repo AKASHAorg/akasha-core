@@ -1,15 +1,19 @@
 import React, { useMemo } from 'react';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import TrendingWidgetLoadingCard from '@akashaorg/design-system-components/lib/components/TrendingWidgetLoadingCard';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import { useTranslation } from 'react-i18next';
 import { useRootComponentProps, getFollowList, hasOwn, useGetLogin } from '@akashaorg/ui-awf-hooks';
-import { useGetProfilesQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 import {
   useGetInterestsStreamQuery,
   useGetInterestsByDidQuery,
   useGetFollowDocumentsByDidQuery,
+  useGetProfileStreamQuery,
+  useGetProfileByIdQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { LatestProfiles, LatestTopics } from './cards';
 import { useGetIndexingDID } from '@akashaorg/ui-awf-hooks/lib/use-settings';
 
@@ -21,10 +25,6 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
   const { plugins, uiEvents, logger, navigateToModal } = useRootComponentProps();
   const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
-  const latestProfilesReq = useGetProfilesQuery(
-    { last: 4 },
-    { select: result => result?.akashaProfileIndex?.edges.map(profile => profile.node) },
-  );
   const currentIndexingDID = useGetIndexingDID();
   const {
     data: latestTopicsReqData,
@@ -41,20 +41,35 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
       variables: { id: authenticatedDID },
       skip: !isLoggedIn,
     });
-  const latestProfiles = useMemo(() => latestProfilesReq.data || [], [latestProfilesReq.data]);
+  const latestProfilesReq = useGetProfileStreamQuery({
+    variables: {
+      last: 4,
+      indexer: currentIndexingDID,
+    },
+  });
+  const latestProfiles: string[] = useMemo(() => {
+    if (
+      latestProfilesReq.data?.node &&
+      hasOwn(latestProfilesReq.data.node, 'akashaProfileStreamList')
+    ) {
+      return (
+        latestProfilesReq.data.node.akashaProfileStreamList?.edges?.map(
+          edge => edge.node?.profileID || '',
+        ) || []
+      );
+    }
+    return [];
+  }, [latestProfilesReq.data]);
 
-  const followProfileIds = useMemo(
-    () => latestProfiles.map(follower => follower.id),
-    [latestProfiles],
-  );
+  useGetProfileByIdQuery({ variables: { id: '' } });
 
   const { data: followDocuments } = useGetFollowDocumentsByDidQuery({
     variables: {
       id: authenticatedDID,
-      following: followProfileIds,
-      last: followProfileIds.length,
+      following: latestProfiles,
+      last: latestProfiles.length,
     },
-    skip: !isLoggedIn || !followProfileIds.length,
+    skip: !isLoggedIn || !latestProfiles.length,
   });
 
   const latestTopics =
@@ -86,6 +101,8 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
       )
     : null;
 
+  const BaseTabPanelStyles = 'ring(white opacity-60  offset(2 blue-400)) focus:outline-none';
+
   const showLoginModal = () => {
     navigateToModal({ name: 'login' });
   };
@@ -104,9 +121,11 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
     });
   };
 
+  if (latestProfilesReq.loading) return <TrendingWidgetLoadingCard />;
+
   return (
     <Stack spacing="gap-y-4">
-      {(latestTopicsError || latestProfilesReq.isError) && (
+      {(latestTopicsError || latestProfilesReq.error) && (
         <ErrorLoader
           type="script-error"
           title={t('Oops, this widget has an error')}
@@ -144,7 +163,7 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
         </ErrorBoundary>
       )}
 
-      {!latestProfilesReq.isError && (
+      {!latestProfilesReq.error && (
         <ErrorBoundary
           errorObj={{
             type: 'script-error',
@@ -152,17 +171,34 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
           }}
           logger={logger}
         >
-          <LatestProfiles
-            titleLabel={t('Start Following')}
-            noProfilesLabel={t('No profiles found!')}
-            isLoadingProfiles={latestProfilesReq.isFetching}
-            profiles={latestProfiles}
-            followList={followList}
-            isLoggedIn={isLoggedIn}
-            authenticatedDID={authenticatedDID}
-            uiEvents={uiEvents}
-            onClickProfile={handleProfileClick}
-          />
+          {latestProfiles?.length === 0 ? (
+            <Stack justify="center" align="center" customStyle="py-2">
+              <Text>{t('No profiles found!')}</Text>
+            </Stack>
+          ) : (
+            <Card padding={16}>
+              <Stack customStyle="mb-4">
+                <Text variant="button-md" weight="bold">
+                  {t('Start Following')}
+                </Text>
+              </Stack>
+              <Stack customStyle={BaseTabPanelStyles}>
+                <Stack spacing="gap-y-4">
+                  {latestProfiles.map(profileID => (
+                    <LatestProfiles
+                      key={profileID}
+                      profileID={profileID}
+                      followList={followList}
+                      isLoggedIn={isLoggedIn}
+                      authenticatedDID={authenticatedDID}
+                      uiEvents={uiEvents}
+                      onClickProfile={handleProfileClick}
+                    />
+                  ))}
+                </Stack>
+              </Stack>
+            </Card>
+          )}
         </ErrorBoundary>
       )}
     </Stack>
