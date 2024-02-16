@@ -5,6 +5,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import EntrySectionLoading from './entry-section-loading';
 import BeamSection from './beam-section';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import EditableReflection from '@akashaorg/ui-lib-feed/lib/components/editable-reflection';
 import { useParams } from 'react-router-dom';
 import {
   createReactiveVar,
@@ -19,7 +20,6 @@ import { useTranslation } from 'react-i18next';
 import { EntityTypes, type ReflectEntryData } from '@akashaorg/typings/lib/ui';
 import { ReflectFeed, ReflectionPreview } from '@akashaorg/ui-lib-feed';
 import { useGetBeamByIdSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import EditableReflection from '@akashaorg/ui-lib-feed/lib/components/editable-reflection';
 import { PendingReflect } from '../../reflect-editor/pending-reflect';
 import { usePendingReflections } from '@akashaorg/ui-awf-hooks/lib/use-pending-reflections';
 
