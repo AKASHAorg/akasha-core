@@ -167,6 +167,7 @@
       "ui/apps/profile",
       "ui/apps/search",
       "ui/apps/routing",
+      "ui/apps/vibes-console",
       "examples/ui/akasha.world",
       "tools/executors",
       "tools/composedb"

@@ -5,7 +5,7 @@ import { renderWithAllProviders, act, cleanup } from '@akashaorg/af-testing';
 import { Dashboard } from '../../pages';
 
 describe('<Overview /> component', () => {
-  const Base = <Dashboard navigateTo={jest.fn()} isAuthorised={true} />;
+  const Base = <Dashboard />;
 
   let componentWrapper = renderWithAllProviders(<></>, {});
 
@@ -21,6 +21,6 @@ describe('<Overview /> component', () => {
   });
 
   it('should render component', async () => {
-    expect(componentWrapper.getByText(/overview/i)).toBeInTheDocument();
+    expect(componentWrapper.getByText(/content review/i)).toBeInTheDocument();
   });
 });
