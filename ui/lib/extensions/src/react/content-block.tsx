@@ -167,12 +167,14 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
     },
     [logger, onError],
   );
+
   const blockId = React.useMemo(() => {
     if (readMode && hasOwn(readMode, 'blockID')) {
       return readMode.blockID;
     }
     return 0;
   }, [readMode]);
+
   return (
     <React.Suspense
       fallback={
