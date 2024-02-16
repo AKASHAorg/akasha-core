@@ -482,7 +482,7 @@ export const VirtualListRenderer = React.forwardRef(
         style={{
           position: 'relative',
           minHeight: Number.isFinite(state.listHeight)
-            ? state.listHeight
+            ? state.listHeight || getItemHeight(HEADER_COMPONENT)
             : viewport.getDocumentViewportHeight(),
         }}
       >
