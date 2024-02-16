@@ -41,35 +41,35 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
       variables: { id: authenticatedDID },
       skip: !isLoggedIn,
     });
-  const latestProfilesReq = useGetProfileStreamQuery({
+  const latestProfileStreamReq = useGetProfileStreamQuery({
     variables: {
       last: 4,
       indexer: currentIndexingDID,
     },
   });
-  const latestProfiles: string[] = useMemo(() => {
+  const latestProfileIDs: string[] = useMemo(() => {
     if (
-      latestProfilesReq.data?.node &&
-      hasOwn(latestProfilesReq.data.node, 'akashaProfileStreamList')
+      latestProfileStreamReq.data?.node &&
+      hasOwn(latestProfileStreamReq.data.node, 'akashaProfileStreamList')
     ) {
       return (
-        latestProfilesReq.data.node.akashaProfileStreamList?.edges?.map(
+        latestProfileStreamReq.data.node.akashaProfileStreamList?.edges?.map(
           edge => edge.node?.profileID || '',
         ) || []
       );
     }
     return [];
-  }, [latestProfilesReq.data]);
+  }, [latestProfileStreamReq.data]);
 
   useGetProfileByIdQuery({ variables: { id: '' } });
 
   const { data: followDocuments } = useGetFollowDocumentsByDidQuery({
     variables: {
       id: authenticatedDID,
-      following: latestProfiles,
-      last: latestProfiles.length,
+      following: latestProfileIDs,
+      last: latestProfileIDs.length,
     },
-    skip: !isLoggedIn || !latestProfiles.length,
+    skip: !isLoggedIn || !latestProfileIDs.length,
   });
 
   const latestTopics =
@@ -101,8 +101,6 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
       )
     : null;
 
-  const BaseTabPanelStyles = 'ring(white opacity-60  offset(2 blue-400)) focus:outline-none';
-
   const showLoginModal = () => {
     navigateToModal({ name: 'login' });
   };
@@ -121,11 +119,9 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
     });
   };
 
-  if (latestProfilesReq.loading) return <TrendingWidgetLoadingCard />;
-
   return (
     <Stack spacing="gap-y-4">
-      {(latestTopicsError || latestProfilesReq.error) && (
+      {(latestTopicsError || latestProfileStreamReq.error) && (
         <ErrorLoader
           type="script-error"
           title={t('Oops, this widget has an error')}
@@ -163,7 +159,7 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
         </ErrorBoundary>
       )}
 
-      {!latestProfilesReq.error && (
+      {!latestProfileStreamReq.error && (
         <ErrorBoundary
           errorObj={{
             type: 'script-error',
@@ -171,34 +167,43 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
           }}
           logger={logger}
         >
-          {latestProfiles?.length === 0 ? (
-            <Stack justify="center" align="center" customStyle="py-2">
-              <Text>{t('No profiles found!')}</Text>
-            </Stack>
-          ) : (
-            <Card padding={16}>
-              <Stack customStyle="mb-4">
-                <Text variant="button-md" weight="bold">
-                  {t('Start Following')}
-                </Text>
-              </Stack>
-              <Stack customStyle={BaseTabPanelStyles}>
-                <Stack spacing="gap-y-4">
-                  {latestProfiles.map(profileID => (
-                    <LatestProfiles
-                      key={profileID}
-                      profileID={profileID}
-                      followList={followList}
-                      isLoggedIn={isLoggedIn}
-                      authenticatedDID={authenticatedDID}
-                      uiEvents={uiEvents}
-                      onClickProfile={handleProfileClick}
-                    />
-                  ))}
-                </Stack>
-              </Stack>
-            </Card>
-          )}
+          <>
+            {latestProfileStreamReq.loading && <TrendingWidgetLoadingCard />}
+            {latestProfileStreamReq.data && (
+              <>
+                {latestProfileIDs?.length === 0 ? (
+                  <Stack justify="center" align="center" customStyle="py-2">
+                    <Text>{t('No profiles found!')}</Text>
+                  </Stack>
+                ) : (
+                  <Card padding={16}>
+                    <Stack customStyle="mb-4">
+                      <Text variant="button-md" weight="bold">
+                        {t('Start Following')}
+                      </Text>
+                    </Stack>
+                    <Stack
+                      customStyle={'ring(white opacity-60  offset(2 blue-400)) focus:outline-none'}
+                    >
+                      <Stack spacing="gap-y-4">
+                        {latestProfileIDs.map(profileID => (
+                          <LatestProfiles
+                            key={profileID}
+                            profileID={profileID}
+                            followList={followList}
+                            isLoggedIn={isLoggedIn}
+                            authenticatedDID={authenticatedDID}
+                            uiEvents={uiEvents}
+                            onClickProfile={handleProfileClick}
+                          />
+                        ))}
+                      </Stack>
+                    </Stack>
+                  </Card>
+                )}
+              </>
+            )}
+          </>
         </ErrorBoundary>
       )}
     </Stack>

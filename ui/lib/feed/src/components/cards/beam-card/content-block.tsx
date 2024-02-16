@@ -28,8 +28,8 @@ const ContentBlock: React.FC<ContentBlockType> = props => {
       ? contentBlockReq.data.node
       : null;
   }, [contentBlockReq.data]);
-  const blockName = blockData?.content?.[0]?.propertyType;
-  const appName = blockData?.content?.[0]?.label;
+  const contentBlockPropertyType = blockData?.content?.[0]?.propertyType;
+  const contentBlockLabel = blockData?.content?.[0]?.label;
   const showNSFWCard = blockData?.nsfw && (!showNsfwContent || !authenticatedDID);
 
   const showLoginModal = () => {
@@ -38,10 +38,11 @@ const ContentBlock: React.FC<ContentBlockType> = props => {
 
   useEffect(() => {
     _onBlockInfoChange.current?.({
-      appName: APP_NAME_TO_DISPLAY_NAME_MAP[appName],
-      blockName,
+      appName: BLOCK_LABEL_TO_APP_DISPLAY_NAME_MAP[contentBlockLabel],
+      blockName:
+        contentBlockPropertyType /*@TODO need to fetch the proper human readable block name*/,
     });
-  }, [appName, blockName]);
+  }, [contentBlockPropertyType, contentBlockLabel]);
 
   return (
     <>
@@ -80,8 +81,8 @@ const ContentBlock: React.FC<ContentBlockType> = props => {
   );
 };
 
-//@TODO fetch app's display name from content block hook
-const APP_NAME_TO_DISPLAY_NAME_MAP = {
+//@TODO properly fetch app's display name
+const BLOCK_LABEL_TO_APP_DISPLAY_NAME_MAP = {
   '@akashaorg/app-akasha-integration': 'Antenna',
 };
 

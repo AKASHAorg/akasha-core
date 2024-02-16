@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
-import TrendingWidgetLoadingCard from '@akashaorg/design-system-components/lib/components/TrendingWidgetLoadingCard';
+import TrendingWidgetItemLoader from '@akashaorg/design-system-components/lib/components/TrendingWidgetLoadingCard/trending-widget-item-loader';
 import { FollowList, RootComponentProps } from '@akashaorg/typings/lib/ui';
 import { hasOwn, transformSource } from '@akashaorg/ui-awf-hooks';
 import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
@@ -30,39 +30,41 @@ export const LatestProfiles: React.FC<LatestProfilesProps> = props => {
     return null;
   }, [profileReq.data?.node]);
 
-  if (profileReq.loading) return <TrendingWidgetLoadingCard />;
+  if (profileReq.loading) return <TrendingWidgetItemLoader />;
 
   return (
-    <Stack
-      key={profileData.id}
-      direction="row"
-      align="center"
-      justify="between"
-      spacing="gap-x-3"
-      customStyle="w-(full xl:[19rem])"
-    >
-      <ProfileAvatarButton
-        profileId={profileData.did.id}
-        label={profileData.name}
-        size="md"
-        avatar={transformSource(profileData?.avatar?.default)}
-        alternativeAvatars={profileData?.avatar?.alternatives?.map(alternative =>
-          transformSource(alternative),
-        )}
-        onClick={() => onClickProfile(profileData.did.id)}
-      />
-
-      {authenticatedDID !== profileData.did.id && (
-        <Extension
-          name={`follow_${profileData.id}`}
-          extensionData={{
-            profileID: profileData.id,
-            isFollowing: followList?.get(profileData.id)?.isFollowing,
-            isLoggedIn,
-            followId: followList?.get(profileData.id)?.id,
-          }}
+    profileData && (
+      <Stack
+        key={profileData.id}
+        direction="row"
+        align="center"
+        justify="between"
+        spacing="gap-x-3"
+        customStyle="w-(full xl:[19rem])"
+      >
+        <ProfileAvatarButton
+          profileId={profileData.did.id}
+          label={profileData.name}
+          size="md"
+          avatar={transformSource(profileData?.avatar?.default)}
+          alternativeAvatars={profileData?.avatar?.alternatives?.map(alternative =>
+            transformSource(alternative),
+          )}
+          onClick={() => onClickProfile(profileData.did.id)}
         />
-      )}
-    </Stack>
+
+        {authenticatedDID !== profileData.did.id && (
+          <Extension
+            name={`follow_${profileData.id}`}
+            extensionData={{
+              profileID: profileData.id,
+              isFollowing: followList?.get(profileData.id)?.isFollowing,
+              isLoggedIn,
+              followId: followList?.get(profileData.id)?.id,
+            }}
+          />
+        )}
+      </Stack>
+    )
   );
 };
