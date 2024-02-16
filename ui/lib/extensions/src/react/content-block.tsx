@@ -162,12 +162,11 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
     },
     [logger, onError],
   );
+  
   const blockId = React.useMemo(() => {
-    if (readMode.blockID) {
-      return readMode.blockID;
-    }
-    return 0;
+    return readMode?.blockID ?? 0;
   }, [readMode]);
+  
   return (
     <React.Suspense
       fallback={
