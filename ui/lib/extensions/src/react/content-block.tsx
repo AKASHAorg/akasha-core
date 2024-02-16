@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import {
   type BlockInstanceMethods,
@@ -31,23 +31,20 @@ export type ContentBlockExtensionProps = {
     appName: string;
     externalHandler?: (value: never) => void;
   };
-  readMode?: {
-    blockID: string;
-  };
+  readMode?:
+    | {
+        blockID: string;
+      }
+    | { blockData?: GetContentBlockByIdQuery['node'] };
   blockRef?: React.RefObject<BlockInstanceMethods>;
-  hideContent?: boolean;
-  children?: (props: {
-    blockData: MatchingBlock['blockData'];
-    blockInfo: MatchingBlock['blockInfo'];
-  }) => ReactElement;
   onError?: (error: Error) => void;
 };
 
 export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
-  const { blockRef, mode, editMode, readMode, onError, hideContent, children } = props;
+  const { blockRef, mode, editMode, readMode, onError } = props;
   const { getExtensionsPlugin, getContext, logger } = useRootComponentProps();
-  const contentBlockStoreRef = React.useRef(getExtensionsPlugin()?.contentBlockStore);
-  const [state, setState] = React.useState<{
+  const contentBlockStoreRef = useRef(getExtensionsPlugin()?.contentBlockStore);
+  const [state, setState] = useState<{
     parcels: (MatchingBlock & { config: ParcelConfigObject })[];
     isMatched: boolean;
   }>({
@@ -63,15 +60,27 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
 
   const [fetchBlockInfo, blockInfoQuery] = useGetContentBlockByIdLazyQuery();
 
+  const blockData = useMemo(() => {
+    if (readMode && hasOwn(readMode, 'blockData')) {
+      if (readMode.blockData && hasOwn(readMode.blockData, 'id')) {
+        return readMode.blockData;
+      }
+    }
+    if (blockInfoQuery.data?.node && hasOwn(blockInfoQuery.data?.node, 'id')) {
+      return blockInfoQuery.data?.node;
+    }
+    return null;
+  }, [readMode, blockInfoQuery]);
+
   useEffect(() => {
-    if (readMode?.blockID) {
+    if (readMode && hasOwn(readMode, 'blockID')) {
       fetchBlockInfo({
         variables: {
           id: readMode?.blockID,
         },
       }).catch(err => console.error('Failed to fetch content block. Error', err));
     }
-  }, [fetchBlockInfo, readMode?.blockID]);
+  }, [fetchBlockInfo, readMode]);
 
   useEffect(() => {
     return () => {
@@ -91,12 +100,12 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
           propertyType: editMode.propertyType,
         });
       case ContentBlockModes.READONLY:
-        if (!blockInfoQuery.data?.node) return [];
-        return contentBlockStoreRef.current.getMatchingBlocks(blockInfoQuery.data.node);
+        if (!blockData) return [];
+        return contentBlockStoreRef.current.getMatchingBlocks(blockData);
       default:
         return [];
     }
-  }, [mode, editMode, blockInfoQuery.data]);
+  }, [mode, editMode, blockData]);
 
   useLayoutEffect(() => {
     const resolveConfigs = async () => {
@@ -143,15 +152,11 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
 
   const appInfo = useMemo(() => {
     if (blockInfoQuery.called && !blockInfoQuery.loading) {
-      if (
-        blockInfoQuery.data?.node &&
-        hasOwn(blockInfoQuery.data.node, 'appVersion') &&
-        blockInfoQuery.data.node.appVersion?.application
-      ) {
-        return blockInfoQuery.data.node.appVersion.application;
+      if (blockData && blockData.appVersion?.application) {
+        return blockData.appVersion.application;
       }
     }
-  }, [blockInfoQuery]);
+  }, [blockInfoQuery, blockData]);
 
   const handleParcelError = React.useCallback(
     (parcelName: string) => {
@@ -163,7 +168,7 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
     [logger, onError],
   );
   const blockId = React.useMemo(() => {
-    if (readMode.blockID) {
+    if (readMode && hasOwn(readMode, 'blockID')) {
       return readMode.blockID;
     }
     return 0;
@@ -222,31 +227,24 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
             id={`${mode}_${matchingBlock.blockInfo.propertyType}_${blockId}_${index}`}
             key={`${mode}_${matchingBlock.blockInfo.propertyType}_${blockId}_${index}`}
           >
-            {!hideContent && (
-              <RootParcel
-                config={{
-                  ...matchingBlock.config,
-                  name: `${matchingBlock.blockInfo.appName}_${matchingBlock.blockInfo.propertyType}_${blockId}_${index}`,
-                }}
-                {...getContext()}
-                blockInfo={{
-                  ...matchingBlock.blockInfo,
-                  mode,
-                  externalHandler: editMode?.externalHandler,
-                }}
-                blockData={matchingBlock.blockData}
-                blockRef={blockRef}
-                content={matchingBlock.content}
-                handleError={handleParcelError(
-                  `${matchingBlock.blockInfo.appName}_${matchingBlock.blockInfo.propertyType}_${blockId}_${index}`,
-                )}
-              />
-            )}
-
-            {children?.({
-              blockData: matchingBlock.blockData,
-              blockInfo: matchingBlock.blockInfo,
-            })}
+            <RootParcel
+              config={{
+                ...matchingBlock.config,
+                name: `${matchingBlock.blockInfo.appName}_${matchingBlock.blockInfo.propertyType}_${blockId}_${index}`,
+              }}
+              {...getContext()}
+              blockInfo={{
+                ...matchingBlock.blockInfo,
+                mode,
+                externalHandler: editMode?.externalHandler,
+              }}
+              blockData={matchingBlock.blockData}
+              blockRef={blockRef}
+              content={matchingBlock.content}
+              handleError={handleParcelError(
+                `${matchingBlock.blockInfo.appName}_${matchingBlock.blockInfo.propertyType}_${blockId}_${index}`,
+              )}
+            />
           </Stack>
         );
       })}
