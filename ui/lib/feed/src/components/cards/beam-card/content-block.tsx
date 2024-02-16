@@ -49,7 +49,10 @@ const ContentBlock: React.FC<ContentBlockType> = props => {
       : nsfw && (!showNsfw || !authenticatedDID) && !showNsfwContent;
 
   const showLoginModal = () => {
-    navigateToModal({ name: 'login' });
+    navigateToModal({
+      name: 'login',
+      message: 'To view explicit or sensitive content, please connect to confirm your consent.',
+    });
   };
 
   useEffect(() => {

@@ -18,6 +18,8 @@ const LoginModal = (props: RootExtensionProps) => {
   const { getRoutingPlugin, getModalFromParams } = useRootComponentProps();
   const modal = getModalFromParams(window.location);
 
+  console.log('modal', modal);
+
   const handleModalClose = () => {
     window.history.replaceState(null, null, location.pathname);
   };
@@ -50,7 +52,9 @@ const LoginModal = (props: RootExtensionProps) => {
     >
       <Stack align="center" fullWidth={true} spacing="gap-y-2">
         <Text variant="body1" align="center">
-          {t('To continue you need an AKASHA World account')}
+          {modal?.message
+            ? t('{{modal.message}}', modal.message)
+            : t('To continue you need an AKASHA World account')}
         </Text>
       </Stack>
     </Modal>

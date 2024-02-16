@@ -21,6 +21,7 @@ export type NavigateToParams = RequireAtLeastOne<NavigationOptions, 'appName' | 
 
 export interface ModalNavigationOptions {
   name: string;
+  message?: string;
   did?: string;
   itemId?: string;
   itemType?: EntityTypes;
