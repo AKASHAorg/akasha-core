@@ -1,5 +1,5 @@
 import React from 'react';
-import { useGetBeamStreamLazyQuery } from './generated/apollo';
+import { useGetBeamStreamLazyQuery, useGetBeamsByAuthorDidLazyQuery } from './generated/apollo';
 import {
   type AkashaBeamStreamFiltersInput,
   type AkashaBeamStreamSortingInput,
@@ -10,6 +10,8 @@ import {
 import type {
   GetBeamStreamQuery,
   GetBeamStreamQueryVariables,
+  GetBeamsByAuthorDidQuery,
+  GetBeamsByAuthorDidQueryVariables,
 } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 import { ApolloError } from '@apollo/client';
 import { hasOwn } from './utils/has-own';
@@ -21,18 +23,18 @@ export type UseBeamsOptions = {
   overscan: number;
   filters?: AkashaBeamStreamFiltersInput;
   sorting?: AkashaBeamStreamSortingInput;
+  did?: string;
 };
 
 const defaultSorting: AkashaBeamStreamSortingInput = {
   createdAt: SortOrder.Desc,
 };
 
-export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
+export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) => {
   const [state, setState] = React.useState<{
-    beams: Exclude<
-      GetBeamStreamQuery['node'],
-      Record<string, never>
-    >['akashaBeamStreamList']['edges'];
+    beams:
+      | Exclude<GetBeamStreamQuery['node'], Record<string, never>>['akashaBeamStreamList']['edges']
+      | Exclude<GetBeamsByAuthorDidQuery['node'], Record<string, never>>['akashaBeamList']['edges'];
     pageInfo?: PageInfo;
   }>({ beams: [] });
 
@@ -41,6 +43,7 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
   const { showNsfw } = useNsfwToggling();
   const { data: loginData, loading: authenticating } = useGetLogin();
   const isLoggedIn = !!loginData?.id;
+  const indexingDID = React.useRef(getSDK().services.gql.indexingDID);
 
   const mergedVars: GetBeamStreamQueryVariables = React.useMemo(() => {
     const vars: {
@@ -58,26 +61,48 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
     return vars;
   }, [sdk.services.gql.indexingDID, sorting, filters]);
 
-  const [fetchBeams, beamsQuery] = useGetBeamStreamLazyQuery({
-    variables: {
-      ...mergedVars,
-      first: overscan,
-    },
+  const getterHook = did ? useGetBeamsByAuthorDidLazyQuery : useGetBeamStreamLazyQuery;
+
+  const [fetchBeams, beamsQuery] = getterHook({
+    variables: did
+      ? {
+          ...mergedVars,
+          id: did,
+          indexer: undefined,
+          first: overscan,
+        } /* satisfies GetBeamsByAuthorDidQueryVariables */
+      : ({
+          ...mergedVars,
+          first: overscan,
+          id: undefined,
+          indexer: indexingDID.current,
+        } satisfies GetBeamStreamQueryVariables & GetBeamsByAuthorDidQueryVariables),
   });
 
   const beamCursors = React.useMemo(() => new Set(state.beams.map(b => b.cursor)), [state]);
 
   const extractData = React.useCallback(
     (
-      results: GetBeamStreamQuery,
+      results: GetBeamStreamQuery | GetBeamsByAuthorDidQuery,
     ): {
-      edges: Exclude<
-        GetBeamStreamQuery['node'],
-        Record<string, never>
-      >['akashaBeamStreamList']['edges'];
+      edges:
+        | Exclude<
+            GetBeamStreamQuery['node'],
+            Record<string, never>
+          >['akashaBeamStreamList']['edges']
+        | Exclude<
+            GetBeamsByAuthorDidQuery['node'],
+            Record<string, never>
+          >['akashaBeamList']['edges'];
 
       pageInfo: PageInfo;
     } => {
+      if (hasOwn(results, 'node') && results.node && hasOwn(results.node, 'akashaBeamList')) {
+        return {
+          edges: results.node.akashaBeamList.edges.filter(edge => !beamCursors.has(edge.cursor)),
+          pageInfo: results.node.akashaBeamList.pageInfo,
+        };
+      }
       if (hasOwn(results, 'node') && results.node && hasOwn(results.node, 'akashaBeamStreamList')) {
         return {
           edges: results.node.akashaBeamStreamList.edges.filter(
@@ -95,13 +120,22 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
   const fetchNextPage = async (lastCursor: string) => {
     if (beamsQuery.loading || beamsQuery.error || !lastCursor) return;
 
-    const variables = {
-      variables: {
-        after: lastCursor,
-        sorting: { createdAt: SortOrder.Desc },
-        indexer: sdk.services.gql.indexingDID,
-      },
-    };
+    const variables = did
+      ? {
+          variables: {
+            id: did,
+            after: lastCursor,
+            sorting: { createdAt: SortOrder.Desc },
+            indexer: undefined,
+          },
+        }
+      : {
+          variables: {
+            after: lastCursor,
+            sorting: { createdAt: SortOrder.Desc },
+            indexer: indexingDID.current,
+          },
+        };
     try {
       const results = await beamsQuery.fetchMore(variables);
       if (results.error) {
@@ -110,14 +144,38 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
       if (!results.data) return;
       const { edges, pageInfo } = extractData(results.data);
 
-      setState(prev => ({
-        beams: [...prev.beams, ...edges],
-        pageInfo: {
-          ...prev.pageInfo,
-          endCursor: pageInfo.endCursor,
-          hasNextPage: pageInfo.hasNextPage,
-        },
-      }));
+      setState(
+        prev =>
+          ({
+            beams: [
+              ...prev.beams,
+              ...edges.filter(edge => {
+                const isNewBeam = !prev.beams.some(beam => beam.cursor === edge.cursor);
+                if (!isNewBeam) {
+                  console.warn('on fetchNextPage, beam cursor:', edge.cursor, 'already added!');
+                }
+                return isNewBeam;
+              }),
+            ],
+            pageInfo: {
+              ...prev.pageInfo,
+              endCursor: pageInfo.endCursor,
+              hasNextPage: pageInfo.hasNextPage,
+            },
+          }) as {
+            /* needs a better type assertion approach to get rid of a typescript error message */
+            beams:
+              | Exclude<
+                  GetBeamStreamQuery['node'],
+                  Record<string, never>
+                >['akashaBeamStreamList']['edges']
+              | Exclude<
+                  GetBeamsByAuthorDidQuery['node'],
+                  Record<string, never>
+                >['akashaBeamList']['edges'];
+            pageInfo?: PageInfo;
+          },
+      );
     } catch (err) {
       setErrors(prev => prev.concat(err));
     }
@@ -138,21 +196,46 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
       }
       if (!results.data) return;
       const { edges, pageInfo } = extractData(results.data);
-      setState(prev => ({
-        beams: [...edges.reverse(), ...prev.beams],
-        pageInfo: {
-          ...prev.pageInfo,
-          startCursor: pageInfo.endCursor,
-          hasPreviousPage: pageInfo.hasNextPage,
-        },
-      }));
+
+      setState(
+        prev =>
+          ({
+            beams: [
+              ...edges.reverse().filter(edge => {
+                const isNewBeam = !prev.beams.some(beam => beam.cursor === edge.cursor);
+                if (!isNewBeam) {
+                  console.warn('on fetch prev page, beam cursor', edge.cursor, 'already added!');
+                }
+                return isNewBeam;
+              }),
+              ...prev.beams,
+            ],
+            pageInfo: {
+              ...prev.pageInfo,
+              startCursor: pageInfo.endCursor,
+              hasPreviousPage: pageInfo.hasNextPage,
+            },
+          }) as {
+            /* needs a better type assertion approach to get rid of a typescript error message */
+            beams:
+              | Exclude<
+                  GetBeamStreamQuery['node'],
+                  Record<string, never>
+                >['akashaBeamStreamList']['edges']
+              | Exclude<
+                  GetBeamsByAuthorDidQuery['node'],
+                  Record<string, never>
+                >['akashaBeamList']['edges'];
+            pageInfo?: PageInfo;
+          },
+      );
     } catch (err) {
       setErrors(prev => prev.concat(err));
     }
   };
 
   const fetchInitialBeams = React.useCallback(
-    async (variables?: GetBeamStreamQueryVariables) => {
+    async (variables?: GetBeamsByAuthorDidQueryVariables & GetBeamStreamQueryVariables) => {
       try {
         const results = await fetchBeams({ variables });
         if (results.error) {
@@ -200,13 +283,19 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
        * filters out NSFW content) and the user is logged in and their NSFW setting is off.
        * 2. The app is still waiting for authentication data from the hook.
        **/
-      if ((beamsQuery.called && !(!isLoggedIn && !authenticating && showNsfw)) || authenticating)
-        return;
+      // if ((beamsQuery.called && !(!isLoggedIn && !authenticating && showNsfw)) || authenticating)
+      //   return;
+      if (state.beams.length) {
+        setState({
+          beams: [],
+        });
+      }
 
-      const initialVars: GetBeamStreamQueryVariables = {
+      const initialVars: GetBeamStreamQueryVariables & GetBeamsByAuthorDidQueryVariables = {
         ...mergedVars,
         sorting: { createdAt: SortOrder.Desc },
-        indexer: sdk.services.gql.indexingDID,
+        id: did ?? undefined,
+        indexer: did ? undefined : indexingDID.current,
       };
 
       /**
@@ -218,7 +307,7 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
             { where: { status: { equalTo: AkashaBeamStreamModerationStatus.Ok } } },
             { where: { status: { isNull: true } } },
           ],
-        };
+        } as AkashaBeamStreamFiltersInput;
       }
 
       /**
@@ -236,7 +325,7 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
             },
             { where: { status: { isNull: true } } },
           ],
-        };
+        } as AkashaBeamStreamFiltersInput;
       }
 
       if (restoreItem) {
@@ -246,15 +335,7 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
 
       await fetchInitialBeams(initialVars);
     },
-    [
-      authenticating,
-      beamsQuery.called,
-      fetchInitialBeams,
-      isLoggedIn,
-      mergedVars,
-      sdk.services.gql.indexingDID,
-      showNsfw,
-    ],
+    [did, fetchInitialBeams, state.beams.length, authenticating, isLoggedIn, showNsfw],
   );
 
   React.useEffect(() => {
@@ -275,12 +356,18 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
      * from the function because the existing beamCursors will contain the data.cursor).
      * Maybe a better approach?
      **/
-    if (!isLoggedIn && !authenticating && showNsfw) {
-      beamCursors.clear();
-    }
-    if (!authenticating || showNsfw || isLoggedIn) {
-      fetchInitialData();
-    }
+    // if (!isLoggedIn && !authenticating && showNsfw) {
+    //   beamCursors.clear();
+    // }
+    // if (!authenticating && showNsfw && isLoggedIn) {
+    //   fetchInitialData();
+    // }
+    // if (!authenticating && !showNsfw && isLoggedIn) {
+    //   fetchInitialData();
+    // }
+    // if (!authenticating || showNsfw || isLoggedIn) {
+    //   fetchInitialData();
+    // }
   }, [showNsfw, isLoggedIn, authenticating]);
 
   const handleReset = async () => {
@@ -298,6 +385,7 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
     fetchNextPage,
     fetchPreviousPage,
     isLoading: beamsQuery.loading,
+    called: beamsQuery.called,
     hasNextPage: state.pageInfo?.hasNextPage,
     hasPreviousPage: state.pageInfo?.hasPreviousPage,
     onReset: handleReset,

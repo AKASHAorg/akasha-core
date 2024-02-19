@@ -40,8 +40,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
     onContentClick,
     ...rest
   } = props;
-  const { getRoutingPlugin } = useRootComponentProps();
-  const { getTranslationPlugin } = useRootComponentProps();
+  const { getRoutingPlugin, getTranslationPlugin } = useRootComponentProps();
   const { data } = useGetLogin();
   const [appName, setAppName] = useState('');
   const [blockNameMap, setBlockNameMap] = useState(new Map());
@@ -84,6 +83,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
   return (
     <EntryCard
       entryData={entryData}
+      reflectionsCount={entryData?.reflectionsCount}
       authorProfile={{ data: profileData, loading, error }}
       locale={locale}
       repliesAnchorLink="/@akashaorg/app-akasha-integration/beam"

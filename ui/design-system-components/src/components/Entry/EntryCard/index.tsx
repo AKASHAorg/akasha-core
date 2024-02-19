@@ -79,6 +79,7 @@ export type EntryCardProps = {
   hover?: boolean;
   editable?: boolean;
   actionsRight?: ReactNode;
+  reflectionsCount?: number;
   customStyle?: CSSProperties;
   ref?: Ref<HTMLDivElement>;
   onReflect?: () => void;
@@ -120,6 +121,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     lastEntry,
     hover,
     actionsRight,
+    reflectionsCount,
     onAvatarClick,
     onTagClick,
     onContentClick,
@@ -327,6 +329,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
           repliesAnchorLink={repliesAnchorLink}
           disableActions={disableActions || !entryData.active}
           actionsRight={actionsRight}
+          reflectionsCount={reflectionsCount}
           onReflect={onReflect}
         />
       )}

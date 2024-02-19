@@ -8,7 +8,7 @@ import {
   decodeb64SlateContent,
   getLinkPreview,
   transformSource,
-  serializeSlateToBase64,
+  encodeSlateToBase64,
   useAnalytics,
   useRootComponentProps,
   useGetLoginProfile,
@@ -52,7 +52,9 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
   const tagSearch = null;
 
   useEffect(() => {
-    setEditorState(entryData.content.flatMap(item => decodeb64SlateContent(item.value)));
+    async () => {
+      setEditorState(entryData.content.flatMap(item => decodeb64SlateContent(item.value)));
+    };
   }, [entryData.content]);
 
   const [editReflection, { loading: editInProgress }] = useUpdateAkashaReflectMutation({
@@ -105,7 +107,7 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
       {
         label: data.metadata.app,
         propertyType: 'slate-block',
-        value: serializeSlateToBase64(data.slateContent),
+        value: encodeSlateToBase64(data.slateContent),
       },
     ];
     setNewContent(content);
@@ -150,6 +152,7 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
             emojiPlaceholderLabel={t('Search')}
             disableActionLabel={t('Authenticating')}
             placeholderButtonLabel={t('Reflect')}
+            maxEncodedLengthErrLabel={t('Text block exceeds line limit, please review!')}
             editorState={editorState}
             showEditorInitialValue={true}
             showCancelButton={true}
@@ -175,6 +178,7 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
             getMentions={setMentionQuery}
             getTags={setTagQuery}
             transformSource={transformSource}
+            encodingFunction={encodeSlateToBase64}
           />
           {/*@TODO reflect error logic goes here */}
         </div>

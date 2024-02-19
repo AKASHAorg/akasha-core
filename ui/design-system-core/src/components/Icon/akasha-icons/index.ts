@@ -2,11 +2,14 @@ import { IconType } from '@akashaorg/typings/lib/ui';
 
 import Akasha from './akasha';
 import AlignCenter from './align-center';
-import AlignJustify from './align-justify';
 import AlignLeft from './align-left';
 import AlignRight from './align-right';
+import AlignTextCenter from './align-text-center';
+import AlignTextLeft from './align-text-left';
+import AlignTextRight from './align-text-right';
 import Antenna from './antenna';
 import BoldAlt from './bold-alt';
+import Caption from './caption';
 import DidKey from './didKey';
 import Discord from './discord';
 import Eth from './eth';
@@ -28,13 +31,9 @@ import ListNumbered from './list-numbered';
 import Metamask from './metamask';
 import NoEth from './no-eth';
 import Shield from './shield';
-import Strikethrough from './strikethrough';
 import Solana from './solana';
 import Telegram from './telegram';
 import TextIcon from './text-icon';
-import TextcaseLower from './textcase-lower';
-import TextcaseSentence from './textcase-sentence';
-import TextcaseUpper from './textcase-upper';
 import Twitter from './twitter';
 import Underline from './underline';
 import Vibe from './vibe';
@@ -52,9 +51,12 @@ export type CustomIconTypes = Extract<
   | 'AlignCenter'
   | 'AlignLeft'
   | 'AlignRight'
-  | 'AlignJustify'
+  | 'AlignTextCenter'
+  | 'AlignTextLeft'
+  | 'AlignTextRight'
   | 'Antenna'
   | 'BoldAlt'
+  | 'Caption'
   | 'DidKey'
   | 'Discord'
   | 'Eth'
@@ -76,13 +78,9 @@ export type CustomIconTypes = Extract<
   | 'Metamask'
   | 'NoEth'
   | 'Shield'
-  | 'Strikethrough'
   | 'Solana'
   | 'Telegram'
   | 'TextIcon'
-  | 'TextcaseLower'
-  | 'TextcaseSentence'
-  | 'TextcaseUpper'
   | 'Twitter'
   | 'Underline'
   | 'Vibe'
@@ -95,11 +93,14 @@ export type CustomIconTypes = Extract<
 export {
   Akasha,
   AlignCenter,
-  AlignJustify,
   AlignLeft,
   AlignRight,
+  AlignTextCenter,
+  AlignTextLeft,
+  AlignTextRight,
   Antenna,
   BoldAlt,
+  Caption,
   Discord,
   DidKey,
   Eth,
@@ -121,13 +122,9 @@ export {
   Metamask,
   NoEth,
   Shield,
-  Strikethrough,
   Solana,
   Telegram,
   TextIcon,
-  TextcaseLower,
-  TextcaseSentence,
-  TextcaseUpper,
   Twitter,
   Underline,
   Vibe,

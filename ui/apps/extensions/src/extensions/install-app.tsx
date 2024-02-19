@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOMClient from 'react-dom/client';
 import singleSpaReact from 'single-spa-react';
 import getSDK from '@akashaorg/awf-sdk';
 import InstallApp from '@akashaorg/design-system-components/lib/components/InstallApp';
@@ -109,7 +109,7 @@ const ModalWrapper: React.FC<RootExtensionProps<IntegrationModalExtensionData>> 
 
 const reactLifecycles = singleSpaReact({
   React,
-  ReactDOMClient: ReactDOM,
+  ReactDOMClient,
   rootComponent: withProviders(ModalWrapper),
   errorBoundary: (err, errorInfo, props: RootExtensionProps<IntegrationModalExtensionData>) => {
     if (props.logger) {

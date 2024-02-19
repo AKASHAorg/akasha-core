@@ -7,10 +7,7 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
-import {
-  TrashIcon,
-  XMarkIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { XMarkIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import SearchBar from '@akashaorg/design-system-components/lib/components/SearchBar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -18,6 +15,7 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { ContentBlockExtension } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
 import { Header } from './header';
 import { Footer } from './footer';
+import { BlockHeader } from '@akashaorg/design-system-components/lib/components/BlockHeader';
 import { useBlocksPublishing } from './use-blocks-publishing';
 
 export type uiState = 'editor' | 'tags' | 'blocks';
@@ -32,6 +30,7 @@ export const BeamEditor: React.FC = () => {
     blocksInUse,
     addBlockToList,
     removeBlockFromList,
+    updateBlockDisablePublishState,
   } = useBlocksPublishing({
     onComplete: beamData => {
       getRoutingPlugin().navigateTo({
@@ -66,9 +65,14 @@ export const BeamEditor: React.FC = () => {
   useEffect(() => {
     if (blocksInUse.length) {
       bottomRef.current?.scrollIntoView({
-        behavior: 'smooth',
+        behavior: 'auto',
         block: 'end',
       });
+    }
+    if (blocksInUse.some(block => block.disablePublish === true)) {
+      setDisablePublishing(true);
+    } else {
+      setDisablePublishing(false);
     }
   }, [blocksInUse]);
 
@@ -226,47 +230,25 @@ export const BeamEditor: React.FC = () => {
           {blocksInUse.map((block, idx) => (
             <div key={`${block.key}`} id={`${block.propertyType}-${idx}`}>
               <Stack padding={16} direction="column" spacing="gap-2">
-                <Stack direction="row" justify="between">
-                  <Stack direction="row" spacing="gap-x-1">
-                    <Stack
-                      align="center"
-                      justify="center"
-                      customStyle={
-                        'h-6 w-6 group relative rounded-full bg(secondaryLight/30 dark:secondaryDark)'
-                      }
-                    >
-                      <Icon size="xs" icon={block.icon} />
-                    </Stack>
-                    <Checkbox
-                      id="nsfw"
-                      label={'NSFW'}
-                      name="nsfw"
-                      value="nsfw"
-                      handleChange={() => {
-                        setNsfwBlocks(new Map(nsfwBlocks.set(idx, !nsfwBlocks.get(idx))));
-                      }}
-                      isSelected={!!nsfwBlocks.get(idx)}
-                    />
-                  </Stack>
-                  <button onClick={() => removeBlockFromList(block.order)}>
-                    <Stack
-                      align="center"
-                      justify="center"
-                      customStyle={'h-6 w-6 group relative rounded-full bg(grey9 dark:grey5)'}
-                    >
-                      <Icon
-                        icon={<TrashIcon />}
-                        size="xs"
-                        color={{ light: 'errorLight', dark: 'errorDark' }}
-                      />
-                    </Stack>
-                  </button>
-                </Stack>
+                <BlockHeader
+                  icon={block.icon}
+                  blockCreationStatus={block.status}
+                  errorLabel={t('Block creation failed.')}
+                  successLabel={t('Block Created Successfully!')}
+                  creatingBlockLabel={t('Creating Block...')}
+                  retryLabel={t('Retry')}
+                  handleRetry={handleBeamPublish}
+                  handleRemoveBlock={() => removeBlockFromList(block.order)}
+                  handleNsfwChange={() => {
+                    setNsfwBlocks(new Map(nsfwBlocks.set(idx, !nsfwBlocks.get(idx))));
+                  }}
+                  isNsfwCheckboxSelected={!!nsfwBlocks.get(idx)}
+                />
                 <ContentBlockExtension
                   editMode={{
                     appName: block.appName,
                     propertyType: block.propertyType,
-                    externalHandler: handleDisablePublishing,
+                    externalHandler: value => updateBlockDisablePublishState(value, block.order),
                   }}
                   mode={ContentBlockModes.EDIT}
                   blockRef={block.blockRef}
@@ -297,9 +279,9 @@ export const BeamEditor: React.FC = () => {
                     <Stack
                       align="center"
                       justify="center"
-                      customStyle={'h-6 w-6 group relative rounded-full bg(grey9 dark:grey5)'}
+                      customStyle={'h-8 w-8 group relative rounded-full bg(grey9 dark:grey5)'}
                     >
-                      <Icon size="xs" icon={block.icon} />
+                      <Icon size="sm" icon={block.icon} />
                     </Stack>
                     <Text>{block.displayName}</Text>
                   </Stack>

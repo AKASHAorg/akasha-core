@@ -13,6 +13,7 @@ export * from './use-login.new';
 export { hasOwn } from './utils/has-own';
 export { sortByKey } from './utils/sort-by-key';
 export { getFollowList } from './utils/getFollowList';
+export { createReactiveVar } from './utils/create-reactive-var';
 export { useQueryListener, useMutationListener, useMutationsListener } from './use-query-listener';
 export {
   useNetworkState,
