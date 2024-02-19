@@ -54,6 +54,7 @@ const ProfileBeamsPage: React.FC<ProfileBeamsPageProps> = props => {
                   })
                 }
                 showNSFWCard={itemData.node.nsfw}
+                showHiddenContent={true}
               />
             );
         }}

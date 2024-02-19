@@ -31,7 +31,15 @@ type BeamCardProps = Pick<
 
 const BeamCard: React.FC<BeamCardProps> = props => {
   const { t } = useTranslation('ui-lib-feed');
-  const { entryData, onReflect, showHiddenContent, showNSFWCard, showLoginModal, ...rest } = props;
+  const {
+    entryData,
+    onReflect,
+    showHiddenContent,
+    showNSFWCard,
+    showLoginModal,
+    onContentClick,
+    ...rest
+  } = props;
   const { getRoutingPlugin } = useRootComponentProps();
   const { getTranslationPlugin } = useRootComponentProps();
   const { data } = useGetLogin();
@@ -147,10 +155,12 @@ const BeamCard: React.FC<BeamCardProps> = props => {
                 blockID={blockID}
                 authenticatedDID={authenticatedDID}
                 showHiddenContent={showHiddenContent}
+                beamIsNsfw={showNSFWCard}
                 onBlockInfoChange={blockInfo => {
                   setAppName(blockInfo?.appName);
                   setBlockNameMap(new Map(blockNameMap.set(blockID, blockInfo?.blockName)));
                 }}
+                onContentClick={onContentClick}
               />
             </Stack>
           </React.Suspense>

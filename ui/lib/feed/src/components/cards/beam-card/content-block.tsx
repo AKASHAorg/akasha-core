@@ -8,15 +8,25 @@ import { ContentBlockModes } from '@akashaorg/typings/lib/ui';
 import { useTranslation } from 'react-i18next';
 import { useNsfwToggling } from '@akashaorg/ui-awf-hooks';
 import { useBlockData } from './use-block-data';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 
 type ContentBlockType = {
   blockID: string;
   authenticatedDID: string;
   showHiddenContent: boolean;
+  beamIsNsfw: boolean;
   onBlockInfoChange?: (blockInfo: { blockName: string; appName: string }) => void;
+  onContentClick?: () => void;
 };
 const ContentBlock: React.FC<ContentBlockType> = props => {
-  const { blockID, authenticatedDID, showHiddenContent, onBlockInfoChange } = props;
+  const {
+    blockID,
+    authenticatedDID,
+    showHiddenContent,
+    beamIsNsfw,
+    onBlockInfoChange,
+    onContentClick,
+  } = props;
   const { t } = useTranslation('ui-lib-feed');
 
   /*
@@ -39,12 +49,14 @@ const ContentBlock: React.FC<ContentBlockType> = props => {
    * the following conditions is met:
    * 1. The user toggled off NSFW content in their settings or is not logged in, or
    * 2. The showNsfwContent flag is false
-   * If the user is logged in and has their NSFW setting turned on, we will never show
-   * thie overlay, regardless of whether the block is NSFW or not (showNSFWCard is always
-   * false).
+   * If the user is logged in and has their NSFW setting turned on (They want to see
+   * NSFW content) or if this block
+   *  is marked as nsfw and the whole beam is also marked as nsfw (When both are NSFW, we
+   * don't want to display the overlays two times), we will never show
+   * this overlay.
    */
   const showNSFWCard =
-    showNsfw && !!authenticatedDID
+    (beamIsNsfw && nsfw) || (showNsfw && !!authenticatedDID)
       ? false
       : nsfw && (!showNsfw || !authenticatedDID) && !showNsfwContent;
 
@@ -60,53 +72,65 @@ const ContentBlock: React.FC<ContentBlockType> = props => {
   }, [appName, blockName]);
 
   return (
-    <ContentBlockExtension
-      hideContent={showNSFWCard}
-      readMode={{ blockID }}
-      mode={ContentBlockModes.READONLY}
-    >
-      {({ blockData, blockInfo }) => {
-        return (
-          <BlockWrapper
-            addBlockData={() => addBlockData(hasOwn(blockData, 'id') ? blockData : null)}
-            addBlockInfo={() => addBlockInfo(blockInfo)}
-          >
-            <Stack
-              justify="center"
-              direction="row"
-              background={{ light: 'grey9', dark: 'grey5' }}
-              customStyle="rounded-[10px]"
-            >
-              {/* showHiddenContent is the flag used to hide nsfw blocks in the
-               * feed when NSFW settings is off and shows the overlay over it when
-               * on beam page (default to true in BeamSection(beam page), otherwise false)
-               *  */}
-              {showHiddenContent && showNSFWCard && (
-                <Card
-                  background={{ light: 'white', dark: 'grey3' }}
-                  elevation="2"
-                  margin="m-3.5"
-                  padding="p-2"
-                  customStyle="w-fit h-[60px]"
-                >
-                  <NSFW
-                    clickToViewLabel={t('Click to View')}
-                    sensitiveContentLabel={t('Sensitive Content!')}
-                    onClickToView={() => {
-                      if (!authenticatedDID) {
-                        showLoginModal();
-                        return;
-                      }
-                      setShowNsfwContent(true);
-                    }}
-                  />
-                </Card>
-              )}
-            </Stack>
-          </BlockWrapper>
-        );
+    <Button
+      onClick={() => {
+        if (showNsfwContent || !nsfw) {
+          if (typeof onContentClick === 'function') {
+            onContentClick();
+          }
+        }
       }}
-    </ContentBlockExtension>
+      plain
+      color="transparent"
+    >
+      <ContentBlockExtension
+        hideContent={showNSFWCard}
+        readMode={{ blockID }}
+        mode={ContentBlockModes.READONLY}
+      >
+        {({ blockData, blockInfo }) => {
+          return (
+            <BlockWrapper
+              addBlockData={() => addBlockData(hasOwn(blockData, 'id') ? blockData : null)}
+              addBlockInfo={() => addBlockInfo(blockInfo)}
+            >
+              <Stack
+                justify="center"
+                direction="row"
+                background={{ light: 'grey9', dark: 'grey5' }}
+                customStyle="rounded-[10px]"
+              >
+                {/* showHiddenContent is the flag used to hide nsfw blocks in the
+                 * feed when NSFW settings is off and shows the overlay over it when
+                 * on beam page (default to true in BeamSection(beam page), otherwise false)
+                 *  */}
+                {showHiddenContent && showNSFWCard && (
+                  <Card
+                    background={{ light: 'white', dark: 'grey3' }}
+                    elevation="2"
+                    margin="m-3.5"
+                    padding="p-2"
+                    customStyle="w-fit h-[60px]"
+                  >
+                    <NSFW
+                      clickToViewLabel={t('Click to View')}
+                      sensitiveContentLabel={t('Sensitive Content!')}
+                      onClickToView={() => {
+                        if (!authenticatedDID) {
+                          showLoginModal();
+                          return;
+                        }
+                        setShowNsfwContent(true);
+                      }}
+                    />
+                  </Card>
+                )}
+              </Stack>
+            </BlockWrapper>
+          );
+        }}
+      </ContentBlockExtension>
+    </Button>
   );
 };
 
