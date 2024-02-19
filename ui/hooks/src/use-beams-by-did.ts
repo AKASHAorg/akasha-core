@@ -227,6 +227,7 @@ export const useBeamsByDid = ({ overscan, filters, sorting, did }: UseBeamsByDid
     fetchInitialData,
     fetchNextPage,
     fetchPreviousPage,
+    called: beamsQuery.called,
     isLoading: beamsQuery.loading,
     hasNextPage: state.pageInfo?.hasNextPage,
     hasPreviousPage: state.pageInfo?.hasPreviousPage,
