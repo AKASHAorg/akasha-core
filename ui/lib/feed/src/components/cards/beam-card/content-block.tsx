@@ -48,7 +48,7 @@ const ContentBlock: React.FC<ContentBlockType> = props => {
   /* Show NSFW card (overlay) only when the block is marked as NSFW and any of
    * the following conditions is met:
    * 1. The user toggled off NSFW content in their settings or is not logged in, or
-   * 2. The showNsfwContent flag is false
+   * 2. The showNsfwContent flag is false (Nsfw content is hidden)
    * If the user is logged in and has their NSFW setting turned on (They want to see
    * NSFW content) or if this block
    *  is marked as nsfw and the whole beam is also marked as nsfw (When both are NSFW, we
@@ -72,16 +72,20 @@ const ContentBlock: React.FC<ContentBlockType> = props => {
   }, [appName, blockName]);
 
   return (
-    <Button
+    <Card
+      border={false}
+      noBorderRadius={true}
+      elevation={'none'}
+      background={'transparent'}
+      padding={0}
+      margin={'0'}
       onClick={() => {
-        if (showNsfwContent || !nsfw) {
+        if (!showNSFWCard || !nsfw) {
           if (typeof onContentClick === 'function') {
             onContentClick();
           }
         }
       }}
-      plain
-      color="transparent"
     >
       <ContentBlockExtension
         hideContent={showNSFWCard}
@@ -102,7 +106,7 @@ const ContentBlock: React.FC<ContentBlockType> = props => {
               >
                 {/* showHiddenContent is the flag used to hide nsfw blocks in the
                  * feed when NSFW settings is off and shows the overlay over it when
-                 * on beam page (default to true in BeamSection(beam page), otherwise false)
+                 * on beam page (set to true in BeamSection(beam page), otherwise false)
                  *  */}
                 {showHiddenContent && showNSFWCard && (
                   <Card
@@ -130,7 +134,7 @@ const ContentBlock: React.FC<ContentBlockType> = props => {
           );
         }}
       </ContentBlockExtension>
-    </Button>
+    </Card>
   );
 };
 

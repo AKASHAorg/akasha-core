@@ -199,6 +199,9 @@ export const useBeamsByTags = (tag: string | string[]) => {
   React.useEffect(() => {
     setState({ beams: [] });
     fetchInitialData(true);
+    /*
+     * tag is a dependency so that it will update when we switch from one tag to another
+     */
   }, [tag]);
 
   return {

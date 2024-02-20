@@ -40,6 +40,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
     onContentClick,
     ...rest
   } = props;
+
   const { getRoutingPlugin, getTranslationPlugin } = useRootComponentProps();
   const { data } = useGetLogin();
   const [appName, setAppName] = useState('');

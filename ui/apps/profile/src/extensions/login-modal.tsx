@@ -18,8 +18,6 @@ const LoginModal = (props: RootExtensionProps) => {
   const { getRoutingPlugin, getModalFromParams } = useRootComponentProps();
   const modal = getModalFromParams(window.location);
 
-  console.log('modal', modal);
-
   const handleModalClose = () => {
     window.history.replaceState(null, null, location.pathname);
   };

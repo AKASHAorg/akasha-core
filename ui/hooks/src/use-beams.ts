@@ -275,21 +275,17 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
 
   const fetchInitialData = React.useCallback(
     async (restoreItem?: { key: string; offsetTop: number }) => {
-      /**
-       * !(!isLoggedIn && !authenticating && showNsfw) translates to: the user is logged in and
-       * has their NSFW setting off. The whole condition means to return from the function
-       * immediately if:
-       * 1. The beamsQuery has run before (the data has been fetched with default filter that
-       * filters out NSFW content) and the user is logged in and their NSFW setting is off.
-       * 2. The app is still waiting for authentication data from the hook.
-       **/
-      // if ((beamsQuery.called && !(!isLoggedIn && !authenticating && showNsfw)) || authenticating)
-      //   return;
       if (state.beams.length) {
         setState({
           beams: [],
         });
       }
+      /**
+       * Return from the function immediately if the beamsQuery has run before (the data has
+       * been fetched with default filter that filters out NSFW content) and the user is logged
+       *  in and their NSFW setting is off (same as the default filter used).
+       **/
+      if (beamsQuery.called && isLoggedIn && !showNsfw) return;
 
       const initialVars: GetBeamStreamQueryVariables & GetBeamsByAuthorDidQueryVariables = {
         ...mergedVars,
@@ -301,7 +297,7 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
       /**
        * Set the filter for logged-out users and users who toggled off nsfw content.
        **/
-      if (!showNsfw || !isLoggedIn) {
+      if (!did && (!showNsfw || !isLoggedIn)) {
         initialVars.filters = {
           or: [
             { where: { status: { equalTo: AkashaBeamStreamModerationStatus.Ok } } },
@@ -313,7 +309,7 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
       /**
        * Set the filter for users who are logged in and want to see nsfw content.
        **/
-      if (showNsfw && isLoggedIn) {
+      if (!did && showNsfw && isLoggedIn) {
         initialVars.filters = {
           or: [
             {
@@ -356,19 +352,18 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
      * from the function because the existing beamCursors will contain the data.cursor).
      * Maybe a better approach?
      **/
-    // if (!isLoggedIn && !authenticating && showNsfw) {
-    //   beamCursors.clear();
-    // }
-    // if (!authenticating && showNsfw && isLoggedIn) {
-    //   fetchInitialData();
-    // }
-    // if (!authenticating && !showNsfw && isLoggedIn) {
-    //   fetchInitialData();
-    // }
-    // if (!authenticating || showNsfw || isLoggedIn) {
-    //   fetchInitialData();
-    // }
-  }, [showNsfw, isLoggedIn, authenticating]);
+    if (!authenticating && (isLoggedIn || !isLoggedIn)) {
+      beamCursors.clear();
+      fetchInitialData();
+    }
+  }, [isLoggedIn, authenticating]);
+
+  React.useEffect(() => {
+    /**
+     * Everytime the NSFW setting changes, refetch.
+     **/
+    fetchInitialData();
+  }, [showNsfw]);
 
   const handleReset = async () => {
     setState({ beams: [] });

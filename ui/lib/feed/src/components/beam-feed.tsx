@@ -52,8 +52,6 @@ const BeamFeed = (props: BeamFeedProps) => {
     offsetTop,
   } = props;
 
-  const fetchBeams = did ? useBeamsByDid : useBeams;
-
   const {
     beams,
     fetchNextPage,
@@ -66,7 +64,7 @@ const BeamFeed = (props: BeamFeedProps) => {
     isLoading,
     hasErrors,
     errors,
-  } = fetchBeams({
+  } = useBeams({
     overscan: scrollerOptions.overscan,
     sorting,
     filters,
@@ -134,7 +132,7 @@ const BeamFeed = (props: BeamFeedProps) => {
         />
       )}
       {!hasErrors && (
-        <Virtualizer<ReturnType<typeof fetchBeams>['beams'][0]>
+        <Virtualizer<ReturnType<typeof useBeams>['beams'][0]>
           header={header}
           footer={footer}
           restorationKey={queryKey}
