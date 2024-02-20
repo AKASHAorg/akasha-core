@@ -84,6 +84,9 @@ export default class AppLoader {
       window.addEventListener('single-spa:before-first-mount', this.onBeforeFirstMount);
       window.addEventListener('single-spa:first-mount', this.onFirstMount);
       window.addEventListener('single-spa:routing-event', this.onRouting);
+      singleSpa.addErrorHandler(err => {
+        this.logger.error(`single-spa error: ${err}`);
+      });
     }
 
     singleSpa.start({
@@ -98,7 +101,7 @@ export default class AppLoader {
     );
 
     if (!layoutManifest) {
-      console.error('layout not found. Cannot continue.');
+      this.logger.error('layout not found. Cannot continue.');
       return;
     }
     this.extensionModules = await this.importModules(this.manifests);

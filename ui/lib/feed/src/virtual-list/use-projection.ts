@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { VirtualDataItem, VirtualItem } from './virtual-item-renderer';
 import { Rect } from './rect';
-import { findFirstInView, getVisibleItemsSlice } from '../utils';
+import { getVisibleItemsSlice } from '../utils';
 
 export type MountedItem<T> = {
   start: number;
@@ -11,137 +11,95 @@ export type MountedItem<T> = {
 };
 
 export type UseProjectionProps<T> = {
-  mountedItems: VirtualItem[];
   itemList: VirtualDataItem<T>[];
   isInitialPlacement: boolean;
   isAtTop: () => boolean;
-  itemHeights: Map<string, number>;
+  getItemHeights: () => Map<string, number>;
   overscan: number;
-  getDistanceFromTop: (itemKey: string) => number;
+  getDistanceFromTop: (itemKey: string, itemList: VirtualDataItem<T>[]) => number;
   getItemHeight: (itemKey: string) => number;
-  itemHeightAverage: number;
-  hasNextPage: boolean;
-  hasPreviousPage: boolean;
+  getItemHeightAverage: () => number;
 };
 
 export const useProjection = <T>(props: UseProjectionProps<T>) => {
   const {
     getDistanceFromTop,
-    isAtTop,
     overscan,
-    itemHeights,
-    mountedItems,
+    getItemHeights,
     itemList,
-    isInitialPlacement,
     getItemHeight,
-    itemHeightAverage,
-    hasNextPage,
-    hasPreviousPage,
+    getItemHeightAverage,
   } = props;
 
   const slice = React.useRef({ start: 0, end: 0 });
 
-  const projection = React.useMemo(() => {
-    return mountedItems.reduce((acc, mountedItem) => {
-      const itemData = itemList.find(it => it.key === mountedItem.key);
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { key, ...rest } = mountedItem;
-      if (itemData) {
-        acc.push({
-          ...rest,
-          virtualData: itemData,
-        });
-      }
-      return acc;
-    }, [] as MountedItem<T>[]);
-  }, [mountedItems, itemList]);
-
-  const getReferenceItems = React.useCallback(() => {
-    return projection.filter(
-      it =>
-        it.virtualData.maybeRef && (isInitialPlacement || !!itemHeights.get(it.virtualData.key)),
-    );
-  }, [projection, isInitialPlacement, itemHeights]);
-
-  const getCommonProjectionItem = React.useCallback(
-    (viewportRect: Rect): VirtualItem | undefined => {
-      const atTop = !isInitialPlacement && isAtTop() && !hasPreviousPage;
-      if (atTop) {
-        const item = itemList.at(0);
-        return item
-          ? {
-              key: item.key,
-              start: 0,
-              height: 0,
-              visible: false,
-              maybeRef: false,
-            }
-          : undefined;
-      }
-      const refItems = getReferenceItems();
-      const firstRefInView = findFirstInView(refItems, (prev, current) => {
-        const prevRect = new Rect(prev.start, prev.height);
-        const currentRect = new Rect(current.start, current.height);
-        const isVisible =
-          Rect.visibleFactor(prevRect, viewportRect) -
-          Rect.visibleFactor(currentRect, viewportRect);
-        const hasVisibleHeight =
-          Rect.getVisibleHeight(currentRect, viewportRect) -
-          Rect.getVisibleHeight(prevRect, viewportRect);
-        return isVisible || hasVisibleHeight;
-      });
-
-      if (firstRefInView) {
-        return {
-          key: firstRefInView.virtualData.key,
-          start: firstRefInView.start,
-          height: firstRefInView.height,
-          visible: false,
-          maybeRef: false,
-        };
-      }
-      const firstRef = refItems.at(0);
-      if (firstRef) {
-        return {
-          key: firstRef.virtualData.key,
-          start: firstRef.start,
-          height: firstRef.height,
-          visible: false,
-          maybeRef: false,
-        };
-      }
-      const listFirst = itemList.at(0);
-      if (listFirst) {
-        return {
-          key: listFirst.key,
-          height: 0,
-          start: 0,
-          visible: false,
-          maybeRef: false,
-        };
-      }
+  const getProjection = React.useCallback(
+    (mountedItems: VirtualItem[], itemList: VirtualDataItem<T>[]) => {
+      return mountedItems.reduce((acc, mountedItem) => {
+        const itemData = itemList.find(it => it.key === mountedItem.key);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { key, ...rest } = mountedItem;
+        if (itemData) {
+          acc.push({
+            ...rest,
+            virtualData: itemData,
+          });
+        }
+        return acc;
+      }, [] as MountedItem<T>[]);
     },
-    [getReferenceItems, isAtTop, isInitialPlacement, itemList],
+    [],
   );
-  const getAllVirtualItems = React.useMemo(
-    () => (startItem: VirtualItem) => {
-      const topDistance = getDistanceFromTop(startItem.key);
-      let offset = startItem.start - topDistance;
-      const items: VirtualItem[] = [];
-      itemList.forEach(item => {
-        const height = getItemHeight(item.key);
+
+  const getAllVirtualItems = React.useCallback(
+    (startItem: VirtualItem) => {
+      const items: VirtualItem[] = [startItem];
+      const startIdx = itemList.findIndex(it => it.key === startItem.key);
+      if (startIdx > 0) {
+        let topOffset = startItem.start;
+        for (const item of itemList.slice(0, startIdx).reverse()) {
+          const itemHeight = getItemHeight(item.key);
+          items.unshift({
+            key: item.key,
+            start: topOffset - itemHeight,
+            visible: getItemHeights().has(item.key),
+            maybeRef: item.maybeRef,
+            height: itemHeight,
+          });
+          topOffset -= itemHeight;
+        }
+      }
+      let topOffset = startItem.start + getItemHeight(startItem.key);
+      for (const item of itemList.slice(startIdx + 1)) {
+        // push
+        const itemHeight = getItemHeight(item.key);
         items.push({
           key: item.key,
-          start: offset,
-          visible: itemHeights.has(item.key),
+          start: topOffset,
+          visible: getItemHeights().has(item.key),
           maybeRef: item.maybeRef,
-          height,
+          height: itemHeight,
         });
-        offset += height;
-      });
+        topOffset += itemHeight;
+      }
+      // //compute slice from startItem to top
+      // console.log('here');
+      // //compute slice from startItem to last
+      //
+      // itemList.forEach(item => {
+      //   const height = getItemHeight(item.key);
+      //   items.push({
+      //     key: item.key,
+      //     start: offset,
+      //     visible: getItemHeights().has(item.key),
+      //     maybeRef: item.maybeRef,
+      //     height,
+      //   });
+      //   offset += height;
+      // });
       return items;
     },
-    [getDistanceFromTop, getItemHeight, itemHeights, itemList],
+    [getItemHeight, getItemHeights, itemList],
   );
 
   const getSlice = React.useCallback(
@@ -174,36 +132,51 @@ export const useProjection = <T>(props: UseProjectionProps<T>) => {
 
   const getNextProjection = React.useCallback(
     (startItem: VirtualItem, viewportRect: Rect, alreadyRendered: boolean) => {
-      const minOffscreenHeight = Math.floor(viewportRect.getHeight() + itemHeightAverage);
-      const maxOffcreenHeight = Math.floor(viewportRect.getHeight() + overscan * itemHeightAverage);
+      const minOffscreenHeight = Math.floor(viewportRect.getHeight() + getItemHeightAverage());
+      const maxOffscreenHeight = Math.floor(
+        viewportRect.getHeight() + overscan * getItemHeightAverage(),
+      );
 
       const minViewportRect = new Rect(
         viewportRect.getTop() - minOffscreenHeight,
         viewportRect.getHeight() + 2 * minOffscreenHeight,
       );
+
       const maxViewportRect = new Rect(
-        viewportRect.getTop() - maxOffcreenHeight,
-        viewportRect.getHeight() + 2 * maxOffcreenHeight,
+        viewportRect.getTop() - maxOffscreenHeight,
+        viewportRect.getHeight() + 2 * maxOffscreenHeight,
       );
 
       const allItems = getAllVirtualItems(startItem);
       const visibleItems = allItems.filter(it =>
-        Rect.fromItem(it).overlaps(
-          alreadyRendered && !hasNextPage ? maxViewportRect : minViewportRect,
-        ),
+        Rect.fromItem(it).overlaps(alreadyRendered ? minViewportRect : maxViewportRect),
       );
+
       const visibleSlice = getVisibleItemsSlice(visibleItems, allItems);
       slice.current = getSlice(alreadyRendered, visibleSlice);
       const nextRendered = allItems.slice(slice.current.start, slice.current.end);
 
       return { allItems, nextRendered, slice };
     },
-    [getAllVirtualItems, getSlice, hasNextPage, itemHeightAverage, overscan],
+    [getAllVirtualItems, getSlice, getItemHeightAverage, overscan],
+  );
+
+  const getProjectionCorrection = React.useCallback(
+    (nextRendered: VirtualItem[], listOffset: number) => {
+      return {
+        offset: listOffset,
+        rendered: nextRendered.map(item => ({
+          ...item,
+          start: item.start - listOffset,
+        })),
+      };
+    },
+    [],
   );
 
   return {
-    projection,
-    getCommonProjectionItem,
+    getProjection,
     getNextProjection,
+    getProjectionCorrection,
   };
 };

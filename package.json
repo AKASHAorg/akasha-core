@@ -19,7 +19,7 @@
     "pack:design-system-components": "nx run @akashaorg/design-system-components:build",
     "pack:ui-widgets": "nx run-many --target=build --projects=@akashaorg/ui-widget-analytics,@akashaorg/ui-widget-layout,@akashaorg/ui-widget-mini-profile,@akashaorg/ui-widget-my-apps,@akashaorg/ui-widget-sidebar,@akashaorg/ui-widget-topbar,@akashaorg/ui-widget-trending",
     "pack:ui-libs": "nx run-many --target=build --projects=@akashaorg/ui-lib-feed,@akashaorg/ui-lib-extensions",
-    "pack:ui-apps": "nx run-many --target=build --projects=@akashaorg/app-akasha-integration,@akashaorg/app-routing,@akashaorg/app-extensions,@akashaorg/app-auth-ewa,@akashaorg/app-lists,@akashaorg/app-legal,@akashaorg/app-messaging,@akashaorg/app-moderation-ewa,@akashaorg/app-notifications,@akashaorg/app-profile,@akashaorg/app-search,@akashaorg/app-settings-ewa,@akashaorg/app-articles",
+    "pack:ui-apps": "nx run-many --target=build --projects=@akashaorg/ui-lib-feed,@akashaorg/app-akasha-integration,@akashaorg/app-routing,@akashaorg/app-extensions,@akashaorg/app-auth-ewa,@akashaorg/app-lists,@akashaorg/app-legal,@akashaorg/app-messaging,@akashaorg/app-moderation-ewa,@akashaorg/app-notifications,@akashaorg/app-profile,@akashaorg/app-search,@akashaorg/app-settings-ewa,@akashaorg/app-articles",
     "pack:app-loader": "nx run @akashaorg/ui-app-loader:build",
     "pack:ui": "yarn tsc:ui && yarn pack:design-system-core && yarn pack:design-system-components && yarn pack:ui-widgets && yarn pack:ui-apps && yarn pack:app-loader",
     "pack:only": "nx run-many --target=build --projects=$AWF_PACKAGE",
@@ -40,7 +40,8 @@
     "test:libs": "nx run @akashaorg/ui-lib-feed:test",
     "test:all": "yarn test:design-system-core && yarn test:design-system-components && yarn test:hooks && yarn test:libs",
     "push:integrations": "node build/integrations_bucket_store.js",
-    "sdk:graphql:generate": "nx run-many --target=graphql:generate --projects=@akashaorg/awf-sdk --output-style=stream"
+    "sdk:graphql:generate": "nx run-many --target=graphql:generate --projects=@akashaorg/awf-sdk --output-style=stream",
+    "pack:antenna": "nx run-many --target=build --projects=@akashaorg/ui-lib-feed,@akashaorg/design-system-core,@akashaorg/design-system-components,@akashaorg/app-akasha-integration"
   },
   "devDependencies": {
     "@babel/core": "7.19.0",

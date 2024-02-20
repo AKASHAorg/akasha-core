@@ -4,28 +4,27 @@ import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import BeamCard from '@akashaorg/ui-lib-feed/lib/components/cards/beam-card';
 import ReflectEditor from '../../reflect-editor';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
 import routes, { REFLECT } from '../../../routes';
 import { useTranslation } from 'react-i18next';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
-import { BeamEntryData } from '@akashaorg/typings/lib/ui';
+import { BeamEntryData, type ReflectEntryData } from '@akashaorg/typings/lib/ui';
 import { useLocation } from 'react-router-dom';
-import { transformSource, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { createReactiveVar, transformSource, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 type BeamSectionProps = {
   beamId: string;
   entryData: BeamEntryData;
   isLoggedIn: boolean;
   showLoginModal: () => void;
+  pendingReflectionsVar: ReturnType<typeof createReactiveVar<ReflectEntryData[]>>;
 };
 
 const BeamSection: React.FC<BeamSectionProps> = props => {
-  const { beamId, entryData, isLoggedIn, showLoginModal } = props;
+  const { beamId, entryData, isLoggedIn, showLoginModal, pendingReflectionsVar } = props;
   const { t } = useTranslation('app-akasha-integration');
   const { getRoutingPlugin } = useRootComponentProps();
   const location = useLocation();
   const navigateTo = getRoutingPlugin().navigateTo;
-  const pendingReflectRef = useRef(null);
 
   const onNavigate = (beamId: string, reflect?: boolean) => {
     navigateTo(
@@ -74,12 +73,11 @@ const BeamSection: React.FC<BeamSectionProps> = props => {
               beamId={beamId}
               reflectToId={beamId}
               showEditorInitialValue={isReflecting}
-              pendingReflectRef={pendingReflectRef}
+              pendingReflectionsVar={pendingReflectionsVar}
             />
           )}
         </Stack>
       </Stack>
-      <Card ref={pendingReflectRef} type="plain" />
     </Stack>
   );
 };

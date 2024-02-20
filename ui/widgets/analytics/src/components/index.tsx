@@ -1,6 +1,6 @@
 import singleSpaReact from 'single-spa-react';
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import ReactDOMClient from 'react-dom/client';
 import { useRootComponentProps, withProviders } from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps } from '@akashaorg/typings/lib/ui';
 import CookieWidget from './cookie-widget';
@@ -17,7 +17,7 @@ const Widget = (props: RootComponentProps) => {
 
 const reactLifecycles = singleSpaReact({
   React,
-  ReactDOMClient: ReactDOM,
+  ReactDOMClient,
   rootComponent: withProviders(Widget),
   errorBoundary: (err, errorInfo, props: RootComponentProps) => {
     if (props.logger) {
