@@ -67,11 +67,13 @@ export type EntryCardProps = {
   repliesAnchorLink?: string;
   disableReporting?: boolean;
   isViewer?: boolean;
+  isLoggedIn: boolean;
   hidePublishTime?: boolean;
   disableActions?: boolean;
   noWrapperCard?: boolean;
   hideActionButtons?: boolean;
   showHiddenContent?: boolean;
+  showNSFWCard?: boolean;
   contentClickable?: boolean;
   lastEntry?: boolean;
   hover?: boolean;
@@ -88,6 +90,7 @@ export type EntryCardProps = {
   onEntryRemove?: (itemId: string) => void;
   onEntryFlag?: () => void;
   onEdit?: () => void;
+  showLoginModal?: () => void;
   transformSource: (src: Image) => Image;
 } & (BeamProps | ReflectProps);
 
@@ -106,11 +109,13 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     repliesAnchorLink,
     disableReporting,
     isViewer,
+    isLoggedIn,
     hidePublishTime,
     disableActions,
     noWrapperCard = false,
     hideActionButtons,
     showHiddenContent,
+    showNSFWCard,
     contentClickable,
     editable = true,
     lastEntry,
@@ -124,12 +129,18 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     onReflect,
     onEdit,
     transformSource,
+    showLoginModal,
     ...rest
   } = props;
 
   const profileRef: React.Ref<HTMLDivElement> = React.useRef(null);
-  const [showNSFWContent, setShowNSFWContent] = useState(false);
-  const showNSFWCard = entryData.nsfw && !showNSFWContent;
+
+  /* showNSFWContent determines whether to display the content underneath the
+   * overlay, so if the showNSFWCard prop is true (which means to show the
+   * overlay), showNSFWContent should be false. It is later toggled through an
+   * onClickToView handler.
+   */
+  const [showNSFWContent, setShowNSFWContent] = useState(!showNSFWCard);
   const showHiddenStyle = showHiddenContent ? '' : 'max-h-[50rem]';
   const contentClickableStyle =
     contentClickable && !showNSFWCard ? 'cursor-pointer' : 'cursor-default';
@@ -237,7 +248,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
       )}
       {entryData.active && (
         <Card
-          onClick={showNSFWCard ? null : onContentClick}
+          onClick={!showNSFWContent ? null : onContentClick}
           customStyle={contentClickableStyle}
           type="plain"
         >
@@ -248,16 +259,20 @@ const EntryCard: React.FC<EntryCardProps> = props => {
             data-testid="entry-content"
             fullWidth={true}
           >
-            {showNSFWCard && (
+            {showNSFWCard && !showNSFWContent && (
               <NSFW
                 {...nsfw}
                 onClickToView={event => {
                   event.stopPropagation();
-                  setShowNSFWContent(true);
+                  if (!isLoggedIn) {
+                    if (showLoginModal && typeof showLoginModal === 'function') showLoginModal();
+                  } else {
+                    setShowNSFWContent(true);
+                  }
                 }}
               />
             )}
-            {(!entryData.nsfw || showNSFWContent) && (
+            {(!entryData.nsfw || showNSFWContent) /* need change */ && (
               <Stack
                 justifySelf="start"
                 alignSelf="start"

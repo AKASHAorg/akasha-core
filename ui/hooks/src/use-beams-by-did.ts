@@ -1,50 +1,61 @@
 import React from 'react';
-import { useGetIndexedStreamLazyQuery } from './generated/apollo';
-import getSDK from '@akashaorg/awf-sdk';
+import { useGetBeamsByAuthorDidLazyQuery } from './generated/apollo';
 import {
-  AkashaIndexedStreamStreamType,
   type PageInfo,
   SortOrder,
+  AkashaBeamFiltersInput,
+  AkashaBeamSortingInput,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import type {
-  GetIndexedStreamQuery,
-  GetIndexedStreamQueryVariables,
+  GetBeamsByAuthorDidQuery,
+  GetBeamsByAuthorDidQueryVariables,
+  GetBeamsQueryVariables,
 } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 import { ApolloError } from '@apollo/client';
 import { hasOwn } from './utils/has-own';
 
-export const useBeamsByTags = (tag: string | string[]) => {
-  const sdk = getSDK();
+export type UseBeamsByDidOptions = {
+  overscan: number;
+  filters?: AkashaBeamFiltersInput;
+  sorting?: AkashaBeamSortingInput;
+  did: string;
+};
+
+const defaultSorting: AkashaBeamSortingInput = {
+  createdAt: SortOrder.Desc,
+};
+
+export const useBeamsByDid = ({ overscan, filters, sorting, did }: UseBeamsByDidOptions) => {
   const [state, setState] = React.useState<{
     beams: Exclude<
-      GetIndexedStreamQuery['node'],
+      GetBeamsByAuthorDidQuery['node'],
       Record<string, never>
-    >['akashaIndexedStreamList']['edges'];
+    >['akashaBeamList']['edges'];
     pageInfo?: PageInfo;
   }>({ beams: [] });
 
   const [errors, setErrors] = React.useState<(ApolloError | Error)[]>([]);
 
-  const tagsFilters =
-    typeof tag === 'string'
-      ? { where: { indexValue: { equalTo: tag } } }
-      : {
-          or: tag?.map(_tag => ({ where: { indexValue: { equalTo: _tag } } })) || [],
-        };
+  const mergedVars: GetBeamsQueryVariables = React.useMemo(() => {
+    const vars: {
+      sorting?: AkashaBeamSortingInput;
+      filters?: AkashaBeamFiltersInput | AkashaBeamFiltersInput;
+      id?: string;
+    } = {
+      sorting: { ...defaultSorting, ...(sorting ?? {}) },
+    };
+    if (filters) {
+      vars.filters = filters;
+    }
 
-  const [fetchBeams, beamsQuery] = useGetIndexedStreamLazyQuery({
+    return vars;
+  }, [sorting, filters]);
+
+  const [fetchBeams, beamsQuery] = useGetBeamsByAuthorDidLazyQuery({
     variables: {
-      indexer: sdk.services.gql.indexingDID,
-      first: 10,
-      sorting: { createdAt: SortOrder.Desc },
-      filters: {
-        and: [
-          { where: { streamType: { equalTo: AkashaIndexedStreamStreamType.Beam } } },
-          { where: { indexType: { equalTo: sdk.services.gql.labelTypes.TAG } } },
-          { where: { active: { equalTo: true } } },
-          tagsFilters,
-        ],
-      },
+      ...mergedVars,
+      id: did,
+      first: overscan,
     },
   });
 
@@ -52,20 +63,19 @@ export const useBeamsByTags = (tag: string | string[]) => {
 
   const extractData = React.useCallback(
     (
-      results: GetIndexedStreamQuery,
+      results: GetBeamsByAuthorDidQuery,
     ): {
       edges: Exclude<
-        GetIndexedStreamQuery['node'],
+        GetBeamsByAuthorDidQuery['node'],
         Record<string, never>
-      >['akashaIndexedStreamList']['edges'];
+      >['akashaBeamList']['edges'];
+
       pageInfo: PageInfo;
     } => {
-      if (hasOwn(results, 'node') && hasOwn(results.node, 'akashaIndexedStreamList')) {
+      if (hasOwn(results, 'node') && hasOwn(results.node, 'akashaBeamList')) {
         return {
-          edges: results.node.akashaIndexedStreamList.edges.filter(
-            edge => !beamCursors.has(edge.cursor),
-          ),
-          pageInfo: results.node.akashaIndexedStreamList.pageInfo,
+          edges: results.node.akashaBeamList.edges.filter(edge => !beamCursors.has(edge.cursor)),
+          pageInfo: results.node.akashaBeamList.pageInfo,
         };
       }
     },
@@ -79,10 +89,13 @@ export const useBeamsByTags = (tag: string | string[]) => {
 
     const variables = {
       variables: {
+        id: did,
         after: lastCursor,
         sorting: { createdAt: SortOrder.Desc },
+        indexer: undefined,
       },
     };
+
     try {
       const results = await beamsQuery.fetchMore(variables);
       if (results.error) {
@@ -133,18 +146,27 @@ export const useBeamsByTags = (tag: string | string[]) => {
   };
 
   const fetchInitialBeams = React.useCallback(
-    async (variables?: GetIndexedStreamQueryVariables) => {
+    async (variables?: GetBeamsByAuthorDidQueryVariables) => {
       try {
         const results = await fetchBeams({ variables });
         if (results.error) {
           setErrors(prev => [...prev, results.error]);
           return;
         }
-
         if (!results.data) return;
-
         const extracted = extractData(results.data);
 
+        /**
+         * handle the case where we are requesting the items created before a
+         * specific beam (previous beams). In this case the property
+         *  pageInfo.hasPreviousPage on the response will always be false and
+         * hasNextPage will be true if there are more newer items than requested
+         *  (the equivalent of hasPreviousPage)
+         *
+         * Note: setting hasNextPage to true here will only trigger one more call
+         * to fetchNextPage and it will
+         * set the actual value inside that function
+         **/
         if (variables?.after) {
           extracted.pageInfo = {
             startCursor: extracted.pageInfo.endCursor,
@@ -163,19 +185,23 @@ export const useBeamsByTags = (tag: string | string[]) => {
   );
 
   const fetchInitialData = React.useCallback(
-    async (newTag?: boolean, restoreItem?: { key: string; offsetTop: number }) => {
-      if (beamsQuery.called && !newTag) return;
+    async (restoreItem?: { key: string; offsetTop: number }) => {
+      if (beamsQuery.called) return;
 
-      const initialVars: GetIndexedStreamQueryVariables = {
-        indexer: sdk.services.gql.indexingDID,
+      const initialVars: GetBeamsByAuthorDidQueryVariables = {
+        ...mergedVars,
+        sorting: { createdAt: SortOrder.Desc },
+        id: did ?? undefined,
       };
 
       if (restoreItem) {
+        initialVars.sorting = { createdAt: SortOrder.Asc };
         initialVars.after = restoreItem.key;
       }
+
       await fetchInitialBeams(initialVars);
     },
-    [beamsQuery.called, fetchInitialBeams],
+    [beamsQuery.called, did, fetchInitialBeams, mergedVars],
   );
 
   React.useEffect(() => {
@@ -196,20 +222,12 @@ export const useBeamsByTags = (tag: string | string[]) => {
     }
   };
 
-  React.useEffect(() => {
-    setState({ beams: [] });
-    fetchInitialData(true);
-    /*
-     * tag is a dependency so that it will update when we switch from one tag to another
-     */
-  }, [tag]);
-
   return {
     beams: state.beams,
-    called: !!state.pageInfo,
     fetchInitialData,
     fetchNextPage,
     fetchPreviousPage,
+    called: beamsQuery.called,
     isLoading: beamsQuery.loading,
     hasNextPage: state.pageInfo?.hasNextPage,
     hasPreviousPage: state.pageInfo?.hasPreviousPage,
