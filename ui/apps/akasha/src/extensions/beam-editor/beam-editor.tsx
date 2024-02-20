@@ -199,7 +199,7 @@ export const BeamEditor: React.FC = () => {
   const blocksWithActiveNsfw = [...nsfwBlocks].filter(([, value]) => !!value);
 
   useEffect(() => {
-    if (blocksWithActiveNsfw.length && blocksWithActiveNsfw.length === blocksInUse.length) {
+    if (blocksWithActiveNsfw.length && blocksWithActiveNsfw.length >= 1) {
       setIsNsfw(true);
       return;
     }
@@ -222,9 +222,6 @@ export const BeamEditor: React.FC = () => {
             value="nsfw"
             handleChange={handleNsfwCheckbox}
             isSelected={isNsfw}
-            indeterminate={
-              blocksWithActiveNsfw.length && blocksWithActiveNsfw.length < blocksInUse.length
-            }
           />
         )}
       </Header>

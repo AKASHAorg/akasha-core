@@ -42,7 +42,7 @@ const Toggle: React.FC<ToggleProps> = ({
     ? 'bg(grey7 after:grey4) border(1 grey4 after:grey7)'
     : `bg(white dark:grey3 ${
         iconUnchecked ? 'after:secondaryDark' : 'after:grey6'
-      } dark:after:secondaryDark peer-checked:after:secondaryLight peer-checked:dark:after:secondaryDark) peer-checked:after:border-secondaryLight border(1 secondaryLight dark:secondaryDark peer-checked:after:red-500 peer-checked:dark:after:red-500)`;
+      } dark:after:secondaryDark peer-checked:after:secondaryLight peer-checked:dark:after:secondaryLight) peer-checked:after:border-secondaryLight border(1 secondaryLight dark:secondaryDark peer-checked:after:red-500 peer-checked:dark:after:red-500)`;
 
   const transitionStyle = 'transition-all duration-300';
 

@@ -69,10 +69,6 @@ const GlobalAntennaPage: React.FC<GlobalAntennaPageProps> = props => {
             <ScrollTopButton hide={false} onClick={onScrollToTop} />
           </ScrollTopWrapper>
         )}
-        renderItem={itemData => {
-          if (!hasOwn(itemData.node, 'content'))
-            return <BeamContentResolver beamId={itemData.node.beamID} />;
-        }}
         trackEvent={analyticsActions.trackEvent}
       />
     </Stack>

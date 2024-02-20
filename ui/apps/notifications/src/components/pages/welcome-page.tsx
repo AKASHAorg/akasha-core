@@ -102,14 +102,7 @@ const WelcomePage: React.FC<WelcomePageProps> = props => {
   return (
     <Card elevation={'1'} radius={16} padding={'p-2'} testId="notifications">
       <Stack justify="center" align="center" customStyle="mb-32">
-        {image && isLoggedIn ? (
-          <Image src={image} customStyle="w-[180px] h-[180px] m-auto my-4" />
-        ) : (
-          <Card
-            customStyle="bg(grey8 dark:grey5) w-[180px] h-[180px] m-auto my-4"
-            radius="rounded-xl"
-          />
-        )}
+        {image && <Image src={image} customStyle="w-[180px] h-[180px] m-auto my-4" />}
 
         <Text variant={finalStep ? 'h5' : 'h6'} align="center">
           {isLoggedIn ? header : t('Uh-oh! You are not connected!')}

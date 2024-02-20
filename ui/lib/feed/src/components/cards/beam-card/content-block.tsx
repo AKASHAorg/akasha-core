@@ -6,26 +6,65 @@ import { hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { ContentBlockExtension } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
 import { ContentBlockModes } from '@akashaorg/typings/lib/ui';
 import { useTranslation } from 'react-i18next';
+import { useNsfwToggling } from '@akashaorg/ui-awf-hooks';
 import { useBlockData } from './use-block-data';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 
 type ContentBlockType = {
   blockID: string;
   authenticatedDID: string;
   showHiddenContent: boolean;
+  beamIsNsfw: boolean;
   onBlockInfoChange?: (blockInfo: { blockName: string; appName: string }) => void;
+  onContentClick?: () => void;
 };
 const ContentBlock: React.FC<ContentBlockType> = props => {
-  const { blockID, authenticatedDID, showHiddenContent, onBlockInfoChange } = props;
+  const {
+    blockID,
+    authenticatedDID,
+    showHiddenContent,
+    beamIsNsfw,
+    onBlockInfoChange,
+    onContentClick,
+  } = props;
   const { t } = useTranslation('ui-lib-feed');
+
+  /*
+   * get user's NSFW settings from the hook
+   */
+  const { showNsfw } = useNsfwToggling();
+
+  /*
+   * internal state for showing the NSFW content behind the overlay, default to false
+   */
+  const [showNsfwContent, setShowNsfwContent] = useState(false);
+  /*
+   * Get all the block's data from the hook, including the nsfw property
+   */
   const { nsfw, blockName, appName, addBlockData, addBlockInfo } = useBlockData();
   const { navigateToModal } = useRootComponentProps();
-  const [showNsfwContent, setShowNsfwContent] = useState(false);
   const _onBlockInfoChange = useRef(onBlockInfoChange);
 
-  const showNSFWCard = nsfw && (!showNsfwContent || !authenticatedDID);
+  /* Show NSFW card (overlay) only when the block is marked as NSFW and any of
+   * the following conditions is met:
+   * 1. The user toggled off NSFW content in their settings or is not logged in, or
+   * 2. The showNsfwContent flag is false (Nsfw content is hidden)
+   * If the user is logged in and has their NSFW setting turned on (They want to see
+   * NSFW content) or if this block
+   *  is marked as nsfw and the whole beam is also marked as nsfw (When both are NSFW, we
+   * don't want to display the overlays two times), we will never show
+   * this overlay.
+   */
+  const showNSFWCard =
+    (beamIsNsfw && nsfw) || (showNsfw && !!authenticatedDID)
+      ? false
+      : nsfw && (!showNsfw || !authenticatedDID) && !showNsfwContent;
 
   const showLoginModal = () => {
-    navigateToModal({ name: 'login' });
+    navigateToModal({
+      name: 'login',
+      message: 'To view explicit or sensitive content, please connect to confirm your consent.',
+    });
   };
 
   useEffect(() => {
@@ -33,49 +72,69 @@ const ContentBlock: React.FC<ContentBlockType> = props => {
   }, [appName, blockName]);
 
   return (
-    <ContentBlockExtension
-      hideContent={showNSFWCard}
-      readMode={{ blockID }}
-      mode={ContentBlockModes.READONLY}
-    >
-      {({ blockData, blockInfo }) => {
-        return (
-          <BlockWrapper
-            addBlockData={() => addBlockData(hasOwn(blockData, 'id') ? blockData : null)}
-            addBlockInfo={() => addBlockInfo(blockInfo)}
-          >
-            <Stack
-              justify="center"
-              direction="row"
-              background={{ light: 'grey9', dark: 'grey5' }}
-              customStyle="rounded-[10px]"
-            >
-              {showHiddenContent && showNSFWCard && (
-                <Card
-                  background={{ light: 'white', dark: 'grey3' }}
-                  elevation="2"
-                  margin="m-3.5"
-                  padding="p-2"
-                  customStyle="w-fit h-[60px]"
-                >
-                  <NSFW
-                    clickToViewLabel={t('Click to View')}
-                    sensitiveContentLabel={t('Sensitive Content!')}
-                    onClickToView={() => {
-                      if (!authenticatedDID) {
-                        showLoginModal();
-                        return;
-                      }
-                      setShowNsfwContent(true);
-                    }}
-                  />
-                </Card>
-              )}
-            </Stack>
-          </BlockWrapper>
-        );
+    <Card
+      border={false}
+      noBorderRadius={true}
+      elevation={'none'}
+      background={'transparent'}
+      padding={0}
+      margin={'0'}
+      onClick={() => {
+        if (!showNSFWCard || !nsfw) {
+          if (typeof onContentClick === 'function') {
+            onContentClick();
+          }
+        }
       }}
-    </ContentBlockExtension>
+    >
+      <ContentBlockExtension
+        hideContent={showNSFWCard}
+        readMode={{ blockID }}
+        mode={ContentBlockModes.READONLY}
+      >
+        {({ blockData, blockInfo }) => {
+          return (
+            <BlockWrapper
+              addBlockData={() => addBlockData(hasOwn(blockData, 'id') ? blockData : null)}
+              addBlockInfo={() => addBlockInfo(blockInfo)}
+            >
+              <Stack
+                justify="center"
+                direction="row"
+                background={{ light: 'grey9', dark: 'grey5' }}
+                customStyle="rounded-[10px]"
+              >
+                {/* showHiddenContent is the flag used to hide nsfw blocks in the
+                 * feed when NSFW settings is off and shows the overlay over it when
+                 * on beam page (set to true in BeamSection(beam page), otherwise false)
+                 *  */}
+                {showHiddenContent && showNSFWCard && (
+                  <Card
+                    background={{ light: 'white', dark: 'grey3' }}
+                    elevation="2"
+                    margin="m-3.5"
+                    padding="p-2"
+                    customStyle="w-fit h-[60px]"
+                  >
+                    <NSFW
+                      clickToViewLabel={t('Click to View')}
+                      sensitiveContentLabel={t('Sensitive Content!')}
+                      onClickToView={() => {
+                        if (!authenticatedDID) {
+                          showLoginModal();
+                          return;
+                        }
+                        setShowNsfwContent(true);
+                      }}
+                    />
+                  </Card>
+                )}
+              </Stack>
+            </BlockWrapper>
+          );
+        }}
+      </ContentBlockExtension>
+    </Card>
   );
 };
 
