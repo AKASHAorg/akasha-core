@@ -31,12 +31,6 @@ const overrides = [
     ...missingRequiredFields,
   },
   {
-    name: '@akashaorg/app-moderation-ewa',
-    integrationType: INTEGRATION_TYPES.APPLICATION,
-    sources: [`/apps/moderation/index.js`],
-    ...missingRequiredFields,
-  },
-  {
     name: '@akashaorg/app-auth-ewa',
     integrationType: INTEGRATION_TYPES.APPLICATION,
     sources: [`/apps/auth-app/index.js`],
