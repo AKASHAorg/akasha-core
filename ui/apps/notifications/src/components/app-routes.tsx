@@ -43,7 +43,11 @@ const AppRoutes: React.FC<unknown> = () => {
                 description={t(
                   'Get the latest updates about what’s going on with your world. You can personalize your notifications and get only what you want to see!',
                 )}
-                image="/images/notificationapp-welcome-min.webp"
+                image={
+                  isLoggedIn
+                    ? '/images/notificationapp-welcome-min.webp'
+                    : '/images/notificationapp-Notconnected-min.webp'
+                }
                 leftButtonLabel={t('Skip')}
                 rightButtonLabel={t('Customize your notifications')}
                 isLoggedIn={isLoggedIn}

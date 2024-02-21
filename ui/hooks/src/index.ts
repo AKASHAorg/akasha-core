@@ -43,3 +43,4 @@ export { useTheme } from './use-theme';
 export { useProfileStats } from './use-profile-stats';
 export { useSaveSettings, useGetSettings } from './use-settings';
 export { useIndividualBeam } from './use-individual-beam';
+export { useNsfwToggling } from './use-nsfw';

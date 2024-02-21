@@ -28,14 +28,18 @@ const AppRoutes: React.FC<unknown> = () => {
   const { baseRouteName, logger, navigateToModal } = useRootComponentProps();
   const { t } = useTranslation('app-akasha-integration');
   const _navigateToModal = React.useRef(navigateToModal);
-  const { data } = useGetLogin();
+  const { data, loading: authenticating } = useGetLogin();
   const authenticatedProfileReq = useGetLoginProfile();
 
   const isLoggedIn = !!data?.id;
   const authenticatedProfile = authenticatedProfileReq?.akashaProfile;
 
   const showLoginModal = React.useCallback((redirectTo?: { modal: ModalNavigationOptions }) => {
-    _navigateToModal.current?.({ name: 'login', redirectTo });
+    _navigateToModal.current?.({
+      name: 'login',
+      redirectTo,
+      message: 'To view explicit or sensitive content, please connect to confirm your consent.',
+    });
   }, []);
 
   const errorBoundaryProps: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {

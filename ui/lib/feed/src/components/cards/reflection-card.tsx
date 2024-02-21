@@ -33,6 +33,7 @@ const ReflectionCard: React.FC<ReflectCardProps> = props => {
   const { data } = useGetLogin();
   const locale = getTranslationPlugin().i18n?.languages?.[0] || 'en';
   const authenticatedDID = data?.id;
+  const isLoggedIn = !!data?.id;
 
   const {
     data: profileDataReq,
@@ -66,6 +67,7 @@ const ReflectionCard: React.FC<ReflectCardProps> = props => {
       flagAsLabel={t('Report')}
       editLabel={t('Edit')}
       isViewer={authenticatedDID === entryData.authorId}
+      isLoggedIn={isLoggedIn}
       removed={{
         author: {
           firstPart: t('AKASHA world members won’t be able to see the content '),
@@ -79,10 +81,6 @@ const ReflectionCard: React.FC<ReflectCardProps> = props => {
           ),
           secondLine: t('All reflections are disabled.'),
         },
-      }}
-      nsfw={{
-        sensitiveContentLabel: t('Sensitive Content!'),
-        clickToViewLabel: t('Click to View'),
       }}
       itemType={EntityTypes.REFLECT}
       transformSource={transformSource}
