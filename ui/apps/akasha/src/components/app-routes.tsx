@@ -80,11 +80,11 @@ const AppRoutes: React.FC<unknown> = () => {
       <Route
         path={`${routes[BEAM]}/:beamId`}
         element={
-          <ErrorBoundary {...errorBoundaryProps} key={currentPath}>
-            <React.Suspense fallback={<EntrySectionLoading />}>
-              <BeamPage />
-            </React.Suspense>
-          </ErrorBoundary>
+          //   <ErrorBoundary {...errorBoundaryProps} key={currentPath}>
+          <React.Suspense fallback={<EntrySectionLoading />}>
+            <BeamPage />
+          </React.Suspense>
+          // </ErrorBoundary>
         }
       />
       <Route

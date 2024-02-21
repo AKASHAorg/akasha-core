@@ -31,6 +31,9 @@ import {
 } from '@akashaorg/typings/lib/ui';
 import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
+import ErrorBoundary, {
+  ErrorBoundaryProps,
+} from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 
 type BeamProps = {
   sortedContents: AkashaBeam['content'];
@@ -175,6 +178,30 @@ const EntryCard: React.FC<EntryCardProps> = props => {
   const publishTime = entryData?.createdAt ? formatRelativeTime(entryData.createdAt, locale) : '';
   const avatar = authorProfile.error ? null : authorProfile.data?.avatar;
 
+  const errorBoundaryProps: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
+    errorObj: {
+      type: 'script-error',
+      title: 'Error in reflection rendering',
+    },
+  };
+
+  const renderEditor = rest => {
+    try {
+      return (
+        <ReadOnlyEditor
+          content={rest.slateContent}
+          disabled={entryData.nsfw}
+          handleMentionClick={rest.onMentionClick}
+          handleLinkClick={url => {
+            rest.navigateTo?.({ getNavigationUrl: () => url });
+          }}
+        />
+      );
+    } catch (e) {
+      console.log('eeeee');
+    }
+  };
+
   const entryCardUi = (
     <Stack spacing="gap-y-2" padding="p-4" customStyle={hoverStyle}>
       <Stack direction="row" justify="between">
@@ -280,22 +307,13 @@ const EntryCard: React.FC<EntryCardProps> = props => {
                 spacing="gap-y-1"
                 fullWidth={true}
               >
-                {rest.itemType === EntityTypes.REFLECT ? (
-                  <ReadOnlyEditor
-                    content={rest.slateContent}
-                    disabled={entryData.nsfw}
-                    handleMentionClick={rest.onMentionClick}
-                    handleLinkClick={url => {
-                      rest.navigateTo?.({ getNavigationUrl: () => url });
-                    }}
-                  />
-                ) : (
-                  rest.sortedContents?.map(item => (
-                    <Fragment key={item.blockID}>
-                      {rest.children({ blockID: item.blockID })}
-                    </Fragment>
-                  ))
-                )}
+                {rest.itemType === EntityTypes.REFLECT
+                  ? renderEditor(rest)
+                  : rest.sortedContents?.map(item => (
+                      <Fragment key={item.blockID}>
+                        {rest.children({ blockID: item.blockID })}
+                      </Fragment>
+                    ))}
               </Stack>
             )}
             {showHiddenContent && entryData.tags?.length > 0 && (
@@ -337,7 +355,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
   );
 
   return noWrapperCard ? (
-    <>{entryCardUi}</>
+    <> {entryCardUi}</>
   ) : (
     <Card ref={ref} padding="p-0">
       {entryCardUi}
