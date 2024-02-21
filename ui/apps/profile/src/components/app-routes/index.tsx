@@ -1,4 +1,5 @@
 import React, { Suspense } from 'react';
+import { Outlet } from '@tanstack/react-router';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import InterestsPage from '../pages/interests';
 import EditProfilePage from '../pages/edit-profile';
@@ -7,9 +8,8 @@ import FollowersPage from '../pages/profile-engagement/followers-page';
 import ProfileInfoPage from '../pages/profile-info';
 import ProfileBeamsPage from '../pages/profile-beams';
 import ProfileHeader from '../profile-header';
-import RootComponent from './root-component';
-import ProfileWithAuthorization from '../profile-with-authorization';
 import ErrorComponent from './error-component';
+import ProfileWithAuthorization from '../profile-with-authorization';
 import menuRoute, { BEAMS, EDIT, INTERESTS, FOLLOWERS, FOLLOWING } from '../../routes';
 import { ProfileLoading } from '@akashaorg/design-system-components/lib/components/Profile';
 import { rootRouteWithContext, Route, Router } from '@tanstack/react-router';
@@ -28,7 +28,7 @@ interface RouterContext {
 }
 
 const rootRoute = rootRouteWithContext<RouterContext>()({
-  component: RootComponent,
+  component: Outlet,
 });
 
 const profileInfoRoute = new Route({
@@ -166,7 +166,7 @@ export const createRouter = ({ baseRouteName, apolloClient }: CreateRouter) =>
     context: {
       apolloClient,
     },
-    defaultErrorComponent: ({ error }) => {
-      return <ErrorComponent error={(error as unknown as Error).message} />;
-    },
+    defaultErrorComponent: ({ error }) => (
+      <ErrorComponent error={(error as unknown as Error).message} />
+    ),
   });
