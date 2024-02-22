@@ -18,7 +18,7 @@
     "type": 0
   },
   {
-    "name": "@akashaorg/app-vibes",
+    "name": "@akashaorg/app-moderation-ewa",
     "id": "0xb5353ae20a4ece1b430333820c5303ff86b3ef3b9662aa8c46f3c74adccf3c44",
     "ipfsManifest": "f0155171c6f20a9a49d2f3e3794f49f50ad22a1c0ce49801d07783a549b48e92d",
     "type": 0
@@ -87,6 +87,12 @@
     "name": "@akashaorg/app-articles",
     "id": "0xe2353af5cf8a031a48a341cdaa895f2a79ef50cd08bff62692e821b238ea8b30",
     "ipfsManifest": "f0155171caea429cee1ec545af044d35feeb9248a1c71ab43510392affbeb8ee7",
+    "type": 0
+  },
+  {
+    "name": "@akashaorg/app-dev-dashboard",
+    "id": "0xe9bcdc5f8083c664c6638a6f99358674a41b153224a9a6140aa925c72f469bb1",
+    "ipfsManifest": "f0155171c64176165d9fbbc23dc4bf05d00a7decaa7989675c884bda237008130",
     "type": 0
   },
   {
