@@ -21,9 +21,12 @@ const ENTRY_DATA = {
   beamID: 1,
 };
 
+const isLoggedIn = true;
+
 export const BaseEntryCard: Story = {
   render: () => (
     <EntryCard
+      isLoggedIn={isLoggedIn}
       entryData={ENTRY_DATA}
       authorProfile={{
         data: {
@@ -62,6 +65,7 @@ const error = new Error('an error occured');
 export const DelistedEntryCardOthers: Story = {
   render: () => (
     <EntryCard
+      isLoggedIn={isLoggedIn}
       entryData={{ ...ENTRY_DATA, active: false }}
       authorProfile={{
         data: {
@@ -100,6 +104,7 @@ export const DelistedEntryCardOthers: Story = {
 export const DelistedEntryCardAuthor: Story = {
   render: () => (
     <EntryCard
+      isLoggedIn={isLoggedIn}
       entryData={{ ...ENTRY_DATA, active: false }}
       authorProfile={{
         data: {
@@ -138,6 +143,7 @@ export const DelistedEntryCardAuthor: Story = {
 export const NSFWCard: Story = {
   render: () => (
     <EntryCard
+      isLoggedIn={isLoggedIn}
       entryData={{ ...ENTRY_DATA, active: true, nsfw: true }}
       authorProfile={{
         data: {
@@ -166,9 +172,9 @@ export const NSFWCard: Story = {
       itemType={EntityTypes?.REFLECT}
       slateContent={[
         {
-          type: 'image',
+          type: 'link',
           url: 'https://images.unsplash.com/photo-1524419986249-348e8fa6ad4a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8c2FtcGxlfGVufDB8fDB8fHww&auto=format&fit=crop&w=900&q=60',
-          size: { width: '100px', height: '100px', naturalWidth: '100px', naturalHeight: '100px' },
+          // size: { width: '100px', height: '100px', naturalWidth: '100px', naturalHeight: '100px' },
           children: [
             {
               text: '',
