@@ -181,25 +181,8 @@ const EntryCard: React.FC<EntryCardProps> = props => {
   const errorBoundaryProps: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
     errorObj: {
       type: 'script-error',
-      title: 'Error in reflection rendering',
+      title: 'Error in beam rendering',
     },
-  };
-
-  const renderEditor = rest => {
-    try {
-      return (
-        <ReadOnlyEditor
-          content={rest.slateContent}
-          disabled={entryData.nsfw}
-          handleMentionClick={rest.onMentionClick}
-          handleLinkClick={url => {
-            rest.navigateTo?.({ getNavigationUrl: () => url });
-          }}
-        />
-      );
-    } catch (e) {
-      console.log('eeeee');
-    }
   };
 
   const entryCardUi = (
@@ -274,72 +257,83 @@ const EntryCard: React.FC<EntryCardProps> = props => {
         />
       )}
       {entryData.active && (
-        <Card
-          onClick={!showNSFWContent ? null : onContentClick}
-          customStyle={contentClickableStyle}
-          type="plain"
-        >
-          <Stack
-            align="center"
-            justify="start"
-            customStyle={`overflow-hidden ${showHiddenStyle} ${contentClickableStyle}`}
-            data-testid="entry-content"
-            fullWidth={true}
+        <ErrorBoundary {...errorBoundaryProps}>
+          <Card
+            onClick={!showNSFWContent ? null : onContentClick}
+            customStyle={contentClickableStyle}
+            type="plain"
           >
-            {showNSFWCard && !showNSFWContent && (
-              <NSFW
-                {...nsfw}
-                onClickToView={event => {
-                  event.stopPropagation();
-                  if (!isLoggedIn) {
-                    if (showLoginModal && typeof showLoginModal === 'function') showLoginModal();
-                  } else {
-                    setShowNSFWContent(true);
-                  }
-                }}
-              />
-            )}
-            {(!entryData.nsfw || showNSFWContent) /* need change */ && (
-              <Stack
-                justifySelf="start"
-                alignSelf="start"
-                align="start"
-                spacing="gap-y-1"
-                fullWidth={true}
-              >
-                {rest.itemType === EntityTypes.REFLECT
-                  ? renderEditor(rest)
-                  : rest.sortedContents?.map(item => (
+            <Stack
+              align="center"
+              justify="start"
+              customStyle={`overflow-hidden ${showHiddenStyle} ${contentClickableStyle}`}
+              data-testid="entry-content"
+              fullWidth={true}
+            >
+              {showNSFWCard && !showNSFWContent && (
+                <NSFW
+                  {...nsfw}
+                  onClickToView={event => {
+                    event.stopPropagation();
+                    if (!isLoggedIn) {
+                      if (showLoginModal && typeof showLoginModal === 'function') showLoginModal();
+                    } else {
+                      setShowNSFWContent(true);
+                    }
+                  }}
+                />
+              )}
+              {(!entryData.nsfw || showNSFWContent) && (
+                <Stack
+                  justifySelf="start"
+                  alignSelf="start"
+                  align="start"
+                  spacing="gap-y-1"
+                  fullWidth={true}
+                >
+                  {rest.itemType === EntityTypes.REFLECT ? (
+                    <ReadOnlyEditor
+                      content={rest.slateContent}
+                      disabled={entryData.nsfw}
+                      handleMentionClick={rest.onMentionClick}
+                      handleLinkClick={url => {
+                        rest.navigateTo?.({ getNavigationUrl: () => url });
+                      }}
+                    />
+                  ) : (
+                    rest.sortedContents?.map(item => (
                       <Fragment key={item.blockID}>
                         {rest.children({ blockID: item.blockID })}
                       </Fragment>
-                    ))}
-              </Stack>
-            )}
-            {showHiddenContent && entryData.tags?.length > 0 && (
-              <Stack
-                padding={{ y: 16 }}
-                justify="start"
-                direction="row"
-                spacing="gap-2"
-                customStyle="flex-wrap"
-                fullWidth
-              >
-                {entryData.tags?.map((tag, index) => (
-                  <Pill
-                    key={index}
-                    label={tag}
-                    onPillClick={() => {
-                      if (typeof onTagClick === 'function') {
-                        onTagClick(tag);
-                      }
-                    }}
-                  />
-                ))}
-              </Stack>
-            )}
-          </Stack>
-        </Card>
+                    ))
+                  )}
+                </Stack>
+              )}
+              {showHiddenContent && entryData.tags?.length > 0 && (
+                <Stack
+                  padding={{ y: 16 }}
+                  justify="start"
+                  direction="row"
+                  spacing="gap-2"
+                  customStyle="flex-wrap"
+                  fullWidth
+                >
+                  {entryData.tags?.map((tag, index) => (
+                    <Pill
+                      key={index}
+                      label={tag}
+                      onPillClick={() => {
+                        if (typeof onTagClick === 'function') {
+                          onTagClick(tag);
+                        }
+                      }}
+                    />
+                  ))}
+                </Stack>
+              )}
+            </Stack>
+          </Card>
+        </ErrorBoundary>
       )}
       {!hideActionButtons && (
         <CardActions

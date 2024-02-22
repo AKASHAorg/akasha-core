@@ -45,7 +45,6 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
   const [, setMentionQuery] = useState(null);
   const [, setTagQuery] = useState(null);
   const [editorState, setEditorState] = useState(null);
-  const [caughtError, setCaughtError] = useState(false);
 
   const sdk = getSDK();
   const beamId = entryData.beamID;
@@ -135,31 +134,6 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
     logger,
   };
 
-  const createReflectionCard = entryData => {
-    try {
-      const test = (
-        <ErrorBoundary
-          errorObj={{
-            type: 'script-error',
-            title: t('Error in reflect rendering'),
-          }}
-        >
-          <ReflectionCard
-            entryData={entryData}
-            editable={reflectionCreationElapsedTimeInMinutes <= MAX_EDIT_TIME_IN_MINUTES}
-            onEdit={() => setEdit(true)}
-            notEditableLabel={t('A reflection created over 10 minutes ago cannot be edited.')}
-            {...rest}
-          />
-        </ErrorBoundary>
-      );
-      return test;
-    } catch (e) {
-      setCaughtError(true);
-      console.log('e', e);
-    }
-  };
-
   if (editInProgress && newContent) {
     return (
       <Stack
@@ -220,7 +194,17 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
           {/*@TODO reflect error logic goes here */}
         </div>
       ) : (
-        <div>{createReflectionCard(entryData)}</div>
+        <>
+          <ErrorBoundary {...errorBoundaryProps}>
+            <ReflectionCard
+              entryData={entryData}
+              editable={reflectionCreationElapsedTimeInMinutes <= MAX_EDIT_TIME_IN_MINUTES}
+              onEdit={() => setEdit(true)}
+              notEditableLabel={t('A reflection created over 10 minutes ago cannot be edited.')}
+              {...rest}
+            />
+          </ErrorBoundary>
+        </>
       )}
     </>
   );
