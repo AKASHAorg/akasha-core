@@ -85,6 +85,8 @@ const Checkbox: React.FC<CheckboxProps> = ({
       ? 'after:w-2.5 after:h-[2px] after:-ml-[3px] after:mt-2.5'
       : 'after:w-3.5 after:h-[1.5px] after:-ml-[3px] after:mt-2.5';
 
+  const cursorStyle = isDisabled ? 'cursor-not-allowed' : 'cursor-pointer';
+
   const instancePseudoCheckboxStyle = apply`
   ${basePseudoCheckboxStyles}
   ${checkboxSizes}
@@ -110,11 +112,13 @@ const Checkbox: React.FC<CheckboxProps> = ({
 
   const selectedPseudoCheckboxStyle = apply`
     ${instancePseudoCheckboxStyle}
+    ${cursorStyle}
     invisible w-4 h-4 relative
     `;
 
   const unselectedPseudoCheckboxStyle = apply`
     ${instancePseudoCheckboxStyle}
+    ${cursorStyle}
     after:content-none invisible w-4 h-4 relative
     `;
 
