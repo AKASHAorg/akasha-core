@@ -13,19 +13,13 @@ import ProfileWithAuthorization from '../profile-with-authorization';
 import menuRoute, { BEAMS, EDIT, INTERESTS, FOLLOWERS, FOLLOWING } from '../../routes';
 import { ProfileLoading } from '@akashaorg/design-system-components/lib/components/Profile';
 import { rootRouteWithContext, Route, Router } from '@tanstack/react-router';
-import { useApolloClient } from '@apollo/client';
 import {
   GetProfileByDidDocument,
   GetFollowersListByDidDocument,
   GetFollowingListByDidDocument,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { ENGAGEMENTS_PER_PAGE } from '../pages/profile-engagement/types';
-
-type ApolloClient = ReturnType<typeof useApolloClient>;
-
-interface RouterContext {
-  apolloClient: ApolloClient;
-}
+import { CreateRouter, RouterContext } from '@akashaorg/typings/lib/ui';
 
 const rootRoute = rootRouteWithContext<RouterContext>()({
   component: Outlet,
@@ -153,11 +147,6 @@ const routeTree = rootRoute.addChildren([
   interestsRoute,
   beamsRoute,
 ]);
-
-interface CreateRouter {
-  baseRouteName: string;
-  apolloClient: ApolloClient;
-}
 
 export const createRouter = ({ baseRouteName, apolloClient }: CreateRouter) =>
   new Router({
