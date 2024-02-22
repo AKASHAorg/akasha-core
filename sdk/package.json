@@ -5,7 +5,7 @@
   "type": "module",
   "dependencies": {
     "@akashaorg/composedb-models": "*",
-    "@apollo/client": "3.8.7",
+    "@apollo/client": "3.9.5",
     "@composedb/client": "0.5.2",
     "@didtools/cacao": "2.1.0",
     "@didtools/pkh-ethereum": "0.4.1",
