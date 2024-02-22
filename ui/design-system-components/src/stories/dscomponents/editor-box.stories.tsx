@@ -14,6 +14,7 @@ type Story = StoryObj<EditorBoxProps>;
 export const BaseEditorBox: Story = {
   render: () => (
     <EditorBox
+      encodingFunction={() => ''}
       profileId="some profile id"
       actionLabel="Publish"
       placeholderLabel="Share your thought"

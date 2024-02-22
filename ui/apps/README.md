@@ -5,7 +5,6 @@
 ## Components
 
 - [AKASHA App](./akasha/README.md)
-- [Vibe](./moderation/README.md)
 - [Authentication](./auth-app/README.md)
 - [Settings](./settings-app/README.md)
 - [Extensions](./akasha-verse/README.md)
