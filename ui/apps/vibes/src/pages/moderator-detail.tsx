@@ -1,13 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-
 import ModeratorDetailCard from '../components/moderator';
 import InfoCard from '../components/moderator/info-card';
 import PaginatedTable from '../components/transparency-log/paginated-table';
 
-import { BasePageProps } from './overview';
 import {
   generateModerators,
   formatDate,
@@ -16,18 +14,21 @@ import {
   generateDismissalReason,
 } from '../utils';
 
-export const ModeratorDetailPage: React.FC<BasePageProps> = props => {
-  const { navigateTo } = props;
+export type ModeratorDetailPageProps = {
+  moderatorId: string;
+};
 
+export const ModeratorDetailPage: React.FC<ModeratorDetailPageProps> = () => {
   const [pages] = React.useState([generateModerationHistory()]);
-
   const [curPage, setCurPage] = React.useState<number>(1);
 
+  const { getRoutingPlugin } = useRootComponentProps();
   /**
    * get the profileId from param and use this to fetch the moderator details
    */
   // const { moderatorProfileId } = useParams<{ moderatorProfileId: string }>();
   const { t } = useTranslation('app-vibes');
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const moderator = generateModerators()[1];
 

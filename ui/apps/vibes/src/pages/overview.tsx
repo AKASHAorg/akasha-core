@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { NavigateToParams } from '@akashaorg/typings/lib/ui';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import VibesIntroCard from '@akashaorg/design-system-components/lib/components/VibesIntroCard';
 import VibesValuesCard from '@akashaorg/design-system-components/lib/components/VibesValuesCard';
@@ -10,7 +10,6 @@ import { externalLinks } from '../utils';
 
 export type BasePageProps = {
   user?: string | null;
-  navigateTo: (args: NavigateToParams) => void;
 };
 
 export type OverviewPageProps = BasePageProps & {
@@ -18,8 +17,11 @@ export type OverviewPageProps = BasePageProps & {
 };
 
 export const Overview: React.FC<OverviewPageProps> = props => {
-  const { isModerator, navigateTo } = props;
+  const { isModerator } = props;
+  const { getRoutingPlugin } = useRootComponentProps();
   const { t } = useTranslation('app-vibes');
+
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const handleCodeOfConductClick = () => {
     navigateTo({

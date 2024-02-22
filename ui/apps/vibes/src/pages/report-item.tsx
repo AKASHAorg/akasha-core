@@ -1,27 +1,25 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-
-import { useModerationCategory } from '@akashaorg/ui-awf-hooks';
-
+import { useModerationCategory, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-
 import { ReportItem, ReportItemConfirmation } from '../components/report';
-
-import { BasePageProps } from './overview';
 import { HOME } from '../routes';
 import { reportDetailsSubtitles, reasons, externalLinks } from '../utils';
 
-export const ReportItemPage: React.FC<BasePageProps> = props => {
-  const { navigateTo } = props;
+export type ReportItemPageProps = {
+  itemType: string;
+  itemId: string;
+};
 
+export const ReportItemPage: React.FC<ReportItemPageProps> = () => {
   const [step, setStep] = useState<number>(0);
-
   const { itemType } = useParams();
-
+  const { getRoutingPlugin } = useRootComponentProps();
   const { t } = useTranslation('app-vibes');
 
+  const navigateTo = getRoutingPlugin().navigateTo;
   const moderationCategories = reasons.map(({ title }) => ({
     value: title,
     label: t('{{title}}', { title }),

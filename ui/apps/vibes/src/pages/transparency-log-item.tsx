@@ -5,7 +5,11 @@ import { generateModerationHistory, generateModerators, generateTenureInfoLabel 
 import ModeratorDetailCard from '../components/moderator';
 import TransparencyLogItemCard from '../components/transparency-log/log-item';
 
-export const TransparencyLogItem: React.FC<unknown> = () => {
+export type TransparencyLogItemPageProps = {
+  itemId: string;
+};
+
+export const TransparencyLogItem: React.FC<TransparencyLogItemPageProps> = () => {
   /**
    * get the itemId from param and use this to fetch the log item details
    */
