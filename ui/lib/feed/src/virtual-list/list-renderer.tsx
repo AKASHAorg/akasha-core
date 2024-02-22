@@ -102,7 +102,6 @@ export const VirtualListRenderer = React.forwardRef(
     const isScrollAtTop = React.useRef(!restorationItem);
     const animatingItems = React.useRef<Set<string>>(new Set());
     const isInitialPlacement = React.useRef(true);
-
     const viewport = useViewport({
       initialRect,
       offsetTop: offsetTop ? offsetTop : rootNodeRef.current?.offsetTop || 0,
@@ -199,6 +198,7 @@ export const VirtualListRenderer = React.forwardRef(
     const isAtTop = React.useCallback(() => {
       const viewportRect = viewport.getRelativeToRootNode(rootNodeRef.current);
       if (!viewportRect) return true;
+      if (!rootNodeRef.current) return true;
 
       return viewportRect.getTop() <= rootNodeRef.current.offsetTop + getItemHeightAverage();
     }, [getItemHeightAverage, viewport]);
