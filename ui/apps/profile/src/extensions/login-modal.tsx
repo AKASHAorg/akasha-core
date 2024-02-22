@@ -50,7 +50,9 @@ const LoginModal = (props: RootExtensionProps) => {
     >
       <Stack align="center" fullWidth={true} spacing="gap-y-2">
         <Text variant="body1" align="center">
-          {t('To continue you need an AKASHA World account')}
+          {modal?.message
+            ? t('{{modalMessage}}', { modalMessage: modal.message })
+            : t('To continue you need an AKASHA World account')}
         </Text>
       </Stack>
     </Modal>

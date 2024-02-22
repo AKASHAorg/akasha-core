@@ -46,6 +46,7 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
   const { getTranslationPlugin, navigateToModal } = useRootComponentProps();
   const { data } = useGetLogin();
   const authenticatedDID = data?.id;
+  const isLoggedIn = !!data?.id;
   const {
     data: profileDataReq,
     loading,
@@ -174,6 +175,7 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
               }`}
               contentClickable={contentClickable}
               isViewer={authenticatedDID === itemData.author.id}
+              isLoggedIn={isLoggedIn}
               removeEntryLabel={t('Delete Post')}
               onEntryRemove={handleEntryRemove}
               onEntryFlag={handleEntryFlag(itemData.id, EntityTypes.BEAM)}

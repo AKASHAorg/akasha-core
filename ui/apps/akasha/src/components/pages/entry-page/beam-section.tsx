@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -15,12 +15,14 @@ type BeamSectionProps = {
   beamId: string;
   entryData: BeamEntryData;
   isLoggedIn: boolean;
+  showNSFWCard: boolean;
   showLoginModal: () => void;
   pendingReflectionsVar: ReturnType<typeof createReactiveVar<ReflectEntryData[]>>;
 };
 
 const BeamSection: React.FC<BeamSectionProps> = props => {
-  const { beamId, entryData, isLoggedIn, showLoginModal, pendingReflectionsVar } = props;
+  const { beamId, entryData, isLoggedIn, showNSFWCard, showLoginModal, pendingReflectionsVar } =
+    props;
   const { t } = useTranslation('app-akasha-integration');
   const { getRoutingPlugin } = useRootComponentProps();
   const location = useLocation();
@@ -52,6 +54,8 @@ const BeamSection: React.FC<BeamSectionProps> = props => {
             noWrapperCard={true}
             contentClickable={false}
             showHiddenContent={true}
+            showNSFWCard={showNSFWCard}
+            showLoginModal={showLoginModal}
             onReflect={() => {
               onNavigate(entryData?.id, !isReflecting);
             }}

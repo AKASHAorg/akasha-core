@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
@@ -39,7 +39,12 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
     variables: { id: profileId },
   });
 
-  const onCompleted = () => {
+  const { akashaProfile: profileData } =
+    data?.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
+  const background = profileData?.background;
+  const avatar = profileData?.avatar;
+
+  const onEditSuccess = () => {
     uiEvents.next({
       event: NotificationEvents.ShowNotification,
       data: {
@@ -52,22 +57,17 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
 
   const sdk = getSDK();
 
-  const { akashaProfile: profileData } =
-    data?.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
-
-  const background = useMemo(() => profileData?.background, [profileData?.background]);
-  const avatar = useMemo(() => profileData?.avatar, [profileData?.avatar]);
   const [createProfileMutation, { loading: createProfileProcessing }] = useCreateProfileMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
     onCompleted: data => {
       const id = data.createAkashaProfile?.document.id;
       if (id) indexProfile(id);
-      onCompleted();
+      onEditSuccess();
     },
   });
   const [updateProfileMutation, { loading: updateProfileProcessing }] = useUpdateProfileMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
-    onCompleted,
+    onCompleted: onEditSuccess,
   });
   const [indexProfileMutation] = useIndexProfileMutation();
   const isProcessing = createProfileProcessing || updateProfileProcessing;
@@ -116,7 +116,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
     });
   };
 
-  const updateGeneralForm = async (
+  const updateProfile = async (
     formValues: EditProfileFormValues,
     profileImages: Pick<PartialAkashaProfileInput, 'avatar' | 'background'>,
   ) => {
@@ -142,7 +142,6 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
   ) => {
     const avatarImageObj = avatarImage ? { avatar: avatarImage } : {};
     const coverImageObj = coverImage ? { background: coverImage } : {};
-
     return { ...avatarImageObj, ...coverImageObj };
   };
 
@@ -150,19 +149,15 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
     <Stack direction="column" spacing="gap-y-4" customStyle="h-full">
       <Card radius={20} elevation="1" customStyle="py-4 h-full">
         <EditProfile
-          defaultValues={
-            profileData
-              ? {
-                  avatar: null,
-                  coverImage: null,
-                  name: profileData.name,
-                  bio: profileData.description,
-                  ens: '',
-                  userName: '',
-                  links: profileData.links?.map(link => link.href),
-                }
-              : undefined
-          }
+          defaultValues={{
+            avatar: null,
+            coverImage: null,
+            name: profileData?.name ?? '',
+            bio: profileData?.description ?? '',
+            ens: '',
+            userName: '',
+            links: profileData?.links?.map(link => link.href) ?? [],
+          }}
           header={{
             title: t('Avatar & Cover Image'),
             coverImage: background,
@@ -236,7 +231,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
                 return;
               }
 
-              updateGeneralForm(formValues, getProfileImageVersions(avatarImage, coverImage));
+              updateProfile(formValues, getProfileImageVersions(avatarImage, coverImage));
             },
           }}
         />

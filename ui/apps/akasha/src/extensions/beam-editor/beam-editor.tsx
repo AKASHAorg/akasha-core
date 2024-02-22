@@ -227,7 +227,7 @@ export const BeamEditor: React.FC = () => {
   const blocksWithActiveNsfw = [...nsfwBlocks].filter(([, value]) => !!value);
 
   useEffect(() => {
-    if (blocksWithActiveNsfw.length && blocksWithActiveNsfw.length === blocksInUse.length) {
+    if (blocksWithActiveNsfw.length && blocksWithActiveNsfw.length >= 1) {
       setIsNsfw(true);
       return;
     }
