@@ -3,7 +3,7 @@ import { rootRouteWithContext, Router } from '@tanstack/react-router';
 import RootComponent from './root-component';
 import ErrorComponent from './error-component';
 
-const rootRoute = rootRouteWithContext<unknown>()({
+const rootRoute = rootRouteWithContext()({
   component: RootComponent,
 });
 
