@@ -27,7 +27,6 @@ export { useLegalDoc } from './use-legal';
 export { usePlaformHealthCheck } from './use-health-check';
 export { useDismissedCard } from './use-dismissed-card';
 export { useValidDid } from './use-valid-did';
-export { useModerationCategory } from './use-moderation-categories';
 export { useAccordion } from './use-accordion';
 
 // the following hooks needs refactor/reimplementation
