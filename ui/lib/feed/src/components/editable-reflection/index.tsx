@@ -27,13 +27,16 @@ import {
 } from '@akashaorg/typings/lib/ui';
 import { useApolloClient } from '@apollo/client';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
+import ErrorBoundary, {
+  ErrorBoundaryProps,
+} from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 
 const MAX_EDIT_TIME_IN_MINUTES = 10;
 
 const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> = props => {
   const { entryData, reflectToId, ...rest } = props;
   const { t } = useTranslation('ui-lib-feed');
-  const { uiEvents } = useRootComponentProps();
+  const { uiEvents, logger } = useRootComponentProps();
   const _uiEvents = React.useRef(uiEvents);
   const [analyticsActions] = useAnalytics();
   const [newContent, setNewContent] = useState(null);
@@ -123,6 +126,14 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
     });
   };
 
+  const errorBoundaryProps: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
+    errorObj: {
+      type: 'script-error',
+      title: t('Error in reflection rendering'),
+    },
+    logger,
+  };
+
   if (editInProgress && newContent) {
     return (
       <Stack
@@ -183,13 +194,17 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
           {/*@TODO reflect error logic goes here */}
         </div>
       ) : (
-        <ReflectionCard
-          entryData={entryData}
-          editable={reflectionCreationElapsedTimeInMinutes <= MAX_EDIT_TIME_IN_MINUTES}
-          onEdit={() => setEdit(true)}
-          notEditableLabel={t('A reflection created over 10 minutes ago cannot be edited.')}
-          {...rest}
-        />
+        <>
+          <ErrorBoundary {...errorBoundaryProps}>
+            <ReflectionCard
+              entryData={entryData}
+              editable={reflectionCreationElapsedTimeInMinutes <= MAX_EDIT_TIME_IN_MINUTES}
+              onEdit={() => setEdit(true)}
+              notEditableLabel={t('A reflection created over 10 minutes ago cannot be edited.')}
+              {...rest}
+            />
+          </ErrorBoundary>
+        </>
       )}
     </>
   );
