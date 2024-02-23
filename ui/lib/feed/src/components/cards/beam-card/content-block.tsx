@@ -2,18 +2,24 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import NSFW from '@akashaorg/design-system-components/lib/components/Entry/NSFW';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { ContentBlockExtension } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
+import {
+  ContentBlockExtension,
+  MatchingBlock,
+} from '@akashaorg/ui-lib-extensions/lib/react/content-block';
 import { ContentBlockModes } from '@akashaorg/typings/lib/ui';
 import { useTranslation } from 'react-i18next';
 import { useGetContentBlockByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { useNsfwToggling } from '@akashaorg/ui-awf-hooks';
+import { Transition } from '@headlessui/react';
 
 type ContentBlockType = {
   blockID: string;
   authenticatedDID: string;
   showHiddenContent: boolean;
   beamIsNsfw: boolean;
+  showBlockName: boolean;
   onBlockInfoChange?: (blockInfo: { blockName: string; appName: string }) => void;
   onContentClick?: () => void;
 };
@@ -23,10 +29,13 @@ const ContentBlock: React.FC<ContentBlockType> = props => {
     authenticatedDID,
     showHiddenContent,
     beamIsNsfw,
+    showBlockName,
     onBlockInfoChange,
     onContentClick,
   } = props;
   const { t } = useTranslation('ui-lib-feed');
+  const { getExtensionsPlugin } = useRootComponentProps();
+  const contentBlockStoreRef = useRef(getExtensionsPlugin()?.contentBlockStore);
   const contentBlockReq = useGetContentBlockByIdQuery({
     variables: { id: blockID },
   });
@@ -53,6 +62,14 @@ const ContentBlock: React.FC<ContentBlockType> = props => {
   const contentBlockPropertyType = blockData?.content?.[0]?.propertyType;
   const contentBlockLabel = blockData?.content?.[0]?.label;
   const nsfw = !!blockData?.nsfw;
+  const matchingBlocks: MatchingBlock[] = contentBlockStoreRef.current.getMatchingBlocks(blockData);
+  const foundBlock = matchingBlocks.find(matchingBlock => {
+    if (matchingBlock.blockData && hasOwn(matchingBlock.blockData, 'id'))
+      return matchingBlock.blockData?.id === blockID;
+
+    return false;
+  });
+  const blockDisplayName = foundBlock ? foundBlock.blockInfo.displayName : '';
 
   /* Show NSFW card (overlay) only when the block is marked as NSFW and any of
    * the following conditions is met:
@@ -96,20 +113,36 @@ const ContentBlock: React.FC<ContentBlockType> = props => {
       }}
     >
       {!showNSFWCard && (
-        <ContentBlockExtension
-          mode={ContentBlockModes.READONLY}
-          blockData={blockData}
-          error={contentBlockReq.error?.message ?? ''}
-          errorTitle={t('Block not loaded correctly')}
-          errorDescription={t('Click on refresh to try reloading the block.')}
-          refreshLabel={t('Refresh')}
-          notInstalledTitle={t('not installed')}
-          notInstalledDescription1={t('Please install')}
-          notInstalledDescription2={t('to view this content.')}
-          onRefresh={() => {
-            contentBlockReq.refetch({ id: blockID });
-          }}
-        />
+        <>
+          <Transition
+            enter="transition-[height] ease-out duration-300"
+            enterFrom="h-0"
+            enterTo="h-[18px]"
+            leave="transition-[height] ease-in duration-300"
+            leaveFrom="h-[18px]"
+            leaveTo="h-0"
+            show={showBlockName && !!blockDisplayName}
+          >
+            <Text variant="footnotes2" weight="normal" color={{ light: 'grey7', dark: 'grey6' }}>
+              {t('{{blockDisplayName}}', { blockDisplayName })}
+            </Text>
+          </Transition>
+          <ContentBlockExtension
+            mode={ContentBlockModes.READONLY}
+            blockData={blockData}
+            matchingBlocks={matchingBlocks}
+            error={contentBlockReq.error?.message ?? ''}
+            errorTitle={t('Block not loaded correctly')}
+            errorDescription={t('Click on refresh to try reloading the block.')}
+            refreshLabel={t('Refresh')}
+            notInstalledTitle={t('not installed')}
+            notInstalledDescription1={t('Please install')}
+            notInstalledDescription2={t('to view this content.')}
+            onRefresh={() => {
+              contentBlockReq.refetch({ id: blockID });
+            }}
+          />
+        </>
       )}
       {showHiddenContent && showNSFWCard && (
         <Stack
