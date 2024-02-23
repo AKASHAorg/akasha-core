@@ -70,6 +70,13 @@ const BeamCard: React.FC<BeamCardProps> = props => {
     });
   };
 
+  const handleFlagBeam = () => {
+    navigateTo({
+      appName: '@akashaorg/app-vibes',
+      getNavigationUrl: () => `/report/beam/${entryData.id}`,
+    });
+  };
+
   const onTagClick = (tag: string) => {
     navigateTo({
       appName: '@akashaorg/app-akasha-integration',
@@ -90,7 +97,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       repliesAnchorLink="/@akashaorg/app-akasha-integration/beam"
       profileAnchorLink="/@akashaorg/app-profile"
       sortedContents={sortedEntryContent}
-      flagAsLabel={t('Report')}
+      flagAsLabel={t('Flag')}
       editLabel={t('Edit')}
       isViewer={authenticatedDID === entryData.authorId}
       removed={{
@@ -118,6 +125,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       onAvatarClick={onAvatarClick}
       onTagClick={onTagClick}
       onReflect={onReflect}
+      onEntryFlag={handleFlagBeam}
       actionsRight={
         <ActionButtons
           appName={appName}

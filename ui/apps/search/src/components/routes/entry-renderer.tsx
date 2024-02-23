@@ -3,7 +3,6 @@ import sortBy from 'lodash/sortBy';
 import { useTranslation } from 'react-i18next';
 import {
   EntityTypes,
-  ModalNavigationOptions,
   NavigateToParams,
   Profile,
   IContentClickDetails,
@@ -37,8 +36,7 @@ export type EntryCardRendererProps = {
 };
 
 const EntryCardRenderer = (props: EntryCardRendererProps) => {
-  const { authenticatedProfile, itemData, itemType, contentClickable, navigateTo, onContentClick } =
-    props;
+  const { itemData, itemType, contentClickable, navigateTo, onContentClick } = props;
 
   const { id } = itemData || {};
 
@@ -80,31 +78,12 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
     );
   };
 
-  // @TODO replace with new moderation hooks
-  // const [isReported, isAccountReported] = React.useMemo(() => {
-  //   if (showAnyway) {
-  //     return [false, false];
-  //   }
-  //   return [itemData?.reported, itemData?.author?.reported];
-  // }, [itemData, showAnyway]);
-
-  // const accountAwaitingModeration = !itemData?.author?.moderated && isAccountReported;
-  // const entryAwaitingModeration = !itemData?.moderated && isReported;
-
-  // const itemTypeName = React.useMemo(() => {
-  //   switch (itemType) {
-  //     case EntityTypes.POST:
-  //       return t('post');
-  //     case EntityTypes.PROFILE:
-  //       return t('account');
-  //     case EntityTypes.REPLY:
-  //       return t('reply');
-  //     case EntityTypes.TAG:
-  //       return t('tag');
-  //     default:
-  //       return t('unknown');
-  //   }
-  // }, [t, itemType]);
+  const handleFlag = () => {
+    navigateTo({
+      appName: '@akashaorg/app-vibes',
+      getNavigationUrl: () => `/report/${itemType}/${itemData.id}`,
+    });
+  };
 
   const handleEntryRemove = (itemId: string) => {
     if (itemId)
@@ -115,49 +94,12 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
       });
   };
 
-  const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
-    navigateToModal({ name: 'login', redirectTo });
-  };
-
-  const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
-    if (!authenticatedProfile?.did?.id) {
-      return showLoginModal({
-        modal: { name: 'report-modal', itemId, itemType: itemType as unknown as EntityTypes },
-      });
-    }
-
-    if (itemId)
-      navigateToModal({
-        name: 'report-modal',
-        itemId,
-        itemType: itemType as unknown as EntityTypes,
-      });
-  };
-
   const hideActionButtons = React.useMemo(() => itemType === EntityTypes.REFLECT, [itemType]);
 
   return (
     <>
       {itemData && itemData.author?.id && (
         <div style={{ marginBottom: '8px' }}>
-          {/* {(accountAwaitingModeration || entryAwaitingModeration) && (
-            <EntryCardHidden
-              reason={entryAwaitingModeration ? itemData.reason : itemData.author?.reason}
-              headerTextLabel={t(
-                'You reported {{ isAuthorString }} {{ itemTypeName }} for the following reason',
-                {
-                  itemTypeName,
-                  isAuthorString: accountAwaitingModeration ? 'the author of this' : 'this',
-                },
-              )}
-              footerTextLabel={t('It is awaiting moderation.')}
-              ctaLabel={t('See it anyway')}
-              handleFlipCard={handleFlipCard}
-            />
-          )} */}
-
-          {/* {!entryAwaitingModeration &&
-            !accountAwaitingModeration && */}
           {!itemData.nsfw && itemData.active && (
             <EntryCard
               entryData={mapBeamEntryData(itemData)}
@@ -166,7 +108,7 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
               itemType={EntityTypes.BEAM}
               onAvatarClick={handleClickAvatar}
               onContentClick={handleContentClick}
-              flagAsLabel={t('Report Post')}
+              flagAsLabel={t('Flag')}
               locale={locale}
               moderatedContentLabel={t('This content has been moderated')}
               profileAnchorLink={'/@akashaorg/app-profile'}
@@ -178,7 +120,7 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
               isLoggedIn={isLoggedIn}
               removeEntryLabel={t('Delete Post')}
               onEntryRemove={handleEntryRemove}
-              onEntryFlag={handleEntryFlag(itemData.id, EntityTypes.BEAM)}
+              onEntryFlag={handleFlag}
               hideActionButtons={hideActionButtons}
               actionsRight={<Extension name={`entry-card-actions-right_${id}`} />}
               transformSource={transformSource}
