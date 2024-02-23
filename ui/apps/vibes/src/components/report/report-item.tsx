@@ -1,10 +1,7 @@
 import React from 'react';
-
-import Accordion, { AccordionProps } from '@akashaorg/design-system-core/lib/components/Accordion';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
-
 import {
   CategoryPills,
   CategoryPillsProps,
@@ -13,7 +10,7 @@ import {
   PageHeader,
   SubtitleRenderer,
 } from '../common';
-import { useAccordion } from '@akashaorg/ui-awf-hooks';
+import { ReasonType } from '../../utils';
 
 export type ReportItemProps = PageHeaderProps &
   CategoryPillsProps &
@@ -21,21 +18,21 @@ export type ReportItemProps = PageHeaderProps &
     step: number;
     introLabel: string;
     subTextLabel: string;
-    accordionNodes: Omit<AccordionProps, 'accordionId' | 'open' | 'handleClick'>[];
+    selectedReason: ReasonType | null;
     reasonPlaceholderLabel: string;
   };
 
 export const ReportItem: React.FC<ReportItemProps> = props => {
-  const { step, introLabel, subTextLabel, accordionNodes, reasonPlaceholderLabel } = props;
+  const { step, introLabel, subTextLabel, selectedReason, reasonPlaceholderLabel } = props;
 
-  const { active, handleAccordionClick } = useAccordion();
+  const textColor = { light: 'grey7', dark: 'grey6' } as const;
 
   return (
     <PageHeader {...props}>
       <Stack spacing="gap-y-4">
         <Text>
           {introLabel}{' '}
-          <Text as="span" variant="footnotes2" color={{ light: 'grey7', dark: 'grey6' }}>
+          <Text as="span" variant="footnotes2" weight="normal" color={textColor}>
             {`(${subTextLabel})`}
           </Text>
         </Text>
@@ -45,31 +42,34 @@ export const ReportItem: React.FC<ReportItemProps> = props => {
             <CategoryPills {...props} />
 
             <Stack spacing="gap-y-2">
-              {accordionNodes.map(({ titleNode, contentNode }, idx) => (
-                <Stack key={idx}>
-                  <Accordion
-                    accordionId={idx}
-                    open={idx === active}
-                    titleNode={titleNode}
-                    contentNode={contentNode}
-                    handleClick={handleAccordionClick}
-                    contentStyle="p-0"
-                  />
-                </Stack>
-              ))}
+              {selectedReason && (
+                <>
+                  <Text variant="h6">{`🛑 ${selectedReason.title}`}</Text>
+                  <Text variant="footnotes2" weight="normal">
+                    {selectedReason.description}
+                  </Text>
+                </>
+              )}
             </Stack>
           </>
         )}
 
         {step === 1 && (
           <>
-            <TextField placeholder={reasonPlaceholderLabel} type="multiline" />
+            <TextField
+              placeholder={reasonPlaceholderLabel}
+              type="multiline"
+              onChange={() => {
+                /** */
+              }}
+            />
 
             <SubtitleRenderer
               {...props}
               textVariant="footnotes2"
               textAlign="start"
-              textColor={{ light: 'grey7', dark: 'grey6' }}
+              fontWeight="normal"
+              textColor={textColor}
             />
           </>
         )}

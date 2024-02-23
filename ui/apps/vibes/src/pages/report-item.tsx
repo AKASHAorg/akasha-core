@@ -1,21 +1,18 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useModerationCategory, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { ReportItem, ReportItemConfirmation } from '../components/report';
 import { HOME } from '../routes';
-import { reportDetailsSubtitles, reasons, externalLinks } from '../utils';
+import { reasons, externalLinks } from '../utils';
 
 export type ReportItemPageProps = {
   itemType: string;
   itemId: string;
 };
 
-export const ReportItemPage: React.FC<ReportItemPageProps> = () => {
+export const ReportItemPage: React.FC<ReportItemPageProps> = props => {
+  const { itemType } = props;
   const [step, setStep] = useState<number>(0);
-  const { itemType } = useParams();
   const { getRoutingPlugin } = useRootComponentProps();
   const { t } = useTranslation('app-vibes');
 
@@ -30,15 +27,8 @@ export const ReportItemPage: React.FC<ReportItemPageProps> = () => {
   const { categories, handleCategoryClick } = useModerationCategory({
     moderationCategories,
     allCategoriesLabel,
-    maxSelection: 2,
+    maxSelection: 1,
   });
-
-  const handleSubtitleLinkClick = (link: string) => () => {
-    navigateTo?.({
-      appName: '@akashaorg/app-legal',
-      getNavigationUrl: () => link,
-    });
-  };
 
   const handleCancelButtonClick = () => {
     if (step === 1) {
@@ -59,21 +49,38 @@ export const ReportItemPage: React.FC<ReportItemPageProps> = () => {
      */
   };
 
-  const handleCloseIconClick = () => {
+  const handleContinueClick = () => {
     navigateTo?.({
       appName: '@akashaorg/app-akasha-integration',
-      getNavigationUrl: () => '/feed',
+      getNavigationUrl: (routes: Record<string, string>) => routes.defaultRoute,
     });
   };
+
+  const handleSubtitleLinkClick = (link: string) => {
+    navigateTo?.({
+      appName: '@akashaorg/app-legal',
+      getNavigationUrl: () => link,
+    });
+  };
+
+  const reportDetailsSubtitles = [
+    {
+      label: t('If you are unsure, you can refer to our'),
+    },
+    { label: t('Code of Conduct'), link: '/code-of-conduct' },
+    { label: t('and') },
+    { label: t('Terms of Service'), link: '/terms-of-service' },
+  ];
 
   if (step === 2) {
     return (
       <ReportItemConfirmation
         titleLabel={t('Thank you for keeping the good vibes')}
         subtitleLabel={t('Our moderators will review the report as soon as possible')}
+        continueLabel={t('Continue on Antenna')}
         footnoteLabel={t('Feel like you want to contribute more to improve our community?')}
-        ctaLabel={t('Join our Moderation Discourd channel')}
-        onIconClick={handleCloseIconClick}
+        ctaLabel={t('Join our Moderation Discord channel')}
+        onContinueClick={handleContinueClick}
         ctaUrl={externalLinks.discord}
       />
     );
@@ -87,30 +94,15 @@ export const ReportItemPage: React.FC<ReportItemPageProps> = () => {
       step={step}
       introLabel={
         step === 0
-          ? t('Can you please let us know why did this {{itemType}} bothers you?', {
+          ? t('Can you please let us know why did this {{itemType}} bother you?', {
               itemType,
             })
           : t('Provide us with more details')
       }
-      subTextLabel={step === 0 ? `${t('2 max')}.` : t('optional')}
+      subTextLabel={step === 0 ? `${t('You can only choose one')}` : t('optional')}
       categories={categories}
       moderationCategories={moderationCategories}
-      accordionNodes={categories
-        .map(cat => reasons.find(el => el.title === cat))
-        .map(el => ({
-          titleNode: (
-            <Stack>
-              <Text variant="button-sm">{el.title}</Text>
-            </Stack>
-          ),
-          contentNode: (
-            <Stack>
-              <Text variant="footnotes2" color={{ light: 'grey5', dark: 'grey6' }}>
-                {el.description}
-              </Text>
-            </Stack>
-          ),
-        }))}
+      selectedReason={reasons.find(el => el.title === categories[0])} // since user can select only one category here
       reasonPlaceholderLabel={`${t('Place some details here, if any')}...`}
       subtitleLabels={reportDetailsSubtitles.map(subtitle => ({
         ...subtitle,
@@ -118,6 +110,7 @@ export const ReportItemPage: React.FC<ReportItemPageProps> = () => {
       }))}
       cancelButtonLabel={t('Cancel')}
       confirmButtonLabel={step === 0 ? t('Proceed') : t('Submit')}
+      confirmButtonDisabled={step === 0 && !categories.length}
       onPillClick={handleCategoryClick}
       onLinkClick={handleSubtitleLinkClick}
       onCancelButtonClick={handleCancelButtonClick}

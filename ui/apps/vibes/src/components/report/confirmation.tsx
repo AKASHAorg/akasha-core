@@ -1,10 +1,10 @@
 import React from 'react';
 
+import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { XMarkIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { Discord } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -16,9 +16,10 @@ export type ReportItemConfirmationProps = {
   titleLabel: string;
   subtitleLabel: string;
   footnoteLabel: string;
+  continueLabel: string;
   ctaLabel: string;
   ctaUrl: string;
-  onIconClick: () => void;
+  onContinueClick: () => void;
 };
 
 export const ReportItemConfirmation: React.FC<ReportItemConfirmationProps> = props => {
@@ -29,39 +30,51 @@ export const ReportItemConfirmation: React.FC<ReportItemConfirmationProps> = pro
     titleLabel,
     subtitleLabel,
     footnoteLabel,
+    continueLabel,
     ctaLabel,
-    onIconClick,
+    onContinueClick,
     ctaUrl,
   } = props;
 
   return (
     <Card padding={16}>
       <Stack spacing="gap-y-4" align="center">
-        <Button plain={true} customStyle="self-end" onClick={onIconClick}>
-          <Icon icon={<XMarkIcon />} />
-        </Button>
-
         <Text variant="h5" align="center">
           {titleLabel} 🙌🏽
         </Text>
 
-        <Stack customStyle="w-40 h-40 my-2 mx-auto">
+        <Stack customStyle="w-45 h-45 my-2 mx-auto">
           <Image
             src={`${publicImgPath}/${assetName}.${assetExtension}`}
             dataTestId={`${assetName}-image`}
           />
         </Stack>
 
-        <Text align="center" color={{ light: 'grey5', dark: 'grey6' }}>
+        <Text
+          variant="body2"
+          weight="normal"
+          align="center"
+          color={{ light: 'grey5', dark: 'grey6' }}
+        >
           {subtitleLabel}
         </Text>
 
+        <Button plain={true} onClick={onContinueClick}>
+          <Text
+            variant="button-md"
+            align="center"
+            color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+          >
+            {continueLabel}
+          </Text>
+        </Button>
+
         <Stack align="center" justifySelf="end" spacing="gap-y-2">
-          <Text variant="footnotes2" align="center">
-            {footnoteLabel}.
+          <Text variant="footnotes2" weight="normal" align="center">
+            {footnoteLabel}
           </Text>
 
-          <a href={ctaUrl} target="_blank" rel="noreferrer noopener">
+          <Anchor href={ctaUrl} target="_blank" rel="noreferrer noopener">
             <Stack direction="row" align="center" spacing="gap-x-2">
               <Icon
                 size="sm"
@@ -73,13 +86,14 @@ export const ReportItemConfirmation: React.FC<ReportItemConfirmationProps> = pro
 
               <Text
                 variant="footnotes2"
+                weight="normal"
                 align="center"
                 color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
               >
                 {ctaLabel}
               </Text>
             </Stack>
-          </a>
+          </Anchor>
         </Stack>
       </Stack>
     </Card>

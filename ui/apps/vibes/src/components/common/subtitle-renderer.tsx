@@ -9,19 +9,27 @@ export type SubtitleRendererProps = {
   textVariant?: TextProps['variant'];
   textAlign?: TextProps['align'];
   textColor?: TextProps['color'];
+  fontWeight?: TextProps['weight'];
   subtitleLabels: SubtitleLabel[];
   onLinkClick: (link?: string) => void;
 };
 
 export const SubtitleRenderer: React.FC<SubtitleRendererProps> = props => {
-  const { textVariant, textAlign = 'center', textColor, subtitleLabels, onLinkClick } = props;
+  const {
+    textVariant,
+    textAlign = 'center',
+    textColor,
+    fontWeight,
+    subtitleLabels,
+    onLinkClick,
+  } = props;
 
   const handleLinkClick = (link: string) => () => {
     onLinkClick(link);
   };
 
   return (
-    <Text align={textAlign} variant={textVariant} color={textColor}>
+    <Text align={textAlign} variant={textVariant} color={textColor} weight={fontWeight}>
       {subtitleLabels.map(el => (
         <React.Fragment key={el.label}>
           {!el.link && <>{el.label} </>}
@@ -33,7 +41,7 @@ export const SubtitleRenderer: React.FC<SubtitleRendererProps> = props => {
                   as="span"
                   variant={textVariant}
                   color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-                  weight="bold"
+                  weight={fontWeight}
                   align="center"
                   customStyle="cursor-pointer"
                 >

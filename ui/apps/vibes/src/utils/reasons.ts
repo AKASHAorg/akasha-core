@@ -1,4 +1,4 @@
-type ReasonType = { title: string; description: string };
+export type ReasonType = { title: string; description: string };
 
 export const reasons: ReasonType[] = [
   {
