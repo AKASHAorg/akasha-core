@@ -46,7 +46,7 @@ export const AppInfoVariants: Story = {
             license="AGPL-3.0"
             share={{ label: 'Share', icon: <ShareIcon /> }}
             report={{
-              label: 'Report',
+              label: 'Flag',
               icon: <FlagIcon />,
               color: { light: 'errorLight', dark: 'errorDark' },
             }}
