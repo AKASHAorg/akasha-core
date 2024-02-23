@@ -18,7 +18,7 @@ export const resolveConfigs = async ({ matchingBlocks, mode, logger }: IResolveC
       })();
       newBlocks.push({ ...block, config });
     } catch (err) {
-      logger.error(err);
+      logger.error('content block resolveConfigs function', err);
     }
   }
   return newBlocks;

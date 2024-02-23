@@ -95,7 +95,7 @@ export const useGetLoginProfile = () => {
       variables: {
         id: data.id,
       },
-    }).catch(err => logger.error(err));
+    }).catch(err => logger.error('useGetLoginProfile hook', err));
   }, [logger, data, fetchProfile]);
 
   return React.useMemo(() => {
