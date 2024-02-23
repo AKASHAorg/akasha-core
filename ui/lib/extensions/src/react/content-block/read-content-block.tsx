@@ -11,7 +11,8 @@ import { useGetContentBlockByIdLazyQuery } from '@akashaorg/ui-awf-hooks/lib/gen
 import { ExclamationTriangleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { ParcelConfigObject } from 'single-spa';
 import { BlockParcel } from './block-parcel';
-import { MatchingBlock } from './index';
+import { MatchingBlock } from './common.types';
+import { resolveConfigs } from './resolve-configs';
 
 export type ReadContentBlockExtensionProps = {
   blockRef?: React.RefObject<BlockInstanceMethods>;
@@ -73,48 +74,26 @@ export const ReadContentBlockExtension: React.FC<ReadContentBlockExtensionProps>
     return null;
   }, [remainingProps, blockInfoQuery]);
   const matchingBlocks: MatchingBlock[] = useMemo(() => {
-    const matchingBlocks = hasOwn(remainingProps, 'blockData')
-      ? remainingProps?.matchingBlocks
-      : null;
-    if (matchingBlocks) return matchingBlocks;
+    if (hasOwn(remainingProps, 'blockData') && remainingProps?.matchingBlocks)
+      return remainingProps.matchingBlocks;
     return !blockData ? [] : contentBlockStoreRef.current.getMatchingBlocks(blockData);
   }, [blockData, remainingProps]);
-  const blockId = React.useMemo(() => {
-    if (hasOwn(remainingProps, 'blockID')) {
-      return remainingProps.blockID;
-    }
-    return '0';
-  }, [remainingProps]);
 
   useLayoutEffect(() => {
-    const resolveConfigs = async () => {
-      const newBlocks = [];
-
-      for (const block of matchingBlocks) {
-        try {
-          const config = await block.blockInfo.loadingFn({
-            blockInfo: { ...block.blockInfo, mode: ContentBlockModes.READONLY },
-            blockData: block.blockData,
-          })();
-          newBlocks.push({ ...block, config });
-        } catch (err) {
-          console.error(err);
-        }
-      }
-
-      setState({
-        parcels: newBlocks,
-        isMatched: true,
-      });
-    };
-
     if (
       matchingBlocks &&
       matchingBlocks.length &&
       matchingBlocks.length !== state.parcels.length &&
       !state.isMatched
     ) {
-      resolveConfigs().catch(err => console.error('failed to load content blocks', err));
+      resolveConfigs({ matchingBlocks, mode: ContentBlockModes.READONLY })
+        .then(newBlocks => {
+          setState({
+            parcels: newBlocks,
+            isMatched: true,
+          });
+        })
+        .catch(err => console.error('failed to load content blocks', err));
     } else if (
       matchingBlocks &&
       !matchingBlocks.length &&
@@ -127,7 +106,7 @@ export const ReadContentBlockExtension: React.FC<ReadContentBlockExtensionProps>
         isMatched: true,
       });
     }
-  }, [blockInfoQuery.called, blockInfoQuery.loading, matchingBlocks, remainingProps, state]);
+  }, [blockInfoQuery.called, blockInfoQuery.loading, matchingBlocks, state]);
 
   useEffect(() => {
     if (hasOwn(remainingProps, 'blockID')) {
@@ -139,6 +118,15 @@ export const ReadContentBlockExtension: React.FC<ReadContentBlockExtensionProps>
     }
   }, [fetchBlockInfo, remainingProps]);
 
+  useEffect(() => {
+    return () => {
+      setState({
+        isMatched: false,
+        parcels: [],
+      });
+    };
+  }, []);
+
   const appInfo = useMemo(() => {
     if (blockData) {
       return blockData.appVersion?.application;
@@ -146,14 +134,7 @@ export const ReadContentBlockExtension: React.FC<ReadContentBlockExtensionProps>
   }, [blockData]);
 
   return (
-    <React.Suspense
-      fallback={
-        <Stack fullWidth={true} spacing="gap-y-1" customStyle="mb-2">
-          <TextLine animated={true} width="w-full" />
-          <TextLine animated={true} width="w-2/3" />
-        </Stack>
-      }
-    >
+    <>
       {blockDataError && (
         <Stack direction="row">
           <Stack
@@ -196,8 +177,8 @@ export const ReadContentBlockExtension: React.FC<ReadContentBlockExtensionProps>
       )}
       {!state.parcels.length && !state.isMatched && (
         <Stack fullWidth={true} spacing="gap-y-1" customStyle="mb-2">
-          <TextLine animated={true} width="w-full" />
-          <TextLine animated={true} width="w-2/3" />
+          <TextLine width="w-full" animated />
+          <TextLine width="w-2/3" animated />
         </Stack>
       )}
       {!state.parcels.length && state.isMatched && appInfo && (
@@ -224,13 +205,13 @@ export const ReadContentBlockExtension: React.FC<ReadContentBlockExtensionProps>
             key={index}
             mode={ContentBlockModes.READONLY}
             matchingBlock={matchingBlock}
-            blockId={blockId}
+            blockId={blockData?.id}
             index={index}
             blockRef={blockRef}
             onError={onError}
           />
         );
       })}
-    </React.Suspense>
+    </>
   );
 };

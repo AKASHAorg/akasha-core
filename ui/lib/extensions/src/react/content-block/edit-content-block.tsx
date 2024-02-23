@@ -1,11 +1,12 @@
-import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { ContentBlockModes, BlockInstanceMethods } from '@akashaorg/typings/lib/ui';
 import { ParcelConfigObject } from 'single-spa';
 import { BlockParcel } from './block-parcel';
-import { MatchingBlock } from './index';
+import { MatchingBlock } from './common.types';
+import { resolveConfigs } from './resolve-configs';
 
 export type EditContentBlockExtensionProps = {
   blockRef?: React.RefObject<BlockInstanceMethods>;
@@ -16,7 +17,7 @@ export type EditContentBlockExtensionProps = {
 };
 
 export const EditContentBlockExtension: React.FC<EditContentBlockExtensionProps> = props => {
-  const { blockRef, propertyType, appName, onError, externalHandler, ...remainingProps } = props;
+  const { blockRef, propertyType, appName, onError, externalHandler } = props;
   const { getExtensionsPlugin } = useRootComponentProps();
   const contentBlockStoreRef = useRef(getExtensionsPlugin()?.contentBlockStore);
   const [state, setState] = useState<{
@@ -36,51 +37,39 @@ export const EditContentBlockExtension: React.FC<EditContentBlockExtensionProps>
   }, [appName, propertyType]);
 
   useLayoutEffect(() => {
-    const resolveConfigs = async () => {
-      const newBlocks = [];
-
-      for (const block of matchingBlocks) {
-        try {
-          const config = await block.blockInfo.loadingFn({
-            blockInfo: { ...block.blockInfo, mode: ContentBlockModes.EDIT },
-            blockData: block.blockData,
-          })();
-          newBlocks.push({ ...block, config });
-        } catch (err) {
-          console.error(err);
-        }
-      }
-
-      setState({
-        parcels: newBlocks,
-        isMatched: true,
-      });
-    };
-
     if (
       matchingBlocks &&
       matchingBlocks.length &&
       matchingBlocks.length !== state.parcels.length &&
       !state.isMatched
     ) {
-      resolveConfigs().catch(err => console.error('failed to load content blocks', err));
+      resolveConfigs({ matchingBlocks, mode: ContentBlockModes.EDIT })
+        .then(newBlocks => {
+          setState({
+            parcels: newBlocks,
+            isMatched: true,
+          });
+        })
+        .catch(err => console.error('failed to load content blocks', err));
     } else if (matchingBlocks && !matchingBlocks.length && !state.isMatched) {
       setState({
         parcels: [],
         isMatched: true,
       });
     }
-  }, [matchingBlocks, remainingProps, state]);
+  }, [matchingBlocks, state]);
+
+  useEffect(() => {
+    return () => {
+      setState({
+        isMatched: false,
+        parcels: [],
+      });
+    };
+  }, []);
 
   return (
-    <React.Suspense
-      fallback={
-        <Stack fullWidth={true} spacing="gap-y-1" customStyle="mb-2">
-          <TextLine animated={true} width="w-full" />
-          <TextLine animated={true} width="w-2/3" />
-        </Stack>
-      }
-    >
+    <>
       {!state.parcels.length && !state.isMatched && (
         <Stack fullWidth={true} spacing="gap-y-1" customStyle="mb-2">
           <TextLine animated={true} width="w-full" />
@@ -101,6 +90,6 @@ export const EditContentBlockExtension: React.FC<EditContentBlockExtensionProps>
           />
         );
       })}
-    </React.Suspense>
+    </>
   );
 };

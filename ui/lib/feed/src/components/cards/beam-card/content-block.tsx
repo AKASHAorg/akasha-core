@@ -5,10 +5,9 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import {
-  ContentBlockExtension,
+  ReadContentBlockExtension,
   MatchingBlock,
 } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
-import { ContentBlockModes } from '@akashaorg/typings/lib/ui';
 import { useTranslation } from 'react-i18next';
 import { useGetContentBlockByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { useNsfwToggling } from '@akashaorg/ui-awf-hooks';
@@ -62,7 +61,9 @@ const ContentBlock: React.FC<ContentBlockType> = props => {
   const contentBlockPropertyType = blockData?.content?.[0]?.propertyType;
   const contentBlockLabel = blockData?.content?.[0]?.label;
   const nsfw = !!blockData?.nsfw;
-  const matchingBlocks: MatchingBlock[] = contentBlockStoreRef.current.getMatchingBlocks(blockData);
+  const matchingBlocks: MatchingBlock[] = !blockData
+    ? []
+    : contentBlockStoreRef.current.getMatchingBlocks(blockData);
   const foundBlock = matchingBlocks.find(matchingBlock => {
     if (matchingBlock.blockData && hasOwn(matchingBlock.blockData, 'id'))
       return matchingBlock.blockData?.id === blockID;
@@ -111,6 +112,7 @@ const ContentBlock: React.FC<ContentBlockType> = props => {
           }
         }
       }}
+      customStyle="w-full"
     >
       {!showNSFWCard && (
         <>
@@ -127,8 +129,7 @@ const ContentBlock: React.FC<ContentBlockType> = props => {
               {t('{{blockDisplayName}}', { blockDisplayName })}
             </Text>
           </Transition>
-          <ContentBlockExtension
-            mode={ContentBlockModes.READONLY}
+          <ReadContentBlockExtension
             blockData={blockData}
             matchingBlocks={matchingBlocks}
             error={contentBlockReq.error?.message ?? ''}

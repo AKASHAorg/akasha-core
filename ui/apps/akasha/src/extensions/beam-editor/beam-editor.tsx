@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, ChangeEvent, KeyboardEvent } from '
 import { useTranslation } from 'react-i18next';
 
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { type ContentBlock, ContentBlockModes } from '@akashaorg/typings/lib/ui';
+import { type ContentBlock } from '@akashaorg/typings/lib/ui';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
@@ -12,7 +12,7 @@ import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import SearchBar from '@akashaorg/design-system-components/lib/components/SearchBar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import { ContentBlockExtension } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
+import { EditContentBlockExtension } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
 import { Header } from './header';
 import { Footer } from './footer';
 import { BlockHeader } from '@akashaorg/design-system-components/lib/components/BlockHeader';
@@ -244,12 +244,11 @@ export const BeamEditor: React.FC = () => {
                   }}
                   isNsfwCheckboxSelected={!!nsfwBlocks.get(idx)}
                 />
-                <ContentBlockExtension
+                <EditContentBlockExtension
                   appName={block.appName}
                   propertyType={block.propertyType}
                   externalHandler={value => updateBlockDisablePublishState(value, block.order)}
                   blockRef={block.blockRef}
-                  mode={ContentBlockModes.EDIT}
                 />
               </Stack>
             </div>
