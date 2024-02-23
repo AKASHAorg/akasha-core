@@ -1,14 +1,8 @@
 import React from 'react';
 import { type ContentBlockExtensionInterface, ContentBlockModes } from '@akashaorg/typings/lib/ui';
 import { GetContentBlockByIdQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
-import {
-  ReadContentBlockExtension,
-  ReadContentBlockExtensionProps,
-} from './read-content-block-extension';
-import {
-  EditContentBlockExtension,
-  EditContentBlockExtensionProps,
-} from './edit-content-block-extension';
+import { ReadContentBlockExtension, ReadContentBlockExtensionProps } from './read-content-block';
+import { EditContentBlockExtension, EditContentBlockExtensionProps } from './edit-content-block';
 
 export type MatchingBlock = {
   blockInfo: ContentBlockExtensionInterface & {
