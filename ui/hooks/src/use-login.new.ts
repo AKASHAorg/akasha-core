@@ -7,6 +7,7 @@ import { logError } from './utils/error-handler';
 import { useGetProfileByDidLazyQuery } from './generated/apollo';
 import { hasOwn } from './utils/has-own';
 import getSDK from '@akashaorg/awf-sdk';
+import { useRootComponentProps } from './use-root-props';
 
 export const LOGIN_STATE_KEY = 'LOGIN_STATE';
 
@@ -85,6 +86,7 @@ export function useGetLogin(onError?: (error: Error) => void) {
  */
 export const useGetLoginProfile = () => {
   const { data } = useGetLogin();
+  const { logger } = useRootComponentProps();
   const [fetchProfile, profileQuery] = useGetProfileByDidLazyQuery();
 
   React.useEffect(() => {
@@ -93,8 +95,8 @@ export const useGetLoginProfile = () => {
       variables: {
         id: data.id,
       },
-    }).catch(err => console.error(err));
-  }, [data, fetchProfile]);
+    }).catch(err => logger.error(err));
+  }, [logger, data, fetchProfile]);
 
   return React.useMemo(() => {
     if (profileQuery.data?.node && hasOwn(profileQuery.data.node, 'akashaProfile')) {

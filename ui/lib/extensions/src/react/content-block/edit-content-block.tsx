@@ -18,7 +18,7 @@ export type EditContentBlockExtensionProps = {
 
 export const EditContentBlockExtension: React.FC<EditContentBlockExtensionProps> = props => {
   const { blockRef, propertyType, appName, onError, externalHandler } = props;
-  const { getExtensionsPlugin } = useRootComponentProps();
+  const { logger, getExtensionsPlugin } = useRootComponentProps();
   const contentBlockStoreRef = useRef(getExtensionsPlugin()?.contentBlockStore);
   const [state, setState] = useState<{
     parcels: (MatchingBlock & { config: ParcelConfigObject })[];
@@ -43,21 +43,21 @@ export const EditContentBlockExtension: React.FC<EditContentBlockExtensionProps>
       matchingBlocks.length !== state.parcels.length &&
       !state.isMatched
     ) {
-      resolveConfigs({ matchingBlocks, mode: ContentBlockModes.EDIT })
+      resolveConfigs({ matchingBlocks, mode: ContentBlockModes.EDIT, logger })
         .then(newBlocks => {
           setState({
             parcels: newBlocks,
             isMatched: true,
           });
         })
-        .catch(err => console.error('failed to load content blocks', err));
+        .catch(err => logger.error('failed to load content blocks', err));
     } else if (matchingBlocks && !matchingBlocks.length && !state.isMatched) {
       setState({
         parcels: [],
         isMatched: true,
       });
     }
-  }, [matchingBlocks, state]);
+  }, [logger, matchingBlocks, state]);
 
   useEffect(() => {
     return () => {

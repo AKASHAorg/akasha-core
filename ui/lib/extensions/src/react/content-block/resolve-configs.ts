@@ -1,12 +1,14 @@
 import { ContentBlockModes } from '@akashaorg/typings/lib/ui';
 import { MatchingBlock } from './common.types';
+import { ILogger } from '@akashaorg/typings/lib/sdk/log';
 
 interface IResolveConfigs {
   matchingBlocks: MatchingBlock[];
   mode: ContentBlockModes;
+  logger: ILogger;
 }
 
-export const resolveConfigs = async ({ matchingBlocks, mode }: IResolveConfigs) => {
+export const resolveConfigs = async ({ matchingBlocks, mode, logger }: IResolveConfigs) => {
   const newBlocks = [];
   for (const block of matchingBlocks) {
     try {
@@ -16,7 +18,7 @@ export const resolveConfigs = async ({ matchingBlocks, mode }: IResolveConfigs) 
       })();
       newBlocks.push({ ...block, config });
     } catch (err) {
-      console.error(err);
+      logger.error(err);
     }
   }
   return newBlocks;

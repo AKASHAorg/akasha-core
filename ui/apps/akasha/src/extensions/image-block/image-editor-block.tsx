@@ -53,7 +53,7 @@ export const ImageEditorBlock = (
 ) => {
   const { t } = useTranslation('app-akasha-integration');
   const sdk = useRef(getSDK());
-  const { uiEvents } = useRootComponentProps();
+  const { uiEvents, logger } = useRootComponentProps();
   const _uiEvents = useRef(uiEvents);
   const [createContentBlock, contentBlockQuery] = useCreateContentBlockMutation();
   const retryCount = useRef<number>();
@@ -129,7 +129,7 @@ export const ImageEditorBlock = (
           retryCount: retryCount.current,
         };
       } catch (err) {
-        console.error('error creating content block', err);
+        logger.error('error creating content block', err);
         return {
           response: {
             blockID: null,

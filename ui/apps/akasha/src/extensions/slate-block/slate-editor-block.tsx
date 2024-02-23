@@ -28,7 +28,7 @@ const TEST_APP_VERSION_ID = 'kjzl6kcym7w8y8af3kd0lwkkk2m1nxtchlvcikbak748md3m3gp
 export const SlateEditorBlock = (
   props: ContentBlockRootProps & { blockRef?: RefObject<BlockInstanceMethods> },
 ) => {
-  const { name } = useRootComponentProps<RootExtensionProps>();
+  const { name, logger } = useRootComponentProps<RootExtensionProps>();
   const { data } = useGetLogin();
   const authenticatedDID = data?.id;
   const retryCount = useRef<number>();
@@ -81,7 +81,7 @@ export const SlateEditorBlock = (
           retryCount: retryCount.current,
         };
       } catch (err) {
-        console.error('error creating content block', err);
+        logger.error('error creating content block', err);
         return {
           response: {
             blockID: null,
