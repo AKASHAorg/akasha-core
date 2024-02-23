@@ -83,12 +83,12 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
     hover,
     hoverColors,
   });
-
   const textStyle = getTextClasses({ variant, loading, disabled, hover, hoverColors, active });
-
   const breakPointStyle = breakPointSize
     ? BUTTON_SIZE_MAP_BY_BREAKPOINT(breakPointSize.breakPoint)[breakPointSize.size]
     : '';
+  const buttonSizeStyle = variant !== 'text' ? BUTTON_SIZE_MAP[size] : '';
+  const buttonPaddingStyle = variant !== 'text' ? BUTTON_SIZE_PADDING_MAP[size] : '';
 
   return (
     <button ref={ref} className={tw(customStyle)} type="button" {...rest} disabled={disabled}>
@@ -97,9 +97,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
         align="center"
         justify="center"
         spacing="gap-x-1"
-        customStyle={apply`group ${containerStyle} ${BUTTON_SIZE_MAP[size]} ${breakPointStyle} ${
-          variant !== 'text' ? BUTTON_SIZE_PADDING_MAP[size] : ''
-        }`}
+        customStyle={apply`group ${containerStyle} ${buttonSizeStyle} ${breakPointStyle} ${buttonPaddingStyle}`}
       >
         {loading ? (
           <ButtonIcon

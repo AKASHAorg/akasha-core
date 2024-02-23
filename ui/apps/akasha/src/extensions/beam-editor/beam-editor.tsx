@@ -245,13 +245,11 @@ export const BeamEditor: React.FC = () => {
                   isNsfwCheckboxSelected={!!nsfwBlocks.get(idx)}
                 />
                 <ContentBlockExtension
-                  editMode={{
-                    appName: block.appName,
-                    propertyType: block.propertyType,
-                    externalHandler: value => updateBlockDisablePublishState(value, block.order),
-                  }}
-                  mode={ContentBlockModes.EDIT}
+                  appName={block.appName}
+                  propertyType={block.propertyType}
+                  externalHandler={value => updateBlockDisablePublishState(value, block.order)}
                   blockRef={block.blockRef}
+                  mode={ContentBlockModes.EDIT}
                 />
               </Stack>
             </div>

@@ -96,7 +96,20 @@ const ContentBlock: React.FC<ContentBlockType> = props => {
       }}
     >
       {!showNSFWCard && (
-        <ContentBlockExtension readMode={{ blockData }} mode={ContentBlockModes.READONLY} />
+        <ContentBlockExtension
+          mode={ContentBlockModes.READONLY}
+          blockData={blockData}
+          error={contentBlockReq.error?.message ?? ''}
+          errorTitle={t('Block not loaded correctly')}
+          errorDescription={t('Click on refresh to try reloading the block.')}
+          refreshLabel={t('Refresh')}
+          notInstalledTitle={t('not installed')}
+          notInstalledDescription1={t('Please install')}
+          notInstalledDescription2={t('to view this content.')}
+          onRefresh={() => {
+            contentBlockReq.refetch({ id: blockID });
+          }}
+        />
       )}
       {showHiddenContent && showNSFWCard && (
         <Stack
