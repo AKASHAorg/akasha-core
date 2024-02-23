@@ -1,11 +1,4 @@
-import React, {
-  PropsWithChildren,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -41,9 +34,7 @@ export type ReadContentBlockExtensionProps = {
     }
 );
 
-export const ReadContentBlockExtension: React.FC<
-  PropsWithChildren<ReadContentBlockExtensionProps>
-> = props => {
+export const ReadContentBlockExtension: React.FC<ReadContentBlockExtensionProps> = props => {
   const {
     blockRef,
     errorTitle,
@@ -52,7 +43,6 @@ export const ReadContentBlockExtension: React.FC<
     notInstalledTitle,
     notInstalledDescription1,
     notInstalledDescription2,
-    children,
     onError,
     ...remainingProps
   } = props;
@@ -228,7 +218,6 @@ export const ReadContentBlockExtension: React.FC<
           </Text>
         </Stack>
       )}
-      {children}
       {state.parcels.map((matchingBlock, index) => {
         return (
           <BlockParcel

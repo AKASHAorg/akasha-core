@@ -42,7 +42,7 @@ export const EditContentBlockExtension: React.FC<EditContentBlockExtensionProps>
       for (const block of matchingBlocks) {
         try {
           const config = await block.blockInfo.loadingFn({
-            blockInfo: { ...block.blockInfo, mode: ContentBlockModes.READONLY },
+            blockInfo: { ...block.blockInfo, mode: ContentBlockModes.EDIT },
             blockData: block.blockData,
           })();
           newBlocks.push({ ...block, config });
