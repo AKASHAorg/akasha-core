@@ -18,10 +18,8 @@ type BlockParcelProps = {
 );
 
 export const BlockParcel: React.FC<BlockParcelProps> = props => {
-  const { matchingBlock, blockId, index, blockRef, onError, ...remainingProps } = props;
-
+  const { matchingBlock, blockId, index, blockRef, onError, ...rest } = props;
   const { getContext, logger } = useRootComponentProps();
-
   const handleParcelError = React.useCallback(
     (parcelName: string) => {
       return error => {
@@ -35,8 +33,8 @@ export const BlockParcel: React.FC<BlockParcelProps> = props => {
   return (
     <Stack
       fullWidth
-      id={`${remainingProps.mode}_${matchingBlock.blockInfo.propertyType}_${blockId}_${index}`}
-      key={`${remainingProps.mode}_${matchingBlock.blockInfo.propertyType}_${blockId}_${index}`}
+      id={`${rest.mode}_${matchingBlock.blockInfo.propertyType}_${blockId}_${index}`}
+      key={`${rest.mode}_${matchingBlock.blockInfo.propertyType}_${blockId}_${index}`}
     >
       <RootParcel
         config={{
@@ -46,9 +44,8 @@ export const BlockParcel: React.FC<BlockParcelProps> = props => {
         {...getContext()}
         blockInfo={{
           ...matchingBlock.blockInfo,
-          mode: remainingProps.mode,
-          externalHandler:
-            remainingProps.mode === ContentBlockModes.EDIT ? remainingProps?.externalHandler : null,
+          mode: rest.mode,
+          externalHandler: rest.mode === ContentBlockModes.EDIT ? rest?.externalHandler : null,
         }}
         blockData={matchingBlock.blockData}
         blockRef={blockRef}
