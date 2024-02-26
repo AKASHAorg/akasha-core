@@ -1,4 +1,5 @@
-import { Moderator, ModeratorApplicantData, Profile } from '@akashaorg/typings/lib/ui';
+import { EntityTypes, Moderator, ModeratorApplicantData, Profile } from '@akashaorg/typings/lib/ui';
+import { EntryCardProps } from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import { reasons } from './reasons';
 import {
   TransparencyLogItem,
@@ -10,6 +11,49 @@ const randomDateBetweenValues = (start = 'Jan 01 2020', end = 'Dec 31 2020') => 
   const timeEnd = new Date(end).getTime();
 
   return new Date(timeStart + Math.random() * (timeEnd - timeStart));
+};
+
+const entryData = {
+  active: true,
+  authorId: 'did:pkh:eip155:5:0xa2aabe32856a8d50c748d50a5111312d986208a8',
+  content: null,
+  createdAt: '26/02/2024',
+  id: 'some random id',
+  beamID: 1,
+};
+
+export const entryCardProps: EntryCardProps = {
+  entryData,
+  isLoggedIn: false,
+  authorProfile: {
+    data: {
+      did: { id: 'did:pkh:eip155:5:0xa2aabe32856a8d50c748d50a5111312d986208a8' },
+      name: 'Coffee Lover',
+    },
+    loading: false,
+    error: new Error('an error occured'),
+  },
+  slateContent: [
+    {
+      type: 'paragraph',
+      children: [
+        {
+          text: 'Coffee makes me drool',
+        },
+      ],
+    },
+  ],
+  itemType: EntityTypes?.REFLECT,
+  flagAsLabel: 'Flag',
+  onContentClick: () => ({}),
+  onMentionClick: () => ({}),
+  onTagClick: () => ({}),
+  transformSource: () => ({
+    src: 'https://placebeard.it/360x360',
+    width: 360,
+    height: 360,
+  }),
+  contentClickable: false,
 };
 
 export const dismissalReasons: { title: string; subtitle: string }[] = [

@@ -37,7 +37,7 @@ export const ReportItemConfirmation: React.FC<ReportItemConfirmationProps> = pro
   } = props;
 
   return (
-    <Card padding={16}>
+    <Card customStyle="p(6 md:4)">
       <Stack spacing="gap-y-4" align="center">
         <Text variant="h5" align="center">
           {titleLabel} 🙌🏽
