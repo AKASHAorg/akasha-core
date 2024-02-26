@@ -11,9 +11,9 @@ import { BeamContentResolver, BeamFeed } from '@akashaorg/ui-lib-feed';
 import routes, { EDITOR } from '../../../routes';
 import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 export type GlobalAntennaPageProps = {
   isLoggedIn: boolean;
@@ -55,22 +55,24 @@ const GlobalAntennaPage: React.FC<GlobalAntennaPageProps> = props => {
 
   return (
     <Stack fullWidth={true}>
-      <Helmet.Helmet>
-        <title>AKASHA World</title>
-      </Helmet.Helmet>
-      <BeamFeed
-        header={listHeader}
-        queryKey={'app-akasha-integration_general-antenna'}
-        estimatedHeight={150}
-        itemSpacing={8}
-        scrollerOptions={{ overscan: 10 }}
-        scrollTopIndicator={(listRect, onScrollToTop) => (
-          <ScrollTopWrapper placement={listRect.left}>
-            <ScrollTopButton hide={false} onClick={onScrollToTop} />
-          </ScrollTopWrapper>
-        )}
-        trackEvent={analyticsActions.trackEvent}
-      />
+      <HelmetProvider>
+        <Helmet>
+          <title>AKASHA World</title>
+        </Helmet>
+        <BeamFeed
+          header={listHeader}
+          queryKey={'app-akasha-integration_general-antenna'}
+          estimatedHeight={150}
+          itemSpacing={8}
+          scrollerOptions={{ overscan: 10 }}
+          scrollTopIndicator={(listRect, onScrollToTop) => (
+            <ScrollTopWrapper placement={listRect.left}>
+              <ScrollTopButton hide={false} onClick={onScrollToTop} />
+            </ScrollTopWrapper>
+          )}
+          trackEvent={analyticsActions.trackEvent}
+        />
+      </HelmetProvider>
     </Stack>
   );
 };
