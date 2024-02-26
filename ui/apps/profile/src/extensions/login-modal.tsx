@@ -46,7 +46,7 @@ const LoginModal = (props: RootExtensionProps) => {
   return (
     <Modal
       show={modal?.name === 'login'}
-      title={{ label: t('{{messageTitle}}', messageTitle), variant: 'h6' }}
+      title={{ label: t('{{messageTitle}}', { messageTitle }), variant: 'h6' }}
       actions={[
         { label: t('Cancel'), variant: 'secondary', onClick: handleModalClose },
         { label: t('Connect'), variant: 'primary', onClick: handleConnectClick },
@@ -56,7 +56,7 @@ const LoginModal = (props: RootExtensionProps) => {
     >
       <Stack align="center" fullWidth={true} spacing="gap-y-2">
         <Text variant="body1" align="center">
-          {t('{{message}}', message)}
+          {t('{{message}}', { message })}
         </Text>
       </Stack>
     </Modal>
