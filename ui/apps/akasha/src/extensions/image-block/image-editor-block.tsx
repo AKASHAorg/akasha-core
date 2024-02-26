@@ -42,10 +42,9 @@ import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 // @TODO: replace this with actual data
 const TEST_APP_VERSION_ID = 'kjzl6kcym7w8y8af3kd0lwkkk2m1nxtchlvcikbak748md3m3gplz1ori3s1j5f';
 
-const isImgUrl = url => {
-  return fetch(url, { method: 'HEAD' }).then(res => {
-    return res.headers.get('Content-Type').startsWith('image');
-  });
+const isImgUrl = async url => {
+  const response = await fetch(url, { method: 'HEAD' });
+  return response.headers.get('Content-Type').startsWith('image');
 };
 
 export const ImageEditorBlock = (
@@ -57,7 +56,11 @@ export const ImageEditorBlock = (
   const _uiEvents = useRef(uiEvents);
   const [createContentBlock, contentBlockQuery] = useCreateContentBlockMutation();
   const retryCount = useRef<number>();
+
   const [imageLink, setImageLink] = useState('');
+  const [urlNotImage, setURLNotImage] = useState(false);
+  const disableURLUpload = !imageLink || urlNotImage;
+
   const [uiState, setUiState] = useState('menu');
 
   const [contentBlockImages, setContentBlockImages] = useState<ImageObject[]>([]);
@@ -163,9 +166,11 @@ export const ImageEditorBlock = (
     [createBlock, retryCreate],
   );
 
-  const handleChange = e => {
+  const handleChange = async e => {
     setImageLink(e.currentTarget.value);
-    if (!isImgUrl(e.currentTarget.value)) {
+    const isImg = await isImgUrl(e.currentTarget.value);
+    if (!isImg) {
+      setURLNotImage(true);
       const notifMsg = t(`URL doesn't contain an image.`);
       _uiEvents.current.next({
         event: NotificationEvents.ShowNotification,
@@ -351,7 +356,7 @@ export const ImageEditorBlock = (
                 <Button
                   label={t('Add')}
                   variant="secondary"
-                  disabled={!imageLink}
+                  disabled={disableURLUpload}
                   onClick={() => uploadNewImage(imageLink, true)}
                 />
               </Stack>

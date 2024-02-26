@@ -8,7 +8,7 @@ export type Color =
   | Status
   | Colors;
 
-export type BaseElevation = 'none' | '1' | '2' | '4';
+export type BaseElevation = 'none' | '1' | '2' | '3' | '4';
 
 export type Elevation = BaseElevation | { light: BaseElevation; dark: BaseElevation };
 

@@ -12,6 +12,7 @@ import {
   useAnalytics,
   useRootComponentProps,
   useGetLoginProfile,
+  useMentions,
 } from '@akashaorg/ui-awf-hooks';
 import {
   GetReflectionsFromBeamDocument,
@@ -41,18 +42,26 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
   const [analyticsActions] = useAnalytics();
   const [newContent, setNewContent] = useState(null);
   const [edit, setEdit] = useState(false);
-  //@TODO
-  const [, setMentionQuery] = useState(null);
-  const [, setTagQuery] = useState(null);
+
   const [editorState, setEditorState] = useState(null);
 
   const sdk = getSDK();
   const beamId = entryData.beamID;
   const isReflectOfReflection = beamId !== reflectToId;
   const apolloClient = useApolloClient();
-  //@TODO
-  const mentionSearch = null;
-  const tagSearch = null;
+
+  const loggedInProfileReq = useGetLoginProfile();
+  const authenticatedDID = useMemo(
+    () => loggedInProfileReq?.akashaProfile?.did?.id,
+    [loggedInProfileReq],
+  );
+
+  const authenticatedProfile = loggedInProfileReq?.akashaProfile;
+
+  const { setMentionQuery, mentions } = useMentions(authenticatedDID);
+  const handleGetMentions = (query: string) => {
+    setMentionQuery(query);
+  };
 
   useEffect(() => {
     async () => {
@@ -93,13 +102,7 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
   const wrapperRef = useCloseActions(() => {
     setEdit(false);
   });
-  const loggedInProfileReq = useGetLoginProfile();
-  const disablePublishing = useMemo(
-    () => !loggedInProfileReq?.akashaProfile?.did?.id,
-    [loggedInProfileReq],
-  );
 
-  const authenticatedProfile = loggedInProfileReq?.akashaProfile;
   const reflectionCreationElapsedTimeInMinutes = dayjs(new Date()).diff(
     entryData.createdAt,
     'minutes',
@@ -169,9 +172,9 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
             showCancelButton={true}
             avatar={authenticatedProfile?.avatar}
             profileId={authenticatedProfile?.did?.id}
-            disablePublish={disablePublishing}
-            tags={tagSearch?.data}
-            mentions={mentionSearch?.data}
+            disablePublish={!authenticatedDID}
+            mentions={mentions}
+            getMentions={handleGetMentions}
             background={{ light: 'grey9', dark: 'grey3' }}
             customStyle="px-2 pt-2"
             onPublish={data => {
@@ -186,8 +189,6 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
               setEdit(false);
             }}
             getLinkPreview={getLinkPreview}
-            getMentions={setMentionQuery}
-            getTags={setTagQuery}
             transformSource={transformSource}
             encodingFunction={encodeSlateToBase64}
           />
