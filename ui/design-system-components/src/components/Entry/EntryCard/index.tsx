@@ -93,7 +93,7 @@ export type EntryCardProps = {
   onEntryRemove?: (itemId: string) => void;
   onEntryFlag?: () => void;
   onEdit?: () => void;
-  showLoginModal?: () => void;
+  showLoginModal?: (title?: string, message?: string) => void;
   transformSource: (src: Image) => Image;
 } & (BeamProps | ReflectProps);
 
@@ -276,7 +276,12 @@ const EntryCard: React.FC<EntryCardProps> = props => {
                   onClickToView={event => {
                     event.stopPropagation();
                     if (!isLoggedIn) {
-                      if (showLoginModal && typeof showLoginModal === 'function') showLoginModal();
+                      if (showLoginModal && typeof showLoginModal === 'function') {
+                        showLoginModal(
+                          null,
+                          'To view explicit or sensitive content, please connect to confirm your consent.',
+                        );
+                      }
                     } else {
                       setShowNSFWContent(true);
                     }
