@@ -16,7 +16,7 @@ type BeamSectionProps = {
   entryData: BeamEntryData;
   isLoggedIn: boolean;
   showNSFWCard: boolean;
-  showLoginModal: () => void;
+  showLoginModal: (title?: string, message?: string) => void;
   pendingReflectionsVar: ReturnType<typeof createReactiveVar<ReflectEntryData[]>>;
 };
 
@@ -65,7 +65,12 @@ const BeamSection: React.FC<BeamSectionProps> = props => {
         <Stack padding="px-2">
           {!isLoggedIn && (
             <EditorPlaceholder
-              onClick={showLoginModal}
+              onClick={() =>
+                showLoginModal(
+                  'Member Only Feature',
+                  'You need to connect first to be able to use this feature.',
+                )
+              }
               profileId={null}
               actionLabel={t('Reflect')}
               placeholderLabel={t('Share your thoughts')}
