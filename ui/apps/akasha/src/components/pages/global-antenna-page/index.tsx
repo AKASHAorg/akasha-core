@@ -1,13 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ModalNavigationOptions, Profile } from '@akashaorg/typings/lib/ui';
-import {
-  useAnalytics,
-  useRootComponentProps,
-  transformSource,
-  hasOwn,
-} from '@akashaorg/ui-awf-hooks';
-import { BeamContentResolver, BeamFeed } from '@akashaorg/ui-lib-feed';
+import { useAnalytics, useRootComponentProps, transformSource } from '@akashaorg/ui-awf-hooks';
+import { BeamFeed } from '@akashaorg/ui-lib-feed';
 import routes, { EDITOR } from '../../../routes';
 import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
