@@ -13,7 +13,7 @@ import MyWidgetsPage from './pages/my-widgets-page';
 import AppsPage from './pages/apps-page';
 import MasterPage from './pages/master-page';
 import routes, { EXPLORE, MY_APPS, MY_WIDGETS, INFO, APPS } from '../routes';
-
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { hiddenIntegrations } from '../hidden-integrations';
 
 const AppRoutes: React.FC<unknown> = () => {
@@ -69,63 +69,68 @@ const AppRoutes: React.FC<unknown> = () => {
   };
 
   return (
-    <Router basename={baseRouteName}>
-      <MasterPage isLoggedIn={isLoggedIn}>
-        <Routes>
-          <Route
-            path={routes[EXPLORE]}
-            element={
-              <ErrorBoundary {...errorBoundaryProps}>
-                <ExplorePage
-                  installableApps={installableApps}
-                  installedAppsInfo={[]}
-                  isFetching={loading}
-                  reqError={error}
-                  isUserLoggedIn={isLoggedIn}
-                />
-              </ErrorBoundary>
-            }
-          />
-          <Route
-            path={routes[MY_APPS]}
-            element={
-              <ErrorBoundary {...errorBoundaryProps}>
-                <MyAppsPage
-                  availableApps={availableApps}
-                  defaultIntegrations={defaultIntegrations}
-                  installedAppsInfo={[]}
-                />
-              </ErrorBoundary>
-            }
-          />
-          <Route
-            path={routes[APPS]}
-            element={
-              <ErrorBoundary {...errorBoundaryProps}>
-                <AppsPage />
-              </ErrorBoundary>
-            }
-          />
-          <Route
-            path={routes[MY_WIDGETS]}
-            element={
-              <ErrorBoundary {...errorBoundaryProps}>
-                <MyWidgetsPage availableApps={availableApps} />
-              </ErrorBoundary>
-            }
-          />
-          <Route
-            path={`${routes[INFO]}/:appId`}
-            element={
-              <ErrorBoundary {...errorBoundaryProps}>
-                <InfoPage />
-              </ErrorBoundary>
-            }
-          />
-          <Route path="/" element={<Navigate to={routes[EXPLORE]} replace />} />
-        </Routes>
-      </MasterPage>
-    </Router>
+    <HelmetProvider>
+      <Helmet>
+        <title>Extensions | AKASHA World</title>
+      </Helmet>
+      <Router basename={baseRouteName}>
+        <MasterPage isLoggedIn={isLoggedIn}>
+          <Routes>
+            <Route
+              path={routes[EXPLORE]}
+              element={
+                <ErrorBoundary {...errorBoundaryProps}>
+                  <ExplorePage
+                    installableApps={installableApps}
+                    installedAppsInfo={[]}
+                    isFetching={loading}
+                    reqError={error}
+                    isUserLoggedIn={isLoggedIn}
+                  />
+                </ErrorBoundary>
+              }
+            />
+            <Route
+              path={routes[MY_APPS]}
+              element={
+                <ErrorBoundary {...errorBoundaryProps}>
+                  <MyAppsPage
+                    availableApps={availableApps}
+                    defaultIntegrations={defaultIntegrations}
+                    installedAppsInfo={[]}
+                  />
+                </ErrorBoundary>
+              }
+            />
+            <Route
+              path={routes[APPS]}
+              element={
+                <ErrorBoundary {...errorBoundaryProps}>
+                  <AppsPage />
+                </ErrorBoundary>
+              }
+            />
+            <Route
+              path={routes[MY_WIDGETS]}
+              element={
+                <ErrorBoundary {...errorBoundaryProps}>
+                  <MyWidgetsPage availableApps={availableApps} />
+                </ErrorBoundary>
+              }
+            />
+            <Route
+              path={`${routes[INFO]}/:appId`}
+              element={
+                <ErrorBoundary {...errorBoundaryProps}>
+                  <InfoPage />
+                </ErrorBoundary>
+              }
+            />
+            <Route path="/" element={<Navigate to={routes[EXPLORE]} replace />} />
+          </Routes>
+        </MasterPage>
+      </Router>
+    </HelmetProvider>
   );
 };
 
