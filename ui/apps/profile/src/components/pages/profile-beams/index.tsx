@@ -6,6 +6,7 @@ import {
   hasOwn,
   mapBeamEntryData,
   useAnalytics,
+  useNsfwToggling,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
 import { BeamCard, BeamFeed } from '@akashaorg/ui-lib-feed';
@@ -52,6 +53,8 @@ const ProfileBeamsPage: React.FC<ProfileBeamsPageProps> = props => {
                       `${navRoutes.Beam}/${itemData.node.id}${navRoutes.Reflect}`,
                   })
                 }
+                showNSFWCard={itemData.node.nsfw}
+                showHiddenContent={true}
               />
             );
         }}

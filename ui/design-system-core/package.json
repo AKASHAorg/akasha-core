@@ -62,7 +62,8 @@
     "react-easy-crop": "4.0.1",
     "@hookform/resolvers": "3.0.0",
     "react-hook-form": "7.43.9",
-    "react-helmet": "6.1.0"
+    "react-helmet": "6.1.0",
+    "react-helmet-async": "2.0.4"
   },
   "devDependencies": {
     "@akashaorg/typings": "*",

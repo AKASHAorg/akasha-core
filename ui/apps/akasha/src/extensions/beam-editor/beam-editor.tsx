@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, ChangeEvent, KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { hasOwn, useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { type ContentBlock, ContentBlockModes } from '@akashaorg/typings/lib/ui';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
@@ -17,6 +17,7 @@ import { Header } from './header';
 import { Footer } from './footer';
 import { BlockHeader } from '@akashaorg/design-system-components/lib/components/BlockHeader';
 import { useBlocksPublishing } from './use-blocks-publishing';
+import { useGetProfileByDidSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
 export type uiState = 'editor' | 'tags' | 'blocks';
 
@@ -49,6 +50,27 @@ export const BeamEditor: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [nsfwBlocks, setNsfwBlocks] = useState(new Map<number, boolean>());
 
+  /*
+   * get the logged-in user info and info about their profile's NSFW property
+   */
+  const { data: loginData, loading: authenticating } = useGetLogin();
+  const { data, error } = useGetProfileByDidSuspenseQuery({
+    fetchPolicy: 'cache-first',
+    variables: {
+      id: loginData?.id,
+    },
+    skip: !loginData?.id || authenticating,
+  });
+
+  const { akashaProfile: profileData } =
+    data?.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
+
+  useEffect(() => {
+    if (profileData?.nsfw) {
+      setIsNsfw(true);
+    }
+  }, [profileData]);
+
   const onBlockSelectAfter = (newSelection: ContentBlock) => {
     if (!newSelection?.propertyType) {
       return;
@@ -77,6 +99,12 @@ export const BeamEditor: React.FC = () => {
   }, [blocksInUse]);
 
   const handleNsfwCheckbox = () => {
+    /*
+     * If the profile is marked as NSFW, Beam NSFW checkbox should be marked as checked by default
+     * and the user shouldn't be able to change it
+     */
+    if (profileData?.nsfw) return;
+
     setIsNsfw(!isNsfw);
     const numberOfBlocks = blocksInUse.length;
     const newNsfwBlocks = new Map();
@@ -199,12 +227,16 @@ export const BeamEditor: React.FC = () => {
   const blocksWithActiveNsfw = [...nsfwBlocks].filter(([, value]) => !!value);
 
   useEffect(() => {
-    if (blocksWithActiveNsfw.length && blocksWithActiveNsfw.length === blocksInUse.length) {
+    if (blocksWithActiveNsfw.length && blocksWithActiveNsfw.length >= 1) {
       setIsNsfw(true);
       return;
     }
-    setIsNsfw(false);
-  }, [blocksWithActiveNsfw, blocksInUse]);
+    /*
+     *  If the profile is marked as NSFW, the beam is automatically marked as NSFW,
+     *  so there is no need to check for blocks
+     */
+    if (!profileData?.nsfw) setIsNsfw(false);
+  }, [blocksWithActiveNsfw, blocksInUse, profileData?.nsfw]);
 
   return (
     <Card customStyle="divide(y grey9 dark:grey3) h-[80vh] justify-between" padding={0}>
@@ -222,9 +254,7 @@ export const BeamEditor: React.FC = () => {
             value="nsfw"
             handleChange={handleNsfwCheckbox}
             isSelected={isNsfw}
-            indeterminate={
-              blocksWithActiveNsfw.length && blocksWithActiveNsfw.length < blocksInUse.length
-            }
+            isDisabled={profileData?.nsfw}
           />
         )}
       </Header>

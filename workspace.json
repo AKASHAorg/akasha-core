@@ -403,28 +403,6 @@
         }
       }
     },
-    "@akashaorg/app-moderation-ewa": {
-      "root": "ui/apps/moderation",
-      "sourceRoot": "ui/apps/moderation/src",
-      "projectType": "application",
-      "targets": {
-        "build": {
-          "builder": "@nrwl/workspace:run-commands",
-          "outputs": ["ui/apps/moderation"],
-          "options": {
-            "commands": ["yarn run pack", "yarn postpack"],
-            "cwd": "ui/apps/moderation",
-            "parallel": false
-          }
-        },
-        "extract:translations": {
-          "builder": "./tools/executors/i18n:extract",
-          "options": {
-            "cwd": "ui/apps/moderation"
-          }
-        }
-      }
-    },
     "@akashaorg/app-notifications": {
       "root": "ui/apps/notifications",
       "sourceRoot": "ui/apps/notifications/src",

@@ -25,11 +25,22 @@ type BeamCardProps = Pick<
   | 'showHiddenContent'
 > & {
   entryData: BeamEntryData;
+  showNSFWCard: boolean;
+  showLoginModal?: () => void;
 };
 
 const BeamCard: React.FC<BeamCardProps> = props => {
   const { t } = useTranslation('ui-lib-feed');
-  const { entryData, onReflect, showHiddenContent, ...rest } = props;
+  const {
+    entryData,
+    onReflect,
+    showHiddenContent,
+    showNSFWCard,
+    showLoginModal,
+    onContentClick,
+    ...rest
+  } = props;
+
   const { getRoutingPlugin, getTranslationPlugin } = useRootComponentProps();
   const { data } = useGetLogin();
   const [appName, setAppName] = useState('');
@@ -99,6 +110,9 @@ const BeamCard: React.FC<BeamCardProps> = props => {
         clickToViewLabel: t('Click to View'),
       }}
       showHiddenContent={showHiddenContent}
+      showNSFWCard={showNSFWCard}
+      showLoginModal={showLoginModal}
+      isLoggedIn={!!authenticatedDID}
       itemType={EntityTypes.BEAM}
       transformSource={transformSource}
       onAvatarClick={onAvatarClick}
@@ -142,10 +156,12 @@ const BeamCard: React.FC<BeamCardProps> = props => {
                 blockID={blockID}
                 authenticatedDID={authenticatedDID}
                 showHiddenContent={showHiddenContent}
+                beamIsNsfw={showNSFWCard}
                 onBlockInfoChange={blockInfo => {
                   setAppName(blockInfo?.appName);
                   setBlockNameMap(new Map(blockNameMap.set(blockID, blockInfo?.blockName)));
                 }}
+                onContentClick={onContentClick}
               />
             </Stack>
           </React.Suspense>
