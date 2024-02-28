@@ -19,7 +19,7 @@ import routes, {
   EDITOR,
 } from '../../routes';
 import { useApolloClient } from '@apollo/client';
-import { rootRouteWithContext, Route, Router } from '@tanstack/react-router';
+import { redirect, rootRouteWithContext, Route, Router } from '@tanstack/react-router';
 
 type ApolloClient = ReturnType<typeof useApolloClient>;
 
@@ -29,6 +29,14 @@ interface RouterContext {
 
 const rootRoute = rootRouteWithContext<RouterContext>()({
   component: RootComponent,
+});
+
+const defaultRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/',
+  beforeLoad: () => {
+    throw redirect({ to: routes[GLOBAL_ANTENNA], replace: true });
+  },
 });
 
 const antennaRoute = new Route({
@@ -126,6 +134,7 @@ const editorRoute = new Route({
 });
 
 const routeTree = rootRoute.addChildren([
+  defaultRoute,
   antennaRoute,
   myAntennaRoute,
   beamRoute,
