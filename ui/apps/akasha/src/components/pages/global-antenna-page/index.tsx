@@ -1,13 +1,13 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ModalNavigationOptions, Profile } from '@akashaorg/typings/lib/ui';
 import {
   useAnalytics,
   useRootComponentProps,
   transformSource,
-  hasOwn,
+  useGetLogin,
+  useGetLoginProfile,
 } from '@akashaorg/ui-awf-hooks';
-import { BeamContentResolver, BeamFeed } from '@akashaorg/ui-lib-feed';
+import { BeamFeed } from '@akashaorg/ui-lib-feed';
 import routes, { EDITOR } from '../../../routes';
 import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -15,15 +15,12 @@ import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
 
-export type GlobalAntennaPageProps = {
-  isLoggedIn: boolean;
-  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-  authenticatedProfile?: Profile;
-};
-
-const GlobalAntennaPage: React.FC<GlobalAntennaPageProps> = props => {
-  const { authenticatedProfile, isLoggedIn } = props;
+const GlobalAntennaPage: React.FC<unknown> = () => {
   const { getRoutingPlugin } = useRootComponentProps();
+  const { data } = useGetLogin();
+  const authenticatedProfileReq = useGetLoginProfile();
+  const isLoggedIn = !!data?.id;
+  const authenticatedProfile = authenticatedProfileReq?.akashaProfile;
   const { t } = useTranslation('app-akasha-integration');
   const [analyticsActions] = useAnalytics();
 

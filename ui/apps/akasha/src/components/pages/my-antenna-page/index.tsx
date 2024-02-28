@@ -7,23 +7,29 @@ import StartCard from '@akashaorg/design-system-components/lib/components/StartC
 import { useTranslation } from 'react-i18next';
 import { ModalNavigationOptions, Profile } from '@akashaorg/typings/lib/ui';
 import { useGetInterestsByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { hasOwn, useGetLoginProfile, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { BeamContentResolver, TagFeed } from '@akashaorg/ui-lib-feed';
 
-export type MyAntennaPageProps = {
-  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-  authenticatedProfile?: Profile;
-};
 const MY_ANTENNA_OVERSCAN = 10;
 
-const MyAntennaPage: React.FC<MyAntennaPageProps> = props => {
-  const { authenticatedProfile, showLoginModal } = props;
-  const { getRoutingPlugin } = useRootComponentProps();
-  const navigateTo = React.useRef(getRoutingPlugin().navigateTo);
+const MyAntennaPage: React.FC<unknown> = () => {
   const { t } = useTranslation('app-akasha-integration');
-
+  const { getRoutingPlugin, navigateToModal } = useRootComponentProps();
+  const authenticatedProfileReq = useGetLoginProfile();
+  const authenticatedProfile: Profile = authenticatedProfileReq?.akashaProfile;
+  const navigateTo = React.useRef(getRoutingPlugin().navigateTo);
+  const _navigateToModal = React.useRef(navigateToModal);
+  const showLoginModal = React.useCallback(
+    (redirectTo?: { modal: ModalNavigationOptions }, message?: string) => {
+      _navigateToModal.current?.({
+        name: 'login',
+        redirectTo,
+        message,
+      });
+    },
+    [],
+  );
   const isLoggedUser = React.useMemo(() => !!authenticatedProfile?.did.id, [authenticatedProfile]);
-
   const { data: tagSubsReq } = useGetInterestsByDidQuery({
     variables: { id: authenticatedProfile?.did.id },
   });

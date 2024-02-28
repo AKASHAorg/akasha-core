@@ -1,21 +1,29 @@
-import * as React from 'react';
+import React from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
-import AppRoutes from './app-routes';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { createRouter } from './app-routes';
+import { RouterProvider } from '@tanstack/react-router';
+import { useApolloClient } from '@apollo/client';
+
+declare module '@tanstack/react-router' {
+  interface Register {
+    router: ReturnType<typeof createRouter>;
+  }
+}
 
 const SocialApp: React.FC<unknown> = () => {
   const { getTranslationPlugin, baseRouteName } = useRootComponentProps();
+  const apolloClient = useApolloClient();
 
   return (
-    <React.Suspense fallback={<Spinner />}>
-      <I18nextProvider i18n={getTranslationPlugin().i18n}>
-        <Router basename={baseRouteName}>
-          <AppRoutes />
-        </Router>
-      </I18nextProvider>
-    </React.Suspense>
+    <I18nextProvider i18n={getTranslationPlugin().i18n}>
+      <RouterProvider
+        router={createRouter({
+          baseRouteName,
+          apolloClient,
+        })}
+      />
+    </I18nextProvider>
   );
 };
 

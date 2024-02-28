@@ -8,8 +8,8 @@ import routes, { REFLECT } from '../../../routes';
 import { useTranslation } from 'react-i18next';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
 import { ReflectEntryData } from '@akashaorg/typings/lib/ui';
-import { useLocation } from 'react-router-dom';
 import { createReactiveVar, transformSource, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useRouterState } from '@tanstack/react-router';
 
 type ReflectionSectionProps = {
   beamId: string;
@@ -25,7 +25,7 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
     props;
   const { t } = useTranslation('app-akasha-integration');
   const { getRoutingPlugin } = useRootComponentProps();
-  const location = useLocation();
+  const routerState = useRouterState();
   const navigateTo = getRoutingPlugin().navigateTo;
 
   const onNavigate = (reflectionId: string, reflect?: boolean) => {
@@ -43,7 +43,7 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
     onNavigate(entryData?.id);
   });
 
-  const isReflecting = location.pathname.endsWith(routes[REFLECT]);
+  const isReflecting = routerState.location.pathname.endsWith(routes[REFLECT]);
 
   return (
     <Stack ref={wrapperRef}>

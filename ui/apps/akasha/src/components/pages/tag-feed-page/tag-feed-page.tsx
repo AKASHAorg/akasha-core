@@ -1,8 +1,7 @@
 import React, { useMemo } from 'react';
-import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import getSDK from '@akashaorg/awf-sdk';
-import { hasOwn, useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { hasOwn, useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import {
   useGetIndexedStreamCountQuery,
   useGetInterestsByDidQuery,
@@ -20,19 +19,28 @@ import TagFeedHeaderLoader from './tag-feed-header-loader';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
 
-export type TagFeedPageProps = {
-  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
+type TagFeedPageProps = {
+  tagName: string;
 };
 
 const TagFeedPage: React.FC<TagFeedPageProps> = props => {
-  const { showLoginModal } = props;
+  const { tagName } = props;
+  const { t } = useTranslation('app-akasha-integration');
   const { data } = useGetLogin();
+  const { navigateToModal } = useRootComponentProps();
   const isLoggedIn = !!data?.id;
   const authenticatedDID = data?.id;
-
-  const { tagName } = useParams<{ tagName: string }>();
-
-  const { t } = useTranslation('app-akasha-integration');
+  const _navigateToModal = React.useRef(navigateToModal);
+  const showLoginModal = React.useCallback(
+    (redirectTo?: { modal: ModalNavigationOptions }, message?: string) => {
+      _navigateToModal.current?.({
+        name: 'login',
+        redirectTo,
+        message,
+      });
+    },
+    [],
+  );
 
   const sdk = getSDK();
   const {
@@ -83,14 +91,13 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
       : null;
   }, [isLoggedIn, tagSubscriptionsData]);
 
-  const [createInterestsMutation, { loading, error }] = useCreateInterestsMutation({
+  const [createInterestsMutation, { loading }] = useCreateInterestsMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
   });
 
-  const [updateInterestsMutation, { loading: updateLoading, error: updateError }] =
-    useUpdateInterestsMutation({
-      context: { source: sdk.services.gql.contextSources.composeDB },
-    });
+  const [updateInterestsMutation, { loading: updateLoading }] = useUpdateInterestsMutation({
+    context: { source: sdk.services.gql.contextSources.composeDB },
+  });
 
   const executeInterestsMutation = (interests: string[]) => {
     if (tagSubscriptionsId) {

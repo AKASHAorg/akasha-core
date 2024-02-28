@@ -16,4 +16,4 @@ export default {
   [BEAM]: '/beam',
   [REFLECT]: '/reflect',
   [TAGS]: '/tags',
-};
+} as const;

@@ -7,7 +7,6 @@ import EntrySectionLoading from './entry-section-loading';
 import ReflectionSection from './reflection-section';
 import ReflectFeed from '@akashaorg/ui-lib-feed/lib/components/reflect-feed';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import { useParams } from 'react-router-dom';
 import {
   createReactiveVar,
   hasOwn,
@@ -24,10 +23,12 @@ import EditableReflection from '@akashaorg/ui-lib-feed/lib/components/editable-r
 import { usePendingReflections } from '@akashaorg/ui-awf-hooks/lib/use-pending-reflections';
 import { PendingReflect } from '../../reflect-editor/pending-reflect';
 
-const ReflectionPage: React.FC<unknown> = () => {
-  const { reflectionId } = useParams<{
-    reflectionId: string;
-  }>();
+type ReflectionPageProps = {
+  reflectionId: string;
+};
+
+const ReflectionPage: React.FC<ReflectionPageProps> = props => {
+  const { reflectionId } = props;
   const { t } = useTranslation('app-akasha-integration');
   const { getRoutingPlugin, navigateToModal, getTranslationPlugin } = useRootComponentProps();
   const { data } = useGetLogin();

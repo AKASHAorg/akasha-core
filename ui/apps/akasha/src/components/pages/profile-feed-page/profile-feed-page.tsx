@@ -1,31 +1,27 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 import {
   hasOwn,
   mapBeamEntryData,
-  useGetLogin,
+  useGetLoginProfile,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
-import { BeamCard, BeamContentResolver, BeamFeed } from '@akashaorg/ui-lib-feed';
-import type { ModalNavigationOptions, Profile } from '@akashaorg/typings/lib/ui';
+import { BeamCard, BeamFeed } from '@akashaorg/ui-lib-feed';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 
-export type ProfilePageProps = {
-  authenticatedProfile: Profile;
-  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
+type ProfileFeedPageProps = {
+  did: string;
 };
 
-const ProfileFeedPage = (props: ProfilePageProps) => {
-  const { authenticatedProfile } = props;
-
+const ProfileFeedPage: React.FC<ProfileFeedPageProps> = props => {
+  const { did } = props;
   const { t } = useTranslation('app-akasha-integration');
-  const { did } = useParams<{ did: string }>();
   const { getRoutingPlugin } = useRootComponentProps();
-
+  const authenticatedProfileReq = useGetLoginProfile();
+  const authenticatedProfile = authenticatedProfileReq?.akashaProfile;
   const profileUserName = React.useMemo(() => {
     if (authenticatedProfile && authenticatedProfile.name) {
       return authenticatedProfile.name;

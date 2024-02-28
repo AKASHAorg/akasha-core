@@ -8,7 +8,6 @@ import BeamSection from './beam-section';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import EditableReflection from '@akashaorg/ui-lib-feed/lib/components/editable-reflection';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
-import { useParams } from 'react-router-dom';
 import {
   createReactiveVar,
   hasOwn,
@@ -30,11 +29,12 @@ import {
 import { PendingReflect } from '../../reflect-editor/pending-reflect';
 import { usePendingReflections } from '@akashaorg/ui-awf-hooks/lib/use-pending-reflections';
 
-const BeamPage: React.FC<unknown> = () => {
-  const { beamId } = useParams<{
-    beamId: string;
-  }>();
-  const sdk = getSDK();
+type BeamPageProps = {
+  beamId: string;
+};
+
+const BeamPage: React.FC<BeamPageProps> = props => {
+  const { beamId } = props;
   const { t } = useTranslation('app-akasha-integration');
   const { getRoutingPlugin, navigateToModal, getTranslationPlugin } = useRootComponentProps();
   const { data, loading: authenticating } = useGetLogin();
@@ -42,6 +42,7 @@ const BeamPage: React.FC<unknown> = () => {
   const [analyticsActions] = useAnalytics();
   const isLoggedIn = !!data?.id;
   const navigateTo = getRoutingPlugin().navigateTo;
+  const sdk = getSDK();
 
   /**
    * Fetch beam data from the Indexed Stream
