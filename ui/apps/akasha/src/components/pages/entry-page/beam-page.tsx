@@ -79,10 +79,11 @@ const BeamPage: React.FC<unknown> = () => {
     }
   }, [beamReq]);
 
-  const showLoginModal = () => {
+  const showLoginModal = (title?: string, message?: string) => {
     navigateToModal({
       name: 'login',
-      message: 'To view explicit or sensitive content, please connect to confirm your consent.',
+      title,
+      message,
     });
   };
 

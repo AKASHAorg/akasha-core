@@ -33,13 +33,16 @@ const AppRoutes: React.FC<unknown> = () => {
   const isLoggedIn = !!data?.id;
   const authenticatedProfile = authenticatedProfileReq?.akashaProfile;
 
-  const showLoginModal = React.useCallback((redirectTo?: { modal: ModalNavigationOptions }) => {
-    _navigateToModal.current?.({
-      name: 'login',
-      redirectTo,
-      message: 'To view explicit or sensitive content, please connect to confirm your consent.',
-    });
-  }, []);
+  const showLoginModal = React.useCallback(
+    (redirectTo?: { modal: ModalNavigationOptions }, message?: string) => {
+      _navigateToModal.current?.({
+        name: 'login',
+        redirectTo,
+        message,
+      });
+    },
+    [],
+  );
 
   const errorBoundaryProps: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
     errorObj: {
