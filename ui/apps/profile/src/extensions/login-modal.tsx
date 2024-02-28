@@ -18,6 +18,12 @@ const LoginModal = (props: RootExtensionProps) => {
   const { getRoutingPlugin, getModalFromParams } = useRootComponentProps();
   const modal = getModalFromParams(window.location);
 
+  const message = React.useMemo(
+    () => modal?.message || 'To continue you need an AKASHA World account',
+    [modal?.message],
+  );
+  const messageTitle = React.useMemo(() => modal?.title || 'AKASHA World', [modal?.title]);
+
   const handleModalClose = () => {
     window.history.replaceState(null, null, location.pathname);
   };
@@ -40,7 +46,7 @@ const LoginModal = (props: RootExtensionProps) => {
   return (
     <Modal
       show={modal?.name === 'login'}
-      title={{ label: t('AKASHA World'), variant: 'h6' }}
+      title={{ label: t('{{messageTitle}}', { messageTitle }), variant: 'h6' }}
       actions={[
         { label: t('Cancel'), variant: 'secondary', onClick: handleModalClose },
         { label: t('Connect'), variant: 'primary', onClick: handleConnectClick },
@@ -50,9 +56,7 @@ const LoginModal = (props: RootExtensionProps) => {
     >
       <Stack align="center" fullWidth={true} spacing="gap-y-2">
         <Text variant="body1" align="center">
-          {modal?.message
-            ? t('{{modalMessage}}', { modalMessage: modal.message })
-            : t('To continue you need an AKASHA World account')}
+          {t('{{message}}', { message })}
         </Text>
       </Stack>
     </Modal>
