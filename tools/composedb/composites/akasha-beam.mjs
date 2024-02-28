@@ -24,7 +24,7 @@ type AkashaProfile @loadModel(id: "${akashaProfileId}") {
   id: ID!
 }
 
-type AkashaBeam @createModel(accountRelation: LIST, description: "AKASHA Beam") @createIndex(fields:[{path:"active"}, {path: "createdAt"}, {path: "tags"}, {path: "mentions"}, {path: "nsfw"}]) {
+type AkashaBeam @createModel(accountRelation: LIST, description: "AKASHA Beam v0.1") @createIndex(fields:[{path:"active"}, {path: "createdAt"}, {path: "nsfw"}]) {
   author: DID! @documentAccount
   content: [BlockRecord!]! @list(maxLength: 10)
   tags: [Labeled] @list(maxLength: 10)

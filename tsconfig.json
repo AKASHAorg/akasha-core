@@ -94,6 +94,9 @@
     },
     {
       "path": "./typings"
+    },
+    {
+      "path": "./tools/composedb"
     }
   ],
   "exclude": [
