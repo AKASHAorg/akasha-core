@@ -10,7 +10,7 @@ type AkashaBeam @loadModel(id: "${akashaBeamId}") {
   id: ID!
 }
 
-type AkashaReflect @createModel(accountRelation: LIST, description: "A Reflection on a Beam") @createIndex(fields:[{path:"active"}, {path: "createdAt"}, {path: "tags"}, {path: "mentions"}, {path: "reflection"}, {path: "isReply"}, {path: "nsfw"}]) {
+type AkashaReflect @createModel(accountRelation: LIST, description: "A Reflection on a Beam v0.1") @createIndex(fields:[{path:"active"}, {path: "createdAt"}, {path: "reflection"}, {path: "isReply"}, {path: "nsfw"}]) {
     beamID: StreamID! @documentReference(model: "AkashaBeam")
     beam: AkashaBeam! @relationDocument(property: "beamID")
     author: DID! @documentAccount
