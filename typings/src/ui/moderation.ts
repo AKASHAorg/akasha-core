@@ -18,11 +18,12 @@ export const ModerationEntityTypesMap = {
   [EntityTypes.TAG]: 'tag',
 } as const;
 
-export type ModeratorStatus = 'active' | 'revoked' | 'resigned';
+export type ModeratorStatus = 'active' | 'dismissed' | 'resigned';
 
 export interface IModeratorInfo {
-  moderatorEndDate?: string;
+  moderatorEndDate?: Date;
   status: ModeratorStatus;
+  moderatedItems: number;
   social: {
     [key: string]: string;
   };

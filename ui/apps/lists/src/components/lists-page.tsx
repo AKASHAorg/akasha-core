@@ -9,14 +9,12 @@ import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ListAppTopbar from '@akashaorg/design-system-components/lib/components/ListAppTopbar';
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
-import { EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
-import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 
 const ListsPage: React.FC<unknown> = () => {
   const [showModal, setShowModal] = React.useState(false);
 
   const { t } = useTranslation('app-lists');
-  const { navigateToModal } = useRootComponentProps();
   const { data } = useGetLogin();
 
   const bookmarkDelete = null;
@@ -28,30 +26,6 @@ const ListsPage: React.FC<unknown> = () => {
   const lists = listsReq?.data || [];
 
   const bookmarkedBeamsIds = lists?.map((bm: Record<string, string>) => bm.itemId);
-  const bookmarkedBeams = undefined;
-  const numberOfBookmarkedInactivePosts = React.useMemo(
-    () => bookmarkedBeams?.filter(({ data }) => (data ? data.active : false)).length,
-    [bookmarkedBeams],
-  );
-
-  const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
-    navigateToModal({ name: 'login', redirectTo });
-  };
-
-  const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
-    if (!isLoggedIn) {
-      return showLoginModal({ modal: { name: 'report-modal', itemId, itemType } });
-    }
-    navigateToModal({ name: 'report-modal', itemId, itemType });
-  };
-
-  const handleEntryRemove = (itemId: string) => {
-    navigateToModal({
-      name: 'entry-remove-confirmation',
-      itemId,
-      itemType: EntityTypes.BEAM,
-    });
-  };
 
   const handleIconMenuClick = () => {
     setShowModal(!showModal);

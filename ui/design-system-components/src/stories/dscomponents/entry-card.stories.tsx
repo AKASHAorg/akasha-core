@@ -88,6 +88,7 @@ export const DelistedEntryCardOthers: Story = {
         },
       }}
       itemType={EntityTypes?.REFLECT}
+      flagAsLabel="Flag"
       slateContent={[]}
       onContentClick={() => ({})}
       onMentionClick={() => ({})}

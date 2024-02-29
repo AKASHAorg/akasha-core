@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useRouterState } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 import { EventTypes, NotificationEvents, UIEventData } from '@akashaorg/typings/lib/ui';
 import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
@@ -15,7 +15,8 @@ const TopbarComponent: React.FC<unknown> = () => {
   const { uiEvents, layoutConfig, logger, worldConfig, encodeAppName, getRoutingPlugin } =
     useRootComponentProps();
   const { data } = useGetLogin();
-  const location = useLocation();
+
+  const { location } = useRouterState();
   const historyCount = React.useRef(0);
   const isNavigatingBackRef = React.useRef(false);
   const isLoggedIn = !!data?.id;
