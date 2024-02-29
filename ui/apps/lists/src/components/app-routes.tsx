@@ -6,7 +6,7 @@ import ErrorBoundary, {
   ErrorBoundaryProps,
 } from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import ListsPage from './lists-page';
-import Helmet from '@akashaorg/design-system-core/lib/components/Helmet';
+import { Helmet, helmetData } from '@akashaorg/design-system-core/lib/utils';
 
 const AppRoutes: React.FC<unknown> = () => {
   const { baseRouteName, logger } = useRootComponentProps();
@@ -22,7 +22,7 @@ const AppRoutes: React.FC<unknown> = () => {
 
   return (
     <Router basename={baseRouteName}>
-      <Helmet>
+      <Helmet helmetData={helmetData}>
         <title>My List | AKASHA World</title>
       </Helmet>
       <Routes>
