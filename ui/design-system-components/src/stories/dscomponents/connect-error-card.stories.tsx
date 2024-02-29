@@ -15,7 +15,7 @@ export const BaseConnectErrorCard: Story = {
   render: () => (
     <ConnectErrorCard
       title="Switch Your Wallet's Network"
-      message="To use AKASHA World during the Alpha period, you need to set the metamask wallet to Goerli"
+      message="To use AKASHA World during the Alpha period, you need to set the metamask wallet to Sepolia"
       action={{ onClick: () => ({}), label: 'Retry' }}
     />
   ),

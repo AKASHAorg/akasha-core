@@ -11,7 +11,7 @@
     "clean": "nx reset && nx run-many --target=clean --all && tsc --build --clean",
     "install:clean": "yarn clean && yarn bootstrap && yarn build:all",
     "compile:sc": "nx run-many --target=sc:compile --projects=@akashaorg/awf-sdk --output-style=stream",
-    "deploy:sc": "nx run-many --target=sc:deploy:goerli --projects=@akashaorg/awf-sdk --output-style=stream",
+    "deploy:sc": "nx run-many --target=sc:deploy:sepolia --projects=@akashaorg/awf-sdk --output-style=stream",
     "extract:translations": "nx run-many --target=extract:translations --all",
     "linter:check": "eslint . --ext .ts,.tsx --fix-dry-run",
     "linter:fix": "eslint . --ext .ts,.tsx --fix",
