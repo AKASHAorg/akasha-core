@@ -5,7 +5,7 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import {
-  ReadContentBlockExtension,
+  ContentBlockExtension,
   MatchingBlock,
 } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
 import { useTranslation } from 'react-i18next';
@@ -129,7 +129,7 @@ const ContentBlock: React.FC<ContentBlockType> = props => {
               {t('{{blockDisplayName}}', { blockDisplayName })}
             </Text>
           </Transition>
-          <ReadContentBlockExtension
+          <ContentBlockExtension
             blockData={blockData}
             matchingBlocks={matchingBlocks}
             error={contentBlockReq.error?.message ?? ''}

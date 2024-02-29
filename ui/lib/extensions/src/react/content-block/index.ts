@@ -1,3 +1,3 @@
-export * from './edit-content-block';
-export * from './read-content-block';
+export * from './editor-block-extension';
+export * from './content-block-extension';
 export * from './common.types';

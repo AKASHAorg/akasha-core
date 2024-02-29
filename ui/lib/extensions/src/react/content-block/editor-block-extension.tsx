@@ -8,7 +8,7 @@ import { BlockParcel } from './block-parcel';
 import { MatchingBlock } from './common.types';
 import { resolveConfigs } from './resolve-configs';
 
-export type EditContentBlockExtensionProps = {
+export type EditorBlockExtensionProps = {
   blockRef?: React.RefObject<BlockInstanceMethods>;
   propertyType: string;
   appName: string;
@@ -16,7 +16,7 @@ export type EditContentBlockExtensionProps = {
   externalHandler?: (value: never) => void;
 };
 
-export const EditContentBlockExtension: React.FC<EditContentBlockExtensionProps> = props => {
+export const EditorBlockExtension: React.FC<EditorBlockExtensionProps> = props => {
   const { blockRef, propertyType, appName, onError, externalHandler } = props;
   const { logger, getExtensionsPlugin } = useRootComponentProps();
   const contentBlockStoreRef = useRef(getExtensionsPlugin()?.contentBlockStore);

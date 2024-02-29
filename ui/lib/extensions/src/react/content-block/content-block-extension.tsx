@@ -14,7 +14,7 @@ import { BlockParcel } from './block-parcel';
 import { MatchingBlock } from './common.types';
 import { resolveConfigs } from './resolve-configs';
 
-export type ReadContentBlockExtensionProps = {
+export type ContentBlockExtensionProps = {
   blockRef?: React.RefObject<BlockInstanceMethods>;
   errorTitle: string;
   errorDescription: string;
@@ -35,7 +35,7 @@ export type ReadContentBlockExtensionProps = {
     }
 );
 
-export const ReadContentBlockExtension: React.FC<ReadContentBlockExtensionProps> = props => {
+export const ContentBlockExtension: React.FC<ContentBlockExtensionProps> = props => {
   const {
     blockRef,
     errorTitle,

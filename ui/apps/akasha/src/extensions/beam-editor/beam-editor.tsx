@@ -11,7 +11,7 @@ import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import SearchBar from '@akashaorg/design-system-components/lib/components/SearchBar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import { EditContentBlockExtension } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
+import { EditorBlockExtension } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
 import { Header } from './header';
 import { Footer } from './footer';
 import { BlockHeader } from '@akashaorg/design-system-components/lib/components/BlockHeader';
@@ -275,7 +275,7 @@ export const BeamEditor: React.FC = () => {
                   }}
                   isNsfwCheckboxSelected={!!nsfwBlocks.get(idx)}
                 />
-                <EditContentBlockExtension
+                <EditorBlockExtension
                   appName={block.appName}
                   propertyType={block.propertyType}
                   externalHandler={value => updateBlockDisablePublishState(value, block.order)}
