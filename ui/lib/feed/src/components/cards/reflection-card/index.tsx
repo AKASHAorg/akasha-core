@@ -56,6 +56,13 @@ const ReflectionCard: React.FC<ReflectCardProps> = props => {
     });
   };
 
+  const handleFlagReflection = () => {
+    navigateTo({
+      appName: '@akashaorg/app-vibes',
+      getNavigationUrl: () => `/report/reflection/${entryData.id}`,
+    });
+  };
+
   return (
     <EntryCard
       entryData={entryData}
@@ -64,13 +71,13 @@ const ReflectionCard: React.FC<ReflectCardProps> = props => {
       profileAnchorLink="/@akashaorg/app-profile"
       slateContent={entryData.content.flatMap(item => decodeb64SlateContent(item.value))}
       noWrapperCard={true}
-      flagAsLabel={t('Report')}
+      flagAsLabel={t('Flag')}
       editLabel={t('Edit')}
       isViewer={authenticatedDID === entryData.authorId}
       isLoggedIn={isLoggedIn}
       removed={{
         author: {
-          firstPart: t('AKASHA world members won’t be able to see the content '),
+          firstPart: t("AKASHA world members won't be able to see the content "),
           secondPart: t('of your reflection because you have violated the following '),
           thirdPart: { url: '' /*@TODO */, content: t('Code of Conduct.') },
           tapToViewLabel: t('Tap to view'),
@@ -85,6 +92,7 @@ const ReflectionCard: React.FC<ReflectCardProps> = props => {
       itemType={EntityTypes.REFLECT}
       transformSource={transformSource}
       onReflect={onReflect}
+      onEntryFlag={handleFlagReflection}
       onAvatarClick={onAvatarClick}
       {...rest}
     />

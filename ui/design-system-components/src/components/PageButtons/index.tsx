@@ -7,13 +7,19 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 export type PageButtonsProps = {
   cancelButtonLabel?: string;
   confirmButtonLabel?: string;
+  confirmButtonDisabled?: boolean;
   onCancelButtonClick?: () => void;
   onConfirmButtonClick?: () => void;
 };
 
 export const PageButtons: React.FC<PageButtonsProps> = props => {
-  const { cancelButtonLabel, confirmButtonLabel, onCancelButtonClick, onConfirmButtonClick } =
-    props;
+  const {
+    cancelButtonLabel,
+    confirmButtonLabel,
+    confirmButtonDisabled,
+    onCancelButtonClick,
+    onConfirmButtonClick,
+  } = props;
 
   const handleCancelButtonClick = () => {
     if (onCancelButtonClick && typeof onCancelButtonClick === 'function') {
@@ -42,6 +48,7 @@ export const PageButtons: React.FC<PageButtonsProps> = props => {
           size="md"
           variant="primary"
           label={confirmButtonLabel}
+          disabled={confirmButtonDisabled}
           onClick={handleConfirmButtonClick}
         />
       )}

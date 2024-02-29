@@ -21,7 +21,7 @@ const commonProps = {
   coverImage: null,
   avatar: { default: { src: 'https://placebeard.it/360x360', width: 360, height: 360 } },
   name: 'Coffee Lover',
-  flagLabel: 'Report',
+  flagLabel: 'Flag',
   publicImagePath: '/images',
   transformSource: () => ({
     src: 'https://placebeard.it/360x360',

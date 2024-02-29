@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { tw, tx } from '@twind/core';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 import {
   NoSymbolIcon,
   ExclamationTriangleIcon,
@@ -74,8 +75,8 @@ const EntryCardHidden: React.FC<IEntryCardHiddenProps> = props => {
             )}
             {footerTextLabel && footerTextLabel}
             {ctaLabel && (
-              <div
-                className={'cursor-pointer'}
+              <Button
+                plain={true}
                 onClick={e => {
                   e.stopPropagation();
                   // open call to action url if specified
@@ -85,7 +86,7 @@ const EntryCardHidden: React.FC<IEntryCardHiddenProps> = props => {
                 <Text variant={'h4'} color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
                   {ctaLabel}
                 </Text>
-              </div>
+              </Button>
             )}
           </Text>
         )}

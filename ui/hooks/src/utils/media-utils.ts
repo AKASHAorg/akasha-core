@@ -71,8 +71,7 @@ export const buildProfileMediaLinks = (profile: UserProfileFragmentDataFragment)
 /**
  * Utility to get preview of a specified url
  */
-export const getLinkPreview = async (url: string) => {
-  const sdk = getSDK();
+export const getLinkPreview = async () => {
   const imageSources = { url: '', fallbackUrl: '' };
   const faviconSources = { url: '', fallbackUrl: '' };
   const linkPreviewResp = { getLinkPreview: undefined };
@@ -123,7 +122,7 @@ export const saveMediaFile = async ({ name, content, isUrl }: ISaveMediaFile) =>
  * Utility to transform source
  */
 export const transformSource = (image?: Image): Image => {
-  if (!image || typeof image?.src !== 'string') return null;
+  if (!image || typeof image?.src !== 'string' || image?.src.length === 0) return null;
 
   const defaultUrl = getMediaUrl(image.src);
 

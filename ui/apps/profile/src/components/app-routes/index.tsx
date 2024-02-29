@@ -1,4 +1,5 @@
 import React, { Suspense } from 'react';
+import { Outlet } from '@tanstack/react-router';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import InterestsPage from '../pages/interests';
 import EditProfilePage from '../pages/edit-profile';
@@ -7,28 +8,21 @@ import FollowersPage from '../pages/profile-engagement/followers-page';
 import ProfileInfoPage from '../pages/profile-info';
 import ProfileBeamsPage from '../pages/profile-beams';
 import ProfileHeader from '../profile-header';
-import RootComponent from './root-component';
-import ProfileWithAuthorization from '../profile-with-authorization';
 import ErrorComponent from './error-component';
+import ProfileWithAuthorization from '../profile-with-authorization';
 import menuRoute, { BEAMS, EDIT, INTERESTS, FOLLOWERS, FOLLOWING } from '../../routes';
 import { ProfileLoading } from '@akashaorg/design-system-components/lib/components/Profile';
 import { rootRouteWithContext, Route, Router } from '@tanstack/react-router';
-import { useApolloClient } from '@apollo/client';
 import {
   GetProfileByDidDocument,
   GetFollowersListByDidDocument,
   GetFollowingListByDidDocument,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { ENGAGEMENTS_PER_PAGE } from '../pages/profile-engagement/types';
-
-type ApolloClient = ReturnType<typeof useApolloClient>;
-
-interface RouterContext {
-  apolloClient: ApolloClient;
-}
+import { CreateRouter, RouterContext } from '@akashaorg/typings/lib/ui';
 
 const rootRoute = rootRouteWithContext<RouterContext>()({
-  component: RootComponent,
+  component: Outlet,
 });
 
 const profileInfoRoute = new Route({
@@ -154,11 +148,6 @@ const routeTree = rootRoute.addChildren([
   beamsRoute,
 ]);
 
-interface CreateRouter {
-  baseRouteName: string;
-  apolloClient: ApolloClient;
-}
-
 export const createRouter = ({ baseRouteName, apolloClient }: CreateRouter) =>
   new Router({
     routeTree,
@@ -166,7 +155,7 @@ export const createRouter = ({ baseRouteName, apolloClient }: CreateRouter) =>
     context: {
       apolloClient,
     },
-    defaultErrorComponent: ({ error }) => {
-      return <ErrorComponent error={(error as unknown as Error).message} />;
-    },
+    defaultErrorComponent: ({ error }) => (
+      <ErrorComponent error={(error as unknown as Error).message} />
+    ),
   });
