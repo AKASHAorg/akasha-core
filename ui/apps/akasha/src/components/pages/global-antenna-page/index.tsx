@@ -29,7 +29,7 @@ const GlobalAntennaPage: React.FC<GlobalAntennaPageProps> = props => {
       showLoginModal();
       return;
     }
-    if (!authenticatedProfile) {
+    if (!authenticatedProfile?.id) {
       //@TODO profile info hasn't been filled, show relevant message
       return;
     }
@@ -37,7 +37,7 @@ const GlobalAntennaPage: React.FC<GlobalAntennaPageProps> = props => {
       appName: '@akashaorg/app-akasha-integration',
       getNavigationUrl: () => `/${routes[EDITOR]}`,
     });
-  }, [isLoggedIn, showLoginModal]);
+  }, [isLoggedIn, authenticatedProfile, showLoginModal]);
 
   const listHeader = React.useMemo(() => {
     return (
