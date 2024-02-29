@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { flushSync } from 'react-dom';
 import {
   HEADER_COMPONENT,
   VirtualDataItem,
@@ -289,30 +290,32 @@ export const VirtualListRenderer = React.forwardRef(
             nextProjection.nextRendered,
             getListOffset(commonProjectionItem),
           );
-          setState(
-            {
-              mounted: projectionWithCorrection.rendered,
-              listHeight,
-              isTransition: !hasCorrection,
-            },
-            newState => {
-              const scrollCorrection = -projectionWithCorrection.offset;
-              let vpRect: Rect | undefined = viewportRect;
-              if (scrollCorrection !== 0) {
-                viewport.scrollBy(scrollCorrection);
-                vpRect = viewport.getRelativeToRootNode(rootNodeRef.current);
-              }
-              if (vpRect) {
-                // update edge sensor
-                handleEdgeChange(
-                  nextProjection.allItems,
-                  newState.mounted,
-                  vpRect,
-                  alreadyRendered,
-                );
-              }
-            },
-          );
+          flushSync(() => {
+            setState(
+              {
+                mounted: projectionWithCorrection.rendered,
+                listHeight,
+                isTransition: !hasCorrection,
+              },
+              newState => {
+                const scrollCorrection = -projectionWithCorrection.offset;
+                let vpRect: Rect | undefined = viewportRect;
+                if (scrollCorrection !== 0) {
+                  viewport.scrollBy(scrollCorrection);
+                  vpRect = viewport.getRelativeToRootNode(rootNodeRef.current);
+                }
+                if (vpRect) {
+                  // update edge sensor
+                  handleEdgeChange(
+                    nextProjection.allItems,
+                    newState.mounted,
+                    vpRect,
+                    alreadyRendered,
+                  );
+                }
+              },
+            );
+          });
         } else {
           setState(
             {

@@ -1,10 +1,14 @@
+import { Rect } from '../rect';
+
 export const mockScrollToTop = jest.fn();
 export const mockIsAtTop = jest.fn(() => true);
+
+const dummyVpRect = new Rect(0, 980);
 
 const useViewport = jest.fn().mockImplementation(() => ({
   scrollToTop: mockScrollToTop,
   isAtTop: mockIsAtTop,
-  getRect: jest.fn(() => ({ getTop: () => 0, getHeight: () => 500 })),
+  getRect: jest.fn(() => dummyVpRect),
   resizeRect: jest.fn(),
   scrollBy: jest.fn(),
   getBottomOffset: jest.fn(() => 0),
@@ -12,7 +16,7 @@ const useViewport = jest.fn().mockImplementation(() => ({
   getScrollY: jest.fn(() => 0),
   setTopOffset: jest.fn(),
   setBottomOffset: jest.fn(),
-  getRelativeToRootNode: jest.fn(() => ({ getTop: () => 0, getHeight: () => 500 })),
+  getRelativeToRootNode: jest.fn(() => dummyVpRect),
 }));
 
 export { useViewport };
