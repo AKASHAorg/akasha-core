@@ -11,7 +11,7 @@
     "@didtools/pkh-ethereum": "0.5.0",
     "@ensdomains/ens-contracts": "^0.0.22",
     "@lit-protocol/sdk-browser": "1.1.250",
-    "@openzeppelin/contracts": "^4.9.2",
+    "@openzeppelin/contracts": "^4.9.6",
     "@openzeppelin/contracts-upgradeable": "^4.9.2",
     "@web3modal/ui": "2.7.0",
     "@web3modal/ethers": "3.4.0",
