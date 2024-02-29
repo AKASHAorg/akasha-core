@@ -23,7 +23,7 @@ import { useCreateContentBlockMutation } from '@akashaorg/ui-awf-hooks/lib/gener
 import getSDK from '@akashaorg/awf-sdk';
 
 // @TODO: replace this with actual data
-const TEST_APP_VERSION_ID = 'kjzl6kcym7w8y8af3kd0lwkkk2m1nxtchlvcikbak748md3m3gplz1ori3s1j5f';
+const TEST_APP_VERSION_ID = 'kjzl6kcym7w8y7tdwpzjep46ufcjyc2vaq671z0a1lxrcjq7ogu42ta3vh1w2dm';
 
 export const SlateEditorBlock = (
   props: ContentBlockRootProps & { blockRef?: RefObject<BlockInstanceMethods> },
