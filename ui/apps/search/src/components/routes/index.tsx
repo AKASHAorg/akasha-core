@@ -32,54 +32,56 @@ const AppRoutes: React.FC<unknown> = () => {
   };
 
   return (
-    <Router basename={baseRouteName}>
-      <Stack testId="search-box">
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <ErrorBoundary {...errorBoundaryProps}>
-                <Navigate to={routes[RESULTS]} replace />
-              </ErrorBoundary>
-            }
-          />
-          <Route path={routes[RESULTS]}>
+    <React.StrictMode>
+      <Router basename={baseRouteName}>
+        <Stack testId="search-box">
+          <Routes>
             <Route
-              path=":searchKeyword"
+              path="/"
               element={
                 <ErrorBoundary {...errorBoundaryProps}>
-                  <SearchPage showLoginModal={showLoginModal} isLoggedIn={isLoggedIn} />
+                  <Navigate to={routes[RESULTS]} replace />
+                </ErrorBoundary>
+              }
+            />
+            <Route path={routes[RESULTS]}>
+              <Route
+                path=":searchKeyword"
+                element={
+                  <ErrorBoundary {...errorBoundaryProps}>
+                    <SearchPage showLoginModal={showLoginModal} isLoggedIn={isLoggedIn} />
+                  </ErrorBoundary>
+                }
+              />
+              <Route
+                path=""
+                element={
+                  <ErrorBoundary {...errorBoundaryProps}>
+                    <SearchPage showLoginModal={showLoginModal} isLoggedIn={isLoggedIn} />
+                  </ErrorBoundary>
+                }
+              />
+            </Route>
+            <Route
+              path={routes[SETTINGS]}
+              element={
+                <ErrorBoundary {...errorBoundaryProps}>
+                  <SettingsPage showLoginModal={showLoginModal} isLoggedIn={isLoggedIn} />
                 </ErrorBoundary>
               }
             />
             <Route
-              path=""
+              path={routes[ONBOARDING]}
               element={
                 <ErrorBoundary {...errorBoundaryProps}>
-                  <SearchPage showLoginModal={showLoginModal} isLoggedIn={isLoggedIn} />
+                  <OnboardingPage showLoginModal={showLoginModal} isLoggedIn={isLoggedIn} />
                 </ErrorBoundary>
               }
             />
-          </Route>
-          <Route
-            path={routes[SETTINGS]}
-            element={
-              <ErrorBoundary {...errorBoundaryProps}>
-                <SettingsPage showLoginModal={showLoginModal} isLoggedIn={isLoggedIn} />
-              </ErrorBoundary>
-            }
-          />
-          <Route
-            path={routes[ONBOARDING]}
-            element={
-              <ErrorBoundary {...errorBoundaryProps}>
-                <OnboardingPage showLoginModal={showLoginModal} isLoggedIn={isLoggedIn} />
-              </ErrorBoundary>
-            }
-          />
-        </Routes>
-      </Stack>
-    </Router>
+          </Routes>
+        </Stack>
+      </Router>
+    </React.StrictMode>
   );
 };
 

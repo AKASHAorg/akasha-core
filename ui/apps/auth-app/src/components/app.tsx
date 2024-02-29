@@ -8,11 +8,13 @@ const Application: React.FC<unknown> = () => {
   const { getTranslationPlugin } = useRootComponentProps();
 
   return (
-    <React.Suspense fallback={<Spinner />}>
-      <I18nextProvider i18n={getTranslationPlugin().i18n}>
-        <AppRoutes />
-      </I18nextProvider>
-    </React.Suspense>
+    <React.StrictMode>
+      <React.Suspense fallback={<Spinner />}>
+        <I18nextProvider i18n={getTranslationPlugin().i18n}>
+          <AppRoutes />
+        </I18nextProvider>
+      </React.Suspense>
+    </React.StrictMode>
   );
 };
 

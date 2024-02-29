@@ -25,12 +25,12 @@ type Labeled{
 }
 
 
-type AkashaProfileInterests @createModel(accountRelation: SINGLE, description: "Interests list"){
+type AkashaProfileInterests @createModel(accountRelation: SINGLE, description: "Interests list v0.1"){
   topics: [Labeled!]! @list(maxLength: 100)
   did: DID! @documentAccount
 }
 
-type AkashaProfile @createModel(accountRelation: SINGLE, description: "AKASHA profile") @createIndex(fields:[{path:"name"}, {path: "createdAt"}, {path: "nsfw"}]) {
+type AkashaProfile @createModel(accountRelation: SINGLE, description: "AKASHA profile v0.1") @createIndex(fields:[{path:"name"}, {path: "createdAt"}, {path: "nsfw"}]) {
   name: String! @string(minLength: 3, maxLength: 50)
   avatar: ImageVersions
   description: String @string(maxLength: 200)
