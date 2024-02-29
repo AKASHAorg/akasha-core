@@ -66,6 +66,7 @@ declare const __LOAD_LOCAL_SOURCES__: boolean;
     // homepageApp is always loaded by default
     defaultApps: [
       '@akashaorg/app-routing',
+      '@akashaorg/app-vibes',
       '@akashaorg/app-auth-ewa',
       '@akashaorg/app-extensions',
       '@akashaorg/app-search',
