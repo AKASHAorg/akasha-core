@@ -12,7 +12,7 @@
     "@ensdomains/ens-contracts": "^0.0.22",
     "@lit-protocol/sdk-browser": "1.1.250",
     "@openzeppelin/contracts": "^4.9.2",
-    "@openzeppelin/contracts-upgradeable": "^4.9.2",
+    "@openzeppelin/contracts-upgradeable": "^4.9.6",
     "@web3modal/ui": "2.7.0",
     "@web3modal/ethers": "3.4.0",
     "@web3-storage/w3up-client": "^11.1.3",
