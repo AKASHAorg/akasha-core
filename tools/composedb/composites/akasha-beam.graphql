@@ -1,4 +1,4 @@
-type AkashaContentBlock @loadModel(id: "kjzl6hvfrbw6c5a30ha3yuzt87u4mcna2v5tyjbhfoc22l8yyj91iq03pps7osb") {
+type AkashaContentBlock @loadModel(id: "kjzl6hvfrbw6c9raeoa7g1c9s53pl91qhnk8pp0cxmjbj2ug2t7mmn8arhz3mth") {
   id: ID!
 }
 
@@ -19,11 +19,11 @@ type Labeled{
   value: String! @string(minLength:2, maxLength: 60)
 }
 
-type AkashaProfile @loadModel(id: "kjzl6hvfrbw6c9l8sxje9238fz8hx6u6whu9njmww96wn04c6uj0lillf9jygno") {
+type AkashaProfile @loadModel(id: "kjzl6hvfrbw6c862oulkrdvxh2yfbhc997f7ahqtjppj2ejg8too3j7jmu8gsno") {
   id: ID!
 }
 
-type AkashaBeam @createModel(accountRelation: LIST, description: "AKASHA Beam") @createIndex(fields:[{path:"active"}, {path: "createdAt"}, {path: "tags"}, {path: "mentions"}, {path: "nsfw"}]) {
+type AkashaBeam @createModel(accountRelation: LIST, description: "AKASHA Beam v0.1") @createIndex(fields:[{path:"active"}, {path: "createdAt"}, {path: "nsfw"}]) {
   author: DID! @documentAccount
   content: [BlockRecord!]! @list(maxLength: 10)
   tags: [Labeled] @list(maxLength: 10)

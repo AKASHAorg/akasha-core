@@ -173,7 +173,7 @@ class Gql {
     this.apolloClient = new ApolloClient({
       cache: this._apolloCache,
       link: directionalLink,
-      version: '0.1dev',
+      version: '0.1.1dev',
       connectToDevTools: __DEV__,
       defaultOptions: {
         watchQuery: {

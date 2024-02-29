@@ -1,13 +1,11 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-
 import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import { transformSource, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Helmet from '@akashaorg/design-system-core/lib/components/Helmet';
 import OnboardingSuggestionsCard from '@akashaorg/design-system-components/lib/components/OnboardingSuggestionsCard';
 import OnboardingStartCard from '@akashaorg/design-system-components/lib/components/OnboardingStartCard';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 export type OnboardingPageProps = {
   onError?: (err: Error) => void;
@@ -86,37 +84,39 @@ const OnboardingPage: React.FC<OnboardingPageProps> = props => {
   };
 
   return (
-    <Stack fullWidth={true}>
-      <Helmet>
-        <title>{t('Onboarding')}</title>
-      </Helmet>
-      <Stack spacing="gap-4">
-        <OnboardingStartCard
-          inputPlaceholderLabel={t('Search')}
-          titleLabel={t('Search')}
-          handleSearch={handleSearch}
-          buttonLabel={t('Show my feed')}
-          isButtonEnabled={tagSubscriptions?.length > 0 || followedProfiles?.length > 0}
-          handleButtonClick={handleShowMyFeed}
-        />
-        <OnboardingSuggestionsCard
-          topicsLabel={t('Topics to follow')}
-          peopleLabel={t('People to follow')}
-          followLabel={t('Follow')}
-          unfollowLabel={t('Unfollow')}
-          followingLabel={t('Following')}
-          tags={trendingTags}
-          profiles={trendingProfiles}
-          subscribedTags={tagSubscriptions}
-          followedProfiles={followedProfiles}
-          onClickProfile={handleAvatarClick}
-          onClickTag={toggleTagSubscribe}
-          onClickFollow={handleFollow}
-          onClickUnfollow={handleUnfollow}
-          transformSource={transformSource}
-        />
+    <HelmetProvider>
+      <Stack fullWidth={true}>
+        <Helmet>
+          <title>{t('Onboarding')}</title>
+        </Helmet>
+        <Stack spacing="gap-4">
+          <OnboardingStartCard
+            inputPlaceholderLabel={t('Search')}
+            titleLabel={t('Search')}
+            handleSearch={handleSearch}
+            buttonLabel={t('Show my feed')}
+            isButtonEnabled={tagSubscriptions?.length > 0 || followedProfiles?.length > 0}
+            handleButtonClick={handleShowMyFeed}
+          />
+          <OnboardingSuggestionsCard
+            topicsLabel={t('Topics to follow')}
+            peopleLabel={t('People to follow')}
+            followLabel={t('Follow')}
+            unfollowLabel={t('Unfollow')}
+            followingLabel={t('Following')}
+            tags={trendingTags}
+            profiles={trendingProfiles}
+            subscribedTags={tagSubscriptions}
+            followedProfiles={followedProfiles}
+            onClickProfile={handleAvatarClick}
+            onClickTag={toggleTagSubscribe}
+            onClickFollow={handleFollow}
+            onClickUnfollow={handleUnfollow}
+            transformSource={transformSource}
+          />
+        </Stack>
       </Stack>
-    </Stack>
+    </HelmetProvider>
   );
 };
 
