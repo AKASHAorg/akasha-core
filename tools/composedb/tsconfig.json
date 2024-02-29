@@ -13,6 +13,8 @@
     "module": "es2020",
     "target": "es2020",
     "strict": true,
+    "outDir": "./lib",
+    "rootDir": "./src"
   },
   "include": [
     "./src",

@@ -22,6 +22,10 @@
       "sourceRoot": "ui/lib/extensions/src",
       "projectType": "library"
     },
+    "@akashaorg/composedb-models": {
+      "root": "tools/composedb",
+      "projectType": "library"
+    },
     "@akashaorg/awf-sdk": {
       "root": "sdk",
       "sourceRoot": "sdk/src",

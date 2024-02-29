@@ -26,8 +26,7 @@
   },
   "scripts": {
     "build": "tsc --build tsconfig.json",
-    "tsc": "tsc --build",
-    "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo",
+    "tsc": "tsc --build tsconfig.json",
     "create:composites": "node ./src/create-composites.mjs",
     "start:graphql": "node ./src/graphiql.mjs"
   },
