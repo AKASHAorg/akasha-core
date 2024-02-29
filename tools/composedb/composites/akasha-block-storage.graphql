@@ -1,8 +1,8 @@
-type AkashaContentBlock @loadModel(id: "kjzl6hvfrbw6c5a30ha3yuzt87u4mcna2v5tyjbhfoc22l8yyj91iq03pps7osb") {
+type AkashaContentBlock @loadModel(id: "kjzl6hvfrbw6c9raeoa7g1c9s53pl91qhnk8pp0cxmjbj2ug2t7mmn8arhz3mth") {
   id: ID!
 }
 
-type AkashaAppRelease @loadModel(id: "kjzl6hvfrbw6c9spdxcia2mvnfhkri2uzvnmkrw39srvoc4dx8xl2wkvfavtk7h") {
+type AkashaAppRelease @loadModel(id: "kjzl6hvfrbw6c5dwel0ej7ji6vedsbsqa2ll4tvb0spraw1ovj3i9jh0m4kr7cr") {
   id: ID!
 }
 
@@ -20,7 +20,7 @@ enum BlockStorageDef{
   OTHER
 }
 
-type AkashaBlockStorage @createModel(accountRelation: LIST, description: "AKASHA Block Storage") @createIndex(fields:[{path:"active"}, {path: "createdAt"}, {path: "kind"}]) {
+type AkashaBlockStorage @createModel(accountRelation: LIST, description: "AKASHA Block Storage v0.1") @createIndex(fields:[{path:"active"}, {path: "createdAt"}, {path: "kind"}]) {
   blockID: StreamID! @documentReference(model: "AkashaContentBlock")
   block: AkashaContentBlock! @relationDocument(property: "blockID")
   content: [LabeledValue!]! @list(maxLength: 20)

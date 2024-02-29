@@ -1,9 +1,9 @@
-type AkashaProfile @loadModel(id: "kjzl6hvfrbw6c9l8sxje9238fz8hx6u6whu9njmww96wn04c6uj0lillf9jygno"){
+type AkashaProfile @loadModel(id: "kjzl6hvfrbw6c8ka585ggylnd62q8tzt0aaymiifoez55sm5wvi7lvts8qwpumv"){
     id: ID!
   }
 
 
-  type AkashaFollow @createModel(accountRelation: LIST, description: "Following list") @createIndex(fields:[{path:"isFollowing"}, {path:"profileID"}]) {
+  type AkashaFollow @createModel(accountRelation: LIST, description: "Following list v0.1") @createIndex(fields:[{path:"isFollowing"}, {path:"profileID"}]) {
     isFollowing: Boolean!
     profileID: StreamID! @documentReference(model: "AkashaProfile")
     profile: AkashaProfile! @relationDocument(property: "profileID")
