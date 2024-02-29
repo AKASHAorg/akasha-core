@@ -1,3 +1,4 @@
-import Helmet from 'react-helmet';
-const exported = { Helmet: Helmet as any };
-export default exported;
+import { Helmet, HelmetData } from 'react-helmet-async';
+const helmetData = new HelmetData({});
+
+export { Helmet, helmetData };

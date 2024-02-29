@@ -10,7 +10,7 @@ import { BeamCard, BeamFeed } from '@akashaorg/ui-lib-feed';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 type ProfileFeedPageProps = {
   did: string;
@@ -30,49 +30,51 @@ const ProfileFeedPage: React.FC<ProfileFeedPageProps> = props => {
   }, [authenticatedProfile, did]);
 
   return (
-    <Stack fullWidth={true}>
-      <Helmet.Helmet>
-        <title>
-          {t("{{profileUsername}}'s Page", { profileUsername: profileUserName || '' })} | AKASHA
-          World
-        </title>
-      </Helmet.Helmet>
+    <HelmetProvider>
+      <Stack fullWidth={true}>
+        <Helmet>
+          <title>
+            {t("{{profileUsername}}'s Page", { profileUsername: profileUserName || '' })} | AKASHA
+            World
+          </title>
+        </Helmet>
 
-      <BeamFeed
-        queryKey={`app-akasha-integration_${authenticatedProfile?.did?.id}-profile-antenna`}
-        estimatedHeight={150}
-        itemSpacing={8}
-        scrollerOptions={{ overscan: 10 }}
-        scrollTopIndicator={(listRect, onScrollToTop) => (
-          <ScrollTopWrapper placement={listRect.left}>
-            <ScrollTopButton hide={false} onClick={onScrollToTop} />
-          </ScrollTopWrapper>
-        )}
-        renderItem={itemData => {
-          if (hasOwn(itemData.node, 'content'))
-            return (
-              <BeamCard
-                entryData={mapBeamEntryData(itemData.node)}
-                contentClickable={true}
-                onContentClick={() =>
-                  getRoutingPlugin().navigateTo({
-                    appName: '@akashaorg/app-akasha-integration',
-                    getNavigationUrl: navRoutes => `${navRoutes.Beam}/${itemData.node.id}`,
-                  })
-                }
-                onReflect={() =>
-                  getRoutingPlugin().navigateTo({
-                    appName: '@akashaorg/app-akasha-integration',
-                    getNavigationUrl: navRoutes =>
-                      `${navRoutes.Beam}/${itemData.node.id}${navRoutes.Reflect}`,
-                  })
-                }
-                showNSFWCard={itemData.node?.nsfw}
-              />
-            );
-        }}
-      />
-    </Stack>
+        <BeamFeed
+          queryKey={`app-akasha-integration_${authenticatedProfile?.did?.id}-profile-antenna`}
+          estimatedHeight={150}
+          itemSpacing={8}
+          scrollerOptions={{ overscan: 10 }}
+          scrollTopIndicator={(listRect, onScrollToTop) => (
+            <ScrollTopWrapper placement={listRect.left}>
+              <ScrollTopButton hide={false} onClick={onScrollToTop} />
+            </ScrollTopWrapper>
+          )}
+          renderItem={itemData => {
+            if (hasOwn(itemData.node, 'content'))
+              return (
+                <BeamCard
+                  entryData={mapBeamEntryData(itemData.node)}
+                  contentClickable={true}
+                  onContentClick={() =>
+                    getRoutingPlugin().navigateTo({
+                      appName: '@akashaorg/app-akasha-integration',
+                      getNavigationUrl: navRoutes => `${navRoutes.Beam}/${itemData.node.id}`,
+                    })
+                  }
+                  onReflect={() =>
+                    getRoutingPlugin().navigateTo({
+                      appName: '@akashaorg/app-akasha-integration',
+                      getNavigationUrl: navRoutes =>
+                        `${navRoutes.Beam}/${itemData.node.id}${navRoutes.Reflect}`,
+                    })
+                  }
+                  showNSFWCard={itemData.node?.nsfw}
+                />
+              );
+          }}
+        />
+      </Stack>
+    </HelmetProvider>
   );
 };
 
