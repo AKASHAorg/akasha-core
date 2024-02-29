@@ -8,7 +8,6 @@ import {
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { EdgeArea, Virtualizer, VirtualizerProps } from '../virtual-list';
 import { useBeams } from '@akashaorg/ui-awf-hooks/lib/use-beams';
-import { useBeamsByDid } from '@akashaorg/ui-awf-hooks/lib/use-beams-by-did';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { RestoreItem } from '../virtual-list/use-scroll-state';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
