@@ -1,12 +1,10 @@
-import { useApolloClient } from '@apollo/client';
-
-export type ApolloClient = ReturnType<typeof useApolloClient>;
+import { ApolloClient } from '@apollo/client';
 
 export interface RouterContext {
-  apolloClient: ApolloClient;
+  apolloClient: ApolloClient<object>;
 }
 
 export interface CreateRouter {
   baseRouteName: string;
-  apolloClient?: ApolloClient;
+  apolloClient?: ApolloClient<object>;
 }
