@@ -6,7 +6,7 @@ import ErrorBoundary, {
   ErrorBoundaryProps,
 } from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import ListsPage from './lists-page';
-import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { Helmet, helmetData } from '@akashaorg/design-system-core/lib/utils';
 
 const AppRoutes: React.FC<unknown> = () => {
   const { baseRouteName, logger } = useRootComponentProps();
@@ -22,21 +22,19 @@ const AppRoutes: React.FC<unknown> = () => {
 
   return (
     <Router basename={baseRouteName}>
-      <HelmetProvider>
-        <Helmet>
-          <title>My List | AKASHA World</title>
-        </Helmet>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <ErrorBoundary {...errorBoundaryProps}>
-                <ListsPage />
-              </ErrorBoundary>
-            }
-          />
-        </Routes>
-      </HelmetProvider>
+      <Helmet helmetData={helmetData}>
+        <title>My List | AKASHA World</title>
+      </Helmet>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <ErrorBoundary {...errorBoundaryProps}>
+              <ListsPage />
+            </ErrorBoundary>
+          }
+        />
+      </Routes>
     </Router>
   );
 };

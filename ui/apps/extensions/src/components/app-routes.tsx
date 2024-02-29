@@ -13,7 +13,7 @@ import MyWidgetsPage from './pages/my-widgets-page';
 import AppsPage from './pages/apps-page';
 import MasterPage from './pages/master-page';
 import routes, { EXPLORE, MY_APPS, MY_WIDGETS, INFO, APPS } from '../routes';
-import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { Helmet, helmetData } from '@akashaorg/design-system-core/lib/utils';
 import { hiddenIntegrations } from '../hidden-integrations';
 
 const AppRoutes: React.FC<unknown> = () => {
@@ -69,8 +69,8 @@ const AppRoutes: React.FC<unknown> = () => {
   };
 
   return (
-    <HelmetProvider>
-      <Helmet>
+    <>
+      <Helmet helmetData={helmetData}>
         <title>Extensions | AKASHA World</title>
       </Helmet>
       <Router basename={baseRouteName}>
@@ -130,7 +130,7 @@ const AppRoutes: React.FC<unknown> = () => {
           </Routes>
         </MasterPage>
       </Router>
-    </HelmetProvider>
+    </>
   );
 };
 

@@ -16,7 +16,7 @@ import SettingsPage from './settings-page';
 import PrivacyOption from './option-privacy';
 import ThemeOption from './option-theme';
 import NsfwOption from './option-nsfw';
-import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { Helmet, helmetData } from '@akashaorg/design-system-core/lib/utils';
 import routes, { THEME, NSFW, APPS, HOME, PRIVACY } from '../routes';
 
 export type theme = 'Light-Theme' | 'Dark-Theme';
@@ -113,8 +113,8 @@ const AppRoutes: React.FC<unknown> = () => {
   };
 
   return (
-    <HelmetProvider>
-      <Helmet>
+    <>
+      <Helmet helmetData={helmetData}>
         <title>Settings | AKASHA World</title>
       </Helmet>
       <Router basename={baseRouteName}>
@@ -224,7 +224,7 @@ const AppRoutes: React.FC<unknown> = () => {
           <Route path="/" element={<Navigate to={routes[HOME]} replace />} />
         </Routes>
       </Router>
-    </HelmetProvider>
+    </>
   );
 };
 

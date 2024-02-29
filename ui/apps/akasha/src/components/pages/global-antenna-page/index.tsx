@@ -13,7 +13,7 @@ import EditorPlaceholder from '@akashaorg/design-system-components/lib/component
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
-import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { Helmet, helmetData } from '@akashaorg/design-system-core/lib/utils';
 
 export type GlobalAntennaPageProps = {
   isLoggedIn: boolean;
@@ -55,24 +55,22 @@ const GlobalAntennaPage: React.FC<GlobalAntennaPageProps> = props => {
 
   return (
     <Stack fullWidth={true}>
-      <HelmetProvider>
-        <Helmet>
-          <title>AKASHA World</title>
-        </Helmet>
-        <BeamFeed
-          header={listHeader}
-          queryKey={'app-akasha-integration_general-antenna'}
-          estimatedHeight={150}
-          itemSpacing={8}
-          scrollerOptions={{ overscan: 10 }}
-          scrollTopIndicator={(listRect, onScrollToTop) => (
-            <ScrollTopWrapper placement={listRect.left}>
-              <ScrollTopButton hide={false} onClick={onScrollToTop} />
-            </ScrollTopWrapper>
-          )}
-          trackEvent={analyticsActions.trackEvent}
-        />
-      </HelmetProvider>
+      <Helmet helmetData={helmetData}>
+        <title>AKASHA World</title>
+      </Helmet>
+      <BeamFeed
+        header={listHeader}
+        queryKey={'app-akasha-integration_general-antenna'}
+        estimatedHeight={150}
+        itemSpacing={8}
+        scrollerOptions={{ overscan: 10 }}
+        scrollTopIndicator={(listRect, onScrollToTop) => (
+          <ScrollTopWrapper placement={listRect.left}>
+            <ScrollTopButton hide={false} onClick={onScrollToTop} />
+          </ScrollTopWrapper>
+        )}
+        trackEvent={analyticsActions.trackEvent}
+      />
     </Stack>
   );
 };

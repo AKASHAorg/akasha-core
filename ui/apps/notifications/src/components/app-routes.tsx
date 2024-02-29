@@ -8,7 +8,7 @@ import ErrorBoundary, {
 import CustomizeNotificationPage from './pages/customize-notification-page';
 import NotificationsPage from './pages/notifications-page';
 import WelcomePage from './pages/welcome-page';
-import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { Helmet, helmetData } from '@akashaorg/design-system-core/lib/utils';
 
 import routes, {
   CUSTOMIZE_NOTIFICATION_WELCOME_PAGE,
@@ -33,8 +33,8 @@ const AppRoutes: React.FC<unknown> = () => {
   };
 
   return (
-    <HelmetProvider>
-      <Helmet>
+    <>
+      <Helmet helmetData={helmetData}>
         <title>Notifications | AKASHA World</title>
       </Helmet>
       <Router basename={baseRouteName}>
@@ -103,7 +103,7 @@ const AppRoutes: React.FC<unknown> = () => {
           />
         </Routes>
       </Router>
-    </HelmetProvider>
+    </>
   );
 };
 
