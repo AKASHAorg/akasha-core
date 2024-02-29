@@ -36,7 +36,7 @@ export const BaseMenu: Story = {
             },
           },
           {
-            label: 'Report',
+            label: 'Flag',
             icon: <FlagIcon />,
             color: { light: 'errorLight', dark: 'errorDark' },
             onClick: () => {

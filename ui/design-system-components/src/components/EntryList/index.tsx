@@ -5,7 +5,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
-import { defaultRangeExtractor, useWindowVirtualizer, VirtualItem } from '@tanstack/react-virtual';
+import { useWindowVirtualizer, VirtualItem } from '@tanstack/react-virtual';
 import { useScrollTop } from './use-scroll-top';
 import { mergeWithCache } from '../../utils/virtual-list-utils';
 import Button from '@akashaorg/design-system-core/lib/components/Button';

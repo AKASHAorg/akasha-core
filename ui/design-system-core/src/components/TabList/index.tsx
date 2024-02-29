@@ -1,17 +1,17 @@
 import React from 'react';
-import { apply, tw } from '@twind/core';
 
 import Button from '../Button';
 import Text, { TextProps } from '../Text';
 
 import { getColorClasses } from '../../utils';
+import Stack from '../Stack';
 
 export type TabListProps = {
   labels: string[];
   selected: number;
+  customStyle?: string;
   tabListDivider?: boolean;
   labelTextVariant?: TextProps['variant'];
-  customStyle?: string;
   onChange: (selectedIndex: number, previousIndex: number) => void;
 };
 
@@ -43,9 +43,7 @@ const TabList: React.FC<TabListProps> = ({
     : '';
 
   return (
-    <div
-      className={tw(apply`grid grid-cols-${labels.length} ${tabListDividerStyle} ${customStyle}`)}
-    >
+    <Stack customStyle={`grid grid-cols-${labels.length} ${tabListDividerStyle} ${customStyle}`}>
       {labels.map((label, index) => (
         <Button
           key={label}
@@ -78,11 +76,11 @@ const TabList: React.FC<TabListProps> = ({
           </Text>
         </Button>
       ))}
-    </div>
+    </Stack>
   );
 };
 
 const getTabTextVariant = (selected: number, index: number) =>
-  selected === index ? 'button-sm' : 'footnotes2';
+  selected === index ? 'button-md' : 'body2';
 
 export default TabList;

@@ -31,6 +31,12 @@ const overrides = [
     ...missingRequiredFields,
   },
   {
+    name: '@akashaorg/app-vibes',
+    integrationType: INTEGRATION_TYPES.APPLICATION,
+    sources: [`/apps/vibes/index.js`],
+    ...missingRequiredFields,
+  },
+  {
     name: '@akashaorg/app-auth-ewa',
     integrationType: INTEGRATION_TYPES.APPLICATION,
     sources: [`/apps/auth-app/index.js`],

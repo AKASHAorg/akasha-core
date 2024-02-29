@@ -69,7 +69,7 @@ $ yarn compile:sc
 ```
 
 ## `deploy:sc`
-> Deploys [compiled](#compilesc) smart contracts to Goerli Test Network by running `sc:deploy:goerli` script on sdk using Nx
+> Deploys [compiled](#compilesc) smart contracts to Sepolia Test Network by running `sc:deploy:sepolia` script on sdk using Nx
 
 ``` shell script
 $ yarn deploy:sc

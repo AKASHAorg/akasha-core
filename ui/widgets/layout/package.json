@@ -36,7 +36,6 @@
     "@akashaorg/ui-lib-extensions": "*",
     "i18next": "22.4.14",
     "react-i18next": "12.2.0",
-    "react-router-dom": "6.4.5",
     "single-spa-react": "6.0.1"
   },
   "devDependencies": {

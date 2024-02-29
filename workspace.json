@@ -407,6 +407,28 @@
         }
       }
     },
+    "@akashaorg/app-vibes": {
+      "root": "ui/apps/vibes",
+      "sourceRoot": "ui/apps/vibes/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": ["ui/apps/vibes"],
+          "options": {
+            "commands": ["yarn run pack", "yarn postpack"],
+            "cwd": "ui/apps/vibes",
+            "parallel": false
+          }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/apps/vibes"
+          }
+        }
+      }
+    },
     "@akashaorg/app-notifications": {
       "root": "ui/apps/notifications",
       "sourceRoot": "ui/apps/notifications/src",
