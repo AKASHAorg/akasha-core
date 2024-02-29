@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useGetLogin, useGetLoginProfile, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import ErrorBoundary, {
@@ -25,22 +25,24 @@ import routes, {
 } from '../routes';
 
 const AppRoutes: React.FC<unknown> = () => {
-  const { baseRouteName, logger, navigateToModal } = useRootComponentProps();
+  const { logger, navigateToModal } = useRootComponentProps();
   const { t } = useTranslation('app-akasha-integration');
   const _navigateToModal = React.useRef(navigateToModal);
   const { data, loading: authenticating } = useGetLogin();
   const authenticatedProfileReq = useGetLoginProfile();
-
   const isLoggedIn = !!data?.id;
   const authenticatedProfile = authenticatedProfileReq?.akashaProfile;
 
-  const showLoginModal = React.useCallback((redirectTo?: { modal: ModalNavigationOptions }) => {
-    _navigateToModal.current?.({
-      name: 'login',
-      redirectTo,
-      message: 'To view explicit or sensitive content, please connect to confirm your consent.',
-    });
-  }, []);
+  const showLoginModal = React.useCallback(
+    (redirectTo?: { modal: ModalNavigationOptions }, message?: string) => {
+      _navigateToModal.current?.({
+        name: 'login',
+        redirectTo,
+        message,
+      });
+    },
+    [],
+  );
 
   const errorBoundaryProps: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
     errorObj: {
@@ -50,102 +52,101 @@ const AppRoutes: React.FC<unknown> = () => {
     logger,
   };
 
+  const location = useLocation();
+  const currentPath = React.useMemo(() => location.pathname, [location.pathname]);
+
   return (
-    <Router basename={baseRouteName}>
-      <Routes>
-        <Route
-          path={routes[GLOBAL_ANTENNA]}
-          element={
-            <ErrorBoundary {...errorBoundaryProps}>
-              <GlobalAntennaPage
-                isLoggedIn={isLoggedIn}
-                authenticatedProfile={authenticatedProfile}
-                showLoginModal={showLoginModal}
-              />
-            </ErrorBoundary>
-          }
-        />
-        <Route
-          path={routes[MY_ANTENNA]}
-          element={
-            <ErrorBoundary {...errorBoundaryProps}>
-              <MyAntennaPage
-                authenticatedProfile={authenticatedProfile}
-                showLoginModal={showLoginModal}
-              />
-            </ErrorBoundary>
-          }
-        />
-        <Route
-          path={`${routes[BEAM]}/:beamId`}
-          element={
-            <ErrorBoundary {...errorBoundaryProps}>
-              <React.Suspense fallback={<EntrySectionLoading />}>
-                <BeamPage />
-              </React.Suspense>
-            </ErrorBoundary>
-          }
-        />
-        <Route
-          path={`${routes[BEAM]}/:beamId${routes[REFLECT]}`}
-          element={
-            <ErrorBoundary {...errorBoundaryProps}>
-              <React.Suspense fallback={<EntrySectionLoading />}>
-                <BeamPage />
-              </React.Suspense>
-            </ErrorBoundary>
-          }
-        />
-        <Route
-          path={`${routes[TAGS]}/:tagName`}
-          element={
-            <ErrorBoundary {...errorBoundaryProps}>
-              <TagFeedPage showLoginModal={showLoginModal} />
-            </ErrorBoundary>
-          }
-        />
-        <Route
-          path={`${routes[PROFILE_FEED]}/:did`}
-          element={
-            <ErrorBoundary {...errorBoundaryProps}>
-              <ProfileFeedPage
-                authenticatedProfile={authenticatedProfile}
-                showLoginModal={showLoginModal}
-              />
-            </ErrorBoundary>
-          }
-        />
-        <Route
-          path={`${routes[REFLECT]}/:reflectionId`}
-          element={
-            <ErrorBoundary {...errorBoundaryProps}>
-              <React.Suspense fallback={<EntrySectionLoading />}>
-                <ReflectionPage />
-              </React.Suspense>
-            </ErrorBoundary>
-          }
-        />
-        <Route
-          path={`${routes[REFLECT]}/:reflectionId${routes[REFLECT]}`}
-          element={
-            <ErrorBoundary {...errorBoundaryProps}>
-              <React.Suspense fallback={<EntrySectionLoading />}>
-                <ReflectionPage />
-              </React.Suspense>
-            </ErrorBoundary>
-          }
-        />
-        <Route
-          path={routes[EDITOR]}
-          element={
-            <ErrorBoundary {...errorBoundaryProps}>
-              <EditorPage authenticatedProfile={authenticatedProfile} />
-            </ErrorBoundary>
-          }
-        />
-        <Route path="/" element={<Navigate to={routes[GLOBAL_ANTENNA]} replace />} />
-      </Routes>
-    </Router>
+    <Routes>
+      <Route
+        path={routes[GLOBAL_ANTENNA]}
+        element={
+          <ErrorBoundary {...errorBoundaryProps} key={currentPath}>
+            <GlobalAntennaPage
+              isLoggedIn={isLoggedIn}
+              authenticatedProfile={authenticatedProfile}
+              showLoginModal={showLoginModal}
+            />
+          </ErrorBoundary>
+        }
+      />
+      <Route
+        path={routes[MY_ANTENNA]}
+        element={
+          <ErrorBoundary {...errorBoundaryProps} key={currentPath}>
+            <MyAntennaPage
+              authenticatedProfile={authenticatedProfile}
+              showLoginModal={showLoginModal}
+            />
+          </ErrorBoundary>
+        }
+      />
+      <Route
+        path={`${routes[BEAM]}/:beamId`}
+        element={
+          <React.Suspense fallback={<EntrySectionLoading />}>
+            <BeamPage />
+          </React.Suspense>
+        }
+      />
+      <Route
+        path={`${routes[BEAM]}/:beamId${routes[REFLECT]}`}
+        element={
+          <ErrorBoundary {...errorBoundaryProps} key={currentPath}>
+            <React.Suspense fallback={<EntrySectionLoading />}>
+              <BeamPage />
+            </React.Suspense>
+          </ErrorBoundary>
+        }
+      />
+      <Route
+        path={`${routes[TAGS]}/:tagName`}
+        element={
+          <ErrorBoundary {...errorBoundaryProps} key={currentPath}>
+            <TagFeedPage showLoginModal={showLoginModal} />
+          </ErrorBoundary>
+        }
+      />
+      <Route
+        path={`${routes[PROFILE_FEED]}/:did`}
+        element={
+          <ErrorBoundary {...errorBoundaryProps} key={currentPath}>
+            <ProfileFeedPage
+              authenticatedProfile={authenticatedProfile}
+              showLoginModal={showLoginModal}
+            />
+          </ErrorBoundary>
+        }
+      />
+      <Route
+        path={`${routes[REFLECT]}/:reflectionId`}
+        element={
+          <ErrorBoundary {...errorBoundaryProps} key={currentPath}>
+            <React.Suspense fallback={<EntrySectionLoading />}>
+              <ReflectionPage />
+            </React.Suspense>
+          </ErrorBoundary>
+        }
+      />
+      <Route
+        path={`${routes[REFLECT]}/:reflectionId${routes[REFLECT]}`}
+        element={
+          <ErrorBoundary {...errorBoundaryProps} key={currentPath}>
+            <React.Suspense fallback={<EntrySectionLoading />}>
+              <ReflectionPage />
+            </React.Suspense>
+          </ErrorBoundary>
+        }
+      />
+      <Route
+        path={routes[EDITOR]}
+        element={
+          <ErrorBoundary {...errorBoundaryProps} key={currentPath}>
+            <EditorPage authenticatedProfile={authenticatedProfile} />
+          </ErrorBoundary>
+        }
+      />
+      <Route path="/" element={<Navigate to={routes[GLOBAL_ANTENNA]} replace />} />
+    </Routes>
   );
 };
 

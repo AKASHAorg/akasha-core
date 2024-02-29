@@ -31,6 +31,9 @@ import {
 } from '@akashaorg/typings/lib/ui';
 import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
+import ErrorBoundary, {
+  ErrorBoundaryProps,
+} from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 
 type BeamProps = {
   sortedContents: AkashaBeam['content'];
@@ -90,7 +93,7 @@ export type EntryCardProps = {
   onEntryRemove?: (itemId: string) => void;
   onEntryFlag?: () => void;
   onEdit?: () => void;
-  showLoginModal?: () => void;
+  showLoginModal?: (title?: string, message?: string) => void;
   transformSource: (src: Image) => Image;
 } & (BeamProps | ReflectProps);
 
@@ -175,6 +178,13 @@ const EntryCard: React.FC<EntryCardProps> = props => {
   const publishTime = entryData?.createdAt ? formatRelativeTime(entryData.createdAt, locale) : '';
   const avatar = authorProfile.error ? null : authorProfile.data?.avatar;
 
+  const errorBoundaryProps: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
+    errorObj: {
+      type: 'script-error',
+      title: 'Error in beam rendering',
+    },
+  };
+
   const entryCardUi = (
     <Stack spacing="gap-y-2" padding="p-4" customStyle={hoverStyle}>
       <Stack direction="row" justify="between">
@@ -247,81 +257,88 @@ const EntryCard: React.FC<EntryCardProps> = props => {
         />
       )}
       {entryData.active && (
-        <Card
-          onClick={!showNSFWContent ? null : onContentClick}
-          customStyle={contentClickableStyle}
-          type="plain"
-        >
-          <Stack
-            align="center"
-            justify="start"
-            customStyle={`overflow-hidden ${showHiddenStyle} ${contentClickableStyle}`}
-            data-testid="entry-content"
-            fullWidth={true}
+        <ErrorBoundary {...errorBoundaryProps}>
+          <Card
+            onClick={!showNSFWContent ? null : onContentClick}
+            customStyle={contentClickableStyle}
+            type="plain"
           >
-            {showNSFWCard && !showNSFWContent && (
-              <NSFW
-                {...nsfw}
-                onClickToView={event => {
-                  event.stopPropagation();
-                  if (!isLoggedIn) {
-                    if (showLoginModal && typeof showLoginModal === 'function') showLoginModal();
-                  } else {
-                    setShowNSFWContent(true);
-                  }
-                }}
-              />
-            )}
-            {(!entryData.nsfw || showNSFWContent) /* need change */ && (
-              <Stack
-                justifySelf="start"
-                alignSelf="start"
-                align="start"
-                spacing="gap-y-1"
-                fullWidth={true}
-              >
-                {rest.itemType === EntityTypes.REFLECT ? (
-                  <ReadOnlyEditor
-                    content={rest.slateContent}
-                    disabled={entryData.nsfw}
-                    handleMentionClick={rest.onMentionClick}
-                    handleLinkClick={url => {
-                      rest.navigateTo?.({ getNavigationUrl: () => url });
-                    }}
-                  />
-                ) : (
-                  rest.sortedContents?.map(item => (
-                    <Fragment key={item.blockID}>
-                      {rest.children({ blockID: item.blockID })}
-                    </Fragment>
-                  ))
-                )}
-              </Stack>
-            )}
-            {showHiddenContent && entryData.tags?.length > 0 && (
-              <Stack
-                padding={{ y: 16 }}
-                justify="start"
-                direction="row"
-                spacing="gap-2"
-                customStyle="flex-wrap"
-                fullWidth
-              >
-                {entryData.tags?.map((tag, index) => (
-                  <Pill
-                    key={index}
-                    label={tag}
-                    onPillClick={() => {
-                      if (typeof onTagClick === 'function') {
-                        onTagClick(tag);
+            <Stack
+              align="center"
+              justify="start"
+              customStyle={`overflow-hidden ${showHiddenStyle} ${contentClickableStyle}`}
+              data-testid="entry-content"
+              fullWidth={true}
+            >
+              {showNSFWCard && !showNSFWContent && (
+                <NSFW
+                  {...nsfw}
+                  onClickToView={event => {
+                    event.stopPropagation();
+                    if (!isLoggedIn) {
+                      if (showLoginModal && typeof showLoginModal === 'function') {
+                        showLoginModal(
+                          null,
+                          'To view explicit or sensitive content, please connect to confirm your consent.',
+                        );
                       }
-                    }}
-                  />
-                ))}
-              </Stack>
-            )}
-          </Stack>
-        </Card>
+                    } else {
+                      setShowNSFWContent(true);
+                    }
+                  }}
+                />
+              )}
+              {(!entryData.nsfw || showNSFWContent) && (
+                <Stack
+                  justifySelf="start"
+                  alignSelf="start"
+                  align="start"
+                  spacing="gap-y-1"
+                  fullWidth={true}
+                >
+                  {rest.itemType === EntityTypes.REFLECT ? (
+                    <ReadOnlyEditor
+                      content={rest.slateContent}
+                      disabled={entryData.nsfw}
+                      handleMentionClick={rest.onMentionClick}
+                      handleLinkClick={url => {
+                        rest.navigateTo?.({ getNavigationUrl: () => url });
+                      }}
+                    />
+                  ) : (
+                    rest.sortedContents?.map(item => (
+                      <Fragment key={item.blockID}>
+                        {rest.children({ blockID: item.blockID })}
+                      </Fragment>
+                    ))
+                  )}
+                </Stack>
+              )}
+              {showHiddenContent && entryData.tags?.length > 0 && (
+                <Stack
+                  padding={{ y: 16 }}
+                  justify="start"
+                  direction="row"
+                  spacing="gap-2"
+                  customStyle="flex-wrap"
+                  fullWidth
+                >
+                  {entryData.tags?.map((tag, index) => (
+                    <Pill
+                      key={index}
+                      label={tag}
+                      onPillClick={() => {
+                        if (typeof onTagClick === 'function') {
+                          onTagClick(tag);
+                        }
+                      }}
+                    />
+                  ))}
+                </Stack>
+              )}
+            </Stack>
+          </Card>
+        </ErrorBoundary>
       )}
       {!hideActionButtons && (
         <CardActions
@@ -337,7 +354,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
   );
 
   return noWrapperCard ? (
-    <>{entryCardUi}</>
+    <> {entryCardUi}</>
   ) : (
     <Card ref={ref} padding="p-0">
       {entryCardUi}

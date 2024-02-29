@@ -34,13 +34,13 @@ export class Rect {
   static visibleFactor = (rect: Rect, containerRect: Rect) => {
     const visibleHeight = Math.max(
       0,
-      Math.min(rect.getBottom(), containerRect.getBottom()) -
-        Math.max(rect.getTop(), containerRect.getTop()),
+      Math.min(rect?.getBottom(), containerRect?.getBottom()) -
+        Math.max(rect?.getTop(), containerRect?.getTop()),
     );
     const fraction = rect.getHeight() > 0 ? visibleHeight / rect.getHeight() : 0;
     return fraction > 0.01 ? 1 : 0;
   };
   static getVisibleHeight = (rect: Rect, container: Rect) => {
-    return rect.getBottom() - container.getTop();
+    return rect?.getBottom() - container?.getTop();
   };
 }
