@@ -2,13 +2,13 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { formatDate } from '@akashaorg/design-system-core/lib/utils';
 import ModeratorDetailCard from '../components/moderator';
 import InfoCard from '../components/moderator/info-card';
 import PaginatedTable from '../components/transparency-log/paginated-table';
 
 import {
   generateModerators,
-  formatDate,
   generateTenureInfoLabel,
   generateModerationHistory,
   generateDismissalReason,
@@ -59,7 +59,7 @@ export const ModeratorDetailPage: React.FC<ModeratorDetailPageProps> = () => {
 
   const trimmedRows =
     pages[curPage - 1]?.map(el => [
-      formatDate(el.moderatedDate, 'DD MMM YYYY'),
+      formatDate(el.moderatedDate.toISOString(), 'DD MMM YYYY'),
       t('{{type}}', { type: el.type }),
       t('{{status}}', { status: el.status }),
       el.contentId,

@@ -9,7 +9,8 @@ import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
-import { formatDate, getModeratorStatusIndicator } from '../../utils';
+import { formatDate } from '@akashaorg/design-system-core/lib/utils';
+import { getModeratorStatusIndicator } from '../../utils';
 
 export type ModeratorDetailCardProps = {
   moderator: Moderator;
@@ -69,9 +70,10 @@ const ModeratorDetailCard: React.FC<ModeratorDetailCardProps> = props => {
 
           <Text variant="footnotes2" weight="normal">
             {moderator.status === 'active'
-              ? formatDate(new Date(moderator.createdAt).toISOString())
-              : `${formatDate(moderator.createdAt, 'MMM YYYY')} - ${formatDate(
-                  moderator.moderatorEndDate,
+              ? formatDate(new Date(moderator.createdAt).toISOString(), 'DD MMM YYYY')
+              : `${formatDate(moderator.createdAt.toISOString(), 'MMM YYYY')} - ${formatDate(
+                  moderator.moderatorEndDate.toISOString(),
+                  'DD MMM YYYY',
                 )}`}
           </Text>
         </Stack>

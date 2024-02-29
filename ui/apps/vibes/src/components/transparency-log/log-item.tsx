@@ -5,7 +5,8 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { FlagIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import { entryCardProps, formatDate } from '../../utils';
+import { formatDate } from '@akashaorg/design-system-core/lib/utils';
+import { entryCardProps } from '../../utils';
 
 export type TransparencyLogItemType = 'Beam' | 'Reflection' | 'Profile';
 
@@ -69,7 +70,7 @@ const TransparencyLogItemCard: React.FC<TransparencyLogItemCardProps> = props =>
               {`${reportedLabel} `}
             </Text>
             <Text variant="footnotes2" weight="normal">
-              {formatDate(item.reportedDate, 'DD-MM-YYYY')}
+              {formatDate(item.reportedDate.toISOString(), 'DD-MM-YYYY')}
             </Text>
           </Stack>
 
@@ -78,7 +79,7 @@ const TransparencyLogItemCard: React.FC<TransparencyLogItemCardProps> = props =>
               {`${resolvedLabel} `}
             </Text>
             <Text variant="footnotes2" weight="normal">
-              {formatDate(item.moderatedDate, 'DD-MM-YYYY')}
+              {formatDate(item.moderatedDate.toISOString(), 'DD-MM-YYYY')}
             </Text>
           </Stack>
         </Stack>

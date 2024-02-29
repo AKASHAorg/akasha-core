@@ -7,7 +7,8 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
-import { formatDate, getModeratorStatusIndicator } from '../../utils';
+import { formatDate } from '@akashaorg/design-system-core/lib/utils';
+import { getModeratorStatusIndicator } from '../../utils';
 import { Moderator } from '@akashaorg/typings/lib/ui';
 import { ChevronRightIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { transformSource } from '@akashaorg/ui-awf-hooks';
@@ -75,7 +76,7 @@ const ModeratorDetailMiniCard: React.FC<ModeratorDetailMiniCardProps> = props =>
           <Text variant="footnotes2" weight="normal">
             {moderator.status === 'active'
               ? `${moderator.moderatedItems} ${moderatedItemsLabel}`
-              : formatDate(moderator.moderatorEndDate)}
+              : formatDate(moderator.moderatorEndDate.toISOString(), 'DD MMM YYYY')}
           </Text>
         </Stack>
 
