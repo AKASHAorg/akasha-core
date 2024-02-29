@@ -17,7 +17,7 @@ enum BlockDef{
 }
 
 # model builder
-type AkashaContentBlock @createModel(accountRelation: LIST, description: "AKASHA Basic Content Block") @createIndex(fields:[{path:"active"}, {path: "createdAt"}, {path: "kind"}, {path: "nsfw"}, {path: "appVersionID"}]) {
+type AkashaContentBlock @createModel(accountRelation: LIST, description: "AKASHA Basic Content Block v0.1") @createIndex(fields:[{path:"active"}, {path: "createdAt"}, {path: "kind"}, {path: "nsfw"}, {path: "appVersionID"}]) {
   content: [LabeledValue!]! @list(maxLength: 20)
   appVersionID: StreamID! @documentReference(model: "AkashaAppRelease")
   appVersion: AkashaAppRelease! @relationDocument(property: "appVersionID")

@@ -1,21 +1,21 @@
 
-type AkashaBeam @loadModel(id: "kjzl6hvfrbw6cb6hnyzrde71ovrvhr1ma70j3zh6tblh6hl48di34dzsx0w6zk4") {
+type AkashaBeam @loadModel(id: "kjzl6hvfrbw6c81jn00de1kfzdjtdbbivos4k3f17wa4a0u45c2v26d3j1eve68") {
   id: ID!
 }
 
-type AkashaContentBlock @loadModel(id: "kjzl6hvfrbw6c5a30ha3yuzt87u4mcna2v5tyjbhfoc22l8yyj91iq03pps7osb") {
+type AkashaContentBlock @loadModel(id: "kjzl6hvfrbw6c9raeoa7g1c9s53pl91qhnk8pp0cxmjbj2ug2t7mmn8arhz3mth") {
   id: ID!
 }
 
-type AkashaProfile @loadModel(id: "kjzl6hvfrbw6c9l8sxje9238fz8hx6u6whu9njmww96wn04c6uj0lillf9jygno") {
+type AkashaProfile @loadModel(id: "kjzl6hvfrbw6c8ka585ggylnd62q8tzt0aaymiifoez55sm5wvi7lvts8qwpumv") {
   id: ID!
 }
 
-type AkashaReflect @loadModel(id: "kjzl6hvfrbw6c8rvt0azcc4qqv0xykpxp4ch0rzw1dsd7zhl7egop4laiq64cyz") {
+type AkashaReflect @loadModel(id: "kjzl6hvfrbw6c9az8glxdc257r0tgzkjxj01nhwxilaciiidaxwafw4023wimnp") {
   id: ID!
 }
 
-type AkashaApp @loadModel(id: "kjzl6hvfrbw6c99kqbzbtrktgontbb48psxsd9xai7og9pyey10sv4c5yqvsjvb") {
+type AkashaApp @loadModel(id: "kjzl6hvfrbw6c6aw2o64rn4b02b2z2t9ehhe419zkk6pakvpzcf7nj9xdunzf4m") {
   id: ID!
 }
 
@@ -39,7 +39,7 @@ enum StreamType{
   OTHER
 }
 
-type AkashaBeamStream @createModel(accountRelation: LIST, description: "Moderated Beams list") @createIndex(fields:[{path: "active"},{path: "beamID"}, {path: "createdAt"}, {path: "status"}, {path: "moderationID"}]){
+type AkashaBeamStream @createModel(accountRelation: LIST, description: "Moderated Beams list v0.1") @createIndex(fields:[{path: "active"},{path: "beamID"}, {path: "createdAt"}, {path: "status"}, {path: "moderationID"}]){
   beamID: StreamID! @documentReference(model: "AkashaBeam")
   beam: AkashaBeam! @relationDocument(property: "beamID")
   active: Boolean!
@@ -48,7 +48,7 @@ type AkashaBeamStream @createModel(accountRelation: LIST, description: "Moderate
   moderationID: StreamID
 }
 
-type AkashaContentBlockStream @createModel(accountRelation: LIST, description: "Moderated Content Blocks") @createIndex(fields:[{path: "active"},{path: "blockID"}, {path: "createdAt"}, {path: "status"}, {path: "moderationID"}]){
+type AkashaContentBlockStream @createModel(accountRelation: LIST, description: "Moderated Content Blocks v0.1") @createIndex(fields:[{path: "active"},{path: "blockID"}, {path: "createdAt"}, {path: "status"}, {path: "moderationID"}]){
   blockID: StreamID! @documentReference(model: "AkashaContentBlock")
   block: AkashaContentBlock! @relationDocument(property: "blockID")
   active: Boolean!
@@ -57,7 +57,7 @@ type AkashaContentBlockStream @createModel(accountRelation: LIST, description: "
   moderationID: StreamID
 }
 
-type AkashaReflectStream @createModel(accountRelation: LIST, description: "Moderated Beam Reflections") @createIndex(fields:[{path: "active"},{path: "reflectionID"}, {path: "createdAt"}, {path: "status"}, {path: "moderationID"}, {path: "beamID"}]){
+type AkashaReflectStream @createModel(accountRelation: LIST, description: "Moderated Beam Reflections v0.1") @createIndex(fields:[{path: "active"},{path: "reflectionID"}, {path: "createdAt"}, {path: "status"}, {path: "moderationID"}, {path: "beamID"}]){
   reflectionID: StreamID! @documentReference(model: "AkashaReflect")
   reflection: AkashaReflect! @relationDocument(property: "reflectionID")
   beamID: StreamID! @documentReference(model: "AkashaBeam")
@@ -67,7 +67,7 @@ type AkashaReflectStream @createModel(accountRelation: LIST, description: "Moder
   moderationID: StreamID
 }
 
-type AkashaProfileStream @createModel(accountRelation: LIST, description: "Moderated Profiles list") @createIndex(fields:[{path: "active"},{path: "profileID"}, {path: "createdAt"}, {path: "status"}, {path: "moderationID"}]){
+type AkashaProfileStream @createModel(accountRelation: LIST, description: "Moderated Profiles list v0.1") @createIndex(fields:[{path: "active"},{path: "profileID"}, {path: "createdAt"}, {path: "status"}, {path: "moderationID"}]){
   profileID: StreamID! @documentReference(model: "AkashaProfile")
   profile: AkashaProfile! @relationDocument(property: "profileID")
   active: Boolean!
@@ -77,7 +77,7 @@ type AkashaProfileStream @createModel(accountRelation: LIST, description: "Moder
 }
 
 
-type AkashaInterestsStream @createModel(accountRelation: LIST, description: "Moderated Interests suggestion list") @createIndex(fields:[{path: "active"},{path: "labelType"}, {path: "value"}, {path: "createdAt"}, {path: "status"}, {path: "moderationID"}]){
+type AkashaInterestsStream @createModel(accountRelation: LIST, description: "Moderated Interests suggestion list v0.1") @createIndex(fields:[{path: "active"},{path: "labelType"}, {path: "value"}, {path: "createdAt"}, {path: "status"}, {path: "moderationID"}]){
   labelType: String! @string(maxLength: 30)
   value: String! @string(minLength:2, maxLength: 60)
   active: Boolean!
@@ -87,7 +87,7 @@ type AkashaInterestsStream @createModel(accountRelation: LIST, description: "Mod
 }
 
 
-type AkashaAppsStream @createModel(accountRelation: LIST, description: "Moderated Apps suggestion list") @createIndex(fields:[{path: "active"},{path: "applicationID"}, {path: "createdAt"}, {path: "status"}, {path: "moderationID"}]){
+type AkashaAppsStream @createModel(accountRelation: LIST, description: "Moderated Apps suggestion list v0.1") @createIndex(fields:[{path: "active"},{path: "applicationID"}, {path: "createdAt"}, {path: "status"}, {path: "moderationID"}]){
   applicationID: StreamID! @documentReference(model: "AkashaApp")
   application: AkashaApp! @relationDocument(property: "applicationID")
   active: Boolean!
@@ -96,7 +96,7 @@ type AkashaAppsStream @createModel(accountRelation: LIST, description: "Moderate
   moderationID: StreamID
 }
 
-type AkashaIndexedStream @createModel(accountRelation: LIST, description: "Indexed Content") @createIndex(fields:[{path: "active"}, {path: "createdAt"}, {path: "status"}, {path: "moderationID"}, {path: "stream"}, {path: "streamType"}, {path: "indexType"}, {path: "indexValue"}]){
+type AkashaIndexedStream @createModel(accountRelation: LIST, description: "Indexed Content v0.1") @createIndex(fields:[{path: "active"}, {path: "createdAt"}, {path: "status"}, {path: "moderationID"}, {path: "stream"}, {path: "streamType"}, {path: "indexType"}, {path: "indexValue"}]){
   active: Boolean!
   createdAt: DateTime!
   status: ModerationStatus
@@ -106,3 +106,4 @@ type AkashaIndexedStream @createModel(accountRelation: LIST, description: "Index
   indexType: String! @string(maxLength: 30)
   indexValue: String! @string(minLength:2, maxLength: 90)
 }
+  
