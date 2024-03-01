@@ -6,7 +6,7 @@ import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 export const RootParcel = props => {
   const { config, ...otherProps } = props;
-  const { singleSpa } = useRootComponentProps();
+  const { singleSpa, logger } = useRootComponentProps();
   const parcel = React.useRef<ReturnType<typeof singleSpa.mountRootParcel>>(null);
   const parcelNodeRef = React.useRef();
   const isMounted = React.useRef(false);
@@ -25,10 +25,10 @@ export const RootParcel = props => {
   React.useEffect(() => {
     if (parcel.current && parcel.current.getStatus() === singleSpaMountedConstant.current) {
       parcel.current.update?.(otherProps).catch(err => {
-        console.error('failed to update parcel', err);
+        logger.error('failed to update parcel', err);
       });
     }
-  }, [otherProps]);
+  }, [logger, otherProps]);
 
   React.useEffect(() => {
     return () => {
