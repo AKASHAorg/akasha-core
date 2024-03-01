@@ -1,0 +1,3 @@
+The AKASHA Foundation develops the moderating app in [an open design process](https://www.notion.so/akasha-foundation/The-AKASHA-Moderating-Open-Design-Challenge-15cb49cf57e740be92534958828ca210) with its community. The app ensures safe and healthy experience on AKASHA World with a content that follows the code of conduct defined by the community. It entails a set of tools and resources to help community onboard moderators, educate them and enable them to fulfil their roles and responsibilities when handling moderating tasks.
+
+If you’re interested feel free to apply to [become an AKASHA World moderator](https://www.notion.so/The-AKASHA-Moderating-Open-Design-Challenge-15cb49cf57e740be92534958828ca210) and take part in the community-based moderating process.

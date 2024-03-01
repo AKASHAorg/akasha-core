@@ -113,8 +113,11 @@ const InfoPage: React.FC<unknown> = () => {
           license={appReleaseInfo?.application?.licence}
           share={{ label: 'Share', icon: <ShareIcon /> }}
           report={{
-            label: 'Report',
+            label: t('Flag'),
             icon: <FlagIcon />,
+            onClick: () => {
+              /** handle flag */
+            },
             color: { light: 'errorLight', dark: 'errorDark' },
           }}
           onInstall={() => {

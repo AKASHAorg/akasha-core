@@ -11,7 +11,7 @@ export default {
   [GLOBAL_ANTENNA]: '/antenna',
   [MY_ANTENNA]: '/my-antenna',
   [PROFILE_FEED]: '/profile-feed',
-  [EDITOR]: 'editor',
+  [EDITOR]: '/editor',
   [BEAMS]: '/beams',
   [BEAM]: '/beam',
   [REFLECT]: '/reflect',

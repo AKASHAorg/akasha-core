@@ -50,7 +50,11 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
   const [appNames, setAppNames] = useState<string[]>([]);
 
   const allowedApps = React.useMemo(
-    () => ['@akashaorg/app-akasha-integration', '@akashaorg/app-extensions'],
+    () => [
+      '@akashaorg/app-akasha-integration',
+      '@akashaorg/app-vibes',
+      '@akashaorg/app-extensions',
+    ],
     [],
   );
 

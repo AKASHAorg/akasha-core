@@ -14,6 +14,7 @@ export * from './navigation';
 export * from './plugins';
 export * from './profile';
 export * from './root-component';
+export * from './router';
 export * from './type-utils';
 export * from './ui-events';
 export * from './widgets';

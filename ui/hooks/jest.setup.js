@@ -25,7 +25,7 @@ jest.mock('@akashaorg/awf-sdk', () => () => ({
         checkCurrentNetwork: () => mockOf({ data: undefined }),
         detectInjectedProvider: () => ({ data: 'MetaMask' }),
         getRequiredNetwork: () => {
-          return { data: { name: 'goerli', chainId: 5 } };
+          return { data: { name: 'sepolia', chainId: 11155111 } };
         },
       },
     },

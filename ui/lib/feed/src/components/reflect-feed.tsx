@@ -34,7 +34,6 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
     reflectionsOf,
     itemSpacing = 8,
     scrollerOptions = { overscan: 5 },
-    newItemsPublishedLabel,
     queryKey,
     estimatedHeight,
     scrollTopIndicator,
