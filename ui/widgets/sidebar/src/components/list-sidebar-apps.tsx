@@ -17,6 +17,9 @@ export type ListSidebarAppsProps = {
   onClickMenuItem?: (menuItem: IMenuItem, isMobile?: boolean) => void;
 };
 
+const getIsActiveMenu = (appName: string) =>
+  location.pathname.split('/')[2] === appName.split('/')[1];
+
 const ListSidebarApps: React.FC<ListSidebarAppsProps> = props => {
   const { list, activeOption, hasBorderTop = false, onOptionClick, onClickMenuItem } = props;
 
@@ -58,43 +61,49 @@ const ListSidebarApps: React.FC<ListSidebarAppsProps> = props => {
     onClickMenuItem(app);
   };
 
-  const borderStyle = hasBorderTop ? 'border(t-1 grey8)' : '';
+  const borderStyle = hasBorderTop ? 'border(t-1 grey9 dark:grey3)' : '';
   const activeMenuItemBg = 'bg(grey8 dark:grey5)';
 
   return (
     <Stack direction="column" customStyle={`py-2 ${borderStyle}`}>
-      {appsWithSubroutes.map((app, idx) => (
-        <Accordion
-          key={app.label + idx}
-          accordionId={idx}
-          open={idx === active}
-          titleNode={<MenuItemLabel menuItem={app} />}
-          contentNode={
-            <MenuSubItems
-              menuItem={app}
-              activeOption={activeOption}
-              onOptionClick={onOptionClick}
-            />
-          }
-          handleClick={handleAccordionClick}
-          customStyle={`py-2 px-6 bg(hover:grey8 dark:hover:grey5) ${
-            location.pathname.includes(app.name) ? activeMenuItemBg : ''
-          }`}
-        />
-      ))}
-
-      {otherApps.map((app, idx) => (
-        <button key={app.label + idx} onClick={handleMenuItemClick(app)}>
-          <Stack
-            padding="py-2 px-6"
-            customStyle={`bg(hover:grey8 dark:hover:grey5)  ${
-              location.pathname.includes(app.name) ? activeMenuItemBg : ''
+      {appsWithSubroutes.map((app, idx) => {
+        const isActiveMenu = getIsActiveMenu(app.name);
+        return (
+          <Accordion
+            key={app.label + idx}
+            accordionId={idx}
+            open={idx === active}
+            titleNode={<MenuItemLabel menuItem={app} isActiveMenu={isActiveMenu} />}
+            contentNode={
+              <MenuSubItems
+                menuItem={app}
+                activeOption={activeOption}
+                onOptionClick={onOptionClick}
+              />
+            }
+            handleClick={handleAccordionClick}
+            customStyle={`py-2 px-6 bg(hover:grey8 dark:hover:grey5) ${
+              isActiveMenu ? activeMenuItemBg : ''
             }`}
-          >
-            <MenuItemLabel menuItem={app} />
-          </Stack>
-        </button>
-      ))}
+          />
+        );
+      })}
+
+      {otherApps.map((app, idx) => {
+        const isActiveMenu = getIsActiveMenu(app.name);
+        return (
+          <button key={app.label + idx} onClick={handleMenuItemClick(app)}>
+            <Stack
+              padding="py-2 px-6"
+              customStyle={`bg(hover:grey8 dark:hover:grey5)  ${
+                isActiveMenu ? activeMenuItemBg : ''
+              }`}
+            >
+              <MenuItemLabel menuItem={app} isActiveMenu={isActiveMenu} />
+            </Stack>
+          </button>
+        );
+      })}
     </Stack>
   );
 };
