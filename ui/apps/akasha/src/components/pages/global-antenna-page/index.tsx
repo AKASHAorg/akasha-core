@@ -50,7 +50,7 @@ const GlobalAntennaPage: React.FC<unknown> = () => {
     }
     navigateTo?.current({
       appName: '@akashaorg/app-akasha-integration',
-      getNavigationUrl: () => `/${routes[EDITOR]}`,
+      getNavigationUrl: () => `${routes[EDITOR]}`,
     });
   }, [isLoggedIn, authenticatedProfile, showLoginModal]);
 

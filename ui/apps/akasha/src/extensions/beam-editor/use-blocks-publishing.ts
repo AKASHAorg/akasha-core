@@ -141,12 +141,6 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
         .catch();
     }
     if (beamIndexQuery.loading) return;
-    if (beamIndexQuery.called && !beamIndexQuery.loading) {
-      // it's probably done
-      if (!beamIndexQuery.error) {
-        onComplete?.(createBeamQuery.data.createAkashaBeam);
-      }
-    }
   }, [
     beamIndexQuery.called,
     beamIndexQuery.error,
