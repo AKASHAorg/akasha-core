@@ -53,14 +53,14 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
     refetchTagSubscriptions,
   } = props;
 
+  const [tagsQueue, setTagsQueue] = useState([]);
   const [localSubscribedTags, setLocalSubscribedTags] = useState([]);
+  const timer = useRef(null);
   const subscriptionId = useRef(null);
   const localTagsInitialized = useRef(null);
-  const timer = useRef(null);
-  const [tagsQueue, setTagsQueue] = useState([]);
   const localSubscribedTagsRef = useRef([]);
 
-  //reset state when user logs out
+  // reset state when user logs out
   useEffect(() => {
     if (!isLoggedIn) {
       setLocalSubscribedTags([]);
@@ -75,7 +75,7 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
       setLocalSubscribedTags([...new Set(receivedTags)]);
       localTagsInitialized.current = true;
     }
-    //prevents reseting interests with []
+    // prevents reseting interests with []
     if (receivedTags && tagsQueue.length === 0) {
       localSubscribedTagsRef.current = receivedTags;
     }
