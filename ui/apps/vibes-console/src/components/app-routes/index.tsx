@@ -9,7 +9,7 @@ const rootRoute = rootRouteWithContext()({
 
 const applicationsRoute = new Route({
   getParentRoute: () => rootRoute,
-  path: '/applications',
+  path: '/applications-center',
   component: () => {
     return <Applications />;
   },
