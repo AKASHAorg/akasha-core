@@ -184,7 +184,7 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
   }
 
   return (
-    <>
+    <React.StrictMode>
       {!isMounted && loadingIndicator && loadingIndicator()}
       {isMounted && (
         <VirtualListRenderer
@@ -206,7 +206,7 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
           offsetTop={offsetTop}
         />
       )}
-    </>
+    </React.StrictMode>
   );
 };
 
