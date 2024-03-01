@@ -5,6 +5,7 @@ export const EDITOR = 'Editor';
 export const BEAMS = 'Beams';
 export const BEAM = 'Beam';
 export const REFLECT = 'Reflect';
+export const REFLECTION = 'Reflection';
 export const TAGS = 'Tags';
 
 export default {
@@ -15,5 +16,6 @@ export default {
   [BEAMS]: '/beams',
   [BEAM]: '/beam',
   [REFLECT]: '/reflect',
+  [REFLECTION]: '/reflection',
   [TAGS]: '/tags',
 } as const;

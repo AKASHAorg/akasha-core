@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -6,9 +6,9 @@ import ReflectEditor from '../../reflect-editor';
 import EditableReflection from '@akashaorg/ui-lib-feed/lib/components/editable-reflection';
 import routes, { REFLECT } from '../../../routes';
 import { useTranslation } from 'react-i18next';
-import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
 import { ReflectEntryData } from '@akashaorg/typings/lib/ui';
-import { createReactiveVar, transformSource, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { createReactiveVar, transformSource } from '@akashaorg/ui-awf-hooks';
+import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
 import { useRouterState } from '@tanstack/react-router';
 
 type ReflectionSectionProps = {
@@ -16,53 +16,52 @@ type ReflectionSectionProps = {
   reflectionId: string;
   entryData: ReflectEntryData;
   isLoggedIn: boolean;
-  showLoginModal: () => void;
   pendingReflectionsVar: ReturnType<typeof createReactiveVar<ReflectEntryData[]>>;
+  showLoginModal: (title?: string, message?: string) => void;
 };
 
 const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
   const { beamId, reflectionId, entryData, isLoggedIn, showLoginModal, pendingReflectionsVar } =
     props;
   const { t } = useTranslation('app-akasha-integration');
-  const { getRoutingPlugin } = useRootComponentProps();
   const routerState = useRouterState();
-  const navigateTo = getRoutingPlugin().navigateTo;
-
-  const onNavigate = (reflectionId: string, reflect?: boolean) => {
-    navigateTo(
-      {
-        appName: '@akashaorg/app-akasha-integration',
-        getNavigationUrl: navRoutes =>
-          `${navRoutes.Reflect}/${reflectionId}${reflect ? navRoutes.Reflect : ''}`,
-      },
-      true,
-    );
-  };
-
+  const [isReflecting, setIsReflecting] = useState(
+    routerState.location.pathname.endsWith(routes[REFLECT]),
+  );
   const wrapperRef = useCloseActions(() => {
-    onNavigate(entryData?.id);
+    setIsReflecting(false);
   });
 
-  const isReflecting = routerState.location.pathname.endsWith(routes[REFLECT]);
-
   return (
-    <Stack ref={wrapperRef}>
+    <>
       <Stack spacing="gap-y-2">
-        <Stack>
+        <Stack ref={wrapperRef}>
           <EditableReflection
             entryData={entryData}
             contentClickable={false}
             reflectToId={entryData.id}
             onReflect={() => {
-              onNavigate(entryData?.id, !isReflecting);
+              if (!isLoggedIn) {
+                showLoginModal(
+                  'Member Only Feature',
+                  'You need to connect first to be able to use this feature.',
+                );
+                return;
+              }
+              setIsReflecting(!isReflecting);
             }}
           />
           <Divider />
         </Stack>
-        <Stack padding="px-2 pb-2">
+        <Stack padding="px-2">
           {!isLoggedIn && (
             <EditorPlaceholder
-              onClick={showLoginModal}
+              onClick={() =>
+                showLoginModal(
+                  'Member Only Feature',
+                  'You need to connect first to be able to use this feature.',
+                )
+              }
               profileId={null}
               actionLabel={t('Reflect')}
               placeholderLabel={t('Share your thoughts')}
@@ -79,7 +78,7 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
           )}
         </Stack>
       </Stack>
-    </Stack>
+    </>
   );
 };
 

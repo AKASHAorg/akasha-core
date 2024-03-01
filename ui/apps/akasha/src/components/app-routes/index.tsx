@@ -6,7 +6,6 @@ import BeamPage from '../pages/entry-page/beam-page';
 import ReflectionPage from '../pages/entry-page/reflection-page';
 import TagFeedPage from '../pages/tag-feed-page/tag-feed-page';
 import EditorPage from '../pages/editor-page/editor-page';
-import RootComponent from './root-component';
 import ErrorComponent from './error-component';
 import EntrySectionLoading from '../pages/entry-page/entry-section-loading';
 import routes, {
@@ -17,9 +16,17 @@ import routes, {
   REFLECT,
   TAGS,
   EDITOR,
+  REFLECTION,
 } from '../../routes';
 import { useApolloClient } from '@apollo/client';
-import { redirect, rootRouteWithContext, Route, Router } from '@tanstack/react-router';
+import {
+  redirect,
+  createRootRouteWithContext,
+  createRoute,
+  createRouter,
+  Outlet,
+} from '@tanstack/react-router';
+import { CreateRouter } from '@akashaorg/typings/lib/ui';
 
 type ApolloClient = ReturnType<typeof useApolloClient>;
 
@@ -27,11 +34,11 @@ interface RouterContext {
   apolloClient: ApolloClient;
 }
 
-const rootRoute = rootRouteWithContext<RouterContext>()({
-  component: RootComponent,
+const rootRoute = createRootRouteWithContext<RouterContext>()({
+  component: Outlet,
 });
 
-const defaultRoute = new Route({
+const defaultRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/',
   beforeLoad: () => {
@@ -39,7 +46,7 @@ const defaultRoute = new Route({
   },
 });
 
-const antennaRoute = new Route({
+const antennaRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[GLOBAL_ANTENNA],
   component: () => {
@@ -47,7 +54,7 @@ const antennaRoute = new Route({
   },
 });
 
-const myAntennaRoute = new Route({
+const myAntennaRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[MY_ANTENNA],
   component: () => {
@@ -55,7 +62,7 @@ const myAntennaRoute = new Route({
   },
 });
 
-const beamRoute = new Route({
+const beamRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[BEAM]}/$beamId`,
   component: () => {
@@ -68,7 +75,7 @@ const beamRoute = new Route({
   },
 });
 
-const beamReflectRoute = new Route({
+const beamReflectRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[BEAM]}/$beamId${routes[REFLECT]}`,
   component: () => {
@@ -81,9 +88,9 @@ const beamReflectRoute = new Route({
   },
 });
 
-const reflectionsRoute = new Route({
+const reflectionsRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: `${routes[REFLECT]}/$reflectionId`,
+  path: `${routes[REFLECTION]}/$reflectionId`,
   component: () => {
     const { reflectionId } = reflectionsRoute.useParams();
     return (
@@ -94,9 +101,9 @@ const reflectionsRoute = new Route({
   },
 });
 
-const reflectionsReflectRoute = new Route({
+const reflectionsReflectRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: `${routes[REFLECT]}/$reflectionId${routes[REFLECT]}`,
+  path: `${routes[REFLECTION]}/$reflectionId${routes[REFLECT]}`,
   component: () => {
     const { reflectionId } = reflectionsReflectRoute.useParams();
     return (
@@ -107,7 +114,7 @@ const reflectionsReflectRoute = new Route({
   },
 });
 
-const tagFeedRoute = new Route({
+const tagFeedRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[TAGS]}/$tagName`,
   component: () => {
@@ -116,7 +123,7 @@ const tagFeedRoute = new Route({
   },
 });
 
-const profileFeedRoute = new Route({
+const profileFeedRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[PROFILE_FEED]}/$did`,
   component: () => {
@@ -125,7 +132,7 @@ const profileFeedRoute = new Route({
   },
 });
 
-const editorRoute = new Route({
+const editorRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[EDITOR],
   component: () => {
@@ -146,13 +153,8 @@ const routeTree = rootRoute.addChildren([
   editorRoute,
 ]);
 
-interface CreateRouter {
-  baseRouteName: string;
-  apolloClient: ApolloClient;
-}
-
-export const createRouter = ({ baseRouteName, apolloClient }: CreateRouter) =>
-  new Router({
+export const createAppRouter = ({ baseRouteName, apolloClient }: CreateRouter) =>
+  createRouter({
     routeTree,
     basepath: baseRouteName,
     context: {

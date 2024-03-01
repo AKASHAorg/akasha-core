@@ -8,8 +8,6 @@ import {
   useGetLoginProfile,
 } from '@akashaorg/ui-awf-hooks';
 import { BeamFeed } from '@akashaorg/ui-lib-feed';
-import { useAnalytics, useRootComponentProps, transformSource } from '@akashaorg/ui-awf-hooks';
-import { BeamFeed } from '@akashaorg/ui-lib-feed';
 import routes, { EDITOR } from '../../../routes';
 import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
