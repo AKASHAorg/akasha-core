@@ -72,7 +72,7 @@ const MyAntennaPage: React.FC<MyAntennaPageProps> = props => {
             queryKey={'antenna_my-antenna'}
             estimatedHeight={150}
             itemSpacing={8}
-            tag={tagSubsData?.topics.map(topic => topic.value)}
+            tags={tagSubsData?.topics.map(topic => topic.value)}
             scrollerOptions={{ overscan: MY_ANTENNA_OVERSCAN }}
             scrollTopIndicator={(listRect, onScrollToTop) => (
               <ScrollTopWrapper placement={listRect.left}>
