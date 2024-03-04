@@ -14,11 +14,11 @@ import { BeamContentResolver, TagFeed } from '@akashaorg/ui-lib-feed';
 import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import TagProfileCard from '@akashaorg/design-system-components/lib/components/TagProfileCard';
 import TagFeedHeaderLoader from './tag-feed-header-loader';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 export type TagFeedPageProps = {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
@@ -83,14 +83,13 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
       : null;
   }, [isLoggedIn, tagSubscriptionsData]);
 
-  const [createInterestsMutation, { loading, error }] = useCreateInterestsMutation({
+  const [createInterestsMutation, { loading }] = useCreateInterestsMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
   });
 
-  const [updateInterestsMutation, { loading: updateLoading, error: updateError }] =
-    useUpdateInterestsMutation({
-      context: { source: sdk.services.gql.contextSources.composeDB },
-    });
+  const [updateInterestsMutation, { loading: updateLoading }] = useUpdateInterestsMutation({
+    context: { source: sdk.services.gql.contextSources.composeDB },
+  });
 
   const executeInterestsMutation = (interests: string[]) => {
     if (tagSubscriptionsId) {
@@ -148,49 +147,51 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
   };
 
   return (
-    <Stack fullWidth={true}>
-      <Helmet.Helmet>
-        <title>AKASHA World</title>
-      </Helmet.Helmet>
-      {loadingCount && <TagFeedHeaderLoader />}
-      {countQueryError && (
-        <ErrorLoader
-          type="script-error"
-          title={t('Error loading tag data')}
-          details={countQueryError?.message}
-        />
-      )}
-      {!loadingCount && (
-        <Stack customStyle="mb-2">
-          <TagProfileCard
-            tag={{
-              name: tagName,
-              totalPosts: beamCount,
-            }}
-            subscribedTags={tagSubscriptions}
-            isLoading={loading || updateLoading}
-            mentionsLabel={beamCount + (beamCount > 1 ? ' Beams' : ' Beam')}
-            handleSubscribeTag={() => handleTagSubscribe(tagName)}
-            handleUnsubscribeTag={() => handleTagUnsubscribe(tagName)}
+    <HelmetProvider>
+      <Stack fullWidth={true}>
+        <Helmet>
+          <title>AKASHA World</title>
+        </Helmet>
+        {loadingCount && <TagFeedHeaderLoader />}
+        {countQueryError && (
+          <ErrorLoader
+            type="script-error"
+            title={t('Error loading tag data')}
+            details={countQueryError?.message}
           />
-        </Stack>
-      )}
-      <TagFeed
-        queryKey={`app-akasha-integration_tag-antenna_${tagName}`}
-        tag={tagName}
-        estimatedHeight={150}
-        itemSpacing={8}
-        scrollerOptions={{ overscan: 10 }}
-        scrollTopIndicator={(listRect, onScrollToTop) => (
-          <ScrollTopWrapper placement={listRect.left}>
-            <ScrollTopButton hide={false} onClick={onScrollToTop} />
-          </ScrollTopWrapper>
         )}
-        renderItem={itemData => (
-          <BeamContentResolver beamId={itemData.node.stream} showLoginModal={showLoginModal} />
+        {!loadingCount && (
+          <Stack customStyle="mb-2">
+            <TagProfileCard
+              tag={{
+                name: tagName,
+                totalPosts: beamCount,
+              }}
+              subscribedTags={tagSubscriptions}
+              isLoading={loading || updateLoading}
+              mentionsLabel={beamCount + (beamCount > 1 ? ' Beams' : ' Beam')}
+              handleSubscribeTag={() => handleTagSubscribe(tagName)}
+              handleUnsubscribeTag={() => handleTagUnsubscribe(tagName)}
+            />
+          </Stack>
         )}
-      />
-    </Stack>
+        <TagFeed
+          queryKey={`app-akasha-integration_tag-antenna_${tagName}`}
+          tags={[tagName]}
+          estimatedHeight={150}
+          itemSpacing={8}
+          scrollerOptions={{ overscan: 10 }}
+          scrollTopIndicator={(listRect, onScrollToTop) => (
+            <ScrollTopWrapper placement={listRect.left}>
+              <ScrollTopButton hide={false} onClick={onScrollToTop} />
+            </ScrollTopWrapper>
+          )}
+          renderItem={itemData => (
+            <BeamContentResolver beamId={itemData.node.stream} showLoginModal={showLoginModal} />
+          )}
+        />
+      </Stack>
+    </HelmetProvider>
   );
 };
 

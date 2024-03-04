@@ -15,7 +15,6 @@ import {
 } from '@akashaorg/design-system-components/lib/components/Profile';
 import { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
 import {
-  EntityTypes,
   ModalNavigationOptions,
   NotificationEvents,
   NotificationTypes,
@@ -62,7 +61,6 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
     [navigateToModal],
   );
 
-  const isLoggedIn = !!loginData?.id;
   const authenticatedDID = loginData?.id;
   const isViewer = profileData?.did?.id === authenticatedDID;
   const navigateTo = getRoutingPlugin().navigateTo;
@@ -80,16 +78,6 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
   const handleCloseOverlay = () => {
     setActiveOverlay(null);
   };
-
-  const handleFlag = React.useCallback(
-    (itemId: string, itemType: EntityTypes, user: string) => () => {
-      if (!isLoggedIn) {
-        return showLoginModal({ modal: { name: 'report-modal', itemId, itemType, user } });
-      }
-      navigateToModal({ name: 'report-modal', itemId, itemType, user });
-    },
-    [isLoggedIn, navigateToModal, showLoginModal],
-  );
 
   const handleCopy = () => {
     const profileUrl = new URL(location.pathname, location.origin).href;
@@ -118,6 +106,13 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
     });
   };
 
+  const handleFlagProfile = () => {
+    navigateTo({
+      appName: '@akashaorg/app-vibes',
+      getNavigationUrl: () => `/report/profile/${profileData.did.id}`,
+    });
+  };
+
   const menuItems: MenuProps['items'] = [
     {
       label: t('Copy link'),
@@ -127,9 +122,9 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
     ...(!isViewer
       ? ([
           {
-            label: t('Report'),
+            label: t('Flag'),
             icon: <FlagIcon />,
-            onClick: handleFlag(profileId, EntityTypes.PROFILE, profileData?.name),
+            onClick: handleFlagProfile,
             color: { light: 'errorLight', dark: 'errorDark' },
           },
         ] as MenuProps['items'])

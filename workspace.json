@@ -22,6 +22,10 @@
       "sourceRoot": "ui/lib/extensions/src",
       "projectType": "library"
     },
+    "@akashaorg/composedb-models": {
+      "root": "tools/composedb",
+      "projectType": "library"
+    },
     "@akashaorg/awf-sdk": {
       "root": "sdk",
       "sourceRoot": "sdk/src",
@@ -399,6 +403,28 @@
           "builder": "./tools/executors/i18n:extract",
           "options": {
             "cwd": "ui/apps/messaging"
+          }
+        }
+      }
+    },
+    "@akashaorg/app-vibes": {
+      "root": "ui/apps/vibes",
+      "sourceRoot": "ui/apps/vibes/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": ["ui/apps/vibes"],
+          "options": {
+            "commands": ["yarn run pack", "yarn postpack"],
+            "cwd": "ui/apps/vibes",
+            "parallel": false
+          }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/apps/vibes"
           }
         }
       }

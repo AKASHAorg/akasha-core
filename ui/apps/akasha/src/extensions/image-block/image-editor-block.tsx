@@ -40,7 +40,7 @@ import getSDK from '@akashaorg/awf-sdk';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 
 // @TODO: replace this with actual data
-const TEST_APP_VERSION_ID = 'kjzl6kcym7w8y8af3kd0lwkkk2m1nxtchlvcikbak748md3m3gplz1ori3s1j5f';
+const TEST_APP_VERSION_ID = 'kjzl6kcym7w8y7tdwpzjep46ufcjyc2vaq671z0a1lxrcjq7ogu42ta3vh1w2dm';
 
 const isImgUrl = async url => {
   const response = await fetch(url, { method: 'HEAD' });
@@ -52,7 +52,7 @@ export const ImageEditorBlock = (
 ) => {
   const { t } = useTranslation('app-akasha-integration');
   const sdk = useRef(getSDK());
-  const { uiEvents } = useRootComponentProps();
+  const { uiEvents, logger } = useRootComponentProps();
   const _uiEvents = useRef(uiEvents);
   const [createContentBlock, contentBlockQuery] = useCreateContentBlockMutation();
   const retryCount = useRef<number>();
@@ -132,7 +132,7 @@ export const ImageEditorBlock = (
           retryCount: retryCount.current,
         };
       } catch (err) {
-        console.error('error creating content block', err);
+        logger.error('error creating content block', err);
         return {
           response: {
             blockID: null,

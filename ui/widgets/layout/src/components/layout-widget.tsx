@@ -1,5 +1,4 @@
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
 import { EventTypes, UIEventData } from '@akashaorg/typings/lib/ui';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import {
@@ -262,11 +261,9 @@ const LayoutWidget = () => {
   const { getTranslationPlugin } = useRootComponentProps();
 
   return (
-    <Router>
-      <I18nextProvider i18n={getTranslationPlugin().i18n}>
-        <Layout />
-      </I18nextProvider>
-    </Router>
+    <I18nextProvider i18n={getTranslationPlugin().i18n}>
+      <Layout />
+    </I18nextProvider>
   );
 };
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useGetLogin, useGetLoginProfile, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import ErrorBoundary, {
@@ -28,7 +28,7 @@ const AppRoutes: React.FC<unknown> = () => {
   const { logger, navigateToModal } = useRootComponentProps();
   const { t } = useTranslation('app-akasha-integration');
   const _navigateToModal = React.useRef(navigateToModal);
-  const { data, loading: authenticating } = useGetLogin();
+  const { data } = useGetLogin();
   const authenticatedProfileReq = useGetLoginProfile();
   const isLoggedIn = !!data?.id;
   const authenticatedProfile = authenticatedProfileReq?.akashaProfile;

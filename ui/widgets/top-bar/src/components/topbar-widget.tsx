@@ -1,19 +1,21 @@
-import * as React from 'react';
+import React from 'react';
 import { I18nextProvider } from 'react-i18next';
-import { BrowserRouter as Router } from 'react-router-dom';
-
+import { RouterProvider } from '@tanstack/react-router';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { createRouter } from './widget-routes';
 
-import TopbarComponent from './topbar-component';
+declare module '@tanstack/react-router' {
+  interface Register {
+    router: ReturnType<typeof createRouter>;
+  }
+}
 
 const TopbarWidget: React.FC<unknown> = () => {
   const { getTranslationPlugin } = useRootComponentProps();
 
   return (
     <I18nextProvider i18n={getTranslationPlugin().i18n}>
-      <Router>
-        <TopbarComponent />
-      </Router>
+      <RouterProvider router={createRouter()} />
     </I18nextProvider>
   );
 };

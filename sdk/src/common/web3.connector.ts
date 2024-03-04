@@ -25,8 +25,8 @@ class Web3Connector {
   #wallet: ethers.Wallet | null;
   #w3modal: Web3Modal;
   #currentProviderType: string | undefined | null;
-  readonly network = 'goerli';
-  #networkId = '0x5';
+  readonly network = 'sepolia';
+  #networkId = '0xaa36a7';
   // mapping for network name and ids
   readonly networkId = Object.freeze({
     mainnet: 1,
@@ -73,11 +73,11 @@ class Web3Connector {
 
     const chains = [
       {
-        chainId: this.networkId.goerli,
+        chainId: this.networkId.sepolia,
         name: 'Ethereum',
         currency: 'ETH',
-        explorerUrl: 'https://goerli.etherscan.io/',
-        rpcUrl: 'https://ethereum.akasha.world/v1/goerli',
+        explorerUrl: 'https://sepolia.etherscan.io/',
+        rpcUrl: 'https://rpc2.sepolia.org',
       },
     ];
 
@@ -88,9 +88,9 @@ class Web3Connector {
         url: 'https://akasha.world',
         icons: ['https://avatars.githubusercontent.com/u/9638191'],
       },
-      defaultChainId: this.networkId.goerli,
-      rpcUrl: 'https://ethereum.akasha.world/v1/goerli',
-      enableCoinbase: false,
+      defaultChainId: this.networkId.sepolia,
+      rpcUrl: 'https://rpc2.sepolia.org',
+      enableCoinbase: true,
     });
 
     this.#w3modal = createWeb3Modal({
@@ -128,6 +128,7 @@ class Web3Connector {
    */
   async connect(): Promise<{ connected: boolean; unsubscribe?: () => void }> {
     if (!this.#w3modal.getIsConnected()) {
+      // eslint-disable-next-line no-async-promise-executor
       return new Promise(async (resolve, reject) => {
         const unsubscribe = this.#w3modal.subscribeProvider(state => {
           if (state.provider && state.isConnected && state.address) {
