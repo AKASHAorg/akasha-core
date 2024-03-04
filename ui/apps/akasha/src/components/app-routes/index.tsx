@@ -146,7 +146,7 @@ const routeTree = rootRoute.addChildren([
   editorRoute,
 ]);
 
-export const createAppRouter = ({ baseRouteName, apolloClient }: CreateRouter) =>
+export const router = ({ baseRouteName, apolloClient }: CreateRouter) =>
   createRouter({
     routeTree,
     basepath: baseRouteName,
