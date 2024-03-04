@@ -40,10 +40,13 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
   const { uiEvents, logger } = useRootComponentProps();
   const _uiEvents = React.useRef(uiEvents);
   const [analyticsActions] = useAnalytics();
+
   const [newContent, setNewContent] = useState(null);
   const [edit, setEdit] = useState(false);
 
   const [editorState, setEditorState] = useState(null);
+
+  const [isReflecting, setIsReflecting] = useState(true);
 
   const sdk = getSDK();
   const beamId = entryData.beamID;
@@ -168,7 +171,8 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
             placeholderButtonLabel={t('Reflect')}
             maxEncodedLengthErrLabel={t('Text block exceeds line limit, please review!')}
             editorState={editorState}
-            showEditorInitialValue={true}
+            showEditor={isReflecting}
+            setShowEditor={setIsReflecting}
             showCancelButton={true}
             avatar={authenticatedProfile?.avatar}
             profileId={authenticatedProfile?.did?.id}

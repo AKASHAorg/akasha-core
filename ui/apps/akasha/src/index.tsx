@@ -1,5 +1,13 @@
 import 'systemjs-webpack-interop/auto-public-path';
-import routes, { BEAM, GLOBAL_ANTENNA, MY_ANTENNA, PROFILE_FEED, REFLECT, TAGS } from './routes';
+import routes, {
+  BEAM,
+  GLOBAL_ANTENNA,
+  MY_ANTENNA,
+  PROFILE_FEED,
+  REFLECT,
+  REFLECTION,
+  TAGS,
+} from './routes';
 import {
   IAppConfig,
   IntegrationRegistrationOptions,
@@ -47,6 +55,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     [BEAM]: routes[BEAM],
     [TAGS]: routes[TAGS],
     [REFLECT]: routes[REFLECT],
+    [REFLECTION]: routes[REFLECTION],
   },
   title: 'AKASHA World',
   logo: { type: LogoTypeSource.ICON, value: <Antenna /> },

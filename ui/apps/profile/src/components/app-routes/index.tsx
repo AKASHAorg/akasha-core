@@ -1,5 +1,4 @@
 import React, { Suspense } from 'react';
-import { Outlet } from '@tanstack/react-router';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import InterestsPage from '../pages/interests';
 import EditProfilePage from '../pages/edit-profile';
@@ -12,7 +11,12 @@ import ErrorComponent from './error-component';
 import ProfileWithAuthorization from '../profile-with-authorization';
 import menuRoute, { BEAMS, EDIT, INTERESTS, FOLLOWERS, FOLLOWING } from '../../routes';
 import { ProfileLoading } from '@akashaorg/design-system-components/lib/components/Profile';
-import { rootRouteWithContext, Route, Router } from '@tanstack/react-router';
+import {
+  createRootRouteWithContext,
+  createRoute,
+  createRouter,
+  Outlet,
+} from '@tanstack/react-router';
 import {
   GetProfileByDidDocument,
   GetFollowersListByDidDocument,
@@ -21,11 +25,11 @@ import {
 import { ENGAGEMENTS_PER_PAGE } from '../pages/profile-engagement/types';
 import { CreateRouter, RouterContext } from '@akashaorg/typings/lib/ui';
 
-const rootRoute = rootRouteWithContext<RouterContext>()({
+const rootRoute = createRootRouteWithContext<RouterContext>()({
   component: Outlet,
 });
 
-const profileInfoRoute = new Route({
+const profileInfoRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '$profileId',
   loader: ({ context, params }) => {
@@ -46,7 +50,7 @@ const profileInfoRoute = new Route({
   },
 });
 
-const profileEditRoute = new Route({
+const profileEditRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `$profileId${menuRoute[EDIT]}`,
   component: () => {
@@ -61,7 +65,7 @@ const profileEditRoute = new Route({
   },
 });
 
-const followersRoute = new Route({
+const followersRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `$profileId${menuRoute[FOLLOWERS]}`,
   loader: ({ context, params }) => {
@@ -86,7 +90,7 @@ const followersRoute = new Route({
   },
 });
 
-const followingRoute = new Route({
+const followingRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `$profileId${menuRoute[FOLLOWING]}`,
   loader: ({ context, params }) => {
@@ -111,7 +115,7 @@ const followingRoute = new Route({
   },
 });
 
-const interestsRoute = new Route({
+const interestsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `$profileId${menuRoute[INTERESTS]}`,
   component: () => {
@@ -125,7 +129,7 @@ const interestsRoute = new Route({
   },
 });
 
-const beamsRoute = new Route({
+const beamsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `$profileId${menuRoute[BEAMS]}`,
   component: () => {
@@ -148,8 +152,8 @@ const routeTree = rootRoute.addChildren([
   beamsRoute,
 ]);
 
-export const createRouter = ({ baseRouteName, apolloClient }: CreateRouter) =>
-  new Router({
+export const router = ({ baseRouteName, apolloClient }: CreateRouter) =>
+  createRouter({
     routeTree,
     basepath: baseRouteName,
     context: {
