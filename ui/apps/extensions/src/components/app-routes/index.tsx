@@ -70,11 +70,7 @@ const infoRoute = createRoute({
 
 const routeTree = rootRoute.addChildren([
   defaultRoute,
-  masterRoute,
-  exploreRoute,
-  appsRoute,
-  myAppsRoute,
-  myWidgetsRoute,
+  masterRoute.addChildren([exploreRoute, appsRoute, myAppsRoute, myWidgetsRoute]),
   infoRoute,
 ]);
 
