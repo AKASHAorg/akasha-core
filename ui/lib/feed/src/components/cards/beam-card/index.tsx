@@ -91,7 +91,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       reflectionsCount={entryData?.reflectionsCount}
       authorProfile={{ data: profileData, loading, error }}
       locale={locale}
-      repliesAnchorLink="/@akashaorg/app-akasha-integration/beam"
+      reflectAnchorLink="/@akashaorg/app-akasha-integration/beam"
       profileAnchorLink="/@akashaorg/app-profile"
       sortedContents={sortedEntryContent}
       flagAsLabel={t('Flag')}

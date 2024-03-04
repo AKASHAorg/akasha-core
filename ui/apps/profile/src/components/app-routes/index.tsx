@@ -1,5 +1,4 @@
 import React, { Suspense } from 'react';
-import { Outlet } from '@tanstack/react-router';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import InterestsPage from '../pages/interests';
 import EditProfilePage from '../pages/edit-profile';
@@ -12,7 +11,12 @@ import ErrorComponent from './error-component';
 import ProfileWithAuthorization from '../profile-with-authorization';
 import menuRoute, { BEAMS, EDIT, INTERESTS, FOLLOWERS, FOLLOWING } from '../../routes';
 import { ProfileLoading } from '@akashaorg/design-system-components/lib/components/Profile';
-import { createRootRouteWithContext, createRoute, createRouter } from '@tanstack/react-router';
+import {
+  createRootRouteWithContext,
+  createRoute,
+  createRouter,
+  Outlet,
+} from '@tanstack/react-router';
 import {
   GetProfileByDidDocument,
   GetFollowersListByDidDocument,

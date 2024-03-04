@@ -7,7 +7,7 @@ import EntrySectionLoading from './entry-section-loading';
 import ReflectionSection from './reflection-section';
 import ReflectFeed from '@akashaorg/ui-lib-feed/lib/components/reflect-feed';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import { useParams } from 'react-router-dom';
+import EditableReflection from '@akashaorg/ui-lib-feed/lib/components/editable-reflection';
 import {
   createReactiveVar,
   hasOwn,
@@ -20,20 +20,22 @@ import { useTranslation } from 'react-i18next';
 import { EntityTypes, type ReflectEntryData } from '@akashaorg/typings/lib/ui';
 import { useGetReflectionByIdSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { ReflectionPreview } from '@akashaorg/ui-lib-feed';
-import EditableReflection from '@akashaorg/ui-lib-feed/lib/components/editable-reflection';
 import { usePendingReflections } from '@akashaorg/ui-awf-hooks/lib/use-pending-reflections';
 import { PendingReflect } from '../../reflect-editor/pending-reflect';
+import { useNavigate } from '@tanstack/react-router';
 
-const ReflectionPage: React.FC<unknown> = () => {
-  const { reflectionId } = useParams<{
-    reflectionId: string;
-  }>();
+type ReflectionPageProps = {
+  reflectionId: string;
+};
+
+const ReflectionPage: React.FC<ReflectionPageProps> = props => {
+  const { reflectionId } = props;
   const { t } = useTranslation('app-akasha-integration');
-  const { getRoutingPlugin, navigateToModal, getTranslationPlugin } = useRootComponentProps();
+  const { navigateToModal, getTranslationPlugin } = useRootComponentProps();
   const { data } = useGetLogin();
   const [analyticsActions] = useAnalytics();
+  const navigate = useNavigate();
   const isLoggedIn = !!data?.id;
-  const navigateTo = getRoutingPlugin().navigateTo;
   const reflectionReq = useGetReflectionByIdSuspenseQuery({ variables: { id: reflectionId } });
   const pendingReflectionsVar = createReactiveVar<ReflectEntryData[]>([]);
   const { pendingReflections } = usePendingReflections(pendingReflectionsVar);
@@ -47,19 +49,22 @@ const ReflectionPage: React.FC<unknown> = () => {
     }
   }, [reflectionReq]);
 
-  const showLoginModal = () => {
-    navigateToModal({ name: 'login' });
+  const showLoginModal = (title?: string, message?: string) => {
+    navigateToModal({
+      name: 'login',
+      title,
+      message,
+    });
   };
 
   const onNavigateToOriginalBeam = (beamId: string, reflect?: boolean) => {
-    navigateTo(
-      {
-        appName: '@akashaorg/app-akasha-integration',
-        getNavigationUrl: navRoutes =>
-          `${navRoutes.Beam}/${beamId}${reflect ? navRoutes.Reflect : ' '}`,
+    navigate({
+      to: reflect ? '/beam/$beamId/reflect' : '/beam/$beamId',
+      params: {
+        beamId,
       },
-      true,
-    );
+      replace: true,
+    });
   };
 
   if (reflectionReq.error)
@@ -117,28 +122,32 @@ const ReflectionPage: React.FC<unknown> = () => {
                 reflectToId={mapReflectEntryData(itemData.node).id}
                 contentClickable={true}
                 onContentClick={() =>
-                  navigateTo({
-                    appName: '@akashaorg/app-akasha-integration',
-                    getNavigationUrl: navRoutes => `${navRoutes.Reflect}/${itemData.node.id}`,
+                  navigate({
+                    to: '/reflection/$reflectionId',
+                    params: {
+                      reflectionId: itemData.node.id,
+                    },
                   })
                 }
                 onReflect={() =>
-                  navigateTo({
-                    appName: '@akashaorg/app-akasha-integration',
-                    getNavigationUrl: navRoutes =>
-                      `${navRoutes.Reflect}/${itemData.node.id}${navRoutes.Reflect}`,
+                  navigate({
+                    to: '/reflection/$reflectionId/reflect',
+                    params: {
+                      reflectionId: itemData.node.id,
+                    },
                   })
                 }
               />
               <ReflectionPreview
                 reflectionId={itemData.node.id}
                 onNavigate={(options: { id: string; reflect?: boolean }) => {
-                  navigateTo({
-                    appName: '@akashaorg/app-akasha-integration',
-                    getNavigationUrl: navRoutes =>
-                      `${navRoutes.Reflect}/${options.id}${
-                        options.reflect ? navRoutes.Reflect : ''
-                      }`,
+                  navigate({
+                    to: options.reflect
+                      ? '/reflection/$reflectionId/reflect'
+                      : '/reflection/$reflectionId',
+                    params: {
+                      reflectionId: options.id,
+                    },
                   });
                 }}
               />
