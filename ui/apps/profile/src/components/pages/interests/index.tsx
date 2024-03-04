@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import { CheckIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
@@ -36,10 +36,30 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
   const navigateTo = getRoutingPlugin().navigateTo;
   const apolloClient = useApolloClient();
 
-  const { data: ownInterestsQueryData, loading } = useGetInterestsByDidQuery({
+  const { data: profileInterestsQueryData, loading } = useGetInterestsByDidQuery({
     variables: { id: profileId },
     skip: !isLoggedIn,
   });
+
+  const { data: ownInterestsQueryData } = useGetInterestsByDidQuery({
+    variables: { id: authenticatedDID },
+    skip: !isLoggedIn || profileId === authenticatedDID,
+  });
+
+  // get interests for the profile being viewed
+  const profileInterests = useMemo(() => {
+    if (!isLoggedIn) return null;
+    return profileInterestsQueryData &&
+      hasOwn(profileInterestsQueryData.node, 'akashaProfileInterests') &&
+      profileInterestsQueryData.node.akashaProfileInterests?.topics.length > 0
+      ? profileInterestsQueryData.node.akashaProfileInterests?.topics.map(topic => ({
+          value: topic.value,
+          labelType: topic.labelType,
+        }))
+      : [];
+  }, [isLoggedIn, profileInterestsQueryData]);
+
+  // get interests for the logged profile
   const ownInterests = useMemo(() => {
     if (!isLoggedIn) return null;
     return ownInterestsQueryData &&
@@ -51,6 +71,12 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
         }))
       : [];
   }, [isLoggedIn, ownInterestsQueryData]);
+
+  useEffect(() => {
+    if (ownInterests && ownInterests.length) {
+      setActiveInterests([...activeInterests, ...ownInterests]);
+    }
+  }, [ownInterests]);
 
   const interestSubscriptionId = useMemo(() => {
     if (!isLoggedIn) return null;
@@ -147,7 +173,7 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
               customStyle="flex-wrap"
               fullWidth
             >
-              {ownInterests.map((interest, idx) => (
+              {profileInterests?.map((interest, idx) => (
                 <Pill
                   key={`${idx}-${interest}`}
                   label={interest.value}
@@ -161,7 +187,7 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
                       : false
                   }
                   onPillClick={() => handleInterestClick(interest)}
-                  active={!!activeInterests.find(activeInterest => activeInterest === interest)}
+                  active={!!activeInterests.find(ac => ac.value === interest.value)}
                 />
               ))}
             </Stack>
