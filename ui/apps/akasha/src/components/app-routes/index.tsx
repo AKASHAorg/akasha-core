@@ -18,7 +18,6 @@ import routes, {
   EDITOR,
   REFLECTION,
 } from '../../routes';
-import { useApolloClient } from '@apollo/client';
 import {
   redirect,
   createRootRouteWithContext,
@@ -26,13 +25,7 @@ import {
   createRouter,
   Outlet,
 } from '@tanstack/react-router';
-import { CreateRouter } from '@akashaorg/typings/lib/ui';
-
-type ApolloClient = ReturnType<typeof useApolloClient>;
-
-interface RouterContext {
-  apolloClient: ApolloClient;
-}
+import { CreateRouter, RouterContext } from '@akashaorg/typings/lib/ui';
 
 const rootRoute = createRootRouteWithContext<RouterContext>()({
   component: Outlet,

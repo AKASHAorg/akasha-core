@@ -56,7 +56,7 @@ const GlobalAntennaPage: React.FC<unknown> = () => {
 
   const listHeader = React.useMemo(() => {
     return (
-      <Stack customStyle="mb-4">
+      <Stack customStyle="mb-2">
         <EditorPlaceholder
           profileId={authenticatedProfile?.did.id}
           avatar={authenticatedProfile?.avatar}

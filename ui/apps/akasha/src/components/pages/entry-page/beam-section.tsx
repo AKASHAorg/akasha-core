@@ -29,12 +29,12 @@ const BeamSection: React.FC<BeamSectionProps> = props => {
     routerState.location.pathname.endsWith(routes[REFLECT]),
   );
 
-  const editorWrapperRef = useCloseActions(() => {
+  const wrapperRef = useCloseActions(() => {
     setIsReflecting(false);
   });
 
   return (
-    <Stack spacing="gap-y-2">
+    <Stack ref={wrapperRef} spacing="gap-y-2">
       <Stack>
         <BeamCard
           entryData={entryData}
@@ -56,7 +56,7 @@ const BeamSection: React.FC<BeamSectionProps> = props => {
         />
         <Divider />
       </Stack>
-      <Stack ref={editorWrapperRef} padding="px-2">
+      <Stack padding="px-2">
         {!isLoggedIn && (
           <EditorPlaceholder
             onClick={() =>
@@ -76,7 +76,7 @@ const BeamSection: React.FC<BeamSectionProps> = props => {
             beamId={beamId}
             reflectToId={beamId}
             showEditor={isReflecting}
-            changeShowEditor={setIsReflecting}
+            setShowEditor={setIsReflecting}
             pendingReflectionsVar={pendingReflectionsVar}
           />
         )}

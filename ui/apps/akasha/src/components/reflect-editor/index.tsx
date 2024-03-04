@@ -29,11 +29,11 @@ export type ReflectEditorProps = {
   reflectToId: string;
   showEditor: boolean;
   pendingReflectionsVar: ReturnType<typeof createReactiveVar<ReflectEntryData[]>>;
-  changeShowEditor: (showEditor: boolean) => void;
+  setShowEditor: (showEditor: boolean) => void;
 };
 
 const ReflectEditor: React.FC<ReflectEditorProps> = props => {
-  const { beamId, reflectToId, showEditor, pendingReflectionsVar, changeShowEditor } = props;
+  const { beamId, reflectToId, showEditor, pendingReflectionsVar, setShowEditor } = props;
   const { t } = useTranslation('app-akasha-integration');
   const [analyticsActions] = useAnalytics();
   const { uiEvents } = useRootComponentProps();
@@ -82,7 +82,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
 
   React.useEffect(() => {
     if (indexReflectionMutation.error || publishReflectionMutation.error) {
-      changeShowEditor(true);
+      setShowEditor(true);
       setEditorState(newContent.content.flatMap(item => decodeb64SlateContent(item.value)));
       showAlertNotification(`${t(`Something went wrong when publishing the reflection`)}.`);
     }
@@ -92,7 +92,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
     publishReflectionMutation,
     showAlertNotification,
     t,
-    changeShowEditor,
+    setShowEditor,
   ]);
 
   const handlePublish = async (data: IPublishData) => {
@@ -150,7 +150,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         maxEncodedLengthErrLabel={t('Text block exceeds line limit, please review!')}
         editorState={editorState}
         showEditor={showEditor}
-        changeShowEditor={changeShowEditor}
+        setShowEditor={setShowEditor}
         avatar={authenticatedProfile?.avatar}
         profileId={authenticatedProfile?.did?.id}
         disablePublish={disablePublishing}

@@ -14,7 +14,7 @@ export type ReflectionEditorProps = EditorBoxProps & {
   noBorderRound?: boolean;
   background?: { light: Colors; dark: Colors };
   customStyle?: string;
-  changeShowEditor: (showEditor: boolean) => void;
+  setShowEditor: (showEditor: boolean) => void;
 };
 
 const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
@@ -48,17 +48,17 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
     onClear,
     transformSource,
     encodingFunction,
-    changeShowEditor,
+    setShowEditor,
   } = props;
 
   const handlePublish = (data: IPublishData) => {
     onPublish(data);
-    changeShowEditor(false);
+    setShowEditor(false);
   };
 
   const handleToggleEditor = (ev: React.SyntheticEvent) => {
     ev.stopPropagation();
-    changeShowEditor(!showEditor);
+    setShowEditor(!showEditor);
   };
 
   return (

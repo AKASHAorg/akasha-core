@@ -28,12 +28,12 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
   const [isReflecting, setIsReflecting] = useState(
     routerState.location.pathname.endsWith(routes[REFLECT]),
   );
-  const editorWrapperRef = useCloseActions(() => {
+  const wrapperRef = useCloseActions(() => {
     setIsReflecting(false);
   });
 
   return (
-    <Stack spacing="gap-y-2">
+    <Stack ref={wrapperRef} spacing="gap-y-2">
       <Stack>
         <EditableReflection
           entryData={entryData}
@@ -52,7 +52,7 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
         />
         <Divider />
       </Stack>
-      <Stack ref={editorWrapperRef} padding="px-2">
+      <Stack padding="px-2">
         {!isLoggedIn && (
           <EditorPlaceholder
             onClick={() =>
@@ -72,7 +72,7 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
             beamId={beamId}
             reflectToId={reflectionId}
             showEditor={isReflecting}
-            changeShowEditor={setIsReflecting}
+            setShowEditor={setIsReflecting}
             pendingReflectionsVar={pendingReflectionsVar}
           />
         )}
