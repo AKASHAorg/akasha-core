@@ -152,7 +152,7 @@ const BeamPage: React.FC<BeamPageProps> = props => {
                 contentClickable={true}
                 onContentClick={() =>
                   navigate({
-                    to: `/reflection/$reflectionId`,
+                    to: '/reflection/$reflectionId',
                     params: {
                       reflectionId: itemData.node.id,
                     },
@@ -160,7 +160,7 @@ const BeamPage: React.FC<BeamPageProps> = props => {
                 }
                 onReflect={() =>
                   navigate({
-                    to: `/reflection/$reflectionId/reflect`,
+                    to: '/reflection/$reflectionId/reflect',
                     params: {
                       reflectionId: itemData.node.id,
                     },
