@@ -49,15 +49,13 @@
     "i18next-fetch-backend": "5.0.2",
     "i18next-localstorage-backend": "4.1.1",
     "react-i18next": "12.2.0",
-    "@tanstack/react-query": "4.29.3",
-    "react-router-dom": "6.3.0",
+    "@tanstack/react-router": "1.16.6",
     "single-spa-react": "6.0.1"
   },
   "devDependencies": {
     "@akashaorg/typings": "*",
     "@types/react": "18.0.33",
     "@types/react-dom": "18.0.11",
-    "@types/react-router-dom": "5.3.3",
     "@types/react-test-renderer": "17.0.1"
   },
   "peerDependencies": {
