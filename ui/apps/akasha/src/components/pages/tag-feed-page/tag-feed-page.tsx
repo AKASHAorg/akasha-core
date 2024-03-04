@@ -83,14 +83,13 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
       : null;
   }, [isLoggedIn, tagSubscriptionsData]);
 
-  const [createInterestsMutation, { loading, error }] = useCreateInterestsMutation({
+  const [createInterestsMutation, { loading }] = useCreateInterestsMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
   });
 
-  const [updateInterestsMutation, { loading: updateLoading, error: updateError }] =
-    useUpdateInterestsMutation({
-      context: { source: sdk.services.gql.contextSources.composeDB },
-    });
+  const [updateInterestsMutation, { loading: updateLoading }] = useUpdateInterestsMutation({
+    context: { source: sdk.services.gql.contextSources.composeDB },
+  });
 
   const executeInterestsMutation = (interests: string[]) => {
     if (tagSubscriptionsId) {
@@ -178,7 +177,7 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
         )}
         <TagFeed
           queryKey={`app-akasha-integration_tag-antenna_${tagName}`}
-          tag={tagName}
+          tags={[tagName]}
           estimatedHeight={150}
           itemSpacing={8}
           scrollerOptions={{ overscan: 10 }}
