@@ -5,13 +5,9 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import MessageCard from '@akashaorg/design-system-core/lib/components/MessageCard';
 import routes, { APPS, EXPLORE, MY_APPS, MY_WIDGETS } from '../../routes';
 import { useTranslation } from 'react-i18next';
-
-import { useLocation } from 'react-router';
-import { useDismissedCard, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-
-export type MasterPageProps = {
-  isLoggedIn: boolean;
-};
+import { useNavigate } from '@tanstack/react-router';
+import { Outlet, useMatchRoute } from '@tanstack/react-router';
+import { useDismissedCard, useRootComponentProps, useGetLogin } from '@akashaorg/ui-awf-hooks';
 
 const TAB_INDEX_TO_ROUTE_MAP = {
   0: [routes[EXPLORE]],
@@ -27,44 +23,35 @@ const ROUTE_TO_TAB_INDEX_MAP: Record<string, number> = {
   [routes[MY_WIDGETS]]: 3,
 };
 
-const MasterPage: React.FC<React.PropsWithChildren<MasterPageProps>> = props => {
-  const { isLoggedIn, children } = props;
-
+const MasterPage: React.FC = () => {
   const { t } = useTranslation('app-extensions');
-  const { navigateToModal, getRoutingPlugin } = useRootComponentProps();
+  const { navigateToModal } = useRootComponentProps();
+  const navigate = useNavigate();
 
-  const location = useLocation();
+  const { data } = useGetLogin();
+  const authenticatedDID = React.useMemo(() => {
+    return data?.id;
+  }, [data]);
+
   const [activeTab, setActiveTab] = useState(
-    isLoggedIn ? ROUTE_TO_TAB_INDEX_MAP[location.pathname] || 0 : 0,
+    authenticatedDID ? ROUTE_TO_TAB_INDEX_MAP[location.pathname] || 0 : 0,
   );
 
   const [dismissed, dismissCard] = useDismissedCard('@akashaorg/app-akasha-verse_welcome-message');
-
-  const navigateTo = getRoutingPlugin().navigateTo;
 
   const showLoginModal = () => {
     navigateToModal({ name: 'login' });
   };
 
   const handleTabChange = (selectedIndex: number) => {
-    if (navigateTo) {
-      navigateTo({
-        appName: '@akashaorg/app-extensions',
-        getNavigationUrl: () => TAB_INDEX_TO_ROUTE_MAP[selectedIndex],
-      });
-    }
+    navigate({ to: TAB_INDEX_TO_ROUTE_MAP[selectedIndex] });
   };
-
+  const matchRoute = useMatchRoute();
   useEffect(() => {
-    if (!isLoggedIn && location.pathname !== routes[EXPLORE]) {
-      if (navigateTo) {
-        navigateTo({
-          appName: '@akashaorg/app-extensions',
-          getNavigationUrl: () => routes[EXPLORE],
-        });
-      }
+    if (!authenticatedDID && !matchRoute({ to: routes[EXPLORE] })) {
+      navigate({ to: routes[EXPLORE] });
     }
-  }, [isLoggedIn, location.pathname, navigateTo]);
+  }, [authenticatedDID, navigate, matchRoute]);
 
   return (
     <Stack spacing="gap-y-2">
@@ -84,7 +71,7 @@ const MasterPage: React.FC<React.PropsWithChildren<MasterPageProps>> = props => 
           selected={activeTab}
           onChange={(selectedIndex, previousIndex) => {
             if (selectedIndex !== previousIndex) {
-              if (selectedIndex === 0 || isLoggedIn) {
+              if (selectedIndex === 0 || authenticatedDID) {
                 handleTabChange(selectedIndex);
                 setActiveTab(selectedIndex);
                 return;
@@ -95,7 +82,9 @@ const MasterPage: React.FC<React.PropsWithChildren<MasterPageProps>> = props => 
           labels={[t('Explore'), t('My Apps'), t('Apps'), t('Widgets')]}
           tabListDivider
         />
-        <Stack padding={'p-4'}>{children}</Stack>
+        <Stack padding={'p-4'}>
+          <Outlet />
+        </Stack>
       </Card>
     </Stack>
   );

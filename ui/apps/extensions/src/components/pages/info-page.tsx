@@ -1,5 +1,4 @@
 import * as React from 'react';
-
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import {
   FlagIcon,
@@ -7,14 +6,15 @@ import {
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import AppInfo from '@akashaorg/design-system-components/lib/components/AppInfo';
-import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { hasOwn, transformSource, useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { useGetAppReleaseByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
-const InfoPage: React.FC<unknown> = () => {
-  const { appId } = useParams<{ appId: string }>();
+type InfoPageProps = {
+  appId: string;
+};
 
+const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
   // const { getRoutingPlugin } = useRootComponentProps();
 
   // const navigateTo = getRoutingPlugin().navigateTo;

@@ -6,16 +6,10 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { ChevronRightIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import PageLayout from './base-layout';
-import { ISettingsItem, settingsItems, SettingsOption } from '../utils/settings-items';
+import { ISettingsItem, settingsItems, SettingsOption } from '../../utils/settings-items';
 import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
-export type BaseOption = {
-  titleLabel: string;
-};
-
-const SettingsPage: React.FC<BaseOption> = props => {
-  const { titleLabel } = props;
-
+const SettingsPage: React.FC = () => {
   const { t } = useTranslation('app-settings-ewa');
   const { getRoutingPlugin } = useRootComponentProps();
   const { data: loginData } = useGetLogin();
@@ -34,7 +28,7 @@ const SettingsPage: React.FC<BaseOption> = props => {
   };
 
   return (
-    <PageLayout title={titleLabel}>
+    <PageLayout title={t('Settings')}>
       <Stack padding="px-4">
         {settingsOptions.map((item: ISettingsItem, idx: number) => {
           const baseStyle = `flex py-4 justify-between items-center ${

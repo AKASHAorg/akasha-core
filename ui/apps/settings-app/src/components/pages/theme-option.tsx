@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { useTranslation } from 'react-i18next';
 import {
   MoonIcon,
   SunIcon,
@@ -9,33 +9,39 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 
 import PageLayout from './base-layout';
-import { BaseOption } from './settings-page';
 
-export interface IThemeOption extends BaseOption {
-  themeIntroLabel: string;
-  themeSubtitleLabel: string;
-  theme: string;
-  onThemeSelect: () => void;
-}
+import { useTheme } from '@akashaorg/ui-awf-hooks';
 
-const ThemeOption: React.FC<IThemeOption> = props => {
-  const { titleLabel, themeIntroLabel, themeSubtitleLabel, theme, onThemeSelect } = props;
+export type theme = 'Light-Theme' | 'Dark-Theme';
+
+const ThemeOption: React.FC = () => {
+  const { t } = useTranslation('app-settings-ewa');
+
+  const { theme, propagateTheme } = useTheme();
+
+  const handleThemeSelect = () => {
+    const selectedTheme = theme === 'Dark-Theme' ? 'Light-Theme' : 'Dark-Theme';
+
+    propagateTheme(selectedTheme, true);
+  };
 
   return (
-    <PageLayout title={titleLabel}>
+    <PageLayout title={t('Theme')}>
       <Stack padding="p-4">
         <Stack direction="row" justify="between" align="center" customStyle="mb-2">
-          <Text weight="bold">{themeIntroLabel}</Text>
+          <Text weight="bold">{t('What mode are you feeling today?')}</Text>
 
           <Toggle
             checked={theme === 'Light-Theme'}
             iconChecked={<SunIcon />}
             iconUnchecked={<MoonIcon />}
-            onChange={onThemeSelect}
+            onChange={handleThemeSelect}
           />
         </Stack>
 
-        <Text>{themeSubtitleLabel}</Text>
+        <Text>
+          {t('You can change your theme between dark mode or light mode! Which side are you on 😼')}
+        </Text>
       </Stack>
     </PageLayout>
   );
