@@ -62,7 +62,7 @@ const BeamSection: React.FC<BeamSectionProps> = props => {
           />
           <Divider />
         </Stack>
-        <Stack padding="px-2 pb-2">
+        <Stack padding="px-2">
           {!isLoggedIn && (
             <EditorPlaceholder
               onClick={() =>

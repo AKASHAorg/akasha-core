@@ -21,7 +21,7 @@
     "pack:ui-libs": "nx run-many --target=build --projects=@akashaorg/ui-lib-feed,@akashaorg/ui-lib-extensions",
     "pack:ui-apps": "nx run-many --target=build --projects=@akashaorg/app-akasha-integration,@akashaorg/app-routing,@akashaorg/app-extensions,@akashaorg/app-auth-ewa,@akashaorg/app-lists,@akashaorg/app-legal,@akashaorg/app-messaging,@akashaorg/app-vibes,@akashaorg/app-notifications,@akashaorg/app-profile,@akashaorg/app-search,@akashaorg/app-settings-ewa,@akashaorg/app-articles,@akashaorg/app-vibes-console",
     "pack:app-loader": "nx run @akashaorg/ui-app-loader:build",
-    "pack:ui": "yarn tsc:ui && yarn pack:design-system-core && yarn pack:design-system-components && yarn pack:ui-widgets && yarn pack:ui-apps && yarn pack:app-loader",
+    "pack:ui": "yarn tsc:ui && yarn pack:design-system-core && yarn pack:design-system-components && yarn pack:ui-libs && yarn pack:ui-widgets && yarn pack:ui-apps && yarn pack:app-loader",
     "pack:only": "nx run-many --target=build --projects=$AWF_PACKAGE",
     "pack:watch": "nx run-many --target=pack:watch --projects=$AWF_PACKAGE",
     "tsc:sdk": "nx run @akashaorg/awf-sdk:tsc",

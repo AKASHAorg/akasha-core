@@ -19,7 +19,7 @@ export type TagFeedProps = {
   itemSpacing?: VirtualizerProps<unknown>['itemSpacing'];
   header?: VirtualizerProps<unknown>['header'];
   footer?: VirtualizerProps<unknown>['footer'];
-  tag: string | string[];
+  tags: string[];
   trackEvent?: (data: AnalyticsEventData['data']) => void;
   scrollTopIndicator?: VirtualizerProps<unknown>['scrollTopIndicator'];
   renderItem: VirtualizerProps<AkashaIndexedStreamEdge>['renderItem'];
@@ -37,7 +37,7 @@ const TagFeed = (props: TagFeedProps) => {
     loadingIndicator,
     header,
     footer,
-    tag,
+    tags,
   } = props;
 
   const { t } = useTranslation('ui-lib-feed');
@@ -54,7 +54,7 @@ const TagFeed = (props: TagFeedProps) => {
     isLoading,
     hasErrors,
     errors,
-  } = useBeamsByTags(tag);
+  } = useBeamsByTags(tags);
 
   const lastCursors = React.useRef({ next: null, prev: null });
   const prevBeams = React.useRef([]);
@@ -112,12 +112,20 @@ const TagFeed = (props: TagFeedProps) => {
       <InfoCard
         titleLabel={
           <>
-            {t('There are no content found for ')} <strong>#{tag}</strong>
+            {t('There are no contents found for the ')}
+            {t('{{topic}}', { topic: tags.length > 1 ? 'topics' : 'topic' })}{' '}
+            {tags.map(tag => (
+              <span key={tag}>#{tag} </span>
+            ))}
           </>
         }
-        bodyLabel={<>{t('Be the first one to create a beam for this topic! 🚀')}</>}
+        bodyLabel={
+          <>
+            {t('Be the first one to create a beam for this topic')}
+            {'! 🚀'}
+          </>
+        }
         bodyVariant="body1"
-        publicImgPath="/images"
         assetName="longbeam-notfound"
       />
     </Stack>
@@ -133,7 +141,7 @@ const TagFeed = (props: TagFeedProps) => {
         />
       )}
 
-      {!hasErrors && tag && (
+      {!hasErrors && tags && (
         <Virtualizer<ReturnType<typeof useBeamsByTags>['beams'][0]>
           header={header}
           footer={footer}
