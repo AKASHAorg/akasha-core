@@ -112,7 +112,7 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
               locale={locale}
               moderatedContentLabel={t('This content has been moderated')}
               profileAnchorLink={'/@akashaorg/app-profile'}
-              repliesAnchorLink={`/@akashaorg/app-akasha-integration/${
+              reflectAnchorLink={`/@akashaorg/app-akasha-integration/${
                 itemType === EntityTypes.REFLECT ? 'reflection' : 'beam'
               }`}
               contentClickable={contentClickable}

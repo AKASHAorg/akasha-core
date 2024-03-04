@@ -69,7 +69,7 @@ const ReflectionCard: React.FC<ReflectCardProps> = props => {
       authorProfile={{ data: profileData, loading, error }}
       locale={locale}
       profileAnchorLink="/@akashaorg/app-profile"
-      repliesAnchorLink="/@akashaorg/app-akasha-integration/reflection"
+      reflectAnchorLink="/@akashaorg/app-akasha-integration/reflection"
       slateContent={entryData.content.flatMap(item => decodeb64SlateContent(item.value))}
       noWrapperCard={true}
       flagAsLabel={t('Flag')}
