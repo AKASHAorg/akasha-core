@@ -4,7 +4,7 @@ export const BMIntroSubtitles = [
       'Becoming a moderator means that you will be responsible to protect the community from harmful contents that violate our',
   },
   {
-    label: 'Code of Conduct',
+    label: 'Code of Conduct.',
     link: '/code-of-conduct',
   },
   {

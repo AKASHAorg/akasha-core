@@ -21,7 +21,7 @@ export type BMIntroProps = PageButtonsProps &
     titleLabel: string;
   };
 
-const BMIntro: React.FC<BMIntroProps> = props => {
+export const BMIntro: React.FC<BMIntroProps> = props => {
   const {
     assetName = 'vibe-overview',
     assetExtension = 'webp',
@@ -43,12 +43,10 @@ const BMIntro: React.FC<BMIntroProps> = props => {
           />
         </Stack>
 
-        <SubtitleRenderer {...props} />
+        <SubtitleRenderer {...props} textAlign="start" fontWeight="normal" />
 
         <PageButtons {...props} />
       </Stack>
     </Card>
   );
 };
-
-export default BMIntro;
