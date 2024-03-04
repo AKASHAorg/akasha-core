@@ -17,6 +17,7 @@ const TextField: React.FC<TextFieldProps> = props => {
     status,
     caption,
     disabled,
+    justifyCaption,
     customStyle = '',
     inputRef,
     ...rest
@@ -48,7 +49,11 @@ const TextField: React.FC<TextFieldProps> = props => {
           {...rest}
         />
       )}
-      {caption && <Caption status={status}>{caption}</Caption>}
+      {caption && (
+        <Caption justifyContents={justifyCaption} status={status}>
+          {caption}
+        </Caption>
+      )}
     </Stack>
   );
 };
