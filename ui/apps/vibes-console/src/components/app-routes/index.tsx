@@ -1,7 +1,7 @@
 import React from 'react';
 import { Outlet, Route, Router, rootRouteWithContext } from '@tanstack/react-router';
 import ErrorComponent from './error-component';
-import { Applications, Dashboard, Settings } from '../../pages';
+import { Applications, BecomeModerator, Dashboard, Settings } from '../../pages';
 
 const rootRoute = rootRouteWithContext()({
   component: Outlet,
@@ -12,6 +12,14 @@ const applicationsRoute = new Route({
   path: '/applications-center',
   component: () => {
     return <Applications />;
+  },
+});
+
+const becomeModeratorRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/applications-center/become-a-moderator',
+  component: () => {
+    return <BecomeModerator />;
   },
 });
 
@@ -31,7 +39,12 @@ const settingsRoute = new Route({
   },
 });
 
-const routeTree = rootRoute.addChildren([applicationsRoute, dashboardRoute, settingsRoute]);
+const routeTree = rootRoute.addChildren([
+  applicationsRoute,
+  becomeModeratorRoute,
+  dashboardRoute,
+  settingsRoute,
+]);
 
 // @todo: update to use type from typings package
 export const createRouter = ({ baseRouteName }: { baseRouteName: string }) =>
