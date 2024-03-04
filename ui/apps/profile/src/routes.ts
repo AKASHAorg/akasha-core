@@ -12,4 +12,4 @@ export default {
   [FOLLOWING]: `/following`,
   [INTERESTS]: `/interests`,
   [EDIT]: `/edit`,
-};
+} as const;

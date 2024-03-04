@@ -1,17 +1,15 @@
 import React from 'react';
 import ReactDOMClient from 'react-dom/client';
 import singleSpaReact from 'single-spa-react';
-
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import SocialApp from './app';
 import { RootComponentProps } from '@akashaorg/typings/lib/ui';
 import { withProviders } from '@akashaorg/ui-awf-hooks';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-
-import App from './app';
 
 const reactLifecycles = singleSpaReact({
   React,
   ReactDOMClient,
-  rootComponent: withProviders(App),
+  rootComponent: withProviders(SocialApp),
   errorBoundary: (error, errorInfo, props: RootComponentProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
