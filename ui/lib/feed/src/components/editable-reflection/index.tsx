@@ -50,6 +50,7 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
   const beamId = entryData.beamID;
   const isReflectOfReflection = beamId !== reflectToId;
   const apolloClient = useApolloClient();
+  const [isReflecting, setIsReflecting] = useState(true);
   //@TODO
   const mentionSearch = null;
   const tagSearch = null;
@@ -165,7 +166,8 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
             placeholderButtonLabel={t('Reflect')}
             maxEncodedLengthErrLabel={t('Text block exceeds line limit, please review!')}
             editorState={editorState}
-            showEditorInitialValue={true}
+            showEditor={isReflecting}
+            setShowEditor={setIsReflecting}
             showCancelButton={true}
             avatar={authenticatedProfile?.avatar}
             profileId={authenticatedProfile?.did?.id}

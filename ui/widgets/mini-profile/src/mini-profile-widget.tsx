@@ -1,8 +1,10 @@
 import React from 'react';
 import ReactDOMClient from 'react-dom/client';
 import singleSpaReact from 'single-spa-react';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
+import ProfileMiniCard from '@akashaorg/design-system-components/lib/components/ProfileMiniCard';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import { BrowserRouter as Router, Routes, Route, useParams } from 'react-router-dom';
 import { RootComponentProps } from '@akashaorg/typings/lib/ui';
 import {
   getFollowList,
@@ -20,17 +22,28 @@ import {
   useGetReflectionByIdQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
-import ProfileMiniCard from '@akashaorg/design-system-components/lib/components/ProfileMiniCard';
+import {
+  createRootRoute,
+  createRoute,
+  createRouter,
+  Outlet,
+  RouterProvider,
+} from '@tanstack/react-router';
 
-const ProfileCardWidget: React.FC<unknown> = () => {
+type ProfileCardWidgetProps = {
+  beamId?: string;
+  reflectionId?: string;
+};
+const ProfileCardWidget: React.FC<ProfileCardWidgetProps> = props => {
+  const { beamId, reflectionId } = props;
   const { t } = useTranslation('ui-widget-mini-profile');
   const { plugins, logger } = useRootComponentProps();
-  const { beamId, reflectionId } = useParams<{ beamId?: string; reflectionId?: string }>();
   const { data: loginData } = useGetLogin();
-  const { data: beam } = useGetBeamByIdQuery({ variables: { id: beamId } });
-  const { data: reflection } = useGetReflectionByIdQuery({ variables: { id: reflectionId } });
+  const { data: beam } = useGetBeamByIdQuery({ variables: { id: beamId }, skip: !beamId });
+  const { data: reflection } = useGetReflectionByIdQuery({
+    variables: { id: reflectionId },
+    skip: !reflectionId,
+  });
 
   const authenticatedDID = loginData?.id;
   const isLoggedIn = !!loginData?.id;
@@ -119,29 +132,53 @@ const ProfileCardWidget: React.FC<unknown> = () => {
   );
 };
 
-// Router is required for the useRouteMatch hook to extract the postId from the url
 const Wrapped = () => {
   const { getTranslationPlugin } = useRootComponentProps();
-  return (
-    <Router>
-      <Routes>
-        {[
-          '@akashaorg/app-akasha-integration/beam/:beamId/*',
-          '@akashaorg/app-akasha-integration/reflect/:reflectionId/*',
-        ].map(r => (
-          <Route
-            key={r}
-            path={r}
-            element={
-              <I18nextProvider i18n={getTranslationPlugin().i18n}>
-                <ProfileCardWidget />
-              </I18nextProvider>
-            }
-          />
-        ))}
-      </Routes>
-    </Router>
+  const rootRoute = createRootRoute({
+    component: Outlet,
+  });
+  //@TODO get base route name from a hook rather instead of hardcoding it
+  const antennaAppBaseRouteName = '@akashaorg/app-akasha-integration';
+  const beamRoutes = (
+    [
+      `${antennaAppBaseRouteName}/beam/$beamId`,
+      `${antennaAppBaseRouteName}/beam/$beamId/$`,
+    ] as const
+  ).map((path, index) =>
+    createRoute({
+      getParentRoute: () => rootRoute,
+      path,
+      component: () => {
+        const { beamId } = beamRoutes[index].useParams();
+        return (
+          <I18nextProvider i18n={getTranslationPlugin().i18n}>
+            <ProfileCardWidget beamId={beamId} />
+          </I18nextProvider>
+        );
+      },
+    }),
   );
+  const reflectionRoutes = (
+    [
+      `${antennaAppBaseRouteName}/reflection/$reflectionId`,
+      `${antennaAppBaseRouteName}/reflection/$reflectionId/$`,
+    ] as const
+  ).map((path, index) =>
+    createRoute({
+      getParentRoute: () => rootRoute,
+      path,
+      component: () => {
+        const { reflectionId } = reflectionRoutes[index].useParams();
+        return (
+          <I18nextProvider i18n={getTranslationPlugin().i18n}>
+            <ProfileCardWidget reflectionId={reflectionId} />
+          </I18nextProvider>
+        );
+      },
+    }),
+  );
+  const routeTree = rootRoute.addChildren([...beamRoutes, ...reflectionRoutes]);
+  return <RouterProvider router={createRouter({ routeTree })} />;
 };
 
 const reactLifecycles = singleSpaReact({

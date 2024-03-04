@@ -7,7 +7,7 @@ import { ChatBubbleLeftRightIcon } from '@akashaorg/design-system-core/lib/compo
 
 export type CardActionProps = {
   itemId: string;
-  repliesAnchorLink?: string;
+  reflectAnchorLink?: string;
   disableActions?: boolean;
   actionsRight?: ReactNode;
   reflectionsCount?: number;
@@ -15,16 +15,17 @@ export type CardActionProps = {
 };
 
 const CardActions: React.FC<CardActionProps> = props => {
-  const { itemId, repliesAnchorLink, disableActions, actionsRight, reflectionsCount, onReflect } =
+  const { itemId, reflectAnchorLink, disableActions, actionsRight, reflectionsCount, onReflect } =
     props;
   const reflectIconUi = <Icon icon={<ChatBubbleLeftRightIcon />} accentColor={true} />;
   return (
     <Stack direction="row" align="center" justify="end" spacing="gap-x-2">
       <>{actionsRight}</>
       <Anchor
-        href={`${repliesAnchorLink}/${itemId}`}
+        href={`${reflectAnchorLink}/${itemId}`}
         onClick={e => {
           e.preventDefault();
+          e.stopPropagation();
           if (!disableActions) onReflect();
         }}
         customStyle="h-fit"
