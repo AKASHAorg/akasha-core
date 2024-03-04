@@ -1,21 +1,20 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React from 'react';
 import EditorPlaceholder from '../EditorPlaceholder';
 import EditorBox, { EditorBoxProps } from '../Editor';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import isEqual from 'lodash.isequal';
 import { editorDefaultValue } from '../Editor/initialValue';
-import { useOnClickAway } from '../../utils/clickAway';
 import { IPublishData } from '@akashaorg/typings/lib/ui';
 import { Colors } from '@akashaorg/typings/lib/ui';
 
 export type ReflectionEditorProps = EditorBoxProps & {
   placeholderButtonLabel?: string;
-  showEditorInitialValue?: boolean;
+  showEditor?: boolean;
   borderBottomOnly?: boolean;
   noBorderRound?: boolean;
   background?: { light: Colors; dark: Colors };
   customStyle?: string;
+  changeShowEditor: (showEditor: boolean) => void;
 };
 
 const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
@@ -24,6 +23,7 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
     avatar,
     actionLabel,
     placeholderLabel,
+    showEditor,
     emojiPlaceholderLabel,
     disableActionLabel,
     maxEncodedLengthErrLabel,
@@ -32,7 +32,6 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
     mentions,
     tags,
     placeholderButtonLabel,
-    showEditorInitialValue = false,
     showCancelButton,
     cancelButtonLabel,
     editorState = editorDefaultValue,
@@ -49,35 +48,21 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
     onClear,
     transformSource,
     encodingFunction,
+    changeShowEditor,
   } = props;
-
-  const [showEditor, setShowEditor] = useState(showEditorInitialValue);
-  const wrapperRef: React.RefObject<HTMLDivElement> = useRef(null);
-
-  const handleClickAway = () => {
-    if (!showEditorInitialValue && showEditor && isEqual(editorState, editorDefaultValue)) {
-      setShowEditor(false);
-    }
-  };
-
-  useEffect(() => {
-    setShowEditor(showEditorInitialValue);
-  }, [showEditorInitialValue]);
 
   const handlePublish = (data: IPublishData) => {
     onPublish(data);
-    setShowEditor(false);
+    changeShowEditor(false);
   };
-
-  useOnClickAway(wrapperRef, handleClickAway);
 
   const handleToggleEditor = (ev: React.SyntheticEvent) => {
     ev.stopPropagation();
-    setShowEditor(!showEditor);
+    changeShowEditor(!showEditor);
   };
 
   return (
-    <Stack ref={wrapperRef} customStyle={customStyle}>
+    <Stack customStyle={customStyle}>
       {!showEditor && (
         <EditorPlaceholder
           onClick={handleToggleEditor}

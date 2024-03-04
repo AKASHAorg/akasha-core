@@ -25,6 +25,7 @@ const CardActions: React.FC<CardActionProps> = props => {
         href={`${repliesAnchorLink}/${itemId}`}
         onClick={e => {
           e.preventDefault();
+          e.stopPropagation();
           if (!disableActions) onReflect();
         }}
         customStyle="h-fit"

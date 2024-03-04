@@ -1,4 +1,4 @@
-import React, { MutableRefObject, useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import ReflectionEditor from '@akashaorg/design-system-components/lib/components/ReflectionEditor';
 import getSDK from '@akashaorg/awf-sdk';
 import {
@@ -27,12 +27,13 @@ import { usePendingReflections } from '@akashaorg/ui-awf-hooks/lib/use-pending-r
 export type ReflectEditorProps = {
   beamId: string;
   reflectToId: string;
-  showEditorInitialValue: boolean;
+  showEditor: boolean;
   pendingReflectionsVar: ReturnType<typeof createReactiveVar<ReflectEntryData[]>>;
+  changeShowEditor: (showEditor: boolean) => void;
 };
 
 const ReflectEditor: React.FC<ReflectEditorProps> = props => {
-  const { beamId, reflectToId, showEditorInitialValue, pendingReflectionsVar } = props;
+  const { beamId, reflectToId, showEditor, pendingReflectionsVar, changeShowEditor } = props;
   const { t } = useTranslation('app-akasha-integration');
   const [analyticsActions] = useAnalytics();
   const { uiEvents } = useRootComponentProps();
@@ -42,8 +43,6 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
   //@TODO
   const [, setMentionQuery] = useState(null);
   const [, setTagQuery] = useState(null);
-
-  const [showEditor, setShowEditor] = useState(showEditorInitialValue);
 
   const sdk = getSDK();
   const isReflectOfReflection = reflectToId !== beamId;
@@ -83,7 +82,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
 
   React.useEffect(() => {
     if (indexReflectionMutation.error || publishReflectionMutation.error) {
-      setShowEditor(true);
+      changeShowEditor(true);
       setEditorState(newContent.content.flatMap(item => decodeb64SlateContent(item.value)));
       showAlertNotification(`${t(`Something went wrong when publishing the reflection`)}.`);
     }
@@ -93,6 +92,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
     publishReflectionMutation,
     showAlertNotification,
     t,
+    changeShowEditor,
   ]);
 
   const handlePublish = async (data: IPublishData) => {
@@ -138,10 +138,6 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
     }
   };
 
-  useEffect(() => {
-    setShowEditor(showEditorInitialValue);
-  }, [showEditorInitialValue]);
-
   return (
     <>
       <ReflectionEditor
@@ -153,7 +149,8 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         disableActionLabel={t('Authenticating')}
         maxEncodedLengthErrLabel={t('Text block exceeds line limit, please review!')}
         editorState={editorState}
-        showEditorInitialValue={showEditor}
+        showEditor={showEditor}
+        changeShowEditor={changeShowEditor}
         avatar={authenticatedProfile?.avatar}
         profileId={authenticatedProfile?.did?.id}
         disablePublish={disablePublishing}

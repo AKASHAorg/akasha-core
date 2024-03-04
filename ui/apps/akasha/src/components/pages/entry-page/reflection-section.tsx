@@ -28,57 +28,56 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
   const [isReflecting, setIsReflecting] = useState(
     routerState.location.pathname.endsWith(routes[REFLECT]),
   );
-  const wrapperRef = useCloseActions(() => {
+  const editorWrapperRef = useCloseActions(() => {
     setIsReflecting(false);
   });
 
   return (
-    <>
-      <Stack spacing="gap-y-2">
-        <Stack ref={wrapperRef}>
-          <EditableReflection
-            entryData={entryData}
-            contentClickable={false}
-            reflectToId={entryData.id}
-            onReflect={() => {
-              if (!isLoggedIn) {
-                showLoginModal(
-                  'Member Only Feature',
-                  'You need to connect first to be able to use this feature.',
-                );
-                return;
-              }
-              setIsReflecting(!isReflecting);
-            }}
-          />
-          <Divider />
-        </Stack>
-        <Stack padding="px-2">
-          {!isLoggedIn && (
-            <EditorPlaceholder
-              onClick={() =>
-                showLoginModal(
-                  'Member Only Feature',
-                  'You need to connect first to be able to use this feature.',
-                )
-              }
-              profileId={null}
-              actionLabel={t('Reflect')}
-              placeholderLabel={t('Share your thoughts')}
-              transformSource={transformSource}
-            />
-          )}
-          {isLoggedIn && entryData?.active && (
-            <ReflectEditor
-              beamId={beamId}
-              reflectToId={reflectionId}
-              showEditorInitialValue={isReflecting}
-              pendingReflectionsVar={pendingReflectionsVar}
-            />
-          )}
-        </Stack>
+    <Stack spacing="gap-y-2">
+      <Stack>
+        <EditableReflection
+          entryData={entryData}
+          contentClickable={false}
+          reflectToId={entryData.id}
+          onReflect={() => {
+            if (!isLoggedIn) {
+              showLoginModal(
+                'Member Only Feature',
+                'You need to connect first to be able to use this feature.',
+              );
+              return;
+            }
+            setIsReflecting(!isReflecting);
+          }}
+        />
+        <Divider />
       </Stack>
-    </>
+      <Stack ref={editorWrapperRef} padding="px-2">
+        {!isLoggedIn && (
+          <EditorPlaceholder
+            onClick={() =>
+              showLoginModal(
+                'Member Only Feature',
+                'You need to connect first to be able to use this feature.',
+              )
+            }
+            profileId={null}
+            actionLabel={t('Reflect')}
+            placeholderLabel={t('Share your thoughts')}
+            transformSource={transformSource}
+          />
+        )}
+        {isLoggedIn && entryData?.active && (
+          <ReflectEditor
+            beamId={beamId}
+            reflectToId={reflectionId}
+            showEditor={isReflecting}
+            changeShowEditor={setIsReflecting}
+            pendingReflectionsVar={pendingReflectionsVar}
+          />
+        )}
+      </Stack>
+    </Stack>
   );
 };
 
