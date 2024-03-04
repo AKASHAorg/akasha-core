@@ -8,24 +8,56 @@ import AppList from '@akashaorg/design-system-components/lib/components/AppList'
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { useTranslation } from 'react-i18next';
 import { APP_EVENTS } from '@akashaorg/typings/lib/sdk';
-import {
-  GetAppsQuery,
-  GetAppsByIdQuery,
-} from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 
-export type ExplorePageProps = {
-  installableApps: GetAppsQuery['akashaAppIndex']['edges'];
-  installedAppsInfo?: GetAppsByIdQuery['node'][];
-  isFetching?: boolean;
-  reqError?: Error;
-  isUserLoggedIn?: boolean;
-};
+import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useGetAppsQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import { hiddenIntegrations } from '../../hidden-integrations';
 
-const ExplorePage: React.FC<ExplorePageProps> = props => {
-  const { isFetching, reqError, isUserLoggedIn } = props;
+const ExplorePage: React.FC = () => {
+  const { worldConfig } = useRootComponentProps();
+
+  const { data } = useGetLogin();
+  const authenticatedDID = React.useMemo(() => {
+    return data?.id;
+  }, [data]);
 
   const [, setUninstallingApps] = useState([]);
   const [, setShowNotifPill] = useState('');
+
+  const defaultIntegrations = [].concat(
+    worldConfig.defaultApps,
+    worldConfig.defaultWidgets,
+    [worldConfig.homepageApp],
+    [worldConfig.layout],
+  );
+
+  const {
+    data: appsReq,
+    loading,
+    error,
+  } = useGetAppsQuery({
+    variables: {
+      first: 50,
+    },
+    skip: !authenticatedDID,
+  });
+
+  const availableApps = appsReq?.akashaAppIndex?.edges;
+
+  const filteredIntegrations = React.useMemo(() => {
+    return availableApps?.filter(
+      app => !hiddenIntegrations.some(hiddenInt => hiddenInt.id === app.node?.id),
+    );
+  }, [availableApps]);
+
+  const installableApps = React.useMemo(() => {
+    return filteredIntegrations?.filter(app => {
+      if (defaultIntegrations?.includes(app.node?.name)) {
+        return;
+      }
+      return app.node;
+    });
+  }, [defaultIntegrations, filteredIntegrations]);
 
   useEffect(() => {
     const subSDK = sdk.api.globalChannel.subscribe({
@@ -88,17 +120,17 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
   return (
     <>
       <Stack testId="akasha-verse">
-        {!isFetching && reqError && (
+        {!loading && error && (
           <ErrorLoader
             type="script-error"
             title={t('There was an error loading the integrations')}
             details={t('We cannot show this page right now')}
-            devDetails={reqError.message}
+            devDetails={error.message}
           />
         )}
-        {!isFetching && !reqError && (
+        {!loading && !error && (
           <>
-            {isUserLoggedIn && (
+            {authenticatedDID && (
               <InfoCard
                 titleLabel={t('Welcome to the Integration Centre!')}
                 bodyLabel={t(
@@ -109,7 +141,7 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
                 assetName="akasha-verse"
               />
             )}
-            {!isUserLoggedIn && (
+            {!authenticatedDID && (
               <Stack spacing="gap-y-4">
                 <Text variant="h6">{t('Latest Apps')}</Text>
                 <AppList
