@@ -40,8 +40,7 @@ const settingsRoute = new Route({
 });
 
 const routeTree = rootRoute.addChildren([
-  applicationsRoute,
-  becomeModeratorRoute,
+  applicationsRoute.addChildren([becomeModeratorRoute]),
   dashboardRoute,
   settingsRoute,
 ]);

@@ -84,13 +84,9 @@ const reportItemRoute = new Route({
 });
 
 const routeTree = rootRoute.addChildren([
-  overviewRoute,
-  moderationValueRoute,
-  moderatorsRoute,
-  viewModeratorRoute,
-  historyRoute,
-  historyItemRoute,
-  reportItemRoute,
+  overviewRoute.addChildren([moderationValueRoute]),
+  moderatorsRoute.addChildren([viewModeratorRoute]),
+  historyRoute.addChildren([historyItemRoute, reportItemRoute]),
 ]);
 
 export const createRouter = ({ baseRouteName }: CreateRouter) =>
