@@ -102,7 +102,14 @@ const ImageOverlay: React.FC<IImageOverlay> = props => {
         </Stack>
         {currentImg && (
           <Stack customStyle="h-full" align="center" justify="center">
-            <TransformWrapper ref={transformRef} centerOnInit={true} centerZoomedOut={true}>
+            <TransformWrapper
+              ref={transformRef}
+              centerOnInit={true}
+              centerZoomedOut={true}
+              limitToBounds={true}
+              disablePadding={true}
+              panning={{ disabled: true }}
+            >
               <TransformComponent wrapperStyle={{ width: '100%', height: '100%' }}>
                 <picture className={tw(`flex`)}>
                   <img src={currentImg.src} alt="" />

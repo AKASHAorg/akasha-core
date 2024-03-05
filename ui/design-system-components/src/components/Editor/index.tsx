@@ -70,6 +70,7 @@ export type EditorBoxProps = {
   emojiPlaceholderLabel?: string;
   disableActionLabel?: string;
   maxEncodedLengthErrLabel?: string;
+  noMentionsLabel?: string;
   disablePublish?: boolean;
   minHeight?: string;
   withMeter?: boolean;
@@ -92,8 +93,8 @@ export type EditorBoxProps = {
   handleSaveLinkPreviewDraft?: (LinkPreview: IEntryData['linkPreview']) => void;
   setEditorState: React.Dispatch<React.SetStateAction<Descendant[]>>;
   getLinkPreview?: (url: string) => Promise<IEntryData['linkPreview']>;
-  getMentions: (query: string) => void;
-  getTags: (query: string) => void;
+  getMentions?: (query: string) => void;
+  getTags?: (query: string) => void;
   handleDisablePublish?: (value: boolean) => void;
   encodingFunction: (value: Descendant[]) => string;
 };
@@ -110,6 +111,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
     placeholderLabel,
     disableActionLabel,
     maxEncodedLengthErrLabel,
+    noMentionsLabel,
     disablePublish,
     onPublish,
     minHeight,
@@ -217,13 +219,13 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
    * position the mention and tag popovers based on the matching text range
    */
   useEffect(() => {
-    if (mentionTargetRange && mentions && mentions.length > 0) {
+    if (mentionTargetRange) {
       const el = mentionPopoverRef.current;
       const domRange = ReactEditor.toDOMRange(editor, mentionTargetRange);
       const rect = domRange.getBoundingClientRect();
       if (el) {
-        el.style.top = `${rect.top + window.pageYOffset + 20}px`;
-        el.style.left = `${rect.left + window.pageXOffset}px`;
+        el.style.top = `${rect.top + window.scrollY + 20}px`;
+        el.style.left = `${rect.left + window.scrollX}px`;
       }
     }
     if (tagTargetRange && tags && tags.length > 0) {
@@ -231,11 +233,11 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
       const domRange = ReactEditor.toDOMRange(editor, tagTargetRange);
       const rect = domRange.getBoundingClientRect();
       if (el) {
-        el.style.top = `${rect.top + window.pageYOffset + 20}px`;
-        el.style.left = `${rect.left + window.pageXOffset}px`;
+        el.style.top = `${rect.top + window.screenY + 20}px`;
+        el.style.left = `${rect.left + window.scrollX}px`;
       }
     }
-  }, [mentions, tags, editor, index, mentionTargetRange, tagTargetRange, editorState]);
+  }, [tags, editor, index, mentionTargetRange, tagTargetRange, editorState, mentionPopoverRef]);
 
   /**
    * creates the object for publishing and resets the editor state after
@@ -360,7 +362,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
       const afterText = Editor.string(editor, afterRange);
       const afterMatch = afterText.match(/^(\s|$)/);
 
-      if (beforeMentionMatch && afterMatch && beforeRange) {
+      if (beforeMentionMatch && afterMatch && beforeRange && typeof getMentions === 'function') {
         setMentionTargetRange(beforeRange);
         getMentions(beforeMentionMatch[1]);
         setIndex(0);
@@ -373,7 +375,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
        * creates the target range for tags
        * setCreateTag is used for creating new tags from the matched text
        */
-      if (beforeTagMatch && afterMatch && beforeRange) {
+      if (beforeTagMatch && afterMatch && beforeRange && typeof getTags === 'function') {
         const tagName = beforeTagMatch[1];
         // .concat(beforeTagMatch[2], beforeTagMatch[3]);
         setTagTargetRange(beforeRange);
@@ -569,7 +571,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
               renderLeaf={renderLeaf}
               onKeyDown={onKeyDown}
             />
-            {mentionTargetRange && mentions.length > 0 && (
+            {mentionTargetRange && (
               <MentionPopover
                 handleSelect={handleInsertMention}
                 ref={mentionPopoverRef}
@@ -577,6 +579,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
                 currentIndex={index}
                 setIndex={setIndex}
                 transformSource={transformSource}
+                noMentionsLabel={noMentionsLabel}
               />
             )}
             {tagTargetRange && tags.length > 0 && (
