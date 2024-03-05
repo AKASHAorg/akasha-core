@@ -91,7 +91,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
   ${basePseudoCheckboxStyles}
   ${checkboxSizes}
   ${tickMarkSizes}
-  before:border(2 ${inputColor})
+  before:border(1 ${inputColor})
   after:border(l-[1px] ${checkmarkColor}) after:border(b-[1px] ${checkmarkColor}) after:-rotate-45
   ${bgColor}
   `;
@@ -105,7 +105,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
   ${basePseudoCheckboxStyles}
   ${checkboxSizes}
   ${minusMarkStyles}
-  before:border(2 ${isDisabled ? 'grey4' : 'secondaryLight dark:secondaryDark'})
+  before:border(1 ${isDisabled ? 'grey4' : 'secondaryLight dark:secondaryDark'})
   before:${isDisabled ? 'bg-grey4' : 'bg-(secondaryLight dark:secondaryDark)'}
   invisible w-4 h-4 relative
   `;
