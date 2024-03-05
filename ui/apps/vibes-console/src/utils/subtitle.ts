@@ -21,19 +21,13 @@ export const BMIntroSubtitles = [
 
 export const BMConfirmationSubtitles = [
   {
-    label:
-      'Your application will be reviewed by the admin and you will receive feedback shortly. To check your application status, you can click',
+    label: 'Ask your friends to endorse you by sharing',
   },
   {
-    label: 'here',
-    link: 'CHECK_APPLICATION_STATUS',
+    label: 'this link',
+    link: '/antenna',
   },
   {
-    label: 'or by visiting the',
+    label: 'in a beam.',
   },
-  {
-    label: 'moderation overview',
-    link: 'HOME',
-  },
-  { label: 'page' },
 ];

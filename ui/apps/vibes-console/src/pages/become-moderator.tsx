@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { BMDetails, BMIntro } from '../components/applications/become-moderator';
-import { BMIntroSubtitles } from '../utils';
+import { BMConfirmation, BMDetails, BMIntro } from '../components/applications/become-moderator';
+import { BMConfirmationSubtitles, BMIntroSubtitles } from '../utils';
 
 export const BecomeModerator: React.FC<unknown> = () => {
   const [step, setStep] = useState(0);
@@ -19,6 +19,11 @@ export const BecomeModerator: React.FC<unknown> = () => {
         appName: '@akashaorg/app-vibes',
         getNavigationUrl: (routes: Record<string, string>) => routes['Overview'],
       });
+    } else if (link.includes('antenna')) {
+      navigateTo({
+        appName: '@akashaorg/app-akasha-integration',
+        getNavigationUrl: (routes: Record<string, string>) => routes.defaultRoute,
+      });
     } else {
       navigateTo({
         appName: '@akashaorg/app-legal',
@@ -32,7 +37,7 @@ export const BecomeModerator: React.FC<unknown> = () => {
   };
 
   const handleCancelButtonClick = () => {
-    if (step === 0) {
+    if (step === 0 || step === 2) {
       navigateTo?.({
         appName: '@akashaorg/app-vibes-console',
         getNavigationUrl: () => `/applications-center`,
@@ -49,6 +54,25 @@ export const BecomeModerator: React.FC<unknown> = () => {
   const handleCheckboxClick = () => {
     setFooterChecked(!footerChecked);
   };
+
+  if (step === 2) {
+    return (
+      <BMConfirmation
+        titleLabel={t('Your application has been successfully submitted')}
+        descriptionLabels={[
+          t('Your application is currently under review'),
+          t('Keep an eye out for new notifications'),
+        ]}
+        subtitleLabels={BMConfirmationSubtitles.map(subtitle => ({
+          ...subtitle,
+          label: t('{{label}}', { label: subtitle.label }),
+        }))}
+        onLinkClick={handleLinkClick}
+        cancelButtonLabel={t('Go back to the Application Center')}
+        onCancelButtonClick={handleCancelButtonClick}
+      />
+    );
+  }
 
   return (
     <>

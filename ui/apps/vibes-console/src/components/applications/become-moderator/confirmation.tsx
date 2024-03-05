@@ -12,20 +12,22 @@ import {
   SubtitleRenderer,
 } from '@akashaorg/design-system-components/lib/components/SubtitleRenderer';
 
-export type BMIntroProps = PageButtonsProps &
+export type BMConfirmationProps = PageButtonsProps &
   SubtitleRendererProps & {
     assetName?: string;
     publicImgPath?: string;
     assetExtension?: string;
     titleLabel: string;
+    descriptionLabels: string[];
   };
 
-export const BMIntro: React.FC<BMIntroProps> = props => {
+export const BMConfirmation: React.FC<BMConfirmationProps> = props => {
   const {
-    assetName = 'vibe-overview',
+    assetName = 'vibe-received',
     assetExtension = 'webp',
     publicImgPath = '/images',
     titleLabel,
+    descriptionLabels,
   } = props;
 
   return (
@@ -42,7 +44,18 @@ export const BMIntro: React.FC<BMIntroProps> = props => {
           />
         </Stack>
 
-        <SubtitleRenderer {...props} textAlign="start" fontWeight="normal" />
+        <Stack spacing="gap-y-0.5">
+          {descriptionLabels.map((d, idx) => (
+            <Text key={d} align="center" variant="body1">
+              {d}
+              {idx === 0 ? '.' : '!'}
+            </Text>
+          ))}
+        </Stack>
+
+        <Stack customStyle="mb-32 px(4 md:24)">
+          <SubtitleRenderer {...props} textVariant="body1" />
+        </Stack>
 
         <PageButtons {...props} />
       </Stack>
