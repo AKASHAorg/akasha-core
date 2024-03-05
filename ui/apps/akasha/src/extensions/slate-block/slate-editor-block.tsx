@@ -5,6 +5,7 @@ import {
   transformSource,
   useGetLogin,
   useRootComponentProps,
+  useMentions,
 } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import type {
@@ -115,6 +116,11 @@ export const SlateEditorBlock = (
     [createBlock, retryCreate],
   );
 
+  const { setMentionQuery, mentions } = useMentions(authenticatedDID);
+  const handleGetMentions = (query: string) => {
+    setMentionQuery(query);
+  };
+
   return (
     <EditorBox
       // ref={editorRef}
@@ -122,20 +128,15 @@ export const SlateEditorBlock = (
       profileId={'profileId'}
       placeholderLabel={'write here'}
       maxEncodedLengthErrLabel={t('Text block exceeds line limit, please review!')}
+      noMentionsLabel={t('You are not following someone with that name')}
       onPublish={() => {
         // void
       }}
       // handleSaveLinkPreviewDraft={handleSaveLinkPreviewDraft}
       // linkPreview={linkPreview}
       // getLinkPreview={getLinkPreview}
-      getMentions={() => {
-        //void
-      }}
-      getTags={() => {
-        // void
-      }}
-      // mentions={mentions}
-      // tags={tags}
+      getMentions={handleGetMentions}
+      mentions={mentions}
       withMeter={true}
       withToolbar={true}
       editorState={editorState}

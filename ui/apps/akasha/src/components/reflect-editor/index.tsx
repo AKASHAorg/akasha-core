@@ -9,6 +9,7 @@ import {
   useGetLoginProfile,
   useRootComponentProps,
   createReactiveVar,
+  useMentions,
 } from '@akashaorg/ui-awf-hooks';
 import {
   useCreateReflectMutation,
@@ -40,15 +41,9 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
   const uiEventsRef = React.useRef(uiEvents);
   const [editorState, setEditorState] = useState(null);
   const [newContent, setNewContent] = useState<ReflectEntryData>(null);
-  //@TODO
-  const [, setMentionQuery] = useState(null);
-  const [, setTagQuery] = useState(null);
 
   const sdk = getSDK();
   const isReflectOfReflection = reflectToId !== beamId;
-  //@TODO
-  const mentionSearch = null;
-  const tagSearch = null;
 
   const [publishReflection, publishReflectionMutation] = useCreateReflectMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
@@ -63,12 +58,17 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
   const { addPendingReflection, pendingReflections } = usePendingReflections(pendingReflectionsVar);
 
   const authenticatedProfileDataReq = useGetLoginProfile();
-  const disablePublishing = useMemo(
-    () => !authenticatedProfileDataReq?.akashaProfile?.did?.id,
+  const authenticatedDID = useMemo(
+    () => authenticatedProfileDataReq?.akashaProfile?.did?.id,
     [authenticatedProfileDataReq],
   );
 
   const authenticatedProfile = authenticatedProfileDataReq?.akashaProfile;
+
+  const { setMentionQuery, mentions } = useMentions(authenticatedDID);
+  const handleGetMentions = (query: string) => {
+    setMentionQuery(query);
+  };
 
   const showAlertNotification = React.useCallback((message: string) => {
     uiEventsRef.current.next({
@@ -153,9 +153,9 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         setShowEditor={setShowEditor}
         avatar={authenticatedProfile?.avatar}
         profileId={authenticatedProfile?.did?.id}
-        disablePublish={disablePublishing}
-        tags={tagSearch?.data}
-        mentions={mentionSearch?.data}
+        disablePublish={!authenticatedDID}
+        mentions={mentions}
+        getMentions={handleGetMentions}
         background={{ light: 'grey9', dark: 'grey3' }}
         onPublish={data => {
           if (!authenticatedProfile) {
@@ -167,8 +167,6 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         onCancelClick={() => {
           //@TODO
         }}
-        getMentions={setMentionQuery}
-        getTags={setTagQuery}
         transformSource={transformSource}
         encodingFunction={encodeSlateToBase64}
       />
