@@ -41,7 +41,10 @@ export function useSaveSettings() {
   const [error, setError] = useState<Error | null>(null);
 
   const mutate = useCallback(
-    (params: { app: string; options: Record<string, string | boolean | number> }) => {
+    (
+      params: { app: string; options: Record<string, string | boolean | number> },
+      callback?: { onComplete: () => void },
+    ) => {
       setIsLoading(true);
 
       const saveSettingCall = async params => {
@@ -49,6 +52,9 @@ export function useSaveSettings() {
           const res = await saveSettings(params);
           setData(res);
           setIsLoading(false);
+          if (callback.onComplete) {
+            callback.onComplete();
+          }
         } catch (err) {
           logError('useSaveSettings', err);
           setError(err);
@@ -94,7 +100,6 @@ export function useGetSettings(app: string) {
       try {
         const res = await getSettings(app);
         if (res) {
-          console.log('res', res);
           setSettings(res);
           setError(null);
           setIsLoading(false);
