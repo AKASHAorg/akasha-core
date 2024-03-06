@@ -1,5 +1,4 @@
 import React from 'react';
-
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
@@ -8,23 +7,27 @@ import {
   PageButtonsProps,
   PageButtons,
 } from '@akashaorg/design-system-components/lib/components/PageButtons';
+import {
+  SubtitleRendererProps,
+  SubtitleRenderer,
+} from '@akashaorg/design-system-components/lib/components/SubtitleRenderer';
 
-import { SubtitleRendererProps, SubtitleRenderer } from '../../common';
-
-export type BMIntroProps = PageButtonsProps &
+export type BMConfirmationProps = PageButtonsProps &
   SubtitleRendererProps & {
     assetName?: string;
     publicImgPath?: string;
     assetExtension?: string;
     titleLabel: string;
+    descriptionLabels: string[];
   };
 
-const BMIntro: React.FC<BMIntroProps> = props => {
+export const BMConfirmation: React.FC<BMConfirmationProps> = props => {
   const {
-    assetName = 'vibe-overview',
+    assetName = 'vibe-received',
     assetExtension = 'webp',
     publicImgPath = '/images',
     titleLabel,
+    descriptionLabels,
   } = props;
 
   return (
@@ -34,19 +37,28 @@ const BMIntro: React.FC<BMIntroProps> = props => {
           {titleLabel}
         </Text>
 
-        <Stack customStyle="w-40 h-40 my-2 mx-auto">
+        <Stack customStyle="w-[11.25rem] h-[11.25rem] my-2 mx-auto">
           <Image
             src={`${publicImgPath}/${assetName}.${assetExtension}`}
             dataTestId={`${assetName}-image`}
           />
         </Stack>
 
-        <SubtitleRenderer {...props} />
+        <Stack spacing="gap-y-0.5">
+          {descriptionLabels.map((d, idx) => (
+            <Text key={d} align="center" variant="body1">
+              {d}
+              {idx === 0 ? '.' : '!'}
+            </Text>
+          ))}
+        </Stack>
+
+        <Stack customStyle="mb-32 px(4 md:24)">
+          <SubtitleRenderer {...props} textVariant="body1" />
+        </Stack>
 
         <PageButtons {...props} />
       </Stack>
     </Card>
   );
 };
-
-export default BMIntro;

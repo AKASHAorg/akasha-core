@@ -58,7 +58,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
     <Stack
       direction="row"
       justifyItems="stretch"
-      customStyle={`p-4 border-b-1 border(grey9 dark:grey3) rounded-t-2xl ${headerPadding} ${headerBackground}`}
+      customStyle={`p-4 border(b-1 grey9 dark:grey3) rounded-t-2xl ${headerPadding} ${headerBackground}`}
     >
       <Stack customStyle="w-fit h-fit mr-2">
         <Avatar

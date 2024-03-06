@@ -3,13 +3,14 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 import {
-  CategoryPills,
-  CategoryPillsProps,
   PageHeaderProps,
-  SubtitleRendererProps,
   PageHeader,
+} from '@akashaorg/design-system-components/lib/components/PageHeader';
+import {
+  SubtitleRendererProps,
   SubtitleRenderer,
-} from '../common';
+} from '@akashaorg/design-system-components/lib/components/SubtitleRenderer';
+import { CategoryPills, CategoryPillsProps } from '../common';
 import { ReasonType } from '../../utils';
 
 export type ReportItemProps = PageHeaderProps &

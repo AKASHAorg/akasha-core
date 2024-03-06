@@ -4,10 +4,7 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Text, { TextProps } from '@akashaorg/design-system-core/lib/components/Text';
-import {
-  PageButtons,
-  PageButtonsProps,
-} from '@akashaorg/design-system-components/lib/components/PageButtons';
+import { PageButtonsProps, PageButtons } from '../PageButtons';
 
 export type PageHeaderProps = PageButtonsProps & {
   label: string;

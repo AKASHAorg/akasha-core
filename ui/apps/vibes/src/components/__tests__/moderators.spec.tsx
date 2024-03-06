@@ -6,13 +6,7 @@ import { Moderators } from '../../pages';
 import { generateModerators } from '../../utils';
 
 describe('<Moderators /> component', () => {
-  const Base = (
-    <Moderators
-      isFetchingModerators={false}
-      moderators={generateModerators()}
-      navigateTo={jest.fn()}
-    />
-  );
+  const Base = <Moderators isFetchingModerators={false} moderators={generateModerators()} />;
 
   let componentWrapper = renderWithAllProviders(<></>, {});
 
