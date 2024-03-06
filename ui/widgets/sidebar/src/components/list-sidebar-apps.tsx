@@ -17,8 +17,7 @@ export type ListSidebarAppsProps = {
   onClickMenuItem?: (menuItem: IMenuItem, isMobile?: boolean) => void;
 };
 
-const getIsActiveMenu = (appName: string) =>
-  location.pathname.split('/')[2] === appName.split('/')[1];
+const getIsActiveMenu = (appName: string) => !!location.pathname.match(`/${appName}/`);
 
 const ListSidebarApps: React.FC<ListSidebarAppsProps> = props => {
   const { list, activeOption, hasBorderTop = false, onOptionClick, onClickMenuItem } = props;
