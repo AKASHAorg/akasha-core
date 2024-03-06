@@ -333,7 +333,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
 
     if (encodedNodeLength <= MAX_ENCODED_LENGTH) {
       setShowMaxEncodedLengthErr(false);
-    } else if (encodedNodeLength > MAX_ENCODED_LENGTH) {
+    } else if (encodedNodeLength > MAX_ENCODED_LENGTH && textLength < MAX_TEXT_LENGTH) {
       setShowMaxEncodedLengthErr(true);
     }
 

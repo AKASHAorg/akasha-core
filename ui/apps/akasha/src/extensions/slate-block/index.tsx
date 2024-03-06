@@ -1,8 +1,10 @@
 import * as React from 'react';
 import singleSpaReact from 'single-spa-react';
 import ReactDOMClient from 'react-dom/client';
-import { withProviders } from '@akashaorg/ui-awf-hooks';
+import { I18nextProvider } from 'react-i18next';
+import { useRootComponentProps, withProviders } from '@akashaorg/ui-awf-hooks';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+
 import {
   BlockInstanceMethods,
   ContentBlockModes,
@@ -15,8 +17,13 @@ import { SlateReadonlyBlock } from './slate-readonly-block';
 const SlateBlockExtension = (
   props: ContentBlockRootProps & { blockRef?: React.RefObject<BlockInstanceMethods> },
 ) => {
-  if (props.blockInfo.mode === ContentBlockModes.EDIT) return <SlateEditorBlock {...props} />;
-  if (props.blockInfo.mode === ContentBlockModes.READONLY) return <SlateReadonlyBlock {...props} />;
+  const { getTranslationPlugin } = useRootComponentProps();
+  return (
+    <I18nextProvider i18n={getTranslationPlugin().i18n}>
+      {props.blockInfo.mode === ContentBlockModes.EDIT && <SlateEditorBlock {...props} />}
+      {props.blockInfo.mode === ContentBlockModes.READONLY && <SlateReadonlyBlock {...props} />}
+    </I18nextProvider>
+  );
 };
 
 export const { bootstrap, mount, unmount } = singleSpaReact({
