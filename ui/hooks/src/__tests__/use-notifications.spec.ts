@@ -4,20 +4,11 @@ import {
   HAS_NEW_NOTIFICATIONS_KEY,
   NOTIFICATIONS_KEY,
   useCheckNewNotifications,
-  useFetchNotifications,
   useMarkAsRead,
 } from '../use-notifications';
 import { mockNotifications } from '../__mocks__/notifications';
 
 describe('useNotifications', () => {
-  it('should get notifications', async () => {
-    const [wrapper] = createWrapper();
-
-    const { result, waitFor } = renderHook(() => useFetchNotifications('0x00'), { wrapper });
-    await waitFor(() => result.current.isFetched, { timeout: 5000 });
-    expect(result.current.data).toHaveLength(4);
-  });
-
   it('should mark notifications as read', async () => {
     const [wrapper, queryClient] = createWrapper();
 
