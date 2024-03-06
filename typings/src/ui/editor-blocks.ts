@@ -58,6 +58,7 @@ export type BlockInstanceMethods = {
     blockInfo: BlockInfo;
     retryCount?: number;
   }>;
+  handleFocusBlock?: (focus: boolean) => void;
 };
 
 export interface ContentBlockStorePluginInterface {

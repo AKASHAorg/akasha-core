@@ -19,13 +19,5 @@
   ],
   "exclude": [
     "./lib"
-  ],
-  "files": [
-    "./src/contracts/abi/ENS.json",
-    "./src/contracts/abi/AkashaRegistrar.json",
-    "./src/contracts/abi/ReverseRegistrar.json",
-    "./src/contracts/abi/IntegrationRegistry.json"
-  ],
-
-
+  ]
 }

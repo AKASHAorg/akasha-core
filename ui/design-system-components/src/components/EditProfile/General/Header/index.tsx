@@ -2,21 +2,21 @@ import React, { useState, useEffect, useRef } from 'react';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import List, { ListProps } from '@akashaorg/design-system-core/lib/components/List';
+import EditImageModal from '../../../EditImageModal';
 import {
   ArrowUpOnSquareIcon,
   PencilIcon,
   PencilSquareIcon,
   TrashIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-import List, { ListProps } from '@akashaorg/design-system-core/lib/components/List';
 import { CropperProps } from 'react-easy-crop';
 import { ProfileImageType, Profile, type Image } from '@akashaorg/typings/lib/ui';
 import { ModalProps } from '@akashaorg/design-system-core/lib/components/Modal';
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils/getColorClasses';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils/useCloseActions';
-import EditImageModal from '../../../EditImageModal';
 import { DeleteImageModal } from './DeleteImageModal';
 import { getImageFromSeed } from '@akashaorg/design-system-core/lib/utils';
 
@@ -64,7 +64,7 @@ export const Header: React.FC<HeaderProps> = ({
   const uploadInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
   const [showAvatarActions, setShowAvatarActions] = useState(false);
   const [showCoverActions, setShowCoverDropdown] = useState(false);
-  const [ProfileImageType, setProfileImageType] = useState<ProfileImageType>();
+  const [profileImageType, setProfileImageType] = useState<ProfileImageType>();
   const [showEditImage, setShowEditImage] = useState(false);
   const [showDeleteImage, setShowDeleteImage] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState(transformSource(avatar?.default));
@@ -93,7 +93,7 @@ export const Header: React.FC<HeaderProps> = ({
   });
 
   const closeActionsDropDown = () => {
-    switch (ProfileImageType) {
+    switch (profileImageType) {
       case 'avatar':
         setShowAvatarActions(false);
         return;
@@ -132,13 +132,13 @@ export const Header: React.FC<HeaderProps> = ({
   ];
 
   const imageModalProps: Partial<CropperProps> =
-    ProfileImageType === 'avatar'
+    profileImageType === 'avatar'
       ? { aspect: 250 / 250, cropShape: 'round' }
       : { aspect: 560 / 169, objectFit: 'contain' };
 
-  const onSave = image => {
+  const onSave = (image: File) => {
     if (image) {
-      switch (ProfileImageType) {
+      switch (profileImageType) {
         case 'avatar':
           onImageSave('avatar', image);
           setAvatarFile(image);
@@ -153,7 +153,7 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   const onDelete = () => {
-    switch (ProfileImageType) {
+    switch (profileImageType) {
       case 'avatar':
         onImageDelete('avatar');
         setAvatarUrl(null);
@@ -167,7 +167,7 @@ export const Header: React.FC<HeaderProps> = ({
 
   const onUpload = (image: File) => {
     if (image) {
-      switch (ProfileImageType) {
+      switch (profileImageType) {
         case 'avatar':
           setAvatarFile(image);
           setAvatarUrl({ src: URL.createObjectURL(image), width: 0, height: 0 });
@@ -182,11 +182,11 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   useEffect(() => {
-    onAvatarChange(avatarFile);
+    if (avatarFile) onAvatarChange(avatarFile);
   }, [onAvatarChange, avatarFile]);
 
   useEffect(() => {
-    onCoverImageChange(coverImageFile);
+    if (coverImageFile) onCoverImageChange(coverImageFile);
   }, [onCoverImageChange, coverImageFile]);
 
   return (
@@ -199,9 +199,13 @@ export const Header: React.FC<HeaderProps> = ({
           customStyle={`flex p-4 h-28 w-full bg-no-repeat bg-center bg-cover bg-[url(${
             coverImageUrl?.src ?? coverImageFallback
           })]`}
-          ref={editCoverRef}
         >
-          <Stack direction="column" spacing="gap-y-1" customStyle="relative mt-auto ml-auto">
+          <Stack
+            ref={editCoverRef}
+            direction="column"
+            spacing="gap-y-1"
+            customStyle="relative mt-auto ml-auto"
+          >
             <Button
               icon={<PencilSquareIcon />}
               size="xs"
@@ -214,7 +218,7 @@ export const Header: React.FC<HeaderProps> = ({
               iconOnly
             />
             {showCoverActions && (
-              <List items={dropDownActions} customStyle="absolute right-0 top-7 w-auto" />
+              <List items={dropDownActions} customStyle="absolute right-0 top-7 w-auto z-10" />
             )}
           </Stack>
         </Card>
@@ -256,18 +260,18 @@ export const Header: React.FC<HeaderProps> = ({
               iconOnly
             />
             {showAvatarActions && (
-              <List items={dropDownActions} customStyle="absolute top-7 w-auto" />
+              <List items={dropDownActions} customStyle="absolute top-7 w-auto z-10" />
             )}
           </Stack>
         </Stack>
       </Stack>
       <EditImageModal
         show={showEditImage}
-        title={ProfileImageType === 'avatar' ? imageTitle.avatar : imageTitle.coverImage}
+        title={profileImageType === 'avatar' ? imageTitle.avatar : imageTitle.coverImage}
         cancelLabel={cancelLabel}
         saveLabel={saveLabel}
         onClose={() => (isSavingImage ? undefined : setShowEditImage(false))}
-        images={ProfileImageType === 'avatar' ? [avatarUrl?.src] : [coverImageUrl?.src]}
+        images={profileImageType === 'avatar' ? [avatarUrl?.src] : [coverImageUrl?.src]}
         dragToRepositionLabel={dragToRepositionLabel}
         isSavingImage={isSavingImage}
         onSave={onSave}
@@ -275,11 +279,11 @@ export const Header: React.FC<HeaderProps> = ({
       />
       <DeleteImageModal
         show={showDeleteImage}
-        title={ProfileImageType === 'avatar' ? deleteTitle.avatar : deleteTitle.coverImage}
+        title={profileImageType === 'avatar' ? deleteTitle.avatar : deleteTitle.coverImage}
         cancelLabel={cancelLabel}
         deleteLabel={deleteLabel}
         confirmationLabel={
-          ProfileImageType === 'avatar' ? confirmationLabel.avatar : confirmationLabel.coverImage
+          profileImageType === 'avatar' ? confirmationLabel.avatar : confirmationLabel.coverImage
         }
         onDelete={onDelete}
         onClose={() => setShowDeleteImage(false)}

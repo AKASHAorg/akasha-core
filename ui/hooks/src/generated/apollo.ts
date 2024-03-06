@@ -2095,52 +2095,6 @@ export type GetProfileByDidQueryHookResult = ReturnType<typeof useGetProfileByDi
 export type GetProfileByDidLazyQueryHookResult = ReturnType<typeof useGetProfileByDidLazyQuery>;
 export type GetProfileByDidSuspenseQueryHookResult = ReturnType<typeof useGetProfileByDidSuspenseQuery>;
 export type GetProfileByDidQueryResult = Apollo.QueryResult<Types.GetProfileByDidQuery, Types.GetProfileByDidQueryVariables>;
-export const GetProfileStatsByDidDocument = /*#__PURE__*/ gql`
-    query GetProfileStatsByDid($id: ID!) {
-  node(id: $id) {
-    ... on CeramicAccount {
-      akashaProfile {
-        ...UserProfileFragment
-        followersCount(filters: {where: {isFollowing: {equalTo: true}}}, account: $id)
-      }
-      isViewer
-    }
-  }
-}
-    ${UserProfileFragmentDoc}`;
-
-/**
- * __useGetProfileStatsByDidQuery__
- *
- * To run a query within a React component, call `useGetProfileStatsByDidQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetProfileStatsByDidQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetProfileStatsByDidQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useGetProfileStatsByDidQuery(baseOptions: Apollo.QueryHookOptions<Types.GetProfileStatsByDidQuery, Types.GetProfileStatsByDidQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<Types.GetProfileStatsByDidQuery, Types.GetProfileStatsByDidQueryVariables>(GetProfileStatsByDidDocument, options);
-      }
-export function useGetProfileStatsByDidLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Types.GetProfileStatsByDidQuery, Types.GetProfileStatsByDidQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<Types.GetProfileStatsByDidQuery, Types.GetProfileStatsByDidQueryVariables>(GetProfileStatsByDidDocument, options);
-        }
-export function useGetProfileStatsByDidSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<Types.GetProfileStatsByDidQuery, Types.GetProfileStatsByDidQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<Types.GetProfileStatsByDidQuery, Types.GetProfileStatsByDidQueryVariables>(GetProfileStatsByDidDocument, options);
-        }
-export type GetProfileStatsByDidQueryHookResult = ReturnType<typeof useGetProfileStatsByDidQuery>;
-export type GetProfileStatsByDidLazyQueryHookResult = ReturnType<typeof useGetProfileStatsByDidLazyQuery>;
-export type GetProfileStatsByDidSuspenseQueryHookResult = ReturnType<typeof useGetProfileStatsByDidSuspenseQuery>;
-export type GetProfileStatsByDidQueryResult = Apollo.QueryResult<Types.GetProfileStatsByDidQuery, Types.GetProfileStatsByDidQueryVariables>;
 export const GetProfilesDocument = /*#__PURE__*/ gql`
     query GetProfiles($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaProfileFiltersInput, $sorting: AkashaProfileSortingInput) {
   akashaProfileIndex(
@@ -2671,6 +2625,55 @@ export type GetFollowersListByDidQueryHookResult = ReturnType<typeof useGetFollo
 export type GetFollowersListByDidLazyQueryHookResult = ReturnType<typeof useGetFollowersListByDidLazyQuery>;
 export type GetFollowersListByDidSuspenseQueryHookResult = ReturnType<typeof useGetFollowersListByDidSuspenseQuery>;
 export type GetFollowersListByDidQueryResult = Apollo.QueryResult<Types.GetFollowersListByDidQuery, Types.GetFollowersListByDidQueryVariables>;
+export const GetProfileStatsByDidDocument = /*#__PURE__*/ gql`
+    query GetProfileStatsByDid($id: ID!) {
+  node(id: $id) {
+    ... on CeramicAccount {
+      akashaFollowListCount(filters: {where: {isFollowing: {equalTo: true}}})
+      akashaBeamListCount(filters: {where: {active: {equalTo: true}}})
+      akashaReflectListCount(filters: {where: {active: {equalTo: true}}})
+      akashaProfile {
+        ...UserProfileFragment
+        followersCount(filters: {where: {isFollowing: {equalTo: true}}})
+      }
+      isViewer
+    }
+  }
+}
+    ${UserProfileFragmentDoc}`;
+
+/**
+ * __useGetProfileStatsByDidQuery__
+ *
+ * To run a query within a React component, call `useGetProfileStatsByDidQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProfileStatsByDidQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProfileStatsByDidQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetProfileStatsByDidQuery(baseOptions: Apollo.QueryHookOptions<Types.GetProfileStatsByDidQuery, Types.GetProfileStatsByDidQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<Types.GetProfileStatsByDidQuery, Types.GetProfileStatsByDidQueryVariables>(GetProfileStatsByDidDocument, options);
+      }
+export function useGetProfileStatsByDidLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Types.GetProfileStatsByDidQuery, Types.GetProfileStatsByDidQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<Types.GetProfileStatsByDidQuery, Types.GetProfileStatsByDidQueryVariables>(GetProfileStatsByDidDocument, options);
+        }
+export function useGetProfileStatsByDidSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<Types.GetProfileStatsByDidQuery, Types.GetProfileStatsByDidQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<Types.GetProfileStatsByDidQuery, Types.GetProfileStatsByDidQueryVariables>(GetProfileStatsByDidDocument, options);
+        }
+export type GetProfileStatsByDidQueryHookResult = ReturnType<typeof useGetProfileStatsByDidQuery>;
+export type GetProfileStatsByDidLazyQueryHookResult = ReturnType<typeof useGetProfileStatsByDidLazyQuery>;
+export type GetProfileStatsByDidSuspenseQueryHookResult = ReturnType<typeof useGetProfileStatsByDidSuspenseQuery>;
+export type GetProfileStatsByDidQueryResult = Apollo.QueryResult<Types.GetProfileStatsByDidQuery, Types.GetProfileStatsByDidQueryVariables>;
 export const CreateAppReleaseDocument = /*#__PURE__*/ gql`
     mutation CreateAppRelease($i: CreateAkashaAppReleaseInput!) {
   createAkashaAppRelease(input: $i) {

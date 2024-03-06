@@ -143,7 +143,7 @@ export const ImageEditorBlock = (
         };
       }
     },
-    [alignState, caption, createContentBlock, contentBlockImages, props.blockInfo],
+    [alignState, caption, createContentBlock, contentBlockImages, props.blockInfo, logger],
   );
 
   const retryCreate = useCallback(
@@ -162,6 +162,7 @@ export const ImageEditorBlock = (
     () => ({
       createBlock: createBlock,
       retryBlockCreation: retryCreate,
+      handleFocusBlock,
     }),
     [createBlock, retryCreate],
   );
@@ -318,6 +319,11 @@ export const ImageEditorBlock = (
     setUiState('gallery');
   };
 
+  const [isFocusedEditor, setIsFocusedEditor] = useState(false);
+  const handleFocusBlock = (focus: boolean) => {
+    setIsFocusedEditor(focus);
+  };
+
   return (
     <>
       {uiState === 'menu' && (
@@ -411,16 +417,18 @@ export const ImageEditorBlock = (
               onChange={handleCaptionChange}
             />
           )}
-          <ImageBlockToolbar
-            handleCaptionClick={handleCaptionClick}
-            handleLeftAlignClick={handleLeftAlignClick}
-            handleCenterAlignClick={handleCenterAlignClick}
-            handleRightAlignClick={handleRightAlignClick}
-            handleEditClick={handleClickEdit}
-            handleAddClick={handleClickAddImage}
-            alignState={alignState}
-            showCaption={showCaption}
-          />
+          {isFocusedEditor && (
+            <ImageBlockToolbar
+              handleCaptionClick={handleCaptionClick}
+              handleLeftAlignClick={handleLeftAlignClick}
+              handleCenterAlignClick={handleCenterAlignClick}
+              handleRightAlignClick={handleRightAlignClick}
+              handleEditClick={handleClickEdit}
+              handleAddClick={handleClickAddImage}
+              alignState={alignState}
+              showCaption={showCaption}
+            />
+          )}
           <EditImageModal
             show={showEditModal}
             title={{ label: t('Edit Image') }}

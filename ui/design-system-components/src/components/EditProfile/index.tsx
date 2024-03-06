@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 import * as z from 'zod';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -50,31 +50,38 @@ const EditProfile: React.FC<EditProfileProps> = ({
   const {
     control,
     setValue,
-    handleSubmit,
+    getValues,
     trigger,
-    formState: { dirtyFields, isValid },
+    formState: { dirtyFields, errors },
   } = useForm<EditProfileFormValues>({
     defaultValues,
     resolver: zodResolver(schema),
     mode: 'onChange',
   });
-
-  const onSave = (formValues: EditProfileFormValues) =>
-    saveButton.handleClick({ ...formValues, links: formValues.links?.filter(link => link) || [] });
-
-  const isFormDirty = Object.keys(dirtyFields).length;
+  const isFormDirty = !!Object.keys(dirtyFields).length;
+  const isValid = !Object.keys(errors).length;
+  const onSave = (event: SyntheticEvent) => {
+    event.preventDefault();
+    const formValues = getValues();
+    if (isValid && isFormDirty) {
+      saveButton.handleClick({
+        ...formValues,
+        links: formValues.links?.filter(link => link) || [],
+      });
+    }
+  };
 
   return (
-    <form onSubmit={handleSubmit(onSave)} className={tw(apply`h-full ${customStyle}`)}>
+    <form onSubmit={onSave} className={tw(apply`h-full ${customStyle}`)}>
       <Stack direction="column" spacing="gap-y-4">
         <General
           {...rest}
           control={control}
           onAvatarChange={avatar => {
-            setValue('avatar', avatar);
+            setValue('avatar', avatar, { shouldDirty: true });
           }}
           onCoverImageChange={coverImage => {
-            setValue('coverImage', coverImage);
+            setValue('coverImage', coverImage, { shouldDirty: true });
           }}
         />
         <SocialLinks
@@ -97,7 +104,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
             label={saveButton.label}
             loading={saveButton.loading}
             disabled={isValid ? !isFormDirty : true}
-            onClick={handleSubmit(onSave)}
+            onClick={onSave}
             type="submit"
           />
         </Stack>

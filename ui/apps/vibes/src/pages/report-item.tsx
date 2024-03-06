@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from '@tanstack/react-router';
 import { useModerationCategory, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { ReportItem, ReportItemConfirmation } from '../components/report';
-import { HOME } from '../routes';
+import routes, { HOME } from '../routes';
 import { reasons, externalLinks } from '../utils';
 
 export type ReportItemPageProps = {
@@ -13,8 +14,9 @@ export type ReportItemPageProps = {
 export const ReportItemPage: React.FC<ReportItemPageProps> = props => {
   const { itemType } = props;
   const [step, setStep] = useState<number>(0);
-  const { getRoutingPlugin } = useRootComponentProps();
   const { t } = useTranslation('app-vibes');
+  const navigate = useNavigate();
+  const { getRoutingPlugin } = useRootComponentProps();
 
   const navigateTo = getRoutingPlugin().navigateTo;
   const moderationCategories = reasons.map(({ title }) => ({
@@ -34,9 +36,8 @@ export const ReportItemPage: React.FC<ReportItemPageProps> = props => {
     if (step === 1) {
       return setStep(0);
     }
-    navigateTo?.({
-      appName: '@akashaorg/app-vibes',
-      getNavigationUrl: routes => routes[HOME],
+    navigate({
+      to: routes[HOME],
     });
   };
 

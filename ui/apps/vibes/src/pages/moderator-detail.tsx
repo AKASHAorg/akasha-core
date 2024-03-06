@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useNavigate } from '@tanstack/react-router';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
 import ModeratorDetailCard from '../components/moderator';
@@ -22,13 +22,12 @@ export const ModeratorDetailPage: React.FC<ModeratorDetailPageProps> = () => {
   const [pages] = React.useState([generateModerationHistory()]);
   const [curPage, setCurPage] = React.useState<number>(1);
 
-  const { getRoutingPlugin } = useRootComponentProps();
   /**
    * get the profileId from param and use this to fetch the moderator details
    */
   // const { moderatorProfileId } = useParams<{ moderatorProfileId: string }>();
   const { t } = useTranslation('app-vibes');
-  const navigateTo = getRoutingPlugin().navigateTo;
+  const navigate = useNavigate();
 
   const moderator = generateModerators()[1];
 
@@ -51,9 +50,11 @@ export const ModeratorDetailPage: React.FC<ModeratorDetailPageProps> = () => {
   };
 
   const handleRowClick = (id: string) => {
-    navigateTo?.({
-      appName: '@akashaorg/app-vibes',
-      getNavigationUrl: navRoutes => `${navRoutes['Transparency Log']}/${id}`,
+    navigate({
+      to: '/history/$itemId',
+      params: {
+        itemId: id,
+      },
     });
   };
 
