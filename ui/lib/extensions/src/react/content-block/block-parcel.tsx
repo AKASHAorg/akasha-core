@@ -14,7 +14,10 @@ type BlockParcelProps = {
   onError?: (error: Error) => void;
 } & (
   | { mode: ContentBlockModes.READONLY }
-  | { mode: ContentBlockModes.EDIT; externalHandler: (value: never) => void }
+  | {
+      mode: ContentBlockModes.EDIT;
+      externalHandler?: (value: never) => void;
+    }
 );
 
 export const BlockParcel: React.FC<BlockParcelProps> = props => {

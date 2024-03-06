@@ -1,4 +1,11 @@
-import React, { RefObject, useCallback, useImperativeHandle, useRef, useState } from 'react';
+import React, {
+  RefObject,
+  useCallback,
+  useImperativeHandle,
+  useRef,
+  useState,
+  useMemo,
+} from 'react';
 import EditorBox from '@akashaorg/design-system-components/lib/components/Editor';
 import {
   encodeSlateToBase64,
@@ -93,7 +100,7 @@ export const SlateEditorBlock = (
         };
       }
     },
-    [createContentBlock, editorState, props.blockInfo],
+    [createContentBlock, editorState, props.blockInfo, logger],
   );
 
   const retryCreate = useCallback(
@@ -112,6 +119,7 @@ export const SlateEditorBlock = (
     () => ({
       createBlock,
       retryBlockCreation: retryCreate,
+      handleFocusBlock,
     }),
     [createBlock, retryCreate],
   );
@@ -119,6 +127,11 @@ export const SlateEditorBlock = (
   const { setMentionQuery, mentions } = useMentions(authenticatedDID);
   const handleGetMentions = (query: string) => {
     setMentionQuery(query);
+  };
+
+  const [isFocusedEditor, setIsFocusedEditor] = useState(false);
+  const handleFocusBlock = (focus: boolean) => {
+    setIsFocusedEditor(focus);
   };
 
   return (
@@ -137,8 +150,8 @@ export const SlateEditorBlock = (
       // getLinkPreview={getLinkPreview}
       getMentions={handleGetMentions}
       mentions={mentions}
-      withMeter={true}
-      withToolbar={true}
+      withMeter={isFocusedEditor}
+      withToolbar={isFocusedEditor}
       editorState={editorState}
       setEditorState={(value: IEntryData['slateContent']) => {
         setEditorState(value);

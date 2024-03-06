@@ -41,11 +41,16 @@ export const BeamEditor: React.FC = () => {
   });
 
   const [uiState, setUiState] = useState<uiState>('editor');
-  const [isNsfw, setIsNsfw] = useState(false);
+
+  const [focusedBlock, setFocusedBlock] = useState(null);
+
   const [tagValue, setTagValue] = useState('');
   const [editorTags, setEditorTags] = useState([]);
   const [newTags, setNewTags] = useState([]);
+
   const [errorMessage, setErrorMessage] = useState(null);
+
+  const [isNsfw, setIsNsfw] = useState(false);
   const [nsfwBlocks, setNsfwBlocks] = useState(new Map<number, boolean>());
 
   /*
@@ -218,9 +223,6 @@ export const BeamEditor: React.FC = () => {
   };
 
   const [disablePublishing, setDisablePublishing] = useState(false);
-  const handleDisablePublishing = (value: boolean) => {
-    setDisablePublishing(value);
-  };
 
   const blocksWithActiveNsfw = [...nsfwBlocks].filter(([, value]) => !!value);
 
@@ -235,6 +237,18 @@ export const BeamEditor: React.FC = () => {
      */
     if (!profileData?.nsfw) setIsNsfw(false);
   }, [blocksWithActiveNsfw, blocksInUse, profileData?.nsfw]);
+
+  useEffect(() => {
+    blocksInUse.forEach(block => {
+      if (block.blockRef?.current?.hasOwnProperty('handleFocusBlock')) {
+        if (block.key === focusedBlock) {
+          block.blockRef?.current?.handleFocusBlock(true);
+        } else {
+          block.blockRef?.current?.handleFocusBlock(false);
+        }
+      }
+    });
+  }, [blocksInUse, focusedBlock]);
 
   return (
     <Card customStyle="divide(y grey9 dark:grey3) h-[80vh] justify-between" padding={0}>
@@ -259,7 +273,14 @@ export const BeamEditor: React.FC = () => {
       <Stack customStyle="relative h-full overflow-hidden">
         <Stack customStyle="overflow-auto h-full">
           {blocksInUse.map((block, idx) => (
-            <div key={`${block.key}`} id={`${block.propertyType}-${idx}`}>
+            <div
+              key={`${block.key}`}
+              id={`${block.propertyType}-${idx}`}
+              role="button"
+              tabIndex={idx}
+              onClick={() => setFocusedBlock(block.key)}
+              onKeyDown={() => setFocusedBlock(block.key)}
+            >
               <Stack padding={16} direction="column" spacing="gap-2">
                 <BlockHeader
                   icon={block.icon}
@@ -274,6 +295,7 @@ export const BeamEditor: React.FC = () => {
                     setNsfwBlocks(new Map(nsfwBlocks.set(idx, !nsfwBlocks.get(idx))));
                   }}
                   isNsfwCheckboxSelected={!!nsfwBlocks.get(idx)}
+                  isFocusedBlock={focusedBlock === block.key}
                 />
                 <EditorBlockExtension
                   appName={block.appName}
