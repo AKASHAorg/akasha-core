@@ -50,7 +50,7 @@ export default class Lit {
     this._settings = settings;
     this._gql = gql;
   }
-  litNodeClient;
+  protected litNodeClient;
   async connect() {
     if (!this.litNodeClient) {
       this.litNodeClient = new LitJsSdk.LitNodeClient();

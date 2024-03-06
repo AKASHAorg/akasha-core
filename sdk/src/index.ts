@@ -17,11 +17,6 @@ import type Web3Connector from './common/web3.connector';
 import type EventBus from './common/event-bus';
 import type AWF_Auth from './auth';
 import type AWF_Profile from './profiles';
-import type AWF_ENS from './registry/ens';
-import type AWF_IC_REGISTRY from './registry/icRegistry';
-import type AWF_Entry from './posts/entry';
-import type AWF_Comments from './posts/comments';
-import type AWF_Tags from './posts/tags';
 import type AWF_IpfsConnector from './common/ipfs.connector';
 import type AppSettings from './settings/apps';
 import type AWF_Misc from './common/misc';
@@ -33,11 +28,6 @@ export interface SDK_API {
   globalChannel: EventBus;
   auth: AWF_Auth;
   profile: AWF_Profile;
-  ens: AWF_ENS;
-  entries: AWF_Entry;
-  comments: AWF_Comments;
-  tags: AWF_Tags;
-  icRegistry: AWF_IC_REGISTRY;
 }
 
 export interface SDK_Services {
@@ -100,13 +90,8 @@ export function init(): AWF_SDK {
   const globalChannel = container.get<EventBus>(TYPES.EventBus);
   const auth = container.get<AWF_Auth>(TYPES.Auth);
   const profile = container.get<AWF_Profile>(TYPES.Profile);
-  const ens = container.get<AWF_ENS>(TYPES.ENS);
-  const entries = container.get<AWF_Entry>(TYPES.Entry);
-  const comments = container.get<AWF_Comments>(TYPES.Comment);
-  const tags = container.get<AWF_Tags>(TYPES.Tag);
   const ipfs = container.get<AWF_IpfsConnector>(TYPES.IPFS);
   const appSettings = container.get<AppSettings>(TYPES.AppSettings);
-  const icRegistry = container.get<AWF_IC_REGISTRY>(TYPES.ICRegistry);
   const misc = container.get<AWF_Misc>(TYPES.Misc);
   // const fetchService = async () => {
   //   // await importLazy();
@@ -138,11 +123,6 @@ export function init(): AWF_SDK {
       globalChannel,
       auth,
       profile,
-      ens,
-      entries,
-      comments,
-      tags,
-      icRegistry,
     },
   };
 }

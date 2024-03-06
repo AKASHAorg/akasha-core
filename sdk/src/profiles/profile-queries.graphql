@@ -67,19 +67,6 @@ query GetProfileByDid($id: ID!) {
   }
 }
 
-# id is the did string of the account
-query GetProfileStatsByDid($id: ID!) {
-  node(id: $id) {
-    ...on CeramicAccount {
-      akashaProfile {
-        ...UserProfileFragment
-        followersCount(filters: {where: {isFollowing: {equalTo: true}}}, account: $id)
-      }
-      isViewer
-    }
-  }
-}
-
 query GetProfiles($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaProfileFiltersInput, $sorting: AkashaProfileSortingInput ){
   akashaProfileIndex(after: $after, before: $before, first: $first, last: $last, filters: $filters, sorting: $sorting ){
     edges {
@@ -270,8 +257,24 @@ query GetFollowersListByDid($id: ID!, $after: String, $before: String, $first: I
       isViewer
     }
   }
-
 }
+
+query GetProfileStatsByDid($id: ID!){
+  node(id: $id){
+    ... on CeramicAccount{
+      akashaFollowListCount(filters: {where: {isFollowing: {equalTo: true}}})
+      akashaBeamListCount(filters: {where: {active: {equalTo: true}}})
+#      akashaContentBlockListCount(filters: {where: {active: {equalTo: true}}})
+      akashaReflectListCount(filters: {where: {active: {equalTo: true}}})
+      akashaProfile {
+        ...UserProfileFragment
+        followersCount(filters: {where: {isFollowing: {equalTo: true}}})
+      }
+      isViewer
+    }
+  }
+}
+
 
 
 

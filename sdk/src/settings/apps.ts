@@ -9,8 +9,7 @@ import {
 import DB from '../db';
 import { createFormattedValue } from '../helpers/observable';
 import Logging from '../logging/index';
-import IcRegistry from '../registry/icRegistry';
-import { ethers, id } from 'ethers';
+import { throwError } from '../common/error-handling';
 import EventBus from '../common/event-bus';
 import pino from 'pino';
 import { validate } from '../common/validator';
@@ -30,18 +29,15 @@ export interface ConfigInfo {
 class AppSettings {
   private _db: DB;
   private _log: pino.Logger;
-  private _icRegistry: IcRegistry;
   private _globalChannel: EventBus;
 
   constructor(
     @inject(TYPES.Log) log: Logging,
     @inject(TYPES.Db) db: DB,
-    @inject(TYPES.ICRegistry) icRegistry: IcRegistry,
     @inject(TYPES.EventBus) globalChannel: EventBus,
   ) {
     this._log = log.create('AWF_Settings_Apps');
     this._db = db;
-    this._icRegistry = icRegistry;
     this._globalChannel = globalChannel;
   }
 
@@ -75,47 +71,7 @@ class AppSettings {
     z.boolean().optional(),
   )
   async install(app: { name: string; id?: string }, isLocal = false) {
-    const collection = this._db.getCollections().integrations;
-    if (isLocal && __DEV__) {
-      // @TODO: find a way to avoid handling local apps here
-
-      this._globalChannel.next({
-        data: { name: app.name, id: app.id },
-        event: APP_EVENTS.INFO_READY,
-      });
-      return collection?.put({
-        integrationType: 0,
-        sources: undefined,
-        status: false,
-        version: '@local',
-        name: app.name,
-        id: app.name,
-      });
-    }
-    const release = await this._icRegistry.getLatestVersionInfo(app);
-    const currentInfo = await this.get(release.name);
-    if (currentInfo?.data?.name) {
-      this._log.warn(`${app.name} already installed.`);
-      return false;
-    }
-    if (!release?.enabled) {
-      this._log.warn(`${app.name} cannot be installed.`);
-      return false;
-    }
-
-    const integrationInfo = {
-      id: release.integrationID,
-      name: release.name,
-      integrationType: release.integrationType,
-      version: release.version,
-      sources: release.sources,
-      status: true,
-    };
-    this._globalChannel.next({
-      data: integrationInfo,
-      event: APP_EVENTS.INFO_READY,
-    });
-    return collection?.put(integrationInfo);
+    return throwError('Not implemented', ['sdk', 'settings', 'apps', 'install']);
   }
 
   /**
@@ -151,47 +107,11 @@ class AppSettings {
   }
 
   async updateVersion(app: VersionInfo) {
-    const release = await this._icRegistry.getIntegrationReleaseInfo(
-      id(`${app.name}${app.version}`),
-    );
-    const currentInfo = await this.get(release.name);
-    const collection = this._db.getCollections().integrations;
-    if (!currentInfo?.data?.id) {
-      this._log.warn(`${app.name} is not installed`);
-      return false;
-    }
-    currentInfo.data.version = release.version;
-    currentInfo.data.sources = release.sources;
-    this._globalChannel.next({
-      data: {
-        status: currentInfo.data.status,
-        name: app.name,
-        version: currentInfo.data.version,
-        sources: currentInfo.data.sources,
-        integrationType: currentInfo.data.integrationType,
-      },
-      event: APP_EVENTS.UPDATE_VERSION,
-    });
-    return collection?.where('id').equals(currentInfo.data.id).modify(currentInfo.data);
+    return throwError('Not implemented', ['sdk', 'settings', 'apps', 'updateVersion']);
   }
 
   async updateConfig(app: ConfigInfo) {
-    const currentInfo = await this.get(app.name);
-    const collection = this._db.getCollections().integrations;
-    if (!currentInfo?.data?.id) {
-      this._log.warn(`${app.name} is not installed`);
-      return false;
-    }
-    currentInfo.data.config = app.config;
-    this._globalChannel.next({
-      data: {
-        name: app.name,
-        config: app.config,
-      },
-      event: APP_EVENTS.UPDATE_CONFIG,
-    });
-
-    return collection?.where('id').equals(currentInfo.data.id).modify(currentInfo.data);
+    return throwError('Not implemented', ['sdk', 'settings', 'apps', 'updateConfig']);
   }
 }
 
