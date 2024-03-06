@@ -1,8 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
 import getSDK from '@akashaorg/awf-sdk';
 import { logError } from './utils/error-handler';
-
-const MAINTENANCE_KEY = 'platform-maintenance';
+import { useEffect, useState } from 'react';
 
 const checkHealth = async () => {
   const sdk = getSDK();
@@ -11,7 +9,29 @@ const checkHealth = async () => {
 };
 
 export const usePlaformHealthCheck = () => {
-  return useQuery([MAINTENANCE_KEY], checkHealth, {
-    onError: (err: Error) => logError('useIntegrationRegistry.getIntegrationInfo', err),
-  });
+  const [data, setData] = useState<{
+    statusCode: number;
+    success: boolean;
+  } | null>(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await checkHealth();
+        if (res) {
+          setData(res);
+          setIsLoading(false);
+        }
+      } catch (err) {
+        setData(null);
+        logError('useIntegrationRegistry.getIntegrationInfo', err);
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  return { data, isLoading };
 };

@@ -183,14 +183,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
       //add snooze pref
       allPrefs[SnoozeOption] = snoozed;
 
-      saveSettingsMutation.mutate(
-        { app: Appname, options: allPrefs },
-        {
-          onSettled() {
-            setLoading(false);
-          },
-        },
-      );
+      const { data, isLoading } = saveSettingsMutation.mutate({ app: Appname, options: allPrefs });
 
       if (snoozed) {
         // emit snooze notification event so the topbar's notification icon can be updated

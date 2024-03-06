@@ -1,19 +1,15 @@
 import React, { Suspense, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient } from '@tanstack/react-query';
-
 import { EventTypes, MenuItemAreaType, IMenuItem } from '@akashaorg/typings/lib/ui';
 import { AUTH_EVENTS, WEB3_EVENTS } from '@akashaorg/typings/lib/sdk/events';
 import {
   useLogout,
-  LOGIN_STATE_KEY,
   useDismissedCard,
   useRootComponentProps,
   useGetLogin,
 } from '@akashaorg/ui-awf-hooks';
 import { startMobileSidebarHidingBreakpoint } from '@akashaorg/design-system-core/lib/utils/breakpoints';
 import getSDK from '@akashaorg/awf-sdk';
-
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
@@ -51,7 +47,6 @@ const SidebarComponent: React.FC<unknown> = () => {
   const authenticatedDID = data?.id;
   const isLoggedIn = !!data?.id;
   const logoutMutation = useLogout();
-  const queryClient = useQueryClient();
 
   const [dismissed, dismissCard] = useDismissedCard('@akashaorg/ui-widget-sidebar_cta-card');
 
@@ -181,8 +176,6 @@ const SidebarComponent: React.FC<unknown> = () => {
 
   function handleLogout() {
     setIsLoading(true);
-
-    queryClient.setQueryData([LOGIN_STATE_KEY], null);
     logoutMutation.mutate();
 
     setIsLoading(false);

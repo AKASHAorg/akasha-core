@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRootComponentProps, useGetSettings, useSaveSettings } from '@akashaorg/ui-awf-hooks';
+import { useRootComponentProps, useSaveSettings } from '@akashaorg/ui-awf-hooks';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
@@ -38,9 +38,6 @@ const WelcomePage: React.FC<WelcomePageProps> = props => {
   const _uiEvents = useRef(uiEvents);
 
   const Appname = '@akashaorg/app-notifications';
-
-  const fetchSettingsQuery = useGetSettings(Appname);
-  const existingSettings = fetchSettingsQuery.data;
 
   const saveSettingsMutation = useSaveSettings();
 
@@ -91,13 +88,6 @@ const WelcomePage: React.FC<WelcomePageProps> = props => {
 
     goToNotificationsPage();
   };
-
-  if (isLoggedIn && !finalStep && existingSettings) {
-    return navigateTo?.({
-      appName: '@akashaorg/app-notifications',
-      getNavigationUrl: () => routes[SHOW_NOTIFICATIONS_PAGE],
-    });
-  }
 
   return (
     <Card elevation={'1'} radius={16} padding={'p-2'} testId="notifications">

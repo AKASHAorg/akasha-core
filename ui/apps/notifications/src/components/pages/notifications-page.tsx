@@ -18,6 +18,7 @@ import DropDownFilter from '@akashaorg/design-system-components/lib/components/D
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { EntityTypes, NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import routes, { SETTINGS_PAGE, CUSTOMIZE_NOTIFICATION_WELCOME_PAGE } from '../../routes';
+import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 
 export type Notification = {
   id: string;
@@ -26,13 +27,13 @@ export type Notification = {
 
 type NotificationsPageProps = {
   isLoggedIn: boolean;
+  settingData: Record<string, string | boolean | number>;
 };
 
 const NotificationsPage: React.FC<NotificationsPageProps> = ({ isLoggedIn }) => {
   const [showMenu, setShowMenu] = useState(false);
 
-  const fetchSettingsQuery = useGetSettings('@akashaorg/app-notifications');
-  const existingSettings = fetchSettingsQuery.data;
+  const { data, isLoading } = useGetSettings('@akashaorg/app-notifications');
 
   const { t } = useTranslation('app-notifications');
   const { getRoutingPlugin, uiEvents } = useRootComponentProps();
@@ -190,7 +191,9 @@ const NotificationsPage: React.FC<NotificationsPageProps> = ({ isLoggedIn }) => 
     },
   ];
 
-  if (!isLoggedIn || !existingSettings) {
+  if (isLoading) return <Spinner />;
+
+  if (!isLoggedIn || !data) {
     return navigateTo?.({
       appName: '@akashaorg/app-notifications',
       getNavigationUrl: () => routes[CUSTOMIZE_NOTIFICATION_WELCOME_PAGE],

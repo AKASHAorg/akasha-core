@@ -33,7 +33,6 @@ export { useAccordion } from './use-accordion';
 // the following hooks needs refactor/reimplementation
 export {
   useCheckNewNotifications,
-  useFetchNotifications,
   useMarkAsRead,
   useListenForMutationEvents,
 } from './use-notifications';

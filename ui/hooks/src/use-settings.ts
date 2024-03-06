@@ -1,9 +1,7 @@
-import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import getSDK from '@akashaorg/awf-sdk';
 import { logError } from './utils/error-handler';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-
-export const SETTING_KEY = 'Notification-Settings';
+import { useGetLogin } from './use-login.new';
 
 async function saveSettings({
   app,
@@ -38,23 +36,32 @@ async function saveSettings({
  * ```
  */
 export function useSaveSettings() {
-  const queryClient = useQueryClient();
+  const [data, setData] = useState<unknown>(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<Error | null>(null);
 
-  return useMutation(
-    (params: { app: string; options: Record<string, string | boolean | number> }) =>
-      saveSettings(params),
-    {
-      onError: (err: Error) => logError('useSaveSettings', err),
-      onSuccess: data => {
-        queryClient.invalidateQueries([SETTING_KEY]);
-        return data;
-      },
-      onMutate: () => {
-        true;
-      },
-      mutationKey: [SETTING_KEY],
+  const mutate = useCallback(
+    (params: { app: string; options: Record<string, string | boolean | number> }) => {
+      setIsLoading(true);
+
+      const saveSettingCall = async params => {
+        try {
+          const res = await saveSettings(params);
+          setData(res);
+          setIsLoading(false);
+        } catch (err) {
+          logError('useSaveSettings', err);
+          setError(err);
+        }
+      };
+
+      saveSettingCall(params);
+
+      return { isLoading, data, error };
     },
+    [],
   );
+  return { mutate };
 }
 
 const getSettings = async (app: string) => {
@@ -74,12 +81,46 @@ const getSettings = async (app: string) => {
  * const savedSettings = savedSettingsQuery.data;
  * ```
  */
+
 export function useGetSettings(app: string) {
-  return useQuery([SETTING_KEY, app], () => getSettings(app), {
-    enabled: !!app,
-    onError: (err: Error) => logError('useGetSettings', err),
-  });
+  const { data: loginData, loading: loadingLoginData } = useGetLogin();
+  const [settings, setSettings] = useState<any>(undefined);
+  const [isLoading, setIsLoading] = useState<any>(true);
+
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await getSettings(app);
+        if (res) {
+          console.log('res', res);
+          setSettings(res);
+          setError(null);
+          setIsLoading(false);
+        } else {
+          setSettings(null);
+          setIsLoading(false);
+        }
+      } catch (err) {
+        setError(err);
+        logError('useSaveSettings', err);
+        setIsLoading(false);
+      }
+    };
+    if (!loadingLoginData && !loginData) {
+      setIsLoading(false);
+      return;
+    }
+
+    if (loginData) {
+      fetchData();
+    }
+  }, [app, loginData, loadingLoginData]);
+
+  return { data: settings, isLoading };
 }
+
 /*
  * Hook to get the indexing DID used by the SDK's GraphQL client.
  *
@@ -89,7 +130,7 @@ export function useGetSettings(app: string) {
  * const currentIndexingDID = useGetIndexingDID();
  */
 
-export function useGetIndexingDID(){
+export function useGetIndexingDID() {
   const sdk = getSDK();
   return useMemo(() => sdk.services.gql.indexingDID, [sdk.services.gql.indexingDID]);
 }
