@@ -273,13 +273,11 @@ export const BeamEditor: React.FC = () => {
       <Stack customStyle="relative h-full overflow-hidden">
         <Stack customStyle="overflow-auto h-full">
           {blocksInUse.map((block, idx) => (
-            <div
-              key={`${block.key}`}
+            <Card
+              key={block.key}
               id={`${block.propertyType}-${idx}`}
-              role="button"
-              tabIndex={idx}
+              type="plain"
               onClick={() => setFocusedBlock(block.key)}
-              onKeyDown={() => setFocusedBlock(block.key)}
             >
               <Stack padding={16} direction="column" spacing="gap-2">
                 <BlockHeader
@@ -304,7 +302,7 @@ export const BeamEditor: React.FC = () => {
                   blockRef={block.blockRef}
                 />
               </Stack>
-            </div>
+            </Card>
           ))}
           <div ref={bottomRef} />
         </Stack>
