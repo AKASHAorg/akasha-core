@@ -212,7 +212,10 @@ const EntryCard: React.FC<EntryCardProps> = props => {
                     >
                       ·
                     </Text>
-                    <Tooltip placement={'top'} content={formatDate(entryData?.createdAt, locale)}>
+                    <Tooltip
+                      placement={'top'}
+                      content={formatDate(entryData?.createdAt, 'H[:]mm [·] D MMM YYYY', locale)}
+                    >
                       <Text
                         variant="footnotes2"
                         weight="normal"
