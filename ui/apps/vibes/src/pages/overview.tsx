@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from '@tanstack/react-router';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import VibesIntroCard from '@akashaorg/design-system-components/lib/components/VibesIntroCard';
@@ -18,6 +19,7 @@ export type OverviewPageProps = BasePageProps & {
 
 export const Overview: React.FC<OverviewPageProps> = props => {
   const { isModerator } = props;
+  const navigate = useNavigate();
   const { getRoutingPlugin } = useRootComponentProps();
   const { t } = useTranslation('app-vibes');
 
@@ -38,9 +40,11 @@ export const Overview: React.FC<OverviewPageProps> = props => {
   };
 
   const handleValueClick = (path: string) => () => {
-    navigateTo({
-      appName: '@akashaorg/app-vibes',
-      getNavigationUrl: () => `/overview/values/${path}`,
+    navigate({
+      to: '/overview/values/$value',
+      params: {
+        value: path,
+      },
     });
   };
 

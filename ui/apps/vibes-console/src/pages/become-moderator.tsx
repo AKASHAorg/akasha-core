@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from '@tanstack/react-router';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { BMConfirmation, BMDetails, BMIntro } from '../components/applications/become-moderator';
 import { BMConfirmationSubtitles, BMIntroSubtitles } from '../utils';
+import routes, { HOME } from '../routes';
 
 export const BecomeModerator: React.FC<unknown> = () => {
   const [step, setStep] = useState(0);
   const [hasExp, setHasExp] = useState(null);
   const [footerChecked, setFooterChecked] = useState(false);
 
+  const navigate = useNavigate();
   const { t } = useTranslation('vibes-console');
   const { getRoutingPlugin } = useRootComponentProps();
   const navigateTo = getRoutingPlugin().navigateTo;
@@ -38,9 +41,8 @@ export const BecomeModerator: React.FC<unknown> = () => {
 
   const handleCancelButtonClick = () => {
     if (step === 0 || step === 2) {
-      navigateTo?.({
-        appName: '@akashaorg/app-vibes-console',
-        getNavigationUrl: () => `/applications-center`,
+      navigate({
+        to: routes[HOME],
       });
     } else {
       setStep(0);

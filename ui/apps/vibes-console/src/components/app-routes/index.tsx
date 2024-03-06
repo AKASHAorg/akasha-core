@@ -1,6 +1,7 @@
 import React from 'react';
 import { Outlet, Route, Router, rootRouteWithContext } from '@tanstack/react-router';
 import ErrorComponent from './error-component';
+import { CreateRouter } from '@akashaorg/typings/lib/ui';
 import { Applications, BecomeModerator, Dashboard, Settings } from '../../pages';
 
 const rootRoute = rootRouteWithContext()({
@@ -46,7 +47,7 @@ const routeTree = rootRoute.addChildren([
 ]);
 
 // @todo: update to use type from typings package
-export const createRouter = ({ baseRouteName }: { baseRouteName: string }) =>
+export const createRouter = ({ baseRouteName }: CreateRouter) =>
   new Router({
     routeTree,
     basepath: baseRouteName,

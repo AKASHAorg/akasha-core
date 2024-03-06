@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from '@tanstack/react-router';
 import { Moderator } from '@akashaorg/typings/lib/ui';
-import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
@@ -19,10 +19,8 @@ export type ModeratorPageProps = BasePageProps & {
 export const Moderators: React.FC<ModeratorPageProps> = props => {
   const { moderators, isFetchingModerators } = props;
   const [activeTab, setActiveTab] = useState<number>(0);
-  const { getRoutingPlugin } = useRootComponentProps();
   const { t } = useTranslation('app-vibes');
-
-  const navigateTo = getRoutingPlugin().navigateTo;
+  const navigate = useNavigate();
 
   const tabs = ['Active', 'Resigned', 'Dismissed'];
 
@@ -31,9 +29,11 @@ export const Moderators: React.FC<ModeratorPageProps> = props => {
   );
 
   const handleViewModerator = (profileId: string) => {
-    navigateTo?.({
-      appName: '@akashaorg/app-vibes',
-      getNavigationUrl: () => `/moderators/${profileId}`,
+    navigate({
+      to: '/moderators/$moderatorId',
+      params: {
+        moderatorId: profileId,
+      },
     });
   };
 
