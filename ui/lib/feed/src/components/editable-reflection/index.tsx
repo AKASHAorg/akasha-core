@@ -67,9 +67,7 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
   };
 
   useEffect(() => {
-    async () => {
-      setEditorState(entryData.content.flatMap(item => decodeb64SlateContent(item.value)));
-    };
+    setEditorState(entryData.content.flatMap(item => decodeb64SlateContent(item.value)));
   }, [entryData.content]);
 
   const [editReflection, { loading: editInProgress }] = useUpdateAkashaReflectMutation({
