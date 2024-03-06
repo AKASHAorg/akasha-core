@@ -64,6 +64,7 @@ const checkNewNotifications = async () => {
 export function useCheckNewNotifications(did: string) {
   const [data, setData] = useState<boolean>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isFetched, setIsFetched] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
@@ -74,14 +75,13 @@ export function useCheckNewNotifications(did: string) {
           setData(res);
           setError(null);
           setIsLoading(false);
-        } else {
-          setData(null);
-          setIsLoading(false);
+          setIsFetched(true);
         }
       } catch (err) {
         setError(err);
         logError('useNotifications.checkNewNotifications', err);
         setIsLoading(false);
+        setIsFetched(true);
       }
     };
 
@@ -90,7 +90,7 @@ export function useCheckNewNotifications(did: string) {
     }
   }, [did]);
 
-  return { data, isLoading, error };
+  return { data, isLoading, error, isFetched };
 }
 
 /**
