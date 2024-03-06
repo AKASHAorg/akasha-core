@@ -52,18 +52,16 @@ const EditProfile: React.FC<EditProfileProps> = ({
     setValue,
     handleSubmit,
     trigger,
-    formState: { dirtyFields, isValid },
+    formState: { dirtyFields, errors },
   } = useForm<EditProfileFormValues>({
     defaultValues,
     resolver: zodResolver(schema),
     mode: 'onChange',
   });
-
   const onSave = (formValues: EditProfileFormValues) =>
     saveButton.handleClick({ ...formValues, links: formValues.links?.filter(link => link) || [] });
-
-  const isFormDirty = Object.keys(dirtyFields).length;
-
+  const isFormDirty = !!Object.keys(dirtyFields).length;
+  const isValid = !Object.keys(errors).length;
   return (
     <form onSubmit={handleSubmit(onSave)} className={tw(apply`h-full ${customStyle}`)}>
       <Stack direction="column" spacing="gap-y-4">
@@ -71,10 +69,10 @@ const EditProfile: React.FC<EditProfileProps> = ({
           {...rest}
           control={control}
           onAvatarChange={avatar => {
-            setValue('avatar', avatar);
+            setValue('avatar', avatar, { shouldDirty: true });
           }}
           onCoverImageChange={coverImage => {
-            setValue('coverImage', coverImage);
+            setValue('coverImage', coverImage, { shouldDirty: true });
           }}
         />
         <SocialLinks
