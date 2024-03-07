@@ -25,7 +25,7 @@ export const usePlaformHealthCheck = () => {
         }
       } catch (err) {
         setData(null);
-        logError('useIntegrationRegistry.getIntegrationInfo', err);
+        logError('usePlaformHealthCheck', err);
         setIsLoading(false);
       }
     };

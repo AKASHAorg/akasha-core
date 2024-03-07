@@ -39,7 +39,7 @@ export function useConnectWallet() {
           setIsSuccess(true);
         }
       } catch (err) {
-        logError('use-logout', err);
+        logError('useConnectWallet', err);
         setError(err);
         setIsError(true);
         setData(null);
