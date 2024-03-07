@@ -38,7 +38,7 @@ async function saveSettings({
 export function useSaveSettings() {
   const [data, setData] = useState<unknown>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError] = useState<{ message: string } | null>(null);
 
   const mutate = useCallback(
     (
@@ -93,7 +93,7 @@ export function useGetSettings(app: string) {
   const [settings, setSettings] = useState<any>(undefined);
   const [isLoading, setIsLoading] = useState<any>(true);
 
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError] = useState<{ message: string } | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
