@@ -1,5 +1,4 @@
 import getSDK from '@akashaorg/awf-sdk';
-import { logError } from './utils/error-handler';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useGetLogin } from './use-login.new';
 
@@ -56,7 +55,6 @@ export function useSaveSettings() {
             callback.onComplete();
           }
         } catch (err) {
-          logError('useSaveSettings', err);
           setError(err);
         }
       };
@@ -109,7 +107,6 @@ export function useGetSettings(app: string) {
         }
       } catch (err) {
         setError(err);
-        logError('useSaveSettings', err);
         setIsLoading(false);
       }
     };
@@ -123,7 +120,7 @@ export function useGetSettings(app: string) {
     }
   }, [app, loginData, loadingLoginData]);
 
-  return { data: settings, isLoading };
+  return { data: settings, isLoading, error };
 }
 
 /*
