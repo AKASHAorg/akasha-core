@@ -1,8 +1,16 @@
 import React from 'react';
 import { Outlet, Route, Router, rootRouteWithContext } from '@tanstack/react-router';
-import ErrorComponent from './error-component';
 import { CreateRouter } from '@akashaorg/typings/lib/ui';
-import { Applications, BecomeModerator, Dashboard, Settings } from '../../pages';
+import ErrorComponent from './error-component';
+import {
+  ApplicationDetailPage,
+  Applications,
+  ApplicationsLog,
+  BecomeModerator,
+  Dashboard,
+  Settings,
+  WithdrawApplicationPage,
+} from '../../pages';
 
 const rootRoute = rootRouteWithContext()({
   component: Outlet,
@@ -24,6 +32,32 @@ const becomeModeratorRoute = new Route({
   },
 });
 
+const applicationsLogRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/applications-center/applications',
+  component: () => {
+    return <ApplicationsLog />;
+  },
+});
+
+const applicationDetailRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/applications-center/applications/application/$applicationId',
+  component: () => {
+    const { applicationId } = applicationDetailRoute.useParams();
+    return <ApplicationDetailPage applicationId={applicationId} />;
+  },
+});
+
+const applicationWithdrawRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/applications-center/applications/application/$applicationId/withdraw',
+  component: () => {
+    const { applicationId } = applicationDetailRoute.useParams();
+    return <WithdrawApplicationPage applicationId={applicationId} />;
+  },
+});
+
 const dashboardRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/dashboard',
@@ -41,7 +75,12 @@ const settingsRoute = new Route({
 });
 
 const routeTree = rootRoute.addChildren([
-  applicationsRoute.addChildren([becomeModeratorRoute]),
+  applicationsRoute.addChildren([
+    becomeModeratorRoute,
+    applicationsLogRoute,
+    applicationDetailRoute,
+    applicationWithdrawRoute,
+  ]),
   dashboardRoute,
   settingsRoute,
 ]);
