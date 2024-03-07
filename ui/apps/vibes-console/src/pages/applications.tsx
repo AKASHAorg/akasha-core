@@ -1,8 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
-import { JoinVibesCard } from '../components/applications/join-vibes-card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { JoinVibesCard } from '../components/applications/join-vibes-card';
+import { SectionRenderer } from '../components/applications/section-renderer';
 import routes, { BECOME_MODERATOR } from '../routes';
 
 export const Applications: React.FC<unknown> = () => {
@@ -10,6 +11,8 @@ export const Applications: React.FC<unknown> = () => {
   const { t } = useTranslation('vibes-console');
 
   const isModerator = false;
+  const loggedUserApplicationHistory = [];
+  const allModeratorApplications = [];
 
   const handleCtaButtonClick = () => {
     navigate({
@@ -17,8 +20,14 @@ export const Applications: React.FC<unknown> = () => {
     });
   };
 
+  const handleViewAllApplications = () => {
+    navigate({
+      to: '/applications-center/applications',
+    });
+  };
+
   return (
-    <Stack spacing="gap-y-4">
+    <Stack spacing="gap-y-6">
       {/* show this card if guest or not a moderator */}
       {!isModerator && (
         <JoinVibesCard
@@ -30,6 +39,22 @@ export const Applications: React.FC<unknown> = () => {
           onCtaButtonClick={handleCtaButtonClick}
         />
       )}
+
+      <SectionRenderer
+        titleLabel={t('Your Applications')}
+        buttonLabel={t('View all')}
+        noItemLabel={t('You have no application history')}
+        items={loggedUserApplicationHistory}
+        onButtonClick={handleViewAllApplications}
+      />
+
+      <SectionRenderer
+        titleLabel={t('Applications Log')}
+        buttonLabel={t('View all')}
+        noItemLabel={t('There are no moderator applications yet')}
+        items={allModeratorApplications}
+        onButtonClick={handleViewAllApplications}
+      />
     </Stack>
   );
 };
