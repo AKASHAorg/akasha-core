@@ -1,11 +1,14 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { ChevronRightIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import PaginatedTable from '@akashaorg/design-system-components/lib/components/PaginatedTable';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
 import ModeratorDetailCard from '../components/moderator';
 import InfoCard from '../components/moderator/info-card';
-import PaginatedTable from '../components/transparency-log/paginated-table';
 
 import {
   generateModerators,
@@ -49,22 +52,43 @@ export const ModeratorDetailPage: React.FC<ModeratorDetailPageProps> = () => {
     }
   };
 
-  const handleRowClick = (id: string) => {
+  const handleRowClick = (itemId: string) => {
     navigate({
       to: '/history/$itemId',
       params: {
-        itemId: id,
+        itemId,
       },
     });
   };
 
   const trimmedRows =
-    pages[curPage - 1]?.map(el => [
-      formatDate(el.moderatedDate.toISOString(), 'DD MMM YYYY'),
-      t('{{type}}', { type: el.type }),
-      t('{{status}}', { status: el.status }),
-      el.contentId,
-    ]) ?? [];
+    pages[curPage - 1]?.map(el => ({
+      value: [
+        <Text key={0} variant="body2">
+          {formatDate(el.moderatedDate.toISOString(), 'DD MMM YYYY')}
+        </Text>,
+
+        <Text key={1} variant="body2">
+          {t('{{type}}', { type: el.type })}
+        </Text>,
+
+        <Stack key={2} direction="row" align="center" spacing="gap-x-1">
+          <Stack
+            customStyle={`w-2 h-2 rounded-full ${
+              ['Kept', 'Accepted'].includes(el.status)
+                ? 'bg-success'
+                : 'bg(errorLight dark:errorDark)'
+            }`}
+          />
+          <Text variant="body2">{t('{{status}}', { status: el.status })}</Text>
+        </Stack>,
+
+        <Stack key={3} align="end">
+          <Icon icon={<ChevronRightIcon />} accentColor={true} />
+        </Stack>,
+      ],
+      clickHandler: () => handleRowClick(el.contentId),
+    })) ?? [];
 
   const dismissalReason = generateDismissalReason();
 
@@ -92,8 +116,6 @@ export const ModeratorDetailPage: React.FC<ModeratorDetailPageProps> = () => {
       <PaginatedTable
         tableTitle={t('Moderation History')}
         rows={trimmedRows}
-        hasIcons={true}
-        clickableRows={true}
         customStyle="mt-3 justify-end"
         pageCount={pages.length}
         currentPage={curPage}
@@ -101,7 +123,6 @@ export const ModeratorDetailPage: React.FC<ModeratorDetailPageProps> = () => {
         nextButtonLabel={t('Next')}
         prevButtonDisabled={curPage === 1}
         nextButtonDisabled={curPage === pages.length - 1}
-        onRowClick={handleRowClick}
         onClickPage={handleClickPage}
         onClickPrev={handleClickPrev}
         onClickNext={handleClickNext}
