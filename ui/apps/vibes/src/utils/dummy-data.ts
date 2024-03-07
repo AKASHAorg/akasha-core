@@ -1,17 +1,11 @@
 import { EntityTypes, Moderator, ModeratorApplicantData, Profile } from '@akashaorg/typings/lib/ui';
 import { EntryCardProps } from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import { reasons } from './reasons';
+import { randomDateBetweenValues } from '@akashaorg/design-system-core/lib/utils';
 import {
   TransparencyLogItem,
   TransparencyLogItemType,
 } from '../components/transparency-log/log-item';
-
-const randomDateBetweenValues = (start = 'Jan 01 2020', end = 'Dec 31 2020') => {
-  const timeStart = new Date(start).getTime();
-  const timeEnd = new Date(end).getTime();
-
-  return new Date(timeStart + Math.random() * (timeEnd - timeStart));
-};
 
 const entryData = {
   active: true,
