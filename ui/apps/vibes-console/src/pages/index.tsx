@@ -4,4 +4,5 @@ export * from './applications';
 export * from './applications-log';
 export * from './become-moderator';
 export * from './dashboard';
+export * from './my-applications';
 export * from './settings';

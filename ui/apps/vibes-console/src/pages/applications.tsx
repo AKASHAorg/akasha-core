@@ -5,14 +5,20 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { JoinVibesCard } from '../components/applications/join-vibes-card';
 import { SectionRenderer } from '../components/applications/section-renderer';
 import routes, { BECOME_MODERATOR } from '../routes';
+import {
+  generateModeratorApplicationHistory,
+  generateUserApplicationHistory,
+  renderChevron,
+  renderDate,
+  renderName,
+  renderStatus,
+} from '../utils';
 
 export const Applications: React.FC<unknown> = () => {
   const navigate = useNavigate();
   const { t } = useTranslation('vibes-console');
 
   const isModerator = false;
-  const loggedUserApplicationHistory = [];
-  const allModeratorApplications = [];
 
   const handleCtaButtonClick = () => {
     navigate({
@@ -20,11 +26,34 @@ export const Applications: React.FC<unknown> = () => {
     });
   };
 
-  const handleViewAllApplications = () => {
+  const handleViewAllApplications = (path: string) => {
+    const route = `/applications-center/${path}`;
     navigate({
-      to: '/applications-center/applications',
+      to: route,
     });
   };
+
+  const handleRowClick = (applicationId: string) => {
+    navigate({
+      to: '/applications-center/applications/application/$applicationId',
+      params: {
+        applicationId,
+      },
+    });
+  };
+
+  const loggedUserApplications = generateUserApplicationHistory(2);
+  const allModeratorApplications = generateModeratorApplicationHistory();
+
+  const loggedUserApplicationsRows = loggedUserApplications.map(({ id, resolvedDate, status }) => ({
+    value: [renderDate(resolvedDate), renderStatus(status), renderChevron()],
+    clickHandler: () => handleRowClick(id),
+  }));
+
+  const allModeratorApplicationsRows = allModeratorApplications.map(({ id, name, status }) => ({
+    value: [renderName(name), renderStatus(status), renderChevron()],
+    clickHandler: () => handleRowClick(id),
+  }));
 
   return (
     <Stack spacing="gap-y-6">
@@ -44,16 +73,16 @@ export const Applications: React.FC<unknown> = () => {
         titleLabel={t('Your Applications')}
         buttonLabel={t('View all')}
         noItemLabel={t('You have no application history')}
-        items={loggedUserApplicationHistory}
-        onButtonClick={handleViewAllApplications}
+        rows={loggedUserApplicationsRows}
+        onButtonClick={() => handleViewAllApplications('my-applications')}
       />
 
       <SectionRenderer
         titleLabel={t('Applications Log')}
         buttonLabel={t('View all')}
         noItemLabel={t('There are no moderator applications yet')}
-        items={allModeratorApplications}
-        onButtonClick={handleViewAllApplications}
+        rows={allModeratorApplicationsRows}
+        onButtonClick={() => handleViewAllApplications('applications')}
       />
     </Stack>
   );

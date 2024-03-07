@@ -8,6 +8,7 @@ import {
   ApplicationsLog,
   BecomeModerator,
   Dashboard,
+  MyApplications,
   Settings,
   WithdrawApplicationPage,
 } from '../../pages';
@@ -29,6 +30,14 @@ const becomeModeratorRoute = new Route({
   path: '/applications-center/become-a-moderator',
   component: () => {
     return <BecomeModerator />;
+  },
+});
+
+const myApplicationsRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/applications-center/my-applications',
+  component: () => {
+    return <MyApplications />;
   },
 });
 
@@ -77,6 +86,7 @@ const settingsRoute = new Route({
 const routeTree = rootRoute.addChildren([
   applicationsRoute.addChildren([
     becomeModeratorRoute,
+    myApplicationsRoute,
     applicationsLogRoute,
     applicationDetailRoute,
     applicationWithdrawRoute,
