@@ -12,7 +12,6 @@ const PaginatedTable: React.FC<TableProps & PaginationProps> = props => {
       <Card padding={0}>
         <Table {...props} />
       </Card>
-
       <Pagination {...props} />
     </>
   );
