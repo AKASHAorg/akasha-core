@@ -30,7 +30,7 @@ export function useConnectWallet() {
 
   const mutate = useCallback(() => {
     setIsLoading(true);
-    const logoutApiCall = async () => {
+    const connectWalletApiCall = async () => {
       try {
         const resp = await sdk.api.auth.connectAddress();
         if (resp) {
@@ -46,7 +46,7 @@ export function useConnectWallet() {
       }
     };
 
-    logoutApiCall();
+    connectWalletApiCall();
   }, []);
 
   return { mutate, data, isLoading, error, isSuccess, isError };
