@@ -69,5 +69,15 @@ export const generateModeratorApplicationHistory = () =>
   moderatorApplicants.map(a => ({
     id,
     name: a,
+    avatar: {
+      default: {
+        height: 320,
+        src: '',
+        width: 320,
+      },
+    },
+    did: { id },
     status: moderatorApplicantsStatus[Math.floor(Math.random() * moderatorApplicantsStatus.length)],
+    appliedOn: randomDateBetweenValues('Jan 01 2024', 'Feb 14 2024'),
+    memberSince: randomDateBetweenValues('Jan 01 2020', 'Dec 31 2020'),
   }));
