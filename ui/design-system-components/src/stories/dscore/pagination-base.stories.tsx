@@ -28,7 +28,7 @@ const Component = () => {
   const pages = 10;
   const [curPage, setCurPage] = useState<number>(1);
 
-  const handleClickPage = (page: number) => () => {
+  const handleClickPage = (page: number) => {
     setCurPage(page);
   };
 

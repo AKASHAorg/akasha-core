@@ -1,5 +1,5 @@
 import React from 'react';
-import { apply, tw } from '@twind/core';
+import { tw } from '@twind/core';
 import Stack from '../Stack';
 import Text from '../Text';
 
@@ -9,13 +9,15 @@ export type TableProps = {
   tableTitle?: string;
   theadValues?: React.ReactNode[];
   rows: TDataValues[];
+  customThStyle?: string;
   customTdStyle?: string;
 };
 
 const Table: React.FC<TableProps> = props => {
-  const { tableTitle, theadValues, rows, customTdStyle = '' } = props;
+  const { tableTitle, theadValues, rows, customThStyle = '', customTdStyle = '' } = props;
 
-  const baseTdStyle = apply(`py-4 px-5 ${customTdStyle}`);
+  const thStyle = `py-4 px-5 ${customThStyle}`;
+  const tdStyle = `py-4 px-5 ${customTdStyle}`;
 
   return (
     <>
@@ -36,7 +38,7 @@ const Table: React.FC<TableProps> = props => {
           <thead>
             <tr>
               {theadValues.map((value, idx) => (
-                <th key={idx} className={tw(baseTdStyle)}>
+                <th key={idx} className={tw(thStyle)}>
                   {value}
                 </th>
               ))}
@@ -55,7 +57,7 @@ const Table: React.FC<TableProps> = props => {
               onClick={row.clickHandler}
             >
               {row.value.map((value, idx) => (
-                <td key={idx} className={baseTdStyle}>
+                <td key={idx} className={tw(tdStyle)}>
                   {value}
                 </td>
               ))}
