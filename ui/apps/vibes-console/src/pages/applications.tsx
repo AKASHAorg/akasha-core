@@ -81,6 +81,8 @@ export const Applications: React.FC<unknown> = () => {
         titleLabel={t('Applications Log')}
         buttonLabel={t('View all')}
         noItemLabel={t('There are no moderator applications yet')}
+        customThStyle="text-left"
+        theadValues={[t('Applicant'), t('Status'), ' ']}
         rows={allModeratorApplicationsRows}
         onButtonClick={() => handleViewAllApplications('applications')}
       />

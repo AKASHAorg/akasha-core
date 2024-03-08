@@ -13,7 +13,16 @@ export type SectionHeaderProps = TableProps & {
 };
 
 export const SectionRenderer: React.FC<SectionHeaderProps> = props => {
-  const { titleLabel, buttonLabel, rows, noItemLabel, onButtonClick } = props;
+  const {
+    titleLabel,
+    buttonLabel,
+    theadValues,
+    rows,
+    customThStyle,
+    customTdStyle,
+    noItemLabel,
+    onButtonClick,
+  } = props;
 
   return (
     <Stack spacing="gap-y-4">
@@ -38,7 +47,12 @@ export const SectionRenderer: React.FC<SectionHeaderProps> = props => {
 
       {!!rows.length && (
         <Card padding={0}>
-          <Table rows={rows} />
+          <Table
+            theadValues={theadValues}
+            rows={rows}
+            customThStyle={customThStyle}
+            customTdStyle={customTdStyle}
+          />
         </Card>
       )}
     </Stack>

@@ -116,7 +116,6 @@ export const ModeratorDetailPage: React.FC<ModeratorDetailPageProps> = () => {
       <PaginatedTable
         tableTitle={t('Moderation History')}
         rows={trimmedRows}
-        customStyle="mt-3 justify-end"
         pageCount={pages.length}
         currentPage={curPage}
         prevButtonLabel={t('Prev')}
