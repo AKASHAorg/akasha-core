@@ -5,4 +5,5 @@ export * from './applications-log';
 export * from './become-moderator';
 export * from './dashboard';
 export * from './my-applications';
+export * from './self-application-detail';
 export * from './settings';

@@ -2,43 +2,56 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import { ApplicantDataCard, ApplicationDetail } from '../components/applications/application';
-import { generateApplicationData, generateModeratorApplicationHistory } from '../utils';
-import routes, { APPLICATIONS } from '../routes';
+import {
+  ApplicationApprovedCard,
+  SelfApplicationDetail,
+} from '../components/applications/application';
+import { generateApplicationData } from '../utils';
+import routes, { REVIEW_HUB } from '../routes';
 
-export type ApplicationDetailProp = {
+export type SelfApplicationDetailProp = {
   applicationId: string;
 };
 
-export const ApplicationDetailPage: React.FC<ApplicationDetailProp> = () => {
+export const SelfApplicationDetailPage: React.FC<SelfApplicationDetailProp> = props => {
+  const { applicationId } = props;
+
   const navigate = useNavigate();
   const { t } = useTranslation('vibes-console');
 
-  const handleClickViewProfile = () => {
+  const handleCancelButtonClick = () => {
     navigate({
-      to: routes[APPLICATIONS],
+      to: '/applications-center/my-applications/$applicationId/withdraw',
+      params: {
+        applicationId,
+      },
+    });
+  };
+
+  const handleGoToReviewHub = () => {
+    navigate({
+      to: routes[REVIEW_HUB],
     });
   };
 
   const applicationData = generateApplicationData();
-  const applicant = generateModeratorApplicationHistory()[0];
 
   return (
     <Stack spacing="gap-y-4">
-      <ApplicantDataCard
-        isMini={true}
-        applicant={applicant}
-        tenureInfoLabel={t('Member since')}
-        appliedOnLabel={t('Applied on')}
-        viewProfileLabel={t('View profile')}
-        onClickViewProfile={handleClickViewProfile}
-      />
+      {applicationData.status === 'approved' && (
+        <ApplicationApprovedCard
+          titleLabel={t('Application Approved')}
+          descriptionLabel={t('Congratulations ✨ you are officially a moderator!')}
+          buttonLabel={t('Start Reviewing Flagged items 🚀')}
+          onButtonClick={handleGoToReviewHub}
+        />
+      )}
 
-      <ApplicationDetail
-        label={t('Vibes Application')}
+      <SelfApplicationDetail
+        label={t('Your Application')}
         sections={[
           {
-            title: t('Application status'),
+            title: t('Status'),
             description: t('{{description}}', { description: applicationData.description }),
             reason: applicationData.reason,
             status: applicationData.status,
@@ -64,9 +77,7 @@ export const ApplicationDetailPage: React.FC<ApplicationDetailProp> = () => {
         {...(applicationData.status === 'pending' && {
           cancelButtonLabel: t('Withdraw Application'),
           cancelButtonVariant: 'secondary',
-          onCancelButtonClick: () => {
-            /** */
-          },
+          onCancelButtonClick: handleCancelButtonClick,
         })}
       />
     </Stack>

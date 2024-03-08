@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-
 import { IModerationLogItem } from '@akashaorg/typings/lib/ui';
-
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Dropdown from '@akashaorg/design-system-core/lib/components/Dropdown';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -18,22 +16,22 @@ export type PaginatedItem = IModerationLogItem[];
 export const DEFAULT_LIMIT = 10;
 
 export const TransparencyLog: React.FC<unknown> = () => {
-  // list filters
   const { t } = useTranslation('app-vibes');
 
-  const decisionPlaceholderLabel = t('Decision');
-  const categoryPlaceholderLabel = t('Category');
+  // list filters
+  const decisionPlaceholder = t('Decision');
+  const categoryPlaceholder = t('Category');
 
   const defaultDecision = {
     id: null,
     iconName: null,
-    title: decisionPlaceholderLabel,
+    title: decisionPlaceholder,
   };
 
   const defaultCategory = {
     id: null,
     iconName: null,
-    title: categoryPlaceholderLabel,
+    title: categoryPlaceholder,
   };
 
   const [filterByDecision, setfilterByDecision] = useState(defaultDecision);
@@ -63,7 +61,7 @@ export const TransparencyLog: React.FC<unknown> = () => {
         <Stack direction="row" align="center" spacing="gap-x-3">
           <Dropdown
             name="filterByDecision"
-            placeholderLabel={decisionPlaceholderLabel}
+            placeholderLabel={decisionPlaceholder}
             selected={filterByDecision}
             menuItems={[
               { id: '1', title: 'Kept' },
@@ -74,7 +72,7 @@ export const TransparencyLog: React.FC<unknown> = () => {
           />
           <Dropdown
             name="filterByCategory"
-            placeholderLabel={categoryPlaceholderLabel}
+            placeholderLabel={categoryPlaceholder}
             selected={filterByCategory}
             menuItems={[
               { id: '1', title: 'Beam' },

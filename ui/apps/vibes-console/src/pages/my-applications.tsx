@@ -12,7 +12,7 @@ export const MyApplications: React.FC<unknown> = () => {
 
   const handleRowClick = (applicationId: string) => {
     navigate({
-      to: '/applications-center/applications/application/$applicationId',
+      to: '/applications-center/my-applications/$applicationId',
       params: {
         applicationId,
       },

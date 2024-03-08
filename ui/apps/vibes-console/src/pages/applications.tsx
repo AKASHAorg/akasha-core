@@ -33,9 +33,17 @@ export const Applications: React.FC<unknown> = () => {
     });
   };
 
-  const handleRowClick = (applicationId: string) => {
-    navigate({
-      to: '/applications-center/applications/application/$applicationId',
+  const handleRowClick = (applicationId: string, isSelf = false) => {
+    if (isSelf) {
+      return navigate({
+        to: '/applications-center/my-applications/$applicationId',
+        params: {
+          applicationId,
+        },
+      });
+    }
+    return navigate({
+      to: '/applications-center/applications/$applicationId',
       params: {
         applicationId,
       },
@@ -47,7 +55,7 @@ export const Applications: React.FC<unknown> = () => {
 
   const loggedUserApplicationsRows = loggedUserApplications.map(({ id, resolvedDate, status }) => ({
     value: [renderDate(resolvedDate), renderStatus(status), renderChevron()],
-    clickHandler: () => handleRowClick(id),
+    clickHandler: () => handleRowClick(id, true),
   }));
 
   const allModeratorApplicationsRows = allModeratorApplications.map(({ id, name, status }) => ({
