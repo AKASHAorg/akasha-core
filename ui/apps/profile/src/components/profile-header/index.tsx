@@ -62,7 +62,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
   );
 
   const authenticatedDID = loginData?.id;
-  const isViewer = profileData?.did?.id === authenticatedDID;
+  const isViewer = !!authenticatedDID && profileData?.did?.id === authenticatedDID;
   const navigateTo = getRoutingPlugin().navigateTo;
 
   const handleClickAvatar = () => {
@@ -147,19 +147,13 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
       validAddress={profileData ? true : isEthAddress || validDid}
       background={profileData?.background}
       avatar={profileData?.avatar}
-      name={profileData?.name}
+      profileName={profileData?.name}
       ensName={null /*@TODO: integrate ENS when the API is ready */}
       viewerIsOwner={isViewer}
       menuItems={menuItems}
       copyLabel={t('Copy to clipboard')}
       copiedLabel={t('Copied')}
-      followElement={
-        <>
-          {profileData?.id && (
-            <FollowButton profileID={profileData.id} showLoginModal={showLoginModal} />
-          )}
-        </>
-      }
+      followElement={<FollowButton profileID={profileData?.id} showLoginModal={showLoginModal} />}
       metadata={
         profileData?.nsfw && (
           <Tooltip

@@ -3,6 +3,7 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
+import ProfileNameField from '@akashaorg/design-system-core/lib/components/ProfileNameField';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import CopyToClipboard from '@akashaorg/design-system-core/lib/components/CopyToClipboard';
@@ -22,7 +23,7 @@ export type HeaderProps = {
   validAddress?: boolean;
   background?: Profile['background'];
   avatar?: Profile['avatar'];
-  name: Profile['name'];
+  profileName: Profile['name'];
   ensName?: 'loading' | string;
   viewerIsOwner?: boolean;
   menuItems?: MenuProps['items'];
@@ -48,7 +49,7 @@ const Header: React.FC<HeaderProps> = ({
   validAddress = true,
   background,
   avatar,
-  name,
+  profileName,
   ensName,
   viewerIsOwner,
   menuItems,
@@ -125,7 +126,7 @@ const Header: React.FC<HeaderProps> = ({
             <Stack direction="column" spacing="gap-y-1">
               <Stack direction="row" align="center" spacing="gap-x-1">
                 <Button plain={true} onClick={onClickProfileName}>
-                  <Text variant="button-lg">{name}</Text>
+                  <ProfileNameField did={profileId} profileName={profileName} size="lg" />
                 </Button>
                 {metadata}
               </Stack>

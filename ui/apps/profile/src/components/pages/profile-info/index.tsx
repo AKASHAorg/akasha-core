@@ -32,6 +32,7 @@ const ProfileInfoPage: React.FC<ProfileInfoPageProps> = props => {
   const { profileId } = props;
   const { t } = useTranslation('app-profile');
   const { getRoutingPlugin, navigateToModal, uiEvents } = useRootComponentProps();
+
   const { data: loginData, loading: authenticating } = useGetLogin();
   const { data, error } = useGetProfileByDidSuspenseQuery({
     fetchPolicy: 'cache-first',
@@ -41,14 +42,20 @@ const ProfileInfoPage: React.FC<ProfileInfoPageProps> = props => {
     skip: !profileId,
   });
   const { validDid, isLoading: validDidCheckLoading } = useValidDid(profileId, !!data?.node);
+
   const { data: statData } = useProfileStats(profileId, true);
   const { akashaProfile: profileData } =
     data?.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
+
   const [showNSFW, setShowNSFW] = useState(false);
+
   const isLoggedIn = !!loginData?.id;
   const authenticatedDID = loginData?.id;
+
   const navigateTo = getRoutingPlugin().navigateTo;
+
   const hasProfile = !!data?.node;
+  const isViewer = !!authenticatedDID && profileId === authenticatedDID;
 
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
     navigateToModal({
@@ -133,17 +140,19 @@ const ProfileInfoPage: React.FC<ProfileInfoPageProps> = props => {
         {profileData?.description && (
           <ProfileBio title={t('Bio')} biography={profileData.description} />
         )}
-        {!isLoggedIn && !hasProfile && (
+        {!isLoggedIn && !profileData && (
           <DefaultEmptyCard
             infoText={t("It seems this user hasn't filled in their information just yet. 🤔")}
             customCardSize={{ width: '140px', height: '85px' }}
+            assetName="profile-not-filled"
           />
         )}
-        {isLoggedIn && !profileData && (
+        {isLoggedIn && !profileData && isViewer && (
           <DefaultEmptyCard
             infoText={t('Uh-uh! it looks like you haven’t filled your information!')}
             buttonLabel={t('Fill my info')}
             buttonClickHandler={goToEditProfile}
+            assetName="profile-not-filled"
           />
         )}
         {statData && (
