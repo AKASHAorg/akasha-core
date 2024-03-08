@@ -40,34 +40,32 @@ export const ApplicationDetailPage: React.FC<ApplicationDetailProp> = () => {
           {
             title: t('Application status'),
             description: t('{{description}}', { description: applicationData.description }),
-            reason: applicationData.reason,
             status: applicationData.status,
-          },
-          {
-            title: t('Applied on'),
-            ...(applicationData.status === 'pending' && {
-              description: t(
-                "You can't modify your application but you can withdraw it and re-apply.",
-              ),
-            }),
-            applicationDate: new Date('2024-02-07'),
           },
           ...(applicationData.status !== 'pending'
             ? [
                 {
-                  title: t('Resolved on'),
-                  applicationDate: new Date(),
+                  title:
+                    applicationData.status === 'withdrawn' ? t('Withdrawn on') : t('Resolved on'),
+                  resolvedDate: applicationData.resolvedDate,
                 },
               ]
             : []),
-        ]}
-        {...(applicationData.status === 'pending' && {
-          cancelButtonLabel: t('Withdraw Application'),
-          cancelButtonVariant: 'secondary',
-          onCancelButtonClick: () => {
-            /** */
+          {
+            title: t('Moderation experience'),
+            value: t('None'),
           },
-        })}
+          {
+            title: t('Why I want to be a moderator'),
+            description: t(
+              'Being a moderator in AKASHA World will allow me to cultivate a space where knowledge, creativity, and mutual respect intersect.',
+            ),
+          },
+          {
+            title: t('Application history'),
+            value: t('None'),
+          },
+        ]}
       />
     </Stack>
   );

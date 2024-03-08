@@ -1,9 +1,14 @@
 import { randomDateBetweenValues } from '@akashaorg/design-system-core/lib/utils';
 import { TApplicationStatus } from './status-color';
 
-export type TApplicationData = { status: TApplicationStatus; description: string; reason?: string };
+export type TApplicationData = {
+  status: TApplicationStatus;
+  description?: string;
+  reason?: string;
+  resolvedDate?: Date;
+};
 
-const applicationData: TApplicationData[] = [
+const selfApplicationData: TApplicationData[] = [
   {
     status: 'pending',
     description: "The admin is reviewing your application; you'll be notified of progress soon!",
@@ -22,6 +27,24 @@ const applicationData: TApplicationData[] = [
   {
     status: 'withdrawn',
     description: 'You have withdrawn your application',
+  },
+];
+
+export const generateSelfApplicationData = () =>
+  selfApplicationData[Math.floor(Math.random() * selfApplicationData.length)];
+
+const applicationData: TApplicationData[] = [
+  {
+    status: 'pending',
+  },
+  {
+    status: 'rejected',
+    description:
+      'Was reported multiple times by others for the reason of spam links and impersonation',
+    resolvedDate: new Date('Feb 14 2024'),
+  },
+  {
+    status: 'withdrawn',
   },
 ];
 

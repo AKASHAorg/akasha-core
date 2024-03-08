@@ -6,7 +6,7 @@ import {
   ApplicationApprovedCard,
   SelfApplicationDetail,
 } from '../components/applications/application';
-import { generateApplicationData } from '../utils';
+import { generateSelfApplicationData } from '../utils';
 import routes, { REVIEW_HUB } from '../routes';
 
 export type SelfApplicationDetailProp = {
@@ -34,7 +34,7 @@ export const SelfApplicationDetailPage: React.FC<SelfApplicationDetailProp> = pr
     });
   };
 
-  const applicationData = generateApplicationData();
+  const applicationData = generateSelfApplicationData();
 
   return (
     <Stack spacing="gap-y-4">

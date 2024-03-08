@@ -7,15 +7,15 @@ import {
   PageHeaderProps,
   PageHeader,
 } from '@akashaorg/design-system-components/lib/components/PageHeader';
-import { TApplicationStatus, getApplicationStatusColor } from '../../../utils';
+import { TApplicationStatus, renderStatusDetail } from '../../../utils';
 
 export type ApplicationDetailProps = PageHeaderProps & {
   sections: {
     title: string;
     description?: string;
-    reason?: string;
+    value?: string;
     status?: TApplicationStatus;
-    applicationDate?: Date;
+    resolvedDate?: Date;
   }[];
 };
 
@@ -24,27 +24,22 @@ export const ApplicationDetail: React.FC<ApplicationDetailProps> = props => {
 
   return (
     <PageHeader {...props}>
-      {sections.map(({ title, description, reason, status, applicationDate }, idx) => (
+      {sections.map(({ title, description, status, resolvedDate, value }, idx) => (
         <React.Fragment key={title}>
-          <Stack
-            spacing="gap-y-1"
-            {...(idx === sections.length - 1 && status === 'pending' && { customStyle: 'mb-32' })}
-          >
+          <Stack spacing="gap-y-1">
             <Stack direction="row" align="center" justify="between">
               <Text variant="button-md">{title}</Text>
-              {status && (
-                <Stack direction="row" align="center" spacing="gap-x-1">
-                  <Stack
-                    customStyle={`w-2 h-2 rounded-full ${getApplicationStatusColor(status)}`}
-                  />
-                  <Text variant="body2" weight="bold">
-                    {`${status.charAt(0).toLocaleUpperCase()}${status.substring(1)}`}
-                  </Text>
-                </Stack>
-              )}
-              {applicationDate && (
+              {status && renderStatusDetail(status)}
+
+              {resolvedDate && (
                 <Text variant="body2" weight="light">
-                  {formatDate(new Date(applicationDate).toISOString(), 'DD MMM YYYY')}
+                  {formatDate(new Date(resolvedDate).toISOString(), 'DD MMM YYYY')}
+                </Text>
+              )}
+
+              {value && (
+                <Text variant="body2" weight="light">
+                  {value}
                 </Text>
               )}
             </Stack>
@@ -52,15 +47,6 @@ export const ApplicationDetail: React.FC<ApplicationDetailProps> = props => {
               <Text variant="footnotes2" weight="light">
                 {description}
               </Text>
-            )}
-            {reason && (
-              <ul className="ml-5 list-disc">
-                <li>
-                  <Text variant="body2" weight="light">
-                    {reason}
-                  </Text>
-                </li>
-              </ul>
             )}
           </Stack>
 
