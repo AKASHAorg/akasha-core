@@ -4,7 +4,7 @@ import { useNavigate } from '@tanstack/react-router';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { JoinVibesCard } from '../components/applications/join-vibes-card';
 import { SectionRenderer } from '../components/applications/section-renderer';
-import routes, { BECOME_MODERATOR } from '../routes';
+import routes, { APPLICATION_DETAIL, BECOME_MODERATOR, MY_APPLICATION_DETAIL } from '../routes';
 import {
   generateModeratorApplicationHistory,
   generateUserApplicationHistory,
@@ -36,14 +36,14 @@ export const Applications: React.FC<unknown> = () => {
   const handleRowClick = (applicationId: string, isSelf = false) => {
     if (isSelf) {
       return navigate({
-        to: '/applications-center/my-applications/$applicationId',
+        to: routes[MY_APPLICATION_DETAIL],
         params: {
           applicationId,
         },
       });
     }
     return navigate({
-      to: '/applications-center/applications/$applicationId',
+      to: routes[APPLICATION_DETAIL],
       params: {
         applicationId,
       },

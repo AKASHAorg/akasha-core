@@ -6,11 +6,7 @@ import { ApplicantDataCard, ApplicationDetail } from '../components/applications
 import { generateApplicationData, generateModeratorApplicationHistory } from '../utils';
 import routes, { APPLICATIONS } from '../routes';
 
-export type ApplicationDetailProp = {
-  applicationId: string;
-};
-
-export const ApplicationDetailPage: React.FC<ApplicationDetailProp> = () => {
+export const ApplicationDetailPage: React.FC<unknown> = () => {
   const navigate = useNavigate();
   const { t } = useTranslation('vibes-console');
 

@@ -5,6 +5,7 @@ import PaginatedTable from '@akashaorg/design-system-components/lib/components/P
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { generateUserApplicationHistory, renderChevron, renderDate, renderStatus } from '../utils';
+import routes, { MY_APPLICATION_DETAIL } from '../routes';
 
 export const MyApplications: React.FC<unknown> = () => {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ export const MyApplications: React.FC<unknown> = () => {
 
   const handleRowClick = (applicationId: string) => {
     navigate({
-      to: '/applications-center/my-applications/$applicationId',
+      to: routes[MY_APPLICATION_DETAIL],
       params: {
         applicationId,
       },

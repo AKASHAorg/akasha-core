@@ -7,21 +7,15 @@ import {
   SelfApplicationDetail,
 } from '../components/applications/application';
 import { generateSelfApplicationData } from '../utils';
-import routes, { REVIEW_HUB } from '../routes';
+import routes, { REVIEW_HUB, WITHDRAW_APPLICATION } from '../routes';
 
-export type SelfApplicationDetailProp = {
-  applicationId: string;
-};
-
-export const SelfApplicationDetailPage: React.FC<SelfApplicationDetailProp> = props => {
-  const { applicationId } = props;
-
+export const SelfApplicationDetailPage: React.FC<unknown> = () => {
   const navigate = useNavigate();
   const { t } = useTranslation('vibes-console');
 
-  const handleCancelButtonClick = () => {
+  const handleCancelButtonClick = (applicationId: string) => {
     navigate({
-      to: '/applications-center/my-applications/$applicationId/withdraw',
+      to: routes[WITHDRAW_APPLICATION],
       params: {
         applicationId,
       },
@@ -77,7 +71,7 @@ export const SelfApplicationDetailPage: React.FC<SelfApplicationDetailProp> = pr
         {...(applicationData.status === 'pending' && {
           cancelButtonLabel: t('Withdraw Application'),
           cancelButtonVariant: 'secondary',
-          onCancelButtonClick: handleCancelButtonClick,
+          onCancelButtonClick: () => handleCancelButtonClick(applicationData.id),
         })}
       />
     </Stack>

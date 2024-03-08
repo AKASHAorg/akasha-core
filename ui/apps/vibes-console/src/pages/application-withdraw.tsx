@@ -2,12 +2,9 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { WAConfirmation, WithdrawApplication } from '../components/applications/application/';
+import routes, { HOME } from '../routes';
 
-export type WithdrawApplicationPageProp = {
-  applicationId: string;
-};
-
-export const WithdrawApplicationPage: React.FC<WithdrawApplicationPageProp> = () => {
+export const WithdrawApplicationPage: React.FC<unknown> = () => {
   const [step, setStep] = useState(0);
 
   const navigate = useNavigate();
@@ -15,7 +12,7 @@ export const WithdrawApplicationPage: React.FC<WithdrawApplicationPageProp> = ()
 
   const handleCancelButtonClick = () => {
     navigate({
-      to: '/applications-center',
+      to: routes[HOME],
     });
   };
 

@@ -13,6 +13,15 @@ import {
   Settings,
   WithdrawApplicationPage,
 } from '../../pages';
+import routes, {
+  APPLICATIONS,
+  APPLICATION_DETAIL,
+  BECOME_MODERATOR,
+  HOME,
+  MY_APPLICATIONS,
+  MY_APPLICATION_DETAIL,
+  WITHDRAW_APPLICATION,
+} from '../../routes';
 
 const rootRoute = rootRouteWithContext()({
   component: Outlet,
@@ -20,7 +29,7 @@ const rootRoute = rootRouteWithContext()({
 
 const applicationsRoute = new Route({
   getParentRoute: () => rootRoute,
-  path: '/applications-center',
+  path: routes[HOME],
   component: () => {
     return <Applications />;
   },
@@ -28,7 +37,7 @@ const applicationsRoute = new Route({
 
 const becomeModeratorRoute = new Route({
   getParentRoute: () => rootRoute,
-  path: '/applications-center/become-a-moderator',
+  path: routes[BECOME_MODERATOR],
   component: () => {
     return <BecomeModerator />;
   },
@@ -36,7 +45,7 @@ const becomeModeratorRoute = new Route({
 
 const selfApplicationsRoute = new Route({
   getParentRoute: () => rootRoute,
-  path: '/applications-center/my-applications',
+  path: routes[MY_APPLICATIONS],
   component: () => {
     return <MyApplications />;
   },
@@ -44,25 +53,23 @@ const selfApplicationsRoute = new Route({
 
 const selfApplicationDetailRoute = new Route({
   getParentRoute: () => rootRoute,
-  path: '/applications-center/my-applications/$applicationId',
+  path: routes[MY_APPLICATION_DETAIL],
   component: () => {
-    const { applicationId } = applicationDetailRoute.useParams();
-    return <SelfApplicationDetailPage applicationId={applicationId} />;
+    return <SelfApplicationDetailPage />;
   },
 });
 
 const selfApplicationWithdrawRoute = new Route({
   getParentRoute: () => rootRoute,
-  path: '/applications-center/my-applications/$applicationId/withdraw',
+  path: routes[WITHDRAW_APPLICATION],
   component: () => {
-    const { applicationId } = applicationDetailRoute.useParams();
-    return <WithdrawApplicationPage applicationId={applicationId} />;
+    return <WithdrawApplicationPage />;
   },
 });
 
 const applicationsLogRoute = new Route({
   getParentRoute: () => rootRoute,
-  path: '/applications-center/applications',
+  path: routes[APPLICATIONS],
   component: () => {
     return <ApplicationsLog />;
   },
@@ -70,10 +77,9 @@ const applicationsLogRoute = new Route({
 
 const applicationDetailRoute = new Route({
   getParentRoute: () => rootRoute,
-  path: '/applications-center/applications/$applicationId',
+  path: routes[APPLICATION_DETAIL],
   component: () => {
-    const { applicationId } = applicationDetailRoute.useParams();
-    return <ApplicationDetailPage applicationId={applicationId} />;
+    return <ApplicationDetailPage />;
   },
 });
 
