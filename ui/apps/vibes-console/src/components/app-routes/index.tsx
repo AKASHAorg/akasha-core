@@ -3,12 +3,13 @@ import { Outlet, Route, Router, rootRouteWithContext } from '@tanstack/react-rou
 import { CreateRouter } from '@akashaorg/typings/lib/ui';
 import ErrorComponent from './error-component';
 import {
-  ApplicationDetailPage,
   Applications,
+  ApplicationDetailPage,
   ApplicationsLog,
   BecomeModerator,
   Dashboard,
   MyApplications,
+  SelfApplicationDetailPage,
   Settings,
   WithdrawApplicationPage,
 } from '../../pages';
@@ -33,11 +34,29 @@ const becomeModeratorRoute = new Route({
   },
 });
 
-const myApplicationsRoute = new Route({
+const selfApplicationsRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/applications-center/my-applications',
   component: () => {
     return <MyApplications />;
+  },
+});
+
+const selfApplicationDetailRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/applications-center/my-applications/$applicationId',
+  component: () => {
+    const { applicationId } = applicationDetailRoute.useParams();
+    return <SelfApplicationDetailPage applicationId={applicationId} />;
+  },
+});
+
+const selfApplicationWithdrawRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/applications-center/my-applications/$applicationId/withdraw',
+  component: () => {
+    const { applicationId } = applicationDetailRoute.useParams();
+    return <WithdrawApplicationPage applicationId={applicationId} />;
   },
 });
 
@@ -51,19 +70,10 @@ const applicationsLogRoute = new Route({
 
 const applicationDetailRoute = new Route({
   getParentRoute: () => rootRoute,
-  path: '/applications-center/applications/application/$applicationId',
+  path: '/applications-center/applications/$applicationId',
   component: () => {
     const { applicationId } = applicationDetailRoute.useParams();
     return <ApplicationDetailPage applicationId={applicationId} />;
-  },
-});
-
-const applicationWithdrawRoute = new Route({
-  getParentRoute: () => rootRoute,
-  path: '/applications-center/applications/application/$applicationId/withdraw',
-  component: () => {
-    const { applicationId } = applicationDetailRoute.useParams();
-    return <WithdrawApplicationPage applicationId={applicationId} />;
   },
 });
 
@@ -86,10 +96,11 @@ const settingsRoute = new Route({
 const routeTree = rootRoute.addChildren([
   applicationsRoute.addChildren([
     becomeModeratorRoute,
-    myApplicationsRoute,
+    selfApplicationsRoute,
+    selfApplicationDetailRoute,
+    selfApplicationWithdrawRoute,
     applicationsLogRoute,
     applicationDetailRoute,
-    applicationWithdrawRoute,
   ]),
   dashboardRoute,
   settingsRoute,
