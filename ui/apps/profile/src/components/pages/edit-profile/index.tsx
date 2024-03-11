@@ -150,8 +150,10 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
       <Card radius={20} elevation="1" customStyle="py-4 h-full">
         <EditProfile
           defaultValues={{
-            avatar: null,
-            coverImage: null,
+            avatar: profileData?.avatar ? transformSource(profileData.avatar?.default) : null,
+            coverImage: profileData?.background
+              ? transformSource(profileData.background?.default)
+              : null,
             name: profileData?.name ?? '',
             bio: profileData?.description ?? '',
             ens: '',

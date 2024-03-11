@@ -69,8 +69,6 @@ export const Header: React.FC<HeaderProps> = ({
   const [showDeleteImage, setShowDeleteImage] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState(transformSource(avatar?.default));
   const [coverImageUrl, setCoverImageUrl] = useState(transformSource(coverImage?.default));
-  const [avatarFile, setAvatarFile] = useState(null);
-  const [coverImageFile, setCoverImageFile] = useState(null);
   const alternativeAvatars = useRef(
     avatar?.alternatives?.map(alternative => transformSource(alternative)),
   );
@@ -141,12 +139,12 @@ export const Header: React.FC<HeaderProps> = ({
       switch (profileImageType) {
         case 'avatar':
           onImageSave('avatar', image);
-          setAvatarFile(image);
+          onAvatarChange(image);
           setAvatarUrl({ src: URL.createObjectURL(image), width: 0, height: 0 });
           break;
         case 'cover-image':
           onImageSave('cover-image', image);
-          setCoverImageFile(image);
+          onCoverImageChange(image);
           setCoverImageUrl({ src: URL.createObjectURL(image), width: 0, height: 0 });
       }
     }
@@ -156,10 +154,12 @@ export const Header: React.FC<HeaderProps> = ({
     switch (profileImageType) {
       case 'avatar':
         onImageDelete('avatar');
+        onAvatarChange(null);
         setAvatarUrl(null);
         break;
       case 'cover-image':
         onImageDelete('cover-image');
+        onCoverImageChange(null);
         setCoverImageUrl(null);
     }
     setShowDeleteImage(false);
@@ -169,25 +169,17 @@ export const Header: React.FC<HeaderProps> = ({
     if (image) {
       switch (profileImageType) {
         case 'avatar':
-          setAvatarFile(image);
+          onAvatarChange(image);
           setAvatarUrl({ src: URL.createObjectURL(image), width: 0, height: 0 });
           break;
         case 'cover-image':
-          setCoverImageFile(image);
+          onCoverImageChange(image);
           setCoverImageUrl({ src: URL.createObjectURL(image), width: 0, height: 0 });
       }
       setShowEditImage(true);
     }
     uploadInputRef.current.value = null;
   };
-
-  useEffect(() => {
-    if (avatarFile) onAvatarChange(avatarFile);
-  }, [onAvatarChange, avatarFile]);
-
-  useEffect(() => {
-    if (coverImageFile) onCoverImageChange(coverImageFile);
-  }, [onCoverImageChange, coverImageFile]);
 
   return (
     <Stack direction="column" spacing="gap-y-2">
