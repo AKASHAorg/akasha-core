@@ -7,7 +7,6 @@ import EntrySectionLoading from './entry-section-loading';
 import BeamSection from './beam-section';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import EditableReflection from '@akashaorg/ui-lib-feed/lib/components/editable-reflection';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import {
   createReactiveVar,
   hasOwn,
@@ -24,7 +23,7 @@ import { ReflectFeed, ReflectionPreview } from '@akashaorg/ui-lib-feed';
 import { AkashaBeamStreamModerationStatus } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import {
   useGetBeamByIdSuspenseQuery,
-  useGetBeamStreamQuery,
+  useGetBeamStreamSuspenseQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { PendingReflect } from '../../reflect-editor/pending-reflect';
 import { usePendingReflections } from '@akashaorg/ui-awf-hooks/lib/use-pending-reflections';
@@ -48,12 +47,13 @@ const BeamPage: React.FC<BeamPageProps> = props => {
   /**
    * Fetch beam data from the Indexed Stream
    */
-  const beamStreamCheckQuery = useGetBeamStreamQuery({
+  const beamStreamCheckQuery = useGetBeamStreamSuspenseQuery({
     variables: {
       first: 1,
       indexer: sdk.services.gql.indexingDID,
       filters: { where: { beamID: { equalTo: beamId } } },
     },
+    fetchPolicy: 'cache-first',
   });
 
   /**
@@ -72,6 +72,7 @@ const BeamPage: React.FC<BeamPageProps> = props => {
 
   const beamReq = useGetBeamByIdSuspenseQuery({
     variables: { id: beamId },
+    fetchPolicy: 'cache-first',
   });
   const pendingReflectionsVar = createReactiveVar<ReflectEntryData[]>([]);
   const { pendingReflections } = usePendingReflections(pendingReflectionsVar);
@@ -102,10 +103,6 @@ const BeamPage: React.FC<BeamPageProps> = props => {
       (!showNsfw || (!isLoggedIn && !authenticating))
     );
   }, [authenticating, isLoggedIn, moderationData, showNsfw]);
-
-  if (beamStreamCheckQuery.loading) {
-    return <Spinner />;
-  }
 
   if (beamReq.error) {
     return (

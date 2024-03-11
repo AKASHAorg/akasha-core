@@ -52,6 +52,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
     loading,
   } = useGetProfileByDidQuery({
     variables: { id: entryData.authorId },
+    fetchPolicy: 'cache-first',
   });
 
   const { akashaProfile: profileData } =
@@ -121,7 +122,13 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       transformSource={transformSource}
       onAvatarClick={onAvatarClick}
       onTagClick={onTagClick}
-      onReflect={onReflect}
+      onReflect={() => {
+        if (!authenticatedDID) {
+          showLoginModal?.();
+          return;
+        }
+        onReflect();
+      }}
       onEntryFlag={handleFlagBeam}
       actionsRight={
         <ActionButtons
