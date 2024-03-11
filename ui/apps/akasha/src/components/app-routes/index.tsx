@@ -26,6 +26,7 @@ import {
   Outlet,
 } from '@tanstack/react-router';
 import { CreateRouter, RouterContext } from '@akashaorg/typings/lib/ui';
+import { getAuthenticatedProfile } from './loaders';
 
 const rootRoute = createRootRouteWithContext<RouterContext>()({
   component: Outlet,
@@ -42,8 +43,13 @@ const defaultRoute = createRoute({
 const antennaRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[GLOBAL_ANTENNA],
+  loader: async ({ context: { authenticatedDID, apolloClient } }) => {
+    return await getAuthenticatedProfile({ authenticatedDID, apolloClient });
+  },
+
   component: () => {
-    return <GlobalAntennaPage />;
+    const authenticatedProfile = antennaRoute.useLoaderData();
+    return <GlobalAntennaPage authenticatedProfile={authenticatedProfile} />;
   },
 });
 
@@ -69,8 +75,8 @@ const beamRoute = createRoute({
 });
 
 const beamReflectRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: `${routes[BEAM]}/$beamId${routes[REFLECT]}`,
+  getParentRoute: () => beamRoute,
+  path: routes[REFLECT],
   component: () => {
     const { beamId } = beamReflectRoute.useParams();
     return (
@@ -95,8 +101,8 @@ const reflectionsRoute = createRoute({
 });
 
 const reflectionsReflectRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: `${routes[REFLECTION]}/$reflectionId${routes[REFLECT]}`,
+  getParentRoute: () => reflectionsRoute,
+  path: routes[REFLECT],
   component: () => {
     const { reflectionId } = reflectionsReflectRoute.useParams();
     return (
@@ -137,21 +143,20 @@ const routeTree = rootRoute.addChildren([
   defaultRoute,
   antennaRoute,
   myAntennaRoute,
-  beamRoute,
-  beamReflectRoute,
-  reflectionsRoute,
-  reflectionsReflectRoute,
+  beamRoute.addChildren([beamReflectRoute]),
+  reflectionsRoute.addChildren([reflectionsReflectRoute]),
   tagFeedRoute,
   profileFeedRoute,
   editorRoute,
 ]);
 
-export const router = ({ baseRouteName, apolloClient }: CreateRouter) =>
+export const router = ({ baseRouteName, apolloClient, authenticatedDID }: CreateRouter) =>
   createRouter({
     routeTree,
     basepath: baseRouteName,
     context: {
       apolloClient,
+      authenticatedDID,
     },
     defaultErrorComponent: ({ error }) => {
       return <ErrorComponent error={(error as unknown as Error).message} />;

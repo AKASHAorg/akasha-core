@@ -1,4 +1,9 @@
 import * as React from 'react';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import BeamContentResolver from './beam-content-resolver';
+
 import { AnalyticsEventData } from '@akashaorg/typings/lib/ui';
 import {
   AkashaBeamEdge,
@@ -8,12 +13,8 @@ import {
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { EdgeArea, Virtualizer, VirtualizerProps } from '../virtual-list';
 import { useBeams } from '@akashaorg/ui-awf-hooks/lib/use-beams';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { RestoreItem } from '../virtual-list/use-scroll-state';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { hasOwn } from '@akashaorg/ui-awf-hooks';
-import BeamContentResolver from './beam-content-resolver';
 
 export type BeamFeedProps = {
   className?: string;
