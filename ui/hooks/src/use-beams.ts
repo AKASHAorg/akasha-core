@@ -275,11 +275,6 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
 
   const fetchInitialData = React.useCallback(
     async (restoreItem?: { key: string; offsetTop: number }) => {
-      if (state.beams.length) {
-        setState({
-          beams: [],
-        });
-      }
       /**
        * Return from the function immediately if the beamsQuery has run before (the data has
        * been fetched with default filter that filters out NSFW content) and the user is logged
