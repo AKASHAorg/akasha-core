@@ -275,11 +275,6 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
 
   const fetchInitialData = React.useCallback(
     async (restoreItem?: { key: string; offsetTop: number }) => {
-      if (state.beams.length) {
-        setState({
-          beams: [],
-        });
-      }
       /**
        * Return from the function immediately if the beamsQuery has run before (the data has
        * been fetched with default filter that filters out NSFW content) and the user is logged
@@ -331,39 +326,39 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
 
       await fetchInitialBeams(initialVars);
     },
-    [did, fetchInitialBeams, state.beams.length, authenticating, isLoggedIn, showNsfw],
+    [beamsQuery.called, isLoggedIn, showNsfw, mergedVars, did, fetchInitialBeams],
   );
 
-  React.useEffect(() => {
-    const unsub = queryClient.current.onClearStore(() => {
-      return fetchInitialData();
-    });
-    return () => {
-      unsub();
-    };
-  }, [fetchInitialData]);
+  // React.useEffect(() => {
+  //   const unsub = queryClient.current.onClearStore(() => {
+  //     return fetchInitialData();
+  //   });
+  //   return () => {
+  //     unsub();
+  //   };
+  // }, []);
 
-  React.useEffect(() => {
-    /**
-     * Reset the beamCursors in case the user logs out and has the NSFW setting on
-     * so as to be able to accept the updated data in the `extractData` function
-     *  when the hook refetches again (Specificallly for dealing with the filter condition
-     *  `!beamCursors.has(edge.cursor)` because if not resetted, no data will be extracted
-     * from the function because the existing beamCursors will contain the data.cursor).
-     * Maybe a better approach?
-     **/
-    if (!authenticating && (isLoggedIn || !isLoggedIn)) {
-      beamCursors.clear();
-      fetchInitialData();
-    }
-  }, [isLoggedIn, authenticating]);
+  // React.useEffect(() => {
+  //   /**
+  //    * Reset the beamCursors in case the user logs out and has the NSFW setting on
+  //    * so as to be able to accept the updated data in the `extractData` function
+  //    *  when the hook refetches again (Specificallly for dealing with the filter condition
+  //    *  `!beamCursors.has(edge.cursor)` because if not resetted, no data will be extracted
+  //    * from the function because the existing beamCursors will contain the data.cursor).
+  //    * Maybe a better approach?
+  //    **/
+  //   if (!authenticating && (isLoggedIn || !isLoggedIn)) {
+  //     beamCursors.clear();
+  //     fetchInitialData();
+  //   }
+  // }, [isLoggedIn, authenticating, beamCursors, fetchInitialData]);
 
-  React.useEffect(() => {
-    /**
-     * Everytime the NSFW setting changes, refetch.
-     **/
-    fetchInitialData();
-  }, [showNsfw]);
+  // React.useEffect(() => {
+  //   /**
+  //    * Everytime the NSFW setting changes, refetch.
+  //    **/
+  //   fetchInitialData();
+  // }, [fetchInitialData, showNsfw]);
 
   const handleReset = async () => {
     setState({ beams: [] });

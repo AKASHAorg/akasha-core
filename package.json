@@ -144,7 +144,6 @@
       "ui/design-system-core",
       "ui/design-system-components",
       "tests",
-      "ui/hooks",
       "ui/lib/feed",
       "ui/lib/extensions",
       "ui/widgets/analytics",

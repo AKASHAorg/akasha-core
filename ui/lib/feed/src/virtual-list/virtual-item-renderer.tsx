@@ -51,9 +51,10 @@ export type VirtualItemProps<T> = {
   transformStyle: string;
   index: number;
   visible: boolean;
-  isTransition: boolean;
-  onAnimationStart: (itemKey: string) => void;
-  onAnimationEnd: (itemKey: string) => void;
+  isTransition?: boolean;
+  onAnimationStart?: (itemKey: string) => void;
+  onAnimationEnd?: (itemKey: string) => void;
+  style?: React.CSSProperties;
 };
 
 export const VirtualItemRenderer = <T,>(props: VirtualItemProps<T>) => {
@@ -69,6 +70,7 @@ export const VirtualItemRenderer = <T,>(props: VirtualItemProps<T>) => {
     isTransition,
     onAnimationEnd,
     onAnimationStart,
+    style,
   } = props;
   const rootNodeRef = React.useRef<HTMLDivElement>();
   const currentHeight = React.useRef(estimatedHeight + itemSpacing);
@@ -150,12 +152,12 @@ export const VirtualItemRenderer = <T,>(props: VirtualItemProps<T>) => {
     if (rootNodeRef.current) {
       resizeObserver.observe(rootNodeRef.current, handleSizeChange);
     }
-    onAnimationEnd(item.key);
+    onAnimationEnd?.(item.key);
   }, [handleSizeChange, item.key, onAnimationEnd, resizeObserver]);
 
   const handleAnimationStart = React.useCallback(() => {
     resizeObserver.unobserve(rootNodeRef.current);
-    onAnimationStart(item.key);
+    onAnimationStart?.(item.key);
     if (animationTimeout.current) {
       clearTimeout(animationTimeout.current);
     }
@@ -195,6 +197,7 @@ export const VirtualItemRenderer = <T,>(props: VirtualItemProps<T>) => {
         width: '100%',
         transition: isTransition ? transition : undefined,
         opacity: visible ? 1 : 0,
+        ...style,
       }}
     >
       {item.render(item.data)}

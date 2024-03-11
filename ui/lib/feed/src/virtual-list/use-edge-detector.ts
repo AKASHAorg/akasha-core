@@ -79,7 +79,7 @@ export const useEdgeDetector = (props: UseEdgeDetectorProps) => {
       getItemHeightAverage: () => number,
       isNewUpdate: boolean,
     ) => {
-      if (!isNewUpdate) return;
+      // if (!isNewUpdate) return;
       const overscanHeight = overscan * getItemHeightAverage();
       const filteredItems = itemList.filter(it => it.maybeRef);
       if (!filteredItems.length && !detectorState.current.newArea) {
