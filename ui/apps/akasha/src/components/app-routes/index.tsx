@@ -44,7 +44,7 @@ const antennaRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[GLOBAL_ANTENNA],
   loader: async ({ context: { authenticatedDID, apolloClient } }) => {
-    return await getAuthenticatedProfile({ authenticatedDID, apolloClient });
+    return getAuthenticatedProfile({ authenticatedDID, apolloClient });
   },
 
   component: () => {
