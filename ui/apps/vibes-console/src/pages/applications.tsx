@@ -1,7 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
+import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { JoinVibesCard } from '../components/applications/join-vibes-card';
 import { SectionRenderer } from '../components/applications/section-renderer';
 import routes, { APPLICATION_DETAIL, BECOME_MODERATOR, MY_APPLICATION_DETAIL } from '../routes';
@@ -15,12 +18,31 @@ import {
 } from '../utils';
 
 export const Applications: React.FC<unknown> = () => {
+  const { data } = useGetLogin();
   const navigate = useNavigate();
+  const { navigateToModal } = useRootComponentProps();
+  const _navigateToModal = React.useRef(navigateToModal);
   const { t } = useTranslation('vibes-console');
 
+  const isLoggedIn = !!data?.id;
   const isModerator = false;
 
+  const showLoginModal = React.useCallback(
+    (redirectTo?: { modal: ModalNavigationOptions }, message?: string) => {
+      _navigateToModal.current?.({
+        name: 'login',
+        redirectTo,
+        message,
+      });
+    },
+    [],
+  );
+
   const handleCtaButtonClick = () => {
+    if (!isLoggedIn) {
+      showLoginModal();
+      return;
+    }
     navigate({
       to: routes[BECOME_MODERATOR],
     });
@@ -90,7 +112,14 @@ export const Applications: React.FC<unknown> = () => {
         buttonLabel={t('View all')}
         noItemLabel={t('There are no moderator applications yet')}
         customThStyle="text-left"
-        theadValues={[t('Applicant'), t('Status'), ' ']}
+        theadValues={[
+          <Text key={0} variant="h6">
+            {t('Applicant')}
+          </Text>,
+          <Text key={1} variant="h6">
+            {t('Status')}
+          </Text>,
+        ]}
         rows={allModeratorApplicationsRows}
         onButtonClick={() => handleViewAllApplications('applications')}
       />

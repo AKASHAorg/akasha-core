@@ -86,7 +86,7 @@ export const ApplicationsLog: React.FC<unknown> = () => {
         </Stack>
 
         <Button plain={true} onClick={resetFilters}>
-          <Text variant="body2" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
+          <Text variant="button-sm" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
             {`${t('Reset')}`}
           </Text>
         </Button>
