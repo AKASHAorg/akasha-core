@@ -5,6 +5,7 @@ import Web3Connector from './web3.connector';
 import EventBus from './event-bus';
 import Logging from '../logging/index';
 import Settings from '../settings/index';
+import AWF_Config from './config';
 import pino from 'pino';
 import { DIDSession } from 'did-session';
 import { EthereumWebAuth } from '@didtools/pkh-ethereum';
@@ -24,6 +25,7 @@ export default class CeramicService {
   private _composeClient: ComposeClient;
   private _didSession?: DIDSession;
   private _ceramic_endpoint: string;
+  private _config: AWF_Config;
 
   constructor(
     @inject(TYPES.Db) db: DB,
@@ -31,13 +33,15 @@ export default class CeramicService {
     @inject(TYPES.EventBus) globalChannel: EventBus,
     @inject(TYPES.Log) log: Logging,
     @inject(TYPES.Settings) settings: Settings,
+    @inject(TYPES.Config) config: AWF_Config,
   ) {
     this._db = db;
     this._web3 = web3;
     this._globalChannel = globalChannel;
     this._log = log.create('AWF_Ceramic');
     this._settings = settings;
-    this._ceramic_endpoint = process.env.CERAMIC_API_ENDPOINT || '';
+    this._config = config;
+    this._ceramic_endpoint = this._config.getOption('ceramic_api_endpoint');
     this._composeClient = new ComposeClient({
       ceramic: this._ceramic_endpoint,
       definition: definition,
