@@ -43,14 +43,16 @@ export const EditorBlockExtension: React.FC<EditorBlockExtensionProps> = props =
       matchingBlocks.length !== state.parcels.length &&
       !state.isMatched
     ) {
-      resolveConfigs({ matchingBlocks, mode: ContentBlockModes.EDIT, logger })
+      resolveConfigs({ matchingBlocks, mode: ContentBlockModes.EDIT })
         .then(newBlocks => {
           setState({
             parcels: newBlocks,
             isMatched: true,
           });
         })
-        .catch(err => logger.error('failed to load content blocks', err));
+        .catch(err =>
+          logger.error(`failed to load content blocks in edit mode: ${JSON.stringify(err)}`),
+        );
     } else if (matchingBlocks && !matchingBlocks.length && !state.isMatched) {
       setState({
         parcels: [],
