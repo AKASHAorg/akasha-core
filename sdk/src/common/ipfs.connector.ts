@@ -15,6 +15,7 @@ import { toString } from 'uint8arrays/to-string';
 import { extract } from '@ucanto/core/delegation';
 import type { Cacao } from '@didtools/cacao';
 import { StoreMemory } from '@web3-storage/access/stores/store-memory';
+import AWF_Config from './config';
 
 export type SessionObj = {
   sessionKeySeed: string;
@@ -25,10 +26,6 @@ export type SessionObj = {
 class AWF_IpfsConnector {
   private _log: pino.Logger;
   private _ceramic: CeramicService;
-  readonly gateway = 'https://cloudflare-ipfs.com/ipfs/';
-  readonly originGateway = 'ipfs.w3s.link';
-  readonly fallbackGateway = 'ipfs.cf-ipfs.com';
-  readonly delegateBaseUrl = process.env.W3_STORAGE_DELEGATE_BASE_URL;
   private readonly LEGAL_DOCS_SOURCE = {
     [LEGAL_DOCS.TERMS_OF_USE]: 'bafkreie3pa22hfttuuier6rp6sm7nngfc5jgfjzre7wc5a2ww7z375fhwm',
     [LEGAL_DOCS.TERMS_OF_SERVICE]: 'bafkreib5jg73c6bmbzkrokpusraiwwycnkypol3xh3uadsu7hhzefp6g2e',
@@ -37,16 +34,24 @@ class AWF_IpfsConnector {
     [LEGAL_DOCS.APP_GUIDE]: 'bafkreidpkbwzpxupnnty4bua5w4n7ddiyugb2ermb2htkxczrw7okan3nu',
   };
   #w3upClient: Client | null;
+  private _config: AWF_Config;
 
-  constructor(@inject(TYPES.Log) log: Logging, @inject(TYPES.Ceramic) ceramic: CeramicService) {
+  constructor(
+    @inject(TYPES.Log) log: Logging,
+    @inject(TYPES.Ceramic) ceramic: CeramicService,
+    @inject(TYPES.Config) config: AWF_Config,
+  ) {
     this._log = log.create('AWF_IpfsConnector');
     this._ceramic = ceramic;
+    this._config = config;
     this.#w3upClient = null;
   }
 
   getSettings() {
     return {
-      gateway: this.gateway,
+      pathGateway: this._config.getOption('ipfs_path_gateway'),
+      originGateway: this._config.getOption('ipfs_origin_gateway'),
+      fallbackGateway: this._config.getOption('ipfs_fallback_gateway'),
     };
   }
 
@@ -96,10 +101,11 @@ class AWF_IpfsConnector {
    * @returns {Promise<Delegation>} The deserialized storage delegation proof.
    */
   private async _getStorageProof() {
-    if (!this.delegateBaseUrl) {
+    const delegateBaseUrl = this._config.getOption('w3_storage_delegate_base_url');
+    if (!delegateBaseUrl) {
       throw new Error('Must set env.W3_STORAGE_DELEGATE_BASE_URL');
     }
-    const url = new URL(`create-proof/${this.#w3upClient!.did()}`, this.delegateBaseUrl);
+    const url = new URL(`create-proof/${this.#w3upClient!.did()}`, delegateBaseUrl);
     const response = await fetch(url, { method: 'POST' });
     const data = await response.arrayBuffer();
 
@@ -194,7 +200,7 @@ class AWF_IpfsConnector {
     if (link) {
       return link;
     }
-    return `https://${cid?.toV1().toString()}.${this.originGateway}`;
+    return `https://${cid?.toV1().toString()}.${this.getSettings().originGateway}`;
   }
 
   @validate(z.union([z.string(), z.instanceof(CID)]))
@@ -203,7 +209,7 @@ class AWF_IpfsConnector {
     if (link) {
       return link;
     }
-    return `https://${cid?.toV1().toString()}.${this.fallbackGateway}`;
+    return `https://${cid?.toV1().toString()}.${this.getSettings().fallbackGateway}`;
   }
 
   @validate(z.union([z.string(), z.instanceof(CID)]))
@@ -212,7 +218,7 @@ class AWF_IpfsConnector {
     if (link) {
       return link;
     }
-    return `${this.gateway}${cid?.toV1().toString()}`;
+    return `${this.getSettings().pathGateway}${cid?.toV1().toString()}`;
   }
 
   @validate(z.union([z.string(), z.instanceof(CID)]))
