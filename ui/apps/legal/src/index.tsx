@@ -11,7 +11,7 @@ import React from 'react';
 import { DocumentTextIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
-  mountsIn: opts.layoutConfig?.pluginSlotId,
+  mountsIn: opts.layoutConfig?.applicationSlotId,
   routes: {
     devGuidelines: routes[DG],
     codeOfConduct: routes[COC],
