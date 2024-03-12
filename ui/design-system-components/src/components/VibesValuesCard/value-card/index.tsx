@@ -1,6 +1,5 @@
 import React from 'react';
-import { tw } from '@twind/core';
-
+import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -35,50 +34,54 @@ const VibesValueCard: React.FC<VibesValueCardProps> = props => {
     <Button plain={true} onClick={onClick}>
       <Card
         padding="p-0"
-        customStyle={`rounded-2xl cursor-pointer ${isMini ? 'bg(grey9 dark:grey3) h-32' : ''}`}
+        elevation={isMini ? 'none' : '1'}
+        customStyle={`rounded-2xl cursor-pointer ${isMini ? 'bg(grey9 dark:grey3)' : ''}`}
       >
-        <Stack align="center" justify="evenly" spacing="gap-y-4" padding={isMini ? 'p-3' : 'p-4'}>
-          <Stack customStyle={`w-${isMini ? '16' : '72'} h-${isMini ? '16' : '72'}`}>
+        <Stack
+          justify={isMini ? 'between' : 'evenly'}
+          padding={isMini ? 'p-3' : 'p-4'}
+          {...(isMini && { customStyle: 'h-32' })}
+        >
+          <Stack customStyle={`w-${isMini ? '16' : '72'} h-${isMini ? '16' : '72'} self-center`}>
             <img
               alt={assetName}
-              className={tw('object-contain')}
+              className="object-contain"
               src={`${publicImgPath}/${assetName}.${assetExtension}`}
             />
           </Stack>
 
           <Text
-            variant={isMini ? 'footnotes1' : 'h5'}
-            align="center"
+            variant={isMini ? 'button-sm' : 'h5'}
+            align={isMini ? 'center' : 'start'}
+            weight="bold"
             color={{
               light: isMini ? 'secondaryLight' : 'black',
               dark: isMini ? 'secondaryDark' : 'white',
             }}
-            weight="bold"
+            {...(isMini && { customStyle: 'px-4' })}
           >
             {label}
           </Text>
 
           {!isMini && (
-            <>
+            <Stack spacing="gap-y-4">
               {description && (
-                <Text variant="body2" align="center">
+                <Text variant="body1" weight="light">
                   {description}
                 </Text>
               )}
 
               {ctaLabel && (
-                <a
+                <Anchor
                   href={ctaUrl}
-                  className={tw(
-                    'text-sm self-end font-bold no-underline text(secondaryLight dark:secondaryDark)',
-                  )}
+                  customStyle="text-sm self-end font-bold no-underline text(secondaryLight dark:secondaryDark)"
                   target="_blank"
                   rel="noreferrer noopener"
                 >
                   {ctaLabel}
-                </a>
+                </Anchor>
               )}
-            </>
+            </Stack>
           )}
         </Stack>
       </Card>

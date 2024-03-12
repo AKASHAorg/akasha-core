@@ -5,54 +5,9 @@ import getSDK from '@akashaorg/awf-sdk';
 import { IMessage, GQL_EVENTS } from '@akashaorg/typings/lib/sdk';
 
 import { logError } from './utils/error-handler';
-import { buildProfileMediaLinks } from './utils/media-utils';
 
 export const NOTIFICATIONS_KEY = 'Notifications';
 export const HAS_NEW_NOTIFICATIONS_KEY = 'Has_New_Notifications';
-
-const getNotifications = async () => {
-  const sdk = getSDK();
-  const getMessagesResp = await sdk.api.auth.getMessages({});
-  const messages = getMessagesResp.data.map(async message => {
-    const ethAddress = message.body.value.author || message.body.value.follower;
-    if (ethAddress) {
-      let populatedMessage;
-      const profile = await sdk.api.profile.getProfile({ ethAddress });
-      const profileData = buildProfileMediaLinks(profile.data);
-      if (message.body.value.author === profileData.ethAddress) {
-        populatedMessage = {
-          ...message,
-          body: { ...message.body, value: { ...message.body.value, author: profileData } },
-        };
-      }
-      if (message.body.value.follower === profileData.ethAddress) {
-        populatedMessage = {
-          ...message,
-          body: { ...message.body, value: { ...message.body.value, follower: profileData } },
-        };
-      }
-      return populatedMessage;
-    }
-  });
-  return Promise.all(messages);
-};
-
-/**
- * Hook to get a user's notifications
- * @example useFetchNotifications hook
- * ```typescript
- * const fetchNotificationsQuery = useFetchNotifications('logged-in-user-eth-address');
- *
- * const notifications = fetchNotificationsQuery.data;
- * ```
- */
-export function useFetchNotifications(loggedEthAddress: string) {
-  return useQuery([NOTIFICATIONS_KEY], () => getNotifications(), {
-    enabled: !!loggedEthAddress,
-    keepPreviousData: true,
-    onError: (err: Error) => logError('useNotifications.getNotifications', err),
-  });
-}
 
 /**
  * Hook to mark a notification as read

@@ -1,28 +1,43 @@
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ModalNavigationOptions, Profile } from '@akashaorg/typings/lib/ui';
-import { useAnalytics, useRootComponentProps, transformSource } from '@akashaorg/ui-awf-hooks';
-import { BeamContentResolver, BeamFeed } from '@akashaorg/ui-lib-feed';
+import {
+  useAnalytics,
+  useRootComponentProps,
+  transformSource,
+  useGetLogin,
+  useGetLoginProfile,
+} from '@akashaorg/ui-awf-hooks';
+import { BeamFeed } from '@akashaorg/ui-lib-feed';
 import routes, { EDITOR } from '../../../routes';
 import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
 import { Helmet, helmetData } from '@akashaorg/design-system-core/lib/utils';
+import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 
-export type GlobalAntennaPageProps = {
-  isLoggedIn: boolean;
-  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-  authenticatedProfile?: Profile;
-};
-
-const GlobalAntennaPage: React.FC<GlobalAntennaPageProps> = props => {
-  const { authenticatedProfile, isLoggedIn, showLoginModal } = props;
-  const { getRoutingPlugin } = useRootComponentProps();
+const GlobalAntennaPage: React.FC<unknown> = () => {
+  const { getRoutingPlugin, navigateToModal } = useRootComponentProps();
+  const { data } = useGetLogin();
+  const authenticatedProfileReq = useGetLoginProfile();
+  const isLoggedIn = !!data?.id;
+  const authenticatedProfile = authenticatedProfileReq?.akashaProfile;
   const { t } = useTranslation('app-akasha-integration');
   const [analyticsActions] = useAnalytics();
+  const _navigateToModal = React.useRef(navigateToModal);
 
   const navigateTo = React.useRef(getRoutingPlugin().navigateTo);
+
+  const showLoginModal = React.useCallback(
+    (redirectTo?: { modal: ModalNavigationOptions }, message?: string) => {
+      _navigateToModal.current?.({
+        name: 'login',
+        redirectTo,
+        message,
+      });
+    },
+    [],
+  );
 
   const handleEditorPlaceholderClick = useCallback(() => {
     if (!isLoggedIn) {
@@ -41,7 +56,7 @@ const GlobalAntennaPage: React.FC<GlobalAntennaPageProps> = props => {
 
   const listHeader = React.useMemo(() => {
     return (
-      <Stack customStyle="mb-4">
+      <Stack customStyle="mb-2">
         <EditorPlaceholder
           profileId={authenticatedProfile?.did.id}
           avatar={authenticatedProfile?.avatar}

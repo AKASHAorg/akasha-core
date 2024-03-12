@@ -45,7 +45,7 @@ const EngagementTab: React.FC<PropsWithChildren<EngagementTabProps>> = props => 
           setActiveTab(selectedIndex);
           onTabChange(selectedIndex);
         }}
-        customStyle="sticky bg(white dark:grey2) top-52 z-50"
+        customStyle="sticky bg(white dark:grey2) top-52 z-10"
       />
       <Stack padding="px-4 pb-4" customStyle="mt-4">
         {children}

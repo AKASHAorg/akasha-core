@@ -1,5 +1,12 @@
 import '../jest.setup';
 
+jest.mock('@tanstack/react-router', () => ({
+  ...jest.requireActual('@tanstack/react-router'),
+  useNavigate: jest.fn().mockImplementation(() => {
+    return jest.fn();
+  }),
+}));
+
 /*TODO: This mock should be removed when using proper babel plugin */
 jest.mock('@akashaorg/typings/lib/ui', () => ({
   EntityTypes: {

@@ -42,10 +42,9 @@ import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 // @TODO: replace this with actual data
 const TEST_APP_VERSION_ID = 'kjzl6kcym7w8y7tdwpzjep46ufcjyc2vaq671z0a1lxrcjq7ogu42ta3vh1w2dm';
 
-const isImgUrl = url => {
-  return fetch(url, { method: 'HEAD' }).then(res => {
-    return res.headers.get('Content-Type').startsWith('image');
-  });
+const isImgUrl = async url => {
+  const response = await fetch(url, { method: 'HEAD' });
+  return response.headers.get('Content-Type').startsWith('image');
 };
 
 export const ImageEditorBlock = (
@@ -57,7 +56,11 @@ export const ImageEditorBlock = (
   const _uiEvents = useRef(uiEvents);
   const [createContentBlock, contentBlockQuery] = useCreateContentBlockMutation();
   const retryCount = useRef<number>();
+
   const [imageLink, setImageLink] = useState('');
+  const [urlNotImage, setURLNotImage] = useState(false);
+  const disableURLUpload = !imageLink || urlNotImage;
+
   const [uiState, setUiState] = useState('menu');
 
   const [contentBlockImages, setContentBlockImages] = useState<ImageObject[]>([]);
@@ -140,7 +143,7 @@ export const ImageEditorBlock = (
         };
       }
     },
-    [alignState, caption, createContentBlock, contentBlockImages, props.blockInfo],
+    [alignState, caption, createContentBlock, contentBlockImages, props.blockInfo, logger],
   );
 
   const retryCreate = useCallback(
@@ -159,13 +162,16 @@ export const ImageEditorBlock = (
     () => ({
       createBlock: createBlock,
       retryBlockCreation: retryCreate,
+      handleFocusBlock,
     }),
     [createBlock, retryCreate],
   );
 
-  const handleChange = e => {
+  const handleChange = async e => {
     setImageLink(e.currentTarget.value);
-    if (!isImgUrl(e.currentTarget.value)) {
+    const isImg = await isImgUrl(e.currentTarget.value);
+    if (!isImg) {
+      setURLNotImage(true);
       const notifMsg = t(`URL doesn't contain an image.`);
       _uiEvents.current.next({
         event: NotificationEvents.ShowNotification,
@@ -313,6 +319,11 @@ export const ImageEditorBlock = (
     setUiState('gallery');
   };
 
+  const [isFocusedEditor, setIsFocusedEditor] = useState(false);
+  const handleFocusBlock = (focus: boolean) => {
+    setIsFocusedEditor(focus);
+  };
+
   return (
     <>
       {uiState === 'menu' && (
@@ -351,7 +362,7 @@ export const ImageEditorBlock = (
                 <Button
                   label={t('Add')}
                   variant="secondary"
-                  disabled={!imageLink}
+                  disabled={disableURLUpload}
                   onClick={() => uploadNewImage(imageLink, true)}
                 />
               </Stack>
@@ -406,16 +417,18 @@ export const ImageEditorBlock = (
               onChange={handleCaptionChange}
             />
           )}
-          <ImageBlockToolbar
-            handleCaptionClick={handleCaptionClick}
-            handleLeftAlignClick={handleLeftAlignClick}
-            handleCenterAlignClick={handleCenterAlignClick}
-            handleRightAlignClick={handleRightAlignClick}
-            handleEditClick={handleClickEdit}
-            handleAddClick={handleClickAddImage}
-            alignState={alignState}
-            showCaption={showCaption}
-          />
+          {isFocusedEditor && (
+            <ImageBlockToolbar
+              handleCaptionClick={handleCaptionClick}
+              handleLeftAlignClick={handleLeftAlignClick}
+              handleCenterAlignClick={handleCenterAlignClick}
+              handleRightAlignClick={handleRightAlignClick}
+              handleEditClick={handleClickEdit}
+              handleAddClick={handleClickAddImage}
+              alignState={alignState}
+              showCaption={showCaption}
+            />
+          )}
           <EditImageModal
             show={showEditModal}
             title={{ label: t('Edit Image') }}

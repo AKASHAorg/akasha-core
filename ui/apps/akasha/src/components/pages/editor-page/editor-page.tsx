@@ -1,19 +1,15 @@
 import * as React from 'react';
-import { Profile } from '@akashaorg/typings/lib/ui';
-import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import { useTranslation } from 'react-i18next';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useTranslation } from 'react-i18next';
+import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
+import { useGetLoginProfile, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
-export type EditorPageProps = {
-  authenticatedProfile?: Profile;
-};
-
-const EditorPage: React.FC<EditorPageProps> = props => {
-  const { authenticatedProfile } = props;
+const EditorPage: React.FC<unknown> = () => {
+  const authenticatedProfileReq = useGetLoginProfile();
+  const authenticatedProfile = authenticatedProfileReq?.akashaProfile;
   const { getRoutingPlugin } = useRootComponentProps();
   const navigateTo = React.useRef(getRoutingPlugin().navigateTo);
   const { t } = useTranslation();

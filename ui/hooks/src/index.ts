@@ -33,7 +33,6 @@ export { useAccordion } from './use-accordion';
 // the following hooks needs refactor/reimplementation
 export {
   useCheckNewNotifications,
-  useFetchNotifications,
   useMarkAsRead,
   useListenForMutationEvents,
 } from './use-notifications';
@@ -44,3 +43,4 @@ export { useProfileStats } from './use-profile-stats';
 export { useSaveSettings, useGetSettings } from './use-settings';
 export { useIndividualBeam } from './use-individual-beam';
 export { useNsfwToggling } from './use-nsfw';
+export { useMentions } from './use-mentions';

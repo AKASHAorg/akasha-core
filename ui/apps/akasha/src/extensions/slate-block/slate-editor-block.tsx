@@ -1,10 +1,18 @@
-import React, { RefObject, useCallback, useImperativeHandle, useRef, useState } from 'react';
+import React, {
+  RefObject,
+  useCallback,
+  useImperativeHandle,
+  useRef,
+  useState,
+  useMemo,
+} from 'react';
 import EditorBox from '@akashaorg/design-system-components/lib/components/Editor';
 import {
   encodeSlateToBase64,
   transformSource,
   useGetLogin,
   useRootComponentProps,
+  useMentions,
 } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import type {
@@ -92,7 +100,7 @@ export const SlateEditorBlock = (
         };
       }
     },
-    [createContentBlock, editorState, props.blockInfo],
+    [createContentBlock, editorState, props.blockInfo, logger],
   );
 
   const retryCreate = useCallback(
@@ -111,9 +119,20 @@ export const SlateEditorBlock = (
     () => ({
       createBlock,
       retryBlockCreation: retryCreate,
+      handleFocusBlock,
     }),
     [createBlock, retryCreate],
   );
+
+  const { setMentionQuery, mentions } = useMentions(authenticatedDID);
+  const handleGetMentions = (query: string) => {
+    setMentionQuery(query);
+  };
+
+  const [isFocusedEditor, setIsFocusedEditor] = useState(false);
+  const handleFocusBlock = (focus: boolean) => {
+    setIsFocusedEditor(focus);
+  };
 
   return (
     <EditorBox
@@ -122,22 +141,17 @@ export const SlateEditorBlock = (
       profileId={'profileId'}
       placeholderLabel={'write here'}
       maxEncodedLengthErrLabel={t('Text block exceeds line limit, please review!')}
+      noMentionsLabel={t('You are not following someone with that name')}
       onPublish={() => {
         // void
       }}
       // handleSaveLinkPreviewDraft={handleSaveLinkPreviewDraft}
       // linkPreview={linkPreview}
       // getLinkPreview={getLinkPreview}
-      getMentions={() => {
-        //void
-      }}
-      getTags={() => {
-        // void
-      }}
-      // mentions={mentions}
-      // tags={tags}
-      withMeter={true}
-      withToolbar={true}
+      getMentions={handleGetMentions}
+      mentions={mentions}
+      withMeter={isFocusedEditor}
+      withToolbar={isFocusedEditor}
       editorState={editorState}
       setEditorState={(value: IEntryData['slateContent']) => {
         setEditorState(value);

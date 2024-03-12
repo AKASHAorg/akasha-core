@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from '@tanstack/react-router';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import VibesIntroCard from '@akashaorg/design-system-components/lib/components/VibesIntroCard';
@@ -18,22 +19,32 @@ export type OverviewPageProps = BasePageProps & {
 
 export const Overview: React.FC<OverviewPageProps> = props => {
   const { isModerator } = props;
+  const navigate = useNavigate();
   const { getRoutingPlugin } = useRootComponentProps();
   const { t } = useTranslation('app-vibes');
 
   const navigateTo = getRoutingPlugin().navigateTo;
 
+  const handleClickApply = () => {
+    navigateTo({
+      appName: '@akashaorg/app-vibes-console',
+      getNavigationUrl: (routes: Record<string, string>) => routes['Become Moderator'],
+    });
+  };
+
   const handleCodeOfConductClick = () => {
     navigateTo({
       appName: '@akashaorg/app-legal',
-      getNavigationUrl: routes => routes.codeOfConduct,
+      getNavigationUrl: (routes: Record<string, string>) => routes.codeOfConduct,
     });
   };
 
   const handleValueClick = (path: string) => () => {
-    navigateTo({
-      appName: '@akashaorg/app-vibes',
-      getNavigationUrl: () => `/overview/values/${path}`,
+    navigate({
+      to: '/overview/values/$value',
+      params: {
+        value: path,
+      },
     });
   };
 
@@ -55,15 +66,6 @@ export const Overview: React.FC<OverviewPageProps> = props => {
 
   return (
     <Stack spacing="gap-y-4">
-      <VibesIntroCard
-        titleLabel={t('Overview')}
-        introLabel={`${t('Welcome to AKASHA Vibes')}`}
-        subtitleLabel={t(
-          "The Vibes app encourages collaboration while safeguarding against misuse. It's an open and transparent platform, inviting you to actively participate in shaping our community's governance.",
-        )}
-        overviewCTAArr={overviewCTAArr}
-      />
-
       {/**
        * if logged user is not a moderator, show this prompt
        */}
@@ -74,11 +76,17 @@ export const Overview: React.FC<OverviewPageProps> = props => {
             'Dive into Akasha World as a moderator! Contribute, guide our community, and create impact. Your journey starts here',
           )}`}
           buttonLabel={t('Apply Now!')}
-          onClickApply={() => {
-            /** */
-          }}
+          onClickApply={handleClickApply}
         />
       )}
+
+      <VibesIntroCard
+        titleLabel={t('Welcome to AKASHA Vibes')}
+        subtitleLabel={t(
+          "The Vibes app encourages collaboration while safeguarding against misuse. It's an open and transparent platform, inviting you to actively participate in shaping our community's governance",
+        )}
+        overviewCTAArr={overviewCTAArr}
+      />
 
       <VibesValuesCard
         titleLabel={t('Our Values')}

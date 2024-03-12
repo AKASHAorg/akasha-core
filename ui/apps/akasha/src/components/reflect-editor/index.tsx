@@ -1,4 +1,4 @@
-import React, { MutableRefObject, useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import ReflectionEditor from '@akashaorg/design-system-components/lib/components/ReflectionEditor';
 import getSDK from '@akashaorg/awf-sdk';
 import {
@@ -9,6 +9,7 @@ import {
   useGetLoginProfile,
   useRootComponentProps,
   createReactiveVar,
+  useMentions,
 } from '@akashaorg/ui-awf-hooks';
 import {
   useCreateReflectMutation,
@@ -27,29 +28,22 @@ import { usePendingReflections } from '@akashaorg/ui-awf-hooks/lib/use-pending-r
 export type ReflectEditorProps = {
   beamId: string;
   reflectToId: string;
-  showEditorInitialValue: boolean;
+  showEditor: boolean;
   pendingReflectionsVar: ReturnType<typeof createReactiveVar<ReflectEntryData[]>>;
+  setShowEditor: (showEditor: boolean) => void;
 };
 
 const ReflectEditor: React.FC<ReflectEditorProps> = props => {
-  const { beamId, reflectToId, showEditorInitialValue, pendingReflectionsVar } = props;
+  const { beamId, reflectToId, showEditor, pendingReflectionsVar, setShowEditor } = props;
   const { t } = useTranslation('app-akasha-integration');
   const [analyticsActions] = useAnalytics();
   const { uiEvents } = useRootComponentProps();
   const uiEventsRef = React.useRef(uiEvents);
   const [editorState, setEditorState] = useState(null);
   const [newContent, setNewContent] = useState<ReflectEntryData>(null);
-  //@TODO
-  const [, setMentionQuery] = useState(null);
-  const [, setTagQuery] = useState(null);
-
-  const [showEditor, setShowEditor] = useState(showEditorInitialValue);
 
   const sdk = getSDK();
   const isReflectOfReflection = reflectToId !== beamId;
-  //@TODO
-  const mentionSearch = null;
-  const tagSearch = null;
 
   const [publishReflection, publishReflectionMutation] = useCreateReflectMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
@@ -64,12 +58,17 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
   const { addPendingReflection, pendingReflections } = usePendingReflections(pendingReflectionsVar);
 
   const authenticatedProfileDataReq = useGetLoginProfile();
-  const disablePublishing = useMemo(
-    () => !authenticatedProfileDataReq?.akashaProfile?.did?.id,
+  const authenticatedDID = useMemo(
+    () => authenticatedProfileDataReq?.akashaProfile?.did?.id,
     [authenticatedProfileDataReq],
   );
 
   const authenticatedProfile = authenticatedProfileDataReq?.akashaProfile;
+
+  const { setMentionQuery, mentions } = useMentions(authenticatedDID);
+  const handleGetMentions = (query: string) => {
+    setMentionQuery(query);
+  };
 
   const showAlertNotification = React.useCallback((message: string) => {
     uiEventsRef.current.next({
@@ -93,6 +92,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
     publishReflectionMutation,
     showAlertNotification,
     t,
+    setShowEditor,
   ]);
 
   const handlePublish = async (data: IPublishData) => {
@@ -138,10 +138,6 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
     }
   };
 
-  useEffect(() => {
-    setShowEditor(showEditorInitialValue);
-  }, [showEditorInitialValue]);
-
   return (
     <>
       <ReflectionEditor
@@ -153,12 +149,13 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         disableActionLabel={t('Authenticating')}
         maxEncodedLengthErrLabel={t('Text block exceeds line limit, please review!')}
         editorState={editorState}
-        showEditorInitialValue={showEditor}
+        showEditor={showEditor}
+        setShowEditor={setShowEditor}
         avatar={authenticatedProfile?.avatar}
         profileId={authenticatedProfile?.did?.id}
-        disablePublish={disablePublishing}
-        tags={tagSearch?.data}
-        mentions={mentionSearch?.data}
+        disablePublish={!authenticatedDID}
+        mentions={mentions}
+        getMentions={handleGetMentions}
         background={{ light: 'grey9', dark: 'grey3' }}
         onPublish={data => {
           if (!authenticatedProfile) {
@@ -170,8 +167,6 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         onCancelClick={() => {
           //@TODO
         }}
-        getMentions={setMentionQuery}
-        getTags={setTagQuery}
         transformSource={transformSource}
         encodingFunction={encodeSlateToBase64}
       />

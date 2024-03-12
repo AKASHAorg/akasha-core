@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Status, Radius } from '../types/common.types';
+import { StackProps } from '../Stack';
 
 export type MultlineProps = {
   type: 'multiline';
@@ -26,6 +27,7 @@ export type LabelProps = {
 
 export type CaptionProps = {
   status?: Status;
+  justifyContents?: StackProps['justify'];
 };
 
 export type TextFieldProps = (InputProps | MultlineProps) & {
@@ -33,6 +35,7 @@ export type TextFieldProps = (InputProps | MultlineProps) & {
   caption?: string;
   status?: Status;
   required?: boolean;
+  justifyCaption?: CaptionProps['justifyContents'];
   customStyle?: string;
   inputRef?: InputProps['ref'] & MultlineProps['ref'];
 };

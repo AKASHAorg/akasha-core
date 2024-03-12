@@ -1,4 +1,0 @@
-cache
-artifacts/*
-!scripts/*
-!tests/*

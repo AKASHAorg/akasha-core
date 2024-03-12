@@ -5,9 +5,7 @@ import { renderWithAllProviders, act, cleanup } from '@akashaorg/af-testing';
 import { Overview } from '../../pages';
 
 describe('<Overview /> component', () => {
-  const Base = <Overview isModerator={false} navigateTo={jest.fn()} />;
-
-  const assetName = 'vibe-overview';
+  const Base = <Overview isModerator={false} />;
 
   let componentWrapper = renderWithAllProviders(<></>, {});
 
@@ -23,14 +21,6 @@ describe('<Overview /> component', () => {
   });
 
   it('should render component', async () => {
-    expect(componentWrapper.getByText(/Overview/i)).toBeInTheDocument();
     expect(componentWrapper.getByText(/Welcome to/i)).toBeInTheDocument();
-  });
-
-  it('renders an image with correct src', () => {
-    const image = componentWrapper.getByTestId(`${assetName}-image`);
-
-    expect(image).toBeDefined();
-    expect(image).toHaveAttribute('src', `/images/${assetName}.webp`);
   });
 });

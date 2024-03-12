@@ -1022,19 +1022,6 @@ export const GetProfileByDidDocument = /*#__PURE__*/ gql`
   }
 }
     ${UserProfileFragmentDoc}`;
-export const GetProfileStatsByDidDocument = /*#__PURE__*/ gql`
-    query GetProfileStatsByDid($id: ID!) {
-  node(id: $id) {
-    ... on CeramicAccount {
-      akashaProfile {
-        ...UserProfileFragment
-        followersCount(filters: {where: {isFollowing: {equalTo: true}}}, account: $id)
-      }
-      isViewer
-    }
-  }
-}
-    ${UserProfileFragmentDoc}`;
 export const GetProfilesDocument = /*#__PURE__*/ gql`
     query GetProfiles($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaProfileFiltersInput, $sorting: AkashaProfileSortingInput) {
   akashaProfileIndex(
@@ -1265,6 +1252,22 @@ export const GetFollowersListByDidDocument = /*#__PURE__*/ gql`
             hasPreviousPage
           }
         }
+      }
+      isViewer
+    }
+  }
+}
+    ${UserProfileFragmentDoc}`;
+export const GetProfileStatsByDidDocument = /*#__PURE__*/ gql`
+    query GetProfileStatsByDid($id: ID!) {
+  node(id: $id) {
+    ... on CeramicAccount {
+      akashaFollowListCount(filters: {where: {isFollowing: {equalTo: true}}})
+      akashaBeamListCount(filters: {where: {active: {equalTo: true}}})
+      akashaReflectListCount(filters: {where: {active: {equalTo: true}}})
+      akashaProfile {
+        ...UserProfileFragment
+        followersCount(filters: {where: {isFollowing: {equalTo: true}}})
       }
       isViewer
     }
@@ -1529,9 +1532,6 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     GetProfileByDid(variables: Types.GetProfileByDidQueryVariables, options?: C): Promise<Types.GetProfileByDidQuery> {
       return requester<Types.GetProfileByDidQuery, Types.GetProfileByDidQueryVariables>(GetProfileByDidDocument, variables, options) as Promise<Types.GetProfileByDidQuery>;
     },
-    GetProfileStatsByDid(variables: Types.GetProfileStatsByDidQueryVariables, options?: C): Promise<Types.GetProfileStatsByDidQuery> {
-      return requester<Types.GetProfileStatsByDidQuery, Types.GetProfileStatsByDidQueryVariables>(GetProfileStatsByDidDocument, variables, options) as Promise<Types.GetProfileStatsByDidQuery>;
-    },
     GetProfiles(variables?: Types.GetProfilesQueryVariables, options?: C): Promise<Types.GetProfilesQuery> {
       return requester<Types.GetProfilesQuery, Types.GetProfilesQueryVariables>(GetProfilesDocument, variables, options) as Promise<Types.GetProfilesQuery>;
     },
@@ -1555,6 +1555,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     GetFollowersListByDid(variables: Types.GetFollowersListByDidQueryVariables, options?: C): Promise<Types.GetFollowersListByDidQuery> {
       return requester<Types.GetFollowersListByDidQuery, Types.GetFollowersListByDidQueryVariables>(GetFollowersListByDidDocument, variables, options) as Promise<Types.GetFollowersListByDidQuery>;
+    },
+    GetProfileStatsByDid(variables: Types.GetProfileStatsByDidQueryVariables, options?: C): Promise<Types.GetProfileStatsByDidQuery> {
+      return requester<Types.GetProfileStatsByDidQuery, Types.GetProfileStatsByDidQueryVariables>(GetProfileStatsByDidDocument, variables, options) as Promise<Types.GetProfileStatsByDidQuery>;
     },
     CreateAppRelease(variables: Types.CreateAppReleaseMutationVariables, options?: C): Promise<Types.CreateAppReleaseMutation> {
       return requester<Types.CreateAppReleaseMutation, Types.CreateAppReleaseMutationVariables>(CreateAppReleaseDocument, variables, options) as Promise<Types.CreateAppReleaseMutation>;

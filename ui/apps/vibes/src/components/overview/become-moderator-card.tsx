@@ -16,14 +16,19 @@ const BecomeModeratorCard: React.FC<BecomeModeratorCardProps> = props => {
 
   return (
     <Card padding={16}>
-      <Stack align="center" spacing="gap-y-6">
+      <Stack spacing="gap-y-6">
         <Text variant="h5" weight="bold">
           {titleLabel}
         </Text>
-        <Text align="center" variant="subtitle2" color={{ light: 'grey5', dark: 'grey6' }}>
+        <Text variant="body2" weight="light" color={{ light: 'grey5', dark: 'grey6' }}>
           {subtitleLabel}
         </Text>
-        <Button size="md" variant="primary" label={buttonLabel} onClick={onClickApply} />
+        <Button
+          variant="primary"
+          label={buttonLabel}
+          customStyle="w-fit self-end"
+          onClick={() => onClickApply()}
+        />
       </Stack>
     </Card>
   );

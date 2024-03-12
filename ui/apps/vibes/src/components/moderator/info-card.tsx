@@ -14,10 +14,7 @@ const InfoCard: React.FC<InfoCardProps> = props => {
   const { titleLabel, subtitleLabel } = props;
 
   return (
-    <Card
-      padding={16}
-      customStyle="bg(errorLight/30 dark:errorDark/30) border(1 solid errorLight dark:errorDark)"
-    >
+    <Card padding={16} elevation="none" customStyle="bg(errorLight/30 dark:errorDark/30)">
       <Stack direction="row" align="center" spacing="gap-x-2">
         <Icon
           icon={<ExclamationTriangleIcon />}
@@ -27,7 +24,9 @@ const InfoCard: React.FC<InfoCardProps> = props => {
           {titleLabel}
         </Text>
       </Stack>
-      <Text variant="footnotes2">{subtitleLabel}</Text>
+      <Text variant="footnotes2" weight="light">
+        {subtitleLabel}
+      </Text>
     </Card>
   );
 };

@@ -16,9 +16,7 @@ export const BaseVibesIntroCard: Story = {
   render: () => (
     <div className={tw('w-[50%]')}>
       <VibesIntroCard
-        publicImgPath=""
-        titleLabel="Overview"
-        introLabel="Welcome to AKASHA Vibes"
+        titleLabel="Welcome to AKASHA Vibes"
         subtitleLabel="Vibes app facilitates cooperation and prevents abuse. The app is open and transparent. Take part in the process of governing this community."
         overviewCTAArr={[
           {

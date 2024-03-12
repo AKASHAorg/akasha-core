@@ -8,13 +8,12 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export type MenuItemLabelProps = {
   menuItem: IMenuItem;
+  isActiveMenu: boolean;
   hasNewNotifs?: boolean;
 };
 
 const MenuItemLabel: React.FC<MenuItemLabelProps> = props => {
-  const { menuItem } = props;
-
-  const isActive = location.pathname.includes(menuItem.name);
+  const { menuItem, isActiveMenu } = props;
 
   return (
     <Stack direction="row" align="center">
@@ -37,13 +36,11 @@ const MenuItemLabel: React.FC<MenuItemLabelProps> = props => {
       <Text
         variant="button-md"
         color={
-          isActive
+          isActiveMenu
             ? { light: 'secondaryLight', dark: 'secondaryDark' }
             : { light: 'black', dark: 'white' }
         }
-        customStyle={`ml-2.5 ${
-          isActive ? 'text(secondaryLight dark:secondaryDark)' : 'text(black dark:white)'
-        }`}
+        customStyle="ml-2.5"
       >
         {menuItem.label}
       </Text>

@@ -1,10 +1,9 @@
 import React from 'react';
-import { tw } from '@twind/core';
-
-import VibesValueCard from './value-card';
-
+import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import VibesValueCard from './value-card';
 
 type VibesValue = {
   path: string;
@@ -26,15 +25,11 @@ const VibesValuesCard: React.FC<VibesValuesCardProps> = props => {
 
   return (
     <Card padding={16}>
-      <div className={tw('grid gap-4 grid-cols-1 md:px-10')}>
-        <Text variant="h5" align="center">
-          {titleLabel}
-        </Text>
+      <Stack spacing="gap-y-4">
+        <Text variant="h5">{titleLabel}</Text>
 
-        <Text variant="subtitle2" align="center">
-          {subtitleLabel}
-        </Text>
-        <div className={tw('grid gap-4 grid-cols-2 md:grid-cols-3')}>
+        <Text variant="subtitle2">{subtitleLabel}</Text>
+        <Stack customStyle="grid gap-4 grid-cols-2 md:grid-cols-3">
           {values.map((value, idx) => (
             <VibesValueCard
               key={value.title + idx}
@@ -45,18 +40,18 @@ const VibesValuesCard: React.FC<VibesValuesCardProps> = props => {
             />
           ))}
 
-          <a
+          <Anchor
             href={ctaUrl}
-            className={tw(
-              'flex md:hidden text-sm text-center font-bold no-underline text-secondaryLight dark:text-secondaryDark',
-            )}
+            customStyle="flex md:hidden text-sm text-center font-bold no-underline text(secondaryLight dark:secondaryDark)"
             target="_blank"
             rel="noreferrer noopener"
           >
-            <div
-              className={tw(
-                'h-32 w-full flex items-center justify-center p-3 bg-grey9 dark:bg-grey3 rounded-2xl cursor-pointer',
-              )}
+            <Stack
+              padding="p-3"
+              align="center"
+              justify="center"
+              fullWidth={true}
+              customStyle="h-32 bg(grey9 dark:grey3) rounded-2xl cursor-pointer"
             >
               <Text
                 variant="footnotes1"
@@ -69,28 +64,26 @@ const VibesValuesCard: React.FC<VibesValuesCardProps> = props => {
               >
                 {ctaLabel}
               </Text>
-            </div>
-          </a>
-        </div>
+            </Stack>
+          </Anchor>
+        </Stack>
         {ctaLabel && (
-          <div
-            className={tw(
-              'hidden md:flex p-5 justify-center bg-grey9 dark:bg-grey3 rounded-2xl cursor-pointer',
-            )}
+          <Stack
+            justify="center"
+            padding="p-5"
+            customStyle="hidden md:flex bg(grey9 dark:grey3) rounded-2xl cursor-pointer"
           >
-            <a
+            <Anchor
               href={ctaUrl}
-              className={tw(
-                'text-sm text-center font-bold no-underline text-secondaryLight dark:text-secondaryDark',
-              )}
+              customStyle="text-sm text-center font-bold no-underline text(secondaryLight dark:secondaryDark)"
               target="_blank"
               rel="noreferrer noopener"
             >
               {ctaLabel}
-            </a>
-          </div>
+            </Anchor>
+          </Stack>
         )}
-      </div>
+      </Stack>
     </Card>
   );
 };

@@ -67,7 +67,7 @@ export type EntryCardProps = {
   editLabel?: string;
   nsfw?: Omit<NSFWProps, 'onClickToView'>;
   profileAnchorLink?: string;
-  repliesAnchorLink?: string;
+  reflectAnchorLink?: string;
   disableReporting?: boolean;
   isViewer?: boolean;
   isLoggedIn: boolean;
@@ -109,7 +109,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     editLabel,
     nsfw,
     profileAnchorLink,
-    repliesAnchorLink,
+    reflectAnchorLink,
     disableReporting,
     isViewer,
     isLoggedIn,
@@ -212,7 +212,10 @@ const EntryCard: React.FC<EntryCardProps> = props => {
                     >
                       ·
                     </Text>
-                    <Tooltip placement={'top'} content={formatDate(entryData?.createdAt, locale)}>
+                    <Tooltip
+                      placement={'top'}
+                      content={formatDate(entryData?.createdAt, 'H[:]mm [·] D MMM YYYY', locale)}
+                    >
                       <Text
                         variant="footnotes2"
                         weight="normal"
@@ -343,7 +346,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
       {!hideActionButtons && (
         <CardActions
           itemId={entryData.id}
-          repliesAnchorLink={repliesAnchorLink}
+          reflectAnchorLink={reflectAnchorLink}
           disableActions={disableActions || !entryData.active}
           actionsRight={actionsRight}
           reflectionsCount={reflectionsCount}

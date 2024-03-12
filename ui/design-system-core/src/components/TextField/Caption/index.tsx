@@ -11,7 +11,11 @@ import { Color, Status } from '../../types/common.types';
 import { CaptionProps } from '../types';
 import { getIconClasses } from '../Input/getIconClasses';
 
-const Caption: React.FC<PropsWithChildren<CaptionProps>> = ({ status, children }) => {
+const Caption: React.FC<PropsWithChildren<CaptionProps>> = ({
+  justifyContents = 'start',
+  status,
+  children,
+}) => {
   const iconStyle = getIconClasses(status);
   const textColor: Color = status
     ? status
@@ -21,7 +25,7 @@ const Caption: React.FC<PropsWithChildren<CaptionProps>> = ({ status, children }
       };
 
   return (
-    <Stack direction="row" align="center" spacing="gap-1.5">
+    <Stack direction="row" align="center" spacing="gap-1.5" justify={justifyContents}>
       {status && <Icon icon={STATUS_TO_ICON_MAP[status]} color={iconStyle} />}
       <Text color={textColor} variant="footnotes2" weight="normal">
         {children}

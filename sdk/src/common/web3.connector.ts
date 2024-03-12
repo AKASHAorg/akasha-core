@@ -77,7 +77,7 @@ class Web3Connector {
         name: 'Ethereum',
         currency: 'ETH',
         explorerUrl: 'https://sepolia.etherscan.io/',
-        rpcUrl: 'https://ethereum.akasha.world/v1/sepolia',
+        rpcUrl: 'https://rpc2.sepolia.org',
       },
     ];
 
@@ -89,8 +89,8 @@ class Web3Connector {
         icons: ['https://avatars.githubusercontent.com/u/9638191'],
       },
       defaultChainId: this.networkId.sepolia,
-      rpcUrl: 'https://ethereum.akasha.world/v1/sepolia',
-      enableCoinbase: false,
+      rpcUrl: 'https://rpc2.sepolia.org',
+      enableCoinbase: true,
     });
 
     this.#w3modal = createWeb3Modal({
