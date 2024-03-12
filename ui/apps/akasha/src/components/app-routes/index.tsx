@@ -28,7 +28,12 @@ import {
   Await,
 } from '@tanstack/react-router';
 import { CreateRouter, RouterContext } from '@akashaorg/typings/lib/ui';
-import { getAuthenticatedProfile, getBeamById, getBeamStream, getReflectionById } from './loaders';
+import {
+  getAuthenticatedProfile,
+  getBeamById,
+  getBeamStream,
+  getReflectionById,
+} from './data-loaders';
 
 const rootRoute = createRootRouteWithContext<RouterContext>()({
   component: Outlet,
@@ -45,7 +50,7 @@ const defaultRoute = createRoute({
 const antennaRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[GLOBAL_ANTENNA],
-  loader: async ({ context: { authenticatedDID, apolloClient } }) =>
+  loader: ({ context: { authenticatedDID, apolloClient } }) =>
     getAuthenticatedProfile({ authenticatedDID, apolloClient }),
   component: () => {
     const authenticatedProfile = antennaRoute.useLoaderData();

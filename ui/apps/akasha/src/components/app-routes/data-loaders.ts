@@ -16,14 +16,13 @@ import {
 
 export async function getAuthenticatedProfile({ authenticatedDID, apolloClient }: RouterContext) {
   if (!authenticatedDID) return null;
-  const response = await apolloClient.query<GetProfileByDidQuery>({
+  const { data } = await apolloClient.query<GetProfileByDidQuery>({
     query: GetProfileByDidDocument,
     variables: {
       id: authenticatedDID,
     },
   });
-  if (response.data?.node && hasOwn(response.data.node, 'akashaProfile'))
-    return response.data.node?.akashaProfile;
+  if (data?.node && hasOwn(data.node, 'akashaProfile')) return data.node?.akashaProfile;
 }
 
 export async function getBeamById({ apolloClient, beamId }: RouterContext & { beamId: string }) {

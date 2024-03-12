@@ -3,7 +3,6 @@ import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoade
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import BeamContentResolver from './beam-content-resolver';
-
 import { AnalyticsEventData } from '@akashaorg/typings/lib/ui';
 import {
   AkashaBeamEdge,
