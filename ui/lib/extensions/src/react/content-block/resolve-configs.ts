@@ -1,3 +1,4 @@
+import getSDK from '@akashaorg/awf-sdk';
 import { ContentBlockModes } from '@akashaorg/typings/lib/ui';
 import { MatchingBlock } from './common.types';
 import { ILogger } from '@akashaorg/typings/lib/sdk/log';
@@ -9,9 +10,8 @@ interface IResolveConfigs {
   logger: ILogger;
 }
 
-const MAX_CACHE_SIZE = 100;
-
-const blocksConfigCache = new Map();
+const sdk = getSDK();
+const uiStash = sdk.services.stash.getUiStash();
 
 export const resolveConfigs = async ({ matchingBlocks, mode, logger }: IResolveConfigs) => {
   const newBlocks = [];
@@ -19,16 +19,16 @@ export const resolveConfigs = async ({ matchingBlocks, mode, logger }: IResolveC
     try {
       let id = null;
       if (block?.blockData && hasOwn(block.blockData, 'id')) {
-        id = block.blockData.id;
+        id = `${block.blockInfo.appName}-${block.blockData.id}`;
       }
-      if (!blocksConfigCache.has(id)) {
+      if (!uiStash.has(id)) {
         const config = await block.blockInfo.loadingFn({
           blockInfo: { ...block.blockInfo, mode },
           blockData: block.blockData,
         })();
-        addToCache(id, config);
+        uiStash.set(id, config);
       }
-      const config = blocksConfigCache.get(id);
+      const config = uiStash.get(id);
       newBlocks.push({ ...block, config });
     } catch (err) {
       logger.error('content block resolveConfigs function', err);
@@ -36,11 +36,3 @@ export const resolveConfigs = async ({ matchingBlocks, mode, logger }: IResolveC
   }
   return newBlocks;
 };
-
-function addToCache(key: string, value: unknown) {
-  if (blocksConfigCache.size >= MAX_CACHE_SIZE) {
-    const firstKey = blocksConfigCache.keys().next().value;
-    if (firstKey) blocksConfigCache.delete(firstKey);
-  }
-  blocksConfigCache.set(key, value);
-}
