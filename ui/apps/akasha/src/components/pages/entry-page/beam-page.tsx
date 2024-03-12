@@ -1,9 +1,6 @@
 import React from 'react';
-import getSDK from '@akashaorg/awf-sdk';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import EntrySectionLoading from './entry-section-loading';
 import BeamSection from './beam-section';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import EditableReflection from '@akashaorg/ui-lib-feed/lib/components/editable-reflection';
@@ -21,20 +18,22 @@ import { useTranslation } from 'react-i18next';
 import { EntityTypes, type ReflectEntryData } from '@akashaorg/typings/lib/ui';
 import { ReflectFeed, ReflectionPreview } from '@akashaorg/ui-lib-feed';
 import { AkashaBeamStreamModerationStatus } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import {
-  useGetBeamByIdSuspenseQuery,
-  useGetBeamStreamSuspenseQuery,
-} from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { PendingReflect } from '../../reflect-editor/pending-reflect';
 import { usePendingReflections } from '@akashaorg/ui-awf-hooks/lib/use-pending-reflections';
 import { useNavigate } from '@tanstack/react-router';
+import {
+  GetBeamByIdQuery,
+  GetBeamStreamQuery,
+} from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 
 type BeamPageProps = {
   beamId: string;
+  beamStream: GetBeamStreamQuery;
+  beam: GetBeamByIdQuery;
 };
 
 const BeamPage: React.FC<BeamPageProps> = props => {
-  const { beamId } = props;
+  const { beamId, beamStream, beam } = props;
   const { t } = useTranslation('app-akasha-integration');
   const { navigateToModal, getTranslationPlugin } = useRootComponentProps();
   const { data, loading: authenticating } = useGetLogin();
@@ -42,45 +41,28 @@ const BeamPage: React.FC<BeamPageProps> = props => {
   const [analyticsActions] = useAnalytics();
   const navigate = useNavigate();
   const isLoggedIn = !!data?.id;
-  const sdk = getSDK();
-
-  /**
-   * Fetch beam data from the Indexed Stream
-   */
-  const beamStreamCheckQuery = useGetBeamStreamSuspenseQuery({
-    variables: {
-      first: 1,
-      indexer: sdk.services.gql.indexingDID,
-      filters: { where: { beamID: { equalTo: beamId } } },
-    },
-    fetchPolicy: 'cache-first',
-  });
 
   /**
    * Check the current moderation status of the beam
    */
   const moderationData = React.useMemo(() => {
     if (
-      beamStreamCheckQuery.data &&
-      hasOwn(beamStreamCheckQuery.data, 'node') &&
-      hasOwn(beamStreamCheckQuery.data.node, 'akashaBeamStreamList') &&
-      hasOwn(beamStreamCheckQuery.data.node.akashaBeamStreamList.edges[0].node, 'status')
+      beamStream &&
+      hasOwn(beamStream, 'node') &&
+      hasOwn(beamStream.node, 'akashaBeamStreamList') &&
+      hasOwn(beamStream.node.akashaBeamStreamList.edges[0].node, 'status')
     ) {
-      return beamStreamCheckQuery.data.node.akashaBeamStreamList.edges[0].node.status;
+      return beamStream.node.akashaBeamStreamList.edges[0].node.status;
     }
-  }, [beamStreamCheckQuery]);
+  }, [beamStream]);
 
-  const beamReq = useGetBeamByIdSuspenseQuery({
-    variables: { id: beamId },
-    fetchPolicy: 'cache-first',
-  });
   const pendingReflectionsVar = createReactiveVar<ReflectEntryData[]>([]);
   const { pendingReflections } = usePendingReflections(pendingReflectionsVar);
   const entryData = React.useMemo(() => {
-    if (beamReq.data && hasOwn(beamReq.data, 'node') && hasOwn(beamReq.data.node, 'id')) {
-      return beamReq.data.node;
+    if (beam && hasOwn(beam, 'node') && hasOwn(beam.node, 'id')) {
+      return beam.node;
     }
-  }, [beamReq]);
+  }, [beam]);
 
   const showLoginModal = (title?: string, message?: string) => {
     navigateToModal({
@@ -104,24 +86,13 @@ const BeamPage: React.FC<BeamPageProps> = props => {
     );
   }, [authenticating, isLoggedIn, moderationData, showNsfw]);
 
-  if (beamReq.error) {
-    return (
-      <ErrorLoader
-        type="script-error"
-        title={t('There was an error loading the entry')}
-        details={t('We cannot show this entry right now')}
-        devDetails={beamReq.error.message}
-      />
-    );
-  }
-
   return (
     <Card padding="p-0" margin="mb-4">
       <Stack spacing="gap-y-2">
         <ReflectFeed
           pendingReflectionsVar={pendingReflectionsVar}
           header={
-            <React.Suspense fallback={<EntrySectionLoading />}>
+            <>
               <BeamSection
                 beamId={beamId}
                 entryData={mapBeamEntryData(entryData)}
@@ -135,7 +106,7 @@ const BeamPage: React.FC<BeamPageProps> = props => {
                 .map((content, index) => (
                   <PendingReflect key={`pending-${index}-${beamId}`} entryData={content} />
                 ))}
-            </React.Suspense>
+            </>
           }
           queryKey={`reflect-feed-${beamId}`}
           filters={{ where: { reflection: { isNull: true } } }}
