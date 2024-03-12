@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import BeamSection from './beam-section';
@@ -39,6 +39,7 @@ const BeamPage: React.FC<BeamPageProps> = props => {
   const { data, loading: authenticating } = useGetLogin();
   const { showNsfw } = useNsfwToggling();
   const [analyticsActions] = useAnalytics();
+  const wrapperRef = useRef(null);
   const navigate = useNavigate();
   const isLoggedIn = !!data?.id;
 
@@ -50,6 +51,7 @@ const BeamPage: React.FC<BeamPageProps> = props => {
       beamStream &&
       hasOwn(beamStream, 'node') &&
       hasOwn(beamStream.node, 'akashaBeamStreamList') &&
+      beamStream.node.akashaBeamStreamList.edges?.[0]?.node &&
       hasOwn(beamStream.node.akashaBeamStreamList.edges[0].node, 'status')
     ) {
       return beamStream.node.akashaBeamStreamList.edges[0].node.status;
@@ -88,7 +90,7 @@ const BeamPage: React.FC<BeamPageProps> = props => {
 
   return (
     <Card padding="p-0" margin="mb-4">
-      <Stack spacing="gap-y-2">
+      <Stack ref={wrapperRef} spacing="gap-y-2">
         <ReflectFeed
           pendingReflectionsVar={pendingReflectionsVar}
           header={
@@ -97,9 +99,10 @@ const BeamPage: React.FC<BeamPageProps> = props => {
                 beamId={beamId}
                 entryData={mapBeamEntryData(entryData)}
                 isLoggedIn={isLoggedIn}
-                showLoginModal={showLoginModal}
                 showNSFWCard={showNsfwCard}
                 pendingReflectionsVar={pendingReflectionsVar}
+                parentWrapperRef={wrapperRef}
+                showLoginModal={showLoginModal}
               />
               {pendingReflections
                 .filter(content => !hasOwn(content, 'reflection') && content.beamID === beamId)

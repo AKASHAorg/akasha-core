@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import BackToOriginalBeam from '@akashaorg/ui-lib-feed/lib/components/back-to-original-beam';
@@ -32,6 +32,7 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
   const { t } = useTranslation('app-akasha-integration');
   const { navigateToModal, getTranslationPlugin } = useRootComponentProps();
   const [analyticsActions] = useAnalytics();
+  const wrapperRef = useRef(null);
   const navigate = useNavigate();
   const pendingReflectionsVar = createReactiveVar<ReflectEntryData[]>([]);
   const { pendingReflections } = usePendingReflections(pendingReflectionsVar);
@@ -76,8 +77,9 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
                   reflectionId={entryData.id}
                   entryData={mapReflectEntryData(entryData)}
                   isLoggedIn={isLoggedIn}
-                  showLoginModal={showLoginModal}
                   pendingReflectionsVar={pendingReflectionsVar}
+                  parentWrapperRef={wrapperRef}
+                  showLoginModal={showLoginModal}
                 />
               </>
               {pendingReflections
