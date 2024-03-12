@@ -9,6 +9,8 @@ interface IResolveConfigs {
   logger: ILogger;
 }
 
+const MAX_CACHE_SIZE = 100;
+
 const blocksConfigCache = new Map();
 
 export const resolveConfigs = async ({ matchingBlocks, mode, logger }: IResolveConfigs) => {
@@ -24,7 +26,7 @@ export const resolveConfigs = async ({ matchingBlocks, mode, logger }: IResolveC
           blockInfo: { ...block.blockInfo, mode },
           blockData: block.blockData,
         })();
-        blocksConfigCache.set(id, config);
+        addToCache(id, config);
       }
       const config = blocksConfigCache.get(id);
       newBlocks.push({ ...block, config });
@@ -34,3 +36,11 @@ export const resolveConfigs = async ({ matchingBlocks, mode, logger }: IResolveC
   }
   return newBlocks;
 };
+
+function addToCache(key: string, value: unknown) {
+  if (blocksConfigCache.size >= MAX_CACHE_SIZE) {
+    const firstKey = blocksConfigCache.keys().next().value;
+    if (firstKey) blocksConfigCache.delete(firstKey);
+  }
+  blocksConfigCache.set(key, value);
+}
