@@ -1,6 +1,6 @@
 import '../jest.setup';
 
-import { genLoggedInState, genPostData, genCommentData } from '@akashaorg/af-testing';
+import { genLoggedInState } from '@akashaorg/af-testing';
 import * as loginHooks from '@akashaorg/ui-awf-hooks/lib/use-login.new';
 import * as mediaHooks from '@akashaorg/ui-awf-hooks/lib/utils/media-utils';
 

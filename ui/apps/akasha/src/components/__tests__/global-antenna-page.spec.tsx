@@ -19,11 +19,7 @@ describe('< GlobalAntennaPage /> component', () => {
   global.ResizeObserver = ResizeObserver;
   const BaseComponent = ({ authenticatedProfile }) => (
     <AnalyticsProvider {...genAppProps()}>
-      <GlobalAntennaPage
-        isLoggedIn={true}
-        showLoginModal={jest.fn()}
-        authenticatedProfile={authenticatedProfile}
-      />
+      <GlobalAntennaPage authenticatedProfile={authenticatedProfile} />
     </AnalyticsProvider>
   );
 
