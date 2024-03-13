@@ -151,7 +151,7 @@ export const useReflections = (props: UseReflectionProps) => {
       startPolling({
         ...mergedVars,
         sorting: { createdAt: SortOrder.Asc },
-        after: state.reflections[0].cursor,
+        after: state.reflections[0]?.cursor,
         first: 1,
       });
     }
