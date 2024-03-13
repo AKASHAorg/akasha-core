@@ -26,7 +26,7 @@ export function useConnectWallet() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
 
-  const mutate = useCallback(() => {
+  const connect = useCallback(() => {
     setIsLoading(true);
     const connectWalletApiCall = async () => {
       try {
@@ -45,7 +45,7 @@ export function useConnectWallet() {
     connectWalletApiCall();
   }, []);
 
-  return { mutate, data, isLoading, error, isSuccess: !!data, isError: !!error };
+  return { connect, data, isLoading, error, isSuccess: !!data, isError: !!error };
 }
 
 /**

@@ -116,7 +116,7 @@ const NotificationsPage: React.FC<NotificationsPageProps> = ({ isLoggedIn }) => 
   const unreadNotifications = allNotifications?.filter(notif => notif.read === undefined);
   const readNotifications = allNotifications?.filter(notif => notif.read === true);
 
-  const markAsRead = useMarkAsRead();
+  const { markAsRead } = useMarkAsRead();
 
   const handleAvatarClick = (id: string) => {
     navigateTo?.({
@@ -154,9 +154,8 @@ const NotificationsPage: React.FC<NotificationsPageProps> = ({ isLoggedIn }) => 
   const markAllAsRead = () => {
     // do something
     unreadNotifications.map(notif => {
-      //  markAsRead.mutate(notif.id);
       if (notif.read === undefined) {
-        markAsRead.mutate(notif.id);
+        markAsRead(notif.id);
       }
     });
     setShowMenu(!showMenu);
@@ -256,7 +255,7 @@ const NotificationsPage: React.FC<NotificationsPageProps> = ({ isLoggedIn }) => 
           moderatedAccountLabel={'suspended your account'}
           markAsReadLabel={'Mark as read'}
           emptyTitle={'Looks like you don’t have any new notifications yet!'}
-          handleMessageRead={markAsRead.mutate}
+          handleMessageRead={markAsRead}
           handleEntryClick={handleEntryClick}
           handleProfileClick={handleAvatarClick}
           transformSource={transformSource}

@@ -5,23 +5,21 @@ import { logError } from './utils/error-handler';
 
 /**
  * Hook to mark a notification as read
- * pass the messageId to the mutate function
+ * pass the messageId to the markAsRead function
  * @example useMarkAsRead hook
  * ```typescript
- * const markAsReadQuery = useMarkAsRead();
+ * const { markAsRead } = useMarkAsRead();
  *
- * markAsReadQuery.mutate('message id');
+ * markAsRead('message id');
  * ```
  */
 export function useMarkAsRead() {
   const sdk = getSDK();
   const [data, setData] = useState<boolean | null>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isSuccess, setIsSuccess] = useState<boolean>(false);
-  const [isError, setIsError] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
 
-  const mutate = useCallback((messageId: string) => {
+  const markAsRead = useCallback((messageId: string) => {
     setIsLoading(true);
     const markMessageAsReadApiCall = async () => {
       try {
@@ -29,21 +27,19 @@ export function useMarkAsRead() {
         if (resp) {
           setData(resp);
           setIsLoading(false);
-          setIsSuccess(true);
           /*  add other logic when real data become available */
         }
       } catch (err) {
         logError('useNotifications.markAsRead', err);
         setError(err);
-        setIsError(true);
-        setData(null);
       }
     };
 
     markMessageAsReadApiCall();
+    return { data, isLoading, error, isSuccess: !!data, isError: !!error };
   }, []);
 
-  return { mutate, data, isLoading, error, isSuccess, isError };
+  return { markAsRead };
 }
 
 const checkNewNotifications = async () => {
@@ -64,7 +60,6 @@ const checkNewNotifications = async () => {
 export function useCheckNewNotifications(did: string) {
   const [data, setData] = useState<boolean>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isFetched, setIsFetched] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
@@ -73,15 +68,12 @@ export function useCheckNewNotifications(did: string) {
         const res = await checkNewNotifications();
         if (res) {
           setData(res);
-          setError(null);
           setIsLoading(false);
-          setIsFetched(true);
         }
       } catch (err) {
         setError(err);
         logError('useNotifications.checkNewNotifications', err);
         setIsLoading(false);
-        setIsFetched(true);
       }
     };
 
@@ -90,7 +82,7 @@ export function useCheckNewNotifications(did: string) {
     }
   }, [did]);
 
-  return { data, isLoading, error, isFetched };
+  return { data, isLoading, error, isFetched: !!data || !!error };
 }
 
 /**
