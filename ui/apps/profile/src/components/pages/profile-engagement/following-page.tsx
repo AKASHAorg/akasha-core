@@ -24,11 +24,11 @@ import { ENGAGEMENTS_PER_PAGE } from './types';
 import { useTranslation } from 'react-i18next';
 
 type FollowingPageProps = {
-  profileId: string;
+  profileDid: string;
 };
 
 const FollowingPage: React.FC<FollowingPageProps> = props => {
-  const { profileId } = props;
+  const { profileDid } = props;
   const { data: loginData, loading: authenticating } = useGetLogin();
   const { getRoutingPlugin, navigateToModal } = useRootComponentProps();
   const authenticatedDID = loginData?.id;
@@ -39,8 +39,8 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
   const profileDataReq = useGetProfileByDidQuery({
     fetchPolicy:
       'cache-first' /* data is prefetched during route matching as a result we prefer reading cache first here  */,
-    variables: { id: profileId },
-    skip: authenticatedDID === profileId,
+    variables: { id: profileDid },
+    skip: authenticatedDID === profileDid,
   });
   const { akashaProfile: profileData } =
     profileDataReq.data?.node && hasOwn(profileDataReq.data.node, 'akashaProfile')
@@ -51,7 +51,7 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
     fetchPolicy:
       'cache-only' /* data is prefetched during route matching as a result we read from cache here */,
     variables: {
-      id: profileId,
+      id: profileDid,
       first: ENGAGEMENTS_PER_PAGE,
     },
     skip: !isLoggedIn,
@@ -102,24 +102,24 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
       redirectTo,
     });
   };
-  const onProfileClick = (profileId: string) => {
+  const onProfileClick = (profileDid: string) => {
     navigateTo?.({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${profileId}`,
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${profileDid}`,
     });
   };
 
   const onError = () => {
     navigateTo?.({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${profileId}${routes[FOLLOWING]}`,
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${profileDid}${routes[FOLLOWING]}`,
     });
   };
 
-  const viewerIsOwner = authenticatedDID === profileId;
+  const viewerIsOwner = authenticatedDID === profileDid;
 
   return (
-    <EngagementTab profileId={profileId} navigateTo={navigateTo}>
+    <EngagementTab profileDid={profileDid} navigateTo={navigateTo}>
       {error && (
         <Stack customStyle="mt-8">
           <InfoCard

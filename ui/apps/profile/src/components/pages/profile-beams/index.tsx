@@ -6,17 +6,16 @@ import {
   hasOwn,
   mapBeamEntryData,
   useAnalytics,
-  useNsfwToggling,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
 import { BeamCard, BeamFeed } from '@akashaorg/ui-lib-feed';
 
 type ProfileBeamsPageProps = {
-  profileId: string;
+  profileDid: string;
 };
 
 const ProfileBeamsPage: React.FC<ProfileBeamsPageProps> = props => {
-  const { profileId } = props;
+  const { profileDid } = props;
   const { getRoutingPlugin } = useRootComponentProps();
   const [analyticsActions] = useAnalytics();
   const navigateTo = React.useRef(getRoutingPlugin().navigateTo);
@@ -24,8 +23,8 @@ const ProfileBeamsPage: React.FC<ProfileBeamsPageProps> = props => {
   return (
     <Stack direction="column" spacing="gap-y-4" fullWidth>
       <BeamFeed
-        did={profileId}
-        queryKey={`app-profile_${profileId}_beams`}
+        did={profileDid}
+        queryKey={`app-profile_${profileDid}_beams`}
         estimatedHeight={150}
         itemSpacing={8}
         scrollerOptions={{ overscan: 10 }}

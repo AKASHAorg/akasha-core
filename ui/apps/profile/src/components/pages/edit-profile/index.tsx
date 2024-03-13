@@ -21,11 +21,11 @@ import { EditProfileFormValues } from '@akashaorg/design-system-components/lib/c
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 
 type EditProfilePageProps = {
-  profileId: string;
+  profileDid: string;
 };
 
 const EditProfilePage: React.FC<EditProfilePageProps> = props => {
-  const { profileId } = props;
+  const { profileDid } = props;
   const { t } = useTranslation('app-profile');
   const { getRoutingPlugin, uiEvents } = useRootComponentProps();
   const { avatarImage, coverImage, saveImage, loading: isSavingImage } = useSaveImage();
@@ -36,7 +36,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
     useState<PartialAkashaProfileInput | null>(null);
   const navigateTo = getRoutingPlugin().navigateTo;
   const { data, error } = useGetProfileByDidSuspenseQuery({
-    variables: { id: profileId },
+    variables: { id: profileDid },
   });
 
   const { akashaProfile: profileData } =
@@ -84,7 +84,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
   const navigateToProfileInfoPage = () => {
     navigateTo({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: () => `/${profileId}`,
+      getNavigationUrl: () => `/${profileDid}`,
     });
   };
 
@@ -163,7 +163,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
             coverImage: background,
             avatar: avatar,
             dragToRepositionLabel: t('Drag the image to reposition'),
-            profileId,
+            profileId: profileDid,
             cancelLabel: t('Cancel'),
             deleteLabel: t('Delete'),
             saveLabel: t('Save'),
