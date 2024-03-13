@@ -1,7 +1,9 @@
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 import pino from 'pino';
 import { validate } from '../common/validator';
 import { z } from 'zod';
+import AWF_Config from '../common/config';
+import { TYPES } from '@akashaorg/typings/lib/sdk';
 
 /**
  * @module Logger
@@ -9,8 +11,13 @@ import { z } from 'zod';
 @injectable()
 class Logging {
   private _appLogger: pino.Logger;
-  public constructor() {
-    this._appLogger = pino({ browser: { asObject: true }, level: process.env.LOG_LEVEL });
+  private _config: AWF_Config;
+  public constructor(@inject(TYPES.Config) config: AWF_Config) {
+    this._config = config;
+    this._appLogger = pino({
+      browser: { asObject: true },
+      level: this._config.getOption('log_level'),
+    });
   }
 
   /**
@@ -21,7 +28,7 @@ class Logging {
   @validate(z.string().optional())
   create(nameSpace?: string) {
     const logger = this._appLogger.child({ module: nameSpace });
-    logger.level = process.env.LOG_LEVEL || 'warn';
+    logger.level = this._config.getOption('log_level');
     return logger;
   }
 }

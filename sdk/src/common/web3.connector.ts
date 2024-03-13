@@ -15,6 +15,7 @@ import { validate } from './validator';
 import { z } from 'zod';
 import { createWeb3Modal, defaultConfig } from '@web3modal/ethers';
 import type { Web3Modal } from '@web3modal/ethers/dist/types/src/client';
+import AWF_Config from './config';
 
 @injectable()
 class Web3Connector {
@@ -36,7 +37,7 @@ class Web3Connector {
     kovan: 42,
     sepolia: 11155111,
   });
-
+  private _config: AWF_Config;
   /*
    * Web3Connector constructor
    *
@@ -60,17 +61,18 @@ class Web3Connector {
   constructor(
     @inject(TYPES.Log) logFactory: Logging,
     @inject(TYPES.EventBus) globalChannel: EventBus,
+    @inject(TYPES.Config) config: AWF_Config,
   ) {
     this.#logFactory = logFactory;
     this.#log = this.#logFactory.create('Web3Connector');
     this.#globalChannel = globalChannel;
     this.#web3Instance = null;
     this.#wallet = null;
-    const projectId = process.env.WALLETCONNECT_PROJECT_ID as string;
+    this._config = config;
+    const projectId = this._config.getOption('wallet_connect_project_id');
     if (!projectId) {
       throw new Error('WALLETCONNECT_PROJECT_ID is not set');
     }
-
     const chains = [
       {
         chainId: this.networkId.sepolia,
