@@ -39,7 +39,7 @@ export function useSaveSettings() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<{ message: string } | null>(null);
 
-  const saveSettings = useCallback(
+  const saveNotificationSettings = useCallback(
     (
       params: { app: string; options: Record<string, string | boolean | number> },
       callback?: { onComplete: () => void },
@@ -51,7 +51,7 @@ export function useSaveSettings() {
           const res = await saveSettings(params);
           setData(res);
           setIsLoading(false);
-          if (callback.onComplete) {
+          if (callback.onComplete && typeof callback.onComplete === 'function') {
             callback.onComplete();
           }
         } catch (err) {
@@ -65,7 +65,7 @@ export function useSaveSettings() {
     },
     [],
   );
-  return { saveSettings };
+  return { saveNotificationSettings };
 }
 
 const getSettings = async (app: string) => {
@@ -89,7 +89,7 @@ const getSettings = async (app: string) => {
 export function useGetSettings(app: string) {
   const { data: loginData, loading: loadingLoginData } = useGetLogin();
   const [settings, setSettings] = useState<any>(undefined);
-  const [isLoading, setIsLoading] = useState<any>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const [error, setError] = useState<{ message: string } | null>(null);
 
