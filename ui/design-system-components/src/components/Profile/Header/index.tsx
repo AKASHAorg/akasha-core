@@ -157,17 +157,19 @@ const Header: React.FC<HeaderProps> = ({
                 )}
 
                 {menuItems && (
-                  <Menu
-                    anchor={{
-                      icon: <EllipsisVerticalIcon />,
-                      variant: 'primary',
-                      greyBg: true,
-                      iconOnly: true,
-                      'aria-label': 'settings',
-                    }}
-                    items={menuItems}
-                    customStyle="w-max z-99"
-                  />
+                  <Stack customStyle="mt-1">
+                    <Menu
+                      anchor={{
+                        icon: <EllipsisVerticalIcon />,
+                        variant: 'primary',
+                        greyBg: true,
+                        iconOnly: true,
+                        'aria-label': 'settings',
+                      }}
+                      items={menuItems}
+                      customStyle="w-max z-99"
+                    />
+                  </Stack>
                 )}
               </Stack>
             </Stack>
