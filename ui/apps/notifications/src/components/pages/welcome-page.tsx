@@ -39,7 +39,7 @@ const WelcomePage: React.FC<WelcomePageProps> = props => {
 
   const Appname = '@akashaorg/app-notifications';
 
-  const saveSettingsMutation = useSaveSettings();
+  const { saveSettings } = useSaveSettings();
 
   const goToNextStep = () => {
     // navigate to step 2
@@ -84,7 +84,7 @@ const WelcomePage: React.FC<WelcomePageProps> = props => {
   };
 
   const skipCustomization = () => {
-    saveSettingsMutation.mutate({ app: Appname, options: { default: true } });
+    saveSettings({ app: Appname, options: { default: true } });
 
     goToNotificationsPage();
   };

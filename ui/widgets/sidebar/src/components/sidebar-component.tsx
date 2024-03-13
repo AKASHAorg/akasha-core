@@ -46,7 +46,7 @@ const SidebarComponent: React.FC<unknown> = () => {
   const [isLoading, setIsLoading] = useState(false);
   const authenticatedDID = data?.id;
   const isLoggedIn = !!data?.id;
-  const logoutMutation = useLogout();
+  const logoutCall = useLogout();
 
   const [dismissed, dismissCard] = useDismissedCard('@akashaorg/ui-widget-sidebar_cta-card');
 
@@ -176,7 +176,7 @@ const SidebarComponent: React.FC<unknown> = () => {
 
   function handleLogout() {
     setIsLoading(true);
-    logoutMutation.mutate();
+    logoutCall.logOut();
 
     setIsLoading(false);
   }

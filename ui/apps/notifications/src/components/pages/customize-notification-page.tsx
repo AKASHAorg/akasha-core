@@ -41,7 +41,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
   const existingSettings: { [k: string]: string | number | boolean } | null =
     fetchSettingsQuery.data;
 
-  const saveSettingsMutation = useSaveSettings();
+  const { saveSettings } = useSaveSettings();
 
   const [routeData, setRouteData] = useState(null);
 
@@ -183,7 +183,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
       //add snooze pref
       allPrefs[SnoozeOption] = snoozed;
 
-      saveSettingsMutation.mutate(
+      saveSettings(
         {
           app: Appname,
           options: allPrefs,

@@ -39,7 +39,7 @@ export function useSaveSettings() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<{ message: string } | null>(null);
 
-  const mutate = useCallback(
+  const saveSettings = useCallback(
     (
       params: { app: string; options: Record<string, string | boolean | number> },
       callback?: { onComplete: () => void },
@@ -65,7 +65,7 @@ export function useSaveSettings() {
     },
     [],
   );
-  return { mutate };
+  return { saveSettings };
 }
 
 const getSettings = async (app: string) => {

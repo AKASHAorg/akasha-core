@@ -20,7 +20,6 @@ const getLegalDoc = async (docName: LEGAL_DOCS) => {
 export function useLegalDoc(docName: LEGAL_DOCS) {
   const [data, setData] = useState<string>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isFetched, setIsFetched] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
@@ -30,20 +29,18 @@ export function useLegalDoc(docName: LEGAL_DOCS) {
         if (res) {
           setData(res);
           setIsLoading(false);
-          setIsFetched(true);
         }
       } catch (err) {
         setData(null);
-        
+
         setError(err);
         logError('useLegal.getLegalDoc', err);
         setIsLoading(false);
-        setIsFetched(true);
       }
     };
 
     fetchData();
   }, []);
 
-  return { data, isLoading, error, isFetched };
+  return { data, isLoading, error, isFetched: data !== undefined };
 }

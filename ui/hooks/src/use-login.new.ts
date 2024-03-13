@@ -24,8 +24,6 @@ export function useConnectWallet() {
 
   const [data, setData] = useState<string | null>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isSuccess, setIsSuccess] = useState<boolean>(false);
-  const [isError, setIsError] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
 
   const mutate = useCallback(() => {
@@ -36,12 +34,10 @@ export function useConnectWallet() {
         if (resp) {
           setData(resp);
           setIsLoading(false);
-          setIsSuccess(true);
         }
       } catch (err) {
         logError('useConnectWallet', err);
         setError(err);
-        setIsError(true);
         setData(null);
       }
     };
@@ -49,7 +45,7 @@ export function useConnectWallet() {
     connectWalletApiCall();
   }, []);
 
-  return { mutate, data, isLoading, error, isSuccess, isError };
+  return { mutate, data, isLoading, error, isSuccess: !!data, isError: !!error };
 }
 
 /**
@@ -146,11 +142,9 @@ export function useLogin(onError?: (err: Error) => void) {
     | null
   >(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isSuccess, setIsSuccess] = useState<boolean>(false);
-  const [isError, setIsError] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
 
-  const mutate = useCallback(
+  const signIn = useCallback(
     ({
       selectedProvider,
       checkRegistered = false,
@@ -168,12 +162,10 @@ export function useLogin(onError?: (err: Error) => void) {
           if (resp.data) {
             setData(resp.data);
             setIsLoading(false);
-            setIsSuccess(true);
           }
         } catch (err) {
           logError('use-login', err);
           setError(err);
-          setIsError(true);
           setData(null);
           if (onError) {
             onError(err);
@@ -186,7 +178,7 @@ export function useLogin(onError?: (err: Error) => void) {
     [],
   );
 
-  return { mutate, data, isLoading, error, isSuccess, isError };
+  return { signIn, data, isLoading, error, isSuccess: !!data, isError: !!error };
 }
 
 /**
@@ -208,7 +200,7 @@ export function useLogout() {
   const [error, setError] = useState<Error | null>(null);
   const sdk = getSDK();
 
-  const mutate = useCallback(() => {
+  const logOut = useCallback(() => {
     setIsLoading(true);
     const logoutApiCall = async () => {
       try {
@@ -228,5 +220,5 @@ export function useLogout() {
     return { data, isLoading, error };
   }, []);
 
-  return { mutate };
+  return { logOut };
 }
