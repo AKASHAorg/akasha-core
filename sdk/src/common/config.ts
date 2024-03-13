@@ -30,10 +30,34 @@ class AWF_Config {
     };
   }
 
+  /**
+   * Set a config value.
+   * @param key - Config key
+   * @param value - New config value
+   *
+   * @example
+   *
+   * ```
+   * const config = new Config();
+   * config.setOption('log_level', 'debug');
+   * ```
+   */
   setOption(key: (typeof SDKConfigOptions)[number], value: string) {
     this.#_config[key] = value.trim();
   }
 
+  /**
+   * Get a config value.
+   * @param key - Config key
+   * @returns Config value
+   *
+   * @example
+   *
+   * ```
+   * const config = new Config();
+   * const ceramicEndpoint = config.get('ceramic_api_endpoint');
+   * ```
+   */
   getOption(key: (typeof SDKConfigOptions)[number]) {
     const value = this.#_config[key];
     if (typeof value === 'undefined') {
