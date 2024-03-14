@@ -60,12 +60,10 @@ export function useSaveSettings() {
       };
 
       saveSettingCall(params);
-
-      return { isLoading, data, error };
     },
     [],
   );
-  return { saveNotificationSettings };
+  return { saveNotificationSettings, isLoading, data, error };
 }
 
 const getSettings = async (app: string) => {
