@@ -10,19 +10,14 @@ import { formatDate } from '@akashaorg/design-system-core/lib/utils';
 import ModeratorDetailCard from '../components/moderator';
 import InfoCard from '../components/moderator/info-card';
 
-import {
-  generateModerators,
-  generateTenureInfoLabel,
-  generateModerationHistory,
-  generateDismissalReason,
-} from '../utils';
+import { generateTenureInfoLabel, generateDismissalReason } from '../utils';
 
 export type ModeratorDetailPageProps = {
   moderatorId: string;
 };
 
 export const ModeratorDetailPage: React.FC<ModeratorDetailPageProps> = () => {
-  const [pages] = React.useState([generateModerationHistory()]);
+  const [pages] = React.useState([]);
   const [curPage, setCurPage] = React.useState<number>(1);
 
   /**
@@ -32,7 +27,7 @@ export const ModeratorDetailPage: React.FC<ModeratorDetailPageProps> = () => {
   const { t } = useTranslation('app-vibes');
   const navigate = useNavigate();
 
-  const moderator = generateModerators()[1];
+  const moderator = null;
 
   const tenureInfoLabel = generateTenureInfoLabel(moderator.status);
 

@@ -9,8 +9,6 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TransparencyLogItemCard from '../components/transparency-log/log-item';
 import NoFlaggedItems from '../components/transparency-log/no-flagged-items';
 
-import { generateModerationHistory } from '../utils';
-
 export type PaginatedItem = IModerationLogItem[];
 
 export const DEFAULT_LIMIT = 10;
@@ -42,7 +40,7 @@ export const TransparencyLog: React.FC<unknown> = () => {
     setfilterByCategory(defaultCategory);
   };
 
-  const moderationEntries = generateModerationHistory();
+  const moderationEntries = [];
 
   const filteredEntries = moderationEntries.filter(entry => {
     if (filterByDecision.id && filterByCategory.id)
