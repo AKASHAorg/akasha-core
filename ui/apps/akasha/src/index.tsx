@@ -42,7 +42,7 @@ import { PhotoIcon } from '@akashaorg/design-system-core/lib/components/Icon/her
 
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
   loadingFn: () => import('./components'),
-  mountsIn: opts.layoutConfig?.pluginSlotId,
+  mountsIn: opts.layoutConfig?.applicationSlotId,
 
   /**
    * routes that are defined here can be used by
