@@ -12,10 +12,10 @@ export function getBarColor(idx: number, strengthLevel: PasswordStrengthLevel) {
     return `bg-warningLight dark:bg-warningDark`;
   }
   if (strengthLevel === PasswordStrengthLevel.GOOD && idx + 1 <= strengthLevel) {
-    return `bg-success dark:bg-success`;
+    return `bg-success`;
   }
   if (strengthLevel === PasswordStrengthLevel.STRONG && idx + 1 <= strengthLevel) {
-    return `bg-success dark:bg-success`;
+    return `bg-success`;
   }
 
   return `${defaultClasses} `;

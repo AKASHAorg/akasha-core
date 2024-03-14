@@ -5,8 +5,8 @@ import Table from '../';
 
 const theadValues = ['Header 1', 'Header 2'];
 const rows = [
-  ['Content Row 1', 'Content Row 1'],
-  ['Content Row 2', 'Content Row 2'],
+  { value: ['Content Row 1', 'Content Row 1'] },
+  { value: ['Content Row 2', 'Content Row 2'] },
 ];
 
 describe('<Table /> Component', () => {

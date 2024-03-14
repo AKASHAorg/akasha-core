@@ -19,7 +19,7 @@ export type RadioButtonProps = {
 const baseStyles = 'flex items-center space-x-2 mb-2';
 
 const baseButtonStyles =
-  'inline-block mr-4 ml-0 p-0 rounded-full shrink-0 after:content-[] after:absolute';
+  'flex items-center justify-center mr-4 ml-0 p-0 rounded-full shrink-0 after:content-[] after:absolute';
 
 export const RadioButton: React.FC<RadioButtonProps> = props => {
   const {
@@ -32,13 +32,10 @@ export const RadioButton: React.FC<RadioButtonProps> = props => {
     size = 'small',
   } = props;
 
-  const textColor = error ? 'text-orange-400' : 'text(black dark:white)';
-  const inputColor = error ? 'orange-400' : 'secondaryLight';
+  const textColor = error ? 'text(errorLight dark:errorDark)' : 'text(black dark:white)';
+  const inputColor = error ? 'errorLight dark:errorDark' : 'secondaryLight dark:secondaryDark';
   const buttonSize = size === 'small' ? 'w-4 h-4' : 'w-6 h-6';
-  const pseudoCircleSize =
-    size === 'small'
-      ? 'after:w-2 after:h-2 after:mt-[2.5px] after:ml-[2.5px]'
-      : 'after:w-4 after:h-4 after:mt-[3px] after:ml-[3px]';
+  const pseudoCircleSize = size === 'small' ? 'after:w-2 after:h-2' : 'after:w-4 after:h-4 ';
 
   const instanceStyles = apply`
     ${baseStyles}
@@ -53,22 +50,19 @@ export const RadioButton: React.FC<RadioButtonProps> = props => {
     <div className={tw(instanceStyles)}>
       <input
         id={id}
-        onChange={handleChange}
-        value={value}
         type="radio"
+        value={value}
+        className="hidden"
         checked={isSelected}
         aria-labelledby={value}
-        className={tw('hidden')}
+        onChange={handleChange}
       />
-      <label
-        htmlFor={id}
-        className={tw(apply`flex items-center cursor-pointer text-sm ${textColor}`)}
-      >
+      <label htmlFor={id} className={tw(`flex items-center cursor-pointer text-sm ${textColor}`)}>
         <span
           className={tw(
             isSelected
-              ? apply`${buttonSize} ${instanceButtonStyles} after:block after:bg-${inputColor} after:rounded-full ${pseudoCircleSize}`
-              : apply`${buttonSize} ${instanceButtonStyles} after:hidden`,
+              ? `${buttonSize} ${instanceButtonStyles} after:block after:bg-(${inputColor}) after:rounded-full ${pseudoCircleSize}`
+              : `${buttonSize} ${instanceButtonStyles} after:hidden`,
           )}
         ></span>
         {label}

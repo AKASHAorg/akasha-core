@@ -8,21 +8,21 @@ import {
   PageButtons,
 } from '@akashaorg/design-system-components/lib/components/PageButtons';
 
-export type BMConfirmationProps = PageButtonsProps & {
+export type WAConfirmationProps = PageButtonsProps & {
   assetName?: string;
   publicImgPath?: string;
   assetExtension?: string;
   titleLabel: string;
-  descriptionLabels: string[];
+  descriptionLabel: string;
 };
 
-export const BMConfirmation: React.FC<BMConfirmationProps> = props => {
+export const WAConfirmation: React.FC<WAConfirmationProps> = props => {
   const {
-    assetName = 'vibe-received',
+    assetName = 'vibe-byemoderator',
     assetExtension = 'webp',
     publicImgPath = '/images',
     titleLabel,
-    descriptionLabels,
+    descriptionLabel,
   } = props;
 
   return (
@@ -39,14 +39,9 @@ export const BMConfirmation: React.FC<BMConfirmationProps> = props => {
           />
         </Stack>
 
-        <Stack spacing="gap-y-0.5" customStyle="mb-32">
-          {descriptionLabels.map((d, idx) => (
-            <Text key={d} align="center" variant="body1">
-              {d}
-              {idx === 0 ? '.' : '!'}
-            </Text>
-          ))}
-        </Stack>
+        <Text align="center" variant="body1" customStyle="mb-32">
+          {descriptionLabel}! ✨
+        </Text>
 
         <PageButtons {...props} />
       </Stack>
