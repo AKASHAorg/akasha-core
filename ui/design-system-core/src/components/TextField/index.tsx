@@ -1,12 +1,9 @@
 import React from 'react';
-
 import Stack from '../Stack';
-
 import Caption from './Caption';
 import { Input } from './Input';
 import Label from './Label';
 import { Multiline } from './Multiline';
-
 import { TextFieldProps } from './types';
 
 const TextField: React.FC<TextFieldProps> = props => {
