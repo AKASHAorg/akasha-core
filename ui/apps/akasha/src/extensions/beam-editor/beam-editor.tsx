@@ -406,6 +406,7 @@ export const BeamEditor: React.FC = () => {
                   icon={<XMarkIcon />}
                   iconDirection="right"
                   onPillClick={() => handleDeleteTag(tag)}
+                  type="action"
                 />
               ))}
             </Stack>

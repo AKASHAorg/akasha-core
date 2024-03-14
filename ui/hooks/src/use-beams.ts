@@ -237,7 +237,7 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
   const fetchInitialBeams = React.useCallback(
     async (variables?: GetBeamsByAuthorDidQueryVariables & GetBeamStreamQueryVariables) => {
       try {
-        const results = await fetchBeams({ variables });
+        const results = await fetchBeams({ variables, fetchPolicy: 'cache-first' });
         if (results.error) {
           setErrors(prev => [...prev, results.error]);
           return;
@@ -275,11 +275,6 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
 
   const fetchInitialData = React.useCallback(
     async (restoreItem?: { key: string; offsetTop: number }) => {
-      if (state.beams.length) {
-        setState({
-          beams: [],
-        });
-      }
       /**
        * Return from the function immediately if the beamsQuery has run before (the data has
        * been fetched with default filter that filters out NSFW content) and the user is logged

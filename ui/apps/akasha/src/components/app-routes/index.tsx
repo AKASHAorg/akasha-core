@@ -24,8 +24,16 @@ import {
   createRoute,
   createRouter,
   Outlet,
+  defer,
+  Await,
 } from '@tanstack/react-router';
 import { CreateRouter, RouterContext } from '@akashaorg/typings/lib/ui';
+import {
+  getAuthenticatedProfile,
+  getBeamById,
+  getBeamStream,
+  getReflectionById,
+} from './data-loaders';
 
 const rootRoute = createRootRouteWithContext<RouterContext>()({
   component: Outlet,
@@ -42,8 +50,11 @@ const defaultRoute = createRoute({
 const antennaRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[GLOBAL_ANTENNA],
+  loader: ({ context: { authenticatedDID, apolloClient } }) =>
+    getAuthenticatedProfile({ authenticatedDID, apolloClient }),
   component: () => {
-    return <GlobalAntennaPage />;
+    const authenticatedProfile = antennaRoute.useLoaderData();
+    return <GlobalAntennaPage authenticatedProfile={authenticatedProfile} />;
   },
 });
 
@@ -58,24 +69,47 @@ const myAntennaRoute = createRoute({
 const beamRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[BEAM]}/$beamId`,
+  loader: ({ context, params }) => ({
+    beam: defer(getBeamById({ apolloClient: context.apolloClient, beamId: params.beamId })),
+    beamStream: defer(
+      getBeamStream({
+        apolloClient: context.apolloClient,
+        beamId: params.beamId,
+      }),
+    ),
+  }),
   component: () => {
     const { beamId } = beamRoute.useParams();
+    const { beam, beamStream } = beamRoute.useLoaderData();
     return (
       <Suspense fallback={<EntrySectionLoading />}>
-        <BeamPage beamId={beamId} />
+        <Await promise={beamStream}>
+          {beamStreamData => (
+            <Await promise={beam}>
+              {beamData => <BeamPage beamId={beamId} beam={beamData} beamStream={beamStreamData} />}
+            </Await>
+          )}
+        </Await>
       </Suspense>
     );
   },
 });
 
 const beamReflectRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: `${routes[BEAM]}/$beamId${routes[REFLECT]}`,
+  getParentRoute: () => beamRoute,
+  path: routes[REFLECT],
   component: () => {
     const { beamId } = beamReflectRoute.useParams();
+    const { beam, beamStream } = beamRoute.useLoaderData();
     return (
       <Suspense fallback={<EntrySectionLoading />}>
-        <BeamPage beamId={beamId} />
+        <Await promise={beamStream}>
+          {beamStreamData => (
+            <Await promise={beam}>
+              {beamData => <BeamPage beamId={beamId} beam={beamData} beamStream={beamStreamData} />}
+            </Await>
+          )}
+        </Await>
       </Suspense>
     );
   },
@@ -84,24 +118,43 @@ const beamReflectRoute = createRoute({
 const reflectionsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[REFLECTION]}/$reflectionId`,
+  loader: ({ context, params }) => ({
+    reflection: defer(
+      getReflectionById({
+        apolloClient: context.apolloClient,
+        reflectionId: params.reflectionId,
+      }),
+    ),
+    isLoggedIn: !!context?.authenticatedDID,
+  }),
   component: () => {
     const { reflectionId } = reflectionsRoute.useParams();
+    const { reflection, isLoggedIn } = reflectionsRoute.useLoaderData();
     return (
       <Suspense fallback={<EntrySectionLoading />}>
-        <ReflectionPage reflectionId={reflectionId} />
+        <Await promise={reflection}>
+          {data => (
+            <ReflectionPage reflectionId={reflectionId} reflection={data} isLoggedIn={isLoggedIn} />
+          )}
+        </Await>
       </Suspense>
     );
   },
 });
 
 const reflectionsReflectRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: `${routes[REFLECTION]}/$reflectionId${routes[REFLECT]}`,
+  getParentRoute: () => reflectionsRoute,
+  path: routes[REFLECT],
   component: () => {
     const { reflectionId } = reflectionsReflectRoute.useParams();
+    const { reflection, isLoggedIn } = reflectionsRoute.useLoaderData();
     return (
       <Suspense fallback={<EntrySectionLoading />}>
-        <ReflectionPage reflectionId={reflectionId} />
+        <Await promise={reflection}>
+          {data => (
+            <ReflectionPage reflectionId={reflectionId} reflection={data} isLoggedIn={isLoggedIn} />
+          )}
+        </Await>
       </Suspense>
     );
   },
@@ -137,21 +190,20 @@ const routeTree = rootRoute.addChildren([
   defaultRoute,
   antennaRoute,
   myAntennaRoute,
-  beamRoute,
-  beamReflectRoute,
-  reflectionsRoute,
-  reflectionsReflectRoute,
+  beamRoute.addChildren([beamReflectRoute]),
+  reflectionsRoute.addChildren([reflectionsReflectRoute]),
   tagFeedRoute,
   profileFeedRoute,
   editorRoute,
 ]);
 
-export const router = ({ baseRouteName, apolloClient }: CreateRouter) =>
+export const router = ({ baseRouteName, apolloClient, authenticatedDID }: CreateRouter) =>
   createRouter({
     routeTree,
     basepath: baseRouteName,
     context: {
       apolloClient,
+      authenticatedDID,
     },
     defaultErrorComponent: ({ error }) => {
       return <ErrorComponent error={(error as unknown as Error).message} />;

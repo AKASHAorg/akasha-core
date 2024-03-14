@@ -31,6 +31,7 @@ export const CategoryPills: React.FC<CategoryPillsProps> = props => {
           active={allCategoriesSelected}
           customStyle="mt-3 mr-3"
           onPillClick={onPillClick({ label: allCategoriesLabel, value: allCategoriesLabel })}
+          type="action"
         />
       )}
 
@@ -43,6 +44,7 @@ export const CategoryPills: React.FC<CategoryPillsProps> = props => {
           iconDirection="right"
           customStyle="mt-3 mr-3"
           onPillClick={onPillClick({ label, value })}
+          type="action"
         />
       ))}
     </Stack>

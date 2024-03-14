@@ -16,7 +16,7 @@ const meta: Meta<PillProps> = {
 export default meta;
 type Story = StoryObj<PillProps>;
 
-const variants: PillProps[] = [
+const variants = [
   {
     label: 'Base pill',
   },
@@ -37,13 +37,13 @@ const variants: PillProps[] = [
     icon: <XMarkIcon />,
     iconDirection: 'right',
   },
-];
+] as const;
 
 export const PillVariants: Story = {
   render: () => (
     <Stack spacing="gap-x-2">
       {variants.map((variant, idx) => (
-        <Pill key={idx} {...variant} />
+        <Pill key={idx} {...variant} type="action" />
       ))}
     </Stack>
   ),

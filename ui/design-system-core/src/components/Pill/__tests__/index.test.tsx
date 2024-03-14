@@ -19,6 +19,7 @@ describe('<Pill /> Component', () => {
           icon={<XMarkIcon />}
           iconDirection="right"
           onPillClick={mockChangeHandler}
+          type="action"
         />,
         {},
       );

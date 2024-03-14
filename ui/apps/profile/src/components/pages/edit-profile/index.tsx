@@ -27,7 +27,7 @@ type EditProfilePageProps = {
 const EditProfilePage: React.FC<EditProfilePageProps> = props => {
   const { profileId } = props;
   const { t } = useTranslation('app-profile');
-  const { getRoutingPlugin, uiEvents } = useRootComponentProps();
+  const { getRoutingPlugin, logger, uiEvents } = useRootComponentProps();
   const { avatarImage, coverImage, saveImage, loading: isSavingImage } = useSaveImage();
   const [activeTab, setActiveTab] = useState(0);
   const [selectedActiveTab, setSelectedActiveTab] = useState(0);
@@ -43,31 +43,59 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
     data?.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
   const background = profileData?.background;
   const avatar = profileData?.avatar;
+  const sdk = getSDK();
 
-  const onEditSuccess = () => {
+  const onUpdateSuccess = () => {
     uiEvents.next({
       event: NotificationEvents.ShowNotification,
       data: {
         type: NotificationTypes.Success,
-        message: t('Profile updated successfully'),
+        message: t('Profile updated successfully.'),
       },
     });
     navigateToProfileInfoPage();
   };
 
-  const sdk = getSDK();
+  const onUpdateError = () => {
+    uiEvents.next({
+      event: NotificationEvents.ShowNotification,
+      data: {
+        type: NotificationTypes.Error,
+        message: t('Profile update unsuccessful. Please try again.'),
+      },
+    });
+    navigateToProfileInfoPage();
+  };
+
+  const onSaveImageError = () => {
+    uiEvents.next({
+      event: NotificationEvents.ShowNotification,
+      data: {
+        type: NotificationTypes.Error,
+        message: t('The image wasn’t uploaded correctly. Please try again!'),
+      },
+    });
+  };
 
   const [createProfileMutation, { loading: createProfileProcessing }] = useCreateProfileMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
     onCompleted: data => {
       const id = data.createAkashaProfile?.document.id;
       if (id) indexProfile(id);
-      onEditSuccess();
+      onUpdateSuccess();
+    },
+    onError: error => {
+      onUpdateError();
+      logger.error(`error in creating a profile: ${JSON.stringify(error)}`);
     },
   });
   const [updateProfileMutation, { loading: updateProfileProcessing }] = useUpdateProfileMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
-    onCompleted: onEditSuccess,
+    onCompleted: onUpdateSuccess,
+    onError: error => {
+      onUpdateError();
+      logger.error(`error in updating a profile: ${JSON.stringify(error)}`);
+    },
   });
   const [indexProfileMutation] = useIndexProfileMutation();
   const isProcessing = createProfileProcessing || updateProfileProcessing;
@@ -150,12 +178,15 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
       <Card radius={20} elevation="1" customStyle="py-4 h-full">
         <EditProfile
           defaultValues={{
-            avatar: null,
-            coverImage: null,
+            avatar: profileData?.avatar ? transformSource(profileData.avatar?.default) : null,
+            coverImage: profileData?.background
+              ? transformSource(profileData.background?.default)
+              : null,
             name: profileData?.name ?? '',
             bio: profileData?.description ?? '',
             ens: '',
             userName: '',
+            nsfw: profileData?.nsfw ?? false,
             links: profileData?.links?.map(link => link.href) ?? [],
           }}
           header={{
@@ -179,9 +210,9 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
               avatar: t('Are you sure you want to delete your avatar?'),
               coverImage: t('Are you sure you want to delete your cover?'),
             },
-            isSavingImage: isSavingImage,
+            isSavingImage,
             publicImagePath: '/images',
-            onImageSave: async (type, image) => saveImage(type, image),
+            onImageSave: (type, image) => saveImage({ type, image, onError: onSaveImageError }),
             onImageDelete: type =>
               setProfileContentOnImageDelete(
                 deleteImageAndGetProfileContent({ profileData, type }),
