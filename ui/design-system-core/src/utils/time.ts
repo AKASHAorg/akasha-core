@@ -47,11 +47,4 @@ const formatRelativeTime = (date: string, locale?: string) => {
   return '';
 };
 
-const randomDateBetweenValues = (start = 'Jan 01 2020', end = 'Dec 31 2020') => {
-  const timeStart = new Date(start).getTime();
-  const timeEnd = new Date(end).getTime();
-
-  return new Date(timeStart + Math.random() * (timeEnd - timeStart));
-};
-
-export { formatDate, formatDateShort, formatRelativeTime, randomDateBetweenValues };
+export { formatDate, formatDateShort, formatRelativeTime };

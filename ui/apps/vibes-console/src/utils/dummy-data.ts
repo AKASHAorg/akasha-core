@@ -1,5 +1,11 @@
-import { randomDateBetweenValues } from '@akashaorg/design-system-core/lib/utils';
 import { TApplicationStatus } from './status-color';
+
+const randomDateBetweenValues = (start = 'Jan 01 2020', end = 'Dec 31 2020') => {
+  const timeStart = new Date(start).getTime();
+  const timeEnd = new Date(end).getTime();
+
+  return new Date(timeStart + Math.random() * (timeEnd - timeStart));
+};
 
 const id = (Math.random() + 1).toString(36).substring(2);
 
