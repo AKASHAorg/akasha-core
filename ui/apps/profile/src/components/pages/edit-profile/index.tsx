@@ -43,6 +43,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
     data?.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
   const background = profileData?.background;
   const avatar = profileData?.avatar;
+  const sdk = getSDK();
 
   const onUpdateSuccess = () => {
     uiEvents.next({
@@ -66,7 +67,15 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
     navigateToProfileInfoPage();
   };
 
-  const sdk = getSDK();
+  const onSaveImageError = () => {
+    uiEvents.next({
+      event: NotificationEvents.ShowNotification,
+      data: {
+        type: NotificationTypes.Error,
+        message: t('The image wasn’t uploaded correctly. Please try again!'),
+      },
+    });
+  };
 
   const [createProfileMutation, { loading: createProfileProcessing }] = useCreateProfileMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
@@ -177,6 +186,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
             bio: profileData?.description ?? '',
             ens: '',
             userName: '',
+            nsfw: profileData?.nsfw ?? false,
             links: profileData?.links?.map(link => link.href) ?? [],
           }}
           header={{
@@ -200,9 +210,9 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
               avatar: t('Are you sure you want to delete your avatar?'),
               coverImage: t('Are you sure you want to delete your cover?'),
             },
-            isSavingImage: isSavingImage,
+            isSavingImage,
             publicImagePath: '/images',
-            onImageSave: async (type, image) => saveImage(type, image),
+            onImageSave: (type, image) => saveImage({ type, image, onError: onSaveImageError }),
             onImageDelete: type =>
               setProfileContentOnImageDelete(
                 deleteImageAndGetProfileContent({ profileData, type }),

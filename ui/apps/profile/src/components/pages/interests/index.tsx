@@ -188,6 +188,7 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
                   }
                   onPillClick={() => handleInterestClick(interest)}
                   active={!!activeInterests.find(ac => ac.value === interest.value)}
+                  type="action"
                 />
               ))}
             </Stack>
