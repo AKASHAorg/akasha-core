@@ -56,7 +56,7 @@ export const ContentBlockExtension: React.FC<ContentBlockExtensionProps> = props
     isMatched: false,
   });
   const [fetchBlockInfo, blockInfoQuery] = useGetContentBlockByIdLazyQuery();
-  const blockDataError = useMemo(() => {
+  const fetchDataError = useMemo(() => {
     return hasOwn(remainingProps, 'blockData')
       ? remainingProps?.error
       : blockInfoQuery.error?.message;
@@ -135,7 +135,7 @@ export const ContentBlockExtension: React.FC<ContentBlockExtensionProps> = props
     }
   }, [blockData]);
 
-  if (hasContentLoadError || blockDataError) {
+  if (hasContentLoadError || fetchDataError) {
     return (
       <Stack spacing="gap-y-2">
         {hasContentLoadError && (
@@ -144,7 +144,7 @@ export const ContentBlockExtension: React.FC<ContentBlockExtensionProps> = props
             errorDescription={contentLoadError.errorDescription}
           />
         )}
-        {blockDataError && (
+        {fetchDataError && (
           <BlockErrorCard
             errorTitle={fetchError.errorTitle}
             errorDescription={fetchError.errorDescription}

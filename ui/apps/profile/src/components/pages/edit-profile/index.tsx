@@ -43,6 +43,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
     data?.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
   const background = profileData?.background;
   const avatar = profileData?.avatar;
+  const sdk = getSDK();
 
   const onUpdateSuccess = () => {
     uiEvents.next({
@@ -75,7 +76,6 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
       },
     });
   };
-  const sdk = getSDK();
 
   const [createProfileMutation, { loading: createProfileProcessing }] = useCreateProfileMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
@@ -211,8 +211,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
             },
             isSavingImage,
             publicImagePath: '/images',
-            onImageSave: async (type, image) =>
-              saveImage({ type, image, onError: onSaveImageError }),
+            onImageSave: (type, image) => saveImage({ type, image, onError: onSaveImageError }),
             onImageDelete: type =>
               setProfileContentOnImageDelete(
                 deleteImageAndGetProfileContent({ profileData, type }),
