@@ -19,7 +19,13 @@ export function deleteImageAndGetProfileContent({ profileData, type }: IDeleteIm
 
   const backgroundObj = background
     ? {
-        default: background.default,
+        default: background?.default
+          ? {
+              height: background.default.height,
+              width: background.default.width,
+              src: background.default.src,
+            }
+          : undefined,
         alternatives:
           /* TODO: the following logical or won't be necessary once the default value is set as undefined rater than null on ceramic side*/
           background?.alternatives || undefined,
@@ -28,7 +34,13 @@ export function deleteImageAndGetProfileContent({ profileData, type }: IDeleteIm
 
   const avatarObj = avatar
     ? {
-        default: avatar?.default,
+        default: avatar?.default
+          ? {
+              height: avatar.default.height,
+              width: avatar.default.width,
+              src: avatar.default.src,
+            }
+          : undefined,
         alternatives:
           /* TODO: the following logical or won't be necessary once the default value is set as undefined rater than null on ceramic side*/
           avatar?.alternatives || undefined,

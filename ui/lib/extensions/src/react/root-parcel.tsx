@@ -25,7 +25,7 @@ export const RootParcel = props => {
   React.useEffect(() => {
     if (parcel.current && parcel.current.getStatus() === singleSpaMountedConstant.current) {
       parcel.current.update?.(otherProps).catch(err => {
-        logger.error('failed to update parcel', err);
+        logger.error(`failed to update parcel: ${JSON.stringify(err)}`);
       });
     }
   }, [logger, otherProps]);

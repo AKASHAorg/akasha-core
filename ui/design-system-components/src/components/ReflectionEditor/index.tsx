@@ -107,7 +107,6 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
             onClear={onClear}
             onCancelClick={onCancelClick}
             transformSource={transformSource}
-            customStyle="p-2"
             encodingFunction={encodingFunction}
           />
         </Card>

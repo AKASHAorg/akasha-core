@@ -1,9 +1,7 @@
-import React from 'react';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import React, { useRef } from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import BackToOriginalBeam from '@akashaorg/ui-lib-feed/lib/components/back-to-original-beam';
-import EntrySectionLoading from './entry-section-loading';
 import ReflectionSection from './reflection-section';
 import ReflectFeed from '@akashaorg/ui-lib-feed/lib/components/reflect-feed';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
@@ -13,41 +11,36 @@ import {
   hasOwn,
   mapReflectEntryData,
   useAnalytics,
-  useGetLogin,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { EntityTypes, type ReflectEntryData } from '@akashaorg/typings/lib/ui';
-import { useGetReflectionByIdSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { ReflectionPreview } from '@akashaorg/ui-lib-feed';
 import { usePendingReflections } from '@akashaorg/ui-awf-hooks/lib/use-pending-reflections';
 import { PendingReflect } from '../../reflect-editor/pending-reflect';
 import { useNavigate } from '@tanstack/react-router';
+import { GetReflectionByIdQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 
 type ReflectionPageProps = {
   reflectionId: string;
+  reflection: GetReflectionByIdQuery;
+  isLoggedIn: boolean;
 };
 
 const ReflectionPage: React.FC<ReflectionPageProps> = props => {
-  const { reflectionId } = props;
+  const { reflectionId, reflection, isLoggedIn } = props;
   const { t } = useTranslation('app-akasha-integration');
   const { navigateToModal, getTranslationPlugin } = useRootComponentProps();
-  const { data } = useGetLogin();
   const [analyticsActions] = useAnalytics();
+  const wrapperRef = useRef(null);
   const navigate = useNavigate();
-  const isLoggedIn = !!data?.id;
-  const reflectionReq = useGetReflectionByIdSuspenseQuery({ variables: { id: reflectionId } });
   const pendingReflectionsVar = createReactiveVar<ReflectEntryData[]>([]);
   const { pendingReflections } = usePendingReflections(pendingReflectionsVar);
   const entryData = React.useMemo(() => {
-    if (
-      reflectionReq.data &&
-      hasOwn(reflectionReq.data, 'node') &&
-      hasOwn(reflectionReq.data.node, 'id')
-    ) {
-      return reflectionReq.data.node;
+    if (reflection && hasOwn(reflection, 'node') && hasOwn(reflection.node, 'id')) {
+      return reflection.node;
     }
-  }, [reflectionReq]);
+  }, [reflection]);
 
   const showLoginModal = (title?: string, message?: string) => {
     navigateToModal({
@@ -67,16 +60,6 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
     });
   };
 
-  if (reflectionReq.error)
-    return (
-      <ErrorLoader
-        type="script-error"
-        title={t('There was an error loading the entry')}
-        details={t('We cannot show this entry right now')}
-        devDetails={reflectionReq.error.message}
-      />
-    );
-
   return (
     <Card padding="p-0" margin="mb-4">
       <Stack spacing="gap-y-2">
@@ -88,16 +71,17 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
                 label={t('Back to original beam')}
                 onClick={() => onNavigateToOriginalBeam(entryData.beam?.id)}
               />
-              <React.Suspense fallback={<EntrySectionLoading />}>
+              <>
                 <ReflectionSection
                   beamId={entryData.beam?.id}
                   reflectionId={entryData.id}
                   entryData={mapReflectEntryData(entryData)}
                   isLoggedIn={isLoggedIn}
-                  showLoginModal={showLoginModal}
                   pendingReflectionsVar={pendingReflectionsVar}
+                  parentWrapperRef={wrapperRef}
+                  showLoginModal={showLoginModal}
                 />
-              </React.Suspense>
+              </>
               {pendingReflections
                 .filter(
                   content => hasOwn(content, 'reflection') && content.reflection === reflectionId,

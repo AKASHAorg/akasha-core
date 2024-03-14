@@ -96,7 +96,8 @@ const SnackBarNotification: React.FC<RootExtensionProps> = () => {
     const eventsSub = uiEvents.pipe(filterEvent(NotificationEvents.ShowNotification)).subscribe({
       next: (eventInfo: NotificationEvent) => {
         if (eventInfo.data && hasOwn(eventInfo.data, 'message')) {
-          setMessage(eventInfo.data.message as string);
+          setMessage(eventInfo.data.message);
+          setMessageType(eventInfo.data.type);
         }
       },
     });

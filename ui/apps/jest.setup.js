@@ -31,6 +31,9 @@ jest.doMock('@akashaorg/awf-sdk', () => () => ({
         resolveDID: jest.fn(),
       },
     },
+    stash: {
+      getUiStash: () => new Map(),
+    },
   },
 }));
 
