@@ -12,20 +12,21 @@ const meta: Meta<AccordionProps> = {
   argTypes: {
     customStyle: { defaultValue: '', control: 'text' },
     contentStyle: { defaultValue: '', control: 'text' },
+    accordionId: { control: 'number' },
     open: { control: 'boolean' },
     headerDivider: { control: 'boolean' },
-    handleClick: { action: 'accordion clicked', control: '' },
+    handleClick: { action: 'accordion clicked' },
   },
 };
 
 type Story = StoryObj<AccordionProps>;
 
-const ethAddress = '0x003410490050000320006570034567114572000';
+const profileId = 'did:pkh:eip155:5:0x36c703c4d22af437dc883e2e0884e57404e16493';
 
 const title = (
   <Stack align="center" direction="row">
     <Avatar
-      profileId={ethAddress}
+      profileId={profileId}
       avatar={{ src: 'https://placebeard.it/360x360', height: 360, width: 360 }}
     />
     <Text customStyle="ml-2.5">Item name</Text>
@@ -40,18 +41,17 @@ const content = (
   </Stack>
 );
 
-export default meta;
-
 const baseArgs: Story = {
   args: {
     open: true,
-    accordionId: 0,
+    accordionId: 1,
     titleNode: title,
     contentNode: content,
+    customStyle: 'w-[15%]',
   },
 };
 
-export const BaseAccordion: Story = {
+export const Default: Story = {
   args: {
     ...baseArgs.args,
   },
@@ -60,3 +60,5 @@ export const BaseAccordion: Story = {
 export const AccordionWithHeaderDivider: Story = {
   args: { ...baseArgs.args, headerDivider: true },
 };
+
+export default meta;

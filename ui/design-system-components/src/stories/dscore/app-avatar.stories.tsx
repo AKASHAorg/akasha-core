@@ -22,8 +22,6 @@ const profileId = 'did:pkh:eip155:5:0x36c703c42dfa2437dc883e2e0884e57404e16493';
 
 const avatar = { src: 'https://placebeard.it/360x360', height: 360, width: 360 };
 
-export default meta;
-
 const baseArgs: Story = {
   args: {
     appType: IntegrationTypes.APP,
@@ -44,3 +42,5 @@ export const AvatarWithWidgetPlaceholder: Story = {
     appType: IntegrationTypes.WIDGET,
   },
 };
+
+export default meta;
