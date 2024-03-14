@@ -17,24 +17,32 @@ type BeamSectionProps = {
   isLoggedIn: boolean;
   showNSFWCard: boolean;
   pendingReflectionsVar: ReturnType<typeof createReactiveVar<ReflectEntryData[]>>;
+  parentWrapperRef: React.MutableRefObject<unknown>;
   showLoginModal: (title?: string, message?: string) => void;
 };
 
 const BeamSection: React.FC<BeamSectionProps> = props => {
-  const { beamId, entryData, isLoggedIn, showNSFWCard, showLoginModal, pendingReflectionsVar } =
-    props;
+  const {
+    beamId,
+    entryData,
+    isLoggedIn,
+    showNSFWCard,
+    pendingReflectionsVar,
+    parentWrapperRef,
+    showLoginModal,
+  } = props;
   const { t } = useTranslation('app-akasha-integration');
   const routerState = useRouterState();
   const [isReflecting, setIsReflecting] = useState(
     routerState.location.pathname.endsWith(routes[REFLECT]),
   );
 
-  const wrapperRef = useCloseActions(() => {
+  useCloseActions(() => {
     setIsReflecting(false);
-  });
+  }, parentWrapperRef);
 
   return (
-    <Stack ref={wrapperRef} spacing="gap-y-2">
+    <Stack spacing="gap-y-2">
       <Stack>
         <BeamCard
           entryData={entryData}

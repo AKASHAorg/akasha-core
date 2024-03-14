@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import { generateModerationHistory, generateModerators, generateTenureInfoLabel } from '../utils';
+import { generateTenureInfoLabel } from '../utils';
 import ModeratorDetailCard from '../components/moderator';
 import TransparencyLogItemCard from '../components/transparency-log/log-item';
 
@@ -16,8 +16,8 @@ export const TransparencyLogItem: React.FC<TransparencyLogItemPageProps> = () =>
   // const { itemId } = useParams<{ itemId: string }>();
   const { t } = useTranslation('app-vibes');
 
-  const moderator = generateModerators()[1];
-  const transparencyLogItems = generateModerationHistory();
+  const moderator = null;
+  const transparencyLogItems = [];
   const randomisedItem =
     transparencyLogItems[Math.floor(Math.random() * transparencyLogItems.length)];
 

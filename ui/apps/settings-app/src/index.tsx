@@ -13,7 +13,7 @@ import routes from './routes';
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
   loadingFn: () => import('./components'),
   i18nNamespace: ['app-settings-ewa'],
-  mountsIn: opts.layoutConfig?.pluginSlotId,
+  mountsIn: opts.layoutConfig?.applicationSlotId,
   logo: { type: LogoTypeSource.ICON, value: <Cog8ToothIcon /> },
   menuItems: {
     label: 'Settings',

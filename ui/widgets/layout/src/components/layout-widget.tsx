@@ -227,7 +227,7 @@ const Layout: React.FC<unknown> = () => {
                   </Stack>
                 </Card>
               )}
-              <div id={layoutConfig.pluginSlotId} />
+              <div id={layoutConfig.applicationSlotId} />
               <Stack customStyle="sticky bottom-2">
                 <Extension name={layoutConfig.snackbarNotifSlotId} />
               </Stack>
