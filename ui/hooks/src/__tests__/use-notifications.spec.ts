@@ -7,9 +7,9 @@ describe('useNotifications', () => {
     const { result } = renderHook(() => useMarkAsRead());
 
     await act(async () => {
-      const data = await result.current.markAsRead(mockNotifications[0].id);
+      await result.current.markAsRead(mockNotifications[0].id);
 
-      expect(data).toBeTruthy();
+      expect(result.current.data).toBeTruthy();
     });
   });
 
