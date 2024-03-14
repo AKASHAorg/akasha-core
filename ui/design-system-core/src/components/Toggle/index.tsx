@@ -7,6 +7,8 @@ import Text from '../Text';
 export type toggleSize = 'small' | 'large';
 
 export type ToggleProps = {
+  id?: string;
+  name?: string;
   label?: string;
   size?: toggleSize;
   // status
@@ -19,6 +21,8 @@ export type ToggleProps = {
 };
 
 const Toggle: React.FC<ToggleProps> = ({
+  id,
+  name,
   label,
   size = 'small',
   checked = false,
@@ -60,9 +64,10 @@ const Toggle: React.FC<ToggleProps> = ({
   return (
     <label className={tw('inline-flex items-center cursor-pointer')}>
       <input
+        id={id}
+        name={name}
         type="checkbox"
         value=""
-        name="toggle"
         checked={checked}
         disabled={disabled}
         onChange={handleChange}
