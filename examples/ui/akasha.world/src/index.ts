@@ -61,10 +61,11 @@ declare const __LOAD_LOCAL_SOURCES__: boolean;
     // main layout (shell)
     layout: '@akashaorg/ui-widget-layout',
     // define an app that will load at root '/' path
-    homepageApp: '@akashaorg/example-app',
+    homepageApp: '@akashaorg/app-akasha-integration',
     // define pre-installed apps,
     // homepageApp is always loaded by default
     defaultApps: [
+      '@akashaorg/example-app',
       '@akashaorg/app-routing',
       '@akashaorg/app-vibes',
       '@akashaorg/app-auth-ewa',

@@ -3,6 +3,8 @@ import {
   IAppConfig,
   IntegrationRegistrationOptions,
   LogoTypeSource,
+  MenuItemAreaType,
+  MenuItemType,
   type RootComponentProps,
 } from '@akashaorg/typings/lib/ui';
 import React from 'react';
@@ -31,8 +33,9 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     logo: { type: LogoTypeSource.ICON, value: <GlobeAltIcon /> },
     menuItems: {
       label: 'Example App',
-      area: [],
+      type: MenuItemType.App,
       logo: { type: LogoTypeSource.ICON, value: <GlobeAltIcon /> },
+      area: [MenuItemAreaType.AppArea],
       subRoutes: [],
     },
   };
