@@ -18,7 +18,7 @@ import { Akasha } from '@akashaorg/design-system-core/lib/components/Icon/akasha
  * All the plugins must export an object like this:
  */
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
-  mountsIn: opts.layoutConfig?.pluginSlotId,
+  mountsIn: opts.layoutConfig?.applicationSlotId,
   routes: {
     ...routes,
   },

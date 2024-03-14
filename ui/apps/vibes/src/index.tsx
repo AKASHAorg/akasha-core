@@ -12,7 +12,7 @@ import routes, { HISTORY, HOME, MODERATORS } from './routes';
 
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
   loadingFn: () => import('./components'),
-  mountsIn: opts.layoutConfig?.pluginSlotId,
+  mountsIn: opts.layoutConfig?.applicationSlotId,
   logo: { type: LogoTypeSource.ICON, value: <Vibe /> },
   i18nNamespace: ['app-vibes'],
   routes: {
