@@ -218,5 +218,5 @@ export function useLogout() {
     logoutApiCall();
   }, []);
 
-  return { logOut, data, isLoading, error };
+  return { logOut, data, isLoading, logOutErrors: error };
 }

@@ -21,7 +21,7 @@ const Connect: React.FC<unknown> = () => {
   const authenticatedDID = data?.id;
 
   const { signIn, signInErrors } = useLogin();
-  const { logOut } = useLogout();
+  const { logOut, logOutErrors } = useLogout();
 
   const { data: profileDataReq, loading } = useGetProfileByDidQuery({
     variables: { id: authenticatedDID },
