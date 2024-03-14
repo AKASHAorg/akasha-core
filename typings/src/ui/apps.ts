@@ -20,47 +20,7 @@ export type InstalledAppStorePlugin = {
     manifest: IntegrationReleaseInfoFragmentFragment;
   }[];
 };
-export type Extensions = { [key: string]: string } & {
-  /**
-   * load modals inside this node
-   */
-  modalSlotId?: string;
-  /**
-   * main app and plugin area
-   */
-  pluginSlotId?: string;
-  /**
-   * load root widgets inside this node
-   * do not use this for app defined widgets
-   */
-  rootWidgetSlotId?: string;
-  /**
-   * topbar loading node
-   */
-  topbarSlotId?: string;
-  /**
-   * load app defined widgets into this node
-   */
-  widgetSlotId?: string;
-
-  /**
-   * cookie widget slot
-   */
-  cookieWidgetSlotId?: string;
-  /**
-   * sidebar area slot
-   */
-  sidebarSlotId?: string;
-  /*
-   * Mode for hiding the widget area
-   * @warning: In the future, this will be deprecated
-   */
-  focusedPluginSlotId?: string;
-  /**
-   * snackbar notification slot
-   */
-  snackbarNotifSlotId?: string;
-};
+export type Extensions = { [key: string]: string };
 
 export type AppName = string;
 
@@ -84,8 +44,11 @@ export interface IAppConfig {
    */
   activeWhen?: ActivityFn;
   /**
-   * The id of the html element
-   * that this app will mount in
+   * The id of the html element that this app will mount in
+   * The applications and widgets have a predefined slots provided by the
+   * layout widget. In this case, the slot names are passed to the register function args as
+   * `registrationOptions.layoutConfig.applicationSlotId` and `registrationOptions.layoutConfig.widgetSlotId`
+   * Note: widgets that are provided by apps should use the `rootWidgetSlotId`.
    **/
   mountsIn: string;
 
@@ -98,7 +61,11 @@ export interface IAppConfig {
   };
   loadingFn: () => Promise<singleSpa.LifeCycles<RootComponentProps>>;
   /**
-   * @TODO: add docs
+   * The content of a Beam (aka. post) is a list of 1 or more contentBlocks.
+   * These are provided by the apps and should have 2 versions:
+   *  - one for the editor (to insert the data)
+   *  - one for the reader (to render the data)
+   *  More info in the documentation.
    */
   contentBlocks?: ContentBlockExtensionInterface[];
   extensions?: ExtensionInterface[];
@@ -119,8 +86,7 @@ export interface IAppConfig {
    */
   i18nNamespace?: string[];
   /**
-   * Only used for topbar.
-   * @deprecated - use extension points
+   * This property is used by the sidebar widget to construct the menu
    */
   menuItems: IMenuItem | IMenuItem[];
 }
