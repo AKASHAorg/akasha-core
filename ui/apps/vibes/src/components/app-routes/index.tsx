@@ -1,7 +1,12 @@
 import React from 'react';
-import { Outlet, Route, Router, rootRouteWithContext } from '@tanstack/react-router';
+import {
+  Outlet,
+  createRootRouteWithContext,
+  createRoute,
+  createRouter,
+} from '@tanstack/react-router';
+import { CreateRouter, RouterContext } from '@akashaorg/typings/lib/ui';
 import ErrorComponent from './error-component';
-import { CreateRouter } from '@akashaorg/typings/lib/ui';
 import {
   ModeratorDetailPage,
   Moderators,
@@ -12,13 +17,11 @@ import {
   VibesValue,
 } from '../../pages';
 
-import { generateModerators } from '../../utils';
-
-const rootRoute = rootRouteWithContext()({
+const rootRoute = createRootRouteWithContext<RouterContext>()({
   component: Outlet,
 });
 
-const overviewRoute = new Route({
+const overviewRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/overview',
   component: () => {
@@ -26,7 +29,7 @@ const overviewRoute = new Route({
   },
 });
 
-const moderationValueRoute = new Route({
+const moderationValueRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `/overview/values/$value`,
   component: () => {
@@ -35,11 +38,11 @@ const moderationValueRoute = new Route({
   },
 });
 
-const moderatorsRoute = new Route({
+const moderatorsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/moderators',
   component: () => {
-    const getModeratorsQuery = { data: generateModerators(), isFetching: false };
+    const getModeratorsQuery = { data: [], isFetching: false };
     const allModerators = getModeratorsQuery.data;
 
     return (
@@ -48,7 +51,7 @@ const moderatorsRoute = new Route({
   },
 });
 
-const viewModeratorRoute = new Route({
+const viewModeratorRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/moderators/$moderatorId',
   component: () => {
@@ -57,7 +60,7 @@ const viewModeratorRoute = new Route({
   },
 });
 
-const historyRoute = new Route({
+const historyRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/history',
   component: () => {
@@ -65,7 +68,7 @@ const historyRoute = new Route({
   },
 });
 
-const historyItemRoute = new Route({
+const historyItemRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/history/$itemId',
   component: () => {
@@ -74,7 +77,7 @@ const historyItemRoute = new Route({
   },
 });
 
-const reportItemRoute = new Route({
+const reportItemRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/report/$itemType/$itemId',
   component: () => {
@@ -90,10 +93,13 @@ const routeTree = rootRoute.addChildren([
   reportItemRoute,
 ]);
 
-export const createRouter = ({ baseRouteName }: CreateRouter) =>
-  new Router({
+export const router = ({ baseRouteName, apolloClient }: CreateRouter) =>
+  createRouter({
     routeTree,
     basepath: baseRouteName,
+    context: {
+      apolloClient,
+    },
     defaultErrorComponent: ({ error }) => (
       <ErrorComponent error={(error as unknown as Error).message} />
     ),

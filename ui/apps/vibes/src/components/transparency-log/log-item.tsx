@@ -1,12 +1,10 @@
 import React from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { FlagIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
-import { entryCardProps } from '../../utils';
 
 export type TransparencyLogItemType = 'Beam' | 'Reflection' | 'Profile';
 
@@ -87,7 +85,8 @@ const TransparencyLogItemCard: React.FC<TransparencyLogItemCardProps> = props =>
 
       {item.status === 'Kept' && (
         <Stack customStyle="mt-4 mx-4">
-          <EntryCard {...entryCardProps} />
+          {/* pass the correct data, when enabled */}
+          {/* <EntryCard /> */}
         </Stack>
       )}
 

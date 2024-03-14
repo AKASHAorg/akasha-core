@@ -85,7 +85,7 @@ export const ContentBlockExtension: React.FC<ContentBlockExtensionProps> = props
       matchingBlocks.length !== state.parcels.length &&
       !state.isMatched
     ) {
-      resolveConfigs({ matchingBlocks, mode: ContentBlockModes.READONLY, logger })
+      resolveConfigs({ matchingBlocks, mode: ContentBlockModes.READONLY })
         .then(newBlocks => {
           setState({
             parcels: newBlocks,
@@ -116,7 +116,7 @@ export const ContentBlockExtension: React.FC<ContentBlockExtensionProps> = props
         variables: {
           id: remainingProps.blockID,
         },
-      }).catch(err => logger.error('Failed to fetch content block. Error', err));
+      }).catch(err => logger.error(`failed to fetch content block: ${JSON.stringify(err)}`));
     }
   }, [logger, fetchBlockInfo, remainingProps]);
 

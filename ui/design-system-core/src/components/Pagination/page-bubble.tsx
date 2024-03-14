@@ -7,7 +7,7 @@ import Card from '../Card';
 export type PageBubbleProps = {
   isActive: boolean;
   page: number;
-  onClickPage: (page: number) => () => void;
+  onClickPage: (page: number) => void;
 };
 
 const PageBubble: React.FC<PageBubbleProps> = props => {
@@ -19,7 +19,7 @@ const PageBubble: React.FC<PageBubbleProps> = props => {
 
   const regularPageWrapperBg = 'bg-(grey8 dark:grey3)';
   return (
-    <Card type="plain" onClick={onClickPage(page)}>
+    <Card type="plain" onClick={() => onClickPage(page)}>
       <Stack
         align="center"
         justify="center"

@@ -37,6 +37,7 @@ const ContentBlock: React.FC<ContentBlockType> = props => {
   const contentBlockStoreRef = useRef(getExtensionsPlugin()?.contentBlockStore);
   const contentBlockReq = useGetContentBlockByIdQuery({
     variables: { id: blockID },
+    fetchPolicy: 'cache-first',
   });
 
   /*

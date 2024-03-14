@@ -1,7 +1,5 @@
 import React from 'react';
 import ReflectionPage from '../pages/entry-page/reflection-page';
-import * as hooks from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-
 import {
   screen,
   renderWithAllProviders,
@@ -10,28 +8,6 @@ import {
   genReflectionData,
 } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
-import { AkashaReflect } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-
-const mockLocationValue = {
-  pathname: '/',
-  search: '',
-  hash: '',
-  state: null,
-};
-
-const mockRouteParams = {
-  beamId: 'kjzl6kcym7w8y7r2ej5n3oaq3l6bp4twqxmcvjoa3dlf86mvdb4vv7ryv1pkewr',
-};
-
-jest.mock('react-router', () => ({
-  ...jest.requireActual('react-router'),
-  useLocation: jest.fn().mockImplementation(() => {
-    return mockLocationValue;
-  }),
-  useParams: jest.fn().mockImplementation(() => {
-    return mockRouteParams;
-  }),
-}));
 
 class ResizeObserver {
   observe() {
@@ -49,7 +25,11 @@ describe('< ReflectionPage /> component', () => {
   global.ResizeObserver = ResizeObserver;
   const BaseComponent = (
     <AnalyticsProvider {...genAppProps()}>
-      <ReflectionPage />
+      <ReflectionPage
+        reflection={{ node: genReflectionData() }}
+        reflectionId={'kjzl6kcym7w8y5coci0at0tquy8zmferlog99ys94oj2qgyjy8soxzpbflmlzey'}
+        isLoggedIn={true}
+      />
     </AnalyticsProvider>
   );
 
@@ -57,15 +37,6 @@ describe('< ReflectionPage /> component', () => {
     await act(async () => {
       renderWithAllProviders(BaseComponent, {});
     });
-  });
-
-  beforeAll(() => {
-    (
-      jest.spyOn(hooks, 'useGetReflectionByIdSuspenseQuery') as unknown as jest.SpyInstance<{
-        data: { node: AkashaReflect };
-        isLoading: boolean;
-      }>
-    ).mockReturnValue({ data: { node: genReflectionData() }, isLoading: false });
   });
 
   it.skip('should render reflection page', async () => {
