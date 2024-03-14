@@ -81,7 +81,6 @@
     "babel-loader": "^8.2.2",
     "dayjs": "1.11.7",
     "react-docgen-typescript": "2.2.2",
-    "storybook": "7.6.10",
     "ts-jest": "29.0.3",
     "react-markdown": "8.0.7",
     "remark-gfm": "3.0.1",
