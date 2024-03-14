@@ -26,11 +26,11 @@ export const initialize = (options: IntegrationRegistrationOptions): void => {
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => {
   return {
     loadingFn: () => import('./components'),
-    mountsIn: opts.layoutConfig?.pluginSlotId,
-    i18nNamespace: ['app-auth-ewa'],
+    mountsIn: opts.layoutConfig?.applicationSlotId,
+    i18nNamespace: ['app-example'],
     logo: { type: LogoTypeSource.ICON, value: <GlobeAltIcon /> },
     menuItems: {
-      label: 'Authentication App',
+      label: 'Example App',
       area: [],
       logo: { type: LogoTypeSource.ICON, value: <GlobeAltIcon /> },
       subRoutes: [],

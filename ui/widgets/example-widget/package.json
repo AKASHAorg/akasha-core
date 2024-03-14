@@ -20,7 +20,7 @@
     "prepare": "yarn run tsc",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.cjs",
     "pack:stats": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.cjs --profile --json ../../stats/layout.json",
-    "postpack": "copyfiles -f ./dist/* ../../build/widgets/layout",
+    "postpack": "copyfiles -f ./dist/* ../../build/widgets/example-widget",
     "watch": "webpack --config webpack.config.cjs --watch",
     "pretest": "tsc -m commonjs",
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
@@ -49,6 +49,6 @@
     "lib"
   ],
   "akasha": {
-    "displayName": "Layout"
+    "displayName": "Example Widget"
   }
 }

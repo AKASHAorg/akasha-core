@@ -61,7 +61,7 @@ declare const __LOAD_LOCAL_SOURCES__: boolean;
     // main layout (shell)
     layout: '@akashaorg/ui-widget-layout',
     // define an app that will load at root '/' path
-    homepageApp: '@akashaorg/app-akasha-integration',
+    homepageApp: '@akashaorg/example-app',
     // define pre-installed apps,
     // homepageApp is always loaded by default
     defaultApps: [
@@ -86,6 +86,7 @@ declare const __LOAD_LOCAL_SOURCES__: boolean;
       '@akashaorg/ui-widget-sidebar',
       '@akashaorg/ui-widget-mini-profile',
       '@akashaorg/ui-widget-my-apps',
+      '@akashaorg/ui-widget-example',
     ],
     analytics: {
       trackerUrl: process.env.MATOMO_TRACKER_URL,

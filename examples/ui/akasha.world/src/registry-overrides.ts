@@ -138,6 +138,18 @@ const overrides = [
     sources: ['/widgets/my-apps/index.js'],
     ...missingRequiredFields,
   },
+  {
+    name: '@akashaorg/example-app',
+    integrationType: INTEGRATION_TYPES.APPLICATION,
+    sources: ['/apps/example-app/index.js'],
+    ...missingRequiredFields,
+  },
+  {
+    name: '@akashaorg/ui-widget-example',
+    integrationType: INTEGRATION_TYPES.WIDGET,
+    sources: ['/widgets/example-widget/index.js'],
+    ...missingRequiredFields,
+  },
 ];
 
 export default overrides;

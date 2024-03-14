@@ -598,6 +598,50 @@
           }
         }
       }
+    },
+    "@akashaorg/ui-widget-example": {
+      "root": "ui/widgets/example-widget",
+      "sourceRoot": "ui/widgets/example-widget/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": ["ui/build/widgets/example-widget"],
+          "options": {
+            "commands": ["yarn run pack", "yarn postpack"],
+            "cwd": "ui/widgets/example-widget",
+            "parallel": false
+          }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/widgets/example-widget"
+          }
+        }
+      }
+    },
+    "@akashaorg/app-example": {
+      "root": "ui/apps/example-app",
+      "sourceRoot": "ui/apps/example-app/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": ["ui/apps/example-app"],
+          "options": {
+            "commands": ["yarn run pack", "yarn postpack"],
+            "cwd": "ui/apps/example-app",
+            "parallel": false
+          }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/apps/example-app"
+          }
+        }
+      }
     }
   }
 }

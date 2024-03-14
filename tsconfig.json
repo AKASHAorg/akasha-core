@@ -66,6 +66,9 @@
       "path": "./ui/widgets/analytics"
     },
     {
+      "path": "./ui/widgets/example-widget"
+    },
+    {
       "path": "./ui/apps/extensions"
     },
     {
@@ -88,6 +91,9 @@
     },
     {
       "path": "./ui/apps/articles"
+    },
+    {
+      "path": "./ui/apps/example-app"
     },
     {
       "path": "./sdk"
