@@ -17,23 +17,31 @@ type ReflectionSectionProps = {
   entryData: ReflectEntryData;
   isLoggedIn: boolean;
   pendingReflectionsVar: ReturnType<typeof createReactiveVar<ReflectEntryData[]>>;
+  parentWrapperRef: React.MutableRefObject<unknown>;
   showLoginModal: (title?: string, message?: string) => void;
 };
 
 const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
-  const { beamId, reflectionId, entryData, isLoggedIn, showLoginModal, pendingReflectionsVar } =
-    props;
+  const {
+    beamId,
+    reflectionId,
+    entryData,
+    isLoggedIn,
+    pendingReflectionsVar,
+    parentWrapperRef,
+    showLoginModal,
+  } = props;
   const { t } = useTranslation('app-akasha-integration');
   const routerState = useRouterState();
   const [isReflecting, setIsReflecting] = useState(
     routerState.location.pathname.endsWith(routes[REFLECT]),
   );
-  const wrapperRef = useCloseActions(() => {
+  useCloseActions(() => {
     setIsReflecting(false);
-  });
+  }, parentWrapperRef);
 
   return (
-    <Stack ref={wrapperRef} spacing="gap-y-2">
+    <Stack spacing="gap-y-2">
       <Stack>
         <EditableReflection
           entryData={entryData}
