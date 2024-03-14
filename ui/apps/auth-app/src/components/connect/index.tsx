@@ -20,8 +20,8 @@ const Connect: React.FC<unknown> = () => {
   const isLoggedIn = !!data?.id;
   const authenticatedDID = data?.id;
 
-  const loginCall = useLogin();
-  const logoutCall = useLogout();
+  const { signIn, signInErrors } = useLogin();
+  const { logOut } = useLogout();
 
   const { data: profileDataReq, loading } = useGetProfileByDidQuery({
     variables: { id: authenticatedDID },
@@ -60,7 +60,7 @@ const Connect: React.FC<unknown> = () => {
   }, [isLoggedIn, loading, authenticatedDID, profileData, profileDataReq, worldConfig.homepageApp]);
 
   const handleDisconnect = () => {
-    logoutCall.logOut();
+    logOut();
     routingPlugin.current?.navigateTo({
       appName: '@akashaorg/app-auth-ewa',
       getNavigationUrl: appRoutes => `${appRoutes[CONNECT]}`,
@@ -68,7 +68,7 @@ const Connect: React.FC<unknown> = () => {
   };
 
   const handleSignIn = provider => {
-    loginCall.signIn({ selectedProvider: provider });
+    signIn({ selectedProvider: provider });
   };
 
   return (
@@ -84,7 +84,7 @@ const Connect: React.FC<unknown> = () => {
               onSignIn={handleSignIn}
               onDisconnect={handleDisconnect}
               worldName={worldConfig.title}
-              signInError={loginCall.error}
+              signInError={signInErrors}
             />
           }
         />

@@ -178,7 +178,7 @@ export function useLogin(onError?: (err: Error) => void) {
     [],
   );
 
-  return { signIn, data, isLoading, error, isSuccess: !!data, isError: !!error };
+  return { signIn, data, isLoading, signInErrors: error, isSuccess: !!data, isError: !!error };
 }
 
 /**
@@ -216,9 +216,7 @@ export function useLogout() {
     };
 
     logoutApiCall();
-
-    return { data, isLoading, error };
   }, []);
 
-  return { logOut };
+  return { logOut, data, isLoading, error };
 }

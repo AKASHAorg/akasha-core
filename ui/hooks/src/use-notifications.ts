@@ -36,10 +36,9 @@ export function useMarkAsRead() {
     };
 
     markMessageAsReadApiCall();
-    return { data, isLoading, error, isSuccess: !!data, isError: !!error };
   }, []);
 
-  return { markAsRead };
+  return { markAsRead, data, isLoading, error, isSuccess: !!data, isError: !!error };
 }
 
 const checkNewNotifications = async () => {
@@ -52,9 +51,8 @@ const checkNewNotifications = async () => {
  * Hook to check for new notifications
  * @example useCheckNewNotifications hook
  * ```typescript
- * const checkNewNotificationsQuery = useCheckNewNotifications('logged-in-user-eth-address');
+ * const { data, isLoading, error } = useCheckNewNotifications('logged-in-user-eth-address');
  *
- * const hasNewNotifications = checkNewNotificationsQuery.data;
  * ```
  */
 export function useCheckNewNotifications(did: string) {
