@@ -186,6 +186,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
             bio: profileData?.description ?? '',
             ens: '',
             userName: '',
+            nsfw: profileData?.nsfw ?? false,
             links: profileData?.links?.map(link => link.href) ?? [],
           }}
           header={{
