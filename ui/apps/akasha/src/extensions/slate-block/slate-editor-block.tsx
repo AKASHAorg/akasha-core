@@ -141,18 +141,11 @@ export const SlateEditorBlock = (
 
   return (
     <EditorBox
-      // ref={editorRef}
       showAvatar={false}
       profileId={'profileId'}
       placeholderLabel={'write here'}
       maxEncodedLengthErrLabel={t('Text block exceeds line limit, please review!')}
       noMentionsLabel={t('You are not following someone with that name')}
-      onPublish={() => {
-        // void
-      }}
-      // handleSaveLinkPreviewDraft={handleSaveLinkPreviewDraft}
-      // linkPreview={linkPreview}
-      // getLinkPreview={getLinkPreview}
       getMentions={handleGetMentions}
       mentions={mentions}
       withMeter={isFocusedEditor}
