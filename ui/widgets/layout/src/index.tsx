@@ -1,14 +1,17 @@
 import 'systemjs-webpack-interop/auto-public-path';
-import { IntegrationRegistrationOptions, WidgetInterface } from '@akashaorg/typings/lib/ui';
+import type {
+  IntegrationRegistrationOptions,
+  LayoutWidgetInterface,
+} from '@akashaorg/typings/lib/ui';
 import { TranslationPlugin } from './translation';
 
-export const register: (props: IntegrationRegistrationOptions) => WidgetInterface = () => {
+export const register: (props: IntegrationRegistrationOptions) => LayoutWidgetInterface = () => {
   return {
     loadingFn: () => import('./components'),
     activeWhen: () => true,
     mountsIn: 'root',
     extensionsMap: {
-      pluginSlotId: 'plugin-slot',
+      applicationSlotId: 'app-slot',
       topbarSlotId: 'topbar-slot',
       sidebarSlotId: 'sidebar-slot',
       rootWidgetSlotId: 'root-widget-slot',

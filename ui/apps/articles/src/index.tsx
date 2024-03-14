@@ -12,7 +12,7 @@ import { NewspaperIcon } from '@akashaorg/design-system-core/lib/components/Icon
 
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
   loadingFn: () => import('./components'),
-  mountsIn: opts.layoutConfig?.pluginSlotId,
+  mountsIn: opts.layoutConfig?.applicationSlotId,
   logo: { type: LogoTypeSource.ICON, value: <NewspaperIcon /> },
   i18nNamespace: ['app-articles'],
   routes: {
