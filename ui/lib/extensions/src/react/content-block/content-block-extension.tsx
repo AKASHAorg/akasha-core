@@ -86,14 +86,16 @@ export const ContentBlockExtension: React.FC<ContentBlockExtensionProps> = props
       matchingBlocks.length !== state.parcels.length &&
       !state.isMatched
     ) {
-      resolveConfigs({ matchingBlocks, mode: ContentBlockModes.READONLY, logger })
+      resolveConfigs({ matchingBlocks, mode: ContentBlockModes.READONLY })
         .then(newBlocks => {
           setState({
             parcels: newBlocks,
             isMatched: true,
           });
         })
-        .catch(err => logger.error('failed to load content blocks', err));
+        .catch(err =>
+          logger.error(`failed to load content blocks in read-only mode: ${JSON.stringify(err)}`),
+        );
     } else if (
       matchingBlocks &&
       !matchingBlocks.length &&
@@ -114,7 +116,7 @@ export const ContentBlockExtension: React.FC<ContentBlockExtensionProps> = props
         variables: {
           id: remainingProps.blockID,
         },
-      }).catch(err => logger.error('Failed to fetch content block. Error', err));
+      }).catch(err => logger.error(`failed to fetch content block: ${JSON.stringify(err)}`));
     }
   }, [logger, fetchBlockInfo, remainingProps]);
 

@@ -534,6 +534,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
   return (
     <Stack
       justify="between"
+      padding="p-4"
       background={{ light: 'white', dark: 'grey2' }}
       fullWidth
       customStyle={customStyle}
@@ -557,7 +558,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
           </Stack>
         )}
         {/* w-0 min-w-full is used to prevent parent width expansion without setting a fixed width */}
-        <Stack padding="py-2" customStyle="w-0 min-w-full">
+        <Stack customStyle="w-0 min-w-full">
           <Slate editor={editor} value={editorState || editorDefaultValue} onChange={handleChange}>
             <Editable
               placeholder={placeholderLabel}

@@ -3,10 +3,9 @@ import * as React from 'react';
 import { renderWithAllProviders, act, cleanup } from '@akashaorg/af-testing';
 
 import { Moderators } from '../../pages';
-import { generateModerators } from '../../utils';
 
 describe('<Moderators /> component', () => {
-  const Base = <Moderators isFetchingModerators={false} moderators={generateModerators()} />;
+  const Base = <Moderators isFetchingModerators={false} moderators={[]} />;
 
   let componentWrapper = renderWithAllProviders(<></>, {});
 
