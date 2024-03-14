@@ -14,10 +14,12 @@ import AppSettings from './settings/apps';
 import AWF_Misc from './common/misc';
 import AWF_Lit from './common/lit';
 import AWF_Ceramic from './common/ceramic';
+import AWF_Config from './common/config';
 
 const diContainer = new Container({
   defaultScope: 'Singleton',
 });
+diContainer.bind<AWF_Config>(TYPES.Config).to(AWF_Config);
 diContainer.bind<AWF_Misc>(TYPES.Misc).to(AWF_Misc);
 diContainer.bind<Logging>(TYPES.Log).to(Logging);
 diContainer.bind<Gql>(TYPES.Gql).to(Gql);

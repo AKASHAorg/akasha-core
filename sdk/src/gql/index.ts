@@ -24,6 +24,7 @@ import { getMainDefinition, relayStylePagination } from '@apollo/client/utilitie
 
 import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev';
 import { VIEWER_ID_HEADER } from '@composedb/constants';
+import AWF_Config from '../common/config';
 
 const enum ContextSources {
   DEFAULT = 'gql#DEFAULT',
@@ -57,16 +58,19 @@ class Gql {
   private readonly _apolloCache: InMemoryCache;
   readonly apolloClient: ApolloClient<any>;
   private readonly _contextSources: { default: symbol; composeDB: symbol };
+  private _config: AWF_Config;
 
   public constructor(
     @inject(TYPES.Log) log: Logging,
     @inject(TYPES.Ceramic) ceramic: CeramicService,
     @inject(TYPES.EventBus) globalChannel: EventBus,
+    @inject(TYPES.Config) config: AWF_Config,
   ) {
     this._log = log.create('AWF_GQL');
     this._globalChannel = globalChannel;
     this._ceramic = ceramic;
     this._viewerID = '';
+    this._config = config;
     this._contextSources = Object.freeze({
       default: Symbol.for(ContextSources.DEFAULT),
       composeDB: Symbol.for(ContextSources.COMPOSEDB),
@@ -135,7 +139,7 @@ class Gql {
       },
       composeDBlink,
       createPersistedQueryLink({ sha256, useGETForHashedQueries: true }).concat(
-        new HttpLink({ uri: process.env.GRAPHQL_URI || 'http://localhost:4112/' }),
+        new HttpLink({ uri: this._config.getOption('graphql_uri') || 'http://localhost:4112/' }),
       ),
     );
 
@@ -289,7 +293,7 @@ class Gql {
   }
 
   get indexingDID() {
-    return process.env.INDEXING_DID;
+    return this._config.getOption('indexing_did');
   }
 
   async resetCache() {
