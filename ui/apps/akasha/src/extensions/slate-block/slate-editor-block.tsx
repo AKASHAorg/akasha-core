@@ -130,6 +130,11 @@ export const SlateEditorBlock = (
   };
 
   const [isFocusedEditor, setIsFocusedEditor] = useState(false);
+  /**
+   * this is used to display/hide elements only when a block instance is focused
+   * must be exposed to outer components through useImperativeHandle
+   * the logic for updating the currently focused block is in beam-editor
+   */
   const handleFocusBlock = (focus: boolean) => {
     setIsFocusedEditor(focus);
   };
