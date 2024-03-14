@@ -1,6 +1,11 @@
 import React from 'react';
-import { Outlet, Route, Router, rootRouteWithContext } from '@tanstack/react-router';
-import { CreateRouter } from '@akashaorg/typings/lib/ui';
+import {
+  Outlet,
+  createRootRouteWithContext,
+  createRoute,
+  createRouter,
+} from '@tanstack/react-router';
+import { CreateRouter, RouterContext } from '@akashaorg/typings/lib/ui';
 import ErrorComponent from './error-component';
 import {
   Applications,
@@ -23,11 +28,11 @@ import routes, {
   WITHDRAW_APPLICATION,
 } from '../../routes';
 
-const rootRoute = rootRouteWithContext()({
+const rootRoute = createRootRouteWithContext<RouterContext>()({
   component: Outlet,
 });
 
-const applicationsRoute = new Route({
+const applicationsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[HOME],
   component: () => {
@@ -35,7 +40,7 @@ const applicationsRoute = new Route({
   },
 });
 
-const becomeModeratorRoute = new Route({
+const becomeModeratorRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[BECOME_MODERATOR],
   component: () => {
@@ -43,7 +48,7 @@ const becomeModeratorRoute = new Route({
   },
 });
 
-const selfApplicationsRoute = new Route({
+const selfApplicationsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[MY_APPLICATIONS],
   component: () => {
@@ -51,7 +56,7 @@ const selfApplicationsRoute = new Route({
   },
 });
 
-const selfApplicationDetailRoute = new Route({
+const selfApplicationDetailRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[MY_APPLICATION_DETAIL],
   component: () => {
@@ -59,7 +64,7 @@ const selfApplicationDetailRoute = new Route({
   },
 });
 
-const selfApplicationWithdrawRoute = new Route({
+const selfApplicationWithdrawRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[WITHDRAW_APPLICATION],
   component: () => {
@@ -67,7 +72,7 @@ const selfApplicationWithdrawRoute = new Route({
   },
 });
 
-const applicationsLogRoute = new Route({
+const applicationsLogRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[APPLICATIONS],
   component: () => {
@@ -75,7 +80,7 @@ const applicationsLogRoute = new Route({
   },
 });
 
-const applicationDetailRoute = new Route({
+const applicationDetailRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[APPLICATION_DETAIL],
   component: () => {
@@ -83,7 +88,7 @@ const applicationDetailRoute = new Route({
   },
 });
 
-const dashboardRoute = new Route({
+const dashboardRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/dashboard',
   component: () => {
@@ -91,7 +96,7 @@ const dashboardRoute = new Route({
   },
 });
 
-const settingsRoute = new Route({
+const settingsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/settings',
   component: () => {
@@ -113,10 +118,13 @@ const routeTree = rootRoute.addChildren([
 ]);
 
 // @todo: update to use type from typings package
-export const createRouter = ({ baseRouteName }: CreateRouter) =>
-  new Router({
+export const router = ({ baseRouteName, apolloClient }: CreateRouter) =>
+  createRouter({
     routeTree,
     basepath: baseRouteName,
+    context: {
+      apolloClient,
+    },
     defaultErrorComponent: ({ error }) => (
       <ErrorComponent error={(error as unknown as Error).message} />
     ),
