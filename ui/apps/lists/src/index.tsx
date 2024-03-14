@@ -14,7 +14,7 @@ import { SparklesIcon } from '@akashaorg/design-system-core/lib/components/Icon/
  */
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
   loadingFn: () => import('./components'),
-  mountsIn: opts.layoutConfig?.pluginSlotId,
+  mountsIn: opts.layoutConfig?.applicationSlotId,
   i18nNamespace: ['app-lists'],
   extensions: [
     {
