@@ -55,6 +55,15 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
     navigateToProfileInfoPage();
   };
 
+  const onSaveImageError = () => {
+    uiEvents.next({
+      event: NotificationEvents.ShowNotification,
+      data: {
+        type: NotificationTypes.Error,
+        message: t('The image wasn’t uploaded correctly. Please try again!'),
+      },
+    });
+  };
   const sdk = getSDK();
 
   const [createProfileMutation, { loading: createProfileProcessing }] = useCreateProfileMutation({
@@ -179,9 +188,10 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
               avatar: t('Are you sure you want to delete your avatar?'),
               coverImage: t('Are you sure you want to delete your cover?'),
             },
-            isSavingImage: isSavingImage,
+            isSavingImage,
             publicImagePath: '/images',
-            onImageSave: async (type, image) => saveImage(type, image),
+            onImageSave: async (type, image) =>
+              saveImage({ type, image, onError: onSaveImageError }),
             onImageDelete: type =>
               setProfileContentOnImageDelete(
                 deleteImageAndGetProfileContent({ profileData, type }),

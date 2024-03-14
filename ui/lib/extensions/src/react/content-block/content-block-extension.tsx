@@ -3,22 +3,20 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { ContentBlockModes, BlockInstanceMethods } from '@akashaorg/typings/lib/ui';
 import { GetContentBlockByIdQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 import { useGetContentBlockByIdLazyQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { ExclamationTriangleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { ParcelConfigObject } from 'single-spa';
 import { BlockParcel } from './block-parcel';
 import { MatchingBlock } from './common.types';
 import { resolveConfigs } from './resolve-configs';
+import { BlockError, BlockErrorCard } from './block-error-card';
 
 export type ContentBlockExtensionProps = {
   blockRef?: React.RefObject<BlockInstanceMethods>;
-  errorTitle: string;
-  errorDescription: string;
-  refreshLabel: string;
+  fetchError?: BlockError;
+  contentLoadError?: BlockError;
   notInstalledTitle: string;
   notInstalledDescription1: string;
   notInstalledDescription2: string;
@@ -31,6 +29,7 @@ export type ContentBlockExtensionProps = {
       blockData: GetContentBlockByIdQuery['node'];
       matchingBlocks?: MatchingBlock[];
       error?: string;
+      refreshLabel?: string;
       onRefresh?: () => void;
     }
 );
@@ -38,9 +37,8 @@ export type ContentBlockExtensionProps = {
 export const ContentBlockExtension: React.FC<ContentBlockExtensionProps> = props => {
   const {
     blockRef,
-    errorTitle,
-    errorDescription,
-    refreshLabel,
+    fetchError,
+    contentLoadError,
     notInstalledTitle,
     notInstalledDescription1,
     notInstalledDescription2,
@@ -49,6 +47,7 @@ export const ContentBlockExtension: React.FC<ContentBlockExtensionProps> = props
   } = props;
   const { logger, getExtensionsPlugin } = useRootComponentProps();
   const contentBlockStoreRef = useRef(getExtensionsPlugin()?.contentBlockStore);
+  const [hasContentLoadError, setHasContentLoadError] = useState(false);
   const [state, setState] = useState<{
     parcels: (MatchingBlock & { config: ParcelConfigObject })[];
     isMatched: boolean;
@@ -93,7 +92,10 @@ export const ContentBlockExtension: React.FC<ContentBlockExtensionProps> = props
             isMatched: true,
           });
         })
-        .catch(err => logger.error('failed to load content blocks', err));
+        .catch(err => {
+          setHasContentLoadError(true);
+          logger.error('failed to load content blocks', err);
+        });
     } else if (
       matchingBlocks &&
       !matchingBlocks.length &&
@@ -133,48 +135,39 @@ export const ContentBlockExtension: React.FC<ContentBlockExtensionProps> = props
     }
   }, [blockData]);
 
+  if (hasContentLoadError || blockDataError) {
+    return (
+      <Stack spacing="gap-y-2">
+        {hasContentLoadError && (
+          <BlockErrorCard
+            errorTitle={contentLoadError.errorTitle}
+            errorDescription={contentLoadError.errorDescription}
+          />
+        )}
+        {blockDataError && (
+          <BlockErrorCard
+            errorTitle={fetchError.errorTitle}
+            errorDescription={fetchError.errorDescription}
+            refreshLabel={hasOwn(remainingProps, 'blockData') ? remainingProps.refreshLabel : ''}
+            onRefresh={() => {
+              if (hasOwn(remainingProps, 'blockID')) {
+                blockInfoQuery.refetch({
+                  id: remainingProps?.blockID,
+                });
+              }
+
+              if (hasOwn(remainingProps, 'blockData')) {
+                remainingProps.onRefresh?.();
+              }
+            }}
+          />
+        )}
+      </Stack>
+    );
+  }
+
   return (
     <>
-      {blockDataError && (
-        <Stack direction="row">
-          <Stack
-            background={{ light: 'warningLight', dark: 'warningDark' }}
-            customStyle="w-2.5 rounded-l-lg border border(warningLight dark:warningDark)"
-          />
-          <Stack
-            spacing="gap-y-1"
-            padding="p-2"
-            background={{ light: 'warningLight/30', dark: 'warningDark/30' }}
-            customStyle="rounded-r-lg border border(warningLight dark:warningDark)"
-            fullWidth
-          >
-            <Stack direction="row" align="center" spacing="gap-x-1">
-              <Icon icon={<ExclamationTriangleIcon />} color="warning" />
-              <Text variant="button-md">{errorTitle}</Text>
-            </Stack>
-            <Text variant="footnotes2" weight="normal" customStyle="pl-6">
-              {errorDescription}
-            </Text>
-            <Button
-              variant="text"
-              size="md"
-              label={refreshLabel}
-              onClick={() => {
-                if (hasOwn(remainingProps, 'blockID')) {
-                  blockInfoQuery.refetch({
-                    id: remainingProps?.blockID,
-                  });
-                }
-
-                if (hasOwn(remainingProps, 'blockData')) {
-                  remainingProps.onRefresh?.();
-                }
-              }}
-              customStyle="ml-auto mt-auto"
-            />
-          </Stack>
-        </Stack>
-      )}
       {!state.parcels.length && !state.isMatched && (
         <Stack fullWidth={true} spacing="gap-y-1" customStyle="mb-2">
           <TextLine width="w-full" animated />

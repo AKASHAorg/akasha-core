@@ -133,12 +133,18 @@ const ContentBlock: React.FC<ContentBlockType> = props => {
             blockData={blockData}
             matchingBlocks={matchingBlocks}
             error={contentBlockReq.error?.message ?? ''}
-            errorTitle={t('Block not loaded correctly')}
-            errorDescription={t('Click on refresh to try reloading the block.')}
-            refreshLabel={t('Refresh')}
+            fetchError={{
+              errorTitle: t('Network error occurred'),
+              errorDescription: t('Click on refresh to try reloading the block.'),
+            }}
+            contentLoadError={{
+              errorTitle: t('Content not loaded correctly'),
+              errorDescription: t('Unable to load content, please try again later.'),
+            }}
             notInstalledTitle={t('not installed')}
             notInstalledDescription1={t('Please install')}
             notInstalledDescription2={t('to view this content.')}
+            refreshLabel={t('Refresh')}
             onRefresh={() => {
               contentBlockReq.refetch({ id: blockID });
             }}
