@@ -26,8 +26,6 @@ import {
   useGetBeamByIdSuspenseQuery,
   useGetBeamStreamQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { PendingReflect } from '../../reflect-editor/pending-reflect';
-import { usePendingReflections } from '@akashaorg/ui-awf-hooks/lib/use-pending-reflections';
 import { useNavigate } from '@tanstack/react-router';
 
 type BeamPageProps = {
@@ -74,7 +72,6 @@ const BeamPage: React.FC<BeamPageProps> = props => {
     variables: { id: beamId },
   });
   const pendingReflectionsVar = createReactiveVar<ReflectEntryData[]>([]);
-  const { pendingReflections } = usePendingReflections(pendingReflectionsVar);
   const entryData = React.useMemo(() => {
     if (beamReq.data && hasOwn(beamReq.data, 'node') && hasOwn(beamReq.data.node, 'id')) {
       return beamReq.data.node;
@@ -133,11 +130,6 @@ const BeamPage: React.FC<BeamPageProps> = props => {
                 showNSFWCard={showNsfwCard}
                 pendingReflectionsVar={pendingReflectionsVar}
               />
-              {pendingReflections
-                .filter(content => !hasOwn(content, 'reflection') && content.beamID === beamId)
-                .map((content, index) => (
-                  <PendingReflect key={`pending-${index}-${beamId}`} entryData={content} />
-                ))}
             </React.Suspense>
           }
           queryKey={`reflect-feed-${beamId}`}
