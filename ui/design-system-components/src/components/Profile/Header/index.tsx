@@ -3,6 +3,7 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
+import ProfileNameField from '@akashaorg/design-system-core/lib/components/ProfileNameField';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import CopyToClipboard from '@akashaorg/design-system-core/lib/components/CopyToClipboard';
 import ImageOverlay from '../../ImageOverlay';
@@ -29,7 +30,7 @@ export type HeaderProps = {
   validAddress?: boolean;
   background?: Profile['background'];
   avatar?: Profile['avatar'];
-  name: Profile['name'];
+  profileName: Profile['name'];
   ensName?: 'loading' | string;
   viewerIsOwner?: boolean;
   menuItems?: MenuProps['items'];
@@ -55,7 +56,7 @@ const Header: React.FC<HeaderProps> = ({
   validAddress = true,
   background,
   avatar,
-  name,
+  profileName,
   ensName,
   viewerIsOwner,
   menuItems,
@@ -132,7 +133,7 @@ const Header: React.FC<HeaderProps> = ({
             <Stack direction="column" spacing="gap-y-1">
               <Stack direction="row" align="center" spacing="gap-x-1">
                 <Button plain={true} onClick={onClickProfileName}>
-                  <Text variant="button-lg">{name}</Text>
+                  <ProfileNameField did={profileId} profileName={profileName} size="lg" />
                 </Button>
               </Stack>
               <DidField
@@ -180,17 +181,19 @@ const Header: React.FC<HeaderProps> = ({
                 )}
 
                 {menuItems && (
-                  <Menu
-                    anchor={{
-                      icon: <EllipsisVerticalIcon />,
-                      variant: 'primary',
-                      greyBg: true,
-                      iconOnly: true,
-                      'aria-label': 'settings',
-                    }}
-                    items={menuItems}
-                    customStyle="w-max z-99"
-                  />
+                  <Stack customStyle="mt-1">
+                    <Menu
+                      anchor={{
+                        icon: <EllipsisVerticalIcon />,
+                        variant: 'primary',
+                        greyBg: true,
+                        iconOnly: true,
+                        'aria-label': 'settings',
+                      }}
+                      items={menuItems}
+                      customStyle="w-max z-99"
+                    />
+                  </Stack>
                 )}
               </Stack>
             </Stack>

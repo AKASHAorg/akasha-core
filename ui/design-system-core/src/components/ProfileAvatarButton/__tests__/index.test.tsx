@@ -2,13 +2,14 @@ import * as React from 'react';
 import { act, fireEvent } from '@testing-library/react';
 import ProfileAvatarButton from '../';
 import { customRender } from '../../../test-utils';
+import { truncateDid } from '../../../utils';
 
 describe('<ProfileAvatarButton /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
   const label = 'label';
 
-  const profileId = 'profileId';
+  const profileId = 'did:pkh:eip155:5:0xc47a483494db8fe455ba29a53a7f75349dfc02ff';
 
   const avatar = {
     height: 320,
@@ -49,7 +50,7 @@ describe('<ProfileAvatarButton /> Component', () => {
   it('shows info and label', () => {
     const { getByText } = componentWrapper;
 
-    const profileIdText = getByText(profileId);
+    const profileIdText = getByText(truncateDid(profileId));
     const labelText = getByText(label);
 
     expect(profileIdText).toBeDefined();

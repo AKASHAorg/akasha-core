@@ -3,7 +3,7 @@ import Avatar, { AvatarSize } from '../Avatar';
 import Stack from '../Stack';
 import Button from '../Button';
 import DidField from '../DidField';
-import Text from '../Text';
+import ProfileNameField from '../ProfileNameField';
 import { type Image } from '@akashaorg/typings/lib/ui';
 
 export type ProfileAvatarButtonProps = {
@@ -41,8 +41,6 @@ const ProfileAvatarButton = React.forwardRef(
       onMouseLeave,
     } = props;
 
-    const textTruncateStyle = `${truncateText ? 'max-w([7rem] xs:[2rem])' : ''}`;
-
     const handleClickAvatar = ev => {
       ev.preventDefault();
 
@@ -77,9 +75,7 @@ const ProfileAvatarButton = React.forwardRef(
           aria-label="info-box"
         >
           <Stack direction="row" align="center" spacing="gap-x-1" ref={ref}>
-            <Text variant="button-sm" weight="bold" truncate={true} customStyle={textTruncateStyle}>
-              {label || profileId}
-            </Text>
+            <ProfileNameField did={profileId} profileName={label} truncateText={truncateText} />
             {metadata}
           </Stack>
           <DidField did={profileId} isValid={true} copiable={false} />

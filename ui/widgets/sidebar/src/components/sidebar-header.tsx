@@ -2,6 +2,7 @@ import React, { Suspense, useMemo } from 'react';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
+import ProfileNameField from '@akashaorg/design-system-core/lib/components/ProfileNameField';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { transformSource, hasOwn } from '@akashaorg/ui-awf-hooks';
@@ -73,9 +74,20 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
       </Stack>
       <Stack justify="center" customStyle={'w-fit flex-grow'}>
         {!isLoggedIn && <Text variant="button-md"> {t('Guest')}</Text>}
-        <Suspense fallback={<Text variant="button-md">{t('Fetching your info...')}</Text>}>
-          <Text variant="button-md">{profileName}</Text>
-        </Suspense>
+        {isLoggedIn && (
+          <Suspense fallback={<Text variant="button-md">{t('Fetching your info...')}</Text>}>
+            <ProfileNameField
+              did={authenticatedDID}
+              profileName={profileName}
+              size="md"
+              truncateText
+              showMissingNameWarning
+              missingNameWarningLabel={t(
+                'Your profile is unfollowable due to the lack of basic information, like your name.',
+              )}
+            />
+          </Suspense>
+        )}
         {isLoggedIn && (
           <DidField
             did={authenticatedDID}
