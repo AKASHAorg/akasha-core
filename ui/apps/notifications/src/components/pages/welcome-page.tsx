@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRootComponentProps, useGetSettings, useSaveSettings } from '@akashaorg/ui-awf-hooks';
+import { useRootComponentProps, useSaveSettings } from '@akashaorg/ui-awf-hooks';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
@@ -39,10 +39,7 @@ const WelcomePage: React.FC<WelcomePageProps> = props => {
 
   const Appname = '@akashaorg/app-notifications';
 
-  const fetchSettingsQuery = useGetSettings(Appname);
-  const existingSettings = fetchSettingsQuery.data;
-
-  const saveSettingsMutation = useSaveSettings();
+  const { saveNotificationSettings } = useSaveSettings();
 
   const goToNextStep = () => {
     // navigate to step 2
@@ -87,17 +84,11 @@ const WelcomePage: React.FC<WelcomePageProps> = props => {
   };
 
   const skipCustomization = () => {
-    saveSettingsMutation.mutate({ app: Appname, options: { default: true } });
-
-    goToNotificationsPage();
+    saveNotificationSettings(
+      { app: Appname, options: { default: true } },
+      { onComplete: () => goToNotificationsPage() },
+    );
   };
-
-  if (isLoggedIn && !finalStep && existingSettings) {
-    return navigateTo?.({
-      appName: '@akashaorg/app-notifications',
-      getNavigationUrl: () => routes[SHOW_NOTIFICATIONS_PAGE],
-    });
-  }
 
   return (
     <Card elevation={'1'} radius={16} padding={'p-2'} testId="notifications">
