@@ -5,18 +5,25 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import ProfileNameField from '@akashaorg/design-system-core/lib/components/ProfileNameField';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import CopyToClipboard from '@akashaorg/design-system-core/lib/components/CopyToClipboard';
 import ImageOverlay from '../../ImageOverlay';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
+import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
+import Menu, { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import {
   Cog6ToothIcon,
   EllipsisVerticalIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { getImageFromSeed, getColorClasses } from '@akashaorg/design-system-core/lib/utils';
 import type { Image, Profile } from '@akashaorg/typings/lib/ui';
-import Menu, { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Pill from '@akashaorg/design-system-core/lib/components/Pill';
+
+type ProfileBadge = {
+  toolTipLabel: string;
+  label: string;
+};
 
 export type HeaderProps = {
   profileId: Profile['did']['id'];
@@ -31,7 +38,7 @@ export type HeaderProps = {
   copiedLabel?: string;
   followElement?: ReactElement;
   publicImagePath?: string;
-  metadata?: ReactElement;
+  badges?: ProfileBadge[];
   actionElement?: ReactElement;
   activeOverlay?: 'avatar' | 'coverImage' | null;
   plain?: boolean;
@@ -57,7 +64,7 @@ const Header: React.FC<HeaderProps> = ({
   copiedLabel,
   followElement,
   publicImagePath = '/images',
-  metadata,
+  badges,
   actionElement,
   activeOverlay = null,
   plain = false,
@@ -128,7 +135,6 @@ const Header: React.FC<HeaderProps> = ({
                 <Button plain={true} onClick={onClickProfileName}>
                   <ProfileNameField did={profileId} profileName={profileName} size="lg" />
                 </Button>
-                {metadata}
               </Stack>
               <DidField
                 did={profileId}
@@ -137,6 +143,24 @@ const Header: React.FC<HeaderProps> = ({
                 copyLabel={copyLabel}
                 copiedLabel={copiedLabel}
               />
+              <Stack direction="row" spacing="gap-2" customStyle="flex-wrap">
+                {badges.map(badge => (
+                  <Tooltip
+                    key={badge.label}
+                    content={badge.toolTipLabel}
+                    placement="bottom"
+                    backgroundColor={{ light: 'grey6', dark: 'grey4' }}
+                  >
+                    <Pill
+                      label={badge.label}
+                      background="errorDark"
+                      borderColor="errorLight"
+                      customStyle="px-2"
+                      type="info"
+                    />
+                  </Tooltip>
+                ))}
+              </Stack>
             </Stack>
             <Stack customStyle="relative ml-auto mt-2">
               <Stack direction="row" align="center" spacing="gap-x-2">

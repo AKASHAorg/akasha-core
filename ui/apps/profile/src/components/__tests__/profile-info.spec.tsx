@@ -1,7 +1,6 @@
 import React from 'react';
 import ProfileInfoPage from '../pages/profile-info';
 import userEvent from '@testing-library/user-event';
-import * as queryListenerHooks from '@akashaorg/ui-awf-hooks/lib/use-query-listener';
 import * as statHook from '@akashaorg/ui-awf-hooks/lib/use-profile-stats';
 import * as apolloHooks from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import {
@@ -67,16 +66,6 @@ describe('< ProfileInfoPage />', () => {
       }>
     ).mockReturnValue({
       data: { totalFollowing: 10, totalFollowers: 2, totalBeams: 4, totalTopics: 0 },
-    });
-
-    (
-      jest.spyOn(queryListenerHooks, 'useMutationListener') as unknown as jest.SpyInstance<{
-        mutation: null;
-        clear: () => void;
-      }>
-    ).mockReturnValue({
-      mutation: null,
-      clear: jest.fn,
     });
 
     (

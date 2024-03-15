@@ -144,6 +144,7 @@ const EditInterests: React.FC<EditInterestsProps> = ({
                   }
                   updateMyActiveInterests(interest, true);
                 }}
+                type="action"
               />
             ))}
           </Stack>

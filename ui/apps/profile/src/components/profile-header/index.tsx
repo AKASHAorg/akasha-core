@@ -1,10 +1,7 @@
-import React, { Suspense, useCallback } from 'react';
+import React, { Suspense, useCallback, useMemo } from 'react';
 import routes, { EDIT } from '../../routes';
 import FollowButton from './follow-button';
-import Badge from '@akashaorg/design-system-core/lib/components/Badge';
-import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import {
   FlagIcon,
   LinkIcon,
@@ -28,7 +25,6 @@ import {
   hasOwn,
 } from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { EighteenPlus } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 
 type ProfileHeaderProps = {
   profileDid: string;
@@ -131,6 +127,14 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
       : []),
   ];
 
+  const nsfwBadge = useMemo(
+    () =>
+      profileData?.nsfw
+        ? [{ label: 'NSFW', toolTipLabel: t('This profile is marked as NSFW.') }]
+        : [],
+    [profileData?.nsfw, t],
+  );
+
   if (error)
     return (
       <ErrorLoader
@@ -154,20 +158,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
       copyLabel={t('Copy to clipboard')}
       copiedLabel={t('Copied')}
       followElement={<FollowButton profileID={profileData?.id} showLoginModal={showLoginModal} />}
-      metadata={
-        profileData?.nsfw && (
-          <Tooltip
-            content={t('This profile is marked as NSFW')}
-            placement="bottom"
-            backgroundColor={{ light: 'grey6', dark: 'grey4' }}
-          >
-            <Badge background={{ light: 'errorLight', dark: 'errorDark' }}>
-              {/*@TODO: The following is a placeholder until proper icon is found */}
-              <Icon size="xs" icon={<EighteenPlus />} color="white" solid />
-            </Badge>
-          </Tooltip>
-        )
-      }
+      badges={[...nsfwBadge]}
       activeOverlay={activeOverlay}
       plain={plain}
       customStyle={customStyle}

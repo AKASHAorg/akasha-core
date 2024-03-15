@@ -5,6 +5,7 @@ import ImageCropper, {
 } from '@akashaorg/design-system-core/lib/components/ImageCropper';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 
 type EditImageModalProps = {
   title: ModalProps['title'];
@@ -51,9 +52,9 @@ const EditImageModal: React.FC<EditImageModalProps> = ({
           {images.map((imageData, index) => {
             const imageUrl = typeof imageData === 'string' ? imageData : imageData?.src;
             return (
-              <button key={index} onClick={() => setIndexOfSelectedImage(index)}>
+              <Button key={index} onClick={() => setIndexOfSelectedImage(index)} plain>
                 <Image src={imageUrl} customStyle="object-contain w-10 h-10 rounded-lg" />
-              </button>
+              </Button>
             );
           })}
         </Stack>

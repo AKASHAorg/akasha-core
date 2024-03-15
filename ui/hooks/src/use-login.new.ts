@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
+import React, { useCallback, useEffect, useState } from 'react';
 import { CurrentUser, EthProviders } from '@akashaorg/typings/lib/sdk';
 import { useGlobalLogin } from './use-global-login';
 import { useTheme } from './use-theme';
@@ -8,8 +7,6 @@ import { useGetProfileByDidLazyQuery } from './generated/apollo';
 import { hasOwn } from './utils/has-own';
 import getSDK from '@akashaorg/awf-sdk';
 import { useRootComponentProps } from './use-root-props';
-
-export const LOGIN_STATE_KEY = 'LOGIN_STATE';
 
 export function useConnectWallet() {
   const { theme } = useTheme();
@@ -25,7 +22,30 @@ export function useConnectWallet() {
     }
   }, [sdk.services.common.web3, theme]);
 
-  return useMutation(async () => sdk.api.auth.connectAddress());
+  const [data, setData] = useState<string | null>(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  const connect = useCallback(() => {
+    setIsLoading(true);
+    const connectWalletApiCall = async () => {
+      try {
+        const resp = await sdk.api.auth.connectAddress();
+        if (resp) {
+          setData(resp);
+          setIsLoading(false);
+        }
+      } catch (err) {
+        logError('useConnectWallet', err);
+        setError(err);
+        setData(null);
+      }
+    };
+
+    connectWalletApiCall();
+  }, []);
+
+  return { connect, data, isLoading, error, isSuccess: !!data, isError: !!error };
 }
 
 /**
@@ -111,29 +131,54 @@ export const useGetLoginProfile = () => {
  */
 export function useLogin(onError?: (err: Error) => void) {
   const sdk = getSDK();
-  return useMutation(
-    async ({
+
+  const [data, setData] = useState<
+    | ({
+        id?: string;
+        ethAddress?: string;
+      } & {
+        isNewUser: boolean;
+      })
+    | null
+  >(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  const signIn = useCallback(
+    ({
       selectedProvider,
       checkRegistered = false,
     }: {
       selectedProvider: EthProviders;
       checkRegistered?: boolean; // optional, use if we need to check registered status
     }) => {
-      const resp = await sdk.api.auth.signIn({
-        provider: selectedProvider,
-        checkRegistered,
-      });
-      return resp.data;
-    },
-    {
-      onError: (payload: Error) => {
-        logError('use-login', payload);
-        if (onError) {
-          onError(payload);
+      setIsLoading(true);
+      const signInApiCall = async () => {
+        try {
+          const resp = await sdk.api.auth.signIn({
+            provider: selectedProvider,
+            checkRegistered,
+          });
+          if (resp.data) {
+            setData(resp.data);
+            setIsLoading(false);
+          }
+        } catch (err) {
+          logError('use-login', err);
+          setError(err);
+          setData(null);
+          if (onError) {
+            onError(err);
+          }
         }
-      },
+      };
+
+      signInApiCall();
     },
+    [],
   );
+
+  return { signIn, data, isLoading, signInErrors: error, isSuccess: !!data, isError: !!error };
 }
 
 /**
@@ -150,16 +195,28 @@ export function useLogin(onError?: (err: Error) => void) {
  * ```
  */
 export function useLogout() {
+  const [data, setData] = useState<unknown>(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<Error | null>(null);
   const sdk = getSDK();
-  return useMutation(
-    async () => {
-      const resp = await sdk.api.auth.signOut();
-      if (resp.data) {
-        return resp.data;
+
+  const logOut = useCallback(() => {
+    setIsLoading(true);
+    const logoutApiCall = async () => {
+      try {
+        const resp = await sdk.api.auth.signOut();
+        if (resp.data) {
+          setData(resp);
+          setIsLoading(false);
+        }
+      } catch (err) {
+        logError('use-logout', err);
+        setError(err);
       }
-    },
-    {
-      onError: (err: Error) => logError('use-logout', err),
-    },
-  );
+    };
+
+    logoutApiCall();
+  }, []);
+
+  return { logOut, data, isLoading, logOutErrors: error };
 }
