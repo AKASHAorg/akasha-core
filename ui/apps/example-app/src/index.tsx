@@ -38,6 +38,16 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       area: [MenuItemAreaType.AppArea],
       subRoutes: [],
     },
+    contentBlocks: [
+      {
+        propertyType: 'text-block',
+        displayName: 'Text Block',
+        icon: <GlobeAltIcon />,
+        loadingFn: () => {
+          return () => import('./content-blocks/text-with-title');
+        },
+      },
+    ],
   };
 };
 
