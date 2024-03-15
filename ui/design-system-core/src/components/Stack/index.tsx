@@ -17,7 +17,7 @@ export type Justify = 'start' | 'end' | 'center' | 'between' | 'around' | 'evenl
 export type JustifyItems = 'start' | 'end' | 'center' | 'stretch';
 export type JustifySelf = 'auto' | 'start' | 'end' | 'center' | 'stretch';
 
-export type StackProps = {
+export type StackProps = PropsWithChildren<{
   direction?: Direction;
   padding?: Padding;
   justify?: Justify;
@@ -32,9 +32,9 @@ export type StackProps = {
   testId?: string;
   ref?: LegacyRef<HTMLDivElement>;
   id?: string;
-};
+}>;
 
-const Stack: React.FC<PropsWithChildren<StackProps>> = forwardRef(
+const Stack: React.FC<StackProps> = forwardRef(
   (
     {
       direction = 'column',
