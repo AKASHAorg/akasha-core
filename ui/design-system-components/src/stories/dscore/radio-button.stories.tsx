@@ -1,60 +1,39 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-
 import RadioButton, {
   RadioButtonProps,
 } from '@akashaorg/design-system-core/lib/components/RadioButton';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 const meta: Meta<RadioButtonProps> = {
   title: 'DSCore/Buttons/RadioButton',
   component: RadioButton,
+  tags: ['autodocs'],
+  argTypes: {
+    id: { control: 'text' },
+    label: { control: 'text' },
+    value: { control: 'text' },
+    size: { control: 'select', options: ['small', 'large'] },
+    isSelected: { control: 'boolean' },
+    error: { control: 'boolean' },
+    handleChange: { action: 'radio button checked' },
+  },
 };
 
-export default meta;
 type Story = StoryObj<RadioButtonProps>;
 
-const variants: Omit<RadioButtonProps, 'handleChange'>[] = [
-  {
-    label: 'Radio button 1',
-    value: 'Radio button 1',
+const baseArgs: Story = {
+  args: {
     id: '1',
+    label: 'Radio button',
+    value: 'Radio button',
   },
-  {
-    label: 'Radio button error',
-    value: 'Radio button error',
-    id: '2',
-    error: true,
-  },
-  {
-    label: 'Radio button 3',
-    value: 'Radio button 3',
-    id: '3',
-    size: 'large',
-  },
-];
-
-const Component = () => {
-  const [selectedButton, setSelectedButton] = React.useState('');
-
-  const changeHandler = e => {
-    setSelectedButton(e.target.value);
-  };
-
-  return (
-    <Stack direction="column" spacing="gap-y-2">
-      {variants.map((variant, idx) => (
-        <RadioButton
-          key={idx}
-          {...variant}
-          isSelected={selectedButton === variant.value}
-          handleChange={changeHandler}
-        />
-      ))}
-    </Stack>
-  );
 };
 
-export const RadioButtonVariants: Story = {
-  render: () => <Component />,
-};
+export const Default: Story = { args: { ...baseArgs.args } };
+
+export const RadioButtonSelected: Story = { args: { ...baseArgs.args, isSelected: true } };
+
+export const RadioButtonError: Story = { args: { ...baseArgs.args, error: true } };
+
+export const RadioButtonLarge: Story = { args: { ...baseArgs.args, size: 'large' } };
+
+export default meta;
