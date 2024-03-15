@@ -13,8 +13,6 @@ export type ProfileAvatarButtonProps = {
   label?: string;
   size?: AvatarSize;
   profileId: string;
-  bold?: boolean;
-  active?: boolean;
   truncateText?: boolean;
   href?: string;
   metadata?: ReactElement;

@@ -36,9 +36,7 @@ const Pill: React.FC<PillProps> = props => {
         background={props.background}
         customStyle={`m-h-[18px] m-w-[18px] rounded-full ${borderStyle} ${props.customStyle}`}
       >
-        <Text variant="footnotes2" color="white">
-          {props.label}
-        </Text>
+        <Text variant="footnotes2">{props.label}</Text>
       </Stack>
     );
   }

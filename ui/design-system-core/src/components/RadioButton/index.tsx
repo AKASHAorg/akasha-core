@@ -1,19 +1,19 @@
 import React from 'react';
 import { tw, apply } from '@twind/core';
 
-type ButtonSize = 'small' | 'large';
+type RadioButtonSize = 'small' | 'large';
 
 export type RadioButtonProps = {
   id: string;
   label: string;
   value: string;
-  //button size
-  size?: ButtonSize;
-  //status
+  // button size
+  size?: RadioButtonSize;
+  // status
   isSelected?: boolean;
   error?: boolean;
-  //handler
-  handleChange: (e) => void;
+  // handler
+  handleChange: (e: React.ChangeEvent) => void;
 };
 
 const baseStyles = 'flex items-center space-x-2 mb-2';
