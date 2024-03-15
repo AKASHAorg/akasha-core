@@ -1,7 +1,6 @@
 let theme;
 
 const darkThemeImgSrc = '/img/LOADER-AKASHA-WORLD-DARK.webp';
-const lightThemeImgSrc = '/img/LOADER-AKASHA-WORLD-LIGHT.webp';
 
 // @warning: must be the same as ThemingEvents.ThemeChange enum in typings
 window.addEventListener('theme-change', ev => {
@@ -30,16 +29,13 @@ if (window.localStorage) {
     });
   }
 }
+if (theme) {
+  window.addEventListener('DOMContentLoaded', () => {
+    //Find the splash image element
+    const splashScreenTpl = document.getElementById('splash-screen-tpl');
+    const splashImage = splashScreenTpl.content.childNodes[1].lastElementChild;
 
-window.addEventListener('DOMContentLoaded', () => {
-  //Find the splash image element
-  const splashScreenTpl = document.getElementById('splash-screen-tpl');
-  const splashImage = splashScreenTpl.content.childNodes[1].lastElementChild;
-
-  if (theme) {
     document.body.classList.add(theme, 'bg-black');
     splashImage.src = darkThemeImgSrc;
-  } else {
-    splashImage.src = lightThemeImgSrc;
-  }
-});
+  });
+}
