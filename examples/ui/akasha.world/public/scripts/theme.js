@@ -33,9 +33,9 @@ if (theme) {
   window.addEventListener('DOMContentLoaded', () => {
     //Find the splash image element
     const splashScreenTpl = document.getElementById('splash-screen-tpl');
-    const splashImage = splashScreenTpl.content.childNodes[1].lastElementChild;
+    const splashImage = splashScreenTpl.content.getElementById('splash-image');
 
-    document.body.classList.add(theme, 'bg-black');
     splashImage.src = darkThemeImgSrc;
+    document.body.classList.add(theme, 'bg-black');
   });
 }
