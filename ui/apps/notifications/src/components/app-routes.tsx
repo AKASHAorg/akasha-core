@@ -17,12 +17,14 @@ import routes, {
   SHOW_NOTIFICATIONS_PAGE,
   SETTINGS_PAGE,
 } from '../routes';
+import { useGetSettings } from '@akashaorg/ui-awf-hooks';
 
 const AppRoutes: React.FC<unknown> = () => {
   const { baseRouteName, logger } = useRootComponentProps();
   const { t } = useTranslation('app-notifications');
   const { data } = useGetLogin();
   const isLoggedIn = !!data?.id;
+  const { data: settingData } = useGetSettings('@akashaorg/app-notifications');
 
   const errorBoundaryProps: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
     errorObj: {
@@ -89,7 +91,7 @@ const AppRoutes: React.FC<unknown> = () => {
             path={routes[SHOW_NOTIFICATIONS_PAGE]}
             element={
               <ErrorBoundary {...errorBoundaryProps}>
-                <NotificationsPage isLoggedIn={isLoggedIn} />
+                <NotificationsPage isLoggedIn={isLoggedIn} settingData={settingData} />
               </ErrorBoundary>
             }
           />

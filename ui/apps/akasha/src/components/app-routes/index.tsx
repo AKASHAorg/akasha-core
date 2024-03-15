@@ -54,7 +54,13 @@ const antennaRoute = createRoute({
     getAuthenticatedProfile({ authenticatedDID, apolloClient }),
   component: () => {
     const authenticatedProfile = antennaRoute.useLoaderData();
-    return <GlobalAntennaPage authenticatedProfile={authenticatedProfile} />;
+    const authenticatedDID = antennaRoute.useRouteContext().authenticatedDID;
+    return (
+      <GlobalAntennaPage
+        authenticatedProfile={authenticatedProfile}
+        authenticatedDID={authenticatedDID}
+      />
+    );
   },
 });
 

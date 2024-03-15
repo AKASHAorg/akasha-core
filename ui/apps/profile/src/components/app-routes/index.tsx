@@ -31,20 +31,20 @@ const rootRoute = createRootRouteWithContext<RouterContext>()({
 
 const profileInfoRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '$profileId',
+  path: '$profileDid',
   loader: ({ context, params }) => {
     context.apolloClient.query({
       query: GetProfileByDidDocument,
       variables: {
-        id: params.profileId,
+        id: params.profileDid,
       },
     });
   },
   component: () => {
-    const { profileId } = profileInfoRoute.useParams();
+    const { profileDid } = profileInfoRoute.useParams();
     return (
       <Suspense fallback={<ProfileLoading />}>
-        <ProfileInfoPage profileId={profileId} />
+        <ProfileInfoPage profileDid={profileDid} />
       </Suspense>
     );
   },
@@ -52,13 +52,13 @@ const profileInfoRoute = createRoute({
 
 const profileEditRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: `$profileId${menuRoute[EDIT]}`,
+  path: `$profileDid${menuRoute[EDIT]}`,
   component: () => {
-    const { profileId } = profileEditRoute.useParams();
+    const { profileDid } = profileEditRoute.useParams();
     return (
       <Suspense fallback={<ProfileLoading />}>
-        <ProfileWithAuthorization editingProfile={true} profileId={profileId}>
-          <EditProfilePage profileId={profileId} />
+        <ProfileWithAuthorization editingProfile={true} profileDid={profileDid}>
+          <EditProfilePage profileDid={profileDid} />
         </ProfileWithAuthorization>
       </Suspense>
     );
@@ -67,23 +67,23 @@ const profileEditRoute = createRoute({
 
 const followersRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: `$profileId${menuRoute[FOLLOWERS]}`,
+  path: `$profileDid${menuRoute[FOLLOWERS]}`,
   loader: ({ context, params }) => {
     context.apolloClient.query({
       query: GetFollowersListByDidDocument,
       variables: {
-        id: params.profileId,
+        id: params.profileDid,
         first: ENGAGEMENTS_PER_PAGE,
       },
     });
   },
   component: () => {
-    const { profileId } = followersRoute.useParams();
+    const { profileDid } = followersRoute.useParams();
     return (
-      <ProfileWithAuthorization profileId={profileId}>
+      <ProfileWithAuthorization profileDid={profileDid}>
         <Card radius={20} elevation="1" padding="p-0">
-          <ProfileHeader profileId={profileId} plain={true} customStyle="sticky top-3.5 z-50" />
-          <FollowersPage profileId={profileId} />
+          <ProfileHeader profileDid={profileDid} plain={true} customStyle="sticky top-3.5 z-50" />
+          <FollowersPage profileDid={profileDid} />
         </Card>
       </ProfileWithAuthorization>
     );
@@ -92,23 +92,23 @@ const followersRoute = createRoute({
 
 const followingRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: `$profileId${menuRoute[FOLLOWING]}`,
+  path: `$profileDid${menuRoute[FOLLOWING]}`,
   loader: ({ context, params }) => {
     context.apolloClient.query({
       query: GetFollowingListByDidDocument,
       variables: {
-        id: params.profileId,
+        id: params.profileDid,
         first: ENGAGEMENTS_PER_PAGE,
       },
     });
   },
   component: () => {
-    const { profileId } = followingRoute.useParams();
+    const { profileDid } = followingRoute.useParams();
     return (
-      <ProfileWithAuthorization profileId={profileId}>
+      <ProfileWithAuthorization profileDid={profileDid}>
         <Card radius={20} elevation="1" padding="p-0">
-          <ProfileHeader profileId={profileId} plain={true} customStyle="sticky top-3.5 z-50" />
-          <FollowingPage profileId={profileId} />
+          <ProfileHeader profileDid={profileDid} plain={true} customStyle="sticky top-3.5 z-50" />
+          <FollowingPage profileDid={profileDid} />
         </Card>
       </ProfileWithAuthorization>
     );
@@ -117,13 +117,13 @@ const followingRoute = createRoute({
 
 const interestsRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: `$profileId${menuRoute[INTERESTS]}`,
+  path: `$profileDid${menuRoute[INTERESTS]}`,
   component: () => {
-    const { profileId } = interestsRoute.useParams();
+    const { profileDid } = interestsRoute.useParams();
     return (
-      <ProfileWithAuthorization profileId={profileId}>
-        <ProfileHeader profileId={profileId} />
-        <InterestsPage profileId={profileId} />
+      <ProfileWithAuthorization profileDid={profileDid}>
+        <ProfileHeader profileDid={profileDid} />
+        <InterestsPage profileDid={profileDid} />
       </ProfileWithAuthorization>
     );
   },
@@ -131,13 +131,13 @@ const interestsRoute = createRoute({
 
 const beamsRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: `$profileId${menuRoute[BEAMS]}`,
+  path: `$profileDid${menuRoute[BEAMS]}`,
   component: () => {
-    const { profileId } = beamsRoute.useParams();
+    const { profileDid } = beamsRoute.useParams();
     return (
-      <ProfileWithAuthorization profileId={profileId}>
-        <ProfileHeader profileId={profileId} />
-        <ProfileBeamsPage profileId={profileId} />
+      <ProfileWithAuthorization profileDid={profileDid}>
+        <ProfileHeader profileDid={profileDid} />
+        <ProfileBeamsPage profileDid={profileDid} />
       </ProfileWithAuthorization>
     );
   },

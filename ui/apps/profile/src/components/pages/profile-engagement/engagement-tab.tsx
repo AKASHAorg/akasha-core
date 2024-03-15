@@ -6,7 +6,7 @@ import { NavigateToParams } from '@akashaorg/typings/lib/ui';
 import { useTranslation } from 'react-i18next';
 
 export type EngagementTabProps = {
-  profileId?: string;
+  profileDid?: string;
   navigateTo?: (args: NavigateToParams) => void;
 };
 
@@ -21,7 +21,7 @@ const ROUTE_TO_TAB_INDEX_MAP: Record<string, number> = {
 };
 
 const EngagementTab: React.FC<PropsWithChildren<EngagementTabProps>> = props => {
-  const { profileId, children, navigateTo } = props;
+  const { profileDid, children, navigateTo } = props;
   const { t } = useTranslation('app-profile');
 
   const pathname = location.pathname.substring(location.pathname.lastIndexOf('/'));
@@ -32,7 +32,7 @@ const EngagementTab: React.FC<PropsWithChildren<EngagementTabProps>> = props => 
     navigateTo?.({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: navRoutes =>
-        `${navRoutes.rootRoute}/${profileId}${TAB_INDEX_TO_ROUTE_MAP[selectedIndex]}`,
+        `${navRoutes.rootRoute}/${profileDid}${TAB_INDEX_TO_ROUTE_MAP[selectedIndex]}`,
     });
   };
 

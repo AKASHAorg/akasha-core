@@ -6,7 +6,7 @@ import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { ProfileStats as ProfileStatsPresentation } from '@akashaorg/design-system-components/lib/components/Profile';
 
 export type ProfileStatsProps = {
-  profileId: string;
+  profileDid: string;
   totalBeams: number;
   totalTopics: number;
   totalFollowers: number;
@@ -16,7 +16,7 @@ export type ProfileStatsProps = {
 };
 
 const ProfileStats: React.FC<ProfileStatsProps> = ({
-  profileId,
+  profileDid,
   totalBeams,
   totalTopics,
   totalFollowers,
@@ -35,7 +35,7 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({
     }
     navigateTo({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: () => `/${profileId}/${stat}`,
+      getNavigationUrl: () => `/${profileDid}/${stat}`,
     });
   };
 
