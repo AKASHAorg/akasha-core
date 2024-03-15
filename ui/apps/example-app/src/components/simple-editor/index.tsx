@@ -16,11 +16,10 @@ type SimpleEditorProps = {};
  * A simplified editor example. For a more complete version see:
  * https://github.com/AKASHAorg/akasha-core/blob/next/ui/apps/akasha/src/extensions/beam-editor/beam-editor.tsx
  */
-const DEFAULT_TEXT_BLOCK = 'text-block';
 
 const SimpleEditor: React.FC<SimpleEditorProps> = () => {
   const { getExtensionsPlugin } = useRootComponentProps();
-
+  const DEFAULT_BLOCK_TYPE = 'text-block';
   const availableBlocks = React.useMemo(
     () => getExtensionsPlugin().contentBlockStore.getInfos(),
     [getExtensionsPlugin],
@@ -37,7 +36,7 @@ const SimpleEditor: React.FC<SimpleEditorProps> = () => {
   >([]);
 
   useLayoutEffect(() => {
-    const defaultTextBlock = availableBlocks.find(bl => bl.propertyType === DEFAULT_TEXT_BLOCK);
+    const defaultTextBlock = availableBlocks.find(bl => bl.propertyType === DEFAULT_BLOCK_TYPE);
     if (availableBlocks.length && !blocksInUse.length) {
       setBlocksInUse([
         {
@@ -83,7 +82,7 @@ const SimpleEditor: React.FC<SimpleEditorProps> = () => {
         <Button
           variant="primary"
           customStyle="flex place-self-end"
-          label={`${t('Beam It')}!`}
+          label={`${t('Beam it')}`}
           onClick={handleSubmit}
         />
       </>
