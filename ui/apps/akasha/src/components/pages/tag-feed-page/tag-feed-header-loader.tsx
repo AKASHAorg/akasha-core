@@ -1,6 +1,4 @@
 import React from 'react';
-
-import CircularPlaceholder from '@akashaorg/design-system-core/lib/components/CircularPlaceholder';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
@@ -10,7 +8,13 @@ const TagFeedHeaderLoader: React.FC = () => {
     <Card customStyle="mb-2">
       <Stack direction="row" align="center" justify="between" spacing="gap-x-3">
         <Stack direction="row" spacing="gap-x-2" fullWidth>
-          <CircularPlaceholder height="h-10" width="w-10" customStyle="shrink-0" animated />
+          <TextLine
+            round="rounded-full"
+            height="h-10"
+            width="w-10"
+            customStyle="shrink-0"
+            animated={true}
+          />
           <Stack
             direction="column"
             spacing="gap-y-1"
