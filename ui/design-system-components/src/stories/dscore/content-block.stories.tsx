@@ -1,6 +1,4 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-
 import ContentBlock, {
   ContentBlockProps,
 } from '@akashaorg/design-system-core/lib/components/ContentBlock';
@@ -8,15 +6,24 @@ import ContentBlock, {
 const meta: Meta<ContentBlockProps> = {
   title: 'DSCore/Blocks/ContentBlock',
   component: ContentBlock,
+  tags: ['autodocs'],
+  argTypes: {
+    blockTitle: { control: 'text' },
+    blockVariant: { control: 'text' },
+    showDivider: { control: 'boolean' },
+  },
 };
 
-export default meta;
 type Story = StoryObj<ContentBlockProps>;
 
-export const BaseContentBlock: Story = {
-  render: () => <ContentBlock blockTitle="Content Block" />,
+const baseArgs: Story = {
+  args: {
+    blockTitle: 'Content Block',
+  },
 };
 
-export const ContentBlockWithoutDivider: Story = {
-  render: () => <ContentBlock blockTitle="Content Block" showDivider={false} />,
-};
+export const Default: Story = { args: { ...baseArgs.args } };
+
+export const ContentBlockWithoutDivider: Story = { args: { ...baseArgs.args, showDivider: false } };
+
+export default meta;
