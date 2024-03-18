@@ -46,6 +46,7 @@ export const HeaderVariants: Story = {
         <Header
           key={idx}
           {...variant}
+          profileName="profileName"
           profileId="profileId"
           onClickCoverImage={() => {
             /** */
