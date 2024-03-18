@@ -27,10 +27,11 @@ type CommonCardProps = {
   customStyle?: string;
 } & React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
 
-export type TCardProps = CommonCardProps &
-  ({ type: 'plain' } | (RegularCardType & { type?: 'regular' }));
+export type TCardProps = PropsWithChildren<
+  CommonCardProps & ({ type: 'plain' } | (RegularCardType & { type?: 'regular' }))
+>;
 
-const Card: React.FC<PropsWithChildren<TCardProps>> = forwardRef((props, ref) => {
+const Card: React.FC<TCardProps> = forwardRef((props, ref) => {
   if (props.type === 'plain') {
     const { testId, customStyle = '', ...rest } = props;
     return (
