@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import getSDK from '@akashaorg/awf-sdk';
 import {
@@ -21,7 +22,7 @@ import {
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 export type FollowProfileButtonProps = {
-  profileID: string;
+  profileID?: string;
   isLoggedIn: boolean;
   isFollowing: boolean;
   followId: string | null;
@@ -84,7 +85,14 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
     setFollowDocumentId(followId);
   }, [followId]);
 
+  // this approach is required to have a clickable tooltip, if btn is disabled via prop, tooltip can only be hover based
+  const disableActions = !profileID;
+  const disabledStyle = disableActions ? 'opacity-50' : '';
+
   const handleFollow = (profileID: string, followId?: string) => {
+    if (disableActions) {
+      return;
+    }
     if (!isLoggedIn) {
       return showLoginModal();
     }
@@ -108,6 +116,9 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
   };
 
   const handleUnFollow = (profileID: string, followId?: string) => {
+    if (disableActions) {
+      return;
+    }
     if (!isLoggedIn) {
       return showLoginModal();
     }
@@ -124,41 +135,57 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
     });
   };
 
-  return iconOnly ? (
-    <Button
-      onClick={
-        following
-          ? () => handleUnFollow(profileID, followDocumentId)
-          : () => handleFollow(profileID, followDocumentId)
-      }
-      icon={following ? <Following /> : <UserPlusIcon />}
-      variant={'primary'}
-      loading={loading}
-      greyBg={true}
-      iconOnly={true}
-    />
+  const FollowButton = () =>
+    iconOnly ? (
+      <Button
+        onClick={
+          following
+            ? () => handleUnFollow(profileID, followDocumentId)
+            : () => handleFollow(profileID, followDocumentId)
+        }
+        icon={following ? <Following /> : <UserPlusIcon />}
+        variant={'primary'}
+        loading={loading}
+        greyBg={true}
+        iconOnly={true}
+        customStyle={disabledStyle}
+      />
+    ) : (
+      <DuplexButton
+        size="sm"
+        customStyle={disabledStyle}
+        inactiveLabel={t('Follow')}
+        activeLabel={t('Following')}
+        activeHoverLabel={t('Unfollow')}
+        active={following}
+        iconDirection="left"
+        activeIcon={<CheckIcon />}
+        activeHoverIcon={<XMarkIcon />}
+        inactiveVariant="secondary"
+        loading={loading}
+        fixedWidth={'w-[7rem]'}
+        hoverColors={{
+          background: { light: 'transparent', dark: 'transparent' },
+          border: { light: 'errorLight', dark: 'errorDark' },
+          text: { light: 'errorLight', dark: 'errorDark' },
+          icon: { light: 'errorLight', dark: 'errorDark' },
+        }}
+        onClickInactive={() => handleFollow(profileID, followDocumentId)}
+        onClickActive={() => handleUnFollow(profileID, followDocumentId)}
+      />
+    );
+
+  return disableActions ? (
+    <Tooltip
+      placement="bottom"
+      content={t('Unfollowable profile due to missing basic information like name and Bio.')}
+      trigger="click"
+      contentCustomStyle="w-52"
+    >
+      <FollowButton />
+    </Tooltip>
   ) : (
-    <DuplexButton
-      size="sm"
-      inactiveLabel={t('Follow')}
-      activeLabel={t('Following')}
-      activeHoverLabel={t('Unfollow')}
-      active={following}
-      iconDirection="left"
-      activeIcon={<CheckIcon />}
-      activeHoverIcon={<XMarkIcon />}
-      inactiveVariant="secondary"
-      loading={loading}
-      fixedWidth={'w-[7rem]'}
-      hoverColors={{
-        background: { light: 'transparent', dark: 'transparent' },
-        border: { light: 'errorLight', dark: 'errorDark' },
-        text: { light: 'errorLight', dark: 'errorDark' },
-        icon: { light: 'errorLight', dark: 'errorDark' },
-      }}
-      onClickInactive={() => handleFollow(profileID, followDocumentId)}
-      onClickActive={() => handleUnFollow(profileID, followDocumentId)}
-    />
+    <FollowButton />
   );
 };
 

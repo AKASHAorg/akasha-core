@@ -9,11 +9,26 @@ export const truncateDid = (didKey: string, type = 'eth') => {
       case 'eth':
       case 'solana':
         return truncateMiddle(address, 6, 6);
-        break;
       default:
         return truncateMiddle(address, 5, 4);
-        break;
     }
   }
   return '';
+};
+
+const ethIdentifier = 'eip155';
+const solanaIdentifier = 'solana';
+
+export const getDidNetworkType = (didKey: string): string => {
+  if (didKey) {
+    if (didKey.includes(ethIdentifier)) {
+      return 'eth';
+    } else if (didKey.includes(solanaIdentifier)) {
+      return 'solana';
+    } else {
+      return 'did';
+    }
+  } else {
+    return 'noDid';
+  }
 };

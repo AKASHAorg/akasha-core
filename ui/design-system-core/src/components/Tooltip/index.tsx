@@ -19,6 +19,7 @@ type TProps = {
   arrow?: boolean;
   backgroundColor?: Color;
   customStyle?: string;
+  contentCustomStyle?: string;
 };
 
 export type TooltipProps = PropsWithChildren<
@@ -47,6 +48,7 @@ const Tooltip: React.FC<TooltipProps> = props => {
     textColor = { light: 'black', dark: 'white' },
     backgroundColor = { light: 'secondaryDark/50', dark: 'grey4' },
     customStyle = '',
+    contentCustomStyle,
     children,
   } = props;
 
@@ -147,7 +149,7 @@ const Tooltip: React.FC<TooltipProps> = props => {
             align="center"
             justify="center"
             background={isContentOfTypeString ? backgroundColor : null}
-            customStyle={`flex-wrap w-max ${contentStyle}`}
+            customStyle={`flex-wrap ${contentStyle} ${contentCustomStyle}`}
           >
             {isContentOfTypeString ? (
               <Text color={textColor} variant={textSize}>

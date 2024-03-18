@@ -25,30 +25,37 @@ import {
 import { useGetProfileByDidSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
 type ProfileInfoPageProps = {
-  profileId: string;
+  profileDid: string;
 };
 
 const ProfileInfoPage: React.FC<ProfileInfoPageProps> = props => {
-  const { profileId } = props;
+  const { profileDid } = props;
   const { t } = useTranslation('app-profile');
   const { getRoutingPlugin, navigateToModal, uiEvents } = useRootComponentProps();
+
   const { data: loginData, loading: authenticating } = useGetLogin();
   const { data, error } = useGetProfileByDidSuspenseQuery({
     fetchPolicy: 'cache-first',
     variables: {
-      id: profileId,
+      id: profileDid,
     },
-    skip: !profileId,
+    skip: !profileDid,
   });
-  const { validDid, isLoading: validDidCheckLoading } = useValidDid(profileId, !!data?.node);
-  const { data: statData } = useProfileStats(profileId, true);
+  const { validDid, isLoading: validDidCheckLoading } = useValidDid(profileDid, !!data?.node);
+
+  const { data: statData } = useProfileStats(profileDid, true);
   const { akashaProfile: profileData } =
     data?.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
+
   const [showNSFW, setShowNSFW] = useState(false);
+
   const isLoggedIn = !!loginData?.id;
   const authenticatedDID = loginData?.id;
+
   const navigateTo = getRoutingPlugin().navigateTo;
+
   const hasProfile = !!data?.node;
+  const isViewer = !!authenticatedDID && profileDid === authenticatedDID;
 
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
     navigateToModal({
@@ -122,33 +129,35 @@ const ProfileInfoPage: React.FC<ProfileInfoPageProps> = props => {
   const goToEditProfile = () => {
     return navigateTo({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: () => `/${profileId}${routes[EDIT]}`,
+      getNavigationUrl: () => `/${profileDid}${routes[EDIT]}`,
     });
   };
 
   return (
     <>
-      <ProfileHeader profileId={profileId} />
+      <ProfileHeader profileDid={profileDid} />
       <Stack direction="column" spacing="gap-y-4" fullWidth>
         {profileData?.description && (
           <ProfileBio title={t('Bio')} biography={profileData.description} />
         )}
-        {!isLoggedIn && !hasProfile && (
+        {!isLoggedIn && !profileData && (
           <DefaultEmptyCard
             infoText={t("It seems this user hasn't filled in their information just yet. 🤔")}
             customCardSize={{ width: '140px', height: '85px' }}
+            assetName="profile-not-filled"
           />
         )}
-        {isLoggedIn && !profileData && (
+        {isLoggedIn && !profileData && isViewer && (
           <DefaultEmptyCard
             infoText={t('Uh-uh! it looks like you haven’t filled your information!')}
             buttonLabel={t('Fill my info')}
             buttonClickHandler={goToEditProfile}
+            assetName="profile-not-filled"
           />
         )}
         {statData && (
           <ProfileStatsView
-            profileId={profileId}
+            profileDid={profileDid}
             totalBeams={statData.totalBeams}
             totalTopics={statData.totalTopics}
             totalFollowers={statData.totalFollowers}

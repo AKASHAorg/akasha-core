@@ -38,7 +38,7 @@ const DefaultEmptyCard: React.FC<DefaultEmptyCardProps> = ({
       elevation={noBorder ? 'none' : '1'}
       radius={20}
       padding={'p-4'}
-      customStyle="dark:bg-transparent"
+      // customStyle="dark:bg-transparent"
     >
       {assetName ? (
         <Image

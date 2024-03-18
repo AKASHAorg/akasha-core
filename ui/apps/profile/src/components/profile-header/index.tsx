@@ -27,13 +27,13 @@ import {
 import { useGetProfileByDidSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
 type ProfileHeaderProps = {
-  profileId: string;
+  profileDid: string;
   plain?: boolean;
   customStyle?: string;
 };
 const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
   const [activeOverlay, setActiveOverlay] = React.useState<'avatar' | 'coverImage' | null>(null);
-  const { profileId, plain, customStyle = '' } = props;
+  const { profileDid, plain, customStyle = '' } = props;
   const { t } = useTranslation('app-profile');
   const { data: loginData } = useGetLogin();
   const { uiEvents, navigateToModal, getRoutingPlugin } = useRootComponentProps();
@@ -41,9 +41,9 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
   const { data, error } = useGetProfileByDidSuspenseQuery({
     fetchPolicy:
       'cache-first' /*data is prefetched during route matching as a result we prefer reading cache first here  */,
-    variables: { id: profileId },
+    variables: { id: profileDid },
   });
-  const { validDid, isEthAddress } = useValidDid(profileId, !!data?.node);
+  const { validDid, isEthAddress } = useValidDid(profileDid, !!data?.node);
   const { akashaProfile: profileData } =
     data?.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
 
@@ -58,7 +58,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
   );
 
   const authenticatedDID = loginData?.id;
-  const isViewer = profileData?.did?.id === authenticatedDID;
+  const isViewer = !!authenticatedDID && profileData?.did?.id === authenticatedDID;
   const navigateTo = getRoutingPlugin().navigateTo;
 
   const handleClickAvatar = () => {
@@ -91,21 +91,21 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
   const handleClickProfileName = () => {
     navigateTo({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: () => `/${profileId}`,
+      getNavigationUrl: () => `/${profileDid}`,
     });
   };
 
   const handleEdit = () => {
     navigateTo({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: () => `/${profileId}${routes[EDIT]}`,
+      getNavigationUrl: () => `/${profileDid}${routes[EDIT]}`,
     });
   };
 
   const handleFlagProfile = () => {
     navigateTo({
       appName: '@akashaorg/app-vibes',
-      getNavigationUrl: () => `/report/profile/${profileData.did.id}`,
+      getNavigationUrl: () => `/report/profile/${profileDid}`,
     });
   };
 
@@ -147,23 +147,17 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
 
   return (
     <ProfileHeaderPresentation
-      profileId={profileData?.did?.id ? profileData.did.id : profileId}
+      profileId={profileData?.did?.id ? profileData.did.id : profileDid}
       validAddress={profileData ? true : isEthAddress || validDid}
       background={profileData?.background}
       avatar={profileData?.avatar}
-      name={profileData?.name}
+      profileName={profileData?.name}
       ensName={null /*@TODO: integrate ENS when the API is ready */}
       viewerIsOwner={isViewer}
       menuItems={menuItems}
       copyLabel={t('Copy to clipboard')}
       copiedLabel={t('Copied')}
-      followElement={
-        <>
-          {profileData?.id && (
-            <FollowButton profileID={profileData.id} showLoginModal={showLoginModal} />
-          )}
-        </>
-      }
+      followElement={<FollowButton profileID={profileData?.id} showLoginModal={showLoginModal} />}
       badges={[...nsfwBadge]}
       activeOverlay={activeOverlay}
       plain={plain}

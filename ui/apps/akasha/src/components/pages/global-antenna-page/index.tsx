@@ -12,14 +12,15 @@ import { ModalNavigationOptions, Profile } from '@akashaorg/typings/lib/ui';
 
 type GlobalAntennaPageProps = {
   authenticatedProfile: Profile;
+  authenticatedDID: string;
 };
 
 const GlobalAntennaPage: React.FC<GlobalAntennaPageProps> = props => {
-  const { authenticatedProfile } = props;
+  const { authenticatedProfile, authenticatedDID } = props;
   const { getRoutingPlugin, navigateToModal } = useRootComponentProps();
+
   const { t } = useTranslation('app-akasha-integration');
   const [analyticsActions] = useAnalytics();
-  const isLoggedIn = !!authenticatedProfile;
   const _navigateToModal = React.useRef(navigateToModal);
 
   const navigateTo = React.useRef(getRoutingPlugin().navigateTo);
@@ -36,25 +37,21 @@ const GlobalAntennaPage: React.FC<GlobalAntennaPageProps> = props => {
   );
 
   const handleEditorPlaceholderClick = useCallback(() => {
-    if (!isLoggedIn) {
+    if (!authenticatedDID) {
       showLoginModal();
-      return;
-    }
-    if (!authenticatedProfile?.id) {
-      //@TODO profile info hasn't been filled, show relevant message
       return;
     }
     navigateTo?.current({
       appName: '@akashaorg/app-akasha-integration',
       getNavigationUrl: () => `${routes[EDITOR]}`,
     });
-  }, [isLoggedIn, authenticatedProfile, showLoginModal]);
+  }, [authenticatedDID, showLoginModal]);
 
   const listHeader = React.useMemo(() => {
     return (
       <Stack customStyle="mb-2">
         <EditorPlaceholder
-          profileId={authenticatedProfile?.did.id}
+          profileId={authenticatedDID}
           avatar={authenticatedProfile?.avatar}
           actionLabel={t(`Start Beaming`)}
           placeholderLabel={t(`From Your Mind to the World 🧠 🌏 ✨`)}
@@ -63,7 +60,7 @@ const GlobalAntennaPage: React.FC<GlobalAntennaPageProps> = props => {
         />
       </Stack>
     );
-  }, [authenticatedProfile, t, handleEditorPlaceholderClick]);
+  }, [authenticatedProfile, authenticatedDID, t, handleEditorPlaceholderClick]);
 
   return (
     <Stack fullWidth={true}>
