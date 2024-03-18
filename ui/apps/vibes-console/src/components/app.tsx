@@ -13,13 +13,13 @@ declare module '@tanstack/react-router' {
 }
 
 const Application: React.FC<unknown> = () => {
-  const { baseRouteName, getTranslationPlugin } = useRootComponentProps();
+  const { baseRouteName, getTranslationPlugin, worldConfig } = useRootComponentProps();
 
   return (
     <React.Suspense fallback={<Spinner />}>
       <I18nextProvider i18n={getTranslationPlugin().i18n}>
         <Helmet helmetData={helmetData}>
-          <title>Vibes Console | AKASHA World</title>
+          <title>Vibes Console | {worldConfig.title}</title>
         </Helmet>
         <RouterProvider
           router={router({

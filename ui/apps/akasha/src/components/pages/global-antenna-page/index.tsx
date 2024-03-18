@@ -17,8 +17,7 @@ type GlobalAntennaPageProps = {
 
 const GlobalAntennaPage: React.FC<GlobalAntennaPageProps> = props => {
   const { authenticatedProfile, authenticatedDID } = props;
-  const { getRoutingPlugin, navigateToModal } = useRootComponentProps();
-
+  const { getRoutingPlugin, navigateToModal, worldConfig } = useRootComponentProps();
   const { t } = useTranslation('app-akasha-integration');
   const [analyticsActions] = useAnalytics();
   const _navigateToModal = React.useRef(navigateToModal);
@@ -65,7 +64,7 @@ const GlobalAntennaPage: React.FC<GlobalAntennaPageProps> = props => {
   return (
     <Stack fullWidth={true}>
       <Helmet helmetData={helmetData}>
-        <title>AKASHA World</title>
+        <title>{worldConfig.title}</title>
       </Helmet>
       <BeamFeed
         header={listHeader}

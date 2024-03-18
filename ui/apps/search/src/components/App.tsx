@@ -6,13 +6,13 @@ import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import AppRoutes from './routes';
 
 const App: React.FC<unknown> = () => {
-  const { getTranslationPlugin } = useRootComponentProps();
+  const { getTranslationPlugin, worldConfig } = useRootComponentProps();
 
   return (
     <React.Suspense fallback={<Spinner />}>
       <I18nextProvider i18n={getTranslationPlugin().i18n}>
         <Helmet helmetData={helmetData}>
-          <title>Search | AKASHA World</title>
+          <title>Search | {worldConfig.title}</title>
         </Helmet>
         <AppRoutes />
       </I18nextProvider>
