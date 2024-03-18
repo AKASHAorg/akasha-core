@@ -27,7 +27,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   title: 'AKASHA Core Extensions',
   menuItems: {
     label: 'Extensions',
-    area: [MenuItemAreaType.AppArea],
+    area: [MenuItemAreaType.OtherArea],
     logo: { type: LogoTypeSource.ICON, solidIcon: true, value: <Akasha /> },
     subRoutes: [],
   },
