@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import {
@@ -57,6 +58,8 @@ const Topbar: React.FC<ITopbarProps> = props => {
     snoozeNotifications,
   } = props;
 
+  const { worldConfig } = useRootComponentProps();
+
   const [displayWidgetTogglingButton, setDisplayWidgetTogglingButton] = React.useState(
     !window.matchMedia(startWidgetsTogglingBreakpoint).matches,
   );
@@ -95,7 +98,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
         <Stack align="center" justify="center" direction="column">
           <Icon icon={<Akasha />} solid={true} customStyle="w-18 h-7" />
           <Text customStyle="uppercase font([Inter] light) text(xs black dark:white) drop-shadow-md">
-            AKASHA World
+            {worldConfig.title}
           </Text>
         </Stack>
       </Button>
