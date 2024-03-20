@@ -20,7 +20,7 @@ import routes, {
 import { useGetSettings } from '@akashaorg/ui-awf-hooks';
 
 const AppRoutes: React.FC<unknown> = () => {
-  const { baseRouteName, logger } = useRootComponentProps();
+  const { baseRouteName, logger, worldConfig } = useRootComponentProps();
   const { t } = useTranslation('app-notifications');
   const { data } = useGetLogin();
   const isLoggedIn = !!data?.id;
@@ -37,7 +37,7 @@ const AppRoutes: React.FC<unknown> = () => {
   return (
     <>
       <Helmet helmetData={helmetData}>
-        <title>Notifications | AKASHA World</title>
+        <title>Notifications | {worldConfig.title}</title>
       </Helmet>
       <Router basename={baseRouteName}>
         <Routes>
