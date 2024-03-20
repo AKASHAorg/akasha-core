@@ -21,7 +21,8 @@ const CardActions: React.FC<CardActionProps> = props => {
   return (
     <Stack direction="row" align="center" justify="end" spacing="gap-x-2">
       <>{actionsRight}</>
-      <Anchor
+      {/* disabled for hackathon */}
+      {/* <Anchor
         href={`${reflectAnchorLink}/${itemId}`}
         onClick={e => {
           e.preventDefault();
@@ -43,7 +44,7 @@ const CardActions: React.FC<CardActionProps> = props => {
         ) : (
           reflectIconUi
         )}
-      </Anchor>
+      </Anchor> */}
     </Stack>
   );
 };
