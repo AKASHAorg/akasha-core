@@ -14,7 +14,7 @@ const MY_ANTENNA_OVERSCAN = 10;
 
 const MyAntennaPage: React.FC<unknown> = () => {
   const { t } = useTranslation('app-akasha-integration');
-  const { getRoutingPlugin, navigateToModal } = useRootComponentProps();
+  const { getRoutingPlugin, navigateToModal, worldConfig } = useRootComponentProps();
   const authenticatedProfileReq = useGetLoginProfile();
   const authenticatedProfile: Profile = authenticatedProfileReq?.akashaProfile;
   const navigateTo = React.useRef(getRoutingPlugin().navigateTo);
@@ -56,7 +56,7 @@ const MyAntennaPage: React.FC<unknown> = () => {
     <HelmetProvider>
       <Stack fullWidth={true}>
         <Helmet>
-          <title>AKASHA World</title>
+          <title>{worldConfig.title}</title>
         </Helmet>
         <Stack customStyle="mb-2">
           <StartCard

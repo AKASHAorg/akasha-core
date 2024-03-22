@@ -14,7 +14,7 @@ declare module '@tanstack/react-router' {
 }
 
 const App: React.FC<unknown> = () => {
-  const { getTranslationPlugin, baseRouteName } = useRootComponentProps();
+  const { getTranslationPlugin, baseRouteName, worldConfig } = useRootComponentProps();
   const apolloClient = useApolloClient();
 
   return (
@@ -22,7 +22,7 @@ const App: React.FC<unknown> = () => {
       <React.Suspense fallback={<Spinner />}>
         <I18nextProvider i18n={getTranslationPlugin().i18n}>
           <Helmet helmetData={helmetData}>
-            <title>Extensions | AKASHA World</title>
+            <title>Extensions | {worldConfig.title}</title>
           </Helmet>
           <RouterProvider
             router={router({
