@@ -24,7 +24,7 @@ const checkNetworkState = async () => {
 };
 
 /**
- * Hook to check if the web3 provider is set to function on the Rinkeby test network
+ * Hook to check if the web3 provider is set to function on the Sepolia test network
  * @returns networkNotSupported: true if web3 provider is not on the specified network
  * @example useNetworkState hook
  * ```typescript
@@ -118,9 +118,11 @@ const getRequiredNetwork = async () => {
 
 /**
  * A hook to get required network name from the SDK
- * @example useRequiredNetworkName hook
+ * @example useRequiredNetwork hook
+ * @returns An object containing the data and statuses of the request:
+ * { data, isLoading, error, isSuccess }
  * ```typescript
- * const requiredNetworkQuery = useRequiredNetworkName();
+ * const requiredNetworkQuery = useRequiredNetwork();
  *
  * const requiredNetworkName = requiredNetworkQuery.data;
  * ```
@@ -156,6 +158,14 @@ export function useRequiredNetwork() {
   return { data, isLoading, error, isSuccess };
 }
 
+/**
+ * A hook used to detect changes when a user switches from one network to another.
+ * @example useRequiredNetwork hook
+ * ```typescript
+ * const [changedNetwork, changedNetworkUnsubscribe] = useNetworkChangeListener();
+ * ```
+ * `changedNetwork` contains data of the network the user changes to.
+ */
 export function useNetworkChangeListener() {
   const [currentNetwork, setCurrentNetwork] = React.useState(null);
   const globalChannel = getSDK().api.globalChannel;

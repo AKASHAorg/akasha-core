@@ -2,6 +2,21 @@ import * as React from 'react';
 import { useGetFollowingListByDidQuery } from './generated/apollo';
 import { hasOwn } from './utils/has-own';
 
+/**
+ * Hook to get a list of users a person can mention by checking the person's following
+ * list and search for the names that match the keyword entered after the @ symbol.
+ * Note: Users cannot mention people they don't already follow.
+ * @example useMentions hook
+ * ```typescript
+ *   const { setMentionQuery, mentions } = useMentions(authenticatedDID);
+ *
+ * // set the handler to start searching after a user enter the @ symbol and then a keyword:
+ *   const handleGetMentions = (query: string) => {
+        setMentionQuery(query);
+     };
+ * ```
+ * The list of possible mentions is returned through the `mentions` variable.
+ */
 const useMentions = (authenticatedDID: string) => {
   const [mentionQuery, setMentionQuery] = React.useState('');
 

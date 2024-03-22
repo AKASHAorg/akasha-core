@@ -30,6 +30,34 @@ const defaultSorting: AkashaBeamStreamSortingInput = {
   createdAt: SortOrder.Desc,
 };
 
+/**
+ * Hook that retrieves all the beams created in general or by a certain DID (when
+ * a did param is provided).
+ * @param { number } overscan - The number of beams being fetched each time, for example 10
+ * @param { AkashaBeamStreamSortingInput } sorting - Any sorting criteria that need to be applied
+ * @param { AkashaBeamStreamFiltersInput } filters - Any filters that need to be applied, i.e. filters for
+ * NSFW content.
+ * @example useBeams hook
+ * ```typescript
+ * const {
+      beams,
+      fetchNextPage,
+      fetchPreviousPage,
+      hasNextPage,
+      hasPreviousPage,
+      fetchInitialData,
+      onReset,
+      called,
+      isLoading,
+      hasErrors,
+      errors,
+    } = useBeams({
+      overscan: 10,
+      sorting: { createdAt: SortOrder.Desc },
+      filters: { where: { status: { equalTo: AkashaBeamStreamModerationStatus.Ok } } },
+    });
+ * ```
+ */
 export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) => {
   const [state, setState] = React.useState<{
     beams:

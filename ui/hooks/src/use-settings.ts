@@ -28,10 +28,11 @@ async function saveSettings({
  * Hook to save app's settings using sdk settings service
  * @param app - The app's name for example \@akashaorg/app-akasha-verse
  * @param options - Array of option pairs [optionName, value]
+ * @returns  The saveNotificationSettings function and the statuses of the request { isLoading, data, error }
  * @example useSaveSettings hook
  * ```typescript
- * const saveSettings = useSaveSettings();
- * saveSettings.mutate(JSON.stringify({ app: '@akashaorg/app-akasha-verse', options: [['key', 'value']] }))
+ * const { saveNotificationSettings } = useSaveSettings();
+ * saveNotificationSettings(JSON.stringify({ app: '@akashaorg/app-akasha-verse', options: [['key', 'value']] }))
  * ```
  */
 export function useSaveSettings() {
@@ -76,6 +77,8 @@ const getSettings = async (app: string) => {
 
 /**
  * Hook to get saved settings for an app
+ * @param app - The app's name for example \@akashaorg/app-akasha-verse
+ * @returns  The statuses of the request { isLoading, data, error }
  * @example useGetSettings hook
  * ```typescript
  * const savedSettingsQuery = useGetSettings('@akashaorg/app-akasha-verse');
