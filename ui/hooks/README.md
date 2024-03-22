@@ -85,4 +85,21 @@ components directly without the need to use `useQuery`.
 
 ### [useBeams](./src/use-beams.ts)
 
-> handles the retrieval of beams published by a DID.
+> handles the retrieval of all the beams published or beams published by a DID (when passed a `did` param).
+
+### [useBeamsByTags](./src/use-beams-by-tags.ts)
+
+> handles the retrieval of all the beams published with a tag (or multiple tags)
+
+### [useMentions](./src/use-mentions.ts)
+
+> handles the retrieval of possible matching users' names that a user can mention
+
+### [useNsfwToggling](./src/use-nsfw.ts)
+
+> handles the getting and setting of the user's choice for showing/hiding nsfw content
+
+### [usePendingReflections](./src/use-pending-reflections.ts)
+
+> makes use of the Apollo Client's reactivity model to allow the adding,
+  removing and returning of pending Reflections to a component (i.e. the Beam Page)
