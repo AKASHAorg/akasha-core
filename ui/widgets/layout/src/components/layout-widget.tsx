@@ -71,16 +71,6 @@ const Layout: React.FC<unknown> = () => {
     };
   }, []);
 
-  const maintenanceReq = usePlaformHealthCheck();
-
-  const isPlatformHealthy = useMemo(() => {
-    if (!maintenanceReq.isLoading) {
-      return maintenanceReq.data.success;
-    }
-    // defaults to healthy.
-    return true;
-  }, [maintenanceReq.isLoading, maintenanceReq.data]);
-
   const _uiEvents = useRef(uiEvents);
   const { t } = useTranslation('ui-widget-layout');
 
