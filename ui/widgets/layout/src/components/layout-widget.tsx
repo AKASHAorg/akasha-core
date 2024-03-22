@@ -192,31 +192,6 @@ const Layout: React.FC<unknown> = () => {
             >
               <Widget name={layoutConfig.topbarSlotId} loadingIndicator={<TopbarLoader />} />
             </Stack>
-            <Stack padding="pt-4">
-              {!isPlatformHealthy && (
-                <Card
-                  margin="mb-4"
-                  customStyle="bg(warningLight dark:warningDark) border(errorLight dark:errorDark)"
-                >
-                  <Stack direction="row">
-                    <Icon
-                      color={{ light: 'grey3', dark: 'grey3' }}
-                      icon={<ExclamationTriangleIcon />}
-                      customStyle="mr-4"
-                    />
-                    <Stack>
-                      <Text variant="footnotes2" color={{ light: 'grey3', dark: 'grey3' }}>
-                        {`${t(
-                          'AKASHA is undergoing maintenance and you may experience difficulties accessing some of the apps right now',
-                        )}. ${t('Please check back soon')}.`}
-                      </Text>
-                      <Text variant="footnotes2" color={{ light: 'grey3', dark: 'grey3' }}>{`${t(
-                        'Thank you for your patience',
-                      )} 😸`}</Text>
-                    </Stack>
-                  </Stack>
-                </Card>
-              )}
               <div id={layoutConfig.applicationSlotId} />
               <Stack customStyle="sticky bottom-2">
                 <Extension name={layoutConfig.snackbarNotifSlotId} />
