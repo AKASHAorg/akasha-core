@@ -28,10 +28,10 @@ export const settingsItems: ISettingsItem[] = [
     label: 'Theme',
     clickable: true,
   },
-  {
-    label: 'NSFW Content',
-    clickable: true,
-  },
+  // {
+  //   label: 'NSFW Content',
+  //   clickable: true,
+  // },
   // disable these untill they are used
   // {
   //   label: 'Integrations',
