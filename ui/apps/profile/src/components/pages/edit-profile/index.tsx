@@ -81,7 +81,8 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
     context: { source: sdk.services.gql.contextSources.composeDB },
     onCompleted: data => {
       const id = data.createAkashaProfile?.document.id;
-      if (id) indexProfile(id);
+      // disable this for the hackathon
+      // if (id) indexProfile(id);
       onUpdateSuccess();
     },
     onError: error => {

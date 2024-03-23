@@ -280,9 +280,9 @@ const SidebarComponent: React.FC<unknown> = () => {
             />
           )}
         </Stack>
-        {!dismissed && (
+        {/* {!dismissed && (
           <SidebarCTACard onClickCTAButton={handleClickExplore} onDismissCard={dismissCard} />
-        )}
+        )} */}
         {modSocialLinks.length > 0 && (
           <Stack padding="px-8 py-4" customStyle="border-t-1 border(grey9 dark:grey3)">
             <Text variant="footnotes2">{t('Get in touch')}</Text>
