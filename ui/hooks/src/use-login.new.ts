@@ -8,6 +8,17 @@ import { hasOwn } from './utils/has-own';
 import getSDK from '@akashaorg/awf-sdk';
 import { useRootComponentProps } from './use-root-props';
 
+/**
+ * Hook for connecting to a user's wallet (through Metamask or any other compatible applications)
+ * @example useConnectWallet hook
+ * ```typescript
+ * const connectWalletCall = useConnectWallet();
+ * // make the call to the connect function when appropriate:
+ *  connectWalletCall.connect();
+ * ```
+ * Consult the statuses of the call to know whether the connection has been successful or not
+ * (connectWalletCall.isSuccess, connectWalletCall.isLoading, connectWalletCall.isError)
+ */
 export function useConnectWallet() {
   const { theme } = useTheme();
   const sdk = getSDK();
@@ -103,6 +114,11 @@ export function useGetLogin(onError?: (error: Error) => void) {
 /**
  * Hook that automatically fetches the profile data of the logged in user
  * when it logs in
+ * @example useGetLoginProfile hook
+ * ```typescript
+ *  const authenticatedProfileReq = useGetLoginProfile();
+ *  const authenticatedProfile = authenticatedProfileReq?.akashaProfile;
+ * ```
  */
 export const useGetLoginProfile = () => {
   const { data } = useGetLogin();
@@ -128,6 +144,13 @@ export const useGetLoginProfile = () => {
 
 /**
  * Hook to sign in a user
+ * @example useLogin hook
+ * ```typescript
+ * const { signIn, signInErrors } = useLogin();
+ * // To actually sign in, call the `signIn` function. The signIn function take a `selectedProvider` parameter:
+ * signIn({ selectedProvider: provider });
+ * ```
+ * `signInErrors` contains possible errors that might occur during the sign-in process.
  */
 export function useLogin(onError?: (err: Error) => void) {
   const sdk = getSDK();
@@ -185,13 +208,10 @@ export function useLogin(onError?: (err: Error) => void) {
  * Hook to sign out the current user
  * @example useLogout hook
  * ```typescript
- * const logoutMutation = useLogout();
+ * const { logout } = useLogout();
  *
- * // sample logout handler
- * const handleLogout = async () => {
- await logoutMutation.mutateAsync();
- // add other logic after logout
- };
+ * // Make the function call to log the user out when appropriate:
+ *  logout();
  * ```
  */
 export function useLogout() {

@@ -16,6 +16,9 @@ export interface UseGlobalLoginProps {
 
 /**
  * Hook that will fire an action when the sign in is called
+ * @param onLogin - The function to be called after logging in succcessfully
+ * @param onLogout - The function to be called after logging out succcessfully
+ * @param onError - The function to be called when there is an error
  * @example useGlobalLogin hook
  * ```typescript
  * useGlobalLogin({

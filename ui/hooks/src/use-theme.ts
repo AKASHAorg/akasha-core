@@ -4,6 +4,19 @@ import { useRootComponentProps } from './use-root-props';
 
 export type theme = 'Light-Theme' | 'Dark-Theme';
 
+/**
+ * Hook to get and set the theme mode for the whole app.
+ * pass the messageId to the markAsRead function
+ * @example useTheme hook
+ * ```typescript
+ *   const { theme, propagateTheme } = useTheme();
+ * ```
+ * The current theme mode is available through `theme`
+ * The `propagateTheme`function can be used for switching the theme:
+ * ```typescript
+ * propagateTheme('Dark-Theme', true);
+ * ```
+ */
 export const useTheme = () => {
   const { uiEvents } = useRootComponentProps();
 

@@ -13,6 +13,26 @@ import type {
 import { ApolloError } from '@apollo/client';
 import { hasOwn } from './utils/has-own';
 
+/**
+ * Hook that retrieves all the beams created with a specific tag or an array of tags
+ * @param {(string|string[])} tag - One tag or an array of tags.
+ * @example useBeamsByTags hook
+ * ```typescript
+ *   const {
+    beams,
+    called,
+    fetchNextPage,
+    fetchPreviousPage,
+    hasNextPage,
+    hasPreviousPage,
+    fetchInitialData,
+    onReset,
+    isLoading,
+    hasErrors,
+    errors,
+  } = useBeamsByTags('akasha');
+ * ```
+ */
 export const useBeamsByTags = (tag: string | string[]) => {
   const sdk = getSDK();
   const [state, setState] = React.useState<{
