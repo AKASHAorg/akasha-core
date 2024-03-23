@@ -10,7 +10,7 @@ import { getDidNetworkType, truncateDid } from '../../utils/did-utils';
 const didNetworkIconMapping = {
   eth: <Eth />,
   solana: <Solana />,
-  didKey: <DidKey />,
+  did: <DidKey />,
   noDid: <NoEth />,
 };
 
