@@ -72,7 +72,6 @@ const Layout: React.FC<unknown> = () => {
   }, []);
 
   const _uiEvents = useRef(uiEvents);
-  const { t } = useTranslation('ui-widget-layout');
 
   const handleSidebarShow = () => {
     setShowSidebar(true);
@@ -192,6 +191,7 @@ const Layout: React.FC<unknown> = () => {
             >
               <Widget name={layoutConfig.topbarSlotId} loadingIndicator={<TopbarLoader />} />
             </Stack>
+            <Stack padding="pt-4">
               <div id={layoutConfig.applicationSlotId} />
               <Stack customStyle="sticky bottom-2">
                 <Extension name={layoutConfig.snackbarNotifSlotId} />
