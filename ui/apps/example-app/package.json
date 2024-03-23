@@ -1,0 +1,53 @@
+{
+  "name": "@akashaorg/app-example",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "description": "Example App",
+  "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
+  "homepage": "https://github.com/AKASHAorg/akasha-core/#readme",
+  "license": "AGPL-3.0",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AKASHAorg/akasha-core.git"
+  },
+  "scripts": {
+    "test": "jest",
+    "build": "tsc --build",
+    "tsc": "tsc --build",
+    "prepare": "yarn run tsc",
+    "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.cjs",
+    "postpack": "copyfiles -f ./dist/* ../../build/apps/example-app",
+    "watch": "webpack --config webpack.config.cjs --watch",
+    "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
+  },
+  "bugs": {
+    "url": "https://github.com/AKASHAorg/akasha-core/issues"
+  },
+  "dependencies": {
+    "@akashaorg/awf-sdk": "*",
+    "@akashaorg/design-system-core": "*",
+    "@akashaorg/design-system-components": "*",
+    "@akashaorg/ui-awf-hooks": "*",
+    "@akashaorg/typings": "*",
+    "i18next": "22.4.14",
+    "react-i18next": "12.2.0",
+    "react-router-dom": "6.11.2",
+    "single-spa-react": "6.0.1"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "rxjs": "7.3.0"
+  },
+  "akasha": {
+    "displayName": "Example App"
+  }
+}

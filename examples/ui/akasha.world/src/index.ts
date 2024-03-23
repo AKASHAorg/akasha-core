@@ -65,6 +65,7 @@ declare const __LOAD_LOCAL_SOURCES__: boolean;
     // define pre-installed apps,
     // homepageApp is always loaded by default
     defaultApps: [
+      '@akashaorg/example-app',
       '@akashaorg/app-routing',
       '@akashaorg/app-vibes',
       '@akashaorg/app-auth-ewa',
@@ -86,6 +87,7 @@ declare const __LOAD_LOCAL_SOURCES__: boolean;
       '@akashaorg/ui-widget-sidebar',
       '@akashaorg/ui-widget-mini-profile',
       '@akashaorg/ui-widget-my-apps',
+      '@akashaorg/ui-widget-example',
     ],
     analytics: {
       trackerUrl: process.env.MATOMO_TRACKER_URL,
