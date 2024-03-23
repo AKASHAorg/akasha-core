@@ -42,7 +42,7 @@ export const useItemHeights = (props: UseItemHeightsProps) => {
   }, []);
 
   const hasMeasuredHeights = React.useCallback((items: VirtualItem[]) => {
-    return items.every(item => itemHeights.current.has(item.key));
+    return items.some(item => itemHeights.current.has(item.key));
   }, []);
 
   const getItemDistanceFromTop = React.useCallback(
@@ -75,7 +75,6 @@ export const useItemHeights = (props: UseItemHeightsProps) => {
   return {
     getItemHeights,
     getItemHeight,
-    updateItemHeight,
     hasMeasuredHeights,
     getItemDistanceFromTop,
     getItemHeightAverage,
