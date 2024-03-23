@@ -115,16 +115,16 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
       icon: <LinkIcon />,
       onClick: handleCopy,
     },
-    ...(!isViewer
-      ? ([
-          {
-            label: t('Flag'),
-            icon: <FlagIcon />,
-            onClick: handleFlagProfile,
-            color: { light: 'errorLight', dark: 'errorDark' },
-          },
-        ] as MenuProps['items'])
-      : []),
+    // ...(!isViewer
+    //   ? ([
+    //       {
+    //         label: t('Flag'),
+    //         icon: <FlagIcon />,
+    //         onClick: handleFlagProfile,
+    //         color: { light: 'errorLight', dark: 'errorDark' },
+    //       },
+    //     ] as MenuProps['items'])
+    //   : []),
   ];
 
   const nsfwBadge = useMemo(

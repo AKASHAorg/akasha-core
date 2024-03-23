@@ -113,25 +113,26 @@ const Topbar: React.FC<ITopbarProps> = props => {
                 onClick={onAppWidgetClick}
                 variant="primary"
               />
-              <Button
+              {/* <Button
                 iconOnly={true}
                 icon={notificationIcon(snoozeNotifications, hasNewNotifications)}
                 onClick={onNotificationClick}
                 greyBg={true}
                 variant="primary"
-              />
+              /> */}
             </>
           ) : (
             <Button iconOnly={true} icon={<BoltIcon />} onClick={onLoginClick} variant="primary" />
           )
         ) : (
-          <Button
-            iconOnly={true}
-            icon={notificationIcon(snoozeNotifications, hasNewNotifications)}
-            onClick={onNotificationClick}
-            greyBg={true}
-            variant="primary"
-          />
+          <></>
+          // <Button
+          //   iconOnly={true}
+          //   icon={notificationIcon(snoozeNotifications, hasNewNotifications)}
+          //   onClick={onNotificationClick}
+          //   greyBg={true}
+          //   variant="primary"
+          // />
         )}
       </Stack>
     </Card>
