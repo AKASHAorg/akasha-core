@@ -13,7 +13,7 @@ import { useGetContentBlockByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generat
 import { useNsfwToggling } from '@akashaorg/ui-awf-hooks';
 import { Transition } from '@headlessui/react';
 
-type ContentBlockType = {
+type ContentBlockRendererProps = {
   blockID: string;
   authenticatedDID: string;
   showHiddenContent: boolean;
@@ -22,7 +22,7 @@ type ContentBlockType = {
   onBlockInfoChange?: (blockInfo: { blockName: string; appName: string }) => void;
   onContentClick?: () => void;
 };
-const ContentBlock: React.FC<ContentBlockType> = props => {
+const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
   const {
     blockID,
     authenticatedDID,
@@ -193,4 +193,4 @@ const BLOCK_LABEL_TO_APP_DISPLAY_NAME_MAP = {
   '@akashaorg/app-akasha-integration': 'Antenna',
 };
 
-export default ContentBlock;
+export default ContentBlockRenderer;

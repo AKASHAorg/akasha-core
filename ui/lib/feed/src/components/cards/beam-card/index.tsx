@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import EntryCard, {
   EntryCardProps,
 } from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
-import ContentBlock from './content-block';
+import ContentBlockRenderer from './content-block-renderer';
 import ActionButtons from './action-buttons';
 import { transformSource, hasOwn, sortByKey, useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { EntityTypes, BeamEntryData } from '@akashaorg/typings/lib/ui';
@@ -144,7 +144,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
     >
       {({ blockID }) => (
         <React.Suspense fallback={<></>}>
-          <ContentBlock
+          <ContentBlockRenderer
             blockID={blockID}
             authenticatedDID={authenticatedDID}
             showHiddenContent={showHiddenContent}
