@@ -69,6 +69,8 @@ export const Header: React.FC<HeaderProps> = ({
   const [showDeleteImage, setShowDeleteImage] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState(transformSource(avatar?.default));
   const [coverImageUrl, setCoverImageUrl] = useState(transformSource(coverImage?.default));
+  const [lastAvatarUrl, setLastAvatarUrl] = useState(transformSource(avatar?.default));
+  const [lastCoverImageUrl, setLastCoverImageUrl] = useState(transformSource(coverImage?.default));
   const alternativeAvatars = useRef(
     avatar?.alternatives?.map(alternative => transformSource(alternative)),
   );
@@ -140,11 +142,13 @@ export const Header: React.FC<HeaderProps> = ({
         case 'avatar':
           onImageSave('avatar', image);
           onAvatarChange(image);
+          setLastAvatarUrl(avatarUrl);
           setAvatarUrl({ src: URL.createObjectURL(image), width: 0, height: 0 });
           break;
         case 'cover-image':
           onImageSave('cover-image', image);
           onCoverImageChange(image);
+          setLastCoverImageUrl(coverImageUrl);
           setCoverImageUrl({ src: URL.createObjectURL(image), width: 0, height: 0 });
       }
     }
@@ -262,7 +266,16 @@ export const Header: React.FC<HeaderProps> = ({
         title={profileImageType === 'avatar' ? imageTitle.avatar : imageTitle.coverImage}
         cancelLabel={cancelLabel}
         saveLabel={saveLabel}
-        onClose={() => (isSavingImage ? undefined : setShowEditImage(false))}
+        onClose={() => {
+          if (isSavingImage) return;
+          if (profileImageType === 'avatar') {
+            setAvatarUrl(lastAvatarUrl);
+          }
+          if (profileImageType === 'cover-image') {
+            setCoverImageUrl(lastCoverImageUrl);
+          }
+          setShowEditImage(false);
+        }}
         images={profileImageType === 'avatar' ? [avatarUrl?.src] : [coverImageUrl?.src]}
         dragToRepositionLabel={dragToRepositionLabel}
         isSavingImage={isSavingImage}
