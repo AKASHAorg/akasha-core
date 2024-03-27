@@ -144,7 +144,7 @@ const Header: React.FC<HeaderProps> = ({
                 copiedLabel={copiedLabel}
               />
               <Stack direction="row" spacing="gap-2" customStyle="flex-wrap">
-                {badges.map(badge => (
+                {badges?.map(badge => (
                   <Tooltip
                     key={badge.label}
                     content={badge.toolTipLabel}
