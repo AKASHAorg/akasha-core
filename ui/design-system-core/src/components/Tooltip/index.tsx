@@ -9,7 +9,7 @@ import { getArrowClasses } from './getArrowClasses';
 import { getContentClasses } from './getContentClasses';
 import { Color } from '../types/common.types';
 
-export type TooltipProps = {
+type TProps = {
   placement: 'top' | 'left' | 'bottom' | 'right';
   content: ReactNode;
   textSize?: TextProps['variant'];
@@ -22,6 +22,10 @@ export type TooltipProps = {
   contentCustomStyle?: string;
 };
 
+export type TooltipProps = PropsWithChildren<
+  TProps | ({ open: boolean; onOpen: () => void; onClose: () => void } & TProps)
+>;
+
 const ARROW_SIZE = 4;
 
 type CSSPosition = 'top' | 'left' | 'bottom' | 'right';
@@ -33,11 +37,7 @@ const PLACEMENT_TO_CSS_POSITION_MAP: Record<TooltipProps['placement'], CSSPositi
   top: 'bottom',
 };
 
-const Tooltip: React.FC<
-  PropsWithChildren<
-    TooltipProps | ({ open: boolean; onOpen: () => void; onClose: () => void } & TooltipProps)
-  >
-> = props => {
+const Tooltip: React.FC<TooltipProps> = props => {
   const {
     placement = 'bottom',
     content,

@@ -1,9 +1,8 @@
 import React from 'react';
-
 import { startWidgetsTogglingBreakpoint } from '@akashaorg/design-system-core/lib/utils/breakpoints';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import CircularPlaceholder from '@akashaorg/design-system-core/lib/components/CircularPlaceholder';
+import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 
 const TopbarLoader: React.FC = () => {
   return (
@@ -14,27 +13,41 @@ const TopbarLoader: React.FC = () => {
       >
         <Stack direction="row" spacing="gap-x-2">
           {Array.from({ length: 2 }).map((el, index: number) => (
-            <CircularPlaceholder
+            <TextLine
+              round="rounded-full"
               key={index}
               height="h-8"
               width="w-8"
               customStyle="shrink-0"
-              animated
+              animated={true}
             />
           ))}
         </Stack>
-        <CircularPlaceholder height="h-10" width="w-10" customStyle="shrink-0" animated />
+        <TextLine
+          round="rounded-full"
+          height="h-10"
+          width="w-10"
+          customStyle="shrink-0"
+          animated={true}
+        />
         <Stack direction="row" spacing="gap-x-2">
           {window.matchMedia(startWidgetsTogglingBreakpoint).matches ? (
-            <CircularPlaceholder height="h-8" width="w-8" customStyle="shrink-0" animated />
+            <TextLine
+              round="rounded-full"
+              height="h-8"
+              width="w-8"
+              customStyle="shrink-0"
+              animated={true}
+            />
           ) : (
             Array.from({ length: 2 }).map((el, index: number) => (
-              <CircularPlaceholder
+              <TextLine
+                round="rounded-full"
                 key={index}
                 height="h-8"
                 width="w-8"
                 customStyle="shrink-0"
-                animated
+                animated={true}
               />
             ))
           )}

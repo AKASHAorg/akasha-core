@@ -1,15 +1,14 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 import { apply, tw } from '@twind/core';
 
 export type OverflowType = 'auto' | 'hidden' | 'scroll' | 'visible';
 
-export type BasicPopoverProps = {
-  children: React.ReactNode;
-  closePopover: () => void;
+export type BasicPopoverProps = PropsWithChildren<{
   target: HTMLElement;
   gap?: string;
   overflow?: OverflowType | { horizontal?: OverflowType; vertical?: OverflowType };
-};
+  closePopover: () => void;
+}>;
 
 const BasicPopover: React.FC<BasicPopoverProps> = ({ children, ...props }) => {
   const { gap, overflow = 'hidden' } = props;

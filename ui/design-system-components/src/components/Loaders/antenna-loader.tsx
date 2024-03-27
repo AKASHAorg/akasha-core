@@ -1,6 +1,4 @@
 import React from 'react';
-
-import CircularPlaceholder from '@akashaorg/design-system-core/lib/components/CircularPlaceholder';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
@@ -24,7 +22,13 @@ const AntennaLoader: React.FC = () => {
             justify="start"
             customStyle="w-9/12 pl-4"
           >
-            <CircularPlaceholder height="h-10" width="w-10" customStyle="shrink-0" animated />
+            <TextLine
+              round="rounded-full"
+              height="h-10"
+              width="w-10"
+              customStyle="shrink-0"
+              animated={true}
+            />
             <TextLine animated={true} width="w-4/5" />
           </Stack>
           <Stack justify="center" customStyle="w-3/12">

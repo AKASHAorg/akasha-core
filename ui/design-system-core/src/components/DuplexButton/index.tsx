@@ -19,7 +19,7 @@ export type DuplexButtonProps = Omit<ButtonProps, 'label'> & {
   fixedWidth?: string;
 };
 
-const DuplexButton = (props: DuplexButtonProps) => {
+const DuplexButton: React.FC<DuplexButtonProps> = props => {
   const {
     onClickActive,
     onClickInactive,

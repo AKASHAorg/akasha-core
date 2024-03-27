@@ -1,5 +1,3 @@
-import React from 'react';
-import { tw } from '@twind/core';
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { IntegrationTypes } from '@akashaorg/typings/lib/ui';
@@ -9,27 +7,40 @@ import AppAvatar, { AppAvatarProps } from '@akashaorg/design-system-core/lib/com
 const meta: Meta<AppAvatarProps> = {
   title: 'DSCore/Avatars/AppAvatar',
   component: AppAvatar,
+  tags: ['autodocs'],
+  argTypes: {
+    appType: {
+      options: [IntegrationTypes.APP, IntegrationTypes.WIDGET],
+      control: { type: 'select' },
+    },
+  },
 };
 
-export default meta;
 type Story = StoryObj<AppAvatarProps>;
 
-const ethAddress = '0x003410490050000320006570034567114572000';
+const profileId = 'did:pkh:eip155:5:0x36c703c42dfa2437dc883e2e0884e57404e16493';
 
 const avatar = { src: 'https://placebeard.it/360x360', height: 360, width: 360 };
 
+const baseArgs: Story = {
+  args: {
+    appType: IntegrationTypes.APP,
+    profileId: profileId,
+    avatar,
+  },
+};
+
 export const AvatarWithAppPlaceholder: Story = {
-  render: () => (
-    <div className={tw('w-fit')}>
-      <AppAvatar appType={IntegrationTypes.APP} profileId={ethAddress} avatar={avatar} />
-    </div>
-  ),
+  args: {
+    ...baseArgs.args,
+  },
 };
 
 export const AvatarWithWidgetPlaceholder: Story = {
-  render: () => (
-    <div className={tw('w-[15%]')}>
-      <AppAvatar appType={IntegrationTypes.WIDGET} profileId={ethAddress} avatar={avatar} />
-    </div>
-  ),
+  args: {
+    ...baseArgs.args,
+    appType: IntegrationTypes.WIDGET,
+  },
 };
+
+export default meta;

@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
 import AutoComplete, {
@@ -8,31 +7,32 @@ import AutoComplete, {
 const meta: Meta<AutoCompleteProps> = {
   title: 'DSCore/Fields/AutoComplete',
   component: AutoComplete,
+  tags: ['autodocs'],
+  argTypes: {
+    options: { control: 'object' },
+    placeholder: { control: 'text' },
+    disabled: { control: 'boolean' },
+    value: { control: 'text' },
+    customStyle: { control: 'text' },
+    multiple: { control: 'boolean' },
+    separators: { control: 'select', options: ['Space', 'Comma', 'Enter'] },
+    tags: { control: 'object' },
+    onChange: { action: 'field changed' },
+    onSelected: { action: 'option selected' },
+  },
 };
 
-export default meta;
 type Story = StoryObj<AutoCompleteProps>;
 
-const Component = () => {
-  const [query, setQuery] = useState('');
-
-  return (
-    <AutoComplete
-      value={query}
-      onChange={value => {
-        if (typeof value === 'string') {
-          setQuery(value);
-          return;
-        }
-      }}
-      options={['AKASHA', 'AKIRA', 'Travel', 'Cooking', 'Ethereum', 'Finance']}
-      customStyle="w-fit"
-      separators={['Comma', 'Space', 'Enter']}
-      multiple
-    />
-  );
+const baseArgs: Story = {
+  args: {
+    options: ['AKASHA', 'AKIRA', 'Travel', 'Cooking', 'Ethereum', 'Finance'],
+    customStyle: 'w-[50%]',
+  },
 };
 
-export const BaseAutoComplete: Story = {
-  render: () => <Component />,
-};
+export const Default: Story = { args: { ...baseArgs.args } };
+
+export const AutoCompleteDisabled: Story = { args: { ...baseArgs.args, disabled: true } };
+
+export default meta;

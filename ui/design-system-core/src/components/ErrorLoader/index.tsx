@@ -1,7 +1,7 @@
 import * as React from 'react';
 import ErrorCard from './error-card';
 
-export interface ErrorLoaderProps {
+export type ErrorLoaderProps = React.PropsWithChildren<{
   /**
    * Error type
    */
@@ -30,8 +30,7 @@ export interface ErrorLoaderProps {
    */
   devDetails?: React.ReactElement | string;
   customStyle?: string; // use valid twind classes;
-  children?: React.ReactElement | string | number;
-}
+}>;
 
 const ErrorLoader: React.FC<ErrorLoaderProps> = ({ children, ...props }) => {
   const { type, publicImgPath = '/images' } = props;
