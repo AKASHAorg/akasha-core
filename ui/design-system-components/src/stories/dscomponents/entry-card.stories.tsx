@@ -32,6 +32,7 @@ export const BaseEntryCard: Story = {
         data: {
           did: { id: 'did:pkh:eip155:5:0xa2aabe32856a8d50c748d50a5111312d986208a8' },
           name: 'Coffee Lover',
+          avatar: { default: { src: 'https://placebeard.it/360x360', height: 0, width: 0 } },
         },
 
         loading: false,

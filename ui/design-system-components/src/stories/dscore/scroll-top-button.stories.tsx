@@ -3,6 +3,8 @@ import ScrollTopButton, {
   ScrollTopButtonProps,
 } from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
 
+ScrollTopButton.displayName = 'ScrollTopButton';
+
 const meta: Meta<ScrollTopButtonProps> = {
   title: 'DSCore/Buttons/ScrollTopButton',
   component: ScrollTopButton,

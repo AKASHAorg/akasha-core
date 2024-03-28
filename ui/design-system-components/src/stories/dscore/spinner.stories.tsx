@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import Spinner, { SpinnerProps } from '@akashaorg/design-system-core/lib/components/Spinner';
 
+Spinner.displayName = 'Spinner';
+
 const meta: Meta<SpinnerProps> = {
   title: 'DSCore/Spinners/Spinner',
   component: Spinner,

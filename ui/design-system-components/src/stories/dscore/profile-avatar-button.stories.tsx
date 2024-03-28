@@ -3,6 +3,8 @@ import ProfileAvatarButton, {
   ProfileAvatarButtonProps,
 } from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 
+ProfileAvatarButton.displayName = 'ProfileAvatarButton';
+
 const meta: Meta<ProfileAvatarButtonProps> = {
   title: 'DSCore/Buttons/ProfileAvatarButton',
   component: ProfileAvatarButton,
