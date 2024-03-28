@@ -7,6 +7,8 @@ import {
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { ButtonProps } from '@akashaorg/design-system-core/lib/components/Button/types';
 
+Button.displayName = 'Button';
+
 const meta: Meta<ButtonProps> = {
   title: 'DSCore/Buttons/Button',
   component: Button,

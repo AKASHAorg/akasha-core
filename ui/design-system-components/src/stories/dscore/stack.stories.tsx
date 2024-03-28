@@ -3,6 +3,8 @@ import type { Meta, StoryObj } from '@storybook/react';
 import Stack, { StackProps } from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
+Stack.displayName = 'Stack';
+
 const meta: Meta<StackProps> = {
   title: 'DSCore/Stack/Stack',
   component: Stack,

@@ -8,6 +8,8 @@ import {
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import List, { ListProps } from '@akashaorg/design-system-core/lib/components/List';
 
+List.displayName = 'List';
+
 const meta: Meta<ListProps> = {
   title: 'DSCore/Lists/List',
   component: List,

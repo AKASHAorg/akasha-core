@@ -4,6 +4,8 @@ import type { Meta, StoryObj } from '@storybook/react';
 import Card, { TCardProps } from '@akashaorg/design-system-core/lib/components/Card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
+Card.displayName = 'Card';
+
 const meta: Meta<TCardProps> = {
   title: 'DSCore/Cards/Card',
   component: Card,
