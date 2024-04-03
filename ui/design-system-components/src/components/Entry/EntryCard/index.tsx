@@ -148,7 +148,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
   const contentClickableStyle =
     contentClickable && !showNSFWCard ? 'cursor-pointer' : 'cursor-default';
   const menuItems: ListItem[] = [
-    ...(!isViewer
+    ...(!isViewer && flagAsLabel
       ? [
           {
             icon: <FlagIcon />,
@@ -159,7 +159,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
           },
         ]
       : []),
-    ...(isViewer
+    ...(isViewer && editLabel
       ? [
           {
             icon: <PencilIcon />,
@@ -234,17 +234,19 @@ const EntryCard: React.FC<EntryCardProps> = props => {
             />
           )}
         </>
-        <Menu
-          anchor={{
-            icon: <EllipsisHorizontalIcon />,
-            plainIcon: true,
-            iconOnly: true,
-            size: 'md',
-          }}
-          items={menuItems}
-          disabled={disableActions}
-          customStyle="shrink-0"
-        />
+        {(editLabel || flagAsLabel) && (
+          <Menu
+            anchor={{
+              icon: <EllipsisHorizontalIcon />,
+              plainIcon: true,
+              iconOnly: true,
+              size: 'md',
+            }}
+            items={menuItems}
+            disabled={disableActions}
+            customStyle="shrink-0"
+          />
+        )}
       </Stack>
       {!entryData.active && (
         <EntryCardRemoved
