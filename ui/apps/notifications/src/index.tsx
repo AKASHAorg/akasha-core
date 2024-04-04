@@ -78,6 +78,10 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       mountsIn: 'snackbar-notif-slot',
       loadingFn: () => import('./extensions/snack-bar-notification'),
     },
+    {
+      mountsIn: 'topbar_notification_button',
+      loadingFn: () => import('./extensions/rounded-notification-button'),
+    },
   ],
 });
 

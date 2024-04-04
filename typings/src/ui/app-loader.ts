@@ -98,6 +98,14 @@ export type WorldConfig = {
    * Define this world's title
    */
   title: string;
+  worldIcon?: {
+    basePath: string;
+    darkModeSuffix: string;
+    extension: '.png' | '.webp' | '.jpg' | '.jpeg';
+    small: string;
+    medium: string;
+    large: string;
+  };
   analytics?: {
     siteId: string;
     trackerUrl: string;

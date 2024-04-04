@@ -4,10 +4,6 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import {
   ArrowLeftOnRectangleIcon,
   ArrowRightOnRectangleIcon,
-  BellAlertIcon,
-  BellIcon,
-  BellSnoozeIcon,
-  BoltIcon,
   ChevronLeftIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { Akasha } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
@@ -15,12 +11,12 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { startWidgetsTogglingBreakpoint } from '@akashaorg/design-system-core/lib/utils/breakpoints';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
 
 export interface ITopbarProps {
   // data
   versionURL?: string;
-  hasNewNotifications?: boolean;
-  snoozeNotifications?: boolean;
   currentLocation?: string;
   // sidebar
   sidebarVisible: boolean;
@@ -31,16 +27,28 @@ export interface ITopbarProps {
   onBackClick: () => void;
   onAppWidgetClick: () => void;
   onBrandClick?: () => void;
-  onNotificationClick: () => void;
-  onLoginClick: () => void;
   modalSlotId: string;
 }
 
-const notificationIcon = function (snoozeNotifications, hasNewNotifications) {
-  if (snoozeNotifications) {
-    return <BellSnoozeIcon />;
+type WorldIconProps = {
+  fallback: React.ReactElement;
+};
+const WorldIcon = (props: WorldIconProps) => {
+  const { worldConfig } = useRootComponentProps();
+  if (worldConfig.worldIcon) {
+    const smallImagePath = `${worldConfig.worldIcon.basePath}${worldConfig.worldIcon.small}${worldConfig.worldIcon.extension}`;
+    const mediumImagePath = `${worldConfig.worldIcon.basePath}${worldConfig.worldIcon.medium}${worldConfig.worldIcon.extension}`;
+    return (
+      <img
+        alt=""
+        height="1.5rem"
+        className="mb-1"
+        src={`${smallImagePath}`}
+        srcSet={`${smallImagePath}, ${mediumImagePath} 2x`}
+      />
+    );
   }
-  return hasNewNotifications ? <BellAlertIcon /> : <BellIcon />;
+  return <Icon icon={props.fallback} solid={true} customStyle="w-18 h-7" />;
 };
 
 const Topbar: React.FC<ITopbarProps> = props => {
@@ -50,12 +58,10 @@ const Topbar: React.FC<ITopbarProps> = props => {
     onSidebarToggle,
     onBrandClick,
     onAppWidgetClick,
-    onNotificationClick,
     onBackClick,
-    onLoginClick,
-    hasNewNotifications = false,
-    snoozeNotifications,
   } = props;
+
+  const { worldConfig } = useRootComponentProps();
 
   const [displayWidgetTogglingButton, setDisplayWidgetTogglingButton] = React.useState(
     !window.matchMedia(startWidgetsTogglingBreakpoint).matches,
@@ -93,16 +99,17 @@ const Topbar: React.FC<ITopbarProps> = props => {
       </Stack>
       <Button plain={true} customStyle="p-0 !ml-0 cursor-pointer" onClick={onBrandClick}>
         <Stack align="center" justify="center" direction="column">
-          <Icon icon={<Akasha />} solid={true} customStyle="w-18 h-7" />
+          <WorldIcon fallback={<Akasha />} />
           <Text customStyle="uppercase font([Inter] light) text(xs black dark:white) drop-shadow-md">
-            AKASHA World
+            {worldConfig.title}
           </Text>
         </Stack>
       </Button>
       <Stack direction="row" spacing="gap-x-2">
-        {displayWidgetTogglingButton ? (
-          isLoggedIn ? (
-            <>
+        {!isLoggedIn && <Extension name="topbar_login_button" />}
+        {isLoggedIn && (
+          <>
+            {displayWidgetTogglingButton && (
               <Button
                 iconOnly={true}
                 icon={<Akasha />}
@@ -110,25 +117,9 @@ const Topbar: React.FC<ITopbarProps> = props => {
                 onClick={onAppWidgetClick}
                 variant="primary"
               />
-              <Button
-                iconOnly={true}
-                icon={notificationIcon(snoozeNotifications, hasNewNotifications)}
-                onClick={onNotificationClick}
-                greyBg={true}
-                variant="primary"
-              />
-            </>
-          ) : (
-            <Button iconOnly={true} icon={<BoltIcon />} onClick={onLoginClick} variant="primary" />
-          )
-        ) : (
-          <Button
-            iconOnly={true}
-            icon={notificationIcon(snoozeNotifications, hasNewNotifications)}
-            onClick={onNotificationClick}
-            greyBg={true}
-            variant="primary"
-          />
+            )}
+            <Extension name="topbar_notification_button" />
+          </>
         )}
       </Stack>
     </Card>
