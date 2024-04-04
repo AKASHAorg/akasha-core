@@ -281,7 +281,7 @@ export const BeamEditor: React.FC = () => {
               key={block.key}
               id={`${block.propertyType}-${idx}`}
               type="plain"
-              onFocus={() => setFocusedBlock(block.key)}
+              onClick={() => setFocusedBlock(block.key)}
             >
               <Stack padding={16} direction="column" spacing="gap-2">
                 <BlockHeader
