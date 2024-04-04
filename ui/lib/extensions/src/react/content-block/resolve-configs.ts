@@ -6,7 +6,7 @@ import { hasOwn } from '@akashaorg/ui-awf-hooks';
 interface IResolveConfigs {
   matchingBlocks: MatchingBlock[];
   mode: ContentBlockModes;
-  //Cache block configuration to prevent re-loading config with the same block id
+  //Cache to prevent re-loading block config with the same block id
   cache?: boolean;
 }
 
