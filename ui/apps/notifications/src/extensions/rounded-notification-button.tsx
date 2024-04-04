@@ -16,19 +16,13 @@ import {
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 
-const NotificationIcon = ({ snoozeNotifications, hasNewNotifications }) => {
-  if (snoozeNotifications) {
-    return <BellSnoozeIcon />;
-  }
-  return hasNewNotifications ? <BellAlertIcon /> : <BellIcon />;
-};
-
 const RoundedNotificationButton = () => {
   const { getRoutingPlugin, uiEvents } = useRootComponentProps();
   const navigateTo = React.useRef(getRoutingPlugin().navigateTo);
   const uiEventsRef = React.useRef(uiEvents);
   const [snoozeNotifications, setSnoozeNotifications] = React.useState(false);
-
+  // Not implemented yet.
+  const hasNewNotifications = false;
   // check if snooze notification option has already been set
   React.useEffect(() => {
     if (window.localStorage) {
@@ -62,11 +56,17 @@ const RoundedNotificationButton = () => {
     });
   }, []);
 
+  const notificationIcon = React.useMemo(() => {
+    if (snoozeNotifications) {
+      return <BellSnoozeIcon />;
+    }
+    return hasNewNotifications ? <BellAlertIcon /> : <BellIcon />;
+  }, [hasNewNotifications, snoozeNotifications]);
+
   return (
     <Button
-      icon={
-        <NotificationIcon snoozeNotifications={snoozeNotifications} hasNewNotifications={false} />
-      }
+      iconOnly={true}
+      icon={notificationIcon}
       onClick={handleNotificationClick}
       greyBg={true}
       variant="primary"
