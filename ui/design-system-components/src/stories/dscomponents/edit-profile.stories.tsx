@@ -1,14 +1,26 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-
 import EditProfile, { EditProfileProps } from '../../components/EditProfile';
 
 const meta: Meta<EditProfileProps> = {
   title: 'DSComponents/Profile/Edit/EditProfile',
   component: EditProfile,
+  tags: ['autodocs'],
+  argTypes: {
+    header: { control: 'object' },
+    name: { control: 'object' },
+    userName: { control: 'object' },
+    bio: { control: 'object' },
+    cancelButton: { control: 'object' },
+    saveButton: { control: 'object' },
+    linkLabel: { control: 'text' },
+    addNewLinkButtonLabel: { control: 'text' },
+    description: { control: 'text' },
+    socialLinks: { control: 'object' },
+    nsfw: { control: 'object' },
+    nsfwFormLabel: { control: 'text' },
+  },
 };
 
-export default meta;
 type Story = StoryObj<EditProfileProps>;
 
 const avatar = { default: { src: 'https://placebeard.it/360x360', height: 360, width: 360 } };
@@ -23,65 +35,65 @@ const coverImage = {
 
 const profileId = 'did:key:003410490050000320006570034567114572000';
 
-export const BaseEditProfile: Story = {
-  render: () => (
-    <EditProfile
-      header={{
-        title: 'Avatar & Cover Image',
-        coverImage: coverImage,
-        avatar: avatar,
-        profileId,
-        cancelLabel: 'Cancel',
-        deleteLabel: 'Delete',
-        saveLabel: 'Save',
-        imageTitle: {
-          avatar: { label: 'Edit Avatar' },
-          coverImage: { label: 'Edit Cover' },
-        },
-        deleteTitle: {
-          avatar: { label: 'Delete Avatar' },
-          coverImage: { label: 'Delete Cover' },
-        },
-        confirmationLabel: {
-          avatar: 'Are you sure you want to delete your avatar?',
-          coverImage: 'Are you sure you want to delete your cover?',
-        },
-        publicImagePath: '/images',
-        dragToRepositionLabel: 'Drag to reposition',
-        isSavingImage: false,
-        onImageSave: () => ({}),
-        onImageDelete: () => ({}),
-        transformSource: () => ({
-          src: 'https://placebeard.it/360x360',
-          width: 360,
-          height: 360,
-        }),
-      }}
-      name={{ label: 'Name', initialValue: 'Mr. Snowman' }}
-      userName={{ label: 'Username', initialValue: 'snowman' }}
-      bio={{
-        label: 'Bio',
-        initialValue: 'Bio',
-      }}
-      cancelButton={{
-        label: 'Cancel',
-        handleClick: () => ({}),
-      }}
-      saveButton={{
-        label: 'Save',
-        handleClick: formValues => {
-          console.log(formValues);
-        },
-      }}
-      linkLabel="External URLs"
-      addNewLinkButtonLabel="Add new"
-      description="You can add your personal websites or social links to be shared on your profile"
-      socialLinks={[]}
-      nsfw={{
-        label: 'Select NSFW if your profile contains mature or explicit content.',
-        initialValue: false,
-      }}
-      nsfwFormLabel="NSFW Profile"
-    />
-  ),
+export const Default: Story = {
+  args: {
+    header: {
+      title: 'Avatar & Cover Image',
+      coverImage: coverImage,
+      avatar: avatar,
+      profileId,
+      cancelLabel: 'Cancel',
+      deleteLabel: 'Delete',
+      saveLabel: 'Save',
+      imageTitle: {
+        avatar: { label: 'Edit Avatar' },
+        coverImage: { label: 'Edit Cover' },
+      },
+      deleteTitle: {
+        avatar: { label: 'Delete Avatar' },
+        coverImage: { label: 'Delete Cover' },
+      },
+      confirmationLabel: {
+        avatar: 'Are you sure you want to delete your avatar?',
+        coverImage: 'Are you sure you want to delete your cover?',
+      },
+      publicImagePath: '/images',
+      dragToRepositionLabel: 'Drag to reposition',
+      isSavingImage: false,
+      onImageSave: () => ({}),
+      onImageDelete: () => ({}),
+      transformSource: () => ({
+        src: 'https://placebeard.it/360x360',
+        width: 360,
+        height: 360,
+      }),
+    },
+    name: { label: 'Name', initialValue: 'Mr. Snowman' },
+    userName: { label: 'Username', initialValue: 'snowman' },
+    bio: {
+      label: 'Bio',
+      initialValue: 'Bio',
+    },
+    cancelButton: {
+      label: 'Cancel',
+      handleClick: () => ({}),
+    },
+    saveButton: {
+      label: 'Save',
+      handleClick: formValues => {
+        console.log(formValues);
+      },
+    },
+    linkLabel: 'External URLs',
+    addNewLinkButtonLabel: 'Add new',
+    description: 'You can add your personal websites or social links to be shared on your profile',
+    socialLinks: [],
+    nsfw: {
+      label: 'Select NSFW if your profile contains mature or explicit content.',
+      initialValue: false,
+    },
+    nsfwFormLabel: 'NSFW Profile',
+  },
 };
+
+export default meta;
