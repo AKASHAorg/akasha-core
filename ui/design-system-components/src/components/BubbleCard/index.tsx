@@ -34,8 +34,8 @@ const BubbleCard: React.FC<BubbleCardProps> = props => {
     handleLinkClick,
   } = props;
 
-  const time = dayjs(+chatTimestamp / 1000000).format('HH:mm');
-  const relativeTime = formatRelativeTime((+chatTimestamp / 1000000).toString(), locale);
+  const time = dayjs(chatTimestamp).format('HH:mm');
+  const relativeTime = formatRelativeTime(chatTimestamp.toString(), locale);
 
   return (
     <div>

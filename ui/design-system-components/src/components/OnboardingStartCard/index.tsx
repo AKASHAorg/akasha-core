@@ -30,7 +30,9 @@ const OnboardingStartCard = ({
       <Stack align="center" padding="p-4" spacing="gap-y-8" fullWidth={true}>
         <Stack direction="row" justify="between" fullWidth={true}>
           <Text variant="h2">{titleLabel}</Text>
-          <Button disabled={!isButtonEnabled} onClick={handleButtonClick} label={buttonLabel} />
+          {buttonLabel && (
+            <Button disabled={!isButtonEnabled} onClick={handleButtonClick} label={buttonLabel} />
+          )}
         </Stack>
 
         <SearchBar
