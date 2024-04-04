@@ -1,10 +1,11 @@
 import React from 'react';
-import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
+import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 import { getImageFromSeed } from '@akashaorg/design-system-core/lib/utils';
 
 export type ProfileMiniCardProps = {
@@ -81,22 +82,32 @@ const ProfileMiniCard: React.FC<ProfileMiniCardProps> = props => {
           )}
         </Stack>
 
-        {!statsLoading && (
-          <Stack direction="row" spacing="gap-x-3" align="center" justify="center">
-            <Text variant="subtitle2">
-              {beams} {beamsLabel}
-            </Text>
-            <Text variant="subtitle2" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
-              |
-            </Text>
-            <Text variant="subtitle2">
-              {followers} {followersLabel}
-            </Text>
-          </Stack>
-        )}
+        <Stack direction="row" spacing="gap-x-3" align="center" justify="center">
+          {statsLoading ? (
+            <>
+              <TextLine width="w-14" height="h-5" animated />
+              <Text variant="subtitle2" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
+                |
+              </Text>
+              <TextLine width="w-14" height="h-5" animated />
+            </>
+          ) : (
+            <>
+              <Text variant="subtitle2">
+                {beams} {beamsLabel}
+              </Text>
+              <Text variant="subtitle2" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
+                |
+              </Text>
+              <Text variant="subtitle2">
+                {followers} {followersLabel}
+              </Text>
+            </>
+          )}
+        </Stack>
 
         {profileData?.description && (
-          <Text breakWord={true} truncate={true}>
+          <Text breakWord={true} align="center" lineClamp={3}>
             {profileData.description}
           </Text>
         )}
