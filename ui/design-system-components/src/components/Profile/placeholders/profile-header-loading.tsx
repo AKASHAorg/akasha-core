@@ -29,6 +29,7 @@ const ProfileHeaderLoading: React.FC<ProfileHeaderLoadingProps> = props => {
             <Stack spacing="gap-y-1.5" customStyle="mt-1">
               <TextLine width="w-36" animated />
               <TextLine width="w-28" animated />
+              <TextLine width="w-28" animated />
             </Stack>
             <Stack direction="row" align="center" spacing="gap-x-2" customStyle="ml-auto">
               <TextLine

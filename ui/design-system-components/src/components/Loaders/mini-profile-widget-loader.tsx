@@ -8,7 +8,7 @@ const MiniProfileWidgetLoader: React.FC = () => {
   return (
     <Card radius="rounded-2xl" margin="mb-4" padding="p-0" customStyle="max-h-[30rem]">
       <Stack align="center" customStyle="h-28 rounded-t-2xl" fullWidth>
-        <Stack customStyle="relative top-12">
+        <Stack customStyle="relative top-16">
           <TextLine
             round="rounded-full"
             height="h-20"
@@ -25,7 +25,7 @@ const MiniProfileWidgetLoader: React.FC = () => {
           <TextLine width="w-3/6" height="h-6" animated />
         </Stack>
 
-        <Stack direction="row" justify="center" align="center" spacing="gap-y-3" fullWidth>
+        <Stack direction="row" justify="center" align="center" spacing="gap-x-3" fullWidth>
           <TextLine width="w-2/6" height="h-5" animated />
           <Text variant="subtitle2" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
             |
