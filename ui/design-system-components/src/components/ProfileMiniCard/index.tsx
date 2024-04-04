@@ -68,7 +68,6 @@ const ProfileMiniCard: React.FC<ProfileMiniCardProps> = props => {
           />
         </Stack>
       </Stack>
-
       <Stack spacing="gap-y-4" align="center" padding="p-4" customStyle="pt-6">
         <Stack spacing="gap-y-1" padding="pt-3" align="center">
           {profileData?.name && (
@@ -76,12 +75,10 @@ const ProfileMiniCard: React.FC<ProfileMiniCardProps> = props => {
               {profileData.name}
             </Text>
           )}
-
           {profileData?.did?.id && (
             <DidField did={profileData.did.id} isValid={true} copiable={false} />
           )}
         </Stack>
-
         <Stack direction="row" spacing="gap-x-3" align="center" justify="center">
           {statsLoading ? (
             <>
@@ -105,13 +102,11 @@ const ProfileMiniCard: React.FC<ProfileMiniCardProps> = props => {
             </>
           )}
         </Stack>
-
         {profileData?.description && (
           <Text breakWord={true} align="center" lineClamp={3}>
             {profileData.description}
           </Text>
         )}
-
         {authenticatedDID !== profileData?.did?.id && footerExt}
       </Stack>
     </Card>

@@ -7,15 +7,14 @@ import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 const MiniProfileWidgetLoader: React.FC = () => {
   return (
     <Card radius="rounded-2xl" margin="mb-4" padding="p-0" customStyle="max-h-[30rem]">
-      <Stack align="center" customStyle="h-28 rounded-t-2xl" fullWidth>
+      <Stack
+        background={{ light: 'grey7', dark: 'grey5' }}
+        align="center"
+        customStyle="h-28 rounded-t-2xl"
+        fullWidth
+      >
         <Stack customStyle="relative top-16">
-          <TextLine
-            round="rounded-full"
-            height="h-20"
-            width="w-20"
-            customStyle="shrink-0"
-            animated={true}
-          />
+          <TextLine round="rounded-full" height="h-20" width="w-20" customStyle="shrink-0" />
         </Stack>
       </Stack>
 
