@@ -85,7 +85,7 @@ export const ContentBlockExtension: React.FC<ContentBlockExtensionProps> = props
       matchingBlocks.length !== state.parcels.length &&
       !state.isMatched
     ) {
-      resolveConfigs({ matchingBlocks, mode: ContentBlockModes.READONLY })
+      resolveConfigs({ matchingBlocks, mode: ContentBlockModes.READONLY, cache: true })
         .then(newBlocks => {
           setState({
             parcels: newBlocks,
