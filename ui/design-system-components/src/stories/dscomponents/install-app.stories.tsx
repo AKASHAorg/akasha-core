@@ -10,7 +10,7 @@ const Wrapped: React.FC<InstallAppProps> = props => (
 );
 
 const meta: Meta<InstallAppProps> = {
-  title: 'DSComponents/Extensions/Install App',
+  title: 'DSComponents/Extensions/AppInstallation',
   component: Wrapped,
   tags: ['autodocs'],
   argTypes: {

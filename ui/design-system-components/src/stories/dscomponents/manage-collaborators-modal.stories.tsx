@@ -8,7 +8,7 @@ import { trendingProfilesData } from '../../utils/dummy-data';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 
 const Component: React.FC<ManageCollaboratorsModalProps> = props => {
-  const [modalOpen, setModalOpen] = React.useState(true);
+  const [modalOpen, setModalOpen] = React.useState(false);
 
   return (
     <Stack direction="column" spacing="gap-y-2">

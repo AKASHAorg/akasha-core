@@ -1,6 +1,5 @@
 import React from 'react';
 import EntryCard, { EntryCardProps } from '../../components/Entry/EntryCard';
-import EntryLoadingPlaceholder from '../../components/Entry/EntryCardLoading';
 import type { Meta, StoryObj } from '@storybook/react';
 import { EntityTypes } from '@akashaorg/typings/lib/ui';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -155,9 +154,4 @@ export const NSFWCard: Story = {
     ],
   },
 };
-
-export const BaseEntryCardLoadingPlaceholder: Story = {
-  render: () => <EntryLoadingPlaceholder />,
-};
-
 export default meta;

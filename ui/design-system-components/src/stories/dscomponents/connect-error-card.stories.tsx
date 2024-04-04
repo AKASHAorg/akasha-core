@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import ConnectErrorCard, { ConnectErrorCardProps } from '../../components/ConnectErrorCard';
 
 const meta: Meta<ConnectErrorCardProps> = {
-  title: 'DSComponents/Cards/ConnectErrorCard',
+  title: 'DSComponents/Errors/ConnectErrorCard',
   component: ConnectErrorCard,
   tags: ['autodocs'],
   argTypes: {

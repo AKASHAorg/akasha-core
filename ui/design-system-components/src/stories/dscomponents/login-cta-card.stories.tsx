@@ -19,7 +19,7 @@ const meta: Meta<LoginCTACardProps> = {
 
 type Story = StoryObj<LoginCTACardProps>;
 
-export const BaseLoginCTACard: Story = {
+export const Default: Story = {
   args: {
     publicImgPath: '',
     title: 'Welcome, fellow Ethereans! 💫',
