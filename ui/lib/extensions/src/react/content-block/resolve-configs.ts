@@ -41,7 +41,6 @@ const getConfig = async ({ block, mode, cache }: IConfig) => {
       })();
       uiStash.set(id, config);
     }
-
     return uiStash.get(id);
   }
   return block.blockInfo.loadingFn({
