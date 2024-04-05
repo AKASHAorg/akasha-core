@@ -19,11 +19,7 @@ describe('< GlobalAntennaPage /> component', () => {
   global.ResizeObserver = ResizeObserver;
   const BaseComponent = ({ authenticatedProfile }) => (
     <AnalyticsProvider {...genAppProps()}>
-      <GlobalAntennaPage
-        isLoggedIn={true}
-        showLoginModal={jest.fn()}
-        authenticatedProfile={authenticatedProfile}
-      />
+      <GlobalAntennaPage authenticatedProfile={authenticatedProfile} />
     </AnalyticsProvider>
   );
 
@@ -38,7 +34,9 @@ describe('< GlobalAntennaPage /> component', () => {
     await act(async () => {
       renderWithAllProviders(
         <BaseComponent
-          authenticatedProfile={genUser('pkh:eip155:5:0xc47a483494db8fe455ba29a53a7f75349dfc02ff')}
+          authenticatedProfile={genUser(
+            'did:pkh:eip155:5:0xc47a483494db8fe455ba29a53a7f75349dfc02ff',
+          )}
         />,
         {},
       );

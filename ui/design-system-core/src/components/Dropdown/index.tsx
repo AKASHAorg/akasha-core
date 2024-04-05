@@ -90,6 +90,7 @@ const Dropdown: React.FC<DropdownProps> = ({
                   onClick={handleChange(menuItem)}
                 >
                   <Stack
+                    direction="row"
                     align="center"
                     spacing="gap-x-2"
                     customStyle={`${isSelected ? 'text-secondaryLight' : 'text-black'}`}

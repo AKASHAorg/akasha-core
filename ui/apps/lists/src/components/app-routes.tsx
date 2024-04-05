@@ -9,7 +9,7 @@ import ListsPage from './lists-page';
 import { Helmet, helmetData } from '@akashaorg/design-system-core/lib/utils';
 
 const AppRoutes: React.FC<unknown> = () => {
-  const { baseRouteName, logger } = useRootComponentProps();
+  const { baseRouteName, logger, worldConfig } = useRootComponentProps();
   const { t } = useTranslation('app-lists');
 
   const errorBoundaryProps: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
@@ -23,7 +23,7 @@ const AppRoutes: React.FC<unknown> = () => {
   return (
     <Router basename={baseRouteName}>
       <Helmet helmetData={helmetData}>
-        <title>My List | AKASHA World</title>
+        <title>My List | {worldConfig.title}</title>
       </Helmet>
       <Routes>
         <Route

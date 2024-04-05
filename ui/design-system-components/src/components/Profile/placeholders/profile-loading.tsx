@@ -15,7 +15,6 @@ const ProfileLoading: React.FC = () => {
           <Stack spacing="gap-1">
             <TextLine width="w-full" animated />
             <TextLine width="w-full" animated />
-            <TextLine width="w-full" animated />
           </Stack>
         </Stack>
       </Card>

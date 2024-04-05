@@ -21,53 +21,83 @@ import { EditProfileFormValues } from '@akashaorg/design-system-components/lib/c
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 
 type EditProfilePageProps = {
-  profileId: string;
+  profileDid: string;
 };
 
 const EditProfilePage: React.FC<EditProfilePageProps> = props => {
-  const { profileId } = props;
+  const { profileDid } = props;
   const { t } = useTranslation('app-profile');
-  const { getRoutingPlugin, uiEvents } = useRootComponentProps();
+  const { getRoutingPlugin, logger, uiEvents } = useRootComponentProps();
   const { avatarImage, coverImage, saveImage, loading: isSavingImage } = useSaveImage();
   const [activeTab, setActiveTab] = useState(0);
   const [selectedActiveTab, setSelectedActiveTab] = useState(0);
+  const [showNsfwModal, setShowNsfwModal] = useState(false);
+  const [nsfwFormValues, setNsfwFormValues] = useState<EditProfileFormValues>();
   const [showUnsavedChangesModal, setShowUnsavedChangesModal] = useState(false);
   const [profileContentOnImageDelete, setProfileContentOnImageDelete] =
     useState<PartialAkashaProfileInput | null>(null);
   const navigateTo = getRoutingPlugin().navigateTo;
   const { data, error } = useGetProfileByDidSuspenseQuery({
-    variables: { id: profileId },
+    variables: { id: profileDid },
   });
 
   const { akashaProfile: profileData } =
     data?.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
   const background = profileData?.background;
   const avatar = profileData?.avatar;
+  const sdk = getSDK();
 
-  const onEditSuccess = () => {
+  const onUpdateSuccess = () => {
     uiEvents.next({
       event: NotificationEvents.ShowNotification,
       data: {
         type: NotificationTypes.Success,
-        message: t('Profile updated successfully'),
+        message: t('Profile updated successfully.'),
       },
     });
     navigateToProfileInfoPage();
   };
 
-  const sdk = getSDK();
+  const onUpdateError = () => {
+    uiEvents.next({
+      event: NotificationEvents.ShowNotification,
+      data: {
+        type: NotificationTypes.Error,
+        message: t('Profile update unsuccessful. Please try again.'),
+      },
+    });
+    navigateToProfileInfoPage();
+  };
+
+  const onSaveImageError = () => {
+    uiEvents.next({
+      event: NotificationEvents.ShowNotification,
+      data: {
+        type: NotificationTypes.Error,
+        message: t('The image wasn’t uploaded correctly. Please try again!'),
+      },
+    });
+  };
 
   const [createProfileMutation, { loading: createProfileProcessing }] = useCreateProfileMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
     onCompleted: data => {
       const id = data.createAkashaProfile?.document.id;
       if (id) indexProfile(id);
-      onEditSuccess();
+      onUpdateSuccess();
+    },
+    onError: error => {
+      onUpdateError();
+      logger.error(`error in creating a profile: ${JSON.stringify(error)}`);
     },
   });
   const [updateProfileMutation, { loading: updateProfileProcessing }] = useUpdateProfileMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
-    onCompleted: onEditSuccess,
+    onCompleted: onUpdateSuccess,
+    onError: error => {
+      onUpdateError();
+      logger.error(`error in updating a profile: ${JSON.stringify(error)}`);
+    },
   });
   const [indexProfileMutation] = useIndexProfileMutation();
   const isProcessing = createProfileProcessing || updateProfileProcessing;
@@ -84,7 +114,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
   const navigateToProfileInfoPage = () => {
     navigateTo({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: () => `/${profileId}`,
+      getNavigationUrl: () => `/${profileDid}`,
     });
   };
 
@@ -145,17 +175,43 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
     return { ...avatarImageObj, ...coverImageObj };
   };
 
+  const onProfileSave = async (formValues: EditProfileFormValues) => {
+    if (!profileData?.id) {
+      await createProfile(formValues, getProfileImageVersions(avatarImage, coverImage));
+      return;
+    }
+
+    if (profileContentOnImageDelete) {
+      updateProfileMutation({
+        variables: {
+          i: {
+            id: profileData.id,
+            content: profileContentOnImageDelete,
+            options: { replace: true },
+          },
+        },
+      });
+      setProfileContentOnImageDelete(null);
+      return;
+    }
+
+    updateProfile(formValues, getProfileImageVersions(avatarImage, coverImage));
+  };
+
   return (
     <Stack direction="column" spacing="gap-y-4" customStyle="h-full">
       <Card radius={20} elevation="1" customStyle="py-4 h-full">
         <EditProfile
           defaultValues={{
-            avatar: null,
-            coverImage: null,
+            avatar: profileData?.avatar ? transformSource(profileData.avatar?.default) : null,
+            coverImage: profileData?.background
+              ? transformSource(profileData.background?.default)
+              : null,
             name: profileData?.name ?? '',
             bio: profileData?.description ?? '',
             ens: '',
             userName: '',
+            nsfw: profileData?.nsfw ?? false,
             links: profileData?.links?.map(link => link.href) ?? [],
           }}
           header={{
@@ -163,7 +219,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
             coverImage: background,
             avatar: avatar,
             dragToRepositionLabel: t('Drag the image to reposition'),
-            profileId,
+            profileId: profileDid,
             cancelLabel: t('Cancel'),
             deleteLabel: t('Delete'),
             saveLabel: t('Save'),
@@ -179,9 +235,9 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
               avatar: t('Are you sure you want to delete your avatar?'),
               coverImage: t('Are you sure you want to delete your cover?'),
             },
-            isSavingImage: isSavingImage,
+            isSavingImage,
             publicImagePath: '/images',
-            onImageSave: async (type, image) => saveImage(type, image),
+            onImageSave: (type, image) => saveImage({ type, image, onError: onSaveImageError }),
             onImageDelete: type =>
               setProfileContentOnImageDelete(
                 deleteImageAndGetProfileContent({ profileData, type }),
@@ -192,6 +248,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
           bio={{ label: t('Bio'), initialValue: profileData?.description }}
           nsfw={{
             label: t('Select NSFW if your profile contains mature or explicit content.'),
+            description: t('Note: this is an irreversible action.'),
             initialValue: profileData?.nsfw,
           }}
           nsfwFormLabel={t('NSFW Profile')}
@@ -212,26 +269,12 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
             label: t('Save'),
             loading: isProcessing,
             handleClick: async formValues => {
-              if (!profileData?.id) {
-                await createProfile(formValues, getProfileImageVersions(avatarImage, coverImage));
+              if (formValues?.nsfw) {
+                setNsfwFormValues(formValues);
+                setShowNsfwModal(true);
                 return;
               }
-
-              if (profileContentOnImageDelete) {
-                updateProfileMutation({
-                  variables: {
-                    i: {
-                      id: profileData.id,
-                      content: profileContentOnImageDelete,
-                      options: { replace: true },
-                    },
-                  },
-                });
-                setProfileContentOnImageDelete(null);
-                return;
-              }
-
-              updateProfile(formValues, getProfileImageVersions(avatarImage, coverImage));
+              onProfileSave(formValues);
             },
           }}
         />
@@ -267,6 +310,60 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
             "It looks like you haven't saved your changes, if you leave this page all the changes you made will be gone!",
           )}
         </Text>
+      </Modal>
+      <Modal
+        title={{ label: t('Changing to NSFW Profile') }}
+        show={showNsfwModal}
+        onClose={() => {
+          setShowNsfwModal(false);
+        }}
+        actions={[
+          {
+            variant: 'text',
+            label: t('Cancel'),
+            onClick: () => {
+              setShowNsfwModal(false);
+            },
+          },
+          {
+            variant: 'primary',
+            label: 'I understand',
+            onClick: () => {
+              if (nsfwFormValues?.nsfw) {
+                onProfileSave(nsfwFormValues);
+                setShowNsfwModal(null);
+              }
+              setShowNsfwModal(false);
+            },
+          },
+        ]}
+      >
+        <Stack direction="column" spacing="gap-y-4">
+          <Text variant="body1">
+            {t('Before you proceed,')}{' '}
+            <Text variant="h6" as="span">
+              {t('please be aware:')}
+            </Text>
+          </Text>
+          <Text variant="body1">
+            <Text variant="h6" color={{ light: 'errorLight', dark: 'errorDark' }} as="span">
+              {t('Irreversible Action:')}{' '}
+            </Text>
+            {t('Changing your profile to NSFW (Not Safe For Work)')}
+            <br /> {t(
+              'means all current and future posts will be marked as NSFW. This action is',
+            )}{' '}
+            <br />
+            {t('permanent and cannot be undone')}.
+          </Text>
+          <Text variant="body1">
+            <Text variant="h6" color={{ light: 'errorLight', dark: 'errorDark' }} as="span">
+              {t('Content Impact: ')}{' '}
+            </Text>
+            {t('Once your profile is set to NSFW, it will affect how your')} <br />{' '}
+            {t('content is viewed and accessed by others in the community.')}
+          </Text>
+        </Stack>
       </Modal>
     </Stack>
   );

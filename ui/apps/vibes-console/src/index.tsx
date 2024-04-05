@@ -12,7 +12,7 @@ import routes, { HOME, REVIEW_HUB, SETTINGS } from './routes';
 
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
   loadingFn: () => import('./components'),
-  mountsIn: opts.layoutConfig?.pluginSlotId,
+  mountsIn: opts.layoutConfig?.applicationSlotId,
   logo: { type: LogoTypeSource.ICON, solidIcon: true, value: <Akasha /> },
   i18nNamespace: ['app-vibes-console'],
   routes: {

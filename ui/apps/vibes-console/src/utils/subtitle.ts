@@ -18,16 +18,3 @@ export const BMIntroSubtitles = [
     label: 'and our code of conduct before applying!',
   },
 ];
-
-export const BMConfirmationSubtitles = [
-  {
-    label: 'Ask your friends to endorse you by sharing',
-  },
-  {
-    label: 'this link',
-    link: '/antenna',
-  },
-  {
-    label: 'in a beam.',
-  },
-];

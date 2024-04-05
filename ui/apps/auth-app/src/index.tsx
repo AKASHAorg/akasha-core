@@ -11,7 +11,7 @@ import { GlobeAltIcon } from '@akashaorg/design-system-core/lib/components/Icon/
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => {
   return {
     loadingFn: () => import('./components'),
-    mountsIn: opts.layoutConfig?.pluginSlotId,
+    mountsIn: opts.layoutConfig?.applicationSlotId,
     i18nNamespace: ['app-auth-ewa'],
     logo: { type: LogoTypeSource.ICON, value: <GlobeAltIcon /> },
     // allow other apps to navigate to this app
@@ -22,6 +22,12 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       logo: { type: LogoTypeSource.ICON, value: <GlobeAltIcon /> },
       subRoutes: [],
     },
+    extensions: [
+      {
+        mountsIn: 'topbar_login_button',
+        loadingFn: () => import('./extensions/login-bolt-button'),
+      },
+    ],
     // allow other apps to find this app
     tags: ['auth', 'signin', 'signup'],
   };

@@ -65,7 +65,7 @@ export const initialize = (options: IntegrationRegistrationOptions & { logger: L
  */
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
   loadingFn: () => import('./components'),
-  mountsIn: opts.layoutConfig?.pluginSlotId,
+  mountsIn: opts.layoutConfig?.applicationSlotId,
   i18nNamespace: ['app-notifications'],
   menuItems: {
     label: 'Notifications',
@@ -77,6 +77,10 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     {
       mountsIn: 'snackbar-notif-slot',
       loadingFn: () => import('./extensions/snack-bar-notification'),
+    },
+    {
+      mountsIn: 'topbar_notification_button',
+      loadingFn: () => import('./extensions/rounded-notification-button'),
     },
   ],
 });

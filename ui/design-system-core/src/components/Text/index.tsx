@@ -26,7 +26,7 @@ export type TextAlignment = 'start' | 'center' | 'end' | 'justify';
 
 export type FontWeight = 'normal' | 'semibold' | 'bold' | 'light' | 'medium';
 
-export type TextProps = {
+export type TextProps = PropsWithChildren<{
   id?: string;
   customStyle?: string; // pass only the string classes without 'apply' or 'tw'
   variant?: Variant;
@@ -39,7 +39,7 @@ export type TextProps = {
   weight?: FontWeight;
   ref?: React.Ref<HTMLElement>;
   selectable?: boolean;
-};
+}>;
 
 const VARIANT_TO_CSS_CLASSES_MAPPER: Record<Variant, string> = {
   h1: 'text-[4rem] leading-[5rem] font-bold',
@@ -60,7 +60,7 @@ const VARIANT_TO_CSS_CLASSES_MAPPER: Record<Variant, string> = {
   'button-sm': 'block text-[0.75rem] leading-[1.125rem] font-bold',
 };
 
-const Text: React.FC<PropsWithChildren<TextProps>> = ({
+const Text: React.FC<TextProps> = ({
   id,
   as,
   customStyle = '',

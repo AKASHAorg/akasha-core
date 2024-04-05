@@ -96,7 +96,8 @@ const SnackBarNotification: React.FC<RootExtensionProps> = () => {
     const eventsSub = uiEvents.pipe(filterEvent(NotificationEvents.ShowNotification)).subscribe({
       next: (eventInfo: NotificationEvent) => {
         if (eventInfo.data && hasOwn(eventInfo.data, 'message')) {
-          setMessage(eventInfo.data.message as string);
+          setMessage(eventInfo.data.message);
+          setMessageType(eventInfo.data.type);
         }
       },
     });
@@ -153,7 +154,7 @@ const SnackBarNotification: React.FC<RootExtensionProps> = () => {
   );
 };
 
-const reactLifecycles = singleSpaReact({
+export const { bootstrap, mount, unmount } = singleSpaReact({
   React,
   ReactDOMClient,
   rootComponent: withProviders(SnackBarNotification),
@@ -170,9 +171,3 @@ const reactLifecycles = singleSpaReact({
     );
   },
 });
-
-export const bootstrap = reactLifecycles.bootstrap;
-
-export const mount = reactLifecycles.mount;
-
-export const unmount = reactLifecycles.unmount;

@@ -13,28 +13,6 @@ import {
   genUser,
 } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
-import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-
-const mockLocationValue = {
-  pathname: '/',
-  search: '',
-  hash: '',
-  state: null,
-};
-
-const mockRouteParams = {
-  beamId: 'kjzl6kcym7w8y7r2ej5n3oaq3l6bp4twqxmcvjoa3dlf86mvdb4vv7ryv1pkewr',
-};
-
-jest.mock('react-router', () => ({
-  ...jest.requireActual('react-router'),
-  useLocation: jest.fn().mockImplementation(() => {
-    return mockLocationValue;
-  }),
-  useParams: jest.fn().mockImplementation(() => {
-    return mockRouteParams;
-  }),
-}));
 
 class ResizeObserver {
   observe() {
@@ -52,7 +30,11 @@ describe('< BeamPage /> component', () => {
   global.ResizeObserver = ResizeObserver;
   const BaseComponent = (
     <AnalyticsProvider {...genAppProps()}>
-      <BeamPage />
+      <BeamPage
+        beamStream={{}}
+        beam={{ node: genBeamData() }}
+        beamId={'kjzl6kcym7w8y5coci0at0tquy8zmferlog99ys94oj2qgyjy8soxzpbflmlzey'}
+      />
     </AnalyticsProvider>
   );
 
@@ -63,12 +45,6 @@ describe('< BeamPage /> component', () => {
   });
 
   beforeAll(() => {
-    (
-      jest.spyOn(apolloHooks, 'useGetBeamByIdSuspenseQuery') as unknown as jest.SpyInstance<{
-        data: { node: AkashaBeam };
-        isLoading: boolean;
-      }>
-    ).mockReturnValue({ data: { node: genBeamData() }, isLoading: true });
     (
       jest.spyOn(apolloHooks, 'useGetReflectReflectionsLazyQuery') as unknown as jest.SpyInstance<
         [
@@ -90,7 +66,7 @@ describe('< BeamPage /> component', () => {
     ).mockReturnValue({
       data: {
         viewer: {
-          akashaProfile: genUser('pkh:eip155:5:0xc47a483494db8fe455ba29a53a7f75349dfc02ff'),
+          akashaProfile: genUser('did:pkh:eip155:5:0xc47a483494db8fe455ba29a53a7f75349dfc02ff'),
         },
       },
     });

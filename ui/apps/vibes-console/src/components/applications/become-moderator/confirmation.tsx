@@ -7,19 +7,14 @@ import {
   PageButtonsProps,
   PageButtons,
 } from '@akashaorg/design-system-components/lib/components/PageButtons';
-import {
-  SubtitleRendererProps,
-  SubtitleRenderer,
-} from '@akashaorg/design-system-components/lib/components/SubtitleRenderer';
 
-export type BMConfirmationProps = PageButtonsProps &
-  SubtitleRendererProps & {
-    assetName?: string;
-    publicImgPath?: string;
-    assetExtension?: string;
-    titleLabel: string;
-    descriptionLabels: string[];
-  };
+export type BMConfirmationProps = PageButtonsProps & {
+  assetName?: string;
+  publicImgPath?: string;
+  assetExtension?: string;
+  titleLabel: string;
+  descriptionLabels: string[];
+};
 
 export const BMConfirmation: React.FC<BMConfirmationProps> = props => {
   const {
@@ -44,17 +39,13 @@ export const BMConfirmation: React.FC<BMConfirmationProps> = props => {
           />
         </Stack>
 
-        <Stack spacing="gap-y-0.5">
+        <Stack spacing="gap-y-0.5" customStyle="mb-32">
           {descriptionLabels.map((d, idx) => (
             <Text key={d} align="center" variant="body1">
               {d}
               {idx === 0 ? '.' : '!'}
             </Text>
           ))}
-        </Stack>
-
-        <Stack customStyle="mb-32 px(4 md:24)">
-          <SubtitleRenderer {...props} textVariant="body1" />
         </Stack>
 
         <PageButtons {...props} />

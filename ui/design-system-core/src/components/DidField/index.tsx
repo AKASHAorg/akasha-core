@@ -5,7 +5,14 @@ import Text from '../Text';
 import CopyToClipboard from '../CopyToClipboard';
 import { Eth, Solana, DidKey, NoEth } from '../Icon/akasha-icons';
 import { Color } from '../types/common.types';
-import { truncateDid } from '../../utils/did-utils';
+import { getDidNetworkType, truncateDid } from '../../utils/did-utils';
+
+const didNetworkIconMapping = {
+  eth: <Eth />,
+  solana: <Solana />,
+  did: <DidKey />,
+  noDid: <NoEth />,
+};
 
 export type DidFieldProps = {
   did: string;
@@ -25,29 +32,12 @@ const DidField: React.FC<DidFieldProps> = ({
   copiedLabel,
   customStyle = '',
 }) => {
-  const ethIdentifier = 'eip155';
-  const solanaIdentifier = 'solana';
-
-  const iconForDid = (didKey: string): { type: string; icon: React.ReactElement } => {
-    if (didKey) {
-      if (didKey.includes(ethIdentifier)) {
-        return { type: 'Eth', icon: <Eth /> };
-      }
-      // modify if we recognize more than 3 types of keys
-      return didKey.includes(solanaIdentifier)
-        ? { type: 'solana', icon: <Solana /> }
-        : { type: 'didKey', icon: <DidKey /> };
-    }
-    // fallback icon for when no Did key
-    return { type: 'NoEth', icon: <NoEth /> };
-  };
-
-  const networkType = iconForDid(did);
-  const truncatedDid = truncateDid(did, networkType.type);
+  const networkType = getDidNetworkType(did);
+  const truncatedDid = truncateDid(did, networkType);
 
   const didDisplayBlock = (
     <Stack direction="row" spacing="gap-x-1.5" align="center" customStyle={customStyle}>
-      {networkType && <Icon icon={isValid ? networkType.icon : <NoEth />} />}
+      {networkType && <Icon icon={isValid ? didNetworkIconMapping[networkType] : <NoEth />} />}
       <Text variant="footnotes1" color={textColor}>
         {truncatedDid}
       </Text>

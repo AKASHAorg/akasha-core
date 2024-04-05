@@ -45,7 +45,7 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
   const [changedNetwork, changedNetworkUnsubscribe] = useNetworkChangeListener();
 
   useEffect(() => {
-    connectWalletCall.mutate();
+    connectWalletCall.connect();
   }, []);
 
   useEffect(() => {
@@ -56,7 +56,7 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
       !connectWalletCall.isLoading
     ) {
       setErrors([]);
-      connectWalletCall.mutate();
+      connectWalletCall.connect();
     } else if (changedNetwork) {
       const errorTitle = t('Network not supported');
       const errorSubtitle = t(
@@ -123,7 +123,7 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
          * reset error state and trigger connect wallet modal
          */
         setErrors([]);
-        connectWalletCall.mutate();
+        connectWalletCall.connect();
       })
       .catch(err => {
         let errorTitle = t("Switch Your Wallet's Network");

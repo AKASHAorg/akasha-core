@@ -1,18 +1,23 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-
 import ScrollTopButton, {
   ScrollTopButtonProps,
 } from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
 
+ScrollTopButton.displayName = 'ScrollTopButton';
+
 const meta: Meta<ScrollTopButtonProps> = {
   title: 'DSCore/Buttons/ScrollTopButton',
   component: ScrollTopButton,
+  tags: ['autodocs'],
+  argTypes: {
+    hide: { control: 'boolean' },
+  },
 };
 
-export default meta;
 type Story = StoryObj<ScrollTopButtonProps>;
 
-export const BaseScrollTopButton: Story = {
-  render: () => <ScrollTopButton onClick={() => ({})} />,
-};
+export const Default: Story = {};
+
+export const HiddenScrollTopButton: Story = { args: { hide: true } };
+
+export default meta;

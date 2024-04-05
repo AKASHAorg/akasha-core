@@ -5,7 +5,7 @@ import { hasOwn, useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 
 type FollowButtonProps = {
-  profileID: string;
+  profileID?: string;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
@@ -22,7 +22,7 @@ const FollowButton: React.FC<FollowButtonProps> = props => {
       following: [profileID],
       last: 1,
     },
-    skip: !isLoggedIn,
+    skip: !isLoggedIn || !profileID,
   });
 
   if (error) return null;

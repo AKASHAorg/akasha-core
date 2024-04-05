@@ -1,4 +1,3 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
 import InfoCard, { InfoCardProps } from '@akashaorg/design-system-core/lib/components/InfoCard';
@@ -6,11 +5,27 @@ import InfoCard, { InfoCardProps } from '@akashaorg/design-system-core/lib/compo
 const meta: Meta<InfoCardProps> = {
   title: 'DSCore/Cards/InfoCard',
   component: InfoCard,
+  tags: ['autodocs'],
+  argTypes: {
+    assetName: { control: 'text' },
+    publicImgPath: { control: 'text' },
+    titleLabel: { control: 'object' },
+    bodyLabel: { control: 'boolean' },
+    titleVariant: { control: 'text' },
+    bodyVariant: { control: 'text' },
+    customWidthStyle: { control: 'text' },
+  },
+};
+
+type Story = StoryObj<InfoCardProps>;
+
+export const Default: Story = {
+  args: {
+    assetName: 'vibe-overview',
+    publicImgPath: '',
+    titleLabel: 'Title',
+    bodyLabel: 'some content',
+  },
 };
 
 export default meta;
-type Story = StoryObj<InfoCardProps>;
-
-export const BaseInfoCard: Story = {
-  render: () => <InfoCard titleLabel="Title label" bodyLabel="Subtitle label" />,
-};

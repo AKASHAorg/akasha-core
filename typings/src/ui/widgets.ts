@@ -1,15 +1,22 @@
 import { ParcelConfigObject } from 'single-spa';
-import { ActivityFn } from './app-loader';
+import type { ActivityFn, LayoutConfig } from './app-loader';
 
 export const enum WidgetEvents {
   RegisterWidget = 'register-widget',
 }
 
-export type WidgetInterface = {
+export type BaseWidgetInterface = {
   mountsIn: string;
   activeWhen?: ActivityFn;
   loadingFn: () => Promise<ParcelConfigObject>;
+};
+
+export type WidgetInterface = BaseWidgetInterface & {
   extensionsMap?: Record<string, string>;
+};
+
+export type LayoutWidgetInterface = BaseWidgetInterface & {
+  extensionsMap: LayoutConfig;
 };
 
 export type WidgetRegisterEvent = {

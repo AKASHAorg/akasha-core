@@ -16,7 +16,7 @@ import { MagnifyingGlassIcon } from '@akashaorg/design-system-core/lib/component
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
   loadingFn: () => import('./components'),
   i18nNamespace: ['app-search'],
-  mountsIn: opts.layoutConfig?.pluginSlotId,
+  mountsIn: opts.layoutConfig?.applicationSlotId,
   menuItems: {
     label: 'Search',
     area: [MenuItemAreaType.SearchArea, MenuItemAreaType.AppArea],

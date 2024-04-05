@@ -237,7 +237,7 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
   const fetchInitialBeams = React.useCallback(
     async (variables?: GetBeamsByAuthorDidQueryVariables & GetBeamStreamQueryVariables) => {
       try {
-        const results = await fetchBeams({ variables });
+        const results = await fetchBeams({ variables, fetchPolicy: 'cache-first' });
         if (results.error) {
           setErrors(prev => [...prev, results.error]);
           return;

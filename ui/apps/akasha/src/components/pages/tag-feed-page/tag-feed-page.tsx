@@ -27,7 +27,7 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
   const { tagName } = props;
   const { t } = useTranslation('app-akasha-integration');
   const { data } = useGetLogin();
-  const { navigateToModal } = useRootComponentProps();
+  const { navigateToModal, worldConfig } = useRootComponentProps();
   const isLoggedIn = !!data?.id;
   const authenticatedDID = data?.id;
   const _navigateToModal = React.useRef(navigateToModal);
@@ -158,7 +158,7 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
     <HelmetProvider>
       <Stack fullWidth={true}>
         <Helmet>
-          <title>AKASHA World</title>
+          <title>{worldConfig.title}</title>
         </Helmet>
         {loadingCount && <TagFeedHeaderLoader />}
         {countQueryError && (
@@ -194,9 +194,7 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
               <ScrollTopButton hide={false} onClick={onScrollToTop} />
             </ScrollTopWrapper>
           )}
-          renderItem={itemData => (
-            <BeamContentResolver beamId={itemData.node.stream} showLoginModal={showLoginModal} />
-          )}
+          renderItem={itemData => <BeamContentResolver beamId={itemData.node.stream} />}
         />
       </Stack>
     </HelmetProvider>

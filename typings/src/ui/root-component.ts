@@ -6,7 +6,7 @@ import type { UIEventData } from './ui-events';
 import type { ModalNavigationOptions } from './navigation';
 import type i18n from 'i18next';
 import type { IPluginsMap } from './plugins';
-import type { WorldConfig, QueryStringType } from './app-loader';
+import type { WorldConfig, QueryStringType, LayoutConfig } from './app-loader';
 import type { ILogger } from '../sdk/log';
 
 export interface RootComponentProps {
@@ -16,7 +16,7 @@ export interface RootComponentProps {
   uiEvents: Subject<UIEventData>;
   i18next?: typeof i18n;
   plugins?: Record<string, IPluginsMap>;
-  layoutConfig: IAppConfig['extensionsMap'];
+  layoutConfig: LayoutConfig;
   logger: ILogger;
   name?: string;
   singleSpa: typeof singleSpa;

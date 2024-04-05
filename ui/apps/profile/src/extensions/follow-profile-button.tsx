@@ -8,7 +8,7 @@ import { ModalNavigationOptions, RootExtensionProps } from '@akashaorg/typings/l
 import { I18nextProvider } from 'react-i18next';
 
 type FollowProfileButtonExtensionData = {
-  profileID: string;
+  profileID?: string;
   isLoggedIn: boolean;
   isFollowing: boolean;
   followId: string;

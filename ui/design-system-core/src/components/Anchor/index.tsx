@@ -4,18 +4,15 @@ import { apply, tw } from '@twind/core';
 import { FontWeight } from '../Text';
 import { getWeightClasses } from '../Text/getWeightClasses';
 
-export type AnchorProps = {
-  weight?: FontWeight;
-  customStyle?: string;
-  dataTestId?: string;
-};
+export type AnchorProps = PropsWithChildren<
+  React.DetailedHTMLProps<React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement> & {
+    weight?: FontWeight;
+    customStyle?: string;
+    dataTestId?: string;
+  }
+>;
 
-const Anchor: React.FC<
-  PropsWithChildren<
-    AnchorProps &
-      React.DetailedHTMLProps<React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>
-  >
-> = props => {
+const Anchor: React.FC<AnchorProps> = props => {
   const {
     href,
     weight,

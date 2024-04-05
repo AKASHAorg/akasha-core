@@ -130,24 +130,22 @@ export const SlateEditorBlock = (
   };
 
   const [isFocusedEditor, setIsFocusedEditor] = useState(false);
+  /**
+   * this is used to display/hide elements only when a block instance is focused
+   * must be exposed to outer components through useImperativeHandle
+   * the logic for updating the currently focused block is in beam-editor
+   */
   const handleFocusBlock = (focus: boolean) => {
     setIsFocusedEditor(focus);
   };
 
   return (
     <EditorBox
-      // ref={editorRef}
       showAvatar={false}
       profileId={'profileId'}
       placeholderLabel={'write here'}
       maxEncodedLengthErrLabel={t('Text block exceeds line limit, please review!')}
       noMentionsLabel={t('You are not following someone with that name')}
-      onPublish={() => {
-        // void
-      }}
-      // handleSaveLinkPreviewDraft={handleSaveLinkPreviewDraft}
-      // linkPreview={linkPreview}
-      // getLinkPreview={getLinkPreview}
       getMentions={handleGetMentions}
       mentions={mentions}
       withMeter={isFocusedEditor}

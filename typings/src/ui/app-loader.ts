@@ -10,12 +10,48 @@ export type ActivityFn = (
   layoutConfig?: Extensions,
 ) => boolean;
 
+export type LayoutConfig = {
+  /**
+   * load modals inside this node
+   */
+  modalSlotId?: string;
+  /**
+   * main app and plugin area
+   */
+  applicationSlotId?: string;
+  /**
+   * load root widgets inside this node
+   * do not use this for app defined widgets
+   */
+  rootWidgetSlotId?: string;
+  /**
+   * load app defined widgets into this node
+   */
+  widgetSlotId?: string;
+  /**
+   * topbar loading node
+   */
+  topbarSlotId?: string;
+  /**
+   * cookie widget slot
+   */
+  cookieWidgetSlotId?: string;
+  /**
+   * sidebar area slot
+   */
+  sidebarSlotId?: string;
+  /**
+   * snackbar notification slot
+   */
+  snackbarNotifSlotId?: string;
+};
+
 export interface IntegrationRegistrationOptions {
   worldConfig: {
     title: string;
   };
   uiEvents: RootComponentProps['uiEvents'];
-  layoutConfig: Extensions;
+  layoutConfig: LayoutConfig;
   extensionData?: UIEventData['data'];
   plugins?: PluginConf;
   logger: unknown;
@@ -62,6 +98,14 @@ export type WorldConfig = {
    * Define this world's title
    */
   title: string;
+  worldIcon?: {
+    basePath: string;
+    darkModeSuffix: string;
+    extension: '.png' | '.webp' | '.jpg' | '.jpeg';
+    small: string;
+    medium: string;
+    large: string;
+  };
   analytics?: {
     siteId: string;
     trackerUrl: string;

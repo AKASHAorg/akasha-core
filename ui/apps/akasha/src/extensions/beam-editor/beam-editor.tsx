@@ -238,6 +238,10 @@ export const BeamEditor: React.FC = () => {
     if (!profileData?.nsfw) setIsNsfw(false);
   }, [blocksWithActiveNsfw, blocksInUse, profileData?.nsfw]);
 
+  /*
+   * after a block is focused by clicking on it, this handles
+   * propagating the state to the block instance through its exposed method
+   */
   useEffect(() => {
     blocksInUse.forEach(block => {
       if (block.blockRef?.current?.hasOwnProperty('handleFocusBlock')) {
@@ -277,7 +281,7 @@ export const BeamEditor: React.FC = () => {
               key={block.key}
               id={`${block.propertyType}-${idx}`}
               type="plain"
-              onClick={() => setFocusedBlock(block.key)}
+              onFocus={() => setFocusedBlock(block.key)}
             >
               <Stack padding={16} direction="column" spacing="gap-2">
                 <BlockHeader
@@ -406,6 +410,7 @@ export const BeamEditor: React.FC = () => {
                   icon={<XMarkIcon />}
                   iconDirection="right"
                   onPillClick={() => handleDeleteTag(tag)}
+                  type="action"
                 />
               ))}
             </Stack>

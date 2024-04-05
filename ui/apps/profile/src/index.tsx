@@ -11,7 +11,7 @@ import routes, { BEAMS, EDIT, FOLLOWERS, FOLLOWING, INTERESTS } from './routes';
  * All plugins must export an object like this:
  */
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
-  mountsIn: opts.layoutConfig?.pluginSlotId,
+  mountsIn: opts.layoutConfig?.applicationSlotId,
   loadingFn: () => import('./components'),
   i18nNamespace: ['app-profile', 'ui-lib-feed'],
   menuItems: [

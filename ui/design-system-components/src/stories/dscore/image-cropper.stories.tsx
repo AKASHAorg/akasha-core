@@ -1,4 +1,3 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
 import ImageCropper, {
@@ -8,9 +7,14 @@ import ImageCropper, {
 const meta: Meta<ImageCropperProps> = {
   title: 'DSCore/Cropper/ImageCropper',
   component: ImageCropper,
+  tags: ['autodocs'],
+  argTypes: {
+    image: { control: 'object' },
+    dragToRepositionLabel: { control: 'text' },
+    onCrop: { action: 'image cropped' },
+  },
 };
 
-export default meta;
 type Story = StoryObj<ImageCropperProps>;
 
 const avatar = {
@@ -19,12 +23,11 @@ const avatar = {
   width: 320,
 };
 
-export const BaseImageCropper: Story = {
-  render: () => (
-    <ImageCropper
-      image={avatar}
-      dragToRepositionLabel="Drag the image to reposition"
-      onCrop={() => ({})}
-    />
-  ),
+export const Default: Story = {
+  args: {
+    image: avatar,
+    dragToRepositionLabel: 'Drag the image to reposition',
+  },
 };
+
+export default meta;

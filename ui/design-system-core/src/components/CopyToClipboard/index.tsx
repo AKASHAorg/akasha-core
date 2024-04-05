@@ -4,12 +4,12 @@ import { useCopyToClipboard } from 'react-use';
 import Button from '../Button';
 import Tooltip from '../Tooltip';
 
-type CopyToClipboardChildren = {
+export type CopyToClipboardProps = PropsWithChildren<{
   value: string;
   copyText?: string;
   copiedText?: string;
-};
-const CopyToClipboard: React.FC<PropsWithChildren<CopyToClipboardChildren>> = ({
+}>;
+const CopyToClipboard: React.FC<CopyToClipboardProps> = ({
   value,
   copyText = 'Copy to clipboard',
   copiedText = 'Copied',
