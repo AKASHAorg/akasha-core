@@ -58,6 +58,14 @@ declare const __LOAD_LOCAL_SOURCES__: boolean;
 
   const loaderConfig: WorldConfig = {
     title: 'AKASHA World',
+    worldIcon: {
+      basePath: '/icons/world/',
+      darkModeSuffix: '_dark',
+      extension: '.png',
+      small: 'small',
+      medium: 'medium',
+      large: 'large',
+    },
     // main layout (shell)
     layout: '@akashaorg/ui-widget-layout',
     // define an app that will load at root '/' path

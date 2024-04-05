@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useRouterState } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
-import { EventTypes, NotificationEvents, UIEventData } from '@akashaorg/typings/lib/ui';
+import { EventTypes, UIEventData } from '@akashaorg/typings/lib/ui';
 import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import Topbar from './topbar';
@@ -35,36 +35,6 @@ const TopbarComponent: React.FC<unknown> = () => {
   );
 
   const uiEventsRef = React.useRef(uiEvents);
-
-  // added for detecting snooze notification event
-  const [snoozeNotifications, setSnoozeNotifications] = React.useState(false);
-
-  // check if snooze notification option has already been set
-  React.useEffect(() => {
-    if (window.localStorage) {
-      setSnoozeNotifications(JSON.parse(localStorage.getItem('notifications-snoozed')));
-    }
-  }, []);
-
-  React.useEffect(() => {
-    const eventsSub = uiEventsRef.current.subscribe({
-      next: (eventInfo: UIEventData) => {
-        if (eventInfo.event == NotificationEvents.SnoozeNotifications) {
-          setSnoozeNotifications(true);
-        }
-        if (eventInfo.event == NotificationEvents.UnsnoozeNotifications) {
-          setSnoozeNotifications(false);
-        }
-      },
-    });
-
-    return () => {
-      if (eventsSub) {
-        eventsSub.unsubscribe();
-      }
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   // show or hide sidebar and widgets
   React.useEffect(() => {
@@ -185,22 +155,6 @@ const TopbarComponent: React.FC<unknown> = () => {
     });
   };
 
-  const handleNotificationClick = () => {
-    navigateTo({
-      appName: '@akashaorg/app-notifications',
-      getNavigationUrl: routes => {
-        return routes.myProfile;
-      },
-    });
-  };
-
-  const handleLoginClick = () => {
-    navigateTo({
-      appName: '@akashaorg/app-auth-ewa',
-      getNavigationUrl: () => '/',
-    });
-  };
-
   return (
     <ErrorBoundary
       errorObj={{
@@ -214,13 +168,10 @@ const TopbarComponent: React.FC<unknown> = () => {
         sidebarVisible={sidebarVisible}
         onSidebarToggle={handleSidebarToggle}
         onAppWidgetClick={handleWidgetToggle}
-        onNotificationClick={handleNotificationClick}
         onBackClick={handleBackClick}
-        onLoginClick={handleLoginClick}
         currentLocation={location?.pathname}
         onBrandClick={handleBrandClick}
         modalSlotId={layoutConfig.modalSlotId}
-        snoozeNotifications={snoozeNotifications}
       />
     </ErrorBoundary>
   );
