@@ -43,7 +43,7 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
 
   const { data: ownInterestsQueryData } = useGetInterestsByDidQuery({
     variables: { id: authenticatedDID },
-    skip: !isLoggedIn || profileDid === authenticatedDID,
+    skip: !isLoggedIn,
   });
 
   // get interests for the profile being viewed
