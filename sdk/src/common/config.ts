@@ -10,6 +10,7 @@ export const SDKConfigOptions = [
   'ipfs_fallback_gateway',
   'wallet_connect_project_id',
   'log_level',
+  'api_status_path',
 ] as const;
 
 @injectable()
@@ -27,6 +28,7 @@ class AWF_Config {
       ipfs_path_gateway: 'https://cloudflare-ipfs.com/ipfs/',
       ipfs_origin_gateway: 'ipfs.w3s.link',
       ipfs_fallback_gateway: 'ipfs.cf-ipfs.com',
+      api_status_path: process.env.API_STATUS_PATH as string,
     };
   }
 

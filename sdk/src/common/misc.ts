@@ -13,12 +13,14 @@ import AWF_Config from './config';
 class AWF_Misc {
   private endPoint: string;
   private resolver: Resolver | undefined;
-  static readonly statsPath = '?query=%7BserviceStatus%7D';
   private _config: AWF_Config;
 
   constructor(@inject(TYPES.Config) config: AWF_Config) {
     this._config = config;
-    const url = new URL(AWF_Misc.statsPath, this._config.getOption('graphql_uri'));
+    const url = new URL(
+      this._config.getOption('api_status_path'),
+      this._config.getOption('graphql_uri'),
+    );
     this.endPoint = url.href;
   }
 
@@ -37,12 +39,16 @@ class AWF_Misc {
   }
 
   public async getApiStatus() {
-    return fetch(this.endPoint, {
+    if (!this._config.getOption('api_status_path').length) {
+      return { statusCode: 200, success: true };
+    }
+
+    const response = await fetch(this.endPoint, {
       method: 'GET',
       headers: { 'apollo-require-preflight': 'true' },
-    }).then(response => {
-      return { statusCode: response.status, success: response.ok };
     });
+
+    return { statusCode: response.status, success: response.ok };
   }
 
   @validate(z.string(), z.boolean().optional())
