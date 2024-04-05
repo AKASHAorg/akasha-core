@@ -60,6 +60,10 @@ const MAX_ENCODED_LENGTH = 6000;
 /**
  * @param uploadRequest - upload a file and returns a promise that resolves to an array
  * @param editorState - the state of the editor is controlled from the parent component
+ * @param withMeter - display the letter counter, maximum length is internally defined at 500
+ * @param withToolbar - display the rich text formatting toolbar
+ * @param transformSource - utility function to provide ipfs images with gateways to be accessed
+ * @param encodingFunction - utility function to check if the encoded slate content is too big
  */
 export type EditorBoxProps = {
   avatar?: Profile['avatar'];
@@ -86,8 +90,7 @@ export type EditorBoxProps = {
   showDraft?: boolean;
   showPostButton?: boolean;
   customStyle?: string;
-  transformSource: (avatar: Image) => Image;
-  onPublish: (publishData: IPublishData) => void;
+  onPublish?: (publishData: IPublishData) => void;
   onClear?: () => void;
   onCancelClick?: () => void;
   handleSaveLinkPreviewDraft?: (LinkPreview: IEntryData['linkPreview']) => void;
@@ -96,6 +99,7 @@ export type EditorBoxProps = {
   getMentions?: (query: string) => void;
   getTags?: (query: string) => void;
   handleDisablePublish?: (value: boolean) => void;
+  transformSource: (avatar: Image) => Image;
   encodingFunction: (value: Descendant[]) => string;
 };
 
@@ -530,6 +534,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
   return (
     <Stack
       justify="between"
+      padding="p-4"
       background={{ light: 'white', dark: 'grey2' }}
       fullWidth
       customStyle={customStyle}
@@ -553,7 +558,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
           </Stack>
         )}
         {/* w-0 min-w-full is used to prevent parent width expansion without setting a fixed width */}
-        <Stack padding="py-2" customStyle="w-0 min-w-full">
+        <Stack customStyle="w-0 min-w-full">
           <Slate editor={editor} value={editorState || editorDefaultValue} onChange={handleChange}>
             <Editable
               placeholder={placeholderLabel}

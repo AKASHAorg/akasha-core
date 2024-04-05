@@ -1,13 +1,9 @@
-import { useQuery } from '@tanstack/react-query';
 import getSDK from '@akashaorg/awf-sdk';
 import { filter } from 'rxjs';
 import { GlobalEventBusData, WEB3_EVENTS } from '@akashaorg/typings/lib/sdk';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { logError } from './utils/error-handler';
 
-export const NETWORK_STATE_KEY = 'Network_State';
-export const CURRENT_NETWORK_KEY = 'Current Network';
-
-export const REQUIRED_NETWORK_KEY = 'REQUIRED_NETWORK';
 /**
  * A utility function to switch to required network for supported wallets
  */
@@ -38,10 +34,36 @@ const checkNetworkState = async () => {
  * ```
  */
 export function useNetworkState(enabler?: boolean) {
-  return useQuery([NETWORK_STATE_KEY], () => checkNetworkState(), {
-    enabled: !!enabler,
-    keepPreviousData: true,
-  });
+  const [data, setData] = useState<{
+    networkNotSupported: boolean;
+  }>(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isFetched, setIsFetched] = useState<boolean>(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await checkNetworkState();
+        if (res) {
+          setData(res);
+          setIsLoading(false);
+          setIsFetched(true);
+        }
+      } catch (err) {
+        setError(err);
+        logError('useNetworkState', err);
+        setIsLoading(false);
+        setIsFetched(true);
+      }
+    };
+
+    if (enabler) {
+      fetchData();
+    }
+  }, [enabler]);
+
+  return { data, isLoading, error, isFetched };
 }
 
 const getCurrentNetwork = () => {
@@ -61,10 +83,31 @@ const getCurrentNetwork = () => {
  * ```
  */
 export function useCurrentNetwork(enabler?: boolean) {
-  return useQuery([CURRENT_NETWORK_KEY], () => getCurrentNetwork(), {
-    enabled: enabler,
-    keepPreviousData: true,
-  });
+  const [data, setData] = useState<string>(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await getCurrentNetwork();
+        if (res) {
+          setData(res);
+          setIsLoading(false);
+        }
+      } catch (err) {
+        setError(err);
+        logError('useCurrentNetwork', err);
+        setIsLoading(false);
+      }
+    };
+
+    if (enabler) {
+      fetchData();
+    }
+  }, [enabler]);
+
+  return { data, isLoading, error };
 }
 
 const getRequiredNetwork = async () => {
@@ -83,9 +126,34 @@ const getRequiredNetwork = async () => {
  * ```
  */
 export function useRequiredNetwork() {
-  return useQuery([REQUIRED_NETWORK_KEY], () => getRequiredNetwork(), {
-    keepPreviousData: true,
-  });
+  const [data, setData] = useState<{
+    name: string;
+    chainId: 11155111;
+  }>(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await getRequiredNetwork();
+        if (res) {
+          setData(res);
+          setIsLoading(false);
+          setIsSuccess(true);
+        }
+      } catch (err) {
+        setError(err);
+        logError('useRequiredNetwork', err);
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  return { data, isLoading, error, isSuccess };
 }
 
 export function useNetworkChangeListener() {

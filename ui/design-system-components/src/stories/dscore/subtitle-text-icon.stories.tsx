@@ -1,40 +1,45 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-
 import { BeakerIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import SubtitleTextIcon, {
   SubtitleTextIconProps,
 } from '@akashaorg/design-system-core/lib/components/SubtitleTextIcon';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 const meta: Meta<SubtitleTextIconProps> = {
   title: 'DSCore/Icons/SubtitleTextIcon',
   component: SubtitleTextIcon,
+  tags: ['autodocs'],
+  argTypes: {
+    customStyle: { control: 'text' },
+    icon: { control: 'object' },
+    solid: { control: 'boolean' },
+    backgroundSize: { control: 'text' },
+    backgroundColor: { control: 'boolean' },
+    label: { control: 'text' },
+    labelSize: { control: 'select', options: ['button-sm', 'button-lg'] },
+    subtitle: { control: 'text' },
+    subtitleIcon: { control: 'object' },
+    gap: { control: 'select', options: ['xxsmall', 'xsmall', 'small', 'medium', 'large'] },
+    maxWidth: { control: 'text' },
+    onClick: { action: 'subtitle text icon clicked' },
+  },
+};
+
+type Story = StoryObj<SubtitleTextIconProps>;
+
+const baseArgs: Story = {
+  args: {
+    label: 'Subtitle Text Label',
+    subtitle: 'some subtitle',
+  },
+};
+
+export const Default: Story = { args: { ...baseArgs.args } };
+
+export const WithIcon: Story = { args: { ...baseArgs.args, icon: <BeakerIcon /> } };
+
+export const WithIconBackgroundColor: Story = {
+  args: { ...baseArgs.args, icon: <BeakerIcon />, backgroundColor: true },
 };
 
 export default meta;
-type Story = StoryObj<SubtitleTextIconProps>;
-
-const variants: SubtitleTextIconProps[] = [
-  {
-    label: 'Text',
-    subtitle: 'Some text',
-    icon: <BeakerIcon />,
-    backgroundColor: true,
-  },
-  {
-    label: 'Text',
-    subtitle: 'Some text',
-    backgroundColor: true,
-  },
-];
-
-export const SubtitleTextIconVariants: Story = {
-  render: () => (
-    <Stack direction="column" spacing="gap-y-4">
-      {variants.map((variant, idx) => (
-        <SubtitleTextIcon key={idx} {...variant} />
-      ))}
-    </Stack>
-  ),
-};

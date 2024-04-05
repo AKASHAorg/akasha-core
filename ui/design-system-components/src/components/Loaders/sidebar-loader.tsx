@@ -1,6 +1,4 @@
 import React from 'react';
-
-import CircularPlaceholder from '@akashaorg/design-system-core/lib/components/CircularPlaceholder';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
@@ -21,7 +19,13 @@ const SidebarLoader: React.FC = () => {
       >
         <Stack direction="row" customStyle="w-full h-fit justify-between" fullWidth>
           <Stack direction="row" spacing="gap-x-1" fullWidth>
-            <CircularPlaceholder height="h-10" width="w-10" customStyle="shrink-0" animated />
+            <TextLine
+              round="rounded-full"
+              height="h-10"
+              width="w-10"
+              customStyle="shrink-0"
+              animated={true}
+            />
             <Stack
               direction="column"
               spacing="gap-y-1"
@@ -33,7 +37,13 @@ const SidebarLoader: React.FC = () => {
             </Stack>
           </Stack>
           <Stack justify="between" customStyle={'w-fit'}>
-            <CircularPlaceholder height="h-10" width="w-10" customStyle="shrink-0" animated />
+            <TextLine
+              round="rounded-full"
+              height="h-10"
+              width="w-10"
+              customStyle="shrink-0"
+              animated={true}
+            />
           </Stack>
         </Stack>
       </Stack>

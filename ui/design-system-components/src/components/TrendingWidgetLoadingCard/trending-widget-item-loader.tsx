@@ -1,6 +1,4 @@
 import React from 'react';
-
-import CircularPlaceholder from '@akashaorg/design-system-core/lib/components/CircularPlaceholder';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 
@@ -8,7 +6,13 @@ const TrendingWidgetItemLoader: React.FC = () => {
   return (
     <Stack direction="row" spacing="gap-x-12" align="center" justify="between" fullWidth>
       <Stack direction="row" spacing="gap-x-2" fullWidth>
-        <CircularPlaceholder height="h-10" width="w-10" customStyle="shrink-0" animated />
+        <TextLine
+          round="rounded-full"
+          height="h-10"
+          width="w-10"
+          customStyle="shrink-0"
+          animated={true}
+        />
         <Stack
           direction="column"
           spacing="gap-y-1"

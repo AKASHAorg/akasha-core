@@ -37,7 +37,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
   } = props;
 
   if (plain) {
-    const disabledStyle = disabled ? 'opacity-50 cursor-not-allowed' : '';
+    const disabledStyle = disabled ? 'opacity-50' : '';
     return (
       <button
         ref={ref}

@@ -335,6 +335,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
                           onTagClick(tag);
                         }
                       }}
+                      type="action"
                     />
                   ))}
                 </Stack>

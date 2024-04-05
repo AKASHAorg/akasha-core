@@ -10,6 +10,7 @@ import {
   useRootComponentProps,
   createReactiveVar,
   useMentions,
+  useGetLogin,
 } from '@akashaorg/ui-awf-hooks';
 import {
   useCreateReflectMutation,
@@ -57,12 +58,10 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
   const [indexReflection, indexReflectionMutation] = useIndexReflectionMutation();
   const { addPendingReflection, pendingReflections } = usePendingReflections(pendingReflectionsVar);
 
-  const authenticatedProfileDataReq = useGetLoginProfile();
-  const authenticatedDID = useMemo(
-    () => authenticatedProfileDataReq?.akashaProfile?.did?.id,
-    [authenticatedProfileDataReq],
-  );
+  const { data: authData } = useGetLogin();
+  const authenticatedDID = useMemo(() => authData?.id, [authData]);
 
+  const authenticatedProfileDataReq = useGetLoginProfile();
   const authenticatedProfile = authenticatedProfileDataReq?.akashaProfile;
 
   const { setMentionQuery, mentions } = useMentions(authenticatedDID);
@@ -115,7 +114,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
     addPendingReflection({
       ...content,
       id: `pending-reflection-${pendingReflections.length}`,
-      authorId: authenticatedProfile.did.id,
+      authorId: authenticatedDID,
     });
 
     const response = await publishReflection({
@@ -152,13 +151,13 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         showEditor={showEditor}
         setShowEditor={setShowEditor}
         avatar={authenticatedProfile?.avatar}
-        profileId={authenticatedProfile?.did?.id}
+        profileId={authenticatedDID}
         disablePublish={!authenticatedDID}
         mentions={mentions}
         getMentions={handleGetMentions}
         background={{ light: 'grey9', dark: 'grey3' }}
         onPublish={data => {
-          if (!authenticatedProfile) {
+          if (!authenticatedDID) {
             return;
           }
           handlePublish(data);
@@ -175,7 +174,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
       {/*  pendingReflectRef.current &&*/}
       {/*  createPortal(*/}
       {/*    <PendingReflect*/}
-      {/*      entryData={{ ...newContent, id: null, authorId: authenticatedProfile?.did?.id }}*/}
+      {/*      entryData={{ ...newContent, id: null, authorId: authenticatedDID }}*/}
       {/*    />,*/}
       {/*    pendingReflectRef.current,*/}
       {/*  )}*/}

@@ -19,7 +19,7 @@ const AppRoutes: React.FC<unknown> = () => {
   // const getHubUserCallback = useCallback(getHubUser, [loggedUserId]);
 
   const [fetchingMessages, setFetchingMessages] = useState(false);
-  const { baseRouteName, logger } = useRootComponentProps();
+  const { baseRouteName, logger, worldConfig } = useRootComponentProps();
   const { t } = useTranslation('app-messaging');
 
   // @TODO: update this
@@ -70,7 +70,7 @@ const AppRoutes: React.FC<unknown> = () => {
     <Router basename={baseRouteName}>
       <HelmetProvider>
         <Helmet>
-          <title>Message App | AKASHA World</title>
+          <title>Message App |{worldConfig.title}</title>
         </Helmet>
         <Routes>
           <Route

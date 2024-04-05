@@ -1,59 +1,44 @@
-import { useEffect, useRef, useState } from 'react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-
+import { useCallback, useEffect, useRef, useState } from 'react';
 import getSDK from '@akashaorg/awf-sdk';
-import { IMessage, GQL_EVENTS } from '@akashaorg/typings/lib/sdk';
-
+import { GQL_EVENTS } from '@akashaorg/typings/lib/sdk';
 import { logError } from './utils/error-handler';
-
-export const NOTIFICATIONS_KEY = 'Notifications';
-export const HAS_NEW_NOTIFICATIONS_KEY = 'Has_New_Notifications';
 
 /**
  * Hook to mark a notification as read
- * pass the messageId to the mutate function
+ * pass the messageId to the markAsRead function
  * @example useMarkAsRead hook
  * ```typescript
- * const markAsReadQuery = useMarkAsRead();
+ * const { markAsRead } = useMarkAsRead();
  *
- * markAsReadQuery.mutate('message id');
+ * markAsRead('message id');
  * ```
  */
 export function useMarkAsRead() {
   const sdk = getSDK();
-  const queryClient = useQueryClient();
-  return useMutation(messageId => sdk.api.auth.markMessageAsRead(messageId), {
-    // When mutate is called:
-    onMutate: async (messageId: string) => {
-      await queryClient.cancelQueries([NOTIFICATIONS_KEY]);
+  const [data, setData] = useState<boolean | null>(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<Error | null>(null);
 
-      // Snapshot the previous value
-      const previousNotifs: IMessage[] = queryClient.getQueryData([NOTIFICATIONS_KEY]);
-      const updated = previousNotifs.map(notif => {
-        if (notif.id === messageId) {
-          return { ...notif, read: true };
+  const markAsRead = useCallback((messageId: string) => {
+    setIsLoading(true);
+    const markMessageAsReadApiCall = async () => {
+      try {
+        const resp = await sdk.api.auth.markMessageAsRead(messageId);
+        if (resp) {
+          setData(resp);
+          setIsLoading(false);
+          /*  add other logic when real data become available */
         }
-        return notif;
-      });
-      const previousCheckNotifs: boolean = queryClient.getQueryData([HAS_NEW_NOTIFICATIONS_KEY]);
-      queryClient.setQueryData([NOTIFICATIONS_KEY], updated);
-      queryClient.setQueryData([HAS_NEW_NOTIFICATIONS_KEY], false);
+      } catch (err) {
+        logError('useNotifications.markAsRead', err);
+        setError(err);
+      }
+    };
 
-      return { previousNotifs, previousCheckNotifs };
-    },
-    onError: (err, variables, context) => {
-      if (context?.previousNotifs) {
-        queryClient.setQueryData([NOTIFICATIONS_KEY], context.previousNotifs);
-      }
-      if (context?.previousCheckNotifs) {
-        queryClient.setQueryData([HAS_NEW_NOTIFICATIONS_KEY], context.previousCheckNotifs);
-      }
-      logError('useNotifications.markAsRead', err as Error);
-    },
-    onSettled: async () => {
-      await queryClient.invalidateQueries([NOTIFICATIONS_KEY]);
-    },
-  });
+    markMessageAsReadApiCall();
+  }, []);
+
+  return { markAsRead, data, isLoading, error, isSuccess: !!data, isError: !!error };
 }
 
 const checkNewNotifications = async () => {
@@ -66,17 +51,36 @@ const checkNewNotifications = async () => {
  * Hook to check for new notifications
  * @example useCheckNewNotifications hook
  * ```typescript
- * const checkNewNotificationsQuery = useCheckNewNotifications('logged-in-user-eth-address');
+ * const { data, isLoading, error } = useCheckNewNotifications('logged-in-user-eth-address');
  *
- * const hasNewNotifications = checkNewNotificationsQuery.data;
  * ```
  */
-export function useCheckNewNotifications(loggedEthAddress: string) {
-  return useQuery([HAS_NEW_NOTIFICATIONS_KEY], () => checkNewNotifications(), {
-    enabled: !!loggedEthAddress,
-    keepPreviousData: true,
-    onError: (err: Error) => logError('useNotifications.checkNewNotifications', err),
-  });
+export function useCheckNewNotifications(did: string) {
+  const [data, setData] = useState<boolean>(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await checkNewNotifications();
+        if (res) {
+          setData(res);
+          setIsLoading(false);
+        }
+      } catch (err) {
+        setError(err);
+        logError('useNotifications.checkNewNotifications', err);
+        setIsLoading(false);
+      }
+    };
+
+    if (did) {
+      fetchData();
+    }
+  }, [did]);
+
+  return { data, isLoading, error, isFetched: !!data || !!error };
 }
 
 /**

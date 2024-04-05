@@ -18,7 +18,7 @@ export type PaginationProps = {
   hasButtons?: boolean;
   prevButtonDisabled?: boolean;
   nextButtonDisabled?: boolean;
-  onClickPage: (page: number) => () => void;
+  onClickPage: (page: number) => void;
   onClickPrev: () => void;
   onClickNext: () => void;
 };
@@ -48,6 +48,12 @@ const Pagination: React.FC<PaginationProps> = props => {
   const activeButtonTextColor: Color = { light: 'secondaryLight', dark: 'secondaryDark' };
 
   const disabledButtonTextColor = 'grey7';
+
+  const getPage = () => {
+    if (currentPage < maxPagesToShow) return maxPagesToShow;
+    else if (currentPage === pageCount) return pageCount - 1;
+    else return currentPage;
+  };
 
   return (
     <Stack direction="row" align="center" spacing="gap-x-2" customStyle={customStyle}>
@@ -97,13 +103,7 @@ const Pagination: React.FC<PaginationProps> = props => {
             {idx === maxPagesToShow && trimBubbles && (
               <PageBubble
                 isActive={currentPage > maxPagesToShow - 1 && currentPage !== pageCount}
-                page={
-                  currentPage < maxPagesToShow
-                    ? maxPagesToShow
-                    : currentPage === pageCount
-                    ? pageCount - 1
-                    : currentPage
-                }
+                page={getPage()}
                 onClickPage={onClickPage}
               />
             )}

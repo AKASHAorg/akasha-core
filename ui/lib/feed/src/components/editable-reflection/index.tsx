@@ -13,6 +13,7 @@ import {
   useRootComponentProps,
   useGetLoginProfile,
   useMentions,
+  useGetLogin,
 } from '@akashaorg/ui-awf-hooks';
 import {
   GetReflectionsFromBeamDocument,
@@ -53,12 +54,10 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
   const isReflectOfReflection = beamId !== reflectToId;
   const apolloClient = useApolloClient();
 
-  const loggedInProfileReq = useGetLoginProfile();
-  const authenticatedDID = useMemo(
-    () => loggedInProfileReq?.akashaProfile?.did?.id,
-    [loggedInProfileReq],
-  );
+  const { data: authData } = useGetLogin();
+  const authenticatedDID = useMemo(() => authData?.id, [authData]);
 
+  const loggedInProfileReq = useGetLoginProfile();
   const authenticatedProfile = loggedInProfileReq?.akashaProfile;
 
   const { setMentionQuery, mentions } = useMentions(authenticatedDID);
@@ -180,7 +179,7 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
             background={{ light: 'grey9', dark: 'grey3' }}
             customStyle="px-2 pt-2"
             onPublish={data => {
-              if (!authenticatedProfile) {
+              if (!authenticatedDID) {
                 return;
               }
 

@@ -19,7 +19,7 @@ type ProfileFeedPageProps = {
 const ProfileFeedPage: React.FC<ProfileFeedPageProps> = props => {
   const { profileDid } = props;
   const { t } = useTranslation('app-akasha-integration');
-  const { getRoutingPlugin } = useRootComponentProps();
+  const { getRoutingPlugin, worldConfig } = useRootComponentProps();
   const authenticatedProfileReq = useGetLoginProfile();
   const authenticatedProfile = authenticatedProfileReq?.akashaProfile;
   const profileUserName = React.useMemo(() => {
@@ -34,8 +34,8 @@ const ProfileFeedPage: React.FC<ProfileFeedPageProps> = props => {
       <Stack fullWidth={true}>
         <Helmet>
           <title>
-            {t("{{profileUsername}}'s Page", { profileUsername: profileUserName || '' })} | AKASHA
-            World
+            {t("{{profileUsername}}'s Page", { profileUsername: profileUserName || '' })} |{' '}
+            {worldConfig.title}
           </title>
         </Helmet>
 

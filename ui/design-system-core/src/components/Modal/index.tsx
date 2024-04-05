@@ -13,7 +13,7 @@ import Text, { TextProps } from '../Text';
 
 export type ActionsAlign = 'center' | 'end';
 
-export type ModalProps = {
+export type ModalProps = PropsWithChildren<{
   show: boolean;
   actions: ButtonProps[];
   title?: { label: string } & TextProps;
@@ -21,9 +21,9 @@ export type ModalProps = {
   actionsAlign?: ActionsAlign;
   customStyle?: string;
   onClose?: () => void;
-};
+}>;
 
-const Modal: React.FC<PropsWithChildren<ModalProps>> = ({
+const Modal: React.FC<ModalProps> = ({
   show,
   actions,
   title,

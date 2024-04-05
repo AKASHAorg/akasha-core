@@ -1,27 +1,23 @@
 import React, { useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
-import {
-  useAnalytics,
-  useRootComponentProps,
-  transformSource,
-  useGetLogin,
-  useGetLoginProfile,
-} from '@akashaorg/ui-awf-hooks';
-import { BeamFeed } from '@akashaorg/ui-lib-feed';
 import routes, { EDITOR } from '../../../routes';
 import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
+import { useTranslation } from 'react-i18next';
+import { useAnalytics, useRootComponentProps, transformSource } from '@akashaorg/ui-awf-hooks';
+import { BeamFeed } from '@akashaorg/ui-lib-feed';
 import { Helmet, helmetData } from '@akashaorg/design-system-core/lib/utils';
-import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
+import { ModalNavigationOptions, Profile } from '@akashaorg/typings/lib/ui';
 
-const GlobalAntennaPage: React.FC<unknown> = () => {
-  const { getRoutingPlugin, navigateToModal } = useRootComponentProps();
-  const { data } = useGetLogin();
-  const authenticatedProfileReq = useGetLoginProfile();
-  const isLoggedIn = !!data?.id;
-  const authenticatedProfile = authenticatedProfileReq?.akashaProfile;
+type GlobalAntennaPageProps = {
+  authenticatedProfile: Profile;
+  authenticatedDID: string;
+};
+
+const GlobalAntennaPage: React.FC<GlobalAntennaPageProps> = props => {
+  const { authenticatedProfile, authenticatedDID } = props;
+  const { getRoutingPlugin, navigateToModal, worldConfig } = useRootComponentProps();
   const { t } = useTranslation('app-akasha-integration');
   const [analyticsActions] = useAnalytics();
   const _navigateToModal = React.useRef(navigateToModal);
@@ -40,25 +36,21 @@ const GlobalAntennaPage: React.FC<unknown> = () => {
   );
 
   const handleEditorPlaceholderClick = useCallback(() => {
-    if (!isLoggedIn) {
+    if (!authenticatedDID) {
       showLoginModal();
-      return;
-    }
-    if (!authenticatedProfile?.id) {
-      //@TODO profile info hasn't been filled, show relevant message
       return;
     }
     navigateTo?.current({
       appName: '@akashaorg/app-akasha-integration',
       getNavigationUrl: () => `${routes[EDITOR]}`,
     });
-  }, [isLoggedIn, authenticatedProfile, showLoginModal]);
+  }, [authenticatedDID, showLoginModal]);
 
   const listHeader = React.useMemo(() => {
     return (
       <Stack customStyle="mb-2">
         <EditorPlaceholder
-          profileId={authenticatedProfile?.did.id}
+          profileId={authenticatedDID}
           avatar={authenticatedProfile?.avatar}
           actionLabel={t(`Start Beaming`)}
           placeholderLabel={t(`From Your Mind to the World 🧠 🌏 ✨`)}
@@ -67,12 +59,12 @@ const GlobalAntennaPage: React.FC<unknown> = () => {
         />
       </Stack>
     );
-  }, [authenticatedProfile, t, handleEditorPlaceholderClick]);
+  }, [authenticatedProfile, authenticatedDID, t, handleEditorPlaceholderClick]);
 
   return (
     <Stack fullWidth={true}>
       <Helmet helmetData={helmetData}>
-        <title>AKASHA World</title>
+        <title>{worldConfig.title}</title>
       </Helmet>
       <BeamFeed
         header={listHeader}

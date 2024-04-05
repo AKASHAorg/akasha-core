@@ -9,8 +9,7 @@
     "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)",
     "Sever Abibula <sever.abibula@akasha.world> (https://github.com/SeverS)",
     "Valentin Cotea <valentin.cotea@akasha.world> (https://github.com/quininez)",
-    "Josemaria Nriagu <josemaria.nriagu@akasha.world> (https://github.com/josenriagu)",
-    "Damir Sabolic <damir.sabolic@akasha.world> (https://github.com/PrimarchAlpharius)"
+    "Josemaria Nriagu <josemaria.nriagu@akasha.world> (https://github.com/josenriagu)"
   ],
   "homepage": "https://github.com/AKASHAorg/akasha-framework#readme",
   "license": "AGPL-3.0",
@@ -50,14 +49,10 @@
     "i18next-chained-backend": "4.2.0",
     "i18next-fetch-backend": "5.0.2",
     "i18next-localstorage-backend": "4.1.1",
-    "react-i18next": "12.2.0",
-    "@tanstack/react-router": "1.3.0"
+    "react-i18next": "12.2.0"
   },
   "devDependencies": {
-    "@akashaorg/typings": "*",
-    "@types/react": "18.0.33",
-    "@types/react-dom": "18.0.11",
-    "@types/react-test-renderer": "17.0.1"
+    "@akashaorg/typings": "*"
   },
   "peerDependencies": {
     "react": "^18.1.0",

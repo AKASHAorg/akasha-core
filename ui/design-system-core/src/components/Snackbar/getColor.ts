@@ -2,7 +2,7 @@ import { Colors, NotificationTypes } from '@akashaorg/typings/lib/ui';
 
 export function getColorLight(type: NotificationTypes): Colors {
   switch (type) {
-    case NotificationTypes.Alert:
+    case (NotificationTypes.Alert, NotificationTypes.Error):
       return 'errorLight';
     case NotificationTypes.Caution:
       return 'warningLight';
@@ -15,7 +15,7 @@ export function getColorLight(type: NotificationTypes): Colors {
 
 export function getColorDark(type: NotificationTypes): Colors {
   switch (type) {
-    case NotificationTypes.Alert:
+    case (NotificationTypes.Alert, NotificationTypes.Error):
       return 'errorDark';
     case NotificationTypes.Caution:
       return 'warningDark';

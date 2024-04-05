@@ -1,5 +1,5 @@
 import React from 'react';
-import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
+import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Controller, Control } from 'react-hook-form';
@@ -26,17 +26,12 @@ export const NSFW: React.FC<NSFWProps> = props => {
         control={control}
         name="nsfw"
         render={({ field: { name, value, onChange } }) => (
-          <Checkbox
-            id={name}
-            name={name}
-            value={name}
-            label={nsfw.label}
-            isSelected={value}
-            labelDirection="left"
-            labelColor={{ light: 'grey4', dark: 'grey6' }}
-            handleChange={onChange}
-            customStyle="justify-between"
-          />
+          <Stack direction="row" justify="between">
+            <Text variant="body2" as="label" color={{ light: 'grey4', dark: 'grey6' }}>
+              {nsfw.label}
+            </Text>
+            <Toggle id={name} name={name} checked={value} onChange={onChange} size="small" />
+          </Stack>
         )}
         defaultValue={nsfw.initialValue}
       />

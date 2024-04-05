@@ -1,10 +1,7 @@
-import React, { Suspense, useCallback } from 'react';
+import React, { Suspense, useCallback, useMemo } from 'react';
 import routes, { EDIT } from '../../routes';
 import FollowButton from './follow-button';
-import Badge from '@akashaorg/design-system-core/lib/components/Badge';
-import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import {
   FlagIcon,
   LinkIcon,
@@ -28,16 +25,15 @@ import {
   hasOwn,
 } from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { EighteenPlus } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 
 type ProfileHeaderProps = {
-  profileId: string;
+  profileDid: string;
   plain?: boolean;
   customStyle?: string;
 };
 const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
   const [activeOverlay, setActiveOverlay] = React.useState<'avatar' | 'coverImage' | null>(null);
-  const { profileId, plain, customStyle = '' } = props;
+  const { profileDid, plain, customStyle = '' } = props;
   const { t } = useTranslation('app-profile');
   const { data: loginData } = useGetLogin();
   const { uiEvents, navigateToModal, getRoutingPlugin } = useRootComponentProps();
@@ -45,9 +41,9 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
   const { data, error } = useGetProfileByDidSuspenseQuery({
     fetchPolicy:
       'cache-first' /*data is prefetched during route matching as a result we prefer reading cache first here  */,
-    variables: { id: profileId },
+    variables: { id: profileDid },
   });
-  const { validDid, isEthAddress } = useValidDid(profileId, !!data?.node);
+  const { validDid, isEthAddress } = useValidDid(profileDid, !!data?.node);
   const { akashaProfile: profileData } =
     data?.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
 
@@ -62,7 +58,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
   );
 
   const authenticatedDID = loginData?.id;
-  const isViewer = profileData?.did?.id === authenticatedDID;
+  const isViewer = !!authenticatedDID && profileData?.did?.id === authenticatedDID;
   const navigateTo = getRoutingPlugin().navigateTo;
 
   const handleClickAvatar = () => {
@@ -95,21 +91,21 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
   const handleClickProfileName = () => {
     navigateTo({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: () => `/${profileId}`,
+      getNavigationUrl: () => `/${profileDid}`,
     });
   };
 
   const handleEdit = () => {
     navigateTo({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: () => `/${profileId}${routes[EDIT]}`,
+      getNavigationUrl: () => `/${profileDid}${routes[EDIT]}`,
     });
   };
 
   const handleFlagProfile = () => {
     navigateTo({
       appName: '@akashaorg/app-vibes',
-      getNavigationUrl: () => `/report/profile/${profileData.did.id}`,
+      getNavigationUrl: () => `/report/profile/${profileDid}`,
     });
   };
 
@@ -131,6 +127,14 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
       : []),
   ];
 
+  const nsfwBadge = useMemo(
+    () =>
+      profileData?.nsfw
+        ? [{ label: 'NSFW', toolTipLabel: t('This profile is marked as NSFW.') }]
+        : [],
+    [profileData?.nsfw, t],
+  );
+
   if (error)
     return (
       <ErrorLoader
@@ -143,37 +147,18 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
 
   return (
     <ProfileHeaderPresentation
-      profileId={profileData?.did?.id ? profileData.did.id : profileId}
+      profileId={profileData?.did?.id ? profileData.did.id : profileDid}
       validAddress={profileData ? true : isEthAddress || validDid}
       background={profileData?.background}
       avatar={profileData?.avatar}
-      name={profileData?.name}
+      profileName={profileData?.name}
       ensName={null /*@TODO: integrate ENS when the API is ready */}
       viewerIsOwner={isViewer}
       menuItems={menuItems}
       copyLabel={t('Copy to clipboard')}
       copiedLabel={t('Copied')}
-      followElement={
-        <>
-          {profileData?.id && (
-            <FollowButton profileID={profileData.id} showLoginModal={showLoginModal} />
-          )}
-        </>
-      }
-      metadata={
-        profileData?.nsfw && (
-          <Tooltip
-            content={t('This profile is marked as NSFW')}
-            placement="bottom"
-            backgroundColor={{ light: 'grey6', dark: 'grey4' }}
-          >
-            <Badge background={{ light: 'errorLight', dark: 'errorDark' }}>
-              {/*@TODO: The following is a placeholder until proper icon is found */}
-              <Icon size="xs" icon={<EighteenPlus />} color="white" solid />
-            </Badge>
-          </Tooltip>
-        )
-      }
+      followElement={<FollowButton profileID={profileData?.id} showLoginModal={showLoginModal} />}
+      badges={[...nsfwBadge]}
       activeOverlay={activeOverlay}
       plain={plain}
       customStyle={customStyle}

@@ -74,12 +74,12 @@ const Layout: React.FC<unknown> = () => {
   const maintenanceReq = usePlaformHealthCheck();
 
   const isPlatformHealthy = useMemo(() => {
-    if (maintenanceReq.status === 'success') {
+    if (!maintenanceReq.isLoading) {
       return maintenanceReq.data.success;
     }
     // defaults to healthy.
     return true;
-  }, [maintenanceReq.status, maintenanceReq.data]);
+  }, [maintenanceReq.isLoading, maintenanceReq.data]);
 
   const _uiEvents = useRef(uiEvents);
   const { t } = useTranslation('ui-widget-layout');
@@ -227,7 +227,7 @@ const Layout: React.FC<unknown> = () => {
                   </Stack>
                 </Card>
               )}
-              <div id={layoutConfig.pluginSlotId} />
+              <div id={layoutConfig.applicationSlotId} />
               <Stack customStyle="sticky bottom-2">
                 <Extension name={layoutConfig.snackbarNotifSlotId} />
               </Stack>

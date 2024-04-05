@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { BMConfirmation, BMDetails, BMIntro } from '../components/applications/become-moderator';
-import { BMConfirmationSubtitles, BMIntroSubtitles } from '../utils';
+import { BMIntroSubtitles } from '../utils';
 import routes, { HOME } from '../routes';
 
 export const BecomeModerator: React.FC<unknown> = () => {
@@ -65,11 +65,6 @@ export const BecomeModerator: React.FC<unknown> = () => {
           t('Your application is currently under review'),
           t('Keep an eye out for new notifications'),
         ]}
-        subtitleLabels={BMConfirmationSubtitles.map(subtitle => ({
-          ...subtitle,
-          label: t('{{label}}', { label: subtitle.label }),
-        }))}
-        onLinkClick={handleLinkClick}
         cancelButtonLabel={t('Go back to the Application Center')}
         onCancelButtonClick={handleCancelButtonClick}
       />

@@ -1,4 +1,3 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
 import MarkdownCard, {
@@ -8,11 +7,23 @@ import MarkdownCard, {
 const meta: Meta<MarkdownCardProps> = {
   title: 'DSCore/Cards/MarkdownCard',
   component: MarkdownCard,
+  tags: ['autodocs'],
+  argTypes: {
+    mdText: { control: 'text' },
+    hasWrapper: { control: 'boolean' },
+  },
 };
 
-export default meta;
 type Story = StoryObj<MarkdownCardProps>;
 
-export const BaseMarkdownCard: Story = {
-  render: () => <MarkdownCard mdText="**Hello World**" />,
+const baseArgs: Story = {
+  args: {
+    mdText: '**Hello World**',
+  },
 };
+
+export const Default: Story = { args: { ...baseArgs.args } };
+
+export const MarkdownCardWithWrapper: Story = { args: { ...baseArgs.args, hasWrapper: true } };
+
+export default meta;

@@ -4,12 +4,12 @@ import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoade
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { useTranslation } from 'react-i18next';
 import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
-import { useGetLoginProfile, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 const EditorPage: React.FC<unknown> = () => {
-  const authenticatedProfileReq = useGetLoginProfile();
-  const authenticatedProfile = authenticatedProfileReq?.akashaProfile;
+  const { data } = useGetLogin();
+  const authenticatedDid = data?.id;
   const { getRoutingPlugin } = useRootComponentProps();
   const navigateTo = React.useRef(getRoutingPlugin().navigateTo);
   const { t } = useTranslation();
@@ -19,7 +19,7 @@ const EditorPage: React.FC<unknown> = () => {
         <Helmet>
           <title>Beam Editor</title>
         </Helmet>
-        {!authenticatedProfile && (
+        {!authenticatedDid && (
           <Stack>
             <ErrorLoader
               type={'not-registered'}
@@ -40,7 +40,7 @@ const EditorPage: React.FC<unknown> = () => {
             </ErrorLoader>
           </Stack>
         )}
-        {authenticatedProfile?.did?.id && (
+        {authenticatedDid && (
           <Stack customStyle="mb-1">
             <Extension name="beam-editor_feed_page" />
           </Stack>

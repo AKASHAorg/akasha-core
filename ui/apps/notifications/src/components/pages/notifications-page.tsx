@@ -18,6 +18,7 @@ import DropDownFilter from '@akashaorg/design-system-components/lib/components/D
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { EntityTypes, NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import routes, { SETTINGS_PAGE, CUSTOMIZE_NOTIFICATION_WELCOME_PAGE } from '../../routes';
+import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 
 export type Notification = {
   id: string;
@@ -26,13 +27,13 @@ export type Notification = {
 
 type NotificationsPageProps = {
   isLoggedIn: boolean;
+  settingData: Record<string, string | boolean | number>;
 };
 
 const NotificationsPage: React.FC<NotificationsPageProps> = ({ isLoggedIn }) => {
   const [showMenu, setShowMenu] = useState(false);
 
-  const fetchSettingsQuery = useGetSettings('@akashaorg/app-notifications');
-  const existingSettings = fetchSettingsQuery.data;
+  const { data, isLoading } = useGetSettings('@akashaorg/app-notifications');
 
   const { t } = useTranslation('app-notifications');
   const { getRoutingPlugin, uiEvents } = useRootComponentProps();
@@ -115,7 +116,7 @@ const NotificationsPage: React.FC<NotificationsPageProps> = ({ isLoggedIn }) => 
   const unreadNotifications = allNotifications?.filter(notif => notif.read === undefined);
   const readNotifications = allNotifications?.filter(notif => notif.read === true);
 
-  const markAsRead = useMarkAsRead();
+  const { markAsRead } = useMarkAsRead();
 
   const handleAvatarClick = (id: string) => {
     navigateTo?.({
@@ -153,9 +154,8 @@ const NotificationsPage: React.FC<NotificationsPageProps> = ({ isLoggedIn }) => 
   const markAllAsRead = () => {
     // do something
     unreadNotifications.map(notif => {
-      //  markAsRead.mutate(notif.id);
       if (notif.read === undefined) {
-        markAsRead.mutate(notif.id);
+        markAsRead(notif.id);
       }
     });
     setShowMenu(!showMenu);
@@ -190,7 +190,9 @@ const NotificationsPage: React.FC<NotificationsPageProps> = ({ isLoggedIn }) => 
     },
   ];
 
-  if (!isLoggedIn || !existingSettings) {
+  if (isLoading) return <Spinner />;
+
+  if (!isLoggedIn || !data) {
     return navigateTo?.({
       appName: '@akashaorg/app-notifications',
       getNavigationUrl: () => routes[CUSTOMIZE_NOTIFICATION_WELCOME_PAGE],
@@ -253,7 +255,7 @@ const NotificationsPage: React.FC<NotificationsPageProps> = ({ isLoggedIn }) => 
           moderatedAccountLabel={'suspended your account'}
           markAsReadLabel={'Mark as read'}
           emptyTitle={'Looks like you don’t have any new notifications yet!'}
-          handleMessageRead={markAsRead.mutate}
+          handleMessageRead={markAsRead}
           handleEntryClick={handleEntryClick}
           handleProfileClick={handleAvatarClick}
           transformSource={transformSource}

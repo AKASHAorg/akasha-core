@@ -1,5 +1,7 @@
 let theme;
 
+const darkThemeImgSrc = '/img/LOADER-AKASHA-WORLD-DARK.webp';
+
 // @warning: must be the same as ThemingEvents.ThemeChange enum in typings
 window.addEventListener('theme-change', ev => {
   if (ev.detail.theme === 'Dark-Theme') {
@@ -29,6 +31,11 @@ if (window.localStorage) {
 }
 if (theme) {
   window.addEventListener('DOMContentLoaded', () => {
+    //Find the splash image element
+    const splashScreenTpl = document.getElementById('splash-screen-tpl');
+    const splashImage = splashScreenTpl.content.getElementById('splash-image');
+
+    splashImage.src = darkThemeImgSrc;
     document.body.classList.add(theme, 'bg-black');
   });
 }
