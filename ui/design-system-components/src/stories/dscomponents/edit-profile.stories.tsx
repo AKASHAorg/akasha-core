@@ -90,6 +90,7 @@ export const Default: Story = {
     socialLinks: [],
     nsfw: {
       label: 'Select NSFW if your profile contains mature or explicit content.',
+      description: '',
       initialValue: false,
     },
     nsfwFormLabel: 'NSFW Profile',

@@ -24,18 +24,18 @@ const OnboardingPage: React.FC<OnboardingPageProps> = props => {
 
   // @TODO: replace with new hooks
   const trendingTagsReq = null;
-  const trendingTags = trendingTagsReq.data?.slice(0, 15) || [];
+  const trendingTags = trendingTagsReq?.data?.slice(0, 15) || [];
 
   const trendingProfilesReq = null;
-  const trendingProfiles = trendingProfilesReq.data?.slice(0, 7) || [];
+  const trendingProfiles = trendingProfilesReq?.data?.slice(0, 7) || [];
 
   const isFollowingMultipleReq = null;
-  const followedProfiles = isFollowingMultipleReq.data;
+  const followedProfiles = isFollowingMultipleReq?.data;
   const followReq = null;
   const unfollowReq = null;
 
   const tagSubscriptionsReq = null;
-  const tagSubscriptions = tagSubscriptionsReq.data;
+  const tagSubscriptions = tagSubscriptionsReq?.data;
   const toggleTagSubscriptionReq = null;
 
   const handleAvatarClick = (id: string) => {
