@@ -91,7 +91,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
           }}
           control={control}
         />
-        <NSFW {...rest} control={control} />
+        <NSFW {...rest} control={control} disabled={rest.nsfw.initialValue} />
         <Stack direction="row" spacing="gap-x-2" customStyle="ml-auto mt-auto">
           <Button
             variant="text"

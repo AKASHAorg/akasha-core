@@ -4,6 +4,7 @@ import singleSpaReact from 'single-spa-react';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import ProfileMiniCard from '@akashaorg/design-system-components/lib/components/ProfileMiniCard';
+import MiniProfileWidgetLoader from '@akashaorg/design-system-components/lib/components/Loaders/mini-profile-widget-loader';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaorg/typings/lib/ui';
 import {
@@ -53,7 +54,7 @@ const ProfileCardWidget: React.FC<ProfileCardWidgetProps> = props => {
 
   const authorId = data?.node && hasOwn(data.node, 'author') ? data?.node?.author.id : '';
 
-  const { data: authorProfileData } = useGetProfileByDidQuery({
+  const { data: authorProfileData, loading: profileLoading } = useGetProfileByDidQuery({
     variables: {
       id: authorId,
     },
@@ -104,28 +105,33 @@ const ProfileCardWidget: React.FC<ProfileCardWidgetProps> = props => {
     >
       <div>
         {(beamId || reflectionId) && (
-          <ProfileMiniCard
-            profileData={profileData}
-            authenticatedDID={authenticatedDID}
-            beamsLabel={beams === 1 ? t('Beam') : t('Beams')}
-            followingLabel={t('Following')}
-            followersLabel={followers === 1 ? t('Follower') : t('Followers')}
-            statsLoading={statsLoading}
-            stats={{ followers, beams }}
-            transformSource={transformSource}
-            handleClick={handleCardClick}
-            footerExt={
-              <Extension
-                name={`follow_${profileData?.id}`}
-                extensionData={{
-                  profileID: profileData?.id,
-                  isFollowing: followList?.get(profileData?.id)?.isFollowing,
-                  followId: followList?.get(profileData?.id)?.id,
-                  isLoggedIn,
-                }}
+          <>
+            {profileLoading && <MiniProfileWidgetLoader />}
+            {profileData && (
+              <ProfileMiniCard
+                profileData={profileData}
+                authenticatedDID={authenticatedDID}
+                beamsLabel={beams === 1 ? t('Beam') : t('Beams')}
+                followingLabel={t('Following')}
+                followersLabel={followers === 1 ? t('Follower') : t('Followers')}
+                statsLoading={statsLoading}
+                stats={{ followers, beams }}
+                transformSource={transformSource}
+                handleClick={handleCardClick}
+                footerExt={
+                  <Extension
+                    name={`follow_${profileData?.id}`}
+                    extensionData={{
+                      profileID: profileData?.id,
+                      isFollowing: followList?.get(profileData?.id)?.isFollowing,
+                      followId: followList?.get(profileData?.id)?.id,
+                      isLoggedIn,
+                    }}
+                  />
+                }
               />
-            }
-          />
+            )}
+          </>
         )}
       </div>
     </ErrorBoundary>

@@ -76,7 +76,7 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
       )}
       {showEditor && (
         <Card
-          padding={0}
+          padding={'p-4'}
           accentBorder={true}
           background={!!background && background}
           customStyle="overflow-hidden"

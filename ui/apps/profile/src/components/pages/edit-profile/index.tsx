@@ -31,6 +31,8 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
   const { avatarImage, coverImage, saveImage, loading: isSavingImage } = useSaveImage();
   const [activeTab, setActiveTab] = useState(0);
   const [selectedActiveTab, setSelectedActiveTab] = useState(0);
+  const [showNsfwModal, setShowNsfwModal] = useState(false);
+  const [nsfwFormValues, setNsfwFormValues] = useState<EditProfileFormValues>();
   const [showUnsavedChangesModal, setShowUnsavedChangesModal] = useState(false);
   const [profileContentOnImageDelete, setProfileContentOnImageDelete] =
     useState<PartialAkashaProfileInput | null>(null);
@@ -173,6 +175,29 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
     return { ...avatarImageObj, ...coverImageObj };
   };
 
+  const onProfileSave = async (formValues: EditProfileFormValues) => {
+    if (!profileData?.id) {
+      await createProfile(formValues, getProfileImageVersions(avatarImage, coverImage));
+      return;
+    }
+
+    if (profileContentOnImageDelete) {
+      updateProfileMutation({
+        variables: {
+          i: {
+            id: profileData.id,
+            content: profileContentOnImageDelete,
+            options: { replace: true },
+          },
+        },
+      });
+      setProfileContentOnImageDelete(null);
+      return;
+    }
+
+    updateProfile(formValues, getProfileImageVersions(avatarImage, coverImage));
+  };
+
   return (
     <Stack direction="column" spacing="gap-y-4" customStyle="h-full">
       <Card radius={20} elevation="1" customStyle="py-4 h-full">
@@ -223,6 +248,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
           bio={{ label: t('Bio'), initialValue: profileData?.description }}
           nsfw={{
             label: t('Select NSFW if your profile contains mature or explicit content.'),
+            description: t('Note: this is an irreversible action.'),
             initialValue: profileData?.nsfw,
           }}
           nsfwFormLabel={t('NSFW Profile')}
@@ -243,26 +269,12 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
             label: t('Save'),
             loading: isProcessing,
             handleClick: async formValues => {
-              if (!profileData?.id) {
-                await createProfile(formValues, getProfileImageVersions(avatarImage, coverImage));
+              if (formValues?.nsfw) {
+                setNsfwFormValues(formValues);
+                setShowNsfwModal(true);
                 return;
               }
-
-              if (profileContentOnImageDelete) {
-                updateProfileMutation({
-                  variables: {
-                    i: {
-                      id: profileData.id,
-                      content: profileContentOnImageDelete,
-                      options: { replace: true },
-                    },
-                  },
-                });
-                setProfileContentOnImageDelete(null);
-                return;
-              }
-
-              updateProfile(formValues, getProfileImageVersions(avatarImage, coverImage));
+              onProfileSave(formValues);
             },
           }}
         />
@@ -298,6 +310,60 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
             "It looks like you haven't saved your changes, if you leave this page all the changes you made will be gone!",
           )}
         </Text>
+      </Modal>
+      <Modal
+        title={{ label: t('Changing to NSFW Profile') }}
+        show={showNsfwModal}
+        onClose={() => {
+          setShowNsfwModal(false);
+        }}
+        actions={[
+          {
+            variant: 'text',
+            label: t('Cancel'),
+            onClick: () => {
+              setShowNsfwModal(false);
+            },
+          },
+          {
+            variant: 'primary',
+            label: 'I understand',
+            onClick: () => {
+              if (nsfwFormValues?.nsfw) {
+                onProfileSave(nsfwFormValues);
+                setShowNsfwModal(null);
+              }
+              setShowNsfwModal(false);
+            },
+          },
+        ]}
+      >
+        <Stack direction="column" spacing="gap-y-4">
+          <Text variant="body1">
+            {t('Before you proceed,')}{' '}
+            <Text variant="h6" as="span">
+              {t('please be aware:')}
+            </Text>
+          </Text>
+          <Text variant="body1">
+            <Text variant="h6" color={{ light: 'errorLight', dark: 'errorDark' }} as="span">
+              {t('Irreversible Action:')}{' '}
+            </Text>
+            {t('Changing your profile to NSFW (Not Safe For Work)')}
+            <br /> {t(
+              'means all current and future posts will be marked as NSFW. This action is',
+            )}{' '}
+            <br />
+            {t('permanent and cannot be undone')}.
+          </Text>
+          <Text variant="body1">
+            <Text variant="h6" color={{ light: 'errorLight', dark: 'errorDark' }} as="span">
+              {t('Content Impact: ')}{' '}
+            </Text>
+            {t('Once your profile is set to NSFW, it will affect how your')} <br />{' '}
+            {t('content is viewed and accessed by others in the community.')}
+          </Text>
+        </Stack>
       </Modal>
     </Stack>
   );
