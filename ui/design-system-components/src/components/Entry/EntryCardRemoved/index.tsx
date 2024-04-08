@@ -29,11 +29,14 @@ const EntryCardRemoved: React.FC<EntryCardRemovedProps> = props => {
     >
       <Stack direction="row" spacing="gap-x-1">
         <Icon color="errorLight" icon={<ExclamationTriangleIcon />} />
+
         {props.type === 'author' ? (
           <Stack spacing="gap-y-1" customStyle="grow">
-            <Stack direction="row" spacing="gap-x-1">
-              <Text variant="button-sm">{props.message.firstPart}</Text>
-              <Text variant="footnotes2">{props.message.secondPart}</Text>
+            <Text variant="button-sm">
+              {props.message.firstPart}{' '}
+              <Text as="span" variant="footnotes2">
+                {props.message.secondPart}
+              </Text>
               <Anchor href={props.message.thirdPart.url}>
                 <Text
                   variant="footnotes2"
@@ -42,7 +45,7 @@ const EntryCardRemoved: React.FC<EntryCardRemovedProps> = props => {
                   {props.message.thirdPart.content}
                 </Text>
               </Anchor>
-            </Stack>
+            </Text>
             {props.type === 'author' && (
               <Button
                 variant="text"

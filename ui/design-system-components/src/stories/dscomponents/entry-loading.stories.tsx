@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { ProfileLoading } from '../../components/Profile';
+import EntryLoading from '../../components/ProfileEngagements/placeholders/entry-loading';
 
 const meta: Meta = {
-  title: 'DSComponents/Loaders/Profile/ProfileLoading',
-  component: ProfileLoading,
+  title: 'DSComponents/Loaders/Profile/EntryLoading',
+  component: EntryLoading,
   tags: ['autodocs'],
 };
 

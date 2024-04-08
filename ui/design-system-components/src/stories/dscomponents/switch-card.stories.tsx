@@ -1,36 +1,39 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-
 import SwitchCard, { SwitchCardProps } from '../../components/SwitchCard';
 
-const meta: Meta<SwitchCardProps> = {
-  title: 'DSComponents/Cards/SwitchCard',
-  component: SwitchCard,
-};
-
-export default meta;
-type Story = StoryObj<SwitchCardProps>;
-
-const Component = () => {
+const Component: React.FC<SwitchCardProps> = props => {
   const [activeButton, setActiveButton] = React.useState<string>('Kept');
 
   const onTabClick = (value: string) => () => {
     setActiveButton(value);
   };
 
-  return (
-    <SwitchCard
-      activeButton={activeButton}
-      buttonValues={[
-        { value: 'Kept', label: 'Kept' },
-        { value: 'Delisted', label: 'Delisted' },
-      ]}
-      onTabClick={onTabClick}
-      isLoggedIn={true}
-    />
-  );
+  return <SwitchCard {...props} activeButton={activeButton} onTabClick={onTabClick} />;
 };
 
-export const BaseSwitchCard: Story = {
-  render: () => <Component />,
+const meta: Meta<SwitchCardProps> = {
+  title: 'DSComponents/Cards/SwitchCard',
+  component: Component,
+  tags: ['autodocs'],
+  argTypes: {
+    isLoggedIn: { control: 'boolean' },
+    activeButton: { control: 'select', options: ['Kept', 'Delisted'] },
+    buttonValues: { control: 'object' },
+    onTabClick: { action: 'tab clicked' },
+  },
 };
+
+type Story = StoryObj<SwitchCardProps>;
+
+export const Default: Story = {
+  args: {
+    isLoggedIn: true,
+    buttonValues: [
+      { value: 'Kept', label: 'Kept' },
+      { value: 'Delisted', label: 'Delisted' },
+    ],
+  },
+};
+
+export default meta;

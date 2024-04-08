@@ -1,21 +1,24 @@
 import React from 'react';
-import { tw } from '@twind/core';
 import type { Meta, StoryObj } from '@storybook/react';
-
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TopbarLoader from '../../components/Loaders/topbar-loader';
+
+const Wrapped: React.FC<unknown> = () => (
+  <Stack customStyle="w-[50%]">
+    <TopbarLoader />
+  </Stack>
+);
 
 const meta: Meta = {
   title: 'DSComponents/Loaders/TopbarLoader',
-  component: TopbarLoader,
+  component: Wrapped,
+  tags: ['autodocs'],
+};
+
+type Story = StoryObj;
+
+export const Default: Story = {
+  args: {},
 };
 
 export default meta;
-type Story = StoryObj;
-
-export const BaseCard: Story = {
-  render: () => (
-    <div className={tw('w-[25%]')}>
-      <TopbarLoader />
-    </div>
-  ),
-};

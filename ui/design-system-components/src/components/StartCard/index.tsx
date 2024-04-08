@@ -1,6 +1,5 @@
-import * as React from 'react';
+import React from 'react';
 import { tw } from '@twind/core';
-
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';

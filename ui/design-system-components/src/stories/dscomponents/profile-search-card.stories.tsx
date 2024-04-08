@@ -1,33 +1,35 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-
 import { profileData } from '@akashaorg/design-system-core/lib/utils';
-
 import ProfileSearchCard, { ProfileSearchCardProps } from '../../components/ProfileSearchCard';
 
 const meta: Meta<ProfileSearchCardProps> = {
   title: 'DSComponents/Cards/ProfileSearchCard',
   component: ProfileSearchCard,
+  tags: ['autodocs'],
+  argTypes: {
+    followLabel: { control: 'text' },
+    followersLabel: { control: 'text' },
+    followingLabel: { control: 'text' },
+  },
+};
+
+type Story = StoryObj<ProfileSearchCardProps>;
+
+export const Default: Story = {
+  args: {
+    followLabel: 'follow',
+    followingLabel: 'following',
+    unfollowLabel: 'unfollow',
+    isFollowing: false,
+    profileData,
+    handleFollow: () => ({}),
+    handleUnfollow: () => ({}),
+    transformSource: () => ({
+      src: 'https://placebeard.it/360x360',
+      width: 360,
+      height: 360,
+    }),
+  },
 };
 
 export default meta;
-type Story = StoryObj<ProfileSearchCardProps>;
-
-export const BaseProfileSearchCard: Story = {
-  render: () => (
-    <ProfileSearchCard
-      followLabel="follow"
-      followingLabel="following"
-      unfollowLabel="unfollow"
-      isFollowing={false}
-      profileData={profileData}
-      handleFollow={() => ({})}
-      handleUnfollow={() => ({})}
-      transformSource={() => ({
-        src: 'https://placebeard.it/360x360',
-        width: 360,
-        height: 360,
-      })}
-    />
-  ),
-};

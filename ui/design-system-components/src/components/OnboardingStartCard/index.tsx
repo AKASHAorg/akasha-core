@@ -27,10 +27,12 @@ const OnboardingStartCard = ({
 
   return (
     <Card>
-      <Stack align="center" padding="p-4" spacing="gap-y-8" fullWidth={true}>
+      <Stack align="center" spacing="gap-y-8" fullWidth={true}>
         <Stack direction="row" justify="between" fullWidth={true}>
-          <Text variant="h2">{titleLabel}</Text>
-          <Button disabled={!isButtonEnabled} onClick={handleButtonClick} label={buttonLabel} />
+          <Text variant="h5">{titleLabel}</Text>
+          {buttonLabel && (
+            <Button disabled={!isButtonEnabled} onClick={handleButtonClick} label={buttonLabel} />
+          )}
         </Stack>
 
         <SearchBar

@@ -152,7 +152,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
       ? [
           {
             icon: <FlagIcon />,
-            label: flagAsLabel,
+            label: flagAsLabel ?? '',
             color: { light: 'errorLight', dark: 'errorDark' } as const,
             disabled: disableReporting,
             onClick: onEntryFlag,
@@ -163,7 +163,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
       ? [
           {
             icon: <PencilIcon />,
-            label: editLabel,
+            label: editLabel ?? '',
             disabled: !editable,
             toolTipContent: editable ? null : notEditableLabel,
             onClick: onEdit,
@@ -234,6 +234,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
             />
           )}
         </>
+
         <Menu
           anchor={{
             icon: <EllipsisHorizontalIcon />,

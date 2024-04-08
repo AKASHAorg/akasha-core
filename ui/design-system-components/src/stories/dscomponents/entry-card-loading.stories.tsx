@@ -1,16 +1,16 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import AntennaLoader from '../../components/Loaders/antenna-loader';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import EntryLoadingPlaceholder from '../../components/Entry/EntryCardLoading';
 
 const Wrapped: React.FC<unknown> = () => (
   <Stack customStyle="w-[50%]">
-    <AntennaLoader />
+    <EntryLoadingPlaceholder />
   </Stack>
 );
 
 const meta: Meta = {
-  title: 'DSComponents/Loaders/AntennaLoader',
+  title: 'DSComponents/Loaders/EntryLoadingPlaceholder',
   component: Wrapped,
   tags: ['autodocs'],
 };
