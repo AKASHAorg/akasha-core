@@ -43,6 +43,7 @@
       "type": "image/png"
     }
   ],
+  "description": "Akasha World",
   "start_url": ".",
   "display": "minimal-ui",
   "theme_color": "#000000",
