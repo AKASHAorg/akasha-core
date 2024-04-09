@@ -534,7 +534,6 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
   return (
     <Stack
       justify="between"
-      padding="p-4"
       background={{ light: 'white', dark: 'grey2' }}
       fullWidth
       customStyle={customStyle}

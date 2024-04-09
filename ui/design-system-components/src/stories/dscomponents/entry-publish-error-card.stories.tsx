@@ -1,6 +1,4 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-
 import EntryPublishErrorCard, {
   PublishErrorCardProps,
 } from '../../components/Entry/EntryPublishErrorCard';
@@ -8,11 +6,20 @@ import EntryPublishErrorCard, {
 const meta: Meta<PublishErrorCardProps> = {
   title: 'DSComponents/Errors/EntryPublishErrorCard',
   component: EntryPublishErrorCard,
+  tags: ['autodocs'],
+  argTypes: {
+    isCard: { control: 'boolean' },
+    message: { control: 'text' },
+  },
 };
 
-export default meta;
 type Story = StoryObj<PublishErrorCardProps>;
 
 export const BaseEntryPublishErrorCard: Story = {
-  render: () => <EntryPublishErrorCard isCard={true} message="Sorry, an error occured!" />,
+  args: {
+    isCard: true,
+    message: 'Sorry, an error occured!',
+  },
 };
+
+export default meta;

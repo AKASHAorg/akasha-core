@@ -1,33 +1,36 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-
 import SearchBar, { SearchBarProps } from '../../components/SearchBar';
 
-const meta: Meta<SearchBarProps> = {
-  title: 'DSComponents/Bars/SearchBar',
-  component: SearchBar,
-};
-
-export default meta;
-type Story = StoryObj<SearchBarProps>;
-
-const Component = () => {
+const Component: React.FC<SearchBarProps> = props => {
   const [inputValue, setInputValue] = React.useState('');
 
   const handleInputChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(ev.target.value);
   };
 
-  return (
-    <SearchBar
-      inputValue={inputValue}
-      inputPlaceholderLabel="Search"
-      onInputChange={handleInputChange}
-      onSearch={() => ({})}
-    />
-  );
+  return <SearchBar {...props} inputValue={inputValue} onInputChange={handleInputChange} />;
 };
 
-export const BaseSearchBar: Story = {
-  render: () => <Component />,
+const meta: Meta<SearchBarProps> = {
+  title: 'DSComponents/Bars/SearchBar',
+  component: Component,
+  tags: ['autodocs'],
+  argTypes: {
+    inputValue: { control: 'text' },
+    inputPlaceholderLabel: { control: 'text' },
+    onInputChange: { action: 'input changed' },
+    onSearch: { action: 'searched' },
+  },
 };
+
+type Story = StoryObj<SearchBarProps>;
+
+export const Default: Story = {
+  args: {
+    inputPlaceholderLabel: 'Search',
+    onSearch: () => ({}),
+  },
+};
+
+export default meta;

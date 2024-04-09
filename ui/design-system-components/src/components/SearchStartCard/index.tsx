@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { PropsWithChildren } from 'react';
 
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
@@ -8,14 +8,13 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import SearchBar from '../SearchBar';
 
-export type SearchStartProps = {
+export type SearchStartProps = PropsWithChildren<{
   titleLabel: string;
   inputPlaceholderLabel: string;
   handleSearch: (val: string) => void;
   handleTopMenuClick: () => void;
   searchKeyword: string;
-  children?: ReactNode;
-};
+}>;
 
 const SearchStartCard: React.FC<SearchStartProps> = ({
   titleLabel,

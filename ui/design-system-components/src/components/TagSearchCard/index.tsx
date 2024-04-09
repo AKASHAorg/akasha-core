@@ -40,7 +40,7 @@ const TagSearchCard: React.FC<TagSearchCardProps> = props => {
   } = props;
 
   return (
-    <Stack align="center" justify="between" customStyle={'py-2'}>
+    <Stack direction="row" align="center" justify="between" customStyle={'py-2'}>
       <Anchor
         onClick={e => {
           e.preventDefault();
