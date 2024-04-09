@@ -1,11 +1,36 @@
 import React from 'react';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { useTranslation } from 'react-i18next';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { DashboardEntry, DashboardHeader } from '../components/dashboard';
+import { generateReportEntries } from '../utils';
 
 export const Dashboard: React.FC<unknown> = () => {
+  const { t } = useTranslation('vibes-console');
+
+  const entries = generateReportEntries();
+
   return (
-    <Card>
-      <Text align="center">content review hub here...</Text>
-    </Card>
+    <Stack spacing="gap-y-3">
+      <DashboardHeader
+        titleLabel={t('Content Review Hub')}
+        inputPlaceholderLabel={t('Search for Case#')}
+        buttonLabel={t('Search')}
+      />
+
+      <Stack spacing="gap-y-3">
+        {entries.map(e => (
+          <DashboardEntry
+            key={e.id}
+            entry={e}
+            caseLabel={t('Case')}
+            viewProfileLabel={t('View Profile')}
+            reportedForLabels={{ first: t('A'), second: t('has been reported for') }}
+            lastReportLabel={t('Last Report')}
+            keepButtonLabel={t('Keep')}
+            suspendButtonLabel={t('Suspend')}
+          />
+        ))}
+      </Stack>
+    </Stack>
   );
 };
