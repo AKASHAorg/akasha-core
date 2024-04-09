@@ -9,11 +9,13 @@ import {
   AkashaBeamFiltersInput,
   AkashaBeamSortingInput,
   AkashaBeamStreamEdge,
+  AkashaBeamStreamFiltersInput,
+  AkashaBeamStreamModerationStatus,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { EdgeArea, Virtualizer, VirtualizerProps } from '../virtual-list';
-import { useBeams } from '@akashaorg/ui-awf-hooks/lib/use-beams';
 import { RestoreItem } from '../virtual-list/use-scroll-state';
-import { hasOwn } from '@akashaorg/ui-awf-hooks';
+import { hasOwn, useGetLogin, useNsfwToggling } from '@akashaorg/ui-awf-hooks';
+import { useBeams } from '@akashaorg/ui-awf-hooks/lib/use-beams';
 
 export type BeamFeedProps = {
   className?: string;
@@ -51,6 +53,44 @@ const BeamFeed = (props: BeamFeedProps) => {
     offsetTop,
   } = props;
 
+  const { showNsfw } = useNsfwToggling();
+  const { data: loginData, loading: authenticating } = useGetLogin();
+  const isLoggedIn = !!loginData?.id;
+
+  let nsfwFilters;
+
+  /**
+   * Set the filter for logged-out users and users who toggled off nsfw content.
+   **/
+  if (!did && (!showNsfw || !isLoggedIn)) {
+    nsfwFilters = {
+      ...filters,
+      or: [
+        { where: { status: { equalTo: AkashaBeamStreamModerationStatus.Ok } } },
+        { where: { status: { isNull: true } } },
+      ],
+    } as AkashaBeamStreamFiltersInput;
+  }
+
+  /**
+   * Set the filter for users who are logged in and want to see nsfw content.
+   **/
+  if (!did && showNsfw && isLoggedIn) {
+    nsfwFilters = {
+      ...filters,
+      or: [
+        {
+          where: {
+            status: {
+              in: [AkashaBeamStreamModerationStatus.Ok, AkashaBeamStreamModerationStatus.Nsfw],
+            },
+          },
+        },
+        { where: { status: { isNull: true } } },
+      ],
+    } as AkashaBeamStreamFiltersInput;
+  }
+
   const {
     beams,
     fetchNextPage,
@@ -66,9 +106,31 @@ const BeamFeed = (props: BeamFeedProps) => {
   } = useBeams({
     overscan: scrollerOptions.overscan,
     sorting,
-    filters,
+    filters: nsfwFilters,
     did,
   });
+
+  React.useEffect(() => {
+    /**
+     * Reset the beamCursors in case the user logs out and has the NSFW setting on
+     * so as to be able to accept the updated data in the `extractData` function
+     *  when the hook refetches again (Specificallly for dealing with the filter condition
+     *  `!beamCursors.has(edge.cursor)` because if not resetted, no data will be extracted
+     * from the function because the existing beamCursors will contain the data.cursor).
+     * Maybe a better approach?
+     **/
+    if (!authenticating && showNsfw) {
+      // beamCursors.clear();
+      fetchInitialData();
+    }
+  }, [authenticating, showNsfw]);
+
+  React.useEffect(() => {
+    /**
+     * Everytime the NSFW setting changes, refetch.
+     **/
+    fetchInitialData();
+  }, [showNsfw]);
 
   const lastCursors = React.useRef({ next: null, prev: null });
   const prevBeams = React.useRef([]);
