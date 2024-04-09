@@ -173,6 +173,7 @@ export const useBeamsByTags = (tag: string | string[]) => {
       if (restoreItem) {
         initialVars.after = restoreItem.key;
       }
+      beamCursors.clear();
       await fetchInitialBeams(initialVars);
     },
     [beamsQuery.called, fetchInitialBeams],
