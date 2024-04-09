@@ -23,13 +23,13 @@
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },
   "dependencies": {
-    "@akashaorg/design-system-core": "*",
     "@akashaorg/design-system-components": "*",
+    "@akashaorg/design-system-core": "*",
     "@akashaorg/ui-awf-hooks": "*"
   },
   "devDependencies": {
-    "@akashaorg/typings": "*",
-    "@akashaorg/awf-sdk": "*"
+    "@akashaorg/awf-sdk": "*",
+    "@akashaorg/typings": "*"
   },
   "peerDependencies": {
     "react": "^18.2.0",

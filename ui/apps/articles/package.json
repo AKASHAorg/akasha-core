@@ -32,8 +32,8 @@
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },
   "dependencies": {
-    "@akashaorg/design-system-core": "*",
     "@akashaorg/design-system-components": "*",
+    "@akashaorg/design-system-core": "*",
     "@akashaorg/ui-awf-hooks": "*",
     "i18next": "22.4.14",
     "i18next-browser-languagedetector": "7.0.1",
@@ -45,9 +45,8 @@
     "single-spa-react": "6.0.1"
   },
   "devDependencies": {
-    "@akashaorg/typings": "*",
-    "@akashaorg/af-testing": "*"
-
+    "@akashaorg/af-testing": "*",
+    "@akashaorg/typings": "*"
   },
   "peerDependencies": {
     "react": "^18.2.0",

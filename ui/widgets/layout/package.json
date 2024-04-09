@@ -39,15 +39,15 @@
     "single-spa-react": "6.0.1"
   },
   "devDependencies": {
-    "@akashaorg/typings": "*",
     "@akashaorg/af-testing": "*",
+    "@akashaorg/typings": "*",
     "@types/react": "18.0.33",
     "@types/react-dom": "18.0.11"
   },
   "peerDependencies": {
+    "@twind/core": "^1.1.3",
     "react": "^18.1.0",
-    "react-dom": "^18.1.0",
-    "@twind/core": "^1.1.3"
+    "react-dom": "^18.1.0"
   },
   "files": [
     "lib"

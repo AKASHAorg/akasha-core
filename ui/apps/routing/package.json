@@ -30,8 +30,8 @@
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },
   "dependencies": {
-    "@akashaorg/ui-awf-hooks": "*",
     "@akashaorg/awf-sdk": "*",
+    "@akashaorg/ui-awf-hooks": "*",
     "rxjs": "7.3.0",
     "single-spa": "6.0.0"
   },
