@@ -118,3 +118,20 @@ export const generateModeratorApplicationHistory = () =>
     appliedOn: randomDateBetweenValues('Jan 01 2024', 'Feb 14 2024'),
     memberSince: randomDateBetweenValues('Jan 01 2020', 'Dec 31 2020'),
   }));
+
+const reportEntries: { appName: string; itemType: 'Profile' | 'Beam' | 'Reply'; id: string }[] = [
+  { appName: 'Profile', itemType: 'Profile', id: 'P-17078' },
+  { appName: 'Antenna', itemType: 'Beam', id: 'P-19089' },
+  { appName: 'Antenna', itemType: 'Reply', id: 'P-19090' },
+  { appName: 'Profile', itemType: 'Profile', id: 'P-17079' },
+];
+
+export const generateReportEntries = () =>
+  reportEntries.map(r => ({
+    id: r.id,
+    appName: r.appName,
+    itemType: r.itemType,
+    primaryReason: 'Sexual or human exploitation',
+    reportCount: 46,
+    lastReportDate: randomDateBetweenValues('Jan 01 2024', 'Mar 31 2024'),
+  }));
