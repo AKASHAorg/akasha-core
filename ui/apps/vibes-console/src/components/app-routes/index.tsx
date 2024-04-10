@@ -13,6 +13,7 @@ import {
   ApplicationsLog,
   BecomeModerator,
   Dashboard,
+  EditMaxApplicants,
   MyApplications,
   SelfApplicationDetailPage,
   Settings,
@@ -22,9 +23,12 @@ import routes, {
   APPLICATIONS,
   APPLICATION_DETAIL,
   BECOME_MODERATOR,
+  EDIT_MAX_MODERATORS,
   HOME,
   MY_APPLICATIONS,
   MY_APPLICATION_DETAIL,
+  DASHBOARD,
+  SETTINGS,
   WITHDRAW_APPLICATION,
 } from '../../routes';
 
@@ -90,7 +94,7 @@ const applicationDetailRoute = createRoute({
 
 const dashboardRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/dashboard',
+  path: routes[DASHBOARD],
   component: () => {
     return <Dashboard />;
   },
@@ -98,9 +102,17 @@ const dashboardRoute = createRoute({
 
 const settingsRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/settings',
+  path: routes[SETTINGS],
   component: () => {
     return <Settings />;
+  },
+});
+
+const editMaxApplicantsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: routes[EDIT_MAX_MODERATORS],
+  component: () => {
+    return <EditMaxApplicants />;
   },
 });
 
@@ -113,8 +125,7 @@ const routeTree = rootRoute.addChildren([
     applicationsLogRoute,
     applicationDetailRoute,
   ]),
-  dashboardRoute,
-  settingsRoute,
+  dashboardRoute.addChildren([settingsRoute, editMaxApplicantsRoute]),
 ]);
 
 // @todo: update to use type from typings package
