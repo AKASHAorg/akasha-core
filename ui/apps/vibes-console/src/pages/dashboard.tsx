@@ -23,6 +23,7 @@ export const Dashboard: React.FC<unknown> = () => {
             key={e.id}
             entry={e}
             caseLabel={t('Case')}
+            nsfwLabel={t('Profile tagged NSFW')}
             viewProfileLabel={t('View Profile')}
             reportedForLabels={{ first: t('A'), second: t('has been reported for') }}
             lastReportLabel={t('Last Report')}

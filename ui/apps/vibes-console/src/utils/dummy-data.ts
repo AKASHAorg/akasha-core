@@ -119,11 +119,18 @@ export const generateModeratorApplicationHistory = () =>
     memberSince: randomDateBetweenValues('Jan 01 2020', 'Dec 31 2020'),
   }));
 
-const reportEntries: { appName: string; itemType: 'Profile' | 'Beam' | 'Reply'; id: string }[] = [
+type TReportEntry = {
+  appName: string;
+  itemType: 'Profile' | 'Beam' | 'Reply';
+  id: string;
+  nsfw?: boolean;
+};
+
+const reportEntries: TReportEntry[] = [
   { appName: 'Profile', itemType: 'Profile', id: 'P-17078' },
-  { appName: 'Antenna', itemType: 'Beam', id: 'P-19089' },
-  { appName: 'Antenna', itemType: 'Reply', id: 'P-19090' },
-  { appName: 'Profile', itemType: 'Profile', id: 'P-17079' },
+  { appName: 'Antenna', itemType: 'Beam', id: 'B-19089' },
+  { appName: 'Antenna', itemType: 'Reply', id: 'R-19090' },
+  { appName: 'Profile', itemType: 'Profile', id: 'P-17079', nsfw: true },
 ];
 
 export const generateReportEntries = () =>
@@ -131,6 +138,7 @@ export const generateReportEntries = () =>
     id: r.id,
     appName: r.appName,
     itemType: r.itemType,
+    nsfw: r.nsfw,
     primaryReason: 'Sexual or human exploitation',
     reportCount: 46,
     lastReportDate: randomDateBetweenValues('Jan 01 2024', 'Mar 31 2024'),

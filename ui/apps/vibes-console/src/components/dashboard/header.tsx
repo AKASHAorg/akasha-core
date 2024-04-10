@@ -19,7 +19,6 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = props => {
     <Stack spacing="gap-y-4">
       <Stack direction="row" justify="between">
         <Text variant="h5">{titleLabel}</Text>
-
         <Button
           aria-label="settings"
           icon={<Cog6ToothIcon />}

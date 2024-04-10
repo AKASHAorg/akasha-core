@@ -4,13 +4,14 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import ReportReasonPill from '@akashaorg/design-system-components/lib/components/ReportReasonPill';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import { Cog6ToothIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { Antenna, Profile } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import DashboardItemRenderer from './item-renderer';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
 
 export type ReportEntry = {
   id: string;
   appName: string;
+  nsfw: boolean;
   itemType: 'Profile' | 'Beam' | 'Reply';
   primaryReason: string;
   reportCount: number;
@@ -20,6 +21,7 @@ export type ReportEntry = {
 export type DashboardEntryProps = {
   entry: ReportEntry;
   caseLabel: string;
+  nsfwLabel: string;
   viewProfileLabel: string;
   reportedForLabels: { first: string; second: string };
   lastReportLabel: string;
@@ -31,6 +33,7 @@ export const DashboardEntry: React.FC<DashboardEntryProps> = props => {
   const {
     entry,
     caseLabel,
+    nsfwLabel,
     viewProfileLabel,
     reportedForLabels,
     lastReportLabel,
@@ -51,8 +54,8 @@ export const DashboardEntry: React.FC<DashboardEntryProps> = props => {
       >
         <Stack direction="row" align="center" spacing="gap-x-2">
           <Button
-            aria-label="settings"
-            icon={<Cog6ToothIcon />}
+            aria-label="itemType"
+            icon={entry.itemType === 'Profile' ? <Profile /> : <Antenna />}
             variant="primary"
             onClick={() => {
               /** */
@@ -79,7 +82,12 @@ export const DashboardEntry: React.FC<DashboardEntryProps> = props => {
       </Stack>
 
       <Stack padding="p-5" spacing="gap-y-4">
-        <DashboardItemRenderer itemType={entry.itemType} viewProfileLabel={viewProfileLabel} />
+        <DashboardItemRenderer
+          itemType={entry.itemType}
+          viewProfileLabel={viewProfileLabel}
+          nsfw={entry.nsfw}
+          nsfwLabel={nsfwLabel}
+        />
 
         <Stack direction="row" spacing="gap-x-1">
           <Text variant="button-sm" weight="normal" color={textColor}>
