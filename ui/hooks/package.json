@@ -33,14 +33,14 @@
   ],
   "dependencies": {
     "@akashaorg/awf-sdk": "*",
-    "object-hash": "2.2.0",
+    "@apollo/client": "^3.9.5",
     "@tanstack/react-query": "4.29.3",
-    "rxjs": "7.3.0",
-    "@apollo/client": "^3.9.5"
+    "object-hash": "2.2.0",
+    "rxjs": "7.3.0"
   },
   "devDependencies": {
-    "@akashaorg/typings": "*",
-    "@akashaorg/af-testing": "*"
+    "@akashaorg/af-testing": "*",
+    "@akashaorg/typings": "*"
   },
   "peerDependencies": {
     "react": "^18.2.0"

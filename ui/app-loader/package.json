@@ -29,17 +29,17 @@
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },
   "dependencies": {
+    "path-to-regexp": "6.2.1",
     "qs": "6.10.3",
-    "single-spa": "6.0.0",
-    "path-to-regexp": "6.2.1"
+    "single-spa": "6.0.0"
   },
   "devDependencies": {
-    "@akashaorg/typings": "*",
     "@akashaorg/af-testing": "*",
-    "i18next": "22.4.14",
+    "@akashaorg/typings": "*",
     "@types/pino": "7.0.5",
     "@types/qs": "6.9.7",
     "@types/systemjs": "6.1.1",
+    "i18next": "22.4.14",
     "systemjs": "6.12.1"
   },
   "peerDependencies": {
