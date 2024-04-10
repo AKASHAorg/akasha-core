@@ -30,6 +30,7 @@ import ListBulleted from './list-bulleted';
 import ListNumbered from './list-numbered';
 import Metamask from './metamask';
 import NoEth from './no-eth';
+import Profile from './profile';
 import Shield from './shield';
 import Solana from './solana';
 import Telegram from './telegram';
@@ -76,6 +77,7 @@ export type CustomIconTypes = Extract<
   | 'ListBulleted'
   | 'Metamask'
   | 'NoEth'
+  | 'Profile'
   | 'Shield'
   | 'Solana'
   | 'Telegram'
@@ -119,6 +121,7 @@ export {
   ListNumbered,
   Metamask,
   NoEth,
+  Profile,
   Shield,
   Solana,
   Telegram,

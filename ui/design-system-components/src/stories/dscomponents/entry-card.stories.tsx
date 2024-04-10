@@ -45,10 +45,8 @@ const error = new Error('an error occured');
 const entryData = {
   active: true,
   authorId: 'did:pkh:eip155:5:0xa2aabe32856a8d50c748d50a5111312d986208a8',
-  content: null,
   createdAt: '12/12/2023',
   id: 'kshggg55555',
-  beamID: 1,
 };
 
 const authorProfile = {
