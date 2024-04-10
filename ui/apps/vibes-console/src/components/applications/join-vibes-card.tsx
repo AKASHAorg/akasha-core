@@ -10,6 +10,7 @@ export type JoinVibesCardProps = {
   ctaButtonLabel: string;
   onCtaButtonClick: () => void;
 };
+
 export const JoinVibesCard: React.FC<JoinVibesCardProps> = props => {
   const { title, description, ctaButtonLabel, onCtaButtonClick } = props;
 

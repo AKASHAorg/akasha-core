@@ -5,7 +5,7 @@ import ReportReasonPill from '@akashaorg/design-system-components/lib/components
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Antenna, Profile } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
-import DashboardItemRenderer from './item-renderer';
+import { DashboardItemRenderer } from './item-renderer';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
 
 export type ReportEntry = {

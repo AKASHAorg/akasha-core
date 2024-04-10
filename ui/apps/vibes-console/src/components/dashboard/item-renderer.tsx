@@ -21,7 +21,7 @@ export type DashboardItemRendererProps = {
   nsfwLabel: string;
 };
 
-export const sampleEntryData: EntryCardProps = {
+const sampleEntryData: EntryCardProps = {
   isLoggedIn: true,
   entryData: {
     active: true,
@@ -59,7 +59,7 @@ export const sampleEntryData: EntryCardProps = {
   }),
 };
 
-const DashboardItemRenderer: React.FC<DashboardItemRendererProps> = props => {
+export const DashboardItemRenderer: React.FC<DashboardItemRendererProps> = props => {
   const { itemType, viewProfileLabel, nsfw, nsfwLabel } = props;
 
   const avatar = {
@@ -130,5 +130,3 @@ const DashboardItemRenderer: React.FC<DashboardItemRendererProps> = props => {
     </Card>
   );
 };
-
-export default DashboardItemRenderer;

@@ -9,10 +9,11 @@ export type DashboardHeaderProps = {
   titleLabel: string;
   inputPlaceholderLabel: string;
   buttonLabel: string;
+  onButtonClick: () => void;
 };
 
 export const DashboardHeader: React.FC<DashboardHeaderProps> = props => {
-  const { titleLabel, inputPlaceholderLabel, buttonLabel } = props;
+  const { titleLabel, inputPlaceholderLabel, buttonLabel, onButtonClick } = props;
   const [inputValue, setInputValue] = React.useState<string>('');
 
   return (
@@ -23,9 +24,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = props => {
           aria-label="settings"
           icon={<Cog6ToothIcon />}
           variant="primary"
-          onClick={() => {
-            /** */
-          }}
+          onClick={onButtonClick}
           greyBg
           iconOnly
         />
