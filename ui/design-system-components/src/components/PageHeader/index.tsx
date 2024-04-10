@@ -9,13 +9,21 @@ import { PageButtonsProps, PageButtons } from '../PageButtons';
 export type PageHeaderProps = PageButtonsProps & {
   label: string;
   labelTextVariant?: TextProps['variant'];
+  customStyle?: string;
 };
 
 export const PageHeader: React.FC<PropsWithChildren<PageHeaderProps>> = props => {
-  const { labelTextVariant = 'h5', label, cancelButtonLabel, confirmButtonLabel, children } = props;
+  const {
+    labelTextVariant = 'h5',
+    label,
+    cancelButtonLabel,
+    confirmButtonLabel,
+    children,
+    customStyle,
+  } = props;
 
   return (
-    <Card padding={0}>
+    <Card padding={0} customStyle={customStyle}>
       <Stack padding="px-4 py-6">
         <Text variant={labelTextVariant} align="center">
           {label}
