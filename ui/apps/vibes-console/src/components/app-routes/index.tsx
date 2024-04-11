@@ -18,6 +18,7 @@ import {
   SelfApplicationDetailPage,
   Settings,
   WithdrawApplicationPage,
+  AssignAdminPage,
 } from '../../pages';
 import routes, {
   APPLICATIONS,
@@ -30,6 +31,7 @@ import routes, {
   DASHBOARD,
   SETTINGS,
   WITHDRAW_APPLICATION,
+  ASSIGN_ADMIN,
 } from '../../routes';
 
 const rootRoute = createRootRouteWithContext<RouterContext>()({
@@ -116,6 +118,14 @@ const editMaxApplicantsRoute = createRoute({
   },
 });
 
+const assignAdminRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: routes[ASSIGN_ADMIN],
+  component: () => {
+    return <AssignAdminPage />;
+  },
+});
+
 const routeTree = rootRoute.addChildren([
   applicationsRoute.addChildren([
     becomeModeratorRoute,
@@ -125,7 +135,7 @@ const routeTree = rootRoute.addChildren([
     applicationsLogRoute,
     applicationDetailRoute,
   ]),
-  dashboardRoute.addChildren([settingsRoute, editMaxApplicantsRoute]),
+  dashboardRoute.addChildren([settingsRoute, editMaxApplicantsRoute, assignAdminRoute]),
 ]);
 
 // @todo: update to use type from typings package
