@@ -17,7 +17,7 @@ export const MaxApplicants: React.FC<MaxApplicantsProps> = props => {
   const { introLabel, maxApplicantsLabel, maxApplicantsPlaceholderLabel } = props;
 
   return (
-    <PageHeader {...props} customStyle="mb-4">
+    <PageHeader {...props}>
       <Stack spacing="gap-y-4" customStyle="mb-8">
         <Text variant="footnotes2" color={{ light: 'black', dark: 'grey6' }}>
           {introLabel}

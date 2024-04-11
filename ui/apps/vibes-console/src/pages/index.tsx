@@ -7,5 +7,6 @@ export * from './become-moderator';
 export * from './dashboard';
 export * from './edit-max-applicants';
 export * from './my-applications';
+export * from './respond-admin';
 export * from './self-application-detail';
 export * from './settings';

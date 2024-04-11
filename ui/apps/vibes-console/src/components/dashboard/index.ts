@@ -5,3 +5,4 @@ export * from './header';
 export * from './item-renderer';
 export * from './max-applicants';
 export * from './moderator-list-item';
+export * from './respond-admin';
