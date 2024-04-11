@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { AdminSettings } from '../components/dashboard';
-import routes, { EDIT_MAX_MODERATORS, DASHBOARD } from '../routes';
+import routes, { EDIT_MAX_MODERATORS, DASHBOARD, ASSIGN_ADMIN } from '../routes';
 
 export const Settings: React.FC<unknown> = () => {
   const navigate = useNavigate();
@@ -18,6 +18,12 @@ export const Settings: React.FC<unknown> = () => {
   const handleCancelButtonClick = () => {
     navigate({
       to: routes[DASHBOARD],
+    });
+  };
+
+  const handleConfirmButtonClick = () => {
+    navigate({
+      to: routes[ASSIGN_ADMIN],
     });
   };
 
@@ -48,9 +54,7 @@ export const Settings: React.FC<unknown> = () => {
       confirmButtonVariant="secondary"
       onChangeButtonClick={handleChangeButtonClick}
       onCancelButtonClick={handleCancelButtonClick}
-      onConfirmButtonClick={() => {
-        /** */
-      }}
+      onConfirmButtonClick={handleConfirmButtonClick}
     />
   );
 };

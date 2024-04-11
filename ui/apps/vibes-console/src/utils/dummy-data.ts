@@ -143,3 +143,30 @@ export const generateReportEntries = () =>
     reportCount: 46,
     lastReportDate: randomDateBetweenValues('Jan 01 2024', 'Mar 31 2024'),
   }));
+
+const activeModeratorNames = [
+  'Mr. Bigote',
+  'Pugstenson',
+  'Jordan Lake',
+  'Joan Jett',
+  'Rocker Mill',
+  'Dudez Jillz',
+];
+
+export const generateActiveModerators = () => {
+  const activeModerators = activeModeratorNames.map((name, idx) => ({
+    id: `${idx + 1}`,
+    createdAt: randomDateBetweenValues(),
+    did: { id: (Math.random() + 1).toString(36).substring(2) },
+    name: name,
+    avatar: {
+      default: {
+        height: 320,
+        src: '',
+        width: 320,
+      },
+    },
+  }));
+
+  return activeModerators;
+};
