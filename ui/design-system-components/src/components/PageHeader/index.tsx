@@ -23,7 +23,7 @@ export const PageHeader: React.FC<PropsWithChildren<PageHeaderProps>> = props =>
   } = props;
 
   return (
-    <Card padding={0} customStyle={customStyle}>
+    <Card padding={0} margin="mb-4" customStyle={customStyle}>
       <Stack padding="px-4 py-6">
         <Text variant={labelTextVariant} align="center">
           {label}
