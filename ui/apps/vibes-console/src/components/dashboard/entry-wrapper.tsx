@@ -114,13 +114,16 @@ export const DashboardEntry: React.FC<DashboardEntryProps> = props => {
       <Stack
         direction="row"
         align="center"
-        justify="end"
         spacing="gap-x-4"
         padding="p-5"
-        customStyle="border(t-1 solid grey8 dark:grey5)"
+        customStyle="border(t-1 solid grey8 dark:grey5) justify(center md:end)"
       >
-        <Button variant="secondary" label={suspendButtonLabel} customStyle="w-[9.25rem]" />
-        <Button variant="primary" label={keepButtonLabel} customStyle="w-[9.25rem]" />
+        <Button
+          variant="secondary"
+          label={suspendButtonLabel}
+          customStyle="w-(full md:[9.25rem])"
+        />
+        <Button variant="primary" label={keepButtonLabel} customStyle="w-(full md:[9.25rem])" />
       </Stack>
     </Card>
   );
