@@ -1,19 +1,13 @@
 import React from 'react';
 import { tw } from '@twind/core';
-
 import { ITag } from '@akashaorg/typings/lib/ui';
-
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import {
   CheckIcon,
   HashtagIcon,
-  RssIcon,
   XMarkIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import SubtitleTextIcon from '@akashaorg/design-system-core/lib/components/SubtitleTextIcon';
 
