@@ -42,18 +42,18 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
     [],
   );
 
-  const sdk = getSDK();
+  const sdk = React.useRef(getSDK());
   const {
     data: beamCountData,
     loading: loadingCount,
     error: countQueryError,
   } = useGetIndexedStreamCountQuery({
     variables: {
-      indexer: sdk.services.gql.indexingDID,
+      indexer: sdk.current.services.gql.indexingDID,
       filters: {
         and: [
           { where: { streamType: { equalTo: AkashaIndexedStreamStreamType.Beam } } },
-          { where: { indexType: { equalTo: sdk.services.gql.labelTypes.TAG } } },
+          { where: { indexType: { equalTo: sdk.current.services.gql.labelTypes.TAG } } },
           { where: { indexValue: { equalTo: tagName } } },
           { where: { active: { equalTo: true } } },
         ],
@@ -92,11 +92,11 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
   }, [isLoggedIn, tagSubscriptionsData]);
 
   const [createInterestsMutation, { loading }] = useCreateInterestsMutation({
-    context: { source: sdk.services.gql.contextSources.composeDB },
+    context: { source: sdk.current.services.gql.contextSources.composeDB },
   });
 
   const [updateInterestsMutation, { loading: updateLoading }] = useUpdateInterestsMutation({
-    context: { source: sdk.services.gql.contextSources.composeDB },
+    context: { source: sdk.current.services.gql.contextSources.composeDB },
   });
 
   const executeInterestsMutation = (interests: string[]) => {
@@ -108,7 +108,7 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
             content: {
               topics: [...new Set(interests)].map(tag => ({
                 value: tag,
-                labelType: sdk.services.gql.labelTypes.INTEREST,
+                labelType: sdk.current.services.gql.labelTypes.INTEREST,
               })),
             },
           },
@@ -124,7 +124,7 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
             content: {
               topics: [...new Set(tagSubscriptions)].map(tag => ({
                 value: tag,
-                labelType: sdk.services.gql.labelTypes.INTEREST,
+                labelType: sdk.current.services.gql.labelTypes.INTEREST,
               })),
             },
           },
@@ -153,6 +153,8 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
     const newInterests = tagSubscriptions.filter(topic => topic !== tagName);
     executeInterestsMutation(newInterests);
   };
+
+  const listOfTags = React.useMemo(() => [tagName], [tagName]);
 
   return (
     <HelmetProvider>
@@ -185,7 +187,7 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
         )}
         <TagFeed
           queryKey={`app-akasha-integration_tag-antenna_${tagName}`}
-          tags={[tagName]}
+          tags={listOfTags}
           estimatedHeight={150}
           itemSpacing={8}
           scrollerOptions={{ overscan: 10 }}
