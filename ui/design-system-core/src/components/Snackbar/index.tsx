@@ -1,16 +1,13 @@
 import React from 'react';
-import { apply } from '@twind/core';
-
+import { NotificationTypes } from '@akashaorg/typings/lib/ui';
 import Button from '../Button';
 import Card from '../Card';
 import Icon from '../Icon';
 import { InformationCircleIcon, XMarkIcon } from '../Icon/hero-icons-outline';
 import Stack from '../Stack';
 import Text from '../Text';
-
-import { getColorLight, getColorDark } from './getColor';
 import { Color } from '../types/common.types';
-import { NotificationTypes } from '@akashaorg/typings/lib/ui';
+import { getColorLight, getColorDark } from './getColor';
 
 export type SnackbarProps = {
   title: React.ReactNode;
@@ -28,7 +25,6 @@ const Snackbar: React.FC<SnackbarProps> = ({
   type = NotificationTypes.Info,
   icon = <InformationCircleIcon />,
   description,
-  //action button
   actionButtonLabel,
   customStyle = '',
   handleButtonClick,
@@ -39,15 +35,12 @@ const Snackbar: React.FC<SnackbarProps> = ({
 
   const textColor: Color = { dark: 'white', light: 'black' };
 
-  const instanceStyle = apply`
-  px-5 py-4
-  border(l-8 ${colorLight}/30) dark:border-${colorDark}/30
-  `;
+  const instanceStyle = `p-4 border(l-8 solid ${colorLight}/30 dark:${colorDark}/30)`;
 
   return (
     <Card
-      background={{ light: 'white', dark: 'grey1' }}
       radius={8}
+      background={{ light: 'white', dark: 'grey1' }}
       customStyle={`${instanceStyle} ${customStyle}`}
     >
       <Stack spacing="gap-x-3" fullWidth direction="row">
