@@ -20,6 +20,8 @@ import {
   WithdrawApplicationPage,
   AssignAdminPage,
   RespondAdminPage,
+  ResignRolePage,
+  ResignConfirmationPage,
 } from '../../pages';
 import routes, {
   APPLICATIONS,
@@ -34,6 +36,8 @@ import routes, {
   WITHDRAW_APPLICATION,
   ASSIGN_ADMIN,
   RESPOND_ADMIN,
+  RESIGN_MODERATOR,
+  RESIGN_CONFIRMATION,
 } from '../../routes';
 
 const rootRoute = createRootRouteWithContext<RouterContext>()({
@@ -136,6 +140,22 @@ const respondAdminRoute = createRoute({
   },
 });
 
+const resignModeratorRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: routes[RESIGN_MODERATOR],
+  component: () => {
+    return <ResignRolePage />;
+  },
+});
+
+const resignConfirmationRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: routes[RESIGN_CONFIRMATION],
+  component: () => {
+    return <ResignConfirmationPage />;
+  },
+});
+
 const routeTree = rootRoute.addChildren([
   applicationsRoute.addChildren([
     becomeModeratorRoute,
@@ -150,6 +170,8 @@ const routeTree = rootRoute.addChildren([
     editMaxApplicantsRoute,
     assignAdminRoute,
     respondAdminRoute,
+    resignModeratorRoute,
+    resignConfirmationRoute,
   ]),
 ]);
 

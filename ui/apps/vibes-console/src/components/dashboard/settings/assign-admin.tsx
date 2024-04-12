@@ -7,7 +7,7 @@ import {
 } from '@akashaorg/design-system-components/lib/components/PageHeader';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import ModeratorListItem from './moderator-list-item';
+import ModeratorListItem from '../moderator-list-item';
 
 export type AssignAdminProps = PageHeaderProps & {
   introLabel: string;
