@@ -5,6 +5,7 @@ import {
   useRootComponentProps,
   useGetSettings,
   transformSource,
+  useGetLogin,
 } from '@akashaorg/ui-awf-hooks';
 import Menu, { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
 import {
@@ -25,13 +26,11 @@ export type Notification = {
   [key: string]: unknown;
 };
 
-type NotificationsPageProps = {
-  isLoggedIn: boolean;
-  settingData: Record<string, string | boolean | number>;
-};
-
-const NotificationsPage: React.FC<NotificationsPageProps> = ({ isLoggedIn }) => {
+const NotificationsPage: React.FC = () => {
   const [showMenu, setShowMenu] = useState(false);
+
+  const loginData = useGetLogin();
+  const isLoggedIn = !!loginData.data?.id;
 
   const { data, isLoading } = useGetSettings('@akashaorg/app-notifications');
 

@@ -2,7 +2,12 @@ import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react'
 import { useTranslation } from 'react-i18next';
 
 import { MenuItemAreaType, NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
-import { useRootComponentProps, useSaveSettings, useGetSettings } from '@akashaorg/ui-awf-hooks';
+import {
+  useRootComponentProps,
+  useSaveSettings,
+  useGetSettings,
+  useGetLogin,
+} from '@akashaorg/ui-awf-hooks';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
@@ -24,7 +29,6 @@ import {
 
 export type CustomizeNotificationPageProps = {
   initial?: boolean;
-  isLoggedIn: boolean;
 };
 export const NOTIF_REF = 'notification-preference-set';
 const Appname = '@akashaorg/app-notifications';
@@ -32,10 +36,12 @@ const SnoozeOption = 'snoozed';
 
 const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
   initial = true,
-  isLoggedIn,
 }) => {
   const { t } = useTranslation('app-notifications');
   const { uiEvents, getRoutingPlugin } = useRootComponentProps();
+
+  const { data } = useGetLogin();
+  const isLoggedIn = !!data?.id;
 
   const fetchSettingsQuery = useGetSettings(Appname);
   const existingSettings: { [k: string]: string | number | boolean } | null =
