@@ -1,4 +1,4 @@
-type AkashaFollow @loadModel(id: "kjzl6hvfrbw6ca3ixw4rn2ow7o3c1o2hykpld8tjqt4pbm0j026gvn65z8czzo7") {
+type AkashaFollow @loadModel(id: "kjzl6hvfrbw6c5jg1zwrvbcvembp7v15kejrry05o2gvv2r4xghzfn2uluglus3") {
   id: ID!
 }
 

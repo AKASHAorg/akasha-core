@@ -45,8 +45,8 @@ fragment AppReleaseFragmentM on AkashaAppRelease{
   createdAt
 }
 
-mutation CreateAppRelease($i: CreateAkashaAppReleaseInput!){
-  createAkashaAppRelease(input: $i){
+mutation SetAppRelease($i: SetAkashaAppReleaseInput!){
+  setAkashaAppRelease(input: $i){
     document {
       ...AppReleaseFragmentM
     }
@@ -64,8 +64,8 @@ mutation UpdateAppRelease($i: UpdateAkashaAppReleaseInput!){
   }
 }
 
-mutation CreateApp($i: CreateAkashaAppInput!){
-  createAkashaApp(input: $i){
+mutation CreateApp($i: SetAkashaAppInput!){
+  setAkashaApp(input: $i){
     document {
       ...AkashaAppFragmentM
     }
