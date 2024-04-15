@@ -5,7 +5,7 @@ export default function compose(akashaProfileId){
   }
 
 
-  type AkashaFollow @createModel(accountRelation: LIST, description: "Following list v0.1") @createIndex(fields:[{path:"isFollowing"}, {path:"profileID"}]) {
+  type AkashaFollow @createModel(accountRelation: SET, description: "Following list v0.2",  accountRelationFields: ["profileID"]) @createIndex(fields:[{path:"isFollowing"}, {path:"profileID"}]) {
     isFollowing: Boolean!
     profileID: StreamID! @documentReference(model: "AkashaProfile")
     profile: AkashaProfile! @relationDocument(property: "profileID")

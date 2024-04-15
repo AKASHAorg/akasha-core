@@ -34,10 +34,10 @@
     "url": "https://github.com/AKASHAorg/akasha-core/issues"
   },
   "devDependencies": {
-    "@ceramicnetwork/http-client": "5.1.0",
-    "@composedb/devtools": "0.7.0",
-    "@composedb/devtools-node": "0.7.0",
-    "@composedb/types": "0.7.0",
+    "@ceramicnetwork/http-client": "5.6.0",
+    "@composedb/devtools": "0.7.1",
+    "@composedb/devtools-node": "0.7.1",
+    "@composedb/types": "0.7.1",
     "dids": "^5.0.2",
     "dotenv": "16.3.1",
     "key-did-provider-ed25519": "^4.0.2",
