@@ -33,7 +33,7 @@ import ErrorBoundary, {
   ErrorBoundaryProps,
 } from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 
-const MAX_EDIT_TIME_IN_MINUTES = 10;
+const MAX_EDIT_TIME_IN_MINUTES = 5000;
 
 const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> = props => {
   const { entryData, reflectToId, ...rest } = props;
@@ -48,6 +48,7 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
   const [editorState, setEditorState] = useState(null);
 
   const [isReflecting, setIsReflecting] = useState(true);
+  Object.assign(window, { decodeb64SlateContent });
 
   const sdk = getSDK();
   const beamId = entryData.beamID;
@@ -66,14 +67,20 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
   };
 
   useEffect(() => {
-    setEditorState(entryData.content.flatMap(item => decodeb64SlateContent(item.value)));
-  }, [entryData.content]);
+    if (newContent) {
+      setEditorState(newContent.flatMap(item => decodeb64SlateContent(item.value)));
+      return;
+    }
+    if (entryData.content) {
+      setEditorState(entryData.content.flatMap(item => decodeb64SlateContent(item.value)));
+    }
+  }, [entryData.content, newContent]);
 
   const [editReflection, { loading: editInProgress }] = useUpdateAkashaReflectMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
     onCompleted: async () => {
       setEdit(false);
-      setNewContent(null);
+      //  setNewContent(null);
 
       if (!isReflectOfReflection) {
         await apolloClient.refetchQueries({ include: [GetReflectionsFromBeamDocument] });
@@ -199,7 +206,7 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
         <>
           <ErrorBoundary {...errorBoundaryProps}>
             <ReflectionCard
-              entryData={entryData}
+              entryData={newContent ? { ...entryData, content: newContent } : entryData}
               editable={reflectionCreationElapsedTimeInMinutes <= MAX_EDIT_TIME_IN_MINUTES}
               onEdit={() => setEdit(true)}
               notEditableLabel={t('A reflection created over 10 minutes ago cannot be edited.')}
