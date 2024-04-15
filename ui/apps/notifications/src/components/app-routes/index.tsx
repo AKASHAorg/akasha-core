@@ -1,12 +1,12 @@
 import React from 'react';
-import CustomizeNotificationPage from '../pages/customize-notification-page';
+import CustomiseNotificationPage from '../pages/customise-notification-page';
 import NotificationsPage from '../pages/notifications-page';
 import WelcomePage from '../pages/welcome-page';
 import ErrorComponent from './error-component';
 import routes, {
-  CUSTOMIZE_NOTIFICATION_WELCOME_PAGE,
-  CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE,
-  CUSTOMIZE_NOTIFICATION_CONFIRMATION_PAGE,
+  CUSTOMISE_NOTIFICATION_WELCOME_PAGE,
+  CUSTOMISE_NOTIFICATION_OPTIONS_PAGE,
+  CUSTOMISE_NOTIFICATION_CONFIRMATION_PAGE,
   SHOW_NOTIFICATIONS_PAGE,
   SETTINGS_PAGE,
 } from '../../routes';
@@ -42,26 +42,26 @@ const showNotificationsRoute = createRoute({
 const settingsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[SETTINGS_PAGE]}`,
-  component: () => <CustomizeNotificationPage initial={false} />,
+  component: () => <CustomiseNotificationPage initial={false} />,
 });
 
-const customizeNotificationsOptionsRoute = createRoute({
+const customiseNotificationsOptionsRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: `${routes[CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE]}`,
-  component: () => <CustomizeNotificationPage initial={true} />,
+  path: `${routes[CUSTOMISE_NOTIFICATION_OPTIONS_PAGE]}`,
+  component: () => <CustomiseNotificationPage initial={true} />,
 });
 
-const customizeNotificationsWelcomePageRoute = createRoute({
+const customiseNotificationsWelcomePageRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: `${routes[CUSTOMIZE_NOTIFICATION_WELCOME_PAGE]}`,
+  path: `${routes[CUSTOMISE_NOTIFICATION_WELCOME_PAGE]}`,
   component: () => {
     return <WelcomePage finalStep={false} />;
   },
 });
 
-const customizeNotificationsConfirmationPageRoute = createRoute({
+const customiseNotificationsConfirmationPageRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: `${routes[CUSTOMIZE_NOTIFICATION_CONFIRMATION_PAGE]}`,
+  path: `${routes[CUSTOMISE_NOTIFICATION_CONFIRMATION_PAGE]}`,
   component: () => {
     return <WelcomePage finalStep={true} />;
   },
@@ -71,9 +71,9 @@ const routeTree = rootRoute.addChildren([
   defaultRoute,
   settingsRoute,
   showNotificationsRoute,
-  customizeNotificationsOptionsRoute,
-  customizeNotificationsWelcomePageRoute,
-  customizeNotificationsConfirmationPageRoute,
+  customiseNotificationsOptionsRoute,
+  customiseNotificationsWelcomePageRoute,
+  customiseNotificationsConfirmationPageRoute,
 ]);
 
 export const router = ({ baseRouteName, apolloClient }: CreateRouter) =>

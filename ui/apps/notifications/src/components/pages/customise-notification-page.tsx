@@ -18,8 +18,8 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 
 import routes, {
-  CUSTOMIZE_NOTIFICATION_WELCOME_PAGE,
-  CUSTOMIZE_NOTIFICATION_CONFIRMATION_PAGE,
+  CUSTOMISE_NOTIFICATION_WELCOME_PAGE,
+  CUSTOMISE_NOTIFICATION_CONFIRMATION_PAGE,
   SHOW_NOTIFICATIONS_PAGE,
 } from '../../routes';
 import {
@@ -27,21 +27,25 @@ import {
   BellAlertIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
-export type CustomizeNotificationPageProps = {
+import { useNavigate } from '@tanstack/react-router';
+
+export type CustomiseNotificationPageProps = {
   initial?: boolean;
 };
 export const NOTIF_REF = 'notification-preference-set';
 const Appname = '@akashaorg/app-notifications';
 const SnoozeOption = 'snoozed';
 
-const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
+const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
   initial = true,
 }) => {
   const { t } = useTranslation('app-notifications');
   const { uiEvents, getRoutingPlugin } = useRootComponentProps();
 
-  const { data } = useGetLogin();
-  const isLoggedIn = !!data?.id;
+  const navigate = useNavigate();
+
+  const { data, loading } = useGetLogin();
+  const isLoggedIn = React.useMemo(() => !!data?.id, [data]);
 
   const fetchSettingsQuery = useGetSettings(Appname);
   const existingSettings: { [k: string]: string | number | boolean } | null =
@@ -94,7 +98,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
 
   const [selected, setSelected] = useState(false);
   const [allStates, setAllStates] = useState<{ [k: string]: string | number | boolean }>({});
-  const [loading, setLoading] = useState(false);
+  const [saveSettingsLoading, setSaveSettingsLoading] = useState(false);
 
   const setDefaultValues = useCallback(() => {
     setAllStates(Object.fromEntries(appNames.map(app => [[app], true])));
@@ -127,8 +131,6 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
     setSnoozed(!snoozed);
     setIsChanged(true);
   };
-
-  const navigateTo = getRoutingPlugin().navigateTo;
 
   // added for emitting snooze notification event
   const _uiEvents = useRef(uiEvents);
@@ -164,12 +166,10 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
 
   const goToNextStep = () => {
     // navigate to final step or go back to notifications page depending whether it's the first time accessing the app or not
-    return navigateTo?.({
-      appName: '@akashaorg/app-notifications',
-      getNavigationUrl: () =>
-        initial
-          ? routes[CUSTOMIZE_NOTIFICATION_CONFIRMATION_PAGE]
-          : `${routes[SHOW_NOTIFICATIONS_PAGE]}`,
+    navigate({
+      to: initial
+        ? routes[CUSTOMISE_NOTIFICATION_CONFIRMATION_PAGE]
+        : `${routes[SHOW_NOTIFICATIONS_PAGE]}`,
     });
   };
 
@@ -181,7 +181,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
   };
 
   const confirmHandler = () => {
-    setLoading(true);
+    setSaveSettingsLoading(true);
 
     try {
       const allPrefs = structuredClone(allStates);
@@ -194,7 +194,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
           app: Appname,
           options: allPrefs,
         },
-        { onComplete: () => setLoading(false) },
+        { onComplete: () => setSaveSettingsLoading(false) },
       );
 
       if (snoozed) {
@@ -240,7 +240,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
       // navigate to final step
       initial && goToNextStep();
     } catch (error) {
-      setLoading(false);
+      setSaveSettingsLoading(false);
 
       _uiEvents.current.next({
         event: NotificationEvents.ShowNotification,
@@ -252,128 +252,118 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
     }
   };
 
-  if (!isLoggedIn) {
-    return navigateTo?.({
-      appName: '@akashaorg/app-notifications',
-      getNavigationUrl: () => routes[CUSTOMIZE_NOTIFICATION_WELCOME_PAGE],
-    });
+  if (!isLoggedIn && !loading) {
+    navigate({ to: routes[CUSTOMISE_NOTIFICATION_WELCOME_PAGE] });
   }
 
   return (
-    <>
-      <Card
-        elevation={'1'}
-        radius={16}
-        padding={'py-2,px-0'}
-        customStyle="h-full md:h-min space-y-4"
-      >
-        <Text variant="h5" align="center" customStyle="pb-2">
-          {initial ? t('Customize Your Notifications') : t('Notifications Settings')}
-        </Text>
-        <Divider customStyle="!mt-0" />
-        {!initial && (
-          <>
-            <Stack direction="column" customStyle="px-6 !my-0 py-2">
-              <>
-                <Stack justify="between" direction="row">
-                  <Text variant="footnotes2">
-                    <>{t('Snooze Notifications')}</>
-                  </Text>
-                  <Toggle
-                    iconChecked={<BellSnoozeIcon />}
-                    iconUnchecked={<BellAlertIcon />}
-                    checked={snoozed}
-                    onChange={snoozeChangeHandler}
-                  />
-                </Stack>
-              </>
-            </Stack>
-            <Divider customStyle="!mt-0" />
-          </>
-        )}
-        <Stack direction="column" customStyle="mx-4">
-          {initial ? (
-            <Text variant="footnotes2" weight="normal" color={{ dark: 'grey6', light: 'grey4' }}>
-              <>
-                {t(
-                  'Choose the notifications that you would like to receive from other applications. Remember, you can change this anytime from the notifications settings.',
-                )}
-              </>
-            </Text>
-          ) : (
-            <Text variant="h6">
-              <>{t('Receiving Notifications')}</>
-            </Text>
-          )}
-          <Checkbox
-            id="receive-all-notifications-checkbox"
-            label={t('I want to receive all types of notifications')}
-            value="I want to receive all types of notifications"
-            name="check-all"
-            isSelected={selected}
-            handleChange={() => {
-              setSelected(!selected);
-              !initial && setIsChanged(true);
-            }}
-            customStyle="ml-2 my-4"
-          />
-        </Stack>
-        <Divider customStyle="!mt-0" />
-        <Stack direction="column" customStyle="min-h-[80%] !mt-0 gap-y-2 pt-2">
-          {Object.keys(allStates).length > 0 &&
-            !Object.keys(allStates).find(key => key === SnoozeOption) &&
-            Object.entries(allStates).map(appState => (
-              <Stack
-                direction="column"
-                key={appState[0].concat(String(Math.round(Math.random() * 100)))}
-              >
-                <Stack direction="row" justify="between" align="center" customStyle="px-6">
-                  <Text variant="h6">{appState[0]}</Text>
-                  <Checkbox
-                    value={appState[0]}
-                    id={appState[0].concat(String(Math.round(Math.random() * 100)))}
-                    isSelected={Boolean(appState[1])}
-                    handleChange={() => changeHandler(appState[0])}
-                    name={appState[0]}
-                    customStyle="mb-4"
-                  />
-                </Stack>
-                <Divider customStyle="!mt-0" />
+    <Card elevation={'1'} radius={16} padding={'py-2,px-0'} customStyle="h-full md:h-min space-y-4">
+      <Text variant="h5" align="center" customStyle="pb-2">
+        {initial ? t('Customise Your Notifications') : t('Notification Settings')}
+      </Text>
+      <Divider customStyle="!mt-0" />
+      {!initial && (
+        <>
+          <Stack direction="column" customStyle="px-6 !my-0 py-2">
+            <>
+              <Stack justify="between" direction="row">
+                <Text variant="footnotes2">
+                  <>{t('Snooze Notifications')}</>
+                </Text>
+                <Toggle
+                  iconChecked={<BellSnoozeIcon />}
+                  iconUnchecked={<BellAlertIcon />}
+                  checked={snoozed}
+                  onChange={snoozeChangeHandler}
+                />
               </Stack>
-            ))}
-        </Stack>
-        {!loading && (
-          <Stack fullWidth direction="row" justify="end" customStyle="space-x-4 pr-2 pb-2 pt-32">
-            {initial ? (
-              <>
-                <Button
-                  variant="text"
-                  label={t('Do it later')}
-                  color="secondaryLight dark:secondaryDark"
-                  onClick={skipHandler}
-                />
-                <Button variant="primary" label={t('Confirm')} onClick={confirmHandler} />
-              </>
-            ) : (
-              <>
-                <Button
-                  variant="text"
-                  label={t('Cancel')}
-                  color="secondaryLight dark:secondaryDark"
-                  onClick={skipHandler}
-                />
-                <Button
-                  variant="primary"
-                  label={t('Update')}
-                  onClick={confirmHandler}
-                  disabled={!isChanged}
-                />
-              </>
-            )}
+            </>
           </Stack>
+          <Divider customStyle="!mt-0" />
+        </>
+      )}
+      <Stack direction="column" customStyle="mx-4">
+        {initial ? (
+          <Text variant="footnotes2" weight="normal" color={{ dark: 'grey6', light: 'grey4' }}>
+            <>
+              {t(
+                'Choose the notifications that you would like to receive from other applications. Remember, you can change this anytime from the notifications settings.',
+              )}
+            </>
+          </Text>
+        ) : (
+          <Text variant="h6">
+            <>{t('Receiving Notifications')}</>
+          </Text>
         )}
-      </Card>
-    </>
+        <Checkbox
+          id="receive-all-notifications-checkbox"
+          label={t('I want to receive all types of notifications')}
+          value="I want to receive all types of notifications"
+          name="check-all"
+          isSelected={selected}
+          handleChange={() => {
+            setSelected(!selected);
+            !initial && setIsChanged(true);
+          }}
+          customStyle="ml-2 my-4"
+        />
+      </Stack>
+      <Divider customStyle="!mt-0" />
+      <Stack direction="column" customStyle="min-h-[80%] !mt-0 gap-y-2 pt-2">
+        {Object.keys(allStates).length > 0 &&
+          !Object.keys(allStates).find(key => key === SnoozeOption) &&
+          Object.entries(allStates).map(appState => (
+            <Stack
+              direction="column"
+              key={appState[0].concat(String(Math.round(Math.random() * 100)))}
+            >
+              <Stack direction="row" justify="between" align="center" customStyle="px-6">
+                <Text variant="h6">{appState[0]}</Text>
+                <Checkbox
+                  value={appState[0]}
+                  id={appState[0].concat(String(Math.round(Math.random() * 100)))}
+                  isSelected={Boolean(appState[1])}
+                  handleChange={() => changeHandler(appState[0])}
+                  name={appState[0]}
+                  customStyle="mb-4"
+                />
+              </Stack>
+              <Divider customStyle="!mt-0" />
+            </Stack>
+          ))}
+      </Stack>
+      {!saveSettingsLoading && (
+        <Stack fullWidth direction="row" justify="end" customStyle="space-x-4 pr-2 pb-2 pt-32">
+          {initial ? (
+            <>
+              <Button
+                variant="text"
+                label={t('Do it later')}
+                color="secondaryLight dark:secondaryDark"
+                onClick={skipHandler}
+              />
+              <Button variant="primary" label={t('Confirm')} onClick={confirmHandler} />
+            </>
+          ) : (
+            <>
+              <Button
+                variant="text"
+                label={t('Cancel')}
+                color="secondaryLight dark:secondaryDark"
+                onClick={skipHandler}
+              />
+              <Button
+                variant="primary"
+                label={t('Update')}
+                onClick={confirmHandler}
+                disabled={!isChanged}
+              />
+            </>
+          )}
+        </Stack>
+      )}
+    </Card>
   );
 };
-export default CustomizeNotificationPage;
+export default CustomiseNotificationPage;

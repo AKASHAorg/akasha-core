@@ -368,10 +368,10 @@ const SearchPage: React.FC<SearchPageProps> = props => {
               titleLabel=""
               bodyLabel={
                 <>
-                  {t('Oops! Looks like there’re no results for the word ')}{' '}
-                  <Text weight="bold">{searchKeyword}</Text> {t('in ')}{' '}
+                  {t('Oops! Looks like there’re no results for the word')}{' '}
+                  <Text weight="bold">{searchKeyword}</Text> {t('in')}{' '}
                   <Text weight="bold">{activeButton}</Text>.{' '}
-                  {t(' Try searching for something else or try a different Category!')}
+                  {t('Try searching for something else or try a different Category!')}
                 </>
               }
               bodyVariant="body1"

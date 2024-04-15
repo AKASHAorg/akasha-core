@@ -4,15 +4,7 @@ import WelcomePage from '../pages/welcome-page';
 import { screen, renderWithAllProviders, act } from '@akashaorg/af-testing';
 
 describe('< WelcomePage /> component', () => {
-  const BaseComponent = (
-    <WelcomePage
-      header="Welcome to the Notification App"
-      description="Get the latest updates about what’s going on with your world. You can personalize your notifications and get only what you want to see!"
-      leftButtonLabel="Skip"
-      rightButtonLabel="Customize your notifications"
-      isLoggedIn={true}
-    />
-  );
+  const BaseComponent = <WelcomePage finalStep={false} />;
   beforeEach(async () => {
     await act(async () => {
       renderWithAllProviders(BaseComponent, {});
@@ -20,6 +12,6 @@ describe('< WelcomePage /> component', () => {
   });
 
   it("should render the notifications app's welcome page", async () => {
-    expect(screen.getByText(/Welcome to the Notification App/)).toBeInTheDocument();
+    expect(screen.getByText(/Uh-oh! You are not connected!/)).toBeInTheDocument();
   });
 });

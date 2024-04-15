@@ -7,7 +7,9 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import routes, { CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE, SHOW_NOTIFICATIONS_PAGE } from '../../routes';
+import routes, { CUSTOMISE_NOTIFICATION_OPTIONS_PAGE, SHOW_NOTIFICATIONS_PAGE } from '../../routes';
+
+import { useNavigate } from '@tanstack/react-router';
 
 export type WelcomePageProps = {
   finalStep?: boolean;
@@ -21,24 +23,25 @@ const WelcomePage: React.FC<WelcomePageProps> = props => {
 
   const { t } = useTranslation('app-notifications');
 
-  const header = finalStep ? t('All done!') : t('Welcome to the Notification App');
+  const navigate = useNavigate();
+
+  const header = finalStep ? t('All Done') : t('Welcome to the Notifications App');
   const description = finalStep
     ? t(
         'You will receive notifications based on your choices now! You can always change that or even pause it from the notifications settings!',
       )
     : t(
-        'Get the latest updates about what’s going on with your world. You can personalize your notifications and get only what you want to see!',
+        `Get the latest updates about what's going on with your world. You can personalize your notifications and get only what you want to see!`,
       );
-
   const welcomeImage = isLoggedIn
     ? '/images/notificationapp-welcome-min.webp'
     : '/images/notificationapp-Notconnected-min.webp';
   const image = finalStep ? '/images/notificationapp-success-min.webp' : welcomeImage;
 
-  const leftButtonLabel = finalStep ? undefined : t('Skip');
+  const leftButtonLabel = finalStep ? undefined : t('Skip this step');
   const rightButtonLabel = finalStep
     ? t('Go to my notifications')
-    : t('Customize your notifications');
+    : t('Customize my notifications');
 
   const { baseRouteName, getRoutingPlugin, uiEvents } = useRootComponentProps();
 
@@ -52,17 +55,11 @@ const WelcomePage: React.FC<WelcomePageProps> = props => {
 
   const goToNextStep = () => {
     // navigate to step 2
-    return navigateTo?.({
-      appName: '@akashaorg/app-notifications',
-      getNavigationUrl: () => routes[CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE],
-    });
+    navigate({ to: routes[CUSTOMISE_NOTIFICATION_OPTIONS_PAGE] });
   };
 
   const goToNotificationsPage = () => {
-    return navigateTo?.({
-      appName: '@akashaorg/app-notifications',
-      getNavigationUrl: () => `${routes[SHOW_NOTIFICATIONS_PAGE]}`,
-    });
+    navigate({ to: routes[SHOW_NOTIFICATIONS_PAGE] });
   };
 
   const connect = () => {
