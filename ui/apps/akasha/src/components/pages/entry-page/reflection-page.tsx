@@ -35,7 +35,7 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
   const wrapperRef = useRef(null);
   const navigate = useNavigate();
   const pendingReflectionsVar = createReactiveVar<ReflectEntryData[]>([]);
-  const { pendingReflections } = usePendingReflections(pendingReflectionsVar);
+
   const entryData = React.useMemo(() => {
     if (reflection && hasOwn(reflection, 'node') && hasOwn(reflection.node, 'id')) {
       return reflection.node;
@@ -82,13 +82,6 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
                   showLoginModal={showLoginModal}
                 />
               </>
-              {pendingReflections
-                .filter(
-                  content => hasOwn(content, 'reflection') && content.reflection === reflectionId,
-                )
-                .map((content, index) => (
-                  <PendingReflect key={`pending-${index}-${reflectionId}`} entryData={content} />
-                ))}
             </>
           }
           reflectionsOf={{ entryId: entryData.id, itemType: EntityTypes.REFLECT }}
