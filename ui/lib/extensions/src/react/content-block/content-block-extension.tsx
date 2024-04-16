@@ -20,6 +20,8 @@ export type ContentBlockExtensionProps = {
   notInstalledTitle: string;
   notInstalledDescription1: string;
   notInstalledDescription2: string;
+  //Cache to prevent re-loading block config with the same block id
+  cacheBlockConfig?: boolean;
   onError?: (error: Error) => void;
 } & (
   | {
@@ -42,6 +44,7 @@ export const ContentBlockExtension: React.FC<ContentBlockExtensionProps> = props
     notInstalledTitle,
     notInstalledDescription1,
     notInstalledDescription2,
+    cacheBlockConfig,
     onError,
     ...remainingProps
   } = props;
@@ -85,7 +88,7 @@ export const ContentBlockExtension: React.FC<ContentBlockExtensionProps> = props
       matchingBlocks.length !== state.parcels.length &&
       !state.isMatched
     ) {
-      resolveConfigs({ matchingBlocks, mode: ContentBlockModes.READONLY })
+      resolveConfigs({ matchingBlocks, mode: ContentBlockModes.READONLY, cache: cacheBlockConfig })
         .then(newBlocks => {
           setState({
             parcels: newBlocks,

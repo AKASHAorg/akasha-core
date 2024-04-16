@@ -439,8 +439,8 @@ useUpdateInterestsMutation.getKey = () => ['UpdateInterests'];
 
 useUpdateInterestsMutation.fetcher = (variables: Types.UpdateInterestsMutationVariables, options?: RequestInit['headers']) => composeDbFetch<Types.UpdateInterestsMutation, Types.UpdateInterestsMutationVariables>(UpdateInterestsDocument, variables, options);
 export const CreateFollowDocument = /*#__PURE__*/ `
-    mutation CreateFollow($i: CreateAkashaFollowInput!) {
-  createAkashaFollow(input: $i) {
+    mutation CreateFollow($i: SetAkashaFollowInput!) {
+  setAkashaFollow(input: $i) {
     document {
       isFollowing
       profile {
@@ -614,9 +614,9 @@ useInfiniteGetFollowDocumentsByDidQuery.getKey = (variables: Types.GetFollowDocu
 ;
 
 useGetFollowDocumentsByDidQuery.fetcher = (variables: Types.GetFollowDocumentsByDidQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetFollowDocumentsByDidQuery, Types.GetFollowDocumentsByDidQueryVariables>(GetFollowDocumentsByDidDocument, variables, options);
-export const CreateAppReleaseDocument = /*#__PURE__*/ `
-    mutation CreateAppRelease($i: CreateAkashaAppReleaseInput!) {
-  createAkashaAppRelease(input: $i) {
+export const SetAppReleaseDocument = /*#__PURE__*/ `
+    mutation SetAppRelease($i: SetAkashaAppReleaseInput!) {
+  setAkashaAppRelease(input: $i) {
     document {
       ...AppReleaseFragmentM
     }
@@ -626,18 +626,18 @@ export const CreateAppReleaseDocument = /*#__PURE__*/ `
     ${AppReleaseFragmentMFragmentDoc}
 ${AkashaAppFragmentMFragmentDoc}
 ${UserProfileFragmentMFragmentDoc}`;
-export const useCreateAppReleaseMutation = <
+export const useSetAppReleaseMutation = <
       TError = unknown,
       TContext = unknown
-    >(options?: UseMutationOptions<Types.CreateAppReleaseMutation, TError, Types.CreateAppReleaseMutationVariables, TContext>) =>
-    useMutation<Types.CreateAppReleaseMutation, TError, Types.CreateAppReleaseMutationVariables, TContext>(
-      ['CreateAppRelease'],
-      (variables?: Types.CreateAppReleaseMutationVariables) => composeDbFetch<Types.CreateAppReleaseMutation, Types.CreateAppReleaseMutationVariables>(CreateAppReleaseDocument, variables)(),
+    >(options?: UseMutationOptions<Types.SetAppReleaseMutation, TError, Types.SetAppReleaseMutationVariables, TContext>) =>
+    useMutation<Types.SetAppReleaseMutation, TError, Types.SetAppReleaseMutationVariables, TContext>(
+      ['SetAppRelease'],
+      (variables?: Types.SetAppReleaseMutationVariables) => composeDbFetch<Types.SetAppReleaseMutation, Types.SetAppReleaseMutationVariables>(SetAppReleaseDocument, variables)(),
       options
     );
-useCreateAppReleaseMutation.getKey = () => ['CreateAppRelease'];
+useSetAppReleaseMutation.getKey = () => ['SetAppRelease'];
 
-useCreateAppReleaseMutation.fetcher = (variables: Types.CreateAppReleaseMutationVariables, options?: RequestInit['headers']) => composeDbFetch<Types.CreateAppReleaseMutation, Types.CreateAppReleaseMutationVariables>(CreateAppReleaseDocument, variables, options);
+useSetAppReleaseMutation.fetcher = (variables: Types.SetAppReleaseMutationVariables, options?: RequestInit['headers']) => composeDbFetch<Types.SetAppReleaseMutation, Types.SetAppReleaseMutationVariables>(SetAppReleaseDocument, variables, options);
 export const UpdateAppReleaseDocument = /*#__PURE__*/ `
     mutation UpdateAppRelease($i: UpdateAkashaAppReleaseInput!) {
   updateAkashaAppRelease(input: $i) {
@@ -663,8 +663,8 @@ useUpdateAppReleaseMutation.getKey = () => ['UpdateAppRelease'];
 
 useUpdateAppReleaseMutation.fetcher = (variables: Types.UpdateAppReleaseMutationVariables, options?: RequestInit['headers']) => composeDbFetch<Types.UpdateAppReleaseMutation, Types.UpdateAppReleaseMutationVariables>(UpdateAppReleaseDocument, variables, options);
 export const CreateAppDocument = /*#__PURE__*/ `
-    mutation CreateApp($i: CreateAkashaAppInput!) {
-  createAkashaApp(input: $i) {
+    mutation CreateApp($i: SetAkashaAppInput!) {
+  setAkashaApp(input: $i) {
     document {
       ...AkashaAppFragmentM
     }

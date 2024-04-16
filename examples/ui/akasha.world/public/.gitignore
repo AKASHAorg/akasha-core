@@ -8,6 +8,8 @@
 !importmap.json
 !icons
 !icons/*.png
+!icons/world
+!icons/world/*.png
 !fonts
 !fonts/*
 !_redirects

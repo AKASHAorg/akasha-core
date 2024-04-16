@@ -133,6 +133,7 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
           <ContentBlockExtension
             blockData={blockData}
             matchingBlocks={matchingBlocks}
+            cacheBlockConfig={true}
             error={contentBlockReq.error?.message ?? ''}
             fetchError={{
               errorTitle: t('Network error occurred'),

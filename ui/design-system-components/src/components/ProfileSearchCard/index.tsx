@@ -39,7 +39,7 @@ const ProfileSearchCard: React.FC<ProfileSearchCardProps> = props => {
   } = props;
 
   return (
-    <Stack align="center" justify="between" customStyle={'py-2'}>
+    <Stack direction="row" align="center" justify="between" customStyle={'py-2'}>
       <ProfileAvatarButton
         onClick={onClickProfile}
         label={profileData.name}

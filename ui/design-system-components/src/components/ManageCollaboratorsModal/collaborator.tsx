@@ -1,8 +1,6 @@
 import React from 'react';
 import { tw } from '@twind/core';
-
 import type { Image, Profile } from '@akashaorg/typings/lib/ui';
-
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -32,7 +30,6 @@ const Collaborator: React.FC<ICollaboratorProps> = props => {
         <Text variant="h5">{profile.name}</Text>
       </div>
       <Button
-        size="lg"
         label={buttonLabel}
         customStyle={`${
           isRed && 'border(errorLight dark:errorDark) text(errorLight dark:errorDark)'

@@ -1,6 +1,4 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-
 import OnboardingSuggestionsCard, {
   OnboardingSuggestionsCardProps,
 } from '../../components/OnboardingSuggestionsCard';
@@ -8,21 +6,26 @@ import OnboardingSuggestionsCard, {
 const meta: Meta<OnboardingSuggestionsCardProps> = {
   title: 'DSComponents/Cards/OnboardingSuggestionsCard',
   component: OnboardingSuggestionsCard,
+  tags: ['autodocs'],
+  argTypes: {
+    topicsLabel: { control: 'text' },
+    peopleLabel: { control: 'text' },
+    transformSource: { action: 'source transformed' },
+  },
 };
 
-export default meta;
 type Story = StoryObj<OnboardingSuggestionsCardProps>;
 
 export const BaseOnboardingSuggestionsCard: Story = {
-  render: () => (
-    <OnboardingSuggestionsCard
-      topicsLabel="TOPICS TO FOLLOW"
-      peopleLabel="PEOPLE TO FOLLOW"
-      transformSource={() => ({
-        src: 'https://placebeard.it/360x360',
-        width: 360,
-        height: 360,
-      })}
-    />
-  ),
+  args: {
+    topicsLabel: 'TOPICS TO FOLLOW',
+    peopleLabel: 'PEOPLE TO FOLLOW',
+    transformSource: () => ({
+      src: 'https://placebeard.it/360x360',
+      width: 360,
+      height: 360,
+    }),
+  },
 };
+
+export default meta;

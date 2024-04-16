@@ -45,8 +45,8 @@
   },
   "devDependencies": {
     "@akashaorg/af-testing": "*",
-    "@akashaorg/typings": "*",
     "@akashaorg/awf-sdk": "*",
+    "@akashaorg/typings": "*",
     "@types/react": "18.0.33",
     "@types/react-dom": "18.0.11",
     "@types/react-router": "5.1.18",

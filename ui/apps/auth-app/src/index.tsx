@@ -22,6 +22,12 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       logo: { type: LogoTypeSource.ICON, value: <GlobeAltIcon /> },
       subRoutes: [],
     },
+    extensions: [
+      {
+        mountsIn: 'topbar_login_button',
+        loadingFn: () => import('./extensions/login-bolt-button'),
+      },
+    ],
     // allow other apps to find this app
     tags: ['auth', 'signin', 'signup'],
   };
