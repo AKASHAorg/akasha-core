@@ -1,4 +1,4 @@
-type AkashaAppRelease @loadModel(id: "kjzl6hvfrbw6c5dwel0ej7ji6vedsbsqa2ll4tvb0spraw1ovj3i9jh0m4kr7cr") {
+type AkashaAppRelease @loadModel(id: "kjzl6hvfrbw6cb03csk8bxuw50irl6m8e0diylhi6euhs9by3ssazl8x5bxhgzj") {
   id: ID!
 }
 
