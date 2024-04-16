@@ -6,10 +6,17 @@ const meta: Meta = {
   title: 'DSCore/Datepicker/DatePicker',
   component: DatePicker,
   tags: ['autodocs'],
+  argTypes: {
+    placeholderLabel: { control: 'text' },
+  },
 };
 
 type Story = StoryObj;
 
-export const Default: Story = {};
+export const Default: Story = {
+  args: {
+    placeholderLabel: 'Select a Date Range',
+  },
+};
 
 export default meta;

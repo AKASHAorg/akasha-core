@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import Button from '../Button';
 import Icon from '../Icon';
 import { ChevronLeftIcon, ChevronRightIcon } from '../Icon/hero-icons-outline';
-import { MONTHS_IN_A_YEAR, DAYS } from './calendarHelpers';
-import { tx } from '@twind/core';
-import { selectedCellStyle, unselectedCellStyle, wrapperStyle } from './MonthSelector';
-import Button from '../Button';
+import Stack from '../Stack';
 import Text from '../Text';
+import { selectedCellStyle, unselectedCellStyle, wrapperStyle } from './month-selector';
+import { MONTHS_IN_A_YEAR, DAYS } from './calendarHelpers';
 
 export interface DateSelectorProps {
   month: number;
@@ -139,117 +139,119 @@ const DateSelector: React.FC<DateSelectorProps> = ({
     setYear(prevMonthYear);
   };
 
-  const applyCellClasses = day => {
+  const applyCellClasses = (day: string) => {
+    const getSelectedDayStyle = () => {
+      if (checkIfDayIsFirstOrSecondDate(day)) {
+        return `${selectedCellStyle} rounded-lg`;
+      } else if (inBetweenDays(day)) {
+        return selectedCellStyle;
+      } else return '';
+    };
+
     const baseStyle = 'text-center w-7';
     const isClickEnabled = isInThePast(day) ? 'pointer-events-none' : 'cursor-pointer';
     const isTodayStyle = isToday(day) ? 'font-bold' : '';
-    const selectedDayStyle = checkIfDayIsFirstOrSecondDate(day)
-      ? `${selectedCellStyle} rounded-lg`
-      : inBetweenDays(day)
-      ? selectedCellStyle
-      : '';
-    return `${unselectedCellStyle} ${isClickEnabled} ${isTodayStyle} ${selectedDayStyle} ${baseStyle}`;
+    const selectedDayStyle = getSelectedDayStyle();
+    return `${baseStyle} ${unselectedCellStyle} ${isClickEnabled} ${isTodayStyle} ${selectedDayStyle}`;
   };
 
   const displayDayTitles = DAYS.map((day, index) => {
     return (
-      <div className={tx('px-1')} key={index}>
-        <div>
-          <Text variant="footnotes2" color={{ light: 'grey4', dark: 'white' }}>
-            {day}
-          </Text>
-        </div>
-      </div>
+      <Stack key={index} padding="px-1">
+        <Text variant="footnotes2" color={{ light: 'grey4', dark: 'white' }}>
+          {day}
+        </Text>
+      </Stack>
     );
   });
 
   const displayCurrentMonthDays = currentMonthDays.map((day, index) => {
     return (
-      <div
-        className={tx(
-          `${inBetweenDays(day) ? 'px-1 bg-secondaryLight dark:bg-secondaryDark' : 'px-1'}
+      <Button key={index} plain={true} onClick={secondDate ? () => deselectDates(day) : null}>
+        <Stack
+          customStyle={`${
+            inBetweenDays(day) ? 'px-1 bg-secondaryLight dark:bg-secondaryDark' : 'px-1'
+          }
                     ${compareDate(day) && 'rounded-l-lg'}
                     ${compareDate(day, secondDate) && 'rounded-r-lg'}
                     mb-1
-                    `,
-        )}
-        key={index}
-        onClick={secondDate ? () => deselectDates(day) : null}
-      >
-        <Button
-          plain={true}
-          onClick={() => {
-            !secondDate ? setSelectedDates(day) : deselectDates;
-          }}
-          customStyle={applyCellClasses(day)}
+                    `}
         >
-          {day}
-        </Button>
-      </div>
+          <Button
+            plain={true}
+            onClick={() => {
+              !secondDate ? setSelectedDates(day) : deselectDates;
+            }}
+            customStyle={applyCellClasses(day)}
+          >
+            {day}
+          </Button>
+        </Stack>
+      </Button>
     );
   });
 
   return (
-    <>
-      <div className={tx(wrapperStyle)}>
-        <div className={tx('flex justify-between items-center')}>
-          <div>
-            <Button onClick={() => getPreviousMonth(month, year)} plain={true}>
-              <Icon icon={<ChevronLeftIcon />} accentColor={true} hover={true} />
-            </Button>
-          </div>
-          <div onClick={handleMonthSelectToggle} className={tx('flex')}>
+    <Stack customStyle={wrapperStyle}>
+      <Stack direction="row" align="center" justify="between">
+        <Stack>
+          <Button onClick={() => getPreviousMonth(month, year)} plain={true}>
+            <Icon icon={<ChevronLeftIcon />} accentColor={true} hover={true} />
+          </Button>
+        </Stack>
+        <Button onClick={handleMonthSelectToggle} plain={true}>
+          <Stack direction="row">
             <Text variant="button-lg" color={{ light: 'black', dark: 'white' }}>
               {MONTHS_IN_A_YEAR[month]}
             </Text>
             <Text variant="button-lg" color={{ light: 'black', dark: 'white' }} customStyle="ml-1">
               {year}
             </Text>
-          </div>
-          <div>
-            <Button onClick={() => getNextMonth(month, year)} plain={true}>
-              <Icon icon={<ChevronRightIcon />} accentColor={true} hover={true} />
-            </Button>
-          </div>
-        </div>
-        <div className={tx('grid grid-cols-7 justify-items-center mt-3 mb-2')}>
-          {displayDayTitles}
-        </div>
-        <div className={tx('grid grid-cols-7')}>
-          {previousMonthDays.map((day, index) => {
-            return (
-              <div className={tx('px-1 mb-1')} key={index}>
-                <div key={index} className={tx('pointer-events-none w-7')}>
-                  <Text
-                    variant="button-md"
-                    color={{ light: 'grey8', dark: 'grey5' }}
-                    customStyle="text-center"
-                  >
-                    {day}
-                  </Text>
-                </div>
-              </div>
-            );
-          })}
-          {displayCurrentMonthDays}
-          {nextMonthDays.map((day, index) => {
-            return (
-              <div className={tx('px-1 mb-1')} key={index}>
-                <div key={index} className={tx('pointer-events-none text-center')}>
-                  <Text
-                    variant="button-md"
-                    color={{ light: 'grey8', dark: 'grey5' }}
-                    customStyle="text-center"
-                  >
-                    {day}
-                  </Text>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    </>
+          </Stack>
+        </Button>
+        <Stack>
+          <Button onClick={() => getNextMonth(month, year)} plain={true}>
+            <Icon icon={<ChevronRightIcon />} accentColor={true} hover={true} />
+          </Button>
+        </Stack>
+      </Stack>
+      <Stack justify="center" customStyle="grid grid-cols-7 mt-3 mb-2">
+        {displayDayTitles}
+      </Stack>
+      <Stack customStyle="grid grid-cols-7">
+        {previousMonthDays.map((day, index) => {
+          return (
+            <Stack key={index} padding="px-1" customStyle="mb-1">
+              <Stack key={index} customStyle="pointer-events-none w-7">
+                <Text
+                  variant="button-md"
+                  color={{ light: 'grey8', dark: 'grey5' }}
+                  customStyle="text-center"
+                >
+                  {day}
+                </Text>
+              </Stack>
+            </Stack>
+          );
+        })}
+        {displayCurrentMonthDays}
+        {nextMonthDays.map((day, index) => {
+          return (
+            <Stack key={index} padding="px-1" customStyle="mb-1">
+              <Stack key={index} customStyle="pointer-events-none text-center">
+                <Text
+                  variant="button-md"
+                  color={{ light: 'grey8', dark: 'grey5' }}
+                  customStyle="text-center"
+                >
+                  {day}
+                </Text>
+              </Stack>
+            </Stack>
+          );
+        })}
+      </Stack>
+    </Stack>
   );
 };
 
