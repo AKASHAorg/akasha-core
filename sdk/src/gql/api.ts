@@ -926,8 +926,8 @@ export const UpdateInterestsDocument = /*#__PURE__*/ gql`
 }
     `;
 export const CreateFollowDocument = /*#__PURE__*/ gql`
-    mutation CreateFollow($i: CreateAkashaFollowInput!) {
-  createAkashaFollow(input: $i) {
+    mutation CreateFollow($i: SetAkashaFollowInput!) {
+  setAkashaFollow(input: $i) {
     document {
       isFollowing
       profile {
@@ -1274,9 +1274,9 @@ export const GetProfileStatsByDidDocument = /*#__PURE__*/ gql`
   }
 }
     ${UserProfileFragmentDoc}`;
-export const CreateAppReleaseDocument = /*#__PURE__*/ gql`
-    mutation CreateAppRelease($i: CreateAkashaAppReleaseInput!) {
-  createAkashaAppRelease(input: $i) {
+export const SetAppReleaseDocument = /*#__PURE__*/ gql`
+    mutation SetAppRelease($i: SetAkashaAppReleaseInput!) {
+  setAkashaAppRelease(input: $i) {
     document {
       ...AppReleaseFragmentM
     }
@@ -1299,8 +1299,8 @@ export const UpdateAppReleaseDocument = /*#__PURE__*/ gql`
 ${AkashaAppFragmentMFragmentDoc}
 ${UserProfileFragmentMFragmentDoc}`;
 export const CreateAppDocument = /*#__PURE__*/ gql`
-    mutation CreateApp($i: CreateAkashaAppInput!) {
-  createAkashaApp(input: $i) {
+    mutation CreateApp($i: SetAkashaAppInput!) {
+  setAkashaApp(input: $i) {
     document {
       ...AkashaAppFragmentM
     }
@@ -1559,8 +1559,8 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     GetProfileStatsByDid(variables: Types.GetProfileStatsByDidQueryVariables, options?: C): Promise<Types.GetProfileStatsByDidQuery> {
       return requester<Types.GetProfileStatsByDidQuery, Types.GetProfileStatsByDidQueryVariables>(GetProfileStatsByDidDocument, variables, options) as Promise<Types.GetProfileStatsByDidQuery>;
     },
-    CreateAppRelease(variables: Types.CreateAppReleaseMutationVariables, options?: C): Promise<Types.CreateAppReleaseMutation> {
-      return requester<Types.CreateAppReleaseMutation, Types.CreateAppReleaseMutationVariables>(CreateAppReleaseDocument, variables, options) as Promise<Types.CreateAppReleaseMutation>;
+    SetAppRelease(variables: Types.SetAppReleaseMutationVariables, options?: C): Promise<Types.SetAppReleaseMutation> {
+      return requester<Types.SetAppReleaseMutation, Types.SetAppReleaseMutationVariables>(SetAppReleaseDocument, variables, options) as Promise<Types.SetAppReleaseMutation>;
     },
     UpdateAppRelease(variables: Types.UpdateAppReleaseMutationVariables, options?: C): Promise<Types.UpdateAppReleaseMutation> {
       return requester<Types.UpdateAppReleaseMutation, Types.UpdateAppReleaseMutationVariables>(UpdateAppReleaseDocument, variables, options) as Promise<Types.UpdateAppReleaseMutation>;
