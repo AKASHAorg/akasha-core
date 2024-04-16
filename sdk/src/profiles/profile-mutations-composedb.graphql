@@ -102,8 +102,8 @@ mutation UpdateInterests($i: UpdateAkashaProfileInterestsInput!){
   }
 }
 
-mutation CreateFollow($i: CreateAkashaFollowInput!){
-  createAkashaFollow(input: $i){
+mutation CreateFollow($i: SetAkashaFollowInput!){
+  setAkashaFollow(input: $i){
     document {
       isFollowing
       profile {

@@ -40,7 +40,7 @@ import getSDK from '@akashaorg/awf-sdk';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 
 // @TODO: replace this with actual data
-const TEST_APP_VERSION_ID = 'kjzl6kcym7w8y7tdwpzjep46ufcjyc2vaq671z0a1lxrcjq7ogu42ta3vh1w2dm';
+const TEST_APP_VERSION_ID = 'k2t6wzhkhabz5ja6dy72fezemlrdc5akqebksfpjyxkyap6g4fqqimcpuf7bix';
 
 const isImgUrl = async url => {
   const response = await fetch(url, { method: 'HEAD' });

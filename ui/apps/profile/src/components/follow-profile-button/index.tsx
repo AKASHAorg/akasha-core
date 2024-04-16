@@ -59,8 +59,8 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
 
   const [createFollowMutation, { loading: createFollowLoading }] = useCreateFollowMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
-    onCompleted: async ({ createAkashaFollow }) => {
-      const document = createAkashaFollow.document;
+    onCompleted: async ({ setAkashaFollow }) => {
+      const document = setAkashaFollow.document;
       onCompleted(document.id, document.isFollowing, document.profile?.name);
     },
   });
@@ -107,7 +107,6 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
             id: followId,
             content: {
               isFollowing: true,
-              profileID,
             },
           },
         },
@@ -128,7 +127,6 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
           id: followId,
           content: {
             isFollowing: false,
-            profileID,
           },
         },
       },
