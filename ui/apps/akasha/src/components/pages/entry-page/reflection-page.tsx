@@ -16,8 +16,6 @@ import {
 import { useTranslation } from 'react-i18next';
 import { EntityTypes, type ReflectEntryData } from '@akashaorg/typings/lib/ui';
 import { ReflectionPreview } from '@akashaorg/ui-lib-feed';
-import { usePendingReflections } from '@akashaorg/ui-awf-hooks/lib/use-pending-reflections';
-import { PendingReflect } from '../../reflect-editor/pending-reflect';
 import { useNavigate } from '@tanstack/react-router';
 import { GetReflectionByIdQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 
