@@ -4,6 +4,7 @@ import {
   createRootRouteWithContext,
   createRoute,
   createRouter,
+  redirect,
 } from '@tanstack/react-router';
 import { CreateRouter, RouterContext } from '@akashaorg/typings/lib/ui';
 import ErrorComponent from './error-component';
@@ -44,6 +45,14 @@ import routes, {
 
 const rootRoute = createRootRouteWithContext<RouterContext>()({
   component: Outlet,
+});
+
+const defaultRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/',
+  beforeLoad: () => {
+    throw redirect({ to: routes[HOME], replace: true });
+  },
 });
 
 const applicationsRoute = createRoute({
@@ -168,6 +177,7 @@ const resignConfirmationRoute = createRoute({
 });
 
 const routeTree = rootRoute.addChildren([
+  defaultRoute,
   applicationsRoute.addChildren([
     becomeModeratorRoute,
     selfApplicationsRoute,
