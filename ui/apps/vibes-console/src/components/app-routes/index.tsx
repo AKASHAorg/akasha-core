@@ -22,6 +22,7 @@ import {
   RespondAdminPage,
   ResignRolePage,
   ResignConfirmationPage,
+  ReviewItemPage,
 } from '../../pages';
 import routes, {
   APPLICATIONS,
@@ -38,6 +39,7 @@ import routes, {
   RESPOND_ADMIN,
   RESIGN_MODERATOR,
   RESIGN_CONFIRMATION,
+  baseDashboardUrl,
 } from '../../routes';
 
 const rootRoute = createRootRouteWithContext<RouterContext>()({
@@ -108,6 +110,15 @@ const dashboardRoute = createRoute({
   },
 });
 
+const reviewItemRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: `${baseDashboardUrl}/$action/$itemType/$id`,
+  component: () => {
+    const { action } = reviewItemRoute.useParams();
+    return <ReviewItemPage action={action} />;
+  },
+});
+
 const settingsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[SETTINGS],
@@ -166,6 +177,7 @@ const routeTree = rootRoute.addChildren([
     applicationDetailRoute,
   ]),
   dashboardRoute.addChildren([
+    reviewItemRoute,
     settingsRoute,
     editMaxApplicantsRoute,
     assignAdminRoute,

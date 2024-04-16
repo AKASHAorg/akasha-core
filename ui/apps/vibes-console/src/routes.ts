@@ -1,5 +1,6 @@
 export const HOME = 'Applications Center';
 export const DASHBOARD = 'Content Review Hub';
+export const REVIEW_ITEM = 'Review Item';
 export const SETTINGS = 'Settings';
 export const EDIT_MAX_MODERATORS = 'Edit Max Moderators';
 export const ASSIGN_ADMIN = 'Assign New Admin';
@@ -26,6 +27,7 @@ export default {
   [WITHDRAW_APPLICATION]: `${baseApplicationsUrl}/my-applications/$applicationId/withdraw`,
 
   [DASHBOARD]: baseDashboardUrl,
+  [REVIEW_ITEM]: `${baseDashboardUrl}/$action/$itemType/$id`,
   [SETTINGS]: `${baseDashboardUrl}/settings`,
   [EDIT_MAX_MODERATORS]: `${baseDashboardUrl}/settings/edit`,
   [ASSIGN_ADMIN]: `${baseDashboardUrl}/settings/assign-admin`,

@@ -10,5 +10,6 @@ export * from './my-applications';
 export * from './resign-confirmation';
 export * from './resign-moderator-role';
 export * from './respond-admin';
+export * from './review-item';
 export * from './self-application-detail';
 export * from './settings';

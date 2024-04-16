@@ -4,7 +4,7 @@ import { useNavigate } from '@tanstack/react-router';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { DashboardEntry, DashboardHeader } from '../components/dashboard';
 import { generateReportEntries } from '../utils';
-import routes, { SETTINGS } from '../routes';
+import routes, { REVIEW_ITEM, SETTINGS } from '../routes';
 
 export const Dashboard: React.FC<unknown> = () => {
   const navigate = useNavigate();
@@ -12,9 +12,16 @@ export const Dashboard: React.FC<unknown> = () => {
 
   const entries = generateReportEntries();
 
-  const handleButtonClick = () => {
+  const handleSettingsButtonClick = () => {
     navigate({
       to: routes[SETTINGS],
+    });
+  };
+
+  const handleButtonClick = (action: string, itemType: string, id: string) => () => {
+    navigate({
+      to: routes[REVIEW_ITEM],
+      params: { action, itemType, id },
     });
   };
 
@@ -24,7 +31,7 @@ export const Dashboard: React.FC<unknown> = () => {
         titleLabel={t('Content Review Hub')}
         inputPlaceholderLabel={t('Search for Case#')}
         buttonLabel={t('Search')}
-        onButtonClick={handleButtonClick}
+        onSettingsButtonClick={handleSettingsButtonClick}
       />
 
       <Stack spacing="gap-y-3">
@@ -37,8 +44,9 @@ export const Dashboard: React.FC<unknown> = () => {
             viewProfileLabel={t('View Profile')}
             reportedForLabels={{ first: t('A'), second: t('has been reported for') }}
             lastReportLabel={t('Last Report')}
-            keepButtonLabel={t('Keep')}
-            suspendButtonLabel={t('Suspend')}
+            primaryButtonLabel={t('Keep')}
+            secondaryButtonLabel={e.itemType === 'Profile' ? t('Suspend') : t('Delist')}
+            onButtonClick={handleButtonClick}
           />
         ))}
       </Stack>

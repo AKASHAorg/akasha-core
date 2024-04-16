@@ -9,3 +9,4 @@ export * from './header';
 export * from './item-renderer';
 export * from './moderator-list-item';
 export * from './respond-admin';
+export * from './review-item';

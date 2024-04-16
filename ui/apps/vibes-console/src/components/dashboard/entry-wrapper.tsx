@@ -5,14 +5,14 @@ import ReportReasonPill from '@akashaorg/design-system-components/lib/components
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Antenna, Profile } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
-import { DashboardItemRenderer } from './item-renderer';
+import { DashboardItemRenderer, ItemType } from './item-renderer';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
 
 export type ReportEntry = {
   id: string;
   appName: string;
   nsfw: boolean;
-  itemType: 'Profile' | 'Beam' | 'Reply';
+  itemType: ItemType;
   primaryReason: string;
   reportCount: number;
   lastReportDate: Date;
@@ -25,8 +25,9 @@ export type DashboardEntryProps = {
   viewProfileLabel: string;
   reportedForLabels: { first: string; second: string };
   lastReportLabel: string;
-  keepButtonLabel: string;
-  suspendButtonLabel: string;
+  primaryButtonLabel: string;
+  secondaryButtonLabel: string;
+  onButtonClick: (action: string, itemType: ItemType, id: string) => () => void;
 };
 
 export const DashboardEntry: React.FC<DashboardEntryProps> = props => {
@@ -37,11 +38,16 @@ export const DashboardEntry: React.FC<DashboardEntryProps> = props => {
     viewProfileLabel,
     reportedForLabels,
     lastReportLabel,
-    keepButtonLabel,
-    suspendButtonLabel,
+    primaryButtonLabel,
+    secondaryButtonLabel,
+    onButtonClick,
   } = props;
 
   const textColor = { light: 'grey4', dark: 'grey7' } as const;
+
+  const buttonStyle = 'w-(full md:[9.25rem])';
+
+  const secondaryButtonAction = entry.itemType === 'Profile' ? 'Suspend' : 'Delist';
 
   return (
     <Card padding={0}>
@@ -120,10 +126,16 @@ export const DashboardEntry: React.FC<DashboardEntryProps> = props => {
       >
         <Button
           variant="secondary"
-          label={suspendButtonLabel}
-          customStyle="w-(full md:[9.25rem])"
+          label={secondaryButtonLabel}
+          customStyle={buttonStyle}
+          onClick={onButtonClick(secondaryButtonAction, entry.itemType, entry.id)}
         />
-        <Button variant="primary" label={keepButtonLabel} customStyle="w-(full md:[9.25rem])" />
+        <Button
+          variant="primary"
+          label={primaryButtonLabel}
+          customStyle={buttonStyle}
+          onClick={onButtonClick('Keep', entry.itemType, entry.id)}
+        />
       </Stack>
     </Card>
   );
