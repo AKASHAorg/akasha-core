@@ -36,7 +36,7 @@ type WorldIconProps = {
   fallback: React.ReactElement;
 };
 
-type EnrichedEvent = Event & {
+type ThemeEvent = Event & {
   detail: { theme: 'Light-Theme' | 'Dark-Theme' };
 };
 
@@ -51,7 +51,7 @@ const WorldIcon = (props: WorldIconProps) => {
   } = useRootComponentProps();
 
   useEffect(() => {
-    const handleSetTheme = (ev: EnrichedEvent) => setCurTheme(ev.detail.theme);
+    const handleSetTheme = (ev: ThemeEvent) => setCurTheme(ev.detail.theme);
     window.addEventListener(ThemingEvents.ThemeChange, handleSetTheme);
   }, []);
 
