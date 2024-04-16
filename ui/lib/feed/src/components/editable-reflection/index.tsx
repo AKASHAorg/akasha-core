@@ -33,7 +33,7 @@ import ErrorBoundary, {
   ErrorBoundaryProps,
 } from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 
-const MAX_EDIT_TIME_IN_MINUTES = 5000;
+const MAX_EDIT_TIME_IN_MINUTES = 10;
 
 const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> = props => {
   const { entryData, reflectToId, ...rest } = props;
@@ -48,7 +48,6 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
   const [editorState, setEditorState] = useState(null);
 
   const [isReflecting, setIsReflecting] = useState(true);
-  Object.assign(window, { decodeb64SlateContent });
 
   const sdk = getSDK();
   const beamId = entryData.beamID;
