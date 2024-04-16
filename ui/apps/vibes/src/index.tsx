@@ -7,13 +7,13 @@ import {
   LogoTypeSource,
 } from '@akashaorg/typings/lib/ui';
 import React from 'react';
-import { Vibe } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
+import { Vibes } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import routes, { HISTORY, HOME, MODERATORS } from './routes';
 
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
   loadingFn: () => import('./components'),
   mountsIn: opts.layoutConfig?.applicationSlotId,
-  logo: { type: LogoTypeSource.ICON, value: <Vibe /> },
+  logo: { type: LogoTypeSource.ICON, value: <Vibes /> },
   i18nNamespace: ['app-vibes'],
   routes: {
     ...routes,
@@ -21,7 +21,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   menuItems: {
     label: 'Vibes',
     type: MenuItemType.App,
-    logo: { type: LogoTypeSource.ICON, value: <Vibe /> },
+    logo: { type: LogoTypeSource.ICON, value: <Vibes /> },
     area: [MenuItemAreaType.AppArea, MenuItemAreaType.OtherArea],
     subRoutes: [
       {
