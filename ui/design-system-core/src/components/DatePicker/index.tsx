@@ -75,7 +75,7 @@ const DatePicker: React.FC<TDatePickerProps> = props => {
   });
 
   return (
-    <Stack fullWidth={true} customStyle="relative md:w-80">
+    <Stack testId="date-picker" fullWidth={true} customStyle="relative md:w-80">
       <Button
         plain={true}
         onClick={() => {
