@@ -114,8 +114,8 @@ const reviewItemRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${baseDashboardUrl}/$action/$itemType/$id`,
   component: () => {
-    const { action } = reviewItemRoute.useParams();
-    return <ReviewItemPage action={action} />;
+    const { action, itemType, id } = reviewItemRoute.useParams();
+    return <ReviewItemPage action={action} itemType={itemType} id={id} />;
   },
 });
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
@@ -9,16 +9,24 @@ import routes, { DASHBOARD } from '../routes';
 
 export type ReviewItemPageProps = {
   action: string;
+  itemType: string;
+  id: string;
 };
 
 export const ReviewItemPage: React.FC<ReviewItemPageProps> = props => {
-  const { action } = props;
+  const { action, itemType } = props;
+
+  const [selectedPeriod, setSelectedPeriod] = useState('');
 
   const navigate = useNavigate();
   const { t } = useTranslation('app-vibes');
   const { getRoutingPlugin, uiEvents } = useRootComponentProps();
 
   const navigateTo = getRoutingPlugin().navigateTo;
+
+  const handleRadioChange = (value: string) => {
+    setSelectedPeriod(value);
+  };
 
   const handleCancelButtonClick = () => {
     navigate({
@@ -58,12 +66,28 @@ export const ReviewItemPage: React.FC<ReviewItemPageProps> = props => {
 
   return (
     <ReviewItem
-      section1Label={t('The content was reported for violating the following Code of Conduct')}
-      section2Label={t('Please explain your decision')}
+      section1Label={t(
+        'The {{itemType}} was reported for violating the following Code of Conduct',
+        { itemType: itemType === 'Profile' ? 'user' : 'content' },
+      )}
+      section3Label={t('Please explain your decision')}
+      {...(itemType === 'Profile' &&
+        action === 'Suspend' && {
+          section2Label: t('Select suspension period'),
+          radioButtons: [
+            { label: t('3 days'), value: '3 days' },
+            { label: t('2 weeks'), value: '2 weeks' },
+            { label: t('Indefinitely'), value: 'Indefinitely' },
+            { label: t('Other'), value: 'Other' },
+          ],
+          selectedPeriod,
+        })}
+      datePlaceholderLabel={t('Select a Date Range')}
       reasonPlaceholderLabel={t('Write down some reason here')}
       subtitleLabels={footnoteLabels}
       cancelButtonLabel={t('Cancel')}
       confirmButtonLabel={t('{{action}}', { action })}
+      handleRadioChange={handleRadioChange}
       onLinkClick={handleSubtitleLinkClick}
       onCancelButtonClick={handleCancelButtonClick}
       onConfirmButtonClick={handleConfirmButtonClick}
