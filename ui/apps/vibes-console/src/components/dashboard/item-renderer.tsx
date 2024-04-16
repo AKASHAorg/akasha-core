@@ -14,8 +14,10 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 
+export type ItemType = 'Profile' | 'Beam' | 'Reflection';
+
 export type DashboardItemRendererProps = {
-  itemType: 'Profile' | 'Beam' | 'Reply';
+  itemType: ItemType;
   viewProfileLabel: string;
   nsfw: boolean;
   nsfwLabel: string;

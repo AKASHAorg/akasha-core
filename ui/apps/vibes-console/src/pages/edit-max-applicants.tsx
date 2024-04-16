@@ -38,8 +38,8 @@ export const EditMaxApplicants: React.FC<unknown> = () => {
       )}
       maxApplicantsLabel={t('Moderator Max')}
       maxApplicantsPlaceholderLabel={t('Please enter maximum number of applicants')}
-      cancelButtonLabel="Cancel"
-      confirmButtonLabel="Update"
+      cancelButtonLabel={t('Cancel')}
+      confirmButtonLabel={t('Update')}
       confirmButtonVariant="secondary"
       onCancelButtonClick={handleCancelButtonClick}
       onConfirmButtonClick={handleConfirmButtonClick}

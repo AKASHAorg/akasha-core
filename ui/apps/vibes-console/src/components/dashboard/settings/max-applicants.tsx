@@ -26,6 +26,9 @@ export const MaxApplicants: React.FC<MaxApplicantsProps> = props => {
           label={`${maxApplicantsLabel}.`}
           placeholder={maxApplicantsPlaceholderLabel}
           type="text"
+          onChange={() => {
+            /** */
+          }}
         />
       </Stack>
     </PageHeader>

@@ -33,8 +33,8 @@ export const ResignRolePage: React.FC<unknown> = () => {
       textLine2Label={t(
         'If you are 100% sure about your decision, you can go ahead and confirm your resignation',
       )}
-      cancelButtonLabel="Cancel"
-      confirmButtonLabel="Confirm Resignation"
+      cancelButtonLabel={t('Cancel')}
+      confirmButtonLabel={t('Confirm Resignation')}
       onCancelButtonClick={handleCancelButtonClick}
       onConfirmButtonClick={handleConfirmButtonClick}
     />

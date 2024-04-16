@@ -121,7 +121,7 @@ export const generateModeratorApplicationHistory = () =>
 
 type TReportEntry = {
   appName: string;
-  itemType: 'Profile' | 'Beam' | 'Reply';
+  itemType: 'Profile' | 'Beam' | 'Reflection';
   id: string;
   nsfw?: boolean;
 };
@@ -129,7 +129,7 @@ type TReportEntry = {
 const reportEntries: TReportEntry[] = [
   { appName: 'Profile', itemType: 'Profile', id: 'P-17078' },
   { appName: 'Antenna', itemType: 'Beam', id: 'B-19089' },
-  { appName: 'Antenna', itemType: 'Reply', id: 'R-19090' },
+  { appName: 'Antenna', itemType: 'Reflection', id: 'R-19090' },
   { appName: 'Profile', itemType: 'Profile', id: 'P-17079', nsfw: true },
 ];
 
