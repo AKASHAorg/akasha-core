@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Vibe = (props: React.SVGProps<SVGSVGElement>) => (
+const Vibes = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     width="26"
     height="26"
@@ -18,4 +18,4 @@ const Vibe = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-export default Vibe;
+export default Vibes;

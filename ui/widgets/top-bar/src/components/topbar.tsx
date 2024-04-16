@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useTheme } from '@akashaorg/ui-awf-hooks';
+import { ThemingEvents } from '@akashaorg/typings/lib/ui';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import {
@@ -33,14 +35,40 @@ export interface ITopbarProps {
 type WorldIconProps = {
   fallback: React.ReactElement;
 };
+
+type ThemeEvent = Event & {
+  detail: { theme: 'Light-Theme' | 'Dark-Theme' };
+};
+
 const WorldIcon = (props: WorldIconProps) => {
-  const { worldConfig } = useRootComponentProps();
-  if (worldConfig.worldIcon) {
-    const smallImagePath = `${worldConfig.worldIcon.basePath}${worldConfig.worldIcon.small}${worldConfig.worldIcon.extension}`;
-    const mediumImagePath = `${worldConfig.worldIcon.basePath}${worldConfig.worldIcon.medium}${worldConfig.worldIcon.extension}`;
+  const { fallback } = props;
+
+  const { theme } = useTheme();
+  const [curTheme, setCurTheme] = useState(theme);
+
+  const {
+    worldConfig: { worldIcon },
+  } = useRootComponentProps();
+
+  useEffect(() => {
+    const handleSetTheme = (ev: ThemeEvent) => setCurTheme(ev.detail.theme);
+    window.addEventListener(ThemingEvents.ThemeChange, handleSetTheme);
+  }, []);
+
+  if (worldIcon) {
+    const isLightTheme = curTheme === 'Light-Theme';
+
+    const smallImagePath = `${worldIcon.basePath}${worldIcon.small}${
+      isLightTheme ? worldIcon.darkModeSuffix : ''
+    }${worldIcon.extension}`;
+
+    const mediumImagePath = `${worldIcon.basePath}${worldIcon.medium}${
+      isLightTheme ? worldIcon.darkModeSuffix : ''
+    }${worldIcon.extension}`;
+
     return (
       <img
-        alt=""
+        alt="world logo"
         height="1.5rem"
         className="mb-1"
         src={`${smallImagePath}`}
@@ -48,7 +76,7 @@ const WorldIcon = (props: WorldIconProps) => {
       />
     );
   }
-  return <Icon icon={props.fallback} solid={true} customStyle="w-18 h-7" />;
+  return <Icon icon={fallback} solid={true} customStyle="w-18 h-7" />;
 };
 
 const Topbar: React.FC<ITopbarProps> = props => {
@@ -79,6 +107,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
 
   const customStyle =
     'flex-row justify-between items-center py-1.5 px-2 space-x-4 xs:(fixed top-0 z-8)';
+
   return (
     <Card customStyle={customStyle}>
       <Stack direction="row" spacing="gap-x-2">

@@ -37,7 +37,8 @@ import Telegram from './telegram';
 import TextIcon from './text-icon';
 import Twitter from './twitter';
 import Underline from './underline';
-import Vibe from './vibe';
+import Vibes from './vibes';
+import VibesConsole from './vibes-console';
 import Walletconnect from './walletconnect';
 import Widget from './widget';
 import Blocks from './blocks';
@@ -84,7 +85,8 @@ export type CustomIconTypes = Extract<
   | 'TextIcon'
   | 'Twitter'
   | 'Underline'
-  | 'Vibe'
+  | 'Vibes'
+  | 'VibesConsole'
   | 'Walletconnect'
   | 'Widget'
   | 'Blocks'
@@ -128,7 +130,8 @@ export {
   TextIcon,
   Twitter,
   Underline,
-  Vibe,
+  Vibes,
+  VibesConsole,
   Walletconnect,
   Widget,
   Blocks,
