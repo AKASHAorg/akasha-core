@@ -88,6 +88,7 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
       if (isReflectOfReflection) {
         await apolloClient.refetchQueries({ include: [GetReflectReflectionsDocument] });
       }
+
       analyticsActions.trackEvent({
         category: AnalyticsCategories.REFLECT,
         action: 'Reflect Updated',
