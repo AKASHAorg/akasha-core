@@ -2,7 +2,7 @@ import { IUserState, IUserStore } from '@akashaorg/typings/lib/ui/store';
 import { genUser } from './user';
 
 const INITIAL_STATE: IUserState = {
-  authenticatedDid: null,
+  authenticatedDID: null,
   authenticatedProfile: null,
   authenticationError: null,
   authenticatedProfileError: null,
@@ -30,7 +30,7 @@ export const getUserStore = (initialState: IUserState = INITIAL_STATE): IUserSto
       setState({ ...state, isAuthenticating: true });
       setTimeout(
         () =>
-          setState({ ...state, authenticatedProfile: genUser(fakeDID), authenticatedDid: fakeDID }),
+          setState({ ...state, authenticatedProfile: genUser(fakeDID), authenticatedDID: fakeDID }),
         1000,
       );
     },
@@ -42,7 +42,7 @@ export const getUserStore = (initialState: IUserState = INITIAL_STATE): IUserSto
       setState({ ...state, isAuthenticating: true });
       setTimeout(
         () =>
-          setState({ ...state, authenticatedProfile: genUser(fakeDID), authenticatedDid: fakeDID }),
+          setState({ ...state, authenticatedProfile: genUser(fakeDID), authenticatedDID: fakeDID }),
         1000,
       );
     },

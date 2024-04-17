@@ -6,7 +6,7 @@ type LoginInput = {
 };
 
 export interface IUserState {
-  authenticatedDid: string;
+  authenticatedDID: string;
   authenticatedProfile: unknown;
   authenticatedProfileError: Error;
   authenticationError: Error;

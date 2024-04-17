@@ -10,7 +10,7 @@ import { filter } from 'rxjs/operators';
 const store = createStore();
 
 const INITIAL_STATE: IUserState = {
-  authenticatedDid: null,
+  authenticatedDID: null,
   authenticatedProfile: null,
   authenticatedProfileError: null,
   isAuthenticating: false,
@@ -122,18 +122,18 @@ export class UserStore implements IUserStore {
       )
       .subscribe({
         next: async ({ data }: { data: CurrentUser }) => {
-          const authenticatedDid = data.id;
-          if (authenticatedDid) {
+          const authenticatedDID = data.id;
+          if (authenticatedDID) {
             let profileInfo = null;
             let authenticatedProfileError = null;
             try {
-              profileInfo = await this.getProfileInfo(authenticatedDid);
+              profileInfo = await this.getProfileInfo(authenticatedDID);
             } catch (error) {
               authenticatedProfileError = error;
             }
             store.set(userAtom, prev => ({
               ...prev,
-              authenticatedDid,
+              authenticatedDID,
               authenticatedProfile: profileInfo,
               authenticatedProfileError,
               isAuthenticating: false,

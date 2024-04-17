@@ -40,7 +40,7 @@ const SidebarComponent: React.FC<unknown> = () => {
   const [activeOption, setActiveOption] = useState<IMenuItem | null>(null);
   const [clickedOptions, setClickedOptions] = useState<{ name: string; route: IMenuItem }[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const authenticatedDID = user.authenticatedDid;
+  const authenticatedDID = user.authenticatedDID;
   const isLoggedIn = !!authenticatedDID;
 
   const [dismissed, dismissCard] = useDismissedCard('@akashaorg/ui-widget-sidebar_cta-card');

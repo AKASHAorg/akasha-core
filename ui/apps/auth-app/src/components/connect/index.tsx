@@ -10,7 +10,7 @@ import { CONNECT } from '../../routes';
 const Connect: React.FC<unknown> = () => {
   const { worldConfig, getRoutingPlugin, userStore } = useRootComponentProps();
   const user = useSyncExternalStore(userStore.subscribe, userStore.getSnapshot);
-  const authenticatedDID = user.authenticatedDid;
+  const authenticatedDID = user.authenticatedDID;
   const isLoggedIn = !!authenticatedDID;
   const routingPlugin = useRef(getRoutingPlugin());
 
