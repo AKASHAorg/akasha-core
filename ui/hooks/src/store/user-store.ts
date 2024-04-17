@@ -1,4 +1,4 @@
-import getSDK, { AWF_SDK } from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/awf-sdk';
 import { AUTH_EVENTS, CurrentUser, WEB3_EVENTS } from '@akashaorg/typings/lib/sdk';
 import type { IPluginsMap } from '@akashaorg/typings/lib/ui';
 import type { IUserState, IUserStore } from '@akashaorg/typings/lib/ui/store';
@@ -24,12 +24,11 @@ const userAtom: WritableAtom<
 > = atomWithImmer<IUserState>(INITIAL_STATE);
 
 export class UserStore implements IUserStore {
-  private sdk: AWF_SDK;
+  private sdk = getSDK();
   private static instance: UserStore;
   private plugins: Record<string, IPluginsMap>;
   private constructor(plugins: Record<string, IPluginsMap>) {
     this.plugins = plugins;
-    this.sdk = getSDK();
     this.checkLogoutEvent();
     this.restoreSession();
   }
