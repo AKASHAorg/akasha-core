@@ -16,7 +16,7 @@ const INITIAL_STATE: IUserState = {
   isAuthenticating: false,
   authenticationError: null,
   isLoadingInfo: false,
-  info: null,
+  info: {},
   infoError: null,
 };
 
@@ -84,10 +84,11 @@ export class UserStore implements IUserStore {
     try {
       const profileInfo = await this.getProfileInfo(profileDid, appName);
       const state = store.get(userAtom);
+
       store.set(userAtom, prev => ({
         ...prev,
         /*@Todo: handle info for different profile apps */
-        info: state.info.set(profileDid, profileInfo),
+        info: { ...state.info, [profileDid]: profileInfo },
         isLoadingInfo: false,
       }));
     } catch (error) {

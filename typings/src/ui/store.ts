@@ -11,7 +11,7 @@ export interface IUserState {
   authenticatedProfileError: Error;
   authenticationError: Error;
   isAuthenticating: boolean;
-  info: Map<string, unknown>;
+  info: Record<string, unknown>;
   isLoadingInfo: boolean;
   infoError: Error;
 }
