@@ -1,13 +1,8 @@
-import React, { Suspense, useEffect, useMemo, useState } from 'react';
+import React, { Suspense, useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import { useTranslation } from 'react-i18next';
 import { EventTypes, MenuItemAreaType, IMenuItem } from '@akashaorg/typings/lib/ui';
 import { AUTH_EVENTS, WEB3_EVENTS } from '@akashaorg/typings/lib/sdk/events';
-import {
-  useLogout,
-  useDismissedCard,
-  useRootComponentProps,
-  useGetLogin,
-} from '@akashaorg/ui-awf-hooks';
+import { useDismissedCard, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { startMobileSidebarHidingBreakpoint } from '@akashaorg/design-system-core/lib/utils/breakpoints';
 import getSDK from '@akashaorg/awf-sdk';
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
@@ -33,10 +28,11 @@ const SidebarComponent: React.FC<unknown> = () => {
     uiEvents,
     worldConfig: { defaultApps, socialLinks },
     getRoutingPlugin,
+    userStore,
   } = useRootComponentProps();
 
   const { t } = useTranslation('ui-widget-sidebar');
-  const { data } = useGetLogin();
+  const user = useSyncExternalStore(userStore.subscribe, userStore.getSnapshot);
   const [isMobile, setIsMobile] = useState(
     window.matchMedia(startMobileSidebarHidingBreakpoint).matches,
   );
@@ -44,9 +40,8 @@ const SidebarComponent: React.FC<unknown> = () => {
   const [activeOption, setActiveOption] = useState<IMenuItem | null>(null);
   const [clickedOptions, setClickedOptions] = useState<{ name: string; route: IMenuItem }[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const authenticatedDID = data?.id;
-  const isLoggedIn = !!data?.id;
-  const { logOut } = useLogout();
+  const authenticatedDID = user.authenticatedDid;
+  const isLoggedIn = !!authenticatedDID;
 
   const [dismissed, dismissCard] = useDismissedCard('@akashaorg/ui-widget-sidebar_cta-card');
 
@@ -168,7 +163,6 @@ const SidebarComponent: React.FC<unknown> = () => {
 
   function handleLoginClick() {
     handleNavigation('@akashaorg/app-auth-ewa', '/');
-
     if (isMobile) {
       handleSidebarClose();
     }
@@ -176,8 +170,7 @@ const SidebarComponent: React.FC<unknown> = () => {
 
   function handleLogout() {
     setIsLoading(true);
-    logOut();
-
+    userStore.logout();
     setIsLoading(false);
   }
 
