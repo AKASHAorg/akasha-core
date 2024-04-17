@@ -1,37 +1,7 @@
+import getSDK from '@akashaorg/awf-sdk';
 import { Logger } from '@akashaorg/awf-sdk';
-import { Comment } from '@akashaorg/typings/lib/sdk/graphql-types';
-import type { PostResultFragment } from '@akashaorg/typings/lib/sdk/graphql-operation-types';
 import type { BeamEntryData, ReflectEntryData, SlateDescendant } from '@akashaorg/typings/lib/ui';
 import { AkashaBeam, AkashaReflect } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import getSDK from '@akashaorg/awf-sdk';
-
-export const PROVIDER_AKASHA = 'AkashaApp';
-export const PROPERTY_SLATE_CONTENT = 'slateContent';
-export const PROPERTY_TEXT_CONTENT = 'textContent';
-export const PROPERTY_LINK_PREVIEW = 'linkPreview';
-export const PROPERTY_IMAGES = 'images';
-
-export type EntryPublishObject = {
-  data: PostResultFragment['content'];
-  post: {
-    tags: PostResultFragment['tags'];
-    mentions: string[];
-    quotes: string[];
-  };
-
-  quotes: PostResultFragment['quotes'];
-};
-
-export type CommentPublishObject = {
-  data: Comment['content'];
-  comment: {
-    tags: PostResultFragment['tags'];
-    mentions: string[];
-    quotes: string[];
-    postID: string;
-    replyTo: string;
-  };
-};
 
 /**
  * Utility to decode base64 slate content

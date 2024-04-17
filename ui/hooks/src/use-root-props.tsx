@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { RootComponentProps, RootExtensionProps } from '@akashaorg/typings/lib/ui';
 import { hasOwn } from './utils/has-own';
+import { UserStore } from './store/user-store';
 
 const RootComponentPropsContext = React.createContext(null);
 const DEFAULT_ROUTING_PLUGIN = '@akashaorg/app-routing';
@@ -57,6 +58,7 @@ const useRootComponentProps = <T extends RootComponentProps>() => {
     getTranslationPlugin,
     getExtensionsPlugin,
     getContext,
+    userStore: UserStore.getInstance(ctx.plugins),
     ...ctx,
   };
 };

@@ -5,7 +5,7 @@ import {
   MenuItemAreaType,
   LogoTypeSource,
 } from '@akashaorg/typings/lib/ui';
-
+import { ProfilePlugin } from './plugins/profile-plugin';
 import routes, { BEAMS, EDIT, FOLLOWERS, FOLLOWING, INTERESTS } from './routes';
 /**
  * All plugins must export an object like this:
@@ -46,3 +46,9 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     rootRoute: '',
   },
 });
+
+export const getPlugin = async () => {
+  return {
+    profile: new ProfilePlugin(),
+  };
+};
