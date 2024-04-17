@@ -1,16 +1,18 @@
-import React, { useEffect, useRef, useSyncExternalStore } from 'react';
+import React, { useEffect, useRef } from 'react';
 import ChooseProvider from './choose-provider';
 import ConnectWallet from './connect-wallet';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import { Routes, Route } from 'react-router-dom';
-import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { EthProviders } from '@akashaorg/typings/lib/sdk';
 import { CONNECT } from '../../routes';
 
 const Connect: React.FC<unknown> = () => {
-  const { worldConfig, getRoutingPlugin, userStore } = useRootComponentProps();
-  const user = useSyncExternalStore(userStore.subscribe, userStore.getSnapshot);
-  const authenticatedDID = user.authenticatedDID;
+  const { worldConfig, getRoutingPlugin } = useRootComponentProps();
+  const {
+    data: { authenticatedDID, isLoadingInfo, authenticatedProfile, authenticationError },
+    userStore,
+  } = useAkashaStore();
   const isLoggedIn = !!authenticatedDID;
   const routingPlugin = useRef(getRoutingPlugin());
 
@@ -18,8 +20,8 @@ const Connect: React.FC<unknown> = () => {
     const searchParam = new URLSearchParams(location.search);
 
     // if user is logged in, do not show the connect page
-    if (isLoggedIn && !user.isLoadingInfo) {
-      if (!user.authenticatedProfile) {
+    if (isLoggedIn && !isLoadingInfo) {
+      if (!authenticatedProfile) {
         routingPlugin.current?.navigateTo({
           appName: '@akashaorg/app-profile',
           getNavigationUrl: () => `/${authenticatedDID}/edit`,
@@ -33,14 +35,7 @@ const Connect: React.FC<unknown> = () => {
         },
       });
     }
-  }, [
-    isLoggedIn,
-    authenticatedDID,
-    worldConfig.homepageApp,
-    user.isLoadingInfo,
-    user.info,
-    user.authenticatedProfile,
-  ]);
+  }, [isLoggedIn, authenticatedDID, worldConfig.homepageApp, isLoadingInfo, authenticatedProfile]);
 
   const handleDisconnect = () => {
     userStore.logout();
@@ -51,7 +46,7 @@ const Connect: React.FC<unknown> = () => {
   };
 
   const handleSignIn = provider => {
-    userStore.login(provider);
+    userStore.login({ provider });
   };
 
   return (
@@ -66,7 +61,7 @@ const Connect: React.FC<unknown> = () => {
               onSignIn={handleSignIn}
               onDisconnect={handleDisconnect}
               worldName={worldConfig.title}
-              signInError={user.authenticationError}
+              signInError={authenticationError}
             />
           }
         />

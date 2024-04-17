@@ -5,22 +5,26 @@ type LoginInput = {
   checkRegistered?: boolean;
 };
 
-export interface IUserState {
+export interface IGetUserInfo {
+  profileDid: string;
+}
+
+export interface IUserState<T> {
   authenticatedDID: string;
-  authenticatedProfile: unknown;
+  authenticatedProfile: T;
   authenticatedProfileError: Error;
   authenticationError: Error;
   isAuthenticating: boolean;
-  info: Record<string, unknown>;
+  info: Record<string, T>;
   isLoadingInfo: boolean;
   infoError: Error;
 }
 
-export interface IUserStore {
+export interface IUserStore<T> {
   login({ provider, checkRegistered }: LoginInput): void;
   logout(): void;
-  getUserInfo(profileDid: string, appName?: string): void;
+  getUserInfo({ profileDid }: IGetUserInfo): void;
   restoreSession(): void;
   subscribe(listener: () => void): () => void;
-  getSnapshot(): IUserState;
+  getSnapshot(): IUserState<T>;
 }

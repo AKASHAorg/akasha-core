@@ -8,7 +8,6 @@ import type i18n from 'i18next';
 import type { IPluginsMap } from './plugins';
 import type { WorldConfig, QueryStringType, LayoutConfig } from './app-loader';
 import type { ILogger } from '../sdk/log';
-import type { IUserStore } from './store';
 
 export interface RootComponentProps {
   activeWhen?: { path: string };
@@ -29,7 +28,6 @@ export interface RootComponentProps {
   parseQueryString: (queryString: string) => QueryStringType;
   encodeAppName: (name: string) => string;
   decodeAppName: (name: string) => string;
-  userStore?: IUserStore;
   children?: React.ReactNode;
 }
 

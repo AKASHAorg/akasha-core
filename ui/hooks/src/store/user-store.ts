@@ -1,15 +1,13 @@
 import getSDK from '@akashaorg/awf-sdk';
 import { AUTH_EVENTS, CurrentUser, WEB3_EVENTS } from '@akashaorg/typings/lib/sdk';
-import type { IPluginsMap } from '@akashaorg/typings/lib/ui';
-import type { IUserState, IUserStore } from '@akashaorg/typings/lib/ui/store';
-import type { WritableDraft } from 'immer/dist/internal';
-import { createStore, type WritableAtom } from 'jotai';
+import type { IGetUserInfo, IUserState, IUserStore } from '@akashaorg/typings/lib/ui/store';
+import { createStore } from 'jotai';
 import { atomWithImmer } from 'jotai-immer';
 import { filter } from 'rxjs/operators';
 
 const store = createStore();
 
-const INITIAL_STATE: IUserState = {
+const INITIAL_STATE = {
   authenticatedDID: null,
   authenticatedProfile: null,
   authenticatedProfileError: null,
@@ -20,33 +18,30 @@ const INITIAL_STATE: IUserState = {
   infoError: null,
 };
 
-const userAtom: WritableAtom<
-  IUserState,
-  [IUserState | ((draft: WritableDraft<IUserState>) => IUserState)],
-  void
-> = atomWithImmer<IUserState>(INITIAL_STATE);
+type GetProfileInfo<T> = (props: IGetUserInfo) => Promise<T>;
 
-export class UserStore implements IUserStore {
+export class UserStore<T> implements IUserStore<T> {
   private sdk = getSDK();
-  private static instance: UserStore;
-  private plugins: Record<string, IPluginsMap>;
-  private constructor(plugins: Record<string, IPluginsMap>) {
-    this.plugins = plugins;
+  private static instance = null;
+  private getProfileInfo: GetProfileInfo<T>;
+  private userAtom = atomWithImmer<IUserState<T>>(INITIAL_STATE);
+  private constructor(getProfileInfo: GetProfileInfo<T>) {
+    this.getProfileInfo = getProfileInfo;
     this.restoreSession();
     this.handleSignInEvent();
     this.handleLogoutEvent();
   }
 
-  static getInstance(plugins: Record<string, IPluginsMap>): UserStore {
+  static getInstance<T>(getProfileInfo: GetProfileInfo<T>): UserStore<T> {
     if (!UserStore.instance) {
-      UserStore.instance = new UserStore(plugins);
+      UserStore.instance = new UserStore<T>(getProfileInfo);
     }
     return UserStore.instance;
   }
 
-  login({ provider, checkRegistered = false }) {
+  login = ({ provider, checkRegistered = false }) => {
     try {
-      store.set(userAtom, prev => ({
+      store.set(this.userAtom, prev => ({
         ...prev,
         isAuthenticating: true,
       }));
@@ -55,52 +50,42 @@ export class UserStore implements IUserStore {
         checkRegistered,
       });
     } catch (error) {
-      store.set(userAtom, prev => ({
+      store.set(this.userAtom, prev => ({
         ...prev,
         authenticationError: error,
         isAuthenticating: false,
       }));
     }
-  }
+  };
 
-  logout() {
+  logout = () => {
     this.sdk.api.auth.signOut();
-    store.set(userAtom, () => INITIAL_STATE);
-  }
+    store.set(this.userAtom, () => INITIAL_STATE);
+  };
 
-  private getProfileInfo(profileDid: string, appName = '@akashaorg/app-profile') {
-    const getProfileInfo = this.plugins?.[appName]?.profile?.getProfileInfo;
-    if (getProfileInfo) {
-      return getProfileInfo(profileDid);
-    }
-    return null;
-  }
-
-  async getUserInfo(profileDid: string, appName = '@akashaorg/app-profile') {
-    store.set(userAtom, prev => ({
+  getUserInfo = async ({ profileDid }: IGetUserInfo) => {
+    store.set(this.userAtom, prev => ({
       ...prev,
       isLoadingInfo: true,
     }));
     try {
-      const profileInfo = await this.getProfileInfo(profileDid, appName);
-      const state = store.get(userAtom);
-
-      store.set(userAtom, prev => ({
+      const profileInfo = await this.getProfileInfo({ profileDid });
+      const state = store.get(this.userAtom);
+      store.set(this.userAtom, prev => ({
         ...prev,
-        /*@Todo: handle info for different profile apps */
         info: { ...state.info, [profileDid]: profileInfo },
         isLoadingInfo: false,
       }));
     } catch (error) {
-      store.set(userAtom, prev => ({
+      store.set(this.userAtom, prev => ({
         ...prev,
         infoError: error,
         isLoadingInfo: false,
       }));
     }
-  }
+  };
 
-  handleLogoutEvent() {
+  handleLogoutEvent = () => {
     this.sdk.api.globalChannel
       .pipe(
         filter(payload => {
@@ -109,12 +94,12 @@ export class UserStore implements IUserStore {
       )
       .subscribe({
         next: () => {
-          store.set(userAtom, () => INITIAL_STATE);
+          store.set(this.userAtom, () => INITIAL_STATE);
         },
       });
-  }
+  };
 
-  handleSignInEvent() {
+  handleSignInEvent = () => {
     this.sdk.api.globalChannel
       .pipe(
         filter(payload => {
@@ -128,11 +113,11 @@ export class UserStore implements IUserStore {
             let profileInfo = null;
             let authenticatedProfileError = null;
             try {
-              profileInfo = await this.getProfileInfo(authenticatedDID);
+              profileInfo = await this.getProfileInfo({ profileDid: authenticatedDID });
             } catch (error) {
               authenticatedProfileError = error;
             }
-            store.set(userAtom, prev => ({
+            store.set(this.userAtom, prev => ({
               ...prev,
               authenticatedDID,
               authenticatedProfile: profileInfo,
@@ -142,30 +127,30 @@ export class UserStore implements IUserStore {
           }
         },
       });
-  }
+  };
 
-  restoreSession() {
+  restoreSession = () => {
     try {
-      store.set(userAtom, prev => ({
+      store.set(this.userAtom, prev => ({
         ...prev,
         isAuthenticating: true,
       }));
       this.sdk.api.auth.getCurrentUser();
     } catch (error) {
-      store.set(userAtom, prev => ({
+      store.set(this.userAtom, prev => ({
         ...prev,
         authenticationError: error,
         isAuthenticating: false,
       }));
     }
-  }
+  };
 
-  subscribe(listener: () => void) {
-    const subscription = store.sub(userAtom, listener);
+  subscribe = (listener: () => void) => {
+    const subscription = store.sub(this.userAtom, listener);
     return () => subscription();
-  }
+  };
 
-  getSnapshot() {
-    return store.get(userAtom);
-  }
+  getSnapshot = () => {
+    return store.get(this.userAtom);
+  };
 }

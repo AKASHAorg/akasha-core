@@ -4,7 +4,6 @@ import { genWorldConfig } from './world-config';
 import { uiEventsMock } from '../mocks/uiEvents';
 import { ReleaseInfo } from '@akashaorg/typings/lib/sdk';
 import { Subject } from 'rxjs';
-import { getUserStore } from './store';
 
 export const genAppConfig = (
   overrides?: Partial<IAppConfig & { name: string }>,
@@ -55,7 +54,6 @@ export const genAppProps = (): RootComponentProps & {
   plugins: {},
   baseRouteName: '',
   domElement: null,
-  userStore: getUserStore(),
   encodeAppName: name => name,
   decodeAppName: name => name,
   getModalFromParams: () => ({ name: 'test-modal' }),

@@ -1,8 +1,8 @@
-import React, { Suspense, useEffect, useMemo, useState, useSyncExternalStore } from 'react';
+import React, { Suspense, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { EventTypes, MenuItemAreaType, IMenuItem } from '@akashaorg/typings/lib/ui';
 import { AUTH_EVENTS, WEB3_EVENTS } from '@akashaorg/typings/lib/sdk/events';
-import { useDismissedCard, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useAkashaStore, useDismissedCard, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { startMobileSidebarHidingBreakpoint } from '@akashaorg/design-system-core/lib/utils/breakpoints';
 import getSDK from '@akashaorg/awf-sdk';
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
@@ -28,11 +28,14 @@ const SidebarComponent: React.FC<unknown> = () => {
     uiEvents,
     worldConfig: { defaultApps, socialLinks },
     getRoutingPlugin,
-    userStore,
   } = useRootComponentProps();
 
+  const {
+    data: { authenticatedDID },
+    userStore,
+  } = useAkashaStore();
+
   const { t } = useTranslation('ui-widget-sidebar');
-  const user = useSyncExternalStore(userStore.subscribe, userStore.getSnapshot);
   const [isMobile, setIsMobile] = useState(
     window.matchMedia(startMobileSidebarHidingBreakpoint).matches,
   );
@@ -40,7 +43,6 @@ const SidebarComponent: React.FC<unknown> = () => {
   const [activeOption, setActiveOption] = useState<IMenuItem | null>(null);
   const [clickedOptions, setClickedOptions] = useState<{ name: string; route: IMenuItem }[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const authenticatedDID = user.authenticatedDID;
   const isLoggedIn = !!authenticatedDID;
 
   const [dismissed, dismissCard] = useDismissedCard('@akashaorg/ui-widget-sidebar_cta-card');

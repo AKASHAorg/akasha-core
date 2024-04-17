@@ -1,4 +1,4 @@
-import React, { useEffect, useSyncExternalStore } from 'react';
+import React, { useEffect } from 'react';
 import ReactDOMClient from 'react-dom/client';
 import singleSpaReact from 'single-spa-react';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
@@ -6,11 +6,12 @@ import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBou
 import ProfileMiniCard from '@akashaorg/design-system-components/lib/components/ProfileMiniCard';
 import MiniProfileWidgetLoader from '@akashaorg/design-system-components/lib/components/Loaders/mini-profile-widget-loader';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import { AkashaProfile, RootComponentProps } from '@akashaorg/typings/lib/ui';
+import { RootComponentProps } from '@akashaorg/typings/lib/ui';
 import {
   getFollowList,
   hasOwn,
   transformSource,
+  useAkashaStore,
   useProfileStats,
   useRootComponentProps,
   withProviders,
@@ -36,12 +37,11 @@ type ProfileCardWidgetProps = {
 const ProfileCardWidget: React.FC<ProfileCardWidgetProps> = props => {
   const { beamId, reflectionId } = props;
   const { t } = useTranslation('ui-widget-mini-profile');
-  const { plugins, logger, userStore } = useRootComponentProps();
+  const { plugins, logger } = useRootComponentProps();
   const {
-    authenticatedDID,
-    info,
-    isLoadingInfo: authorProfileLoading,
-  } = useSyncExternalStore(userStore.subscribe, userStore.getSnapshot);
+    data: { authenticatedDID, info, isLoadingInfo: authorProfileLoading },
+    userStore,
+  } = useAkashaStore();
   const { data: beam } = useGetBeamByIdQuery({ variables: { id: beamId }, skip: !beamId });
   const { data: reflection } = useGetReflectionByIdQuery({
     variables: { id: reflectionId },
@@ -57,11 +57,11 @@ const ProfileCardWidget: React.FC<ProfileCardWidgetProps> = props => {
 
   useEffect(() => {
     if (authorId) {
-      userStore.getUserInfo(authorId);
+      userStore.getUserInfo({ profileDid: authorId });
     }
   }, [authorId, userStore]);
 
-  const authorProfileData = authorId ? (info[authorId] as AkashaProfile) : null;
+  const authorProfileData = authorId ? info[authorId] : null;
 
   const { data: stats, loading: statsLoading } = useProfileStats(authorId);
 
