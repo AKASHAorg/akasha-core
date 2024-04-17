@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { genAppProps } from '@akashaorg/af-testing';
+import { genAppProps, getUserInfo, getUserStore } from '@akashaorg/af-testing';
 import * as useRootComponentProps from '@akashaorg/ui-awf-hooks/lib/use-root-props';
+import * as useAkashaStore from '@akashaorg/ui-awf-hooks/lib/store/use-akasha-store';
 
 require('@testing-library/jest-dom/extend-expect');
 
@@ -62,4 +63,8 @@ jest.mock('@twind/core', () => {
   };
 });
 
-jest.spyOn(useRootComponentProps, 'useRootComponentProps').mockReturnValue(genAppProps());
+jest.spyOn(useRootComponentProps, 'useRootComponentProps').mockReturnValue({ ...genAppProps() });
+
+jest
+  .spyOn(useAkashaStore, 'useAkashaStore')
+  .mockReturnValue({ userStore: getUserStore(), data: getUserInfo() });
