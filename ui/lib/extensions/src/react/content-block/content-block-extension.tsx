@@ -17,6 +17,7 @@ export type ContentBlockExtensionProps = {
   blockRef?: React.RefObject<BlockInstanceMethods>;
   fetchError?: BlockError;
   contentLoadError?: BlockError;
+  installButtonLabel: string;
   notInstalledTitle: string;
   notInstalledDescription1: string;
   notInstalledDescription2: string;
@@ -41,6 +42,7 @@ export const ContentBlockExtension: React.FC<ContentBlockExtensionProps> = props
     blockRef,
     fetchError,
     contentLoadError,
+    installButtonLabel,
     notInstalledTitle,
     notInstalledDescription1,
     notInstalledDescription2,
@@ -171,13 +173,13 @@ export const ContentBlockExtension: React.FC<ContentBlockExtensionProps> = props
 
   return (
     <>
-      {!state.parcels.length && !state.isMatched && (
+      {!state.parcels.length && !state.isMatched && !appInfo && (
         <Stack fullWidth={true} spacing="gap-y-1" customStyle="mb-2">
           <TextLine width="w-full" animated />
           <TextLine width="w-2/3" animated />
         </Stack>
       )}
-      {!state.parcels.length && state.isMatched && appInfo && (
+      {!state.parcels.length && !state.isMatched && appInfo && (
         <Stack
           spacing="gap-y-2"
           padding="p-4"
@@ -188,7 +190,7 @@ export const ContentBlockExtension: React.FC<ContentBlockExtensionProps> = props
             <Text variant="button-sm">
               {appInfo.displayName} {notInstalledTitle}
             </Text>
-            <Button variant="text" label={'Install'} customStyle="ml-auto" />
+            <Button variant="text" label={installButtonLabel} customStyle="ml-auto" />
           </Stack>
           <Text variant="footnotes2" weight="normal">
             {notInstalledDescription1} {appInfo.displayName} {notInstalledDescription2}

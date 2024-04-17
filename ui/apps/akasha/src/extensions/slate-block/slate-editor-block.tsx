@@ -1,11 +1,4 @@
-import React, {
-  RefObject,
-  useCallback,
-  useImperativeHandle,
-  useRef,
-  useState,
-  useMemo,
-} from 'react';
+import React, { RefObject, useCallback, useImperativeHandle, useRef, useState } from 'react';
 import EditorBox from '@akashaorg/design-system-components/lib/components/Editor';
 import {
   encodeSlateToBase64,

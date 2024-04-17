@@ -30,6 +30,7 @@ export const Header: React.FC<PropsWithChildren<HeaderProps>> = props => {
       justify={uiState === 'editor' ? 'between' : 'center'}
       direction="row"
       align="center"
+      customStyle="rounded-t-2xl"
     >
       <Text variant="h4">{renderTitle()}</Text>
       {children}

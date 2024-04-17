@@ -143,6 +143,7 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
               errorTitle: t('Content not loaded correctly'),
               errorDescription: t('Unable to load content, please try again later.'),
             }}
+            installButtonLabel={t('Install')}
             notInstalledTitle={t('not installed')}
             notInstalledDescription1={t('Please install')}
             notInstalledDescription2={t('to view this content.')}
