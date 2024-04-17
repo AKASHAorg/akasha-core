@@ -11,10 +11,13 @@ const store = createStore();
 
 const INITIAL_STATE: IUserState = {
   authenticatedDid: null,
+  authenticatedProfile: null,
+  authenticatedProfileError: null,
   isAuthenticating: false,
   authenticationError: null,
   isLoadingInfo: false,
   info: null,
+  infoError: null,
 };
 
 const userAtom: WritableAtom<
@@ -29,8 +32,9 @@ export class UserStore implements IUserStore {
   private plugins: Record<string, IPluginsMap>;
   private constructor(plugins: Record<string, IPluginsMap>) {
     this.plugins = plugins;
-    this.checkLogoutEvent();
     this.restoreSession();
+    this.handleSignInEvent();
+    this.handleLogoutEvent();
   }
 
   static getInstance(plugins: Record<string, IPluginsMap>): UserStore {
@@ -40,23 +44,16 @@ export class UserStore implements IUserStore {
     return UserStore.instance;
   }
 
-  async login({ provider, checkRegistered = false }) {
+  login({ provider, checkRegistered = false }) {
     try {
       store.set(userAtom, prev => ({
         ...prev,
         isAuthenticating: true,
       }));
-      const resp = await this.sdk.api.auth.signIn({
+      this.sdk.api.auth.signIn({
         provider,
         checkRegistered,
       });
-      if (resp.data) {
-        store.set(userAtom, prev => ({
-          ...prev,
-          authenticatedDid: resp.data.id,
-          isAuthenticating: false,
-        }));
-      }
     } catch (error) {
       store.set(userAtom, prev => ({
         ...prev,
@@ -84,15 +81,25 @@ export class UserStore implements IUserStore {
       ...prev,
       isLoadingInfo: true,
     }));
-    const profileInfo = await this.getProfileInfo(profileDid, appName);
-    store.set(userAtom, prev => ({
-      ...prev,
-      info: profileInfo,
-      isLoadingInfo: false,
-    }));
+    try {
+      const profileInfo = await this.getProfileInfo(profileDid, appName);
+      const state = store.get(userAtom);
+      store.set(userAtom, prev => ({
+        ...prev,
+        /*@Todo: handle info for different profile apps */
+        info: state.info.set(profileDid, profileInfo),
+        isLoadingInfo: false,
+      }));
+    } catch (error) {
+      store.set(userAtom, prev => ({
+        ...prev,
+        infoError: error,
+        isLoadingInfo: false,
+      }));
+    }
   }
 
-  checkLogoutEvent() {
+  handleLogoutEvent() {
     this.sdk.api.globalChannel
       .pipe(
         filter(payload => {
@@ -106,28 +113,43 @@ export class UserStore implements IUserStore {
       });
   }
 
-  async restoreSession() {
+  handleSignInEvent() {
+    this.sdk.api.globalChannel
+      .pipe(
+        filter(payload => {
+          return payload.event === AUTH_EVENTS.SIGN_IN;
+        }),
+      )
+      .subscribe({
+        next: async ({ data }: { data: CurrentUser }) => {
+          const authenticatedDid = data.id;
+          if (authenticatedDid) {
+            let profileInfo = null;
+            let authenticatedProfileError = null;
+            try {
+              profileInfo = await this.getProfileInfo(authenticatedDid);
+            } catch (error) {
+              authenticatedProfileError = error;
+            }
+            store.set(userAtom, prev => ({
+              ...prev,
+              authenticatedDid,
+              authenticatedProfile: profileInfo,
+              authenticatedProfileError,
+              isAuthenticating: false,
+            }));
+          }
+        },
+      });
+  }
+
+  restoreSession() {
     try {
       store.set(userAtom, prev => ({
         ...prev,
         isAuthenticating: true,
       }));
-      await this.sdk.api.auth.getCurrentUser();
-      this.sdk.api.globalChannel
-        .pipe(
-          filter(payload => {
-            return payload.event === AUTH_EVENTS.SIGN_IN;
-          }),
-        )
-        .subscribe({
-          next: ({ data }: { data: CurrentUser }) => {
-            store.set(userAtom, prev => ({
-              ...prev,
-              authenticatedDid: data.id,
-              isAuthenticating: false,
-            }));
-          },
-        });
+      this.sdk.api.auth.getCurrentUser();
     } catch (error) {
       store.set(userAtom, prev => ({
         ...prev,

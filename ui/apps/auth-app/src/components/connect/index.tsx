@@ -10,29 +10,16 @@ import { CONNECT } from '../../routes';
 const Connect: React.FC<unknown> = () => {
   const { worldConfig, getRoutingPlugin, userStore } = useRootComponentProps();
   const user = useSyncExternalStore(userStore.subscribe, userStore.getSnapshot);
-  const userInfoCalled = useRef(false);
   const authenticatedDID = user.authenticatedDid;
   const isLoggedIn = !!authenticatedDID;
   const routingPlugin = useRef(getRoutingPlugin());
 
   useEffect(() => {
-    if (authenticatedDID) {
-      userStore.getUserInfo(authenticatedDID);
-    }
-  }, [authenticatedDID, userStore]);
-
-  useEffect(() => {
-    if (user.isLoadingInfo) {
-      userInfoCalled.current = true;
-    }
-  }, [user.isLoadingInfo]);
-
-  useEffect(() => {
     const searchParam = new URLSearchParams(location.search);
 
     // if user is logged in, do not show the connect page
-    if (isLoggedIn && userInfoCalled.current && !user.isLoadingInfo) {
-      if (!user.info) {
+    if (isLoggedIn && !user.isLoadingInfo) {
+      if (!user.authenticatedProfile) {
         routingPlugin.current?.navigateTo({
           appName: '@akashaorg/app-profile',
           getNavigationUrl: () => `/${authenticatedDID}/edit`,
@@ -46,7 +33,14 @@ const Connect: React.FC<unknown> = () => {
         },
       });
     }
-  }, [isLoggedIn, authenticatedDID, worldConfig.homepageApp, user.isLoadingInfo, user.info]);
+  }, [
+    isLoggedIn,
+    authenticatedDID,
+    worldConfig.homepageApp,
+    user.isLoadingInfo,
+    user.info,
+    user.authenticatedProfile,
+  ]);
 
   const handleDisconnect = () => {
     userStore.logout();

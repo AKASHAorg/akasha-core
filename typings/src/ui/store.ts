@@ -7,10 +7,13 @@ type LoginInput = {
 
 export interface IUserState {
   authenticatedDid: string;
-  isAuthenticating: boolean;
+  authenticatedProfile: unknown;
+  authenticatedProfileError: Error;
   authenticationError: Error;
-  info: unknown;
+  isAuthenticating: boolean;
+  info: Map<string, unknown>;
   isLoadingInfo: boolean;
+  infoError: Error;
 }
 
 export interface IUserStore {
