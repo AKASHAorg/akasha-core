@@ -42,8 +42,11 @@ const ProfileCardWidget: React.FC<ProfileCardWidgetProps> = props => {
     data: { authenticatedDID, info, isLoadingInfo: authorProfileLoading },
     userStore,
   } = useAkashaStore();
-  const { data: beam } = useGetBeamByIdQuery({ variables: { id: beamId }, skip: !beamId });
-  const { data: reflection } = useGetReflectionByIdQuery({
+  const { data: beam, loading: beamLoading } = useGetBeamByIdQuery({
+    variables: { id: beamId },
+    skip: !beamId,
+  });
+  const { data: reflection, loading: reflectionLoading } = useGetReflectionByIdQuery({
     variables: { id: reflectionId },
     skip: !reflectionId,
   });
@@ -52,6 +55,8 @@ const ProfileCardWidget: React.FC<ProfileCardWidgetProps> = props => {
 
   // set data based on beam or reflect page
   const data = beamId ? beam : reflection;
+
+  const dataLoading = beamId ? beamLoading : reflectionLoading;
 
   const authorId = data?.node && hasOwn(data.node, 'author') ? data?.node?.author.id : '';
 
@@ -103,7 +108,7 @@ const ProfileCardWidget: React.FC<ProfileCardWidgetProps> = props => {
       <div>
         {(beamId || reflectionId) && (
           <>
-            {authorProfileLoading && <MiniProfileWidgetLoader />}
+            {(authorProfileLoading || dataLoading) && <MiniProfileWidgetLoader />}
             {authorProfileData && (
               <ProfileMiniCard
                 profileData={authorProfileData}
