@@ -7,13 +7,17 @@ import { AkashaProfile } from '@akashaorg/typings/lib/ui';
 import { IGetUserInfo } from '@akashaorg/typings/lib/ui/store';
 
 export class ProfilePlugin {
-  private apolloClient: ApolloClient<object>;
+  #apolloClient: ApolloClient<object>;
   constructor() {
-    this.apolloClient = getSDK().services.gql.queryClient;
+    this.#apolloClient = getSDK().services.gql.queryClient;
   }
-  private getProfileInfo = async ({ profileDid }: IGetUserInfo) => {
+
+  /**
+   * Fetch AKASHA profile info
+   */
+  #getProfileInfo = async ({ profileDid }: IGetUserInfo) => {
     try {
-      const profileQuery = await this.apolloClient.query<GetProfileByDidQuery>({
+      const profileQuery = await this.#apolloClient.query<GetProfileByDidQuery>({
         query: GetProfileByDidDocument,
         variables: {
           id: profileDid,
@@ -34,7 +38,11 @@ export class ProfilePlugin {
       throw new Error((error as unknown as Error).message);
     }
   };
+
+  /**
+   * Get the user store for AKASHA profile app
+   */
   get userStore() {
-    return UserStore.getInstance<AkashaProfile>(this.getProfileInfo);
+    return UserStore.getInstance<AkashaProfile>(this.#getProfileInfo);
   }
 }

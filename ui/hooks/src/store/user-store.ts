@@ -7,50 +7,64 @@ import { filter } from 'rxjs/operators';
 
 const store = createStore();
 
-const INITIAL_STATE = {
-  authenticatedDID: null,
-  authenticatedProfile: null,
-  authenticatedProfileError: null,
-  isAuthenticating: false,
-  authenticationError: null,
-  isLoadingInfo: false,
-  info: {},
-  infoError: null,
-};
-
 type GetProfileInfo<T> = (props: IGetUserInfo) => Promise<T>;
 
+/**
+ * Singleton store for managing login, logout, session restoration and fetching profile.
+ * It uses jotai to manage the store
+ */
 export class UserStore<T> implements IUserStore<T> {
-  private sdk = getSDK();
-  private static instance = null;
-  private getProfileInfo: GetProfileInfo<T>;
-  private userAtom = atomWithImmer<IUserState<T>>(INITIAL_STATE);
+  #initialState: IUserState<T> = {
+    authenticatedDID: null,
+    authenticatedProfile: null,
+    authenticatedProfileError: null,
+    isAuthenticating: false,
+    authenticationError: null,
+    isLoadingInfo: false,
+    info: {},
+    infoError: null,
+  };
+  #sdk = getSDK();
+  static #instance = null;
+  #getProfileInfo: GetProfileInfo<T>;
+  //
+  #userAtom = atomWithImmer<IUserState<T>>(this.#initialState);
+
+  /**
+   * Prevent singleton store from being instantiated outside of this class
+   */
   private constructor(getProfileInfo: GetProfileInfo<T>) {
-    this.getProfileInfo = getProfileInfo;
+    this.#getProfileInfo = getProfileInfo;
     this.restoreSession();
-    this.handleSignInEvent();
+    this.handleLogInEvent();
     this.handleLogoutEvent();
   }
 
+  /**
+   * Get the singleton instance of the user store
+   */
   static getInstance<T>(getProfileInfo: GetProfileInfo<T>): UserStore<T> {
-    if (!UserStore.instance) {
-      UserStore.instance = new UserStore<T>(getProfileInfo);
+    if (!UserStore.#instance) {
+      UserStore.#instance = new UserStore<T>(getProfileInfo);
     }
-    return UserStore.instance;
+    return UserStore.#instance;
   }
 
+  /**
+   * Handles login
+   */
   login = ({ provider, checkRegistered = false }) => {
     try {
-      store.set(this.userAtom, prev => ({
+      store.set(this.#userAtom, prev => ({
         ...prev,
         isAuthenticating: true,
       }));
-      this.sdk.api.auth.signIn({
+      this.#sdk.api.auth.signIn({
         provider,
         checkRegistered,
       });
     } catch (error) {
-      store.set(this.userAtom, prev => ({
+      store.set(this.#userAtom, prev => ({
         ...prev,
         authenticationError: error,
         isAuthenticating: false,
@@ -58,26 +72,32 @@ export class UserStore<T> implements IUserStore<T> {
     }
   };
 
+  /**
+   * Handles logout
+   */
   logout = () => {
-    this.sdk.api.auth.signOut();
-    store.set(this.userAtom, () => INITIAL_STATE);
+    this.#sdk.api.auth.signOut();
+    store.set(this.#userAtom, () => this.#initialState);
   };
 
+  /**
+   * Fetch user info using getProfileInfo method from the profile app plugin
+   */
   getUserInfo = async ({ profileDid }: IGetUserInfo) => {
-    store.set(this.userAtom, prev => ({
+    store.set(this.#userAtom, prev => ({
       ...prev,
       isLoadingInfo: true,
     }));
     try {
-      const profileInfo = await this.getProfileInfo({ profileDid });
-      const state = store.get(this.userAtom);
-      store.set(this.userAtom, prev => ({
+      const profileInfo = await this.#getProfileInfo({ profileDid });
+      const state = store.get(this.#userAtom);
+      store.set(this.#userAtom, prev => ({
         ...prev,
         info: { ...state.info, [profileDid]: profileInfo },
         isLoadingInfo: false,
       }));
     } catch (error) {
-      store.set(this.userAtom, prev => ({
+      store.set(this.#userAtom, prev => ({
         ...prev,
         infoError: error,
         isLoadingInfo: false,
@@ -85,8 +105,11 @@ export class UserStore<T> implements IUserStore<T> {
     }
   };
 
+  /**
+   * Listens to a disconnected event and reset the store to the initial state
+   */
   handleLogoutEvent = () => {
-    this.sdk.api.globalChannel
+    this.#sdk.api.globalChannel
       .pipe(
         filter(payload => {
           return payload.event === WEB3_EVENTS.DISCONNECTED;
@@ -94,13 +117,17 @@ export class UserStore<T> implements IUserStore<T> {
       )
       .subscribe({
         next: () => {
-          store.set(this.userAtom, () => INITIAL_STATE);
+          store.set(this.#userAtom, () => this.#initialState);
         },
       });
   };
 
-  handleSignInEvent = () => {
-    this.sdk.api.globalChannel
+  /**
+   * Listens to a sign in event on the global channel and set the authenticatedDID state
+   * Fetch the authenticated profile info for the authenticatedDID and set the authenticatedProfile state
+   */
+  handleLogInEvent = () => {
+    this.#sdk.api.globalChannel
       .pipe(
         filter(payload => {
           return payload.event === AUTH_EVENTS.SIGN_IN;
@@ -110,34 +137,38 @@ export class UserStore<T> implements IUserStore<T> {
         next: async ({ data }: { data: CurrentUser }) => {
           const authenticatedDID = data.id;
           if (authenticatedDID) {
-            let profileInfo = null;
-            let authenticatedProfileError = null;
-            try {
-              profileInfo = await this.getProfileInfo({ profileDid: authenticatedDID });
-            } catch (error) {
-              authenticatedProfileError = error;
-            }
-            store.set(this.userAtom, prev => ({
+            const profileInfo = await this.#getProfileInfo({
+              profileDid: authenticatedDID,
+            });
+            store.set(this.#userAtom, prev => ({
               ...prev,
               authenticatedDID,
               authenticatedProfile: profileInfo,
-              authenticatedProfileError,
               isAuthenticating: false,
             }));
           }
         },
+        error: error => {
+          store.set(this.#userAtom, prev => ({
+            ...prev,
+            authenticatedProfileError: error,
+          }));
+        },
       });
   };
 
+  /**
+   * Initiates session restore for current authenticated user
+   **/
   restoreSession = () => {
     try {
-      store.set(this.userAtom, prev => ({
+      store.set(this.#userAtom, prev => ({
         ...prev,
         isAuthenticating: true,
       }));
-      this.sdk.api.auth.getCurrentUser();
+      this.#sdk.api.auth.getCurrentUser();
     } catch (error) {
-      store.set(this.userAtom, prev => ({
+      store.set(this.#userAtom, prev => ({
         ...prev,
         authenticationError: error,
         isAuthenticating: false,
@@ -145,12 +176,21 @@ export class UserStore<T> implements IUserStore<T> {
     }
   };
 
+  /**
+   * Takes a callback function and subscribes it to the store, when the store changes the callback is invoked.
+   * This in turns causes a component to re-render
+   * @param listener - callback listener which subscribes to the store
+   * @returns function that cleans up the subscription
+   **/
   subscribe = (listener: () => void) => {
-    const subscription = store.sub(this.userAtom, listener);
+    const subscription = store.sub(this.#userAtom, listener);
     return () => subscription();
   };
 
+  /**
+   * Get a snapshot of store data
+   */
   getSnapshot = () => {
-    return store.get(this.userAtom);
+    return store.get(this.#userAtom);
   };
 }
