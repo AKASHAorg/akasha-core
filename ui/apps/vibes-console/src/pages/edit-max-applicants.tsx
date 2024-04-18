@@ -11,7 +11,7 @@ export const EditMaxApplicants: React.FC<unknown> = () => {
   const navigate = useNavigate();
   const { uiEvents } = useRootComponentProps();
 
-  const { t } = useTranslation('app-vibes');
+  const { t } = useTranslation('app-vibes-console');
 
   const handleCancelButtonClick = () => {
     navigate({

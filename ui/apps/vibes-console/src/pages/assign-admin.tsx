@@ -11,7 +11,7 @@ export const AssignAdminPage: React.FC<unknown> = () => {
   const [assignedAdmin, setAssignedAdmin] = useState(false);
 
   const navigate = useNavigate();
-  const { t } = useTranslation('app-vibes');
+  const { t } = useTranslation('app-vibes-console');
   const { uiEvents } = useRootComponentProps();
 
   const handleAssignButtonClick = () => {

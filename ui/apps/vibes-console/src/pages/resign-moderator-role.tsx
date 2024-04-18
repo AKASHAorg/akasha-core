@@ -7,7 +7,7 @@ import routes, { RESIGN_CONFIRMATION, SETTINGS } from '../routes';
 export const ResignRolePage: React.FC<unknown> = () => {
   const navigate = useNavigate();
 
-  const { t } = useTranslation('app-vibes');
+  const { t } = useTranslation('app-vibes-console');
 
   const handleCancelButtonClick = () => {
     navigate({

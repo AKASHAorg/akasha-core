@@ -8,7 +8,7 @@ import routes, { DASHBOARD, SETTINGS } from '../routes';
 
 export const RespondAdminPage: React.FC<unknown> = () => {
   const navigate = useNavigate();
-  const { t } = useTranslation('app-vibes');
+  const { t } = useTranslation('app-vibes-console');
   const { uiEvents } = useRootComponentProps();
 
   const handleCancelButtonClick = () => {

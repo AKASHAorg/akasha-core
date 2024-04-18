@@ -123,11 +123,7 @@ export const DashboardItemRenderer: React.FC<DashboardItemRendererProps> = props
           )}
         </Stack>
 
-        <Button plain={true}>
-          <Text variant="button-md" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
-            {viewProfileLabel}
-          </Text>
-        </Button>
+        <Button variant="text" size="md" label={viewProfileLabel} />
       </Stack>
     </Card>
   );

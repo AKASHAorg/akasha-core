@@ -7,7 +7,7 @@ import routes, { EDIT_MAX_MODERATORS, DASHBOARD, ASSIGN_ADMIN, RESIGN_MODERATOR 
 export const Settings: React.FC<unknown> = () => {
   const navigate = useNavigate();
 
-  const { t } = useTranslation('app-vibes');
+  const { t } = useTranslation('app-vibes-console');
 
   const isAdmin = true;
 
