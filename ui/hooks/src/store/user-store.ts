@@ -1,13 +1,11 @@
 import getSDK from '@akashaorg/awf-sdk';
 import { AUTH_EVENTS, CurrentUser, WEB3_EVENTS } from '@akashaorg/typings/lib/sdk';
-import type { IGetUserInfo, IUserState, IUserStore } from '@akashaorg/typings/lib/ui/store';
+import type { IGetProfileInfo, IUserState, IUserStore } from '@akashaorg/typings/lib/ui/store';
 import { createStore } from 'jotai';
 import { atomWithImmer } from 'jotai-immer';
 import { filter } from 'rxjs/operators';
 
 const store = createStore();
-
-type GetProfileInfo<T> = (props: IGetUserInfo) => Promise<T>;
 
 /**
  * Singleton store for managing login, logout, session restoration and fetching profile.
@@ -26,14 +24,14 @@ export class UserStore<T> implements IUserStore<T> {
   };
   #sdk = getSDK();
   static #instance = null;
-  #getProfileInfo: GetProfileInfo<T>;
+  #getProfileInfo: IGetProfileInfo<T>['getProfileInfo'];
   //
   #userAtom = atomWithImmer<IUserState<T>>(this.#initialState);
 
   /**
    * Prevent singleton store from being instantiated outside of this class
    */
-  private constructor(getProfileInfo: GetProfileInfo<T>) {
+  private constructor(getProfileInfo: IGetProfileInfo<T>['getProfileInfo']) {
     this.#getProfileInfo = getProfileInfo;
     this.restoreSession();
     this.handleLogInEvent();
@@ -43,7 +41,7 @@ export class UserStore<T> implements IUserStore<T> {
   /**
    * Get the singleton instance of the user store
    */
-  static getInstance<T>(getProfileInfo: GetProfileInfo<T>): UserStore<T> {
+  static getInstance<T>(getProfileInfo: IGetProfileInfo<T>['getProfileInfo']): UserStore<T> {
     if (!UserStore.#instance) {
       UserStore.#instance = new UserStore<T>(getProfileInfo);
     }
@@ -83,18 +81,20 @@ export class UserStore<T> implements IUserStore<T> {
   /**
    * Fetch user info using getProfileInfo method from the profile app plugin
    */
-  getUserInfo = async ({ profileDid }: IGetUserInfo) => {
+  getUserInfo = async ({ profileDid }) => {
     store.set(this.#userAtom, prev => ({
       ...prev,
       isLoadingInfo: true,
     }));
     try {
-      const profileInfo = await this.#getProfileInfo({ profileDid });
+      const { data: profileInfo, error } = await this.#getProfileInfo({ profileDid });
       const state = store.get(this.#userAtom);
+      const info = profileInfo ? { ...state.info, [profileDid]: profileInfo } : null;
       store.set(this.#userAtom, prev => ({
         ...prev,
-        info: { ...state.info, [profileDid]: profileInfo },
+        info,
         isLoadingInfo: false,
+        infoError: error,
       }));
     } catch (error) {
       store.set(this.#userAtom, prev => ({
@@ -137,13 +137,14 @@ export class UserStore<T> implements IUserStore<T> {
         next: async ({ data }: { data: CurrentUser }) => {
           const authenticatedDID = data.id;
           if (authenticatedDID) {
-            const profileInfo = await this.#getProfileInfo({
+            const { data: profileInfo, error } = await this.#getProfileInfo({
               profileDid: authenticatedDID,
             });
             store.set(this.#userAtom, prev => ({
               ...prev,
               authenticatedDID,
               authenticatedProfile: profileInfo,
+              authenticatedProfileError: error,
               isAuthenticating: false,
             }));
           }

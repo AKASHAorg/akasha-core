@@ -4,9 +4,9 @@ import { GetProfileByDidQuery } from '@akashaorg/typings/lib/sdk/graphql-operati
 import { GetProfileByDidDocument } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { ApolloClient } from '@apollo/client';
 import { AkashaProfile } from '@akashaorg/typings/lib/ui';
-import { IGetUserInfo } from '@akashaorg/typings/lib/ui/store';
+import { IProfilePlugin } from '@akashaorg/typings/lib/ui/store';
 
-export class ProfilePlugin {
+export class ProfilePlugin implements IProfilePlugin<AkashaProfile> {
   #apolloClient: ApolloClient<object>;
   constructor() {
     this.#apolloClient = getSDK().services.gql.queryClient;
@@ -15,34 +15,26 @@ export class ProfilePlugin {
   /**
    * Fetch AKASHA profile info
    */
-  #getProfileInfo = async ({ profileDid }: IGetUserInfo) => {
-    try {
-      const profileQuery = await this.#apolloClient.query<GetProfileByDidQuery>({
-        query: GetProfileByDidDocument,
-        variables: {
-          id: profileDid,
-        },
-      });
+  getProfileInfo = async ({ profileDid }) => {
+    const profileQuery = await this.#apolloClient.query<GetProfileByDidQuery>({
+      query: GetProfileByDidDocument,
+      variables: {
+        id: profileDid,
+      },
+    });
+    const error = JSON.stringify(profileQuery.errors?.map(error => error.message));
+    const profileData =
+      profileQuery.data?.node && hasOwn(profileQuery.data?.node, 'isViewer')
+        ? profileQuery.data.node.akashaProfile
+        : null;
 
-      if (profileQuery?.errors) {
-        throw new Error(JSON.stringify(profileQuery.errors?.map(error => error.message)));
-      }
-
-      const profileData =
-        profileQuery.data?.node && hasOwn(profileQuery.data?.node, 'isViewer')
-          ? profileQuery.data.node.akashaProfile
-          : null;
-
-      return profileData;
-    } catch (error) {
-      throw new Error((error as unknown as Error).message);
-    }
+    return { data: profileData, error };
   };
 
   /**
    * Get the user store for AKASHA profile app
    */
   get userStore() {
-    return UserStore.getInstance<AkashaProfile>(this.#getProfileInfo);
+    return UserStore.getInstance<AkashaProfile>(this.getProfileInfo);
   }
 }
