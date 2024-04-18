@@ -105,10 +105,7 @@ export const ReportItemPage: React.FC<ReportItemPageProps> = props => {
       moderationCategories={moderationCategories}
       selectedReason={reasons.find(el => el.title === categories[0])} // since user can select only one category here
       reasonPlaceholderLabel={`${t('Place some details here, if any')}...`}
-      subtitleLabels={reportDetailsSubtitles.map(subtitle => ({
-        ...subtitle,
-        label: t('{{label}}', { label: subtitle.label }),
-      }))}
+      subtitleLabels={reportDetailsSubtitles}
       cancelButtonLabel={t('Cancel')}
       confirmButtonLabel={step === 0 ? t('Proceed') : t('Submit')}
       confirmButtonDisabled={step === 0 && !categories.length}

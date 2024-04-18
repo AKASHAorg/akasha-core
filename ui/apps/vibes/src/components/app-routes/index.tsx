@@ -4,6 +4,7 @@ import {
   createRootRouteWithContext,
   createRoute,
   createRouter,
+  redirect,
 } from '@tanstack/react-router';
 import { CreateRouter, RouterContext } from '@akashaorg/typings/lib/ui';
 import ErrorComponent from './error-component';
@@ -16,14 +17,30 @@ import {
   TransparencyLogItem,
   VibesValue,
 } from '../../pages';
+import routes, {
+  HISTORY,
+  HOME,
+  MODERATORS,
+  baseHistoryUrl,
+  baseModeratorsUrl,
+  baseOverviewUrl,
+} from '../../routes';
 
 const rootRoute = createRootRouteWithContext<RouterContext>()({
   component: Outlet,
 });
 
+const defaultRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/',
+  beforeLoad: () => {
+    throw redirect({ to: routes[HOME], replace: true });
+  },
+});
+
 const overviewRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/overview',
+  path: routes[HOME],
   component: () => {
     return <Overview isModerator={false} />;
   },
@@ -31,7 +48,7 @@ const overviewRoute = createRoute({
 
 const moderationValueRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: `/overview/values/$value`,
+  path: `${baseOverviewUrl}/values/$value`,
   component: () => {
     const { value } = moderationValueRoute.useParams();
     return <VibesValue value={value} />;
@@ -40,7 +57,7 @@ const moderationValueRoute = createRoute({
 
 const moderatorsRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/moderators',
+  path: routes[MODERATORS],
   component: () => {
     const getModeratorsQuery = { data: [], isFetching: false };
     const allModerators = getModeratorsQuery.data;
@@ -53,7 +70,7 @@ const moderatorsRoute = createRoute({
 
 const viewModeratorRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/moderators/$moderatorId',
+  path: `${baseModeratorsUrl}/$moderatorId`,
   component: () => {
     const { moderatorId } = viewModeratorRoute.useParams();
     return <ModeratorDetailPage moderatorId={moderatorId} />;
@@ -62,7 +79,7 @@ const viewModeratorRoute = createRoute({
 
 const historyRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/history',
+  path: routes[HISTORY],
   component: () => {
     return <TransparencyLog />;
   },
@@ -70,7 +87,7 @@ const historyRoute = createRoute({
 
 const historyItemRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/history/$itemId',
+  path: `${baseHistoryUrl}/$itemId`,
   component: () => {
     const { itemId } = historyItemRoute.useParams();
     return <TransparencyLogItem itemId={itemId} />;
@@ -87,6 +104,7 @@ const reportItemRoute = createRoute({
 });
 
 const routeTree = rootRoute.addChildren([
+  defaultRoute,
   overviewRoute.addChildren([moderationValueRoute]),
   moderatorsRoute.addChildren([viewModeratorRoute]),
   historyRoute.addChildren([historyItemRoute]),

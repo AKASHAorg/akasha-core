@@ -18,8 +18,15 @@ export type SearchBarProps = {
 };
 
 const SearchBar: React.FC<SearchBarProps> = props => {
-  const { inputValue, customStyle, onInputChange, inputPlaceholderLabel, onSearch, onKeyUp } =
-    props;
+  const {
+    inputValue,
+    customStyle,
+    onInputChange,
+    inputPlaceholderLabel,
+    responsive,
+    onSearch,
+    onKeyUp,
+  } = props;
 
   const handleSearch = (ev: React.KeyboardEvent<HTMLInputElement>) => {
     if (ev.key === 'Enter') {
@@ -36,14 +43,16 @@ const SearchBar: React.FC<SearchBarProps> = props => {
   return (
     <Stack
       direction="row"
-      spacing="gap-y-2"
+      spacing="gap-x-2"
       align="center"
-      customStyle={`px-2.5 bg-grey9 dark:bg-grey3 rounded-full focus-within:border focus-within:border-secondaryLight dark:focus-within:border-secondaryDark ${customStyle}`}
+      padding="px-2.5"
+      fullWidth={responsive}
+      customStyle={`bg(grey9 dark:grey3) rounded-full focus-within:border focus-within:border-secondaryLight dark:focus-within:border-secondaryDark ${customStyle}`}
     >
       <input
         type="text"
         className={tw(
-          apply`peer focus:outline-none w-full bg-transparent py-[0.4375rem] text-[0.875rem] leading-[1.375rem] font-light dark:text-grey6 text-grey5 dark:placeholder-grey6 placeholder-grey5`,
+          apply`peer focus:outline-none w-full bg-transparent py-[0.4375rem] text-[0.875rem] leading-[1.375rem] font-light text(grey5 dark:grey6) placeholder(grey5 dark:grey6)`,
         )}
         placeholder={inputPlaceholderLabel}
         value={inputValue}
