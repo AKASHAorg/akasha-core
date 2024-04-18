@@ -7,7 +7,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { generateModeratorApplicationHistory } from '../utils';
 import { ApplicantDataCard } from '../components/applications/application';
-import routes, { APPLICATIONS, APPLICATION_DETAIL } from '../routes';
+import routes, { APPLICATION_DETAIL } from '../routes';
 
 export const ApplicationsLog: React.FC<unknown> = () => {
   const navigate = useNavigate();
@@ -38,12 +38,6 @@ export const ApplicationsLog: React.FC<unknown> = () => {
   };
 
   const applications = generateModeratorApplicationHistory();
-
-  const handleClickViewProfile = () => {
-    navigate({
-      to: routes[APPLICATIONS],
-    });
-  };
 
   const handleClickViewApplication = (applicationId: string) => {
     navigate({
@@ -101,7 +95,9 @@ export const ApplicationsLog: React.FC<unknown> = () => {
             appliedOnLabel={t('Applied on')}
             viewProfileLabel={t('View profile')}
             viewApplicationLabel={t('View application')}
-            onClickViewProfile={handleClickViewProfile}
+            onClickViewProfile={() => {
+              /** */
+            }}
             onClickViewApplication={() => handleClickViewApplication(a.did.id)}
           />
         ))}

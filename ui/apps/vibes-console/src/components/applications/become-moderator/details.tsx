@@ -52,7 +52,7 @@ export const BMDetails: React.FC<BMDetailsProps> = props => {
           <Text variant="footnotes2" weight="light">
             {section1.subtitle}
           </Text>
-          <Stack direction="row">
+          <Stack direction="row" spacing="gap-x-4">
             {section1.radioButtons.map(b => (
               <RadioButton
                 id={b.value}

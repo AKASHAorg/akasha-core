@@ -49,6 +49,7 @@ export type NotificationEvent = {
   data?: {
     type: NotificationTypes;
     message: string;
+    snackbarIcon?: React.ReactElement;
   };
 };
 
