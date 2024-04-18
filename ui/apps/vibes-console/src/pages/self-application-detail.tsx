@@ -35,7 +35,7 @@ export const SelfApplicationDetailPage: React.FC<unknown> = () => {
       {applicationData.status === 'approved' && (
         <ApplicationApprovedCard
           titleLabel={t('Application Approved')}
-          descriptionLabel={t('Congratulations ✨ you are officially a moderator!')}
+          descriptionLabel={t('Congratulations ✨ you are officially a moderator')}
           buttonLabel={t('Start Reviewing Flagged items 🚀')}
           onButtonClick={handleGoToReviewHub}
         />

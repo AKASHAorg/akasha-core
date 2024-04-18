@@ -1,28 +1,25 @@
 import React from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import {
   PageHeader,
   PageHeaderProps,
 } from '@akashaorg/design-system-components/lib/components/PageHeader';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+
+export type TSection = {
+  title: string;
+  description?: string;
+};
 
 export type AdminSettingsProps = PageHeaderProps & {
   changeLimitLabel: string;
   currentNumberLabel: string;
   sections: {
-    one: {
-      title: string;
-    };
-    two: {
-      title: string;
-      description: string;
-    };
-    three: {
-      title: string;
-      description: string;
-    };
+    one: TSection;
+    two: TSection;
+    three: TSection;
   };
   onChangeButtonClick: () => void;
 };
@@ -48,10 +45,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = props => {
         </Stack>
         <Divider />
         <Stack direction="row" align="start" justify="between">
-          <Stack
-            spacing="gap-y-3
-          "
-          >
+          <Stack spacing="gap-y-3">
             <Text variant="button-md" color={{ light: 'black', dark: 'grey6' }}>
               {two.title}
             </Text>
@@ -65,11 +59,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = props => {
               </Text>
             </Text>
           </Stack>
-          <Button plain={true} onClick={onChangeButtonClick}>
-            <Text variant="button-sm" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
-              {changeLimitLabel}
-            </Text>
-          </Button>
+          <Button variant="text" size="md" label={changeLimitLabel} onClick={onChangeButtonClick} />
         </Stack>
         <Divider />
         <Stack>

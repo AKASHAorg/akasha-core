@@ -19,7 +19,7 @@ export const ReviewItemPage: React.FC<ReviewItemPageProps> = props => {
   const [selectedPeriod, setSelectedPeriod] = useState('');
 
   const navigate = useNavigate();
-  const { t } = useTranslation('app-vibes');
+  const { t } = useTranslation('app-vibes-console');
   const { getRoutingPlugin, uiEvents } = useRootComponentProps();
 
   const navigateTo = getRoutingPlugin().navigateTo;

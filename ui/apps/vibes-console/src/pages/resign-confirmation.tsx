@@ -7,7 +7,7 @@ export const ResignConfirmationPage: React.FC<unknown> = () => {
   const { getRoutingPlugin } = useRootComponentProps();
   const navigateTo = getRoutingPlugin().navigateTo;
 
-  const { t } = useTranslation('app-vibes');
+  const { t } = useTranslation('app-vibes-console');
 
   const handleCloseButtonClick = () => {
     navigateTo?.({
