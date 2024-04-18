@@ -1,1760 +1,1762 @@
 # This file was generated. Do not edit manually.
 
 schema {
-    query: Query
-    mutation: Mutation
+  query: Query
+  mutation: Mutation
 }
 
 "An object with an ID"
 interface Node {
-    "The id of the object."
-    id: ID!
+  "The id of the object."
+  id: ID!
 }
 
 type AkashaApp implements Node {
-    applicationType: AkashaAppApplicationType
-    "Account controlling the document"
-    author: CeramicAccount!
-    contributors: [CeramicAccount]
-    createdAt: DateTime!
-    description: String!
-    displayName: String!
-    id: ID!
-    keywords: [String]
-    licence: String!
-    name: String!
-    releases(
-        "Returns only documents created by the provided account"
-        account: ID,
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        filters: AkashaAppReleaseFiltersInput,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int,
-        sorting: AkashaAppReleaseSortingInput
-    ): AkashaAppReleaseConnection!
-    releasesCount(
-        "Counts only documents created by the provided account"
-        account: ID,
-        filters: AkashaAppReleaseFiltersInput
-    ): Int!
-    "Current version of the document"
-    version: CeramicCommitID!
+  applicationType: AkashaAppApplicationType
+  "Account controlling the document"
+  author: CeramicAccount!
+  contributors: [CeramicAccount]
+  createdAt: DateTime!
+  description: String!
+  displayName: String!
+  id: ID!
+  keywords: [String]
+  licence: String!
+  name: String!
+  releases(
+    "Returns only documents created by the provided account"
+    account: ID,
+    "Returns the items in the list that come after the specified cursor."
+    after: String,
+    "Returns the items in the list that come before the specified cursor."
+    before: String,
+    filters: AkashaAppReleaseFiltersInput,
+    "Returns the first n items from the list."
+    first: Int,
+    "Returns the last n items from the list."
+    last: Int,
+    sorting: AkashaAppReleaseSortingInput
+  ): AkashaAppReleaseConnection!
+  releasesCount(
+    "Counts only documents created by the provided account"
+    account: ID,
+    filters: AkashaAppReleaseFiltersInput
+  ): Int!
+  "Current version of the document"
+  version: CeramicCommitID!
 }
 
 "A connection to a list of items."
 type AkashaAppConnection {
-    "A list of edges."
-    edges: [AkashaAppEdge]
-    "Information to aid in pagination."
-    pageInfo: PageInfo!
+  "A list of edges."
+  edges: [AkashaAppEdge]
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
 }
 
 "An edge in a connection."
 type AkashaAppEdge {
-    "A cursor for use in pagination"
-    cursor: String!
-    "The item at the end of the edge"
-    node: AkashaApp
+  "A cursor for use in pagination"
+  cursor: String!
+  "The item at the end of the edge"
+  node: AkashaApp
 }
 
 type AkashaAppRelease implements Node {
-    application: AkashaApp
-    applicationID: CeramicStreamID!
-    createdAt: DateTime!
-    id: ID!
-    source: InterPlanetaryCID!
-    version: String!
+  application: AkashaApp
+  applicationID: CeramicStreamID!
+  createdAt: DateTime!
+  id: ID!
+  source: InterPlanetaryCID!
+  version: String!
 }
 
 "A connection to a list of items."
 type AkashaAppReleaseConnection {
-    "A list of edges."
-    edges: [AkashaAppReleaseEdge]
-    "Information to aid in pagination."
-    pageInfo: PageInfo!
+  "A list of edges."
+  edges: [AkashaAppReleaseEdge]
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
 }
 
 "An edge in a connection."
 type AkashaAppReleaseEdge {
-    "A cursor for use in pagination"
-    cursor: String!
-    "The item at the end of the edge"
-    node: AkashaAppRelease
+  "A cursor for use in pagination"
+  cursor: String!
+  "The item at the end of the edge"
+  node: AkashaAppRelease
 }
 
 type AkashaAppsStream implements Node {
-    active: Boolean!
-    application: AkashaApp
-    applicationID: CeramicStreamID!
-    createdAt: DateTime!
-    id: ID!
-    moderationID: CeramicStreamID
-    status: AkashaAppsStreamModerationStatus
+  active: Boolean!
+  application: AkashaApp
+  applicationID: CeramicStreamID!
+  createdAt: DateTime!
+  id: ID!
+  moderationID: CeramicStreamID
+  status: AkashaAppsStreamModerationStatus
 }
 
 "A connection to a list of items."
 type AkashaAppsStreamConnection {
-    "A list of edges."
-    edges: [AkashaAppsStreamEdge]
-    "Information to aid in pagination."
-    pageInfo: PageInfo!
+  "A list of edges."
+  edges: [AkashaAppsStreamEdge]
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
 }
 
 "An edge in a connection."
 type AkashaAppsStreamEdge {
-    "A cursor for use in pagination"
-    cursor: String!
-    "The item at the end of the edge"
-    node: AkashaAppsStream
+  "A cursor for use in pagination"
+  cursor: String!
+  "The item at the end of the edge"
+  node: AkashaAppsStream
 }
 
 type AkashaBeam implements Node {
-    active: Boolean!
-    "Account controlling the document"
-    author: CeramicAccount!
-    content: [AkashaBeamBlockRecord!]!
-    createdAt: DateTime!
-    embeddedStream: AkashaBeamEmbeddedType
-    id: ID!
-    mentions: [CeramicAccount]
-    nsfw: Boolean
-    reflections(
-        "Returns only documents created by the provided account"
-        account: ID,
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        filters: AkashaReflectFiltersInput,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int,
-        sorting: AkashaReflectSortingInput
-    ): AkashaReflectConnection!
-    reflectionsCount(
-        "Counts only documents created by the provided account"
-        account: ID,
-        filters: AkashaReflectFiltersInput
-    ): Int!
-    tags: [AkashaBeamLabeled]
-    "Current version of the document"
-    version: CeramicCommitID!
+  active: Boolean!
+  "Account controlling the document"
+  author: CeramicAccount!
+  content: [AkashaBeamBlockRecord!]!
+  createdAt: DateTime!
+  embeddedStream: AkashaBeamEmbeddedType
+  id: ID!
+  mentions: [CeramicAccount]
+  nsfw: Boolean
+  reflections(
+    "Returns only documents created by the provided account"
+    account: ID,
+    "Returns the items in the list that come after the specified cursor."
+    after: String,
+    "Returns the items in the list that come before the specified cursor."
+    before: String,
+    filters: AkashaReflectFiltersInput,
+    "Returns the first n items from the list."
+    first: Int,
+    "Returns the last n items from the list."
+    last: Int,
+    sorting: AkashaReflectSortingInput
+  ): AkashaReflectConnection!
+  reflectionsCount(
+    "Counts only documents created by the provided account"
+    account: ID,
+    filters: AkashaReflectFiltersInput
+  ): Int!
+  tags: [AkashaBeamLabeled]
+  "Current version of the document"
+  version: CeramicCommitID!
 }
 
 type AkashaBeamBlockRecord {
-    blockID: CeramicStreamID!
-    order: Int!
+  blockID: CeramicStreamID!
+  order: Int!
 }
 
 "A connection to a list of items."
 type AkashaBeamConnection {
-    "A list of edges."
-    edges: [AkashaBeamEdge]
-    "Information to aid in pagination."
-    pageInfo: PageInfo!
+  "A list of edges."
+  edges: [AkashaBeamEdge]
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
 }
 
 "An edge in a connection."
 type AkashaBeamEdge {
-    "A cursor for use in pagination"
-    cursor: String!
-    "The item at the end of the edge"
-    node: AkashaBeam
+  "A cursor for use in pagination"
+  cursor: String!
+  "The item at the end of the edge"
+  node: AkashaBeam
 }
 
 type AkashaBeamEmbeddedType {
-    embeddedID: CeramicStreamID!
-    label: String!
+  embeddedID: CeramicStreamID!
+  label: String!
 }
 
 type AkashaBeamLabeled {
-    labelType: String!
-    value: String!
+  labelType: String!
+  value: String!
 }
 
 type AkashaBeamStream implements Node {
-    active: Boolean!
-    beam: AkashaBeam
-    beamID: CeramicStreamID!
-    createdAt: DateTime!
-    id: ID!
-    moderationID: CeramicStreamID
-    status: AkashaBeamStreamModerationStatus
+  active: Boolean!
+  beam: AkashaBeam
+  beamID: CeramicStreamID!
+  createdAt: DateTime!
+  id: ID!
+  moderationID: CeramicStreamID
+  status: AkashaBeamStreamModerationStatus
 }
 
 "A connection to a list of items."
 type AkashaBeamStreamConnection {
-    "A list of edges."
-    edges: [AkashaBeamStreamEdge]
-    "Information to aid in pagination."
-    pageInfo: PageInfo!
+  "A list of edges."
+  edges: [AkashaBeamStreamEdge]
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
 }
 
 "An edge in a connection."
 type AkashaBeamStreamEdge {
-    "A cursor for use in pagination"
-    cursor: String!
-    "The item at the end of the edge"
-    node: AkashaBeamStream
+  "A cursor for use in pagination"
+  cursor: String!
+  "The item at the end of the edge"
+  node: AkashaBeamStream
 }
 
 type AkashaBlockStorage implements Node {
-    active: Boolean!
-    appVersion: AkashaAppRelease
-    appVersionID: CeramicStreamID!
-    "Account controlling the document"
-    author: CeramicAccount!
-    block: AkashaContentBlock
-    blockID: CeramicStreamID!
-    content: [AkashaBlockStorageLabeledValue!]!
-    createdAt: DateTime!
-    id: ID!
-    kind: AkashaBlockStorageBlockStorageDef
-    "Current version of the document"
-    version: CeramicCommitID!
+  active: Boolean!
+  appVersion: AkashaAppRelease
+  appVersionID: CeramicStreamID!
+  "Account controlling the document"
+  author: CeramicAccount!
+  block: AkashaContentBlock
+  blockID: CeramicStreamID!
+  content: [AkashaBlockStorageLabeledValue!]!
+  createdAt: DateTime!
+  id: ID!
+  kind: AkashaBlockStorageBlockStorageDef
+  "Current version of the document"
+  version: CeramicCommitID!
 }
 
 "A connection to a list of items."
 type AkashaBlockStorageConnection {
-    "A list of edges."
-    edges: [AkashaBlockStorageEdge]
-    "Information to aid in pagination."
-    pageInfo: PageInfo!
+  "A list of edges."
+  edges: [AkashaBlockStorageEdge]
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
 }
 
 "An edge in a connection."
 type AkashaBlockStorageEdge {
-    "A cursor for use in pagination"
-    cursor: String!
-    "The item at the end of the edge"
-    node: AkashaBlockStorage
+  "A cursor for use in pagination"
+  cursor: String!
+  "The item at the end of the edge"
+  node: AkashaBlockStorage
 }
 
 type AkashaBlockStorageLabeledValue {
-    label: String!
-    propertyType: String!
-    value: String!
+  label: String!
+  propertyType: String!
+  value: String!
 }
 
 type AkashaContentBlock implements Node {
-    active: Boolean!
-    appVersion: AkashaAppRelease
-    appVersionID: CeramicStreamID!
-    "Account controlling the document"
-    author: CeramicAccount!
-    content: [AkashaContentBlockLabeledValue!]!
-    createdAt: DateTime!
-    id: ID!
-    kind: AkashaContentBlockBlockDef
-    nsfw: Boolean
-    "Current version of the document"
-    version: CeramicCommitID!
+  active: Boolean!
+  appVersion: AkashaAppRelease
+  appVersionID: CeramicStreamID!
+  "Account controlling the document"
+  author: CeramicAccount!
+  content: [AkashaContentBlockLabeledValue!]!
+  createdAt: DateTime!
+  id: ID!
+  kind: AkashaContentBlockBlockDef
+  nsfw: Boolean
+  "Current version of the document"
+  version: CeramicCommitID!
 }
 
 "A connection to a list of items."
 type AkashaContentBlockConnection {
-    "A list of edges."
-    edges: [AkashaContentBlockEdge]
-    "Information to aid in pagination."
-    pageInfo: PageInfo!
+  "A list of edges."
+  edges: [AkashaContentBlockEdge]
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
 }
 
 "An edge in a connection."
 type AkashaContentBlockEdge {
-    "A cursor for use in pagination"
-    cursor: String!
-    "The item at the end of the edge"
-    node: AkashaContentBlock
+  "A cursor for use in pagination"
+  cursor: String!
+  "The item at the end of the edge"
+  node: AkashaContentBlock
 }
 
 type AkashaContentBlockLabeledValue {
-    label: String!
-    propertyType: String!
-    value: String!
+  label: String!
+  propertyType: String!
+  value: String!
 }
 
 type AkashaContentBlockStream implements Node {
-    active: Boolean!
-    block: AkashaContentBlock
-    blockID: CeramicStreamID!
-    createdAt: DateTime!
-    id: ID!
-    moderationID: CeramicStreamID
-    status: AkashaContentBlockStreamModerationStatus
+  active: Boolean!
+  block: AkashaContentBlock
+  blockID: CeramicStreamID!
+  createdAt: DateTime!
+  id: ID!
+  moderationID: CeramicStreamID
+  status: AkashaContentBlockStreamModerationStatus
 }
 
 "A connection to a list of items."
 type AkashaContentBlockStreamConnection {
-    "A list of edges."
-    edges: [AkashaContentBlockStreamEdge]
-    "Information to aid in pagination."
-    pageInfo: PageInfo!
+  "A list of edges."
+  edges: [AkashaContentBlockStreamEdge]
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
 }
 
 "An edge in a connection."
 type AkashaContentBlockStreamEdge {
-    "A cursor for use in pagination"
-    cursor: String!
-    "The item at the end of the edge"
-    node: AkashaContentBlockStream
+  "A cursor for use in pagination"
+  cursor: String!
+  "The item at the end of the edge"
+  node: AkashaContentBlockStream
 }
 
 type AkashaFollow implements Node {
-    "Account controlling the document"
-    did: CeramicAccount!
-    id: ID!
-    isFollowing: Boolean!
-    profile: AkashaProfile
-    profileID: CeramicStreamID!
+  "Account controlling the document"
+  did: CeramicAccount!
+  id: ID!
+  isFollowing: Boolean!
+  profile: AkashaProfile
+  profileID: CeramicStreamID!
 }
 
 "A connection to a list of items."
 type AkashaFollowConnection {
-    "A list of edges."
-    edges: [AkashaFollowEdge]
-    "Information to aid in pagination."
-    pageInfo: PageInfo!
+  "A list of edges."
+  edges: [AkashaFollowEdge]
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
 }
 
 "An edge in a connection."
 type AkashaFollowEdge {
-    "A cursor for use in pagination"
-    cursor: String!
-    "The item at the end of the edge"
-    node: AkashaFollow
+  "A cursor for use in pagination"
+  cursor: String!
+  "The item at the end of the edge"
+  node: AkashaFollow
 }
 
 type AkashaIndexedStream implements Node {
-    active: Boolean!
-    createdAt: DateTime!
-    id: ID!
-    indexType: String!
-    indexValue: String!
-    moderationID: CeramicStreamID
-    status: AkashaIndexedStreamModerationStatus
-    stream: CeramicStreamID!
-    streamType: AkashaIndexedStreamStreamType
+  active: Boolean!
+  createdAt: DateTime!
+  id: ID!
+  indexType: String!
+  indexValue: String!
+  moderationID: CeramicStreamID
+  status: AkashaIndexedStreamModerationStatus
+  stream: CeramicStreamID!
+  streamType: AkashaIndexedStreamStreamType
 }
 
 "A connection to a list of items."
 type AkashaIndexedStreamConnection {
-    "A list of edges."
-    edges: [AkashaIndexedStreamEdge]
-    "Information to aid in pagination."
-    pageInfo: PageInfo!
+  "A list of edges."
+  edges: [AkashaIndexedStreamEdge]
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
 }
 
 "An edge in a connection."
 type AkashaIndexedStreamEdge {
-    "A cursor for use in pagination"
-    cursor: String!
-    "The item at the end of the edge"
-    node: AkashaIndexedStream
+  "A cursor for use in pagination"
+  cursor: String!
+  "The item at the end of the edge"
+  node: AkashaIndexedStream
 }
 
 type AkashaInterestsStream implements Node {
-    active: Boolean!
-    createdAt: DateTime!
-    id: ID!
-    labelType: String!
-    moderationID: CeramicStreamID
-    status: AkashaInterestsStreamModerationStatus
-    value: String!
+  active: Boolean!
+  createdAt: DateTime!
+  id: ID!
+  labelType: String!
+  moderationID: CeramicStreamID
+  status: AkashaInterestsStreamModerationStatus
+  value: String!
 }
 
 "A connection to a list of items."
 type AkashaInterestsStreamConnection {
-    "A list of edges."
-    edges: [AkashaInterestsStreamEdge]
-    "Information to aid in pagination."
-    pageInfo: PageInfo!
+  "A list of edges."
+  edges: [AkashaInterestsStreamEdge]
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
 }
 
 "An edge in a connection."
 type AkashaInterestsStreamEdge {
-    "A cursor for use in pagination"
-    cursor: String!
-    "The item at the end of the edge"
-    node: AkashaInterestsStream
+  "A cursor for use in pagination"
+  cursor: String!
+  "The item at the end of the edge"
+  node: AkashaInterestsStream
 }
 
 type AkashaProfile implements Node {
-    avatar: AkashaProfileImageVersions
-    background: AkashaProfileImageVersions
-    createdAt: DateTime!
-    description: String
-    "Account controlling the document"
-    did: CeramicAccount!
-    followers(
-        "Returns only documents created by the provided account"
-        account: ID,
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        filters: AkashaFollowFiltersInput,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int,
-        sorting: AkashaFollowSortingInput
-    ): AkashaFollowConnection!
-    followersCount(
-        "Counts only documents created by the provided account"
-        account: ID,
-        filters: AkashaFollowFiltersInput
-    ): Int!
-    id: ID!
-    links: [AkashaProfileLinkSource]
-    name: String!
-    nsfw: Boolean
+  avatar: AkashaProfileImageVersions
+  background: AkashaProfileImageVersions
+  createdAt: DateTime!
+  description: String
+  "Account controlling the document"
+  did: CeramicAccount!
+  followers(
+    "Returns only documents created by the provided account"
+    account: ID,
+    "Returns the items in the list that come after the specified cursor."
+    after: String,
+    "Returns the items in the list that come before the specified cursor."
+    before: String,
+    filters: AkashaFollowFiltersInput,
+    "Returns the first n items from the list."
+    first: Int,
+    "Returns the last n items from the list."
+    last: Int,
+    sorting: AkashaFollowSortingInput
+  ): AkashaFollowConnection!
+  followersCount(
+    "Counts only documents created by the provided account"
+    account: ID,
+    filters: AkashaFollowFiltersInput
+  ): Int!
+  id: ID!
+  links: [AkashaProfileLinkSource]
+  name: String!
+  nsfw: Boolean
 }
 
 "A connection to a list of items."
 type AkashaProfileConnection {
-    "A list of edges."
-    edges: [AkashaProfileEdge]
-    "Information to aid in pagination."
-    pageInfo: PageInfo!
+  "A list of edges."
+  edges: [AkashaProfileEdge]
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
 }
 
 "An edge in a connection."
 type AkashaProfileEdge {
-    "A cursor for use in pagination"
-    cursor: String!
-    "The item at the end of the edge"
-    node: AkashaProfile
+  "A cursor for use in pagination"
+  cursor: String!
+  "The item at the end of the edge"
+  node: AkashaProfile
 }
 
 type AkashaProfileImageSource {
-    height: Int!
-    src: URI!
-    width: Int!
+  height: Int!
+  src: URI!
+  width: Int!
 }
 
 type AkashaProfileImageVersions {
-    alternatives: [AkashaProfileImageSource]
-    default: AkashaProfileImageSource!
+  alternatives: [AkashaProfileImageSource]
+  default: AkashaProfileImageSource!
 }
 
 type AkashaProfileInterests implements Node {
-    "Account controlling the document"
-    did: CeramicAccount!
-    id: ID!
-    topics: [AkashaProfileInterestsLabeled!]!
+  "Account controlling the document"
+  did: CeramicAccount!
+  id: ID!
+  topics: [AkashaProfileInterestsLabeled!]!
 }
 
 "A connection to a list of items."
 type AkashaProfileInterestsConnection {
-    "A list of edges."
-    edges: [AkashaProfileInterestsEdge]
-    "Information to aid in pagination."
-    pageInfo: PageInfo!
+  "A list of edges."
+  edges: [AkashaProfileInterestsEdge]
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
 }
 
 "An edge in a connection."
 type AkashaProfileInterestsEdge {
-    "A cursor for use in pagination"
-    cursor: String!
-    "The item at the end of the edge"
-    node: AkashaProfileInterests
+  "A cursor for use in pagination"
+  cursor: String!
+  "The item at the end of the edge"
+  node: AkashaProfileInterests
 }
 
 type AkashaProfileInterestsLabeled {
-    labelType: String!
-    value: String!
+  labelType: String!
+  value: String!
 }
 
 type AkashaProfileLinkSource {
-    href: URI!
-    label: String
+  href: URI!
+  label: String
 }
 
 type AkashaProfileStream implements Node {
-    active: Boolean!
-    createdAt: DateTime!
-    id: ID!
-    moderationID: CeramicStreamID
-    profile: AkashaProfile
-    profileID: CeramicStreamID!
-    status: AkashaProfileStreamModerationStatus
+  active: Boolean!
+  createdAt: DateTime!
+  id: ID!
+  moderationID: CeramicStreamID
+  profile: AkashaProfile
+  profileID: CeramicStreamID!
+  status: AkashaProfileStreamModerationStatus
 }
 
 "A connection to a list of items."
 type AkashaProfileStreamConnection {
-    "A list of edges."
-    edges: [AkashaProfileStreamEdge]
-    "Information to aid in pagination."
-    pageInfo: PageInfo!
+  "A list of edges."
+  edges: [AkashaProfileStreamEdge]
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
 }
 
 "An edge in a connection."
 type AkashaProfileStreamEdge {
-    "A cursor for use in pagination"
-    cursor: String!
-    "The item at the end of the edge"
-    node: AkashaProfileStream
+  "A cursor for use in pagination"
+  cursor: String!
+  "The item at the end of the edge"
+  node: AkashaProfileStream
 }
 
 type AkashaReflect implements Node {
-    active: Boolean!
-    "Account controlling the document"
-    author: CeramicAccount!
-    beam: AkashaBeam
-    beamID: CeramicStreamID!
-    content: [AkashaReflectProviderValue!]!
-    createdAt: DateTime!
-    id: ID!
-    isReply: Boolean
-    mentions: [CeramicStreamID]
-    nsfw: Boolean
-    reflection: CeramicStreamID
-    tags: [String]
-    "Current version of the document"
-    version: CeramicCommitID!
+  active: Boolean!
+  "Account controlling the document"
+  author: CeramicAccount!
+  beam: AkashaBeam
+  beamID: CeramicStreamID!
+  content: [AkashaReflectProviderValue!]!
+  createdAt: DateTime!
+  id: ID!
+  isReply: Boolean
+  mentions: [CeramicStreamID]
+  nsfw: Boolean
+  reflection: CeramicStreamID
+  tags: [String]
+  "Current version of the document"
+  version: CeramicCommitID!
 }
 
 "A connection to a list of items."
 type AkashaReflectConnection {
-    "A list of edges."
-    edges: [AkashaReflectEdge]
-    "Information to aid in pagination."
-    pageInfo: PageInfo!
+  "A list of edges."
+  edges: [AkashaReflectEdge]
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
 }
 
 "An edge in a connection."
 type AkashaReflectEdge {
-    "A cursor for use in pagination"
-    cursor: String!
-    "The item at the end of the edge"
-    node: AkashaReflect
+  "A cursor for use in pagination"
+  cursor: String!
+  "The item at the end of the edge"
+  node: AkashaReflect
 }
 
 type AkashaReflectProviderValue {
-    label: String!
-    propertyType: String!
-    value: String!
+  label: String!
+  propertyType: String!
+  value: String!
 }
 
 type AkashaReflectStream implements Node {
-    active: Boolean!
-    beamID: CeramicStreamID!
-    createdAt: DateTime!
-    id: ID!
-    moderationID: CeramicStreamID
-    reflection: AkashaReflect
-    reflectionID: CeramicStreamID!
-    status: AkashaReflectStreamModerationStatus
+  active: Boolean!
+  beamID: CeramicStreamID!
+  createdAt: DateTime!
+  id: ID!
+  isReply: Boolean
+  moderationID: CeramicStreamID
+  reflection: AkashaReflect
+  reflectionID: CeramicStreamID!
+  replyTo: CeramicStreamID
+  status: AkashaReflectStreamModerationStatus
 }
 
 "A connection to a list of items."
 type AkashaReflectStreamConnection {
-    "A list of edges."
-    edges: [AkashaReflectStreamEdge]
-    "Information to aid in pagination."
-    pageInfo: PageInfo!
+  "A list of edges."
+  edges: [AkashaReflectStreamEdge]
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
 }
 
 "An edge in a connection."
 type AkashaReflectStreamEdge {
-    "A cursor for use in pagination"
-    cursor: String!
-    "The item at the end of the edge"
-    node: AkashaReflectStream
+  "A cursor for use in pagination"
+  cursor: String!
+  "The item at the end of the edge"
+  node: AkashaReflectStream
 }
 
 type CeramicAccount implements Node {
-    akashaApp(with: WithAkashaAppInput!): AkashaApp
-    akashaAppList(
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        filters: AkashaAppFiltersInput,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int,
-        sorting: AkashaAppSortingInput
-    ): AkashaAppConnection
-    akashaAppListCount(filters: AkashaAppFiltersInput): Int!
-    akashaAppRelease(with: WithAkashaAppReleaseInput!): AkashaAppRelease
-    akashaAppReleaseList(
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        filters: AkashaAppReleaseFiltersInput,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int,
-        sorting: AkashaAppReleaseSortingInput
-    ): AkashaAppReleaseConnection
-    akashaAppReleaseListCount(filters: AkashaAppReleaseFiltersInput): Int!
-    akashaAppsStream(with: WithAkashaAppsStreamInput!): AkashaAppsStream
-    akashaAppsStreamList(
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        filters: AkashaAppsStreamFiltersInput,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int,
-        sorting: AkashaAppsStreamSortingInput
-    ): AkashaAppsStreamConnection
-    akashaAppsStreamListCount(filters: AkashaAppsStreamFiltersInput): Int!
-    akashaBeamList(
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        filters: AkashaBeamFiltersInput,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int,
-        sorting: AkashaBeamSortingInput
-    ): AkashaBeamConnection
-    akashaBeamListCount(filters: AkashaBeamFiltersInput): Int!
-    akashaBeamStream(with: WithAkashaBeamStreamInput!): AkashaBeamStream
-    akashaBeamStreamList(
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        filters: AkashaBeamStreamFiltersInput,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int,
-        sorting: AkashaBeamStreamSortingInput
-    ): AkashaBeamStreamConnection
-    akashaBeamStreamListCount(filters: AkashaBeamStreamFiltersInput): Int!
-    akashaBlockStorage(with: WithAkashaBlockStorageInput!): AkashaBlockStorage
-    akashaBlockStorageList(
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        filters: AkashaBlockStorageFiltersInput,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int,
-        sorting: AkashaBlockStorageSortingInput
-    ): AkashaBlockStorageConnection
-    akashaBlockStorageListCount(filters: AkashaBlockStorageFiltersInput): Int!
-    akashaContentBlockList(
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        filters: AkashaContentBlockFiltersInput,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int,
-        sorting: AkashaContentBlockSortingInput
-    ): AkashaContentBlockConnection
-    akashaContentBlockListCount(filters: AkashaContentBlockFiltersInput): Int!
-    akashaContentBlockStream(with: WithAkashaContentBlockStreamInput!): AkashaContentBlockStream
-    akashaContentBlockStreamList(
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        filters: AkashaContentBlockStreamFiltersInput,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int,
-        sorting: AkashaContentBlockStreamSortingInput
-    ): AkashaContentBlockStreamConnection
-    akashaContentBlockStreamListCount(filters: AkashaContentBlockStreamFiltersInput): Int!
-    akashaFollow(with: WithAkashaFollowInput!): AkashaFollow
-    akashaFollowList(
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        filters: AkashaFollowFiltersInput,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int,
-        sorting: AkashaFollowSortingInput
-    ): AkashaFollowConnection
-    akashaFollowListCount(filters: AkashaFollowFiltersInput): Int!
-    akashaIndexedStream(with: WithAkashaIndexedStreamInput!): AkashaIndexedStream
-    akashaIndexedStreamList(
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        filters: AkashaIndexedStreamFiltersInput,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int,
-        sorting: AkashaIndexedStreamSortingInput
-    ): AkashaIndexedStreamConnection
-    akashaIndexedStreamListCount(filters: AkashaIndexedStreamFiltersInput): Int!
-    akashaInterestsStream(with: WithAkashaInterestsStreamInput!): AkashaInterestsStream
-    akashaInterestsStreamList(
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        filters: AkashaInterestsStreamFiltersInput,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int,
-        sorting: AkashaInterestsStreamSortingInput
-    ): AkashaInterestsStreamConnection
-    akashaInterestsStreamListCount(filters: AkashaInterestsStreamFiltersInput): Int!
-    akashaProfile: AkashaProfile
-    akashaProfileInterests: AkashaProfileInterests
-    akashaProfileStream(with: WithAkashaProfileStreamInput!): AkashaProfileStream
-    akashaProfileStreamList(
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        filters: AkashaProfileStreamFiltersInput,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int,
-        sorting: AkashaProfileStreamSortingInput
-    ): AkashaProfileStreamConnection
-    akashaProfileStreamListCount(filters: AkashaProfileStreamFiltersInput): Int!
-    akashaReflectList(
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        filters: AkashaReflectFiltersInput,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int,
-        sorting: AkashaReflectSortingInput
-    ): AkashaReflectConnection
-    akashaReflectListCount(filters: AkashaReflectFiltersInput): Int!
-    akashaReflectStream(with: WithAkashaReflectStreamInput!): AkashaReflectStream
-    akashaReflectStreamList(
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        filters: AkashaReflectStreamFiltersInput,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int,
-        sorting: AkashaReflectStreamSortingInput
-    ): AkashaReflectStreamConnection
-    akashaReflectStreamListCount(filters: AkashaReflectStreamFiltersInput): Int!
-    "Globally unique identifier of the account (DID string)"
-    id: ID!
-    "Whether the Ceramic instance is currently authenticated with this account or not"
-    isViewer: Boolean!
+  akashaApp(with: WithAkashaAppInput!): AkashaApp
+  akashaAppList(
+    "Returns the items in the list that come after the specified cursor."
+    after: String,
+    "Returns the items in the list that come before the specified cursor."
+    before: String,
+    filters: AkashaAppFiltersInput,
+    "Returns the first n items from the list."
+    first: Int,
+    "Returns the last n items from the list."
+    last: Int,
+    sorting: AkashaAppSortingInput
+  ): AkashaAppConnection
+  akashaAppListCount(filters: AkashaAppFiltersInput): Int!
+  akashaAppRelease(with: WithAkashaAppReleaseInput!): AkashaAppRelease
+  akashaAppReleaseList(
+    "Returns the items in the list that come after the specified cursor."
+    after: String,
+    "Returns the items in the list that come before the specified cursor."
+    before: String,
+    filters: AkashaAppReleaseFiltersInput,
+    "Returns the first n items from the list."
+    first: Int,
+    "Returns the last n items from the list."
+    last: Int,
+    sorting: AkashaAppReleaseSortingInput
+  ): AkashaAppReleaseConnection
+  akashaAppReleaseListCount(filters: AkashaAppReleaseFiltersInput): Int!
+  akashaAppsStream(with: WithAkashaAppsStreamInput!): AkashaAppsStream
+  akashaAppsStreamList(
+    "Returns the items in the list that come after the specified cursor."
+    after: String,
+    "Returns the items in the list that come before the specified cursor."
+    before: String,
+    filters: AkashaAppsStreamFiltersInput,
+    "Returns the first n items from the list."
+    first: Int,
+    "Returns the last n items from the list."
+    last: Int,
+    sorting: AkashaAppsStreamSortingInput
+  ): AkashaAppsStreamConnection
+  akashaAppsStreamListCount(filters: AkashaAppsStreamFiltersInput): Int!
+  akashaBeamList(
+    "Returns the items in the list that come after the specified cursor."
+    after: String,
+    "Returns the items in the list that come before the specified cursor."
+    before: String,
+    filters: AkashaBeamFiltersInput,
+    "Returns the first n items from the list."
+    first: Int,
+    "Returns the last n items from the list."
+    last: Int,
+    sorting: AkashaBeamSortingInput
+  ): AkashaBeamConnection
+  akashaBeamListCount(filters: AkashaBeamFiltersInput): Int!
+  akashaBeamStream(with: WithAkashaBeamStreamInput!): AkashaBeamStream
+  akashaBeamStreamList(
+    "Returns the items in the list that come after the specified cursor."
+    after: String,
+    "Returns the items in the list that come before the specified cursor."
+    before: String,
+    filters: AkashaBeamStreamFiltersInput,
+    "Returns the first n items from the list."
+    first: Int,
+    "Returns the last n items from the list."
+    last: Int,
+    sorting: AkashaBeamStreamSortingInput
+  ): AkashaBeamStreamConnection
+  akashaBeamStreamListCount(filters: AkashaBeamStreamFiltersInput): Int!
+  akashaBlockStorage(with: WithAkashaBlockStorageInput!): AkashaBlockStorage
+  akashaBlockStorageList(
+    "Returns the items in the list that come after the specified cursor."
+    after: String,
+    "Returns the items in the list that come before the specified cursor."
+    before: String,
+    filters: AkashaBlockStorageFiltersInput,
+    "Returns the first n items from the list."
+    first: Int,
+    "Returns the last n items from the list."
+    last: Int,
+    sorting: AkashaBlockStorageSortingInput
+  ): AkashaBlockStorageConnection
+  akashaBlockStorageListCount(filters: AkashaBlockStorageFiltersInput): Int!
+  akashaContentBlockList(
+    "Returns the items in the list that come after the specified cursor."
+    after: String,
+    "Returns the items in the list that come before the specified cursor."
+    before: String,
+    filters: AkashaContentBlockFiltersInput,
+    "Returns the first n items from the list."
+    first: Int,
+    "Returns the last n items from the list."
+    last: Int,
+    sorting: AkashaContentBlockSortingInput
+  ): AkashaContentBlockConnection
+  akashaContentBlockListCount(filters: AkashaContentBlockFiltersInput): Int!
+  akashaContentBlockStream(with: WithAkashaContentBlockStreamInput!): AkashaContentBlockStream
+  akashaContentBlockStreamList(
+    "Returns the items in the list that come after the specified cursor."
+    after: String,
+    "Returns the items in the list that come before the specified cursor."
+    before: String,
+    filters: AkashaContentBlockStreamFiltersInput,
+    "Returns the first n items from the list."
+    first: Int,
+    "Returns the last n items from the list."
+    last: Int,
+    sorting: AkashaContentBlockStreamSortingInput
+  ): AkashaContentBlockStreamConnection
+  akashaContentBlockStreamListCount(filters: AkashaContentBlockStreamFiltersInput): Int!
+  akashaFollow(with: WithAkashaFollowInput!): AkashaFollow
+  akashaFollowList(
+    "Returns the items in the list that come after the specified cursor."
+    after: String,
+    "Returns the items in the list that come before the specified cursor."
+    before: String,
+    filters: AkashaFollowFiltersInput,
+    "Returns the first n items from the list."
+    first: Int,
+    "Returns the last n items from the list."
+    last: Int,
+    sorting: AkashaFollowSortingInput
+  ): AkashaFollowConnection
+  akashaFollowListCount(filters: AkashaFollowFiltersInput): Int!
+  akashaIndexedStream(with: WithAkashaIndexedStreamInput!): AkashaIndexedStream
+  akashaIndexedStreamList(
+    "Returns the items in the list that come after the specified cursor."
+    after: String,
+    "Returns the items in the list that come before the specified cursor."
+    before: String,
+    filters: AkashaIndexedStreamFiltersInput,
+    "Returns the first n items from the list."
+    first: Int,
+    "Returns the last n items from the list."
+    last: Int,
+    sorting: AkashaIndexedStreamSortingInput
+  ): AkashaIndexedStreamConnection
+  akashaIndexedStreamListCount(filters: AkashaIndexedStreamFiltersInput): Int!
+  akashaInterestsStream(with: WithAkashaInterestsStreamInput!): AkashaInterestsStream
+  akashaInterestsStreamList(
+    "Returns the items in the list that come after the specified cursor."
+    after: String,
+    "Returns the items in the list that come before the specified cursor."
+    before: String,
+    filters: AkashaInterestsStreamFiltersInput,
+    "Returns the first n items from the list."
+    first: Int,
+    "Returns the last n items from the list."
+    last: Int,
+    sorting: AkashaInterestsStreamSortingInput
+  ): AkashaInterestsStreamConnection
+  akashaInterestsStreamListCount(filters: AkashaInterestsStreamFiltersInput): Int!
+  akashaProfile: AkashaProfile
+  akashaProfileInterests: AkashaProfileInterests
+  akashaProfileStream(with: WithAkashaProfileStreamInput!): AkashaProfileStream
+  akashaProfileStreamList(
+    "Returns the items in the list that come after the specified cursor."
+    after: String,
+    "Returns the items in the list that come before the specified cursor."
+    before: String,
+    filters: AkashaProfileStreamFiltersInput,
+    "Returns the first n items from the list."
+    first: Int,
+    "Returns the last n items from the list."
+    last: Int,
+    sorting: AkashaProfileStreamSortingInput
+  ): AkashaProfileStreamConnection
+  akashaProfileStreamListCount(filters: AkashaProfileStreamFiltersInput): Int!
+  akashaReflectList(
+    "Returns the items in the list that come after the specified cursor."
+    after: String,
+    "Returns the items in the list that come before the specified cursor."
+    before: String,
+    filters: AkashaReflectFiltersInput,
+    "Returns the first n items from the list."
+    first: Int,
+    "Returns the last n items from the list."
+    last: Int,
+    sorting: AkashaReflectSortingInput
+  ): AkashaReflectConnection
+  akashaReflectListCount(filters: AkashaReflectFiltersInput): Int!
+  akashaReflectStream(with: WithAkashaReflectStreamInput!): AkashaReflectStream
+  akashaReflectStreamList(
+    "Returns the items in the list that come after the specified cursor."
+    after: String,
+    "Returns the items in the list that come before the specified cursor."
+    before: String,
+    filters: AkashaReflectStreamFiltersInput,
+    "Returns the first n items from the list."
+    first: Int,
+    "Returns the last n items from the list."
+    last: Int,
+    sorting: AkashaReflectStreamSortingInput
+  ): AkashaReflectStreamConnection
+  akashaReflectStreamListCount(filters: AkashaReflectStreamFiltersInput): Int!
+  "Globally unique identifier of the account (DID string)"
+  id: ID!
+  "Whether the Ceramic instance is currently authenticated with this account or not"
+  isViewer: Boolean!
 }
 
 type CreateAkashaBeamPayload {
-    clientMutationId: String
-    document: AkashaBeam!
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaBeam!
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type CreateAkashaContentBlockPayload {
-    clientMutationId: String
-    document: AkashaContentBlock!
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaContentBlock!
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type CreateAkashaProfileInterestsPayload {
-    clientMutationId: String
-    document: AkashaProfileInterests!
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaProfileInterests!
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type CreateAkashaProfilePayload {
-    clientMutationId: String
-    document: AkashaProfile!
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaProfile!
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type CreateAkashaReflectPayload {
-    clientMutationId: String
-    document: AkashaReflect!
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaReflect!
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type EnableIndexingAkashaAppPayload {
-    clientMutationId: String
-    document: AkashaApp
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaApp
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type EnableIndexingAkashaAppReleasePayload {
-    clientMutationId: String
-    document: AkashaAppRelease
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaAppRelease
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type EnableIndexingAkashaAppsStreamPayload {
-    clientMutationId: String
-    document: AkashaAppsStream
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaAppsStream
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type EnableIndexingAkashaBeamPayload {
-    clientMutationId: String
-    document: AkashaBeam
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaBeam
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type EnableIndexingAkashaBeamStreamPayload {
-    clientMutationId: String
-    document: AkashaBeamStream
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaBeamStream
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type EnableIndexingAkashaBlockStoragePayload {
-    clientMutationId: String
-    document: AkashaBlockStorage
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaBlockStorage
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type EnableIndexingAkashaContentBlockPayload {
-    clientMutationId: String
-    document: AkashaContentBlock
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaContentBlock
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type EnableIndexingAkashaContentBlockStreamPayload {
-    clientMutationId: String
-    document: AkashaContentBlockStream
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaContentBlockStream
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type EnableIndexingAkashaFollowPayload {
-    clientMutationId: String
-    document: AkashaFollow
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaFollow
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type EnableIndexingAkashaIndexedStreamPayload {
-    clientMutationId: String
-    document: AkashaIndexedStream
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaIndexedStream
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type EnableIndexingAkashaInterestsStreamPayload {
-    clientMutationId: String
-    document: AkashaInterestsStream
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaInterestsStream
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type EnableIndexingAkashaProfileInterestsPayload {
-    clientMutationId: String
-    document: AkashaProfileInterests
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaProfileInterests
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type EnableIndexingAkashaProfilePayload {
-    clientMutationId: String
-    document: AkashaProfile
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaProfile
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type EnableIndexingAkashaProfileStreamPayload {
-    clientMutationId: String
-    document: AkashaProfileStream
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaProfileStream
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type EnableIndexingAkashaReflectPayload {
-    clientMutationId: String
-    document: AkashaReflect
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaReflect
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type EnableIndexingAkashaReflectStreamPayload {
-    clientMutationId: String
-    document: AkashaReflectStream
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaReflectStream
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type Mutation {
-    createAkashaBeam(input: CreateAkashaBeamInput!): CreateAkashaBeamPayload
-    createAkashaContentBlock(input: CreateAkashaContentBlockInput!): CreateAkashaContentBlockPayload
-    createAkashaProfile(input: CreateAkashaProfileInput!): CreateAkashaProfilePayload @deprecated(reason: "Replaced by the setAkashaProfile mutation, createAkashaProfile will be removed in a future version of ComposeDB.")
-    createAkashaProfileInterests(input: CreateAkashaProfileInterestsInput!): CreateAkashaProfileInterestsPayload @deprecated(reason: "Replaced by the setAkashaProfileInterests mutation, createAkashaProfileInterests will be removed in a future version of ComposeDB.")
-    createAkashaReflect(input: CreateAkashaReflectInput!): CreateAkashaReflectPayload
-    enableIndexingAkashaApp(input: EnableIndexingAkashaAppInput!): EnableIndexingAkashaAppPayload
-    enableIndexingAkashaAppRelease(input: EnableIndexingAkashaAppReleaseInput!): EnableIndexingAkashaAppReleasePayload
-    enableIndexingAkashaAppsStream(input: EnableIndexingAkashaAppsStreamInput!): EnableIndexingAkashaAppsStreamPayload
-    enableIndexingAkashaBeam(input: EnableIndexingAkashaBeamInput!): EnableIndexingAkashaBeamPayload
-    enableIndexingAkashaBeamStream(input: EnableIndexingAkashaBeamStreamInput!): EnableIndexingAkashaBeamStreamPayload
-    enableIndexingAkashaBlockStorage(input: EnableIndexingAkashaBlockStorageInput!): EnableIndexingAkashaBlockStoragePayload
-    enableIndexingAkashaContentBlock(input: EnableIndexingAkashaContentBlockInput!): EnableIndexingAkashaContentBlockPayload
-    enableIndexingAkashaContentBlockStream(input: EnableIndexingAkashaContentBlockStreamInput!): EnableIndexingAkashaContentBlockStreamPayload
-    enableIndexingAkashaFollow(input: EnableIndexingAkashaFollowInput!): EnableIndexingAkashaFollowPayload
-    enableIndexingAkashaIndexedStream(input: EnableIndexingAkashaIndexedStreamInput!): EnableIndexingAkashaIndexedStreamPayload
-    enableIndexingAkashaInterestsStream(input: EnableIndexingAkashaInterestsStreamInput!): EnableIndexingAkashaInterestsStreamPayload
-    enableIndexingAkashaProfile(input: EnableIndexingAkashaProfileInput!): EnableIndexingAkashaProfilePayload
-    enableIndexingAkashaProfileInterests(input: EnableIndexingAkashaProfileInterestsInput!): EnableIndexingAkashaProfileInterestsPayload
-    enableIndexingAkashaProfileStream(input: EnableIndexingAkashaProfileStreamInput!): EnableIndexingAkashaProfileStreamPayload
-    enableIndexingAkashaReflect(input: EnableIndexingAkashaReflectInput!): EnableIndexingAkashaReflectPayload
-    enableIndexingAkashaReflectStream(input: EnableIndexingAkashaReflectStreamInput!): EnableIndexingAkashaReflectStreamPayload
-    setAkashaApp(input: SetAkashaAppInput!): SetAkashaAppPayload
-    setAkashaAppRelease(input: SetAkashaAppReleaseInput!): SetAkashaAppReleasePayload
-    setAkashaAppsStream(input: SetAkashaAppsStreamInput!): SetAkashaAppsStreamPayload
-    setAkashaBeamStream(input: SetAkashaBeamStreamInput!): SetAkashaBeamStreamPayload
-    setAkashaBlockStorage(input: SetAkashaBlockStorageInput!): SetAkashaBlockStoragePayload
-    setAkashaContentBlockStream(input: SetAkashaContentBlockStreamInput!): SetAkashaContentBlockStreamPayload
-    setAkashaFollow(input: SetAkashaFollowInput!): SetAkashaFollowPayload
-    setAkashaIndexedStream(input: SetAkashaIndexedStreamInput!): SetAkashaIndexedStreamPayload
-    setAkashaInterestsStream(input: SetAkashaInterestsStreamInput!): SetAkashaInterestsStreamPayload
-    setAkashaProfile(input: SetAkashaProfileInput!): SetAkashaProfilePayload
-    setAkashaProfileInterests(input: SetAkashaProfileInterestsInput!): SetAkashaProfileInterestsPayload
-    setAkashaProfileStream(input: SetAkashaProfileStreamInput!): SetAkashaProfileStreamPayload
-    setAkashaReflectStream(input: SetAkashaReflectStreamInput!): SetAkashaReflectStreamPayload
-    updateAkashaApp(input: UpdateAkashaAppInput!): UpdateAkashaAppPayload
-    updateAkashaAppRelease(input: UpdateAkashaAppReleaseInput!): UpdateAkashaAppReleasePayload
-    updateAkashaAppsStream(input: UpdateAkashaAppsStreamInput!): UpdateAkashaAppsStreamPayload
-    updateAkashaBeam(input: UpdateAkashaBeamInput!): UpdateAkashaBeamPayload
-    updateAkashaBeamStream(input: UpdateAkashaBeamStreamInput!): UpdateAkashaBeamStreamPayload
-    updateAkashaBlockStorage(input: UpdateAkashaBlockStorageInput!): UpdateAkashaBlockStoragePayload
-    updateAkashaContentBlock(input: UpdateAkashaContentBlockInput!): UpdateAkashaContentBlockPayload
-    updateAkashaContentBlockStream(input: UpdateAkashaContentBlockStreamInput!): UpdateAkashaContentBlockStreamPayload
-    updateAkashaFollow(input: UpdateAkashaFollowInput!): UpdateAkashaFollowPayload
-    updateAkashaIndexedStream(input: UpdateAkashaIndexedStreamInput!): UpdateAkashaIndexedStreamPayload
-    updateAkashaInterestsStream(input: UpdateAkashaInterestsStreamInput!): UpdateAkashaInterestsStreamPayload
-    updateAkashaProfile(input: UpdateAkashaProfileInput!): UpdateAkashaProfilePayload
-    updateAkashaProfileInterests(input: UpdateAkashaProfileInterestsInput!): UpdateAkashaProfileInterestsPayload
-    updateAkashaProfileStream(input: UpdateAkashaProfileStreamInput!): UpdateAkashaProfileStreamPayload
-    updateAkashaReflect(input: UpdateAkashaReflectInput!): UpdateAkashaReflectPayload
-    updateAkashaReflectStream(input: UpdateAkashaReflectStreamInput!): UpdateAkashaReflectStreamPayload
+  createAkashaBeam(input: CreateAkashaBeamInput!): CreateAkashaBeamPayload
+  createAkashaContentBlock(input: CreateAkashaContentBlockInput!): CreateAkashaContentBlockPayload
+  createAkashaProfile(input: CreateAkashaProfileInput!): CreateAkashaProfilePayload @deprecated(reason: "Replaced by the setAkashaProfile mutation, createAkashaProfile will be removed in a future version of ComposeDB.")
+  createAkashaProfileInterests(input: CreateAkashaProfileInterestsInput!): CreateAkashaProfileInterestsPayload @deprecated(reason: "Replaced by the setAkashaProfileInterests mutation, createAkashaProfileInterests will be removed in a future version of ComposeDB.")
+  createAkashaReflect(input: CreateAkashaReflectInput!): CreateAkashaReflectPayload
+  enableIndexingAkashaApp(input: EnableIndexingAkashaAppInput!): EnableIndexingAkashaAppPayload
+  enableIndexingAkashaAppRelease(input: EnableIndexingAkashaAppReleaseInput!): EnableIndexingAkashaAppReleasePayload
+  enableIndexingAkashaAppsStream(input: EnableIndexingAkashaAppsStreamInput!): EnableIndexingAkashaAppsStreamPayload
+  enableIndexingAkashaBeam(input: EnableIndexingAkashaBeamInput!): EnableIndexingAkashaBeamPayload
+  enableIndexingAkashaBeamStream(input: EnableIndexingAkashaBeamStreamInput!): EnableIndexingAkashaBeamStreamPayload
+  enableIndexingAkashaBlockStorage(input: EnableIndexingAkashaBlockStorageInput!): EnableIndexingAkashaBlockStoragePayload
+  enableIndexingAkashaContentBlock(input: EnableIndexingAkashaContentBlockInput!): EnableIndexingAkashaContentBlockPayload
+  enableIndexingAkashaContentBlockStream(input: EnableIndexingAkashaContentBlockStreamInput!): EnableIndexingAkashaContentBlockStreamPayload
+  enableIndexingAkashaFollow(input: EnableIndexingAkashaFollowInput!): EnableIndexingAkashaFollowPayload
+  enableIndexingAkashaIndexedStream(input: EnableIndexingAkashaIndexedStreamInput!): EnableIndexingAkashaIndexedStreamPayload
+  enableIndexingAkashaInterestsStream(input: EnableIndexingAkashaInterestsStreamInput!): EnableIndexingAkashaInterestsStreamPayload
+  enableIndexingAkashaProfile(input: EnableIndexingAkashaProfileInput!): EnableIndexingAkashaProfilePayload
+  enableIndexingAkashaProfileInterests(input: EnableIndexingAkashaProfileInterestsInput!): EnableIndexingAkashaProfileInterestsPayload
+  enableIndexingAkashaProfileStream(input: EnableIndexingAkashaProfileStreamInput!): EnableIndexingAkashaProfileStreamPayload
+  enableIndexingAkashaReflect(input: EnableIndexingAkashaReflectInput!): EnableIndexingAkashaReflectPayload
+  enableIndexingAkashaReflectStream(input: EnableIndexingAkashaReflectStreamInput!): EnableIndexingAkashaReflectStreamPayload
+  setAkashaApp(input: SetAkashaAppInput!): SetAkashaAppPayload
+  setAkashaAppRelease(input: SetAkashaAppReleaseInput!): SetAkashaAppReleasePayload
+  setAkashaAppsStream(input: SetAkashaAppsStreamInput!): SetAkashaAppsStreamPayload
+  setAkashaBeamStream(input: SetAkashaBeamStreamInput!): SetAkashaBeamStreamPayload
+  setAkashaBlockStorage(input: SetAkashaBlockStorageInput!): SetAkashaBlockStoragePayload
+  setAkashaContentBlockStream(input: SetAkashaContentBlockStreamInput!): SetAkashaContentBlockStreamPayload
+  setAkashaFollow(input: SetAkashaFollowInput!): SetAkashaFollowPayload
+  setAkashaIndexedStream(input: SetAkashaIndexedStreamInput!): SetAkashaIndexedStreamPayload
+  setAkashaInterestsStream(input: SetAkashaInterestsStreamInput!): SetAkashaInterestsStreamPayload
+  setAkashaProfile(input: SetAkashaProfileInput!): SetAkashaProfilePayload
+  setAkashaProfileInterests(input: SetAkashaProfileInterestsInput!): SetAkashaProfileInterestsPayload
+  setAkashaProfileStream(input: SetAkashaProfileStreamInput!): SetAkashaProfileStreamPayload
+  setAkashaReflectStream(input: SetAkashaReflectStreamInput!): SetAkashaReflectStreamPayload
+  updateAkashaApp(input: UpdateAkashaAppInput!): UpdateAkashaAppPayload
+  updateAkashaAppRelease(input: UpdateAkashaAppReleaseInput!): UpdateAkashaAppReleasePayload
+  updateAkashaAppsStream(input: UpdateAkashaAppsStreamInput!): UpdateAkashaAppsStreamPayload
+  updateAkashaBeam(input: UpdateAkashaBeamInput!): UpdateAkashaBeamPayload
+  updateAkashaBeamStream(input: UpdateAkashaBeamStreamInput!): UpdateAkashaBeamStreamPayload
+  updateAkashaBlockStorage(input: UpdateAkashaBlockStorageInput!): UpdateAkashaBlockStoragePayload
+  updateAkashaContentBlock(input: UpdateAkashaContentBlockInput!): UpdateAkashaContentBlockPayload
+  updateAkashaContentBlockStream(input: UpdateAkashaContentBlockStreamInput!): UpdateAkashaContentBlockStreamPayload
+  updateAkashaFollow(input: UpdateAkashaFollowInput!): UpdateAkashaFollowPayload
+  updateAkashaIndexedStream(input: UpdateAkashaIndexedStreamInput!): UpdateAkashaIndexedStreamPayload
+  updateAkashaInterestsStream(input: UpdateAkashaInterestsStreamInput!): UpdateAkashaInterestsStreamPayload
+  updateAkashaProfile(input: UpdateAkashaProfileInput!): UpdateAkashaProfilePayload
+  updateAkashaProfileInterests(input: UpdateAkashaProfileInterestsInput!): UpdateAkashaProfileInterestsPayload
+  updateAkashaProfileStream(input: UpdateAkashaProfileStreamInput!): UpdateAkashaProfileStreamPayload
+  updateAkashaReflect(input: UpdateAkashaReflectInput!): UpdateAkashaReflectPayload
+  updateAkashaReflectStream(input: UpdateAkashaReflectStreamInput!): UpdateAkashaReflectStreamPayload
 }
 
 "Information about pagination in a connection."
 type PageInfo {
-    "When paginating forwards, the cursor to continue."
-    endCursor: String
-    "When paginating forwards, are there more items?"
-    hasNextPage: Boolean!
-    "When paginating backwards, are there more items?"
-    hasPreviousPage: Boolean!
-    "When paginating backwards, the cursor to continue."
-    startCursor: String
+  "When paginating forwards, the cursor to continue."
+  endCursor: String
+  "When paginating forwards, are there more items?"
+  hasNextPage: Boolean!
+  "When paginating backwards, are there more items?"
+  hasPreviousPage: Boolean!
+  "When paginating backwards, the cursor to continue."
+  startCursor: String
 }
 
 type Query {
-    akashaAppCount(filters: AkashaAppFiltersInput): Int!
-    akashaAppIndex(
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        filters: AkashaAppFiltersInput,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int,
-        sorting: AkashaAppSortingInput
-    ): AkashaAppConnection
-    akashaAppReleaseCount(filters: AkashaAppReleaseFiltersInput): Int!
-    akashaAppReleaseIndex(
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        filters: AkashaAppReleaseFiltersInput,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int,
-        sorting: AkashaAppReleaseSortingInput
-    ): AkashaAppReleaseConnection
-    akashaAppsStreamCount(filters: AkashaAppsStreamFiltersInput): Int!
-    akashaAppsStreamIndex(
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        filters: AkashaAppsStreamFiltersInput,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int,
-        sorting: AkashaAppsStreamSortingInput
-    ): AkashaAppsStreamConnection
-    akashaBeamCount(filters: AkashaBeamFiltersInput): Int!
-    akashaBeamIndex(
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        filters: AkashaBeamFiltersInput,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int,
-        sorting: AkashaBeamSortingInput
-    ): AkashaBeamConnection
-    akashaBeamStreamCount(filters: AkashaBeamStreamFiltersInput): Int!
-    akashaBeamStreamIndex(
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        filters: AkashaBeamStreamFiltersInput,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int,
-        sorting: AkashaBeamStreamSortingInput
-    ): AkashaBeamStreamConnection
-    akashaBlockStorageCount(filters: AkashaBlockStorageFiltersInput): Int!
-    akashaBlockStorageIndex(
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        filters: AkashaBlockStorageFiltersInput,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int,
-        sorting: AkashaBlockStorageSortingInput
-    ): AkashaBlockStorageConnection
-    akashaContentBlockCount(filters: AkashaContentBlockFiltersInput): Int!
-    akashaContentBlockIndex(
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        filters: AkashaContentBlockFiltersInput,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int,
-        sorting: AkashaContentBlockSortingInput
-    ): AkashaContentBlockConnection
-    akashaContentBlockStreamCount(filters: AkashaContentBlockStreamFiltersInput): Int!
-    akashaContentBlockStreamIndex(
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        filters: AkashaContentBlockStreamFiltersInput,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int,
-        sorting: AkashaContentBlockStreamSortingInput
-    ): AkashaContentBlockStreamConnection
-    akashaFollowCount(filters: AkashaFollowFiltersInput): Int!
-    akashaFollowIndex(
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        filters: AkashaFollowFiltersInput,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int,
-        sorting: AkashaFollowSortingInput
-    ): AkashaFollowConnection
-    akashaIndexedStreamCount(filters: AkashaIndexedStreamFiltersInput): Int!
-    akashaIndexedStreamIndex(
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        filters: AkashaIndexedStreamFiltersInput,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int,
-        sorting: AkashaIndexedStreamSortingInput
-    ): AkashaIndexedStreamConnection
-    akashaInterestsStreamCount(filters: AkashaInterestsStreamFiltersInput): Int!
-    akashaInterestsStreamIndex(
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        filters: AkashaInterestsStreamFiltersInput,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int,
-        sorting: AkashaInterestsStreamSortingInput
-    ): AkashaInterestsStreamConnection
-    akashaProfileCount(filters: AkashaProfileFiltersInput): Int!
-    akashaProfileIndex(
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        filters: AkashaProfileFiltersInput,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int,
-        sorting: AkashaProfileSortingInput
-    ): AkashaProfileConnection
-    akashaProfileInterestsCount: Int!
-    akashaProfileInterestsIndex(
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int
-    ): AkashaProfileInterestsConnection
-    akashaProfileStreamCount(filters: AkashaProfileStreamFiltersInput): Int!
-    akashaProfileStreamIndex(
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        filters: AkashaProfileStreamFiltersInput,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int,
-        sorting: AkashaProfileStreamSortingInput
-    ): AkashaProfileStreamConnection
-    akashaReflectCount(filters: AkashaReflectFiltersInput): Int!
-    akashaReflectIndex(
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        filters: AkashaReflectFiltersInput,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int,
-        sorting: AkashaReflectSortingInput
-    ): AkashaReflectConnection
-    akashaReflectStreamCount(filters: AkashaReflectStreamFiltersInput): Int!
-    akashaReflectStreamIndex(
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        filters: AkashaReflectStreamFiltersInput,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int,
-        sorting: AkashaReflectStreamSortingInput
-    ): AkashaReflectStreamConnection
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Fetches objects given their IDs"
-    nodes(
-        "The IDs of objects"
-        ids: [ID!]!
-    ): [Node]!
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  akashaAppCount(filters: AkashaAppFiltersInput): Int!
+  akashaAppIndex(
+    "Returns the items in the list that come after the specified cursor."
+    after: String,
+    "Returns the items in the list that come before the specified cursor."
+    before: String,
+    filters: AkashaAppFiltersInput,
+    "Returns the first n items from the list."
+    first: Int,
+    "Returns the last n items from the list."
+    last: Int,
+    sorting: AkashaAppSortingInput
+  ): AkashaAppConnection
+  akashaAppReleaseCount(filters: AkashaAppReleaseFiltersInput): Int!
+  akashaAppReleaseIndex(
+    "Returns the items in the list that come after the specified cursor."
+    after: String,
+    "Returns the items in the list that come before the specified cursor."
+    before: String,
+    filters: AkashaAppReleaseFiltersInput,
+    "Returns the first n items from the list."
+    first: Int,
+    "Returns the last n items from the list."
+    last: Int,
+    sorting: AkashaAppReleaseSortingInput
+  ): AkashaAppReleaseConnection
+  akashaAppsStreamCount(filters: AkashaAppsStreamFiltersInput): Int!
+  akashaAppsStreamIndex(
+    "Returns the items in the list that come after the specified cursor."
+    after: String,
+    "Returns the items in the list that come before the specified cursor."
+    before: String,
+    filters: AkashaAppsStreamFiltersInput,
+    "Returns the first n items from the list."
+    first: Int,
+    "Returns the last n items from the list."
+    last: Int,
+    sorting: AkashaAppsStreamSortingInput
+  ): AkashaAppsStreamConnection
+  akashaBeamCount(filters: AkashaBeamFiltersInput): Int!
+  akashaBeamIndex(
+    "Returns the items in the list that come after the specified cursor."
+    after: String,
+    "Returns the items in the list that come before the specified cursor."
+    before: String,
+    filters: AkashaBeamFiltersInput,
+    "Returns the first n items from the list."
+    first: Int,
+    "Returns the last n items from the list."
+    last: Int,
+    sorting: AkashaBeamSortingInput
+  ): AkashaBeamConnection
+  akashaBeamStreamCount(filters: AkashaBeamStreamFiltersInput): Int!
+  akashaBeamStreamIndex(
+    "Returns the items in the list that come after the specified cursor."
+    after: String,
+    "Returns the items in the list that come before the specified cursor."
+    before: String,
+    filters: AkashaBeamStreamFiltersInput,
+    "Returns the first n items from the list."
+    first: Int,
+    "Returns the last n items from the list."
+    last: Int,
+    sorting: AkashaBeamStreamSortingInput
+  ): AkashaBeamStreamConnection
+  akashaBlockStorageCount(filters: AkashaBlockStorageFiltersInput): Int!
+  akashaBlockStorageIndex(
+    "Returns the items in the list that come after the specified cursor."
+    after: String,
+    "Returns the items in the list that come before the specified cursor."
+    before: String,
+    filters: AkashaBlockStorageFiltersInput,
+    "Returns the first n items from the list."
+    first: Int,
+    "Returns the last n items from the list."
+    last: Int,
+    sorting: AkashaBlockStorageSortingInput
+  ): AkashaBlockStorageConnection
+  akashaContentBlockCount(filters: AkashaContentBlockFiltersInput): Int!
+  akashaContentBlockIndex(
+    "Returns the items in the list that come after the specified cursor."
+    after: String,
+    "Returns the items in the list that come before the specified cursor."
+    before: String,
+    filters: AkashaContentBlockFiltersInput,
+    "Returns the first n items from the list."
+    first: Int,
+    "Returns the last n items from the list."
+    last: Int,
+    sorting: AkashaContentBlockSortingInput
+  ): AkashaContentBlockConnection
+  akashaContentBlockStreamCount(filters: AkashaContentBlockStreamFiltersInput): Int!
+  akashaContentBlockStreamIndex(
+    "Returns the items in the list that come after the specified cursor."
+    after: String,
+    "Returns the items in the list that come before the specified cursor."
+    before: String,
+    filters: AkashaContentBlockStreamFiltersInput,
+    "Returns the first n items from the list."
+    first: Int,
+    "Returns the last n items from the list."
+    last: Int,
+    sorting: AkashaContentBlockStreamSortingInput
+  ): AkashaContentBlockStreamConnection
+  akashaFollowCount(filters: AkashaFollowFiltersInput): Int!
+  akashaFollowIndex(
+    "Returns the items in the list that come after the specified cursor."
+    after: String,
+    "Returns the items in the list that come before the specified cursor."
+    before: String,
+    filters: AkashaFollowFiltersInput,
+    "Returns the first n items from the list."
+    first: Int,
+    "Returns the last n items from the list."
+    last: Int,
+    sorting: AkashaFollowSortingInput
+  ): AkashaFollowConnection
+  akashaIndexedStreamCount(filters: AkashaIndexedStreamFiltersInput): Int!
+  akashaIndexedStreamIndex(
+    "Returns the items in the list that come after the specified cursor."
+    after: String,
+    "Returns the items in the list that come before the specified cursor."
+    before: String,
+    filters: AkashaIndexedStreamFiltersInput,
+    "Returns the first n items from the list."
+    first: Int,
+    "Returns the last n items from the list."
+    last: Int,
+    sorting: AkashaIndexedStreamSortingInput
+  ): AkashaIndexedStreamConnection
+  akashaInterestsStreamCount(filters: AkashaInterestsStreamFiltersInput): Int!
+  akashaInterestsStreamIndex(
+    "Returns the items in the list that come after the specified cursor."
+    after: String,
+    "Returns the items in the list that come before the specified cursor."
+    before: String,
+    filters: AkashaInterestsStreamFiltersInput,
+    "Returns the first n items from the list."
+    first: Int,
+    "Returns the last n items from the list."
+    last: Int,
+    sorting: AkashaInterestsStreamSortingInput
+  ): AkashaInterestsStreamConnection
+  akashaProfileCount(filters: AkashaProfileFiltersInput): Int!
+  akashaProfileIndex(
+    "Returns the items in the list that come after the specified cursor."
+    after: String,
+    "Returns the items in the list that come before the specified cursor."
+    before: String,
+    filters: AkashaProfileFiltersInput,
+    "Returns the first n items from the list."
+    first: Int,
+    "Returns the last n items from the list."
+    last: Int,
+    sorting: AkashaProfileSortingInput
+  ): AkashaProfileConnection
+  akashaProfileInterestsCount: Int!
+  akashaProfileInterestsIndex(
+    "Returns the items in the list that come after the specified cursor."
+    after: String,
+    "Returns the items in the list that come before the specified cursor."
+    before: String,
+    "Returns the first n items from the list."
+    first: Int,
+    "Returns the last n items from the list."
+    last: Int
+  ): AkashaProfileInterestsConnection
+  akashaProfileStreamCount(filters: AkashaProfileStreamFiltersInput): Int!
+  akashaProfileStreamIndex(
+    "Returns the items in the list that come after the specified cursor."
+    after: String,
+    "Returns the items in the list that come before the specified cursor."
+    before: String,
+    filters: AkashaProfileStreamFiltersInput,
+    "Returns the first n items from the list."
+    first: Int,
+    "Returns the last n items from the list."
+    last: Int,
+    sorting: AkashaProfileStreamSortingInput
+  ): AkashaProfileStreamConnection
+  akashaReflectCount(filters: AkashaReflectFiltersInput): Int!
+  akashaReflectIndex(
+    "Returns the items in the list that come after the specified cursor."
+    after: String,
+    "Returns the items in the list that come before the specified cursor."
+    before: String,
+    filters: AkashaReflectFiltersInput,
+    "Returns the first n items from the list."
+    first: Int,
+    "Returns the last n items from the list."
+    last: Int,
+    sorting: AkashaReflectSortingInput
+  ): AkashaReflectConnection
+  akashaReflectStreamCount(filters: AkashaReflectStreamFiltersInput): Int!
+  akashaReflectStreamIndex(
+    "Returns the items in the list that come after the specified cursor."
+    after: String,
+    "Returns the items in the list that come before the specified cursor."
+    before: String,
+    filters: AkashaReflectStreamFiltersInput,
+    "Returns the first n items from the list."
+    first: Int,
+    "Returns the last n items from the list."
+    last: Int,
+    sorting: AkashaReflectStreamSortingInput
+  ): AkashaReflectStreamConnection
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Fetches objects given their IDs"
+  nodes(
+    "The IDs of objects"
+    ids: [ID!]!
+  ): [Node]!
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type SetAkashaAppPayload {
-    clientMutationId: String
-    document: AkashaApp!
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaApp!
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type SetAkashaAppReleasePayload {
-    clientMutationId: String
-    document: AkashaAppRelease!
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaAppRelease!
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type SetAkashaAppsStreamPayload {
-    clientMutationId: String
-    document: AkashaAppsStream!
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaAppsStream!
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type SetAkashaBeamStreamPayload {
-    clientMutationId: String
-    document: AkashaBeamStream!
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaBeamStream!
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type SetAkashaBlockStoragePayload {
-    clientMutationId: String
-    document: AkashaBlockStorage!
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaBlockStorage!
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type SetAkashaContentBlockStreamPayload {
-    clientMutationId: String
-    document: AkashaContentBlockStream!
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaContentBlockStream!
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type SetAkashaFollowPayload {
-    clientMutationId: String
-    document: AkashaFollow!
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaFollow!
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type SetAkashaIndexedStreamPayload {
-    clientMutationId: String
-    document: AkashaIndexedStream!
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaIndexedStream!
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type SetAkashaInterestsStreamPayload {
-    clientMutationId: String
-    document: AkashaInterestsStream!
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaInterestsStream!
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type SetAkashaProfileInterestsPayload {
-    clientMutationId: String
-    document: AkashaProfileInterests!
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaProfileInterests!
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type SetAkashaProfilePayload {
-    clientMutationId: String
-    document: AkashaProfile!
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaProfile!
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type SetAkashaProfileStreamPayload {
-    clientMutationId: String
-    document: AkashaProfileStream!
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaProfileStream!
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type SetAkashaReflectStreamPayload {
-    clientMutationId: String
-    document: AkashaReflectStream!
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaReflectStream!
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type UpdateAkashaAppPayload {
-    clientMutationId: String
-    document: AkashaApp!
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaApp!
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type UpdateAkashaAppReleasePayload {
-    clientMutationId: String
-    document: AkashaAppRelease!
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaAppRelease!
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type UpdateAkashaAppsStreamPayload {
-    clientMutationId: String
-    document: AkashaAppsStream!
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaAppsStream!
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type UpdateAkashaBeamPayload {
-    clientMutationId: String
-    document: AkashaBeam!
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaBeam!
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type UpdateAkashaBeamStreamPayload {
-    clientMutationId: String
-    document: AkashaBeamStream!
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaBeamStream!
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type UpdateAkashaBlockStoragePayload {
-    clientMutationId: String
-    document: AkashaBlockStorage!
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaBlockStorage!
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type UpdateAkashaContentBlockPayload {
-    clientMutationId: String
-    document: AkashaContentBlock!
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaContentBlock!
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type UpdateAkashaContentBlockStreamPayload {
-    clientMutationId: String
-    document: AkashaContentBlockStream!
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaContentBlockStream!
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type UpdateAkashaFollowPayload {
-    clientMutationId: String
-    document: AkashaFollow!
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaFollow!
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type UpdateAkashaIndexedStreamPayload {
-    clientMutationId: String
-    document: AkashaIndexedStream!
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaIndexedStream!
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type UpdateAkashaInterestsStreamPayload {
-    clientMutationId: String
-    document: AkashaInterestsStream!
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaInterestsStream!
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type UpdateAkashaProfileInterestsPayload {
-    clientMutationId: String
-    document: AkashaProfileInterests!
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaProfileInterests!
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type UpdateAkashaProfilePayload {
-    clientMutationId: String
-    document: AkashaProfile!
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaProfile!
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type UpdateAkashaProfileStreamPayload {
-    clientMutationId: String
-    document: AkashaProfileStream!
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaProfileStream!
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type UpdateAkashaReflectPayload {
-    clientMutationId: String
-    document: AkashaReflect!
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaReflect!
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 type UpdateAkashaReflectStreamPayload {
-    clientMutationId: String
-    document: AkashaReflectStream!
-    "Fetches an object given its ID"
-    node(
-        "The ID of an object"
-        id: ID!
-    ): Node
-    "Account currently authenticated on the Ceramic instance, if set"
-    viewer: CeramicAccount
+  clientMutationId: String
+  document: AkashaReflectStream!
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!
+  ): Node
+  "Account currently authenticated on the Ceramic instance, if set"
+  viewer: CeramicAccount
 }
 
 enum AkashaAppApplicationType {
-    APP
-    OTHER
-    PLUGIN
-    WIDGET
+  APP
+  OTHER
+  PLUGIN
+  WIDGET
 }
 
 enum AkashaAppsStreamModerationStatus {
-    IN_REVIEW
-    NSFW
-    OK
-    OTHER
-    REMOVED
-    SUSPENDED
+  IN_REVIEW
+  NSFW
+  OK
+  OTHER
+  REMOVED
+  SUSPENDED
 }
 
 enum AkashaBeamStreamModerationStatus {
-    IN_REVIEW
-    NSFW
-    OK
-    OTHER
-    REMOVED
-    SUSPENDED
+  IN_REVIEW
+  NSFW
+  OK
+  OTHER
+  REMOVED
+  SUSPENDED
 }
 
 enum AkashaBlockStorageBlockStorageDef {
-    BOOL
-    EMOJI
-    FORM_DATA
-    OTHER
-    TEXT
+  BOOL
+  EMOJI
+  FORM_DATA
+  OTHER
+  TEXT
 }
 
 enum AkashaContentBlockBlockDef {
-    FORM
-    OTHER
-    TEXT
+  FORM
+  OTHER
+  TEXT
 }
 
 enum AkashaContentBlockStreamModerationStatus {
-    IN_REVIEW
-    NSFW
-    OK
-    OTHER
-    REMOVED
-    SUSPENDED
+  IN_REVIEW
+  NSFW
+  OK
+  OTHER
+  REMOVED
+  SUSPENDED
 }
 
 enum AkashaIndexedStreamModerationStatus {
-    IN_REVIEW
-    NSFW
-    OK
-    OTHER
-    REMOVED
-    SUSPENDED
+  IN_REVIEW
+  NSFW
+  OK
+  OTHER
+  REMOVED
+  SUSPENDED
 }
 
 enum AkashaIndexedStreamStreamType {
-    APP
-    BEAM
-    EXTENSION
-    OTHER
-    PLUGIN
-    PROFILE
-    REFLECT
-    WIDGET
+  APP
+  BEAM
+  EXTENSION
+  OTHER
+  PLUGIN
+  PROFILE
+  REFLECT
+  WIDGET
 }
 
 enum AkashaInterestsStreamModerationStatus {
-    IN_REVIEW
-    NSFW
-    OK
-    OTHER
-    REMOVED
-    SUSPENDED
+  IN_REVIEW
+  NSFW
+  OK
+  OTHER
+  REMOVED
+  SUSPENDED
 }
 
 enum AkashaProfileStreamModerationStatus {
-    IN_REVIEW
-    NSFW
-    OK
-    OTHER
-    REMOVED
-    SUSPENDED
+  IN_REVIEW
+  NSFW
+  OK
+  OTHER
+  REMOVED
+  SUSPENDED
 }
 
 enum AkashaReflectStreamModerationStatus {
-    IN_REVIEW
-    NSFW
-    OK
-    OTHER
-    REMOVED
-    SUSPENDED
+  IN_REVIEW
+  NSFW
+  OK
+  OTHER
+  REMOVED
+  SUSPENDED
 }
 
 enum SortOrder {
-    ASC
-    DESC
+  ASC
+  DESC
 }
 
 "A Ceramic Commit ID"
@@ -1776,1137 +1778,1145 @@ scalar InterPlanetaryCID
 scalar URI
 
 input AkashaAppApplicationTypeValueFilterInput {
-    equalTo: AkashaAppApplicationType
-    in: [AkashaAppApplicationType!]
-    isNull: Boolean
-    notEqualTo: AkashaAppApplicationType
-    notIn: [AkashaAppApplicationType!]
+  equalTo: AkashaAppApplicationType
+  in: [AkashaAppApplicationType!]
+  isNull: Boolean
+  notEqualTo: AkashaAppApplicationType
+  notIn: [AkashaAppApplicationType!]
 }
 
 input AkashaAppFiltersInput {
-    and: [AkashaAppFiltersInput!]
-    not: AkashaAppFiltersInput
-    or: [AkashaAppFiltersInput!]
-    where: AkashaAppObjectFilterInput
+  and: [AkashaAppFiltersInput!]
+  not: AkashaAppFiltersInput
+  or: [AkashaAppFiltersInput!]
+  where: AkashaAppObjectFilterInput
 }
 
 input AkashaAppInput {
-    applicationType: AkashaAppApplicationType
-    contributors: [DID]
-    createdAt: DateTime!
-    description: String!
-    displayName: String!
-    keywords: [String]
-    licence: String!
-    name: String!
+  applicationType: AkashaAppApplicationType
+  contributors: [DID]
+  createdAt: DateTime!
+  description: String!
+  displayName: String!
+  keywords: [String]
+  licence: String!
+  name: String!
 }
 
 input AkashaAppObjectFilterInput {
-    applicationType: AkashaAppApplicationTypeValueFilterInput
-    createdAt: StringValueFilterInput
-    displayName: StringValueFilterInput
-    name: StringValueFilterInput
+  applicationType: AkashaAppApplicationTypeValueFilterInput
+  createdAt: StringValueFilterInput
+  displayName: StringValueFilterInput
+  name: StringValueFilterInput
 }
 
 input AkashaAppReleaseFiltersInput {
-    and: [AkashaAppReleaseFiltersInput!]
-    not: AkashaAppReleaseFiltersInput
-    or: [AkashaAppReleaseFiltersInput!]
-    where: AkashaAppReleaseObjectFilterInput
+  and: [AkashaAppReleaseFiltersInput!]
+  not: AkashaAppReleaseFiltersInput
+  or: [AkashaAppReleaseFiltersInput!]
+  where: AkashaAppReleaseObjectFilterInput
 }
 
 input AkashaAppReleaseInput {
-    applicationID: CeramicStreamID!
-    createdAt: DateTime!
-    source: InterPlanetaryCID!
-    version: String!
+  applicationID: CeramicStreamID!
+  createdAt: DateTime!
+  source: InterPlanetaryCID!
+  version: String!
 }
 
 input AkashaAppReleaseObjectFilterInput {
-    applicationID: StringValueFilterInput
-    createdAt: StringValueFilterInput
-    version: StringValueFilterInput
+  applicationID: StringValueFilterInput
+  createdAt: StringValueFilterInput
+  version: StringValueFilterInput
 }
 
 input AkashaAppReleaseSortingInput {
-    applicationID: SortOrder
-    createdAt: SortOrder
-    version: SortOrder
+  applicationID: SortOrder
+  createdAt: SortOrder
+  version: SortOrder
 }
 
 input AkashaAppSortingInput {
-    applicationType: SortOrder
-    createdAt: SortOrder
-    displayName: SortOrder
-    name: SortOrder
+  applicationType: SortOrder
+  createdAt: SortOrder
+  displayName: SortOrder
+  name: SortOrder
 }
 
 input AkashaAppsStreamFiltersInput {
-    and: [AkashaAppsStreamFiltersInput!]
-    not: AkashaAppsStreamFiltersInput
-    or: [AkashaAppsStreamFiltersInput!]
-    where: AkashaAppsStreamObjectFilterInput
+  and: [AkashaAppsStreamFiltersInput!]
+  not: AkashaAppsStreamFiltersInput
+  or: [AkashaAppsStreamFiltersInput!]
+  where: AkashaAppsStreamObjectFilterInput
 }
 
 input AkashaAppsStreamInput {
-    active: Boolean!
-    applicationID: CeramicStreamID!
-    createdAt: DateTime!
-    moderationID: CeramicStreamID
-    status: AkashaAppsStreamModerationStatus
+  active: Boolean!
+  applicationID: CeramicStreamID!
+  createdAt: DateTime!
+  moderationID: CeramicStreamID
+  status: AkashaAppsStreamModerationStatus
 }
 
 input AkashaAppsStreamModerationStatusValueFilterInput {
-    equalTo: AkashaAppsStreamModerationStatus
-    in: [AkashaAppsStreamModerationStatus!]
-    isNull: Boolean
-    notEqualTo: AkashaAppsStreamModerationStatus
-    notIn: [AkashaAppsStreamModerationStatus!]
+  equalTo: AkashaAppsStreamModerationStatus
+  in: [AkashaAppsStreamModerationStatus!]
+  isNull: Boolean
+  notEqualTo: AkashaAppsStreamModerationStatus
+  notIn: [AkashaAppsStreamModerationStatus!]
 }
 
 input AkashaAppsStreamObjectFilterInput {
-    active: BooleanValueFilterInput
-    applicationID: StringValueFilterInput
-    createdAt: StringValueFilterInput
-    moderationID: StringValueFilterInput
-    status: AkashaAppsStreamModerationStatusValueFilterInput
+  active: BooleanValueFilterInput
+  applicationID: StringValueFilterInput
+  createdAt: StringValueFilterInput
+  moderationID: StringValueFilterInput
+  status: AkashaAppsStreamModerationStatusValueFilterInput
 }
 
 input AkashaAppsStreamSortingInput {
-    active: SortOrder
-    applicationID: SortOrder
-    createdAt: SortOrder
-    moderationID: SortOrder
-    status: SortOrder
+  active: SortOrder
+  applicationID: SortOrder
+  createdAt: SortOrder
+  moderationID: SortOrder
+  status: SortOrder
 }
 
 input AkashaBeamBlockRecordInput {
-    blockID: CeramicStreamID!
-    order: Int!
+  blockID: CeramicStreamID!
+  order: Int!
 }
 
 input AkashaBeamEmbeddedTypeInput {
-    embeddedID: CeramicStreamID!
-    label: String!
+  embeddedID: CeramicStreamID!
+  label: String!
 }
 
 input AkashaBeamFiltersInput {
-    and: [AkashaBeamFiltersInput!]
-    not: AkashaBeamFiltersInput
-    or: [AkashaBeamFiltersInput!]
-    where: AkashaBeamObjectFilterInput
+  and: [AkashaBeamFiltersInput!]
+  not: AkashaBeamFiltersInput
+  or: [AkashaBeamFiltersInput!]
+  where: AkashaBeamObjectFilterInput
 }
 
 input AkashaBeamInput {
-    active: Boolean!
-    content: [AkashaBeamBlockRecordInput]!
-    createdAt: DateTime!
-    embeddedStream: AkashaBeamEmbeddedTypeInput
-    mentions: [DID]
-    nsfw: Boolean
-    tags: [AkashaBeamLabeledInput]
+  active: Boolean!
+  content: [AkashaBeamBlockRecordInput]!
+  createdAt: DateTime!
+  embeddedStream: AkashaBeamEmbeddedTypeInput
+  mentions: [DID]
+  nsfw: Boolean
+  tags: [AkashaBeamLabeledInput]
 }
 
 input AkashaBeamLabeledInput {
-    labelType: String!
-    value: String!
+  labelType: String!
+  value: String!
 }
 
 input AkashaBeamObjectFilterInput {
-    active: BooleanValueFilterInput
-    createdAt: StringValueFilterInput
-    nsfw: BooleanValueFilterInput
+  active: BooleanValueFilterInput
+  createdAt: StringValueFilterInput
+  nsfw: BooleanValueFilterInput
 }
 
 input AkashaBeamSortingInput {
-    active: SortOrder
-    createdAt: SortOrder
-    nsfw: SortOrder
+  active: SortOrder
+  createdAt: SortOrder
+  nsfw: SortOrder
 }
 
 input AkashaBeamStreamFiltersInput {
-    and: [AkashaBeamStreamFiltersInput!]
-    not: AkashaBeamStreamFiltersInput
-    or: [AkashaBeamStreamFiltersInput!]
-    where: AkashaBeamStreamObjectFilterInput
+  and: [AkashaBeamStreamFiltersInput!]
+  not: AkashaBeamStreamFiltersInput
+  or: [AkashaBeamStreamFiltersInput!]
+  where: AkashaBeamStreamObjectFilterInput
 }
 
 input AkashaBeamStreamInput {
-    active: Boolean!
-    beamID: CeramicStreamID!
-    createdAt: DateTime!
-    moderationID: CeramicStreamID
-    status: AkashaBeamStreamModerationStatus
+  active: Boolean!
+  beamID: CeramicStreamID!
+  createdAt: DateTime!
+  moderationID: CeramicStreamID
+  status: AkashaBeamStreamModerationStatus
 }
 
 input AkashaBeamStreamModerationStatusValueFilterInput {
-    equalTo: AkashaBeamStreamModerationStatus
-    in: [AkashaBeamStreamModerationStatus!]
-    isNull: Boolean
-    notEqualTo: AkashaBeamStreamModerationStatus
-    notIn: [AkashaBeamStreamModerationStatus!]
+  equalTo: AkashaBeamStreamModerationStatus
+  in: [AkashaBeamStreamModerationStatus!]
+  isNull: Boolean
+  notEqualTo: AkashaBeamStreamModerationStatus
+  notIn: [AkashaBeamStreamModerationStatus!]
 }
 
 input AkashaBeamStreamObjectFilterInput {
-    active: BooleanValueFilterInput
-    beamID: StringValueFilterInput
-    createdAt: StringValueFilterInput
-    moderationID: StringValueFilterInput
-    status: AkashaBeamStreamModerationStatusValueFilterInput
+  active: BooleanValueFilterInput
+  beamID: StringValueFilterInput
+  createdAt: StringValueFilterInput
+  moderationID: StringValueFilterInput
+  status: AkashaBeamStreamModerationStatusValueFilterInput
 }
 
 input AkashaBeamStreamSortingInput {
-    active: SortOrder
-    beamID: SortOrder
-    createdAt: SortOrder
-    moderationID: SortOrder
-    status: SortOrder
+  active: SortOrder
+  beamID: SortOrder
+  createdAt: SortOrder
+  moderationID: SortOrder
+  status: SortOrder
 }
 
 input AkashaBlockStorageBlockStorageDefValueFilterInput {
-    equalTo: AkashaBlockStorageBlockStorageDef
-    in: [AkashaBlockStorageBlockStorageDef!]
-    isNull: Boolean
-    notEqualTo: AkashaBlockStorageBlockStorageDef
-    notIn: [AkashaBlockStorageBlockStorageDef!]
+  equalTo: AkashaBlockStorageBlockStorageDef
+  in: [AkashaBlockStorageBlockStorageDef!]
+  isNull: Boolean
+  notEqualTo: AkashaBlockStorageBlockStorageDef
+  notIn: [AkashaBlockStorageBlockStorageDef!]
 }
 
 input AkashaBlockStorageFiltersInput {
-    and: [AkashaBlockStorageFiltersInput!]
-    not: AkashaBlockStorageFiltersInput
-    or: [AkashaBlockStorageFiltersInput!]
-    where: AkashaBlockStorageObjectFilterInput
+  and: [AkashaBlockStorageFiltersInput!]
+  not: AkashaBlockStorageFiltersInput
+  or: [AkashaBlockStorageFiltersInput!]
+  where: AkashaBlockStorageObjectFilterInput
 }
 
 input AkashaBlockStorageInput {
-    active: Boolean!
-    appVersionID: CeramicStreamID!
-    blockID: CeramicStreamID!
-    content: [AkashaBlockStorageLabeledValueInput]!
-    createdAt: DateTime!
-    kind: AkashaBlockStorageBlockStorageDef
+  active: Boolean!
+  appVersionID: CeramicStreamID!
+  blockID: CeramicStreamID!
+  content: [AkashaBlockStorageLabeledValueInput]!
+  createdAt: DateTime!
+  kind: AkashaBlockStorageBlockStorageDef
 }
 
 input AkashaBlockStorageLabeledValueInput {
-    label: String!
-    propertyType: String!
-    value: String!
+  label: String!
+  propertyType: String!
+  value: String!
 }
 
 input AkashaBlockStorageObjectFilterInput {
-    active: BooleanValueFilterInput
-    createdAt: StringValueFilterInput
-    kind: AkashaBlockStorageBlockStorageDefValueFilterInput
+  active: BooleanValueFilterInput
+  createdAt: StringValueFilterInput
+  kind: AkashaBlockStorageBlockStorageDefValueFilterInput
 }
 
 input AkashaBlockStorageSortingInput {
-    active: SortOrder
-    createdAt: SortOrder
-    kind: SortOrder
+  active: SortOrder
+  createdAt: SortOrder
+  kind: SortOrder
 }
 
 input AkashaContentBlockBlockDefValueFilterInput {
-    equalTo: AkashaContentBlockBlockDef
-    in: [AkashaContentBlockBlockDef!]
-    isNull: Boolean
-    notEqualTo: AkashaContentBlockBlockDef
-    notIn: [AkashaContentBlockBlockDef!]
+  equalTo: AkashaContentBlockBlockDef
+  in: [AkashaContentBlockBlockDef!]
+  isNull: Boolean
+  notEqualTo: AkashaContentBlockBlockDef
+  notIn: [AkashaContentBlockBlockDef!]
 }
 
 input AkashaContentBlockFiltersInput {
-    and: [AkashaContentBlockFiltersInput!]
-    not: AkashaContentBlockFiltersInput
-    or: [AkashaContentBlockFiltersInput!]
-    where: AkashaContentBlockObjectFilterInput
+  and: [AkashaContentBlockFiltersInput!]
+  not: AkashaContentBlockFiltersInput
+  or: [AkashaContentBlockFiltersInput!]
+  where: AkashaContentBlockObjectFilterInput
 }
 
 input AkashaContentBlockInput {
-    active: Boolean!
-    appVersionID: CeramicStreamID!
-    content: [AkashaContentBlockLabeledValueInput]!
-    createdAt: DateTime!
-    kind: AkashaContentBlockBlockDef
-    nsfw: Boolean
+  active: Boolean!
+  appVersionID: CeramicStreamID!
+  content: [AkashaContentBlockLabeledValueInput]!
+  createdAt: DateTime!
+  kind: AkashaContentBlockBlockDef
+  nsfw: Boolean
 }
 
 input AkashaContentBlockLabeledValueInput {
-    label: String!
-    propertyType: String!
-    value: String!
+  label: String!
+  propertyType: String!
+  value: String!
 }
 
 input AkashaContentBlockObjectFilterInput {
-    active: BooleanValueFilterInput
-    appVersionID: StringValueFilterInput
-    createdAt: StringValueFilterInput
-    kind: AkashaContentBlockBlockDefValueFilterInput
-    nsfw: BooleanValueFilterInput
+  active: BooleanValueFilterInput
+  appVersionID: StringValueFilterInput
+  createdAt: StringValueFilterInput
+  kind: AkashaContentBlockBlockDefValueFilterInput
+  nsfw: BooleanValueFilterInput
 }
 
 input AkashaContentBlockSortingInput {
-    active: SortOrder
-    appVersionID: SortOrder
-    createdAt: SortOrder
-    kind: SortOrder
-    nsfw: SortOrder
+  active: SortOrder
+  appVersionID: SortOrder
+  createdAt: SortOrder
+  kind: SortOrder
+  nsfw: SortOrder
 }
 
 input AkashaContentBlockStreamFiltersInput {
-    and: [AkashaContentBlockStreamFiltersInput!]
-    not: AkashaContentBlockStreamFiltersInput
-    or: [AkashaContentBlockStreamFiltersInput!]
-    where: AkashaContentBlockStreamObjectFilterInput
+  and: [AkashaContentBlockStreamFiltersInput!]
+  not: AkashaContentBlockStreamFiltersInput
+  or: [AkashaContentBlockStreamFiltersInput!]
+  where: AkashaContentBlockStreamObjectFilterInput
 }
 
 input AkashaContentBlockStreamInput {
-    active: Boolean!
-    blockID: CeramicStreamID!
-    createdAt: DateTime!
-    moderationID: CeramicStreamID
-    status: AkashaContentBlockStreamModerationStatus
+  active: Boolean!
+  blockID: CeramicStreamID!
+  createdAt: DateTime!
+  moderationID: CeramicStreamID
+  status: AkashaContentBlockStreamModerationStatus
 }
 
 input AkashaContentBlockStreamModerationStatusValueFilterInput {
-    equalTo: AkashaContentBlockStreamModerationStatus
-    in: [AkashaContentBlockStreamModerationStatus!]
-    isNull: Boolean
-    notEqualTo: AkashaContentBlockStreamModerationStatus
-    notIn: [AkashaContentBlockStreamModerationStatus!]
+  equalTo: AkashaContentBlockStreamModerationStatus
+  in: [AkashaContentBlockStreamModerationStatus!]
+  isNull: Boolean
+  notEqualTo: AkashaContentBlockStreamModerationStatus
+  notIn: [AkashaContentBlockStreamModerationStatus!]
 }
 
 input AkashaContentBlockStreamObjectFilterInput {
-    active: BooleanValueFilterInput
-    blockID: StringValueFilterInput
-    createdAt: StringValueFilterInput
-    moderationID: StringValueFilterInput
-    status: AkashaContentBlockStreamModerationStatusValueFilterInput
+  active: BooleanValueFilterInput
+  blockID: StringValueFilterInput
+  createdAt: StringValueFilterInput
+  moderationID: StringValueFilterInput
+  status: AkashaContentBlockStreamModerationStatusValueFilterInput
 }
 
 input AkashaContentBlockStreamSortingInput {
-    active: SortOrder
-    blockID: SortOrder
-    createdAt: SortOrder
-    moderationID: SortOrder
-    status: SortOrder
+  active: SortOrder
+  blockID: SortOrder
+  createdAt: SortOrder
+  moderationID: SortOrder
+  status: SortOrder
 }
 
 input AkashaFollowFiltersInput {
-    and: [AkashaFollowFiltersInput!]
-    not: AkashaFollowFiltersInput
-    or: [AkashaFollowFiltersInput!]
-    where: AkashaFollowObjectFilterInput
+  and: [AkashaFollowFiltersInput!]
+  not: AkashaFollowFiltersInput
+  or: [AkashaFollowFiltersInput!]
+  where: AkashaFollowObjectFilterInput
 }
 
 input AkashaFollowInput {
-    isFollowing: Boolean!
-    profileID: CeramicStreamID!
+  isFollowing: Boolean!
+  profileID: CeramicStreamID!
 }
 
 input AkashaFollowObjectFilterInput {
-    isFollowing: BooleanValueFilterInput
-    profileID: StringValueFilterInput
+  isFollowing: BooleanValueFilterInput
+  profileID: StringValueFilterInput
 }
 
 input AkashaFollowSortingInput {
-    isFollowing: SortOrder
-    profileID: SortOrder
+  isFollowing: SortOrder
+  profileID: SortOrder
 }
 
 input AkashaIndexedStreamFiltersInput {
-    and: [AkashaIndexedStreamFiltersInput!]
-    not: AkashaIndexedStreamFiltersInput
-    or: [AkashaIndexedStreamFiltersInput!]
-    where: AkashaIndexedStreamObjectFilterInput
+  and: [AkashaIndexedStreamFiltersInput!]
+  not: AkashaIndexedStreamFiltersInput
+  or: [AkashaIndexedStreamFiltersInput!]
+  where: AkashaIndexedStreamObjectFilterInput
 }
 
 input AkashaIndexedStreamInput {
-    active: Boolean!
-    createdAt: DateTime!
-    indexType: String!
-    indexValue: String!
-    moderationID: CeramicStreamID
-    status: AkashaIndexedStreamModerationStatus
-    stream: CeramicStreamID!
-    streamType: AkashaIndexedStreamStreamType
+  active: Boolean!
+  createdAt: DateTime!
+  indexType: String!
+  indexValue: String!
+  moderationID: CeramicStreamID
+  status: AkashaIndexedStreamModerationStatus
+  stream: CeramicStreamID!
+  streamType: AkashaIndexedStreamStreamType
 }
 
 input AkashaIndexedStreamModerationStatusValueFilterInput {
-    equalTo: AkashaIndexedStreamModerationStatus
-    in: [AkashaIndexedStreamModerationStatus!]
-    isNull: Boolean
-    notEqualTo: AkashaIndexedStreamModerationStatus
-    notIn: [AkashaIndexedStreamModerationStatus!]
+  equalTo: AkashaIndexedStreamModerationStatus
+  in: [AkashaIndexedStreamModerationStatus!]
+  isNull: Boolean
+  notEqualTo: AkashaIndexedStreamModerationStatus
+  notIn: [AkashaIndexedStreamModerationStatus!]
 }
 
 input AkashaIndexedStreamObjectFilterInput {
-    active: BooleanValueFilterInput
-    createdAt: StringValueFilterInput
-    indexType: StringValueFilterInput
-    indexValue: StringValueFilterInput
-    moderationID: StringValueFilterInput
-    status: AkashaIndexedStreamModerationStatusValueFilterInput
-    stream: StringValueFilterInput
-    streamType: AkashaIndexedStreamStreamTypeValueFilterInput
+  active: BooleanValueFilterInput
+  createdAt: StringValueFilterInput
+  indexType: StringValueFilterInput
+  indexValue: StringValueFilterInput
+  moderationID: StringValueFilterInput
+  status: AkashaIndexedStreamModerationStatusValueFilterInput
+  stream: StringValueFilterInput
+  streamType: AkashaIndexedStreamStreamTypeValueFilterInput
 }
 
 input AkashaIndexedStreamSortingInput {
-    active: SortOrder
-    createdAt: SortOrder
-    indexType: SortOrder
-    indexValue: SortOrder
-    moderationID: SortOrder
-    status: SortOrder
-    stream: SortOrder
-    streamType: SortOrder
+  active: SortOrder
+  createdAt: SortOrder
+  indexType: SortOrder
+  indexValue: SortOrder
+  moderationID: SortOrder
+  status: SortOrder
+  stream: SortOrder
+  streamType: SortOrder
 }
 
 input AkashaIndexedStreamStreamTypeValueFilterInput {
-    equalTo: AkashaIndexedStreamStreamType
-    in: [AkashaIndexedStreamStreamType!]
-    isNull: Boolean
-    notEqualTo: AkashaIndexedStreamStreamType
-    notIn: [AkashaIndexedStreamStreamType!]
+  equalTo: AkashaIndexedStreamStreamType
+  in: [AkashaIndexedStreamStreamType!]
+  isNull: Boolean
+  notEqualTo: AkashaIndexedStreamStreamType
+  notIn: [AkashaIndexedStreamStreamType!]
 }
 
 input AkashaInterestsStreamFiltersInput {
-    and: [AkashaInterestsStreamFiltersInput!]
-    not: AkashaInterestsStreamFiltersInput
-    or: [AkashaInterestsStreamFiltersInput!]
-    where: AkashaInterestsStreamObjectFilterInput
+  and: [AkashaInterestsStreamFiltersInput!]
+  not: AkashaInterestsStreamFiltersInput
+  or: [AkashaInterestsStreamFiltersInput!]
+  where: AkashaInterestsStreamObjectFilterInput
 }
 
 input AkashaInterestsStreamInput {
-    active: Boolean!
-    createdAt: DateTime!
-    labelType: String!
-    moderationID: CeramicStreamID
-    status: AkashaInterestsStreamModerationStatus
-    value: String!
+  active: Boolean!
+  createdAt: DateTime!
+  labelType: String!
+  moderationID: CeramicStreamID
+  status: AkashaInterestsStreamModerationStatus
+  value: String!
 }
 
 input AkashaInterestsStreamModerationStatusValueFilterInput {
-    equalTo: AkashaInterestsStreamModerationStatus
-    in: [AkashaInterestsStreamModerationStatus!]
-    isNull: Boolean
-    notEqualTo: AkashaInterestsStreamModerationStatus
-    notIn: [AkashaInterestsStreamModerationStatus!]
+  equalTo: AkashaInterestsStreamModerationStatus
+  in: [AkashaInterestsStreamModerationStatus!]
+  isNull: Boolean
+  notEqualTo: AkashaInterestsStreamModerationStatus
+  notIn: [AkashaInterestsStreamModerationStatus!]
 }
 
 input AkashaInterestsStreamObjectFilterInput {
-    active: BooleanValueFilterInput
-    createdAt: StringValueFilterInput
-    labelType: StringValueFilterInput
-    moderationID: StringValueFilterInput
-    status: AkashaInterestsStreamModerationStatusValueFilterInput
-    value: StringValueFilterInput
+  active: BooleanValueFilterInput
+  createdAt: StringValueFilterInput
+  labelType: StringValueFilterInput
+  moderationID: StringValueFilterInput
+  status: AkashaInterestsStreamModerationStatusValueFilterInput
+  value: StringValueFilterInput
 }
 
 input AkashaInterestsStreamSortingInput {
-    active: SortOrder
-    createdAt: SortOrder
-    labelType: SortOrder
-    moderationID: SortOrder
-    status: SortOrder
-    value: SortOrder
+  active: SortOrder
+  createdAt: SortOrder
+  labelType: SortOrder
+  moderationID: SortOrder
+  status: SortOrder
+  value: SortOrder
 }
 
 input AkashaProfileFiltersInput {
-    and: [AkashaProfileFiltersInput!]
-    not: AkashaProfileFiltersInput
-    or: [AkashaProfileFiltersInput!]
-    where: AkashaProfileObjectFilterInput
+  and: [AkashaProfileFiltersInput!]
+  not: AkashaProfileFiltersInput
+  or: [AkashaProfileFiltersInput!]
+  where: AkashaProfileObjectFilterInput
 }
 
 input AkashaProfileImageSourceInput {
-    height: Int!
-    src: URI!
-    width: Int!
+  height: Int!
+  src: URI!
+  width: Int!
 }
 
 input AkashaProfileImageVersionsInput {
-    alternatives: [AkashaProfileImageSourceInput]
-    default: AkashaProfileImageSourceInput!
+  alternatives: [AkashaProfileImageSourceInput]
+  default: AkashaProfileImageSourceInput!
 }
 
 input AkashaProfileInput {
-    avatar: AkashaProfileImageVersionsInput
-    background: AkashaProfileImageVersionsInput
-    createdAt: DateTime!
-    description: String
-    links: [AkashaProfileLinkSourceInput]
-    name: String!
-    nsfw: Boolean
+  avatar: AkashaProfileImageVersionsInput
+  background: AkashaProfileImageVersionsInput
+  createdAt: DateTime!
+  description: String
+  links: [AkashaProfileLinkSourceInput]
+  name: String!
+  nsfw: Boolean
 }
 
 input AkashaProfileInterestsInput {
-    topics: [AkashaProfileInterestsLabeledInput]!
+  topics: [AkashaProfileInterestsLabeledInput]!
 }
 
 input AkashaProfileInterestsLabeledInput {
-    labelType: String!
-    value: String!
+  labelType: String!
+  value: String!
 }
 
 input AkashaProfileLinkSourceInput {
-    href: URI!
-    label: String
+  href: URI!
+  label: String
 }
 
 input AkashaProfileObjectFilterInput {
-    createdAt: StringValueFilterInput
-    name: StringValueFilterInput
-    nsfw: BooleanValueFilterInput
+  createdAt: StringValueFilterInput
+  name: StringValueFilterInput
+  nsfw: BooleanValueFilterInput
 }
 
 input AkashaProfileSortingInput {
-    createdAt: SortOrder
-    name: SortOrder
-    nsfw: SortOrder
+  createdAt: SortOrder
+  name: SortOrder
+  nsfw: SortOrder
 }
 
 input AkashaProfileStreamFiltersInput {
-    and: [AkashaProfileStreamFiltersInput!]
-    not: AkashaProfileStreamFiltersInput
-    or: [AkashaProfileStreamFiltersInput!]
-    where: AkashaProfileStreamObjectFilterInput
+  and: [AkashaProfileStreamFiltersInput!]
+  not: AkashaProfileStreamFiltersInput
+  or: [AkashaProfileStreamFiltersInput!]
+  where: AkashaProfileStreamObjectFilterInput
 }
 
 input AkashaProfileStreamInput {
-    active: Boolean!
-    createdAt: DateTime!
-    moderationID: CeramicStreamID
-    profileID: CeramicStreamID!
-    status: AkashaProfileStreamModerationStatus
+  active: Boolean!
+  createdAt: DateTime!
+  moderationID: CeramicStreamID
+  profileID: CeramicStreamID!
+  status: AkashaProfileStreamModerationStatus
 }
 
 input AkashaProfileStreamModerationStatusValueFilterInput {
-    equalTo: AkashaProfileStreamModerationStatus
-    in: [AkashaProfileStreamModerationStatus!]
-    isNull: Boolean
-    notEqualTo: AkashaProfileStreamModerationStatus
-    notIn: [AkashaProfileStreamModerationStatus!]
+  equalTo: AkashaProfileStreamModerationStatus
+  in: [AkashaProfileStreamModerationStatus!]
+  isNull: Boolean
+  notEqualTo: AkashaProfileStreamModerationStatus
+  notIn: [AkashaProfileStreamModerationStatus!]
 }
 
 input AkashaProfileStreamObjectFilterInput {
-    active: BooleanValueFilterInput
-    createdAt: StringValueFilterInput
-    moderationID: StringValueFilterInput
-    profileID: StringValueFilterInput
-    status: AkashaProfileStreamModerationStatusValueFilterInput
+  active: BooleanValueFilterInput
+  createdAt: StringValueFilterInput
+  moderationID: StringValueFilterInput
+  profileID: StringValueFilterInput
+  status: AkashaProfileStreamModerationStatusValueFilterInput
 }
 
 input AkashaProfileStreamSortingInput {
-    active: SortOrder
-    createdAt: SortOrder
-    moderationID: SortOrder
-    profileID: SortOrder
-    status: SortOrder
+  active: SortOrder
+  createdAt: SortOrder
+  moderationID: SortOrder
+  profileID: SortOrder
+  status: SortOrder
 }
 
 input AkashaReflectFiltersInput {
-    and: [AkashaReflectFiltersInput!]
-    not: AkashaReflectFiltersInput
-    or: [AkashaReflectFiltersInput!]
-    where: AkashaReflectObjectFilterInput
+  and: [AkashaReflectFiltersInput!]
+  not: AkashaReflectFiltersInput
+  or: [AkashaReflectFiltersInput!]
+  where: AkashaReflectObjectFilterInput
 }
 
 input AkashaReflectInput {
-    active: Boolean!
-    beamID: CeramicStreamID!
-    content: [AkashaReflectProviderValueInput]!
-    createdAt: DateTime!
-    isReply: Boolean
-    mentions: [CeramicStreamID]
-    nsfw: Boolean
-    reflection: CeramicStreamID
-    tags: [String]
+  active: Boolean!
+  beamID: CeramicStreamID!
+  content: [AkashaReflectProviderValueInput]!
+  createdAt: DateTime!
+  isReply: Boolean
+  mentions: [CeramicStreamID]
+  nsfw: Boolean
+  reflection: CeramicStreamID
+  tags: [String]
 }
 
 input AkashaReflectObjectFilterInput {
-    active: BooleanValueFilterInput
-    createdAt: StringValueFilterInput
-    isReply: BooleanValueFilterInput
-    nsfw: BooleanValueFilterInput
-    reflection: StringValueFilterInput
+  active: BooleanValueFilterInput
+  createdAt: StringValueFilterInput
+  isReply: BooleanValueFilterInput
+  nsfw: BooleanValueFilterInput
+  reflection: StringValueFilterInput
 }
 
 input AkashaReflectProviderValueInput {
-    label: String!
-    propertyType: String!
-    value: String!
+  label: String!
+  propertyType: String!
+  value: String!
 }
 
 input AkashaReflectSortingInput {
-    active: SortOrder
-    createdAt: SortOrder
-    isReply: SortOrder
-    nsfw: SortOrder
-    reflection: SortOrder
+  active: SortOrder
+  createdAt: SortOrder
+  isReply: SortOrder
+  nsfw: SortOrder
+  reflection: SortOrder
 }
 
 input AkashaReflectStreamFiltersInput {
-    and: [AkashaReflectStreamFiltersInput!]
-    not: AkashaReflectStreamFiltersInput
-    or: [AkashaReflectStreamFiltersInput!]
-    where: AkashaReflectStreamObjectFilterInput
+  and: [AkashaReflectStreamFiltersInput!]
+  not: AkashaReflectStreamFiltersInput
+  or: [AkashaReflectStreamFiltersInput!]
+  where: AkashaReflectStreamObjectFilterInput
 }
 
 input AkashaReflectStreamInput {
-    active: Boolean!
-    beamID: CeramicStreamID!
-    createdAt: DateTime!
-    moderationID: CeramicStreamID
-    reflectionID: CeramicStreamID!
-    status: AkashaReflectStreamModerationStatus
+  active: Boolean!
+  beamID: CeramicStreamID!
+  createdAt: DateTime!
+  isReply: Boolean
+  moderationID: CeramicStreamID
+  reflectionID: CeramicStreamID!
+  replyTo: CeramicStreamID
+  status: AkashaReflectStreamModerationStatus
 }
 
 input AkashaReflectStreamModerationStatusValueFilterInput {
-    equalTo: AkashaReflectStreamModerationStatus
-    in: [AkashaReflectStreamModerationStatus!]
-    isNull: Boolean
-    notEqualTo: AkashaReflectStreamModerationStatus
-    notIn: [AkashaReflectStreamModerationStatus!]
+  equalTo: AkashaReflectStreamModerationStatus
+  in: [AkashaReflectStreamModerationStatus!]
+  isNull: Boolean
+  notEqualTo: AkashaReflectStreamModerationStatus
+  notIn: [AkashaReflectStreamModerationStatus!]
 }
 
 input AkashaReflectStreamObjectFilterInput {
-    active: BooleanValueFilterInput
-    beamID: StringValueFilterInput
-    createdAt: StringValueFilterInput
-    moderationID: StringValueFilterInput
-    reflectionID: StringValueFilterInput
-    status: AkashaReflectStreamModerationStatusValueFilterInput
+  active: BooleanValueFilterInput
+  beamID: StringValueFilterInput
+  createdAt: StringValueFilterInput
+  isReply: BooleanValueFilterInput
+  moderationID: StringValueFilterInput
+  reflectionID: StringValueFilterInput
+  replyTo: StringValueFilterInput
+  status: AkashaReflectStreamModerationStatusValueFilterInput
 }
 
 input AkashaReflectStreamSortingInput {
-    active: SortOrder
-    beamID: SortOrder
-    createdAt: SortOrder
-    moderationID: SortOrder
-    reflectionID: SortOrder
-    status: SortOrder
+  active: SortOrder
+  beamID: SortOrder
+  createdAt: SortOrder
+  isReply: SortOrder
+  moderationID: SortOrder
+  reflectionID: SortOrder
+  replyTo: SortOrder
+  status: SortOrder
 }
 
 input BooleanValueFilterInput {
-    equalTo: Boolean
-    isNull: Boolean
+  equalTo: Boolean
+  isNull: Boolean
 }
 
 input CreateAkashaBeamInput {
-    clientMutationId: String
-    content: AkashaBeamInput!
-    options: CreateOptionsInput
+  clientMutationId: String
+  content: AkashaBeamInput!
+  options: CreateOptionsInput
 }
 
 input CreateAkashaContentBlockInput {
-    clientMutationId: String
-    content: AkashaContentBlockInput!
-    options: CreateOptionsInput
+  clientMutationId: String
+  content: AkashaContentBlockInput!
+  options: CreateOptionsInput
 }
 
 input CreateAkashaProfileInput {
-    clientMutationId: String
-    content: AkashaProfileInput!
-    options: SetOptionsInput
+  clientMutationId: String
+  content: AkashaProfileInput!
+  options: SetOptionsInput
 }
 
 input CreateAkashaProfileInterestsInput {
-    clientMutationId: String
-    content: AkashaProfileInterestsInput!
-    options: SetOptionsInput
+  clientMutationId: String
+  content: AkashaProfileInterestsInput!
+  options: SetOptionsInput
 }
 
 input CreateAkashaReflectInput {
-    clientMutationId: String
-    content: AkashaReflectInput!
-    options: CreateOptionsInput
+  clientMutationId: String
+  content: AkashaReflectInput!
+  options: CreateOptionsInput
 }
 
 input CreateOptionsInput {
-    "Inform indexers if they should index this document or not"
-    shouldIndex: Boolean
+  "Inform indexers if they should index this document or not"
+  shouldIndex: Boolean
 }
 
 input EnableIndexingAkashaAppInput {
-    clientMutationId: String
-    id: ID!
-    shouldIndex: Boolean!
+  clientMutationId: String
+  id: ID!
+  shouldIndex: Boolean!
 }
 
 input EnableIndexingAkashaAppReleaseInput {
-    clientMutationId: String
-    id: ID!
-    shouldIndex: Boolean!
+  clientMutationId: String
+  id: ID!
+  shouldIndex: Boolean!
 }
 
 input EnableIndexingAkashaAppsStreamInput {
-    clientMutationId: String
-    id: ID!
-    shouldIndex: Boolean!
+  clientMutationId: String
+  id: ID!
+  shouldIndex: Boolean!
 }
 
 input EnableIndexingAkashaBeamInput {
-    clientMutationId: String
-    id: ID!
-    shouldIndex: Boolean!
+  clientMutationId: String
+  id: ID!
+  shouldIndex: Boolean!
 }
 
 input EnableIndexingAkashaBeamStreamInput {
-    clientMutationId: String
-    id: ID!
-    shouldIndex: Boolean!
+  clientMutationId: String
+  id: ID!
+  shouldIndex: Boolean!
 }
 
 input EnableIndexingAkashaBlockStorageInput {
-    clientMutationId: String
-    id: ID!
-    shouldIndex: Boolean!
+  clientMutationId: String
+  id: ID!
+  shouldIndex: Boolean!
 }
 
 input EnableIndexingAkashaContentBlockInput {
-    clientMutationId: String
-    id: ID!
-    shouldIndex: Boolean!
+  clientMutationId: String
+  id: ID!
+  shouldIndex: Boolean!
 }
 
 input EnableIndexingAkashaContentBlockStreamInput {
-    clientMutationId: String
-    id: ID!
-    shouldIndex: Boolean!
+  clientMutationId: String
+  id: ID!
+  shouldIndex: Boolean!
 }
 
 input EnableIndexingAkashaFollowInput {
-    clientMutationId: String
-    id: ID!
-    shouldIndex: Boolean!
+  clientMutationId: String
+  id: ID!
+  shouldIndex: Boolean!
 }
 
 input EnableIndexingAkashaIndexedStreamInput {
-    clientMutationId: String
-    id: ID!
-    shouldIndex: Boolean!
+  clientMutationId: String
+  id: ID!
+  shouldIndex: Boolean!
 }
 
 input EnableIndexingAkashaInterestsStreamInput {
-    clientMutationId: String
-    id: ID!
-    shouldIndex: Boolean!
+  clientMutationId: String
+  id: ID!
+  shouldIndex: Boolean!
 }
 
 input EnableIndexingAkashaProfileInput {
-    clientMutationId: String
-    id: ID!
-    shouldIndex: Boolean!
+  clientMutationId: String
+  id: ID!
+  shouldIndex: Boolean!
 }
 
 input EnableIndexingAkashaProfileInterestsInput {
-    clientMutationId: String
-    id: ID!
-    shouldIndex: Boolean!
+  clientMutationId: String
+  id: ID!
+  shouldIndex: Boolean!
 }
 
 input EnableIndexingAkashaProfileStreamInput {
-    clientMutationId: String
-    id: ID!
-    shouldIndex: Boolean!
+  clientMutationId: String
+  id: ID!
+  shouldIndex: Boolean!
 }
 
 input EnableIndexingAkashaReflectInput {
-    clientMutationId: String
-    id: ID!
-    shouldIndex: Boolean!
+  clientMutationId: String
+  id: ID!
+  shouldIndex: Boolean!
 }
 
 input EnableIndexingAkashaReflectStreamInput {
-    clientMutationId: String
-    id: ID!
-    shouldIndex: Boolean!
+  clientMutationId: String
+  id: ID!
+  shouldIndex: Boolean!
 }
 
 input PartialAkashaAppInput {
-    applicationType: AkashaAppApplicationType
-    contributors: [DID]
-    createdAt: DateTime
-    description: String
-    displayName: String
-    keywords: [String]
-    licence: String
+  applicationType: AkashaAppApplicationType
+  contributors: [DID]
+  createdAt: DateTime
+  description: String
+  displayName: String
+  keywords: [String]
+  licence: String
 }
 
 input PartialAkashaAppReleaseInput {
-    createdAt: DateTime
-    source: InterPlanetaryCID
+  createdAt: DateTime
+  source: InterPlanetaryCID
 }
 
 input PartialAkashaAppsStreamInput {
-    active: Boolean
-    createdAt: DateTime
-    moderationID: CeramicStreamID
-    status: AkashaAppsStreamModerationStatus
+  active: Boolean
+  createdAt: DateTime
+  moderationID: CeramicStreamID
+  status: AkashaAppsStreamModerationStatus
 }
 
 input PartialAkashaBeamInput {
-    active: Boolean
-    content: [AkashaBeamBlockRecordInput]
-    createdAt: DateTime
-    embeddedStream: AkashaBeamEmbeddedTypeInput
-    mentions: [DID]
-    nsfw: Boolean
-    tags: [AkashaBeamLabeledInput]
+  active: Boolean
+  content: [AkashaBeamBlockRecordInput]
+  createdAt: DateTime
+  embeddedStream: AkashaBeamEmbeddedTypeInput
+  mentions: [DID]
+  nsfw: Boolean
+  tags: [AkashaBeamLabeledInput]
 }
 
 input PartialAkashaBeamStreamInput {
-    active: Boolean
-    createdAt: DateTime
-    moderationID: CeramicStreamID
-    status: AkashaBeamStreamModerationStatus
+  active: Boolean
+  createdAt: DateTime
+  moderationID: CeramicStreamID
+  status: AkashaBeamStreamModerationStatus
 }
 
 input PartialAkashaBlockStorageInput {
-    active: Boolean
-    appVersionID: CeramicStreamID
-    content: [AkashaBlockStorageLabeledValueInput]
-    createdAt: DateTime
-    kind: AkashaBlockStorageBlockStorageDef
+  active: Boolean
+  appVersionID: CeramicStreamID
+  content: [AkashaBlockStorageLabeledValueInput]
+  createdAt: DateTime
+  kind: AkashaBlockStorageBlockStorageDef
 }
 
 input PartialAkashaContentBlockInput {
-    active: Boolean
-    appVersionID: CeramicStreamID
-    content: [AkashaContentBlockLabeledValueInput]
-    createdAt: DateTime
-    kind: AkashaContentBlockBlockDef
-    nsfw: Boolean
+  active: Boolean
+  appVersionID: CeramicStreamID
+  content: [AkashaContentBlockLabeledValueInput]
+  createdAt: DateTime
+  kind: AkashaContentBlockBlockDef
+  nsfw: Boolean
 }
 
 input PartialAkashaContentBlockStreamInput {
-    active: Boolean
-    createdAt: DateTime
-    moderationID: CeramicStreamID
-    status: AkashaContentBlockStreamModerationStatus
+  active: Boolean
+  createdAt: DateTime
+  moderationID: CeramicStreamID
+  status: AkashaContentBlockStreamModerationStatus
 }
 
 input PartialAkashaFollowInput {
-    isFollowing: Boolean
+  isFollowing: Boolean
 }
 
 input PartialAkashaIndexedStreamInput {
-    active: Boolean
-    createdAt: DateTime
-    moderationID: CeramicStreamID
-    status: AkashaIndexedStreamModerationStatus
-    streamType: AkashaIndexedStreamStreamType
+  active: Boolean
+  createdAt: DateTime
+  moderationID: CeramicStreamID
+  status: AkashaIndexedStreamModerationStatus
+  streamType: AkashaIndexedStreamStreamType
 }
 
 input PartialAkashaInterestsStreamInput {
-    active: Boolean
-    createdAt: DateTime
-    moderationID: CeramicStreamID
-    status: AkashaInterestsStreamModerationStatus
+  active: Boolean
+  createdAt: DateTime
+  moderationID: CeramicStreamID
+  status: AkashaInterestsStreamModerationStatus
 }
 
 input PartialAkashaProfileInput {
-    avatar: AkashaProfileImageVersionsInput
-    background: AkashaProfileImageVersionsInput
-    createdAt: DateTime
-    description: String
-    links: [AkashaProfileLinkSourceInput]
-    name: String
-    nsfw: Boolean
+  avatar: AkashaProfileImageVersionsInput
+  background: AkashaProfileImageVersionsInput
+  createdAt: DateTime
+  description: String
+  links: [AkashaProfileLinkSourceInput]
+  name: String
+  nsfw: Boolean
 }
 
 input PartialAkashaProfileInterestsInput {
-    topics: [AkashaProfileInterestsLabeledInput]
+  topics: [AkashaProfileInterestsLabeledInput]
 }
 
 input PartialAkashaProfileStreamInput {
-    active: Boolean
-    createdAt: DateTime
-    moderationID: CeramicStreamID
-    status: AkashaProfileStreamModerationStatus
+  active: Boolean
+  createdAt: DateTime
+  moderationID: CeramicStreamID
+  status: AkashaProfileStreamModerationStatus
 }
 
 input PartialAkashaReflectInput {
-    active: Boolean
-    beamID: CeramicStreamID
-    content: [AkashaReflectProviderValueInput]
-    createdAt: DateTime
-    isReply: Boolean
-    mentions: [CeramicStreamID]
-    nsfw: Boolean
-    reflection: CeramicStreamID
-    tags: [String]
+  active: Boolean
+  beamID: CeramicStreamID
+  content: [AkashaReflectProviderValueInput]
+  createdAt: DateTime
+  isReply: Boolean
+  mentions: [CeramicStreamID]
+  nsfw: Boolean
+  reflection: CeramicStreamID
+  tags: [String]
 }
 
 input PartialAkashaReflectStreamInput {
-    active: Boolean
-    beamID: CeramicStreamID
-    createdAt: DateTime
-    moderationID: CeramicStreamID
-    status: AkashaReflectStreamModerationStatus
+  active: Boolean
+  beamID: CeramicStreamID
+  createdAt: DateTime
+  isReply: Boolean
+  moderationID: CeramicStreamID
+  replyTo: CeramicStreamID
+  status: AkashaReflectStreamModerationStatus
 }
 
 input SetAkashaAppInput {
-    clientMutationId: String
-    content: AkashaAppInput!
-    options: SetOptionsInput
+  clientMutationId: String
+  content: AkashaAppInput!
+  options: SetOptionsInput
 }
 
 input SetAkashaAppReleaseInput {
-    clientMutationId: String
-    content: AkashaAppReleaseInput!
-    options: SetOptionsInput
+  clientMutationId: String
+  content: AkashaAppReleaseInput!
+  options: SetOptionsInput
 }
 
 input SetAkashaAppsStreamInput {
-    clientMutationId: String
-    content: AkashaAppsStreamInput!
-    options: SetOptionsInput
+  clientMutationId: String
+  content: AkashaAppsStreamInput!
+  options: SetOptionsInput
 }
 
 input SetAkashaBeamStreamInput {
-    clientMutationId: String
-    content: AkashaBeamStreamInput!
-    options: SetOptionsInput
+  clientMutationId: String
+  content: AkashaBeamStreamInput!
+  options: SetOptionsInput
 }
 
 input SetAkashaBlockStorageInput {
-    clientMutationId: String
-    content: AkashaBlockStorageInput!
-    options: SetOptionsInput
+  clientMutationId: String
+  content: AkashaBlockStorageInput!
+  options: SetOptionsInput
 }
 
 input SetAkashaContentBlockStreamInput {
-    clientMutationId: String
-    content: AkashaContentBlockStreamInput!
-    options: SetOptionsInput
+  clientMutationId: String
+  content: AkashaContentBlockStreamInput!
+  options: SetOptionsInput
 }
 
 input SetAkashaFollowInput {
-    clientMutationId: String
-    content: AkashaFollowInput!
-    options: SetOptionsInput
+  clientMutationId: String
+  content: AkashaFollowInput!
+  options: SetOptionsInput
 }
 
 input SetAkashaIndexedStreamInput {
-    clientMutationId: String
-    content: AkashaIndexedStreamInput!
-    options: SetOptionsInput
+  clientMutationId: String
+  content: AkashaIndexedStreamInput!
+  options: SetOptionsInput
 }
 
 input SetAkashaInterestsStreamInput {
-    clientMutationId: String
-    content: AkashaInterestsStreamInput!
-    options: SetOptionsInput
+  clientMutationId: String
+  content: AkashaInterestsStreamInput!
+  options: SetOptionsInput
 }
 
 input SetAkashaProfileInput {
-    clientMutationId: String
-    content: AkashaProfileInput!
-    options: SetOptionsInput
+  clientMutationId: String
+  content: AkashaProfileInput!
+  options: SetOptionsInput
 }
 
 input SetAkashaProfileInterestsInput {
-    clientMutationId: String
-    content: AkashaProfileInterestsInput!
-    options: SetOptionsInput
+  clientMutationId: String
+  content: AkashaProfileInterestsInput!
+  options: SetOptionsInput
 }
 
 input SetAkashaProfileStreamInput {
-    clientMutationId: String
-    content: AkashaProfileStreamInput!
-    options: SetOptionsInput
+  clientMutationId: String
+  content: AkashaProfileStreamInput!
+  options: SetOptionsInput
 }
 
 input SetAkashaReflectStreamInput {
-    clientMutationId: String
-    content: AkashaReflectStreamInput!
-    options: SetOptionsInput
+  clientMutationId: String
+  content: AkashaReflectStreamInput!
+  options: SetOptionsInput
 }
 
 input SetOptionsInput {
-    "Inform indexers if they should index this document or not"
-    shouldIndex: Boolean
-    "Maximum amount of time to lookup the stream over the network, in seconds - see https://developers.ceramic.network/reference/typescript/interfaces/_ceramicnetwork_common.CreateOpts.html#syncTimeoutSeconds"
-    syncTimeout: Int
+  "Inform indexers if they should index this document or not"
+  shouldIndex: Boolean
+  "Maximum amount of time to lookup the stream over the network, in seconds - see https://developers.ceramic.network/reference/typescript/interfaces/_ceramicnetwork_common.CreateOpts.html#syncTimeoutSeconds"
+  syncTimeout: Int
 }
 
 input StringValueFilterInput {
-    equalTo: String
-    greaterThan: String
-    greaterThanOrEqualTo: String
-    in: [String!]
-    isNull: Boolean
-    lessThan: String
-    lessThanOrEqualTo: String
-    notEqualTo: String
-    notIn: [String!]
+  equalTo: String
+  greaterThan: String
+  greaterThanOrEqualTo: String
+  in: [String!]
+  isNull: Boolean
+  lessThan: String
+  lessThanOrEqualTo: String
+  notEqualTo: String
+  notIn: [String!]
 }
 
 input UpdateAkashaAppInput {
-    clientMutationId: String
-    content: PartialAkashaAppInput!
-    id: ID!
-    options: UpdateOptionsInput
+  clientMutationId: String
+  content: PartialAkashaAppInput!
+  id: ID!
+  options: UpdateOptionsInput
 }
 
 input UpdateAkashaAppReleaseInput {
-    clientMutationId: String
-    content: PartialAkashaAppReleaseInput!
-    id: ID!
-    options: UpdateOptionsInput
+  clientMutationId: String
+  content: PartialAkashaAppReleaseInput!
+  id: ID!
+  options: UpdateOptionsInput
 }
 
 input UpdateAkashaAppsStreamInput {
-    clientMutationId: String
-    content: PartialAkashaAppsStreamInput!
-    id: ID!
-    options: UpdateOptionsInput
+  clientMutationId: String
+  content: PartialAkashaAppsStreamInput!
+  id: ID!
+  options: UpdateOptionsInput
 }
 
 input UpdateAkashaBeamInput {
-    clientMutationId: String
-    content: PartialAkashaBeamInput!
-    id: ID!
-    options: UpdateOptionsInput
+  clientMutationId: String
+  content: PartialAkashaBeamInput!
+  id: ID!
+  options: UpdateOptionsInput
 }
 
 input UpdateAkashaBeamStreamInput {
-    clientMutationId: String
-    content: PartialAkashaBeamStreamInput!
-    id: ID!
-    options: UpdateOptionsInput
+  clientMutationId: String
+  content: PartialAkashaBeamStreamInput!
+  id: ID!
+  options: UpdateOptionsInput
 }
 
 input UpdateAkashaBlockStorageInput {
-    clientMutationId: String
-    content: PartialAkashaBlockStorageInput!
-    id: ID!
-    options: UpdateOptionsInput
+  clientMutationId: String
+  content: PartialAkashaBlockStorageInput!
+  id: ID!
+  options: UpdateOptionsInput
 }
 
 input UpdateAkashaContentBlockInput {
-    clientMutationId: String
-    content: PartialAkashaContentBlockInput!
-    id: ID!
-    options: UpdateOptionsInput
+  clientMutationId: String
+  content: PartialAkashaContentBlockInput!
+  id: ID!
+  options: UpdateOptionsInput
 }
 
 input UpdateAkashaContentBlockStreamInput {
-    clientMutationId: String
-    content: PartialAkashaContentBlockStreamInput!
-    id: ID!
-    options: UpdateOptionsInput
+  clientMutationId: String
+  content: PartialAkashaContentBlockStreamInput!
+  id: ID!
+  options: UpdateOptionsInput
 }
 
 input UpdateAkashaFollowInput {
-    clientMutationId: String
-    content: PartialAkashaFollowInput!
-    id: ID!
-    options: UpdateOptionsInput
+  clientMutationId: String
+  content: PartialAkashaFollowInput!
+  id: ID!
+  options: UpdateOptionsInput
 }
 
 input UpdateAkashaIndexedStreamInput {
-    clientMutationId: String
-    content: PartialAkashaIndexedStreamInput!
-    id: ID!
-    options: UpdateOptionsInput
+  clientMutationId: String
+  content: PartialAkashaIndexedStreamInput!
+  id: ID!
+  options: UpdateOptionsInput
 }
 
 input UpdateAkashaInterestsStreamInput {
-    clientMutationId: String
-    content: PartialAkashaInterestsStreamInput!
-    id: ID!
-    options: UpdateOptionsInput
+  clientMutationId: String
+  content: PartialAkashaInterestsStreamInput!
+  id: ID!
+  options: UpdateOptionsInput
 }
 
 input UpdateAkashaProfileInput {
-    clientMutationId: String
-    content: PartialAkashaProfileInput!
-    id: ID!
-    options: UpdateOptionsInput
+  clientMutationId: String
+  content: PartialAkashaProfileInput!
+  id: ID!
+  options: UpdateOptionsInput
 }
 
 input UpdateAkashaProfileInterestsInput {
-    clientMutationId: String
-    content: PartialAkashaProfileInterestsInput!
-    id: ID!
-    options: UpdateOptionsInput
+  clientMutationId: String
+  content: PartialAkashaProfileInterestsInput!
+  id: ID!
+  options: UpdateOptionsInput
 }
 
 input UpdateAkashaProfileStreamInput {
-    clientMutationId: String
-    content: PartialAkashaProfileStreamInput!
-    id: ID!
-    options: UpdateOptionsInput
+  clientMutationId: String
+  content: PartialAkashaProfileStreamInput!
+  id: ID!
+  options: UpdateOptionsInput
 }
 
 input UpdateAkashaReflectInput {
-    clientMutationId: String
-    content: PartialAkashaReflectInput!
-    id: ID!
-    options: UpdateOptionsInput
+  clientMutationId: String
+  content: PartialAkashaReflectInput!
+  id: ID!
+  options: UpdateOptionsInput
 }
 
 input UpdateAkashaReflectStreamInput {
-    clientMutationId: String
-    content: PartialAkashaReflectStreamInput!
-    id: ID!
-    options: UpdateOptionsInput
+  clientMutationId: String
+  content: PartialAkashaReflectStreamInput!
+  id: ID!
+  options: UpdateOptionsInput
 }
 
 input UpdateOptionsInput {
-    "Fully replace the document contents instead of performing a shallow merge"
-    replace: Boolean = false
-    "Inform indexers if they should index this document or not"
-    shouldIndex: Boolean
-    "Only perform mutation if the document matches the provided version"
-    version: CeramicCommitID
+  "Fully replace the document contents instead of performing a shallow merge"
+  replace: Boolean = false
+  "Inform indexers if they should index this document or not"
+  shouldIndex: Boolean
+  "Only perform mutation if the document matches the provided version"
+  version: CeramicCommitID
 }
 
 input WithAkashaAppInput {
-    name: String!
+  name: String!
 }
 
 input WithAkashaAppReleaseInput {
-    applicationID: CeramicStreamID!
-    version: String!
+  applicationID: CeramicStreamID!
+  version: String!
 }
 
 input WithAkashaAppsStreamInput {
-    applicationID: CeramicStreamID!
+  applicationID: CeramicStreamID!
 }
 
 input WithAkashaBeamStreamInput {
-    beamID: CeramicStreamID!
+  beamID: CeramicStreamID!
 }
 
 input WithAkashaBlockStorageInput {
-    blockID: CeramicStreamID!
+  blockID: CeramicStreamID!
 }
 
 input WithAkashaContentBlockStreamInput {
-    blockID: CeramicStreamID!
+  blockID: CeramicStreamID!
 }
 
 input WithAkashaFollowInput {
-    profileID: CeramicStreamID!
+  profileID: CeramicStreamID!
 }
 
 input WithAkashaIndexedStreamInput {
-    indexType: String!
-    indexValue: String!
-    stream: CeramicStreamID!
+  indexType: String!
+  indexValue: String!
+  stream: CeramicStreamID!
 }
 
 input WithAkashaInterestsStreamInput {
-    labelType: String!
-    value: String!
+  labelType: String!
+  value: String!
 }
 
 input WithAkashaProfileStreamInput {
-    profileID: CeramicStreamID!
+  profileID: CeramicStreamID!
 }
 
 input WithAkashaReflectStreamInput {
-    reflectionID: CeramicStreamID!
+  reflectionID: CeramicStreamID!
 }

@@ -813,6 +813,8 @@ export const GetReflectionStreamDocument = /*#__PURE__*/ gql`
             active
             status
             createdAt
+            isReply
+            replyTo
           }
           cursor
         }
