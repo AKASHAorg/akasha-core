@@ -55,7 +55,7 @@ export const SuccessSnackbar: Story = {
 };
 
 export const SnackbarWithActionButtonLabel: Story = {
-  args: { ...baseArgs.args, actionButtonLabel: 'OK' },
+  args: { ...baseArgs.args, actionButtonLabel: 'Dismiss' },
 };
 
 export const SnackbarWithSpecificIcon: Story = {

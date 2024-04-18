@@ -9,9 +9,6 @@ import {
   useListenForMutationEvents,
   filterEvent,
 } from '@akashaorg/ui-awf-hooks';
-import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
-import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import {
   RootExtensionProps,
   MenuItemAreaType,
@@ -19,12 +16,17 @@ import {
   type NotificationEvent,
   NotificationTypes,
 } from '@akashaorg/typings/lib/ui';
+import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
+import { InformationCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 const SnackBarNotification: React.FC<RootExtensionProps> = () => {
   const { uiEvents, getRoutingPlugin } = useRootComponentProps();
   const [message, setMessage] = useState('');
   const [appTitle, setAppTitle] = useState(null);
   const [messageType, setMessageType] = useState(NotificationTypes.Success);
+  const [snackbarIcon, setSnackbarIcon] = useState(<InformationCircleIcon />);
 
   const [routeData, setRouteData] = useState(null);
   const mutationEvents = useListenForMutationEvents();
@@ -99,6 +101,9 @@ const SnackBarNotification: React.FC<RootExtensionProps> = () => {
           setMessage(eventInfo.data.message);
           setMessageType(eventInfo.data.type);
         }
+        if (eventInfo.data && hasOwn(eventInfo.data, 'snackbarIcon')) {
+          setSnackbarIcon(eventInfo.data.snackbarIcon);
+        }
       },
     });
 
@@ -107,6 +112,7 @@ const SnackBarNotification: React.FC<RootExtensionProps> = () => {
         eventsSub.unsubscribe();
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const dismissHandler = () => {
@@ -115,7 +121,7 @@ const SnackBarNotification: React.FC<RootExtensionProps> = () => {
   };
 
   const findAppIcon = (appName: string) => {
-    return defaultInstalledApps?.find(app => app.name === appName);
+    return defaultInstalledApps?.find(({ name }) => name === appName);
   };
 
   const icon = (
@@ -130,6 +136,7 @@ const SnackBarNotification: React.FC<RootExtensionProps> = () => {
     <Stack customStyle="z-50" fullWidth>
       {message && (
         <Snackbar
+          icon={snackbarIcon}
           title={
             appTitle ? (
               <Stack

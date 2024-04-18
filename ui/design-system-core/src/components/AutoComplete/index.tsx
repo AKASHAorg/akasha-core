@@ -127,7 +127,7 @@ const AutoComplete: React.FC<AutoCompleteProps> = props => {
               if (onChange) onChange(label);
               if (onSelected) onSelected({ value: label, index });
             }}
-            customStyle="absolute max-h-28 w-full overflow-y-auto scrollbar"
+            customStyle="absolute max-h-28 w-full overflow-y-auto scrollbar z-10"
           />
         </Stack>
       )}
