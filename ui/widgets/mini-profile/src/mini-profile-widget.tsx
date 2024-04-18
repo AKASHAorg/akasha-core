@@ -62,7 +62,7 @@ const ProfileCardWidget: React.FC<ProfileCardWidgetProps> = props => {
 
   useEffect(() => {
     if (authorId) {
-      userStore.getUserInfo({ profileDid: authorId });
+      userStore.getUserInfo({ profileDID: authorId });
     }
   }, [authorId, userStore]);
 

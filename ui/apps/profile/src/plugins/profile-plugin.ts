@@ -15,11 +15,11 @@ export class ProfilePlugin implements IProfilePlugin<AkashaProfile> {
   /**
    * Fetch AKASHA profile info
    */
-  getProfileInfo = async ({ profileDid }) => {
+  getProfileInfo = async ({ profileDID }) => {
     const profileQuery = await this.#apolloClient.query<GetProfileByDidQuery>({
       query: GetProfileByDidDocument,
       variables: {
-        id: profileDid,
+        id: profileDID,
       },
     });
     const error = JSON.stringify(profileQuery.errors?.map(error => error.message));
