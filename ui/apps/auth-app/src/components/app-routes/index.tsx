@@ -12,7 +12,7 @@ import {
 import { CreateRouter, RouterContext } from '@akashaorg/typings/lib/ui';
 import ChooseProvider from '../pages/choose-provider';
 import ConnectWallet from '../pages/connect-wallet';
-import MasterPage from '../pages/master-page';
+import MainPage from '../pages/main-page';
 
 const rootRoute = createRootRouteWithContext<RouterContext>()({
   component: Outlet,
@@ -26,27 +26,27 @@ const defaultRoute = createRoute({
   },
 });
 
-const masterRoute = createRoute({
+const mainRoute = createRoute({
   getParentRoute: () => rootRoute,
-  id: 'master',
-  component: MasterPage,
+  id: 'main',
+  component: MainPage,
 });
 
 const connectRoute = createRoute({
-  getParentRoute: () => masterRoute,
+  getParentRoute: () => mainRoute,
   path: `${routes[CONNECT]}`,
   component: ChooseProvider,
 });
 
 const web3ModalRoute = createRoute({
-  getParentRoute: () => masterRoute,
+  getParentRoute: () => mainRoute,
   path: `${routes[CONNECT]}${routes[WEB3MODAL]}`,
   component: ConnectWallet,
 });
 
 const routeTree = rootRoute.addChildren([
   defaultRoute,
-  masterRoute.addChildren([connectRoute, web3ModalRoute]),
+  mainRoute.addChildren([connectRoute, web3ModalRoute]),
 ]);
 
 export const router = ({ baseRouteName, apolloClient }: CreateRouter) =>

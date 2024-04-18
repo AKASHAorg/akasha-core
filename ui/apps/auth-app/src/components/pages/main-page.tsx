@@ -4,7 +4,7 @@ import { useGetLogin, useRootComponentProps, hasOwn } from '@akashaorg/ui-awf-ho
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import { Outlet } from '@tanstack/react-router';
 
-const MasterPage: React.FC = () => {
+const MainPage: React.FC = () => {
   const { worldConfig, getRoutingPlugin } = useRootComponentProps();
 
   const { data } = useGetLogin();
@@ -50,4 +50,4 @@ const MasterPage: React.FC = () => {
   );
 };
 
-export default MasterPage;
+export default MainPage;
