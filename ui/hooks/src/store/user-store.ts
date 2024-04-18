@@ -81,15 +81,15 @@ export class UserStore<T> implements IUserStore<T> {
   /**
    * Fetch user info using getProfileInfo method from the profile app plugin
    */
-  getUserInfo = async ({ profileDid }) => {
+  getUserInfo = async ({ profileDID }) => {
     store.set(this.#userAtom, prev => ({
       ...prev,
       isLoadingInfo: true,
     }));
     try {
-      const { data: profileInfo, error } = await this.#getProfileInfo({ profileDid });
+      const { data: profileInfo, error } = await this.#getProfileInfo({ profileDID });
       const state = store.get(this.#userAtom);
-      const info = profileInfo ? { ...state.info, [profileDid]: profileInfo } : null;
+      const info = profileInfo ? { ...state.info, [profileDID]: profileInfo } : null;
       store.set(this.#userAtom, prev => ({
         ...prev,
         info,
@@ -138,7 +138,7 @@ export class UserStore<T> implements IUserStore<T> {
           const authenticatedDID = data.id;
           if (authenticatedDID) {
             const { data: profileInfo, error } = await this.#getProfileInfo({
-              profileDid: authenticatedDID,
+              profileDID: authenticatedDID,
             });
             store.set(this.#userAtom, prev => ({
               ...prev,

@@ -27,13 +27,13 @@ import {
 import { useGetProfileByDidSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
 type ProfileHeaderProps = {
-  profileDid: string;
+  profileDID: string;
   plain?: boolean;
   customStyle?: string;
 };
 const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
   const [activeOverlay, setActiveOverlay] = React.useState<'avatar' | 'coverImage' | null>(null);
-  const { profileDid, plain, customStyle = '' } = props;
+  const { profileDID, plain, customStyle = '' } = props;
   const { t } = useTranslation('app-profile');
   const { data: loginData } = useGetLogin();
   const { uiEvents, navigateToModal, getRoutingPlugin } = useRootComponentProps();
@@ -41,9 +41,9 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
   const { data, error } = useGetProfileByDidSuspenseQuery({
     fetchPolicy:
       'cache-first' /*data is prefetched during route matching as a result we prefer reading cache first here  */,
-    variables: { id: profileDid },
+    variables: { id: profileDID },
   });
-  const { validDid, isEthAddress } = useValidDid(profileDid, !!data?.node);
+  const { validDid, isEthAddress } = useValidDid(profileDID, !!data?.node);
   const { akashaProfile: profileData } =
     data?.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
 
@@ -91,21 +91,21 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
   const handleClickProfileName = () => {
     navigateTo({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: () => `/${profileDid}`,
+      getNavigationUrl: () => `/${profileDID}`,
     });
   };
 
   const handleEdit = () => {
     navigateTo({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: () => `/${profileDid}${routes[EDIT]}`,
+      getNavigationUrl: () => `/${profileDID}${routes[EDIT]}`,
     });
   };
 
   const handleFlagProfile = () => {
     navigateTo({
       appName: '@akashaorg/app-vibes',
-      getNavigationUrl: () => `/report/profile/${profileDid}`,
+      getNavigationUrl: () => `/report/profile/${profileDID}`,
     });
   };
 
@@ -147,7 +147,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
 
   return (
     <ProfileHeaderPresentation
-      profileId={profileData?.did?.id ? profileData.did.id : profileDid}
+      profileId={profileData?.did?.id ? profileData.did.id : profileDID}
       validAddress={profileData ? true : isEthAddress || validDid}
       background={profileData?.background}
       avatar={profileData?.avatar}
