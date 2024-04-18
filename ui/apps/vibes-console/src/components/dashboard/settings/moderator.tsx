@@ -1,21 +1,17 @@
 import React from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import {
   PageHeader,
   PageHeaderProps,
 } from '@akashaorg/design-system-components/lib/components/PageHeader';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { TSection } from './admin';
 
 export type ModeratorSettingsProps = PageHeaderProps & {
   sections: {
-    one: {
-      title: string;
-    };
-    two: {
-      title: string;
-      description: string;
-    };
+    one: TSection;
+    two: TSection;
   };
 };
 
@@ -37,10 +33,7 @@ export const ModeratorSettings: React.FC<ModeratorSettingsProps> = props => {
         </Stack>
         <Divider />
         <Stack direction="row" align="start" justify="between">
-          <Stack
-            spacing="gap-y-3
-          "
-          >
+          <Stack spacing="gap-y-3">
             <Text variant="button-md" color={{ light: 'black', dark: 'grey6' }}>
               {two.title}
             </Text>

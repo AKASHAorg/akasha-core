@@ -4,9 +4,7 @@ import { EthProviders, PROVIDER_ERROR_CODES } from '@akashaorg/typings/lib/sdk';
 import {
   switchToRequiredNetwork,
   useConnectWallet,
-  useGetLogin,
-  useLogin,
-  useLogout,
+  useAkashaStore,
   useNetworkChangeListener,
   useRequiredNetwork,
   useRootComponentProps,
@@ -34,26 +32,27 @@ const ConnectWallet: React.FC = () => {
   const selectedProvider = EthProviders.WalletConnect;
   const worldName = worldConfig.title;
 
-  const { data } = useGetLogin();
+  const {
+    data: { authenticatedDID, authenticationError },
+    userStore,
+  } = useAkashaStore();
+  const isLoggedIn = !!authenticatedDID;
+
   const [errors, setErrors] = useState<{ title: string; subtitle: string }[]>([]);
   const [isSignInRetry, setIsSignInRetry] = useState(false);
 
-  const { signIn, signInErrors } = useLogin();
-  const { logOut } = useLogout();
-
   const onDisconnect = () => {
-    logOut();
+    userStore.logout();
     navigate({ to: '/' });
   };
 
   const onSignIn = provider => {
-    signIn({ selectedProvider: provider });
+    userStore.login({ provider });
   };
 
   const signInCall = useRef(onSignIn);
   const signOutCall = useRef(onDisconnect);
 
-  const isLoggedIn = !!data?.id;
   const connectWalletCall = useConnectWallet();
   const requiredNetworkQuery = useRequiredNetwork();
   const [changedNetwork, changedNetworkUnsubscribe] = useNetworkChangeListener();
@@ -124,7 +123,7 @@ const ConnectWallet: React.FC = () => {
   }, [connectWalletCall.error, connectWalletCall.isError, requiredNetworkName, t]);
 
   const hasErrors =
-    Boolean(networkNotSupportedError) || Boolean(errors.length) || Boolean(signInErrors);
+    Boolean(networkNotSupportedError) || Boolean(errors.length) || Boolean(authenticationError);
 
   const handleChangeNetwork = () => {
     /**
@@ -213,10 +212,10 @@ const ConnectWallet: React.FC = () => {
           action={{ onClick: handleChangeNetwork, label: t('Change Network') }}
         />
       )}
-      {signInErrors && (
+      {authenticationError && (
         <ConnectErrorCard
           title={t('Request Rejected!')}
-          message={signInErrors.message}
+          message={authenticationError.message}
           action={{ onClick: handleSignInRetry, label: t('Retry Request') }}
         />
       )}

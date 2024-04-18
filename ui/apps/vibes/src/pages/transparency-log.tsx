@@ -4,7 +4,6 @@ import { IModerationLogItem } from '@akashaorg/typings/lib/ui';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Dropdown from '@akashaorg/design-system-core/lib/components/Dropdown';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import TransparencyLogItemCard from '../components/transparency-log/log-item';
 import NoFlaggedItems from '../components/transparency-log/no-flagged-items';
@@ -80,12 +79,7 @@ export const TransparencyLog: React.FC<unknown> = () => {
             setSelected={setfilterByCategory}
           />
         </Stack>
-
-        <Button plain={true} onClick={resetFilters}>
-          <Text variant="body2" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
-            {`${t('Reset')}`}
-          </Text>
-        </Button>
+        <Button variant="text" size="md" label={`${t('Reset')}`} onClick={resetFilters} />
       </Stack>
 
       {!filteredEntries.length && (

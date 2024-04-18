@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { ReplaySubject } from 'rxjs';
-import { genAppProps } from '@akashaorg/af-testing';
+import { genAppProps, getUserInfo, getUserStore } from '@akashaorg/af-testing';
 import * as useRootComponentProps from '@akashaorg/ui-awf-hooks/lib/use-root-props';
+import * as useAkashaStore from '@akashaorg/ui-awf-hooks/lib/store/use-akasha-store';
 
 require('@testing-library/jest-dom/extend-expect');
 
@@ -9,33 +9,37 @@ require('@testing-library/jest-dom/extend-expect');
  * sdk mock for Apps package.
  * Include only methods needed for the apps tests
  *
- * using .doMock() here instead of .mock() to fix error about referencing out-of-scope variables.
  */
-jest.doMock('@akashaorg/awf-sdk', () => () => ({
-  api: {
-    auth: {
-      getCurrentUser: () => Promise.resolve({ data: { id: 'id' } }),
+jest.mock('@akashaorg/awf-sdk', () => () => {
+  const { ReplaySubject } = require('rxjs');
+  return {
+    api: {
+      auth: {
+        signIn: () => Promise.resolve({ data: { id: 'id' } }),
+        signOut: () => Promise.resolve('Logged out'),
+        getCurrentUser: () => Promise.resolve({ data: { id: 'id' } }),
+      },
+      globalChannel: new ReplaySubject(),
     },
-    globalChannel: new ReplaySubject(),
-  },
-  services: {
-    gql: {
-      mutationNotificationConfig: { optionName: 'testMutationConfig' },
-      contextSources: {
-        composeDB: Symbol.for('composeDB'),
-        default: Symbol.for('defaultContextSource'),
+    services: {
+      gql: {
+        mutationNotificationConfig: { optionName: 'testMutationConfig' },
+        contextSources: {
+          composeDB: Symbol.for('composeDB'),
+          default: Symbol.for('defaultContextSource'),
+        },
+      },
+      common: {
+        misc: {
+          resolveDID: jest.fn(),
+        },
+      },
+      stash: {
+        getUiStash: () => new Map(),
       },
     },
-    common: {
-      misc: {
-        resolveDID: jest.fn(),
-      },
-    },
-    stash: {
-      getUiStash: () => new Map(),
-    },
-  },
-}));
+  };
+});
 
 jest.mock('react-i18next', () => ({
   ...jest.requireActual('react-i18next'),
@@ -59,4 +63,8 @@ jest.mock('@twind/core', () => {
   };
 });
 
-jest.spyOn(useRootComponentProps, 'useRootComponentProps').mockReturnValue(genAppProps());
+jest.spyOn(useRootComponentProps, 'useRootComponentProps').mockReturnValue({ ...genAppProps() });
+
+jest
+  .spyOn(useAkashaStore, 'useAkashaStore')
+  .mockReturnValue({ userStore: getUserStore(), data: getUserInfo() });
