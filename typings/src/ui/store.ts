@@ -6,7 +6,7 @@ type Login = {
 };
 
 export type GetUserInfo = {
-  profileDid: string;
+  profileDID: string;
 };
 
 /**
@@ -39,7 +39,7 @@ export interface IGetProfileInfo<T> {
 export interface IUserStore<T> {
   login({ provider, checkRegistered }: Login): void;
   logout(): void;
-  getUserInfo({ profileDid }: GetUserInfo): void;
+  getUserInfo({ profileDID }: GetUserInfo): void;
   restoreSession(): void;
   subscribe(listener: () => void): () => void;
   getSnapshot(): IUserState<T>;
