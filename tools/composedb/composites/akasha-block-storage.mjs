@@ -21,7 +21,7 @@ enum BlockStorageDef{
   OTHER
 }
 
-type AkashaBlockStorage @createModel(accountRelation: LIST, description: "AKASHA Block Storage v0.1") @createIndex(fields:[{path:"active"}, {path: "createdAt"}, {path: "kind"}]) {
+type AkashaBlockStorage @createModel(accountRelation: SET, description: "AKASHA Block Storage v0.2", accountRelationFields: ["blockID"]) @createIndex(fields:[{path:"active"}, {path: "createdAt"}, {path: "kind"}]) {
   blockID: StreamID! @documentReference(model: "AkashaContentBlock")
   block: AkashaContentBlock! @relationDocument(property: "blockID")
   content: [LabeledValue!]! @list(maxLength: 20)

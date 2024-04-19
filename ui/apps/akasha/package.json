@@ -37,23 +37,23 @@
     "url": "https://github.com/AKASHAorg/akasha-world-framework/issues"
   },
   "dependencies": {
-    "@akashaorg/awf-sdk": "*",
-    "@akashaorg/design-system-core": "*",
-    "@akashaorg/design-system-components": "*",
-    "@akashaorg/ui-awf-hooks": "*",
     "@akashaorg/af-testing": "*",
-    "@akashaorg/ui-lib-feed": "*",
+    "@akashaorg/awf-sdk": "*",
+    "@akashaorg/design-system-components": "*",
+    "@akashaorg/design-system-core": "*",
+    "@akashaorg/ui-awf-hooks": "*",
     "@akashaorg/ui-lib-extensions": "*",
+    "@akashaorg/ui-lib-feed": "*",
+    "@tanstack/react-query": "4.29.3",
+    "@tanstack/react-router": "1.16.6",
     "i18next": "22.4.14",
     "i18next-browser-languagedetector": "7.0.1",
     "i18next-chained-backend": "4.2.0",
     "i18next-fetch-backend": "5.0.2",
     "i18next-localstorage-backend": "4.1.1",
     "react-i18next": "12.2.0",
-    "@tanstack/react-query": "4.29.3",
     "react-router-dom": "6.3.0",
-    "single-spa-react": "6.0.1",
-    "@tanstack/react-router": "1.16.6"
+    "single-spa-react": "6.0.1"
   },
   "devDependencies": {
     "@akashaorg/typings": "*",

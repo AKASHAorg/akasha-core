@@ -1810,8 +1810,8 @@ export type UpdateInterestsMutationHookResult = ReturnType<typeof useUpdateInter
 export type UpdateInterestsMutationResult = Apollo.MutationResult<Types.UpdateInterestsMutation>;
 export type UpdateInterestsMutationOptions = Apollo.BaseMutationOptions<Types.UpdateInterestsMutation, Types.UpdateInterestsMutationVariables>;
 export const CreateFollowDocument = /*#__PURE__*/ gql`
-    mutation CreateFollow($i: CreateAkashaFollowInput!) {
-  createAkashaFollow(input: $i) {
+    mutation CreateFollow($i: SetAkashaFollowInput!) {
+  setAkashaFollow(input: $i) {
     document {
       isFollowing
       profile {
@@ -2674,9 +2674,9 @@ export type GetProfileStatsByDidQueryHookResult = ReturnType<typeof useGetProfil
 export type GetProfileStatsByDidLazyQueryHookResult = ReturnType<typeof useGetProfileStatsByDidLazyQuery>;
 export type GetProfileStatsByDidSuspenseQueryHookResult = ReturnType<typeof useGetProfileStatsByDidSuspenseQuery>;
 export type GetProfileStatsByDidQueryResult = Apollo.QueryResult<Types.GetProfileStatsByDidQuery, Types.GetProfileStatsByDidQueryVariables>;
-export const CreateAppReleaseDocument = /*#__PURE__*/ gql`
-    mutation CreateAppRelease($i: CreateAkashaAppReleaseInput!) {
-  createAkashaAppRelease(input: $i) {
+export const SetAppReleaseDocument = /*#__PURE__*/ gql`
+    mutation SetAppRelease($i: SetAkashaAppReleaseInput!) {
+  setAkashaAppRelease(input: $i) {
     document {
       ...AppReleaseFragmentM
     }
@@ -2686,32 +2686,32 @@ export const CreateAppReleaseDocument = /*#__PURE__*/ gql`
     ${AppReleaseFragmentMFragmentDoc}
 ${AkashaAppFragmentMFragmentDoc}
 ${UserProfileFragmentMFragmentDoc}`;
-export type CreateAppReleaseMutationFn = Apollo.MutationFunction<Types.CreateAppReleaseMutation, Types.CreateAppReleaseMutationVariables>;
+export type SetAppReleaseMutationFn = Apollo.MutationFunction<Types.SetAppReleaseMutation, Types.SetAppReleaseMutationVariables>;
 
 /**
- * __useCreateAppReleaseMutation__
+ * __useSetAppReleaseMutation__
  *
- * To run a mutation, you first call `useCreateAppReleaseMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateAppReleaseMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useSetAppReleaseMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetAppReleaseMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [createAppReleaseMutation, { data, loading, error }] = useCreateAppReleaseMutation({
+ * const [setAppReleaseMutation, { data, loading, error }] = useSetAppReleaseMutation({
  *   variables: {
  *      i: // value for 'i'
  *   },
  * });
  */
-export function useCreateAppReleaseMutation(baseOptions?: Apollo.MutationHookOptions<Types.CreateAppReleaseMutation, Types.CreateAppReleaseMutationVariables>) {
+export function useSetAppReleaseMutation(baseOptions?: Apollo.MutationHookOptions<Types.SetAppReleaseMutation, Types.SetAppReleaseMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<Types.CreateAppReleaseMutation, Types.CreateAppReleaseMutationVariables>(CreateAppReleaseDocument, options);
+        return Apollo.useMutation<Types.SetAppReleaseMutation, Types.SetAppReleaseMutationVariables>(SetAppReleaseDocument, options);
       }
-export type CreateAppReleaseMutationHookResult = ReturnType<typeof useCreateAppReleaseMutation>;
-export type CreateAppReleaseMutationResult = Apollo.MutationResult<Types.CreateAppReleaseMutation>;
-export type CreateAppReleaseMutationOptions = Apollo.BaseMutationOptions<Types.CreateAppReleaseMutation, Types.CreateAppReleaseMutationVariables>;
+export type SetAppReleaseMutationHookResult = ReturnType<typeof useSetAppReleaseMutation>;
+export type SetAppReleaseMutationResult = Apollo.MutationResult<Types.SetAppReleaseMutation>;
+export type SetAppReleaseMutationOptions = Apollo.BaseMutationOptions<Types.SetAppReleaseMutation, Types.SetAppReleaseMutationVariables>;
 export const UpdateAppReleaseDocument = /*#__PURE__*/ gql`
     mutation UpdateAppRelease($i: UpdateAkashaAppReleaseInput!) {
   updateAkashaAppRelease(input: $i) {
@@ -2751,8 +2751,8 @@ export type UpdateAppReleaseMutationHookResult = ReturnType<typeof useUpdateAppR
 export type UpdateAppReleaseMutationResult = Apollo.MutationResult<Types.UpdateAppReleaseMutation>;
 export type UpdateAppReleaseMutationOptions = Apollo.BaseMutationOptions<Types.UpdateAppReleaseMutation, Types.UpdateAppReleaseMutationVariables>;
 export const CreateAppDocument = /*#__PURE__*/ gql`
-    mutation CreateApp($i: CreateAkashaAppInput!) {
-  createAkashaApp(input: $i) {
+    mutation CreateApp($i: SetAkashaAppInput!) {
+  setAkashaApp(input: $i) {
     document {
       ...AkashaAppFragmentM
     }

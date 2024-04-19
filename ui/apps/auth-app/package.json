@@ -39,11 +39,11 @@
     "url": "https://github.com/AKASHAorg/akasha-world-framework/issues"
   },
   "dependencies": {
-    "@akashaorg/awf-sdk": "*",
-    "@akashaorg/design-system-core": "*",
-    "@akashaorg/design-system-components": "*",
-    "@akashaorg/ui-awf-hooks": "*",
     "@akashaorg/af-testing": "*",
+    "@akashaorg/awf-sdk": "*",
+    "@akashaorg/design-system-components": "*",
+    "@akashaorg/design-system-core": "*",
+    "@akashaorg/ui-awf-hooks": "*",
     "i18next": "22.4.14",
     "react-i18next": "12.2.0",
     "react-router-dom": "6.11.2",

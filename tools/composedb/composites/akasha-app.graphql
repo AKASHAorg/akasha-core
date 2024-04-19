@@ -5,7 +5,7 @@ enum ApplicationType {
   OTHER
 }
 
-type AkashaApp @createModel(accountRelation: LIST, description: "AKASHA Application v0.1") @createIndex(fields:[{path:"name"}, {path: "displayName"}, {path: "applicationType"}, {path: "createdAt"}]) {
+type AkashaApp @createModel(accountRelation: SET, description: "AKASHA Application v0.2", accountRelationFields:["name"]) @createIndex(fields:[{path:"name"}, {path: "displayName"}, {path: "applicationType"}, {path: "createdAt"}]) {
   name: String! @string(minLength:4, maxLength: 48),
   displayName: String! @string(minLength:4, maxLength: 24)
   applicationType: ApplicationType!

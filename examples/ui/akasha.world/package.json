@@ -5,19 +5,19 @@
   "type": "module",
   "devDependencies": {
     "@akashaorg/awf-sdk": "*",
-    "@akashaorg/ui-app-loader": "*",
-    "@akashaorg/typings": "*",
     "@akashaorg/design-system-core": "*",
-    "style-loader": "3.3.1",
+    "@akashaorg/typings": "*",
+    "@akashaorg/ui-app-loader": "*",
+    "@twind/core": "1.1.3",
     "css-loader": "6.7.2",
-    "@twind/core": "1.1.3"
+    "style-loader": "3.3.1"
   },
   "peerDependencies": {
     "@twind/core": "^1.1.3",
     "@twind/preset-autoprefix": "^1.0.7",
-    "@twind/preset-tailwind": "^1.1.4",
     "@twind/preset-container-queries": "^1.0.7",
     "@twind/preset-line-clamp": "1.0.7",
+    "@twind/preset-tailwind": "^1.1.4",
     "@twind/with-react": "^1.1.3"
   },
   "scripts": {
