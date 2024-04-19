@@ -57,7 +57,7 @@ const TagFeed = (props: TagFeedProps) => {
    *  Check if the feed will be used inside the My Antenna page and
    *  set the filter for logged-out users and users who toggled off nsfw content.
    **/
-  if ((queryKey.includes('my-antenna') && !showNsfw) || !isLoggedIn) {
+  if (queryKey.includes('my-antenna') && (!showNsfw || !isLoggedIn)) {
     nsfwFilters = {
       or: [
         { where: { status: { equalTo: AkashaBeamStreamModerationStatus.Ok } } },
