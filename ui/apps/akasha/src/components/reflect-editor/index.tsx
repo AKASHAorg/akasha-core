@@ -155,7 +155,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         disablePublish={!authenticatedDID}
         mentions={mentions}
         getMentions={handleGetMentions}
-        background={{ light: 'grey9', dark: 'grey3' }}
+        background={{ light: 'white', dark: 'grey2' }}
         onPublish={data => {
           if (!authenticatedDID) {
             return;
