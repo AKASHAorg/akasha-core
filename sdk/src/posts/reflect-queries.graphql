@@ -80,6 +80,8 @@ query GetReflectionStream($indexer: ID!, $after: String, $before: String, $first
             active
             status
             createdAt
+            isReply
+            replyTo
           }
           cursor
         }
