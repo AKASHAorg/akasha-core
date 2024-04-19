@@ -6,7 +6,7 @@ import ContentBlockRenderer from './content-block-renderer';
 import ActionButtons from './action-buttons';
 import { transformSource, hasOwn, sortByKey, useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { EntityTypes, BeamEntryData } from '@akashaorg/typings/lib/ui';
-import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useRootComponentProps, useNsfwToggling } from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { useTranslation } from 'react-i18next';
 
@@ -45,6 +45,8 @@ const BeamCard: React.FC<BeamCardProps> = props => {
   const [showBlockName, setShowBlockName] = useState(false);
   const navigateTo = getRoutingPlugin().navigateTo;
   const authenticatedDID = data?.id;
+
+  const { showNsfw } = useNsfwToggling();
 
   const {
     data: profileDataReq,
@@ -116,6 +118,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       }}
       showHiddenContent={showHiddenContent}
       showNSFWCard={showNSFWCard}
+      nsfwUserSetting={showNsfw}
       showLoginModal={showLoginModal}
       isLoggedIn={!!authenticatedDID}
       itemType={EntityTypes.BEAM}

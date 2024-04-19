@@ -1,5 +1,4 @@
 import React, { ReactElement, ReactNode, Ref, CSSProperties, Fragment, useState } from 'react';
-import { useNsfwToggling } from '@akashaorg/ui-awf-hooks';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
@@ -78,6 +77,7 @@ export type EntryCardProps = {
   hideActionButtons?: boolean;
   showHiddenContent?: boolean;
   showNSFWCard?: boolean;
+  nsfwUserSetting?: boolean;
   contentClickable?: boolean;
   lastEntry?: boolean;
   hover?: boolean;
@@ -120,6 +120,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     hideActionButtons,
     showHiddenContent,
     showNSFWCard,
+    nsfwUserSetting,
     contentClickable,
     editable = true,
     lastEntry,
@@ -145,7 +146,6 @@ const EntryCard: React.FC<EntryCardProps> = props => {
    * onClickToView handler.
    */
 
-  const { showNsfw } = useNsfwToggling();
   const [showNSFWContent, setShowNSFWContent] = useState(!showNSFWCard);
   const showHiddenStyle = showHiddenContent ? '' : 'max-h-[50rem]';
   const contentClickableStyle =
@@ -279,7 +279,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
             >
               {/* show the overlay in two cases: the user not logged in, or the beam is nsfw and
               the nsfw setting is off */}
-              {((showNSFWCard && !showNsfw && !showNSFWContent) ||
+              {((showNSFWCard && !nsfwUserSetting && !showNSFWContent) ||
                 (!isLoggedIn && showNSFWCard)) && (
                 <NSFW
                   {...nsfw}
@@ -302,7 +302,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
                * display the content in case: the content is not nsfw or, the showNSFWContent flag
                * is true or, the nsfw setting is on and the user is logged in.
                */}
-              {(!entryData.nsfw || showNSFWContent || (showNsfw && isLoggedIn)) && (
+              {(!entryData.nsfw || showNSFWContent || (nsfwUserSetting && isLoggedIn)) && (
                 <Stack
                   justifySelf="start"
                   alignSelf="start"
