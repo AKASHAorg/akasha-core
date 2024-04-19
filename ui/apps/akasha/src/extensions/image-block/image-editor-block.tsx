@@ -42,11 +42,6 @@ import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 // @TODO: replace this with actual data
 const TEST_APP_VERSION_ID = 'k2t6wzhkhabz5ja6dy72fezemlrdc5akqebksfpjyxkyap6g4fqqimcpuf7bix';
 
-const isImgUrl = async url => {
-  const response = await fetch(url, { method: 'HEAD' });
-  return response.headers.get('Content-Type').startsWith('image');
-};
-
 export const ImageEditorBlock = (
   props: ContentBlockRootProps & { blockRef?: React.RefObject<BlockInstanceMethods> },
 ) => {
@@ -167,10 +162,29 @@ export const ImageEditorBlock = (
     [createBlock, retryCreate],
   );
 
+  const isImgUrl = async url => {
+    try {
+      const response = await fetch(url, { method: 'HEAD' });
+      const isImg = response?.headers?.get('Content-Type')?.startsWith('image');
+      if (isImg) return 'isImg';
+      return 'notImg';
+    } catch (error) {
+      setURLNotImage(true);
+      const notifMsg = error?.message;
+      _uiEvents.current.next({
+        event: NotificationEvents.ShowNotification,
+        data: {
+          type: NotificationTypes.Error,
+          message: notifMsg,
+        },
+      });
+    }
+  };
+
   const handleChange = async e => {
     setImageLink(e.currentTarget.value);
     const isImg = await isImgUrl(e.currentTarget.value);
-    if (!isImg) {
+    if (isImg === 'notImg') {
       setURLNotImage(true);
       const notifMsg = t(`URL doesn't contain an image.`);
       _uiEvents.current.next({
@@ -180,6 +194,8 @@ export const ImageEditorBlock = (
           message: notifMsg,
         },
       });
+    } else if (isImg === 'isImg') {
+      setURLNotImage(false);
     }
   };
 
@@ -200,27 +216,40 @@ export const ImageEditorBlock = (
 
     const imageName = typeof image === 'string' ? image : image.name || 'beam-block-image';
 
-    const mediaFile = await saveMediaFile({
-      name: imageName,
-      isUrl: isUrl || false,
-      content: image,
-    });
-    setUploading(false);
-    if (!mediaFile) return null;
+    try {
+      const mediaFile = await saveMediaFile({
+        name: imageName,
+        isUrl: isUrl || false,
+        content: image,
+      });
+      setUploading(false);
+      if (!mediaFile) return null;
 
-    const mediaUri = `ipfs://${mediaFile.CID}`;
+      const mediaUri = `ipfs://${mediaFile.CID}`;
 
-    const mediaUrl = getMediaUrl(mediaUri);
+      const mediaUrl = getMediaUrl(mediaUri);
 
-    const imageObj = {
-      size: { height: mediaFile.size.height, width: mediaFile.size.width },
-      displaySrc: mediaUrl.originLink || mediaUrl.fallbackLink,
-      src: mediaUri,
-      name: imageName,
-      originalSrc: typeof image === 'string' ? image : URL.createObjectURL(image),
-    };
+      const imageObj = {
+        size: { height: mediaFile.size.height, width: mediaFile.size.width },
+        displaySrc: mediaUrl.originLink || mediaUrl.fallbackLink,
+        src: mediaUri,
+        name: imageName,
+        originalSrc: typeof image === 'string' ? image : URL.createObjectURL(image),
+      };
 
-    return imageObj;
+      return imageObj;
+    } catch (error) {
+      setUploading(false);
+      const notifMsg = error?.message;
+      _uiEvents.current.next({
+        event: NotificationEvents.ShowNotification,
+        data: {
+          type: NotificationTypes.Error,
+          message: notifMsg,
+        },
+      });
+      return null;
+    }
   };
 
   const uploadNewImage = async (image: File | string, isUrl?: boolean) => {
