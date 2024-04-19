@@ -7,22 +7,34 @@ import Text, { TextProps } from '@akashaorg/design-system-core/lib/components/Te
 import { PageButtonsProps, PageButtons } from '../PageButtons';
 
 export type PageHeaderProps = PageButtonsProps & {
-  label: string;
+  label?: string;
   labelTextVariant?: TextProps['variant'];
+  customStyle?: string;
 };
 
 export const PageHeader: React.FC<PropsWithChildren<PageHeaderProps>> = props => {
-  const { labelTextVariant = 'h5', label, cancelButtonLabel, confirmButtonLabel, children } = props;
+  const {
+    labelTextVariant = 'h5',
+    label,
+    cancelButtonLabel,
+    confirmButtonLabel,
+    children,
+    customStyle,
+  } = props;
 
   return (
-    <Card padding={0}>
-      <Stack padding="px-4 py-6">
-        <Text variant={labelTextVariant} align="center">
-          {label}
-        </Text>
-      </Stack>
+    <Card padding={0} margin="mb-4" customStyle={customStyle}>
+      {label && (
+        <>
+          <Stack padding="px-4 py-6">
+            <Text variant={labelTextVariant} align="center">
+              {label}
+            </Text>
+          </Stack>
 
-      <Divider />
+          <Divider />
+        </>
+      )}
 
       <Stack padding="p-4" spacing="gap-y-3">
         {children}

@@ -26,11 +26,11 @@ import {
 import { useGetProfileByDidSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
 type ProfileInfoPageProps = {
-  profileDid: string;
+  profileDID: string;
 };
 
 const ProfileInfoPage: React.FC<ProfileInfoPageProps> = props => {
-  const { profileDid } = props;
+  const { profileDID } = props;
   const { t } = useTranslation('app-profile');
   const { getRoutingPlugin, navigateToModal, uiEvents } = useRootComponentProps();
 
@@ -38,13 +38,13 @@ const ProfileInfoPage: React.FC<ProfileInfoPageProps> = props => {
   const { data, error } = useGetProfileByDidSuspenseQuery({
     fetchPolicy: 'cache-first',
     variables: {
-      id: profileDid,
+      id: profileDID,
     },
-    skip: !profileDid,
+    skip: !profileDID,
   });
-  const { validDid, isLoading: validDidCheckLoading } = useValidDid(profileDid, !!data?.node);
+  const { validDid, isLoading: validDidCheckLoading } = useValidDid(profileDID, !!data?.node);
 
-  const { data: statData } = useProfileStats(profileDid, true);
+  const { data: statData } = useProfileStats(profileDID, true);
   const { akashaProfile: profileData } =
     data?.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
 
@@ -58,7 +58,7 @@ const ProfileInfoPage: React.FC<ProfileInfoPageProps> = props => {
   const navigateTo = getRoutingPlugin().navigateTo;
 
   const hasProfile = !!data?.node;
-  const isViewer = !!authenticatedDID && profileDid === authenticatedDID;
+  const isViewer = !!authenticatedDID && profileDID === authenticatedDID;
 
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
     navigateToModal({
@@ -132,13 +132,13 @@ const ProfileInfoPage: React.FC<ProfileInfoPageProps> = props => {
   const goToEditProfile = () => {
     return navigateTo({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: () => `/${profileDid}${routes[EDIT]}`,
+      getNavigationUrl: () => `/${profileDID}${routes[EDIT]}`,
     });
   };
 
   return (
     <>
-      <ProfileHeader profileDid={profileDid} />
+      <ProfileHeader profileDID={profileDID} />
       <Stack direction="column" spacing="gap-y-4" fullWidth>
         {profileData?.description && (
           <ProfileBio title={t('Bio')} biography={profileData.description} />
@@ -160,7 +160,7 @@ const ProfileInfoPage: React.FC<ProfileInfoPageProps> = props => {
         )}
         {statData && (
           <ProfileStatsView
-            profileDid={profileDid}
+            profileDID={profileDID}
             totalBeams={statData.totalBeams}
             totalTopics={statData.totalTopics}
             totalFollowers={statData.totalFollowers}

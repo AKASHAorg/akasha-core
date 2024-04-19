@@ -59,15 +59,7 @@ export const ReportItemConfirmation: React.FC<ReportItemConfirmationProps> = pro
           {subtitleLabel}
         </Text>
 
-        <Button plain={true} onClick={onContinueClick}>
-          <Text
-            variant="button-md"
-            align="center"
-            color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-          >
-            {continueLabel}
-          </Text>
-        </Button>
+        <Button variant="text" size="md" label={continueLabel} onClick={onContinueClick} />
 
         <Stack align="center" justifySelf="end" spacing="gap-y-2">
           <Text variant="footnotes2" weight="normal" align="center">

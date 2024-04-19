@@ -1566,9 +1566,11 @@ type AkashaReflectStream implements Node
   beamID: CeramicStreamID!
   createdAt: DateTime!
   id: ID!
+  isReply: Boolean
   moderationID: CeramicStreamID
   reflection: AkashaReflect
   reflectionID: CeramicStreamID!
+  replyTo: CeramicStreamID
   status: AkashaReflectStreamModerationStatus
 }
 
@@ -1609,8 +1611,10 @@ input AkashaReflectStreamInput
   active: Boolean!
   beamID: CeramicStreamID!
   createdAt: DateTime!
+  isReply: Boolean
   moderationID: CeramicStreamID
   reflectionID: CeramicStreamID!
+  replyTo: CeramicStreamID
   status: AkashaReflectStreamModerationStatus
 }
 
@@ -1641,8 +1645,10 @@ input AkashaReflectStreamObjectFilterInput
   active: BooleanValueFilterInput
   beamID: StringValueFilterInput
   createdAt: StringValueFilterInput
+  isReply: BooleanValueFilterInput
   moderationID: StringValueFilterInput
   reflectionID: StringValueFilterInput
+  replyTo: StringValueFilterInput
   status: AkashaReflectStreamModerationStatusValueFilterInput
 }
 
@@ -1652,8 +1658,10 @@ input AkashaReflectStreamSortingInput
   active: SortOrder
   beamID: SortOrder
   createdAt: SortOrder
+  isReply: SortOrder
   moderationID: SortOrder
   reflectionID: SortOrder
+  replyTo: SortOrder
   status: SortOrder
 }
 
@@ -2839,7 +2847,9 @@ input PartialAkashaReflectStreamInput
   active: Boolean
   beamID: CeramicStreamID
   createdAt: DateTime
+  isReply: Boolean
   moderationID: CeramicStreamID
+  replyTo: CeramicStreamID
   status: AkashaReflectStreamModerationStatus
 }
 

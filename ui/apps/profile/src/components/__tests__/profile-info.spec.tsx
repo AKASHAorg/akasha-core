@@ -22,7 +22,7 @@ describe('< ProfileInfoPage />', () => {
 
   const BaseComponent = (
     <Router initialEntries={['/@akashaorg/app-profile/']}>
-      <ProfileInfoPage profileDid={fakeDID} />
+      <ProfileInfoPage profileDID={fakeDID} />
     </Router>
   );
   const profile = genUser(fakeDID);

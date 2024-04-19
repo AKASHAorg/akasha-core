@@ -3,13 +3,13 @@ import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useEffect } from 'react';
 
 type ProfileWithAuthorizationProps = {
-  profileDid: string;
+  profileDID: string;
   editingProfile?: boolean;
 };
 const ProfileWithAuthorization: React.FC<
   PropsWithChildren<ProfileWithAuthorizationProps>
 > = props => {
-  const { profileDid, editingProfile, children } = props;
+  const { profileDID, editingProfile, children } = props;
   const { data: loginData, loading: authenticating } = useGetLogin();
   const { getRoutingPlugin } = useRootComponentProps();
 
@@ -19,15 +19,15 @@ const ProfileWithAuthorization: React.FC<
     */
     if (
       !authenticating &&
-      (!loginData || (editingProfile && loginData && profileDid !== loginData.id))
+      (!loginData || (editingProfile && loginData && profileDID !== loginData.id))
     ) {
       getRoutingPlugin().navigateTo({
         appName: '@akashaorg/app-profile',
-        getNavigationUrl: () => `/${profileDid}`,
+        getNavigationUrl: () => `/${profileDID}`,
       });
       return;
     }
-  }, [loginData, editingProfile, getRoutingPlugin, authenticating, profileDid]);
+  }, [loginData, editingProfile, getRoutingPlugin, authenticating, profileDID]);
 
   return <>{children}</>;
 };

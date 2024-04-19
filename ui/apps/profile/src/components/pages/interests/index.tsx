@@ -19,11 +19,11 @@ import { useApolloClient } from '@apollo/client';
 import { AkashaProfileInterestsLabeled } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 type InterestsPageProps = {
-  profileDid: string;
+  profileDID: string;
 };
 
 const InterestsPage: React.FC<InterestsPageProps> = props => {
-  const { profileDid } = props;
+  const { profileDID } = props;
   const { t } = useTranslation('app-profile');
   const { data: loginData, loading: authenticating } = useGetLogin();
   const { getRoutingPlugin } = useRootComponentProps();
@@ -37,7 +37,7 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
   const apolloClient = useApolloClient();
 
   const { data: profileInterestsQueryData, loading } = useGetInterestsByDidQuery({
-    variables: { id: profileDid },
+    variables: { id: profileDID },
     skip: !isLoggedIn,
   });
 
@@ -156,7 +156,7 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
   return (
     <Stack direction="column" spacing="gap-y-4" fullWidth>
       <Card elevation="1" radius={20} padding={'p-4'}>
-        {profileDid !== authenticatedDID && (
+        {profileDID !== authenticatedDID && (
           <Stack direction="column" spacing="gap-y-2.5">
             <Text variant="h5">{t('Interests')} </Text>
             <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey7' }}>
@@ -194,7 +194,7 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
             </Stack>
           </Stack>
         )}
-        {profileDid === authenticatedDID && (
+        {profileDID === authenticatedDID && (
           <EditInterests
             title={t('Your interests')}
             subTitle={t('(10 topics max.)')}
@@ -217,7 +217,7 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
               handleClick: () => {
                 navigateTo({
                   appName: '@akashaorg/app-profile',
-                  getNavigationUrl: () => `/${profileDid}`,
+                  getNavigationUrl: () => `/${profileDID}`,
                 });
               },
             }}

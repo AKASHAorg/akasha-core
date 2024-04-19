@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactDOMClient from 'react-dom/client';
 import singleSpaReact from 'single-spa-react';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
@@ -11,7 +11,7 @@ import {
   getFollowList,
   hasOwn,
   transformSource,
-  useGetLogin,
+  useAkashaStore,
   useProfileStats,
   useRootComponentProps,
   withProviders,
@@ -19,7 +19,6 @@ import {
 import {
   useGetBeamByIdQuery,
   useGetFollowDocumentsByDidQuery,
-  useGetProfileByDidQuery,
   useGetReflectionByIdQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
@@ -39,32 +38,35 @@ const ProfileCardWidget: React.FC<ProfileCardWidgetProps> = props => {
   const { beamId, reflectionId } = props;
   const { t } = useTranslation('ui-widget-mini-profile');
   const { plugins, logger } = useRootComponentProps();
-  const { data: loginData } = useGetLogin();
-  const { data: beam } = useGetBeamByIdQuery({ variables: { id: beamId }, skip: !beamId });
-  const { data: reflection } = useGetReflectionByIdQuery({
+  const {
+    data: { authenticatedDID, info, isLoadingInfo: authorProfileLoading },
+    userStore,
+  } = useAkashaStore();
+  const { data: beam, loading: beamLoading } = useGetBeamByIdQuery({
+    variables: { id: beamId },
+    skip: !beamId,
+  });
+  const { data: reflection, loading: reflectionLoading } = useGetReflectionByIdQuery({
     variables: { id: reflectionId },
     skip: !reflectionId,
   });
 
-  const authenticatedDID = loginData?.id;
-  const isLoggedIn = !!loginData?.id;
+  const isLoggedIn = !!authenticatedDID;
 
   // set data based on beam or reflect page
   const data = beamId ? beam : reflection;
 
+  const dataLoading = beamId ? beamLoading : reflectionLoading;
+
   const authorId = data?.node && hasOwn(data.node, 'author') ? data?.node?.author.id : '';
 
-  const { data: authorProfileData, loading: profileLoading } = useGetProfileByDidQuery({
-    variables: {
-      id: authorId,
-    },
-    skip: data?.node && !hasOwn(data.node, 'author'),
-  });
+  useEffect(() => {
+    if (authorId) {
+      userStore.getUserInfo({ profileDID: authorId });
+    }
+  }, [authorId, userStore]);
 
-  const profileData =
-    authorProfileData?.node && hasOwn(authorProfileData.node, 'akashaProfile')
-      ? authorProfileData.node.akashaProfile
-      : null;
+  const authorProfileData = authorId ? info[authorId] : null;
 
   const { data: stats, loading: statsLoading } = useProfileStats(authorId);
 
@@ -106,10 +108,10 @@ const ProfileCardWidget: React.FC<ProfileCardWidgetProps> = props => {
       <div>
         {(beamId || reflectionId) && (
           <>
-            {profileLoading && <MiniProfileWidgetLoader />}
-            {profileData && (
+            {(authorProfileLoading || dataLoading) && <MiniProfileWidgetLoader />}
+            {authorProfileData && (
               <ProfileMiniCard
-                profileData={profileData}
+                profileData={authorProfileData}
                 authenticatedDID={authenticatedDID}
                 beamsLabel={beams === 1 ? t('Beam') : t('Beams')}
                 followingLabel={t('Following')}
@@ -120,11 +122,11 @@ const ProfileCardWidget: React.FC<ProfileCardWidgetProps> = props => {
                 handleClick={handleCardClick}
                 footerExt={
                   <Extension
-                    name={`follow_${profileData?.id}`}
+                    name={`follow_${authorProfileData?.id}`}
                     extensionData={{
-                      profileID: profileData?.id,
-                      isFollowing: followList?.get(profileData?.id)?.isFollowing,
-                      followId: followList?.get(profileData?.id)?.id,
+                      profileID: authorProfileData?.id,
+                      isFollowing: followList?.get(authorProfileData?.id)?.isFollowing,
+                      followId: followList?.get(authorProfileData?.id)?.id,
                       isLoggedIn,
                     }}
                   />

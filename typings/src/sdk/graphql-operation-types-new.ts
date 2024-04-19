@@ -216,7 +216,7 @@ export type GetReflectionStreamQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetReflectionStreamQuery = { node?: { isViewer: boolean, akashaReflectStreamList?: { edges?: Array<{ cursor: string, node?: { reflectionID: any, moderationID?: any | null, beamID: any, active: boolean, status?: Types.AkashaReflectStreamModerationStatus | null, createdAt: any } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } | null } | {} | null };
+export type GetReflectionStreamQuery = { node?: { isViewer: boolean, akashaReflectStreamList?: { edges?: Array<{ cursor: string, node?: { reflectionID: any, moderationID?: any | null, beamID: any, active: boolean, status?: Types.AkashaReflectStreamModerationStatus | null, createdAt: any, isReply?: boolean | null, replyTo?: any | null } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } | null } | {} | null };
 
 export type GetReflectionByIdQueryVariables = Types.Exact<{
   id: Types.Scalars['ID']['input'];

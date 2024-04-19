@@ -1,55 +1,33 @@
 import React, { useEffect, useRef } from 'react';
-import { Routes, Route } from 'react-router-dom';
-import {
-  hasOwn,
-  useGetLogin,
-  useLogin,
-  useLogout,
-  useRootComponentProps,
-} from '@akashaorg/ui-awf-hooks';
-
-import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { EthProviders } from '@akashaorg/typings/lib/sdk';
-import { CONNECT } from '../../routes';
 import ChooseProvider from './choose-provider';
 import ConnectWallet from './connect-wallet';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Routes, Route } from 'react-router-dom';
+import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { EthProviders } from '@akashaorg/typings/lib/sdk';
+import { CONNECT } from '../../routes';
 
 const Connect: React.FC<unknown> = () => {
-  const { data } = useGetLogin();
-  const isLoggedIn = !!data?.id;
-  const authenticatedDID = data?.id;
-
-  const { signIn, signInErrors } = useLogin();
-  const { logOut, logOutErrors } = useLogout();
-
-  const { data: profileDataReq, loading } = useGetProfileByDidQuery({
-    variables: { id: authenticatedDID },
-    skip: !isLoggedIn,
-  });
-
-  const profileData =
-    profileDataReq?.node && hasOwn(profileDataReq?.node, 'akashaProfile')
-      ? profileDataReq?.node?.akashaProfile
-      : null;
-
   const { worldConfig, getRoutingPlugin } = useRootComponentProps();
-
+  const {
+    data: { authenticatedDID, isLoadingInfo, authenticatedProfile, authenticationError },
+    userStore,
+  } = useAkashaStore();
+  const isLoggedIn = !!authenticatedDID;
   const routingPlugin = useRef(getRoutingPlugin());
 
   useEffect(() => {
     const searchParam = new URLSearchParams(location.search);
 
     // if user is logged in, do not show the connect page
-    if (isLoggedIn && !loading) {
-      if (!profileData) {
+    if (isLoggedIn && !isLoadingInfo) {
+      if (!authenticatedProfile) {
         routingPlugin.current?.navigateTo({
           appName: '@akashaorg/app-profile',
           getNavigationUrl: () => `/${authenticatedDID}/edit`,
         });
         return;
       }
-
       routingPlugin.current?.handleRedirect({
         search: searchParam,
         fallback: {
@@ -57,10 +35,10 @@ const Connect: React.FC<unknown> = () => {
         },
       });
     }
-  }, [isLoggedIn, loading, authenticatedDID, profileData, profileDataReq, worldConfig.homepageApp]);
+  }, [isLoggedIn, authenticatedDID, worldConfig.homepageApp, isLoadingInfo, authenticatedProfile]);
 
   const handleDisconnect = () => {
-    logOut();
+    userStore.logout();
     routingPlugin.current?.navigateTo({
       appName: '@akashaorg/app-auth-ewa',
       getNavigationUrl: appRoutes => `${appRoutes[CONNECT]}`,
@@ -68,14 +46,13 @@ const Connect: React.FC<unknown> = () => {
   };
 
   const handleSignIn = provider => {
-    signIn({ selectedProvider: provider });
+    userStore.login({ provider });
   };
 
   return (
     <Card padding="px-4 py-6">
       <Routes>
         <Route path="*" element={<ChooseProvider />} />
-
         <Route
           path={'/web3modal'}
           element={
@@ -84,7 +61,7 @@ const Connect: React.FC<unknown> = () => {
               onSignIn={handleSignIn}
               onDisconnect={handleDisconnect}
               worldName={worldConfig.title}
-              signInError={signInErrors}
+              signInError={authenticationError}
             />
           }
         />

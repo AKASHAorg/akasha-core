@@ -69,8 +69,10 @@ export const Header: React.FC<HeaderProps> = ({
   const [showDeleteImage, setShowDeleteImage] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState(transformSource(avatar?.default));
   const [coverImageUrl, setCoverImageUrl] = useState(transformSource(coverImage?.default));
-  const [lastAvatarUrl, setLastAvatarUrl] = useState(transformSource(avatar?.default));
-  const [lastCoverImageUrl, setLastCoverImageUrl] = useState(transformSource(coverImage?.default));
+  const [uploadedAvatarUrl, setUploadedAvatarUrl] = useState(transformSource(avatar?.default));
+  const [uploadedCoverImageUrl, setUploadedCoverImageUrl] = useState(
+    transformSource(coverImage?.default),
+  );
   const alternativeAvatars = useRef(
     avatar?.alternatives?.map(alternative => transformSource(alternative)),
   );
@@ -142,13 +144,11 @@ export const Header: React.FC<HeaderProps> = ({
         case 'avatar':
           onImageSave('avatar', image);
           onAvatarChange(image);
-          setLastAvatarUrl(avatarUrl);
           setAvatarUrl({ src: URL.createObjectURL(image), width: 0, height: 0 });
           break;
         case 'cover-image':
           onImageSave('cover-image', image);
           onCoverImageChange(image);
-          setLastCoverImageUrl(coverImageUrl);
           setCoverImageUrl({ src: URL.createObjectURL(image), width: 0, height: 0 });
       }
     }
@@ -174,11 +174,11 @@ export const Header: React.FC<HeaderProps> = ({
       switch (profileImageType) {
         case 'avatar':
           onAvatarChange(image);
-          setAvatarUrl({ src: URL.createObjectURL(image), width: 0, height: 0 });
+          setUploadedAvatarUrl({ src: URL.createObjectURL(image), width: 0, height: 0 });
           break;
         case 'cover-image':
           onCoverImageChange(image);
-          setCoverImageUrl({ src: URL.createObjectURL(image), width: 0, height: 0 });
+          setUploadedCoverImageUrl({ src: URL.createObjectURL(image), width: 0, height: 0 });
       }
       setShowEditImage(true);
     }
@@ -268,15 +268,11 @@ export const Header: React.FC<HeaderProps> = ({
         saveLabel={saveLabel}
         onClose={() => {
           if (isSavingImage) return;
-          if (profileImageType === 'avatar') {
-            setAvatarUrl(lastAvatarUrl);
-          }
-          if (profileImageType === 'cover-image') {
-            setCoverImageUrl(lastCoverImageUrl);
-          }
           setShowEditImage(false);
         }}
-        images={profileImageType === 'avatar' ? [avatarUrl?.src] : [coverImageUrl?.src]}
+        images={
+          profileImageType === 'avatar' ? [uploadedAvatarUrl?.src] : [uploadedCoverImageUrl?.src]
+        }
         dragToRepositionLabel={dragToRepositionLabel}
         isSavingImage={isSavingImage}
         onSave={onSave}

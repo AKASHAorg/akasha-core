@@ -13,11 +13,11 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 type ProfileFeedPageProps = {
-  profileDid: string;
+  profileDID: string;
 };
 
 const ProfileFeedPage: React.FC<ProfileFeedPageProps> = props => {
-  const { profileDid } = props;
+  const { profileDID } = props;
   const { t } = useTranslation('app-akasha-integration');
   const { getRoutingPlugin, worldConfig } = useRootComponentProps();
   const authenticatedProfileReq = useGetLoginProfile();
@@ -26,8 +26,8 @@ const ProfileFeedPage: React.FC<ProfileFeedPageProps> = props => {
     if (authenticatedProfile && authenticatedProfile.name) {
       return authenticatedProfile.name;
     }
-    return profileDid;
-  }, [authenticatedProfile, profileDid]);
+    return profileDID;
+  }, [authenticatedProfile, profileDID]);
 
   return (
     <HelmetProvider>

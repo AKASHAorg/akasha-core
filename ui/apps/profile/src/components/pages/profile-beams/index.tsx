@@ -11,11 +11,11 @@ import {
 import { BeamCard, BeamFeed } from '@akashaorg/ui-lib-feed';
 
 type ProfileBeamsPageProps = {
-  profileDid: string;
+  profileDID: string;
 };
 
 const ProfileBeamsPage: React.FC<ProfileBeamsPageProps> = props => {
-  const { profileDid } = props;
+  const { profileDID } = props;
   const { getRoutingPlugin } = useRootComponentProps();
   const [analyticsActions] = useAnalytics();
   const navigateTo = React.useRef(getRoutingPlugin().navigateTo);
@@ -23,8 +23,8 @@ const ProfileBeamsPage: React.FC<ProfileBeamsPageProps> = props => {
   return (
     <Stack direction="column" spacing="gap-y-4" fullWidth>
       <BeamFeed
-        did={profileDid}
-        queryKey={`app-profile_${profileDid}_beams`}
+        did={profileDID}
+        queryKey={`app-profile_${profileDID}_beams`}
         estimatedHeight={150}
         itemSpacing={8}
         scrollerOptions={{ overscan: 10 }}

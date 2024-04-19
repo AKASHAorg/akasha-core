@@ -118,3 +118,55 @@ export const generateModeratorApplicationHistory = () =>
     appliedOn: randomDateBetweenValues('Jan 01 2024', 'Feb 14 2024'),
     memberSince: randomDateBetweenValues('Jan 01 2020', 'Dec 31 2020'),
   }));
+
+type TReportEntry = {
+  appName: string;
+  itemType: 'Profile' | 'Beam' | 'Reflection';
+  id: string;
+  nsfw?: boolean;
+};
+
+const reportEntries: TReportEntry[] = [
+  { appName: 'Profile', itemType: 'Profile', id: 'P-17078' },
+  { appName: 'Antenna', itemType: 'Beam', id: 'B-19089' },
+  { appName: 'Antenna', itemType: 'Reflection', id: 'R-19090' },
+  { appName: 'Profile', itemType: 'Profile', id: 'P-17079', nsfw: true },
+];
+
+export const generateReportEntries = () =>
+  reportEntries.map(r => ({
+    id: r.id,
+    appName: r.appName,
+    itemType: r.itemType,
+    nsfw: r.nsfw,
+    primaryReason: 'Sexual or human exploitation',
+    reportCount: 46,
+    lastReportDate: randomDateBetweenValues('Jan 01 2024', 'Mar 31 2024'),
+  }));
+
+const activeModeratorNames = [
+  'Mr. Bigote',
+  'Pugstenson',
+  'Jordan Lake',
+  'Joan Jett',
+  'Rocker Mill',
+  'Dudez Jillz',
+];
+
+export const generateActiveModerators = () => {
+  const activeModerators = activeModeratorNames.map((name, idx) => ({
+    id: `${idx + 1}`,
+    createdAt: randomDateBetweenValues(),
+    did: { id: (Math.random() + 1).toString(36).substring(2) },
+    name: name,
+    avatar: {
+      default: {
+        height: 320,
+        src: '',
+        width: 320,
+      },
+    },
+  }));
+
+  return activeModerators;
+};
