@@ -166,8 +166,7 @@ export const ImageEditorBlock = (
     try {
       const response = await fetch(url, { method: 'HEAD' });
       const isImg = response?.headers?.get('Content-Type')?.startsWith('image');
-      if (isImg) return 'isImg';
-      return 'notImg';
+      return isImg;
     } catch (error) {
       setURLNotImage(true);
       const notifMsg = error?.message;
@@ -184,7 +183,7 @@ export const ImageEditorBlock = (
   const handleChange = async e => {
     setImageLink(e.currentTarget.value);
     const isImg = await isImgUrl(e.currentTarget.value);
-    if (isImg === 'notImg') {
+    if (isImg === false) {
       setURLNotImage(true);
       const notifMsg = t(`URL doesn't contain an image.`);
       _uiEvents.current.next({
@@ -194,7 +193,7 @@ export const ImageEditorBlock = (
           message: notifMsg,
         },
       });
-    } else if (isImg === 'isImg') {
+    } else if (isImg === true) {
       setURLNotImage(false);
     }
   };
