@@ -312,6 +312,7 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
 
   return {
     beams: state.beams,
+    beamCursors,
     fetchInitialData,
     fetchNextPage,
     fetchPreviousPage,

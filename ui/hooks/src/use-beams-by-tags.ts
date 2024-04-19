@@ -224,6 +224,7 @@ export const useBeamsByTags = ({ tag, filters }: UseBeamsByTagsOptions) => {
 
   return {
     beams: state.beams,
+    beamCursors,
     called: !!state.pageInfo,
     fetchInitialData,
     fetchNextPage,
