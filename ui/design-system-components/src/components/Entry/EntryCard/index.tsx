@@ -298,7 +298,11 @@ const EntryCard: React.FC<EntryCardProps> = props => {
                   }}
                 />
               )}
-              {(!entryData.nsfw || showNSFWContent || showNsfw) && (
+              {/*
+               * display the content in case: the content is not nsfw or, the showNSFWContent flag
+               * is true or, the nsfw setting is on and the user is logged in.
+               */}
+              {(!entryData.nsfw || showNSFWContent || (showNsfw && isLoggedIn)) && (
                 <Stack
                   justifySelf="start"
                   alignSelf="start"
