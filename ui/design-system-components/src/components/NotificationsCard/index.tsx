@@ -188,7 +188,7 @@ const NotificationsCard: React.FC<NotificationsCardProps> = props => {
   };
 
   return (
-    <Card elevation={'1'} radius={16} customStyle="p-0 w-full grow flex-wrap">
+    <Card radius={16} customStyle="p-0 w-full grow flex-wrap">
       {loggedIn && !isFetching && notifications.length === 0 && (
         <BasicInfoCard titleLabel={emptyTitle} image={'/images/longbeam-notfound.webp'} />
       )}

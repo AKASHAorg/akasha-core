@@ -34,7 +34,7 @@ const ErrorCard: React.FC<PropsWithChildren<ErrorLoaderProps & { imageSrc: strin
   const message = details ?? devDetails;
 
   return (
-    <Card elevation="1" customStyle={`items-center mb-0 ${customStyle}`}>
+    <Card customStyle={`items-center mb-0 ${customStyle}`}>
       <Stack>
         <img alt={''} className={tw('max-w-[50%] h-auto my-0 mx-auto py-8 px-0')} src={imageSrc} />
       </Stack>

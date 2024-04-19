@@ -40,13 +40,7 @@ const ProfileMiniCard: React.FC<ProfileMiniCardProps> = props => {
   const coverImageFallback = `${publicImagePath}/profile-cover-${seed}.webp`;
 
   return (
-    <Card
-      elevation="1"
-      radius="rounded-2xl"
-      margin="mb-4"
-      padding="p-0"
-      customStyle="max-h-[30rem]"
-    >
+    <Card radius="rounded-2xl" margin="mb-4" padding="p-0" customStyle="max-h-[30rem]">
       <Stack
         align="center"
         customStyle={`h-28 rounded-t-2xl bg(center cover [url(${

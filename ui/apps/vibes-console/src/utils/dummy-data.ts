@@ -184,7 +184,7 @@ const reportEntries: TReportEntry[] = [
   { itemData: sampleEntryData, appName: 'Antenna', itemType: 'Beam', id: 'B-19089' },
   { itemData: sampleEntryData, appName: 'Antenna', itemType: 'Reflection', id: 'R-19090' },
   {
-    itemData: sampleProfileData,
+    itemData: { ...sampleProfileData, nsfw: true },
     appName: 'Profile',
     itemType: 'Profile',
     id: 'P-17079',

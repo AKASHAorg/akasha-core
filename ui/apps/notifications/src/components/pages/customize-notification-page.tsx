@@ -255,12 +255,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
 
   return (
     <>
-      <Card
-        elevation={'1'}
-        radius={16}
-        padding={'py-2,px-0'}
-        customStyle="h-full md:h-min space-y-4"
-      >
+      <Card radius={16} padding="py-2,px-0" customStyle="h-full md:h-min space-y-4">
         <Text variant="h5" align="center" customStyle="pb-2">
           {initial ? t('Customize Your Notifications') : t('Notifications Settings')}
         </Text>

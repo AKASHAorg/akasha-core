@@ -103,12 +103,7 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
 
   return (
     <>
-      <Card
-        elevation={'1'}
-        radius={16}
-        padding={'p-2'}
-        customStyle="h-full md:h-min space-y-4 flex flex-col"
-      >
+      <Card radius={16} padding={'p-2'} customStyle="h-full md:h-min space-y-4 flex flex-col">
         <Text variant="h5" align="center">
           {t('Search Settings')}
         </Text>

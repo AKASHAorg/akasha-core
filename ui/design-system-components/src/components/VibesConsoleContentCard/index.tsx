@@ -6,7 +6,7 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Antenna, Profile } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import MiniProfileCTA, { ItemType, ProfileItemData } from './mini-profile-cta';
 import ReportReasonPill from '../ReportReasonPill';
-import { formatDate } from '@akashaorg/design-system-core/lib/utils';
+import { formatDate, getElevationClasses } from '@akashaorg/design-system-core/lib/utils';
 import EntryCard, { EntryCardProps } from '../Entry/EntryCard';
 
 export type ReportEntry = {
@@ -47,6 +47,8 @@ const VibesConsoleContentCard: React.FC<VibesConsoleContentCardProps> = props =>
   const textColor = { light: 'grey4', dark: 'grey7' } as const;
 
   const buttonStyle = 'w-(full md:[9.25rem])';
+
+  const shadowStyle = getElevationClasses('2');
 
   const secondaryButtonAction = entry.itemType === 'Profile' ? 'Suspend' : 'Delist';
 
@@ -89,10 +91,12 @@ const VibesConsoleContentCard: React.FC<VibesConsoleContentCardProps> = props =>
       </Stack>
 
       <Stack padding="p-5" spacing="gap-y-4">
-        {entry.itemType !== 'Profile' && <EntryCard {...(entry.itemData as EntryCardProps)} />}
+        {entry.itemType !== 'Profile' && (
+          <EntryCard {...(entry.itemData as EntryCardProps)} customStyle={shadowStyle} />
+        )}
 
         {entry.itemType === 'Profile' && (
-          <Card padding="p-4">
+          <Card padding="p-4" customStyle={shadowStyle}>
             <MiniProfileCTA
               itemData={entry.itemData as ProfileItemData}
               nsfwLabel={nsfwLabel}
