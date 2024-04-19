@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { NotificationTypes, NotificationEvents } from '@akashaorg/typings/lib/ui';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
@@ -12,8 +13,9 @@ const NsfwOption: React.FC = () => {
   const { data, loading } = useGetLogin();
   const isLoggedIn = !!data?.id;
 
-  const { getRoutingPlugin } = useRootComponentProps();
+  const { getRoutingPlugin, uiEvents } = useRootComponentProps();
   const routingPlugin = useRef(getRoutingPlugin());
+  const _uiEvents = React.useRef(uiEvents);
 
   const { showNsfw, toggleShowNsfw } = useNsfwToggling();
 
@@ -27,6 +29,14 @@ const NsfwOption: React.FC = () => {
 
   const handleNsfwToggle = () => {
     toggleShowNsfw(!showNsfw);
+    const notifMsg = t(`NSFW Settings updated`);
+    _uiEvents.current.next({
+      event: NotificationEvents.ShowNotification,
+      data: {
+        type: NotificationTypes.Success,
+        message: notifMsg,
+      },
+    });
   };
 
   return (
