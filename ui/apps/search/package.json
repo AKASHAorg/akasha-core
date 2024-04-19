@@ -42,7 +42,7 @@
     "i18next-fetch-backend": "5.0.2",
     "i18next-localstorage-backend": "4.1.1",
     "react-i18next": "12.2.0",
-    "react-router-dom": "6.3.0",
+    "@tanstack/react-router": "1.16.6",
     "single-spa-react": "6.0.1"
   },
   "devDependencies": {

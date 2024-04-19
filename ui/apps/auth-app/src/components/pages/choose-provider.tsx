@@ -1,29 +1,24 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Walletconnect } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
-import Web3ConnectCard from './web3-connect-card';
-import { CONNECT, WEB3MODAL } from '../../routes';
+import Web3ConnectCard from '@akashaorg/design-system-components/lib/components/Web3ConnectCard';
+import routes, { CONNECT, WEB3MODAL } from '../../routes';
+import { useNavigate } from '@tanstack/react-router';
 
 const ChooseProvider: React.FC<unknown> = () => {
   const { t } = useTranslation('app-auth-ewa');
-  const { getRoutingPlugin } = useRootComponentProps();
 
-  const routingPlugin = useRef(getRoutingPlugin());
+  const navigate = useNavigate();
 
   const handleProviderClick = () => {
     // this is required because of the backend
     localStorage.setItem('@acceptedTermsAndPrivacy', JSON.stringify(true));
 
-    routingPlugin.current?.navigateTo({
-      appName: '@akashaorg/app-auth-ewa',
-      getNavigationUrl: appRoutes =>
-        `${appRoutes[CONNECT]}${appRoutes[WEB3MODAL]}${
-          location.search ? `${location.search}` : ''
-        }`,
+    navigate({
+      to: `${routes[CONNECT]}${routes[WEB3MODAL]}${location.search ? `${location.search}` : ''}`,
     });
   };
 

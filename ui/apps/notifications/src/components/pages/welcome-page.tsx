@@ -1,59 +1,65 @@
 import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRootComponentProps, useSaveSettings } from '@akashaorg/ui-awf-hooks';
+import { useRootComponentProps, useSaveSettings, useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import routes, { CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE, SHOW_NOTIFICATIONS_PAGE } from '../../routes';
+import routes, { CUSTOMISE_NOTIFICATION_OPTIONS_PAGE, SHOW_NOTIFICATIONS_PAGE } from '../../routes';
+
+import { useNavigate } from '@tanstack/react-router';
 
 export type WelcomePageProps = {
-  header: string;
-  description: string;
-  image?: string;
-  leftButtonLabel?: string;
-  rightButtonLabel: string;
   finalStep?: boolean;
-  isLoggedIn: boolean;
 };
 
 const WelcomePage: React.FC<WelcomePageProps> = props => {
-  const {
-    leftButtonLabel,
-    rightButtonLabel,
-    header,
-    description,
-    image,
-    finalStep = false,
-    isLoggedIn,
-  } = props;
+  const { finalStep = false } = props;
+
+  const { data } = useGetLogin();
+  const isLoggedIn = !!data?.id;
 
   const { t } = useTranslation('app-notifications');
+
+  const navigate = useNavigate();
+
+  const header = finalStep ? t('All Done') : t('Welcome to the Notifications App');
+  const description = finalStep
+    ? t(
+        'You will receive notifications based on your choices now! You can always change that or even pause it from the notifications settings!',
+      )
+    : t(
+        `Get the latest updates about what's going on with your world. You can personalize your notifications and get only what you want to see!`,
+      );
+  const welcomeImage = isLoggedIn
+    ? '/images/notificationapp-welcome-min.webp'
+    : '/images/notificationapp-Notconnected-min.webp';
+  const image = finalStep ? '/images/notificationapp-success-min.webp' : welcomeImage;
+
+  const leftButtonLabel = finalStep ? undefined : t('Skip this step');
+  const rightButtonLabel = finalStep
+    ? t('Go to my notifications')
+    : t('Customize my notifications');
+
   const { baseRouteName, getRoutingPlugin, uiEvents } = useRootComponentProps();
 
   const navigateTo = getRoutingPlugin().navigateTo;
 
   const _uiEvents = useRef(uiEvents);
 
-  const Appname = '@akashaorg/app-notifications';
+  const appName = '@akashaorg/app-notifications';
 
   const { saveNotificationSettings } = useSaveSettings();
 
   const goToNextStep = () => {
     // navigate to step 2
-    return navigateTo?.({
-      appName: '@akashaorg/app-notifications',
-      getNavigationUrl: () => routes[CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE],
-    });
+    navigate({ to: routes[CUSTOMISE_NOTIFICATION_OPTIONS_PAGE] });
   };
 
   const goToNotificationsPage = () => {
-    return navigateTo?.({
-      appName: '@akashaorg/app-notifications',
-      getNavigationUrl: () => `${routes[SHOW_NOTIFICATIONS_PAGE]}`,
-    });
+    navigate({ to: routes[SHOW_NOTIFICATIONS_PAGE] });
   };
 
   const connect = () => {
@@ -85,7 +91,7 @@ const WelcomePage: React.FC<WelcomePageProps> = props => {
 
   const skipCustomization = () => {
     saveNotificationSettings(
-      { app: Appname, options: { default: true } },
+      { app: appName, options: { default: true } },
       { onComplete: () => goToNotificationsPage() },
     );
   };

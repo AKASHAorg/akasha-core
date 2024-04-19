@@ -1,26 +1,24 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
-import { transformSource, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { transformSource, useRootComponentProps, useGetLogin } from '@akashaorg/ui-awf-hooks';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import OnboardingSuggestionsCard from '@akashaorg/design-system-components/lib/components/OnboardingSuggestionsCard';
 import OnboardingStartCard from '@akashaorg/design-system-components/lib/components/OnboardingStartCard';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
-export type OnboardingPageProps = {
-  onError?: (err: Error) => void;
-  isLoggedIn: boolean;
-  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-};
-
-const OnboardingPage: React.FC<OnboardingPageProps> = props => {
-  const { isLoggedIn, showLoginModal } = props;
-
+const OnboardingPage: React.FC = () => {
   const { t } = useTranslation('app-search');
 
-  const { getRoutingPlugin } = useRootComponentProps();
+  const { getRoutingPlugin, navigateToModal } = useRootComponentProps();
 
   const navigateTo = getRoutingPlugin().navigateTo;
+
+  const { data } = useGetLogin();
+  const isLoggedIn = !!data?.id;
+
+  const showLoginModal = () => {
+    navigateToModal({ name: 'login' });
+  };
 
   // @TODO: replace with new hooks
   const trendingTagsReq = null;

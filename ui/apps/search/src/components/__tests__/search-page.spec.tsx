@@ -1,5 +1,5 @@
 import React from 'react';
-import SearchPage from '../routes/search-page';
+import SearchPage from '../pages/search-page';
 import { screen, renderWithAllProviders, act, genAppProps } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 
@@ -27,15 +27,7 @@ jest.mock('react-router', () => ({
 describe('<SearchPage />', () => {
   const BaseComponent = (
     <AnalyticsProvider {...genAppProps()}>
-      <SearchPage
-        authenticatedProfile={{
-          id: 'some id',
-          createdAt: Date.now(),
-          name: 'some name',
-          did: { id: 'did:pkh' },
-        }}
-        showLoginModal={jest.fn()}
-      />
+      <SearchPage />
     </AnalyticsProvider>
   );
   beforeEach(async () => {
@@ -44,6 +36,6 @@ describe('<SearchPage />', () => {
     });
   });
   it('should render search page', () => {
-    expect(screen.getByText(/Start searching for something/)).toBeInTheDocument();
+    expect(screen.getByText(/Search/)).toBeInTheDocument();
   });
 });

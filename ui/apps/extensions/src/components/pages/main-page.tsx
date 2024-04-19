@@ -23,7 +23,7 @@ const ROUTE_TO_TAB_INDEX_MAP: Record<string, number> = {
   [routes[MY_WIDGETS]]: 3,
 };
 
-const MasterPage: React.FC = () => {
+const MainPage: React.FC = () => {
   const { t } = useTranslation('app-extensions');
   const { navigateToModal } = useRootComponentProps();
   const navigate = useNavigate();
@@ -90,4 +90,4 @@ const MasterPage: React.FC = () => {
   );
 };
 
-export default MasterPage;
+export default MainPage;

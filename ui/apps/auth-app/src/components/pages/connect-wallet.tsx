@@ -4,11 +4,12 @@ import { EthProviders, PROVIDER_ERROR_CODES } from '@akashaorg/typings/lib/sdk';
 import {
   switchToRequiredNetwork,
   useConnectWallet,
-  useGetLogin,
+  useAkashaStore,
   useNetworkChangeListener,
   useRequiredNetwork,
+  useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
-import IndicatorDots from './indicator-dots';
+import IndicatorDots from '@akashaorg/design-system-components/lib/components/IndicatorDots';
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 import ConnectErrorCard from '@akashaorg/design-system-components/lib/components/ConnectErrorCard';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
@@ -20,26 +21,38 @@ import { ArrowsRightLeftIcon } from '@akashaorg/design-system-core/lib/component
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { useNavigate } from '@tanstack/react-router';
 
-export type ConnectWalletProps = {
-  selectedProvider: EthProviders;
-  onSignIn: (provider: EthProviders) => void;
-  onDisconnect: (provider: EthProviders) => void;
-  worldName: string;
-  signInError?: Error;
-};
-
-const ConnectWallet: React.FC<ConnectWalletProps> = props => {
+const ConnectWallet: React.FC = () => {
   const { t } = useTranslation('app-auth-ewa');
-  const { selectedProvider, onSignIn, onDisconnect, worldName, signInError } = props;
-  const { data } = useGetLogin();
+  const navigate = useNavigate();
+
+  const { worldConfig } = useRootComponentProps();
+
+  const selectedProvider = EthProviders.WalletConnect;
+  const worldName = worldConfig.title;
+
+  const {
+    data: { authenticatedDID, authenticationError },
+    userStore,
+  } = useAkashaStore();
+  const isLoggedIn = !!authenticatedDID;
+
   const [errors, setErrors] = useState<{ title: string; subtitle: string }[]>([]);
   const [isSignInRetry, setIsSignInRetry] = useState(false);
+
+  const onDisconnect = () => {
+    userStore.logout();
+    navigate({ to: '/' });
+  };
+
+  const onSignIn = provider => {
+    userStore.login({ provider });
+  };
 
   const signInCall = useRef(onSignIn);
   const signOutCall = useRef(onDisconnect);
 
-  const isLoggedIn = !!data?.id;
   const connectWalletCall = useConnectWallet();
   const requiredNetworkQuery = useRequiredNetwork();
   const [changedNetwork, changedNetworkUnsubscribe] = useNetworkChangeListener();
@@ -110,7 +123,7 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
   }, [connectWalletCall.error, connectWalletCall.isError, requiredNetworkName, t]);
 
   const hasErrors =
-    Boolean(networkNotSupportedError) || Boolean(errors.length) || Boolean(signInError);
+    Boolean(networkNotSupportedError) || Boolean(errors.length) || Boolean(authenticationError);
 
   const handleChangeNetwork = () => {
     /**
@@ -157,7 +170,7 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
 
   const handleDisconnect = () => {
     // disconnect wallet
-    signOutCall.current(selectedProvider);
+    signOutCall.current();
   };
 
   const textColor = { light: 'grey4', dark: 'grey7' } as const;
@@ -199,10 +212,10 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
           action={{ onClick: handleChangeNetwork, label: t('Change Network') }}
         />
       )}
-      {signInError && (
+      {authenticationError && (
         <ConnectErrorCard
           title={t('Request Rejected!')}
-          message={signInError.message}
+          message={authenticationError.message}
           action={{ onClick: handleSignInRetry, label: t('Retry Request') }}
         />
       )}

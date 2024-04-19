@@ -1,11 +1,9 @@
 import * as React from 'react';
-import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   IEntryData,
   ITag,
   EntityTypes,
-  ModalNavigationOptions,
   AnalyticsCategories,
   Profile,
 } from '@akashaorg/typings/lib/ui';
@@ -17,6 +15,7 @@ import {
   useAnalytics,
   useRootComponentProps,
   transformSource,
+  useGetLogin,
 } from '@akashaorg/ui-awf-hooks';
 
 import { SearchTagsResult } from '@akashaorg/typings/lib/sdk/graphql-types';
@@ -45,9 +44,7 @@ export enum ButtonValues {
 }
 
 export type SearchPageProps = {
-  onError?: (err: Error) => void;
-  isLoggedIn: boolean;
-  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
+  searchKeyword?: string;
 };
 
 type DataResponse = SearchTagsResult | IEntryData;
@@ -59,14 +56,20 @@ const initSearchState = {
 };
 
 const SearchPage: React.FC<SearchPageProps> = props => {
-  const { isLoggedIn, showLoginModal } = props;
-  const { searchKeyword = '' } = useParams<{ searchKeyword: string }>();
+  const { searchKeyword } = props;
   const [searchState, setSearchState] = React.useState(initSearchState);
   const [activeButton, setActiveButton] = React.useState<ButtonValues>(ButtonValues.CONTENT);
 
   const [analyticsActions] = useAnalytics();
   const { t } = useTranslation('app-search');
-  const { getRoutingPlugin } = useRootComponentProps();
+  const { getRoutingPlugin, navigateToModal } = useRootComponentProps();
+
+  const { data } = useGetLogin();
+  const isLoggedIn = !!data?.id;
+
+  const showLoginModal = () => {
+    navigateToModal({ name: 'login' });
+  };
 
   // @TODO replace with new hooks
   const tagSubscriptionsReq = null;
@@ -348,10 +351,10 @@ const SearchPage: React.FC<SearchPageProps> = props => {
               titleLabel=""
               bodyLabel={
                 <>
-                  {t('Oops! Looks like there’re no results for the word ')}{' '}
-                  <Text weight="bold">{searchKeyword}</Text> {t('in ')}{' '}
+                  {t('Oops! Looks like there’re no results for the word')}{' '}
+                  <Text weight="bold">{searchKeyword}</Text> {t('in')}{' '}
                   <Text weight="bold">{activeButton}</Text>.{' '}
-                  {t(' Try searching for something else or try a different Category!')}
+                  {t('Try searching for something else or try a different Category!')}
                 </>
               }
               bodyVariant="body1"
