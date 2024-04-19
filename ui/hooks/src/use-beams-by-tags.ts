@@ -5,6 +5,7 @@ import {
   AkashaIndexedStreamStreamType,
   type PageInfo,
   SortOrder,
+  AkashaIndexedStreamFiltersInput,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import type {
   GetIndexedStreamQuery,
@@ -13,8 +14,12 @@ import type {
 import { ApolloError } from '@apollo/client';
 import { hasOwn } from './utils/has-own';
 
-export const useBeamsByTags = (tag: string | string[]) => {
-  const sdk = getSDK();
+export type UseBeamsByTagsOptions = {
+  tag: string | string[];
+  filters?: AkashaIndexedStreamFiltersInput;
+};
+
+export const useBeamsByTags = ({ tag, filters }: UseBeamsByTagsOptions) => {
   const [state, setState] = React.useState<{
     beams: Exclude<
       GetIndexedStreamQuery['node'],
@@ -24,26 +29,38 @@ export const useBeamsByTags = (tag: string | string[]) => {
   }>({ beams: [] });
 
   const [errors, setErrors] = React.useState<(ApolloError | Error)[]>([]);
+  const sdk = getSDK();
+  const indexingDID = React.useRef(getSDK().services.gql.indexingDID);
 
-  const tagsFilters =
-    typeof tag === 'string'
-      ? { where: { indexValue: { equalTo: tag } } }
-      : {
-          or: tag?.map(_tag => ({ where: { indexValue: { equalTo: _tag } } })) || [],
-        };
+  const mergedFilters: AkashaIndexedStreamFiltersInput[] = React.useMemo(() => {
+    const tagsFilters =
+      typeof tag === 'string'
+        ? { where: { indexValue: { equalTo: tag } } }
+        : {
+            or: tag?.map(_tag => ({ where: { indexValue: { equalTo: _tag } } })) || [],
+          };
+
+    const defaultFilters: AkashaIndexedStreamFiltersInput[] = [
+      { where: { streamType: { equalTo: AkashaIndexedStreamStreamType.Beam } } },
+      { where: { indexType: { equalTo: sdk.services.gql.labelTypes.TAG } } },
+      { where: { active: { equalTo: true } } },
+      tagsFilters,
+    ];
+
+    if (filters) {
+      defaultFilters.push(filters);
+    }
+
+    return defaultFilters;
+  }, [filters, sdk.services.gql.labelTypes.TAG, tag]);
 
   const [fetchBeams, beamsQuery] = useGetIndexedStreamLazyQuery({
     variables: {
-      indexer: sdk.services.gql.indexingDID,
+      indexer: indexingDID.current,
       first: 10,
       sorting: { createdAt: SortOrder.Desc },
       filters: {
-        and: [
-          { where: { streamType: { equalTo: AkashaIndexedStreamStreamType.Beam } } },
-          { where: { indexType: { equalTo: sdk.services.gql.labelTypes.TAG } } },
-          { where: { active: { equalTo: true } } },
-          tagsFilters,
-        ],
+        and: mergedFilters,
       },
     },
   });
@@ -167,7 +184,7 @@ export const useBeamsByTags = (tag: string | string[]) => {
       if (beamsQuery.called && !newTag) return;
 
       const initialVars: GetIndexedStreamQueryVariables = {
-        indexer: sdk.services.gql.indexingDID,
+        indexer: indexingDID.current,
       };
 
       if (restoreItem) {

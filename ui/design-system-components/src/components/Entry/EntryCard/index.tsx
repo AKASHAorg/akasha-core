@@ -1,4 +1,5 @@
 import React, { ReactElement, ReactNode, Ref, CSSProperties, Fragment, useState } from 'react';
+import { useNsfwToggling } from '@akashaorg/ui-awf-hooks';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
@@ -143,6 +144,8 @@ const EntryCard: React.FC<EntryCardProps> = props => {
    * overlay), showNSFWContent should be false. It is later toggled through an
    * onClickToView handler.
    */
+
+  const { showNsfw } = useNsfwToggling();
   const [showNSFWContent, setShowNSFWContent] = useState(!showNSFWCard);
   const showHiddenStyle = showHiddenContent ? '' : 'max-h-[50rem]';
   const contentClickableStyle =
@@ -274,7 +277,10 @@ const EntryCard: React.FC<EntryCardProps> = props => {
               data-testid="entry-content"
               fullWidth={true}
             >
-              {showNSFWCard && !showNSFWContent && (
+              {/* show the overlay in two cases: the user not logged in, or the beam is nsfw and
+              the nsfw setting is off */}
+              {((showNSFWCard && !showNsfw && !showNSFWContent) ||
+                (!isLoggedIn && showNSFWCard)) && (
                 <NSFW
                   {...nsfw}
                   onClickToView={event => {
@@ -292,7 +298,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
                   }}
                 />
               )}
-              {(!entryData.nsfw || showNSFWContent) && (
+              {(!entryData.nsfw || showNSFWContent || showNsfw) && (
                 <Stack
                   justifySelf="start"
                   alignSelf="start"
