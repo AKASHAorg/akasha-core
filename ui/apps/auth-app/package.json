@@ -46,7 +46,7 @@
     "@akashaorg/ui-awf-hooks": "*",
     "i18next": "22.4.14",
     "react-i18next": "12.2.0",
-    "react-router-dom": "6.11.2",
+    "@tanstack/react-router": "1.16.6",
     "single-spa-react": "6.0.1"
   },
   "devDependencies": {

@@ -1,11 +1,6 @@
 import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-
-import {
-  ModalNavigationOptions,
-  NotificationEvents,
-  NotificationTypes,
-} from '@akashaorg/typings/lib/ui';
+import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -17,13 +12,7 @@ import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 
 import routes, { RESULTS } from '../../routes';
 
-export type SettingsPageProps = {
-  onError?: (err: Error) => void;
-  isLoggedIn: boolean;
-  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-};
-
-const SettingsPage: React.FC<SettingsPageProps> = () => {
+const SettingsPage: React.FC = () => {
   const { t } = useTranslation('app-search');
   const { getRoutingPlugin, uiEvents } = useRootComponentProps();
 
@@ -102,53 +91,49 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
   };
 
   return (
-    <>
-      <Card
-        elevation={'1'}
-        radius={16}
-        padding={'p-2'}
-        customStyle="h-full md:h-min space-y-4 flex flex-col"
-      >
-        <Text variant="h5" align="center">
-          {t('Search Settings')}
-        </Text>
+    <Card
+      elevation={'1'}
+      radius={16}
+      padding={'p-2'}
+      customStyle="h-full md:h-min space-y-4 flex flex-col"
+    >
+      <Text variant="h5" align="center">
+        {t('Search Settings')}
+      </Text>
 
-        <Divider customStyle="my-2" />
-        <Stack justify="between" direction="row">
-          <Text variant="h6">
-            <>{t('Show NSFW Content')}</>
-          </Text>
-          <Toggle checked={showNsfwContent} onChange={showNSFWChangeHandler} size="small" />
-        </Stack>
-        <Text variant="footnotes2" color={{ light: 'grey7', dark: 'grey6' }}>
-          <>
-            {t(
-              'If you enable NSFW content, any sensitive content will show up in your search results when you lookup anything.',
-            )}
-          </>
+      <Divider customStyle="my-2" />
+      <Stack justify="between" direction="row">
+        <Text variant="h6">
+          <>{t('Show NSFW Content')}</>
         </Text>
-        <Stack
-          direction="row"
-          fullWidth
-          justify="end"
-          spacing="gap-x-4"
-          customStyle="pr-2 pb-2 pt-32"
-        >
-          <Button
-            variant="text"
-            label={t('Cancel')}
-            color="secondaryLight dark:secondaryDark"
-            onClick={cancelHandler}
-          />
-          <Button
-            variant="primary"
-            label={t('Update')}
-            onClick={confirmHandler}
-            disabled={updateButtonDisabled}
-          />
-        </Stack>
-      </Card>
-    </>
+        <Toggle checked={showNsfwContent} onChange={showNSFWChangeHandler} size="small" />
+      </Stack>
+      <Text variant="footnotes2" color={{ light: 'grey7', dark: 'grey6' }}>
+        {t(
+          'If you enable NSFW content, any sensitive content will show up in your search results when you lookup anything.',
+        )}
+      </Text>
+      <Stack
+        direction="row"
+        fullWidth
+        justify="end"
+        spacing="gap-x-4"
+        customStyle="pr-2 pb-2 pt-32"
+      >
+        <Button
+          variant="text"
+          label={t('Cancel')}
+          color="secondaryLight dark:secondaryDark"
+          onClick={cancelHandler}
+        />
+        <Button
+          variant="primary"
+          label={t('Update')}
+          onClick={confirmHandler}
+          disabled={updateButtonDisabled}
+        />
+      </Stack>
+    </Card>
   );
 };
 export default SettingsPage;

@@ -5,6 +5,7 @@ import {
   useRootComponentProps,
   useGetSettings,
   transformSource,
+  useGetLogin,
 } from '@akashaorg/ui-awf-hooks';
 import Menu, { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
 import {
@@ -17,21 +18,22 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import DropDownFilter from '@akashaorg/design-system-components/lib/components/DropDownFilter';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { EntityTypes, NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
-import routes, { SETTINGS_PAGE, CUSTOMIZE_NOTIFICATION_WELCOME_PAGE } from '../../routes';
+import routes, { SETTINGS_PAGE, CUSTOMISE_NOTIFICATION_WELCOME_PAGE } from '../../routes';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import { useNavigate } from '@tanstack/react-router';
 
 export type Notification = {
   id: string;
   [key: string]: unknown;
 };
 
-type NotificationsPageProps = {
-  isLoggedIn: boolean;
-  settingData: Record<string, string | boolean | number>;
-};
-
-const NotificationsPage: React.FC<NotificationsPageProps> = ({ isLoggedIn }) => {
+const NotificationsPage: React.FC = () => {
   const [showMenu, setShowMenu] = useState(false);
+
+  const loginData = useGetLogin();
+  const isLoggedIn = !!loginData.data?.id;
+
+  const navigate = useNavigate();
 
   const { data, isLoading } = useGetSettings('@akashaorg/app-notifications');
 
@@ -171,10 +173,7 @@ const NotificationsPage: React.FC<NotificationsPageProps> = ({ isLoggedIn }) => 
 
   const redirectToSettingsPage = () => {
     // go to customization page
-    return navigateTo?.({
-      appName: '@akashaorg/app-notifications',
-      getNavigationUrl: () => routes[SETTINGS_PAGE],
-    });
+    navigate({ to: routes[SETTINGS_PAGE] });
   };
 
   const dropDownActions: MenuProps['items'] = [
@@ -193,10 +192,7 @@ const NotificationsPage: React.FC<NotificationsPageProps> = ({ isLoggedIn }) => 
   if (isLoading) return <Spinner />;
 
   if (!isLoggedIn || !data) {
-    return navigateTo?.({
-      appName: '@akashaorg/app-notifications',
-      getNavigationUrl: () => routes[CUSTOMIZE_NOTIFICATION_WELCOME_PAGE],
-    });
+    navigate({ to: routes[CUSTOMISE_NOTIFICATION_WELCOME_PAGE] });
   }
 
   const filterShownNotifications = (selectedOption: number) => {
