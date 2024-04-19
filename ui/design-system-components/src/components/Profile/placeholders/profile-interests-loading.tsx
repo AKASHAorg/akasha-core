@@ -6,7 +6,7 @@ import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 const ProfileInterestsLoading: React.FC = () => {
   return (
     <Stack direction="column" spacing="gap-y-4" fullWidth>
-      <Card elevation="1" radius={20} padding="p-4">
+      <Card radius={20} padding="p-4">
         <Stack direction="column" spacing="gap-y-2.5" customStyle="mb-16">
           <TextLine width="w-24" animated />
           <TextLine width="w-full" animated />

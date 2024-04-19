@@ -1,4 +1,4 @@
-import React, { ReactElement, ReactNode, Ref, CSSProperties, Fragment, useState } from 'react';
+import React, { ReactElement, ReactNode, Ref, Fragment, useState } from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
@@ -83,7 +83,7 @@ export type EntryCardProps = {
   editable?: boolean;
   actionsRight?: ReactNode;
   reflectionsCount?: number;
-  customStyle?: CSSProperties;
+  customStyle?: string;
   ref?: Ref<HTMLDivElement>;
   onReflect?: () => void;
   onAvatarClick?: (profileId: string) => void;
@@ -125,6 +125,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     hover,
     actionsRight,
     reflectionsCount,
+    customStyle,
     onAvatarClick,
     onTagClick,
     onContentClick,
@@ -361,7 +362,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
   return noWrapperCard ? (
     <> {entryCardUi}</>
   ) : (
-    <Card ref={ref} padding="p-0">
+    <Card ref={ref} padding="p-0" customStyle={customStyle}>
       {entryCardUi}
     </Card>
   );

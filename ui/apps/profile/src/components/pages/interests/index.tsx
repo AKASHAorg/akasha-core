@@ -155,7 +155,7 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
 
   return (
     <Stack direction="column" spacing="gap-y-4" fullWidth>
-      <Card elevation="1" radius={20} padding={'p-4'}>
+      <Card radius={20} padding={'p-4'}>
         {profileDID !== authenticatedDID && (
           <Stack direction="column" spacing="gap-y-2.5">
             <Text variant="h5">{t('Interests')} </Text>

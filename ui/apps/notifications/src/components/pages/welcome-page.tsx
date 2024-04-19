@@ -97,7 +97,7 @@ const WelcomePage: React.FC<WelcomePageProps> = props => {
   };
 
   return (
-    <Card elevation={'1'} radius={16} padding={'p-2'} testId="notifications">
+    <Card radius={16} padding={'p-2'} testId="notifications">
       <Stack justify="center" align="center" customStyle="mb-32">
         {image && <Image src={image} customStyle="w-[180px] h-[180px] m-auto my-4" />}
 

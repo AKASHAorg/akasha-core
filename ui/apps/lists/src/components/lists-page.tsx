@@ -36,7 +36,7 @@ const ListsPage: React.FC<unknown> = () => {
   };
 
   return (
-    <Card elevation="1" radius={16} padding="p-4">
+    <Card radius={16} padding="p-4">
       <ListAppTopbar
         titleLabel={t('Your List')}
         resetLabel={t('Reset')}
