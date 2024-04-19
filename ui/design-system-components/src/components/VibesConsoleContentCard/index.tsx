@@ -1,24 +1,25 @@
 import React from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import ReportReasonPill from '@akashaorg/design-system-components/lib/components/ReportReasonPill';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Antenna, Profile } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
-import { DashboardItemRenderer, ItemType } from './item-renderer';
+import MiniProfileCTA, { ItemType, ProfileItemData } from './mini-profile-cta';
+import ReportReasonPill from '../ReportReasonPill';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
+import EntryCard, { EntryCardProps } from '../Entry/EntryCard';
 
 export type ReportEntry = {
   id: string;
+  itemData: EntryCardProps | ProfileItemData;
   appName: string;
-  nsfw: boolean;
   itemType: ItemType;
   primaryReason: string;
   reportCount: number;
   lastReportDate: Date;
 };
 
-export type DashboardEntryProps = {
+export type VibesConsoleContentCardProps = {
   entry: ReportEntry;
   caseLabel: string;
   nsfwLabel: string;
@@ -30,7 +31,7 @@ export type DashboardEntryProps = {
   onButtonClick: (action: string, itemType: ItemType, id: string) => () => void;
 };
 
-export const DashboardEntry: React.FC<DashboardEntryProps> = props => {
+const VibesConsoleContentCard: React.FC<VibesConsoleContentCardProps> = props => {
   const {
     entry,
     caseLabel,
@@ -71,7 +72,7 @@ export const DashboardEntry: React.FC<DashboardEntryProps> = props => {
           />
           <Text variant="h6" weight="bold">
             {entry.appName}{' '}
-            {entry.itemType && (
+            {entry.itemType && entry.itemType !== 'Profile' && (
               <Text as="span" variant="footnotes2">
                 - {entry.itemType}
               </Text>
@@ -88,12 +89,17 @@ export const DashboardEntry: React.FC<DashboardEntryProps> = props => {
       </Stack>
 
       <Stack padding="p-5" spacing="gap-y-4">
-        <DashboardItemRenderer
-          itemType={entry.itemType}
-          viewProfileLabel={viewProfileLabel}
-          nsfw={entry.nsfw}
-          nsfwLabel={nsfwLabel}
-        />
+        {entry.itemType !== 'Profile' && <EntryCard {...(entry.itemData as EntryCardProps)} />}
+
+        {entry.itemType === 'Profile' && (
+          <Card padding="p-4">
+            <MiniProfileCTA
+              itemData={entry.itemData as ProfileItemData}
+              nsfwLabel={nsfwLabel}
+              ctaExt={<Button variant="text" size="md" label={viewProfileLabel} />}
+            />
+          </Card>
+        )}
 
         <Stack direction="row" spacing="gap-x-1">
           <Text variant="button-sm" weight="normal" color={textColor}>
@@ -140,3 +146,5 @@ export const DashboardEntry: React.FC<DashboardEntryProps> = props => {
     </Card>
   );
 };
+
+export default VibesConsoleContentCard;

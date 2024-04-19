@@ -1,4 +1,7 @@
+import { EntityTypes } from '@akashaorg/typings/lib/ui';
 import { TApplicationStatus } from './status-color';
+import { EntryCardProps } from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
+import { ProfileItemData } from '@akashaorg/design-system-components/lib/components/VibesConsoleContentCard/mini-profile-cta';
 
 const randomDateBetweenValues = (start = 'Jan 01 2020', end = 'Dec 31 2020') => {
   const timeStart = new Date(start).getTime();
@@ -120,25 +123,80 @@ export const generateModeratorApplicationHistory = () =>
   }));
 
 type TReportEntry = {
+  itemData: EntryCardProps | ProfileItemData;
   appName: string;
   itemType: 'Profile' | 'Beam' | 'Reflection';
   id: string;
-  nsfw?: boolean;
+};
+
+const sampleEntryData: EntryCardProps = {
+  isLoggedIn: true,
+  entryData: {
+    active: true,
+    authorId: 'did:pkh:eip155:5:0xa2aabe32856a8d50c748d50a5111312d986208a8',
+    createdAt: '12/12/2023',
+    id: 'kshggg55555',
+  },
+  authorProfile: {
+    data: {
+      did: { id: 'did:pkh:eip155:5:0xa2aabe32856a8d50c748d50a5111312d986208a8' },
+      name: 'Coffee Lover',
+    },
+    loading: false,
+    error: new Error('an error occured'),
+  },
+  itemType: EntityTypes?.REFLECT,
+  flagAsLabel: 'Flag',
+  slateContent: [
+    {
+      type: 'paragraph',
+      children: [
+        {
+          text: 'This content will be reported, for test purposes',
+        },
+      ],
+    },
+  ],
+  onContentClick: () => ({}),
+  onMentionClick: () => ({}),
+  onTagClick: () => ({}),
+  transformSource: () => ({
+    src: 'https://placebeard.it/360x360',
+    width: 360,
+    height: 360,
+  }),
+};
+
+const sampleProfileData: ProfileItemData = {
+  avatar: {
+    height: 320,
+    src: '',
+    width: 320,
+  },
+  alternativeAvatars: [],
+  name: 'Golden Showers',
+  did: { id: 'somerandomdid' },
+  nsfw: false,
 };
 
 const reportEntries: TReportEntry[] = [
-  { appName: 'Profile', itemType: 'Profile', id: 'P-17078' },
-  { appName: 'Antenna', itemType: 'Beam', id: 'B-19089' },
-  { appName: 'Antenna', itemType: 'Reflection', id: 'R-19090' },
-  { appName: 'Profile', itemType: 'Profile', id: 'P-17079', nsfw: true },
+  { itemData: sampleProfileData, appName: 'Profile', itemType: 'Profile', id: 'P-17078' },
+  { itemData: sampleEntryData, appName: 'Antenna', itemType: 'Beam', id: 'B-19089' },
+  { itemData: sampleEntryData, appName: 'Antenna', itemType: 'Reflection', id: 'R-19090' },
+  {
+    itemData: sampleProfileData,
+    appName: 'Profile',
+    itemType: 'Profile',
+    id: 'P-17079',
+  },
 ];
 
 export const generateReportEntries = () =>
   reportEntries.map(r => ({
     id: r.id,
+    itemData: r.itemData,
     appName: r.appName,
     itemType: r.itemType,
-    nsfw: r.nsfw,
     primaryReason: 'Sexual or human exploitation',
     reportCount: 46,
     lastReportDate: randomDateBetweenValues('Jan 01 2024', 'Mar 31 2024'),
