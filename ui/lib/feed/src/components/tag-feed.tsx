@@ -110,7 +110,7 @@ const TagFeed = (props: TagFeedProps) => {
        * so as to be able to accept the updated data in the `extractData` function
        *  when the hook refetches again (Specificallly for dealing with the filter condition
        *  `!beamCursors.has(edge.cursor)` inside the extractData function inside the hook
-       *  because if not resetted, no data will be extracted
+       *  because if not reset, no data will be extracted
        * from the function because the existing beamCursors will contain the data.cursor and
        * therefore the feed doesn't get updated correctly sometimes with nsfw content when toggling
        * the nswf setting on).
