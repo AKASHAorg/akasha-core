@@ -5,7 +5,7 @@ import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { CheckCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { ReviewItem } from '../components/dashboard';
-import routes, { DASHBOARD } from '../routes';
+import routes, { DASHBOARD, VIEW_ALL_REPORTS } from '../routes';
 
 export type ReviewItemPageProps = {
   action: string;
@@ -23,6 +23,13 @@ export const ReviewItemPage: React.FC<ReviewItemPageProps> = props => {
   const { getRoutingPlugin, uiEvents } = useRootComponentProps();
 
   const navigateTo = getRoutingPlugin().navigateTo;
+
+  const handleReasonClick = (id: string) => {
+    navigate({
+      to: routes[VIEW_ALL_REPORTS],
+      params: { id },
+    });
+  };
 
   const handleRadioChange = (value: string) => {
     setSelectedPeriod(value);
@@ -87,6 +94,7 @@ export const ReviewItemPage: React.FC<ReviewItemPageProps> = props => {
       subtitleLabels={footnoteLabels}
       cancelButtonLabel={t('Cancel')}
       confirmButtonLabel={t('{{action}}', { action })}
+      handleReasonClick={handleReasonClick}
       handleRadioChange={handleRadioChange}
       onLinkClick={handleSubtitleLinkClick}
       onCancelButtonClick={handleCancelButtonClick}

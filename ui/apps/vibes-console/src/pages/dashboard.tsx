@@ -5,7 +5,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import VibesConsoleContentCard from '@akashaorg/design-system-components/lib/components/VibesConsoleContentCard';
 import { DashboardHeader } from '../components/dashboard';
 import { generateReportEntries } from '../utils';
-import routes, { REVIEW_ITEM, SETTINGS } from '../routes';
+import routes, { REVIEW_ITEM, SETTINGS, VIEW_ALL_REPORTS } from '../routes';
 
 export const Dashboard: React.FC<unknown> = () => {
   const navigate = useNavigate();
@@ -16,6 +16,13 @@ export const Dashboard: React.FC<unknown> = () => {
   const handleSettingsButtonClick = () => {
     navigate({
       to: routes[SETTINGS],
+    });
+  };
+
+  const handleReasonClick = (id: string) => {
+    navigate({
+      to: routes[VIEW_ALL_REPORTS],
+      params: { id },
     });
   };
 
@@ -48,6 +55,7 @@ export const Dashboard: React.FC<unknown> = () => {
             primaryButtonLabel={t('Keep')}
             secondaryButtonLabel={e.itemType === 'Profile' ? t('Suspend') : t('Delist')}
             onButtonClick={handleButtonClick}
+            onReasonClick={handleReasonClick}
           />
         ))}
       </Stack>
