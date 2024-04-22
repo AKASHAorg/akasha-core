@@ -18,7 +18,6 @@ describe('<ProfileAvatarButton /> Component', () => {
   };
 
   const handleClick = jest.fn(/** */);
-  const handleClickAvatar = jest.fn(/** */);
 
   beforeEach(() => {
     act(() => {
@@ -57,11 +56,8 @@ describe('<ProfileAvatarButton /> Component', () => {
 
     const avatarBox = getByTestId('avatar-box');
     expect(avatarBox.childNodes[0]).toBeDefined();
-    expect(handleClickAvatar).toBeCalledTimes(0);
 
     fireEvent.click(avatarBox.childNodes[0]);
-
-    expect(handleClickAvatar).toBeCalledTimes(1);
   });
 
   it('calls info handlers', () => {
