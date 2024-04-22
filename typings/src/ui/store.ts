@@ -18,10 +18,6 @@ export interface IUserState<T> {
   authenticatedProfileError: Error;
   authenticationError: Error;
   isAuthenticating: boolean;
-  //User profile info
-  info: Record<string, T>;
-  isLoadingInfo: boolean;
-  infoError: Error;
 }
 
 /**
@@ -39,7 +35,6 @@ export interface IGetProfileInfo<T> {
 export interface IUserStore<T> {
   login({ provider, checkRegistered }: Login): void;
   logout(): void;
-  getUserInfo({ profileDID }: GetUserInfo): void;
   restoreSession(): void;
   subscribe(listener: () => void): () => void;
   getSnapshot(): IUserState<T>;

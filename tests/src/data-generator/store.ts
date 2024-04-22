@@ -9,9 +9,6 @@ export function getUserInfo(): IUserState<AkashaProfile> {
     authenticationError: null,
     authenticatedProfileError: null,
     isAuthenticating: false,
-    info: {},
-    isLoadingInfo: false,
-    infoError: null,
   };
 }
 
@@ -44,7 +41,6 @@ export function getUserStore(initialState: IUserState<AkashaProfile>): IUserStor
     logout: () => {
       setState(getUserInfo());
     },
-    getUserInfo: () => jest.fn(),
     restoreSession: () => {
       setState({ ...state, isAuthenticating: true });
       setTimeout(
