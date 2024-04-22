@@ -205,8 +205,8 @@ const activeModeratorNames = [
   'Dudez Jillz',
 ];
 
-export const generateActiveModerators = () => {
-  const activeModerators = activeModeratorNames.map((name, idx) => ({
+export const generateActiveModerators = () =>
+  activeModeratorNames.map((name, idx) => ({
     id: `${idx + 1}`,
     createdAt: randomDateBetweenValues(),
     did: { id: (Math.random() + 1).toString(36).substring(2) },
@@ -220,5 +220,64 @@ export const generateActiveModerators = () => {
     },
   }));
 
-  return activeModerators;
-};
+const flags = [
+  {
+    explanation: 'This user is using hateful words',
+  },
+  {
+    explanation: 'Can you hurry up and delist this content?',
+  },
+  { explanation: '' },
+  {
+    explanation: "I flagged this many times and it's still there.",
+  },
+  {
+    explanation: 'Can you hurry up and delist this content?',
+  },
+  {
+    explanation: 'At this point Idk what to do.',
+  },
+  {
+    explanation: "This beam violates AKASHA's CoC.",
+  },
+  { explanation: '' },
+  { explanation: '' },
+  { explanation: '' },
+  { explanation: '' },
+  { explanation: '' },
+  { explanation: '' },
+];
+
+const reports = [
+  {
+    name: 'Gingerbread',
+    flags,
+  },
+  {
+    name: 'Coffee is not real',
+    flags: flags.slice(2, 3),
+  },
+  {
+    name: 'John Samsung',
+    flags,
+  },
+  {
+    name: 'Cats4eva',
+    flags: flags.slice(0, 2),
+  },
+  {
+    name: 'Bree Van de kamp',
+    flags: flags.slice(0, 1),
+  },
+  {
+    name: 'Mike Delgado',
+    flags,
+  },
+];
+
+export const generateReports = () =>
+  reports.map(r => ({
+    ...r,
+    did: { id: 'f633FF82ab71' },
+    date: randomDateBetweenValues('Jan 01 2024', 'Jan 31 2024'),
+  }));

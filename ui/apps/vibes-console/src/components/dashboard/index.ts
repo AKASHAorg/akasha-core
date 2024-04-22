@@ -8,3 +8,4 @@ export * from './header';
 export * from './moderator-list-item';
 export * from './respond-admin';
 export * from './review-item';
+export * from './reports';

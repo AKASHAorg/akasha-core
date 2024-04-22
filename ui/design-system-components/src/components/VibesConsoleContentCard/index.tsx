@@ -28,6 +28,7 @@ export type VibesConsoleContentCardProps = {
   lastReportLabel: string;
   primaryButtonLabel: string;
   secondaryButtonLabel: string;
+  onReasonClick: (id: string) => void;
   onButtonClick: (action: string, itemType: ItemType, id: string) => () => void;
 };
 
@@ -41,6 +42,7 @@ const VibesConsoleContentCard: React.FC<VibesConsoleContentCardProps> = props =>
     lastReportLabel,
     primaryButtonLabel,
     secondaryButtonLabel,
+    onReasonClick,
     onButtonClick,
   } = props;
 
@@ -117,7 +119,11 @@ const VibesConsoleContentCard: React.FC<VibesConsoleContentCardProps> = props =>
           </Text>
         </Stack>
 
-        <ReportReasonPill reason={entry.primaryReason} reportCount={entry.reportCount} />
+        <ReportReasonPill
+          reason={entry.primaryReason}
+          reportCount={entry.reportCount}
+          handleClick={() => onReasonClick(entry.id)}
+        />
 
         <Text variant="footnotes2">
           {lastReportLabel}:{' '}

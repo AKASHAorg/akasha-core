@@ -24,6 +24,7 @@ export type ReviewItemProps = PageHeaderProps &
     datePlaceholderLabel: string;
     reasonPlaceholderLabel: string;
     handleRadioChange: (value: string) => void;
+    handleReasonClick: (id: string) => void;
   };
 
 export const ReviewItem: React.FC<ReviewItemProps> = props => {
@@ -36,6 +37,7 @@ export const ReviewItem: React.FC<ReviewItemProps> = props => {
     datePlaceholderLabel,
     reasonPlaceholderLabel,
     handleRadioChange,
+    handleReasonClick,
   } = props;
 
   const textColor = { light: 'grey7', dark: 'grey6' } as const;
@@ -45,8 +47,16 @@ export const ReviewItem: React.FC<ReviewItemProps> = props => {
       <Stack spacing="gap-y-4" customStyle="mb-24">
         <Text variant="h6">{section1Label}</Text>
         <Stack customStyle="gap-y-2 md:(flex-row gap-x-2)">
-          <ReportReasonPill reason="Bullying and harassment" reportCount={46} />
-          <ReportReasonPill reason="Hate speech" reportCount={15} />
+          <ReportReasonPill
+            reason="Bullying and harassment"
+            reportCount={46}
+            handleClick={() => handleReasonClick('bh-123')}
+          />
+          <ReportReasonPill
+            reason="Hate speech"
+            reportCount={15}
+            handleClick={() => handleReasonClick('hs-123')}
+          />
         </Stack>
 
         {section2Label && (
