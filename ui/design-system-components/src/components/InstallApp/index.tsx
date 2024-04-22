@@ -37,7 +37,7 @@ const InstallApp: React.FC<InstallAppProps> = ({
   action,
 }) => {
   return (
-    <Card elevation="1" radius={20} padding={'p-4'}>
+    <Card radius={20} padding={'p-4'}>
       <Stack align="center" direction="column" spacing="gap-y-8">
         <Text variant="h5">{title}</Text>
         <InfoCard titleLabel={appName} />

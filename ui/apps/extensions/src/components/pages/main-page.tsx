@@ -66,7 +66,7 @@ const MainPage: React.FC = () => {
           onClose={dismissCard}
         />
       )}
-      <Card elevation="1" radius={20}>
+      <Card radius={20}>
         <TabList
           selected={activeTab}
           onChange={(selectedIndex, previousIndex) => {

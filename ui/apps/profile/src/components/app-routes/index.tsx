@@ -81,7 +81,7 @@ const followersRoute = createRoute({
     const { profileDID } = followersRoute.useParams();
     return (
       <ProfileWithAuthorization profileDID={profileDID}>
-        <Card radius={20} elevation="1" padding="p-0">
+        <Card radius={20} padding="p-0">
           <ProfileHeader profileDID={profileDID} plain={true} customStyle="sticky top-3.5 z-50" />
           <FollowersPage profileDID={profileDID} />
         </Card>
@@ -106,7 +106,7 @@ const followingRoute = createRoute({
     const { profileDID } = followingRoute.useParams();
     return (
       <ProfileWithAuthorization profileDID={profileDID}>
-        <Card radius={20} elevation="1" padding="p-0">
+        <Card radius={20} padding="p-0">
           <ProfileHeader profileDID={profileDID} plain={true} customStyle="sticky top-3.5 z-50" />
           <FollowingPage profileDID={profileDID} />
         </Card>

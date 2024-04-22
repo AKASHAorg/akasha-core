@@ -129,46 +129,44 @@ const ICWidget: React.FC<unknown> = () => {
       }}
       logger={logger}
     >
-      <Stack padding="pb-4">
-        <Card elevation="1">
-          <Stack padding="pl-4 pt-4 pb-6">
-            <Text weight="bold" variant="body1">
-              {t('My Apps')}
-            </Text>
-          </Stack>
-          <Stack>
-            <TabList
-              labels={[t('World Apps'), t('Installed')]}
-              selected={activeTabIndex}
-              onChange={onTabChange}
-              tabListDivider
+      <Card padding="pb-4">
+        <Stack padding="pl-4 pt-4 pb-6">
+          <Text weight="bold" variant="body1">
+            {t('My Apps')}
+          </Text>
+        </Stack>
+        <Stack>
+          <TabList
+            labels={[t('World Apps'), t('Installed')]}
+            selected={activeTabIndex}
+            onChange={onTabChange}
+            tabListDivider
+          />
+        </Stack>
+        <Stack padding="pt-4 pb-4">
+          {activeTabIndex === 0 && filteredDefaultApps.length === 0 && <NoAppsMessage />}
+          {activeTabIndex === 1 && filteredInstalledApps.length === 0 && <NoAppsMessage />}
+
+          {activeTabIndex === 0 && filteredDefaultApps.length > 0 && (
+            <AppsList
+              apps={filteredDefaultApps.slice(0, 4)}
+              onAppClick={handleAppClick}
+              appAction={<Icon icon={<CheckIcon />} />}
             />
-          </Stack>
-          <Stack padding="pt-4 pb-4">
-            {activeTabIndex === 0 && filteredDefaultApps.length === 0 && <NoAppsMessage />}
-            {activeTabIndex === 1 && filteredInstalledApps.length === 0 && <NoAppsMessage />}
+          )}
 
-            {activeTabIndex === 0 && filteredDefaultApps.length > 0 && (
+          {activeTabIndex === 1 && filteredInstalledApps.length > 0 && (
+            <Stack direction="column" spacing="gap-y-4">
               <AppsList
-                apps={filteredDefaultApps.slice(0, 4)}
+                apps={filteredInstalledApps.slice(0, 4)}
                 onAppClick={handleAppClick}
-                appAction={<Icon icon={<CheckIcon />} />}
+                appAction={<Button>{t('Open')}</Button>}
+                onAppActionClick={handleInstalledAppActionClick}
               />
-            )}
-
-            {activeTabIndex === 1 && filteredInstalledApps.length > 0 && (
-              <Stack direction="column" spacing="gap-y-4">
-                <AppsList
-                  apps={filteredInstalledApps.slice(0, 4)}
-                  onAppClick={handleAppClick}
-                  appAction={<Button>{t('Open')}</Button>}
-                  onAppActionClick={handleInstalledAppActionClick}
-                />
-              </Stack>
-            )}
-          </Stack>
-        </Card>
-      </Stack>
+            </Stack>
+          )}
+        </Stack>
+      </Card>
     </ErrorBoundary>
   );
 };

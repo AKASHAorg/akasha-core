@@ -5,7 +5,7 @@ import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 
 const ProfileStatLoading: React.FC = () => {
   return (
-    <Card elevation="1" radius={20} padding={'p-4'}>
+    <Card radius={20} padding={'p-4'}>
       <Stack direction="row" justify="between">
         <Stack spacing="gap-2">
           <TextLine

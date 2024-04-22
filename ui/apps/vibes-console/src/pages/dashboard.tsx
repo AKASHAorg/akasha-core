@@ -2,7 +2,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import { DashboardEntry, DashboardHeader } from '../components/dashboard';
+import VibesConsoleContentCard from '@akashaorg/design-system-components/lib/components/VibesConsoleContentCard';
+import { DashboardHeader } from '../components/dashboard';
 import { generateReportEntries } from '../utils';
 import routes, { REVIEW_ITEM, SETTINGS } from '../routes';
 
@@ -36,7 +37,7 @@ export const Dashboard: React.FC<unknown> = () => {
 
       <Stack spacing="gap-y-3">
         {entries.map(e => (
-          <DashboardEntry
+          <VibesConsoleContentCard
             key={e.id}
             entry={e}
             caseLabel={t('Case')}

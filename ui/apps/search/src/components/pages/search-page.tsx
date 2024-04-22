@@ -266,23 +266,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     });
   };
 
-  // // repost related
-  const handleRebeam = (_withComment: boolean, itemId: string) => {
-    analyticsActions.trackEvent({
-      category: AnalyticsCategories.BEAM,
-      action: 'Repost Clicked',
-    });
-    if (!isLoggedIn) {
-      showLoginModal();
-      return;
-    } else {
-      navigateTo?.({
-        appName: '@akashaorg/app-akasha-integration',
-        getNavigationUrl: () => `/feed?repost=${itemId}`,
-      });
-    }
-  };
-
   React.useEffect(() => {
     if (activeButton !== ButtonValues.CONTENT) {
       analyticsActions.trackEvent({
@@ -327,7 +310,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   };
 
   return (
-    <Card elevation="1" radius={16} padding="p-4">
+    <Card radius={16} padding="p-4">
       <Stack>
         <SearchStartCard
           searchKeyword={searchKeyword}
