@@ -24,6 +24,7 @@ import {
   ResignRolePage,
   ResignConfirmationPage,
   ReviewItemPage,
+  ItemReportsPage,
 } from '../../pages';
 import routes, {
   APPLICATIONS,
@@ -119,6 +120,24 @@ const dashboardRoute = createRoute({
   },
 });
 
+const viewItemReportsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: `${baseDashboardUrl}/item/$id/reports`,
+  component: () => {
+    const { id } = viewItemReportsRoute.useParams();
+    return <ItemReportsPage id={id} />;
+  },
+});
+
+const viewItemReportFlagsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: `${baseDashboardUrl}/item/$id/reports/$reportId`,
+  component: () => {
+    const { id, reportId } = viewItemReportFlagsRoute.useParams();
+    return <ItemReportsPage id={id} reportId={reportId} />;
+  },
+});
+
 const reviewItemRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${baseDashboardUrl}/$action/$itemType/$id`,
@@ -187,6 +206,8 @@ const routeTree = rootRoute.addChildren([
     applicationDetailRoute,
   ]),
   dashboardRoute.addChildren([
+    viewItemReportsRoute,
+    viewItemReportFlagsRoute,
     reviewItemRoute,
     settingsRoute,
     editMaxApplicantsRoute,

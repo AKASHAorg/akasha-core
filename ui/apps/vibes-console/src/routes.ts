@@ -1,5 +1,7 @@
 export const HOME = 'Applications Center';
 export const DASHBOARD = 'Content Review Hub';
+export const VIEW_ALL_REPORTS = 'View Item Reports';
+export const VIEW_SPECIFIC_REPORT = 'View Specific Report';
 export const REVIEW_ITEM = 'Review Item';
 export const SETTINGS = 'Settings';
 export const EDIT_MAX_MODERATORS = 'Edit Max Moderators';
@@ -27,6 +29,8 @@ export default {
   [WITHDRAW_APPLICATION]: `${baseApplicationsUrl}/my-applications/$applicationId/withdraw`,
 
   [DASHBOARD]: baseDashboardUrl,
+  [VIEW_ALL_REPORTS]: `${baseDashboardUrl}/item/$id/reports`,
+  [VIEW_SPECIFIC_REPORT]: `${baseDashboardUrl}/item/$id/reports/$reportId`,
   [REVIEW_ITEM]: `${baseDashboardUrl}/$action/$itemType/$id`,
   [SETTINGS]: `${baseDashboardUrl}/settings`,
   [EDIT_MAX_MODERATORS]: `${baseDashboardUrl}/settings/edit`,

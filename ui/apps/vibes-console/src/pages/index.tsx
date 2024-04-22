@@ -6,6 +6,7 @@ export * from './applications';
 export * from './become-moderator';
 export * from './dashboard';
 export * from './edit-max-applicants';
+export * from './item-reports';
 export * from './my-applications';
 export * from './resign-confirmation';
 export * from './resign-moderator-role';
