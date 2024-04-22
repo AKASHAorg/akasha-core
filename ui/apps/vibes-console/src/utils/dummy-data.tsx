@@ -1,4 +1,6 @@
-import { EntityTypes } from '@akashaorg/typings/lib/ui';
+import React from 'react';
+import AuthorProfileAvatar from '@akashaorg/ui-lib-feed/lib/components/cards/author-profile-avatar';
+import { EntityTypes, EntryData } from '@akashaorg/typings/lib/ui';
 import { TApplicationStatus } from './status-color';
 import { EntryCardProps } from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import { ProfileItemData } from '@akashaorg/design-system-components/lib/components/VibesConsoleContentCard/mini-profile-cta';
@@ -129,22 +131,19 @@ type TReportEntry = {
   id: string;
 };
 
+const entryData: EntryData = {
+  active: true,
+  authorId: 'did:pkh:eip155:5:0xa2aabe32856a8d50c748d50a5111312d986208a8',
+  createdAt: '12/12/2023',
+  id: 'kshggg55555',
+};
+
 const sampleEntryData: EntryCardProps = {
   isLoggedIn: true,
-  entryData: {
-    active: true,
-    authorId: 'did:pkh:eip155:5:0xa2aabe32856a8d50c748d50a5111312d986208a8',
-    createdAt: '12/12/2023',
-    id: 'kshggg55555',
-  },
-  authorProfile: {
-    data: {
-      did: { id: 'did:pkh:eip155:5:0xa2aabe32856a8d50c748d50a5111312d986208a8' },
-      name: 'Coffee Lover',
-    },
-    loading: false,
-    error: new Error('an error occured'),
-  },
+  entryData,
+  profileAvatarExt: (
+    <AuthorProfileAvatar authorId={entryData.authorId} createdAt={entryData?.createdAt} />
+  ),
   itemType: EntityTypes?.REFLECT,
   flagAsLabel: 'Flag',
   slateContent: [
@@ -160,11 +159,6 @@ const sampleEntryData: EntryCardProps = {
   onContentClick: () => ({}),
   onMentionClick: () => ({}),
   onTagClick: () => ({}),
-  transformSource: () => ({
-    src: 'https://placebeard.it/360x360',
-    width: 360,
-    height: 360,
-  }),
 };
 
 const sampleProfileData: ProfileItemData = {

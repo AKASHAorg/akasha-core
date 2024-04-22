@@ -2,10 +2,10 @@ import React from 'react';
 import EntryCard, {
   EntryCardProps,
 } from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
-import { transformSource, hasOwn, useGetLogin } from '@akashaorg/ui-awf-hooks';
+import AuthorProfileAvatar from '../author-profile-avatar';
+import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { EntityTypes, ReflectEntryData } from '@akashaorg/typings/lib/ui';
 import { decodeb64SlateContent, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { useTranslation } from 'react-i18next';
 
 export type ReflectCardProps = Pick<
@@ -17,44 +17,24 @@ export type ReflectCardProps = Pick<
   | 'onReflect'
   | 'editable'
   | 'notEditableLabel'
-  | 'hidePublishTime'
   | 'hideActionButtons'
   | 'disableActions'
   | 'hover'
   | 'lastEntry'
 > & {
   entryData: ReflectEntryData;
+  hidePublishTime?: boolean;
 };
 
 const ReflectionCard: React.FC<ReflectCardProps> = props => {
   const { t } = useTranslation('ui-lib-feed');
-  const { entryData, onReflect, ...rest } = props;
-  const { getRoutingPlugin, getTranslationPlugin } = useRootComponentProps();
+  const { entryData, hidePublishTime, onReflect, ...rest } = props;
+  const { getRoutingPlugin } = useRootComponentProps();
   const { data } = useGetLogin();
-  const locale = getTranslationPlugin().i18n?.languages?.[0] || 'en';
   const authenticatedDID = data?.id;
   const isLoggedIn = !!data?.id;
 
-  const {
-    data: profileDataReq,
-    loading,
-    error,
-  } = useGetProfileByDidQuery({
-    variables: { id: entryData.authorId },
-  });
-  const { akashaProfile: profileData } =
-    profileDataReq?.node && hasOwn(profileDataReq.node, 'akashaProfile')
-      ? profileDataReq.node
-      : { akashaProfile: null };
-
   const navigateTo = getRoutingPlugin().navigateTo;
-
-  const onAvatarClick = (id: string) => {
-    navigateTo({
-      appName: '@akashaorg/app-profile',
-      getNavigationUrl: routes => `${routes.rootRoute}/${id}`,
-    });
-  };
 
   const handleFlagReflection = () => {
     navigateTo({
@@ -66,9 +46,6 @@ const ReflectionCard: React.FC<ReflectCardProps> = props => {
   return (
     <EntryCard
       entryData={entryData}
-      authorProfile={{ data: profileData, loading, error }}
-      locale={locale}
-      profileAnchorLink="/@akashaorg/app-profile"
       reflectAnchorLink="/@akashaorg/app-akasha-integration/reflection"
       slateContent={entryData.content.flatMap(item => decodeb64SlateContent(item.value))}
       noWrapperCard={true}
@@ -91,10 +68,15 @@ const ReflectionCard: React.FC<ReflectCardProps> = props => {
         },
       }}
       itemType={EntityTypes.REFLECT}
-      transformSource={transformSource}
       onReflect={onReflect}
       onEntryFlag={handleFlagReflection}
-      onAvatarClick={onAvatarClick}
+      profileAvatarExt={
+        <AuthorProfileAvatar
+          authorId={entryData.authorId}
+          hidePublishTime={hidePublishTime}
+          createdAt={entryData?.createdAt}
+        />
+      }
       {...rest}
     />
   );

@@ -2,7 +2,7 @@ import React, { PropsWithChildren } from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import AuthorProfileLoading from './author-profile-loading';
+import ProfileAvatarLoading from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton/ProfileAvatarLoading';
 
 export type EntryLoadingPlaceholderProps = {
   animated?: boolean;
@@ -16,7 +16,7 @@ const EntryLoadingPlaceholder: React.FC<
   const loaderUi = (
     <Stack spacing="gap-y-2" padding="p-4">
       <Stack direction="row" align="center" justify="between">
-        <AuthorProfileLoading animated={animated} />
+        <ProfileAvatarLoading animated={animated} />
         <TextLine width="w-4" height="h-4" animated={animated} />
       </Stack>
       <Stack justify="center" spacing="gap-y-1">

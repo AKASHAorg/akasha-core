@@ -21,6 +21,7 @@ export class ProfilePlugin implements IProfilePlugin<AkashaProfile> {
       variables: {
         id: profileDID,
       },
+      fetchPolicy: 'cache-first',
     });
     const error = JSON.stringify(profileQuery.errors?.map(error => error.message));
     const profileData =
