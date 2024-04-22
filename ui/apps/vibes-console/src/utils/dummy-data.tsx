@@ -138,7 +138,7 @@ const entryData: EntryData = {
   id: 'kshggg55555',
 };
 
-const sampleEntryData: EntryCardProps = {
+export const sampleEntryData: EntryCardProps = {
   isLoggedIn: true,
   entryData,
   profileAvatarExt: (
