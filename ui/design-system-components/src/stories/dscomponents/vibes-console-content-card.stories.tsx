@@ -92,6 +92,7 @@ const baseArgs: Story = {
     primaryButtonLabel: 'Keep',
     secondaryButtonLabel: 'Delist',
     onButtonClick: () => handleButtonClick,
+    onReasonClick: () => ({}),
   },
 };
 

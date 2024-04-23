@@ -93,7 +93,13 @@ const TransparencyLogItemCard: React.FC<TransparencyLogItemCardProps> = props =>
         <Text variant="body1" color={textColor}>
           {`This ${item.type} has been ${item.status === 'Delisted' ? 'delisted' : 'reported'} for`}
         </Text>
-        <ReportReasonPill reason={item.reason} reportCount={item.reports} />
+        <ReportReasonPill
+          reason={item.reason}
+          reportCount={item.reports}
+          handleClick={() => {
+            /** */
+          }}
+        />
       </Stack>
     </Card>
   );
