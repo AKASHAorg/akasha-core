@@ -1,18 +1,18 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import {
   ApplicationApprovedCard,
   SelfApplicationDetail,
 } from '../components/applications/application';
-import { generateSelfApplicationData } from '../utils';
+import { NoItemFound } from '../components/no-item-found';
 import routes, { DASHBOARD, WITHDRAW_APPLICATION } from '../routes';
 
 export const SelfApplicationDetailPage: React.FC<unknown> = () => {
   const navigate = useNavigate();
   const { t } = useTranslation('vibes-console');
-
   const handleCancelButtonClick = (applicationId: string) => {
     navigate({
       to: routes[WITHDRAW_APPLICATION],
@@ -21,15 +21,18 @@ export const SelfApplicationDetailPage: React.FC<unknown> = () => {
       },
     });
   };
-
   const handleGoToReviewHub = () => {
     navigate({
       to: routes[DASHBOARD],
     });
   };
-
-  const applicationData = generateSelfApplicationData();
-
+  const applicationData = null;
+  if (!applicationData)
+    return (
+      <Card>
+        <NoItemFound title="Oops! This application detail does not exist" />
+      </Card>
+    );
   return (
     <Stack spacing="gap-y-4">
       {applicationData.status === 'approved' && (
@@ -40,7 +43,6 @@ export const SelfApplicationDetailPage: React.FC<unknown> = () => {
           onButtonClick={handleGoToReviewHub}
         />
       )}
-
       <SelfApplicationDetail
         label={t('Your Application')}
         sections={[

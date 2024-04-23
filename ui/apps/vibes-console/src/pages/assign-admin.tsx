@@ -4,26 +4,21 @@ import { useNavigate } from '@tanstack/react-router';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { AssignAdmin } from '../components/dashboard';
-import { generateActiveModerators } from '../utils/dummy-data';
 import routes, { DASHBOARD, SETTINGS } from '../routes';
 
 export const AssignAdminPage: React.FC<unknown> = () => {
   const [assignedAdmin, setAssignedAdmin] = useState(false);
-
   const navigate = useNavigate();
   const { t } = useTranslation('app-vibes-console');
   const { uiEvents } = useRootComponentProps();
-
   const handleAssignButtonClick = () => {
     setAssignedAdmin(true);
   };
-
   const handleCancelButtonClick = () => {
     navigate({
       to: routes[SETTINGS],
     });
   };
-
   const handleConfirmButtonClick = () => {
     navigate({
       to: routes[DASHBOARD],
@@ -36,7 +31,6 @@ export const AssignAdminPage: React.FC<unknown> = () => {
       },
     });
   };
-
   const introLabel = !assignedAdmin
     ? t(
         'Before resigning, you need to assign a new admin from the list below or you can search for a certain moderator',
@@ -44,10 +38,9 @@ export const AssignAdminPage: React.FC<unknown> = () => {
     : `${t(
         'Once the moderator accept the admin request you will be able to resign officially. The following moderator will be notified about assignment',
       )}:`;
-
   return (
     <AssignAdmin
-      activeModerators={generateActiveModerators()}
+      activeModerators={[]}
       label={t('Assign a New Admin')}
       introLabel={t('{{introLabel}}', { introLabel })}
       searchPlaceholderLabel={t('Search for a moderator')}
@@ -56,7 +49,7 @@ export const AssignAdminPage: React.FC<unknown> = () => {
       onClickAssign={handleAssignButtonClick}
       {...(assignedAdmin && {
         cancelButtonLabel: 'Cancel',
-        confirmButtonLabel: 'Confirm Assigment',
+        confirmButtonLabel: 'Confirm Assignment',
         onCancelButtonClick: handleCancelButtonClick,
         onConfirmButtonClick: handleConfirmButtonClick,
       })}
