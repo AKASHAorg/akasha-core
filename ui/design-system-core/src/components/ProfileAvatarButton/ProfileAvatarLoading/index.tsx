@@ -1,12 +1,12 @@
 import React from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
+import Stack from '../../Stack';
+import TextLine from '../../TextLine';
 
-type AuthorProfileLoadingProps = {
+type ProfileAvatarLoadingProps = {
   animated?: boolean;
 };
 
-const AuthorProfileLoading: React.FC<AuthorProfileLoadingProps> = props => {
+const ProfileAvatarLoading: React.FC<ProfileAvatarLoadingProps> = props => {
   const { animated = false } = props;
   return (
     <Stack direction="row" spacing="gap-1">
@@ -25,4 +25,4 @@ const AuthorProfileLoading: React.FC<AuthorProfileLoadingProps> = props => {
   );
 };
 
-export default AuthorProfileLoading;
+export default ProfileAvatarLoading;

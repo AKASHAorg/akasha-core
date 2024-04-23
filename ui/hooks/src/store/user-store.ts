@@ -18,14 +18,10 @@ export class UserStore<T> implements IUserStore<T> {
     authenticatedProfileError: null,
     isAuthenticating: false,
     authenticationError: null,
-    isLoadingInfo: false,
-    info: {},
-    infoError: null,
   };
   #sdk = getSDK();
   static #instance = null;
   #getProfileInfo: IGetProfileInfo<T>['getProfileInfo'];
-  //
   #userAtom = atomWithImmer<IUserState<T>>(this.#initialState);
 
   /**
@@ -76,33 +72,6 @@ export class UserStore<T> implements IUserStore<T> {
   logout = () => {
     this.#sdk.api.auth.signOut();
     store.set(this.#userAtom, () => this.#initialState);
-  };
-
-  /**
-   * Fetch user info using getProfileInfo method from the profile app plugin
-   */
-  getUserInfo = async ({ profileDID }) => {
-    store.set(this.#userAtom, prev => ({
-      ...prev,
-      isLoadingInfo: true,
-    }));
-    try {
-      const { data: profileInfo, error } = await this.#getProfileInfo({ profileDID });
-      const state = store.get(this.#userAtom);
-      const info = profileInfo ? { ...state.info, [profileDID]: profileInfo } : null;
-      store.set(this.#userAtom, prev => ({
-        ...prev,
-        info,
-        isLoadingInfo: false,
-        infoError: error,
-      }));
-    } catch (error) {
-      store.set(this.#userAtom, prev => ({
-        ...prev,
-        infoError: error,
-        isLoadingInfo: false,
-      }));
-    }
   };
 
   /**

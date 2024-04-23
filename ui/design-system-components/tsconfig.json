@@ -8,6 +8,9 @@
     "allowSyntheticDefaultImports": true,
     "jsx": "react-jsx"
   },
-  "include": ["./src/**/*"],
+  "include": [
+    "./src/**/*",
+    "../design-system-core/src/components/ProfileAvatarButton/profile-avatar-loading.tsx"
+  ],
   "exclude": ["**/*.test.tsx", "./src/stories/**/*"]
 }
