@@ -1,6 +1,6 @@
 import getSDK from '@akashaorg/awf-sdk';
-import { AUTH_EVENTS, CurrentUser, WEB3_EVENTS } from '@akashaorg/typings/lib/sdk';
-import type { IGetProfileInfo, IUserState, IUserStore } from '@akashaorg/typings/lib/ui/store';
+import { AUTH_EVENTS, type CurrentUser, WEB3_EVENTS } from '@akashaorg/typings/lib/sdk';
+import type { IGetProfileInfo, IUserState, IUserStore } from '@akashaorg/typings/lib/ui';
 import { createStore } from 'jotai';
 import { atomWithImmer } from 'jotai-immer';
 import { filter } from 'rxjs/operators';

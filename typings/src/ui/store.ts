@@ -21,14 +21,6 @@ export interface IUserState<T> {
 }
 
 /**
- * Interface defining method for fetching profile info inside a profile plugin
- */
-
-export interface IGetProfileInfo<T> {
-  getProfileInfo(params: GetUserInfo): Promise<{ data: T; error: string }>;
-}
-
-/**
  * Interface defining a user store
  */
 
@@ -38,12 +30,4 @@ export interface IUserStore<T> {
   restoreSession(): void;
   subscribe(listener: () => void): () => void;
   getSnapshot(): IUserState<T>;
-}
-
-/**
- * Interface defining a profile plugin
- */
-export interface IProfilePlugin<T> {
-  get userStore(): IUserStore<T>;
-  getProfileInfo: IGetProfileInfo<T>['getProfileInfo'];
 }

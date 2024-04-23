@@ -1,11 +1,4 @@
-import React, {
-  RefObject,
-  useCallback,
-  useImperativeHandle,
-  useRef,
-  useState,
-  useMemo,
-} from 'react';
+import React, { RefObject, useCallback, useImperativeHandle, useRef, useState } from 'react';
 import EditorBox from '@akashaorg/design-system-components/lib/components/Editor';
 import {
   encodeSlateToBase64,
@@ -15,12 +8,13 @@ import {
   useMentions,
 } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
-import type {
-  BlockInstanceMethods,
-  ContentBlockRootProps,
-  CreateContentBlock,
-  IEntryData,
-  RootExtensionProps,
+import {
+  ContentBlockModes,
+  type IPublishData,
+  type BlockInstanceMethods,
+  type ContentBlockRootProps,
+  type CreateContentBlock,
+  type RootExtensionProps,
 } from '@akashaorg/typings/lib/ui';
 import { Draft } from '../../utils';
 import {
@@ -46,17 +40,16 @@ export const SlateEditorBlock = (
 
   const [createContentBlock, contentBlockQuery] = useCreateContentBlockMutation();
 
-  const postDraft = new Draft<IEntryData['slateContent']>({
+  const beamDraft = new Draft<IPublishData['slateContent']>({
     storage: localStorage,
     appName: name,
     userId: authenticatedDID,
-    action: 'post',
   });
 
-  const canSaveDraft = !props.blockInfo.mode; //action === 'post' || action === 'repost';
-  const draftPostData = canSaveDraft ? postDraft.get() : null;
+  const canSaveDraft = props.blockInfo.mode === ContentBlockModes.EDIT;
+  const draftBeamData = canSaveDraft ? beamDraft.get() : null;
 
-  const [editorState, setEditorState] = useState(draftPostData);
+  const [editorState, setEditorState] = useState(draftBeamData);
 
   const createBlock = useCallback(
     async ({ nsfw }: CreateContentBlock) => {
@@ -151,7 +144,7 @@ export const SlateEditorBlock = (
       withMeter={isFocusedEditor}
       withToolbar={isFocusedEditor}
       editorState={editorState}
-      setEditorState={(value: IEntryData['slateContent']) => {
+      setEditorState={(value: IPublishData['slateContent']) => {
         setEditorState(value);
       }}
       showCancelButton={false}

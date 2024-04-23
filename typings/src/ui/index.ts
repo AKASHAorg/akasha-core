@@ -23,6 +23,7 @@ export * from './colors';
 export * from './extensions';
 export * from './editor-blocks';
 export * from './media';
+export * from './store';
 
 export enum IntegrationTypes {
   APP = 'App',
