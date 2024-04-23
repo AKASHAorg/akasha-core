@@ -42,6 +42,12 @@ import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 // @TODO: replace this with actual data
 const TEST_APP_VERSION_ID = 'k2t6wzhkhabz5ja6dy72fezemlrdc5akqebksfpjyxkyap6g4fqqimcpuf7bix';
 
+const isImgUrl = async url => {
+  const response = await fetch(url, { method: 'HEAD' });
+  const isImg = response?.headers?.get('Content-Type')?.startsWith('image');
+  return isImg;
+};
+
 export const ImageEditorBlock = (
   props: ContentBlockRootProps & { blockRef?: React.RefObject<BlockInstanceMethods> },
 ) => {
@@ -162,14 +168,25 @@ export const ImageEditorBlock = (
     [createBlock, retryCreate],
   );
 
-  const isImgUrl = async url => {
+  const handleChange = async e => {
+    const imageUrl = e.currentTarget.value;
+    setImageLink(imageUrl);
     try {
-      const response = await fetch(url, { method: 'HEAD' });
-      const isImg = response?.headers?.get('Content-Type')?.startsWith('image');
-      return isImg;
+      const isImg = await isImgUrl(imageUrl);
+      setURLNotImage(!isImg);
+      if (!isImg) {
+        const notifMsg = t(`URL doesn't contain an image.`);
+        _uiEvents.current.next({
+          event: NotificationEvents.ShowNotification,
+          data: {
+            type: NotificationTypes.Error,
+            message: notifMsg,
+          },
+        });
+      }
     } catch (error) {
       setURLNotImage(true);
-      const notifMsg = error?.message;
+      const notifMsg = error.message;
       _uiEvents.current.next({
         event: NotificationEvents.ShowNotification,
         data: {
@@ -177,24 +194,6 @@ export const ImageEditorBlock = (
           message: notifMsg,
         },
       });
-    }
-  };
-
-  const handleChange = async e => {
-    setImageLink(e.currentTarget.value);
-    const isImg = await isImgUrl(e.currentTarget.value);
-    if (isImg === false) {
-      setURLNotImage(true);
-      const notifMsg = t(`URL doesn't contain an image.`);
-      _uiEvents.current.next({
-        event: NotificationEvents.ShowNotification,
-        data: {
-          type: NotificationTypes.Error,
-          message: notifMsg,
-        },
-      });
-    } else if (isImg === true) {
-      setURLNotImage(false);
     }
   };
 
