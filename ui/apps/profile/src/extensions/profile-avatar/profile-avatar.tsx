@@ -1,17 +1,15 @@
-import React, { ReactElement } from 'react';
-import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
+import React from 'react';
+import ProfileAvatarButton, {
+  ProfileAvatarButtonProps,
+} from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import ProfileAvatarLoading from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton/ProfileAvatarLoading';
 import { hasOwn, transformSource } from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
-export type ProfileAvatarProps = {
-  profileDID: string;
-  href?: string;
-  metadata?: ReactElement;
-  truncateText?: boolean;
-  customStyle?: string;
-  onClick?: React.MouseEventHandler<HTMLButtonElement>;
-};
+export type ProfileAvatarProps = Pick<
+  ProfileAvatarButtonProps,
+  'truncateText' | 'href' | 'metadata' | 'customStyle' | 'onClick'
+> & { profileDID: string };
 
 const ProfileAvatar = (props: ProfileAvatarProps) => {
   const { profileDID, ...rest } = props;

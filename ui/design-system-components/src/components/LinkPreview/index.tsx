@@ -1,7 +1,7 @@
 import * as React from 'react';
 import isUrl from 'is-url';
 import { tw, apply, tx } from '@twind/core';
-import { LinkPreviewExt } from '@akashaorg/typings/lib/ui';
+import type { ILinkPreviewExt } from '@akashaorg/typings/lib/ui';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import {
@@ -26,7 +26,7 @@ export interface ILinkPreview {
   handleLinkClick?: (url: string) => void;
   handleDeletePreview?: () => void;
   uploading?: boolean;
-  linkPreviewData?: LinkPreviewExt;
+  linkPreviewData?: ILinkPreviewExt;
   uploadingLinkPreviewLabel?: string;
 }
 

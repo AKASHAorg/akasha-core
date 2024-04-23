@@ -7,8 +7,6 @@ import { EthAddress } from './common';
 export * from './events';
 export * from './responses';
 export * from './common';
-export * from './posts';
-export * from './comments';
 export * from './registry';
 
 export {

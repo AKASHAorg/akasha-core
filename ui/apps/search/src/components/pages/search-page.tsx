@@ -1,11 +1,10 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  IEntryData,
-  ITag,
+  type ITag,
   EntityTypes,
   AnalyticsCategories,
-  Profile,
+  type Profile,
 } from '@akashaorg/typings/lib/ui';
 
 import routes, { SETTINGS } from '../../routes';
@@ -47,7 +46,7 @@ export type SearchPageProps = {
   searchKeyword?: string;
 };
 
-type DataResponse = SearchTagsResult | IEntryData;
+type DataResponse = SearchTagsResult;
 
 const initSearchState = {
   [ButtonValues.CONTENT]: { page: 1, results: [], done: false, isLoading: false },

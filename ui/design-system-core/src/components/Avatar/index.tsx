@@ -16,6 +16,7 @@ export type AvatarBorderSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 export type AvatarBorderColor = 'white' | 'darkerBlue' | 'accent';
 
 export type AvatarProps = {
+  dataTestId?: string;
   profileId?: string | null;
   alt?: string;
   publicImgPath?: string;
@@ -35,6 +36,7 @@ export type AvatarProps = {
 
 const Avatar: React.FC<AvatarProps> = props => {
   const {
+    dataTestId,
     profileId = '0x0000000000000000000000000000000',
     alt,
     publicImgPath = '/images',
@@ -66,7 +68,7 @@ const Avatar: React.FC<AvatarProps> = props => {
   const activeOverlayClass = generateActiveOverlayClass();
 
   return (
-    <Anchor href={href} onClick={onClick} tabIndex={-6}>
+    <Anchor dataTestId={dataTestId} href={href} onClick={onClick} tabIndex={-6}>
       <Stack customStyle={containerStyle}>
         {(avatar || avatarFallback) && (
           <React.Suspense fallback={<></>}>

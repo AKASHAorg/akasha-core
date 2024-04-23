@@ -8,11 +8,11 @@ describe('<Image /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
   const src = 'https://placebeard.it/360x360';
-  const testId = 'Image-element';
+  const dataTestId = 'Image-element';
 
   beforeEach(() => {
     act(() => {
-      componentWrapper = customRender(<Image src={src} dataTestId={testId} />, {});
+      componentWrapper = customRender(<Image src={src} dataTestId={dataTestId} />, {});
     });
   });
 

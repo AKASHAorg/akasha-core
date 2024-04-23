@@ -10,7 +10,6 @@ interface IDraftFields {
   storage: IDraftStorage;
   appName: string;
   userId: string;
-  action: 'post' | 'repost';
 }
 
 interface IDraft<T> extends IDraftFields {
@@ -25,37 +24,29 @@ export class Draft<T> implements IDraft<T> {
   storage: IDraftStorage;
   appName: string;
   userId: string;
-  action: 'post' | 'repost';
-
-  constructor({ storage, appName, userId, action }: IDraftFields) {
+  constructor({ storage, appName, userId }: IDraftFields) {
     this.storage = storage;
     this.appName = appName;
     this.userId = userId;
-    this.action = action;
   }
 
-  static getDraftKey(appName: string, userId: string, action: string) {
-    return `${appName}-${userId}-draft-${action}`;
+  static getDraftKey(appName: string, userId: string) {
+    return `${appName}-${userId}-draft`;
   }
 
   save(content: T) {
-    this.storage.setItem(
-      Draft.getDraftKey(this.appName, this.userId, this.action),
-      JSON.stringify(content),
-    );
+    this.storage.setItem(Draft.getDraftKey(this.appName, this.userId), JSON.stringify(content));
   }
 
   get() {
     try {
-      return JSON.parse(
-        this.storage.getItem(Draft.getDraftKey(this.appName, this.userId, this.action)),
-      ) as T;
+      return JSON.parse(this.storage.getItem(Draft.getDraftKey(this.appName, this.userId))) as T;
     } catch {
       return null;
     }
   }
 
   clear() {
-    this.storage.removeItem(Draft.getDraftKey(this.appName, this.userId, this.action));
+    this.storage.removeItem(Draft.getDraftKey(this.appName, this.userId));
   }
 }
