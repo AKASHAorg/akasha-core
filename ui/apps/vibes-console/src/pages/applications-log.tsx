@@ -2,43 +2,37 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Dropdown from '@akashaorg/design-system-core/lib/components/Dropdown';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import { generateModeratorApplicationHistory } from '../utils';
 import { ApplicantDataCard } from '../components/applications/application';
+import { NoItemFound } from '../components/no-item-found';
 import routes, { APPLICATION_DETAIL } from '../routes';
 
 export const ApplicationsLog: React.FC<unknown> = () => {
   const navigate = useNavigate();
   const { t } = useTranslation('vibes-console');
-
   // list filters
   const statusPlaceholder = t('Status');
   const tenurePlaceholder = t('Member since');
-
   const defaultStatus = {
     id: null,
     iconName: null,
     title: statusPlaceholder,
   };
-
   const defaultTenure = {
     id: null,
     iconName: null,
     title: tenurePlaceholder,
   };
-
   const [filterByStatus, setfilterByStatus] = useState(defaultStatus);
   const [filterByTenure, setfilterByTenure] = useState(defaultTenure);
-
   const resetFilters = () => {
     setfilterByStatus(defaultStatus);
     setfilterByTenure(defaultTenure);
   };
-
-  const applications = generateModeratorApplicationHistory();
-
+  const applications = [];
   const handleClickViewApplication = (applicationId: string) => {
     navigate({
       to: routes[APPLICATION_DETAIL],
@@ -47,7 +41,13 @@ export const ApplicationsLog: React.FC<unknown> = () => {
       },
     });
   };
-
+  if (!applications.length) {
+    return (
+      <Card>
+        <NoItemFound title="No applications found" />
+      </Card>
+    );
+  }
   return (
     <Stack spacing="gap-y-4">
       <Text variant="h5">{t('Applications Log')}</Text>
@@ -78,14 +78,12 @@ export const ApplicationsLog: React.FC<unknown> = () => {
             setSelected={setfilterByTenure}
           />
         </Stack>
-
         <Button plain={true} onClick={resetFilters}>
           <Text variant="button-sm" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
             {`${t('Reset')}`}
           </Text>
         </Button>
       </Stack>
-
       <>
         {applications.map(a => (
           <ApplicantDataCard

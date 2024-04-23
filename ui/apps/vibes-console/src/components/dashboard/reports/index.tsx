@@ -1,7 +1,9 @@
 import React from 'react';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { ReportsHeader, ReportsHeaderProps } from './header';
 import { ReportItem, ReportItemProps, TReport } from './item';
+import { NoItemFound } from '../../no-item-found';
 
 export type TItemReportsProps = ReportsHeaderProps &
   Omit<ReportItemProps, 'report'> & {
@@ -19,11 +21,16 @@ export const ItemReports: React.FC<TItemReportsProps> = props => {
     reportId,
     onClickViewMore,
   } = props;
-
+  if (!reports.length) {
+    return (
+      <Card>
+        <NoItemFound title="No reports found. Please try again later" />
+      </Card>
+    );
+  }
   return (
     <Stack spacing="gap-y-4">
       <ReportsHeader introLabel={introLabel} reportLabel={reportLabel} />
-
       {!reportId &&
         reports.map(r => (
           <ReportItem
@@ -35,7 +42,6 @@ export const ItemReports: React.FC<TItemReportsProps> = props => {
             onClickViewMore={onClickViewMore}
           />
         ))}
-
       {reportId && (
         <ReportItem
           key={reports[0].name}
