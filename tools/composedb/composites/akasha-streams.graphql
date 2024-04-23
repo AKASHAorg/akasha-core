@@ -57,10 +57,12 @@ type AkashaContentBlockStream @createModel(accountRelation: SET, description: "M
   moderationID: StreamID
 }
 
-type AkashaReflectStream @createModel(accountRelation: SET, description: "Moderated Beam Reflections v0.2", accountRelationFields: ["reflectionID"]) @createIndex(fields:[{path: "active"},{path: "reflectionID"}, {path: "createdAt"}, {path: "status"}, {path: "moderationID"}, {path: "beamID"}]){
+type AkashaReflectStream @createModel(accountRelation: SET, description: "Moderated Beam Reflections v0.2.1", accountRelationFields: ["reflectionID"]) @createIndex(fields:[{path: "active"},{path: "reflectionID"}, {path: "createdAt"}, {path: "status"}, {path: "moderationID"}, {path: "beamID"},  {path: "isReply"},  {path: "replyTo"}]){
   reflectionID: StreamID! @documentReference(model: "AkashaReflect")
   reflection: AkashaReflect! @relationDocument(property: "reflectionID")
   beamID: StreamID! @documentReference(model: "AkashaBeam")
+  replyTo: StreamID
+  isReply: Boolean
   active: Boolean!
   createdAt: DateTime!
   status: ModerationStatus

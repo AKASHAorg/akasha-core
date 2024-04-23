@@ -93,7 +93,7 @@ export const definition = {
         AkashaReflectStream: {
             interface: false,
             implements: [],
-            id: 'kjzl6hvfrbw6c8d51y2m3h8ykuboig237w39abyg4uwynwz3lcg81523o1ss65j',
+            id: 'kjzl6hvfrbw6c8jl8c7saabmuwx63q4xsx1uvob3lbp2n8fb02ht2i30j5t89np',
             accountRelation: { type: 'set', fields: ['reflectionID'] },
         },
     },
@@ -374,7 +374,12 @@ export const definition = {
             propertyType: { type: 'string', required: true, immutable: false },
         },
         AkashaContentBlockStream: {
-            active: { type: 'boolean', required: true, immutable: false, indexed: true },
+            active: {
+                type: 'boolean',
+                required: true,
+                immutable: false,
+                indexed: true,
+            },
             status: {
                 type: 'reference',
                 refType: 'enum',
@@ -631,6 +636,8 @@ export const definition = {
                 immutable: false,
                 indexed: true,
             },
+            isReply: { type: 'boolean', required: false, immutable: false, indexed: true },
+            replyTo: { type: 'streamid', required: false, immutable: false, indexed: true },
             createdAt: { type: 'datetime', required: true, immutable: false, indexed: true },
             moderationID: { type: 'streamid', required: false, immutable: false, indexed: true },
             reflectionID: { type: 'streamid', required: true, immutable: true, indexed: true },

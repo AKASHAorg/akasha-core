@@ -17,9 +17,6 @@ export type ProfileAvatarButtonProps = {
   href?: string;
   metadata?: ReactElement;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
-  onClickAvatar?: () => void;
-  onMouseEnter?: React.MouseEventHandler<HTMLButtonElement>;
-  onMouseLeave?: React.MouseEventHandler<HTMLButtonElement>;
 };
 
 const ProfileAvatarButton = React.forwardRef(
@@ -34,26 +31,13 @@ const ProfileAvatarButton = React.forwardRef(
       href,
       metadata,
       onClick,
-      onClickAvatar,
-      onMouseEnter,
-      onMouseLeave,
     } = props;
-
-    const handleClickAvatar = ev => {
-      ev.preventDefault();
-
-      if (onClickAvatar) {
-        onClickAvatar();
-      }
-    };
 
     return (
       <Button
         plain={true}
         customStyle={`inline-flex items-center space-x-2 ${customStyle}`}
         onClick={onClick}
-        onMouseEnter={onMouseEnter}
-        onMouseLeave={onMouseLeave}
       >
         <Stack customStyle="shrink-0" testId="avatar-box" aria-label="avatar-box">
           <Avatar
@@ -62,7 +46,6 @@ const ProfileAvatarButton = React.forwardRef(
             profileId={profileId}
             customStyle="cursor-pointer"
             href={href}
-            onClick={handleClickAvatar}
           />
         </Stack>
         <Stack

@@ -9,7 +9,7 @@ const ProfileLoading: React.FC = () => {
   return (
     <Stack spacing="gap-y-4">
       <ProfileHeaderLoading />
-      <Card elevation="1" radius={20} padding={'p-4'}>
+      <Card radius={20} padding={'p-4'}>
         <Stack spacing="gap-2">
           <TextLine width="w-24" animated />
           <Stack spacing="gap-1">
@@ -19,7 +19,7 @@ const ProfileLoading: React.FC = () => {
         </Stack>
       </Card>
       <ProfileStatLoading />
-      <Card elevation="1" radius={20} padding={'p-4'}>
+      <Card radius={20} padding={'p-4'}>
         <Stack spacing="gap-2">
           <TextLine width="w-24" animated />
           <TextLine width="w-full" animated />

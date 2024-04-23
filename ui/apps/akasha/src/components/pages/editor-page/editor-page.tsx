@@ -9,7 +9,7 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 const EditorPage: React.FC<unknown> = () => {
   const { data } = useGetLogin();
-  const authenticatedDid = data?.id;
+  const authenticatedDID = data?.id;
   const { getRoutingPlugin } = useRootComponentProps();
   const navigateTo = React.useRef(getRoutingPlugin().navigateTo);
   const { t } = useTranslation();
@@ -19,7 +19,7 @@ const EditorPage: React.FC<unknown> = () => {
         <Helmet>
           <title>Beam Editor</title>
         </Helmet>
-        {!authenticatedDid && (
+        {!authenticatedDID && (
           <Stack>
             <ErrorLoader
               type={'not-registered'}
@@ -40,7 +40,7 @@ const EditorPage: React.FC<unknown> = () => {
             </ErrorLoader>
           </Stack>
         )}
-        {authenticatedDid && (
+        {authenticatedDID && (
           <Stack customStyle="mb-1">
             <Extension name="beam-editor_feed_page" />
           </Stack>

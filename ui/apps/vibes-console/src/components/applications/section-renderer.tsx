@@ -29,11 +29,7 @@ export const SectionRenderer: React.FC<SectionHeaderProps> = props => {
       <Stack direction="row" justify="between">
         <Text variant="h5">{titleLabel}</Text>
         {!!rows.length && (
-          <Button plain={true} onClick={onButtonClick}>
-            <Text variant="button-md" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
-              {buttonLabel}
-            </Text>
-          </Button>
+          <Button variant="text" size="md" label={buttonLabel} onClick={onButtonClick} />
         )}
       </Stack>
 

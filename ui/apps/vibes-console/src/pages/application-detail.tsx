@@ -1,20 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from '@tanstack/react-router';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { ApplicantDataCard, ApplicationDetail } from '../components/applications/application';
 import { generateApplicationData, generateModeratorApplicationHistory } from '../utils';
-import routes, { APPLICATIONS } from '../routes';
 
 export const ApplicationDetailPage: React.FC<unknown> = () => {
-  const navigate = useNavigate();
   const { t } = useTranslation('vibes-console');
-
-  const handleClickViewProfile = () => {
-    navigate({
-      to: routes[APPLICATIONS],
-    });
-  };
 
   const applicationData = generateApplicationData();
   const applicant = generateModeratorApplicationHistory()[0];
@@ -27,7 +18,9 @@ export const ApplicationDetailPage: React.FC<unknown> = () => {
         tenureInfoLabel={t('Member since')}
         appliedOnLabel={t('Applied on')}
         viewProfileLabel={t('View profile')}
-        onClickViewProfile={handleClickViewProfile}
+        onClickViewProfile={() => {
+          /** */
+        }}
       />
 
       <ApplicationDetail

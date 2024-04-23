@@ -7,7 +7,7 @@ import {
   SelfApplicationDetail,
 } from '../components/applications/application';
 import { generateSelfApplicationData } from '../utils';
-import routes, { REVIEW_HUB, WITHDRAW_APPLICATION } from '../routes';
+import routes, { DASHBOARD, WITHDRAW_APPLICATION } from '../routes';
 
 export const SelfApplicationDetailPage: React.FC<unknown> = () => {
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ export const SelfApplicationDetailPage: React.FC<unknown> = () => {
 
   const handleGoToReviewHub = () => {
     navigate({
-      to: routes[REVIEW_HUB],
+      to: routes[DASHBOARD],
     });
   };
 
@@ -35,7 +35,7 @@ export const SelfApplicationDetailPage: React.FC<unknown> = () => {
       {applicationData.status === 'approved' && (
         <ApplicationApprovedCard
           titleLabel={t('Application Approved')}
-          descriptionLabel={t('Congratulations ✨ you are officially a moderator!')}
+          descriptionLabel={t('Congratulations ✨ you are officially a moderator')}
           buttonLabel={t('Start Reviewing Flagged items 🚀')}
           onButtonClick={handleGoToReviewHub}
         />

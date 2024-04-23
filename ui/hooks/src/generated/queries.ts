@@ -941,6 +941,8 @@ export const GetReflectionStreamDocument = /*#__PURE__*/ `
             active
             status
             createdAt
+            isReply
+            replyTo
           }
           cursor
         }

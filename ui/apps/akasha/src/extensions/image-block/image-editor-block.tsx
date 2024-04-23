@@ -44,7 +44,8 @@ const TEST_APP_VERSION_ID = 'k2t6wzhkhabz5ja6dy72fezemlrdc5akqebksfpjyxkyap6g4fq
 
 const isImgUrl = async url => {
   const response = await fetch(url, { method: 'HEAD' });
-  return response.headers.get('Content-Type').startsWith('image');
+  const isImg = response?.headers?.get('Content-Type')?.startsWith('image');
+  return isImg;
 };
 
 export const ImageEditorBlock = (
@@ -168,11 +169,24 @@ export const ImageEditorBlock = (
   );
 
   const handleChange = async e => {
-    setImageLink(e.currentTarget.value);
-    const isImg = await isImgUrl(e.currentTarget.value);
-    if (!isImg) {
+    const imageUrl = e.currentTarget.value;
+    setImageLink(imageUrl);
+    try {
+      const isImg = await isImgUrl(imageUrl);
+      setURLNotImage(!isImg);
+      if (!isImg) {
+        const notifMsg = t(`URL doesn't contain an image.`);
+        _uiEvents.current.next({
+          event: NotificationEvents.ShowNotification,
+          data: {
+            type: NotificationTypes.Error,
+            message: notifMsg,
+          },
+        });
+      }
+    } catch (error) {
       setURLNotImage(true);
-      const notifMsg = t(`URL doesn't contain an image.`);
+      const notifMsg = error.message;
       _uiEvents.current.next({
         event: NotificationEvents.ShowNotification,
         data: {
@@ -200,27 +214,40 @@ export const ImageEditorBlock = (
 
     const imageName = typeof image === 'string' ? image : image.name || 'beam-block-image';
 
-    const mediaFile = await saveMediaFile({
-      name: imageName,
-      isUrl: isUrl || false,
-      content: image,
-    });
-    setUploading(false);
-    if (!mediaFile) return null;
+    try {
+      const mediaFile = await saveMediaFile({
+        name: imageName,
+        isUrl: isUrl || false,
+        content: image,
+      });
+      setUploading(false);
+      if (!mediaFile) return null;
 
-    const mediaUri = `ipfs://${mediaFile.CID}`;
+      const mediaUri = `ipfs://${mediaFile.CID}`;
 
-    const mediaUrl = getMediaUrl(mediaUri);
+      const mediaUrl = getMediaUrl(mediaUri);
 
-    const imageObj = {
-      size: { height: mediaFile.size.height, width: mediaFile.size.width },
-      displaySrc: mediaUrl.originLink || mediaUrl.fallbackLink,
-      src: mediaUri,
-      name: imageName,
-      originalSrc: typeof image === 'string' ? image : URL.createObjectURL(image),
-    };
+      const imageObj = {
+        size: { height: mediaFile.size.height, width: mediaFile.size.width },
+        displaySrc: mediaUrl.originLink || mediaUrl.fallbackLink,
+        src: mediaUri,
+        name: imageName,
+        originalSrc: typeof image === 'string' ? image : URL.createObjectURL(image),
+      };
 
-    return imageObj;
+      return imageObj;
+    } catch (error) {
+      setUploading(false);
+      const notifMsg = error?.message;
+      _uiEvents.current.next({
+        event: NotificationEvents.ShowNotification,
+        data: {
+          type: NotificationTypes.Error,
+          message: notifMsg,
+        },
+      });
+      return null;
+    }
   };
 
   const uploadNewImage = async (image: File | string, isUrl?: boolean) => {

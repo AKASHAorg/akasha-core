@@ -30,13 +30,15 @@ import ListBulleted from './list-bulleted';
 import ListNumbered from './list-numbered';
 import Metamask from './metamask';
 import NoEth from './no-eth';
+import Profile from './profile';
 import Shield from './shield';
 import Solana from './solana';
 import Telegram from './telegram';
 import TextIcon from './text-icon';
 import Twitter from './twitter';
 import Underline from './underline';
-import Vibe from './vibe';
+import Vibes from './vibes';
+import VibesConsole from './vibes-console';
 import Walletconnect from './walletconnect';
 import Widget from './widget';
 import Blocks from './blocks';
@@ -76,13 +78,15 @@ export type CustomIconTypes = Extract<
   | 'ListBulleted'
   | 'Metamask'
   | 'NoEth'
+  | 'Profile'
   | 'Shield'
   | 'Solana'
   | 'Telegram'
   | 'TextIcon'
   | 'Twitter'
   | 'Underline'
-  | 'Vibe'
+  | 'Vibes'
+  | 'VibesConsole'
   | 'Walletconnect'
   | 'Widget'
   | 'Blocks'
@@ -119,13 +123,15 @@ export {
   ListNumbered,
   Metamask,
   NoEth,
+  Profile,
   Shield,
   Solana,
   Telegram,
   TextIcon,
   Twitter,
   Underline,
-  Vibe,
+  Vibes,
+  VibesConsole,
   Walletconnect,
   Widget,
   Blocks,

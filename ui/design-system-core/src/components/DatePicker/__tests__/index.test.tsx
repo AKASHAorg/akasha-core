@@ -7,7 +7,7 @@ import { DAYS, MONTHS_IN_A_YEAR } from '../calendarHelpers';
 describe('<DatePicker /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
-  const defaultValue = 'Selected Date';
+  const defaultValue = 'Select date';
 
   beforeEach(() => {
     act(() => {
@@ -32,9 +32,9 @@ describe('<DatePicker /> Component', () => {
   });
 
   it('shows date picker when clicked', () => {
-    const { getByTitle, getByText } = componentWrapper;
+    const { getByTestId, getByText } = componentWrapper;
 
-    const wrapper = getByTitle('date-picker');
+    const wrapper = getByTestId('date-picker');
 
     expect(wrapper).toBeDefined();
 
@@ -51,9 +51,9 @@ describe('<DatePicker /> Component', () => {
   });
 
   it('shows month selector when toggled', () => {
-    const { getByTitle, getByText } = componentWrapper;
+    const { getByTestId, getByText } = componentWrapper;
 
-    const wrapper = getByTitle('date-picker');
+    const wrapper = getByTestId('date-picker');
 
     expect(wrapper).toBeDefined();
 

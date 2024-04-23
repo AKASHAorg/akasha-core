@@ -44,11 +44,13 @@ export const ApplicationApprovedCard: React.FC<ApplicationApprovedCardProps> = p
           {descriptionLabel}! ✨
         </Text>
 
-        <Button plain={true} onClick={onButtonClick} customStyle="w-fit self-center">
-          <Text variant="button-md" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
-            {buttonLabel}
-          </Text>
-        </Button>
+        <Button
+          variant="text"
+          size="md"
+          label={buttonLabel}
+          customStyle="w-fit self-center"
+          onClick={onButtonClick}
+        />
       </Stack>
     </Card>
   );

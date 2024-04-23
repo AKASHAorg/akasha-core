@@ -1,15 +1,11 @@
 import React, { forwardRef } from 'react';
 import { apply, tw } from '@twind/core';
-
+import Stack from '../Stack';
+import Text, { TextProps } from '../Text';
+import { ArrowPathIcon } from '../Icon/hero-icons-outline';
 import { ButtonIcon } from './button-icon';
 import { IconOnlyButton } from './IconOnlyButton';
-
-import Stack from '../Stack';
-import { ArrowPathIcon } from '../Icon/hero-icons-outline';
-import Text, { TextProps } from '../Text';
-
 import { ButtonProps, ButtonSize } from './types';
-
 import { getTextClasses } from './getTextClasses';
 import { getContainerClasses } from './getContainerClasses';
 

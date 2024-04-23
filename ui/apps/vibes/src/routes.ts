@@ -12,10 +12,10 @@ export const baseModeratorsUrl = '/moderators';
 
 export default {
   [HOME]: baseOverviewUrl,
+  [MODERATION_VALUE]: `${baseOverviewUrl}/values/$value`,
   [MODERATORS]: baseModeratorsUrl,
-  [VIEW_MODERATOR]: `${baseModeratorsUrl}/:moderatorProfileId`,
+  [VIEW_MODERATOR]: `${baseModeratorsUrl}/$moderatorId`,
   [HISTORY]: baseHistoryUrl,
-  [HISTORY_ITEM]: `${baseHistoryUrl}/:itemId`,
-  [MODERATION_VALUE]: `${baseOverviewUrl}/values/:value`,
-  [REPORT_ITEM]: '/report/:itemType/:id',
+  [HISTORY_ITEM]: `${baseHistoryUrl}/$itemId`,
+  [REPORT_ITEM]: '/report/$itemType/$id',
 };

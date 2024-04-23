@@ -1,7 +1,7 @@
 import faker from 'faker';
 import { AkashaProfile } from '@akashaorg/typings/lib/ui';
 
-const genUser = (profileDid?: string): AkashaProfile => {
+const genUser = (profileDID?: string): AkashaProfile => {
   const avatarUrl = faker.image.avatar();
   const coverImageUrl = faker.image.imageUrl();
   return {
@@ -14,7 +14,7 @@ const genUser = (profileDid?: string): AkashaProfile => {
       { href: 'https://twitter.com/AKASHAorg' },
     ],
     name: faker.fake('{{name.firstName}} {{name.lastName}}'),
-    did: { id: profileDid },
+    did: { id: profileDID },
     createdAt: faker.date.past().toISOString(),
     followersCount: 0,
   };

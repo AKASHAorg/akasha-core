@@ -1,7 +1,6 @@
 import React from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { FlagIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import ReportReasonPill from '@akashaorg/design-system-components/lib/components/ReportReasonPill';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
@@ -94,27 +93,13 @@ const TransparencyLogItemCard: React.FC<TransparencyLogItemCardProps> = props =>
         <Text variant="body1" color={textColor}>
           {`This ${item.type} has been ${item.status === 'Delisted' ? 'delisted' : 'reported'} for`}
         </Text>
-        <Stack
-          direction="row"
-          customStyle="w-fit rounded-full bg-(secondaryLight/30 dark:secondaryDark/30)"
-        >
-          <Stack direction="row" align="center" spacing="gap-x-1" padding="p-2">
-            <Icon
-              icon={<FlagIcon />}
-              size="sm"
-              color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-            />
-            <Text variant="footnotes2" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
-              {item.reports}
-            </Text>
-          </Stack>
-
-          <Stack padding="p-2" customStyle="border(l-1 solid white dark:grey2)">
-            <Text variant="footnotes2" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
-              {item.reason}
-            </Text>
-          </Stack>
-        </Stack>
+        <ReportReasonPill
+          reason={item.reason}
+          reportCount={item.reports}
+          handleClick={() => {
+            /** */
+          }}
+        />
       </Stack>
     </Card>
   );
