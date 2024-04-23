@@ -7,15 +7,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { JoinVibesCard } from '../components/applications/join-vibes-card';
 import { SectionRenderer } from '../components/applications/section-renderer';
-import routes, { APPLICATION_DETAIL, BECOME_MODERATOR, MY_APPLICATION_DETAIL } from '../routes';
-import {
-  generateModeratorApplicationHistory,
-  generateUserApplicationHistory,
-  renderChevron,
-  renderDate,
-  renderName,
-  renderStatus,
-} from '../utils';
+import routes, { BECOME_MODERATOR } from '../routes';
 
 export const Applications: React.FC<unknown> = () => {
   const { data } = useGetLogin();
@@ -23,10 +15,8 @@ export const Applications: React.FC<unknown> = () => {
   const { navigateToModal } = useRootComponentProps();
   const _navigateToModal = React.useRef(navigateToModal);
   const { t } = useTranslation('vibes-console');
-
   const isLoggedIn = !!data?.id;
   const isModerator = false;
-
   const showLoginModal = React.useCallback(
     (redirectTo?: { modal: ModalNavigationOptions }, message?: string) => {
       _navigateToModal.current?.({
@@ -37,7 +27,6 @@ export const Applications: React.FC<unknown> = () => {
     },
     [],
   );
-
   const handleCtaButtonClick = () => {
     if (!isLoggedIn) {
       showLoginModal();
@@ -47,44 +36,12 @@ export const Applications: React.FC<unknown> = () => {
       to: routes[BECOME_MODERATOR],
     });
   };
-
   const handleViewAllApplications = (path: string) => {
     const route = `/applications-center/${path}`;
     navigate({
       to: route,
     });
   };
-
-  const handleRowClick = (applicationId: string, isSelf = false) => {
-    if (isSelf) {
-      return navigate({
-        to: routes[MY_APPLICATION_DETAIL],
-        params: {
-          applicationId,
-        },
-      });
-    }
-    return navigate({
-      to: routes[APPLICATION_DETAIL],
-      params: {
-        applicationId,
-      },
-    });
-  };
-
-  const loggedUserApplications = generateUserApplicationHistory(2);
-  const allModeratorApplications = generateModeratorApplicationHistory();
-
-  const loggedUserApplicationsRows = loggedUserApplications.map(({ id, resolvedDate, status }) => ({
-    value: [renderDate(resolvedDate), renderStatus(status), renderChevron()],
-    clickHandler: () => handleRowClick(id, true),
-  }));
-
-  const allModeratorApplicationsRows = allModeratorApplications.map(({ id, name, status }) => ({
-    value: [renderName(name), renderStatus(status), renderChevron()],
-    clickHandler: () => handleRowClick(id),
-  }));
-
   return (
     <Stack spacing="gap-y-6">
       {/* show this card if guest or not a moderator */}
@@ -98,15 +55,13 @@ export const Applications: React.FC<unknown> = () => {
           onCtaButtonClick={handleCtaButtonClick}
         />
       )}
-
       <SectionRenderer
         titleLabel={t('Your Applications')}
         buttonLabel={t('View all')}
         noItemLabel={t('You have no application history')}
-        rows={loggedUserApplicationsRows}
+        rows={[]}
         onButtonClick={() => handleViewAllApplications('my-applications')}
       />
-
       <SectionRenderer
         titleLabel={t('Applications Log')}
         buttonLabel={t('View all')}
@@ -120,7 +75,7 @@ export const Applications: React.FC<unknown> = () => {
             {t('Status')}
           </Text>,
         ]}
-        rows={allModeratorApplicationsRows}
+        rows={[]}
         onButtonClick={() => handleViewAllApplications('applications')}
       />
     </Stack>

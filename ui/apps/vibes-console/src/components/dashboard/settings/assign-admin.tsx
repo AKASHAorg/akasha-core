@@ -8,6 +8,7 @@ import {
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ModeratorListItem from '../moderator-list-item';
+import { NoItemFound } from '../../no-item-found';
 
 export type AssignAdminProps = PageHeaderProps & {
   introLabel: string;
@@ -27,28 +28,28 @@ export const AssignAdmin: React.FC<AssignAdminProps> = props => {
     assignedAdmin,
     onClickAssign,
   } = props;
-
-  const selectedModerator = activeModerators[0];
-
   return (
     <PageHeader {...props}>
       <Stack spacing="gap-y-6" customStyle="mb-8">
         <Text>{introLabel}</Text>
-
         {!assignedAdmin && (
           <AutoComplete
             options={activeModerators.map(el => el.name)}
             placeholder={searchPlaceholderLabel}
           />
         )}
-
-        <ModeratorListItem
-          assignedAdmin={assignedAdmin}
-          assignButtonLabel={assignButtonLabel}
-          activeModerators={activeModerators}
-          selectedModerator={selectedModerator}
-          onClickAssign={onClickAssign}
-        />
+        {!activeModerators.length && (
+          <NoItemFound title="No active moderators found. Please add some moderators first and try again later" />
+        )}
+        {!!activeModerators.length && (
+          <ModeratorListItem
+            assignedAdmin={assignedAdmin}
+            assignButtonLabel={assignButtonLabel}
+            activeModerators={activeModerators}
+            selectedModerator={activeModerators[0]}
+            onClickAssign={onClickAssign}
+          />
+        )}
       </Stack>
     </PageHeader>
   );
