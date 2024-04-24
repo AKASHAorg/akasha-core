@@ -58,11 +58,9 @@ export const ApplicantDataCard: React.FC<ApplicantDataCardProps> = props => {
             />
             <Stack>
               <Tooltip content={applicant.name} placement="right">
-                <Text
-                  variant="body2"
-                  weight="bold"
-                  customStyle={textStyle}
-                >{`${applicant.name}`}</Text>
+                <Text variant="body2" weight="bold" customStyle={textStyle}>
+                  {applicant.name}
+                </Text>
               </Tooltip>
 
               <DidField did={applicant.did.id} />

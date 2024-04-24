@@ -8,7 +8,7 @@ describe('<Anchor /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
   const link = 'https://akasha.world';
-  const testId = 'anchor-element';
+  const dataTestId = 'anchor-element';
 
   const dummyClickFn = jest.fn(() => {
     /** */
@@ -16,7 +16,7 @@ describe('<Anchor /> Component', () => {
 
   beforeEach(() => {
     act(() => {
-      componentWrapper = customRender(<Anchor href={link} dataTestId={testId} />, {});
+      componentWrapper = customRender(<Anchor href={link} dataTestId={dataTestId} />, {});
     });
   });
 

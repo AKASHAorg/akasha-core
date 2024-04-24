@@ -14,7 +14,7 @@ type FollowProfileButtonExtensionData = {
   followId: string;
 };
 
-const App = (props: RootExtensionProps<FollowProfileButtonExtensionData>) => {
+const Index = (props: RootExtensionProps<FollowProfileButtonExtensionData>) => {
   const { navigateToModal, extensionData } = props;
   const { profileID, isLoggedIn, isFollowing, followId } = extensionData;
   const { getTranslationPlugin } = useRootComponentProps();
@@ -41,7 +41,7 @@ const App = (props: RootExtensionProps<FollowProfileButtonExtensionData>) => {
 const reactLifecycles = singleSpaReact({
   React,
   ReactDOMClient,
-  rootComponent: withProviders(App),
+  rootComponent: withProviders(Index),
   errorBoundary: (
     error,
     errorInfo,

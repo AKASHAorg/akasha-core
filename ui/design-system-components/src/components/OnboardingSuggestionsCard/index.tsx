@@ -72,8 +72,6 @@ const OnboardingSuggestionsCard: React.FC<OnboardingSuggestionsCardProps> = prop
                 profileId={profile.did.id}
                 onClick={() => onClickProfile(profile.did.id)}
                 label={profile.name}
-                // info={profile.userName && `@${profile.userName}`}
-                size="md"
                 avatar={transformSource(profile?.avatar?.default)}
                 alternativeAvatars={profile?.avatar?.alternatives?.map(alternative =>
                   transformSource(alternative),

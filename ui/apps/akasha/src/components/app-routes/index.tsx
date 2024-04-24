@@ -177,10 +177,10 @@ const tagFeedRoute = createRoute({
 
 const profileFeedRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: `${routes[PROFILE_FEED]}/$profileDid`,
+  path: `${routes[PROFILE_FEED]}/$profileDID`,
   component: () => {
-    const { profileDid } = profileFeedRoute.useParams();
-    return <ProfileFeedPage profileDid={profileDid} />;
+    const { profileDID } = profileFeedRoute.useParams();
+    return <ProfileFeedPage profileDID={profileDID} />;
   },
 });
 

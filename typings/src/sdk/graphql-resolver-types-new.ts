@@ -1210,9 +1210,11 @@ export type AkashaReflectStreamResolvers<ContextType = any, ParentType extends R
   beamID?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  isReply?: Resolver<Types.Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   moderationID?: Resolver<Types.Maybe<ResolversTypes['CeramicStreamID']>, ParentType, ContextType>;
   reflection?: Resolver<Types.Maybe<ResolversTypes['AkashaReflect']>, ParentType, ContextType>;
   reflectionID?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
+  replyTo?: Resolver<Types.Maybe<ResolversTypes['CeramicStreamID']>, ParentType, ContextType>;
   status?: Resolver<Types.Maybe<ResolversTypes['AkashaReflectStreamModerationStatus']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

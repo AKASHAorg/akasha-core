@@ -1,24 +1,20 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from '@tanstack/react-router';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { ApplicantDataCard, ApplicationDetail } from '../components/applications/application';
-import { generateApplicationData, generateModeratorApplicationHistory } from '../utils';
-import routes, { APPLICATIONS } from '../routes';
+import { NoItemFound } from '../components/no-item-found';
 
 export const ApplicationDetailPage: React.FC<unknown> = () => {
-  const navigate = useNavigate();
   const { t } = useTranslation('vibes-console');
-
-  const handleClickViewProfile = () => {
-    navigate({
-      to: routes[APPLICATIONS],
-    });
-  };
-
-  const applicationData = generateApplicationData();
-  const applicant = generateModeratorApplicationHistory()[0];
-
+  const applicationData = null;
+  const applicant = null;
+  if (!applicationData)
+    return (
+      <Card>
+        <NoItemFound title="Oops! This application detail does not exist" />
+      </Card>
+    );
   return (
     <Stack spacing="gap-y-4">
       <ApplicantDataCard
@@ -27,7 +23,9 @@ export const ApplicationDetailPage: React.FC<unknown> = () => {
         tenureInfoLabel={t('Member since')}
         appliedOnLabel={t('Applied on')}
         viewProfileLabel={t('View profile')}
-        onClickViewProfile={handleClickViewProfile}
+        onClickViewProfile={() => {
+          /** */
+        }}
       />
 
       <ApplicationDetail

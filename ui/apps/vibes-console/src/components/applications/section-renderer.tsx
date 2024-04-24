@@ -23,20 +23,14 @@ export const SectionRenderer: React.FC<SectionHeaderProps> = props => {
     noItemLabel,
     onButtonClick,
   } = props;
-
   return (
     <Stack spacing="gap-y-4">
       <Stack direction="row" justify="between">
         <Text variant="h5">{titleLabel}</Text>
         {!!rows.length && (
-          <Button plain={true} onClick={onButtonClick}>
-            <Text variant="button-md" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
-              {buttonLabel}
-            </Text>
-          </Button>
+          <Button variant="text" size="md" label={buttonLabel} onClick={onButtonClick} />
         )}
       </Stack>
-
       {!rows.length && (
         <Card>
           <Text variant="button-sm" weight="bold" color={{ light: 'grey4', dark: 'grey6' }}>

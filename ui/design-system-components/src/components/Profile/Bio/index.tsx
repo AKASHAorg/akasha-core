@@ -10,7 +10,7 @@ export type BioProps = {
 };
 const Bio: React.FC<BioProps> = ({ title, biography }) => {
   return (
-    <Card elevation="1" radius={20} padding={'p-4'}>
+    <Card radius={20} padding={'p-4'}>
       <Stack direction="column" spacing="gap-y-2.5">
         <Text variant="label">{title}</Text>
         <Text variant="body2">{biography}</Text>

@@ -2,7 +2,7 @@ import React from 'react';
 import AppsPage from '../pages/apps-page';
 import ExplorePage from '../pages/explore-page';
 import InfoPage from '../pages/info-page';
-import MasterPage from '../pages/master-page';
+import MainPage from '../pages/main-page';
 import MyAppsPage from '../pages/my-apps-page';
 import MyWidgetsPage from '../pages/my-widgets-page';
 import ErrorComponent from './error-component';
@@ -29,32 +29,32 @@ const defaultRoute = createRoute({
   },
 });
 
-const masterRoute = createRoute({
+const mainRoute = createRoute({
   getParentRoute: () => rootRoute,
-  id: `master`,
-  component: MasterPage,
+  id: `main`,
+  component: MainPage,
 });
 
 const exploreRoute = createRoute({
-  getParentRoute: () => masterRoute,
+  getParentRoute: () => mainRoute,
   path: `${routes[EXPLORE]}`,
   component: ExplorePage,
 });
 
 const appsRoute = createRoute({
-  getParentRoute: () => masterRoute,
+  getParentRoute: () => mainRoute,
   path: `${routes[APPS]}`,
   component: AppsPage,
 });
 
 const myAppsRoute = createRoute({
-  getParentRoute: () => masterRoute,
+  getParentRoute: () => mainRoute,
   path: `${routes[MY_APPS]}`,
   component: MyAppsPage,
 });
 
 const myWidgetsRoute = createRoute({
-  getParentRoute: () => masterRoute,
+  getParentRoute: () => mainRoute,
   path: `${routes[MY_WIDGETS]}`,
   component: MyWidgetsPage,
 });
@@ -70,7 +70,7 @@ const infoRoute = createRoute({
 
 const routeTree = rootRoute.addChildren([
   defaultRoute,
-  masterRoute.addChildren([exploreRoute, appsRoute, myAppsRoute, myWidgetsRoute]),
+  mainRoute.addChildren([exploreRoute, appsRoute, myAppsRoute, myWidgetsRoute]),
   infoRoute,
 ]);
 

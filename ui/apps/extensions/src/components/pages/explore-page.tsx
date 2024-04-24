@@ -119,7 +119,7 @@ const ExplorePage: React.FC = () => {
 
   return (
     <>
-      <Stack testId="akasha-verse">
+      <Stack dataTestId="akasha-verse">
         {!loading && error && (
           <ErrorLoader
             type="script-error"

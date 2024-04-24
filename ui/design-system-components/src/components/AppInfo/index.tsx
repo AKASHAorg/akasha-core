@@ -71,13 +71,8 @@ const AppInfo: React.FC<AppInfoProps> = ({
 }) => {
   return (
     <>
-      <Card
-        elevation="1"
-        background="secondaryLight/30"
-        radius={{ top: 20 }}
-        customStyle="h-[7.3125rem]"
-      />
-      <Card elevation="1" padding={'p-4'} radius={{ bottom: 20 }}>
+      <Card background="secondaryLight/30" radius={{ top: 20 }} customStyle="h-[7.3125rem]" />
+      <Card padding={'p-4'} radius={{ bottom: 20 }}>
         <Stack direction="column" spacing="gap-y-4">
           <Stack direction="column" spacing="gap-y-4">
             <Stack direction="row" align="start" customStyle="relative">
@@ -155,7 +150,6 @@ const AppInfo: React.FC<AppInfoProps> = ({
                     <ProfileAvatarButton
                       profileId={developer.profileId}
                       label={developer.name}
-                      size="md"
                       avatar={transformSource(developer?.avatar?.default)}
                       alternativeAvatars={developer?.avatar?.alternatives?.map(alternative =>
                         transformSource(alternative),

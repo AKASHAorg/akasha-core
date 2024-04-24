@@ -7,9 +7,11 @@ import EditableReflection from '@akashaorg/ui-lib-feed/lib/components/editable-r
 import routes, { REFLECT } from '../../../routes';
 import { useTranslation } from 'react-i18next';
 import { ReflectEntryData } from '@akashaorg/typings/lib/ui';
-import { createReactiveVar, transformSource } from '@akashaorg/ui-awf-hooks';
+import { createReactiveVar, hasOwn, transformSource } from '@akashaorg/ui-awf-hooks';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
 import { useRouterState } from '@tanstack/react-router';
+import { usePendingReflections } from '@akashaorg/ui-awf-hooks/lib/use-pending-reflections';
+import { PendingReflect } from '../../reflect-editor/pending-reflect';
 
 type ReflectionSectionProps = {
   beamId: string;
@@ -36,6 +38,8 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
   const [isReflecting, setIsReflecting] = useState(
     routerState.location.pathname.endsWith(routes[REFLECT]),
   );
+  const { pendingReflections } = usePendingReflections(pendingReflectionsVar);
+
   useCloseActions(() => {
     setIsReflecting(false);
   }, parentWrapperRef);
@@ -85,6 +89,11 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
           />
         )}
       </Stack>
+      {pendingReflections
+        .filter(content => hasOwn(content, 'reflection') && content.reflection === reflectionId)
+        .map((content, index) => (
+          <PendingReflect key={`pending-${index}-${reflectionId}`} entryData={content} />
+        ))}
     </Stack>
   );
 };

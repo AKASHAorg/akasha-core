@@ -15,7 +15,7 @@ export interface IconProps {
   accentColor?: boolean;
   disabled?: boolean;
   hover?: boolean;
-  testId?: string;
+  dataTestId?: string;
   customStyle?: string;
   hoverColor?: Color;
   solid?: boolean;
@@ -32,7 +32,7 @@ const Icon: React.FC<IconProps> = props => {
     color,
     disabled,
     hover,
-    testId,
+    dataTestId,
     customStyle = '',
     hoverColor,
     solid = false,
@@ -87,7 +87,7 @@ const Icon: React.FC<IconProps> = props => {
     <Stack ref={ref} customStyle={customStyle}>
       {React.cloneElement(icon, {
         className: tw(apply(iconStyle)),
-        'data-testid': testId,
+        'data-testid': dataTestId,
       })}
     </Stack>
   );

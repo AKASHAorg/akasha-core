@@ -18,7 +18,7 @@ export type MessageCardProps = {
   background?: Color;
   elevation?: Elevation;
   borderColor?: Color;
-  testId?: string;
+  dataTestId?: string;
   customStyle?: string;
   onClose: () => void;
 };
@@ -30,7 +30,7 @@ const MessageCard: React.FC<MessageCardProps> = ({
   background = 'white',
   elevation = 'none',
   borderColor,
-  testId,
+  dataTestId,
   customStyle = '',
   message,
   onClose,
@@ -43,7 +43,7 @@ const MessageCard: React.FC<MessageCardProps> = ({
       background={background}
       radius={20}
       padding={'p-4'}
-      testId={testId}
+      dataTestId={dataTestId}
       customStyle={`${borderStyle} ${customStyle}`}
     >
       <Stack direction="column" spacing="gap-y-2">
