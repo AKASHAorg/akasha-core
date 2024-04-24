@@ -7,6 +7,7 @@ import {
 import { Rect } from '../virtual-list/rect';
 import { MountedItem } from '../virtual-list/use-projection';
 import { VirtualItem } from '../virtual-list/virtual-item-renderer';
+import { QueryKeys } from '@akashaorg/typings/lib/ui';
 
 export const getHeightBetweenItems = (first?: VirtualItem, last?: VirtualItem) => {
   if (first && last) {
@@ -104,7 +105,7 @@ export const getNsfwFiltersTagFeed = ({
    *  Check if the feed will be used inside the My Antenna page and
    *  set the filter for logged-out users and users who toggled off nsfw content.
    **/
-  if (queryKey.includes('my-antenna') && (!showNsfw || !isLoggedIn)) {
+  if (queryKey.includes(QueryKeys.MY_ANTENNA) && (!showNsfw || !isLoggedIn)) {
     return {
       or: [
         { where: { status: { equalTo: AkashaBeamStreamModerationStatus.Ok } } },
