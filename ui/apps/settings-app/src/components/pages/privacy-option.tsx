@@ -55,9 +55,16 @@ const PrivacyOption: React.FC = () => {
   }, []);
 
   const handlePrivacyPolicyClick = () => {
-    routingPlugin.current?.navigateTo?.navigateTo({
+    routingPlugin.current?.navigateTo?.({
       appName: '@akashaorg/app-legal',
-      getNavigationUrl: () => '/privacy-policy',
+      getNavigationUrl: navRoutes => navRoutes.privacyPolicy,
+    });
+  };
+
+  const handleLegalAppNav = () => {
+    routingPlugin.current?.navigateTo?.({
+      appName: '@akashaorg/app-legal',
+      getNavigationUrl: navRoutes => navRoutes.legal,
     });
   };
 
@@ -120,7 +127,7 @@ const PrivacyOption: React.FC = () => {
         </Stack>
 
         {/* tracking analytics */}
-        <Stack padding="py-4">
+        <Stack padding="py-4" customStyle="border(b-1 solid grey8 dark:grey5)">
           <Stack direction="row" justify="between" align="center" customStyle="mb-2">
             <Text weight="bold">{t('Tracking and analytics')}</Text>
 
@@ -163,6 +170,20 @@ const PrivacyOption: React.FC = () => {
               </Text>
             </Anchor>
             {t(' to learn more.')}
+          </Text>
+        </Stack>
+        {/* legal notice */}
+        <Stack padding="py-4">
+          <Stack direction="row" justify="start" align="center" customStyle="mb-2">
+            <Text weight="bold">{t('Legal and Terms of Use')}</Text>
+          </Stack>
+          <Text>
+            {t("Discover more about AKASHA World's legal and Terms of Use ")}
+            <Anchor onClick={handleLegalAppNav}>
+              <Text as="span" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
+                {t('here!')}
+              </Text>
+            </Anchor>
           </Text>
         </Stack>
       </Stack>
