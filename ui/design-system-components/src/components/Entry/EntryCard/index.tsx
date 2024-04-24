@@ -56,6 +56,7 @@ export type EntryCardProps = {
   hideActionButtons?: boolean;
   showHiddenContent?: boolean;
   showNSFWCard?: boolean;
+  nsfwUserSetting?: boolean;
   contentClickable?: boolean;
   lastEntry?: boolean;
   hover?: boolean;
@@ -93,6 +94,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     hideActionButtons,
     showHiddenContent,
     showNSFWCard,
+    nsfwUserSetting,
     contentClickable,
     editable = true,
     lastEntry,
@@ -114,6 +116,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
    * overlay), showNSFWContent should be false. It is later toggled through an
    * onClickToView handler.
    */
+
   const [showNSFWContent, setShowNSFWContent] = useState(!showNSFWCard);
   const showHiddenStyle = showHiddenContent ? '' : 'max-h-[50rem]';
   const contentClickableStyle =
@@ -197,7 +200,10 @@ const EntryCard: React.FC<EntryCardProps> = props => {
               data-testid="entry-content"
               fullWidth={true}
             >
-              {showNSFWCard && !showNSFWContent && (
+              {/* show the overlay in two cases: the user not logged in, or the beam is nsfw and
+              the nsfw setting is off */}
+              {((showNSFWCard && !nsfwUserSetting && !showNSFWContent) ||
+                (!isLoggedIn && showNSFWCard)) && (
                 <NSFW
                   {...nsfw}
                   onClickToView={event => {
@@ -215,7 +221,11 @@ const EntryCard: React.FC<EntryCardProps> = props => {
                   }}
                 />
               )}
-              {(!entryData.nsfw || showNSFWContent) && (
+              {/*
+               * display the content in case: the content is not nsfw or, the showNSFWContent flag
+               * is true or, the nsfw setting is on and the user is logged in.
+               */}
+              {(!entryData.nsfw || showNSFWContent || (nsfwUserSetting && isLoggedIn)) && (
                 <Stack
                   justifySelf="start"
                   alignSelf="start"

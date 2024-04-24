@@ -9,6 +9,8 @@ import { AkashaIndexedStreamEdge } from '@akashaorg/typings/lib/sdk/graphql-type
 import { EdgeArea, Virtualizer, VirtualizerProps } from '../virtual-list';
 import { useBeamsByTags } from '@akashaorg/ui-awf-hooks/lib/use-beams-by-tags';
 import { RestoreItem } from '../virtual-list/use-scroll-state';
+import { useGetLogin, useNsfwToggling } from '@akashaorg/ui-awf-hooks';
+import { getNsfwFiltersTagFeed } from '../utils';
 
 export type TagFeedProps = {
   className?: string;
@@ -42,8 +44,14 @@ const TagFeed = (props: TagFeedProps) => {
 
   const { t } = useTranslation('ui-lib-feed');
 
+  const { showNsfw } = useNsfwToggling();
+  const { data: loginData, loading: authenticating } = useGetLogin();
+  const isLoggedIn = !!loginData?.id;
+  const nsfwFilters = getNsfwFiltersTagFeed({ queryKey, showNsfw, isLoggedIn });
+
   const {
     beams,
+    beamCursors,
     called,
     fetchNextPage,
     fetchPreviousPage,
@@ -54,7 +62,34 @@ const TagFeed = (props: TagFeedProps) => {
     isLoading,
     hasErrors,
     errors,
-  } = useBeamsByTags(tags);
+  } = useBeamsByTags({ tag: tags, filters: nsfwFilters });
+
+  React.useEffect(() => {
+    /**
+     * Refetch data in case nsfw setting is on and user is either logged in or out
+     **/
+    if (!authenticating && showNsfw) {
+      /**
+       * Reset the beamCursors in case the user logs out and has the NSFW setting on
+       * so as to be able to accept the updated data in the `extractData` function
+       *  when the hook refetches again (Specificallly for dealing with the filter condition
+       *  `!beamCursors.has(edge.cursor)` inside the extractData function inside the hook
+       *  because if not reset, no data will be extracted
+       * from the function because the existing beamCursors will contain the data.cursor and
+       * therefore the feed doesn't get updated correctly sometimes with nsfw content when toggling
+       * the nswf setting on).
+       **/
+      beamCursors.clear();
+      fetchInitialData();
+    }
+  }, [authenticating, showNsfw]);
+
+  React.useEffect(() => {
+    /**
+     * Everytime the NSFW setting changes, refetch.
+     **/
+    fetchInitialData();
+  }, [showNsfw]);
 
   const lastCursors = React.useRef({ next: null, prev: null });
   const prevBeams = React.useRef([]);
@@ -112,7 +147,7 @@ const TagFeed = (props: TagFeedProps) => {
       <InfoCard
         titleLabel={
           <>
-            {t('There are no contents found for the ')}
+            {t('There is no content found for the ')}
             {t('{{topic}}', { topic: tags.length > 1 ? 'topics' : 'topic' })}{' '}
             {tags.map(tag => (
               <span key={tag}>#{tag} </span>

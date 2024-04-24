@@ -7,7 +7,7 @@ import ActionButtons from './action-buttons';
 import AuthorProfileAvatar from '../author-profile-avatar';
 import { sortByKey, useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { EntityTypes, BeamEntryData } from '@akashaorg/typings/lib/ui';
-import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useRootComponentProps, useNsfwToggling } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 
 type BeamCardProps = Pick<
@@ -46,6 +46,8 @@ const BeamCard: React.FC<BeamCardProps> = props => {
   const [showBlockName, setShowBlockName] = useState(false);
   const navigateTo = getRoutingPlugin().navigateTo;
   const authenticatedDID = data?.id;
+
+  const { showNsfw } = useNsfwToggling();
 
   const handleFlagBeam = () => {
     navigateTo({
@@ -92,6 +94,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       }}
       showHiddenContent={showHiddenContent}
       showNSFWCard={showNSFWCard}
+      nsfwUserSetting={showNsfw}
       showLoginModal={showLoginModal}
       isLoggedIn={!!authenticatedDID}
       itemType={EntityTypes.BEAM}
