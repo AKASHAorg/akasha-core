@@ -5,15 +5,12 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import { useTranslation } from 'react-i18next';
 import { AnalyticsEventData } from '@akashaorg/typings/lib/ui';
-import {
-  AkashaBeamStreamFiltersInput,
-  AkashaBeamStreamModerationStatus,
-  AkashaIndexedStreamEdge,
-} from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { AkashaIndexedStreamEdge } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { EdgeArea, Virtualizer, VirtualizerProps } from '../virtual-list';
 import { useBeamsByTags } from '@akashaorg/ui-awf-hooks/lib/use-beams-by-tags';
 import { RestoreItem } from '../virtual-list/use-scroll-state';
 import { useGetLogin, useNsfwToggling } from '@akashaorg/ui-awf-hooks';
+import { getNsfwFiltersTagFeed } from '../utils';
 
 export type TagFeedProps = {
   className?: string;
@@ -50,40 +47,7 @@ const TagFeed = (props: TagFeedProps) => {
   const { showNsfw } = useNsfwToggling();
   const { data: loginData, loading: authenticating } = useGetLogin();
   const isLoggedIn = !!loginData?.id;
-
-  let nsfwFilters;
-
-  /**
-   *  Check if the feed will be used inside the My Antenna page and
-   *  set the filter for logged-out users and users who toggled off nsfw content.
-   **/
-  if (queryKey.includes('my-antenna') && (!showNsfw || !isLoggedIn)) {
-    nsfwFilters = {
-      or: [
-        { where: { status: { equalTo: AkashaBeamStreamModerationStatus.Ok } } },
-        { where: { status: { isNull: true } } },
-      ],
-    } as AkashaBeamStreamFiltersInput;
-  }
-
-  /**
-   * Check if the feed will be used inside the My Antenna page and
-   * set the filter for users who are logged in and want to see nsfw content.
-   **/
-  if (queryKey.includes('my-antenna') && showNsfw && isLoggedIn) {
-    nsfwFilters = {
-      or: [
-        {
-          where: {
-            status: {
-              in: [AkashaBeamStreamModerationStatus.Ok, AkashaBeamStreamModerationStatus.Nsfw],
-            },
-          },
-        },
-        { where: { status: { isNull: true } } },
-      ],
-    } as AkashaBeamStreamFiltersInput;
-  }
+  const nsfwFilters = getNsfwFiltersTagFeed({ queryKey, showNsfw, isLoggedIn });
 
   const {
     beams,

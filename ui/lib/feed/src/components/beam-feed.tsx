@@ -9,13 +9,12 @@ import {
   AkashaBeamFiltersInput,
   AkashaBeamSortingInput,
   AkashaBeamStreamEdge,
-  AkashaBeamStreamFiltersInput,
-  AkashaBeamStreamModerationStatus,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { EdgeArea, Virtualizer, VirtualizerProps } from '../virtual-list';
 import { RestoreItem } from '../virtual-list/use-scroll-state';
 import { hasOwn, useGetLogin, useNsfwToggling } from '@akashaorg/ui-awf-hooks';
 import { useBeams } from '@akashaorg/ui-awf-hooks/lib/use-beams';
+import { getNsfwFiltersBeamFeed } from '../utils';
 
 export type BeamFeedProps = {
   className?: string;
@@ -57,39 +56,7 @@ const BeamFeed = (props: BeamFeedProps) => {
   const { data: loginData, loading: authenticating } = useGetLogin();
   const isLoggedIn = !!loginData?.id;
 
-  let nsfwFilters;
-
-  /**
-   * Set the filter for logged-out users and users who toggled off nsfw content.
-   **/
-  if (!did && (!showNsfw || !isLoggedIn)) {
-    nsfwFilters = {
-      ...filters,
-      or: [
-        { where: { status: { equalTo: AkashaBeamStreamModerationStatus.Ok } } },
-        { where: { status: { isNull: true } } },
-      ],
-    } as AkashaBeamStreamFiltersInput;
-  }
-
-  /**
-   * Set the filter for users who are logged in and want to see nsfw content.
-   **/
-  if (!did && showNsfw && isLoggedIn) {
-    nsfwFilters = {
-      ...filters,
-      or: [
-        {
-          where: {
-            status: {
-              in: [AkashaBeamStreamModerationStatus.Ok, AkashaBeamStreamModerationStatus.Nsfw],
-            },
-          },
-        },
-        { where: { status: { isNull: true } } },
-      ],
-    } as AkashaBeamStreamFiltersInput;
-  }
+  const nsfwFilters = getNsfwFiltersBeamFeed({ did, showNsfw, isLoggedIn, filters });
 
   const {
     beams,
