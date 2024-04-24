@@ -12,12 +12,12 @@ import isUrl from 'is-url';
 import { withHistory } from 'slate-history';
 import { Editable, Slate, withReact, ReactEditor, RenderElementProps } from 'slate-react';
 
-import {
-  IEntryData,
+import type {
   IMetadata,
   IPublishData,
-  type Image,
+  Image,
   Profile,
+  ILinkPreviewExt,
 } from '@akashaorg/typings/lib/ui';
 
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
@@ -79,7 +79,7 @@ export type EditorBoxProps = {
   minHeight?: string;
   withMeter?: boolean;
   withToolbar?: boolean;
-  linkPreview?: IEntryData['linkPreview'];
+  linkPreview?: ILinkPreviewExt;
   mentions?: Profile[];
   tags?: { name: string; totalPosts: number }[];
   publishingApp?: string;
@@ -93,9 +93,9 @@ export type EditorBoxProps = {
   onPublish?: (publishData: IPublishData) => void;
   onClear?: () => void;
   onCancelClick?: () => void;
-  handleSaveLinkPreviewDraft?: (LinkPreview: IEntryData['linkPreview']) => void;
+  handleSaveLinkPreviewDraft?: (linkPreview: ILinkPreviewExt) => void;
   setEditorState: React.Dispatch<React.SetStateAction<Descendant[]>>;
-  getLinkPreview?: (url: string) => Promise<IEntryData['linkPreview']>;
+  getLinkPreview?: (url: string) => Promise<ILinkPreviewExt>;
   getMentions?: (query: string) => void;
   getTags?: (query: string) => void;
   handleDisablePublish?: (value: boolean) => void;

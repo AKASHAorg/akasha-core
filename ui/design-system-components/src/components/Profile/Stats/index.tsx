@@ -48,7 +48,7 @@ const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following })
   ];
 
   return (
-    <Card elevation="1" radius={20} padding={'p-4'}>
+    <Card radius={20} padding={'p-4'}>
       <Stack spacing="gap-4" fullWidth>
         <Stack direction="row" justify="between">
           {stats.map((stat, index) => (

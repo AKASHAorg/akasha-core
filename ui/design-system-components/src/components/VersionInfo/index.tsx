@@ -25,7 +25,7 @@ const VersionInfo: React.FC<VersionInfoProps> = ({
   additionalNotesBody,
 }) => {
   return (
-    <Card elevation="1" padding={'p-4'} radius={20}>
+    <Card padding={'p-4'} radius={20}>
       <Stack direction="column" spacing="gap-y-4">
         <ContentBlock blockTitle={integrationName}>
           <Text variant="footnotes2" weight="normal" color="grey7">

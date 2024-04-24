@@ -16,8 +16,6 @@ import {
 import { useTranslation } from 'react-i18next';
 import { EntityTypes, type ReflectEntryData } from '@akashaorg/typings/lib/ui';
 import { ReflectionPreview } from '@akashaorg/ui-lib-feed';
-import { usePendingReflections } from '@akashaorg/ui-awf-hooks/lib/use-pending-reflections';
-import { PendingReflect } from '../../reflect-editor/pending-reflect';
 import { useNavigate } from '@tanstack/react-router';
 import { GetReflectionByIdQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 
@@ -35,7 +33,7 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
   const wrapperRef = useRef(null);
   const navigate = useNavigate();
   const pendingReflectionsVar = createReactiveVar<ReflectEntryData[]>([]);
-  const { pendingReflections } = usePendingReflections(pendingReflectionsVar);
+
   const entryData = React.useMemo(() => {
     if (reflection && hasOwn(reflection, 'node') && hasOwn(reflection.node, 'id')) {
       return reflection.node;
@@ -82,13 +80,6 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
                   showLoginModal={showLoginModal}
                 />
               </>
-              {pendingReflections
-                .filter(
-                  content => hasOwn(content, 'reflection') && content.reflection === reflectionId,
-                )
-                .map((content, index) => (
-                  <PendingReflect key={`pending-${index}-${reflectionId}`} entryData={content} />
-                ))}
             </>
           }
           reflectionsOf={{ entryId: entryData.id, itemType: EntityTypes.REFLECT }}

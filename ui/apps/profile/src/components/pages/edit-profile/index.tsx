@@ -29,11 +29,8 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
   const { t } = useTranslation('app-profile');
   const { getRoutingPlugin, logger, uiEvents } = useRootComponentProps();
   const { avatarImage, coverImage, saveImage, loading: isSavingImage } = useSaveImage();
-  const [activeTab, setActiveTab] = useState(0);
-  const [selectedActiveTab, setSelectedActiveTab] = useState(0);
   const [showNsfwModal, setShowNsfwModal] = useState(false);
   const [nsfwFormValues, setNsfwFormValues] = useState<EditProfileFormValues>();
-  const [showUnsavedChangesModal, setShowUnsavedChangesModal] = useState(false);
   const [profileContentOnImageDelete, setProfileContentOnImageDelete] =
     useState<PartialAkashaProfileInput | null>(null);
   const navigateTo = getRoutingPlugin().navigateTo;
@@ -200,7 +197,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
 
   return (
     <Stack direction="column" spacing="gap-y-4" customStyle="h-full">
-      <Card radius={20} elevation="1" customStyle="py-4 h-full">
+      <Card radius={20} customStyle="py-4 h-full">
         <EditProfile
           defaultValues={{
             avatar: profileData?.avatar ? transformSource(profileData.avatar?.default) : null,
@@ -269,7 +266,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
             label: t('Save'),
             loading: isProcessing,
             handleClick: async formValues => {
-              if (formValues?.nsfw) {
+              if (formValues?.nsfw && !profileData?.nsfw) {
                 setNsfwFormValues(formValues);
                 setShowNsfwModal(true);
                 return;
@@ -279,38 +276,6 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
           }}
         />
       </Card>
-      <Modal
-        title={{ label: t('Unsaved Changes') }}
-        show={showUnsavedChangesModal}
-        onClose={() => {
-          setSelectedActiveTab(activeTab);
-          setShowUnsavedChangesModal(false);
-        }}
-        actions={[
-          {
-            variant: 'text',
-            label: t('Leave'),
-            onClick: () => {
-              setActiveTab(selectedActiveTab);
-              setShowUnsavedChangesModal(false);
-            },
-          },
-          {
-            variant: 'primary',
-            label: 'Save',
-            onClick: () => {
-              setShowUnsavedChangesModal(false);
-              //@TODO
-            },
-          },
-        ]}
-      >
-        <Text variant="body1">
-          {t(
-            "It looks like you haven't saved your changes, if you leave this page all the changes you made will be gone!",
-          )}
-        </Text>
-      </Modal>
       <Modal
         title={{ label: t('Changing to NSFW Profile') }}
         show={showNsfwModal}

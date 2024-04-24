@@ -18,8 +18,6 @@ import { useTranslation } from 'react-i18next';
 import { EntityTypes, type ReflectEntryData } from '@akashaorg/typings/lib/ui';
 import { ReflectFeed, ReflectionPreview } from '@akashaorg/ui-lib-feed';
 import { AkashaBeamStreamModerationStatus } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { PendingReflect } from '../../reflect-editor/pending-reflect';
-import { usePendingReflections } from '@akashaorg/ui-awf-hooks/lib/use-pending-reflections';
 import { useNavigate } from '@tanstack/react-router';
 import {
   GetBeamByIdQuery,
@@ -59,7 +57,6 @@ const BeamPage: React.FC<BeamPageProps> = props => {
   }, [beamStream]);
 
   const pendingReflectionsVar = createReactiveVar<ReflectEntryData[]>([]);
-  const { pendingReflections } = usePendingReflections(pendingReflectionsVar);
   const entryData = React.useMemo(() => {
     if (beam && hasOwn(beam, 'node') && hasOwn(beam.node, 'id')) {
       return beam.node;
@@ -104,11 +101,6 @@ const BeamPage: React.FC<BeamPageProps> = props => {
                 parentWrapperRef={wrapperRef}
                 showLoginModal={showLoginModal}
               />
-              {pendingReflections
-                .filter(content => !hasOwn(content, 'reflection') && content.beamID === beamId)
-                .map((content, index) => (
-                  <PendingReflect key={`pending-${index}-${beamId}`} entryData={content} />
-                ))}
             </>
           }
           queryKey={`reflect-feed-${beamId}`}

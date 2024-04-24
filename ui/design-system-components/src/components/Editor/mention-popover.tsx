@@ -20,7 +20,7 @@ export type MentionPopover = {
 export const MentionPopover: React.FC<MentionPopover> = React.forwardRef((props, ref) => {
   const { values, currentIndex, setIndex, handleSelect, transformSource, noMentionsLabel } = props;
 
-  const boxShadow = getElevationClasses({ light: '2', dark: '3' });
+  const boxShadow = getElevationClasses('2');
 
   return (
     <Portal>

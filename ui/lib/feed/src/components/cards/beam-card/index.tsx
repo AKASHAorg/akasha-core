@@ -4,10 +4,10 @@ import EntryCard, {
 } from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import ContentBlockRenderer from './content-block-renderer';
 import ActionButtons from './action-buttons';
-import { transformSource, hasOwn, sortByKey, useGetLogin } from '@akashaorg/ui-awf-hooks';
+import AuthorProfileAvatar from '../author-profile-avatar';
+import { sortByKey, useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { EntityTypes, BeamEntryData } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps, useNsfwToggling } from '@akashaorg/ui-awf-hooks';
-import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { useTranslation } from 'react-i18next';
 
 type BeamCardProps = Pick<
@@ -16,12 +16,12 @@ type BeamCardProps = Pick<
   | 'noWrapperCard'
   | 'onContentClick'
   | 'onReflect'
-  | 'hidePublishTime'
   | 'hideActionButtons'
   | 'disableActions'
   | 'showHiddenContent'
 > & {
   entryData: BeamEntryData;
+  hidePublishTime?: boolean;
   showNSFWCard: boolean;
   showLoginModal?: () => void;
 };
@@ -30,6 +30,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
   const { t } = useTranslation('ui-lib-feed');
   const {
     entryData,
+    hidePublishTime,
     onReflect,
     showHiddenContent,
     showNSFWCard,
@@ -38,7 +39,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
     ...rest
   } = props;
 
-  const { getRoutingPlugin, getTranslationPlugin } = useRootComponentProps();
+  const { getRoutingPlugin } = useRootComponentProps();
   const { data } = useGetLogin();
   const [appName, setAppName] = useState('');
   const [blockNameMap, setBlockNameMap] = useState(new Map());
@@ -47,28 +48,6 @@ const BeamCard: React.FC<BeamCardProps> = props => {
   const authenticatedDID = data?.id;
 
   const { showNsfw } = useNsfwToggling();
-
-  const {
-    data: profileDataReq,
-    error,
-    loading,
-  } = useGetProfileByDidQuery({
-    variables: { id: entryData.authorId },
-    fetchPolicy: 'cache-first',
-  });
-
-  const { akashaProfile: profileData } =
-    profileDataReq?.node && hasOwn(profileDataReq.node, 'akashaProfile')
-      ? profileDataReq.node
-      : { akashaProfile: null };
-  const locale = getTranslationPlugin().i18n?.languages?.[0] || 'en';
-
-  const onAvatarClick = (id: string) => {
-    navigateTo({
-      appName: '@akashaorg/app-profile',
-      getNavigationUrl: routes => `${routes.rootRoute}/${id}`,
-    });
-  };
 
   const handleFlagBeam = () => {
     navigateTo({
@@ -92,10 +71,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
     <EntryCard
       entryData={entryData}
       reflectionsCount={entryData?.reflectionsCount}
-      authorProfile={{ data: profileData, loading, error }}
-      locale={locale}
       reflectAnchorLink="/@akashaorg/app-akasha-integration/beam"
-      profileAnchorLink="/@akashaorg/app-profile"
       sortedContents={sortedEntryContent}
       flagAsLabel={t('Flag')}
       editLabel={t('Edit')}
@@ -122,8 +98,6 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       showLoginModal={showLoginModal}
       isLoggedIn={!!authenticatedDID}
       itemType={EntityTypes.BEAM}
-      transformSource={transformSource}
-      onAvatarClick={onAvatarClick}
       onTagClick={onTagClick}
       onReflect={() => {
         if (!authenticatedDID) {
@@ -133,6 +107,13 @@ const BeamCard: React.FC<BeamCardProps> = props => {
         onReflect();
       }}
       onEntryFlag={handleFlagBeam}
+      profileAvatarExt={
+        <AuthorProfileAvatar
+          authorId={entryData.authorId}
+          hidePublishTime={hidePublishTime}
+          createdAt={entryData?.createdAt}
+        />
+      }
       actionsRight={
         <ActionButtons
           appName={appName}

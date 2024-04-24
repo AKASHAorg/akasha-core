@@ -36,6 +36,10 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       mountsIn: 'follow_*',
       loadingFn: () => import('./extensions/follow-profile-button'),
     },
+    {
+      mountsIn: 'profile_avatar_*',
+      loadingFn: () => import('./extensions/profile-avatar'),
+    },
   ],
   routes: {
     beams: routes[BEAMS],

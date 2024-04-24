@@ -7,7 +7,7 @@ const MainPage: React.FC = () => {
   const { worldConfig, getRoutingPlugin } = useRootComponentProps();
 
   const {
-    data: { authenticatedDID, isLoadingInfo, authenticatedProfile },
+    data: { authenticatedDID, authenticatedProfile },
   } = useAkashaStore();
   const isLoggedIn = !!authenticatedDID;
 
@@ -16,7 +16,7 @@ const MainPage: React.FC = () => {
     const searchParam = new URLSearchParams(location.search);
 
     // if user is logged in, do not show the connect page
-    if (isLoggedIn && !isLoadingInfo) {
+    if (isLoggedIn) {
       if (!authenticatedProfile) {
         routingPlugin.current?.navigateTo({
           appName: '@akashaorg/app-profile',
@@ -31,7 +31,7 @@ const MainPage: React.FC = () => {
         },
       });
     }
-  }, [isLoggedIn, authenticatedDID, worldConfig.homepageApp, isLoadingInfo, authenticatedProfile]);
+  }, [isLoggedIn, authenticatedDID, worldConfig.homepageApp, authenticatedProfile]);
   return (
     <Card padding="px-4 py-6">
       <Outlet />

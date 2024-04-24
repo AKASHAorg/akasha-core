@@ -1,34 +1,20 @@
-import React, { ReactElement, ReactNode, Ref, CSSProperties, Fragment, useState } from 'react';
+import React, { ReactElement, ReactNode, Ref, Fragment, useState } from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
-import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import EntryCardRemoved, { AuthorsRemovedMessage, OthersRemovedMessage } from '../EntryCardRemoved';
 import CardActions from './card-actions';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
 import {
   EllipsisHorizontalIcon,
   FlagIcon,
   PencilIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import ReadOnlyEditor from '../../ReadOnlyEditor';
-import AuthorProfileLoading from '../EntryCardLoading/author-profile-loading';
 import NSFW, { NSFWProps } from '../NSFW';
 import Menu from '@akashaorg/design-system-core/lib/components/Menu';
-import {
-  formatDate,
-  formatRelativeTime,
-  getColorClasses,
-} from '@akashaorg/design-system-core/lib/utils';
+import { getColorClasses } from '@akashaorg/design-system-core/lib/utils';
 import { Descendant } from 'slate';
 import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import {
-  type EntryData,
-  AkashaProfile,
-  EntityTypes,
-  type Image,
-  NavigateToParams,
-} from '@akashaorg/typings/lib/ui';
+import { type EntryData, EntityTypes, NavigateToParams } from '@akashaorg/typings/lib/ui';
 import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import ErrorBoundary, {
@@ -49,12 +35,7 @@ type ReflectProps = {
 
 export type EntryCardProps = {
   entryData: EntryData;
-  authorProfile: {
-    data: Pick<AkashaProfile, 'name' | 'avatar' | 'did'>;
-    loading: boolean;
-    error: Error;
-  };
-  locale?: string;
+  profileAvatarExt: ReactNode;
   flagAsLabel?: string;
   moderatedContentLabel?: string;
   ctaLabel?: string;
@@ -66,12 +47,10 @@ export type EntryCardProps = {
   };
   editLabel?: string;
   nsfw?: Omit<NSFWProps, 'onClickToView'>;
-  profileAnchorLink?: string;
   reflectAnchorLink?: string;
   disableReporting?: boolean;
   isViewer?: boolean;
   isLoggedIn: boolean;
-  hidePublishTime?: boolean;
   disableActions?: boolean;
   noWrapperCard?: boolean;
   hideActionButtons?: boolean;
@@ -84,10 +63,9 @@ export type EntryCardProps = {
   editable?: boolean;
   actionsRight?: ReactNode;
   reflectionsCount?: number;
-  customStyle?: CSSProperties;
+  customStyle?: string;
   ref?: Ref<HTMLDivElement>;
   onReflect?: () => void;
-  onAvatarClick?: (profileId: string) => void;
   onTagClick?: (tag: string) => void;
   onMentionClick?: (profileId: string) => void;
   onContentClick?: () => void;
@@ -95,26 +73,22 @@ export type EntryCardProps = {
   onEntryFlag?: () => void;
   onEdit?: () => void;
   showLoginModal?: (title?: string, message?: string) => void;
-  transformSource: (src: Image) => Image;
 } & (BeamProps | ReflectProps);
 
 const EntryCard: React.FC<EntryCardProps> = props => {
   const {
     entryData,
-    locale,
+    profileAvatarExt,
     ref,
-    authorProfile,
     flagAsLabel,
     removed,
     notEditableLabel,
     editLabel,
     nsfw,
-    profileAnchorLink,
     reflectAnchorLink,
     disableReporting,
     isViewer,
     isLoggedIn,
-    hidePublishTime,
     disableActions,
     noWrapperCard = false,
     hideActionButtons,
@@ -127,18 +101,15 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     hover,
     actionsRight,
     reflectionsCount,
-    onAvatarClick,
+    customStyle,
     onTagClick,
     onContentClick,
     onEntryFlag,
     onReflect,
     onEdit,
-    transformSource,
     showLoginModal,
     ...rest
   } = props;
-
-  const profileRef: React.Ref<HTMLDivElement> = React.useRef(null);
 
   /* showNSFWContent determines whether to display the content underneath the
    * overlay, so if the showNSFWCard prop is true (which means to show the
@@ -178,8 +149,6 @@ const EntryCard: React.FC<EntryCardProps> = props => {
   const hoverStyle = hover
     ? `${getColorClasses({ light: 'grey9/60', dark: 'grey3' }, 'hover:bg')} ${hoverStyleLastEntry}`
     : '';
-  const publishTime = entryData?.createdAt ? formatRelativeTime(entryData.createdAt, locale) : '';
-  const avatar = authorProfile.error ? null : authorProfile.data?.avatar;
 
   const errorBoundaryProps: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
     errorObj: {
@@ -191,53 +160,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
   const entryCardUi = (
     <Stack spacing="gap-y-2" padding="p-4" customStyle={hoverStyle}>
       <Stack direction="row" justify="between">
-        <>
-          {authorProfile.loading ? (
-            <AuthorProfileLoading />
-          ) : (
-            <ProfileAvatarButton
-              data-testid="entry-profile-detail"
-              profileId={entryData.authorId}
-              label={authorProfile.error ? entryData.authorId : authorProfile.data?.name}
-              avatar={transformSource(avatar?.default)}
-              alternativeAvatars={avatar?.alternatives?.map(alternative =>
-                transformSource(alternative),
-              )}
-              href={`${profileAnchorLink}/${entryData.authorId}`}
-              metadata={
-                publishTime &&
-                !hidePublishTime && (
-                  <Stack direction="row" align="center" spacing="gap-x-1">
-                    <Text
-                      variant="footnotes2"
-                      weight="normal"
-                      color={{ light: 'grey4', dark: 'grey7' }}
-                    >
-                      ·
-                    </Text>
-                    <Tooltip
-                      placement={'top'}
-                      content={formatDate(entryData?.createdAt, 'H[:]mm [·] D MMM YYYY', locale)}
-                    >
-                      <Text
-                        variant="footnotes2"
-                        weight="normal"
-                        color={{ light: 'grey4', dark: 'grey7' }}
-                      >
-                        {publishTime}
-                      </Text>
-                    </Tooltip>
-                  </Stack>
-                )
-              }
-              onClick={() => {
-                if (onAvatarClick) onAvatarClick(entryData.authorId);
-              }}
-              ref={profileRef}
-            />
-          )}
-        </>
-
+        {profileAvatarExt}
         <Menu
           anchor={{
             icon: <EllipsisHorizontalIcon />,
@@ -371,7 +294,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
   return noWrapperCard ? (
     <> {entryCardUi}</>
   ) : (
-    <Card ref={ref} padding="p-0">
+    <Card ref={ref} padding="p-0" customStyle={customStyle}>
       {entryCardUi}
     </Card>
   );

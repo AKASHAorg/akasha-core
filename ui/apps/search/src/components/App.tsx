@@ -18,7 +18,7 @@ const App: React.FC<unknown> = () => {
         <Helmet helmetData={helmetData}>
           <title>Search | {worldConfig.title}</title>
         </Helmet>
-        <Stack testId="search-box">
+        <Stack dataTestId="search-box">
           <RouterProvider
             router={router({
               baseRouteName,

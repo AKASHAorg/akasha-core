@@ -29,7 +29,7 @@ export type StackProps = PropsWithChildren<{
   spacing?: `gap-x-${number}` | `gap-y-${number}` | `gap-${number}`;
   customStyle?: string;
   fullWidth?: boolean;
-  testId?: string;
+  dataTestId?: string;
   ref?: LegacyRef<HTMLDivElement>;
   id?: string;
 }>;
@@ -48,7 +48,7 @@ const Stack: React.FC<StackProps> = forwardRef(
       spacing = '',
       customStyle = '',
       fullWidth,
-      testId,
+      dataTestId,
       children,
       id,
     },
@@ -70,7 +70,7 @@ const Stack: React.FC<StackProps> = forwardRef(
         className={tw(
           apply`${baseStyle} ${directionStyle} ${backgroundStyle} ${paddingStyle} ${justifyStyle} ${alignSelfStyle} ${justifyItemsStyle} ${justifySelfStyle} ${alignStyle} ${spacing} ${fullWidthStyle} ${customStyle}`,
         )}
-        data-testid={testId}
+        data-testid={dataTestId}
         ref={ref}
       >
         {children}

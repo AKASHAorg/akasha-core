@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import ReactDOMClient from 'react-dom/client';
 import singleSpaReact from 'single-spa-react';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
@@ -19,6 +19,7 @@ import {
 import {
   useGetBeamByIdQuery,
   useGetFollowDocumentsByDidQuery,
+  useGetProfileByDidQuery,
   useGetReflectionByIdQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
@@ -39,8 +40,7 @@ const ProfileCardWidget: React.FC<ProfileCardWidgetProps> = props => {
   const { t } = useTranslation('ui-widget-mini-profile');
   const { plugins, logger } = useRootComponentProps();
   const {
-    data: { authenticatedDID, info, isLoadingInfo: authorProfileLoading },
-    userStore,
+    data: { authenticatedDID },
   } = useAkashaStore();
   const { data: beam, loading: beamLoading } = useGetBeamByIdQuery({
     variables: { id: beamId },
@@ -50,26 +50,22 @@ const ProfileCardWidget: React.FC<ProfileCardWidgetProps> = props => {
     variables: { id: reflectionId },
     skip: !reflectionId,
   });
-
   const isLoggedIn = !!authenticatedDID;
-
   // set data based on beam or reflect page
   const data = beamId ? beam : reflection;
-
   const dataLoading = beamId ? beamLoading : reflectionLoading;
-
   const authorId = data?.node && hasOwn(data.node, 'author') ? data?.node?.author.id : '';
+  const { data: authorProfileInfo, loading: authorProfileLoading } = useGetProfileByDidQuery({
+    variables: { id: authorId },
+    skip: !authorId,
+  });
 
-  useEffect(() => {
-    if (authorId) {
-      userStore.getUserInfo({ profileDID: authorId });
-    }
-  }, [authorId, userStore]);
-
-  const authorProfileData = authorId ? info[authorId] : null;
+  const authorProfileData =
+    authorProfileInfo?.node && hasOwn(authorProfileInfo.node, 'isViewer')
+      ? authorProfileInfo.node?.akashaProfile
+      : null;
 
   const { data: stats, loading: statsLoading } = useProfileStats(authorId);
-
   const { data: followDocuments } = useGetFollowDocumentsByDidQuery({
     variables: {
       id: authenticatedDID,
@@ -78,7 +74,6 @@ const ProfileCardWidget: React.FC<ProfileCardWidgetProps> = props => {
     },
     skip: !isLoggedIn,
   });
-
   const followList = isLoggedIn
     ? getFollowList(
         followDocuments?.node && hasOwn(followDocuments.node, 'akashaFollowList')
