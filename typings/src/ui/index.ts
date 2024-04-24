@@ -5,6 +5,7 @@ export * from './app-loader';
 export * from './analytics';
 export * from './apps';
 export * from './article';
+export * from './antennas';
 export * from './editor';
 export * from './entry';
 export * from './menu-items';

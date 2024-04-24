@@ -18,6 +18,7 @@ import { EventTypes, ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import {
   hasOwn,
   useGetLogin,
+  useNsfwToggling,
   useProfileStats,
   useRootComponentProps,
   useValidDid,
@@ -47,10 +48,19 @@ const ProfileInfoPage: React.FC<ProfileInfoPageProps> = props => {
   const { akashaProfile: profileData } =
     data?.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
 
-  const [showNSFW, setShowNSFW] = useState(false);
-
   const isLoggedIn = !!loginData?.id;
   const authenticatedDID = loginData?.id;
+
+  const { showNsfw: showNsfwSetting } = useNsfwToggling();
+  const [showNSFW, setShowNSFW] = useState(false);
+
+  /* show the overlay or display the profile directly depending on the user's nsfw setting
+  and whether they are logged in or not */
+  React.useEffect(() => {
+    if (isLoggedIn && showNsfwSetting) {
+      setShowNSFW(true);
+    }
+  }, [isLoggedIn, showNsfwSetting]);
 
   const navigateTo = getRoutingPlugin().navigateTo;
 
