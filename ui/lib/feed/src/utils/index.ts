@@ -118,7 +118,7 @@ export const getNsfwFiltersTagFeed = ({
    * Check if the feed will be used inside the My Antenna page and
    * set the filter for users who are logged in and want to see nsfw content.
    **/
-  if (queryKey.includes('my-antenna') && showNsfw && isLoggedIn) {
+  if (queryKey === QueryKeys.MY_ANTENNA && showNsfw && isLoggedIn) {
     return {
       or: [
         {
