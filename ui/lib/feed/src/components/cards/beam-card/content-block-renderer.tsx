@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import NSFW from '@akashaorg/design-system-components/lib/components/Entry/NSFW';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
@@ -10,7 +10,6 @@ import {
 } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
 import { useTranslation } from 'react-i18next';
 import { useGetContentBlockByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { useNsfwToggling } from '@akashaorg/ui-awf-hooks';
 import { Transition } from '@headlessui/react';
 
 type ContentBlockRendererProps = {
@@ -32,29 +31,16 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
     onBlockInfoChange,
     onContentClick,
   } = props;
-  const { t } = useTranslation('ui-lib-feed');
-  const { getExtensionsPlugin } = useRootComponentProps();
+  const { navigateToModal, getExtensionsPlugin } = useRootComponentProps();
   const contentBlockStoreRef = useRef(getExtensionsPlugin()?.contentBlockStore);
+  const _onBlockInfoChange = useRef(onBlockInfoChange);
+  const { t } = useTranslation('ui-lib-feed');
   const contentBlockReq = useGetContentBlockByIdQuery({
     variables: { id: blockID },
     fetchPolicy: 'cache-first',
   });
-
-  /*
-   * get user's NSFW settings from the hook
-   */
-  const { showNsfw } = useNsfwToggling();
-
-  /*
-   * internal state for showing the NSFW content behind the overlay, default to false
-   */
-  const [showNsfwContent, setShowNsfwContent] = useState(false);
-  /*
-   * Get all the block's data from the hook, including the nsfw property
-   */
-  const { navigateToModal } = useRootComponentProps();
-  const _onBlockInfoChange = useRef(onBlockInfoChange);
   const blockData = useMemo(() => {
+    // Get all the block's data from the hook, including the nsfw property
     return contentBlockReq.data?.node && hasOwn(contentBlockReq.data.node, 'id')
       ? contentBlockReq.data.node
       : null;
@@ -62,6 +48,14 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
   const contentBlockPropertyType = blockData?.content?.[0]?.propertyType;
   const contentBlockLabel = blockData?.content?.[0]?.label;
   const nsfw = !!blockData?.nsfw;
+  useEffect(() => {
+    _onBlockInfoChange.current?.({
+      appName: BLOCK_LABEL_TO_APP_DISPLAY_NAME_MAP[contentBlockLabel],
+      blockName:
+        contentBlockPropertyType /*@TODO need to fetch the proper human readable block name*/,
+    });
+  }, [contentBlockPropertyType, contentBlockLabel]);
+
   const matchingBlocks: MatchingBlock[] = !blockData
     ? []
     : contentBlockStoreRef.current.getMatchingBlocks(blockData);
@@ -71,22 +65,17 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
 
     return false;
   });
-  const blockDisplayName = foundBlock ? foundBlock.blockInfo.displayName : '';
+  const blockDisplayName = foundBlock?.blockInfo?.displayName ?? '';
 
-  /* Show NSFW card (overlay) only when the block is marked as NSFW and any of
-   * the following conditions is met:
-   * 1. The user toggled off NSFW content in their settings or is not logged in, or
-   * 2. The showNsfwContent flag is false (Nsfw content is hidden)
-   * If the user is logged in and has their NSFW setting turned on (They want to see
-   * NSFW content) or if this block
-   *  is marked as nsfw and the whole beam is also marked as nsfw (When both are NSFW, we
-   * don't want to display the overlays two times), we will never show
-   * this overlay.
+  /**
+   * beam is nsfw (at least one block is nsfw)
+   * 1. user is not logged in = show overlay and when clicked, prompt login
+   * 2. user is logged in:
+   * a. has settings off (also check beam level nsfw) = show overlay
+   * b. has settings on = hide overlay
    */
-  const showNSFWCard =
-    (beamIsNsfw && nsfw) || (showNsfw && !!authenticatedDID)
-      ? false
-      : nsfw && (!showNsfw || !authenticatedDID) && !showNsfwContent;
+
+  const showNSFWCard = beamIsNsfw && !authenticatedDID;
 
   const showLoginModal = () => {
     navigateToModal({
@@ -95,19 +84,11 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
     });
   };
 
-  useEffect(() => {
-    _onBlockInfoChange.current?.({
-      appName: BLOCK_LABEL_TO_APP_DISPLAY_NAME_MAP[contentBlockLabel],
-      blockName:
-        contentBlockPropertyType /*@TODO need to fetch the proper human readable block name*/,
-    });
-  }, [contentBlockPropertyType, contentBlockLabel]);
-
   return (
     <Card
       type="plain"
       onClick={() => {
-        if (!showNSFWCard || !nsfw) {
+        if (!(showNSFWCard && nsfw)) {
           if (typeof onContentClick === 'function') {
             onContentClick();
           }
@@ -180,7 +161,6 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
                   showLoginModal();
                   return;
                 }
-                setShowNsfwContent(true);
               }}
             />
           </Card>
@@ -190,7 +170,7 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
   );
 };
 
-//@TODO properly fetch app's display name
+// @TODO properly fetch app's display name
 const BLOCK_LABEL_TO_APP_DISPLAY_NAME_MAP = {
   '@akashaorg/app-akasha-integration': 'Antenna',
 };
