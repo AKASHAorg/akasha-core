@@ -13,24 +13,19 @@ export type ProfileAvatarProps = Pick<
 
 const ProfileAvatar = (props: ProfileAvatarProps) => {
   const { profileDID, ...rest } = props;
-  const profileQuery = useGetProfileByDidQuery({
+  const { data, loading, error } = useGetProfileByDidQuery({
     variables: { id: profileDID },
     fetchPolicy: 'cache-first',
   });
 
-  if (profileQuery?.loading) return <ProfileAvatarLoading />;
+  if (loading) return <ProfileAvatarLoading />;
 
-  if (profileQuery?.error) return null;
-
-  const profileData =
-    profileQuery.data?.node && hasOwn(profileQuery.data.node, 'isViewer')
-      ? profileQuery.data.node.akashaProfile
-      : null;
+  const profileData = data?.node && hasOwn(data.node, 'isViewer') ? data.node.akashaProfile : null;
 
   return (
     <ProfileAvatarButton
       profileId={profileDID}
-      label={profileData.name}
+      label={!error && profileData ? profileData.name : profileDID}
       avatar={transformSource(profileData?.avatar?.default)}
       alternativeAvatars={profileData?.avatar?.alternatives?.map(alternative =>
         transformSource(alternative),
