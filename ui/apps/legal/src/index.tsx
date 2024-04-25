@@ -1,5 +1,5 @@
 import 'systemjs-webpack-interop/auto-public-path';
-import routes, { COC, DG, PP, TOS, TOU } from './routes';
+import routes, { COC, DG, HOME, PP, TOS, TOU } from './routes';
 import {
   IAppConfig,
   MenuItemAreaType,
@@ -13,6 +13,7 @@ import { DocumentTextIcon } from '@akashaorg/design-system-core/lib/components/I
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
   mountsIn: opts.layoutConfig?.applicationSlotId,
   routes: {
+    legal: routes[HOME],
     devGuidelines: routes[DG],
     codeOfConduct: routes[COC],
     privacyPolicy: routes[PP],
