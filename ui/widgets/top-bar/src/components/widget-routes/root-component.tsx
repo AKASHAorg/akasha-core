@@ -15,7 +15,6 @@ const TanStackRouterDevtools =
 const RootComponent = () => {
   return (
     <>
-      <ScrollRestoration getKey={location => location.pathname} />
       <Suspense fallback={<></>}>
         <Stack customStyle="fixed">
           <TanStackRouterDevtools />
