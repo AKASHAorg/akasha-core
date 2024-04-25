@@ -161,7 +161,7 @@ const Layout: React.FC<unknown> = () => {
       }`;
 
   const sidebarSlotStyle = `
-      sticky top-0 h-screen transition-all duration-300 transform ${
+      fixed top-0 h-screen transition-all duration-300 transform ${
         showSidebar ? 'w-fit translate-x-0' : '-translate-x-full xl:hidden'
       } ${needSidebarToggling ? 'fixed left-0' : ''}
       `;
@@ -228,14 +228,14 @@ const Layout: React.FC<unknown> = () => {
                 </Card>
               )}
               <div id={layoutConfig.applicationSlotId} />
-              <Stack customStyle="sticky bottom-2">
+              <Stack customStyle="fixed bottom-2">
                 <Extension name={layoutConfig.snackbarNotifSlotId} />
               </Stack>
             </Stack>
           </Stack>
 
           <Stack customStyle="sticky top-0 h-screen">
-            <Stack customStyle={`grid grid-auto-rows pt-4 ${showWidgets ? '' : 'hidden'}`}>
+            <Stack customStyle={`fixed grid grid-auto-rows pt-4 ${showWidgets ? '' : 'hidden'}`}>
               <Widget
                 name={layoutConfig.widgetSlotId}
                 loadingIndicator={<MiniProfileWidgetLoader />}

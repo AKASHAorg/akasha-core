@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import GlobalAntennaPage from '../pages/global-antenna-page/index';
+import GlobalAntennaPage from '../pages/global-antenna-page/index.new';
 import MyAntennaPage from '../pages/my-antenna-page';
 import ProfileFeedPage from '../pages/profile-feed-page/profile-feed-page';
 import BeamPage from '../pages/entry-page/beam-page';

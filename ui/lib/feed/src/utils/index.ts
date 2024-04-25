@@ -54,7 +54,7 @@ export const getNsfwFiltersBeamFeed = ({
   isLoggedIn,
   filters,
 }: {
-  did: string;
+  did?: string;
   showNsfw: boolean;
   isLoggedIn: boolean;
   filters: AkashaBeamFiltersInput;
