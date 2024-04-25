@@ -1,13 +1,14 @@
 import React from 'react';
 import { Outlet } from '@tanstack/react-router';
+import MainPage from '../pages/main-page';
 import TermsOfService from '../pages/terms-of-service';
 import TermsOfUse from '../pages/terms-of-use';
 import CodeOfConduct from '../pages/code-of-conduct';
 import PrivacyPolicy from '../pages/privacy-policy';
 import DeveloperGuidelines from '../pages/developer-guidelines';
 import ErrorComponent from './error-component';
-import route, { TOS, TOU, PP, COC, DG } from '../../routes';
-import { createRootRoute, createRoute, createRouter } from '@tanstack/react-router';
+import routes, { HOME, TOS, TOU, PP, COC, DG } from '../../routes';
+import { createRootRoute, createRoute, createRouter, redirect } from '@tanstack/react-router';
 
 import { CreateRouter } from '@akashaorg/typings/lib/ui';
 
@@ -15,9 +16,23 @@ const rootRoute = createRootRoute({
   component: Outlet,
 });
 
+const defaultRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/',
+  beforeLoad: () => {
+    throw redirect({ to: routes[HOME], replace: true });
+  },
+});
+
+const mainRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: `${routes[HOME]}`,
+  component: MainPage,
+});
+
 const termsOfServiceRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: `${route[TOS]}`,
+  path: `${routes[TOS]}`,
   component: () => {
     return <TermsOfService />;
   },
@@ -25,7 +40,7 @@ const termsOfServiceRoute = createRoute({
 
 const termsOfUseRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: `${route[TOU]}`,
+  path: `${routes[TOU]}`,
   component: () => {
     return <TermsOfUse />;
   },
@@ -33,7 +48,7 @@ const termsOfUseRoute = createRoute({
 
 const codeOfConductRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: `${route[COC]}`,
+  path: `${routes[COC]}`,
   component: () => {
     return <CodeOfConduct />;
   },
@@ -41,7 +56,7 @@ const codeOfConductRoute = createRoute({
 
 const privacyPolicyRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: `${route[PP]}`,
+  path: `${routes[PP]}`,
   component: () => {
     return <PrivacyPolicy />;
   },
@@ -49,13 +64,15 @@ const privacyPolicyRoute = createRoute({
 
 const developerGuidelinesRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: `${route[DG]}`,
+  path: `${routes[DG]}`,
   component: () => {
     return <DeveloperGuidelines />;
   },
 });
 
 const routeTree = rootRoute.addChildren([
+  defaultRoute,
+  mainRoute,
   termsOfServiceRoute,
   termsOfUseRoute,
   codeOfConductRoute,
