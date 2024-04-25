@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import Followers, {
   FollowersProps,
-} from '../../components/ProfileEngagements/Engagement/Followers';
+} from '../../components/ProfileEngagements/Engagement/followers';
 
 const meta: Meta<FollowersProps> = {
   title: 'DSComponents/Profile/Followers',

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import FollowProfileButton from '../../follow-profile-button';
-import Followers from '@akashaorg/design-system-components/lib/components/ProfileEngagements/Engagement/Followers';
+import Followers from '@akashaorg/design-system-components/lib/components/ProfileEngagements/Engagement/followers';
 import EngagementTab from './engagement-tab';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
