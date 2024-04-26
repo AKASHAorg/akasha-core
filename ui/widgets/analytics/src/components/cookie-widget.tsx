@@ -27,7 +27,6 @@ const CookieWidget: React.FC<unknown> = () => {
   const eventSub = useRef(null);
   const analyticsConfig = useRef(worldConfig.analytics);
   const _uiEvents = useRef(uiEvents);
-  const navigateTo = React.useRef(getRoutingPlugin().navigateTo);
 
   useLayoutEffect(() => {
     const consentType = window.localStorage.getItem(COOKIE_CONSENT_NAME);
@@ -67,15 +66,6 @@ const CookieWidget: React.FC<unknown> = () => {
       event: EventTypes.SetInitialCookieType,
     });
   }, []);
-
-  const handleSettingsClick = React.useCallback(
-    () =>
-      navigateTo.current?.({
-        appName: '@akashaorg/app-settings-ewa',
-        getNavigationUrl: navRoutes => navRoutes.Home,
-      }),
-    [],
-  );
 
   return (
     <div>

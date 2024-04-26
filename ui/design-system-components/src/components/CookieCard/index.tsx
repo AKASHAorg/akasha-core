@@ -39,29 +39,31 @@ const CookieCard: React.FC<CookieCardProps> = props => {
 
   return (
     <Card radius={20} padding={'p-4'}>
-      <Stack direction="column" spacing="gap-y-1">
+      <Stack direction="column" spacing="gap-y-2">
         <Text variant="h6">{titleLabel}</Text>
 
-        <Text variant="body2">{paragraphOneLabel}</Text>
+        <Stack spacing="gap-y-1">
+          <Text variant="body2">{paragraphOneLabel}</Text>
 
-        <Text variant="body2">
-          {paragraphTwo.ctaLabel}
+          <Text variant="body2">
+            {paragraphTwo.ctaLabel}
 
-          <Anchor href={paragraphTwo.analyticsURL}>{paragraphTwo.analyticsLabel}</Anchor>
+            <Anchor href={paragraphTwo.analyticsURL}>{paragraphTwo.analyticsLabel}</Anchor>
 
-          {paragraphTwo.middleParagraphLabeL}
+            {paragraphTwo.middleParagraphLabeL}
 
-          <Anchor onClick={paragraphTwo.onSettingsClick}>{paragraphTwo.settingsLabel}</Anchor>
+            <Anchor onClick={paragraphTwo.onSettingsClick}>{paragraphTwo.settingsLabel}</Anchor>
 
-          {paragraphTwo.lastParagraphLabel}
-        </Text>
+            {paragraphTwo.lastParagraphLabel}
+          </Text>
 
-        <Text variant="body2">
-          {paragraphThree.ctaLabel}{' '}
-          <Anchor href={paragraphThree.url}>{paragraphThree.urlLabel}</Anchor>
-        </Text>
+          <Text variant="body2">
+            {paragraphThree.ctaLabel}{' '}
+            <Anchor href={paragraphThree.url}>{paragraphThree.urlLabel}</Anchor>
+          </Text>
+        </Stack>
 
-        <Stack direction="row" spacing="gap-x-4" customStyle="ml-auto mt-auto">
+        <Stack direction="row" spacing="gap-x-4" customStyle="ml-auto">
           <Button variant="text" label={onlyEssentialLabel} onClick={onClickOnlyEssential} />
 
           <Button
