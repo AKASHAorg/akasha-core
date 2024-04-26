@@ -25,6 +25,9 @@ export type BeamFeedProps = {
   sorting?: AkashaBeamSortingInput;
   estimatedHeight?: number;
   itemSpacing?: number;
+  scrollOptions?: {
+    overScan: number;
+  };
   scrollTopIndicator?: VirtualizerProps<unknown>['scrollTopIndicator'];
   renderItem?: (props: AkashaBeamStreamEdge | AkashaBeamEdge) => React.ReactNode;
   trackEvent?: (data: AnalyticsEventData['data']) => void;
@@ -32,7 +35,14 @@ export type BeamFeedProps = {
 };
 
 const BeamFeed = (props: BeamFeedProps) => {
-  const { filters, sorting, estimatedHeight = 350, itemSpacing, loadingIndicator } = props;
+  const {
+    filters,
+    sorting,
+    estimatedHeight = 350,
+    itemSpacing,
+    scrollOptions = { overScan: 10 },
+    loadingIndicator,
+  } = props;
   const indexingDID = React.useRef(getSDK().services.gql.indexingDID);
   const [fetchBeam, beamQuery] = useGetBeamStreamLazyQuery();
   const beamStream = React.useMemo(() => {
@@ -92,8 +102,8 @@ const BeamFeed = (props: BeamFeedProps) => {
         <DynamicInfiniteScroll
           totalElements={beams.length}
           itemHeight={estimatedHeight}
-          /* @TODO: Revisit. OverScan less than beams length results in weird UI behavior and a bigger overScan introduces performance issues. */
-          overScan={beams.length}
+          overScan={scrollOptions.overScan}
+          itemSpacing={itemSpacing}
           hasNextPage={pageInfo && pageInfo.hasNextPage}
           loading={beamQuery.loading}
           onLoadMore={async () => {
@@ -109,7 +119,6 @@ const BeamFeed = (props: BeamFeedProps) => {
               });
             }
           }}
-          customStyle={`gap-y-[${itemSpacing}px]`}
         >
           {({ itemIndex }) => {
             const beam = beams[itemIndex];

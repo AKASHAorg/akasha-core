@@ -15,6 +15,7 @@ type DynamicInfiniteScrollType = {
   totalElements: number;
   itemHeight: number;
   overScan?: number;
+  itemSpacing?: number;
   hasNextPage?: boolean;
   loading?: boolean;
   customStyle?: string;
@@ -28,6 +29,7 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
     totalElements,
     itemHeight,
     overScan = 0,
+    itemSpacing,
     hasNextPage,
     loading,
     customStyle = '',
@@ -67,16 +69,22 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
 
   return (
     <Stack customStyle={`relative mb-2 min-h-[${totalSize + additionalSize}px] ${customStyle}`}>
-      {virtualItems.map((virtualItem, index, items) => (
-        <Card
-          key={virtualItem.key}
-          data-index={virtualItem.index}
-          ref={rowVirtualizer.measureElement}
-          type="plain"
-        >
-          {children({ index, itemIndex: virtualItem.index, itemsSize: items.length })}
-        </Card>
-      ))}
+      <Stack
+        customStyle={`absolute w-full top-0 left-0 gap-y-[${itemSpacing}px] translate-y-[${
+          virtualItems?.[0]?.start ?? 0
+        }px]`}
+      >
+        {virtualItems.map((virtualItem, index, items) => (
+          <Card
+            key={virtualItem.key}
+            data-index={virtualItem.index}
+            ref={rowVirtualizer.measureElement}
+            type="plain"
+          >
+            {children({ index, itemIndex: virtualItem.index, itemsSize: items.length })}
+          </Card>
+        ))}
+      </Stack>
       {loadingMore && (
         <Stack align="center" justify="center" fullWidth ref={loadMoreRef}>
           <Spinner />
