@@ -4,15 +4,15 @@ import { useEffect, useRef } from 'react';
 const SCROLL_RESTORATION_OFFSET = '@scrollRestorationOffset';
 
 interface IScrollRestoration {
-  rowVirtualizer: Virtualizer<Window, Element>;
+  virtualizer: Virtualizer<Window, Element>;
 }
 
 /*
  * Restore the scroll position using the last offset stored in a local storage before a component unmounts
- * @param rowVirtualizer - virtualizer instance
+ * @param virtualizer - virtualizer instance
  **/
-export function useScrollRestoration({ rowVirtualizer }: IScrollRestoration) {
-  const rowVirtualizerRef = useRef(rowVirtualizer);
+export function useScrollRestoration({ virtualizer }: IScrollRestoration) {
+  const virtualizerRef = useRef(virtualizer);
   const observer = useRef(
     //observe body element to check its scroll height to ensure the possibility of scrolling to an offset
     new ResizeObserver(() => {
@@ -35,13 +35,13 @@ export function useScrollRestoration({ rowVirtualizer }: IScrollRestoration) {
 
   useEffect(() => {
     const currentObserver = observer.current;
-    const currentRowVirtualizer = rowVirtualizerRef.current;
+    const currentVirtualizer = virtualizerRef.current;
     currentObserver.observe(document.body);
     return () => {
       //when a component unmounts store the last scroll offset position in a local storage
       localStorage.setItem(
         SCROLL_RESTORATION_OFFSET,
-        JSON.stringify(currentRowVirtualizer.scrollOffset),
+        JSON.stringify(currentVirtualizer.scrollOffset),
       );
       currentObserver.disconnect();
     };

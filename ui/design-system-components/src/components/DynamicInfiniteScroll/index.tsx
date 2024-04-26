@@ -37,14 +37,14 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
     children,
   } = props;
 
-  const rowVirtualizer = useWindowVirtualizer({
+  const virtualizer = useWindowVirtualizer({
     count: totalElements,
     overscan: overScan,
     estimateSize: () => itemHeight,
   });
   const loadMoreRef = useRef(null);
 
-  useScrollRestoration({ rowVirtualizer });
+  useScrollRestoration({ virtualizer });
 
   useEffect(() => {
     const onScroll = async () => {
@@ -62,15 +62,18 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
     };
   }, [onLoadMore, hasNextPage, loading]);
 
-  const virtualItems = rowVirtualizer.getVirtualItems();
-  const totalSize = rowVirtualizer.getTotalSize();
+  const virtualItems = virtualizer.getVirtualItems();
+  const totalVirtualItems = virtualItems.length;
+  const totalSize = virtualizer.getTotalSize();
   const loadingMore = loading && totalElements > 0;
-  const additionalSize = loadingMore ? 16 : 0;
-
+  const itemSpacingTotal = totalVirtualItems ? totalVirtualItems * itemSpacing - itemSpacing : 0;
   return (
-    <Stack customStyle={`relative mb-2 min-h-[${totalSize + additionalSize}px] ${customStyle}`}>
+    <Card
+      customStyle={`relative mb-2 min-h-[${totalSize + itemSpacingTotal}px] ${customStyle}`}
+      type="plain"
+    >
       <Stack
-        customStyle={`absolute w-full top-0 left-0 gap-y-[${itemSpacing}px] translate-y-[${
+        customStyle={`absolute w-full gap-y-[${itemSpacing}px] translate-y-[${
           virtualItems?.[0]?.start ?? 0
         }px]`}
       >
@@ -78,19 +81,19 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
           <Card
             key={virtualItem.key}
             data-index={virtualItem.index}
-            ref={rowVirtualizer.measureElement}
+            ref={virtualizer.measureElement}
             type="plain"
           >
             {children({ index, itemIndex: virtualItem.index, itemsSize: items.length })}
           </Card>
         ))}
+        {loadingMore && (
+          <Stack align="center" justify="center" fullWidth ref={loadMoreRef}>
+            <Spinner />
+          </Stack>
+        )}
       </Stack>
-      {loadingMore && (
-        <Stack align="center" justify="center" fullWidth ref={loadMoreRef}>
-          <Spinner />
-        </Stack>
-      )}
-    </Stack>
+    </Card>
   );
 };
 
