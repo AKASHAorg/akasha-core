@@ -22,7 +22,7 @@ type DynamicInfiniteScrollType = {
   children: (item: DynamicInfiniteScrollItem) => ReactElement;
 };
 
-//@TODO: merge with InfiniteScroll
+//@TODO: merge with InfiniteScroll component and move to design system core
 const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
   const {
     totalElements,
