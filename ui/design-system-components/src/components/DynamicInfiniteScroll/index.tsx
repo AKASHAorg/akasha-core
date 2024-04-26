@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useRef } from 'react';
+import React, { ReactElement, useCallback, useEffect, useRef } from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
@@ -45,23 +45,24 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
   });
   const loadMoreRef = useRef(null);
 
-  useScrollRestoration({ scrollOffset: virtualizer.scrollOffset });
+  useScrollRestoration({ virtualizer });
+
+  const onScroll = useCallback(async () => {
+    const scrolledTo = window.scrollY + window.innerHeight;
+    const threshold = 100;
+    if (document.body.scrollHeight - threshold <= scrolledTo) {
+      if (hasNextPage && !loading) {
+        await onLoadMore();
+      }
+    }
+  }, [onLoadMore, hasNextPage, loading]);
 
   useEffect(() => {
-    const onScroll = async () => {
-      const scrolledTo = window.scrollY + window.innerHeight;
-      const threshold = 100;
-      if (document.body.scrollHeight - threshold <= scrolledTo) {
-        if (hasNextPage && !loading) {
-          await onLoadMore();
-        }
-      }
-    };
     window.onscroll = onScroll;
     return () => {
       window.removeEventListener('scroll', onScroll);
     };
-  }, [onLoadMore, hasNextPage, loading]);
+  }, [onScroll]);
 
   const virtualItems = virtualizer.getVirtualItems();
   const totalSize = virtualizer.getTotalSize();
