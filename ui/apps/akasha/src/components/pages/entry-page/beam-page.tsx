@@ -23,6 +23,7 @@ import {
   GetBeamByIdQuery,
   GetBeamStreamQuery,
 } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
+import { EditableReflectionResolver } from '@akashaorg/ui-lib-feed/lib/components/editable-reflection/editable-reflection-resolver';
 
 type BeamPageProps = {
   beamId: string;
@@ -104,48 +105,33 @@ const BeamPage: React.FC<BeamPageProps> = props => {
             </>
           }
           queryKey={`reflect-feed-${beamId}`}
-          filters={{ where: { reflection: { isNull: true } } }}
+          filters={{ where: { beamID: { equalTo: beamId } } }}
           estimatedHeight={120}
-          renderItem={itemData => (
-            <>
-              <Divider />
-              <EditableReflection
-                entryData={mapReflectEntryData(itemData.node)}
-                reflectToId={beamId}
-                contentClickable={true}
-                onContentClick={() =>
-                  navigate({
-                    to: '/reflection/$reflectionId',
-                    params: {
-                      reflectionId: itemData.node.id,
-                    },
-                  })
-                }
-                onReflect={() =>
-                  navigate({
-                    to: '/reflection/$reflectionId/reflect',
-                    params: {
-                      reflectionId: itemData.node.id,
-                    },
-                  })
-                }
-              />
-              <ReflectionPreview
-                reflectionId={itemData.node.id}
-                onNavigate={(options: { id: string; reflect?: boolean }) => {
-                  navigate({
-                    to: options.reflect
-                      ? '/reflection/$reflectionId/reflect'
-                      : '/reflection/$reflectionId',
-                    params: {
-                      reflectionId: options.id,
-                    },
-                  });
-                  return;
-                }}
-              />
-            </>
-          )}
+          renderItem={itemData => {
+            return (
+              <>
+                <Divider />
+                <EditableReflectionResolver
+                  reflectID={itemData.node.reflectionID}
+                  beamID={beamId}
+                />
+                <ReflectionPreview
+                  reflectionId={itemData.node.reflectionID}
+                  onNavigate={(options: { id: string; reflect?: boolean }) => {
+                    navigate({
+                      to: options.reflect
+                        ? '/reflection/$reflectionId/reflect'
+                        : '/reflection/$reflectionId',
+                      params: {
+                        reflectionId: options.id,
+                      },
+                    });
+                    return;
+                  }}
+                />
+              </>
+            );
+          }}
           reflectionsOf={{ entryId: beamId, itemType: EntityTypes.BEAM }}
           itemSpacing={0}
           newItemsPublishedLabel={t('New Reflects published recently')}

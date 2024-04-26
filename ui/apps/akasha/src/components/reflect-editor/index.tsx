@@ -95,7 +95,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
   ]);
 
   const handlePublish = async (data: IPublishData) => {
-    const reflection = isReflectOfReflection ? { reflection: reflectToId } : {};
+    const reflection = isReflectOfReflection ? { reflection: reflectToId, isReply: true } : {};
     const content = {
       active: true,
       beamID: beamId,
@@ -107,7 +107,6 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         },
       ],
       createdAt: new Date().toISOString(),
-      isReply: true,
       ...reflection,
     };
     setNewContent({ ...content, authorId: null, id: null });

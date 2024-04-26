@@ -18,6 +18,7 @@ import { EntityTypes, type ReflectEntryData } from '@akashaorg/typings/lib/ui';
 import { ReflectionPreview } from '@akashaorg/ui-lib-feed';
 import { useNavigate } from '@tanstack/react-router';
 import { GetReflectionByIdQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
+import { EditableReflectionResolver } from '@akashaorg/ui-lib-feed/lib/components/editable-reflection/editable-reflection-resolver';
 
 type ReflectionPageProps = {
   reflectionId: string;
@@ -92,26 +93,9 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
           renderItem={itemData => (
             <>
               <Divider />
-              <EditableReflection
-                entryData={mapReflectEntryData(itemData.node)}
-                reflectToId={mapReflectEntryData(itemData.node).id}
-                contentClickable={true}
-                onContentClick={() =>
-                  navigate({
-                    to: '/reflection/$reflectionId',
-                    params: {
-                      reflectionId: itemData.node.id,
-                    },
-                  })
-                }
-                onReflect={() =>
-                  navigate({
-                    to: '/reflection/$reflectionId/reflect',
-                    params: {
-                      reflectionId: itemData.node.id,
-                    },
-                  })
-                }
+              <EditableReflectionResolver
+                reflectID={itemData.node.reflectionID}
+                beamID={entryData.beam?.id}
               />
               <ReflectionPreview
                 reflectionId={itemData.node.id}

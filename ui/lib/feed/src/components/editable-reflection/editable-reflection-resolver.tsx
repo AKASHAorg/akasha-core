@@ -34,7 +34,7 @@ export const EditableReflectionResolver = (props: EditableReflectionResolverProp
             const reflectionId = reflectionQuery.data.node.id;
             return getRoutingPlugin().navigateTo({
               appName: '@akashaorg/app-akasha-integration',
-              getNavigationUrl: navRoutes => `${navRoutes.Reflect}/${reflectionId}`,
+              getNavigationUrl: navRoutes => `${navRoutes.Reflection}/${reflectionId}`,
             });
           }
         }}
@@ -44,7 +44,7 @@ export const EditableReflectionResolver = (props: EditableReflectionResolverProp
             getRoutingPlugin().navigateTo({
               appName: '@akashaorg/app-akasha-integration',
               getNavigationUrl: navRoutes =>
-                `${navRoutes.Reflect}/${reflectionId}${navRoutes.Reflect}`,
+                `${navRoutes.Reflection}/${reflectionId}${navRoutes.Reflect}`,
             });
           }
         }}

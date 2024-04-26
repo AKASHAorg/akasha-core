@@ -1,9 +1,11 @@
 import React from 'react';
 import { AnalyticsEventData, EntityTypes, type ReflectEntryData } from '@akashaorg/typings/lib/ui';
 import {
-  AkashaReflectEdge,
+  AkashaReflectStreamEdge,
   AkashaReflectFiltersInput,
   AkashaReflectSortingInput,
+  AkashaReflectStreamFiltersInput,
+  AkashaReflectStreamSortingInput,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { EdgeArea, Virtualizer, VirtualizerProps } from '../virtual-list';
 import { useReflections } from '@akashaorg/ui-awf-hooks/lib/use-reflections';
@@ -20,9 +22,9 @@ export type ReflectFeedProps = {
   queryKey: string;
   estimatedHeight: number;
   scrollTopIndicator?: VirtualizerProps<unknown>['scrollTopIndicator'];
-  renderItem: VirtualizerProps<AkashaReflectEdge>['renderItem'];
-  filters?: AkashaReflectFiltersInput;
-  sorting?: AkashaReflectSortingInput;
+  renderItem: VirtualizerProps<AkashaReflectStreamEdge>['renderItem'];
+  filters?: AkashaReflectStreamFiltersInput;
+  sorting?: AkashaReflectStreamSortingInput;
   loadingIndicator?: VirtualizerProps<unknown>['loadingIndicator'];
   header?: VirtualizerProps<unknown>['header'];
   footer?: VirtualizerProps<unknown>['footer'];
@@ -107,7 +109,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
         />
       )}
       {!hasErrors && (
-        <Virtualizer<AkashaReflectEdge>
+        <Virtualizer<AkashaReflectStreamEdge>
           requestStatus={{ called, isLoading }}
           restorationKey={queryKey}
           itemSpacing={itemSpacing}
