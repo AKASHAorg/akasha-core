@@ -38,7 +38,7 @@ const CookieCard: React.FC<CookieCardProps> = props => {
   } = props;
 
   return (
-    <Card radius={20} padding={'p-4'}>
+    <Card elevation="3" radius={20} padding={'p-4'}>
       <Stack direction="column" spacing="gap-y-2">
         <Text variant="h6">{titleLabel}</Text>
 
