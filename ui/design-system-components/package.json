@@ -67,7 +67,7 @@
     "@nrwl/tao": "15.3.0",
     "@nrwl/web": "15.3.0",
     "@nrwl/workspace": "15.3.0",
-    "@tanstack/react-virtual": "3.0.2",
+    "@tanstack/react-virtual": "3.4.0",
     "@types/emoji-mart": "3.0.9",
     "@types/is-url": "1.2.30",
     "@types/lodash.isequal": "4.5.5",

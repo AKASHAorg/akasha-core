@@ -1,18 +1,17 @@
-import { Virtualizer } from '@tanstack/react-virtual';
 import { useEffect, useRef } from 'react';
 
 const SCROLL_RESTORATION_OFFSET = '@scrollRestorationOffset';
 
 interface IScrollRestoration {
-  virtualizer: Virtualizer<Window, Element>;
+  scrollOffset: number;
 }
 
 /*
  * Restore the scroll position using the last offset stored in a local storage before a component unmounts
- * @param virtualizer - virtualizer instance
+ * @param scrollOffset - scroll offset to restore
  **/
-export function useScrollRestoration({ virtualizer }: IScrollRestoration) {
-  const virtualizerRef = useRef(virtualizer);
+export function useScrollRestoration({ scrollOffset }: IScrollRestoration) {
+  const scrollOffsetRef = useRef(scrollOffset);
   const observer = useRef(
     //observe body element to check its scroll height to ensure the possibility of scrolling to an offset
     new ResizeObserver(() => {
@@ -34,15 +33,16 @@ export function useScrollRestoration({ virtualizer }: IScrollRestoration) {
   );
 
   useEffect(() => {
+    scrollOffsetRef.current = scrollOffset;
+  }, [scrollOffset]);
+
+  useEffect(() => {
     const currentObserver = observer.current;
-    const currentVirtualizer = virtualizerRef.current;
     currentObserver.observe(document.body);
     return () => {
+      const currentScrollOffset = scrollOffsetRef.current;
       //when a component unmounts store the last scroll offset position in a local storage
-      localStorage.setItem(
-        SCROLL_RESTORATION_OFFSET,
-        JSON.stringify(currentVirtualizer.scrollOffset),
-      );
+      localStorage.setItem(SCROLL_RESTORATION_OFFSET, JSON.stringify(currentScrollOffset));
       currentObserver.disconnect();
     };
   }, []);

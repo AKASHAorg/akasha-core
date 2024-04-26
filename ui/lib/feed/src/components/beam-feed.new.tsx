@@ -119,6 +119,7 @@ const BeamFeed = (props: BeamFeedProps) => {
               });
             }
           }}
+          customStyle="mb-4"
         >
           {({ itemIndex }) => {
             const beam = beams[itemIndex];

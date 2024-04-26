@@ -40,11 +40,12 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
   const virtualizer = useWindowVirtualizer({
     count: totalElements,
     overscan: overScan,
+    gap: itemSpacing,
     estimateSize: () => itemHeight,
   });
   const loadMoreRef = useRef(null);
 
-  useScrollRestoration({ virtualizer });
+  useScrollRestoration({ scrollOffset: virtualizer.scrollOffset });
 
   useEffect(() => {
     const onScroll = async () => {
@@ -63,36 +64,37 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
   }, [onLoadMore, hasNextPage, loading]);
 
   const virtualItems = virtualizer.getVirtualItems();
-  const totalVirtualItems = virtualItems.length;
   const totalSize = virtualizer.getTotalSize();
   const loadingMore = loading && totalElements > 0;
-  const itemSpacingTotal = totalVirtualItems ? totalVirtualItems * itemSpacing - itemSpacing : 0;
+  const loadingPlaceholderSize = loadingMore ? 32 + itemSpacing : 0;
+
   return (
     <Card
-      customStyle={`relative mb-2 min-h-[${totalSize + itemSpacingTotal}px] ${customStyle}`}
+      customStyle={`relative min-h-[${totalSize + loadingPlaceholderSize}px] ${customStyle}`}
       type="plain"
     >
-      <Stack
-        customStyle={`absolute w-full gap-y-[${itemSpacing}px] translate-y-[${
-          virtualItems?.[0]?.start ?? 0
-        }px]`}
-      >
-        {virtualItems.map((virtualItem, index, items) => (
-          <Card
-            key={virtualItem.key}
-            data-index={virtualItem.index}
-            ref={virtualizer.measureElement}
-            type="plain"
-          >
-            {children({ index, itemIndex: virtualItem.index, itemsSize: items.length })}
-          </Card>
-        ))}
-        {loadingMore && (
-          <Stack align="center" justify="center" fullWidth ref={loadMoreRef}>
-            <Spinner />
-          </Stack>
-        )}
-      </Stack>
+      {virtualItems.map((virtualItem, index, items) => (
+        <Card
+          key={virtualItem.key}
+          data-index={virtualItem.index}
+          ref={virtualizer.measureElement}
+          customStyle={`absolute w-full translate-y-[${virtualItem.start}px]`}
+          type="plain"
+        >
+          {children({ index, itemIndex: virtualItem.index, itemsSize: items.length })}
+        </Card>
+      ))}
+      {loadingMore && (
+        <Stack
+          align="center"
+          justify="center"
+          fullWidth
+          ref={loadMoreRef}
+          customStyle={`absolute w-full bottom-0 mt-[${itemSpacing}px]`}
+        >
+          <Spinner />
+        </Stack>
+      )}
     </Card>
   );
 };
