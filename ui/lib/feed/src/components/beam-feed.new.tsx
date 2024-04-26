@@ -92,6 +92,7 @@ const BeamFeed = (props: BeamFeedProps) => {
         <DynamicInfiniteScroll
           totalElements={beams.length}
           itemHeight={estimatedHeight}
+          /* @TODO: Revisit. OverScan less than beams length results in weird UI behavior and a bigger overScan introduces performance issues. */
           overScan={beams.length}
           hasNextPage={pageInfo && pageInfo.hasNextPage}
           loading={beamQuery.loading}
