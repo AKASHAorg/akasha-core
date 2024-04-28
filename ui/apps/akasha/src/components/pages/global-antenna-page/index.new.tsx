@@ -66,7 +66,7 @@ const GlobalAntennaPage: React.FC<GlobalAntennaPageProps> = props => {
           queryKey={QueryKeys.GLOBAL_ANTENNA}
           estimatedHeight={150}
           itemSpacing={8}
-          scrollOptions={{ overScan: 50 }}
+          scrollOptions={{ overScan: 25 }}
           scrollTopIndicator={(listRect, onScrollToTop) => (
             <ScrollTopWrapper placement={listRect.left}>
               <ScrollTopButton hide={false} onClick={onScrollToTop} />
