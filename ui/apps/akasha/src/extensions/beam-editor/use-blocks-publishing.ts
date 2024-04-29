@@ -32,12 +32,11 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
   const [errors, setErrors] = React.useState<Error[]>([]);
   const globalIdx = React.useRef(0);
   const sdk = React.useRef(getSDK());
-
   const [isNsfw, setIsNsfw] = React.useState(false);
   const [editorTags, setEditorTags] = React.useState([]);
-
   const { getExtensionsPlugin } = useRootComponentProps();
-
+  const maxAllowedBlocks = 10;
+  const maxAllowedTags = 10;
   React.useLayoutEffect(() => {
     if (getExtensionsPlugin()) {
       setAvailableBlocks(getExtensionsPlugin().contentBlockStore.getInfos());
@@ -282,6 +281,8 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
     setIsPublishing,
     createContentBlocks,
     blocksInUse,
+    maxAllowedBlocks,
+    maxAllowedTags,
     addBlockToList,
     removeBlockFromList,
     updateBlockDisablePublishState,
