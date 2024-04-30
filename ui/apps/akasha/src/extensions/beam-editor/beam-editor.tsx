@@ -27,8 +27,11 @@ export const BeamEditor: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [isNsfw, setIsNsfw] = useState(false);
   const [nsfwBlocks, setNsfwBlocks] = useState(new Map<number, boolean>());
+
   const bottomRef = useRef<HTMLDivElement>(null);
+
   const { t } = useTranslation('app-akasha-integration');
+
   const { getRoutingPlugin } = useRootComponentProps();
   /*
    * get the logged-in user info and info about their profile's NSFW property
@@ -43,6 +46,7 @@ export const BeamEditor: React.FC = () => {
     },
     skip: !authenticatedDID || authenticating,
   });
+
   const {
     availableBlocks,
     createContentBlocks,
@@ -61,6 +65,7 @@ export const BeamEditor: React.FC = () => {
       });
     },
   });
+
   const { akashaProfile: profileData } =
     data?.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
   useEffect(() => {
@@ -68,6 +73,18 @@ export const BeamEditor: React.FC = () => {
       setIsNsfw(true);
     }
   }, [profileData]);
+
+  /**
+   * focus the last block after adding or removing a block
+   */
+  useEffect(() => {
+    if (blocksInUse.length > 0) {
+      setFocusedBlock(blocksInUse[blocksInUse.length - 1]?.key);
+    }
+    // blocksInUse changes when you type due to checking for disablePublishing state
+    // that's why we only care about the length here
+  }, [blocksInUse.length]);
+
   useEffect(() => {
     if (blocksInUse.length) {
       bottomRef.current?.scrollIntoView({
@@ -75,21 +92,27 @@ export const BeamEditor: React.FC = () => {
         block: 'end',
       });
     }
+  }, [blocksInUse.length]);
+
+  useEffect(() => {
     if (blocksInUse.some(block => block.disablePublish === true)) {
       setDisablePublishing(true);
     } else {
       setDisablePublishing(false);
     }
   }, [blocksInUse]);
+
   const onBlockSelectAfter = (newSelection: ContentBlock) => {
     if (!newSelection?.propertyType) {
       return;
     }
     addBlockToList({ propertyType: newSelection.propertyType, appName: newSelection.appName });
   };
+
   const handleBeamPublish = () => {
     createContentBlocks(isNsfw, editorTags, nsfwBlocks);
   };
+
   const handleNsfwCheckbox = () => {
     /*
      * If the profile is marked as NSFW, Beam NSFW checkbox should be marked as checked by default
@@ -114,9 +137,11 @@ export const BeamEditor: React.FC = () => {
     }
     setNsfwBlocks(newNsfwBlocks);
   };
+
   const handleAddBlockBtn = () => {
     setUiState('blocks');
   };
+
   const handleTagsBtn = () => {
     setUiState('tags');
     /**
@@ -136,14 +161,17 @@ export const BeamEditor: React.FC = () => {
     onBlockSelectAfter(newBlock);
     setUiState('editor');
   };
+
   const targetKeys = [' ', ',', 'Enter'];
   const targetCodes = ['Space', 'Comma', 'Enter'];
   const allTags = [...new Set([...editorTags, ...newTags])];
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const tag = e.currentTarget.value;
     if (targetKeys.includes(tag.charAt(tag.length - 1))) return;
     setTagValue(tag);
   };
+
   const handleKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
     if (newTags.length === 10) {
       setErrorMessage('Tags limit reached');
@@ -158,6 +186,7 @@ export const BeamEditor: React.FC = () => {
       addTag();
     }
   };
+
   const addTag = () => {
     /**
      * if tag length is at least 2 and total number of tags
@@ -174,6 +203,7 @@ export const BeamEditor: React.FC = () => {
       setTagValue('');
     }
   };
+
   const handleDeleteTag = (tag: string) => {
     if (newTags.includes(tag)) {
       setNewTags(newTags.filter(_tag => _tag !== tag));
@@ -182,11 +212,13 @@ export const BeamEditor: React.FC = () => {
       setErrorMessage(null);
     }
   };
+
   const handleClickSave = () => {
     setEditorTags(newTags);
     setNewTags([]);
     setUiState('editor');
   };
+
   const handleClickCancel = () => {
     /**
      * if uiState is 'tags', reset newTags and tagValue states,
@@ -198,8 +230,10 @@ export const BeamEditor: React.FC = () => {
     }
     setUiState('editor');
   };
+
   const [disablePublishing, setDisablePublishing] = useState(false);
   const blocksWithActiveNsfw = [...nsfwBlocks].filter(([, value]) => !!value);
+
   useEffect(() => {
     if (blocksWithActiveNsfw.length && blocksWithActiveNsfw.length >= 1) {
       setIsNsfw(true);
@@ -226,6 +260,7 @@ export const BeamEditor: React.FC = () => {
       }
     });
   }, [blocksInUse, focusedBlock]);
+
   return (
     <Card padding={0} customStyle="divide(y grey9 dark:grey3) h-[80vh] justify-between">
       <Header

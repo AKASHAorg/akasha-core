@@ -35,6 +35,8 @@ const InfoCard: React.FC<InfoCardProps> = ({
     >
       {assetName ? (
         <img
+          loading="lazy"
+          decoding="async"
           className={tw('object-contain h-[11.25rem]')}
           aria-label={assetName}
           src={`${publicImgPath}/${assetName}.${assetExtension}`}

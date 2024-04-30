@@ -325,14 +325,18 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
       encodedNodeLength <= MAX_ENCODED_LENGTH
     ) {
       setPublishDisabledInternal(false);
-      handleDisablePublish?.(false);
+      if (typeof handleDisablePublish === 'function') {
+        handleDisablePublish?.(false);
+      }
     } else if (
       textLength === 0 ||
       textLength > MAX_TEXT_LENGTH ||
       encodedNodeLength > MAX_ENCODED_LENGTH
     ) {
       setPublishDisabledInternal(true);
-      handleDisablePublish?.(true);
+      if (typeof handleDisablePublish === 'function') {
+        handleDisablePublish?.(true);
+      }
     }
 
     if (encodedNodeLength <= MAX_ENCODED_LENGTH) {
@@ -563,7 +567,8 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
               placeholder={placeholderLabel}
               autoComplete="off"
               spellCheck={false}
-              // autoFocus={true}
+              // eslint-disable-next-line
+              autoFocus={true}
               renderElement={(renderProps: RenderElementProps) =>
                 renderElement(
                   renderProps,
