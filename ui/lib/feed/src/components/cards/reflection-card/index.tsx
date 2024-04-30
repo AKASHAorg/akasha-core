@@ -3,7 +3,7 @@ import EntryCard, {
   EntryCardProps,
 } from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import AuthorProfileAvatar from '../author-profile-avatar';
-import { useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { useAkashaStore } from '@akashaorg/ui-awf-hooks';
 import { EntityTypes, ReflectEntryData } from '@akashaorg/typings/lib/ui';
 import { decodeb64SlateContent, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
@@ -30,9 +30,10 @@ const ReflectionCard: React.FC<ReflectCardProps> = props => {
   const { t } = useTranslation('ui-lib-feed');
   const { entryData, hidePublishTime, onReflect, ...rest } = props;
   const { getRoutingPlugin } = useRootComponentProps();
-  const { data } = useGetLogin();
-  const authenticatedDID = data?.id;
-  const isLoggedIn = !!data?.id;
+  const {
+    data: { authenticatedDID },
+  } = useAkashaStore();
+  const isLoggedIn = !!authenticatedDID;
 
   const navigateTo = getRoutingPlugin().navigateTo;
 

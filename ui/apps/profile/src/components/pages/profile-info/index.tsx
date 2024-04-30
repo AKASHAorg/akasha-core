@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { EventTypes, ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import {
   hasOwn,
-  useGetLogin,
+  useAkashaStore,
   useNsfwToggling,
   useProfileStats,
   useRootComponentProps,
@@ -33,8 +33,9 @@ const ProfileInfoPage: React.FC<ProfileInfoPageProps> = props => {
   const { profileDID } = props;
   const { t } = useTranslation('app-profile');
   const { getRoutingPlugin, navigateToModal, uiEvents } = useRootComponentProps();
-
-  const { data: loginData, loading: authenticating } = useGetLogin();
+  const {
+    data: { authenticatedDID, isAuthenticating: authenticating },
+  } = useAkashaStore();
   const { data, error } = useGetProfileByDidSuspenseQuery({
     fetchPolicy: 'cache-first',
     variables: {
@@ -43,14 +44,10 @@ const ProfileInfoPage: React.FC<ProfileInfoPageProps> = props => {
     skip: !profileDID,
   });
   const { validDid, isLoading: validDidCheckLoading } = useValidDid(profileDID, !!data?.node);
-
   const { data: statData } = useProfileStats(profileDID, true);
   const { akashaProfile: profileData } =
     data?.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
-
-  const isLoggedIn = !!loginData?.id;
-  const authenticatedDID = loginData?.id;
-
+  const isLoggedIn = !!authenticatedDID;
   const { showNsfw: showNsfwSetting } = useNsfwToggling();
   const [showNSFW, setShowNSFW] = useState(false);
 

@@ -8,7 +8,7 @@ import {
   withProviders,
   validateType,
   useRootComponentProps,
-  useGetLoginProfile,
+  useAkashaStore,
 } from '@akashaorg/ui-awf-hooks';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
@@ -30,8 +30,9 @@ const MessageButton: React.FC<RootExtensionProps<MessageButtonExtensionData>> = 
 
   const { profileId } = extensionData;
 
-  const authenticatedProfileReq = useGetLoginProfile();
-  const authenticatedProfile = authenticatedProfileReq?.akashaProfile;
+  const {
+    data: { authenticatedProfile },
+  } = useAkashaStore();
 
   const contactsToCheck = [];
   if (validateType(profileId, 'string')) {

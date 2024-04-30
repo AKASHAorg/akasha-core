@@ -9,7 +9,7 @@ export * from './utils/generic-utils';
 export * from './utils/entry-utils';
 export * from './utils/media-utils';
 export * from './utils/event-utils';
-export * from './use-login.new';
+export * from './use-connect-wallet';
 export * from './store';
 export { hasOwn } from './utils/has-own';
 export { sortByKey } from './utils/sort-by-key';

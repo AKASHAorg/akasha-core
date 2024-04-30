@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavigateToParams, ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
-import { useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { useAkashaStore } from '@akashaorg/ui-awf-hooks';
 
 import { ProfileStats as ProfileStatsPresentation } from '@akashaorg/design-system-components/lib/components/Profile';
 
@@ -26,8 +26,10 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({
 }) => {
   const { t } = useTranslation('app-profile');
 
-  const { data } = useGetLogin();
-  const isLoggedIn = !!data?.id;
+  const {
+    data: { authenticatedDID },
+  } = useAkashaStore();
+  const isLoggedIn = !!authenticatedDID;
 
   const onStatClick = (stat: 'beams' | 'followers' | 'following' | 'interests') => () => {
     if (!isLoggedIn) {

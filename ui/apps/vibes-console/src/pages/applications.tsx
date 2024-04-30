@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
-import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -10,12 +10,14 @@ import { SectionRenderer } from '../components/applications/section-renderer';
 import routes, { BECOME_MODERATOR } from '../routes';
 
 export const Applications: React.FC<unknown> = () => {
-  const { data } = useGetLogin();
+  const {
+    data: { authenticatedDID },
+  } = useAkashaStore();
   const navigate = useNavigate();
   const { navigateToModal } = useRootComponentProps();
   const _navigateToModal = React.useRef(navigateToModal);
   const { t } = useTranslation('vibes-console');
-  const isLoggedIn = !!data?.id;
+  const isLoggedIn = !!authenticatedDID;
   const isModerator = false;
   const showLoginModal = React.useCallback(
     (redirectTo?: { modal: ModalNavigationOptions }, message?: string) => {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, ChangeEvent, KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { hasOwn, useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { hasOwn, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { type ContentBlock } from '@akashaorg/typings/lib/ui';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
@@ -33,13 +33,15 @@ export const BeamEditor: React.FC = () => {
   /*
    * get the logged-in user info and info about their profile's NSFW property
    */
-  const { data: loginData, loading: authenticating } = useGetLogin();
+  const {
+    data: { authenticatedDID, isAuthenticating: authenticating },
+  } = useAkashaStore();
   const { data } = useGetProfileByDidSuspenseQuery({
     fetchPolicy: 'cache-first',
     variables: {
-      id: loginData?.id,
+      id: authenticatedDID,
     },
-    skip: !loginData?.id || authenticating,
+    skip: !authenticatedDID || authenticating,
   });
   const {
     availableBlocks,

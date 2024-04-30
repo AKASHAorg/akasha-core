@@ -9,17 +9,19 @@ import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ListAppTopbar from '@akashaorg/design-system-components/lib/components/ListAppTopbar';
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
-import { useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { useAkashaStore } from '@akashaorg/ui-awf-hooks';
 
 const ListsPage: React.FC<unknown> = () => {
   const [showModal, setShowModal] = React.useState(false);
 
   const { t } = useTranslation('app-lists');
-  const { data } = useGetLogin();
+  const {
+    data: { authenticatedDID },
+  } = useAkashaStore();
 
   const bookmarkDelete = null;
 
-  const isLoggedIn = !!data?.id;
+  const isLoggedIn = !!authenticatedDID;
 
   //temporary
   const listsReq = { isFetched: true, data: null, status: 'success', error: null };

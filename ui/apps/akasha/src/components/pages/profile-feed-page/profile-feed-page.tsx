@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import {
   hasOwn,
   mapBeamEntryData,
-  useGetLoginProfile,
+  useAkashaStore,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
 import { BeamCard, BeamFeed } from '@akashaorg/ui-lib-feed';
@@ -20,8 +20,10 @@ const ProfileFeedPage: React.FC<ProfileFeedPageProps> = props => {
   const { profileDID } = props;
   const { t } = useTranslation('app-akasha-integration');
   const { getRoutingPlugin, worldConfig } = useRootComponentProps();
-  const authenticatedProfileReq = useGetLoginProfile();
-  const authenticatedProfile = authenticatedProfileReq?.akashaProfile;
+  const {
+    data: { authenticatedProfile },
+  } = useAkashaStore();
+
   const profileUserName = React.useMemo(() => {
     if (authenticatedProfile && authenticatedProfile.name) {
       return authenticatedProfile.name;

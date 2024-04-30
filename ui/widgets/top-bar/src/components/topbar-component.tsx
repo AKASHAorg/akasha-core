@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useRouterState } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 import { EventTypes, UIEventData } from '@akashaorg/typings/lib/ui';
-import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import Topbar from './topbar';
 import {
@@ -14,12 +14,13 @@ import { filter } from 'rxjs';
 const TopbarComponent: React.FC<unknown> = () => {
   const { uiEvents, layoutConfig, logger, worldConfig, encodeAppName, getRoutingPlugin } =
     useRootComponentProps();
-  const { data } = useGetLogin();
-
+  const {
+    data: { authenticatedDID },
+  } = useAkashaStore();
   const { location } = useRouterState();
   const historyCount = React.useRef(0);
   const isNavigatingBackRef = React.useRef(false);
-  const isLoggedIn = !!data?.id;
+  const isLoggedIn = !!authenticatedDID;
   const navigateTo = getRoutingPlugin().navigateTo;
 
   const { t } = useTranslation('ui-widget-topbar');

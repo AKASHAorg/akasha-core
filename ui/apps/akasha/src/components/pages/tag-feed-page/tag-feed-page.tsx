@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import getSDK from '@akashaorg/awf-sdk';
-import { hasOwn, useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { hasOwn, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import {
   useGetIndexedStreamCountQuery,
   useGetInterestsByDidQuery,
@@ -26,10 +26,11 @@ type TagFeedPageProps = {
 const TagFeedPage: React.FC<TagFeedPageProps> = props => {
   const { tagName } = props;
   const { t } = useTranslation('app-akasha-integration');
-  const { data } = useGetLogin();
+  const {
+    data: { authenticatedDID },
+  } = useAkashaStore();
   const { navigateToModal, worldConfig } = useRootComponentProps();
-  const isLoggedIn = !!data?.id;
-  const authenticatedDID = data?.id;
+  const isLoggedIn = !!authenticatedDID;
   const _navigateToModal = React.useRef(navigateToModal);
   const showLoginModal = React.useCallback(
     (redirectTo?: { modal: ModalNavigationOptions }, message?: string) => {

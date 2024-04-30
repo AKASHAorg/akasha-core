@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from 'react';
-import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useEffect } from 'react';
 
 type ProfileWithAuthorizationProps = {
@@ -10,7 +10,9 @@ const ProfileWithAuthorization: React.FC<
   PropsWithChildren<ProfileWithAuthorizationProps>
 > = props => {
   const { profileDID, editingProfile, children } = props;
-  const { data: loginData, loading: authenticating } = useGetLogin();
+  const {
+    data: { authenticatedDID, isAuthenticating: authenticating },
+  } = useAkashaStore();
   const { getRoutingPlugin } = useRootComponentProps();
 
   useEffect(() => {
@@ -19,7 +21,7 @@ const ProfileWithAuthorization: React.FC<
     */
     if (
       !authenticating &&
-      (!loginData || (editingProfile && loginData && profileDID !== loginData.id))
+      (!authenticatedDID || (editingProfile && authenticatedDID && profileDID !== authenticatedDID))
     ) {
       getRoutingPlugin().navigateTo({
         appName: '@akashaorg/app-profile',
@@ -27,7 +29,7 @@ const ProfileWithAuthorization: React.FC<
       });
       return;
     }
-  }, [loginData, editingProfile, getRoutingPlugin, authenticating, profileDID]);
+  }, [authenticatedDID, editingProfile, getRoutingPlugin, authenticating, profileDID]);
 
   return <>{children}</>;
 };
