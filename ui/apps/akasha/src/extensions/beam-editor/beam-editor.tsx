@@ -76,7 +76,7 @@ export const BeamEditor: React.FC = () => {
    * focus the last block after adding or removing a block
    */
   useEffect(() => {
-    if (blocksInUse.length > 1) {
+    if (blocksInUse.length > 0) {
       setFocusedBlock(blocksInUse[blocksInUse.length - 1]?.key);
     }
     // blocksInUse changes when you type due to checking for disablePublishing state
