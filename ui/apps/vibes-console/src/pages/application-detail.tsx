@@ -1,15 +1,20 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { ApplicantDataCard, ApplicationDetail } from '../components/applications/application';
-import { generateApplicationData, generateModeratorApplicationHistory } from '../utils';
+import { NoItemFound } from '../components/no-item-found';
 
 export const ApplicationDetailPage: React.FC<unknown> = () => {
   const { t } = useTranslation('vibes-console');
-
-  const applicationData = generateApplicationData();
-  const applicant = generateModeratorApplicationHistory()[0];
-
+  const applicationData = null;
+  const applicant = null;
+  if (!applicationData)
+    return (
+      <Card>
+        <NoItemFound title="Oops! This application detail does not exist" />
+      </Card>
+    );
   return (
     <Stack spacing="gap-y-4">
       <ApplicantDataCard

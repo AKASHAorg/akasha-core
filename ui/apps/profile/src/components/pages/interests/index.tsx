@@ -13,7 +13,7 @@ import {
   useUpdateInterestsMutation,
   GetInterestsByDidDocument,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { hasOwn, useRootComponentProps, useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { hasOwn, useRootComponentProps, useAkashaStore } from '@akashaorg/ui-awf-hooks';
 import getSDK from '@akashaorg/awf-sdk';
 import { useApolloClient } from '@apollo/client';
 import { AkashaProfileInterestsLabeled } from '@akashaorg/typings/lib/sdk/graphql-types-new';
@@ -25,14 +25,13 @@ type InterestsPageProps = {
 const InterestsPage: React.FC<InterestsPageProps> = props => {
   const { profileDID } = props;
   const { t } = useTranslation('app-profile');
-  const { data: loginData, loading: authenticating } = useGetLogin();
+  const {
+    data: { authenticatedDID, isAuthenticating: authenticating },
+  } = useAkashaStore();
   const { getRoutingPlugin } = useRootComponentProps();
-
   const [isProcessing, setIsProcessing] = useState(false);
   const [activeInterests, setActiveInterests] = useState([]);
-
-  const authenticatedDID = loginData?.id;
-  const isLoggedIn = !!loginData?.id;
+  const isLoggedIn = !!authenticatedDID;
   const navigateTo = getRoutingPlugin().navigateTo;
   const apolloClient = useApolloClient();
 

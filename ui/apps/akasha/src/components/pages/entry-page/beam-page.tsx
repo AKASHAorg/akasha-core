@@ -7,8 +7,8 @@ import {
   createReactiveVar,
   hasOwn,
   mapBeamEntryData,
+  useAkashaStore,
   useAnalytics,
-  useGetLogin,
   useNsfwToggling,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
@@ -34,12 +34,14 @@ const BeamPage: React.FC<BeamPageProps> = props => {
   const { beamId, beamStream, beam } = props;
   const { t } = useTranslation('app-akasha-integration');
   const { navigateToModal, getTranslationPlugin, logger } = useRootComponentProps();
-  const { data, loading: authenticating } = useGetLogin();
+  const {
+    data: { authenticatedDID, isAuthenticating: authenticating },
+  } = useAkashaStore();
   const { showNsfw } = useNsfwToggling();
   const [analyticsActions] = useAnalytics();
   const wrapperRef = useRef(null);
   const navigate = useNavigate();
-  const isLoggedIn = !!data?.id;
+  const isLoggedIn = !!authenticatedDID;
 
   /**
    * Check the current moderation status of the beam

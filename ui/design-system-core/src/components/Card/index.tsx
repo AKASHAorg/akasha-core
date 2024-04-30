@@ -23,7 +23,7 @@ type RegularCardType = {
 
 type CommonCardProps = {
   ref?: LegacyRef<HTMLDivElement>;
-  testId?: string;
+  dataTestId?: string;
   customStyle?: string;
 } & React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
 
@@ -33,14 +33,14 @@ export type TCardProps = PropsWithChildren<
 
 const Card: React.FC<TCardProps> = forwardRef((props, ref) => {
   if (props.type === 'plain') {
-    const { testId, customStyle = '', ...rest } = props;
+    const { dataTestId, customStyle = '', ...rest } = props;
     return (
       <div
         {...rest}
         className={tw(customStyle)}
         role={rest.onClick ? 'button' : 'presentation'}
         ref={ref}
-        data-testid={testId}
+        data-testid={dataTestId}
       >
         {props.children}
       </div>
@@ -65,7 +65,7 @@ const RegularCard: React.FC<PropsWithChildren<CommonCardProps & RegularCardType>
       border,
       noBorderRadius,
       customStyle = '',
-      testId,
+      dataTestId,
       ...rest
     } = props;
 
@@ -102,7 +102,7 @@ const RegularCard: React.FC<PropsWithChildren<CommonCardProps & RegularCardType>
         className={tw(className)}
         role={rest.onClick ? 'button' : 'presentation'}
         ref={ref}
-        data-testid={testId}
+        data-testid={dataTestId}
         {...rest}
       >
         {children}

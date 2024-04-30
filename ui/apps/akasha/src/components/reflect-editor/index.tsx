@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import ReflectionEditor from '@akashaorg/design-system-components/lib/components/ReflectionEditor';
 import getSDK from '@akashaorg/awf-sdk';
 import {
@@ -6,11 +6,10 @@ import {
   encodeSlateToBase64,
   useAnalytics,
   decodeb64SlateContent,
-  useGetLoginProfile,
   useRootComponentProps,
   createReactiveVar,
   useMentions,
-  useGetLogin,
+  useAkashaStore,
 } from '@akashaorg/ui-awf-hooks';
 import {
   useCreateReflectMutation,
@@ -58,11 +57,9 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
   const [indexReflection, indexReflectionMutation] = useIndexReflectionMutation();
   const { addPendingReflection, pendingReflections } = usePendingReflections(pendingReflectionsVar);
 
-  const { data: authData } = useGetLogin();
-  const authenticatedDID = useMemo(() => authData?.id, [authData]);
-
-  const authenticatedProfileDataReq = useGetLoginProfile();
-  const authenticatedProfile = authenticatedProfileDataReq?.akashaProfile;
+  const {
+    data: { authenticatedDID, authenticatedProfile },
+  } = useAkashaStore();
 
   const { setMentionQuery, mentions } = useMentions(authenticatedDID);
   const handleGetMentions = (query: string) => {

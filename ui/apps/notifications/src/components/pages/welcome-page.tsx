@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRootComponentProps, useSaveSettings, useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { useRootComponentProps, useSaveSettings, useAkashaStore } from '@akashaorg/ui-awf-hooks';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
@@ -18,8 +18,10 @@ export type WelcomePageProps = {
 const WelcomePage: React.FC<WelcomePageProps> = props => {
   const { finalStep = false } = props;
 
-  const { data } = useGetLogin();
-  const isLoggedIn = !!data?.id;
+  const {
+    data: { authenticatedDID },
+  } = useAkashaStore();
+  const isLoggedIn = !!authenticatedDID;
 
   const { t } = useTranslation('app-notifications');
 
@@ -97,7 +99,7 @@ const WelcomePage: React.FC<WelcomePageProps> = props => {
   };
 
   return (
-    <Card radius={16} padding={'p-2'} testId="notifications">
+    <Card radius={16} padding={'p-2'} dataTestId="notifications">
       <Stack justify="center" align="center" customStyle="mb-32">
         {image && <Image src={image} customStyle="w-[180px] h-[180px] m-auto my-4" />}
 

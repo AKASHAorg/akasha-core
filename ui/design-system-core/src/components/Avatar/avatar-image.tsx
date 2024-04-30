@@ -13,11 +13,19 @@ const AvatarImage: React.FC<AvatarImageProps> = props => {
 
   const className = apply`opacity-${faded ? '50' : '100'}`;
 
+  const Image = React.createElement('img', {
+    src: fallbackUrl,
+    fetchpriority: 'high',
+    loading: 'lazy',
+    decoding: 'async',
+    'data-testid': 'avatar-image',
+    alt: alt,
+  });
+
   return (
     <picture className={tw(className)}>
       <source srcSet={url} />
-
-      <img data-testid="avatar-image" alt={alt} src={fallbackUrl} />
+      {Image}
     </picture>
   );
 };

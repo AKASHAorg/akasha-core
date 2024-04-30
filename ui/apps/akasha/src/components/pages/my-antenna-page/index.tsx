@@ -4,9 +4,9 @@ import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/Scrol
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
 import StartCard from '@akashaorg/design-system-components/lib/components/StartCard';
 import { useTranslation } from 'react-i18next';
-import { ModalNavigationOptions, Profile } from '@akashaorg/typings/lib/ui';
+import { ModalNavigationOptions, QueryKeys } from '@akashaorg/typings/lib/ui';
 import { useGetInterestsByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { hasOwn, useGetLoginProfile, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { hasOwn, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { BeamContentResolver, TagFeed } from '@akashaorg/ui-lib-feed';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
@@ -15,8 +15,9 @@ const MY_ANTENNA_OVERSCAN = 10;
 const MyAntennaPage: React.FC<unknown> = () => {
   const { t } = useTranslation('app-akasha-integration');
   const { getRoutingPlugin, navigateToModal, worldConfig } = useRootComponentProps();
-  const authenticatedProfileReq = useGetLoginProfile();
-  const authenticatedProfile: Profile = authenticatedProfileReq?.akashaProfile;
+  const {
+    data: { authenticatedProfile },
+  } = useAkashaStore();
   const navigateTo = React.useRef(getRoutingPlugin().navigateTo);
   const _navigateToModal = React.useRef(navigateToModal);
   const showLoginModal = React.useCallback(
@@ -75,7 +76,7 @@ const MyAntennaPage: React.FC<unknown> = () => {
         </Stack>
         {userHasSubscriptions && (
           <TagFeed
-            queryKey={'antenna_my-antenna'}
+            queryKey={QueryKeys.MY_ANTENNA}
             estimatedHeight={150}
             itemSpacing={8}
             tags={tagSubsData?.topics.map(topic => topic.value)}

@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useAnalytics, useRootComponentProps, transformSource } from '@akashaorg/ui-awf-hooks';
 import { BeamFeed } from '@akashaorg/ui-lib-feed';
 import { Helmet, helmetData } from '@akashaorg/design-system-core/lib/utils';
-import { ModalNavigationOptions, Profile } from '@akashaorg/typings/lib/ui';
+import { ModalNavigationOptions, Profile, QueryKeys } from '@akashaorg/typings/lib/ui';
 
 type GlobalAntennaPageProps = {
   authenticatedProfile: Profile;
@@ -68,7 +68,7 @@ const GlobalAntennaPage: React.FC<GlobalAntennaPageProps> = props => {
       </Helmet>
       <BeamFeed
         header={listHeader}
-        queryKey={'app-akasha-integration_general-antenna'}
+        queryKey={QueryKeys.GLOBAL_ANTENNA}
         estimatedHeight={150}
         itemSpacing={8}
         scrollerOptions={{ overscan: 10 }}

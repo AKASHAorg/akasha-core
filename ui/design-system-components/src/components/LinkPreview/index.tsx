@@ -1,7 +1,7 @@
 import * as React from 'react';
 import isUrl from 'is-url';
 import { tw, apply, tx } from '@twind/core';
-import { LinkPreviewExt } from '@akashaorg/typings/lib/ui';
+import type { ILinkPreviewExt } from '@akashaorg/typings/lib/ui';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import {
@@ -26,7 +26,7 @@ export interface ILinkPreview {
   handleLinkClick?: (url: string) => void;
   handleDeletePreview?: () => void;
   uploading?: boolean;
-  linkPreviewData?: LinkPreviewExt;
+  linkPreviewData?: ILinkPreviewExt;
   uploadingLinkPreviewLabel?: string;
 }
 
@@ -104,6 +104,8 @@ const LinkPreview: React.FC<ILinkPreview> = props => {
                   <div className={tw(`flex`)}>
                     <source srcSet={linkPreviewData.imageSources?.url} />
                     <img
+                      loading="lazy"
+                      decoding="async"
                       // don't resize the image to fit the width of the container
                       // because the image width might be smaller than the container width
                       className={tw(

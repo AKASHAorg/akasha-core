@@ -23,7 +23,6 @@ export const SectionRenderer: React.FC<SectionHeaderProps> = props => {
     noItemLabel,
     onButtonClick,
   } = props;
-
   return (
     <Stack spacing="gap-y-4">
       <Stack direction="row" justify="between">
@@ -32,7 +31,6 @@ export const SectionRenderer: React.FC<SectionHeaderProps> = props => {
           <Button variant="text" size="md" label={buttonLabel} onClick={onButtonClick} />
         )}
       </Stack>
-
       {!rows.length && (
         <Card>
           <Text variant="button-sm" weight="bold" color={{ light: 'grey4', dark: 'grey6' }}>

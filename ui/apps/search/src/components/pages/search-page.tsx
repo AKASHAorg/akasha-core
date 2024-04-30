@@ -1,25 +1,20 @@
-import * as React from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  IEntryData,
-  ITag,
+  type ITag,
   EntityTypes,
   AnalyticsCategories,
-  Profile,
+  type Profile,
 } from '@akashaorg/typings/lib/ui';
-
 import routes, { SETTINGS } from '../../routes';
-
 import {
   useEntryNavigation,
   useAnalytics,
   useRootComponentProps,
   transformSource,
-  useGetLogin,
+  useAkashaStore,
 } from '@akashaorg/ui-awf-hooks';
-
 import { SearchTagsResult } from '@akashaorg/typings/lib/sdk/graphql-types';
-
 import EntryCardRenderer from './entry-renderer';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -47,7 +42,7 @@ export type SearchPageProps = {
   searchKeyword?: string;
 };
 
-type DataResponse = SearchTagsResult | IEntryData;
+type DataResponse = SearchTagsResult;
 
 const initSearchState = {
   [ButtonValues.CONTENT]: { page: 1, results: [], done: false, isLoading: false },
@@ -64,8 +59,10 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const { t } = useTranslation('app-search');
   const { getRoutingPlugin, navigateToModal } = useRootComponentProps();
 
-  const { data } = useGetLogin();
-  const isLoggedIn = !!data?.id;
+  const {
+    data: { authenticatedDID },
+  } = useAkashaStore();
+  const isLoggedIn = !!authenticatedDID;
 
   const showLoginModal = () => {
     navigateToModal({ name: 'login' });

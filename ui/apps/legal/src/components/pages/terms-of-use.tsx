@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { TOU } from '../../routes';
 import { useLegalDoc } from '@akashaorg/ui-awf-hooks';
 import { LEGAL_DOCS } from '@akashaorg/typings/lib/ui';
 
@@ -11,7 +11,7 @@ const TermsOfUsePage: React.FC<unknown> = () => {
   const legalDoc = legalDocReq.data;
   const error = legalDocReq.error as Error | null;
 
-  return <PageRenderer doc={legalDoc} error={error} />;
+  return <PageRenderer doc={legalDoc} error={error} title={TOU} />;
 };
 
 export default TermsOfUsePage;

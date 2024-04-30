@@ -1,17 +1,10 @@
 import '../jest.setup';
 import * as mediaHooks from '@akashaorg/ui-awf-hooks/lib/utils/media-utils';
-import * as loginHook from '@akashaorg/ui-awf-hooks/lib/use-login.new';
 import * as reactUse from 'react-use';
 import ResizeObserver from 'resize-observer-polyfill';
 import { genUser } from '@akashaorg/af-testing';
 
 global.ResizeObserver = ResizeObserver;
-
-jest.spyOn(loginHook, 'useGetLogin').mockReturnValue({
-  data: { id: genUser('did:pkh:eip155:5:0xc47a483494db8fe455ba29a53a7f75349dfc02ff')?.did?.id },
-  loading: false,
-  error: null,
-});
 
 jest
   .spyOn(mediaHooks, 'transformSource')

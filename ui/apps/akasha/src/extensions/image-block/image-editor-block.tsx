@@ -88,8 +88,10 @@ export const ImageEditorBlock = (
 
   React.useEffect(() => {
     const disablePublish = imageGalleryImages.length === 0;
-    props.blockInfo.externalHandler(disablePublish);
-  }, [imageGalleryImages, props.blockInfo]);
+    if (typeof props.blockInfo.externalHandler === 'function') {
+      props.blockInfo.externalHandler(disablePublish);
+    }
+  }, [imageGalleryImages.length, props.blockInfo]);
 
   const createBlock = useCallback(
     async ({ nsfw }: CreateContentBlock) => {
@@ -208,7 +210,7 @@ export const ImageEditorBlock = (
   };
 
   const onUpload = async (image: File | string, isUrl?: boolean) => {
-    if (!image || contentBlockImages.length > 4) return null;
+    if (!image || contentBlockImages.length > 3) return null;
     setUiState('gallery');
     setUploading(true);
 

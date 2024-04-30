@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
-import Editor from '@akashaorg/design-system-components/lib/components/ReflectionEditor';
+import ReflectionEditor from '@akashaorg/design-system-components/lib/components/ReflectionEditor';
 import ReflectionCard, { ReflectCardProps } from '../cards/reflection-card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import getSDK from '@akashaorg/awf-sdk';
@@ -11,9 +11,8 @@ import {
   encodeSlateToBase64,
   useAnalytics,
   useRootComponentProps,
-  useGetLoginProfile,
   useMentions,
-  useGetLogin,
+  useAkashaStore,
 } from '@akashaorg/ui-awf-hooks';
 import {
   GetReflectionsFromBeamDocument,
@@ -53,13 +52,9 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
   const beamId = entryData.beamID;
   const isReflectOfReflection = beamId !== reflectToId;
   const apolloClient = useApolloClient();
-
-  const { data: authData } = useGetLogin();
-  const authenticatedDID = useMemo(() => authData?.id, [authData]);
-
-  const loggedInProfileReq = useGetLoginProfile();
-  const authenticatedProfile = loggedInProfileReq?.akashaProfile;
-
+  const {
+    data: { authenticatedDID, authenticatedProfile },
+  } = useAkashaStore();
   const { setMentionQuery, mentions } = useMentions(authenticatedDID);
   const handleGetMentions = (query: string) => {
     setMentionQuery(query);
@@ -162,7 +157,7 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
     <>
       {edit ? (
         <div ref={wrapperRef}>
-          <Editor
+          <ReflectionEditor
             actionLabel={t('Save')}
             cancelButtonLabel={t('Cancel')}
             emojiPlaceholderLabel={t('Search')}
@@ -178,7 +173,7 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
             disablePublish={!authenticatedDID}
             mentions={mentions}
             getMentions={handleGetMentions}
-            background={{ light: 'grey9', dark: 'grey3' }}
+            background={{ light: 'white', dark: 'grey2' }}
             customStyle="px-2 pt-2"
             onPublish={data => {
               if (!authenticatedDID) {

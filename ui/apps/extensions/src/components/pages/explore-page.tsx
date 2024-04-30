@@ -9,17 +9,16 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { useTranslation } from 'react-i18next';
 import { APP_EVENTS } from '@akashaorg/typings/lib/sdk';
 
-import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetAppsQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { hiddenIntegrations } from '../../hidden-integrations';
 
 const ExplorePage: React.FC = () => {
   const { worldConfig } = useRootComponentProps();
 
-  const { data } = useGetLogin();
-  const authenticatedDID = React.useMemo(() => {
-    return data?.id;
-  }, [data]);
+  const {
+    data: { authenticatedDID },
+  } = useAkashaStore();
 
   const [, setUninstallingApps] = useState([]);
   const [, setShowNotifPill] = useState('');
@@ -119,7 +118,7 @@ const ExplorePage: React.FC = () => {
 
   return (
     <>
-      <Stack testId="akasha-verse">
+      <Stack dataTestId="akasha-verse">
         {!loading && error && (
           <ErrorLoader
             type="script-error"

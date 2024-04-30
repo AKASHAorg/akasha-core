@@ -1,7 +1,7 @@
 import React from 'react';
 import FollowProfileButton from '../follow-profile-button';
 import { useGetFollowDocumentsByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { hasOwn, useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { hasOwn, useAkashaStore } from '@akashaorg/ui-awf-hooks';
 import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 
 type FollowButtonProps = {
@@ -11,9 +11,10 @@ type FollowButtonProps = {
 
 const FollowButton: React.FC<FollowButtonProps> = props => {
   const { profileID, showLoginModal } = props;
-  const { data: loginData } = useGetLogin();
-  const authenticatedDID = loginData?.id;
-  const isLoggedIn = !!loginData?.id;
+  const {
+    data: { authenticatedDID },
+  } = useAkashaStore();
+  const isLoggedIn = !!authenticatedDID;
 
   const { data, error } = useGetFollowDocumentsByDidQuery({
     fetchPolicy: 'cache-and-network',

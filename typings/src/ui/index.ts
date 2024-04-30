@@ -5,6 +5,7 @@ export * from './app-loader';
 export * from './analytics';
 export * from './apps';
 export * from './article';
+export * from './antennas';
 export * from './editor';
 export * from './entry';
 export * from './menu-items';
@@ -23,6 +24,7 @@ export * from './colors';
 export * from './extensions';
 export * from './editor-blocks';
 export * from './media';
+export * from './store';
 
 export enum IntegrationTypes {
   APP = 'App',

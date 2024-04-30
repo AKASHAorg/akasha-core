@@ -23,7 +23,7 @@ const ChooseProvider: React.FC<unknown> = () => {
   };
 
   return (
-    <Stack testId="providers-list" spacing="gap-y-6">
+    <Stack dataTestId="providers-list" spacing="gap-y-6">
       <Text variant="h5" align="center">
         {`✨ ${t('Welcome to AKASHA World')} ✨`}
       </Text>
