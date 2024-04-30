@@ -32,12 +32,11 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
   const [errors, setErrors] = React.useState<Error[]>([]);
   const globalIdx = React.useRef(0);
   const sdk = React.useRef(getSDK());
-
   const [isNsfw, setIsNsfw] = React.useState(false);
   const [editorTags, setEditorTags] = React.useState([]);
-
   const { getExtensionsPlugin } = useRootComponentProps();
-
+  const maxAllowedBlocks = 10;
+  const maxAllowedTags = 10;
   React.useLayoutEffect(() => {
     if (getExtensionsPlugin()) {
       setAvailableBlocks(getExtensionsPlugin().contentBlockStore.getInfos());
@@ -207,7 +206,6 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
   // if index (idx) param is omitted, it will be added as the last block in the list
   const addBlockToList = (
     selectedBlock: { propertyType: string; appName: string },
-    callback?: (blockKey: number) => void,
     afterIdx?: number,
   ) => {
     const block = availableBlocks.find(
@@ -241,12 +239,6 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
       },
     ]);
     globalIdx.current += 1;
-    /**
-     * focus the last block after adding a block
-     */
-    if (callback) {
-      callback(globalIdx.current);
-    }
   };
 
   const removeBlockFromList = (index: number) => {
@@ -292,6 +284,8 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
     setIsPublishing,
     createContentBlocks,
     blocksInUse,
+    maxAllowedBlocks,
+    maxAllowedTags,
     addBlockToList,
     removeBlockFromList,
     updateBlockDisablePublishState,

@@ -5,7 +5,6 @@ import { type ContentBlock } from '@akashaorg/typings/lib/ui';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
 import { XMarkIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import SearchBar from '@akashaorg/design-system-components/lib/components/SearchBar';
@@ -17,42 +16,23 @@ import { Footer } from './footer';
 import { BlockHeader } from '@akashaorg/design-system-components/lib/components/BlockHeader';
 import { useBlocksPublishing } from './use-blocks-publishing';
 import { useGetProfileByDidSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-
-export type uiState = 'editor' | 'tags' | 'blocks';
+import { EditorUIState } from './types';
 
 export const BeamEditor: React.FC = () => {
-  const { t } = useTranslation('app-akasha-integration');
-  const { getRoutingPlugin } = useRootComponentProps();
-  const {
-    availableBlocks,
-    createContentBlocks,
-    isPublishing,
-    blocksInUse,
-    addBlockToList,
-    removeBlockFromList,
-    updateBlockDisablePublishState,
-  } = useBlocksPublishing({
-    onComplete: beamData => {
-      getRoutingPlugin().navigateTo({
-        appName: '@akashaorg/app-akasha-integration',
-        getNavigationUrl: navRoutes => `${navRoutes.Beam}/${beamData.document.id}`,
-      });
-    },
-  });
-
-  const [uiState, setUiState] = useState<uiState>('editor');
-
+  const [uiState, setUiState] = useState<EditorUIState>('editor');
   const [focusedBlock, setFocusedBlock] = useState(null);
-
   const [tagValue, setTagValue] = useState('');
   const [editorTags, setEditorTags] = useState([]);
   const [newTags, setNewTags] = useState([]);
-
   const [errorMessage, setErrorMessage] = useState(null);
-
   const [isNsfw, setIsNsfw] = useState(false);
   const [nsfwBlocks, setNsfwBlocks] = useState(new Map<number, boolean>());
 
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  const { t } = useTranslation('app-akasha-integration');
+
+  const { getRoutingPlugin } = useRootComponentProps();
   /*
    * get the logged-in user info and info about their profile's NSFW property
    */
@@ -65,24 +45,33 @@ export const BeamEditor: React.FC = () => {
     skip: !loginData?.id || authenticating,
   });
 
+  const {
+    availableBlocks,
+    createContentBlocks,
+    isPublishing,
+    blocksInUse,
+    maxAllowedBlocks,
+    maxAllowedTags,
+    addBlockToList,
+    removeBlockFromList,
+    updateBlockDisablePublishState,
+  } = useBlocksPublishing({
+    onComplete: beamData => {
+      getRoutingPlugin().navigateTo({
+        appName: '@akashaorg/app-akasha-integration',
+        getNavigationUrl: navRoutes => `${navRoutes.Beam}/${beamData.document.id}`,
+      });
+    },
+  });
+
   const { akashaProfile: profileData } =
     data?.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
-
   useEffect(() => {
     if (profileData?.nsfw) {
       setIsNsfw(true);
     }
   }, [profileData]);
 
-  const onBlockSelectAfter = (newSelection: ContentBlock) => {
-    if (!newSelection?.propertyType) {
-      return;
-    }
-    addBlockToList(
-      { propertyType: newSelection.propertyType, appName: newSelection.appName },
-      // setFocusedBlock,
-    );
-  };
   /**
    * focus the last block after adding or removing a block
    */
@@ -93,12 +82,6 @@ export const BeamEditor: React.FC = () => {
     // blocksInUse changes when you type due to checking for disablePublishing state
     // that's why we only care about the length here
   }, [blocksInUse.length]);
-
-  const handleBeamPublish = () => {
-    createContentBlocks(isNsfw, editorTags, nsfwBlocks);
-  };
-
-  const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (blocksInUse.length) {
@@ -116,6 +99,17 @@ export const BeamEditor: React.FC = () => {
       setDisablePublishing(false);
     }
   }, [blocksInUse]);
+
+  const onBlockSelectAfter = (newSelection: ContentBlock) => {
+    if (!newSelection?.propertyType) {
+      return;
+    }
+    addBlockToList({ propertyType: newSelection.propertyType, appName: newSelection.appName });
+  };
+
+  const handleBeamPublish = () => {
+    createContentBlocks(isNsfw, editorTags, nsfwBlocks);
+  };
 
   const handleNsfwCheckbox = () => {
     /*
@@ -148,7 +142,6 @@ export const BeamEditor: React.FC = () => {
 
   const handleTagsBtn = () => {
     setUiState('tags');
-
     /**
      * copy existing tags, if any,
      * to new tags state
@@ -157,7 +150,6 @@ export const BeamEditor: React.FC = () => {
       setNewTags(editorTags);
     }
   };
-
   const handleAddBlock = selectedBlock => {
     const newBlock = availableBlocks.find(
       block =>
@@ -170,7 +162,6 @@ export const BeamEditor: React.FC = () => {
 
   const targetKeys = [' ', ',', 'Enter'];
   const targetCodes = ['Space', 'Comma', 'Enter'];
-
   const allTags = [...new Set([...editorTags, ...newTags])];
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -239,7 +230,6 @@ export const BeamEditor: React.FC = () => {
   };
 
   const [disablePublishing, setDisablePublishing] = useState(false);
-
   const blocksWithActiveNsfw = [...nsfwBlocks].filter(([, value]) => !!value);
 
   useEffect(() => {
@@ -253,7 +243,6 @@ export const BeamEditor: React.FC = () => {
      */
     if (!profileData?.nsfw) setIsNsfw(false);
   }, [blocksWithActiveNsfw, blocksInUse, profileData?.nsfw]);
-
   /*
    * after a block is focused by clicking on it, this handles
    * propagating the state to the block instance through its exposed method
@@ -271,25 +260,16 @@ export const BeamEditor: React.FC = () => {
   }, [blocksInUse, focusedBlock]);
 
   return (
-    <Card customStyle="divide(y grey9 dark:grey3) h-[80vh] justify-between" padding={0}>
+    <Card padding={0} customStyle="divide(y grey9 dark:grey3) h-[80vh] justify-between">
       <Header
+        uiState={uiState}
+        addTagsLabel={t('Add Tags')}
         addBlockLabel={t('Add a Block')}
         beamEditorLabel={t('Beam Editor')}
-        addTagsLabel={t('Add Tags')}
-        uiState={uiState}
-      >
-        {uiState === 'editor' && (
-          <Checkbox
-            id="nsfw"
-            label={'NSFW'}
-            name="nsfw"
-            value="nsfw"
-            handleChange={handleNsfwCheckbox}
-            isSelected={isNsfw}
-            isDisabled={profileData?.nsfw}
-          />
-        )}
-      </Header>
+        checkboxIsSelected={isNsfw}
+        checkboxIsDisabled={profileData?.nsfw}
+        onSelectCheckbox={handleNsfwCheckbox}
+      />
       <Stack customStyle="relative h-full overflow-hidden">
         <Stack customStyle="overflow-auto h-full">
           {blocksInUse.map((block, idx) => (
@@ -435,21 +415,25 @@ export const BeamEditor: React.FC = () => {
       </Stack>
       <Footer
         uiState={uiState}
-        handleClickAddBlock={handleAddBlockBtn}
-        handleClickTags={handleTagsBtn}
-        handleClickCancel={handleClickCancel}
-        handleClickSave={handleClickSave}
-        handleBeamPublish={handleBeamPublish}
-        addBlockLabel={t('Add a Block')}
+        tagsLabel={t('Tags')}
+        blocksLabel={t('Blocks')}
+        publishLabel={t('Beam it')}
         saveTagsLabel={t('Save')}
         cancelLabel={t('Cancel')}
-        blocksLabel={t('Blocks')}
-        tagsLabel={t('Tags')}
-        publishLabel={t('Beam it')}
-        blocksNumber={blocksInUse.length}
+        addBlockLabel={t('Add a Block')}
+        maxBlocksWarningLabel={t('You have reached the maximum number of blocks for a beam.')}
+        maxTags={maxAllowedTags}
+        maxBlocks={maxAllowedBlocks}
         tagsNumber={uiState === 'tags' ? newTags.length : allTags.length}
-        disableBeamPublishing={isPublishing || disablePublishing}
+        blocksNumber={blocksInUse.length}
+        disableAddBlock={blocksInUse.length === maxAllowedBlocks}
         disableTagsSave={isPublishing || JSON.stringify(newTags) === JSON.stringify(editorTags)}
+        disableBeamPublishing={isPublishing || disablePublishing}
+        handleClickTags={handleTagsBtn}
+        handleClickSave={handleClickSave}
+        handleClickCancel={handleClickCancel}
+        handleBeamPublish={handleBeamPublish}
+        handleClickAddBlock={handleAddBlockBtn}
       />
     </Card>
   );
