@@ -55,6 +55,7 @@ export const ImageBlockGridItem: React.FC<IGridItemProps> = props => {
         <source srcSet={imageSrc?.originalSrc} />
 
         <img
+          decoding="async"
           alt={imageSrc?.src}
           className={tx(`rounded object-cover w-full ${heightStyle} ${multipleImageStyle}`)}
           src={imageSrc?.src}
@@ -68,6 +69,8 @@ export const ImageBlockGridItem: React.FC<IGridItemProps> = props => {
         <DelayLoad>
           <div className={tw('flex')}>
             <img
+              loading="lazy"
+              decoding="async"
               alt={'placeholder'}
               className={tx(`rounded object-cover w-full  ${heightStyle} ${multipleImageStyle}`)}
               src={'/images/image-placeholder.webp'}

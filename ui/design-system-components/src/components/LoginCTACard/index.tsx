@@ -56,6 +56,8 @@ const LoginCTACard: React.FC<LoginCTACardProps> = props => {
           </div>
           <div className={tw(`md:w-[43%] md:pr-2 mb-2 md:mb-0`)}>
             <img
+              loading="lazy"
+              decoding="async"
               alt="login widget illustration"
               className={tw(`flex self-center w-[60%] md:(self-auto w-full) object-contain`)}
               src={`${publicImgPath}/login-widget-illustration.webp`}

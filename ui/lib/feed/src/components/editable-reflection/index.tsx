@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
-import Editor from '@akashaorg/design-system-components/lib/components/ReflectionEditor';
+import ReflectionEditor from '@akashaorg/design-system-components/lib/components/ReflectionEditor';
 import ReflectionCard, { ReflectCardProps } from '../cards/reflection-card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import getSDK from '@akashaorg/awf-sdk';
@@ -160,7 +160,7 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
     <>
       {edit ? (
         <div ref={wrapperRef}>
-          <Editor
+          <ReflectionEditor
             actionLabel={t('Save')}
             cancelButtonLabel={t('Cancel')}
             emojiPlaceholderLabel={t('Search')}
@@ -176,7 +176,7 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
             disablePublish={!authenticatedDID}
             mentions={mentions}
             getMentions={handleGetMentions}
-            background={{ light: 'grey9', dark: 'grey3' }}
+            background={{ light: 'white', dark: 'grey2' }}
             customStyle="px-2 pt-2"
             onPublish={data => {
               if (!authenticatedDID) {

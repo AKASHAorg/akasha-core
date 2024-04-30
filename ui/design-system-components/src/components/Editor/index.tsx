@@ -567,7 +567,8 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
               placeholder={placeholderLabel}
               autoComplete="off"
               spellCheck={false}
-              // autoFocus={true}
+              // eslint-disable-next-line
+              autoFocus={true}
               renderElement={(renderProps: RenderElementProps) =>
                 renderElement(
                   renderProps,

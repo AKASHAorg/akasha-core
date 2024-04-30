@@ -44,6 +44,8 @@ const VibesValueCard: React.FC<VibesValueCardProps> = props => {
         >
           <Stack customStyle={`w-${isMini ? '16' : '72'} h-${isMini ? '16' : '72'} self-center`}>
             <img
+              loading="lazy"
+              decoding="async"
               alt={assetName}
               className="object-contain"
               src={`${publicImgPath}/${assetName}.${assetExtension}`}

@@ -36,7 +36,13 @@ const ErrorCard: React.FC<PropsWithChildren<ErrorLoaderProps & { imageSrc: strin
   return (
     <Card customStyle={`items-center mb-0 ${customStyle}`}>
       <Stack>
-        <img alt={''} className={tw('max-w-[50%] h-auto my-0 mx-auto py-8 px-0')} src={imageSrc} />
+        <img
+          loading="lazy"
+          decoding="async"
+          alt={''}
+          className={tw('max-w-[50%] h-auto my-0 mx-auto py-8 px-0')}
+          src={imageSrc}
+        />
       </Stack>
       <Text variant="h5" align="center" customStyle="px-4">
         {title}
