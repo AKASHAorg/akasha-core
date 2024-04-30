@@ -30,7 +30,7 @@ const ProfileAvatar = (props: ProfileAvatarProps) => {
   return (
     <ProfileAvatarButton
       profileId={profileDID}
-      label={profileData.name}
+      label={profileData?.name}
       avatar={transformSource(profileData?.avatar?.default)}
       alternativeAvatars={profileData?.avatar?.alternatives?.map(alternative =>
         transformSource(alternative),

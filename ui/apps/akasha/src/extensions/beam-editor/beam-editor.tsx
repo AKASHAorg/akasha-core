@@ -78,8 +78,21 @@ export const BeamEditor: React.FC = () => {
     if (!newSelection?.propertyType) {
       return;
     }
-    addBlockToList({ propertyType: newSelection.propertyType, appName: newSelection.appName });
+    addBlockToList(
+      { propertyType: newSelection.propertyType, appName: newSelection.appName },
+      // setFocusedBlock,
+    );
   };
+  /**
+   * focus the last block after adding or removing a block
+   */
+  useEffect(() => {
+    if (blocksInUse.length > 1) {
+      setFocusedBlock(blocksInUse[blocksInUse.length - 1]?.key);
+    }
+    // blocksInUse changes when you type due to checking for disablePublishing state
+    // that's why we only care about the length here
+  }, [blocksInUse.length]);
 
   const handleBeamPublish = () => {
     createContentBlocks(isNsfw, editorTags, nsfwBlocks);
@@ -94,6 +107,9 @@ export const BeamEditor: React.FC = () => {
         block: 'end',
       });
     }
+  }, [blocksInUse.length]);
+
+  useEffect(() => {
     if (blocksInUse.some(block => block.disablePublish === true)) {
       setDisablePublishing(true);
     } else {

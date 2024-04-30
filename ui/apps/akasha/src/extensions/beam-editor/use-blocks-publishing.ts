@@ -207,6 +207,7 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
   // if index (idx) param is omitted, it will be added as the last block in the list
   const addBlockToList = (
     selectedBlock: { propertyType: string; appName: string },
+    callback?: (blockKey: number) => void,
     afterIdx?: number,
   ) => {
     const block = availableBlocks.find(
@@ -240,14 +241,23 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
       },
     ]);
     globalIdx.current += 1;
+    /**
+     * focus the last block after adding a block
+     */
+    if (callback) {
+      callback(globalIdx.current);
+    }
   };
 
   const removeBlockFromList = (index: number) => {
     setBlocksInUse(prev => {
       const beforeSlice = prev.slice(0, index);
-      const afterSlice = prev.slice(index + 1).map(bl => ({ ...bl, order: bl.order - 1 }));
+      const afterSlice = prev
+        .slice(index + 1)
+        .map(bl => ({ ...bl, order: bl.order - 1, key: bl.key - 1 }));
       return beforeSlice.concat(afterSlice);
     });
+    globalIdx.current -= 1;
   };
 
   const updateBlockDisablePublishState = (value: boolean, index: number) => {
