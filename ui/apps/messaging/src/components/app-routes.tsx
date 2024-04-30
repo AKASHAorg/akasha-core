@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import { useGetLoginProfile, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import ErrorBoundary, {
   ErrorBoundaryProps,
 } from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
@@ -13,10 +13,9 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 import routes, { CHAT, MESSAGING, SETTINGS } from '../routes';
 
 const AppRoutes: React.FC<unknown> = () => {
-  const authenticatedProfileReq = useGetLoginProfile();
-  const authenticatedProfile = authenticatedProfileReq?.akashaProfile;
-
-  // const getHubUserCallback = useCallback(getHubUser, [loggedUserId]);
+  const {
+    data: { authenticatedProfile },
+  } = useAkashaStore();
 
   const [fetchingMessages, setFetchingMessages] = useState(false);
   const { baseRouteName, logger, worldConfig } = useRootComponentProps();

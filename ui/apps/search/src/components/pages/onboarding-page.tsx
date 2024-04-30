@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { transformSource, useRootComponentProps, useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { transformSource, useRootComponentProps, useAkashaStore } from '@akashaorg/ui-awf-hooks';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import OnboardingSuggestionsCard from '@akashaorg/design-system-components/lib/components/OnboardingSuggestionsCard';
 import OnboardingStartCard from '@akashaorg/design-system-components/lib/components/OnboardingStartCard';
@@ -13,8 +13,10 @@ const OnboardingPage: React.FC = () => {
 
   const navigateTo = getRoutingPlugin().navigateTo;
 
-  const { data } = useGetLogin();
-  const isLoggedIn = !!data?.id;
+  const {
+    data: { authenticatedDID },
+  } = useAkashaStore();
+  const isLoggedIn = !!authenticatedDID;
 
   const showLoginModal = () => {
     navigateToModal({ name: 'login' });

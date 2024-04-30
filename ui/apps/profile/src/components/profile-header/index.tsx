@@ -20,9 +20,9 @@ import { useTranslation } from 'react-i18next';
 import {
   transformSource,
   useValidDid,
-  useGetLogin,
   useRootComponentProps,
   hasOwn,
+  useAkashaStore,
 } from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
@@ -35,7 +35,9 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
   const [activeOverlay, setActiveOverlay] = React.useState<'avatar' | 'coverImage' | null>(null);
   const { profileDID, plain, customStyle = '' } = props;
   const { t } = useTranslation('app-profile');
-  const { data: loginData } = useGetLogin();
+  const {
+    data: { authenticatedDID },
+  } = useAkashaStore();
   const { uiEvents, navigateToModal, getRoutingPlugin } = useRootComponentProps();
 
   const { data, error } = useGetProfileByDidSuspenseQuery({
@@ -46,7 +48,6 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
   const { validDid, isEthAddress } = useValidDid(profileDID, !!data?.node);
   const { akashaProfile: profileData } =
     data?.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
-
   const showLoginModal = useCallback(
     (redirectTo?: { modal: ModalNavigationOptions }) => {
       navigateToModal({
@@ -56,8 +57,6 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
     },
     [navigateToModal],
   );
-
-  const authenticatedDID = loginData?.id;
   const isViewer = !!authenticatedDID && profileData?.did?.id === authenticatedDID;
   const navigateTo = getRoutingPlugin().navigateTo;
 

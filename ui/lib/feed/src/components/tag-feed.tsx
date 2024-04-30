@@ -9,7 +9,7 @@ import { AkashaIndexedStreamEdge } from '@akashaorg/typings/lib/sdk/graphql-type
 import { EdgeArea, Virtualizer, VirtualizerProps } from '../virtual-list';
 import { useBeamsByTags } from '@akashaorg/ui-awf-hooks/lib/use-beams-by-tags';
 import { RestoreItem } from '../virtual-list/use-scroll-state';
-import { useGetLogin, useNsfwToggling } from '@akashaorg/ui-awf-hooks';
+import { useAkashaStore, useNsfwToggling } from '@akashaorg/ui-awf-hooks';
 import { getNsfwFiltersTagFeed } from '../utils';
 
 export type TagFeedProps = {
@@ -45,8 +45,10 @@ const TagFeed = (props: TagFeedProps) => {
   const { t } = useTranslation('ui-lib-feed');
 
   const { showNsfw } = useNsfwToggling();
-  const { data: loginData, loading: authenticating } = useGetLogin();
-  const isLoggedIn = !!loginData?.id;
+  const {
+    data: { authenticatedDID, isAuthenticating: authenticating },
+  } = useAkashaStore();
+  const isLoggedIn = !!authenticatedDID;
   const nsfwFilters = getNsfwFiltersTagFeed({ queryKey, showNsfw, isLoggedIn });
 
   const {
