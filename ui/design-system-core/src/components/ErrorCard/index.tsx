@@ -50,6 +50,8 @@ const ErrorCard: React.FC<ErrorCardProps> = props => {
     <div className={tw(contentWrapperClass)}>
       <div className={tw(`h-[${boxSize}] w-[${boxSize}] mb-${imageBoxHasMargin ? '0.5' : '0'}`)}>
         <img
+          loading="lazy"
+          decoding="async"
           className={tw('object-contain')}
           src={`${publicImgPath}/${errorType}.webp`}
           alt="error"

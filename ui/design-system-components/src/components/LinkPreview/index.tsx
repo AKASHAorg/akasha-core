@@ -104,6 +104,8 @@ const LinkPreview: React.FC<ILinkPreview> = props => {
                   <div className={tw(`flex`)}>
                     <source srcSet={linkPreviewData.imageSources?.url} />
                     <img
+                      loading="lazy"
+                      decoding="async"
                       // don't resize the image to fit the width of the container
                       // because the image width might be smaller than the container width
                       className={tw(

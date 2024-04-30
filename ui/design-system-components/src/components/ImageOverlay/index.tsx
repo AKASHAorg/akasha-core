@@ -112,7 +112,7 @@ const ImageOverlay: React.FC<IImageOverlay> = props => {
             >
               <TransformComponent wrapperStyle={{ width: '100%', height: '100%' }}>
                 <picture className={tw(`flex`)}>
-                  <img src={currentImg.src} alt="" />
+                  <img loading="lazy" decoding="async" src={currentImg.src} alt="" />
                 </picture>
               </TransformComponent>
             </TransformWrapper>

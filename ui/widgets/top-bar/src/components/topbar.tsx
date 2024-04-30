@@ -68,6 +68,8 @@ const WorldIcon = (props: WorldIconProps) => {
 
     return (
       <img
+        loading="lazy"
+        decoding="async"
         alt="world logo"
         height="1.5rem"
         className="mb-1"

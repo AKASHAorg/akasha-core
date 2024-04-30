@@ -39,6 +39,8 @@ const IconByType: React.FC<AppImgProps> = ({
   if (appImg?.type === (LogoTypeSource.String || LogoTypeSource.IPFS)) {
     return (
       <img
+        loading="lazy"
+        decoding="async"
         alt={appImg.type}
         className={tw(apply`rounded-[50%] object-contain`)}
         src={appImg?.value}

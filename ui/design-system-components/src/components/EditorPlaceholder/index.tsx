@@ -27,7 +27,13 @@ const EditorPlaceholder: React.FC<EditorPlaceholderType> = props => {
     transformSource,
   } = props;
   return (
-    <Card border={true} padding={0} background={{ light: 'grey9', dark: 'grey3' }}>
+    <Card
+      border={true}
+      padding={0}
+      background={{ light: 'grey9', dark: 'grey3' }}
+      onClick={onClick}
+      customStyle="cursor-pointer"
+    >
       <div className={tw(`flex justify-between p-4 `)}>
         <div className={tw(`flex flex-row items-center gap-4`)}>
           <Avatar
@@ -41,15 +47,13 @@ const EditorPlaceholder: React.FC<EditorPlaceholderType> = props => {
           <Text
             variant="subtitle2"
             {...(isReflection && { color: 'grey7' })}
-            customStyle={`${
-              !isReflection ? 'max-w([9.5rem] md:fit)' : ''
-            } whitespace-normal cursor-default`}
+            customStyle={`${!isReflection ? 'max-w([9.5rem] md:fit)' : ''} whitespace-normal`}
           >
             {placeholderLabel}
           </Text>
         </div>
 
-        <Button variant="primary" label={actionLabel} size="sm" onClick={onClick} />
+        <Button variant="primary" label={actionLabel} size="sm" />
       </div>
     </Card>
   );
