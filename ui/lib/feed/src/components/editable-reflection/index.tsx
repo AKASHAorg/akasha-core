@@ -74,6 +74,8 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
     onCompleted: async () => {
       setEdit(false);
       setNewContent(null);
+      //reset the state modified inside Editor component when done
+      setIsReflecting(true);
 
       if (!isReflectOfReflection) {
         await apolloClient.refetchQueries({ include: [GetReflectionsFromBeamDocument] });
