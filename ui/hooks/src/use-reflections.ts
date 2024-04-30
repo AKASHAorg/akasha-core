@@ -132,12 +132,9 @@ export const useReflections = (props: UseReflectionProps) => {
       const { edges } = extractData(response.data, entityType);
       return (
         edges.length > 0 &&
-        filterById(
-          edges as AkashaReflectStreamEdge[],
-          //  filterByAuthor(edges as AkashaReflectStreamEdge[], pendingReflections[0].authorId),
-          entityType,
-          entityId,
-        ).every(edge => !state.reflections.some(reflection => reflection.cursor === edge.cursor))
+        filterById(edges as AkashaReflectStreamEdge[], entityType, entityId).every(
+          edge => !state.reflections.some(reflection => reflection.cursor === edge.cursor),
+        )
       );
     },
     [entityId, entityType, pendingReflections, state.reflections],
@@ -145,7 +142,7 @@ export const useReflections = (props: UseReflectionProps) => {
 
   const { lastResponse, removeLastResponse, isPolling, startPolling } = useQueryPolling<
     GetReflectionStreamQueryVariables,
-    GetReflectionStreamQuery /* | GetReflectReflectionsQuery */
+    GetReflectionStreamQuery
   >(refetchReflections, stopRefetch);
 
   React.useEffect(() => {
