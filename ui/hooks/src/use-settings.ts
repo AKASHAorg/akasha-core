@@ -1,6 +1,6 @@
 import getSDK from '@akashaorg/awf-sdk';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useGetLogin } from './use-login.new';
+import { useAkashaStore } from './store';
 
 async function saveSettings({
   app,
@@ -85,7 +85,9 @@ const getSettings = async (app: string) => {
  */
 
 export function useGetSettings(app: string) {
-  const { data: loginData, loading: loadingLoginData } = useGetLogin();
+  const {
+    data: { authenticatedDID, isAuthenticating: loadingLoginData },
+  } = useAkashaStore();
   const [settings, setSettings] = useState<any>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -108,15 +110,15 @@ export function useGetSettings(app: string) {
         setIsLoading(false);
       }
     };
-    if (!loadingLoginData && !loginData) {
+    if (!loadingLoginData && !authenticatedDID) {
       setIsLoading(false);
       return;
     }
 
-    if (loginData) {
+    if (authenticatedDID) {
       fetchData();
     }
-  }, [app, loginData, loadingLoginData]);
+  }, [app, authenticatedDID, loadingLoginData]);
 
   return { data: settings, isLoading, error };
 }

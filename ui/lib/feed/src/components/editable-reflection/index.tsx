@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import Editor from '@akashaorg/design-system-components/lib/components/ReflectionEditor';
 import ReflectionCard, { ReflectCardProps } from '../cards/reflection-card';
@@ -11,9 +11,8 @@ import {
   encodeSlateToBase64,
   useAnalytics,
   useRootComponentProps,
-  useGetLoginProfile,
   useMentions,
-  useGetLogin,
+  useAkashaStore,
 } from '@akashaorg/ui-awf-hooks';
 import {
   GetReflectionsFromBeamDocument,
@@ -53,13 +52,9 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
   const beamId = entryData.beamID;
   const isReflectOfReflection = beamId !== reflectToId;
   const apolloClient = useApolloClient();
-
-  const { data: authData } = useGetLogin();
-  const authenticatedDID = useMemo(() => authData?.id, [authData]);
-
-  const loggedInProfileReq = useGetLoginProfile();
-  const authenticatedProfile = loggedInProfileReq?.akashaProfile;
-
+  const {
+    data: { authenticatedDID, authenticatedProfile },
+  } = useAkashaStore();
   const { setMentionQuery, mentions } = useMentions(authenticatedDID);
   const handleGetMentions = (query: string) => {
     setMentionQuery(query);

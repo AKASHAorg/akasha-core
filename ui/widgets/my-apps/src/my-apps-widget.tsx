@@ -5,7 +5,7 @@ import { I18nextProvider, useTranslation } from 'react-i18next';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import { ModalNavigationOptions, RootComponentProps } from '@akashaorg/typings/lib/ui';
-import { withProviders, useRootComponentProps, useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { withProviders, useRootComponentProps, useAkashaStore } from '@akashaorg/ui-awf-hooks';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { CheckIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
@@ -21,50 +21,17 @@ const ICWidget: React.FC<unknown> = () => {
   const { t } = useTranslation('ui-widget-my-apps');
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const { logger, worldConfig, navigateToModal, getRoutingPlugin } = useRootComponentProps();
-  const { data } = useGetLogin();
-  const isLoggedIn = !!data?.id;
+  const {
+    data: { authenticatedDID },
+  } = useAkashaStore();
+  const isLoggedIn = !!authenticatedDID;
   const navigateTo = getRoutingPlugin().navigateTo;
 
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
     navigateToModal({ name: 'login', redirectTo });
   };
 
-  // const availableIntegrationsReq = null;
-
-  // const filteredIntegrations = React.useMemo(() => {
-  //   return availableIntegrationsReq?.data?.filter(
-  //     id => !hiddenIntegrations.some(hiddenInt => hiddenInt.id === id),
-  //   );
-  // }, [availableIntegrationsReq?.data]);
-
-  // const defaultIntegrations = [].concat(
-  //   worldConfig.defaultApps,
-  //   worldConfig.defaultWidgets,
-  //   [worldConfig.homepageApp],
-  //   [worldConfig.layout],
-  // );
-
-  // const filteredDefaultIntegrations = React.useMemo(() => {
-  //   return defaultIntegrations?.filter(
-  //     id => !hiddenIntegrations.some(hiddenInt => hiddenInt.id === id),
-  //   );
-  // }, [defaultIntegrations]);
-
   const defaultApps = [].concat(worldConfig.defaultApps, [worldConfig.homepageApp]);
-
-  // const integrationIdsNormalized = React.useMemo(() => {
-  //   if (filteredIntegrations) {
-  //     return filteredIntegrations.map(integrationId => {
-  //       return { id: integrationId };
-  //     });
-  //   }
-  //   return filteredDefaultIntegrations
-  //     .map(integrationName => {
-  //       if (!hiddenIntegrations.some(hiddenInt => hiddenInt.name === integrationName))
-  //         return { name: integrationName };
-  //     })
-  //     .filter(Boolean);
-  // }, [filteredIntegrations, filteredDefaultIntegrations]);
 
   const installedAppsReq = null;
   const integrationsInfoReq = null;

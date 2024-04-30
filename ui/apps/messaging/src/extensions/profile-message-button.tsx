@@ -4,8 +4,8 @@ import ReactDOMClient from 'react-dom/client';
 import { RootExtensionProps, AnalyticsCategories } from '@akashaorg/typings/lib/ui';
 import { I18nextProvider } from 'react-i18next';
 import {
+  useAkashaStore,
   useAnalytics,
-  useGetLoginProfile,
   useRootComponentProps,
   withProviders,
 } from '@akashaorg/ui-awf-hooks';
@@ -26,9 +26,9 @@ const MessageIconButton: React.FC<RootExtensionProps<MessageIconExtensionData>> 
   const [analyticsActions] = useAnalytics();
   const { profileId } = extensionData;
 
-  const authenticatedProfileReq = useGetLoginProfile();
-  const authenticatedProfile = authenticatedProfileReq?.akashaProfile;
-
+  const {
+    data: { authenticatedProfile },
+  } = useAkashaStore();
   const isContactReq = null;
   const contactList = isContactReq?.data;
 

@@ -7,13 +7,15 @@ import { ChevronRightIcon } from '@akashaorg/design-system-core/lib/components/I
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import PageLayout from './base-layout';
 import { ISettingsItem, settingsItems, SettingsOption } from '../../utils/settings-items';
-import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 const SettingsPage: React.FC = () => {
   const { t } = useTranslation('app-settings-ewa');
   const { getRoutingPlugin } = useRootComponentProps();
-  const { data: loginData } = useGetLogin();
-  const isLoggedIn = !!loginData?.id;
+  const {
+    data: { authenticatedDID },
+  } = useAkashaStore();
+  const isLoggedIn = !!authenticatedDID;
 
   const settingsOptions: ISettingsItem[] = React.useMemo(() => {
     if (!isLoggedIn) return settingsItems.filter(item => item.label !== 'NSFW Content');
