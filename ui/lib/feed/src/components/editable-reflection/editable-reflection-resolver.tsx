@@ -1,7 +1,8 @@
 import * as React from 'react';
 import EditableReflection from './index';
 import { hasOwn, mapReflectEntryData, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { useGetReflectionByIdSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import { useGetReflectionByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
 
 export type EditableReflectionResolverProps = {
   reflectID: string;
@@ -9,29 +10,32 @@ export type EditableReflectionResolverProps = {
 };
 
 export const EditableReflectionResolver = (props: EditableReflectionResolverProps) => {
-  const reflectionQuery = useGetReflectionByIdSuspenseQuery({
+  const { getRoutingPlugin } = useRootComponentProps();
+
+  const reflectionReq = useGetReflectionByIdQuery({
     variables: {
       id: props.reflectID,
     },
+    fetchPolicy: 'cache-first',
+    skip: !props.reflectID,
   });
 
-  const { getRoutingPlugin } = useRootComponentProps();
+  if (reflectionReq.loading) return <EntryCardLoading />;
+
+  const entryData =
+    reflectionReq.data?.node && hasOwn(reflectionReq.data.node, 'id')
+      ? reflectionReq.data.node
+      : undefined;
 
   return (
     <React.Suspense>
       <EditableReflection
-        entryData={mapReflectEntryData(
-          hasOwn(reflectionQuery.data?.node, 'id') ? reflectionQuery.data.node : undefined,
-        )}
-        reflectToId={
-          mapReflectEntryData(
-            hasOwn(reflectionQuery.data?.node, 'id') ? reflectionQuery.data.node : undefined,
-          ).id
-        }
+        entryData={mapReflectEntryData(entryData)}
+        reflectToId={mapReflectEntryData(entryData).id}
         contentClickable={true}
         onContentClick={() => {
-          if (hasOwn(reflectionQuery.data?.node, 'id')) {
-            const reflectionId = reflectionQuery.data.node.id;
+          if (hasOwn(reflectionReq.data?.node, 'id')) {
+            const reflectionId = reflectionReq.data.node.id;
             return getRoutingPlugin().navigateTo({
               appName: '@akashaorg/app-akasha-integration',
               getNavigationUrl: navRoutes => `${navRoutes.Reflection}/${reflectionId}`,
@@ -39,8 +43,8 @@ export const EditableReflectionResolver = (props: EditableReflectionResolverProp
           }
         }}
         onReflect={() => {
-          if (hasOwn(reflectionQuery.data?.node, 'id')) {
-            const reflectionId = reflectionQuery.data.node.id;
+          if (hasOwn(reflectionReq.data?.node, 'id')) {
+            const reflectionId = reflectionReq.data.node.id;
             getRoutingPlugin().navigateTo({
               appName: '@akashaorg/app-akasha-integration',
               getNavigationUrl: navRoutes =>
