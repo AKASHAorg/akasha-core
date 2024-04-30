@@ -6,7 +6,7 @@ import {
   useRootComponentProps,
   useSaveSettings,
   useGetSettings,
-  useGetLogin,
+  useAkashaStore,
 } from '@akashaorg/ui-awf-hooks';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -44,8 +44,10 @@ const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
 
   const navigate = useNavigate();
 
-  const { data, loading } = useGetLogin();
-  const isLoggedIn = React.useMemo(() => !!data?.id, [data]);
+  const {
+    data: { authenticatedDID, isAuthenticating: loading },
+  } = useAkashaStore();
+  const isLoggedIn = !!authenticatedDID;
 
   const fetchSettingsQuery = useGetSettings(Appname);
   const existingSettings: { [k: string]: string | number | boolean } | null =

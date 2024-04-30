@@ -6,10 +6,11 @@ import {
   withProviders,
   useAnalytics,
   useRootComponentProps,
-  useGetLogin,
+  useAkashaStore,
 } from '@akashaorg/ui-awf-hooks';
 import { I18nextProvider } from 'react-i18next';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import {
   BookmarkIcon,
@@ -22,8 +23,10 @@ type CardSaveButtonExtensionData = {
 };
 const EntryCardSaveButton = (props: RootExtensionProps<CardSaveButtonExtensionData>) => {
   const { extensionData } = props;
-  const { data } = useGetLogin();
-  const isLoggedIn = !!data?.id;
+  const {
+    data: { authenticatedDID },
+  } = useAkashaStore();
+  const isLoggedIn = !!authenticatedDID;
   const bookmarkReq = null;
   const bookmarkCreate = null;
   const bookmarkDelete = null;
@@ -60,13 +63,13 @@ const EntryCardSaveButton = (props: RootExtensionProps<CardSaveButtonExtensionDa
 
   return (
     <Stack align="center">
-      <button onClick={handleEntryBookmark}>
+      <Button onClick={handleEntryBookmark}>
         <Icon
           icon={<BookmarkIcon />}
           accentColor={true}
           customStyle={isBookmarked && `[&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark`}
         />
-      </button>
+      </Button>
     </Stack>
   );
 };

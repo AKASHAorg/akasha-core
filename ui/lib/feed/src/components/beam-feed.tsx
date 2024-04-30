@@ -12,7 +12,7 @@ import {
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { EdgeArea, Virtualizer, VirtualizerProps } from '../virtual-list';
 import { RestoreItem } from '../virtual-list/use-scroll-state';
-import { hasOwn, useGetLogin, useNsfwToggling } from '@akashaorg/ui-awf-hooks';
+import { hasOwn, useAkashaStore, useNsfwToggling } from '@akashaorg/ui-awf-hooks';
 import { useBeams } from '@akashaorg/ui-awf-hooks/lib/use-beams';
 import { getNsfwFiltersBeamFeed } from '../utils';
 
@@ -53,8 +53,10 @@ const BeamFeed = (props: BeamFeedProps) => {
   } = props;
 
   const { showNsfw } = useNsfwToggling();
-  const { data: loginData, loading: authenticating } = useGetLogin();
-  const isLoggedIn = !!loginData?.id;
+  const {
+    data: { authenticatedDID, isAuthenticating: authenticating },
+  } = useAkashaStore();
+  const isLoggedIn = !!authenticatedDID;
 
   const nsfwFilters = getNsfwFiltersBeamFeed({ did, showNsfw, isLoggedIn, filters });
 

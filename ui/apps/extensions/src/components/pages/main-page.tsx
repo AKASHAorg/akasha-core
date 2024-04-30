@@ -7,7 +7,7 @@ import routes, { APPS, EXPLORE, MY_APPS, MY_WIDGETS } from '../../routes';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { Outlet, useMatchRoute } from '@tanstack/react-router';
-import { useDismissedCard, useRootComponentProps, useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { useDismissedCard, useRootComponentProps, useAkashaStore } from '@akashaorg/ui-awf-hooks';
 
 const TAB_INDEX_TO_ROUTE_MAP = {
   0: [routes[EXPLORE]],
@@ -28,10 +28,9 @@ const MainPage: React.FC = () => {
   const { navigateToModal } = useRootComponentProps();
   const navigate = useNavigate();
 
-  const { data } = useGetLogin();
-  const authenticatedDID = React.useMemo(() => {
-    return data?.id;
-  }, [data]);
+  const {
+    data: { authenticatedDID },
+  } = useAkashaStore();
 
   const [activeTab, setActiveTab] = useState(
     authenticatedDID ? ROUTE_TO_TAB_INDEX_MAP[location.pathname] || 0 : 0,

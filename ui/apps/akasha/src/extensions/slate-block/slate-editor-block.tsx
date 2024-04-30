@@ -3,9 +3,9 @@ import EditorBox from '@akashaorg/design-system-components/lib/components/Editor
 import {
   encodeSlateToBase64,
   transformSource,
-  useGetLogin,
   useRootComponentProps,
   useMentions,
+  useAkashaStore,
 } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import {
@@ -31,8 +31,9 @@ export const SlateEditorBlock = (
   props: ContentBlockRootProps & { blockRef?: RefObject<BlockInstanceMethods> },
 ) => {
   const { name, logger } = useRootComponentProps<RootExtensionProps>();
-  const { data } = useGetLogin();
-  const authenticatedDID = data?.id;
+  const {
+    data: { authenticatedDID },
+  } = useAkashaStore();
   const retryCount = useRef<number>();
   const sdk = useRef(getSDK());
 

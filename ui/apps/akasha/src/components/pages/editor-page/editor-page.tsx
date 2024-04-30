@@ -4,12 +4,13 @@ import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoade
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { useTranslation } from 'react-i18next';
 import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
-import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 const EditorPage: React.FC<unknown> = () => {
-  const { data } = useGetLogin();
-  const authenticatedDID = data?.id;
+  const {
+    data: { authenticatedDID },
+  } = useAkashaStore();
   const { getRoutingPlugin } = useRootComponentProps();
   const navigateTo = React.useRef(getRoutingPlugin().navigateTo);
   const { t } = useTranslation();

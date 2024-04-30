@@ -5,7 +5,7 @@ import EntryCard, {
 import ContentBlockRenderer from './content-block-renderer';
 import ActionButtons from './action-buttons';
 import AuthorProfileAvatar from '../author-profile-avatar';
-import { sortByKey, useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { sortByKey, useAkashaStore } from '@akashaorg/ui-awf-hooks';
 import { EntityTypes, BeamEntryData } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps, useNsfwToggling } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
@@ -40,12 +40,13 @@ const BeamCard: React.FC<BeamCardProps> = props => {
   } = props;
 
   const { getRoutingPlugin } = useRootComponentProps();
-  const { data } = useGetLogin();
+  const {
+    data: { authenticatedDID },
+  } = useAkashaStore();
   const [appName, setAppName] = useState('');
   const [blockNameMap, setBlockNameMap] = useState(new Map());
   const [showBlockName, setShowBlockName] = useState(false);
   const navigateTo = getRoutingPlugin().navigateTo;
-  const authenticatedDID = data?.id;
 
   const { showNsfw } = useNsfwToggling();
 
