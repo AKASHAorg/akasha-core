@@ -3,12 +3,10 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import BeamSection from './beam-section';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import EditableReflection from '@akashaorg/ui-lib-feed/lib/components/editable-reflection';
 import {
   createReactiveVar,
   hasOwn,
   mapBeamEntryData,
-  mapReflectEntryData,
   useAnalytics,
   useGetLogin,
   useNsfwToggling,
@@ -24,6 +22,7 @@ import {
   GetBeamStreamQuery,
 } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 import { EditableReflectionResolver } from '@akashaorg/ui-lib-feed/lib/components/editable-reflection/editable-reflection-resolver';
+import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 
 type BeamPageProps = {
   beamId: string;
@@ -34,7 +33,7 @@ type BeamPageProps = {
 const BeamPage: React.FC<BeamPageProps> = props => {
   const { beamId, beamStream, beam } = props;
   const { t } = useTranslation('app-akasha-integration');
-  const { navigateToModal, getTranslationPlugin } = useRootComponentProps();
+  const { navigateToModal, getTranslationPlugin, logger } = useRootComponentProps();
   const { data, loading: authenticating } = useGetLogin();
   const { showNsfw } = useNsfwToggling();
   const [analyticsActions] = useAnalytics();
@@ -109,27 +108,35 @@ const BeamPage: React.FC<BeamPageProps> = props => {
           estimatedHeight={120}
           renderItem={itemData => {
             return (
-              <>
-                <Divider />
-                <EditableReflectionResolver
-                  reflectID={itemData.node.reflectionID}
-                  beamID={beamId}
-                />
-                <ReflectionPreview
-                  reflectionId={itemData.node.reflectionID}
-                  onNavigate={(options: { id: string; reflect?: boolean }) => {
-                    navigate({
-                      to: options.reflect
-                        ? '/reflection/$reflectionId/reflect'
-                        : '/reflection/$reflectionId',
-                      params: {
-                        reflectionId: options.id,
-                      },
-                    });
-                    return;
-                  }}
-                />
-              </>
+              <ErrorBoundary
+                errorObj={{
+                  type: 'script-error',
+                  title: t('Error in loading reflection.'),
+                }}
+                logger={logger}
+              >
+                <>
+                  <Divider />
+                  <EditableReflectionResolver
+                    reflectID={itemData.node.reflectionID}
+                    beamID={beamId}
+                  />
+                  <ReflectionPreview
+                    reflectionId={itemData.node.reflectionID}
+                    onNavigate={(options: { id: string; reflect?: boolean }) => {
+                      navigate({
+                        to: options.reflect
+                          ? '/reflection/$reflectionId/reflect'
+                          : '/reflection/$reflectionId',
+                        params: {
+                          reflectionId: options.id,
+                        },
+                      });
+                      return;
+                    }}
+                  />
+                </>
+              </ErrorBoundary>
             );
           }}
           reflectionsOf={{ entryId: beamId, itemType: EntityTypes.BEAM }}

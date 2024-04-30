@@ -2,8 +2,6 @@ import React from 'react';
 import { AnalyticsEventData, EntityTypes, type ReflectEntryData } from '@akashaorg/typings/lib/ui';
 import {
   AkashaReflectStreamEdge,
-  AkashaReflectFiltersInput,
-  AkashaReflectSortingInput,
   AkashaReflectStreamFiltersInput,
   AkashaReflectStreamSortingInput,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
@@ -35,7 +33,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
   const {
     reflectionsOf,
     itemSpacing = 8,
-    scrollerOptions = { overscan: 5 },
+    scrollerOptions = { overscan: 120 },
     queryKey,
     estimatedHeight,
     scrollTopIndicator,
