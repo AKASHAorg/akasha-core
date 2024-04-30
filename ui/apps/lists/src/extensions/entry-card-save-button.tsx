@@ -63,7 +63,7 @@ const EntryCardSaveButton = (props: RootExtensionProps<CardSaveButtonExtensionDa
 
   return (
     <Stack align="center">
-      <Button onClick={handleEntryBookmark}>
+      <Button onClick={handleEntryBookmark} plain>
         <Icon
           icon={<BookmarkIcon />}
           accentColor={true}

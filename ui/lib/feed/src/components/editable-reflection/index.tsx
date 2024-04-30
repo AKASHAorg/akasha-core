@@ -53,10 +53,7 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
   const isReflectOfReflection = beamId !== reflectToId;
   const apolloClient = useApolloClient();
   const {
-    data: { authenticatedDID },
-  } = useAkashaStore();
-  const {
-    data: { authenticatedProfile },
+    data: { authenticatedDID, authenticatedProfile },
   } = useAkashaStore();
   const { setMentionQuery, mentions } = useMentions(authenticatedDID);
   const handleGetMentions = (query: string) => {
