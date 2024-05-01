@@ -1,13 +1,14 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { ParcelConfigObject } from 'single-spa';
 import { hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { BlockInstanceMethods } from '@akashaorg/typings/lib/ui';
+import { BlockInstanceMethods, ContentBlockModes } from '@akashaorg/typings/lib/ui';
 import { GetContentBlockByIdQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 import { useGetContentBlockByIdLazyQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { BlockError } from '../block-error-card';
-import { MatchingBlock } from '../common.types';
 import { RenderError } from './render-error';
 import { RenderBlock } from './render-block';
-import { useContentBlockExtension } from './use-content-block-extension';
+import { BlockError } from '../block-error-card';
+import { resolveConfigs } from '../resolve-configs';
+import { MatchingBlock } from '../common.types';
 
 export type ContentBlockExtensionProps = {
   blockRef?: React.RefObject<BlockInstanceMethods>;
@@ -48,7 +49,79 @@ export const ContentBlockExtension: React.FC<ContentBlockExtensionProps> = props
   } = props;
   const { logger, getExtensionsPlugin } = useRootComponentProps();
   const contentBlockStoreRef = useRef(getExtensionsPlugin()?.contentBlockStore);
+  const [hasContentLoadError, setHasContentLoadError] = useState(false);
+  const [state, setState] = useState<{
+    parcels: (MatchingBlock & { config: ParcelConfigObject })[];
+    isMatched: boolean;
+  }>({
+    parcels: [],
+    isMatched: false,
+  });
   const [fetchBlockInfo, blockInfoQuery] = useGetContentBlockByIdLazyQuery();
+  // fetch data error
+  const fetchDataError = useMemo(() => {
+    return hasOwn(remainingProps, 'blockData')
+      ? remainingProps?.error
+      : blockInfoQuery.error?.message;
+  }, [remainingProps, blockInfoQuery]);
+  // block data
+  const blockData = useMemo(() => {
+    if (hasOwn(remainingProps, 'blockData')) {
+      if (remainingProps.blockData && hasOwn(remainingProps.blockData, 'id')) {
+        return remainingProps.blockData;
+      }
+    }
+    if (blockInfoQuery.data?.node && hasOwn(blockInfoQuery.data?.node, 'id')) {
+      return blockInfoQuery.data?.node;
+    }
+    return null;
+  }, [remainingProps, blockInfoQuery]);
+  // find matching blocks
+  const matchingBlocks: MatchingBlock[] = useMemo(() => {
+    if (hasOwn(remainingProps, 'blockData') && remainingProps?.matchingBlocks)
+      return remainingProps.matchingBlocks;
+    return !blockData ? [] : contentBlockStoreRef.current.getMatchingBlocks(blockData);
+  }, [blockData, remainingProps]);
+
+  useLayoutEffect(() => {
+    if (
+      matchingBlocks &&
+      matchingBlocks.length &&
+      matchingBlocks.length !== state.parcels.length &&
+      !state.isMatched
+    ) {
+      resolveConfigs({ matchingBlocks, mode: ContentBlockModes.READONLY, cache: cacheBlockConfig })
+        .then(newBlocks => {
+          setState({
+            parcels: newBlocks,
+            isMatched: true,
+          });
+        })
+        .catch(err => {
+          setHasContentLoadError(true);
+          logger.error('failed to load content blocks', err);
+        });
+    } else if (
+      matchingBlocks &&
+      !matchingBlocks.length &&
+      !state.isMatched &&
+      blockInfoQuery.called &&
+      !blockInfoQuery.loading
+    ) {
+      setState({
+        parcels: [],
+        isMatched: true,
+      });
+    }
+  }, [
+    logger,
+    blockInfoQuery.called,
+    blockInfoQuery.loading,
+    matchingBlocks,
+    state,
+    cacheBlockConfig,
+  ]);
+
   /**
    * remainingProps could have either just the blockID or other necessary data passed from the parent
    * Each of the variables and hooks below evaluates the props available in the remainingProps and acts accordingly.
@@ -63,31 +136,16 @@ export const ContentBlockExtension: React.FC<ContentBlockExtensionProps> = props
       }).catch(err => logger.error(`failed to fetch content block: ${JSON.stringify(err)}`));
     }
   }, [logger, fetchBlockInfo, remainingProps]);
-  // fetch data error
-  const fetchDataError = useMemo(() => {
-    return hasOwn(remainingProps, 'error') ? remainingProps?.error : blockInfoQuery.error?.message;
-  }, [remainingProps, blockInfoQuery]);
-  // block data
-  const blockData = useMemo(() => {
-    if (hasOwn(remainingProps, 'blockData') && hasOwn(remainingProps.blockData, 'id')) {
-      return remainingProps.blockData;
-    }
-    if (blockInfoQuery.data?.node && hasOwn(blockInfoQuery.data?.node, 'id')) {
-      return blockInfoQuery.data?.node;
-    }
-    return null;
-  }, [blockInfoQuery.data?.node, remainingProps]);
-  // find matching blocks
-  const matchingBlocks: MatchingBlock[] = useMemo(() => {
-    if (hasOwn(remainingProps, 'matchingBlocks') && remainingProps?.matchingBlocks)
-      return remainingProps.matchingBlocks;
-    return !blockData ? [] : contentBlockStoreRef.current.getMatchingBlocks(blockData);
-  }, [blockData, remainingProps]);
-  const { state, hasContentLoadError } = useContentBlockExtension({
-    matchingBlocks,
-    cacheBlockConfig,
-    blockInfoQuery,
-  });
+
+  useEffect(() => {
+    return () => {
+      setState({
+        isMatched: false,
+        parcels: [],
+      });
+    };
+  }, []);
+
   const appInfo = useMemo(() => {
     if (blockData) {
       return blockData.appVersion?.application;
@@ -108,7 +166,6 @@ export const ContentBlockExtension: React.FC<ContentBlockExtensionProps> = props
               id: remainingProps?.blockID,
             });
           }
-
           if (hasOwn(remainingProps, 'blockData')) {
             remainingProps.onRefresh?.();
           }
