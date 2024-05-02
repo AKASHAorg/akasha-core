@@ -35,29 +35,33 @@ export const RenderBlock: React.FC<RenderBlockProps> = props => {
 
   return (
     <>
-      {!state.parcels.length && !state.isMatched && !appInfo && (
-        <Stack fullWidth={true} spacing="gap-y-1" customStyle="mb-2">
-          <TextLine width="w-full" animated />
-          <TextLine width="w-2/3" animated />
-        </Stack>
-      )}
-      {!state.parcels.length && state.isMatched && appInfo && (
-        <Stack
-          spacing="gap-y-2"
-          padding="p-4"
-          background={{ light: 'grey9', dark: 'grey1' }}
-          customStyle="rounded-[20px]"
-        >
-          <Stack direction="row" spacing="gap-x-1">
-            <Text variant="button-sm">
-              {appInfo.displayName} {notInstalledTitle}
-            </Text>
-            <Button variant="text" label={installButtonLabel} customStyle="ml-auto" />
-          </Stack>
-          <Text variant="footnotes2" weight="normal">
-            {notInstalledDescription1} {appInfo.displayName} {notInstalledDescription2}
-          </Text>
-        </Stack>
+      {!state.parcels.length && (
+        <>
+          {!state.isMatched && !appInfo && (
+            <Stack fullWidth={true} spacing="gap-y-1" customStyle="mb-2">
+              <TextLine width="w-full" animated />
+              <TextLine width="w-2/3" animated />
+            </Stack>
+          )}
+          {state.isMatched && appInfo && (
+            <Stack
+              spacing="gap-y-2"
+              padding="p-4"
+              background={{ light: 'grey9', dark: 'grey1' }}
+              customStyle="rounded-[20px]"
+            >
+              <Stack direction="row" spacing="gap-x-1">
+                <Text variant="button-sm">
+                  {appInfo.displayName} {notInstalledTitle}
+                </Text>
+                <Button variant="text" label={installButtonLabel} customStyle="ml-auto" />
+              </Stack>
+              <Text variant="footnotes2" weight="normal">
+                {notInstalledDescription1} {appInfo.displayName} {notInstalledDescription2}
+              </Text>
+            </Stack>
+          )}
+        </>
       )}
       {state.parcels.map((matchingBlock, index) => {
         return (
