@@ -96,7 +96,7 @@ const ICWidget: React.FC<unknown> = () => {
       }}
       logger={logger}
     >
-      <Card padding="pb-4">
+      <Card margin="mb-4" padding="pb-4">
         <Stack padding="pl-4 pt-4 pb-6">
           <Text weight="bold" variant="body1">
             {t('My Apps')}
