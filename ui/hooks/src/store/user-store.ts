@@ -1,9 +1,7 @@
 import getSDK from '@akashaorg/awf-sdk';
-import { AUTH_EVENTS, type CurrentUser, WEB3_EVENTS } from '@akashaorg/typings/lib/sdk';
 import type { IGetProfileInfo, IUserState, IUserStore } from '@akashaorg/typings/lib/ui';
 import { createStore } from 'jotai';
 import { atomWithImmer } from 'jotai-immer';
-import { filter } from 'rxjs/operators';
 
 const store = createStore();
 
@@ -30,8 +28,6 @@ export class UserStore<T> implements IUserStore<T> {
   private constructor(getProfileInfo: IGetProfileInfo<T>['getProfileInfo']) {
     this.#getProfileInfo = getProfileInfo;
     this.restoreSession();
-    this.handleLogInEvent();
-    this.handleLogoutEvent();
   }
 
   /**
@@ -53,10 +49,21 @@ export class UserStore<T> implements IUserStore<T> {
         ...prev,
         isAuthenticating: true,
       }));
-      this.#sdk.api.auth.signIn({
-        provider,
-        checkRegistered,
-      });
+      this.#sdk.api.auth
+        .signIn({
+          provider,
+          checkRegistered,
+        })
+        .then(result => {
+          if (!result?.data) {
+            store.set(this.#userAtom, prev => ({
+              ...prev,
+              isAuthenticating: false,
+            }));
+            return;
+          }
+          this.handleLoggedInState(result.data?.id);
+        });
     } catch (error) {
       store.set(this.#userAtom, prev => ({
         ...prev,
@@ -68,63 +75,31 @@ export class UserStore<T> implements IUserStore<T> {
 
   /**
    * Handles logout
+   * Reset the store to the initial state
    */
   logout = () => {
-    this.#sdk.api.auth.signOut();
-    store.set(this.#userAtom, () => this.#initialState);
+    this.#sdk.api.auth.signOut().then(() => {
+      store.set(this.#userAtom, () => this.#initialState);
+    });
   };
 
   /**
-   * Listens to a disconnected event and reset the store to the initial state
-   */
-  handleLogoutEvent = () => {
-    this.#sdk.api.globalChannel
-      .pipe(
-        filter(payload => {
-          return payload.event === WEB3_EVENTS.DISCONNECTED;
-        }),
-      )
-      .subscribe({
-        next: () => {
-          store.set(this.#userAtom, () => this.#initialState);
-        },
-      });
-  };
-
-  /**
-   * Listens to a sign in event on the global channel and set the authenticatedDID state
+   * Handles logged in state
    * Fetch the authenticated profile info for the authenticatedDID and set the authenticatedProfile state
    */
-  handleLogInEvent = () => {
-    this.#sdk.api.globalChannel
-      .pipe(
-        filter(payload => {
-          return payload.event === AUTH_EVENTS.SIGN_IN;
-        }),
-      )
-      .subscribe({
-        next: async ({ data }: { data: CurrentUser }) => {
-          const authenticatedDID = data.id;
-          if (authenticatedDID) {
-            const { data: profileInfo, error } = await this.#getProfileInfo({
-              profileDID: authenticatedDID,
-            });
-            store.set(this.#userAtom, prev => ({
-              ...prev,
-              authenticatedDID,
-              authenticatedProfile: profileInfo,
-              authenticatedProfileError: error,
-              isAuthenticating: false,
-            }));
-          }
-        },
-        error: error => {
-          store.set(this.#userAtom, prev => ({
-            ...prev,
-            authenticatedProfileError: error,
-          }));
-        },
+  handleLoggedInState = async (authenticatedDID: string) => {
+    if (authenticatedDID) {
+      const { data: profileInfo, error } = await this.#getProfileInfo({
+        profileDID: authenticatedDID,
       });
+      store.set(this.#userAtom, prev => ({
+        ...prev,
+        authenticatedDID,
+        authenticatedProfile: profileInfo,
+        authenticatedProfileError: error,
+        isAuthenticating: false,
+      }));
+    }
   };
 
   /**
@@ -136,7 +111,16 @@ export class UserStore<T> implements IUserStore<T> {
         ...prev,
         isAuthenticating: true,
       }));
-      this.#sdk.api.auth.getCurrentUser();
+      this.#sdk.api.auth.getCurrentUser().then(result => {
+        if (!result) {
+          store.set(this.#userAtom, prev => ({
+            ...prev,
+            isAuthenticating: false,
+          }));
+          return;
+        }
+        this.handleLoggedInState(result?.id);
+      });
     } catch (error) {
       store.set(this.#userAtom, prev => ({
         ...prev,
