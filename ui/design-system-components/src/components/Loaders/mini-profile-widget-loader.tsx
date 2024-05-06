@@ -27,7 +27,11 @@ const MiniProfileWidgetLoader: React.FC = () => {
         <Stack direction="row" justify="center" align="center" spacing="gap-x-2" fullWidth>
           <TextLine width="w-2/6" height="h-5" animated />
           <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey6' }}>
-            |
+            •
+          </Text>
+          <TextLine width="w-2/6" height="h-5" animated />
+          <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey6' }}>
+            •
           </Text>
           <TextLine width="w-2/6" height="h-5" animated />
         </Stack>
