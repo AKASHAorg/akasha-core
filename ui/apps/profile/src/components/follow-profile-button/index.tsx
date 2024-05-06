@@ -39,12 +39,15 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
 
   const sdk = getSDK();
 
+  const snackbarMessage = isFollowing ? 'You are now following' : 'You are no longer following';
+
   const sendSuccessNotification = (profileName: string) => {
     uiEvents.next({
       event: NotificationEvents.ShowNotification,
       data: {
         type: NotificationTypes.Success,
-        message: t('You are now following {{name}}', {
+        message: t('{{message}} {{name}}', {
+          message: snackbarMessage,
           name: profileName,
         }),
       },
@@ -55,6 +58,7 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
     setFollowing(isFollowing);
     setFollowDocumentId(followId);
     if (iconOnly && isFollowing) sendSuccessNotification(profileName);
+    if (iconOnly && !isFollowing) sendSuccessNotification(profileName);
   };
 
   const [createFollowMutation, { loading: createFollowLoading }] = useCreateFollowMutation({
