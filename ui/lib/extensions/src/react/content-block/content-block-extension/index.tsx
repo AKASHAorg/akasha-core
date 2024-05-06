@@ -52,10 +52,8 @@ export const ContentBlockExtension: React.FC<ContentBlockExtensionProps> = props
   const [hasContentLoadError, setHasContentLoadError] = useState(false);
   const [state, setState] = useState<{
     parcels: (MatchingBlock & { config: ParcelConfigObject })[];
-    isMatched: boolean;
   }>({
     parcels: [],
-    isMatched: false,
   });
   const [fetchBlockInfo, blockInfoQuery] = useGetContentBlockByIdLazyQuery();
   // fetch data error
@@ -76,6 +74,7 @@ export const ContentBlockExtension: React.FC<ContentBlockExtensionProps> = props
     }
     return null;
   }, [remainingProps, blockInfoQuery]);
+
   // find matching blocks
   const matchingBlocks: MatchingBlock[] = useMemo(() => {
     if (hasOwn(remainingProps, 'blockData') && remainingProps?.matchingBlocks)
@@ -84,33 +83,20 @@ export const ContentBlockExtension: React.FC<ContentBlockExtensionProps> = props
   }, [blockData, remainingProps]);
 
   useLayoutEffect(() => {
-    if (
-      matchingBlocks &&
-      matchingBlocks.length &&
-      matchingBlocks.length !== state.parcels.length &&
-      !state.isMatched
-    ) {
+    if (matchingBlocks && matchingBlocks.length !== state.parcels.length) {
       resolveConfigs({ matchingBlocks, mode: ContentBlockModes.READONLY, cache: cacheBlockConfig })
         .then(newBlocks => {
           setState({
             parcels: newBlocks,
-            isMatched: true,
           });
         })
         .catch(err => {
           setHasContentLoadError(true);
           logger.error('failed to load content blocks', err);
         });
-    } else if (
-      matchingBlocks &&
-      !matchingBlocks.length &&
-      !state.isMatched &&
-      blockInfoQuery.called &&
-      !blockInfoQuery.loading
-    ) {
+    } else if (blockInfoQuery.called && !blockInfoQuery.loading) {
       setState({
         parcels: [],
-        isMatched: true,
       });
     }
   }, [
@@ -140,7 +126,6 @@ export const ContentBlockExtension: React.FC<ContentBlockExtensionProps> = props
   useEffect(() => {
     return () => {
       setState({
-        isMatched: false,
         parcels: [],
       });
     };
@@ -180,6 +165,8 @@ export const ContentBlockExtension: React.FC<ContentBlockExtensionProps> = props
       appInfo={appInfo}
       blockId={blockData?.id}
       blockRef={blockRef}
+      blockData={blockData}
+      matchingBlocks={matchingBlocks}
       notInstalledTitle={notInstalledTitle}
       installButtonLabel={installButtonLabel}
       notInstalledDescription1={notInstalledDescription1}
