@@ -7,17 +7,22 @@ import EntryCardLoading from '@akashaorg/design-system-components/lib/components
 export type EditableReflectionResolverProps = {
   reflectID: string;
   beamID: string;
+  onContentClick: () => void;
+  onReflect: () => void;
 };
 
-export const EditableReflectionResolver = (props: EditableReflectionResolverProps) => {
-  const { getRoutingPlugin } = useRootComponentProps();
-
+export const EditableReflectionResolver = ({
+  reflectID,
+  beamID,
+  onContentClick,
+  onReflect,
+}: EditableReflectionResolverProps) => {
   const reflectionReq = useGetReflectionByIdQuery({
     variables: {
-      id: props.reflectID,
+      id: reflectID,
     },
     fetchPolicy: 'cache-first',
-    skip: !props.reflectID,
+    skip: !reflectID,
   });
 
   if (reflectionReq.loading) return <EntryCardLoading />;
@@ -33,25 +38,8 @@ export const EditableReflectionResolver = (props: EditableReflectionResolverProp
         entryData={mapReflectEntryData(entryData)}
         reflectToId={mapReflectEntryData(entryData).id}
         contentClickable={true}
-        onContentClick={() => {
-          if (hasOwn(reflectionReq.data?.node, 'id')) {
-            const reflectionId = reflectionReq.data.node.id;
-            return getRoutingPlugin().navigateTo({
-              appName: '@akashaorg/app-akasha-integration',
-              getNavigationUrl: navRoutes => `${navRoutes.Reflection}/${reflectionId}`,
-            });
-          }
-        }}
-        onReflect={() => {
-          if (hasOwn(reflectionReq.data?.node, 'id')) {
-            const reflectionId = reflectionReq.data.node.id;
-            getRoutingPlugin().navigateTo({
-              appName: '@akashaorg/app-akasha-integration',
-              getNavigationUrl: navRoutes =>
-                `${navRoutes.Reflection}/${reflectionId}${navRoutes.Reflect}`,
-            });
-          }
-        }}
+        onContentClick={onContentClick}
+        onReflect={onReflect}
       />
     </React.Suspense>
   );

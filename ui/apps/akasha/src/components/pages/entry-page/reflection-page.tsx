@@ -115,6 +115,22 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
                 <EditableReflectionResolver
                   reflectID={itemData.node.reflectionID}
                   beamID={entryData.beam?.id}
+                  onContentClick={() => {
+                    navigate({
+                      to: '/reflection/$reflectionId',
+                      params: {
+                        reflectionId: itemData.node.reflectionID,
+                      },
+                    });
+                  }}
+                  onReflect={() => {
+                    navigate({
+                      to: '/reflection/$reflectionId/reflect',
+                      params: {
+                        reflectionId: itemData.node.reflectionID,
+                      },
+                    });
+                  }}
                 />
                 <ReflectionPreview
                   reflectionId={itemData.node.id}

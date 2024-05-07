@@ -14,11 +14,7 @@ import {
   useMentions,
   useAkashaStore,
 } from '@akashaorg/ui-awf-hooks';
-import {
-  GetReflectionsFromBeamDocument,
-  GetReflectReflectionsDocument,
-  useUpdateAkashaReflectMutation,
-} from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import { useUpdateAkashaReflectMutation } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { useTranslation } from 'react-i18next';
 import {
   AnalyticsCategories,
@@ -26,11 +22,11 @@ import {
   NotificationTypes,
   NotificationEvents,
 } from '@akashaorg/typings/lib/ui';
-import { useApolloClient } from '@apollo/client';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
 import ErrorBoundary, {
   ErrorBoundaryProps,
 } from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
+import ReflectionEditorRenderer from './reflection-editor-renderer';
 
 const MAX_EDIT_TIME_IN_MINUTES = 10;
 
@@ -49,9 +45,7 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
   const [isReflecting, setIsReflecting] = useState(true);
 
   const sdk = getSDK();
-  const beamId = entryData.beamID;
-  const isReflectOfReflection = beamId !== reflectToId;
-  const apolloClient = useApolloClient();
+
   const {
     data: { authenticatedDID, authenticatedProfile },
   } = useAkashaStore();
@@ -69,16 +63,7 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
     onCompleted: async () => {
       setEdit(false);
       setNewContent(null);
-      //reset the state modified inside Editor component when done
-      setIsReflecting(true);
 
-      if (!isReflectOfReflection) {
-        await apolloClient.refetchQueries({ include: [GetReflectionsFromBeamDocument] });
-      }
-
-      if (isReflectOfReflection) {
-        await apolloClient.refetchQueries({ include: [GetReflectReflectionsDocument] });
-      }
       analyticsActions.trackEvent({
         category: AnalyticsCategories.REFLECT,
         action: 'Reflect Updated',
