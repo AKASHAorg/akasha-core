@@ -66,7 +66,7 @@ export const ReportItemConfirmation: React.FC<ReportItemConfirmationProps> = pro
             {footnoteLabel}
           </Text>
 
-          <Anchor href={ctaUrl} target="_blank" rel="noreferrer noopener">
+          <Anchor href={ctaUrl} target="_blank">
             <Stack direction="row" align="center" spacing="gap-x-2">
               <Icon
                 size="sm"

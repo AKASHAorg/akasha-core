@@ -78,7 +78,6 @@ const VibesValueCard: React.FC<VibesValueCardProps> = props => {
                   href={ctaUrl}
                   customStyle="text-sm self-end font-bold no-underline text(secondaryLight dark:secondaryDark)"
                   target="_blank"
-                  rel="noreferrer noopener"
                 >
                   {ctaLabel}
                 </Anchor>

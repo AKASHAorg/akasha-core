@@ -111,10 +111,9 @@ const PrivacyOption: React.FC = () => {
             )}
             <Button plain={true} onClick={handlePrivacyPolicyClick}>
               <Text
-                customStyle="inline-block cursor-pointer"
                 as="span"
-                weight="bold"
                 color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                align="center"
               >
                 {t('our privacy policy')}
               </Text>
@@ -148,7 +147,7 @@ const PrivacyOption: React.FC = () => {
             {t(
               ' is used so we can all work all the more brilliantly to improve it, you can opt-in to our own ',
             )}
-            <Anchor href={'https://matomo.org'}>
+            <Anchor target="_blank" href={'https://matomo.org'}>
               <Text
                 as="span"
                 weight="bold"
@@ -161,6 +160,7 @@ const PrivacyOption: React.FC = () => {
               " analytics. We don't store personal identifiable information (PII) and you can opt-out at any time. ",
             )}
             <Anchor
+              target="_blank"
               href={
                 'https://forum.akasha.org/t/implementing-analytics-on-ethereum-world-an-open-discussion-on-the-rationale-and-your-choices/100'
               }
@@ -178,12 +178,16 @@ const PrivacyOption: React.FC = () => {
             <Text weight="bold">{t('Legal and Terms of Use')}</Text>
           </Stack>
           <Text>
-            {t("Discover more about AKASHA World's legal and Terms of Use ")}
-            <Anchor onClick={handleLegalAppNav}>
-              <Text as="span" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
-                {t('here!')}
+            {t("Discover more about AKASHA World's Legal and Terms of Use")}{' '}
+            <Button plain={true} onClick={handleLegalAppNav}>
+              <Text
+                as="span"
+                color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                align="center"
+              >
+                {t('here')}
               </Text>
-            </Anchor>
+            </Button>
           </Text>
         </Stack>
       </Stack>

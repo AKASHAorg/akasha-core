@@ -43,7 +43,6 @@ export const SubtitleRenderer: React.FC<SubtitleRendererProps> = props => {
                   color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
                   weight={fontWeight}
                   align="center"
-                  customStyle="cursor-pointer"
                 >
                   {el.label}
                 </Text>
