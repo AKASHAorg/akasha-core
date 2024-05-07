@@ -14,11 +14,12 @@ const EditorPage: React.FC<unknown> = () => {
   const { getRoutingPlugin } = useRootComponentProps();
   const navigateTo = React.useRef(getRoutingPlugin().navigateTo);
   const { t } = useTranslation();
+
   return (
     <HelmetProvider>
       <Stack fullWidth={true}>
         <Helmet>
-          <title>Beam Editor</title>
+          <title>{t('Beam Editor')}</title>
         </Helmet>
         {!authenticatedDID && (
           <Stack>
