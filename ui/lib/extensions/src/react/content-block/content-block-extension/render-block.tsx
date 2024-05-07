@@ -21,6 +21,7 @@ export type RenderBlockProps = {
   notInstalledDescription1: string;
   notInstalledDescription2: string;
   onError: BlockParcelProps['onError'];
+  onClickInstall: (e: React.SyntheticEvent) => void;
 };
 
 export const RenderBlock: React.FC<RenderBlockProps> = props => {
@@ -36,6 +37,7 @@ export const RenderBlock: React.FC<RenderBlockProps> = props => {
     notInstalledDescription1,
     notInstalledDescription2,
     onError,
+    onClickInstall,
   } = props;
 
   return (
@@ -57,7 +59,12 @@ export const RenderBlock: React.FC<RenderBlockProps> = props => {
             <Text variant="button-sm">
               {appInfo.displayName} {notInstalledTitle}
             </Text>
-            <Button variant="text" label={installButtonLabel} customStyle="ml-auto" />
+            <Button
+              onClick={onClickInstall}
+              variant="text"
+              label={installButtonLabel}
+              customStyle="ml-auto"
+            />
           </Stack>
           <Text variant="footnotes2" weight="normal">
             {notInstalledDescription1} {appInfo.displayName} {notInstalledDescription2}

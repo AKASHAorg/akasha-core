@@ -31,10 +31,11 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
     onBlockInfoChange,
     onContentClick,
   } = props;
-  const { navigateToModal, getExtensionsPlugin } = useRootComponentProps();
+  const { navigateToModal, getExtensionsPlugin, getRoutingPlugin } = useRootComponentProps();
   const contentBlockStoreRef = useRef(getExtensionsPlugin()?.contentBlockStore);
   const _onBlockInfoChange = useRef(onBlockInfoChange);
   const { t } = useTranslation('ui-lib-feed');
+  const navigateTo = getRoutingPlugin().navigateTo;
   const contentBlockReq = useGetContentBlockByIdQuery({
     variables: { id: blockID },
     fetchPolicy: 'cache-first',
@@ -81,6 +82,14 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
     navigateToModal({
       name: 'login',
       message: 'To view explicit or sensitive content, please connect to confirm your consent.',
+    });
+  };
+
+  const handleClickInstall = (e: React.SyntheticEvent) => {
+    e.stopPropagation();
+    navigateTo({
+      appName: '@akashaorg/app-extensions',
+      getNavigationUrl: routes => routes.apps,
     });
   };
 
@@ -132,6 +141,7 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
             onRefresh={() => {
               contentBlockReq.refetch({ id: blockID });
             }}
+            onClickInstall={handleClickInstall}
           />
         </>
       )}

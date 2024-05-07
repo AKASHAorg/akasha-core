@@ -21,6 +21,7 @@ export type ContentBlockExtensionProps = {
   // cache to prevent re-loading block config with the same block id
   cacheBlockConfig?: boolean;
   onError?: (error: Error) => void;
+  onClickInstall: (e: React.SyntheticEvent) => void;
 } & (
   | {
       blockID: string;
@@ -45,6 +46,7 @@ export const ContentBlockExtension: React.FC<ContentBlockExtensionProps> = props
     notInstalledDescription2,
     cacheBlockConfig,
     onError,
+    onClickInstall,
     ...remainingProps
   } = props;
   const { logger, getExtensionsPlugin } = useRootComponentProps();
@@ -172,6 +174,7 @@ export const ContentBlockExtension: React.FC<ContentBlockExtensionProps> = props
       notInstalledDescription1={notInstalledDescription1}
       notInstalledDescription2={notInstalledDescription2}
       onError={onError}
+      onClickInstall={onClickInstall}
     />
   );
 };
