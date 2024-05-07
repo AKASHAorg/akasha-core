@@ -91,6 +91,7 @@ const ProfileCardWidget: React.FC<ProfileCardWidgetProps> = props => {
 
   const beams = stats?.totalBeams ?? 0;
   const followers = stats?.totalFollowers ?? 0;
+  const following = stats?.totalFollowing ?? 0;
 
   return (
     <ErrorBoundary
@@ -112,7 +113,7 @@ const ProfileCardWidget: React.FC<ProfileCardWidgetProps> = props => {
                 followingLabel={t('Following')}
                 followersLabel={followers === 1 ? t('Follower') : t('Followers')}
                 statsLoading={statsLoading}
-                stats={{ followers, beams }}
+                stats={{ followers, following, beams }}
                 transformSource={transformSource}
                 handleClick={handleCardClick}
                 footerExt={
