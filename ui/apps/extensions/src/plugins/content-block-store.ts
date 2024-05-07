@@ -78,11 +78,11 @@ export class ContentBlockStore extends BaseStore {
         hasOwn(blockInfo, 'content') &&
         Array.isArray(blockInfo.content)
       ) {
-        const applicationName = blockInfo.appVersion.application.name;
+        let applicationName = blockInfo.appVersion.application.name;
         // @TODO: remove this if statement
-        // if (applicationName === 'antenna-test') {
-        //   applicationName = '@akashaorg/app-akasha-integration';
-        // }
+        if (applicationName === 'antenna-test') {
+          applicationName = '@akashaorg/app-akasha-integration';
+        }
         if (!applicationName) {
           console.error('Application name is not defined! blockInfo', blockInfo);
           return [];
