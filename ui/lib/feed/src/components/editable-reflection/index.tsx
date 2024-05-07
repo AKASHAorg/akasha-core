@@ -26,7 +26,6 @@ import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
 import ErrorBoundary, {
   ErrorBoundaryProps,
 } from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
-import ReflectionEditorRenderer from './reflection-editor-renderer';
 
 const MAX_EDIT_TIME_IN_MINUTES = 10;
 
