@@ -1,0 +1,40 @@
+{
+  "name": "@akashaorg/app-legal",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "extensions/apps/legal/src",
+  "projectType": "application",
+  "targets": {
+    "prepare": {
+      "dependsOn": [
+        "@akashaorg/ui-awf-hooks:build",
+        "@akashaorg/design-system-core:prepare",
+        "@akashaorg/design-system-components:prepare",
+        "@akashaorg/typings:prepare"
+      ],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "extensions/apps/legal",
+        "command": "tsc --build"
+      }
+    },
+    "build": {
+      "dependsOn": ["prepare"],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "extensions/apps/legal",
+        "command": "webpack --config webpack.config.cjs"
+      },
+      "outputs": [
+        "{projectRoot}/lib",
+        "{workspaceRoot}/dist/apps/legal"
+      ]
+    },
+    "translations": {
+      "executor": "./tools/executors/i18n:extract",
+      "options": {
+        "cwd": "extensions/apps/legal"
+      }
+    }
+  },
+  "tags": ["scope:extension", "type:app"]
+}

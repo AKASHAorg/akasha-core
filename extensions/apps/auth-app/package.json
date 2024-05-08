@@ -1,0 +1,27 @@
+{
+  "name": "@akashaorg/app-auth-ewa",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "description": "The Authentication App handles how you login to AKASHA World",
+  "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
+  "homepage": "https://github.com/AKASHAorg/akasha-core#readme",
+  "license": "Apache-2.0",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AKASHAorg/akasha-core.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AKASHAorg/akasha-core/issues"
+  },
+  "akasha": {
+    "displayName": "Authentication"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "@akashaorg/app-notifications",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "This application helps you stay in the loop on what is going on in Ethereum World and see how other participants are interacting with you and/or your content.",
+  "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AKASHAorg/akasha-core.git"
+  },
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
+  "akasha": {
+    "displayName": "Notifications"
+  }
+}

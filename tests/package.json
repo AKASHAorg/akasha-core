@@ -3,44 +3,16 @@
   "version": "0.1.0",
   "description": "AF testing suite",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
-  "main": "lib/index.js",
-  "contributors": [
-    "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)",
-    "Sever Abibula <sever.abibula@akasha.world> (https://github.com/SeverS)",
-    "Valentin Cotea <valentin.cotea@akasha.world> (https://github.com/quininez)",
-    "Josemaria Nriagu <josemaria.nriagu@akasha.world> (https://github.com/josenriagu)",
-    "Damir Sabolic <damir.sabolic@akasha.world> (https://github.com/PrimarchAlpharius)"
-  ],
-  "license": "MIT",
+  "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AKASHAorg/akasha-framework.git"
+    "url": "git+https://github.com/AKASHAorg/akasha-core.git"
   },
-  "engines": {
-    "node": ">=10",
-    "npm": ">=5"
-  },
-  "scripts": {
-    "ethereum-world-local": "cypress open --project ethereum-world --env configFile=local --browser firefox",
-    "ethereum-world-prod": "cypress open --project ethereum-world --env configFile=production",
-    "cy:e2e:chrome:record": "cypress run --project ethereum-world --env configFile='pull-request' --record --browser chrome",
-    "cy:e2e:firefox:local": "cypress run --project ethereum-world --env configFile=local --browser firefox",
-    "build": "tsc --build",
-    "tsc": "tsc --build",
-    "prepare": "yarn run tsc",
-    "pretest": "tsc -m commonjs",
-    "test": "jest",
-    "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
-  },
-  "devDependencies": {
-    "@akashaorg/design-system-core": "*",
-    "@akashaorg/typings": "*",
-    "@apollo/client": "3.9.5",
-    "@types/faker": "5.5.8",
-    "cypress": "10.7.0",
-    "faker": "5.5.3",
-    "fs-extra": "10.1.0",
-    "react-i18next": "12.2.0",
-    "react-router-dom": "6.3.0"
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
+  "directories": {
+    "lib": "lib"
   }
 }

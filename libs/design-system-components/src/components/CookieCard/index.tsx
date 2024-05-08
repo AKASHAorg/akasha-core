@@ -1,0 +1,101 @@
+import React from 'react';
+
+import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+
+export type CookieCardProps = {
+  titleLabel: string;
+  paragraphOneLabel: string;
+  paragraphTwo: {
+    introLabel: string;
+    analyticsLabel: string;
+    analyticsURL: string;
+    middleParagraphLabeL: string;
+    lastParagraphLabel: string;
+    settingsLabel: string;
+    onSettingsClick: () => void;
+  };
+  paragraphThree: { introLabel: string; ctaLabel: string; onPrivacyClick: () => void };
+  onlyEssentialLabel: string;
+  acceptAllLabel: string;
+  onClickAcceptAll: () => void;
+  onClickOnlyEssential: () => void;
+};
+
+const CookieCard: React.FC<CookieCardProps> = props => {
+  const {
+    titleLabel,
+    paragraphOneLabel,
+    paragraphTwo,
+    paragraphThree,
+    onlyEssentialLabel,
+    acceptAllLabel,
+    onClickAcceptAll,
+    onClickOnlyEssential,
+  } = props;
+
+  return (
+    <Card elevation="3" radius={20} padding={'p-4'}>
+      <Stack direction="column" spacing="gap-y-2">
+        <Text variant="h6">{titleLabel}</Text>
+
+        <Stack spacing="gap-y-1">
+          <Text variant="body2">{paragraphOneLabel}</Text>
+
+          <Text variant="body2">
+            {paragraphTwo.introLabel}
+
+            <Anchor target="_blank" href={paragraphTwo.analyticsURL}>
+              {paragraphTwo.analyticsLabel}
+            </Anchor>
+
+            {paragraphTwo.middleParagraphLabeL}
+
+            <Button plain={true} onClick={paragraphTwo.onSettingsClick}>
+              <Text
+                as="span"
+                variant="body2"
+                color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                align="center"
+              >
+                {paragraphTwo.settingsLabel}
+              </Text>
+            </Button>
+
+            {paragraphTwo.lastParagraphLabel}
+          </Text>
+
+          <Text variant="body2">
+            {paragraphThree.introLabel}{' '}
+            <Button plain={true} onClick={paragraphThree.onPrivacyClick}>
+              <Text
+                as="span"
+                variant="body2"
+                color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                align="center"
+              >
+                {paragraphThree.ctaLabel}
+              </Text>
+            </Button>
+          </Text>
+        </Stack>
+
+        <Stack direction="row" spacing="gap-x-4" customStyle="mt-4 ml-auto">
+          <Button variant="text" label={onlyEssentialLabel} onClick={onClickOnlyEssential} />
+
+          <Button
+            variant="primary"
+            label={acceptAllLabel}
+            customStyle="w-44"
+            onClick={onClickAcceptAll}
+          />
+        </Stack>
+      </Stack>
+    </Card>
+  );
+};
+
+export default CookieCard;

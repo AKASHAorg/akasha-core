@@ -1,0 +1,19 @@
+{
+  "name": "@akashaorg/ui-widget-layout",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "AKASHA specific page-layout widget",
+  "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AKASHAorg/akasha-core.git"
+  },
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
+  "akasha": {
+    "displayName": "Layout"
+  }
+}

@@ -4,13 +4,25 @@
   "sourceRoot": "tests/src",
   "projectType": "application",
   "targets": {
-    "build": {
-      "executor": "@nx/workspace:run-commands",
+    "prepare": {
+      "dependsOn": [
+        "@akashaorg/design-system-core:prepare",
+        "@akashaorg/typings:prepare"
+      ],
+      "executor": "nx:run-commands",
       "options": {
-        "commands": ["yarn build"],
-        "cwd": "tests",
-        "parallel": false
+        "cwd": "tests/",
+        "command": "tsc --build"
+      }
+    },
+    "test": {
+      "dependsOn": ["prepare"],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "tests/",
+        "command": "jest"
       }
     }
-  }
+  },
+  "tags": ["tests"]
 }

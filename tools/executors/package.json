@@ -2,35 +2,18 @@
   "name": "@akashaorg/nx-executors",
   "private": true,
   "version": "0.0.1",
-  "description": "ETHEREUM WORLD NX monorepo executors",
+  "description": "NX monorepo executors",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
-  "contributors": [
-    "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)",
-    "Sever Abibula <sever.abibula@akasha.world> (https://github.com/SeverS)",
-    "Valentin Cotea <valentin.cotea@akasha.world> (https://github.com/quininez)",
-    "Josemaria Nriagu <josemaria.nriagu@akasha.world> (https://github.com/josenriagu)",
-    "Damir Sabolic <damir.sabolic@akasha.world> (https://github.com/PrimarchAlpharius)"
-  ],
-  "homepage": "https://github.com/AKASHAorg/akasha-framework#readme",
-  "license": "AGPL-3.0",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AKASHAorg/akasha-core.git"
+  },
   "main": "lib/index.js",
   "directories": {
     "lib": "lib"
   },
   "files": [
     "lib"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/AKASHAorg/akasha-world-framework.git"
-  },
-  "scripts": {
-    "build": "tsc --build tsconfig.json",
-    "tsc": "tsc --build",
-    "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo",
-    "test": "jest --config jest.config.js"
-  },
-  "bugs": {
-    "url": "https://github.com/AKASHAorg/akasha-world-framework/issues"
-  }
+  ]
 }

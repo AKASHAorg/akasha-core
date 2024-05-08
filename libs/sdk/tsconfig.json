@@ -1,0 +1,23 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "types": ["node"],
+    "lib": [
+      "dom",
+      "es2022"
+    ],
+    "module": "es2020",
+    "target": "es2020",
+    "strict": true,
+  },
+  "include": [
+    "./src",
+  ],
+  "exclude": [
+    "./lib"
+  ]
+}

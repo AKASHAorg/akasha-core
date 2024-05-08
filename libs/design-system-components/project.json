@@ -1,0 +1,20 @@
+{
+  "name": "@akashaorg/design-system-components",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/design-system-components/src",
+  "projectType": "library",
+  "targets": {
+    "prepare": {
+      "dependsOn": [
+        "@akashaorg/typings:prepare",
+        "@akashaorg/design-system-core:prepare"
+      ],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "libs/design-system-components",
+        "command": "tsc --build"
+      }
+    }
+  },
+  "tags": ["scope:extension", "type:lib"]
+}

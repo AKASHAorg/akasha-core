@@ -1,0 +1,37 @@
+{
+  "name": "@akashaorg/composedb-models",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/composedb/src",
+  "projectType": "library",
+  "targets": {
+    "prepare": {
+      "dependsOn": [
+        "@akashaorg/typings:prepare"
+      ],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "libs/composedb",
+        "command": "tsc --build"
+      }
+    },
+    "deploy-composites": {
+      "dependsOn": [
+        "prepare"
+      ],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "libs/composedb",
+        "command": "node ./src/cmd/deploy-composites.mjs && tsc --build"
+      }
+    },
+    "start-graphql": {
+      "dependsOn": [],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "libs/composedb",
+        "command": "node ./src/cmd/graphiql.mjs"
+      }
+    }
+  },
+  "tags": ["scope:sdk", "type:lib"]
+}

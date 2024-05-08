@@ -1,0 +1,19 @@
+{
+  "name": "@akashaorg/app-extensions",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "App for extensions",
+  "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AKASHAorg/akasha-core.git"
+  },
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
+  "akasha": {
+    "displayName": "Extensions"
+  }
+}

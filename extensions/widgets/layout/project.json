@@ -1,0 +1,43 @@
+{
+  "name": "@akashaorg/ui-widget-layout",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "extensions/widgets/layout/src",
+  "projectType": "application",
+  "targets": {
+    "prepare": {
+      "dependsOn": [
+        "@akashaorg/ui-awf-hooks:build",
+        "@akashaorg/design-system-core:prepare",
+        "@akashaorg/design-system-components:prepare",
+        "@akashaorg/awf-sdk:build",
+        "@akashaorg/ui-lib-extensions:prepare",
+        "@akashaorg/ui-lib-feed:prepare",
+        "@akashaorg/typings:prepare"
+      ],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "extensions/widgets/layout",
+        "command": "tsc --build"
+      }
+    },
+    "build": {
+      "dependsOn": ["prepare"],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "extensions/widgets/layout",
+        "command": "webpack --config webpack.config.cjs"
+      },
+      "outputs": [
+        "{projectRoot}/lib",
+        "{workspaceRoot}/dist/widgets/layout"
+      ]
+    },
+    "translations": {
+      "executor": "./tools/executors/i18n:extract",
+      "options": {
+        "cwd": "extensions/widgets/layout"
+      }
+    }
+  },
+  "tags": ["scope:extension", "type:widget"]
+}

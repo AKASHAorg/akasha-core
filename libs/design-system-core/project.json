@@ -1,0 +1,31 @@
+{
+  "name": "@akashaorg/design-system-core",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/design-system-core/src",
+  "projectType": "application",
+  "targets": {
+    "prepare": {
+      "dependsOn": [
+        "@akashaorg/typings:prepare"
+      ],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "libs/design-system-core",
+        "command": "tsc --build"
+      }
+    },
+    "build": {
+      "dependsOn": ["prepare"],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "libs/design-system-core",
+        "command": "copyfiles -f ./src/static/img/* ../../dist/images && tsc --build"
+      },
+      "outputs": [
+        "{projectRoot}/lib",
+        "{workspaceRoot}/dist/images"
+      ]
+    }
+  },
+  "tags": ["scope:extension", "type:lib"]
+}

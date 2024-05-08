@@ -1,50 +1,33 @@
 {
-  "extends": "@nrwl/workspace/presets/core.json",
-  "npmScope": "default",
-  "affected": {
-    "defaultBase": "main"
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "namedInputs": {
+    "default": [
+      "{projectRoot}/**/*",
+      "sharedGlobals"
+    ],
+    "production": [
+      "default",
+      "!{projectRoot}/.eslintrc.json",
+      "!{projectRoot}/eslint.config.js",
+      "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
+      "!{projectRoot}/tsconfig.spec.json",
+      "!{projectRoot}/jest.config.[jt]s",
+      "!{projectRoot}/src/test-setup.[jt]s",
+      "!{projectRoot}/test-setup.[jt]s"
+    ],
+    "sharedGlobals": [{ "runtime": "node --version" }, "{workspaceRoot}/*.env"]
   },
-  "cli": {
-    "defaultCollection": "@nrwl/workspace"
+  "plugins": [
+  ],
+  "generators": {
   },
-  "tasksRunnerOptions": {
-    "default": {
-      "runner": "@nrwl/workspace/tasks-runners/default",
-      "options": {
-        "cacheableOperations": ["tsc", "build", "lint", "test", "e2e"]
-      }
+  "targetDefaults": {
+    "build": {
+      "cache": true,
+      "inputs": [
+        "production",
+        "^production"
+      ]
     }
-  },
-  "targetDependencies": {
-    "install": [
-      {
-        "target": "tsc",
-        "projects": "dependencies"
-      }
-    ],
-    "tsc": [
-      {
-        "target": "tsc",
-        "projects": "dependencies"
-      }
-    ],
-    "build": [
-      {
-        "target": "build",
-        "projects": "dependencies"
-      }
-    ],
-    "pack": [
-      {
-        "target": "run pack",
-        "projects": "dependencies"
-      }
-    ],
-    "pack:watch": [
-      {
-        "target": "pack:watch",
-        "projects": "dependencies"
-      }
-    ]
   }
 }

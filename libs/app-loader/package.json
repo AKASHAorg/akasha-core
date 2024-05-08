@@ -1,0 +1,19 @@
+{
+  "name": "@akashaorg/ui-app-loader",
+  "version": "0.1.0",
+  "description": "App loader for AKASHA web",
+  "type": "module",
+  "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AKASHAorg/akasha-core.git"
+  },
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
+  "directories": {
+    "lib": "lib"
+  }
+}

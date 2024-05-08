@@ -1,0 +1,32 @@
+{
+  "name": "@akashaorg/ui-awf-hooks",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/hooks/src",
+  "projectType": "application",
+  "targets": {
+    "prepare": {
+      "dependsOn": [
+        "@akashaorg/awf-sdk:build",
+        "@akashaorg/typings:prepare"
+      ],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "libs/hooks",
+        "command": "tsc --build"
+      }
+    },
+    "build": {
+      "dependsOn": ["prepare"],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "libs/hooks",
+        "command": "webpack --config webpack.config.cjs"
+      },
+      "outputs": [
+        "{projectRoot}/lib",
+        "{workspaceRoot}/dist/libs/hooks"
+      ]
+    }
+  },
+  "tags": ["scope:extension", "type:lib"]
+}

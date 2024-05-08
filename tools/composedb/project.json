@@ -1,5 +1,0 @@
-{
-  "name": "@akashaorg/composedb-models",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "projectType": "library"
-}

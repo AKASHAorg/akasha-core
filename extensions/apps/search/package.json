@@ -1,0 +1,19 @@
+{
+  "name": "@akashaorg/app-search",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "The AKASHA Foundation built this application to help participants in Ethereum World or any other dsocial World in the future discover relevant content, conversations, profiles and wonderful people to follow.",
+  "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AKASHAorg/akasha-core.git"
+  },
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
+  "akasha": {
+    "displayName": "Search"
+  }
+}

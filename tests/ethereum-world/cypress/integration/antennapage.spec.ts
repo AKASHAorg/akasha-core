@@ -6,7 +6,7 @@ import { DismissableNotificationCard } from './partials/layout-widget.spec';
 describe('Global Antenna Page', () => {
   context('Global Antenna Page', () => {
     beforeEach(() => {
-      cy.visit('/@akashaorg/app-akasha-integration/antenna', { timeout: TIMEOUT });
+      cy.visit('/@akashaorg/app-antenna/antenna', { timeout: TIMEOUT });
     });
     describe('Should test top bar', () => TopbarTest());
     describe('Should test trending widget', () => TrendingWidgetTest());

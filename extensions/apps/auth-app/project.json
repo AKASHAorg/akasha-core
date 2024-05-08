@@ -1,0 +1,43 @@
+{
+  "name": "@akashaorg/app-auth-ewa",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "extensions/apps/auth-app/src",
+  "projectType": "application",
+  "targets": {
+    "prepare": {
+      "dependsOn": [
+        "@akashaorg/ui-awf-hooks:build",
+        "@akashaorg/design-system-core:prepare",
+        "@akashaorg/design-system-components:prepare",
+        "@akashaorg/awf-sdk:build",
+        "@akashaorg/ui-lib-extensions:prepare",
+        "@akashaorg/ui-lib-feed:prepare",
+        "@akashaorg/typings:prepare"
+      ],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "extensions/apps/auth-app",
+        "command": "tsc --build"
+      }
+    },
+    "build": {
+      "dependsOn": ["prepare"],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "extensions/apps/auth-app",
+        "command": "webpack --config webpack.config.cjs"
+      },
+      "outputs": [
+        "{projectRoot}/lib",
+        "{workspaceRoot}/dist/apps/auth-app"
+      ]
+    },
+    "translations": {
+      "executor": "./tools/executors/i18n:extract",
+      "options": {
+        "cwd": "extensions/apps/auth-app"
+      }
+    }
+  },
+  "tags": ["scope:extension", "type:app"]
+}

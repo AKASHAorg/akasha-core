@@ -17,7 +17,7 @@ export const DismissableNotificationCard = () => {
   });
   it('should not display the merge notification on next visit', () => {
     // TODO: Right now the call to graphql api fails when revisiting feed page once it's resolved uncomment the line below
-    // cy.visit('/@akashaorg/app-akasha-integration/feed');
+    // cy.visit('/@akashaorg/app-antenna/feed');
     cy.get('[data-testid="the-merge-notification"]', { timeout: TIMEOUT }).should('not.exist');
   });
 };

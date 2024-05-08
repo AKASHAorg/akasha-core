@@ -1,0 +1,22 @@
+{
+  "name": "@akashaorg/ui-lib-extensions",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/extensions/src",
+  "projectType": "library",
+  "targets": {
+    "prepare": {
+      "dependsOn": [
+        "@akashaorg/ui-awf-hooks:build",
+        "@akashaorg/design-system-components:prepare",
+        "@akashaorg/awf-sdk:build",
+        "@akashaorg/typings:prepare"
+      ],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "libs/extensions",
+        "command": "tsc --build"
+      }
+    }
+  },
+  "tags": ["scope:extension", "type:lib"]
+}

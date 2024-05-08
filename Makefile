@@ -1,27 +1,18 @@
-build:	install build.all
-build.all: build.sdk build.translations build.ui
-build.sdk:
-	export NODE_ENV='production' && \
-	yarn run build:sdk
-build.ui:
-	export NODE_ENV='production' && \
-	yarn run pack:ui
-build.feed-app:
-	yarn run build:feed-app
+build:	install
 clean:
-	rm -rf ./ui/build && \
-	yarn run clean
+	rm -rf ./dist && \
+	yarn clean
 install:
-	yarn run bootstrap && \
-	yarn run tsc:all
+	export NODE_OPTIONS='--max-old-space-size=4096' && \
+  export NODE_ENV='production' && \
+	yarn build-all
 build.staging.feed:
 	export NODE_OPTIONS='--max-old-space-size=4096' && \
   export NODE_ENV='production' && \
-	yarn run build:example
-build.staging.feed.static: build build.staging.feed
+	yarn world:deploy
+build.staging.feed.static:	build build.staging.feed
 build.staging.storybook:
 	yarn run build:storybook
-build.staging.storybook.static: install build.staging.storybook
-build.translations:
-	yarn run extract:translations
+build.staging.storybook.static:	install build.staging.storybook
+
 

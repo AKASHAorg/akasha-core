@@ -1,5 +1,0 @@
-This direct messaging app has a simple and easy-to-use interface. It is built on open-source Textile mailboxes that keep your conversations secure and strictly private. Messages are end-to-end encrypted using the recipient's public key. This means your message can only be read by the private key holder, i.e. the recipient.
-
-You can initiate and have private conversations with Ethereans when you follow each other in AKASHA World. The app enables you to move your conversations from the public feed to a private format. You can speak freely about anything that matters to you using this private side of AKASHA World without worrying about being tracked. Chat about posts or any other content, collaborate on the next web3 projects, share sensitive information when you need to, or interact with the moderators of AKASHA World. 
-
-Happy messaging! 🎉
