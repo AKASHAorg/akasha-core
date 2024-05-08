@@ -43,27 +43,24 @@ export class UserStore<T> implements IUserStore<T> {
   /**
    * Handles login
    */
-  login = ({ provider, checkRegistered = false }) => {
+  login = async ({ provider, checkRegistered = false }) => {
     try {
       store.set(this.#userAtom, prev => ({
         ...prev,
         isAuthenticating: true,
       }));
-      this.#sdk.api.auth
-        .signIn({
-          provider,
-          checkRegistered,
-        })
-        .then(result => {
-          if (!result?.data) {
-            store.set(this.#userAtom, prev => ({
-              ...prev,
-              isAuthenticating: false,
-            }));
-            return;
-          }
-          this.handleLoggedInState(result.data?.id);
-        });
+      const result = await this.#sdk.api.auth.signIn({
+        provider,
+        checkRegistered,
+      });
+      if (!result?.data) {
+        store.set(this.#userAtom, prev => ({
+          ...prev,
+          isAuthenticating: false,
+        }));
+        return;
+      }
+      this.handleLoggedInState(result.data?.id);
     } catch (error) {
       store.set(this.#userAtom, prev => ({
         ...prev,
@@ -105,22 +102,21 @@ export class UserStore<T> implements IUserStore<T> {
   /**
    * Initiates session restore for current authenticated user
    **/
-  restoreSession = () => {
+  restoreSession = async () => {
     try {
       store.set(this.#userAtom, prev => ({
         ...prev,
         isAuthenticating: true,
       }));
-      this.#sdk.api.auth.getCurrentUser().then(result => {
-        if (!result) {
-          store.set(this.#userAtom, prev => ({
-            ...prev,
-            isAuthenticating: false,
-          }));
-          return;
-        }
-        this.handleLoggedInState(result?.id);
-      });
+      const result = await this.#sdk.api.auth.getCurrentUser();
+      if (!result) {
+        store.set(this.#userAtom, prev => ({
+          ...prev,
+          isAuthenticating: false,
+        }));
+        return;
+      }
+      this.handleLoggedInState(result?.id);
     } catch (error) {
       store.set(this.#userAtom, prev => ({
         ...prev,
