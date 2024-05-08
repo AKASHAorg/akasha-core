@@ -6,7 +6,7 @@ import { BlockInstanceMethods, ContentBlockModes } from '@akashaorg/typings/lib/
 import { ParcelConfigObject } from 'single-spa';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
-type BlockParcelProps = {
+export type BlockParcelProps = {
   matchingBlock: MatchingBlock & { config: ParcelConfigObject };
   blockId: string;
   index: number;

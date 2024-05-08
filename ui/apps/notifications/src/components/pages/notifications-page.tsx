@@ -5,7 +5,7 @@ import {
   useRootComponentProps,
   useGetSettings,
   transformSource,
-  useGetLogin,
+  useAkashaStore,
 } from '@akashaorg/ui-awf-hooks';
 import Menu, { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
 import {
@@ -30,8 +30,10 @@ export type Notification = {
 const NotificationsPage: React.FC = () => {
   const [showMenu, setShowMenu] = useState(false);
 
-  const loginData = useGetLogin();
-  const isLoggedIn = !!loginData.data?.id;
+  const {
+    data: { authenticatedDID },
+  } = useAkashaStore();
+  const isLoggedIn = !!authenticatedDID;
 
   const navigate = useNavigate();
 

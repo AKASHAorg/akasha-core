@@ -16,7 +16,7 @@ export type ProfileMiniCardProps = {
   followersLabel?: string;
   followingLabel?: string;
   statsLoading: boolean;
-  stats: { followers: number; beams: number };
+  stats: { followers: number; following: number; beams: number };
   transformSource: (src: Image) => Image;
   handleClick?: () => void;
   footerExt?: React.ReactNode;
@@ -29,8 +29,9 @@ const ProfileMiniCard: React.FC<ProfileMiniCardProps> = props => {
     authenticatedDID,
     beamsLabel,
     followersLabel,
+    followingLabel,
     statsLoading,
-    stats: { followers, beams },
+    stats: { followers, following, beams },
     transformSource,
     handleClick,
     footerExt,
@@ -73,12 +74,16 @@ const ProfileMiniCard: React.FC<ProfileMiniCardProps> = props => {
             <DidField did={profileData.did.id} isValid={true} copiable={false} />
           )}
         </Stack>
-        <Stack direction="row" spacing="gap-x-3" align="center" justify="center">
+        <Stack direction="row" spacing="gap-x-2" align="center" justify="center">
           {statsLoading ? (
             <>
               <TextLine width="w-14" height="h-5" animated />
               <Text variant="subtitle2" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
-                |
+                •
+              </Text>
+              <TextLine width="w-14" height="h-5" animated />
+              <Text variant="subtitle2" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
+                •
               </Text>
               <TextLine width="w-14" height="h-5" animated />
             </>
@@ -88,10 +93,16 @@ const ProfileMiniCard: React.FC<ProfileMiniCardProps> = props => {
                 {beams} {beamsLabel}
               </Text>
               <Text variant="subtitle2" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
-                |
+                •
               </Text>
               <Text variant="subtitle2">
                 {followers} {followersLabel}
+              </Text>
+              <Text variant="subtitle2" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
+                •
+              </Text>
+              <Text variant="subtitle2">
+                {following} {followingLabel}
               </Text>
             </>
           )}

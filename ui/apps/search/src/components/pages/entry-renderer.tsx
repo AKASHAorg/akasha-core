@@ -12,7 +12,7 @@ import {
 } from '@akashaorg/typings/lib/ui';
 import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
 import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { mapBeamEntryData, useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { mapBeamEntryData, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 export type EntryCardRendererProps = {
   itemData?: AkashaBeam;
@@ -35,9 +35,10 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
   const { id } = itemData || {};
   const { t } = useTranslation('app-search');
   const { navigateToModal } = useRootComponentProps();
-  const { data } = useGetLogin();
-  const authenticatedDID = data?.id;
-  const isLoggedIn = !!data?.id;
+  const {
+    data: { authenticatedDID },
+  } = useAkashaStore();
+  const isLoggedIn = !!authenticatedDID;
 
   const handleContentClick = () => {
     onContentClick(

@@ -18,7 +18,7 @@ import {
   hasOwn,
   getFollowList,
   useRootComponentProps,
-  useGetLogin,
+  useAkashaStore,
 } from '@akashaorg/ui-awf-hooks';
 import { ENGAGEMENTS_PER_PAGE } from './types';
 import { useTranslation } from 'react-i18next';
@@ -29,10 +29,11 @@ type FollowersPageProps = {
 
 const FollowersPage: React.FC<FollowersPageProps> = props => {
   const { profileDID } = props;
-  const { data: loginData, loading: authenticating } = useGetLogin();
+  const {
+    data: { authenticatedDID, isAuthenticating: authenticating },
+  } = useAkashaStore();
   const { getRoutingPlugin, navigateToModal } = useRootComponentProps();
-  const authenticatedDID = loginData?.id;
-  const isLoggedIn = !!loginData?.id;
+  const isLoggedIn = !!authenticatedDID;
   const navigateTo = getRoutingPlugin().navigateTo;
   const { t } = useTranslation('app-profile');
 

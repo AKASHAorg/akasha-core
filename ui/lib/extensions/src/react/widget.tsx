@@ -46,7 +46,7 @@ export const Widget: React.FC<WidgetExtensionProps> = props => {
     };
 
     resolveConfigs().catch();
-  }, [widgets, onError]);
+  }, [widgets, onError, logger]);
 
   const handleParcelError = React.useCallback(
     (widget, index: number) => err => {

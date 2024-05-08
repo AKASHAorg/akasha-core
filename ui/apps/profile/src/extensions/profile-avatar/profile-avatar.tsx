@@ -13,7 +13,7 @@ export type ProfileAvatarProps = Pick<
 
 const ProfileAvatar = (props: ProfileAvatarProps) => {
   const { profileDID, ...rest } = props;
-  const { data, loading, error } = useGetProfileByDidQuery({
+  const { data, loading } = useGetProfileByDidQuery({
     variables: { id: profileDID },
     fetchPolicy: 'cache-first',
   });
@@ -25,7 +25,7 @@ const ProfileAvatar = (props: ProfileAvatarProps) => {
   return (
     <ProfileAvatarButton
       profileId={profileDID}
-      label={!error && profileData ? profileData.name : profileDID}
+      label={profileData?.name}
       avatar={transformSource(profileData?.avatar?.default)}
       alternativeAvatars={profileData?.avatar?.alternatives?.map(alternative =>
         transformSource(alternative),

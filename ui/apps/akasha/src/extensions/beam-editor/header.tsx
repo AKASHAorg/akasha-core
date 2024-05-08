@@ -1,17 +1,29 @@
-import React, { PropsWithChildren } from 'react';
+import React from 'react';
+import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import { uiState } from './beam-editor';
+import { EditorUIState } from './types';
 
 export interface HeaderProps {
-  uiState: uiState;
-  addBlockLabel?: string;
+  uiState: EditorUIState;
   addTagsLabel?: string;
+  addBlockLabel?: string;
   beamEditorLabel?: string;
+  checkboxIsSelected: boolean;
+  checkboxIsDisabled: boolean;
+  onSelectCheckbox: () => void;
 }
 
-export const Header: React.FC<PropsWithChildren<HeaderProps>> = props => {
-  const { uiState, addBlockLabel, addTagsLabel, beamEditorLabel, children } = props;
+export const Header: React.FC<HeaderProps> = props => {
+  const {
+    uiState,
+    addTagsLabel,
+    addBlockLabel,
+    beamEditorLabel,
+    checkboxIsSelected,
+    checkboxIsDisabled,
+    onSelectCheckbox,
+  } = props;
 
   const renderTitle = () => {
     switch (uiState) {
@@ -30,9 +42,20 @@ export const Header: React.FC<PropsWithChildren<HeaderProps>> = props => {
       justify={uiState === 'editor' ? 'between' : 'center'}
       direction="row"
       align="center"
+      customStyle="rounded-t-2xl"
     >
       <Text variant="h4">{renderTitle()}</Text>
-      {children}
+      {uiState === 'editor' && (
+        <Checkbox
+          id="nsfw"
+          label="NSFW"
+          name="nsfw"
+          value="nsfw"
+          handleChange={onSelectCheckbox}
+          isSelected={checkboxIsSelected}
+          isDisabled={checkboxIsDisabled}
+        />
+      )}
     </Stack>
   );
 };

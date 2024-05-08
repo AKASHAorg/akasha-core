@@ -15,6 +15,8 @@ const Image: React.FC<ImageProps> = props => {
 
   return (
     <img
+      loading="lazy"
+      decoding="async"
       alt={src}
       src={src}
       className={tw(className)}

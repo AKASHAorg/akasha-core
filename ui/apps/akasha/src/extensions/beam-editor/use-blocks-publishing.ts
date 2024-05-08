@@ -22,6 +22,8 @@ import type { CreateBeamMutation } from '@akashaorg/typings/lib/sdk/graphql-oper
 
 // this can be made configurable via world config
 const DEFAULT_TEXT_BLOCK = 'slate-block';
+const MAX_ALLOWED_BLOCKS = 10;
+const MAX_ALLOWED_TAGS = 10;
 export type UseBlocksPublishingProps = {
   onComplete?: (beamData: CreateBeamMutation['createAkashaBeam']) => void;
 };
@@ -32,10 +34,8 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
   const [errors, setErrors] = React.useState<Error[]>([]);
   const globalIdx = React.useRef(0);
   const sdk = React.useRef(getSDK());
-
   const [isNsfw, setIsNsfw] = React.useState(false);
   const [editorTags, setEditorTags] = React.useState([]);
-
   const { getExtensionsPlugin } = useRootComponentProps();
 
   React.useLayoutEffect(() => {
@@ -245,9 +245,12 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
   const removeBlockFromList = (index: number) => {
     setBlocksInUse(prev => {
       const beforeSlice = prev.slice(0, index);
-      const afterSlice = prev.slice(index + 1).map(bl => ({ ...bl, order: bl.order - 1 }));
+      const afterSlice = prev
+        .slice(index + 1)
+        .map(bl => ({ ...bl, order: bl.order - 1, key: bl.key - 1 }));
       return beforeSlice.concat(afterSlice);
     });
+    globalIdx.current -= 1;
   };
 
   const updateBlockDisablePublishState = (value: boolean, index: number) => {
@@ -282,6 +285,8 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
     setIsPublishing,
     createContentBlocks,
     blocksInUse,
+    maxAllowedBlocks: MAX_ALLOWED_BLOCKS,
+    maxAllowedTags: MAX_ALLOWED_TAGS,
     addBlockToList,
     removeBlockFromList,
     updateBlockDisablePublishState,
