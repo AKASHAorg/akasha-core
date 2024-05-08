@@ -60,7 +60,7 @@ export class UserStore<T> implements IUserStore<T> {
         }));
         return;
       }
-      this.handleLoggedInState(result.data?.id);
+      this.#handleLoggedInState(result.data?.id);
     } catch (error) {
       store.set(this.#userAtom, prev => ({
         ...prev,
@@ -84,7 +84,7 @@ export class UserStore<T> implements IUserStore<T> {
    * Handles logged in state
    * Fetch the authenticated profile info for the authenticatedDID and set the authenticatedProfile state
    */
-  handleLoggedInState = async (authenticatedDID: string) => {
+  #handleLoggedInState = async (authenticatedDID: string) => {
     if (authenticatedDID) {
       const { data: profileInfo, error } = await this.#getProfileInfo({
         profileDID: authenticatedDID,
@@ -116,7 +116,7 @@ export class UserStore<T> implements IUserStore<T> {
         }));
         return;
       }
-      this.handleLoggedInState(result?.id);
+      this.#handleLoggedInState(result?.id);
     } catch (error) {
       store.set(this.#userAtom, prev => ({
         ...prev,
