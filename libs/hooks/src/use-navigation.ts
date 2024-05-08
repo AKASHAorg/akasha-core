@@ -21,7 +21,7 @@ export const useEntryNavigation = (
       }
 
       navigateFn({
-        appName: '@akashaorg/app-antenna',
+        appName: '@akashaorg/app-akasha-integration',
         getNavigationUrl: navRoutes =>
           `${itemType === EntityTypes.REFLECT ? navRoutes.Reflect : navRoutes.Beam}/${id}${
             reflect ? navRoutes.Reflect : ''
