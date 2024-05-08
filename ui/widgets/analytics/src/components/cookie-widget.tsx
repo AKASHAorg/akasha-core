@@ -76,7 +76,7 @@ const CookieWidget: React.FC<unknown> = () => {
             `We use cookies. Some are necessary to operate effectively the platform, others are to help us improve AKASHA World.`,
           )}
           paragraphTwo={{
-            ctaLabel: t(`By opting-in you allow us to collect data via `),
+            introLabel: t(`By opting-in you allow us to collect data via `),
             analyticsLabel: t('Matomo'),
             analyticsURL: 'https://matomo.org',
             middleParagraphLabeL: t(
@@ -91,9 +91,13 @@ const CookieWidget: React.FC<unknown> = () => {
             lastParagraphLabel: t(' menu.'),
           }}
           paragraphThree={{
-            ctaLabel: t('For more info, see our '),
-            urlLabel: t('Privacy Policy'),
-            url: `${window.location.protocol}//${window.location.host}/@akashaorg/app-legal/privacy-policy`,
+            introLabel: t('For more info, see our '),
+            ctaLabel: t('Privacy Policy'),
+            onPrivacyClick: () =>
+              getRoutingPlugin().navigateTo?.({
+                appName: '@akashaorg/app-legal',
+                getNavigationUrl: navRoutes => navRoutes.privacyPolicy,
+              }),
           }}
           onlyEssentialLabel={t('Only essential')}
           acceptAllLabel={t('Accept all')}

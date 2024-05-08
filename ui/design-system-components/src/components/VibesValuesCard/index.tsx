@@ -44,7 +44,6 @@ const VibesValuesCard: React.FC<VibesValuesCardProps> = props => {
             href={ctaUrl}
             customStyle="flex md:hidden text-sm text-center font-bold no-underline text(secondaryLight dark:secondaryDark)"
             target="_blank"
-            rel="noreferrer noopener"
           >
             <Stack
               padding="p-3"
@@ -77,7 +76,6 @@ const VibesValuesCard: React.FC<VibesValuesCardProps> = props => {
               href={ctaUrl}
               customStyle="text-sm text-center font-bold no-underline text(secondaryLight dark:secondaryDark)"
               target="_blank"
-              rel="noreferrer noopener"
             >
               {ctaLabel}
             </Anchor>

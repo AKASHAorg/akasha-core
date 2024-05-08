@@ -10,7 +10,7 @@ export type CookieCardProps = {
   titleLabel: string;
   paragraphOneLabel: string;
   paragraphTwo: {
-    ctaLabel: string;
+    introLabel: string;
     analyticsLabel: string;
     analyticsURL: string;
     middleParagraphLabeL: string;
@@ -18,7 +18,7 @@ export type CookieCardProps = {
     settingsLabel: string;
     onSettingsClick: () => void;
   };
-  paragraphThree: { ctaLabel: string; urlLabel: string; url: string };
+  paragraphThree: { introLabel: string; ctaLabel: string; onPrivacyClick: () => void };
   onlyEssentialLabel: string;
   acceptAllLabel: string;
   onClickAcceptAll: () => void;
@@ -46,24 +46,44 @@ const CookieCard: React.FC<CookieCardProps> = props => {
           <Text variant="body2">{paragraphOneLabel}</Text>
 
           <Text variant="body2">
-            {paragraphTwo.ctaLabel}
+            {paragraphTwo.introLabel}
 
-            <Anchor href={paragraphTwo.analyticsURL}>{paragraphTwo.analyticsLabel}</Anchor>
+            <Anchor target="_blank" href={paragraphTwo.analyticsURL}>
+              {paragraphTwo.analyticsLabel}
+            </Anchor>
 
             {paragraphTwo.middleParagraphLabeL}
 
-            <Anchor onClick={paragraphTwo.onSettingsClick}>{paragraphTwo.settingsLabel}</Anchor>
+            <Button plain={true} onClick={paragraphTwo.onSettingsClick}>
+              <Text
+                as="span"
+                variant="body2"
+                color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                align="center"
+              >
+                {paragraphTwo.settingsLabel}
+              </Text>
+            </Button>
 
             {paragraphTwo.lastParagraphLabel}
           </Text>
 
           <Text variant="body2">
-            {paragraphThree.ctaLabel}{' '}
-            <Anchor href={paragraphThree.url}>{paragraphThree.urlLabel}</Anchor>
+            {paragraphThree.introLabel}{' '}
+            <Button plain={true} onClick={paragraphThree.onPrivacyClick}>
+              <Text
+                as="span"
+                variant="body2"
+                color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                align="center"
+              >
+                {paragraphThree.ctaLabel}
+              </Text>
+            </Button>
           </Text>
         </Stack>
 
-        <Stack direction="row" spacing="gap-x-4" customStyle="ml-auto">
+        <Stack direction="row" spacing="gap-x-4" customStyle="mt-4 ml-auto">
           <Button variant="text" label={onlyEssentialLabel} onClick={onClickOnlyEssential} />
 
           <Button

@@ -13,15 +13,7 @@ export type AnchorProps = PropsWithChildren<
 >;
 
 const Anchor: React.FC<AnchorProps> = props => {
-  const {
-    href,
-    weight,
-    customStyle = '',
-    target = '_blank',
-    dataTestId,
-    children,
-    ...rest
-  } = props;
+  const { href, weight, customStyle = '', target, dataTestId, children, ...rest } = props;
 
   const weightStyle = weight ? getWeightClasses(weight) : '';
 

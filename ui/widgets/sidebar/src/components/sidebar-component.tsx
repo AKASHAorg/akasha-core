@@ -281,15 +281,9 @@ const SidebarComponent: React.FC<unknown> = () => {
         {modSocialLinks.length > 0 && (
           <Stack padding="px-8 py-4" customStyle="border-t-1 border(grey9 dark:grey3)">
             <Text variant="footnotes2">{t('Get in touch')}</Text>
-            <Stack direction="row" customStyle="w-fit h-fit mt-6">
+            <Stack direction="row" spacing="gap-x-4" customStyle="w-fit h-fit mt-6">
               {modSocialLinks.map((socialLink, idx) => (
-                <Anchor
-                  key={idx}
-                  href={socialLink.link}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  customStyle="mr-4"
-                >
+                <Anchor key={idx} href={socialLink.link} target="_blank">
                   <Button
                     icon={socialLink.icon}
                     solidIcon={idx > 0}

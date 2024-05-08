@@ -63,7 +63,8 @@ const AuthorProfileAvatar: React.FC<AuthorProfileAvatarProps> = props => {
             )}
           </>
         ),
-        onClick: () => {
+        onClick: e => {
+          e.preventDefault();
           onAvatarClick(authorId);
         },
       }}
