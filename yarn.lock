@@ -16763,6 +16763,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"css-loader@npm:6.7.2":
+  version: 6.7.2
+  resolution: "css-loader@npm:6.7.2"
+  dependencies:
+    icss-utils: "npm:^5.1.0"
+    postcss: "npm:^8.4.18"
+    postcss-modules-extract-imports: "npm:^3.0.0"
+    postcss-modules-local-by-default: "npm:^4.0.0"
+    postcss-modules-scope: "npm:^3.0.0"
+    postcss-modules-values: "npm:^4.0.0"
+    postcss-value-parser: "npm:^4.2.0"
+    semver: "npm:^7.3.8"
+  peerDependencies:
+    webpack: ^5.0.0
+  checksum: 10/5a1261d03577270eb73d347daf1353ca978e9f63432d2305d4b7d6d9a84b27e50c3b83d3dcc73c23d9bc5155b36d2cceb9b475d162ddcfa9fbf2d40894cf897a
+  languageName: node
+  linkType: hard
+
 "css-loader@npm:^6.4.0, css-loader@npm:^6.7.1":
   version: 6.11.0
   resolution: "css-loader@npm:6.11.0"
@@ -30369,7 +30387,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.3.5, postcss@npm:^8.4.14, postcss@npm:^8.4.24, postcss@npm:^8.4.33":
+"postcss@npm:^8.3.5, postcss@npm:^8.4.14, postcss@npm:^8.4.18, postcss@npm:^8.4.24, postcss@npm:^8.4.33":
   version: 8.4.38
   resolution: "postcss@npm:8.4.38"
   dependencies:
@@ -32457,6 +32475,7 @@ __metadata:
     copyfiles: "npm:2.4.1"
     core-js: "npm:3.25.0"
     crypto-hash: "npm:^3.0.0"
+    css-loader: "npm:6.7.2"
     cypress: "npm:10.7.0"
     dayjs: "npm:1.11.7"
     dexie: "npm:3.2.3"
@@ -32548,6 +32567,7 @@ __metadata:
     source-map-loader: "npm:3.0.0"
     storybook: "npm:8.0.5"
     stream-browserify: "npm:3.0.0"
+    style-loader: "npm:3.3.1"
     styled-components: "npm:5.3.5"
     systemjs: "npm:6.15.1"
     systemjs-webpack-interop: "npm:2.3.7"
@@ -34372,6 +34392,15 @@ __metadata:
   version: 0.3.0
   resolution: "style-inject@npm:0.3.0"
   checksum: 10/fa5f5f6730c3eb4ccc5735347935703c7c02759d4ddb5983d037ed0efda3c50a80640c2fed4f4d4c5ea600c97cdfdb45f79f734630324fa21a3a86723c0472da
+  languageName: node
+  linkType: hard
+
+"style-loader@npm:3.3.1":
+  version: 3.3.1
+  resolution: "style-loader@npm:3.3.1"
+  peerDependencies:
+    webpack: ^5.0.0
+  checksum: 10/8807445469e684592754bb91191c4ebc67014559ca7a18df674dc3d2d05f7a8cabfdf173d929e446fbeea778140a77d33fe72835b9492c128138cc6b92be582c
   languageName: node
   linkType: hard
 
