@@ -108,7 +108,7 @@ export const useReflections = (props: UseReflectionProps) => {
   const [fetchReflections, reflectionsQuery] = useGetReflectionStreamLazyQuery({
     variables: {
       ...mergedVars,
-      last: overscan,
+      first: overscan,
       indexer: indexingDID.current,
     },
     onError: error => {
@@ -248,6 +248,7 @@ export const useReflections = (props: UseReflectionProps) => {
       }
     }
   };
+
   const fetchNextPage = async (lastCursor: string) => {
     if (reflectionsQuery.loading || reflectionsQuery.error || !lastCursor) return;
     try {

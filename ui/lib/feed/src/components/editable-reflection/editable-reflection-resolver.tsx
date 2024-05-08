@@ -1,19 +1,17 @@
 import * as React from 'react';
 import EditableReflection from './index';
-import { hasOwn, mapReflectEntryData, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { hasOwn, mapReflectEntryData } from '@akashaorg/ui-awf-hooks';
 import { useGetReflectionByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
 
 export type EditableReflectionResolverProps = {
   reflectID: string;
-  beamID: string;
   onContentClick: () => void;
   onReflect: () => void;
 };
 
 export const EditableReflectionResolver = ({
   reflectID,
-  beamID,
   onContentClick,
   onReflect,
 }: EditableReflectionResolverProps) => {
@@ -36,7 +34,7 @@ export const EditableReflectionResolver = ({
     <React.Suspense>
       <EditableReflection
         entryData={mapReflectEntryData(entryData)}
-        reflectToId={mapReflectEntryData(entryData).id}
+        reflectToId={mapReflectEntryData(entryData)?.id}
         contentClickable={true}
         onContentClick={onContentClick}
         onReflect={onReflect}

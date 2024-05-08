@@ -26,6 +26,7 @@ import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
 import ErrorBoundary, {
   ErrorBoundaryProps,
 } from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
+import ReflectionEditorRenderer from './reflection-editor-renderer';
 
 const MAX_EDIT_TIME_IN_MINUTES = 10;
 
@@ -40,8 +41,6 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
   const [edit, setEdit] = useState(false);
 
   const [editorState, setEditorState] = useState(null);
-
-  const [isReflecting, setIsReflecting] = useState(true);
 
   const sdk = getSDK();
 
@@ -141,7 +140,7 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
     <>
       {edit ? (
         <div ref={wrapperRef}>
-          <ReflectionEditor
+          <ReflectionEditorRenderer
             actionLabel={t('Save')}
             cancelButtonLabel={t('Cancel')}
             emojiPlaceholderLabel={t('Search')}
@@ -149,16 +148,11 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
             placeholderButtonLabel={t('Reflect')}
             maxEncodedLengthErrLabel={t('Text block exceeds line limit, please review!')}
             editorState={editorState}
-            showEditor={isReflecting}
-            setShowEditor={setIsReflecting}
-            showCancelButton={true}
             avatar={authenticatedProfile?.avatar}
             profileId={authenticatedProfile?.did?.id}
             disablePublish={!authenticatedDID}
             mentions={mentions}
             getMentions={handleGetMentions}
-            background={{ light: 'white', dark: 'grey2' }}
-            customStyle="px-2 pt-2"
             onPublish={data => {
               if (!authenticatedDID) {
                 return;
@@ -170,9 +164,6 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
             onCancelClick={() => {
               setEdit(false);
             }}
-            getLinkPreview={getLinkPreview}
-            transformSource={transformSource}
-            encodingFunction={encodeSlateToBase64}
           />
           {/*@TODO reflect error logic goes here */}
         </div>

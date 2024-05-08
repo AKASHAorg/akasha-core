@@ -121,7 +121,6 @@ const BeamPage: React.FC<BeamPageProps> = props => {
                   <Divider />
                   <EditableReflectionResolver
                     reflectID={itemData.node.reflectionID}
-                    beamID={beamId}
                     onContentClick={() => {
                       navigate({
                         to: '/reflection/$reflectionId',
