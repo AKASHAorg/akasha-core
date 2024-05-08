@@ -16,8 +16,8 @@ const ProfileWithAuthorization: React.FC<
   const { getRoutingPlugin } = useRootComponentProps();
 
   useEffect(() => {
-    /* redirect user to profile info page if authentication isn't in progress 
-      and either user is not logged in or the authenticated viewer is not the owner while editing profile 
+    /* redirect user to profile info page if authentication isn't in progress
+      and either user is not logged in or the authenticated viewer is not the owner while editing profile
     */
     if (
       !authenticating &&
