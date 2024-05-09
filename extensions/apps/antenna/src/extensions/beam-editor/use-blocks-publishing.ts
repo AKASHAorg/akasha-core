@@ -32,7 +32,6 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
   const [availableBlocks, setAvailableBlocks] = React.useState([]);
   const [isPublishing, setIsPublishing] = React.useState(false);
   const [errors, setErrors] = React.useState<Error[]>([]);
-  const globalIdx = React.useRef(0);
   const sdk = React.useRef(getSDK());
   const [isNsfw, setIsNsfw] = React.useState(false);
   const [editorTags, setEditorTags] = React.useState([]);
@@ -238,20 +237,18 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
         key: crypto.randomUUID(),
       },
     ]);
-    globalIdx.current += 1;
   };
 
   const removeBlockFromList = (index: number) => {
     setBlocksInUse(prev => {
       const filtered = prev.filter(bl => bl.order !== index);
-      const remapped = filtered.map((bl, idx) => {
+      const reordered = filtered.map((bl, idx) => {
         return {
           ...bl,
           order: idx,
         };
       });
-
-      return remapped;
+      return reordered;
     });
   };
 
