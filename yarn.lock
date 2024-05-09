@@ -32558,7 +32558,6 @@ __metadata:
     rimraf: "npm:3.0.2"
     rxjs: "npm:7.3.0"
     safe-buffer: "npm:5.2.1"
-    semver: "npm:7.5.2"
     single-spa: "npm:6.0.1"
     single-spa-react: "npm:6.0.1"
     slate: "npm:0.93.0"
@@ -33009,17 +33008,6 @@ __metadata:
   bin:
     semver: bin/semver.js
   checksum: 10/64fb7172e328da80a46cf36c87ec0072feb218cb63b0d0ecebfaf1e35ee77580f6edc112a5f094fbaec8748d66b6e4cdc76809bdcbe4bac03cd31a690ef1a0f9
-  languageName: node
-  linkType: hard
-
-"semver@npm:7.5.2":
-  version: 7.5.2
-  resolution: "semver@npm:7.5.2"
-  dependencies:
-    lru-cache: "npm:^6.0.0"
-  bin:
-    semver: bin/semver.js
-  checksum: 10/f77b3a1842e19b78e5864a175d62699a17c0c25f6223366684041e8c7dd6a55f0091887f405c534895dfe69e1d770528d072b32d9ed866ab24392fe34344d3b5
   languageName: node
   linkType: hard
 
