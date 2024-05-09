@@ -1,9 +1,9 @@
 import React from 'react';
 import { AnalyticsEventData, EntityTypes, type ReflectEntryData } from '@akashaorg/typings/lib/ui';
 import {
-  AkashaReflectEdge,
-  AkashaReflectFiltersInput,
-  AkashaReflectSortingInput,
+  AkashaReflectStreamEdge,
+  AkashaReflectStreamFiltersInput,
+  AkashaReflectStreamSortingInput,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { EdgeArea, Virtualizer, VirtualizerProps } from '../virtual-list';
 import { useReflections } from '@akashaorg/ui-awf-hooks/lib/use-reflections';
@@ -20,9 +20,9 @@ export type ReflectFeedProps = {
   queryKey: string;
   estimatedHeight: number;
   scrollTopIndicator?: VirtualizerProps<unknown>['scrollTopIndicator'];
-  renderItem: VirtualizerProps<AkashaReflectEdge>['renderItem'];
-  filters?: AkashaReflectFiltersInput;
-  sorting?: AkashaReflectSortingInput;
+  renderItem: VirtualizerProps<AkashaReflectStreamEdge>['renderItem'];
+  filters?: AkashaReflectStreamFiltersInput;
+  sorting?: AkashaReflectStreamSortingInput;
   loadingIndicator?: VirtualizerProps<unknown>['loadingIndicator'];
   header?: VirtualizerProps<unknown>['header'];
   footer?: VirtualizerProps<unknown>['footer'];
@@ -33,7 +33,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
   const {
     reflectionsOf,
     itemSpacing = 8,
-    scrollerOptions = { overscan: 5 },
+    scrollerOptions = { overscan: 25 },
     queryKey,
     estimatedHeight,
     scrollTopIndicator,
@@ -76,7 +76,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
     switch (newArea) {
       case EdgeArea.TOP:
       case EdgeArea.NEAR_TOP:
-        if (!reflections.length) return;
+        if (!reflections.length || !hasPreviousPage) return;
         const firstCursor = reflections[0].cursor;
         if (lastCursors.current.prev !== firstCursor) {
           lastCursors.current.prev = firstCursor;
@@ -85,7 +85,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
         break;
       case EdgeArea.BOTTOM:
       case EdgeArea.NEAR_BOTTOM:
-        if (!reflections.length) return;
+        if (!reflections.length || !hasNextPage) return;
         const lastCursor = reflections[reflections.length - 1].cursor;
         if (lastCursors.current.next !== lastCursor) {
           lastCursors.current.next = lastCursor;
@@ -107,7 +107,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
         />
       )}
       {!hasErrors && (
-        <Virtualizer<AkashaReflectEdge>
+        <Virtualizer<AkashaReflectStreamEdge>
           requestStatus={{ called, isLoading }}
           restorationKey={queryKey}
           itemSpacing={itemSpacing}
