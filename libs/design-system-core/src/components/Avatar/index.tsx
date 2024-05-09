@@ -1,5 +1,6 @@
 import React from 'react';
 import Anchor from '../Anchor';
+import Link from '../Link';
 import Stack from '../Stack';
 import AvatarImage from './avatar-image';
 import {
@@ -15,42 +16,42 @@ export type AvatarBorderSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 
 export type AvatarBorderColor = 'white' | 'darkerBlue' | 'accent';
 
-export type AvatarProps = {
-  dataTestId?: string;
-  profileId?: string | null;
+type AvatarContentProps = {
   alt?: string;
-  publicImgPath?: string;
-  backgroundColor?: string;
   avatar?: Image;
   alternativeAvatars?: Image[];
-  size?: AvatarSize;
-  border?: AvatarBorderSize;
-  borderColor?: AvatarBorderColor;
-  faded?: boolean;
   active?: boolean;
+  border?: AvatarBorderSize;
+  size?: AvatarSize;
+  borderColor?: AvatarBorderColor;
+  backgroundColor?: string;
+  faded?: boolean;
   isClickable?: boolean;
-  href?: string;
+  profileId?: string | null;
+  publicImgPath?: string;
   customStyle?: string;
+};
+
+export type AvatarProps = AvatarContentProps & {
+  dataTestId?: string;
+  href?: string;
   onClick?: React.MouseEventHandler<HTMLAnchorElement>;
 };
 
-const Avatar: React.FC<AvatarProps> = props => {
+const AvatarContent: React.FC<AvatarContentProps> = props => {
   const {
-    dataTestId,
-    profileId = '0x0000000000000000000000000000000',
     alt,
-    publicImgPath = '/images',
-    backgroundColor,
     avatar,
-    size = 'md',
-    border,
-    borderColor,
-    faded,
     active,
-    isClickable = false,
-    href,
-    customStyle = '',
-    onClick,
+    border,
+    size,
+    borderColor,
+    backgroundColor,
+    faded,
+    isClickable,
+    profileId = '0x0000000000000000000000000000000',
+    publicImgPath = '/images',
+    customStyle,
   } = props;
 
   const seed = getImageFromSeed(profileId, 7);
@@ -68,15 +69,34 @@ const Avatar: React.FC<AvatarProps> = props => {
   const activeOverlayClass = generateActiveOverlayClass();
 
   return (
-    <Anchor dataTestId={dataTestId} href={href} onClick={onClick} tabIndex={-6}>
-      <Stack customStyle={containerStyle}>
-        {(avatar || avatarFallback) && (
-          <React.Suspense fallback={<></>}>
-            <AvatarImage url={avatar?.src} alt={alt} fallbackUrl={avatarFallback} faded={faded} />
-          </React.Suspense>
-        )}
-        {active && <Stack customStyle={activeOverlayClass} />}
-      </Stack>
+    <Stack customStyle={containerStyle}>
+      {(avatar || avatarFallback) && (
+        <React.Suspense fallback={<></>}>
+          <AvatarImage url={avatar?.src} alt={alt} fallbackUrl={avatarFallback} faded={faded} />
+        </React.Suspense>
+      )}
+      {active && <Stack customStyle={activeOverlayClass} />}
+    </Stack>
+  );
+};
+
+/**
+ * The Avatar component could return either of the two;
+ * 1. where the onClick function is passed, the Link component.
+ * 2. where the there is no onClick function, the Anchor component.
+ */
+const Avatar: React.FC<AvatarProps> = props => {
+  const { dataTestId, href, onClick, ...rest } = props;
+
+  if (typeof onClick === 'function') {
+    <Link dataTestId={dataTestId} to={href} tabIndex={-6} onClick={onClick}>
+      <AvatarContent {...rest} />
+    </Link>;
+  }
+
+  return (
+    <Anchor dataTestId={dataTestId} href={href} tabIndex={-6}>
+      <AvatarContent {...rest} />
     </Anchor>
   );
 };
