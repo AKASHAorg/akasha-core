@@ -234,7 +234,7 @@ const Layout: React.FC<unknown> = () => {
             </Stack>
           </Stack>
 
-          <Stack align="center" justify="between" customStyle="sticky top-0 h-screen">
+          <Stack align="center" justify="between" customStyle="sticky top-0 h-screen relative">
             <Stack customStyle={`grid grid-auto-rows pt-4 ${showWidgets ? '' : 'hidden'}`}>
               <Widget
                 name={layoutConfig.widgetSlotId}
@@ -246,7 +246,7 @@ const Layout: React.FC<unknown> = () => {
               />
             </Stack>
 
-            <Stack customStyle="fixed bottom-2 mx-2 lg:(static my-4)">
+            <Stack customStyle="fixed bottom-2 mx-2 lg:(w-[21rem] mb-2)">
               <Widget name={layoutConfig.cookieWidgetSlotId} />
             </Stack>
           </Stack>
