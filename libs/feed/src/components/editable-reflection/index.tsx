@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
-import ReflectionEditor from '@akashaorg/design-system-components/lib/components/ReflectionEditor';
 import ReflectionCard, { ReflectCardProps } from '../cards/reflection-card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import getSDK from '@akashaorg/awf-sdk';
 import {
   decodeb64SlateContent,
-  getLinkPreview,
-  transformSource,
   encodeSlateToBase64,
   useAnalytics,
   useRootComponentProps,
@@ -30,8 +27,8 @@ import ReflectionEditorRenderer from './reflection-editor-renderer';
 
 const MAX_EDIT_TIME_IN_MINUTES = 10;
 
-const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> = props => {
-  const { entryData, reflectToId, ...rest } = props;
+const EditableReflection: React.FC<ReflectCardProps> = props => {
+  const { entryData, ...rest } = props;
   const { t } = useTranslation('ui-lib-feed');
   const { uiEvents, logger } = useRootComponentProps();
   const _uiEvents = React.useRef(uiEvents);

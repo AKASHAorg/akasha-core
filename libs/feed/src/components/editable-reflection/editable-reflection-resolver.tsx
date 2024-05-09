@@ -34,7 +34,6 @@ export const EditableReflectionResolver = ({
     <React.Suspense>
       <EditableReflection
         entryData={mapReflectEntryData(entryData)}
-        reflectToId={mapReflectEntryData(entryData)?.id}
         contentClickable={true}
         onContentClick={onContentClick}
         onReflect={onReflect}

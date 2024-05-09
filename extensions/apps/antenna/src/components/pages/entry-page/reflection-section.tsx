@@ -50,7 +50,6 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
         <EditableReflection
           entryData={entryData}
           contentClickable={false}
-          reflectToId={entryData.id}
           onReflect={() => {
             if (!isLoggedIn) {
               showLoginModal(

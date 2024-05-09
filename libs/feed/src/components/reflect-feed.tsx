@@ -76,7 +76,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
     switch (newArea) {
       case EdgeArea.TOP:
       case EdgeArea.NEAR_TOP:
-        if (!reflections.length || !hasPreviousPage) return;
+        if (!reflections.length) return;
         const firstCursor = reflections[0].cursor;
         if (lastCursors.current.prev !== firstCursor) {
           lastCursors.current.prev = firstCursor;
@@ -85,7 +85,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
         break;
       case EdgeArea.BOTTOM:
       case EdgeArea.NEAR_BOTTOM:
-        if (!reflections.length || !hasNextPage) return;
+        if (!reflections.length) return;
         const lastCursor = reflections[reflections.length - 1].cursor;
         if (lastCursors.current.next !== lastCursor) {
           lastCursors.current.next = lastCursor;
