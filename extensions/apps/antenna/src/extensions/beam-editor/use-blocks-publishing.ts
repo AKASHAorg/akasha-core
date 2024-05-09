@@ -72,10 +72,9 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
           order: 0,
           mode: ContentBlockModes.EDIT,
           blockRef: React.createRef<BlockInstanceMethods>(),
-          key: 0,
+          key: crypto.randomUUID(),
         },
       ]);
-      globalIdx.current = 1;
     }
   }, [blocksInUse, defaultTextBlock]);
 
@@ -221,7 +220,7 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
           order: afterIdx,
           blockRef: React.createRef<BlockInstanceMethods>(),
           mode: ContentBlockModes.EDIT,
-          key: globalIdx.current + 1,
+          key: crypto.randomUUID(),
         },
         ...prev.slice(afterIdx).map(bl => ({
           ...bl,
@@ -236,7 +235,7 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
         order: prev.length,
         blockRef: React.createRef<BlockInstanceMethods>(),
         mode: ContentBlockModes.EDIT,
-        key: globalIdx.current + 1,
+        key: crypto.randomUUID(),
       },
     ]);
     globalIdx.current += 1;
@@ -244,13 +243,16 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
 
   const removeBlockFromList = (index: number) => {
     setBlocksInUse(prev => {
-      const beforeSlice = prev.slice(0, index);
-      const afterSlice = prev
-        .slice(index + 1)
-        .map(bl => ({ ...bl, order: bl.order - 1, key: bl.key - 1 }));
-      return beforeSlice.concat(afterSlice);
+      const filtered = prev.filter(bl => bl.order !== index);
+      const remapped = filtered.map((bl, idx) => {
+        return {
+          ...bl,
+          order: idx,
+        };
+      });
+
+      return remapped;
     });
-    globalIdx.current -= 1;
   };
 
   const updateBlockDisablePublishState = (value: boolean, index: number) => {

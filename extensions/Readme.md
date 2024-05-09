@@ -1,10 +1,17 @@
-# AKASHA World UI Components
+# AKASHA World Apps
 
-## Table of contents
+> An app (application) is a holistic, standalone service that usually includes associated widgets and plugins.
 
-- [App Loader](./app-loader/README.md)
-- [Apps](./apps/README.md)
-- [Design system core](./design-system-core/README.md)
-- [Design system components](./design-system-components/README.md)
-- [Hooks](./hooks/README.md)
-- [Widgets](./widgets/README.md)
+## Components
+
+- [AKASHA App](./akasha/README.md)
+- [Vibes](./vibes/README.md)
+- [Authentication](./auth-app/README.md)
+- [Settings](./settings-app/README.md)
+- [Extensions](./akasha-verse/README.md)
+- [Lists](./bookmarks/README.md)
+- [Legal](./legal/README.md)
+- [Notifcations](./notifications/README.md)
+- [Profile](./profile/README.md)
+- [Search](./search/README.md)
+- [Vibes Console](./vibes-console/README.md)
