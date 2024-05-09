@@ -1,11 +1,11 @@
 build:	install
 clean:
 	rm -rf ./dist && \
-	yarn clean
+	yarn clean:all
 install:
 	export NODE_OPTIONS='--max-old-space-size=4096' && \
   export NODE_ENV='production' && \
-	yarn build-all
+	yarn build:all
 build.staging.feed:
 	export NODE_OPTIONS='--max-old-space-size=4096' && \
   export NODE_ENV='production' && \

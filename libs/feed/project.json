@@ -17,6 +17,12 @@
         "cwd": "libs/feed",
         "command": "tsc --build"
       }
+    },
+    "translations": {
+      "executor": "./tools/executors/i18n:extract",
+      "options": {
+        "cwd": "libs/feed"
+      }
     }
   },
   "tags": ["scope:extension", "type:lib"]

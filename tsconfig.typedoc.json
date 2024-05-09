@@ -1,61 +1,91 @@
 {
   "references": [
     {
-      "path": "./typings"
+      "path": "./libs/design-system-core"
     },
     {
-      "path": "./ui/design-system-core"
+      "path": "./libs/design-system-components"
     },
     {
-      "path": "./ui/design-system-components"
+      "path": "./libs/hooks"
+    },
+    {
+      "path": "./libs/feed"
+    },
+    {
+      "path": "./libs/extensions"
+    },
+    {
+      "path": "./extensions/widgets/layout"
+    },
+    {
+      "path": "./extensions/widgets/mini-profile"
+    },
+    {
+      "path": "./extensions/widgets/my-apps"
+    },
+    {
+      "path": "./extensions/widgets/sidebar"
+    },
+    {
+      "path": "./extensions/widgets/top-bar"
+    },
+    {
+      "path": "./extensions/widgets/trending"
+    },
+    {
+      "path": "./extensions/widgets/analytics"
+    },
+    {
+      "path": "./extensions/apps/extensions"
+    },
+    {
+      "path": "./extensions/apps/legal"
+    },
+    {
+      "path": "./extensions/apps/notifications"
+    },
+    {
+      "path": "./extensions/apps/profile"
+    },
+    {
+      "path": "./extensions/apps/search"
+    },
+    {
+      "path": "./extensions/apps/antenna"
+    },
+    {
+      "path": "./extensions/apps/auth-app"
+    },
+    {
+      "path": "./extensions/apps/routing"
+    },
+    {
+      "path": "./extensions/apps/settings"
+    },
+    {
+      "path": "./extensions/apps/vibes"
+    },
+    {
+      "path": "./extensions/apps/vibes-console"
+    },
+    {
+      "path": "./libs/sdk"
+    },
+    {
+      "path": "./libs/typings"
+    },
+    {
+      "path": "./libs/composedb"
+    },
+    {
+      "path": "./worlds/akasha.world"
+    },
+    {
+      "path": "./tools/executors"
     },
     {
       "path": "./tests"
-    },
-    {
-      "path": "./ui/hooks"
-    },
-    {
-      "path": "./ui/widgets/feed"
-    },
-    {
-      "path": "./ui/widgets/layout"
-    },
-    {
-      "path": "./ui/widgets/mini-profile"
-    },
-    {
-      "path": "./ui/widgets/my-apps"
-    },
-    {
-      "path": "./ui/widgets/sidebar"
-    },
-    {
-      "path": "./ui/widgets/top-bar"
-    },
-    {
-      "path": "./ui/widgets/trending"
-    },
-    {
-      "path": "./ui/apps/extensions"
-    },
-    {
-      "path": "./ui/apps/lists"
-    },
-    {
-      "path": "./ui/apps/legal"
-    },
-    {
-      "path": "./ui/apps/notifications"
-    },
-    {
-      "path": "./ui/apps/profile"
-    },
-    {
-      "path": "./ui/apps/search"
-    },
-    {
-      "path": "./sdk"
     }
   ]
 }
