@@ -30,14 +30,18 @@ const defaultSorting: AkashaReflectSortingInput = {
   createdAt: SortOrder.Asc,
 };
 
-const extractData = (data: GetReflectionStreamQuery, entityType: EntityTypes) => {
+const extractData = (
+  data: GetReflectionStreamQuery,
+  entityType: EntityTypes,
+  reflectionCursors: Set<string>,
+) => {
   if (data && hasOwn(data, 'node')) {
     if (entityType === EntityTypes.BEAM) {
       const result = data;
       if (hasOwn(result.node, 'akashaReflectStreamList')) {
         return {
           edges: result.node.akashaReflectStreamList.edges.filter(
-            edge => edge.node.replyTo === null,
+            edge => edge.node.replyTo === null && !reflectionCursors.has(edge.cursor),
           ),
           pageInfo: result.node.akashaReflectStreamList.pageInfo,
         };
@@ -47,7 +51,7 @@ const extractData = (data: GetReflectionStreamQuery, entityType: EntityTypes) =>
       if (hasOwn(result.node, 'akashaReflectStreamList')) {
         return {
           edges: result.node.akashaReflectStreamList.edges.filter(
-            edge => edge.node.replyTo !== null,
+            edge => edge.node.replyTo !== null && !reflectionCursors.has(edge.cursor),
           ),
           pageInfo: result.node.akashaReflectStreamList.pageInfo,
         };
@@ -126,7 +130,7 @@ export const useReflections = (props: UseReflectionProps) => {
 
   const stopRefetch = React.useCallback(
     response => {
-      const { edges } = extractData(response.data, entityType);
+      const { edges } = extractData(response.data, entityType, reflectionCursors);
       return (
         edges.length > 0 &&
         filterById(edges as AkashaReflectStreamEdge[], entityType, entityId).every(
@@ -154,10 +158,10 @@ export const useReflections = (props: UseReflectionProps) => {
 
     if (
       lastResponse &&
-      extractData(lastResponse.data, entityType)?.edges.length > 0 &&
+      extractData(lastResponse.data, entityType, reflectionCursors)?.edges.length > 0 &&
       pendingReflections.length
     ) {
-      const { edges } = extractData(lastResponse.data, entityType);
+      const { edges } = extractData(lastResponse.data, entityType, reflectionCursors);
 
       const wasPendingReflections = edges.filter(
         edge => !state.reflections.some(reflection => reflection.cursor === edge.cursor),
@@ -205,7 +209,7 @@ export const useReflections = (props: UseReflectionProps) => {
         }
         if (!results.data) return;
 
-        const { edges, pageInfo } = extractData(results.data, entityType);
+        const { edges, pageInfo } = extractData(results.data, entityType, reflectionCursors);
 
         setState({
           reflections: edges
@@ -232,7 +236,7 @@ export const useReflections = (props: UseReflectionProps) => {
 
         if (!results.data) return;
 
-        const { edges, pageInfo } = extractData(results.data, entityType);
+        const { edges, pageInfo } = extractData(results.data, entityType, reflectionCursors);
 
         setState({
           reflections: edges.filter(
@@ -261,7 +265,7 @@ export const useReflections = (props: UseReflectionProps) => {
       }
 
       if (!results.data) return;
-      const { edges, pageInfo } = extractData(results.data, entityType);
+      const { edges, pageInfo } = extractData(results.data, entityType, reflectionCursors);
 
       setState(prev => ({
         reflections: [
@@ -290,7 +294,7 @@ export const useReflections = (props: UseReflectionProps) => {
       }
 
       if (!results.data) return;
-      const { edges, pageInfo } = extractData(results.data, entityType);
+      const { edges, pageInfo } = extractData(results.data, entityType, reflectionCursors);
       setState(prev => ({
         reflections: [
           ...edges.filter(edge => !reflectionCursors.has(edge.cursor)).reverse(),
