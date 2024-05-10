@@ -1,9 +1,48 @@
 *.json @kenshyx @SeverS
-/build/ @kenshyx
-/tools/ @kenshyx
-/sdk/ @kenshyx @SeverS
-/typings/ @kenshyx @SeverS @quininez
-/tests/ @didd
-/ui/hooks/ @quininez @SeverS
-/ui/design-system-core/ @quininez @didd @josenriagu @themonster2015
-/ui/design-system-components/ @quininez @didd @josenriagu @themonster2015
+*.cjs @kenshyx @didd
+*.yml @kenshyx @didd
+*.toml @kenshyx @didd
+*.md @josenriagu @SeverS @themonster2015
+*.config.js @kenshyx @didd
+*.conf.js @kenshyx @didd
+*.stories.tsx @josenriagu @didd
+*.spec.ts @kenshyx @didd
+*.spec.tsx @themonster2015 @didd
+
+.github/ @kenshyx @didd
+.circleci/ @kenshyx @didd
+
+/extensions/apps/antenna/ @SeverS @quininez @didd @themonster2015
+/extensions/apps/auth-app/ @didd @josenriagu @themonster2015
+/extensions/apps/extensions/ @SeverS @quininez @didd
+/extensions/apps/legal/ @quininez @josenriagu
+/extensions/apps/notifications/ @quininez @themonster2015
+/extensions/apps/profile/ @didd @themonster2015 @quininez
+/extensions/apps/routing/ @SeverS @didd
+/extensions/apps/search/ @quininez @themonster2015
+/extensions/apps/settings/ @themonster2015 @josenriagu
+/extensions/apps/vibes/ @themonster2015 @josenriagu
+/extensions/apps/vibes-console/ @themonster2015 @josenriagu
+
+/extensions/widgets/analytics/ @SeverS @josenriagu
+/extensions/widgets/layout/ @SeverS @josenriagu @quininez
+/extensions/widgets/mini-profile/ @quininez @josenriagu
+/extensions/widgets/my-apps/ @quininez @themonster2015
+/extensions/widgets/sidebar/ @josenriagu @themonster2015 @didd
+/extensions/widgets/top-bar/ @themonster2015 @josenriagu
+/extensions/widgets/trending/ @themonster2015 @josenriagu @didd
+
+/libs/app-loader/ @SeverS @kenshyx
+/libs/composedb/ @kenshyx @josenriagu @SeverS
+/libs/design-system-components/ @josenriagu @didd @themonster2015 @quininez
+/libs/design-system-core/ @josenriagu @didd @themonster2015 @quininez
+/libs/extensions/ @SeverS @quininez @didd
+/libs/feed/ @SeverS @themonster2015 @didd
+/libs/hooks/ @kenshyx @quininez @didd @SeverS
+/libs/sdk/ @kenshyx @josenriagu @SeverS
+/libs/typings/ @kenshyx @SeverS @quininez
+
+/tests/ @didd @kenshyx
+/tools/ @kenshyx @SeverS
+
+/worlds/ @kenshyx @SeverS
