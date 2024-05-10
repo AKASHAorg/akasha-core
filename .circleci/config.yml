@@ -21,13 +21,12 @@ jobs:
       # documented at https://circleci.com/docs/2.0/circleci-images/
       # - image: circleci/mongo:3.4.4
 
-    working_directory: ~/akasha-world-framework
+    working_directory: ~/akasha-core
 
     steps: # a collection of executable commands
       - checkout # special step to check out source code to working directory
       - node/install:
           install-yarn: true
-          yarn-version: '4.1.1'
           node-version: '20.11.0'
       - run: node --version
       - run:
@@ -54,9 +53,9 @@ jobs:
             export NUM_AFFECTED_PROJECTS=$(echo $AFFECTED_PROJECTS | sed 's/, /\n/g' | wc -l | xargs)
 
             echo '{ "affected-projects": "'$AFFECTED_PROJECTS'", "num-affected-projects": '$NUM_AFFECTED_PROJECTS' }' >> .circleci/continuation-params.json
-      - continuation/continue:
-          configuration_path: ./.circleci/continuation.yml
-          parameters: ./.circleci/continuation-params.json
+#      - continuation/continue:
+#          configuration_path: ./.circleci/continuation.yml
+#          parameters: ./.circleci/continuation-params.json
 
 workflows:
   setup:

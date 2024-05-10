@@ -12,7 +12,7 @@ executors:
   shared-executor:
     docker:
       - image: cimg/node:20.9.0
-    working_directory: ~/akasha-world-framework
+    working_directory: ~/akasha-core
 
 jobs:
   build:
