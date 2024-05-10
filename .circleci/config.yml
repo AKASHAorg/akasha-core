@@ -29,8 +29,8 @@ jobs:
           node-version: '20.11.0'
           yarn-version: '4.1.1'
       - run: node --version
-      - node/install-yarn:
-          version: '4.1.1'
+      - run: corepack enable
+      - corepack prepare yarn@4.1.1 --activate
       - run: yarn --version
       - node/install-packages:
           check-cache: detect
