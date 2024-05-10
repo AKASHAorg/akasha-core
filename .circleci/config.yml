@@ -34,8 +34,7 @@ jobs:
       - run: yarn --version
       - node/install-packages:
           check-cache: detect
-          pkg-manager: yarn
-          with-cache: false
+          pkg-manager: yarn-berry
       - run:
           name: Prepare continuation parameters
           command: |
