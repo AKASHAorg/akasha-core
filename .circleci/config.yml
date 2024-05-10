@@ -29,9 +29,12 @@ jobs:
           node-version: '20.11.0'
           yarn-version: '4.1.1'
       - run: node --version
+      - node/install-yarn:
+          version: '4.1.1'
+      - run: yarn --version
       - node/install-packages:
           check-cache: detect
-          pkg-manager: yarn-berry
+          pkg-manager: yarn
           with-cache: false
       - run:
           name: Prepare continuation parameters
