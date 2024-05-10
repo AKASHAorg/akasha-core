@@ -4,7 +4,6 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import BeamSection from './beam-section';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import {
-  createReactiveVar,
   hasOwn,
   mapBeamEntryData,
   useAkashaStore,
@@ -13,7 +12,7 @@ import {
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
-import { EntityTypes, type ReflectEntryData } from '@akashaorg/typings/lib/ui';
+import { EntityTypes } from '@akashaorg/typings/lib/ui';
 import { ReflectFeed, ReflectionPreview } from '@akashaorg/ui-lib-feed';
 import { AkashaBeamStreamModerationStatus } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { useNavigate } from '@tanstack/react-router';
@@ -58,7 +57,6 @@ const BeamPage: React.FC<BeamPageProps> = props => {
     }
   }, [beamStream]);
 
-  const pendingReflectionsVar = createReactiveVar<ReflectEntryData[]>([]);
   const entryData = React.useMemo(() => {
     if (beam && hasOwn(beam, 'node') && hasOwn(beam.node, 'id')) {
       return beam.node;
@@ -91,7 +89,6 @@ const BeamPage: React.FC<BeamPageProps> = props => {
     <Card padding="p-0" margin="mb-4">
       <Stack ref={wrapperRef} spacing="gap-y-2">
         <ReflectFeed
-          pendingReflectionsVar={pendingReflectionsVar}
           header={
             <>
               <BeamSection
@@ -99,7 +96,6 @@ const BeamPage: React.FC<BeamPageProps> = props => {
                 entryData={mapBeamEntryData(entryData)}
                 isLoggedIn={isLoggedIn}
                 showNSFWCard={showNsfwCard}
-                pendingReflectionsVar={pendingReflectionsVar}
                 parentWrapperRef={wrapperRef}
                 showLoginModal={showLoginModal}
               />

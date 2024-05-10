@@ -9,7 +9,7 @@ import {
   PageInfo,
   SortOrder,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { EntityTypes, type ReflectEntryData } from '@akashaorg/typings/lib/ui';
+import { EntityTypes } from '@akashaorg/typings/lib/ui';
 import {
   GetReflectionStreamQuery,
   GetReflectionStreamQueryVariables,
@@ -17,7 +17,6 @@ import {
 import { hasOwn } from './utils/has-own';
 import { usePendingReflections } from './use-pending-reflections';
 import { useQueryPolling } from './use-query-polling';
-import type { createReactiveVar } from './utils/create-reactive-var';
 import getSDK from '@akashaorg/awf-sdk';
 
 export type UseReflectionProps = {
@@ -26,7 +25,6 @@ export type UseReflectionProps = {
   filters?: AkashaReflectStreamFiltersInput;
   sorting?: AkashaReflectStreamSortingInput;
   overscan?: number;
-  pendingReflectionsVar: ReturnType<typeof createReactiveVar<ReflectEntryData[]>>;
 };
 const defaultSorting: AkashaReflectSortingInput = {
   createdAt: SortOrder.Asc,
@@ -77,7 +75,7 @@ const filterById = (edges: AkashaReflectStreamEdge[], entityType, entityId) => {
 // extract the logic of pending and
 
 export const useReflections = (props: UseReflectionProps) => {
-  const { overscan = 10, entityId, entityType, sorting, filters, pendingReflectionsVar } = props;
+  const { overscan = 10, entityId, entityType, sorting, filters } = props;
   const [state, setState] = React.useState<{
     reflections: AkashaReflectStreamEdge[];
     pageInfo?: PageInfo;
@@ -117,8 +115,7 @@ export const useReflections = (props: UseReflectionProps) => {
     fetchPolicy: 'cache-and-network',
   });
 
-  const { pendingReflections, removePendingReflections } =
-    usePendingReflections(pendingReflectionsVar);
+  const { pendingReflections, removePendingReflections } = usePendingReflections();
 
   const refetchReflections = React.useCallback(
     variables => {

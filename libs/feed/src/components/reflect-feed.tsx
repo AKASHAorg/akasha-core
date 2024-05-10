@@ -1,5 +1,5 @@
 import React from 'react';
-import { AnalyticsEventData, EntityTypes, type ReflectEntryData } from '@akashaorg/typings/lib/ui';
+import { AnalyticsEventData, EntityTypes } from '@akashaorg/typings/lib/ui';
 import {
   AkashaReflectStreamEdge,
   AkashaReflectStreamFiltersInput,
@@ -8,7 +8,6 @@ import {
 import { EdgeArea, Virtualizer, VirtualizerProps } from '../virtual-list';
 import { useReflections } from '@akashaorg/ui-awf-hooks/lib/use-reflections';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import { createReactiveVar } from '@akashaorg/ui-awf-hooks';
 
 export type ReflectFeedProps = {
   reflectionsOf: { entryId: string; itemType: EntityTypes };
@@ -26,7 +25,6 @@ export type ReflectFeedProps = {
   loadingIndicator?: VirtualizerProps<unknown>['loadingIndicator'];
   header?: VirtualizerProps<unknown>['header'];
   footer?: VirtualizerProps<unknown>['footer'];
-  pendingReflectionsVar?: ReturnType<typeof createReactiveVar<ReflectEntryData[]>>;
 };
 
 const ReflectFeed: React.FC<ReflectFeedProps> = props => {
@@ -42,7 +40,6 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
     sorting,
     header,
     footer,
-    pendingReflectionsVar,
   } = props;
 
   // const isReflectOfReflection = reflectionsOf.itemType === EntityTypes.REFLECT;
@@ -64,7 +61,6 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
     overscan: scrollerOptions.overscan,
     filters,
     sorting,
-    pendingReflectionsVar,
   });
   const lastCursors = React.useRef({ next: null, prev: null });
 
