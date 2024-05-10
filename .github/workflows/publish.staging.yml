@@ -1,11 +1,12 @@
-name: publish apps on registry for staging
+name: webhook for new staging version
 
 on:
   push:
     branches:
       - next
     paths:
-      - 'sdk/**'
+      - 'extensions/**'
+      - 'libs/**'
 jobs:
   publish:
     name: Update registry apps
@@ -17,25 +18,15 @@ jobs:
         with:
           python-version: '3.x'
           architecture: 'x64'
-      - name: Setup Node
-        uses: actions/setup-node@v1
-        with:
-          node-version: 20.9.0
-          cache: 'yarn'
       - name: Checkout
-        uses: actions/checkout@v2
-      - name: Cache node modules
-        uses: actions/cache@v1
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      - name: install root dependencies
-        env:
-          CI: 1
-        run: |
-          yarn install --frozen-lockfile
+          node-version: 20
+          cache: 'yarn'
+          cache-dependency-path: yarn.lock
+        run: yarn install
 #      - name: Publish new versions
 #        env:
 #          INFURA_ID: ${{ secrets.INFURA_ID_STAGING }}
