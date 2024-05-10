@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
+import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { ChatBubbleLeftRightIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
@@ -21,10 +21,9 @@ const CardActions: React.FC<CardActionProps> = props => {
   return (
     <Stack direction="row" align="center" justify="end" spacing="gap-x-2">
       <>{actionsRight}</>
-      <Anchor
-        href={`${reflectAnchorLink}/${itemId}`}
-        onClick={e => {
-          e.preventDefault();
+      <Link
+        to={`${reflectAnchorLink}/${itemId}`}
+        onClick={() => {
           if (!disableActions) onReflect();
         }}
         customStyle="h-fit"
@@ -43,7 +42,7 @@ const CardActions: React.FC<CardActionProps> = props => {
         ) : (
           reflectIconUi
         )}
-      </Anchor>
+      </Link>
     </Stack>
   );
 };

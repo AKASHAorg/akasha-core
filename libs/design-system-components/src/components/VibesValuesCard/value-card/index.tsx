@@ -1,5 +1,5 @@
 import React from 'react';
-import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
+import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -74,13 +74,13 @@ const VibesValueCard: React.FC<VibesValueCardProps> = props => {
               )}
 
               {ctaLabel && (
-                <Anchor
-                  href={ctaUrl}
+                <Link
+                  to={ctaUrl}
                   customStyle="text-sm self-end font-bold no-underline text(secondaryLight dark:secondaryDark)"
                   target="_blank"
                 >
                   {ctaLabel}
-                </Anchor>
+                </Link>
               )}
             </Stack>
           )}

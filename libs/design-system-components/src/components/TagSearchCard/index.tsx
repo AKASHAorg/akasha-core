@@ -2,7 +2,7 @@ import React from 'react';
 
 import { ITag } from '@akashaorg/typings/lib/ui';
 
-import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
+import Link from '@akashaorg/design-system-core/lib/components/Link';
 import { HashtagIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
@@ -41,34 +41,26 @@ const TagSearchCard: React.FC<TagSearchCardProps> = props => {
 
   return (
     <Stack direction="row" align="center" justify="between" customStyle={'py-2'}>
-      <Anchor
-        onClick={e => {
-          e.preventDefault();
-          return false;
-        }}
-        href={`${tagAnchorLink}/${tag?.name}`}
-      >
-        <button onClick={onClickTag}>
-          <Stack align="center" justify="between" customStyle={'py-2'}>
-            {tag && (
-              <SubtitleTextIcon
-                onClick={onClickTag}
-                label={tag.name}
-                subtitle={`${tag.totalPosts} Beams`}
-                icon={<HashtagIcon />}
-                backgroundColor={true}
-              />
-            )}
+      <Link onClick={onClickTag} to={`${tagAnchorLink}/${tag?.name}`}>
+        <Stack align="center" justify="between" customStyle={'py-2'}>
+          {tag && (
+            <SubtitleTextIcon
+              onClick={onClickTag}
+              label={tag.name}
+              subtitle={`${tag.totalPosts} Beams`}
+              icon={<HashtagIcon />}
+              backgroundColor={true}
+            />
+          )}
 
-            {!tag && (
-              <Stack align="center" justify="between" customStyle={'py-2'}>
-                <TextLine title="tagName" animated={false} width="140px" />
-                <TextLine title="tagName" animated={false} width="80px" />
-              </Stack>
-            )}
-          </Stack>
-        </button>
-      </Anchor>
+          {!tag && (
+            <Stack align="center" justify="between" customStyle={'py-2'}>
+              <TextLine title="tagName" animated={false} width="140px" />
+              <TextLine title="tagName" animated={false} width="80px" />
+            </Stack>
+          )}
+        </Stack>
+      </Link>
       {tag && (
         <Stack>
           <DuplexButton

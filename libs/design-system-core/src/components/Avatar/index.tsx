@@ -1,5 +1,4 @@
 import React from 'react';
-import Anchor from '../Anchor';
 import Link from '../Link';
 import Stack from '../Stack';
 import AvatarImage from './avatar-image';
@@ -80,24 +79,13 @@ const AvatarContent: React.FC<AvatarContentProps> = props => {
   );
 };
 
-/**
- * The Avatar component could return either of the two;
- * 1. where the onClick function is passed, the Link component.
- * 2. where the there is no onClick function, the Anchor component.
- */
 const Avatar: React.FC<AvatarProps> = props => {
   const { dataTestId, href, onClick, ...rest } = props;
 
-  if (typeof onClick === 'function') {
+  return (
     <Link dataTestId={dataTestId} to={href} tabIndex={-6} onClick={onClick}>
       <AvatarContent {...rest} />
-    </Link>;
-  }
-
-  return (
-    <Anchor dataTestId={dataTestId} href={href} tabIndex={-6}>
-      <AvatarContent {...rest} />
-    </Anchor>
+    </Link>
   );
 };
 

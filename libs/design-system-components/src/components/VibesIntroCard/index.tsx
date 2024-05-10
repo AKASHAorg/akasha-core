@@ -1,5 +1,5 @@
 import React from 'react';
-import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
+import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -46,9 +46,9 @@ const VibesIntroCard: React.FC<VibesIntroCardProps> = props => {
                     </Text>
                   </Button>
                 ) : (
-                  <Anchor href={url} dataTestId={`${label}-link`} customStyle="text-sm font-bold">
+                  <Link to={url} dataTestId={`${label}-link`} customStyle="text-sm font-bold">
                     {label}
-                  </Anchor>
+                  </Link>
                 )}
               </Stack>
             ))}

@@ -5,7 +5,7 @@ import { AUTH_EVENTS, WEB3_EVENTS } from '@akashaorg/typings/lib/sdk/events';
 import { useAkashaStore, useDismissedCard, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { startMobileSidebarHidingBreakpoint } from '@akashaorg/design-system-core/lib/utils/breakpoints';
 import getSDK from '@akashaorg/awf-sdk';
-import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
+import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
@@ -283,7 +283,7 @@ const SidebarComponent: React.FC<unknown> = () => {
             <Text variant="footnotes2">{t('Get in touch')}</Text>
             <Stack direction="row" spacing="gap-x-4" customStyle="w-fit h-fit mt-6">
               {modSocialLinks.map((socialLink, idx) => (
-                <Anchor key={idx} href={socialLink.link} target="_blank">
+                <Link key={idx} to={socialLink.link} target="_blank">
                   <Button
                     icon={socialLink.icon}
                     solidIcon={idx > 0}
@@ -291,7 +291,7 @@ const SidebarComponent: React.FC<unknown> = () => {
                     greyBg={true}
                     iconOnly={true}
                   />
-                </Anchor>
+                </Link>
               ))}
             </Stack>
           </Stack>

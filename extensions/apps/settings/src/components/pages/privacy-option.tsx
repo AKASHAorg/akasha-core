@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Link from '@akashaorg/design-system-core/lib/components/Link';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 
@@ -147,7 +147,7 @@ const PrivacyOption: React.FC = () => {
             {t(
               ' is used so we can all work all the more brilliantly to improve it, you can opt-in to our own ',
             )}
-            <Anchor target="_blank" href={'https://matomo.org'}>
+            <Link target="_blank" to={'https://matomo.org'}>
               <Text
                 as="span"
                 weight="bold"
@@ -155,20 +155,20 @@ const PrivacyOption: React.FC = () => {
               >
                 {'Matomo'}
               </Text>
-            </Anchor>
+            </Link>
             {t(
               " analytics. We don't store personal identifiable information (PII) and you can opt-out at any time. ",
             )}
-            <Anchor
+            <Link
               target="_blank"
-              href={
+              to={
                 'https://forum.akasha.org/t/implementing-analytics-on-ethereum-world-an-open-discussion-on-the-rationale-and-your-choices/100'
               }
             >
               <Text as="span" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
                 {t('Click here')}
               </Text>
-            </Anchor>
+            </Link>
             {t(' to learn more.')}
           </Text>
         </Stack>
