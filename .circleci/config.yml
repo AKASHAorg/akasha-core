@@ -26,25 +26,13 @@ jobs:
     steps: # a collection of executable commands
       - checkout # special step to check out source code to working directory
       - node/install:
-          install-yarn: true
           node-version: '20.11.0'
+          yarn-version: '4.1.1'
       - run: node --version
-      - run:
-          name: Install nx
-          command: sudo npm install -g nx@18.0.7
-      - restore_cache:
-          name: Restore Yarn Package Cache
-          keys:
-            - yarn-packages-{{ checksum "yarn.lock" }}
-      - run:
-          name: Install Dependencies
-          command: yarn install --immutable
-      - save_cache:
-          name: Save Yarn Package Cache
-          key: yarn-packages-{{ checksum "yarn.lock" }}
-          paths:
-            - .yarn/cache
-            - .yarn/unplugged
+      - node/install-packages:
+          check-cache: detect
+          pkg-manager: yarn-berry
+          with-cache: false
       - run:
           name: Prepare continuation parameters
           command: |
