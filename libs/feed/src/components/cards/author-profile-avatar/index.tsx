@@ -11,10 +11,11 @@ type AuthorProfileAvatarProps = {
   authorId: string;
   createdAt: string;
   hidePublishTime?: boolean;
+  pending?: boolean;
 };
 
 const AuthorProfileAvatar: React.FC<AuthorProfileAvatarProps> = props => {
-  const { authorId, createdAt, hidePublishTime } = props;
+  const { authorId, createdAt, hidePublishTime, pending } = props;
   const { getTranslationPlugin, getRoutingPlugin } = useRootComponentProps();
   const navigateTo = getRoutingPlugin().navigateTo;
   const locale = getTranslationPlugin().i18n?.languages?.[0] || 'en';
@@ -26,6 +27,8 @@ const AuthorProfileAvatar: React.FC<AuthorProfileAvatarProps> = props => {
       getNavigationUrl: routes => `${routes.rootRoute}/${id}`,
     });
   };
+
+  console.log('pending', pending);
 
   return (
     <Extension
@@ -59,6 +62,17 @@ const AuthorProfileAvatar: React.FC<AuthorProfileAvatarProps> = props => {
                     {publishTime}
                   </Text>
                 </Tooltip>
+              </Stack>
+            )}
+            {pending && (
+              <Stack direction="row" align="center" spacing="gap-x-1">
+                <Text
+                  variant="footnotes2"
+                  weight="normal"
+                  color={{ light: 'grey4', dark: 'grey7' }}
+                >
+                  Pending
+                </Text>
               </Stack>
             )}
           </>

@@ -32,7 +32,7 @@ import ErrorBoundary, {
   ErrorBoundaryProps,
 } from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 
-const MAX_EDIT_TIME_IN_MINUTES = 10;
+const MAX_EDIT_TIME_IN_MINUTES = 1000;
 
 const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> = props => {
   const { entryData, reflectToId, ...rest } = props;
@@ -144,6 +144,7 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
             content: newContent,
           }}
           contentClickable={false}
+          pending={true}
           hidePublishTime={true}
           disableActions={true}
         />
