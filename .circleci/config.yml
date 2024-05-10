@@ -8,12 +8,13 @@ setup: true
 
 orbs:
   continuation: circleci/continuation@0.3.1
+  node: circleci/node@5.2.0
 
 jobs:
   setup:
     docker:
       # specify the version you desire here
-      - image: cimg/node:20.9.0
+      - image: cimg/base:stable
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -24,24 +25,27 @@ jobs:
 
     steps: # a collection of executable commands
       - checkout # special step to check out source code to working directory
-      - run:
-          name: Install gcc
-          command: 'sudo apt-get update -y && sudo apt-get install -y build-essential libsqlite3-dev'
+      - node/install:
+          install-yarn: true
+          yarn-version: '4.1.1'
+          node-version: '20.11.0'
+      - run: node --version
       - run:
           name: Install nx
-          command: sudo npm install -g nx@14.6.5
-      - restore_cache: # special step to restore the dependency cache
-          # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
+          command: sudo npm install -g nx@18.0.7
+      - restore_cache:
+          name: Restore Yarn Package Cache
           keys:
-            - dependency-cache-v2-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - yarn-packages-{{ checksum "yarn.lock" }}
       - run:
-          name: Install yarn packages
-          command: yarn install --frozen-lockfile --cache-folder ~/.cache/yarn
+          name: Install Dependencies
+          command: yarn install --immutable
       - save_cache:
+          name: Save Yarn Package Cache
+          key: yarn-packages-{{ checksum "yarn.lock" }}
           paths:
-            - node_modules
-            - ~/.cache/yarn
-          key: dependency-cache-v2-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - .yarn/cache
+            - .yarn/unplugged
       - run:
           name: Prepare continuation parameters
           command: |
