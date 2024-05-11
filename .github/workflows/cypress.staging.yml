@@ -7,7 +7,7 @@ on:
 jobs:
   cypress-run:
     if: github.event.label.name == 'run-e2e'
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     name: Staging-E2E on Chrome
     steps:
       - name: Setup Python
@@ -15,49 +15,52 @@ jobs:
         with:
           python-version: '3.x'
           architecture: 'x64'
-      - name: Setup Node
-        uses: actions/setup-node@v1
-        with:
-          node-version: 20.9.0
-          cache: 'yarn'
       - name: Checkout
-        uses: actions/checkout@v2
-      - name: Cache node modules
-        uses: actions/cache@v1
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      - name: Cache Cypress binary
-        uses: actions/cache@v1
-        with:
-          path: ~/.cache/Cypress
-          key: cypress-${{ runner.os }}-cypress-${{ hashFiles('**/package.json') }}
-          restore-keys: |
-            cypress-${{ runner.os }}-cypress-
-      - name: install root dependencies
-        env:
-          CI: 1
-        run: |
-          yarn bootstrap
-      - name: verify Cypress
-        env:
-          CI: 1
-        working-directory: tests
-        run: |
-          npx cypress verify
-          npx cypress info
-      - name: e2e tests
-        run: |
-          PR_PREVIEW_SUB_DOMAIN=$(echo $GITHUB_HEAD_REF | sed -e 's/\//-/g' | cut -c 1-28)
-          export CYPRESS_BASE_URL=https://$PR_PREVIEW_SUB_DOMAIN.akasha-world-framework.pages.dev
-          npm run cy:e2e:chrome:record
-        working-directory: tests
-        env:
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
+          node-version: 20
+          cache: 'yarn'
+          cache-dependency-path: yarn.lock
+        run: yarn install
+
+#      - name: Cache node modules
+#        uses: actions/cache@v1
+#        with:
+#          path: ~/.npm
+#          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+#          restore-keys: |
+#            ${{ runner.os }}-node-
+#      - name: Cache Cypress binary
+#        uses: actions/cache@v1
+#        with:
+#          path: ~/.cache/Cypress
+#          key: cypress-${{ runner.os }}-cypress-${{ hashFiles('**/package.json') }}
+#          restore-keys: |
+#            cypress-${{ runner.os }}-cypress-
+#      - name: install root dependencies
+#        env:
+#          CI: 1
+#        run: |
+#          yarn bootstrap
+#      - name: verify Cypress
+#        env:
+#          CI: 1
+#        working-directory: tests
+#        run: |
+#          npx cypress verify
+#          npx cypress info
+#      - name: e2e tests
+#        run: |
+#          PR_PREVIEW_SUB_DOMAIN=$(echo $GITHUB_HEAD_REF | sed -e 's/\//-/g' | cut -c 1-28)
+#          export CYPRESS_BASE_URL=https://$PR_PREVIEW_SUB_DOMAIN.akasha-world-framework.pages.dev
+#          npm run cy:e2e:chrome:record
+#        working-directory: tests
+#        env:
+#          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
 #      - name: Install test deps
 #        uses: ./
 #        with:
