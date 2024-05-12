@@ -43,14 +43,14 @@ const AvatarContent: React.FC<AvatarContentProps> = props => {
     avatar,
     active,
     border,
-    size,
+    size = 'md',
     borderColor,
     backgroundColor,
     faded,
-    isClickable,
+    isClickable = false,
     profileId = '0x0000000000000000000000000000000',
     publicImgPath = '/images',
-    customStyle,
+    customStyle = '',
   } = props;
 
   const seed = getImageFromSeed(profileId, 7);
