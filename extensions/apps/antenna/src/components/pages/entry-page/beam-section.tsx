@@ -92,12 +92,12 @@ const BeamSection: React.FC<BeamSectionProps> = props => {
             pendingReflectionsVar={pendingReflectionsVar}
           />
         )}
-        {pendingReflections
-          .filter(content => !hasOwn(content, 'reflection') && content.beamID === beamId)
-          .map((content, index) => (
-            <PendingReflect key={`pending-${index}-${beamId}`} entryData={content} />
-          ))}
       </Stack>
+      {pendingReflections
+        .filter(content => !hasOwn(content, 'reflection') && content.beamID === beamId)
+        .map((content, index) => (
+          <PendingReflect key={`pending-${index}-${beamId}`} entryData={content} />
+        ))}
     </Stack>
   );
 };
