@@ -31,8 +31,6 @@ const AuthorProfileAvatar: React.FC<AuthorProfileAvatarProps> = props => {
     });
   };
 
-  console.log('pending', pending);
-
   return (
     <Extension
       name={`profile_avatar_${authorId}`}
