@@ -14,14 +14,10 @@ const meta: Meta<ProfileAvatarButtonProps> = {
     avatar: { control: 'object' },
     alternativeAvatars: { control: 'object' },
     label: { control: 'text' },
-    size: { control: 'select', options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl'] },
     profileId: { control: 'text' },
     truncateText: { control: 'boolean' },
     href: { control: 'text' },
     onClick: { action: 'button clicked' },
-    onClickAvatar: { action: 'avatar clicked' },
-    onMouseEnter: { action: 'mouse entered' },
-    onMouseLeave: { action: 'mouse left' },
   },
 };
 
@@ -42,7 +38,5 @@ const baseArgs: Story = {
 export const Default: Story = { args: { ...baseArgs.args } };
 
 export const NotTruncatedButton: Story = { args: { ...baseArgs.args, truncateText: false } };
-
-export const ButtonWithSize: Story = { args: { ...baseArgs.args, size: 'lg' } };
 
 export default meta;
