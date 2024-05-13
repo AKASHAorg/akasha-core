@@ -1,14 +1,14 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import Anchor, { AnchorProps } from '@akashaorg/design-system-core/lib/components/Anchor';
+import Link, { LinkProps } from '@akashaorg/design-system-core/lib/components/Link';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-const meta: Meta<AnchorProps> = {
-  title: 'DSCore/Anchor/Anchor',
-  component: Anchor,
+const meta: Meta<LinkProps> = {
+  title: 'DSCore/Link/Link',
+  component: Link,
   tags: ['autodocs'],
   argTypes: {
-    href: { control: 'text' },
+    to: { control: 'text' },
     target: {
       defaultValue: '_blank',
       control: 'select',
@@ -19,11 +19,11 @@ const meta: Meta<AnchorProps> = {
   },
 };
 
-type Story = StoryObj<AnchorProps>;
+type Story = StoryObj<LinkProps>;
 
 export const Default: Story = {
   args: {
-    href: 'https://akasha.org',
+    to: 'https://akasha.org',
     children: <Text>Click me</Text>,
     weight: 'light',
     customStyle: 'w-[15%]',

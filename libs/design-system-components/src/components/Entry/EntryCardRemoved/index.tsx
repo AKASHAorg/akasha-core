@@ -4,7 +4,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { ExclamationTriangleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
+import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 
 export type AuthorsRemovedMessage = {
@@ -37,14 +37,14 @@ const EntryCardRemoved: React.FC<EntryCardRemovedProps> = props => {
               <Text as="span" variant="footnotes2">
                 {props.message.secondPart}
               </Text>
-              <Anchor href={props.message.thirdPart.url}>
+              <Link to={props.message.thirdPart.url}>
                 <Text
                   variant="footnotes2"
                   color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
                 >
                   {props.message.thirdPart.content}
                 </Text>
-              </Anchor>
+              </Link>
             </Text>
             {props.type === 'author' && (
               <Button

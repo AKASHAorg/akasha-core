@@ -2,7 +2,7 @@ import React from 'react';
 
 import { IntegrationTypes } from '@akashaorg/typings/lib/ui';
 
-import Anchor from '../Anchor';
+import Link from '../Link';
 import { AvatarProps } from '../Avatar';
 import AvatarImage from '../Avatar/avatar-image';
 import Stack from '../Stack';
@@ -62,7 +62,7 @@ const AppAvatar: React.FC<AppAvatarProps> = props => {
   const activeOverlayClass = generateActiveOverlayClass();
 
   return (
-    <Anchor onClick={onClick} tabIndex={-6}>
+    <Link onClick={onClick} tabIndex={-1}>
       <Stack customStyle={className}>
         <React.Suspense fallback={<></>}>
           <AvatarImage url={avatar?.src} alt={alt} fallbackUrl={avatarFallback} faded={faded} />
@@ -70,7 +70,7 @@ const AppAvatar: React.FC<AppAvatarProps> = props => {
 
         {active && <div className={activeOverlayClass}></div>}
       </Stack>
-    </Anchor>
+    </Link>
   );
 };
 

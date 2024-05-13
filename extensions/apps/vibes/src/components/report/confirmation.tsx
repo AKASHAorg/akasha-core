@@ -1,9 +1,9 @@
 import React from 'react';
 
-import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
+import Link from '@akashaorg/design-system-core/lib/components/Link';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { Discord } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
@@ -66,7 +66,7 @@ export const ReportItemConfirmation: React.FC<ReportItemConfirmationProps> = pro
             {footnoteLabel}
           </Text>
 
-          <Anchor href={ctaUrl} target="_blank">
+          <Link to={ctaUrl} target="_blank">
             <Stack direction="row" align="center" spacing="gap-x-2">
               <Icon
                 size="sm"
@@ -85,7 +85,7 @@ export const ReportItemConfirmation: React.FC<ReportItemConfirmationProps> = pro
                 {ctaLabel}
               </Text>
             </Stack>
-          </Anchor>
+          </Link>
         </Stack>
       </Stack>
     </Card>
