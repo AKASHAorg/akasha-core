@@ -358,6 +358,8 @@ export const ImageEditorBlock = (
     setIsFocusedEditor(focus);
   };
 
+  const maxImagesLimitReached = contentBlockImages.length === 4;
+
   return (
     <>
       {uiState === 'menu' && (
@@ -376,7 +378,7 @@ export const ImageEditorBlock = (
                 variant="primary"
                 customStyle="w-full sm:w-48"
                 onClick={handleMediaClick}
-                disabled={imageUploadDisabled}
+                disabled={imageUploadDisabled || maxImagesLimitReached}
               />
             </Stack>
             <Divider />
@@ -390,13 +392,13 @@ export const ImageEditorBlock = (
                   fullWidth
                   type={'text'}
                   onChange={handleChange}
-                  disabled={imageUploadDisabled}
+                  disabled={imageUploadDisabled || maxImagesLimitReached}
                   customStyle="w-5/6"
                 />
                 <Button
                   label={t('Add')}
                   variant="secondary"
-                  disabled={disableURLUpload}
+                  disabled={disableURLUpload || maxImagesLimitReached}
                   onClick={() => uploadNewImage(imageLink, true)}
                 />
               </Stack>
