@@ -28,12 +28,12 @@ jobs:
           cache: 'yarn'
           cache-dependency-path: yarn.lock
       - run: node --version
-      - run: yarn --version
       - name: install root dependencies
         env:
           CI: 1
         run: |
           yarn install --immutable
+          yarn build:all
 #      - name: Publish new versions
 #        env:
 #          INFURA_ID: ${{ secrets.INFURA_ID_STAGING }}

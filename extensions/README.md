@@ -11,7 +11,7 @@
 - [Extensions](./akasha-verse/README.md)
 - [Lists](./bookmarks/README.md)
 - [Legal](./legal/README.md)
-- [Notifcations](./notifications/README.md)
+- [Notifications](./apps/notifications/README.md)
 - [Profile](./profile/README.md)
 - [Search](./apps/search/README.md)
 - [Vibes Console](./vibes-console/README.md)
