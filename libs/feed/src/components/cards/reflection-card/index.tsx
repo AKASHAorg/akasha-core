@@ -24,11 +24,12 @@ export type ReflectCardProps = Pick<
 > & {
   entryData: ReflectEntryData;
   hidePublishTime?: boolean;
+  pending?: boolean;
 };
 
 const ReflectionCard: React.FC<ReflectCardProps> = props => {
   const { t } = useTranslation('ui-lib-feed');
-  const { entryData, hidePublishTime, onReflect, ...rest } = props;
+  const { entryData, hidePublishTime, pending, onReflect, ...rest } = props;
   const { getRoutingPlugin } = useRootComponentProps();
   const {
     data: { authenticatedDID },
@@ -75,6 +76,7 @@ const ReflectionCard: React.FC<ReflectCardProps> = props => {
         <AuthorProfileAvatar
           authorId={entryData.authorId}
           hidePublishTime={hidePublishTime}
+          pending={pending}
           createdAt={entryData?.createdAt}
         />
       }
