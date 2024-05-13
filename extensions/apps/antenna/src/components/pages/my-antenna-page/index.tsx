@@ -25,9 +25,11 @@ const MyAntennaPage: React.FC<unknown> = () => {
       _navigateToModal.current?.({
         name: 'login',
         redirectTo,
-        message,
+        title: t('Member Only Feature'),
+        message: message ?? t('You need to connect first to be able to use this feature.'),
       });
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
   const isLoggedUser = React.useMemo(() => !!authenticatedProfile?.did.id, [authenticatedProfile]);
