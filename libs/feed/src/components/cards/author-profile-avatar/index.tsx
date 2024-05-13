@@ -6,6 +6,7 @@ import ProfileAvatarLoading from '@akashaorg/design-system-core/lib/components/P
 import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
 import { formatDate, formatRelativeTime } from '@akashaorg/design-system-core/lib/utils';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useTranslation } from 'react-i18next';
 
 type AuthorProfileAvatarProps = {
   authorId: string;
@@ -20,6 +21,8 @@ const AuthorProfileAvatar: React.FC<AuthorProfileAvatarProps> = props => {
   const navigateTo = getRoutingPlugin().navigateTo;
   const locale = getTranslationPlugin().i18n?.languages?.[0] || 'en';
   const publishTime = createdAt ? formatRelativeTime(createdAt, locale) : '';
+
+  const { t } = useTranslation('app-extensions');
 
   const onAvatarClick = (id: string) => {
     navigateTo({
@@ -71,7 +74,14 @@ const AuthorProfileAvatar: React.FC<AuthorProfileAvatarProps> = props => {
                   weight="normal"
                   color={{ light: 'grey4', dark: 'grey7' }}
                 >
-                  Pending
+                  ·
+                </Text>
+                <Text
+                  variant="footnotes2"
+                  weight="normal"
+                  color={{ light: 'grey4', dark: 'grey7' }}
+                >
+                  {t('Pending')}...
                 </Text>
               </Stack>
             )}
