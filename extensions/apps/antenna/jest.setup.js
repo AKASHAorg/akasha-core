@@ -1,4 +1,4 @@
-import '../jest.setup';
+import './jest.setup';
 
 import { genLoggedInState } from '@akashaorg/af-testing';
 import * as loginHooks from '@akashaorg/ui-awf-hooks/lib/use-login.new';

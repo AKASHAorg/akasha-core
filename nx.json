@@ -18,6 +18,12 @@
     "sharedGlobals": [{ "runtime": "node --version" }, "{workspaceRoot}/*.env"]
   },
   "plugins": [
+    {
+      "plugin": "@nx/jest/plugin",
+      "options": {
+        "targetName": "test"
+      }
+    }
   ],
   "generators": {
   },

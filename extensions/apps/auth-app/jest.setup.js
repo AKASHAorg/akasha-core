@@ -1,1 +1,1 @@
-import '../jest.setup';
+import './jest.setup';
