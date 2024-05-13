@@ -13,5 +13,5 @@
 - [Legal](./legal/README.md)
 - [Notifcations](./notifications/README.md)
 - [Profile](./profile/README.md)
-- [Search](./search/README.md)
+- [Search](./apps/search/README.md)
 - [Vibes Console](./vibes-console/README.md)

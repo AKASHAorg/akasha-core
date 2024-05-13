@@ -20,12 +20,15 @@ jobs:
           architecture: 'x64'
       - name: Checkout
         uses: actions/checkout@v4
+      - run: corepack enable
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'yarn'
           cache-dependency-path: yarn.lock
+      - run: node --version
+      - run: yarn --version
       - name: install root dependencies
         env:
           CI: 1
