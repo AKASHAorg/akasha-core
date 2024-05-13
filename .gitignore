@@ -190,3 +190,6 @@ Thumbs.db
 
 .nx/cache
 *.seed.txt
+
+
+storybook-static

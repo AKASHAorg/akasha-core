@@ -18,10 +18,7 @@
     "pretty": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "lib": [
-      "dom",
-      "es2022"
-    ],
+    "lib": ["dom", "es2022"],
     "module": "ES2020",
     "target": "es2022"
   },
@@ -114,11 +111,10 @@
       "path": "./tests"
     }
   ],
-  "exclude": [
-    "node_modules",
-    "**/*.spec.ts",
-    "**/*.spec.tsx",
-    "tmp",
-    "dist"
-  ]
+  "exclude": ["node_modules", "**/*.spec.ts", "**/*.spec.tsx", "tmp", "dist"],
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  }
 }
