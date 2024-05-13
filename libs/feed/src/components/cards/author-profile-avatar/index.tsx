@@ -6,19 +6,23 @@ import ProfileAvatarLoading from '@akashaorg/design-system-core/lib/components/P
 import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
 import { formatDate, formatRelativeTime } from '@akashaorg/design-system-core/lib/utils';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useTranslation } from 'react-i18next';
 
 type AuthorProfileAvatarProps = {
   authorId: string;
   createdAt: string;
   hidePublishTime?: boolean;
+  pending?: boolean;
 };
 
 const AuthorProfileAvatar: React.FC<AuthorProfileAvatarProps> = props => {
-  const { authorId, createdAt, hidePublishTime } = props;
+  const { authorId, createdAt, hidePublishTime, pending } = props;
   const { getTranslationPlugin, getRoutingPlugin } = useRootComponentProps();
   const navigateTo = getRoutingPlugin().navigateTo;
   const locale = getTranslationPlugin().i18n?.languages?.[0] || 'en';
   const publishTime = createdAt ? formatRelativeTime(createdAt, locale) : '';
+
+  const { t } = useTranslation('app-extensions');
 
   const onAvatarClick = (id: string) => {
     navigateTo({
@@ -59,6 +63,24 @@ const AuthorProfileAvatar: React.FC<AuthorProfileAvatarProps> = props => {
                     {publishTime}
                   </Text>
                 </Tooltip>
+              </Stack>
+            )}
+            {pending && (
+              <Stack direction="row" align="center" spacing="gap-x-1">
+                <Text
+                  variant="footnotes2"
+                  weight="normal"
+                  color={{ light: 'grey4', dark: 'grey7' }}
+                >
+                  ·
+                </Text>
+                <Text
+                  variant="footnotes2"
+                  weight="normal"
+                  color={{ light: 'grey4', dark: 'grey7' }}
+                >
+                  {t('Pending')}...
+                </Text>
               </Stack>
             )}
           </>
