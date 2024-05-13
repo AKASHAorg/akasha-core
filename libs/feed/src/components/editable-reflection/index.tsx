@@ -6,7 +6,6 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import getSDK from '@akashaorg/awf-sdk';
 import {
   decodeb64SlateContent,
-  getLinkPreview,
   transformSource,
   encodeSlateToBase64,
   useAnalytics,
@@ -185,7 +184,6 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
             onCancelClick={() => {
               setEdit(false);
             }}
-            getLinkPreview={getLinkPreview}
             transformSource={transformSource}
             encodingFunction={encodeSlateToBase64}
           />

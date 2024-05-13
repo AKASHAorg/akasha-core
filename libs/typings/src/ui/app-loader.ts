@@ -2,7 +2,6 @@ import { IconType, RootComponentProps } from './index';
 import { UIEventData } from './ui-events';
 import { Extensions } from './apps';
 import { PluginConf } from './plugins';
-import { IntegrationReleaseInfoFragmentFragment } from '../sdk/graphql-operation-types';
 
 export type ActivityFn = (
   location: Location,
@@ -72,6 +71,20 @@ export enum INTEGRATION_TYPES {
   WIDGET,
 }
 
+export type ExtensionConfig = {
+  name: string;
+  id?: string;
+  integrationType: INTEGRATION_TYPES;
+  sources: string[];
+  version: string;
+  integrationID: string;
+  author: string;
+  enabled: boolean;
+  manifestData: {
+    mainFile: string;
+  };
+};
+
 /**
  * World configuration object
  */
@@ -110,7 +123,7 @@ export type WorldConfig = {
     siteId: string;
     trackerUrl: string;
   };
-  registryOverrides?: IntegrationReleaseInfoFragmentFragment[];
+  registryOverrides?: ExtensionConfig[];
   socialLinks?: { icon: IconType; link: string }[];
 };
 

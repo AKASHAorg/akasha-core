@@ -12,13 +12,7 @@ import isUrl from 'is-url';
 import { withHistory } from 'slate-history';
 import { Editable, Slate, withReact, ReactEditor, RenderElementProps } from 'slate-react';
 
-import type {
-  IMetadata,
-  IPublishData,
-  Image,
-  Profile,
-  ILinkPreviewExt,
-} from '@akashaorg/typings/lib/ui';
+import type { IMetadata, IPublishData, Image, Profile } from '@akashaorg/typings/lib/ui';
 
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
@@ -51,7 +45,6 @@ import { renderElement, renderLeaf } from './renderers';
 import { withMentions, withTags, withLinks } from './plugins';
 
 import { MarkButton, BlockButton } from './formatting-buttons';
-import LinkPreview from '../LinkPreview';
 
 const MAX_TEXT_LENGTH = 500;
 // this is to account for the limitations on the ceramic storage side
@@ -79,7 +72,6 @@ export type EditorBoxProps = {
   minHeight?: string;
   withMeter?: boolean;
   withToolbar?: boolean;
-  linkPreview?: ILinkPreviewExt;
   mentions?: Profile[];
   tags?: { name: string; totalPosts: number }[];
   publishingApp?: string;
@@ -93,9 +85,7 @@ export type EditorBoxProps = {
   onPublish?: (publishData: IPublishData) => void;
   onClear?: () => void;
   onCancelClick?: () => void;
-  handleSaveLinkPreviewDraft?: (linkPreview: ILinkPreviewExt) => void;
   setEditorState: React.Dispatch<React.SetStateAction<Descendant[]>>;
-  getLinkPreview?: (url: string) => Promise<ILinkPreviewExt>;
   getMentions?: (query: string) => void;
   getTags?: (query: string) => void;
   handleDisablePublish?: (value: boolean) => void;
@@ -121,8 +111,6 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
     minHeight,
     withMeter,
     withToolbar,
-    linkPreview,
-    getLinkPreview,
     getMentions,
     getTags,
     mentions = [],
@@ -152,20 +140,6 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
   const [publishDisabledInternal, setPublishDisabledInternal] = useState(true);
   const [showMaxEncodedLengthErr, setShowMaxEncodedLengthErr] = useState(false);
 
-  const [linkPreviewState, setLinkPreviewState] = useState(linkPreview);
-  const [linkPreviewUploading, setLinkPreviewUploading] = useState(false);
-
-  const handleGetLinkPreview = async (url: string) => {
-    setLinkPreviewUploading(true);
-    const linkPreview = await getLinkPreview(url);
-    setLinkPreviewState(linkPreview);
-    setLinkPreviewUploading(false);
-  };
-
-  const handleDeletePreview = () => {
-    setLinkPreviewState(null);
-  };
-
   /**
    * display only 3 results in the tag and mention popovers
    */
@@ -190,9 +164,6 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
 
   const handleInsertLink = (text: string) => {
     CustomEditor.insertLink(editor, { url: text.trim() });
-    if (typeof getLinkPreview === 'function') {
-      handleGetLinkPreview(text);
-    }
   };
 
   editor.insertText = text => {
@@ -253,7 +224,6 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
 
     const metadata: IMetadata = {
       app: publishingApp,
-      linkPreview: linkPreviewState,
       tags: [],
       mentions: [],
       version: 1,
@@ -637,14 +607,6 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
               </Stack>
             </Stack>
           </Slate>
-
-          {(linkPreviewState || linkPreviewUploading) && (
-            <LinkPreview
-              uploading={linkPreviewUploading}
-              linkPreviewData={linkPreviewState}
-              handleDeletePreview={handleDeletePreview}
-            />
-          )}
           {showMaxEncodedLengthErr && (
             <Stack
               direction="row"
