@@ -19,6 +19,7 @@ export function PendingReflect(props: PendingReflectProps) {
       <ReflectionCard
         entryData={entryData}
         contentClickable={false}
+        pending={true}
         hidePublishTime={true}
         disableActions={true}
       />

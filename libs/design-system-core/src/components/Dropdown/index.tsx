@@ -5,7 +5,7 @@ import Stack from '../Stack';
 import Icon from '../Icon';
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from '../Icon/hero-icons-outline';
 import Text from '../Text';
-import Anchor from '../Anchor';
+import Link from '../Link';
 
 export type DropdownMenuItemType = { id: string; icon?: React.ReactElement; title: string };
 
@@ -79,9 +79,9 @@ const Dropdown: React.FC<DropdownProps> = ({
             {menuItems.map((menuItem, idx) => {
               const isSelected = selected?.id === menuItem.id;
               return (
-                <Anchor
+                <Link
                   key={menuItem.id}
-                  tabIndex={-7}
+                  tabIndex={-1}
                   className={tw(
                     `${optionStyle} ${
                       idx < menuItems.length - 1 ? 'border-b(1 grey8 dark:grey3)' : ''
@@ -124,7 +124,7 @@ const Dropdown: React.FC<DropdownProps> = ({
                       />
                     </span>
                   )}
-                </Anchor>
+                </Link>
               );
             })}
           </ul>

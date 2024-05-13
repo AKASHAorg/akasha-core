@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
+import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -48,9 +48,9 @@ const CookieCard: React.FC<CookieCardProps> = props => {
           <Text variant="body2">
             {paragraphTwo.introLabel}
 
-            <Anchor target="_blank" href={paragraphTwo.analyticsURL}>
+            <Link target="_blank" to={paragraphTwo.analyticsURL}>
               {paragraphTwo.analyticsLabel}
-            </Anchor>
+            </Link>
 
             {paragraphTwo.middleParagraphLabeL}
 

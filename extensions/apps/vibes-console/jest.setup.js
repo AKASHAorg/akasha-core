@@ -1,4 +1,4 @@
-import '../jest.setup';
+import './jest.setup';
 
 jest.mock('@tanstack/react-router', () => ({
   ...jest.requireActual('@tanstack/react-router'),

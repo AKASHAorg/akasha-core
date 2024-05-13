@@ -126,6 +126,7 @@ const EditableReflection: React.FC<ReflectCardProps> = props => {
             content: newContent,
           }}
           contentClickable={false}
+          pending={true}
           hidePublishTime={true}
           disableActions={true}
         />

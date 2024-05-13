@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { act, fireEvent } from '@testing-library/react';
 
-import Anchor from '../';
+import Link from '..';
 import { customRender } from '../../../test-utils';
 
-describe('<Anchor /> Component', () => {
+describe('<Link /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
   const link = 'https://akasha.world';
-  const dataTestId = 'anchor-element';
+  const dataTestId = 'link-component';
 
   const dummyClickFn = jest.fn(() => {
     /** */
@@ -16,7 +16,7 @@ describe('<Anchor /> Component', () => {
 
   beforeEach(() => {
     act(() => {
-      componentWrapper = customRender(<Anchor href={link} dataTestId={dataTestId} />, {});
+      componentWrapper = customRender(<Link to={link} dataTestId={dataTestId} />, {});
     });
   });
 
@@ -31,15 +31,15 @@ describe('<Anchor /> Component', () => {
   it('has correct link', () => {
     const { getByRole } = componentWrapper;
 
-    const anchor = getByRole('link');
+    const link = getByRole('link');
 
-    expect(anchor).toHaveAttribute('href', link);
+    expect(link).toHaveAttribute('href', link);
   });
 
   it('handles click event', () => {
     const { getByRole } = componentWrapper;
 
-    const anchor = getByRole('link');
+    const link = getByRole('link');
 
     expect(dummyClickFn).toHaveBeenCalledTimes(0);
 
@@ -48,8 +48,8 @@ describe('<Anchor /> Component', () => {
      * simulate click
      * assert
      */
-    anchor.addEventListener('click', dummyClickFn);
-    fireEvent.click(anchor);
+    link.addEventListener('click', dummyClickFn);
+    fireEvent.click(link);
 
     expect(dummyClickFn).toHaveBeenCalledTimes(1);
   });

@@ -1,4 +1,4 @@
-import '../jest.setup';
+import './jest.setup';
 import * as mediaHooks from '@akashaorg/ui-awf-hooks/lib/utils/media-utils';
 import * as loginHook from '@akashaorg/ui-awf-hooks/lib/use-login.new';
 import * as reactUse from 'react-use';

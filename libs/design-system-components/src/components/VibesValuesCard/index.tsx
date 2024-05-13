@@ -1,5 +1,5 @@
 import React from 'react';
-import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
+import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -40,8 +40,8 @@ const VibesValuesCard: React.FC<VibesValuesCardProps> = props => {
             />
           ))}
 
-          <Anchor
-            href={ctaUrl}
+          <Link
+            to={ctaUrl}
             customStyle="flex md:hidden text-sm text-center font-bold no-underline text(secondaryLight dark:secondaryDark)"
             target="_blank"
           >
@@ -64,7 +64,7 @@ const VibesValuesCard: React.FC<VibesValuesCardProps> = props => {
                 {ctaLabel}
               </Text>
             </Stack>
-          </Anchor>
+          </Link>
         </Stack>
         {ctaLabel && (
           <Stack
@@ -72,13 +72,13 @@ const VibesValuesCard: React.FC<VibesValuesCardProps> = props => {
             padding="p-5"
             customStyle="hidden md:flex bg(grey9 dark:grey3) rounded-2xl cursor-pointer"
           >
-            <Anchor
-              href={ctaUrl}
+            <Link
+              to={ctaUrl}
               customStyle="text-sm text-center font-bold no-underline text(secondaryLight dark:secondaryDark)"
               target="_blank"
             >
               {ctaLabel}
-            </Anchor>
+            </Link>
           </Stack>
         )}
       </Stack>
