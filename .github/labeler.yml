@@ -1,13 +1,63 @@
 sdk:
-  - sdk-packages/**/*
-plugin/widget:
-  - ui/**/*
-design-system:
-  - ui/design/**/*
-  - ui/storybook/**/*
-examples:
-  - examples/**/*
+  - changed-files:
+      - any-glob-to-any-file:
+        - libs/sdk/**
+        - libs/composedb/**
+hooks:
+  - changed-files:
+      - any-glob-to-any-file:
+        - libs/hooks/**
+typings:
+  - changed-files:
+      - any-glob-to-any-file:
+        - libs/typings/**
+widgets:
+  - changed-files:
+      - any-glob-to-any-file:
+        - extensions/widgets/**
 apps:
-  - apps/**/*
-api:
-  - api/**/*
+  - changed-files:
+      - any-glob-to-any-file:
+        - extensions/apps/**
+design-system:
+  - changed-files:
+      - any-glob-to-any-file:
+        - libs/design-system-core/**
+        - libs/design-system-components/**
+world:
+  - changed-files:
+      - any-glob-to-any-file:
+        - worlds/**
+stories:
+  - changed-files:
+      - any-glob-to-any-file:
+        - '**/*.stories.tsx'
+tests:
+  - changed-files:
+      - any-glob-to-any-file:
+        - tests/**
+        - '**/*.spec.ts'
+        - '**/*.spec.tsx'
+libs:
+  - changed-files:
+      - any-glob-to-any-file:
+        - libs/**
+extensions:
+  - changed-files:
+      - any-glob-to-any-file:
+        - extensions/**
+docs:
+  - changed-files:
+      - any-glob-to-any-file: '**/*.md'
+config:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '**/*.config.js'
+          - '**/*.conf.js'
+          - '**/*.toml'
+          - '**/*.yml'
+          - '**/*.json'
+feature:
+  - head-branch: ['^feat', 'feat','^feature', 'feature']
+fix:
+  - head-branch: ['^fix', 'fix','^patch', 'patch']

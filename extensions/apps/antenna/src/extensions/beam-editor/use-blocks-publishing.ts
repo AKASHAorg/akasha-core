@@ -32,7 +32,6 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
   const [availableBlocks, setAvailableBlocks] = React.useState([]);
   const [isPublishing, setIsPublishing] = React.useState(false);
   const [errors, setErrors] = React.useState<Error[]>([]);
-  const globalIdx = React.useRef(0);
   const sdk = React.useRef(getSDK());
   const [isNsfw, setIsNsfw] = React.useState(false);
   const [editorTags, setEditorTags] = React.useState([]);
@@ -72,10 +71,9 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
           order: 0,
           mode: ContentBlockModes.EDIT,
           blockRef: React.createRef<BlockInstanceMethods>(),
-          key: 0,
+          key: crypto.randomUUID(),
         },
       ]);
-      globalIdx.current = 1;
     }
   }, [blocksInUse, defaultTextBlock]);
 
@@ -221,7 +219,7 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
           order: afterIdx,
           blockRef: React.createRef<BlockInstanceMethods>(),
           mode: ContentBlockModes.EDIT,
-          key: globalIdx.current + 1,
+          key: crypto.randomUUID(),
         },
         ...prev.slice(afterIdx).map(bl => ({
           ...bl,
@@ -236,21 +234,22 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
         order: prev.length,
         blockRef: React.createRef<BlockInstanceMethods>(),
         mode: ContentBlockModes.EDIT,
-        key: globalIdx.current + 1,
+        key: crypto.randomUUID(),
       },
     ]);
-    globalIdx.current += 1;
   };
 
   const removeBlockFromList = (index: number) => {
     setBlocksInUse(prev => {
-      const beforeSlice = prev.slice(0, index);
-      const afterSlice = prev
-        .slice(index + 1)
-        .map(bl => ({ ...bl, order: bl.order - 1, key: bl.key - 1 }));
-      return beforeSlice.concat(afterSlice);
+      const filtered = prev.filter(bl => bl.order !== index);
+      const reordered = filtered.map((bl, idx) => {
+        return {
+          ...bl,
+          order: idx,
+        };
+      });
+      return reordered;
     });
-    globalIdx.current -= 1;
   };
 
   const updateBlockDisablePublishState = (value: boolean, index: number) => {
