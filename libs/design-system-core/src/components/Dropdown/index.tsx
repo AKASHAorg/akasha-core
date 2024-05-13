@@ -81,7 +81,7 @@ const Dropdown: React.FC<DropdownProps> = ({
               return (
                 <Link
                   key={menuItem.id}
-                  tabIndex={-7}
+                  tabIndex={-1}
                   className={tw(
                     `${optionStyle} ${
                       idx < menuItems.length - 1 ? 'border-b(1 grey8 dark:grey3)' : ''

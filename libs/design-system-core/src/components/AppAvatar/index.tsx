@@ -62,7 +62,7 @@ const AppAvatar: React.FC<AppAvatarProps> = props => {
   const activeOverlayClass = generateActiveOverlayClass();
 
   return (
-    <Link onClick={onClick} tabIndex={-6}>
+    <Link onClick={onClick} tabIndex={-1}>
       <Stack customStyle={className}>
         <React.Suspense fallback={<></>}>
           <AvatarImage url={avatar?.src} alt={alt} fallbackUrl={avatarFallback} faded={faded} />
