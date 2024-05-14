@@ -78,7 +78,7 @@ export const ImageEditorBlock = (
     [contentBlockImages],
   );
   const imageUrls = useMemo(
-    () => contentBlockImages.map(imageObj => imageObj.displaySrc),
+    () => contentBlockImages.map(imageObj => imageObj.originalSrc),
     [contentBlockImages],
   );
   const [alignState, setAlignState] = useState<'start' | 'center' | 'end'>('start');
@@ -414,7 +414,7 @@ export const ImageEditorBlock = (
                   <Stack direction="row" spacing="gap-1">
                     <Image
                       alt={imageObj.name}
-                      src={imageObj.displaySrc}
+                      src={imageObj.originalSrc}
                       customStyle="object-contain w-8 h-8 rounded-lg"
                     />
                     <Text>{imageObj.name}</Text>
