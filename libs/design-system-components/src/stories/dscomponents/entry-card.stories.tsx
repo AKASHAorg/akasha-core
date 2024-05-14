@@ -1,4 +1,5 @@
 import React from 'react';
+import AuthorProfileAvatar from '@akashaorg/ui-lib-feed/lib/components/cards/author-profile-avatar';
 import EntryCard, { EntryCardProps } from '../../components/Entry/EntryCard';
 import type { Meta, StoryObj } from '@storybook/react';
 import { EntityTypes } from '@akashaorg/typings/lib/ui';
@@ -17,7 +18,6 @@ const meta: Meta<EntryCardProps> = {
   argTypes: {
     isLoggedIn: { control: 'boolean' },
     entryData: { control: 'object' },
-    authorProfile: { control: 'object' },
     itemType: {
       control: 'select',
       options: [
@@ -32,15 +32,12 @@ const meta: Meta<EntryCardProps> = {
     onContentClick: { action: 'content clicked' },
     onMentionClick: { action: 'mention clicked' },
     onTagClick: { action: 'tag clicked' },
-    transformSource: { action: 'source transformed' },
   },
 };
 
 type Story = StoryObj<EntryCardProps>;
 
 const isLoggedIn = true;
-
-const error = new Error('an error occured');
 
 const entryData = {
   active: true,
@@ -49,20 +46,13 @@ const entryData = {
   id: 'kshggg55555',
 };
 
-const authorProfile = {
-  data: {
-    did: { id: 'did:pkh:eip155:5:0xa2aabe32856a8d50c748d50a5111312d986208a8' },
-    name: 'Coffee Lover',
-  },
-  loading: false,
-  error,
-};
-
 const baseArgs: Story = {
   args: {
     isLoggedIn,
     entryData,
-    authorProfile,
+    profileAvatarExt: (
+      <AuthorProfileAvatar authorId="authorId" createdAt={new Date('Jan 01 2024').toISOString()} />
+    ),
     itemType: EntityTypes?.REFLECT,
     flagAsLabel: 'Flag',
     slateContent: [
@@ -78,11 +68,6 @@ const baseArgs: Story = {
     onContentClick: () => ({}),
     onMentionClick: () => ({}),
     onTagClick: () => ({}),
-    transformSource: () => ({
-      src: 'https://placebeard.it/360x360',
-      width: 360,
-      height: 360,
-    }),
   },
 };
 
