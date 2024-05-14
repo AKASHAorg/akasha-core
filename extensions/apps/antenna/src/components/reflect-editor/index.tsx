@@ -7,7 +7,6 @@ import {
   useAnalytics,
   decodeb64SlateContent,
   useRootComponentProps,
-  createReactiveVar,
   useMentions,
   useAkashaStore,
 } from '@akashaorg/ui-awf-hooks';
@@ -29,12 +28,11 @@ export type ReflectEditorProps = {
   beamId: string;
   reflectToId: string;
   showEditor: boolean;
-  pendingReflectionsVar: ReturnType<typeof createReactiveVar<ReflectEntryData[]>>;
   setShowEditor: (showEditor: boolean) => void;
 };
 
 const ReflectEditor: React.FC<ReflectEditorProps> = props => {
-  const { beamId, reflectToId, showEditor, pendingReflectionsVar, setShowEditor } = props;
+  const { beamId, reflectToId, showEditor, setShowEditor } = props;
   const { t } = useTranslation('app-antenna');
   const [analyticsActions] = useAnalytics();
   const { uiEvents } = useRootComponentProps();
@@ -55,7 +53,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
     },
   });
   const [indexReflection, indexReflectionMutation] = useIndexReflectionMutation();
-  const { addPendingReflection, pendingReflections } = usePendingReflections(pendingReflectionsVar);
+  const { addPendingReflection, pendingReflections } = usePendingReflections();
 
   const {
     data: { authenticatedDID, authenticatedProfile },
@@ -92,7 +90,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
   ]);
 
   const handlePublish = async (data: IPublishData) => {
-    const reflection = isReflectOfReflection ? { reflection: reflectToId } : {};
+    const reflection = isReflectOfReflection ? { reflection: reflectToId, isReply: true } : {};
     const content = {
       active: true,
       beamID: beamId,
@@ -104,7 +102,6 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         },
       ],
       createdAt: new Date().toISOString(),
-      isReply: true,
       ...reflection,
     };
     setNewContent({ ...content, authorId: null, id: null });

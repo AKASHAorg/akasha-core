@@ -6,8 +6,8 @@ import BeamCard from '@akashaorg/ui-lib-feed/lib/components/cards/beam-card';
 import ReflectEditor from '../../reflect-editor';
 import routes, { REFLECT } from '../../../routes';
 import { useTranslation } from 'react-i18next';
-import { BeamEntryData, type ReflectEntryData } from '@akashaorg/typings/lib/ui';
-import { createReactiveVar, hasOwn, transformSource } from '@akashaorg/ui-awf-hooks';
+import { BeamEntryData } from '@akashaorg/typings/lib/ui';
+import { hasOwn, transformSource } from '@akashaorg/ui-awf-hooks';
 import { useRouterState } from '@tanstack/react-router';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
 import { PendingReflect } from '../../reflect-editor/pending-reflect';
@@ -18,28 +18,19 @@ type BeamSectionProps = {
   entryData: BeamEntryData;
   isLoggedIn: boolean;
   showNSFWCard: boolean;
-  pendingReflectionsVar: ReturnType<typeof createReactiveVar<ReflectEntryData[]>>;
   parentWrapperRef: React.MutableRefObject<unknown>;
   showLoginModal: (title?: string, message?: string) => void;
 };
 
 const BeamSection: React.FC<BeamSectionProps> = props => {
-  const {
-    beamId,
-    entryData,
-    isLoggedIn,
-    showNSFWCard,
-    pendingReflectionsVar,
-    parentWrapperRef,
-    showLoginModal,
-  } = props;
+  const { beamId, entryData, isLoggedIn, showNSFWCard, parentWrapperRef, showLoginModal } = props;
   const { t } = useTranslation('app-antenna');
   const routerState = useRouterState();
   const [isReflecting, setIsReflecting] = useState(
     routerState.location.pathname.endsWith(routes[REFLECT]),
   );
 
-  const { pendingReflections } = usePendingReflections(pendingReflectionsVar);
+  const { pendingReflections } = usePendingReflections();
 
   useCloseActions(() => {
     setIsReflecting(false);
@@ -89,15 +80,14 @@ const BeamSection: React.FC<BeamSectionProps> = props => {
             reflectToId={beamId}
             showEditor={isReflecting}
             setShowEditor={setIsReflecting}
-            pendingReflectionsVar={pendingReflectionsVar}
           />
         )}
-        {pendingReflections
-          .filter(content => !hasOwn(content, 'reflection') && content.beamID === beamId)
-          .map((content, index) => (
-            <PendingReflect key={`pending-${index}-${beamId}`} entryData={content} />
-          ))}
       </Stack>
+      {pendingReflections
+        .filter(content => !hasOwn(content, 'reflection') && content.beamID === beamId)
+        .map((content, index) => (
+          <PendingReflect key={`pending-${index}-${beamId}`} entryData={content} />
+        ))}
     </Stack>
   );
 };

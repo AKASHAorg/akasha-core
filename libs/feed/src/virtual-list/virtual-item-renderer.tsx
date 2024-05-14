@@ -154,7 +154,7 @@ export const VirtualItemRenderer = <T,>(props: VirtualItemProps<T>) => {
   }, [handleSizeChange, item.key, onAnimationEnd, resizeObserver]);
 
   const handleAnimationStart = React.useCallback(() => {
-    resizeObserver.unobserve(rootNodeRef.current);
+    if (rootNodeRef.current) resizeObserver.unobserve(rootNodeRef.current);
     onAnimationStart(item.key);
     if (animationTimeout.current) {
       clearTimeout(animationTimeout.current);

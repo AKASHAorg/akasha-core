@@ -7,7 +7,7 @@ import EditableReflection from '@akashaorg/ui-lib-feed/lib/components/editable-r
 import routes, { REFLECT } from '../../../routes';
 import { useTranslation } from 'react-i18next';
 import { ReflectEntryData } from '@akashaorg/typings/lib/ui';
-import { createReactiveVar, hasOwn, transformSource } from '@akashaorg/ui-awf-hooks';
+import { hasOwn, transformSource } from '@akashaorg/ui-awf-hooks';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
 import { useRouterState } from '@tanstack/react-router';
 import { usePendingReflections } from '@akashaorg/ui-awf-hooks/lib/use-pending-reflections';
@@ -18,27 +18,18 @@ type ReflectionSectionProps = {
   reflectionId: string;
   entryData: ReflectEntryData;
   isLoggedIn: boolean;
-  pendingReflectionsVar: ReturnType<typeof createReactiveVar<ReflectEntryData[]>>;
   parentWrapperRef: React.MutableRefObject<unknown>;
   showLoginModal: (title?: string, message?: string) => void;
 };
 
 const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
-  const {
-    beamId,
-    reflectionId,
-    entryData,
-    isLoggedIn,
-    pendingReflectionsVar,
-    parentWrapperRef,
-    showLoginModal,
-  } = props;
+  const { beamId, reflectionId, entryData, isLoggedIn, parentWrapperRef, showLoginModal } = props;
   const { t } = useTranslation('app-antenna');
   const routerState = useRouterState();
   const [isReflecting, setIsReflecting] = useState(
     routerState.location.pathname.endsWith(routes[REFLECT]),
   );
-  const { pendingReflections } = usePendingReflections(pendingReflectionsVar);
+  const { pendingReflections } = usePendingReflections();
 
   useCloseActions(() => {
     setIsReflecting(false);
@@ -50,7 +41,6 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
         <EditableReflection
           entryData={entryData}
           contentClickable={false}
-          reflectToId={entryData.id}
           onReflect={() => {
             if (!isLoggedIn) {
               showLoginModal(
@@ -85,7 +75,6 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
             reflectToId={reflectionId}
             showEditor={isReflecting}
             setShowEditor={setIsReflecting}
-            pendingReflectionsVar={pendingReflectionsVar}
           />
         )}
       </Stack>

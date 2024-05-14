@@ -1,4 +1,6 @@
+import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import AuthorProfileAvatar from '@akashaorg/ui-lib-feed/lib/components/cards/author-profile-avatar';
 import VibesConsoleContentCard, {
   VibesConsoleContentCardProps,
 } from '../../components/VibesConsoleContentCard';
@@ -25,14 +27,9 @@ const sampleEntryData: EntryCardProps = {
     createdAt: '12/12/2023',
     id: 'kshggg55555',
   },
-  authorProfile: {
-    data: {
-      did: { id: 'did:pkh:eip155:5:0xa2aabe32856a8d50c748d50a5111312d986208a8' },
-      name: 'Coffee Lover',
-    },
-    loading: false,
-    error: new Error('an error occured'),
-  },
+  profileAvatarExt: (
+    <AuthorProfileAvatar authorId="authorId" createdAt={new Date('Jan 01 2024').toISOString()} />
+  ),
   itemType: EntityTypes?.REFLECT,
   flagAsLabel: 'Flag',
   slateContent: [
@@ -48,11 +45,6 @@ const sampleEntryData: EntryCardProps = {
   onContentClick: () => ({}),
   onMentionClick: () => ({}),
   onTagClick: () => ({}),
-  transformSource: () => ({
-    src: 'https://placebeard.it/360x360',
-    width: 360,
-    height: 360,
-  }),
 };
 
 const sampleProfileData: ProfileItemData = {

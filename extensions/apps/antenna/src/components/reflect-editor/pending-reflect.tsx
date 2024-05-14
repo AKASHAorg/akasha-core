@@ -12,7 +12,7 @@ export function PendingReflect(props: PendingReflectProps) {
 
   return (
     <Stack
-      background={{ light: 'secondaryLight/30', dark: 'secondaryDark/30' }}
+      background={{ light: 'secondaryLight/10', dark: 'secondaryDark/10' }}
       customStyle="border border(grey8 dark:grey3)"
       data-testid="pending-reflect"
     >
