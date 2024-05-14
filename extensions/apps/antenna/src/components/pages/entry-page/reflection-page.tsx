@@ -27,7 +27,7 @@ type ReflectionPageProps = {
 
 const ReflectionPage: React.FC<ReflectionPageProps> = props => {
   const { reflectionId, reflection, isLoggedIn } = props;
-  const { t } = useTranslation('app-akasha-integration');
+  const { t } = useTranslation('app-antenna');
   const { navigateToModal, getTranslationPlugin, logger } = useRootComponentProps();
   const [analyticsActions] = useAnalytics();
   const wrapperRef = useRef(null);

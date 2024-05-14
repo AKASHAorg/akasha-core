@@ -31,7 +31,7 @@ type BeamPageProps = {
 
 const BeamPage: React.FC<BeamPageProps> = props => {
   const { beamId, beamStream, beam } = props;
-  const { t } = useTranslation('app-akasha-integration');
+  const { t } = useTranslation('app-antenna');
   const { navigateToModal, getTranslationPlugin, logger } = useRootComponentProps();
   const {
     data: { authenticatedDID, isAuthenticating: authenticating },

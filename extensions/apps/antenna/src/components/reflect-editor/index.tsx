@@ -33,7 +33,7 @@ export type ReflectEditorProps = {
 
 const ReflectEditor: React.FC<ReflectEditorProps> = props => {
   const { beamId, reflectToId, showEditor, setShowEditor } = props;
-  const { t } = useTranslation('app-akasha-integration');
+  const { t } = useTranslation('app-antenna');
   const [analyticsActions] = useAnalytics();
   const { uiEvents } = useRootComponentProps();
   const uiEventsRef = React.useRef(uiEvents);
