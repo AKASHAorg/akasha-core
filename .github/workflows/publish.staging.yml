@@ -20,17 +20,21 @@ jobs:
           architecture: 'x64'
       - name: Checkout
         uses: actions/checkout@v4
+      - run: corepack enable
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'yarn'
           cache-dependency-path: yarn.lock
+      - run: node --version
       - name: install root dependencies
         env:
           CI: 1
         run: |
           yarn install --immutable
+          yarn build:all
+          sleep(360)
 #      - name: Publish new versions
 #        env:
 #          INFURA_ID: ${{ secrets.INFURA_ID_STAGING }}
