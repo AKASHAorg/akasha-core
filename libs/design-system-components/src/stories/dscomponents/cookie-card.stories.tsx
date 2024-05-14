@@ -24,7 +24,7 @@ export const Default: Story = {
     paragraphOneLabel:
       'We use cookies. Some are necessary to operate effectively the platform, others are to help us improve AKASHA World.',
     paragraphTwo: {
-      ctaLabel: `By opting-in you allow us to collect data via `,
+      introLabel: `By opting-in you allow us to collect data via `,
       analyticsLabel: 'Matomo',
       analyticsURL: '',
       middleParagraphLabeL: `, an open source analytics platform that will help us improve AKASHA World. As we respect your privacy, rest assured that we don't store personal identifiable information (PII). In addition, if you change your mind, you can always opt-out by accessing the `,
@@ -33,9 +33,9 @@ export const Default: Story = {
       onSettingsClick: () => ({}),
     },
     paragraphThree: {
-      ctaLabel: 'For more info, see our ',
-      urlLabel: 'Privacy Policy',
-      url: 'https://ethereum.world/privacy-policy',
+      introLabel: 'For more info, see our ',
+      ctaLabel: 'Privacy Policy',
+      onPrivacyClick: () => ({}),
     },
     acceptAllLabel: 'Accept all',
     onlyEssentialLabel: 'Only essential',
