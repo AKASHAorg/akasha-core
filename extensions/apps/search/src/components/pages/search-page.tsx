@@ -14,7 +14,6 @@ import {
   transformSource,
   useAkashaStore,
 } from '@akashaorg/ui-awf-hooks';
-import { SearchTagsResult } from '@akashaorg/typings/lib/sdk/graphql-types';
 import EntryCardRenderer from './entry-renderer';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -42,7 +41,8 @@ export type SearchPageProps = {
   searchKeyword?: string;
 };
 
-type DataResponse = SearchTagsResult;
+// @TODO to be implemented
+type DataResponse = unknown;
 
 const initSearchState = {
   [ButtonValues.CONTENT]: { page: 1, results: [], done: false, isLoading: false },
