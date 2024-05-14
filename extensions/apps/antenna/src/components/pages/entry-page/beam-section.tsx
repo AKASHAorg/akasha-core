@@ -82,12 +82,12 @@ const BeamSection: React.FC<BeamSectionProps> = props => {
             setShowEditor={setIsReflecting}
           />
         )}
-        {pendingReflections
-          .filter(content => !hasOwn(content, 'reflection') && content.beamID === beamId)
-          .map((content, index) => (
-            <PendingReflect key={`pending-${index}-${beamId}`} entryData={content} />
-          ))}
       </Stack>
+      {pendingReflections
+        .filter(content => !hasOwn(content, 'reflection') && content.beamID === beamId)
+        .map((content, index) => (
+          <PendingReflect key={`pending-${index}-${beamId}`} entryData={content} />
+        ))}
     </Stack>
   );
 };

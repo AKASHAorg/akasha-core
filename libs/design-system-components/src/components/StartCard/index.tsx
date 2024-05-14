@@ -1,7 +1,8 @@
 import React from 'react';
 import { tw } from '@twind/core';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export type StartCardProps = {
@@ -37,17 +38,21 @@ const StartCard: React.FC<StartCardProps> = ({
 }: StartCardProps) => {
   return (
     <Card noBorderRadius={noBorderRadius} customStyle="gap-1">
-      <div className={tw(`flex justify-center w-full`)}>
+      <Stack direction="row" justify="center" fullWidth={true}>
         {!!title && <Text variant="h5">{title}</Text>}
         {!!subtitle && <Text variant="subtitle1">{subtitle}</Text>}
-      </div>
+      </Stack>
       {showMainArea && (
-        <div className={tw(`w-full px-4 ${hideMainAreaOnMobile && 'hidden'}`)}>
+        <Stack
+          spacing="gap-y-3"
+          fullWidth={true}
+          {...(hideMainAreaOnMobile && { customStyle: 'hidden' })}
+        >
           {!!image && (
             <img
               loading="lazy"
               alt={image}
-              className={tw('max-w-[1/2] mx-auto py-3 pr-2')}
+              className={tw('max-w-[1/2] mx-auto pr-2')}
               src={image}
             />
           )}
@@ -55,17 +60,17 @@ const StartCard: React.FC<StartCardProps> = ({
           <Text variant="h6" align="center">
             {heading}
           </Text>
-          <Text variant="body1" align="center" customStyle="pt-3 px-8">
+          <Text variant="body1" align="center" customStyle=" px-8">
             {description}
           </Text>
           {onClickCTA && (
-            <div className={tw(`p-4 flex items-center justify-end`)}>
+            <Stack direction="row" align="center" justify="end">
               <Button variant="primary" label={CTALabel} onClick={onClickCTA} />
-            </div>
+            </Stack>
           )}
-        </div>
+        </Stack>
       )}
-      {showSecondaryArea && <Text color="grey1">{secondaryDescription}</Text>}
+      {showSecondaryArea && <Text variant="body1">{secondaryDescription}</Text>}
     </Card>
   );
 };
