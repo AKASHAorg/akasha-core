@@ -4,8 +4,8 @@ import { ThemingEvents } from '@akashaorg/typings/lib/ui';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import {
-  ArrowLeftOnRectangleIcon,
-  ArrowRightOnRectangleIcon,
+  ArrowLeftEndOnRectangleIcon,
+  ArrowRightEndOnRectangleIcon,
   ChevronLeftIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { Akasha } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
@@ -115,7 +115,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
       <Stack direction="row" spacing="gap-x-2">
         <Button
           iconOnly={true}
-          icon={sidebarVisible ? <ArrowLeftOnRectangleIcon /> : <ArrowRightOnRectangleIcon />}
+          icon={sidebarVisible ? <ArrowLeftEndOnRectangleIcon /> : <ArrowRightEndOnRectangleIcon />}
           onClick={onSidebarToggle}
           greyBg={true}
           variant="primary"
