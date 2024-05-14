@@ -237,10 +237,10 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     });
   };
 
-  const handleMentionClick = (profileEthAddress: string) => {
+  const handleMentionClick = (profileDID: string) => {
     navigateTo?.({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${profileEthAddress}`,
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${profileDID}`,
     });
   };
 
