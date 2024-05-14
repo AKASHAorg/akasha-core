@@ -34,7 +34,7 @@ jobs:
         run: |
           yarn install --immutable
           yarn build:all
-          sleep(360)
+          sleep 6m
 #      - name: Publish new versions
 #        env:
 #          INFURA_ID: ${{ secrets.INFURA_ID_STAGING }}

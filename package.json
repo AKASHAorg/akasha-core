@@ -256,7 +256,7 @@
   },
   "resolutions": {
     "@multiformats/murmur3": "2.1.5",
-    "single-spa": "6.0.0",
+    "single-spa": "6.0.1",
     "single-spa-react": "6.0.1",
     "graphql": "16.8.1",
     "@apollo/client": "3.9.5",

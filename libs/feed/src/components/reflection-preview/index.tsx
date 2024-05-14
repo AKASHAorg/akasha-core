@@ -42,7 +42,6 @@ const ReflectionPreview: React.FC<ReflectionPreviewProps> = props => {
               key={reflection?.id}
               entryData={mapReflectEntryData(reflection)}
               contentClickable={true}
-              reflectToId={reflectionId}
               hover={true}
               onReflect={() => {
                 onNavigate(
