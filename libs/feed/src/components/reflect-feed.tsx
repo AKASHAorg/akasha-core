@@ -1,14 +1,13 @@
 import React from 'react';
-import { AnalyticsEventData, EntityTypes, type ReflectEntryData } from '@akashaorg/typings/lib/ui';
+import { AnalyticsEventData, EntityTypes } from '@akashaorg/typings/lib/ui';
 import {
-  AkashaReflectEdge,
-  AkashaReflectFiltersInput,
-  AkashaReflectSortingInput,
+  AkashaReflectStreamEdge,
+  AkashaReflectStreamFiltersInput,
+  AkashaReflectStreamSortingInput,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { EdgeArea, Virtualizer, VirtualizerProps } from '../virtual-list';
 import { useReflections } from '@akashaorg/ui-awf-hooks/lib/use-reflections';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import { createReactiveVar } from '@akashaorg/ui-awf-hooks';
 
 export type ReflectFeedProps = {
   reflectionsOf: { entryId: string; itemType: EntityTypes };
@@ -20,20 +19,19 @@ export type ReflectFeedProps = {
   queryKey: string;
   estimatedHeight: number;
   scrollTopIndicator?: VirtualizerProps<unknown>['scrollTopIndicator'];
-  renderItem: VirtualizerProps<AkashaReflectEdge>['renderItem'];
-  filters?: AkashaReflectFiltersInput;
-  sorting?: AkashaReflectSortingInput;
+  renderItem: VirtualizerProps<AkashaReflectStreamEdge>['renderItem'];
+  filters?: AkashaReflectStreamFiltersInput;
+  sorting?: AkashaReflectStreamSortingInput;
   loadingIndicator?: VirtualizerProps<unknown>['loadingIndicator'];
   header?: VirtualizerProps<unknown>['header'];
   footer?: VirtualizerProps<unknown>['footer'];
-  pendingReflectionsVar?: ReturnType<typeof createReactiveVar<ReflectEntryData[]>>;
 };
 
 const ReflectFeed: React.FC<ReflectFeedProps> = props => {
   const {
     reflectionsOf,
     itemSpacing = 8,
-    scrollerOptions = { overscan: 5 },
+    scrollerOptions = { overscan: 25 },
     queryKey,
     estimatedHeight,
     scrollTopIndicator,
@@ -42,7 +40,6 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
     sorting,
     header,
     footer,
-    pendingReflectionsVar,
   } = props;
 
   // const isReflectOfReflection = reflectionsOf.itemType === EntityTypes.REFLECT;
@@ -64,7 +61,6 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
     overscan: scrollerOptions.overscan,
     filters,
     sorting,
-    pendingReflectionsVar,
   });
   const lastCursors = React.useRef({ next: null, prev: null });
 
@@ -107,7 +103,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
         />
       )}
       {!hasErrors && (
-        <Virtualizer<AkashaReflectEdge>
+        <Virtualizer<AkashaReflectStreamEdge>
           requestStatus={{ called, isLoading }}
           restorationKey={queryKey}
           itemSpacing={itemSpacing}

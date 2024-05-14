@@ -1,53 +1,42 @@
 import * as React from 'react';
 import EditableReflection from './index';
-import { hasOwn, mapReflectEntryData, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { useGetReflectionByIdSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import { hasOwn, mapReflectEntryData } from '@akashaorg/ui-awf-hooks';
+import { useGetReflectionByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
 
 export type EditableReflectionResolverProps = {
   reflectID: string;
-  beamID: string;
+  onContentClick: () => void;
+  onReflect: () => void;
 };
 
-export const EditableReflectionResolver = (props: EditableReflectionResolverProps) => {
-  const reflectionQuery = useGetReflectionByIdSuspenseQuery({
+export const EditableReflectionResolver = ({
+  reflectID,
+  onContentClick,
+  onReflect,
+}: EditableReflectionResolverProps) => {
+  const reflectionReq = useGetReflectionByIdQuery({
     variables: {
-      id: props.reflectID,
+      id: reflectID,
     },
+    fetchPolicy: 'cache-first',
+    skip: !reflectID,
   });
 
-  const { getRoutingPlugin } = useRootComponentProps();
+  if (reflectionReq.loading) return <EntryCardLoading />;
+
+  const entryData =
+    reflectionReq.data?.node && hasOwn(reflectionReq.data.node, 'id')
+      ? reflectionReq.data.node
+      : undefined;
 
   return (
     <React.Suspense>
       <EditableReflection
-        entryData={mapReflectEntryData(
-          hasOwn(reflectionQuery.data?.node, 'id') ? reflectionQuery.data.node : undefined,
-        )}
-        reflectToId={
-          mapReflectEntryData(
-            hasOwn(reflectionQuery.data?.node, 'id') ? reflectionQuery.data.node : undefined,
-          ).id
-        }
+        entryData={mapReflectEntryData(entryData)}
         contentClickable={true}
-        onContentClick={() => {
-          if (hasOwn(reflectionQuery.data?.node, 'id')) {
-            const reflectionId = reflectionQuery.data.node.id;
-            return getRoutingPlugin().navigateTo({
-              appName: '@akashaorg/app-antenna',
-              getNavigationUrl: navRoutes => `${navRoutes.Reflect}/${reflectionId}`,
-            });
-          }
-        }}
-        onReflect={() => {
-          if (hasOwn(reflectionQuery.data?.node, 'id')) {
-            const reflectionId = reflectionQuery.data.node.id;
-            getRoutingPlugin().navigateTo({
-              appName: '@akashaorg/app-antenna',
-              getNavigationUrl: navRoutes =>
-                `${navRoutes.Reflect}/${reflectionId}${navRoutes.Reflect}`,
-            });
-          }
-        }}
+        onContentClick={onContentClick}
+        onReflect={onReflect}
       />
     </React.Suspense>
   );
