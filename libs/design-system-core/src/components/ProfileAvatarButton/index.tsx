@@ -42,6 +42,7 @@ const ProfileAvatarButton = React.forwardRef(
             profileId={profileId}
             customStyle="shrink-0 cursor-pointer"
             href={href}
+            onClick={() => ({})}
           />
           <Stack
             justify="center"
