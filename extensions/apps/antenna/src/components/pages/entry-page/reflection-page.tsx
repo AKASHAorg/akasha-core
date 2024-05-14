@@ -5,19 +5,19 @@ import BackToOriginalBeam from '@akashaorg/ui-lib-feed/lib/components/back-to-or
 import ReflectionSection from './reflection-section';
 import ReflectFeed from '@akashaorg/ui-lib-feed/lib/components/reflect-feed';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import EditableReflection from '@akashaorg/ui-lib-feed/lib/components/editable-reflection';
+import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import {
-  createReactiveVar,
   hasOwn,
   mapReflectEntryData,
   useAnalytics,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
-import { EntityTypes, type ReflectEntryData } from '@akashaorg/typings/lib/ui';
+import { EntityTypes } from '@akashaorg/typings/lib/ui';
 import { ReflectionPreview } from '@akashaorg/ui-lib-feed';
 import { useNavigate } from '@tanstack/react-router';
 import { GetReflectionByIdQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
+import { EditableReflectionResolver } from '@akashaorg/ui-lib-feed/lib/components/editable-reflection/editable-reflection-resolver';
 
 type ReflectionPageProps = {
   reflectionId: string;
@@ -28,11 +28,10 @@ type ReflectionPageProps = {
 const ReflectionPage: React.FC<ReflectionPageProps> = props => {
   const { reflectionId, reflection, isLoggedIn } = props;
   const { t } = useTranslation('app-antenna');
-  const { navigateToModal, getTranslationPlugin } = useRootComponentProps();
+  const { navigateToModal, getTranslationPlugin, logger } = useRootComponentProps();
   const [analyticsActions] = useAnalytics();
   const wrapperRef = useRef(null);
   const navigate = useNavigate();
-  const pendingReflectionsVar = createReactiveVar<ReflectEntryData[]>([]);
 
   const entryData = React.useMemo(() => {
     if (reflection && hasOwn(reflection, 'node') && hasOwn(reflection.node, 'id')) {
@@ -62,7 +61,6 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
     <Card padding="p-0" margin="mb-4">
       <Stack spacing="gap-y-2">
         <ReflectFeed
-          pendingReflectionsVar={pendingReflectionsVar}
           header={
             <>
               <BackToOriginalBeam
@@ -75,7 +73,6 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
                   reflectionId={entryData.id}
                   entryData={mapReflectEntryData(entryData)}
                   isLoggedIn={isLoggedIn}
-                  pendingReflectionsVar={pendingReflectionsVar}
                   parentWrapperRef={wrapperRef}
                   showLoginModal={showLoginModal}
                 />
@@ -89,44 +86,62 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
           locale={getTranslationPlugin().i18n.language}
           estimatedHeight={120}
           queryKey={`reflect-feed-${entryData.id}`}
+          filters={{
+            and: [
+              { where: { isReply: { equalTo: true } } },
+              {
+                where: {
+                  replyTo: {
+                    equalTo: entryData.id,
+                  },
+                },
+              },
+            ],
+          }}
           renderItem={itemData => (
-            <>
-              <Divider />
-              <EditableReflection
-                entryData={mapReflectEntryData(itemData.node)}
-                reflectToId={mapReflectEntryData(itemData.node).id}
-                contentClickable={true}
-                onContentClick={() =>
-                  navigate({
-                    to: '/reflection/$reflectionId',
-                    params: {
-                      reflectionId: itemData.node.id,
-                    },
-                  })
-                }
-                onReflect={() =>
-                  navigate({
-                    to: '/reflection/$reflectionId/reflect',
-                    params: {
-                      reflectionId: itemData.node.id,
-                    },
-                  })
-                }
-              />
-              <ReflectionPreview
-                reflectionId={itemData.node.id}
-                onNavigate={(options: { id: string; reflect?: boolean }) => {
-                  navigate({
-                    to: options.reflect
-                      ? '/reflection/$reflectionId/reflect'
-                      : '/reflection/$reflectionId',
-                    params: {
-                      reflectionId: options.id,
-                    },
-                  });
-                }}
-              />
-            </>
+            <ErrorBoundary
+              errorObj={{
+                type: 'script-error',
+                title: t('Error in loading reflection.'),
+              }}
+              logger={logger}
+            >
+              <>
+                <Divider />
+                <EditableReflectionResolver
+                  reflectID={itemData.node.reflectionID}
+                  onContentClick={() => {
+                    navigate({
+                      to: '/reflection/$reflectionId',
+                      params: {
+                        reflectionId: itemData.node.reflectionID,
+                      },
+                    });
+                  }}
+                  onReflect={() => {
+                    navigate({
+                      to: '/reflection/$reflectionId/reflect',
+                      params: {
+                        reflectionId: itemData.node.reflectionID,
+                      },
+                    });
+                  }}
+                />
+                <ReflectionPreview
+                  reflectionId={itemData.node.id}
+                  onNavigate={(options: { id: string; reflect?: boolean }) => {
+                    navigate({
+                      to: options.reflect
+                        ? '/reflection/$reflectionId/reflect'
+                        : '/reflection/$reflectionId',
+                      params: {
+                        reflectionId: options.id,
+                      },
+                    });
+                  }}
+                />
+              </>
+            </ErrorBoundary>
           )}
         />
       </Stack>
