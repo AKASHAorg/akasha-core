@@ -1,6 +1,5 @@
 import 'systemjs-webpack-interop/auto-public-path';
 // these hooks should remain
-export * from './dummy-hooks';
 export * from './use-root-props';
 export * from './use-global-login';
 export * from './use-analytics';
