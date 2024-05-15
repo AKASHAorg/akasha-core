@@ -1,7 +1,6 @@
 import getSDK from '@akashaorg/awf-sdk';
-import { UserProfileFragmentDataFragment } from '@akashaorg/typings/lib/sdk/graphql-operation-types';
 import { logError } from './error-handler';
-import { type Image } from '@akashaorg/typings/lib/ui';
+import { type Image, Profile } from '@akashaorg/typings/lib/ui';
 
 export interface IConfig {
   quality?: number;
@@ -39,33 +38,6 @@ export const getMediaUrl = (hash?: string) => {
   }
 
   return ipfsLinks;
-};
-
-/**
- * Utility to build media links attached to a given profile
- */
-export const buildProfileMediaLinks = (profile: UserProfileFragmentDataFragment) => {
-  const { avatar, coverImage, ...other } = profile;
-  const images: {
-    avatar: { url: string; fallbackUrl: string };
-    coverImage: { url: string; fallbackUrl: string };
-  } = {
-    avatar: { url: '', fallbackUrl: '' },
-    coverImage: { url: '', fallbackUrl: '' },
-  };
-  if (avatar) {
-    images.avatar = {
-      url: getMediaUrl(avatar)?.originLink,
-      fallbackUrl: getMediaUrl(avatar)?.fallbackLink,
-    };
-  }
-  if (coverImage) {
-    images.coverImage = {
-      url: getMediaUrl(coverImage)?.originLink,
-      fallbackUrl: getMediaUrl(coverImage)?.fallbackLink,
-    };
-  }
-  return { ...images, ...other };
 };
 
 /**

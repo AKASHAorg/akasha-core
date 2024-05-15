@@ -1,9 +1,9 @@
 import React, { ReactElement } from 'react';
 import Avatar from '../Avatar';
-import Stack from '../Stack';
 import DidField from '../DidField';
+import Link from '../Link';
 import ProfileNameField from '../ProfileNameField';
-import Card from '../Card';
+import Stack from '../Stack';
 import { type Image } from '@akashaorg/typings/lib/ui';
 
 export type ProfileAvatarButtonProps = {
@@ -15,7 +15,7 @@ export type ProfileAvatarButtonProps = {
   href?: string;
   metadata?: ReactElement;
   customStyle?: string;
-  onClick?: React.MouseEventHandler<HTMLDivElement>;
+  onClick?: React.MouseEventHandler<HTMLAnchorElement>;
 };
 
 const ProfileAvatarButton = React.forwardRef(
@@ -32,8 +32,8 @@ const ProfileAvatarButton = React.forwardRef(
     } = props;
 
     return (
-      <Card onClick={onClick} type="plain" customStyle={customStyle}>
-        <Stack direction="row" align="start" spacing="gap-x-2">
+      <Link to={href} onClick={onClick}>
+        <Stack direction="row" align="start" spacing="gap-x-2" customStyle={customStyle}>
           <Avatar
             dataTestId="avatar-box"
             aria-label="avatar-box"
@@ -41,7 +41,6 @@ const ProfileAvatarButton = React.forwardRef(
             avatar={avatar}
             profileId={profileId}
             customStyle="shrink-0 cursor-pointer"
-            href={href}
           />
           <Stack
             justify="center"
@@ -57,7 +56,7 @@ const ProfileAvatarButton = React.forwardRef(
             <DidField did={profileId} isValid={true} copiable={false} />
           </Stack>
         </Stack>
-      </Card>
+      </Link>
     );
   },
 );

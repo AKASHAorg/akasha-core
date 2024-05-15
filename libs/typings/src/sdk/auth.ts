@@ -60,26 +60,7 @@ interface AWF_IAuth {
     };
   }>;
 
-  getMessages(args: never): Observable<{
-    data: IMessage[];
-  }>;
-
-  hasNewNotifications(): Observable<{ data: boolean }>;
-
-  markMessageAsRead(messageId: string): Observable<{ data: boolean }>;
-
-  deleteMessage(messageId: string): Observable<{ data: boolean }>;
-
   validateInvite(inviteCode: string): Observable<{ data: boolean }>;
-}
-
-export interface IMessage {
-  body: Record<string, any>;
-  from: string;
-  readAt: number;
-  createdAt: number;
-  id: string;
-  read: boolean;
 }
 
 export default AWF_IAuth;

@@ -27,35 +27,36 @@ export const initialize = (options: IntegrationRegistrationOptions & { logger: L
             data.event === AUTH_EVENTS.NEW_NOTIFICATIONS,
         ),
       );
+      // @TODO reimplement this logic with new notification system
       // get notifications for the 1st time
-      from(sdk.api.auth.getMessages({})).subscribe({
-        next: msg => {
-          notification.notify(
-            '@akashaorg/app-notifications',
-            msg.data.filter(m => !m.read),
-          );
-        },
-        error: err => {
-          options.logger.error(`Error fetching notifications: ${err}`);
-        },
-      });
+      // from(sdk.api.auth.getMessages({})).subscribe({
+      //   next: msg => {
+      //     notification.notify(
+      //       '@akashaorg/app-notifications',
+      //       msg.data.filter(m => !m.read),
+      //     );
+      //   },
+      //   error: err => {
+      //     options.logger.error(`Error fetching notifications: ${err}`);
+      //   },
+      // });
       // listen for new notifications and for mark as read
-      markAsRead$
-        .pipe(
-          mergeMap(() => {
-            return from(sdk.api.auth.getMessages({})).pipe(
-              map(newMsg => newMsg.data.filter(m => !m.read)),
-            );
-          }),
-        )
-        .subscribe({
-          next: messages => {
-            notification.notify('@akashaorg/app-notifications', messages);
-          },
-          error: err => {
-            options.logger.error(`There was an error when trying to refetch notifications: ${err}`);
-          },
-        });
+      // markAsRead$
+      //   .pipe(
+      //     mergeMap(() => {
+      //       return from(sdk.api.auth.getMessages({})).pipe(
+      //         map(newMsg => newMsg.data.filter(m => !m.read)),
+      //       );
+      //     }),
+      //   )
+      //   .subscribe({
+      //     next: messages => {
+      //       notification.notify('@akashaorg/app-notifications', messages);
+      //     },
+      //     error: err => {
+      //       options.logger.error(`There was an error when trying to refetch notifications: ${err}`);
+      //     },
+      //   });
     });
   }
 };
