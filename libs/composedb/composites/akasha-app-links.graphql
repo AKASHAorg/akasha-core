@@ -1,9 +1,9 @@
-type AkashaAppRelease @loadModel(id: "kjzl6hvfrbw6cb03csk8bxuw50irl6m8e0diylhi6euhs9by3ssazl8x5bxhgzj") {
+interface AkashaAppReleaseInterface @loadModel(id: "kjzl6hvfrbw6c8fv1e9sa2nrja8c2vd4mvfz6q4kvhpipn0bcfgui0ugg44clkg") {
   id: ID!
 }
 
-type AkashaApp @loadModel(id: "kjzl6hvfrbw6cb6pcdpdnrlau2rwz0gs5nddo3e5v578s4wstt2kpybrf11byzc") {
+type AkashaApp @loadModel(id: "kjzl6hvfrbw6cak65bqli1k6p46w8lxrkm34pnrglr1cmqoaakpk75kohtgmh2f") {
   id: ID!
-  releases: [AkashaAppRelease] @relationFrom(model: "AkashaAppRelease", property: "applicationID")
-  releasesCount: Int! @relationCountFrom(model: "AkashaAppRelease", property: "applicationID")
+  releases: [AkashaAppReleaseInterface] @relationFrom(model: "AkashaAppReleaseInterface", property: "applicationID")
+  releasesCount: Int! @relationCountFrom(model: "AkashaAppReleaseInterface", property: "applicationID")
 }

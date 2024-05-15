@@ -1,11 +1,20 @@
-type AkashaProfile @loadModel(id: "kjzl6hvfrbw6c862oulkrdvxh2yfbhc997f7ahqtjppj2ejg8too3j7jmu8gsno"){
+interface AkashaProfileInterface @loadModel(id: "kjzl6hvfrbw6c7e8zsymrt8zzgknfgggfya189775z56hbfq8q640mllkm2d349"){
     id: ID!
   }
 
+  interface AkashaFollowInterface
+    @createModel(description: "AKASHA Following interface") {
+      isFollowing: Boolean!
+      profileID: StreamID! @documentReference(model: "AkashaProfileInterface") @immutable
+      profile: AkashaProfileInterface! @relationDocument(property: "profileID")
+      did: DID! @documentAccount
+}
 
-  type AkashaFollow @createModel(accountRelation: SET, description: "Following list v0.2",  accountRelationFields: ["profileID"]) @createIndex(fields:[{path:"isFollowing"}, {path:"profileID"}]) {
-    isFollowing: Boolean!
-    profileID: StreamID! @documentReference(model: "AkashaProfile")
-    profile: AkashaProfile! @relationDocument(property: "profileID")
-    did: DID! @documentAccount
+  type AkashaFollow implements AkashaFollowInterface
+    @createModel(accountRelation: SET, description: "Following list v0.3",  accountRelationFields: ["profileID"])
+    @createIndex(fields:[{path:"isFollowing"}, {path:"profileID"}]) {
+      isFollowing: Boolean!
+      profileID: StreamID! @documentReference(model: "AkashaProfileInterface") @immutable
+      profile: AkashaProfileInterface! @relationDocument(property: "profileID")
+      did: DID! @documentAccount
   }

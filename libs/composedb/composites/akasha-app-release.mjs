@@ -1,14 +1,33 @@
-export default function compose(akashaAppId){
- return `type AkashaApp @loadModel(id: "${akashaAppId}") {
+export default function compose(akashaAppIdInterface){
+ return `interface AkashaAppInterface @loadModel(id: "${akashaAppIdInterface}") {
   id: ID!
 }
 
-type AkashaAppRelease @createModel(accountRelation: SET, description: "AKASHA Application releases list v0.2", accountRelationFields: ["applicationID", "version"]) @createIndex(fields:[{path:"version"}, {path: "createdAt"}, {path: "applicationID"}]){
-  applicationID: StreamID! @documentReference(model: "AkashaApp")
-  application: AkashaApp! @relationDocument(property: "applicationID")
-  version: String! @string(minLength:2, maxLength: 16)
-  source: CID!
-  createdAt: DateTime!
+type ProviderValue{
+  provider: String! @string(minLength: 6, maxLength: 100)
+  property: String! @string(minLength: 2, maxLength: 40)
+  value: String! @string(minLength: 3, maxLength: 2000)
+}
+
+interface AkashaAppReleaseInterface
+  @createModel(description: "AKASHA Application releases interface") {
+    applicationID: StreamID! @documentReference(model: "AkashaAppInterface")
+    application: AkashaAppInterface! @relationDocument(property: "applicationID") @immutable
+    version: String! @string(minLength:2, maxLength: 16) @immutable
+    source: URI! @immutable
+    createdAt: DateTime! @immutable
+    meta: [ProviderValue] @list(maxLength: 16)
+}
+
+type AkashaAppRelease implements AkashaAppReleaseInterface
+  @createModel(accountRelation: SET, description: "AKASHA Application releases list v0.3", accountRelationFields: ["applicationID", "version"])
+  @createIndex(fields:[{path:"version"}, {path: "createdAt"}, {path: "applicationID"}]){
+    applicationID: StreamID! @documentReference(model: "AkashaAppInterface")
+    application: AkashaAppInterface! @relationDocument(property: "applicationID") @immutable
+    version: String! @string(minLength:2, maxLength: 16) @immutable
+    source: URI! @immutable
+    createdAt: DateTime! @immutable
+    meta: [ProviderValue] @list(maxLength: 16)
 }`
 }
 

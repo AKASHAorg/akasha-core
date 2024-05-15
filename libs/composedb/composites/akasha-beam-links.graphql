@@ -1,10 +1,10 @@
 
-type AkashaReflect @loadModel(id: "kjzl6hvfrbw6c9az8glxdc257r0tgzkjxj01nhwxilaciiidaxwafw4023wimnp") {
+interface AkashaReflectInterface @loadModel(id: "kjzl6hvfrbw6cb6do0q0p7cwb8anbac8jbnukswic58p52qb4b03bum1zgypjwa") {
   id: ID!
 }
 
-type AkashaBeam @loadModel(id: "kjzl6hvfrbw6c81jn00de1kfzdjtdbbivos4k3f17wa4a0u45c2v26d3j1eve68") {
+type AkashaBeam @loadModel(id: "kjzl6hvfrbw6c7hls3jibc4aj5cr5dksgfc2bclnmvvyhhszm29rlogqc3bctbv") {
   id: ID!
-  reflections: [AkashaReflect] @relationFrom(model: "AkashaReflect", property: "beamID")
-  reflectionsCount: Int! @relationCountFrom(model: "AkashaReflect", property: "beamID")
+  reflections: [AkashaReflectInterface] @relationFrom(model: "AkashaReflectInterface", property: "beamID")
+  reflectionsCount: Int! @relationCountFrom(model: "AkashaReflectInterface", property: "beamID")
 }

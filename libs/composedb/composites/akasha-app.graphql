@@ -5,15 +5,57 @@ enum ApplicationType {
   OTHER
 }
 
-type AkashaApp @createModel(accountRelation: SET, description: "AKASHA Application v0.2", accountRelationFields:["name"]) @createIndex(fields:[{path:"name"}, {path: "displayName"}, {path: "applicationType"}, {path: "createdAt"}]) {
-  name: String! @string(minLength:4, maxLength: 48),
-  displayName: String! @string(minLength:4, maxLength: 24)
-  applicationType: ApplicationType!
-  licence: String! @string(maxLength: 1000)
+type ImageSource {
+  width: Int @int(min: 24, max: 8000)
+  height: Int @int(min: 24, max: 8000)
+  src: URI!
+}
+
+type ProviderValue{
+  provider: String! @string(minLength: 6, maxLength: 100)
+  property: String! @string(minLength: 2, maxLength: 40)
+  value: String! @string(minLength: 3, maxLength: 2000)
+}
+
+type LinkSource{
+  label: String @string(maxLength: 24)
+  href: URI!
+}
+
+interface AkashaAppInterface @createModel(description: "AKASHA Application interface") {
+  name: String! @string(minLength:4, maxLength: 48) @immutable
+  displayName: String! @string(minLength:4, maxLength: 24) @immutable
+  applicationType: ApplicationType! @immutable
+  license: String! @string(maxLength: 1000) @immutable
   description: String! @string(maxLength: 2000)
-  keywords: [String!] @list(maxLength: 16) @string(minLength:3, maxLength: 32)
+  keywords: [String!] @list(maxLength: 16) @string(minLength:3, maxLength: 32) @immutable
   author: DID! @documentAccount
   contributors: [DID] @list(maxLength: 16)
-  createdAt: DateTime!
+  createdAt: DateTime! @immutable
   version: CommitID! @documentVersion
+  logoImage: ImageSource
+  coverImage: ImageSource
+  gallery: [ImageSource] @list(maxLength: 16)
+  links: [LinkSource] @list(maxLength: 10)
+  meta: [ProviderValue] @list(maxLength: 16)
+}
+
+type AkashaApp implements AkashaAppInterface
+  @createModel(accountRelation: SET, description: "AKASHA Application v0.3", accountRelationFields:["name"])
+  @createIndex(fields:[{path:"name"}, {path: "displayName"}, {path: "applicationType"}, {path: "createdAt"}]) {
+    name: String! @string(minLength:4, maxLength: 48) @immutable
+    displayName: String! @string(minLength:4, maxLength: 24) @immutable
+    applicationType: ApplicationType! @immutable
+    license: String! @string(maxLength: 1000) @immutable
+    description: String! @string(maxLength: 2000)
+    keywords: [String!] @list(maxLength: 16) @string(minLength:3, maxLength: 32) @immutable
+    author: DID! @documentAccount
+    contributors: [DID] @list(maxLength: 16)
+    createdAt: DateTime! @immutable
+    version: CommitID! @documentVersion
+    logoImage: ImageSource
+    coverImage: ImageSource
+    gallery: [ImageSource] @list(maxLength: 16)
+    links: [LinkSource] @list(maxLength: 10)
+    meta: [ProviderValue] @list(maxLength: 16)
 }

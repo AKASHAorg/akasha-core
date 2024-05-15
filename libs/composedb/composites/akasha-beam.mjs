@@ -1,18 +1,19 @@
-export default function compose(akashaContentBlockId, akashaProfileId){
-  return `type AkashaContentBlock @loadModel(id: "${akashaContentBlockId}") {
+export default function compose(akashaContentBlockIdInterface){
+  return `interface AkashaContentBlockInterface @loadModel(id: "${akashaContentBlockIdInterface}") {
   id: ID!
 }
 
 
 type BlockRecord{
   order: Int! @int(min: 0, max: 10)
-  blockID: StreamID! @documentReference(model: "AkashaContentBlock")
- # block: ContentBlock! @relationDocument(property: "blockID")
+  blockID: StreamID! @documentReference(model: "AkashaContentBlockInterface")
+  # block: AkashaContentBlockInterface! @relationDocument(property: "blockID")
 }
 
 type EmbeddedType{
   label: String! @string(minLength:3, maxLength: 32)
-  embeddedID: StreamID!
+  embeddedID : StreamID! @documentReference(model: "Node")
+  # content: Node! @relationDocument(property: "embeddedID")
 }
 
 type Labeled{
@@ -20,20 +21,31 @@ type Labeled{
   value: String! @string(minLength:2, maxLength: 60)
 }
 
-type AkashaProfile @loadModel(id: "${akashaProfileId}") {
-  id: ID!
-}
+interface AkashaBeamInterface
+ @createModel(description: "AKASHA Beam interface") {
+    author: DID! @documentAccount
+    content: [BlockRecord!]! @list(maxLength: 10) @immutable
+    tags: [Labeled] @list(maxLength: 10) @immutable
+    mentions: [DID] @list(maxLength: 10) @immutable
+    version: CommitID! @documentVersion
+    embeddedStream: EmbeddedType @immutable
+    active: Boolean!
+    createdAt: DateTime! @immutable
+    nsfw: Boolean
+ }
 
-type AkashaBeam @createModel(accountRelation: LIST, description: "AKASHA Beam v0.1") @createIndex(fields:[{path:"active"}, {path: "createdAt"}, {path: "nsfw"}]) {
-  author: DID! @documentAccount
-  content: [BlockRecord!]! @list(maxLength: 10)
-  tags: [Labeled] @list(maxLength: 10)
-  mentions: [DID] @list(maxLength: 10)
-  version: CommitID! @documentVersion
-  embeddedStream: EmbeddedType
-  active: Boolean!
-  createdAt: DateTime!
-  nsfw: Boolean
+type AkashaBeam implements AkashaBeamInterface
+  @createModel(accountRelation: LIST, description: "AKASHA Beam v0.3")
+  @createIndex(fields:[{path:"active"}, {path: "createdAt"}, {path: "nsfw"}]) {
+    author: DID! @documentAccount
+    content: [BlockRecord!]! @list(maxLength: 10) @immutable
+    tags: [Labeled] @list(maxLength: 10) @immutable
+    mentions: [DID] @list(maxLength: 10) @immutable
+    version: CommitID! @documentVersion
+    embeddedStream: EmbeddedType @immutable
+    active: Boolean!
+    createdAt: DateTime! @immutable
+    nsfw: Boolean
 }
 `
 }

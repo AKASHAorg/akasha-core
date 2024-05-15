@@ -4,7 +4,7 @@
   "scripts": {
     "clean": "tsc --build --clean tsconfig.json",
     "clean:all": "yarn clean && nx reset",
-    "prepare": "nx run-many --target=prepare --all",
+    "prepare": "nx run-many --target=prepare --all --verbose",
     "build:libs": "nx run-many -t build --projects=tag:type:lib --verbose",
     "build:apps": "nx run-many -t build --projects=tag:scope:extension --verbose",
     "extract:translations": "nx run-many -t translations --projects=tag:scope:extension --verbose",

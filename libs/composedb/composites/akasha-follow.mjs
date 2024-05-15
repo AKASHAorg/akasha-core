@@ -1,15 +1,24 @@
 
-export default function compose(akashaProfileId){
-  return `type AkashaProfile @loadModel(id: "${akashaProfileId}"){
+export default function compose(akashaProfileIdInterface){
+  return `interface AkashaProfileInterface @loadModel(id: "${akashaProfileIdInterface}"){
     id: ID!
   }
 
+  interface AkashaFollowInterface
+    @createModel(description: "AKASHA Following interface") {
+      isFollowing: Boolean!
+      profileID: StreamID! @documentReference(model: "AkashaProfileInterface") @immutable
+      profile: AkashaProfileInterface! @relationDocument(property: "profileID")
+      did: DID! @documentAccount
+}
 
-  type AkashaFollow @createModel(accountRelation: SET, description: "Following list v0.2",  accountRelationFields: ["profileID"]) @createIndex(fields:[{path:"isFollowing"}, {path:"profileID"}]) {
-    isFollowing: Boolean!
-    profileID: StreamID! @documentReference(model: "AkashaProfile")
-    profile: AkashaProfile! @relationDocument(property: "profileID")
-    did: DID! @documentAccount
+  type AkashaFollow implements AkashaFollowInterface
+    @createModel(accountRelation: SET, description: "Following list v0.3",  accountRelationFields: ["profileID"])
+    @createIndex(fields:[{path:"isFollowing"}, {path:"profileID"}]) {
+      isFollowing: Boolean!
+      profileID: StreamID! @documentReference(model: "AkashaProfileInterface") @immutable
+      profile: AkashaProfileInterface! @relationDocument(property: "profileID")
+      did: DID! @documentAccount
   }`
 }
 

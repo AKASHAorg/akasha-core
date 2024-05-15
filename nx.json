@@ -39,7 +39,11 @@
       }
     }
   ],
-  "generators": {},
+  "generators": {
+    "@nrwl/js:library": {
+      "buildable": true
+    }
+  },
   "targetDefaults": {
     "build": {
       "cache": true,
@@ -48,9 +52,21 @@
   },
   "tasksRunnerOptions": {
     "default": {
+      "runner": "nx/tasks-runners/default",
       "options": {
-        "cacheableOperations": ["build-storybook"]
+        "cacheableOperations": ["build-storybook", "build", "prepare"]
       }
     }
-  }
+  },
+  "cli": {
+    "packageManager": "yarn"
+  },
+  "workspaceLayout": {
+    "libsDir": "libs",
+    "appsDir": "apps"
+  },
+  "affected": {
+    "defaultBase": "next"
+  },
+  "defaultBase": "next"
 }

@@ -24,21 +24,40 @@ type Labeled{
   value: String! @string(minLength:2, maxLength: 60)
 }
 
-
-type AkashaProfileInterests @createModel(accountRelation: SINGLE, description: "Interests list v0.1"){
-  topics: [Labeled!]! @list(maxLength: 100)
-  did: DID! @documentAccount
+interface AkashaProfileInterestsInterface
+  @createModel(description: "AKASHA Profile interests interface") {
+    topics: [Labeled!]! @list(maxLength: 100)
+    did: DID! @documentAccount
 }
 
-type AkashaProfile @createModel(accountRelation: SINGLE, description: "AKASHA profile v0.1") @createIndex(fields:[{path:"name"}, {path: "createdAt"}, {path: "nsfw"}]) {
+type AkashaProfileInterests implements AkashaProfileInterestsInterface
+  @createModel(accountRelation: SINGLE, description: "Interests list v0.2"){
+    topics: [Labeled!]! @list(maxLength: 100)
+    did: DID! @documentAccount
+}
+
+interface AkashaProfileInterface @createModel(description: "AKASHA Profile interface") {
   name: String! @string(minLength: 3, maxLength: 50)
   avatar: ImageVersions
   description: String @string(maxLength: 200)
   background: ImageVersions
   links: [LinkSource] @list(maxLength: 20)
   did: DID! @documentAccount
-  createdAt: DateTime!
+  createdAt: DateTime! @immutable
   nsfw: Boolean
+}
+
+type AkashaProfile implements AkashaProfileInterface
+  @createModel(accountRelation: SINGLE, description: "AKASHA profile v0.2")
+  @createIndex(fields:[{path:"name"}, {path: "createdAt"}, {path: "nsfw"}]) {
+    name: String! @string(minLength: 3, maxLength: 50)
+    avatar: ImageVersions
+    description: String @string(maxLength: 200)
+    background: ImageVersions
+    links: [LinkSource] @list(maxLength: 20)
+    did: DID! @documentAccount
+    createdAt: DateTime! @immutable
+    nsfw: Boolean
 }
 
 
