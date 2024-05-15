@@ -1,5 +1,4 @@
 import { Descendant } from 'slate';
-import { LinkPreview } from '../sdk/graphql-types';
 import { AkashaBeam, AkashaReflect } from '../sdk/graphql-types-new';
 
 export type ITag = {
@@ -13,11 +12,6 @@ export type Interest = {
   totalPosts?: number;
 };
 
-export interface ILinkPreviewExt extends LinkPreview {
-  imageSources?: { url: string; fallbackUrl: string };
-  faviconSources?: { url: string; fallbackUrl: string };
-}
-
 export interface IPublishData {
   metadata: IMetadata;
   slateContent: (Descendant & { url?: string; type?: string; fallbackUrl?: string })[];
@@ -29,7 +23,6 @@ export interface IPublishData {
 export interface IMetadata {
   app: string;
   version: number;
-  linkPreview?: ILinkPreviewExt;
   images?: {
     originalSrc?: string;
     src: { url?: string; fallbackUrl?: string };

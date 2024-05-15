@@ -1,6 +1,5 @@
 import 'systemjs-webpack-interop/auto-public-path';
 // these hooks should remain
-export * from './dummy-hooks';
 export * from './use-root-props';
 export * from './use-global-login';
 export * from './use-analytics';
@@ -31,11 +30,7 @@ export { useModerationCategory } from './use-moderation-categories';
 export { useAccordion } from './use-accordion';
 
 // the following hooks needs refactor/reimplementation
-export {
-  useCheckNewNotifications,
-  useMarkAsRead,
-  useListenForMutationEvents,
-} from './use-notifications';
+export { useListenForMutationEvents } from './use-notifications';
 
 export { useShowFeedback } from './use-show-feedback';
 export { useTheme } from './use-theme';
