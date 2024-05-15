@@ -82,17 +82,21 @@ const AvatarContent: React.FC<AvatarContentProps> = props => {
 const Avatar: React.FC<AvatarProps> = props => {
   const { dataTestId, href, onClick, ...rest } = props;
 
-  return (
-    <Link
-      dataTestId={dataTestId}
-      to={href}
-      // tabIndex is set to -1 to allow keyboard focus while preventing direct navigation using Tab key
-      tabIndex={-1}
-      onClick={onClick}
-    >
-      <AvatarContent {...rest} />
-    </Link>
-  );
+  if (href) {
+    return (
+      <Link
+        dataTestId={dataTestId}
+        to={href}
+        // tabIndex is set to -1 to allow keyboard focus while preventing direct navigation using Tab key
+        tabIndex={-1}
+        onClick={onClick}
+      >
+        <AvatarContent {...rest} />
+      </Link>
+    );
+  }
+
+  return <AvatarContent {...rest} />;
 };
 
 export default Avatar;
