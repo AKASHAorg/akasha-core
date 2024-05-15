@@ -1,11 +1,9 @@
-import { ReleaseInfo } from '@akashaorg/typings/lib/sdk';
-
 export interface IntegrationSchema {
   name: string;
   id?: string;
   integrationType: number;
   version: string;
-  sources: ReleaseInfo['sources'];
+  sources: string[];
   status: boolean;
   config?: string[][];
 }

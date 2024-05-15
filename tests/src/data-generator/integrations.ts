@@ -2,7 +2,7 @@ import { IAppConfig, INTEGRATION_TYPES, RootComponentProps } from '@akashaorg/ty
 import { genLifecycles } from '../mocks/single-spa';
 import { genWorldConfig } from './world-config';
 import { uiEventsMock } from '../mocks/uiEvents';
-import { ReleaseInfo } from '@akashaorg/typings/lib/sdk';
+import { ExtensionConfig } from '@akashaorg/typings/lib/ui';
 import { Subject } from 'rxjs';
 
 export const genAppConfig = (
@@ -59,7 +59,7 @@ export const genAppProps = (): RootComponentProps & {
   getModalFromParams: () => ({ name: 'test-modal' }),
 });
 
-export const genReleaseInfo = (): ReleaseInfo => ({
+export const genReleaseInfo = (): ExtensionConfig => ({
   integrationID: 'iu9385acnr',
   id: 'id',
   name: 'release name',

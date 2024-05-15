@@ -11,11 +11,11 @@ import {
   UIEventData,
   WidgetEvents,
   WorldConfig,
+  ManifestConfig,
 } from '@akashaorg/typings/lib/ui';
 import { Subject, Subscription } from 'rxjs';
 import { hidePageSplash, showPageSplash } from './splash-screen';
 import * as singleSpa from 'single-spa';
-import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/lib/sdk/graphql-operation-types';
 import {
   getExtensionsData,
   getUserInstalledExtensions,
@@ -53,7 +53,7 @@ export default class AppLoader {
   uiEvents: Subject<UIEventData>;
   extensionConfigs: Map<string, IAppConfig & { name: string }>;
   extensionModules: Map<string, SystemModuleType>;
-  manifests: IntegrationReleaseInfoFragmentFragment[];
+  manifests: ManifestConfig[];
   layoutConfig: IAppConfig;
   logger: ILogger;
   parentLogger: Logging;
@@ -135,7 +135,7 @@ export default class AppLoader {
       }
     }
   };
-  importModules = async (manifests: IntegrationReleaseInfoFragmentFragment[]) => {
+  importModules = async (manifests: ManifestConfig[]) => {
     if (!this.manifests.length) return;
     const modules = new Map();
     for (const manifest of manifests) {

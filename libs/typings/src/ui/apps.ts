@@ -1,23 +1,46 @@
 import { ActivityFn } from './app-loader';
-import { IMenuItem } from './menu-items';
+import { IMenuItem } from './sidebar-menu-items';
 import singleSpa from 'single-spa';
 import { RootComponentProps } from './root-component';
 import { ContentBlockExtensionInterface } from './editor-blocks';
 import { ExtensionInterface } from './extensions';
-import { IntegrationReleaseInfoFragmentFragment } from '../sdk/graphql-operation-types';
 
 export const enum AppEvents {
   RegisterApplication = 'register-application',
 }
 
+export type ManifestConfig = {
+  id?: string | null;
+  name: string;
+  version: string;
+  integrationType: number;
+  sources?: Array<string> | null;
+  integrationID: string;
+  author: string;
+  enabled: boolean;
+  createdAt?: number | null;
+  links?: {
+    publicRepository?: string | null;
+    documentation?: string | null;
+    detailedDescription?: string | null;
+  } | null;
+  manifestData: {
+    mainFile: string;
+    license?: string | null;
+    keywords?: Array<string | null> | null;
+    description?: string | null;
+    displayName?: string | null;
+  };
+};
+
 export type AppRegisterEvent = {
   event: AppEvents.RegisterApplication;
-  data: { config: IAppConfig; manifest: IntegrationReleaseInfoFragmentFragment };
+  data: { config: IAppConfig; manifest: ManifestConfig };
 };
 export type InstalledAppStorePlugin = {
   getInstalledApps: () => {
     config: IAppConfig;
-    manifest: IntegrationReleaseInfoFragmentFragment;
+    manifest: ManifestConfig;
   }[];
 };
 export type Extensions = { [key: string]: string };
