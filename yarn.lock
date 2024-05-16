@@ -18142,6 +18142,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dids@npm:5.0.2, dids@npm:^5.0.0, dids@npm:^5.0.2":
+  version: 5.0.2
+  resolution: "dids@npm:5.0.2"
+  dependencies:
+    "@didtools/cacao": "npm:^3.0.1"
+    "@didtools/codecs": "npm:^3.0.0"
+    "@didtools/pkh-ethereum": "npm:^0.5.0"
+    "@stablelib/random": "npm:^1.0.2"
+    codeco: "npm:^1.2.0"
+    dag-jose-utils: "npm:^4.0.0"
+    did-jwt: "npm:^7.4.7"
+    did-resolver: "npm:^4.1.0"
+    multiformats: "npm:^13.0.0"
+    rpc-utils: "npm:^0.6.2"
+    uint8arrays: "npm:^5.0.1"
+  checksum: 10/a17d6a306ec263b41266eccd20844a88075ea5147bbdf7e03ea16b96c44b64c230efdc541c6c3ef21265c5febaf97664e7c0d818d323252e4d2c117a3ecf9067
+  languageName: node
+  linkType: hard
+
 "dids@npm:^4.0.4":
   version: 4.0.4
   resolution: "dids@npm:4.0.4"
@@ -18158,25 +18177,6 @@ __metadata:
     rpc-utils: "npm:^0.6.1"
     uint8arrays: "npm:^4.0.3"
   checksum: 10/50dcd09fb476a6c574dd537874d59aca1163cfa1f847c17d99c838c930c3cb120ba4469dd680799fb36c9dbd8a25581bc2298980d53a10f4ef2ea4a775193e11
-  languageName: node
-  linkType: hard
-
-"dids@npm:^5.0.0, dids@npm:^5.0.2":
-  version: 5.0.2
-  resolution: "dids@npm:5.0.2"
-  dependencies:
-    "@didtools/cacao": "npm:^3.0.1"
-    "@didtools/codecs": "npm:^3.0.0"
-    "@didtools/pkh-ethereum": "npm:^0.5.0"
-    "@stablelib/random": "npm:^1.0.2"
-    codeco: "npm:^1.2.0"
-    dag-jose-utils: "npm:^4.0.0"
-    did-jwt: "npm:^7.4.7"
-    did-resolver: "npm:^4.1.0"
-    multiformats: "npm:^13.0.0"
-    rpc-utils: "npm:^0.6.2"
-    uint8arrays: "npm:^5.0.1"
-  checksum: 10/a17d6a306ec263b41266eccd20844a88075ea5147bbdf7e03ea16b96c44b64c230efdc541c6c3ef21265c5febaf97664e7c0d818d323252e4d2c117a3ecf9067
   languageName: node
   linkType: hard
 
@@ -18464,7 +18464,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:^16.0.0":
+"dotenv@npm:16.4.5, dotenv@npm:^16.0.0":
   version: 16.4.5
   resolution: "dotenv@npm:16.4.5"
   checksum: 10/55a3134601115194ae0f924e54473459ed0d9fc340ae610b676e248cca45aa7c680d86365318ea964e6da4e2ea80c4514c1adab5adb43d6867fb57ff068f95c8
@@ -32786,7 +32786,8 @@ __metadata:
     did-jwt: "npm:^8.0.0"
     did-resolver: "npm:4.1.0"
     did-session: "npm:3.1.0"
-    dids: "npm:^5.0.2"
+    dids: "npm:5.0.2"
+    dotenv: "npm:16.4.5"
     dotenv-webpack: "npm:8.0.1"
     eslint: "npm:8.57.0"
     eslint-config-prettier: "npm:8.10.0"
