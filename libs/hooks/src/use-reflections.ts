@@ -109,6 +109,12 @@ export const useReflections = (props: UseReflectionProps) => {
     return vars;
   }, [sorting, filters]);
 
+  React.useEffect(() => {
+    if (filterRef.current !== filters) {
+      setState({ reflections: [] });
+    }
+  }, [filters]);
+
   const [fetchReflections, reflectionsQuery] = useGetReflectionStreamLazyQuery({
     variables: {
       ...mergedVars,
@@ -225,9 +231,6 @@ export const useReflections = (props: UseReflectionProps) => {
         setErrors(prev => prev.concat(err));
       }
     } else if (!reflectionsQuery.called || filterRef.current !== filters) {
-      if (filterRef.current !== filters) {
-        setState({ reflections: [] });
-      }
       try {
         const results = await fetchReflections({
           variables: {
