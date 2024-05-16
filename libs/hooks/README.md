@@ -13,10 +13,6 @@ This package contains all hooks required for proper functioning of the AKASHA Co
 - rejectConsent
 - trackEvent
 
-### [useGlobalLogin](./src/use-global-login.ts)
-
-> handles actions triggered right after user logs in or out of the app.
-
 ### [useLegal](./src/use-legal.ts)
 
 > handles retrieval of legal docs from IPFS service. Available actions include;
