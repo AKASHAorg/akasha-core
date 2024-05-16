@@ -84,7 +84,7 @@
     "@swc/helpers": "~0.5.2",
     "@tanstack/react-query": "4.36.1",
     "@tanstack/react-router": "1.16.6",
-    "@tanstack/react-virtual": "3.0.2",
+    "@tanstack/react-virtual": "3.5.0",
     "@tanstack/router-devtools": "1.16.6",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "14.0.0",
