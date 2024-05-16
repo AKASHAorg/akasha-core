@@ -6,32 +6,19 @@ import { type ImageObject } from '@akashaorg/typings/lib/ui';
 export interface IGridItemProps {
   image: ImageObject;
   images: ImageObject[];
+  gridStyle: {
+    gridColumnEnd: string;
+    gridRowEnd: string;
+  };
   handleClickImage: (image: ImageObject) => void;
 }
 
 export const ImageBlockGridItem: React.FC<IGridItemProps> = props => {
-  const { image, images, handleClickImage } = props;
+  const { image, images, gridStyle, handleClickImage } = props;
 
   const imageSrc = React.useMemo(() => image, [image]);
 
   const [imgLoaded, setImgLoaded] = React.useState(false);
-
-  const getGridSpan = () => {
-    switch (images.length) {
-      case 1:
-        return 6;
-      case 3:
-        return 2;
-
-      default:
-        return 3;
-    }
-  };
-
-  const style = {
-    gridColumnEnd: `span ${getGridSpan()}`,
-    gridRowEnd: `span ${getGridSpan()}`,
-  };
 
   const multipleImageStyle = apply`${images.length > 1 && 'aspect-square'}`;
   const heightStyle = apply`${images.length === 1 && 'max-h-40 sm:max-h-60'}`;
@@ -39,7 +26,7 @@ export const ImageBlockGridItem: React.FC<IGridItemProps> = props => {
   return (
     <button
       className={tw('flex relative border(solid grey1) rounded')}
-      style={style}
+      style={gridStyle}
       onClick={ev => {
         if (handleClickImage && typeof handleClickImage === 'function' && imgLoaded) {
           handleClickImage(imageSrc);
