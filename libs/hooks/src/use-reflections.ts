@@ -92,8 +92,6 @@ export const useReflections = (props: UseReflectionProps) => {
     [state],
   );
 
-  const filterRef = React.useRef(filters);
-
   const [errors, setErrors] = React.useState<(ApolloError | Error)[]>([]);
 
   const indexingDID = React.useRef(getSDK().services.gql.indexingDID);
@@ -110,9 +108,7 @@ export const useReflections = (props: UseReflectionProps) => {
   }, [sorting, filters]);
 
   React.useEffect(() => {
-    if (filterRef.current !== filters) {
-      setState({ reflections: [] });
-    }
+    setState({ reflections: [] });
   }, [filters]);
 
   const [fetchReflections, reflectionsQuery] = useGetReflectionStreamLazyQuery({
@@ -202,64 +198,66 @@ export const useReflections = (props: UseReflectionProps) => {
     state.reflections,
   ]);
 
-  const fetchInitialData = async (restoreItem: { key: string; offsetTop: number }) => {
-    if (restoreItem && !reflectionsQuery.called) {
-      try {
-        const results = await fetchReflections({
-          variables: {
-            ...mergedVars,
-            after: restoreItem?.key,
-            indexer: indexingDID.current,
-          },
-        });
-        if (results.error) {
-          setErrors(prev => [...prev, results.error]);
-          return;
+  const fetchInitialData = React.useCallback(
+    async (restoreItem: { key: string; offsetTop: number }) => {
+      if (restoreItem && !reflectionsQuery.called) {
+        try {
+          const results = await fetchReflections({
+            variables: {
+              ...mergedVars,
+              after: restoreItem?.key,
+              indexer: indexingDID.current,
+            },
+          });
+          if (results.error) {
+            setErrors(prev => [...prev, results.error]);
+            return;
+          }
+
+          if (!results.data) return;
+
+          const { edges, pageInfo } = extractData(results.data, entityType, reflectionCursors);
+
+          setState({
+            reflections: edges
+              .filter(edge => !reflectionCursors.has(edge.cursor))
+              .reverse() as AkashaReflectStreamEdge[],
+            pageInfo,
+          });
+        } catch (err) {
+          setErrors(prev => prev.concat(err));
         }
+      } else {
+        try {
+          const results = await fetchReflections({
+            variables: {
+              ...mergedVars,
+              indexer: indexingDID.current,
+              sorting: { createdAt: SortOrder.Desc },
+            },
+          });
+          if (results.error) {
+            setErrors(prev => [...prev, results.error]);
+            return;
+          }
 
-        if (!results.data) return;
+          if (!results.data) return;
 
-        const { edges, pageInfo } = extractData(results.data, entityType, reflectionCursors);
+          const { edges, pageInfo } = extractData(results.data, entityType, reflectionCursors);
 
-        setState({
-          reflections: edges
-            .filter(edge => !reflectionCursors.has(edge.cursor))
-            .reverse() as AkashaReflectStreamEdge[],
-          pageInfo,
-        });
-      } catch (err) {
-        setErrors(prev => prev.concat(err));
-      }
-    } else if (!reflectionsQuery.called || filterRef.current !== filters) {
-      try {
-        const results = await fetchReflections({
-          variables: {
-            ...mergedVars,
-            indexer: indexingDID.current,
-            sorting: { createdAt: SortOrder.Desc },
-          },
-        });
-        if (results.error) {
-          setErrors(prev => [...prev, results.error]);
-          return;
+          setState({
+            reflections: edges.filter(
+              edge => !reflectionCursors.has(edge.cursor),
+            ) as AkashaReflectStreamEdge[],
+            pageInfo: pageInfo,
+          });
+        } catch (err) {
+          setErrors(prev => prev.concat(err));
         }
-
-        if (!results.data) return;
-
-        const { edges, pageInfo } = extractData(results.data, entityType, reflectionCursors);
-
-        setState({
-          reflections: edges.filter(
-            edge => !reflectionCursors.has(edge.cursor),
-          ) as AkashaReflectStreamEdge[],
-          pageInfo: pageInfo,
-        });
-      } catch (err) {
-        setErrors(prev => prev.concat(err));
       }
-    }
-    filterRef.current = filters;
-  };
+    },
+    [entityType, fetchReflections, mergedVars, reflectionCursors, reflectionsQuery.called],
+  );
 
   const fetchNextPage = async (lastCursor: string) => {
     if (reflectionsQuery.loading || reflectionsQuery.error || !lastCursor) return;
