@@ -92,7 +92,7 @@ export const useReflections = (props: UseReflectionProps) => {
     [state],
   );
 
-  const filterRef = React.useRef(null);
+  const filterRef = React.useRef(filters);
 
   const [errors, setErrors] = React.useState<(ApolloError | Error)[]>([]);
 
@@ -224,11 +224,8 @@ export const useReflections = (props: UseReflectionProps) => {
       } catch (err) {
         setErrors(prev => prev.concat(err));
       }
-    } else if (
-      !reflectionsQuery.called ||
-      JSON.stringify(filterRef.current) !== JSON.stringify(filters)
-    ) {
-      if (JSON.stringify(filterRef.current) !== JSON.stringify(filters)) {
+    } else if (!reflectionsQuery.called || filterRef.current !== filters) {
+      if (filterRef.current !== filters) {
         setState({ reflections: [] });
       }
       try {
