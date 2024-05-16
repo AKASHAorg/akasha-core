@@ -1,4 +1,4 @@
-schema: ./tools/composedb/lib/schema.graphql
+schema: ./libs/composedb/lib/schema.graphql
 extensions:
   endpoints:
     Default GraphQL Endpoint:

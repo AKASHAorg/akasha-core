@@ -5,19 +5,19 @@ enum ApplicationType {
   OTHER
 }
 
-type ImageSource {
+type AppImageSource {
   width: Int @int(min: 24, max: 8000)
   height: Int @int(min: 24, max: 8000)
   src: URI!
 }
 
-type ProviderValue{
+type AppProviderValue{
   provider: String! @string(minLength: 6, maxLength: 100)
   property: String! @string(minLength: 2, maxLength: 40)
   value: String! @string(minLength: 3, maxLength: 2000)
 }
 
-type LinkSource{
+type AppLinkSource{
   label: String @string(maxLength: 24)
   href: URI!
 }
@@ -25,7 +25,7 @@ type LinkSource{
 interface AkashaAppInterface @createModel(description: "AKASHA Application interface") {
   name: String! @string(minLength:4, maxLength: 48) @immutable
   displayName: String! @string(minLength:4, maxLength: 24) @immutable
-  applicationType: ApplicationType! @immutable
+ # applicationType: ApplicationType! @immutable
   license: String! @string(maxLength: 1000) @immutable
   description: String! @string(maxLength: 2000)
   keywords: [String!] @list(maxLength: 16) @string(minLength:3, maxLength: 32) @immutable
@@ -33,16 +33,19 @@ interface AkashaAppInterface @createModel(description: "AKASHA Application inter
   contributors: [DID] @list(maxLength: 16)
   createdAt: DateTime! @immutable
   version: CommitID! @documentVersion
-  logoImage: ImageSource
-  coverImage: ImageSource
-  gallery: [ImageSource] @list(maxLength: 16)
-  links: [LinkSource] @list(maxLength: 10)
-  meta: [ProviderValue] @list(maxLength: 16)
+  logoImage: AppImageSource
+  coverImage: AppImageSource
+  gallery: [AppImageSource] @list(maxLength: 16)
+  links: [AppLinkSource] @list(maxLength: 10)
+  meta: [AppProviderValue] @list(maxLength: 16)
 }
 
 type AkashaApp implements AkashaAppInterface
-  @createModel(accountRelation: SET, description: "AKASHA Application v0.3", accountRelationFields:["name"])
-  @createIndex(fields:[{path:"name"}, {path: "displayName"}, {path: "applicationType"}, {path: "createdAt"}]) {
+  @createModel(accountRelation: SET, description: "AKASHA Application v0.3.1", accountRelationFields:["name"])
+  @createIndex(fields:[{path:"name"}])
+  @createIndex(fields:[{path:"displayName"}])
+  @createIndex(fields:[{path:"applicationType"}])
+  @createIndex(fields:[{path:"createdAt"}]) {
     name: String! @string(minLength:4, maxLength: 48) @immutable
     displayName: String! @string(minLength:4, maxLength: 24) @immutable
     applicationType: ApplicationType! @immutable
@@ -53,9 +56,9 @@ type AkashaApp implements AkashaAppInterface
     contributors: [DID] @list(maxLength: 16)
     createdAt: DateTime! @immutable
     version: CommitID! @documentVersion
-    logoImage: ImageSource
-    coverImage: ImageSource
-    gallery: [ImageSource] @list(maxLength: 16)
-    links: [LinkSource] @list(maxLength: 10)
-    meta: [ProviderValue] @list(maxLength: 16)
+    logoImage: AppImageSource
+    coverImage: AppImageSource
+    gallery: [AppImageSource] @list(maxLength: 16)
+    links: [AppLinkSource] @list(maxLength: 10)
+    meta: [AppProviderValue] @list(maxLength: 16)
 }

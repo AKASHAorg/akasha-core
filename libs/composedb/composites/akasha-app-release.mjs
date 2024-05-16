@@ -3,7 +3,7 @@ export default function compose(akashaAppIdInterface){
   id: ID!
 }
 
-type ProviderValue{
+type AppProviderValue{
   provider: String! @string(minLength: 6, maxLength: 100)
   property: String! @string(minLength: 2, maxLength: 40)
   value: String! @string(minLength: 3, maxLength: 2000)
@@ -16,18 +16,20 @@ interface AkashaAppReleaseInterface
     version: String! @string(minLength:2, maxLength: 16) @immutable
     source: URI! @immutable
     createdAt: DateTime! @immutable
-    meta: [ProviderValue] @list(maxLength: 16)
+    meta: [AppProviderValue] @list(maxLength: 16)
 }
 
 type AkashaAppRelease implements AkashaAppReleaseInterface
-  @createModel(accountRelation: SET, description: "AKASHA Application releases list v0.3", accountRelationFields: ["applicationID", "version"])
-  @createIndex(fields:[{path:"version"}, {path: "createdAt"}, {path: "applicationID"}]){
+  @createModel(accountRelation: SET, description: "AKASHA Application releases list v0.3.1", accountRelationFields: ["applicationID", "version"])
+  @createIndex(fields:[{path:"version"}])
+  @createIndex(fields:[{path:"createdAt"}])
+  @createIndex(fields:[{path:"applicationID"}]){
     applicationID: StreamID! @documentReference(model: "AkashaAppInterface")
     application: AkashaAppInterface! @relationDocument(property: "applicationID") @immutable
     version: String! @string(minLength:2, maxLength: 16) @immutable
     source: URI! @immutable
     createdAt: DateTime! @immutable
-    meta: [ProviderValue] @list(maxLength: 16)
+    meta: [AppProviderValue] @list(maxLength: 16)
 }`
 }
 

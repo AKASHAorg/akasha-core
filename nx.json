@@ -54,7 +54,7 @@
     "default": {
       "runner": "nx/tasks-runners/default",
       "options": {
-        "cacheableOperations": ["build-storybook", "build", "prepare"]
+        "cacheableOperations": ["build-storybook", "build"]
       }
     }
   },

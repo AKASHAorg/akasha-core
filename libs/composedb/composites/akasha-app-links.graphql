@@ -1,8 +1,8 @@
-interface AkashaAppReleaseInterface @loadModel(id: "kjzl6hvfrbw6c8fv1e9sa2nrja8c2vd4mvfz6q4kvhpipn0bcfgui0ugg44clkg") {
+interface AkashaAppReleaseInterface @loadModel(id: "kjzl6hvfrbw6c5shugmcfmrivuunrdzvrnku3ktetuvz6zzv69fnktunigc2lgj") {
   id: ID!
 }
 
-type AkashaApp @loadModel(id: "kjzl6hvfrbw6cak65bqli1k6p46w8lxrkm34pnrglr1cmqoaakpk75kohtgmh2f") {
+type AkashaApp @loadModel(id: "kjzl6hvfrbw6c6ocjbyi6kjt6k7yiphuwr7xewnbra5rf2sgrap2mumyoa4au30") {
   id: ID!
   releases: [AkashaAppReleaseInterface] @relationFrom(model: "AkashaAppReleaseInterface", property: "applicationID")
   releasesCount: Int! @relationCountFrom(model: "AkashaAppReleaseInterface", property: "applicationID")

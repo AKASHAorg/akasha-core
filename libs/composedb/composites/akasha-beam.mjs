@@ -4,19 +4,19 @@ export default function compose(akashaContentBlockIdInterface){
 }
 
 
-type BlockRecord{
+type BeamBlockRecord{
   order: Int! @int(min: 0, max: 10)
   blockID: StreamID! @documentReference(model: "AkashaContentBlockInterface")
   # block: AkashaContentBlockInterface! @relationDocument(property: "blockID")
 }
 
-type EmbeddedType{
+type BeamEmbeddedType{
   label: String! @string(minLength:3, maxLength: 32)
   embeddedID : StreamID! @documentReference(model: "Node")
   # content: Node! @relationDocument(property: "embeddedID")
 }
 
-type Labeled{
+type BeamLabeled{
   labelType: String! @string(maxLength: 30)
   value: String! @string(minLength:2, maxLength: 60)
 }
@@ -24,25 +24,27 @@ type Labeled{
 interface AkashaBeamInterface
  @createModel(description: "AKASHA Beam interface") {
     author: DID! @documentAccount
-    content: [BlockRecord!]! @list(maxLength: 10) @immutable
-    tags: [Labeled] @list(maxLength: 10) @immutable
+    content: [BeamBlockRecord!]! @list(maxLength: 10) @immutable
+    tags: [BeamLabeled] @list(maxLength: 10) @immutable
     mentions: [DID] @list(maxLength: 10) @immutable
     version: CommitID! @documentVersion
-    embeddedStream: EmbeddedType @immutable
+    embeddedStream: BeamEmbeddedType @immutable
     active: Boolean!
     createdAt: DateTime! @immutable
     nsfw: Boolean
  }
 
 type AkashaBeam implements AkashaBeamInterface
-  @createModel(accountRelation: LIST, description: "AKASHA Beam v0.3")
-  @createIndex(fields:[{path:"active"}, {path: "createdAt"}, {path: "nsfw"}]) {
+  @createModel(accountRelation: LIST, description: "AKASHA Beam v0.3.1")
+  @createIndex(fields:[{path:"active"}])
+  @createIndex(fields:[{path:"createdAt"}])
+  @createIndex(fields:[{path:"nsfw"}]) {
     author: DID! @documentAccount
-    content: [BlockRecord!]! @list(maxLength: 10) @immutable
-    tags: [Labeled] @list(maxLength: 10) @immutable
+    content: [BeamBlockRecord!]! @list(maxLength: 10) @immutable
+    tags: [BeamLabeled] @list(maxLength: 10) @immutable
     mentions: [DID] @list(maxLength: 10) @immutable
     version: CommitID! @documentVersion
-    embeddedStream: EmbeddedType @immutable
+    embeddedStream: BeamEmbeddedType @immutable
     active: Boolean!
     createdAt: DateTime! @immutable
     nsfw: Boolean
