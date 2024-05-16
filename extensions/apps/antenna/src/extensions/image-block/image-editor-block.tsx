@@ -443,7 +443,7 @@ export const ImageEditorBlock = (
       {uiState === 'gallery' && imageGalleryImages.length > 0 && (
         <Stack spacing="gap-1">
           <Stack alignSelf={alignState}>
-            <ImageBlockGallery images={imageGalleryImages} />
+            <ImageBlockGallery images={imageGalleryImages} uploading={uploading} />
           </Stack>
           {showCaption && (
             <TextField
