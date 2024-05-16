@@ -210,7 +210,7 @@ export const ImageEditorBlock = (
   };
 
   const onUpload = async (image: File | string, isUrl?: boolean) => {
-    if (!image || contentBlockImages.length > 3) return null;
+    if (!image) return null;
     setUiState('gallery');
     setUploading(true);
 
