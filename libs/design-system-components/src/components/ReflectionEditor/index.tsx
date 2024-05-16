@@ -28,7 +28,6 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
     disableActionLabel,
     maxEncodedLengthErrLabel,
     disablePublish,
-    linkPreview,
     mentions,
     tags,
     placeholderButtonLabel,
@@ -40,11 +39,9 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
     customStyle = '',
     setEditorState,
     onCancelClick,
-    getLinkPreview,
     getMentions,
     getTags,
     onPublish,
-    handleSaveLinkPreviewDraft,
     onClear,
     transformSource,
     encodingFunction,
@@ -90,7 +87,6 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
             disableActionLabel={disableActionLabel}
             maxEncodedLengthErrLabel={maxEncodedLengthErrLabel}
             disablePublish={disablePublish}
-            linkPreview={linkPreview}
             mentions={mentions}
             tags={tags}
             withMeter={true}
@@ -100,8 +96,6 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
             showDraft={showDraft}
             setEditorState={setEditorState}
             onPublish={handlePublish}
-            handleSaveLinkPreviewDraft={handleSaveLinkPreviewDraft}
-            getLinkPreview={getLinkPreview}
             getMentions={getMentions}
             getTags={getTags}
             onClear={onClear}

@@ -117,7 +117,7 @@ const EditableReflection: React.FC<ReflectCardProps> = props => {
   if (editInProgress && newContent) {
     return (
       <Stack
-        background={{ light: 'secondaryLight/30', dark: 'secondaryDark/30' }}
+        background={{ light: 'secondaryLight/10', dark: 'secondaryDark/10' }}
         customStyle="border border(grey8 dark:grey3)"
       >
         <ReflectionCard

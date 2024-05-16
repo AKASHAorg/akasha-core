@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  useMarkAsRead,
   useRootComponentProps,
   useGetSettings,
   transformSource,
@@ -120,8 +119,6 @@ const NotificationsPage: React.FC = () => {
   const unreadNotifications = allNotifications?.filter(notif => notif.read === undefined);
   const readNotifications = allNotifications?.filter(notif => notif.read === true);
 
-  const { markAsRead } = useMarkAsRead();
-
   const handleAvatarClick = (id: string) => {
     navigateTo?.({
       appName: '@akashaorg/app-profile',
@@ -156,11 +153,8 @@ const NotificationsPage: React.FC = () => {
   };
 
   const markAllAsRead = () => {
-    // do something
-    unreadNotifications.map(notif => {
-      if (notif.read === undefined) {
-        markAsRead(notif.id);
-      }
+    unreadNotifications.map(() => {
+      // @TODO to be implemented
     });
     setShowMenu(!showMenu);
 
@@ -253,7 +247,9 @@ const NotificationsPage: React.FC = () => {
           moderatedAccountLabel={'suspended your account'}
           markAsReadLabel={'Mark as read'}
           emptyTitle={'Looks like you don’t have any new notifications yet!'}
-          handleMessageRead={markAsRead}
+          handleMessageRead={() => {
+            return;
+          }} //@TODO to be implemented
           handleEntryClick={handleEntryClick}
           handleProfileClick={handleAvatarClick}
           transformSource={transformSource}

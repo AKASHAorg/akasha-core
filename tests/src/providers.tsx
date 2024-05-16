@@ -1,12 +1,10 @@
 import * as React from 'react';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { MockedProvider } from '@apollo/client/testing';
 
 import i18n from 'i18next';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 
-const queryClient = new QueryClient();
 const apolloClient = new ApolloClient({
   cache: new InMemoryCache(),
   version: '0.1dev',
@@ -46,11 +44,9 @@ const AllProviders: React.FC<{
   children: React.ReactElement<any, string | React.JSXElementConstructor<any>>;
 }> = ({ children }) => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <ApolloProvider client={apolloClient}>
-        <TranslationProvider>{children}</TranslationProvider>
-      </ApolloProvider>
-    </QueryClientProvider>
+    <ApolloProvider client={apolloClient}>
+      <TranslationProvider>{children}</TranslationProvider>
+    </ApolloProvider>
   );
 };
 

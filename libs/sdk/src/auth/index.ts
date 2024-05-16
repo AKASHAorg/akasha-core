@@ -7,7 +7,6 @@ import {
   EthAddressSchema,
   EthProviders,
   EthProvidersSchema,
-  IMessage,
   InviteCode,
   InviteCodeSchema,
   PubKey,
@@ -574,58 +573,6 @@ class AWF_Auth {
       throw new Error('Content is not serializable');
     }
     return createFormattedValue({});
-  }
-
-  /**
-   * Returns all the inbox messages from Textile Users
-   * @param args - InboxListOptions
-   */
-  async getMessages(args?: { limit?: number }): Promise<{ data: IMessage[] }> {
-    return createFormattedValue(await this._getMessages(args));
-  }
-
-  private async _getMessages(args?: { limit?: number }) {
-    const limit = args?.limit || 50;
-    return [].slice(0, limit);
-  }
-
-  // pubKey seek does not work
-  // @Todo: workaround pubKey filtering
-  async getConversation(_pubKey: string) {
-    const limit = 10000;
-    return createFormattedValue([].slice(0, limit));
-  }
-
-  /**
-   * Checks the Textile Users inbox and looks for specific
-   * notification message type
-   */
-  async hasNewNotifications() {
-    const hasNewNotifications = await this._hasNewNotifications();
-    return createFormattedValue(hasNewNotifications);
-  }
-
-  private async _hasNewNotifications() {
-    return false;
-  }
-
-  @validate(z.string())
-  async markMessageAsRead(messageId: string) {
-    const marked = await this._markMessageAsRead(messageId);
-    this._globalChannel.next({
-      data: { messageId },
-      event: AUTH_EVENTS.MARK_MSG_READ,
-    });
-    return marked;
-  }
-
-  /**
-   *
-   * @param _messageId - message id to mark as read
-   */
-  @validate(z.string())
-  private async _markMessageAsRead(_messageId: string) {
-    return true;
   }
 
   @validate(InviteCodeSchema)

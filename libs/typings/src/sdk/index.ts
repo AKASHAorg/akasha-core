@@ -41,19 +41,3 @@ const ServiceTypes = {
   Config: Symbol.for('awf-Config'),
   ScrollState: Symbol.for('awf-scroll-state'),
 };
-
-export type IMessageBody = {
-  value: {
-    author: EthAddress;
-    follower: EthAddress;
-  };
-};
-
-export type IMessage = {
-  body: IMessageBody;
-  from: string;
-  readAt: number;
-  createdAt: number;
-  id: string;
-  read: boolean;
-};

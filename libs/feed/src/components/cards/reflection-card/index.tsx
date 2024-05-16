@@ -38,6 +38,13 @@ const ReflectionCard: React.FC<ReflectCardProps> = props => {
 
   const navigateTo = getRoutingPlugin().navigateTo;
 
+  const handleMentionClick = profileDID => {
+    navigateTo({
+      appName: '@akashaorg/app-profile',
+      getNavigationUrl: () => `/${profileDID}`,
+    });
+  };
+
   const handleFlagReflection = () => {
     navigateTo({
       appName: '@akashaorg/app-vibes',
@@ -72,6 +79,7 @@ const ReflectionCard: React.FC<ReflectCardProps> = props => {
       itemType={EntityTypes.REFLECT}
       onReflect={onReflect}
       onEntryFlag={handleFlagReflection}
+      onMentionClick={handleMentionClick}
       profileAvatarExt={
         <AuthorProfileAvatar
           authorId={entryData.authorId}
