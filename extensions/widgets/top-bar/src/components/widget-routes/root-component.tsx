@@ -1,5 +1,4 @@
 import React, { Suspense } from 'react';
-import { ScrollRestoration } from '@tanstack/react-router';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TopbarComponent from '../topbar-component';
 
@@ -15,7 +14,6 @@ const TanStackRouterDevtools =
 const RootComponent = () => {
   return (
     <>
-      <ScrollRestoration getKey={location => location.pathname} />
       <Suspense fallback={<></>}>
         <Stack customStyle="fixed">
           <TanStackRouterDevtools />

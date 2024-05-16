@@ -16,6 +16,7 @@ import {
   createRoute,
   createRouter,
   Outlet,
+  ScrollRestoration,
 } from '@tanstack/react-router';
 import {
   GetProfileByDidDocument,
@@ -26,7 +27,12 @@ import { ENGAGEMENTS_PER_PAGE } from '../pages/profile-engagement/types';
 import { CreateRouter, RouterContext } from '@akashaorg/typings/lib/ui';
 
 const rootRoute = createRootRouteWithContext<RouterContext>()({
-  component: Outlet,
+  component: () => (
+    <>
+      <ScrollRestoration getKey={location => location.pathname} />
+      <Outlet />
+    </>
+  ),
 });
 
 const profileInfoRoute = createRoute({
