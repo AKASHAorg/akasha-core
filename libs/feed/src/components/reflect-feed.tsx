@@ -64,6 +64,15 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
   });
   const lastCursors = React.useRef({ next: null, prev: null });
 
+  const lastReflectionId = React.useRef(null);
+
+  React.useEffect(() => {
+    if (lastReflectionId.current !== null && reflectionsOf.entryId !== lastReflectionId.current) {
+      fetchInitialData(null);
+    }
+    lastReflectionId.current = reflectionsOf.entryId;
+  }, [fetchInitialData, reflectionsOf.entryId]);
+
   const handleInitialFetch = async (restoreItem?: { key: string; offsetTop: number }) => {
     await fetchInitialData(restoreItem);
   };

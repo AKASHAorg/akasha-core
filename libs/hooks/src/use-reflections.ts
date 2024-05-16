@@ -92,6 +92,8 @@ export const useReflections = (props: UseReflectionProps) => {
     [state],
   );
 
+  const filterRef = React.useRef(null);
+
   const [errors, setErrors] = React.useState<(ApolloError | Error)[]>([]);
 
   const indexingDID = React.useRef(getSDK().services.gql.indexingDID);
@@ -138,7 +140,7 @@ export const useReflections = (props: UseReflectionProps) => {
         )
       );
     },
-    [entityId, entityType, pendingReflections, state.reflections],
+    [entityId, entityType, reflectionCursors, state.reflections],
   );
 
   const { lastResponse, removeLastResponse, isPolling, startPolling } = useQueryPolling<
@@ -186,6 +188,7 @@ export const useReflections = (props: UseReflectionProps) => {
     lastResponse,
     mergedVars,
     pendingReflections,
+    reflectionCursors,
     reflectionsQuery.data,
     removeLastResponse,
     removePendingReflections,
@@ -207,6 +210,7 @@ export const useReflections = (props: UseReflectionProps) => {
           setErrors(prev => [...prev, results.error]);
           return;
         }
+
         if (!results.data) return;
 
         const { edges, pageInfo } = extractData(results.data, entityType, reflectionCursors);
@@ -220,7 +224,13 @@ export const useReflections = (props: UseReflectionProps) => {
       } catch (err) {
         setErrors(prev => prev.concat(err));
       }
-    } else if (!reflectionsQuery.called) {
+    } else if (
+      !reflectionsQuery.called ||
+      JSON.stringify(filterRef.current) !== JSON.stringify(filters)
+    ) {
+      if (JSON.stringify(filterRef.current) !== JSON.stringify(filters)) {
+        setState({ reflections: [] });
+      }
       try {
         const results = await fetchReflections({
           variables: {
@@ -248,6 +258,7 @@ export const useReflections = (props: UseReflectionProps) => {
         setErrors(prev => prev.concat(err));
       }
     }
+    filterRef.current = filters;
   };
 
   const fetchNextPage = async (lastCursor: string) => {
