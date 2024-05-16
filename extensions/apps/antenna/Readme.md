@@ -1,4 +1,4 @@
-# AKASHA Integration App
+# Antenna App
 
 > Implementation of the AKASHA Core
 

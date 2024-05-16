@@ -1,4 +1,4 @@
-# Auth App
+# Authentication App
 
 > Auth app for AKASHA World, it handles authentication, sign-in and sign-up.
 

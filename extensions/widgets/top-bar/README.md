@@ -1,4 +1,4 @@
-# Top Bar widget
+# Top-Bar widget
 
 > Presents the app title, search bar and other related plugin icons.
 
