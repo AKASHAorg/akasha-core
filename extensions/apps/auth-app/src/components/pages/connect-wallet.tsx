@@ -215,7 +215,7 @@ const ConnectWallet: React.FC = () => {
       {authenticationError && (
         <ConnectErrorCard
           title={t('Request Rejected!')}
-          message={t('You have rejected the request. Please change it manually or try again!')}
+          message={t('You have rejected the request. Please try again!')}
           action={{ onClick: handleSignInRetry, label: t('Retry Request') }}
         />
       )}
