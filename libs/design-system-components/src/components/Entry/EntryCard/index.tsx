@@ -286,6 +286,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
           actionsRight={actionsRight}
           reflectionsCount={reflectionsCount}
           onReflect={onReflect}
+          customStyle="mt-auto"
         />
       )}
     </Stack>

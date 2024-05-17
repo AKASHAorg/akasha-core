@@ -158,6 +158,7 @@ class Gql {
           merge: true,
           fields: {
             akashaFollowList: relayStylePagination(['sorting', 'filters']),
+            akashaBeamStreamList: relayStylePagination(['sorting', 'filters']),
           },
         },
         AkashaProfile: {

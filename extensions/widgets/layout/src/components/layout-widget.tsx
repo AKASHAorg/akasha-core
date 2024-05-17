@@ -161,7 +161,7 @@ const Layout: React.FC<unknown> = () => {
       }`;
 
   const sidebarSlotStyle = `
-      sticky top-0 h-screen transition-all duration-300 transform ${
+      fixed top-0 h-screen transition-all duration-300 transform ${
         showSidebar ? 'w-fit translate-x-0' : '-translate-x-full xl:hidden'
       } ${needSidebarToggling ? 'fixed left-0' : ''}
       `;
@@ -235,7 +235,9 @@ const Layout: React.FC<unknown> = () => {
           </Stack>
 
           <Stack align="center" justify="between" customStyle="sticky top-0 h-screen ">
-            <Stack customStyle={`grid grid-auto-rows pt-4 ${showWidgets ? '' : 'hidden'}`}>
+            <Stack
+              customStyle={`fixed top-0 ml-5 max-w-[21rem] grid grid-auto-rows pt-4 ${showWidgets ? '' : 'hidden'}`}
+            >
               <Widget
                 name={layoutConfig.widgetSlotId}
                 loadingIndicator={<MiniProfileWidgetLoader />}
@@ -246,7 +248,7 @@ const Layout: React.FC<unknown> = () => {
               />
             </Stack>
 
-            <Stack customStyle="fixed bottom-2 mx-2 lg:(w-[21rem])">
+            <Stack customStyle="fixed bottom-2 ml-[25px] mr-2 lg:(w-[21rem])">
               <Widget name={layoutConfig.cookieWidgetSlotId} />
             </Stack>
           </Stack>

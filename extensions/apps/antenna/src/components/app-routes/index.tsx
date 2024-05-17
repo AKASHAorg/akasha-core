@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import GlobalAntennaPage from '../pages/global-antenna-page';
+import GlobalAntennaPage from '../pages/global-antenna-page/index.new';
 import MyAntennaPage from '../pages/my-antenna-page';
 import ProfileFeedPage from '../pages/profile-feed-page/profile-feed-page';
 import BeamPage from '../pages/entry-page/beam-page';
@@ -31,7 +31,7 @@ import { CreateRouter, RouterContext } from '@akashaorg/typings/lib/ui';
 import {
   getAuthenticatedProfile,
   getBeamById,
-  getBeamStream,
+  getBeamStreamId,
   getReflectionById,
 } from './data-loaders';
 
@@ -78,7 +78,7 @@ const beamRoute = createRoute({
   loader: ({ context, params }) => ({
     beam: defer(getBeamById({ apolloClient: context.apolloClient, beamId: params.beamId })),
     beamStream: defer(
-      getBeamStream({
+      getBeamStreamId({
         apolloClient: context.apolloClient,
         beamId: params.beamId,
       }),

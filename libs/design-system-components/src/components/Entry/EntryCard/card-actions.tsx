@@ -12,14 +12,22 @@ export type CardActionProps = {
   actionsRight?: ReactNode;
   reflectionsCount?: number;
   onReflect: () => void;
+  customStyle?: string;
 };
 
 const CardActions: React.FC<CardActionProps> = props => {
-  const { itemId, reflectAnchorLink, disableActions, actionsRight, reflectionsCount, onReflect } =
-    props;
+  const {
+    itemId,
+    reflectAnchorLink,
+    disableActions,
+    actionsRight,
+    reflectionsCount,
+    onReflect,
+    customStyle = '',
+  } = props;
   const reflectIconUi = <Icon icon={<ChatBubbleLeftRightIcon />} accentColor={true} />;
   return (
-    <Stack direction="row" align="center" justify="end" spacing="gap-x-2">
+    <Stack direction="row" align="center" justify="end" spacing="gap-x-2" customStyle={customStyle}>
       <>{actionsRight}</>
       <Link
         to={`${reflectAnchorLink}/${itemId}`}

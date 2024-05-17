@@ -19,6 +19,7 @@ type BeamCardProps = Pick<
   | 'hideActionButtons'
   | 'disableActions'
   | 'showHiddenContent'
+  | 'customStyle'
 > & {
   entryData: BeamEntryData;
   hidePublishTime?: boolean;

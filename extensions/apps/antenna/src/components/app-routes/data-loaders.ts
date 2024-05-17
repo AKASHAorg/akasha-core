@@ -34,7 +34,10 @@ export async function getBeamById({ apolloClient, beamId }: RouterContext & { be
   return data;
 }
 
-export async function getBeamStream({ apolloClient, beamId }: RouterContext & { beamId: string }) {
+export async function getBeamStreamId({
+  apolloClient,
+  beamId,
+}: RouterContext & { beamId: string }) {
   const sdk = getSDK();
   const { data } = await apolloClient.query<GetBeamStreamQuery>({
     query: GetBeamStreamDocument,
