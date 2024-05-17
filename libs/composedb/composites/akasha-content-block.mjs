@@ -38,12 +38,13 @@ interface AkashaContentBlockInterface
 
 # model builder
 type AkashaContentBlock implements AkashaContentBlockInterface
-  @createModel(accountRelation: LIST, description: "AKASHA Basic Content Block v0.3.1")
-  @createIndex(fields:[{path:"active"}])
-  @createIndex(fields:[{path:"createdAt"}])
-  @createIndex(fields:[{path:"kind"}])
-  @createIndex(fields:[{path:"nsfw"}])
-  @createIndex(fields:[{path:"appVersionID"}]){
+  @createModel(accountRelation: LIST, description: "AKASHA Basic Content Block v0.4.0")
+  @createIndex(fields:[{path:["active"]}])
+  @createIndex(fields:[{path:["createdAt"]}])
+  @createIndex(fields:[{path:["kind"]}])
+  @createIndex(fields:[{path:["nsfw"]}])
+  @createIndex(fields:[{path:["appVersionID"]}])
+  @createIndex(fields:[{path:["appVersionID"]}, {path:["kind"]}, {path:["createdAt"]}, {path:["nsfw"]}]){
     content: [BlockLabeledValue!]! @list(maxLength: 20) @immutable
     appVersionID: StreamID! @documentReference(model: "AkashaAppReleaseInterface") @immutable
     appVersion: AkashaAppReleaseInterface! @relationDocument(property: "appVersionID")
@@ -56,13 +57,16 @@ type AkashaContentBlock implements AkashaContentBlockInterface
 }
 
 type AkashaBlockStorage implements AkashaContentBlockInterface
-  @createModel(accountRelation: SET, description: "AKASHA Block Storage v0.3.1", accountRelationFields: ["blockID"])
-  @createIndex(fields:[{path:"active"}])
-  @createIndex(fields:[{path:"createdAt"}])
-  @createIndex(fields:[{path:"kind"}])
-  @createIndex(fields:[{path:"nsfw"}])
-  @createIndex(fields:[{path:"appVersionID"}])
-  @createIndex(fields:[{path:"blockID"}]){
+  @createModel(accountRelation: SET, description: "AKASHA Block Storage v0.4.0", accountRelationFields: ["blockID"])
+  @createIndex(fields:[{path:["active"]}])
+  @createIndex(fields:[{path:["createdAt"]}])
+  @createIndex(fields:[{path:["kind"]}])
+  @createIndex(fields:[{path:["nsfw"]}])
+  @createIndex(fields:[{path:["appVersionID"]}])
+  @createIndex(fields:[{path:["blockID"]}])
+  @createIndex(fields:[{path:["appVersionID"]}, {path:["kind"]}, {path:["createdAt"]}, {path:["nsfw"]}])
+  @createIndex(fields:[{path:["blockID"]}, {path:["kind"]}, {path:["createdAt"]}, {path:["nsfw"]}])
+  {
     blockID: StreamID! @documentReference(model: "AkashaContentBlock")
     block: AkashaContentBlock! @relationDocument(property: "blockID")
     content: [BlockLabeledValue!]! @list(maxLength: 20)

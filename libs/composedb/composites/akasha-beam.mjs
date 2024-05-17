@@ -35,10 +35,11 @@ interface AkashaBeamInterface
  }
 
 type AkashaBeam implements AkashaBeamInterface
-  @createModel(accountRelation: LIST, description: "AKASHA Beam v0.3.1")
-  @createIndex(fields:[{path:"active"}])
-  @createIndex(fields:[{path:"createdAt"}])
-  @createIndex(fields:[{path:"nsfw"}]) {
+  @createModel(accountRelation: LIST, description: "AKASHA Beam v0.4.0")
+  @createIndex(fields:[{path:["active"]}])
+  @createIndex(fields:[{path:["createdAt"]}])
+  @createIndex(fields:[{path:["nsfw"]}])
+  @createIndex(fields:[{path:["active"]}, {path:["createdAt"]}, {path:["nsfw"]}]){
     author: DID! @documentAccount
     content: [BeamBlockRecord!]! @list(maxLength: 10) @immutable
     tags: [BeamLabeled] @list(maxLength: 10) @immutable

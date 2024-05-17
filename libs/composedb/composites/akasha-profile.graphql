@@ -42,10 +42,12 @@ interface AkashaProfileInterface @createModel(description: "AKASHA Profile inter
 }
 
 type AkashaProfile implements AkashaProfileInterface
-  @createModel(accountRelation: SINGLE, description: "AKASHA profile v0.3.1")
-  @createIndex(fields:[{path:"name"}])
-  @createIndex(fields:[{path:"createdAt"}])
-  @createIndex(fields:[{path:"nsfw"}]) {
+  @createModel(accountRelation: SINGLE, description: "AKASHA profile v0.4.0")
+  @createIndex(fields:[{path:["name"]}])
+  @createIndex(fields:[{path:["createdAt"]}])
+  @createIndex(fields:[{path:["nsfw"]}])
+  @createIndex(fields:[{path:["nsfw"]}, {path:["createdAt"]}, {path:["name"]}])
+{
     name: String! @string(minLength: 3, maxLength: 50)
     avatar: ProfileImageVersions
     description: String @string(maxLength: 200)

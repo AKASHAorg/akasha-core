@@ -63,7 +63,7 @@ const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
           versionDescription={appReleaseInfo?.application?.description}
           linksAndDocumentationTitle={t('Links & Documentation')}
           licenseTitle={t('License')}
-          license={appReleaseInfo?.application?.licence}
+          license={appReleaseInfo?.application?.license}
           share={{ label: 'Share', icon: <ShareIcon /> }}
           report={{
             label: t('Flag'),

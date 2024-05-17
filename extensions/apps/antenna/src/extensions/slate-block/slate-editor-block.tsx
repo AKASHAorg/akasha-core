@@ -19,7 +19,7 @@ import {
 import { Draft } from '../../utils';
 import {
   AkashaContentBlockBlockDef,
-  type AkashaContentBlockLabeledValueInput,
+  type BlockLabeledValue,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { useCreateContentBlockMutation } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import getSDK from '@akashaorg/awf-sdk';
@@ -55,7 +55,7 @@ export const SlateEditorBlock = (
   const createBlock = useCallback(
     async ({ nsfw }: CreateContentBlock) => {
       const content = encodeSlateToBase64(editorState);
-      const contentBlockValue: AkashaContentBlockLabeledValueInput = {
+      const contentBlockValue: BlockLabeledValue = {
         label: props.blockInfo.appName,
         propertyType: props.blockInfo.propertyType,
         value: content,

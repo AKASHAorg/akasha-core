@@ -23,6 +23,13 @@
         "{workspaceRoot}/dist/sdk",
         "{workspaceRoot}/dist/worker.js"
       ]
+    },
+    "generate-gql": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "libs/sdk",
+        "command": "graphql-codegen-esm --config codegen.cjs --project default && graphql-codegen-esm --config codegen.cjs --project mutations_client_api && graphql-codegen-esm --config codegen.cjs --project client_composedb && graphql-codegen-esm --config codegen.cjs --project queries_client"
+      }
     }
   },
   "tags": ["scope:sdk", "type:lib"]

@@ -1,7 +1,7 @@
 import singleSpa from 'single-spa';
 import { RootComponentProps } from './root-component';
 import { GetContentBlockByIdQuery } from '../sdk/graphql-operation-types-new';
-import { AkashaContentBlockLabeledValue } from '../sdk/graphql-types-new';
+import { BlockLabeledValue } from '../sdk/graphql-types-new';
 
 export const enum ContentBlockModes {
   EDIT = 'edit-mode',
@@ -37,7 +37,7 @@ export type ContentBlock = ContentBlockExtensionInterface & {
 export type ContentBlockRootProps = RootComponentProps & {
   blockInfo: Omit<ContentBlock, 'loadingFn'> & { mode: ContentBlockModes };
   blockData: GetContentBlockByIdQuery['node'];
-  content: AkashaContentBlockLabeledValue;
+  content: BlockLabeledValue;
 };
 
 export const enum ContentBlockEvents {

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { saveAndGetImageObj } from './save-and-get-image-obj';
-import { AkashaProfileImageVersions } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { ProfileImageVersions } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { ProfileImageType } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
@@ -12,8 +12,8 @@ interface ISaveImage {
 
 export function useSaveImage() {
   const [loading, setLoading] = useState(false);
-  const [avatarImage, setAvatarImage] = useState<AkashaProfileImageVersions | null>(null);
-  const [coverImage, setCoverImage] = useState<AkashaProfileImageVersions | null>(null);
+  const [avatarImage, setAvatarImage] = useState<ProfileImageVersions | null>(null);
+  const [coverImage, setCoverImage] = useState<ProfileImageVersions | null>(null);
   const { logger } = useRootComponentProps();
 
   const saveImage = async ({ type, image, onError }: ISaveImage) => {

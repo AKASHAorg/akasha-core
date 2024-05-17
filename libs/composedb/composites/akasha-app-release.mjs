@@ -20,10 +20,11 @@ interface AkashaAppReleaseInterface
 }
 
 type AkashaAppRelease implements AkashaAppReleaseInterface
-  @createModel(accountRelation: SET, description: "AKASHA Application releases list v0.3.1", accountRelationFields: ["applicationID", "version"])
-  @createIndex(fields:[{path:"version"}])
-  @createIndex(fields:[{path:"createdAt"}])
-  @createIndex(fields:[{path:"applicationID"}]){
+  @createModel(accountRelation: SET, description: "AKASHA Application releases list v0.4.0", accountRelationFields: ["applicationID", "version"])
+  @createIndex(fields:[{path:["version"]}])
+  @createIndex(fields:[{path:["createdAt"]}])
+  @createIndex(fields:[{path:["applicationID"]}])
+  @createIndex(fields:[{path:["applicationID"]}, {path:["version"]}, {path:["createdAt"]}]){
     applicationID: StreamID! @documentReference(model: "AkashaAppInterface")
     application: AkashaAppInterface! @relationDocument(property: "applicationID") @immutable
     version: String! @string(minLength:2, maxLength: 16) @immutable

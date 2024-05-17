@@ -3,7 +3,7 @@ interface AkashaReflectInterface @loadModel(id: "kjzl6hvfrbw6c6qb11x4adb625uyxl7
   id: ID!
 }
 
-type AkashaBeam @loadModel(id: "kjzl6hvfrbw6c7nn5dr3jczwusvi0x7id5kxg34gllylr0gq5a4t9e89ddkebpv") {
+type AkashaBeam @loadModel(id: "kjzl6hvfrbw6c9eqxi4g8esw3rgl88z0enck6ztyk46kyzpj4vxqddfpihkrlty") {
   id: ID!
   reflections: [AkashaReflectInterface] @relationFrom(model: "AkashaReflectInterface", property: "beamID")
   reflectionsCount: Int! @relationCountFrom(model: "AkashaReflectInterface", property: "beamID")

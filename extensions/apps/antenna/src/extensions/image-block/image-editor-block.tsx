@@ -19,7 +19,7 @@ import {
 import { useCreateContentBlockMutation } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import {
   AkashaContentBlockBlockDef,
-  type AkashaContentBlockLabeledValueInput,
+  type BlockLabeledValue,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -107,7 +107,7 @@ export const ImageEditorBlock = (
         align: alignState,
       };
       const content = JSON.stringify(imageData);
-      const contentBlockValue: AkashaContentBlockLabeledValueInput = {
+      const contentBlockValue: BlockLabeledValue = {
         label: props.blockInfo.appName,
         propertyType: props.blockInfo.propertyType,
         value: content,

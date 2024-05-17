@@ -13,9 +13,11 @@ export default function compose(akashaProfileIdInterface){
 }
 
   type AkashaFollow implements AkashaFollowInterface
-    @createModel(accountRelation: SET, description: "Following list v0.3.1",  accountRelationFields: ["profileID"])
-    @createIndex(fields:[{path:"isFollowing"}])
-    @createIndex(fields:[{path:"profileID"}]) {
+    @createModel(accountRelation: SET, description: "Following list v0.4.0",  accountRelationFields: ["profileID"])
+    @createIndex(fields:[{path:["isFollowing"]}])
+    @createIndex(fields:[{path:["profileID"]}])
+    @createIndex(fields:[{path:["profileID"]}, {path:["isFollowing"]}])
+     {
       isFollowing: Boolean!
       profileID: StreamID! @documentReference(model: "AkashaProfileInterface") @immutable
       profile: AkashaProfileInterface! @relationDocument(property: "profileID")
