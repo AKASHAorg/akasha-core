@@ -6,17 +6,19 @@ import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/Scrol
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
 import BeamFeed from '@akashaorg/ui-lib-feed/lib/components/beam-feed.new';
 import { useTranslation } from 'react-i18next';
-import { useAnalytics, useRootComponentProps, transformSource } from '@akashaorg/ui-awf-hooks';
+import {
+  useAnalytics,
+  useRootComponentProps,
+  transformSource,
+  useAkashaStore,
+} from '@akashaorg/ui-awf-hooks';
 import { Helmet, helmetData } from '@akashaorg/design-system-core/lib/utils';
-import { ModalNavigationOptions, Profile, QueryKeys } from '@akashaorg/typings/lib/ui';
+import { ModalNavigationOptions, QueryKeys } from '@akashaorg/typings/lib/ui';
 
-type GlobalAntennaPageProps = {
-  authenticatedProfile: Profile;
-  authenticatedDID: string;
-};
-
-const GlobalAntennaPage: React.FC<GlobalAntennaPageProps> = props => {
-  const { authenticatedProfile, authenticatedDID } = props;
+const GlobalAntennaPage: React.FC<unknown> = () => {
+  const {
+    data: { authenticatedProfile, authenticatedDID },
+  } = useAkashaStore();
   const { getRoutingPlugin, navigateToModal, worldConfig } = useRootComponentProps();
   const { t } = useTranslation('app-antenna');
   const [analyticsActions] = useAnalytics();

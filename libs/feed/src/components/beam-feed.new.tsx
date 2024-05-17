@@ -61,24 +61,28 @@ const BeamFeed = (props: BeamFeedProps) => {
   }, [beamStream]);
   const loadingIndicatorRef = React.useRef(loadingIndicator);
   const {
-    data: { authenticatedDID },
+    data: { authenticatedDID, isAuthenticating },
   } = useAkashaStore();
   const { showNsfw } = useNsfwToggling();
   const isLoggedIn = !!authenticatedDID;
-  const nsfwFilters = useRef(getNsfwFiltersBeamFeed({ showNsfw, isLoggedIn, filters }));
 
   useEffect(() => {
+    const nsfwFilters = getNsfwFiltersBeamFeed({
+      showNsfw,
+      isLoggedIn,
+      filters,
+    });
     fetchBeam({
       variables: {
         first: 10,
         sorting: { createdAt: SortOrder.Desc, ...sorting },
         indexer: indexingDID.current,
-        filters: nsfwFilters.current,
+        filters: nsfwFilters,
       },
       fetchPolicy: 'cache-first',
       notifyOnNetworkStatusChange: true,
     });
-  }, [fetchBeam, nsfwFilters, sorting]);
+  }, [fetchBeam, filters, isLoggedIn, showNsfw, sorting]);
 
   if (!loadingIndicatorRef.current) {
     loadingIndicatorRef.current = () => (
@@ -87,6 +91,8 @@ const BeamFeed = (props: BeamFeedProps) => {
       </Stack>
     );
   }
+
+  if (isAuthenticating) return <>{loadingIndicatorRef.current()}</>;
 
   return (
     <>

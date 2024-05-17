@@ -9,6 +9,7 @@ import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBou
 import {
   hasOwn,
   mapReflectEntryData,
+  useAkashaStore,
   useAnalytics,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
@@ -20,14 +21,16 @@ import { GetReflectionByIdQuery } from '@akashaorg/typings/lib/sdk/graphql-opera
 import { EditableReflectionResolver } from '@akashaorg/ui-lib-feed/lib/components/editable-reflection/editable-reflection-resolver';
 
 type ReflectionPageProps = {
-  reflectionId: string;
   reflection: GetReflectionByIdQuery;
-  isLoggedIn: boolean;
 };
 
 const ReflectionPage: React.FC<ReflectionPageProps> = props => {
-  const { reflectionId, reflection, isLoggedIn } = props;
+  const { reflection } = props;
   const { t } = useTranslation('app-antenna');
+  const {
+    data: { authenticatedDID },
+  } = useAkashaStore();
+  const isLoggedIn = !!authenticatedDID;
   const { navigateToModal, getTranslationPlugin, logger } = useRootComponentProps();
   const [analyticsActions] = useAnalytics();
   const wrapperRef = useRef(null);

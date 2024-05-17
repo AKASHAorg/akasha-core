@@ -248,7 +248,7 @@ const Layout: React.FC<unknown> = () => {
               />
             </Stack>
 
-            <Stack customStyle="fixed bottom-2 ml-[25px] mr-2 lg:(w-[21rem])">
+            <Stack customStyle="fixed bottom-2 ml-5 mr-2 lg:(w-[21rem])">
               <Widget name={layoutConfig.cookieWidgetSlotId} />
             </Stack>
           </Stack>

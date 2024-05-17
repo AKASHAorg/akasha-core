@@ -28,12 +28,7 @@ import {
   Await,
 } from '@tanstack/react-router';
 import { CreateRouter, RouterContext } from '@akashaorg/typings/lib/ui';
-import {
-  getAuthenticatedProfile,
-  getBeamById,
-  getBeamStreamId,
-  getReflectionById,
-} from './data-loaders';
+import { getBeamById, getBeamStreamId, getReflectionById } from './data-loaders';
 
 const rootRoute = createRootRouteWithContext<RouterContext>()({
   component: Outlet,
@@ -50,17 +45,8 @@ const defaultRoute = createRoute({
 const antennaRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[GLOBAL_ANTENNA],
-  loader: ({ context: { authenticatedDID, apolloClient } }) =>
-    getAuthenticatedProfile({ authenticatedDID, apolloClient }),
   component: () => {
-    const authenticatedProfile = antennaRoute.useLoaderData();
-    const authenticatedDID = antennaRoute.useRouteContext().authenticatedDID;
-    return (
-      <GlobalAntennaPage
-        authenticatedProfile={authenticatedProfile}
-        authenticatedDID={authenticatedDID}
-      />
-    );
+    return <GlobalAntennaPage />;
   },
 });
 
@@ -131,18 +117,12 @@ const reflectionsRoute = createRoute({
         reflectionId: params.reflectionId,
       }),
     ),
-    isLoggedIn: !!context?.authenticatedDID,
   }),
   component: () => {
-    const { reflectionId } = reflectionsRoute.useParams();
-    const { reflection, isLoggedIn } = reflectionsRoute.useLoaderData();
+    const { reflection } = reflectionsRoute.useLoaderData();
     return (
       <Suspense fallback={<EntrySectionLoading />}>
-        <Await promise={reflection}>
-          {data => (
-            <ReflectionPage reflectionId={reflectionId} reflection={data} isLoggedIn={isLoggedIn} />
-          )}
-        </Await>
+        <Await promise={reflection}>{data => <ReflectionPage reflection={data} />}</Await>
       </Suspense>
     );
   },
@@ -152,15 +132,10 @@ const reflectionsReflectRoute = createRoute({
   getParentRoute: () => reflectionsRoute,
   path: routes[REFLECT],
   component: () => {
-    const { reflectionId } = reflectionsReflectRoute.useParams();
-    const { reflection, isLoggedIn } = reflectionsRoute.useLoaderData();
+    const { reflection } = reflectionsRoute.useLoaderData();
     return (
       <Suspense fallback={<EntrySectionLoading />}>
-        <Await promise={reflection}>
-          {data => (
-            <ReflectionPage reflectionId={reflectionId} reflection={data} isLoggedIn={isLoggedIn} />
-          )}
-        </Await>
+        <Await promise={reflection}>{data => <ReflectionPage reflection={data} />}</Await>
       </Suspense>
     );
   },
@@ -203,13 +178,12 @@ const routeTree = rootRoute.addChildren([
   editorRoute,
 ]);
 
-export const router = ({ baseRouteName, apolloClient, authenticatedDID }: CreateRouter) =>
+export const router = ({ baseRouteName, apolloClient }: CreateRouter) =>
   createRouter({
     routeTree,
     basepath: baseRouteName,
     context: {
       apolloClient,
-      authenticatedDID,
     },
     defaultErrorComponent: ({ error }) => {
       return <ErrorComponent error={(error as unknown as Error).message} />;
