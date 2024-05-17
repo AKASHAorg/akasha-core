@@ -3,7 +3,7 @@ import { AkashaProfile, IPublishData } from '@akashaorg/typings/lib/ui';
 import React, { useState } from 'react';
 import { Descendant } from 'slate';
 import { getLinkPreview, transformSource, encodeSlateToBase64 } from '@akashaorg/ui-awf-hooks';
-import { AkashaProfileImageVersions } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { ProfileImageVersions } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 type ReflectionEditorRendererProps = {
   actionLabel: string;
@@ -12,7 +12,7 @@ type ReflectionEditorRendererProps = {
   disableActionLabel: string;
   placeholderButtonLabel: string;
   maxEncodedLengthErrLabel: string;
-  avatar: AkashaProfileImageVersions;
+  avatar: ProfileImageVersions;
   profileId: string;
   disablePublish: boolean;
   editorState: Descendant[];

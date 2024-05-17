@@ -640,7 +640,7 @@ export type AkashaBlockStorageInput = {
   active: Scalars['Boolean']['input'];
   appVersionID: Scalars['CeramicStreamID']['input'];
   blockID: Scalars['CeramicStreamID']['input'];
-  content: Array<InputMaybe<BlockLabeledValue>>;
+  content: Array<InputMaybe<BlockLabeledValueInput>>;
   createdAt: Scalars['DateTime']['input'];
   kind?: InputMaybe<AkashaBlockStorageBlockDef>;
   nsfw?: InputMaybe<Scalars['Boolean']['input']>;

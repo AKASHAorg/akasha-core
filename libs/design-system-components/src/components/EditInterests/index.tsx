@@ -10,7 +10,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { apply, tw } from '@twind/core';
 import { ButtonType } from '../types/common.types';
-import { AkashaProfileInterestsLabeled } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { ProfileLabeled } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 export type EditInterestsProps = {
   title: string;
@@ -19,15 +19,15 @@ export type EditInterestsProps = {
   moreInterestTitle: string;
   moreInterestDescription: string;
   moreInterestPlaceholder: string;
-  myInterests: AkashaProfileInterestsLabeled[];
-  interests: AkashaProfileInterestsLabeled[];
+  myInterests: ProfileLabeled[];
+  interests: ProfileLabeled[];
   labelType: string;
   maxInterestsErrorMessage: string;
   cancelButton: ButtonType;
   saveButton: {
     label: string;
     loading?: boolean;
-    handleClick: (interests: AkashaProfileInterestsLabeled[]) => void;
+    handleClick: (interests: ProfileLabeled[]) => void;
   };
   maxInterests: number;
   customStyle?: string;
@@ -61,7 +61,7 @@ const EditInterests: React.FC<EditInterestsProps> = ({
     setAllMyInterests(new Set(myInterests));
   }, [myInterests]);
 
-  const updateMyActiveInterests = (interest: AkashaProfileInterestsLabeled, remove?: boolean) => {
+  const updateMyActiveInterests = (interest: ProfileLabeled, remove?: boolean) => {
     const newMyActiveInterests = new Set(myActiveInterests);
     if (remove) {
       newMyActiveInterests.delete(interest);
@@ -71,11 +71,11 @@ const EditInterests: React.FC<EditInterestsProps> = ({
     setMyActiveInterests(newMyActiveInterests.add(interest));
   };
 
-  const updateAllMyInterests = (interest: AkashaProfileInterestsLabeled) => {
+  const updateAllMyInterests = (interest: ProfileLabeled) => {
     setAllMyInterests(new Set(allMyInterests).add(interest));
   };
 
-  const onSave = (interests: AkashaProfileInterestsLabeled[]) => {
+  const onSave = (interests: ProfileLabeled[]) => {
     saveButton.handleClick(interests);
     setTags(null);
     setQuery('');
