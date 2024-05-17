@@ -5,8 +5,9 @@ import {
   IntegrationRegistrationOptions,
   LogoTypeSource,
   RootComponentProps,
+  MenuItemType,
 } from '@akashaorg/typings/lib/ui';
-import routes from './routes';
+import routes, { EXTENSIONS, HOME, INSTALLED } from './routes';
 import { ContentBlockStore } from './plugins/content-block-store';
 import { ExtensionStore } from './plugins/extension-store';
 import { WidgetStore } from './plugins/widget-store';
@@ -18,18 +19,39 @@ import { Akasha } from '@akashaorg/design-system-core/lib/components/Icon/akasha
  * All the plugins must export an object like this:
  */
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
+  loadingFn: () => import('./components'),
   mountsIn: opts.layoutConfig?.applicationSlotId,
+  logo: { type: LogoTypeSource.ICON, solidIcon: true, value: <Akasha /> },
+  i18nNamespace: ['app-extensions'],
   routes: {
     ...routes,
   },
-  i18nNamespace: ['app-extensions'],
-  loadingFn: () => import('./components'),
   title: 'AKASHA Core Extensions',
   menuItems: {
     label: 'Extensions',
-    area: [MenuItemAreaType.AppArea],
+    type: MenuItemType.App,
     logo: { type: LogoTypeSource.ICON, solidIcon: true, value: <Akasha /> },
-    subRoutes: [],
+    area: [MenuItemAreaType.AppArea, MenuItemAreaType.OtherArea],
+    subRoutes: [
+      {
+        label: HOME,
+        index: 0,
+        route: routes[HOME],
+        type: MenuItemType.Internal,
+      },
+      {
+        label: EXTENSIONS,
+        index: 1,
+        route: routes[EXTENSIONS],
+        type: MenuItemType.Internal,
+      },
+      {
+        label: INSTALLED,
+        index: 2,
+        route: routes[INSTALLED],
+        type: MenuItemType.Internal,
+      },
+    ],
   },
   extends: (matcher, loader) => {
     matcher({
