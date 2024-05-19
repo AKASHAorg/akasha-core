@@ -46,24 +46,25 @@ export function useScrollRestoration({
   }, [scrollRestorationKeys]);
 
   useEffect(() => {
-    /*
-     * Obtain the last virtualizer's options and the scroll restoration key from the scroll restoration config. Then set the options on
-     * the current virtualizer instance. Afterwards obtain a scroll index from the scroll restoration key to be used for scroll restoration reference.
-     * Finally scroll to the index of the item.
-     **/
     const virtualizer = virtualizerRef.current;
     const scrollConfig = restoreScrollConfig();
     if (scrollConfig) {
       const { scrollRestorationKey, options } = scrollConfig;
 
+      if (!scrollRestorationKey || !options || typeof options !== 'object') return;
+      /*
+       * Find the index of an item which will be used as a scroll restoration reference.
+       **/
       const scrollIndex = scrollRestorationKeysRef.current?.findIndex(
         key => key === scrollRestorationKey,
       );
       if (scrollIndex && scrollIndex !== -1) {
+        /*
+         * Make sure virtualizer's options from last scroll position are available in the current virtualizer instance before making any computations.
+         **/
         virtualizer.setOptions({
           ...virtualizer.options,
           ...options,
-          estimateSize: index => options.initialMeasurementsCache[index].size,
         });
         virtualizer.scrollToIndex(scrollIndex, { align: 'start', behavior: 'auto' });
       }
@@ -72,15 +73,14 @@ export function useScrollRestoration({
 
   useEffect(() => {
     const overScan = overScanRef.current;
-
     /*
-     * Store scroll restoration configs after unmounting the component where the scroll restoration is used
+     * Store scroll restoration configs after unmounting the component where the scroll restoration is used.
      **/
     return () => {
       const virtualItems = virtualizerRef.current.getVirtualItems();
       /*
-       * Find the index of a visible item on the virtual list used for scroll restoration reference
-       * This computation accurately identifies those items whose index  is less than or equal to overScan
+       * Find the index of a visible item on the virtual list used for scroll restoration reference.
+       * This computation accurately identifies those items whose index  is less than or equal to overScan.
        **/
       const visibleItemIndex =
         virtualItems.findIndex(
@@ -93,7 +93,7 @@ export function useScrollRestoration({
           /*
            * Find the index of a visible item used for scroll restoration reference and in turn use it to get the scroll restoration key.
            * Use visibleItemIndex for those items whose index is less than or equal to overScan otherwise use overScan as an index on virtual items array
-           * to identify the index of the correct visible item that can be used for scroll restoration reference
+           * to identify the index of the correct visible item that can be used for scroll restoration reference.
            **/
           scrollRestorationKeysRef.current?.[
             virtualItems?.[overScan]?.index <= overScan && visibleItemIndex >= 0

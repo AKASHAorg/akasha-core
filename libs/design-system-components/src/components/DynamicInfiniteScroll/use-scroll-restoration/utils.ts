@@ -1,6 +1,6 @@
 import { Virtualizer, VirtualizerOptions } from '@tanstack/react-virtual';
 
-const SCROLL_RESTORATION_CONFIGS = 'scroll-restoration-configs';
+const SCROLL_RESTORATION_CONFIG = 'scroll-restoration-config';
 
 type Config = {
   /*
@@ -12,7 +12,7 @@ type Config = {
    **/
   topOffset: number;
   /*
-   * The key used to identify the item used as a scroll restoration reference
+   * The key used to compute the item used as a scroll restoration reference
    **/
   scrollRestorationKey: string;
   /*
@@ -46,84 +46,47 @@ export async function restoreScrollPosition({
      * Validate scroll restoration config fields
      **/
     if (
-      !scrollRestorationKey &&
-      typeof scrollRestorationKey !== 'string' &&
-      !options &&
-      typeof options !== 'object' &&
-      !Number.isInteger(scrollOffset)
+      !scrollRestorationKey ||
+      !options ||
+      typeof options !== 'object' ||
+      typeof scrollOffset !== 'number'
     )
       return;
 
     const scrollIndex = scrollRestorationKeys.findIndex(key => key === scrollRestorationKey);
     if (scrollIndex !== -1) {
       /*
-       * Make sure virtualizer's options from last scroll position are available in the current virtualizer instance
+       * Make sure virtualizer's options from last scroll position are available in the current virtualizer instance before making any computations.
        **/
       virtualizer.setOptions({ ...virtualizer.options, ...options });
 
       /*
-       * Find the visible item used as a scroll restoration reference
-       **/
-      const referenceItem = virtualizer
-        .getVirtualItems()
-        .find(virtualItem => virtualItem.index === scrollIndex);
-
-      /*
-       * Create array of steps to take back from the reference item to check if
-       * the virtual items before it are loaded according to the appropriate size
-       **/
-      const stepBackArr = Array(overScan)
-        .fill(0)
-        .map((_, index) => index + 1);
-
-      /*
-       * Check if the reference item is loaded according to the appropriate size
-       **/
-      const referenceItemLoaded =
-        referenceItem &&
-        referenceItem.size >= options.initialMeasurementsCache?.[referenceItem.index]?.size;
-
-      /*
-       * Check if items before the visible reference item are loaded according to the appropriate size
-       **/
-      const itemsBeforeReferenceItemLoaded = stepBackArr
-        .map(stepBack => {
-          const prevItem = virtualizer
-            .getVirtualItems()
-            .find(virtualItem => virtualItem.index === scrollIndex - stepBack);
-          return prevItem
-            ? prevItem.size >= options.initialMeasurementsCache?.[prevItem.index]?.size
-            : true;
-        })
-        .every(item => item);
-
-      /*
        * Check if the latest virtual items container offset matches with the current offset to determine
-       *  if the current offset can be used for scroll restoration
+       *  if the current offset can be used for scroll restoration.
        **/
       const offsetMatched =
         Number(document.querySelector(`[${offsetAttribute}]`)?.getAttribute(offsetAttribute)) ===
         virtualizer.getVirtualItems()?.[0].start;
 
       /*
-       * Check if all conditions for scroll restoration are satisfied
+       * Check if all conditions for scroll restoration are satisfied.
        **/
-      if (referenceItemLoaded && itemsBeforeReferenceItemLoaded && offsetMatched) {
+      if (requiredItemsLoaded({ virtualizer, scrollIndex, overScan, options }) && offsetMatched) {
         /*
-         * Check the difference between the last offset of the virtual list container with the current
-         * If there is a difference add or subtract from the last scroll offset to determine the normalized scroll restoration offset
+         * Check the difference between the last offset of the virtual list container with the current one.
+         * If there is a difference add or subtract from the last scroll offset to determine the normalized scroll restoration offset.
          **/
         const offsetDelta = topOffset - virtualizer.getVirtualItems()?.[0].start;
-        const scrollToOffset = Number.isFinite(offsetDelta)
-          ? scrollOffset - offsetDelta
-          : scrollOffset;
+        const scrollToOffset =
+          typeof offsetDelta === 'number' ? Math.round(scrollOffset - offsetDelta) : scrollOffset;
+
         window.scrollTo({ top: scrollToOffset, behavior: 'instant' });
-        sessionStorage.removeItem(SCROLL_RESTORATION_CONFIGS);
+        setTimeout(() => sessionStorage.removeItem(SCROLL_RESTORATION_CONFIG), 500);
       }
     }
   } catch (error) {
     console.error(error);
-    sessionStorage.removeItem(SCROLL_RESTORATION_CONFIGS);
+    sessionStorage.removeItem(SCROLL_RESTORATION_CONFIG);
   }
 }
 
@@ -132,20 +95,70 @@ export async function restoreScrollPosition({
  **/
 export function restoreScrollConfig(): Config {
   try {
-    const scrollRestorationOptions = sessionStorage.getItem(SCROLL_RESTORATION_CONFIGS);
-    if (scrollRestorationOptions) {
-      return JSON.parse(scrollRestorationOptions);
+    const scrollRestorationConfig = sessionStorage.getItem(SCROLL_RESTORATION_CONFIG);
+    if (scrollRestorationConfig) {
+      return JSON.parse(scrollRestorationConfig);
     }
   } catch (error) {
     console.error(error);
-    sessionStorage.removeItem(SCROLL_RESTORATION_CONFIGS);
+    sessionStorage.removeItem(SCROLL_RESTORATION_CONFIG);
   }
   return null;
 }
 
 /*
- * Store scroll restoration configuration including virtualizer's options
+ * Store scroll restoration configuration
  **/
 export function storeScrollConfigs(config: Config) {
-  sessionStorage.setItem(SCROLL_RESTORATION_CONFIGS, JSON.stringify(config));
+  sessionStorage.setItem(SCROLL_RESTORATION_CONFIG, JSON.stringify(config));
+}
+
+interface IItemsLoaded {
+  virtualizer: Virtualizer<Window, Element>;
+  scrollIndex: number;
+  overScan: number;
+  options: VirtualizerOptions<Window, Element>;
+}
+
+/*
+ * Check if all required items for scroll restoration are loaded.
+ **/
+function requiredItemsLoaded({ virtualizer, scrollIndex, overScan, options }: IItemsLoaded) {
+  /*
+   * Find the visible item used as a scroll restoration reference.
+   **/
+  const referenceItem = virtualizer
+    .getVirtualItems()
+    .find(virtualItem => virtualItem.index === scrollIndex);
+
+  /*
+   * Create array of steps to take back from the reference item to check if
+   * the virtual items before it are loaded according to the appropriate size.
+   **/
+  const stepBackArr = Array(overScan)
+    .fill(0)
+    .map((_, index) => index + 1);
+
+  /*
+   * Check if the reference item is loaded according to the appropriate size.
+   **/
+  const referenceItemLoaded =
+    referenceItem &&
+    referenceItem.size >= options.initialMeasurementsCache?.[referenceItem.index]?.size;
+
+  /*
+   * Check if items before the visible reference item are loaded according to the appropriate size.
+   **/
+  const itemsBeforeReferenceItemLoaded = stepBackArr
+    .map(stepBack => {
+      const prevItem = virtualizer
+        .getVirtualItems()
+        .find(virtualItem => virtualItem.index === scrollIndex - stepBack);
+      return prevItem
+        ? prevItem.size >= options.initialMeasurementsCache?.[prevItem.index]?.size
+        : true;
+    })
+    .every(item => item);
+
+  return referenceItemLoaded && itemsBeforeReferenceItemLoaded;
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -138,7 +138,7 @@ const BeamFeed = (props: BeamFeedProps) => {
                 <BeamContentResolver
                   beamId={beam.node.beamID}
                   showNSFWCard={false}
-                  customStyle="min-h-ful"
+                  customStyle="min-h-full"
                 />
               );
             }
