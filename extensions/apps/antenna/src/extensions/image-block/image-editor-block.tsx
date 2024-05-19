@@ -78,7 +78,7 @@ export const ImageEditorBlock = (
     [contentBlockImages],
   );
   const imageUrls = useMemo(
-    () => contentBlockImages.map(imageObj => imageObj.displaySrc),
+    () => contentBlockImages.map(imageObj => imageObj.originalSrc),
     [contentBlockImages],
   );
   const [alignState, setAlignState] = useState<'start' | 'center' | 'end'>('start');
@@ -210,7 +210,7 @@ export const ImageEditorBlock = (
   };
 
   const onUpload = async (image: File | string, isUrl?: boolean) => {
-    if (!image || contentBlockImages.length > 3) return null;
+    if (!image) return null;
     setUiState('gallery');
     setUploading(true);
 
@@ -414,7 +414,7 @@ export const ImageEditorBlock = (
                   <Stack direction="row" spacing="gap-1">
                     <Image
                       alt={imageObj.name}
-                      src={imageObj.displaySrc}
+                      src={imageObj.originalSrc}
                       customStyle="object-contain w-8 h-8 rounded-lg"
                     />
                     <Text>{imageObj.name}</Text>
@@ -443,7 +443,10 @@ export const ImageEditorBlock = (
       {uiState === 'gallery' && imageGalleryImages.length > 0 && (
         <Stack spacing="gap-1">
           <Stack alignSelf={alignState}>
-            <ImageBlockGallery images={imageGalleryImages} />
+            <ImageBlockGallery
+              images={imageGalleryImages}
+              uploading={uploading && !showEditModal}
+            />
           </Stack>
           {showCaption && (
             <TextField
