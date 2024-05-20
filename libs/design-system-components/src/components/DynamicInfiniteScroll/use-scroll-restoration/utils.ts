@@ -86,6 +86,9 @@ export async function restoreScrollPosition({
           typeof offsetDelta === 'number' ? Math.round(scrollOffset - offsetDelta) : scrollOffset;
 
         window.scrollTo({ top: scrollToOffset, behavior: 'instant' });
+        setTimeout(() => {
+          window.scrollTo({ top: scrollToOffset, behavior: 'instant' });
+        }, 150);
         storeScrollConfig(scrollRestorationStorageKey, { ...scrollConfig, done: true });
         setTimeout(() => {
           removeItemFromScrollConfig(scrollRestorationStorageKey);

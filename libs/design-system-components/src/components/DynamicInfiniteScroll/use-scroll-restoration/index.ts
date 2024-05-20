@@ -93,6 +93,16 @@ export function useScrollRestoration({
         virtualItem => virtualItem.start >= virtualizerRef.current.scrollOffset,
       );
       visibleItemIndex = visibleItemIndex === 0 ? 0 : visibleItemIndex - 1;
+      const stepBackArr = Array(overScan)
+        .fill(0)
+        .map((_, index) => index);
+      let overScanItem = null;
+      for (const stepBack of stepBackArr) {
+        if (virtualItems?.[overScan - stepBack]) {
+          overScanItem = virtualItems[overScan - stepBack];
+          break;
+        }
+      }
       storeScrollConfig(scrollRestorationStorageKey, {
         scrollOffset: virtualizerRef.current?.scrollOffset,
         topOffset: virtualItems?.[0]?.start,
@@ -103,9 +113,9 @@ export function useScrollRestoration({
            * to identify the index of the correct visible item that can be used for scroll restoration reference.
            **/
           scrollRestorationKeysRef.current?.[
-            virtualItems?.[overScan]?.index <= overScan && visibleItemIndex >= 0
+            overScanItem?.index <= overScan && visibleItemIndex >= 0
               ? visibleItemIndex
-              : virtualItems?.[overScan]?.index
+              : overScanItem?.index
           ],
         options: {
           ...virtualizerRef.current?.options,

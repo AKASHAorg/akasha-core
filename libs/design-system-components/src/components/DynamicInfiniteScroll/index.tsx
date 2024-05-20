@@ -33,7 +33,7 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
     count,
     itemHeight,
     scrollRestorationStorageKey,
-    overScan = 0,
+    overScan = 5,
     itemSpacing,
     hasNextPage,
     loading,
@@ -120,7 +120,7 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
     >
       <Card
         data-offset={virtualItems?.[0]?.start}
-        customStyle={`flex flex-col ${virtualizer.options.initialMeasurementsCache.length ? '[overflow-anchor:none]' : ''} absolute w-full top-0 left-0 translate-y-[${virtualItems?.[0]?.start ? virtualItems?.[0]?.start - virtualizer.options.scrollMargin : 0}px] gap-y-[${itemSpacing}px]`}
+        customStyle={`flex flex-col absolute w-full top-0 left-0 translate-y-[${virtualItems?.[0]?.start ? virtualItems?.[0]?.start - virtualizer.options.scrollMargin : 0}px] gap-y-[${itemSpacing}px]`}
         type="plain"
       >
         {virtualItems.map((virtualItem, index, items) => (
