@@ -18,6 +18,7 @@ import { ReflectionPreview } from '@akashaorg/ui-lib-feed';
 import { useNavigate } from '@tanstack/react-router';
 import { GetReflectionByIdQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 import { EditableReflectionResolver } from '@akashaorg/ui-lib-feed/lib/components/editable-reflection/editable-reflection-resolver';
+import { EntityTypes } from '@akashaorg/typings/lib/ui';
 
 type ReflectionPageProps = {
   reflection: GetReflectionByIdQuery;
@@ -80,6 +81,7 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
         </>
         <ReflectFeed
           scrollRestorationStorageKey={`reflect-feed-${entryData.id}`}
+          itemType={EntityTypes.REFLECT}
           itemSpacing={0}
           newItemsPublishedLabel={t('New Reflects published recently')}
           trackEvent={analyticsActions.trackEvent}

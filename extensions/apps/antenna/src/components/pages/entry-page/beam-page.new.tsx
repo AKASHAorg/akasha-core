@@ -22,6 +22,7 @@ import {
   GetBeamStreamQuery,
 } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 import { EditableReflectionResolver } from '@akashaorg/ui-lib-feed/lib/components/editable-reflection/editable-reflection-resolver';
+import { EntityTypes } from '@akashaorg/typings/lib/ui';
 
 type BeamPageProps = {
   beamId: string;
@@ -98,6 +99,7 @@ const BeamPage: React.FC<BeamPageProps> = props => {
         />
         <ReflectFeed
           scrollRestorationStorageKey={`reflect-feed-${beamId}`}
+          itemType={EntityTypes.BEAM}
           filters={{ where: { beamID: { equalTo: beamId } } }}
           estimatedHeight={150}
           scrollOptions={{ overScan: 5 }}

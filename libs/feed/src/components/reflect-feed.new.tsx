@@ -4,7 +4,7 @@ import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoade
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import DynamicInfiniteScroll from '@akashaorg/design-system-components/lib/components/DynamicInfiniteScroll';
 import getSDK from '@akashaorg/awf-sdk';
-import { AnalyticsEventData } from '@akashaorg/typings/lib/ui';
+import { AnalyticsEventData, EntityTypes } from '@akashaorg/typings/lib/ui';
 import {
   AkashaReflectStreamFiltersInput,
   AkashaReflectStreamSortingInput,
@@ -17,6 +17,7 @@ import { hasOwn, useAkashaStore } from '@akashaorg/ui-awf-hooks';
 
 export type ReflectFeedProps = {
   scrollRestorationStorageKey: string;
+  itemType: EntityTypes;
   newItemsPublishedLabel?: string;
   filters?: AkashaReflectStreamFiltersInput;
   sorting?: AkashaReflectStreamSortingInput;
@@ -34,6 +35,7 @@ export type ReflectFeedProps = {
 const ReflectFeed: React.FC<ReflectFeedProps> = props => {
   const {
     scrollRestorationStorageKey,
+    itemType,
     filters,
     sorting,
     estimatedHeight = 350,
@@ -56,7 +58,18 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
     }
   }, [reflectionStreamQuery.data]);
 
-  const reflections = React.useMemo(() => reflectionStream?.edges || [], [reflectionStream]);
+  const reflections = React.useMemo(() => {
+    if (reflectionStream) {
+      if (itemType === EntityTypes.BEAM) {
+        return reflectionStream?.edges?.filter(edge => edge.node.replyTo === null) || [];
+      }
+
+      if (itemType === EntityTypes.REFLECT) {
+        return reflectionStream?.edges?.filter(edge => edge.node.replyTo !== null) || [];
+      }
+    }
+    return [];
+  }, [itemType, reflectionStream]);
   const pageInfo = React.useMemo(() => {
     return reflectionStream?.pageInfo;
   }, [reflectionStream]);
