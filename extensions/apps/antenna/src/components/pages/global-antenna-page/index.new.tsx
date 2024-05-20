@@ -65,7 +65,7 @@ const GlobalAntennaPage: React.FC<unknown> = () => {
           />
         </Stack>
         <BeamFeed
-          queryKey={QueryKeys.GLOBAL_ANTENNA}
+          scrollRestorationStorageKey={QueryKeys.GLOBAL_ANTENNA}
           estimatedHeight={150}
           itemSpacing={8}
           scrollOptions={{ overScan: 5 }}

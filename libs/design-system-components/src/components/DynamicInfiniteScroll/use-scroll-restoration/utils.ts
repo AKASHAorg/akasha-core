@@ -26,6 +26,7 @@ interface IRestoreScrollPosition {
   virtualizer: Virtualizer<Window, Element>;
   overScan: number;
   offsetAttribute: string;
+  scrollRestorationStorageKey: string;
 }
 
 /*
@@ -36,9 +37,10 @@ export async function restoreScrollPosition({
   virtualizer,
   overScan,
   offsetAttribute,
+  scrollRestorationStorageKey,
 }: IRestoreScrollPosition) {
   try {
-    const scrollConfig = restoreScrollConfig();
+    const scrollConfig = restoreScrollConfig(scrollRestorationStorageKey);
     if (!scrollConfig) return;
     const { scrollRestorationKey, topOffset, scrollOffset, options } = scrollConfig;
 
@@ -55,11 +57,6 @@ export async function restoreScrollPosition({
 
     const scrollIndex = scrollRestorationKeys.findIndex(key => key === scrollRestorationKey);
     if (scrollIndex !== -1) {
-      /*
-       * Make sure virtualizer's options from last scroll position are available in the current virtualizer instance before making any computations.
-       **/
-      virtualizer.setOptions({ ...virtualizer.options, ...options });
-
       /*
        * Check if the latest virtual items container offset matches with the current offset to determine
        *  if the current offset can be used for scroll restoration.
@@ -81,36 +78,49 @@ export async function restoreScrollPosition({
           typeof offsetDelta === 'number' ? Math.round(scrollOffset - offsetDelta) : scrollOffset;
 
         window.scrollTo({ top: scrollToOffset, behavior: 'instant' });
-        setTimeout(() => sessionStorage.removeItem(SCROLL_RESTORATION_CONFIG), 500);
+        setTimeout(() => {
+          removeItemFromScrollConfig(scrollRestorationStorageKey);
+        }, 500);
       }
     }
   } catch (error) {
     console.error(error);
-    sessionStorage.removeItem(SCROLL_RESTORATION_CONFIG);
+    removeItemFromScrollConfig(scrollRestorationStorageKey);
   }
 }
 
 /*
  * Restore scroll config
  **/
-export function restoreScrollConfig(): Config {
+export function restoreScrollConfig(scrollRestorationStorageKey?: string): Config {
   try {
-    const scrollRestorationConfig = sessionStorage.getItem(SCROLL_RESTORATION_CONFIG);
-    if (scrollRestorationConfig) {
-      return JSON.parse(scrollRestorationConfig);
-    }
-  } catch (error) {
-    console.error(error);
-    sessionStorage.removeItem(SCROLL_RESTORATION_CONFIG);
+    const config = JSON.parse(sessionStorage.getItem(SCROLL_RESTORATION_CONFIG));
+    return scrollRestorationStorageKey ? config[scrollRestorationStorageKey] : config;
+  } catch (e) {
+    return null;
   }
-  return null;
 }
 
 /*
  * Store scroll restoration configuration
  **/
-export function storeScrollConfigs(config: Config) {
-  sessionStorage.setItem(SCROLL_RESTORATION_CONFIG, JSON.stringify(config));
+export function storeScrollConfig(scrollRestorationStorageKey: string, config: Config) {
+  const currentConfig = restoreScrollConfig();
+  sessionStorage.setItem(
+    SCROLL_RESTORATION_CONFIG,
+    JSON.stringify({
+      ...(currentConfig ? currentConfig : {}),
+      [scrollRestorationStorageKey]: config,
+    }),
+  );
+}
+
+function removeItemFromScrollConfig(key: string) {
+  const config = restoreScrollConfig();
+  if (config[key]) {
+    delete config[key];
+    sessionStorage.setItem(SCROLL_RESTORATION_CONFIG, JSON.stringify(config));
+  }
 }
 
 interface IItemsLoaded {

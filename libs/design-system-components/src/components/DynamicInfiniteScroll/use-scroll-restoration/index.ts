@@ -1,6 +1,6 @@
 import { Virtualizer } from '@tanstack/react-virtual';
 import { useEffect, useRef } from 'react';
-import { restoreScrollPosition, restoreScrollConfig, storeScrollConfigs } from './utils';
+import { restoreScrollPosition, restoreScrollConfig, storeScrollConfig } from './utils';
 
 interface IScrollRestoration {
   /*
@@ -17,6 +17,10 @@ interface IScrollRestoration {
    **/
   overScan: number;
   /*
+   * Scroll restoration session storage key
+   **/
+  scrollRestorationStorageKey: string;
+  /*
    * The offset attribute for the virtual list container
    **/
   offsetAttribute: string;
@@ -30,12 +34,14 @@ export function useScrollRestoration({
   virtualizer,
   scrollRestorationKeys,
   overScan,
+  scrollRestorationStorageKey,
   offsetAttribute,
 }: IScrollRestoration) {
   const virtualizerRef = useRef(virtualizer);
   const scrollRestorationKeysRef = useRef(scrollRestorationKeys);
   const overScanRef = useRef(overScan);
   const offsetAttributeRef = useRef(offsetAttribute);
+  const scrollRestorationStorageKeyRef = useRef(scrollRestorationStorageKey);
 
   useEffect(() => {
     virtualizerRef.current = virtualizer;
@@ -47,7 +53,7 @@ export function useScrollRestoration({
 
   useEffect(() => {
     const virtualizer = virtualizerRef.current;
-    const scrollConfig = restoreScrollConfig();
+    const scrollConfig = restoreScrollConfig(scrollRestorationStorageKeyRef.current);
     if (scrollConfig) {
       const { scrollRestorationKey, options } = scrollConfig;
 
@@ -73,6 +79,7 @@ export function useScrollRestoration({
 
   useEffect(() => {
     const overScan = overScanRef.current;
+    const scrollRestorationStorageKey = scrollRestorationStorageKeyRef.current;
     /*
      * Store scroll restoration configs after unmounting the component where the scroll restoration is used.
      **/
@@ -86,7 +93,7 @@ export function useScrollRestoration({
         virtualItems.findIndex(
           virtualItem => virtualItem.start > virtualizerRef.current.scrollOffset,
         ) - 1;
-      storeScrollConfigs({
+      storeScrollConfig(scrollRestorationStorageKey, {
         scrollOffset: virtualizerRef.current?.scrollOffset,
         topOffset: virtualItems?.[0]?.start,
         scrollRestorationKey:
@@ -118,6 +125,7 @@ export function useScrollRestoration({
         scrollRestorationKeys: scrollRestorationKeysRef.current,
         overScan: overScanRef.current,
         offsetAttribute: offsetAttributeRef.current,
+        scrollRestorationStorageKey: scrollRestorationStorageKeyRef.current,
       });
     });
     observer.observe(document.body);

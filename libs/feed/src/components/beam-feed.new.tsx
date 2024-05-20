@@ -7,10 +7,8 @@ import DynamicInfiniteScroll from '@akashaorg/design-system-components/lib/compo
 import getSDK from '@akashaorg/awf-sdk';
 import { AnalyticsEventData } from '@akashaorg/typings/lib/ui';
 import {
-  AkashaBeamEdge,
   AkashaBeamFiltersInput,
   AkashaBeamSortingInput,
-  AkashaBeamStreamEdge,
   SortOrder,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { VirtualizerProps } from '../virtual-list';
@@ -19,7 +17,7 @@ import { useGetBeamStreamLazyQuery } from '@akashaorg/ui-awf-hooks/lib/generated
 import { getNsfwFiltersBeamFeed } from '../utils';
 
 export type BeamFeedProps = {
-  queryKey: string;
+  scrollRestorationStorageKey: string;
   newItemsPublishedLabel?: string;
   filters?: AkashaBeamFiltersInput;
   sorting?: AkashaBeamSortingInput;
@@ -29,13 +27,14 @@ export type BeamFeedProps = {
     overScan: number;
   };
   scrollTopIndicator?: VirtualizerProps<unknown>['scrollTopIndicator'];
-  renderItem?: (props: AkashaBeamStreamEdge | AkashaBeamEdge) => React.ReactNode;
+
   trackEvent?: (data: AnalyticsEventData['data']) => void;
   loadingIndicator?: VirtualizerProps<unknown>['loadingIndicator'];
 };
 
 const BeamFeed = (props: BeamFeedProps) => {
   const {
+    scrollRestorationStorageKey,
     filters,
     sorting,
     estimatedHeight = 350,
@@ -44,17 +43,17 @@ const BeamFeed = (props: BeamFeedProps) => {
     loadingIndicator,
   } = props;
   const indexingDID = React.useRef(getSDK().services.gql.indexingDID);
-  const [fetchBeam, beamQuery] = useGetBeamStreamLazyQuery();
+  const [fetchBeamStream, beamStreamQuery] = useGetBeamStreamLazyQuery();
   const beamStream = React.useMemo(() => {
     if (
-      beamQuery.data &&
-      hasOwn(beamQuery.data, 'node') &&
-      beamQuery.data.node &&
-      hasOwn(beamQuery.data.node, 'akashaBeamStreamList')
+      beamStreamQuery.data &&
+      hasOwn(beamStreamQuery.data, 'node') &&
+      beamStreamQuery.data.node &&
+      hasOwn(beamStreamQuery.data.node, 'akashaBeamStreamList')
     ) {
-      return beamQuery.data.node?.akashaBeamStreamList;
+      return beamStreamQuery.data.node?.akashaBeamStreamList;
     }
-  }, [beamQuery.data]);
+  }, [beamStreamQuery.data]);
   const beams = React.useMemo(() => beamStream?.edges || [], [beamStream]);
   const pageInfo = React.useMemo(() => {
     return beamStream?.pageInfo;
@@ -72,7 +71,7 @@ const BeamFeed = (props: BeamFeedProps) => {
       isLoggedIn,
       filters,
     });
-    fetchBeam({
+    fetchBeamStream({
       variables: {
         first: 10,
         sorting: { createdAt: SortOrder.Desc, ...sorting },
@@ -82,7 +81,7 @@ const BeamFeed = (props: BeamFeedProps) => {
       fetchPolicy: 'cache-first',
       notifyOnNetworkStatusChange: true,
     });
-  }, [fetchBeam, filters, isLoggedIn, showNsfw, sorting]);
+  }, [fetchBeamStream, filters, isLoggedIn, showNsfw, sorting]);
 
   if (!loadingIndicatorRef.current) {
     loadingIndicatorRef.current = () => (
@@ -96,28 +95,29 @@ const BeamFeed = (props: BeamFeedProps) => {
 
   return (
     <>
-      {beamQuery.loading && beams.length === 0 && loadingIndicatorRef.current()}
-      {beamQuery.error && (
+      {beamStreamQuery.loading && beams.length === 0 && loadingIndicatorRef.current()}
+      {beamStreamQuery.error && (
         <ErrorLoader
           type="script-error"
           title={'Sorry, there was an error when fetching beams'}
-          details={<>{beamQuery.error.message}</>}
+          details={<>{beamStreamQuery.error.message}</>}
         />
       )}
       {beams && (
         <DynamicInfiniteScroll
           count={beams.length}
+          scrollRestorationStorageKey={scrollRestorationStorageKey}
           scrollRestorationKeys={beams.map(beam => beam?.node?.beamID)}
           itemHeight={estimatedHeight}
           overScan={scrollOptions.overScan}
           itemSpacing={itemSpacing}
           hasNextPage={pageInfo && pageInfo.hasNextPage}
-          loading={beamQuery.loading}
+          loading={beamStreamQuery.loading}
           onLoadMore={async () => {
             const lastCursor = beams[beams.length - 1]?.cursor;
-            if (beamQuery.loading || beamQuery.error || !lastCursor) return;
+            if (beamStreamQuery.loading || beamStreamQuery.error || !lastCursor) return;
             if (lastCursor) {
-              await beamQuery.fetchMore({
+              await beamStreamQuery.fetchMore({
                 variables: {
                   after: lastCursor,
                   sorting: { createdAt: SortOrder.Desc },
