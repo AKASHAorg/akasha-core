@@ -8,6 +8,9 @@ export const register: (opts: IntegrationRegistrationOptions) => WidgetInterface
   mountsIn: opts.layoutConfig?.widgetSlotId,
   loadingFn: () => import('./mini-profile-widget'),
   activeWhen: (location, pathToActiveWhen) => {
+    if (location.pathname.includes('/reflection')) {
+      return pathToActiveWhen('/@akashaorg/app-antenna/reflection/', false)(location);
+    }
     return pathToActiveWhen('/@akashaorg/app-antenna/beam/', false)(location);
   },
 });
