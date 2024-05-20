@@ -1,12 +1,4 @@
 import React from 'react';
-import AppsPage from '../pages/apps-page';
-import ExplorePage from '../pages/explore-page';
-import InfoPage from '../pages/info-page';
-import MainPage from '../pages/main-page';
-import MyAppsPage from '../pages/my-apps-page';
-import MyWidgetsPage from '../pages/my-widgets-page';
-import ErrorComponent from './error-component';
-import routes, { EXPLORE, MY_APPS, MY_WIDGETS, APPS, INFO } from '../../routes';
 import {
   Outlet,
   createRootRouteWithContext,
@@ -14,8 +6,19 @@ import {
   createRouter,
   redirect,
 } from '@tanstack/react-router';
-
 import { CreateRouter, RouterContext } from '@akashaorg/typings/lib/ui';
+import {
+  AppsPage,
+  ExplorePage,
+  InfoPage,
+  InstalledExtensions,
+  MainPage,
+  MyAppsPage,
+  MyWidgetsPage,
+  Overview,
+} from '../pages';
+import ErrorComponent from './error-component';
+import routes, { EXTENSIONS, MY_APPS, MY_WIDGETS, INSTALLED, INFO, HOME } from '../../routes';
 
 const rootRoute = createRootRouteWithContext<RouterContext>()({
   component: Outlet,
@@ -25,37 +28,49 @@ const defaultRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/',
   beforeLoad: () => {
-    throw redirect({ to: routes[EXPLORE], replace: true });
+    throw redirect({ to: routes[HOME], replace: true });
   },
+});
+
+const overviewRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: routes[HOME],
+  component: Overview,
+});
+
+const installedExtensionsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: routes[INSTALLED],
+  component: InstalledExtensions,
 });
 
 const mainRoute = createRoute({
   getParentRoute: () => rootRoute,
-  id: `main`,
+  id: 'main',
   component: MainPage,
 });
 
 const exploreRoute = createRoute({
   getParentRoute: () => mainRoute,
-  path: `${routes[EXPLORE]}`,
+  path: routes[EXTENSIONS],
   component: ExplorePage,
 });
 
 const appsRoute = createRoute({
   getParentRoute: () => mainRoute,
-  path: `${routes[APPS]}`,
+  path: routes[INSTALLED],
   component: AppsPage,
 });
 
 const myAppsRoute = createRoute({
   getParentRoute: () => mainRoute,
-  path: `${routes[MY_APPS]}`,
+  path: routes[MY_APPS],
   component: MyAppsPage,
 });
 
 const myWidgetsRoute = createRoute({
   getParentRoute: () => mainRoute,
-  path: `${routes[MY_WIDGETS]}`,
+  path: routes[MY_WIDGETS],
   component: MyWidgetsPage,
 });
 
@@ -70,6 +85,8 @@ const infoRoute = createRoute({
 
 const routeTree = rootRoute.addChildren([
   defaultRoute,
+  overviewRoute,
+  installedExtensionsRoute,
   mainRoute.addChildren([exploreRoute, appsRoute, myAppsRoute, myWidgetsRoute]),
   infoRoute,
 ]);

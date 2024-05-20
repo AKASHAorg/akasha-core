@@ -21,7 +21,7 @@ export type MyAppsPageProps = {
   defaultIntegrations?: string[];
 };
 
-const MyAppsPage: React.FC<MyAppsPageProps> = props => {
+export const MyAppsPage: React.FC<MyAppsPageProps> = props => {
   const { availableApps } = props;
 
   const { t } = useTranslation('app-extensions');
@@ -120,5 +120,3 @@ const MyAppsPage: React.FC<MyAppsPageProps> = props => {
     </Stack>
   );
 };
-
-export default MyAppsPage;
