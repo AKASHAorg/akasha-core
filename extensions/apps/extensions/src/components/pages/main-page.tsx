@@ -3,27 +3,27 @@ import TabList from '@akashaorg/design-system-core/lib/components/TabList';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import MessageCard from '@akashaorg/design-system-core/lib/components/MessageCard';
-import routes, { APPS, EXPLORE, MY_APPS, MY_WIDGETS } from '../../routes';
+import routes, { INSTALLED, EXTENSIONS, MY_APPS, MY_WIDGETS } from '../../routes';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { Outlet, useMatchRoute } from '@tanstack/react-router';
 import { useDismissedCard, useRootComponentProps, useAkashaStore } from '@akashaorg/ui-awf-hooks';
 
 const TAB_INDEX_TO_ROUTE_MAP = {
-  0: [routes[EXPLORE]],
+  0: [routes[EXTENSIONS]],
   1: [routes[MY_APPS]],
-  2: [routes[APPS]],
+  2: [routes[INSTALLED]],
   3: [routes[MY_WIDGETS]],
 };
 
 const ROUTE_TO_TAB_INDEX_MAP: Record<string, number> = {
-  [routes[EXPLORE]]: 0,
+  [routes[EXTENSIONS]]: 0,
   [routes[MY_APPS]]: 1,
-  [routes[APPS]]: 2,
+  [routes[INSTALLED]]: 2,
   [routes[MY_WIDGETS]]: 3,
 };
 
-const MainPage: React.FC = () => {
+export const MainPage: React.FC = () => {
   const { t } = useTranslation('app-extensions');
   const { navigateToModal } = useRootComponentProps();
   const navigate = useNavigate();
@@ -47,8 +47,8 @@ const MainPage: React.FC = () => {
   };
   const matchRoute = useMatchRoute();
   useEffect(() => {
-    if (!authenticatedDID && !matchRoute({ to: routes[EXPLORE] })) {
-      navigate({ to: routes[EXPLORE] });
+    if (!authenticatedDID && !matchRoute({ to: routes[EXTENSIONS] })) {
+      navigate({ to: routes[EXTENSIONS] });
     }
   }, [authenticatedDID, navigate, matchRoute]);
 
@@ -88,5 +88,3 @@ const MainPage: React.FC = () => {
     </Stack>
   );
 };
-
-export default MainPage;

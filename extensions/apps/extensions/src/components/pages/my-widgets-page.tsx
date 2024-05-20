@@ -17,7 +17,7 @@ export type WidgetsPageProps = {
   defaultIntegrations?: string[];
 };
 
-const MyWidgetsPage: React.FC<WidgetsPageProps> = () => {
+export const MyWidgetsPage: React.FC<WidgetsPageProps> = () => {
   const { t } = useTranslation('app-extensions');
 
   // const defaultWidgetNamesNormalized = React.useMemo(() => {
@@ -77,5 +77,3 @@ const MyWidgetsPage: React.FC<WidgetsPageProps> = () => {
     </Stack>
   );
 };
-
-export default MyWidgetsPage;

@@ -13,7 +13,7 @@ import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetAppsQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { hiddenIntegrations } from '../../hidden-integrations';
 
-const ExplorePage: React.FC = () => {
+export const ExplorePage: React.FC = () => {
   const { worldConfig } = useRootComponentProps();
 
   const {
@@ -192,5 +192,3 @@ const ExplorePage: React.FC = () => {
     </>
   );
 };
-
-export default ExplorePage;
