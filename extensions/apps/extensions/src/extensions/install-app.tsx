@@ -20,7 +20,7 @@ type IntegrationModalExtensionData = {
 const IntegrationInstallModal: React.FC<
   RootExtensionProps<IntegrationModalExtensionData>
 > = props => {
-  const { extensionData, uiEvents, singleSpa } = props;
+  const { extensionData, uiEvents } = props;
   const sdk = getSDK();
   const { t } = useTranslation('app-extensions');
 
@@ -38,7 +38,7 @@ const IntegrationInstallModal: React.FC<
   }, [extensionData]);
 
   const [modalState, setModalState] = React.useState(1);
-  const [error, setError] = React.useState<Error | null>(null);
+  const [, setError] = React.useState<Error | null>(null);
 
   React.useEffect(() => {
     const subSDK = sdk.api.globalChannel.subscribe({
@@ -80,11 +80,11 @@ const IntegrationInstallModal: React.FC<
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleModalClose = React.useCallback(() => {
-    if (singleSpa) {
-      singleSpa.navigateToUrl(location.pathname);
-    }
-  }, [singleSpa]);
+  // const handleModalClose = React.useCallback(() => {
+  //   if (singleSpa) {
+  //     singleSpa.navigateToUrl(location.pathname);
+  //   }
+  // }, [singleSpa]);
 
   return (
     /*@TODO: revisit props when new install/uninstall hooks are ready to be integrated*/
