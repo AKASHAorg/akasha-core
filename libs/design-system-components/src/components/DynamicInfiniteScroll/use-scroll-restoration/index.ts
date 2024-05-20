@@ -89,10 +89,10 @@ export function useScrollRestoration({
        * Find the index of a visible item on the virtual list used for scroll restoration reference.
        * This computation accurately identifies those items whose index  is less than or equal to overScan.
        **/
-      const visibleItemIndex =
-        virtualItems.findIndex(
-          virtualItem => virtualItem.start > virtualizerRef.current.scrollOffset,
-        ) - 1;
+      let visibleItemIndex = virtualItems.findIndex(
+        virtualItem => virtualItem.start >= virtualizerRef.current.scrollOffset,
+      );
+      visibleItemIndex = visibleItemIndex === 0 ? 0 : visibleItemIndex - 1;
       storeScrollConfig(scrollRestorationStorageKey, {
         scrollOffset: virtualizerRef.current?.scrollOffset,
         topOffset: virtualItems?.[0]?.start,

@@ -115,7 +115,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
         <DynamicInfiniteScroll
           count={reflections.length}
           scrollRestorationStorageKey={scrollRestorationStorageKey}
-          scrollRestorationKeys={reflections.map(beam => beam?.node?.beamID)}
+          scrollRestorationKeys={reflections.map(beam => beam?.node?.reflectionID)}
           itemHeight={estimatedHeight}
           overScan={scrollOptions.overScan}
           itemSpacing={itemSpacing}
