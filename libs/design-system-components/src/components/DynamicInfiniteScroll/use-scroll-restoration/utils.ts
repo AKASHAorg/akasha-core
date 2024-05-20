@@ -19,6 +19,10 @@ type Config = {
    * Virtualizer's options
    **/
   options: VirtualizerOptions<Window, Element>;
+  /*
+   * Flag to check if a scroll restoration is done
+   **/
+  done?: boolean;
 };
 
 interface IRestoreScrollPosition {
@@ -42,7 +46,7 @@ export async function restoreScrollPosition({
   try {
     const scrollConfig = restoreScrollConfig(scrollRestorationStorageKey);
     if (!scrollConfig) return;
-    const { scrollRestorationKey, topOffset, scrollOffset, options } = scrollConfig;
+    const { scrollRestorationKey, topOffset, scrollOffset, options, done } = scrollConfig;
 
     /*
      * Validate scroll restoration config fields
@@ -68,7 +72,11 @@ export async function restoreScrollPosition({
       /*
        * Check if all conditions for scroll restoration are satisfied.
        **/
-      if (requiredItemsLoaded({ virtualizer, scrollIndex, overScan, options }) && offsetMatched) {
+      if (
+        requiredItemsLoaded({ virtualizer, scrollIndex, overScan, options }) &&
+        offsetMatched &&
+        !done
+      ) {
         /*
          * Check the difference between the last offset of the virtual list container with the current one.
          * If there is a difference add or subtract from the last scroll offset to determine the normalized scroll restoration offset.
@@ -78,9 +86,10 @@ export async function restoreScrollPosition({
           typeof offsetDelta === 'number' ? Math.round(scrollOffset - offsetDelta) : scrollOffset;
 
         window.scrollTo({ top: scrollToOffset, behavior: 'instant' });
+        storeScrollConfig(scrollRestorationStorageKey, { ...scrollConfig, done: true });
         setTimeout(() => {
           removeItemFromScrollConfig(scrollRestorationStorageKey);
-        }, 500);
+        }, 1000);
       }
     }
   } catch (error) {

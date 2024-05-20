@@ -134,13 +134,7 @@ const BeamFeed = (props: BeamFeedProps) => {
               /* Set the showNSFWCard prop to false so as to prevent the
                * NSFW beams from being displayed in the antenna feed when NSFW setting is off.
                */
-              return (
-                <BeamContentResolver
-                  beamId={beam.node.beamID}
-                  showNSFWCard={false}
-                  customStyle="min-h-full"
-                />
-              );
+              return <BeamContentResolver beamId={beam.node.beamID} showNSFWCard={false} />;
             }
           }}
         </DynamicInfiniteScroll>

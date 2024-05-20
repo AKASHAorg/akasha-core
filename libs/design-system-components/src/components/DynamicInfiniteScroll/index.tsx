@@ -2,9 +2,10 @@ import React, { ReactElement, useCallback, useEffect, useLayoutEffect, useRef } 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import { useWindowVirtualizer } from '@tanstack/react-virtual';
+import { measureElement, useWindowVirtualizer } from '@tanstack/react-virtual';
 import { useScrollRestoration } from './use-scroll-restoration';
 import { restoreScrollConfig } from './use-scroll-restoration/utils';
+import { useMedia } from 'react-use';
 
 type DynamicInfiniteScrollItem = {
   index: number;
@@ -45,6 +46,7 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
   const parentRef = useRef(null);
   const scrollRestorationStorageKeyRef = useRef(scrollRestorationStorageKey);
   const parentOffsetRef = React.useRef(0);
+  const isMobileScreen = useMedia('(max-width: 640px)');
 
   useLayoutEffect(() => {
     parentOffsetRef.current = parentRef.current?.offsetTop ?? 0;
@@ -67,6 +69,17 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
     count: count,
     overscan: overScan,
     initialMeasurementsCache: getInitialMeasurementsCache(),
+    measureElement: isMobileScreen
+      ? (element, entry, instance) => {
+          if (instance.scrollDirection === 'backward') {
+            return (
+              instance.measurementsCache?.[instance?.indexFromElement(element)]?.size ||
+              element.scrollHeight
+            );
+          }
+          return measureElement(element, entry, instance);
+        }
+      : measureElement,
     scrollMargin: getScrollMargin(),
     estimateSize: () => itemHeight,
   });
@@ -116,7 +129,7 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
             data-index={virtualItem.index}
             ref={virtualizer.measureElement}
             type="plain"
-            customStyle={`${virtualizer.isScrolling || virtualizer.options.initialMeasurementsCache.length ? `flex flex-col min-h-[${virtualItem.size}px]` : ''}`}
+            customStyle={`${virtualizer.isScrolling || virtualizer.options.initialMeasurementsCache.length ? `min-h-[${virtualItem.size}px]` : ''}`}
           >
             {children({ index, itemIndex: virtualItem.index, itemsSize: items.length })}
           </Card>
