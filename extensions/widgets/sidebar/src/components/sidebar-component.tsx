@@ -131,13 +131,13 @@ const SidebarComponent: React.FC<unknown> = () => {
     });
   };
 
-  const handleAvatarClick = function (did: string) {
-    if (!did) {
+  const handleAvatarClick = (id: string) => {
+    if (!id) {
       return;
     }
     routing?.navigateTo({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${did}`,
+      getNavigationUrl: routes => `${routes.rootRoute}/${id}`,
     });
 
     if (isMobile) {
