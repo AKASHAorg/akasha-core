@@ -27,7 +27,6 @@ export type BeamFeedProps = {
     overScan: number;
   };
   scrollTopIndicator?: VirtualizerProps<unknown>['scrollTopIndicator'];
-
   trackEvent?: (data: AnalyticsEventData['data']) => void;
   loadingIndicator?: VirtualizerProps<unknown>['loadingIndicator'];
 };

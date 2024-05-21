@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import DynamicInfiniteScroll from '@akashaorg/design-system-components/lib/components/DynamicInfiniteScroll';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import getSDK from '@akashaorg/awf-sdk';
 import { AnalyticsEventData, EntityTypes } from '@akashaorg/typings/lib/ui';
 import {
@@ -102,8 +103,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
   if (isAuthenticating) return <>{loadingIndicatorRef.current()}</>;
 
   return (
-    <>
-      {reflectionStreamQuery.loading && reflections.length === 0 && loadingIndicatorRef.current()}
+    <Card type="plain">
       {reflectionStreamQuery.error && (
         <ErrorLoader
           type="script-error"
@@ -111,7 +111,8 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
           details={<>{reflectionStreamQuery.error.message}</>}
         />
       )}
-      {reflections && (
+
+      {reflections.length > 0 && (
         <DynamicInfiniteScroll
           count={reflections.length}
           scrollRestorationStorageKey={scrollRestorationStorageKey}
@@ -134,7 +135,6 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
               });
             }
           }}
-          customStyle="mb-4"
         >
           {({ itemIndex }) => {
             const reflection = reflections[itemIndex];
@@ -143,7 +143,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
           }}
         </DynamicInfiniteScroll>
       )}
-    </>
+    </Card>
   );
 };
 

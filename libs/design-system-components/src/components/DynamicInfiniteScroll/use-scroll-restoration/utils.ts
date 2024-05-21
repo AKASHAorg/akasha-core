@@ -82,8 +82,7 @@ export async function restoreScrollPosition({
          * If there is a difference add or subtract from the last scroll offset to determine the normalized scroll restoration offset.
          **/
         const offsetDelta = topOffset - virtualizer.getVirtualItems()?.[0].start;
-        const scrollToOffset =
-          typeof offsetDelta === 'number' ? Math.round(scrollOffset - offsetDelta) : scrollOffset;
+        const scrollToOffset = typeof offsetDelta === 'number' ? scrollOffset : scrollOffset;
 
         window.scrollTo({ top: scrollToOffset, behavior: 'instant' });
         setTimeout(() => {
@@ -92,7 +91,7 @@ export async function restoreScrollPosition({
         storeScrollConfig(scrollRestorationStorageKey, { ...scrollConfig, done: true });
         setTimeout(() => {
           removeItemFromScrollConfig(scrollRestorationStorageKey);
-        }, 1000);
+        }, 500);
       }
     }
   } catch (error) {
