@@ -18,7 +18,3 @@ export type AWF_APP_BUILD_MANIFEST = {
   links?: z.infer<typeof IntegrationInfoLinksSchema>;
   sources: string[];
 };
-
-/** Warning:  the following exported types are auto generated */
-export type { IntegrationReleaseInfo as ReleaseInfo } from './graphql-types';
-export type { IntegrationInfo } from './graphql-types';

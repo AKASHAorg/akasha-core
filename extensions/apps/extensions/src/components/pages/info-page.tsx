@@ -14,7 +14,7 @@ type InfoPageProps = {
   appId: string;
 };
 
-const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
+export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
   const { t } = useTranslation('app-extensions');
   const {
     data: { authenticatedDID },
@@ -92,5 +92,3 @@ const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
     </Stack>
   );
 };
-
-export default InfoPage;

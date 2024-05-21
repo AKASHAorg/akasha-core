@@ -1,4 +1,4 @@
-import { IMenuItem } from './menu-items';
+import { IMenuItem } from './sidebar-menu-items';
 import { ContentBlockRegisterEvent } from './editor-blocks';
 import { AnalyticsEventData } from './analytics';
 import { ExtensionRegisterEvent } from './extensions';

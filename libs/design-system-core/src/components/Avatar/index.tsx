@@ -8,6 +8,7 @@ import {
   getImageFromSeed,
 } from '../../utils';
 import { type Image } from '@akashaorg/typings/lib/ui';
+import Card from '../Card';
 
 export type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 
@@ -29,12 +30,12 @@ type AvatarContentProps = {
   profileId?: string | null;
   publicImgPath?: string;
   customStyle?: string;
+  onClick?: React.MouseEventHandler;
 };
 
 export type AvatarProps = AvatarContentProps & {
   dataTestId?: string;
   href?: string;
-  onClick?: React.MouseEventHandler<HTMLAnchorElement>;
 };
 
 const AvatarContent: React.FC<AvatarContentProps> = props => {
@@ -51,6 +52,7 @@ const AvatarContent: React.FC<AvatarContentProps> = props => {
     profileId = '0x0000000000000000000000000000000',
     publicImgPath = '/images',
     customStyle = '',
+    onClick,
   } = props;
 
   const seed = getImageFromSeed(profileId, 7);
@@ -68,31 +70,37 @@ const AvatarContent: React.FC<AvatarContentProps> = props => {
   const activeOverlayClass = generateActiveOverlayClass();
 
   return (
-    <Stack customStyle={containerStyle}>
-      {(avatar || avatarFallback) && (
-        <React.Suspense fallback={<></>}>
-          <AvatarImage url={avatar?.src} alt={alt} fallbackUrl={avatarFallback} faded={faded} />
-        </React.Suspense>
-      )}
-      {active && <Stack customStyle={activeOverlayClass} />}
-    </Stack>
+    <Card type="plain" onClick={onClick}>
+      <Stack customStyle={containerStyle}>
+        {(avatar || avatarFallback) && (
+          <React.Suspense fallback={<></>}>
+            <AvatarImage url={avatar?.src} alt={alt} fallbackUrl={avatarFallback} faded={faded} />
+          </React.Suspense>
+        )}
+        {active && <Stack customStyle={activeOverlayClass} />}
+      </Stack>
+    </Card>
   );
 };
 
 const Avatar: React.FC<AvatarProps> = props => {
   const { dataTestId, href, onClick, ...rest } = props;
 
-  return (
-    <Link
-      dataTestId={dataTestId}
-      to={href}
-      // tabIndex is set to -1 to allow keyboard focus while preventing direct navigation using Tab key
-      tabIndex={-1}
-      onClick={onClick}
-    >
-      <AvatarContent {...rest} />
-    </Link>
-  );
+  if (href) {
+    return (
+      <Link
+        dataTestId={dataTestId}
+        to={href}
+        // tabIndex is set to -1 to allow keyboard focus while preventing direct navigation using Tab key
+        tabIndex={-1}
+        onClick={onClick}
+      >
+        <AvatarContent {...rest} />
+      </Link>
+    );
+  }
+
+  return <AvatarContent onClick={onClick} {...rest} />;
 };
 
 export default Avatar;

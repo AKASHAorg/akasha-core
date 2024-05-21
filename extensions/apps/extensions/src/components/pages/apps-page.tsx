@@ -5,7 +5,7 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import AppList from '@akashaorg/design-system-components/lib/components/AppList';
 import { useTranslation } from 'react-i18next';
 
-const AppsPage: React.FC<unknown> = () => {
+export const AppsPage: React.FC<unknown> = () => {
   const { t } = useTranslation('app-extensions');
 
   /*@TODO: replace with the relevant hook once it's ready */
@@ -35,5 +35,3 @@ const AppsPage: React.FC<unknown> = () => {
     </Stack>
   );
 };
-
-export default AppsPage;

@@ -66,7 +66,6 @@ const ReflectionEditorRenderer: React.FC<ReflectionEditorRendererProps> = props 
       onPublish={onPublish}
       setEditorState={setEditorState}
       onCancelClick={onCancelClick}
-      getLinkPreview={getLinkPreview}
       transformSource={transformSource}
       encodingFunction={encodeSlateToBase64}
     />

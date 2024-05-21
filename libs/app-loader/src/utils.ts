@@ -1,8 +1,12 @@
-import { IAppConfig, ModalNavigationOptions, QueryStringType } from '@akashaorg/typings/lib/ui';
+import {
+  IAppConfig,
+  ModalNavigationOptions,
+  QueryStringType,
+  ManifestConfig,
+} from '@akashaorg/typings/lib/ui';
 import * as singleSpa from 'single-spa';
 import qs from 'qs';
 import { Logger } from '@akashaorg/awf-sdk';
-import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/lib/sdk/graphql-operation-types';
 
 export const encodeName = (appName: string) => {
   return appName;
@@ -15,7 +19,7 @@ export const decodeName = (appName: string) => {
 export interface CheckActivityOptions {
   config: IAppConfig;
   encodedAppName: string;
-  manifest?: IntegrationReleaseInfoFragmentFragment;
+  manifest?: ManifestConfig;
   location?: Location;
 }
 
