@@ -15,7 +15,7 @@
 - [Vibes Console](./apps/vibes-console/README.md)
 
 ## Widgets
-> A widget further enriches and provides additonal information relating to a specific app or the entire world. Available widgets include:
+> Widgets further enrich and provide additonal information relating to a specific app or the entire world. They could be `General` (shown across all apps and routes - eg: trending widget) or `App Specific` (shown only when the defining app is active - eg: mini profile widget, my-apps widget). Available widgets include:
 
 - [Analytics](./widgets/analytics/README.md)
 - [Layout](./widgets/layout/README.md)

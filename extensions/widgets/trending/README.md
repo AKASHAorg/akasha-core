@@ -1,6 +1,6 @@
 # Trending Widget
 
-> Shows most-used tags (sorted in order of descending count) and accounts (sorted in chronological order)
+> Trending widgets show most-used tags (sorted in order of descending count) and profiles (sorted in chronological order)
 
 ## Usage
 
