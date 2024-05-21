@@ -160,7 +160,7 @@ export const AkashaAppFragmentMFragmentDoc = /*#__PURE__*/ `
   id
   applicationType
   description
-  licence
+  license
   name
   displayName
   keywords

@@ -1,10 +1,10 @@
-type AkashaFollow @loadModel(id: "kjzl6hvfrbw6c5jg1zwrvbcvembp7v15kejrry05o2gvv2r4xghzfn2uluglus3") {
+interface AkashaFollowInterface @loadModel(id: "kjzl6hvfrbw6calrvwg964obomy7bymp65be4zwpagdjms6bm067pakecsx61st") {
   id: ID!
 }
 
 
-type AkashaProfile @loadModel(id: "kjzl6hvfrbw6c862oulkrdvxh2yfbhc997f7ahqtjppj2ejg8too3j7jmu8gsno") {
+type AkashaProfile @loadModel(id: "kjzl6hvfrbw6cagktk50tp31ec5nycbhzcpi0mmideporowub9qe7ee3lgml511") {
   id: ID!
-  followers: [AkashaFollow] @relationFrom(model: "AkashaFollow", property: "profileID")
-  followersCount: Int! @relationCountFrom(model: "AkashaFollow", property: "profileID")
+  followers: [AkashaFollowInterface] @relationFrom(model: "AkashaFollowInterface", property: "profileID")
+  followersCount: Int! @relationCountFrom(model: "AkashaFollowInterface", property: "profileID")
 }

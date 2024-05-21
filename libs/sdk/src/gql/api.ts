@@ -304,7 +304,7 @@ export const AkashaAppFragmentMFragmentDoc = /*#__PURE__*/ gql`
   id
   applicationType
   description
-  licence
+  license
   name
   displayName
   keywords
@@ -402,7 +402,7 @@ export const AkashaAppFragmentDoc = /*#__PURE__*/ gql`
   id
   applicationType
   description
-  licence
+  license
   name
   displayName
   keywords
@@ -734,7 +734,7 @@ export const UpdateAkashaReflectDocument = /*#__PURE__*/ gql`
 }
     ${ReflectFragmentMFragmentDoc}`;
 export const GetReflectionsFromBeamDocument = /*#__PURE__*/ gql`
-    query GetReflectionsFromBeam($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaReflectSortingInput, $filters: AkashaReflectFiltersInput) {
+    query GetReflectionsFromBeam($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaReflectInterfaceSortingInput, $filters: AkashaReflectInterfaceFiltersInput) {
   node(id: $id) {
     ... on AkashaBeam {
       reflections(
@@ -1219,7 +1219,7 @@ export const GetFollowingListByDidDocument = /*#__PURE__*/ gql`
 }
     ${UserProfileFragmentDoc}`;
 export const GetFollowersListByDidDocument = /*#__PURE__*/ gql`
-    query GetFollowersListByDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaFollowSortingInput) {
+    query GetFollowersListByDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaFollowInterfaceSortingInput) {
   node(id: $id) {
     ... on CeramicAccount {
       akashaProfile {

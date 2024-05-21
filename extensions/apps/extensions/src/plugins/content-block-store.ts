@@ -6,7 +6,7 @@ import {
   RootExtensionProps,
 } from '@akashaorg/typings/lib/ui';
 import { hasOwn } from '@akashaorg/ui-awf-hooks';
-import { AkashaContentBlockLabeledValue } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { BlockLabeledValue } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { BaseStore } from './base-store';
 
 /**
@@ -90,7 +90,7 @@ export class ContentBlockStore extends BaseStore {
         return this.#blocks
           .filter(bl => bl.appName === applicationName)
           .flatMap(blockExt => {
-            return (blockInfo.content as AkashaContentBlockLabeledValue[])
+            return (blockInfo.content as BlockLabeledValue[])
               .filter(content => content.propertyType === blockExt.propertyType)
               .map(content => ({
                 blockInfo: blockExt,

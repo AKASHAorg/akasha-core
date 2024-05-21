@@ -4,7 +4,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { SocialLink } from './social-link';
 import { PlusIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import { AkashaProfileLinkSource } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { ProfileLinkSource } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { Controller, Control } from 'react-hook-form';
 import { EditProfileFormValues } from '../types';
 
@@ -14,7 +14,7 @@ export type SocialLinksProps = {
   description: string;
   customStyle?: string;
   control: Control<EditProfileFormValues>;
-  socialLinks: AkashaProfileLinkSource[];
+  socialLinks: ProfileLinkSource[];
   onDeleteLink: () => void;
 };
 

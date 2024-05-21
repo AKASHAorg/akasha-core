@@ -1,14 +1,14 @@
 
-export default function compose(akashaFollowId, akashaProfileId){
- return `type AkashaFollow @loadModel(id: "${akashaFollowId}") {
+export default function compose(akashaFollowIdInterface, akashaProfileId){
+ return `interface AkashaFollowInterface @loadModel(id: "${akashaFollowIdInterface}") {
   id: ID!
 }
 
 
 type AkashaProfile @loadModel(id: "${akashaProfileId}") {
   id: ID!
-  followers: [AkashaFollow] @relationFrom(model: "AkashaFollow", property: "profileID")
-  followersCount: Int! @relationCountFrom(model: "AkashaFollow", property: "profileID")
+  followers: [AkashaFollowInterface] @relationFrom(model: "AkashaFollowInterface", property: "profileID")
+  followersCount: Int! @relationCountFrom(model: "AkashaFollowInterface", property: "profileID")
 }`
 }
 
