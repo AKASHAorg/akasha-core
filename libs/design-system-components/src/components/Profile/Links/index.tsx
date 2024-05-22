@@ -14,11 +14,11 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import { getIconFromLink } from '../../../utils/get-icon-from-link';
-import { AkashaProfileLinkSource } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { ProfileLinkSource } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 export type LinksProps = {
   title: string;
-  links: AkashaProfileLinkSource[];
+  links: ProfileLinkSource[];
   copyLabel?: string;
   copiedLabel?: string;
 };

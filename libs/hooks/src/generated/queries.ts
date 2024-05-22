@@ -199,7 +199,7 @@ export const AkashaAppFragmentDoc = /*#__PURE__*/ `
   id
   applicationType
   description
-  licence
+  license
   name
   displayName
   keywords
@@ -786,7 +786,7 @@ useInfiniteGetIndexedStreamCountQuery.getKey = (variables: Types.GetIndexedStrea
 
 useGetIndexedStreamCountQuery.fetcher = (variables: Types.GetIndexedStreamCountQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetIndexedStreamCountQuery, Types.GetIndexedStreamCountQueryVariables>(GetIndexedStreamCountDocument, variables, options);
 export const GetReflectionsFromBeamDocument = /*#__PURE__*/ `
-    query GetReflectionsFromBeam($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaReflectSortingInput, $filters: AkashaReflectFiltersInput) {
+    query GetReflectionsFromBeam($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaReflectInterfaceSortingInput, $filters: AkashaReflectInterfaceFiltersInput) {
   node(id: $id) {
     ... on AkashaBeam {
       reflections(
@@ -1664,7 +1664,7 @@ useInfiniteGetFollowingListByDidQuery.getKey = (variables: Types.GetFollowingLis
 
 useGetFollowingListByDidQuery.fetcher = (variables: Types.GetFollowingListByDidQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetFollowingListByDidQuery, Types.GetFollowingListByDidQueryVariables>(GetFollowingListByDidDocument, variables, options);
 export const GetFollowersListByDidDocument = /*#__PURE__*/ `
-    query GetFollowersListByDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaFollowSortingInput) {
+    query GetFollowersListByDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaFollowInterfaceSortingInput) {
   node(id: $id) {
     ... on CeramicAccount {
       akashaProfile {

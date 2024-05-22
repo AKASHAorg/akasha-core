@@ -4,7 +4,7 @@
   "scripts": {
     "clean": "tsc --build --clean tsconfig.json",
     "clean:all": "yarn clean && nx reset",
-    "prepare": "nx run-many --target=prepare --all",
+    "prepare": "nx run-many --target=prepare --all --verbose",
     "build:libs": "nx run-many -t build --projects=tag:type:lib --verbose",
     "build:apps": "nx run-many -t build --projects=tag:scope:extension --verbose",
     "extract:translations": "nx run-many -t translations --projects=tag:scope:extension --verbose",
@@ -137,7 +137,8 @@
     "did-jwt": "^8.0.0",
     "did-resolver": "4.1.0",
     "did-session": "3.1.0",
-    "dids": "^5.0.2",
+    "dids": "5.0.2",
+    "dotenv": "16.4.5",
     "dotenv-webpack": "8.0.1",
     "eslint": "8.57.0",
     "eslint-config-prettier": "8.10.0",

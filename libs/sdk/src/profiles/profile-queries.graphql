@@ -225,7 +225,7 @@ query GetFollowingListByDid($id: ID!, $after: String, $before: String, $first: I
 }
 
 # get followers
-query GetFollowersListByDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaFollowSortingInput){
+query GetFollowersListByDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaFollowInterfaceSortingInput){
   node(id: $id){
     ... on CeramicAccount{
       akashaProfile {

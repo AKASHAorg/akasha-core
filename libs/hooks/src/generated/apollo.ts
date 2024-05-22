@@ -305,7 +305,7 @@ export const AkashaAppFragmentMFragmentDoc = /*#__PURE__*/ gql`
   id
   applicationType
   description
-  licence
+  license
   name
   displayName
   keywords
@@ -403,7 +403,7 @@ export const AkashaAppFragmentDoc = /*#__PURE__*/ gql`
   id
   applicationType
   description
-  licence
+  license
   name
   displayName
   keywords
@@ -720,7 +720,7 @@ export const GetBeamStreamDocument = /*#__PURE__*/ gql`
  *   },
  * });
  */
-export function useGetBeamStreamQuery(baseOptions: Apollo.QueryHookOptions<Types.GetBeamStreamQuery, Types.GetBeamStreamQueryVariables>) {
+export function useGetBeamStreamQuery(baseOptions: Apollo.QueryHookOptions<Types.GetBeamStreamQuery, Types.GetBeamStreamQueryVariables> & ({ variables: Types.GetBeamStreamQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<Types.GetBeamStreamQuery, Types.GetBeamStreamQueryVariables>(GetBeamStreamDocument, options);
       }
@@ -853,7 +853,7 @@ export const GetBeamsByAuthorDidDocument = /*#__PURE__*/ gql`
  *   },
  * });
  */
-export function useGetBeamsByAuthorDidQuery(baseOptions: Apollo.QueryHookOptions<Types.GetBeamsByAuthorDidQuery, Types.GetBeamsByAuthorDidQueryVariables>) {
+export function useGetBeamsByAuthorDidQuery(baseOptions: Apollo.QueryHookOptions<Types.GetBeamsByAuthorDidQuery, Types.GetBeamsByAuthorDidQueryVariables> & ({ variables: Types.GetBeamsByAuthorDidQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<Types.GetBeamsByAuthorDidQuery, Types.GetBeamsByAuthorDidQueryVariables>(GetBeamsByAuthorDidDocument, options);
       }
@@ -895,7 +895,7 @@ export const GetBeamByIdDocument = /*#__PURE__*/ gql`
  *   },
  * });
  */
-export function useGetBeamByIdQuery(baseOptions: Apollo.QueryHookOptions<Types.GetBeamByIdQuery, Types.GetBeamByIdQueryVariables>) {
+export function useGetBeamByIdQuery(baseOptions: Apollo.QueryHookOptions<Types.GetBeamByIdQuery, Types.GetBeamByIdQueryVariables> & ({ variables: Types.GetBeamByIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<Types.GetBeamByIdQuery, Types.GetBeamByIdQueryVariables>(GetBeamByIdDocument, options);
       }
@@ -969,7 +969,7 @@ export const GetContentBlockStreamDocument = /*#__PURE__*/ gql`
  *   },
  * });
  */
-export function useGetContentBlockStreamQuery(baseOptions: Apollo.QueryHookOptions<Types.GetContentBlockStreamQuery, Types.GetContentBlockStreamQueryVariables>) {
+export function useGetContentBlockStreamQuery(baseOptions: Apollo.QueryHookOptions<Types.GetContentBlockStreamQuery, Types.GetContentBlockStreamQueryVariables> & ({ variables: Types.GetContentBlockStreamQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<Types.GetContentBlockStreamQuery, Types.GetContentBlockStreamQueryVariables>(GetContentBlockStreamDocument, options);
       }
@@ -1011,7 +1011,7 @@ export const GetContentBlockByIdDocument = /*#__PURE__*/ gql`
  *   },
  * });
  */
-export function useGetContentBlockByIdQuery(baseOptions: Apollo.QueryHookOptions<Types.GetContentBlockByIdQuery, Types.GetContentBlockByIdQueryVariables>) {
+export function useGetContentBlockByIdQuery(baseOptions: Apollo.QueryHookOptions<Types.GetContentBlockByIdQuery, Types.GetContentBlockByIdQueryVariables> & ({ variables: Types.GetContentBlockByIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<Types.GetContentBlockByIdQuery, Types.GetContentBlockByIdQueryVariables>(GetContentBlockByIdDocument, options);
       }
@@ -1053,7 +1053,7 @@ export const GetBlockStorageByIdDocument = /*#__PURE__*/ gql`
  *   },
  * });
  */
-export function useGetBlockStorageByIdQuery(baseOptions: Apollo.QueryHookOptions<Types.GetBlockStorageByIdQuery, Types.GetBlockStorageByIdQueryVariables>) {
+export function useGetBlockStorageByIdQuery(baseOptions: Apollo.QueryHookOptions<Types.GetBlockStorageByIdQuery, Types.GetBlockStorageByIdQueryVariables> & ({ variables: Types.GetBlockStorageByIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<Types.GetBlockStorageByIdQuery, Types.GetBlockStorageByIdQueryVariables>(GetBlockStorageByIdDocument, options);
       }
@@ -1130,7 +1130,7 @@ export const GetIndexedStreamDocument = /*#__PURE__*/ gql`
  *   },
  * });
  */
-export function useGetIndexedStreamQuery(baseOptions: Apollo.QueryHookOptions<Types.GetIndexedStreamQuery, Types.GetIndexedStreamQueryVariables>) {
+export function useGetIndexedStreamQuery(baseOptions: Apollo.QueryHookOptions<Types.GetIndexedStreamQuery, Types.GetIndexedStreamQueryVariables> & ({ variables: Types.GetIndexedStreamQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<Types.GetIndexedStreamQuery, Types.GetIndexedStreamQueryVariables>(GetIndexedStreamDocument, options);
       }
@@ -1174,7 +1174,7 @@ export const GetIndexedStreamCountDocument = /*#__PURE__*/ gql`
  *   },
  * });
  */
-export function useGetIndexedStreamCountQuery(baseOptions: Apollo.QueryHookOptions<Types.GetIndexedStreamCountQuery, Types.GetIndexedStreamCountQueryVariables>) {
+export function useGetIndexedStreamCountQuery(baseOptions: Apollo.QueryHookOptions<Types.GetIndexedStreamCountQuery, Types.GetIndexedStreamCountQueryVariables> & ({ variables: Types.GetIndexedStreamCountQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<Types.GetIndexedStreamCountQuery, Types.GetIndexedStreamCountQueryVariables>(GetIndexedStreamCountDocument, options);
       }
@@ -1299,7 +1299,7 @@ export type UpdateAkashaReflectMutationHookResult = ReturnType<typeof useUpdateA
 export type UpdateAkashaReflectMutationResult = Apollo.MutationResult<Types.UpdateAkashaReflectMutation>;
 export type UpdateAkashaReflectMutationOptions = Apollo.BaseMutationOptions<Types.UpdateAkashaReflectMutation, Types.UpdateAkashaReflectMutationVariables>;
 export const GetReflectionsFromBeamDocument = /*#__PURE__*/ gql`
-    query GetReflectionsFromBeam($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaReflectSortingInput, $filters: AkashaReflectFiltersInput) {
+    query GetReflectionsFromBeam($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaReflectInterfaceSortingInput, $filters: AkashaReflectInterfaceFiltersInput) {
   node(id: $id) {
     ... on AkashaBeam {
       reflections(
@@ -1351,7 +1351,7 @@ export const GetReflectionsFromBeamDocument = /*#__PURE__*/ gql`
  *   },
  * });
  */
-export function useGetReflectionsFromBeamQuery(baseOptions: Apollo.QueryHookOptions<Types.GetReflectionsFromBeamQuery, Types.GetReflectionsFromBeamQueryVariables>) {
+export function useGetReflectionsFromBeamQuery(baseOptions: Apollo.QueryHookOptions<Types.GetReflectionsFromBeamQuery, Types.GetReflectionsFromBeamQueryVariables> & ({ variables: Types.GetReflectionsFromBeamQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<Types.GetReflectionsFromBeamQuery, Types.GetReflectionsFromBeamQueryVariables>(GetReflectionsFromBeamDocument, options);
       }
@@ -1420,7 +1420,7 @@ export const GetReflectionsByAuthorDidDocument = /*#__PURE__*/ gql`
  *   },
  * });
  */
-export function useGetReflectionsByAuthorDidQuery(baseOptions: Apollo.QueryHookOptions<Types.GetReflectionsByAuthorDidQuery, Types.GetReflectionsByAuthorDidQueryVariables>) {
+export function useGetReflectionsByAuthorDidQuery(baseOptions: Apollo.QueryHookOptions<Types.GetReflectionsByAuthorDidQuery, Types.GetReflectionsByAuthorDidQueryVariables> & ({ variables: Types.GetReflectionsByAuthorDidQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<Types.GetReflectionsByAuthorDidQuery, Types.GetReflectionsByAuthorDidQueryVariables>(GetReflectionsByAuthorDidDocument, options);
       }
@@ -1496,7 +1496,7 @@ export const GetReflectionStreamDocument = /*#__PURE__*/ gql`
  *   },
  * });
  */
-export function useGetReflectionStreamQuery(baseOptions: Apollo.QueryHookOptions<Types.GetReflectionStreamQuery, Types.GetReflectionStreamQueryVariables>) {
+export function useGetReflectionStreamQuery(baseOptions: Apollo.QueryHookOptions<Types.GetReflectionStreamQuery, Types.GetReflectionStreamQueryVariables> & ({ variables: Types.GetReflectionStreamQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<Types.GetReflectionStreamQuery, Types.GetReflectionStreamQueryVariables>(GetReflectionStreamDocument, options);
       }
@@ -1538,7 +1538,7 @@ export const GetReflectionByIdDocument = /*#__PURE__*/ gql`
  *   },
  * });
  */
-export function useGetReflectionByIdQuery(baseOptions: Apollo.QueryHookOptions<Types.GetReflectionByIdQuery, Types.GetReflectionByIdQueryVariables>) {
+export function useGetReflectionByIdQuery(baseOptions: Apollo.QueryHookOptions<Types.GetReflectionByIdQuery, Types.GetReflectionByIdQueryVariables> & ({ variables: Types.GetReflectionByIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<Types.GetReflectionByIdQuery, Types.GetReflectionByIdQueryVariables>(GetReflectionByIdDocument, options);
       }
@@ -1601,7 +1601,7 @@ export const GetReflectReflectionsDocument = /*#__PURE__*/ gql`
  *   },
  * });
  */
-export function useGetReflectReflectionsQuery(baseOptions: Apollo.QueryHookOptions<Types.GetReflectReflectionsQuery, Types.GetReflectReflectionsQueryVariables>) {
+export function useGetReflectReflectionsQuery(baseOptions: Apollo.QueryHookOptions<Types.GetReflectReflectionsQuery, Types.GetReflectReflectionsQueryVariables> & ({ variables: Types.GetReflectReflectionsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<Types.GetReflectReflectionsQuery, Types.GetReflectReflectionsQueryVariables>(GetReflectReflectionsDocument, options);
       }
@@ -1994,7 +1994,7 @@ export const GetFollowDocumentsByDidDocument = /*#__PURE__*/ gql`
  *   },
  * });
  */
-export function useGetFollowDocumentsByDidQuery(baseOptions: Apollo.QueryHookOptions<Types.GetFollowDocumentsByDidQuery, Types.GetFollowDocumentsByDidQueryVariables>) {
+export function useGetFollowDocumentsByDidQuery(baseOptions: Apollo.QueryHookOptions<Types.GetFollowDocumentsByDidQuery, Types.GetFollowDocumentsByDidQueryVariables> & ({ variables: Types.GetFollowDocumentsByDidQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<Types.GetFollowDocumentsByDidQuery, Types.GetFollowDocumentsByDidQueryVariables>(GetFollowDocumentsByDidDocument, options);
       }
@@ -2036,7 +2036,7 @@ export const GetProfileByIdDocument = /*#__PURE__*/ gql`
  *   },
  * });
  */
-export function useGetProfileByIdQuery(baseOptions: Apollo.QueryHookOptions<Types.GetProfileByIdQuery, Types.GetProfileByIdQueryVariables>) {
+export function useGetProfileByIdQuery(baseOptions: Apollo.QueryHookOptions<Types.GetProfileByIdQuery, Types.GetProfileByIdQueryVariables> & ({ variables: Types.GetProfileByIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<Types.GetProfileByIdQuery, Types.GetProfileByIdQueryVariables>(GetProfileByIdDocument, options);
       }
@@ -2081,7 +2081,7 @@ export const GetProfileByDidDocument = /*#__PURE__*/ gql`
  *   },
  * });
  */
-export function useGetProfileByDidQuery(baseOptions: Apollo.QueryHookOptions<Types.GetProfileByDidQuery, Types.GetProfileByDidQueryVariables>) {
+export function useGetProfileByDidQuery(baseOptions: Apollo.QueryHookOptions<Types.GetProfileByDidQuery, Types.GetProfileByDidQueryVariables> & ({ variables: Types.GetProfileByDidQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<Types.GetProfileByDidQuery, Types.GetProfileByDidQueryVariables>(GetProfileByDidDocument, options);
       }
@@ -2216,7 +2216,7 @@ export const GetProfileStreamDocument = /*#__PURE__*/ gql`
  *   },
  * });
  */
-export function useGetProfileStreamQuery(baseOptions: Apollo.QueryHookOptions<Types.GetProfileStreamQuery, Types.GetProfileStreamQueryVariables>) {
+export function useGetProfileStreamQuery(baseOptions: Apollo.QueryHookOptions<Types.GetProfileStreamQuery, Types.GetProfileStreamQueryVariables> & ({ variables: Types.GetProfileStreamQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<Types.GetProfileStreamQuery, Types.GetProfileStreamQueryVariables>(GetProfileStreamDocument, options);
       }
@@ -2354,7 +2354,7 @@ export const GetInterestsStreamDocument = /*#__PURE__*/ gql`
  *   },
  * });
  */
-export function useGetInterestsStreamQuery(baseOptions: Apollo.QueryHookOptions<Types.GetInterestsStreamQuery, Types.GetInterestsStreamQueryVariables>) {
+export function useGetInterestsStreamQuery(baseOptions: Apollo.QueryHookOptions<Types.GetInterestsStreamQuery, Types.GetInterestsStreamQueryVariables> & ({ variables: Types.GetInterestsStreamQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<Types.GetInterestsStreamQuery, Types.GetInterestsStreamQueryVariables>(GetInterestsStreamDocument, options);
       }
@@ -2406,7 +2406,7 @@ export const GetInterestsByDidDocument = /*#__PURE__*/ gql`
  *   },
  * });
  */
-export function useGetInterestsByDidQuery(baseOptions: Apollo.QueryHookOptions<Types.GetInterestsByDidQuery, Types.GetInterestsByDidQueryVariables>) {
+export function useGetInterestsByDidQuery(baseOptions: Apollo.QueryHookOptions<Types.GetInterestsByDidQuery, Types.GetInterestsByDidQueryVariables> & ({ variables: Types.GetInterestsByDidQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<Types.GetInterestsByDidQuery, Types.GetInterestsByDidQueryVariables>(GetInterestsByDidDocument, options);
       }
@@ -2455,7 +2455,7 @@ export const GetInterestsByIdDocument = /*#__PURE__*/ gql`
  *   },
  * });
  */
-export function useGetInterestsByIdQuery(baseOptions: Apollo.QueryHookOptions<Types.GetInterestsByIdQuery, Types.GetInterestsByIdQueryVariables>) {
+export function useGetInterestsByIdQuery(baseOptions: Apollo.QueryHookOptions<Types.GetInterestsByIdQuery, Types.GetInterestsByIdQueryVariables> & ({ variables: Types.GetInterestsByIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<Types.GetInterestsByIdQuery, Types.GetInterestsByIdQueryVariables>(GetInterestsByIdDocument, options);
       }
@@ -2531,7 +2531,7 @@ export const GetFollowingListByDidDocument = /*#__PURE__*/ gql`
  *   },
  * });
  */
-export function useGetFollowingListByDidQuery(baseOptions: Apollo.QueryHookOptions<Types.GetFollowingListByDidQuery, Types.GetFollowingListByDidQueryVariables>) {
+export function useGetFollowingListByDidQuery(baseOptions: Apollo.QueryHookOptions<Types.GetFollowingListByDidQuery, Types.GetFollowingListByDidQueryVariables> & ({ variables: Types.GetFollowingListByDidQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<Types.GetFollowingListByDidQuery, Types.GetFollowingListByDidQueryVariables>(GetFollowingListByDidDocument, options);
       }
@@ -2548,7 +2548,7 @@ export type GetFollowingListByDidLazyQueryHookResult = ReturnType<typeof useGetF
 export type GetFollowingListByDidSuspenseQueryHookResult = ReturnType<typeof useGetFollowingListByDidSuspenseQuery>;
 export type GetFollowingListByDidQueryResult = Apollo.QueryResult<Types.GetFollowingListByDidQuery, Types.GetFollowingListByDidQueryVariables>;
 export const GetFollowersListByDidDocument = /*#__PURE__*/ gql`
-    query GetFollowersListByDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaFollowSortingInput) {
+    query GetFollowersListByDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaFollowInterfaceSortingInput) {
   node(id: $id) {
     ... on CeramicAccount {
       akashaProfile {
@@ -2611,7 +2611,7 @@ export const GetFollowersListByDidDocument = /*#__PURE__*/ gql`
  *   },
  * });
  */
-export function useGetFollowersListByDidQuery(baseOptions: Apollo.QueryHookOptions<Types.GetFollowersListByDidQuery, Types.GetFollowersListByDidQueryVariables>) {
+export function useGetFollowersListByDidQuery(baseOptions: Apollo.QueryHookOptions<Types.GetFollowersListByDidQuery, Types.GetFollowersListByDidQueryVariables> & ({ variables: Types.GetFollowersListByDidQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<Types.GetFollowersListByDidQuery, Types.GetFollowersListByDidQueryVariables>(GetFollowersListByDidDocument, options);
       }
@@ -2660,7 +2660,7 @@ export const GetProfileStatsByDidDocument = /*#__PURE__*/ gql`
  *   },
  * });
  */
-export function useGetProfileStatsByDidQuery(baseOptions: Apollo.QueryHookOptions<Types.GetProfileStatsByDidQuery, Types.GetProfileStatsByDidQueryVariables>) {
+export function useGetProfileStatsByDidQuery(baseOptions: Apollo.QueryHookOptions<Types.GetProfileStatsByDidQuery, Types.GetProfileStatsByDidQueryVariables> & ({ variables: Types.GetProfileStatsByDidQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<Types.GetProfileStatsByDidQuery, Types.GetProfileStatsByDidQueryVariables>(GetProfileStatsByDidDocument, options);
       }
@@ -2946,7 +2946,7 @@ export const GetAppsStreamDocument = /*#__PURE__*/ gql`
  *   },
  * });
  */
-export function useGetAppsStreamQuery(baseOptions: Apollo.QueryHookOptions<Types.GetAppsStreamQuery, Types.GetAppsStreamQueryVariables>) {
+export function useGetAppsStreamQuery(baseOptions: Apollo.QueryHookOptions<Types.GetAppsStreamQuery, Types.GetAppsStreamQueryVariables> & ({ variables: Types.GetAppsStreamQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<Types.GetAppsStreamQuery, Types.GetAppsStreamQueryVariables>(GetAppsStreamDocument, options);
       }
@@ -2989,7 +2989,7 @@ ${UserProfileFragmentDoc}`;
  *   },
  * });
  */
-export function useGetAppsByIdQuery(baseOptions: Apollo.QueryHookOptions<Types.GetAppsByIdQuery, Types.GetAppsByIdQueryVariables>) {
+export function useGetAppsByIdQuery(baseOptions: Apollo.QueryHookOptions<Types.GetAppsByIdQuery, Types.GetAppsByIdQueryVariables> & ({ variables: Types.GetAppsByIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<Types.GetAppsByIdQuery, Types.GetAppsByIdQueryVariables>(GetAppsByIdDocument, options);
       }
@@ -3098,7 +3098,7 @@ ${UserProfileFragmentDoc}`;
  *   },
  * });
  */
-export function useGetAppReleaseByIdQuery(baseOptions: Apollo.QueryHookOptions<Types.GetAppReleaseByIdQuery, Types.GetAppReleaseByIdQueryVariables>) {
+export function useGetAppReleaseByIdQuery(baseOptions: Apollo.QueryHookOptions<Types.GetAppReleaseByIdQuery, Types.GetAppReleaseByIdQueryVariables> & ({ variables: Types.GetAppReleaseByIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<Types.GetAppReleaseByIdQuery, Types.GetAppReleaseByIdQueryVariables>(GetAppReleaseByIdDocument, options);
       }

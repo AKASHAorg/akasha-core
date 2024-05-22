@@ -99,7 +99,8 @@ const EditableReflection: React.FC<ReflectCardProps> = props => {
         i: {
           id: entryData.id,
           content: {
-            content,
+            // reflection's content is now immutable
+            //content,
           },
         },
       },

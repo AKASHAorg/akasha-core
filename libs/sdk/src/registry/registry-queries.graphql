@@ -2,7 +2,7 @@ fragment AkashaAppFragment on AkashaApp{
   id
   applicationType
   description
-  licence
+  license
   name
   displayName
   keywords
