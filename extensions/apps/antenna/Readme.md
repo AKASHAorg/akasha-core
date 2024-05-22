@@ -8,6 +8,7 @@
 - [Components](#components)
     - [Global-Antenna-Page](#global-antenna-page)
     - [Beam-Page](#beam-page)
+    - [Reflection-Page](#reflection-page)
     - [My-Antenna-Page](#my-antenna-page)
     - [Profile-Feed-Page](#profile-feed-page)
     - [Tag-Feed-Page](#tag-feed-page)
@@ -32,6 +33,9 @@ The core components include:
 
 ### Beam page
 > A single beam entry with all its reflections and reflects to those reflections. It´s a place to reflect on a beam and express your thoughts freely.
+
+### Reflection page
+> A single reflection entry with all its reflects. You arrive at a reflection page upon clicking on any reflection on a beam page.
 
 ### My antenna page
 > A curated list of beams, based on a logged-in user's interests. See no content here? Start subscribing to some popular topics in the Latest Topics widget on the right-hand side of the desktop screen. 
