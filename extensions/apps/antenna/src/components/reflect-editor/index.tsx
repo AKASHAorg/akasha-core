@@ -24,6 +24,7 @@ import {
   ReflectEntryData,
 } from '@akashaorg/typings/lib/ui';
 import { usePendingReflections } from '@akashaorg/ui-awf-hooks/lib/use-pending-reflections';
+import { useApolloClient } from '@apollo/client';
 
 export type ReflectEditorProps = {
   beamId: string;
@@ -41,20 +42,18 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
   const [editorState, setEditorState] = useState(null);
   const [newContent, setNewContent] = useState<ReflectEntryData>(null);
   const pendingReflectionIdRef = useRef(null);
+  const apolloClient = useApolloClient();
 
   const sdk = getSDK();
   const isReflectOfReflection = reflectToId !== beamId;
 
   const [publishReflection, publishReflectionMutation] = useCreateReflectMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
-    refetchQueries: [GetReflectionStreamDocument],
-    awaitRefetchQueries: true,
     onCompleted: () => {
       analyticsActions.trackEvent({
         category: AnalyticsCategories.REFLECT,
         action: 'Reflect Published',
       });
-      removePendingReflection(pendingReflectionIdRef.current);
     },
   });
   const [indexReflection, indexReflectionMutation] = useIndexReflectionMutation();
@@ -132,6 +131,9 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
       );
       await indexReflection({
         variables: indexingVars,
+      });
+      apolloClient.refetchQueries({ include: [GetReflectionStreamDocument] }).then(() => {
+        removePendingReflection(pendingReflectionIdRef.current);
       });
     } else {
       showAlertNotification(`${t(`Something went wrong when publishing the reflection`)}.`);
