@@ -9,7 +9,7 @@ import {
 import { CreateRouter, RouterContext } from '@akashaorg/typings/lib/ui';
 import { ExplorePage, ExtensionsHub, InfoPage, InstalledExtensions } from '../pages';
 import ErrorComponent from './error-component';
-import routes, { EXTENSIONS, INSTALLED, INFO, HOME } from '../../routes';
+import routes, { EXTENSIONS, INSTALLED, HOME } from '../../routes';
 
 const rootRoute = createRootRouteWithContext<RouterContext>()({
   component: Outlet,
@@ -42,8 +42,8 @@ const installedExtensionsRoute = createRoute({
 });
 
 const infoRoute = createRoute({
-  getParentRoute: () => exploreRoute,
-  path: `$appId${routes[INFO]}`,
+  getParentRoute: () => rootRoute,
+  path: '/info/$appId',
   component: () => {
     const { appId } = infoRoute.useParams();
     return <InfoPage appId={appId} />;
@@ -52,9 +52,10 @@ const infoRoute = createRoute({
 
 const routeTree = rootRoute.addChildren([
   defaultRoute,
-  exploreRoute.addChildren([infoRoute]),
+  exploreRoute,
   extensionsHubRoute,
   installedExtensionsRoute,
+  infoRoute,
 ]);
 
 export const router = ({ baseRouteName, apolloClient }: CreateRouter) =>

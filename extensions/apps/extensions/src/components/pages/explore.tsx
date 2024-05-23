@@ -19,7 +19,10 @@ export const ExplorePage: React.FC<unknown> = () => {
   const handleButtonClick = (appId: string) => {
     if (!isInstalled) {
       navigate({
-        to: `${appId}/info`,
+        to: '/info/$appId',
+        params: {
+          appId,
+        },
       });
     } else {
       navigateTo({
@@ -36,7 +39,10 @@ export const ExplorePage: React.FC<unknown> = () => {
 
   const handleAppClick = (appId: string) => {
     navigate({
-      to: `${appId}/info`,
+      to: '/info/$appId',
+      params: {
+        appId,
+      },
     });
   };
 
@@ -78,7 +84,7 @@ export const ExplorePage: React.FC<unknown> = () => {
         {
           assetName: t('vibes-console-explore'),
           title: t('Vibes Console'),
-          description: `${t("Dive into AKASHA WORLD's Vibes Console!")} 💫 ${t("Your spot to become a moderator, explore applicants, and curate content. Together, let's shape our vibrant community!")}`,
+          description: `${t("Dive into AKASHA WORLD's Vibes Console!")} 💫 ${t("Your spot to become a moderator, explore applicants, and curate content. Together, let's shape our vibrant community!")} 🌟🔍✨`,
           ctaNode: (
             <Button
               variant={isInstalled ? 'secondary' : 'primary'}

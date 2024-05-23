@@ -87,10 +87,7 @@ export const Explore: React.FC<TExploreProps> = props => {
                 />
               )}
               <Text variant="h6">{section.title}</Text>
-              <Text variant="body2">
-                {section.description}
-                🌟🔍✨
-              </Text>
+              <Text variant="body2">{section.description}</Text>
               {section.ctaNode}
             </Stack>
           </Card>

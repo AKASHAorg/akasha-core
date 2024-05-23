@@ -9,5 +9,5 @@ export default {
   [HOME]: '/explore',
   [EXTENSIONS]: '/extensions',
   [INSTALLED]: '/installed',
-  [INFO]: '/info',
+  [INFO]: '/info/$appId',
 };
