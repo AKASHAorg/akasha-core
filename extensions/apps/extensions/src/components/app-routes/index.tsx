@@ -7,7 +7,7 @@ import {
   redirect,
 } from '@tanstack/react-router';
 import { CreateRouter, RouterContext } from '@akashaorg/typings/lib/ui';
-import { ExplorePage, ExtensionsHub, InfoPage, InstalledExtensions } from '../../pages';
+import { ExplorePage, ExtensionsHub, InfoPage, InstalledExtensions } from '../pages';
 import ErrorComponent from './error-component';
 import routes, { EXTENSIONS, INSTALLED, INFO, HOME } from '../../routes';
 
