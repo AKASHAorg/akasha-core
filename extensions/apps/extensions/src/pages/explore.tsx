@@ -6,7 +6,7 @@ import { ArrowLongRightIcon } from '@heroicons/react/24/outline';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import { Explore } from '../components/explore';
-import routes, { EXTENSIONS, INFO } from '../routes';
+import routes, { EXTENSIONS } from '../routes';
 
 export const ExplorePage: React.FC<unknown> = () => {
   const navigate = useNavigate();
@@ -14,12 +14,12 @@ export const ExplorePage: React.FC<unknown> = () => {
   const { getRoutingPlugin } = useRootComponentProps();
   const navigateTo = getRoutingPlugin().navigateTo;
 
-  const isInstalled = true;
+  const isInstalled = false;
 
-  const handleButtonClick = () => {
+  const handleButtonClick = (appId: string) => {
     if (!isInstalled) {
       navigate({
-        to: routes[INFO],
+        to: `${appId}/info`,
       });
     } else {
       navigateTo({
@@ -34,9 +34,9 @@ export const ExplorePage: React.FC<unknown> = () => {
     });
   };
 
-  const handleAppClick = (id: string) => {
+  const handleAppClick = (appId: string) => {
     navigate({
-      to: `${id}/info`,
+      to: `${appId}/info`,
     });
   };
 
@@ -49,19 +49,25 @@ export const ExplorePage: React.FC<unknown> = () => {
       id: 'supercart1',
       name: t('Supercarts'),
       description,
-      action: <Button variant="primary" label={t('Open')} />,
+      action: (
+        <Button variant="primary" label={t('Open')} onClick={() => handleAppClick('supercart1')} />
+      ),
     },
     {
       id: 'newsreader2',
       name: t('News Reader'),
       description,
-      action: <Button variant="primary" label={t('Open')} />,
+      action: (
+        <Button variant="primary" label={t('Open')} onClick={() => handleAppClick('newsreader2')} />
+      ),
     },
     {
       id: 'nftgallery3',
       name: t('NFT Gallery'),
       description,
-      action: <Button variant="primary" label={t('Open')} />,
+      action: (
+        <Button variant="primary" label={t('Open')} onClick={() => handleAppClick('nftgallery3')} />
+      ),
     },
   ];
 
@@ -78,7 +84,7 @@ export const ExplorePage: React.FC<unknown> = () => {
               variant={isInstalled ? 'secondary' : 'primary'}
               label={isInstalled ? t('Installed') : t('Open')}
               customStyle="w-fit self-end"
-              onClick={handleButtonClick}
+              onClick={() => handleButtonClick('vibesconsole')}
             />
           ),
         },

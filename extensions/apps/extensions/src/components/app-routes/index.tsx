@@ -23,7 +23,7 @@ const defaultRoute = createRoute({
   },
 });
 
-const overviewRoute = createRoute({
+const exploreRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[HOME],
   component: ExplorePage,
@@ -42,7 +42,7 @@ const installedExtensionsRoute = createRoute({
 });
 
 const infoRoute = createRoute({
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => exploreRoute,
   path: `$appId${routes[INFO]}`,
   component: () => {
     const { appId } = infoRoute.useParams();
@@ -52,10 +52,9 @@ const infoRoute = createRoute({
 
 const routeTree = rootRoute.addChildren([
   defaultRoute,
-  overviewRoute,
+  exploreRoute.addChildren([infoRoute]),
   extensionsHubRoute,
   installedExtensionsRoute,
-  infoRoute,
 ]);
 
 export const router = ({ baseRouteName, apolloClient }: CreateRouter) =>
