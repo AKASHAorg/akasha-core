@@ -6,9 +6,9 @@ import { ArrowLongRightIcon } from '@heroicons/react/24/outline';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import { Explore } from '../explore';
-import routes, { INFO } from '../../routes';
+import routes, { EXTENSIONS, INFO } from '../../routes';
 
-export const Overview: React.FC<unknown> = () => {
+export const ExplorePage: React.FC<unknown> = () => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
   const { getRoutingPlugin } = useRootComponentProps();
@@ -27,6 +27,43 @@ export const Overview: React.FC<unknown> = () => {
       });
     }
   };
+
+  const handleViewAllLatestExtensions = () => {
+    navigate({
+      to: routes[EXTENSIONS],
+    });
+  };
+
+  const handleAppClick = (id: string) => {
+    navigate({
+      to: `${id}/info`,
+    });
+  };
+
+  const description = t(
+    'Play with your friends in AKASHA World and enjoy a couple of puzzle games or drawing games or any kind of game!',
+  );
+
+  const latestExtensions = [
+    {
+      id: 'supercart1',
+      name: t('Supercarts'),
+      description,
+      action: <Button variant="primary" label={t('Open')} />,
+    },
+    {
+      id: 'newsreader2',
+      name: t('News Reader'),
+      description,
+      action: <Button variant="primary" label={t('Open')} />,
+    },
+    {
+      id: 'nftgallery3',
+      name: t('NFT Gallery'),
+      description,
+      action: <Button variant="primary" label={t('Open')} />,
+    },
+  ];
 
   return (
     <Explore
@@ -62,6 +99,11 @@ export const Overview: React.FC<unknown> = () => {
           ),
         },
       ]}
+      latestExtensionsLabel={t('Latest Extensions')}
+      latestExtensions={latestExtensions}
+      buttonLabel={t('View All')}
+      onViewAllClick={handleViewAllLatestExtensions}
+      onAppClick={handleAppClick}
     />
   );
 };

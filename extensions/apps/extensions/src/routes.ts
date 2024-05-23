@@ -9,7 +9,5 @@ export default {
   [HOME]: '/explore',
   [EXTENSIONS]: '/extensions',
   [INSTALLED]: '/installed',
-  [MY_APPS]: '/my-apps',
-  [MY_WIDGETS]: '/my-widgets',
   [INFO]: '/info',
 };
