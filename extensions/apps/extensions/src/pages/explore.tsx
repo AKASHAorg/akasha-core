@@ -5,8 +5,8 @@ import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { ArrowLongRightIcon } from '@heroicons/react/24/outline';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
-import { Explore } from '../explore';
-import routes, { EXTENSIONS, INFO } from '../../routes';
+import { Explore } from '../components/explore';
+import routes, { EXTENSIONS, INFO } from '../routes';
 
 export const ExplorePage: React.FC<unknown> = () => {
   const navigate = useNavigate();
