@@ -16,7 +16,7 @@ import {
 import { hasOwn, useRootComponentProps, useAkashaStore } from '@akashaorg/ui-awf-hooks';
 import getSDK from '@akashaorg/awf-sdk';
 import { useApolloClient } from '@apollo/client';
-import { AkashaProfileInterestsLabeled } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { ProfileLabeled } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 type InterestsPageProps = {
   profileDID: string;
@@ -112,7 +112,7 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
     });
   };
 
-  const runMutations = (interests: AkashaProfileInterestsLabeled[]) => {
+  const runMutations = (interests: ProfileLabeled[]) => {
     setIsProcessing(true);
     if (interestSubscriptionId) {
       updateInterestsMutation({

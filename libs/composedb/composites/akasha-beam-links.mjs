@@ -1,13 +1,13 @@
-export default function compose (akashaBeamId, akashaReflectId) {
+export default function compose (akashaBeamId, akashaReflectIdInterface) {
     return `
-type AkashaReflect @loadModel(id: "${akashaReflectId}") {
+interface AkashaReflectInterface @loadModel(id: "${akashaReflectIdInterface}") {
   id: ID!
 }
 
 type AkashaBeam @loadModel(id: "${akashaBeamId}") {
   id: ID!
-  reflections: [AkashaReflect] @relationFrom(model: "AkashaReflect", property: "beamID")
-  reflectionsCount: Int! @relationCountFrom(model: "AkashaReflect", property: "beamID")
+  reflections: [AkashaReflectInterface] @relationFrom(model: "AkashaReflectInterface", property: "beamID")
+  reflectionsCount: Int! @relationCountFrom(model: "AkashaReflectInterface", property: "beamID")
 }
 `
 }

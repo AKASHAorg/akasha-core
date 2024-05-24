@@ -1,27 +1,54 @@
-export default function compose (akashaBeamId) {
+export default function compose (akashaBeamIdInterface) {
     return `
-type ProviderValue{
+type ReflectProviderValue{
   propertyType: String! @string(minLength: 2, maxLength: 100)
   label: String! @string(minLength: 6, maxLength: 100)
   value: String! @string(minLength: 3, maxLength: 3000)
 }
 
-type AkashaBeam @loadModel(id: "${akashaBeamId}") {
+interface AkashaBeamInterface @loadModel(id: "${akashaBeamIdInterface}") {
   id: ID!
 }
 
-type AkashaReflect @createModel(accountRelation: LIST, description: "A Reflection on a Beam v0.1") @createIndex(fields:[{path:"active"}, {path: "createdAt"}, {path: "reflection"}, {path: "isReply"}, {path: "nsfw"}]) {
-    beamID: StreamID! @documentReference(model: "AkashaBeam")
-    beam: AkashaBeam! @relationDocument(property: "beamID")
+interface AkashaReflectInterface @createModel(description: "A Reflection on a Beam interface") {
+    beamID: StreamID! @documentReference(model: "AkashaBeamInterface") @immutable
+    beam: AkashaBeamInterface! @relationDocument(property: "beamID")
     author: DID! @documentAccount
-    content: [ProviderValue!]! @list(maxLength: 10)
-    tags: [String] @list(maxLength: 10) @string(minLength:3, maxLength: 32)
-    mentions: [StreamID] @list(maxLength: 10)
+    content: [ReflectProviderValue!]! @list(maxLength: 10) @immutable
+    tags: [String] @list(maxLength: 10) @string(minLength:3, maxLength: 32) @immutable
+    mentions: [StreamID] @list(maxLength: 10) @immutable
     version: CommitID! @documentVersion
-    reflection: StreamID
-    isReply: Boolean
+    reflection: StreamID @documentReference(model: "Node") @immutable
+    reflectionView: Node @relationDocument(property: "reflection")
+    isReply: Boolean @immutable
     active: Boolean!
-    createdAt: DateTime!
+    createdAt: DateTime! @immutable
+    nsfw: Boolean
+}
+
+type AkashaReflect implements AkashaReflectInterface
+  @createModel(accountRelation: LIST, description: "A Reflection on a Beam v0.4.0")
+  @createIndex(fields:[{path:["active"]}])
+  @createIndex(fields:[{path:["beamID"]}])
+  @createIndex(fields:[{path:["createdAt"]}])
+  @createIndex(fields:[{path:["reflection"]}])
+  @createIndex(fields:[{path:["isReply"]}])
+  @createIndex(fields:[{path:["nsfw"]}])
+  @createIndex(fields:[{path:["beamID"]}, {path:["active"]}, {path:["isReply"]}, {path:["createdAt"]}])
+  @createIndex(fields:[{path:["reflection"]}, {path:["active"]}, {path:["isReply"]}, {path:["createdAt"]}])
+   {
+    beamID: StreamID! @documentReference(model: "AkashaBeamInterface") @immutable
+    beam: AkashaBeamInterface! @relationDocument(property: "beamID")
+    author: DID! @documentAccount
+    content: [ReflectProviderValue!]! @list(maxLength: 10) @immutable
+    tags: [String] @list(maxLength: 10) @string(minLength:3, maxLength: 32) @immutable
+    mentions: [StreamID] @list(maxLength: 10) @immutable
+    version: CommitID! @documentVersion
+    reflection: StreamID @documentReference(model: "Node") @immutable
+    reflectionView: Node @relationDocument(property: "reflection")
+    isReply: Boolean @immutable
+    active: Boolean!
+    createdAt: DateTime! @immutable
     nsfw: Boolean
 }`
 }
