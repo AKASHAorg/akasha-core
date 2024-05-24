@@ -73,29 +73,33 @@ export const BlockHeader: React.FC<BlockHeaderProps> = props => {
       <BlockStatusToolbar {...rest} />
       {isFocusedBlock && (
         <Stack direction="row" spacing="gap-x-1" align="center">
-          <button onClick={decreaseBlockOrder}>
-            <Stack
-              align="center"
-              justify="center"
-              customStyle={'h-8 w-8 group relative rounded-full bg(grey9 dark:grey5)'}
-            >
-              <Icon icon={<ArrowUpIcon />} size="sm" accentColor disabled={blockOrder === 0} />
-            </Stack>
-          </button>
-          <button onClick={increaseBlockOrder}>
-            <Stack
-              align="center"
-              justify="center"
-              customStyle={'h-8 w-8 group relative rounded-full bg(grey9 dark:grey5)'}
-            >
-              <Icon
-                icon={<ArrowDownIcon />}
-                size="sm"
-                accentColor
-                disabled={blockOrder > totalBlocksLength - 2}
-              />
-            </Stack>
-          </button>
+          {totalBlocksLength > 0 && (
+            <button onClick={decreaseBlockOrder}>
+              <Stack
+                align="center"
+                justify="center"
+                customStyle={'h-8 w-8 group relative rounded-full bg(grey9 dark:grey5)'}
+              >
+                <Icon icon={<ArrowUpIcon />} size="sm" accentColor disabled={blockOrder === 0} />
+              </Stack>
+            </button>
+          )}
+          {totalBlocksLength > 0 && (
+            <button onClick={increaseBlockOrder}>
+              <Stack
+                align="center"
+                justify="center"
+                customStyle={'h-8 w-8 group relative rounded-full bg(grey9 dark:grey5)'}
+              >
+                <Icon
+                  icon={<ArrowDownIcon />}
+                  size="sm"
+                  accentColor
+                  disabled={blockOrder > totalBlocksLength - 2}
+                />
+              </Stack>
+            </button>
+          )}
           <button onClick={removeBlock}>
             <Stack
               align="center"
