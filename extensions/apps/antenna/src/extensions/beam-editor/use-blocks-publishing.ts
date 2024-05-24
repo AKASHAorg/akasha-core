@@ -255,24 +255,20 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
   const increaseBlockOrder = (index: number) => {
     if (index < blocksInUse.length - 1) {
       setBlocksInUse(prev => {
-        const oldBlock = prev[index];
+        const blockToBeReordered = prev[index];
         const blockAfter = prev[index + 1];
-
-        const beforeSlice = prev.slice(0, index);
-
-        const newBlockAfter = {
-          ...blockAfter,
-          order: blockAfter?.order - 1,
-        };
-
-        const newOldBlock = {
-          ...oldBlock,
-          order: oldBlock?.order + 1,
-        };
-
-        const afterSlice = prev.slice(index + 2);
-        const res = [...beforeSlice, newBlockAfter, newOldBlock, ...afterSlice];
-        return res;
+        return [
+          ...prev.slice(0, index),
+          {
+            ...blockAfter,
+            order: blockAfter?.order - 1,
+          },
+          {
+            ...blockToBeReordered,
+            order: blockToBeReordered?.order + 1,
+          },
+          ...prev.slice(index + 2),
+        ];
       });
     }
   };
@@ -280,14 +276,14 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
   const decreaseBlockOrder = (index: number) => {
     if (index > 0) {
       setBlocksInUse(prev => {
-        const oldBlock = prev[index];
+        const blockToBeReordered = prev[index];
         const blockBefore = prev[index - 1];
         return [
           ...prev.slice(0, index - 1),
 
           {
-            ...oldBlock,
-            order: oldBlock?.order - 1,
+            ...blockToBeReordered,
+            order: blockToBeReordered?.order - 1,
           },
           {
             ...blockBefore,
