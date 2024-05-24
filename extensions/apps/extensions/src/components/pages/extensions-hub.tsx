@@ -1,16 +1,45 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from '@tanstack/react-router';
 import { ArrowLongRightIcon } from '@heroicons/react/24/outline';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
+import { VibesConsole } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import { ExtensionsHub } from '../extensions-hub';
 
 export const ExtensionsHubPage: React.FC<unknown> = () => {
+  const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
+
+  const handleAppClick = (appId: string) => {
+    navigate({
+      to: '/info/$appId',
+      params: {
+        appId,
+      },
+    });
+  };
+
+  const extensions = [
+    {
+      id: 'vibesconsole',
+      name: t('Vibes Console'),
+      description: `${t("Dive into AKASHA WORLD's Vibes Console!")} 💫 ${t('Your spot to become a moderator, explore applicants, and curate content.')}`,
+      icon: <VibesConsole />,
+      action: (
+        <Button
+          variant="primary"
+          label={t('Install')}
+          onClick={() => handleAppClick('vibesconsole')}
+        />
+      ),
+    },
+  ];
 
   return (
     <ExtensionsHub
       titleLabel={t('Extensions Hub')}
+      extensions={extensions}
       sections={[
         {
           assetName: t('extensions-discover'),
@@ -49,6 +78,7 @@ export const ExtensionsHubPage: React.FC<unknown> = () => {
           ),
         },
       ]}
+      onAppClick={handleAppClick}
     />
   );
 };
