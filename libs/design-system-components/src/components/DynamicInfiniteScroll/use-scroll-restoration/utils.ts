@@ -12,9 +12,9 @@ type Config = {
    **/
   topOffset: number;
   /*
-   * The key used to compute the item used as a scroll restoration reference
+   * Index of the reference item used for scroll restoration
    **/
-  scrollRestorationKey: string;
+  referenceItemIndex: number;
   /*
    * Virtualizer's options
    **/
@@ -26,7 +26,6 @@ type Config = {
 };
 
 interface IRestoreScrollPosition {
-  scrollRestorationKeys: string[];
   virtualizer: Virtualizer<Window, Element>;
   overScan: number;
   offsetAttribute: string;
@@ -37,7 +36,6 @@ interface IRestoreScrollPosition {
  * Restore scroll position
  **/
 export async function restoreScrollPosition({
-  scrollRestorationKeys,
   virtualizer,
   overScan,
   offsetAttribute,
@@ -46,28 +44,32 @@ export async function restoreScrollPosition({
   try {
     const scrollConfig = restoreScrollConfig(scrollRestorationStorageKey);
     if (!scrollConfig) return;
-    const { scrollRestorationKey, topOffset, scrollOffset, options, done } = scrollConfig;
-
+    const { referenceItemIndex, topOffset, scrollOffset, options, done } = scrollConfig;
     /*
      * Validate scroll restoration config fields
      **/
     if (
-      !scrollRestorationKey ||
+      !referenceItemIndex ||
       !options ||
       typeof options !== 'object' ||
       typeof scrollOffset !== 'number'
     )
       return;
 
-    const scrollIndex = scrollRestorationKeys.findIndex(key => key === scrollRestorationKey);
+    const scrollIndex = options.initialMeasurementsCache.findIndex(
+      measurementCache => measurementCache.index === referenceItemIndex,
+    );
+
     if (scrollIndex !== -1) {
+      const currentTopOffset =
+        virtualizer.getVirtualItems()?.[0]?.start - virtualizer.options.scrollMargin;
       /*
        * Check if the latest virtual items container offset matches with the current offset to determine
        *  if the current offset can be used for scroll restoration.
        **/
       const offsetMatched =
         Number(document.querySelector(`[${offsetAttribute}]`)?.getAttribute(offsetAttribute)) ===
-        virtualizer.getVirtualItems()?.[0].start;
+          currentTopOffset && typeof currentTopOffset === 'number';
 
       /*
        * Check if all conditions for scroll restoration are satisfied.
@@ -81,13 +83,15 @@ export async function restoreScrollPosition({
          * Check the difference between the last offset of the virtual list container with the current one.
          * If there is a difference add or subtract from the last scroll offset to determine the normalized scroll restoration offset.
          **/
-        const offsetDelta = topOffset - virtualizer.getVirtualItems()?.[0].start;
-        const scrollToOffset = typeof offsetDelta === 'number' ? scrollOffset : scrollOffset;
-
-        window.scrollTo({ top: scrollToOffset, behavior: 'instant' });
-        setTimeout(() => {
-          window.scrollTo({ top: scrollToOffset, behavior: 'instant' });
-        }, 150);
+        const offsetDelta = topOffset - currentTopOffset;
+        const scrollToOffset =
+          typeof offsetDelta === 'number' ? scrollOffset - offsetDelta : scrollOffset;
+        virtualizer.scrollToOffset(scrollToOffset, { align: 'start', behavior: 'auto' });
+        if (scrollToOffset !== virtualizer.scrollOffset) {
+          setTimeout(() => {
+            window.scrollTo(0, scrollToOffset);
+          }, 500);
+        }
         storeScrollConfig(scrollRestorationStorageKey, { ...scrollConfig, done: true });
         setTimeout(() => {
           removeItemFromScrollConfig(scrollRestorationStorageKey);

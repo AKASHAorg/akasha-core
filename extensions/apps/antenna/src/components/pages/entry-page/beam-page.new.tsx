@@ -98,7 +98,6 @@ const BeamPage: React.FC<BeamPageProps> = props => {
           showLoginModal={showLoginModal}
         />
         <ReflectFeed
-          scrollRestorationStorageKey={`reflect-feed-${beamId}`}
           itemType={EntityTypes.BEAM}
           filters={{ where: { beamID: { equalTo: beamId } } }}
           estimatedHeight={150}
@@ -152,7 +151,6 @@ const BeamPage: React.FC<BeamPageProps> = props => {
             );
           }}
           itemSpacing={0}
-          newItemsPublishedLabel={t('New Reflects published recently')}
           trackEvent={analyticsActions.trackEvent}
         />
       </Stack>

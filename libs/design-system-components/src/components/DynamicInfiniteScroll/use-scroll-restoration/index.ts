@@ -8,10 +8,9 @@ interface IScrollRestoration {
    **/
   virtualizer: Virtualizer<Window, Element>;
   /*
-   * Array of scroll restoration keys.
-   * One of the keys is used to compute the latest scroll index of a visible item used for scroll restoration reference.
+   * The total number of items virtualized
    **/
-  scrollRestorationKeys: string[];
+  count: number;
   /*
    * The number of items rendered above and below the visible area
    **/
@@ -32,13 +31,12 @@ interface IScrollRestoration {
  **/
 export function useScrollRestoration({
   virtualizer,
-  scrollRestorationKeys,
+  count,
   overScan,
   scrollRestorationStorageKey,
   offsetAttribute,
 }: IScrollRestoration) {
   const virtualizerRef = useRef(virtualizer);
-  const scrollRestorationKeysRef = useRef(scrollRestorationKeys);
   const overScanRef = useRef(overScan);
   const offsetAttributeRef = useRef(offsetAttribute);
   const scrollRestorationStorageKeyRef = useRef(scrollRestorationStorageKey);
@@ -48,21 +46,24 @@ export function useScrollRestoration({
   }, [virtualizer]);
 
   useEffect(() => {
-    scrollRestorationKeysRef.current = scrollRestorationKeys;
-  }, [scrollRestorationKeys]);
-
-  useEffect(() => {
     const virtualizer = virtualizerRef.current;
     const scrollConfig = restoreScrollConfig(scrollRestorationStorageKeyRef.current);
     if (scrollConfig) {
-      const { scrollRestorationKey, options } = scrollConfig;
+      const { referenceItemIndex, options, done } = scrollConfig;
 
-      if (!scrollRestorationKey || !options || typeof options !== 'object') return;
+      if (
+        !options ||
+        typeof referenceItemIndex !== 'number' ||
+        typeof options !== 'object' ||
+        count < options.count ||
+        done
+      )
+        return;
       /*
        * Find the index of an item which will be used as a scroll restoration reference.
        **/
-      const scrollIndex = scrollRestorationKeysRef.current?.findIndex(
-        key => key === scrollRestorationKey,
+      const scrollIndex = options.initialMeasurementsCache?.findIndex(
+        measurementCache => measurementCache.index === referenceItemIndex,
       );
       if (scrollIndex && scrollIndex !== -1) {
         /*
@@ -75,7 +76,7 @@ export function useScrollRestoration({
         virtualizer.scrollToIndex(scrollIndex, { align: 'start', behavior: 'auto' });
       }
     }
-  }, [scrollRestorationKeys]);
+  }, [count]);
 
   useEffect(() => {
     const overScan = overScanRef.current;
@@ -85,38 +86,36 @@ export function useScrollRestoration({
      **/
     return () => {
       const virtualItems = virtualizerRef.current.getVirtualItems();
-      /*
-       * Find the index of a visible item on the virtual list used for scroll restoration reference.
-       * This computation accurately identifies those items whose index  is less than or equal to overScan.
-       **/
-      let visibleItemIndex = virtualItems.findIndex(
-        virtualItem => virtualItem.start >= virtualizerRef.current.scrollOffset,
-      );
-      visibleItemIndex = visibleItemIndex === 0 ? 0 : visibleItemIndex - 1;
       const stepBackArr = Array(overScan)
         .fill(0)
         .map((_, index) => index);
-      let overScanItem = null;
+      /*
+       * Compute a visible item which will be used for scroll restoration reference.
+       **/
+      let visibleItem = null;
       for (const stepBack of stepBackArr) {
         if (virtualItems?.[overScan - stepBack]) {
-          overScanItem = virtualItems[overScan - stepBack];
+          visibleItem = virtualItems[overScan - stepBack];
           break;
         }
       }
+      /*
+       * If the index of the visible item is less than or equal to overScan recompute the visible item for accuracy
+       **/
+      if (visibleItem?.index <= overScan) {
+        let visibleItemIndex = virtualItems.findIndex(
+          virtualItem => virtualItem.start >= virtualizerRef.current.scrollOffset,
+        );
+        visibleItemIndex = visibleItemIndex === 0 ? 0 : visibleItemIndex - 1;
+        if (visibleItemIndex >= 0) {
+          visibleItem = virtualItems[visibleItemIndex];
+        }
+      }
+
       storeScrollConfig(scrollRestorationStorageKey, {
         scrollOffset: virtualizerRef.current?.scrollOffset,
-        topOffset: virtualItems?.[0]?.start,
-        scrollRestorationKey:
-          /*
-           * Find the index of a visible item used for scroll restoration reference and in turn use it to get the scroll restoration key.
-           * Use visibleItemIndex for those items whose index is less than or equal to overScan otherwise use overScan as an index on virtual items array
-           * to identify the index of the correct visible item that can be used for scroll restoration reference.
-           **/
-          scrollRestorationKeysRef.current?.[
-            overScanItem?.index <= overScan && visibleItemIndex >= 0
-              ? visibleItemIndex
-              : overScanItem?.index
-          ],
+        topOffset: virtualItems?.[0]?.start - virtualizerRef.current.options.scrollMargin,
+        referenceItemIndex: visibleItem?.index,
         options: {
           ...virtualizerRef.current?.options,
           initialMeasurementsCache: virtualizerRef.current?.measurementsCache,
@@ -132,7 +131,6 @@ export function useScrollRestoration({
     const observer = new ResizeObserver(() => {
       restoreScrollPosition({
         virtualizer: virtualizerRef.current,
-        scrollRestorationKeys: scrollRestorationKeysRef.current,
         overScan: overScanRef.current,
         offsetAttribute: offsetAttributeRef.current,
         scrollRestorationStorageKey: scrollRestorationStorageKeyRef.current,

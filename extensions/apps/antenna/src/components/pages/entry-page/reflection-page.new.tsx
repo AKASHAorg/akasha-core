@@ -80,10 +80,8 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
           </>
         </>
         <ReflectFeed
-          scrollRestorationStorageKey={`reflect-feed-${entryData.id}`}
           itemType={EntityTypes.REFLECT}
           itemSpacing={0}
-          newItemsPublishedLabel={t('New Reflects published recently')}
           trackEvent={analyticsActions.trackEvent}
           estimatedHeight={120}
           filters={{

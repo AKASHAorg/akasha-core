@@ -1,8 +1,15 @@
-import React, { ReactElement, useCallback, useEffect, useLayoutEffect, useRef } from 'react';
+import React, {
+  PropsWithChildren,
+  ReactElement,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+} from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import { measureElement, useWindowVirtualizer } from '@tanstack/react-virtual';
+import { Virtualizer, measureElement, useWindowVirtualizer } from '@tanstack/react-virtual';
 import { useScrollRestoration } from './use-scroll-restoration';
 import { restoreScrollConfig } from './use-scroll-restoration/utils';
 import { useMedia } from 'react-use';
@@ -16,12 +23,12 @@ type DynamicInfiniteScrollItem = {
 type DynamicInfiniteScrollType = {
   count: number;
   itemHeight: number;
-  scrollRestorationStorageKey: string;
+  enableScrollRestoration?: boolean;
+  scrollRestorationStorageKey?: string;
   overScan?: number;
   itemSpacing?: number;
   hasNextPage?: boolean;
   loading?: boolean;
-  scrollRestorationKeys?: string[];
   customStyle?: string;
   onLoadMore: () => Promise<unknown>;
   children: (item: DynamicInfiniteScrollItem) => ReactElement;
@@ -32,12 +39,12 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
   const {
     count,
     itemHeight,
-    scrollRestorationStorageKey,
+    enableScrollRestoration,
+    scrollRestorationStorageKey = 'storage-key',
     overScan = 5,
     itemSpacing,
     hasNextPage,
     loading,
-    scrollRestorationKeys,
     customStyle = '',
     onLoadMore,
     children,
@@ -58,29 +65,20 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
     return scrollConfig.options.initialMeasurementsCache;
   }, []);
 
-  const getScrollMargin = useCallback(() => {
-    const scrollConfig = restoreScrollConfig(scrollRestorationStorageKeyRef.current);
-    if (!scrollConfig || !scrollConfig.options || typeof scrollConfig !== 'object')
-      return parentOffsetRef.current;
-    return scrollConfig.options.scrollMargin;
-  }, []);
-
   const virtualizer = useWindowVirtualizer({
     count: count,
     overscan: overScan,
     initialMeasurementsCache: getInitialMeasurementsCache(),
+    scrollMargin: parentOffsetRef.current,
     measureElement: isMobileScreen
       ? (element, entry, instance) => {
-          if (instance.scrollDirection === 'backward') {
-            return (
-              instance.measurementsCache?.[instance?.indexFromElement(element)]?.size ||
-              element.scrollHeight
-            );
+          const dataIndex = instance.indexFromElement(element);
+          if (instance.scrollDirection === 'backward' && instance.measurementsCache?.[dataIndex]) {
+            return instance.measurementsCache[dataIndex].size;
           }
           return measureElement(element, entry, instance);
         }
       : measureElement,
-    scrollMargin: getScrollMargin(),
     estimateSize: () => itemHeight,
   });
 
@@ -92,16 +90,8 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
     ? loadMoreRef.current?.getBoundingClientRect().height
     : 0;
 
-  useScrollRestoration({
-    virtualizer,
-    scrollRestorationKeys,
-    overScan,
-    scrollRestorationStorageKey: scrollRestorationStorageKeyRef.current,
-    offsetAttribute: 'data-offset',
-  });
-
   useEffect(() => {
-    const [lastItem] = [...virtualItems].reverse();
+    const lastItem = virtualItems[virtualItems.length - 1];
 
     if (!lastItem) {
       return;
@@ -112,15 +102,19 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
     }
   }, [hasNextPage, count, loading, onLoadMore, virtualItems]);
 
-  return (
+  const vListOffset = virtualItems?.[0]?.start
+    ? virtualItems?.[0]?.start - virtualizer.options.scrollMargin
+    : 0;
+
+  const virtualListUi = (
     <Card
       ref={parentRef}
       customStyle={`relative min-h-[${totalSize + loadingPlaceholderSize}px] ${customStyle}`}
       type="plain"
     >
       <Card
-        data-offset={virtualItems?.[0]?.start}
-        customStyle={`flex flex-col absolute w-full top-0 left-0 translate-y-[${virtualItems?.[0]?.start ? virtualItems?.[0]?.start - virtualizer.options.scrollMargin : 0}px] gap-y-[${itemSpacing}px]`}
+        data-offset={vListOffset}
+        customStyle={`flex flex-col absolute w-full top-0 left-0 translate-y-[${vListOffset}px] gap-y-[${itemSpacing}px]`}
         type="plain"
       >
         {virtualItems.map((virtualItem, index, items) => (
@@ -142,6 +136,42 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
       </Card>
     </Card>
   );
+
+  return enableScrollRestoration ? (
+    <WithScrollRestoration
+      virtualizer={virtualizer}
+      scrollRestorationStorageKey={scrollRestorationStorageKey}
+      count={count}
+      overScan={overScan}
+      offsetAttribute="data-offset"
+    >
+      {virtualListUi}
+    </WithScrollRestoration>
+  ) : (
+    <>{virtualListUi}</>
+  );
+};
+
+type WithScrollRestorationProps = {
+  virtualizer: Virtualizer<Window, Element>;
+  scrollRestorationStorageKey: string;
+  count: number;
+  overScan: number;
+  offsetAttribute: string;
+};
+
+const WithScrollRestoration: React.FC<PropsWithChildren<WithScrollRestorationProps>> = props => {
+  const { virtualizer, scrollRestorationStorageKey, count, overScan, offsetAttribute, children } =
+    props;
+  const scrollRestorationStorageKeyRef = useRef(scrollRestorationStorageKey);
+  useScrollRestoration({
+    virtualizer,
+    count,
+    overScan,
+    scrollRestorationStorageKey: scrollRestorationStorageKeyRef.current,
+    offsetAttribute,
+  });
+  return <>{children}</>;
 };
 
 export default DynamicInfiniteScroll;

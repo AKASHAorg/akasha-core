@@ -17,9 +17,7 @@ import { useGetReflectionStreamLazyQuery } from '@akashaorg/ui-awf-hooks/lib/gen
 import { hasOwn, useAkashaStore } from '@akashaorg/ui-awf-hooks';
 
 export type ReflectFeedProps = {
-  scrollRestorationStorageKey: string;
   itemType: EntityTypes;
-  newItemsPublishedLabel?: string;
   filters?: AkashaReflectStreamFiltersInput;
   sorting?: AkashaReflectStreamSortingInput;
   estimatedHeight: number;
@@ -35,11 +33,10 @@ export type ReflectFeedProps = {
 
 const ReflectFeed: React.FC<ReflectFeedProps> = props => {
   const {
-    scrollRestorationStorageKey,
     itemType,
     filters,
     sorting,
-    estimatedHeight = 350,
+    estimatedHeight = 150,
     itemSpacing,
     scrollOptions = { overScan: 10 },
     loadingIndicator,
@@ -50,9 +47,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
   const [fetchReflectionStream, reflectionStreamQuery] = useGetReflectionStreamLazyQuery();
   const reflectionStream = React.useMemo(() => {
     if (
-      reflectionStreamQuery.data &&
-      hasOwn(reflectionStreamQuery.data, 'node') &&
-      reflectionStreamQuery.data.node &&
+      reflectionStreamQuery.data?.node &&
       hasOwn(reflectionStreamQuery.data.node, 'akashaReflectStreamList')
     ) {
       return reflectionStreamQuery.data.node?.akashaReflectStreamList;
@@ -115,8 +110,6 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
       {reflections.length > 0 && (
         <DynamicInfiniteScroll
           count={reflections.length}
-          scrollRestorationStorageKey={scrollRestorationStorageKey}
-          scrollRestorationKeys={reflections.map(beam => beam?.node?.reflectionID)}
           itemHeight={estimatedHeight}
           overScan={scrollOptions.overScan}
           itemSpacing={itemSpacing}
