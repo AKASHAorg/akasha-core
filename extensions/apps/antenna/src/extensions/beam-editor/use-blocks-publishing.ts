@@ -252,6 +252,53 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
     });
   };
 
+  const increaseBlockOrder = (index: number) => {
+    if (index < blocksInUse.length - 1) {
+      setBlocksInUse(prev => {
+        const oldBlock = prev[index];
+        const blockAfter = prev[index + 1];
+
+        const beforeSlice = prev.slice(0, index);
+
+        const newBlockAfter = {
+          ...blockAfter,
+          order: blockAfter?.order - 1,
+        };
+
+        const newOldBlock = {
+          ...oldBlock,
+          order: oldBlock?.order + 1,
+        };
+
+        const afterSlice = prev.slice(index + 2);
+        const res = [...beforeSlice, newBlockAfter, newOldBlock, ...afterSlice];
+        return res;
+      });
+    }
+  };
+
+  const decreaseBlockOrder = (index: number) => {
+    if (index > 0) {
+      setBlocksInUse(prev => {
+        const oldBlock = prev[index];
+        const blockBefore = prev[index - 1];
+        return [
+          ...prev.slice(0, index - 1),
+
+          {
+            ...oldBlock,
+            order: oldBlock?.order - 1,
+          },
+          {
+            ...blockBefore,
+            order: blockBefore?.order + 1,
+          },
+          ...prev.slice(index + 1),
+        ];
+      });
+    }
+  };
+
   const updateBlockDisablePublishState = (value: boolean, index: number) => {
     setBlocksInUse(prev => {
       const next = prev.map(elem => {
@@ -288,6 +335,8 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
     maxAllowedTags: MAX_ALLOWED_TAGS,
     addBlockToList,
     removeBlockFromList,
+    increaseBlockOrder,
+    decreaseBlockOrder,
     updateBlockDisablePublishState,
     availableBlocks,
     errors: formattedErrors,

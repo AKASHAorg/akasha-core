@@ -2,12 +2,20 @@ import * as React from 'react';
 import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { TrashIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import {
+  ArrowDownIcon,
+  ArrowUpIcon,
+  TrashIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import BlockStatusToolbar, { IBlockStatusToolbar } from '../BlockStatusToolbar';
 
 export interface BlockHeaderProps extends IBlockStatusToolbar {
   icon?: JSX.Element;
-  handleRemoveBlock?: () => void;
+  blockOrder?: number;
+  totalBlocksLength?: number;
+  handleIncreaseBlockOrder?: (index: number) => void;
+  handleDecreaseBlockOrder?: (index: number) => void;
+  handleRemoveBlock?: (index: number) => void;
   handleNsfwChange?: () => void;
   isNsfwCheckboxSelected?: boolean;
   isFocusedBlock?: boolean;
@@ -16,12 +24,29 @@ export interface BlockHeaderProps extends IBlockStatusToolbar {
 export const BlockHeader: React.FC<BlockHeaderProps> = props => {
   const {
     icon,
+    blockOrder,
+    totalBlocksLength,
+    handleIncreaseBlockOrder,
+    handleDecreaseBlockOrder,
     handleRemoveBlock,
     handleNsfwChange,
     isNsfwCheckboxSelected,
     isFocusedBlock,
     ...rest
   } = props;
+
+  const increaseBlockOrder = () => {
+    handleIncreaseBlockOrder(blockOrder);
+  };
+
+  const decreaseBlockOrder = () => {
+    handleDecreaseBlockOrder(blockOrder);
+  };
+
+  const removeBlock = () => {
+    handleRemoveBlock(blockOrder);
+  };
+
   return (
     <Stack direction="row" justify="between">
       <Stack direction="row" spacing="gap-x-1" align="center">
@@ -47,19 +72,44 @@ export const BlockHeader: React.FC<BlockHeaderProps> = props => {
       </Stack>
       <BlockStatusToolbar {...rest} />
       {isFocusedBlock && (
-        <button onClick={handleRemoveBlock}>
-          <Stack
-            align="center"
-            justify="center"
-            customStyle={'h-8 w-8 group relative rounded-full bg(grey9 dark:grey5)'}
-          >
-            <Icon
-              icon={<TrashIcon />}
-              size="sm"
-              color={{ light: 'errorLight', dark: 'errorDark' }}
-            />
-          </Stack>
-        </button>
+        <Stack direction="row" spacing="gap-x-1" align="center">
+          <button onClick={decreaseBlockOrder}>
+            <Stack
+              align="center"
+              justify="center"
+              customStyle={'h-8 w-8 group relative rounded-full bg(grey9 dark:grey5)'}
+            >
+              <Icon icon={<ArrowUpIcon />} size="sm" accentColor disabled={blockOrder === 0} />
+            </Stack>
+          </button>
+          <button onClick={increaseBlockOrder}>
+            <Stack
+              align="center"
+              justify="center"
+              customStyle={'h-8 w-8 group relative rounded-full bg(grey9 dark:grey5)'}
+            >
+              <Icon
+                icon={<ArrowDownIcon />}
+                size="sm"
+                accentColor
+                disabled={blockOrder > totalBlocksLength - 2}
+              />
+            </Stack>
+          </button>
+          <button onClick={removeBlock}>
+            <Stack
+              align="center"
+              justify="center"
+              customStyle={'h-8 w-8 group relative rounded-full bg(grey9 dark:grey5)'}
+            >
+              <Icon
+                icon={<TrashIcon />}
+                size="sm"
+                color={{ light: 'errorLight', dark: 'errorDark' }}
+              />
+            </Stack>
+          </button>
+        </Stack>
       )}
     </Stack>
   );

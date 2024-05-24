@@ -56,6 +56,8 @@ export const BeamEditor: React.FC = () => {
     maxAllowedTags,
     addBlockToList,
     removeBlockFromList,
+    increaseBlockOrder,
+    decreaseBlockOrder,
     updateBlockDisablePublishState,
   } = useBlocksPublishing({
     onComplete: beamData => {
@@ -290,7 +292,11 @@ export const BeamEditor: React.FC = () => {
                   creatingBlockLabel={t('Creating Block...')}
                   retryLabel={t('Retry')}
                   handleRetry={handleBeamPublish}
-                  handleRemoveBlock={() => removeBlockFromList(block.order)}
+                  blockOrder={block.order}
+                  totalBlocksLength={blocksInUse.length}
+                  handleIncreaseBlockOrder={increaseBlockOrder}
+                  handleDecreaseBlockOrder={decreaseBlockOrder}
+                  handleRemoveBlock={removeBlockFromList}
                   handleNsfwChange={() => {
                     setNsfwBlocks(new Map(nsfwBlocks.set(idx, !nsfwBlocks.get(idx))));
                   }}
