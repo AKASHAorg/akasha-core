@@ -1,9 +1,9 @@
 import React, { Suspense } from 'react';
-import GlobalAntennaPage from '../pages/global-antenna-page/index.new';
+import GlobalAntennaPage from '../pages/global-antenna-page';
 import MyAntennaPage from '../pages/my-antenna-page';
 import ProfileFeedPage from '../pages/profile-feed-page/profile-feed-page';
-import BeamPage from '../pages/entry-page/beam-page.new';
-import ReflectionPage from '../pages/entry-page/reflection-page.new';
+import BeamPage from '../pages/entry-page/beam-page';
+import ReflectionPage from '../pages/entry-page/reflection-page';
 import TagFeedPage from '../pages/tag-feed-page/tag-feed-page';
 import EditorPage from '../pages/editor-page/editor-page';
 import ErrorComponent from './error-component';
