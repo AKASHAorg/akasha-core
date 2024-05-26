@@ -57,11 +57,15 @@ const BeamCard: React.FC<BeamCardProps> = props => {
     });
   };
 
-  const onTagClick = (tag: string) => {
+  const handleTagClick = (tag: string) => {
     navigateTo({
       appName: '@akashaorg/app-antenna',
       getNavigationUrl: routes => `${routes.Tags}/${tag}`,
     });
+  };
+
+  const handleEntryRemove = () => {
+    console.log('remove beam with id:', entryData.id);
   };
 
   const sortedEntryContent = React.useMemo(() => {
@@ -76,6 +80,8 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       sortedContents={sortedEntryContent}
       flagAsLabel={t('Flag')}
       editLabel={t('Edit')}
+      removeEntryLabel={t('Remove')}
+      onEntryRemove={handleEntryRemove}
       isViewer={authenticatedDID === entryData.authorId}
       removed={{
         author: {
@@ -99,7 +105,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       showLoginModal={showLoginModal}
       isLoggedIn={!!authenticatedDID}
       itemType={EntityTypes.BEAM}
-      onTagClick={onTagClick}
+      onTagClick={handleTagClick}
       onReflect={() => {
         if (!authenticatedDID) {
           showLoginModal?.();
