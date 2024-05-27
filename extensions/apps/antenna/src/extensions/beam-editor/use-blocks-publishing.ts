@@ -252,6 +252,49 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
     });
   };
 
+  const increaseBlockOrder = (index: number) => {
+    if (index < blocksInUse.length - 1) {
+      setBlocksInUse(prev => {
+        const blockToBeReordered = prev[index];
+        const blockAfter = prev[index + 1];
+        return [
+          ...prev.slice(0, index),
+          {
+            ...blockAfter,
+            order: blockAfter?.order - 1,
+          },
+          {
+            ...blockToBeReordered,
+            order: blockToBeReordered?.order + 1,
+          },
+          ...prev.slice(index + 2),
+        ];
+      });
+    }
+  };
+
+  const decreaseBlockOrder = (index: number) => {
+    if (index > 0) {
+      setBlocksInUse(prev => {
+        const blockToBeReordered = prev[index];
+        const blockBefore = prev[index - 1];
+        return [
+          ...prev.slice(0, index - 1),
+
+          {
+            ...blockToBeReordered,
+            order: blockToBeReordered?.order - 1,
+          },
+          {
+            ...blockBefore,
+            order: blockBefore?.order + 1,
+          },
+          ...prev.slice(index + 1),
+        ];
+      });
+    }
+  };
+
   const updateBlockDisablePublishState = (value: boolean, index: number) => {
     setBlocksInUse(prev => {
       const next = prev.map(elem => {
@@ -288,6 +331,8 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
     maxAllowedTags: MAX_ALLOWED_TAGS,
     addBlockToList,
     removeBlockFromList,
+    increaseBlockOrder,
+    decreaseBlockOrder,
     updateBlockDisablePublishState,
     availableBlocks,
     errors: formattedErrors,
