@@ -89,8 +89,8 @@ export async function restoreScrollPosition({
         virtualizer.scrollToOffset(scrollToOffset, { align: 'start', behavior: 'auto' });
         if (scrollToOffset !== virtualizer.scrollOffset) {
           setTimeout(() => {
-            window.scrollTo(0, scrollToOffset);
-          }, 500);
+            virtualizer.scrollToOffset(scrollToOffset, { align: 'start', behavior: 'auto' });
+          }, 0);
         }
         storeScrollConfig(scrollRestorationStorageKey, { ...scrollConfig, done: true });
         setTimeout(() => {
@@ -186,4 +186,24 @@ function requiredItemsLoaded({ virtualizer, scrollIndex, overScan, options }: II
     .every(item => item);
 
   return referenceItemLoaded && itemsBeforeReferenceItemLoaded;
+}
+
+interface IGetMinHeight {
+  virtualizer: Virtualizer<Window, Element>;
+  virtualItemSize: number;
+  virtualItemIndex: number;
+}
+
+/*
+ * Get min height of virtual item
+ **/
+export function getMinHeight({ virtualizer, virtualItemSize, virtualItemIndex }: IGetMinHeight) {
+  if (virtualizer.options.initialMeasurementsCache?.[virtualItemIndex]) {
+    return `min-h-[${virtualizer.options.initialMeasurementsCache[virtualItemIndex].size}px]`;
+  }
+  /*
+   * While scrolling set the min height to the size of the virtual item to avoid flicker
+   **/
+  if (virtualizer.isScrolling) return `min-h-[${virtualItemSize}px]`;
+  return '';
 }

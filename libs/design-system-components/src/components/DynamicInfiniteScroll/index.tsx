@@ -11,7 +11,7 @@ import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import { Virtualizer, measureElement, useWindowVirtualizer } from '@tanstack/react-virtual';
 import { useScrollRestoration } from './use-scroll-restoration';
-import { restoreScrollConfig } from './use-scroll-restoration/utils';
+import { getMinHeight, restoreScrollConfig } from './use-scroll-restoration/utils';
 import { useMedia } from 'react-use';
 
 type DynamicInfiniteScrollItem = {
@@ -123,7 +123,15 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
             data-index={virtualItem.index}
             ref={virtualizer.measureElement}
             type="plain"
-            customStyle={`${virtualizer.isScrolling || virtualizer.options.initialMeasurementsCache.length ? `min-h-[${virtualItem.size}px]` : ''}`}
+            customStyle={
+              loading
+                ? `min-h-[${itemHeight}px]`
+                : getMinHeight({
+                    virtualizer,
+                    virtualItemIndex: virtualItem.index,
+                    virtualItemSize: virtualItem.size,
+                  })
+            }
           >
             {children({ index, itemIndex: virtualItem.index, itemsSize: items.length })}
           </Card>

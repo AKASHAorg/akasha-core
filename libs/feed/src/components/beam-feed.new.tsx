@@ -102,7 +102,6 @@ const BeamFeed = (props: BeamFeedProps) => {
     fetchBeamStream({
       variables,
       fetchPolicy: 'cache-and-network',
-      notifyOnNetworkStatusChange: true,
     });
   }, [fetchBeamStream, variables]);
 
