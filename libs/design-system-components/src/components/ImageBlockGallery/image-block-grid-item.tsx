@@ -38,13 +38,13 @@ export const ImageBlockGridItem: React.FC<IGridItemProps> = props => {
     >
       {/* when we have a single image we need to keep the original aspect ratio,
           otherwise give images a 1:1 ratio */}
-      <picture className={tw('flex')}>
+      <picture className={tw('flex w-full')}>
         <source srcSet={imageSrc?.originalSrc} />
 
         <img
           decoding="async"
           alt={imageSrc?.src}
-          className={tx(`rounded object-cover w-full ${heightStyle} ${multipleImageStyle}`)}
+          className={tx(`rounded object-cover ${heightStyle} ${multipleImageStyle}`)}
           src={imageSrc?.src}
           onLoad={() => setImgLoaded(true)}
           hidden={!imgLoaded}
@@ -59,7 +59,7 @@ export const ImageBlockGridItem: React.FC<IGridItemProps> = props => {
               loading="lazy"
               decoding="async"
               alt={'placeholder'}
-              className={tx(`rounded object-cover w-full  ${heightStyle} ${multipleImageStyle}`)}
+              className={tx(`rounded object-cover ${heightStyle} ${multipleImageStyle}`)}
               src={'/images/image-placeholder.webp'}
               height={images.length === 1 ? imageSrc?.size?.height : ''}
             />
