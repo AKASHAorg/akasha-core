@@ -7,14 +7,8 @@ import {
   redirect,
 } from '@tanstack/react-router';
 import { CreateRouter, RouterContext } from '@akashaorg/typings/lib/ui';
-import {
-  ExplorePage,
-  ExtensionsHub,
-  InfoPage,
-  InstalledExtensions,
-  DevInfoPage,
-  CollaboratorsPage,
-} from '../pages';
+import { ExplorePage, ExtensionsHub, InfoPage, InstalledExtensions } from '../pages';
+import { DevInfoPage, CollaboratorsPage, VersionInfoPage } from '../pages/sub-pages';
 import ErrorComponent from './error-component';
 import routes, { EXTENSIONS, INSTALLED, HOME } from '../../routes';
 
@@ -75,6 +69,15 @@ const collaboratorsInfoRoute = createRoute({
   },
 });
 
+const versionInfoRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/info/$appId/versions',
+  component: () => {
+    const { appId } = infoRoute.useParams();
+    return <VersionInfoPage appId={appId} />;
+  },
+});
+
 const routeTree = rootRoute.addChildren([
   defaultRoute,
   exploreRoute,
@@ -83,6 +86,7 @@ const routeTree = rootRoute.addChildren([
   infoRoute,
   devInfoRoute,
   collaboratorsInfoRoute,
+  versionInfoRoute,
 ]);
 
 export const router = ({ baseRouteName, apolloClient }: CreateRouter) =>

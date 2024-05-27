@@ -9,7 +9,8 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { ChevronRightIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import { mockProfile } from './info-page';
+import { mockProfile } from '../info-page';
+import ExtensionHeader from '@akashaorg/design-system-components/lib/components/ExtensionHeader';
 
 type CollaboratorsPageProps = {
   appId: string;
@@ -29,25 +30,7 @@ export const CollaboratorsPage: React.FC<CollaboratorsPageProps> = ({ appId }) =
       <Card padding="p-4">
         <Stack spacing="gap-y-4">
           <Text variant="h5">{t('Collaborators')}</Text>
-          <Stack direction="row" align="center" spacing="gap-x-2">
-            <Card
-              elevation="none"
-              radius={10}
-              background={{
-                light: 'grey8',
-                dark: 'grey5',
-              }}
-              customStyle="w-[4.375rem] h-[4.375rem]"
-            />
-            <Stack direction="column" spacing="gap-y-1">
-              <Text variant="body1" weight="semibold">
-                {'name'}
-              </Text>
-              <Text variant="footnotes2" weight="normal" color="grey7">
-                {'package name'}
-              </Text>
-            </Stack>
-          </Stack>
+          <ExtensionHeader appName={'Extension Name'} packageName="Package name" />
           <Divider />
           <Stack direction="column" spacing="gap-y-4">
             {developers.map((developer, idx) => (

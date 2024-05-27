@@ -9,7 +9,7 @@ import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
-import { mockProfile } from './info-page';
+import { mockProfile } from '../info-page';
 
 type DevInfoPageProps = {
   devDid: string;

@@ -26,6 +26,7 @@ import ImageBlockGallery from '../ImageBlockGallery';
 export type AppInfoProps = {
   integrationName: string;
   packageName: string;
+  packageNameTitle: string;
   developers: Developer[];
   descriptionTitle: string;
   readMore: string;
@@ -36,13 +37,15 @@ export type AppInfoProps = {
   viewAllGalleryCTA: string;
   generalInfoTitle: string;
   latestReleaseTitle: string;
+  contactSupportTitle: string;
   languageLabel: string;
   languages: string[];
   version: string;
   versionInfo: string;
   versionDate: string;
   versionDescription: string;
-  linksAndDocumentationTitle: string;
+  goToVersionInfoPageLabel: string;
+  documentationTitle: string;
   licenseTitle: string;
   license: string;
   share: ListItem;
@@ -52,12 +55,14 @@ export type AppInfoProps = {
   onUninstall: () => void;
   onSelectDeveloper: (profileId: string) => void;
   onCollaboratorsClick: () => void;
+  onAppVersionClick: () => void;
   transformSource: (src: Image) => Image;
 };
 
 const AppInfo: React.FC<AppInfoProps> = ({
   integrationName,
   packageName,
+  packageNameTitle,
   developers,
   descriptionTitle,
   readMore,
@@ -69,12 +74,14 @@ const AppInfo: React.FC<AppInfoProps> = ({
   generalInfoTitle,
   latestReleaseTitle,
   languageLabel,
+  contactSupportTitle,
   languages,
   version,
   versionInfo,
   versionDate,
   versionDescription,
-  linksAndDocumentationTitle,
+  goToVersionInfoPageLabel,
+  documentationTitle,
   licenseTitle,
   license,
   share,
@@ -84,6 +91,7 @@ const AppInfo: React.FC<AppInfoProps> = ({
   onUninstall,
   onSelectDeveloper,
   onCollaboratorsClick,
+  onAppVersionClick,
   transformSource,
 }) => {
   const [showAllDescription, setShowAllDescription] = React.useState(false);
@@ -169,8 +177,8 @@ const AppInfo: React.FC<AppInfoProps> = ({
           </Stack>
           <ContentBlock
             blockTitle={descriptionTitle}
-            viewMore={readMore}
-            onClickViewMore={() => setShowAllDescription(!showAllDescription)}
+            viewMoreLabel={readMore}
+            onClickviewMoreLabel={() => setShowAllDescription(!showAllDescription)}
           >
             <Stack direction="row" justify="between">
               <Text lineClamp={showAllDescription ? 0 : 2} variant="body1">
@@ -180,8 +188,8 @@ const AppInfo: React.FC<AppInfoProps> = ({
           </ContentBlock>
           <ContentBlock
             blockTitle={galleryTitle}
-            viewMore={viewAllGalleryCTA}
-            //  onClickViewMore={() => setShowAllDescription(!showAllDescription)}
+            viewMoreLabel={viewAllGalleryCTA}
+            //  onClickviewMoreLabel={() => setShowAllDescription(!showAllDescription)}
           >
             <Stack direction="row" justify="between">
               <ImageBlockGallery images={imageGalleryImages} gap={3} />
@@ -237,36 +245,84 @@ const AppInfo: React.FC<AppInfoProps> = ({
           </ContentBlock>
           <ContentBlock blockTitle={generalInfoTitle}>
             <Stack direction="column" spacing="gap-y-2">
-              <Stack direction="row" justify="between">
-                <Text variant="body1" color={{ light: 'grey5', dark: 'grey6' }}>
+              <Stack direction="column" spacing="gap-y-1">
+                <Text variant="body2" color={{ light: 'grey4', dark: 'grey7' }}>
                   {latestReleaseTitle}
                 </Text>
-                <Button variant="text" size="md" label={versionDate}>
-                  {versionDate}
-                </Button>
+                <Button variant="text" size="md" label={versionDate} />
               </Stack>
               <Divider />
               <Stack direction="row" justify="between">
-                <Text variant="body1" color={{ light: 'grey5', dark: 'grey6' }}>
+                <Text variant="body2" color={{ light: 'grey4', dark: 'grey7' }}>
                   {languageLabel}
                 </Text>
-                <Text variant="body1">
+                <Text variant="body2">
                   {languages.map((language, idx) =>
                     idx < languages.length - 1 ? language + ', ' : language,
                   )}
                 </Text>
               </Stack>
-              <Text variant="body1" truncate>
+              <Divider />
+
+              <Stack direction="row" justify="between">
+                <Text variant="body2" color={{ light: 'grey4', dark: 'grey7' }}>
+                  {documentationTitle}
+                </Text>
+                <Link to="#">
+                  <Button variant="text" size="md" label={'Link 1'} />
+                </Link>
+              </Stack>
+              <Divider />
+
+              <Stack direction="row" justify="between">
+                <Text variant="body2" color={{ light: 'grey4', dark: 'grey7' }}>
+                  {'Extension Permission'}
+                </Text>
+                <Link to="#">
+                  <Button variant="text" size="md" label={'View'} />
+                </Link>
+              </Stack>
+              <Divider />
+
+              <Stack direction="row" justify="between">
+                <Text variant="body2" color={{ light: 'grey4', dark: 'grey7' }}>
+                  {'License'}
+                </Text>
+                <Link to="#">
+                  <Button variant="text" size="md" label={'License A'} />
+                </Link>
+              </Stack>
+            </Stack>
+          </ContentBlock>
+
+          <ContentBlock blockTitle={packageNameTitle}>
+            <Text variant="body1">{packageName}</Text>
+          </ContentBlock>
+
+          <ContentBlock
+            blockTitle={versionInfo}
+            viewMoreLabel={goToVersionInfoPageLabel}
+            onClickviewMoreLabel={onAppVersionClick}
+          >
+            <Stack direction="column" spacing="gap-y-4">
+              <Stack direction="row">
+                <Text variant="body1">{version}</Text>
+                <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey7' }}>
+                  {versionDate}
+                </Text>
+              </Stack>
+              <Text lineClamp={2} variant="body1">
                 {versionDescription}
               </Text>
             </Stack>
           </ContentBlock>
-          <ContentBlock blockTitle={linksAndDocumentationTitle}>
-            <Link to="#">Link</Link>
-          </ContentBlock>
-          <ContentBlock blockTitle={licenseTitle} showDivider={false}>
-            <Text variant="body1">{license}</Text>
-          </ContentBlock>
+
+          <ContentBlock
+            blockTitle={contactSupportTitle}
+            viewMoreIcon={<ChevronRightIcon />}
+            showDivider={false}
+            //  onClickviewMoreLabel={() => setShowAllDescription(!showAllDescription)}
+          ></ContentBlock>
         </Stack>
       </Card>
     </>

@@ -15,7 +15,7 @@ import { Developer } from '@akashaorg/typings/lib/ui';
 export const mockProfile: Developer = {
   avatar: {
     default: {
-      src: 'https://bafkreig5wajd7vnssqrq35qzzwzwz5c53ptfiklqsx6rndttgxbcw5u2q4.ipfs.hub.textile.io',
+      src: 'https://avatar.iran.liara.run/public',
       height: 320,
       width: 320,
     },
@@ -74,7 +74,10 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
       {true && (
         <AppInfo
           integrationName={'Test app' /* appReleaseInfo?.application?.displayName */}
-          packageName={'Test package' /* appReleaseInfo?.application?.name */}
+          packageName={
+            'com.companyname.productname.supercarts.racing.game' /* appReleaseInfo?.application?.name */
+          }
+          packageNameTitle={'Package name'}
           developers={developers}
           descriptionTitle={t('Description')}
           readMore={t('Read more')}
@@ -90,15 +93,17 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
           latestReleaseTitle={t('Latest Release')}
           languageLabel={t('Languages')}
           languages={['English', 'Spanish']}
-          version={t('Version') + ` ${appReleaseInfo?.version}`}
+          version={t('Version 2.8.10') /* + ` ${appReleaseInfo?.version}` */}
           versionInfo={t('Latest release')}
           versionDate={t('December 2022')}
           versionDescription={
             'some dummy description' /* appReleaseInfo?.application?.description */
           }
-          linksAndDocumentationTitle={t('Links & Documentation')}
+          goToVersionInfoPageLabel={t('View info')}
+          documentationTitle={t('Documentation')}
           licenseTitle={t('License')}
           license={'license 1122233' /* appReleaseInfo?.application?.license */}
+          contactSupportTitle={t('Contact Support')}
           share={{ label: 'Share', icon: <ShareIcon /> }}
           report={{
             label: t('Flag'),
@@ -129,6 +134,11 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
               params: {
                 appId,
               },
+            });
+          }}
+          onAppVersionClick={() => {
+            navigate({
+              to: '/info/$appId/versions',
             });
           }}
           status={
