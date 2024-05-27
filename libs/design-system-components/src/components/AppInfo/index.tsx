@@ -10,14 +10,12 @@ import Menu from '@akashaorg/design-system-core/lib/components/Menu';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import type { Developer, Image } from '@akashaorg/typings/lib/ui';
 import {
   ArrowDownIcon,
   ArrowPathIcon,
   ChevronRightIcon,
   EllipsisVerticalIcon,
-  InformationCircleIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
 import StackedAvatar from '@akashaorg/design-system-core/lib/components/StackedAvatar';
@@ -36,7 +34,10 @@ export type AppInfoProps = {
   collaboratorsTitle: string;
   galleryTitle: string;
   viewAllGalleryCTA: string;
+  generalInfoTitle: string;
   latestReleaseTitle: string;
+  languageLabel: string;
+  languages: string[];
   version: string;
   versionInfo: string;
   versionDate: string;
@@ -65,7 +66,10 @@ const AppInfo: React.FC<AppInfoProps> = ({
   viewAllGalleryCTA,
   developersTitle,
   collaboratorsTitle,
+  generalInfoTitle,
   latestReleaseTitle,
+  languageLabel,
+  languages,
   version,
   versionInfo,
   versionDate,
@@ -169,7 +173,7 @@ const AppInfo: React.FC<AppInfoProps> = ({
             onClickViewMore={() => setShowAllDescription(!showAllDescription)}
           >
             <Stack direction="row" justify="between">
-              <Text lineClamp={showAllDescription ? 1000 : 2} variant="body1">
+              <Text lineClamp={showAllDescription ? 0 : 2} variant="body1">
                 {descriptionBody}
               </Text>
             </Stack>
@@ -231,22 +235,25 @@ const AppInfo: React.FC<AppInfoProps> = ({
               </Card>
             </Stack>
           </ContentBlock>
-          <ContentBlock blockTitle={latestReleaseTitle}>
-            <Stack direction="column" spacing="gap-y-4">
-              <Stack direction="column">
-                <Stack direction="row" align="center" spacing="gap-x-1">
-                  <Text variant="body1" color={{ light: 'grey5', dark: 'grey6' }}>
-                    {version}
-                  </Text>
-                  <Tooltip content={versionInfo} placement="right">
-                    <Icon
-                      icon={<InformationCircleIcon />}
-                      color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-                    />
-                  </Tooltip>
-                </Stack>
-                <Text variant="footnotes2" color="grey7">
+          <ContentBlock blockTitle={generalInfoTitle}>
+            <Stack direction="column" spacing="gap-y-2">
+              <Stack direction="row" justify="between">
+                <Text variant="body1" color={{ light: 'grey5', dark: 'grey6' }}>
+                  {latestReleaseTitle}
+                </Text>
+                <Button variant="text" size="md" label={versionDate}>
                   {versionDate}
+                </Button>
+              </Stack>
+              <Divider />
+              <Stack direction="row" justify="between">
+                <Text variant="body1" color={{ light: 'grey5', dark: 'grey6' }}>
+                  {languageLabel}
+                </Text>
+                <Text variant="body1">
+                  {languages.map((language, idx) =>
+                    idx < languages.length - 1 ? language + ', ' : language,
+                  )}
                 </Text>
               </Stack>
               <Text variant="body1" truncate>

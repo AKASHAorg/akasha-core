@@ -86,7 +86,10 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
           viewAllGalleryCTA={t('View all')}
           developersTitle={t('Developer')}
           collaboratorsTitle={t('Collaborators')}
+          generalInfoTitle={t('General Information')}
           latestReleaseTitle={t('Latest Release')}
+          languageLabel={t('Languages')}
+          languages={['English', 'Spanish']}
           version={t('Version') + ` ${appReleaseInfo?.version}`}
           versionInfo={t('Latest release')}
           versionDate={t('December 2022')}
