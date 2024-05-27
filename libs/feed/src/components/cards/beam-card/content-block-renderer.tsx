@@ -29,7 +29,6 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
     beamIsNsfw,
     showBlockName,
     onBlockInfoChange,
-    onContentClick,
   } = props;
   const { navigateToModal, getExtensionsPlugin, getRoutingPlugin } = useRootComponentProps();
   const contentBlockStoreRef = useRef(getExtensionsPlugin()?.contentBlockStore);
@@ -48,7 +47,6 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
   }, [contentBlockReq.data]);
   const contentBlockPropertyType = blockData?.content?.[0]?.propertyType;
   const contentBlockLabel = blockData?.content?.[0]?.label;
-  const nsfw = !!blockData?.nsfw;
   useEffect(() => {
     _onBlockInfoChange.current?.({
       appName: BLOCK_LABEL_TO_APP_DISPLAY_NAME_MAP[contentBlockLabel],
@@ -94,17 +92,7 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
   };
 
   return (
-    <Card
-      type="plain"
-      onClick={() => {
-        if (!(showNSFWCard && nsfw)) {
-          if (typeof onContentClick === 'function') {
-            onContentClick();
-          }
-        }
-      }}
-      customStyle="w-full"
-    >
+    <Card type="plain" customStyle="w-full">
       {!showNSFWCard && (
         <>
           <Transition
