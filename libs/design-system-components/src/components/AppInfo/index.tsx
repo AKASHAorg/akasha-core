@@ -20,15 +20,22 @@ import {
   InformationCircleIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
+import StackedAvatar from '@akashaorg/design-system-core/lib/components/StackedAvatar';
+import { userData } from '@akashaorg/design-system-core/lib/utils';
 import { DuplexAppButton } from './duplex-app-button';
+import ImageBlockGallery from '../ImageBlockGallery';
 
 export type AppInfoProps = {
   integrationName: string;
   packageName: string;
   developers: Developer[];
   descriptionTitle: string;
+  readMore: string;
   descriptionBody: string;
   developersTitle: string;
+  collaboratorsTitle: string;
+  galleryTitle: string;
+  viewAllGalleryCTA: string;
   latestReleaseTitle: string;
   version: string;
   versionInfo: string;
@@ -43,6 +50,7 @@ export type AppInfoProps = {
   onInstall: () => void;
   onUninstall: () => void;
   onSelectDeveloper: (profileId: string) => void;
+  onCollaboratorsClick: () => void;
   transformSource: (src: Image) => Image;
 };
 
@@ -51,8 +59,12 @@ const AppInfo: React.FC<AppInfoProps> = ({
   packageName,
   developers,
   descriptionTitle,
+  readMore,
   descriptionBody,
+  galleryTitle,
+  viewAllGalleryCTA,
   developersTitle,
+  collaboratorsTitle,
   latestReleaseTitle,
   version,
   versionInfo,
@@ -67,8 +79,29 @@ const AppInfo: React.FC<AppInfoProps> = ({
   onInstall,
   onUninstall,
   onSelectDeveloper,
+  onCollaboratorsClick,
   transformSource,
 }) => {
+  const [showAllDescription, setShowAllDescription] = React.useState(false);
+
+  const imageGalleryImages = [
+    {
+      src: 'https://placebeard.it/360x360',
+      size: { width: 320, height: 320 },
+      name: 'sample-1',
+    },
+    {
+      src: 'https://placebeard.it/320x320',
+      size: { width: 320, height: 320 },
+      name: 'sample-2',
+    },
+    {
+      src: 'https://placebeard.it/350x350',
+      size: { width: 320, height: 320 },
+      name: 'sample-3',
+    },
+  ];
+
   return (
     <>
       <Card background="secondaryLight/30" radius={{ top: 20 }} customStyle="h-[7.3125rem]" />
@@ -94,9 +127,6 @@ const AppInfo: React.FC<AppInfoProps> = ({
                 <Stack direction="column" spacing="gap-y-1">
                   <Text variant="body1" weight="semibold">
                     {integrationName}
-                  </Text>
-                  <Text variant="footnotes2" weight="normal" color="grey7">
-                    {packageName}
                   </Text>
                 </Stack>
               </Stack>
@@ -133,8 +163,25 @@ const AppInfo: React.FC<AppInfoProps> = ({
             </Stack>
             <Divider />
           </Stack>
-          <ContentBlock blockTitle={descriptionTitle}>
-            <Text lineClamp={4}>{descriptionBody}</Text>
+          <ContentBlock
+            blockTitle={descriptionTitle}
+            viewMore={readMore}
+            onClickViewMore={() => setShowAllDescription(!showAllDescription)}
+          >
+            <Stack direction="row" justify="between">
+              <Text lineClamp={showAllDescription ? 1000 : 2} variant="body1">
+                {descriptionBody}
+              </Text>
+            </Stack>
+          </ContentBlock>
+          <ContentBlock
+            blockTitle={galleryTitle}
+            viewMore={viewAllGalleryCTA}
+            //  onClickViewMore={() => setShowAllDescription(!showAllDescription)}
+          >
+            <Stack direction="row" justify="between">
+              <ImageBlockGallery images={imageGalleryImages} gap={3} />
+            </Stack>
           </ContentBlock>
           <ContentBlock blockTitle={developersTitle}>
             <Stack direction="column" spacing="gap-y-2">
@@ -164,6 +211,24 @@ const AppInfo: React.FC<AppInfoProps> = ({
                   </Stack>
                 </Card>
               ))}
+            </Stack>
+          </ContentBlock>
+          <ContentBlock blockTitle={collaboratorsTitle}>
+            <Stack direction="column" spacing="gap-y-2">
+              <Card onClick={onCollaboratorsClick} type="plain">
+                <Stack direction="row" align="center">
+                  <StackedAvatar
+                    userData={userData.map(item => ({ ...item, avatar: item.avatar?.default }))}
+                    maxAvatars={4}
+                  />
+                  <Icon
+                    icon={<ChevronRightIcon />}
+                    size="sm"
+                    color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                    customStyle="ml-auto"
+                  />
+                </Stack>
+              </Card>
             </Stack>
           </ContentBlock>
           <ContentBlock blockTitle={latestReleaseTitle}>

@@ -10,10 +10,11 @@ import { type ImageObject } from '@akashaorg/typings/lib/ui';
 export interface IImageGallery {
   images: ImageObject[];
   uploading?: boolean;
+  gap?: number;
 }
 
 const ImageBlockGallery: React.FC<IImageGallery> = props => {
-  const { images, uploading } = props;
+  const { images, uploading, gap = 1 } = props;
 
   const [showOverlay, setShowOverlay] = React.useState(false);
   const [clickedImg, setClickedImg] = React.useState(null);
@@ -27,7 +28,7 @@ const ImageBlockGallery: React.FC<IImageGallery> = props => {
     setClickedImg(img);
   };
 
-  const gridStyle = apply(`grid grid-cols-6 gap-1`);
+  const gridStyle = apply(`grid grid-cols-6 gap-${gap}`);
 
   const getGridSpan = () => {
     switch (uploading ? images.length + 1 : images.length) {
