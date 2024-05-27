@@ -44,7 +44,7 @@ export const ImageBlockGridItem: React.FC<IGridItemProps> = props => {
         <img
           decoding="async"
           alt={imageSrc?.src}
-          className={tx(`rounded object-cover ${heightStyle} ${multipleImageStyle}`)}
+          className={tx(`rounded object-cover w-full ${heightStyle} ${multipleImageStyle}`)}
           src={imageSrc?.src}
           onLoad={() => setImgLoaded(true)}
           hidden={!imgLoaded}
@@ -59,7 +59,7 @@ export const ImageBlockGridItem: React.FC<IGridItemProps> = props => {
               loading="lazy"
               decoding="async"
               alt={'placeholder'}
-              className={tx(`rounded object-cover ${heightStyle} ${multipleImageStyle}`)}
+              className={tx(`rounded object-cover w-full ${heightStyle} ${multipleImageStyle}`)}
               src={'/images/image-placeholder.webp'}
               height={images.length === 1 ? imageSrc?.size?.height : ''}
             />
