@@ -6,7 +6,7 @@ import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-type TContentProps = {
+export type TContentProps = {
   id?: string;
   assetName?: string;
   name: string;
