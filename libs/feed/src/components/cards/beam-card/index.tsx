@@ -107,13 +107,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
         }
         onReflect();
       }}
-      onContentClick={() => {
-        if (!showNSFWCard) {
-          if (typeof onContentClick === 'function') {
-            onContentClick();
-          }
-        }
-      }}
+      onContentClick={onContentClick}
       onEntryFlag={handleFlagBeam}
       profileAvatarExt={
         <AuthorProfileAvatar
