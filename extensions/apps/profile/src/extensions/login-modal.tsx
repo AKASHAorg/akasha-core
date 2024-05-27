@@ -12,17 +12,26 @@ import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 import { RootExtensionProps } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps, withProviders } from '@akashaorg/ui-awf-hooks';
 
-const LoginModal = (props: RootExtensionProps) => {
+const LoginModal = (_props: RootExtensionProps) => {
   const { t } = useTranslation('app-profile');
   const location = useLocation();
   const { getRoutingPlugin, getModalFromParams } = useRootComponentProps();
   const modal = getModalFromParams(window.location);
+  const message = React.useRef('To continue you need an AKASHA World account');
+  if (modal?.message) {
+    message.current = modal.message;
+  }
+  const messageTitle = React.useRef('AKASHA World');
+  if (modal?.title) {
+    messageTitle.current = modal.title;
+  }
 
-  const message = React.useMemo(
-    () => modal?.message || 'To continue you need an AKASHA World account',
-    [modal?.message],
-  );
-  const messageTitle = React.useMemo(() => modal?.title || 'AKASHA World', [modal?.title]);
+  React.useEffect(() => {
+    return () => {
+      message.current = null;
+      messageTitle.current = null;
+    };
+  }, []);
 
   const handleModalClose = () => {
     window.history.replaceState(null, null, location.pathname);
@@ -46,7 +55,10 @@ const LoginModal = (props: RootExtensionProps) => {
   return (
     <Modal
       show={modal?.name === 'login'}
-      title={{ label: t('{{messageTitle}}', { messageTitle }), variant: 'h6' }}
+      title={{
+        label: t('{{messageTitle}}', { messageTitle: messageTitle.current }),
+        variant: 'h6',
+      }}
       actions={[
         { label: t('Cancel'), variant: 'secondary', onClick: handleModalClose },
         { label: t('Connect'), variant: 'primary', onClick: handleConnectClick },
@@ -56,7 +68,7 @@ const LoginModal = (props: RootExtensionProps) => {
     >
       <Stack align="center" fullWidth={true} spacing="gap-y-2">
         <Text variant="body1" align="center">
-          {t('{{message}}', { message })}
+          {t('{{message}}', { message: message.current })}
         </Text>
       </Stack>
     </Modal>
