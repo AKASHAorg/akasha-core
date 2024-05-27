@@ -7,7 +7,7 @@ import {
   redirect,
 } from '@tanstack/react-router';
 import { CreateRouter, RouterContext } from '@akashaorg/typings/lib/ui';
-import { ExplorePage, ExtensionsHubPage, InfoPage, InstalledExtensions } from '../pages';
+import { ExplorePage, ExtensionsHubPage, InfoPage, InstalledExtensionsPage } from '../pages';
 import ErrorComponent from './error-component';
 import routes, { EXTENSIONS, INSTALLED, HOME } from '../../routes';
 
@@ -38,7 +38,7 @@ const extensionsHubRoute = createRoute({
 const installedExtensionsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[INSTALLED],
-  component: InstalledExtensions,
+  component: InstalledExtensionsPage,
 });
 
 const infoRoute = createRoute({
