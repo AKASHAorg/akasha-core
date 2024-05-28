@@ -6,7 +6,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import ExtensionHeader from '@akashaorg/design-system-components/lib/components/ExtensionHeader';
 import { KeyIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 
 type PermissionsPageProps = {
   appId: string;
@@ -38,7 +38,14 @@ export const PermissionsPage: React.FC<PermissionsPageProps> = ({ appId }) => {
             mockPermissionData.map((permission, idx) => (
               <Stack key={idx} spacing="gap-y-4">
                 <Stack direction="row" align="center" spacing="gap-x-2">
-                  <Button icon={<KeyIcon />} iconOnly={true} variant="text" />
+                  <Stack
+                    direction="row"
+                    align="center"
+                    justify="center"
+                    customStyle={'bg(grey8 dark:grey3) rounded-full w-8 h-8'}
+                  >
+                    <Icon icon={<KeyIcon />} solid={false} size={{ width: 'w-4', height: 'h-5' }} />
+                  </Stack>
                   <Text variant="footnotes2">{t('{{permission}}', { permission })}</Text>
                 </Stack>
                 {idx < mockPermissionData.length - 1 && <Divider />}
