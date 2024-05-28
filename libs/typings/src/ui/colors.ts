@@ -5,6 +5,7 @@ export type Colors =
   | 'primaryStop'
   | 'secondaryLight'
   | 'secondaryDark'
+  | 'tertiaryLight'
   | 'black'
   | 'white'
   | 'grey1'

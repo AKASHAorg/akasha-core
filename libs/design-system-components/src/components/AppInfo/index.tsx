@@ -8,13 +8,15 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Menu from '@akashaorg/design-system-core/lib/components/Menu';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import type { Developer, Image } from '@akashaorg/typings/lib/ui';
+import { NotificationTypes, type Developer, type Image } from '@akashaorg/typings/lib/ui';
 import {
   ArrowDownIcon,
   ArrowPathIcon,
   ChevronRightIcon,
   EllipsisVerticalIcon,
+  InformationCircleIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
 import StackedAvatar from '@akashaorg/design-system-core/lib/components/StackedAvatar';
@@ -22,6 +24,8 @@ import CopyToClipboard from '@akashaorg/design-system-core/lib/components/CopyTo
 import { userData } from '@akashaorg/design-system-core/lib/utils';
 import { DuplexAppButton } from './duplex-app-button';
 import ExtensionImageGallery from '../ExtensionImageGallery';
+import Pill from '@akashaorg/design-system-core/lib/components/Pill';
+import { Plugin } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 
 export type AppInfoProps = {
   integrationName: string;
@@ -61,6 +65,7 @@ export type AppInfoProps = {
   onLatestUpdateClick: () => void;
   onPermissionInfoClick: () => void;
   onLicenseClick: () => void;
+  onContactSupportClick: () => void;
   transformSource: (src: Image) => Image;
 };
 
@@ -102,6 +107,7 @@ const AppInfo: React.FC<AppInfoProps> = ({
   onLatestUpdateClick,
   onPermissionInfoClick,
   onLicenseClick,
+  onContactSupportClick,
   transformSource,
 }) => {
   const [showAllDescription, setShowAllDescription] = React.useState(false);
@@ -128,10 +134,10 @@ const AppInfo: React.FC<AppInfoProps> = ({
   return (
     <>
       <Card background="secondaryLight/30" radius={{ top: 20 }} customStyle="h-[7.3125rem]" />
-      <Card padding={'p-4'} radius={{ bottom: 20 }}>
+      <Card padding={'p-4'} radius={{ bottom: 20 }} elevation="none">
         <Stack direction="column" spacing="gap-y-4">
           <Stack direction="column" spacing="gap-y-4">
-            <Stack direction="row" align="start" customStyle="relative">
+            <Stack direction="row" align="end" customStyle="relative">
               <Stack
                 direction="row"
                 align="center"
@@ -147,10 +153,29 @@ const AppInfo: React.FC<AppInfoProps> = ({
                   }}
                   customStyle="w-[4.375rem] h-[4.375rem]"
                 />
-                <Stack direction="column" spacing="gap-y-1">
-                  <Text variant="body1" weight="semibold">
+                <Stack direction="column">
+                  <Text variant="h6" weight="semibold">
                     {integrationName}
                   </Text>
+                  <Stack direction="row" spacing="gap-x-2" customStyle="flex-wrap">
+                    <Pill
+                      label={'Plugin'}
+                      icon={<Plugin />}
+                      iconDirection="left"
+                      type="action"
+                      customStyle="[&>*]:(px-2 h-5 bg-tertiaryLight dark:bg-secondaryDark border-tertiaryLight !dark:text-white text-inherit)"
+                    />
+                    {/* <Stack
+                      align="center"
+                      justify="center"
+                      background={'tertiaryLight'}
+                      direction="row"
+                      customStyle={`m-h-[18px] m-w-[18px] rounded-md px-4`}
+                    >
+                      <Icon icon={<Plugin />} size={'sm'} />
+                      <Text variant="footnotes2">{'scus'}</Text>
+                    </Stack> */}
+                  </Stack>
                 </Stack>
               </Stack>
               <Stack direction="row" spacing="gap-x-2" customStyle="ml-auto">
@@ -186,6 +211,39 @@ const AppInfo: React.FC<AppInfoProps> = ({
             </Stack>
             <Divider />
           </Stack>
+          <Card radius={8} background={{ light: 'grey9', dark: 'grey3' }} padding={'p-4'}>
+            <Stack spacing="gap-x-3" fullWidth direction="row" align="start">
+              <Icon
+                icon={<InformationCircleIcon />}
+                solid={true}
+                size="lg"
+                color={{ light: 'errorLight', dark: 'errorDark' }}
+              />
+              <Stack direction="column" spacing="gap-y-2">
+                <Text variant="button-md">Notification</Text>
+                <Text variant="body2">Some important information will appear here</Text>
+
+                <Button onClick={null} plain>
+                  <Text
+                    variant="button-md"
+                    color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                  >
+                    Button
+                  </Text>
+                </Button>
+              </Stack>
+            </Stack>
+          </Card>
+          <Divider />
+          <Card radius={8} background={{ light: 'grey9', dark: 'grey3' }} customStyle="p-4">
+            <Stack direction="row" justify="between" align="center">
+              <Text variant="button-md">
+                <span className="text-secondaryLight dark:text-secondaryDark">Version 2.8.0</span>{' '}
+                is available
+              </Text>
+              <Button variant="primary" label="Update" />
+            </Stack>
+          </Card>
           <ContentBlock
             blockTitle={descriptionTitle}
             viewMoreLabel={readMore}
@@ -314,7 +372,11 @@ const AppInfo: React.FC<AppInfoProps> = ({
           </ContentBlock>
 
           <ContentBlock blockTitle={packageNameTitle}>
-            <Text variant="body1">{packageName}</Text>
+            <Stack direction="column" customStyle="w-[20rem] lg:w-full">
+              <Text variant="body1" truncate>
+                {packageName}
+              </Text>
+            </Stack>
           </ContentBlock>
 
           <ContentBlock
@@ -339,7 +401,7 @@ const AppInfo: React.FC<AppInfoProps> = ({
             blockTitle={contactSupportTitle}
             viewMoreIcon={<ChevronRightIcon />}
             showDivider={false}
-            //  onClickviewMoreLabel={() => setShowAllDescription(!showAllDescription)}
+            onClickviewMoreLabel={onContactSupportClick}
           ></ContentBlock>
         </Stack>
       </Card>

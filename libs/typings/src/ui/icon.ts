@@ -29,6 +29,7 @@ export type IconType =
   | 'ListBulleted'
   | 'Metamask'
   | 'NoEth'
+  | 'Plugin'
   | 'Shield'
   | 'Strikethrough'
   | 'Solana'

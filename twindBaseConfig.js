@@ -21,6 +21,7 @@ export default {
         primaryStop: withOpacity('--gradient-primary-stop'),
         secondaryLight: withOpacity('--foundation-secondary'),
         secondaryDark: withOpacity('--foundation-secondary-dark'),
+        tertiaryLight: withOpacity('--tertiary-light'),
         black: withOpacity('--system-black'),
         white: withOpacity('--system-white'),
         grey1: withOpacity('--system-grey-1'),

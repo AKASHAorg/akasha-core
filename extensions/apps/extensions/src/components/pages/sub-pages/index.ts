@@ -5,3 +5,4 @@ export * from './version-history-page';
 export * from './audit-log-page';
 export * from './permissions-page';
 export * from './license-page';
+export * from './contact-support-page';
