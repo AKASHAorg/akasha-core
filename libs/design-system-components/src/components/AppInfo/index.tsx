@@ -21,7 +21,7 @@ import StackedAvatar from '@akashaorg/design-system-core/lib/components/StackedA
 import CopyToClipboard from '@akashaorg/design-system-core/lib/components/CopyToClipboard';
 import { userData } from '@akashaorg/design-system-core/lib/utils';
 import { DuplexAppButton } from './duplex-app-button';
-import ImageBlockGallery from '../ImageBlockGallery';
+import ExtensionImageGallery from '../ExtensionImageGallery';
 
 export type AppInfoProps = {
   integrationName: string;
@@ -202,7 +202,7 @@ const AppInfo: React.FC<AppInfoProps> = ({
             //  onClickviewMoreLabel={() => setShowAllDescription(!showAllDescription)}
           >
             <Stack direction="row" justify="between">
-              <ImageBlockGallery images={imageGalleryImages} gap={3} />
+              <ExtensionImageGallery images={imageGalleryImages} />
             </Stack>
           </ContentBlock>
           <ContentBlock blockTitle={developersTitle}>

@@ -10,17 +10,18 @@ export interface IGridItemProps {
     gridColumnEnd: string;
     gridRowEnd: string;
   };
+  aspectRatio?: 'aspect-video' | 'aspect-auto' | 'aspect-square';
   handleClickImage: (image: ImageObject) => void;
 }
 
 export const ImageBlockGridItem: React.FC<IGridItemProps> = props => {
-  const { image, images, gridStyle, handleClickImage } = props;
+  const { image, images, gridStyle, aspectRatio = 'aspect-square', handleClickImage } = props;
 
   const imageSrc = React.useMemo(() => image, [image]);
 
   const [imgLoaded, setImgLoaded] = React.useState(false);
 
-  const multipleImageStyle = apply`${images.length > 1 && 'aspect-square'}`;
+  const multipleImageStyle = apply`${images.length > 1 && aspectRatio}`;
   const heightStyle = apply`${images.length === 1 && 'max-h-40 sm:max-h-60'}`;
 
   return (
