@@ -1,12 +1,12 @@
-export default function compose(akashaAppReleaseId, akashaAppId){
- return `type AkashaAppRelease @loadModel(id: "${akashaAppReleaseId}") {
+export default function compose(akashaAppReleaseIdInterface, akashaAppId){
+ return `interface AkashaAppReleaseInterface @loadModel(id: "${akashaAppReleaseIdInterface}") {
   id: ID!
 }
 
 type AkashaApp @loadModel(id: "${akashaAppId}") {
   id: ID!
-  releases: [AkashaAppRelease] @relationFrom(model: "AkashaAppRelease", property: "applicationID")
-  releasesCount: Int! @relationCountFrom(model: "AkashaAppRelease", property: "applicationID")
+  releases: [AkashaAppReleaseInterface] @relationFrom(model: "AkashaAppReleaseInterface", property: "applicationID")
+  releasesCount: Int! @relationCountFrom(model: "AkashaAppReleaseInterface", property: "applicationID")
 }`
 }
 

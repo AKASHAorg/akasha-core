@@ -4,7 +4,7 @@
 const config = {
   projects: {
     default: {
-      schema: '../tools/composedb/lib/supergraph.graphql', //can be also an url
+      schema: '../composedb/lib/supergraph.graphql', //can be also an url
       documents: ['src/**/*.graphql'],
       extensions: {
         codegen: {
@@ -45,7 +45,7 @@ const config = {
                     useTypeImports: true
                   },
               },
-            '../ui/hooks/src/generated/apollo.ts': {
+            '../hooks/src/generated/apollo.ts': {
               preset: 'import-types-preset',
               presetConfig: {
                 typesPath: '@akashaorg/typings/lib/sdk/graphql-operation-types-new',
@@ -86,13 +86,13 @@ const config = {
       },
     },
     client_composedb: {
-        schema: '../tools/composedb/lib/supergraph.graphql',
+        schema: '../composedb/lib/supergraph.graphql',
         documents: ['src/**/*-*-composedb.graphql'],
         extensions: {
           emitLegacyCommonJSImports: false,
           codegen: {
             generates: {
-                '../ui/hooks/src/generated/composedb.ts': {
+                '../hooks/src/generated/composedb.ts': {
                     preset: 'import-types-preset',
                     presetConfig: {
                         typesPath: '@akashaorg/typings/lib/sdk/graphql-operation-types-new',
@@ -141,13 +141,13 @@ function composeDbFetch<TData, TVariables extends Record<string, unknown>>(query
         }
       },
     mutations_client_api: {
-      schema: '../tools/composedb/lib/supergraph.graphql',
+      schema: '../composedb/lib/supergraph.graphql',
       documents: ['src/**/*-mutations-api.graphql'],
       extensions: {
         emitLegacyCommonJSImports: false,
         codegen: {
           generates: {
-            '../ui/hooks/src/generated/mutations.ts': {
+            '../hooks/src/generated/mutations.ts': {
               preset: 'import-types-preset',
               presetConfig: {
                 typesPath: '@akashaorg/typings/lib/sdk/graphql-operation-types-new',
@@ -195,13 +195,13 @@ function composeDbFetch<TData, TVariables extends Record<string, unknown>>(query
       }
     },
     queries_client: {
-      schema: '../tools/composedb/lib/supergraph.graphql',
+      schema: '../composedb/lib/supergraph.graphql',
       documents: ['src/**/*-queries.graphql'],
       extensions: {
         emitLegacyCommonJSImports: false,
         codegen: {
           generates: {
-            '../ui/hooks/src/generated/queries.ts': {
+            '../hooks/src/generated/queries.ts': {
               preset: 'import-types-preset',
               presetConfig: {
                 typesPath: '@akashaorg/typings/lib/sdk/graphql-operation-types-new',

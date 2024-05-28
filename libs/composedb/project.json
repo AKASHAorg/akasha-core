@@ -21,7 +21,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "libs/composedb",
-        "command": "node ./src/cmd/deploy-composites.mjs && tsc --build"
+        "command": "node ./src/create-composites.mjs && tsc --build"
       }
     },
     "start-graphql": {
@@ -29,7 +29,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "libs/composedb",
-        "command": "node ./src/cmd/graphiql.mjs"
+        "command": "node ./src/graphiql.mjs"
       }
     }
   },

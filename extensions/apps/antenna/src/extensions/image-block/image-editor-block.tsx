@@ -19,7 +19,7 @@ import {
 import { useCreateContentBlockMutation } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import {
   AkashaContentBlockBlockDef,
-  type AkashaContentBlockLabeledValueInput,
+  type BlockLabeledValue,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -40,7 +40,7 @@ import getSDK from '@akashaorg/awf-sdk';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 
 // @TODO: replace this with actual data
-const TEST_APP_VERSION_ID = 'k2t6wzhkhabz5ja6dy72fezemlrdc5akqebksfpjyxkyap6g4fqqimcpuf7bix';
+const TEST_APP_VERSION_ID = 'k2t6wzhkhabz3aut9p2mhjzp80hzo7bee18l1pt94syakfbfcj7phve27kiwwp';
 
 const isImgUrl = async url => {
   const response = await fetch(url, { method: 'HEAD' });
@@ -107,7 +107,7 @@ export const ImageEditorBlock = (
         align: alignState,
       };
       const content = JSON.stringify(imageData);
-      const contentBlockValue: AkashaContentBlockLabeledValueInput = {
+      const contentBlockValue: BlockLabeledValue = {
         label: props.blockInfo.appName,
         propertyType: props.blockInfo.propertyType,
         value: content,

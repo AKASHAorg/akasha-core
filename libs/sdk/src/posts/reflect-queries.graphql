@@ -24,7 +24,7 @@ fragment ReflectFragment on AkashaReflect{
   nsfw
 }
 
-query GetReflectionsFromBeam($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaReflectSortingInput, $filters: AkashaReflectFiltersInput ){
+query GetReflectionsFromBeam($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaReflectInterfaceSortingInput, $filters: AkashaReflectInterfaceFiltersInput ){
   node(id: $id){
     ... on AkashaBeam{
       reflections(after: $after, before: $before, first: $first, last: $last, sorting: $sorting, filters: $filters) {

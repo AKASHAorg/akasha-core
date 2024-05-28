@@ -7,18 +7,9 @@ import {
   redirect,
 } from '@tanstack/react-router';
 import { CreateRouter, RouterContext } from '@akashaorg/typings/lib/ui';
-import {
-  AppsPage,
-  ExplorePage,
-  InfoPage,
-  InstalledExtensions,
-  MainPage,
-  MyAppsPage,
-  MyWidgetsPage,
-  Overview,
-} from '../pages';
+import { ExplorePage, ExtensionsHubPage, InfoPage, InstalledExtensions } from '../pages';
 import ErrorComponent from './error-component';
-import routes, { EXTENSIONS, MY_APPS, MY_WIDGETS, INSTALLED, INFO, HOME } from '../../routes';
+import routes, { EXTENSIONS, INSTALLED, HOME } from '../../routes';
 
 const rootRoute = createRootRouteWithContext<RouterContext>()({
   component: Outlet,
@@ -32,10 +23,16 @@ const defaultRoute = createRoute({
   },
 });
 
-const overviewRoute = createRoute({
+const exploreRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[HOME],
-  component: Overview,
+  component: ExplorePage,
+});
+
+const extensionsHubRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: routes[EXTENSIONS],
+  component: ExtensionsHubPage,
 });
 
 const installedExtensionsRoute = createRoute({
@@ -44,39 +41,9 @@ const installedExtensionsRoute = createRoute({
   component: InstalledExtensions,
 });
 
-const mainRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  id: 'main',
-  component: MainPage,
-});
-
-const exploreRoute = createRoute({
-  getParentRoute: () => mainRoute,
-  path: routes[EXTENSIONS],
-  component: ExplorePage,
-});
-
-const appsRoute = createRoute({
-  getParentRoute: () => mainRoute,
-  path: routes[INSTALLED],
-  component: AppsPage,
-});
-
-const myAppsRoute = createRoute({
-  getParentRoute: () => mainRoute,
-  path: routes[MY_APPS],
-  component: MyAppsPage,
-});
-
-const myWidgetsRoute = createRoute({
-  getParentRoute: () => mainRoute,
-  path: routes[MY_WIDGETS],
-  component: MyWidgetsPage,
-});
-
 const infoRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: `$appId${routes[INFO]}`,
+  path: '/info/$appId',
   component: () => {
     const { appId } = infoRoute.useParams();
     return <InfoPage appId={appId} />;
@@ -85,9 +52,9 @@ const infoRoute = createRoute({
 
 const routeTree = rootRoute.addChildren([
   defaultRoute,
-  overviewRoute,
+  exploreRoute,
+  extensionsHubRoute,
   installedExtensionsRoute,
-  mainRoute.addChildren([exploreRoute, appsRoute, myAppsRoute, myWidgetsRoute]),
   infoRoute,
 ]);
 
