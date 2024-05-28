@@ -10,6 +10,20 @@ import ExtensionVersionBulletPointCard from '@akashaorg/design-system-components
 import ContentBlock from '@akashaorg/design-system-core/lib/components/ContentBlock';
 import { ChevronRightIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
+export const mockAppVersionData = {
+  version: '2.8.0',
+  versionDate: 'April 2024',
+  ethAddress: '0xc0ffee254729296a45a3885639AC7E10F9d54979',
+  newFeatures: ['Edit image after upload', 'Ability to add filters and stickers'],
+  bugFixes: [
+    'Image upload problems',
+    'Stickers not appearing when searching',
+    'Gallery Carrousel problem',
+  ],
+  releaseNote:
+    'All problems from previous version have been fixed. We cannot guarantee that it’ll work 100% well as we are all still working on the fixes. Please feel free to contact us if you are facing any other issue.',
+};
+
 type VersionHeaderProps = {
   version: string;
   versionDate: string;
@@ -49,19 +63,6 @@ export const VersionInfoPage: React.FC<VersionInfoPageProps> = ({ appId }) => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
   // @TODO get version info from the hook when available
-  const mockAppVersionData = {
-    version: '2.8.0',
-    versionDate: 'April 2024',
-    ethAddress: '0xc0ffee254729296a45a3885639AC7E10F9d54979',
-    newFeatures: ['Edit image after upload', 'Ability to add filters and stickers'],
-    bugFixes: [
-      'Image upload problems',
-      'Stickers not appearing when searching',
-      'Gallery Carrousel problem',
-    ],
-    releaseNote:
-      'All problems from previous version have been fixed. We cannot guarantee that it’ll work 100% well as we are all still working on the fixes. Please feel free to contact us if you are facing any other issue.',
-  };
 
   return (
     <>
@@ -70,8 +71,8 @@ export const VersionInfoPage: React.FC<VersionInfoPageProps> = ({ appId }) => {
           <ExtensionHeader appName={'Extension Name'} packageName="Package name" />
           <Divider />
           <VersionHeader
-            version={mockAppVersionData.version}
-            versionDate={t('Version {{version}}', { version: mockAppVersionData.versionDate })}
+            version={t('Version {{version}}', { version: mockAppVersionData.version })}
+            versionDate={mockAppVersionData.versionDate}
             ethAddressLabel={t('Eth Address')}
             ethAddress={mockAppVersionData.ethAddress}
           />
@@ -97,7 +98,7 @@ export const VersionInfoPage: React.FC<VersionInfoPageProps> = ({ appId }) => {
             showDivider={false}
             onClickviewMoreLabel={() => {
               navigate({
-                to: '/info/$appId',
+                to: '/info/$appId/version-history',
                 params: {
                   appId,
                 },

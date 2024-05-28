@@ -16,7 +16,7 @@ const ExtensionVersionBulletPointCard: React.FC<ExtensionVersionBulletPointCardP
     <Stack direction="column" spacing="gap-y-4">
       <Stack direction="column" spacing="gap-y-2">
         <Text variant="h6">{featureTitle}</Text>
-        <ul className="ml-5 list-disc dark-text-white text-black">
+        <ul className="ml-5 list-disc dark:text-white text-black">
           {itemList.map((item, idx) => (
             <Stack key={idx} direction="column" spacing="gap-y-1">
               <li>

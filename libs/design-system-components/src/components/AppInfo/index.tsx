@@ -32,6 +32,7 @@ export type AppInfoProps = {
   readMore: string;
   descriptionBody: string;
   developersTitle: string;
+  permissionTitle: string;
   collaboratorsTitle: string;
   galleryTitle: string;
   viewAllGalleryCTA: string;
@@ -56,6 +57,8 @@ export type AppInfoProps = {
   onSelectDeveloper: (profileId: string) => void;
   onCollaboratorsClick: () => void;
   onAppVersionClick: () => void;
+  onLatestUpdateClick: () => void;
+  onPermissionInfoClick: () => void;
   transformSource: (src: Image) => Image;
 };
 
@@ -65,6 +68,7 @@ const AppInfo: React.FC<AppInfoProps> = ({
   packageNameTitle,
   developers,
   descriptionTitle,
+  permissionTitle,
   readMore,
   descriptionBody,
   galleryTitle,
@@ -92,6 +96,8 @@ const AppInfo: React.FC<AppInfoProps> = ({
   onSelectDeveloper,
   onCollaboratorsClick,
   onAppVersionClick,
+  onLatestUpdateClick,
+  onPermissionInfoClick,
   transformSource,
 }) => {
   const [showAllDescription, setShowAllDescription] = React.useState(false);
@@ -245,11 +251,16 @@ const AppInfo: React.FC<AppInfoProps> = ({
           </ContentBlock>
           <ContentBlock blockTitle={generalInfoTitle}>
             <Stack direction="column" spacing="gap-y-2">
-              <Stack direction="column" spacing="gap-y-1">
+              <Stack direction="row" justify="between">
                 <Text variant="body2" color={{ light: 'grey4', dark: 'grey7' }}>
                   {latestReleaseTitle}
                 </Text>
-                <Button variant="text" size="md" label={versionDate} />
+                <Button
+                  variant="text"
+                  size="md"
+                  label={versionDate}
+                  onClick={onLatestUpdateClick}
+                />
               </Stack>
               <Divider />
               <Stack direction="row" justify="between">
@@ -276,11 +287,9 @@ const AppInfo: React.FC<AppInfoProps> = ({
 
               <Stack direction="row" justify="between">
                 <Text variant="body2" color={{ light: 'grey4', dark: 'grey7' }}>
-                  {'Extension Permission'}
+                  {permissionTitle}
                 </Text>
-                <Link to="#">
-                  <Button variant="text" size="md" label={'View'} />
-                </Link>
+                <Button variant="text" size="md" label={'View'} onClick={onPermissionInfoClick} />
               </Stack>
               <Divider />
 

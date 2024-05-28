@@ -5,7 +5,6 @@ import { transformSource } from '@akashaorg/ui-awf-hooks';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { ChevronRightIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
@@ -29,8 +28,11 @@ export const CollaboratorsPage: React.FC<CollaboratorsPageProps> = ({ appId }) =
     <>
       <Card padding="p-4">
         <Stack spacing="gap-y-4">
-          <Text variant="h5">{t('Collaborators')}</Text>
-          <ExtensionHeader appName={'Extension Name'} packageName="Package name" />
+          <ExtensionHeader
+            appName={'Extension Name'}
+            packageName="Package name"
+            pageTitle={t('Collaborators')}
+          />
           <Divider />
           <Stack direction="column" spacing="gap-y-4">
             {developers.map((developer, idx) => (

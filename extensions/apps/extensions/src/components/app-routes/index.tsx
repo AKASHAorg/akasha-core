@@ -8,7 +8,14 @@ import {
 } from '@tanstack/react-router';
 import { CreateRouter, RouterContext } from '@akashaorg/typings/lib/ui';
 import { ExplorePage, ExtensionsHub, InfoPage, InstalledExtensions } from '../pages';
-import { DevInfoPage, CollaboratorsPage, VersionInfoPage } from '../pages/sub-pages';
+import {
+  DevInfoPage,
+  CollaboratorsPage,
+  VersionInfoPage,
+  VersionHistoryPage,
+  AuditLogPage,
+  PermissionsPage,
+} from '../pages/sub-pages';
 import ErrorComponent from './error-component';
 import routes, { EXTENSIONS, INSTALLED, HOME } from '../../routes';
 
@@ -78,15 +85,46 @@ const versionInfoRoute = createRoute({
   },
 });
 
+const versionHistoryRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/info/$appId/version-history',
+  component: () => {
+    const { appId } = versionHistoryRoute.useParams();
+    return <VersionHistoryPage appId={appId} />;
+  },
+});
+
+const auditLogRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/info/$appId/audit-log',
+  component: () => {
+    const { appId } = auditLogRoute.useParams();
+    return <AuditLogPage appId={appId} />;
+  },
+});
+
+const permissionInfoRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/info/$appId/permissions',
+  component: () => {
+    const { appId } = permissionInfoRoute.useParams();
+    return <PermissionsPage appId={appId} />;
+  },
+});
+
 const routeTree = rootRoute.addChildren([
   defaultRoute,
   exploreRoute,
   extensionsHubRoute,
   installedExtensionsRoute,
   infoRoute,
+  //sub-routes from app info page
   devInfoRoute,
   collaboratorsInfoRoute,
   versionInfoRoute,
+  versionHistoryRoute,
+  auditLogRoute,
+  permissionInfoRoute,
 ]);
 
 export const router = ({ baseRouteName, apolloClient }: CreateRouter) =>
