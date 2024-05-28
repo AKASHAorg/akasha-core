@@ -8,4 +8,4 @@
 
 ## Background
 
-The Auth App adds the authentication and authorization functionalities to the AKASHA World. It supports various ways of authentication, like a wallet connection via an extension or a mobile app (ie. Metamask), WalletConnect etc.
+The Auth App adds the authentication and authorization functionalities to the AKASHA World. It supports various ways of authentication, through the Web3Modal.

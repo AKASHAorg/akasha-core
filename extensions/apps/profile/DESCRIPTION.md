@@ -1,3 +1,3 @@
-The Profile app displays the information in your profile and makes it easy to customize it any time. It enables you to see and quickly access a timeline with your posts and a list with your interests, wonderful people you follow and people who follow you. 
+The Profile app displays the information in your profile and makes it easy to customize it any time. It enables you to see and quickly access a timeline with your beams and a list with your interests, wonderful people you follow and people who follow you. 
 
 You can also identify yourself in the AKASHA World by selecting a unique avatar, adding a name, cover image, a little bio or even your lovely Ethereum name.

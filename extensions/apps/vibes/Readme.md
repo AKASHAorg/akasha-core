@@ -1,6 +1,7 @@
 # Vibes App
 
 > Vibes for AKASHA World
+
 ## Table of contents
 
 - [Table of contents](#table-of-contents)

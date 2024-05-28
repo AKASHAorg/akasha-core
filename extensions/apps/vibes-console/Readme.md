@@ -6,8 +6,8 @@
 
 - [Background](#background)
 - [Pages](#pages)
-  - [Applications Center](#applicationscenter)
-  - [Content Review Hub](#contentreviewhub)
+  - [Applications Center](#applications-center)
+  - [Content Review Hub](#content-review-hub)
 
 ## Background
 
