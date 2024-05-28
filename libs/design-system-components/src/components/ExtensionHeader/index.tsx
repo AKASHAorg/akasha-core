@@ -47,7 +47,7 @@ const ExtensionHeader: React.FC<ExtensionHeaderProps> = ({
           </Text>
         </Stack>
       </Stack>
-      {pageTitle && (
+      {!!description && (
         <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey7' }}>
           {description}
         </Text>

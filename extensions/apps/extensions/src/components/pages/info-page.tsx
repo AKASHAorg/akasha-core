@@ -100,12 +100,13 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
             versionInfo={t('Latest release')}
             versionDate={t('December 2022')}
             versionDescription={
-              'some dummy description' /* appReleaseInfo?.application?.description */
+              'Only two lines of text will be displayed here then if you go to View info aaaa...' /* appReleaseInfo?.application?.description */
             }
             goToVersionInfoPageLabel={t('View info')}
             documentationTitle={t('Documentation')}
+            documentationLink={'Link 1'}
             licenseTitle={t('License')}
-            license={'license 1122233' /* appReleaseInfo?.application?.license */}
+            license={'License A' /* appReleaseInfo?.application?.license */}
             contactSupportTitle={t('Contact Support')}
             share={{ label: 'Share', icon: <ShareIcon /> }}
             report={{
@@ -155,6 +156,14 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
             onPermissionInfoClick={() => {
               navigate({
                 to: '/info/$appId/permissions',
+                params: {
+                  appId,
+                },
+              });
+            }}
+            onLicenseClick={() => {
+              navigate({
+                to: '/info/$appId/license',
                 params: {
                   appId,
                 },

@@ -4,3 +4,4 @@ export * from './version-info-page';
 export * from './version-history-page';
 export * from './audit-log-page';
 export * from './permissions-page';
+export * from './license-page';

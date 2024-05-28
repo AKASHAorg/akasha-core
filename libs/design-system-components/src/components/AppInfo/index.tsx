@@ -1,5 +1,4 @@
 import React from 'react';
-import Link from '@akashaorg/design-system-core/lib/components/Link';
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
@@ -19,6 +18,7 @@ import {
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
 import StackedAvatar from '@akashaorg/design-system-core/lib/components/StackedAvatar';
+import CopyToClipboard from '@akashaorg/design-system-core/lib/components/CopyToClipboard';
 import { userData } from '@akashaorg/design-system-core/lib/utils';
 import { DuplexAppButton } from './duplex-app-button';
 import ImageBlockGallery from '../ImageBlockGallery';
@@ -47,6 +47,7 @@ export type AppInfoProps = {
   versionDescription: string;
   goToVersionInfoPageLabel: string;
   documentationTitle: string;
+  documentationLink: string;
   licenseTitle: string;
   license: string;
   share: ListItem;
@@ -59,6 +60,7 @@ export type AppInfoProps = {
   onAppVersionClick: () => void;
   onLatestUpdateClick: () => void;
   onPermissionInfoClick: () => void;
+  onLicenseClick: () => void;
   transformSource: (src: Image) => Image;
 };
 
@@ -86,6 +88,7 @@ const AppInfo: React.FC<AppInfoProps> = ({
   versionDescription,
   goToVersionInfoPageLabel,
   documentationTitle,
+  documentationLink,
   licenseTitle,
   license,
   share,
@@ -98,6 +101,7 @@ const AppInfo: React.FC<AppInfoProps> = ({
   onAppVersionClick,
   onLatestUpdateClick,
   onPermissionInfoClick,
+  onLicenseClick,
   transformSource,
 }) => {
   const [showAllDescription, setShowAllDescription] = React.useState(false);
@@ -279,9 +283,9 @@ const AppInfo: React.FC<AppInfoProps> = ({
                 <Text variant="body2" color={{ light: 'grey4', dark: 'grey7' }}>
                   {documentationTitle}
                 </Text>
-                <Link to="#">
-                  <Button variant="text" size="md" label={'Link 1'} />
-                </Link>
+                <CopyToClipboard value={documentationLink}>
+                  <Button variant="text" size="md" label={documentationLink} />
+                </CopyToClipboard>
               </Stack>
               <Divider />
 
@@ -295,11 +299,9 @@ const AppInfo: React.FC<AppInfoProps> = ({
 
               <Stack direction="row" justify="between">
                 <Text variant="body2" color={{ light: 'grey4', dark: 'grey7' }}>
-                  {'License'}
+                  {licenseTitle}
                 </Text>
-                <Link to="#">
-                  <Button variant="text" size="md" label={'License A'} />
-                </Link>
+                <Button variant="text" size="md" label={license} onClick={onLicenseClick} />
               </Stack>
             </Stack>
           </ContentBlock>
@@ -314,7 +316,7 @@ const AppInfo: React.FC<AppInfoProps> = ({
             onClickviewMoreLabel={onAppVersionClick}
           >
             <Stack direction="column" spacing="gap-y-4">
-              <Stack direction="row">
+              <Stack direction="column">
                 <Text variant="body1">{version}</Text>
                 <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey7' }}>
                   {versionDate}

@@ -15,6 +15,7 @@ import {
   VersionHistoryPage,
   AuditLogPage,
   PermissionsPage,
+  LicensePage,
 } from '../pages/sub-pages';
 import ErrorComponent from './error-component';
 import routes, { EXTENSIONS, INSTALLED, HOME } from '../../routes';
@@ -112,6 +113,15 @@ const permissionInfoRoute = createRoute({
   },
 });
 
+const appLicenseInfoRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/info/$appId/license',
+  component: () => {
+    const { appId } = appLicenseInfoRoute.useParams();
+    return <LicensePage appId={appId} />;
+  },
+});
+
 const routeTree = rootRoute.addChildren([
   defaultRoute,
   exploreRoute,
@@ -125,6 +135,7 @@ const routeTree = rootRoute.addChildren([
   versionHistoryRoute,
   auditLogRoute,
   permissionInfoRoute,
+  appLicenseInfoRoute,
 ]);
 
 export const router = ({ baseRouteName, apolloClient }: CreateRouter) =>
