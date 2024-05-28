@@ -1,20 +1,24 @@
 # Vibes Console App
 
-> Vibes console for AKASHA World moderators
+> Vibes Console for AKASHA World
+
 ## Table of contents
 
-- [Table of contents](#table-of-contents)
 - [Background](#background)
-- [Components](#components)
-  - [Overview](#overview)
+- [Pages](#pages)
+  - [Applications Center](#applicationscenter)
+  - [Content Review Hub](#contentreviewhub)
 
 ## Background
 
+Vibes Console app is an installable app that extends Vibes app by providing interface for users to apply to become a moderator and moderators/admins to review flagged contents.
 
-## Components
+## Pages
 
-The core components include:
+The core pages include:
 
-### Overview
-> The Overview ...
+### Applications Center
+> The Applications center shows an overview of moderator applications history and allows admins to review same.
 
+### Content Review Hub
+> The Content Review Hub allows authorized users (moderators) to review (suspend, keep and delist) flagged contents.
