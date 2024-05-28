@@ -105,20 +105,21 @@ const AppInfo: React.FC<AppInfoProps> = ({
   transformSource,
 }) => {
   const [showAllDescription, setShowAllDescription] = React.useState(false);
+  const [showImageGalleryOverlay, setShowImageGalleryOverlay] = React.useState(false);
 
   const imageGalleryImages = [
     {
-      src: 'https://placebeard.it/360x360',
+      src: 'https://placebeard.it/800x800',
       size: { width: 320, height: 320 },
       name: 'sample-1',
     },
     {
-      src: 'https://placebeard.it/320x320',
+      src: 'https://placebeard.it/800x800',
       size: { width: 320, height: 320 },
       name: 'sample-2',
     },
     {
-      src: 'https://placebeard.it/350x350',
+      src: 'https://placebeard.it/800x800',
       size: { width: 320, height: 320 },
       name: 'sample-3',
     },
@@ -199,10 +200,16 @@ const AppInfo: React.FC<AppInfoProps> = ({
           <ContentBlock
             blockTitle={galleryTitle}
             viewMoreLabel={viewAllGalleryCTA}
-            //  onClickviewMoreLabel={() => setShowAllDescription(!showAllDescription)}
+            onClickviewMoreLabel={() => {
+              setShowImageGalleryOverlay(!showImageGalleryOverlay);
+            }}
           >
             <Stack direction="row" justify="between">
-              <ExtensionImageGallery images={imageGalleryImages} />
+              <ExtensionImageGallery
+                images={imageGalleryImages}
+                showOverlay={showImageGalleryOverlay}
+                toggleOverlay={() => setShowImageGalleryOverlay(!showImageGalleryOverlay)}
+              />
             </Stack>
           </ContentBlock>
           <ContentBlock blockTitle={developersTitle}>
