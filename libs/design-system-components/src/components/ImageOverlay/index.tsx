@@ -59,9 +59,7 @@ const ImageOverlay: React.FC<IImageOverlay> = props => {
 
   const handleImageOnLoad = () => {
     transformRef.current?.resetTransform();
-    setTimeout(() => {
-      setImgLoaded(true);
-    }, 150);
+    setImgLoaded(true);
   };
 
   React.useEffect(() => {
