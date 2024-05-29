@@ -118,18 +118,18 @@ const AppInfo: React.FC<AppInfoProps> = ({
 
   const imageGalleryImages = [
     {
-      src: 'https://placebeard.it/800x800',
-      size: { width: 320, height: 320 },
+      src: 'https://bafkreia4a6262sy5l6jqduyrdplynavybdlj6gww6srstnpc5swtmijdnq.ipfs.w3s.link',
+      size: { width: 640, height: 448 },
       name: 'sample-1',
     },
     {
-      src: 'https://placebeard.it/820x820',
-      size: { width: 320, height: 320 },
+      src: 'https://bafkreia4a6262sy5l6jqduyrdplynavybdlj6gww6srstnpc5swtmijdnq.ipfs.w3s.link',
+      size: { width: 640, height: 448 },
       name: 'sample-2',
     },
     {
-      src: 'https://placebeard.it/850x850',
-      size: { width: 320, height: 320 },
+      src: 'https://bafkreiebphfg3neceldflksm3medufm2himfkbegtidcevmr3pork5vbcm.ipfs.w3s.link',
+      size: { width: 640, height: 539 },
       name: 'sample-3',
     },
   ];
