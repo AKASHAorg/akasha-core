@@ -198,7 +198,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
       {entryData.active && (
         <ErrorBoundary {...errorBoundaryProps}>
           <Card
-            onClick={!showNSFWContent ? null : onContentClick}
+            onClick={!showNSFWContent || !noWrapperCard ? null : onContentClick}
             customStyle={contentClickableStyle}
             type="plain"
           >
@@ -303,7 +303,12 @@ const EntryCard: React.FC<EntryCardProps> = props => {
   return noWrapperCard ? (
     <> {entryCardUi}</>
   ) : (
-    <Card ref={ref} padding="p-0" customStyle={customStyle}>
+    <Card
+      ref={ref}
+      padding="p-0"
+      customStyle={customStyle}
+      onClick={!showNSFWContent ? null : onContentClick}
+    >
       {entryCardUi}
     </Card>
   );

@@ -116,6 +116,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
         }
         onReflect();
       }}
+      onContentClick={onContentClick}
       onEntryFlag={handleFlagBeam}
       profileAvatarExt={
         <AuthorProfileAvatar
@@ -148,7 +149,6 @@ const BeamCard: React.FC<BeamCardProps> = props => {
               setAppName(blockInfo?.appName);
               setBlockNameMap(new Map(blockNameMap.set(blockID, blockInfo?.blockName)));
             }}
-            onContentClick={onContentClick}
           />
         </React.Suspense>
       )}
