@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import BeamSection from './beam-section';
@@ -85,6 +85,11 @@ const BeamPage: React.FC<BeamPageProps> = props => {
       (!showNsfw || (!isLoggedIn && !authenticating))
     );
   }, [authenticating, isLoggedIn, moderationData, showNsfw]);
+
+  useLayoutEffect(() => {
+    //todo revisit scroll reset
+    scrollTo(0, 0);
+  }, []);
 
   return (
     <Card padding="p-0" margin="mb-4">

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import BackToOriginalBeam from '@akashaorg/ui-lib-feed/lib/components/back-to-original-beam';
@@ -59,6 +59,11 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
       replace: true,
     });
   };
+
+  useLayoutEffect(() => {
+    //todo revisit scroll reset
+    scrollTo(0, 0);
+  }, []);
 
   return (
     <Card padding="p-0" margin="mb-4">

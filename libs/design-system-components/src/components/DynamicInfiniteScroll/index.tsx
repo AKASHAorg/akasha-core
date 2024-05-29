@@ -39,7 +39,7 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
   const {
     count,
     itemHeight,
-    enableScrollRestoration,
+    enableScrollRestoration = false,
     scrollRestorationStorageKey = 'storage-key',
     overScan = 5,
     itemSpacing,
@@ -110,7 +110,7 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
   const virtualListUi = (
     <Card
       ref={parentRef}
-      customStyle={`relative [overflow-anchor: none] min-h-[${totalSize + loadingPlaceholderSize}px] ${customStyle}`}
+      customStyle={`relative min-h-[${totalSize + loadingPlaceholderSize}px] ${customStyle}`}
       type="plain"
     >
       <Card
