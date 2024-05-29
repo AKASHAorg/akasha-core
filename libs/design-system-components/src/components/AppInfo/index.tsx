@@ -319,6 +319,7 @@ const AppInfo: React.FC<AppInfoProps> = ({
                   <StackedAvatar
                     userData={userData.map(item => ({ ...item, avatar: item.avatar?.default }))}
                     maxAvatars={4}
+                    size="xs"
                   />
                   <Icon
                     icon={<ChevronRightIcon />}
