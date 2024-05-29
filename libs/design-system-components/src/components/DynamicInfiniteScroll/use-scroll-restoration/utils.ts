@@ -65,7 +65,7 @@ export async function restoreScrollPosition({
         virtualizer.getVirtualItems()?.[0]?.start - virtualizer.options.scrollMargin;
       /*
        * Check if the latest virtual items container offset matches with the current offset to determine
-       *  if the current offset can be used for scroll restoration.
+       * if the current offset can be used for scroll restoration.
        **/
       const offsetMatched =
         Number(document.querySelector(`[${offsetAttribute}]`)?.getAttribute(offsetAttribute)) ===
@@ -130,6 +130,9 @@ export function storeScrollConfig(scrollRestorationStorageKey: string, config: C
   );
 }
 
+/*
+ * Remove item from scroll config by key
+ **/
 function removeItemFromScrollConfig(key: string) {
   const config = restoreScrollConfig();
   if (config[key]) {

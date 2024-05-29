@@ -67,7 +67,8 @@ export function useScrollRestoration({
       );
       if (scrollIndex && scrollIndex !== -1) {
         /*
-         * Make sure virtualizer's options from last scroll position are available in the current virtualizer instance before making any computations.
+         * Make sure virtualizer's options from last scroll position are available in the current virtualizer instance
+         * before scrolling to the index of the reference item.
          **/
         virtualizer.setOptions({
           ...virtualizer.options,

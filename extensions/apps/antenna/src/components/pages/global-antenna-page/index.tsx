@@ -53,21 +53,19 @@ const GlobalAntennaPage: React.FC<unknown> = () => {
       <Helmet helmetData={helmetData}>
         <title>{worldConfig.title}</title>
       </Helmet>
-      <Stack spacing="gap-y-2">
-        <Stack customStyle="mb-2">
-          <EditorPlaceholder
-            profileId={authenticatedDID}
-            avatar={authenticatedProfile?.avatar}
-            actionLabel={t(`Start Beaming`)}
-            placeholderLabel={t(`From Your Mind to the World 🧠 🌏 ✨`)}
-            onClick={handleEditorPlaceholderClick}
-            transformSource={transformSource}
-          />
-        </Stack>
+      <Stack spacing="gap-y-4">
+        <EditorPlaceholder
+          profileId={authenticatedDID}
+          avatar={authenticatedProfile?.avatar}
+          actionLabel={t(`Start Beaming`)}
+          placeholderLabel={t(`From Your Mind to the World 🧠 🌏 ✨`)}
+          onClick={handleEditorPlaceholderClick}
+          transformSource={transformSource}
+        />
         <BeamFeed
           scrollRestorationStorageKey={QueryKeys.GLOBAL_ANTENNA}
           estimatedHeight={150}
-          itemSpacing={8}
+          itemSpacing={16}
           scrollOptions={{ overScan: 5 }}
           scrollTopIndicator={(listRect, onScrollToTop) => (
             <ScrollTopWrapper placement={listRect.left}>

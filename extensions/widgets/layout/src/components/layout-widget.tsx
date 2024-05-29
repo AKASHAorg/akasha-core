@@ -234,10 +234,8 @@ const Layout: React.FC<unknown> = () => {
             </Stack>
           </Stack>
 
-          <Stack align="center" justify="between" customStyle="sticky top-0 h-screen ">
-            <Stack
-              customStyle={`fixed top-0 ml-5 max-w-[21rem] grid grid-auto-rows pt-4 ${showWidgets ? '' : 'hidden'}`}
-            >
+          <Stack align="center" justify="between" customStyle="sticky top-0 ml-5 h-screen ">
+            <Stack customStyle={`fixed top-4 grid grid-auto-rows ${showWidgets ? '' : 'hidden'}`}>
               <Widget
                 name={layoutConfig.widgetSlotId}
                 loadingIndicator={<MiniProfileWidgetLoader />}
@@ -248,7 +246,7 @@ const Layout: React.FC<unknown> = () => {
               />
             </Stack>
 
-            <Stack customStyle="fixed bottom-2 ml-5 mr-2 lg:(w-[21rem])">
+            <Stack customStyle="fixed bottom-2 mx-2 lg:(w-[21rem])">
               <Widget name={layoutConfig.cookieWidgetSlotId} />
             </Stack>
           </Stack>

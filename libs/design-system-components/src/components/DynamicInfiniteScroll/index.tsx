@@ -68,6 +68,7 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
   const virtualizer = useWindowVirtualizer({
     count: count,
     overscan: overScan,
+    gap: itemSpacing,
     initialMeasurementsCache: getInitialMeasurementsCache(),
     scrollMargin: parentOffsetRef.current,
     measureElement: isMobileScreen
@@ -85,7 +86,7 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const virtualItems = virtualizer.getVirtualItems();
   const totalSize = virtualizer.getTotalSize();
-  const loadingMore = loading && virtualItems.length > 0;
+  const loadingMore = loading && hasNextPage && virtualItems.length > 0;
   const loadingPlaceholderSize = loadingMore
     ? loadMoreRef.current?.getBoundingClientRect().height
     : 0;
@@ -109,7 +110,7 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
   const virtualListUi = (
     <Card
       ref={parentRef}
-      customStyle={`relative min-h-[${totalSize + loadingPlaceholderSize}px] ${customStyle}`}
+      customStyle={`relative [overflow-anchor: none] min-h-[${totalSize + loadingPlaceholderSize}px] ${customStyle}`}
       type="plain"
     >
       <Card
