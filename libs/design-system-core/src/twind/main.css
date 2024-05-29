@@ -33,8 +33,10 @@
     --feedback-warning-dark: 255 223 140; /* #ffdf8c */
     --feedback-error: 238 97 53; /* #ee6135 */
     --feedback-error-dark: 255 146 113; /* #ff9271 */
+    --feedback-error-fade-2: 252 226 217; /* #FCE2D9 */
     --elevation: 49 50 53; /* #313235 */
     --tertiary-light: 233 220 249; /*  #E9DCF9 */
+    --tertiary-dark: 91 24 149; /* #511895 */
   }
 
 }
