@@ -39,7 +39,7 @@ export default {
         warningDark: withOpacity('--feedback-warning-dark'),
         errorLight: withOpacity('--feedback-error'),
         errorDark: withOpacity('--feedback-error-dark'),
-        errorFade2: withOpacity('--feedback-error-fade-2'),
+        errorFade: withOpacity('--feedback-error-fade'),
         elevation: withOpacity('--elevation'),
       },
       borderRadius: {

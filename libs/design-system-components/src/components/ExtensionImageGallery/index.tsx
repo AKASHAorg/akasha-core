@@ -12,6 +12,12 @@ export type ExtensionImageGalleryProps = {
 
 const ExtensionImageGallery: React.FC<ExtensionImageGalleryProps> = props => {
   const { images, showOverlay, toggleOverlay } = props;
+  const [clickedImg, setClickedImg] = React.useState(null);
+
+  const handleClickImage = (img: ImageObject) => {
+    toggleOverlay();
+    setClickedImg(img);
+  };
 
   const gridStyle = apply(`grid grid-cols-6 gap-3`);
 
@@ -27,7 +33,7 @@ const ExtensionImageGallery: React.FC<ExtensionImageGalleryProps> = props => {
           <ImageBlockGridItem
             image={image}
             key={index}
-            handleClickImage={null}
+            handleClickImage={handleClickImage}
             images={images}
             gridStyle={style}
             aspectRatio="aspect-video"
@@ -35,7 +41,11 @@ const ExtensionImageGallery: React.FC<ExtensionImageGalleryProps> = props => {
         ))}
       </div>
       {showOverlay && (
-        <ImageOverlay images={images} clickedImg={images[0]} closeModal={toggleOverlay} />
+        <ImageOverlay
+          images={images}
+          clickedImg={clickedImg ?? images[0]}
+          closeModal={toggleOverlay}
+        />
       )}
     </>
   );

@@ -160,7 +160,7 @@ const AppInfo: React.FC<AppInfoProps> = ({
                       <Stack
                         align="center"
                         justify="center"
-                        background={{ light: 'errorFade2', dark: 'errorDark' }}
+                        background={{ light: 'errorFade', dark: 'errorDark' }}
                         direction="row"
                         spacing="gap-x-1"
                         customStyle={`m-h-[18px] m-w-[18px] rounded-md px-2 rounded-3xl`}
@@ -357,7 +357,7 @@ const AppInfo: React.FC<AppInfoProps> = ({
               </Stack>
               <Divider />
 
-              <Stack direction="row" justify="between">
+              {/*             <Stack direction="row" justify="between">
                 <Text variant="body2" color={{ light: 'grey4', dark: 'grey7' }}>
                   {documentationTitle}
                 </Text>
@@ -365,7 +365,7 @@ const AppInfo: React.FC<AppInfoProps> = ({
                   <Button variant="text" size="md" label={documentationLink} />
                 </CopyToClipboard>
               </Stack>
-              <Divider />
+              <Divider /> */}
 
               <Stack direction="row" justify="between">
                 <Text variant="body2" color={{ light: 'grey4', dark: 'grey7' }}>

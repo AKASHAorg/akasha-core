@@ -76,9 +76,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
           integrationName={'Extension Name' /* appReleaseInfo?.application?.displayName */}
           integrationType="plugin"
           nsfw={false}
-          packageName={
-            'com.companyname.productname.supercarts.racing.game' /* appReleaseInfo?.application?.name */
-          }
+          packageName={'TBD package name' /* appReleaseInfo?.application?.name */}
           packageNameTitle={'Package name'}
           developers={developers}
           descriptionTitle={t('Description')}

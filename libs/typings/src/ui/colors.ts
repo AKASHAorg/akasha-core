@@ -23,7 +23,7 @@ export type Colors =
   | 'warningDark'
   | 'errorLight'
   | 'errorDark'
-  | 'errorFade2'
+  | 'errorFade'
   | 'blue'
   | 'red'
   | 'orange'

@@ -23,7 +23,15 @@ const ContentBlock: React.FC<PropsWithChildren<ContentBlockProps>> = ({
   showDivider = true,
   children,
 }) => {
-  return (
+  const ClickWrapper = ({ children }) => {
+    return (
+      <Button plain onClick={onClickviewMoreLabel}>
+        {children}
+      </Button>
+    );
+  };
+
+  const BaseCompnt = (
     <Stack direction="column" spacing="gap-y-4">
       <Stack direction="column" spacing="gap-y-2">
         <Stack justify="between" direction="row">
@@ -32,14 +40,12 @@ const ContentBlock: React.FC<PropsWithChildren<ContentBlockProps>> = ({
             <Button size="md" variant="text" label={viewMoreLabel} onClick={onClickviewMoreLabel} />
           )}
           {!!viewMoreIcon && (
-            <Button plain onClick={onClickviewMoreLabel}>
-              <Icon
-                icon={viewMoreIcon}
-                size="sm"
-                color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-                customStyle="ml-auto"
-              />
-            </Button>
+            <Icon
+              icon={viewMoreIcon}
+              size="sm"
+              color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+              customStyle="ml-auto"
+            />
           )}
         </Stack>
         {children}
@@ -47,6 +53,10 @@ const ContentBlock: React.FC<PropsWithChildren<ContentBlockProps>> = ({
       {showDivider && <Divider />}
     </Stack>
   );
+  if (viewMoreIcon) {
+    return <ClickWrapper>{BaseCompnt}</ClickWrapper>;
+  }
+  return BaseCompnt;
 };
 
 export default ContentBlock;
