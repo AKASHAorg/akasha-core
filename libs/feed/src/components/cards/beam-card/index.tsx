@@ -39,7 +39,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
     ...rest
   } = props;
 
-  const { getRoutingPlugin } = useRootComponentProps();
+  const { getRoutingPlugin, navigateToModal } = useRootComponentProps();
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
@@ -65,7 +65,10 @@ const BeamCard: React.FC<BeamCardProps> = props => {
   };
 
   const handleEntryRemove = () => {
-    console.log('remove beam with id:', entryData.id);
+    navigateToModal({
+      name: `remove-beam-confirmation`,
+      beamId: entryData.id,
+    });
   };
 
   const sortedEntryContent = React.useMemo(() => {
