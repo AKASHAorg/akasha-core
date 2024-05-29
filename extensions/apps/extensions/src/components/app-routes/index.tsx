@@ -17,6 +17,7 @@ import {
   PermissionsPage,
   LicensePage,
   ContactSupportPage,
+  AppDescriptionPage,
 } from '../pages/sub-pages';
 import ErrorComponent from './error-component';
 import routes, { EXTENSIONS, INSTALLED, HOME } from '../../routes';
@@ -132,6 +133,15 @@ const supportInfoRoute = createRoute({
   },
 });
 
+const appDescriptionRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/info/$appId/description',
+  component: () => {
+    const { appId } = appDescriptionRoute.useParams();
+    return <AppDescriptionPage appId={appId} />;
+  },
+});
+
 const routeTree = rootRoute.addChildren([
   defaultRoute,
   exploreRoute,
@@ -147,6 +157,7 @@ const routeTree = rootRoute.addChildren([
   permissionInfoRoute,
   appLicenseInfoRoute,
   supportInfoRoute,
+  appDescriptionRoute,
 ]);
 
 export const router = ({ baseRouteName, apolloClient }: CreateRouter) =>

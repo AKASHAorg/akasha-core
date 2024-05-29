@@ -175,6 +175,14 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
               },
             });
           }}
+          onAppDescriptionClick={() => {
+            navigate({
+              to: '/info/$appId/description',
+              params: {
+                appId,
+              },
+            });
+          }}
           status={
             'not-installed'
             // isInstalled ? 'installed' : 'not-installed'
