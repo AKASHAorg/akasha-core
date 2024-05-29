@@ -123,12 +123,12 @@ const AppInfo: React.FC<AppInfoProps> = ({
       name: 'sample-1',
     },
     {
-      src: 'https://placebeard.it/800x800',
+      src: 'https://placebeard.it/820x820',
       size: { width: 320, height: 320 },
       name: 'sample-2',
     },
     {
-      src: 'https://placebeard.it/800x800',
+      src: 'https://placebeard.it/850x850',
       size: { width: 320, height: 320 },
       name: 'sample-3',
     },
