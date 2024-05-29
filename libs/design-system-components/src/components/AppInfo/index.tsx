@@ -27,6 +27,8 @@ import { Plugin } from '@akashaorg/design-system-core/lib/components/Icon/akasha
 
 export type AppInfoProps = {
   integrationName: string;
+  integrationType: string;
+  nsfw: boolean;
   packageName: string;
   packageNameTitle: string;
   developers: Developer[];
@@ -70,6 +72,8 @@ export type AppInfoProps = {
 
 const AppInfo: React.FC<AppInfoProps> = ({
   integrationName,
+  integrationType,
+  nsfw,
   packageName,
   packageNameTitle,
   developers,
@@ -152,31 +156,38 @@ const AppInfo: React.FC<AppInfoProps> = ({
                     {integrationName}
                   </Text>
                   <Stack direction="row" spacing="gap-x-2" customStyle="flex-wrap">
-                    <Stack
-                      align="center"
-                      justify="center"
-                      background={{ light: 'errorFade2', dark: 'errorDark' }}
-                      direction="row"
-                      spacing="gap-x-1"
-                      customStyle={`m-h-[18px] m-w-[18px] rounded-md px-2 rounded-3xl`}
-                    >
-                      <Text variant="footnotes2" color={{ light: 'errorDark', dark: 'white' }}>
-                        {'NSFW'}
-                      </Text>
-                    </Stack>
-                    <Stack
-                      align="center"
-                      justify="center"
-                      background={{ light: 'tertiaryLight', dark: 'tertiaryDark' }}
-                      direction="row"
-                      spacing="gap-x-1"
-                      customStyle={`m-h-[18px] m-w-[18px] rounded-md px-2 rounded-3xl`}
-                    >
-                      <Icon icon={<Plugin />} size={'sm'} />
-                      <Text variant="footnotes2" color={{ light: 'secondaryLight', dark: 'white' }}>
-                        {'Plugin'}
-                      </Text>
-                    </Stack>
+                    {nsfw && (
+                      <Stack
+                        align="center"
+                        justify="center"
+                        background={{ light: 'errorFade2', dark: 'errorDark' }}
+                        direction="row"
+                        spacing="gap-x-1"
+                        customStyle={`m-h-[18px] m-w-[18px] rounded-md px-2 rounded-3xl`}
+                      >
+                        <Text variant="footnotes2" color={{ light: 'errorDark', dark: 'white' }}>
+                          {'NSFW'}
+                        </Text>
+                      </Stack>
+                    )}
+                    {integrationType === 'plugin' && (
+                      <Stack
+                        align="center"
+                        justify="center"
+                        background={{ light: 'tertiaryLight', dark: 'tertiaryDark' }}
+                        direction="row"
+                        spacing="gap-x-1"
+                        customStyle={`m-h-[18px] m-w-[18px] rounded-md px-2 rounded-3xl`}
+                      >
+                        <Icon icon={<Plugin />} size={'sm'} />
+                        <Text
+                          variant="footnotes2"
+                          color={{ light: 'secondaryLight', dark: 'white' }}
+                        >
+                          {'Plugin'}
+                        </Text>
+                      </Stack>
+                    )}
                   </Stack>
                 </Stack>
               </Stack>
@@ -220,7 +231,7 @@ const AppInfo: React.FC<AppInfoProps> = ({
                 size="lg"
                 color={{ light: 'errorLight', dark: 'errorDark' }}
               />
-              <Stack direction="column" spacing="gap-y-2">
+              <Stack direction="column" spacing="gap-y-1">
                 <Text variant="button-md">Notification</Text>
                 <Text variant="body2">Some important information will appear here</Text>
 
