@@ -70,7 +70,7 @@ export const InstalledExtensions: React.FC<InstalledExtensionsProps> = props => 
           )}
         </Stack>
       </Card>
-      <Card padding="p-4">
+      <Card padding="p-4" margin="mb-2">
         <Stack spacing="gap-y-3">
           <Text variant="h6">{sections[1].title}</Text>
           <Text variant="body2" color={{ light: 'grey5', dark: 'grey6' }}>
