@@ -206,7 +206,7 @@
     "react-router-dom": "6.23.0",
     "react-test-renderer": "18.2.0",
     "react-use": "17.5.0",
-    "react-zoom-pan-pinch": "2.3.2",
+    "react-zoom-pan-pinch": "3.4.4",
     "reflect-metadata": "0.2.1",
     "regenerator-runtime": "0.13.9",
     "remark-gfm": "4.0.0",
