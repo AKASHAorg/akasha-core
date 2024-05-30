@@ -24,7 +24,7 @@ export const AppDescriptionPage: React.FC<AppDescriptionPageProps> = ({ appId })
           <ExtensionHeader
             appName={'Extension Name'}
             packageName="Package name"
-            pageTitle={t('Permissions')}
+            pageTitle={t('Description')}
           />
           <Divider />
           {!!mockDescriptionData && (
