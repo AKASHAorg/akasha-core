@@ -8,6 +8,17 @@ import {
 } from '@tanstack/react-router';
 import { CreateRouter, RouterContext } from '@akashaorg/typings/lib/ui';
 import { ExplorePage, ExtensionsHubPage, InfoPage, InstalledExtensionsPage } from '../pages';
+import {
+  DevInfoPage,
+  CollaboratorsPage,
+  VersionInfoPage,
+  VersionHistoryPage,
+  AuditLogPage,
+  PermissionsPage,
+  LicensePage,
+  ContactSupportPage,
+  AppDescriptionPage,
+} from '../pages/sub-pages';
 import ErrorComponent from './error-component';
 import routes, { EXTENSIONS, INSTALLED, HOME } from '../../routes';
 
@@ -50,12 +61,103 @@ const infoRoute = createRoute({
   },
 });
 
+const devInfoRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/info/$appId/developer/$devDid',
+  component: () => {
+    const { devDid } = devInfoRoute.useParams();
+    return <DevInfoPage devDid={devDid} />;
+  },
+});
+
+const collaboratorsInfoRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/info/$appId/collaborators',
+  component: () => {
+    const { appId } = infoRoute.useParams();
+    return <CollaboratorsPage appId={appId} />;
+  },
+});
+
+const versionInfoRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/info/$appId/versions',
+  component: () => {
+    const { appId } = infoRoute.useParams();
+    return <VersionInfoPage appId={appId} />;
+  },
+});
+
+const versionHistoryRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/info/$appId/version-history',
+  component: () => {
+    const { appId } = versionHistoryRoute.useParams();
+    return <VersionHistoryPage appId={appId} />;
+  },
+});
+
+const auditLogRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/info/$appId/audit-log',
+  component: () => {
+    const { appId } = auditLogRoute.useParams();
+    return <AuditLogPage appId={appId} />;
+  },
+});
+
+const permissionInfoRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/info/$appId/permissions',
+  component: () => {
+    const { appId } = permissionInfoRoute.useParams();
+    return <PermissionsPage appId={appId} />;
+  },
+});
+
+const appLicenseInfoRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/info/$appId/license',
+  component: () => {
+    const { appId } = appLicenseInfoRoute.useParams();
+    return <LicensePage appId={appId} />;
+  },
+});
+
+const supportInfoRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/info/$appId/contact',
+  component: () => {
+    const { appId } = supportInfoRoute.useParams();
+    return <ContactSupportPage appId={appId} />;
+  },
+});
+
+const appDescriptionRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/info/$appId/description',
+  component: () => {
+    const { appId } = appDescriptionRoute.useParams();
+    return <AppDescriptionPage appId={appId} />;
+  },
+});
+
 const routeTree = rootRoute.addChildren([
   defaultRoute,
   exploreRoute,
   extensionsHubRoute,
   installedExtensionsRoute,
   infoRoute,
+  devInfoRoute.addChildren([
+    collaboratorsInfoRoute,
+    versionInfoRoute,
+    versionHistoryRoute,
+    auditLogRoute,
+    permissionInfoRoute,
+    appLicenseInfoRoute,
+    supportInfoRoute,
+    appDescriptionRoute,
+  ]),
 ]);
 
 export const router = ({ baseRouteName, apolloClient }: CreateRouter) =>

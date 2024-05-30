@@ -55,6 +55,13 @@ const ImageOverlay: React.FC<IImageOverlay> = props => {
     setCurrentImg(nextIndex);
   }, [currentImg, images]);
 
+  const [imgLoaded, setImgLoaded] = React.useState(false);
+
+  const handleImageOnLoad = () => {
+    transformRef.current?.resetTransform();
+    setImgLoaded(true);
+  };
+
   React.useEffect(() => {
     const handler = ev => {
       if (ev.key === 'Escape') {
@@ -103,17 +110,26 @@ const ImageOverlay: React.FC<IImageOverlay> = props => {
         {currentImg && (
           <Stack customStyle="h-full" align="center" justify="center">
             <TransformWrapper
+              key={currentImg.src}
               ref={transformRef}
               centerOnInit={true}
-              centerZoomedOut={true}
+              centerZoomedOut={false}
               limitToBounds={true}
               disablePadding={true}
               panning={{ disabled: true }}
+              alignmentAnimation={{ animationTime: 0 }}
             >
-              <TransformComponent wrapperStyle={{ width: '100%', height: '100%' }}>
-                <picture className={tw(`flex`)}>
-                  <img loading="lazy" decoding="async" src={currentImg.src} alt="" />
-                </picture>
+              <TransformComponent wrapperStyle={{ height: '100%', width: '100%' }}>
+                <img
+                  className={tw(
+                    `block max-w-full max-h-full ${imgLoaded ? 'opacity-100' : 'opacity-0'}`,
+                  )}
+                  loading="lazy"
+                  decoding="async"
+                  src={currentImg.src}
+                  alt={currentImg.src}
+                  onLoad={handleImageOnLoad}
+                />
               </TransformComponent>
             </TransformWrapper>
           </Stack>

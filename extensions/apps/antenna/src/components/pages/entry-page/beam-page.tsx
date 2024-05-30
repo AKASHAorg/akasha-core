@@ -1,8 +1,10 @@
-import React, { useRef } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import BeamSection from './beam-section';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
+import ReflectFeed from '@akashaorg/ui-lib-feed/lib/components/reflect-feed.new';
 import {
   hasOwn,
   mapBeamEntryData,
@@ -12,8 +14,7 @@ import {
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
-import { EntityTypes } from '@akashaorg/typings/lib/ui';
-import { ReflectFeed, ReflectionPreview } from '@akashaorg/ui-lib-feed';
+import { ReflectionPreview } from '@akashaorg/ui-lib-feed';
 import { AkashaBeamStreamModerationStatus } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { useNavigate } from '@tanstack/react-router';
 import {
@@ -21,7 +22,7 @@ import {
   GetBeamStreamQuery,
 } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 import { EditableReflectionResolver } from '@akashaorg/ui-lib-feed/lib/components/editable-reflection/editable-reflection-resolver';
-import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
+import { EntityTypes } from '@akashaorg/typings/lib/ui';
 
 type BeamPageProps = {
   beamId: string;
@@ -32,7 +33,7 @@ type BeamPageProps = {
 const BeamPage: React.FC<BeamPageProps> = props => {
   const { beamId, beamStream, beam } = props;
   const { t } = useTranslation('app-antenna');
-  const { navigateToModal, getTranslationPlugin, logger } = useRootComponentProps();
+  const { navigateToModal, logger } = useRootComponentProps();
   const {
     data: { authenticatedDID, isAuthenticating: authenticating },
   } = useAkashaStore();
@@ -85,25 +86,27 @@ const BeamPage: React.FC<BeamPageProps> = props => {
     );
   }, [authenticating, isLoggedIn, moderationData, showNsfw]);
 
+  useLayoutEffect(() => {
+    //todo revisit scroll reset
+    scrollTo(0, 0);
+  }, []);
+
   return (
     <Card padding="p-0" margin="mb-4">
       <Stack ref={wrapperRef} spacing="gap-y-2">
+        <BeamSection
+          beamId={beamId}
+          entryData={mapBeamEntryData(entryData)}
+          isLoggedIn={isLoggedIn}
+          showNSFWCard={showNsfwCard}
+          parentWrapperRef={wrapperRef}
+          showLoginModal={showLoginModal}
+        />
         <ReflectFeed
-          header={
-            <>
-              <BeamSection
-                beamId={beamId}
-                entryData={mapBeamEntryData(entryData)}
-                isLoggedIn={isLoggedIn}
-                showNSFWCard={showNsfwCard}
-                parentWrapperRef={wrapperRef}
-                showLoginModal={showLoginModal}
-              />
-            </>
-          }
-          queryKey={`reflect-feed-${beamId}`}
+          itemType={EntityTypes.BEAM}
           filters={{ where: { beamID: { equalTo: beamId } } }}
-          estimatedHeight={120}
+          estimatedHeight={150}
+          scrollOptions={{ overScan: 5 }}
           renderItem={itemData => {
             return (
               <ErrorBoundary
@@ -113,15 +116,15 @@ const BeamPage: React.FC<BeamPageProps> = props => {
                 }}
                 logger={logger}
               >
-                <>
+                <div>
                   <Divider />
                   <EditableReflectionResolver
-                    reflectID={itemData.node.reflectionID}
+                    reflectID={itemData.reflectionID}
                     onContentClick={() => {
                       navigate({
                         to: '/reflection/$reflectionId',
                         params: {
-                          reflectionId: itemData.node.reflectionID,
+                          reflectionId: itemData.reflectionID,
                         },
                       });
                     }}
@@ -129,13 +132,13 @@ const BeamPage: React.FC<BeamPageProps> = props => {
                       navigate({
                         to: '/reflection/$reflectionId/reflect',
                         params: {
-                          reflectionId: itemData.node.reflectionID,
+                          reflectionId: itemData.reflectionID,
                         },
                       });
                     }}
                   />
                   <ReflectionPreview
-                    reflectionId={itemData.node.reflectionID}
+                    reflectionId={itemData.reflectionID}
                     onNavigate={(options: { id: string; reflect?: boolean }) => {
                       navigate({
                         to: options.reflect
@@ -148,15 +151,12 @@ const BeamPage: React.FC<BeamPageProps> = props => {
                       return;
                     }}
                   />
-                </>
+                </div>
               </ErrorBoundary>
             );
           }}
-          reflectionsOf={{ entryId: beamId, itemType: EntityTypes.BEAM }}
           itemSpacing={0}
-          newItemsPublishedLabel={t('New Reflects published recently')}
           trackEvent={analyticsActions.trackEvent}
-          locale={getTranslationPlugin().i18n.language}
         />
       </Stack>
     </Card>

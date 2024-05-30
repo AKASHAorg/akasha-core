@@ -115,7 +115,6 @@ function EntryList<T>(props: EntryListProps<T>) {
     estimateSize: () => 150,
     scrollMargin: rootElementRef.current?.offsetTop || 0,
     initialMeasurementsCache: initialScrollStateRef.current?.measurementsCache || [],
-    scrollingDelay: 250,
     overscan: scrollerOptions.overscan,
     getItemKey: index => getItemKey(index, pageItems),
   });

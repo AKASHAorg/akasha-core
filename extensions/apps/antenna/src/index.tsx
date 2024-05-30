@@ -103,5 +103,9 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       mountsIn: 'beam-editor_*',
       loadingFn: () => import('./extensions/beam-editor'),
     },
+    {
+      mountsIn: 'remove-beam-confirmation',
+      loadingFn: () => import('./extensions/remove-beam-confirmation'),
+    },
   ],
 });

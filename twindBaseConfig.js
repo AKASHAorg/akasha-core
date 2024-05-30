@@ -21,6 +21,8 @@ export default {
         primaryStop: withOpacity('--gradient-primary-stop'),
         secondaryLight: withOpacity('--foundation-secondary'),
         secondaryDark: withOpacity('--foundation-secondary-dark'),
+        tertiaryLight: withOpacity('--tertiary-light'),
+        tertiaryDark: withOpacity('--tertiary-dark'),
         black: withOpacity('--system-black'),
         white: withOpacity('--system-white'),
         grey1: withOpacity('--system-grey-1'),
@@ -37,6 +39,7 @@ export default {
         warningDark: withOpacity('--feedback-warning-dark'),
         errorLight: withOpacity('--feedback-error'),
         errorDark: withOpacity('--feedback-error-dark'),
+        errorFade: withOpacity('--feedback-error-fade'),
         elevation: withOpacity('--elevation'),
       },
       borderRadius: {
