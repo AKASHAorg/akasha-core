@@ -110,7 +110,7 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
   const virtualListUi = (
     <Card
       ref={parentRef}
-      customStyle={`relative min-h-[${totalSize + loadingPlaceholderSize}px] ${customStyle}`}
+      customStyle={`relative min-h-[${totalSize}px] ${customStyle}`}
       type="plain"
     >
       <Card
@@ -137,11 +137,12 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
             {children({ index, itemIndex: virtualItem.index, itemsSize: items.length })}
           </Card>
         ))}
-        {loadingMore && (
+        {/*@TODO revisit spinner */}
+        {/* {loadingMore && (
           <Stack align="center" justify="center" fullWidth ref={loadMoreRef}>
             <Spinner />
           </Stack>
-        )}
+        )} */}
       </Card>
     </Card>
   );
