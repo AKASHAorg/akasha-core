@@ -110,7 +110,7 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
   const virtualListUi = (
     <Card
       ref={parentRef}
-      customStyle={`relative min-h-[${totalSize}px] ${customStyle}`}
+      customStyle={`relative min-h-[${virtualizer.isScrolling && loading && hasNextPage ? totalSize + overScan * itemHeight : totalSize}px] ${customStyle}`}
       type="plain"
     >
       <Card
