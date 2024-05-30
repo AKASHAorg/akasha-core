@@ -22,7 +22,7 @@ describe('<Accordion /> Component', () => {
     act(() => {
       componentWrapper = customRender(
         <Accordion
-          accordionId={0}
+          accordionId="someId"
           open={true}
           handleClick={jest.fn()}
           titleNode={Title}

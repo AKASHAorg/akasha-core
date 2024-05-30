@@ -9,12 +9,12 @@ import Card from '../Card';
 export type AccordionProps = {
   customStyle?: string;
   contentStyle?: string;
-  accordionId: number;
+  accordionId: string;
   open: boolean;
   headerDivider?: boolean;
   titleNode: React.ReactNode;
   contentNode: React.ReactNode;
-  handleClick: (id: number) => void;
+  handleClick: (id: string) => void;
 };
 
 const Accordion: React.FC<AccordionProps> = props => {
