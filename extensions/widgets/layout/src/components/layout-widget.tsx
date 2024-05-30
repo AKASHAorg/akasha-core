@@ -36,10 +36,6 @@ const Layout: React.FC<unknown> = () => {
   );
 
   const scrollBarWidth = useScrollbarWidth();
-  const sideBarRef = useRef<HTMLDivElement>(null);
-  const widgetRef = useRef<HTMLDivElement>(null);
-  const sideBarWidth = sideBarRef.current?.getBoundingClientRect()?.width || 312;
-  const widgetWidth = widgetRef.current?.getBoundingClientRect()?.width || 336;
 
   const { uiEvents, layoutConfig } = useRootComponentProps();
   // initialise fallback theme, if none is set
@@ -165,7 +161,7 @@ const Layout: React.FC<unknown> = () => {
       }`;
 
   const sidebarSlotStyle = `
-      fixed top-0 h-screen transition-all duration-300 transform ${
+      sticky top-0 h-screen transition-all duration-300 transform ${
         showSidebar ? 'w-fit translate-x-0' : '-translate-x-full xl:hidden'
       } ${needSidebarToggling ? 'fixed left-0' : ''}
       `;
@@ -177,10 +173,8 @@ const Layout: React.FC<unknown> = () => {
     <Stack customStyle={`bg(white dark:black) min-h-screen ${widthStyle}`}>
       <Stack customStyle="h-full m-auto w-[95%] xl:w-full min-h-screen">
         <Stack customStyle={layoutStyle}>
-          <Stack
-            customStyle={`${mobileLayoverStyle} ${sideBarWidth ? `lg:(w-[${sideBarWidth}px])` : ''}`}
-          >
-            <Stack ref={sideBarRef} customStyle={sidebarSlotStyle}>
+          <Stack customStyle={mobileLayoverStyle}>
+            <Stack customStyle={sidebarSlotStyle}>
               {needSidebarToggling ? (
                 <Stack padding="pt-0 xl:pt-4" customStyle="h-screen" ref={wrapperRef}>
                   <Widget
@@ -240,15 +234,8 @@ const Layout: React.FC<unknown> = () => {
             </Stack>
           </Stack>
 
-          <Stack
-            align="center"
-            justify="between"
-            customStyle={`sticky top-0 h-screen ${widgetWidth ? `lg:(w-[${widgetWidth}px])` : ''}`}
-          >
-            <Stack
-              ref={widgetRef}
-              customStyle={`lg:(fixed) grid grid-auto-rows mt-4 ${showWidgets ? '' : 'hidden'}`}
-            >
+          <Stack align="center" justify="between" customStyle="sticky top-0 h-screen ">
+            <Stack customStyle={`grid grid-auto-rows pt-4 ${showWidgets ? '' : 'hidden'}`}>
               <Widget
                 name={layoutConfig.widgetSlotId}
                 loadingIndicator={<MiniProfileWidgetLoader />}
@@ -258,6 +245,7 @@ const Layout: React.FC<unknown> = () => {
                 loadingIndicator={<TrendingWidgetLoader />}
               />
             </Stack>
+
             <Stack customStyle="fixed bottom-2 mx-2 lg:(w-[21rem])">
               <Widget name={layoutConfig.cookieWidgetSlotId} />
             </Stack>
