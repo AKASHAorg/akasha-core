@@ -19,7 +19,7 @@ export const usePendingReflections = () => {
   };
 
   const removePendingReflection = (tempId: string) => {
-    const oldState = pendingReflectionsVar().filter(refl => refl.id === tempId);
+    const oldState = pendingReflectionsVar().filter(refl => refl.id !== tempId);
 
     pendingReflectionsVar([...oldState]);
   };

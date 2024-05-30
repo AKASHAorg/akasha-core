@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import ReflectionEditor from '@akashaorg/design-system-components/lib/components/ReflectionEditor';
 import getSDK from '@akashaorg/awf-sdk';
 import {
@@ -13,6 +13,7 @@ import {
 import {
   useCreateReflectMutation,
   useIndexReflectionMutation,
+  GetReflectionStreamDocument,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { useTranslation } from 'react-i18next';
 import {
@@ -23,6 +24,7 @@ import {
   ReflectEntryData,
 } from '@akashaorg/typings/lib/ui';
 import { usePendingReflections } from '@akashaorg/ui-awf-hooks/lib/use-pending-reflections';
+import { useApolloClient } from '@apollo/client';
 
 export type ReflectEditorProps = {
   beamId: string;
@@ -39,13 +41,15 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
   const uiEventsRef = React.useRef(uiEvents);
   const [editorState, setEditorState] = useState(null);
   const [newContent, setNewContent] = useState<ReflectEntryData>(null);
+  const pendingReflectionIdRef = useRef(null);
+  const apolloClient = useApolloClient();
 
   const sdk = getSDK();
   const isReflectOfReflection = reflectToId !== beamId;
 
   const [publishReflection, publishReflectionMutation] = useCreateReflectMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
-    onCompleted: async () => {
+    onCompleted: () => {
       analyticsActions.trackEvent({
         category: AnalyticsCategories.REFLECT,
         action: 'Reflect Published',
@@ -53,7 +57,8 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
     },
   });
   const [indexReflection, indexReflectionMutation] = useIndexReflectionMutation();
-  const { addPendingReflection, pendingReflections } = usePendingReflections();
+  const { addPendingReflection, removePendingReflection, pendingReflections } =
+    usePendingReflections();
 
   const {
     data: { authenticatedDID, authenticatedProfile },
@@ -105,9 +110,10 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
       ...reflection,
     };
     setNewContent({ ...content, authorId: null, id: null });
+    pendingReflectionIdRef.current = `pending-reflection-${pendingReflections.length}`;
     addPendingReflection({
       ...content,
-      id: `pending-reflection-${pendingReflections.length}`,
+      id: pendingReflectionIdRef.current,
       authorId: authenticatedDID,
     });
 
@@ -125,6 +131,9 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
       );
       await indexReflection({
         variables: indexingVars,
+      });
+      apolloClient.refetchQueries({ include: [GetReflectionStreamDocument] }).then(() => {
+        removePendingReflection(pendingReflectionIdRef.current);
       });
     } else {
       showAlertNotification(`${t(`Something went wrong when publishing the reflection`)}.`);
@@ -163,15 +172,6 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         transformSource={transformSource}
         encodingFunction={encodeSlateToBase64}
       />
-      {/*{(publishReflectionMutation.loading || indexReflectionMutation.loading) &&*/}
-      {/*  newContent &&*/}
-      {/*  pendingReflectRef.current &&*/}
-      {/*  createPortal(*/}
-      {/*    <PendingReflect*/}
-      {/*      entryData={{ ...newContent, id: null, authorId: authenticatedDID }}*/}
-      {/*    />,*/}
-      {/*    pendingReflectRef.current,*/}
-      {/*  )}*/}
     </>
   );
 };
