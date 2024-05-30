@@ -31739,13 +31739,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-zoom-pan-pinch@npm:2.3.2":
-  version: 2.3.2
-  resolution: "react-zoom-pan-pinch@npm:2.3.2"
+"react-zoom-pan-pinch@npm:3.4.4":
+  version: 3.4.4
+  resolution: "react-zoom-pan-pinch@npm:3.4.4"
   peerDependencies:
     react: "*"
     react-dom: "*"
-  checksum: 10/adef12482e9bb126ef24fa95bf9248ac07ed9cb5f79b88762d4fc5be198245270bdddd22fa0cdc4115e72de7217701064af5e8580788510f55ff41e3c668cb1d
+  checksum: 10/c02a7047923ed85f6d5e45d754d3df8403c00c2bf39fce4ef07d81961bdb3bcd549ca27b3122fba17dc2ac7eb2eb4c2b4c656bb503402aa6f7869a446a8ddff4
   languageName: node
   linkType: hard
 
@@ -32836,7 +32836,7 @@ __metadata:
     react-router-dom: "npm:6.23.0"
     react-test-renderer: "npm:18.2.0"
     react-use: "npm:17.5.0"
-    react-zoom-pan-pinch: "npm:2.3.2"
+    react-zoom-pan-pinch: "npm:3.4.4"
     reflect-metadata: "npm:0.2.1"
     regenerator-runtime: "npm:0.13.9"
     remark-gfm: "npm:4.0.0"
