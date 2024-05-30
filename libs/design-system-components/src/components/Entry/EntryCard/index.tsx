@@ -20,6 +20,7 @@ import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import ErrorBoundary, {
   ErrorBoundaryProps,
 } from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
+import { TrashIcon } from '@heroicons/react/24/outline';
 
 type BeamProps = {
   sortedContents: AkashaBeam['content'];
@@ -83,7 +84,6 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     flagAsLabel,
     removed,
     notEditableLabel,
-    editLabel,
     nsfw,
     reflectAnchorLink,
     disableReporting,
@@ -108,6 +108,8 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     onReflect,
     onEdit,
     showLoginModal,
+    removeEntryLabel,
+    onEntryRemove,
     ...rest
   } = props;
 
@@ -135,12 +137,19 @@ const EntryCard: React.FC<EntryCardProps> = props => {
       : []),
     ...(isViewer
       ? [
+          // {
+          //   icon: <PencilIcon />,
+          //   label: editLabel ?? '',
+          //   disabled: !editable,
+          //   toolTipContent: editable ? null : notEditableLabel,
+          //   onClick: onEdit,
+          // },
           {
-            icon: <PencilIcon />,
-            label: editLabel ?? '',
+            icon: <TrashIcon />,
+            label: removeEntryLabel ?? '',
             disabled: !editable,
             toolTipContent: editable ? null : notEditableLabel,
-            onClick: onEdit,
+            onClick: onEntryRemove,
           },
         ]
       : []),
