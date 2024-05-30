@@ -4,19 +4,21 @@ import EditorPlaceholder from '@akashaorg/design-system-components/lib/component
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
+import BeamFeed from '@akashaorg/ui-lib-feed/lib/components/beam-feed.new';
 import { useTranslation } from 'react-i18next';
-import { useAnalytics, useRootComponentProps, transformSource } from '@akashaorg/ui-awf-hooks';
-import { BeamFeed } from '@akashaorg/ui-lib-feed';
+import {
+  useAnalytics,
+  useRootComponentProps,
+  transformSource,
+  useAkashaStore,
+} from '@akashaorg/ui-awf-hooks';
 import { Helmet, helmetData } from '@akashaorg/design-system-core/lib/utils';
-import { ModalNavigationOptions, Profile, QueryKeys } from '@akashaorg/typings/lib/ui';
+import { ModalNavigationOptions, QueryKeys } from '@akashaorg/typings/lib/ui';
 
-type GlobalAntennaPageProps = {
-  authenticatedProfile: Profile;
-  authenticatedDID: string;
-};
-
-const GlobalAntennaPage: React.FC<GlobalAntennaPageProps> = props => {
-  const { authenticatedProfile, authenticatedDID } = props;
+const GlobalAntennaPage: React.FC<unknown> = () => {
+  const {
+    data: { authenticatedProfile, authenticatedDID },
+  } = useAkashaStore();
   const { getRoutingPlugin, navigateToModal, worldConfig } = useRootComponentProps();
   const { t } = useTranslation('app-antenna');
   const [analyticsActions] = useAnalytics();
@@ -46,9 +48,12 @@ const GlobalAntennaPage: React.FC<GlobalAntennaPageProps> = props => {
     });
   }, [authenticatedDID, showLoginModal]);
 
-  const listHeader = React.useMemo(() => {
-    return (
-      <Stack customStyle="mb-2">
+  return (
+    <Stack fullWidth={true}>
+      <Helmet helmetData={helmetData}>
+        <title>{worldConfig.title}</title>
+      </Helmet>
+      <Stack spacing="gap-y-4">
         <EditorPlaceholder
           profileId={authenticatedDID}
           avatar={authenticatedProfile?.avatar}
@@ -57,28 +62,19 @@ const GlobalAntennaPage: React.FC<GlobalAntennaPageProps> = props => {
           onClick={handleEditorPlaceholderClick}
           transformSource={transformSource}
         />
+        <BeamFeed
+          scrollRestorationStorageKey={QueryKeys.GLOBAL_ANTENNA}
+          estimatedHeight={150}
+          itemSpacing={16}
+          scrollOptions={{ overScan: 5 }}
+          scrollTopIndicator={(listRect, onScrollToTop) => (
+            <ScrollTopWrapper placement={listRect.left}>
+              <ScrollTopButton hide={false} onClick={onScrollToTop} />
+            </ScrollTopWrapper>
+          )}
+          trackEvent={analyticsActions.trackEvent}
+        />
       </Stack>
-    );
-  }, [authenticatedProfile, authenticatedDID, t, handleEditorPlaceholderClick]);
-
-  return (
-    <Stack fullWidth={true}>
-      <Helmet helmetData={helmetData}>
-        <title>{worldConfig.title}</title>
-      </Helmet>
-      <BeamFeed
-        header={listHeader}
-        queryKey={QueryKeys.GLOBAL_ANTENNA}
-        estimatedHeight={150}
-        itemSpacing={8}
-        scrollerOptions={{ overscan: 10 }}
-        scrollTopIndicator={(listRect, onScrollToTop) => (
-          <ScrollTopWrapper placement={listRect.left}>
-            <ScrollTopButton hide={false} onClick={onScrollToTop} />
-          </ScrollTopWrapper>
-        )}
-        trackEvent={analyticsActions.trackEvent}
-      />
     </Stack>
   );
 };

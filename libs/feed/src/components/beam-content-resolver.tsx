@@ -8,9 +8,14 @@ import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 export type BeamContentResolverProps = {
   beamId: string;
   showNSFWCard?: boolean;
+  customStyle?: string;
 };
 
-const BeamContentResolver: React.FC<BeamContentResolverProps> = ({ beamId, showNSFWCard }) => {
+const BeamContentResolver: React.FC<BeamContentResolverProps> = ({
+  beamId,
+  showNSFWCard,
+  customStyle = '',
+}) => {
   const { getRoutingPlugin, navigateToModal } = useRootComponentProps();
   const _navigateToModal = React.useRef(navigateToModal);
 
@@ -60,6 +65,7 @@ const BeamContentResolver: React.FC<BeamContentResolverProps> = ({ beamId, showN
             getNavigationUrl: navRoutes => `${navRoutes.Beam}/${entryData.id}${navRoutes.Reflect}`,
           })
         }
+        customStyle={customStyle}
       />
     )
   );
