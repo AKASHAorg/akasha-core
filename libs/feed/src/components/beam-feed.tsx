@@ -168,7 +168,7 @@ const BeamFeed = (props: BeamFeedProps) => {
           details={<>{beamStreamQuery.error.message}</>}
         />
       )}
-      {beams.length > 0 && (
+      {beams && (
         <Card ref={vListContainerRef} type="plain">
           <DynamicInfiniteScroll
             count={beams.length}

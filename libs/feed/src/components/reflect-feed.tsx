@@ -104,7 +104,6 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
 
   return (
     <Card type="plain">
-      {reflectionStreamQuery.loading && reflections.length === 0 && <>{header}</>}
       {reflectionStreamQuery.error && (
         <ErrorLoader
           type="script-error"
@@ -112,7 +111,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
           details={<>{reflectionStreamQuery.error.message}</>}
         />
       )}
-      {reflections.length > 0 && (
+      {reflections && (
         <DynamicInfiniteScroll
           header={header}
           scrollRestorationStorageKey={scrollRestorationStorageKey}
