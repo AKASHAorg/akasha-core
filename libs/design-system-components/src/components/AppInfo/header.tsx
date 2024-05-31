@@ -39,32 +39,32 @@ export const AppInfoHeader: React.FC<AppInfoHeaderProps> = props => {
   } = props;
 
   return (
-    <Stack direction="row" align="center" justify="between">
-      <Stack direction="row" align="center" spacing="gap-x-2">
+    <Stack direction="row" align="center" justify="between" customStyle="-mt-3">
+      <Stack direction="row" align="start" spacing="gap-x-2">
         <Stack
           background={{
             light: 'grey8',
             dark: 'grey5',
           }}
-          customStyle="-mt-6 rounded-lg w-[4.375rem] h-[4.375rem]"
+          customStyle="-mt-4 rounded-lg w-[4.375rem] h-[4.375rem]"
         />
         <Stack>
           <Text variant="h6" weight="semibold">
             {integrationName}
           </Text>
-          <Stack direction="row" spacing="gap-x-2" customStyle="flex-wrap">
+          <Stack direction="row" spacing="gap-x-1" customStyle="flex-wrap">
+            {integrationType === 'plugin' && (
+              <AppInfoPill background={{ light: 'tertiaryLight', dark: 'tertiaryDark' }}>
+                <Icon icon={<Plugin />} size="xs" />
+                <Text variant="footnotes2" color={{ light: 'secondaryLight', dark: 'white' }}>
+                  {pluginLabel}
+                </Text>
+              </AppInfoPill>
+            )}
             {nsfw && (
               <AppInfoPill background={{ light: 'errorFade', dark: 'errorDark' }}>
                 <Text variant="footnotes2" color={{ light: 'errorDark', dark: 'white' }}>
                   {nsfwLabel}
-                </Text>
-              </AppInfoPill>
-            )}
-            {integrationType === 'plugin' && (
-              <AppInfoPill background={{ light: 'tertiaryLight', dark: 'tertiaryDark' }}>
-                <Icon icon={<Plugin />} size="sm" />
-                <Text variant="footnotes2" color={{ light: 'secondaryLight', dark: 'white' }}>
-                  {pluginLabel}
                 </Text>
               </AppInfoPill>
             )}
