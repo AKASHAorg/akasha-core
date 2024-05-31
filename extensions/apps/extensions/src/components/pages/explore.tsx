@@ -55,25 +55,16 @@ export const ExplorePage: React.FC<unknown> = () => {
       id: 'supercart1',
       name: t('Supercarts'),
       description,
-      action: (
-        <Button variant="primary" label={t('Open')} onClick={() => handleAppClick('supercart1')} />
-      ),
     },
     {
       id: 'newsreader2',
       name: t('News Reader'),
       description,
-      action: (
-        <Button variant="primary" label={t('Open')} onClick={() => handleAppClick('newsreader2')} />
-      ),
     },
     {
       id: 'nftgallery3',
       name: t('NFT Gallery'),
       description,
-      action: (
-        <Button variant="primary" label={t('Open')} onClick={() => handleAppClick('nftgallery3')} />
-      ),
     },
   ];
 
@@ -112,7 +103,12 @@ export const ExplorePage: React.FC<unknown> = () => {
         },
       ]}
       latestExtensionsLabel={t('Latest Extensions')}
-      latestExtensions={latestExtensions}
+      latestExtensions={latestExtensions.map(ext => ({
+        ...ext,
+        action: (
+          <Button variant="primary" label={t('Open')} onClick={() => handleAppClick(ext.id)} />
+        ),
+      }))}
       buttonLabel={t('View All')}
       onViewAllClick={handleViewAllLatestExtensions}
       onAppClick={handleAppClick}

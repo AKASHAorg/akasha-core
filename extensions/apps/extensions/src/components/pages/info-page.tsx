@@ -8,9 +8,10 @@ import {
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import AppInfo from '@akashaorg/design-system-components/lib/components/AppInfo';
 import { useTranslation } from 'react-i18next';
-import { hasOwn, transformSource, useAkashaStore } from '@akashaorg/ui-awf-hooks';
+import { transformSource, useAkashaStore } from '@akashaorg/ui-awf-hooks';
 import { useGetAppReleaseByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { Developer } from '@akashaorg/typings/lib/ui';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 
 export const mockProfile: Developer = {
   avatar: {
@@ -43,24 +44,10 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
     data: { authenticatedDID },
   } = useAkashaStore();
   const isLoggedIn = !!authenticatedDID;
-  const { data: appReleaseInfoReq, error } = useGetAppReleaseByIdQuery({
+  const { error } = useGetAppReleaseByIdQuery({
     variables: { id: appId },
     skip: !isLoggedIn || true,
   });
-
-  const appReleaseInfo =
-    appReleaseInfoReq?.node && hasOwn(appReleaseInfoReq?.node, 'applicationID')
-      ? appReleaseInfoReq.node
-      : null;
-
-  /* appReleaseInfo?.application?.contributors?.map(contributor => {
-    const avatarImg = contributor.akashaProfile?.avatar;
-    return {
-      profileId: contributor.akashaProfile.did.id,
-      name: contributor.akashaProfile.name,
-      avatar: avatarImg,
-    };
-  }); */
 
   return (
     <Stack>
@@ -71,12 +58,37 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
           details={t('We cannot show this app right now')}
         />
       )}
-      {true && (
+      {!error && (
         <AppInfo
-          integrationName={'Extension Name' /* appReleaseInfo?.application?.displayName */}
+          integrationName="Extension Name"
           integrationType="plugin"
-          nsfw={false}
-          packageName={'TBD package name' /* appReleaseInfo?.application?.name */}
+          nsfw={true}
+          nsfwLabel="NSFW"
+          pluginLabel={t('Plugin')}
+          share={{ label: 'Share', icon: <ShareIcon /> }}
+          report={{
+            label: t('Flag'),
+            icon: <FlagIcon />,
+            onClick: () => ({}),
+            color: { light: 'errorLight', dark: 'errorDark' },
+          }}
+          status="not-installed"
+          notification={{
+            title: t('Notification'),
+            message: t('Some important information will appear here'),
+            action: (
+              <Button
+                size="md"
+                variant="text"
+                label={t('Button')}
+                onClick={null}
+                customStyle="self-start"
+              />
+            ),
+          }}
+          versionLabel={t('is available')}
+          updateButtonLabel={t('Update')}
+          packageName="TBD package name"
           packageNameTitle={'Package name'}
           developers={developers}
           descriptionTitle={t('Description')}
@@ -94,7 +106,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
           latestReleaseTitle={t('Latest Release')}
           languageLabel={t('Languages')}
           languages={['English', 'Spanish']}
-          version={t('Version 2.8.10') /* + ` ${appReleaseInfo?.version}` */}
+          version={t('Version 2.8.10')}
           versionInfo={t('Latest release')}
           versionDate={t('December 2022')}
           versionDescription={
@@ -106,15 +118,6 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
           licenseTitle={t('License')}
           license={'License A' /* appReleaseInfo?.application?.license */}
           contactSupportTitle={t('Contact Support')}
-          share={{ label: 'Share', icon: <ShareIcon /> }}
-          report={{
-            label: t('Flag'),
-            icon: <FlagIcon />,
-            onClick: () => {
-              /** handle flag */
-            },
-            color: { light: 'errorLight', dark: 'errorDark' },
-          }}
           onInstall={() => {
             /*TODO: connect new hooks when they are ready*/
           }}
@@ -183,10 +186,6 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
               },
             });
           }}
-          status={
-            'not-installed'
-            // isInstalled ? 'installed' : 'not-installed'
-          }
           transformSource={transformSource}
         />
       )}
