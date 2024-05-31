@@ -7,7 +7,6 @@ import { hasOwn, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf
 import { BeamContentResolver, BeamFeed } from '@akashaorg/ui-lib-feed';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { AkashaBeamStreamModerationStatus } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { useNavigate } from '@tanstack/react-router';
 
 type ProfileFeedPageProps = {
   profileDID: string;
@@ -20,7 +19,6 @@ const ProfileFeedPage: React.FC<ProfileFeedPageProps> = props => {
   const {
     data: { authenticatedProfile },
   } = useAkashaStore();
-  const navigate = useNavigate();
 
   const profileUserName = React.useMemo(() => {
     if (authenticatedProfile && authenticatedProfile.name) {
@@ -53,22 +51,6 @@ const ProfileFeedPage: React.FC<ProfileFeedPageProps> = props => {
               return (
                 <BeamContentResolver
                   beamId={itemData.beamID}
-                  onContentClick={() => {
-                    navigate({
-                      to: '/beam/$beamId',
-                      params: {
-                        beamId: itemData.beamID,
-                      },
-                    });
-                  }}
-                  onReflect={() => {
-                    navigate({
-                      to: '/beam/$beamId/reflect',
-                      params: {
-                        beamId: itemData.beamID,
-                      },
-                    });
-                  }}
                   showNSFWCard={itemData?.status === AkashaBeamStreamModerationStatus.Nsfw}
                 />
               );

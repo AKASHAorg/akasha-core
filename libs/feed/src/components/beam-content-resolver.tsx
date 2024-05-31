@@ -9,16 +9,12 @@ export type BeamContentResolverProps = {
   beamId: string;
   showNSFWCard?: boolean;
   customStyle?: string;
-  onContentClick?: () => void;
-  onReflect?: () => void;
 };
 
 const BeamContentResolver: React.FC<BeamContentResolverProps> = ({
   beamId,
   showNSFWCard,
   customStyle = '',
-  onContentClick,
-  onReflect,
 }) => {
   const { getRoutingPlugin, navigateToModal } = useRootComponentProps();
   const _navigateToModal = React.useRef(navigateToModal);
@@ -57,25 +53,18 @@ const BeamContentResolver: React.FC<BeamContentResolverProps> = ({
          * */
         showNSFWCard={showNSFWCard ?? entryData.nsfw}
         showLoginModal={showLoginModal}
-        onContentClick={
-          onContentClick ??
-          function () {
-            getRoutingPlugin().navigateTo({
-              appName: '@akashaorg/app-antenna',
-              getNavigationUrl: navRoutes => `${navRoutes.Beam}/${entryData.id}`,
-            });
-          }
-        }
-        onReflect={
-          onReflect ??
-          function () {
-            getRoutingPlugin().navigateTo({
-              appName: '@akashaorg/app-antenna',
-              getNavigationUrl: navRoutes =>
-                `${navRoutes.Beam}/${entryData.id}${navRoutes.Reflect}`,
-            });
-          }
-        }
+        onContentClick={function () {
+          getRoutingPlugin().navigateTo({
+            appName: '@akashaorg/app-antenna',
+            getNavigationUrl: navRoutes => `${navRoutes.Beam}/${entryData.id}`,
+          });
+        }}
+        onReflect={function () {
+          getRoutingPlugin().navigateTo({
+            appName: '@akashaorg/app-antenna',
+            getNavigationUrl: navRoutes => `${navRoutes.Beam}/${entryData.id}${navRoutes.Reflect}`,
+          });
+        }}
         customStyle={customStyle}
       />
     )

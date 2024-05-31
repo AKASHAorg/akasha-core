@@ -76,28 +76,7 @@ const GlobalAntennaPage: React.FC<unknown> = () => {
               /* Set the showNSFWCard prop to false so as to prevent the
                * NSFW beams from being displayed in the antenna feed when NSFW setting is off.
                **/
-              return (
-                <BeamContentResolver
-                  beamId={itemData.beamID}
-                  showNSFWCard={false}
-                  onContentClick={() => {
-                    navigate({
-                      to: '/beam/$beamId',
-                      params: {
-                        beamId: itemData.beamID,
-                      },
-                    });
-                  }}
-                  onReflect={() => {
-                    navigate({
-                      to: '/beam/$beamId/reflect',
-                      params: {
-                        beamId: itemData.beamID,
-                      },
-                    });
-                  }}
-                />
-              );
+              return <BeamContentResolver beamId={itemData.beamID} showNSFWCard={false} />;
             }
           }}
         />
