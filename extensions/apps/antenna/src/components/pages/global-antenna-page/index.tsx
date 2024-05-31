@@ -1,30 +1,31 @@
 import React, { useCallback } from 'react';
-import routes, { EDITOR } from '../../../routes';
 import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
-import BeamFeed from '@akashaorg/ui-lib-feed/lib/components/beam-feed.new';
+import BeamFeed from '@akashaorg/ui-lib-feed/lib/components/beam-feed';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from '@tanstack/react-router';
 import {
   useAnalytics,
   useRootComponentProps,
   transformSource,
   useAkashaStore,
+  hasOwn,
 } from '@akashaorg/ui-awf-hooks';
 import { Helmet, helmetData } from '@akashaorg/design-system-core/lib/utils';
 import { ModalNavigationOptions, QueryKeys } from '@akashaorg/typings/lib/ui';
+import { BeamContentResolver } from '@akashaorg/ui-lib-feed';
 
 const GlobalAntennaPage: React.FC<unknown> = () => {
   const {
     data: { authenticatedProfile, authenticatedDID },
   } = useAkashaStore();
-  const { getRoutingPlugin, navigateToModal, worldConfig } = useRootComponentProps();
+  const { navigateToModal, worldConfig } = useRootComponentProps();
   const { t } = useTranslation('app-antenna');
   const [analyticsActions] = useAnalytics();
   const _navigateToModal = React.useRef(navigateToModal);
-
-  const navigateTo = React.useRef(getRoutingPlugin().navigateTo);
+  const navigate = useNavigate();
 
   const showLoginModal = React.useCallback(
     (redirectTo?: { modal: ModalNavigationOptions }, message?: string) => {
@@ -42,11 +43,8 @@ const GlobalAntennaPage: React.FC<unknown> = () => {
       showLoginModal();
       return;
     }
-    navigateTo?.current({
-      appName: '@akashaorg/app-antenna',
-      getNavigationUrl: () => `${routes[EDITOR]}`,
-    });
-  }, [authenticatedDID, showLoginModal]);
+    navigate({ to: '/editor' });
+  }, [authenticatedDID, navigate, showLoginModal]);
 
   return (
     <Stack fullWidth={true}>
@@ -73,6 +71,35 @@ const GlobalAntennaPage: React.FC<unknown> = () => {
             </ScrollTopWrapper>
           )}
           trackEvent={analyticsActions.trackEvent}
+          renderItem={itemData => {
+            if (!hasOwn(itemData, 'content')) {
+              /* Set the showNSFWCard prop to false so as to prevent the
+               * NSFW beams from being displayed in the antenna feed when NSFW setting is off.
+               **/
+              return (
+                <BeamContentResolver
+                  beamId={itemData.beamID}
+                  showNSFWCard={false}
+                  onContentClick={() => {
+                    navigate({
+                      to: '/beam/$beamId',
+                      params: {
+                        beamId: itemData.beamID,
+                      },
+                    });
+                  }}
+                  onReflect={() => {
+                    navigate({
+                      to: '/beam/$beamId/reflect',
+                      params: {
+                        beamId: itemData.beamID,
+                      },
+                    });
+                  }}
+                />
+              );
+            }
+          }}
         />
       </Stack>
     </Stack>

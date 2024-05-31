@@ -1,10 +1,8 @@
 import React, { useLayoutEffect, useRef } from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import BeamSection from './beam-section';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
-import ReflectFeed from '@akashaorg/ui-lib-feed/lib/components/reflect-feed.new';
 import {
   hasOwn,
   mapBeamEntryData,
@@ -21,7 +19,7 @@ import {
   GetBeamByIdQuery,
   GetBeamStreamQuery,
 } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
-import { EditableReflectionResolver } from '@akashaorg/ui-lib-feed/lib/components/editable-reflection/editable-reflection-resolver';
+import { EditableReflectionResolver, ReflectFeed } from '@akashaorg/ui-lib-feed';
 import { EntityTypes } from '@akashaorg/typings/lib/ui';
 
 type BeamPageProps = {
@@ -87,78 +85,81 @@ const BeamPage: React.FC<BeamPageProps> = props => {
   }, [authenticating, isLoggedIn, moderationData, showNsfw]);
 
   useLayoutEffect(() => {
-    //todo revisit scroll reset
+    //resets initial scroll to top when page mounts
     scrollTo(0, 0);
   }, []);
 
   return (
-    <Card padding="p-0" margin="mb-4">
-      <Stack ref={wrapperRef} spacing="gap-y-2">
-        <BeamSection
-          beamId={beamId}
-          entryData={mapBeamEntryData(entryData)}
-          isLoggedIn={isLoggedIn}
-          showNSFWCard={showNsfwCard}
-          parentWrapperRef={wrapperRef}
-          showLoginModal={showLoginModal}
-        />
-        <ReflectFeed
-          itemType={EntityTypes.BEAM}
-          filters={{ where: { beamID: { equalTo: beamId } } }}
-          estimatedHeight={150}
-          scrollOptions={{ overScan: 5 }}
-          renderItem={itemData => {
-            return (
-              <ErrorBoundary
-                errorObj={{
-                  type: 'script-error',
-                  title: t('Error in loading reflection.'),
-                }}
-                logger={logger}
-              >
-                <div>
-                  <Divider />
-                  <EditableReflectionResolver
-                    reflectID={itemData.reflectionID}
-                    onContentClick={() => {
-                      navigate({
-                        to: '/reflection/$reflectionId',
-                        params: {
-                          reflectionId: itemData.reflectionID,
-                        },
-                      });
-                    }}
-                    onReflect={() => {
-                      navigate({
-                        to: '/reflection/$reflectionId/reflect',
-                        params: {
-                          reflectionId: itemData.reflectionID,
-                        },
-                      });
-                    }}
-                  />
-                  <ReflectionPreview
-                    reflectionId={itemData.reflectionID}
-                    onNavigate={(options: { id: string; reflect?: boolean }) => {
-                      navigate({
-                        to: options.reflect
-                          ? '/reflection/$reflectionId/reflect'
-                          : '/reflection/$reflectionId',
-                        params: {
-                          reflectionId: options.id,
-                        },
-                      });
-                      return;
-                    }}
-                  />
-                </div>
-              </ErrorBoundary>
-            );
-          }}
-          itemSpacing={0}
-          trackEvent={analyticsActions.trackEvent}
-        />
-      </Stack>
+    <Card ref={wrapperRef} padding="p-0" margin="mb-4">
+      <ReflectFeed
+        header={
+          <BeamSection
+            beamId={beamId}
+            entryData={mapBeamEntryData(entryData)}
+            isLoggedIn={isLoggedIn}
+            showNSFWCard={showNsfwCard}
+            parentWrapperRef={wrapperRef}
+            showLoginModal={showLoginModal}
+            customStyle="mb-2"
+          />
+        }
+        scrollRestorationStorageKey="beam-reflect-feed"
+        lastScrollRestorationKey={beamId}
+        itemType={EntityTypes.BEAM}
+        filters={{ where: { beamID: { equalTo: beamId } } }}
+        estimatedHeight={150}
+        scrollOptions={{ overScan: 5 }}
+        renderItem={itemData => {
+          return (
+            <ErrorBoundary
+              errorObj={{
+                type: 'script-error',
+                title: t('Error in loading reflection.'),
+              }}
+              logger={logger}
+            >
+              <div>
+                <Divider />
+                <EditableReflectionResolver
+                  reflectID={itemData.reflectionID}
+                  onContentClick={() => {
+                    navigate({
+                      to: '/reflection/$reflectionId',
+                      params: {
+                        reflectionId: itemData.reflectionID,
+                      },
+                    });
+                  }}
+                  onReflect={() => {
+                    navigate({
+                      to: '/reflection/$reflectionId/reflect',
+                      params: {
+                        reflectionId: itemData.reflectionID,
+                      },
+                    });
+                  }}
+                />
+                <ReflectionPreview
+                  reflectionId={itemData.reflectionID}
+                  onNavigate={(options: { id: string; reflect?: boolean }) => {
+                    navigate({
+                      to: options.reflect
+                        ? '/reflection/$reflectionId/reflect'
+                        : '/reflection/$reflectionId',
+                      params: {
+                        reflectionId: options.id,
+                      },
+                    });
+                    return;
+                  }}
+                />
+              </div>
+            </ErrorBoundary>
+          );
+        }}
+        itemSpacing={0}
+        trackEvent={analyticsActions.trackEvent}
+      />
     </Card>
   );
 };

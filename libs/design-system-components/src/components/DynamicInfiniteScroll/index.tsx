@@ -1,4 +1,5 @@
 import React, {
+  MutableRefObject,
   PropsWithChildren,
   ReactElement,
   useCallback,
@@ -22,14 +23,16 @@ type DynamicInfiniteScrollItem = {
 
 type DynamicInfiniteScrollType = {
   count: number;
-  itemHeight: number;
+  estimatedHeight: number;
   enableScrollRestoration?: boolean;
   scrollRestorationStorageKey?: string;
+  lastScrollRestorationKey?: string;
   overScan?: number;
   itemSpacing?: number;
   hasNextPage?: boolean;
   loading?: boolean;
   customStyle?: string;
+  header?: ReactElement;
   onLoadMore: () => Promise<unknown>;
   children: (item: DynamicInfiniteScrollItem) => ReactElement;
 };
@@ -38,14 +41,16 @@ type DynamicInfiniteScrollType = {
 const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
   const {
     count,
-    itemHeight,
+    estimatedHeight,
     enableScrollRestoration = false,
     scrollRestorationStorageKey = 'storage-key',
+    lastScrollRestorationKey,
     overScan = 5,
     itemSpacing,
     hasNextPage,
     loading,
     customStyle = '',
+    header,
     onLoadMore,
     children,
   } = props;
@@ -54,16 +59,34 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
   const scrollRestorationStorageKeyRef = useRef(scrollRestorationStorageKey);
   const parentOffsetRef = React.useRef(0);
   const isMobileScreen = useMedia('(max-width: 640px)');
+  const headerRef = useRef<HTMLDivElement>(null);
+  const headerHeightStyle = useRef('');
+
+  const getHeaderHeight = useCallback(() => {
+    const scrollConfig = restoreScrollConfig(scrollRestorationStorageKeyRef.current);
+    if (!scrollConfig || typeof scrollConfig !== 'object') return null;
+    return typeof scrollConfig.headerHeight === 'number' ? scrollConfig.headerHeight : null;
+  }, []);
+
+  const getInitialMeasurementsCache = useCallback(() => {
+    const scrollConfig = restoreScrollConfig(scrollRestorationStorageKeyRef.current);
+    if (
+      !scrollConfig ||
+      typeof scrollConfig !== 'object' ||
+      typeof scrollConfig.options !== 'object'
+    )
+      return [];
+    return scrollConfig.options.initialMeasurementsCache;
+  }, []);
 
   useLayoutEffect(() => {
     parentOffsetRef.current = parentRef.current?.offsetTop ?? 0;
   }, []);
 
-  const getInitialMeasurementsCache = useCallback(() => {
-    const scrollConfig = restoreScrollConfig(scrollRestorationStorageKeyRef.current);
-    if (!scrollConfig || !scrollConfig.options || typeof scrollConfig !== 'object') return [];
-    return scrollConfig.options.initialMeasurementsCache;
-  }, []);
+  useLayoutEffect(() => {
+    const headerHeight = getHeaderHeight();
+    if (headerHeight) headerHeightStyle.current = `h-[${headerHeight}px]`;
+  }, [getHeaderHeight]);
 
   const virtualizer = useWindowVirtualizer({
     count: count,
@@ -80,16 +103,12 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
           return measureElement(element, entry, instance);
         }
       : measureElement,
-    estimateSize: () => itemHeight,
+    estimateSize: () => estimatedHeight,
   });
 
-  const loadMoreRef = useRef<HTMLDivElement>(null);
   const virtualItems = virtualizer.getVirtualItems();
   const totalSize = virtualizer.getTotalSize();
   const loadingMore = loading && hasNextPage && virtualItems.length > 0;
-  const loadingPlaceholderSize = loadingMore
-    ? loadMoreRef.current?.getBoundingClientRect().height
-    : 0;
 
   useEffect(() => {
     const lastItem = virtualItems[virtualItems.length - 1];
@@ -108,51 +127,57 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
     : 0;
 
   const virtualListUi = (
-    <Card
-      ref={parentRef}
-      customStyle={`relative min-h-[${virtualizer.isScrolling && loading && hasNextPage ? totalSize + overScan * itemHeight : totalSize}px] ${customStyle}`}
-      type="plain"
-    >
+    <>
+      {header && (
+        <Card ref={headerRef} type="plain" customStyle={headerHeightStyle.current}>
+          {header}
+        </Card>
+      )}
       <Card
-        data-offset={vListOffset}
-        customStyle={`flex flex-col absolute w-full top-0 left-0 translate-y-[${vListOffset}px] gap-y-[${itemSpacing}px]`}
+        ref={parentRef}
+        customStyle={`relative min-h-[${virtualizer.isScrolling && loading && hasNextPage ? totalSize + overScan * estimatedHeight : totalSize}px] ${customStyle}`}
         type="plain"
       >
-        {virtualItems.map((virtualItem, index, items) => (
-          <Card
-            key={virtualItem.key}
-            data-index={virtualItem.index}
-            ref={virtualizer.measureElement}
-            type="plain"
-            customStyle={
-              loading
-                ? `min-h-[${itemHeight}px]`
-                : getMinHeight({
-                    virtualizer,
-                    virtualItemIndex: virtualItem.index,
-                    virtualItemSize: virtualItem.size,
-                  })
-            }
-          >
-            {children({ index, itemIndex: virtualItem.index, itemsSize: items.length })}
-          </Card>
-        ))}
-        {/*@TODO revisit spinner */}
-        {/* {loadingMore && (
-          <Stack align="center" justify="center" fullWidth ref={loadMoreRef}>
-            <Spinner />
+        <Card
+          data-offset={vListOffset}
+          customStyle={`flex flex-col absolute w-full top-0 left-0 translate-y-[${vListOffset}px] gap-y-[${itemSpacing}px]`}
+          type="plain"
+        >
+          {virtualItems.map((virtualItem, index, items) => (
+            <Card
+              key={virtualItem.key}
+              data-index={virtualItem.index}
+              ref={virtualizer.measureElement}
+              type="plain"
+              customStyle={
+                loading
+                  ? `min-h-[${estimatedHeight}px]`
+                  : getMinHeight({
+                      virtualizer,
+                      virtualItemIndex: virtualItem.index,
+                      virtualItemSize: virtualItem.size,
+                    })
+              }
+            >
+              {children({ index, itemIndex: virtualItem.index, itemsSize: items.length })}
+            </Card>
+          ))}
+          <Stack align="center" justify="center" fullWidth>
+            {loadingMore && <Spinner />}
           </Stack>
-        )} */}
+        </Card>
       </Card>
-    </Card>
+    </>
   );
 
   return enableScrollRestoration ? (
     <WithScrollRestoration
       virtualizer={virtualizer}
       scrollRestorationStorageKey={scrollRestorationStorageKey}
+      lastScrollRestorationKey={lastScrollRestorationKey}
       count={count}
       overScan={overScan}
+      headerRef={headerRef}
       offsetAttribute="data-offset"
     >
       {virtualListUi}
@@ -165,14 +190,24 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
 type WithScrollRestorationProps = {
   virtualizer: Virtualizer<Window, Element>;
   scrollRestorationStorageKey: string;
+  lastScrollRestorationKey: string;
   count: number;
   overScan: number;
+  headerRef?: MutableRefObject<HTMLDivElement>;
   offsetAttribute: string;
 };
 
 const WithScrollRestoration: React.FC<PropsWithChildren<WithScrollRestorationProps>> = props => {
-  const { virtualizer, scrollRestorationStorageKey, count, overScan, offsetAttribute, children } =
-    props;
+  const {
+    virtualizer,
+    scrollRestorationStorageKey,
+    count,
+    overScan,
+    offsetAttribute,
+    lastScrollRestorationKey,
+    headerRef,
+    children,
+  } = props;
   const scrollRestorationStorageKeyRef = useRef(scrollRestorationStorageKey);
   useScrollRestoration({
     virtualizer,
@@ -180,6 +215,8 @@ const WithScrollRestoration: React.FC<PropsWithChildren<WithScrollRestorationPro
     overScan,
     scrollRestorationStorageKey: scrollRestorationStorageKeyRef.current,
     offsetAttribute,
+    lastScrollRestorationKey,
+    headerRef,
   });
   return <>{children}</>;
 };

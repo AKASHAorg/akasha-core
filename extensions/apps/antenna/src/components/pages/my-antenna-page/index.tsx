@@ -9,6 +9,7 @@ import { useGetInterestsByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated
 import { hasOwn, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { BeamContentResolver, TagFeed } from '@akashaorg/ui-lib-feed';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { useNavigate } from '@tanstack/react-router';
 
 const MY_ANTENNA_OVERSCAN = 10;
 
@@ -18,6 +19,7 @@ const MyAntennaPage: React.FC<unknown> = () => {
   const {
     data: { authenticatedProfile },
   } = useAkashaStore();
+  const navigate = useNavigate();
   const navigateTo = React.useRef(getRoutingPlugin().navigateTo);
   const _navigateToModal = React.useRef(navigateToModal);
   const showLoginModal = React.useCallback(
@@ -82,13 +84,33 @@ const MyAntennaPage: React.FC<unknown> = () => {
             estimatedHeight={150}
             itemSpacing={8}
             tags={tagSubsData?.topics.map(topic => topic.value)}
-            scrollerOptions={{ overscan: MY_ANTENNA_OVERSCAN }}
+            scrollOptions={{ overScan: MY_ANTENNA_OVERSCAN }}
             scrollTopIndicator={(listRect, onScrollToTop) => (
               <ScrollTopWrapper placement={listRect.left}>
                 <ScrollTopButton hide={false} onClick={onScrollToTop} />
               </ScrollTopWrapper>
             )}
-            renderItem={itemData => <BeamContentResolver beamId={itemData.node.stream} />}
+            renderItem={itemData => (
+              <BeamContentResolver
+                beamId={itemData.stream}
+                onContentClick={() => {
+                  navigate({
+                    to: '/beam/$beamId',
+                    params: {
+                      beamId: itemData.stream,
+                    },
+                  });
+                }}
+                onReflect={() => {
+                  navigate({
+                    to: '/beam/$beamId/reflect',
+                    params: {
+                      beamId: itemData.stream,
+                    },
+                  });
+                }}
+              />
+            )}
           />
         )}
       </Stack>

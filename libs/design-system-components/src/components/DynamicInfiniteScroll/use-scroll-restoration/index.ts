@@ -1,6 +1,11 @@
 import { Virtualizer } from '@tanstack/react-virtual';
-import { useEffect, useRef } from 'react';
-import { restoreScrollPosition, restoreScrollConfig, storeScrollConfig } from './utils';
+import { MutableRefObject, useEffect, useRef } from 'react';
+import {
+  restoreScrollPosition,
+  restoreScrollConfig,
+  storeScrollConfig,
+  removeItemFromScrollConfig,
+} from './utils';
 
 interface IScrollRestoration {
   /*
@@ -20,9 +25,18 @@ interface IScrollRestoration {
    **/
   scrollRestorationStorageKey: string;
   /*
+   * Last scroll restoration session key used to either reset the scroll restoration config
+   * if the current key and the one before do not match or to use the scroll config.
+   **/
+  lastScrollRestorationKey: string;
+  /*
    * The offset attribute for the virtual list container
    **/
   offsetAttribute: string;
+  /*
+   * Reference to a header element in a virtual list
+   **/
+  headerRef?: MutableRefObject<HTMLDivElement>;
 }
 
 /*
@@ -34,12 +48,28 @@ export function useScrollRestoration({
   count,
   overScan,
   scrollRestorationStorageKey,
+  lastScrollRestorationKey,
   offsetAttribute,
+  headerRef,
 }: IScrollRestoration) {
   const virtualizerRef = useRef(virtualizer);
   const overScanRef = useRef(overScan);
   const offsetAttributeRef = useRef(offsetAttribute);
   const scrollRestorationStorageKeyRef = useRef(scrollRestorationStorageKey);
+  const lastScrollRestorationKeyRef = useRef(lastScrollRestorationKey);
+  const headerHeightRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new ResizeObserver(() => {
+      headerHeightRef.current = headerRef.current?.getBoundingClientRect()?.height;
+    });
+    if (headerRef.current) {
+      observer.observe(headerRef.current);
+    }
+    return () => {
+      observer.disconnect();
+    };
+  }, [headerRef]);
 
   useEffect(() => {
     virtualizerRef.current = virtualizer;
@@ -49,7 +79,18 @@ export function useScrollRestoration({
     const virtualizer = virtualizerRef.current;
     const scrollConfig = restoreScrollConfig(scrollRestorationStorageKeyRef.current);
     if (scrollConfig) {
-      const { referenceItemIndex, options, done } = scrollConfig;
+      const { referenceItemIndex, options, done, lastScrollRestorationKey } = scrollConfig;
+
+      /*
+       * If the current lastScrollRestorationKey and the one before do not match then prevent from initiating scroll restoration
+       **/
+      if (
+        lastScrollRestorationKey &&
+        lastScrollRestorationKey !== lastScrollRestorationKeyRef.current
+      ) {
+        removeItemFromScrollConfig(scrollRestorationStorageKeyRef.current);
+        return;
+      }
 
       if (
         !options ||
@@ -59,6 +100,7 @@ export function useScrollRestoration({
         done
       )
         return;
+
       /*
        * Find the index of an item which will be used as a scroll restoration reference.
        **/
@@ -82,10 +124,12 @@ export function useScrollRestoration({
   useEffect(() => {
     const overScan = overScanRef.current;
     const scrollRestorationStorageKey = scrollRestorationStorageKeyRef.current;
+    const lastScrollRestorationKey = lastScrollRestorationKeyRef.current;
     /*
      * Store scroll restoration configs after unmounting the component where the scroll restoration is used.
      **/
     return () => {
+      const headerHeight = headerHeightRef.current;
       const virtualItems = virtualizerRef.current.getVirtualItems();
       const stepBackArr = Array(overScan)
         .fill(0)
@@ -121,11 +165,15 @@ export function useScrollRestoration({
           ...virtualizerRef.current?.options,
           initialMeasurementsCache: virtualizerRef.current?.measurementsCache,
         },
+        lastScrollRestorationKey,
+        headerHeight,
       });
     };
   }, []);
 
   useEffect(() => {
+    const scrollConfig = restoreScrollConfig(scrollRestorationStorageKeyRef.current);
+
     /*
      * Observe changes in the dimension of body element to check scroll position restoration requirements and if all check passes commit the restoration.
      **/
@@ -137,7 +185,7 @@ export function useScrollRestoration({
         scrollRestorationStorageKey: scrollRestorationStorageKeyRef.current,
       });
     });
-    observer.observe(document.body);
+    if (scrollConfig) observer.observe(document.body);
     return () => {
       observer.disconnect();
     };

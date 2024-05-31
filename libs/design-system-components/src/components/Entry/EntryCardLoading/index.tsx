@@ -14,7 +14,7 @@ const EntryLoadingPlaceholder: React.FC<
 > = props => {
   const { animated = true, noWrapperCard, children } = props;
   const loaderUi = (
-    <Stack spacing="gap-y-2" padding="p-4" customStyle="min-h-[inherit]">
+    <Stack spacing="gap-y-2" padding="p-4" customStyle="h-full min-h-[inherit]">
       <Stack direction="row" align="center" justify="between">
         <ProfileAvatarLoading animated={animated} />
         <TextLine width="w-4" height="h-4" animated={animated} />
@@ -34,7 +34,7 @@ const EntryLoadingPlaceholder: React.FC<
   return noWrapperCard ? (
     loaderUi
   ) : (
-    <Card padding="p-0" customStyle="min-h-[inherit]">
+    <Card padding="p-0" customStyle="h-full min-h-[inherit]">
       {loaderUi}
     </Card>
   );

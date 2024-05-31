@@ -18,6 +18,7 @@ import TagFeedHeaderLoader from './tag-feed-header-loader';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { useNavigate } from '@tanstack/react-router';
 
 type TagFeedPageProps = {
   tagName: string;
@@ -32,6 +33,7 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
   const { navigateToModal, worldConfig } = useRootComponentProps();
   const isLoggedIn = !!authenticatedDID;
   const _navigateToModal = React.useRef(navigateToModal);
+  const navigate = useNavigate();
   const showLoginModal = React.useCallback(
     (redirectTo?: { modal: ModalNavigationOptions }, message?: string) => {
       _navigateToModal.current?.({
@@ -191,13 +193,33 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
           tags={listOfTags}
           estimatedHeight={150}
           itemSpacing={8}
-          scrollerOptions={{ overscan: 10 }}
+          scrollOptions={{ overScan: 10 }}
           scrollTopIndicator={(listRect, onScrollToTop) => (
             <ScrollTopWrapper placement={listRect.left}>
               <ScrollTopButton hide={false} onClick={onScrollToTop} />
             </ScrollTopWrapper>
           )}
-          renderItem={itemData => <BeamContentResolver beamId={itemData.node.stream} />}
+          renderItem={itemData => (
+            <BeamContentResolver
+              beamId={itemData.stream}
+              onContentClick={() => {
+                navigate({
+                  to: '/beam/$beamId',
+                  params: {
+                    beamId: itemData.stream,
+                  },
+                });
+              }}
+              onReflect={() => {
+                navigate({
+                  to: '/beam/$beamId/reflect',
+                  params: {
+                    beamId: itemData.stream,
+                  },
+                });
+              }}
+            />
+          )}
         />
       </Stack>
     </HelmetProvider>

@@ -167,7 +167,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
   };
 
   const entryCardUi = (
-    <Stack spacing="gap-y-2" padding="p-4" customStyle={`min-h-[inherit] ${hoverStyle}`}>
+    <Stack spacing="gap-y-2" padding="p-4" customStyle={`h-full min-h-[inherit] ${hoverStyle}`}>
       <Stack direction="row" justify="between">
         {profileAvatarExt}
         <Menu
