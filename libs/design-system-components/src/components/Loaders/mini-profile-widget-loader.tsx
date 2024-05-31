@@ -17,13 +17,11 @@ const MiniProfileWidgetLoader: React.FC = () => {
           <TextLine round="rounded-full" height="h-20" width="w-20" customStyle="shrink-0" />
         </Stack>
       </Stack>
-
       <Stack spacing="gap-y-4" align="center" padding="p-4 pt-6" fullWidth>
         <Stack spacing="gap-y-1" padding="pt-3" align="center" fullWidth>
-          <TextLine width="w-3/6" height="h-6" animated />
-          <TextLine width="w-3/6" height="h-6" animated />
+          <TextLine width="w-3/6" height="h-5" animated />
+          <TextLine width="w-3/6" height="h-5" animated />
         </Stack>
-
         <Stack direction="row" justify="center" align="center" spacing="gap-x-2" fullWidth>
           <TextLine width="w-2/6" height="h-5" animated />
           <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey6' }}>
@@ -35,9 +33,7 @@ const MiniProfileWidgetLoader: React.FC = () => {
           </Text>
           <TextLine width="w-2/6" height="h-5" animated />
         </Stack>
-
         <TextLine width="w-full" height="h-5" animated />
-
         <TextLine
           title="followButton"
           width="w-[5rem]"

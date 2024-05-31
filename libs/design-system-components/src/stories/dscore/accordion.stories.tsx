@@ -44,7 +44,7 @@ const content = (
 const baseArgs: Story = {
   args: {
     open: true,
-    accordionId: 1,
+    accordionId: 'someId',
     titleNode: title,
     contentNode: content,
     customStyle: 'w-[15%]',
