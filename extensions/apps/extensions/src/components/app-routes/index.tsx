@@ -148,16 +148,15 @@ const routeTree = rootRoute.addChildren([
   extensionsHubRoute,
   installedExtensionsRoute,
   infoRoute,
-  devInfoRoute.addChildren([
-    collaboratorsInfoRoute,
-    versionInfoRoute,
-    versionHistoryRoute,
-    auditLogRoute,
-    permissionInfoRoute,
-    appLicenseInfoRoute,
-    supportInfoRoute,
-    appDescriptionRoute,
-  ]),
+  devInfoRoute,
+  collaboratorsInfoRoute,
+  versionInfoRoute,
+  versionHistoryRoute,
+  auditLogRoute,
+  permissionInfoRoute,
+  appLicenseInfoRoute,
+  supportInfoRoute,
+  appDescriptionRoute,
 ]);
 
 export const router = ({ baseRouteName, apolloClient }: CreateRouter) =>

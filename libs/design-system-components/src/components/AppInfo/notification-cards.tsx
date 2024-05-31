@@ -38,16 +38,9 @@ export const AppInfoNotificationCards: React.FC<AppInfoNotificationCardsProps> =
         </Stack>
       </Card>
       <Card radius={8} background={{ light: 'grey9', dark: 'grey3' }} customStyle="p-4">
-        <Stack direction="row" justify="between" align="center">
-          <Text variant="button-md">
-            <Text
-              as="span"
-              variant="button-md"
-              color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-            >
-              {version}
-            </Text>{' '}
-            {versionLabel}
+        <Stack direction="row" align="center" justify="between">
+          <Text as="span">
+            <Button variant="text" size="md" label={version} /> {versionLabel}
           </Text>
           <Button variant="primary" label={updateButtonLabel} />
         </Stack>
