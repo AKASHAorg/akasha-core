@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef } from 'react';
+import React, { useLayoutEffect } from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import BeamSection from './beam-section';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
@@ -37,7 +37,6 @@ const BeamPage: React.FC<BeamPageProps> = props => {
   } = useAkashaStore();
   const { showNsfw } = useNsfwToggling();
   const [analyticsActions] = useAnalytics();
-  const wrapperRef = useRef(null);
   const navigate = useNavigate();
   const isLoggedIn = !!authenticatedDID;
 
@@ -90,7 +89,7 @@ const BeamPage: React.FC<BeamPageProps> = props => {
   }, []);
 
   return (
-    <Card ref={wrapperRef} padding="p-0" margin="mb-4">
+    <Card padding="p-0" margin="mb-4">
       <ReflectFeed
         header={
           <BeamSection
@@ -98,7 +97,6 @@ const BeamPage: React.FC<BeamPageProps> = props => {
             entryData={mapBeamEntryData(entryData)}
             isLoggedIn={isLoggedIn}
             showNSFWCard={showNsfwCard}
-            parentWrapperRef={wrapperRef}
             showLoginModal={showLoginModal}
             customStyle="mb-2"
           />

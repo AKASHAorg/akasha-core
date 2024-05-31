@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef } from 'react';
+import React, { useLayoutEffect } from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import BackToOriginalBeam from '@akashaorg/ui-lib-feed/lib/components/back-to-original-beam';
@@ -32,7 +32,6 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
   const isLoggedIn = !!authenticatedDID;
   const { navigateToModal, logger } = useRootComponentProps();
   const [analyticsActions] = useAnalytics();
-  const wrapperRef = useRef(null);
   const navigate = useNavigate();
 
   const entryData = React.useMemo(() => {
@@ -78,7 +77,6 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
               reflectionId={entryData.id}
               entryData={mapReflectEntryData(entryData)}
               isLoggedIn={isLoggedIn}
-              parentWrapperRef={wrapperRef}
               showLoginModal={showLoginModal}
               customStyle="mb-2"
             />

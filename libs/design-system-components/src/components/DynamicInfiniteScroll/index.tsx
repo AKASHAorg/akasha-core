@@ -91,7 +91,7 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
 
   useLayoutEffect(() => {
     const headerHeight = getHeaderHeight();
-    if (headerHeight) headerHeightStyle.current = `h-[${headerHeight}px]`;
+    if (headerHeight) headerHeightStyle.current = `min-h-[${headerHeight}px]`;
   }, [getHeaderHeight]);
 
   const virtualizer = useWindowVirtualizer({
@@ -135,9 +135,9 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
   const virtualListUi = (
     <>
       {header && (
-        <Card ref={headerRef} type="plain" customStyle={headerHeightStyle.current}>
+        <Stack ref={headerRef} customStyle={headerHeightStyle.current}>
           {header}
-        </Card>
+        </Stack>
       )}
       <Card
         ref={parentRef}

@@ -18,21 +18,12 @@ type ReflectionSectionProps = {
   reflectionId: string;
   entryData: ReflectEntryData;
   isLoggedIn: boolean;
-  parentWrapperRef: React.MutableRefObject<unknown>;
   customStyle?: string;
   showLoginModal: (title?: string, message?: string) => void;
 };
 
 const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
-  const {
-    beamId,
-    reflectionId,
-    entryData,
-    isLoggedIn,
-    parentWrapperRef,
-    customStyle = '',
-    showLoginModal,
-  } = props;
+  const { beamId, reflectionId, entryData, isLoggedIn, customStyle = '', showLoginModal } = props;
   const { t } = useTranslation('app-antenna');
   const routerState = useRouterState();
   const [isReflecting, setIsReflecting] = useState(
@@ -40,13 +31,13 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
   );
   const { pendingReflections } = usePendingReflections();
 
-  useCloseActions(() => {
+  const wrapperRef = useCloseActions(() => {
     setIsReflecting(false);
-  }, parentWrapperRef);
+  });
 
   return (
-    <Stack spacing="gap-y-2" customStyle={`h-full ${customStyle}`}>
-      <Stack customStyle="h-full grow">
+    <Stack ref={wrapperRef} spacing="gap-y-2" customStyle={`grow ${customStyle}`}>
+      <Stack customStyle="grow">
         <EditableReflection
           entryData={entryData}
           contentClickable={false}
