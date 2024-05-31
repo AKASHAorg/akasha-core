@@ -57,6 +57,7 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
 
   const parentRef = useRef(null);
   const scrollRestorationStorageKeyRef = useRef(scrollRestorationStorageKey);
+  const lastScrollRestorationKeyRef = useRef(lastScrollRestorationKey);
   const parentOffsetRef = React.useRef(0);
   const isMobileScreen = useMedia('(max-width: 640px)');
   const headerRef = useRef<HTMLDivElement>(null);
@@ -65,6 +66,11 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
   const getHeaderHeight = useCallback(() => {
     const scrollConfig = restoreScrollConfig(scrollRestorationStorageKeyRef.current);
     if (!scrollConfig || typeof scrollConfig !== 'object') return null;
+    if (
+      scrollConfig.lastScrollRestorationKey &&
+      lastScrollRestorationKeyRef.current !== scrollConfig.lastScrollRestorationKey
+    )
+      return null;
     return typeof scrollConfig.headerHeight === 'number' ? scrollConfig.headerHeight : null;
   }, []);
 

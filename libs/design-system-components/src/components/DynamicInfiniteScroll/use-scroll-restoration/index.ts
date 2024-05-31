@@ -82,7 +82,7 @@ export function useScrollRestoration({
       const { referenceItemIndex, options, done, lastScrollRestorationKey } = scrollConfig;
 
       /*
-       * If the current lastScrollRestorationKey and the one before do not match then prevent from initiating scroll restoration
+       * If the current lastScrollRestorationKey and the one before do not match then prevent initiating scroll restoration
        **/
       if (
         lastScrollRestorationKey &&
