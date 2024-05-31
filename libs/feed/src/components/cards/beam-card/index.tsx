@@ -83,7 +83,6 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       reflectAnchorLink="/@akashaorg/app-antenna/beam"
       sortedContents={sortedEntryContent}
       flagAsLabel={t('Flag')}
-      editLabel={t('Edit')}
       removeEntryLabel={t('Remove')}
       onEntryRemove={handleEntryRemove}
       isViewer={authenticatedDID === entryData.authorId}
