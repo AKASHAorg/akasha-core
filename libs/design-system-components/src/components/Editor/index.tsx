@@ -516,7 +516,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
         direction="row"
         justify="start"
         spacing="gap-x-2"
-        customStyle={`h-full ${showAvatar && `w-11/12`} ${minHeight && `min-h-[${minHeight}]`}`}
+        customStyle={`h-full ${showAvatar && ` w-10/12 md:w-11/12 `} ${minHeight && `min-h-[${minHeight}]`}`}
         fullWidth
       >
         {showAvatar && (

@@ -11,6 +11,7 @@ type App = {
   id?: string;
   name: string;
   icon?: ReactElement;
+  isSolidIcon?: boolean;
   description: string;
   action: ReactNode;
 };
@@ -36,9 +37,10 @@ const AppList: React.FC<AppListProps> = ({ apps, onAppSelected }) => {
                 <Stack align="center" justify="center" customStyle={iconStyle}>
                   {app.icon && (
                     <Icon
+                      solid={app.isSolidIcon}
                       icon={app.icon}
                       accentColor={true}
-                      size={{ width: 'w-[3rem]', height: 'h-[3rem]' }}
+                      size={{ width: 'w-[2rem]', height: 'h-[2rem]' }}
                     />
                   )}
                 </Stack>
