@@ -3,15 +3,12 @@ import ChooseProvider from '../pages/choose-provider';
 
 import { act, screen, renderWithAllProviders, genAppProps } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
-import { MemoryRouter as Router } from 'react-router-dom';
 
 describe('< SignIn /> component', () => {
   const BaseComponent = (
-    <Router initialEntries={['/@akashaorg/app-auth-ewa/provider']}>
-      <AnalyticsProvider {...genAppProps()}>
-        <ChooseProvider />;
-      </AnalyticsProvider>
-    </Router>
+    <AnalyticsProvider {...genAppProps()}>
+      <ChooseProvider />;
+    </AnalyticsProvider>
   );
   beforeEach(async () => {
     await act(async () => {

@@ -6,7 +6,6 @@ import CardActions from './card-actions';
 import {
   EllipsisHorizontalIcon,
   FlagIcon,
-  PencilIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import ReadOnlyEditor from '../../ReadOnlyEditor';
 import NSFW, { NSFWProps } from '../NSFW';
@@ -46,7 +45,6 @@ export type EntryCardProps = {
     author: AuthorsRemovedMessage;
     others: OthersRemovedMessage;
   };
-  editLabel?: string;
   nsfw?: Omit<NSFWProps, 'onClickToView'>;
   reflectAnchorLink?: string;
   disableReporting?: boolean;
@@ -106,7 +104,6 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     onContentClick,
     onEntryFlag,
     onReflect,
-    onEdit,
     showLoginModal,
     removeEntryLabel,
     onEntryRemove,
@@ -137,13 +134,6 @@ const EntryCard: React.FC<EntryCardProps> = props => {
       : []),
     ...(isViewer
       ? [
-          // {
-          //   icon: <PencilIcon />,
-          //   label: editLabel ?? '',
-          //   disabled: !editable,
-          //   toolTipContent: editable ? null : notEditableLabel,
-          //   onClick: onEdit,
-          // },
           {
             icon: <TrashIcon />,
             label: removeEntryLabel ?? '',
