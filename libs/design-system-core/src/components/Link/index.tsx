@@ -38,6 +38,7 @@ const Link: React.FC<LinkProps> = props => {
     if (typeof onClick === 'function') {
       // prevent the default behaviour of the anchor element
       ev.preventDefault();
+      ev.stopPropagation();
       onClick(ev);
     }
   };

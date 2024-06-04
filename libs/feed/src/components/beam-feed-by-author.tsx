@@ -1,28 +1,34 @@
-import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef } from 'react';
+import React, {
+  ReactElement,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+} from 'react';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import BeamContentResolver from './beam-content-resolver';
 import DynamicInfiniteScroll from '@akashaorg/design-system-components/lib/components/DynamicInfiniteScroll';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import getSDK from '@akashaorg/awf-sdk';
-import { AnalyticsEventData } from '@akashaorg/typings/lib/ui';
+import { AnalyticsEventData, RawEntryData } from '@akashaorg/typings/lib/ui';
 import {
   AkashaBeamFiltersInput,
   AkashaBeamSortingInput,
   SortOrder,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { VirtualizerProps } from '../virtual-list';
 import { hasOwn, useAkashaStore, useNsfwToggling } from '@akashaorg/ui-awf-hooks';
 import {
-  useGetBeamStreamLazyQuery,
+  useGetBeamsByAuthorDidLazyQuery,
   GetBeamStreamDocument,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { getNsfwFiltersBeamFeed } from '../utils';
 import { useApolloClient } from '@apollo/client';
-import { GetBeamStreamQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
+import { GetBeamsByAuthorDidQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 
-export type BeamFeedProps = {
+export type BeamFeedByAuthorProps = {
+  did: string;
   scrollRestorationStorageKey: string;
   filters?: AkashaBeamFiltersInput;
   sorting?: AkashaBeamSortingInput;
@@ -31,13 +37,15 @@ export type BeamFeedProps = {
   scrollOptions?: {
     overScan: number;
   };
-  scrollTopIndicator?: VirtualizerProps<unknown>['scrollTopIndicator'];
+  scrollTopIndicator?: (listRect: DOMRect, onScrollToTop: () => void) => React.ReactNode;
+  loadingIndicator?: () => ReactElement;
+  renderItem: (data?: RawEntryData) => ReactElement;
   trackEvent?: (data: AnalyticsEventData['data']) => void;
-  loadingIndicator?: VirtualizerProps<unknown>['loadingIndicator'];
 };
 
-const BeamFeed = (props: BeamFeedProps) => {
+const BeamFeedByAuthor = (props: BeamFeedByAuthorProps) => {
   const {
+    did,
     scrollRestorationStorageKey,
     filters,
     sorting,
@@ -45,18 +53,19 @@ const BeamFeed = (props: BeamFeedProps) => {
     itemSpacing,
     scrollOptions = { overScan: 10 },
     loadingIndicator,
+    renderItem,
   } = props;
   const indexingDID = React.useRef(getSDK().services.gql.indexingDID);
-  const [fetchBeamStream, beamStreamQuery] = useGetBeamStreamLazyQuery();
-  const beamStream = React.useMemo(() => {
-    if (beamStreamQuery.data?.node && hasOwn(beamStreamQuery.data.node, 'akashaBeamStreamList')) {
-      return beamStreamQuery.data.node?.akashaBeamStreamList;
+  const [fetchBeam, beamQuery] = useGetBeamsByAuthorDidLazyQuery();
+  const beamList = React.useMemo(() => {
+    if (beamQuery.data?.node && hasOwn(beamQuery.data.node, 'akashaBeamList')) {
+      return beamQuery.data.node?.akashaBeamList;
     }
-  }, [beamStreamQuery.data]);
-  const beams = React.useMemo(() => beamStream?.edges || [], [beamStream]);
+  }, [beamQuery.data]);
+  const beams = React.useMemo(() => beamList?.edges || [], [beamList]);
   const pageInfo = React.useMemo(() => {
-    return beamStream?.pageInfo;
-  }, [beamStream]);
+    return beamList?.pageInfo;
+  }, [beamList]);
   const {
     data: { authenticatedDID, isAuthenticating },
   } = useAkashaStore();
@@ -65,22 +74,24 @@ const BeamFeed = (props: BeamFeedProps) => {
   const nsfwFilters = useMemo(
     () =>
       getNsfwFiltersBeamFeed({
+        did,
         showNsfw,
         isLoggedIn,
         filters,
       }),
-    [filters, isLoggedIn, showNsfw],
+    [did, filters, isLoggedIn, showNsfw],
   );
   const loadingIndicatorRef = useRef(loadingIndicator);
-  const variables = useMemo(
-    () => ({
+  const variables = useMemo(() => {
+    const filters = nsfwFilters ? { filters: nsfwFilters } : {};
+    return {
+      id: did,
       first: 10,
       sorting: { createdAt: SortOrder.Desc, ...sorting },
       indexer: indexingDID.current,
-      filters: nsfwFilters,
-    }),
-    [nsfwFilters, sorting],
-  );
+      ...filters,
+    };
+  }, [did, nsfwFilters, sorting]);
   const hasLatestBeamsRef = useRef(false);
   const vListContainerRef = useRef<HTMLDivElement>(null);
   const vListContainerOffset = useRef(null);
@@ -91,31 +102,31 @@ const BeamFeed = (props: BeamFeedProps) => {
   }, []);
 
   useEffect(() => {
-    fetchBeamStream({
+    fetchBeam({
       variables,
       fetchPolicy: 'cache-first',
       notifyOnNetworkStatusChange: true,
     });
-  }, [fetchBeamStream, variables]);
+  }, [fetchBeam, variables]);
 
   const onLoadNewest = useCallback(() => {
-    fetchBeamStream({
+    fetchBeam({
       variables,
       fetchPolicy: 'cache-and-network',
     });
-  }, [fetchBeamStream, variables]);
+  }, [fetchBeam, variables]);
 
   useEffect(() => {
     if (pageInfo?.startCursor) {
       apolloClientRef.current
-        .query<GetBeamStreamQuery>({
+        .query<GetBeamsByAuthorDidQuery>({
           query: GetBeamStreamDocument,
           variables,
           fetchPolicy: 'no-cache',
         })
         .then(result => {
-          if (result.data?.node && hasOwn(result.data.node, 'akashaBeamStreamList')) {
-            const latestPageInfo = result.data.node.akashaBeamStreamList?.pageInfo;
+          if (result.data?.node && hasOwn(result.data.node, 'akashaBeamList')) {
+            const latestPageInfo = result.data.node.akashaBeamList?.pageInfo;
             if (latestPageInfo && latestPageInfo.startCursor !== pageInfo.startCursor) {
               if (scrollY <= vListContainerOffset.current) {
                 onLoadNewest();
@@ -152,30 +163,30 @@ const BeamFeed = (props: BeamFeedProps) => {
 
   return (
     <>
-      {beamStreamQuery.loading && beams.length === 0 && loadingIndicatorRef.current()}
-      {beamStreamQuery.error && (
+      {beamQuery.loading && beams.length === 0 && loadingIndicatorRef.current()}
+      {beamQuery.error && (
         <ErrorLoader
           type="script-error"
           title={'Sorry, there was an error when fetching beams'}
-          details={<>{beamStreamQuery.error.message}</>}
+          details={<>{beamQuery.error.message}</>}
         />
       )}
-      {beams && (
+      {beams.length > 0 && (
         <Card ref={vListContainerRef} type="plain">
           <DynamicInfiniteScroll
             count={beams.length}
             scrollRestorationStorageKey={scrollRestorationStorageKey}
             enableScrollRestoration={true}
-            itemHeight={estimatedHeight}
+            estimatedHeight={estimatedHeight}
             overScan={scrollOptions.overScan}
             itemSpacing={itemSpacing}
             hasNextPage={pageInfo && pageInfo.hasNextPage}
-            loading={beamStreamQuery.loading}
+            loading={beamQuery.loading}
             onLoadMore={async () => {
               const lastCursor = beams[beams.length - 1]?.cursor;
-              if (beamStreamQuery.loading || beamStreamQuery.error || !lastCursor) return;
+              if (beamQuery.loading || beamQuery.error || !lastCursor) return;
               if (lastCursor) {
-                await beamStreamQuery.fetchMore({
+                await beamQuery.fetchMore({
                   variables: {
                     after: lastCursor,
                     sorting: { createdAt: SortOrder.Desc },
@@ -188,12 +199,7 @@ const BeamFeed = (props: BeamFeedProps) => {
           >
             {({ itemIndex }) => {
               const beam = beams[itemIndex];
-              if (!hasOwn(beam.node, 'content')) {
-                /* Set the showNSFWCard prop to false so as to prevent the
-                 * NSFW beams from being displayed in the antenna feed when NSFW setting is off.
-                 */
-                return <BeamContentResolver beamId={beam.node.beamID} showNSFWCard={false} />;
-              }
+              return renderItem(beam.node);
             }}
           </DynamicInfiniteScroll>
         </Card>
@@ -202,4 +208,4 @@ const BeamFeed = (props: BeamFeedProps) => {
   );
 };
 
-export default BeamFeed;
+export default BeamFeedByAuthor;

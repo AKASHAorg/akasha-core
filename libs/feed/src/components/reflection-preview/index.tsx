@@ -35,7 +35,7 @@ const ReflectionPreview: React.FC<ReflectionPreviewProps> = props => {
 
   return (
     reflections?.length > 0 && (
-      <Stack spacing="gap-y-1" customStyle="ml-4">
+      <Stack spacing="gap-y-1" customStyle="ml-4 mb-4">
         <Stack customStyle={leftBorderStyle}>
           {reflections.slice(0, MAXIMUM_REFLECTION_PREVIEWS).map(reflection => (
             <EditableReflection

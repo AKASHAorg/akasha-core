@@ -1,7 +1,6 @@
 import React, { Suspense } from 'react';
 import GlobalAntennaPage from '../pages/global-antenna-page';
 import MyAntennaPage from '../pages/my-antenna-page';
-import ProfileFeedPage from '../pages/profile-feed-page/profile-feed-page';
 import BeamPage from '../pages/entry-page/beam-page';
 import ReflectionPage from '../pages/entry-page/reflection-page';
 import TagFeedPage from '../pages/tag-feed-page/tag-feed-page';
@@ -11,7 +10,6 @@ import EntrySectionLoading from '../pages/entry-page/entry-section-loading';
 import routes, {
   GLOBAL_ANTENNA,
   MY_ANTENNA,
-  PROFILE_FEED,
   BEAM,
   REFLECT,
   TAGS,
@@ -150,15 +148,6 @@ const tagFeedRoute = createRoute({
   },
 });
 
-const profileFeedRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: `${routes[PROFILE_FEED]}/$profileDID`,
-  component: () => {
-    const { profileDID } = profileFeedRoute.useParams();
-    return <ProfileFeedPage profileDID={profileDID} />;
-  },
-});
-
 const editorRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[EDITOR],
@@ -174,7 +163,6 @@ const routeTree = rootRoute.addChildren([
   beamRoute.addChildren([beamReflectRoute]),
   reflectionsRoute.addChildren([reflectionsReflectRoute]),
   tagFeedRoute,
-  profileFeedRoute,
   editorRoute,
 ]);
 

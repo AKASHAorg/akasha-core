@@ -157,7 +157,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
   };
 
   const entryCardUi = (
-    <Stack spacing="gap-y-2" padding="p-4" customStyle={`min-h-[inherit] ${hoverStyle}`}>
+    <Stack spacing="gap-y-2" padding="p-4" customStyle={`grow min-h-[inherit] ${hoverStyle}`}>
       <Stack direction="row" justify="between">
         {profileAvatarExt}
         <Menu
@@ -297,7 +297,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     <Card
       ref={ref}
       padding="p-0"
-      customStyle={`min-h-[inherit] ${customStyle}`}
+      customStyle={`grow min-h-[inherit] ${customStyle}`}
       onClick={!showNSFWContent ? null : onContentClick}
     >
       {entryCardUi}

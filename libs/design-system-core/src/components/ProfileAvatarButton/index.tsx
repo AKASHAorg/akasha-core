@@ -32,7 +32,7 @@ const ProfileAvatarButton = React.forwardRef(
     } = props;
 
     return (
-      <Link to={href} onClick={onClick}>
+      <Link to={href} onClick={onClick} customStyle="block">
         <Stack direction="row" align="start" spacing="gap-x-2" customStyle={customStyle}>
           <Avatar
             dataTestId="avatar-box"
