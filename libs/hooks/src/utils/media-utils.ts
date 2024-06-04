@@ -1,6 +1,6 @@
 import getSDK from '@akashaorg/awf-sdk';
 import { logError } from './error-handler';
-import { type Image, Profile } from '@akashaorg/typings/lib/ui';
+import { type Image } from '@akashaorg/typings/lib/ui';
 
 export interface IConfig {
   quality?: number;

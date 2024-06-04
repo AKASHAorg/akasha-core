@@ -59,7 +59,6 @@ const ReflectionCard: React.FC<ReflectCardProps> = props => {
       slateContent={entryData.content.flatMap(item => decodeb64SlateContent(item.value))}
       noWrapperCard={true}
       flagAsLabel={t('Flag')}
-      editLabel={t('Edit')}
       isViewer={authenticatedDID === entryData.authorId}
       isLoggedIn={isLoggedIn}
       removed={{
