@@ -1,7 +1,6 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { SetStateAction, useEffect, useMemo } from 'react';
 
 import { IMenuItem } from '@akashaorg/typings/lib/ui';
-import { useAccordion } from '@akashaorg/ui-awf-hooks';
 
 import Accordion from '@akashaorg/design-system-core/lib/components/Accordion';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -11,8 +10,11 @@ import MenuSubItems from './menu-sub-items';
 
 export type ListSidebarAppsProps = {
   list: IMenuItem[];
+  activeAccordionId: string;
   activeOption: IMenuItem;
   hasBorderTop?: boolean;
+  setActiveAccordionId: React.Dispatch<SetStateAction<string>>;
+  handleAccordionClick: (id: string) => void;
   onOptionClick: (menu: IMenuItem, submenu: IMenuItem) => void;
   onClickMenuItem?: (menuItem: IMenuItem, isMobile?: boolean) => void;
 };
@@ -20,9 +22,16 @@ export type ListSidebarAppsProps = {
 const getIsActiveMenu = (appName: string) => !!location.pathname.match(`/${appName}/`);
 
 const ListSidebarApps: React.FC<ListSidebarAppsProps> = props => {
-  const { list, activeOption, hasBorderTop = false, onOptionClick, onClickMenuItem } = props;
-
-  const { active, setActive, handleAccordionClick } = useAccordion();
+  const {
+    list,
+    activeAccordionId,
+    activeOption,
+    hasBorderTop = false,
+    setActiveAccordionId,
+    handleAccordionClick,
+    onOptionClick,
+    onClickMenuItem,
+  } = props;
 
   const [appsWithSubroutes, otherApps]: IMenuItem[][] = useMemo(() => {
     return list.reduce(
@@ -45,7 +54,7 @@ const ListSidebarApps: React.FC<ListSidebarAppsProps> = props => {
      */
     appsWithSubroutes.forEach((app, idx) =>
       app.subRoutes.some(r => location.pathname === `/${app.name}${r.route}`)
-        ? setActive(idx)
+        ? setActiveAccordionId(`${app.name}${idx}`)
         : null,
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -56,7 +65,7 @@ const ListSidebarApps: React.FC<ListSidebarAppsProps> = props => {
      * close any open accordion,
      * then call handler
      */
-    setActive(null);
+    setActiveAccordionId(null);
     onClickMenuItem(app);
   };
 
@@ -70,8 +79,8 @@ const ListSidebarApps: React.FC<ListSidebarAppsProps> = props => {
         return (
           <Accordion
             key={app.label + idx}
-            accordionId={idx}
-            open={idx === active}
+            accordionId={`${app.name}${idx}`}
+            open={`${app.name}${idx}` === activeAccordionId}
             titleNode={<MenuItemLabel menuItem={app} isActiveMenu={isActiveMenu} />}
             contentNode={
               <MenuSubItems

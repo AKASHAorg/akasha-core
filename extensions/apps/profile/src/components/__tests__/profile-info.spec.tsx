@@ -12,7 +12,6 @@ import {
 } from '@akashaorg/af-testing';
 import { truncateDid } from '@akashaorg/design-system-core/lib/utils/did-utils';
 import { Profile } from '@akashaorg/typings/lib/ui';
-import { MemoryRouter as Router } from 'react-router-dom';
 import { AkashaFollow } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 const fakeDID = 'did:pkh:eip155:5:0xc47a483494db8fe455ba29a53a7f75349dfc02ff';
@@ -20,11 +19,7 @@ const fakeDID = 'did:pkh:eip155:5:0xc47a483494db8fe455ba29a53a7f75349dfc02ff';
 describe('< ProfileInfoPage />', () => {
   const navigateTo = jest.fn();
 
-  const BaseComponent = (
-    <Router initialEntries={['/@akashaorg/app-profile/']}>
-      <ProfileInfoPage profileDID={fakeDID} />
-    </Router>
-  );
+  const BaseComponent = <ProfileInfoPage profileDID={fakeDID} />;
   const profile = genUser(fakeDID);
 
   beforeEach(async () => {

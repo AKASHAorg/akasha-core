@@ -4,36 +4,7 @@ import {
   AkashaBeamStreamModerationStatus,
   AkashaIndexedStreamFiltersInput,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { Rect } from '../virtual-list/rect';
-import { MountedItem } from '../virtual-list/use-projection';
-import { VirtualItem } from '../virtual-list/virtual-item-renderer';
 import { QueryKeys } from '@akashaorg/typings/lib/ui';
-
-export const getHeightBetweenItems = (first?: VirtualItem, last?: VirtualItem) => {
-  if (first && last) {
-    return (
-      new Rect(last.start, last.height).getBottom() - new Rect(first.start, first.height).getTop()
-    );
-  }
-  return 0;
-};
-
-export const findFirstInView = <T>(
-  items: MountedItem<T>[],
-  compareFn: (prev: MountedItem<T>, curr: MountedItem<T>) => number,
-) => {
-  if (!items.length) return undefined;
-  return items.reduce((prev, curr) => (compareFn(curr, prev) > 0 ? curr : prev));
-};
-
-export const getVisibleItemsSlice = (visibleItems: VirtualItem[], allItems: VirtualItem[]) => {
-  const first = visibleItems[0];
-  const last = visibleItems[visibleItems.length - 1];
-  return {
-    start: first ? allItems.indexOf(first) : 0,
-    end: last ? allItems.indexOf(last) + 1 : 0,
-  };
-};
 
 export const findLastItem = <T>(items: T[], predicate: (item: T) => boolean): T | undefined => {
   let found: T | undefined = undefined;

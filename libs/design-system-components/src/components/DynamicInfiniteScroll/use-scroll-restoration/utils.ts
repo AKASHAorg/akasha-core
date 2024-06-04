@@ -20,6 +20,15 @@ type Config = {
    **/
   options: VirtualizerOptions<Window, Element>;
   /*
+   * Last scroll restoration session key used to either reset the scroll restoration config
+   * if the current key and the one before do not match or to use the scroll config.
+   **/
+  lastScrollRestorationKey: string;
+  /*
+   * Height of a header element in a virtual list
+   **/
+  headerHeight?: number;
+  /*
    * Flag to check if a scroll restoration is done
    **/
   done?: boolean;
@@ -49,7 +58,7 @@ export async function restoreScrollPosition({
      * Validate scroll restoration config fields
      **/
     if (
-      !referenceItemIndex ||
+      typeof referenceItemIndex !== 'number' ||
       !options ||
       typeof options !== 'object' ||
       typeof scrollOffset !== 'number'
@@ -133,7 +142,7 @@ export function storeScrollConfig(scrollRestorationStorageKey: string, config: C
 /*
  * Remove item from scroll config by key
  **/
-function removeItemFromScrollConfig(key: string) {
+export function removeItemFromScrollConfig(key: string) {
   const config = restoreScrollConfig();
   if (config[key]) {
     delete config[key];

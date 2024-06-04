@@ -2,7 +2,12 @@ import React, { Suspense, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { EventTypes, MenuItemAreaType, IMenuItem } from '@akashaorg/typings/lib/ui';
 import { AUTH_EVENTS, WEB3_EVENTS } from '@akashaorg/typings/lib/sdk/events';
-import { useAkashaStore, useDismissedCard, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import {
+  useAccordion,
+  useAkashaStore,
+  useDismissedCard,
+  useRootComponentProps,
+} from '@akashaorg/ui-awf-hooks';
 import { startMobileSidebarHidingBreakpoint } from '@akashaorg/design-system-core/lib/utils/breakpoints';
 import getSDK from '@akashaorg/awf-sdk';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
@@ -45,6 +50,7 @@ const SidebarComponent: React.FC<unknown> = () => {
   const [isLoading, setIsLoading] = useState(false);
   const isLoggedIn = !!authenticatedDID;
 
+  const { activeAccordionId, setActiveAccordionId, handleAccordionClick } = useAccordion();
   const [dismissed, dismissCard] = useDismissedCard('@akashaorg/ui-widget-sidebar_cta-card');
 
   const routing = getRoutingPlugin();
@@ -259,7 +265,10 @@ const SidebarComponent: React.FC<unknown> = () => {
           {worldApps?.length > 0 && (
             <ListSidebarApps
               list={worldApps}
+              activeAccordionId={activeAccordionId}
               activeOption={activeOption}
+              setActiveAccordionId={setActiveAccordionId}
+              handleAccordionClick={handleAccordionClick}
               onOptionClick={handleOptionClick}
               onClickMenuItem={handleAppIconClick}
             />
@@ -268,7 +277,10 @@ const SidebarComponent: React.FC<unknown> = () => {
           {userInstalledApps?.length > 0 && (
             <ListSidebarApps
               list={userInstalledApps}
+              activeAccordionId={activeAccordionId}
               activeOption={activeOption}
+              setActiveAccordionId={setActiveAccordionId}
+              handleAccordionClick={handleAccordionClick}
               hasBorderTop={true}
               onOptionClick={handleOptionClick}
               onClickMenuItem={handleAppIconClick}

@@ -1,18 +1,18 @@
 import { useState } from 'react';
 
 export function useAccordion() {
-  const [active, setActive] = useState<number | null>(null);
+  const [activeAccordionId, setActiveAccordionId] = useState<string | null>(null);
 
-  const handleAccordionClick = (id: number) => {
+  const handleAccordionClick = (accordionId: string) => {
     /**
      * if id is already active, set null so as to collapse it
      */
-    if (id === active) {
-      setActive(null);
+    if (accordionId === activeAccordionId) {
+      setActiveAccordionId(null);
     } else {
-      setActive(id);
+      setActiveAccordionId(accordionId);
     }
   };
 
-  return { active, setActive, handleAccordionClick };
+  return { activeAccordionId, setActiveAccordionId, handleAccordionClick };
 }

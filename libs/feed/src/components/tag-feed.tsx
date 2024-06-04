@@ -1,100 +1,98 @@
-import * as React from 'react';
+import React, { ReactElement, useEffect, useRef } from 'react';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
+import DynamicInfiniteScroll from '@akashaorg/design-system-components/lib/components/DynamicInfiniteScroll';
+import getSDK from '@akashaorg/awf-sdk';
 import { useTranslation } from 'react-i18next';
 import { AnalyticsEventData } from '@akashaorg/typings/lib/ui';
-import { AkashaIndexedStreamEdge } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { EdgeArea, Virtualizer, VirtualizerProps } from '../virtual-list';
-import { useBeamsByTags } from '@akashaorg/ui-awf-hooks/lib/use-beams-by-tags';
-import { RestoreItem } from '../virtual-list/use-scroll-state';
-import { useAkashaStore, useNsfwToggling } from '@akashaorg/ui-awf-hooks';
+import {
+  SortOrder,
+  AkashaIndexedStreamFiltersInput,
+  AkashaIndexedStreamStreamType,
+  AkashaIndexedStreamEdge,
+} from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { hasOwn, useAkashaStore, useNsfwToggling } from '@akashaorg/ui-awf-hooks';
 import { getNsfwFiltersTagFeed } from '../utils';
+import { useGetIndexedStreamLazyQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
 export type TagFeedProps = {
-  className?: string;
-  scrollerOptions?: { overscan: number };
   queryKey: string;
-  newItemsPublishedLabel?: string;
-  estimatedHeight?: VirtualizerProps<unknown>['estimatedHeight'];
-  itemSpacing?: VirtualizerProps<unknown>['itemSpacing'];
-  header?: VirtualizerProps<unknown>['header'];
-  footer?: VirtualizerProps<unknown>['footer'];
+  estimatedHeight: number;
+  itemSpacing?: number;
+  scrollOptions?: {
+    overScan: number;
+  };
   tags: string[];
+  scrollTopIndicator?: (listRect: DOMRect, onScrollToTop: () => void) => React.ReactNode;
+  loadingIndicator?: () => React.ReactElement;
+  renderItem: (data?: Omit<AkashaIndexedStreamEdge['node'], 'id'>) => ReactElement;
   trackEvent?: (data: AnalyticsEventData['data']) => void;
-  scrollTopIndicator?: VirtualizerProps<unknown>['scrollTopIndicator'];
-  renderItem: VirtualizerProps<AkashaIndexedStreamEdge>['renderItem'];
-  loadingIndicator?: VirtualizerProps<unknown>['loadingIndicator'];
 };
 
 const TagFeed = (props: TagFeedProps) => {
   const {
-    scrollerOptions = { overscan: 5 },
-    scrollTopIndicator,
-    renderItem,
     queryKey,
     estimatedHeight = 150,
     itemSpacing,
-    loadingIndicator,
-    header,
-    footer,
+    scrollOptions = { overScan: 10 },
     tags,
+    loadingIndicator,
+    renderItem,
   } = props;
 
   const { t } = useTranslation('ui-lib-feed');
-
+  const sdkRef = useRef(getSDK());
+  const indexingDID = React.useRef(sdkRef.current.services.gql.indexingDID);
   const { showNsfw } = useNsfwToggling();
   const {
-    data: { authenticatedDID, isAuthenticating: authenticating },
+    data: { authenticatedDID, isAuthenticating },
   } = useAkashaStore();
   const isLoggedIn = !!authenticatedDID;
-  const nsfwFilters = getNsfwFiltersTagFeed({ queryKey, showNsfw, isLoggedIn });
-
-  const {
-    beams,
-    beamCursors,
-    called,
-    fetchNextPage,
-    fetchPreviousPage,
-    hasNextPage,
-    hasPreviousPage,
-    fetchInitialData,
-    onReset,
-    isLoading,
-    hasErrors,
-    errors,
-  } = useBeamsByTags({ tag: tags, filters: nsfwFilters });
-
-  React.useEffect(() => {
-    /**
-     * Refetch data in case nsfw setting is on and user is either logged in or out
-     **/
-    if (!authenticating && showNsfw) {
-      /**
-       * Reset the beamCursors in case the user logs out and has the NSFW setting on
-       * so as to be able to accept the updated data in the `extractData` function
-       *  when the hook refetches again (Specificallly for dealing with the filter condition
-       *  `!beamCursors.has(edge.cursor)` inside the extractData function inside the hook
-       *  because if not reset, no data will be extracted
-       * from the function because the existing beamCursors will contain the data.cursor and
-       * therefore the feed doesn't get updated correctly sometimes with nsfw content when toggling
-       * the nswf setting on).
-       **/
-      beamCursors.clear();
-      fetchInitialData();
+  const [fetchIndexedStream, indexedStreamQuery] = useGetIndexedStreamLazyQuery();
+  const indexedBeamStream = React.useMemo(() => {
+    if (
+      indexedStreamQuery.data?.node &&
+      hasOwn(indexedStreamQuery.data.node, 'akashaIndexedStreamList')
+    ) {
+      return indexedStreamQuery.data.node?.akashaIndexedStreamList;
     }
-  }, [authenticating, showNsfw]);
+  }, [indexedStreamQuery.data]);
+  const beams = React.useMemo(() => indexedBeamStream?.edges || [], [indexedBeamStream]);
+  const pageInfo = React.useMemo(() => {
+    return indexedBeamStream?.pageInfo;
+  }, [indexedBeamStream]);
+  const mergedFilters: AkashaIndexedStreamFiltersInput[] = React.useMemo(() => {
+    const nsfwFilters = getNsfwFiltersTagFeed({ queryKey, showNsfw, isLoggedIn });
 
-  React.useEffect(() => {
-    /**
-     * Everytime the NSFW setting changes, refetch.
-     **/
-    fetchInitialData();
-  }, [showNsfw]);
+    const tagsFilters = {
+      or: tags?.map(_tag => ({ where: { indexValue: { equalTo: _tag } } })) || [],
+    };
+    const defaultFilters: AkashaIndexedStreamFiltersInput[] = [
+      { where: { streamType: { equalTo: AkashaIndexedStreamStreamType.Beam } } },
+      { where: { indexType: { equalTo: sdkRef.current.services.gql.labelTypes.TAG } } },
+      { where: { active: { equalTo: true } } },
+      tagsFilters,
+    ];
+    if (nsfwFilters) {
+      defaultFilters.push(nsfwFilters);
+    }
+    return defaultFilters;
+  }, [isLoggedIn, queryKey, showNsfw, tags]);
 
-  const lastCursors = React.useRef({ next: null, prev: null });
-  const prevBeams = React.useRef([]);
+  useEffect(() => {
+    fetchIndexedStream({
+      variables: {
+        indexer: indexingDID.current,
+        first: 10,
+        sorting: { createdAt: SortOrder.Desc },
+        filters: {
+          and: mergedFilters,
+        },
+      },
+    });
+  }, [fetchIndexedStream, mergedFilters]);
 
   const loadingIndicatorRef = React.useRef(loadingIndicator);
 
@@ -105,44 +103,6 @@ const TagFeed = (props: TagFeedProps) => {
       </Stack>
     );
   }
-
-  const handleInitialFetch = async (restoreItem?: RestoreItem) => {
-    await fetchInitialData(true, restoreItem);
-  };
-
-  const handleFetch = React.useCallback(
-    async (newArea: EdgeArea) => {
-      switch (newArea) {
-        case EdgeArea.TOP:
-        case EdgeArea.NEAR_TOP:
-          if (!beams.length) return;
-          const firstCursor = beams[0].cursor;
-          if (lastCursors.current.prev !== firstCursor) {
-            lastCursors.current.prev = firstCursor;
-            await fetchPreviousPage(firstCursor);
-          }
-          break;
-        case EdgeArea.BOTTOM:
-        case EdgeArea.NEAR_BOTTOM:
-          if (!beams.length) return;
-          const lastCursor = beams[beams.length - 1].cursor;
-          if (lastCursors.current.next !== lastCursor) {
-            lastCursors.current.next = lastCursor;
-            await fetchNextPage(lastCursor);
-          }
-          break;
-        default:
-          break;
-      }
-    },
-    [beams, fetchNextPage, fetchPreviousPage],
-  );
-
-  const handleReset = async () => {
-    prevBeams.current = [];
-    lastCursors.current = { next: null, prev: null };
-    await onReset();
-  };
 
   const emptyListCard = (
     <Stack customStyle="mt-8">
@@ -168,41 +128,49 @@ const TagFeed = (props: TagFeedProps) => {
     </Stack>
   );
 
+  if (isAuthenticating) return <>{loadingIndicatorRef.current()}</>;
+
+  if (!indexedStreamQuery.error && !indexedStreamQuery.loading && !beams.length)
+    return <>{emptyListCard}</>;
+
   return (
     <>
-      {hasErrors && (
+      {indexedStreamQuery.loading && beams.length === 0 && loadingIndicatorRef.current()}
+      {indexedStreamQuery.error && (
         <ErrorLoader
           type="script-error"
           title={'Sorry, there was an error when fetching beams'}
-          details={<>{errors}</>}
+          details={<>{indexedStreamQuery.error.message}</>}
         />
       )}
-
-      {!hasErrors && tags && (
-        <Virtualizer<ReturnType<typeof useBeamsByTags>['beams'][0]>
-          header={header}
-          footer={footer}
-          requestStatus={{
-            called,
-            isLoading,
-          }}
-          emptyListIndicator={emptyListCard}
-          restorationKey={queryKey}
-          itemSpacing={itemSpacing}
+      {beams.length > 0 && (
+        <DynamicInfiniteScroll
+          count={beams.length}
           estimatedHeight={estimatedHeight}
-          overscan={scrollerOptions.overscan}
-          items={beams}
-          onFetchInitialData={handleInitialFetch}
-          itemKeyExtractor={item => item.cursor}
-          itemIndexExtractor={item => beams.findIndex(p => p.cursor === item.cursor)}
-          onListReset={handleReset}
-          onEdgeDetectorChange={handleFetch}
-          scrollTopIndicator={scrollTopIndicator}
-          renderItem={renderItem}
-          loadingIndicator={loadingIndicatorRef.current}
-          hasNextPage={hasNextPage}
-          hasPreviousPage={hasPreviousPage}
-        />
+          overScan={scrollOptions.overScan}
+          itemSpacing={itemSpacing}
+          hasNextPage={pageInfo && pageInfo.hasNextPage}
+          loading={indexedStreamQuery.loading}
+          onLoadMore={async () => {
+            const lastCursor = beams[beams.length - 1]?.cursor;
+            if (indexedStreamQuery.loading || indexedStreamQuery.error || !lastCursor) return;
+            if (lastCursor) {
+              await indexedStreamQuery.fetchMore({
+                variables: {
+                  after: lastCursor,
+                  sorting: { createdAt: SortOrder.Desc },
+                  indexer: indexingDID.current,
+                },
+              });
+            }
+          }}
+          customStyle="mb-4"
+        >
+          {({ itemIndex }) => {
+            const beam = beams[itemIndex];
+            return renderItem(beam.node);
+          }}
+        </DynamicInfiniteScroll>
       )}
     </>
   );

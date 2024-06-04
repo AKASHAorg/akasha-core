@@ -191,13 +191,13 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
           tags={listOfTags}
           estimatedHeight={150}
           itemSpacing={8}
-          scrollerOptions={{ overscan: 10 }}
+          scrollOptions={{ overScan: 10 }}
           scrollTopIndicator={(listRect, onScrollToTop) => (
             <ScrollTopWrapper placement={listRect.left}>
               <ScrollTopButton hide={false} onClick={onScrollToTop} />
             </ScrollTopWrapper>
           )}
-          renderItem={itemData => <BeamContentResolver beamId={itemData.node.stream} />}
+          renderItem={itemData => <BeamContentResolver beamId={itemData.stream} />}
         />
       </Stack>
     </HelmetProvider>

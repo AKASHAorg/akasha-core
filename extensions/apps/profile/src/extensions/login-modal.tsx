@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOMClient from 'react-dom/client';
 import singleSpaReact from 'single-spa-react';
-import { BrowserRouter as Router, useLocation } from 'react-router-dom';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
@@ -10,20 +9,22 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 
 import { RootExtensionProps } from '@akashaorg/typings/lib/ui';
-import { useRootComponentProps, withProviders } from '@akashaorg/ui-awf-hooks';
+import { useRootComponentProps, withProviders, useModalData } from '@akashaorg/ui-awf-hooks';
 
 const LoginModal = (_props: RootExtensionProps) => {
   const { t } = useTranslation('app-profile');
-  const location = useLocation();
-  const { getRoutingPlugin, getModalFromParams } = useRootComponentProps();
-  const modal = getModalFromParams(window.location);
+  const location = window.location;
+  const { getRoutingPlugin } = useRootComponentProps();
+
+  const { modalData } = useModalData();
+
   const message = React.useRef('To continue you need an AKASHA World account');
-  if (modal?.message) {
-    message.current = modal.message;
+  if (modalData?.message) {
+    message.current = modalData.message;
   }
   const messageTitle = React.useRef('AKASHA World');
-  if (modal?.title) {
-    messageTitle.current = modal.title;
+  if (modalData?.title) {
+    messageTitle.current = modalData.title;
   }
 
   React.useEffect(() => {
@@ -54,7 +55,7 @@ const LoginModal = (_props: RootExtensionProps) => {
 
   return (
     <Modal
-      show={modal?.name === 'login'}
+      show={modalData?.name === 'login'}
       title={{
         label: t('{{messageTitle}}', { messageTitle: messageTitle.current }),
         variant: 'h6',
@@ -78,11 +79,9 @@ const LoginModal = (_props: RootExtensionProps) => {
 const Wrapped = (props: RootExtensionProps) => {
   const { getTranslationPlugin } = useRootComponentProps();
   return (
-    <Router>
-      <I18nextProvider i18n={getTranslationPlugin().i18n}>
-        <LoginModal {...props} />
-      </I18nextProvider>
-    </Router>
+    <I18nextProvider i18n={getTranslationPlugin().i18n}>
+      <LoginModal {...props} />
+    </I18nextProvider>
   );
 };
 

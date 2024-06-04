@@ -1,143 +1,176 @@
-import React from 'react';
-import Link from '@akashaorg/design-system-core/lib/components/Link';
-import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
+import React, { useState } from 'react';
+import { type Developer, type Image } from '@akashaorg/typings/lib/ui';
+import { type Color } from '@akashaorg/design-system-core/lib/components/types/common.types';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import ContentBlock from '@akashaorg/design-system-core/lib/components/ContentBlock';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import Menu from '@akashaorg/design-system-core/lib/components/Menu';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
-import type { Developer, Image } from '@akashaorg/typings/lib/ui';
-import {
-  ArrowDownIcon,
-  ArrowPathIcon,
-  ChevronRightIcon,
-  EllipsisVerticalIcon,
-  InformationCircleIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
-import { DuplexAppButton } from './duplex-app-button';
+import { ChevronRightIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import StackedAvatar from '@akashaorg/design-system-core/lib/components/StackedAvatar';
+import { AppInfoHeader, AppInfoHeaderProps } from './header';
+import { AppInfoNotificationCards, AppInfoNotificationCardsProps } from './notification-cards';
+import ExtensionImageGallery from '../ExtensionImageGallery';
+import { userData } from '@akashaorg/design-system-core/lib/utils';
 
-export type AppInfoProps = {
-  integrationName: string;
-  packageName: string;
-  developers: Developer[];
-  descriptionTitle: string;
-  descriptionBody: string;
-  developersTitle: string;
-  latestReleaseTitle: string;
-  version: string;
-  versionInfo: string;
-  versionDate: string;
-  versionDescription: string;
-  linksAndDocumentationTitle: string;
-  licenseTitle: string;
-  license: string;
-  share: ListItem;
-  report: ListItem;
-  status: 'installed' | 'not-installed' | 'loading';
-  onInstall: () => void;
-  onUninstall: () => void;
-  onSelectDeveloper: (profileId: string) => void;
-  transformSource: (src: Image) => Image;
-};
+export type AppInfoProps = AppInfoHeaderProps &
+  AppInfoNotificationCardsProps & {
+    packageName: string;
+    packageNameTitle: string;
+    developers: Developer[];
+    descriptionTitle: string;
+    readMore: string;
+    descriptionBody: string;
+    developersTitle: string;
+    permissionTitle: string;
+    collaboratorsTitle: string;
+    galleryTitle: string;
+    viewAllGalleryCTA: string;
+    generalInfoTitle: string;
+    latestReleaseTitle: string;
+    contactSupportTitle: string;
+    languageLabel: string;
+    languages: string[];
+    version: string;
+    versionInfo: string;
+    versionDate: string;
+    versionDescription: string;
+    goToVersionInfoPageLabel: string;
+    documentationTitle: string;
+    documentationLink: string;
+    licenseTitle: string;
+    license: string;
+    onAppDescriptionClick: () => void;
+    onSelectDeveloper: (profileId: string) => void;
+    onCollaboratorsClick: () => void;
+    onAppVersionClick: () => void;
+    onLatestUpdateClick: () => void;
+    onPermissionInfoClick: () => void;
+    onLicenseClick: () => void;
+    onContactSupportClick: () => void;
+    transformSource: (src: Image) => Image;
+  };
 
 const AppInfo: React.FC<AppInfoProps> = ({
   integrationName,
+  integrationType,
+  nsfw,
+  nsfwLabel,
+  pluginLabel,
+  share,
+  report,
+  status,
+  notification,
+  versionLabel,
+  updateButtonLabel,
   packageName,
+  packageNameTitle,
   developers,
   descriptionTitle,
+  permissionTitle,
+  readMore,
   descriptionBody,
+  galleryTitle,
+  viewAllGalleryCTA,
   developersTitle,
+  collaboratorsTitle,
+  generalInfoTitle,
   latestReleaseTitle,
+  languageLabel,
+  contactSupportTitle,
+  languages,
   version,
   versionInfo,
   versionDate,
   versionDescription,
-  linksAndDocumentationTitle,
+  goToVersionInfoPageLabel,
   licenseTitle,
   license,
-  share,
-  report,
-  status,
   onInstall,
   onUninstall,
+  onAppDescriptionClick,
   onSelectDeveloper,
+  onCollaboratorsClick,
+  onAppVersionClick,
+  onLatestUpdateClick,
+  onPermissionInfoClick,
+  onLicenseClick,
+  onContactSupportClick,
   transformSource,
 }) => {
+  const [showImageGalleryOverlay, setShowImageGalleryOverlay] = useState(false);
+
+  const imageGalleryImages = [
+    {
+      src: 'https://bafkreia4a6262sy5l6jqduyrdplynavybdlj6gww6srstnpc5swtmijdnq.ipfs.w3s.link',
+      size: { width: 640, height: 448 },
+      name: 'sample-1',
+    },
+    {
+      src: 'https://bafkreiebphfg3neceldflksm3medufm2himfkbegtidcevmr3pork5vbcm.ipfs.w3s.link',
+      size: { width: 640, height: 539 },
+      name: 'sample-2',
+    },
+    {
+      src: 'https://bafkreia4a6262sy5l6jqduyrdplynavybdlj6gww6srstnpc5swtmijdnq.ipfs.w3s.link',
+      size: { width: 640, height: 448 },
+      name: 'sample-3',
+    },
+  ];
+
+  const greyTextColor = { light: 'grey4', dark: 'grey7' } as Color;
+
   return (
     <>
       <Card background="secondaryLight/30" radius={{ top: 20 }} customStyle="h-[7.3125rem]" />
-      <Card padding={'p-4'} radius={{ bottom: 20 }}>
-        <Stack direction="column" spacing="gap-y-4">
-          <Stack direction="column" spacing="gap-y-4">
-            <Stack direction="row" align="start" customStyle="relative">
-              <Stack
-                direction="row"
-                align="center"
-                spacing="gap-x-2"
-                customStyle="h-[4.375rem] -mt-7"
-              >
-                <Card
-                  elevation="none"
-                  radius={10}
-                  background={{
-                    light: 'grey8',
-                    dark: 'grey5',
-                  }}
-                  customStyle="w-[4.375rem] h-[4.375rem]"
-                />
-                <Stack direction="column" spacing="gap-y-1">
-                  <Text variant="body1" weight="semibold">
-                    {integrationName}
-                  </Text>
-                  <Text variant="footnotes2" weight="normal" color="grey7">
-                    {packageName}
-                  </Text>
-                </Stack>
-              </Stack>
-              <Stack direction="row" spacing="gap-x-2" customStyle="ml-auto">
-                {status === 'not-installed' && (
-                  <Button
-                    icon={<ArrowDownIcon />}
-                    variant="primary"
-                    size="xs"
-                    iconOnly
-                    onClick={onInstall}
-                  />
-                )}
-                {status === 'installed' && <DuplexAppButton onUninstall={onUninstall} />}
-                {status === 'loading' && (
-                  <AppIcon
-                    placeholderIcon={<ArrowPathIcon />}
-                    iconColor="white"
-                    background="secondaryDark"
-                    size="xs"
-                  />
-                )}
-                <Menu
-                  anchor={{
-                    icon: <EllipsisVerticalIcon />,
-                    variant: 'primary',
-                    size: 'xs',
-                    greyBg: true,
-                    iconOnly: true,
-                  }}
-                  items={[share, report]}
-                />
-              </Stack>
-            </Stack>
-            <Divider />
-          </Stack>
-          <ContentBlock blockTitle={descriptionTitle}>
-            <Text lineClamp={4}>{descriptionBody}</Text>
+      <Card padding="p-4" margin="mb-2" radius={{ bottom: 20 }}>
+        <Stack spacing="gap-y-4">
+          <AppInfoHeader
+            integrationName={integrationName}
+            integrationType={integrationType}
+            nsfw={nsfw}
+            nsfwLabel={nsfwLabel}
+            pluginLabel={pluginLabel}
+            share={share}
+            report={report}
+            status={status}
+            onInstall={onInstall}
+            onUninstall={onUninstall}
+          />
+          <AppInfoNotificationCards
+            notification={notification}
+            version={version}
+            versionLabel={versionLabel}
+            updateButtonLabel={updateButtonLabel}
+          />
+          <Divider />
+          <ContentBlock
+            blockTitle={descriptionTitle}
+            viewMoreLabel={readMore}
+            onClickviewMoreLabel={onAppDescriptionClick}
+          >
+            <Text lineClamp={2} variant="body1">
+              {descriptionBody}
+            </Text>
+          </ContentBlock>
+          <ContentBlock
+            blockTitle={galleryTitle}
+            viewMoreLabel={viewAllGalleryCTA}
+            onClickviewMoreLabel={() => {
+              setShowImageGalleryOverlay(!showImageGalleryOverlay);
+            }}
+          >
+            <ExtensionImageGallery
+              images={imageGalleryImages}
+              showOverlay={showImageGalleryOverlay}
+              toggleOverlay={() => setShowImageGalleryOverlay(!showImageGalleryOverlay)}
+            />
           </ContentBlock>
           <ContentBlock blockTitle={developersTitle}>
-            <Stack direction="column" spacing="gap-y-2">
+            <Stack spacing="gap-y-2">
               {developers.map(developer => (
                 <Card
                   key={developer.profileId}
@@ -166,35 +199,97 @@ const AppInfo: React.FC<AppInfoProps> = ({
               ))}
             </Stack>
           </ContentBlock>
-          <ContentBlock blockTitle={latestReleaseTitle}>
-            <Stack direction="column" spacing="gap-y-4">
-              <Stack direction="column">
-                <Stack direction="row" align="center" spacing="gap-x-1">
-                  <Text variant="body1" color={{ light: 'grey5', dark: 'grey6' }}>
-                    {version}
-                  </Text>
-                  <Tooltip content={versionInfo} placement="right">
-                    <Icon
-                      icon={<InformationCircleIcon />}
-                      color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-                    />
-                  </Tooltip>
+          <ContentBlock blockTitle={collaboratorsTitle}>
+            <Stack spacing="gap-y-2">
+              <Card onClick={onCollaboratorsClick} type="plain">
+                <Stack direction="row" align="center">
+                  <StackedAvatar
+                    userData={userData.map(item => ({ ...item, avatar: item.avatar?.default }))}
+                    maxAvatars={4}
+                    size="xs"
+                  />
+                  <Icon
+                    icon={<ChevronRightIcon />}
+                    size="sm"
+                    color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                    customStyle="ml-auto"
+                  />
                 </Stack>
-                <Text variant="footnotes2" color="grey7">
+              </Card>
+            </Stack>
+          </ContentBlock>
+          <ContentBlock blockTitle={generalInfoTitle}>
+            <Stack spacing="gap-y-2">
+              <Stack direction="row" justify="between">
+                <Text variant="body2" color={greyTextColor}>
+                  {latestReleaseTitle}
+                </Text>
+                <Button
+                  variant="text"
+                  size="md"
+                  label={versionDate}
+                  onClick={onLatestUpdateClick}
+                />
+              </Stack>
+              <Divider />
+              <Stack direction="row" justify="between">
+                <Text variant="body2" color={greyTextColor}>
+                  {languageLabel}
+                </Text>
+                <Text variant="body2">
+                  {languages.map((language, idx) =>
+                    idx < languages.length - 1 ? language + ', ' : language,
+                  )}
+                </Text>
+              </Stack>
+              <Divider />
+              <Stack direction="row" justify="between">
+                <Text variant="body2" color={greyTextColor}>
+                  {permissionTitle}
+                </Text>
+                <Button variant="text" size="md" label={'View'} onClick={onPermissionInfoClick} />
+              </Stack>
+              <Divider />
+
+              <Stack direction="row" justify="between">
+                <Text variant="body2" color={greyTextColor}>
+                  {licenseTitle}
+                </Text>
+                <Button variant="text" size="md" label={license} onClick={onLicenseClick} />
+              </Stack>
+            </Stack>
+          </ContentBlock>
+
+          <ContentBlock blockTitle={packageNameTitle}>
+            <Stack customStyle=" flex-wrap">
+              <Text variant="body1" customStyle="break-words w-[20rem] md:w-full">
+                {packageName}
+              </Text>
+            </Stack>
+          </ContentBlock>
+          <ContentBlock
+            blockTitle={versionInfo}
+            viewMoreLabel={goToVersionInfoPageLabel}
+            onClickviewMoreLabel={onAppVersionClick}
+          >
+            <Stack spacing="gap-y-4">
+              <Stack>
+                <Text variant="body1">{version}</Text>
+                <Text variant="footnotes2" color={greyTextColor}>
                   {versionDate}
                 </Text>
               </Stack>
-              <Text variant="body1" truncate>
+              <Text lineClamp={2} variant="body1">
                 {versionDescription}
               </Text>
             </Stack>
           </ContentBlock>
-          <ContentBlock blockTitle={linksAndDocumentationTitle}>
-            <Link to="#">Link</Link>
-          </ContentBlock>
-          <ContentBlock blockTitle={licenseTitle} showDivider={false}>
-            <Text variant="body1">{license}</Text>
-          </ContentBlock>
+          <ContentBlock
+            blockTitle={contactSupportTitle}
+            viewMoreIcon={<ChevronRightIcon />}
+            showDivider={false}
+            onClickviewMoreLabel={onContactSupportClick}
+          />
         </Stack>
       </Card>
     </>

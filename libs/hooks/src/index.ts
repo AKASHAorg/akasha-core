@@ -27,6 +27,7 @@ export { useDismissedCard } from './use-dismissed-card';
 export { useValidDid } from './use-valid-did';
 export { useModerationCategory } from './use-moderation-categories';
 export { useAccordion } from './use-accordion';
+export { useModalData } from './use-modal-data';
 
 // the following hooks needs refactor/reimplementation
 export { useListenForMutationEvents } from './use-notifications';

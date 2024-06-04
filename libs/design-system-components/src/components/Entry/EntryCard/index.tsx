@@ -6,7 +6,6 @@ import CardActions from './card-actions';
 import {
   EllipsisHorizontalIcon,
   FlagIcon,
-  // PencilIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import ReadOnlyEditor from '../../ReadOnlyEditor';
 import NSFW, { NSFWProps } from '../NSFW';
@@ -50,7 +49,6 @@ export type EntryCardProps = {
     author: React.ReactNode;
     others: React.ReactNode;
   };
-  editLabel?: string;
   nsfw?: Omit<NSFWProps, 'onClickToView'>;
   reflectAnchorLink?: string;
   disableReporting?: boolean;
@@ -110,7 +108,6 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     onContentClick,
     onEntryFlag,
     onReflect,
-    // onEdit,
     showLoginModal,
     removeEntryLabel,
     onEntryRemove,
@@ -141,13 +138,6 @@ const EntryCard: React.FC<EntryCardProps> = props => {
       : []),
     ...(isViewer
       ? [
-          // {
-          //   icon: <PencilIcon />,
-          //   label: editLabel ?? '',
-          //   disabled: !editable,
-          //   toolTipContent: editable ? null : notEditableLabel,
-          //   onClick: onEdit,
-          // },
           {
             icon: <TrashIcon />,
             label: removeEntryLabel ?? '',
@@ -172,7 +162,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
   };
 
   const entryCardUi = (
-    <Stack spacing="gap-y-2" padding="p-4" customStyle={`min-h-[inherit] ${hoverStyle}`}>
+    <Stack spacing="gap-y-2" padding="p-4" customStyle={`grow min-h-[inherit] ${hoverStyle}`}>
       <Stack direction="row" justify="between">
         {profileAvatarExt}
         <Menu
@@ -312,7 +302,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     <Card
       ref={ref}
       padding="p-0"
-      customStyle={`min-h-[inherit] ${customStyle}`}
+      customStyle={`grow min-h-[inherit] ${customStyle}`}
       onClick={!showNSFWContent ? null : onContentClick}
     >
       {entryCardUi}
