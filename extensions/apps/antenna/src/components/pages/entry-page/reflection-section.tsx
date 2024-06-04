@@ -18,12 +18,21 @@ type ReflectionSectionProps = {
   reflectionId: string;
   entryData: ReflectEntryData;
   isLoggedIn: boolean;
+  hasReflections: boolean;
   customStyle?: string;
   showLoginModal: (title?: string, message?: string) => void;
 };
 
 const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
-  const { beamId, reflectionId, entryData, isLoggedIn, customStyle = '', showLoginModal } = props;
+  const {
+    beamId,
+    reflectionId,
+    entryData,
+    isLoggedIn,
+    hasReflections,
+    customStyle = '',
+    showLoginModal,
+  } = props;
   const { t } = useTranslation('app-antenna');
   const routerState = useRouterState();
   const [isReflecting, setIsReflecting] = useState(
@@ -81,7 +90,11 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
       {pendingReflections
         .filter(content => hasOwn(content, 'reflection') && content.reflection === reflectionId)
         .map((content, index) => (
-          <PendingReflect key={`pending-${index}-${reflectionId}`} entryData={content} />
+          <PendingReflect
+            key={`pending-${index}-${reflectionId}`}
+            entryData={content}
+            customStyle={`${!hasReflections ? 'rounded-b-2xl' : ''}`}
+          />
         ))}
     </Stack>
   );

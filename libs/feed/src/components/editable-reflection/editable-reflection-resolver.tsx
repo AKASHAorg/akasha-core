@@ -23,7 +23,7 @@ export const EditableReflectionResolver = ({
     skip: !reflectID,
   });
 
-  if (reflectionReq.loading) return <EntryCardLoading />;
+  if (reflectionReq.loading) return <EntryCardLoading noWrapperCard={true} />;
 
   const entryData =
     reflectionReq.data?.node && hasOwn(reflectionReq.data.node, 'id')
