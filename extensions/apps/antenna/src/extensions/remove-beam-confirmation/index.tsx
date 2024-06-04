@@ -1,7 +1,7 @@
 import singleSpaReact from 'single-spa-react';
 import ReactDOMClient from 'react-dom/client';
 import React from 'react';
-import { useRootComponentProps, withProviders } from '@akashaorg/ui-awf-hooks';
+import { useRootComponentProps, withProviders, useModalData } from '@akashaorg/ui-awf-hooks';
 import { RootExtensionProps } from '@akashaorg/typings/lib/ui';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
@@ -13,21 +13,12 @@ import getSDK from '@akashaorg/awf-sdk';
 const RemoveModal = (_: RootExtensionProps) => {
   const { t } = useTranslation();
   const sdk = getSDK();
-  const { getModalFromParams } = useRootComponentProps();
-  const getModalData = React.useRef(getModalFromParams);
-  const [modalData, setModalData] = React.useState(() => getModalFromParams(window.location));
 
   const [updateBeam, updateBeamQuery] = useUpdateBeamMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
   });
 
-  React.useEffect(() => {
-    const onLocationChange = () => {
-      setModalData(getModalData.current(window.location));
-    };
-    window.addEventListener('single-spa:before-routing-event', onLocationChange);
-    return () => window.removeEventListener('single-spa:before-routing-event', onLocationChange);
-  }, []);
+  const { modalData } = useModalData();
 
   const handleModalClose = React.useCallback(() => {
     window.history.replaceState(null, null, location.pathname);
