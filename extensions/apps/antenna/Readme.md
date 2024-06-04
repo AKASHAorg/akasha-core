@@ -9,7 +9,6 @@
     - [Feed-Page](#feed-page)
     - [Post-Page](#post-page)
     - [My-Feed-Page](#my-feed-page)
-    - [Profile-Feed-Page](#profile-feed-page)
     - [Tag-Feed-Page](#tag-feed-page)
 - [Services](#services)
 - [Widgets](#widgets)
