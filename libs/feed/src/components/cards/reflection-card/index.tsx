@@ -6,7 +6,7 @@ import AuthorProfileAvatar from '../author-profile-avatar';
 import { useAkashaStore } from '@akashaorg/ui-awf-hooks';
 import { EntityTypes, ReflectEntryData } from '@akashaorg/typings/lib/ui';
 import { decodeb64SlateContent, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 
@@ -64,14 +64,16 @@ const ReflectionCard: React.FC<ReflectCardProps> = props => {
       isViewer={authenticatedDID === entryData.authorId}
       isLoggedIn={isLoggedIn}
       removed={{
-        author: t(
-          `
+        author: (
+          <Trans
+            defaults={`
                 {textComponent}You have delisted this reflection.{textComponent}
                 {textComponent}Some users may still be able to see it in the beam page.{textComponent}
-                `,
-          {
-            textComponent: <Text variant="button-sm" />,
-          },
+                `}
+            components={{
+              textComponent: <Text variant="button-sm" />,
+            }}
+          />
         ),
         others: t(
           `
@@ -84,25 +86,29 @@ const ReflectionCard: React.FC<ReflectCardProps> = props => {
         ),
       }}
       moderated={{
-        author: t(
-          `
+        author: (
+          <Trans
+            defaults={`
                 {textComponent}AKASHA world members won't be able to see the content {textComponent}
                 {textComponent}of your reflection because you have violated the following {textComponent}
                 {linkComponent}Code of conduct{linkComponent}
-                `,
-          {
-            textComponent: <Text />,
-            linkComponent: <Link />,
-          },
+                `}
+            component={{
+              textComponent: <Text />,
+              linkComponent: <Link />,
+            }}
+          />
         ),
-        others: t(
-          `
+        others: (
+          <Trans
+            defaults={`
                 {textComponent}This reflection has been delisted for the violation of our Code of Conduct.{textComponent}
                 {textComponent}All reflections are disabled.{textComponent}
-                `,
-          {
-            textComponent: <Text />,
-          },
+                `}
+            components={{
+              textComponent: <Text />,
+            }}
+          />
         ),
       }}
       itemType={EntityTypes.REFLECT}
