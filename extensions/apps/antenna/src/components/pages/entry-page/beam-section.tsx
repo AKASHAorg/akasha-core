@@ -18,12 +18,12 @@ type BeamSectionProps = {
   entryData: BeamEntryData;
   isLoggedIn: boolean;
   showNSFWCard: boolean;
-  parentWrapperRef: React.MutableRefObject<unknown>;
+  customStyle?: string;
   showLoginModal: (title?: string, message?: string) => void;
 };
 
 const BeamSection: React.FC<BeamSectionProps> = props => {
-  const { beamId, entryData, isLoggedIn, showNSFWCard, parentWrapperRef, showLoginModal } = props;
+  const { beamId, entryData, isLoggedIn, showNSFWCard, customStyle = '', showLoginModal } = props;
   const { t } = useTranslation('app-antenna');
   const routerState = useRouterState();
   const [isReflecting, setIsReflecting] = useState(
@@ -32,13 +32,13 @@ const BeamSection: React.FC<BeamSectionProps> = props => {
 
   const { pendingReflections } = usePendingReflections();
 
-  useCloseActions(() => {
+  const wrapperRef = useCloseActions(() => {
     setIsReflecting(false);
-  }, parentWrapperRef);
+  });
 
   return (
-    <Stack spacing="gap-y-2">
-      <Stack>
+    <Stack ref={wrapperRef} spacing="gap-y-2" customStyle={`grow ${customStyle}`}>
+      <Stack customStyle="grow">
         <BeamCard
           entryData={entryData}
           noWrapperCard={true}
@@ -59,7 +59,7 @@ const BeamSection: React.FC<BeamSectionProps> = props => {
         />
         <Divider />
       </Stack>
-      <Stack padding="px-2">
+      <Stack padding="px-2" customStyle="mt-auto">
         {!isLoggedIn && (
           <EditorPlaceholder
             onClick={() =>

@@ -1,13 +1,5 @@
 import 'systemjs-webpack-interop/auto-public-path';
-import routes, {
-  BEAM,
-  GLOBAL_ANTENNA,
-  MY_ANTENNA,
-  PROFILE_FEED,
-  REFLECT,
-  REFLECTION,
-  TAGS,
-} from './routes';
+import routes, { BEAM, GLOBAL_ANTENNA, MY_ANTENNA, REFLECT, REFLECTION, TAGS } from './routes';
 import {
   IAppConfig,
   IntegrationRegistrationOptions,
@@ -51,7 +43,6 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   routes: {
     defaultRoute: routes[GLOBAL_ANTENNA],
     [MY_ANTENNA]: routes[MY_ANTENNA],
-    [PROFILE_FEED]: routes[PROFILE_FEED],
     [BEAM]: routes[BEAM],
     [TAGS]: routes[TAGS],
     [REFLECT]: routes[REFLECT],

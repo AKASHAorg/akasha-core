@@ -1,129 +1,150 @@
-import React from 'react';
+import React, { ReactElement, useEffect } from 'react';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import DynamicInfiniteScroll from '@akashaorg/design-system-components/lib/components/DynamicInfiniteScroll';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
+import getSDK from '@akashaorg/awf-sdk';
 import { AnalyticsEventData, EntityTypes } from '@akashaorg/typings/lib/ui';
 import {
   AkashaReflectStreamEdge,
   AkashaReflectStreamFiltersInput,
   AkashaReflectStreamSortingInput,
+  SortOrder,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { EdgeArea, Virtualizer, VirtualizerProps } from '../virtual-list';
-import { useReflections } from '@akashaorg/ui-awf-hooks/lib/use-reflections';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import { useGetReflectionStreamLazyQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import { hasOwn, useAkashaStore } from '@akashaorg/ui-awf-hooks';
 
 export type ReflectFeedProps = {
-  reflectionsOf: { entryId: string; itemType: EntityTypes };
-  locale?: string;
-  scrollerOptions?: { overscan: number };
-  trackEvent?: (data: AnalyticsEventData['data']) => void;
-  itemSpacing?: number;
-  newItemsPublishedLabel?: string;
-  queryKey: string;
-  estimatedHeight: number;
-  scrollTopIndicator?: VirtualizerProps<unknown>['scrollTopIndicator'];
-  renderItem: VirtualizerProps<AkashaReflectStreamEdge>['renderItem'];
+  header?: ReactElement;
+  scrollRestorationStorageKey: string;
+  lastScrollRestorationKey: string;
+  itemType: EntityTypes;
   filters?: AkashaReflectStreamFiltersInput;
   sorting?: AkashaReflectStreamSortingInput;
-  loadingIndicator?: VirtualizerProps<unknown>['loadingIndicator'];
-  header?: VirtualizerProps<unknown>['header'];
-  footer?: VirtualizerProps<unknown>['footer'];
+  estimatedHeight: number;
+  itemSpacing?: number;
+  scrollOptions?: {
+    overScan: number;
+  };
+  scrollTopIndicator?: (listRect: DOMRect, onScrollToTop: () => void) => React.ReactNode;
+  loadingIndicator?: () => ReactElement;
+  renderItem: (data?: Omit<AkashaReflectStreamEdge['node'], 'id'>) => ReactElement;
+  trackEvent?: (data: AnalyticsEventData['data']) => void;
 };
 
 const ReflectFeed: React.FC<ReflectFeedProps> = props => {
   const {
-    reflectionsOf,
-    itemSpacing = 8,
-    scrollerOptions = { overscan: 25 },
-    queryKey,
-    estimatedHeight,
-    scrollTopIndicator,
-    renderItem,
+    header,
+    scrollRestorationStorageKey,
+    lastScrollRestorationKey,
+    itemType,
     filters,
     sorting,
-    header,
-    footer,
+    estimatedHeight = 150,
+    itemSpacing,
+    scrollOptions = { overScan: 10 },
+    loadingIndicator,
+    renderItem,
   } = props;
 
-  // const isReflectOfReflection = reflectionsOf.itemType === EntityTypes.REFLECT;
-
-  const {
-    reflections,
-    hasNextPage,
-    hasPreviousPage,
-    fetchInitialData,
-    fetchPreviousPage,
-    fetchNextPage,
-    hasErrors,
-    errors,
-    called,
-    isLoading,
-  } = useReflections({
-    entityId: reflectionsOf.entryId,
-    entityType: reflectionsOf.itemType,
-    overscan: scrollerOptions.overscan,
-    filters,
-    sorting,
-  });
-  const lastCursors = React.useRef({ next: null, prev: null });
-
-  const handleInitialFetch = async (restoreItem?: { key: string; offsetTop: number }) => {
-    await fetchInitialData(restoreItem);
-  };
-
-  const handleFetch = async (newArea: EdgeArea) => {
-    switch (newArea) {
-      case EdgeArea.TOP:
-      case EdgeArea.NEAR_TOP:
-        if (!reflections.length) return;
-        const firstCursor = reflections[0].cursor;
-        if (lastCursors.current.prev !== firstCursor) {
-          lastCursors.current.prev = firstCursor;
-          await fetchPreviousPage(firstCursor);
-        }
-        break;
-      case EdgeArea.BOTTOM:
-      case EdgeArea.NEAR_BOTTOM:
-        if (!reflections.length) return;
-        const lastCursor = reflections[reflections.length - 1].cursor;
-        if (lastCursors.current.next !== lastCursor) {
-          lastCursors.current.next = lastCursor;
-          await fetchNextPage(lastCursor);
-        }
-        break;
-      default:
-        break;
+  const indexingDID = React.useRef(getSDK().services.gql.indexingDID);
+  const [fetchReflectionStream, reflectionStreamQuery] = useGetReflectionStreamLazyQuery();
+  const reflectionStream = React.useMemo(() => {
+    if (
+      reflectionStreamQuery.data?.node &&
+      hasOwn(reflectionStreamQuery.data.node, 'akashaReflectStreamList')
+    ) {
+      return reflectionStreamQuery.data.node?.akashaReflectStreamList;
     }
-  };
+  }, [reflectionStreamQuery.data]);
+
+  const reflections = React.useMemo(() => {
+    if (reflectionStream) {
+      if (itemType === EntityTypes.BEAM) {
+        return reflectionStream?.edges?.filter(edge => edge.node.replyTo === null) || [];
+      }
+
+      if (itemType === EntityTypes.REFLECT) {
+        return reflectionStream?.edges?.filter(edge => edge.node.replyTo !== null) || [];
+      }
+    }
+    return [];
+  }, [itemType, reflectionStream]);
+  const pageInfo = React.useMemo(() => {
+    return reflectionStream?.pageInfo;
+  }, [reflectionStream]);
+  const loadingIndicatorRef = React.useRef(loadingIndicator);
+  const {
+    data: { isAuthenticating },
+  } = useAkashaStore();
+
+  useEffect(() => {
+    fetchReflectionStream({
+      variables: {
+        first: 10,
+        sorting: { createdAt: SortOrder.Desc, ...sorting },
+        indexer: indexingDID.current,
+        filters,
+      },
+      fetchPolicy: 'cache-first',
+      notifyOnNetworkStatusChange: true,
+    });
+  }, [fetchReflectionStream, filters, sorting]);
+
+  if (!loadingIndicatorRef.current) {
+    loadingIndicatorRef.current = () => (
+      <Stack align="center">
+        <Spinner />
+      </Stack>
+    );
+  }
+
+  if (isAuthenticating) return <>{loadingIndicatorRef.current()}</>;
 
   return (
-    <>
-      {hasErrors && (
+    <Card type="plain">
+      {reflectionStreamQuery.error && (
         <ErrorLoader
           type="script-error"
-          title={'Sorry, there was an error when fetching beams'}
-          details={<>{errors}</>}
+          title={'Sorry, there was an error when fetching reflections'}
+          details={<>{reflectionStreamQuery.error.message}</>}
         />
       )}
-      {!hasErrors && (
-        <Virtualizer<AkashaReflectStreamEdge>
-          requestStatus={{ called, isLoading }}
-          restorationKey={queryKey}
-          itemSpacing={itemSpacing}
-          estimatedHeight={estimatedHeight}
-          overscan={scrollerOptions.overscan}
-          items={reflections}
-          onFetchInitialData={handleInitialFetch}
-          itemKeyExtractor={item => item.cursor}
-          itemIndexExtractor={item => reflections.findIndex(p => p.cursor === item.cursor)}
-          onListReset={() => Promise.resolve()}
-          onEdgeDetectorChange={handleFetch}
-          scrollTopIndicator={scrollTopIndicator}
-          renderItem={renderItem}
-          hasNextPage={hasNextPage}
-          hasPreviousPage={hasPreviousPage}
+      {reflections && (
+        <DynamicInfiniteScroll
           header={header}
-          footer={footer}
-        />
+          scrollRestorationStorageKey={scrollRestorationStorageKey}
+          lastScrollRestorationKey={lastScrollRestorationKey}
+          enableScrollRestoration={true}
+          count={reflections.length}
+          estimatedHeight={estimatedHeight}
+          overScan={scrollOptions.overScan}
+          itemSpacing={itemSpacing}
+          hasNextPage={pageInfo && pageInfo.hasNextPage}
+          loading={reflectionStreamQuery.loading}
+          onLoadMore={async () => {
+            const lastCursor = reflections[reflections.length - 1]?.cursor;
+            if (reflectionStreamQuery.loading || reflectionStreamQuery.error || !lastCursor) return;
+            if (lastCursor) {
+              await reflectionStreamQuery.fetchMore({
+                variables: {
+                  after: lastCursor,
+                  sorting: { createdAt: SortOrder.Desc },
+                  indexer: indexingDID.current,
+                },
+              });
+            }
+          }}
+        >
+          {({ itemIndex }) => {
+            const reflection = reflections[itemIndex];
+            if (!reflection?.node) return null;
+            return <>{renderItem(reflection.node)}</>;
+          }}
+        </DynamicInfiniteScroll>
       )}
-    </>
+    </Card>
   );
 };
 

@@ -53,18 +53,18 @@ const BeamContentResolver: React.FC<BeamContentResolverProps> = ({
          * */
         showNSFWCard={showNSFWCard ?? entryData.nsfw}
         showLoginModal={showLoginModal}
-        onContentClick={() =>
+        onContentClick={function () {
           getRoutingPlugin().navigateTo({
             appName: '@akashaorg/app-antenna',
             getNavigationUrl: navRoutes => `${navRoutes.Beam}/${entryData.id}`,
-          })
-        }
-        onReflect={() =>
+          });
+        }}
+        onReflect={function () {
           getRoutingPlugin().navigateTo({
             appName: '@akashaorg/app-antenna',
             getNavigationUrl: navRoutes => `${navRoutes.Beam}/${entryData.id}${navRoutes.Reflect}`,
-          })
-        }
+          });
+        }}
         customStyle={customStyle}
       />
     )

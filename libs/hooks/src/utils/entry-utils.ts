@@ -1,7 +1,12 @@
 import getSDK from '@akashaorg/awf-sdk';
 import { Logger } from '@akashaorg/awf-sdk';
-import type { BeamEntryData, ReflectEntryData, SlateDescendant } from '@akashaorg/typings/lib/ui';
-import { AkashaBeam, AkashaReflect } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import type {
+  BeamEntryData,
+  RawEntryData,
+  ReflectEntryData,
+  SlateDescendant,
+} from '@akashaorg/typings/lib/ui';
+import { AkashaReflect } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 /**
  * Utility to decode base64 slate content
@@ -74,14 +79,7 @@ export const mapReflectEntryData = (
 /**
  * Utility to map beam entry data
  */
-export const mapBeamEntryData = (
-  beam?: Pick<
-    AkashaBeam,
-    'id' | 'active' | 'createdAt' | 'content' | 'nsfw' | 'tags' | 'reflectionsCount'
-  > & {
-    author: { id: string };
-  },
-): BeamEntryData => {
+export const mapBeamEntryData = (beam?: RawEntryData): BeamEntryData => {
   if (!beam) return null;
   const sdk = getSDK();
   return {

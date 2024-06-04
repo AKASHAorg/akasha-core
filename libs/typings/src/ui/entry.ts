@@ -50,3 +50,12 @@ export type ReflectEntryData = EntryData & {
   content: AkashaReflect['content'];
   beamID: AkashaReflect['beamID'];
 };
+
+export type RawEntryData = Pick<
+  AkashaBeam,
+  'id' | 'active' | 'createdAt' | 'content' | 'nsfw' | 'tags' | 'reflectionsCount'
+> & {
+  author: {
+    id: string;
+  };
+};
