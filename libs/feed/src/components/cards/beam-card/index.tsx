@@ -8,7 +8,10 @@ import AuthorProfileAvatar from '../author-profile-avatar';
 import { sortByKey, useAkashaStore } from '@akashaorg/ui-awf-hooks';
 import { EntityTypes, BeamEntryData } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps, useNsfwToggling } from '@akashaorg/ui-awf-hooks';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Link from '@akashaorg/design-system-core/lib/components/Link';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 
 type BeamCardProps = Pick<
   EntryCardProps,
@@ -88,16 +91,62 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       onEntryRemove={handleEntryRemove}
       isViewer={authenticatedDID === entryData.authorId}
       removed={{
-        author: {
-          firstPart: t('AKASHA world members won’t be able to see the content '),
-          secondPart: t('of your beam because you have violated the following '),
-          thirdPart: { url: '' /*@TODO */, content: t('Code of Conduct.') },
-          tapToViewLabel: t('Tap to view'),
-        },
-        others: {
-          firstLine: t('This beam has been delisted for the violation of our Code of Conduct.'),
-          secondLine: t('All reflections are disabled.'),
-        },
+        author: (
+          <Trans
+            defaults={`
+              <txt>You have delisted this beam.</txt>
+              <txt>Some users may still be able to see it in the antenna.</txt>
+            `}
+            components={{
+              txt: <Text variant="button-sm" />,
+            }}
+          />
+        ),
+        others: (
+          <Trans
+            defaults={`
+              <txt>This beam was delisted by the author.</txt>
+              <txt>All reflections are disabled.</txt>
+            `}
+            components={{
+              txt: <Text variant="button-sm" />,
+            }}
+          />
+        ),
+      }}
+      moderated={{
+        author: (
+          <Trans
+            defaults={`
+              <txt>AKASHA world members won’t be able to see the content </txt>
+              <txt>of your beam because you have violated the following <lnk>Code of Conduct</lnk></txt>
+              <btn></btn>
+            `}
+            components={{
+              txt: <Text variant="button-sm" />,
+              lnk: <Link to={''} />,
+              btn: (
+                <Button
+                  variant="text"
+                  onClick={() => console.log('tap to view')}
+                  label={t('Tap to view')}
+                />
+              ),
+            }}
+          />
+        ),
+        others: (
+          <Trans
+            defaults={`
+              <txt>This beam has been delisted for the violation of our <lnk>Code of Conduct</lnk>.</txt>
+              <txt>All reflections are disabled.</txt>
+            `}
+            components={{
+              txt: <Text variant="button-sm" />,
+              lnk: <Link to={''} />,
+            }}
+          />
+        ),
       }}
       nsfw={{
         sensitiveContentLabel: t('Sensitive Content!'),
