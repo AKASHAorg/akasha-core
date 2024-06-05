@@ -42,7 +42,7 @@ jobs:
           MATOMO_TRACKER_URL: ${{ secrets.MATOMO_TRACKER_URL }}
         run: |
           yarn install --immutable
-          make build
+          yarn build:all
       - uses: nrwl/nx-set-shas@v4
       - name: Set the affected projects
         id: affected-projects
