@@ -1,4 +1,4 @@
-name: CI
+name: W3S publish staging
 on:
   push:
     branches:
@@ -17,6 +17,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - run: corepack enable
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -61,3 +62,6 @@ jobs:
           CERAMIC_API_ENDPOINT: ${{ secrets.CERAMIC_API_ENDPOINT }}
           GRAPHQL_URI: ${{ secrets.GRAPHQL_URI }}
         run: yarn run extensions:upload
+      - name: Trigger update message
+        run: |
+          curl ${{secrets.WEBHOOK_BOT_STAGING}}
