@@ -1,30 +1,26 @@
 import { inject, injectable } from 'inversify';
-import { GQL_EVENTS, TYPES } from '@akashaorg/typings/lib/sdk';
-import { getSdk, Sdk } from './api';
-import Logging from '../logging/index';
+import { GQL_EVENTS, TYPES } from '@akashaorg/typings/lib/sdk/index.js';
+import { getSdk, Sdk } from './api.js';
+import Logging from '../logging/index.js';
 import pino from 'pino';
-import CeramicService from '../common/ceramic';
+import CeramicService from '../common/ceramic.js';
 import type { DocumentNode } from 'graphql';
-import EventBus from '../common/event-bus';
-import { validate } from '../common/validator';
+import EventBus from '../common/event-bus.js';
+import { validate } from '../common/validator.js';
 import { z } from 'zod';
-import {
-  ApolloClient,
-  ApolloLink,
-  HttpLink,
-  InMemoryCache,
-  Observable,
-  split,
-  gql,
-  FetchResult,
-} from '@apollo/client';
-import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries';
-import { sha256 } from 'crypto-hash';
-import { getMainDefinition, relayStylePagination } from '@apollo/client/utilities';
+import type { FetchResult } from '@apollo/client/link/core/types.js';
 
-import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev';
+import { ApolloClient, gql, ApolloLink, Observable, split } from '@apollo/client/core/index.js';
+import { HttpLink } from '@apollo/client/link/http/index.js';
+import { InMemoryCache } from '@apollo/client/cache/index.js';
+
+import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries/index.js';
+import { sha256 } from 'crypto-hash';
+import { getMainDefinition, relayStylePagination } from '@apollo/client/utilities/index.js';
+
+import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev/index.js';
 import { VIEWER_ID_HEADER } from '@composedb/constants';
-import AWF_Config from '../common/config';
+import AWF_Config from '../common/config.js';
 
 const enum ContextSources {
   DEFAULT = 'gql#DEFAULT',
@@ -38,7 +34,7 @@ export const LabelTypes = {
   MENTION: 'core#mention',
 } as const;
 
-declare const __DEV__: boolean;
+const __DEV__: boolean = process.env.NODE_ENV !== 'production';
 
 if (__DEV__) {
   // Adds messages only in a dev environment
@@ -247,7 +243,12 @@ class Gql {
     let result: FetchResult<unknown, Record<string, unknown>, Record<string, unknown>>;
     if (definition.kind === 'OperationDefinition' && definition.operation === 'mutation') {
       uuid = crypto.randomUUID();
-      sessionStorage.setItem(uuid, JSON.stringify({ variables: definition.variableDefinitions }));
+      if (typeof globalThis.sessionStorage !== 'undefined') {
+        globalThis.sessionStorage.setItem(
+          uuid,
+          JSON.stringify({ variables: definition.variableDefinitions }),
+        );
+      }
       this._globalChannel.next({
         data: { uuid, success: false, pending: true },
         event: GQL_EVENTS.MUTATION,

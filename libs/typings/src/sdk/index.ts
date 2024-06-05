@@ -1,13 +1,13 @@
-import type IDBService from './db';
-import type IGqlClient from './gql';
-import type { ServiceCallResult } from './responses';
-import { EthProviders, EthProvidersSchema } from './web3.connector';
+import type IDBService from './db.js';
+import type IGqlClient from './gql.js';
+import type { ServiceCallResult } from './responses.js';
+import { EthProviders, EthProvidersSchema } from './web3.connector.js';
 import { EthAddress } from './common';
 
-export * from './events';
-export * from './responses';
-export * from './common';
-export * from './registry';
+export * from './events.js';
+export * from './responses.js';
+export * from './common.js';
+export * from './registry.js';
 
 export {
   IDBService,

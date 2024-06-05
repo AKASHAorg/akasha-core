@@ -1,0 +1,63 @@
+name: CI
+on:
+  push:
+    branches:
+      - next
+#  pull_request:
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    environment: Staging
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'yarn'
+          cache-dependency-path: yarn.lock
+      - run: node --version
+      - name: install root dependencies
+        env:
+          CI: 1
+          NODE_ENV: production
+          LOG_LEVEL: warn
+          WALLETCONNECT_PROJECT_ID: ${{ secrets.WALLETCONNECT_PROJECT_ID }}
+          API_STATUS_PATH: ${{ secrets.API_STATUS_PATH }}
+          CERAMIC_API_ENDPOINT: ${{ secrets.CERAMIC_API_ENDPOINT }}
+          GRAPHQL_URI: ${{ secrets.GRAPHQL_URI }}
+          INDEXING_DID: ${{ secrets.INDEXING_DID }}
+          INFURA_ID: ${{ secrets.INFURA_ID }}
+          INFURA_IPFS_ID: ${{ secrets.INFURA_IPFS_ID }}
+          INFURA_IPFS_SECRET: ${{ secrets.INFURA_IPFS_SECRET }}
+          MATOMO_SITE_ID: ${{ secrets.MATOMO_SITE_ID }}
+          MATOMO_TRACKER_URL: ${{ secrets.MATOMO_TRACKER_URL }}
+        run: |
+          yarn install --immutable
+          make build
+      - uses: nrwl/nx-set-shas@v4
+      - name: Set the affected projects
+        id: affected-projects
+        run: |
+          echo "AFFECTED_EXTENSIONS=$(nx show projects --affected --json --type app)" >> "$GITHUB_OUTPUT"
+      - run: nx affected -t prepare build
+      - name: Upload extensions
+        env:
+          CI: 1
+          AFFECTED_EXTENSIONS: ${{ steps.affected-projects.outputs.AFFECTED_EXTENSIONS }}
+          NODE_ENV: production
+          LOG_LEVEL: warn
+          W3_STORAGE_DID_KEY: ${{ secrets.W3_STORAGE_DID_KEY }}
+          W3_STORAGE_DELEGATE: ${{ secrets.W3_STORAGE_DELEGATE }}
+          DID_PUBLISHER_PRIVATE_KEY: ${{ secrets.DID_PUBLISHER_PRIVATE_KEY }}
+          WALLETCONNECT_PROJECT_ID: ${{ secrets.WALLETCONNECT_PROJECT_ID }}
+          CERAMIC_API_ENDPOINT: ${{ secrets.CERAMIC_API_ENDPOINT }}
+          GRAPHQL_URI: ${{ secrets.GRAPHQL_URI }}
+        run: yarn run extensions:upload

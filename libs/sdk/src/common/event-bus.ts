@@ -1,4 +1,4 @@
-import { GlobalEventBusData } from '@akashaorg/typings/lib/sdk';
+import { GlobalEventBusData } from '@akashaorg/typings/lib/sdk/index.js';
 import { injectable, decorate } from 'inversify';
 import { ReplaySubject, TimestampProvider } from 'rxjs';
 

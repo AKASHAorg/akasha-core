@@ -1,24 +1,19 @@
 import { inject, injectable } from 'inversify';
-import { TYPES } from '@akashaorg/typings/lib/sdk';
-import AWF_Auth from '../auth';
-import Logging from '../logging';
-import { resizeImage } from '../helpers/img';
-import EventBus from '../common/event-bus';
-import pino from 'pino';
-import { createFormattedValue } from '../helpers/observable';
-import IpfsConnector from '../common/ipfs.connector';
+import { TYPES } from '@akashaorg/typings/lib/sdk/index.js';
+import AWF_Auth from '../auth/index.js';
+
+import { resizeImage } from '../helpers/img.js';
+
+import { createFormattedValue } from '../helpers/observable.js';
+import IpfsConnector from '../common/ipfs.connector.js';
 import { z } from 'zod';
-import { validate } from '../common/validator';
-import { throwError } from '../common/error-handling';
-import Gql from '../gql';
-import { GetProfilesQueryVariables } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
-import type { AkashaProfileInput } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import CeramicService from '../common/ceramic';
-import { definition } from '@akashaorg/composedb-models/lib/runtime-definition';
-import { hasOwn } from '../helpers/types';
+import { validate } from '../common/validator.js';
+import Gql from '../gql/index.js';
+import CeramicService from '../common/ceramic.js';
+import { hasOwn } from '../helpers/types.js';
 // tslint:disable-next-line:no-var-requires
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const urlSource = require('ipfs-utils/src/files/url-source');
+const { default: urlSource } = await import('ipfs-utils/src/files/url-source.js');
 
 @injectable()
 class AWF_Profile {
@@ -110,6 +105,9 @@ class AWF_Profile {
       const source = urlSource(data.content);
       const arr: BlobPart[] = [];
 
+      if (!source.content) {
+        throw new Error('Could not read the url');
+      }
       for await (const entry of source.content) {
         arr.push(entry);
       }
@@ -134,6 +132,10 @@ class AWF_Profile {
       file,
       config: data.config,
     });
+
+    if (!resized.image) {
+      throw new Error('Failed to resize image');
+    }
     const CID = await this._ipfs.uploadFile(resized.image);
     if (!CID) {
       throw new Error('Failed to upload file');

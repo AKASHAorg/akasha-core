@@ -1,5 +1,3 @@
-import { readAndCompressImage } from 'browser-image-resizer';
-
 export const getImageSize = async (
   source: File | Blob | string,
 ): Promise<{ width: number; height: number; naturalWidth: number; naturalHeight: number }> => {
@@ -44,7 +42,11 @@ export const resizeImage = async (args: {
   if (!args.config?.quality) {
     args.config.quality = 0.7;
   }
-  const img = await readAndCompressImage(args.file, args.config);
-  const size = await getImageSize(img);
-  return { image: img, size: size };
+  if (typeof globalThis.window !== 'undefined') {
+    const ImgUtils = await import('browser-image-resizer');
+    const img = await ImgUtils.readAndCompressImage(args.file, args.config);
+    const size = await getImageSize(img);
+    return { image: img, size: size };
+  }
+  return { image: null, size: null };
 };

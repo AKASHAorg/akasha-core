@@ -1,0 +1,16 @@
+{
+  "ts-node": {
+    "transpileOnly": true,
+    "esm": true,
+    "experimentalResolver": true,
+    "experimentalSpecifierResolution": "node",
+    "moduleTypes": {
+    }
+  },
+  "compilerOptions": {
+    "moduleResolution": "Bundler",
+    "module": "es2020",
+    "target": "es2020",
+    "resolveJsonModule": true
+  }
+}
