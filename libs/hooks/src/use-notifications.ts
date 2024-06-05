@@ -3,12 +3,11 @@ import getSDK from '@akashaorg/awf-sdk';
 import { GQL_EVENTS } from '@akashaorg/typings/lib/sdk';
 
 /**
- * Hook to listen for mutation events
+ * Hook to listen for mutation events emitted from the SDK's globalChannel.
  * @example useListenForMutationEvents hook
  * ```typescript
- * const mutationEvent = useListenForMutationEvents();
+ * const { messageObj, appid, success, pending } = useListenForMutationEvents();
  *
- * const { messageObj, appid, success, pending } = mutationEvent;
  * ```
  */
 export function useListenForMutationEvents() {

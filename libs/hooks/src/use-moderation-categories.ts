@@ -16,7 +16,7 @@ type useModerationCategoryReturnType = {
  * Hook to handle moderation/report categories
  * @param props - useModerationCategoryProps
  * @returns useModerationCategoryReturnType
- */
+ **/
 export const useModerationCategory = (
   props: useModerationCategoryProps,
 ): useModerationCategoryReturnType => {

@@ -3,9 +3,11 @@ import { NavigateToParams, EntityTypes, IContentClickDetails } from '@akashaorg/
 
 /**
  * Hook to navigation to entry's page
+ * @param navigateFn - function (optional) that can control the actual navigation.
+ * @param currentBeamId - string (optional)
  * @example useEntryNavigation hook
  * ```typescript
- * // navigateFn handles the actual navigation
+ * // navigateTo is a function extracted from the `useRootComponentProps` hook.
  * const handleEntryNavigate = useEntryNavigation(navigateTo, 'current-beam-id');
  * ```
  */
@@ -21,7 +23,7 @@ export const useEntryNavigation = (
       }
 
       navigateFn({
-        appName: '@akashaorg/app-akasha-integration',
+        appName: '@akashaorg/app-antenna',
         getNavigationUrl: navRoutes =>
           `${itemType === EntityTypes.REFLECT ? navRoutes.Reflect : navRoutes.Beam}/${id}${
             reflect ? navRoutes.Reflect : ''

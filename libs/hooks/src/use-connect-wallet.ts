@@ -3,6 +3,15 @@ import { useCallback, useEffect, useState } from 'react';
 import { useTheme } from './use-theme';
 import { logError } from './utils/error-handler';
 
+/**
+ * Hook for connecting to a user's wallet (through Metamask or any other compatible applications)
+ * @example useConnectWallet hook
+ * ```typescript
+ * const connectWalletCall = useConnectWallet();
+ *  // make the call to the connect function when appropriate:
+ * connectWalletCall.connect();
+ * ```
+ **/
 export function useConnectWallet() {
   const { theme } = useTheme();
   const sdk = getSDK();
