@@ -18,12 +18,11 @@ import {
   AkashaBeamSortingInput,
   SortOrder,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { hasOwn, useAkashaStore, useNsfwToggling } from '@akashaorg/ui-awf-hooks';
+import { hasOwn, useAkashaStore } from '@akashaorg/ui-awf-hooks';
 import {
   useGetBeamsByAuthorDidLazyQuery,
   GetBeamStreamDocument,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { getNsfwFiltersBeamFeed } from '../utils';
 import { useApolloClient } from '@apollo/client';
 import { GetBeamsByAuthorDidQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 
@@ -67,31 +66,19 @@ const BeamFeedByAuthor = (props: BeamFeedByAuthorProps) => {
     return beamList?.pageInfo;
   }, [beamList]);
   const {
-    data: { authenticatedDID, isAuthenticating },
+    data: { isAuthenticating },
   } = useAkashaStore();
-  const { showNsfw } = useNsfwToggling();
-  const isLoggedIn = !!authenticatedDID;
-  const nsfwFilters = useMemo(
-    () =>
-      getNsfwFiltersBeamFeed({
-        did,
-        showNsfw,
-        isLoggedIn,
-        filters,
-      }),
-    [did, filters, isLoggedIn, showNsfw],
-  );
+
   const loadingIndicatorRef = useRef(loadingIndicator);
   const variables = useMemo(() => {
-    const filters = nsfwFilters ? { filters: nsfwFilters } : {};
     return {
       id: did,
       first: 10,
       sorting: { createdAt: SortOrder.Desc, ...sorting },
       indexer: indexingDID.current,
-      ...filters,
+      filters: filters ?? {},
     };
-  }, [did, nsfwFilters, sorting]);
+  }, [did, filters, sorting]);
   const hasLatestBeamsRef = useRef(false);
   const vListContainerRef = useRef<HTMLDivElement>(null);
   const vListContainerOffset = useRef(null);

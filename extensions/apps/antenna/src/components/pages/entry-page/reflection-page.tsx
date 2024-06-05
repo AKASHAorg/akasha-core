@@ -91,6 +91,7 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
         filters={{
           and: [
             { where: { isReply: { equalTo: true } } },
+            { where: { active: { equalTo: true } } },
             {
               where: {
                 replyTo: {

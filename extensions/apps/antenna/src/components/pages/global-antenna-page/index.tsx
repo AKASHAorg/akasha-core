@@ -12,10 +12,11 @@ import {
   transformSource,
   useAkashaStore,
   hasOwn,
+  useNsfwToggling,
 } from '@akashaorg/ui-awf-hooks';
 import { Helmet, helmetData } from '@akashaorg/design-system-core/lib/utils';
 import { ModalNavigationOptions, QueryKeys } from '@akashaorg/typings/lib/ui';
-import { BeamContentResolver } from '@akashaorg/ui-lib-feed';
+import { BeamContentResolver, getNsfwFiltersForBeamFeed } from '@akashaorg/ui-lib-feed';
 
 const GlobalAntennaPage: React.FC<unknown> = () => {
   const {
@@ -26,6 +27,7 @@ const GlobalAntennaPage: React.FC<unknown> = () => {
   const [analyticsActions] = useAnalytics();
   const _navigateToModal = React.useRef(navigateToModal);
   const navigate = useNavigate();
+  const { showNsfw } = useNsfwToggling();
 
   const showLoginModal = React.useCallback(
     (redirectTo?: { modal: ModalNavigationOptions }, message?: string) => {
@@ -45,7 +47,6 @@ const GlobalAntennaPage: React.FC<unknown> = () => {
     }
     navigate({ to: '/editor' });
   }, [authenticatedDID, navigate, showLoginModal]);
-
   return (
     <Stack fullWidth={true}>
       <Helmet helmetData={helmetData}>
@@ -70,13 +71,27 @@ const GlobalAntennaPage: React.FC<unknown> = () => {
               <ScrollTopButton hide={false} onClick={onScrollToTop} />
             </ScrollTopWrapper>
           )}
+          filters={{
+            and: [
+              { where: { active: { equalTo: true } } },
+              {
+                or: [
+                  ...getNsfwFiltersForBeamFeed({
+                    did: authenticatedDID,
+                    showNsfw: showNsfw,
+                    isLoggedIn: !!authenticatedDID,
+                  }),
+                ],
+              },
+            ],
+          }}
           trackEvent={analyticsActions.trackEvent}
           renderItem={itemData => {
             if (!hasOwn(itemData, 'content')) {
               /* Set the showNSFWCard prop to false so as to prevent the
                * NSFW beams from being displayed in the antenna feed when NSFW setting is off.
                **/
-              return <BeamContentResolver beamId={itemData.beamID} showNSFWCard={false} />;
+              return <BeamContentResolver beamId={itemData.beamID} />;
             }
           }}
         />
