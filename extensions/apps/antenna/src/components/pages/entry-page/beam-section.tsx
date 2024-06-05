@@ -94,11 +94,12 @@ const BeamSection: React.FC<BeamSectionProps> = props => {
       </Stack>
       {pendingReflections
         .filter(content => !hasOwn(content, 'reflection') && content.beamID === beamId)
-        .map((content, index) => (
+        .map((content, index, arr) => (
           <PendingReflect
             key={`pending-${index}-${beamId}`}
             entryData={content}
-            customStyle={`${!hasReflections ? 'rounded-b-2xl' : ''}`}
+            // in an unlikely scenario where there are more than one pending reflections, adjust style on the last element only
+            customStyle={`${!hasReflections && index === arr.length - 1 ? 'rounded-b-2xl' : ''}`}
           />
         ))}
     </Stack>

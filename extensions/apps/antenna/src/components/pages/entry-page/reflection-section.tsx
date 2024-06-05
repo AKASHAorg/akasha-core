@@ -89,11 +89,11 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
       </Stack>
       {pendingReflections
         .filter(content => hasOwn(content, 'reflection') && content.reflection === reflectionId)
-        .map((content, index) => (
+        .map((content, index, arr) => (
           <PendingReflect
             key={`pending-${index}-${reflectionId}`}
             entryData={content}
-            customStyle={`${!hasReflections ? 'rounded-b-2xl' : ''}`}
+            customStyle={`${!hasReflections && index === arr.length - 1 ? 'rounded-b-2xl' : ''}`}
           />
         ))}
     </Stack>
