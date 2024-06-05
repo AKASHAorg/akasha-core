@@ -1,6 +1,6 @@
 # Layout widget
 
-> Defines the various areas of the screen for mounting other widgets, apps and/or plugin
+> Layout widget defines and controls the sizing and styling of various sections of the screen upon which other apps, widgets and plugins are mounted. It also sets up the [translation plugin](./src/translation/index.tsx)
 
 ## Usage
 

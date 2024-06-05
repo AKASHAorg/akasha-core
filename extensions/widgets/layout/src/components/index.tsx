@@ -6,14 +6,6 @@ import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoade
 import { withProviders } from '@akashaorg/ui-awf-hooks';
 import LayoutWidget from './layout-widget';
 
-// import whyDidYouRender from '@welldone-software/why-did-you-render';
-//
-// if (process.env.NODE_ENV !== 'production') {
-//   whyDidYouRender(React, {
-//     trackAllPureComponents: true,
-//   });
-// }
-
 const reactLifecycles = singleSpaReact({
   React,
   ReactDOMClient,

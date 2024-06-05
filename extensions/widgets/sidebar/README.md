@@ -1,6 +1,6 @@
 # Sidebar widget
 
-> Shows currently installed app(s), Extensions app and other quick access icons
+> Sidebar widget displays information regarding currently installed app(s), authenticated user's profile avatar and other quick access links.
 
 ## Usage
 

@@ -1,3 +1,3 @@
-The Authentication App handles how you login to AKASHA World. You interact with this app whenever you sign up, sign in and go through the related onboarding screens and messages. This application supports various ways of authentication, like a wallet connection via a browser extension or via a mobile app such as Metamask, WalletConnect, OpenLogin etc. 
+The Authentication App handles how you login to or authenticate with AKASHA World. You interact with this app whenever you connect to the World. It supports various ways of authentication, through the Web3Modal.
 
 Authentification app provides the much needed security layer for your AKASHA World account and helps create a profile in the World and make sure that you, and only you, can access it.

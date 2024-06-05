@@ -1,6 +1,6 @@
 # My Apps widget
 
-> Shows world apps and installed apps in the Extensions app.
+> My Apps widget is an app-specific widget, shown on the widget section of the world's layout when the [Extensions App](../../apps/extensions/README.md) is mounted. It displays information regarding user installed apps, as well as world apps.
 
 ## Usage
 
