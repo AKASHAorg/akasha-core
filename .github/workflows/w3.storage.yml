@@ -40,6 +40,7 @@ jobs:
           INFURA_IPFS_SECRET: ${{ secrets.INFURA_IPFS_SECRET }}
           MATOMO_SITE_ID: ${{ secrets.MATOMO_SITE_ID }}
           MATOMO_TRACKER_URL: ${{ secrets.MATOMO_TRACKER_URL }}
+          W3_STORAGE_DELEGATE_BASE_URL: ${{ secrets.W3_STORAGE_DELEGATE_BASE_URL }}
         run: |
           yarn install --immutable
           yarn build:all
@@ -55,12 +56,14 @@ jobs:
           AFFECTED_EXTENSIONS: ${{ steps.affected-projects.outputs.AFFECTED_EXTENSIONS }}
           NODE_ENV: production
           LOG_LEVEL: warn
+          API_STATUS_PATH: ${{ secrets.API_STATUS_PATH }}
           W3_STORAGE_DID_KEY: ${{ secrets.W3_STORAGE_DID_KEY }}
           W3_STORAGE_DELEGATE: ${{ secrets.W3_STORAGE_DELEGATE }}
           DID_PUBLISHER_PRIVATE_KEY: ${{ secrets.DID_PUBLISHER_PRIVATE_KEY }}
           WALLETCONNECT_PROJECT_ID: ${{ secrets.WALLETCONNECT_PROJECT_ID }}
           CERAMIC_API_ENDPOINT: ${{ secrets.CERAMIC_API_ENDPOINT }}
           GRAPHQL_URI: ${{ secrets.GRAPHQL_URI }}
+          W3_STORAGE_DELEGATE_BASE_URL: ${{ secrets.W3_STORAGE_DELEGATE_BASE_URL }}
         run: yarn run extensions:upload
       - name: Trigger update message
         run: |
