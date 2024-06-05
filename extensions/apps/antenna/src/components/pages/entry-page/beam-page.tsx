@@ -1,4 +1,7 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useLayoutEffect, useMemo, useRef } from 'react';
+import getSDK from '@akashaorg/awf-sdk';
+import { EntityTypes } from '@akashaorg/typings/lib/ui';
+import { useGetReflectionStreamQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import BeamSection from './beam-section';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
@@ -20,7 +23,6 @@ import {
   GetBeamStreamQuery,
 } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 import { EditableReflectionResolver, ReflectFeed } from '@akashaorg/ui-lib-feed';
-import { EntityTypes } from '@akashaorg/typings/lib/ui';
 
 type BeamPageProps = {
   beamId: string;
@@ -39,6 +41,27 @@ const BeamPage: React.FC<BeamPageProps> = props => {
   const [analyticsActions] = useAnalytics();
   const navigate = useNavigate();
   const isLoggedIn = !!authenticatedDID;
+
+  const indexingDID = useRef(getSDK().services.gql.indexingDID);
+  const filters = useRef({ where: { beamID: { equalTo: beamId } } });
+
+  // TODO: after usePendingReflections refactor, the pending reflect component can be moved inside the reflect feed component, thereby making these blocks and associated logic redundant and safe to be cleaned up
+  const reflectionStreamQuery = useGetReflectionStreamQuery({
+    variables: {
+      first: 1,
+      indexer: indexingDID.current,
+      filters: filters.current,
+    },
+    fetchPolicy: 'no-cache',
+  });
+  const hasReflections = useMemo(() => {
+    if (
+      reflectionStreamQuery.data?.node &&
+      hasOwn(reflectionStreamQuery.data.node, 'akashaReflectStreamList')
+    ) {
+      return !!reflectionStreamQuery.data.node?.akashaReflectStreamList?.edges?.length;
+    }
+  }, [reflectionStreamQuery.data]);
 
   /**
    * Check the current moderation status of the beam
@@ -97,6 +120,7 @@ const BeamPage: React.FC<BeamPageProps> = props => {
             entryData={mapBeamEntryData(entryData)}
             isLoggedIn={isLoggedIn}
             showNSFWCard={showNsfwCard}
+            hasReflections={hasReflections}
             showLoginModal={showLoginModal}
             customStyle="mb-2"
           />
@@ -104,7 +128,7 @@ const BeamPage: React.FC<BeamPageProps> = props => {
         scrollRestorationStorageKey="beam-reflect-feed"
         lastScrollRestorationKey={beamId}
         itemType={EntityTypes.BEAM}
-        filters={{ where: { beamID: { equalTo: beamId } } }}
+        filters={filters.current}
         estimatedHeight={150}
         scrollOptions={{ overScan: 5 }}
         renderItem={itemData => {

@@ -1,0 +1,1 @@
+Vibes Console app is an installable app that extends Vibes app by providing interface for users to apply to become a moderator and moderators/admins to review flagged contents.
