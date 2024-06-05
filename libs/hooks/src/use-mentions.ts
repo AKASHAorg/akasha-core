@@ -3,7 +3,7 @@ import { useGetFollowingListByDidQuery } from './generated/apollo';
 import { hasOwn } from './utils/has-own';
 
 /**
- * Hook to handle the data supplied to the `LoginModal` extension.
+ * Hook to retrieve and set the mentions associated with a profile.
  * @param authenticatedDID - string
  * @returns { setMentionQuery, mentions  } - Object containing the mentions associated
  * with the authenticatedDID and a setMentionQuery method to control the querying

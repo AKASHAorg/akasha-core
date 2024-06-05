@@ -16,7 +16,7 @@ const writeToStorage = (storage: IStorage, key: string, value: string[]): void =
  * Hook to manage the information cards displayed in the sidebar or inside
  * the apps which users can dismiss by clicking the close button.
  * @param id - string
- * @param statusStorage - IStorage (optional) to specify from which storage to retrieve the saved dsmissed card IDs.
+ * @param statusStorage - IStorage (optional) to specify from which storage to retrieve the saved dismissed card IDs.
  * @example useDismissedCard hook
  * ```typescript
  * const [dismissed, dismissCard] = useDismissedCard('@akashaorg/ui-widget-sidebar_cta-card');
