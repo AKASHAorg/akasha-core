@@ -1,4 +1,7 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useLayoutEffect, useMemo, useRef } from 'react';
+import getSDK from '@akashaorg/awf-sdk';
+import { EntityTypes } from '@akashaorg/typings/lib/ui';
+import { useGetReflectionStreamQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import BackToOriginalBeam from '@akashaorg/ui-lib-feed/lib/components/back-to-original-beam';
@@ -17,7 +20,6 @@ import { ReflectionPreview } from '@akashaorg/ui-lib-feed';
 import { useNavigate } from '@tanstack/react-router';
 import { GetReflectionByIdQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 import { EditableReflectionResolver, ReflectFeed } from '@akashaorg/ui-lib-feed';
-import { EntityTypes } from '@akashaorg/typings/lib/ui';
 
 type ReflectionPageProps = {
   reflection: GetReflectionByIdQuery;
@@ -29,16 +31,48 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
-  const isLoggedIn = !!authenticatedDID;
   const { navigateToModal, logger } = useRootComponentProps();
   const [analyticsActions] = useAnalytics();
   const navigate = useNavigate();
+  const isLoggedIn = !!authenticatedDID;
 
   const entryData = React.useMemo(() => {
     if (reflection && hasOwn(reflection, 'node') && hasOwn(reflection.node, 'id')) {
       return reflection.node;
     }
   }, [reflection]);
+
+  const indexingDID = useRef(getSDK().services.gql.indexingDID);
+  const filters = useRef({
+    and: [
+      { where: { isReply: { equalTo: true } } },
+      {
+        where: {
+          replyTo: {
+            equalTo: entryData.id,
+          },
+        },
+      },
+    ],
+  });
+
+  // TODO: after usePendingReflections refactor, the pending reflect component can be moved inside the reflect feed component, thereby making these blocks and associated logic redundant and safe to be cleaned up
+  const reflectionStreamQuery = useGetReflectionStreamQuery({
+    variables: {
+      first: 1,
+      indexer: indexingDID.current,
+      filters: filters.current,
+    },
+    fetchPolicy: 'no-cache',
+  });
+  const hasReflections = useMemo(() => {
+    if (
+      reflectionStreamQuery.data?.node &&
+      hasOwn(reflectionStreamQuery.data.node, 'akashaReflectStreamList')
+    ) {
+      return !!reflectionStreamQuery.data.node?.akashaReflectStreamList?.edges?.length;
+    }
+  }, [reflectionStreamQuery.data]);
 
   const showLoginModal = (title?: string, message?: string) => {
     navigateToModal({
@@ -77,6 +111,7 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
               reflectionId={entryData.id}
               entryData={mapReflectEntryData(entryData)}
               isLoggedIn={isLoggedIn}
+              hasReflections={hasReflections}
               showLoginModal={showLoginModal}
               customStyle="mb-2"
             />
@@ -88,18 +123,7 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
         itemSpacing={0}
         trackEvent={analyticsActions.trackEvent}
         estimatedHeight={120}
-        filters={{
-          and: [
-            { where: { isReply: { equalTo: true } } },
-            {
-              where: {
-                replyTo: {
-                  equalTo: entryData.id,
-                },
-              },
-            },
-          ],
-        }}
+        filters={filters.current}
         renderItem={itemData => (
           <ErrorBoundary
             errorObj={{
