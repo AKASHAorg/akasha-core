@@ -76,7 +76,7 @@ const BeamFeedByAuthor = (props: BeamFeedByAuthorProps) => {
       first: 10,
       sorting: { createdAt: SortOrder.Desc, ...sorting },
       indexer: indexingDID.current,
-      filters: filters ?? {},
+      ...(filters ? { filters } : {}),
     };
   }, [did, filters, sorting]);
   const hasLatestBeamsRef = useRef(false);

@@ -6,7 +6,12 @@ import StartCard from '@akashaorg/design-system-components/lib/components/StartC
 import { useTranslation } from 'react-i18next';
 import { ModalNavigationOptions, QueryKeys } from '@akashaorg/typings/lib/ui';
 import { useGetInterestsByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { hasOwn, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import {
+  hasOwn,
+  useAkashaStore,
+  useNsfwToggling,
+  useRootComponentProps,
+} from '@akashaorg/ui-awf-hooks';
 import { BeamContentResolver, getNsfwFiltersForTagFeed, TagFeed } from '@akashaorg/ui-lib-feed';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { AkashaIndexedStreamStreamType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
@@ -17,6 +22,7 @@ const MY_ANTENNA_OVERSCAN = 10;
 const MyAntennaPage: React.FC<unknown> = () => {
   const { t } = useTranslation('app-antenna');
   const { getRoutingPlugin, navigateToModal, worldConfig } = useRootComponentProps();
+  const { showNsfw } = useNsfwToggling();
   const {
     data: { authenticatedProfile },
   } = useAkashaStore();
@@ -99,7 +105,7 @@ const MyAntennaPage: React.FC<unknown> = () => {
                   or: [
                     ...getNsfwFiltersForTagFeed({
                       queryKey: QueryKeys.MY_ANTENNA,
-                      showNsfw: false,
+                      showNsfw: showNsfw,
                       isLoggedIn: !!authenticatedProfile?.did.id,
                     }),
                     { where: { indexValue: { in: tagSubsData.topics.map(t => t.value) } } },

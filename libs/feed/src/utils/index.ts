@@ -21,18 +21,16 @@ export const dpr = isWindow() ? window.devicePixelRatio ?? 1 : 1;
 export const pxToDPR = (px: number, dpr: number) => Math.ceil(px * dpr) / dpr;
 
 export const getNsfwFiltersForBeamFeed = ({
-  did,
   showNsfw,
   isLoggedIn,
 }: {
-  did?: string;
   showNsfw: boolean;
   isLoggedIn: boolean;
 }): AkashaBeamStreamFiltersInput[] => {
   /**
    * Set the filter for logged-out users and users who toggled off nsfw content.
    **/
-  if (!did && (!showNsfw || !isLoggedIn)) {
+  if (!showNsfw || !isLoggedIn) {
     return [
       { where: { status: { equalTo: AkashaBeamStreamModerationStatus.Ok } } },
       { where: { status: { isNull: true } } },
@@ -42,7 +40,7 @@ export const getNsfwFiltersForBeamFeed = ({
   /**
    * Set the filter for users who are logged in and want to see nsfw content.
    **/
-  if (!did && showNsfw && isLoggedIn) {
+  if (showNsfw && isLoggedIn) {
     return [
       {
         where: {

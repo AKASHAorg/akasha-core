@@ -77,7 +77,6 @@ const GlobalAntennaPage: React.FC<unknown> = () => {
               {
                 or: [
                   ...getNsfwFiltersForBeamFeed({
-                    did: authenticatedDID,
                     showNsfw: showNsfw,
                     isLoggedIn: !!authenticatedDID,
                   }),
