@@ -22,7 +22,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     label: 'Vibes Console',
     type: MenuItemType.App,
     logo: { type: LogoTypeSource.ICON, value: <VibesConsole /> },
-    area: [MenuItemAreaType.UserAppArea, MenuItemAreaType.OtherArea],
+    area: [MenuItemAreaType.UserAppArea],
     subRoutes: [
       {
         label: HOME,

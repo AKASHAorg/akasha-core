@@ -43,14 +43,16 @@ const BeamPage: React.FC<BeamPageProps> = props => {
   const isLoggedIn = !!authenticatedDID;
 
   const indexingDID = useRef(getSDK().services.gql.indexingDID);
-  const filters = useRef({ where: { beamID: { equalTo: beamId } } });
+  const filters = useMemo(() => {
+    return { where: { beamID: { equalTo: beamId } } };
+  }, [beamId]);
 
   // TODO: after usePendingReflections refactor, the pending reflect component can be moved inside the reflect feed component, thereby making these blocks and associated logic redundant and safe to be cleaned up
   const reflectionStreamQuery = useGetReflectionStreamQuery({
     variables: {
       first: 1,
       indexer: indexingDID.current,
-      filters: filters.current,
+      filters: filters,
     },
     fetchPolicy: 'no-cache',
   });
@@ -128,7 +130,7 @@ const BeamPage: React.FC<BeamPageProps> = props => {
         scrollRestorationStorageKey="beam-reflect-feed"
         lastScrollRestorationKey={beamId}
         itemType={EntityTypes.BEAM}
-        filters={filters.current}
+        filters={filters}
         estimatedHeight={150}
         scrollOptions={{ overScan: 5 }}
         renderItem={itemData => {
