@@ -1,49 +1,49 @@
-name: webhook for new staging version
-
-on:
-  push:
-    branches:
-      - next
-    paths:
-      - 'extensions/**'
-      - 'libs/**'
-jobs:
-  publish:
-    name: Update registry apps
-    runs-on: ubuntu-latest
-    environment: Staging
-    steps:
-      - name: Setup Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-          architecture: 'x64'
-      - name: Checkout
-        uses: actions/checkout@v4
-      - run: corepack enable
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'yarn'
-          cache-dependency-path: yarn.lock
-      - run: node --version
-      - name: install root dependencies
-        env:
-          CI: 1
-        run: |
-          yarn install --immutable
-          yarn build:all
-          sleep 6m
-#      - name: Publish new versions
+#name: webhook for new staging version
+#
+#on:
+#  push:
+#    branches:
+#      - next
+#    paths:
+#      - 'extensions/**'
+#      - 'libs/**'
+#jobs:
+#  publish:
+#    name: Update registry apps
+#    runs-on: ubuntu-latest
+#    environment: Staging
+#    steps:
+#      - name: Setup Python
+#        uses: actions/setup-python@v2
+#        with:
+#          python-version: '3.x'
+#          architecture: 'x64'
+#      - name: Checkout
+#        uses: actions/checkout@v4
+#      - run: corepack enable
+#      - name: Setup Node
+#        uses: actions/setup-node@v4
+#        with:
+#          node-version: 20
+#          cache: 'yarn'
+#          cache-dependency-path: yarn.lock
+#      - run: node --version
+#      - name: install root dependencies
 #        env:
-#          INFURA_ID: ${{ secrets.INFURA_ID_STAGING }}
-#          ETH_DEPLOY_KEY: ${{ secrets.ETH_DEPLOY_KEY_STAGING }}
-#          INTEGRATION_REGISTRY_ADDRESS:  ${{ secrets.INTEGRATION_REGISTRY_ADDRESS_STAGING }}
-#          RINKEBY_JSONRPC: ${{ secrets.RINKEBY_JSONRPC_STAGING }}
+#          CI: 1
 #        run: |
-#          yarn run compile:sc
-#          yarn run deploy:sc
-      - name: Trigger update message
-        run: |
-          curl ${{secrets.WEBHOOK_BOT_STAGING}}
+#          yarn install --immutable
+#          yarn build:all
+#          sleep 6m
+##      - name: Publish new versions
+##        env:
+##          INFURA_ID: ${{ secrets.INFURA_ID_STAGING }}
+##          ETH_DEPLOY_KEY: ${{ secrets.ETH_DEPLOY_KEY_STAGING }}
+##          INTEGRATION_REGISTRY_ADDRESS:  ${{ secrets.INTEGRATION_REGISTRY_ADDRESS_STAGING }}
+##          RINKEBY_JSONRPC: ${{ secrets.RINKEBY_JSONRPC_STAGING }}
+##        run: |
+##          yarn run compile:sc
+##          yarn run deploy:sc
+#      - name: Trigger update message
+#        run: |
+#          curl ${{secrets.WEBHOOK_BOT_STAGING}}

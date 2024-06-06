@@ -5,14 +5,14 @@ import {
   IntegrationName,
   IntegrationNameSchema,
   TYPES,
-} from '@akashaorg/typings/lib/sdk';
-import DB from '../db';
-import { createFormattedValue } from '../helpers/observable';
-import Logging from '../logging/index';
-import { throwError } from '../common/error-handling';
-import EventBus from '../common/event-bus';
+} from '@akashaorg/typings/lib/sdk/index.js';
+import DB from '../db/index.js';
+import { createFormattedValue } from '../helpers/observable.js';
+import Logging from '../logging/index.js';
+import { throwError } from '../common/error-handling.js';
+import EventBus from '../common/event-bus.js';
 import pino from 'pino';
-import { validate } from '../common/validator';
+import { validate } from '../common/validator.js';
 import { z } from 'zod';
 
 declare const __DEV__: boolean;

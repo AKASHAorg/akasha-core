@@ -10,7 +10,7 @@
       "dom",
       "es2022"
     ],
-    "module": "es2020",
+    "module": "esnext",
     "target": "es2020",
     "strict": true,
   },

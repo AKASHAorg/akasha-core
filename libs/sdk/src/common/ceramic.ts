@@ -1,19 +1,18 @@
 import { inject, injectable } from 'inversify';
-import { TYPES } from '@akashaorg/typings/lib/sdk';
-import DB from '../db/index';
-import Web3Connector from './web3.connector';
-import EventBus from './event-bus';
-import Logging from '../logging/index';
-import Settings from '../settings/index';
-import AWF_Config from './config';
+import { TYPES } from '@akashaorg/typings/lib/sdk/index.js';
+import DB from '../db/index.js';
+import Web3Connector from './web3.connector.js';
+import EventBus from './event-bus.js';
+import Logging from '../logging/index.js';
+import Settings from '../settings/index.js';
+import AWF_Config from './config.js';
 import pino from 'pino';
 import { DIDSession } from 'did-session';
 import { EthereumWebAuth } from '@didtools/pkh-ethereum';
 import { ComposeClient } from '@composedb/client';
 import { AccountId } from 'caip';
 import { sha256 } from 'crypto-hash';
-import { ethers } from 'ethers';
-import { definition } from '@akashaorg/composedb-models/lib/runtime-definition';
+import { definition } from '@akashaorg/composedb-models/lib/runtime-definition.js';
 
 @injectable()
 export default class CeramicService {

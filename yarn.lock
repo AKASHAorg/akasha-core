@@ -103,9 +103,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:3.9.5":
-  version: 3.9.5
-  resolution: "@apollo/client@npm:3.9.5"
+"@apollo/client@npm:3.10.4":
+  version: 3.10.4
+  resolution: "@apollo/client@npm:3.10.4"
   dependencies:
     "@graphql-typed-document-node/core": "npm:^3.1.1"
     "@wry/caches": "npm:^1.0.0"
@@ -115,7 +115,7 @@ __metadata:
     hoist-non-react-statics: "npm:^3.3.2"
     optimism: "npm:^0.18.0"
     prop-types: "npm:^15.7.2"
-    rehackt: "npm:0.0.5"
+    rehackt: "npm:^0.1.0"
     response-iterator: "npm:^0.2.6"
     symbol-observable: "npm:^4.0.0"
     ts-invariant: "npm:^0.10.3"
@@ -136,7 +136,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: 10/359b980928fe476c14b38b81aa3713fb6ef525d902caa67e218b7393d76f88433a1dad1b515908ab10bfe7ddec68461f5fbb3dc53bdd6ce185ab57984e7c9028
+  checksum: 10/8db77625bb96f3330187a6b45c9792edf338c42d4e48ed66f6b0ce38c7cea503db9a5de27f9987b7d83306201a57f90e8ef7ebc06c8a6899aaadb8a090b175cb
   languageName: node
   linkType: hard
 
@@ -5508,7 +5508,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ipld/car@npm:^5.1.0, @ipld/car@npm:^5.1.1, @ipld/car@npm:^5.2.2, @ipld/car@npm:^5.2.4":
+"@ipld/car@npm:5.3.1":
+  version: 5.3.1
+  resolution: "@ipld/car@npm:5.3.1"
+  dependencies:
+    "@ipld/dag-cbor": "npm:^9.0.7"
+    cborg: "npm:^4.0.5"
+    multiformats: "npm:^13.0.0"
+    varint: "npm:^6.0.0"
+  checksum: 10/62bfb02f3b86c36c3a59ce456f432cc2865d65d2d6eef0a4bdff5f2c6a96328216504a56cd8bb48297ab6e0e1c5d61744ab98ba008c19f76fa0a7b227ed2ec2a
+  languageName: node
+  linkType: hard
+
+"@ipld/car@npm:^5.1.0, @ipld/car@npm:^5.1.1, @ipld/car@npm:^5.2.2":
   version: 5.3.0
   resolution: "@ipld/car@npm:5.3.0"
   dependencies:
@@ -10820,6 +10832,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tsconfig/node20@npm:^20.1.4":
+  version: 20.1.4
+  resolution: "@tsconfig/node20@npm:20.1.4"
+  checksum: 10/345dba8074647f6c11b8d78afa76d9c16e3436cb56a8e78fe2060014d33a09f3f4fd6ed81dc90e955d3509f926cd7fd61c6ddfd3d5a1d80758d7844f7cc3a99e
+  languageName: node
+  linkType: hard
+
 "@twind/core@npm:1.1.3":
   version: 1.1.3
   resolution: "@twind/core@npm:1.1.3"
@@ -12082,7 +12101,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ucanto/client@npm:^9.0.0, @ucanto/client@npm:^9.0.1":
+"@ucanto/client@npm:^9.0.1":
   version: 9.0.1
   resolution: "@ucanto/client@npm:9.0.1"
   dependencies:
@@ -12092,7 +12111,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ucanto/core@npm:^10.0.0, @ucanto/core@npm:^10.0.1":
+"@ucanto/core@npm:10.0.1, @ucanto/core@npm:^10.0.0, @ucanto/core@npm:^10.0.1":
   version: 10.0.1
   resolution: "@ucanto/core@npm:10.0.1"
   dependencies:
@@ -12102,19 +12121,6 @@ __metadata:
     "@ucanto/interface": "npm:^10.0.1"
     multiformats: "npm:^11.0.2"
   checksum: 10/608305d7c75abb68f35d18b608ad11448a956da7e987e00be73f71314bc4a08a56054cd35a8c48ffe0a47d6ec0fb332cb90cd026c484502448cb6bbddff49343
-  languageName: node
-  linkType: hard
-
-"@ucanto/core@npm:^9.0.1":
-  version: 9.0.1
-  resolution: "@ucanto/core@npm:9.0.1"
-  dependencies:
-    "@ipld/car": "npm:^5.1.0"
-    "@ipld/dag-cbor": "npm:^9.0.0"
-    "@ipld/dag-ucan": "npm:^3.4.0"
-    "@ucanto/interface": "npm:^9.0.0"
-    multiformats: "npm:^11.0.2"
-  checksum: 10/8ced4d13c227d7ba6714077981a4d8157fea0636ab90723cf2f697673403c54a9234fc12fe4417ec3d92e41ec59fe94dcd32cdc4db13fc01062f1f9b12f3c965
   languageName: node
   linkType: hard
 
@@ -12128,17 +12134,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ucanto/interface@npm:^9.0.0":
-  version: 9.0.0
-  resolution: "@ucanto/interface@npm:9.0.0"
-  dependencies:
-    "@ipld/dag-ucan": "npm:^3.4.0"
-    multiformats: "npm:^11.0.2"
-  checksum: 10/e5b0db834406d763853d7ca45151c1be200e907244fa345c57cf2d943db55ef5eacaa45b1b692d53b8c929da0efb31cefa98b71ddcc45f4539c956f14ef815b7
-  languageName: node
-  linkType: hard
-
-"@ucanto/principal@npm:^9.0.0, @ucanto/principal@npm:^9.0.1":
+"@ucanto/principal@npm:9.0.1, @ucanto/principal@npm:^9.0.1":
   version: 9.0.1
   resolution: "@ucanto/principal@npm:9.0.1"
   dependencies:
@@ -12153,7 +12149,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ucanto/transport@npm:^9.0.0, @ucanto/transport@npm:^9.1.1":
+"@ucanto/transport@npm:^9.1.1":
   version: 9.1.1
   resolution: "@ucanto/transport@npm:9.1.1"
   dependencies:
@@ -12163,7 +12159,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ucanto/validator@npm:^9.0.1, @ucanto/validator@npm:^9.0.2":
+"@ucanto/validator@npm:^9.0.2":
   version: 9.0.2
   resolution: "@ucanto/validator@npm:9.0.2"
   dependencies:
@@ -12722,9 +12718,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@web3-storage/access@npm:^18.0.5":
-  version: 18.3.2
-  resolution: "@web3-storage/access@npm:18.3.2"
+"@web3-storage/access@npm:^18.4.0":
+  version: 18.4.0
+  resolution: "@web3-storage/access@npm:18.4.0"
   dependencies:
     "@ipld/car": "npm:^5.1.1"
     "@ipld/dag-ucan": "npm:^3.4.0"
@@ -12735,7 +12731,7 @@ __metadata:
     "@ucanto/principal": "npm:^9.0.1"
     "@ucanto/transport": "npm:^9.1.1"
     "@ucanto/validator": "npm:^9.0.2"
-    "@web3-storage/capabilities": "npm:^14.0.2"
+    "@web3-storage/capabilities": "npm:^17.1.0"
     "@web3-storage/did-mailto": "npm:^2.1.0"
     bigint-mod-arith: "npm:^3.1.2"
     conf: "npm:11.0.2"
@@ -12744,36 +12740,7 @@ __metadata:
     p-defer: "npm:^4.0.0"
     type-fest: "npm:^4.9.0"
     uint8arrays: "npm:^4.0.6"
-  checksum: 10/a919d19619e4a3c4c05905685603dad2a66eddea66a5e027744e8bc3471e3770f7284b0c20630376e5f6da5b4a2544660058a021fb062b05f9d9603ffb3131aa
-  languageName: node
-  linkType: hard
-
-"@web3-storage/capabilities@npm:^12.1.0":
-  version: 12.1.0
-  resolution: "@web3-storage/capabilities@npm:12.1.0"
-  dependencies:
-    "@ucanto/core": "npm:^9.0.1"
-    "@ucanto/interface": "npm:^9.0.0"
-    "@ucanto/principal": "npm:^9.0.0"
-    "@ucanto/transport": "npm:^9.0.0"
-    "@ucanto/validator": "npm:^9.0.1"
-    "@web3-storage/data-segment": "npm:^3.2.0"
-  checksum: 10/5f4fc56a978f177414e5be5639150bc14e2753dd774af520bce53886e76209386c1eaaf276de4a84750e7210eb38c310a62a9e1f9d4a43ce136ed6f7d1c68177
-  languageName: node
-  linkType: hard
-
-"@web3-storage/capabilities@npm:^14.0.2":
-  version: 14.0.2
-  resolution: "@web3-storage/capabilities@npm:14.0.2"
-  dependencies:
-    "@ucanto/core": "npm:^10.0.1"
-    "@ucanto/interface": "npm:^10.0.1"
-    "@ucanto/principal": "npm:^9.0.1"
-    "@ucanto/transport": "npm:^9.1.1"
-    "@ucanto/validator": "npm:^9.0.2"
-    "@web3-storage/data-segment": "npm:^3.2.0"
-    uint8arrays: "npm:^5.0.3"
-  checksum: 10/193219978dbc3117a52cc8e0c9b8308b1ab982a395290066f41f67031b8123119e6e280477c00280be1bc71bcac644b3d6fb439eb2da9516a1aa9463eb87a179
+  checksum: 10/d294351b71c6bc3cf7158c5869df4d4eed1eeac3547ef2cfd385dff79433400c37a4b8faeba6915232b30df45cf7128f97d1250a45580ee2e6df9981716cd425
   languageName: node
   linkType: hard
 
@@ -12792,6 +12759,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@web3-storage/capabilities@npm:^17.1.0":
+  version: 17.1.1
+  resolution: "@web3-storage/capabilities@npm:17.1.1"
+  dependencies:
+    "@ucanto/core": "npm:^10.0.1"
+    "@ucanto/interface": "npm:^10.0.1"
+    "@ucanto/principal": "npm:^9.0.1"
+    "@ucanto/transport": "npm:^9.1.1"
+    "@ucanto/validator": "npm:^9.0.2"
+    "@web3-storage/data-segment": "npm:^3.2.0"
+    uint8arrays: "npm:^5.0.3"
+  checksum: 10/cb642c1ea0eee423570005808a58449ec14e7953ba935e2d6f74df4b286392c7a26478c80f4f204689e3d257fe44581f91b52b9ec0c61fb9f9faf886699717aa
+  languageName: node
+  linkType: hard
+
 "@web3-storage/data-segment@npm:^3.2.0":
   version: 3.2.0
   resolution: "@web3-storage/data-segment@npm:3.2.0"
@@ -12803,6 +12785,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@web3-storage/data-segment@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "@web3-storage/data-segment@npm:5.1.0"
+  dependencies:
+    "@ipld/dag-cbor": "npm:^9.0.5"
+    multiformats: "npm:^11.0.2"
+    sync-multihash-sha2: "npm:^1.0.0"
+  checksum: 10/b522611e9452e206ca19de5a6f13d831387d1bc826e35e79a43543a296ff38a6535073577bbd32047e3d9b5c635359cc56612a2d93fdc0f61804126a0aafe4f5
+  languageName: node
+  linkType: hard
+
 "@web3-storage/did-mailto@npm:^2.1.0":
   version: 2.1.0
   resolution: "@web3-storage/did-mailto@npm:2.1.0"
@@ -12810,7 +12803,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@web3-storage/filecoin-client@npm:^3.2.0":
+"@web3-storage/filecoin-client@npm:^3.3.3":
   version: 3.3.3
   resolution: "@web3-storage/filecoin-client@npm:3.3.3"
   dependencies:
@@ -12824,44 +12817,45 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@web3-storage/upload-client@npm:^12.3.2":
-  version: 12.3.2
-  resolution: "@web3-storage/upload-client@npm:12.3.2"
+"@web3-storage/upload-client@npm:^14.1.1":
+  version: 14.1.1
+  resolution: "@web3-storage/upload-client@npm:14.1.1"
   dependencies:
     "@ipld/car": "npm:^5.2.2"
     "@ipld/dag-cbor": "npm:^9.0.6"
     "@ipld/dag-ucan": "npm:^3.4.0"
     "@ipld/unixfs": "npm:^2.1.1"
-    "@ucanto/client": "npm:^9.0.0"
-    "@ucanto/interface": "npm:^9.0.0"
-    "@ucanto/transport": "npm:^9.0.0"
-    "@web3-storage/capabilities": "npm:^12.1.0"
-    fr32-sha2-256-trunc254-padded-binary-tree-multihash: "npm:^3.1.1"
+    "@ucanto/client": "npm:^9.0.1"
+    "@ucanto/core": "npm:^10.0.1"
+    "@ucanto/interface": "npm:^10.0.1"
+    "@ucanto/transport": "npm:^9.1.1"
+    "@web3-storage/capabilities": "npm:^17.1.0"
+    "@web3-storage/data-segment": "npm:^5.1.0"
+    "@web3-storage/filecoin-client": "npm:^3.3.3"
     ipfs-utils: "npm:^9.0.14"
     multiformats: "npm:^12.1.2"
     p-retry: "npm:^5.1.2"
-    parallel-transform-web: "npm:^1.0.1"
     varint: "npm:^6.0.0"
-  checksum: 10/57310b6f54498a0850959d506847a0f1d54dc3031f357d06493354104a2bd6597b4a9871854ddfaa498500f60773dae5fae42548dc60730bfa79ffbd1f88600d
+  checksum: 10/8ced11a632e6809f4814180d409e8774770b8bc820fb3ed0aeae27e4b9741238c1134f7eb70582bf09526daf295f8ab451fcae42ae7c0f6344c9397d3bbdf6ac
   languageName: node
   linkType: hard
 
-"@web3-storage/w3up-client@npm:^11.1.3":
-  version: 11.2.1
-  resolution: "@web3-storage/w3up-client@npm:11.2.1"
+"@web3-storage/w3up-client@npm:13.1.1":
+  version: 13.1.1
+  resolution: "@web3-storage/w3up-client@npm:13.1.1"
   dependencies:
     "@ipld/dag-ucan": "npm:^3.4.0"
-    "@ucanto/client": "npm:^9.0.0"
-    "@ucanto/core": "npm:^9.0.1"
-    "@ucanto/interface": "npm:^9.0.0"
-    "@ucanto/principal": "npm:^9.0.0"
-    "@ucanto/transport": "npm:^9.0.0"
-    "@web3-storage/access": "npm:^18.0.5"
-    "@web3-storage/capabilities": "npm:^12.1.0"
+    "@ucanto/client": "npm:^9.0.1"
+    "@ucanto/core": "npm:^10.0.1"
+    "@ucanto/interface": "npm:^10.0.1"
+    "@ucanto/principal": "npm:^9.0.1"
+    "@ucanto/transport": "npm:^9.1.1"
+    "@web3-storage/access": "npm:^18.4.0"
+    "@web3-storage/capabilities": "npm:^17.1.0"
     "@web3-storage/did-mailto": "npm:^2.1.0"
-    "@web3-storage/filecoin-client": "npm:^3.2.0"
-    "@web3-storage/upload-client": "npm:^12.3.2"
-  checksum: 10/7a907aa7f84e34b77830a18336c485be807fea821648f7b21403e5af93d7fd58d3a71bada64fa802b919be222c5520671cd0601c686637f25f481700d956102d
+    "@web3-storage/filecoin-client": "npm:^3.3.3"
+    "@web3-storage/upload-client": "npm:^14.1.1"
+  checksum: 10/0b5961ad0c0c2cc123bed2c269aaa9f91375c75470542599db4f21aad7f7dab6fea7c4950360063cb2ffe70cc67f22987527346a8f0e1699e059e24b51d129f9
   languageName: node
   linkType: hard
 
@@ -20553,6 +20547,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"files-from-path@npm:1.0.4":
+  version: 1.0.4
+  resolution: "files-from-path@npm:1.0.4"
+  dependencies:
+    graceful-fs: "npm:^4.2.10"
+  checksum: 10/608e7175b5e1ef536a2213f7a78cbfbdef1008b1f58127b61a586930492ace866fa3d253a7a712bddca7f559e4cb60e11b2318eb549401b6907e06c0cd73f61d
+  languageName: node
+  linkType: hard
+
 "fill-range@npm:^7.0.1":
   version: 7.0.1
   resolution: "fill-range@npm:7.0.1"
@@ -20894,13 +20897,6 @@ __metadata:
   version: 1.19.5
   resolution: "fp-ts@npm:1.19.5"
   checksum: 10/17aa04bbbba9096ac32efd4f192de6211687cab195c423d4072a904f1346c2d508243880685d6f4bb4be29e5f337a67cfa211645e491491683b6aaff23b5dd4a
-  languageName: node
-  linkType: hard
-
-"fr32-sha2-256-trunc254-padded-binary-tree-multihash@npm:^3.1.1":
-  version: 3.3.0
-  resolution: "fr32-sha2-256-trunc254-padded-binary-tree-multihash@npm:3.3.0"
-  checksum: 10/76d04909c15069e5e393a3d6f984d545025be7406084f10a167f5f70ab3e1eb4ac1699d1094225810087d133ce8271fce655d5a540c15253c51b45af92f5ca01
   languageName: node
   linkType: hard
 
@@ -21652,7 +21648,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graceful-fs@npm:^4.0.0, graceful-fs@npm:^4.1.11, graceful-fs@npm:^4.1.15, graceful-fs@npm:^4.1.2, graceful-fs@npm:^4.1.6, graceful-fs@npm:^4.1.9, graceful-fs@npm:^4.2.0, graceful-fs@npm:^4.2.11, graceful-fs@npm:^4.2.4, graceful-fs@npm:^4.2.6, graceful-fs@npm:^4.2.9":
+"graceful-fs@npm:^4.0.0, graceful-fs@npm:^4.1.11, graceful-fs@npm:^4.1.15, graceful-fs@npm:^4.1.2, graceful-fs@npm:^4.1.6, graceful-fs@npm:^4.1.9, graceful-fs@npm:^4.2.0, graceful-fs@npm:^4.2.10, graceful-fs@npm:^4.2.11, graceful-fs@npm:^4.2.4, graceful-fs@npm:^4.2.6, graceful-fs@npm:^4.2.9":
   version: 4.2.11
   resolution: "graceful-fs@npm:4.2.11"
   checksum: 10/bf152d0ed1dc159239db1ba1f74fdbc40cb02f626770dcd5815c427ce0688c2635a06ed69af364396da4636d0408fcf7d4afdf7881724c3307e46aff30ca49e2
@@ -29534,13 +29530,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"parallel-transform-web@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "parallel-transform-web@npm:1.0.1"
-  checksum: 10/a576c481ff24c7aec49823382b90ff164fc5119f9758fe2ed8c8773e078b3791933ed46691f3e5a9f162d39973566821bee5e3fec5bffe113923d78e02649fed
-  languageName: node
-  linkType: hard
-
 "param-case@npm:^3.0.4":
   version: 3.0.4
   resolution: "param-case@npm:3.0.4"
@@ -32028,9 +32017,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rehackt@npm:0.0.5":
-  version: 0.0.5
-  resolution: "rehackt@npm:0.0.5"
+"rehackt@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "rehackt@npm:0.1.0"
   peerDependencies:
     "@types/react": "*"
     react: "*"
@@ -32039,7 +32028,7 @@ __metadata:
       optional: true
     react:
       optional: true
-  checksum: 10/a7536eaeb47ba46bc29fa050c7cbf80860809689c893c6177664efbbdca641a1996185ea6602fb76473f0e2b145c1f3e9c27a5e738054d69809b6c39046fe269
+  checksum: 10/c81adead82c165dffc574cbf9e1de3605522782a56b48df48b68d53d45c4d8c9253df3790109335bf97072424e54ad2423bb9544ca3a985fa91995dda43452fc
   languageName: node
   linkType: hard
 
@@ -32339,7 +32328,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resolve@npm:^1.1.7, resolve@npm:^1.10.0, resolve@npm:^1.12.0, resolve@npm:^1.14.2, resolve@npm:^1.19.0, resolve@npm:^1.20.0, resolve@npm:^1.22.1, resolve@npm:^1.22.4, resolve@npm:^1.22.8":
+"resolve@npm:1.22.8, resolve@npm:^1.1.7, resolve@npm:^1.10.0, resolve@npm:^1.12.0, resolve@npm:^1.14.2, resolve@npm:^1.19.0, resolve@npm:^1.20.0, resolve@npm:^1.22.1, resolve@npm:^1.22.4, resolve@npm:^1.22.8":
   version: 1.22.8
   resolution: "resolve@npm:1.22.8"
   dependencies:
@@ -32384,7 +32373,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resolve@patch:resolve@npm%3A^1.1.7#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.10.0#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.12.0#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.14.2#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.19.0#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.20.0#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.22.1#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.22.4#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.22.8#optional!builtin<compat/resolve>":
+"resolve@patch:resolve@npm%3A1.22.8#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.1.7#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.10.0#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.12.0#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.14.2#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.19.0#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.20.0#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.22.1#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.22.4#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.22.8#optional!builtin<compat/resolve>":
   version: 1.22.8
   resolution: "resolve@patch:resolve@npm%3A1.22.8#optional!builtin<compat/resolve>::version=1.22.8&hash=c3c19d"
   dependencies:
@@ -32613,7 +32602,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    "@apollo/client": "npm:3.9.5"
+    "@apollo/client": "npm:3.10.4"
     "@babel/core": "npm:^7.14.5"
     "@babel/helper-get-function-arity": "npm:7.16.7"
     "@babel/plugin-syntax-dynamic-import": "npm:7.8.3"
@@ -32643,7 +32632,7 @@ __metadata:
     "@headlessui/react": "npm:1.7.18"
     "@heroicons/react": "npm:2.1.1"
     "@hookform/resolvers": "npm:3.0.0"
-    "@ipld/car": "npm:^5.2.4"
+    "@ipld/car": "npm:5.3.1"
     "@ipld/dag-ucan": "npm:^3.4.0"
     "@lit-protocol/sdk-browser": "npm:1.1.250"
     "@lottiefiles/react-lottie-player": "npm:3.4.9"
@@ -32689,6 +32678,7 @@ __metadata:
     "@testing-library/react": "npm:14.0.0"
     "@testing-library/react-hooks": "npm:8.0.1"
     "@testing-library/user-event": "npm:14.4.3"
+    "@tsconfig/node20": "npm:^20.1.4"
     "@twind/core": "npm:1.1.3"
     "@twind/preset-autoprefix": "npm:1.0.7"
     "@twind/preset-container-queries": "npm:1.0.7"
@@ -32709,9 +32699,9 @@ __metadata:
     "@types/systemjs": "npm:6.13.5"
     "@typescript-eslint/eslint-plugin": "npm:^6.13.2"
     "@typescript-eslint/parser": "npm:^6.13.2"
-    "@ucanto/core": "npm:^9.0.1"
-    "@ucanto/principal": "npm:^9.0.0"
-    "@web3-storage/w3up-client": "npm:^11.1.3"
+    "@ucanto/core": "npm:10.0.1"
+    "@ucanto/principal": "npm:9.0.1"
+    "@web3-storage/w3up-client": "npm:13.1.1"
     "@web3modal/ethers": "npm:4.1.1"
     "@web3modal/ui": "npm:4.1.1"
     "@welldone-software/why-did-you-render": "npm:^7.0.1"
@@ -32750,6 +32740,7 @@ __metadata:
     eslint-plugin-unicorn: "npm:52.0.0"
     ethers: "npm:6.11.1"
     faker: "npm:5.5.3"
+    files-from-path: "npm:1.0.4"
     fs-extra: "npm:10.1.0"
     graphql: "npm:16.8.1"
     graphql-request: "npm:6.1.0"
@@ -32809,10 +32800,11 @@ __metadata:
     regenerator-runtime: "npm:0.13.9"
     remark-gfm: "npm:4.0.0"
     resize-observer-polyfill: "npm:^1.5.1"
+    resolve: "npm:1.22.8"
     rimraf: "npm:3.0.2"
     rxjs: "npm:7.3.0"
     safe-buffer: "npm:5.2.1"
-    semver: "npm:7.5.2"
+    semver: "npm:7.6.2"
     single-spa: "npm:6.0.1"
     single-spa-react: "npm:6.0.1"
     slate: "npm:0.93.0"
@@ -33259,14 +33251,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:7.5.2":
-  version: 7.5.2
-  resolution: "semver@npm:7.5.2"
-  dependencies:
-    lru-cache: "npm:^6.0.0"
+"semver@npm:7.6.2, semver@npm:^7.6.0":
+  version: 7.6.2
+  resolution: "semver@npm:7.6.2"
   bin:
     semver: bin/semver.js
-  checksum: 10/f77b3a1842e19b78e5864a175d62699a17c0c25f6223366684041e8c7dd6a55f0091887f405c534895dfe69e1d770528d072b32d9ed866ab24392fe34344d3b5
+  checksum: 10/296b17d027f57a87ef645e9c725bff4865a38dfc9caf29b26aa084b85820972fbe7372caea1ba6857162fa990702c6d9c1d82297cecb72d56c78ab29070d2ca2
   languageName: node
   linkType: hard
 
@@ -33285,15 +33275,6 @@ __metadata:
   bin:
     semver: bin/semver.js
   checksum: 10/a05a641ebaa65f4a35970bb587c4178dc50931e15261ca60c9d531b4fc2b70a2d24b3f300a3bf6c37f37ce9d007b0071abca2f87c0f947f09a253ecfb0df4026
-  languageName: node
-  linkType: hard
-
-"semver@npm:^7.6.0":
-  version: 7.6.2
-  resolution: "semver@npm:7.6.2"
-  bin:
-    semver: bin/semver.js
-  checksum: 10/296b17d027f57a87ef645e9c725bff4865a38dfc9caf29b26aa084b85820972fbe7372caea1ba6857162fa990702c6d9c1d82297cecb72d56c78ab29070d2ca2
   languageName: node
   linkType: hard
 

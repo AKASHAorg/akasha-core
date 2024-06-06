@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { throwError } from './error-handling';
+import { throwError } from './error-handling.js';
 
 export const validate = (...schemas: z.ZodSchema[]) => {
   return (target: any, propertyName: string | symbol, descriptor: TypedPropertyDescriptor<any>) => {
