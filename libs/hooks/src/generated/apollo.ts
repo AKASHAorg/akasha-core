@@ -3005,6 +3005,131 @@ export type GetAppsByIdQueryHookResult = ReturnType<typeof useGetAppsByIdQuery>;
 export type GetAppsByIdLazyQueryHookResult = ReturnType<typeof useGetAppsByIdLazyQuery>;
 export type GetAppsByIdSuspenseQueryHookResult = ReturnType<typeof useGetAppsByIdSuspenseQuery>;
 export type GetAppsByIdQueryResult = Apollo.QueryResult<Types.GetAppsByIdQuery, Types.GetAppsByIdQueryVariables>;
+export const GetAppsByPublisherDidDocument = /*#__PURE__*/ gql`
+    query GetAppsByPublisherDID($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaAppFiltersInput, $sorting: AkashaAppSortingInput) {
+  node(id: $id) {
+    ... on CeramicAccount {
+      akashaAppList(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        filters: $filters
+        sorting: $sorting
+      ) {
+        edges {
+          node {
+            ...AkashaAppFragment
+          }
+        }
+      }
+    }
+  }
+}
+    ${AkashaAppFragmentDoc}
+${UserProfileFragmentDoc}`;
+
+/**
+ * __useGetAppsByPublisherDidQuery__
+ *
+ * To run a query within a React component, call `useGetAppsByPublisherDidQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAppsByPublisherDidQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAppsByPublisherDidQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      after: // value for 'after'
+ *      before: // value for 'before'
+ *      first: // value for 'first'
+ *      last: // value for 'last'
+ *      filters: // value for 'filters'
+ *      sorting: // value for 'sorting'
+ *   },
+ * });
+ */
+export function useGetAppsByPublisherDidQuery(baseOptions: Apollo.QueryHookOptions<Types.GetAppsByPublisherDidQuery, Types.GetAppsByPublisherDidQueryVariables> & ({ variables: Types.GetAppsByPublisherDidQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<Types.GetAppsByPublisherDidQuery, Types.GetAppsByPublisherDidQueryVariables>(GetAppsByPublisherDidDocument, options);
+      }
+export function useGetAppsByPublisherDidLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Types.GetAppsByPublisherDidQuery, Types.GetAppsByPublisherDidQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<Types.GetAppsByPublisherDidQuery, Types.GetAppsByPublisherDidQueryVariables>(GetAppsByPublisherDidDocument, options);
+        }
+export function useGetAppsByPublisherDidSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<Types.GetAppsByPublisherDidQuery, Types.GetAppsByPublisherDidQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<Types.GetAppsByPublisherDidQuery, Types.GetAppsByPublisherDidQueryVariables>(GetAppsByPublisherDidDocument, options);
+        }
+export type GetAppsByPublisherDidQueryHookResult = ReturnType<typeof useGetAppsByPublisherDidQuery>;
+export type GetAppsByPublisherDidLazyQueryHookResult = ReturnType<typeof useGetAppsByPublisherDidLazyQuery>;
+export type GetAppsByPublisherDidSuspenseQueryHookResult = ReturnType<typeof useGetAppsByPublisherDidSuspenseQuery>;
+export type GetAppsByPublisherDidQueryResult = Apollo.QueryResult<Types.GetAppsByPublisherDidQuery, Types.GetAppsByPublisherDidQueryVariables>;
+export const GetAppsReleasesByPublisherDidDocument = /*#__PURE__*/ gql`
+    query GetAppsReleasesByPublisherDID($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaAppReleaseFiltersInput, $sorting: AkashaAppReleaseSortingInput) {
+  node(id: $id) {
+    ... on CeramicAccount {
+      akashaAppReleaseList(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        filters: $filters
+        sorting: $sorting
+      ) {
+        edges {
+          node {
+            ...AppReleaseFragment
+          }
+        }
+      }
+    }
+  }
+}
+    ${AppReleaseFragmentDoc}
+${AkashaAppFragmentDoc}
+${UserProfileFragmentDoc}`;
+
+/**
+ * __useGetAppsReleasesByPublisherDidQuery__
+ *
+ * To run a query within a React component, call `useGetAppsReleasesByPublisherDidQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAppsReleasesByPublisherDidQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAppsReleasesByPublisherDidQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      after: // value for 'after'
+ *      before: // value for 'before'
+ *      first: // value for 'first'
+ *      last: // value for 'last'
+ *      filters: // value for 'filters'
+ *      sorting: // value for 'sorting'
+ *   },
+ * });
+ */
+export function useGetAppsReleasesByPublisherDidQuery(baseOptions: Apollo.QueryHookOptions<Types.GetAppsReleasesByPublisherDidQuery, Types.GetAppsReleasesByPublisherDidQueryVariables> & ({ variables: Types.GetAppsReleasesByPublisherDidQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<Types.GetAppsReleasesByPublisherDidQuery, Types.GetAppsReleasesByPublisherDidQueryVariables>(GetAppsReleasesByPublisherDidDocument, options);
+      }
+export function useGetAppsReleasesByPublisherDidLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Types.GetAppsReleasesByPublisherDidQuery, Types.GetAppsReleasesByPublisherDidQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<Types.GetAppsReleasesByPublisherDidQuery, Types.GetAppsReleasesByPublisherDidQueryVariables>(GetAppsReleasesByPublisherDidDocument, options);
+        }
+export function useGetAppsReleasesByPublisherDidSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<Types.GetAppsReleasesByPublisherDidQuery, Types.GetAppsReleasesByPublisherDidQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<Types.GetAppsReleasesByPublisherDidQuery, Types.GetAppsReleasesByPublisherDidQueryVariables>(GetAppsReleasesByPublisherDidDocument, options);
+        }
+export type GetAppsReleasesByPublisherDidQueryHookResult = ReturnType<typeof useGetAppsReleasesByPublisherDidQuery>;
+export type GetAppsReleasesByPublisherDidLazyQueryHookResult = ReturnType<typeof useGetAppsReleasesByPublisherDidLazyQuery>;
+export type GetAppsReleasesByPublisherDidSuspenseQueryHookResult = ReturnType<typeof useGetAppsReleasesByPublisherDidSuspenseQuery>;
+export type GetAppsReleasesByPublisherDidQueryResult = Apollo.QueryResult<Types.GetAppsReleasesByPublisherDidQuery, Types.GetAppsReleasesByPublisherDidQueryVariables>;
 export const GetAppsReleasesDocument = /*#__PURE__*/ gql`
     query GetAppsReleases($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaAppReleaseFiltersInput, $sorting: AkashaAppReleaseSortingInput) {
   akashaAppReleaseIndex(

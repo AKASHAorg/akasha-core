@@ -1,5 +1,14 @@
 import { useState } from 'react';
 
+/**
+ * Hook to manipulate the state of the Accordion component.
+ * @returns { activeAccordionId, setActiveAccordionId, handleAccordionClick } - Object containing the active accordion ID, and
+ * methods for handling click events and setting an active ID.
+ * @example useAccordion hook
+ * ```typescript
+ *  const { activeAccordionId, setActiveAccordionId, handleAccordionClick } = useAccordion();
+ * ```
+ **/
 export function useAccordion() {
   const [activeAccordionId, setActiveAccordionId] = useState<string | null>(null);
 

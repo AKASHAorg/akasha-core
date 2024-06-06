@@ -8,6 +8,14 @@ const checkHealth = async () => {
   return res;
 };
 
+/**
+ * Hook to check the overall status of the platform.
+ * @returns { data, isLoading } - Object containing the data and query status
+ * @example usePlaformHealthCheck hook
+ * ```typescript
+ * const { data, isLoading } = usePlaformHealthCheck();
+ * ```
+ **/
 export const usePlaformHealthCheck = () => {
   const [data, setData] = useState<{
     statusCode: number;

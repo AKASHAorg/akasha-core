@@ -25,6 +25,7 @@ const checkNetworkState = async () => {
 
 /**
  * Hook to check if the web3 provider is set to function on the Rinkeby test network
+ * @param enabler - boolean (optional) that can control when to start verifying network state
  * @returns networkNotSupported: true if web3 provider is not on the specified network
  * @example useNetworkState hook
  * ```typescript

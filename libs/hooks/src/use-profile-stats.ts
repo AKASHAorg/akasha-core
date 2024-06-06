@@ -14,7 +14,9 @@ const getStats = async (profileId: string) => {
 type Stats = Awaited<ReturnType<typeof getStats>>;
 
 /**
- * Hook to get profile stats
+ * Hook to get a profile's stats (number of beams, followers, following, etc. )
+ * @param profileId - string
+ * @param readCache - boolean (optional) to indicate whether to read from the cache
  * @example useProfileStats hook
  * ```typescript
  * const profileStatsQuery = useProfileStats('did:pkh:eip155:5:0xadc81c169...');
