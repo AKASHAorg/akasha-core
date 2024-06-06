@@ -1980,6 +1980,129 @@ useInfiniteGetAppsByIdQuery.getKey = (variables: Types.GetAppsByIdQueryVariables
 ;
 
 useGetAppsByIdQuery.fetcher = (variables: Types.GetAppsByIdQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetAppsByIdQuery, Types.GetAppsByIdQueryVariables>(GetAppsByIdDocument, variables, options);
+export const GetAppsByPublisherDidDocument = /*#__PURE__*/ `
+    query GetAppsByPublisherDID($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaAppFiltersInput, $sorting: AkashaAppSortingInput) {
+  node(id: $id) {
+    ... on CeramicAccount {
+      akashaAppList(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        filters: $filters
+        sorting: $sorting
+      ) {
+        edges {
+          node {
+            ...AkashaAppFragment
+          }
+        }
+      }
+    }
+  }
+}
+    ${AkashaAppFragmentDoc}
+${UserProfileFragmentDoc}`;
+export const useGetAppsByPublisherDidQuery = <
+      TData = Types.GetAppsByPublisherDidQuery,
+      TError = unknown
+    >(
+      variables: Types.GetAppsByPublisherDidQueryVariables,
+      options?: UseQueryOptions<Types.GetAppsByPublisherDidQuery, TError, TData>
+    ) =>
+    useQuery<Types.GetAppsByPublisherDidQuery, TError, TData>(
+      ['GetAppsByPublisherDID', variables],
+      composeDbFetch<Types.GetAppsByPublisherDidQuery, Types.GetAppsByPublisherDidQueryVariables>(GetAppsByPublisherDidDocument, variables),
+      options
+    );
+useGetAppsByPublisherDidQuery.document = GetAppsByPublisherDidDocument;
+
+
+useGetAppsByPublisherDidQuery.getKey = (variables: Types.GetAppsByPublisherDidQueryVariables) => ['GetAppsByPublisherDID', variables];
+;
+
+export const useInfiniteGetAppsByPublisherDidQuery = <
+      TData = Types.GetAppsByPublisherDidQuery,
+      TError = unknown
+    >(
+      pageParamKey: keyof Types.GetAppsByPublisherDidQueryVariables,
+      variables: Types.GetAppsByPublisherDidQueryVariables,
+      options?: UseInfiniteQueryOptions<Types.GetAppsByPublisherDidQuery, TError, TData>
+    ) =>{
+    
+    return useInfiniteQuery<Types.GetAppsByPublisherDidQuery, TError, TData>(
+      ['GetAppsByPublisherDID.infinite', variables],
+      (metaData) => composeDbFetch<Types.GetAppsByPublisherDidQuery, Types.GetAppsByPublisherDidQueryVariables>(GetAppsByPublisherDidDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      options
+    )};
+
+
+useInfiniteGetAppsByPublisherDidQuery.getKey = (variables: Types.GetAppsByPublisherDidQueryVariables) => ['GetAppsByPublisherDID.infinite', variables];
+;
+
+useGetAppsByPublisherDidQuery.fetcher = (variables: Types.GetAppsByPublisherDidQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetAppsByPublisherDidQuery, Types.GetAppsByPublisherDidQueryVariables>(GetAppsByPublisherDidDocument, variables, options);
+export const GetAppsReleasesByPublisherDidDocument = /*#__PURE__*/ `
+    query GetAppsReleasesByPublisherDID($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaAppReleaseFiltersInput, $sorting: AkashaAppReleaseSortingInput) {
+  node(id: $id) {
+    ... on CeramicAccount {
+      akashaAppReleaseList(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        filters: $filters
+        sorting: $sorting
+      ) {
+        edges {
+          node {
+            ...AppReleaseFragment
+          }
+        }
+      }
+    }
+  }
+}
+    ${AppReleaseFragmentDoc}
+${AkashaAppFragmentDoc}
+${UserProfileFragmentDoc}`;
+export const useGetAppsReleasesByPublisherDidQuery = <
+      TData = Types.GetAppsReleasesByPublisherDidQuery,
+      TError = unknown
+    >(
+      variables: Types.GetAppsReleasesByPublisherDidQueryVariables,
+      options?: UseQueryOptions<Types.GetAppsReleasesByPublisherDidQuery, TError, TData>
+    ) =>
+    useQuery<Types.GetAppsReleasesByPublisherDidQuery, TError, TData>(
+      ['GetAppsReleasesByPublisherDID', variables],
+      composeDbFetch<Types.GetAppsReleasesByPublisherDidQuery, Types.GetAppsReleasesByPublisherDidQueryVariables>(GetAppsReleasesByPublisherDidDocument, variables),
+      options
+    );
+useGetAppsReleasesByPublisherDidQuery.document = GetAppsReleasesByPublisherDidDocument;
+
+
+useGetAppsReleasesByPublisherDidQuery.getKey = (variables: Types.GetAppsReleasesByPublisherDidQueryVariables) => ['GetAppsReleasesByPublisherDID', variables];
+;
+
+export const useInfiniteGetAppsReleasesByPublisherDidQuery = <
+      TData = Types.GetAppsReleasesByPublisherDidQuery,
+      TError = unknown
+    >(
+      pageParamKey: keyof Types.GetAppsReleasesByPublisherDidQueryVariables,
+      variables: Types.GetAppsReleasesByPublisherDidQueryVariables,
+      options?: UseInfiniteQueryOptions<Types.GetAppsReleasesByPublisherDidQuery, TError, TData>
+    ) =>{
+    
+    return useInfiniteQuery<Types.GetAppsReleasesByPublisherDidQuery, TError, TData>(
+      ['GetAppsReleasesByPublisherDID.infinite', variables],
+      (metaData) => composeDbFetch<Types.GetAppsReleasesByPublisherDidQuery, Types.GetAppsReleasesByPublisherDidQueryVariables>(GetAppsReleasesByPublisherDidDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      options
+    )};
+
+
+useInfiniteGetAppsReleasesByPublisherDidQuery.getKey = (variables: Types.GetAppsReleasesByPublisherDidQueryVariables) => ['GetAppsReleasesByPublisherDID.infinite', variables];
+;
+
+useGetAppsReleasesByPublisherDidQuery.fetcher = (variables: Types.GetAppsReleasesByPublisherDidQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetAppsReleasesByPublisherDidQuery, Types.GetAppsReleasesByPublisherDidQueryVariables>(GetAppsReleasesByPublisherDidDocument, variables, options);
 export const GetAppsReleasesDocument = /*#__PURE__*/ `
     query GetAppsReleases($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaAppReleaseFiltersInput, $sorting: AkashaAppReleaseSortingInput) {
   akashaAppReleaseIndex(
