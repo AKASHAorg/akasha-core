@@ -1391,6 +1391,53 @@ export const GetAppsByIdDocument = /*#__PURE__*/ gql`
 }
     ${AkashaAppFragmentDoc}
 ${UserProfileFragmentDoc}`;
+export const GetAppsByPublisherDidDocument = /*#__PURE__*/ gql`
+    query GetAppsByPublisherDID($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaAppFiltersInput, $sorting: AkashaAppSortingInput) {
+  node(id: $id) {
+    ... on CeramicAccount {
+      akashaAppList(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        filters: $filters
+        sorting: $sorting
+      ) {
+        edges {
+          node {
+            ...AkashaAppFragment
+          }
+        }
+      }
+    }
+  }
+}
+    ${AkashaAppFragmentDoc}
+${UserProfileFragmentDoc}`;
+export const GetAppsReleasesByPublisherDidDocument = /*#__PURE__*/ gql`
+    query GetAppsReleasesByPublisherDID($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaAppReleaseFiltersInput, $sorting: AkashaAppReleaseSortingInput) {
+  node(id: $id) {
+    ... on CeramicAccount {
+      akashaAppReleaseList(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        filters: $filters
+        sorting: $sorting
+      ) {
+        edges {
+          node {
+            ...AppReleaseFragment
+          }
+        }
+      }
+    }
+  }
+}
+    ${AppReleaseFragmentDoc}
+${AkashaAppFragmentDoc}
+${UserProfileFragmentDoc}`;
 export const GetAppsReleasesDocument = /*#__PURE__*/ gql`
     query GetAppsReleases($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaAppReleaseFiltersInput, $sorting: AkashaAppReleaseSortingInput) {
   akashaAppReleaseIndex(
@@ -1581,6 +1628,12 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     GetAppsByID(variables: Types.GetAppsByIdQueryVariables, options?: C): Promise<Types.GetAppsByIdQuery> {
       return requester<Types.GetAppsByIdQuery, Types.GetAppsByIdQueryVariables>(GetAppsByIdDocument, variables, options) as Promise<Types.GetAppsByIdQuery>;
+    },
+    GetAppsByPublisherDID(variables: Types.GetAppsByPublisherDidQueryVariables, options?: C): Promise<Types.GetAppsByPublisherDidQuery> {
+      return requester<Types.GetAppsByPublisherDidQuery, Types.GetAppsByPublisherDidQueryVariables>(GetAppsByPublisherDidDocument, variables, options) as Promise<Types.GetAppsByPublisherDidQuery>;
+    },
+    GetAppsReleasesByPublisherDID(variables: Types.GetAppsReleasesByPublisherDidQueryVariables, options?: C): Promise<Types.GetAppsReleasesByPublisherDidQuery> {
+      return requester<Types.GetAppsReleasesByPublisherDidQuery, Types.GetAppsReleasesByPublisherDidQueryVariables>(GetAppsReleasesByPublisherDidDocument, variables, options) as Promise<Types.GetAppsReleasesByPublisherDidQuery>;
     },
     GetAppsReleases(variables?: Types.GetAppsReleasesQueryVariables, options?: C): Promise<Types.GetAppsReleasesQuery> {
       return requester<Types.GetAppsReleasesQuery, Types.GetAppsReleasesQueryVariables>(GetAppsReleasesDocument, variables, options) as Promise<Types.GetAppsReleasesQuery>;

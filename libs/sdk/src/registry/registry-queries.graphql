@@ -95,6 +95,34 @@ query GetAppsByID($id: ID!) {
   }
 }
 
+query GetAppsByPublisherDID($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaAppFiltersInput, $sorting: AkashaAppSortingInput) {
+  node(id: $id) {
+    ...on CeramicAccount {
+      akashaAppList(after: $after, before: $before, first: $first, last: $last, filters: $filters, sorting:  $sorting){
+          edges {
+            node {
+              ...AkashaAppFragment
+            }
+          }
+      }
+    }
+  }
+}
+
+query GetAppsReleasesByPublisherDID($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaAppReleaseFiltersInput, $sorting: AkashaAppReleaseSortingInput) {
+  node(id: $id) {
+    ...on CeramicAccount {
+      akashaAppReleaseList(after: $after, before: $before, first: $first, last: $last, filters: $filters, sorting:  $sorting){
+        edges {
+          node {
+            ...AppReleaseFragment
+          }
+        }
+      }
+    }
+  }
+}
+
 query GetAppsReleases($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaAppReleaseFiltersInput, $sorting: AkashaAppReleaseSortingInput){
   akashaAppReleaseIndex(after: $after, before: $before, first: $first, last: $last, filters:  $filters, sorting: $sorting){
     edges {
