@@ -91,7 +91,7 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
               onEntryRemove={handleEntryRemove}
               onEntryFlag={handleFlag}
               hideActionButtons={hideActionButtons}
-              profileAvatarExt={
+              profileAvatar={
                 <AuthorProfileAvatar
                   authorId={itemData.author.id}
                   createdAt={itemData?.createdAt}

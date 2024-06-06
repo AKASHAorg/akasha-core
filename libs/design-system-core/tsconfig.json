@@ -11,5 +11,5 @@
       "react": ["./node_modules/@types/react"]
     }
   },
-  "include": ["./src/**/*"]
+  "include": ["./src/**/*", "jest.setup.js", "jest.config.cjs"]
 }

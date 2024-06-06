@@ -1,6 +1,6 @@
 import * as mediaHooks from '@akashaorg/ui-awf-hooks/lib/utils/media-utils';
 
-require('@testing-library/jest-dom/extend-expect');
+import '@testing-library/jest-dom';
 
 jest.mock('react-i18next', () => ({
   ...jest.requireActual('react-i18next'),

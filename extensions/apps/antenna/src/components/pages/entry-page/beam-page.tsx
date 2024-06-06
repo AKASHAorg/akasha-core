@@ -8,7 +8,6 @@ import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import {
   hasOwn,
-  mapBeamEntryData,
   useAkashaStore,
   useAnalytics,
   useNsfwToggling,
@@ -18,20 +17,17 @@ import { useTranslation } from 'react-i18next';
 import { ReflectionPreview } from '@akashaorg/ui-lib-feed';
 import { AkashaBeamStreamModerationStatus } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { useNavigate } from '@tanstack/react-router';
-import {
-  GetBeamByIdQuery,
-  GetBeamStreamQuery,
-} from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 import { EditableReflectionResolver, ReflectFeed } from '@akashaorg/ui-lib-feed';
+import { BeamEntryData } from '@akashaorg/typings/lib/ui';
 
 type BeamPageProps = {
   beamId: string;
-  beamStream: GetBeamStreamQuery;
-  beam: GetBeamByIdQuery;
+  beamStatus: AkashaBeamStreamModerationStatus;
+  entryData: BeamEntryData;
 };
 
 const BeamPage: React.FC<BeamPageProps> = props => {
-  const { beamId, beamStream, beam } = props;
+  const { beamId, beamStatus, entryData } = props;
   const { t } = useTranslation('app-antenna');
   const { navigateToModal, logger } = useRootComponentProps();
   const {
@@ -65,27 +61,6 @@ const BeamPage: React.FC<BeamPageProps> = props => {
     }
   }, [reflectionStreamQuery.data]);
 
-  /**
-   * Check the current moderation status of the beam
-   */
-  const moderationData = React.useMemo(() => {
-    if (
-      beamStream &&
-      hasOwn(beamStream, 'node') &&
-      hasOwn(beamStream.node, 'akashaBeamStreamList') &&
-      beamStream.node.akashaBeamStreamList.edges?.[0]?.node &&
-      hasOwn(beamStream.node.akashaBeamStreamList.edges[0].node, 'status')
-    ) {
-      return beamStream.node.akashaBeamStreamList.edges[0].node.status;
-    }
-  }, [beamStream]);
-
-  const entryData = React.useMemo(() => {
-    if (beam && hasOwn(beam, 'node') && hasOwn(beam.node, 'id')) {
-      return beam.node;
-    }
-  }, [beam]);
-
   const showLoginModal = (title?: string, message?: string) => {
     navigateToModal({
       name: 'login',
@@ -103,10 +78,10 @@ const BeamPage: React.FC<BeamPageProps> = props => {
    */
   const showNsfwCard = React.useMemo(() => {
     return (
-      moderationData === AkashaBeamStreamModerationStatus.Nsfw &&
+      beamStatus === AkashaBeamStreamModerationStatus.Nsfw &&
       (!showNsfw || (!isLoggedIn && !authenticating))
     );
-  }, [authenticating, isLoggedIn, moderationData, showNsfw]);
+  }, [authenticating, beamStatus, isLoggedIn, showNsfw]);
 
   useLayoutEffect(() => {
     //resets initial scroll to top when page mounts
@@ -119,7 +94,7 @@ const BeamPage: React.FC<BeamPageProps> = props => {
         header={
           <BeamSection
             beamId={beamId}
-            entryData={mapBeamEntryData(entryData)}
+            entryData={entryData}
             isLoggedIn={isLoggedIn}
             showNSFWCard={showNsfwCard}
             hasReflections={hasReflections}
