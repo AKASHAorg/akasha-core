@@ -5,7 +5,7 @@ import { CarReader } from '@ipld/car';
 import * as Signer from '@ucanto/principal/ed25519';
 import { filesFromPaths } from 'files-from-path';
 import semver from 'semver';
-import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new.js';
+import { AkashaAppApplicationType, SortOrder } from '@akashaorg/typings/lib/sdk/graphql-types-new.js';
 import getSDK from '@akashaorg/awf-sdk';
 //import path from 'path';
 import pkgMapping from './pkg.mapping.mjs';
@@ -88,19 +88,21 @@ async function uploadExtensions () {
   if (affected.length && Array.isArray(affected)) {
     for (const pkgName of affected) {
       if (!pkgMapping[pkgName]) {
-        console.log(`Could not find ${ pkgName } in pkg.mapping.js`);
+        console.warn(`Could not find ${ pkgName } in pkg.mapping.js`);
         continue;
       }
       let pkgID;
-      const pkgInfo = await sdk.services.gql.client.GetApps({
-        filters: { where: { name: { equalTo: pkgName } } },
-        last: 1,
-      });
-      pkgID = pkgInfo?.akashaAppIndex?.edges
-        ? pkgInfo?.akashaAppIndex?.edges[0]?.node?.id
+      const pkgInfo = await sdk.services.gql.client.GetAppsByPublisherDID({
+        id: did.id.toString(),
+        first: 1,
+        filters: { where: { name: { equalTo: pkgName.toString() } } },
+        sorting: { createdAt: SortOrder.Desc },
+      }, { context: { source: sdk.services.gql.contextSources.composeDB }});
+      pkgID = pkgInfo?.node?.akashaAppList?.edges
+        ? pkgInfo?.node?.akashaAppList?.edges[0]?.node?.id
         : undefined;
       if (!pkgID) {
-        console.log(`Could not find ${ pkgName } in the registry`);
+        console.info(`Could not find ${ pkgName } in the registry`);
         const {default: pkgInfo} = await import(`${ pkgMapping[pkgName] }/manifest.json`, {
           with: {
             type: 'json',
@@ -127,13 +129,15 @@ async function uploadExtensions () {
 
       console.log(`Uploaded ${ pkgName } ${ directoryCid }`);
 
-      const appRelease = await sdk.services.gql.client.GetAppsReleases({
+      const appRelease = await sdk.services.gql.client.GetAppsReleasesByPublisherDID({
+        id: did.id,
         filters: { where: { applicationID: { equalTo: pkgID } } },
-        last: 1,
-      });
+        first: 1,
+        sorting: { createdAt: SortOrder.Desc },
+      }, { context: { source: sdk.services.gql.contextSources.composeDB }});
 
-      const version = appRelease.akashaAppReleaseIndex?.edges[0]?.node?.version
-        ? semver.inc(appRelease.akashaAppReleaseIndex?.edges[0]?.node?.version, 'patch')
+      const version = appRelease?.node?.akashaAppReleaseList?.edges[0]?.node?.version
+        ? semver.inc(appRelease?.node?.akashaAppReleaseList?.edges[0]?.node?.version, 'patch')
         : defaultVersion;
       await sdk.services.gql.client.SetAppRelease({
         i: {
