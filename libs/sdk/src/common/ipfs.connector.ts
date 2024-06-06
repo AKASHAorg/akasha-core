@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
-import { LEGAL_DOCS, LegalDocsSchema, TYPES } from '@akashaorg/typings/lib/sdk';
-import Logging from '../logging/index';
+import { LEGAL_DOCS, LegalDocsSchema, TYPES } from '@akashaorg/typings/lib/sdk/index.js';
+import Logging from '../logging/index.js';
 import { CID } from 'multiformats/cid';
 import { base16 } from 'multiformats/bases/base16';
 import { multiaddrToUri } from '@multiformats/multiaddr-to-uri';
@@ -8,14 +8,14 @@ import { Client, create } from '@web3-storage/w3up-client';
 import * as Signer from '@ucanto/principal/ed25519';
 import pino from 'pino';
 import { z } from 'zod';
-import { validate } from './validator';
-import CeramicService from './ceramic';
+import { validate } from './validator.js';
+import CeramicService from './ceramic.js';
 import { fromString } from 'uint8arrays/from-string';
 import { toString } from 'uint8arrays/to-string';
 import { extract } from '@ucanto/core/delegation';
 import type { Cacao } from '@didtools/cacao';
 import { StoreMemory } from '@web3-storage/access/stores/store-memory';
-import AWF_Config from './config';
+import AWF_Config from './config.js';
 
 export type SessionObj = {
   sessionKeySeed: string;

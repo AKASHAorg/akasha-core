@@ -1,9 +1,9 @@
 import { injectable } from 'inversify';
 import QuickLRU from 'quick-lru';
-import { createFormattedValue } from '../helpers/observable';
+import { createFormattedValue } from '../helpers/observable.js';
 import hash from 'object-hash';
 import { z } from 'zod';
-import { validate } from '../common/validator';
+import { validate } from '../common/validator.js';
 
 export type IQuickLRU = QuickLRU<string, any>;
 @injectable()

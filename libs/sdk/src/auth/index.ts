@@ -1,4 +1,4 @@
-import { authStatus, SwActionType } from './constants';
+import { authStatus, SwActionType } from './constants.js';
 import { inject, injectable } from 'inversify';
 import {
   AUTH_EVENTS,
@@ -12,21 +12,21 @@ import {
   PubKey,
   PubKeySchema,
   TYPES,
-} from '@akashaorg/typings/lib/sdk';
-import DB from '../db';
-import Web3Connector from '../common/web3.connector';
-import EventBus from '../common/event-bus';
-import Logging from '../logging';
-import Settings from '../settings';
+} from '@akashaorg/typings/lib/sdk/index.js';
+import DB from '../db/index.js';
+import Web3Connector from '../common/web3.connector.js';
+import EventBus from '../common/event-bus.js';
+import Logging from '../logging/index.js';
+import Settings from '../settings/index.js';
 
-import Gql from '../gql';
-import { createFormattedValue } from '../helpers/observable';
-import { executeOnSW } from './helpers';
+import Gql from '../gql/index.js';
+import { createFormattedValue } from '../helpers/observable.js';
+import { executeOnSW } from './helpers.js';
 import pino from 'pino';
-import Lit from '../common/lit';
-import CeramicService from '../common/ceramic';
+import Lit from '../common/lit.js';
+import CeramicService from '../common/ceramic.js';
 import { z } from 'zod';
-import { validate } from '../common/validator';
+import { validate } from '../common/validator.js';
 import { DIDSession } from 'did-session';
 import type { DagJWS } from 'dids';
 import type { JWE } from 'did-jwt';

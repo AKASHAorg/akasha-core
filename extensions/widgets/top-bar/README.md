@@ -1,6 +1,6 @@
-# Top Bar widget
+# Top-Bar widget
 
-> Presents the app title, search bar and other related plugin icons.
+> Topbar widget presents the world logo, and helpful icons for navigation, sidebar toggle and authentication on mobile screens.
 
 ## Usage
 

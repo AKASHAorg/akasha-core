@@ -64,7 +64,7 @@ const config = [
             crossOriginLoading: 'anonymous',
             clean: true
         },
-        target: ['web', 'es2020'],
+        target: ['web', 'es2022'],
         optimization: {
             moduleIds: 'deterministic',
             chunkIds: 'named',

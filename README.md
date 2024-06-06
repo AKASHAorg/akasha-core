@@ -23,13 +23,13 @@
   - [Install](#install)
   - [Usage](#usage)
     - [Run](#run)
-    - [Test](#test)
     - [Explore](#explore)
-      - [SDK](#sdk)
-      - [UI workspace](#ui-workspace)
-      - [Playground test-app](#playground-test-app)
-    - [Getting started with local development](#getting-started-with-local-development)
-  - [Adding a new package](#adding-a-new-package)
+      - [Extensions](#extensions)
+      - [Libs](#libs)
+      - [Tests](#tests)
+      - [Tools](#tools)
+      - [Worlds](#worlds)
+
   - [Contributors ✨](#contributors-✨)
   - [License](#license)
 
@@ -39,12 +39,12 @@ AKASHA Core is one of the results of an [initiative](https://ethereum.world/mani
 
 ## Install
 
-This project uses [node](http://nodejs.org) and [yarn](https://classic.yarnpkg.com).
+This project uses [node >= v20](http://nodejs.org) and [yarn >= v4](https://classic.yarnpkg.com).
 
 From the root of this project:
 
 ```shell script
-$ yarn bootstrap
+$ yarn clean:all
 $ yarn build:all
 ```
 
@@ -54,70 +54,32 @@ For a definitive guide on all available scripts, check out [Scripts-Guide](./SCR
 ### Run
 For development purposes, from the root of this project:
 ```shell script
-$ yarn start:feed-app
+$ yarn world:dev
 ```
-To watch for changes in dependent packages
+To watch for changes in dependent projects
 ```shell script
-$ AWF_PACKAGE=<package-name> yarn pack:watch
-```
-You can check which packages are available in the [workspace](./workspace.json) file in the root of the project.
-
-### Test
-
-From the root of the project:
-
-```shell script
-$ yarn test:<package-group>
-```
-
-where `<package-group>` can be one of `apps`, `design-system-core`, `design-system-components`, `hooks`, `widgets`, `app-loader`
-
-To test all:
-
-```shell script
-$ yarn test:all
+$ nx watch --projects=tag:scope:extension --includeDependentProjects -- nx build \\NX_PACKAGE_NAME
 ```
 
 ### Explore
 
-This repository is split into three major parts:
+This repository is split into five major parts:
 
-#### SDK
+#### Extensions
 
-To build the [SDK](./sdk), from the root of the project:
+The [extensions](./extensions/README.md) directory contains the available apps and widgets
 
-```shell script
-$ yarn build:sdk
-```
+#### Libs
+The [libs](./libs/README.md) directory contains components and logic reused across multiple apps and widgets
 
-This will create under the SDK package repo a folder `dist` that contains the built files.
+#### Tests
+The [tests](./tests/README.md) directory contains integration tests for Akasha World
 
-#### UI workspace
+#### Tools
+The [tools](./tools/README.md) directory contains executors (i18n etc) and cloudflare functions
 
-- [Apps](./ui/apps/README.md)
-- [Design system core](./ui/design-system-core/README.md)
-- [Design system components](./ui/design-system-components/README.md)
-- [Hooks](./ui/hooks/README.md)
-- [Widgets](./ui/widgets/README.md)
-- [Testing Utils](./tests/README.md)
-- [Typings](./typings/README.md)
-
-#### Playground test-app
-
-This [workspace](./examples) contains examples of applications that showcase the usage of AKASHA Core.
-
-### Getting started with local development
-
-Follow the steps described [here](./LOCAL_DEV.md)
-
-## Adding a new package
-
-1. in the root package.json add the package to the workspace package list
-2. in the root package.json create scripts to build it ex: ```"pack:ui-design": "nx run @akashaorg/design-system:build"```
-3. in the root package.json add it to build process in scripts, for example in the ```pack:ui``` script
-4. add it to tsconfig.json
-5. add it to workspace.json
-6. add it to tsconfig.typedoc.json
+#### Worlds
+The [Akasha World](./worlds/akasha.world/README.md) contains examples of applications that showcase the usage of AKASHA Core.
 
 ## Contributors ✨
 

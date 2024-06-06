@@ -19,7 +19,7 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "lib": ["dom", "es2022"],
-    "module": "ES2020",
+    "module": "esnext",
     "target": "es2022"
   },
   "references": [

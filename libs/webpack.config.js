@@ -55,6 +55,7 @@ const exp = {
         }
         return {
           displayName,
+          name: packageJson.name,
           mainFile: outputMainFile,
           license: packageJson.license,
           description: packageJson.description,

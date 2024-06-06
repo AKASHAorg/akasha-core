@@ -1,6 +1,6 @@
-# Mini profile widget
+# Mini Profile widget
 
-> Shows profile information of the author of an entry.
+> Mini Profile widget is an app-specific widget, shown on the widget section of the world's layout when the [Antenna App](../../apps/antenna/README.md) is mounted. It displays profile summary of the author of a Beam or Reflection.
 
 ## Usage
 

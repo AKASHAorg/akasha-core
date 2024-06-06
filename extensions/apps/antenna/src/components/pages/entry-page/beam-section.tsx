@@ -18,12 +18,21 @@ type BeamSectionProps = {
   entryData: BeamEntryData;
   isLoggedIn: boolean;
   showNSFWCard: boolean;
+  hasReflections: boolean;
   customStyle?: string;
   showLoginModal: (title?: string, message?: string) => void;
 };
 
 const BeamSection: React.FC<BeamSectionProps> = props => {
-  const { beamId, entryData, isLoggedIn, showNSFWCard, customStyle = '', showLoginModal } = props;
+  const {
+    beamId,
+    entryData,
+    isLoggedIn,
+    showNSFWCard,
+    hasReflections,
+    customStyle = '',
+    showLoginModal,
+  } = props;
   const { t } = useTranslation('app-antenna');
   const routerState = useRouterState();
   const [isReflecting, setIsReflecting] = useState(
@@ -85,8 +94,13 @@ const BeamSection: React.FC<BeamSectionProps> = props => {
       </Stack>
       {pendingReflections
         .filter(content => !hasOwn(content, 'reflection') && content.beamID === beamId)
-        .map((content, index) => (
-          <PendingReflect key={`pending-${index}-${beamId}`} entryData={content} />
+        .map((content, index, arr) => (
+          <PendingReflect
+            key={`pending-${index}-${beamId}`}
+            entryData={content}
+            // in an unlikely scenario where there are more than one pending reflections, adjust style on the last element only
+            customStyle={`${!hasReflections && index === arr.length - 1 ? 'rounded-b-2xl' : ''}`}
+          />
         ))}
     </Stack>
   );
