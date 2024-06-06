@@ -46,6 +46,8 @@ jobs:
           yarn build:all
       - run: echo "${GITHUB_WORKSPACE}/node_modules/.bin" >> $GITHUB_PATH
       - uses: nrwl/nx-set-shas@v4
+        with:
+          main-branch-name: "next"
       - name: Set the affected projects
         id: affected-projects
         run: |
