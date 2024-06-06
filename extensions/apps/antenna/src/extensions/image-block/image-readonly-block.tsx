@@ -15,7 +15,7 @@ export const ImageReadonlyBlock = (
   return (
     <Stack align={content.align || 'start'} spacing="gap-1">
       <ImageBlockGallery images={transformedImages} />
-      {content.caption && <Text>{content.caption}</Text>}
+      {content.caption && <Text breakWord>{content.caption}</Text>}
     </Stack>
   );
 };
