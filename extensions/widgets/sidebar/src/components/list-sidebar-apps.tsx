@@ -49,11 +49,11 @@ const ListSidebarApps: React.FC<ListSidebarAppsProps> = props => {
 
   useEffect(() => {
     /**
-     * checks if any of the accordion's sub menu is
-     * currently active, and keeps same open even after refresh
+     * checks if any of the accordion's sub menu or app's sub route
+     * is currently active, and keeps same open even after refresh
      */
     appsWithSubroutes.forEach((app, idx) =>
-      app.subRoutes.some(r => location.pathname === `/${app.name}${r.route}`)
+      app.subRoutes.some(() => location.pathname.includes(`/${app.name}`))
         ? setActiveAccordionId(`${app.name}${idx}`)
         : null,
     );
