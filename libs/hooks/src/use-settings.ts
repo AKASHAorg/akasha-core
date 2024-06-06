@@ -26,12 +26,12 @@ async function saveSettings({
 
 /**
  * Hook to save app's settings using sdk settings service
- * @param app - The app's name for example \@akashaorg/app-akasha-verse
+ * @param app - string: The app's name for example \@akashaorg/app-extensions
  * @param options - Array of option pairs [optionName, value]
  * @example useSaveSettings hook
  * ```typescript
- * const saveSettings = useSaveSettings();
- * saveSettings.mutate(JSON.stringify({ app: '@akashaorg/app-akasha-verse', options: [['key', 'value']] }))
+ * const { saveNotificationSettings } = useSaveSettings();
+ * saveNotificationSettings({ app: '@akashaorg/app-extensions', options: [['key', 'value']] })
  * ```
  */
 export function useSaveSettings() {
@@ -76,10 +76,10 @@ const getSettings = async (app: string) => {
 
 /**
  * Hook to get saved settings for an app
+ * @param app - string: The app's name for example \@akashaorg/app-extensions
  * @example useGetSettings hook
  * ```typescript
  * const savedSettingsQuery = useGetSettings('@akashaorg/app-akasha-verse');
- *
  * const savedSettings = savedSettingsQuery.data;
  * ```
  */
@@ -123,14 +123,14 @@ export function useGetSettings(app: string) {
   return { data: settings, isLoading, error };
 }
 
-/*
+/**
  * Hook to get the indexing DID used by the SDK's GraphQL client.
  *
  * @returns {string} The indexing DID currently used by the SDK's GraphQL client.
  *
  * @example
  * const currentIndexingDID = useGetIndexingDID();
- */
+ **/
 
 export function useGetIndexingDID() {
   const sdk = getSDK();

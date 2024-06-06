@@ -3,6 +3,14 @@ import { useRootComponentProps } from './use-root-props';
 
 export type theme = 'Light-Theme' | 'Dark-Theme';
 
+/**
+ * Hook to handle the data supplied to the `LoginModal` extension.
+ * @returns { modalData } - Object containing the params passed in the url
+ * @example useModalData hook
+ * ```typescript
+ * const { modalData } = useModalData();
+ * ```
+ **/
 export const useModalData = () => {
   const { getModalFromParams } = useRootComponentProps();
   const getModalData = useRef(getModalFromParams);
