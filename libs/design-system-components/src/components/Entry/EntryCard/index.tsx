@@ -1,7 +1,7 @@
 import React, { ReactElement, ReactNode, Ref, Fragment, useState } from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import EntryCardRemoved, { AuthorsRemovedMessage, OthersRemovedMessage } from '../EntryCardRemoved';
+import EntryCardRemoved from '../EntryCardRemoved';
 import CardActions from './card-actions';
 import {
   EllipsisHorizontalIcon,
@@ -42,8 +42,12 @@ export type EntryCardProps = {
   removeEntryLabel?: string;
   notEditableLabel?: string;
   removed?: {
-    author: AuthorsRemovedMessage;
-    others: OthersRemovedMessage;
+    author: React.ReactNode;
+    others: React.ReactNode;
+  };
+  moderated?: {
+    author: React.ReactNode;
+    others: React.ReactNode;
   };
   nsfw?: Omit<NSFWProps, 'onClickToView'>;
   reflectAnchorLink?: string;
@@ -137,6 +141,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
           {
             icon: <TrashIcon />,
             label: removeEntryLabel ?? '',
+            color: { light: 'errorLight', dark: 'errorDark' } as const,
             disabled: !editable,
             toolTipContent: editable ? null : notEditableLabel,
             onClick: onEntryRemove,

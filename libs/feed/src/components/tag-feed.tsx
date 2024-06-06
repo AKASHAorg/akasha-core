@@ -9,12 +9,11 @@ import { useTranslation } from 'react-i18next';
 import { AnalyticsEventData } from '@akashaorg/typings/lib/ui';
 import {
   SortOrder,
-  AkashaIndexedStreamFiltersInput,
-  AkashaIndexedStreamStreamType,
   AkashaIndexedStreamEdge,
+  AkashaIndexedStreamSortingInput,
+  AkashaIndexedStreamFiltersInput,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { hasOwn, useAkashaStore, useNsfwToggling } from '@akashaorg/ui-awf-hooks';
-import { getNsfwFiltersTagFeed } from '../utils';
+import { hasOwn, useAkashaStore } from '@akashaorg/ui-awf-hooks';
 import { useGetIndexedStreamLazyQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
 export type TagFeedProps = {
@@ -29,27 +28,28 @@ export type TagFeedProps = {
   loadingIndicator?: () => React.ReactElement;
   renderItem: (data?: Omit<AkashaIndexedStreamEdge['node'], 'id'>) => ReactElement;
   trackEvent?: (data: AnalyticsEventData['data']) => void;
+  filters?: AkashaIndexedStreamFiltersInput;
+  sorting?: AkashaIndexedStreamSortingInput;
 };
 
 const TagFeed = (props: TagFeedProps) => {
   const {
-    queryKey,
     estimatedHeight = 150,
     itemSpacing,
     scrollOptions = { overScan: 10 },
     tags,
     loadingIndicator,
     renderItem,
+    filters,
   } = props;
 
   const { t } = useTranslation('ui-lib-feed');
   const sdkRef = useRef(getSDK());
   const indexingDID = React.useRef(sdkRef.current.services.gql.indexingDID);
-  const { showNsfw } = useNsfwToggling();
   const {
-    data: { authenticatedDID, isAuthenticating },
+    data: { isAuthenticating },
   } = useAkashaStore();
-  const isLoggedIn = !!authenticatedDID;
+
   const [fetchIndexedStream, indexedStreamQuery] = useGetIndexedStreamLazyQuery();
   const indexedBeamStream = React.useMemo(() => {
     if (
@@ -63,23 +63,6 @@ const TagFeed = (props: TagFeedProps) => {
   const pageInfo = React.useMemo(() => {
     return indexedBeamStream?.pageInfo;
   }, [indexedBeamStream]);
-  const mergedFilters: AkashaIndexedStreamFiltersInput[] = React.useMemo(() => {
-    const nsfwFilters = getNsfwFiltersTagFeed({ queryKey, showNsfw, isLoggedIn });
-
-    const tagsFilters = {
-      or: tags?.map(_tag => ({ where: { indexValue: { equalTo: _tag } } })) || [],
-    };
-    const defaultFilters: AkashaIndexedStreamFiltersInput[] = [
-      { where: { streamType: { equalTo: AkashaIndexedStreamStreamType.Beam } } },
-      { where: { indexType: { equalTo: sdkRef.current.services.gql.labelTypes.TAG } } },
-      { where: { active: { equalTo: true } } },
-      tagsFilters,
-    ];
-    if (nsfwFilters) {
-      defaultFilters.push(nsfwFilters);
-    }
-    return defaultFilters;
-  }, [isLoggedIn, queryKey, showNsfw, tags]);
 
   useEffect(() => {
     fetchIndexedStream({
@@ -87,12 +70,10 @@ const TagFeed = (props: TagFeedProps) => {
         indexer: indexingDID.current,
         first: 10,
         sorting: { createdAt: SortOrder.Desc },
-        filters: {
-          and: mergedFilters,
-        },
+        filters,
       },
     });
-  }, [fetchIndexedStream, mergedFilters]);
+  }, [fetchIndexedStream, filters]);
 
   const loadingIndicatorRef = React.useRef(loadingIndicator);
 

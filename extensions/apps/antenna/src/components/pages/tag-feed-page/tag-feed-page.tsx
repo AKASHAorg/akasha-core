@@ -9,7 +9,7 @@ import {
   useUpdateInterestsMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { AkashaIndexedStreamStreamType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { BeamContentResolver, TagFeed } from '@akashaorg/ui-lib-feed';
+import { BeamContentResolver, getNsfwFiltersForTagFeed, TagFeed } from '@akashaorg/ui-lib-feed';
 import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -44,6 +44,15 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
   );
 
   const sdk = React.useRef(getSDK());
+  const tagFilters = useMemo(
+    () => [
+      { where: { streamType: { equalTo: AkashaIndexedStreamStreamType.Beam } } },
+      { where: { indexType: { equalTo: sdk.current.services.gql.labelTypes.TAG } } },
+      { where: { indexValue: { equalTo: tagName } } },
+      { where: { active: { equalTo: true } } },
+    ],
+    [tagName],
+  );
   const {
     data: beamCountData,
     loading: loadingCount,
@@ -52,12 +61,7 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
     variables: {
       indexer: sdk.current.services.gql.indexingDID,
       filters: {
-        and: [
-          { where: { streamType: { equalTo: AkashaIndexedStreamStreamType.Beam } } },
-          { where: { indexType: { equalTo: sdk.current.services.gql.labelTypes.TAG } } },
-          { where: { indexValue: { equalTo: tagName } } },
-          { where: { active: { equalTo: true } } },
-        ],
+        and: tagFilters,
       },
     },
   });
@@ -157,6 +161,8 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
 
   const listOfTags = React.useMemo(() => [tagName], [tagName]);
 
+  const queryKey = `app-antenna_tag-antenna_${tagName}`;
+
   return (
     <HelmetProvider>
       <Stack fullWidth={true}>
@@ -187,10 +193,22 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
           </Stack>
         )}
         <TagFeed
-          queryKey={`app-antenna_tag-antenna_${tagName}`}
+          queryKey={queryKey}
           tags={listOfTags}
           estimatedHeight={150}
           itemSpacing={8}
+          filters={{
+            and: [
+              ...tagFilters,
+              {
+                or: getNsfwFiltersForTagFeed({
+                  isLoggedIn,
+                  showNsfw: false,
+                  queryKey,
+                }),
+              },
+            ],
+          }}
           scrollOptions={{ overScan: 10 }}
           scrollTopIndicator={(listRect, onScrollToTop) => (
             <ScrollTopWrapper placement={listRect.left}>

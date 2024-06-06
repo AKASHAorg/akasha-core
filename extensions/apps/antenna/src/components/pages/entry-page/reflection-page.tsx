@@ -43,6 +43,7 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
   }, [reflection]);
 
   const indexingDID = useRef(getSDK().services.gql.indexingDID);
+
   const filters = useMemo(() => {
     return {
       and: [
@@ -58,7 +59,9 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
     };
   }, [entryData.id]);
 
-  // TODO: after usePendingReflections refactor, the pending reflect component can be moved inside the reflect feed component, thereby making these blocks and associated logic redundant and safe to be cleaned up
+  // TODO: after usePendingReflections refactor, the pending reflect component can be moved
+  //  inside the reflect feed component, thereby making these blocks and associated logic
+  //  redundant and safe to be cleaned up
   const reflectionStreamQuery = useGetReflectionStreamQuery({
     variables: {
       first: 1,

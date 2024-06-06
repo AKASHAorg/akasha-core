@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo, useRef } from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
@@ -6,15 +6,23 @@ import StartCard from '@akashaorg/design-system-components/lib/components/StartC
 import { useTranslation } from 'react-i18next';
 import { ModalNavigationOptions, QueryKeys } from '@akashaorg/typings/lib/ui';
 import { useGetInterestsByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { hasOwn, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { BeamContentResolver, TagFeed } from '@akashaorg/ui-lib-feed';
+import {
+  hasOwn,
+  useAkashaStore,
+  useNsfwToggling,
+  useRootComponentProps,
+} from '@akashaorg/ui-awf-hooks';
+import { BeamContentResolver, getNsfwFiltersForTagFeed, TagFeed } from '@akashaorg/ui-lib-feed';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { AkashaIndexedStreamStreamType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import getSDK from '@akashaorg/awf-sdk';
 
 const MY_ANTENNA_OVERSCAN = 10;
 
 const MyAntennaPage: React.FC<unknown> = () => {
   const { t } = useTranslation('app-antenna');
   const { getRoutingPlugin, navigateToModal, worldConfig } = useRootComponentProps();
+  const { showNsfw } = useNsfwToggling();
   const {
     data: { authenticatedProfile },
   } = useAkashaStore();
@@ -54,6 +62,15 @@ const MyAntennaPage: React.FC<unknown> = () => {
         `${navRoutes.rootRoute}/${authenticatedProfile?.did.id}${navRoutes.interests}`,
     });
   };
+  const sdk = useRef(getSDK());
+  const tagFilters = useMemo(
+    () => [
+      { where: { streamType: { equalTo: AkashaIndexedStreamStreamType.Beam } } },
+      { where: { indexType: { equalTo: sdk.current.services.gql.labelTypes.TAG } } },
+      { where: { active: { equalTo: true } } },
+    ],
+    [],
+  );
 
   return (
     <HelmetProvider>
@@ -81,6 +98,21 @@ const MyAntennaPage: React.FC<unknown> = () => {
             queryKey={QueryKeys.MY_ANTENNA}
             estimatedHeight={150}
             itemSpacing={8}
+            filters={{
+              and: [
+                ...tagFilters,
+                {
+                  or: [
+                    ...getNsfwFiltersForTagFeed({
+                      queryKey: QueryKeys.MY_ANTENNA,
+                      showNsfw: showNsfw,
+                      isLoggedIn: !!authenticatedProfile?.did.id,
+                    }),
+                    { where: { indexValue: { in: tagSubsData.topics.map(t => t.value) } } },
+                  ],
+                },
+              ],
+            }}
             tags={tagSubsData?.topics.map(topic => topic.value)}
             scrollOptions={{ overScan: MY_ANTENNA_OVERSCAN }}
             scrollTopIndicator={(listRect, onScrollToTop) => (
