@@ -81,7 +81,7 @@ async function uploadExtensions () {
   if (!process.env.AFFECTED_EXTENSIONS) {
     throw new Error('AFFECTED_PROJECTS env var not set');
   }
-  const affected = JSON.parse(process.env.AFFECTED_PROJECTS);
+  const affected = JSON.parse(process.env.AFFECTED_EXTENSIONS);
   const sdk = getSDK();
   const did = await authenticate();
   sdk.services.ceramic.getComposeClient().setDID(did);
@@ -102,7 +102,7 @@ async function uploadExtensions () {
       if (!pkgID) {
         console.log(`Could not find ${ pkgName } in the registry`);
         const {default: pkgInfo} = await import(`${ pkgMapping[pkgName] }/manifest.json`, {
-          assert: {
+          with: {
             type: 'json',
           },
         });
