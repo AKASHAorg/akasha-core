@@ -44,6 +44,8 @@ jobs:
         run: |
           yarn install --immutable
           yarn build:all
+      - run: echo "${GITHUB_WORKSPACE}/node_modules/.bin/nx" >> $GITHUB_PATH
+      - run: echo "${GITHUB_WORKSPACE}/node_modules/.bin/ts-node" >> $GITHUB_PATH
       - uses: nrwl/nx-set-shas@v4
       - name: Set the affected projects
         id: affected-projects
