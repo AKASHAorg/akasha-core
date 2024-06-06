@@ -25,6 +25,17 @@ export type CookieCardProps = {
   onClickOnlyEssential: () => void;
 };
 
+/**
+ * Component used to display the platform cookie policy info, used in the cookie widget
+ * @param titleLabel - title of the cookie carda
+ * @param paragraphOneLabel - first paragraph data
+ * @param paragraphTwo - second paragraph data, contains also @param onSettingsClick - handler
+for redirecting to the settings page
+ * @param paragraphThree - third paragraph data, contains also @param onPrivacyClick - handler
+for redirecting to the privacy policy 
+ * @param onClickAcceptAll - handler to accept all cookie settings
+ * @param onClickOnlyEssential - handler to accept only essential cookie settings
+ */
 const CookieCard: React.FC<CookieCardProps> = props => {
   const {
     titleLabel,
