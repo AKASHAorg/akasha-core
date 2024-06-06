@@ -6,6 +6,16 @@ let pendingReflectionsVar;
 
 export const PENDING_REFLECTION_PREFIX = 'pending-reflection';
 
+/**
+ * Hook that handles the adding, removing and returning of the
+ * pending Reflections by making use of Apollo's reactive variables.
+ * The updated pending reflections returned can be used to update/re-render
+ * the components directly without the need to use `useQuery`.
+ * @example usePendingReflections hook
+ * ```typescript
+ * const { pendingReflections, addPendingReflection } = usePendingReflections();
+ * ```
+ */
 export const usePendingReflections = () => {
   if (!pendingReflectionsVar) {
     pendingReflectionsVar = createReactiveVar<ReflectEntryData[]>([]);
