@@ -43,25 +43,27 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
   }, [reflection]);
 
   const indexingDID = useRef(getSDK().services.gql.indexingDID);
-  const filters = useRef({
-    and: [
-      { where: { isReply: { equalTo: true } } },
-      {
-        where: {
-          replyTo: {
-            equalTo: entryData.id,
+  const filters = useMemo(() => {
+    return {
+      and: [
+        { where: { isReply: { equalTo: true } } },
+        {
+          where: {
+            replyTo: {
+              equalTo: entryData.id,
+            },
           },
         },
-      },
-    ],
-  });
+      ],
+    };
+  }, [entryData.id]);
 
   // TODO: after usePendingReflections refactor, the pending reflect component can be moved inside the reflect feed component, thereby making these blocks and associated logic redundant and safe to be cleaned up
   const reflectionStreamQuery = useGetReflectionStreamQuery({
     variables: {
       first: 1,
       indexer: indexingDID.current,
-      filters: filters.current,
+      filters: filters,
     },
     fetchPolicy: 'no-cache',
   });
@@ -123,7 +125,7 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
         itemSpacing={0}
         trackEvent={analyticsActions.trackEvent}
         estimatedHeight={120}
-        filters={filters.current}
+        filters={filters}
         renderItem={itemData => (
           <ErrorBoundary
             errorObj={{
