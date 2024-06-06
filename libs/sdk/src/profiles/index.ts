@@ -13,7 +13,7 @@ import CeramicService from '../common/ceramic.js';
 import { hasOwn } from '../helpers/types.js';
 // tslint:disable-next-line:no-var-requires
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const { default: urlSource } = await import('ipfs-utils/src/files/url-source.js');
+
 
 @injectable()
 class AWF_Profile {
@@ -102,6 +102,7 @@ class AWF_Profile {
       throw new Error('Must be logged in to upload media');
     }
     if (data.isUrl) {
+      const { default: urlSource } = await import('ipfs-utils/src/files/url-source.js');
       const source = urlSource(data.content);
       const arr: BlobPart[] = [];
 
