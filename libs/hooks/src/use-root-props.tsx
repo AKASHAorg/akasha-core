@@ -18,6 +18,16 @@ const RootComponentPropsProvider = ({
   );
 };
 
+/**
+ * Hook to manage and access the context of the plugins for routing, translation, and extensions.
+ * For example, through this hook, the `getRoutingPlugin`method can be used to
+ * navigate between apps, or the `worldConfig` object can be used for accessing
+ * the config info related to the World the whole application belongs to.
+ * @example useRootComponentProps hook
+ * ```typescript
+ *   const { getTranslationPlugin, baseRouteName,getRoutingPlugin, navigateToModal, worldConfig } = useRootComponentProps();
+ * ```
+ */
 const useRootComponentProps = <T extends RootComponentProps>() => {
   const ctx = React.useContext<T>(RootComponentPropsContext);
   const getRoutingPlugin = React.useCallback(
