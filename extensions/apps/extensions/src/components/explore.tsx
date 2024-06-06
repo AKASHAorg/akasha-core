@@ -68,7 +68,7 @@ export const Explore: React.FC<TExploreProps> = props => {
     <Stack spacing="gap-y-4">
       <Text variant="h5">{titleLabel}</Text>
       {sections.map((section, idx) => (
-        <>
+        <React.Fragment key={section.title + idx}>
           {!!latestExtensions?.length && idx === 1 && (
             <LatestExtensionsCard
               buttonLabel={buttonLabel}
@@ -91,7 +91,7 @@ export const Explore: React.FC<TExploreProps> = props => {
               {section.ctaNode}
             </Stack>
           </Card>
-        </>
+        </React.Fragment>
       ))}
     </Stack>
   );
