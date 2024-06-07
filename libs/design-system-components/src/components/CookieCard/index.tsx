@@ -32,7 +32,7 @@ export type CookieCardProps = {
  * @param paragraphTwo - second paragraph data, contains also @param onSettingsClick - handler
 for redirecting to the settings page
  * @param paragraphThree - third paragraph data, contains also @param onPrivacyClick - handler
-for redirecting to the privacy policy 
+for redirecting to the privacy policy
  * @param onClickAcceptAll - handler to accept all cookie settings
  * @param onClickOnlyEssential - handler to accept only essential cookie settings
  */
