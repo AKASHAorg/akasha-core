@@ -129,45 +129,50 @@ export function useScrollRestoration({
      * Store scroll restoration configs after unmounting the component where the scroll restoration is used.
      **/
     return () => {
-      const headerHeight = headerHeightRef.current;
-      const virtualItems = virtualizerRef.current.getVirtualItems();
-      const stepBackArr = Array(overScan)
-        .fill(0)
-        .map((_, index) => index);
       /*
-       * Compute a visible item which will be used for scroll restoration reference.
+       * Store scroll restoration config only if a scroll occurred
        **/
-      let visibleItem = null;
-      for (const stepBack of stepBackArr) {
-        if (virtualItems?.[overScan - stepBack]) {
-          visibleItem = virtualItems[overScan - stepBack];
-          break;
+      if (virtualizerRef.current?.scrollOffset > 0) {
+        const headerHeight = headerHeightRef.current;
+        const virtualItems = virtualizerRef.current.getVirtualItems();
+        const stepBackArr = Array(overScan)
+          .fill(0)
+          .map((_, index) => index);
+        /*
+         * Compute a visible item which will be used for scroll restoration reference.
+         **/
+        let visibleItem = null;
+        for (const stepBack of stepBackArr) {
+          if (virtualItems?.[overScan - stepBack]) {
+            visibleItem = virtualItems[overScan - stepBack];
+            break;
+          }
         }
-      }
-      /*
-       * If the index of the visible item is less than or equal to overScan recompute the visible item for accuracy
-       **/
-      if (visibleItem?.index <= overScan) {
-        let visibleItemIndex = virtualItems.findIndex(
-          virtualItem => virtualItem.start >= virtualizerRef.current.scrollOffset,
-        );
-        visibleItemIndex = visibleItemIndex === 0 ? 0 : visibleItemIndex - 1;
-        if (visibleItemIndex >= 0) {
-          visibleItem = virtualItems[visibleItemIndex];
+        /*
+         * If the index of the visible item is less than or equal to overScan recompute the visible item for accuracy
+         **/
+        if (visibleItem?.index <= overScan) {
+          let visibleItemIndex = virtualItems.findIndex(
+            virtualItem => virtualItem.start >= virtualizerRef.current.scrollOffset,
+          );
+          visibleItemIndex = visibleItemIndex === 0 ? 0 : visibleItemIndex - 1;
+          if (visibleItemIndex >= 0) {
+            visibleItem = virtualItems[visibleItemIndex];
+          }
         }
-      }
 
-      storeScrollConfig(scrollRestorationStorageKey, {
-        scrollOffset: virtualizerRef.current?.scrollOffset,
-        topOffset: virtualItems?.[0]?.start - virtualizerRef.current.options.scrollMargin,
-        referenceItemIndex: visibleItem?.index,
-        options: {
-          ...virtualizerRef.current?.options,
-          initialMeasurementsCache: virtualizerRef.current?.measurementsCache,
-        },
-        lastScrollRestorationKey,
-        headerHeight,
-      });
+        storeScrollConfig(scrollRestorationStorageKey, {
+          scrollOffset: virtualizerRef.current?.scrollOffset,
+          topOffset: virtualItems?.[0]?.start - virtualizerRef.current.options.scrollMargin,
+          referenceItemIndex: visibleItem?.index,
+          options: {
+            ...virtualizerRef.current?.options,
+            initialMeasurementsCache: virtualizerRef.current?.measurementsCache,
+          },
+          lastScrollRestorationKey,
+          headerHeight,
+        });
+      }
     };
   }, []);
 
