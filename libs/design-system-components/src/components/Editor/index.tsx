@@ -50,14 +50,6 @@ const MAX_TEXT_LENGTH = 500;
 // this is to account for the limitations on the ceramic storage side
 const MAX_ENCODED_LENGTH = 6000;
 
-/**
- * @param uploadRequest - upload a file and returns a promise that resolves to an array
- * @param editorState - the state of the editor is controlled from the parent component
- * @param withMeter - display the letter counter, maximum length is internally defined at 500
- * @param withToolbar - display the rich text formatting toolbar
- * @param transformSource - utility function to provide ipfs images with gateways to be accessed
- * @param encodingFunction - utility function to check if the encoded slate content is too big
- */
 export type EditorBoxProps = {
   avatar?: Profile['avatar'];
   showAvatar?: boolean;
@@ -94,6 +86,15 @@ export type EditorBoxProps = {
 };
 
 /* eslint-disable complexity */
+/**
+ * Editor component based on the slate.js framework
+ * @param uploadRequest - upload a file and returns a promise that resolves to an array
+ * @param editorState - the state of the editor is controlled from the parent component
+ * @param withMeter - display the letter counter, maximum length is internally defined at 500
+ * @param withToolbar - display the rich text formatting toolbar
+ * @param transformSource - utility function to provide ipfs images with gateways to be accessed
+ * @param encodingFunction - utility function to check if the encoded slate content is too big
+ */
 const EditorBox: React.FC<EditorBoxProps> = props => {
   const {
     avatar,
