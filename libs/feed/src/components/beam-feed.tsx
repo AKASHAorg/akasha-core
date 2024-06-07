@@ -100,10 +100,16 @@ const BeamFeed = (props: BeamFeedProps) => {
       variables,
       fetchPolicy: 'cache-and-network',
     });
+    hasLatestBeamsRef.current = false;
   }, [fetchBeamStream, variables]);
 
   useEffect(() => {
     if (pageInfo?.startCursor) {
+      /*
+       * When feed mounts, check if there is latest data. There will be latest data if current start cursor differs from the one before.
+       * If there is latest data and if scroll position is at the top then load latest data immediately otherwise flag hasLatestBeamsRef to use it to load data
+       * when the scroll position is at the top.
+       **/
       apolloClientRef.current
         .query<GetBeamStreamQuery>({
           query: GetBeamStreamDocument,
@@ -127,6 +133,9 @@ const BeamFeed = (props: BeamFeedProps) => {
 
   React.useEffect(() => {
     const onScroll = () => {
+      /*
+       * If there is latest data and the scroll position is at the top load the data.
+       **/
       if (hasLatestBeamsRef.current && scrollY <= vListContainerOffset.current) {
         onLoadNewest();
       }
