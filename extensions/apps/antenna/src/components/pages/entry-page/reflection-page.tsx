@@ -137,7 +137,7 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
             }}
             logger={logger}
           >
-            <>
+            <div>
               <Divider />
               <EditableReflectionResolver
                 reflectID={itemData.reflectionID}
@@ -171,7 +171,7 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
                   });
                 }}
               />
-            </>
+            </div>
           </ErrorBoundary>
         )}
       />
