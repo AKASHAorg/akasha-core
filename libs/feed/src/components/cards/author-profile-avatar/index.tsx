@@ -18,7 +18,7 @@ type AuthorProfileAvatarProps = {
 
 const AuthorProfileAvatar: React.FC<AuthorProfileAvatarProps> = props => {
   const { authorId, createdAt, hidePublishTime, pending } = props;
-  const { t } = useTranslation('app-extensions');
+  const { t } = useTranslation('ui-lib-feed');
   const { getTranslationPlugin, getRoutingPlugin } = useRootComponentProps();
   const navigateTo = getRoutingPlugin().navigateTo;
   const locale = getTranslationPlugin().i18n?.languages?.[0] || 'en';
