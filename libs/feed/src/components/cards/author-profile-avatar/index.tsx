@@ -3,10 +3,11 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import ProfileAvatarLoading from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton/ProfileAvatarLoading';
-import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
+import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import { formatDate, formatRelativeTime } from '@akashaorg/design-system-core/lib/utils';
-import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { hasOwn, transformSource, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
+import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
 type AuthorProfileAvatarProps = {
   authorId: string;
@@ -17,12 +18,15 @@ type AuthorProfileAvatarProps = {
 
 const AuthorProfileAvatar: React.FC<AuthorProfileAvatarProps> = props => {
   const { authorId, createdAt, hidePublishTime, pending } = props;
+  const { t } = useTranslation('ui-lib-feed');
   const { getTranslationPlugin, getRoutingPlugin } = useRootComponentProps();
   const navigateTo = getRoutingPlugin().navigateTo;
   const locale = getTranslationPlugin().i18n?.languages?.[0] || 'en';
   const publishTime = createdAt ? formatRelativeTime(createdAt, locale) : '';
-
-  const { t } = useTranslation('app-extensions');
+  const profileQuery = useGetProfileByDidQuery({
+    variables: { id: authorId },
+    fetchPolicy: 'cache-first',
+  });
 
   const onAvatarClick = (id: string) => {
     navigateTo({
@@ -31,64 +35,59 @@ const AuthorProfileAvatar: React.FC<AuthorProfileAvatarProps> = props => {
     });
   };
 
+  if (profileQuery?.loading) return <ProfileAvatarLoading />;
+
+  if (profileQuery?.error) return null;
+
+  const profileData =
+    profileQuery.data?.node && hasOwn(profileQuery.data.node, 'isViewer')
+      ? profileQuery.data.node.akashaProfile
+      : null;
+
   return (
-    <Extension
-      name={`profile_avatar_${authorId}`}
-      loadingIndicator={<ProfileAvatarLoading />}
-      emptyIndicator={<ProfileAvatarLoading />}
-      extensionData={{
-        dataTestId: 'entry-profile-detail',
-        profileDID: authorId,
-        href: `/@akashaorg/app-profile/${authorId}`,
-        metadata: (
-          <>
-            {publishTime && !hidePublishTime && (
-              <Stack direction="row" align="center" spacing="gap-x-1">
+    <ProfileAvatarButton
+      profileId={authorId}
+      href={`/@akashaorg/app-profile/${authorId}`}
+      label={profileData?.name}
+      avatar={transformSource(profileData?.avatar?.default)}
+      alternativeAvatars={profileData?.avatar?.alternatives?.map(alternative =>
+        transformSource(alternative),
+      )}
+      metadata={
+        <>
+          {publishTime && !hidePublishTime && (
+            <Stack direction="row" align="center" spacing="gap-x-1">
+              <Text variant="footnotes2" weight="normal" color={{ light: 'grey4', dark: 'grey7' }}>
+                ·
+              </Text>
+              <Tooltip
+                placement={'top'}
+                content={createdAt ? formatDate(createdAt, 'H[:]mm [·] D MMM YYYY', locale) : ''}
+              >
                 <Text
                   variant="footnotes2"
                   weight="normal"
                   color={{ light: 'grey4', dark: 'grey7' }}
                 >
-                  ·
+                  {publishTime}
                 </Text>
-                <Tooltip
-                  placement={'top'}
-                  content={createdAt ? formatDate(createdAt, 'H[:]mm [·] D MMM YYYY', locale) : ''}
-                >
-                  <Text
-                    variant="footnotes2"
-                    weight="normal"
-                    color={{ light: 'grey4', dark: 'grey7' }}
-                  >
-                    {publishTime}
-                  </Text>
-                </Tooltip>
-              </Stack>
-            )}
-            {pending && (
-              <Stack direction="row" align="center" spacing="gap-x-1">
-                <Text
-                  variant="footnotes2"
-                  weight="normal"
-                  color={{ light: 'grey4', dark: 'grey7' }}
-                >
-                  ·
-                </Text>
-                <Text
-                  variant="footnotes2"
-                  weight="normal"
-                  color={{ light: 'grey4', dark: 'grey7' }}
-                >
-                  {t('Pending')}...
-                </Text>
-              </Stack>
-            )}
-          </>
-        ),
-        onClick: e => {
-          e.preventDefault();
-          onAvatarClick(authorId);
-        },
+              </Tooltip>
+            </Stack>
+          )}
+          {pending && (
+            <Stack direction="row" align="center" spacing="gap-x-1">
+              <Text variant="footnotes2" weight="normal" color={{ light: 'grey4', dark: 'grey7' }}>
+                ·
+              </Text>
+              <Text variant="footnotes2" weight="normal" color={{ light: 'grey4', dark: 'grey7' }}>
+                {t('Pending')}...
+              </Text>
+            </Stack>
+          )}
+        </>
+      }
+      onClick={() => {
+        onAvatarClick(authorId);
       }}
     />
   );

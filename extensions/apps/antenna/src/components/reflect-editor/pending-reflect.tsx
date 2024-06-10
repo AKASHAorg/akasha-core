@@ -11,7 +11,6 @@ export type PendingReflectProps = {
 
 export function PendingReflect(props: PendingReflectProps) {
   const { entryData, customStyle = '' } = props;
-
   return (
     <>
       <Divider />

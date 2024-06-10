@@ -167,7 +167,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       }}
       onContentClick={onContentClick}
       onEntryFlag={handleFlagBeam}
-      profileAvatarExt={
+      profileAvatar={
         <AuthorProfileAvatar
           authorId={entryData.authorId}
           hidePublishTime={hidePublishTime}
