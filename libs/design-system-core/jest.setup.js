@@ -1,7 +1,6 @@
 import { install } from '@twind/core';
 import twindConfig from './src/twind/twind.config.js';
 import ResizeObserver from 'resize-observer-polyfill';
-import '@testing-library/jest-dom';
 
 global.ResizeObserver = ResizeObserver;
 
