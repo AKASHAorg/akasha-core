@@ -57,8 +57,8 @@ describe('< BeamPage /> component', () => {
     </AnalyticsProvider>
   );
 
-  beforeEach(async () => {
-    await act(async () => {
+  beforeAll(async () => {
+    await act(() => {
       renderWithAllProviders(
         BaseComponent,
         {},
@@ -85,7 +85,6 @@ describe('< BeamPage /> component', () => {
                   node: genBeamData({
                     beamId: BEAM_SECTION.beamId,
                     authorProfileDID: BEAM_SECTION.profileDID,
-                    reflectionsCount: BEAM_SECTION.reflectionCount,
                   }),
                 },
               },
@@ -132,8 +131,8 @@ describe('< BeamPage /> component', () => {
     });
   });
 
-  //TODO add test case for publishing reflection
-  it('should render beam section', async () => {
+  it('should render beam page', async () => {
+    //should render beam section
     await waitFor(() => {
       expect(screen.getAllByTestId('info-box')[0]).toHaveTextContent(
         profileData.akashaProfile.name,
@@ -147,9 +146,7 @@ describe('< BeamPage /> component', () => {
       expect(screen.getByText(/Share your thoughts/i)).toBeInTheDocument();
       expect(screen.getByRole('button', { name: 'Reflect' })).toBeInTheDocument();
     });
-  });
-
-  it('should render reflect feed', async () => {
+    //should render reflect feed
     await waitFor(() => {
       expect(screen.getByText(REFLECT_FEED.content)).toBeInTheDocument();
       expect(screen.getByText(REFLECT_FEED.preview.content)).toBeInTheDocument();

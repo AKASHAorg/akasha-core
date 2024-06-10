@@ -5,7 +5,6 @@ interface IGenBeamData {
   authorProfileDID: string;
   isViewer?: boolean;
   nsfw?: boolean;
-  reflectionsCount?: number;
 }
 
 interface IGenBeamStream {
@@ -29,11 +28,10 @@ const genBeamData = ({
   authorProfileDID,
   isViewer = false,
   nsfw = false,
-  reflectionsCount = 0,
 }: IGenBeamData) => {
   return {
     id: beamId,
-    reflectionsCount,
+    reflectionsCount: 0,
     active: true,
     embeddedStream: null,
     author: {
