@@ -3,7 +3,6 @@ import { act } from '@testing-library/react';
 import { IntegrationTypes } from '@akashaorg/typings/lib/ui';
 import AppAvatar from '../';
 import { customRender } from '../../../test-utils';
-import '@testing-library/jest-dom';
 
 describe('<AppAvatar /> Component', () => {
   let componentWrapper = customRender(<></>, {});
