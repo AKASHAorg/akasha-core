@@ -9,6 +9,21 @@ export type CopyToClipboardProps = PropsWithChildren<{
   copyText?: string;
   copiedText?: string;
 }>;
+
+/**
+ * A CopyToClipboard component serves a specific purpose: display a tooltip on hover to explain to
+ * the user the purpose of the component and copy the content of component to the Clipboard.
+ * The user can then paste the copied content elsewhere. The copied content remains in memory
+ * until the user copies something.
+ * @param value - the value to be copied
+ * @param copyText - (optional) text that will be displayed in the tooltip before copying
+ * @param copiedText - (optional) text that will be displayed in the tooltip after copying
+ * ```tsx
+ *  <CopyToClipboard
+ *    value='0x003410490050000320006570034567114572000'
+ *   />
+ * ```
+ **/
 const CopyToClipboard: React.FC<CopyToClipboardProps> = ({
   value,
   copyText = 'Copy to clipboard',

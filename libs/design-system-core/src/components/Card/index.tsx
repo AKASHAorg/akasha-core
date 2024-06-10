@@ -31,6 +31,33 @@ export type TCardProps = PropsWithChildren<
   CommonCardProps & ({ type: 'plain' } | (RegularCardType & { type?: 'regular' }))
 >;
 
+/**
+ * A Card component contains content and actions pertaining to a single subject.
+ * There are two types of cards: regular and plain. A regular card looks like a
+ * normal card with customizable border and elevation. A plain card doesn't look
+ * like a card and can act as an invisible wrapper around other components.
+ * @param elevation - (optional) adjust the elevation property
+ * @param background - (optional) customize the background color
+ * @param dashedBorder - boolean (optional) whether the border should have dashed style
+ * @param accentBorder - boolean (optional) whether the border should have accent style
+ * @param padding - (optional) customize the padding
+ * @param margin - (optional) customize the margin
+ * @param radius - (optional) customize the radius
+ * @param border - boolean (optional) whether the card should have border
+ * @param noBorderRadius - boolean (optional) whether the card should have rounded corner
+ * @param fullWidth - boolean (optional) whether the card should occupy the full width of the parent element
+ * @param customStyle - (optional) custom styling if any
+ * @param dataTestId - (optional) useful identifier when writing tests
+ * @param ref - (optional)
+ * @example
+ * ```tsx
+ *  <Card
+ *    background={{ dark: 'grey3', light: 'grey9' }}
+ *    onClick={clickHandler}
+ *    padding="p-4"
+ *   />
+ * ```
+ **/
 const Card: React.FC<TCardProps> = forwardRef((props, ref) => {
   if (props.type === 'plain') {
     const { dataTestId, customStyle = '', ...rest } = props;

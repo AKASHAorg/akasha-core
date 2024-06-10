@@ -23,6 +23,24 @@ export type DidFieldProps = {
   copiable?: boolean;
   customStyle?: string;
 };
+
+/**
+ * A DidField component provides a stylish way to display a DID address. It will include a
+ * corresponding network icon, truncate the address if it's too long, and provide a CopyToClipboard
+ * functionality that can also be disabled depending on the use case.
+ * @param did - a DID address
+ * @param isValid - boolean (optional) whether it is a valid DID
+ * @param textColor - (optional) customize the text color
+ * @param copyLabel - (optional) specify the label on hover before copying to clipbaord
+ * @param copiedLabel - (optional) specify the label on hover after copying to clipbaord
+ * @param copiable - boolean (optional) whether CopyToClipboard should be enabled
+ * @param customStyle - (optional) customize the style
+ * ```tsx
+ *  <DidField
+ *    did='0x003410490050000320006570034567114572000'
+ *   />
+ * ```
+ **/
 const DidField: React.FC<DidFieldProps> = ({
   did,
   isValid = true,

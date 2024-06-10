@@ -83,6 +83,34 @@ const AvatarContent: React.FC<AvatarContentProps> = props => {
   );
 };
 
+/**
+ * An Avatar component provides an easy and fast way to include an avatar in your app.
+ * @param alt - alt text (optional)
+ * @param avatar -image source (optional)
+ * @param alternativeAvatars - (optional) a list of alternative images for the avatar
+ * @param active - boolean (optional) whether the avatar is active
+ * @param border - (optional) custom sizing for the border
+ * @param size - (optional) custom sizing for the avatar
+ * @param borderColor - (optional) custom styling for the border color
+ * @param backgroundColor - (optional) custom styling for the background color
+ * @param faded - boolean (optional) whether the avatar should have faded style
+ * @param isClickable - boolean (optional) whether the avatar should be clickable
+ * @param profileId - string (optional) the profile id the avatar belongs to
+ * @param publicImgPath - string (optional) the public image path of the avata
+ * @param customStyle - (optional) custom styling if any
+ * @param onClick - (optional) click handler
+ * @param dataTestId - (optional) for test writing purpose
+ * @param href - (optional) href if any
+ *
+ * @example
+ * ```tsx
+ *  <Avatar
+ *    size="md"
+ *    avatar={avatar}
+ *    profileId={profileId}
+ *   />
+ * ```
+ **/
 const Avatar: React.FC<AvatarProps> = props => {
   const { dataTestId, href, onClick, ...rest } = props;
 
