@@ -22,22 +22,29 @@ export type DuplexButtonProps = Omit<ButtonProps, 'label'> & {
 /**
  * A DuplexButton component is a special type of button that has been customized to satisfy
  * a specific use case. This button will change its label depending on its active and hover state.
+ * A DuplexButton component takes all the props of a Button component minus the `label`
+ * and additional customization
+ * props as shown below:
  * @param onClickInactive - (optional) click event handler for inactive state
  * @param onClickActive - (optional)  click event handler for active state
- * @param placeholderLabel - (optional) a placeholder text to be displayed by default
- * @param selected - (optional) selected item by default
- * @param menuItems - a list of menu items to be displayed on activation
- * @param setSelected - handler function to set the selected item
+ * @param inactiveLabel - (optional) label for inactive state
+ * @param inactiveVariant - (optional) customize button variant for inactive state
+ * @param activeLabel - (optional) label for active state
+ * @param activeVariant - (optional) customize button variant for active state
+ * @param active - boolean (optional) whether the button's state is active
+ * @param activeIcon - (optional) icon for active state
+ * @param activeHoverIcon - (optional) icon on hover for active state
+ * @param allowMinimization - boolean (optional) whether to allow minimization of the button on smaller screens.
+ * @param fixedWidth - (optional) specify a fixed width for the button
+ * @example
  * ```tsx
- *  <Dropdown
+ *  <DuplexButton
  *    name='dropdown'
- *    menuItems: [
- *    { id: '1', icon: <BeakerIcon />, title: 'Option 1' },
- *     { id: '2', icon: <ArchiveBoxIcon />, title: 'Option 2' },
- *     { id: '3', icon: <ArchiveBoxIcon />, title: 'Option 3' },
- *    ]
- *    placeholderLabel={'Select an option'}
- *    setSelected={setSelectedHandler}
+ *    customStyle={disabledStyle}
+ *    inactiveLabel={t('Follow')}
+ *    activeLabel={t('Following')}
+ *    activeHoverLabel={t('Unfollow')}
+ *    active={following}
  *   />
  * ```
  **/

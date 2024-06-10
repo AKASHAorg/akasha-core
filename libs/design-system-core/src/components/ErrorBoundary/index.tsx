@@ -11,6 +11,25 @@ export type ErrorBoundaryProps = {
 
 export type ErrorBoundaryState = { hasError: boolean; error: Error };
 
+/**
+ * An ErrorBoundary serves the purpose of catching and displaying errors
+ * when a component fails to load.
+ * @param children - the component that needs to load
+ * @param fallback - (optional) fallback component when error occurs
+ * @param errorObj - (optional) object containing the error message and type
+ * @param logger - (optional) log to the console if provided
+ * @example
+ * ```tsx
+ *  <ErrorBoundary>
+ *      errorObj={{
+ *               type: 'script-error',
+ *               title: t('Error in loading reflection.'),
+ *             }}
+ *   >
+ *    <SomeChildComponent />
+ * </ErrorBoundary>
+ * ```
+ **/
 class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
   constructor(props: ErrorBoundaryProps) {
     super(props);
