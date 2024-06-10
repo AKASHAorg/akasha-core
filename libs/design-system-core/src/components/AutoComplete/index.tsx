@@ -26,7 +26,7 @@ export type AutoCompleteProps = {
 
 /**
  * An AutoComplete component improves the user experience by suggesting possible
- * completions the user types.
+ * completions as the user types.
  * @param options - string
  * @param placeholder - placeholder text (optional)
  * @param disabled - (optional) whether to disable the text input
