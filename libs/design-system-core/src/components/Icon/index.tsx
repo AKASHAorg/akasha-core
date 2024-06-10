@@ -22,6 +22,28 @@ export interface IconProps {
   rotateAnimation?: boolean;
 }
 
+/**
+ * An Icon's purpose is as clear as its name indicates: provide an icon. In our design
+ * system, we use [Heroicons](https://heroicons.com/) together with our own icons to make
+ * up a rich icon library that you can easily include in your app and apply custom styling
+ * to them through props as you see fit.
+ * @param color - (optional) customize the color of your icon
+ * @param ref - (optional) pass the ref here
+ * @param size - (optional) customize the size of your icon
+ * @param breakPointSize - (optional) specify breakpoint sizes if needed
+ * @param accentColor - boolean (optional) whether your icon will have the default accent color scheme
+ * @param disabled - boolean (optional) a disabled icon looks different
+ * @param hover - boolean (optional) a hovered icon has a different shade
+ * @param dataTestId - (optional) useful when writing tests for the component
+ * @param customStyle - (optional) apply your custom styling (Make sure to use standard Tailwind classes)
+ * @param hoverColor - (optional) specify a color for hover state here (Please note that you can specify colors for light and dark mode separately)
+ * @param solid - boolean (optional) a solid icon looks different from an outlined one
+ * @param rotateAnimation - boolean (optional) for those who want to add rotate animation to their icon
+ * @example
+ * ```tsx
+ *  <Icon accentColor icon={<XMarkIcon />} />
+ * ```
+ **/
 const Icon: React.FC<IconProps> = props => {
   const {
     icon,

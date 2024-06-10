@@ -23,6 +23,24 @@ export type MessageCardProps = {
   onClose: () => void;
 };
 
+/**
+ * A MessageCard component is useful for displaying simple notifications in your app. The user
+ * can opt to close it by clicking on the close icon.
+ * @param title - string
+ * @param message - string
+ * @param titleVariant - (optional) customize the text variant for the title
+ * @param titleIcon - (optional) include an icon for the title if you want
+ * @param background - (optional) customize the background color
+ * @param elevation - (optional) customize the elevation property of the card
+ * @param borderColor - (optional) customize the border color
+ * @param dataTestId - (optional) useful when writing test
+ * @param customStyle - (optional) apply your custom styling (Make sure to use standard Tailwind classes)
+ * @param onClose - (optional) handler when clicking the close icon
+ * @example
+ * ```tsx
+ *     <MessageCard title='Title' elevation='1' message='A sample message...' />
+ * ```
+ **/
 const MessageCard: React.FC<MessageCardProps> = ({
   title,
   titleVariant = 'button-sm',

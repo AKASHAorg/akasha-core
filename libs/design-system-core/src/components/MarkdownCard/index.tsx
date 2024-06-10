@@ -10,6 +10,17 @@ export type MarkdownCardProps = {
   hasWrapper?: boolean;
 };
 
+/**
+ * A MarkdownCard component is useful for displaying markdown text in your app. It comes
+ * in two forms: with and without a nice Card that wraps up your markdown text and this
+ * can be specified through props.
+ * @param mdText - the markdown text to be displayed
+ * @param hasWrapper - boolean (optional) whether to wrap everything in a nice Card or not
+ * @example
+ * ```tsx
+ *     <MarkdownCard mdText={md-doc} />
+ * ```
+ **/
 const MarkdownCard: React.FC<MarkdownCardProps> = props => {
   const { mdText, hasWrapper = true } = props;
 

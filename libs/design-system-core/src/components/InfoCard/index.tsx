@@ -15,6 +15,28 @@ export type InfoCardProps = {
   customWidthStyle?: string;
 };
 
+/**
+ * An InfoCard component offers a quick way to include an informational card
+ * with text and an illustrative image. An example use case is an announcement
+ * that you want to put at the top so visitors can easily see.
+ * @param assetName - (optional) name of the image file
+ * @param assetExtension - (optional) image file extension
+ * @param publicImgPath - (optional) path to image location
+ * @param titleLabel - title of the card. It can be a React node.
+ * @param bodyLabel - (optional) additional body text of the card. It can be a React node.
+ * @param titleVariant - (optional) customize the text variant of the title
+ * @param bodyVariant - (optional) customize the text variant of the body
+ * @param customWidthStyle - (optional) customize the width of the card
+ * @example
+ * ```tsx
+ *     <InfoCard
+ *       titleLabel={'Hello there!'}
+ *       bodyLabel={'There is nothing here!'}
+ *       publicImgPath={publicImgPath}
+ *       assetName="longbeam-notfound"
+ *     />
+ * ```
+ **/
 const InfoCard: React.FC<InfoCardProps> = ({
   titleLabel,
   titleVariant = 'h6',
