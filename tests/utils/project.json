@@ -5,22 +5,11 @@
   "projectType": "application",
   "targets": {
     "prepare": {
-      "dependsOn": [
-        "@akashaorg/design-system-core:prepare",
-        "@akashaorg/typings:prepare"
-      ],
+      "dependsOn": ["@akashaorg/design-system-core:prepare", "@akashaorg/typings:prepare"],
       "executor": "nx:run-commands",
       "options": {
         "cwd": "tests/utils",
         "command": "tsc --build"
-      }
-    },
-    "test": {
-      "dependsOn": ["prepare"],
-      "executor": "nx:run-commands",
-      "options": {
-        "cwd": "tests/utils",
-        "command": "jest"
       }
     }
   },

@@ -21,7 +21,7 @@ import {
   GetBeamByIdDocument,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { formatRelativeTime, truncateDid } from '@akashaorg/design-system-core/lib/utils';
-import { getReflectionFeedMocks } from '@akashaorg/ui-lib-feed/lib/__tests__/__mocks__/get-reflection-feed-mocks';
+import { getReflectionFeedMocks } from '@akashaorg/ui-lib-feed/lib/__mocks__/get-reflection-feed-mocks';
 
 const BEAM_SECTION = {
   profileDID: 'did:pkh:eip155:11155111:0x1d3ac7a3d118f60a726f2dc52a614b2a6ae8dd00',
