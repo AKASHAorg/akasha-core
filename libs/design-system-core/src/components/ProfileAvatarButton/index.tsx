@@ -18,6 +18,30 @@ export type ProfileAvatarButtonProps = {
   onClick?: React.MouseEventHandler<HTMLAnchorElement>;
 };
 
+/**
+ * The ProfileAvatarButton component serves a specific use case: display the profile avatar
+ * together with the profile name and DID address in a compact, informative yet flexible way.
+ * The full DID address will be truncated to save space when appropriate. 
+ * @param avatar - (optional) object containing info about the image to be displayed, such as `src`, `height`, and `width`.
+ * @param alternativeAvatars - (optional) a list of alternative images for the avatar
+ * @param label - (optional) it is usually the profile name
+ * @param profileId - the profile DID address
+ * @param truncateText - boolean (optional) whether to truncate the label (profile name) when it's too long
+ * @param href - (optional) provide href link here
+ * @param metadata - string (optional) provide metadata here
+ * @param customStyle - (optional) apply your custom styling (Make sure to use standard Tailwind classes)
+ * @param onClick - handler that will be called when clicking on the avatar
+ * @example
+ * ```tsx
+ * const profileId = 'did:pkh:eip155:5:0x36c703c4d22af437dc883e2e0884e57404e16493';
+ * const avatar = { src: 'https://placebeard.it/360x360', height: 360, width: 360 };
+ *    <ProfileAvatarButton
+        label='Profile Avatar Button'
+        profileId
+        avatar
+      />
+ * ```
+ **/
 const ProfileAvatarButton = React.forwardRef(
   (props: ProfileAvatarButtonProps, ref: React.LegacyRef<HTMLDivElement>) => {
     const {
