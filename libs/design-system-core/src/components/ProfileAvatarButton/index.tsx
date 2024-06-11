@@ -21,7 +21,7 @@ export type ProfileAvatarButtonProps = {
 /**
  * The ProfileAvatarButton component serves a specific use case: display the profile avatar
  * together with the profile name and DID address in a compact, informative yet flexible way.
- * The full DID address will be truncated to save space when appropriate. 
+ * The full DID address will be truncated to save space when appropriate.
  * @param avatar - (optional) object containing info about the image to be displayed, such as `src`, `height`, and `width`.
  * @param alternativeAvatars - (optional) a list of alternative images for the avatar
  * @param label - (optional) it is usually the profile name

@@ -24,7 +24,7 @@ export type SnackbarProps = {
  * The Snackbar component is an UI element that is often used to display brief messages that don't
  * requires immediate actions from the user. One example is to provide feedback or updates when a user
  * perform an action. The Snackbar will appear near the bottom of the page and will disappear after
- * a predetermined amount of time. 
+ * a predetermined amount of time.
  * @param title -  title of the snackbar
  * @param type - (optional) type of the snackbar. Please import `NotificationTypes` from the
  * typings package to explore all available Snackbar types
