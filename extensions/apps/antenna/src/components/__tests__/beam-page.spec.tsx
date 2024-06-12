@@ -14,6 +14,7 @@ import {
   getByTestId,
   getUserStore,
   genProfileByDID,
+  genReflectionStream,
 } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 import { AkashaBeamStreamModerationStatus } from '@akashaorg/typings/lib/sdk/graphql-types-new';
@@ -28,6 +29,7 @@ import {
   getBeamPageMocks,
   getReflectEditorMocks,
 } from '../__mocks__';
+import { GetReflectionStreamDocument } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
 const { mocks, profileData: beamSectionProfileData, beamData } = getBeamPageMocks();
 
@@ -157,14 +159,42 @@ describe('< BeamPage /> component', () => {
           {},
           {
             mocks: [
-              ...mocks,
               ...reflectFeedMocks,
+              ...mocks,
               ...getReflectEditorMocks({
                 reflectionId: newReflectionId,
-                beamId: BEAM_ID,
                 authorProfileDID: authenticatedDID,
                 content: newReflection,
               }),
+              /*@TODO revisit this mock which is needed as a result of refetch on reflect editor */
+              {
+                request: {
+                  query: GetReflectionStreamDocument,
+                },
+                variableMatcher: () => true,
+                result: {
+                  data: {
+                    node: genReflectionStream({
+                      beamId: BEAM_ID,
+                      reflectionId: newReflectionId,
+                    }),
+                  },
+                },
+              },
+              {
+                request: {
+                  query: GetReflectionStreamDocument,
+                },
+                variableMatcher: () => true,
+                result: {
+                  data: {
+                    node: genReflectionStream({
+                      beamId: BEAM_ID,
+                      reflectionId: newReflectionId,
+                    }),
+                  },
+                },
+              },
             ],
           },
         );

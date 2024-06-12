@@ -13,6 +13,7 @@ import {
   getByText,
   getUserStore,
   genProfileByDID,
+  genReflectionStream,
 } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 import { mapReflectEntryData } from '@akashaorg/ui-awf-hooks';
@@ -26,6 +27,7 @@ import {
   REFLECTION_ID,
   REPLY_TO,
 } from '../__mocks__';
+import { GetReflectionStreamDocument } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
 const {
   mocks,
@@ -160,13 +162,45 @@ describe('< ReflectionPage /> component', () => {
           {
             mocks: [
               ...reflectFeedMocks,
+              ...mocks,
               ...getReflectEditorMocks({
                 reflectionId: newReflectionId,
-                beamId: BEAM_ID,
                 authorProfileDID: authenticatedDID,
                 content: newReflection,
               }),
-              ...mocks,
+              /*@TODO revisit this mock which is needed as a result of refetch on reflect editor */
+              {
+                request: {
+                  query: GetReflectionStreamDocument,
+                },
+                variableMatcher: () => true,
+                result: {
+                  data: {
+                    node: genReflectionStream({
+                      beamId: BEAM_ID,
+                      reflectionId: newReflectionId,
+                      isReply: true,
+                      replyTo: REPLY_TO,
+                    }),
+                  },
+                },
+              },
+              {
+                request: {
+                  query: GetReflectionStreamDocument,
+                },
+                variableMatcher: () => true,
+                result: {
+                  data: {
+                    node: genReflectionStream({
+                      beamId: BEAM_ID,
+                      reflectionId: newReflectionId,
+                      isReply: true,
+                      replyTo: REPLY_TO,
+                    }),
+                  },
+                },
+              },
             ],
           },
         );

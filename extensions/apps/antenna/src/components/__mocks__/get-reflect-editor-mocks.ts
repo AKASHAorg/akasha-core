@@ -1,6 +1,5 @@
-import { genReflectionStream, genReflectionData } from '@akashaorg/af-testing';
+import { genReflectionData } from '@akashaorg/af-testing';
 import {
-  GetReflectionStreamDocument,
   CreateReflectDocument,
   GetFollowingListByDidDocument,
   IndexReflectionDocument,
@@ -8,14 +7,12 @@ import {
 
 interface IGetReflectEditorMocks {
   reflectionId: string;
-  beamId: string;
   authorProfileDID: string;
   content: string;
 }
 
 export function getReflectEditorMocks({
   reflectionId,
-  beamId,
   authorProfileDID,
   content,
 }: IGetReflectEditorMocks) {
@@ -52,35 +49,6 @@ export function getReflectEditorMocks({
             },
             __typename: 'IndexReflectPayload',
           },
-        },
-      },
-    },
-    /*@TODO revisit this mock which is needed as a result of refetch on reflect editor */
-    {
-      request: {
-        query: GetReflectionStreamDocument,
-      },
-      variableMatcher: () => true,
-      result: {
-        data: {
-          node: genReflectionStream({
-            beamId,
-            reflectionId,
-          }),
-        },
-      },
-    },
-    {
-      request: {
-        query: GetReflectionStreamDocument,
-      },
-      variableMatcher: () => true,
-      result: {
-        data: {
-          node: genReflectionStream({
-            beamId,
-            reflectionId,
-          }),
         },
       },
     },
