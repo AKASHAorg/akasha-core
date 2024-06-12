@@ -16,7 +16,6 @@ export type ReflectCardProps = Pick<
   | 'noWrapperCard'
   | 'onContentClick'
   | 'onEdit'
-  | 'editLabel'
   | 'onReflect'
   | 'editable'
   | 'notEditableLabel'
