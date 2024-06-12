@@ -35,7 +35,7 @@ const EditorPlaceholder: React.FC<EditorPlaceholderType> = props => {
       customStyle="cursor-pointer"
     >
       <div className={tw(`flex justify-between p-4 `)}>
-        <div className={tw(`flex flex-row items-center gap-4`)}>
+        <div className={tw(`flex flex-row items-center gap-4 flex-1`)}>
           <Avatar
             avatar={transformSource(avatar?.default)}
             alternativeAvatars={avatar?.alternatives?.map(alternative =>
