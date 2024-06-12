@@ -2,7 +2,7 @@ import ReflectionEditor from '@akashaorg/design-system-components/lib/components
 import { AkashaProfile, IPublishData } from '@akashaorg/typings/lib/ui';
 import React, { useState } from 'react';
 import { Descendant } from 'slate';
-import { getLinkPreview, transformSource, encodeSlateToBase64 } from '@akashaorg/ui-awf-hooks';
+import { transformSource, encodeSlateToBase64 } from '@akashaorg/ui-awf-hooks';
 import { ProfileImageVersions } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 type ReflectionEditorRendererProps = {

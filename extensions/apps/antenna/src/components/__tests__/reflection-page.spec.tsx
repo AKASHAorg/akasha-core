@@ -1,5 +1,5 @@
 import React from 'react';
-import BeamPage from '../pages/entry-page/beam-page';
+import ReflectionPage from '../pages/entry-page/reflection-page';
 import userEvent from '@testing-library/user-event';
 import * as useAkashaStore from '@akashaorg/ui-awf-hooks/lib/store/use-akasha-store';
 import * as getEditorValueForTest from '../reflect-editor/get-editor-value-for-test';
@@ -11,38 +11,36 @@ import {
   waitFor,
   getAllByTestId,
   getByText,
-  getByTestId,
   getUserStore,
   genProfileByDID,
 } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
-import { AkashaBeamStreamModerationStatus } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { mapBeamEntryData } from '@akashaorg/ui-awf-hooks';
+import { mapReflectEntryData } from '@akashaorg/ui-awf-hooks';
 import { formatRelativeTime, truncateDid } from '@akashaorg/design-system-core/lib/utils';
 import { getReflectFeedMocks } from '@akashaorg/ui-lib-feed/lib/__mocks__/get-reflection-feed-mocks';
 import {
-  BEAM_ID,
-  BEAM_SECTION,
-  REFLECTION_ID,
   REFLECT_FEED,
-  getBeamPageMocks,
+  getReflectionPageMocks,
   getReflectEditorMocks,
+  BEAM_ID,
+  REFLECTION_ID,
+  REPLY_TO,
 } from '../__mocks__';
 
-const { mocks, profileData: beamSectionProfileData, beamData } = getBeamPageMocks();
+const {
+  mocks,
+  profileData: reflectionSectionProfileData,
+  reflectionData,
+} = getReflectionPageMocks();
 
-describe('< BeamPage /> component', () => {
+describe('< ReflectionPage /> component', () => {
   const BaseComponent = (
     <AnalyticsProvider {...genAppProps()}>
-      <BeamPage
-        beamStatus={AkashaBeamStreamModerationStatus.Ok}
-        entryData={mapBeamEntryData(beamData)}
-        beamId={BEAM_ID}
-      />
+      <ReflectionPage entryData={mapReflectEntryData(reflectionData)} />
     </AnalyticsProvider>
   );
 
-  describe('should render beam page', () => {
+  describe('should render reflection page', () => {
     const {
       mocks: reflectFeedMocks,
       profileData: reflectFeedProfileData,
@@ -57,6 +55,8 @@ describe('< BeamPage /> component', () => {
         reflectionId: REFLECT_FEED.preview.reflectionId,
         content: REFLECT_FEED.preview.content,
       },
+      replyTo: REPLY_TO,
+      isReply: true,
     });
 
     beforeEach(async () => {
@@ -71,22 +71,22 @@ describe('< BeamPage /> component', () => {
       });
     });
 
-    it('should render beam section', async () => {
+    it('should render reflection section', async () => {
       expect(screen.getByText(/Share your thoughts/i)).toBeInTheDocument();
       expect(screen.getByRole('button', { name: 'Reflect' })).toBeInTheDocument();
       await waitFor(() => {
-        const beamSection = screen.getByTestId('beam-section');
-        const infoBox = getAllByTestId(beamSection, 'info-box')[0];
-        expect(getByTestId(beamSection, 'reflections-count')).toHaveTextContent(
-          String(BEAM_SECTION.reflectionsCount),
-        );
-        expect(getAllByTestId(beamSection, 'avatar-source')[0]).toHaveAttribute(
+        const reflectionSection = screen.getByTestId('reflection-section');
+        const infoBox = getAllByTestId(reflectionSection, 'info-box')[0];
+        expect(screen.getByText(/back to original beam/i)).toBeInTheDocument();
+        expect(getAllByTestId(reflectionSection, 'avatar-source')[0]).toHaveAttribute(
           'srcset',
-          beamSectionProfileData.akashaProfile.avatar.default.src,
+          reflectionSectionProfileData.akashaProfile.avatar.default.src,
         );
-        expect(infoBox).toHaveTextContent(beamSectionProfileData.akashaProfile.name);
-        expect(infoBox).toHaveTextContent(truncateDid(beamSectionProfileData.akashaProfile.did.id));
-        expect(infoBox).toHaveTextContent(formatRelativeTime(beamData.createdAt, 'en'));
+        expect(infoBox).toHaveTextContent(reflectionSectionProfileData.akashaProfile.name);
+        expect(infoBox).toHaveTextContent(
+          truncateDid(reflectionSectionProfileData.akashaProfile.did.id),
+        );
+        expect(infoBox).toHaveTextContent(formatRelativeTime(reflectionData.createdAt, 'en'));
       });
     });
 
@@ -137,6 +137,8 @@ describe('< BeamPage /> component', () => {
       reflectionId: newReflectionId,
       authorProfileDID: authenticatedDID,
       reflectionContent: newReflection,
+      replyTo: REPLY_TO,
+      isReply: true,
     });
 
     beforeEach(async () => {
@@ -157,7 +159,6 @@ describe('< BeamPage /> component', () => {
           {},
           {
             mocks: [
-              ...mocks,
               ...reflectFeedMocks,
               ...getReflectEditorMocks({
                 reflectionId: newReflectionId,
@@ -165,6 +166,7 @@ describe('< BeamPage /> component', () => {
                 authorProfileDID: authenticatedDID,
                 content: newReflection,
               }),
+              ...mocks,
             ],
           },
         );

@@ -19,7 +19,7 @@ import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import ErrorBoundary, {
   ErrorBoundaryProps,
 } from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
-import { TrashIcon } from '@heroicons/react/24/outline';
+import { TrashIcon, PencilIcon } from '@heroicons/react/24/outline';
 
 type BeamProps = {
   sortedContents: AkashaBeam['content'];
@@ -41,6 +41,7 @@ export type EntryCardProps = {
   ctaLabel?: string;
   removeEntryLabel?: string;
   notEditableLabel?: string;
+  editLabel?: string;
   removed?: {
     author: React.ReactNode;
     others: React.ReactNode;
@@ -84,6 +85,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     profileAvatar,
     ref,
     flagAsLabel,
+    editLabel,
     removed,
     notEditableLabel,
     nsfw,
@@ -111,6 +113,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     showLoginModal,
     removeEntryLabel,
     onEntryRemove,
+    onEdit,
     ...rest
   } = props;
 
@@ -124,6 +127,30 @@ const EntryCard: React.FC<EntryCardProps> = props => {
   const showHiddenStyle = showHiddenContent ? '' : 'max-h-[50rem]';
   const contentClickableStyle =
     contentClickable && !showNSFWCard ? 'cursor-pointer' : 'cursor-default';
+  const editMenu =
+    rest.itemType === EntityTypes.REFLECT
+      ? [
+          {
+            icon: <PencilIcon />,
+            label: editLabel ?? '',
+            disabled: !editable,
+            toolTipContent: editable ? null : notEditableLabel,
+            onClick: onEdit,
+          },
+        ]
+      : [];
+  const removeMenu =
+    rest.itemType === EntityTypes.BEAM
+      ? [
+          {
+            icon: <TrashIcon />,
+            label: removeEntryLabel ?? '',
+            color: { light: 'errorLight', dark: 'errorDark' } as const,
+            disabled: !editable,
+            onClick: onEntryRemove,
+          },
+        ]
+      : [];
   const menuItems: ListItem[] = [
     ...(!isViewer
       ? [
@@ -136,18 +163,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
           },
         ]
       : []),
-    ...(isViewer
-      ? [
-          {
-            icon: <TrashIcon />,
-            label: removeEntryLabel ?? '',
-            color: { light: 'errorLight', dark: 'errorDark' } as const,
-            disabled: !editable,
-            toolTipContent: editable ? null : notEditableLabel,
-            onClick: onEntryRemove,
-          },
-        ]
-      : []),
+    ...(isViewer ? [...removeMenu, ...editMenu] : []),
   ];
   const hoverStyleLastEntry = lastEntry ? 'rounded-b-2xl' : '';
   const hoverStyle = hover

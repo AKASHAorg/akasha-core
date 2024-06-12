@@ -25,6 +25,7 @@ import {
 } from '@akashaorg/typings/lib/ui';
 import { usePendingReflections } from '@akashaorg/ui-awf-hooks/lib/use-pending-reflections';
 import { useApolloClient } from '@apollo/client';
+import { getEditorValueForTest } from './get-editor-value-for-test';
 
 export type ReflectEditorProps = {
   beamId: string;
@@ -77,6 +78,26 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         message,
       },
     });
+  }, []);
+
+  /*
+   * Currently jsdom doesn't support contenteditable and as a result slate editor as well.
+   * This effect is a workaround to set the value of the editor during tests
+   **/
+  React.useEffect(() => {
+    const editorValueForTest = getEditorValueForTest();
+    if (editorValueForTest) {
+      setEditorState([
+        {
+          type: 'paragraph',
+          children: [
+            {
+              text: editorValueForTest,
+            },
+          ],
+        },
+      ]);
+    }
   }, []);
 
   React.useEffect(() => {

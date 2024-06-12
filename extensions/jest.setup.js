@@ -1,5 +1,6 @@
 import * as useRootComponentProps from '@akashaorg/ui-awf-hooks/lib/use-root-props';
 import * as useAkashaStore from '@akashaorg/ui-awf-hooks/lib/store/use-akasha-store';
+import * as useAnalytics from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 import { genAppProps, getUserInfo, getUserStore } from '@akashaorg/af-testing';
 import '@testing-library/jest-dom';
 
@@ -51,6 +52,10 @@ jest.mock('@akashaorg/awf-sdk', () => () => {
         signIn: () => Promise.resolve({ data: { id: 'id' } }),
         signOut: () => Promise.resolve('Logged out'),
         getCurrentUser: () => Promise.resolve({ data: { id: 'id' } }),
+        prepareIndexedID: () => ({
+          jws: null,
+          capability: null,
+        }),
       },
       globalChannel: new ReplaySubject(),
     },
@@ -65,6 +70,13 @@ jest.mock('@akashaorg/awf-sdk', () => () => {
       common: {
         misc: {
           resolveDID: jest.fn(),
+        },
+        ipfs: {
+          buildIpfsLinks: hash => ({
+            originLink: hash,
+            fallbackLink: hash,
+            pathLink: hash,
+          }),
         },
       },
       stash: {
@@ -97,6 +109,8 @@ jest.mock('@twind/core', () => {
 });
 
 jest.spyOn(useRootComponentProps, 'useRootComponentProps').mockReturnValue({ ...genAppProps() });
+
+jest.spyOn(useAnalytics, 'useAnalytics').mockReturnValue([{ trackEvent: jest.fn }]);
 
 jest
   .spyOn(useAkashaStore, 'useAkashaStore')

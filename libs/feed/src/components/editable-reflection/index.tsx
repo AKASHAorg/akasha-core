@@ -172,6 +172,7 @@ const EditableReflection: React.FC<ReflectCardProps> = props => {
             <ReflectionCard
               entryData={entryData}
               editable={reflectionCreationElapsedTimeInMinutes <= MAX_EDIT_TIME_IN_MINUTES}
+              editLabel={t('Edit')}
               onEdit={() => setEdit(true)}
               notEditableLabel={t('A reflection created over 10 minutes ago cannot be edited.')}
               {...rest}
