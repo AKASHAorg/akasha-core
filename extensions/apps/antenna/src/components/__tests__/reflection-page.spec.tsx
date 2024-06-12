@@ -206,7 +206,20 @@ describe('< ReflectionPage /> component', () => {
         );
       });
     });
-    it('should publish a reflection and render it on reflect feed', async () => {
+
+    it('should render pending reflection card', async () => {
+      const user = userEvent.setup();
+      await user.click(screen.getByRole('button', { name: 'Reflect' }));
+      await waitFor(() => {
+        expect(screen.getByRole('textbox')).toHaveTextContent(newReflection);
+      });
+      await userEvent.click(screen.getByRole('button', { name: 'Reflect' }));
+      await waitFor(() => {
+        expect(screen.getByTestId('pending-reflect')).toBeInTheDocument();
+      });
+    });
+
+    it('should render published reflection on reflect feed', async () => {
       const user = userEvent.setup();
       await user.click(screen.getByRole('button', { name: 'Reflect' }));
       await waitFor(() => {

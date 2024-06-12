@@ -162,38 +162,36 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
   };
 
   return (
-    <>
-      <ReflectionEditor
-        actionLabel={t('Reflect')}
-        placeholderButtonLabel={t('Reflect')}
-        placeholderLabel={t('My thoughts on this are...')}
-        cancelButtonLabel={t('Cancel')}
-        emojiPlaceholderLabel={t('Search')}
-        disableActionLabel={t('Authenticating')}
-        maxEncodedLengthErrLabel={t('Text block exceeds line limit, please review!')}
-        editorState={editorState}
-        showEditor={showEditor}
-        setShowEditor={setShowEditor}
-        avatar={authenticatedProfile?.avatar}
-        profileId={authenticatedDID}
-        disablePublish={!authenticatedDID}
-        mentions={mentions}
-        getMentions={handleGetMentions}
-        background={{ light: 'white', dark: 'grey2' }}
-        onPublish={data => {
-          if (!authenticatedDID) {
-            return;
-          }
-          handlePublish(data);
-        }}
-        setEditorState={setEditorState}
-        onCancelClick={() => {
-          //@TODO
-        }}
-        transformSource={transformSource}
-        encodingFunction={encodeSlateToBase64}
-      />
-    </>
+    <ReflectionEditor
+      actionLabel={t('Reflect')}
+      placeholderButtonLabel={t('Reflect')}
+      placeholderLabel={t('My thoughts on this are...')}
+      cancelButtonLabel={t('Cancel')}
+      emojiPlaceholderLabel={t('Search')}
+      disableActionLabel={t('Authenticating')}
+      maxEncodedLengthErrLabel={t('Text block exceeds line limit, please review!')}
+      editorState={editorState}
+      showEditor={showEditor}
+      setShowEditor={setShowEditor}
+      avatar={authenticatedProfile?.avatar}
+      profileId={authenticatedDID}
+      disablePublish={!authenticatedDID}
+      mentions={mentions}
+      getMentions={handleGetMentions}
+      background={{ light: 'white', dark: 'grey2' }}
+      onPublish={data => {
+        if (!authenticatedDID) {
+          return;
+        }
+        handlePublish(data);
+      }}
+      setEditorState={setEditorState}
+      onCancelClick={() => {
+        //@TODO
+      }}
+      transformSource={transformSource}
+      encodingFunction={encodeSlateToBase64}
+    />
   );
 };
 
