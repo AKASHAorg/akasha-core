@@ -23,7 +23,7 @@ jobs:
     parallelism: <<pipeline.parameters.num-affected-projects>>
     steps:
       - when:
-          condition: <<pipeline.parameters.num-affected-projects>>
+          condition: <<pipeline.parameters.affected-projects>>
           steps:
             - checkout
             - node/install:
@@ -35,7 +35,7 @@ jobs:
                   AFFECTED_PROJECTS=$(echo "<<pipeline.parameters.affected-projects>>" | sed 's/, /\n/g' | circleci tests split)
                   npx nx run-many --target=test --projects=$AFFECTED_PROJECTS --passWithNoTests --runInBand
       - unless:
-          condition: <<pipeline.parameters.num-affected-projects>>
+          condition: <<pipeline.parameters.affected-projects>>
           steps:
             - run:
                 name: No affected projects to test
