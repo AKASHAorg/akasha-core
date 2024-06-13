@@ -35,7 +35,7 @@ type ReflectProps = {
 
 export type EntryCardProps = {
   entryData: EntryData;
-  profileAvatarExt: ReactNode;
+  profileAvatar: ReactNode;
   flagAsLabel?: string;
   moderatedContentLabel?: string;
   ctaLabel?: string;
@@ -81,7 +81,7 @@ export type EntryCardProps = {
 const EntryCard: React.FC<EntryCardProps> = props => {
   const {
     entryData,
-    profileAvatarExt,
+    profileAvatar,
     ref,
     flagAsLabel,
     removed,
@@ -164,7 +164,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
   const entryCardUi = (
     <Stack spacing="gap-y-2" padding="p-4" customStyle={`grow min-h-[inherit] ${hoverStyle}`}>
       <Stack direction="row" justify="between">
-        {profileAvatarExt}
+        {profileAvatar}
         <Menu
           anchor={{
             icon: <EllipsisHorizontalIcon />,

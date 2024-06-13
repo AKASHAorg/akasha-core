@@ -1,9 +1,42 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
-import { genAppProps, getUserInfo, getUserStore } from '@akashaorg/af-testing';
 import * as useRootComponentProps from '@akashaorg/ui-awf-hooks/lib/use-root-props';
 import * as useAkashaStore from '@akashaorg/ui-awf-hooks/lib/store/use-akasha-store';
+import { genAppProps, getUserInfo, getUserStore } from '@akashaorg/af-testing';
+import '@testing-library/jest-dom';
 
-require('@testing-library/jest-dom/extend-expect');
+class ResizeObserver {
+  observe() {
+    return;
+  }
+  unobserve() {
+    return;
+  }
+  disconnect() {
+    return;
+  }
+}
+
+global.ResizeObserver = ResizeObserver;
+
+jest.mock('@tanstack/react-router', () => ({
+  ...jest.requireActual('@tanstack/react-router'),
+  useNavigate: jest.fn().mockImplementation(() => {
+    return jest.fn();
+  }),
+  useRouterState: jest.fn().mockImplementation(() => {
+    return {
+      location: {
+        pathname: '',
+      },
+    };
+  }),
+}));
+
+jest.mock('react-use', () => ({
+  ...jest.requireActual('react-use'),
+  useMedia: jest.fn().mockImplementation(() => {
+    return false;
+  }),
+}));
 
 /**
  * sdk mock for Apps package.
@@ -68,3 +101,16 @@ jest.spyOn(useRootComponentProps, 'useRootComponentProps').mockReturnValue({ ...
 jest
   .spyOn(useAkashaStore, 'useAkashaStore')
   .mockReturnValue({ userStore: getUserStore(), data: getUserInfo() });
+
+const mockIntersectionObserver = jest.fn();
+
+mockIntersectionObserver.mockReturnValue({
+  observe: () => null,
+  unobserve: () => null,
+  disconnect: () => null,
+});
+
+global.IntersectionObserver = mockIntersectionObserver;
+
+//TODO revisit this mock
+global.scrollTo = jest.fn();

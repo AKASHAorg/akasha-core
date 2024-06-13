@@ -50,7 +50,7 @@ const baseArgs: Story = {
   args: {
     isLoggedIn,
     entryData,
-    profileAvatarExt: (
+    profileAvatar: (
       <AuthorProfileAvatar authorId="authorId" createdAt={new Date('Jan 01 2024').toISOString()} />
     ),
     itemType: EntityTypes?.REFLECT,

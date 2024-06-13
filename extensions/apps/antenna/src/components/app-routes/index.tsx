@@ -26,7 +26,14 @@ import {
   Await,
 } from '@tanstack/react-router';
 import { CreateRouter, RouterContext } from '@akashaorg/typings/lib/ui';
-import { getBeamById, getBeamStreamId, getReflectionById } from './data-loaders';
+import {
+  getBeamById,
+  getBeamData,
+  getBeamStatus,
+  getBeamStreamId,
+  getReflectionById,
+} from './data-loaders';
+import { mapBeamEntryData } from '@akashaorg/ui-awf-hooks';
 
 const rootRoute = createRootRouteWithContext<RouterContext>()({
   component: Outlet,
@@ -76,7 +83,15 @@ const beamRoute = createRoute({
         <Await promise={beamStream}>
           {beamStreamData => (
             <Await promise={beam}>
-              {beamData => <BeamPage beamId={beamId} beam={beamData} beamStream={beamStreamData} />}
+              {beamById => {
+                return (
+                  <BeamPage
+                    beamId={beamId}
+                    entryData={mapBeamEntryData(getBeamData(beamById))}
+                    beamStatus={getBeamStatus(beamStreamData)}
+                  />
+                );
+              }}
             </Await>
           )}
         </Await>
@@ -96,7 +111,15 @@ const beamReflectRoute = createRoute({
         <Await promise={beamStream}>
           {beamStreamData => (
             <Await promise={beam}>
-              {beamData => <BeamPage beamId={beamId} beam={beamData} beamStream={beamStreamData} />}
+              {beamById => {
+                return (
+                  <BeamPage
+                    beamId={beamId}
+                    entryData={mapBeamEntryData(getBeamData(beamById))}
+                    beamStatus={getBeamStatus(beamStreamData)}
+                  />
+                );
+              }}
             </Await>
           )}
         </Await>

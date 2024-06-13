@@ -1,15 +1,14 @@
-import './jest.setup';
+import '../../jest.setup';
 
-import { genLoggedInState } from '@akashaorg/af-testing';
-import * as loginHooks from '@akashaorg/ui-awf-hooks/lib/use-login.new';
 import * as mediaHooks from '@akashaorg/ui-awf-hooks/lib/utils/media-utils';
 
 jest.mock('@akashaorg/typings/lib/ui', () => ({
   EntityTypes: {
-    POST: 0,
+    BEAM: 0,
     PROFILE: 1,
-    REPLY: 2,
+    REFLECT: 2,
     TAG: 3,
+    ARTICLE: 4,
   },
   EventTypes: {
     Instantiated: 'instantiated',
@@ -37,20 +36,3 @@ jest.mock('@akashaorg/typings/lib/ui', () => ({
 jest
   .spyOn(mediaHooks, 'getMediaUrl')
   .mockReturnValue({ originLink: '', fallbackLink: '', pathLink: '' });
-
-jest.spyOn(loginHooks, 'useGetLogin').mockReturnValue({
-  data: { ...genLoggedInState(true) },
-  status: 'success',
-  isSuccess: true,
-  reported: true,
-});
-
-const mockIntersectionObserver = jest.fn();
-
-mockIntersectionObserver.mockReturnValue({
-  observe: () => null,
-  unobserve: () => null,
-  disconnect: () => null,
-});
-
-global.IntersectionObserver = mockIntersectionObserver;

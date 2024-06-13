@@ -115,7 +115,7 @@ const ReflectionCard: React.FC<ReflectCardProps> = props => {
       onReflect={onReflect}
       onEntryFlag={handleFlagReflection}
       onMentionClick={handleMentionClick}
-      profileAvatarExt={
+      profileAvatar={
         <AuthorProfileAvatar
           authorId={entryData.authorId}
           hidePublishTime={hidePublishTime}
