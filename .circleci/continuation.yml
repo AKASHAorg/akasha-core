@@ -1,12 +1,15 @@
 version: 2.1
 
+orbs:
+  node: circleci/node@5.2.0
+
 parameters:
   affected-projects:
     type: string
     default: ''
   num-affected-projects:
     type: integer
-    default: 1
+    default: 0
 
 executors:
   shared-executor:
@@ -15,12 +18,12 @@ executors:
     working_directory: ~/akasha-core
 
 jobs:
-  build:
+  run-tests:
     executor: shared-executor
     parallelism: <<pipeline.parameters.num-affected-projects>>
     steps:
       - when:
-          condition: <<pipeline.parameters.affected-projects>>
+          condition: <<pipeline.parameters.num-affected-projects>>
           steps:
             - checkout
             - node/install:
@@ -29,18 +32,16 @@ jobs:
             - run:
                 name: Test affected projects
                 command: |
-                  #TODO: exclude messaging, af-testing, hup-api, and app loader apps till their tsc and failing tests are fixed
                   AFFECTED_PROJECTS=$(echo "<<pipeline.parameters.affected-projects>>" | sed 's/, /\n/g' | circleci tests split)
-                  nx run-many --target=tsc --projects=$AFFECTED_PROJECTS
-                  nx run-many --target=test --projects=$AFFECTED_PROJECTS --passWithNoTests --runInBand
+                  npx nx run-many --target=test --projects=$AFFECTED_PROJECTS --passWithNoTests --runInBand
       - unless:
-          condition: <<pipeline.parameters.affected-projects>>
+          condition: <<pipeline.parameters.num-affected-projects>>
           steps:
             - run:
                 name: No affected projects to test
                 command: echo "No affected projects to test"
 
 workflows:
-  build:
+  test:
     jobs:
-      - build
+      - run-tests
