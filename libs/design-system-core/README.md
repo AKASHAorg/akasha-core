@@ -44,8 +44,8 @@ Can be used as an entry point for other, more detailed elements:
 
 ### Button
 
-A button component with rounded borders. Has 2 variants: `primary` for the call-to-action
-use case and `secondary` for normal usage. It can also display an icon, or it can be text only.
+A button component with rounded borders. Has 3 variants: `primary` for the call-to-action
+use case, `secondary` for normal usage, and `text` only when you need clickable texts that don't look like a button. It can also be displayed as an icon.
 
 ```tsx
  <Button variant="secondary" label="Click me" onClick={handleClick}>

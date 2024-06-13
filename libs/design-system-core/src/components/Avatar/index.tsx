@@ -96,7 +96,7 @@ const AvatarContent: React.FC<AvatarContentProps> = props => {
  * @param faded - boolean (optional) whether the avatar should have faded style
  * @param isClickable - boolean (optional) whether the avatar should be clickable
  * @param profileId - string (optional) the profile id the avatar belongs to
- * @param publicImgPath - string (optional) the public image path of the avata
+ * @param publicImgPath - string (optional) the public image path of the avatar
  * @param customStyle - (optional) custom styling if any
  * @param onClick - (optional) click handler
  * @param dataTestId - (optional) for test writing purpose

@@ -39,7 +39,7 @@ const PLACEMENT_TO_CSS_POSITION_MAP: Record<TooltipProps['placement'], CSSPositi
 
 /**
  * The ToolTip component offers a quick way to include a UI element that will be displayed when
- * a user hovers over or click on an element that you want to include additional information for. The component
+ * a user hovers over or clicks on an element that you want to include additional information for. The component
  * It supports various placement options, triggers, custom styles, and you can include text or other React elements
  * as content.
  * @param placement - where the tooltip will appear

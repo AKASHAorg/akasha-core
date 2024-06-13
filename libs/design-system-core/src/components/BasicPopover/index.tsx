@@ -13,7 +13,7 @@ export type BasicPopoverProps = PropsWithChildren<{
 /**
  * A BasicPopover component provides an easy and fast way to include a popover in your app.
  * @param target - HTML Element
- * @param gap -custom gap (optional)
+ * @param gap - custom gap (optional)
  * @param overflow - (optional) custom overflow styling
  * @param closePopover - click handler for closing the popover
  *
