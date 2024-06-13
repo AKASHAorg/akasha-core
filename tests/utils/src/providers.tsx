@@ -2,6 +2,8 @@ import React, { PropsWithChildren } from 'react';
 import i18n from 'i18next';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
+import { InMemoryCache } from '@apollo/client';
+import { relayStylePagination } from '@apollo/client/utilities';
 
 const getI18nInstance = () => {
   i18n.use(initReactI18next).init({
@@ -33,7 +35,44 @@ const AllProviders: React.FC<
   }>
 > = ({ providerProps, children }) => {
   return (
-    <MockedProvider mocks={providerProps?.mocks ?? []}>
+    <MockedProvider
+      mocks={providerProps?.mocks ?? []}
+      cache={
+        new InMemoryCache({
+          typePolicies: {
+            AkashaBeam: {
+              merge: true,
+            },
+            AkashaReflectConnection: {
+              merge: true,
+            },
+            AkashaFollow: {
+              merge: true,
+            },
+            CeramicAccount: {
+              merge: true,
+              fields: {
+                akashaFollowList: relayStylePagination(['sorting', 'filters']),
+                akashaBeamStreamList: relayStylePagination(['sorting', 'filters']),
+                akashaReflectStreamList: relayStylePagination(['sorting', 'filters']),
+                akashaBeamList: relayStylePagination(['sorting', 'filters']),
+              },
+            },
+            AkashaProfile: {
+              merge: true,
+              fields: {
+                followers: relayStylePagination(['sorting', 'filters']),
+              },
+            },
+            Query: {
+              fields: {
+                akashaBeamIndex: relayStylePagination(['sorting', 'filters']),
+              },
+            },
+          },
+        })
+      }
+    >
       <TranslationProvider>{children}</TranslationProvider>
     </MockedProvider>
   );

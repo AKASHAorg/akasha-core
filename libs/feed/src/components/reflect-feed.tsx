@@ -16,6 +16,7 @@ import { useGetReflectionStreamLazyQuery } from '@akashaorg/ui-awf-hooks/lib/gen
 import { hasOwn, useAkashaStore } from '@akashaorg/ui-awf-hooks';
 
 export type ReflectFeedProps = {
+  dataTestId?: string;
   header?: ReactElement;
   scrollRestorationStorageKey: string;
   lastScrollRestorationKey: string;
@@ -35,6 +36,7 @@ export type ReflectFeedProps = {
 
 const ReflectFeed: React.FC<ReflectFeedProps> = props => {
   const {
+    dataTestId,
     header,
     scrollRestorationStorageKey,
     lastScrollRestorationKey,
@@ -114,6 +116,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
       {reflections && (
         <DynamicInfiniteScroll
           header={header}
+          dataTestId={dataTestId}
           scrollRestorationStorageKey={scrollRestorationStorageKey}
           lastScrollRestorationKey={lastScrollRestorationKey}
           enableScrollRestoration={true}

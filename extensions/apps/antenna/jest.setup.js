@@ -1,7 +1,5 @@
 import '../../jest.setup';
 
-import * as mediaHooks from '@akashaorg/ui-awf-hooks/lib/utils/media-utils';
-
 jest.mock('@akashaorg/typings/lib/ui', () => ({
   EntityTypes: {
     BEAM: 0,
@@ -31,8 +29,13 @@ jest.mock('@akashaorg/typings/lib/ui', () => ({
     LayoutShowAppNotFound: 'layout:show-app-not-found',
     ThemeChange: 'theme-change',
   },
+  NotificationEvents: {
+    ShowNotification: 'show-notification',
+  },
+  AnalyticsCategories: {
+    REFLECT: 'Reflect',
+  },
+  NotificationTypes: {
+    Alert: 'alert',
+  },
 }));
-
-jest
-  .spyOn(mediaHooks, 'getMediaUrl')
-  .mockReturnValue({ originLink: '', fallbackLink: '', pathLink: '' });

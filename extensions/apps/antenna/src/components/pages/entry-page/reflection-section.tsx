@@ -45,7 +45,12 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
   });
 
   return (
-    <Stack ref={wrapperRef} spacing="gap-y-2" customStyle={`grow ${customStyle}`}>
+    <Stack
+      dataTestId="reflection-section"
+      ref={wrapperRef}
+      spacing="gap-y-2"
+      customStyle={`grow ${customStyle}`}
+    >
       <Stack customStyle="grow">
         <EditableReflection
           entryData={entryData}
