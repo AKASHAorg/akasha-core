@@ -37,6 +37,30 @@ const PLACEMENT_TO_CSS_POSITION_MAP: Record<TooltipProps['placement'], CSSPositi
   top: 'bottom',
 };
 
+/**
+ * The ToolTip component offers a quick way to include a UI element that will be displayed when
+ * a user hovers over or click on an element that you want to include additional information for. The component
+ * It supports various placement options, triggers, custom styles, and you can include text or other React elements
+ * as content.
+ * @param placement - where the tooltip will appear
+ * @param content - it can be pure text or another React element
+ * @param textSize - (optional) for customizing the text size
+ * @param textColor - (optional) for customizing the text color
+ * @param trigger - (optional) for controlling when the tooltip will show (on hover or on click)
+ * @param centerArrowToReference - boolean (optional) for controlling the tooltip's arrow
+ * @param arrow - boolean (optional) whethe the tooltip will have an arrow
+ * @param backgroundColor - (optional) for customizing the background color
+ * @param customStyle - (optional) apply any other custom styles. Please use standard Tailwind CSS classes
+ * @param contentCustomStyle - (optional) for customizing the content's style
+ * @example
+ * ```tsx
+ *  const tooltipContent = 'I am a tooltip';
+ *  const label = 'Hover over me to know more';
+ *  <Tooltip content={tooltipContent} placement="top">
+ *    <>{label}</>
+ *  </Tooltip>
+ * ```
+ **/
 const Tooltip: React.FC<TooltipProps> = props => {
   const {
     placement = 'bottom',

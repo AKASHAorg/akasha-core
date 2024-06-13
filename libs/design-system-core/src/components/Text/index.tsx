@@ -60,6 +60,33 @@ const VARIANT_TO_CSS_CLASSES_MAPPER: Record<Variant, string> = {
   'button-sm': 'block text-[0.75rem] leading-[1.125rem] font-bold',
 };
 
+/**
+ * The Text component offers a versatile and highly-customizable way to render text content in your
+ * app. It supports various text variants, colors, alignments, truncation, word breaking, line clamping,
+ * font weights, and HTML tags. For customization, please use standard Taiwind CSS classes.
+ * @param id - (optional) id of the text if any
+ * @param customStyle - (optional) apply any other custom styles. Please use standard Tailwind CSS classes
+ * @param variant - for customizing the text variant. The default value is `body1`
+ * @param color - (optional) for customizing the text color
+ * @param as - (optional) useful for specifying the role of the text as something else, e.g. span, label
+ * @param align - (optional) for customizing the alignment of the text
+ * @param truncate - boolean (optional) whether to truncate the text when the length exceeds the width of the container
+ * @param breakWord - boolean (optional) whether to break the word when it exceeeds the width of the container
+ * @param lineClamp - number (optional) truncate a block of text after a (number) of lines
+ * @param weight - (optional) for customizing the font weight
+ * @param ref - (optional) pass the ref here
+ * @param selectable - boolean (optional) whether the text is selectable
+  * @example
+ * ```tsx
+ *  <Text variant="h6">H6 Text</Text>
+ * <Text variant="h1">H1 Text</Text>
+ * <Text variant="body1">Body1 Text</Text>
+ * <Text variant="button-md" align="center" weight="bold">Bold Text aligned in the center</Text>
+ *  <Text variant="h6" as="label">
+        Text with variant H6 used as a label
+    </Text>
+ * ```
+ **/
 const Text: React.FC<TextProps> = ({
   id,
   as,

@@ -6,8 +6,6 @@ import Text from '../Text';
 import Card from '../Card';
 
 export type SubtitleTextIconProps = {
-  customStyle?: string;
-  dataTestId?: string;
   icon?: React.ReactElement;
   solid?: boolean;
   backgroundSize?: string;
@@ -18,9 +16,37 @@ export type SubtitleTextIconProps = {
   subtitleIcon?: IconType;
   gap?: 'xxsmall' | 'xsmall' | 'small' | 'medium' | 'large';
   maxWidth?: string;
+  customStyle?: string;
+  dataTestId?: string;
   onClick?: React.EventHandler<React.SyntheticEvent>;
 };
 
+/**
+ * The SubtitleTextIcon component serves a specific use case: to display two lines of content ( One
+ * main text and a subtitle below it) and its associated icon side-by-side. It is used mainly in the
+ * `Latest Topics` widget in Akasha World.
+ * @param icon - (optional) supply the icon to be placed on the left side.
+ * @param solid - boolean (optional) whether the icon will be applied solid style
+ * @param backgroundSize - (optional) for customizing the background size of the icon
+ * @param backgroundColor - boolean (optional) whether the icon will have a grey rounded background around it
+ * @param label - (optional) customize the top label
+ * @param labelSize - (optional) for customizing the size of the label
+ * @param subtitle - (optional)  customize the bottom subtitle 
+ * @param gap - (optional) for customizing the gap between the elements
+ * @param maxWidth - (optional) for customizing the max width of the whole component
+ * @param customStyle - (optional) apply any other custom styles. Please use standard Tailwind CSS classes
+ * @param onClick - (optional)click handler for when user clicks on the text
+ * @param dataTestId - (optional) useful for test writing purpose
+ * ```tsx
+ *  <SubtitleTextIcon
+      onClick={onClickHandler}
+      label={'Top Label'}
+      subtitle={`Bottom Subtitle`}
+      icon={<HashtagIcon />}
+      backgroundColor={true}
+    />
+ * ```
+ **/
 const SubtitleTextIcon: React.FC<SubtitleTextIconProps> = props => {
   const {
     customStyle = '',
