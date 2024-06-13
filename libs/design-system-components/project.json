@@ -16,5 +16,8 @@
       }
     }
   },
+  "test": {
+    "dependsOn": ["prepare"]
+  },
   "tags": ["scope:extension", "type:lib"]
 }

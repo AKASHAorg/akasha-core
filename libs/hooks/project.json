@@ -15,6 +15,9 @@
         "command": "tsc --build"
       }
     },
+    "test": {
+      "dependsOn": ["prepare"]
+    },
     "build": {
       "dependsOn": ["prepare"],
       "executor": "nx:run-commands",

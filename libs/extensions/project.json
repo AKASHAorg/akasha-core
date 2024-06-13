@@ -16,6 +16,9 @@
         "cwd": "libs/extensions",
         "command": "tsc --build"
       }
+    },
+    "test": {
+      "dependsOn": ["prepare"]
     }
   },
   "tags": ["scope:extension", "type:lib"]

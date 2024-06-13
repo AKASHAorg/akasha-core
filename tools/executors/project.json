@@ -12,6 +12,9 @@
         "cwd": "tools/executors",
         "command": "tsc --build"
       }
+    },
+    "test": {
+      "dependsOn": ["prepare"]
     }
   },
   "tags": ["scope:tools", "type:lib"]
