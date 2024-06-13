@@ -29,6 +29,11 @@ jobs:
             - node/install:
                 node-version: '20.11.0'
                 yarn-version: '4.1.1'
+            - run: corepack enable
+            - run: corepack prepare yarn@4.1.1 --activate
+            - node/install-packages:
+                check-cache: detect
+                pkg-manager: yarn-berry
             - run:
                 name: Test affected projects
                 command: |
