@@ -39,7 +39,7 @@ jobs:
           name: Prepare continuation parameters
           command: |
             export AFFECTED_PROJECTS=$(npx nx show projects --affected)
-            export NUM_AFFECTED_PROJECTS=$(echo $AFFECTED_PROJECTS | sed 's/, /\n/g' | grep -v '^$' |  wc -l | xargs)
+            export NUM_AFFECTED_PROJECTS=$(echo $AFFECTED_PROJECTS | sed 's/, /\n/g' | wc -l | xargs)
 
             echo '{ "affected-projects": "'$AFFECTED_PROJECTS'", "num-affected-projects": '$NUM_AFFECTED_PROJECTS' }' >> .circleci/continuation-params.json
       - continuation/continue:
