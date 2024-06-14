@@ -105,11 +105,7 @@ const AvatarContent: React.FC<AvatarContentProps> = props => {
  *
  * @example
  * ```tsx
- *  <Avatar
- *    size="md"
- *    avatar={avatar}
- *    profileId={profileId}
- *   />
+ *  <Avatar size="md" avatar={avatar} profileId={profileId} />
  * ```
  **/
 const Avatar: React.FC<AvatarProps> = props => {

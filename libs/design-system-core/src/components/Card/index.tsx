@@ -51,11 +51,7 @@ export type TCardProps = PropsWithChildren<
  * @param ref - (optional)
  * @example
  * ```tsx
- *  <Card
- *    background={{ dark: 'grey3', light: 'grey9' }}
- *    onClick={clickHandler}
- *    padding="p-4"
- *   />
+ *  <Card background={{ dark: 'grey3', light: 'grey9' }} onClick={clickHandler} padding="p-4" />
  * ```
  **/
 const Card: React.FC<TCardProps> = forwardRef((props, ref) => {

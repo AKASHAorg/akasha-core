@@ -18,7 +18,7 @@ export type AccordionProps = {
 };
 
 /**
- *  An accordion provides a fast and easy way to create expandable and collapsible sections
+ * An accordion provides a fast and easy way to create expandable and collapsible sections
  * anywhere in your app. Its container and content can be easily customized using the
  * `customStyle` and `contentStyle` props.
  * #### Usage
@@ -41,14 +41,7 @@ export type AccordionProps = {
  *   <Text>inside the accordion</Text>
  * </Stack>
  * );
- *
- * <Accordion
- *  open: true
- *  accordionId: 'someId'
- *  titleNode: title
- *  contentNode: content
- *  customStyle: 'w-[15%]'
- * />
+ * <Accordion open={true} accordionId='someId' titleNode={title} contentNode={content} customStyle='w-[15%]' />
  * ```
  **/
 const Accordion: React.FC<AccordionProps> = props => {

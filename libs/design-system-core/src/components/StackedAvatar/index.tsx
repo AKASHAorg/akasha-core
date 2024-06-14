@@ -85,10 +85,7 @@ export type StackedAvatarProps = {
         "followersCount": 0
       }
     ]
- *   <StackedAvatar
-        userData={userData}
-        maxAvatar={4}
-     />
+ *   <StackedAvatar userData={userData} maxAvatar={4} />
  * ```
  **/
 const StackedAvatar: React.FC<StackedAvatarProps> = props => {

@@ -27,10 +27,7 @@ export type BasicPopoverProps = PropsWithChildren<{
  *  <div>Popover content</div>
  * </React.Fragment>
  * );
- *  <BasicPopover
- *    target={targetNode}
- *    children={Contents}
- *   />
+ *  <BasicPopover target={targetNode} children={Contents} />
  * ```
  **/
 const BasicPopover: React.FC<BasicPopoverProps> = ({ children, ...props }) => {

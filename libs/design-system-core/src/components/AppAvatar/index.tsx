@@ -14,7 +14,7 @@ export type AppAvatarProps = AvatarProps & {
 };
 
 /**
- *  An AppAvatar provides a fast and easy way to create an avatar component.
+ * An AppAvatar provides a fast and easy way to create an avatar component.
  * You can easily customize its size, border, background color, clickability and
  * apply custom styling using the corresponding props.
  * #### Usage
@@ -23,11 +23,7 @@ export type AppAvatarProps = AvatarProps & {
  * const profileId = 'did:pkh:eip155:5:0x36c703c42dfa2437dc883e2e0884e57404e16493';
  * const avatar = { src: 'https://placebeard.it/360x360', height: 360, width: 360 };
  *
- * <AppAvatar
- *   appType: IntegrationTypes.APP
- *   profileId: profileId
- *   avatar
- * />
+ * <AppAvatar avatar={avatar} appType={IntegrationTypes.APP} profileId={profileId} />
  * ```
  **/
 const AppAvatar: React.FC<AppAvatarProps> = props => {

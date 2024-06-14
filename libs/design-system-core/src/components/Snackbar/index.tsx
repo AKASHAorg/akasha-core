@@ -37,10 +37,7 @@ export type SnackbarProps = {
  * @param customStyle - (optional)  add custom Tailwind CSS classes here
  * @example
  * ```tsx
- *   <Snackbar
-        title='Snackbar'
-        description='Some important information will appear here'
-     />
+ *   <Snackbar title='Snackbar' description='Some important information will appear here' />
  * ```
  **/
 const Snackbar: React.FC<SnackbarProps> = ({

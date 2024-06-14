@@ -35,7 +35,7 @@ export type AppIconProps = {
 };
 
 /**
- *  An AppIcon component provides a fast and easy way to include a custom app icon
+ * An AppIcon component provides a fast and easy way to include a custom app icon
  * for your application.
  * You can easily customize its icon, size, border, background color, etc. and
  * apply custom styling using the corresponding props. A boolean `hasNewNotifs` prop can

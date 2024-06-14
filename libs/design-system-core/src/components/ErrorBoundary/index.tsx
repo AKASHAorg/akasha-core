@@ -24,7 +24,7 @@ export type ErrorBoundaryState = { hasError: boolean; error: Error };
  *      errorObj={{
  *               type: 'script-error',
  *               title: t('Error in loading reflection.'),
- *             }}
+ *               }}
  *   >
  *    <SomeChildComponent />
  * </ErrorBoundary>

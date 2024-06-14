@@ -40,11 +40,7 @@ export type AutoCompleteProps = {
  *
  * @example
  * ```tsx
- *  <AutoComplete
- *    placeholder={'Start searching...'}
- *    options={['a','b','c']}
- *    separators={['Comma', 'Space', 'Enter']}s
- *   />
+ *  <AutoComplete placeholder={'Start searching...'} options={['a','b','c']} separators={['Comma', 'Space', 'Enter']} />
  * ```
  **/
 const AutoComplete: React.FC<AutoCompleteProps> = props => {

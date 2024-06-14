@@ -36,9 +36,7 @@ export type DidFieldProps = {
  * @param copiable - boolean (optional) whether CopyToClipboard should be enabled
  * @param customStyle - (optional) customize the style
  * ```tsx
- *  <DidField
- *    did='0x003410490050000320006570034567114572000'
- *   />
+ *  <DidField did='0x003410490050000320006570034567114572000' />
  * ```
  **/
 const DidField: React.FC<DidFieldProps> = ({

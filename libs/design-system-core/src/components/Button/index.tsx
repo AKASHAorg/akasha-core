@@ -37,12 +37,7 @@ import { getContainerClasses } from './getContainerClasses';
  *
  * @example
  * ```tsx
- *  <Button
- *    variant={'primary'}
- *    label={'Primary button'}
- *    size={'sm'}
- *    onClick={onclickHandler}
- *   />
+ *  <Button variant={'primary'} label={'Primary button'} size={'sm'} onClick={onclickHandler} />
  * ```
  **/
 const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {

@@ -18,10 +18,7 @@ export type ImageProps = PropsWithChildren<
  * @param dataTestId - (optional) useful when writing tests for the component
  * @example
  * ```tsx
- *   <Image
- *      customStyle="object-contain rounded-2xl"
- *      src={`${publicImgPath}/${imageName}`}
- *   />
+ *   <Image customStyle="object-contain rounded-2xl" src={`${publicImgPath}/${imageName}`} />
  * ```
  **/
 const Image: React.FC<ImageProps> = props => {
