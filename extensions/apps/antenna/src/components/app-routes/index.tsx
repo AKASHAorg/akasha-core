@@ -26,7 +26,15 @@ import {
   Await,
 } from '@tanstack/react-router';
 import { CreateRouter, RouterContext } from '@akashaorg/typings/lib/ui';
-import { getBeamById, getBeamStreamId, getReflectionById } from './data-loaders';
+import {
+  getBeamById,
+  getBeamData,
+  getBeamStatus,
+  getBeamStreamId,
+  getReflectionById,
+  getReflectionData,
+} from './data-loaders';
+import { mapBeamEntryData, mapReflectEntryData } from '@akashaorg/ui-awf-hooks';
 
 const rootRoute = createRootRouteWithContext<RouterContext>()({
   component: Outlet,
@@ -76,7 +84,15 @@ const beamRoute = createRoute({
         <Await promise={beamStream}>
           {beamStreamData => (
             <Await promise={beam}>
-              {beamData => <BeamPage beamId={beamId} beam={beamData} beamStream={beamStreamData} />}
+              {beamById => {
+                return (
+                  <BeamPage
+                    beamId={beamId}
+                    entryData={mapBeamEntryData(getBeamData(beamById))}
+                    beamStatus={getBeamStatus(beamStreamData)}
+                  />
+                );
+              }}
             </Await>
           )}
         </Await>
@@ -96,7 +112,15 @@ const beamReflectRoute = createRoute({
         <Await promise={beamStream}>
           {beamStreamData => (
             <Await promise={beam}>
-              {beamData => <BeamPage beamId={beamId} beam={beamData} beamStream={beamStreamData} />}
+              {beamById => {
+                return (
+                  <BeamPage
+                    beamId={beamId}
+                    entryData={mapBeamEntryData(getBeamData(beamById))}
+                    beamStatus={getBeamStatus(beamStreamData)}
+                  />
+                );
+              }}
             </Await>
           )}
         </Await>
@@ -120,7 +144,9 @@ const reflectionsRoute = createRoute({
     const { reflection } = reflectionsRoute.useLoaderData();
     return (
       <Suspense fallback={<EntrySectionLoading />}>
-        <Await promise={reflection}>{data => <ReflectionPage reflection={data} />}</Await>
+        <Await promise={reflection}>
+          {data => <ReflectionPage entryData={mapReflectEntryData(getReflectionData(data))} />}
+        </Await>
       </Suspense>
     );
   },
@@ -133,7 +159,9 @@ const reflectionsReflectRoute = createRoute({
     const { reflection } = reflectionsRoute.useLoaderData();
     return (
       <Suspense fallback={<EntrySectionLoading />}>
-        <Await promise={reflection}>{data => <ReflectionPage reflection={data} />}</Await>
+        <Await promise={reflection}>
+          {data => <ReflectionPage entryData={mapReflectEntryData(getReflectionData(data))} />}
+        </Await>
       </Suspense>
     );
   },

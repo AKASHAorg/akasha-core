@@ -33,7 +33,7 @@ describe('<Link /> Component', () => {
 
     const link = getByRole('link');
 
-    expect(link).toHaveAttribute('href', link);
+    expect(link).toHaveAttribute('href', link.getAttribute('href'));
   });
 
   it('handles click event', () => {

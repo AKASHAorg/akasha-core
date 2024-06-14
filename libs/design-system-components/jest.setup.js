@@ -1,4 +1,4 @@
-require('@testing-library/jest-dom/extend-expect');
+import '@testing-library/jest-dom';
 
 import { install } from '@twind/core';
 import twindConfig from './.storybook/twind.config.js';
