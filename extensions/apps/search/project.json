@@ -16,9 +16,12 @@
       ],
       "executor": "nx:run-commands",
       "options": {
-        "cwd": "extensions/apps/notifications",
+        "cwd": "extensions/apps/search",
         "command": "tsc --build"
       }
+    },
+    "test": {
+      "dependsOn": ["@akashaorg/af-testing:prepare", "prepare"]
     },
     "build": {
       "dependsOn": ["prepare"],
