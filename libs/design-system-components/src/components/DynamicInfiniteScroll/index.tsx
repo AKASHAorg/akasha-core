@@ -33,6 +33,7 @@ type DynamicInfiniteScrollType = {
   loading?: boolean;
   customStyle?: string;
   header?: ReactElement;
+  dataTestId?: string;
   onLoadMore: () => Promise<unknown>;
   children: (item: DynamicInfiniteScrollItem) => ReactElement;
 };
@@ -51,6 +52,7 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
     loading,
     customStyle = '',
     header,
+    dataTestId,
     onLoadMore,
     children,
   } = props;
@@ -142,6 +144,7 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
       <Card
         ref={parentRef}
         customStyle={`relative min-h-[${virtualizer.isScrolling && loading && hasNextPage ? totalSize + overScan * estimatedHeight : totalSize}px] ${customStyle}`}
+        dataTestId={dataTestId}
         type="plain"
       >
         <Card

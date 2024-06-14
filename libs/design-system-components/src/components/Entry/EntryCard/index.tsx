@@ -41,6 +41,7 @@ export type EntryCardProps = {
   ctaLabel?: string;
   removeEntryLabel?: string;
   notEditableLabel?: string;
+  editLabel?: string;
   removed?: {
     author: React.ReactNode;
     others: React.ReactNode;
@@ -85,7 +86,6 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     ref,
     flagAsLabel,
     removed,
-    notEditableLabel,
     nsfw,
     reflectAnchorLink,
     disableReporting,
@@ -98,7 +98,6 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     showNSFWCard,
     nsfwUserSetting,
     contentClickable,
-    editable = true,
     lastEntry,
     hover,
     actionsRight,
@@ -136,14 +135,12 @@ const EntryCard: React.FC<EntryCardProps> = props => {
           },
         ]
       : []),
-    ...(isViewer
+    ...(isViewer && rest.itemType === EntityTypes.BEAM
       ? [
           {
             icon: <TrashIcon />,
             label: removeEntryLabel ?? '',
             color: { light: 'errorLight', dark: 'errorDark' } as const,
-            disabled: !editable,
-            toolTipContent: editable ? null : notEditableLabel,
             onClick: onEntryRemove,
           },
         ]

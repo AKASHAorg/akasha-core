@@ -46,7 +46,12 @@ const BeamSection: React.FC<BeamSectionProps> = props => {
   });
 
   return (
-    <Stack ref={wrapperRef} spacing="gap-y-2" customStyle={`grow ${customStyle}`}>
+    <Stack
+      dataTestId="beam-section"
+      ref={wrapperRef}
+      spacing="gap-y-2"
+      customStyle={`grow ${customStyle}`}
+    >
       <Stack customStyle="grow">
         <BeamCard
           entryData={entryData}

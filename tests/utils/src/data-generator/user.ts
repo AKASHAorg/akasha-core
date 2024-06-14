@@ -1,29 +1,61 @@
-const genProfileByDID = (profileDID?: string) => {
+import { faker } from '@faker-js/faker';
+
+interface IGenProfileByDID {
+  profileDID: string;
+  pageInfo?: {
+    startCursor: string;
+    endCursor: string;
+    hasPreviousPage: boolean;
+    hasNextPage: boolean;
+  };
+  nsfw?: boolean;
+}
+
+const genProfileByDID = ({
+  profileDID,
+  pageInfo = { startCursor: null, endCursor: null, hasPreviousPage: false, hasNextPage: false },
+  nsfw = false,
+}: IGenProfileByDID) => {
   return {
     akashaProfile: {
-      id: 'k2t6wzhkhabz4h6cyxd7y7uodszszzgaid7jkh6k7hs0hplj4jvk03s0e5b2lx',
+      id: faker.string.uuid(),
       did: {
         id: profileDID,
         isViewer: false,
         __typename: 'CeramicAccount',
       },
-      name: 'CoffeeLover',
+      name: faker.internet.userName(),
       links: [],
-      background: null,
+      background: {
+        default: {
+          src: faker.image.urlPicsumPhotos(),
+          width: 600,
+          height: 128,
+          __typename: 'ProfileImageSource',
+        },
+        alternatives: null,
+        __typename: 'ProfileImageVersions',
+      },
       description: 'AKASHA',
-      avatar: null,
+      avatar: {
+        default: {
+          src: faker.image.avatar(),
+          width: 159,
+          height: 159,
+          __typename: 'ProfileImageSource',
+        },
+        alternatives: null,
+        __typename: 'ProfileImageVersions',
+      },
       followers: {
         pageInfo: {
-          startCursor: null,
-          endCursor: null,
-          hasPreviousPage: false,
-          hasNextPage: false,
+          ...pageInfo,
           __typename: 'PageInfo',
         },
         __typename: 'AkashaFollowInterfaceConnection',
       },
       createdAt: '2024-05-24T07:45:26.191Z',
-      nsfw: false,
+      nsfw,
       __typename: 'AkashaProfile',
     },
     isViewer: false,

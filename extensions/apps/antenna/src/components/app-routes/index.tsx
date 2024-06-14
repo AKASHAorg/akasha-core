@@ -32,8 +32,9 @@ import {
   getBeamStatus,
   getBeamStreamId,
   getReflectionById,
+  getReflectionData,
 } from './data-loaders';
-import { mapBeamEntryData } from '@akashaorg/ui-awf-hooks';
+import { mapBeamEntryData, mapReflectEntryData } from '@akashaorg/ui-awf-hooks';
 
 const rootRoute = createRootRouteWithContext<RouterContext>()({
   component: Outlet,
@@ -143,7 +144,9 @@ const reflectionsRoute = createRoute({
     const { reflection } = reflectionsRoute.useLoaderData();
     return (
       <Suspense fallback={<EntrySectionLoading />}>
-        <Await promise={reflection}>{data => <ReflectionPage reflection={data} />}</Await>
+        <Await promise={reflection}>
+          {data => <ReflectionPage entryData={mapReflectEntryData(getReflectionData(data))} />}
+        </Await>
       </Suspense>
     );
   },
@@ -156,7 +159,9 @@ const reflectionsReflectRoute = createRoute({
     const { reflection } = reflectionsRoute.useLoaderData();
     return (
       <Suspense fallback={<EntrySectionLoading />}>
-        <Await promise={reflection}>{data => <ReflectionPage reflection={data} />}</Await>
+        <Await promise={reflection}>
+          {data => <ReflectionPage entryData={mapReflectEntryData(getReflectionData(data))} />}
+        </Await>
       </Suspense>
     );
   },

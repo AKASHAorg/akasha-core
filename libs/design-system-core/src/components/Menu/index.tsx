@@ -42,25 +42,27 @@ const Menu: React.FC<MenuProps> = ({ anchor, disabled, ...rest }) => {
   };
 
   return (
-    <Stack ref={anchorRef} direction="column" spacing="gap-y-1">
-      <Button
-        {...anchor}
-        disabled={disabled}
-        onClick={(event: React.SyntheticEvent) => {
-          setShowList(!showList);
-          event.preventDefault();
-          event.stopPropagation();
-        }}
-      />
+    rest.items?.length > 0 && (
+      <Stack ref={anchorRef} direction="column" spacing="gap-y-1">
+        <Button
+          {...anchor}
+          disabled={disabled}
+          onClick={(event: React.SyntheticEvent) => {
+            setShowList(!showList);
+            event.preventDefault();
+            event.stopPropagation();
+          }}
+        />
 
-      <div className={tw('relative')}>
-        {showList && (
-          <div className={tw('absolute right-0 z-50')}>
-            <List {...rest} onSelected={handleCloseList} />
-          </div>
-        )}
-      </div>
-    </Stack>
+        <div className={tw('relative')}>
+          {showList && (
+            <div className={tw('absolute right-0 z-50')}>
+              <List {...rest} onSelected={handleCloseList} />
+            </div>
+          )}
+        </div>
+      </Stack>
+    )
   );
 };
 

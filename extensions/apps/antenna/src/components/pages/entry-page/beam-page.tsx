@@ -91,6 +91,7 @@ const BeamPage: React.FC<BeamPageProps> = props => {
   return (
     <Card padding="p-0" margin="mb-4">
       <ReflectFeed
+        dataTestId="reflect-feed"
         header={
           <BeamSection
             beamId={beamId}

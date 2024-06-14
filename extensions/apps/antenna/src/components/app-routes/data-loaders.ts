@@ -62,9 +62,20 @@ export function getBeamStatus(beamStream: GetBeamStreamQuery) {
   return null;
 }
 
-export function getBeamData(beamById: GetBeamByIdQuery) {
-  if (beamById?.node && hasOwn(beamById.node, 'id')) {
-    return beamById?.node;
+export function getBeamData(beamByIdQuery: GetBeamByIdQuery) {
+  if (beamByIdQuery?.node && hasOwn(beamByIdQuery.node, 'id')) {
+    return beamByIdQuery?.node;
+  }
+  return null;
+}
+
+export function getReflectionData(reflectionByIdQuery: GetReflectionByIdQuery) {
+  if (
+    reflectionByIdQuery &&
+    hasOwn(reflectionByIdQuery, 'node') &&
+    hasOwn(reflectionByIdQuery.node, 'id')
+  ) {
+    return reflectionByIdQuery.node;
   }
   return null;
 }

@@ -37,7 +37,7 @@ const CardActions: React.FC<CardActionProps> = props => {
         customStyle="h-fit"
       >
         {reflectionsCount ? (
-          <Stack direction="row" align="end" spacing="gap-x-1">
+          <Stack dataTestId="reflections-count" direction="row" align="end" spacing="gap-x-1">
             {reflectIconUi}
             <Text
               variant="body2"
