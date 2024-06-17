@@ -6,7 +6,9 @@ import AuthorProfileAvatar from '../author-profile-avatar';
 import { useAkashaStore } from '@akashaorg/ui-awf-hooks';
 import { EntityTypes, ReflectEntryData } from '@akashaorg/typings/lib/ui';
 import { decodeb64SlateContent, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Link from '@akashaorg/design-system-core/lib/components/Link';
 
 export type ReflectCardProps = Pick<
   EntryCardProps,
@@ -62,24 +64,58 @@ const ReflectionCard: React.FC<ReflectCardProps> = props => {
       isViewer={authenticatedDID === entryData.authorId}
       isLoggedIn={isLoggedIn}
       removed={{
-        author: {
-          firstPart: t("AKASHA world members won't be able to see the content "),
-          secondPart: t('of your reflection because you have violated the following '),
-          thirdPart: { url: '' /*@TODO */, content: t('Code of Conduct.') },
-          tapToViewLabel: t('Tap to view'),
-        },
-        others: {
-          firstLine: t(
-            'This reflection has been delisted for the violation of our Code of Conduct.',
-          ),
-          secondLine: t('All reflections are disabled.'),
-        },
+        author: (
+          <Trans
+            defaults={`
+                {textComponent}You have delisted this reflection.{textComponent}
+                {textComponent}Some users may still be able to see it in the beam page.{textComponent}
+                `}
+            components={{
+              textComponent: <Text variant="button-sm" />,
+            }}
+          />
+        ),
+        others: t(
+          `
+                {textComponent}This reflection was delisted by the author.{textComponent}
+                {textComponent}All reflections are disabled.{textComponent}
+                `,
+          {
+            textComponent: <Text />,
+          },
+        ),
+      }}
+      moderated={{
+        author: (
+          <Trans
+            defaults={`
+                {textComponent}AKASHA world members won't be able to see the content {textComponent}
+                {textComponent}of your reflection because you have violated the following {textComponent}
+                {linkComponent}Code of conduct{linkComponent}
+                `}
+            component={{
+              textComponent: <Text />,
+              linkComponent: <Link />,
+            }}
+          />
+        ),
+        others: (
+          <Trans
+            defaults={`
+                {textComponent}This reflection has been delisted for the violation of our Code of Conduct.{textComponent}
+                {textComponent}All reflections are disabled.{textComponent}
+                `}
+            components={{
+              textComponent: <Text />,
+            }}
+          />
+        ),
       }}
       itemType={EntityTypes.REFLECT}
       onReflect={onReflect}
       onEntryFlag={handleFlagReflection}
       onMentionClick={handleMentionClick}
-      profileAvatarExt={
+      profileAvatar={
         <AuthorProfileAvatar
           authorId={entryData.authorId}
           hidePublishTime={hidePublishTime}

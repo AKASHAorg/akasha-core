@@ -108,7 +108,7 @@
       "path": "./tools/executors"
     },
     {
-      "path": "./tests"
+      "path": "./tests/utils"
     }
   ],
   "exclude": ["node_modules", "**/*.spec.ts", "**/*.spec.tsx", "tmp", "dist"],

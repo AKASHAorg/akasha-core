@@ -21,7 +21,6 @@ const ReflectionPreview: React.FC<ReflectionPreviewProps> = props => {
   const { data: reflectOfReflectionReq } = useGetReflectReflectionsQuery({
     variables: { id: reflectionId, first: MAXIMUM_REFLECTION_PREVIEWS + 1 },
   });
-
   const reflections = reflectOfReflectionReq?.akashaReflectIndex?.edges?.map(edge => ({
     ...edge.node,
     beam: null /*Note: the hook returns partial result for beam, if complete result is needed the result of the hook should be modified*/,

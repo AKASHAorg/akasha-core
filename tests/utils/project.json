@@ -1,0 +1,17 @@
+{
+  "name": "@akashaorg/af-testing",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "tests/utils",
+  "projectType": "application",
+  "targets": {
+    "prepare": {
+      "dependsOn": ["@akashaorg/design-system-core:prepare", "@akashaorg/typings:prepare"],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "tests/utils",
+        "command": "tsc --build"
+      }
+    }
+  },
+  "tags": ["tests"]
+}

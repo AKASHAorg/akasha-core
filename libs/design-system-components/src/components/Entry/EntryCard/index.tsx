@@ -1,7 +1,7 @@
 import React, { ReactElement, ReactNode, Ref, Fragment, useState } from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import EntryCardRemoved, { AuthorsRemovedMessage, OthersRemovedMessage } from '../EntryCardRemoved';
+import EntryCardRemoved from '../EntryCardRemoved';
 import CardActions from './card-actions';
 import {
   EllipsisHorizontalIcon,
@@ -35,15 +35,20 @@ type ReflectProps = {
 
 export type EntryCardProps = {
   entryData: EntryData;
-  profileAvatarExt: ReactNode;
+  profileAvatar: ReactNode;
   flagAsLabel?: string;
   moderatedContentLabel?: string;
   ctaLabel?: string;
   removeEntryLabel?: string;
   notEditableLabel?: string;
+  editLabel?: string;
   removed?: {
-    author: AuthorsRemovedMessage;
-    others: OthersRemovedMessage;
+    author: React.ReactNode;
+    others: React.ReactNode;
+  };
+  moderated?: {
+    author: React.ReactNode;
+    others: React.ReactNode;
   };
   nsfw?: Omit<NSFWProps, 'onClickToView'>;
   reflectAnchorLink?: string;
@@ -77,11 +82,10 @@ export type EntryCardProps = {
 const EntryCard: React.FC<EntryCardProps> = props => {
   const {
     entryData,
-    profileAvatarExt,
+    profileAvatar,
     ref,
     flagAsLabel,
     removed,
-    notEditableLabel,
     nsfw,
     reflectAnchorLink,
     disableReporting,
@@ -94,7 +98,6 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     showNSFWCard,
     nsfwUserSetting,
     contentClickable,
-    editable = true,
     lastEntry,
     hover,
     actionsRight,
@@ -132,13 +135,12 @@ const EntryCard: React.FC<EntryCardProps> = props => {
           },
         ]
       : []),
-    ...(isViewer
+    ...(isViewer && rest.itemType === EntityTypes.BEAM
       ? [
           {
             icon: <TrashIcon />,
             label: removeEntryLabel ?? '',
-            disabled: !editable,
-            toolTipContent: editable ? null : notEditableLabel,
+            color: { light: 'errorLight', dark: 'errorDark' } as const,
             onClick: onEntryRemove,
           },
         ]
@@ -159,7 +161,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
   const entryCardUi = (
     <Stack spacing="gap-y-2" padding="p-4" customStyle={`grow min-h-[inherit] ${hoverStyle}`}>
       <Stack direction="row" justify="between">
-        {profileAvatarExt}
+        {profileAvatar}
         <Menu
           anchor={{
             icon: <EllipsisHorizontalIcon />,
