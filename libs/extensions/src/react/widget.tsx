@@ -13,7 +13,7 @@ export type WidgetExtensionProps = {
   fullHeight?: boolean;
 };
 
-export const Widget: React.FC<WidgetExtensionProps> = (props: WidgetExtensionProps) => {
+export const Widget: React.FC<WidgetExtensionProps> = props => {
   const { name, loadingIndicator, onError, customStyle = '', fullHeight } = props;
   const { getExtensionsPlugin, getContext, logger } = useRootComponentProps();
   const widgetStore = React.useRef<WidgetStorePlugin>(getExtensionsPlugin().widgetStore);
