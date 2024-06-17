@@ -4551,21 +4551,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/typescript-react-query@npm:4.1.0":
-  version: 4.1.0
-  resolution: "@graphql-codegen/typescript-react-query@npm:4.1.0"
-  dependencies:
-    "@graphql-codegen/plugin-helpers": "npm:^3.0.0"
-    "@graphql-codegen/visitor-plugin-common": "npm:2.13.1"
-    auto-bind: "npm:~4.0.0"
-    change-case-all: "npm:1.0.15"
-    tslib: "npm:~2.4.0"
-  peerDependencies:
-    graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 10/d3af30877bd8efe3550abd1e104d194a78d4027bcbc80606713a0fd069a35594d5ae5e731e1999385da9399e63e92a5fdadc7b64edbfca912f227ba17890f5b9
-  languageName: node
-  linkType: hard
-
 "@graphql-codegen/typescript-resolvers@npm:4.0.1":
   version: 4.0.1
   resolution: "@graphql-codegen/typescript-resolvers@npm:4.0.1"
@@ -10519,32 +10504,6 @@ __metadata:
   version: 1.15.13
   resolution: "@tanstack/history@npm:1.15.13"
   checksum: 10/5d3c52db4c495ba965c31caafadfeba7e5bb514f79048426808fa581bfa26db9825ee8a3bca52ca55dfa91ed98455d388e0a2707df940cfe2d77f8e0aaa19fe6
-  languageName: node
-  linkType: hard
-
-"@tanstack/query-core@npm:4.36.1":
-  version: 4.36.1
-  resolution: "@tanstack/query-core@npm:4.36.1"
-  checksum: 10/7c648872cd491bcab2aa4c18e0b7ca130c072f05c277a5876977fa3bfa87634bbfde46e9d249236587d78c39866889a02e4e202b478dc6074ff96093732ae56d
-  languageName: node
-  linkType: hard
-
-"@tanstack/react-query@npm:4.36.1":
-  version: 4.36.1
-  resolution: "@tanstack/react-query@npm:4.36.1"
-  dependencies:
-    "@tanstack/query-core": "npm:4.36.1"
-    use-sync-external-store: "npm:^1.2.0"
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0
-    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-    react-native: "*"
-  peerDependenciesMeta:
-    react-dom:
-      optional: true
-    react-native:
-      optional: true
-  checksum: 10/764b860c3ac8d254fc6b07e01054a0f58058644d59626c724b213293fbf1e31c198cbb26e4c32c0d16dcaec0353c0ae19147d9c667675b31f8cea1d64f1ff4ac
   languageName: node
   linkType: hard
 
@@ -32604,7 +32563,6 @@ __metadata:
     "@graphql-codegen/typescript-graphql-request": "npm:5.0.0"
     "@graphql-codegen/typescript-operations": "npm:4.0.1"
     "@graphql-codegen/typescript-react-apollo": "npm:^4.1.0"
-    "@graphql-codegen/typescript-react-query": "npm:4.1.0"
     "@graphql-codegen/typescript-resolvers": "npm:4.0.1"
     "@headlessui/react": "npm:1.7.18"
     "@heroicons/react": "npm:2.1.1"
@@ -32647,7 +32605,6 @@ __metadata:
     "@swc/cli": "npm:~0.1.62"
     "@swc/core": "npm:~1.3.85"
     "@swc/helpers": "npm:~0.5.2"
-    "@tanstack/react-query": "npm:4.36.1"
     "@tanstack/react-router": "npm:1.16.6"
     "@tanstack/react-virtual": "npm:3.5.0"
     "@tanstack/router-devtools": "npm:1.16.6"
