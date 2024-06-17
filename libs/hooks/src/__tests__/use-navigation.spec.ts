@@ -23,7 +23,7 @@ describe('useNavigation', () => {
       0,
     );
     expect(navigateTo).toHaveBeenCalledWith({
-      appName: '@akashaorg/app-akasha-integration',
+      appName: '@akashaorg/app-antenna',
       getNavigationUrl: expect.any(Function),
     });
   });

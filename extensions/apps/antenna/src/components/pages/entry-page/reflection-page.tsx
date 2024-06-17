@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useMemo, useRef } from 'react';
 import getSDK from '@akashaorg/awf-sdk';
-import { EntityTypes } from '@akashaorg/typings/lib/ui';
+import { EntityTypes, ReflectEntryData } from '@akashaorg/typings/lib/ui';
 import { useGetReflectionStreamQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -10,7 +10,6 @@ import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import {
   hasOwn,
-  mapReflectEntryData,
   useAkashaStore,
   useAnalytics,
   useRootComponentProps,
@@ -18,15 +17,14 @@ import {
 import { useTranslation } from 'react-i18next';
 import { ReflectionPreview } from '@akashaorg/ui-lib-feed';
 import { useNavigate } from '@tanstack/react-router';
-import { GetReflectionByIdQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 import { EditableReflectionResolver, ReflectFeed } from '@akashaorg/ui-lib-feed';
 
 type ReflectionPageProps = {
-  reflection: GetReflectionByIdQuery;
+  entryData: ReflectEntryData;
 };
 
 const ReflectionPage: React.FC<ReflectionPageProps> = props => {
-  const { reflection } = props;
+  const { entryData } = props;
   const { t } = useTranslation('app-antenna');
   const {
     data: { authenticatedDID },
@@ -35,12 +33,6 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
   const [analyticsActions] = useAnalytics();
   const navigate = useNavigate();
   const isLoggedIn = !!authenticatedDID;
-
-  const entryData = React.useMemo(() => {
-    if (reflection && hasOwn(reflection, 'node') && hasOwn(reflection.node, 'id')) {
-      return reflection.node;
-    }
-  }, [reflection]);
 
   const indexingDID = useRef(getSDK().services.gql.indexingDID);
 
@@ -105,16 +97,17 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
   return (
     <Card padding="p-0" margin="mb-4">
       <ReflectFeed
+        dataTestId="reflect-feed"
         header={
           <Stack spacing="gap-y-2">
             <BackToOriginalBeam
               label={t('Back to original beam')}
-              onClick={() => onNavigateToOriginalBeam(entryData.beam?.id)}
+              onClick={() => onNavigateToOriginalBeam(entryData.beamID)}
             />
             <ReflectionSection
-              beamId={entryData.beam?.id}
+              beamId={entryData.beamID}
               reflectionId={entryData.id}
-              entryData={mapReflectEntryData(entryData)}
+              entryData={entryData}
               isLoggedIn={isLoggedIn}
               hasReflections={hasReflections}
               showLoginModal={showLoginModal}
@@ -137,7 +130,7 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
             }}
             logger={logger}
           >
-            <>
+            <div>
               <Divider />
               <EditableReflectionResolver
                 reflectID={itemData.reflectionID}
@@ -171,7 +164,7 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
                   });
                 }}
               />
-            </>
+            </div>
           </ErrorBoundary>
         )}
       />

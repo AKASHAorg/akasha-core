@@ -87,8 +87,8 @@
     "@tanstack/react-router": "1.16.6",
     "@tanstack/react-virtual": "3.5.0",
     "@tanstack/router-devtools": "1.16.6",
-    "@testing-library/jest-dom": "5.16.5",
-    "@testing-library/react": "14.0.0",
+    "@testing-library/jest-dom": "6.4.5",
+    "@testing-library/react": "16.0.0",
     "@testing-library/react-hooks": "8.0.1",
     "@testing-library/user-event": "14.4.3",
     "@tsconfig/node20": "^20.1.4",
@@ -271,7 +271,7 @@
   },
   "workspaces": [
     "libs/*",
-    "apps/*"
+    "tests/*"
   ],
   "packageManager": "yarn@4.1.1",
   "engines": {

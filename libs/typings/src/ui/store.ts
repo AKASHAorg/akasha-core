@@ -15,8 +15,8 @@ export type GetUserInfo = {
 export interface IUserState<T> {
   authenticatedDID: string;
   authenticatedProfile: T;
-  authenticatedProfileError: Error;
-  authenticationError: Error;
+  authenticatedProfileError: Error | null;
+  authenticationError: Error | null;
   isAuthenticating: boolean;
 }
 

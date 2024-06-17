@@ -25,6 +25,7 @@ import {
 } from '@akashaorg/typings/lib/ui';
 import { usePendingReflections } from '@akashaorg/ui-awf-hooks/lib/use-pending-reflections';
 import { useApolloClient } from '@apollo/client';
+import { getEditorValueForTest } from './get-editor-value-for-test';
 
 export type ReflectEditorProps = {
   beamId: string;
@@ -77,6 +78,26 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         message,
       },
     });
+  }, []);
+
+  /*
+   * Currently jsdom doesn't support contenteditable and as a result slate editor as well.
+   * This effect is a workaround to set the value of the editor during tests
+   **/
+  React.useEffect(() => {
+    const editorValueForTest = getEditorValueForTest();
+    if (editorValueForTest) {
+      setEditorState([
+        {
+          type: 'paragraph',
+          children: [
+            {
+              text: editorValueForTest,
+            },
+          ],
+        },
+      ]);
+    }
   }, []);
 
   React.useEffect(() => {
@@ -141,38 +162,36 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
   };
 
   return (
-    <>
-      <ReflectionEditor
-        actionLabel={t('Reflect')}
-        placeholderButtonLabel={t('Reflect')}
-        placeholderLabel={t('My thoughts on this are...')}
-        cancelButtonLabel={t('Cancel')}
-        emojiPlaceholderLabel={t('Search')}
-        disableActionLabel={t('Authenticating')}
-        maxEncodedLengthErrLabel={t('Text block exceeds line limit, please review!')}
-        editorState={editorState}
-        showEditor={showEditor}
-        setShowEditor={setShowEditor}
-        avatar={authenticatedProfile?.avatar}
-        profileId={authenticatedDID}
-        disablePublish={!authenticatedDID}
-        mentions={mentions}
-        getMentions={handleGetMentions}
-        background={{ light: 'white', dark: 'grey2' }}
-        onPublish={data => {
-          if (!authenticatedDID) {
-            return;
-          }
-          handlePublish(data);
-        }}
-        setEditorState={setEditorState}
-        onCancelClick={() => {
-          //@TODO
-        }}
-        transformSource={transformSource}
-        encodingFunction={encodeSlateToBase64}
-      />
-    </>
+    <ReflectionEditor
+      actionLabel={t('Reflect')}
+      placeholderButtonLabel={t('Reflect')}
+      placeholderLabel={t('My thoughts on this are...')}
+      cancelButtonLabel={t('Cancel')}
+      emojiPlaceholderLabel={t('Search')}
+      disableActionLabel={t('Authenticating')}
+      maxEncodedLengthErrLabel={t('Text block exceeds line limit, please review!')}
+      editorState={editorState}
+      showEditor={showEditor}
+      setShowEditor={setShowEditor}
+      avatar={authenticatedProfile?.avatar}
+      profileId={authenticatedDID}
+      disablePublish={!authenticatedDID}
+      mentions={mentions}
+      getMentions={handleGetMentions}
+      background={{ light: 'white', dark: 'grey2' }}
+      onPublish={data => {
+        if (!authenticatedDID) {
+          return;
+        }
+        handlePublish(data);
+      }}
+      setEditorState={setEditorState}
+      onCancelClick={() => {
+        //@TODO
+      }}
+      transformSource={transformSource}
+      encodingFunction={encodeSlateToBase64}
+    />
   );
 };
 

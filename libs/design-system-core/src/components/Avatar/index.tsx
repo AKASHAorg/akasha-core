@@ -17,6 +17,7 @@ export type AvatarBorderSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 export type AvatarBorderColor = 'white' | 'darkerBlue' | 'accent';
 
 type AvatarContentProps = {
+  dataTestId?: string;
   alt?: string;
   avatar?: Image;
   alternativeAvatars?: Image[];
@@ -34,7 +35,6 @@ type AvatarContentProps = {
 };
 
 export type AvatarProps = AvatarContentProps & {
-  dataTestId?: string;
   href?: string;
 };
 
@@ -52,6 +52,7 @@ const AvatarContent: React.FC<AvatarContentProps> = props => {
     profileId = '0x0000000000000000000000000000000',
     publicImgPath = '/images',
     customStyle = '',
+    dataTestId,
     onClick,
   } = props;
 
@@ -70,7 +71,7 @@ const AvatarContent: React.FC<AvatarContentProps> = props => {
   const activeOverlayClass = generateActiveOverlayClass();
 
   return (
-    <Card type="plain" onClick={onClick}>
+    <Card dataTestId={dataTestId} type="plain" onClick={onClick}>
       <Stack customStyle={containerStyle}>
         {(avatar || avatarFallback) && (
           <React.Suspense fallback={<></>}>
@@ -100,7 +101,7 @@ const Avatar: React.FC<AvatarProps> = props => {
     );
   }
 
-  return <AvatarContent onClick={onClick} {...rest} />;
+  return <AvatarContent dataTestId={dataTestId} onClick={onClick} {...rest} />;
 };
 
 export default Avatar;

@@ -24,7 +24,7 @@ const AvatarImage: React.FC<AvatarImageProps> = props => {
 
   return (
     <picture className={tw(className)}>
-      <source srcSet={url} />
+      <source data-testid="avatar-source" srcSet={url} />
       {Image}
     </picture>
   );

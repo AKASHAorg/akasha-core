@@ -1,6 +1,6 @@
 import * as React from 'react';
 import ProfileAvatarButton from '../';
-import { act, fireEvent } from '@testing-library/react';
+import { act, fireEvent, screen } from '@testing-library/react';
 import { customRender } from '../../../test-utils';
 import { truncateDid } from '../../../utils';
 
