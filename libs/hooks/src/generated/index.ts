@@ -1,3 +1,1 @@
-export * from './queries';
-export * from './mutations';
-export * from './composedb';
+export * from './apollo';
