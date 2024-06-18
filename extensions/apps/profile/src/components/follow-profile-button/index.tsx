@@ -151,8 +151,6 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
       />
     ) : (
       <DuplexButton
-        size="sm"
-        customStyle={disabledStyle}
         inactiveLabel={t('Follow')}
         activeLabel={t('Following')}
         activeHoverLabel={t('Unfollow')}
@@ -169,6 +167,7 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
           text: { light: 'errorLight', dark: 'errorDark' },
           icon: { light: 'errorLight', dark: 'errorDark' },
         }}
+        customStyle={disabledStyle}
         onClickInactive={() => handleFollow(profileID, followDocumentId)}
         onClickActive={() => handleUnFollow(profileID, followDocumentId)}
       />

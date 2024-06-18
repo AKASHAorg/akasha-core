@@ -260,10 +260,8 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
                     subscribeLabel={subscribeLabel}
                     subscribedLabel={subscribedLabel}
                     unsubscribeLabel={unsubscribeLabel}
-                    isLoggedIn={isLoggedIn}
                     onClickTopic={onClickTopic}
                     isLoading={tagsQueue.includes(tag)}
-                    showLoginModal={showLoginModal}
                     handleTopicUnsubscribe={handleTopicUnsubscribe}
                     handleTopicSubscribe={handleTopicSubscribe}
                   />
