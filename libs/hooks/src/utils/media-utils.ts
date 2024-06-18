@@ -2,6 +2,9 @@ import getSDK from '@akashaorg/awf-sdk';
 import { logError } from './error-handler';
 import { type Image } from '@akashaorg/typings/lib/ui';
 
+/**
+ * @internal
+ */
 export interface IConfig {
   quality?: number;
   maxWidth: number;
