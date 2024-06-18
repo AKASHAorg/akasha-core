@@ -11,6 +11,9 @@ import { BehaviorSubject } from 'rxjs';
  */
 export const COOKIE_CONSENT_NAME = 'ewa-cookie-consent';
 
+/**
+ * @internal
+ */
 export enum CookieConsentTypes {
   ESSENTIAL = 'ESSENTIAL',
   ALL = 'ALL',
@@ -28,6 +31,9 @@ const AnalyticsProvider = ({
   return <AnalyticsContext.Provider value={uiEvents}>{children}</AnalyticsContext.Provider>;
 };
 
+/**
+ * @internal
+ */
 export interface UseAnalyticsActions {
   /* Track a custom event */
   trackEvent: (eventData: AnalyticsEventData['data']) => void;
