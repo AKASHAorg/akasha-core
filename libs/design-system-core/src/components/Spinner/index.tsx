@@ -19,6 +19,25 @@ const spinnerSizesMap = {
   xxl: 'w-24 h-24',
 };
 
+/**
+ * The Spinner component is an UI element that is often used to indicate that the application is
+ * performing some tasks in the background. When seeing a loading spinner, the user knows that they
+ * should wait for the operation to complete. A spinner is often used when submitting a form, loading
+ * more content, processing user's input or transitioning between pages.
+ * @param size - (optional) indicate your preferred size here. The default size is 'md'
+ * @param color - (optional) for customizing the color of the spinner
+ * @param loadingLabel - (optional) label that will be displayed underneath the loading spinner
+ * @param partialSpinner - boolean (optional) prop that detemines whether to apply partial loading style
+ * @example
+ * ```tsx
+ *   <Spinner
+        color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+        size="xxl"
+        loadingLabel="Loading..."
+        partialSpinner={true}
+     />
+ * ```
+ **/
 const Spinner: React.FC<SpinnerProps> = props => {
   const { size = 'md', color, loadingLabel = 'Loading...', partialSpinner } = props;
   const partialSpinnerColor = typeof color === 'string' ? color : 'black';

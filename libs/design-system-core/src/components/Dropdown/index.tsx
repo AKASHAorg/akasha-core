@@ -18,6 +18,29 @@ export type DropdownProps = {
   setSelected: React.Dispatch<React.SetStateAction<DropdownMenuItemType>>;
 };
 
+/**
+ * A Dropdown component provides a fast and easy way to include a dropdown in your app.
+ * When inactive, the dropdown display a placeholder text or a single value. Upon activation,
+ * a list of options is presented to the user so that they can select.
+ * @param name - (optional) dropdown's name
+ * @param label - (optional) dropdown's label
+ * @param placeholderLabel - (optional) a placeholder text to be displayed by default
+ * @param selected - (optional) selected item by default
+ * @param menuItems - a list of menu items to be displayed on activation
+ * @param setSelected - handler function to set the selected item
+ * ```tsx
+ *  <Dropdown
+ *    name='dropdown'
+ *    menuItems: [
+ *    { id: '1', icon: <BeakerIcon />, title: 'Option 1' },
+ *     { id: '2', icon: <ArchiveBoxIcon />, title: 'Option 2' },
+ *     { id: '3', icon: <ArchiveBoxIcon />, title: 'Option 3' },
+ *    ]
+ *    placeholderLabel={'Select an option'}
+ *    setSelected={setSelectedHandler}
+ *   />
+ * ```
+ **/
 const Dropdown: React.FC<DropdownProps> = ({
   label,
   placeholderLabel,

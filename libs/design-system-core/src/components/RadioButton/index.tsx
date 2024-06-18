@@ -21,6 +21,26 @@ const baseStyles = 'flex items-center mb-2';
 const baseButtonStyles =
   'flex items-center justify-center mr-2 ml-0 p-0 rounded-full shrink-0 after:content-[] after:absolute';
 
+/**
+ * A RadioButton component is useful when you need the user to pick one option from a list of multiple
+ * options.
+ * @param id - string
+ * @param label - button label
+ * @param size - (optional) the default size is `small`
+ * @param isSelected - boolean (optional) `selected` state is passed through this prop
+ * @param error - boolean (optional) to represent error state
+ * @param handleChange - handler that will be called when the user clicks on the button
+ * @example
+ * ```tsx
+ *    <RadioButton
+        id='1'
+        label='Radio button'
+        value='Radio button'
+        isSelected={true}
+        handleChange={handleRadioChange}
+      />
+ * ```
+ **/
 export const RadioButton: React.FC<RadioButtonProps> = props => {
   const {
     handleChange,

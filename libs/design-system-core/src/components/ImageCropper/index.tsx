@@ -23,6 +23,19 @@ const ZOOM_STEP = 0.01;
 const CROPPER_WIDTH = 320;
 const CROPPWER_HEIGHT = 224;
 
+/**
+ * An ImageCropper component makes the task of cropping an image much easier. It also makes
+ * the task of including an image cropper in your app more straightforward. The component makes
+ * use of the [`react-easy-crop`](https://www.npmjs.com/package/react-easy-crop) library under
+ * the hood and accepts some additional props as listed below:
+ * @param image - the image you want to crop
+ * @param dragToRepositionLabel - supply your custom label here
+ * @param onCrop - callback function that will be called when the image cropping finishes
+ * @example
+ * ```tsx
+ *  <ImageCropper image={selectedImage} onCrop={setCroppedImage} />
+ * ```
+ **/
 const ImageCropper: React.FC<ImageCropperProps> = ({
   image,
   dragToRepositionLabel,

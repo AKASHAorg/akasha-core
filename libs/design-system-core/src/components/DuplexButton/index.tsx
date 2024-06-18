@@ -19,6 +19,35 @@ export type DuplexButtonProps = Omit<ButtonProps, 'label'> & {
   fixedWidth?: string;
 };
 
+/**
+ * A DuplexButton component is a special type of button that has been customized to satisfy
+ * a specific use case. This button will change its label depending on its active and hover state.
+ * A DuplexButton component takes all the props of a Button component minus the `label`
+ * and additional customization
+ * props as shown below:
+ * @param onClickInactive - (optional) click event handler for inactive state
+ * @param onClickActive - (optional)  click event handler for active state
+ * @param inactiveLabel - (optional) label for inactive state
+ * @param inactiveVariant - (optional) customize button variant for inactive state
+ * @param activeLabel - (optional) label for active state
+ * @param activeVariant - (optional) customize button variant for active state
+ * @param active - boolean (optional) whether the button's state is active
+ * @param activeIcon - (optional) icon for active state
+ * @param activeHoverIcon - (optional) icon on hover for active state
+ * @param allowMinimization - boolean (optional) whether to allow minimization of the button on smaller screens.
+ * @param fixedWidth - (optional) specify a fixed width for the button
+ * @example
+ * ```tsx
+ *  <DuplexButton
+ *    name='dropdown'
+ *    customStyle={disabledStyle}
+ *    inactiveLabel={t('Follow')}
+ *    activeLabel={t('Following')}
+ *    activeHoverLabel={t('Unfollow')}
+ *    active={following}
+ *   />
+ * ```
+ **/
 const DuplexButton: React.FC<DuplexButtonProps> = props => {
   const {
     onClickActive,

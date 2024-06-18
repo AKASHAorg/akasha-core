@@ -14,6 +14,27 @@ export type ContentBlockProps = {
   showDivider?: boolean;
 };
 
+/**
+ * A ContentBlock component is a specific type of container that display content in a pre-determined
+ * style. You can find examples of Content Block usage when browsing a specific app inside
+ * the Extensions app in Akasha World.
+ * @param blockTitle - assign a title to be displayed
+ * @param viewMoreLabel - (optional) text that a user can click to view more content
+ * @param viewMoreIcon - (optional) icon that a user can click to view more content. Only
+ * a viewMoreLabel or viewMoreIcon should be provided at a time.
+ * @param onClickviewMoreLabel - (optional) click handler for the viewMoreLabel/viewMoreIcon props
+ * @param blockVariant - (optional) customize the text variant
+ * @param showDivider - boolean (optional) whether to show a divider at the bottom of the block
+ * @example
+ * ```tsx
+ *  <ContentBlock
+ *    blockTitle='Version History'
+ *    viewMoreIcon={<ChevronRightIcon />}
+ *    showDivider={false}
+ *    onClickviewMoreLabel={viewMoreClickHandler}
+ *   />
+ * ```
+ **/
 const ContentBlock: React.FC<PropsWithChildren<ContentBlockProps>> = ({
   blockTitle,
   viewMoreLabel,

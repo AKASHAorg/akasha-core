@@ -10,6 +10,26 @@ export type BasicPopoverProps = PropsWithChildren<{
   closePopover: () => void;
 }>;
 
+/**
+ * A BasicPopover component provides an easy and fast way to include a popover in your app.
+ * @param target - HTML Element
+ * @param gap - custom gap (optional)
+ * @param overflow - (optional) custom overflow styling
+ * @param closePopover - click handler for closing the popover
+ *
+ * @example
+ * ```tsx
+ * const targetNode = document.createElement('div');
+ * const Contents = (
+ * <React.Fragment>
+ *  <div>Popover content</div>
+ *   <div>Popover content</div>
+ *  <div>Popover content</div>
+ * </React.Fragment>
+ * );
+ *  <BasicPopover target={targetNode} children={Contents} />
+ * ```
+ **/
 const BasicPopover: React.FC<BasicPopoverProps> = ({ children, ...props }) => {
   const { gap, overflow = 'hidden' } = props;
 

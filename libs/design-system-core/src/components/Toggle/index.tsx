@@ -20,6 +20,24 @@ export type ToggleProps = {
   onChange?: (ev: React.SyntheticEvent) => void;
 };
 
+/**
+ * The Toggle component offers a quick way to include a toggle input in your app. The component
+ * supports many customization options such as size, icons for checked/unchecked states,
+ * and handling changes through an event handler.
+ * @param id - (optional) id if there is any
+ * @param name - (optional) name of the input
+ * @param label - (optional) label that will be displayed
+ * @param size - (optional) for customizing the size
+ * @param checked - boolean (optional) for controlling the checked state
+ * @param disabled - boolean (optional) for controlling the disabled state
+ * @param iconUnchecked - (optional) include an icon for unchecked state
+ * @param iconChecked - (optional) include an icon for checked state
+ * @param onChange - (optional) handler that will be called on change event
+ * @example
+ * ```tsx
+ * <Toggle checked={false} label={'Agree?'} onChange={ToggleChangeHandler} size="small" />
+ * ```
+ **/
 const Toggle: React.FC<ToggleProps> = ({
   id,
   name,

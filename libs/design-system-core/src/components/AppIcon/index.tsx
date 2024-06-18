@@ -34,6 +34,25 @@ export type AppIconProps = {
   customStyle?: string;
 };
 
+/**
+ * An AppIcon component provides a fast and easy way to include a custom app icon
+ * for your application.
+ * You can easily customize its icon, size, border, background color, etc. and
+ * apply custom styling using the corresponding props. A boolean `hasNewNotifs` prop can
+ * also be passed to indicate whether that app has new notifications.
+ * #### Usage
+ * @example
+ * ```tsx
+ *  <AppIcon
+ *    placeholderIcon={<Walletconnect />}
+ *    background={{ gradient: 'gradient-to-b', from: 'orange-50', to: 'orange-200' }}
+ *    radius={24}
+ *    size={{ width: 80, height: 80 }}
+ *    backgroundSize={80}
+ *    iconColor="self-color"
+ *   />
+ * ```
+ **/
 const AppIcon: React.FC<AppIconProps> = props => {
   const {
     appImg,

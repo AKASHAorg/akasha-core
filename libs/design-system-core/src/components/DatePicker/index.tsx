@@ -12,6 +12,15 @@ export type TDatePickerProps = {
   placeholderLabel?: string;
 };
 
+/**
+ * A DatePicker component provides a fast and easy way to include a date picker in your app.
+ * @param placeholderLabel - (optional) string
+ * ```tsx
+ *  <DatePicker
+ *    placeholderLabel='Select a date'
+ *   />
+ * ```
+ **/
 const DatePicker: React.FC<TDatePickerProps> = props => {
   const { placeholderLabel = 'Select date' } = props;
 

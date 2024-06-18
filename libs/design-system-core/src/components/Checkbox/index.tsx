@@ -39,6 +39,35 @@ before:left-2
 after:left-2
 `;
 
+/**
+ * A Checkbox component allows users to select one or more options from a list.
+ * Checkboxes are most useful when you have multiple options to present. When there
+ * is only one option available, consider using a toggle instead.
+ * @param id - assign an ID to the checkbox
+ * @param label - (optional) checkbox label
+ * @param labelDirection - (optional) control where the label will be placed
+ * @param labelColor - (optional) customize the label color
+ * @param value - checkbox value
+ * @param name - checkbox's name
+ * @param size - (optional) customize checkbox' size
+ * @param indeterminate - boolean (optional) whether the checkbox is in indeterminate state
+ * @param error - boolean (optional) whether the checkbox is in error state
+ * @param isSelected - boolean (optional) whether the checkbox is selected
+ * @param isDisabled - boolean (optional) whether the checkbox is disabled
+ * @param customStyle - (optional) custom styling if any
+ * @param handleChange - (optional) change handler
+ * @example
+ * ```tsx
+ *  <Checkbbox
+ *    id='nsfw'
+ *    label="NSFW"
+ *    name="nsfw"
+ *    value="nsfw"
+ *    handleChange={onSelectCheckbox}
+ *    isSelected={false}
+ *   />
+ * ```
+ **/
 const Checkbox: React.FC<CheckboxProps> = ({
   id,
   label,
