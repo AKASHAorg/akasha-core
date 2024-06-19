@@ -1,6 +1,5 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { useEntryNavigation } from '../use-navigation';
-import { createWrapper } from './utils';
 
 jest.mock('@akashaorg/typings/lib/ui', () => ({
   EntityTypes: {
@@ -12,9 +11,7 @@ const navigateTo = jest.fn();
 
 describe('useNavigation', () => {
   it('should correctly call the navigate fn', () => {
-    const [wrapper] = createWrapper();
-
-    const { result } = renderHook(() => useEntryNavigation(navigateTo), { wrapper });
+    const { result } = renderHook(() => useEntryNavigation(navigateTo));
     result.current(
       {
         authorId: '0x00',
