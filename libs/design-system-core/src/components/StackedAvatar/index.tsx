@@ -10,6 +10,84 @@ export type StackedAvatarProps = {
   size?: AvatarSize;
 };
 
+/**
+ * The StackedAvatar component is an UI element that serves a specific use case: to display multiple
+ * user avatars stacked together. You often see such stacked avatars used in social media for indicating
+ * the number of users who have liked/interacted on a piece of content.
+ * @param userData - supply a list of objects containing info about the user and their avatar here for display
+ * @param maxAvatars - (optional) maximum number of avatar to be stacked togetherr
+ * @param size - (optional) for customizing the size of the avatars
+ * @example
+ * ```tsx
+ *  const userData = [
+      {
+        "name": "Alice",
+        "id": "410490050000320006570034567114572000",
+        "did": {
+          "id": "did:pkh:eip155:1:0x003410490050000320006570034567114572000",
+          "isViewer": true
+        },
+        "avatar": {
+          "src": "https://placebeard.it/360x360",
+          "width": 360,
+          "height": 360
+        },
+        "createdAt": "2021-03-01T00:00:00.000Z",
+        "followers": {},
+        "followersCount": 0
+      },
+      {
+        "name": "Bob",
+        "id": "410490050000320006570034567114572001",
+        "did": {
+          "id": "did:pkh:eip155:1:0x003410490050000320006570034567114572001",
+          "isViewer": false
+        },
+        "avatar": {
+          "src": "https://placebeard.it/360x360",
+          "width": 360,
+          "height": 360
+        },
+        "createdAt": "2021-03-01T00:00:00.000Z",
+        "followers": {},
+        "followersCount": 0
+      },
+      {
+        "name": "Charlie",
+        "id": "410490050000320006570034567114572002",
+        "did": {
+          "id": "did:pkh:eip155:1:0x003410490050000320006570034567114572002",
+          "isViewer": true
+        },
+        "avatar": {
+          "src": "https://placebeard.it/360x360",
+          "width": 360,
+          "height": 360
+        },
+        "createdAt": "2021-03-01T00:00:00.000Z",
+        "followers": {},
+        "followersCount": 0
+      },
+      {
+        "name": "Dave",
+        "id": "410490050000320006570034567114572003",
+        "did": {
+          "id": "did:pkh:eip155:1:0x003410490050000320006570034567114572003",
+          "isViewer": false
+        },
+        "avatar": {
+          "src": "https://placebeard.it/360x360",
+          "width": 360,
+          "height": 360
+        },
+        "createdAt": "2021-03-01T00:00:00.000Z",
+        "followers": {},
+        "followersCount": 0
+      }
+    ]
+ *   <StackedAvatar userData={userData} maxAvatar={4} />
+ * ```
+ **/
 const StackedAvatar: React.FC<StackedAvatarProps> = props => {
   const { userData, maxAvatars, size } = props;
   let data = userData;

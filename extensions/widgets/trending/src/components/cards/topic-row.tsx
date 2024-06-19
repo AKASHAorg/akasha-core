@@ -21,11 +21,9 @@ export type TopicRowProps = {
   subscribeLabel: string;
   subscribedLabel: string;
   unsubscribeLabel: string;
-  isLoggedIn: boolean;
   isLoading: boolean;
   // handlers
   onClickTopic: (topic: string) => void;
-  showLoginModal: () => void;
   handleTopicUnsubscribe: (topic: string) => void;
   handleTopicSubscribe: (topic: string) => void;
 };
@@ -38,11 +36,9 @@ export const TopicRow: React.FC<TopicRowProps> = props => {
     subscribedLabel,
     unsubscribeLabel,
     subscribedTags,
-    isLoggedIn,
     isLoading,
     onClickTopic,
     // setSubscribedInterests,
-    showLoginModal,
     handleTopicUnsubscribe,
     handleTopicSubscribe,
   } = props;
@@ -91,19 +87,19 @@ export const TopicRow: React.FC<TopicRowProps> = props => {
         inactiveLabel={subscribeLabel}
         activeLabel={subscribedLabel}
         activeHoverLabel={unsubscribeLabel}
-        active={subscribedTags?.includes(tag)}
+        active={!!subscribedTags?.includes(tag)}
         iconDirection="left"
         activeIcon={<CheckIcon />}
         activeHoverIcon={<XMarkIcon />}
         inactiveVariant="secondary"
         loading={isLoading}
+        fixedWidth={'w-[7rem]'}
         hoverColors={{
           background: { light: 'transparent', dark: 'transparent' },
           border: { light: 'errorLight', dark: 'errorDark' },
           text: { light: 'errorLight', dark: 'errorDark' },
           icon: { light: 'errorLight', dark: 'errorDark' },
         }}
-        fixedWidth={'w-[7rem]'}
         onClickActive={() => handleTopicUnsubscribe(tag)}
         onClickInactive={() => handleTopicSubscribe(tag)}
       />

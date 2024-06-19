@@ -24,6 +24,33 @@ export type PillProps =
       type: 'info';
     };
 
+/**
+ * A Pill component is an UI element that takes the shape of a capsule/pill. It is often used
+ * to display compact information such as tags, labels, or counters. In Akasha's design system,
+ * Pills have two types: action pills and info pills. The main difference between the two is that
+ * info pills are informative only and action pills allow users to take action.
+ * Action Pills take most of the Button component's props as they also act as a button.
+ * Info Pills, on the other hand, have their own set of props mostly for customization purpose.
+ * @example
+ * ```tsx
+ * // Example of an action pill
+ *    <Pill
+        label={'This is a pill'}
+        active={true}
+        icon={<XMarkIcon />}
+        iconDirection="right"
+        onPillClick={clickHandler}
+        type="action"
+      />
+   // Example of an info pill
+      <Pill
+        type='info'
+        background='blue'
+        borderColor='success'
+        customStyle='w-20'
+      />
+ * ```
+ **/
 const Pill: React.FC<PillProps> = props => {
   if (props.type === 'info') {
     const borderStyle = props.borderColor

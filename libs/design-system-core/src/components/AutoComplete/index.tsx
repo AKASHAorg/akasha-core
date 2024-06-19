@@ -24,6 +24,25 @@ export type AutoCompleteProps = {
   onSelected?: ({ value, index }: Selected) => void;
 } & Pick<TextFieldProps, 'label' | 'caption' | 'status'>;
 
+/**
+ * An AutoComplete component improves the user experience by suggesting possible
+ * completions as the user types.
+ * @param options - string
+ * @param placeholder - placeholder text (optional)
+ * @param disabled - (optional) whether to disable the text input
+ * @param value - string (optional) set the value for the input
+ * @param customStyle - (optional) custom styling to apply if any
+ * @param multiple - boolean (optional) whether to delay suggestion because it is a phrase with multiple words
+ * @param separators - (optional) a list of keystrokes that separate the words and start the action
+ * @param tags - (optional) a set of string
+ * @param onChange - (optional) handler on text input change
+ * @param onSelected - (optional) handler when user selects a suggestion
+ *
+ * @example
+ * ```tsx
+ *  <AutoComplete placeholder={'Start searching...'} options={['a','b','c']} separators={['Comma', 'Space', 'Enter']} />
+ * ```
+ **/
 const AutoComplete: React.FC<AutoCompleteProps> = props => {
   const {
     options,

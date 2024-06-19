@@ -10,6 +10,19 @@ export type EditorMeterProps = {
   customStyle?: string;
 };
 
+/**
+ * An EditorMeter component displays a visual indicator that provides instant feedback as
+ * the user types. The EditorMeter generally shows the user the character count and how much
+ * percentage they have left before they reach the maximum word count allowed.
+ * @param max - a number representing the maximum
+ * @param value - a number representing the current count
+ * @param background - (optional) customize the background color
+ * @param customStyle - (optional) customize the general style
+ * @example
+ * ```tsx
+ *  <EditorMeter value={50} max={100} />
+ * ```
+ **/
 const EditorMeter: React.FC<EditorMeterProps> = props => {
   const { value, max, background = { light: 'grey8', dark: 'grey4' }, customStyle } = props;
   const remainingChars = max - value;

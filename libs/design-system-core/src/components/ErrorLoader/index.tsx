@@ -32,6 +32,20 @@ export type ErrorLoaderProps = React.PropsWithChildren<{
   customStyle?: string; // use valid twind classes;
 }>;
 
+/**
+ * An ErrorLoader serves the purpose of displaying an error card with an image and a messagge
+ * explaining to the user the error in detail.
+ * @param type -  error type
+ * @param publicImgPath - (optional) path of the image to be displayed
+ * @param title - error title
+ * @param details - additional details about the error
+ * @param devDetails - additional info to show when in dev mode.
+ * @param customStyle - provide custom twind classes if needed
+ * @example
+ * ```tsx
+ *  <ErrorLoader type="script-error" title="Error in akasha app" details={error.message} />
+ * ```
+ **/
 const ErrorLoader: React.FC<ErrorLoaderProps> = ({ children, ...props }) => {
   const { type, publicImgPath = '/images' } = props;
 

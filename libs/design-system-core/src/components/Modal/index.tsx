@@ -23,6 +23,33 @@ export type ModalProps = PropsWithChildren<{
   onClose?: () => void;
 }>;
 
+/**
+ * A Modal component displays content in a dialog box in a layer above the main application's
+ * content to grab the user's attention.
+ * @param show - boolean that control the show/hide state of the modal
+ * @param actions - a list of Button props that will be made available in the modal dialogue
+ * for the user to take action
+ * @param title - (optional) title of the modal coupled with customization props (please use Text component's props)
+ * @param showDivider - boolean (optional) whether to show the divider
+ * @param actionsAlign - (optional) alignment options for the action buttons
+ * @param customStyle - (optional) apply your custom styling (Make sure to use standard Tailwind classes)
+ * @param onClose - (optional) handler that will be called when clicking the close icon
+ * @example
+ * ```tsx
+ *      <Modal
+ *        show={true}
+ *        title={{
+ *        label: 'Are you sure you want to delete this?',
+ *         variant: 'h6',
+ *         }}
+ *         actions={[
+ *         { label: 'Cancel', variant: 'secondary', onClick: handleModalClose },
+ *         { label: 'Remove', variant: 'primary', onClick: handleRemove },
+ *         ]}
+ *         onClose={handleModalClose}
+ *   >
+ * ```
+ **/
 const Modal: React.FC<ModalProps> = ({
   show,
   actions,
