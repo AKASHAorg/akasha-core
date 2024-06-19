@@ -6,7 +6,6 @@ export const GENERAL = 'General';
 export const APPS = 'Apps';
 export const PLUGINS = 'Plugins';
 export const WIDGETS = 'Widgets';
-export const ADVANCED = 'Advanced';
 export const rootRoute = '/settings';
 
 export default {
@@ -15,5 +14,4 @@ export default {
   [THEME]: `${rootRoute}/theme`,
   [NSFW]: `${rootRoute}/nsfw`,
   [APPS]: `${rootRoute}/apps`,
-  [ADVANCED]: `${rootRoute}/advanced`,
 };

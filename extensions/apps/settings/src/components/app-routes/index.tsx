@@ -1,12 +1,11 @@
 import React from 'react';
-import AdvancedOption from '../pages/advanced-option';
 import AppsOption from '../pages/apps-option';
 import NsfwOption from '../pages/nsfw-option';
 import PrivacyOption from '../pages/privacy-option';
 import ThemeOption from '../pages/theme-option';
 import SettingsPage from '../pages/settings-page';
 import ErrorComponent from './error-component';
-import routes, { APPS, NSFW, PRIVACY, THEME, HOME, ADVANCED } from '../../routes';
+import routes, { APPS, NSFW, PRIVACY, THEME, HOME } from '../../routes';
 import {
   Outlet,
   createRootRoute,
@@ -59,12 +58,6 @@ const themeRoute = createRoute({
   component: ThemeOption,
 });
 
-const advancedRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: `${routes[ADVANCED]}`,
-  component: AdvancedOption,
-});
-
 const routeTree = rootRoute.addChildren([
   defaultRoute,
   settingsRoute,
@@ -72,7 +65,6 @@ const routeTree = rootRoute.addChildren([
   nsfwRoute,
   privacyRoute,
   themeRoute,
-  advancedRoute,
 ]);
 
 export const router = ({ baseRouteName }: CreateRouter) =>
