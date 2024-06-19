@@ -27,6 +27,7 @@ import {
 } from '../pages/sub-pages';
 import ErrorComponent from './error-component';
 import routes, { EXTENSIONS, INSTALLED, HOME, MY_EXTENSIONS } from '../../routes';
+import { DEV_MODE_KEY } from '../../constants';
 
 const rootRoute = createRootRouteWithContext<RouterContext>()({
   component: Outlet,
@@ -62,7 +63,7 @@ const MyExtensionsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[MY_EXTENSIONS],
   beforeLoad: () => {
-    if (window.localStorage.getItem('DevMode') !== 'true') {
+    if (window.localStorage.getItem(DEV_MODE_KEY) !== 'ENABLED') {
       throw redirect({ to: routes[HOME], replace: true });
     }
   },

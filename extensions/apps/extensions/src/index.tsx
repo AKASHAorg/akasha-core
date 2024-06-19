@@ -8,6 +8,7 @@ import {
   MenuItemType,
 } from '@akashaorg/typings/lib/ui';
 import routes, { EXTENSIONS, HOME, INSTALLED, MY_EXTENSIONS } from './routes';
+import { DEV_MODE_KEY } from './constants';
 import { ContentBlockStore } from './plugins/content-block-store';
 import { ExtensionStore } from './plugins/extension-store';
 import { WidgetStore } from './plugins/widget-store';
@@ -15,11 +16,8 @@ import { InstalledAppStore } from './plugins/installed-app-store';
 import React from 'react';
 import { Akasha } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 
-/**
- * All the plugins must export an object like this:
- */
-export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => {
-  const isDevModeEnabled = window.localStorage.getItem('DevMode') === 'true';
+const generateSubRoutes = () => {
+  const localValue = window.localStorage.getItem(DEV_MODE_KEY);
   const baseSubRoutes = [
     {
       label: HOME,
@@ -40,7 +38,8 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       type: MenuItemType.Internal,
     },
   ];
-  const subRoutes = isDevModeEnabled
+
+  return localValue === 'ENABLED'
     ? [
         ...baseSubRoutes,
         {
@@ -51,30 +50,33 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
         },
       ]
     : baseSubRoutes;
-
-  return {
-    loadingFn: () => import('./components'),
-    mountsIn: opts.layoutConfig?.applicationSlotId,
-    logo: { type: LogoTypeSource.ICON, solidIcon: true, value: <Akasha /> },
-    i18nNamespace: ['app-extensions'],
-    routes: {
-      ...routes,
-    },
-    title: 'AKASHA Core Extensions',
-    menuItems: {
-      label: 'Extensions',
-      type: MenuItemType.App,
-      logo: { type: LogoTypeSource.ICON, solidIcon: true, value: <Akasha /> },
-      area: [MenuItemAreaType.AppArea],
-      subRoutes: subRoutes,
-    },
-    extends: (matcher, loader) => {
-      matcher({
-        'install-app': loader(() => import('./extensions/install-app')),
-      });
-    },
-  };
 };
+
+/**
+ * All the plugins must export an object like this:
+ */
+export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
+  loadingFn: () => import('./components'),
+  mountsIn: opts.layoutConfig?.applicationSlotId,
+  logo: { type: LogoTypeSource.ICON, solidIcon: true, value: <Akasha /> },
+  i18nNamespace: ['app-extensions'],
+  routes: {
+    ...routes,
+  },
+  title: 'AKASHA Core Extensions',
+  menuItems: {
+    label: 'Extensions',
+    type: MenuItemType.App,
+    logo: { type: LogoTypeSource.ICON, solidIcon: true, value: <Akasha /> },
+    area: [MenuItemAreaType.AppArea],
+    subRoutes: generateSubRoutes(),
+  },
+  extends: (matcher, loader) => {
+    matcher({
+      'install-app': loader(() => import('./extensions/install-app')),
+    });
+  },
+});
 
 export const getPlugin = (
   props: RootComponentProps & {
