@@ -18,11 +18,11 @@ import {
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 import { mapReflectEntryData } from '@akashaorg/ui-awf-hooks';
 import { formatRelativeTime, truncateDid } from '@akashaorg/design-system-core/lib/utils';
-import { getReflectFeedMocks } from '@akashaorg/ui-lib-feed/lib/__mocks__/get-reflection-feed-mocks';
 import {
   REFLECT_FEED,
   getReflectionPageMocks,
   getReflectEditorMocks,
+  getReflectFeedMocks,
   BEAM_ID,
   REFLECTION_ID,
   REPLY_TO,

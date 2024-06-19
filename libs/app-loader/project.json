@@ -5,15 +5,15 @@
   "projectType": "application",
   "targets": {
     "prepare": {
-      "dependsOn": [
-        "@akashaorg/awf-sdk:build",
-        "@akashaorg/typings:prepare"
-      ],
+      "dependsOn": ["@akashaorg/awf-sdk:build", "@akashaorg/typings:prepare"],
       "executor": "nx:run-commands",
       "options": {
         "cwd": "libs/app-loader",
         "command": "tsc --build"
       }
+    },
+    "test": {
+      "dependsOn": ["@akashaorg/af-testing:prepare", "prepare"]
     },
     "build": {
       "dependsOn": ["prepare"],

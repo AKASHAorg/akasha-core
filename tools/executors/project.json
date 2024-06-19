@@ -5,13 +5,15 @@
   "projectType": "application",
   "targets": {
     "prepare": {
-      "dependsOn": [
-      ],
+      "dependsOn": [],
       "executor": "nx:run-commands",
       "options": {
         "cwd": "tools/executors",
         "command": "tsc --build"
       }
+    },
+    "test": {
+      "dependsOn": ["prepare"]
     }
   },
   "tags": ["scope:tools", "type:lib"]

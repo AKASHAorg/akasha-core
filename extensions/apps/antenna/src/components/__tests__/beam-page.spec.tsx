@@ -20,7 +20,6 @@ import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 import { AkashaBeamStreamModerationStatus } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { mapBeamEntryData } from '@akashaorg/ui-awf-hooks';
 import { formatRelativeTime, truncateDid } from '@akashaorg/design-system-core/lib/utils';
-import { getReflectFeedMocks } from '@akashaorg/ui-lib-feed/lib/__mocks__/get-reflection-feed-mocks';
 import {
   BEAM_ID,
   BEAM_SECTION,
@@ -28,6 +27,7 @@ import {
   REFLECT_FEED,
   getBeamPageMocks,
   getReflectEditorMocks,
+  getReflectFeedMocks,
 } from '../__mocks__';
 import { GetReflectionStreamDocument } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
