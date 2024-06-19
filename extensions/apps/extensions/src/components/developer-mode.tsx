@@ -24,7 +24,7 @@ export const DeveloperMode: React.FC<TDeveloperMode> = props => {
           {titleLabel}
         </Text>
       </Stack>
-      <Stack padding="p-4" spacing="gap-y-2">
+      <Stack padding="p-4" spacing="gap-y-4">
         {sections.map(({ title, toggleButtonNode, descriptionNode, ctaNode }, idx) => (
           <>
             {idx > 0 && <Divider />}

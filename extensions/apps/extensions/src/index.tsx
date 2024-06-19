@@ -15,6 +15,7 @@ import { WidgetStore } from './plugins/widget-store';
 import { InstalledAppStore } from './plugins/installed-app-store';
 import React from 'react';
 import { Akasha } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
+import { DevMode } from './components/pages';
 
 const generateSubRoutes = () => {
   const localValue = window.localStorage.getItem(DEV_MODE_KEY);
@@ -39,7 +40,7 @@ const generateSubRoutes = () => {
     },
   ];
 
-  return localValue === 'ENABLED'
+  return localValue === DevMode.ENABLED
     ? [
         ...baseSubRoutes,
         {
