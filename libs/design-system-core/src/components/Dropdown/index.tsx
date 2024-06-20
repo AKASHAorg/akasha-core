@@ -6,8 +6,15 @@ import Icon from '../Icon';
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from '../Icon/hero-icons-outline';
 import Text from '../Text';
 import Link from '../Link';
+import Label from '../TextField/Label';
+import { Color } from '../types/common.types';
 
-export type DropdownMenuItemType = { id: string; icon?: React.ReactElement; title: string };
+export type DropdownMenuItemType = {
+  id: string;
+  icon?: React.ReactElement;
+  title: string;
+  [key: string]: unknown;
+};
 
 export type DropdownProps = {
   name?: string;
@@ -16,6 +23,9 @@ export type DropdownProps = {
   selected?: DropdownMenuItemType;
   menuItems: DropdownMenuItemType[];
   setSelected: React.Dispatch<React.SetStateAction<DropdownMenuItemType>>;
+  ref?: React.Ref<HTMLDivElement>;
+  required?: boolean;
+  requiredFieldAsteriskColor?: Color;
 };
 
 /**
@@ -47,6 +57,9 @@ const Dropdown: React.FC<DropdownProps> = ({
   menuItems,
   selected,
   setSelected,
+  ref,
+  required,
+  requiredFieldAsteriskColor,
 }) => {
   const [dropOpen, setDropOpen] = React.useState<boolean>(false);
 
@@ -63,9 +76,9 @@ const Dropdown: React.FC<DropdownProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const optionsWrapperStyle = apply`absolute w-full z-10 max-h-60 mt-12 py-0 rounded-lg overflow-auto bg-(white dark:grey5) border(1 grey8 dark:grey3)`;
+  const optionsWrapperStyle = apply`absolute w-full z-10 max-h-60 ${label ? 'mt-[80px]' : 'mt-12'} py-0 rounded-lg overflow-auto bg-(white dark:grey5) border(1 grey8 dark:grey3)`;
 
-  const optionStyle = apply`flex items-center justify-between p-3 bg-(hover:grey8 dark:hover:grey5)`;
+  const optionStyle = apply`flex items-center justify-between py-1.5 px-2 bg-(hover:grey8 dark:hover:grey5)`;
 
   const handleDropClick = () => {
     setDropOpen(!dropOpen);
@@ -77,15 +90,19 @@ const Dropdown: React.FC<DropdownProps> = ({
   };
 
   return (
-    <Stack customStyle="relative min-w-[8rem]">
-      {label && <Text variant="label">{label}</Text>}
-
+    <Stack customStyle="relative min-w-[8rem] gap-y-2 " ref={ref}>
+      {label && (
+        <Label required={required} requiredFieldAsteriskColor={requiredFieldAsteriskColor}>
+          {label}
+        </Label>
+      )}
       <button
-        className={tx`inline-flex items-center justify-between min-w-[8rem] p-3 rounded-lg bg-(white dark:grey5) rounded-lg border-(1 solid ${
+        className={tx`inline-flex items-center justify-between min-w-[8rem] p-2 rounded-lg bg-(white dark:grey5) rounded-lg border-(1 solid ${
           dropOpen ? 'secondaryLight dark:secondark-dark' : 'grey8 dark:grey3'
         })`}
         onClick={handleDropClick}
         aria-label="dropdown"
+        type="button"
       >
         <Text variant="body1">{selected?.title}</Text>
         {dropOpen ? (

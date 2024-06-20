@@ -33,6 +33,7 @@ const TextField: React.FC<TextFieldProps> = props => {
   const {
     id,
     required,
+    requiredFieldAsteriskColor,
     label,
     status,
     caption,
@@ -46,7 +47,12 @@ const TextField: React.FC<TextFieldProps> = props => {
   return (
     <Stack direction="column" spacing="gap-y-2" customStyle={customStyle}>
       {label && (
-        <Label id={id} required={required} disabled={disabled}>
+        <Label
+          id={id}
+          required={required}
+          disabled={disabled}
+          requiredFieldAsteriskColor={requiredFieldAsteriskColor}
+        >
           {label}
         </Label>
       )}

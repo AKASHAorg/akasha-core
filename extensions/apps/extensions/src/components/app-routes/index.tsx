@@ -7,7 +7,13 @@ import {
   redirect,
 } from '@tanstack/react-router';
 import { CreateRouter, RouterContext } from '@akashaorg/typings/lib/ui';
-import { ExplorePage, ExtensionsHubPage, InfoPage, InstalledExtensionsPage } from '../pages';
+import {
+  ExplorePage,
+  ExtensionsHubPage,
+  InfoPage,
+  InstalledExtensionsPage,
+  AppCreationPage,
+} from '../pages';
 import {
   DevInfoPage,
   CollaboratorsPage,
@@ -20,7 +26,7 @@ import {
   AppDescriptionPage,
 } from '../pages/sub-pages';
 import ErrorComponent from './error-component';
-import routes, { EXTENSIONS, INSTALLED, HOME } from '../../routes';
+import routes, { EXTENSIONS, INSTALLED, HOME, APP_CREATE } from '../../routes';
 
 const rootRoute = createRootRouteWithContext<RouterContext>()({
   component: Outlet,
@@ -142,6 +148,14 @@ const appDescriptionRoute = createRoute({
   },
 });
 
+const extensionCreateRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: routes[APP_CREATE],
+  component: () => {
+    return <AppCreationPage />;
+  },
+});
+
 const routeTree = rootRoute.addChildren([
   defaultRoute,
   exploreRoute,
@@ -157,6 +171,7 @@ const routeTree = rootRoute.addChildren([
   appLicenseInfoRoute,
   supportInfoRoute,
   appDescriptionRoute,
+  extensionCreateRoute,
 ]);
 
 export const router = ({ baseRouteName, apolloClient }: CreateRouter) =>
