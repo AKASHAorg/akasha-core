@@ -5,6 +5,13 @@ export interface DividerProps {
   customStyle?: string;
 }
 
+/**
+ * A Divider component provides a custom-styled <hr> tag divider.
+ * @param customStyle - (optional) customize the style further
+ * ```tsx
+ *  <Divider />
+ * ```
+ **/
 const Divider: React.FC<DividerProps> = ({ customStyle = '' }) => {
   return (
     <hr

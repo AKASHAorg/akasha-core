@@ -11,6 +11,26 @@ export type MenuProps = {
   disabled?: boolean;
 } & ListProps;
 
+/**
+ * A Menu component makes it easier to add an ellipsis menu in your app. A typical use case
+ * is for saving UI space by hiding less critical options under a single icon.
+ * A Menu component takes all the props of a List component, plus more:
+ * @param anchor - the anchored menu icon to be displayed
+ * @param disabled - boolean (optional) whether to disable the menu completely
+ * @example
+ * ```tsx
+ *   <Menu
+ *      anchor={{
+ *      icon: <EllipsisHorizontalIcon />,
+ *      variant: 'primary',
+ *      greyBg: true,
+ *      iconOnly: true,
+ *      'aria-label': 'settings',
+ *      }}
+ *      items={dropDownActions}
+ *    />
+ * ```
+ **/
 const Menu: React.FC<MenuProps> = ({ anchor, disabled, ...rest }) => {
   const [showList, setShowList] = useState(false);
   const anchorRef = useCloseActions(() => {

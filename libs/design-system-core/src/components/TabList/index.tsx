@@ -15,6 +15,25 @@ export type TabListProps = {
   onChange: (selectedIndex: number, previousIndex: number) => void;
 };
 
+/**
+ * The TabList component organizes content into separate sections that are easy to navigate between
+ * without the need to leave the current page. Switching from one tab to another reveals the content of that
+ * tab while hiding the others.
+ * @param labels - a list of tab labels
+ * @param selected - the index number of the selected tab
+ * @param customStyle - (optional) apply any other custom styles. Please use standard Tailwind CSS classes
+ * @param tabListDivider - boolean (optional) whether to add a divider between tabs
+ * @param labelTextVariant - (optional) for customizing the text variant of the label
+ * @param onChange - handler that is called when clicking on a tab
+ * @example
+ * ```tsx
+ *  <TabList
+ *      labels={['Tab 1', 'Tab 2', 'Tab 3']}
+ *      selected={0}
+ *      onChange={onTabChange}
+ *   />
+ * ```
+ **/
 const TabList: React.FC<TabListProps> = ({
   labels,
   selected,

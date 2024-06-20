@@ -23,6 +23,37 @@ export type PaginationProps = {
   onClickNext: () => void;
 };
 
+/**
+ * A Pagination component makes it easier to navigate through a large set of data by showing
+ * a subset of the data per page and making sure the user can navigate back and forth between
+ * the pages easily with controls.
+ * @param pageCount - number that is the total number of pages
+ * @param currentPage - number that is of the current page
+ * @param maxPagesToShow - (optional) maximum number of pages to present to the user at any given time
+ * @param prevButtonLabel - (optional) label for the prev button
+ * @param nextButtonLabel - (optional) label for the next button
+ * @param hasButtons - boolean (optional) whether to display the buttons
+ * @param prevButtonDisabled - boolean (optional) whether to disable the prev button
+ * @param nextButtonDisabled - boolean (optional) whether to disable the next button
+ * @param nextButtonLabel - (optional) label for the next button
+ * @param customStyle - (optional) apply your custom styling (Make sure to use standard Tailwind classes)
+ * @param onClickPage - handler that will be called when clicking on the current page
+ * @param onClickPrev - handler that will be called when clicking on the prev page
+ * @param onClickNext - handler that will be called when clicking on the next page
+ * @example
+ * ```tsx
+ *    <Pagination
+        pageCount={10}
+        currentPage={2}
+        prevButtonDisabled={false}
+        prevButtonLabel="Previous"
+        nextButtonLabel="Next"
+        onClickPrev={handleClickPrev}
+        onClickPage={handleClickPage}
+        onClickNext={handleClickNext}
+      />
+ * ```
+ **/
 const Pagination: React.FC<PaginationProps> = props => {
   const {
     pageCount,

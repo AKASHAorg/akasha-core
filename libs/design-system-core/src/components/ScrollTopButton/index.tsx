@@ -9,6 +9,16 @@ export type ScrollTopButtonProps = {
   hide?: boolean;
 };
 
+/**
+ * A ScrollTopButton component is often displayed at the bottom of a long page with lots of content. It
+ * provides a quick way for users to navigate back to the top of the page without excessive scrolling.
+ * @param hide - boolean (optional) whether to show or hide the button
+ * @param onClick - handler that will be called when the user clicks on the button
+ * @example
+ * ```tsx
+ *    <ScrollTopButton hide={false} onClick={onScrollToTop} />
+ * ```
+ **/
 const ScrollTopButton = React.forwardRef<HTMLDivElement, ScrollTopButtonProps>(
   ({ onClick, hide }, ref) => {
     //@TODO: fix style

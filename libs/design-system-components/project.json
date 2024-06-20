@@ -5,15 +5,15 @@
   "projectType": "library",
   "targets": {
     "prepare": {
-      "dependsOn": [
-        "@akashaorg/typings:prepare",
-        "@akashaorg/design-system-core:prepare"
-      ],
+      "dependsOn": ["@akashaorg/typings:prepare", "@akashaorg/design-system-core:prepare"],
       "executor": "nx:run-commands",
       "options": {
         "cwd": "libs/design-system-components",
         "command": "tsc --build"
       }
+    },
+    "test": {
+      "dependsOn": ["prepare"]
     }
   },
   "tags": ["scope:extension", "type:lib"]

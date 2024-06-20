@@ -9,6 +9,37 @@ import { ButtonProps, ButtonSize } from './types';
 import { getTextClasses } from './getTextClasses';
 import { getContainerClasses } from './getContainerClasses';
 
+/**
+ * A Button allows users to take actions when appropriate with a tap(on touch-screen devices)
+ * or click of a mouse.
+ * A Button component comes with three variants: primary, secondary (default), and text.
+ * A Button component accepts all the props that a native html button accepts plus
+ * additional customization props, such as those listed below:
+ * @param label - button label (optional)
+ * @param icon - React.ReactElement button icon if any (optional)
+ * @param iconDirection - 'left' | 'right' (optional) where the icon will be placed
+ * @param size - button size (optional)
+ * @param variant - button variant (optional) the default is 'secondary'
+ * @param disabled - boolean (optional) whether the button is disabled or not
+ * @param loading - boolean (optional) whether to apply loading state to the button
+ * @param iconOnly - boolean (optional) whether it is an icon-only button with no label
+ * @param greyBg - boolean (optional) whether to apply grey background styling
+ * @param plainIcon - boolean (optional) whether to apply plain-icon styling to the icon
+ * @param solidIcon - boolean (optional) whether to apply solid-icon styling to the icon
+ * @param plain - boolean (optional) a plain button has no styling applied, can be used as a
+ * click wrapper
+ * @param breakPointSize - (optional) customize sizes for the break points
+ * @param customStyle - (optional) custom styling if any
+ * @param active - boolean (optional) whether the buttton is active
+ * @param hover - boolean (optional)
+ * @param hoverColors - (optional) styling for hover state
+ * @param ref - (optional)
+ *
+ * @example
+ * ```tsx
+ *  <Button variant={'primary'} label={'Primary button'} size={'sm'} onClick={onclickHandler} />
+ * ```
+ **/
 const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
   const {
     plain,

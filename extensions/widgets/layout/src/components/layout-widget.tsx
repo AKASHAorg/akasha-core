@@ -11,7 +11,6 @@ import {
   startMobileSidebarHidingBreakpoint,
   startWidgetsTogglingBreakpoint,
 } from '@akashaorg/design-system-core/lib/utils/breakpoints';
-import { useScrollbarWidth } from 'react-use/lib/useScrollbarWidth';
 import { useClickAway } from 'react-use';
 import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
 import { Widget } from '@akashaorg/ui-lib-extensions/lib/react/widget';
@@ -25,8 +24,12 @@ import TopbarLoader from '@akashaorg/design-system-components/lib/components/Loa
 import MiniProfileWidgetLoader from '@akashaorg/design-system-components/lib/components/Loaders/mini-profile-widget-loader';
 import TrendingWidgetLoader from '@akashaorg/design-system-components/lib/components/Loaders/trending-widget-loader';
 import SidebarLoader from '@akashaorg/design-system-components/lib/components/Loaders/sidebar-loader';
+import { css } from '@twind/core';
+import { useSticky } from './use-sticky';
 
 const Layout: React.FC<unknown> = () => {
+  const widgetContainerRef = useRef<HTMLDivElement>(null);
+  const widgetContentRef = useRef<HTMLDivElement>(null);
   const [needSidebarToggling, setNeedSidebarToggling] = useState(
     window.matchMedia(startMobileSidebarHidingBreakpoint).matches,
   );
@@ -35,12 +38,10 @@ const Layout: React.FC<unknown> = () => {
     !window.matchMedia(startMobileSidebarHidingBreakpoint).matches,
   );
 
-  const scrollBarWidth = useScrollbarWidth();
-
   const { uiEvents, layoutConfig } = useRootComponentProps();
   // initialise fallback theme, if none is set
   useTheme();
-
+  const widgetStickyStyle = useSticky(widgetContainerRef, widgetContentRef, 8);
   useEffect(() => {
     const mql = window.matchMedia(startMobileSidebarHidingBreakpoint);
 
@@ -145,7 +146,7 @@ const Layout: React.FC<unknown> = () => {
   }, []);
 
   const layoutStyle = `
-      grid min-h-screen
+      grid min-h-full
       lg:${showWidgets ? 'grid-cols-[8fr_4fr]' : 'grid-cols-[2fr_8fr_2fr]'}
       ${showSidebar ? 'xl:grid-cols-[3fr_6fr_3fr] ' : 'xl:grid-cols-[1.5fr_6fr_3fr_1.5fr]'}
       xl:max-w-7xl xl:mx-auto gap-x-4
@@ -166,12 +167,20 @@ const Layout: React.FC<unknown> = () => {
       } ${needSidebarToggling ? 'fixed left-0' : ''}
       `;
 
-  // style to prevent horizontal shift when vertical scrollbar appears
-  const widthStyle = `w-[calc(100vw-${scrollBarWidth}px)]`;
+  const containerStyle = css({
+    '@apply': 'bg(white dark:black) min-h-screen',
+    /** since the 100vw is including the scrollbar and
+     * 100% is the width excluding the scrollbar
+     * we can add a left padding (when the scrollbar is visible)
+     * to readjust the middle of the page, thus compensating the presence
+     * of the scrollbar
+     */
+    'padding-left': 'calc(100vw - 100%)',
+  });
 
   return (
-    <Stack customStyle={`bg(white dark:black) min-h-screen ${widthStyle}`}>
-      <Stack customStyle="h-full m-auto w-[95%] xl:w-full min-h-screen">
+    <Stack customStyle={containerStyle}>
+      <Stack customStyle="h-full m-auto w-full min-h-screen">
         <Stack customStyle={layoutStyle}>
           <Stack customStyle={mobileLayoverStyle}>
             <Stack customStyle={sidebarSlotStyle}>
@@ -233,20 +242,29 @@ const Layout: React.FC<unknown> = () => {
               </Stack>
             </Stack>
           </Stack>
-
-          <Stack align="center" justify="between" customStyle="sticky top-0 h-screen ">
-            <Stack customStyle={`grid grid-auto-rows pt-4 ${showWidgets ? '' : 'hidden'}`}>
-              <Widget
-                name={layoutConfig.widgetSlotId}
-                loadingIndicator={<MiniProfileWidgetLoader />}
-              />
-              <Widget
-                name={layoutConfig.rootWidgetSlotId}
-                loadingIndicator={<TrendingWidgetLoader />}
-              />
+          <Stack
+            ref={widgetContainerRef}
+            customStyle={`relative min-h-[${widgetStickyStyle.contentHeight}px] h-full`}
+          >
+            <Stack customStyle="h-full hidden lg:flex">
+              <Stack customStyle={`mt-[${widgetStickyStyle.offset}px]`} />
+              <Stack
+                ref={widgetContentRef}
+                customStyle={`${widgetStickyStyle.position} ${widgetStickyStyle.stickyPosition} ${showWidgets ? '' : 'hidden'} self-start`}
+              >
+                <Stack customStyle="my-4">
+                  <Widget
+                    name={layoutConfig.widgetSlotId}
+                    loadingIndicator={<MiniProfileWidgetLoader />}
+                  />
+                  <Widget
+                    name={layoutConfig.rootWidgetSlotId}
+                    loadingIndicator={<TrendingWidgetLoader />}
+                  />
+                </Stack>
+              </Stack>
             </Stack>
-
-            <Stack customStyle="fixed bottom-2 mx-2 lg:(w-[21rem])">
+            <Stack customStyle="fixed bottom-2 lg:(w-[21rem])">
               <Widget name={layoutConfig.cookieWidgetSlotId} />
             </Stack>
           </Stack>

@@ -34,6 +34,34 @@ export type StackProps = PropsWithChildren<{
   id?: string;
 }>;
 
+/**
+ * A Stack component is a container that lays out its content in one direction using flexbox.
+ * It can be used to arrange other components.
+ * @param direction - (optional) use this prop to control how child elements are placed in this flex container.
+ * The default direction is `column`
+ * @param padding - (optional) for customizing the padding (see example of usage below)
+ * @param justify - (optional) for customizing the aligment of items along the main axis of the flex
+ * container (see example of usage below)
+ * @param justifyItems - (optional) for customizing the aligment of items along their inline axis
+ * @param justifySelf - (optional) for customizing the aligment of an individual item along its inline axis
+ * @param alignSelf - (optional) for customizing the position of an individual item along its container's cross
+ * axis
+ * @param align - (optional) for customizing the position of items along its container's cross
+ * axis
+ * @param background - (optional) for customizing the background color of the Stack
+ * @param spacing - (optional) for customizing the gap among items in the x or y axis, or both (see example of usage below)
+ * @param customStyle - (optional) apply any other custom styles. Please use standard Tailwind CSS classes
+ * @param fullWidth - boolean (optional) whether the Stack will occupy the full width of the parent element
+ * @param dataTestId - (optional) useful for test writing purpose
+ * @param ref - (optional) pass the `ref` here
+ * @param id - (optional) id of the Stack element, if any
+ * ```tsx
+ *  <Stack direction="row" align="center" justify="between" spacing="gap-4" padding="p-4" fullWidth>
+      <ExampleComponent1>
+      <ExampleComponent2>
+    </Stack>
+ * ```
+ **/
 const Stack: React.FC<StackProps> = forwardRef(
   (
     {

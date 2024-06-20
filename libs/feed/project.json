@@ -18,6 +18,9 @@
         "command": "tsc --build"
       }
     },
+    "test": {
+      "dependsOn": ["prepare"]
+    },
     "translations": {
       "executor": "./tools/executors/i18n:extract",
       "options": {
