@@ -1,5 +1,5 @@
 import React from 'react';
-import TagFeed from '../pages/tag-feed-page/tag-feed-page';
+import TagFeedPage from '../pages/tag-feed-page/tag-feed-page';
 import userEvent from '@testing-library/user-event';
 import * as useAkashaStore from '@akashaorg/ui-awf-hooks/lib/store/use-akasha-store';
 import {
@@ -23,10 +23,10 @@ import {
 import { formatRelativeTime, truncateDid } from '@akashaorg/design-system-core/lib/utils';
 import { getTagFeedPageMocks } from '../__mocks__';
 
-describe('< TagFeed /> component', () => {
+describe('< TagFeedPage /> component', () => {
   const BaseComponent = (
     <AnalyticsProvider {...genAppProps()}>
-      <TagFeed tagName={TAG_NAME} />
+      <TagFeedPage tagName={TAG_NAME} />
     </AnalyticsProvider>
   );
 
