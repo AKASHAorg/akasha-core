@@ -253,6 +253,8 @@ class AWF_IpfsConnector {
         results.push(this.buildOriginLink(addr.substring(7)));
       } else if (addr.substring(0, 1) === '/') {
         results.push(multiaddrToUri(addr));
+      } else if (addr.startsWith('https://')) {
+        results.push(addr);
       }
     }
 

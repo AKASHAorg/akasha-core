@@ -2,6 +2,7 @@ import { IconType, RootComponentProps } from './index';
 import { UIEventData } from './ui-events';
 import { Extensions } from './apps';
 import { PluginConf } from './plugins';
+import { AkashaAppApplicationType } from '../sdk/graphql-types-new';
 
 export type ActivityFn = (
   location: Location,
@@ -65,16 +66,11 @@ export enum LogLevels {
   TRACE = 'trace',
 }
 
-export enum INTEGRATION_TYPES {
-  APPLICATION,
-  PLUGIN,
-  WIDGET,
-}
 
 export type ExtensionConfig = {
   name: string;
   id?: string;
-  integrationType: INTEGRATION_TYPES;
+  integrationType: AkashaAppApplicationType;
   sources: string[];
   version: string;
   integrationID: string;

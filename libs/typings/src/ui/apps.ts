@@ -13,7 +13,7 @@ export type ManifestConfig = {
   id?: string | null;
   name: string;
   version: string;
-  integrationType: number;
+  integrationType: string;
   sources?: Array<string> | null;
   integrationID: string;
   author: string;
