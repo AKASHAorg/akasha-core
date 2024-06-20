@@ -43,6 +43,7 @@ const MyAntennaPage: React.FC<unknown> = () => {
   const isLoggedUser = React.useMemo(() => !!authenticatedProfile?.did.id, [authenticatedProfile]);
   const { data: tagSubsReq } = useGetInterestsByDidQuery({
     variables: { id: authenticatedProfile?.did.id },
+    skip: !authenticatedProfile?.did.id,
   });
   const tagSubsData =
     tagSubsReq?.node && hasOwn(tagSubsReq.node, 'akashaProfileInterests')
@@ -95,7 +96,7 @@ const MyAntennaPage: React.FC<unknown> = () => {
         </Stack>
         {userHasSubscriptions && (
           <TagFeed
-            queryKey={QueryKeys.MY_ANTENNA}
+            dataTestId="tag-feed"
             estimatedHeight={150}
             itemSpacing={8}
             filters={{

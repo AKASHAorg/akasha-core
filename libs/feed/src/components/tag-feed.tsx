@@ -2,7 +2,6 @@ import React, { ReactElement, useEffect, useRef } from 'react';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import DynamicInfiniteScroll from '@akashaorg/design-system-components/lib/components/DynamicInfiniteScroll';
 import getSDK from '@akashaorg/awf-sdk';
 import { useTranslation } from 'react-i18next';
@@ -17,7 +16,7 @@ import { hasOwn, useAkashaStore } from '@akashaorg/ui-awf-hooks';
 import { useGetIndexedStreamLazyQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
 export type TagFeedProps = {
-  queryKey: string;
+  dataTestId?: string;
   estimatedHeight: number;
   itemSpacing?: number;
   scrollOptions?: {
@@ -34,6 +33,7 @@ export type TagFeedProps = {
 
 const TagFeed = (props: TagFeedProps) => {
   const {
+    dataTestId,
     estimatedHeight = 150,
     itemSpacing,
     scrollOptions = { overScan: 10 },
@@ -85,34 +85,7 @@ const TagFeed = (props: TagFeedProps) => {
     );
   }
 
-  const emptyListCard = (
-    <Stack customStyle="mt-8">
-      <InfoCard
-        titleLabel={
-          <>
-            {t('There is no content found for the ')}
-            {t('{{topic}}', { topic: tags.length > 1 ? 'topics' : 'topic' })}{' '}
-            {tags.map(tag => (
-              <span key={tag}>#{tag} </span>
-            ))}
-          </>
-        }
-        bodyLabel={
-          <>
-            {t('Be the first one to create a beam for this topic')}
-            {'! 🚀'}
-          </>
-        }
-        bodyVariant="body1"
-        assetName="longbeam-notfound"
-      />
-    </Stack>
-  );
-
   if (isAuthenticating) return <>{loadingIndicatorRef.current()}</>;
-
-  if (!indexedStreamQuery.error && !indexedStreamQuery.loading && !beams.length)
-    return <>{emptyListCard}</>;
 
   return (
     <>
@@ -126,6 +99,7 @@ const TagFeed = (props: TagFeedProps) => {
       )}
       {beams.length > 0 && (
         <DynamicInfiniteScroll
+          dataTestId={dataTestId}
           count={beams.length}
           estimatedHeight={estimatedHeight}
           overScan={scrollOptions.overScan}
