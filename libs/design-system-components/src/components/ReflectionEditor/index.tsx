@@ -9,14 +9,26 @@ import { Colors } from '@akashaorg/typings/lib/ui';
 
 export type ReflectionEditorProps = EditorBoxProps & {
   placeholderButtonLabel?: string;
-  showEditor?: boolean;
   borderBottomOnly?: boolean;
   noBorderRound?: boolean;
   background?: { light: Colors; dark: Colors };
   customStyle?: string;
+  showEditor?: boolean;
   setShowEditor: (showEditor: boolean) => void;
 };
 
+/**
+ * Component used as a text editor for posting reflections (comments)
+ * It is a wrapper over the slate.js based akasha editor, containing
+ * also the placeholder component for when the editor is inactive.
+ * Upon clicking the placeholder the user opens the editor.
+ * @param placeholderButtonLabel - text for the placeholder action button
+ * @param borderBottomOnly - style option to display a border only on the bottom
+ * @param noBorderRound - style option to override rounded borders
+ * @param customStyle - add custom tailwind styles for the wrapper
+ * @param showEditor - whether to display the placeholder or the actual editor
+ * @param setShowEditor - toggle between editor and placeholder
+ */
 const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
   const {
     profileId,

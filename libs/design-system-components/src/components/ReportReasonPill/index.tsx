@@ -11,6 +11,12 @@ export type ReportReasonPillProps = {
   handleClick: () => void;
 };
 
+/**
+ * Component used in the vibes and vibes console apps to display moderation data
+ * @param reportCount - number of times of report
+ * @param reason - report reason text
+ * @param handleClick - click handler for the pill
+ */
 const ReportReasonPill: React.FC<ReportReasonPillProps> = props => {
   const { reason, reportCount, handleClick } = props;
 

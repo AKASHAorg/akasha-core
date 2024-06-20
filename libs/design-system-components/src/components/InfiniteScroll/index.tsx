@@ -18,6 +18,15 @@ type InfiniteScrollType = {
   children: (item: InfiniteScrollItem) => ReactElement;
 };
 
+/**
+ * Component used to render a long list of items inside a scrollable container
+ * without losing performance, requires a fixed height for each item
+ * @param totalElements - number of items in the list
+ * @param itemHeight - height of the items to be rendered
+ * @param overscan - number of items to render above and below the visible area
+ * @param loadMore - function to fetch more items, triggered on reaching the bottom of the visible area
+ * @param children - function that returns the react component that will render each item
+ */
 const InfiniteScroll: React.FC<InfiniteScrollType> = props => {
   const { totalElements, itemHeight, overScan = 0, onLoadMore, children } = props;
   const [loadMore, setLoadingMore] = useState(false);

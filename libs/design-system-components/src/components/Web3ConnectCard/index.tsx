@@ -11,21 +11,28 @@ export type TWeb3ConnectCardProps = {
   leftIconType: AppIconProps['placeholderIcon'];
   subtitleLabel?: string;
   iconSize: AppIconProps['size'];
-  boxSize: AppIconProps['backgroundSize'];
+  boxSize?: AppIconProps['backgroundSize'];
   iconColor?: IconProps['color'];
   boxBgColor?: Color;
   handleClick: () => void;
 };
 
+/**
+ * Component used in the auth app to initiate the wallet connection
+ * redirects the user to the next step of authenticating
+ * @param boxSize - object with width and height of the app icon
+ * @param iconSize - object with width and height of the app icon
+ * @param handleClick -  handler to continue the authentication process
+ */
 const Web3ConnectCard: React.FC<TWeb3ConnectCardProps> = props => {
   const {
     titleLabel,
     subtitleLabel,
     leftIconType,
-    iconSize,
-    boxSize,
-    boxBgColor = 'white',
-    iconColor,
+    iconSize = { width: 40, height: 40 },
+    boxSize = { width: 40, height: 40 },
+    boxBgColor = 'transparent',
+    iconColor = 'self-color',
     handleClick,
   } = props;
 

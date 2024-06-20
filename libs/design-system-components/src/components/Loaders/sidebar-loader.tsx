@@ -3,6 +3,10 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 
+/**
+ * Component used to display a skeleton placeholder for data loading
+ * in the sidebar widget
+ */
 const SidebarLoader: React.FC = () => {
   return (
     <Card

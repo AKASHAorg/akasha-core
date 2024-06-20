@@ -4,6 +4,10 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 
+/**
+ * Component used to display a skeleton placeholder for data loading
+ * in the mini profile widget
+ */
 const MiniProfileWidgetLoader: React.FC = () => {
   return (
     <Card radius="rounded-2xl" margin="mb-4" padding="p-0" customStyle="max-h-[30rem]">

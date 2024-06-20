@@ -20,6 +20,9 @@ export interface VibesValuesCardProps {
   onValueClick: (path: VibesValue['path']) => () => void;
 }
 
+/**
+ * Component used in the vibes app to present the community values for moderation
+ */
 const VibesValuesCard: React.FC<VibesValuesCardProps> = props => {
   const { titleLabel, subtitleLabel, ctaLabel, ctaUrl, values, onValueClick } = props;
 
