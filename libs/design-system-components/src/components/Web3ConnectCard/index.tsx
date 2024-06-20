@@ -10,7 +10,7 @@ export type TWeb3ConnectCardProps = {
   titleLabel: string;
   leftIconType: AppIconProps['placeholderIcon'];
   subtitleLabel?: string;
-  iconSize: AppIconProps['size'];
+  iconSize?: AppIconProps['size'];
   boxSize?: AppIconProps['backgroundSize'];
   iconColor?: IconProps['color'];
   boxBgColor?: Color;

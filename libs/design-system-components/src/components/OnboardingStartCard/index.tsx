@@ -49,7 +49,7 @@ const OnboardingStartCard = ({
           inputPlaceholderLabel={inputPlaceholderLabel}
           onInputChange={ev => setInputValue(ev.target.value)}
           onSearch={handleSearch}
-          responsive={false}
+          fullWidth={false}
         />
       </Stack>
     </Card>
