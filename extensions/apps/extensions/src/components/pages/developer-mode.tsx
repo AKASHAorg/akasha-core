@@ -27,14 +27,16 @@ export const DeveloperModePage: React.FC<unknown> = () => {
     setDevMode(value);
     window.localStorage.setItem(DEV_MODE_KEY, value);
 
-    if (value === DevMode.ENABLED) {
-      navigate({
-        to: routes[MY_EXTENSIONS],
-      });
+    // allow one sec delay, then reload the page
+    setTimeout(() => {
       window.location.reload();
-    } else {
-      window.location.reload();
-    }
+    }, 1000);
+  };
+
+  const handleCTAClick = () => {
+    navigate({
+      to: routes[MY_EXTENSIONS],
+    });
   };
 
   return (
@@ -43,6 +45,9 @@ export const DeveloperModePage: React.FC<unknown> = () => {
       sections={[
         {
           title: t('Extensions Developer Mode'),
+          toggleButtonNode: (
+            <Toggle checked={devMode === DevMode.ENABLED} onChange={handleToggleDevMode} />
+          ),
           descriptionNode: (
             <Text as="span" color={{ light: 'grey4', dark: 'grey6' }}>
               {`🌟 ${t("When you enable Dev Mode, you'll unlock the ability to create awesome extensions in the Extensions app! 🚀 Once enabled, a new sub menu item called")} `}
@@ -52,9 +57,17 @@ export const DeveloperModePage: React.FC<unknown> = () => {
               {` ${t('will appear on the sidebar')}. 💻✨`}
             </Text>
           ),
-          toggleButtonNode: (
-            <Toggle checked={devMode === DevMode.ENABLED} onChange={handleToggleDevMode} />
-          ),
+          ...(devMode === DevMode.ENABLED && {
+            ctaNode: (
+              <Button
+                size="md"
+                variant="text"
+                label={t('Go to My Extensions')}
+                customStyle="w-fit self-end"
+                onClick={handleCTAClick}
+              />
+            ),
+          }),
         },
         {
           title: t('AKASHA World Developer Guide'),
