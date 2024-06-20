@@ -26,7 +26,7 @@ export const DeveloperMode: React.FC<TDeveloperMode> = props => {
       </Stack>
       <Stack padding="p-4" spacing="gap-y-4">
         {sections.map(({ title, toggleButtonNode, descriptionNode, ctaNode }, idx) => (
-          <>
+          <React.Fragment key={title + idx}>
             {idx > 0 && <Divider />}
             <Stack key={title + idx} spacing="gap-y-2">
               <Stack direction="row" justify="between" align="center" customStyle="mb-2">
@@ -36,7 +36,7 @@ export const DeveloperMode: React.FC<TDeveloperMode> = props => {
               {descriptionNode}
               {ctaNode}
             </Stack>
-          </>
+          </React.Fragment>
         ))}
       </Stack>
     </Card>
