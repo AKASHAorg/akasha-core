@@ -80,7 +80,25 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={tw(apply`h-full`)}>
       <Stack direction="column" spacing="gap-y-4">
-        <Stack padding="px-4 pb-8" spacing="gap-y-4">
+        <Stack padding="px-4 pb-16" spacing="gap-y-4">
+          <Controller
+            control={control}
+            name={FieldName.extensionType}
+            render={({ field: { name, value = extensionTypes[0], onChange, ref } }) => (
+              <DropDown
+                label="Extension Type"
+                name={name}
+                selected={value}
+                menuItems={extensionTypes}
+                setSelected={onChange}
+                ref={ref}
+                required={true}
+                requiredFieldAsteriskColor="red-500"
+              />
+            )}
+            defaultValue={extensionTypes[0]}
+          />
+          <Divider />
           <Controller
             control={control}
             name={FieldName.extensionID}
@@ -111,24 +129,6 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
               />
             )}
             defaultValue=""
-          />
-          <Divider />
-          <Controller
-            control={control}
-            name={FieldName.extensionType}
-            render={({ field: { name, value = extensionTypes[0], onChange, ref } }) => (
-              <DropDown
-                label="Extension Type"
-                name={name}
-                selected={value}
-                menuItems={extensionTypes}
-                setSelected={onChange}
-                ref={ref}
-                required={true}
-                requiredFieldAsteriskColor="red-500"
-              />
-            )}
-            defaultValue={extensionTypes[0]}
           />
           <Divider />
           <Controller

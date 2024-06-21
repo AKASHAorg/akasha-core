@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { apply, tw, tx } from '@twind/core';
-
 import Stack from '../Stack';
 import Icon from '../Icon';
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from '../Icon/hero-icons-outline';
@@ -8,6 +7,7 @@ import Text from '../Text';
 import Link from '../Link';
 import Label from '../TextField/Label';
 import { Color } from '../types/common.types';
+import { useCloseActions } from '../../utils';
 
 export type DropdownMenuItemType = {
   id: string;
@@ -87,13 +87,17 @@ const Dropdown: React.FC<DropdownProps> = React.forwardRef((props, ref) => {
     setDropOpen(!dropOpen);
   };
 
+  const anchorRef = useCloseActions(() => {
+    setDropOpen(false);
+  });
+
   const handleChange = (menuItem: DropdownMenuItemType) => () => {
     setSelected(menuItem);
     setDropOpen(!dropOpen);
   };
 
   return (
-    <Stack customStyle="relative min-w-[8rem] gap-y-2 " ref={ref}>
+    <Stack customStyle="relative min-w-[8rem] gap-y-2 " ref={anchorRef}>
       {label && (
         <Label required={required} requiredFieldAsteriskColor={requiredFieldAsteriskColor}>
           {label}
@@ -109,9 +113,17 @@ const Dropdown: React.FC<DropdownProps> = React.forwardRef((props, ref) => {
       >
         <Text variant="body1">{selected?.title}</Text>
         {dropOpen ? (
-          <Icon icon={<ChevronUpIcon />} customStyle="ml-4" />
+          <Icon
+            icon={<ChevronUpIcon />}
+            customStyle="ml-4"
+            color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+          />
         ) : (
-          <Icon icon={<ChevronDownIcon />} customStyle="ml-4" />
+          <Icon
+            icon={<ChevronDownIcon />}
+            customStyle="ml-4"
+            color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+          />
         )}
       </button>
 
@@ -136,7 +148,7 @@ const Dropdown: React.FC<DropdownProps> = React.forwardRef((props, ref) => {
                     direction="row"
                     align="center"
                     spacing="gap-x-2"
-                    customStyle={`${isSelected ? 'text-secondaryLight' : 'text-black'}`}
+                    customStyle={`${isSelected ? 'text-secondaryLight' : 'text-black'} hover:bg-(grey8 dark:grey3)`}
                   >
                     {menuItem?.icon && (
                       <Icon
