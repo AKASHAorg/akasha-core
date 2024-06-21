@@ -233,12 +233,18 @@ const AppInfo: React.FC<AppInfoProps> = ({
                 </Text>
                 <Button variant="text" size="md" label={packageName} />
               </Stack>
+
+              <Divider />
+
               <Stack direction="row" justify="between">
                 <Text variant="body2" color={greyTextColor}>
                   {extensionIdTitle}
                 </Text>
                 <Button variant="text" size="md" label={extensionId} />
               </Stack>
+
+              <Divider />
+
               <Stack direction="row" justify="between">
                 <Text variant="body2" color={greyTextColor}>
                   {latestReleaseTitle}
@@ -287,12 +293,7 @@ const AppInfo: React.FC<AppInfoProps> = ({
           <ContentBlock blockTitle={documentationTitle}>
             <Stack customStyle="flex-wrap">
               <CopyToClipboard value={documentationLink}>
-                <Button
-                  variant="text"
-                  size="md"
-                  label={documentationLink}
-                  onClick={onLicenseClick}
-                />
+                <Button variant="text" size="md" label={documentationLink} />
               </CopyToClipboard>
             </Stack>
           </ContentBlock>
