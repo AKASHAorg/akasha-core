@@ -156,7 +156,8 @@ export default class AppLoader {
         );
       }
       const source = getSDK().services.common.ipfs.buildOriginLink(manifest.sources[0]);
-      const sourceURL = new URL(manifest.manifestData.mainFile, source);
+      const mainFile = manifest?.manifestData?.mainFile || 'index.js';
+      const sourceURL = new URL(mainFile, source);
       const module = await System.import<SystemModuleType>(sourceURL.href);
       modules.set(manifest.name, module);
     }
