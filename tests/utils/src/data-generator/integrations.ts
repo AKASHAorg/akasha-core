@@ -1,9 +1,10 @@
-import { IAppConfig, INTEGRATION_TYPES, RootComponentProps } from '@akashaorg/typings/lib/ui';
+import { IAppConfig, RootComponentProps } from '@akashaorg/typings/lib/ui';
 import { genLifecycles } from '../mocks/single-spa';
 import { genWorldConfig } from './world-config';
 import { uiEventsMock } from '../mocks/uiEvents';
 import { ExtensionConfig } from '@akashaorg/typings/lib/ui';
 import { Subject } from 'rxjs';
+import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 export const genAppConfig = (
   overrides?: Partial<IAppConfig & { name: string }>,
@@ -69,7 +70,7 @@ export const genReleaseInfo = (): ExtensionConfig => ({
   id: 'id',
   name: 'release name',
   version: 'version',
-  integrationType: INTEGRATION_TYPES.APPLICATION,
+  integrationType: AkashaAppApplicationType.App,
   sources: [''],
   author: 'author',
   enabled: true,
