@@ -90,6 +90,8 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
           updateButtonLabel={t('Update')}
           packageName="TBD package name"
           packageNameTitle={'Package name'}
+          extensionIdTitle={'Extension Id'}
+          extensionId="zhzhahdhaskdh"
           developers={developers}
           descriptionTitle={t('Description')}
           readMore={t('Read more')}

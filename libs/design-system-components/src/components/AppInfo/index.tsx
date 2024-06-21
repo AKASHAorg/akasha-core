@@ -3,6 +3,7 @@ import { type Developer, type Image } from '@akashaorg/typings/lib/ui';
 import { type Color } from '@akashaorg/design-system-core/lib/components/types/common.types';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
+import CopyToClipboard from '@akashaorg/design-system-core/lib/components/CopyToClipboard';
 import ContentBlock from '@akashaorg/design-system-core/lib/components/ContentBlock';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
@@ -41,6 +42,8 @@ export type AppInfoProps = AppInfoHeaderProps &
     goToVersionInfoPageLabel: string;
     documentationTitle: string;
     documentationLink: string;
+    extensionIdTitle: string;
+    extensionId: string;
     licenseTitle: string;
     license: string;
     onAppDescriptionClick: () => void;
@@ -71,6 +74,10 @@ const AppInfo: React.FC<AppInfoProps> = ({
   developers,
   descriptionTitle,
   permissionTitle,
+  documentationTitle,
+  documentationLink,
+  extensionIdTitle,
+  extensionId,
   readMore,
   descriptionBody,
   galleryTitle,
@@ -222,6 +229,24 @@ const AppInfo: React.FC<AppInfoProps> = ({
             <Stack spacing="gap-y-2">
               <Stack direction="row" justify="between">
                 <Text variant="body2" color={greyTextColor}>
+                  {packageNameTitle}
+                </Text>
+                <Button variant="text" size="md" label={packageName} />
+              </Stack>
+
+              <Divider />
+
+              <Stack direction="row" justify="between">
+                <Text variant="body2" color={greyTextColor}>
+                  {extensionIdTitle}
+                </Text>
+                <Button variant="text" size="md" label={extensionId} />
+              </Stack>
+
+              <Divider />
+
+              <Stack direction="row" justify="between">
+                <Text variant="body2" color={greyTextColor}>
                   {latestReleaseTitle}
                 </Text>
                 <Button
@@ -231,7 +256,9 @@ const AppInfo: React.FC<AppInfoProps> = ({
                   onClick={onLatestUpdateClick}
                 />
               </Stack>
+
               <Divider />
+
               <Stack direction="row" justify="between">
                 <Text variant="body2" color={greyTextColor}>
                   {languageLabel}
@@ -242,13 +269,16 @@ const AppInfo: React.FC<AppInfoProps> = ({
                   )}
                 </Text>
               </Stack>
+
               <Divider />
+
               <Stack direction="row" justify="between">
                 <Text variant="body2" color={greyTextColor}>
                   {permissionTitle}
                 </Text>
                 <Button variant="text" size="md" label={'View'} onClick={onPermissionInfoClick} />
               </Stack>
+
               <Divider />
 
               <Stack direction="row" justify="between">
@@ -260,11 +290,11 @@ const AppInfo: React.FC<AppInfoProps> = ({
             </Stack>
           </ContentBlock>
 
-          <ContentBlock blockTitle={packageNameTitle}>
-            <Stack customStyle=" flex-wrap">
-              <Text variant="body1" customStyle="break-words w-[20rem] md:w-full">
-                {packageName}
-              </Text>
+          <ContentBlock blockTitle={documentationTitle}>
+            <Stack customStyle="flex-wrap">
+              <CopyToClipboard value={documentationLink}>
+                <Button variant="text" size="md" label={documentationLink} />
+              </CopyToClipboard>
             </Stack>
           </ContentBlock>
           <ContentBlock
