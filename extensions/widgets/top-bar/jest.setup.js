@@ -19,8 +19,13 @@ jest.mock('react-i18next', () => ({
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
-  value: jest.fn().mockImplementation(() => ({
+  value: jest.fn().mockImplementation(query => ({
     matches: false,
+    media: query,
+    onchange: null,
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+    dispatchEvent: jest.fn(),
   })),
 });
 

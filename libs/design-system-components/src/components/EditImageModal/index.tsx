@@ -18,6 +18,18 @@ type EditImageModalProps = {
   images: ImageCropperProps['image'][];
 } & Pick<ImageCropperProps, 'dragToRepositionLabel'>;
 
+/**
+ * Component used to crop user uploaded images, used in the image editor block
+ * @param title - modal text title
+ * @param show - controls the visibility of the modal
+ * @param cancelLabel - label for the action to exit the modal
+ * @param saveLabel - label for the action of cropping the selected image
+ * @param isSavingImage - status for saving the cropped image, prevents
+ exiting the modal while true
+ * @param onSave - handler for uploading the cropped image and replacing the old image with it
+ * @param onClose - handler to close the modal
+ * @param images - an array of the images currently in the gallery of an image content block
+ */
 const EditImageModal: React.FC<EditImageModalProps> = ({
   title,
   show,

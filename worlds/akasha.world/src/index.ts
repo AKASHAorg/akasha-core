@@ -1,8 +1,9 @@
 import '@akashaorg/design-system-core/src/twind/main.css';
 import '@akashaorg/design-system-core/src/twind/globals.css';
 
-import { WorldConfig, INTEGRATION_TYPES } from '@akashaorg/typings/lib/ui';
+import { WorldConfig } from '@akashaorg/typings/lib/ui';
 import { missingRequiredFields } from './registry-overrides';
+import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 console.time('AppLoader:firstMount');
 
@@ -13,41 +14,42 @@ declare const __LOAD_LOCAL_SOURCES__: boolean;
   const { default: AppLoader } = await System.import('@akashaorg/ui-app-loader');
   const { default: getSDK } = await System.import('@akashaorg/awf-sdk');
 
+  const origin = window.location.origin;
   let registryOverrides = [
     {
       name: '@akashaorg/app-routing',
-      integrationType: INTEGRATION_TYPES.APPLICATION,
-      sources: ['/apps/routing/index.js'],
+      integrationType: AkashaAppApplicationType.App,
+      sources: [`${origin}/apps/routing`],
       ...missingRequiredFields,
     },
     {
       name: '@akashaorg/ui-widget-layout',
-      integrationType: INTEGRATION_TYPES.WIDGET,
-      sources: ['/widgets/layout/index.js'],
+      integrationType: AkashaAppApplicationType.Widget,
+      sources: [`${origin}/widgets/layout`],
       ...missingRequiredFields,
     },
     {
       name: '@akashaorg/ui-widget-sidebar',
-      integrationType: INTEGRATION_TYPES.WIDGET,
-      sources: ['/widgets/sidebar/index.js'],
+      integrationType: AkashaAppApplicationType.Widget,
+      sources: [`${origin}/widgets/sidebar`],
       ...missingRequiredFields,
     },
     {
       name: '@akashaorg/ui-widget-topbar',
-      integrationType: INTEGRATION_TYPES.WIDGET,
-      sources: ['/widgets/top-bar/index.js'],
+      integrationType: AkashaAppApplicationType.Widget,
+      sources: [`${origin}/widgets/top-bar`],
       ...missingRequiredFields,
     },
     {
       name: '@akashaorg/ui-widget-mini-profile',
-      integrationType: INTEGRATION_TYPES.WIDGET,
-      sources: ['/widgets/mini-profile/index.js'],
+      integrationType: AkashaAppApplicationType.Widget,
+      sources: [`${origin}/widgets/mini-profile`],
       ...missingRequiredFields,
     },
     {
       name: '@akashaorg/ui-widget-my-apps',
-      integrationType: INTEGRATION_TYPES.WIDGET,
-      sources: ['/widgets/my-apps/index.js'],
+      integrationType: AkashaAppApplicationType.Widget,
+      sources: [`${origin}/widgets/my-apps`],
       ...missingRequiredFields,
     },
   ];
@@ -81,7 +83,6 @@ declare const __LOAD_LOCAL_SOURCES__: boolean;
       '@akashaorg/app-profile',
       '@akashaorg/app-notifications',
       '@akashaorg/app-legal',
-      '@akashaorg/app-lists',
       '@akashaorg/app-settings-ewa',
       '@akashaorg/app-vibes-console',
     ],

@@ -6,6 +6,7 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import { VibesConsole } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import { ExtensionsHub } from '../extensions-hub';
+import routes, { DEVELOPER_MODE } from '../../routes';
 
 export const ExtensionsHubPage: React.FC<unknown> = () => {
   const navigate = useNavigate();
@@ -17,6 +18,12 @@ export const ExtensionsHubPage: React.FC<unknown> = () => {
       params: {
         appId,
       },
+    });
+  };
+
+  const handleCTAClick = () => {
+    navigate({
+      to: routes[DEVELOPER_MODE],
     });
   };
 
@@ -54,6 +61,7 @@ export const ExtensionsHubPage: React.FC<unknown> = () => {
               customStyle="w-fit self-end"
             >
               <Button
+                size="md"
                 variant="text"
                 label={t('Share your thoughts!')}
                 customStyle="w-fit self-end"
@@ -67,14 +75,15 @@ export const ExtensionsHubPage: React.FC<unknown> = () => {
             'Create awesome extensions, spark your imagination, and be part of an enthusiastic developer community!',
           ),
           ctaNode: (
-            <Link target="_blank" to="https://docs.akasha.world" customStyle="w-fit self-end">
-              <Button
-                variant="text"
-                iconDirection="right"
-                icon={<ArrowLongRightIcon />}
-                label={t('Read the documentation')}
-              />
-            </Link>
+            <Button
+              size="md"
+              variant="text"
+              iconDirection="right"
+              icon={<ArrowLongRightIcon />}
+              label={t('Start your journey')}
+              customStyle="w-fit self-end"
+              onClick={handleCTAClick}
+            />
           ),
         },
       ]}

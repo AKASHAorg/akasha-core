@@ -4,9 +4,8 @@ import { useNavigate } from '@tanstack/react-router';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { ArrowLongRightIcon } from '@heroicons/react/24/outline';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Link from '@akashaorg/design-system-core/lib/components/Link';
 import { Explore } from '../explore';
-import routes, { EXTENSIONS } from '../../routes';
+import routes, { DEVELOPER_MODE, EXTENSIONS } from '../../routes';
 
 export const ExplorePage: React.FC<unknown> = () => {
   const navigate = useNavigate();
@@ -43,6 +42,12 @@ export const ExplorePage: React.FC<unknown> = () => {
       params: {
         appId,
       },
+    });
+  };
+
+  const handleCTAClick = () => {
+    navigate({
+      to: routes[DEVELOPER_MODE],
     });
   };
 
@@ -91,14 +96,15 @@ export const ExplorePage: React.FC<unknown> = () => {
             'Create awesome extensions, spark your imagination, and be part of an enthusiastic developer community!',
           ),
           ctaNode: (
-            <Link target="_blank" to="https://docs.akasha.world" customStyle="w-fit self-end">
-              <Button
-                variant="text"
-                iconDirection="right"
-                icon={<ArrowLongRightIcon />}
-                label={t('Read the documentation')}
-              />
-            </Link>
+            <Button
+              size="md"
+              variant="text"
+              iconDirection="right"
+              icon={<ArrowLongRightIcon />}
+              label={t('Start your journey')}
+              customStyle="w-fit self-end"
+              onClick={handleCTAClick}
+            />
           ),
         },
       ]}

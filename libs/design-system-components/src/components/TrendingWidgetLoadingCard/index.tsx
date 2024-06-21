@@ -5,6 +5,10 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import TrendingWidgetItemLoader from './trending-widget-item-loader';
 
+/**
+ * Component used to display a skeleton placeholder for data loading
+ * in the trending widget
+ */
 const TrendingWidgetLoadingCard: React.FC = () => {
   return (
     <Card radius="rounded-2xl">

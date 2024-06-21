@@ -23,9 +23,28 @@ export type OnboardingSuggestionsCardProps = {
   onClickProfile?: (id: string) => void;
   onClickFollow?: (id: string) => void;
   onClickUnfollow?: (id: string) => void;
-  isViewer?: boolean;
+  loggedUserDID?: string;
 };
 
+/**
+ * Component used in the search app to showcase suggested topics and profiles for the
+ * new user to follow
+ * @param topicsLabel - text for topics title
+ * @param peopleLabel - text for profiles title
+ * @param followLabel - text for follow button
+ * @param unfollowLabel -  text for unfollow button
+ * @param followingLabel - text for follow button
+ * @param tags - list of topics that the user can subscribe to
+ * @param profiles - list of profiles that the user can follow
+ * @param subscribedTags - list of tags user has already subscribed to
+ * @param followedProfiles - list of profiles that the user is already following
+ * @param transformSource - utility function to provide ipfs images with gateways to be accessed
+ * @param onClickTag - handler for clicking on a topic
+ * @param onClickProfile - handler for clicking on a profile
+ * @param onClickFollow - handler for following a profile
+ * @param onClickUnfollow - handler for unfollowing a profile
+ * @param loggedUserDID - did of the logged in user, to prevent displaying the follow function
+ */
 const OnboardingSuggestionsCard: React.FC<OnboardingSuggestionsCardProps> = props => {
   const {
     topicsLabel,
@@ -42,7 +61,7 @@ const OnboardingSuggestionsCard: React.FC<OnboardingSuggestionsCardProps> = prop
     onClickProfile,
     onClickFollow,
     onClickUnfollow,
-    isViewer,
+    loggedUserDID,
   } = props;
 
   return (
@@ -77,7 +96,7 @@ const OnboardingSuggestionsCard: React.FC<OnboardingSuggestionsCardProps> = prop
                   transformSource(alternative),
                 )}
               />
-              {!isViewer && (
+              {loggedUserDID !== profile.did.id && (
                 <DuplexButton
                   inactiveLabel={followLabel}
                   activeLabel={followingLabel}

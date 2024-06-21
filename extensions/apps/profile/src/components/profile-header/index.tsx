@@ -57,7 +57,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
     },
     [navigateToModal],
   );
-  const isViewer = !!authenticatedDID && profileData?.did?.id === authenticatedDID;
+  const isViewer = !!authenticatedDID && profileDID === authenticatedDID;
   const navigateTo = getRoutingPlugin().navigateTo;
 
   const handleClickAvatar = () => {
