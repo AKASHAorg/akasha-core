@@ -26,6 +26,10 @@ import {
   BEAM_ID,
   REFLECTION_ID,
   REPLY_TO,
+  NEW_REFLECTION_ID,
+  AUTHENTICATED_DID,
+  NEW_REFLECTION,
+  AUTHENTICATED_PROFILE,
 } from '../__mocks__';
 import { GetReflectionStreamDocument } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
@@ -126,19 +130,15 @@ describe('< ReflectionPage /> component', () => {
   });
 
   describe('should publish reflection', () => {
-    const newReflection = 'New reflection';
-    const newReflectionId = 'kjzl6kcym7w8ya09ffxtm0db3cvf9rt7fisv4lud1ksyf4sfw55o9dqqc6lbk5l';
-    const authenticatedDID = 'did:pkh:eip155:11155111:0x3dd4dcf15396f2636719447247c45bb3a9506e50';
-    const authenticatedProfile = genProfileByDID({ profileDID: authenticatedDID }).akashaProfile;
     const {
       mocks: reflectFeedMocks,
       profileData: reflectFeedProfileData,
       reflectionData,
     } = getReflectFeedMocks({
       beamId: BEAM_ID,
-      reflectionId: newReflectionId,
-      authorProfileDID: authenticatedDID,
-      reflectionContent: newReflection,
+      reflectionId: NEW_REFLECTION_ID,
+      authorProfileDID: AUTHENTICATED_DID,
+      reflectionContent: NEW_REFLECTION,
       replyTo: REPLY_TO,
       isReply: true,
     });
@@ -147,14 +147,14 @@ describe('< ReflectionPage /> component', () => {
       jest.spyOn(useAkashaStore, 'useAkashaStore').mockReturnValue({
         userStore: getUserStore(),
         data: {
-          authenticatedDID,
-          authenticatedProfile,
+          authenticatedDID: AUTHENTICATED_DID,
+          authenticatedProfile: AUTHENTICATED_PROFILE,
           authenticatedProfileError: null,
           authenticationError: null,
           isAuthenticating: false,
         },
       });
-      jest.spyOn(getEditorValueForTest, 'getEditorValueForTest').mockReturnValue(newReflection);
+      jest.spyOn(getEditorValueForTest, 'getEditorValueForTest').mockReturnValue(NEW_REFLECTION);
       await act(() => {
         renderWithAllProviders(
           BaseComponent,
@@ -164,9 +164,9 @@ describe('< ReflectionPage /> component', () => {
               ...reflectFeedMocks,
               ...mocks,
               ...getReflectEditorMocks({
-                reflectionId: newReflectionId,
-                authorProfileDID: authenticatedDID,
-                content: newReflection,
+                reflectionId: NEW_REFLECTION_ID,
+                authorProfileDID: AUTHENTICATED_DID,
+                content: NEW_REFLECTION,
               }),
               /*@TODO revisit this mock which is needed as a result of refetch on reflect editor */
               {
@@ -178,7 +178,7 @@ describe('< ReflectionPage /> component', () => {
                   data: {
                     node: genReflectionStream({
                       beamId: BEAM_ID,
-                      reflectionId: newReflectionId,
+                      reflectionId: NEW_REFLECTION_ID,
                       isReply: true,
                       replyTo: REPLY_TO,
                     }),
@@ -194,7 +194,7 @@ describe('< ReflectionPage /> component', () => {
                   data: {
                     node: genReflectionStream({
                       beamId: BEAM_ID,
-                      reflectionId: newReflectionId,
+                      reflectionId: NEW_REFLECTION_ID,
                       isReply: true,
                       replyTo: REPLY_TO,
                     }),
@@ -211,7 +211,7 @@ describe('< ReflectionPage /> component', () => {
       const user = userEvent.setup();
       await user.click(screen.getByRole('button', { name: 'Reflect' }));
       await waitFor(() => {
-        expect(screen.getByRole('textbox')).toHaveTextContent(newReflection);
+        expect(screen.getByRole('textbox')).toHaveTextContent(NEW_REFLECTION);
       });
       await userEvent.click(screen.getByRole('button', { name: 'Reflect' }));
       await waitFor(() => {
@@ -223,7 +223,7 @@ describe('< ReflectionPage /> component', () => {
       const user = userEvent.setup();
       await user.click(screen.getByRole('button', { name: 'Reflect' }));
       await waitFor(() => {
-        expect(screen.getByRole('textbox')).toHaveTextContent(newReflection);
+        expect(screen.getByRole('textbox')).toHaveTextContent(NEW_REFLECTION);
       });
       await userEvent.click(screen.getByRole('button', { name: 'Reflect' }));
       await waitFor(() => {
@@ -236,7 +236,7 @@ describe('< ReflectionPage /> component', () => {
         );
         expect(infoBox).toHaveTextContent(truncateDid(reflectFeedProfileData.akashaProfile.did.id));
         expect(infoBox).toHaveTextContent(formatRelativeTime(reflectionData.createdAt, 'en'));
-        expect(getByText(reflectFeed, newReflection)).toBeInTheDocument();
+        expect(getByText(reflectFeed, NEW_REFLECTION)).toBeInTheDocument();
       });
     });
   });

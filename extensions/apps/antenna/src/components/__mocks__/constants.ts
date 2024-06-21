@@ -1,6 +1,20 @@
+import { genProfileByDID } from '@akashaorg/af-testing';
+
 export const BEAM_ID = 'kjzl6kcym7w8y5coci0at0tquy8zmferlog88ys14oj2qgyjy8soxzpbflmlzey';
 
 export const REFLECTION_ID = 'kjzl6kcym7w8yavmnzr502vunhfmsy5mc9hbbiprgpr2sfob4ajzdzcezr5pumq';
+
+export const TAG_FEED = {
+  authorProfileDID: 'did:pkh:eip155:11155111:0xe35ffb3752f6fb15a07ecfa8a1bb65ec51029718',
+  content: 'Beam',
+  reflectionsCount: 1,
+};
+
+export const BEAM_FEED = {
+  authorProfileDID: 'did:pkh:eip155:11155111:0x7fe1697d026268fa519f4df90637cf1ebcccf252',
+  content: 'Beam',
+  reflectionsCount: 1,
+};
 
 export const REFLECT_FEED = {
   authorProfileDID: 'did:pkh:eip155:11155111:0x404ea3f8e4a5fcc8bdcdb7a74f25357113fdf989',
@@ -24,3 +38,18 @@ export const REFLECTION_SECTION = {
 };
 
 export const REPLY_TO = 'kjzl6kcym7w8yavmnzr502vunhfmsy5mc9hbbiprgpr2sfob4ajzdzcezr5pumq';
+
+export const NEW_REFLECTION = 'New reflection';
+
+export const NEW_REFLECTION_ID = 'kjzl6kcym7w8ya09ffxtm0db3cvf9rt7fisv4lud1ksyf4sfw55o9dqqc6lbk5l';
+
+export const AUTHENTICATED_DID =
+  'did:pkh:eip155:11155111:0x3dd4dcf15396f2636719447247c45bb3a9506e50';
+
+export const AUTHENTICATED_PROFILE = genProfileByDID({
+  profileDID: AUTHENTICATED_DID,
+}).akashaProfile;
+
+export const TAG_NAME = 'akasha';
+
+export const TAG_COUNT = 1;

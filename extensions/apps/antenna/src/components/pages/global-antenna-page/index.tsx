@@ -62,6 +62,7 @@ const GlobalAntennaPage: React.FC<unknown> = () => {
           transformSource={transformSource}
         />
         <BeamFeed
+          dataTestId="beam-feed"
           scrollRestorationStorageKey={QueryKeys.GLOBAL_ANTENNA}
           estimatedHeight={150}
           itemSpacing={16}
