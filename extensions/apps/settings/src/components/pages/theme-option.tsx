@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useTheme } from '@akashaorg/ui-awf-hooks';
 import {
   MoonIcon,
   SunIcon,
@@ -9,8 +10,6 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 
 import PageLayout from './base-layout';
-
-import { useTheme } from '@akashaorg/ui-awf-hooks';
 
 export type theme = 'Light-Theme' | 'Dark-Theme';
 
@@ -27,8 +26,8 @@ const ThemeOption: React.FC = () => {
 
   return (
     <PageLayout title={t('Theme')}>
-      <Stack padding="p-4">
-        <Stack direction="row" justify="between" align="center" customStyle="mb-2">
+      <Stack padding="p-4" spacing="gap-y-2">
+        <Stack direction="row" justify="between" align="center">
           <Text weight="bold">{t('What mode are you feeling today?')}</Text>
 
           <Toggle

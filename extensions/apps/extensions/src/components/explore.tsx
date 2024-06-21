@@ -65,7 +65,7 @@ export const Explore: React.FC<TExploreProps> = props => {
   } = props;
 
   return (
-    <Stack spacing="gap-y-4">
+    <Stack spacing="gap-y-4" customStyle="mb-2">
       <Text variant="h5">{titleLabel}</Text>
       {sections.map((section, idx) => (
         <React.Fragment key={section.title + idx}>
