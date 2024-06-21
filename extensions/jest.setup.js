@@ -62,6 +62,10 @@ jest.mock('@akashaorg/awf-sdk', () => () => {
     services: {
       gql: {
         mutationNotificationConfig: { optionName: 'testMutationConfig' },
+        labelTypes: {
+          TAG: 'core#tag',
+        },
+        indexingDID: 'did:key:z3LkgiKkD9NLvLX5FwePrvzvRF2bLmYjDvrd8MbQ5w1VjJ7A',
         contextSources: {
           composeDB: Symbol.for('composeDB'),
           default: Symbol.for('defaultContextSource'),
@@ -126,5 +130,16 @@ mockIntersectionObserver.mockReturnValue({
 
 global.IntersectionObserver = mockIntersectionObserver;
 
-//TODO revisit this mock
 global.scrollTo = jest.fn();
+
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  value: jest.fn().mockImplementation(query => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+    dispatchEvent: jest.fn(),
+  })),
+});

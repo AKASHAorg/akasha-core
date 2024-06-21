@@ -28,6 +28,7 @@ import { useApolloClient } from '@apollo/client';
 import { GetBeamStreamQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 
 export type BeamFeedProps = {
+  dataTestId?: string;
   scrollRestorationStorageKey: string;
   filters?: AkashaBeamFiltersInput;
   sorting?: AkashaBeamSortingInput;
@@ -44,6 +45,7 @@ export type BeamFeedProps = {
 
 const BeamFeed = (props: BeamFeedProps) => {
   const {
+    dataTestId,
     scrollRestorationStorageKey,
     filters,
     sorting,
@@ -169,6 +171,7 @@ const BeamFeed = (props: BeamFeedProps) => {
       {beams && (
         <Card ref={vListContainerRef} type="plain">
           <DynamicInfiniteScroll
+            dataTestId={dataTestId}
             count={beams.length}
             scrollRestorationStorageKey={scrollRestorationStorageKey}
             enableScrollRestoration={true}

@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import getSDK from '@akashaorg/awf-sdk';
 import { hasOwn, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import {
   useGetIndexedStreamCountQuery,
@@ -11,13 +10,15 @@ import {
 import { AkashaIndexedStreamStreamType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { BeamContentResolver, getNsfwFiltersForTagFeed, TagFeed } from '@akashaorg/ui-lib-feed';
 import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
+import getSDK from '@akashaorg/awf-sdk';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TagProfileCard from '@akashaorg/design-system-components/lib/components/TagProfileCard';
 import TagFeedHeaderLoader from './tag-feed-header-loader';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
-import { Helmet, HelmetProvider } from 'react-helmet-async';
+import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 
 type TagFeedPageProps = {
   tagName: string;
@@ -192,31 +193,56 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
             />
           </Stack>
         )}
-        <TagFeed
-          queryKey={queryKey}
-          tags={listOfTags}
-          estimatedHeight={150}
-          itemSpacing={8}
-          filters={{
-            and: [
-              ...tagFilters,
-              {
-                or: getNsfwFiltersForTagFeed({
-                  isLoggedIn,
-                  showNsfw: false,
-                  queryKey,
-                }),
-              },
-            ],
-          }}
-          scrollOptions={{ overScan: 10 }}
-          scrollTopIndicator={(listRect, onScrollToTop) => (
-            <ScrollTopWrapper placement={listRect.left}>
-              <ScrollTopButton hide={false} onClick={onScrollToTop} />
-            </ScrollTopWrapper>
-          )}
-          renderItem={itemData => <BeamContentResolver beamId={itemData.stream} />}
-        />
+        {beamCount === 0 && (
+          <Stack customStyle="mt-8">
+            <InfoCard
+              titleLabel={
+                <>
+                  {t('There is no content found for the ')}
+                  {t('{{topic}}', { topic: listOfTags.length > 1 ? 'topics' : 'topic' })}{' '}
+                  {listOfTags.map(tag => (
+                    <span key={tag}>#{tag} </span>
+                  ))}
+                </>
+              }
+              bodyLabel={
+                <>
+                  {t('Be the first one to create a beam for this topic')}
+                  {'! 🚀'}
+                </>
+              }
+              bodyVariant="body1"
+              assetName="longbeam-notfound"
+            />
+          </Stack>
+        )}
+        {beamCount > 0 && (
+          <TagFeed
+            dataTestId="tag-feed"
+            tags={listOfTags}
+            estimatedHeight={150}
+            itemSpacing={8}
+            filters={{
+              and: [
+                ...tagFilters,
+                {
+                  or: getNsfwFiltersForTagFeed({
+                    isLoggedIn,
+                    showNsfw: false,
+                    queryKey,
+                  }),
+                },
+              ],
+            }}
+            scrollOptions={{ overScan: 10 }}
+            scrollTopIndicator={(listRect, onScrollToTop) => (
+              <ScrollTopWrapper placement={listRect.left}>
+                <ScrollTopButton hide={false} onClick={onScrollToTop} />
+              </ScrollTopWrapper>
+            )}
+            renderItem={itemData => <BeamContentResolver beamId={itemData.stream} />}
+          />
+        )}
       </Stack>
     </HelmetProvider>
   );
