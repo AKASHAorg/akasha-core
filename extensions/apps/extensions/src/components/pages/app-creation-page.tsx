@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
-import routes, { EXTENSIONS } from '../../routes';
+import routes, { MY_EXTENSIONS } from '../../routes';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useCreateAppMutation } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import getSDK from '@akashaorg/awf-sdk';
@@ -40,10 +40,8 @@ export const AppCreationPage: React.FC<unknown> = () => {
               label: 'Cancel',
               disabled: false,
               handleClick: () => {
-                // this one should navigate to My Extensions page, but since that
-                //page is not available yet, it navigates to Extensions page for now
                 navigate({
-                  to: routes[EXTENSIONS],
+                  to: routes[MY_EXTENSIONS],
                 });
               },
             }}
@@ -82,10 +80,9 @@ export const AppCreationPage: React.FC<unknown> = () => {
                         message: t('Extension created successfully!'),
                       },
                     });
-                    // this one should navigate to My Extensions page, but since that
-                    //page is not available yet, it navigates to Extensions page for now
+
                     navigate({
-                      to: routes[EXTENSIONS],
+                      to: routes[MY_EXTENSIONS],
                     });
                   },
                 });
