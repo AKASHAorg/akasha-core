@@ -10,6 +10,12 @@ export type ExtensionImageGalleryProps = {
   toggleOverlay: () => void;
 };
 
+/**
+ * Component used to present the images in the extension info section of the extension app
+ * @param images - a list of images
+ * @param toggleOverlay - handler that toggles the image overlay for zooming in
+ * @param showOverlay - conditional rendering for the zooming overlay
+ */
 const ExtensionImageGallery: React.FC<ExtensionImageGalleryProps> = props => {
   const { images, showOverlay, toggleOverlay } = props;
   const [clickedImg, setClickedImg] = React.useState(null);

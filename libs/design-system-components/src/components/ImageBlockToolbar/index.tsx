@@ -23,6 +23,11 @@ export type ImageBlockToolbar = {
   alignState: 'start' | 'center' | 'end';
 };
 
+/**
+ * Component used in the image editor content block to align images, add captions
+and add/edit images
+ * @param alignState - flexbox alignment state
+ */
 const ImageBlockToolbar: React.FC<ImageBlockToolbar> = props => {
   const {
     handleCaptionClick,

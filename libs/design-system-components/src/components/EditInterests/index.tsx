@@ -34,6 +34,13 @@ export type EditInterestsProps = {
   onFormDirty?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+/**
+ * Component used in the profile app to allow the user to select topics of interest
+ * @param interests - array of available interests used for the autocomplete input
+ * @param myInterests - list of user's already selected interests
+ * @param maxInterests - limit of how many topics a user can choose
+ * @param customStyle - the wrapper form can be customised through this
+ */
 const EditInterests: React.FC<EditInterestsProps> = ({
   title,
   subTitle,

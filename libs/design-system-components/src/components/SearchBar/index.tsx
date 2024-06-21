@@ -1,29 +1,37 @@
 import * as React from 'react';
 import { apply, tw } from '@twind/core';
 
-import Icon, { IconProps } from '@akashaorg/design-system-core/lib/components/Icon';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { MagnifyingGlassIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 export type SearchBarProps = {
   inputValue: string;
   inputPlaceholderLabel?: string;
-  responsive?: boolean;
-  searchInputSize?: string;
-  iconSize?: IconProps['size'];
+  fullWidth?: boolean;
   customStyle?: string;
   onSearch: (keyword: string) => void;
   onKeyUp?: (ev: React.KeyboardEvent<HTMLInputElement>) => void;
   onInputChange: (ev: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
+/**
+ * Component used as input for searches, with state controlled from parent
+ * @param inputValue - text for search
+ * @param inputPlaceholderLabel - style option to display a border only on the bottom
+ * @param fullWidth - style option to expand the input
+ * @param customStyle - add custom tailwind styles for the wrapper
+ * @param onSearch - handler for the search function
+ * @param onKeyUp - handler for extra logic related to key input
+ * @param onInputChange - handler to update the input state
+ */
 const SearchBar: React.FC<SearchBarProps> = props => {
   const {
     inputValue,
     customStyle,
     onInputChange,
     inputPlaceholderLabel,
-    responsive,
+    fullWidth,
     onSearch,
     onKeyUp,
   } = props;
@@ -46,7 +54,7 @@ const SearchBar: React.FC<SearchBarProps> = props => {
       spacing="gap-x-2"
       align="center"
       padding="px-2.5"
-      fullWidth={responsive}
+      fullWidth={fullWidth}
       customStyle={`bg(grey9 dark:grey3) rounded-full focus-within:border focus-within:border-secondaryLight dark:focus-within:border-secondaryDark ${customStyle}`}
     >
       <input

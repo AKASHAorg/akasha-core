@@ -16,6 +16,15 @@ export type EditorPlaceholderType = {
   transformSource: (src: Image) => Image;
 };
 
+/**
+ * Component used as a call to action to redirect the user to the beam editor page
+or to toggle the reflection editor
+ * @param avatar - profile avatar data, an ipfs stored image
+ * @param transformSource - utility function to provide ipfs images with gateways to be accessed
+ * @param profileId - signed in user's profile id, in this case the DID
+ * @param isReflection - sets if it is used for the reflection editor
+ * @param onClick - handler for accessing the editor
+ */
 const EditorPlaceholder: React.FC<EditorPlaceholderType> = props => {
   const {
     avatar,

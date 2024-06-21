@@ -21,6 +21,15 @@ export type StartCardProps = {
   CTALabel?: string;
 };
 
+/**
+ * Component used as a header in the my antenna page
+ * @param showMainArea - boolean to display the main presentation area, defaults true
+ * @param hideMainAreaOnMobile - boolean to hide main presentation area on mobile,
+ * defaults true
+ * @param showSecondaryArea - boolean to display the secondary area
+ * @param noBorderRadius - customise style to edges borders
+ * @param onClickCTA - handler for the main action button
+ */
 const StartCard: React.FC<StartCardProps> = ({
   title,
   subtitle,

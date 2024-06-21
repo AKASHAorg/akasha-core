@@ -11,6 +11,12 @@ export interface IEmbedEntryBox {
   transformSource: (src: Image) => Image;
 }
 
+/**
+ * Component used to display an embeded slate content block in order to repost content
+ * @param embedEntryAuthorData - profile data of the original post that is being embeded
+ * @param transformSource - utility function to provide ipfs images with gateways to be accessed
+ * @param slateContent - text content in the slate.js format
+ */
 const EmbedBox: React.FC<IEmbedEntryBox> = props => {
   const { embedEntryAuthorData, transformSource, slateContent } = props;
   return (

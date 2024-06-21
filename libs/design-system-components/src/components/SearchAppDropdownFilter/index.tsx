@@ -32,6 +32,9 @@ export type IDropdownProps = {
   optgroup?: boolean;
 };
 
+/**
+ * Component used in the search app to filter search criteria
+ */
 const Dropdown: React.FC<IDropdownProps> = ({
   label,
   placeholderLabel,

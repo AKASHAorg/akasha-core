@@ -9,12 +9,21 @@ import SearchBar from '../SearchBar';
 export type OnboardingStartCardProps = {
   inputPlaceholderLabel: string;
   titleLabel: string;
-  buttonLabel?: string;
-  isButtonEnabled?: boolean;
+  buttonLabel: string;
+  isButtonEnabled: boolean;
   handleSearch: (val: string) => void;
   handleButtonClick?: () => void;
 };
 
+/**
+ * Component used in the search app onboarding page to allow the user to search
+ * @param inputPlaceholderLabel - placeholder of search input
+ * @param titleLabel - title of the card
+ * @param buttonLabel - text of the button to navigate user to his feed
+ * @param isButtonEnabled - to enable or disable the nav button
+ * @param handleSearch - handler for the search function
+ * @param handleButtonClick - handler to navigate user to his feed
+ */
 const OnboardingStartCard = ({
   inputPlaceholderLabel,
   titleLabel,
@@ -40,7 +49,7 @@ const OnboardingStartCard = ({
           inputPlaceholderLabel={inputPlaceholderLabel}
           onInputChange={ev => setInputValue(ev.target.value)}
           onSearch={handleSearch}
-          responsive={false}
+          fullWidth={false}
         />
       </Stack>
     </Card>

@@ -21,6 +21,11 @@ export type AppListProps = {
   onAppSelected: (appId: string) => void;
 };
 
+/**
+ * Component that renders a list of apps
+ * @param apps - array of extensions
+ * @param onAppSelected - handler for clicking on an app from the list
+ */
 const AppList: React.FC<AppListProps> = ({ apps, onAppSelected }) => {
   const iconStyle = `shrink-0	${getRadiusClasses(10)} ${getColorClasses(
     { light: 'grey6', dark: 'grey5' },

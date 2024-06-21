@@ -16,6 +16,15 @@ export type SearchStartProps = PropsWithChildren<{
   searchKeyword: string;
 }>;
 
+/**
+ * Component used as a header in the search app
+ * Renders a title, a menu icon, a search input and children
+ * @param titleLabel - text for the title
+ * @param inputPlaceholderLabel - placeholder for the search input
+ * @param handleSearch - handler for the search input
+ * @param handleTopMenuClick - handler for the menu icon
+ * @param searchKeyword - initial search input value
+ */
 const SearchStartCard: React.FC<SearchStartProps> = ({
   titleLabel,
   inputPlaceholderLabel,
@@ -47,7 +56,7 @@ const SearchStartCard: React.FC<SearchStartProps> = ({
         inputPlaceholderLabel={inputPlaceholderLabel}
         onInputChange={ev => setInputValue(ev.target.value)}
         onSearch={handleSearch}
-        responsive={true}
+        fullWidth={true}
       />
       <div>{children}</div>
     </>

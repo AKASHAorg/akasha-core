@@ -23,6 +23,11 @@ const getDotColor = (success: boolean, error: boolean) => {
   return 'bg(secondaryLight dark:secondaryDark)';
 };
 
+/**
+ * Component used in the auth app to showcase the status of wallet connection
+ * @param isSuccess - state of the wallet connection process
+ * @param hasErrors - error state
+ */
 const IndicatorDots: React.FC<TIndicatorDotsProps> = props => {
   const { isSuccess, hasErrors = false } = props;
 

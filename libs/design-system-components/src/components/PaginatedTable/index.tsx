@@ -7,6 +7,9 @@ import Pagination, {
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Table, { TableProps } from '@akashaorg/design-system-core/lib/components/Table';
 
+/**
+ * Component used in the vibes app for data presentation
+ */
 const PaginatedTable: React.FC<TableProps & PaginationProps> = props => {
   return (
     <Stack spacing="gap-y-3">

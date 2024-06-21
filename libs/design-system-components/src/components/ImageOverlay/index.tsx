@@ -24,7 +24,9 @@ const closeDivClass = apply(
 );
 
 /**
- * renders the full screen image modal that is triggered on image click
+ * Component that renders the full screen image modal that is triggered on image click
+ * @param images - list of images
+ * @param clickedImg -  image that was clicked to open the overlay
  */
 const ImageOverlay: React.FC<IImageOverlay> = props => {
   const { clickedImg, images, closeModal } = props;

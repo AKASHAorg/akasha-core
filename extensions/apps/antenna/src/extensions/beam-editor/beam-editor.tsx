@@ -372,7 +372,7 @@ export const BeamEditor: React.FC = () => {
                 onSearch={() => {
                   /** */
                 }}
-                responsive={true}
+                fullWidth={true}
                 customStyle={`${
                   errorMessage
                     ? 'focus-within:border-errorLight dark:focus-within:border-errorDark))'
