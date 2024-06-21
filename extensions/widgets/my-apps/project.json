@@ -19,6 +19,9 @@
         "command": "tsc --build"
       }
     },
+    "test": {
+      "dependsOn": ["@akashaorg/af-testing:prepare", "prepare"]
+    },
     "build": {
       "dependsOn": ["prepare"],
       "executor": "nx:run-commands",

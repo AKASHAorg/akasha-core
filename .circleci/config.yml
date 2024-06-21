@@ -7,7 +7,7 @@ version: 2.1
 setup: true
 
 orbs:
-  continuation: circleci/continuation@0.3.1
+  continuation: circleci/continuation@1.0.0
   node: circleci/node@5.2.0
 
 jobs:
@@ -34,18 +34,18 @@ jobs:
       - run: yarn --version
       - node/install-packages:
           check-cache: detect
-          pkg-manager: yarn-berry
+          pkg-manager: yarn
+          cache-path: ~/project/node_modules
       - run:
           name: Prepare continuation parameters
           command: |
-            #TODO: exclude messaging, af-testing, hup-api, and app loader apps till their tsc and failing tests are fixed
-            export AFFECTED_PROJECTS=$(npx nx print-affected --target=tsc --select=tasks.target.project --base=next --exclude='@akashaorg/app-messaging', '@akashaorg/af-testing', '@akashaorg/hub-api', '@akashaorg/ui-app-loader')
+            export AFFECTED_PROJECTS=$(npx nx show projects --affected --with-target=test --sep=", ")
             export NUM_AFFECTED_PROJECTS=$(echo $AFFECTED_PROJECTS | sed 's/, /\n/g' | wc -l | xargs)
 
             echo '{ "affected-projects": "'$AFFECTED_PROJECTS'", "num-affected-projects": '$NUM_AFFECTED_PROJECTS' }' >> .circleci/continuation-params.json
-#      - continuation/continue:
-#          configuration_path: ./.circleci/continuation.yml
-#          parameters: ./.circleci/continuation-params.json
+      - continuation/continue:
+          configuration_path: ./.circleci/continuation.yml
+          parameters: ./.circleci/continuation-params.json
 
 workflows:
   setup:
