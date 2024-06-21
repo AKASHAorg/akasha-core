@@ -21,6 +21,19 @@ export interface BlockHeaderProps extends IBlockStatusToolbar {
   isFocusedBlock?: boolean;
 }
 
+/**
+ * Component used to display the generic block actions for a content block in the beam editor
+ * @param icon - icon passed down from the content block, specific for each type
+ * @param blockOrder - index of the block in the list of used blocks
+ * @param totalBlocksLength - length of the list of used blocks
+ * @param handleIncreaseBlockOrder - handler to increment the index of the block by 1
+ * @param handleDecreaseBlockOrder - handler to decrement the index of the block by 1
+ * @param handleRemoveBlock - handler to remove the block from the list of used blocks
+ * @param handleNsfwChange - handler to toggle the nsfw status of the block
+ * @param isNsfwCheckboxSelected - pass the nsfw status of the block
+ * @param isFocusedBlock - depends on the focused status of the block, renders certain elements only
+ * for a focused block
+ */
 export const BlockHeader: React.FC<BlockHeaderProps> = props => {
   const {
     icon,

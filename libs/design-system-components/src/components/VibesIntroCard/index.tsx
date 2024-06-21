@@ -17,6 +17,9 @@ export type VibesIntroCardProps = {
   overviewCTAArr: OverviewCTA[];
 };
 
+/**
+ * Component used in the vibes app as a header with links to relevant pages
+ */
 const VibesIntroCard: React.FC<VibesIntroCardProps> = props => {
   const { titleLabel, subtitleLabel, overviewCTAArr } = props;
 

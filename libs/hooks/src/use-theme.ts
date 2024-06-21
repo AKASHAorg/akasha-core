@@ -4,18 +4,23 @@ import { useRootComponentProps } from './use-root-props';
 
 export type theme = 'Light-Theme' | 'Dark-Theme';
 
+interface TUseThemeReturn {
+  theme: theme;
+  propagateTheme: (_theme: theme, setToLocal?: boolean) => void;
+}
+
 /**
  * Hook to check the current theme or set one
  * @example useTheme hook
  * ```typescript
  * const { theme, propagateTheme } = useTheme();
  * ```
- * @returns { theme, propagateTheme } The current theme and a function to set the theme.
- * The `propagateTheme` function takes two parameters: the first one is
- * the theme to be set, and a second (optional) one is a boolean to indicate
- * whether you want to save the theme to local storage as well.
+ * @returns `{ theme, propagateTheme }` The current theme and a function to set the theme.
+ * The `propagateTheme` function takes two parameters:
+ * the first one is the theme to be set, and
+ * a second (optional) one is a boolean to indicate whether you want to save the theme to local storage as well.
  **/
-export const useTheme = () => {
+export const useTheme = (): TUseThemeReturn => {
   const { uiEvents } = useRootComponentProps();
 
   // get the current theme from local storage

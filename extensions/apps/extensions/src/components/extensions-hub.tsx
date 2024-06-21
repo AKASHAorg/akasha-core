@@ -31,7 +31,7 @@ export const ExtensionsHub: React.FC<TExtensionsHubProps> = props => {
   } = props;
 
   return (
-    <Stack spacing="gap-y-4">
+    <Stack spacing="gap-y-4" customStyle="mb-2">
       <Text variant="h5">{titleLabel}</Text>
       <Card padding="p-4">
         <AppList apps={extensions} onAppSelected={onAppClick} />

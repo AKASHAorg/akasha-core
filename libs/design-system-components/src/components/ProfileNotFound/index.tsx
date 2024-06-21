@@ -13,6 +13,12 @@ export type ProfileNotFoundProps = {
   onClickGoToHomepage: () => void;
 };
 
+/**
+ * Component used in the profile app when a profile associated witha  specific DID is not found
+ * @param titleLabel - text for the title
+ * @param buttonLabel - text for the button to navigate the user to homepage
+ * @param onClickGoToHomepage - handler for homepage navigation
+ */
 const ProfileNotFound: React.FC<ProfileNotFoundProps> = ({
   titleLabel,
   buttonLabel,

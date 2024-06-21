@@ -14,6 +14,17 @@ export interface IBlockStatusToolbar {
   handleRetry?: () => void;
 }
 
+/**
+ * Component used to display the block creation status for each block in the beam editor
+ * Used as part of the BlockHeader component
+ * @param blockCreationStatus - status displayed for each block after the action of publishing
+ * a beam is triggered
+ * @param creatingBlockLabel - label for the pending state of block creation
+ * @param successLabel - label for the success state of block creation
+ * @param errorLabel - label for the error state of block creation
+ * @param retryLabel- label for the retry action
+ * @param handleRetry- handler to retry publishing the block in case of an error state
+ */
 const BlockStatusToolbar: React.FC<IBlockStatusToolbar> = props => {
   const {
     creatingBlockLabel,

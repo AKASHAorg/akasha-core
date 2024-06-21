@@ -197,4 +197,76 @@ const genContentBlock = ({ blockId, content, authorProfileDID }: IGenContentBloc
   };
 };
 
-export { genBeamSlate, genBeamStream, genContentBlock, genBeamData };
+interface IGetIndexedStream {
+  streamId: string;
+  pageInfo?: {
+    startCursor: string;
+    endCursor: string;
+    hasPreviousPage: boolean;
+    hasNextPage: boolean;
+  };
+}
+
+const getIndexedStream = ({
+  streamId,
+  pageInfo = {
+    startCursor:
+      'eyJ0eXBlIjoiY29udGVudCIsImlkIjoiazJ0Nnd6aGtoYWJ6MGs3YnVsNWVscW1zeWZwbDV5enNyb3N1cmk4aW10MDZtaHVsajN5OGx1ZTJoa2Jid28iLCJ2YWx1ZSI6eyJjcmVhdGVkQXQiOiIyMDI0LTA1LTIxVDE0OjQ3OjA3LjM0M1oifX0',
+    endCursor:
+      'eyJ0eXBlIjoiY29udGVudCIsImlkIjoiazJ0Nnd6aGtoYWJ6MWhuMXYxb3F4c2Y3NnF4ajNnZ2ViYXo5Y3ZkMmQ5bzBoaHBpYjl2ODF6aXR2ZG1mbXUiLCJ2YWx1ZSI6eyJjcmVhdGVkQXQiOiIyMDI0LTA1LTIxVDE0OjMwOjM0LjA1NFoifX0',
+    hasPreviousPage: false,
+    hasNextPage: false,
+  },
+}: IGetIndexedStream) => {
+  return {
+    akashaIndexedStreamList: {
+      edges: [
+        {
+          node: {
+            createdAt: '2024-05-21T14:47:07.343Z',
+            active: true,
+            status: null,
+            indexValue: 'fasfas',
+            indexType: 'core#tag',
+            stream: streamId,
+            streamType: 'BEAM',
+            moderationID: null,
+            __typename: 'AkashaIndexedStream',
+          },
+          cursor:
+            'eyJ0eXBlIjoiY29udGVudCIsImlkIjoiazJ0Nnd6aGtoYWJ6MGs3YnVsNWVscW1zeWZwbDV5enNyb3N1cmk4aW10MDZtaHVsajN5OGx1ZTJoa2Jid28iLCJ2YWx1ZSI6eyJjcmVhdGVkQXQiOiIyMDI0LTA1LTIxVDE0OjQ3OjA3LjM0M1oifX0',
+          __typename: 'AkashaIndexedStreamEdge',
+        },
+      ],
+      pageInfo: {
+        ...pageInfo,
+        __typename: 'PageInfo',
+      },
+      __typename: 'AkashaIndexedStreamConnection',
+    },
+    akashaIndexedStreamListCount: 1,
+    isViewer: false,
+    __typename: 'CeramicAccount',
+  };
+};
+
+interface IGetIndexedStreamCount {
+  count: number;
+}
+
+const genIndexedStreamCount = ({ count }: IGetIndexedStreamCount) => {
+  return {
+    akashaIndexedStreamListCount: count,
+    isViewer: false,
+    __typename: 'CeramicAccount',
+  };
+};
+
+export {
+  genBeamSlate,
+  genBeamStream,
+  genContentBlock,
+  genBeamData,
+  getIndexedStream,
+  genIndexedStreamCount,
+};

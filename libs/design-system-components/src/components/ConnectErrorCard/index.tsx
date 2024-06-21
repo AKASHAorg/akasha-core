@@ -12,7 +12,12 @@ export type ConnectErrorCardProps = {
   message: string;
   action?: { onClick: () => void; label: string };
 };
-
+/**
+ * Component used to display an error message in the auth app
+ * @param title - title of the error
+ * @param message - message of the error
+ * @param action - generic handler
+ */
 const ConnectErrorCard: React.FC<ConnectErrorCardProps> = ({ title, message, action }) => {
   return (
     <Card

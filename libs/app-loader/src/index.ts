@@ -3,7 +3,6 @@ import {
   ContentBlockEvents,
   ExtensionEvents,
   IAppConfig,
-  INTEGRATION_TYPES,
   IntegrationRegistrationOptions,
   PluginConf,
   RootComponentProps,
@@ -34,6 +33,7 @@ import {
 import EventBus from '@akashaorg/awf-sdk/src/common/event-bus';
 import { APP_EVENTS, AUTH_EVENTS } from '@akashaorg/typings/lib/sdk';
 import { IntegrationSchema } from '@akashaorg/awf-sdk/src/db/integrations.schema';
+import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 const isWindow = window && typeof window !== 'undefined';
 
@@ -155,8 +155,11 @@ export default class AppLoader {
           `Multiple sources found for integration ${manifest.name}. Using ${manifest.sources[0]}`,
         );
       }
-      const source = manifest.sources[0];
-      const module = await System.import<SystemModuleType>(source);
+      const source = getSDK().services.common.ipfs.buildOriginLink(manifest.sources[0]);
+      const mainFile = manifest?.manifestData?.mainFile || 'index.js';
+      // does not play well with local overwrites
+      //const sourceURL = new URL(mainFile, source);
+      const module = await System.import<SystemModuleType>(`${source}/${mainFile}`);
       modules.set(manifest.name, module);
     }
     return modules;
@@ -301,13 +304,13 @@ export default class AppLoader {
           });
         }
         const manifest = this.manifests.find(man => man.name === name);
-        if (manifest && manifest.integrationType === INTEGRATION_TYPES.WIDGET) {
+        if (manifest && manifest.integrationType === AkashaAppApplicationType.Widget) {
           this.uiEvents.next({
             event: WidgetEvents.RegisterWidget,
             data: { ...config, appName: name },
           });
         }
-        if (manifest && manifest.integrationType === INTEGRATION_TYPES.APPLICATION) {
+        if (manifest && manifest.integrationType === AkashaAppApplicationType.App) {
           this.uiEvents.next({
             event: AppEvents.RegisterApplication,
             data: { config, manifest },
@@ -347,7 +350,7 @@ export default class AppLoader {
       if (!conf.loadingFn || typeof conf.loadingFn !== 'function') continue;
 
       const manifest = this.manifests.find(m => m.name === name);
-      if (manifest.integrationType !== INTEGRATION_TYPES.APPLICATION) continue;
+      if (manifest.integrationType !== AkashaAppApplicationType.App) continue;
 
       const customProps: RootComponentProps & { domElementGetter: () => HTMLElement } = {
         domElementGetter: () => getDomElement(conf, name, this.logger),
