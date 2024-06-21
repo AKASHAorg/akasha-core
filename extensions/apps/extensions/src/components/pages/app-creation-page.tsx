@@ -65,6 +65,14 @@ export const AppCreationPage: React.FC<unknown> = () => {
                     },
                   },
                   onError: err => {
+                    if (
+                      err.message.includes('data/displayName must NOT have fewer than 4 characters')
+                    ) {
+                      setErrorMessage({
+                        fieldName: FieldName.extensionName,
+                        message: 'Must be at least 4 characters',
+                      });
+                    }
                     if (err.message.includes('Immutable field')) {
                       setErrorMessage({
                         fieldName: FieldName.extensionID,

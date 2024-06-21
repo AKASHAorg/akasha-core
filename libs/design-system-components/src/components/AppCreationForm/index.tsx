@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 import * as z from 'zod';
 import { Controller } from 'react-hook-form';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
@@ -49,8 +49,8 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
     control,
     setError,
     clearErrors,
-    handleSubmit,
-    formState: { errors, isDirty, isValid },
+    getValues,
+    formState: { errors, dirtyFields },
   } = useForm<AppCreationFormValues>({
     defaultValues,
     resolver: zodResolver(schema),
@@ -70,15 +70,23 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
     { id: '2', type: AkashaAppApplicationType.Other, title: 'Extension' },
     { id: '3', type: AkashaAppApplicationType.Widget, title: 'Widget' },
   ];
+  const isFormDirty =
+    Object.keys(dirtyFields).includes(FieldName.extensionID) &&
+    Object.keys(dirtyFields).includes(FieldName.extensionName);
+  const isValid = !Object.keys(errors).length;
 
-  const onSubmit = data => {
-    if (isValid && isDirty) {
-      createButton.handleClick(data);
+  const onSave = (event: SyntheticEvent) => {
+    event.preventDefault();
+    const formValues = getValues();
+    if (isValid && isFormDirty) {
+      createButton.handleClick({
+        ...formValues,
+      });
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className={tw(apply`h-full`)}>
+    <form onSubmit={onSave} className={tw(apply`h-full`)}>
       <Stack direction="column" spacing="gap-y-4">
         <Stack padding="px-4 pb-16" spacing="gap-y-4">
           <Controller
@@ -93,7 +101,7 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
                 setSelected={onChange}
                 ref={ref}
                 required={true}
-                requiredFieldAsteriskColor="red-500"
+                requiredFieldAsteriskColor={{ light: 'errorLight', dark: 'errorDark' }}
               />
             )}
             defaultValue={extensionTypes[0]}
@@ -102,17 +110,7 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
           <Controller
             control={control}
             name={FieldName.extensionID}
-            render={({
-              field: {
-                name,
-                value,
-                onChange = () => {
-                  clearErrors(FieldName.extensionID);
-                },
-                ref,
-              },
-              fieldState: { error },
-            }) => (
+            render={({ field: { name, value, onChange, ref }, fieldState: { error } }) => (
               <TextField
                 id={name}
                 type="text"
@@ -125,7 +123,7 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
                 onChange={onChange}
                 inputRef={ref}
                 required={true}
-                requiredFieldAsteriskColor="red-500"
+                requiredFieldAsteriskColor={{ light: 'errorLight', dark: 'errorDark' }}
               />
             )}
             defaultValue=""
@@ -147,7 +145,7 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
                 onChange={onChange}
                 inputRef={ref}
                 required={true}
-                requiredFieldAsteriskColor="red-500"
+                requiredFieldAsteriskColor={{ light: 'errorLight', dark: 'errorDark' }}
               />
             )}
             defaultValue=""
@@ -165,8 +163,8 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
             variant="primary"
             label={createButton.label}
             loading={createButton.loading}
-            disabled={isValid ? !isDirty : true}
-            onClick={handleSubmit(onSubmit)}
+            disabled={isValid ? !isFormDirty : true}
+            onClick={onSave}
             type="submit"
           />
         </Stack>
