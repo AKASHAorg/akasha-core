@@ -26,12 +26,13 @@ async function saveSettings({
 
 /**
  * Hook to save app's settings using sdk settings service
- * @param app - string: The app's name for example \@akashaorg/app-extensions
- * @param options - Array of option pairs [optionName, value]
  * @example useSaveSettings hook
  * ```typescript
  * const { saveNotificationSettings } = useSaveSettings();
- * saveNotificationSettings({ app: '@akashaorg/app-extensions', options: [['key', 'value']] })
+ * saveNotificationSettings(
+ *  { app: '@akashaorg/app-extensions', options: NotificationsOptions },
+ *  callback: {onComplete: () => void}
+ *  )
  * ```
  */
 export function useSaveSettings() {
@@ -126,7 +127,7 @@ export function useGetSettings(app: string) {
 /**
  * Hook to get the indexing DID used by the SDK's GraphQL client.
  *
- * @returns {string} The indexing DID currently used by the SDK's GraphQL client.
+ * @returns string - The indexing DID currently used by the SDK's GraphQL client.
  *
  * @example
  * const currentIndexingDID = useGetIndexingDID();
