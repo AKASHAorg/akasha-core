@@ -7,7 +7,15 @@ import {
   redirect,
 } from '@tanstack/react-router';
 import { CreateRouter, RouterContext } from '@akashaorg/typings/lib/ui';
-import { ExplorePage, ExtensionsHubPage, InfoPage, InstalledExtensionsPage } from '../pages';
+import {
+  ExplorePage,
+  ExtensionsHubPage,
+  InfoPage,
+  InstalledExtensionsPage,
+  MyExtensionsPage,
+  DeveloperModePage,
+  DevMode,
+} from '../pages';
 import {
   DevInfoPage,
   CollaboratorsPage,
@@ -20,7 +28,8 @@ import {
   AppDescriptionPage,
 } from '../pages/sub-pages';
 import ErrorComponent from './error-component';
-import routes, { EXTENSIONS, INSTALLED, HOME } from '../../routes';
+import routes, { EXTENSIONS, INSTALLED, HOME, MY_EXTENSIONS, DEVELOPER_MODE } from '../../routes';
+import { DEV_MODE_KEY } from '../../constants';
 
 const rootRoute = createRootRouteWithContext<RouterContext>()({
   component: Outlet,
@@ -50,6 +59,23 @@ const installedExtensionsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[INSTALLED],
   component: InstalledExtensionsPage,
+});
+
+const MyExtensionsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: routes[MY_EXTENSIONS],
+  beforeLoad: () => {
+    if (window.localStorage.getItem(DEV_MODE_KEY) !== DevMode.ENABLED) {
+      throw redirect({ to: routes[HOME], replace: true });
+    }
+  },
+  component: MyExtensionsPage,
+});
+
+const DeveloperModeRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: routes[DEVELOPER_MODE],
+  component: DeveloperModePage,
 });
 
 const infoRoute = createRoute({
@@ -147,6 +173,8 @@ const routeTree = rootRoute.addChildren([
   exploreRoute,
   extensionsHubRoute,
   installedExtensionsRoute,
+  MyExtensionsRoute,
+  DeveloperModeRoute,
   infoRoute,
   devInfoRoute,
   collaboratorsInfoRoute,
