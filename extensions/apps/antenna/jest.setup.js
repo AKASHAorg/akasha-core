@@ -38,4 +38,8 @@ jest.mock('@akashaorg/typings/lib/ui', () => ({
   NotificationTypes: {
     Alert: 'alert',
   },
+  QueryKeys: {
+    MY_ANTENNA: 'antenna_my-antenna',
+    GLOBAL_ANTENNA: 'app-antenna_general-antenna',
+  },
 }));
