@@ -38,6 +38,8 @@ export type DropdownProps = {
  * @param selected - (optional) selected item by default
  * @param menuItems - a list of menu items to be displayed on activation
  * @param setSelected - handler function to set the selected item
+ * @param requiredFieldAsteriskColor - (optional) set the color of the asterisk symbol in case this component
+ * is used in a form and it is a required field
  * ```tsx
  *  <Dropdown
  *    name='dropdown'
@@ -51,16 +53,17 @@ export type DropdownProps = {
  *   />
  * ```
  **/
-const Dropdown: React.FC<DropdownProps> = ({
-  label,
-  placeholderLabel,
-  menuItems,
-  selected,
-  setSelected,
-  ref,
-  required,
-  requiredFieldAsteriskColor,
-}) => {
+const Dropdown: React.FC<DropdownProps> = React.forwardRef((props, ref) => {
+  const {
+    label,
+    placeholderLabel,
+    menuItems,
+    selected,
+    setSelected,
+    required,
+    requiredFieldAsteriskColor,
+  } = props;
+
   const [dropOpen, setDropOpen] = React.useState<boolean>(false);
 
   React.useEffect(() => {
@@ -172,6 +175,6 @@ const Dropdown: React.FC<DropdownProps> = ({
       )}
     </Stack>
   );
-};
+});
 
 export default Dropdown;
