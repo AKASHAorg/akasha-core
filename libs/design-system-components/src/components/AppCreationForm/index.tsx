@@ -92,7 +92,7 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
           <Controller
             control={control}
             name={FieldName.extensionType}
-            render={({ field: { name, value = extensionTypes[0], onChange, ref } }) => (
+            render={({ field: { name, value, onChange, ref } }) => (
               <DropDown
                 label="Extension Type"
                 name={name}
