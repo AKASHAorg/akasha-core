@@ -20,8 +20,8 @@ export enum FieldName {
 
 type AppCreationFormValues = {
   extensionType: { id: string; type: AkashaAppApplicationType; title: string };
-  extensionID: '';
-  extensionName: '';
+  extensionID: string;
+  extensionName: string;
 };
 
 export type AppCreationFormProps = {
