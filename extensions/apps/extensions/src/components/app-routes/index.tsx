@@ -15,6 +15,7 @@ import {
   MyExtensionsPage,
   DeveloperModePage,
   DevMode,
+  AppCreationPage,
 } from '../pages';
 import {
   DevInfoPage,
@@ -28,7 +29,14 @@ import {
   AppDescriptionPage,
 } from '../pages/sub-pages';
 import ErrorComponent from './error-component';
-import routes, { EXTENSIONS, INSTALLED, HOME, MY_EXTENSIONS, DEVELOPER_MODE } from '../../routes';
+import routes, {
+  EXTENSIONS,
+  INSTALLED,
+  HOME,
+  MY_EXTENSIONS,
+  DEVELOPER_MODE,
+  APP_CREATE,
+} from '../../routes';
 import { DEV_MODE_KEY } from '../../constants';
 
 const rootRoute = createRootRouteWithContext<RouterContext>()({
@@ -168,6 +176,14 @@ const appDescriptionRoute = createRoute({
   },
 });
 
+const extensionCreateRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: routes[APP_CREATE],
+  component: () => {
+    return <AppCreationPage />;
+  },
+});
+
 const routeTree = rootRoute.addChildren([
   defaultRoute,
   exploreRoute,
@@ -185,6 +201,7 @@ const routeTree = rootRoute.addChildren([
   appLicenseInfoRoute,
   supportInfoRoute,
   appDescriptionRoute,
+  extensionCreateRoute,
 ]);
 
 export const router = ({ baseRouteName, apolloClient }: CreateRouter) =>

@@ -4,6 +4,7 @@ export const INSTALLED = 'Installed Extensions';
 export const MY_EXTENSIONS = 'My Extensions';
 export const DEVELOPER_MODE = 'Developer Mode';
 export const INFO = 'info';
+export const APP_CREATE = 'create';
 
 export default {
   [HOME]: '/explore',
@@ -12,4 +13,5 @@ export default {
   [MY_EXTENSIONS]: '/my-extensions',
   [DEVELOPER_MODE]: '/developer-mode',
   [INFO]: '/info/$appId',
+  [APP_CREATE]: '/extensions/create',
 };
