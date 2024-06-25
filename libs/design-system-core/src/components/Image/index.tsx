@@ -13,7 +13,7 @@ export type ImageProps = PropsWithChildren<
  * The component makes use of lazy loading and async decoding so that the browser will
  * only load your image when needed and decode it asyncronously so as to avoid blocking
  * other elements from rendering.
- * The Image component accepts all the props a normal HTML <img> tag accepts, plus more:
+ * The Image component accepts all the props a normal HTML \<img\> tag accepts, plus more:
  * @param customStyle - (optional) apply your custom styling (Make sure to use standard Tailwind classes)
  * @param dataTestId - (optional) useful when writing tests for the component
  * @example
