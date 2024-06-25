@@ -1,4 +1,4 @@
-import { GetUserInfo, IUserStore } from './store';
+import { IUserStore } from './store';
 
 export interface IPluginsMap {
   [namespace: string]: any;
@@ -9,6 +9,13 @@ export interface PluginConf {
     [key: string]: unknown;
   };
 }
+
+/**
+ * Type defining param of a function which fetches profile info
+ **/
+export type GetUserInfo = {
+  profileDID: string;
+};
 
 /**
  * Interface defining method for fetching profile info inside a profile plugin

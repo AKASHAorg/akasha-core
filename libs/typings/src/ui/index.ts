@@ -19,7 +19,7 @@ export * from './ui-events';
 export * from './widgets';
 export * from './icon';
 export * from './colors';
-export * from './extensions';
+export * from './extension-point';
 export * from './editor-blocks';
 export * from './media';
 export * from './store';

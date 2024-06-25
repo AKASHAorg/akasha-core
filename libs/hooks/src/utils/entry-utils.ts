@@ -2,7 +2,7 @@ import getSDK from '@akashaorg/awf-sdk';
 import { Logger } from '@akashaorg/awf-sdk';
 import type {
   BeamEntryData,
-  RawEntryData,
+  RawBeamData,
   ReflectEntryData,
   SlateDescendant,
 } from '@akashaorg/typings/lib/ui';
@@ -79,7 +79,7 @@ export const mapReflectEntryData = (
 /**
  * Utility to map beam entry data
  */
-export const mapBeamEntryData = (beam?: RawEntryData): BeamEntryData => {
+export const mapBeamEntryData = (beam?: RawBeamData): BeamEntryData => {
   if (!beam) return null;
   const sdk = getSDK();
   return {

@@ -5,10 +5,6 @@ type Login = {
   checkRegistered?: boolean;
 };
 
-export type GetUserInfo = {
-  profileDID: string;
-};
-
 /**
  * Interface defining the state of a user store
  */

@@ -1,5 +1,8 @@
 import * as HeroIcons from '@heroicons/react/24/outline';
 
+/**
+ * Type defining icon types used in a design system
+ **/
 export type IconType =
   | keyof typeof HeroIcons
   | 'Akasha'

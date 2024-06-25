@@ -1,3 +1,6 @@
+/**
+ * Type defining colors used in design system
+ **/
 export type Colors =
   | 'transparent'
   | 'primary'

@@ -3,10 +3,17 @@ import { ReactEditor } from 'slate-react';
 import { HistoryEditor } from 'slate-history';
 import { Profile } from './profile';
 
-export type EmptyText = {
+/**
+ * Type defining empty text
+ * @internal
+ */
+type EmptyText = {
   text: string;
 };
 
+/**
+ * Type defining hyperlink element of an editor
+ */
 export type LinkElement = {
   type: 'link';
   align?: 'left' | 'center' | 'right';
@@ -14,6 +21,9 @@ export type LinkElement = {
   children: EmptyText[];
 };
 
+/**
+ * Type defining mention element of an editor
+ */
 export type MentionElement = {
   type: 'mention';
   name?: string;
@@ -23,6 +33,9 @@ export type MentionElement = {
   align?: 'left' | 'center' | 'right';
 };
 
+/**
+ * Type defining tag element of an editor
+ */
 export type TagElement = {
   type: 'tag';
   name: string;
@@ -37,24 +50,36 @@ export type ParagraphElement = {
   children: CustomText[];
 };
 
+/**
+ * Type defining list element of an editor
+ */
 export type ListItemElement = {
   type: 'list-item';
   align?: 'left' | 'center' | 'right';
   children: CustomText[];
 };
 
+/**
+ * Type defining bulleted list element of an editor
+ */
 export type BulletedListElement = {
   type: 'bulleted-list';
   align?: 'left' | 'center' | 'right';
   children: CustomText[];
 };
 
+/**
+ * Type defining numbered list element of an editor
+ */
 export type NumberedListElement = {
   type: 'numbered-list';
   align?: 'left' | 'center' | 'right';
   children: CustomText[];
 };
 
+/**
+ * Type defining custom element of an editor
+ */
 export type CustomElement =
   | LinkElement
   | MentionElement
@@ -64,6 +89,9 @@ export type CustomElement =
   | BulletedListElement
   | NumberedListElement;
 
+/**
+ * Type defining custom text configuration object of an editor
+ */
 export type CustomText = {
   bold?: boolean;
   italic?: boolean;
@@ -72,7 +100,14 @@ export type CustomText = {
   text: string;
 };
 
+/**
+ * Type defining custom editor object
+ */
 export type CustomEditor = BaseEditor & ReactEditor & HistoryEditor;
+
+/**
+ * Alias of Descendant type
+ */
 export type SlateDescendant = Descendant;
 
 declare module 'slate' {

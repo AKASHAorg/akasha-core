@@ -9,10 +9,12 @@ import type { IPluginsMap } from './plugins';
 import type { WorldConfig, QueryStringType, LayoutConfig } from './app-loader';
 import type { ILogger } from '../sdk/log';
 
+/**
+ * Interface defining props shared via root component provider which are available for all apps and widgets
+ **/
 export interface RootComponentProps {
   activeWhen?: { path: string };
   domElement?: HTMLElement;
-  domElementGetter?: () => HTMLElement;
   uiEvents: Subject<UIEventData>;
   i18next?: typeof i18n;
   plugins?: Record<string, IPluginsMap>;
@@ -21,16 +23,20 @@ export interface RootComponentProps {
   name?: string;
   singleSpa: typeof singleSpa;
   baseRouteName: string;
+  worldConfig: WorldConfig;
+  domElementGetter?: () => HTMLElement;
   navigateToModal: (opts: ModalNavigationOptions) => void;
   getModalFromParams: (location: Location) => { name: string; message?: string; title?: string };
   getAppRoutes?: (appId: string) => IAppConfig['routes'];
-  worldConfig: WorldConfig;
   parseQueryString: (queryString: string) => QueryStringType;
   encodeAppName: (name: string) => string;
   decodeAppName: (name: string) => string;
   children?: React.ReactNode;
 }
 
+/**
+ * Interface defining props of an extension point component
+ **/
 export interface RootExtensionProps<D = Record<string, unknown>> extends RootComponentProps {
   extensionData: D;
 }

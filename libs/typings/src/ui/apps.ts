@@ -1,14 +1,20 @@
+import singleSpa from 'single-spa';
 import { ActivityFn } from './app-loader';
 import { IMenuItem } from './sidebar-menu-items';
-import singleSpa from 'single-spa';
 import { RootComponentProps } from './root-component';
 import { ContentBlockExtensionInterface } from './editor-blocks';
-import { ExtensionInterface } from './extensions';
+import { ExtensionInterface } from './extension-point';
 
+/**
+ * Enum defining events related to loading and unloading of an app
+ **/
 export const enum AppEvents {
   RegisterApplication = 'register-application',
 }
 
+/**
+ * Type defining metadata info about an extension
+ **/
 export type ManifestConfig = {
   id?: string | null;
   name: string;
@@ -33,20 +39,27 @@ export type ManifestConfig = {
   };
 };
 
+/**
+ * Type defining app registration event
+ **/
 export type AppRegisterEvent = {
   event: AppEvents.RegisterApplication;
   data: { config: IAppConfig; manifest: ManifestConfig };
 };
-export type InstalledAppStorePlugin = {
-  getInstalledApps: () => {
-    config: IAppConfig;
-    manifest: ManifestConfig;
-  }[];
-};
+
+/**
+ * Type defining list of extensions
+ **/
 export type Extensions = { [key: string]: string };
 
+/**
+ * Type defining app name
+ **/
 export type AppName = string;
 
+/**
+ * Type defining app loading configuration object
+ **/
 export interface IAppConfig {
   /**
    * Optional property.

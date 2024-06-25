@@ -1,8 +1,14 @@
+/**
+ * Type defining analytics event types
+ **/
 export enum AnalyticsEventTypes {
   ENABLE_TRACKING = 'analytics:enable-tracking',
   TRACK_EVENT = 'analytics:track-event',
 }
 
+/**
+ * Type defining analytics event data
+ **/
 export type AnalyticsEventData = {
   event: AnalyticsEventTypes;
   data: {
@@ -13,6 +19,9 @@ export type AnalyticsEventData = {
   };
 };
 
+/**
+ * Type defining analytics event categories
+ **/
 export enum AnalyticsCategories {
   APPS = 'Apps',
   BROWSE = 'Browse',

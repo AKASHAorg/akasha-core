@@ -1,5 +1,8 @@
 export type Image = { height: number; width: number; src: string };
 
+/**
+ * Type defining image object
+ **/
 export type ImageObject = {
   originalSrc?: string;
   src: string;

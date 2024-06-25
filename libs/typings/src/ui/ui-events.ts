@@ -1,14 +1,20 @@
 import { IMenuItem } from './sidebar-menu-items';
 import { ContentBlockRegisterEvent } from './editor-blocks';
 import { AnalyticsEventData } from './analytics';
-import { ExtensionRegisterEvent } from './extensions';
+import { ExtensionRegisterEvent } from './extension-point';
 import { WidgetRegisterEvent } from './widgets';
 import { AppRegisterEvent } from './apps';
 
+/**
+ * Enum defining events related to loading and unloading of global routes
+ **/
 export const enum RouteRegistrationEvents {
   RegisterRoutes = 'register-routes',
 }
 
+/**
+ * Type defining route registration event
+ **/
 export type RoutesRegisterEvent = {
   event: RouteRegistrationEvents;
   data: {
@@ -19,10 +25,16 @@ export type RoutesRegisterEvent = {
   };
 };
 
+/**
+ * Enum defining events related to theming
+ **/
 export const enum ThemingEvents {
   ThemeChange = 'theme-change',
 }
 
+/**
+ * Type defining theming evening object
+ **/
 export type ThemingEvent = {
   event: ThemingEvents;
   data: {
@@ -30,12 +42,18 @@ export type ThemingEvent = {
   };
 };
 
+/**
+ * Enum defining notification events
+ **/
 export const enum NotificationEvents {
   ShowNotification = 'show-notification',
   SnoozeNotifications = 'snooze-notifications',
   UnsnoozeNotifications = 'unsnooze-notifications',
 }
 
+/**
+ * Enum defining notification types
+ **/
 export const enum NotificationTypes {
   Info = 'info',
   Alert = 'alert',
@@ -44,6 +62,9 @@ export const enum NotificationTypes {
   Error = 'error',
 }
 
+/**
+ * Type defining notification event object
+ **/
 export type NotificationEvent = {
   event: NotificationEvents;
   data?: {
@@ -53,6 +74,9 @@ export type NotificationEvent = {
   };
 };
 
+/**
+ * Enum defining global event types
+ **/
 export enum EventTypes {
   Instantiated = 'instantiated',
   InstallIntegration = 'install-integration',
@@ -66,6 +90,9 @@ export enum EventTypes {
   GoBackToPreviousRoute = 'routing:go-back-to-previous-route',
 }
 
+/**
+ * Enum defining entity types
+ **/
 export const enum EntityTypes {
   BEAM = 0,
   PROFILE = 1,
@@ -75,16 +102,8 @@ export const enum EntityTypes {
 }
 
 /**
-  To be used as per example `EntityTypesMap[EntityTypes.BEAM]` to get the name of the entity type
- */
-export const EntityTypesMap = {
-  [EntityTypes.BEAM]: 'beam',
-  [EntityTypes.PROFILE]: 'profile',
-  [EntityTypes.REFLECT]: 'reflect',
-  [EntityTypes.TAG]: 'tag',
-  [EntityTypes.ARTICLE]: 'article',
-};
-
+ * Type defining global event data object
+ **/
 export type EventDataTypes = {
   //profile stream id
   profileID?: string;
@@ -96,6 +115,9 @@ export type EventDataTypes = {
   itemType?: EntityTypes;
 };
 
+/**
+ * Type defining global UI event data object
+ **/
 // @TODO: split EventTypes with their respective EventDataTypes as the example below
 export type UIEventData =
   | {

@@ -4,12 +4,19 @@ import { Extensions } from './apps';
 import { PluginConf } from './plugins';
 import { AkashaAppApplicationType } from '../sdk/graphql-types-new';
 
+/**
+ * Type defining single-spa activity function
+ * @see {@link https://single-spa.js.org/docs/configuration/#configactivewhen}
+ */
 export type ActivityFn = (
   location: Location,
   pathToActiveWhen: (path: string, exact?: boolean) => (location: Location) => boolean,
   layoutConfig?: Extensions,
 ) => boolean;
 
+/**
+ * Type defining layout slots where apps and widgets are mounted
+ */
 export type LayoutConfig = {
   /**
    * load modals inside this node
@@ -46,6 +53,9 @@ export type LayoutConfig = {
   snackbarNotifSlotId?: string;
 };
 
+/**
+ * Type defining the params of a register function
+ */
 export interface IntegrationRegistrationOptions {
   worldConfig: {
     title: string;
@@ -57,16 +67,9 @@ export interface IntegrationRegistrationOptions {
   logger: unknown;
 }
 
-export enum LogLevels {
-  FATAL = 'fatal',
-  ERROR = 'error',
-  WARN = 'warn',
-  INFO = 'info',
-  DEBUG = 'debug',
-  TRACE = 'trace',
-}
-
-
+/**
+ * Type defining extension info
+ **/
 export type ExtensionConfig = {
   name: string;
   id?: string;
@@ -82,7 +85,7 @@ export type ExtensionConfig = {
 };
 
 /**
- * World configuration object
+ * Type defining world configuration object
  */
 export type WorldConfig = {
   /**
@@ -123,6 +126,9 @@ export type WorldConfig = {
   socialLinks?: { icon: IconType; link: string }[];
 };
 
+/**
+ * Type defining query string
+ **/
 export interface QueryStringType {
   [key: string]: string | string[] | unknown | undefined;
 }

@@ -5,27 +5,37 @@ import {
   AkashaFollow,
 } from '../sdk/graphql-types-new';
 
+/**
+ * Type defining profile info
+ **/
 export type AkashaProfile = Omit<ProfileData, 'followers' | 'did' | 'followersCount'> & {
   did: Partial<CeramicAccount>;
   followers?: AkashaFollowConnection;
   followersCount?: number;
 };
 
+/**
+ * Alias to AkashaProfile type
+ **/
 export type Profile = AkashaProfile;
 
-export enum ProfileProviders {
-  EWA_BASIC = 'ewa.providers.basic',
-  ENS = 'ewa.providers.ens',
-}
-
+/**
+ * Type defining profile image types
+ **/
 export type ProfileImageType = 'avatar' | 'cover-image';
 
+/**
+ * Type defining follower info list
+ **/
 export type AkashaFollowers = {
   id: AkashaFollow['id'];
   isFollowing: AkashaFollow['isFollowing'];
   did?: { [key in keyof Pick<CeramicAccount, 'akashaProfile'>]: AkashaProfile };
 }[];
 
+/**
+ * Type defining following info list
+ **/
 export type AkashaFollowing = {
   id: AkashaFollow['id'];
   isFollowing: AkashaFollow['isFollowing'];
@@ -33,6 +43,9 @@ export type AkashaFollowing = {
   did?: { id: string };
 }[];
 
+/**
+ * Type defining  follow document which represents either followers or following info
+ **/
 export type AkashaFollowDocument = {
   id: AkashaFollow['id'];
   isFollowing: AkashaFollow['isFollowing'];
@@ -40,4 +53,7 @@ export type AkashaFollowDocument = {
   profileID: AkashaFollow['profileID'];
 };
 
+/**
+ * Type defining  follow list which is a map of profile ID and AkashaFollowDocument
+ **/
 export type FollowList = Map<string, AkashaFollowDocument>;

@@ -1,11 +1,18 @@
 import { RequireAtLeastOne } from './type-utils';
 import { EntityTypes } from './ui-events';
 
-export interface NavigationOptions {
+/**
+ * Interface defining navigation object
+ * @internal
+ **/
+interface NavigationOptions {
   appName: string;
   getNavigationUrl: (navRoute: Record<string, string>) => string;
 }
 
+/**
+ * @deprecated
+ **/
 export type IContentClickDetails = {
   authorId: string;
   id: string;
@@ -17,8 +24,14 @@ export type IContentClickDetails = {
   };
 };
 
+/**
+ * Type defining params of navigate to function of a routing plugin
+ **/
 export type NavigateToParams = RequireAtLeastOne<NavigationOptions, 'appName' | 'getNavigationUrl'>;
 
+/**
+ * Type defining params of a modal navigation
+ **/
 export interface ModalNavigationOptions {
   name: string;
   message?: string;

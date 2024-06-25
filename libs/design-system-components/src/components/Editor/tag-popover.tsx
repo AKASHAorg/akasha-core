@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ITag } from '@akashaorg/typings/lib/ui';
+import { Tag } from '@akashaorg/typings/lib/ui';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Portal } from './helpers';
@@ -7,7 +7,7 @@ import { tw, tx } from '@twind/core';
 
 export interface ITagPopover {
   postsLabel?: string;
-  values: ITag[];
+  values: Tag[];
   ref: React.Ref<HTMLDivElement>;
   currentIndex: number;
   setIndex: React.Dispatch<React.SetStateAction<number>>;

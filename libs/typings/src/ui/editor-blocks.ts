@@ -3,17 +3,24 @@ import { RootComponentProps } from './root-component';
 import { GetContentBlockByIdQuery } from '../sdk/graphql-operation-types-new';
 import { BlockLabeledValue } from '../sdk/graphql-types-new';
 
+/**
+ * Enum defining content block modes
+ **/
 export const enum ContentBlockModes {
   EDIT = 'edit-mode',
   READONLY = 'read-only-mode',
 }
 
-export type BlockInfo = {
+/**
+ * Type defining block info
+ * @internal
+ **/
+type BlockInfo = {
   mode: ContentBlockModes;
 };
 
 /**
- * Content Block's register function should return an object with this shape.
+ * Type defining return type of content block's register function
  */
 export type ContentBlockExtensionInterface = {
   propertyType: string;
@@ -26,13 +33,17 @@ export type ContentBlockExtensionInterface = {
   }) => () => Promise<singleSpa.ParcelConfigObject<ContentBlockRootProps>>;
 };
 
+/**
+ * Type defining content blocks
+ */
 export type ContentBlock = ContentBlockExtensionInterface & {
   appName: string;
   propertyType: string;
   order: number;
 };
+
 /**
- * Props that will be passed to the contentBlock's root React component.
+ * Type defining props that will be passed to the contentBlock's root React component.
  */
 export type ContentBlockRootProps = RootComponentProps & {
   blockInfo: Omit<ContentBlock, 'loadingFn'> & { mode: ContentBlockModes };
@@ -40,22 +51,30 @@ export type ContentBlockRootProps = RootComponentProps & {
   content: BlockLabeledValue;
 };
 
+/**
+ * Enum defining events related to loading and unloading of content blocks
+ **/
 export const enum ContentBlockEvents {
   RegisterContentBlock = 'register-content-block',
 }
 
+/**
+ * Type defining content block registration event
+ **/
 export type ContentBlockRegisterEvent = {
   event: ContentBlockEvents.RegisterContentBlock;
   data?: (ContentBlockExtensionInterface & { appName: string })[];
 };
 
+/**
+ * Type defining params of a function that creates content block
+ **/
 export type CreateContentBlock = {
   nsfw: boolean;
 };
 
 /**
- * When the contentBlock is in edit mode (user is inserting data),
- * the block should expose an api that will be called by the editor.
+ * Type defining an api that will be called by an editor when the content block is in edit mode
  */
 export type BlockInstanceMethods = {
   /**

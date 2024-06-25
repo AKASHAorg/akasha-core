@@ -1,17 +1,26 @@
 import { Descendant } from 'slate';
 import { AkashaBeam, AkashaReflect } from '../sdk/graphql-types-new';
 
-export type ITag = {
+/**
+ * Type defining tag object
+ */
+export type Tag = {
   name: string;
   totalPosts: number;
 };
 
+/**
+ * Type defining interest object
+ */
 export type Interest = {
   labelType: string;
   value: string;
   totalPosts?: number;
 };
 
+/**
+ * Interface defining data to be published
+ */
 export interface IPublishData {
   metadata: IMetadata;
   slateContent: (Descendant & { url?: string; type?: string; fallbackUrl?: string })[];
@@ -20,6 +29,9 @@ export interface IPublishData {
   userId?: string;
 }
 
+/**
+ * Interface defining metadata of a content which will be used by an editor
+ */
 export interface IMetadata {
   app: string;
   version: number;
@@ -33,6 +45,9 @@ export interface IMetadata {
   mentions: string[];
 }
 
+/**
+ * Type defining data of an entry which can be either a beam or a reflection
+ */
 export type EntryData = {
   id: string;
   active: boolean;
@@ -42,16 +57,25 @@ export type EntryData = {
   tags?: string[];
 };
 
+/**
+ * Type defining data of a beam
+ */
 export type BeamEntryData = EntryData & { content: AkashaBeam['content'] } & {
   reflectionsCount?: number;
 };
 
+/**
+ * Type defining data of a reflection
+ */
 export type ReflectEntryData = EntryData & {
   content: AkashaReflect['content'];
   beamID: AkashaReflect['beamID'];
 };
 
-export type RawEntryData = Pick<
+/**
+ * Type defining raw data of a beam obtained from an api
+ */
+export type RawBeamData = Pick<
   AkashaBeam,
   'id' | 'active' | 'createdAt' | 'content' | 'nsfw' | 'tags' | 'reflectionsCount'
 > & {
