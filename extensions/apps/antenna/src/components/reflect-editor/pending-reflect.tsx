@@ -1,11 +1,11 @@
 import React from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ReflectionCard from '@akashaorg/ui-lib-feed/lib/components/cards/reflection-card';
-import { type ReflectEntryData } from '@akashaorg/typings/lib/ui';
+import { type ReflectionData } from '@akashaorg/typings/lib/ui';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 
 export type PendingReflectProps = {
-  entryData: ReflectEntryData;
+  entryData: ReflectionData;
   customStyle?: string;
 };
 

@@ -46,7 +46,7 @@ export interface IMetadata {
 }
 
 /**
- * Type defining data of an entry which can be either a beam or a reflection
+ * Type defining plain old javascript object for an entry which can be either a beam or a reflection
  */
 export type EntryData = {
   id: string;
@@ -58,16 +58,16 @@ export type EntryData = {
 };
 
 /**
- * Type defining data of a beam
+ * Type defining plain old javascript object for a beam
  */
-export type BeamEntryData = EntryData & { content: AkashaBeam['content'] } & {
+export type BeamData = EntryData & { content: AkashaBeam['content'] } & {
   reflectionsCount?: number;
 };
 
 /**
- * Type defining data of a reflection
+ * Type defining plain old javascript object for a reflection
  */
-export type ReflectEntryData = EntryData & {
+export type ReflectionData = EntryData & {
   content: AkashaReflect['content'];
   beamID: AkashaReflect['beamID'];
 };
