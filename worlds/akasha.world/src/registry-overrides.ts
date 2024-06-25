@@ -42,24 +42,24 @@ const overrides = [
     sources: [`${origin}/apps/auth-app`],
     ...missingRequiredFields,
   },
-  // {
-  //   name: '@akashaorg/app-profile',
-  //   integrationType: AkashaAppApplicationType.App,
-  //   sources: [`${origin}/apps/profile`],
-  //   ...missingRequiredFields,
-  // },
+  {
+    name: '@akashaorg/app-profile',
+    integrationType: AkashaAppApplicationType.App,
+    sources: [`${origin}/apps/profile`],
+    ...missingRequiredFields,
+  },
   // {
   //   name: '@akashaorg/app-notifications',
   //   integrationType: AkashaAppApplicationType.App,
   //   sources: [`${origin}/apps/notifications`],
   //   ...missingRequiredFields,
   // },
-  {
-    name: '@akashaorg/app-legal',
-    integrationType: AkashaAppApplicationType.App,
-    sources: [`${origin}/apps/legal`],
-    ...missingRequiredFields,
-  },
+  // {
+  //   name: '@akashaorg/app-legal',
+  //   integrationType: AkashaAppApplicationType.App,
+  //   sources: [`${origin}/apps/legal`],
+  //   ...missingRequiredFields,
+  // },
   {
     name: '@akashaorg/app-search',
     integrationType: AkashaAppApplicationType.App,
