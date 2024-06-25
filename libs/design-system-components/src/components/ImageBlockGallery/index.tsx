@@ -5,10 +5,10 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { ArrowPathIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { ImageBlockGridItem } from './image-block-grid-item';
 import ImageOverlay from '../ImageOverlay';
-import { type ImageObject } from '@akashaorg/typings/lib/ui';
+import { type GalleryImage } from '@akashaorg/typings/lib/ui';
 
 export interface IImageGallery {
-  images: ImageObject[];
+  images: GalleryImage[];
   uploading?: boolean;
 }
 
@@ -27,7 +27,7 @@ const ImageBlockGallery: React.FC<IImageGallery> = props => {
     setShowOverlay(false);
   };
 
-  const handleClickImage = (img: ImageObject) => {
+  const handleClickImage = (img: GalleryImage) => {
     setShowOverlay(true);
     setClickedImg(img);
   };

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { IntegrationTypes } from '@akashaorg/typings/lib/ui';
+import { ExtensionTypes } from '@akashaorg/typings/lib/ui';
 
 import Link from '../Link';
 import { AvatarProps } from '../Avatar';
@@ -10,7 +10,7 @@ import Stack from '../Stack';
 import { generateActiveOverlayClass, generateAvatarContainerStyle } from '../../utils';
 
 export type AppAvatarProps = AvatarProps & {
-  appType: IntegrationTypes;
+  appType: ExtensionTypes;
 };
 
 /**
@@ -23,7 +23,7 @@ export type AppAvatarProps = AvatarProps & {
  * const profileId = 'did:pkh:eip155:5:0x36c703c42dfa2437dc883e2e0884e57404e16493';
  * const avatar = { src: 'https://placebeard.it/360x360', height: 360, width: 360 };
  *
- * <AppAvatar avatar={avatar} appType={IntegrationTypes.APP} profileId={profileId} />
+ * <AppAvatar avatar={avatar} appType={ExtensionTypes.APP} profileId={profileId} />
  * ```
  **/
 const AppAvatar: React.FC<AppAvatarProps> = props => {
@@ -49,14 +49,14 @@ const AppAvatar: React.FC<AppAvatarProps> = props => {
     avatarFallback = avatar?.src;
   }
 
-  if (!avatar?.src && appType === IntegrationTypes.APP) {
+  if (!avatar?.src && appType === ExtensionTypes.APP) {
     // currently there are 3 placeholders for sidebar apps
     avatarFallback = `${publicImgPath}/sidebar-app-placeholder-${
       Math.floor(Math.random() * 3) + 1
     }.webp`;
   }
 
-  if (!avatar?.src && appType === IntegrationTypes.WIDGET) {
+  if (!avatar?.src && appType === ExtensionTypes.WIDGET) {
     // currently there are 2 placeholders for sidebar apps
     avatarFallback = `${publicImgPath}/sidebar-widget-placeholder-${
       Math.floor(Math.random() * 2) + 1

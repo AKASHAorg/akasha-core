@@ -6,7 +6,7 @@ import {
 } from '../sdk/graphql-types-new';
 
 /**
- * Type defining profile info
+ * Type defining plain old javascript object of a profile data
  **/
 export type AkashaProfile = Omit<ProfileData, 'followers' | 'did' | 'followersCount'> & {
   did: Partial<CeramicAccount>;
@@ -15,7 +15,8 @@ export type AkashaProfile = Omit<ProfileData, 'followers' | 'did' | 'followersCo
 };
 
 /**
- * Alias to AkashaProfile type
+ * Alias of AkashaProfile type
+ * @see {@link AkashaProfile}
  **/
 export type Profile = AkashaProfile;
 
@@ -44,7 +45,7 @@ export type AkashaFollowing = {
 }[];
 
 /**
- * Type defining  follow document which represents either followers or following info
+ * Type defining follow document which represents either followers or following info
  **/
 export type AkashaFollowDocument = {
   id: AkashaFollow['id'];
@@ -54,6 +55,7 @@ export type AkashaFollowDocument = {
 };
 
 /**
- * Type defining  follow list which is a map of profile ID and AkashaFollowDocument
+ * Type defining  follow list which is a map of profile stream id and AkashaFollowDocument
+ * @see {@link AkashaFollowDocument}
  **/
 export type FollowList = Map<string, AkashaFollowDocument>;

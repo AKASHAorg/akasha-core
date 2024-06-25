@@ -12,7 +12,7 @@ import {
 } from '@akashaorg/design-system-components/lib/components/Profile';
 import { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
 import {
-  ModalNavigationOptions,
+  IModalNavigationOptions,
   NotificationEvents,
   NotificationTypes,
 } from '@akashaorg/typings/lib/ui';
@@ -49,7 +49,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
   const { akashaProfile: profileData } =
     data?.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
   const showLoginModal = useCallback(
-    (redirectTo?: { modal: ModalNavigationOptions }) => {
+    (redirectTo?: { modal: IModalNavigationOptions }) => {
       navigateToModal({
         name: 'login',
         redirectTo,

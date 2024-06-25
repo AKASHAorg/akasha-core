@@ -3,7 +3,7 @@ import { ContentBlockRegisterEvent } from './editor-blocks';
 import { AnalyticsEventData } from './analytics';
 import { ExtensionRegisterEvent } from './extension-point';
 import { WidgetRegisterEvent } from './widgets';
-import { AppRegisterEvent } from './apps';
+import { AppRegisterEvent } from './extensions';
 
 /**
  * Enum defining events related to loading and unloading of global routes
@@ -33,7 +33,7 @@ export const enum ThemingEvents {
 }
 
 /**
- * Type defining theming evening object
+ * Type defining theming event object
  **/
 export type ThemingEvent = {
   event: ThemingEvents;

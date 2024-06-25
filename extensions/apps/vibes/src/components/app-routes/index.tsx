@@ -6,7 +6,7 @@ import {
   createRouter,
   redirect,
 } from '@tanstack/react-router';
-import { CreateRouter, RouterContext } from '@akashaorg/typings/lib/ui';
+import { ICreateRouter, IRouterContext } from '@akashaorg/typings/lib/ui';
 import ErrorComponent from './error-component';
 import {
   ModeratorDetailPage,
@@ -26,7 +26,7 @@ import routes, {
   baseOverviewUrl,
 } from '../../routes';
 
-const rootRoute = createRootRouteWithContext<RouterContext>()({
+const rootRoute = createRootRouteWithContext<IRouterContext>()({
   component: Outlet,
 });
 
@@ -111,7 +111,7 @@ const routeTree = rootRoute.addChildren([
   reportItemRoute,
 ]);
 
-export const router = ({ baseRouteName, apolloClient }: CreateRouter) =>
+export const router = ({ baseRouteName, apolloClient }: ICreateRouter) =>
   createRouter({
     routeTree,
     basepath: baseRouteName,

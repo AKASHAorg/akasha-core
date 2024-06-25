@@ -1,5 +1,5 @@
 import singleSpa from 'single-spa';
-import { RootComponentProps } from './root-component';
+import { IRootComponentProps } from './root-component';
 import { GetContentBlockByIdQuery } from '../sdk/graphql-operation-types-new';
 import { BlockLabeledValue } from '../sdk/graphql-types-new';
 
@@ -20,9 +20,9 @@ type BlockInfo = {
 };
 
 /**
- * Type defining return type of content block's register function
+ * Type defining configuration object for loading content blocks
  */
-export type ContentBlockExtensionInterface = {
+export type ContentBlockConfig = {
   propertyType: string;
   icon?: React.ReactElement;
   displayName: string;
@@ -34,19 +34,19 @@ export type ContentBlockExtensionInterface = {
 };
 
 /**
- * Type defining content blocks
+ * Type defining content block
  */
-export type ContentBlock = ContentBlockExtensionInterface & {
+export type ContentBlock = {
   appName: string;
   propertyType: string;
   order: number;
 };
 
 /**
- * Type defining props that will be passed to the contentBlock's root React component.
+ * Type defining props that will be passed to the content block's root React component.
  */
-export type ContentBlockRootProps = RootComponentProps & {
-  blockInfo: Omit<ContentBlock, 'loadingFn'> & { mode: ContentBlockModes };
+export type ContentBlockRootProps = IRootComponentProps & {
+  blockInfo: Omit<ContentBlock, 'loadingFn'> & ContentBlockConfig & { mode: ContentBlockModes };
   blockData: GetContentBlockByIdQuery['node'];
   content: BlockLabeledValue;
 };
@@ -63,7 +63,7 @@ export const enum ContentBlockEvents {
  **/
 export type ContentBlockRegisterEvent = {
   event: ContentBlockEvents.RegisterContentBlock;
-  data?: (ContentBlockExtensionInterface & { appName: string })[];
+  data?: (ContentBlockConfig & { appName: string })[];
 };
 
 /**
@@ -74,7 +74,7 @@ export type CreateContentBlock = {
 };
 
 /**
- * Type defining an api that will be called by an editor when the content block is in edit mode
+ * Type defining methods of block instance object used by an editor when the content block is in edit mode
  */
 export type BlockInstanceMethods = {
   /**
@@ -107,9 +107,12 @@ export type BlockInstanceMethods = {
   handleFocusBlock?: (focus: boolean) => void;
 };
 
-export interface ContentBlockStorePluginInterface {
+/**
+ * Interface defining content block state store defined as a plugin
+ **/
+export interface IContentBlockStorePlugin {
   getInfos(): Omit<
-    ContentBlockExtensionInterface & {
+    ContentBlockConfig & {
       appName: string;
     },
     'loadingFn'
@@ -123,7 +126,7 @@ export interface ContentBlockStorePluginInterface {
         }
       | GetContentBlockByIdQuery['node'],
   ) => {
-    blockInfo: ContentBlockExtensionInterface & {
+    blockInfo: ContentBlockConfig & {
       appName: string;
     };
     blockData?: unknown;

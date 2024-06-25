@@ -20,7 +20,7 @@ export type AnalyticsEventData = {
 };
 
 /**
- * Type defining analytics event categories
+ * Type defining analytics categories
  **/
 export enum AnalyticsCategories {
   APPS = 'Apps',

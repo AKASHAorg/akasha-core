@@ -1,9 +1,20 @@
 import singleSpa from 'single-spa';
-import { ActivityFn } from './app-loader';
+import { ActivityFn, LayoutConfig } from './app-loader';
 import { IMenuItem } from './sidebar-menu-items';
-import { RootComponentProps } from './root-component';
-import { ContentBlockExtensionInterface } from './editor-blocks';
+import { IRootComponentProps } from './root-component';
+import { ContentBlockConfig } from './editor-blocks';
 import { ExtensionInterface } from './extension-point';
+import { Profile } from './profile';
+
+/**
+ * Enum defining extension types
+ **/
+export enum ExtensionTypes {
+  APP = 'App',
+  WIDGET = 'Widget',
+  PLUGIN = 'Plugin',
+  NONE = 'None',
+}
 
 /**
  * Enum defining events related to loading and unloading of an app
@@ -15,7 +26,7 @@ export const enum AppEvents {
 /**
  * Type defining metadata info about an extension
  **/
-export type ManifestConfig = {
+export type ExtensionManifest = {
   id?: string | null;
   name: string;
   version: string;
@@ -40,17 +51,19 @@ export type ManifestConfig = {
 };
 
 /**
+ * Type defining info about developer of an extension
+ */
+export type Developer = {
+  profileId: Profile['did']['id'];
+} & Pick<Profile, 'avatar' | 'name'>;
+
+/**
  * Type defining app registration event
  **/
 export type AppRegisterEvent = {
   event: AppEvents.RegisterApplication;
-  data: { config: IAppConfig; manifest: ManifestConfig };
+  data: { config: IAppConfig; manifest: ExtensionManifest };
 };
-
-/**
- * Type defining list of extensions
- **/
-export type Extensions = { [key: string]: string };
 
 /**
  * Type defining app name
@@ -58,7 +71,7 @@ export type Extensions = { [key: string]: string };
 export type AppName = string;
 
 /**
- * Type defining app loading configuration object
+ * Interface defining configuration object for loading an app
  **/
 export interface IAppConfig {
   /**
@@ -95,7 +108,7 @@ export interface IAppConfig {
   routes?: {
     [key: string]: string;
   };
-  loadingFn: () => Promise<singleSpa.LifeCycles<RootComponentProps>>;
+  loadingFn: () => Promise<singleSpa.LifeCycles<IRootComponentProps>>;
   /**
    * The content of a Beam (aka. post) is a list of 1 or more contentBlocks.
    * These are provided by the apps and should have 2 versions:
@@ -103,14 +116,14 @@ export interface IAppConfig {
    *  - one for the reader (to render the data)
    *  More info in the documentation.
    */
-  contentBlocks?: ContentBlockExtensionInterface[];
+  contentBlocks?: ContentBlockConfig[];
   extensions?: ExtensionInterface[];
   /**
    * A simple mapping of the extensions exposed by this app.
    * Can be used to target a specific app's extension
    * Note that this is optional
    */
-  extensionsMap?: Extensions;
+  extensionsMap?: LayoutConfig;
   /**
    * Keywords that defines this widget.
    * Useful for filtering through integrations

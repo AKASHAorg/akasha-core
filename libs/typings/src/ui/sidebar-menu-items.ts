@@ -55,7 +55,7 @@ export enum MenuItemType {
 }
 
 /**
- * Enum defining an area where a menu item is mounted
+ * Enum defining an area where a menu item is loaded
  **/
 export enum MenuItemAreaType {
   AppArea = 'app-area', // body of sidebar

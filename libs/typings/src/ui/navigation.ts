@@ -5,7 +5,7 @@ import { EntityTypes } from './ui-events';
  * Interface defining navigation object
  * @internal
  **/
-interface NavigationOptions {
+interface INavigationOptions {
   appName: string;
   getNavigationUrl: (navRoute: Record<string, string>) => string;
 }
@@ -27,12 +27,15 @@ export type IContentClickDetails = {
 /**
  * Type defining params of navigate to function of a routing plugin
  **/
-export type NavigateToParams = RequireAtLeastOne<NavigationOptions, 'appName' | 'getNavigationUrl'>;
+export type NavigateToParams = RequireAtLeastOne<
+  INavigationOptions,
+  'appName' | 'getNavigationUrl'
+>;
 
 /**
- * Type defining params of a modal navigation
+ * Interface defining params of a modal navigation
  **/
-export interface ModalNavigationOptions {
+export interface IModalNavigationOptions {
   name: string;
   message?: string;
   title?: string;

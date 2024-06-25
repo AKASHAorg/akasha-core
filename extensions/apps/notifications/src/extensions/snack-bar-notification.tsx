@@ -10,7 +10,7 @@ import {
   filterEvent,
 } from '@akashaorg/ui-awf-hooks';
 import {
-  RootExtensionProps,
+  IRootExtensionProps,
   MenuItemAreaType,
   NotificationEvents,
   type NotificationEvent,
@@ -21,7 +21,7 @@ import { InformationCircleIcon } from '@akashaorg/design-system-core/lib/compone
 import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
-const SnackBarNotification: React.FC<RootExtensionProps> = () => {
+const SnackBarNotification: React.FC<IRootExtensionProps> = () => {
   const { uiEvents, getRoutingPlugin } = useRootComponentProps();
   const [message, setMessage] = useState('');
   const [appTitle, setAppTitle] = useState(null);
@@ -165,7 +165,7 @@ export const { bootstrap, mount, unmount } = singleSpaReact({
   React,
   ReactDOMClient,
   rootComponent: withProviders(SnackBarNotification),
-  errorBoundary: (error, errorInfo, props: RootExtensionProps) => {
+  errorBoundary: (error, errorInfo, props: IRootExtensionProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
     }

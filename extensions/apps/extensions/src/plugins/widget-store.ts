@@ -1,7 +1,7 @@
 import { BaseStore } from './base-store';
 import {
-  RootComponentProps,
-  RootExtensionProps,
+  IRootComponentProps,
+  IRootExtensionProps,
   WidgetEvents,
   WidgetInterface,
   WidgetRegisterEvent,
@@ -12,7 +12,7 @@ import { pathToActiveWhen } from 'single-spa';
 export class WidgetStore extends BaseStore {
   static instance: WidgetStore;
   readonly #widgets: (WidgetInterface & { appName: string })[];
-  constructor(uiEvents: RootComponentProps['uiEvents']) {
+  constructor(uiEvents: IRootComponentProps['uiEvents']) {
     super(uiEvents);
     this.#widgets = [];
     this.subscribeRegisterEvents(WidgetEvents.RegisterWidget, {
@@ -41,7 +41,7 @@ export class WidgetStore extends BaseStore {
     }
     return matchingWidgets;
   };
-  static getInstance(uiEvents: RootExtensionProps<unknown>['uiEvents']) {
+  static getInstance(uiEvents: IRootExtensionProps<unknown>['uiEvents']) {
     if (!this.instance) {
       this.instance = new WidgetStore(uiEvents);
     }

@@ -44,6 +44,9 @@ export type TagElement = {
   align?: 'left' | 'center' | 'right';
 };
 
+/**
+ * Type defining paragraph element of an editor
+ */
 export type ParagraphElement = {
   type: 'paragraph';
   align?: 'left' | 'center' | 'right';
@@ -90,7 +93,7 @@ export type CustomElement =
   | NumberedListElement;
 
 /**
- * Type defining custom text configuration object of an editor
+ * Type defining custom text object of an editor
  */
 export type CustomText = {
   bold?: boolean;
@@ -107,8 +110,25 @@ export type CustomEditor = BaseEditor & ReactEditor & HistoryEditor;
 
 /**
  * Alias of Descendant type
+ * @see {@link Descendant}
  */
 export type SlateDescendant = Descendant;
+
+/**
+ * Interface defining metadata of a content used by an editor
+ */
+export interface IMetadata {
+  app: string;
+  version: number;
+  images?: {
+    originalSrc?: string;
+    src: { url?: string; fallbackUrl?: string };
+    size: { width: number; height: number; naturalWidth: number; naturalHeight: number };
+    id: string;
+  }[];
+  tags: string[];
+  mentions: string[];
+}
 
 declare module 'slate' {
   interface CustomTypes {

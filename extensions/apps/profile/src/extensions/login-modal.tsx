@@ -8,10 +8,10 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 
-import { RootExtensionProps } from '@akashaorg/typings/lib/ui';
+import { IRootExtensionProps } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps, withProviders, useModalData } from '@akashaorg/ui-awf-hooks';
 
-const LoginModal = (_props: RootExtensionProps) => {
+const LoginModal = (_props: IRootExtensionProps) => {
   const { t } = useTranslation('app-profile');
   const location = window.location;
   const { getRoutingPlugin } = useRootComponentProps();
@@ -76,7 +76,7 @@ const LoginModal = (_props: RootExtensionProps) => {
   );
 };
 
-const Wrapped = (props: RootExtensionProps) => {
+const Wrapped = (props: IRootExtensionProps) => {
   const { getTranslationPlugin } = useRootComponentProps();
   return (
     <I18nextProvider i18n={getTranslationPlugin().i18n}>
@@ -89,7 +89,7 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOMClient,
   rootComponent: withProviders(Wrapped),
-  errorBoundary: (err, errorInfo, props: RootExtensionProps) => {
+  errorBoundary: (err, errorInfo, props: IRootExtensionProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(err)}, ${errorInfo}`);
     }

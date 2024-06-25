@@ -1,13 +1,5 @@
-import { Profile } from './profile';
 import { ParcelConfigObject } from 'single-spa';
 import { ActivityFn } from './app-loader';
-
-/**
- * Type defining info about developer of an extension
- */
-export type Developer = {
-  profileId: Profile['did']['id'];
-} & Pick<Profile, 'avatar' | 'name'>;
 
 /**
  * Enum defining events related to loading and unloading of an extension point
@@ -17,7 +9,7 @@ export const enum ExtensionEvents {
 }
 
 /**
- * Type defining an extension point loading configuration object
+ * Type defining configuration object for loading an extension point
  **/
 export type ExtensionInterface = {
   mountsIn: string;
@@ -36,7 +28,7 @@ export type ExtensionRegisterEvent = {
 /**
  * Interface defining an extension point state store defined as a plugin
  **/
-export interface ExtensionStorePlugin {
+export interface IExtensionStorePlugin {
   getExtensions: () => ExtensionInterface[];
   getMatchingExtensions: (
     slotName: string,

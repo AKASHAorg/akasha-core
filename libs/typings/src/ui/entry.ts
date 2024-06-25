@@ -1,5 +1,6 @@
 import { Descendant } from 'slate';
 import { AkashaBeam, AkashaReflect } from '../sdk/graphql-types-new';
+import { IMetadata } from './editor';
 
 /**
  * Type defining tag object
@@ -30,23 +31,7 @@ export interface IPublishData {
 }
 
 /**
- * Interface defining metadata of a content which will be used by an editor
- */
-export interface IMetadata {
-  app: string;
-  version: number;
-  images?: {
-    originalSrc?: string;
-    src: { url?: string; fallbackUrl?: string };
-    size: { width: number; height: number; naturalWidth: number; naturalHeight: number };
-    id: string;
-  }[];
-  tags: string[];
-  mentions: string[];
-}
-
-/**
- * Type defining plain old javascript object of an entry which can be either a beam or a reflection
+ * Type defining plain old javascript object of an entry which can either be a beam or a reflection
  */
 export type EntryData = {
   id: string;
@@ -73,7 +58,7 @@ export type ReflectionData = EntryData & {
 };
 
 /**
- * Type defining plain old javascript object of a raw beam data obtained from an api
+ * Type defining plain old javascript object of a beam data obtained from an api
  */
 export type RawBeamData = Pick<
   AkashaBeam,
