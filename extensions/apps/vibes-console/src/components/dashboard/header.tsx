@@ -32,7 +32,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = props => {
 
       <Stack direction="row" justify="between" spacing="gap-x-4">
         <SearchBar
-          responsive={true}
+          fullWidth={true}
           inputValue={inputValue}
           inputPlaceholderLabel={inputPlaceholderLabel}
           onInputChange={ev => setInputValue(ev.target.value)}

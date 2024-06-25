@@ -4,6 +4,10 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 
+/**
+ * Component used to display a skeleton placeholder for data loading
+ * in the topbar widget
+ */
 const TopbarLoader: React.FC = () => {
   return (
     <div>

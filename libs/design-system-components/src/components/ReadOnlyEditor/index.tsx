@@ -14,8 +14,9 @@ export interface IReadOnlyEditor {
 }
 
 /**
- * loads a read-only version of slate
- * @param content - slate content to be rendered
+ * Component used to display content created with a slate.js based editor
+ * Used in the entry card to render text content
+ * @param content - slate.js formatted text content to be rendered
  * @param handleMentionClick - click handler for mentions in the content
  * @param handleTagClick - click handler for tags in the content
  * @param handleLinkClick - click handler for links in the content, will open external links in new tab

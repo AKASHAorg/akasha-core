@@ -113,6 +113,7 @@ const OnboardingPage: React.FC = () => {
             onClickFollow={handleFollow}
             onClickUnfollow={handleUnfollow}
             transformSource={transformSource}
+            loggedUserDID={authenticatedDID}
           />
         </Stack>
       </Stack>

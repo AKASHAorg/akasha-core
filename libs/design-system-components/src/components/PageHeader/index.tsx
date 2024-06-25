@@ -12,6 +12,12 @@ export type PageHeaderProps = PageButtonsProps & {
   customStyle?: string;
 };
 
+/**
+ * Component used to display a header for each page in the vibes and vibes console apps
+ * @param label - title of the header
+ * @param labelTextVariant - text style for the title
+ * @param customStyle - custom tailwind styles for the wrapper card
+ */
 export const PageHeader: React.FC<PropsWithChildren<PageHeaderProps>> = props => {
   const {
     labelTextVariant = 'h5',

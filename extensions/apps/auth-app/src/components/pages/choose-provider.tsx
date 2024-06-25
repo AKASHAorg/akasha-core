@@ -42,10 +42,6 @@ const ChooseProvider: React.FC<unknown> = () => {
           subtitleLabel={t('Connect your wallet using MetaMask, WalletConnect, Coinbase etc ...')}
           titleLabel="Web3Modal"
           handleClick={handleProviderClick}
-          iconColor="self-color"
-          boxBgColor="transparent"
-          iconSize={{ width: 40, height: 40 }}
-          boxSize={{ width: 40, height: 40 }}
         />
       </Stack>
 

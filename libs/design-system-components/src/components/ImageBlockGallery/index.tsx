@@ -12,6 +12,11 @@ export interface IImageGallery {
   uploading?: boolean;
 }
 
+/**
+ * Component used to present the images in the beam card and beam editor image content block
+ * @param images - a list of images
+ * @param uploading - used to apply a different style in the editor when a  new image is uploaded
+ */
 const ImageBlockGallery: React.FC<IImageGallery> = props => {
   const { images, uploading } = props;
 

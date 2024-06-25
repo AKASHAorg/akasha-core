@@ -12,6 +12,15 @@ export type ExtensionHeaderProps = {
   description?: string;
 };
 
+/**
+ * Component used in the extension info page
+ * @param pageTitle - optional page title
+ * @param appName - display name of the extension
+ * @param packageName - unique identifier for the extension
+ * @param appType - type of extension
+ * @param description - optional description for the extension
+ * @param nsfw - sets if the extension is safe for work or not
+ */
 const ExtensionHeader: React.FC<ExtensionHeaderProps> = ({
   pageTitle,
   appName,

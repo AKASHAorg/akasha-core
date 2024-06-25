@@ -26,6 +26,9 @@ export type TagSearchCardProps = {
   handleUnsubscribeTag: (tagName: string) => void;
 };
 
+/**
+ * Component used to showcase tags in the search app
+ */
 const TagSearchCard: React.FC<TagSearchCardProps> = props => {
   const {
     tag,

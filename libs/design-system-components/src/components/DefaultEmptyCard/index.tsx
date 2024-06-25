@@ -19,6 +19,16 @@ export type DefaultEmptyCardProps = {
   buttonClickHandler?: () => void;
 };
 
+/**
+ * Card component used to display generic info and images
+ * @param assetName - name of the image from the public folder, if not provided
+ will render a placeholder card instead
+ * @param infoText - descriptive text
+ * @param buttonLabel - button text
+ * @param noBorder - defaults to false, can be set true to remove the card outer border
+ * @param customCardSize - object with width and height to customise the card dimensions
+ * @param buttonClickHandler - handler for the button
+ */
 const DefaultEmptyCard: React.FC<DefaultEmptyCardProps> = ({
   publicImagePath = '/images',
   assetExtension = 'webp',

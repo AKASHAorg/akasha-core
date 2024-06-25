@@ -15,6 +15,9 @@ export type PageButtonsProps = {
   onConfirmButtonClick?: () => void;
 };
 
+/**
+ * Component used to display action buttons in the vibes console app
+ */
 export const PageButtons: React.FC<PageButtonsProps> = props => {
   const {
     cancelButtonLabel,

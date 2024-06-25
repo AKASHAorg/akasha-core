@@ -4,7 +4,13 @@ import { tw } from '@twind/core';
 import { LabelProps } from '../types';
 import { getColorClasses } from '../../../utils/getColorClasses';
 
-const Label: React.FC<PropsWithChildren<LabelProps>> = ({ id, required, disabled, children }) => {
+const Label: React.FC<PropsWithChildren<LabelProps>> = ({
+  id,
+  required,
+  disabled,
+  requiredFieldAsteriskColor,
+  children,
+}) => {
   const labelStyle = disabled ? `text-grey4` : ``;
   return (
     <Text id={id} variant="h6" customStyle={labelStyle} as="label">
@@ -12,10 +18,7 @@ const Label: React.FC<PropsWithChildren<LabelProps>> = ({ id, required, disabled
       {required && (
         <sup
           className={tw(
-            `-top-0.5 ${getColorClasses(
-              { light: 'secondaryLight', dark: 'secondaryDark' },
-              'text',
-            )}`,
+            `-top-0.5 left-1 ${getColorClasses(requiredFieldAsteriskColor ?? { light: 'secondaryLight', dark: 'secondaryDark' }, 'text')}`,
           )}
         >
           *

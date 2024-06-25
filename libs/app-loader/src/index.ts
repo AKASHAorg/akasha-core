@@ -157,8 +157,9 @@ export default class AppLoader {
       }
       const source = getSDK().services.common.ipfs.buildOriginLink(manifest.sources[0]);
       const mainFile = manifest?.manifestData?.mainFile || 'index.js';
-      const sourceURL = new URL(mainFile, source);
-      const module = await System.import<SystemModuleType>(sourceURL.href);
+      // does not play well with local overwrites
+      //const sourceURL = new URL(mainFile, source);
+      const module = await System.import<SystemModuleType>(`${source}/${mainFile}`);
       modules.set(manifest.name, module);
     }
     return modules;

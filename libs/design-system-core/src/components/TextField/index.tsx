@@ -24,6 +24,8 @@ import { TextFieldProps } from './types';
  * @param required - boolean (optional) whether it is a required field
  * @param customStyle - (optional) apply any other custom styles. Please use standard Tailwind CSS classes
  * @param inputRef - (optional) pass the ref here
+ * @param requiredFieldAsteriskColor - (optional) set the color of the asterisk symbol in case this component
+ * is used in a form and it is a required field
  * @example
  * ```tsx
  * <TextField type="text" required={true} label={'Username'} placeholder={'Please enter your username...'} />
@@ -33,6 +35,7 @@ const TextField: React.FC<TextFieldProps> = props => {
   const {
     id,
     required,
+    requiredFieldAsteriskColor,
     label,
     status,
     caption,
@@ -46,7 +49,12 @@ const TextField: React.FC<TextFieldProps> = props => {
   return (
     <Stack direction="column" spacing="gap-y-2" customStyle={customStyle}>
       {label && (
-        <Label id={id} required={required} disabled={disabled}>
+        <Label
+          id={id}
+          required={required}
+          disabled={disabled}
+          requiredFieldAsteriskColor={requiredFieldAsteriskColor}
+        >
           {label}
         </Label>
       )}

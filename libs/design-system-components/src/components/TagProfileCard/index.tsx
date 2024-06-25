@@ -27,6 +27,9 @@ export interface ITagProfileCard {
   handleUnsubscribeTag: (tagName: string) => void;
 }
 
+/**
+ * Component used as a header in the tag feed page, to display tag data
+ */
 const TagProfileCard: React.FC<ITagProfileCard> = props => {
   const {
     tag,

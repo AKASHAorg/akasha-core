@@ -14,6 +14,10 @@ export type SubtitleRendererProps = {
   onLinkClick: (link?: string) => void;
 };
 
+/**
+ * Component used in the vibes and vibes console apps to
+ * create clickable text from a list of subtitles
+ */
 export const SubtitleRenderer: React.FC<SubtitleRendererProps> = props => {
   const {
     textVariant,
