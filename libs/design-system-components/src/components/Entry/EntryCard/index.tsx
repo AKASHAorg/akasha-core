@@ -123,6 +123,17 @@ const EntryCard: React.FC<EntryCardProps> = props => {
   const showHiddenStyle = showHiddenContent ? '' : 'max-h-[50rem]';
   const contentClickableStyle =
     contentClickable && !showNSFWCard ? 'cursor-pointer' : 'cursor-default';
+
+  const handleEntryFlag = (ev: React.SyntheticEvent) => {
+    ev.stopPropagation();
+    onEntryFlag();
+  };
+
+  const handleEntryRemove = (ev: React.SyntheticEvent) => {
+    ev.stopPropagation();
+    onEntryRemove(entryData.id);
+  };
+
   const menuItems: ListItem[] = [
     ...(!isViewer
       ? [
@@ -131,7 +142,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
             label: flagAsLabel ?? '',
             color: { light: 'errorLight', dark: 'errorDark' } as const,
             disabled: disableReporting,
-            onClick: onEntryFlag,
+            onClick: handleEntryFlag,
           },
         ]
       : []),
@@ -141,7 +152,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
             icon: <TrashIcon />,
             label: removeEntryLabel ?? '',
             color: { light: 'errorLight', dark: 'errorDark' } as const,
-            onClick: onEntryRemove,
+            onClick: handleEntryRemove,
           },
         ]
       : []),

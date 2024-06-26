@@ -5,14 +5,15 @@ import Icon from '../Icon';
 import Button from '../Button';
 import { ListItem } from '.';
 
-export type ListItemProps = { customStyle?: string } & ListItem;
+export type ListItemProps = ListItem & { customStyle?: string };
 
 const ListElement: React.FC<ListItemProps> = props => {
   const { label, icon, color, disabled, customStyle = '', onClick, ...rest } = props;
 
   const handleButtonClick = (e: React.SyntheticEvent) => {
-    e.stopPropagation();
-    if (onClick) onClick(label);
+    if (onClick && typeof onClick === 'function') {
+      onClick(e);
+    }
   };
 
   return (
