@@ -218,7 +218,6 @@ const routeTree = rootRoute.addChildren([
   ]),
 ]);
 
-// @todo: update to use type from typings package
 export const router = ({ baseRouteName, apolloClient }: ICreateRouter) =>
   createRouter({
     routeTree,
