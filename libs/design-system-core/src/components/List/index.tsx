@@ -13,7 +13,7 @@ export type ListItem = {
   icon?: React.ReactElement;
   toolTipContent?: string;
   disabled?: boolean;
-  onClick?: (ev: React.SyntheticEvent) => void;
+  onClick?: (label?: string) => void;
 } & TextProps;
 
 export type ListProps = {
@@ -58,9 +58,9 @@ const List: React.FC<ListProps> = forwardRef(
     const baseStyle = borderStyle;
     const hoverStyle = getColorClasses({ light: 'grey8', dark: 'grey5' }, 'hover:bg');
 
-    const handleItemClick = (ev: React.SyntheticEvent, item: ListItem, index: number) => {
+    const handleItemClick = (item: ListItem, index: number) => () => {
       if (item.onClick) {
-        item.onClick(ev);
+        item.onClick(item.label);
       }
       if (onSelected) {
         onSelected({ index, label: item.label });
@@ -76,14 +76,14 @@ const List: React.FC<ListProps> = forwardRef(
                 <Tooltip placement="left" content={item.toolTipContent}>
                   <ListElement
                     {...item}
-                    onClick={ev => handleItemClick(ev, item, index)}
+                    onClick={handleItemClick(item, index)}
                     customStyle={`${baseStyle} ${hoverStyle} first:rounded-t-lg	last:rounded-b-lg`}
                   />
                 </Tooltip>
               ) : (
                 <ListElement
                   {...item}
-                  onClick={ev => handleItemClick(ev, item, index)}
+                  onClick={handleItemClick(item, index)}
                   customStyle={`${baseStyle} ${hoverStyle} first:rounded-t-lg	last:rounded-b-lg`}
                 />
               )}

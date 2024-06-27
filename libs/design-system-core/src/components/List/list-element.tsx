@@ -10,9 +10,9 @@ export type ListItemProps = ListItem & { customStyle?: string };
 const ListElement: React.FC<ListItemProps> = props => {
   const { label, icon, color, disabled, customStyle = '', onClick, ...rest } = props;
 
-  const handleButtonClick = (e: React.SyntheticEvent) => {
+  const handleButtonClick = () => {
     if (onClick && typeof onClick === 'function') {
-      onClick(e);
+      onClick();
     }
   };
 
