@@ -12,20 +12,15 @@ import getSDK from '@akashaorg/awf-sdk';
 
 const Component: React.FC<RootExtensionProps> = () => {
   const sdk = getSDK();
-  const { getRoutingPlugin } = useRootComponentProps();
-  const navigateTo = React.useRef(getRoutingPlugin().navigateTo);
   const { t } = useTranslation();
   const { modalData } = useModalData();
   const [updateBeam, updateBeamQuery] = useUpdateBeamMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
   });
 
-  const handleModalClose = () => {
-    navigateTo.current({
-      appName: '@akashaorg/app-antenna',
-      getNavigationUrl: (routes: { [key: string]: string }) => routes.defaultRoute,
-    });
-  };
+  const handleModalClose = React.useCallback(() => {
+    window.history.replaceState(null, null, location.pathname);
+  }, []);
 
   const handleRemove = () => {
     updateBeam({
