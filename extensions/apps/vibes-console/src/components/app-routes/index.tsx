@@ -6,7 +6,7 @@ import {
   createRouter,
   redirect,
 } from '@tanstack/react-router';
-import { CreateRouter, RouterContext } from '@akashaorg/typings/lib/ui';
+import { ICreateRouter, IRouterContext } from '@akashaorg/typings/lib/ui';
 import ErrorComponent from './error-component';
 import {
   Applications,
@@ -44,7 +44,7 @@ import routes, {
   baseDashboardUrl,
 } from '../../routes';
 
-const rootRoute = createRootRouteWithContext<RouterContext>()({
+const rootRoute = createRootRouteWithContext<IRouterContext>()({
   component: Outlet,
 });
 
@@ -218,8 +218,7 @@ const routeTree = rootRoute.addChildren([
   ]),
 ]);
 
-// @todo: update to use type from typings package
-export const router = ({ baseRouteName, apolloClient }: CreateRouter) =>
+export const router = ({ baseRouteName, apolloClient }: ICreateRouter) =>
   createRouter({
     routeTree,
     basepath: baseRouteName,

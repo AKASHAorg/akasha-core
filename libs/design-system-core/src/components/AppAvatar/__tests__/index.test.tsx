@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { act } from '@testing-library/react';
-import { IntegrationTypes } from '@akashaorg/typings/lib/ui';
+import { ExtensionTypes } from '@akashaorg/typings/lib/ui';
 import AppAvatar from '../';
 import { customRender } from '../../../test-utils';
 
@@ -16,7 +16,7 @@ describe('<AppAvatar /> Component', () => {
   beforeEach(() => {
     act(() => {
       componentWrapper = customRender(
-        <AppAvatar appType={IntegrationTypes.APP} avatar={avatar} />,
+        <AppAvatar appType={ExtensionTypes.APP} avatar={avatar} />,
         {},
       );
     });

@@ -9,12 +9,12 @@ import {
   createRouter,
   redirect,
 } from '@tanstack/react-router';
-import { CreateRouter, RouterContext } from '@akashaorg/typings/lib/ui';
+import { ICreateRouter, IRouterContext } from '@akashaorg/typings/lib/ui';
 import ChooseProvider from '../pages/choose-provider';
 import ConnectWallet from '../pages/connect-wallet';
 import MainPage from '../pages/main-page';
 
-const rootRoute = createRootRouteWithContext<RouterContext>()({
+const rootRoute = createRootRouteWithContext<IRouterContext>()({
   component: Outlet,
 });
 
@@ -49,7 +49,7 @@ const routeTree = rootRoute.addChildren([
   mainRoute.addChildren([connectRoute, web3ModalRoute]),
 ]);
 
-export const router = ({ baseRouteName, apolloClient }: CreateRouter) =>
+export const router = ({ baseRouteName, apolloClient }: ICreateRouter) =>
   createRouter({
     routeTree,
     basepath: baseRouteName,

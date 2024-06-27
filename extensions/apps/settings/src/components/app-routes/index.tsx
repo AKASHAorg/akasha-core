@@ -14,7 +14,7 @@ import {
   redirect,
 } from '@tanstack/react-router';
 
-import { CreateRouter } from '@akashaorg/typings/lib/ui';
+import { ICreateRouter } from '@akashaorg/typings/lib/ui';
 
 const rootRoute = createRootRoute({
   component: Outlet,
@@ -67,7 +67,7 @@ const routeTree = rootRoute.addChildren([
   themeRoute,
 ]);
 
-export const router = ({ baseRouteName }: CreateRouter) =>
+export const router = ({ baseRouteName }: ICreateRouter) =>
   createRouter({
     routeTree,
     basepath: baseRouteName,

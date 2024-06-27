@@ -4,10 +4,10 @@ import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoade
 import singleSpaReact from 'single-spa-react';
 import ProfileAvatar, { ProfileAvatarProps } from './profile-avatar';
 import { useRootComponentProps, withProviders } from '@akashaorg/ui-awf-hooks';
-import { RootExtensionProps } from '@akashaorg/typings/lib/ui';
+import { IRootExtensionProps } from '@akashaorg/typings/lib/ui';
 import { I18nextProvider } from 'react-i18next';
 
-const Index = (props: RootExtensionProps<ProfileAvatarProps>) => {
+const Index = (props: IRootExtensionProps<ProfileAvatarProps>) => {
   const { extensionData } = props;
   const { getTranslationPlugin } = useRootComponentProps();
 
@@ -22,7 +22,7 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOMClient,
   rootComponent: withProviders(Index),
-  errorBoundary: (error, errorInfo, props: RootExtensionProps<ProfileAvatarProps>) => {
+  errorBoundary: (error, errorInfo, props: IRootExtensionProps<ProfileAvatarProps>) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
     }

@@ -1,9 +1,9 @@
 import getSDK from '@akashaorg/awf-sdk';
 import { Logger } from '@akashaorg/awf-sdk';
 import type {
-  BeamEntryData,
-  RawEntryData,
-  ReflectEntryData,
+  BeamData,
+  RawBeamData,
+  ReflectionData,
   SlateDescendant,
 } from '@akashaorg/typings/lib/ui';
 import { AkashaReflect } from '@akashaorg/typings/lib/sdk/graphql-types-new';
@@ -62,7 +62,7 @@ export const mapReflectEntryData = (
     author: { id: string };
     beam?: { id: string };
   },
-): ReflectEntryData => {
+): ReflectionData => {
   if (!reflection) return null;
 
   return {
@@ -79,7 +79,7 @@ export const mapReflectEntryData = (
 /**
  * Utility to map beam entry data
  */
-export const mapBeamEntryData = (beam?: RawEntryData): BeamEntryData => {
+export const mapBeamEntryData = (beam?: RawBeamData): BeamData => {
   if (!beam) return null;
   const sdk = getSDK();
   return {

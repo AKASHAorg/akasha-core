@@ -1,8 +1,8 @@
-import { IAppConfig, RootComponentProps } from '@akashaorg/typings/lib/ui';
+import { IAppConfig, IRootComponentProps } from '@akashaorg/typings/lib/ui';
 import { genLifecycles } from '../mocks/single-spa';
 import { genWorldConfig } from './world-config';
 import { uiEventsMock } from '../mocks/uiEvents';
-import { ExtensionConfig } from '@akashaorg/typings/lib/ui';
+import { ExtensionManifest } from '@akashaorg/typings/lib/ui';
 import { Subject } from 'rxjs';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
@@ -32,7 +32,7 @@ const log: any = {
     /*  */
   },
 };
-export const genAppProps = (): RootComponentProps & {
+export const genAppProps = (): IRootComponentProps & {
   getRoutingPlugin: (ns?: string) => any;
   getTranslationPlugin: (ns?: string) => any;
   getExtensionsPlugin: () => any;
@@ -65,7 +65,7 @@ export const genAppProps = (): RootComponentProps & {
   getModalFromParams: () => ({ name: 'test-modal' }),
 });
 
-export const genReleaseInfo = (): ExtensionConfig => ({
+export const genReleaseInfo = (): ExtensionManifest => ({
   integrationID: 'iu9385acnr',
   id: 'id',
   name: 'release name',

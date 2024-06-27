@@ -21,7 +21,7 @@ import {
   IPublishData,
   NotificationTypes,
   NotificationEvents,
-  ReflectEntryData,
+  ReflectionData,
 } from '@akashaorg/typings/lib/ui';
 import { usePendingReflections } from '@akashaorg/ui-awf-hooks/lib/use-pending-reflections';
 import { useApolloClient } from '@apollo/client';
@@ -41,7 +41,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
   const { uiEvents } = useRootComponentProps();
   const uiEventsRef = React.useRef(uiEvents);
   const [editorState, setEditorState] = useState(null);
-  const [newContent, setNewContent] = useState<ReflectEntryData>(null);
+  const [newContent, setNewContent] = useState<ReflectionData>(null);
   const pendingReflectionIdRef = useRef(null);
   const apolloClient = useApolloClient();
 

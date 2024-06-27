@@ -1,16 +1,16 @@
 import { EthProviders } from '../sdk';
 
+/**
+ * Type defining params of login function
+ * @internal
+ */
 type Login = {
   provider: EthProviders;
   checkRegistered?: boolean;
 };
 
-export type GetUserInfo = {
-  profileDID: string;
-};
-
 /**
- * Interface defining the state of a user store
+ * Interface defining the state of a user object
  */
 export interface IUserState<T> {
   authenticatedDID: string;
@@ -21,9 +21,8 @@ export interface IUserState<T> {
 }
 
 /**
- * Interface defining a user store
+ * Interface defining a user state store
  */
-
 export interface IUserStore<T> {
   login({ provider, checkRegistered }: Login): void;
   logout(): void;

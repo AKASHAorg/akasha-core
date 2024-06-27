@@ -2,11 +2,11 @@ import singleSpaReact from 'single-spa-react';
 import * as React from 'react';
 import ReactDOMClient from 'react-dom/client';
 import { useRootComponentProps, withProviders } from '@akashaorg/ui-awf-hooks';
-import { RootComponentProps } from '@akashaorg/typings/lib/ui';
+import { IRootComponentProps } from '@akashaorg/typings/lib/ui';
 import CookieWidget from './cookie-widget';
 import { I18nextProvider } from 'react-i18next';
 
-const Widget = (props: RootComponentProps) => {
+const Widget = (props: IRootComponentProps) => {
   const { getTranslationPlugin } = useRootComponentProps();
   return (
     <I18nextProvider i18n={getTranslationPlugin().i18n}>
@@ -19,7 +19,7 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOMClient,
   rootComponent: withProviders(Widget),
-  errorBoundary: (err, errorInfo, props: RootComponentProps) => {
+  errorBoundary: (err, errorInfo, props: IRootComponentProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(err)}, ${errorInfo}`);
     }

@@ -6,7 +6,7 @@ import BeamCard from '@akashaorg/ui-lib-feed/lib/components/cards/beam-card';
 import ReflectEditor from '../../reflect-editor';
 import routes, { REFLECT } from '../../../routes';
 import { useTranslation } from 'react-i18next';
-import { BeamEntryData } from '@akashaorg/typings/lib/ui';
+import { BeamData } from '@akashaorg/typings/lib/ui';
 import { hasOwn, transformSource } from '@akashaorg/ui-awf-hooks';
 import { useRouterState } from '@tanstack/react-router';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
@@ -15,7 +15,7 @@ import { usePendingReflections } from '@akashaorg/ui-awf-hooks/lib/use-pending-r
 
 type BeamSectionProps = {
   beamId: string;
-  entryData: BeamEntryData;
+  entryData: BeamData;
   isLoggedIn: boolean;
   showNSFWCard: boolean;
   hasReflections: boolean;

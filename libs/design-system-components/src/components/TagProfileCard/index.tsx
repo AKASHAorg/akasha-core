@@ -1,6 +1,6 @@
 import React from 'react';
 import { tw } from '@twind/core';
-import { ITag } from '@akashaorg/typings/lib/ui';
+import { Tag } from '@akashaorg/typings/lib/ui';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import {
@@ -11,9 +11,9 @@ import {
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import SubtitleTextIcon from '@akashaorg/design-system-core/lib/components/SubtitleTextIcon';
 
-export interface ITagProfileCard {
+export type TagProfileCard = {
   // data
-  tag: ITag | null;
+  tag: Tag | null;
   subscribedTags: string[];
   isLoading: boolean;
   // labels
@@ -25,12 +25,12 @@ export interface ITagProfileCard {
   // handlers
   handleSubscribeTag: (tagName: string) => void;
   handleUnsubscribeTag: (tagName: string) => void;
-}
+};
 
 /**
  * Component used as a header in the tag feed page, to display tag data
  */
-const TagProfileCard: React.FC<ITagProfileCard> = props => {
+const TagProfileCard: React.FC<TagProfileCard> = props => {
   const {
     tag,
     isLoading,

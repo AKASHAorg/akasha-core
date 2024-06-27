@@ -6,7 +6,7 @@ import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBou
 import ProfileMiniCard from '@akashaorg/design-system-components/lib/components/ProfileMiniCard';
 import MiniProfileWidgetLoader from '@akashaorg/design-system-components/lib/components/Loaders/mini-profile-widget-loader';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import { RootComponentProps } from '@akashaorg/typings/lib/ui';
+import { IRootComponentProps } from '@akashaorg/typings/lib/ui';
 import {
   getFollowList,
   hasOwn,
@@ -189,7 +189,7 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOMClient,
   rootComponent: withProviders(Wrapped),
-  errorBoundary: (err, errorInfo, props: RootComponentProps) => {
+  errorBoundary: (err, errorInfo, props: IRootComponentProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
     }
