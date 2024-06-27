@@ -10,25 +10,17 @@ import { useUpdateBeamMutation } from '@akashaorg/ui-awf-hooks/lib/generated/apo
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import getSDK from '@akashaorg/awf-sdk';
 
-const RemoveModal = (_: IRootExtensionProps) => {
-  const { t } = useTranslation();
+const Component: React.FC<IRootExtensionProps> = () => {
   const sdk = getSDK();
-
+  const { t } = useTranslation();
+  const { modalData } = useModalData();
   const [updateBeam, updateBeamQuery] = useUpdateBeamMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
   });
 
-  const { modalData } = useModalData();
-
   const handleModalClose = React.useCallback(() => {
     window.history.replaceState(null, null, location.pathname);
   }, []);
-
-  React.useEffect(() => {
-    if (updateBeamQuery.data?.updateAkashaBeam?.document) {
-      handleModalClose();
-    }
-  }, [handleModalClose, updateBeamQuery]);
 
   const handleRemove = () => {
     updateBeam({
@@ -40,27 +32,37 @@ const RemoveModal = (_: IRootExtensionProps) => {
           id: modalData['beamId'],
         },
       },
-    }).catch(err => console.error(err));
+    })
+      .then(() => handleModalClose())
+      .catch(err => console.error(err));
   };
+
+  const isQueryCalled = updateBeamQuery.called && updateBeamQuery.loading;
 
   return (
     <Modal
       show={modalData?.name === 'remove-beam-confirmation'}
-      title={{
-        label: t('Are you sure you want to remove this beam?'),
-        variant: 'h6',
-      }}
       actions={[
-        { label: t('Cancel'), variant: 'secondary', onClick: handleModalClose },
-        { label: t('Remove'), variant: 'primary', onClick: handleRemove },
+        {
+          label: t('Cancel'),
+          variant: 'secondary',
+          disabled: isQueryCalled,
+          onClick: handleModalClose,
+        },
+        { label: t('Remove'), variant: 'primary', disabled: isQueryCalled, onClick: handleRemove },
       ]}
-      onClose={handleModalClose}
+      // optionally show title only when query is not yet called
+      {...(!isQueryCalled && {
+        title: {
+          label: t('Are you sure you want to remove this beam?'),
+          variant: 'h6',
+        },
+      })}
       customStyle="py-4 px-6 md:px-24"
+      onClose={handleModalClose}
     >
       {updateBeamQuery.error && <Text variant="body2">{updateBeamQuery.error.message}</Text>}
-      {updateBeamQuery.called && updateBeamQuery.loading && (
-        <Text variant="body2">{t('Removing beam. Please wait')}</Text>
-      )}
+      {isQueryCalled && <Text variant="body2">{t('Removing beam. Please wait')}</Text>}
       {!updateBeamQuery.error &&
         updateBeamQuery.called &&
         !updateBeamQuery.loading &&
@@ -69,11 +71,11 @@ const RemoveModal = (_: IRootExtensionProps) => {
   );
 };
 
-const RemoveConfirmationModal = (props: IRootExtensionProps) => {
+const RemoveBeamModal = (props: IRootExtensionProps) => {
   const { getTranslationPlugin } = useRootComponentProps();
   return (
     <I18nextProvider i18n={getTranslationPlugin().i18n}>
-      <RemoveModal {...props} />
+      <Component {...props} />
     </I18nextProvider>
   );
 };
@@ -81,7 +83,7 @@ const RemoveConfirmationModal = (props: IRootExtensionProps) => {
 export const { bootstrap, mount, unmount } = singleSpaReact({
   React,
   ReactDOMClient,
-  rootComponent: withProviders(RemoveConfirmationModal),
+  rootComponent: withProviders(RemoveBeamModal),
   errorBoundary: (err, errorInfo, props: IRootExtensionProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);

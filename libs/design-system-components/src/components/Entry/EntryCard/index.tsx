@@ -123,6 +123,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
   const showHiddenStyle = showHiddenContent ? '' : 'max-h-[50rem]';
   const contentClickableStyle =
     contentClickable && !showNSFWCard ? 'cursor-pointer' : 'cursor-default';
+
   const menuItems: ListItem[] = [
     ...(!isViewer
       ? [
@@ -172,6 +173,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
           items={menuItems}
           disabled={disableActions}
           customStyle="shrink-0"
+          onMenuClick={e => e.stopPropagation()}
         />
       </Stack>
       {!entryData.active && (

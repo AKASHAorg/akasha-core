@@ -47,6 +47,7 @@ const GlobalAntennaPage: React.FC<unknown> = () => {
     }
     navigate({ to: '/editor' });
   }, [authenticatedDID, navigate, showLoginModal]);
+
   return (
     <Stack fullWidth={true}>
       <Helmet helmetData={helmetData}>
