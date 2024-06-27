@@ -1,9 +1,9 @@
 import { Observer, Subscription } from 'rxjs';
-import { RootExtensionProps, UIEventData } from '@akashaorg/typings/lib/ui';
+import { IRootExtensionProps, UIEventData } from '@akashaorg/typings/lib/ui';
 import { filterEvent } from '@akashaorg/ui-awf-hooks';
 
 export class BaseStore {
-  #uiEvents: RootExtensionProps<unknown>['uiEvents'];
+  #uiEvents: IRootExtensionProps<unknown>['uiEvents'];
   #uiEventsSub: Subscription;
   constructor(uiEvents) {
     this.#uiEvents = uiEvents;

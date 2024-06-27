@@ -4,7 +4,7 @@ import {
   GetBeamStreamQuery,
   GetReflectionByIdQuery,
 } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
-import { RouterContext } from '@akashaorg/typings/lib/ui';
+import { IRouterContext } from '@akashaorg/typings/lib/ui';
 import { hasOwn } from '@akashaorg/ui-awf-hooks';
 import {
   GetBeamByIdDocument,
@@ -12,7 +12,7 @@ import {
   GetReflectionByIdDocument,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
-export async function getBeamById({ apolloClient, beamId }: RouterContext & { beamId: string }) {
+export async function getBeamById({ apolloClient, beamId }: IRouterContext & { beamId: string }) {
   const { data } = await apolloClient.query<GetBeamByIdQuery>({
     query: GetBeamByIdDocument,
     variables: { id: beamId },
@@ -24,7 +24,7 @@ export async function getBeamById({ apolloClient, beamId }: RouterContext & { be
 export async function getBeamStreamId({
   apolloClient,
   beamId,
-}: RouterContext & { beamId: string }) {
+}: IRouterContext & { beamId: string }) {
   const sdk = getSDK();
   const { data } = await apolloClient.query<GetBeamStreamQuery>({
     query: GetBeamStreamDocument,
@@ -41,7 +41,7 @@ export async function getBeamStreamId({
 export async function getReflectionById({
   apolloClient,
   reflectionId,
-}: RouterContext & { reflectionId: string }) {
+}: IRouterContext & { reflectionId: string }) {
   const { data } = await apolloClient.query<GetReflectionByIdQuery>({
     query: GetReflectionByIdDocument,
     variables: { id: reflectionId },

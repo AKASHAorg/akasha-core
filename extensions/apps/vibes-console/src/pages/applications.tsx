@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
+import { IModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { JoinVibesCard } from '../components/applications/join-vibes-card';
@@ -20,7 +20,7 @@ export const Applications: React.FC<unknown> = () => {
   const isLoggedIn = !!authenticatedDID;
   const isModerator = false;
   const showLoginModal = React.useCallback(
-    (redirectTo?: { modal: ModalNavigationOptions }, message?: string) => {
+    (redirectTo?: { modal: IModalNavigationOptions }, message?: string) => {
       _navigateToModal.current?.({
         name: 'login',
         redirectTo,

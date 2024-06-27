@@ -4,7 +4,7 @@ import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoade
 import singleSpaReact from 'single-spa-react';
 import FollowProfileButton from '../components/follow-profile-button';
 import { useRootComponentProps, withProviders } from '@akashaorg/ui-awf-hooks';
-import { ModalNavigationOptions, RootExtensionProps } from '@akashaorg/typings/lib/ui';
+import { IModalNavigationOptions, IRootExtensionProps } from '@akashaorg/typings/lib/ui';
 import { I18nextProvider } from 'react-i18next';
 
 type FollowProfileButtonExtensionData = {
@@ -14,11 +14,11 @@ type FollowProfileButtonExtensionData = {
   followId: string;
 };
 
-const Index = (props: RootExtensionProps<FollowProfileButtonExtensionData>) => {
+const Index = (props: IRootExtensionProps<FollowProfileButtonExtensionData>) => {
   const { navigateToModal, extensionData } = props;
   const { profileID, isLoggedIn, isFollowing, followId } = extensionData;
   const { getTranslationPlugin } = useRootComponentProps();
-  const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
+  const showLoginModal = (redirectTo?: { modal: IModalNavigationOptions }) => {
     navigateToModal({
       name: 'login',
       redirectTo,
@@ -45,7 +45,7 @@ const reactLifecycles = singleSpaReact({
   errorBoundary: (
     error,
     errorInfo,
-    props: RootExtensionProps<FollowProfileButtonExtensionData>,
+    props: IRootExtensionProps<FollowProfileButtonExtensionData>,
   ) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);

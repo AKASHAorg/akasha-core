@@ -4,7 +4,7 @@ import singleSpaReact from 'single-spa-react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
-import { ModalNavigationOptions, RootComponentProps } from '@akashaorg/typings/lib/ui';
+import { IModalNavigationOptions, IRootComponentProps } from '@akashaorg/typings/lib/ui';
 import { withProviders, useRootComponentProps, useAkashaStore } from '@akashaorg/ui-awf-hooks';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
@@ -27,7 +27,7 @@ const ICWidget: React.FC<unknown> = () => {
   const isLoggedIn = !!authenticatedDID;
   const navigateTo = getRoutingPlugin().navigateTo;
 
-  const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
+  const showLoginModal = (redirectTo?: { modal: IModalNavigationOptions }) => {
     navigateToModal({ name: 'login', redirectTo });
   };
 
@@ -152,7 +152,7 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOMClient,
   rootComponent: withProviders(Wrapped),
-  errorBoundary: (err, errorInfo, props: RootComponentProps) => {
+  errorBoundary: (err, errorInfo, props: IRootComponentProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
     }

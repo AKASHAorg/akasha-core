@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { NavigateToParams, ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
+import { NavigateToParams, IModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import { useAkashaStore } from '@akashaorg/ui-awf-hooks';
 
 import { ProfileStats as ProfileStatsPresentation } from '@akashaorg/design-system-components/lib/components/Profile';
@@ -12,7 +12,7 @@ export type ProfileStatsProps = {
   totalFollowers: number;
   totalFollowing: number;
   navigateTo: (args: NavigateToParams) => void;
-  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
+  showLoginModal: (redirectTo?: { modal: IModalNavigationOptions }) => void;
 };
 
 const ProfileStats: React.FC<ProfileStatsProps> = ({

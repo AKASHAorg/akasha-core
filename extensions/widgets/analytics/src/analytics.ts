@@ -2,7 +2,7 @@ import type { SingleSpaCustomEventDetail } from 'single-spa';
 import {
   AnalyticsEventData,
   AnalyticsEventTypes,
-  RootComponentProps,
+  IRootComponentProps,
 } from '@akashaorg/typings/lib/ui';
 import { filterEvents } from '@akashaorg/ui-awf-hooks';
 
@@ -32,7 +32,7 @@ export const trackEvent = (event: AnalyticsEventData) => {
   }
 };
 
-export const registerEventBusSubscriber = (eventBus: RootComponentProps['uiEvents']) => {
+export const registerEventBusSubscriber = (eventBus: IRootComponentProps['uiEvents']) => {
   return eventBus
     .pipe(filterEvents([AnalyticsEventTypes.TRACK_EVENT, AnalyticsEventTypes.ENABLE_TRACKING]))
     .subscribe(evData => {

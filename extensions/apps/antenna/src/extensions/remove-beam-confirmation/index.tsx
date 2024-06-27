@@ -2,7 +2,7 @@ import singleSpaReact from 'single-spa-react';
 import ReactDOMClient from 'react-dom/client';
 import React from 'react';
 import { useRootComponentProps, withProviders, useModalData } from '@akashaorg/ui-awf-hooks';
-import { RootExtensionProps } from '@akashaorg/typings/lib/ui';
+import { IRootExtensionProps } from '@akashaorg/typings/lib/ui';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 import { I18nextProvider, useTranslation } from 'react-i18next';
@@ -10,7 +10,7 @@ import { useUpdateBeamMutation } from '@akashaorg/ui-awf-hooks/lib/generated/apo
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import getSDK from '@akashaorg/awf-sdk';
 
-const Component: React.FC<RootExtensionProps> = () => {
+const Component: React.FC<IRootExtensionProps> = () => {
   const sdk = getSDK();
   const { t } = useTranslation();
   const { modalData } = useModalData();
@@ -71,7 +71,7 @@ const Component: React.FC<RootExtensionProps> = () => {
   );
 };
 
-const RemoveBeamModal = (props: RootExtensionProps) => {
+const RemoveBeamModal = (props: IRootExtensionProps) => {
   const { getTranslationPlugin } = useRootComponentProps();
   return (
     <I18nextProvider i18n={getTranslationPlugin().i18n}>
@@ -84,7 +84,7 @@ export const { bootstrap, mount, unmount } = singleSpaReact({
   React,
   ReactDOMClient,
   rootComponent: withProviders(RemoveBeamModal),
-  errorBoundary: (err, errorInfo, props: RootExtensionProps) => {
+  errorBoundary: (err, errorInfo, props: IRootExtensionProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
     }

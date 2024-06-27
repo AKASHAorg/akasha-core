@@ -31,7 +31,7 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import ImageBlockToolbar from '@akashaorg/design-system-components/lib/components/ImageBlockToolbar';
 import EditImageModal from '@akashaorg/design-system-components/lib/components/EditImageModal';
-import { type ImageObject } from '@akashaorg/typings/lib/ui';
+import { type GalleryImage } from '@akashaorg/typings/lib/ui';
 import {
   XMarkIcon,
   ArrowPathIcon,
@@ -64,7 +64,7 @@ export const ImageEditorBlock = (
 
   const [uiState, setUiState] = useState('menu');
 
-  const [contentBlockImages, setContentBlockImages] = useState<ImageObject[]>([]);
+  const [contentBlockImages, setContentBlockImages] = useState<GalleryImage[]>([]);
   const imageGalleryImages = useMemo(
     () =>
       contentBlockImages.map(imageObj => {
@@ -295,7 +295,7 @@ export const ImageEditorBlock = (
     setCanCloseModal(true);
   };
 
-  const handleDeleteImage = (element: ImageObject) => {
+  const handleDeleteImage = (element: GalleryImage) => {
     const newImages = contentBlockImages.filter(image => image.src !== element.src);
 
     if (newImages.length < 4) {

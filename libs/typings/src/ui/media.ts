@@ -1,6 +1,12 @@
+/**
+ * Type defining image object
+ **/
 export type Image = { height: number; width: number; src: string };
 
-export type ImageObject = {
+/**
+ * Type defining gallery image object
+ **/
+export type GalleryImage = {
   originalSrc?: string;
   src: string;
   displaySrc?: string;

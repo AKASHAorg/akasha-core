@@ -15,7 +15,7 @@ import {
   useNsfwToggling,
 } from '@akashaorg/ui-awf-hooks';
 import { Helmet, helmetData } from '@akashaorg/design-system-core/lib/utils';
-import { ModalNavigationOptions, QueryKeys } from '@akashaorg/typings/lib/ui';
+import { IModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import { BeamContentResolver, getNsfwFiltersForBeamFeed } from '@akashaorg/ui-lib-feed';
 
 const GlobalAntennaPage: React.FC<unknown> = () => {
@@ -30,7 +30,7 @@ const GlobalAntennaPage: React.FC<unknown> = () => {
   const { showNsfw } = useNsfwToggling();
 
   const showLoginModal = React.useCallback(
-    (redirectTo?: { modal: ModalNavigationOptions }, message?: string) => {
+    (redirectTo?: { modal: IModalNavigationOptions }, message?: string) => {
       _navigateToModal.current?.({
         name: 'login',
         redirectTo,
@@ -64,7 +64,7 @@ const GlobalAntennaPage: React.FC<unknown> = () => {
         />
         <BeamFeed
           dataTestId="beam-feed"
-          scrollRestorationStorageKey={QueryKeys.GLOBAL_ANTENNA}
+          scrollRestorationStorageKey="akasha-global-antenna"
           estimatedHeight={150}
           itemSpacing={16}
           scrollOptions={{ overScan: 5 }}

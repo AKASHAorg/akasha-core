@@ -9,7 +9,7 @@ import {
   BlockInstanceMethods,
   ContentBlockModes,
   ContentBlockRootProps,
-  RootComponentProps,
+  IRootComponentProps,
 } from '@akashaorg/typings/lib/ui';
 import { SlateEditorBlock } from './slate-editor-block';
 import { SlateReadonlyBlock } from './slate-readonly-block';
@@ -30,7 +30,7 @@ export const { bootstrap, mount, unmount } = singleSpaReact({
   React,
   ReactDOMClient,
   rootComponent: withProviders<ContentBlockRootProps>(SlateBlockExtension),
-  errorBoundary: (err, errorInfo, props: RootComponentProps & ContentBlockRootProps) => {
+  errorBoundary: (err, errorInfo, props: IRootComponentProps & ContentBlockRootProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
     }

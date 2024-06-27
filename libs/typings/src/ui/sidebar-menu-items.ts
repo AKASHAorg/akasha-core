@@ -1,18 +1,29 @@
 import { ValueOf } from './type-utils';
 
-type Sources = 'icon' | 'source' | 'string' | 'ipfs' | 'avatar';
+/**
+ * @internal
+ * Type defining logo types
+ **/
 
+type LogoTypes = 'icon' | 'source' | 'string' | 'ipfs' | 'avatar';
+
+/**
+ * Type defining logo types and their corresponding value
+ **/
 export type LogoSourceType =
   | {
-      type: Extract<Sources, 'icon'>;
+      type: Extract<LogoTypes, 'icon'>;
       solidIcon?: boolean;
       value: React.ReactElement;
     }
   | {
-      type: Exclude<Sources, 'icon'>;
+      type: Exclude<LogoTypes, 'icon'>;
       value: string;
     };
 
+/**
+ * Enum defining logo types
+ **/
 export enum LogoTypeSource {
   ICON = 'icon',
   String = 'string',
@@ -20,6 +31,9 @@ export enum LogoTypeSource {
   AVATAR = 'avatar',
 }
 
+/**
+ * Interface defining sidebar menu items
+ **/
 export interface IMenuItem {
   index?: number;
   label: string;
@@ -31,12 +45,18 @@ export interface IMenuItem {
   subRoutes?: IMenuItem[];
 }
 
+/**
+ * Enum defining menu item types
+ **/
 export enum MenuItemType {
   Plugin = 'plugin',
   App = 'app',
   Internal = 'internal',
 }
 
+/**
+ * Enum defining an area where a menu item is loaded
+ **/
 export enum MenuItemAreaType {
   AppArea = 'app-area', // body of sidebar
   UserAppArea = 'user-app-area', // user installed app area of sidebar

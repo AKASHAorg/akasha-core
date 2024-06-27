@@ -1,15 +1,20 @@
-import { IconType, RootComponentProps } from './index';
+import { IconType, ExtensionManifest, IRootComponentProps } from './index';
 import { UIEventData } from './ui-events';
-import { Extensions } from './apps';
-import { PluginConf } from './plugins';
-import { AkashaAppApplicationType } from '../sdk/graphql-types-new';
+import { IPluginConf } from './plugins';
 
+/**
+ * Type defining single-spa activity function
+ * @see {@link https://single-spa.js.org/docs/configuration/#configactivewhen}
+ */
 export type ActivityFn = (
   location: Location,
   pathToActiveWhen: (path: string, exact?: boolean) => (location: Location) => boolean,
-  layoutConfig?: Extensions,
+  layoutConfig?: LayoutConfig,
 ) => boolean;
 
+/**
+ * Type defining layout slots where apps and widgets among others are loaded
+ */
 export type LayoutConfig = {
   /**
    * load modals inside this node
@@ -46,43 +51,22 @@ export type LayoutConfig = {
   snackbarNotifSlotId?: string;
 };
 
+/**
+ * Type defining the params of a register function used by app-loader to load apps
+ */
 export interface IntegrationRegistrationOptions {
   worldConfig: {
     title: string;
   };
-  uiEvents: RootComponentProps['uiEvents'];
+  uiEvents: IRootComponentProps['uiEvents'];
   layoutConfig: LayoutConfig;
   extensionData?: UIEventData['data'];
-  plugins?: PluginConf;
+  plugins?: IPluginConf;
   logger: unknown;
 }
 
-export enum LogLevels {
-  FATAL = 'fatal',
-  ERROR = 'error',
-  WARN = 'warn',
-  INFO = 'info',
-  DEBUG = 'debug',
-  TRACE = 'trace',
-}
-
-
-export type ExtensionConfig = {
-  name: string;
-  id?: string;
-  integrationType: AkashaAppApplicationType;
-  sources: string[];
-  version: string;
-  integrationID: string;
-  author: string;
-  enabled: boolean;
-  manifestData: {
-    mainFile: string;
-  };
-};
-
 /**
- * World configuration object
+ * Type defining world configuration object
  */
 export type WorldConfig = {
   /**
@@ -119,10 +103,13 @@ export type WorldConfig = {
     siteId: string;
     trackerUrl: string;
   };
-  registryOverrides?: ExtensionConfig[];
+  registryOverrides?: ExtensionManifest[];
   socialLinks?: { icon: IconType; link: string }[];
 };
 
-export interface QueryStringType {
+/**
+ * Interface defining query string
+ **/
+export interface IQueryString {
   [key: string]: string | string[] | unknown | undefined;
 }

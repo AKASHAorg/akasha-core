@@ -2,10 +2,10 @@ import * as React from 'react';
 import { tw, apply } from '@twind/core';
 import { ImageBlockGridItem } from '../ImageBlockGallery/image-block-grid-item';
 import ImageOverlay from '../ImageOverlay';
-import { type ImageObject } from '@akashaorg/typings/lib/ui';
+import { type GalleryImage } from '@akashaorg/typings/lib/ui';
 
 export type ExtensionImageGalleryProps = {
-  images: ImageObject[];
+  images: GalleryImage[];
   showOverlay: boolean;
   toggleOverlay: () => void;
 };
@@ -20,7 +20,7 @@ const ExtensionImageGallery: React.FC<ExtensionImageGalleryProps> = props => {
   const { images, showOverlay, toggleOverlay } = props;
   const [clickedImg, setClickedImg] = React.useState(null);
 
-  const handleClickImage = (img: ImageObject) => {
+  const handleClickImage = (img: GalleryImage) => {
     toggleOverlay();
     setClickedImg(img);
   };

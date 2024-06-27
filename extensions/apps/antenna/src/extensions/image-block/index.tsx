@@ -8,7 +8,7 @@ import {
   BlockInstanceMethods,
   ContentBlockModes,
   ContentBlockRootProps,
-  RootComponentProps,
+  IRootComponentProps,
 } from '@akashaorg/typings/lib/ui';
 import { ImageEditorBlock } from './image-editor-block';
 import { ImageReadonlyBlock } from './image-readonly-block';
@@ -29,7 +29,7 @@ export const { bootstrap, mount, unmount } = singleSpaReact({
   React,
   ReactDOMClient,
   rootComponent: withProviders<ContentBlockRootProps>(ImageBlockExtension),
-  errorBoundary: (err, errorInfo, props: RootComponentProps & ContentBlockRootProps) => {
+  errorBoundary: (err, errorInfo, props: IRootComponentProps & ContentBlockRootProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
     }

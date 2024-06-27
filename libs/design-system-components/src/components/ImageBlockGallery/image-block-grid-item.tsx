@@ -1,17 +1,17 @@
 import * as React from 'react';
 import { apply, tw, tx } from '@twind/core';
 import { DelayLoad } from '../../utils/delay-load';
-import { type ImageObject } from '@akashaorg/typings/lib/ui';
+import { type GalleryImage } from '@akashaorg/typings/lib/ui';
 
 export interface IGridItemProps {
-  image: ImageObject;
-  images: ImageObject[];
+  image: GalleryImage;
+  images: GalleryImage[];
   gridStyle: {
     gridColumnEnd: string;
     gridRowEnd: string;
   };
   aspectRatio?: 'aspect-video' | 'aspect-auto' | 'aspect-square';
-  handleClickImage: (image: ImageObject) => void;
+  handleClickImage: (image: GalleryImage) => void;
 }
 
 export const ImageBlockGridItem: React.FC<IGridItemProps> = props => {
