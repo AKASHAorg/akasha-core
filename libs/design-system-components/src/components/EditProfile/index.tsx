@@ -6,7 +6,7 @@ import { SocialLinks, SocialLinksProps } from './SocialLinks';
 import { apply, tw } from '@twind/core';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { General, GeneralProps } from './General';
+import { General, GeneralProps, ProfileNameFieldName } from './General';
 import { EditProfileFormValues } from './types';
 import { ButtonType } from '../types/common.types';
 import { NSFW, NSFWProps } from './NSFW';
@@ -59,7 +59,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
     mode: 'onChange',
   });
   const isFormDirty = !!Object.keys(dirtyFields).length;
-  const isValid = !Object.keys(errors).length;
+  const isValid = !Object.keys(errors).includes(ProfileNameFieldName);
   const onSave = (event: SyntheticEvent) => {
     event.preventDefault();
     const formValues = getValues();

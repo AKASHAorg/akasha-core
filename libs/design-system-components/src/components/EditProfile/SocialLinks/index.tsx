@@ -73,8 +73,8 @@ export const SocialLinks: React.FC<SocialLinksProps> = ({
                 }}
                 name={name}
                 value={value || ''}
-                caption={error?.message}
-                status={error?.message ? 'error' : null}
+                caption={!value ? null : error?.message}
+                status={error?.message && value ? 'error' : null}
                 onChange={onChange}
                 inputRef={ref}
               />

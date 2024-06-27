@@ -9,6 +9,7 @@ import { EditProfileFormValues } from '../types';
 import { ButtonType } from '../../types/common.types';
 
 type InputType = { label: string; initialValue: string };
+export const ProfileNameFieldName = 'name';
 
 export type GeneralProps = {
   header: Omit<HeaderProps, 'onAvatarChange' | 'onCoverImageChange'>;
@@ -42,7 +43,7 @@ export const General: React.FC<GeneralProps> = ({
       <Header {...header} onAvatarChange={onAvatarChange} onCoverImageChange={onCoverImageChange} />
       <Controller
         control={control}
-        name="name"
+        name={ProfileNameFieldName}
         render={({ field: { name, value, onChange, ref }, fieldState: { error } }) => (
           <TextField
             id={name}
