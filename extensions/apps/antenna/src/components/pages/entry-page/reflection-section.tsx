@@ -6,7 +6,7 @@ import ReflectEditor from '../../reflect-editor';
 import EditableReflection from '@akashaorg/ui-lib-feed/lib/components/editable-reflection';
 import routes, { REFLECT } from '../../../routes';
 import { useTranslation } from 'react-i18next';
-import { ReflectEntryData } from '@akashaorg/typings/lib/ui';
+import { ReflectionData } from '@akashaorg/typings/lib/ui';
 import { hasOwn, transformSource } from '@akashaorg/ui-awf-hooks';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
 import { useRouterState } from '@tanstack/react-router';
@@ -16,7 +16,7 @@ import { PendingReflect } from '../../reflect-editor/pending-reflect';
 type ReflectionSectionProps = {
   beamId: string;
   reflectionId: string;
-  entryData: ReflectEntryData;
+  entryData: ReflectionData;
   isLoggedIn: boolean;
   hasReflections: boolean;
   customStyle?: string;

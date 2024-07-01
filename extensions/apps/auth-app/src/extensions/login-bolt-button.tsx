@@ -7,7 +7,7 @@ import {
 import { useRootComponentProps, withProviders } from '@akashaorg/ui-awf-hooks';
 import singleSpaReact from 'single-spa-react';
 import ReactDOMClient from 'react-dom/client';
-import type { RootComponentProps } from '@akashaorg/typings/lib/ui';
+import type { IRootComponentProps } from '@akashaorg/typings/lib/ui';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 
 const LoginBoltButton = () => {
@@ -28,7 +28,7 @@ export const { bootstrap, mount, unmount } = singleSpaReact({
   React,
   ReactDOMClient,
   rootComponent: withProviders(LoginBoltButton),
-  errorBoundary: (err, errorInfo, props: RootComponentProps) => {
+  errorBoundary: (err, errorInfo, props: IRootComponentProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
     }

@@ -14,7 +14,7 @@ import {
   ProfileLoading,
 } from '@akashaorg/design-system-components/lib/components/Profile';
 import { useTranslation } from 'react-i18next';
-import { EventTypes, ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
+import { EventTypes, IModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import {
   hasOwn,
   useAkashaStore,
@@ -64,7 +64,7 @@ const ProfileInfoPage: React.FC<ProfileInfoPageProps> = props => {
   const hasProfile = !!data?.node;
   const isViewer = !!authenticatedDID && profileDID === authenticatedDID;
 
-  const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
+  const showLoginModal = (redirectTo?: { modal: IModalNavigationOptions }) => {
     navigateToModal({
       name: 'login',
       redirectTo,

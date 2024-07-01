@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Button from '../Button';
+import Card from '../Card';
 import Stack from '../Stack';
 import List, { ListProps } from '../List';
 import { tw } from '@twind/core';
@@ -9,6 +10,7 @@ import { useCloseActions } from '../../utils';
 export type MenuProps = {
   anchor: ButtonProps;
   disabled?: boolean;
+  onMenuClick?: (e: React.SyntheticEvent) => void;
 } & ListProps;
 
 /**
@@ -31,7 +33,7 @@ export type MenuProps = {
  *    />
  * ```
  **/
-const Menu: React.FC<MenuProps> = ({ anchor, disabled, ...rest }) => {
+const Menu: React.FC<MenuProps> = ({ anchor, disabled, onMenuClick, ...rest }) => {
   const [showList, setShowList] = useState(false);
   const anchorRef = useCloseActions(() => {
     setShowList(false);
@@ -43,25 +45,27 @@ const Menu: React.FC<MenuProps> = ({ anchor, disabled, ...rest }) => {
 
   return (
     rest.items?.length > 0 && (
-      <Stack ref={anchorRef} direction="column" spacing="gap-y-1">
-        <Button
-          {...anchor}
-          disabled={disabled}
-          onClick={(event: React.SyntheticEvent) => {
-            setShowList(!showList);
-            event.preventDefault();
-            event.stopPropagation();
-          }}
-        />
+      <Card type="plain" onClick={onMenuClick}>
+        <Stack ref={anchorRef} direction="column" spacing="gap-y-1">
+          <Button
+            {...anchor}
+            disabled={disabled}
+            onClick={(event: React.SyntheticEvent) => {
+              setShowList(!showList);
+              event.preventDefault();
+              event.stopPropagation();
+            }}
+          />
 
-        <div className={tw('relative')}>
-          {showList && (
-            <div className={tw('absolute right-0 z-50')}>
-              <List {...rest} onSelected={handleCloseList} />
-            </div>
-          )}
-        </div>
-      </Stack>
+          <div className={tw('relative')}>
+            {showList && (
+              <div className={tw('absolute right-0 z-50')}>
+                <List {...rest} onSelected={handleCloseList} />
+              </div>
+            )}
+          </div>
+        </Stack>
+      </Card>
     )
   );
 };

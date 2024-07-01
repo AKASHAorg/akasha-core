@@ -3,7 +3,7 @@ import BeamCard from './cards/beam-card';
 import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
 import { hasOwn, mapBeamEntryData, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetBeamByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
+import { IModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 
 export type BeamContentResolverProps = {
   beamId: string;
@@ -20,7 +20,7 @@ const BeamContentResolver: React.FC<BeamContentResolverProps> = ({
   const _navigateToModal = React.useRef(navigateToModal);
 
   const showLoginModal = React.useCallback(
-    (redirectTo?: { modal: ModalNavigationOptions }, message?: string) => {
+    (redirectTo?: { modal: IModalNavigationOptions }, message?: string) => {
       _navigateToModal.current?.({
         name: 'login',
         redirectTo,

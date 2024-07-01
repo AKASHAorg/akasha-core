@@ -7,7 +7,7 @@ import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import ProfileEngagementLoading from '@akashaorg/design-system-components/lib/components/ProfileEngagements/placeholders/profile-engagement-loading';
 import routes, { FOLLOWERS } from '../../../routes';
-import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
+import { IModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import {
   useGetFollowDocumentsByDidQuery,
   useGetFollowersListByDidQuery,
@@ -101,7 +101,7 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
       : null,
   );
 
-  const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
+  const showLoginModal = (redirectTo?: { modal: IModalNavigationOptions }) => {
     navigateToModal({
       name: 'login',
       redirectTo,

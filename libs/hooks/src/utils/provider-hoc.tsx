@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { AnalyticsProvider } from '../use-analytics';
-import { RootComponentProps } from '@akashaorg/typings/lib/ui';
+import { IRootComponentProps } from '@akashaorg/typings/lib/ui';
 import { RootComponentPropsProvider } from '../use-root-props';
 import { ApolloProvider } from '@apollo/client';
 import getSDK from '@akashaorg/awf-sdk';
@@ -8,7 +8,7 @@ import getSDK from '@akashaorg/awf-sdk';
 /**
  * Higher order component that wraps a component with all necessary providers
  */
-export const withProviders = <T extends RootComponentProps>(
+export const withProviders = <T extends IRootComponentProps>(
   WrappedComponent: React.ComponentType<T>,
 ) => {
   const displayName = WrappedComponent.displayName || WrappedComponent.name || 'WrappedHOComponent';

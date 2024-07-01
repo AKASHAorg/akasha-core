@@ -12,7 +12,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import DynamicInfiniteScroll from '@akashaorg/design-system-components/lib/components/DynamicInfiniteScroll';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import getSDK from '@akashaorg/awf-sdk';
-import { AnalyticsEventData, RawEntryData } from '@akashaorg/typings/lib/ui';
+import { AnalyticsEventData, RawBeamData } from '@akashaorg/typings/lib/ui';
 import {
   AkashaBeamFiltersInput,
   AkashaBeamSortingInput,
@@ -38,7 +38,7 @@ export type BeamFeedByAuthorProps = {
   };
   scrollTopIndicator?: (listRect: DOMRect, onScrollToTop: () => void) => React.ReactNode;
   loadingIndicator?: () => ReactElement;
-  renderItem: (data?: RawEntryData) => ReactElement;
+  renderItem: (data?: RawBeamData) => ReactElement;
   trackEvent?: (data: AnalyticsEventData['data']) => void;
 };
 

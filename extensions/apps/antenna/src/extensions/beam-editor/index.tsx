@@ -4,10 +4,10 @@ import { useRootComponentProps, withProviders } from '@akashaorg/ui-awf-hooks';
 import { BeamEditor } from './beam-editor';
 import singleSpaReact from 'single-spa-react';
 import ReactDOMClient from 'react-dom/client';
-import { RootExtensionProps } from '@akashaorg/typings/lib/ui';
+import { IRootExtensionProps } from '@akashaorg/typings/lib/ui';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 
-const Wrapped = (_: RootExtensionProps) => {
+const Wrapped = (_: IRootExtensionProps) => {
   const { getTranslationPlugin } = useRootComponentProps();
   return (
     <I18nextProvider i18n={getTranslationPlugin().i18n}>
@@ -20,7 +20,7 @@ export const { bootstrap, mount, unmount } = singleSpaReact({
   React,
   ReactDOMClient,
   rootComponent: withProviders(Wrapped),
-  errorBoundary: (err, errorInfo, props: RootExtensionProps) => {
+  errorBoundary: (err, errorInfo, props: IRootExtensionProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
     }

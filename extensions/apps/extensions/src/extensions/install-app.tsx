@@ -5,7 +5,7 @@ import getSDK from '@akashaorg/awf-sdk';
 import InstallApp from '@akashaorg/design-system-components/lib/components/InstallApp';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import {
-  RootExtensionProps,
+  IRootExtensionProps,
   RouteRegistrationEvents,
   RoutesRegisterEvent,
 } from '@akashaorg/typings/lib/ui';
@@ -18,7 +18,7 @@ type IntegrationModalExtensionData = {
 };
 
 const IntegrationInstallModal: React.FC<
-  RootExtensionProps<IntegrationModalExtensionData>
+  IRootExtensionProps<IntegrationModalExtensionData>
 > = props => {
   const { extensionData, uiEvents } = props;
   const sdk = getSDK();
@@ -98,7 +98,7 @@ const IntegrationInstallModal: React.FC<
   );
 };
 
-const ModalWrapper: React.FC<RootExtensionProps<IntegrationModalExtensionData>> = props => {
+const ModalWrapper: React.FC<IRootExtensionProps<IntegrationModalExtensionData>> = props => {
   const { getTranslationPlugin } = useRootComponentProps();
   return (
     <I18nextProvider i18n={getTranslationPlugin().i18n}>
@@ -111,7 +111,7 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOMClient,
   rootComponent: withProviders(ModalWrapper),
-  errorBoundary: (err, errorInfo, props: RootExtensionProps<IntegrationModalExtensionData>) => {
+  errorBoundary: (err, errorInfo, props: IRootExtensionProps<IntegrationModalExtensionData>) => {
     if (props.logger) {
       props.logger.error(`Error in InstallModal: ${JSON.stringify(err)}, ${errorInfo}`);
     }

@@ -2,7 +2,7 @@ import {
   ExtensionEvents,
   ExtensionInterface,
   ExtensionRegisterEvent,
-  RootExtensionProps,
+  IRootExtensionProps,
 } from '@akashaorg/typings/lib/ui';
 import { BaseStore } from './base-store';
 import { hasOwn } from '@akashaorg/ui-awf-hooks';
@@ -12,7 +12,7 @@ import { stringToRegExp } from './utils';
 export class ExtensionStore extends BaseStore {
   static instance: ExtensionStore;
   readonly #extensions: ExtensionInterface[];
-  constructor(uiEvents: RootExtensionProps['uiEvents']) {
+  constructor(uiEvents: IRootExtensionProps['uiEvents']) {
     super(uiEvents);
     this.#extensions = [];
 
@@ -46,7 +46,7 @@ export class ExtensionStore extends BaseStore {
     return matchingExtensions;
   };
 
-  static getInstance(uiEvents: RootExtensionProps<unknown>['uiEvents']) {
+  static getInstance(uiEvents: IRootExtensionProps<unknown>['uiEvents']) {
     if (!this.instance) {
       this.instance = new ExtensionStore(uiEvents);
     }

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { RootComponentProps, RootExtensionProps } from '@akashaorg/typings/lib/ui';
+import { IRootComponentProps, IRootExtensionProps } from '@akashaorg/typings/lib/ui';
 import { hasOwn } from './utils/has-own';
 
 const RootComponentPropsContext = React.createContext(null);
@@ -10,7 +10,7 @@ const DEFAULT_EXTENSIONS_PLUGIN = '@akashaorg/app-extensions';
 const RootComponentPropsProvider = ({
   children,
   ...props
-}: RootComponentProps | RootExtensionProps) => {
+}: IRootComponentProps | IRootExtensionProps) => {
   return (
     <RootComponentPropsContext.Provider value={props}>
       {children}
@@ -28,7 +28,7 @@ const RootComponentPropsProvider = ({
  *   const { getTranslationPlugin, baseRouteName,getRoutingPlugin, navigateToModal, worldConfig } = useRootComponentProps();
  * ```
  */
-const useRootComponentProps = <T extends RootComponentProps>() => {
+const useRootComponentProps = <T extends IRootComponentProps>() => {
   const ctx = React.useContext<T>(RootComponentPropsContext);
   const getRoutingPlugin = React.useCallback(
     (ns = DEFAULT_ROUTING_PLUGIN) => {
@@ -42,7 +42,7 @@ const useRootComponentProps = <T extends RootComponentProps>() => {
   );
 
   const getTranslationPlugin = React.useCallback(
-    (ns = DEFAULT_TRANSLATION_PLUGIN): { i18n: RootComponentProps['i18next'] } => {
+    (ns = DEFAULT_TRANSLATION_PLUGIN): { i18n: IRootComponentProps['i18next'] } => {
       if (hasOwn(ctx?.plugins, ns)) {
         return ctx?.plugins[ns].translation;
       }

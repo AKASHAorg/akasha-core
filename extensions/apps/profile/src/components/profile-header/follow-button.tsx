@@ -2,11 +2,11 @@ import React from 'react';
 import FollowProfileButton from '../follow-profile-button';
 import { useGetFollowDocumentsByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { hasOwn, useAkashaStore } from '@akashaorg/ui-awf-hooks';
-import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
+import { IModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 
 type FollowButtonProps = {
   profileID?: string;
-  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
+  showLoginModal: (redirectTo?: { modal: IModalNavigationOptions }) => void;
 };
 
 const FollowButton: React.FC<FollowButtonProps> = props => {

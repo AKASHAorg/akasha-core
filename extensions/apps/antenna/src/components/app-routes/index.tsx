@@ -25,7 +25,7 @@ import {
   defer,
   Await,
 } from '@tanstack/react-router';
-import { CreateRouter, RouterContext } from '@akashaorg/typings/lib/ui';
+import { ICreateRouter, IRouterContext } from '@akashaorg/typings/lib/ui';
 import {
   getBeamById,
   getBeamData,
@@ -36,7 +36,7 @@ import {
 } from './data-loaders';
 import { mapBeamEntryData, mapReflectEntryData } from '@akashaorg/ui-awf-hooks';
 
-const rootRoute = createRootRouteWithContext<RouterContext>()({
+const rootRoute = createRootRouteWithContext<IRouterContext>()({
   component: Outlet,
 });
 
@@ -194,7 +194,7 @@ const routeTree = rootRoute.addChildren([
   editorRoute,
 ]);
 
-export const router = ({ baseRouteName, apolloClient }: CreateRouter) =>
+export const router = ({ baseRouteName, apolloClient }: ICreateRouter) =>
   createRouter({
     routeTree,
     basepath: baseRouteName,

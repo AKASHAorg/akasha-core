@@ -1,5 +1,5 @@
 import React from 'react';
-import { ITag, type Image, Profile } from '@akashaorg/typings/lib/ui';
+import { Tag, type Image, Profile } from '@akashaorg/typings/lib/ui';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import { UserCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
@@ -14,7 +14,7 @@ export type OnboardingSuggestionsCardProps = {
   followLabel?: string;
   unfollowLabel?: string;
   followingLabel?: string;
-  tags?: ITag[];
+  tags?: Tag[];
   profiles?: Profile[];
   subscribedTags?: string[];
   followedProfiles?: string[];

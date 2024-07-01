@@ -14,7 +14,7 @@ import {
   type BlockInstanceMethods,
   type ContentBlockRootProps,
   type CreateContentBlock,
-  type RootExtensionProps,
+  type IRootExtensionProps,
 } from '@akashaorg/typings/lib/ui';
 import { Draft } from '../../utils';
 import {
@@ -30,7 +30,7 @@ const TEST_APP_VERSION_ID = 'k2t6wzhkhabz3aut9p2mhjzp80hzo7bee18l1pt94syakfbfcj7
 export const SlateEditorBlock = (
   props: ContentBlockRootProps & { blockRef?: RefObject<BlockInstanceMethods> },
 ) => {
-  const { name, logger } = useRootComponentProps<RootExtensionProps>();
+  const { name, logger } = useRootComponentProps<IRootExtensionProps>();
   const {
     data: { authenticatedDID },
   } = useAkashaStore();

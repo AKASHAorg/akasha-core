@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ITag } from '@akashaorg/typings/lib/ui';
+import { Tag } from '@akashaorg/typings/lib/ui';
 
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import { HashtagIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
@@ -11,7 +11,7 @@ import SubtitleTextIcon from '@akashaorg/design-system-core/lib/components/Subti
 
 export type TagSearchCardProps = {
   // data
-  tag: ITag | null;
+  tag: Tag | null;
   subscribedTags: string[];
   loggedEthAddress?: string | null;
   // labels

@@ -4,7 +4,7 @@ import {
   MenuItemAreaType,
   IntegrationRegistrationOptions,
   LogoTypeSource,
-  RootComponentProps,
+  IRootComponentProps,
   MenuItemType,
 } from '@akashaorg/typings/lib/ui';
 import routes, { EXTENSIONS, HOME, INSTALLED, MY_EXTENSIONS } from './routes';
@@ -80,7 +80,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
 });
 
 export const getPlugin = (
-  props: RootComponentProps & {
+  props: IRootComponentProps & {
     encodeAppName: (name: string) => string;
     decodeAppName: (name: string) => string;
   },

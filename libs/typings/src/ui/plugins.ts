@@ -1,21 +1,27 @@
-import { GetUserInfo, IUserStore } from './store';
+import { IUserStore } from './store';
 
-export interface IPluginsMap {
-  [namespace: string]: any;
-}
-
-export interface PluginConf {
+/**
+ * Interface defining plugin configuration object
+ */
+export interface IPluginConf {
   [namespace: string]: {
-    [key: string]: unknown;
+    [key: string]: any;
   };
 }
 
 /**
+ * Type defining param of a function which fetches profile info
+ * @internal
+ **/
+type UserInfoParams = {
+  profileDID: string;
+};
+
+/**
  * Interface defining method for fetching profile info inside a profile plugin
  */
-
 export interface IGetProfileInfo<T> {
-  getProfileInfo(params: GetUserInfo): Promise<{ data: T; error: string }>;
+  getProfileInfo(params: UserInfoParams): Promise<{ data: T; error: string }>;
 }
 
 /**

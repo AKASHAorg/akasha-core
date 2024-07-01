@@ -1,8 +1,8 @@
 import {
   IAppConfig,
-  ModalNavigationOptions,
-  QueryStringType,
-  ManifestConfig,
+  IModalNavigationOptions,
+  IQueryString,
+  ExtensionManifest,
 } from '@akashaorg/typings/lib/ui';
 import * as singleSpa from 'single-spa';
 import qs from 'qs';
@@ -19,7 +19,7 @@ export const decodeName = (appName: string) => {
 export interface CheckActivityOptions {
   config: IAppConfig;
   encodedAppName: string;
-  manifest?: ManifestConfig;
+  manifest?: ExtensionManifest;
   location?: Location;
 }
 
@@ -52,7 +52,7 @@ export const getModalFromParams = (location: Location) => {
   try {
     const searchObj = qs.parse(search, {
       ignoreQueryPrefix: true,
-    }) as { modal: ModalNavigationOptions } | undefined;
+    }) as { modal: IModalNavigationOptions } | undefined;
 
     if (searchObj.modal) {
       return {
@@ -84,7 +84,7 @@ export const createRootNode = (parent: HTMLElement, nodeName: string) => {
   return wrapNode;
 };
 
-export const navigateToModal = (opts: ModalNavigationOptions) => {
+export const navigateToModal = (opts: IModalNavigationOptions) => {
   const currentPath = location.pathname;
   const currentSearch = location.search;
   const str = qs.stringify({ modal: opts });
@@ -109,7 +109,7 @@ export const navigateToModal = (opts: ModalNavigationOptions) => {
   }
 };
 
-export const parseQueryString = (queryString: string): QueryStringType => {
+export const parseQueryString = (queryString: string): IQueryString => {
   const query = qs.parse(queryString, { ignoreQueryPrefix: true });
   return query;
 };

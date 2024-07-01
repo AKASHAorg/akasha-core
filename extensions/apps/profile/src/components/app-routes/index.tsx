@@ -24,9 +24,9 @@ import {
   GetFollowingListByDidDocument,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { ENGAGEMENTS_PER_PAGE } from '../pages/profile-engagement/types';
-import { CreateRouter, RouterContext } from '@akashaorg/typings/lib/ui';
+import { ICreateRouter, IRouterContext } from '@akashaorg/typings/lib/ui';
 
-const rootRoute = createRootRouteWithContext<RouterContext>()({
+const rootRoute = createRootRouteWithContext<IRouterContext>()({
   component: () => (
     <>
       <ScrollRestoration getKey={location => location.pathname} />
@@ -158,7 +158,7 @@ const routeTree = rootRoute.addChildren([
   beamsRoute,
 ]);
 
-export const router = ({ baseRouteName, apolloClient }: CreateRouter) =>
+export const router = ({ baseRouteName, apolloClient }: ICreateRouter) =>
   createRouter({
     routeTree,
     basepath: baseRouteName,

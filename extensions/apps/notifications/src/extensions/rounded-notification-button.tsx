@@ -4,7 +4,7 @@ import singleSpaReact from 'single-spa-react';
 import { useRootComponentProps, withProviders } from '@akashaorg/ui-awf-hooks';
 import {
   NotificationEvents,
-  type RootComponentProps,
+  type IRootComponentProps,
   type UIEventData,
 } from '@akashaorg/typings/lib/ui';
 import {
@@ -78,7 +78,7 @@ export const { bootstrap, mount, unmount } = singleSpaReact({
   React,
   ReactDOMClient,
   rootComponent: withProviders(RoundedNotificationButton),
-  errorBoundary: (err, errorInfo, props: RootComponentProps) => {
+  errorBoundary: (err, errorInfo, props: IRootComponentProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
     }

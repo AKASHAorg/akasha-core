@@ -1,17 +1,17 @@
 import { BehaviorSubject, filter, NextObserver, Subscription } from 'rxjs';
 import getSdk from '@akashaorg/awf-sdk';
 import { AUTH_EVENTS, GlobalEventBusData } from '@akashaorg/typings/lib/sdk';
-import { RootComponentProps } from '@akashaorg/typings/lib/ui';
+import { IRootComponentProps } from '@akashaorg/typings/lib/ui';
 
 type Listener = (data: unknown) => void;
 
 export class NotificationPlugin {
   notificationPool: Record<string, BehaviorSubject<unknown>>;
   listeners: Record<string, Listener[]>;
-  logger: RootComponentProps['logger'];
+  logger: IRootComponentProps['logger'];
   user?: GlobalEventBusData['data'];
   loginListeners: Listener[];
-  constructor(props: RootComponentProps) {
+  constructor(props: IRootComponentProps) {
     this.notificationPool = {};
     this.listeners = {};
     this.logger = props.logger;

@@ -8,8 +8,8 @@ import {
   useUpdateInterestsMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { AkashaIndexedStreamStreamType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { BeamContentResolver, getNsfwFiltersForTagFeed, TagFeed } from '@akashaorg/ui-lib-feed';
-import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
+import { BeamContentResolver, TagFeed } from '@akashaorg/ui-lib-feed';
+import { IModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import getSDK from '@akashaorg/awf-sdk';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
@@ -34,7 +34,7 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
   const isLoggedIn = !!authenticatedDID;
   const _navigateToModal = React.useRef(navigateToModal);
   const showLoginModal = React.useCallback(
-    (redirectTo?: { modal: ModalNavigationOptions }, message?: string) => {
+    (redirectTo?: { modal: IModalNavigationOptions }, message?: string) => {
       _navigateToModal.current?.({
         name: 'login',
         redirectTo,
@@ -162,8 +162,6 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
 
   const listOfTags = React.useMemo(() => [tagName], [tagName]);
 
-  const queryKey = `app-antenna_tag-antenna_${tagName}`;
-
   return (
     <HelmetProvider>
       <Stack fullWidth={true}>
@@ -223,16 +221,7 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
             estimatedHeight={150}
             itemSpacing={8}
             filters={{
-              and: [
-                ...tagFilters,
-                {
-                  or: getNsfwFiltersForTagFeed({
-                    isLoggedIn,
-                    showNsfw: false,
-                    queryKey,
-                  }),
-                },
-              ],
+              and: tagFilters,
             }}
             scrollOptions={{ overScan: 10 }}
             scrollTopIndicator={(listRect, onScrollToTop) => (

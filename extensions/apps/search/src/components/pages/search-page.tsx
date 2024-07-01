@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  type ITag,
+  type Tag,
   EntityTypes,
   AnalyticsCategories,
   type Profile,
@@ -409,7 +409,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                   />
                 }
                 <Card customStyle="pb-0">
-                  {searchTagsState?.map((tag: ITag, index: number) => (
+                  {searchTagsState?.map((tag: Tag, index: number) => (
                     <Stack key={index}>
                       <TagSearchCard
                         tag={tag}

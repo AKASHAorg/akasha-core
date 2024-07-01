@@ -18,12 +18,12 @@ import { ReflectionPreview } from '@akashaorg/ui-lib-feed';
 import { AkashaBeamStreamModerationStatus } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { useNavigate } from '@tanstack/react-router';
 import { EditableReflectionResolver, ReflectFeed } from '@akashaorg/ui-lib-feed';
-import { BeamEntryData } from '@akashaorg/typings/lib/ui';
+import { BeamData } from '@akashaorg/typings/lib/ui';
 
 type BeamPageProps = {
   beamId: string;
   beamStatus: AkashaBeamStreamModerationStatus;
-  entryData: BeamEntryData;
+  entryData: BeamData;
 };
 
 const BeamPage: React.FC<BeamPageProps> = props => {

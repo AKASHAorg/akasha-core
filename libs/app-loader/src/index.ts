@@ -4,13 +4,13 @@ import {
   ExtensionEvents,
   IAppConfig,
   IntegrationRegistrationOptions,
-  PluginConf,
-  RootComponentProps,
+  IPluginConf,
+  IRootComponentProps,
   RouteRegistrationEvents,
   UIEventData,
   WidgetEvents,
   WorldConfig,
-  ManifestConfig,
+  ExtensionManifest,
 } from '@akashaorg/typings/lib/ui';
 import { Subject, Subscription } from 'rxjs';
 import { hidePageSplash, showPageSplash } from './splash-screen';
@@ -45,7 +45,7 @@ type SystemModuleType = {
       encodeAppName: (name: string) => string;
       decodeAppName: (name: string) => string;
     },
-  ) => Promise<PluginConf>;
+  ) => Promise<IPluginConf>;
 };
 
 export default class AppLoader {
@@ -53,11 +53,11 @@ export default class AppLoader {
   uiEvents: Subject<UIEventData>;
   extensionConfigs: Map<string, IAppConfig & { name: string }>;
   extensionModules: Map<string, SystemModuleType>;
-  manifests: ManifestConfig[];
+  manifests: ExtensionManifest[];
   layoutConfig: IAppConfig;
   logger: ILogger;
   parentLogger: Logging;
-  plugins: PluginConf;
+  plugins: IPluginConf;
   globalChannel: EventBus;
   user: { id: string };
   globalChannelSub: Subscription;
@@ -135,7 +135,7 @@ export default class AppLoader {
       }
     }
   };
-  importModules = async (manifests: ManifestConfig[]) => {
+  importModules = async (manifests: ExtensionManifest[]) => {
     if (!this.manifests.length) return;
     const modules = new Map();
     for (const manifest of manifests) {
@@ -352,7 +352,7 @@ export default class AppLoader {
       const manifest = this.manifests.find(m => m.name === name);
       if (manifest.integrationType !== AkashaAppApplicationType.App) continue;
 
-      const customProps: RootComponentProps & { domElementGetter: () => HTMLElement } = {
+      const customProps: IRootComponentProps & { domElementGetter: () => HTMLElement } = {
         domElementGetter: () => getDomElement(conf, name, this.logger),
         singleSpa,
         baseRouteName: `/${name}`,

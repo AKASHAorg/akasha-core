@@ -2,7 +2,7 @@ import * as React from 'react';
 import {
   AnalyticsEventData,
   AnalyticsEventTypes,
-  RootComponentProps,
+  IRootComponentProps,
 } from '@akashaorg/typings/lib/ui';
 import { BehaviorSubject } from 'rxjs';
 
@@ -25,7 +25,7 @@ const AnalyticsProvider = ({
   uiEvents,
   children,
 }: {
-  uiEvents: RootComponentProps['uiEvents'];
+  uiEvents: IRootComponentProps['uiEvents'];
   children?: React.ReactNode;
 }) => {
   return <AnalyticsContext.Provider value={uiEvents}>{children}</AnalyticsContext.Provider>;

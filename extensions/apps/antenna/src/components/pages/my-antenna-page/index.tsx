@@ -4,7 +4,7 @@ import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/Scrol
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
 import StartCard from '@akashaorg/design-system-components/lib/components/StartCard';
 import { useTranslation } from 'react-i18next';
-import { ModalNavigationOptions, QueryKeys } from '@akashaorg/typings/lib/ui';
+import { IModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import { useGetInterestsByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import {
   hasOwn,
@@ -29,7 +29,7 @@ const MyAntennaPage: React.FC<unknown> = () => {
   const navigateTo = React.useRef(getRoutingPlugin().navigateTo);
   const _navigateToModal = React.useRef(navigateToModal);
   const showLoginModal = React.useCallback(
-    (redirectTo?: { modal: ModalNavigationOptions }, message?: string) => {
+    (redirectTo?: { modal: IModalNavigationOptions }, message?: string) => {
       _navigateToModal.current?.({
         name: 'login',
         redirectTo,
@@ -105,8 +105,7 @@ const MyAntennaPage: React.FC<unknown> = () => {
                 {
                   or: [
                     ...getNsfwFiltersForTagFeed({
-                      queryKey: QueryKeys.MY_ANTENNA,
-                      showNsfw: showNsfw,
+                      showNsfw,
                       isLoggedIn: !!authenticatedProfile?.did.id,
                     }),
                     { where: { indexValue: { in: tagSubsData.topics.map(t => t.value) } } },

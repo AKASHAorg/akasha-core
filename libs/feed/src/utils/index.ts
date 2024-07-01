@@ -4,7 +4,6 @@ import {
   AkashaIndexedStreamFiltersInput,
   AkashaIndexedStreamModerationStatus,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { QueryKeys } from '@akashaorg/typings/lib/ui';
 
 export const findLastItem = <T>(items: T[], predicate: (item: T) => boolean): T | undefined => {
   let found: T | undefined = undefined;
@@ -56,19 +55,16 @@ export const getNsfwFiltersForBeamFeed = ({
 };
 
 export const getNsfwFiltersForTagFeed = ({
-  queryKey,
   showNsfw,
   isLoggedIn,
 }: {
-  queryKey: string;
   showNsfw: boolean;
   isLoggedIn: boolean;
 }): AkashaIndexedStreamFiltersInput[] => {
   /**
-   *  Check if the feed will be used inside the My Antenna page and
-   *  set the filter for logged-out users and users who toggled off nsfw content.
+   *  Set the filter for logged-out users and users who toggled off nsfw content.
    **/
-  if (queryKey === QueryKeys.MY_ANTENNA && (!showNsfw || !isLoggedIn)) {
+  if (!showNsfw || !isLoggedIn) {
     return [
       { where: { status: { equalTo: AkashaIndexedStreamModerationStatus.Ok } } },
       { where: { status: { isNull: true } } },
@@ -76,10 +72,9 @@ export const getNsfwFiltersForTagFeed = ({
   }
 
   /**
-   * Check if the feed will be used inside the My Antenna page and
-   * set the filter for users who are logged in and want to see nsfw content.
+   * Set the filter for users who are logged in and want to see nsfw content.
    **/
-  if (queryKey === QueryKeys.MY_ANTENNA && showNsfw && isLoggedIn) {
+  if (showNsfw && isLoggedIn) {
     return [
       {
         where: {

@@ -4,7 +4,7 @@ import * as singleSpa from 'single-spa';
 import {
   MenuItemAreaType,
   NavigateToParams,
-  RootComponentProps,
+  IRootComponentProps,
   RouteRegistrationEvents,
   RoutesRegisterEvent,
 } from '@akashaorg/typings/lib/ui';
@@ -24,7 +24,7 @@ export class RoutingPlugin {
   static decodeAppName;
   static encodeAppName;
 
-  static initRouteObservation(uiEvents: RootComponentProps['uiEvents']) {
+  static initRouteObservation(uiEvents: IRootComponentProps['uiEvents']) {
     const globalChannel = getSDK().api.globalChannel;
     globalChannel.subscribe({
       next(evData) {
@@ -179,7 +179,7 @@ export class RoutingPlugin {
 }
 
 export const getPlugin = async (
-  props: RootComponentProps & {
+  props: IRootComponentProps & {
     encodeAppName: (name: string) => string;
     decodeAppName: (name: string) => string;
   },
