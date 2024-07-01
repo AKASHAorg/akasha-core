@@ -27,7 +27,7 @@ import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import SwitchCard from '@akashaorg/design-system-components/lib/components/SwitchCard';
 import TagSearchCard from '@akashaorg/design-system-components/lib/components/TagSearchCard';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import { DropdownMenuItemGroupType } from '@akashaorg/design-system-components/lib/components/SearchAppDropdownFilter';
+import { DropdownMenuItemGroupType } from '@akashaorg/design-system-components/lib/components/BaseDropdownFilter';
 import SearchResultCount from './search-result-count';
 import useIntersectionObserver from '@akashaorg/design-system-core/lib/utils/intersection-observer';
 

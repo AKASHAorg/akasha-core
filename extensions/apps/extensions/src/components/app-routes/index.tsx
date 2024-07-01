@@ -15,7 +15,7 @@ import {
   MyExtensionsPage,
   DeveloperModePage,
   DevMode,
-  AppCreationPage,
+  ExtensionCreationPage,
 } from '../pages';
 import {
   DevInfoPage,
@@ -27,16 +27,9 @@ import {
   LicensePage,
   ContactSupportPage,
   AppDescriptionPage,
-} from '../pages/sub-pages';
+} from '../pages/info-page/sub-pages';
 import ErrorComponent from './error-component';
-import routes, {
-  EXTENSIONS,
-  INSTALLED,
-  HOME,
-  MY_EXTENSIONS,
-  DEVELOPER_MODE,
-  APP_CREATE,
-} from '../../routes';
+
 import { DEV_MODE_KEY } from '../../constants';
 
 const rootRoute = createRootRouteWithContext<RouterContext>()({
@@ -47,42 +40,42 @@ const defaultRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/',
   beforeLoad: () => {
-    throw redirect({ to: routes[HOME], replace: true });
+    throw redirect({ to: '/explore', replace: true });
   },
 });
 
 const exploreRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: routes[HOME],
+  path: '/explore',
   component: ExplorePage,
 });
 
 const extensionsHubRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: routes[EXTENSIONS],
+  path: '/extensions-hub',
   component: ExtensionsHubPage,
 });
 
 const installedExtensionsRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: routes[INSTALLED],
+  path: '/installed-extensions',
   component: InstalledExtensionsPage,
 });
 
-const MyExtensionsRoute = createRoute({
+const myExtensionsRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: routes[MY_EXTENSIONS],
+  path: '/my-extensions',
   beforeLoad: () => {
     if (window.localStorage.getItem(DEV_MODE_KEY) !== DevMode.ENABLED) {
-      throw redirect({ to: routes[HOME], replace: true });
+      throw redirect({ to: '/explore', replace: true });
     }
   },
   component: MyExtensionsPage,
 });
 
-const DeveloperModeRoute = createRoute({
+const developerModeRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: routes[DEVELOPER_MODE],
+  path: '/developer-mode',
   component: DeveloperModePage,
 });
 
@@ -96,8 +89,8 @@ const infoRoute = createRoute({
 });
 
 const devInfoRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/info/$appId/developer/$devDid',
+  getParentRoute: () => infoRoute,
+  path: '/developer/$devDid',
   component: () => {
     const { devDid } = devInfoRoute.useParams();
     return <DevInfoPage devDid={devDid} />;
@@ -105,8 +98,8 @@ const devInfoRoute = createRoute({
 });
 
 const collaboratorsInfoRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/info/$appId/collaborators',
+  getParentRoute: () => infoRoute,
+  path: '/collaborators',
   component: () => {
     const { appId } = infoRoute.useParams();
     return <CollaboratorsPage appId={appId} />;
@@ -114,8 +107,8 @@ const collaboratorsInfoRoute = createRoute({
 });
 
 const versionInfoRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/info/$appId/versions',
+  getParentRoute: () => infoRoute,
+  path: '/versions',
   component: () => {
     const { appId } = infoRoute.useParams();
     return <VersionInfoPage appId={appId} />;
@@ -123,8 +116,8 @@ const versionInfoRoute = createRoute({
 });
 
 const versionHistoryRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/info/$appId/version-history',
+  getParentRoute: () => infoRoute,
+  path: '/version-history',
   component: () => {
     const { appId } = versionHistoryRoute.useParams();
     return <VersionHistoryPage appId={appId} />;
@@ -132,8 +125,8 @@ const versionHistoryRoute = createRoute({
 });
 
 const auditLogRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/info/$appId/audit-log',
+  getParentRoute: () => infoRoute,
+  path: '/audit-log',
   component: () => {
     const { appId } = auditLogRoute.useParams();
     return <AuditLogPage appId={appId} />;
@@ -141,8 +134,8 @@ const auditLogRoute = createRoute({
 });
 
 const permissionInfoRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/info/$appId/permissions',
+  getParentRoute: () => infoRoute,
+  path: '/permissions',
   component: () => {
     const { appId } = permissionInfoRoute.useParams();
     return <PermissionsPage appId={appId} />;
@@ -150,8 +143,8 @@ const permissionInfoRoute = createRoute({
 });
 
 const appLicenseInfoRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/info/$appId/license',
+  getParentRoute: () => infoRoute,
+  path: '/license',
   component: () => {
     const { appId } = appLicenseInfoRoute.useParams();
     return <LicensePage appId={appId} />;
@@ -159,8 +152,8 @@ const appLicenseInfoRoute = createRoute({
 });
 
 const supportInfoRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/info/$appId/contact',
+  getParentRoute: () => infoRoute,
+  path: '/contact',
   component: () => {
     const { appId } = supportInfoRoute.useParams();
     return <ContactSupportPage appId={appId} />;
@@ -168,8 +161,8 @@ const supportInfoRoute = createRoute({
 });
 
 const appDescriptionRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/info/$appId/description',
+  getParentRoute: () => infoRoute,
+  path: '/description',
   component: () => {
     const { appId } = appDescriptionRoute.useParams();
     return <AppDescriptionPage appId={appId} />;
@@ -178,9 +171,9 @@ const appDescriptionRoute = createRoute({
 
 const extensionCreateRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: routes[APP_CREATE],
+  path: '/create-extension',
   component: () => {
-    return <AppCreationPage />;
+    return <ExtensionCreationPage />;
   },
 });
 
@@ -189,18 +182,19 @@ const routeTree = rootRoute.addChildren([
   exploreRoute,
   extensionsHubRoute,
   installedExtensionsRoute,
-  MyExtensionsRoute,
-  DeveloperModeRoute,
-  infoRoute,
-  devInfoRoute,
-  collaboratorsInfoRoute,
-  versionInfoRoute,
-  versionHistoryRoute,
-  auditLogRoute,
-  permissionInfoRoute,
-  appLicenseInfoRoute,
-  supportInfoRoute,
-  appDescriptionRoute,
+  myExtensionsRoute,
+  developerModeRoute,
+  infoRoute.addChildren([
+    devInfoRoute,
+    collaboratorsInfoRoute,
+    versionInfoRoute,
+    versionHistoryRoute,
+    auditLogRoute,
+    permissionInfoRoute,
+    appLicenseInfoRoute,
+    supportInfoRoute,
+    appDescriptionRoute,
+  ]),
   extensionCreateRoute,
 ]);
 

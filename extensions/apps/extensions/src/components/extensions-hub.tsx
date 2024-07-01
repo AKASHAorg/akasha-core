@@ -17,7 +17,6 @@ export type TExtensionsHubProps = {
     description: string;
     ctaNode: React.ReactNode;
   }[];
-  onAppClick: (appId: string) => void;
 };
 
 export const ExtensionsHub: React.FC<TExtensionsHubProps> = props => {
@@ -27,14 +26,13 @@ export const ExtensionsHub: React.FC<TExtensionsHubProps> = props => {
     assetExtension = 'webp',
     extensions,
     sections,
-    onAppClick,
   } = props;
 
   return (
     <Stack spacing="gap-y-4" customStyle="mb-2">
       <Text variant="h5">{titleLabel}</Text>
       <Card padding="p-4">
-        <AppList apps={extensions} onAppSelected={onAppClick} />
+        <AppList apps={extensions} />
       </Card>
       {sections.map((section, idx) => (
         <Card key={section.title + idx} padding="p-4">

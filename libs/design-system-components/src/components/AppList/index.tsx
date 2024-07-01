@@ -1,6 +1,5 @@
 import React, { ReactElement, ReactNode } from 'react';
 
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -18,7 +17,6 @@ type App = {
 
 export type AppListProps = {
   apps: App[];
-  onAppSelected: (appId: string) => void;
 };
 
 /**
@@ -26,7 +24,7 @@ export type AppListProps = {
  * @param apps - array of extensions
  * @param onAppSelected - handler for clicking on an app from the list
  */
-const AppList: React.FC<AppListProps> = ({ apps, onAppSelected }) => {
+const AppList: React.FC<AppListProps> = ({ apps }) => {
   const iconStyle = `shrink-0	${getRadiusClasses(10)} ${getColorClasses(
     { light: 'grey6', dark: 'grey5' },
     'bg',
@@ -37,32 +35,30 @@ const AppList: React.FC<AppListProps> = ({ apps, onAppSelected }) => {
       {apps?.map((app, index, array) => (
         <Stack key={app.name} spacing="gap-y-4">
           <Stack direction="row" justify="between" align="center" spacing="gap-x-8">
-            <Button plain={true} onClick={() => onAppSelected(app.id)}>
-              <Stack direction="row" spacing="gap-x-3">
-                <Stack align="center" justify="center" customStyle={iconStyle}>
-                  {app.icon && (
-                    <Icon
-                      solid={app.isSolidIcon}
-                      icon={app.icon}
-                      accentColor={true}
-                      size={{ width: 'w-[2rem]', height: 'h-[2rem]' }}
-                    />
-                  )}
-                </Stack>
-                <Stack spacing="gap-y-1">
-                  <Text variant="button-sm">{app.name}</Text>
-
-                  <Text
-                    variant="footnotes2"
-                    weight="normal"
-                    color={{ light: 'grey4', dark: 'grey7' }}
-                    lineClamp={2}
-                  >
-                    {app.description}
-                  </Text>
-                </Stack>
+            <Stack direction="row" spacing="gap-x-3">
+              <Stack align="center" justify="center" customStyle={iconStyle}>
+                {app.icon && (
+                  <Icon
+                    solid={app.isSolidIcon}
+                    icon={app.icon}
+                    accentColor={true}
+                    size={{ width: 'w-8', height: 'h-8' }}
+                  />
+                )}
               </Stack>
-            </Button>
+              <Stack direction="column" justify="between">
+                <Text variant="button-sm">{app.name}</Text>
+
+                <Text
+                  variant="footnotes2"
+                  weight="normal"
+                  color={{ light: 'grey4', dark: 'grey7' }}
+                  lineClamp={2}
+                >
+                  {app.description}
+                </Text>
+              </Stack>
+            </Stack>
 
             {app.action}
           </Stack>

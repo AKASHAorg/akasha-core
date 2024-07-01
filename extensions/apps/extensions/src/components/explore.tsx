@@ -19,7 +19,6 @@ type TLatestExtensionsCardProps = {
   latestExtensionsLabel: string;
   latestExtensions?: TContentProps[];
   onViewAllClick: () => void;
-  onAppClick: (appId: string) => void;
 };
 
 export type TExploreProps = TLatestExtensionsCardProps & {
@@ -34,23 +33,6 @@ export type TExploreProps = TLatestExtensionsCardProps & {
   }[];
 };
 
-const LatestExtensionsCard: React.FC<TLatestExtensionsCardProps> = props => {
-  const { buttonLabel, latestExtensionsLabel, latestExtensions, onViewAllClick, onAppClick } =
-    props;
-
-  return (
-    <Card padding="p-4">
-      <Stack spacing="gap-y-4">
-        <Stack direction="row" align="center" justify="between">
-          <Text variant="h6">{latestExtensionsLabel}</Text>
-          <Button variant="text" label={buttonLabel} onClick={onViewAllClick} />
-        </Stack>
-        <AppList apps={latestExtensions} onAppSelected={onAppClick} />
-      </Stack>
-    </Card>
-  );
-};
-
 export const Explore: React.FC<TExploreProps> = props => {
   const {
     titleLabel,
@@ -61,7 +43,6 @@ export const Explore: React.FC<TExploreProps> = props => {
     latestExtensions,
     buttonLabel,
     onViewAllClick,
-    onAppClick,
   } = props;
 
   return (
@@ -70,13 +51,15 @@ export const Explore: React.FC<TExploreProps> = props => {
       {sections.map((section, idx) => (
         <React.Fragment key={section.title + idx}>
           {!!latestExtensions?.length && idx === 1 && (
-            <LatestExtensionsCard
-              buttonLabel={buttonLabel}
-              latestExtensionsLabel={latestExtensionsLabel}
-              latestExtensions={latestExtensions}
-              onViewAllClick={onViewAllClick}
-              onAppClick={onAppClick}
-            />
+            <Card padding="p-4">
+              <Stack spacing="gap-y-4">
+                <Stack direction="row" align="center" justify="between">
+                  <Text variant="h6">{latestExtensionsLabel}</Text>
+                  <Button variant="text" label={buttonLabel} onClick={onViewAllClick} />
+                </Stack>
+                <AppList apps={latestExtensions} />
+              </Stack>
+            </Card>
           )}
           <Card key={section.title + idx} padding="p-4">
             <Stack spacing="gap-y-3">

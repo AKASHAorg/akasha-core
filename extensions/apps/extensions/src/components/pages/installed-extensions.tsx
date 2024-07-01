@@ -101,7 +101,6 @@ export const InstalledExtensionsPage: React.FC<unknown> = () => {
           ),
         },
       ]}
-      onAppClick={handleAppClick}
     />
   );
 };

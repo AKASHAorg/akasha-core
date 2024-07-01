@@ -21,7 +21,6 @@ export type InstalledExtensionsProps = {
     description2?: string;
     onClickDiscover?: () => void;
   }[];
-  onAppClick: (appId: string) => void;
 };
 
 export const InstalledExtensions: React.FC<InstalledExtensionsProps> = props => {
@@ -32,7 +31,6 @@ export const InstalledExtensions: React.FC<InstalledExtensionsProps> = props => 
     installedExtensions,
     defaultExtensions,
     sections,
-    onAppClick,
   } = props;
 
   return (
@@ -65,9 +63,7 @@ export const InstalledExtensions: React.FC<InstalledExtensionsProps> = props => 
               </Stack>
             </>
           )}
-          {!!installedExtensions.length && (
-            <AppList apps={installedExtensions} onAppSelected={onAppClick} />
-          )}
+          {!!installedExtensions.length && <AppList apps={installedExtensions} />}
         </Stack>
       </Card>
       <Card padding="p-4" margin="mb-2">
@@ -76,7 +72,7 @@ export const InstalledExtensions: React.FC<InstalledExtensionsProps> = props => 
           <Text variant="body2" color={{ light: 'grey5', dark: 'grey6' }}>
             {sections[1].description}
           </Text>
-          <AppList apps={defaultExtensions} onAppSelected={onAppClick} />
+          <AppList apps={defaultExtensions} />
         </Stack>
       </Card>
     </Stack>

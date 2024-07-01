@@ -87,7 +87,6 @@ export const ExtensionsHubPage: React.FC<unknown> = () => {
           ),
         },
       ]}
-      onAppClick={handleAppClick}
     />
   );
 };

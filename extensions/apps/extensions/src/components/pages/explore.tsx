@@ -117,7 +117,6 @@ export const ExplorePage: React.FC<unknown> = () => {
       }))}
       buttonLabel={t('View All')}
       onViewAllClick={handleViewAllLatestExtensions}
-      onAppClick={handleAppClick}
     />
   );
 };

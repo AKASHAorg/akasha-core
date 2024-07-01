@@ -16,12 +16,13 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 export type DropdownMenuItemGroupType = {
   id: string;
   title: string;
+  altTitle?: string;
   icon?: React.ReactElement;
   type?: 'optgroup' | 'opt';
   children?: DropdownMenuItemGroupType[];
 };
 
-export type IDropdownProps = {
+export type IDropdownFilterProps = {
   name?: string;
   label?: string;
   placeholderLabel?: string;
@@ -30,12 +31,14 @@ export type IDropdownProps = {
   setSelected: React.Dispatch<React.SetStateAction<DropdownMenuItemGroupType>>;
   divider?: boolean;
   optgroup?: boolean;
+  customStyle?: string;
+  padding?: string;
 };
 
 /**
- * Component used in the search app to filter search criteria
+ * Base dropdown filter
  */
-const Dropdown: React.FC<IDropdownProps> = ({
+const DropdownFilter: React.FC<IDropdownFilterProps> = ({
   label,
   placeholderLabel,
   menuItems,
@@ -43,9 +46,10 @@ const Dropdown: React.FC<IDropdownProps> = ({
   setSelected,
   divider = false,
   optgroup = false,
+  customStyle,
+  padding = 'p-3',
 }) => {
   const [dropOpen, setDropOpen] = React.useState<boolean>(false);
-  // const [selected, setSelected] = React.useState<null | DropdownMenuItemGroupType>(null);
 
   React.useEffect(() => {
     if (placeholderLabel) {
@@ -78,16 +82,16 @@ const Dropdown: React.FC<IDropdownProps> = ({
   };
 
   return (
-    <Stack ref={anchorRef} fullWidth customStyle="relative" direction="row">
+    <Stack ref={anchorRef} fullWidth customStyle={`relative`} direction="row">
       {label && <Text variant="label">{label}</Text>}
 
       <button
-        className={tx`inline-flex items-center justify-between w-full p-3 rounded-lg bg-(white dark:grey3) rounded-lg border-(1 solid ${
+        className={tx`inline-flex items-center justify-between w-full ${padding} rounded-lg bg-(white dark:grey3) rounded-lg border-(1 solid ${
           dropOpen ? 'secondaryLight dark:secondark-dark' : 'grey8 dark:grey3'
-        })`}
+        }) ${customStyle}`}
         onClick={handleDropClick}
       >
-        <Text variant="body1">{selected?.title}</Text>
+        <Text variant="body1">{selected?.altTitle || selected?.title}</Text>
         {dropOpen ? (
           <Icon icon={<ChevronUpIcon />} customStyle="ml-4" />
         ) : (
@@ -213,7 +217,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
               } else {
                 return (
                   <li
-                    key={menuItem.id}
+                    key={idx}
                     className={tw(
                       `${optionStyle} ${
                         idx < menuItems.length - 1 ? 'border-b(1 grey8 dark:grey3)' : ''
@@ -248,15 +252,15 @@ const Dropdown: React.FC<IDropdownProps> = ({
                         >
                           {menuItem.title}
                         </Text>
+                        {isSelected && (
+                          <span className={tw('ml-4')}>
+                            <Icon
+                              icon={<CheckIcon />}
+                              color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                            />
+                          </span>
+                        )}
                       </Stack>
-                      {isSelected && (
-                        <span className={tw('ml-4')}>
-                          <Icon
-                            icon={<CheckIcon />}
-                            color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-                          />
-                        </span>
-                      )}
                     </Card>
                   </li>
                 );
@@ -269,4 +273,4 @@ const Dropdown: React.FC<IDropdownProps> = ({
   );
 };
 
-export default Dropdown;
+export default DropdownFilter;

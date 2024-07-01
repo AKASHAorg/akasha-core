@@ -59,10 +59,10 @@ export const DevInfoPage: React.FC<DevInfoPageProps> = () => {
             )}
           />
           <Divider />
-          <AppList apps={ownExtensions} onAppSelected={handleAppClick} />
+          <AppList apps={ownExtensions} />
           <Divider />
           <Text variant="h5">{t('Collaborations')}</Text>
-          <AppList apps={ownExtensions.slice(0, 1)} onAppSelected={handleAppClick} />
+          <AppList apps={ownExtensions.slice(0, 1)} />
         </Stack>
       </Card>
     </>

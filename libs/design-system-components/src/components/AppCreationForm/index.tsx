@@ -57,7 +57,7 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
     mode: 'onChange',
   });
   React.useEffect(() => {
-    if (!!errorMessage) {
+    if (errorMessage) {
       setError(errorMessage.fieldName as FieldName, {
         type: 'custom',
         message: errorMessage.message,
@@ -67,7 +67,7 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
 
   const extensionTypes = [
     { id: '1', type: AkashaAppApplicationType.App, title: 'Application' },
-    { id: '2', type: AkashaAppApplicationType.Other, title: 'Extension' },
+    { id: '2', type: AkashaAppApplicationType.Other, title: 'Plugin' },
     { id: '3', type: AkashaAppApplicationType.Widget, title: 'Widget' },
   ];
   const isFormDirty =
