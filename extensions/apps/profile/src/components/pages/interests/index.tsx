@@ -40,7 +40,7 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
     skip: !isLoggedIn,
   });
 
-  const { data: ownInterestsQueryData } = useGetInterestsByDidQuery({
+  const { data: loggedUserInterestsQueryData } = useGetInterestsByDidQuery({
     variables: { id: authenticatedDID },
     skip: !isLoggedIn,
   });
@@ -59,30 +59,31 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
   }, [isLoggedIn, profileInterestsQueryData]);
 
   // get interests for the logged profile
-  const ownInterests = useMemo(() => {
+  const loggedUserInterests = useMemo(() => {
     if (!isLoggedIn) return null;
-    return ownInterestsQueryData &&
-      hasOwn(ownInterestsQueryData.node, 'akashaProfileInterests') &&
-      ownInterestsQueryData.node.akashaProfileInterests?.topics.length > 0
-      ? ownInterestsQueryData.node.akashaProfileInterests?.topics.map(topic => ({
+    return loggedUserInterestsQueryData &&
+      hasOwn(loggedUserInterestsQueryData.node, 'akashaProfileInterests') &&
+      loggedUserInterestsQueryData.node.akashaProfileInterests?.topics.length > 0
+      ? loggedUserInterestsQueryData.node.akashaProfileInterests?.topics.map(topic => ({
           value: topic.value,
           labelType: topic.labelType,
         }))
       : [];
-  }, [isLoggedIn, ownInterestsQueryData]);
+  }, [isLoggedIn, loggedUserInterestsQueryData]);
 
   useEffect(() => {
-    if (ownInterests && ownInterests.length) {
-      setActiveInterests([...activeInterests, ...ownInterests]);
+    if (loggedUserInterests && loggedUserInterests.length) {
+      setActiveInterests(loggedUserInterests);
     }
-  }, [ownInterests]);
+  }, [loggedUserInterests]);
 
   const interestSubscriptionId = useMemo(() => {
     if (!isLoggedIn) return null;
-    return ownInterestsQueryData && hasOwn(ownInterestsQueryData.node, 'akashaProfileInterests')
-      ? ownInterestsQueryData.node.akashaProfileInterests?.id
+    return loggedUserInterestsQueryData &&
+      hasOwn(loggedUserInterestsQueryData.node, 'akashaProfileInterests')
+      ? loggedUserInterestsQueryData.node.akashaProfileInterests?.id
       : null;
-  }, [isLoggedIn, ownInterestsQueryData]);
+  }, [isLoggedIn, loggedUserInterestsQueryData]);
 
   const sdk = getSDK();
 
@@ -103,13 +104,13 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
 
       runMutations(newActiveInterests);
       setActiveInterests(newActiveInterests);
-
-      return;
+    } else {
+      navigateTo?.({
+        appName: '@akashaorg/app-antenna',
+        getNavigationUrl: (navRoutes: { [key: string]: string }) =>
+          `${navRoutes.Tags}/${topic.value}`,
+      });
     }
-    navigateTo?.({
-      appName: '@akashaorg/app-antenna',
-      getNavigationUrl: navRoutes => `${navRoutes.Tags}/${topic.value}`,
-    });
   };
 
   const runMutations = (interests: ProfileLabeled[]) => {
@@ -168,7 +169,7 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
               direction="row"
               align="center"
               justify="start"
-              spacing="gap-x-2"
+              spacing="gap-2"
               customStyle="flex-wrap"
               fullWidth
             >
@@ -203,7 +204,7 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
             moreInterestTitle={t('Add more interests')}
             moreInterestDescription={t('Separate your interests by comma or space!')}
             moreInterestPlaceholder={t('Interests')}
-            myInterests={ownInterests}
+            myInterests={loggedUserInterests}
             interests={[]} /* TODO: when indexed list of interests hook is ready connect it */
             maxInterests={10}
             labelType={sdk.services.gql.labelTypes.INTEREST}
