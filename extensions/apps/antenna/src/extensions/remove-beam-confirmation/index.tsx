@@ -30,6 +30,9 @@ const Component: React.FC<IRootExtensionProps> = () => {
             active: false,
           },
           id: modalData['beamId'],
+          options: {
+            shouldIndex: false,
+          },
         },
       },
     })
