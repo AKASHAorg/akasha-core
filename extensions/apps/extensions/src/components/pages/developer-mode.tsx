@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
@@ -16,6 +19,7 @@ export enum DevMode {
 
 export const DeveloperModePage: React.FC<unknown> = () => {
   const navigate = useNavigate();
+  const { uiEvents } = useRootComponentProps();
   const { t } = useTranslation('app-extensions');
   // get the dev mode preference, if any, from local storage
   const localValue = window.localStorage.getItem(DEV_MODE_KEY);
@@ -26,11 +30,23 @@ export const DeveloperModePage: React.FC<unknown> = () => {
     const value = devMode === DevMode.ENABLED ? DevMode.DISABLED : DevMode.ENABLED;
     setDevMode(value);
     window.localStorage.setItem(DEV_MODE_KEY, value);
+    // show snackbar
+    uiEvents.next({
+      event: NotificationEvents.ShowNotification,
+      data: {
+        type: NotificationTypes.Info,
+        message:
+          devMode !== DevMode.ENABLED
+            ? t('Developer Mode activated. The page will reload now')
+            : t('Developer Mode deactivated. The page will reload now'),
+        snackbarIcon: <InformationCircleIcon />,
+      },
+    });
 
     // allow one sec delay, then reload the page
     setTimeout(() => {
       window.location.reload();
-    }, 1000);
+    }, 1500);
   };
 
   const handleCTAClick = () => {
