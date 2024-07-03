@@ -10,6 +10,7 @@ import {
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { Akasha } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
+import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { startWidgetsTogglingBreakpoint } from '@akashaorg/design-system-core/lib/utils/breakpoints';
@@ -110,6 +111,8 @@ const Topbar: React.FC<ITopbarProps> = props => {
   const customStyle =
     'flex-row justify-between items-center py-1.5 px-2 space-x-4 xs:(fixed top-0 z-8)';
 
+  const isAlpha = true;
+
   return (
     <Card customStyle={customStyle}>
       <Stack direction="row" spacing="gap-x-2">
@@ -129,11 +132,23 @@ const Topbar: React.FC<ITopbarProps> = props => {
         />
       </Stack>
       <Button plain={true} customStyle="p-0 !ml-0 cursor-pointer" onClick={onBrandClick}>
-        <Stack align="center" justify="center" direction="column">
+        <Stack align="center" justify="center" direction="column" spacing="gap-y-1">
           <WorldIcon fallback={<Akasha />} />
-          <Text customStyle="uppercase font([Inter] light) text(xs black dark:white) drop-shadow-md">
-            {worldConfig.title}
-          </Text>
+          {isAlpha ? (
+            <Pill
+              type="info"
+              label="Alpha"
+              weight="light"
+              color="white"
+              background={{ light: 'errorLight', dark: 'errorDark' }}
+              borderColor={{ light: 'errorLight', dark: 'errorDark' }}
+              customStyle="w-fit px-2"
+            />
+          ) : (
+            <Text customStyle="uppercase font([Inter] light) text(xs black dark:white) drop-shadow-md">
+              {worldConfig.title}
+            </Text>
+          )}
         </Stack>
       </Button>
       <Stack direction="row" spacing="gap-x-2">
