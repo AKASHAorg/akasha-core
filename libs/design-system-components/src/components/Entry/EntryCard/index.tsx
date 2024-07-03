@@ -176,6 +176,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
             items={menuItems}
             disabled={disableActions}
             customStyle="shrink-0"
+            onMenuClick={e => e.stopPropagation()}
           />
         </Stack>
         {!entryData.active && (
