@@ -54,6 +54,7 @@ export type Colors =
   | `warningDark/${number}`
   | `errorLight/${number}`
   | `errorDark/${number}`
+  | `errorFade/${number}`
   | `blue-${number}`
   | `red-${number}`
   | `orange-${number}`;
