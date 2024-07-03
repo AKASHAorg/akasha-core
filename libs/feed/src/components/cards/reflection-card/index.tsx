@@ -56,6 +56,7 @@ const ReflectionCard: React.FC<ReflectCardProps> = props => {
 
   return (
     <EntryCard
+      dataTestId="reflection-card"
       entryData={entryData}
       reflectAnchorLink="/@akashaorg/app-antenna/reflection"
       slateContent={entryData.content.flatMap(item => decodeb64SlateContent(item.value))}

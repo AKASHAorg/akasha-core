@@ -81,6 +81,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
 
   return (
     <EntryCard
+      dataTestId="beam-card"
       entryData={entryData}
       reflectionsCount={entryData?.reflectionsCount}
       reflectAnchorLink="/@akashaorg/app-antenna/beam"
