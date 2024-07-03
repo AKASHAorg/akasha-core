@@ -25,19 +25,17 @@ const writeToStorage = (storage: IStorage, key: string, value: string[]): void =
 export function useDismissedCard(id: string, statusStorage?: IStorage): [boolean, () => void] {
   const [dismissed, setDismissed] = useState<boolean>(true);
 
-  const storage = statusStorage || window.localStorage;
-
-  const dismissedIds = new Set<string>(JSON.parse(storage.getItem(LOCAL_STORAGE_KEY)));
+  const storage = statusStorage ?? window.localStorage;
 
   useEffect(() => {
-    setDismissed(dismissedIds.has(id));
+    setDismissed(new Set<string>(JSON.parse(storage.getItem(LOCAL_STORAGE_KEY))).has(id));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dismissed]);
+  }, []);
 
   const dismissCard = () => {
-    dismissedIds.add(id);
+    const ids = new Set<string>(JSON.parse(storage.getItem(LOCAL_STORAGE_KEY)));
 
-    writeToStorage(storage, LOCAL_STORAGE_KEY, [...dismissedIds]);
+    writeToStorage(storage, LOCAL_STORAGE_KEY, [...ids.add(id)]);
 
     setDismissed(true);
   };
