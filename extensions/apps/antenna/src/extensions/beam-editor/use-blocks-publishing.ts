@@ -8,7 +8,6 @@ import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import type { AkashaBeamInput } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { useCreateBeamMutation } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import getSDK from '@akashaorg/awf-sdk';
-import { useIndexBeamMutation } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import type { CreateBeamMutation } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 
 /**
@@ -28,7 +27,6 @@ export type UseBlocksPublishingProps = {
   onComplete?: (beamData: CreateBeamMutation['createAkashaBeam']) => void;
 };
 export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
-  const { onComplete } = props;
   const [availableBlocks, setAvailableBlocks] = React.useState([]);
   const [isPublishing, setIsPublishing] = React.useState(false);
   const [errors, setErrors] = React.useState<Error[]>([]);
@@ -46,8 +44,6 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
   const [createBeam, createBeamQuery] = useCreateBeamMutation({
     context: { source: sdk.current.services.gql.contextSources.composeDB },
   });
-
-  const [createBeamIndex, beamIndexQuery] = useIndexBeamMutation();
 
   const [blocksInUse, setBlocksInUse] = React.useState<
     (ContentBlockRootProps['blockInfo'] & {
@@ -107,47 +103,16 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
             content: beamContent,
           },
         },
-      }).catch(err => {
-        setErrors(prev => [...prev, new Error(`failed to create beam: ${err.message}`)]);
-      });
-    }
-  }, [blocksInUse, createBeam, createBeamQuery, isNsfw, editorTags]);
-
-  const indexBeam = React.useCallback(
-    async (beamData: CreateBeamMutation['createAkashaBeam']) => {
-      try {
-        const indexingVars = await sdk.current.api.auth.prepareIndexedID(beamData.document.id);
-        createBeamIndex({
-          variables: indexingVars,
-        }).then(() => {
+      })
+        .then(() => {
           setBlocksInUse([]);
           setIsPublishing(false);
-        });
-      } catch (err) {
-        setErrors(prev => [...prev, new Error(`Failed to index beam: ${err.message}`)]);
-      }
-    },
-    [createBeamIndex],
-  );
-
-  React.useEffect(() => {
-    if (isPublishing && createBeamQuery.data?.createAkashaBeam && !beamIndexQuery.called) {
-      indexBeam(createBeamQuery.data.createAkashaBeam)
-        .then(() => {
-          onComplete?.(createBeamQuery.data.createAkashaBeam);
         })
-        .catch();
+        .catch(err => {
+          setErrors(prev => [...prev, new Error(`failed to create beam: ${err.message}`)]);
+        });
     }
-    if (beamIndexQuery.loading) return;
-  }, [
-    beamIndexQuery.called,
-    beamIndexQuery.error,
-    beamIndexQuery.loading,
-    createBeamQuery,
-    indexBeam,
-    isPublishing,
-    onComplete,
-  ]);
+  }, [blocksInUse, createBeam, createBeamQuery, isNsfw, editorTags]);
 
   const createContentBlocks = React.useCallback(
     async (nsfw: boolean, editorTags: string[], blocksWithActiveNsfw: Map<number, boolean>) => {
@@ -313,14 +278,11 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
     if (errors.length) {
       err.push(errors.map(err => err.message));
     }
-    if (beamIndexQuery.error) {
-      err.push(beamIndexQuery.error.message);
-    }
     if (createBeamQuery.error) {
       err.push(createBeamQuery.error.message);
     }
     return err;
-  }, [beamIndexQuery.error, createBeamQuery.error, errors]);
+  }, [createBeamQuery.error, errors]);
 
   return {
     isPublishing,
@@ -336,6 +298,6 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
     updateBlockDisablePublishState,
     availableBlocks,
     errors: formattedErrors,
-    isLoading: beamIndexQuery.loading || createBeamQuery.loading,
+    isLoading: createBeamQuery.loading,
   };
 };
