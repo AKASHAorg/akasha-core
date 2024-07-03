@@ -1,9 +1,9 @@
 import {
   ContentBlockEvents,
   ContentBlockRegisterEvent,
-  ContentBlockStorePluginInterface,
-  RootComponentProps,
-  RootExtensionProps,
+  IContentBlockStorePlugin,
+  IRootComponentProps,
+  IRootExtensionProps,
 } from '@akashaorg/typings/lib/ui';
 import { hasOwn } from '@akashaorg/ui-awf-hooks';
 import { BlockLabeledValue } from '@akashaorg/typings/lib/sdk/graphql-types-new';
@@ -22,7 +22,7 @@ export class ContentBlockStore extends BaseStore {
   static instance: ContentBlockStore;
   #blocks: ContentBlockRegisterEvent['data'];
 
-  constructor(uiEvents: RootComponentProps['uiEvents']) {
+  constructor(uiEvents: IRootComponentProps['uiEvents']) {
     super(uiEvents);
     this.#blocks = [];
     this.subscribeRegisterEvents(ContentBlockEvents.RegisterContentBlock, {
@@ -35,7 +35,7 @@ export class ContentBlockStore extends BaseStore {
     });
   }
 
-  public getMatchingBlocks: ContentBlockStorePluginInterface['getMatchingBlocks'] = blockInfo => {
+  public getMatchingBlocks: IContentBlockStorePlugin['getMatchingBlocks'] = blockInfo => {
     if (!blockInfo) {
       console.warn('Block info not defined:', blockInfo);
       return [];
@@ -111,7 +111,7 @@ export class ContentBlockStore extends BaseStore {
     });
   };
 
-  static getInstance(uiEvents: RootExtensionProps<unknown>['uiEvents']) {
+  static getInstance(uiEvents: IRootExtensionProps<unknown>['uiEvents']) {
     if (!this.instance) {
       this.instance = new ContentBlockStore(uiEvents);
     }

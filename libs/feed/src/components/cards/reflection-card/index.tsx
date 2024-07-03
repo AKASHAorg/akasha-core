@@ -4,7 +4,7 @@ import EntryCard, {
 } from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import AuthorProfileAvatar from '../author-profile-avatar';
 import { useAkashaStore } from '@akashaorg/ui-awf-hooks';
-import { EntityTypes, ReflectEntryData } from '@akashaorg/typings/lib/ui';
+import { EntityTypes, ReflectionData } from '@akashaorg/typings/lib/ui';
 import { decodeb64SlateContent, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { Trans, useTranslation } from 'react-i18next';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -24,7 +24,7 @@ export type ReflectCardProps = Pick<
   | 'hover'
   | 'lastEntry'
 > & {
-  entryData: ReflectEntryData;
+  entryData: ReflectionData;
   hidePublishTime?: boolean;
   pending?: boolean;
 };

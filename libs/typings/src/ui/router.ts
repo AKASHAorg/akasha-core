@@ -1,10 +1,17 @@
 import { ApolloClient } from '@apollo/client';
 
-export interface RouterContext {
+/**
+ * Interface defining router context used for dependency injection
+ **/
+
+export interface IRouterContext {
   apolloClient: ApolloClient<object>;
 }
 
-export interface CreateRouter {
+/**
+ * Interface defining input params of a function which creates a router instance
+ **/
+export interface ICreateRouter {
   baseRouteName: string;
   apolloClient?: ApolloClient<object>;
 }

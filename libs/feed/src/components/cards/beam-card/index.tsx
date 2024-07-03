@@ -6,7 +6,7 @@ import ContentBlockRenderer from './content-block-renderer';
 import ActionButtons from './action-buttons';
 import AuthorProfileAvatar from '../author-profile-avatar';
 import { sortByKey, useAkashaStore } from '@akashaorg/ui-awf-hooks';
-import { EntityTypes, BeamEntryData } from '@akashaorg/typings/lib/ui';
+import { EntityTypes, BeamData } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps, useNsfwToggling } from '@akashaorg/ui-awf-hooks';
 import { Trans, useTranslation } from 'react-i18next';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -24,7 +24,7 @@ type BeamCardProps = Pick<
   | 'showHiddenContent'
   | 'customStyle'
 > & {
-  entryData: BeamEntryData;
+  entryData: BeamData;
   hidePublishTime?: boolean;
   showNSFWCard: boolean;
   showLoginModal?: () => void;

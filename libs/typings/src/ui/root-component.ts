@@ -1,36 +1,42 @@
 import React from 'react';
 import type singleSpa from 'single-spa';
-import type { IAppConfig } from './apps';
+import type { IAppConfig } from './extensions';
 import type { Subject } from 'rxjs';
 import type { UIEventData } from './ui-events';
-import type { ModalNavigationOptions } from './navigation';
+import type { IModalNavigationOptions } from './navigation';
 import type i18n from 'i18next';
-import type { IPluginsMap } from './plugins';
-import type { WorldConfig, QueryStringType, LayoutConfig } from './app-loader';
+import type { IPluginConf } from './plugins';
+import type { WorldConfig, IQueryString, LayoutConfig } from './app-loader';
 import type { ILogger } from '../sdk/log';
 
-export interface RootComponentProps {
+/**
+ * Interface defining props shared via root component provider which are available for all apps and widgets
+ **/
+export interface IRootComponentProps {
   activeWhen?: { path: string };
   domElement?: HTMLElement;
-  domElementGetter?: () => HTMLElement;
   uiEvents: Subject<UIEventData>;
   i18next?: typeof i18n;
-  plugins?: Record<string, IPluginsMap>;
+  plugins?: IPluginConf;
   layoutConfig: LayoutConfig;
   logger: ILogger;
   name?: string;
   singleSpa: typeof singleSpa;
   baseRouteName: string;
-  navigateToModal: (opts: ModalNavigationOptions) => void;
+  worldConfig: WorldConfig;
+  domElementGetter?: () => HTMLElement;
+  navigateToModal: (opts: IModalNavigationOptions) => void;
   getModalFromParams: (location: Location) => { name: string; message?: string; title?: string };
   getAppRoutes?: (appId: string) => IAppConfig['routes'];
-  worldConfig: WorldConfig;
-  parseQueryString: (queryString: string) => QueryStringType;
+  parseQueryString: (queryString: string) => IQueryString;
   encodeAppName: (name: string) => string;
   decodeAppName: (name: string) => string;
   children?: React.ReactNode;
 }
 
-export interface RootExtensionProps<D = Record<string, unknown>> extends RootComponentProps {
+/**
+ * Interface defining props of a root extension point component
+ **/
+export interface IRootExtensionProps<D = Record<string, unknown>> extends IRootComponentProps {
   extensionData: D;
 }

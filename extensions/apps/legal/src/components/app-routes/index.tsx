@@ -10,7 +10,7 @@ import ErrorComponent from './error-component';
 import routes, { HOME, TOS, TOU, PP, COC, DG } from '../../routes';
 import { createRootRoute, createRoute, createRouter, redirect } from '@tanstack/react-router';
 
-import { CreateRouter } from '@akashaorg/typings/lib/ui';
+import { ICreateRouter } from '@akashaorg/typings/lib/ui';
 
 const rootRoute = createRootRoute({
   component: Outlet,
@@ -80,7 +80,7 @@ const routeTree = rootRoute.addChildren([
   developerGuidelinesRoute,
 ]);
 
-export const router = ({ baseRouteName }: CreateRouter) =>
+export const router = ({ baseRouteName }: ICreateRouter) =>
   createRouter({
     routeTree,
     basepath: baseRouteName,

@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
 
-import { RootComponentProps } from '@akashaorg/typings/lib/ui';
+import { IRootComponentProps } from '@akashaorg/typings/lib/ui';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { withProviders } from '@akashaorg/ui-awf-hooks';
 
@@ -12,7 +12,7 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOMClient: ReactDOM,
   rootComponent: withProviders(App),
-  errorBoundary: (error, errorInfo, props: RootComponentProps) => {
+  errorBoundary: (error, errorInfo, props: IRootComponentProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
     }

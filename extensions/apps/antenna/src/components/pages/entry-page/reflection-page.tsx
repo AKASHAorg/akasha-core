@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useMemo, useRef } from 'react';
 import getSDK from '@akashaorg/awf-sdk';
-import { EntityTypes, ReflectEntryData } from '@akashaorg/typings/lib/ui';
+import { EntityTypes, ReflectionData } from '@akashaorg/typings/lib/ui';
 import { useGetReflectionStreamQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -20,7 +20,7 @@ import { useNavigate } from '@tanstack/react-router';
 import { EditableReflectionResolver, ReflectFeed } from '@akashaorg/ui-lib-feed';
 
 type ReflectionPageProps = {
-  entryData: ReflectEntryData;
+  entryData: ReflectionData;
 };
 
 const ReflectionPage: React.FC<ReflectionPageProps> = props => {

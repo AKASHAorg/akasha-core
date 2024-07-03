@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useRoutingEvents } from './use-routing-events';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { ExtensionInterface, ExtensionStorePlugin } from '@akashaorg/typings/lib/ui';
+import { ExtensionInterface, IExtensionStorePlugin } from '@akashaorg/typings/lib/ui';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { RootParcel } from './root-parcel';
 
@@ -24,7 +24,7 @@ export const Extension = <D,>(props: ExtensionComponentProps<D>) => {
     extensionData,
   } = props;
   const { getExtensionsPlugin, getContext, logger } = useRootComponentProps();
-  const extensionStore = React.useRef<ExtensionStorePlugin>(getExtensionsPlugin().extensionStore);
+  const extensionStore = React.useRef<IExtensionStorePlugin>(getExtensionsPlugin().extensionStore);
   const [parcelConfigs, setParcelConfigs] = React.useState([]);
   const [isEmpty, setIsEmpty] = React.useState(false);
 

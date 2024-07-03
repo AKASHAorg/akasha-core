@@ -1,5 +1,5 @@
 import { useReactiveVar } from '@apollo/client';
-import type { ReflectEntryData } from '@akashaorg/typings/lib/ui';
+import type { ReflectionData } from '@akashaorg/typings/lib/ui';
 import { createReactiveVar } from './utils/create-reactive-var';
 
 let pendingReflectionsVar;
@@ -18,11 +18,11 @@ export const PENDING_REFLECTION_PREFIX = 'pending-reflection';
  */
 export const usePendingReflections = () => {
   if (!pendingReflectionsVar) {
-    pendingReflectionsVar = createReactiveVar<ReflectEntryData[]>([]);
+    pendingReflectionsVar = createReactiveVar<ReflectionData[]>([]);
   }
-  const pendingReflections = useReactiveVar<ReflectEntryData[]>(pendingReflectionsVar);
+  const pendingReflections = useReactiveVar<ReflectionData[]>(pendingReflectionsVar);
 
-  const addPendingReflection = (pendingReflection: ReflectEntryData) => {
+  const addPendingReflection = (pendingReflection: ReflectionData) => {
     const oldState = pendingReflectionsVar();
 
     pendingReflectionsVar([...oldState, pendingReflection]);

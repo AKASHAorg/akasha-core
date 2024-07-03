@@ -4,7 +4,7 @@ import {
   MenuItemAreaType,
   IntegrationRegistrationOptions,
   LogoTypeSource,
-  RootComponentProps,
+  IRootComponentProps,
 } from '@akashaorg/typings/lib/ui';
 import { NotificationPlugin } from './plugins/notification-plugin';
 import getSDK from '@akashaorg/awf-sdk';
@@ -86,7 +86,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   ],
 });
 
-export const getPlugin = async (props: RootComponentProps) => {
+export const getPlugin = async (props: IRootComponentProps) => {
   return {
     notification: new NotificationPlugin(props),
   };

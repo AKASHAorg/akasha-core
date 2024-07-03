@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { IntegrationTypes } from '@akashaorg/typings/lib/ui';
+import { ExtensionTypes } from '@akashaorg/typings/lib/ui';
 
 import AppAvatar, { AppAvatarProps } from '@akashaorg/design-system-core/lib/components/AppAvatar';
 
@@ -10,7 +10,7 @@ const meta: Meta<AppAvatarProps> = {
   tags: ['autodocs'],
   argTypes: {
     appType: {
-      options: [IntegrationTypes.APP, IntegrationTypes.WIDGET],
+      options: [ExtensionTypes.APP, ExtensionTypes.WIDGET],
       control: { type: 'select' },
     },
   },
@@ -24,7 +24,7 @@ const avatar = { src: 'https://placebeard.it/360x360', height: 360, width: 360 }
 
 const baseArgs: Story = {
   args: {
-    appType: IntegrationTypes.APP,
+    appType: ExtensionTypes.APP,
     profileId: profileId,
     avatar,
   },
@@ -39,7 +39,7 @@ export const AvatarWithAppPlaceholder: Story = {
 export const AvatarWithWidgetPlaceholder: Story = {
   args: {
     ...baseArgs.args,
-    appType: IntegrationTypes.WIDGET,
+    appType: ExtensionTypes.WIDGET,
   },
 };
 

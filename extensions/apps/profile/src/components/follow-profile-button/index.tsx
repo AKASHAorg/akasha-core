@@ -10,7 +10,7 @@ import {
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { Following } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import {
-  ModalNavigationOptions,
+  IModalNavigationOptions,
   NotificationEvents,
   NotificationTypes,
 } from '@akashaorg/typings/lib/ui';
@@ -27,7 +27,7 @@ export type FollowProfileButtonProps = {
   isFollowing: boolean;
   followId: string | null;
   iconOnly?: boolean;
-  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
+  showLoginModal: (redirectTo?: { modal: IModalNavigationOptions }) => void;
 };
 
 const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
