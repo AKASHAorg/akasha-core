@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import {
-  REQUIRED_VISIBLE_ITEMS,
+  NUMBER_OF_VISIBLE_ITEMS,
   SCREENSHOT_WIDTH,
   SCREENSHOT_HEIGHT,
   BEAM_FEED_TEST_ID,
@@ -24,11 +24,11 @@ test('scroll restoration', async ({ page }) => {
 
   //assert profile avatars inside beam feed are visible
   await assertItemsAreVisible(
-    REQUIRED_VISIBLE_ITEMS,
+    NUMBER_OF_VISIBLE_ITEMS,
     beamFeedLocator.getByTestId(AVATAR_IMAGE_TEST_ID),
   );
 
-  const nthBeamCardLocator = page.getByTestId(BEAM_CARD_TEST_ID).nth(REQUIRED_VISIBLE_ITEMS - 1);
+  const nthBeamCardLocator = page.getByTestId(BEAM_CARD_TEST_ID).nth(NUMBER_OF_VISIBLE_ITEMS - 1);
 
   //assert nth beam card is visible
   await expect(nthBeamCardLocator).toBeVisible();
@@ -54,7 +54,7 @@ test('scroll restoration', async ({ page }) => {
 
   //assert profile avatars inside beam feed are visible
   await assertItemsAreVisible(
-    REQUIRED_VISIBLE_ITEMS,
+    NUMBER_OF_VISIBLE_ITEMS,
     beamFeedLocator.getByTestId(AVATAR_IMAGE_TEST_ID),
   );
 
@@ -82,7 +82,7 @@ test('virtual list', async ({ page }) => {
 
   //assert profile avatars inside beam feed are visible
   await assertItemsAreVisible(
-    REQUIRED_VISIBLE_ITEMS,
+    NUMBER_OF_VISIBLE_ITEMS,
     beamFeedLocator.getByTestId(AVATAR_IMAGE_TEST_ID),
   );
 
@@ -98,7 +98,7 @@ test('virtual list', async ({ page }) => {
 
   //scroll into view nth beam card
   await vListWrapperLocator
-    .locator(`[${DATA_INDEX_ATTRIBUTE}="${REQUIRED_VISIBLE_ITEMS - 1}"]`)
+    .locator(`[${DATA_INDEX_ATTRIBUTE}="${NUMBER_OF_VISIBLE_ITEMS - 1}"]`)
     .scrollIntoViewIfNeeded();
 
   //assert virtual list wrapper is visible

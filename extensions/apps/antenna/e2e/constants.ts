@@ -1,4 +1,4 @@
-export const REQUIRED_VISIBLE_ITEMS = 8;
+export const NUMBER_OF_VISIBLE_ITEMS = 8;
 export const SCREENSHOT_WIDTH = 780;
 export const SCREENSHOT_HEIGHT = 200;
 export const BEAM_FEED_TEST_ID = 'beam-feed';
