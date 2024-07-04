@@ -10,6 +10,7 @@ module.exports = {
   testPathIgnorePatterns: [
     '<rootDir>/node_modules',
     '<rootDir>/__tests__/__mocks__',
+    '<rootDir>/e2e',
     '<rootDir>/lib',
     '<rootDir>/dist',
   ],
