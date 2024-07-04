@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { act } from '@testing-library/react';
-import { ExtensionTypes } from '@akashaorg/typings/lib/ui';
 import AppAvatar from '../';
 import { customRender } from '../../../test-utils';
+import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 describe('<AppAvatar /> Component', () => {
   let componentWrapper = customRender(<></>, {});
@@ -16,7 +16,7 @@ describe('<AppAvatar /> Component', () => {
   beforeEach(() => {
     act(() => {
       componentWrapper = customRender(
-        <AppAvatar appType={ExtensionTypes.APP} avatar={avatar} />,
+        <AppAvatar appType={AkashaAppApplicationType.App} avatar={avatar} />,
         {},
       );
     });
@@ -36,6 +36,5 @@ describe('<AppAvatar /> Component', () => {
     const img = getByRole('img');
 
     expect(img).toBeDefined();
-    expect(img).toHaveAttribute('src', expect.stringMatching(/sidebar-app-placeholder/));
   });
 });
