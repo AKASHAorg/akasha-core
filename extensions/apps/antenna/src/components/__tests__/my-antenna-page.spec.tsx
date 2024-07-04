@@ -31,7 +31,7 @@ describe('< MyAntennaPage /> component', () => {
 
   describe('should render my antenna page', () => {
     it('should render placeholder if there is no subscribed topic', async () => {
-      await act(() => {
+      await act(async () => {
         renderWithAllProviders(BaseComponent, {});
       });
       expect(screen.getByText(/add some magic to your feed/i)).toBeInTheDocument();
@@ -49,7 +49,7 @@ describe('< MyAntennaPage /> component', () => {
           isAuthenticating: false,
         },
       });
-      await act(() => {
+      await act(async () => {
         renderWithAllProviders(
           BaseComponent,
           {},
