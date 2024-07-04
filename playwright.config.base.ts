@@ -41,9 +41,9 @@ module.exports = {
     },
   ],
   /*Configure test timeout */
-  timeout: 5 * 60 * 1000,
+  timeout: process.env.PLAYWRIGHT_TEST_TIMEOUT || 5 * 60 * 1000,
   /*Configure expect timeout */
   expect: {
-    timeout: 10 * 1000,
+    timeout: process.env.PLAYWRIGHT_TEST_EXPECT_TIMEOUT || 10 * 1000,
   },
 };
