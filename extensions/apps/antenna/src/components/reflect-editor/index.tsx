@@ -12,7 +12,6 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 import {
   useCreateReflectMutation,
-  useIndexReflectionMutation,
   GetReflectionStreamDocument,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { useTranslation } from 'react-i18next';
@@ -57,7 +56,6 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
       });
     },
   });
-  const [indexReflection, indexReflectionMutation] = useIndexReflectionMutation();
   const { addPendingReflection, removePendingReflection, pendingReflections } =
     usePendingReflections();
 
@@ -101,19 +99,12 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
   }, []);
 
   React.useEffect(() => {
-    if (indexReflectionMutation.error || publishReflectionMutation.error) {
+    if (publishReflectionMutation.error) {
       setShowEditor(true);
       setEditorState(newContent.content.flatMap(item => decodeb64SlateContent(item.value)));
       showAlertNotification(`${t(`Something went wrong when publishing the reflection`)}.`);
     }
-  }, [
-    indexReflectionMutation,
-    newContent?.content,
-    publishReflectionMutation,
-    showAlertNotification,
-    t,
-    setShowEditor,
-  ]);
+  }, [newContent?.content, publishReflectionMutation, showAlertNotification, t, setShowEditor]);
 
   const handlePublish = async (data: IPublishData) => {
     const reflection = isReflectOfReflection ? { reflection: reflectToId, isReply: true } : {};
@@ -147,12 +138,6 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
     });
 
     if (response.data?.createAkashaReflect) {
-      const indexingVars = await getSDK().api.auth.prepareIndexedID(
-        response.data.createAkashaReflect.document.id,
-      );
-      await indexReflection({
-        variables: indexingVars,
-      });
       apolloClient.refetchQueries({ include: [GetReflectionStreamDocument] }).then(() => {
         removePendingReflection(pendingReflectionIdRef.current);
       });
