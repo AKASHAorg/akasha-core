@@ -10,7 +10,6 @@ import { useTranslation } from 'react-i18next';
 import {
   useCreateProfileMutation,
   useGetProfileByDidSuspenseQuery,
-  useIndexProfileMutation,
   useUpdateProfileMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { transformSource, hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
@@ -78,9 +77,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
 
   const [createProfileMutation, { loading: createProfileProcessing }] = useCreateProfileMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
-    onCompleted: data => {
-      const id = data.createAkashaProfile?.document.id;
-      if (id) indexProfile(id);
+    onCompleted: () => {
       onUpdateSuccess();
     },
     onError: error => {
@@ -96,7 +93,6 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
       logger.error(`error in updating a profile: ${JSON.stringify(error)}`);
     },
   });
-  const [indexProfileMutation] = useIndexProfileMutation();
   const isProcessing = createProfileProcessing || updateProfileProcessing;
 
   if (error)
@@ -113,14 +109,6 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => `/${profileDID}`,
     });
-  };
-
-  const indexProfile = async (id: string) => {
-    const payload = await sdk.api.auth.prepareIndexedID(id);
-    if (payload)
-      indexProfileMutation({
-        variables: payload,
-      });
   };
 
   const createProfile = async (
