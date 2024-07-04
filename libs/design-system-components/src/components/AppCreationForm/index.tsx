@@ -48,7 +48,6 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
   const {
     control,
     setError,
-    clearErrors,
     getValues,
     formState: { errors, dirtyFields },
   } = useForm<AppCreationFormValues>({
@@ -66,9 +65,9 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
   }, [errorMessage, errors]);
 
   const extensionTypes = [
-    { id: '1', type: AkashaAppApplicationType.App, title: 'Application' },
-    { id: '2', type: AkashaAppApplicationType.Other, title: 'Plugin' },
-    { id: '3', type: AkashaAppApplicationType.Widget, title: 'Widget' },
+    { id: '1', type: AkashaAppApplicationType.App, title: AkashaAppApplicationType.App },
+    { id: '2', type: AkashaAppApplicationType.Other, title: AkashaAppApplicationType.Other },
+    { id: '3', type: AkashaAppApplicationType.Widget, title: AkashaAppApplicationType.Widget },
   ];
   const isFormDirty =
     Object.keys(dirtyFields).includes(FieldName.extensionID) &&

@@ -51,6 +51,7 @@ const WelcomePage: React.FC<WelcomePageProps> = props => {
 
   const _uiEvents = useRef(uiEvents);
 
+  // @TODO: get this data from useRootComponentProps
   const appName = '@akashaorg/app-notifications';
 
   const { saveNotificationSettings } = useSaveSettings();

@@ -7,6 +7,7 @@ import AlignRight from './align-right';
 import AlignTextCenter from './align-text-center';
 import AlignTextLeft from './align-text-left';
 import AlignTextRight from './align-text-right';
+import App from './app';
 import Antenna from './antenna';
 import BoldAlt from './bold-alt';
 import Caption from './caption';
@@ -56,6 +57,7 @@ export type CustomIconTypes = Extract<
   | 'AlignTextCenter'
   | 'AlignTextLeft'
   | 'AlignTextRight'
+  | 'App'
   | 'Antenna'
   | 'BoldAlt'
   | 'Caption'
@@ -102,6 +104,7 @@ export {
   AlignTextCenter,
   AlignTextLeft,
   AlignTextRight,
+  App,
   Antenna,
   BoldAlt,
   Caption,

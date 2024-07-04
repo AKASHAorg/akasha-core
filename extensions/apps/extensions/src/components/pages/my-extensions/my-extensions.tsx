@@ -7,14 +7,7 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import {
-  ArrowUpOnSquareIcon,
-  BookOpenIcon,
-  ClockIcon,
-  EyeIcon,
-  PencilIcon,
-  XMarkIcon,
-} from '@heroicons/react/24/outline';
+import { BookOpenIcon } from '@heroicons/react/24/outline';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import DropDownFilter, {
   DropdownMenuItemGroupType,
@@ -22,12 +15,13 @@ import DropDownFilter, {
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import AppList from '@akashaorg/design-system-components/lib/components/AppList';
-import Menu from '@akashaorg/design-system-core/lib/components/Menu';
-import { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
-import { EllipsisHorizontalIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
 import { useGetAppsByPublisherDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { hasOwn, useAkashaStore } from '@akashaorg/ui-awf-hooks';
+import { SortOrder, AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { ExtensionStatus } from '@akashaorg/typings/lib/ui';
+import { ExtensionAction } from './extension-action';
+import { NotConnnected } from './not-connected';
 
 export const MyExtensionsPage: React.FC<unknown> = () => {
   const { t } = useTranslation('app-extensions');
@@ -38,101 +32,6 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
     navigate({ to: '/create-extension' });
   };
 
-  const {
-    data: { authenticatedProfile },
-  } = useAkashaStore();
-
-  const { data: appsByPubReq, error } = useGetAppsByPublisherDidQuery({
-    variables: { id: authenticatedProfile?.did.id },
-    skip: !authenticatedProfile?.did.id,
-  });
-  const appsData =
-    appsByPubReq?.node && hasOwn(appsByPubReq.node, 'apps') ? appsByPubReq.node.apps : null;
-
-  const createdApps = [];
-
-  const menuItems = (appStatus: string) => {
-    switch (appStatus) {
-      case 'pending':
-        return [
-          {
-            label: t('Check status'),
-            icon: <ClockIcon />,
-            onClick: () => {},
-          },
-        ] as MenuProps['items'];
-      case 'published':
-        return [
-          {
-            label: t('View'),
-            icon: <EyeIcon />,
-            onClick: () => {},
-          },
-          {
-            label: t('Edit'),
-            icon: <PencilIcon />,
-            onClick: () => {},
-          },
-          {
-            label: t('Unpublish'),
-            icon: <XMarkIcon />,
-            onClick: () => {},
-            color: { light: 'errorLight', dark: 'errorDark' },
-          },
-        ] as MenuProps['items'];
-      case 'draft':
-        return [
-          {
-            label: t('Publish'),
-            icon: <ArrowUpOnSquareIcon />,
-            onClick: () => {},
-          },
-          {
-            label: t('Edit'),
-            icon: <PencilIcon />,
-            onClick: () => {},
-          },
-          {
-            label: t('Delete'),
-            icon: <XMarkIcon />,
-            onClick: () => {},
-            color: { light: 'errorLight', dark: 'errorDark' },
-          },
-        ] as MenuProps['items'];
-      default:
-        return [];
-    }
-  };
-
-  const appElements = createdApps.map(ext => ({
-    ...ext,
-    action: (
-      <Stack direction="column" justify="between">
-        <Menu
-          anchor={{
-            icon: <EllipsisHorizontalIcon />,
-            variant: 'primary',
-            greyBg: true,
-            iconOnly: true,
-            'aria-label': 'settings',
-          }}
-          items={menuItems(ext.status)}
-          customStyle="w-max z-99"
-        />
-        <Stack direction="row" align="center" spacing="gap-x-1.5">
-          <Stack
-            customStyle={`w-2 h-2 rounded-full ${
-              ext.status === 'Kept' ? 'bg-success' : 'bg-(errorLight dark:errorDark)'
-            }`}
-          />
-          <Text variant="footnotes2" weight="normal">
-            {ext.status}
-          </Text>
-        </Stack>
-      </Stack>
-    ),
-  }));
-
   const typeDropDownMenuItems: DropdownMenuItemGroupType[] = [
     {
       id: '0',
@@ -141,21 +40,25 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
     },
     {
       id: '1',
-      title: 'App',
+      title: AkashaAppApplicationType.App,
       type: 'opt',
     },
     {
       id: '2',
-      title: 'Widget',
+      title: AkashaAppApplicationType.Widget,
       type: 'opt',
     },
     {
       id: '3',
-      title: 'Plugin',
+      title: AkashaAppApplicationType.Plugin,
+      type: 'opt',
+    },
+    {
+      id: '4',
+      title: AkashaAppApplicationType.Other,
       type: 'opt',
     },
   ];
-
   const [selectedType, setSelectedType] = React.useState<DropdownMenuItemGroupType | null>(
     typeDropDownMenuItems[0],
   );
@@ -168,17 +71,17 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
     },
     {
       id: '1',
-      title: 'Draft',
+      title: ExtensionStatus.Draft,
       type: 'opt',
     },
     {
       id: '2',
-      title: 'Pending',
+      title: ExtensionStatus.Pending,
       type: 'opt',
     },
     {
       id: '3',
-      title: 'Published',
+      title: ExtensionStatus.Published,
       type: 'opt',
     },
   ];
@@ -191,6 +94,41 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
     setSelectedStatus(statusDropDownMenuItems[0]);
     setSelectedType(typeDropDownMenuItems[0]);
   };
+
+  const {
+    data: { authenticatedProfile },
+  } = useAkashaStore();
+
+  const { data: appsByPubReq, error } = useGetAppsByPublisherDidQuery({
+    variables: {
+      id: authenticatedProfile?.did.id,
+      first: 20,
+      sorting: { createdAt: SortOrder.Desc },
+    },
+    skip: !authenticatedProfile?.did.id,
+  });
+  const appsData =
+    appsByPubReq?.node && hasOwn(appsByPubReq.node, 'akashaAppList')
+      ? appsByPubReq.node.akashaAppList
+      : null;
+
+  const appElements = appsData?.edges
+    ?.filter(ext => {
+      if (selectedType.id === '0') {
+        return true;
+      }
+      return ext.node?.applicationType === selectedType.title;
+    })
+    .map(ext => {
+      return {
+        ...ext.node,
+        action: <ExtensionAction extensionData={ext.node} />,
+      };
+    });
+
+  if (!authenticatedProfile?.did.id) {
+    return <NotConnnected />;
+  }
 
   return (
     <Stack spacing="gap-y-4">
@@ -235,16 +173,16 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
           details={<>{error.message}</>}
         />
       )}
-      {!error && createdApps.length === 0 && (
+      {!error && appElements?.length === 0 && (
         <DefaultEmptyCard
           noBorder={true}
           infoText={t('You haven’t created any extensions yet')}
           assetName="longbeam-notfound"
         />
       )}
-      {!error && createdApps.length > 0 && (
+      {!error && appElements?.length > 0 && (
         <Card>
-          <AppList apps={appElements} />
+          <AppList apps={appElements} showAppTypeIndicator />
         </Card>
       )}
     </Stack>

@@ -54,7 +54,7 @@ const DropdownFilter: React.FC<IDropdownFilterProps> = ({
   React.useEffect(() => {
     if (placeholderLabel) {
       setSelected({
-        id: '',
+        id: '0',
         icon: null,
         title: placeholderLabel,
       });

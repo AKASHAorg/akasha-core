@@ -1,22 +1,24 @@
-import React, { ReactElement, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import { getRadiusClasses, getColorClasses } from '@akashaorg/design-system-core/lib/utils';
+import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
+import { AkashaApp, AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import {
+  Plugin,
+  App,
+  Widget,
+} from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 
-type App = {
-  id?: string;
-  name: string;
-  icon?: ReactElement;
-  isSolidIcon?: boolean;
-  description: string;
+type App = Omit<AkashaApp, 'version'> & {
   action: ReactNode;
 };
 
 export type AppListProps = {
   apps: App[];
+  showAppTypeIndicator?: boolean;
 };
 
 /**
@@ -24,11 +26,17 @@ export type AppListProps = {
  * @param apps - array of extensions
  * @param onAppSelected - handler for clicking on an app from the list
  */
-const AppList: React.FC<AppListProps> = ({ apps }) => {
-  const iconStyle = `shrink-0	${getRadiusClasses(10)} ${getColorClasses(
-    { light: 'grey6', dark: 'grey5' },
-    'bg',
-  )} w-[3.75rem] h-[3.75rem]`;
+const AppList: React.FC<AppListProps> = ({ apps, showAppTypeIndicator }) => {
+  const getIconByAppType = (applicationType: AkashaAppApplicationType) => {
+    switch (applicationType) {
+      case AkashaAppApplicationType.App:
+        return <App />;
+      case AkashaAppApplicationType.Plugin:
+        return <Plugin />;
+      case AkashaAppApplicationType.Widget:
+        return <Widget />;
+    }
+  };
 
   return (
     <Stack spacing="gap-y-4">
@@ -36,26 +44,33 @@ const AppList: React.FC<AppListProps> = ({ apps }) => {
         <Stack key={app.name} spacing="gap-y-4">
           <Stack direction="row" justify="between" align="center" spacing="gap-x-8">
             <Stack direction="row" spacing="gap-x-3">
-              <Stack align="center" justify="center" customStyle={iconStyle}>
-                {app.icon && (
-                  <Icon
-                    solid={app.isSolidIcon}
-                    icon={app.icon}
-                    accentColor={true}
-                    size={{ width: 'w-8', height: 'h-8' }}
-                  />
-                )}
-              </Stack>
+              <AppAvatar appType={app.applicationType} avatar={app.logoImage} size="lg" />
               <Stack direction="column" justify="between">
-                <Text variant="button-sm">{app.name}</Text>
-
+                <Stack direction="row" spacing="gap-2">
+                  <Text variant="button-sm">{app.name}</Text>
+                  {showAppTypeIndicator && (
+                    <Stack
+                      customStyle="w-[18px] h-[18px] rounded-full"
+                      background={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                      justify="center"
+                      align="center"
+                    >
+                      <Icon
+                        color={{ light: 'secondaryLight', dark: 'white' }}
+                        size={'xs'}
+                        solid
+                        icon={getIconByAppType(app.applicationType)}
+                      />
+                    </Stack>
+                  )}
+                </Stack>
                 <Text
                   variant="footnotes2"
                   weight="normal"
                   color={{ light: 'grey4', dark: 'grey7' }}
                   lineClamp={2}
                 >
-                  {app.description}
+                  {app.description || app.displayName}
                 </Text>
               </Stack>
             </Stack>
