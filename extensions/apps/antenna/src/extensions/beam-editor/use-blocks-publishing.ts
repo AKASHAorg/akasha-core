@@ -27,6 +27,7 @@ export type UseBlocksPublishingProps = {
   onComplete?: (beamData: CreateBeamMutation['createAkashaBeam']) => void;
 };
 export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
+  const { onComplete } = props;
   const [availableBlocks, setAvailableBlocks] = React.useState([]);
   const [isPublishing, setIsPublishing] = React.useState(false);
   const [errors, setErrors] = React.useState<Error[]>([]);
@@ -104,9 +105,10 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
           },
         },
       })
-        .then(() => {
+        .then(resp => {
           setBlocksInUse([]);
           setIsPublishing(false);
+          onComplete?.(resp.data.createAkashaBeam);
         })
         .catch(err => {
           setErrors(prev => [...prev, new Error(`failed to create beam: ${err.message}`)]);
