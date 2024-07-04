@@ -5,6 +5,7 @@ import { IRootComponentProps } from './root-component';
 import { ContentBlockConfig } from './editor-blocks';
 import { ExtensionInterface } from './extension-point';
 import { Profile } from './profile';
+import { AkashaAppApplicationType } from '../sdk/graphql-types-new';
 
 /**
  * Enum defining extension types
@@ -24,6 +25,85 @@ export enum ExtensionStatus {
   Pending = 'Pending',
   Published = 'Published',
 }
+
+export type AkashaApp = {
+  id: string;
+  applicationType?: AkashaAppApplicationType | null;
+  description: string;
+  license: string;
+  name: string;
+  displayName: string;
+  keywords?: Array<string | null> | null;
+  createdAt: any;
+  releasesCount: number;
+  releases: {
+    edges?: Array<{
+      cursor: string;
+      node?: { id: string; createdAt: any; source: any; version: string } | null;
+    } | null> | null;
+  };
+  author: {
+    id: string;
+    isViewer: boolean;
+    akashaProfile?: {
+      id: string;
+      name: string;
+      description?: string | null;
+      createdAt: any;
+      nsfw?: boolean | null;
+      did: { id: string; isViewer: boolean };
+      links?: Array<{ href: any; label?: string | null } | null> | null;
+      background?: {
+        alternatives?: Array<{ src: any; width: number; height: number } | null> | null;
+        default: { src: any; width: number; height: number };
+      } | null;
+      avatar?: {
+        default: { src: any; width: number; height: number };
+        alternatives?: Array<{ src: any; width: number; height: number } | null> | null;
+      } | null;
+      followers: {
+        pageInfo: {
+          startCursor?: string | null;
+          endCursor?: string | null;
+          hasPreviousPage: boolean;
+          hasNextPage: boolean;
+        };
+      };
+    } | null;
+  };
+  logoImage?: { height?: number | null; width?: number | null; src: any } | null;
+  coverImage?: { height?: number | null; width?: number | null; src: any } | null;
+  gallery?: Array<{ height?: number | null; width?: number | null; src: any } | null> | null;
+  contributors?: Array<{
+    id: string;
+    isViewer: boolean;
+    akashaProfile?: {
+      id: string;
+      name: string;
+      description?: string | null;
+      createdAt: any;
+      nsfw?: boolean | null;
+      did: { id: string; isViewer: boolean };
+      links?: Array<{ href: any; label?: string | null } | null> | null;
+      background?: {
+        alternatives?: Array<{ src: any; width: number; height: number } | null> | null;
+        default: { src: any; width: number; height: number };
+      } | null;
+      avatar?: {
+        default: { src: any; width: number; height: number };
+        alternatives?: Array<{ src: any; width: number; height: number } | null> | null;
+      } | null;
+      followers: {
+        pageInfo: {
+          startCursor?: string | null;
+          endCursor?: string | null;
+          hasPreviousPage: boolean;
+          hasNextPage: boolean;
+        };
+      };
+    } | null;
+  } | null> | null;
+};
 
 /**
  * Enum defining events related to loading and unloading of an app

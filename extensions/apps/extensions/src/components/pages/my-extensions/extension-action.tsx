@@ -17,14 +17,11 @@ import { EllipsisHorizontalIcon } from '@akashaorg/design-system-core/lib/compon
 
 import { hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetAppsStreamQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import {
-  AkashaApp,
-  AkashaAppsStreamModerationStatus,
-} from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { ExtensionStatus } from '@akashaorg/typings/lib/ui';
+import { AkashaAppsStreamModerationStatus } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { ExtensionStatus, AkashaApp } from '@akashaorg/typings/lib/ui';
 
 type ExtensionAction = {
-  extensionData: Omit<AkashaApp, 'version'>;
+  extensionData: AkashaApp;
 };
 
 export const ExtensionAction: React.FC<ExtensionAction> = ({ extensionData }) => {

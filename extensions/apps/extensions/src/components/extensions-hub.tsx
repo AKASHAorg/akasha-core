@@ -1,16 +1,15 @@
 import React from 'react';
-import AppList from '@akashaorg/design-system-components/lib/components/AppList';
+import AppList, { App } from '@akashaorg/design-system-components/lib/components/AppList';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import { TContentProps } from './explore';
 
 export type TExtensionsHubProps = {
   titleLabel: string;
   publicImgPath?: string;
   assetExtension?: string;
-  extensions?: TContentProps[];
+  extensions?: App[];
   sections: {
     assetName?: string;
     title: string;

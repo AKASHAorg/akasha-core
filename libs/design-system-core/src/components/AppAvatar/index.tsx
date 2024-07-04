@@ -56,7 +56,7 @@ const AppAvatar: React.FC<AppAvatarProps> = props => {
     }
   }
 
-  const className = `shrink-0	${getRadiusClasses(10)} ${getColorClasses(
+  const className = `shrink-0 overflow-hidden	${getRadiusClasses(10)} ${getColorClasses(
     { light: 'grey6', dark: 'grey5' },
     'bg',
   )} w-[3.75rem] h-[3.75rem]`;

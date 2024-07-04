@@ -4,7 +4,6 @@ import { useNavigate } from '@tanstack/react-router';
 import { ArrowLongRightIcon } from '@heroicons/react/24/outline';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
-import { VibesConsole } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import { ExtensionsHub } from '../extensions-hub';
 import routes, { DEVELOPER_MODE } from '../../routes';
 
@@ -26,22 +25,8 @@ export const ExtensionsHubPage: React.FC<unknown> = () => {
       to: routes[DEVELOPER_MODE],
     });
   };
-
-  const extensions = [
-    {
-      id: 'vibesconsole',
-      name: t('Vibes Console'),
-      description: `${t("Dive into AKASHA WORLD's Vibes Console!")} 💫 ${t('Your spot to become a moderator, explore applicants, and curate content.')}`,
-      icon: <VibesConsole />,
-      action: (
-        <Button
-          variant="primary"
-          label={t('Install')}
-          onClick={() => handleAppClick('vibesconsole')}
-        />
-      ),
-    },
-  ];
+  // @TODO fetch real data
+  const extensions = [];
 
   return (
     <ExtensionsHub

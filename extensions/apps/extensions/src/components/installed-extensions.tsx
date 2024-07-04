@@ -1,18 +1,17 @@
 import React from 'react';
-import AppList from '@akashaorg/design-system-components/lib/components/AppList';
+import AppList, { App } from '@akashaorg/design-system-components/lib/components/AppList';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import { TContentProps } from './explore';
 
 export type InstalledExtensionsProps = {
   titleLabel: string;
   publicImgPath?: string;
   assetExtension?: string;
-  installedExtensions: TContentProps[];
-  defaultExtensions: TContentProps[];
+  installedExtensions: App[];
+  defaultExtensions: App[];
   sections: {
     assetName?: string;
     title: string;

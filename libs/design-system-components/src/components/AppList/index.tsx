@@ -5,14 +5,15 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
-import { AkashaApp, AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { AkashaApp } from '@akashaorg/typings/lib/ui';
 import {
   Plugin,
   App,
   Widget,
 } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 
-type App = Omit<AkashaApp, 'version'> & {
+export type App = AkashaApp & {
   action: ReactNode;
 };
 
@@ -44,7 +45,7 @@ const AppList: React.FC<AppListProps> = ({ apps, showAppTypeIndicator }) => {
         <Stack key={app.name} spacing="gap-y-4">
           <Stack direction="row" justify="between" align="center" spacing="gap-x-8">
             <Stack direction="row" spacing="gap-x-3">
-              <AppAvatar appType={app.applicationType} avatar={app.logoImage} size="lg" />
+              <AppAvatar appType={app.applicationType} avatar={app.logoImage} />
               <Stack direction="column" justify="between">
                 <Stack direction="row" spacing="gap-2">
                   <Text variant="button-sm">{app.name}</Text>
