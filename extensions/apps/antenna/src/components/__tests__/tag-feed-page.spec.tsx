@@ -33,7 +33,7 @@ describe('< TagFeedPage /> component', () => {
   describe('should render tag feed page', () => {
     it('should render placeholder if there is no subscribed topic', async () => {
       const { mocks } = getTagFeedPageMocks({ count: 0 });
-      await act(() => {
+      await act(async () => {
         renderWithAllProviders(BaseComponent, {}, { mocks });
       });
       await waitFor(() => {
@@ -59,7 +59,7 @@ describe('< TagFeedPage /> component', () => {
           isAuthenticating: false,
         },
       });
-      await act(() => {
+      await act(async () => {
         renderWithAllProviders(
           BaseComponent,
           {},
@@ -102,14 +102,14 @@ describe('< TagFeedPage /> component', () => {
     it('should change button text from subscribe to subscribed', async () => {
       const { mocks } = getTagFeedPageMocks({ count: 0 });
       const subscriptionMocks = getSubscriptionsMocks({ tag: TAG_NAME });
-      await act(() => {
+      await act(async () => {
         renderWithAllProviders(BaseComponent, {}, { mocks: [...subscriptionMocks, ...mocks] });
       });
       const user = userEvent.setup();
       await waitFor(() => {
         expect(screen.getByRole('button', { name: 'Subscribe' })).toBeInTheDocument();
       });
-      await user.click(screen.getByRole('button', { name: 'Subscribe' }));
+      user.click(screen.getByRole('button', { name: 'Subscribe' }));
       await waitFor(() => {
         expect(screen.getByRole('button', { name: 'Subscribed' })).toBeInTheDocument();
       });
@@ -117,7 +117,7 @@ describe('< TagFeedPage /> component', () => {
 
     it('should show subscribed text on button when a topic was previously subscribed', async () => {
       const { mocks } = getTagFeedPageMocks({ count: 0, tag: TAG_NAME });
-      await act(() => {
+      await act(async () => {
         renderWithAllProviders(BaseComponent, {}, { mocks });
       });
       await waitFor(() => {

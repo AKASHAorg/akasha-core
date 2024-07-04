@@ -26,6 +26,21 @@ fragment AkashaAppFragment on AkashaApp{
      ...UserProfileFragment
     }
   }
+  logoImage {
+    height
+    width
+    src
+  }
+  coverImage {
+    height
+    width
+    src
+  }
+  gallery {
+    height
+    width
+    src
+  }
   contributors {
     id
     isViewer

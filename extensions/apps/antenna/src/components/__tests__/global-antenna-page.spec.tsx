@@ -22,7 +22,7 @@ describe('< GlobalAntennaPage /> component', () => {
   );
 
   beforeEach(async () => {
-    await act(() => {
+    await act(async () => {
       renderWithAllProviders(BaseComponent, {}, { mocks });
     });
   });

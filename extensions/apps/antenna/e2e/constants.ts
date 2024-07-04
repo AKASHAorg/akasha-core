@@ -1,0 +1,10 @@
+export const NUMBER_OF_VISIBLE_ITEMS = 8;
+export const SCREENSHOT_WIDTH = 780;
+export const SCREENSHOT_HEIGHT = 200;
+export const BEAM_FEED_TEST_ID = 'beam-feed';
+export const BEAM_CARD_TEST_ID = 'beam-card';
+export const MAX_DIFF_PIXELS = 100;
+export const AVATAR_IMAGE_TEST_ID = 'avatar-image';
+export const MAX_VIRTUAL_LIST_ITEMS = 16;
+export const DATA_OFFSET_ATTRIBUTE = 'data-offset';
+export const DATA_INDEX_ATTRIBUTE = 'data-index';
