@@ -407,6 +407,7 @@ export const AkashaAppFragmentDoc = /*#__PURE__*/ gql`
   name
   displayName
   keywords
+  createdAt
   releases(last: 5) {
     edges {
       node {

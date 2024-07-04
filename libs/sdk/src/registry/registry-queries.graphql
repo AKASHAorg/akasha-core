@@ -6,6 +6,7 @@ fragment AkashaAppFragment on AkashaApp{
   name
   displayName
   keywords
+  createdAt
   releases(last: 5){
     edges {
       node {
