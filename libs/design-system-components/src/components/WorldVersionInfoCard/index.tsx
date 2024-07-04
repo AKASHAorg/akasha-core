@@ -16,21 +16,21 @@ const WorldVersionInfoCard: React.FC<TWorldVersionInfoCard> = props => {
 
   return (
     <Stack
-      spacing="gap-y-3"
+      spacing="gap-y-1"
       padding="p-4"
       background={{ light: 'warningLight/30', dark: 'warningDark/30' }}
       customStyle="rounded-3xl"
     >
       <Stack direction="row" align="center" justify="between">
-        <Stack direction="row" align="center" spacing="gap-x-2">
+        <Stack direction="row" align="center" spacing="gap-x-1">
           <Icon icon={<ExclamationTriangleIcon />} size="sm" />
-          <Text variant="button-sm">{titleLabel}</Text>
+          <Text variant="button-md">{titleLabel}</Text>
         </Stack>
         <Button plain={true} onClick={onDismissCard}>
           <Icon icon={<XMarkIcon />} size="sm" />
         </Button>
       </Stack>
-      <Text variant="footnotes2" weight="light">
+      <Text variant="body2" weight="light">
         {description}
       </Text>
     </Stack>
