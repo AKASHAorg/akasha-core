@@ -37,8 +37,9 @@ export const DeveloperModePage: React.FC<unknown> = () => {
         type: NotificationTypes.Info,
         message:
           devMode !== DevMode.ENABLED
-            ? t('Developer Mode activated. The page will reload now')
+            ? t('Developer Mode is active. The page will reload now')
             : t('Developer Mode deactivated. The page will reload now'),
+        dismissable: false,
         snackbarIcon: <InformationCircleIcon />,
       },
     });
@@ -46,7 +47,7 @@ export const DeveloperModePage: React.FC<unknown> = () => {
     // allow one sec delay, then reload the page
     setTimeout(() => {
       window.location.reload();
-    }, 1500);
+    }, 2500);
   };
 
   const handleCTAClick = () => {
