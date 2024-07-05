@@ -70,6 +70,7 @@ export type NotificationEvent = {
   data?: {
     type: NotificationTypes;
     message: string;
+    dismissable?: boolean;
     snackbarIcon?: React.ReactElement;
   };
 };
