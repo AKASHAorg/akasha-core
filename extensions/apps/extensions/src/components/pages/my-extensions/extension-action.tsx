@@ -18,13 +18,13 @@ import { EllipsisHorizontalIcon } from '@akashaorg/design-system-core/lib/compon
 import { hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetAppsStreamQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { AkashaAppsStreamModerationStatus } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { ExtensionStatus, AkashaApp } from '@akashaorg/typings/lib/ui';
+import { ExtensionStatus } from '@akashaorg/typings/lib/ui';
 
 type ExtensionAction = {
-  extensionData: AkashaApp;
+  extensionId: string;
 };
 
-export const ExtensionAction: React.FC<ExtensionAction> = ({ extensionData }) => {
+export const ExtensionAction: React.FC<ExtensionAction> = ({ extensionId }) => {
   const { t } = useTranslation('app-extensions');
   const sdk = React.useRef(getSDK());
 
@@ -37,12 +37,12 @@ export const ExtensionAction: React.FC<ExtensionAction> = ({ extensionData }) =>
       filters: {
         where: {
           applicationID: {
-            equalTo: extensionData.id,
+            equalTo: extensionId,
           },
         },
       },
     },
-    skip: !extensionData.id,
+    skip: !extensionId,
   });
 
   const appStreamData =
@@ -80,7 +80,7 @@ export const ExtensionAction: React.FC<ExtensionAction> = ({ extensionData }) =>
   const handleExtensionRemove = () => {
     navigateToModal({
       name: `remove-extension-confirmation`,
-      extensionId: extensionData.id,
+      extensionId: extensionId,
     });
   };
 

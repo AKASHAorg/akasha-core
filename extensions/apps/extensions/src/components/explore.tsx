@@ -1,15 +1,10 @@
-import React, { ReactNode } from 'react';
-import AppList from '@akashaorg/design-system-components/lib/components/AppList';
+import React from 'react';
+import AppList, { App } from '@akashaorg/design-system-components/lib/components/AppList';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import { AkashaApp } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-
-type App = Omit<AkashaApp, 'version'> & {
-  action: ReactNode;
-};
 
 type TLatestExtensionsCardProps = {
   buttonLabel: string;

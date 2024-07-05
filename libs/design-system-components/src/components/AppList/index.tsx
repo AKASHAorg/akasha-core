@@ -5,16 +5,23 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
-import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { AkashaApp } from '@akashaorg/typings/lib/ui';
+import {
+  AkashaAppApplicationType,
+  AppImageSource,
+} from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import {
   Plugin,
   App,
   Widget,
 } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 
-export type App = AkashaApp & {
-  action: ReactNode;
+export type App = {
+  name?: string;
+  displayName?: string;
+  logoImage?: AppImageSource;
+  description?: string;
+  applicationType?: AkashaAppApplicationType;
+  action?: ReactNode;
 };
 
 export type AppListProps = {

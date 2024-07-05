@@ -122,7 +122,7 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
     .map(ext => {
       return {
         ...ext.node,
-        action: <ExtensionAction extensionData={ext.node} />,
+        action: <ExtensionAction extensionId={ext.node?.id} />,
       };
     });
 
