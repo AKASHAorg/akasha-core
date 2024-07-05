@@ -426,6 +426,21 @@ export const AkashaAppFragmentDoc = /*#__PURE__*/ gql`
       ...UserProfileFragment
     }
   }
+  logoImage {
+    height
+    width
+    src
+  }
+  coverImage {
+    height
+    width
+    src
+  }
+  gallery {
+    height
+    width
+    src
+  }
   contributors {
     id
     isViewer

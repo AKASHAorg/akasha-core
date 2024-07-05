@@ -13,7 +13,6 @@ import {
   getByText,
   getByTestId,
   getUserStore,
-  genProfileByDID,
   genReflectionStream,
 } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
@@ -66,7 +65,7 @@ describe('< BeamPage /> component', () => {
     });
 
     beforeEach(async () => {
-      await act(() => {
+      await act(async () => {
         renderWithAllProviders(
           BaseComponent,
           {},
@@ -153,7 +152,7 @@ describe('< BeamPage /> component', () => {
         },
       });
       jest.spyOn(getEditorValueForTest, 'getEditorValueForTest').mockReturnValue(NEW_REFLECTION);
-      await act(() => {
+      await act(async () => {
         renderWithAllProviders(
           BaseComponent,
           {},
@@ -206,7 +205,7 @@ describe('< BeamPage /> component', () => {
       await waitFor(() => {
         expect(screen.getByRole('textbox')).toHaveTextContent(NEW_REFLECTION);
       });
-      await userEvent.click(screen.getByRole('button', { name: 'Reflect' }));
+      user.click(screen.getByRole('button', { name: 'Reflect' }));
       await waitFor(() => {
         expect(screen.getByTestId('pending-reflect')).toBeInTheDocument();
       });
@@ -214,12 +213,11 @@ describe('< BeamPage /> component', () => {
 
     it('should render published reflection on reflect feed', async () => {
       const user = userEvent.setup();
-      await user.click(screen.getByRole('button', { name: 'Reflect' }));
+      user.click(screen.getByRole('button', { name: 'Reflect' }));
       await waitFor(() => {
         expect(screen.getByRole('textbox')).toHaveTextContent(NEW_REFLECTION);
       });
-      await userEvent.click(screen.getByRole('button', { name: 'Reflect' }));
-
+      user.click(screen.getByRole('button', { name: 'Reflect' }));
       await waitFor(() => {
         const reflectFeed = screen.getByTestId('reflect-feed');
         const infoBox = getAllByTestId(screen.getByTestId('reflect-feed'), 'info-box')[0];
