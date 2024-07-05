@@ -25,6 +25,7 @@ const SnackBarNotification: React.FC<IRootExtensionProps> = () => {
   const { uiEvents, getRoutingPlugin } = useRootComponentProps();
   const [message, setMessage] = useState('');
   const [appTitle, setAppTitle] = useState(null);
+  const [dismissable, setDismissable] = useState(true);
   const [messageType, setMessageType] = useState(NotificationTypes.Success);
   const [snackbarIcon, setSnackbarIcon] = useState(<InformationCircleIcon />);
 
@@ -104,6 +105,9 @@ const SnackBarNotification: React.FC<IRootExtensionProps> = () => {
         if (eventInfo.data && hasOwn(eventInfo.data, 'snackbarIcon')) {
           setSnackbarIcon(eventInfo.data.snackbarIcon);
         }
+        if (eventInfo.data && hasOwn(eventInfo.data, 'dismissable')) {
+          setDismissable(eventInfo.data.dismissable);
+        }
       },
     });
 
@@ -154,6 +158,7 @@ const SnackBarNotification: React.FC<IRootExtensionProps> = () => {
           }
           description={appTitle ? message : null}
           type={messageType}
+          dismissable={dismissable}
           handleDismiss={dismissHandler}
         />
       )}

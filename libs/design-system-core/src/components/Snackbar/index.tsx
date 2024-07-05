@@ -16,6 +16,7 @@ export type SnackbarProps = {
   description?: string;
   actionButtonLabel?: string;
   customStyle?: string;
+  dismissable?: boolean;
   handleButtonClick?: (event: React.SyntheticEvent<Element, Event>) => void;
   handleDismiss?: (event: React.SyntheticEvent<Element, Event>) => void;
 };
@@ -32,6 +33,7 @@ export type SnackbarProps = {
  * @param description - (optional)  more details regarding the notification
  * @param actionButtonLabel - (optional)  add a label if you want to show a button and allow the user
  * to perform some action
+ * @param dismissable - (optional) defaults to true. Determines if the user should be able to dismiss the snackbar
  * @param handleButtonClick - (optional) click handler to be included if an `actionButtonLabel` prop is provided
  * @param handleDismiss - (optional) handler that will be called when the user click the close button
  * @param customStyle - (optional)  add custom Tailwind CSS classes here
@@ -46,6 +48,7 @@ const Snackbar: React.FC<SnackbarProps> = ({
   icon = <InformationCircleIcon />,
   description,
   actionButtonLabel,
+  dismissable = true,
   customStyle = '',
   handleButtonClick,
   handleDismiss,
@@ -82,14 +85,16 @@ const Snackbar: React.FC<SnackbarProps> = ({
             </Button>
           )}
         </Stack>
-        <Button
-          onClick={handleDismiss}
-          customStyle="self-start	ml-auto"
-          aria-label="dismiss"
-          plain={true}
-        >
-          <Icon icon={<XMarkIcon />} color="grey7" size="lg" />
-        </Button>
+        {dismissable && (
+          <Button
+            onClick={handleDismiss}
+            customStyle="self-start	ml-auto"
+            aria-label="dismiss"
+            plain={true}
+          >
+            <Icon icon={<XMarkIcon />} color="grey7" size="lg" />
+          </Button>
+        )}
       </Stack>
     </Card>
   );
