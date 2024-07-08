@@ -6,13 +6,6 @@ const meta: Meta<SearchStartProps> = {
   title: 'DSComponents/Cards/SearchStartCard',
   component: SearchStartCard,
   tags: ['autodocs'],
-  argTypes: {
-    searchKeyword: { control: 'text' },
-    titleLabel: { control: 'text' },
-    inputPlaceholderLabel: { control: 'text' },
-    handleSearch: { action: 'searched' },
-    handleTopMenuClick: { action: 'top menu clicked' },
-  },
 };
 
 type Story = StoryObj<SearchStartProps>;

@@ -7,15 +7,6 @@ const meta: Meta<EntryProps> = {
   title: 'DSComponents/Profile/Entry',
   component: Entry,
   tags: ['autodocs'],
-  argTypes: {
-    profileAnchorLink: { control: 'text' },
-    avatar: { control: 'object' },
-    name: { control: 'text' },
-    profileIds: { control: 'object' },
-    followId: { control: 'text' },
-    isFollowing: { control: 'boolean' },
-    transformSource: { action: 'source transformed' },
-  },
 };
 
 type Story = StoryObj<EntryProps>;

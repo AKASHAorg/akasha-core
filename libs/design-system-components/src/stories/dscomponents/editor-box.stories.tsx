@@ -5,25 +5,23 @@ const meta: Meta<EditorBoxProps> = {
   title: 'DSComponents/Editor/EditorBox',
   component: EditorBox,
   tags: ['autodocs'],
-  argTypes: {
-    profileId: { control: 'text' },
-    actionLabel: { control: 'text' },
-    placeholderLabel: { control: 'text' },
-    onPublish: { action: 'published' },
-    onClear: { action: 'editor cleared' },
-    encodingFunction: { action: 'encoded' },
-    onCancelClick: { action: 'action canceled' },
-    setEditorState: { action: 'editor state set' },
-  },
 };
 
 type Story = StoryObj<EditorBoxProps>;
 
 export const Default: Story = {
   args: {
+    avatar: { default: { src: 'https://placebeard.it/360x360', height: 360, width: 360 } },
     profileId: 'some profile id',
     actionLabel: 'Publish',
     placeholderLabel: 'Share your thought',
+    disableActionLabel: 'disable action',
+    maxEncodedLengthErrLabel: 'max encoded',
+    noMentionsLabel: 'No mentions',
+    disablePublish: false,
+    minHeight: '2rem',
+    withMeter: true,
+    withToolbar: true,
     encodingFunction: () => '',
     setEditorState: () => ({}),
     onPublish: () => ({}),

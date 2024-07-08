@@ -5,10 +5,6 @@ const meta: Meta<ReportReasonPillProps> = {
   title: 'DSComponents/Vibes/ReportReasonPill',
   component: ReportReasonPill,
   tags: ['autodocs'],
-  argTypes: {
-    reportCount: { control: 'number' },
-    reason: { control: 'text' },
-  },
 };
 
 type Story = StoryObj<ReportReasonPillProps>;

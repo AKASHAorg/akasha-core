@@ -16,12 +16,6 @@ const meta: Meta<SwitchCardProps> = {
   title: 'DSComponents/Cards/SwitchCard',
   component: Component,
   tags: ['autodocs'],
-  argTypes: {
-    isLoggedIn: { control: 'boolean' },
-    activeButton: { control: 'select', options: ['Kept', 'Delisted'] },
-    buttonValues: { control: 'object' },
-    onTabClick: { action: 'tab clicked' },
-  },
 };
 
 type Story = StoryObj<SwitchCardProps>;
