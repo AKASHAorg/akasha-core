@@ -14,10 +14,6 @@ const meta: Meta<AppListProps> = {
   title: 'DSComponents/Extensions/AppList',
   component: Wrapped,
   tags: ['autodocs'],
-  argTypes: {
-    apps: { control: 'object' },
-    onAppSelected: { action: 'app selected' },
-  },
 };
 
 type Story = StoryObj<AppListProps>;
@@ -38,6 +34,7 @@ export const Default: Story = {
         action: <Button label="Install" variant="primary" />,
       },
     ],
+    onAppSelected: () => ({}),
   },
 };
 
