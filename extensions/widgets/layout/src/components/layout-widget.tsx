@@ -211,7 +211,7 @@ const Layout: React.FC<unknown> = () => {
             >
               <Widget name={layoutConfig.topbarSlotId} loadingIndicator={<TopbarLoader />} />
             </Stack>
-            <Stack padding="pt-4">
+            <Stack padding="pt-4" spacing="gap-y-4">
               {!isPlatformHealthy && (
                 <Card
                   margin="mb-4"
@@ -242,6 +242,7 @@ const Layout: React.FC<unknown> = () => {
               </Stack>
             </Stack>
           </Stack>
+
           <Stack
             ref={widgetContainerRef}
             customStyle={`relative min-h-[${widgetStickyStyle.contentHeight}px] h-full`}

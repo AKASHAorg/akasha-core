@@ -3,6 +3,7 @@ import EditorPlaceholder from '@akashaorg/design-system-components/lib/component
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
+import WorldVersionInfoCard from '@akashaorg/design-system-components/lib/components/WorldVersionInfoCard';
 import BeamFeed from '@akashaorg/ui-lib-feed/lib/components/beam-feed';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
@@ -13,6 +14,7 @@ import {
   useAkashaStore,
   hasOwn,
   useNsfwToggling,
+  useDismissedCard,
 } from '@akashaorg/ui-awf-hooks';
 import { Helmet, helmetData } from '@akashaorg/design-system-core/lib/utils';
 import { IModalNavigationOptions } from '@akashaorg/typings/lib/ui';
@@ -28,6 +30,9 @@ const GlobalAntennaPage: React.FC<unknown> = () => {
   const _navigateToModal = React.useRef(navigateToModal);
   const navigate = useNavigate();
   const { showNsfw } = useNsfwToggling();
+  const [dismissed, dismissCard] = useDismissedCard(
+    '@akashaorg/ui-widget-layout_version-info-card',
+  );
 
   const showLoginModal = React.useCallback(
     (redirectTo?: { modal: IModalNavigationOptions }, message?: string) => {
@@ -54,6 +59,15 @@ const GlobalAntennaPage: React.FC<unknown> = () => {
         <title>{worldConfig.title}</title>
       </Helmet>
       <Stack spacing="gap-y-4">
+        {!dismissed && (
+          <WorldVersionInfoCard
+            titleLabel={t('Attention: Testing Environment')}
+            description={t(
+              'Things might be a bit unstable, and all data may be lost during updates.',
+            )}
+            onDismissCard={dismissCard}
+          />
+        )}
         <EditorPlaceholder
           profileId={authenticatedDID}
           avatar={authenticatedProfile?.avatar}
