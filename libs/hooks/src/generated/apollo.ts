@@ -3037,6 +3037,13 @@ export const GetAppsByPublisherDidDocument = /*#__PURE__*/ gql`
           node {
             ...AkashaAppFragment
           }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
         }
       }
     }
@@ -3099,6 +3106,13 @@ export const GetAppsReleasesByPublisherDidDocument = /*#__PURE__*/ gql`
           node {
             ...AppReleaseFragment
           }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
         }
       }
     }
