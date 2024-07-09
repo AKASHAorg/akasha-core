@@ -10,8 +10,8 @@ import {
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { Akasha } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
+import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { startWidgetsTogglingBreakpoint } from '@akashaorg/design-system-core/lib/utils/breakpoints';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
@@ -91,8 +91,6 @@ const Topbar: React.FC<ITopbarProps> = props => {
     onBackClick,
   } = props;
 
-  const { worldConfig } = useRootComponentProps();
-
   const [displayWidgetTogglingButton, setDisplayWidgetTogglingButton] = React.useState(
     !window.matchMedia(startWidgetsTogglingBreakpoint).matches,
   );
@@ -129,11 +127,17 @@ const Topbar: React.FC<ITopbarProps> = props => {
         />
       </Stack>
       <Button plain={true} customStyle="p-0 !ml-0 cursor-pointer" onClick={onBrandClick}>
-        <Stack align="center" justify="center" direction="column">
+        <Stack align="center" justify="center" direction="column" spacing="gap-y-1">
           <WorldIcon fallback={<Akasha />} />
-          <Text customStyle="uppercase font([Inter] light) text(xs black dark:white) drop-shadow-md">
-            {worldConfig.title}
-          </Text>
+          <Pill
+            type="info"
+            label="Alpha"
+            weight="light"
+            color="white"
+            background={{ light: 'errorLight', dark: 'errorDark' }}
+            borderColor={{ light: 'errorLight', dark: 'errorDark' }}
+            customStyle="w-fit px-2"
+          />
         </Stack>
       </Button>
       <Stack direction="row" spacing="gap-x-2">

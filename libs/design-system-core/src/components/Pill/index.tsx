@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Button from '../Button';
 import Stack from '../Stack';
-import Text from '../Text';
+import Text, { TextProps } from '../Text';
 import { ButtonProps } from '../Button/types';
 import { Color } from '../types/common.types';
 import { getColorClasses } from '../../utils';
@@ -14,15 +14,18 @@ type ActionPillProps = Pick<ButtonProps, 'label' | 'size' | 'icon' | 'iconDirect
   onPillClick?: (active?: boolean) => void;
 };
 
+type InfoPillProps = Pick<TextProps, 'weight' | 'color'> & {
+  label: string;
+  borderColor?: Color;
+  background?: Color;
+  customStyle?: string;
+};
+
 export type PillProps =
   | (ActionPillProps & { type: 'action' })
-  | {
-      label: string;
-      borderColor?: Color;
-      background?: Color;
-      customStyle?: string;
+  | (InfoPillProps & {
       type: 'info';
-    };
+    });
 
 /**
  * A Pill component is an UI element that takes the shape of a capsule/pill. It is often used
@@ -33,18 +36,19 @@ export type PillProps =
  * Info Pills, on the other hand, have their own set of props mostly for customization purpose.
  * @example
  * ```tsx
- * // Example of an action pill
+ * // Action pill
  *    <Pill
-        label={'This is a pill'}
+        type="action"
+        label='This is an action pill'
         active={true}
         icon={<XMarkIcon />}
         iconDirection="right"
         onPillClick={clickHandler}
-        type="action"
       />
-   // Example of an info pill
+  // Info pill
       <Pill
         type='info'
+        label='This is an info pill'
         background='blue'
         borderColor='success'
         customStyle='w-20'
@@ -63,7 +67,9 @@ const Pill: React.FC<PillProps> = props => {
         background={props.background}
         customStyle={`m-h-[18px] m-w-[18px] rounded-full ${borderStyle} ${props.customStyle}`}
       >
-        <Text variant="footnotes2">{props.label}</Text>
+        <Text variant="footnotes2" weight={props.weight} color={props.color}>
+          {props.label}
+        </Text>
       </Stack>
     );
   }
