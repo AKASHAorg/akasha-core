@@ -23,7 +23,7 @@ fragment AkashaAppFragment on AkashaApp{
     id
     isViewer
     akashaProfile {
-     ...UserProfileFragment
+      ...UserProfileFragment
     }
   }
   logoImage {
@@ -115,11 +115,18 @@ query GetAppsByPublisherDID($id: ID!, $after: String, $before: String, $first: I
   node(id: $id) {
     ...on CeramicAccount {
       akashaAppList(after: $after, before: $before, first: $first, last: $last, filters: $filters, sorting:  $sorting){
-          edges {
-            node {
-              ...AkashaAppFragment
-            }
+        edges {
+          node {
+            ...AkashaAppFragment
           }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
       }
     }
   }
@@ -133,6 +140,13 @@ query GetAppsReleasesByPublisherDID($id: ID!, $after: String, $before: String, $
           node {
             ...AppReleaseFragment
           }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
         }
       }
     }
