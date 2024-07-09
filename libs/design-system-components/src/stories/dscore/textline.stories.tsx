@@ -21,7 +21,7 @@ export const Default: Story = {};
 
 export const TextLineAnimated: Story = { args: { animated: true } };
 
-export const TextLineWithStraightCorners: Story = { args: { round: null } };
+export const TextLineWithStraightCorners: Story = { args: {} };
 
 export const TextLineRounded: Story = { args: { width: 50, height: 50, round: 'rounded-full' } };
 
