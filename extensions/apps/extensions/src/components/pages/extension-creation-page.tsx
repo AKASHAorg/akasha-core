@@ -14,11 +14,10 @@ import AppCreationForm, {
   FieldName,
 } from '@akashaorg/design-system-components/lib/components/AppCreationForm';
 
-export const AppCreationPage: React.FC<unknown> = () => {
+export const ExtensionCreationPage: React.FC<unknown> = () => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
-  const { getRoutingPlugin, uiEvents } = useRootComponentProps();
-  const navigateTo = getRoutingPlugin().navigateTo;
+  const { uiEvents } = useRootComponentProps();
   const sdk = React.useRef(getSDK());
   const [errorMessage, setErrorMessage] = useState(null);
 
@@ -80,7 +79,7 @@ export const AppCreationPage: React.FC<unknown> = () => {
                       });
                     }
                   },
-                  onCompleted: res => {
+                  onCompleted: () => {
                     uiEvents.next({
                       event: NotificationEvents.ShowNotification,
                       data: {

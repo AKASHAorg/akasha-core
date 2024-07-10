@@ -72,11 +72,16 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     area: [MenuItemAreaType.AppArea],
     subRoutes: generateSubRoutes(),
   },
-  extends: (matcher, loader) => {
-    matcher({
-      'install-app': loader(() => import('./extensions/install-app')),
-    });
-  },
+  extensions: [
+    {
+      mountsIn: 'install-app',
+      loadingFn: () => import('./extensions/install-app'),
+    },
+    {
+      mountsIn: 'remove-extension-confirmation',
+      loadingFn: () => import('./extensions/remove-extension-confirmation'),
+    },
+  ],
 });
 
 export const getPlugin = (
