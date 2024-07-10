@@ -39,30 +39,29 @@ const BeamContentResolver: React.FC<BeamContentResolverProps> = ({
 
   if (beamReq.loading) return <EntryCardLoading />;
 
-  const entryData =
-    beamReq.data?.node && hasOwn(beamReq.data.node, 'id') ? beamReq.data.node : null;
+  const beamData = beamReq.data?.node && hasOwn(beamReq.data.node, 'id') ? beamReq.data.node : null;
 
   return (
-    entryData && (
+    beamData && (
       <BeamCard
-        entryData={mapBeamEntryData(entryData)}
+        beamData={mapBeamEntryData(beamData)}
         contentClickable={true}
         /* Display the overlay according to the passed prop showNSFWCard
          * or the nsfw property of the beam object just fetched through the
          * useIndividualBeam hook (see BeamFeed).
          * */
-        showNSFWCard={showNSFWCard ?? entryData.nsfw}
+        showNSFWCard={showNSFWCard ?? beamData.nsfw}
         showLoginModal={showLoginModal}
         onContentClick={function () {
           getRoutingPlugin().navigateTo({
             appName: '@akashaorg/app-antenna',
-            getNavigationUrl: navRoutes => `${navRoutes.Beam}/${entryData.id}`,
+            getNavigationUrl: navRoutes => `${navRoutes.Beam}/${beamData.id}`,
           });
         }}
         onReflect={function () {
           getRoutingPlugin().navigateTo({
             appName: '@akashaorg/app-antenna',
-            getNavigationUrl: navRoutes => `${navRoutes.Beam}/${entryData.id}${navRoutes.Reflect}`,
+            getNavigationUrl: navRoutes => `${navRoutes.Beam}/${beamData.id}${navRoutes.Reflect}`,
           });
         }}
         customStyle={customStyle}

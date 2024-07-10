@@ -3,10 +3,10 @@ import { Logger } from '@akashaorg/awf-sdk';
 import type {
   BeamData,
   RawBeamData,
+  RawReflectionData,
   ReflectionData,
   SlateDescendant,
 } from '@akashaorg/typings/lib/ui';
-import { AkashaReflect } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 /**
  * Utility to decode base64 slate content
@@ -57,12 +57,7 @@ function fromBinary(binary: string) {
 /**
  * Utility to map reflect entry data
  */
-export const mapReflectEntryData = (
-  reflection?: Pick<AkashaReflect, 'id' | 'active' | 'createdAt' | 'nsfw' | 'content'> & {
-    author: { id: string };
-    beam?: { id: string };
-  },
-): ReflectionData => {
+export const mapReflectEntryData = (reflection?: RawReflectionData): ReflectionData => {
   if (!reflection) return null;
 
   return {

@@ -10,7 +10,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 
-export type ReflectCardProps = Pick<
+export type ReflectionCardProps = Pick<
   EntryCardProps,
   | 'contentClickable'
   | 'noWrapperCard'
@@ -24,14 +24,14 @@ export type ReflectCardProps = Pick<
   | 'hover'
   | 'lastEntry'
 > & {
-  entryData: ReflectionData;
+  reflectionData: ReflectionData;
   hidePublishTime?: boolean;
   pending?: boolean;
 };
 
-const ReflectionCard: React.FC<ReflectCardProps> = props => {
+const ReflectionCard: React.FC<ReflectionCardProps> = props => {
   const { t } = useTranslation('ui-lib-feed');
-  const { entryData, hidePublishTime, pending, onReflect, ...rest } = props;
+  const { reflectionData, hidePublishTime, pending, onReflect, ...rest } = props;
   const { getRoutingPlugin } = useRootComponentProps();
   const {
     data: { authenticatedDID },
@@ -50,19 +50,19 @@ const ReflectionCard: React.FC<ReflectCardProps> = props => {
   const handleFlagReflection = () => {
     navigateTo({
       appName: '@akashaorg/app-vibes',
-      getNavigationUrl: () => `/report/reflection/${entryData.id}`,
+      getNavigationUrl: () => `/report/reflection/${reflectionData.id}`,
     });
   };
 
   return (
     <EntryCard
       dataTestId="reflection-card"
-      entryData={entryData}
+      entryData={reflectionData}
       reflectAnchorLink="/@akashaorg/app-antenna/reflection"
-      slateContent={entryData.content.flatMap(item => decodeb64SlateContent(item.value))}
+      slateContent={reflectionData.content.flatMap(item => decodeb64SlateContent(item.value))}
       noWrapperCard={true}
       flagAsLabel={t('Flag')}
-      isViewer={authenticatedDID === entryData.authorId}
+      isViewer={authenticatedDID === reflectionData.authorId}
       isLoggedIn={isLoggedIn}
       removed={{
         author: (
@@ -118,10 +118,10 @@ const ReflectionCard: React.FC<ReflectCardProps> = props => {
       onMentionClick={handleMentionClick}
       profileAvatar={
         <AuthorProfileAvatar
-          authorId={entryData.authorId}
+          authorId={reflectionData.authorId}
           hidePublishTime={hidePublishTime}
           pending={pending}
-          createdAt={entryData?.createdAt}
+          createdAt={reflectionData?.createdAt}
         />
       }
       {...rest}

@@ -3,6 +3,7 @@ import * as useAkashaStore from '@akashaorg/ui-awf-hooks/lib/store/use-akasha-st
 import * as useAnalytics from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 import { genAppProps, getUserInfo, getUserStore } from '@akashaorg/af-testing';
 import '@testing-library/jest-dom';
+import { randomUUID } from 'crypto';
 
 class ResizeObserver {
   observe() {

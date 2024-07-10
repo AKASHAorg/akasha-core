@@ -7,38 +7,25 @@ import EditableReflection from '@akashaorg/ui-lib-feed/lib/components/editable-r
 import routes, { REFLECT } from '../../../routes';
 import { useTranslation } from 'react-i18next';
 import { ReflectionData } from '@akashaorg/typings/lib/ui';
-import { hasOwn, transformSource } from '@akashaorg/ui-awf-hooks';
+import { transformSource } from '@akashaorg/ui-awf-hooks';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
 import { useRouterState } from '@tanstack/react-router';
-import { usePendingReflections } from '@akashaorg/ui-awf-hooks/lib/use-pending-reflections';
-import { PendingReflect } from '../../reflect-editor/pending-reflect';
 
 type ReflectionSectionProps = {
   beamId: string;
   reflectionId: string;
-  entryData: ReflectionData;
+  reflectionData: ReflectionData;
   isLoggedIn: boolean;
-  hasReflections: boolean;
-  customStyle?: string;
   showLoginModal: (title?: string, message?: string) => void;
 };
 
 const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
-  const {
-    beamId,
-    reflectionId,
-    entryData,
-    isLoggedIn,
-    hasReflections,
-    customStyle = '',
-    showLoginModal,
-  } = props;
+  const { beamId, reflectionId, reflectionData, isLoggedIn, showLoginModal } = props;
   const { t } = useTranslation('app-antenna');
   const routerState = useRouterState();
   const [isReflecting, setIsReflecting] = useState(
     routerState.location.pathname.endsWith(routes[REFLECT]),
   );
-  const { pendingReflections } = usePendingReflections();
 
   const wrapperRef = useCloseActions(() => {
     setIsReflecting(false);
@@ -49,11 +36,11 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
       dataTestId="reflection-section"
       ref={wrapperRef}
       spacing="gap-y-2"
-      customStyle={`grow ${customStyle}`}
+      customStyle="grow mb-2"
     >
       <Stack customStyle="grow">
         <EditableReflection
-          entryData={entryData}
+          reflectionData={reflectionData}
           contentClickable={false}
           onReflect={() => {
             if (!isLoggedIn) {
@@ -83,7 +70,7 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
             transformSource={transformSource}
           />
         )}
-        {isLoggedIn && entryData?.active && (
+        {isLoggedIn && reflectionData?.active && (
           <ReflectEditor
             beamId={beamId}
             reflectToId={reflectionId}
@@ -92,15 +79,6 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
           />
         )}
       </Stack>
-      {pendingReflections
-        .filter(content => hasOwn(content, 'reflection') && content.reflection === reflectionId)
-        .map((content, index, arr) => (
-          <PendingReflect
-            key={`pending-${index}-${reflectionId}`}
-            entryData={content}
-            customStyle={`${!hasReflections && index === arr.length - 1 ? 'rounded-b-2xl' : ''}`}
-          />
-        ))}
     </Stack>
   );
 };

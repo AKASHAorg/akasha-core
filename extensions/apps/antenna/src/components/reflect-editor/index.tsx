@@ -10,10 +10,7 @@ import {
   useMentions,
   useAkashaStore,
 } from '@akashaorg/ui-awf-hooks';
-import {
-  useCreateReflectMutation,
-  GetReflectionStreamDocument,
-} from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import { useCreateReflectMutation } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { useTranslation } from 'react-i18next';
 import {
   AnalyticsCategories,
@@ -22,8 +19,10 @@ import {
   NotificationEvents,
   ReflectionData,
 } from '@akashaorg/typings/lib/ui';
-import { usePendingReflections } from '@akashaorg/ui-awf-hooks/lib/use-pending-reflections';
-import { useApolloClient } from '@apollo/client';
+import {
+  usePendingReflections,
+  PENDING_REFLECTION_PREFIX,
+} from '@akashaorg/ui-awf-hooks/lib/use-pending-reflections';
 import { getEditorValueForTest } from './get-editor-value-for-test';
 
 export type ReflectEditorProps = {
@@ -42,7 +41,6 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
   const [editorState, setEditorState] = useState(null);
   const [newContent, setNewContent] = useState<ReflectionData>(null);
   const pendingReflectionIdRef = useRef(null);
-  const apolloClient = useApolloClient();
 
   const sdk = getSDK();
   const isReflectOfReflection = reflectToId !== beamId;
@@ -56,7 +54,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
       });
     },
   });
-  const { addPendingReflection, removePendingReflection, pendingReflections } =
+  const { addPendingReflection, removePendingReflection, changePendingReflection } =
     usePendingReflections();
 
   const {
@@ -122,11 +120,17 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
       ...reflection,
     };
     setNewContent({ ...content, authorId: null, id: null });
-    pendingReflectionIdRef.current = `pending-reflection-${pendingReflections.length}`;
+    //Create unique id for pending reflection using randomUUID(). If it's not available fallback to Date.now().
+    pendingReflectionIdRef.current = `${PENDING_REFLECTION_PREFIX}-${crypto?.randomUUID?.() ?? Date.now()}`;
     addPendingReflection({
       ...content,
       id: pendingReflectionIdRef.current,
-      authorId: authenticatedDID,
+      beam: {
+        id: beamId,
+      },
+      author: {
+        id: authenticatedDID,
+      },
     });
 
     const response = await publishReflection({
@@ -138,11 +142,12 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
     });
 
     if (response.data?.createAkashaReflect) {
-      apolloClient.refetchQueries({ include: [GetReflectionStreamDocument] }).then(() => {
-        removePendingReflection(pendingReflectionIdRef.current);
-      });
+      changePendingReflection(
+        pendingReflectionIdRef.current,
+        response.data.createAkashaReflect.document,
+      );
     } else {
-      showAlertNotification(`${t(`Something went wrong when publishing the reflection`)}.`);
+      removePendingReflection(pendingReflectionIdRef.current);
     }
   };
 

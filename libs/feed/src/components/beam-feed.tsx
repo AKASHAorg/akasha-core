@@ -28,7 +28,6 @@ import { useApolloClient } from '@apollo/client';
 import { GetBeamStreamQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 
 export type BeamFeedProps = {
-  dataTestId?: string;
   scrollRestorationStorageKey: string;
   filters?: AkashaBeamFiltersInput;
   sorting?: AkashaBeamSortingInput;
@@ -37,6 +36,7 @@ export type BeamFeedProps = {
   scrollOptions?: {
     overScan: number;
   };
+  dataTestId?: string;
   scrollTopIndicator?: (listRect: DOMRect, onScrollToTop: () => void) => React.ReactNode;
   loadingIndicator?: () => ReactElement;
   renderItem: (data?: Omit<AkashaBeamStreamEdge['node'], 'id'>) => ReactElement;

@@ -39,7 +39,7 @@ const ReflectionPreview: React.FC<ReflectionPreviewProps> = props => {
           {reflections.slice(0, MAXIMUM_REFLECTION_PREVIEWS).map(reflection => (
             <EditableReflection
               key={reflection?.id}
-              entryData={mapReflectEntryData(reflection)}
+              reflectionData={mapReflectEntryData(reflection)}
               contentClickable={true}
               hover={true}
               onReflect={() => {
