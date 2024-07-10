@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 
@@ -99,7 +99,11 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
     data: { authenticatedProfile },
   } = useAkashaStore();
 
-  const { data: appsByPubReq, error } = useGetAppsByPublisherDidQuery({
+  const {
+    data: appsByPubReq,
+    error,
+    fetchMore,
+  } = useGetAppsByPublisherDidQuery({
     variables: {
       id: authenticatedProfile?.did.id,
       first: 20,
@@ -107,12 +111,19 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
     },
     skip: !authenticatedProfile?.did.id,
   });
-  const appsData =
-    appsByPubReq?.node && hasOwn(appsByPubReq.node, 'akashaAppList')
-      ? appsByPubReq.node.akashaAppList
+  const appsData = useMemo(() => {
+    return appsByPubReq?.node && hasOwn(appsByPubReq.node, 'akashaAppList')
+      ? appsByPubReq.node.akashaAppList?.edges
       : null;
+  }, [appsByPubReq]);
 
-  const appElements = appsData?.edges
+  const pageInfo = useMemo(() => {
+    return appsByPubReq?.node && hasOwn(appsByPubReq?.node, 'akashaAppList')
+      ? appsByPubReq?.node.akashaAppList?.pageInfo
+      : null;
+  }, [appsByPubReq]);
+
+  const appElements = appsData
     ?.filter(ext => {
       if (selectedType.id === '0') {
         return true;
@@ -181,8 +192,21 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
         />
       )}
       {!error && appElements?.length > 0 && (
-        <Card>
-          <AppList apps={appElements} showAppTypeIndicator />
+        <Card customStyle="pb-0">
+          <AppList
+            apps={appElements}
+            showAppTypeIndicator
+            onLoadMore={() => {
+              if (pageInfo && pageInfo.hasNextPage) {
+                return fetchMore({
+                  variables: {
+                    after: pageInfo.endCursor,
+                  },
+                });
+              }
+              return null;
+            }}
+          />
         </Card>
       )}
     </Stack>
