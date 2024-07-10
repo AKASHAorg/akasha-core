@@ -5,11 +5,6 @@ const meta: Meta<ConnectErrorCardProps> = {
   title: 'DSComponents/Errors/ConnectErrorCard',
   component: ConnectErrorCard,
   tags: ['autodocs'],
-  argTypes: {
-    title: { control: 'text' },
-    message: { control: 'text' },
-    action: { control: 'object' },
-  },
 };
 
 type Story = StoryObj<ConnectErrorCardProps>;

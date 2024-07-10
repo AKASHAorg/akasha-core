@@ -1,18 +1,17 @@
 import React from 'react';
-import AppList from '@akashaorg/design-system-components/lib/components/AppList';
+import AppList, { App } from '@akashaorg/design-system-components/lib/components/AppList';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import { TContentProps } from './explore';
 
 export type InstalledExtensionsProps = {
   titleLabel: string;
   publicImgPath?: string;
   assetExtension?: string;
-  installedExtensions: TContentProps[];
-  defaultExtensions: TContentProps[];
+  installedExtensions: App[];
+  defaultExtensions: App[];
   sections: {
     assetName?: string;
     title: string;
@@ -21,7 +20,6 @@ export type InstalledExtensionsProps = {
     description2?: string;
     onClickDiscover?: () => void;
   }[];
-  onAppClick: (appId: string) => void;
 };
 
 export const InstalledExtensions: React.FC<InstalledExtensionsProps> = props => {
@@ -32,7 +30,6 @@ export const InstalledExtensions: React.FC<InstalledExtensionsProps> = props => 
     installedExtensions,
     defaultExtensions,
     sections,
-    onAppClick,
   } = props;
 
   return (
@@ -65,9 +62,7 @@ export const InstalledExtensions: React.FC<InstalledExtensionsProps> = props => 
               </Stack>
             </>
           )}
-          {!!installedExtensions.length && (
-            <AppList apps={installedExtensions} onAppSelected={onAppClick} />
-          )}
+          {!!installedExtensions.length && <AppList apps={installedExtensions} />}
         </Stack>
       </Card>
       <Card padding="p-4" margin="mb-2">
@@ -76,7 +71,7 @@ export const InstalledExtensions: React.FC<InstalledExtensionsProps> = props => 
           <Text variant="body2" color={{ light: 'grey5', dark: 'grey6' }}>
             {sections[1].description}
           </Text>
-          <AppList apps={defaultExtensions} onAppSelected={onAppClick} />
+          <AppList apps={defaultExtensions} />
         </Stack>
       </Card>
     </Stack>

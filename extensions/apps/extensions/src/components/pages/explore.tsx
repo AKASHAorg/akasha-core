@@ -50,28 +50,7 @@ export const ExplorePage: React.FC<unknown> = () => {
       to: routes[DEVELOPER_MODE],
     });
   };
-
-  const description = t(
-    'Play with your friends in AKASHA World and enjoy a couple of puzzle games or drawing games or any kind of game!',
-  );
-
-  const latestExtensions = [
-    {
-      id: 'supercart1',
-      name: t('Supercarts'),
-      description,
-    },
-    {
-      id: 'newsreader2',
-      name: t('News Reader'),
-      description,
-    },
-    {
-      id: 'nftgallery3',
-      name: t('NFT Gallery'),
-      description,
-    },
-  ];
+  const latestExtensions = [];
 
   return (
     <Explore
@@ -117,7 +96,6 @@ export const ExplorePage: React.FC<unknown> = () => {
       }))}
       buttonLabel={t('View All')}
       onViewAllClick={handleViewAllLatestExtensions}
-      onAppClick={handleAppClick}
     />
   );
 };

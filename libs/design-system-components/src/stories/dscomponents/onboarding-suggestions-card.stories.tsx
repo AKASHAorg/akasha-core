@@ -7,11 +7,6 @@ const meta: Meta<OnboardingSuggestionsCardProps> = {
   title: 'DSComponents/Cards/OnboardingSuggestionsCard',
   component: OnboardingSuggestionsCard,
   tags: ['autodocs'],
-  argTypes: {
-    topicsLabel: { control: 'text' },
-    peopleLabel: { control: 'text' },
-    transformSource: { action: 'source transformed' },
-  },
 };
 
 type Story = StoryObj<OnboardingSuggestionsCardProps>;

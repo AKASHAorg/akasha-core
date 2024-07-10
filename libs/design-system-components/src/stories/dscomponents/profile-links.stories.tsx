@@ -5,10 +5,6 @@ const meta: Meta<LinksProps> = {
   title: 'DSComponents/Profile/ProfileLinks',
   component: Links,
   tags: ['autodocs'],
-  argTypes: {
-    title: { control: 'text' },
-    links: { control: 'object' },
-  },
 };
 
 type Story = StoryObj<LinksProps>;

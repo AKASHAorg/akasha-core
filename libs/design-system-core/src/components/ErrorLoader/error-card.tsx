@@ -39,7 +39,7 @@ const ErrorCard: React.FC<PropsWithChildren<ErrorLoaderProps & { imageSrc: strin
         <img
           loading="lazy"
           decoding="async"
-          alt={''}
+          alt="error-card"
           className={tw('max-w-[50%] h-auto my-0 mx-auto py-8 px-0')}
           src={imageSrc}
         />

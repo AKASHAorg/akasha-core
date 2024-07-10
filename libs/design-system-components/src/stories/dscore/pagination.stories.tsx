@@ -18,8 +18,8 @@ const meta: Meta<PaginationProps> = {
     prevButtonDisabled: { control: 'boolean' },
     nextButtonDisabled: { control: 'boolean' },
     onClickPage: { action: 'page clicked' },
-    onClickPrev: { control: 'prev button clicked' },
-    onClickNext: { control: 'next button clicked' },
+    onClickPrev: { action: 'prev button clicked' },
+    onClickNext: { action: 'next button clicked' },
   },
 };
 

@@ -2,23 +2,9 @@ import type { Meta, StoryObj } from '@storybook/react';
 import EditProfile, { EditProfileProps } from '../../components/EditProfile';
 
 const meta: Meta<EditProfileProps> = {
-  title: 'DSComponents/Profile/Edit/EditProfile',
+  title: 'DSComponents/Profile/Edit',
   component: EditProfile,
   tags: ['autodocs'],
-  argTypes: {
-    header: { control: 'object' },
-    name: { control: 'object' },
-    userName: { control: 'object' },
-    bio: { control: 'object' },
-    cancelButton: { control: 'object' },
-    saveButton: { control: 'object' },
-    linkLabel: { control: 'text' },
-    addNewLinkButtonLabel: { control: 'text' },
-    description: { control: 'text' },
-    socialLinks: { control: 'object' },
-    nsfw: { control: 'object' },
-    nsfwFormLabel: { control: 'text' },
-  },
 };
 
 type Story = StoryObj<EditProfileProps>;
@@ -80,14 +66,12 @@ export const Default: Story = {
     },
     saveButton: {
       label: 'Save',
-      handleClick: formValues => {
-        console.log(formValues);
-      },
+      handleClick: () => ({}),
     },
+    socialLinks: [],
     linkLabel: 'External URLs',
     addNewLinkButtonLabel: 'Add new',
     description: 'You can add your personal websites or social links to be shared on your profile',
-    socialLinks: [],
     nsfw: {
       label: 'Select NSFW if your profile contains mature or explicit content.',
       description: '',

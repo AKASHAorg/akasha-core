@@ -6,11 +6,6 @@ const meta: Meta<ProfileSearchCardProps> = {
   title: 'DSComponents/Cards/ProfileSearchCard',
   component: ProfileSearchCard,
   tags: ['autodocs'],
-  argTypes: {
-    followLabel: { control: 'text' },
-    followersLabel: { control: 'text' },
-    followingLabel: { control: 'text' },
-  },
 };
 
 type Story = StoryObj<ProfileSearchCardProps>;
