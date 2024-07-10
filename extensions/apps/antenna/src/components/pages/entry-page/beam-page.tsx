@@ -1,18 +1,15 @@
-import React, { useLayoutEffect, useMemo, useRef } from 'react';
-import getSDK from '@akashaorg/awf-sdk';
-import { EntityTypes } from '@akashaorg/typings/lib/ui';
-import { useGetReflectionStreamQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import React, { useLayoutEffect, useMemo } from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import BeamSection from './beam-section';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import {
-  hasOwn,
   useAkashaStore,
   useAnalytics,
   useNsfwToggling,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
+import { EntityTypes } from '@akashaorg/typings/lib/ui';
 import { useTranslation } from 'react-i18next';
 import { ReflectionPreview } from '@akashaorg/ui-lib-feed';
 import { AkashaBeamStreamModerationStatus } from '@akashaorg/typings/lib/sdk/graphql-types-new';
@@ -23,11 +20,11 @@ import { BeamData } from '@akashaorg/typings/lib/ui';
 type BeamPageProps = {
   beamId: string;
   beamStatus: AkashaBeamStreamModerationStatus;
-  entryData: BeamData;
+  beamData: BeamData;
 };
 
 const BeamPage: React.FC<BeamPageProps> = props => {
-  const { beamId, beamStatus, entryData } = props;
+  const { beamId, beamStatus, beamData } = props;
   const { t } = useTranslation('app-antenna');
   const { navigateToModal, logger } = useRootComponentProps();
   const {
@@ -38,28 +35,9 @@ const BeamPage: React.FC<BeamPageProps> = props => {
   const navigate = useNavigate();
   const isLoggedIn = !!authenticatedDID;
 
-  const indexingDID = useRef(getSDK().services.gql.indexingDID);
   const filters = useMemo(() => {
     return { where: { beamID: { equalTo: beamId } } };
   }, [beamId]);
-
-  // TODO: after usePendingReflections refactor, the pending reflect component can be moved inside the reflect feed component, thereby making these blocks and associated logic redundant and safe to be cleaned up
-  const reflectionStreamQuery = useGetReflectionStreamQuery({
-    variables: {
-      first: 1,
-      indexer: indexingDID.current,
-      filters: filters,
-    },
-    fetchPolicy: 'no-cache',
-  });
-  const hasReflections = useMemo(() => {
-    if (
-      reflectionStreamQuery.data?.node &&
-      hasOwn(reflectionStreamQuery.data.node, 'akashaReflectStreamList')
-    ) {
-      return !!reflectionStreamQuery.data.node?.akashaReflectStreamList?.edges?.length;
-    }
-  }, [reflectionStreamQuery.data]);
 
   const showLoginModal = (title?: string, message?: string) => {
     navigateToModal({
@@ -91,16 +69,14 @@ const BeamPage: React.FC<BeamPageProps> = props => {
   return (
     <Card padding="p-0" margin="mb-4">
       <ReflectFeed
-        dataTestId="reflect-feed"
+        reflectToId={beamId}
         header={
           <BeamSection
             beamId={beamId}
-            entryData={entryData}
+            beamData={beamData}
             isLoggedIn={isLoggedIn}
             showNSFWCard={showNsfwCard}
-            hasReflections={hasReflections}
             showLoginModal={showLoginModal}
-            customStyle="mb-2"
           />
         }
         scrollRestorationStorageKey="beam-reflect-feed"
@@ -109,6 +85,7 @@ const BeamPage: React.FC<BeamPageProps> = props => {
         filters={filters}
         estimatedHeight={150}
         scrollOptions={{ overScan: 5 }}
+        dataTestId="reflect-feed"
         renderItem={itemData => {
           return (
             <ErrorBoundary

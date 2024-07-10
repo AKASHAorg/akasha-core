@@ -1,30 +1,23 @@
-import React, { useLayoutEffect, useMemo, useRef } from 'react';
-import getSDK from '@akashaorg/awf-sdk';
-import { EntityTypes, ReflectionData } from '@akashaorg/typings/lib/ui';
-import { useGetReflectionStreamQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import React, { useLayoutEffect, useMemo } from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import BackToOriginalBeam from '@akashaorg/ui-lib-feed/lib/components/back-to-original-beam';
 import ReflectionSection from './reflection-section';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
-import {
-  hasOwn,
-  useAkashaStore,
-  useAnalytics,
-  useRootComponentProps,
-} from '@akashaorg/ui-awf-hooks';
+import { EntityTypes, ReflectionData } from '@akashaorg/typings/lib/ui';
+import { useAkashaStore, useAnalytics, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { ReflectionPreview } from '@akashaorg/ui-lib-feed';
 import { useNavigate } from '@tanstack/react-router';
 import { EditableReflectionResolver, ReflectFeed } from '@akashaorg/ui-lib-feed';
 
 type ReflectionPageProps = {
-  entryData: ReflectionData;
+  reflectionData: ReflectionData;
 };
 
 const ReflectionPage: React.FC<ReflectionPageProps> = props => {
-  const { entryData } = props;
+  const { reflectionData } = props;
   const { t } = useTranslation('app-antenna');
   const {
     data: { authenticatedDID },
@@ -34,8 +27,6 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
   const navigate = useNavigate();
   const isLoggedIn = !!authenticatedDID;
 
-  const indexingDID = useRef(getSDK().services.gql.indexingDID);
-
   const filters = useMemo(() => {
     return {
       and: [
@@ -43,33 +34,13 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
         {
           where: {
             replyTo: {
-              equalTo: entryData.id,
+              equalTo: reflectionData.id,
             },
           },
         },
       ],
     };
-  }, [entryData.id]);
-
-  // TODO: after usePendingReflections refactor, the pending reflect component can be moved
-  //  inside the reflect feed component, thereby making these blocks and associated logic
-  //  redundant and safe to be cleaned up
-  const reflectionStreamQuery = useGetReflectionStreamQuery({
-    variables: {
-      first: 1,
-      indexer: indexingDID.current,
-      filters: filters,
-    },
-    fetchPolicy: 'no-cache',
-  });
-  const hasReflections = useMemo(() => {
-    if (
-      reflectionStreamQuery.data?.node &&
-      hasOwn(reflectionStreamQuery.data.node, 'akashaReflectStreamList')
-    ) {
-      return !!reflectionStreamQuery.data.node?.akashaReflectStreamList?.edges?.length;
-    }
-  }, [reflectionStreamQuery.data]);
+  }, [reflectionData.id]);
 
   const showLoginModal = (title?: string, message?: string) => {
     navigateToModal({
@@ -97,31 +68,30 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
   return (
     <Card padding="p-0" margin="mb-4">
       <ReflectFeed
-        dataTestId="reflect-feed"
+        reflectToId={reflectionData.id}
         header={
           <Stack spacing="gap-y-2">
             <BackToOriginalBeam
               label={t('Back to original beam')}
-              onClick={() => onNavigateToOriginalBeam(entryData.beamID)}
+              onClick={() => onNavigateToOriginalBeam(reflectionData.beamID)}
             />
             <ReflectionSection
-              beamId={entryData.beamID}
-              reflectionId={entryData.id}
-              entryData={entryData}
+              beamId={reflectionData.beamID}
+              reflectionId={reflectionData.id}
+              reflectionData={reflectionData}
               isLoggedIn={isLoggedIn}
-              hasReflections={hasReflections}
               showLoginModal={showLoginModal}
-              customStyle="mb-2"
             />
           </Stack>
         }
         scrollRestorationStorageKey="reflection-reflect-feed"
-        lastScrollRestorationKey={entryData.id}
+        lastScrollRestorationKey={reflectionData.id}
         itemType={EntityTypes.REFLECT}
         itemSpacing={0}
         trackEvent={analyticsActions.trackEvent}
         estimatedHeight={120}
         filters={filters}
+        dataTestId="reflect-feed"
         renderItem={itemData => (
           <ErrorBoundary
             errorObj={{

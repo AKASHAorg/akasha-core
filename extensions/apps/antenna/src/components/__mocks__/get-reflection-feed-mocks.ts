@@ -78,7 +78,6 @@ export function getReflectFeedMocks({
         request: {
           query: GetReflectionStreamDocument,
         },
-        maxUsageCount: 2,
         variableMatcher: () => true,
         result: {
           data: {

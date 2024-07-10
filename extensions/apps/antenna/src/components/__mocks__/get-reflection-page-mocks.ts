@@ -1,10 +1,9 @@
-import { genReflectionStream, genProfileByDID, genReflectionData } from '@akashaorg/af-testing';
+import { genProfileByDID, genReflectionData } from '@akashaorg/af-testing';
 import {
   GetProfileByDidDocument,
-  GetReflectionStreamDocument,
   GetReflectionByIdDocument,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { REFLECTION_ID, REFLECTION_SECTION, REFLECT_FEED } from './constants';
+import { REFLECTION_ID, REFLECTION_SECTION } from './constants';
 
 export function getReflectionPageMocks() {
   const reflectionData = genReflectionData({
@@ -34,35 +33,6 @@ export function getReflectionPageMocks() {
         result: {
           data: {
             node: reflectionData,
-          },
-        },
-      },
-      {
-        request: {
-          query: GetReflectionStreamDocument,
-          variables: {
-            first: 1,
-            indexer: undefined,
-            filters: {
-              and: [
-                { where: { isReply: { equalTo: true } } },
-                {
-                  where: {
-                    replyTo: {
-                      equalTo: REFLECTION_ID,
-                    },
-                  },
-                },
-              ],
-            },
-          },
-        },
-        result: {
-          data: {
-            node: genReflectionStream({
-              beamId: REFLECTION_ID,
-              reflectionId: REFLECT_FEED.reflectionId,
-            }),
           },
         },
       },

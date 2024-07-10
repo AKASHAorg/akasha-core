@@ -68,3 +68,14 @@ export type RawBeamData = Pick<
     id: string;
   };
 };
+
+/**
+ * Type defining plain old javascript object of a reflection data obtained from an api
+ */
+export type RawReflectionData = Pick<
+  AkashaReflect,
+  'id' | 'active' | 'createdAt' | 'nsfw' | 'content' | 'reflection' | 'isReply'
+> & {
+  author: { id: string };
+  beam?: { id: string };
+};

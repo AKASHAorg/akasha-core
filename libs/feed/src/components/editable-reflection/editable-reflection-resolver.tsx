@@ -25,7 +25,7 @@ export const EditableReflectionResolver = ({
 
   if (reflectionReq.loading) return <EntryCardLoading noWrapperCard={true} />;
 
-  const entryData =
+  const reflectionData =
     reflectionReq.data?.node && hasOwn(reflectionReq.data.node, 'id')
       ? reflectionReq.data.node
       : undefined;
@@ -33,7 +33,7 @@ export const EditableReflectionResolver = ({
   return (
     <React.Suspense>
       <EditableReflection
-        entryData={mapReflectEntryData(entryData)}
+        reflectionData={mapReflectEntryData(reflectionData)}
         contentClickable={true}
         onContentClick={onContentClick}
         onReflect={onReflect}

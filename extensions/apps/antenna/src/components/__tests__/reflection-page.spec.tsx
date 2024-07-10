@@ -12,7 +12,6 @@ import {
   getAllByTestId,
   getByText,
   getUserStore,
-  genReflectionStream,
 } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 import { mapReflectEntryData } from '@akashaorg/ui-awf-hooks';
@@ -30,7 +29,6 @@ import {
   NEW_REFLECTION,
   AUTHENTICATED_PROFILE,
 } from '../__mocks__';
-import { GetReflectionStreamDocument } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
 const {
   mocks,
@@ -41,7 +39,7 @@ const {
 describe('< ReflectionPage /> component', () => {
   const BaseComponent = (
     <AnalyticsProvider {...genAppProps()}>
-      <ReflectionPage entryData={mapReflectEntryData(reflectionData)} />
+      <ReflectionPage reflectionData={mapReflectEntryData(reflectionData)} />
     </AnalyticsProvider>
   );
 
@@ -167,39 +165,6 @@ describe('< ReflectionPage /> component', () => {
                 authorProfileDID: AUTHENTICATED_DID,
                 content: NEW_REFLECTION,
               }),
-              /*@TODO revisit this mock which is needed as a result of refetch on reflect editor */
-              {
-                request: {
-                  query: GetReflectionStreamDocument,
-                },
-                variableMatcher: () => true,
-                result: {
-                  data: {
-                    node: genReflectionStream({
-                      beamId: BEAM_ID,
-                      reflectionId: NEW_REFLECTION_ID,
-                      isReply: true,
-                      replyTo: REPLY_TO,
-                    }),
-                  },
-                },
-              },
-              {
-                request: {
-                  query: GetReflectionStreamDocument,
-                },
-                variableMatcher: () => true,
-                result: {
-                  data: {
-                    node: genReflectionStream({
-                      beamId: BEAM_ID,
-                      reflectionId: NEW_REFLECTION_ID,
-                      isReply: true,
-                      replyTo: REPLY_TO,
-                    }),
-                  },
-                },
-              },
             ],
           },
         );
@@ -208,22 +173,18 @@ describe('< ReflectionPage /> component', () => {
 
     it('should render pending reflection card', async () => {
       const user = userEvent.setup();
-      await user.click(screen.getByRole('button', { name: 'Reflect' }));
+      user.click(screen.getByRole('button', { name: 'Reflect' }));
       await waitFor(() => {
         expect(screen.getByRole('textbox')).toHaveTextContent(NEW_REFLECTION);
       });
       user.click(screen.getByRole('button', { name: 'Reflect' }));
-      await waitFor(() => {
-        expect(screen.getByTestId('pending-reflect')).toBeInTheDocument();
-      });
+      await waitFor(() => expect(screen.getByTestId('pending-reflect')).toBeInTheDocument());
     });
 
     it('should render published reflection on reflect feed', async () => {
       const user = userEvent.setup();
       user.click(screen.getByRole('button', { name: 'Reflect' }));
-      await waitFor(() => {
-        expect(screen.getByRole('textbox')).toHaveTextContent(NEW_REFLECTION);
-      });
+      await waitFor(() => expect(screen.getByRole('textbox')).toHaveTextContent(NEW_REFLECTION));
       user.click(screen.getByRole('button', { name: 'Reflect' }));
       await waitFor(() => {
         const reflectFeed = screen.getByTestId('reflect-feed');

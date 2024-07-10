@@ -39,32 +39,7 @@ export function getReflectEditorMocks({
         query: GetFollowingListByDidDocument,
       },
       variableMatcher: () => true,
-      result: {
-        data: {
-          node: {
-            akashaFollowList: {
-              edges: [],
-              pageInfo: {
-                startCursor: null,
-                endCursor: null,
-                hasNextPage: false,
-                hasPreviousPage: false,
-                __typename: 'PageInfo',
-              },
-              __typename: 'AkashaFollowConnection',
-            },
-            isViewer: false,
-            __typename: 'CeramicAccount',
-          },
-        },
-      },
-    },
-    /*@TODO revisit this mock which is needed as a result of refetch on reflect editor */
-    {
-      request: {
-        query: GetFollowingListByDidDocument,
-      },
-      variableMatcher: () => true,
+      maxUsageCount: 2,
       result: {
         data: {
           node: {

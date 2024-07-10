@@ -37,7 +37,7 @@ const ProfileBeamsPage: React.FC<ProfileBeamsPageProps> = props => {
           if (hasOwn(itemData, 'content'))
             return (
               <BeamCard
-                entryData={mapBeamEntryData(itemData)}
+                beamData={mapBeamEntryData(itemData)}
                 contentClickable={true}
                 showNSFWCard={itemData?.nsfw}
                 showHiddenContent={false}

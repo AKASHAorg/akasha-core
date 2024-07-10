@@ -88,7 +88,7 @@ const beamRoute = createRoute({
                 return (
                   <BeamPage
                     beamId={beamId}
-                    entryData={mapBeamEntryData(getBeamData(beamById))}
+                    beamData={mapBeamEntryData(getBeamData(beamById))}
                     beamStatus={getBeamStatus(beamStreamData)}
                   />
                 );
@@ -116,7 +116,7 @@ const beamReflectRoute = createRoute({
                 return (
                   <BeamPage
                     beamId={beamId}
-                    entryData={mapBeamEntryData(getBeamData(beamById))}
+                    beamData={mapBeamEntryData(getBeamData(beamById))}
                     beamStatus={getBeamStatus(beamStreamData)}
                   />
                 );
@@ -145,7 +145,7 @@ const reflectionsRoute = createRoute({
     return (
       <Suspense fallback={<EntrySectionLoading />}>
         <Await promise={reflection}>
-          {data => <ReflectionPage entryData={mapReflectEntryData(getReflectionData(data))} />}
+          {data => <ReflectionPage reflectionData={mapReflectEntryData(getReflectionData(data))} />}
         </Await>
       </Suspense>
     );
@@ -160,7 +160,7 @@ const reflectionsReflectRoute = createRoute({
     return (
       <Suspense fallback={<EntrySectionLoading />}>
         <Await promise={reflection}>
-          {data => <ReflectionPage entryData={mapReflectEntryData(getReflectionData(data))} />}
+          {data => <ReflectionPage reflectionData={mapReflectEntryData(getReflectionData(data))} />}
         </Await>
       </Suspense>
     );

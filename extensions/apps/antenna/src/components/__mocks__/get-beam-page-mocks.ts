@@ -1,16 +1,10 @@
-import {
-  genBeamData,
-  genContentBlock,
-  genReflectionStream,
-  genProfileByDID,
-} from '@akashaorg/af-testing';
+import { genBeamData, genContentBlock, genProfileByDID } from '@akashaorg/af-testing';
 import {
   GetProfileByDidDocument,
   GetBeamByIdDocument,
   GetContentBlockByIdDocument,
-  GetReflectionStreamDocument,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { BEAM_ID, BEAM_SECTION, REFLECT_FEED } from './constants';
+import { BEAM_ID, BEAM_SECTION } from './constants';
 
 export function getBeamPageMocks() {
   const beamData = genBeamData({
@@ -58,30 +52,6 @@ export function getBeamPageMocks() {
           },
         },
       })),
-      {
-        request: {
-          query: GetReflectionStreamDocument,
-          variables: {
-            first: 1,
-            indexer: undefined,
-            filters: {
-              where: {
-                beamID: {
-                  equalTo: BEAM_ID,
-                },
-              },
-            },
-          },
-        },
-        result: {
-          data: {
-            node: genReflectionStream({
-              beamId: BEAM_ID,
-              reflectionId: REFLECT_FEED.reflectionId,
-            }),
-          },
-        },
-      },
     ],
     beamData,
     profileData,
