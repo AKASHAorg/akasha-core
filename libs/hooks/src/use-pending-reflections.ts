@@ -6,6 +6,8 @@ let pendingReflectionsVar;
 
 export const PENDING_REFLECTION_PREFIX = 'pending-reflection';
 
+type PendingReflection = RawReflectionData & { published?: boolean };
+
 /**
  * Hook that handles the adding, removing and returning of the
  * pending Reflections by making use of Apollo's reactive variables.
@@ -18,11 +20,11 @@ export const PENDING_REFLECTION_PREFIX = 'pending-reflection';
  */
 export const usePendingReflections = () => {
   if (!pendingReflectionsVar) {
-    pendingReflectionsVar = createReactiveVar<RawReflectionData[]>([]);
+    pendingReflectionsVar = createReactiveVar<PendingReflection[]>([]);
   }
-  const pendingReflections = useReactiveVar<RawReflectionData[]>(pendingReflectionsVar);
+  const pendingReflections = useReactiveVar<PendingReflection[]>(pendingReflectionsVar);
 
-  const addPendingReflection = (pendingReflection: RawReflectionData) => {
+  const addPendingReflection = (pendingReflection: PendingReflection) => {
     const oldState = pendingReflectionsVar();
 
     pendingReflectionsVar([...oldState, pendingReflection]);
@@ -34,7 +36,7 @@ export const usePendingReflections = () => {
     pendingReflectionsVar([...oldState]);
   };
 
-  const changePendingReflection = (reflectionId: string, reflectionData: RawReflectionData) => {
+  const updatePendingReflection = (reflectionId: string, reflectionData: PendingReflection) => {
     const newState = pendingReflectionsVar().map(reflection => {
       if (reflection.id === reflectionId) return reflectionData;
       return reflection;
@@ -51,7 +53,7 @@ export const usePendingReflections = () => {
     addPendingReflection,
     removePendingReflection,
     removePendingReflections,
-    changePendingReflection,
+    updatePendingReflection,
     pendingReflections,
   };
 };

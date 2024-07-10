@@ -54,7 +54,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
       });
     },
   });
-  const { addPendingReflection, removePendingReflection, changePendingReflection } =
+  const { addPendingReflection, removePendingReflection, updatePendingReflection } =
     usePendingReflections();
 
   const {
@@ -142,10 +142,10 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
     });
 
     if (response.data?.createAkashaReflect) {
-      changePendingReflection(
-        pendingReflectionIdRef.current,
-        response.data.createAkashaReflect.document,
-      );
+      updatePendingReflection(pendingReflectionIdRef.current, {
+        ...response.data.createAkashaReflect.document,
+        published: true,
+      });
     } else {
       removePendingReflection(pendingReflectionIdRef.current);
     }

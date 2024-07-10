@@ -18,10 +18,7 @@ import {
   useGetReflectionStreamLazyQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { hasOwn, mapReflectEntryData, useAkashaStore } from '@akashaorg/ui-awf-hooks';
-import {
-  usePendingReflections,
-  PENDING_REFLECTION_PREFIX,
-} from '@akashaorg/ui-awf-hooks/lib/use-pending-reflections';
+import { usePendingReflections } from '@akashaorg/ui-awf-hooks/lib/use-pending-reflections';
 import { GetReflectionStreamQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 import { PendingReflect } from './pending-reflect';
 import { useApolloClient } from '@apollo/client';
@@ -115,7 +112,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
   useEffect(() => {
     const updateCache = async () => {
       for (const pendingReflection of pendingReflections) {
-        if (!pendingReflection.id.startsWith(PENDING_REFLECTION_PREFIX)) {
+        if (pendingReflection.published) {
           const query = await apolloClient.cache.readQuery<GetReflectionStreamQuery>({
             query: GetReflectionStreamDocument,
             variables,
@@ -130,7 +127,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
                   status: pendingReflection.nsfw ? AkashaReflectStreamModerationStatus.Nsfw : null,
                   moderationID: null,
                   replyTo: itemType === EntityTypes.REFLECT ? pendingReflection.reflection : null,
-                  active: true,
+                  active: pendingReflection.active,
                   createdAt: pendingReflection.createdAt,
                   isReply: !!pendingReflection.isReply,
                 },
