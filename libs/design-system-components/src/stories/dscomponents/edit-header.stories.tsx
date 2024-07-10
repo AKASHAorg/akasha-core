@@ -5,26 +5,6 @@ const meta: Meta<HeaderProps> = {
   title: 'DSComponents/Profile/Edit/Header',
   component: Header,
   tags: ['autodocs'],
-  argTypes: {
-    avatar: { control: 'object' },
-    coverImage: { control: 'object' },
-    profileId: { control: 'text' },
-    title: { control: 'text' },
-    cancelLabel: { control: 'text' },
-    deleteLabel: { control: 'text' },
-    saveLabel: { control: 'text' },
-    dragToRepositionLabel: { control: 'text' },
-    isSavingImage: { control: 'boolean' },
-    imageTitle: { control: 'object' },
-    deleteTitle: { control: 'object' },
-    confirmationLabel: { control: 'object' },
-    publicImagePath: { control: 'text' },
-    onAvatarChange: { action: 'avatar changed' },
-    onCoverImageChange: { action: 'avatar changed' },
-    onImageDelete: { action: 'avatar changed' },
-    onImageSave: { action: 'avatar changed' },
-    transformSource: { action: 'source transformed' },
-  },
 };
 
 type Story = StoryObj<HeaderProps>;
@@ -49,31 +29,31 @@ const coverImage = {
 
 export const Default: Story = {
   args: {
-    avatar,
     coverImage,
+    avatar,
     profileId,
     title: 'Avatar & Cover Image',
     cancelLabel: 'Cancel',
     deleteLabel: 'Delete',
     saveLabel: 'Save',
-    dragToRepositionLabel: 'Drag to reposition',
-    isSavingImage: false,
     imageTitle: { avatar: { label: 'Edit Avatar' }, coverImage: { label: 'Edit Cover' } },
     deleteTitle: { avatar: { label: 'Delete Avatar' }, coverImage: { label: 'Delete Cover' } },
     confirmationLabel: {
       avatar: 'Are you sure you want to delete your avatar? ',
       coverImage: 'Are you sure you want to delete your cover?',
     },
+    dragToRepositionLabel: 'Drag to reposition',
+    isSavingImage: false,
     publicImagePath: '/images',
-    onAvatarChange: () => ({}),
-    onCoverImageChange: () => ({}),
-    onImageDelete: () => ({}),
-    onImageSave: () => ({}),
     transformSource: () => ({
       src: 'https://placebeard.it/360x360',
       width: 360,
       height: 360,
     }),
+    onAvatarChange: () => ({}),
+    onCoverImageChange: () => ({}),
+    onImageSave: () => ({}),
+    onImageDelete: () => ({}),
   },
 };
 

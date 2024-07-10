@@ -5,27 +5,6 @@ const meta: Meta<NotificationsCardProps> = {
   title: 'DSComponents/Cards/NotificationsCard',
   component: NotificationsCard,
   tags: ['autodocs'],
-  argTypes: {
-    notifications: { control: 'object' },
-    isFetching: { control: 'boolean' },
-    emptyTitle: { control: 'text' },
-    emptySubtitle: { control: 'text' },
-    markAsReadLabel: { control: 'text' },
-    repostLabel: { control: 'text' },
-    replyToPostLabel: { control: 'text' },
-    replyToReplyLabel: { control: 'text' },
-    followingLabel: { control: 'text' },
-    mentionedPostLabel: { control: 'text' },
-    mentionedCommentLabel: { control: 'text' },
-    moderatedPostLabel: { control: 'text' },
-    moderatedReplyLabel: { control: 'text' },
-    moderatedAccountLabel: { control: 'text' },
-    loggedIn: { control: 'boolean' },
-    handleEntryClick: { action: 'entry clicked' },
-    handleMessageRead: { action: 'message read' },
-    handleProfileClick: { action: 'profile clicked' },
-    transformSource: { action: 'source transformed' },
-  },
 };
 
 type Story = StoryObj<NotificationsCardProps>;

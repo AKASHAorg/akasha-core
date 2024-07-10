@@ -5,10 +5,6 @@ const meta: Meta<BioProps> = {
   title: 'DSComponents/Profile/ProfileBio',
   component: Bio,
   tags: ['autodocs'],
-  argTypes: {
-    title: { control: 'text' },
-    biography: { control: 'text' },
-  },
 };
 
 type Story = StoryObj<BioProps>;

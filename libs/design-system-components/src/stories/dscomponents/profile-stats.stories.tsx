@@ -5,12 +5,6 @@ const meta: Meta<StatsProps> = {
   title: 'DSComponents/Profile/ProfileStatsCard',
   component: Stats,
   tags: ['autodocs'],
-  argTypes: {
-    posts: { control: 'object' },
-    interests: { control: 'object' },
-    followers: { control: 'object' },
-    following: { control: 'object' },
-  },
 };
 
 type Story = StoryObj<StatsProps>;

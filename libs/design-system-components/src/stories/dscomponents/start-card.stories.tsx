@@ -5,12 +5,6 @@ const meta: Meta<StartCardProps> = {
   title: 'DSComponents/Cards/StartCard',
   component: StartCard,
   tags: ['autodocs'],
-  argTypes: {
-    title: { control: 'text' },
-    heading: { control: 'text' },
-    image: { control: 'text' },
-    description: { control: 'text' },
-  },
 };
 
 type Story = StoryObj<StartCardProps>;

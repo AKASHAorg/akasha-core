@@ -5,10 +5,6 @@ const meta: Meta<EditInterestsProps> = {
   title: 'DSComponents/Profile/Edit/Interests',
   component: EditInterests,
   tags: ['autodocs'],
-  argTypes: {
-    title: { control: 'text' },
-    onFormDirty: { action: 'form dirtied' },
-  },
 };
 
 type Story = StoryObj<EditInterestsProps>;

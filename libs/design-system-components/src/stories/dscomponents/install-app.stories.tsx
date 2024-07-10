@@ -13,13 +13,6 @@ const meta: Meta<InstallAppProps> = {
   title: 'DSComponents/Extensions/AppInstallation',
   component: Wrapped,
   tags: ['autodocs'],
-  argTypes: {
-    title: { control: 'text' },
-    appName: { control: 'text' },
-    progressInfo: { control: 'text' },
-    status: { control: 'text' },
-    action: { control: 'object' },
-  },
 };
 
 type Story = StoryObj<InstallAppProps>;
