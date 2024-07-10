@@ -17,6 +17,15 @@ export enum ExtensionTypes {
 }
 
 /**
+ * Enum defining extension status for an extension developer
+ **/
+export enum ExtensionStatus {
+  Draft = 'Draft',
+  Pending = 'Pending',
+  Published = 'Published',
+}
+
+/**
  * Enum defining events related to loading and unloading of an app
  **/
 export const enum AppEvents {

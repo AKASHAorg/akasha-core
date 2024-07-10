@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { transformSource } from '@akashaorg/ui-awf-hooks';
 import AppList from '@akashaorg/design-system-components/lib/components/AppList';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -27,23 +26,8 @@ export const DevInfoPage: React.FC<DevInfoPageProps> = () => {
       },
     });
   };
-
-  const description = t(
-    'Play with your friends in AKASHA World and enjoy a couple of puzzle games or drawing games or any kind of game!',
-  );
-
-  const ownExtensions = Array.from({ length: 4 }, (_, i) => ({
-    id: 'gamesapp' + i + 1,
-    name: t('Games App'),
-    description,
-    action: (
-      <Button
-        variant="primary"
-        label={t('Open')}
-        onClick={() => handleAppClick('gamesapp' + i + 1)}
-      />
-    ),
-  }));
+  // @TODO fetch real data
+  const ownExtensions = [];
 
   return (
     <>
@@ -59,10 +43,10 @@ export const DevInfoPage: React.FC<DevInfoPageProps> = () => {
             )}
           />
           <Divider />
-          <AppList apps={ownExtensions} onAppSelected={handleAppClick} />
+          <AppList apps={ownExtensions} />
           <Divider />
           <Text variant="h5">{t('Collaborations')}</Text>
-          <AppList apps={ownExtensions.slice(0, 1)} onAppSelected={handleAppClick} />
+          <AppList apps={ownExtensions.slice(0, 1)} />
         </Stack>
       </Card>
     </>

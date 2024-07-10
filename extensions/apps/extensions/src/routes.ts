@@ -3,15 +3,15 @@ export const EXTENSIONS = 'Extensions Hub';
 export const INSTALLED = 'Installed Extensions';
 export const MY_EXTENSIONS = 'My Extensions';
 export const DEVELOPER_MODE = 'Developer Mode';
-export const INFO = 'info';
-export const APP_CREATE = 'create';
+export const INFO = 'App Info';
+export const CREATE_EXTENSION = 'Create Extension';
 
 export default {
   [HOME]: '/explore',
-  [EXTENSIONS]: '/extensions',
-  [INSTALLED]: '/installed',
+  [EXTENSIONS]: '/extensions-hub',
+  [INSTALLED]: '/installed-extensions',
   [MY_EXTENSIONS]: '/my-extensions',
   [DEVELOPER_MODE]: '/developer-mode',
   [INFO]: '/info/$appId',
-  [APP_CREATE]: '/extensions/create',
+  [CREATE_EXTENSION]: '/create-extension',
 };
