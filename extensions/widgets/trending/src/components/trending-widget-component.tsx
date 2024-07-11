@@ -69,8 +69,6 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
     return [];
   }, [latestProfileStreamReq.data]);
 
-  useGetProfileByIdQuery({ variables: { id: '' } });
-
   const { data: followDocuments } = useGetFollowDocumentsByDidQuery({
     variables: {
       id: authenticatedDID,
