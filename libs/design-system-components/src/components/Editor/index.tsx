@@ -333,9 +333,9 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
       const before = wordBefore && Editor.before(editor, wordBefore);
       const beforeRange = before && Editor.range(editor, before, start);
       const beforeText = beforeRange && Editor.string(editor, beforeRange);
-      const beforeMentionMatch = beforeText && beforeText.match(/^@(\w+)$/);
+      const beforeMentionMatch = beforeText && beforeText.toLocaleLowerCase().match(/^@(\w+)$/);
       // @todo: proper matching /^#([a-z0-9]*)(\-?|.?)([a-z0-9]*)$/
-      const beforeTagMatch = beforeText && beforeText.match(/^#(\w+)$/);
+      const beforeTagMatch = beforeText && beforeText.toLocaleLowerCase().match(/^#(\w+)$/);
       const after = Editor.after(editor, start);
       const afterRange = Editor.range(editor, start, after);
       const afterText = Editor.string(editor, afterRange);
