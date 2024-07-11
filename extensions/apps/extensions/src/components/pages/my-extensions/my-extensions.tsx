@@ -38,7 +38,7 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
   const typeDropDownMenuItems: DropdownMenuItemGroupType[] = [
     {
       id: '0',
-      title: 'All',
+      title: t('All'),
       type: 'opt',
     },
     {
@@ -69,7 +69,7 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
   const statusDropDownMenuItems: DropdownMenuItemGroupType[] = [
     {
       id: '0',
-      title: 'All',
+      title: t('All'),
       type: 'opt',
     },
     {
