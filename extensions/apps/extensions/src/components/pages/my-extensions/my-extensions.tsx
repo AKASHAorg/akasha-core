@@ -206,7 +206,6 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
                 },
               });
             }}
-            // customStyle="mb-4"
           >
             {({ itemIndex }) => {
               const app = appElements[itemIndex];
