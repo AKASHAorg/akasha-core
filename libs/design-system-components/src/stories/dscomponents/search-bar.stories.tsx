@@ -16,12 +16,6 @@ const meta: Meta<SearchBarProps> = {
   title: 'DSComponents/Bars/SearchBar',
   component: Component,
   tags: ['autodocs'],
-  argTypes: {
-    inputValue: { control: 'text' },
-    inputPlaceholderLabel: { control: 'text' },
-    onInputChange: { action: 'input changed' },
-    onSearch: { action: 'searched' },
-  },
 };
 
 type Story = StoryObj<SearchBarProps>;

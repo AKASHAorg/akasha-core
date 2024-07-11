@@ -7,11 +7,6 @@ const meta: Meta<OnboardingStartCardProps> = {
   title: 'DSComponents/Cards/OnboardingStartCard',
   component: OnboardingStartCard,
   tags: ['autodocs'],
-  argTypes: {
-    inputPlaceholderLabel: { control: 'text' },
-    titleLabel: { control: 'text' },
-    handleSearch: { action: 'searched' },
-  },
 };
 
 type Story = StoryObj<OnboardingStartCardProps>;

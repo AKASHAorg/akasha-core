@@ -4,16 +4,6 @@ import CookieCard, { CookieCardProps } from '../../components/CookieCard';
 const meta: Meta<CookieCardProps> = {
   title: 'DSComponents/Cards/CookieCard',
   component: CookieCard,
-  argTypes: {
-    titleLabel: { control: 'text' },
-    paragraphOneLabel: { control: 'text' },
-    paragraphTwo: { control: 'object' },
-    paragraphThree: { control: 'object' },
-    onlyEssentialLabel: { control: 'text' },
-    acceptAllLabel: { control: 'text' },
-    onClickAcceptAll: { action: 'all cookies accepted' },
-    onClickOnlyEssential: { action: 'essential cookies accepted' },
-  },
 };
 
 type Story = StoryObj<CookieCardProps>;
@@ -37,8 +27,8 @@ export const Default: Story = {
       ctaLabel: 'Privacy Policy',
       onPrivacyClick: () => ({}),
     },
-    acceptAllLabel: 'Accept all',
     onlyEssentialLabel: 'Only essential',
+    acceptAllLabel: 'Accept all',
     onClickAcceptAll: () => ({}),
     onClickOnlyEssential: () => ({}),
   },

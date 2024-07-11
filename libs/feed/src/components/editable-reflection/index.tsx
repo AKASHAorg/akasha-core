@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
-import ReflectionCard, { ReflectCardProps } from '../cards/reflection-card';
+import ReflectionCard, { ReflectionCardProps } from '../cards/reflection-card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import getSDK from '@akashaorg/awf-sdk';
 import {
@@ -27,8 +27,8 @@ import ReflectionEditorRenderer from './reflection-editor-renderer';
 
 const MAX_EDIT_TIME_IN_MINUTES = 10;
 
-const EditableReflection: React.FC<ReflectCardProps> = props => {
-  const { entryData, ...rest } = props;
+const EditableReflection: React.FC<ReflectionCardProps> = props => {
+  const { reflectionData, ...rest } = props;
   const { t } = useTranslation('ui-lib-feed');
   const { uiEvents, logger } = useRootComponentProps();
   const _uiEvents = React.useRef(uiEvents);
@@ -50,8 +50,8 @@ const EditableReflection: React.FC<ReflectCardProps> = props => {
   };
 
   useEffect(() => {
-    setEditorState(entryData.content.flatMap(item => decodeb64SlateContent(item.value)));
-  }, [entryData.content]);
+    setEditorState(reflectionData.content.flatMap(item => decodeb64SlateContent(item.value)));
+  }, [reflectionData.content]);
 
   const [editReflection, { loading: editInProgress }] = useUpdateAkashaReflectMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
@@ -81,7 +81,7 @@ const EditableReflection: React.FC<ReflectCardProps> = props => {
   });
 
   const reflectionCreationElapsedTimeInMinutes = dayjs(new Date()).diff(
-    entryData.createdAt,
+    reflectionData.createdAt,
     'minutes',
   );
 
@@ -97,7 +97,7 @@ const EditableReflection: React.FC<ReflectCardProps> = props => {
     editReflection({
       variables: {
         i: {
-          id: entryData.id,
+          id: reflectionData.id,
           content: {
             // reflection's content is now immutable
             //content,
@@ -122,8 +122,8 @@ const EditableReflection: React.FC<ReflectCardProps> = props => {
         customStyle="border border(grey8 dark:grey3)"
       >
         <ReflectionCard
-          entryData={{
-            ...entryData,
+          reflectionData={{
+            ...reflectionData,
             content: newContent,
           }}
           contentClickable={false}
@@ -170,7 +170,7 @@ const EditableReflection: React.FC<ReflectCardProps> = props => {
         <>
           <ErrorBoundary {...errorBoundaryProps}>
             <ReflectionCard
-              entryData={entryData}
+              reflectionData={reflectionData}
               editable={reflectionCreationElapsedTimeInMinutes <= MAX_EDIT_TIME_IN_MINUTES}
               onEdit={() => setEdit(true)}
               notEditableLabel={t('A reflection created over 10 minutes ago cannot be edited.')}

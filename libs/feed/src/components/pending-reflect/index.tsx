@@ -1,32 +1,32 @@
 import React from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import ReflectionCard from '@akashaorg/ui-lib-feed/lib/components/cards/reflection-card';
-import { type ReflectionData } from '@akashaorg/typings/lib/ui';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import ReflectionCard from '../cards/reflection-card';
+import { type ReflectionData } from '@akashaorg/typings/lib/ui';
 
 export type PendingReflectProps = {
-  entryData: ReflectionData;
+  reflectionData: ReflectionData;
   customStyle?: string;
 };
 
 export function PendingReflect(props: PendingReflectProps) {
-  const { entryData, customStyle = '' } = props;
+  const { reflectionData, customStyle = '' } = props;
   return (
-    <>
+    <Stack>
       <Divider />
       <Stack
         background={{ light: 'secondaryLight/10', dark: 'secondaryDark/10' }}
-        customStyle={`border border(grey8 dark:grey3) -my-2 ${customStyle}`}
+        customStyle={`border border(grey8 dark:grey3) ${customStyle}`}
         dataTestId="pending-reflect"
       >
         <ReflectionCard
-          entryData={entryData}
+          reflectionData={reflectionData}
           contentClickable={false}
           pending={true}
           hidePublishTime={true}
           disableActions={true}
         />
       </Stack>
-    </>
+    </Stack>
   );
 }

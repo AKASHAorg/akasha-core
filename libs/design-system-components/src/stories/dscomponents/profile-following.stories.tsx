@@ -9,16 +9,6 @@ const meta: Meta<FollowingProps> = {
   title: 'DSComponents/Profile/Following',
   component: Following,
   tags: ['autodocs'],
-  argTypes: {
-    authenticatedDID: { control: 'text' },
-    followList: { control: 'object' },
-    profileAnchorLink: { control: 'text' },
-    publicImgPath: { control: 'text' },
-    onLoadMore: { action: 'more loaded' },
-    transformSource: { action: 'source transformed' },
-    onProfileClick: { action: 'profile transformed' },
-    renderFollowElement: { action: 'follow element rendered' },
-  },
 };
 
 type Story = StoryObj<FollowingProps>;

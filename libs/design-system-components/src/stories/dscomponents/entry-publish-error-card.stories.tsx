@@ -7,10 +7,6 @@ const meta: Meta<PublishErrorCardProps> = {
   title: 'DSComponents/Errors/EntryPublishErrorCard',
   component: EntryPublishErrorCard,
   tags: ['autodocs'],
-  argTypes: {
-    isCard: { control: 'boolean' },
-    message: { control: 'text' },
-  },
 };
 
 type Story = StoryObj<PublishErrorCardProps>;

@@ -1,6 +1,8 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import AuthorProfileAvatar from '@akashaorg/ui-lib-feed/lib/components/cards/author-profile-avatar';
+import { EntryCardProps } from '../../components/Entry/EntryCard';
+import { EntityTypes } from '@akashaorg/typings/lib/ui';
+import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import VibesConsoleContentCard, {
   VibesConsoleContentCardProps,
 } from '../../components/VibesConsoleContentCard';
@@ -8,8 +10,6 @@ import {
   ItemType,
   ProfileItemData,
 } from '../../components/VibesConsoleContentCard/mini-profile-cta';
-import { EntityTypes } from '@akashaorg/typings/lib/ui';
-import { EntryCardProps } from '../../components/Entry/EntryCard';
 
 const meta: Meta<VibesConsoleContentCardProps> = {
   title: 'DSComponents/Vibes/VibesConsoleContentCard',
@@ -24,14 +24,19 @@ const sampleEntryData: EntryCardProps = {
   entryData: {
     active: true,
     authorId: 'did:pkh:eip155:5:0xa2aabe32856a8d50c748d50a5111312d986208a8',
-    createdAt: '12/12/2023',
-    id: 'kshggg55555',
+    createdAt: new Date('Jan 01 2024').toISOString(),
+    id: 'kjzl6kcym7w8y90evf7vartzsbj9jbzdq',
   },
   profileAvatar: (
-    <AuthorProfileAvatar authorId="authorId" createdAt={new Date('Jan 01 2024').toISOString()} />
+    <ProfileAvatarButton
+      label="Profile Avatar Button"
+      profileId="did:pkh:eip155:5:0xa2aabe32856a8d50c748d50a5111312d986208a8"
+      avatar={{ src: 'https://placebeard.it/360x360', height: 360, width: 360 }}
+    />
   ),
   itemType: EntityTypes?.REFLECT,
   flagAsLabel: 'Flag',
+  notEditableLabel: 'A reflection created over 10 minutes ago cannot be edited.',
   slateContent: [
     {
       type: 'paragraph',
@@ -42,9 +47,10 @@ const sampleEntryData: EntryCardProps = {
       ],
     },
   ],
-  onContentClick: () => ({}),
+  onEdit: () => ({}),
+  onEntryFlag: () => ({}),
   onMentionClick: () => ({}),
-  onTagClick: () => ({}),
+  onReflect: () => ({}),
 };
 
 const sampleProfileData: ProfileItemData = {

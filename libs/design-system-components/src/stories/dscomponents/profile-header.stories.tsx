@@ -5,13 +5,6 @@ const meta: Meta<HeaderProps> = {
   title: 'DSComponents/Profile/ProfileHeader',
   component: Header,
   tags: ['autodocs'],
-  argTypes: {
-    profileId: { control: 'text' },
-    profileName: { control: 'text' },
-    publicImagePath: { control: 'text' },
-    viewerIsOwner: { control: 'boolean' },
-    transformSource: { action: 'source transformed' },
-  },
 };
 
 type Story = StoryObj<HeaderProps>;

@@ -1,8 +1,8 @@
 import React from 'react';
-import AuthorProfileAvatar from '@akashaorg/ui-lib-feed/lib/components/cards/author-profile-avatar';
-import EntryCard, { EntryCardProps } from '../../components/Entry/EntryCard';
 import type { Meta, StoryObj } from '@storybook/react';
+import EntryCard, { EntryCardProps } from '../../components/Entry/EntryCard';
 import { EntityTypes } from '@akashaorg/typings/lib/ui';
+import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 const Wrapped: React.FC<EntryCardProps> = props => (
@@ -15,59 +15,73 @@ const meta: Meta<EntryCardProps> = {
   title: 'DSComponents/Cards/EntryCard',
   component: Wrapped,
   tags: ['autodocs'],
-  argTypes: {
-    isLoggedIn: { control: 'boolean' },
-    entryData: { control: 'object' },
-    itemType: {
-      control: 'select',
-      options: [
-        EntityTypes.ARTICLE,
-        EntityTypes.BEAM,
-        EntityTypes.PROFILE,
-        EntityTypes.REFLECT,
-        EntityTypes.TAG,
-      ],
-    },
-    slateContent: { control: 'object' },
-    onContentClick: { action: 'content clicked' },
-    onMentionClick: { action: 'mention clicked' },
-    onTagClick: { action: 'tag clicked' },
-  },
 };
 
 type Story = StoryObj<EntryCardProps>;
 
-const isLoggedIn = true;
-
 const entryData = {
   active: true,
   authorId: 'did:pkh:eip155:5:0xa2aabe32856a8d50c748d50a5111312d986208a8',
-  createdAt: '12/12/2023',
-  id: 'kshggg55555',
+  beamID: 'kjzl6kcym7w8y6cgn',
+  createdAt: new Date('Jan 01 2024').toISOString(),
+  id: 'kjzl6kcym7w8y90evf7vartzsbj9jbzdq',
+  content: [
+    {
+      label: 'AkashaApp',
+      propertyType: 'slate-block',
+      value:
+        'WwB7ACIAdAB5AHAAZQAiADoAIgBwAGEAcgBhAGcAcgBhAHAAaAAiACwAIgBjAGgAaQBsAGQAcgBlAG4AIgA6AFsAewAiAHQAZQB4AHQAIgA6ACIAVABoAGUAIABhAG4AdABpAGMAaQBwAGEAdABpAG8AbgAgAGkAcwAgA==',
+      __typename: 'ReflectProviderValue',
+    },
+  ],
 };
 
 const baseArgs: Story = {
   args: {
-    isLoggedIn,
+    isLoggedIn: true,
     entryData,
     profileAvatar: (
-      <AuthorProfileAvatar authorId="authorId" createdAt={new Date('Jan 01 2024').toISOString()} />
+      <ProfileAvatarButton
+        label="Profile Avatar Button"
+        profileId={entryData.authorId}
+        avatar={{ src: 'https://placebeard.it/360x360', height: 360, width: 360 }}
+      />
     ),
-    itemType: EntityTypes?.REFLECT,
+    itemType: EntityTypes.REFLECT,
     flagAsLabel: 'Flag',
+    notEditableLabel: 'A reflection created over 10 minutes ago cannot be edited.',
+    removed: {
+      author: (
+        <p>
+          AKASHA world members won&apos;t be able to see the content of your reflection because you
+          have violated the following Code of Conduct.
+        </p>
+      ),
+      others: (
+        <p>
+          This reflection has been delisted for the violation of our Code of Conduct. All
+          reflections are disabled.
+        </p>
+      ),
+    },
+    moderated: {
+      author: <p>Content has been moderated.</p>,
+      others: <p>Content has been moderated.</p>,
+    },
     slateContent: [
       {
         type: 'paragraph',
         children: [
           {
-            text: 'Content goes here ...',
+            text: 'hello world...',
           },
         ],
       },
     ],
-    onContentClick: () => ({}),
+    onEdit: () => ({}),
+    onEntryFlag: () => ({}),
     onMentionClick: () => ({}),
-    onTagClick: () => ({}),
+    onReflect: () => ({}),
   },
 };
 
@@ -79,18 +93,6 @@ export const DelistedEntryCardOthers: Story = {
   args: {
     ...baseArgs.args,
     entryData: { ...entryData, active: false },
-    removed: {
-      author: {
-        firstPart: "AKASHA world members won't be able to see the content",
-        secondPart: 'of your reflection because you have violated the following ',
-        thirdPart: { url: '', content: 'Code of Conduct.' },
-        tapToViewLabel: 'Tap to view',
-      },
-      others: {
-        firstLine: 'This reflection has been delisted for the violation of our Code of Conduct.',
-        secondLine: 'All reflections are disabled.',
-      },
-    },
   },
 };
 
@@ -99,18 +101,6 @@ export const DelistedEntryCardAuthor: Story = {
     ...baseArgs.args,
     isViewer: true,
     entryData: { ...entryData, active: false },
-    removed: {
-      author: {
-        firstPart: "AKASHA world members won't be able to see the content",
-        secondPart: 'of your reflection because you have violated the following ',
-        thirdPart: { url: '', content: 'Code of Conduct.' },
-        tapToViewLabel: 'Tap to view',
-      },
-      others: {
-        firstLine: 'This reflection has been delisted for the violation of our Code of Conduct.',
-        secondLine: 'All reflections are disabled.',
-      },
-    },
     editLabel: 'Edit',
     editable: false,
   },
@@ -119,7 +109,7 @@ export const DelistedEntryCardAuthor: Story = {
 export const NSFWCard: Story = {
   args: {
     ...baseArgs.args,
-    entryData: { ...entryData, active: true, nsfw: true },
+    entryData: { ...entryData, nsfw: true },
     nsfw: {
       sensitiveContentLabel: 'Sensitive Content!',
       clickToViewLabel: 'Click to View',

@@ -9,7 +9,6 @@ const meta: Meta<DidFieldProps> = {
   argTypes: {
     did: { control: 'text' },
     isValid: { control: 'boolean' },
-    textColor: { control: 'string' },
     copyLabel: { control: 'text' },
     copiedLabel: { control: 'text' },
     copiable: { control: 'boolean' },

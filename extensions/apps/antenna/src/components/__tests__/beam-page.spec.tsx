@@ -13,7 +13,6 @@ import {
   getByText,
   getByTestId,
   getUserStore,
-  genReflectionStream,
 } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 import { AkashaBeamStreamModerationStatus } from '@akashaorg/typings/lib/sdk/graphql-types-new';
@@ -32,7 +31,6 @@ import {
   getReflectEditorMocks,
   getReflectFeedMocks,
 } from '../__mocks__';
-import { GetReflectionStreamDocument } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
 const { mocks, profileData: beamSectionProfileData, beamData } = getBeamPageMocks();
 
@@ -41,7 +39,7 @@ describe('< BeamPage /> component', () => {
     <AnalyticsProvider {...genAppProps()}>
       <BeamPage
         beamStatus={AkashaBeamStreamModerationStatus.Ok}
-        entryData={mapBeamEntryData(beamData)}
+        beamData={mapBeamEntryData(beamData)}
         beamId={BEAM_ID}
       />
     </AnalyticsProvider>
@@ -165,35 +163,6 @@ describe('< BeamPage /> component', () => {
                 authorProfileDID: AUTHENTICATED_DID,
                 content: NEW_REFLECTION,
               }),
-              /*@TODO revisit this mock which is needed as a result of refetch on reflect editor */
-              {
-                request: {
-                  query: GetReflectionStreamDocument,
-                },
-                variableMatcher: () => true,
-                result: {
-                  data: {
-                    node: genReflectionStream({
-                      beamId: BEAM_ID,
-                      reflectionId: NEW_REFLECTION_ID,
-                    }),
-                  },
-                },
-              },
-              {
-                request: {
-                  query: GetReflectionStreamDocument,
-                },
-                variableMatcher: () => true,
-                result: {
-                  data: {
-                    node: genReflectionStream({
-                      beamId: BEAM_ID,
-                      reflectionId: NEW_REFLECTION_ID,
-                    }),
-                  },
-                },
-              },
             ],
           },
         );
@@ -201,22 +170,18 @@ describe('< BeamPage /> component', () => {
     });
     it('should render pending reflection card', async () => {
       const user = userEvent.setup();
-      await user.click(screen.getByRole('button', { name: 'Reflect' }));
+      user.click(screen.getByRole('button', { name: 'Reflect' }));
       await waitFor(() => {
         expect(screen.getByRole('textbox')).toHaveTextContent(NEW_REFLECTION);
       });
       user.click(screen.getByRole('button', { name: 'Reflect' }));
-      await waitFor(() => {
-        expect(screen.getByTestId('pending-reflect')).toBeInTheDocument();
-      });
+      await waitFor(() => expect(screen.getByTestId('pending-reflect')).toBeInTheDocument());
     });
 
     it('should render published reflection on reflect feed', async () => {
       const user = userEvent.setup();
       user.click(screen.getByRole('button', { name: 'Reflect' }));
-      await waitFor(() => {
-        expect(screen.getByRole('textbox')).toHaveTextContent(NEW_REFLECTION);
-      });
+      await waitFor(() => expect(screen.getByRole('textbox')).toHaveTextContent(NEW_REFLECTION));
       user.click(screen.getByRole('button', { name: 'Reflect' }));
       await waitFor(() => {
         const reflectFeed = screen.getByTestId('reflect-feed');

@@ -24,7 +24,7 @@ type BeamCardProps = Pick<
   | 'showHiddenContent'
   | 'customStyle'
 > & {
-  entryData: BeamData;
+  beamData: BeamData;
   hidePublishTime?: boolean;
   showNSFWCard: boolean;
   showLoginModal?: () => void;
@@ -33,7 +33,7 @@ type BeamCardProps = Pick<
 const BeamCard: React.FC<BeamCardProps> = props => {
   const { t } = useTranslation('ui-lib-feed');
   const {
-    entryData,
+    beamData,
     hidePublishTime,
     onReflect,
     showHiddenContent,
@@ -57,7 +57,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
   const handleFlagBeam = () => {
     navigateTo({
       appName: '@akashaorg/app-vibes',
-      getNavigationUrl: () => `/report/beam/${entryData.id}`,
+      getNavigationUrl: () => `/report/beam/${beamData.id}`,
     });
   };
 
@@ -71,25 +71,25 @@ const BeamCard: React.FC<BeamCardProps> = props => {
   const handleEntryRemove = () => {
     navigateToModal({
       name: `remove-beam-confirmation`,
-      beamId: entryData.id,
+      beamId: beamData.id,
     });
   };
 
   const sortedEntryContent = React.useMemo(() => {
-    return sortByKey(entryData.content, 'order');
-  }, [entryData.content]);
+    return sortByKey(beamData.content, 'order');
+  }, [beamData.content]);
 
   return (
     <EntryCard
       dataTestId="beam-card"
-      entryData={entryData}
-      reflectionsCount={entryData?.reflectionsCount}
+      entryData={beamData}
+      reflectionsCount={beamData?.reflectionsCount}
       reflectAnchorLink="/@akashaorg/app-antenna/beam"
       sortedContents={sortedEntryContent}
       flagAsLabel={t('Flag')}
       removeEntryLabel={t('Remove')}
       onEntryRemove={handleEntryRemove}
-      isViewer={authenticatedDID === entryData.authorId}
+      isViewer={authenticatedDID === beamData.authorId}
       removed={{
         author: (
           <Trans
@@ -170,9 +170,9 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       onEntryFlag={handleFlagBeam}
       profileAvatar={
         <AuthorProfileAvatar
-          authorId={entryData.authorId}
+          authorId={beamData.authorId}
           hidePublishTime={hidePublishTime}
-          createdAt={entryData?.createdAt}
+          createdAt={beamData?.createdAt}
         />
       }
       actionsRight={

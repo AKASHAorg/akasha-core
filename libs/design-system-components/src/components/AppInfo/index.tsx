@@ -35,7 +35,6 @@ export type AppInfoProps = AppInfoHeaderProps &
     contactSupportTitle: string;
     languageLabel: string;
     languages: string[];
-    version: string;
     versionInfo: string;
     versionDate: string;
     versionDescription: string;

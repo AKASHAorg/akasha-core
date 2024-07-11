@@ -1,10 +1,12 @@
 import { useReactiveVar } from '@apollo/client';
-import type { ReflectionData } from '@akashaorg/typings/lib/ui';
+import type { RawReflectionData } from '@akashaorg/typings/lib/ui';
 import { createReactiveVar } from './utils/create-reactive-var';
 
 let pendingReflectionsVar;
 
 export const PENDING_REFLECTION_PREFIX = 'pending-reflection';
+
+type PendingReflection = RawReflectionData & { published?: boolean };
 
 /**
  * Hook that handles the adding, removing and returning of the
@@ -18,20 +20,29 @@ export const PENDING_REFLECTION_PREFIX = 'pending-reflection';
  */
 export const usePendingReflections = () => {
   if (!pendingReflectionsVar) {
-    pendingReflectionsVar = createReactiveVar<ReflectionData[]>([]);
+    pendingReflectionsVar = createReactiveVar<PendingReflection[]>([]);
   }
-  const pendingReflections = useReactiveVar<ReflectionData[]>(pendingReflectionsVar);
+  const pendingReflections = useReactiveVar<PendingReflection[]>(pendingReflectionsVar);
 
-  const addPendingReflection = (pendingReflection: ReflectionData) => {
+  const addPendingReflection = (pendingReflection: PendingReflection) => {
     const oldState = pendingReflectionsVar();
 
     pendingReflectionsVar([...oldState, pendingReflection]);
   };
 
-  const removePendingReflection = (tempId: string) => {
-    const oldState = pendingReflectionsVar().filter(refl => refl.id !== tempId);
+  const removePendingReflection = (reflectionId: string) => {
+    const oldState = pendingReflectionsVar().filter(refl => refl.id !== reflectionId);
 
     pendingReflectionsVar([...oldState]);
+  };
+
+  const updatePendingReflection = (reflectionId: string, reflectionData: PendingReflection) => {
+    const newState = pendingReflectionsVar().map(reflection => {
+      if (reflection.id === reflectionId) return reflectionData;
+      return reflection;
+    });
+
+    pendingReflectionsVar([...newState]);
   };
 
   const removePendingReflections = () => {
@@ -42,6 +53,7 @@ export const usePendingReflections = () => {
     addPendingReflection,
     removePendingReflection,
     removePendingReflections,
+    updatePendingReflection,
     pendingReflections,
   };
 };
