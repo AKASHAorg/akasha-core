@@ -6,7 +6,12 @@ import TrendingWidgetLoadingCard from '@akashaorg/design-system-components/lib/c
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import { useTranslation } from 'react-i18next';
-import { getFollowList, hasOwn, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import {
+  getFollowList,
+  hasOwn,
+  useAkashaStore,
+  useRootComponentProps,
+} from '@akashaorg/ui-awf-hooks';
 import {
   useGetFollowDocumentsByDidQuery,
   useGetInterestsByDidQuery,
