@@ -14,14 +14,17 @@ import DropDownFilter, {
 } from '@akashaorg/design-system-components/lib/components/BaseDropdownFilter';
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import AppList from '@akashaorg/design-system-components/lib/components/AppList';
+import DynamicInfiniteScroll from '@akashaorg/design-system-components/lib/components/DynamicInfiniteScroll';
 
 import { useGetAppsByPublisherDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { hasOwn, useAkashaStore } from '@akashaorg/ui-awf-hooks';
 import { SortOrder, AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { ExtensionStatus } from '@akashaorg/typings/lib/ui';
-import { ExtensionAction } from './extension-action';
+import { ExtensionElement } from './extension-element';
 import { NotConnnected } from './not-connected';
+import { capitalize } from '@akashaorg/design-system-core/lib/utils';
+
+const ENTRY_HEIGHT = 92;
 
 export const MyExtensionsPage: React.FC<unknown> = () => {
   const { t } = useTranslation('app-extensions');
@@ -35,27 +38,27 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
   const typeDropDownMenuItems: DropdownMenuItemGroupType[] = [
     {
       id: '0',
-      title: t('All'),
+      title: 'All',
       type: 'opt',
     },
     {
       id: '1',
-      title: AkashaAppApplicationType.App,
+      title: capitalize(AkashaAppApplicationType.App),
       type: 'opt',
     },
     {
       id: '2',
-      title: AkashaAppApplicationType.Widget,
+      title: capitalize(AkashaAppApplicationType.Widget),
       type: 'opt',
     },
     {
       id: '3',
-      title: AkashaAppApplicationType.Plugin,
+      title: capitalize(AkashaAppApplicationType.Plugin),
       type: 'opt',
     },
     {
       id: '4',
-      title: AkashaAppApplicationType.Other,
+      title: capitalize(AkashaAppApplicationType.Other),
       type: 'opt',
     },
   ];
@@ -66,7 +69,7 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
   const statusDropDownMenuItems: DropdownMenuItemGroupType[] = [
     {
       id: '0',
-      title: t('All'),
+      title: 'All',
       type: 'opt',
     },
     {
@@ -102,40 +105,36 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
   const {
     data: appsByPubReq,
     error,
+    loading,
     fetchMore,
   } = useGetAppsByPublisherDidQuery({
     variables: {
       id: authenticatedProfile?.did.id,
-      first: 20,
+      first: 10,
       sorting: { createdAt: SortOrder.Desc },
     },
     skip: !authenticatedProfile?.did.id,
   });
-  const appsData = useMemo(() => {
+  const appsList = useMemo(() => {
     return appsByPubReq?.node && hasOwn(appsByPubReq.node, 'akashaAppList')
-      ? appsByPubReq.node.akashaAppList?.edges
+      ? appsByPubReq.node.akashaAppList
       : null;
   }, [appsByPubReq]);
+
+  const appsData = useMemo(() => {
+    return appsList?.edges?.map(edge => edge.node);
+  }, [appsList]);
 
   const pageInfo = useMemo(() => {
-    return appsByPubReq?.node && hasOwn(appsByPubReq?.node, 'akashaAppList')
-      ? appsByPubReq?.node.akashaAppList?.pageInfo
-      : null;
-  }, [appsByPubReq]);
+    return appsList?.pageInfo;
+  }, [appsList]);
 
-  const appElements = appsData
-    ?.filter(ext => {
-      if (selectedType.id === '0') {
-        return true;
-      }
-      return ext.node?.applicationType === selectedType.title;
-    })
-    .map(ext => {
-      return {
-        ...ext.node,
-        action: <ExtensionAction extensionId={ext.node?.id} />,
-      };
-    });
+  const appElements = appsData?.filter(ext => {
+    if (selectedType.id === '0') {
+      return true;
+    }
+    return ext?.applicationType === selectedType.title?.toUpperCase();
+  });
 
   if (!authenticatedProfile?.did.id) {
     return <NotConnnected />;
@@ -192,21 +191,34 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
         />
       )}
       {!error && appElements?.length > 0 && (
-        <Card customStyle="pb-0">
-          <AppList
-            apps={appElements}
-            showAppTypeIndicator
+        <Card>
+          <DynamicInfiniteScroll
+            count={appElements.length}
+            estimatedHeight={ENTRY_HEIGHT}
+            overScan={1}
+            itemSpacing={16}
+            hasNextPage={pageInfo && pageInfo.hasNextPage}
+            loading={loading}
             onLoadMore={() => {
-              if (pageInfo && pageInfo.hasNextPage) {
-                return fetchMore({
-                  variables: {
-                    after: pageInfo.endCursor,
-                  },
-                });
-              }
-              return null;
+              return fetchMore({
+                variables: {
+                  after: pageInfo.endCursor,
+                },
+              });
             }}
-          />
+            // customStyle="mb-4"
+          >
+            {({ itemIndex }) => {
+              const app = appElements[itemIndex];
+              return (
+                <ExtensionElement
+                  extensionData={app}
+                  showDivider={itemIndex < appElements.length - 1}
+                  filter={selectedStatus}
+                />
+              );
+            }}
+          </DynamicInfiniteScroll>
         </Card>
       )}
     </Stack>
