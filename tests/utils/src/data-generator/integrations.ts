@@ -40,7 +40,7 @@ export const genAppProps = (): IRootComponentProps & {
   logger: log,
   navigateToModal: () => ({}),
   uiEvents: uiEventsMock,
-  layoutConfig: {},
+  layoutSlots: {},
   singleSpa: null,
   worldConfig: genWorldConfig(),
   getRoutingPlugin: () => ({

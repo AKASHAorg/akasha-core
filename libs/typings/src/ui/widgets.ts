@@ -1,5 +1,5 @@
 import { ParcelConfigObject } from 'single-spa';
-import type { ActivityFn, LayoutConfig } from './app-loader';
+import type { ActivityFn, LayoutSlots } from './app-loader';
 
 /**
  * Enum defining events related to loading and unloading of a widget
@@ -21,14 +21,14 @@ type BaseWidgetInterface = {
  * Type defining widget loading configuration object
  **/
 export type WidgetInterface = BaseWidgetInterface & {
-  extensionsMap?: Record<string, string>;
+  extensionSlots?: Record<string, string>;
 };
 
 /**
  * Type defining layout widget loading configuration object
  **/
 export type LayoutWidgetInterface = BaseWidgetInterface & {
-  extensionsMap: LayoutConfig;
+  extensionSlots: LayoutSlots;
 };
 
 /**

@@ -1,20 +1,10 @@
 import singleSpa from 'single-spa';
-import { ActivityFn, LayoutConfig } from './app-loader';
+import { ActivityFn, LayoutSlots } from './app-loader';
 import { IMenuItem } from './sidebar-menu-items';
 import { IRootComponentProps } from './root-component';
 import { ContentBlockConfig } from './editor-blocks';
-import { ExtensionInterface } from './extension-point';
+import { ExtensionPointInterface } from './extension-point';
 import { Profile } from './profile';
-
-/**
- * Enum defining extension types
- **/
-export enum ExtensionTypes {
-  APP = 'App',
-  WIDGET = 'Widget',
-  PLUGIN = 'Plugin',
-  NONE = 'None',
-}
 
 /**
  * Enum defining extension status for an extension developer
@@ -75,11 +65,6 @@ export type AppRegisterEvent = {
 };
 
 /**
- * Type defining app name
- **/
-export type AppName = string;
-
-/**
  * Interface defining configuration object for loading an app
  **/
 export interface IAppConfig {
@@ -126,13 +111,15 @@ export interface IAppConfig {
    *  More info in the documentation.
    */
   contentBlocks?: ContentBlockConfig[];
-  extensions?: ExtensionInterface[];
+  extensionPoints?: ExtensionPointInterface[];
   /**
    * A simple mapping of the extensions exposed by this app.
    * Can be used to target a specific app's extension
    * Note that this is optional
    */
-  extensionsMap?: LayoutConfig;
+  extensionsSlots?: {
+    [key: string]: string;
+  };
   /**
    * Keywords that defines this widget.
    * Useful for filtering through integrations

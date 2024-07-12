@@ -1,10 +1,10 @@
 import {
   AppEvents,
   ContentBlockEvents,
-  ExtensionEvents,
+  ExtensionPointEvents,
   IAppConfig,
   IntegrationRegistrationOptions,
-  IPluginConf,
+  IPlugin,
   IRootComponentProps,
   RouteRegistrationEvents,
   UIEventData,
@@ -40,12 +40,12 @@ const isWindow = window && typeof window !== 'undefined';
 type SystemModuleType = {
   register?: (opts: IntegrationRegistrationOptions) => IAppConfig;
   initialize?: (opts: Partial<IntegrationRegistrationOptions>) => Promise<void> | void;
-  getPlugin?: (
-    opts: Omit<IntegrationRegistrationOptions, 'layoutConfig'> & {
+  registerPlugin?: (
+    opts: Omit<IntegrationRegistrationOptions, 'layoutSlots'> & {
       encodeAppName: (name: string) => string;
       decodeAppName: (name: string) => string;
     },
-  ) => Promise<IPluginConf>;
+  ) => Promise<IPlugin>;
 };
 
 export default class AppLoader {
@@ -57,7 +57,7 @@ export default class AppLoader {
   layoutConfig: IAppConfig;
   logger: ILogger;
   parentLogger: Logging;
-  plugins: IPluginConf;
+  plugins: IPlugin;
   globalChannel: EventBus;
   user: { id: string };
   globalChannelSub: Subscription;
@@ -202,10 +202,10 @@ export default class AppLoader {
     // unload user extensions
   };
 
-  handleExtensionInstall = (extensionData: unknown) => {
+  handleExtensionInstall = (_extensionData: unknown) => {
     // listen for extension installs
   };
-  handleExtensionUninstall = (extensionData: unknown) => {
+  handleExtensionUninstall = (_extensionData: unknown) => {
     // listen for extension uninstalls
   };
   loadUserExtensions = async () => {
@@ -216,7 +216,7 @@ export default class AppLoader {
       this.worldConfig,
     );
     const modules = await this.importModules(manifests);
-    const plugins = await this.loadPlugins(modules);
+    const _plugins = await this.loadPlugins(modules);
     await this.initializeExtensions(modules);
     const extensionConfigs = this.registerExtensions(modules);
     this.singleSpaRegister(extensionConfigs);
@@ -227,9 +227,9 @@ export default class AppLoader {
       if (this.extensionConfigs.has(name)) {
         continue;
       }
-      if (module.getPlugin && typeof module.getPlugin === 'function') {
+      if (module.registerPlugin && typeof module.registerPlugin === 'function') {
         // load plugin;
-        plugins[name] = await module.getPlugin({
+        plugins[name] = await module.registerPlugin({
           worldConfig: this.worldConfig,
           logger: this.parentLogger.create(`${name}_plugin`),
           uiEvents: this.uiEvents,
@@ -247,7 +247,7 @@ export default class AppLoader {
           uiEvents: this.uiEvents,
           plugins: this.plugins,
           worldConfig: this.worldConfig,
-          layoutConfig: this.layoutConfig.extensionsMap,
+          layoutSlots: this.layoutConfig.extensionsSlots,
           logger: this.parentLogger.create(`${name}_initialize`),
         });
       }
@@ -265,7 +265,7 @@ export default class AppLoader {
         worldConfig: this.worldConfig,
         uiEvents: this.uiEvents,
         logger,
-        layoutConfig: {},
+        layoutSlots: {},
       });
     }
   };
@@ -276,7 +276,7 @@ export default class AppLoader {
       if (this.extensionConfigs.has(name) || extensionConfigs.has(name)) continue;
       if (mod.register && typeof mod.register === 'function') {
         const config = mod.register({
-          layoutConfig: this.layoutConfig.extensionsMap,
+          layoutSlots: this.layoutConfig.extensionsSlots,
           worldConfig: this.worldConfig,
           logger: this.parentLogger.create(name),
           uiEvents: this.uiEvents,
@@ -297,10 +297,10 @@ export default class AppLoader {
             data: config.contentBlocks.map(eb => ({ ...eb, appName: name })),
           });
         }
-        if (config?.extensions) {
+        if (config?.extensionPoints) {
           this.uiEvents.next({
-            event: ExtensionEvents.RegisterExtension,
-            data: config.extensions.map(ext => ({ ...ext, appName: name })),
+            event: ExtensionPointEvents.RegisterExtensionPoint,
+            data: config.extensionPoints.map(ext => ({ ...ext, appName: name })),
           });
         }
         const manifest = this.manifests.find(man => man.name === name);
@@ -337,7 +337,7 @@ export default class AppLoader {
         getModalFromParams: getModalFromParams,
         parseQueryString: parseQueryString,
         worldConfig: this.worldConfig,
-        layoutConfig: layoutConf.extensionsMap,
+        layoutSlots: layoutConf.extensionsSlots,
         uiEvents: this.uiEvents,
         logger,
         plugins: this.plugins,
@@ -362,7 +362,7 @@ export default class AppLoader {
         getModalFromParams: getModalFromParams,
         parseQueryString: parseQueryString,
         worldConfig: this.worldConfig,
-        layoutConfig: this.layoutConfig.extensionsMap,
+        layoutSlots: this.layoutConfig.extensionsSlots,
         uiEvents: this.uiEvents,
         logger: this.parentLogger.create(name),
         plugins: this.plugins,

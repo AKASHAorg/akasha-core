@@ -1,7 +1,7 @@
 import { IMenuItem } from './sidebar-menu-items';
 import { ContentBlockRegisterEvent } from './editor-blocks';
 import { AnalyticsEventData } from './analytics';
-import { ExtensionRegisterEvent } from './extension-point';
+import { ExtensionPointRegisterEvent } from './extension-point';
 import { WidgetRegisterEvent } from './widgets';
 import { AppRegisterEvent } from './extensions';
 
@@ -80,8 +80,8 @@ export type NotificationEvent = {
  **/
 export enum EventTypes {
   Instantiated = 'instantiated',
-  InstallIntegration = 'install-integration',
-  UninstallIntegration = 'uninstall-integration',
+  InstallExtension = 'install-extension',
+  UninstallExtension = 'uninstall-extension',
   ShowSidebar = 'show-sidebar',
   HideSidebar = 'hide-sidebar',
   ShowWidgets = 'show-widgets',
@@ -126,7 +126,7 @@ export type UIEventData =
       data?: EventDataTypes;
     }
   | ContentBlockRegisterEvent
-  | ExtensionRegisterEvent
+  | ExtensionPointRegisterEvent
   | WidgetRegisterEvent
   | AppRegisterEvent
   | RoutesRegisterEvent

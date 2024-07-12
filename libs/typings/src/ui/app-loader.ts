@@ -1,6 +1,6 @@
 import { IconType, ExtensionManifest, IRootComponentProps } from './index';
 import { UIEventData } from './ui-events';
-import { IPluginConf } from './plugins';
+import { IPlugin } from './plugins';
 
 /**
  * Type defining single-spa activity function
@@ -9,13 +9,13 @@ import { IPluginConf } from './plugins';
 export type ActivityFn = (
   location: Location,
   pathToActiveWhen: (path: string, exact?: boolean) => (location: Location) => boolean,
-  layoutConfig?: LayoutConfig,
+  layoutConfig?: LayoutSlots,
 ) => boolean;
 
 /**
  * Type defining layout slots where apps and widgets among others are loaded
  */
-export type LayoutConfig = {
+export type LayoutSlots = {
   /**
    * load modals inside this node
    */
@@ -28,7 +28,7 @@ export type LayoutConfig = {
    * load root widgets inside this node
    * do not use this for app defined widgets
    */
-  rootWidgetSlotId?: string;
+  contextualWidgetSlotId?: string;
   /**
    * load app defined widgets into this node
    */
@@ -59,9 +59,9 @@ export interface IntegrationRegistrationOptions {
     title: string;
   };
   uiEvents: IRootComponentProps['uiEvents'];
-  layoutConfig: LayoutConfig;
+  layoutSlots: LayoutSlots;
   extensionData?: UIEventData['data'];
-  plugins?: IPluginConf;
+  plugins?: IPlugin;
   logger: unknown;
 }
 

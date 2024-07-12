@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useRoutingEvents } from './use-routing-events';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { ExtensionInterface, IExtensionStorePlugin } from '@akashaorg/typings/lib/ui';
+import { ExtensionPointInterface, IExtensionPointStorePlugin } from '@akashaorg/typings/lib/ui';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { RootParcel } from './root-parcel';
 
@@ -9,7 +9,7 @@ export type ExtensionComponentProps<D> = {
   name: string;
   loadingIndicator?: React.ReactNode;
   emptyIndicator?: React.ReactNode;
-  onError?: (extension: ExtensionInterface & { appName: string }, message?: string) => void;
+  onError?: (extension: ExtensionPointInterface & { appName: string }, message?: string) => void;
   customStyle?: string;
   extensionData?: D;
 };
@@ -24,14 +24,16 @@ export const Extension = <D,>(props: ExtensionComponentProps<D>) => {
     extensionData,
   } = props;
   const { getExtensionsPlugin, getContext, logger } = useRootComponentProps();
-  const extensionStore = React.useRef<IExtensionStorePlugin>(getExtensionsPlugin().extensionStore);
+  const extensionStore = React.useRef<IExtensionPointStorePlugin>(
+    getExtensionsPlugin().extensionStore,
+  );
   const [parcelConfigs, setParcelConfigs] = React.useState([]);
   const [isEmpty, setIsEmpty] = React.useState(false);
 
   const location = useRoutingEvents();
   const extensions = React.useMemo(() => {
     if (!extensionStore.current) return [];
-    const exts = extensionStore.current.getMatchingExtensions(name, location);
+    const exts = extensionStore.current.getMatchingExtensionPoints(name, location);
     if (!exts.length) {
       setIsEmpty(true);
       return [];
@@ -62,7 +64,7 @@ export const Extension = <D,>(props: ExtensionComponentProps<D>) => {
   }, [extensions, logger, onError]);
 
   const handleParcelError = React.useCallback(
-    (extension: ExtensionInterface & { appName: string }) => (err: Error) => {
+    (extension: ExtensionPointInterface & { appName: string }) => (err: Error) => {
       if (logger) logger.error(`Error in ${extension.appName}_${name}: ${err}`);
       onError?.(extension, `Failed to mount. ${err.message}`);
     },

@@ -4,6 +4,7 @@ import {
   IntegrationRegistrationOptions,
   MenuItemAreaType,
   LogoTypeSource,
+  IPlugin,
 } from '@akashaorg/typings/lib/ui';
 import { ProfilePlugin } from './plugins/profile-plugin';
 import routes, { BEAMS, EDIT, FOLLOWERS, FOLLOWING, INTERESTS } from './routes';
@@ -11,7 +12,7 @@ import routes, { BEAMS, EDIT, FOLLOWERS, FOLLOWING, INTERESTS } from './routes';
  * All plugins must export an object like this:
  */
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
-  mountsIn: opts.layoutConfig?.applicationSlotId,
+  mountsIn: opts.layoutSlots?.applicationSlotId,
   loadingFn: () => import('./components'),
   i18nNamespace: ['app-profile', 'ui-lib-feed'],
   menuItems: [
@@ -51,7 +52,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   },
 });
 
-export const getPlugin = async () => {
+export const registerPlugin = async (): Promise<IPlugin> => {
   return {
     profile: new ProfilePlugin(),
   };

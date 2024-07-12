@@ -45,10 +45,12 @@ const getPublishedAppLatestVersion = async (appName: string, logger?: ILogger) =
     log.warn(`No published versions found for app ${appName}`);
     return;
   }
-  const { source, version, id, createdAt } = appNode.releases.edges[0].node;
+  // const { source, version, id, createdAt } = appNode.releases.edges[0].node;
 
-  // @Todo: update the manifest config
-  return {
+  return appNode;
+
+  // @Todo: remove this
+  /*{
     sources: sdk.services.common.ipfs.multiAddrToUri([source]),
     id,
     createdAt,
@@ -66,7 +68,7 @@ const getPublishedAppLatestVersion = async (appName: string, logger?: ILogger) =
       contributors: appNode.contributors?.map(contributor => contributor.akashaProfile.did.id),
       mainFile: 'index.js',
     },
-  };
+  };*/
 };
 
 export const getRemoteLatestExtensionInfos = async (extensions: { name: string }[]) => {

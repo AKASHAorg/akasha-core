@@ -6,11 +6,12 @@ import {
   LogoTypeSource,
   IRootComponentProps,
   MenuItemType,
+  IPlugin,
 } from '@akashaorg/typings/lib/ui';
 import routes, { EXTENSIONS, HOME, INSTALLED, MY_EXTENSIONS } from './routes';
 import { DEV_MODE_KEY } from './constants';
 import { ContentBlockStore } from './plugins/content-block-store';
-import { ExtensionStore } from './plugins/extension-store';
+import { ExtensionPointStore } from './plugins/extension-point-store';
 import { WidgetStore } from './plugins/widget-store';
 import { InstalledAppStore } from './plugins/installed-app-store';
 import React from 'react';
@@ -56,15 +57,13 @@ const generateSubRoutes = () => {
 /**
  * All the plugins must export an object like this:
  */
-export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
+export const register = (opts: IntegrationRegistrationOptions): IAppConfig => ({
   loadingFn: () => import('./components'),
-  mountsIn: opts.layoutConfig?.applicationSlotId,
-  logo: { type: LogoTypeSource.ICON, solidIcon: true, value: <Akasha /> },
+  mountsIn: opts.layoutSlots?.applicationSlotId,
   i18nNamespace: ['app-extensions'],
   routes: {
     ...routes,
   },
-  title: 'AKASHA Core Extensions',
   menuItems: {
     label: 'Extensions',
     type: MenuItemType.App,
@@ -72,7 +71,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     area: [MenuItemAreaType.AppArea],
     subRoutes: generateSubRoutes(),
   },
-  extensions: [
+  extensionPoints: [
     {
       mountsIn: 'install-app',
       loadingFn: () => import('./extensions/install-app'),
@@ -84,14 +83,14 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   ],
 });
 
-export const getPlugin = (
+export const registerPlugin = async (
   props: IRootComponentProps & {
     encodeAppName: (name: string) => string;
     decodeAppName: (name: string) => string;
   },
-) => {
+): Promise<IPlugin> => {
   const contentBlockStore = ContentBlockStore.getInstance(props.uiEvents);
-  const extensionStore = ExtensionStore.getInstance(props.uiEvents);
+  const extensionPointStore = ExtensionPointStore.getInstance(props.uiEvents);
   const widgetStore = WidgetStore.getInstance(props.uiEvents);
   const installedAppStore = InstalledAppStore.getInstance(props.uiEvents);
 
@@ -100,9 +99,9 @@ export const getPlugin = (
       getInfos: contentBlockStore.getContentBlockInfos,
       getMatchingBlocks: contentBlockStore.getMatchingBlocks,
     },
-    extensionStore: {
-      getExtensions: extensionStore.getExtensions,
-      getMatchingExtensions: extensionStore.getMatchingExtensions,
+    extensionPointStore: {
+      getExtensionPoints: extensionPointStore.getExtensions,
+      getMatchingExtensionPoints: extensionPointStore.getMatchingExtensions,
     },
     widgetStore: {
       getWidgets: widgetStore.getWidgets,

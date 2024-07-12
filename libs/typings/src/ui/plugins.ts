@@ -3,7 +3,7 @@ import { IUserStore } from './store';
 /**
  * Interface defining plugin configuration object
  */
-export interface IPluginConf {
+export interface IPlugin {
   [namespace: string]: {
     [key: string]: any;
   };
