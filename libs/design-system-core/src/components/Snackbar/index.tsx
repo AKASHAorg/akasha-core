@@ -14,10 +14,11 @@ export type SnackbarProps = {
   type?: NotificationTypes;
   icon?: React.ReactElement;
   description?: string;
-  actionButtonLabel?: string;
+  ctaLabel?: string;
   customStyle?: string;
+  accentColor?: boolean;
   dismissable?: boolean;
-  handleButtonClick?: (event: React.SyntheticEvent<Element, Event>) => void;
+  handleCTAClick?: (event: React.SyntheticEvent<Element, Event>) => void;
   handleDismiss?: (event: React.SyntheticEvent<Element, Event>) => void;
 };
 
@@ -31,10 +32,10 @@ export type SnackbarProps = {
  * typings package to explore all available Snackbar types
  * @param icon - (optional) if you want to include an icon to be displayed instead of the default one
  * @param description - (optional)  more details regarding the notification
- * @param actionButtonLabel - (optional)  add a label if you want to show a button and allow the user
+ * @param ctaLabel - (optional)  add a label if you want to show a button and allow the user
  * to perform some action
  * @param dismissable - (optional) defaults to true. Determines if the user should be able to dismiss the snackbar
- * @param handleButtonClick - (optional) click handler to be included if an `actionButtonLabel` prop is provided
+ * @param handleCTAClick - (optional) click handler to be included if an `ctaLabel` prop is provided
  * @param handleDismiss - (optional) handler that will be called when the user click the close button
  * @param customStyle - (optional)  add custom Tailwind CSS classes here
  * @example
@@ -47,10 +48,11 @@ const Snackbar: React.FC<SnackbarProps> = ({
   type = NotificationTypes.Info,
   icon = <InformationCircleIcon />,
   description,
-  actionButtonLabel,
+  ctaLabel,
+  accentColor = false,
   dismissable = true,
   customStyle = '',
-  handleButtonClick,
+  handleCTAClick,
   handleDismiss,
 }) => {
   const colorLight = getColorLight(type);
@@ -77,10 +79,16 @@ const Snackbar: React.FC<SnackbarProps> = ({
               {description}
             </Text>
           )}
-          {actionButtonLabel && (
-            <Button onClick={handleButtonClick} plain>
-              <Text variant="button-md" color={{ light: `${colorLight}`, dark: `${colorDark}` }}>
-                {actionButtonLabel}
+          {ctaLabel && (
+            <Button onClick={handleCTAClick} plain>
+              <Text
+                variant="button-md"
+                color={{
+                  light: `${accentColor ? 'secondaryLight' : colorLight}`,
+                  dark: `${accentColor ? 'secondaryDark' : colorDark}`,
+                }}
+              >
+                {ctaLabel}
               </Text>
             </Button>
           )}

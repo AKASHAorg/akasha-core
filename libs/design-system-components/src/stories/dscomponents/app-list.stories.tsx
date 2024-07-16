@@ -34,7 +34,6 @@ export const Default: Story = {
         action: <Button label="Install" variant="primary" />,
       },
     ],
-    onAppSelected: () => ({}),
   },
 };
 

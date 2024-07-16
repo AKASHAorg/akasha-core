@@ -22,9 +22,9 @@ const meta: Meta<SnackbarProps> = {
     },
     icon: { control: 'object' },
     description: { control: 'text' },
-    actionButtonLabel: { control: 'text' },
+    ctaLabel: { control: 'text' },
     customStyle: { control: 'text' },
-    handleButtonClick: { action: 'button clicked' },
+    handleCTAClick: { action: 'button clicked' },
     handleDismiss: { action: 'dismissed' },
   },
 };
@@ -54,8 +54,17 @@ export const SuccessSnackbar: Story = {
   args: { ...baseArgs.args, type: NotificationTypes.Success },
 };
 
-export const SnackbarWithActionButtonLabel: Story = {
-  args: { ...baseArgs.args, actionButtonLabel: 'Dismiss' },
+export const SnackbarWithCTALabel: Story = {
+  args: { ...baseArgs.args, ctaLabel: 'Dismiss' },
+};
+
+export const SnackbarWithSpecificCTALabelColor: Story = {
+  args: {
+    ...baseArgs.args,
+    type: NotificationTypes.Error,
+    ctaLabel: 'Dismiss',
+    accentColor: true,
+  },
 };
 
 export const SnackbarWithSpecificIcon: Story = {

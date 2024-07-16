@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { ExtensionTypes } from '@akashaorg/typings/lib/ui';
+import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 import AppAvatar, { AppAvatarProps } from '@akashaorg/design-system-core/lib/components/AppAvatar';
 
@@ -10,7 +10,12 @@ const meta: Meta<AppAvatarProps> = {
   tags: ['autodocs'],
   argTypes: {
     appType: {
-      options: [ExtensionTypes.APP, ExtensionTypes.WIDGET],
+      options: [
+        AkashaAppApplicationType.App,
+        AkashaAppApplicationType.Widget,
+        AkashaAppApplicationType.Plugin,
+        AkashaAppApplicationType.Other,
+      ],
       control: { type: 'select' },
     },
   },
@@ -18,14 +23,11 @@ const meta: Meta<AppAvatarProps> = {
 
 type Story = StoryObj<AppAvatarProps>;
 
-const profileId = 'did:pkh:eip155:5:0x36c703c42dfa2437dc883e2e0884e57404e16493';
-
 const avatar = { src: 'https://placebeard.it/360x360', height: 360, width: 360 };
 
 const baseArgs: Story = {
   args: {
-    appType: ExtensionTypes.APP,
-    profileId: profileId,
+    appType: AkashaAppApplicationType.App,
     avatar,
   },
 };
@@ -39,7 +41,7 @@ export const AvatarWithAppPlaceholder: Story = {
 export const AvatarWithWidgetPlaceholder: Story = {
   args: {
     ...baseArgs.args,
-    appType: ExtensionTypes.WIDGET,
+    appType: AkashaAppApplicationType.Widget,
   },
 };
 
