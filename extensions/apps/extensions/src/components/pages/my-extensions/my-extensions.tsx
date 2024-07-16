@@ -22,7 +22,7 @@ import { SortOrder, AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/
 import { ExtensionStatus } from '@akashaorg/typings/lib/ui';
 import { ExtensionElement } from './extension-element';
 import { NotConnnected } from './not-connected';
-import { capitalize } from '@akashaorg/design-system-core/lib/utils';
+import { capitalize } from 'lodash';
 
 const ENTRY_HEIGHT = 92;
 

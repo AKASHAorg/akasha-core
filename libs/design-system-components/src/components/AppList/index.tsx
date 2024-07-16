@@ -27,7 +27,7 @@ export type App = {
 export type AppListProps = {
   apps: App[];
   showAppTypeIndicator?: boolean;
-  onLoadMore?: () => Promise<unknown>;
+  onLoadMore: () => Promise<unknown>;
 };
 
 const ENTRY_HEIGHT = 92;

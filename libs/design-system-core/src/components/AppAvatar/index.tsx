@@ -42,19 +42,19 @@ const AppAvatar: React.FC<AppAvatarProps> = props => {
   if (!avatar?.src) {
     switch (appType) {
       case AkashaAppApplicationType.App:
-        avatarFallback = `${publicImgPath}/app-${Math.floor(Math.random() * 4)}.webp`;
+        avatarFallback = `${publicImgPath}/App-${Math.floor(Math.random() * 3) + 1}.webp`;
         break;
       case AkashaAppApplicationType.Widget:
-        avatarFallback = `${publicImgPath}/widget-${Math.floor(Math.random() * 4)}.webp`;
+        avatarFallback = `${publicImgPath}/Widget-${Math.floor(Math.random() * 3) + 1}.webp`;
         break;
       case AkashaAppApplicationType.Plugin:
-        avatarFallback = `${publicImgPath}/plugin-${Math.floor(Math.random() * 4)}.webp`;
+        avatarFallback = `${publicImgPath}/Plugin-${Math.floor(Math.random() * 3) + 1}.webp`;
         break;
       case AkashaAppApplicationType.Other:
-        avatarFallback = `${publicImgPath}/other-${Math.floor(Math.random() * 4)}.webp`;
+        avatarFallback = `${publicImgPath}/Other-${Math.floor(Math.random() * 3) + 1}.webp`;
         break;
       default:
-        avatarFallback = `${publicImgPath}/app-${Math.floor(Math.random() * 4)}.webp`;
+        avatarFallback = `${publicImgPath}/App-${Math.floor(Math.random() * 3) + 1}.webp`;
         break;
     }
   }

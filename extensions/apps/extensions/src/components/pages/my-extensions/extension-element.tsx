@@ -69,7 +69,7 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
         },
       },
     },
-    skip: !extensionData.id,
+    skip: !extensionData.id.trim() || extensionData.id.length < 10,
   });
 
   const appStreamData =
@@ -89,19 +89,15 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
   };
 
   const getExtensionStatus = () => {
-    if (appStreamData?.edges?.length === 0) {
-      return ExtensionStatus.Draft;
-    }
-    if (appStreamData?.edges[0]) {
-      if (appStreamData?.edges[0].node?.status === null) {
+    switch (appStreamData?.edges[0]?.node?.status) {
+      case null:
         return ExtensionStatus.Draft;
-      }
-      if (appStreamData?.edges[0].node?.status === AkashaAppsStreamModerationStatus.InReview) {
+      case AkashaAppsStreamModerationStatus.InReview:
         return ExtensionStatus.Pending;
-      }
-      if (appStreamData?.edges[0].node?.status === AkashaAppsStreamModerationStatus.Ok) {
+      case AkashaAppsStreamModerationStatus.Ok:
         return ExtensionStatus.Published;
-      }
+      default:
+        return ExtensionStatus.Draft;
     }
   };
 
@@ -125,7 +121,7 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
     });
   };
 
-  const menuItems = (extensionStatus: string) => {
+  const menuItems = (extensionStatus: string): MenuProps['items'] | [] => {
     switch (extensionStatus) {
       case ExtensionStatus.Pending:
         return [
@@ -134,7 +130,7 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
             icon: <ClockIcon />,
             onClick: () => {},
           },
-        ] as MenuProps['items'];
+        ];
       case ExtensionStatus.Published:
         return [
           {
@@ -153,7 +149,7 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
             onClick: () => {},
             color: { light: 'errorLight', dark: 'errorDark' },
           },
-        ] as MenuProps['items'];
+        ];
       case ExtensionStatus.Draft:
         return [
           {
@@ -172,7 +168,7 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
             onClick: handleExtensionRemove,
             color: { light: 'errorLight', dark: 'errorDark' },
           },
-        ] as MenuProps['items'];
+        ];
       default:
         return [];
     }
