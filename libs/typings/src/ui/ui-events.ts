@@ -70,7 +70,11 @@ export type NotificationEvent = {
   data?: {
     type: NotificationTypes;
     message: string;
+    description?: string;
+    ctaLabel?: string;
     dismissable?: boolean;
+    accentColor?: boolean;
+    handleCTAClick?: () => void;
     snackbarIcon?: React.ReactElement;
   };
 };
@@ -122,9 +126,9 @@ export type EventDataTypes = {
 // @TODO: split EventTypes with their respective EventDataTypes as the example below
 export type UIEventData =
   | {
-      event: EventTypes;
-      data?: EventDataTypes;
-    }
+    event: EventTypes;
+    data?: EventDataTypes;
+  }
   | ContentBlockRegisterEvent
   | ExtensionRegisterEvent
   | WidgetRegisterEvent
