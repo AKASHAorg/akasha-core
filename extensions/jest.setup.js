@@ -2,7 +2,11 @@ import * as useRootComponentProps from '@akashaorg/ui-awf-hooks/lib/use-root-pro
 import * as useAkashaStore from '@akashaorg/ui-awf-hooks/lib/store/use-akasha-store';
 import * as useAnalytics from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 import { genAppProps, getUserInfo, getUserStore } from '@akashaorg/af-testing';
+import { install } from '@twind/core';
+import twindConfig from '@akashaorg/design-system-core/src/twind/twind.config';
 import '@testing-library/jest-dom';
+
+install(twindConfig);
 
 class ResizeObserver {
   observe() {
@@ -103,14 +107,6 @@ jest.mock('react-i18next', () => ({
     };
   },
 }));
-
-jest.mock('@twind/core', () => {
-  return {
-    tw: () => {},
-    apply: () => {},
-    tx: () => {},
-  };
-});
 
 jest.spyOn(useRootComponentProps, 'useRootComponentProps').mockReturnValue({ ...genAppProps() });
 

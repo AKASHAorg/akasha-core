@@ -1,4 +1,5 @@
 import { genProfileByDID } from '@akashaorg/af-testing';
+import { relayStylePagination } from '@apollo/client/utilities';
 
 export const BEAM_ID = 'kjzl6kcym7w8y5coci0at0tquy8zmferlog88ys14oj2qgyjy8soxzpbflmlzey';
 
@@ -53,3 +54,24 @@ export const AUTHENTICATED_PROFILE = genProfileByDID({
 export const TAG_NAME = 'akasha';
 
 export const TAG_COUNT = 1;
+
+export const APOLLO_TYPE_POLICIES = {
+  typePolicies: {
+    AkashaBeam: {
+      merge: true,
+    },
+    CeramicAccount: {
+      merge: true,
+      fields: {
+        akashaBeamStreamList: relayStylePagination(['sorting', 'filters']),
+        akashaReflectStreamList: relayStylePagination(['sorting', 'filters']),
+        akashaBeamList: relayStylePagination(['sorting', 'filters']),
+      },
+    },
+    Query: {
+      fields: {
+        akashaBeamIndex: relayStylePagination(['sorting', 'filters']),
+      },
+    },
+  },
+};

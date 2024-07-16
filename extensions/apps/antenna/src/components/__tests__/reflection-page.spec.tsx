@@ -6,43 +6,47 @@ import * as getEditorValueForTest from '../reflect-editor/get-editor-value-for-t
 import {
   screen,
   renderWithAllProviders,
-  act,
   genAppProps,
   waitFor,
-  getAllByTestId,
-  getByText,
   getUserStore,
+  within,
 } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 import { mapReflectEntryData } from '@akashaorg/ui-awf-hooks';
 import { formatRelativeTime, truncateDid } from '@akashaorg/design-system-core/lib/utils';
 import {
   REFLECT_FEED,
-  getReflectionPageMocks,
+  getReflectionSectionMocks,
   getReflectEditorMocks,
   getReflectFeedMocks,
   BEAM_ID,
-  REFLECTION_ID,
   REPLY_TO,
   NEW_REFLECTION_ID,
   AUTHENTICATED_DID,
   NEW_REFLECTION,
   AUTHENTICATED_PROFILE,
+  APOLLO_TYPE_POLICIES,
+  getEmptyReflectionStreamMock,
+  getPendingReflectMock,
 } from '../__mocks__';
+import { MockedProvider, MockedResponse } from '@apollo/client/testing';
+import { InMemoryCache } from '@apollo/client';
 
 const {
-  mocks,
+  mocks: reflectionSectionMocks,
   profileData: reflectionSectionProfileData,
   reflectionData,
-} = getReflectionPageMocks();
+} = getReflectionSectionMocks();
 
-describe('< ReflectionPage /> component', () => {
-  const BaseComponent = (
+const baseComponent = (mocks: Readonly<MockedResponse<unknown, unknown>[]> | undefined) => (
+  <MockedProvider mocks={mocks} cache={new InMemoryCache(APOLLO_TYPE_POLICIES)}>
     <AnalyticsProvider {...genAppProps()}>
       <ReflectionPage reflectionData={mapReflectEntryData(reflectionData)} />
     </AnalyticsProvider>
-  );
+  </MockedProvider>
+);
 
+describe('< ReflectionPage /> component', () => {
   describe('should render reflection page', () => {
     const {
       mocks: reflectFeedMocks,
@@ -51,7 +55,7 @@ describe('< ReflectionPage /> component', () => {
       previewData,
     } = getReflectFeedMocks({
       beamId: BEAM_ID,
-      reflectionId: REFLECTION_ID,
+      reflectionId: REFLECT_FEED.reflectionId,
       authorProfileDID: REFLECT_FEED.authorProfileDID,
       reflectionContent: REFLECT_FEED.content,
       preview: {
@@ -62,75 +66,88 @@ describe('< ReflectionPage /> component', () => {
       isReply: true,
     });
 
-    beforeEach(async () => {
-      await act(async () => {
-        renderWithAllProviders(
-          BaseComponent,
-          {},
-          {
-            mocks: [...reflectFeedMocks, ...mocks],
-          },
-        );
-      });
-    });
-
     it('should render reflection section', async () => {
+      renderWithAllProviders(
+        baseComponent([...reflectionSectionMocks, ...getEmptyReflectionStreamMock()]),
+        {},
+      );
       expect(screen.getByText(/Share your thoughts/i)).toBeInTheDocument();
       expect(screen.getByRole('button', { name: 'Reflect' })).toBeInTheDocument();
-      await waitFor(() => {
-        const reflectionSection = screen.getByTestId('reflection-section');
-        const infoBox = getAllByTestId(reflectionSection, 'info-box')[0];
-        expect(screen.getByText(/back to original beam/i)).toBeInTheDocument();
-        expect(getAllByTestId(reflectionSection, 'avatar-source')[0]).toHaveAttribute(
+      const reflectionSection = screen.getByTestId('reflection-section');
+      expect(screen.getByText(/back to original beam/i)).toBeInTheDocument();
+      await waitFor(() =>
+        expect(within(reflectionSection).getAllByTestId('avatar-source')[0]).toHaveAttribute(
           'srcset',
           reflectionSectionProfileData.akashaProfile.avatar.default.src,
-        );
-        expect(infoBox).toHaveTextContent(reflectionSectionProfileData.akashaProfile.name);
-        expect(infoBox).toHaveTextContent(
-          truncateDid(reflectionSectionProfileData.akashaProfile.did.id),
-        );
-        expect(infoBox).toHaveTextContent(formatRelativeTime(reflectionData.createdAt, 'en'));
-      });
+        ),
+      );
+      const infoBox = within(reflectionSection).getAllByTestId('info-box')[0];
+      await waitFor(() =>
+        expect(infoBox).toHaveTextContent(reflectionSectionProfileData.akashaProfile.name),
+      );
+      expect(infoBox).toHaveTextContent(
+        truncateDid(reflectionSectionProfileData.akashaProfile.did.id),
+      );
+      expect(infoBox).toHaveTextContent(formatRelativeTime(reflectionData.createdAt, 'en'));
     });
 
     it('should render a reflection on reflect feed', async () => {
-      await waitFor(() => {
-        const reflectFeed = screen.getByTestId('reflect-feed');
-        const infoBox = getAllByTestId(reflectFeed, 'info-box')[0];
-        expect(getAllByTestId(reflectFeed, 'avatar-source')[0]).toHaveAttribute(
+      renderWithAllProviders(baseComponent([...reflectionSectionMocks, ...reflectFeedMocks]), {});
+      const reflectFeed = screen.getByTestId('reflect-feed');
+      await waitFor(() => within(reflectFeed).getByTestId('reflection-card'));
+      //we have a reflection and a preview on the reflect feed and here we want to assert for the reflection author's profile info
+      await waitFor(() =>
+        expect(within(reflectFeed).getAllByTestId('avatar-source')[0]).toHaveAttribute(
           'srcset',
           reflectFeedProfileData.akashaProfile.avatar.default.src,
-        );
-        expect(infoBox).toHaveTextContent(reflectFeedProfileData.akashaProfile.name);
-        expect(infoBox).toHaveTextContent(truncateDid(reflectFeedProfileData.akashaProfile.did.id));
-        expect(infoBox).toHaveTextContent(formatRelativeTime(reflectionData.createdAt, 'en'));
-        expect(getByText(reflectFeed, REFLECT_FEED.content)).toBeInTheDocument();
-      });
+        ),
+      );
+      const infoBox = within(reflectFeed).getAllByTestId('info-box')[0];
+      await waitFor(() =>
+        expect(infoBox).toHaveTextContent(reflectFeedProfileData.akashaProfile.name),
+      );
+      expect(await within(reflectFeed).findByText(REFLECT_FEED.content)).toBeInTheDocument();
+      expect(infoBox).toHaveTextContent(truncateDid(reflectFeedProfileData.akashaProfile.did.id));
+      expect(infoBox).toHaveTextContent(formatRelativeTime(reflectionData.createdAt, 'en'));
     });
 
     it('should render preview of a reflection on reflect feed', async () => {
-      await waitFor(() => {
-        const reflectFeed = screen.getByTestId('reflect-feed');
-        const infoBox = getAllByTestId(reflectFeed, 'info-box')[1];
-        expect(getAllByTestId(reflectFeed, 'avatar-source')[1]).toHaveAttribute(
+      renderWithAllProviders(baseComponent([...reflectionSectionMocks, ...reflectFeedMocks]), {});
+      const reflectFeed = screen.getByTestId('reflect-feed');
+      //we have a reflection and a preview on the reflect feed and here we want to assert for the reflection preview author's profile info
+      await waitFor(() =>
+        expect(within(reflectFeed).getAllByTestId('avatar-source')[1]).toHaveAttribute(
           'srcset',
           reflectFeedProfileData.akashaProfile.avatar.default.src,
-        );
-        expect(infoBox).toHaveTextContent(reflectFeedProfileData.akashaProfile.name);
-        expect(infoBox).toHaveTextContent(truncateDid(reflectFeedProfileData.akashaProfile.did.id));
-        expect(infoBox).toHaveTextContent(
-          formatRelativeTime(previewData.akashaReflectIndex.edges[0].node.createdAt, 'en'),
-        );
-        expect(getByText(reflectFeed, REFLECT_FEED.preview.content)).toBeInTheDocument();
-      });
+        ),
+      );
+      const infoBox = within(reflectFeed).getAllByTestId('info-box')[1];
+      await waitFor(() =>
+        expect(infoBox).toHaveTextContent(reflectFeedProfileData.akashaProfile.name),
+      );
+      expect(infoBox).toHaveTextContent(truncateDid(reflectFeedProfileData.akashaProfile.did.id));
+      expect(infoBox).toHaveTextContent(
+        formatRelativeTime(previewData.akashaReflectIndex.edges[0].node.createdAt, 'en'),
+      );
+      expect(
+        await within(reflectFeed).findByText(REFLECT_FEED.preview.content),
+      ).toBeInTheDocument();
     });
   });
 
   describe('should publish reflection', () => {
+    const reflectEditorMocks = getReflectEditorMocks({
+      reflectionId: NEW_REFLECTION_ID,
+      authorProfileDID: AUTHENTICATED_DID,
+      content: NEW_REFLECTION,
+      reflection: REPLY_TO,
+      isReply: true,
+    });
+
     const {
       mocks: reflectFeedMocks,
+      reflectionData: newReflectionData,
       profileData: reflectFeedProfileData,
-      reflectionData,
     } = getReflectFeedMocks({
       beamId: BEAM_ID,
       reflectionId: NEW_REFLECTION_ID,
@@ -152,52 +169,56 @@ describe('< ReflectionPage /> component', () => {
         },
       });
       jest.spyOn(getEditorValueForTest, 'getEditorValueForTest').mockReturnValue(NEW_REFLECTION);
-      await act(async () => {
-        renderWithAllProviders(
-          BaseComponent,
-          {},
-          {
-            mocks: [
-              ...reflectFeedMocks,
-              ...mocks,
-              ...getReflectEditorMocks({
-                reflectionId: NEW_REFLECTION_ID,
-                authorProfileDID: AUTHENTICATED_DID,
-                content: NEW_REFLECTION,
-              }),
-            ],
-          },
-        );
-      });
     });
 
-    it('should render pending reflection card', async () => {
+    it('should render pending reflect card', async () => {
+      renderWithAllProviders(
+        baseComponent([
+          ...reflectionSectionMocks,
+          ...getEmptyReflectionStreamMock(),
+          ...reflectEditorMocks,
+          ...getPendingReflectMock(AUTHENTICATED_DID),
+        ]),
+        {},
+      );
       const user = userEvent.setup();
+      const reflectButton = screen.getByRole('button', { name: 'Reflect' });
+      user.click(reflectButton);
+      await waitFor(() => expect(reflectButton).toBeInTheDocument());
+      await waitFor(() => expect(screen.getByRole('textbox')).toHaveTextContent(NEW_REFLECTION));
       user.click(screen.getByRole('button', { name: 'Reflect' }));
-      await waitFor(() => {
-        expect(screen.getByRole('textbox')).toHaveTextContent(NEW_REFLECTION);
-      });
-      user.click(screen.getByRole('button', { name: 'Reflect' }));
-      await waitFor(() => expect(screen.getByTestId('pending-reflect')).toBeInTheDocument());
+      expect(await screen.findByTestId('pending-reflect')).toBeInTheDocument();
     });
 
     it('should render published reflection on reflect feed', async () => {
+      renderWithAllProviders(
+        baseComponent([
+          ...reflectionSectionMocks,
+          ...getEmptyReflectionStreamMock(),
+          ...reflectEditorMocks,
+          ...reflectFeedMocks,
+        ]),
+        {},
+      );
       const user = userEvent.setup();
-      user.click(screen.getByRole('button', { name: 'Reflect' }));
+      const reflectButton = screen.getByRole('button', { name: 'Reflect' });
+      const reflectFeed = screen.getByTestId('reflect-feed');
+      user.click(reflectButton);
+      await waitFor(() => expect(reflectButton).toBeInTheDocument());
       await waitFor(() => expect(screen.getByRole('textbox')).toHaveTextContent(NEW_REFLECTION));
       user.click(screen.getByRole('button', { name: 'Reflect' }));
-      await waitFor(() => {
-        const reflectFeed = screen.getByTestId('reflect-feed');
-        const infoBox = getAllByTestId(screen.getByTestId('reflect-feed'), 'info-box')[0];
-        expect(infoBox).toHaveTextContent(reflectFeedProfileData.akashaProfile.name);
-        expect(getAllByTestId(reflectFeed, 'avatar-source')[0]).toHaveAttribute(
-          'srcset',
-          reflectFeedProfileData.akashaProfile.avatar.default.src,
-        );
-        expect(infoBox).toHaveTextContent(truncateDid(reflectFeedProfileData.akashaProfile.did.id));
-        expect(infoBox).toHaveTextContent(formatRelativeTime(reflectionData.createdAt, 'en'));
-        expect(getByText(reflectFeed, NEW_REFLECTION)).toBeInTheDocument();
-      });
+      expect(await screen.findByTestId('pending-reflect')).toBeInTheDocument();
+      expect(await within(reflectFeed).findByText(NEW_REFLECTION)).toBeInTheDocument();
+      const infoBox = within(reflectFeed).getByTestId('info-box');
+      await waitFor(() =>
+        expect(infoBox).toHaveTextContent(reflectFeedProfileData.akashaProfile.name),
+      );
+      expect(await within(reflectFeed).findByTestId('avatar-source')).toHaveAttribute(
+        'srcset',
+        reflectFeedProfileData.akashaProfile.avatar.default.src,
+      );
+      expect(infoBox).toHaveTextContent(truncateDid(reflectFeedProfileData.akashaProfile.did.id));
+      expect(infoBox).toHaveTextContent(formatRelativeTime(newReflectionData.createdAt, 'en'));
     });
   });
 });
