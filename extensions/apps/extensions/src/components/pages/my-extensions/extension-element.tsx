@@ -28,11 +28,21 @@ import { useGetAppsStreamQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apo
 import {
   AkashaAppApplicationType,
   AkashaAppsStreamModerationStatus,
+  AppImageSource,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { ExtensionStatus } from '@akashaorg/typings/lib/ui';
 
+type Extension = {
+  id?: string;
+  name?: string;
+  displayName?: string;
+  logoImage?: AppImageSource;
+  description?: string;
+  applicationType?: AkashaAppApplicationType;
+};
+
 type ExtensionElement = {
-  extensionData: any;
+  extensionData: Extension;
   showDivider?: boolean;
   filter: { id?: string; title?: string; opt?: string };
 };

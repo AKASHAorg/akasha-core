@@ -154,7 +154,7 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
         align="center"
         padding={12}
         background={{ light: 'grey9', dark: 'grey5' }}
-        customStyle="rounded-3xl"
+        customStyle="rounded-[20px]"
       >
         <Text variant="body1">{t('Create an extension ✨ 🚀')}</Text>
         <Button variant="primary" label={t('Create')} onClick={handleNavigateToCreateApp} />
