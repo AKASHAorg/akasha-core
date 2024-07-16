@@ -24,8 +24,11 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 const SnackBarNotification: React.FC<IRootExtensionProps> = () => {
   const { uiEvents, getRoutingPlugin } = useRootComponentProps();
   const [message, setMessage] = useState('');
+  const [description, setDescription] = useState('');
+  const [ctaLabel, setCTALabel] = useState('');
   const [appTitle, setAppTitle] = useState(null);
   const [dismissable, setDismissable] = useState(true);
+  const [accentColor, setAccentColor] = useState(true);
   const [messageType, setMessageType] = useState(NotificationTypes.Success);
   const [snackbarIcon, setSnackbarIcon] = useState(<InformationCircleIcon />);
 
@@ -42,9 +45,10 @@ const SnackBarNotification: React.FC<IRootExtensionProps> = () => {
     }, 8000);
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!message) {
       setMessageType(NotificationTypes.Success);
+      setDescription('');
       setMessageUuid('');
       setAppTitle(null);
     }
@@ -72,7 +76,7 @@ const SnackBarNotification: React.FC<IRootExtensionProps> = () => {
     return routeData?.[MenuItemAreaType.AppArea];
   }, [routeData]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (mutationEvents) {
       const { messageObj, appid, success, pending } = mutationEvents;
 
@@ -101,6 +105,15 @@ const SnackBarNotification: React.FC<IRootExtensionProps> = () => {
         if (eventInfo.data && hasOwn(eventInfo.data, 'message')) {
           setMessage(eventInfo.data.message);
           setMessageType(eventInfo.data.type);
+        }
+        if (eventInfo.data && hasOwn(eventInfo.data, 'description')) {
+          setDescription(eventInfo.data.description);
+        }
+        if (eventInfo.data && hasOwn(eventInfo.data, 'ctaLabel')) {
+          setCTALabel(eventInfo.data.ctaLabel);
+        }
+        if (eventInfo.data && hasOwn(eventInfo.data, 'accentColor')) {
+          setAccentColor(eventInfo.data.accentColor);
         }
         if (eventInfo.data && hasOwn(eventInfo.data, 'snackbarIcon')) {
           setSnackbarIcon(eventInfo.data.snackbarIcon);
@@ -156,10 +169,13 @@ const SnackBarNotification: React.FC<IRootExtensionProps> = () => {
               message
             )
           }
-          description={appTitle ? message : null}
+          description={appTitle ? message : description}
           type={messageType}
           dismissable={dismissable}
+          ctaLabel={ctaLabel}
+          accentColor={accentColor}
           handleDismiss={dismissHandler}
+          handleCTAClick={() => ({})}
         />
       )}
     </Stack>
