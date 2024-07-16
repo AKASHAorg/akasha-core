@@ -1,6 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import { CheckIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import {
+  CheckIcon,
+  InformationCircleIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -33,7 +37,7 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
   const {
     data: { authenticatedDID, isAuthenticating: authenticating },
   } = useAkashaStore();
-  const { getRoutingPlugin } = useRootComponentProps();
+  const { uiEvents, getRoutingPlugin } = useRootComponentProps();
   const [isProcessing, setIsProcessing] = useState(false);
   const [activeInterests, setActiveInterests] = useState([]);
   const [clickedTopic, setClickedTopic] = useState<Topic | null>(null);
@@ -41,10 +45,11 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
   const navigateTo = getRoutingPlugin().navigateTo;
   const apolloClient = useApolloClient();
 
-  const { data: profileInterestsQueryData } = useGetInterestsByDidQuery({
-    variables: { id: profileDID },
-    skip: !isLoggedIn,
-  });
+  const { data: profileInterestsQueryData, loading: loadingProfileInterests } =
+    useGetInterestsByDidQuery({
+      variables: { id: profileDID },
+      skip: !isLoggedIn,
+    });
 
   const { data: loggedUserInterestsQueryData, loading: loadingLoggedUserInterests } =
     useGetInterestsByDidQuery({
@@ -102,21 +107,40 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
     context: { source: sdk.services.gql.contextSources.composeDB },
   });
 
+  const handleCTAClick = () => {
+    navigateTo?.({
+      appName: '@akashaorg/app-profile',
+      getNavigationUrl: (navRoutes: { [key: string]: string }) =>
+        console.log(navRoutes),
+    });
+  }
+
   const handleInterestClick = (topic: Topic) => {
-    if (activeInterests.length === 10) {
-      /** show feedback */
-      return;
-    }
-
     const isSubscribed = activeInterests.filter(el => el.value === topic.value).length > 0;
-
-    // subscribe only if logged in user hasn't subscribed before otherwise navigate to the topic page
-    if (!isSubscribed) {
+    const shouldSubscribe = !isSubscribed && activeInterests.length < 10;
+    /**
+     * subscribe only if logged in user hasn't subscribed
+     * and still has less than 10 interests,
+     * otherwise navigate to the topic page
+     */
+    if (shouldSubscribe) {
       const newActiveInterests = [...activeInterests, topic];
-
       setClickedTopic(topic);
       runMutations(newActiveInterests);
     } else {
+      // show snackbar
+      uiEvents.next({
+        event: NotificationEvents.ShowNotification,
+        data: {
+          type: NotificationTypes.Error,
+          message: t('Interests limit reached'),
+          description: t('You reached 10 interests limit. Remove some interests to add more.'),
+          ctaLabel: t('Go to my interests'),
+          accentColor: true,
+          handleCTAClick: handleCTAClick,
+          snackbarIcon: <InformationCircleIcon />,
+        },
+      });
       navigateTo?.({
         appName: '@akashaorg/app-antenna',
         getNavigationUrl: (navRoutes: { [key: string]: string }) =>
@@ -171,7 +195,8 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
     }
   };
 
-  if (loadingLoggedUserInterests || authenticating) return <ProfileInterestsLoading />;
+  if (loadingProfileInterests || loadingLoggedUserInterests || authenticating)
+    return <ProfileInterestsLoading />;
 
   return (
     <Stack direction="column" spacing="gap-y-4" fullWidth>
