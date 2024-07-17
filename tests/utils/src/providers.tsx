@@ -56,6 +56,7 @@ const AllProviders: React.FC<
                 akashaBeamStreamList: relayStylePagination(['sorting', 'filters']),
                 akashaReflectStreamList: relayStylePagination(['sorting', 'filters']),
                 akashaBeamList: relayStylePagination(['sorting', 'filters']),
+                akashaAppList: relayStylePagination(['sorting', 'filters']),
               },
             },
             AkashaProfile: {

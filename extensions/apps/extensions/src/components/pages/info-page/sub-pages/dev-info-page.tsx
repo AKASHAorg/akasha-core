@@ -43,10 +43,20 @@ export const DevInfoPage: React.FC<DevInfoPageProps> = () => {
             )}
           />
           <Divider />
-          <AppList apps={ownExtensions} />
+          <AppList
+            apps={ownExtensions}
+            onLoadMore={() => {
+              return new Promise(null);
+            }}
+          />
           <Divider />
           <Text variant="h5">{t('Collaborations')}</Text>
-          <AppList apps={ownExtensions.slice(0, 1)} />
+          <AppList
+            apps={ownExtensions.slice(0, 1)}
+            onLoadMore={() => {
+              return new Promise(null);
+            }}
+          />
         </Stack>
       </Card>
     </>
