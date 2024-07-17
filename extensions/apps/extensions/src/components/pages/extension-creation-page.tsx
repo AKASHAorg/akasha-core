@@ -58,7 +58,7 @@ export const ExtensionCreationPage: React.FC<unknown> = () => {
                         createdAt: new Date().toISOString(),
                         description: '',
                         displayName: data?.extensionName,
-                        license: '',
+                        license: data?.extensionLicense.title,
                         name: data?.extensionID,
                       },
                     },

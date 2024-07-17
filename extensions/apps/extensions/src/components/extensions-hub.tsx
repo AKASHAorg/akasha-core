@@ -31,7 +31,12 @@ export const ExtensionsHub: React.FC<TExtensionsHubProps> = props => {
     <Stack spacing="gap-y-4" customStyle="mb-2">
       <Text variant="h5">{titleLabel}</Text>
       <Card padding="p-4">
-        <AppList apps={extensions} />
+        <AppList
+          apps={extensions}
+          onLoadMore={() => {
+            return new Promise(null);
+          }}
+        />
       </Card>
       {sections.map((section, idx) => (
         <Card key={section.title + idx} padding="p-4">
