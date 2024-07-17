@@ -1,6 +1,6 @@
 import React, { SyntheticEvent } from 'react';
 import * as z from 'zod';
-import { Controller } from 'react-hook-form';
+import { Controller, useWatch } from 'react-hook-form';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -64,7 +64,6 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
     control,
     setError,
     getValues,
-    watch,
     formState: { errors, dirtyFields },
   } = useForm<AppCreationFormValues>({
     defaultValues,
@@ -81,7 +80,7 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
     }
   }, [errorMessage, errors]);
 
-  const extensionLicenseValue = watch(FieldName.extensionLicense);
+  const extensionLicenseValue = useWatch({ control, name: FieldName.extensionLicense });
 
   const extensionTypes = [
     { id: '1', type: AkashaAppApplicationType.App, title: AkashaAppApplicationType.App },
