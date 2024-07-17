@@ -31,9 +31,9 @@ export const usePendingReflections = () => {
   };
 
   const removePendingReflection = (reflectionId: string) => {
-    const oldState = pendingReflectionsVar().filter(refl => refl.id !== reflectionId);
+    const newState = pendingReflectionsVar().filter(refl => refl.id !== reflectionId);
 
-    pendingReflectionsVar([...oldState]);
+    pendingReflectionsVar([...newState]);
   };
 
   const updatePendingReflection = (reflectionId: string, reflectionData: PendingReflection) => {
