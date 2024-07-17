@@ -8,15 +8,20 @@ interface IGetReflectEditorMocks {
   reflectionId: string;
   authorProfileDID: string;
   content: string;
+  isReply?: boolean;
+  reflection?: string | null;
 }
 
 export function getReflectEditorMocks({
   reflectionId,
   authorProfileDID,
   content,
+  isReply,
+  reflection,
 }: IGetReflectEditorMocks) {
   return [
     {
+      delay: 100,
       request: {
         query: CreateReflectDocument,
       },
@@ -28,6 +33,8 @@ export function getReflectEditorMocks({
               reflectionId,
               authorProfileDID,
               content,
+              isReply,
+              reflection,
             }),
             clientMutationId: '',
           },

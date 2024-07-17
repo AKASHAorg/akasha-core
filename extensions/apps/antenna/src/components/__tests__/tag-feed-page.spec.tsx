@@ -5,14 +5,14 @@ import * as useAkashaStore from '@akashaorg/ui-awf-hooks/lib/store/use-akasha-st
 import {
   screen,
   renderWithAllProviders,
-  act,
   genAppProps,
   getUserStore,
   waitFor,
-  getByTestId,
+  within,
 } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 import {
+  APOLLO_TYPE_POLICIES,
   AUTHENTICATED_DID,
   AUTHENTICATED_PROFILE,
   TAG_FEED,
@@ -22,31 +22,32 @@ import {
 } from '../__mocks__';
 import { formatRelativeTime, truncateDid } from '@akashaorg/design-system-core/lib/utils';
 import { getTagFeedPageMocks } from '../__mocks__';
+import { MockedProvider, MockedResponse } from '@apollo/client/testing';
+import { InMemoryCache } from '@apollo/client';
 
-describe('< TagFeedPage /> component', () => {
-  const BaseComponent = (
+const baseComponent = (mocks?: Readonly<MockedResponse<unknown, unknown>[]> | undefined) => (
+  <MockedProvider mocks={mocks} cache={new InMemoryCache(APOLLO_TYPE_POLICIES)}>
     <AnalyticsProvider {...genAppProps()}>
       <TagFeedPage tagName={TAG_NAME} />
     </AnalyticsProvider>
-  );
+  </MockedProvider>
+);
 
+describe('< TagFeedPage /> component', () => {
   describe('should render tag feed page', () => {
-    it('should render placeholder if there is no subscribed topic', async () => {
+    it('should render placeholder if there are no subscribed topics', async () => {
       const { mocks } = getTagFeedPageMocks({ count: 0 });
-      await act(async () => {
-        renderWithAllProviders(BaseComponent, {}, { mocks });
-      });
-      await waitFor(() => {
-        expect(screen.getByText(TAG_NAME)).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: 'Subscribe' })).toBeInTheDocument();
-      });
+      renderWithAllProviders(baseComponent(mocks), {});
+      expect(await screen.findByText(TAG_NAME)).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Subscribe' })).toBeInTheDocument();
       expect(screen.getByText(/0 beam/i)).toBeInTheDocument();
       expect(screen.getByText(/there is no content found for the/i)).toBeInTheDocument();
       expect(
         screen.getByText(/be the first one to create a beam for this topic! 🚀/i),
       ).toBeInTheDocument();
     });
-    it('should render a beam on tag feed for subscribed topic', async () => {
+
+    it('should render a beam on tag feed for subscribed topics', async () => {
       const { mocks } = getTagFeedPageMocks({ count: 1 });
       const { mocks: tagFeedMocks, profileData, beamData } = getTagFeedMocks();
       jest.spyOn(useAkashaStore, 'useAkashaStore').mockReturnValue({
@@ -59,30 +60,23 @@ describe('< TagFeedPage /> component', () => {
           isAuthenticating: false,
         },
       });
-      await act(async () => {
-        renderWithAllProviders(
-          BaseComponent,
-          {},
-          {
-            mocks: [...tagFeedMocks, ...mocks],
-          },
-        );
-      });
-      await waitFor(() => {
-        const tagFeed = screen.getByTestId('tag-feed');
-        const infoBox = getByTestId(tagFeed, 'info-box');
-        expect(getByTestId(tagFeed, 'reflections-count')).toHaveTextContent(
-          String(TAG_FEED.reflectionsCount),
-        );
-        expect(getByTestId(tagFeed, 'avatar-source')).toHaveAttribute(
+      renderWithAllProviders(baseComponent([...mocks, ...tagFeedMocks]), {});
+      expect(await screen.findByTestId('tag-feed')).toBeInTheDocument();
+      const tagFeed = screen.getByTestId('tag-feed');
+      await waitFor(() =>
+        expect(within(tagFeed).getByTestId('avatar-source')).toHaveAttribute(
           'srcset',
           profileData.akashaProfile.avatar.default.src,
-        );
-        expect(infoBox).toHaveTextContent(profileData.akashaProfile.name);
-        expect(infoBox).toHaveTextContent(truncateDid(profileData.akashaProfile.did.id));
-        expect(infoBox).toHaveTextContent(formatRelativeTime(beamData.createdAt, 'en'));
-        expect(screen.getByText(/published via/i)).toBeInTheDocument();
-      });
+        ),
+      );
+      expect(within(tagFeed).getByTestId('reflections-count')).toHaveTextContent(
+        String(TAG_FEED.reflectionsCount),
+      );
+      const infoBox = within(tagFeed).getByTestId('info-box');
+      await waitFor(() => expect(infoBox).toHaveTextContent(profileData.akashaProfile.name));
+      expect(infoBox).toHaveTextContent(truncateDid(profileData.akashaProfile.did.id));
+      expect(infoBox).toHaveTextContent(formatRelativeTime(beamData.createdAt, 'en'));
+      expect(screen.getByText(/published via/i)).toBeInTheDocument();
     });
   });
 
@@ -99,31 +93,22 @@ describe('< TagFeedPage /> component', () => {
         },
       });
     });
+
     it('should change button text from subscribe to subscribed', async () => {
       const { mocks } = getTagFeedPageMocks({ count: 0 });
       const subscriptionMocks = getSubscriptionsMocks({ tag: TAG_NAME });
-      await act(async () => {
-        renderWithAllProviders(BaseComponent, {}, { mocks: [...subscriptionMocks, ...mocks] });
-      });
+      renderWithAllProviders(baseComponent([...mocks, ...subscriptionMocks]), {});
       const user = userEvent.setup();
-      await waitFor(() => {
-        expect(screen.getByRole('button', { name: 'Subscribe' })).toBeInTheDocument();
-      });
+      expect(await screen.findByRole('button', { name: 'Subscribe' })).toBeInTheDocument();
       user.click(screen.getByRole('button', { name: 'Subscribe' }));
-      await waitFor(() => {
-        expect(screen.getByRole('button', { name: 'Subscribed' })).toBeInTheDocument();
-      });
+      expect(await screen.findByRole('button', { name: 'Subscribed' })).toBeInTheDocument();
     });
 
     it('should show subscribed text on button when a topic was previously subscribed', async () => {
       const { mocks } = getTagFeedPageMocks({ count: 0, tag: TAG_NAME });
-      await act(async () => {
-        renderWithAllProviders(BaseComponent, {}, { mocks });
-      });
-      await waitFor(() => {
-        expect(screen.getByText(TAG_NAME)).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: 'Subscribed' })).toBeInTheDocument();
-      });
+      renderWithAllProviders(baseComponent(mocks), {});
+      expect(await screen.findByText(TAG_NAME)).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Subscribed' })).toBeInTheDocument();
     });
   });
 });

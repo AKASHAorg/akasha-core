@@ -16,7 +16,6 @@ import {
   useGetFollowDocumentsByDidQuery,
   useGetInterestsByDidQuery,
   useGetInterestsStreamQuery,
-  useGetProfileByIdQuery,
   useGetProfileStreamQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { LatestProfiles, LatestTopics } from './cards';

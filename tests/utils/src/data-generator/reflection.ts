@@ -4,6 +4,8 @@ interface IGenReflectionData {
   reflectionId: string;
   authorProfileDID: string;
   content: string;
+  isReply?: boolean;
+  reflection?: string | null;
 }
 
 interface IGenReflectionStream {
@@ -32,7 +34,13 @@ interface IGenReflectReflectionStream {
   };
 }
 
-const genReflectionData = ({ reflectionId, authorProfileDID, content }: IGenReflectionData) => {
+const genReflectionData = ({
+  reflectionId,
+  authorProfileDID,
+  content,
+  isReply = false,
+  reflection = null,
+}: IGenReflectionData) => {
   return {
     id: reflectionId,
     author: {
@@ -51,8 +59,8 @@ const genReflectionData = ({ reflectionId, authorProfileDID, content }: IGenRefl
         __typename: 'ReflectProviderValue',
       },
     ],
-    isReply: null,
-    reflection: null,
+    isReply,
+    reflection,
     createdAt: '2024-06-05T07:42:04.736Z',
     beam: {
       id: 'kjzl6kcym7w8yam23sr1xc4z842m4rv5u8y1j513hi6g3q28656dmjs5vysffs6',

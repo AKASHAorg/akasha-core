@@ -12,12 +12,11 @@ export type PendingReflectProps = {
 export function PendingReflect(props: PendingReflectProps) {
   const { reflectionData, customStyle = '' } = props;
   return (
-    <Stack>
+    <Stack dataTestId="pending-reflect">
       <Divider />
       <Stack
         background={{ light: 'secondaryLight/10', dark: 'secondaryDark/10' }}
         customStyle={`border border(grey8 dark:grey3) ${customStyle}`}
-        dataTestId="pending-reflect"
       >
         <ReflectionCard
           reflectionData={reflectionData}

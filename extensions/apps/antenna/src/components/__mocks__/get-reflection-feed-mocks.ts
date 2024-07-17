@@ -113,3 +113,53 @@ export function getReflectFeedMocks({
     previewData,
   };
 }
+
+export function getEmptyReflectionStreamMock() {
+  return [
+    {
+      request: {
+        query: GetReflectionStreamDocument,
+      },
+      variableMatcher: () => true,
+      result: {
+        data: {
+          node: {
+            akashaReflectStreamList: {
+              edges: [],
+              pageInfo: {
+                startCursor: null,
+                endCursor: null,
+                hasNextPage: false,
+                hasPreviousPage: false,
+                __typename: 'PageInfo',
+              },
+              __typename: 'AkashaReflectStreamConnection',
+            },
+            isViewer: false,
+            __typename: 'CeramicAccount',
+          },
+        },
+      },
+    },
+  ];
+}
+
+export function getPendingReflectMock(authorProfileDID: string) {
+  const profileData = genProfileByDID({ profileDID: authorProfileDID });
+  return [
+    {
+      delay: 30,
+      request: {
+        query: GetProfileByDidDocument,
+        variables: {
+          id: authorProfileDID,
+        },
+      },
+      result: {
+        data: {
+          node: profileData,
+        },
+      },
+    },
+  ];
+}

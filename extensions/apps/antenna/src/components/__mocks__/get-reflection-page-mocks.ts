@@ -1,11 +1,8 @@
 import { genProfileByDID, genReflectionData } from '@akashaorg/af-testing';
-import {
-  GetProfileByDidDocument,
-  GetReflectionByIdDocument,
-} from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import { GetProfileByDidDocument } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { REFLECTION_ID, REFLECTION_SECTION } from './constants';
 
-export function getReflectionPageMocks() {
+export function getReflectionSectionMocks() {
   const reflectionData = genReflectionData({
     reflectionId: REFLECTION_ID,
     authorProfileDID: REFLECTION_SECTION.authorProfileDID,
@@ -22,17 +19,6 @@ export function getReflectionPageMocks() {
         result: {
           data: {
             node: profileData,
-          },
-        },
-      },
-      {
-        request: {
-          query: GetReflectionByIdDocument,
-        },
-        variableMatcher: () => true,
-        result: {
-          data: {
-            node: reflectionData,
           },
         },
       },
