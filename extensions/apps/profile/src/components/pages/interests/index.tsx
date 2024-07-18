@@ -40,7 +40,7 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
   const { uiEvents, getRoutingPlugin } = useRootComponentProps();
   const [isProcessing, setIsProcessing] = useState(false);
   const [activeInterests, setActiveInterests] = useState([]);
-  const [clickedTopic, setClickedTopic] = useState<Topic | null>(null);
+  const [clickedTopic, setClickedTopic] = useState<ProfileLabeled | null>(null);
   const isLoggedIn = !!authenticatedDID;
   const navigateTo = getRoutingPlugin().navigateTo;
   const apolloClient = useApolloClient();
@@ -110,12 +110,11 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
   const handleCTAClick = () => {
     navigateTo?.({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: (navRoutes: { [key: string]: string }) =>
-        console.log(navRoutes),
     });
-  }
+  };
 
   const handleInterestClick = (topic: Topic) => {
+    if (isProcessing) return;
     const isSubscribed = activeInterests.filter(el => el.value === topic.value).length > 0;
     const shouldSubscribe = !isSubscribed && activeInterests.length < 10;
     /**
@@ -195,7 +194,7 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
     }
   };
 
-  if (loadingProfileInterests || loadingLoggedUserInterests || authenticating)
+  if ((loadingProfileInterests || loadingLoggedUserInterests || authenticating) && !clickedTopic)
     return <ProfileInterestsLoading />;
 
   return (
@@ -218,19 +217,22 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
               customStyle="flex-wrap"
               fullWidth
             >
-              {profileInterests?.map((interest, idx) => (
-                <Pill
-                  key={`${idx}-${interest}`}
-                  label={interest.value}
-                  icon={<CheckIcon />}
-                  iconDirection="right"
-                  size="sm"
-                  loading={clickedTopic && clickedTopic?.value === interest.value}
-                  onPillClick={() => handleInterestClick(interest)}
-                  active={!!activeInterests.find(ac => ac.value === interest.value)}
-                  type="action"
-                />
-              ))}
+              {profileInterests?.map((interest, idx) => {
+                const isActive = !!activeInterests.find(ac => ac.value === interest.value);
+                return (
+                  <Pill
+                    key={`${idx}-${interest}`}
+                    label={interest.value}
+                    iconDirection="right"
+                    size="sm"
+                    loading={clickedTopic && clickedTopic?.value === interest.value}
+                    onPillClick={() => handleInterestClick(interest)}
+                    active={isActive}
+                    type="action"
+                    {...(isActive && { icon: <CheckIcon /> })}
+                  />
+                );
+              })}
             </Stack>
           </Stack>
         )}
