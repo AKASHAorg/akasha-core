@@ -1,10 +1,12 @@
 import { IconType } from '@akashaorg/typings/lib/ui';
+import isUrl from 'is-url';
 
-export const getIconFromLink = (href: string): IconType => {
+export const getIconFromLink = (href: string): IconType | null => {
+  if (!isUrl(href)) return null;
   const host = new URL(href).host;
-  if ('github.com'.includes(host)) return 'Github';
-  if ('twitter.com'.includes(host)) return 'Twitter';
-  if ('discordapp.com'.includes(host)) return 'Discord';
-  if ('telegram.me'.includes(host) || 't.me'.includes(host)) return 'Telegram';
+  if (host.includes('github.com')) return 'Github';
+  if (host.includes('twitter.com') || host.includes('x.com')) return 'Twitter';
+  if (host.includes('discordapp.com')) return 'Discord';
+  if (host.includes('t.me') || host.includes('telegram.me')) return 'Telegram';
   return 'LinkIcon';
 };

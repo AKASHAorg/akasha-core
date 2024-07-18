@@ -25,7 +25,13 @@ const genProfileByDID = ({
         __typename: 'CeramicAccount',
       },
       name: faker.internet.userName(),
-      links: [],
+      links: [
+        {
+          href: faker.internet.url(),
+          label: null,
+          __typename: 'ProfileLinkSource',
+        },
+      ],
       background: {
         default: {
           src: faker.image.urlPicsumPhotos(),
@@ -36,7 +42,7 @@ const genProfileByDID = ({
         alternatives: null,
         __typename: 'ProfileImageVersions',
       },
-      description: 'AKASHA',
+      description: faker.lorem.sentence(),
       avatar: {
         default: {
           src: faker.image.avatar(),
@@ -63,4 +69,49 @@ const genProfileByDID = ({
   };
 };
 
-export { genProfileByDID };
+interface IGenFollowDocumentByDid {
+  isFollowing: boolean;
+  profile: IGenProfileByDID;
+  pageInfo?: {
+    startCursor: string;
+    endCursor: string;
+    hasPreviousPage: boolean;
+    hasNextPage: boolean;
+  };
+}
+
+const genFollowDocumentByDid = (params?: IGenFollowDocumentByDid) => {
+  const profileData = params
+    ? genProfileByDID({ ...params.profile, pageInfo: params.pageInfo })
+    : null;
+  const pageInfo = params?.pageInfo
+    ? params.pageInfo
+    : { startCursor: null, endCursor: null, hasPreviousPage: false, hasNextPage: false };
+  return {
+    akashaFollowList: {
+      edges: profileData
+        ? [
+            {
+              node: {
+                id: faker.string.uuid(),
+                isFollowing: params.isFollowing,
+                profileID: profileData.akashaProfile.id,
+                profile: profileData.akashaProfile,
+                __typename: 'AkashaFollowEdge',
+              },
+              cursor: pageInfo.startCursor ?? '',
+            },
+          ]
+        : [],
+      pageInfo: {
+        ...pageInfo,
+        __typename: 'PageInfo',
+      },
+      __typename: 'AkashaFollowConnection',
+    },
+    isViewer: false,
+    __typename: 'CeramicAccount',
+  };
+};
+
+export { genProfileByDID, genFollowDocumentByDid };

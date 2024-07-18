@@ -39,6 +39,7 @@ export type TextProps = PropsWithChildren<{
   weight?: FontWeight;
   ref?: React.Ref<HTMLElement>;
   selectable?: boolean;
+  ariaLabelledBy?: string;
 }>;
 
 const VARIANT_TO_CSS_CLASSES_MAPPER: Record<Variant, string> = {
@@ -75,6 +76,7 @@ const VARIANT_TO_CSS_CLASSES_MAPPER: Record<Variant, string> = {
  * @param lineClamp - number (optional) truncate a block of text after a (number) of lines
  * @param weight - (optional) for customizing the font weight
  * @param ref - (optional) pass the ref here
+ * @param ariaLabelledBy - identifies the element (or elements) that labels the element it is applied to
  * @param selectable - boolean (optional) whether the text is selectable
   * @example
  * ```tsx
@@ -101,6 +103,7 @@ const Text: React.FC<TextProps> = ({
   children,
   ref,
   selectable = true,
+  ariaLabelledBy,
 }) => {
   const tag = as ?? getTag(variant);
   const alignmentStyle = align ? getAlignmentClasses(align) : '';
@@ -118,6 +121,7 @@ const Text: React.FC<TextProps> = ({
 
     {
       id,
+      'aria-labelledby': ariaLabelledBy,
       className: tw(
         apply`${noSelectClass} ${baseStyles} ${colorStyle} ${alignmentStyle} ${truncateStyle} ${wordBreakStyle} ${weightStyle} ${lineClampStyle} ${customStyle}`,
       ),

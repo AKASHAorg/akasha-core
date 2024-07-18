@@ -12,7 +12,7 @@ export type PendingReflectProps = {
 export function PendingReflect(props: PendingReflectProps) {
   const { reflectionData, customStyle = '' } = props;
   return (
-    <Stack dataTestId="pending-reflect">
+    <Stack>
       <Divider />
       <Stack
         background={{ light: 'secondaryLight/10', dark: 'secondaryDark/10' }}

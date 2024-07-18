@@ -97,6 +97,7 @@ const Header: React.FC<HeaderProps> = ({
   return (
     <Stack customStyle={customStyle}>
       <Card
+        dataTestId="cover-image"
         elevation={plain ? 'none' : '1'}
         radius={{ top: 20 }}
         background={{ light: 'grey7', dark: 'grey5' }}
@@ -153,8 +154,8 @@ const Header: React.FC<HeaderProps> = ({
                   >
                     <Pill
                       label={badge.label}
-                      background="errorDark"
-                      borderColor="errorLight"
+                      color={{ light: 'errorDark2', dark: 'white' }}
+                      background={{ light: 'errorFade', dark: 'errorDark2' }}
                       customStyle="px-2"
                       type="info"
                     />

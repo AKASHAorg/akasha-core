@@ -25,10 +25,10 @@ export type LinksProps = {
 
 const Links: React.FC<LinksProps> = ({ title, links }) => {
   const iconsMap: Record<string, { icon: React.ReactElement; solid: boolean }> = {
-    github: { icon: <Github />, solid: false },
-    twitter: { icon: <Twitter />, solid: true },
-    discord: { icon: <Discord />, solid: true },
-    telegram: { icon: <Telegram />, solid: true },
+    Github: { icon: <Github />, solid: false },
+    Twitter: { icon: <Twitter />, solid: true },
+    Discord: { icon: <Discord />, solid: true },
+    Telegram: { icon: <Telegram />, solid: true },
     LinkIcon: { icon: <LinkIcon />, solid: false },
   };
 
