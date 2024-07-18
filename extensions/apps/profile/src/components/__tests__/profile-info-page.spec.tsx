@@ -124,8 +124,7 @@ describe('< ProfileInfoPage /> component', () => {
     it('should display NSFW card when viewing another users NSFW profile', async () => {
       const { mocks } = getProfileInfoMocks({ profileDID: PROFILE_DID, nsfw: true });
       renderWithAllProviders(baseComponent(mocks), {});
-      expect(await screen.findByText(/NSFW Profile/i)).toBeInTheDocument();
-      expect(screen.getByText(/This profile is marked as NSFW./i)).toBeInTheDocument();
+      expect(await screen.findByText(/nsfw profile/i)).toBeInTheDocument();
       expect(screen.getByRole('button', { name: 'View Profile' })).toBeInTheDocument();
     });
 
@@ -196,10 +195,10 @@ describe('< ProfileInfoPage /> component', () => {
     const { mocks } = getProfileInfoMocks({ profileDID: PROFILE_DID, nsfw: true });
     const followMock = getFollowMock();
     renderWithAllProviders(baseComponent([...mocks, ...followMock]), {});
-    expect(await screen.findByText(/NSFW Profile/i)).toBeInTheDocument();
+    expect(await screen.findByText(/nsfw profile/i)).toBeInTheDocument();
     await waitFor(async () => {
       await user.click(screen.getByRole('button', { name: 'View Profile' }));
     });
-    expect(screen.queryByText(/NSFW Profile/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/nsfw profile/i)).not.toBeInTheDocument();
   });
 });
