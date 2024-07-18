@@ -4,5 +4,4 @@ import { IntegrationRegistrationOptions, WidgetInterface } from '@akashaorg/typi
 export const register = (opts: IntegrationRegistrationOptions): WidgetInterface => ({
   loadingFn: () => import('./components'),
   mountsIn: opts.layoutSlots?.widgetSlotId,
-  activeWhen: () => true,
 });

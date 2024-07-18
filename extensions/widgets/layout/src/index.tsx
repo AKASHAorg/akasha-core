@@ -5,7 +5,6 @@ import { TranslationPlugin } from './translation';
 export const register = (): LayoutWidgetInterface => {
   return {
     loadingFn: () => import('./components'),
-    activeWhen: () => true,
     mountsIn: 'root',
     extensionSlots: {
       applicationSlotId: 'app-slot',

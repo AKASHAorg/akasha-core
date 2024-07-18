@@ -4,5 +4,4 @@ import { IntegrationRegistrationOptions, WidgetInterface } from '@akashaorg/typi
 export const register = (opts: IntegrationRegistrationOptions): WidgetInterface => ({
   mountsIn: opts.layoutSlots?.sidebarSlotId,
   loadingFn: () => import('./sidebar'),
-  activeWhen: () => true,
 });

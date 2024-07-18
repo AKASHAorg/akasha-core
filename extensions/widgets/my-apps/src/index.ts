@@ -4,6 +4,5 @@ import { IntegrationRegistrationOptions, WidgetInterface } from '@akashaorg/typi
 export const register = (opts: IntegrationRegistrationOptions): WidgetInterface => ({
   mountsIn: opts.layoutSlots?.contextualWidgetSlotId,
   loadingFn: () => import('./my-apps-widget'),
-  activeWhen: (location, pathToActiveWhen) =>
-    pathToActiveWhen('/@akashaorg/app-extensions/', false)(location),
+  activeWhen: '/@akashaorg/app-extensions/',
 });

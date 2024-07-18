@@ -36,7 +36,7 @@ const getPublishedAppLatestVersion = async (appName: string, logger?: ILogger) =
     ? app?.node?.akashaAppList?.edges[0].node
     : undefined;
 
-  if (!appNode.id) {
+  if (!appNode?.id) {
     log.warn(`No app found for publisher ${did} and name ${appName}`);
     return;
   }

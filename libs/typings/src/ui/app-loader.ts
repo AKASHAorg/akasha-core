@@ -1,16 +1,19 @@
-import { IconType, ExtensionManifest, IRootComponentProps } from './index';
+import { IconType, IRootComponentProps } from './index';
 import { UIEventData } from './ui-events';
 import { IPlugin } from './plugins';
+import { AkashaApp } from '../sdk/graphql-types-new';
 
-/**
- * Type defining single-spa activity function
- * @see {@link https://single-spa.js.org/docs/configuration/#configactivewhen}
- */
-export type ActivityFn = (
+type ActivityFn = (
   location: Location,
-  pathToActiveWhen: (path: string, exact?: boolean) => (location: Location) => boolean,
+  pathToActiveWhen: (path: string, exact?: boolean) => boolean,
   layoutConfig?: LayoutSlots,
 ) => boolean;
+
+/**
+ * Type defining single-spa activity
+ * @see {@link https://single-spa.js.org/docs/configuration/#configactivewhen}
+ */
+export type ExtensionActivity = string | ActivityFn | (string | ActivityFn)[];
 
 /**
  * Type defining layout slots where apps and widgets among others are loaded
@@ -103,7 +106,7 @@ export type WorldConfig = {
     siteId: string;
     trackerUrl: string;
   };
-  registryOverrides?: ExtensionManifest[];
+  registryOverrides?: Partial<AkashaApp>[];
   socialLinks?: { icon: IconType; link: string }[];
 };
 

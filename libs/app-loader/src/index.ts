@@ -10,7 +10,6 @@ import {
   UIEventData,
   WidgetEvents,
   WorldConfig,
-  ExtensionManifest,
 } from '@akashaorg/typings/lib/ui';
 import { Subject, Subscription } from 'rxjs';
 import { hidePageSplash, showPageSplash } from './splash-screen';
@@ -33,7 +32,7 @@ import {
 import EventBus from '@akashaorg/awf-sdk/src/common/event-bus';
 import { APP_EVENTS, AUTH_EVENTS } from '@akashaorg/typings/lib/sdk';
 import { IntegrationSchema } from '@akashaorg/awf-sdk/src/db/integrations.schema';
-import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { AkashaApp, AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 const isWindow = window && typeof window !== 'undefined';
 
@@ -46,6 +45,7 @@ type SystemModuleType = {
       decodeAppName: (name: string) => string;
     },
   ) => Promise<IPlugin>;
+  uninstall?: (opts: IntegrationRegistrationOptions) => Promise<void> | void;
 };
 
 export default class AppLoader {
@@ -53,7 +53,7 @@ export default class AppLoader {
   uiEvents: Subject<UIEventData>;
   extensionConfigs: Map<string, IAppConfig & { name: string }>;
   extensionModules: Map<string, SystemModuleType>;
-  manifests: ExtensionManifest[];
+  extensionData: AkashaApp[];
   layoutConfig: IAppConfig;
   logger: ILogger;
   parentLogger: Logging;
@@ -67,7 +67,7 @@ export default class AppLoader {
     this.uiEvents = new Subject<UIEventData>();
     this.extensionConfigs = new Map();
     this.extensionModules = new Map();
-    this.manifests = [];
+    this.extensionData = [];
     this.layoutConfig = null;
     this.parentLogger = getSDK().services.log;
     this.logger = this.parentLogger.create('app-loader');
@@ -95,16 +95,14 @@ export default class AppLoader {
 
     singleSpa.setUnmountMaxTime(5000, false);
 
-    this.manifests = await getWorldDefaultExtensions(this.worldConfig);
-    const layoutManifest = this.manifests.find(
-      manifest => manifest.name === this.worldConfig.layout,
-    );
+    this.extensionData = await getWorldDefaultExtensions(this.worldConfig);
+    const layoutManifest = this.extensionData.find(data => data.name === this.worldConfig.layout);
 
     if (!layoutManifest) {
       this.logger.error('layout not found. Cannot continue.');
       return;
     }
-    this.extensionModules = await this.importModules(this.manifests);
+    this.extensionModules = await this.importModules(this.extensionData);
     this.plugins = await this.loadPlugins(this.extensionModules);
     await this.loadLayoutConfig();
     await this.initializeExtensions(this.extensionModules);
@@ -135,32 +133,32 @@ export default class AppLoader {
       }
     }
   };
-  importModules = async (manifests: ExtensionManifest[]) => {
-    if (!this.manifests.length) return;
+  importModules = async extensionData => {
+    if (!extensionData.length) return;
     const modules = new Map();
-    for (const manifest of manifests) {
-      if (this.extensionModules.has(manifest.name) || modules.has(manifest.name)) {
+    for (const extension of extensionData) {
+      if (this.extensionModules.has(extension.name) || modules.has(extension.name)) {
         continue;
       }
-      if (!manifest.enabled) {
+      if (!extension.enabled) {
         continue;
       }
-      if (manifest.sources.length === 0) {
-        this.logger.warn(`No source path was found for integration ${manifest.name}. Skipping!`);
+      if (extension.sources.length === 0) {
+        this.logger.warn(`No source path was found for integration ${extension.name}. Skipping!`);
         continue;
       }
 
-      if (manifest.sources.length > 1) {
+      if (extension.sources.length > 1) {
         this.logger.info(
-          `Multiple sources found for integration ${manifest.name}. Using ${manifest.sources[0]}`,
+          `Multiple sources found for integration ${extensionData.name}. Using ${extensionData.sources[0]}`,
         );
       }
-      const source = getSDK().services.common.ipfs.buildOriginLink(manifest.sources[0]);
-      const mainFile = manifest?.manifestData?.mainFile || 'index.js';
+      const source = getSDK().services.common.ipfs.buildOriginLink(extensionData.sources[0]);
+      const mainFile = extensionData?.mainFile || 'index.js';
       // does not play well with local overwrites
       //const sourceURL = new URL(mainFile, source);
       const module = await System.import<SystemModuleType>(`${source}/${mainFile}`);
-      modules.set(manifest.name, module);
+      modules.set(extensionData.name, module);
     }
     return modules;
   };
@@ -303,17 +301,17 @@ export default class AppLoader {
             data: config.extensionPoints.map(ext => ({ ...ext, appName: name })),
           });
         }
-        const manifest = this.manifests.find(man => man.name === name);
-        if (manifest && manifest.integrationType === AkashaAppApplicationType.Widget) {
+        const extensionData = this.extensionData.find(man => man.name === name);
+        if (extensionData && extensionData.applicationType === AkashaAppApplicationType.Widget) {
           this.uiEvents.next({
             event: WidgetEvents.RegisterWidget,
             data: { ...config, appName: name },
           });
         }
-        if (manifest && manifest.integrationType === AkashaAppApplicationType.App) {
+        if (extensionData && extensionData.applicationType === AkashaAppApplicationType.App) {
           this.uiEvents.next({
             event: AppEvents.RegisterApplication,
-            data: { config, manifest },
+            data: { config, appData: extensionData },
           });
         }
       }
@@ -349,8 +347,16 @@ export default class AppLoader {
       if (singleSpa.getAppNames().includes(name)) continue;
       if (!conf.loadingFn || typeof conf.loadingFn !== 'function') continue;
 
-      const manifest = this.manifests.find(m => m.name === name);
-      if (manifest.integrationType !== AkashaAppApplicationType.App) continue;
+      const extensionData = this.extensionData.find(m => m.name === name);
+      if (extensionData.applicationType !== AkashaAppApplicationType.App) continue;
+
+      const activeWhen: singleSpa.Activity = checkActivityFn({
+        config: conf,
+        encodedAppName: decodeURIComponent(name),
+        enabled: true,
+        location,
+        extensionType: extensionData.applicationType,
+      });
 
       const customProps: IRootComponentProps & { domElementGetter: () => HTMLElement } = {
         domElementGetter: () => getDomElement(conf, name, this.logger),
@@ -370,13 +376,7 @@ export default class AppLoader {
       singleSpa.registerApplication({
         name,
         app: conf.loadingFn,
-        activeWhen: (location: Location) =>
-          checkActivityFn({
-            config: conf,
-            encodedAppName: decodeURIComponent(name),
-            manifest,
-            location,
-          }),
+        activeWhen,
         customProps: {
           ...customProps,
         },

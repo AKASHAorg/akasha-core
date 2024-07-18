@@ -6,7 +6,6 @@ export const register = (opts: IntegrationRegistrationOptions): WidgetInterface 
   return {
     mountsIn: opts.layoutSlots?.topbarSlotId,
     loadingFn: () => import('./components'),
-    activeWhen: () => true,
     extensionSlots,
   };
 };

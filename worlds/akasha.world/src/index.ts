@@ -2,8 +2,7 @@ import '@akashaorg/design-system-core/src/twind/main.css';
 import '@akashaorg/design-system-core/src/twind/globals.css';
 
 import { WorldConfig } from '@akashaorg/typings/lib/ui';
-import { missingRequiredFields } from './registry-overrides';
-import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { AkashaApp, AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 console.time('AppLoader:firstMount');
 
@@ -15,42 +14,36 @@ declare const __LOAD_LOCAL_SOURCES__: boolean;
   const { default: getSDK } = await System.import('@akashaorg/awf-sdk');
 
   const origin = window.location.origin;
-  let registryOverrides = [
+  let registryOverrides: (Partial<AkashaApp> & { sources: string[] })[] = [
     {
       name: '@akashaorg/app-routing',
-      integrationType: AkashaAppApplicationType.App,
+      applicationType: AkashaAppApplicationType.App,
       sources: [`${origin}/apps/routing`],
-      ...missingRequiredFields,
     },
     {
       name: '@akashaorg/ui-widget-layout',
-      integrationType: AkashaAppApplicationType.Widget,
+      applicationType: AkashaAppApplicationType.Widget,
       sources: [`${origin}/widgets/layout`],
-      ...missingRequiredFields,
     },
     {
       name: '@akashaorg/ui-widget-sidebar',
-      integrationType: AkashaAppApplicationType.Widget,
+      applicationType: AkashaAppApplicationType.Widget,
       sources: [`${origin}/widgets/sidebar`],
-      ...missingRequiredFields,
     },
     {
       name: '@akashaorg/ui-widget-topbar',
-      integrationType: AkashaAppApplicationType.Widget,
+      applicationType: AkashaAppApplicationType.Widget,
       sources: [`${origin}/widgets/top-bar`],
-      ...missingRequiredFields,
     },
     {
       name: '@akashaorg/ui-widget-mini-profile',
-      integrationType: AkashaAppApplicationType.Widget,
+      applicationType: AkashaAppApplicationType.Widget,
       sources: [`${origin}/widgets/mini-profile`],
-      ...missingRequiredFields,
     },
     {
       name: '@akashaorg/ui-widget-my-apps',
-      integrationType: AkashaAppApplicationType.Widget,
+      applicationType: AkashaAppApplicationType.Widget,
       sources: [`${origin}/widgets/my-apps`],
-      ...missingRequiredFields,
     },
   ];
 

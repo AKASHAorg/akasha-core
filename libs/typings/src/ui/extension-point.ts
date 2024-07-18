@@ -1,5 +1,5 @@
 import { ParcelConfigObject } from 'single-spa';
-import { ActivityFn } from './app-loader';
+import { ExtensionActivity } from './app-loader';
 
 /**
  * Enum defining events related to loading and unloading of an extension point
@@ -13,7 +13,7 @@ export const enum ExtensionPointEvents {
  **/
 export type ExtensionPointInterface = {
   mountsIn: string;
-  activeWhen?: ActivityFn;
+  activeWhen?: ExtensionActivity;
   loadingFn: () => Promise<ParcelConfigObject>;
 };
 

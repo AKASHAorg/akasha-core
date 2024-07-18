@@ -1,5 +1,5 @@
 import { ParcelConfigObject } from 'single-spa';
-import type { ActivityFn, LayoutSlots } from './app-loader';
+import type { ExtensionActivity, LayoutSlots } from './app-loader';
 
 /**
  * Enum defining events related to loading and unloading of a widget
@@ -13,7 +13,7 @@ export const enum WidgetEvents {
  **/
 type BaseWidgetInterface = {
   mountsIn: string;
-  activeWhen?: ActivityFn;
+  activeWhen?: ExtensionActivity;
   loadingFn: () => Promise<ParcelConfigObject>;
 };
 

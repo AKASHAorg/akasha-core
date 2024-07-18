@@ -1,10 +1,11 @@
 import singleSpa from 'single-spa';
-import { ActivityFn, LayoutSlots } from './app-loader';
+import { ExtensionActivity } from './app-loader';
 import { IMenuItem } from './sidebar-menu-items';
 import { IRootComponentProps } from './root-component';
 import { ContentBlockConfig } from './editor-blocks';
 import { ExtensionPointInterface } from './extension-point';
 import { Profile } from './profile';
+import { AkashaApp } from '../sdk/graphql-types-new';
 
 /**
  * Enum defining extension status for an extension developer
@@ -21,34 +22,6 @@ export enum ExtensionStatus {
 export const enum AppEvents {
   RegisterApplication = 'register-application',
 }
-
-/**
- * Type defining metadata info about an extension
- **/
-export type ExtensionManifest = {
-  id?: string | null;
-  name: string;
-  version: string;
-  integrationType: string;
-  sources?: Array<string> | null;
-  integrationID: string;
-  author: string;
-  enabled: boolean;
-  createdAt?: number | null;
-  links?: {
-    publicRepository?: string | null;
-    documentation?: string | null;
-    detailedDescription?: string | null;
-  } | null;
-  manifestData: {
-    mainFile: string;
-    license?: string | null;
-    keywords?: Array<string | null> | null;
-    description?: string | null;
-    displayName?: string | null;
-  };
-};
-
 /**
  * Type defining info about developer of an extension
  */
@@ -61,7 +34,7 @@ export type Developer = {
  **/
 export type AppRegisterEvent = {
   event: AppEvents.RegisterApplication;
-  data: { config: IAppConfig; manifest: ExtensionManifest };
+  data: { config: IAppConfig; appData: AkashaApp };
 };
 
 /**
@@ -85,7 +58,7 @@ export interface IAppConfig {
    *
    * This functionality is most useful for widgets.
    */
-  activeWhen?: ActivityFn;
+  activeWhen?: ExtensionActivity;
   /**
    * The id of the html element that this app will mount in
    * The applications and widgets have a predefined slots provided by the
@@ -134,4 +107,9 @@ export interface IAppConfig {
    * This property is used by the sidebar widget to construct the menu
    */
   menuItems: IMenuItem | IMenuItem[];
+  /**
+   * Method to register newly deployed composeDB Models (streamId's and runtime definitions)
+   * use methods provided by the sdk
+   */
+  registerResources?: () => void;
 }
