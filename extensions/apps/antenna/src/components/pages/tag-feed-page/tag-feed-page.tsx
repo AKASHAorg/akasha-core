@@ -8,8 +8,12 @@ import {
   useUpdateInterestsMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { AkashaIndexedStreamStreamType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import {
+  IModalNavigationOptions,
+  NotificationEvents,
+  NotificationTypes,
+} from '@akashaorg/typings/lib/ui';
 import { BeamContentResolver, TagFeed } from '@akashaorg/ui-lib-feed';
-import { IModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import getSDK from '@akashaorg/awf-sdk';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
@@ -19,6 +23,7 @@ import TagFeedHeaderLoader from './tag-feed-header-loader';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
+import { InformationCircleIcon } from '@heroicons/react/24/outline';
 
 type TagFeedPageProps = {
   tagName: string;
@@ -30,7 +35,7 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
-  const { navigateToModal, worldConfig } = useRootComponentProps();
+  const { uiEvents, worldConfig, navigateToModal } = useRootComponentProps();
   const isLoggedIn = !!authenticatedDID;
   const _navigateToModal = React.useRef(navigateToModal);
   const showLoginModal = React.useCallback(
@@ -147,8 +152,23 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
       showLoginModal();
       return;
     }
-    const newInterests = [...tagSubscriptions, tagName];
-    executeInterestsMutation(newInterests);
+    if (tagSubscriptions.length < 10) {
+      const newInterests = [...tagSubscriptions, tagName];
+      executeInterestsMutation(newInterests);
+    } else {
+      // show snackbar
+      uiEvents.next({
+        event: NotificationEvents.ShowNotification,
+        data: {
+          type: NotificationTypes.Error,
+          message: t('Interests limit reached'),
+          description: t('You reached 10 interests limit. Remove some interests to add more.'),
+          ctaLabel: t('Go to my interests'),
+          accentColor: true,
+          snackbarIcon: <InformationCircleIcon />,
+        },
+      });
+    }
   };
 
   const handleTagUnsubscribe = (tagName: string) => {
