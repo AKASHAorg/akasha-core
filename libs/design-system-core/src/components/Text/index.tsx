@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import React, { AriaAttributes, PropsWithChildren } from 'react';
 import { apply, tw } from '@twind/core';
 
 import { getTag } from './getTag';
@@ -26,21 +26,22 @@ export type TextAlignment = 'start' | 'center' | 'end' | 'justify';
 
 export type FontWeight = 'normal' | 'semibold' | 'bold' | 'light' | 'medium';
 
-export type TextProps = PropsWithChildren<{
-  id?: string;
-  customStyle?: string; // pass only the string classes without 'apply' or 'tw'
-  variant?: Variant;
-  color?: Color;
-  as?: Heading | 'p' | 'span' | 'label';
-  align?: TextAlignment;
-  truncate?: boolean;
-  breakWord?: boolean;
-  lineClamp?: number;
-  weight?: FontWeight;
-  ref?: React.Ref<HTMLElement>;
-  selectable?: boolean;
-  ariaLabelledBy?: string;
-}>;
+export type TextProps = PropsWithChildren<
+  {
+    id?: string;
+    customStyle?: string; // pass only the string classes without 'apply' or 'tw'
+    variant?: Variant;
+    color?: Color;
+    as?: Heading | 'p' | 'span' | 'label';
+    align?: TextAlignment;
+    truncate?: boolean;
+    breakWord?: boolean;
+    lineClamp?: number;
+    weight?: FontWeight;
+    ref?: React.Ref<HTMLElement>;
+    selectable?: boolean;
+  } & Partial<AriaAttributes>
+>;
 
 const VARIANT_TO_CSS_CLASSES_MAPPER: Record<Variant, string> = {
   h1: 'text-[4rem] leading-[5rem] font-bold',
@@ -76,7 +77,6 @@ const VARIANT_TO_CSS_CLASSES_MAPPER: Record<Variant, string> = {
  * @param lineClamp - number (optional) truncate a block of text after a (number) of lines
  * @param weight - (optional) for customizing the font weight
  * @param ref - (optional) pass the ref here
- * @param ariaLabelledBy - identifies the element (or elements) that labels the element it is applied to
  * @param selectable - boolean (optional) whether the text is selectable
   * @example
  * ```tsx
@@ -101,9 +101,8 @@ const Text: React.FC<TextProps> = ({
   lineClamp,
   weight,
   children,
-  ref,
   selectable = true,
-  ariaLabelledBy,
+  ...rest
 }) => {
   const tag = as ?? getTag(variant);
   const alignmentStyle = align ? getAlignmentClasses(align) : '';
@@ -121,11 +120,10 @@ const Text: React.FC<TextProps> = ({
 
     {
       id,
-      'aria-labelledby': ariaLabelledBy,
       className: tw(
         apply`${noSelectClass} ${baseStyles} ${colorStyle} ${alignmentStyle} ${truncateStyle} ${wordBreakStyle} ${weightStyle} ${lineClampStyle} ${customStyle}`,
       ),
-      ref,
+      ...rest,
     },
     children,
   );

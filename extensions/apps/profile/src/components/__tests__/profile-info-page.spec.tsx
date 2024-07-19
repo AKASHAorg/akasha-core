@@ -123,7 +123,8 @@ describe('< ProfileInfoPage /> component', () => {
 
     it('should display NSFW card when viewing another users NSFW profile', async () => {
       const { mocks } = getProfileInfoMocks({ profileDID: PROFILE_DID, nsfw: true });
-      renderWithAllProviders(baseComponent(mocks), {});
+      const followMock = getFollowMock();
+      renderWithAllProviders(baseComponent([...mocks, ...followMock]), {});
       expect(await screen.findByText(/nsfw profile/i)).toBeInTheDocument();
       expect(screen.getByRole('button', { name: 'View Profile' })).toBeInTheDocument();
     });
@@ -140,65 +141,61 @@ describe('< ProfileInfoPage /> component', () => {
         },
       });
       const { mocks } = getProfileInfoMocks({ profileDID: AUTHENTICATED_DID, nsfw: true });
-      renderWithAllProviders(baseComponent(mocks, AUTHENTICATED_DID), {});
+      const followMock = getFollowMock();
+      renderWithAllProviders(baseComponent([...mocks, ...followMock], AUTHENTICATED_DID), {});
       expect(await screen.findByText(/nsfw/i)).toBeInTheDocument();
     });
   });
 
-  it('should follow other profile', async () => {
-    jest.spyOn(useAkashaStore, 'useAkashaStore').mockReturnValue({
-      userStore: getUserStore(),
-      data: {
-        authenticatedDID: AUTHENTICATED_DID,
-        authenticatedProfile: AUTHENTICATED_PROFILE,
-        authenticatedProfileError: null,
-        authenticationError: null,
-        isAuthenticating: false,
-      },
+  describe('should allow user to interact with profile info', () => {
+    beforeEach(() => {
+      jest.spyOn(useAkashaStore, 'useAkashaStore').mockReturnValue({
+        userStore: getUserStore(),
+        data: {
+          authenticatedDID: AUTHENTICATED_DID,
+          authenticatedProfile: AUTHENTICATED_PROFILE,
+          authenticatedProfileError: null,
+          authenticationError: null,
+          isAuthenticating: false,
+        },
+      });
     });
-    const { mocks, profileData } = getProfileInfoMocks({ profileDID: PROFILE_DID });
-    const followMock = getFollowMock();
-    const followProfileMocks = getFollowProfileMocks({
-      profileDID: PROFILE_DID,
-      isFollowing: true,
-    });
-    const user = userEvent.setup();
-    renderWithAllProviders(baseComponent([...mocks, ...followMock, ...followProfileMocks]), {});
-    expect(await screen.findByText(profileData.akashaProfile.name)).toBeInTheDocument();
-    expect(screen.getByText(truncateDid(profileData.akashaProfile.did.id))).toBeInTheDocument();
-    expect(screen.getByTestId('avatar-source')).toHaveAttribute(
-      'srcset',
-      profileData.akashaProfile.avatar.default.src,
-    );
-    expect(screen.getByTestId('cover-image')).toHaveStyle(
-      `background-image: url(${profileData.akashaProfile.background.default.src})`,
-    );
-    expect(screen.getByRole('button', { name: 'follow' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'settings' })).toBeInTheDocument();
-    expect(screen.queryByRole('img', { name: 'following' })).not.toBeInTheDocument();
-    user.click(screen.getByRole('button', { name: 'follow' }));
-    expect(await screen.findByRole('img', { name: 'following' })).toBeInTheDocument();
-  });
 
-  it('should display NSFW profiles to authenticated users upon request', async () => {
-    const user = userEvent.setup();
-    jest.spyOn(useAkashaStore, 'useAkashaStore').mockReturnValue({
-      userStore: getUserStore(),
-      data: {
-        authenticatedDID: AUTHENTICATED_DID,
-        authenticatedProfile: AUTHENTICATED_PROFILE,
-        authenticatedProfileError: null,
-        authenticationError: null,
-        isAuthenticating: false,
-      },
+    it('should follow other profile', async () => {
+      const { mocks, profileData } = getProfileInfoMocks({ profileDID: PROFILE_DID });
+      const followMock = getFollowMock();
+      const followProfileMocks = getFollowProfileMocks({
+        profileDID: PROFILE_DID,
+        isFollowing: true,
+      });
+      const user = userEvent.setup();
+      renderWithAllProviders(baseComponent([...mocks, ...followMock, ...followProfileMocks]), {});
+      expect(await screen.findByText(profileData.akashaProfile.name)).toBeInTheDocument();
+      expect(screen.getByText(truncateDid(profileData.akashaProfile.did.id))).toBeInTheDocument();
+      expect(screen.getByTestId('avatar-source')).toHaveAttribute(
+        'srcset',
+        profileData.akashaProfile.avatar.default.src,
+      );
+      expect(screen.getByTestId('cover-image')).toHaveStyle(
+        `background-image: url(${profileData.akashaProfile.background.default.src})`,
+      );
+      expect(screen.getByRole('button', { name: 'follow' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'settings' })).toBeInTheDocument();
+      expect(screen.queryByRole('img', { name: 'following' })).not.toBeInTheDocument();
+      user.click(screen.getByRole('button', { name: 'follow' }));
+      expect(await screen.findByRole('img', { name: 'following' })).toBeInTheDocument();
     });
-    const { mocks } = getProfileInfoMocks({ profileDID: PROFILE_DID, nsfw: true });
-    const followMock = getFollowMock();
-    renderWithAllProviders(baseComponent([...mocks, ...followMock]), {});
-    expect(await screen.findByText(/nsfw profile/i)).toBeInTheDocument();
-    await waitFor(async () => {
-      await user.click(screen.getByRole('button', { name: 'View Profile' }));
+
+    it('should display NSFW profiles to authenticated users upon view profile request', async () => {
+      const user = userEvent.setup();
+      const { mocks } = getProfileInfoMocks({ profileDID: PROFILE_DID, nsfw: true });
+      const followMock = getFollowMock();
+      renderWithAllProviders(baseComponent([...mocks, ...followMock]), {});
+      expect(await screen.findByText(/nsfw profile/i)).toBeInTheDocument();
+      await waitFor(async () => {
+        await user.click(screen.getByRole('button', { name: 'View Profile' }));
+      });
+      expect(screen.queryByText(/nsfw profile/i)).not.toBeInTheDocument();
     });
-    expect(screen.queryByText(/nsfw profile/i)).not.toBeInTheDocument();
   });
 });

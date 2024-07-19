@@ -66,7 +66,7 @@ const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following })
                 <Text id={stat.label} {...labelProp}>
                   {stat.label}
                 </Text>
-                <Text ariaLabelledBy={stat.label} {...totalProp}>
+                <Text aria-labelledby={stat.label} {...totalProp}>
                   {stat.total}
                 </Text>
               </Stack>
