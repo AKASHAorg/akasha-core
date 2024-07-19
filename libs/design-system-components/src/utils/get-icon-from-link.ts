@@ -1,6 +1,6 @@
 import { IconType } from '@akashaorg/typings/lib/ui';
 
-export const getIconFromLink = (href: string): IconType | null => {
+export const getIconFromLink = (href: string): IconType => {
   const host = new URL(href).host;
   if (checkHostMatchesDomain(host, 'github.com')) return 'Github';
   if (checkHostMatchesDomain(host, 'twitter.com') || checkHostMatchesDomain(host, 'x.com'))
