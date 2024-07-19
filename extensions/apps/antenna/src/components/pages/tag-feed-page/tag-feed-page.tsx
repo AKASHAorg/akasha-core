@@ -23,7 +23,7 @@ import TagFeedHeaderLoader from './tag-feed-header-loader';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
-import { InformationCircleIcon } from '@heroicons/react/24/outline';
+import { CheckCircleIcon, InformationCircleIcon } from '@heroicons/react/24/solid';
 
 type TagFeedPageProps = {
   tagName: string;
@@ -110,7 +110,45 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
     context: { source: sdk.current.services.gql.contextSources.composeDB },
   });
 
-  const executeInterestsMutation = (interests: string[]) => {
+  const showSuccessSnackbar = (subscribing: boolean) => {
+    uiEvents.next({
+      event: NotificationEvents.ShowNotification,
+      data: {
+        type: NotificationTypes.Success,
+        message: subscribing ? t('Subscribed to topic') : t('Unsubscribed from topic'),
+        description: subscribing
+          ? `"${tagName}" ${t('has been added to your interests')}`
+          : `"${tagName}" ${t('has been removed from your interests')}`,
+        snackbarIcon: <CheckCircleIcon />,
+      },
+    });
+  };
+
+  const handleTagClick = (tagName: string, subscribing = true) => {
+    // if not logged in, show modal
+    if (!isLoggedIn) {
+      showLoginModal();
+      return;
+    }
+    // if subscribing, and limit is already reached, return snackbar
+    if (subscribing && tagSubscriptions.length === 10) {
+      uiEvents.next({
+        event: NotificationEvents.ShowNotification,
+        data: {
+          type: NotificationTypes.Error,
+          message: t('Interests limit reached'),
+          description: t('You reached 10 interests limit. Remove some interests to add more.'),
+          ctaLabel: t('Go to my interests'),
+          accentColor: true,
+          snackbarIcon: <InformationCircleIcon />,
+        },
+      });
+      return;
+    }
+    const interests = subscribing
+      ? [...tagSubscriptions, tagName]
+      : tagSubscriptions.filter(tag => tag !== tagName);
+
     if (tagSubscriptionsId) {
       updateInterestsMutation({
         variables: {
@@ -124,6 +162,7 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
             },
           },
         },
+        onCompleted: () => showSuccessSnackbar(subscribing),
         onError: () => {
           refetchTagSubscriptions();
         },
@@ -140,44 +179,12 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
             },
           },
         },
+        onCompleted: () => showSuccessSnackbar(subscribing),
         onError: () => {
           refetchTagSubscriptions();
         },
       });
     }
-  };
-
-  const handleTagSubscribe = (tagName: string) => {
-    if (!isLoggedIn) {
-      showLoginModal();
-      return;
-    }
-    if (tagSubscriptions.length < 10) {
-      const newInterests = [...tagSubscriptions, tagName];
-      executeInterestsMutation(newInterests);
-    } else {
-      // show snackbar
-      uiEvents.next({
-        event: NotificationEvents.ShowNotification,
-        data: {
-          type: NotificationTypes.Error,
-          message: t('Interests limit reached'),
-          description: t('You reached 10 interests limit. Remove some interests to add more.'),
-          ctaLabel: t('Go to my interests'),
-          accentColor: true,
-          snackbarIcon: <InformationCircleIcon />,
-        },
-      });
-    }
-  };
-
-  const handleTagUnsubscribe = (tagName: string) => {
-    if (!isLoggedIn) {
-      showLoginModal();
-      return;
-    }
-    const newInterests = tagSubscriptions.filter(topic => topic !== tagName);
-    executeInterestsMutation(newInterests);
   };
 
   const listOfTags = React.useMemo(() => [tagName], [tagName]);
@@ -206,8 +213,8 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
               subscribedTags={tagSubscriptions}
               isLoading={loading || updateLoading}
               mentionsLabel={beamCount + (beamCount > 1 ? ' Beams' : ' Beam')}
-              handleSubscribeTag={() => handleTagSubscribe(tagName)}
-              handleUnsubscribeTag={() => handleTagUnsubscribe(tagName)}
+              handleSubscribeTag={() => handleTagClick(tagName)}
+              handleUnsubscribeTag={() => handleTagClick(tagName, false)}
             />
           </Stack>
         )}
