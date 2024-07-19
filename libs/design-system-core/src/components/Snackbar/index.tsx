@@ -13,6 +13,7 @@ export type SnackbarProps = {
   title: React.ReactNode;
   type?: NotificationTypes;
   icon?: React.ReactElement;
+  solidIcon?: boolean;
   description?: string;
   ctaLabel?: string;
   customStyle?: string;
@@ -47,6 +48,7 @@ const Snackbar: React.FC<SnackbarProps> = ({
   title,
   type = NotificationTypes.Info,
   icon = <InformationCircleIcon />,
+  solidIcon = true,
   description,
   ctaLabel,
   accentColor = false,
@@ -69,7 +71,12 @@ const Snackbar: React.FC<SnackbarProps> = ({
       customStyle={`${instanceStyle} ${customStyle}`}
     >
       <Stack spacing="gap-x-3" fullWidth direction="row">
-        <Icon icon={icon} color={{ light: colorLight, dark: colorDark }} size="lg" />
+        <Icon
+          icon={icon}
+          solid={solidIcon}
+          color={{ light: colorLight, dark: colorDark }}
+          size="lg"
+        />
         <Stack direction="column">
           <Text variant="button-md" color={textColor}>
             {title}
