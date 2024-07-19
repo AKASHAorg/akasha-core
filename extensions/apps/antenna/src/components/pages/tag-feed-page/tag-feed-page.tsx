@@ -138,8 +138,6 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
           type: NotificationTypes.Error,
           message: t('Interests limit reached'),
           description: t('You reached 10 interests limit. Remove some interests to add more.'),
-          ctaLabel: t('Go to my interests'),
-          accentColor: true,
           snackbarIcon: <InformationCircleIcon />,
         },
       });

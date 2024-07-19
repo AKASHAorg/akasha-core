@@ -27,6 +27,7 @@ const SnackBarNotification: React.FC<IRootExtensionProps> = () => {
   const [description, setDescription] = useState('');
   const [ctaLabel, setCTALabel] = useState('');
   const [appTitle, setAppTitle] = useState(null);
+  const [solidIcon, setSolidIcon] = useState(true);
   const [dismissable, setDismissable] = useState(true);
   const [accentColor, setAccentColor] = useState(true);
   const [messageType, setMessageType] = useState(NotificationTypes.Success);
@@ -112,14 +113,17 @@ const SnackBarNotification: React.FC<IRootExtensionProps> = () => {
         if (eventInfo.data && hasOwn(eventInfo.data, 'ctaLabel')) {
           setCTALabel(eventInfo.data.ctaLabel);
         }
+        if (eventInfo.data && hasOwn(eventInfo.data, 'solidIcon')) {
+          setSolidIcon(eventInfo.data.solidIcon);
+        }
+        if (eventInfo.data && hasOwn(eventInfo.data, 'dismissable')) {
+          setDismissable(eventInfo.data.dismissable);
+        }
         if (eventInfo.data && hasOwn(eventInfo.data, 'accentColor')) {
           setAccentColor(eventInfo.data.accentColor);
         }
         if (eventInfo.data && hasOwn(eventInfo.data, 'snackbarIcon')) {
           setSnackbarIcon(eventInfo.data.snackbarIcon);
-        }
-        if (eventInfo.data && hasOwn(eventInfo.data, 'dismissable')) {
-          setDismissable(eventInfo.data.dismissable);
         }
       },
     });
@@ -154,6 +158,7 @@ const SnackBarNotification: React.FC<IRootExtensionProps> = () => {
       {message && (
         <Snackbar
           icon={snackbarIcon}
+          solidIcon={solidIcon}
           title={
             appTitle ? (
               <Stack
