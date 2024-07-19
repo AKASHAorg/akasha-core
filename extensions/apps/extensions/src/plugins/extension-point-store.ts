@@ -1,4 +1,5 @@
 import {
+  ExtensionActivityFn,
   ExtensionPointEvents,
   ExtensionPointInterface,
   ExtensionPointRegisterEvent,
@@ -6,8 +7,7 @@ import {
 } from '@akashaorg/typings/lib/ui';
 import { BaseStore } from './base-store';
 import { hasOwn } from '@akashaorg/ui-awf-hooks';
-import { pathToActiveWhen } from 'single-spa';
-import { stringToRegExp } from './utils';
+import { checkActivity, stringToRegExp } from './utils';
 
 export class ExtensionPointStore extends BaseStore {
   static instance: ExtensionPointStore;
@@ -37,7 +37,12 @@ export class ExtensionPointStore extends BaseStore {
         matchingExtensions.push(ext);
       }
       if (stringToRegExp(ext.mountsIn).test(slotName) && typeof ext.activeWhen === 'function') {
-        const isActive = ext.activeWhen(location, pathToActiveWhen);
+        let isActive = checkActivity(ext.activeWhen, location);
+
+        if (Array.isArray(ext.activeWhen) && ext.activeWhen.length > 0) {
+          isActive = ext.activeWhen.some(activity => checkActivity(activity, location));
+        }
+
         if (isActive) {
           matchingExtensions.push(ext);
         }

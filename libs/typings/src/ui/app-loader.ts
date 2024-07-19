@@ -3,7 +3,7 @@ import { UIEventData } from './ui-events';
 import { IPlugin } from './plugins';
 import { AkashaApp } from '../sdk/graphql-types-new';
 
-type ActivityFn = (
+export type ExtensionActivityFn = (
   location: Location,
   pathToActiveWhen: (path: string, exact?: boolean) => boolean,
   layoutConfig?: LayoutSlots,
@@ -13,7 +13,7 @@ type ActivityFn = (
  * Type defining single-spa activity
  * @see {@link https://single-spa.js.org/docs/configuration/#configactivewhen}
  */
-export type ExtensionActivity = string | ActivityFn | (string | ActivityFn)[];
+export type ExtensionActivity = string | ExtensionActivityFn | (string | ExtensionActivityFn)[];
 
 /**
  * Type defining layout slots where apps and widgets among others are loaded
