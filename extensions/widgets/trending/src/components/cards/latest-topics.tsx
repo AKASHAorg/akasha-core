@@ -1,17 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import isEqual from 'lodash/isEqual';
+import difference from 'lodash/difference';
+import pullAll from 'lodash/pullAll';
 import getSDK from '@akashaorg/awf-sdk';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import {
   useCreateInterestsMutation,
   useUpdateInterestsMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { CheckCircleIcon, InformationCircleIcon } from '@heroicons/react/24/solid';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TrendingWidgetLoadingCard from '@akashaorg/design-system-components/lib/components/TrendingWidgetLoadingCard';
 import { TopicRow } from './topic-row';
-import isEqual from 'lodash/isEqual';
-import difference from 'lodash/difference';
-import pullAll from 'lodash/pullAll';
 
 export type LatestTopicsProps = {
   // data
@@ -33,6 +37,15 @@ export type LatestTopicsProps = {
   showLoginModal: () => void;
   refetchTagSubscriptions: () => void;
 };
+
+/**
+ * This utility method compares two arrays of tags and returns the difference,
+ * @param arr1 - first array to be compared
+ * @param arr2 - second array to be compared
+ * @returns an array of strings
+ */
+const getTagsDiff = (arr1: string[], arr2: string[]) =>
+  arr1.length > arr2.length ? arr1.slice(arr2.length) : arr2.slice(arr1.length);
 
 export const LatestTopics: React.FC<LatestTopicsProps> = props => {
   const {
@@ -59,6 +72,8 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
   const subscriptionId = useRef(null);
   const localTagsInitialized = useRef(null);
   const localSubscribedTagsRef = useRef([]);
+  const { uiEvents } = useRootComponentProps();
+  const { t } = useTranslation('ui-widget-trending');
 
   // reset state when user logs out
   useEffect(() => {
@@ -133,6 +148,12 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
               topic => topic.value,
             );
 
+            const tagsDiff = getTagsDiff(returnedData, receivedTags);
+
+            const subscribing = returnedData.length > receivedTags.length;
+
+            showSuccessSnackbar(tagsDiff, subscribing);
+
             const arrDifference = difference(returnedData, receivedTags).concat(
               difference(receivedTags, returnedData),
             );
@@ -167,6 +188,12 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
               topic => topic.value,
             );
 
+            const tagsDiff = getTagsDiff(returnedData, localSubscribedTags);
+
+            const subscribing = returnedData.length > localSubscribedTags.length;
+
+            showSuccessSnackbar(tagsDiff, subscribing);
+
             const arrDifference = difference(returnedData, localSubscribedTags).concat(
               difference(localSubscribedTags, returnedData),
             );
@@ -187,34 +214,55 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
     }
   }, [localSubscribedTags, updateLoading, loading]);
 
-  const handleTopicSubscribe = (tag: string) => {
-    if (!isLoggedIn) {
-      showLoginModal();
-      return;
-    }
-    setTagsQueue(prev => [...prev, tag]);
+  const showSuccessSnackbar = (tags: string[], subscribing: boolean) => {
+    if (!tags.length) return;
 
-    const newInterests = [...localSubscribedTagsRef.current, tag];
+    const tagsString = tags.join(', ');
+    const pluralize = tags.length > 1;
+    const modifier1 = pluralize ? t('topics') : t('topic');
+    const modifier2 = pluralize ? t('have') : t('has');
 
-    localSubscribedTagsRef.current = newInterests;
-
-    if (timer.current !== null) {
-      window.clearTimeout(timer.current);
-    }
-    timer.current = window.setTimeout(
-      () => setLocalSubscribedTags(localSubscribedTagsRef.current),
-      700,
-    );
+    uiEvents.next({
+      event: NotificationEvents.ShowNotification,
+      data: {
+        type: NotificationTypes.Success,
+        message: subscribing
+          ? `${t('Subscribed to')} ${modifier1}`
+          : `${t('Unsubscribed from')} ${modifier1}`,
+        description: subscribing
+          ? `"${tagsString}" ${modifier2} ${t('been added to your interests')}`
+          : `"${tagsString}" ${modifier2} ${t('been removed from your interests')}`,
+        snackbarIcon: <CheckCircleIcon />,
+      },
+    });
   };
 
-  const handleTopicUnsubscribe = (tag: string) => {
+  const handleTopicSubscription = (tag: string, subscribing = true) => {
+    // if not logged in, show modal
     if (!isLoggedIn) {
       showLoginModal();
       return;
     }
 
+    // if subscribing, and limit is already reached, return snackbar
+    if (subscribing && localSubscribedTagsRef.current.length === 10) {
+      uiEvents.next({
+        event: NotificationEvents.ShowNotification,
+        data: {
+          type: NotificationTypes.Error,
+          message: t('Interests limit reached'),
+          description: t('You reached 10 interests limit. Remove some interests to add more.'),
+          snackbarIcon: <InformationCircleIcon />,
+        },
+      });
+      return;
+    }
+
     setTagsQueue(prev => [...prev, tag]);
-    const newInterests = localSubscribedTagsRef.current.filter(topic => topic !== tag);
+
+    const newInterests = subscribing
+      ? [...localSubscribedTagsRef.current, tag]
+      : localSubscribedTagsRef.current.filter(topic => topic !== tag);
 
     localSubscribedTagsRef.current = newInterests;
 
@@ -262,8 +310,7 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
                     unsubscribeLabel={unsubscribeLabel}
                     onClickTopic={onClickTopic}
                     isLoading={tagsQueue.includes(tag)}
-                    handleTopicUnsubscribe={handleTopicUnsubscribe}
-                    handleTopicSubscribe={handleTopicSubscribe}
+                    handleTopicSubscription={handleTopicSubscription}
                   />
                 ))}
           </Stack>
