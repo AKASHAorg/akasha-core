@@ -73,6 +73,7 @@ export type NotificationEvent = {
     description?: string;
     ctaLabel?: string;
     dismissable?: boolean;
+    solidIcon?: boolean;
     accentColor?: boolean;
     handleCTAClick?: () => void;
     snackbarIcon?: React.ReactElement;
