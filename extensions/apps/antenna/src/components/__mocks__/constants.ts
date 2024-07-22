@@ -38,7 +38,7 @@ export const REFLECTION_SECTION = {
   content: 'Reflection',
 };
 
-export const REPLY_TO = 'kjzl6kcym7w8yavmnzr502vunhfmsy5mc9hbbiprgpr2sfob4ajzdzcezr5pumq';
+export const REPLY_TO = REFLECTION_ID;
 
 export const NEW_REFLECTION = 'New reflection';
 

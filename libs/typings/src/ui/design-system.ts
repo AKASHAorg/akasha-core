@@ -28,6 +28,7 @@ export type Colors =
   | 'warningDark'
   | 'errorLight'
   | 'errorDark'
+  | 'errorDark2'
   | 'errorFade'
   | 'blue'
   | 'red'
@@ -54,6 +55,7 @@ export type Colors =
   | `warningDark/${number}`
   | `errorLight/${number}`
   | `errorDark/${number}`
+  | `errorDark2/${number}`
   | `errorFade/${number}`
   | `blue-${number}`
   | `red-${number}`

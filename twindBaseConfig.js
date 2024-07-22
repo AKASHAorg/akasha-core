@@ -39,6 +39,7 @@ export default {
         warningDark: withOpacity('--feedback-warning-dark'),
         errorLight: withOpacity('--feedback-error'),
         errorDark: withOpacity('--feedback-error-dark'),
+        errorDark2: withOpacity('--feedback-error-dark2'),
         errorFade: withOpacity('--feedback-error-fade'),
         elevation: withOpacity('--elevation'),
       },

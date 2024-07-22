@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import React, { AriaAttributes, PropsWithChildren } from 'react';
 import { apply, tw } from '@twind/core';
 
 import { getTag } from './getTag';
@@ -26,20 +26,23 @@ export type TextAlignment = 'start' | 'center' | 'end' | 'justify';
 
 export type FontWeight = 'normal' | 'semibold' | 'bold' | 'light' | 'medium';
 
-export type TextProps = PropsWithChildren<{
-  id?: string;
-  customStyle?: string; // pass only the string classes without 'apply' or 'tw'
-  variant?: Variant;
-  color?: Color;
-  as?: Heading | 'p' | 'span' | 'label';
-  align?: TextAlignment;
-  truncate?: boolean;
-  breakWord?: boolean;
-  lineClamp?: number;
-  weight?: FontWeight;
-  ref?: React.Ref<HTMLElement>;
-  selectable?: boolean;
-}>;
+export type TextProps = PropsWithChildren<
+  Partial<
+    {
+      id: string;
+      variant: Variant;
+      color: Color;
+      as: Heading | 'p' | 'span' | 'label';
+      align: TextAlignment;
+      truncate: boolean;
+      breakWord: boolean;
+      lineClamp: number;
+      weight: FontWeight;
+      selectable: boolean;
+      customStyle: string;
+    } & AriaAttributes
+  >
+>;
 
 const VARIANT_TO_CSS_CLASSES_MAPPER: Record<Variant, string> = {
   h1: 'text-[4rem] leading-[5rem] font-bold',
@@ -90,7 +93,6 @@ const VARIANT_TO_CSS_CLASSES_MAPPER: Record<Variant, string> = {
 const Text: React.FC<TextProps> = ({
   id,
   as,
-  customStyle = '',
   variant = 'body1',
   align = 'start',
   color = { dark: 'white', light: 'black' },
@@ -99,8 +101,9 @@ const Text: React.FC<TextProps> = ({
   lineClamp,
   weight,
   children,
-  ref,
   selectable = true,
+  customStyle = '',
+  ...rest
 }) => {
   const tag = as ?? getTag(variant);
   const alignmentStyle = align ? getAlignmentClasses(align) : '';
@@ -121,7 +124,7 @@ const Text: React.FC<TextProps> = ({
       className: tw(
         apply`${noSelectClass} ${baseStyles} ${colorStyle} ${alignmentStyle} ${truncateStyle} ${wordBreakStyle} ${weightStyle} ${lineClampStyle} ${customStyle}`,
       ),
-      ref,
+      ...rest,
     },
     children,
   );

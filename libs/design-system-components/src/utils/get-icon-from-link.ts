@@ -2,9 +2,16 @@ import { IconType } from '@akashaorg/typings/lib/ui';
 
 export const getIconFromLink = (href: string): IconType => {
   const host = new URL(href).host;
-  if ('github.com'.includes(host)) return 'Github';
-  if ('twitter.com'.includes(host)) return 'Twitter';
-  if ('discordapp.com'.includes(host)) return 'Discord';
-  if ('telegram.me'.includes(host) || 't.me'.includes(host)) return 'Telegram';
+  if (checkHostMatchesDomain(host, 'github.com')) return 'Github';
+  if (checkHostMatchesDomain(host, 'twitter.com') || checkHostMatchesDomain(host, 'x.com'))
+    return 'Twitter';
+  if (checkHostMatchesDomain(host, 'discordapp.com')) return 'Discord';
+  if (checkHostMatchesDomain(host, 't.me') || checkHostMatchesDomain(host, 'telegram.me'))
+    return 'Telegram';
   return 'LinkIcon';
 };
+
+function checkHostMatchesDomain(host: string, domain: string) {
+  const regex = new RegExp(`^((https?://)?(www.)?)${domain}(?:\\/.*)?`);
+  return regex.test(host);
+}
