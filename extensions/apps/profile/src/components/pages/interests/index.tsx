@@ -33,7 +33,7 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
   const {
     data: { authenticatedDID, isAuthenticating: authenticating },
   } = useAkashaStore();
-  const { uiEvents, getRoutingPlugin } = useRootComponentProps();
+  const { getRoutingPlugin } = useRootComponentProps();
   const [isProcessing, setIsProcessing] = useState(false);
   const [activeInterests, setActiveInterests] = useState([]);
   const isLoggedIn = !!authenticatedDID;
