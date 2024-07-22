@@ -183,10 +183,9 @@ describe('< BeamPage /> component', () => {
       const user = userEvent.setup();
       const reflectButton = screen.getByRole('button', { name: 'Reflect' });
       user.click(reflectButton);
-      await waitFor(() => expect(reflectButton).toBeInTheDocument());
       await waitFor(() => expect(screen.getByRole('textbox')).toHaveTextContent(NEW_REFLECTION));
       user.click(screen.getByRole('button', { name: 'Reflect' }));
-      expect(await screen.findByTestId('pending-reflect')).toBeInTheDocument();
+      expect(await screen.findByTestId('pending-reflection-card')).toBeInTheDocument();
     });
 
     it('should render published reflection on reflect feed', async () => {
@@ -203,11 +202,11 @@ describe('< BeamPage /> component', () => {
       const reflectButton = screen.getByRole('button', { name: 'Reflect' });
       const reflectFeed = screen.getByTestId('reflect-feed');
       user.click(reflectButton);
-      await waitFor(() => expect(reflectButton).toBeInTheDocument());
       await waitFor(() => expect(screen.getByRole('textbox')).toHaveTextContent(NEW_REFLECTION));
       user.click(screen.getByRole('button', { name: 'Reflect' }));
-      expect(await screen.findByTestId('pending-reflect')).toBeInTheDocument();
-      expect(await within(reflectFeed).findByText(NEW_REFLECTION)).toBeInTheDocument();
+      expect(await screen.findByTestId('pending-reflection-card')).toBeInTheDocument();
+      expect(await within(reflectFeed).findByTestId('reflection-card')).toBeInTheDocument();
+      expect(within(reflectFeed).getByText(NEW_REFLECTION)).toBeInTheDocument();
       const infoBox = within(reflectFeed).getByTestId('info-box');
       await waitFor(() =>
         expect(infoBox).toHaveTextContent(reflectFeedProfileData.akashaProfile.name),
