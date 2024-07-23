@@ -16,12 +16,6 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TrendingWidgetLoadingCard from '@akashaorg/design-system-components/lib/components/TrendingWidgetLoadingCard';
 import { TopicRow } from './topic-row';
 
-declare global {
-  interface Set<T> {
-    symmetricDifference: (value: Set<T>) => Set<T>;
-  }
-}
-
 export type LatestTopicsProps = {
   // data
   tags: string[];
