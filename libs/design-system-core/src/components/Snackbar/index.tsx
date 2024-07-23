@@ -3,7 +3,13 @@ import { NotificationTypes } from '@akashaorg/typings/lib/ui';
 import Button from '../Button';
 import Card from '../Card';
 import Icon from '../Icon';
-import { InformationCircleIcon, XMarkIcon } from '../Icon/hero-icons-outline';
+import {
+  CheckCircleIcon,
+  ExclamationTriangleIcon,
+  InformationCircleIcon,
+  XCircleIcon,
+  XMarkIcon,
+} from '../Icon/hero-icons-solid';
 import Stack from '../Stack';
 import Text from '../Text';
 import { Color } from '../types/common.types';
@@ -12,12 +18,9 @@ import { getColorLight, getColorDark } from './getColor';
 export type SnackbarProps = {
   title: React.ReactNode;
   type?: NotificationTypes;
-  icon?: React.ReactElement;
-  solidIcon?: boolean;
   description?: string;
   ctaLabel?: string;
   customStyle?: string;
-  accentColor?: boolean;
   dismissable?: boolean;
   handleCTAClick?: (event: React.SyntheticEvent<Element, Event>) => void;
   handleDismiss?: (event: React.SyntheticEvent<Element, Event>) => void;
@@ -31,7 +34,6 @@ export type SnackbarProps = {
  * @param title -  title of the snackbar
  * @param type - (optional) type of the snackbar. Please import `NotificationTypes` from the
  * typings package to explore all available Snackbar types
- * @param icon - (optional) if you want to include an icon to be displayed instead of the default one
  * @param description - (optional)  more details regarding the notification
  * @param ctaLabel - (optional)  add a label if you want to show a button and allow the user
  * to perform some action
@@ -47,11 +49,8 @@ export type SnackbarProps = {
 const Snackbar: React.FC<SnackbarProps> = ({
   title,
   type = NotificationTypes.Info,
-  icon = <InformationCircleIcon />,
-  solidIcon = true,
   description,
   ctaLabel,
-  accentColor = false,
   dismissable = true,
   customStyle = '',
   handleCTAClick,
@@ -64,6 +63,13 @@ const Snackbar: React.FC<SnackbarProps> = ({
 
   const instanceStyle = `p-4 border(l-8 solid ${colorLight}/30 dark:${colorDark}/30)`;
 
+  const typeIconsMap: Record<NotificationTypes, React.ReactElement> = {
+    info: <InformationCircleIcon />,
+    caution: <ExclamationTriangleIcon />,
+    success: <CheckCircleIcon />,
+    error: <XCircleIcon />,
+  };
+
   return (
     <Card
       radius={8}
@@ -72,8 +78,8 @@ const Snackbar: React.FC<SnackbarProps> = ({
     >
       <Stack spacing="gap-x-3" fullWidth direction="row">
         <Icon
-          icon={icon}
-          solid={solidIcon}
+          icon={typeIconsMap[type]}
+          solid={true}
           color={{ light: colorLight, dark: colorDark }}
           size="lg"
         />
@@ -91,8 +97,8 @@ const Snackbar: React.FC<SnackbarProps> = ({
               <Text
                 variant="button-md"
                 color={{
-                  light: `${accentColor ? 'secondaryLight' : colorLight}`,
-                  dark: `${accentColor ? 'secondaryDark' : colorDark}`,
+                  light: 'secondaryLight',
+                  dark: 'secondaryDark',
                 }}
               >
                 {ctaLabel}
