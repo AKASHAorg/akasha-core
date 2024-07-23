@@ -16,6 +16,12 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TrendingWidgetLoadingCard from '@akashaorg/design-system-components/lib/components/TrendingWidgetLoadingCard';
 import { TopicRow } from './topic-row';
 
+declare global {
+  interface Set<T> {
+    symmetricDifference: (value: Set<T>) => Set<T>;
+  }
+}
+
 export type LatestTopicsProps = {
   // data
   tags: string[];
@@ -43,8 +49,12 @@ export type LatestTopicsProps = {
  * @param arr2 - second array to be compared
  * @returns an array of strings
  */
-const getTagsDiff = (arr1: string[], arr2: string[]) =>
-  arr1.length > arr2.length ? arr1.slice(arr2.length) : arr2.slice(arr1.length);
+const getTagsDiff = (arr1: string[], arr2: string[]) => {
+  const setA = new Set(arr1);
+  const setB = new Set(arr2);
+
+  return Array.from(setA.symmetricDifference(setB));
+};
 
 export const LatestTopics: React.FC<LatestTopicsProps> = props => {
   const {
