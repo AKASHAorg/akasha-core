@@ -38,6 +38,7 @@ interface AkashaAppInterface @createModel(description: "AKASHA Application inter
   gallery: [AppImageSource] @list(maxLength: 16)
   links: [AppLinkSource] @list(maxLength: 10)
   meta: [AppProviderValue] @list(maxLength: 16)
+  nsfw: Boolean @immutable
 }
 
 type AkashaApp implements AkashaAppInterface
@@ -63,4 +64,5 @@ type AkashaApp implements AkashaAppInterface
     gallery: [AppImageSource] @list(maxLength: 16)
     links: [AppLinkSource] @list(maxLength: 10)
     meta: [AppProviderValue] @list(maxLength: 16)
+    nsfw: Boolean @immutable
 }

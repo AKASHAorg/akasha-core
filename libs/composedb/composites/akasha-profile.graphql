@@ -38,7 +38,7 @@ interface AkashaProfileInterface @createModel(description: "AKASHA Profile inter
   links: [ProfileLinkSource] @list(maxLength: 20)
   did: DID! @documentAccount
   createdAt: DateTime! @immutable
-  nsfw: Boolean
+  nsfw: Boolean @immutable
 }
 
 type AkashaProfile implements AkashaProfileInterface
@@ -55,7 +55,7 @@ type AkashaProfile implements AkashaProfileInterface
     links: [ProfileLinkSource] @list(maxLength: 20)
     did: DID! @documentAccount
     createdAt: DateTime! @immutable
-    nsfw: Boolean
+    nsfw: Boolean @immutable
 }
 
 
