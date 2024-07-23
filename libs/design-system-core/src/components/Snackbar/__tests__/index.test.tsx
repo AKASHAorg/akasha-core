@@ -17,7 +17,7 @@ describe('<Snackbar /> Component', () => {
     act(() => {
       componentWrapper = customRender(
         <Snackbar
-          type={NotificationTypes.Alert}
+          type={NotificationTypes.Info}
           title={title}
           description={description}
           handleDismiss={mockChangeHandler}
@@ -38,7 +38,7 @@ describe('<Snackbar /> Component', () => {
   it('has correct label', () => {
     const { getByText } = componentWrapper;
     const infoTitle = getByText(title);
-    expect(infoTitle).toBeDefined();
+    expect(infoTitle).toBeInTheDocument();
   });
 
   it('correctly calls handler function when clicked', () => {
