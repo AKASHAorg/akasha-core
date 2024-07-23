@@ -36,7 +36,7 @@ const NsfwOption: React.FC = () => {
       event: NotificationEvents.ShowNotification,
       data: {
         type: NotificationTypes.Success,
-        message: notifMsg,
+        title: notifMsg,
       },
     });
   };

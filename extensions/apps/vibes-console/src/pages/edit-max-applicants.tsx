@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
-import { CheckCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { MaxApplicants } from '../components/dashboard';
 import routes, { SETTINGS } from '../routes';
 
@@ -24,8 +23,7 @@ export const EditMaxApplicants: React.FC<unknown> = () => {
       event: NotificationEvents.ShowNotification,
       data: {
         type: NotificationTypes.Success,
-        message: t('Moderator limit updated successfully'),
-        snackbarIcon: <CheckCircleIcon />,
+        title: t('Moderator limit updated successfully'),
       },
     });
   };

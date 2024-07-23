@@ -11,7 +11,6 @@ import {
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import { CheckCircleIcon, InformationCircleIcon } from '@heroicons/react/24/solid';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TrendingWidgetLoadingCard from '@akashaorg/design-system-components/lib/components/TrendingWidgetLoadingCard';
@@ -226,13 +225,12 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
       event: NotificationEvents.ShowNotification,
       data: {
         type: NotificationTypes.Success,
-        message: subscribing
+        title: subscribing
           ? `${t('Subscribed to')} ${modifier1}`
           : `${t('Unsubscribed from')} ${modifier1}`,
         description: subscribing
           ? `"${tagsString}" ${modifier2} ${t('been added to your interests')}`
           : `"${tagsString}" ${modifier2} ${t('been removed from your interests')}`,
-        snackbarIcon: <CheckCircleIcon />,
       },
     });
   };
@@ -250,11 +248,10 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
         event: NotificationEvents.ShowNotification,
         data: {
           type: NotificationTypes.Error,
-          message: t('Interests limit reached'),
+          title: t('Interests limit reached'),
           description: t(
             'You have reached the limit of 10 interests. Please remove some interests from your profile to add new ones.',
           ),
-          snackbarIcon: <InformationCircleIcon />,
         },
       });
       return;

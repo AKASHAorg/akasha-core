@@ -66,12 +66,12 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
     setMentionQuery(query);
   };
 
-  const showAlertNotification = React.useCallback((message: string) => {
+  const showAlertNotification = React.useCallback((title: string) => {
     uiEventsRef.current.next({
       event: NotificationEvents.ShowNotification,
       data: {
-        type: NotificationTypes.Alert,
-        message,
+        type: NotificationTypes.Info,
+        title,
       },
     });
   }, []);

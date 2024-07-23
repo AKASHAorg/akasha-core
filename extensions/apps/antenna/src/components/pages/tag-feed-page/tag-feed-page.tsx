@@ -23,7 +23,6 @@ import TagFeedHeaderLoader from './tag-feed-header-loader';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
-import { CheckCircleIcon, InformationCircleIcon } from '@heroicons/react/24/solid';
 
 type TagFeedPageProps = {
   tagName: string;
@@ -115,11 +114,10 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
       event: NotificationEvents.ShowNotification,
       data: {
         type: NotificationTypes.Success,
-        message: subscribing ? t('Subscribed to topic') : t('Unsubscribed from topic'),
+        title: subscribing ? t('Subscribed to topic') : t('Unsubscribed from topic'),
         description: subscribing
           ? `"${tagName}" ${t('has been added to your interests')}`
           : `"${tagName}" ${t('has been removed from your interests')}`,
-        snackbarIcon: <CheckCircleIcon />,
       },
     });
   };
@@ -136,11 +134,10 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
         event: NotificationEvents.ShowNotification,
         data: {
           type: NotificationTypes.Error,
-          message: t('Interests limit reached'),
+          title: t('Interests limit reached'),
           description: t(
             'You have reached the limit of 10 interests. Please remove some interests from your profile to add new ones.',
           ),
-          snackbarIcon: <InformationCircleIcon />,
         },
       });
       return;

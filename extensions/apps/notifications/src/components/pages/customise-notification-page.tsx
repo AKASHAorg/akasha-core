@@ -205,7 +205,7 @@ const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
           event: NotificationEvents.ShowNotification,
           data: {
             type: NotificationTypes.Success,
-            message: 'You have snoozed your notifications successfully',
+            title: 'You have snoozed your notifications successfully',
           },
         });
       }
@@ -220,7 +220,7 @@ const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
           event: NotificationEvents.ShowNotification,
           data: {
             type: NotificationTypes.Success,
-            message: 'You have unsnoozed your notifications successfully',
+            title: 'You have unsnoozed your notifications successfully',
           },
         });
       }
@@ -229,7 +229,7 @@ const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
         event: NotificationEvents.ShowNotification,
         data: {
           type: NotificationTypes.Success,
-          message: 'Notification settings updated successfully',
+          title: 'Notification settings updated successfully',
         },
       });
 
@@ -244,7 +244,7 @@ const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
         event: NotificationEvents.ShowNotification,
         data: {
           type: NotificationTypes.Error,
-          message: 'Something went wrong. Retry',
+          title: 'Something went wrong. Retry',
         },
       });
     }

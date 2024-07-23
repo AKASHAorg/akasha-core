@@ -82,7 +82,7 @@ const WelcomePage: React.FC<WelcomePageProps> = props => {
         event: NotificationEvents.ShowNotification,
         data: {
           type: NotificationTypes.Success,
-          message: 'Notification settings updated successfully',
+          title: 'Notification settings updated successfully',
         },
       });
 

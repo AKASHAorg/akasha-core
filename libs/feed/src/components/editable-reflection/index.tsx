@@ -70,7 +70,7 @@ const EditableReflection: React.FC<ReflectionCardProps> = props => {
         event: NotificationEvents.ShowNotification,
         data: {
           type: NotificationTypes.Alert,
-          message: notifMsg,
+          title: notifMsg,
         },
       });
     },
