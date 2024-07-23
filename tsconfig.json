@@ -18,7 +18,7 @@
     "pretty": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "lib": ["dom", "es2022"],
+    "lib": ["dom", "esnext"],
     "module": "esnext",
     "target": "es2022"
   },
