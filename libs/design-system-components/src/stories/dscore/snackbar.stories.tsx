@@ -46,6 +46,10 @@ export const SuccessSnackbar: Story = {
 
 export const ErrorSnackbar: Story = { args: { ...baseArgs.args, type: NotificationTypes.Error } };
 
+export const NonDismissableSnackbar: Story = {
+  args: { ...baseArgs.args, dismissable: false },
+};
+
 export const SnackbarWithCTALabel: Story = {
   args: { ...baseArgs.args, ctaLabel: 'Dismiss' },
 };
