@@ -32,7 +32,7 @@ const SnackBarNotification: React.FC<IRootExtensionProps> = () => {
   const [routeData, setRouteData] = useState(null);
   const mutationEvents = useListenForMutationEvents();
 
-  const [titleUuid, setTitleUuid] = useState('');
+  const [currentAppId, setCurrentAppId] = useState('');
 
   let timeoutHandle;
 
@@ -46,7 +46,7 @@ const SnackBarNotification: React.FC<IRootExtensionProps> = () => {
     if (!title) {
       setNotifType(NotificationTypes.Success);
       setDescription('');
-      setTitleUuid('');
+      setCurrentAppId('');
       setAppTitle(null);
     }
   }, [title]);
@@ -77,10 +77,9 @@ const SnackBarNotification: React.FC<IRootExtensionProps> = () => {
     if (mutationEvents) {
       const { messageObj, appid, success, pending } = mutationEvents;
 
-      if (titleUuid !== appid) {
+      if (currentAppId !== appid) {
         clearTimeout(timeoutHandle);
-
-        setTitleUuid(appid);
+        setCurrentAppId(appid);
         setTitle('');
         setAppTitle(messageObj?.app);
       }
