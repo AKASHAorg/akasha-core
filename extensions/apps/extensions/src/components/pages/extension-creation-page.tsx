@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
-import routes, { MY_EXTENSIONS } from '../../routes';
-import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import routes, { CREATE_EXTENSION, MY_EXTENSIONS } from '../../routes';
+import { useRootComponentProps, useAkashaStore } from '@akashaorg/ui-awf-hooks';
 import { useCreateAppMutation } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import getSDK from '@akashaorg/awf-sdk';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
@@ -13,6 +13,7 @@ import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import AppCreationForm, {
   FieldName,
 } from '@akashaorg/design-system-components/lib/components/AppCreationForm';
+import { NotConnnected } from '../not-connected';
 
 export const ExtensionCreationPage: React.FC<unknown> = () => {
   const navigate = useNavigate();
@@ -24,6 +25,19 @@ export const ExtensionCreationPage: React.FC<unknown> = () => {
   const [createAppMutation, { loading }] = useCreateAppMutation({
     context: { source: sdk.current.services.gql.contextSources.composeDB },
   });
+
+  const {
+    data: { authenticatedProfile },
+  } = useAkashaStore();
+
+  if (!authenticatedProfile?.did.id) {
+    return (
+      <NotConnnected
+        description={t('To create an extension you must be connected ⚡️')}
+        redirectRoute={routes[CREATE_EXTENSION]}
+      />
+    );
+  }
 
   return (
     <Card padding="py-4 px-0" margin="mb-2">
@@ -54,11 +68,11 @@ export const ExtensionCreationPage: React.FC<unknown> = () => {
                   variables: {
                     i: {
                       content: {
-                        applicationType: data?.extensionType.type,
+                        applicationType: data?.extensionType,
                         createdAt: new Date().toISOString(),
                         description: '',
                         displayName: data?.extensionName,
-                        license: data?.extensionLicense.title,
+                        license: data?.extensionLicense,
                         name: data?.extensionID,
                       },
                     },

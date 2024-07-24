@@ -34,7 +34,7 @@ export const ExtensionsHub: React.FC<TExtensionsHubProps> = props => {
         <AppList
           apps={extensions}
           onLoadMore={() => {
-            return new Promise(null);
+            return new Promise(res => res);
           }}
         />
       </Card>

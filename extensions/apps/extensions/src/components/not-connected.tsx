@@ -6,9 +6,13 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import appRoutes, { MY_EXTENSIONS } from '../../../routes';
 
-export const NotConnnected: React.FC = () => {
+type NotConnnectedProps = {
+  redirectRoute: string;
+  description: string;
+};
+
+export const NotConnnected: React.FC<NotConnnectedProps> = ({ redirectRoute, description }) => {
   const { t } = useTranslation('app-notifications');
 
   const { baseRouteName, getRoutingPlugin } = useRootComponentProps();
@@ -20,7 +24,7 @@ export const NotConnnected: React.FC = () => {
       appName: '@akashaorg/app-auth-ewa',
       getNavigationUrl: (routes: Record<string, string>) => {
         return `${routes.Connect}?${new URLSearchParams({
-          redirectTo: `${baseRouteName}/${appRoutes[MY_EXTENSIONS]}`,
+          redirectTo: `${baseRouteName}/${redirectRoute}`,
         }).toString()}`;
       },
     });
@@ -37,7 +41,7 @@ export const NotConnnected: React.FC = () => {
           {t('Uh-oh! You are not connected!')}
         </Text>
         <Text variant="footnotes2" align="center" color={{ light: 'black', dark: 'grey6' }}>
-          {t('To check your extensions you must be connected ⚡️')}
+          {description}
         </Text>
       </Stack>
       <Stack direction="row" fullWidth justify="end" spacing="gap-x-4" customStyle="pr-2 pb-2">

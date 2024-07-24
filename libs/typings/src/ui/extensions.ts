@@ -26,6 +26,11 @@ export enum ExtensionStatus {
 }
 
 /**
+ * Type defining extension image types
+ **/
+export type ExtensionImageType = 'logo-image' | 'cover-image';
+
+/**
  * Enum defining events related to loading and unloading of an app
  **/
 export const enum AppEvents {

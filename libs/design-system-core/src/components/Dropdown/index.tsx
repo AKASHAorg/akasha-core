@@ -9,20 +9,13 @@ import Label from '../TextField/Label';
 import { Color } from '../types/common.types';
 import { useCloseActions } from '../../utils';
 
-export type DropdownMenuItemType = {
-  id: string;
-  icon?: React.ReactElement;
-  title: string;
-  [key: string]: unknown;
-};
-
 export type DropdownProps = {
   name?: string;
   label?: string;
   placeholderLabel?: string;
-  selected?: DropdownMenuItemType;
-  menuItems: DropdownMenuItemType[];
-  setSelected: React.Dispatch<React.SetStateAction<DropdownMenuItemType>>;
+  selected?: string;
+  menuItems: string[];
+  setSelected: React.Dispatch<React.SetStateAction<string>>;
   ref?: React.Ref<HTMLDivElement>;
   required?: boolean;
   requiredFieldAsteriskColor?: Color;
@@ -68,11 +61,7 @@ const Dropdown: React.FC<DropdownProps> = React.forwardRef((props, ref) => {
 
   React.useEffect(() => {
     if (placeholderLabel) {
-      setSelected({
-        id: '',
-        icon: null,
-        title: placeholderLabel ?? menuItems[0].title,
-      });
+      setSelected(placeholderLabel ?? menuItems[0]);
     } else {
       setSelected(selected ?? menuItems[0]);
     }
@@ -91,7 +80,7 @@ const Dropdown: React.FC<DropdownProps> = React.forwardRef((props, ref) => {
     setDropOpen(false);
   });
 
-  const handleChange = (menuItem: DropdownMenuItemType) => () => {
+  const handleChange = (menuItem: string) => () => {
     setSelected(menuItem);
     setDropOpen(!dropOpen);
   };
@@ -111,7 +100,7 @@ const Dropdown: React.FC<DropdownProps> = React.forwardRef((props, ref) => {
         aria-label="dropdown"
         type="button"
       >
-        <Text variant="body1">{selected?.title}</Text>
+        <Text variant="body1">{selected}</Text>
         {dropOpen ? (
           <Icon
             icon={<ChevronUpIcon />}
@@ -132,10 +121,10 @@ const Dropdown: React.FC<DropdownProps> = React.forwardRef((props, ref) => {
         <Stack customStyle={optionsWrapperStyle}>
           <ul aria-labelledby="dropdownDefaultButton">
             {menuItems.map((menuItem, idx) => {
-              const isSelected = selected?.id === menuItem.id;
+              const isSelected = selected === menuItem;
               return (
                 <Link
-                  key={menuItem.id}
+                  key={idx}
                   tabIndex={-1}
                   className={tw(
                     `${optionStyle} ${
@@ -150,16 +139,6 @@ const Dropdown: React.FC<DropdownProps> = React.forwardRef((props, ref) => {
                     spacing="gap-x-2"
                     customStyle={`${isSelected ? 'text-secondaryLight' : 'text-black'} hover:bg-(grey8 dark:grey3)`}
                   >
-                    {menuItem?.icon && (
-                      <Icon
-                        icon={menuItem.icon}
-                        color={
-                          isSelected
-                            ? { light: 'secondaryLight', dark: 'secondaryDark' }
-                            : { light: 'black', dark: 'white' }
-                        }
-                      />
-                    )}
                     <Text
                       variant="body1"
                       color={
@@ -168,7 +147,7 @@ const Dropdown: React.FC<DropdownProps> = React.forwardRef((props, ref) => {
                           : { light: 'black', dark: 'white' }
                       }
                     >
-                      {menuItem.title}
+                      {menuItem}
                     </Text>
                   </Stack>
                   {isSelected && (

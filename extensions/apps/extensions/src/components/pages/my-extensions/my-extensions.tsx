@@ -21,7 +21,8 @@ import { hasOwn, useAkashaStore } from '@akashaorg/ui-awf-hooks';
 import { SortOrder, AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { ExtensionStatus } from '@akashaorg/typings/lib/ui';
 import { ExtensionElement } from './extension-element';
-import { NotConnnected } from './not-connected';
+import { NotConnnected } from '../../not-connected';
+import appRoutes, { MY_EXTENSIONS } from '../../../routes';
 import { capitalize } from 'lodash';
 
 const ENTRY_HEIGHT = 92;
@@ -137,7 +138,12 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
   });
 
   if (!authenticatedProfile?.did.id) {
-    return <NotConnnected />;
+    return (
+      <NotConnnected
+        description={t('To check your extensions you must be connected ⚡️')}
+        redirectRoute={appRoutes[MY_EXTENSIONS]}
+      />
+    );
   }
 
   return (

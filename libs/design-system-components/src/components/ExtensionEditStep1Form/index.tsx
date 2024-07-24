@@ -11,61 +11,58 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { ButtonType } from '../types/common.types';
+import { Header, HeaderProps } from './Header';
+import { Image } from '@akashaorg/typings/lib/ui';
 
 export enum FieldName {
   extensionType = 'extensionType',
   extensionID = 'extensionID',
   extensionName = 'extensionName',
-  extensionLicense = 'extensionLicense',
-  extensionLicenseOther = 'extensionLicenseOther',
+  logoImage = 'logoImage',
+  coverImage = 'coverImage',
 }
 
-export enum Licenses {
-  MIT = 'MIT',
-  GPL = 'GNU General Public License',
-  APACHE = 'Apache License 2.0',
-  BSD = 'BSD',
-  MPL = 'MPL 2.0',
-  OTHER = 'Other',
-}
-
-type AppCreationFormValues = {
-  extensionType: AkashaAppApplicationType;
-  extensionID: string;
-  extensionName: string;
-  extensionLicense: Licenses | string;
-  extensionLicenseOther: string;
+type ExtensionEditStep1FormValues = {
+  logoImage?: Image | File | null;
+  coverImage?: Image | File | null;
+  extensionType?: AkashaAppApplicationType;
+  extensionID?: string;
+  extensionName?: string;
 };
 
-export type AppCreationFormProps = {
-  defaultValues?: AppCreationFormValues;
+export type ExtensionEditStep1FormProps = {
+  header: Omit<HeaderProps, 'onLogoImageChange' | 'onCoverImageChange'>;
+  defaultValues?: ExtensionEditStep1FormValues;
   cancelButton: ButtonType;
-  createButton: {
+  nextButton: {
     label: string;
-    loading?: boolean;
-    handleClick: (data: AppCreationFormValues) => void;
+    handleClick: (data: ExtensionEditStep1FormValues) => void;
   };
   errorMessage?: { fieldName: string; message: string };
 };
 
-const AppCreationForm: React.FC<AppCreationFormProps> = ({
-  defaultValues = {
-    extensionType: AkashaAppApplicationType.App,
-    extensionID: '',
-    extensionName: '',
-    extensionLicense: Licenses.MIT,
-    extensionLicenseOther: '',
-  },
-  cancelButton,
-  createButton,
-  errorMessage,
-}) => {
+const ExtensionEditStep1Form: React.FC<ExtensionEditStep1FormProps> = props => {
+  const {
+    header,
+    defaultValues = {
+      extensionType: AkashaAppApplicationType.App,
+      extensionID: '',
+      extensionName: '',
+      logoImage: null,
+      coverImage: null,
+    },
+    cancelButton,
+    nextButton,
+    errorMessage,
+  } = props;
+
   const {
     control,
     setError,
+    setValue,
     getValues,
     formState: { errors, dirtyFields },
-  } = useForm<AppCreationFormValues>({
+  } = useForm<ExtensionEditStep1FormValues>({
     defaultValues,
     resolver: zodResolver(schema),
     mode: 'onChange',
@@ -80,21 +77,10 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
     }
   }, [errorMessage, errors]);
 
-  const extensionLicenseValue = useWatch({ control, name: FieldName.extensionLicense });
-
   const extensionTypes = [
     AkashaAppApplicationType.App,
     AkashaAppApplicationType.Plugin,
     AkashaAppApplicationType.Widget,
-  ];
-
-  const extensionLicenses = [
-    Licenses.MIT,
-    Licenses.GPL,
-    Licenses.APACHE,
-    Licenses.BSD,
-    Licenses.MPL,
-    Licenses.OTHER,
   ];
 
   const isFormDirty =
@@ -105,11 +91,8 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
   const onSave = (event: SyntheticEvent) => {
     event.preventDefault();
     const formValues = getValues();
-    if (formValues.extensionLicense === Licenses.OTHER) {
-      formValues.extensionLicense = formValues.extensionLicenseOther;
-    }
     if (isValid && isFormDirty) {
-      createButton.handleClick({
+      nextButton.handleClick({
         ...formValues,
       });
     }
@@ -118,6 +101,16 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
   return (
     <form onSubmit={onSave} className={tw(apply`h-full`)}>
       <Stack direction="column" spacing="gap-y-4">
+        <Header
+          {...header}
+          extensionType={getValues('extensionType')}
+          onLogoImageChange={logoImage => {
+            setValue('logoImage', logoImage, { shouldDirty: true });
+          }}
+          onCoverImageChange={coverImage => {
+            setValue('coverImage', coverImage, { shouldDirty: true });
+          }}
+        />
         <Stack padding="px-4 pb-16" spacing="gap-y-4">
           <Controller
             control={control}
@@ -134,6 +127,7 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
                 requiredFieldAsteriskColor={{ light: 'errorLight', dark: 'errorDark' }}
               />
             )}
+            defaultValue={extensionTypes[0]}
           />
           <Divider />
           <Controller
@@ -155,6 +149,7 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
                 requiredFieldAsteriskColor={{ light: 'errorLight', dark: 'errorDark' }}
               />
             )}
+            defaultValue=""
           />
           <Divider />
           <Controller
@@ -176,49 +171,9 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
                 requiredFieldAsteriskColor={{ light: 'errorLight', dark: 'errorDark' }}
               />
             )}
+            defaultValue=""
           />
           <Divider />
-          <Controller
-            control={control}
-            name={FieldName.extensionLicense}
-            render={({ field: { name, value, onChange, ref } }) => (
-              <>
-                <DropDown
-                  label="Extension License"
-                  name={name}
-                  selected={value}
-                  menuItems={extensionLicenses}
-                  setSelected={onChange}
-                  ref={ref}
-                  required={true}
-                  requiredFieldAsteriskColor={{ light: 'errorLight', dark: 'errorDark' }}
-                />
-              </>
-            )}
-            defaultValue={extensionLicenses[0]}
-          />
-          {extensionLicenseValue === Licenses.OTHER && (
-            <Controller
-              control={control}
-              name={FieldName.extensionLicenseOther}
-              render={({ field: { name, value, onChange, ref }, fieldState: { error } }) => (
-                <TextField
-                  id={name}
-                  customStyle="mt-2"
-                  value={value}
-                  placeholder={'Please specify your license type'}
-                  type={'text'}
-                  caption={error?.message}
-                  status={error?.message ? 'error' : null}
-                  onChange={onChange}
-                  inputRef={ref}
-                  required={true}
-                  requiredFieldAsteriskColor={{ light: 'errorLight', dark: 'errorDark' }}
-                />
-              )}
-              defaultValue=""
-            />
-          )}
         </Stack>
         <Divider />
 
@@ -231,8 +186,7 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
           />
           <Button
             variant="primary"
-            label={createButton.label}
-            loading={createButton.loading}
+            label={nextButton.label}
             disabled={isValid ? !isFormDirty : true}
             onClick={onSave}
             type="submit"
@@ -243,7 +197,7 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
   );
 };
 
-export default AppCreationForm;
+export default ExtensionEditStep1Form;
 
 const schema = z.object({
   extensionID: z
@@ -256,6 +210,6 @@ const schema = z.object({
     ),
   extensionType: z.object({ id: z.string(), type: z.string(), title: z.string() }).required(),
   extensionName: z.string().trim().min(4, { message: 'Must be at least 4 characters' }),
-  extensionLicense: z.object({ id: z.string(), type: z.string(), title: z.string() }).required(),
-  extensionLicenseOther: z.string().trim().min(3, { message: 'Must be at least 3 characters' }),
+  logoImage: z.any().optional(),
+  coverImage: z.any().optional(),
 });

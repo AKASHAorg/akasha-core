@@ -16,20 +16,8 @@ export const TransparencyLog: React.FC<unknown> = () => {
   const { t } = useTranslation('app-vibes');
 
   // list filters
-  const decisionPlaceholder = t('Decision');
-  const categoryPlaceholder = t('Category');
-
-  const defaultDecision = {
-    id: null,
-    iconName: null,
-    title: decisionPlaceholder,
-  };
-
-  const defaultCategory = {
-    id: null,
-    iconName: null,
-    title: categoryPlaceholder,
-  };
+  const defaultDecision = 'Decision';
+  const defaultCategory = 'Category';
 
   const [filterByDecision, setfilterByDecision] = useState(defaultDecision);
   const [filterByCategory, setfilterByCategory] = useState(defaultCategory);
@@ -42,12 +30,12 @@ export const TransparencyLog: React.FC<unknown> = () => {
   const moderationEntries = [];
 
   const filteredEntries = moderationEntries.filter(entry => {
-    if (filterByDecision.id && filterByCategory.id)
-      return entry.status === filterByDecision.title && entry.type === filterByCategory.title;
+    if (filterByDecision && filterByCategory)
+      return entry.status === filterByDecision && entry.type === filterByCategory;
 
-    if (filterByDecision.id) return entry.status === filterByDecision.title;
+    if (filterByDecision) return entry.status === filterByDecision;
 
-    if (filterByCategory.id) return entry.type === filterByCategory.title;
+    if (filterByCategory) return entry.type === filterByCategory;
 
     return entry;
   });
@@ -58,24 +46,16 @@ export const TransparencyLog: React.FC<unknown> = () => {
         <Stack direction="row" align="center" spacing="gap-x-3">
           <Dropdown
             name="filterByDecision"
-            placeholderLabel={decisionPlaceholder}
+            placeholderLabel={defaultDecision}
             selected={filterByDecision}
-            menuItems={[
-              { id: '1', title: 'Kept' },
-              { id: '2', title: 'Delisted' },
-              { id: '3', title: 'Suspended' },
-            ]}
+            menuItems={['Kept', 'Delisted', 'Suspended']}
             setSelected={setfilterByDecision}
           />
           <Dropdown
             name="filterByCategory"
-            placeholderLabel={categoryPlaceholder}
+            placeholderLabel={defaultCategory}
             selected={filterByCategory}
-            menuItems={[
-              { id: '1', title: 'Beam' },
-              { id: '2', title: 'Reflection' },
-              { id: '3', title: 'Profile' },
-            ]}
+            menuItems={['Beam', 'Reflection', 'Profile']}
             setSelected={setfilterByCategory}
           />
         </Stack>

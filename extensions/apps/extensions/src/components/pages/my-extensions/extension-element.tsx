@@ -31,6 +31,7 @@ import {
   AppImageSource,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { ExtensionStatus } from '@akashaorg/typings/lib/ui';
+import { useNavigate } from '@tanstack/react-router';
 
 type Extension = {
   id?: string;
@@ -56,6 +57,7 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
   const sdk = React.useRef(getSDK());
 
   const { navigateToModal } = useRootComponentProps();
+  const navigate = useNavigate();
 
   const { data: appStreamReq } = useGetAppsStreamQuery({
     variables: {
@@ -121,6 +123,13 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
     });
   };
 
+  const handleExtensionEdit = () => {
+    navigate({
+      to: `/edit-extension/$extensionId/step1`,
+      params: { extensionId: extensionData.id },
+    });
+  };
+
   const menuItems = (extensionStatus: string): MenuProps['items'] | [] => {
     switch (extensionStatus) {
       case ExtensionStatus.Pending:
@@ -141,7 +150,7 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
           {
             label: t('Edit'),
             icon: <PencilIcon />,
-            onClick: () => {},
+            onClick: handleExtensionEdit,
           },
           {
             label: t('Unpublish'),
@@ -160,7 +169,7 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
           {
             label: t('Edit'),
             icon: <PencilIcon />,
-            onClick: () => {},
+            onClick: handleExtensionEdit,
           },
           {
             label: t('Delete'),

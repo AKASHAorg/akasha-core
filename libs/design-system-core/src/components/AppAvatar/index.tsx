@@ -15,6 +15,7 @@ export type AppAvatarProps = {
   avatar?: AppImageSource;
   publicImgPath?: string;
   onClick?: React.MouseEventHandler;
+  customStyle?: string;
 };
 
 /**
@@ -31,7 +32,7 @@ export type AppAvatarProps = {
  * ```
  **/
 const AppAvatar: React.FC<AppAvatarProps> = props => {
-  const { appType, publicImgPath = '/images', avatar, onClick } = props;
+  const { appType, publicImgPath = '/images', avatar, onClick, customStyle } = props;
 
   let avatarFallback: string;
 
@@ -62,7 +63,7 @@ const AppAvatar: React.FC<AppAvatarProps> = props => {
   const className = `shrink-0 overflow-hidden	${getRadiusClasses(10)} ${getColorClasses(
     { light: 'grey6', dark: 'grey5' },
     'bg',
-  )} w-[3.75rem] h-[3.75rem]`;
+  )} w-[3.75rem] h-[3.75rem] ${customStyle}`;
 
   return (
     <Link onClick={onClick} tabIndex={-1}>
