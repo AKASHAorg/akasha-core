@@ -25,7 +25,7 @@ export const RespondAdminPage: React.FC<unknown> = () => {
       event: NotificationEvents.ShowNotification,
       data: {
         type: NotificationTypes.Info,
-        message: t('Pending confirmation from assigned admin'),
+        title: t('Pending confirmation from assigned admin'),
       },
     });
   };

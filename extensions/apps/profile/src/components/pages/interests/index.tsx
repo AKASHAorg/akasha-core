@@ -22,6 +22,11 @@ type InterestsPageProps = {
   profileDID: string;
 };
 
+type Topic = {
+  value: string;
+  labelType: string;
+};
+
 const InterestsPage: React.FC<InterestsPageProps> = props => {
   const { profileDID } = props;
   const { t } = useTranslation('app-profile');
@@ -35,15 +40,17 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
   const navigateTo = getRoutingPlugin().navigateTo;
   const apolloClient = useApolloClient();
 
-  const { data: profileInterestsQueryData, loading } = useGetInterestsByDidQuery({
-    variables: { id: profileDID },
-    skip: !isLoggedIn,
-  });
+  const { data: profileInterestsQueryData, loading: loadingProfileInterests } =
+    useGetInterestsByDidQuery({
+      variables: { id: profileDID },
+      skip: !isLoggedIn,
+    });
 
-  const { data: loggedUserInterestsQueryData } = useGetInterestsByDidQuery({
-    variables: { id: authenticatedDID },
-    skip: !isLoggedIn,
-  });
+  const { data: loggedUserInterestsQueryData, loading: loadingLoggedUserInterests } =
+    useGetInterestsByDidQuery({
+      variables: { id: authenticatedDID },
+      skip: !isLoggedIn,
+    });
 
   // get interests for the profile being viewed
   const profileInterests = useMemo(() => {
@@ -95,22 +102,12 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
     context: { source: sdk.services.gql.contextSources.composeDB },
   });
 
-  if (loading || authenticating) return <ProfileInterestsLoading />;
-
-  const handleInterestClick = (topic: { value: string; labelType: string }) => {
-    // subscribe only if logged in user hasn't subscribed before otherwise navigate to the topic page
-    if (!activeInterests.find(interest => interest.value === topic.value)) {
-      const newActiveInterests = [...activeInterests, topic];
-
-      runMutations(newActiveInterests);
-      setActiveInterests(newActiveInterests);
-    } else {
-      navigateTo?.({
-        appName: '@akashaorg/app-antenna',
-        getNavigationUrl: (navRoutes: { [key: string]: string }) =>
-          `${navRoutes.Tags}/${topic.value}`,
-      });
-    }
+  const handleInterestClick = (topic: Topic) => {
+    navigateTo?.({
+      appName: '@akashaorg/app-antenna',
+      getNavigationUrl: (navRoutes: { [key: string]: string }) =>
+        `${navRoutes.Tags}/${topic.value}`,
+    });
   };
 
   const runMutations = (interests: ProfileLabeled[]) => {
@@ -127,6 +124,7 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
         },
         onCompleted: async () => {
           await apolloClient.refetchQueries({ include: [GetInterestsByDidDocument] });
+          setActiveInterests(interests);
           setIsProcessing(false);
         },
         onError: () => {
@@ -144,6 +142,7 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
         },
         onCompleted: async () => {
           await apolloClient.refetchQueries({ include: [GetInterestsByDidDocument] });
+          setActiveInterests(interests);
           setIsProcessing(false);
         },
         onError: () => {
@@ -152,6 +151,9 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
       });
     }
   };
+
+  if (loadingProfileInterests || loadingLoggedUserInterests || authenticating)
+    return <ProfileInterestsLoading />;
 
   return (
     <Stack direction="column" spacing="gap-y-4" fullWidth>
@@ -173,24 +175,21 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
               customStyle="flex-wrap"
               fullWidth
             >
-              {profileInterests?.map((interest, idx) => (
-                <Pill
-                  key={`${idx}-${interest}`}
-                  label={interest.value}
-                  icon={<CheckIcon />}
-                  iconDirection="right"
-                  size="sm"
-                  loading={
-                    activeInterests.length > 0 &&
-                    activeInterests[activeInterests.length - 1] === interest
-                      ? isProcessing
-                      : false
-                  }
-                  onPillClick={() => handleInterestClick(interest)}
-                  active={!!activeInterests.find(ac => ac.value === interest.value)}
-                  type="action"
-                />
-              ))}
+              {profileInterests?.map((interest, idx) => {
+                const isActive = !!activeInterests.find(ac => ac.value === interest.value);
+                return (
+                  <Pill
+                    key={`${idx}-${interest}`}
+                    label={interest.value}
+                    iconDirection="right"
+                    size="sm"
+                    onPillClick={() => handleInterestClick(interest)}
+                    active={isActive}
+                    type="action"
+                    {...(isActive && { icon: <CheckIcon /> })}
+                  />
+                );
+              })}
             </Stack>
           </Stack>
         )}

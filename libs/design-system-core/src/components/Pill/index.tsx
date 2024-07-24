@@ -6,11 +6,12 @@ import { ButtonProps } from '../Button/types';
 import { Color } from '../types/common.types';
 import { getColorClasses } from '../../utils';
 
-type ActionPillProps = Pick<ButtonProps, 'label' | 'size' | 'icon' | 'iconDirection'> & {
+type ActionPillProps = Pick<
+  ButtonProps,
+  'label' | 'size' | 'icon' | 'iconDirection' | 'loading' | 'customStyle'
+> & {
   hover?: { icon: ButtonProps['icon']; active: boolean };
   active?: boolean;
-  loading?: boolean;
-  customStyle?: string;
   onPillClick?: (active?: boolean) => void;
 };
 
