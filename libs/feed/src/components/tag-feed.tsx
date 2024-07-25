@@ -81,6 +81,11 @@ const TagFeed = (props: TagFeedProps) => {
     );
   }
 
+  // @TODO: replace with cache policy
+  const filteredBeams = beams.filter(
+    (beam, i, arr) => arr.findIndex(a => a.node.stream === beam.node.stream) === i,
+  );
+
   if (isAuthenticating) return <>{loadingIndicatorRef.current()}</>;
 
   return (
@@ -93,17 +98,17 @@ const TagFeed = (props: TagFeedProps) => {
           details={<>{indexedStreamQuery.error.message}</>}
         />
       )}
-      {beams.length > 0 && (
+      {filteredBeams.length > 0 && (
         <DynamicInfiniteScroll
           dataTestId={dataTestId}
-          count={beams.length}
+          count={filteredBeams.length}
           estimatedHeight={estimatedHeight}
           overScan={scrollOptions.overScan}
           itemSpacing={itemSpacing}
           hasNextPage={pageInfo && pageInfo.hasNextPage}
           loading={indexedStreamQuery.loading}
           onLoadMore={async () => {
-            const lastCursor = beams[beams.length - 1]?.cursor;
+            const lastCursor = filteredBeams[filteredBeams.length - 1]?.cursor;
             if (indexedStreamQuery.loading || indexedStreamQuery.error || !lastCursor) return;
             if (lastCursor) {
               await indexedStreamQuery.fetchMore({
@@ -118,7 +123,7 @@ const TagFeed = (props: TagFeedProps) => {
           customStyle="mb-4"
         >
           {({ itemIndex }) => {
-            const beam = beams[itemIndex];
+            const beam = filteredBeams[itemIndex];
             return renderItem(beam.node);
           }}
         </DynamicInfiniteScroll>
