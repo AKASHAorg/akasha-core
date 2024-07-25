@@ -27,7 +27,7 @@ const ScrollTopButton = React.forwardRef<HTMLDivElement, ScrollTopButtonProps>(
     return (
       !hide && (
         <Button
-          title="scroll-to-top"
+          aria-label="scroll-to-top"
           plain={true}
           onClick={() => onClick()}
           customStyle={styledDiv}

@@ -68,7 +68,6 @@ export const Default: Story = {
       label: 'Save',
       handleClick: () => ({}),
     },
-    socialLinks: [],
     linkLabel: 'External URLs',
     addNewLinkButtonLabel: 'Add new',
     description: 'You can add your personal websites or social links to be shared on your profile',
