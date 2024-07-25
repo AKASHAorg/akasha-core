@@ -3,7 +3,13 @@ import { NotificationTypes } from '@akashaorg/typings/lib/ui';
 import Button from '../Button';
 import Card from '../Card';
 import Icon from '../Icon';
-import { InformationCircleIcon, XMarkIcon } from '../Icon/hero-icons-outline';
+import {
+  CheckCircleIcon,
+  ExclamationTriangleIcon,
+  InformationCircleIcon,
+  XCircleIcon,
+  XMarkIcon,
+} from '../Icon/hero-icons-solid';
 import Stack from '../Stack';
 import Text from '../Text';
 import { Color } from '../types/common.types';
@@ -12,12 +18,11 @@ import { getColorLight, getColorDark } from './getColor';
 export type SnackbarProps = {
   title: React.ReactNode;
   type?: NotificationTypes;
-  icon?: React.ReactElement;
   description?: string;
-  actionButtonLabel?: string;
+  ctaLabel?: string;
   customStyle?: string;
   dismissable?: boolean;
-  handleButtonClick?: (event: React.SyntheticEvent<Element, Event>) => void;
+  handleCTAClick?: (event: React.SyntheticEvent<Element, Event>) => void;
   handleDismiss?: (event: React.SyntheticEvent<Element, Event>) => void;
 };
 
@@ -29,12 +34,11 @@ export type SnackbarProps = {
  * @param title -  title of the snackbar
  * @param type - (optional) type of the snackbar. Please import `NotificationTypes` from the
  * typings package to explore all available Snackbar types
- * @param icon - (optional) if you want to include an icon to be displayed instead of the default one
  * @param description - (optional)  more details regarding the notification
- * @param actionButtonLabel - (optional)  add a label if you want to show a button and allow the user
+ * @param ctaLabel - (optional)  add a label if you want to show a button and allow the user
  * to perform some action
  * @param dismissable - (optional) defaults to true. Determines if the user should be able to dismiss the snackbar
- * @param handleButtonClick - (optional) click handler to be included if an `actionButtonLabel` prop is provided
+ * @param handleCTAClick - (optional) click handler to be included if an `ctaLabel` prop is provided
  * @param handleDismiss - (optional) handler that will be called when the user click the close button
  * @param customStyle - (optional)  add custom Tailwind CSS classes here
  * @example
@@ -45,12 +49,11 @@ export type SnackbarProps = {
 const Snackbar: React.FC<SnackbarProps> = ({
   title,
   type = NotificationTypes.Info,
-  icon = <InformationCircleIcon />,
   description,
-  actionButtonLabel,
+  ctaLabel,
   dismissable = true,
   customStyle = '',
-  handleButtonClick,
+  handleCTAClick,
   handleDismiss,
 }) => {
   const colorLight = getColorLight(type);
@@ -60,6 +63,13 @@ const Snackbar: React.FC<SnackbarProps> = ({
 
   const instanceStyle = `p-4 border(l-8 solid ${colorLight}/30 dark:${colorDark}/30)`;
 
+  const typeIconsMap: Record<NotificationTypes, React.ReactElement> = {
+    info: <InformationCircleIcon />,
+    caution: <ExclamationTriangleIcon />,
+    success: <CheckCircleIcon />,
+    error: <XCircleIcon />,
+  };
+
   return (
     <Card
       radius={8}
@@ -67,7 +77,12 @@ const Snackbar: React.FC<SnackbarProps> = ({
       customStyle={`${instanceStyle} ${customStyle}`}
     >
       <Stack spacing="gap-x-3" fullWidth direction="row">
-        <Icon icon={icon} color={{ light: colorLight, dark: colorDark }} size="lg" />
+        <Icon
+          icon={typeIconsMap[type]}
+          solid={true}
+          color={{ light: colorLight, dark: colorDark }}
+          size="lg"
+        />
         <Stack direction="column">
           <Text variant="button-md" color={textColor}>
             {title}
@@ -77,10 +92,16 @@ const Snackbar: React.FC<SnackbarProps> = ({
               {description}
             </Text>
           )}
-          {actionButtonLabel && (
-            <Button onClick={handleButtonClick} plain>
-              <Text variant="button-md" color={{ light: `${colorLight}`, dark: `${colorDark}` }}>
-                {actionButtonLabel}
+          {ctaLabel && (
+            <Button onClick={handleCTAClick} plain>
+              <Text
+                variant="button-md"
+                color={{
+                  light: 'secondaryLight',
+                  dark: 'secondaryDark',
+                }}
+              >
+                {ctaLabel}
               </Text>
             </Button>
           )}

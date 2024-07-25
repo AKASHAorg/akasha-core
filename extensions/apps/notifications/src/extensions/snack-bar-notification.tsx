@@ -17,38 +17,39 @@ import {
   NotificationTypes,
 } from '@akashaorg/typings/lib/ui';
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
-import { InformationCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 const SnackBarNotification: React.FC<IRootExtensionProps> = () => {
   const { uiEvents, getRoutingPlugin } = useRootComponentProps();
-  const [message, setMessage] = useState('');
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [ctaLabel, setCTALabel] = useState('');
   const [appTitle, setAppTitle] = useState(null);
   const [dismissable, setDismissable] = useState(true);
-  const [messageType, setMessageType] = useState(NotificationTypes.Success);
-  const [snackbarIcon, setSnackbarIcon] = useState(<InformationCircleIcon />);
+  const [notifType, setNotifType] = useState(NotificationTypes.Success);
 
   const [routeData, setRouteData] = useState(null);
   const mutationEvents = useListenForMutationEvents();
 
-  const [messageUuid, setMessageUuid] = useState('');
+  const [currentAppId, setCurrentAppId] = useState('');
 
   let timeoutHandle;
 
-  if (message) {
+  if (title) {
     timeoutHandle = setTimeout(() => {
-      setMessage('');
+      setTitle('');
     }, 8000);
   }
 
-  React.useEffect(() => {
-    if (!message) {
-      setMessageType(NotificationTypes.Success);
-      setMessageUuid('');
+  useEffect(() => {
+    if (!title) {
+      setNotifType(NotificationTypes.Success);
+      setDescription('');
+      setCurrentAppId('');
       setAppTitle(null);
     }
-  }, [message]);
+  }, [title]);
 
   const routing = getRoutingPlugin();
 
@@ -72,24 +73,23 @@ const SnackBarNotification: React.FC<IRootExtensionProps> = () => {
     return routeData?.[MenuItemAreaType.AppArea];
   }, [routeData]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (mutationEvents) {
       const { messageObj, appid, success, pending } = mutationEvents;
 
-      if (messageUuid !== appid) {
+      if (currentAppId !== appid) {
         clearTimeout(timeoutHandle);
-
-        setMessageUuid(appid);
-        setMessage('');
+        setCurrentAppId(appid);
+        setTitle('');
         setAppTitle(messageObj?.app);
       }
       if (pending && messageObj?.pending) {
-        setMessage(messageObj?.pending);
-        setMessageType(NotificationTypes.Info);
+        setTitle(messageObj?.pending);
+        setNotifType(NotificationTypes.Info);
       }
       if (success && messageObj?.success) {
-        setMessage(messageObj?.success);
-        setMessageType(NotificationTypes.Success);
+        setTitle(messageObj?.success);
+        setNotifType(NotificationTypes.Success);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -98,12 +98,15 @@ const SnackBarNotification: React.FC<IRootExtensionProps> = () => {
   useEffect(() => {
     const eventsSub = uiEvents.pipe(filterEvent(NotificationEvents.ShowNotification)).subscribe({
       next: (eventInfo: NotificationEvent) => {
-        if (eventInfo.data && hasOwn(eventInfo.data, 'message')) {
-          setMessage(eventInfo.data.message);
-          setMessageType(eventInfo.data.type);
+        if (eventInfo.data && hasOwn(eventInfo.data, 'title')) {
+          setTitle(eventInfo.data.title);
+          setNotifType(eventInfo.data.type);
         }
-        if (eventInfo.data && hasOwn(eventInfo.data, 'snackbarIcon')) {
-          setSnackbarIcon(eventInfo.data.snackbarIcon);
+        if (eventInfo.data && hasOwn(eventInfo.data, 'description')) {
+          setDescription(eventInfo.data.description);
+        }
+        if (eventInfo.data && hasOwn(eventInfo.data, 'ctaLabel')) {
+          setCTALabel(eventInfo.data.ctaLabel);
         }
         if (eventInfo.data && hasOwn(eventInfo.data, 'dismissable')) {
           setDismissable(eventInfo.data.dismissable);
@@ -120,8 +123,8 @@ const SnackBarNotification: React.FC<IRootExtensionProps> = () => {
   }, []);
 
   const dismissHandler = () => {
-    setMessage('');
-    setMessageType(NotificationTypes.Success);
+    setTitle('');
+    setNotifType(NotificationTypes.Success);
   };
 
   const findAppIcon = (appName: string) => {
@@ -138,9 +141,8 @@ const SnackBarNotification: React.FC<IRootExtensionProps> = () => {
 
   return (
     <Stack customStyle="z-50" fullWidth>
-      {message && (
+      {title && (
         <Snackbar
-          icon={snackbarIcon}
           title={
             appTitle ? (
               <Stack
@@ -153,13 +155,15 @@ const SnackBarNotification: React.FC<IRootExtensionProps> = () => {
                 {findAppIcon(appTitle) && icon} {findAppIcon(appTitle)?.label}
               </Stack>
             ) : (
-              message
+              title
             )
           }
-          description={appTitle ? message : null}
-          type={messageType}
+          description={appTitle ? title : description}
+          type={notifType}
           dismissable={dismissable}
+          ctaLabel={ctaLabel}
           handleDismiss={dismissHandler}
+          handleCTAClick={() => ({})}
         />
       )}
     </Stack>

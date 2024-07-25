@@ -81,7 +81,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
         event: NotificationEvents.ShowNotification,
         data: {
           type: NotificationTypes.Success,
-          message: t('Profile link copied'),
+          title: t('Profile link copied'),
         },
       });
     });

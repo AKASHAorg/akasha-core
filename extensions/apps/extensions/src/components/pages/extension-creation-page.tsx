@@ -84,7 +84,7 @@ export const ExtensionCreationPage: React.FC<unknown> = () => {
                       event: NotificationEvents.ShowNotification,
                       data: {
                         type: NotificationTypes.Success,
-                        message: t('Extension created successfully!'),
+                        title: t('Extension created successfully!'),
                       },
                     });
 

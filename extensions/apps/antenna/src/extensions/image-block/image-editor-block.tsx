@@ -182,7 +182,7 @@ export const ImageEditorBlock = (
           event: NotificationEvents.ShowNotification,
           data: {
             type: NotificationTypes.Error,
-            message: notifMsg,
+            title: notifMsg,
           },
         });
       }
@@ -193,7 +193,7 @@ export const ImageEditorBlock = (
         event: NotificationEvents.ShowNotification,
         data: {
           type: NotificationTypes.Error,
-          message: notifMsg,
+          title: notifMsg,
         },
       });
     }
@@ -245,7 +245,7 @@ export const ImageEditorBlock = (
         event: NotificationEvents.ShowNotification,
         data: {
           type: NotificationTypes.Error,
-          message: notifMsg,
+          title: notifMsg,
         },
       });
       return null;
@@ -310,7 +310,7 @@ export const ImageEditorBlock = (
       event: NotificationEvents.ShowNotification,
       data: {
         type: NotificationTypes.Success,
-        message: notifMsg,
+        title: notifMsg,
       },
     });
   };

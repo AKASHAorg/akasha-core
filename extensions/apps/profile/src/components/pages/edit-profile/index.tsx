@@ -48,7 +48,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
       event: NotificationEvents.ShowNotification,
       data: {
         type: NotificationTypes.Success,
-        message: t('Profile updated successfully.'),
+        title: t('Profile updated successfully.'),
       },
     });
     navigateToProfileInfoPage();
@@ -59,7 +59,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
       event: NotificationEvents.ShowNotification,
       data: {
         type: NotificationTypes.Error,
-        message: t('Profile update unsuccessful. Please try again.'),
+        title: t('Profile update unsuccessful. Please try again.'),
       },
     });
     navigateToProfileInfoPage();
@@ -70,7 +70,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
       event: NotificationEvents.ShowNotification,
       data: {
         type: NotificationTypes.Error,
-        message: t('The image wasn’t uploaded correctly. Please try again!'),
+        title: t("The image wasn't uploaded correctly. Please try again!"),
       },
     });
   };

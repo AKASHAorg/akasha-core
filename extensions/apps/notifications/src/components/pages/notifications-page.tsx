@@ -162,7 +162,7 @@ const NotificationsPage: React.FC = () => {
       event: NotificationEvents.ShowNotification,
       data: {
         type: NotificationTypes.Success,
-        message: 'Marked all as read successfully.',
+        title: 'Marked all as read successfully.',
       },
     });
   };

@@ -4,7 +4,6 @@ import { useNavigate } from '@tanstack/react-router';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
@@ -35,12 +34,11 @@ export const DeveloperModePage: React.FC<unknown> = () => {
       event: NotificationEvents.ShowNotification,
       data: {
         type: NotificationTypes.Info,
-        message:
+        title:
           devMode !== DevMode.ENABLED
             ? t('Developer Mode is active. The page will reload now')
             : t('Developer Mode deactivated. The page will reload now'),
         dismissable: false,
-        snackbarIcon: <InformationCircleIcon />,
       },
     });
 

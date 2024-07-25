@@ -44,7 +44,7 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
       event: NotificationEvents.ShowNotification,
       data: {
         type: NotificationTypes.Success,
-        message: t('{{message}} {{name}}', {
+        title: t('{{message}} {{name}}', {
           message: following ? 'You are now following' : 'You are no longer following',
           name: profileName,
         }),
