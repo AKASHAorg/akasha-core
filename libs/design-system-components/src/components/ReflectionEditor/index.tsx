@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef, LegacyRef } from 'react';
 import EditorPlaceholder from '../EditorPlaceholder';
 import EditorBox, { EditorBoxProps } from '../Editor';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -14,6 +14,7 @@ export type ReflectionEditorProps = EditorBoxProps & {
   background?: { light: Colors; dark: Colors };
   customStyle?: string;
   showEditor?: boolean;
+  ref?: LegacyRef<HTMLDivElement>;
   setShowEditor: (showEditor: boolean) => void;
 };
 
@@ -28,97 +29,100 @@ export type ReflectionEditorProps = EditorBoxProps & {
  * @param customStyle - add custom tailwind styles for the wrapper
  * @param showEditor - whether to display the placeholder or the actual editor
  * @param setShowEditor - toggle between editor and placeholder
+ * @param onClose - event handler while closing editor
  */
-const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
-  const {
-    profileId,
-    avatar,
-    actionLabel,
-    placeholderLabel,
-    showEditor,
-    emojiPlaceholderLabel,
-    disableActionLabel,
-    maxEncodedLengthErrLabel,
-    disablePublish,
-    mentions,
-    tags,
-    placeholderButtonLabel,
-    showCancelButton,
-    cancelButtonLabel,
-    editorState = editorDefaultValue,
-    showDraft,
-    background,
-    customStyle = '',
-    setEditorState,
-    onCancelClick,
-    getMentions,
-    getTags,
-    onPublish,
-    onClear,
-    transformSource,
-    encodingFunction,
-    setShowEditor,
-  } = props;
+const ReflectionEditor: React.FC<ReflectionEditorProps> = forwardRef(
+  (props, ref: LegacyRef<HTMLDivElement>) => {
+    const {
+      profileId,
+      avatar,
+      actionLabel,
+      placeholderLabel,
+      showEditor,
+      emojiPlaceholderLabel,
+      disableActionLabel,
+      maxEncodedLengthErrLabel,
+      disablePublish,
+      mentions,
+      tags,
+      placeholderButtonLabel,
+      showCancelButton,
+      cancelButtonLabel,
+      editorState = editorDefaultValue,
+      showDraft,
+      background,
+      customStyle = '',
+      setEditorState,
+      onCancelClick,
+      getMentions,
+      getTags,
+      onPublish,
+      onClear,
+      transformSource,
+      encodingFunction,
+      setShowEditor,
+    } = props;
 
-  const handlePublish = (data: IPublishData) => {
-    onPublish(data);
-    setShowEditor(false);
-  };
+    const handlePublish = (data: IPublishData) => {
+      onPublish(data);
+      setShowEditor(false);
+    };
 
-  const handleToggleEditor = (ev: React.SyntheticEvent) => {
-    ev.stopPropagation();
-    setShowEditor(!showEditor);
-  };
+    const handleToggleEditor = (ev: React.SyntheticEvent) => {
+      ev.stopPropagation();
+      setShowEditor(!showEditor);
+    };
 
-  return (
-    <Stack customStyle={customStyle}>
-      {!showEditor && (
-        <EditorPlaceholder
-          onClick={handleToggleEditor}
-          profileId={profileId}
-          avatar={avatar}
-          actionLabel={placeholderButtonLabel}
-          placeholderLabel={placeholderLabel}
-          isReflection={true}
-          transformSource={transformSource}
-        />
-      )}
-      {showEditor && (
-        <Card
-          padding={'p-4'}
-          accentBorder={true}
-          background={!!background && background}
-          customStyle="overflow-hidden"
-        >
-          <EditorBox
-            avatar={avatar}
+    return (
+      <Stack ref={ref} customStyle={customStyle}>
+        {!showEditor && (
+          <EditorPlaceholder
+            onClick={handleToggleEditor}
             profileId={profileId}
-            actionLabel={actionLabel}
+            avatar={avatar}
+            actionLabel={placeholderButtonLabel}
             placeholderLabel={placeholderLabel}
-            emojiPlaceholderLabel={emojiPlaceholderLabel}
-            disableActionLabel={disableActionLabel}
-            maxEncodedLengthErrLabel={maxEncodedLengthErrLabel}
-            disablePublish={disablePublish}
-            mentions={mentions}
-            tags={tags}
-            withMeter={true}
-            editorState={editorState}
-            cancelButtonLabel={cancelButtonLabel}
-            showCancelButton={showCancelButton}
-            showDraft={showDraft}
-            setEditorState={setEditorState}
-            onPublish={handlePublish}
-            getMentions={getMentions}
-            getTags={getTags}
-            onClear={onClear}
-            onCancelClick={onCancelClick}
+            isReflection={true}
             transformSource={transformSource}
-            encodingFunction={encodingFunction}
           />
-        </Card>
-      )}
-    </Stack>
-  );
-};
+        )}
+        {showEditor && (
+          <Card
+            padding={'p-4'}
+            accentBorder={true}
+            background={!!background && background}
+            customStyle="overflow-hidden"
+          >
+            <EditorBox
+              avatar={avatar}
+              profileId={profileId}
+              actionLabel={actionLabel}
+              placeholderLabel={placeholderLabel}
+              emojiPlaceholderLabel={emojiPlaceholderLabel}
+              disableActionLabel={disableActionLabel}
+              maxEncodedLengthErrLabel={maxEncodedLengthErrLabel}
+              disablePublish={disablePublish}
+              mentions={mentions}
+              tags={tags}
+              withMeter={true}
+              editorState={editorState}
+              cancelButtonLabel={cancelButtonLabel}
+              showCancelButton={showCancelButton}
+              showDraft={showDraft}
+              setEditorState={setEditorState}
+              onPublish={handlePublish}
+              getMentions={getMentions}
+              getTags={getTags}
+              onClear={onClear}
+              onCancelClick={onCancelClick}
+              transformSource={transformSource}
+              encodingFunction={encodingFunction}
+            />
+          </Card>
+        )}
+      </Stack>
+    );
+  },
+);
 
 export default ReflectionEditor;

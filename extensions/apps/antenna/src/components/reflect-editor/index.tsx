@@ -18,12 +18,15 @@ import {
   NotificationTypes,
   NotificationEvents,
   ReflectionData,
+  CustomElement,
 } from '@akashaorg/typings/lib/ui';
 import {
   usePendingReflections,
   PENDING_REFLECTION_PREFIX,
 } from '@akashaorg/ui-awf-hooks/lib/use-pending-reflections';
 import { getEditorValueForTest } from './get-editor-value-for-test';
+import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
+import { isEditorEmpty } from '@akashaorg/design-system-components/lib/components/Editor/helpers';
 
 export type ReflectEditorProps = {
   beamId: string;
@@ -35,12 +38,17 @@ export type ReflectEditorProps = {
 const ReflectEditor: React.FC<ReflectEditorProps> = props => {
   const { beamId, reflectToId, showEditor, setShowEditor } = props;
   const { t } = useTranslation('app-antenna');
-  const [analyticsActions] = useAnalytics();
   const { uiEvents } = useRootComponentProps();
-  const uiEventsRef = React.useRef(uiEvents);
-  const [editorState, setEditorState] = useState(null);
+  const [analyticsActions] = useAnalytics();
+  const [editorState, setEditorState] = useState<CustomElement[] | null>(null);
   const [newContent, setNewContent] = useState<ReflectionData>(null);
+  const uiEventsRef = React.useRef(uiEvents);
   const pendingReflectionIdRef = useRef(null);
+  const wrapperRef = useCloseActions(() => {
+    if (isEditorEmpty(editorState)) {
+      setShowEditor(false);
+    }
+  });
 
   const sdk = getSDK();
   const isReflectOfReflection = reflectToId !== beamId;
@@ -120,8 +128,8 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
       ...reflection,
     };
     setNewContent({ ...content, authorId: null, id: null });
-    //Create unique id for pending reflection using randomUUID(). If it's not available fallback to Date.now().
-    pendingReflectionIdRef.current = `${PENDING_REFLECTION_PREFIX}-${crypto?.randomUUID?.() ?? Date.now()}`;
+    //Create unique id for pending reflection using randomUUID().
+    pendingReflectionIdRef.current = `${PENDING_REFLECTION_PREFIX}-${crypto?.randomUUID?.()}`;
     addPendingReflection({
       ...content,
       id: pendingReflectionIdRef.current,
@@ -153,6 +161,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
 
   return (
     <ReflectionEditor
+      ref={wrapperRef}
       actionLabel={t('Reflect')}
       placeholderButtonLabel={t('Reflect')}
       placeholderLabel={t('My thoughts on this are...')}
@@ -176,9 +185,6 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         handlePublish(data);
       }}
       setEditorState={setEditorState}
-      onCancelClick={() => {
-        //@TODO
-      }}
       transformSource={transformSource}
       encodingFunction={encodeSlateToBase64}
     />

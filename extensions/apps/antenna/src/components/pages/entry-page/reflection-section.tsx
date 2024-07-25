@@ -8,7 +8,6 @@ import routes, { REFLECT } from '../../../routes';
 import { useTranslation } from 'react-i18next';
 import { ReflectionData } from '@akashaorg/typings/lib/ui';
 import { transformSource } from '@akashaorg/ui-awf-hooks';
-import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
 import { useRouterState } from '@tanstack/react-router';
 
 type ReflectionSectionProps = {
@@ -27,17 +26,8 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
     routerState.location.pathname.endsWith(routes[REFLECT]),
   );
 
-  const wrapperRef = useCloseActions(() => {
-    setIsReflecting(false);
-  });
-
   return (
-    <Stack
-      dataTestId="reflection-section"
-      ref={wrapperRef}
-      spacing="gap-y-2"
-      customStyle="grow mb-2"
-    >
+    <Stack dataTestId="reflection-section" spacing="gap-y-2" customStyle="grow mb-2">
       <Stack customStyle="grow">
         <EditableReflection
           reflectionData={reflectionData}
