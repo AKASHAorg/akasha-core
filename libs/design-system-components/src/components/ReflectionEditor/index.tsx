@@ -29,7 +29,6 @@ export type ReflectionEditorProps = EditorBoxProps & {
  * @param customStyle - add custom tailwind styles for the wrapper
  * @param showEditor - whether to display the placeholder or the actual editor
  * @param setShowEditor - toggle between editor and placeholder
- * @param onClose - event handler while closing editor
  */
 const ReflectionEditor: React.FC<ReflectionEditorProps> = forwardRef(
   (props, ref: LegacyRef<HTMLDivElement>) => {
