@@ -4,7 +4,6 @@ import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import DynamicInfiniteScroll from '@akashaorg/design-system-components/lib/components/DynamicInfiniteScroll';
 import getSDK from '@akashaorg/awf-sdk';
-import { useTranslation } from 'react-i18next';
 import { AnalyticsEventData } from '@akashaorg/typings/lib/ui';
 import {
   SortOrder,
@@ -22,7 +21,6 @@ export type TagFeedProps = {
   scrollOptions?: {
     overScan: number;
   };
-  tags: string[];
   scrollTopIndicator?: (listRect: DOMRect, onScrollToTop: () => void) => React.ReactNode;
   loadingIndicator?: () => React.ReactElement;
   renderItem: (data?: Omit<AkashaIndexedStreamEdge['node'], 'id'>) => ReactElement;
@@ -37,13 +35,11 @@ const TagFeed = (props: TagFeedProps) => {
     estimatedHeight = 150,
     itemSpacing,
     scrollOptions = { overScan: 10 },
-    tags,
     loadingIndicator,
     renderItem,
     filters,
   } = props;
 
-  const { t } = useTranslation('ui-lib-feed');
   const sdkRef = useRef(getSDK());
   const indexingDID = React.useRef(sdkRef.current.services.gql.indexingDID);
   const {

@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from 'react';
+import React from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
@@ -49,6 +49,10 @@ const MyAntennaPage: React.FC<unknown> = () => {
     tagSubsReq?.node && hasOwn(tagSubsReq.node, 'akashaProfileInterests')
       ? tagSubsReq.node.akashaProfileInterests
       : null;
+  const tagsArr = React.useMemo(
+    () => (tagSubsData ? tagSubsData.topics.map(t => t.value) : []),
+    [tagSubsData],
+  );
   const userHasSubscriptions = React.useMemo(() => {
     return authenticatedProfile?.followers?.edges?.length > 0 || tagSubsData?.topics?.length > 0;
   }, [authenticatedProfile, tagSubsData]);
@@ -63,14 +67,15 @@ const MyAntennaPage: React.FC<unknown> = () => {
         `${navRoutes.rootRoute}/${authenticatedProfile?.did.id}${navRoutes.interests}`,
     });
   };
-  const sdk = useRef(getSDK());
-  const tagFilters = useMemo(
+  const sdk = React.useRef(getSDK());
+  const tagFilters = React.useMemo(
     () => [
       { where: { streamType: { equalTo: AkashaIndexedStreamStreamType.Beam } } },
       { where: { indexType: { equalTo: sdk.current.services.gql.labelTypes.TAG } } },
+      { where: { indexValue: { in: tagsArr } } },
       { where: { active: { equalTo: true } } },
     ],
-    [],
+    [tagsArr],
   );
 
   return (
@@ -108,12 +113,11 @@ const MyAntennaPage: React.FC<unknown> = () => {
                       showNsfw,
                       isLoggedIn: !!authenticatedProfile?.did.id,
                     }),
-                    { where: { indexValue: { in: tagSubsData.topics.map(t => t.value) } } },
+                    { where: { indexValue: { in: tagsArr } } },
                   ],
                 },
               ],
             }}
-            tags={tagSubsData?.topics.map(topic => topic.value)}
             scrollOptions={{ overScan: MY_ANTENNA_OVERSCAN }}
             scrollTopIndicator={(listRect, onScrollToTop) => (
               <ScrollTopWrapper placement={listRect.left}>
