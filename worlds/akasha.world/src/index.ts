@@ -49,6 +49,8 @@ declare const __LOAD_LOCAL_SOURCES__: boolean;
   ];
 
   if (__DEV__ || __LOAD_LOCAL_SOURCES__) {
+    const ov = await import('./registry-overrides');
+    console.log('ov', ov);
     //   const overwrites = await import('./registry-overrides');
     registryOverrides = rOverrides;
   }
