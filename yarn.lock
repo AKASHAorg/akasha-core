@@ -33424,11 +33424,11 @@ __metadata:
     styled-components: "npm:5.3.5"
     systemjs: "npm:6.15.1"
     systemjs-webpack-interop: "npm:2.3.7"
-    ts-jest: "npm:^29.1.0"
-    ts-loader: "npm:9.4.1"
-    ts-node: "npm:10.9.1"
-    tslib: "npm:2.4.1"
-    typescript: "npm:5.5.3"
+    ts-jest: "npm:29.1.2"
+    ts-loader: "npm:9.5.1"
+    ts-node: "npm:10.9.2"
+    tslib: "npm:2.6.3"
+    typescript: "npm:5.5.4"
     uint8arrays: "npm:4.0.4"
     url-loader: "npm:^4.1.1"
     util: "npm:0.12.5"
@@ -36109,7 +36109,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-jest@npm:^29.1.0":
+"ts-jest@npm:29.1.2":
   version: 29.1.2
   resolution: "ts-jest@npm:29.1.2"
   dependencies:
@@ -36142,22 +36142,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-loader@npm:9.4.1":
-  version: 9.4.1
-  resolution: "ts-loader@npm:9.4.1"
-  dependencies:
-    chalk: "npm:^4.1.0"
-    enhanced-resolve: "npm:^5.0.0"
-    micromatch: "npm:^4.0.0"
-    semver: "npm:^7.3.4"
-  peerDependencies:
-    typescript: "*"
-    webpack: ^5.0.0
-  checksum: 10/fa95269a8808593e25554e5bd7072334477e91ce3bb63b05e80e05ee4feed66779ccca829a4e93e51933bdcfbfa89ec44915c517c00e474277d87d5e3e892589
-  languageName: node
-  linkType: hard
-
-"ts-loader@npm:^9.3.1":
+"ts-loader@npm:9.5.1, ts-loader@npm:^9.3.1":
   version: 9.5.1
   resolution: "ts-loader@npm:9.5.1"
   dependencies:
@@ -36218,6 +36203,44 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ts-node@npm:10.9.2":
+  version: 10.9.2
+  resolution: "ts-node@npm:10.9.2"
+  dependencies:
+    "@cspotcode/source-map-support": "npm:^0.8.0"
+    "@tsconfig/node10": "npm:^1.0.7"
+    "@tsconfig/node12": "npm:^1.0.7"
+    "@tsconfig/node14": "npm:^1.0.0"
+    "@tsconfig/node16": "npm:^1.0.2"
+    acorn: "npm:^8.4.1"
+    acorn-walk: "npm:^8.1.1"
+    arg: "npm:^4.1.0"
+    create-require: "npm:^1.1.0"
+    diff: "npm:^4.0.1"
+    make-error: "npm:^1.1.1"
+    v8-compile-cache-lib: "npm:^3.0.1"
+    yn: "npm:3.1.1"
+  peerDependencies:
+    "@swc/core": ">=1.2.50"
+    "@swc/wasm": ">=1.2.50"
+    "@types/node": "*"
+    typescript: ">=2.7"
+  peerDependenciesMeta:
+    "@swc/core":
+      optional: true
+    "@swc/wasm":
+      optional: true
+  bin:
+    ts-node: dist/bin.js
+    ts-node-cwd: dist/bin-cwd.js
+    ts-node-esm: dist/bin-esm.js
+    ts-node-script: dist/bin-script.js
+    ts-node-transpile-only: dist/bin-transpile.js
+    ts-script: dist/bin-script-deprecated.js
+  checksum: 10/a91a15b3c9f76ac462f006fa88b6bfa528130dcfb849dd7ef7f9d640832ab681e235b8a2bc58ecde42f72851cc1d5d4e22c901b0c11aa51001ea1d395074b794
+  languageName: node
+  linkType: hard
+
 "tsconfig-paths-webpack-plugin@npm:4.0.0":
   version: 4.0.0
   resolution: "tsconfig-paths-webpack-plugin@npm:4.0.0"
@@ -36273,10 +36296,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:2.4.1, tslib@npm:~2.4.0":
-  version: 2.4.1
-  resolution: "tslib@npm:2.4.1"
-  checksum: 10/e14311d5392ec0e3519feb9afdb54483d7f3aa2d3def6f1a1a30bd3deca5dfeadd106e80bee9ba880bce86a2e50854c9fe5958572cd188d7ac6f8625101a6a8f
+"tslib@npm:2.6.3":
+  version: 2.6.3
+  resolution: "tslib@npm:2.6.3"
+  checksum: 10/52109bb681f8133a2e58142f11a50e05476de4f075ca906d13b596ae5f7f12d30c482feb0bff167ae01cfc84c5803e575a307d47938999246f5a49d174fc558c
   languageName: node
   linkType: hard
 
@@ -36291,6 +36314,13 @@ __metadata:
   version: 2.1.0
   resolution: "tslib@npm:2.1.0"
   checksum: 10/15a0efbca455d7ce0bb2b7eaabbda70293082519e7d7f14b660d2fdb7a70c64f8dbd142067b1de25c84d4acc87922e699726cfe38864af92b056d14dcd01670f
+  languageName: node
+  linkType: hard
+
+"tslib@npm:~2.4.0":
+  version: 2.4.1
+  resolution: "tslib@npm:2.4.1"
+  checksum: 10/e14311d5392ec0e3519feb9afdb54483d7f3aa2d3def6f1a1a30bd3deca5dfeadd106e80bee9ba880bce86a2e50854c9fe5958572cd188d7ac6f8625101a6a8f
   languageName: node
   linkType: hard
 
@@ -36536,13 +36566,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:5.5.3":
-  version: 5.5.3
-  resolution: "typescript@npm:5.5.3"
+"typescript@npm:5.5.4":
+  version: 5.5.4
+  resolution: "typescript@npm:5.5.4"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10/11a867312419ed497929aafd2f1d28b2cd41810a5eb6c6e9e169559112e9ea073d681c121a29102e67cd4478d0a4ae37a306a5800f3717f59c4337e6a9bd5e8d
+  checksum: 10/1689ccafef894825481fc3d856b4834ba3cc185a9c2878f3c76a9a1ef81af04194849840f3c69e7961e2312771471bb3b460ca92561e1d87599b26c37d0ffb6f
   languageName: node
   linkType: hard
 
@@ -36566,13 +36596,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A5.5.3#optional!builtin<compat/typescript>":
-  version: 5.5.3
-  resolution: "typescript@patch:typescript@npm%3A5.5.3#optional!builtin<compat/typescript>::version=5.5.3&hash=5adc0c"
+"typescript@patch:typescript@npm%3A5.5.4#optional!builtin<compat/typescript>":
+  version: 5.5.4
+  resolution: "typescript@patch:typescript@npm%3A5.5.4#optional!builtin<compat/typescript>::version=5.5.4&hash=5adc0c"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10/b61b8bb4b4d6a8a00f9d5f931f8c67070eed6ad11feabf4c41744a326987080bfc806a621596c70fbf2e5974eca3ed65bafeeeb22a078071bdfb51d8abd7c013
+  checksum: 10/2c065f0ef81855eac25c9b658a3c9da65ffc005260c12854c2286f40f3667e1b1ecf8bdbdd37b59aa0397920378ce7900bff8cb32e0f1c7af6fd86efc676718c
   languageName: node
   linkType: hard
 
