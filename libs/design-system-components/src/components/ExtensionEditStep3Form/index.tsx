@@ -9,28 +9,27 @@ import DropDown from '@akashaorg/design-system-core/lib/components/Dropdown';
 import { apply, tw } from '@twind/core';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ButtonType } from '../types/common.types';
-import { Header, HeaderProps } from './Header';
-import { Image } from '@akashaorg/typings/lib/ui';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { ButtonType } from '../types/common.types';
+import { Image } from '@akashaorg/typings/lib/ui';
 
 export enum FieldName {
-  name = 'name',
-  displayName = 'displayName',
+  extensionType = 'extensionType',
+  extensionID = 'extensionID',
+  extensionName = 'extensionName',
   logoImage = 'logoImage',
   coverImage = 'coverImage',
 }
 
-export type ExtensionEditStep1FormValues = {
-  name?: string;
-  displayName?: string;
+type ExtensionEditStep1FormValues = {
   logoImage?: Image | File | null;
   coverImage?: Image | File | null;
+  extensionType?: AkashaAppApplicationType;
+  extensionID?: string;
+  extensionName?: string;
 };
 
 export type ExtensionEditStep1FormProps = {
-  header: Omit<HeaderProps, 'onLogoImageChange' | 'onCoverImageChange'>;
-  extensionType: AkashaAppApplicationType;
   defaultValues?: ExtensionEditStep1FormValues;
   cancelButton: ButtonType;
   nextButton: {
@@ -38,25 +37,20 @@ export type ExtensionEditStep1FormProps = {
     handleClick: (data: ExtensionEditStep1FormValues) => void;
   };
   errorMessage?: { fieldName: string; message: string };
-  extensionIdLabel?: string;
-  extensionDisplayNameLabel?: string;
 };
 
 const ExtensionEditStep1Form: React.FC<ExtensionEditStep1FormProps> = props => {
   const {
-    header,
-    extensionType,
     defaultValues = {
-      name: '',
-      displayName: '',
+      extensionType: AkashaAppApplicationType.App,
+      extensionID: '',
+      extensionName: '',
       logoImage: null,
       coverImage: null,
     },
     cancelButton,
     nextButton,
     errorMessage,
-    extensionIdLabel,
-    extensionDisplayNameLabel,
   } = props;
 
   const {
@@ -80,6 +74,15 @@ const ExtensionEditStep1Form: React.FC<ExtensionEditStep1FormProps> = props => {
     }
   }, [errorMessage, errors]);
 
+  const extensionTypes = [
+    AkashaAppApplicationType.App,
+    AkashaAppApplicationType.Plugin,
+    AkashaAppApplicationType.Widget,
+  ];
+
+  const isFormDirty =
+    Object.keys(dirtyFields).includes(FieldName.extensionID) &&
+    Object.keys(dirtyFields).includes(FieldName.extensionName);
   const isValid = !Object.keys(errors).length;
 
   const onSave = (event: SyntheticEvent) => {
@@ -95,28 +98,33 @@ const ExtensionEditStep1Form: React.FC<ExtensionEditStep1FormProps> = props => {
   return (
     <form onSubmit={onSave} className={tw(apply`h-full`)}>
       <Stack direction="column" spacing="gap-y-4">
-        <Stack padding="px-4">
-          <Header
-            {...header}
-            extensionType={extensionType}
-            onLogoImageChange={logoImage => {
-              setValue('logoImage', logoImage, { shouldDirty: true });
-            }}
-            onCoverImageChange={coverImage => {
-              setValue('coverImage', coverImage, { shouldDirty: true });
-            }}
-          />
-        </Stack>
         <Stack padding="px-4 pb-16" spacing="gap-y-4">
           <Controller
             control={control}
-            name={FieldName.name}
+            name={FieldName.extensionType}
+            render={({ field: { name, value, onChange, ref } }) => (
+              <DropDown
+                label="Extension Type"
+                name={name}
+                selected={value}
+                menuItems={extensionTypes}
+                setSelected={onChange}
+                ref={ref}
+                required={true}
+                requiredFieldAsteriskColor={{ light: 'errorLight', dark: 'errorDark' }}
+              />
+            )}
+          />
+          <Divider />
+          <Controller
+            control={control}
+            name={FieldName.extensionID}
             render={({ field: { name, value, onChange, ref }, fieldState: { error } }) => (
               <TextField
                 id={name}
                 type="text"
                 name={name}
-                label={extensionIdLabel}
+                label={'Extension ID'}
                 placeholder="unique extension identifier"
                 value={value}
                 caption={error?.message}
@@ -127,18 +135,17 @@ const ExtensionEditStep1Form: React.FC<ExtensionEditStep1FormProps> = props => {
                 requiredFieldAsteriskColor={{ light: 'errorLight', dark: 'errorDark' }}
               />
             )}
-            defaultValue={defaultValues.name}
           />
           <Divider />
           <Controller
             control={control}
-            name={FieldName.displayName}
+            name={FieldName.extensionName}
             render={({ field: { name, value, onChange, ref }, fieldState: { error } }) => (
               <TextField
                 id={name}
                 type="text"
                 name={name}
-                label={extensionDisplayNameLabel}
+                label={'Extension Display Name'}
                 placeholder="extension x"
                 value={value}
                 caption={error?.message}
@@ -149,7 +156,6 @@ const ExtensionEditStep1Form: React.FC<ExtensionEditStep1FormProps> = props => {
                 requiredFieldAsteriskColor={{ light: 'errorLight', dark: 'errorDark' }}
               />
             )}
-            defaultValue={defaultValues.displayName}
           />
         </Stack>
         <Divider />
@@ -177,7 +183,7 @@ const ExtensionEditStep1Form: React.FC<ExtensionEditStep1FormProps> = props => {
 export default ExtensionEditStep1Form;
 
 const schema = z.object({
-  name: z
+  extensionID: z
     .string()
     .trim()
     .min(6, { message: 'Must be at least 6 characters' })
@@ -185,7 +191,8 @@ const schema = z.object({
       value => /^[a-zA-Z0-9-_.]+$/.test(value),
       'ID should contain only alphabets, numbers or -_.',
     ),
-  displayName: z.string().trim().min(4, { message: 'Must be at least 4 characters' }).optional(),
+  extensionType: z.string(),
+  extensionName: z.string().trim().min(4, { message: 'Must be at least 4 characters' }).optional(),
   logoImage: z.any().optional(),
   coverImage: z.any().optional(),
 });

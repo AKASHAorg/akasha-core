@@ -1,8 +1,6 @@
-import React, { createContext, useEffect, useMemo } from 'react';
+import React, { createContext, useMemo } from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import { useNavigate } from '@tanstack/react-router';
-import { Outlet, useMatchRoute } from '@tanstack/react-router';
+import { Outlet } from '@tanstack/react-router';
 
 import routes, { EDIT_EXTENSION } from '../../../routes';
 import { useTranslation } from 'react-i18next';
@@ -10,21 +8,18 @@ import { NotConnnected } from '../../not-connected';
 import { hasOwn, useAkashaStore } from '@akashaorg/ui-awf-hooks';
 import { useGetAppsByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { atomWithStorage, createJSONStorage } from 'jotai/utils';
-import {
-  AkashaAppApplicationType,
-  AppImageSource,
-} from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { AppImageSource } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { ExtensionEditStep2FormValues } from '@akashaorg/design-system-components/lib/components/ExtensionEditStep2Form';
 
 export const AtomContext = createContext(null);
 
 export type FormData = {
   lastCompletedStep?: number;
-  extensionType?: AkashaAppApplicationType;
-  extensionID?: string;
-  extensionName?: string;
+  name?: string;
+  displayName?: string;
   logoImage?: AppImageSource;
   coverImage?: AppImageSource;
-};
+} & ExtensionEditStep2FormValues;
 
 type ExtensionEditMainPageProps = {
   extensionId: string;
@@ -60,11 +55,14 @@ export const ExtensionEditMainPage: React.FC<ExtensionEditMainPageProps> = ({ ex
         extensionId,
         {
           lastCompletedStep: 0,
-          extensionType: AkashaAppApplicationType.App,
-          extensionID: '',
-          extensionName: '',
+          name: '',
+          displayName: '',
           logoImage: { src: '' },
           coverImage: { src: '' },
+          nsfw: false,
+          description: '',
+          gallery: [],
+          links: [],
         },
         storage,
       ),
@@ -80,12 +78,10 @@ export const ExtensionEditMainPage: React.FC<ExtensionEditMainPageProps> = ({ ex
     );
   }
   return (
-    <Card>
-      <Stack>
-        <AtomContext.Provider value={formData}>
-          <Outlet />
-        </AtomContext.Provider>
-      </Stack>
+    <Card padding={0}>
+      <AtomContext.Provider value={formData}>
+        <Outlet />
+      </AtomContext.Provider>
     </Card>
   );
 };

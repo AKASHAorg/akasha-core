@@ -4,6 +4,7 @@ import { useNavigate } from '@tanstack/react-router';
 import routes, { MY_EXTENSIONS } from '../../../routes';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import ExtensionEditStep1Form from '@akashaorg/design-system-components/lib/components/ExtensionEditStep1Form';
 import { useSaveImage } from '../../../utils/use-save-image';
 import {
@@ -50,9 +51,8 @@ export const ExtensionEditStep1Page: React.FC<ExtensionEditStep1PageProps> = ({ 
 
   const initialExtensionData = useMemo(() => {
     return {
-      extensionType: appData?.applicationType,
-      extensionID: appData?.name,
-      extensionName: appData?.displayName,
+      name: appData?.name,
+      displayName: appData?.displayName,
       logoImage: appData?.logoImage,
       coverImage: appData?.coverImage,
     };
@@ -69,20 +69,27 @@ export const ExtensionEditStep1Page: React.FC<ExtensionEditStep1PageProps> = ({ 
       event: NotificationEvents.ShowNotification,
       data: {
         type: NotificationTypes.Error,
-        message: t('The image wasn’t uploaded correctly. Please try again!'),
+        title: t("The image wasn't uploaded correctly. Please try again!"),
       },
     });
   };
 
   return (
     <Stack spacing="gap-y-4">
-      <Text variant="h5" weight="semibold" align="center">
-        {t('Present your Extension')}
-      </Text>
-
-      <Stack>
+      <Stack padding={16}>
+        <Text variant="h5" weight="semibold" align="center">
+          {t('Edit Extension Presentation')}
+        </Text>
+      </Stack>
+      <Stack align="center" justify="center">
+        {loading && <Spinner />}
+      </Stack>
+      {!loading && (
         <ExtensionEditStep1Form
+          extensionIdLabel={t('Extension Id')}
+          extensionDisplayNameLabel={t('Extension Display Name')}
           defaultValues={defaultValues}
+          extensionType={appData?.applicationType}
           header={{
             coverImage: coverImage,
             logoImage: logoImage,
@@ -126,7 +133,7 @@ export const ExtensionEditStep1Page: React.FC<ExtensionEditStep1PageProps> = ({ 
               setErrorMessage(null);
               const step1Data = { ...data, logoImage, coverImage };
               setForm(prev => {
-                return { ...prev, ...step1Data };
+                return { ...prev, ...step1Data, lastCompletedStep: 1 };
               });
               navigate({
                 to: '/edit-extension/$extensionId/step2',
@@ -134,7 +141,7 @@ export const ExtensionEditStep1Page: React.FC<ExtensionEditStep1PageProps> = ({ 
             },
           }}
         />
-      </Stack>
+      )}
     </Stack>
   );
 };

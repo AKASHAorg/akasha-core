@@ -207,17 +207,25 @@ const extensionEditStep1Route = createRoute({
 const extensionEditStep2Route = createRoute({
   getParentRoute: () => extensionEditMainRoute,
   path: '/step2',
-  component: () => <ExtensionEditStep2Page />,
+  component: () => {
+    const { extensionId } = extensionEditMainRoute.useParams();
+    return <ExtensionEditStep2Page extensionId={extensionId} />;
+  },
 });
 const extensionEditStep3Route = createRoute({
   getParentRoute: () => extensionEditMainRoute,
   path: '/step3',
-  component: () => <ExtensionEditStep3Page />,
+  component: () => {
+    const { extensionId } = extensionEditMainRoute.useParams();
+    return <ExtensionEditStep3Page extensionId={extensionId} />;
+  },
 });
 const extensionEditStep4Route = createRoute({
   getParentRoute: () => extensionEditMainRoute,
   path: '/step4',
-  component: () => <ExtensionEditStep4Page />,
+  component: () => {
+    return <ExtensionEditStep4Page />;
+  },
 });
 
 const routeTree = rootRoute.addChildren([
