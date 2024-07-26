@@ -48,7 +48,8 @@ declare const __LOAD_LOCAL_SOURCES__: boolean;
   ];
 
   if (__DEV__ || __LOAD_LOCAL_SOURCES__) {
-    registryOverrides = (await import('./registry-overrides')).default;
+    const overwrites = await import('./registry-overrides');
+    registryOverrides = overwrites.default;
   }
 
   const loaderConfig: WorldConfig = {
@@ -91,8 +92,8 @@ declare const __LOAD_LOCAL_SOURCES__: boolean;
       '@akashaorg/ui-widget-my-apps',
     ],
     analytics: {
-      trackerUrl: process.env.MATOMO_TRACKER_URL,
-      siteId: process.env.MATOMO_SITE_ID,
+      trackerUrl: process.env.MATOMO_TRACKER_URL || '',
+      siteId: process.env.MATOMO_SITE_ID || '',
     },
     registryOverrides,
     socialLinks: [
