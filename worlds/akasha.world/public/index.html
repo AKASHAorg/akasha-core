@@ -87,11 +87,8 @@
   <div id="four-oh-four-root" class="text-black dark:text-white">
     <div class="flex flex-col items-center bg-white dark:bg-grey2 p-4 rounded-2xl">
       <h1 class="font-bold text-lg">App not found!</h1>
-      <p>Application not found or is not installed.</p>
+      <p>Application <span id="app-name" class="font-bold"></span> not found or is not installed.</p>
       <div class="flex flex-row gap-2 mt-4">
-        <a href="/connect" onclick="singleSpaNavigate(event)" id="connect-button" class="bg-gradient-to-r from-primaryStart to-primaryStop rounded-3xl py-2 px-4">
-          <span class="font-bold text-sm">Connect</span>
-        </a>
         <a href="#" onclick="singleSpaNavigate(event)" id="search-extension-button" class="bg-transparent border-1 rounded-3xl py-2 px-4">
           <span class="font-bold text-sm">Go to Extensions</span>
         </a>
