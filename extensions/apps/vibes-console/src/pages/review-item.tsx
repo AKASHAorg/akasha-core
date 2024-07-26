@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { CheckCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { ReviewItem } from '../components/dashboard';
 import routes, { DASHBOARD, VIEW_ALL_REPORTS } from '../routes';
 
@@ -49,8 +48,7 @@ export const ReviewItemPage: React.FC<ReviewItemPageProps> = props => {
       event: NotificationEvents.ShowNotification,
       data: {
         type: NotificationTypes.Success,
-        message: t('Content successfully reviewed'),
-        snackbarIcon: <CheckCircleIcon />,
+        title: t('Content successfully reviewed'),
       },
     });
   };

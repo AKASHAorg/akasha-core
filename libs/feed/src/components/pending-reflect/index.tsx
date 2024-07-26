@@ -17,7 +17,6 @@ export function PendingReflect(props: PendingReflectProps) {
       <Stack
         background={{ light: 'secondaryLight/10', dark: 'secondaryDark/10' }}
         customStyle={`border border(grey8 dark:grey3) ${customStyle}`}
-        dataTestId="pending-reflect"
       >
         <ReflectionCard
           reflectionData={reflectionData}

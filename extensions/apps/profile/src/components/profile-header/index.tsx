@@ -81,7 +81,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
         event: NotificationEvents.ShowNotification,
         data: {
           type: NotificationTypes.Success,
-          message: t('Profile link copied'),
+          title: t('Profile link copied'),
         },
       });
     });
@@ -151,7 +151,6 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
       background={profileData?.background}
       avatar={profileData?.avatar}
       profileName={profileData?.name}
-      ensName={null /*@TODO: integrate ENS when the API is ready */}
       viewerIsOwner={isViewer}
       menuItems={menuItems}
       copyLabel={t('Copy to clipboard')}

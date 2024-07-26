@@ -1,6 +1,4 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { CheckCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Snackbar, { SnackbarProps } from '@akashaorg/design-system-core/lib/components/Snackbar';
 import { NotificationTypes } from '@akashaorg/typings/lib/ui';
 
@@ -13,18 +11,16 @@ const meta: Meta<SnackbarProps> = {
     type: {
       control: 'select',
       options: [
-        NotificationTypes.Alert,
-        NotificationTypes.Caution,
-        NotificationTypes.Error,
         NotificationTypes.Info,
+        NotificationTypes.Caution,
         NotificationTypes.Success,
+        NotificationTypes.Error,
       ],
     },
-    icon: { control: 'object' },
     description: { control: 'text' },
-    actionButtonLabel: { control: 'text' },
+    ctaLabel: { control: 'text' },
     customStyle: { control: 'text' },
-    handleButtonClick: { action: 'button clicked' },
+    handleCTAClick: { action: 'button clicked' },
     handleDismiss: { action: 'dismissed' },
   },
 };
@@ -40,26 +36,22 @@ const baseArgs: Story = {
 
 export const Default: Story = { args: { ...baseArgs.args } };
 
-export const AlertSnackbar: Story = { args: { ...baseArgs.args, type: NotificationTypes.Alert } };
-
 export const CautionSnackbar: Story = {
   args: { ...baseArgs.args, type: NotificationTypes.Caution },
 };
-
-export const ErrorSnackbar: Story = { args: { ...baseArgs.args, type: NotificationTypes.Error } };
-
-export const InfoSnackbar: Story = { args: { ...baseArgs.args, type: NotificationTypes.Info } };
 
 export const SuccessSnackbar: Story = {
   args: { ...baseArgs.args, type: NotificationTypes.Success },
 };
 
-export const SnackbarWithActionButtonLabel: Story = {
-  args: { ...baseArgs.args, actionButtonLabel: 'Dismiss' },
+export const ErrorSnackbar: Story = { args: { ...baseArgs.args, type: NotificationTypes.Error } };
+
+export const NonDismissableSnackbar: Story = {
+  args: { ...baseArgs.args, dismissable: false },
 };
 
-export const SnackbarWithSpecificIcon: Story = {
-  args: { ...baseArgs.args, icon: <CheckCircleIcon /> },
+export const SnackbarWithCTALabel: Story = {
+  args: { ...baseArgs.args, ctaLabel: 'Dismiss' },
 };
 
 export default meta;

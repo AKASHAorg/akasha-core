@@ -62,7 +62,14 @@ export const InstalledExtensions: React.FC<InstalledExtensionsProps> = props => 
               </Stack>
             </>
           )}
-          {!!installedExtensions.length && <AppList apps={installedExtensions} />}
+          {!!installedExtensions.length && (
+            <AppList
+              apps={installedExtensions}
+              onLoadMore={() => {
+                return new Promise(null);
+              }}
+            />
+          )}
         </Stack>
       </Card>
       <Card padding="p-4" margin="mb-2">
@@ -71,7 +78,12 @@ export const InstalledExtensions: React.FC<InstalledExtensionsProps> = props => 
           <Text variant="body2" color={{ light: 'grey5', dark: 'grey6' }}>
             {sections[1].description}
           </Text>
-          <AppList apps={defaultExtensions} />
+          <AppList
+            apps={defaultExtensions}
+            onLoadMore={() => {
+              return new Promise(null);
+            }}
+          />
         </Stack>
       </Card>
     </Stack>

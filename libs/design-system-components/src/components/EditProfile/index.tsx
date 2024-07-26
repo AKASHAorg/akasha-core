@@ -11,12 +11,9 @@ import { EditProfileFormValues } from './types';
 import { ButtonType } from '../types/common.types';
 import { NSFW, NSFWProps } from './NSFW';
 
-type SocialLinkForm = Pick<
-  SocialLinksProps,
-  'socialLinks' | 'linkLabel' | 'addNewLinkButtonLabel' | 'description'
->;
+type SocialLinkForm = Pick<SocialLinksProps, 'linkLabel' | 'addNewLinkButtonLabel' | 'description'>;
 
-type GeneralForm = Pick<GeneralProps, 'header' | 'name' | 'userName' | 'bio'>;
+type GeneralForm = Pick<GeneralProps, 'header' | 'name' | 'bio'>;
 
 export type EditProfileProps = {
   defaultValues?: EditProfileFormValues;
@@ -37,8 +34,6 @@ const EditProfile: React.FC<EditProfileProps> = ({
     coverImage: null,
     name: '',
     bio: '',
-    ens: '',
-    userName: '',
     nsfw: false,
     links: [],
   },
@@ -47,19 +42,17 @@ const EditProfile: React.FC<EditProfileProps> = ({
   customStyle = '',
   ...rest
 }) => {
-  const {
-    control,
-    setValue,
-    getValues,
-    trigger,
-    formState: { dirtyFields, errors },
-  } = useForm<EditProfileFormValues>({
+  const { control, setValue, getValues, formState } = useForm<EditProfileFormValues>({
     defaultValues,
     resolver: zodResolver(schema),
     mode: 'onChange',
   });
-  const isFormDirty = !!Object.keys(dirtyFields).length;
+  const { isDirty, dirtyFields, errors } = formState;
+  const isFormDirty =
+    (isDirty && !!Object.keys(dirtyFields).length) ||
+    defaultValues.links.length > (getValues(`links`)?.filter(link => link)?.length || 0);
   const isValid = !Object.keys(errors).length;
+
   const onSave = (event: SyntheticEvent) => {
     event.preventDefault();
     const formValues = getValues();
@@ -84,13 +77,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
             setValue('coverImage', coverImage, { shouldDirty: true });
           }}
         />
-        <SocialLinks
-          {...rest}
-          onDeleteLink={async () => {
-            await trigger();
-          }}
-          control={control}
-        />
+        <SocialLinks {...rest} control={control} initialLinks={defaultValues.links} />
         <NSFW {...rest} control={control} disabled={rest.nsfw.initialValue} />
         <Stack direction="row" spacing="gap-x-2" customStyle="ml-auto mt-auto">
           <Button
@@ -124,7 +111,6 @@ const schema = z.object({
       value => /^[a-zA-Z0-9-_.]+$/.test(value),
       'Name should contain only alphabets, numbers or -_.',
     ),
-  userName: z.string().optional(),
   avatar: z.any().optional(),
   coverImage: z.any().optional(),
   ens: z.string().optional(),

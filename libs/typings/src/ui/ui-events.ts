@@ -56,7 +56,6 @@ export const enum NotificationEvents {
  **/
 export const enum NotificationTypes {
   Info = 'info',
-  Alert = 'alert',
   Caution = 'caution',
   Success = 'success',
   Error = 'error',
@@ -69,9 +68,10 @@ export type NotificationEvent = {
   event: NotificationEvents;
   data?: {
     type: NotificationTypes;
-    message: string;
+    title: string;
+    description?: string;
+    ctaLabel?: string;
     dismissable?: boolean;
-    snackbarIcon?: React.ReactElement;
   };
 };
 

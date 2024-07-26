@@ -24,6 +24,7 @@ export type StatsProps = {
 const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following }) => {
   const labelProp: TextProps = {
     variant: 'footnotes2',
+    as: 'label',
     weight: 'normal',
     color: {
       light: 'grey4',
@@ -31,7 +32,7 @@ const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following })
     },
   };
 
-  const totalProps: TextProps = {
+  const totalProp: TextProps = {
     variant: 'button-sm',
     weight: 'bold',
     color: {
@@ -62,8 +63,12 @@ const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following })
                   accentColor
                   hover={!stat.disabled}
                 />
-                <Text {...labelProp}>{stat.label}</Text>
-                <Text {...totalProps}>{stat.total}</Text>
+                <Text id={stat.label} {...labelProp}>
+                  {stat.label}
+                </Text>
+                <Text aria-labelledby={stat.label} {...totalProp}>
+                  {stat.total}
+                </Text>
               </Stack>
             </Button>
           ))}

@@ -12,6 +12,8 @@ module.exports = {
     'plugin:react-hooks/recommended',
     'plugin:prettier/recommended',
     'plugin:jsx-a11y/recommended',
+    'plugin:testing-library/react',
+    'plugin:jest-dom/recommended',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -28,6 +30,8 @@ module.exports = {
     'eslint-plugin-tsdoc',
     'jsx-a11y',
     'unicorn',
+    'testing-library',
+    'jest-dom',
   ],
   rules: {
     'tsdoc/syntax': 'warn',

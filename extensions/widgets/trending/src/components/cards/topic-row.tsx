@@ -24,8 +24,7 @@ export type TopicRowProps = {
   isLoading: boolean;
   // handlers
   onClickTopic: (topic: string) => void;
-  handleTopicUnsubscribe: (topic: string) => void;
-  handleTopicSubscribe: (topic: string) => void;
+  handleTopicSubscription: (topic: string, subscribing?: boolean) => void;
 };
 
 export const TopicRow: React.FC<TopicRowProps> = props => {
@@ -38,9 +37,7 @@ export const TopicRow: React.FC<TopicRowProps> = props => {
     subscribedTags,
     isLoading,
     onClickTopic,
-    // setSubscribedInterests,
-    handleTopicUnsubscribe,
-    handleTopicSubscribe,
+    handleTopicSubscription,
   } = props;
   const sdk = getSDK();
   const { data: beamCountData, loading: loadingCount } = useGetIndexedStreamCountQuery({
@@ -100,8 +97,8 @@ export const TopicRow: React.FC<TopicRowProps> = props => {
           text: { light: 'errorLight', dark: 'errorDark' },
           icon: { light: 'errorLight', dark: 'errorDark' },
         }}
-        onClickActive={() => handleTopicUnsubscribe(tag)}
-        onClickInactive={() => handleTopicSubscribe(tag)}
+        onClickActive={() => handleTopicSubscription(tag, false)}
+        onClickInactive={() => handleTopicSubscription(tag)}
       />
     </Stack>
   );

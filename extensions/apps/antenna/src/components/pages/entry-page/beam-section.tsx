@@ -9,7 +9,6 @@ import { useTranslation } from 'react-i18next';
 import { BeamData } from '@akashaorg/typings/lib/ui';
 import { transformSource } from '@akashaorg/ui-awf-hooks';
 import { useRouterState } from '@tanstack/react-router';
-import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
 
 type BeamSectionProps = {
   beamId: string;
@@ -27,12 +26,8 @@ const BeamSection: React.FC<BeamSectionProps> = props => {
     routerState.location.pathname.endsWith(routes[REFLECT]),
   );
 
-  const wrapperRef = useCloseActions(() => {
-    setIsReflecting(false);
-  });
-
   return (
-    <Stack dataTestId="beam-section" ref={wrapperRef} spacing="gap-y-2" customStyle="grow mb-2">
+    <Stack dataTestId="beam-section" spacing="gap-y-2" customStyle="grow mb-2">
       <Stack customStyle="grow">
         <BeamCard
           beamData={beamData}

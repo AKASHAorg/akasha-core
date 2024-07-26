@@ -44,7 +44,7 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
       event: NotificationEvents.ShowNotification,
       data: {
         type: NotificationTypes.Success,
-        message: t('{{message}} {{name}}', {
+        title: t('{{message}} {{name}}', {
           message: following ? 'You are now following' : 'You are no longer following',
           name: profileName,
         }),
@@ -137,12 +137,13 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
   const FollowButton = () =>
     iconOnly ? (
       <Button
+        aria-label="follow"
         onClick={
           following
             ? () => handleUnFollow(profileID, followDocumentId)
             : () => handleFollow(profileID, followDocumentId)
         }
-        icon={following ? <Following /> : <UserPlusIcon />}
+        icon={following ? <Following role="img" aria-label="following" /> : <UserPlusIcon />}
         variant={'primary'}
         loading={loading}
         greyBg={true}

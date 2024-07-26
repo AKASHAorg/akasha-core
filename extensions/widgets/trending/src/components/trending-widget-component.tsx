@@ -7,20 +7,20 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import { useTranslation } from 'react-i18next';
 import {
-  useRootComponentProps,
   getFollowList,
   hasOwn,
   useAkashaStore,
+  useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
 import {
-  useGetInterestsStreamQuery,
-  useGetInterestsByDidQuery,
   useGetFollowDocumentsByDidQuery,
+  useGetInterestsByDidQuery,
+  useGetInterestsStreamQuery,
   useGetProfileStreamQuery,
-  useGetProfileByIdQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { LatestProfiles, LatestTopics } from './cards';
 import { useGetIndexingDID } from '@akashaorg/ui-awf-hooks/lib/use-settings';
+import { SortOrder } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 const TrendingWidgetComponent: React.FC<unknown> = () => {
   const { t } = useTranslation('ui-widget-trending');
@@ -49,8 +49,9 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
     });
   const latestProfileStreamReq = useGetProfileStreamQuery({
     variables: {
-      last: 4,
+      first: 4,
       indexer: currentIndexingDID,
+      sorting: { createdAt: SortOrder.Desc },
     },
   });
   const latestProfileIDs: string[] = useMemo(() => {
@@ -66,8 +67,6 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
     }
     return [];
   }, [latestProfileStreamReq.data]);
-
-  useGetProfileByIdQuery({ variables: { id: '' } });
 
   const { data: followDocuments } = useGetFollowDocumentsByDidQuery({
     variables: {

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { act, fireEvent } from '@testing-library/react';
+import { act, fireEvent, screen } from '@testing-library/react';
 import ScrollTopButton from '../';
 import { customRender } from '../../../test-utils';
 
@@ -23,15 +23,13 @@ describe('<ScrollTopButton /> Component', () => {
   });
 
   it('calls handler when clicked', () => {
-    const { getByTitle } = componentWrapper;
+    const scrollTop = screen.getByRole('button', { name: 'scroll-to-top' });
 
-    const scrollTopDiv = getByTitle('scroll-to-top');
+    expect(scrollTop).toBeInTheDocument();
+    expect(handleClick).toHaveBeenCalledTimes(0);
 
-    expect(scrollTopDiv).toBeDefined();
-    expect(handleClick).toBeCalledTimes(0);
+    fireEvent.click(scrollTop);
 
-    fireEvent.click(scrollTopDiv);
-
-    expect(handleClick).toBeCalledTimes(1);
+    expect(handleClick).toHaveBeenCalledTimes(1);
   });
 });

@@ -69,8 +69,8 @@ const EditableReflection: React.FC<ReflectionCardProps> = props => {
       _uiEvents.current.next({
         event: NotificationEvents.ShowNotification,
         data: {
-          type: NotificationTypes.Alert,
-          message: notifMsg,
+          type: NotificationTypes.Info,
+          title: notifMsg,
         },
       });
     },
@@ -164,7 +164,6 @@ const EditableReflection: React.FC<ReflectionCardProps> = props => {
               setEdit(false);
             }}
           />
-          {/*@TODO reflect error logic goes here */}
         </div>
       ) : (
         <>

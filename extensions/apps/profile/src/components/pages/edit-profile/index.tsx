@@ -48,7 +48,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
       event: NotificationEvents.ShowNotification,
       data: {
         type: NotificationTypes.Success,
-        message: t('Profile updated successfully.'),
+        title: t('Profile updated successfully.'),
       },
     });
     navigateToProfileInfoPage();
@@ -59,7 +59,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
       event: NotificationEvents.ShowNotification,
       data: {
         type: NotificationTypes.Error,
-        message: t('Profile update unsuccessful. Please try again.'),
+        title: t('Profile update unsuccessful. Please try again.'),
       },
     });
     navigateToProfileInfoPage();
@@ -70,7 +70,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
       event: NotificationEvents.ShowNotification,
       data: {
         type: NotificationTypes.Error,
-        message: t('The image wasn’t uploaded correctly. Please try again!'),
+        title: t("The image wasn't uploaded correctly. Please try again!"),
       },
     });
   };
@@ -194,8 +194,6 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
               : null,
             name: profileData?.name ?? '',
             bio: profileData?.description ?? '',
-            ens: '',
-            userName: '',
             nsfw: profileData?.nsfw ?? false,
             links: profileData?.links?.map(link => link.href) ?? [],
           }}
@@ -242,7 +240,6 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
           description={t(
             'You can add your personal websites or social links to be shared on your profile',
           )}
-          socialLinks={profileData?.links || []}
           cancelButton={{
             label: t('Cancel'),
             disabled: isProcessing,

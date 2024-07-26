@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 
@@ -14,14 +14,17 @@ import DropDownFilter, {
 } from '@akashaorg/design-system-components/lib/components/BaseDropdownFilter';
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import AppList from '@akashaorg/design-system-components/lib/components/AppList';
+import DynamicInfiniteScroll from '@akashaorg/design-system-components/lib/components/DynamicInfiniteScroll';
 
 import { useGetAppsByPublisherDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { hasOwn, useAkashaStore } from '@akashaorg/ui-awf-hooks';
 import { SortOrder, AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { ExtensionStatus } from '@akashaorg/typings/lib/ui';
-import { ExtensionAction } from './extension-action';
+import { ExtensionElement } from './extension-element';
 import { NotConnnected } from './not-connected';
+import { capitalize } from 'lodash';
+
+const ENTRY_HEIGHT = 92;
 
 export const MyExtensionsPage: React.FC<unknown> = () => {
   const { t } = useTranslation('app-extensions');
@@ -40,22 +43,22 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
     },
     {
       id: '1',
-      title: AkashaAppApplicationType.App,
+      title: capitalize(AkashaAppApplicationType.App),
       type: 'opt',
     },
     {
       id: '2',
-      title: AkashaAppApplicationType.Widget,
+      title: capitalize(AkashaAppApplicationType.Widget),
       type: 'opt',
     },
     {
       id: '3',
-      title: AkashaAppApplicationType.Plugin,
+      title: capitalize(AkashaAppApplicationType.Plugin),
       type: 'opt',
     },
     {
       id: '4',
-      title: AkashaAppApplicationType.Other,
+      title: capitalize(AkashaAppApplicationType.Other),
       type: 'opt',
     },
   ];
@@ -99,32 +102,39 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
     data: { authenticatedProfile },
   } = useAkashaStore();
 
-  const { data: appsByPubReq, error } = useGetAppsByPublisherDidQuery({
+  const {
+    data: appsByPubReq,
+    error,
+    loading,
+    fetchMore,
+  } = useGetAppsByPublisherDidQuery({
     variables: {
       id: authenticatedProfile?.did.id,
-      first: 20,
+      first: 10,
       sorting: { createdAt: SortOrder.Desc },
     },
     skip: !authenticatedProfile?.did.id,
   });
-  const appsData =
-    appsByPubReq?.node && hasOwn(appsByPubReq.node, 'akashaAppList')
+  const appsList = useMemo(() => {
+    return appsByPubReq?.node && hasOwn(appsByPubReq.node, 'akashaAppList')
       ? appsByPubReq.node.akashaAppList
       : null;
+  }, [appsByPubReq]);
 
-  const appElements = appsData?.edges
-    ?.filter(ext => {
-      if (selectedType.id === '0') {
-        return true;
-      }
-      return ext.node?.applicationType === selectedType.title;
-    })
-    .map(ext => {
-      return {
-        ...ext.node,
-        action: <ExtensionAction extensionId={ext.node?.id} />,
-      };
-    });
+  const appsData = useMemo(() => {
+    return appsList?.edges?.map(edge => edge.node);
+  }, [appsList]);
+
+  const pageInfo = useMemo(() => {
+    return appsList?.pageInfo;
+  }, [appsList]);
+
+  const appElements = appsData?.filter(ext => {
+    if (selectedType.id === '0') {
+      return true;
+    }
+    return ext?.applicationType === selectedType.title?.toUpperCase();
+  });
 
   if (!authenticatedProfile?.did.id) {
     return <NotConnnected />;
@@ -144,7 +154,7 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
         align="center"
         padding={12}
         background={{ light: 'grey9', dark: 'grey5' }}
-        customStyle="rounded-3xl"
+        customStyle="rounded-[20px]"
       >
         <Text variant="body1">{t('Create an extension ✨ 🚀')}</Text>
         <Button variant="primary" label={t('Create')} onClick={handleNavigateToCreateApp} />
@@ -182,7 +192,32 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
       )}
       {!error && appElements?.length > 0 && (
         <Card>
-          <AppList apps={appElements} showAppTypeIndicator />
+          <DynamicInfiniteScroll
+            count={appElements.length}
+            estimatedHeight={ENTRY_HEIGHT}
+            overScan={1}
+            itemSpacing={16}
+            hasNextPage={pageInfo && pageInfo.hasNextPage}
+            loading={loading}
+            onLoadMore={() => {
+              return fetchMore({
+                variables: {
+                  after: pageInfo.endCursor,
+                },
+              });
+            }}
+          >
+            {({ itemIndex }) => {
+              const app = appElements[itemIndex];
+              return (
+                <ExtensionElement
+                  extensionData={app}
+                  showDivider={itemIndex < appElements.length - 1}
+                  filter={selectedStatus}
+                />
+              );
+            }}
+          </DynamicInfiniteScroll>
         </Card>
       )}
     </Stack>

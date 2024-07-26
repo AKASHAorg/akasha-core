@@ -1,7 +1,6 @@
 import React from 'react';
 import { render, RenderOptions } from '@testing-library/react';
 import { AllProviders } from './providers';
-import { MockedResponse } from '@apollo/client/testing';
 
 const renderWithWrapper = (
   component: React.ReactElement,
@@ -12,15 +11,8 @@ const renderWithWrapper = (
 };
 
 /* Utility function to render with all required providers */
-const renderWithAllProviders = (
-  component: React.ReactElement,
-  options: RenderOptions,
-  providerProps?: { mocks: MockedResponse<unknown, unknown>[] },
-) => {
-  return render(component, {
-    wrapper: () => React.createElement(AllProviders, { providerProps }, component),
-    ...options,
-  });
+const renderWithAllProviders = (component: React.ReactElement, options: RenderOptions) => {
+  return render(component, { wrapper: AllProviders, ...options });
 };
 
 export * from '@testing-library/react';

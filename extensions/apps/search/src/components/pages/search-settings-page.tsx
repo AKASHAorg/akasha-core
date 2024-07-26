@@ -67,7 +67,7 @@ const SettingsPage: React.FC = () => {
           event: NotificationEvents.ShowNotification,
           data: {
             type: NotificationTypes.Success,
-            message: 'Search settings updated successfully',
+            title: 'Search settings updated successfully',
           },
         });
       }
@@ -84,7 +84,7 @@ const SettingsPage: React.FC = () => {
         event: NotificationEvents.ShowNotification,
         data: {
           type: NotificationTypes.Error,
-          message: 'Something went wrong. Retry',
+          title: 'Something went wrong. Retry',
         },
       });
     }

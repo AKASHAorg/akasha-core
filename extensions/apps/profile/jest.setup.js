@@ -1,10 +1,4 @@
-import './jest.setup';
-import * as reactUse from 'react-use';
-import ResizeObserver from 'resize-observer-polyfill';
-
-global.ResizeObserver = ResizeObserver;
-
-jest.spyOn(reactUse, 'useMedia').mockReturnValue(true);
+import '../../jest.setup';
 
 jest.mock('@akashaorg/typings/lib/ui', () => ({
   EntityTypes: {
@@ -37,12 +31,10 @@ jest.mock('@akashaorg/typings/lib/ui', () => ({
     LayoutShowAppNotFound: 'layout:show-app-not-found',
     ThemeChange: 'theme-change',
   },
+  NotificationEvents: {
+    ShowNotification: 'show-notification',
+  },
+  NotificationTypes: {
+    Success: 'success',
+  },
 }));
-
-jest.mock('@twind/core', () => {
-  return {
-    tw: () => ({}),
-    apply: () => ({}),
-    keyframes: () => ({}),
-  };
-});

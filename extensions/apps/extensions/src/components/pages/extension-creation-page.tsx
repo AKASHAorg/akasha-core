@@ -58,7 +58,7 @@ export const ExtensionCreationPage: React.FC<unknown> = () => {
                         createdAt: new Date().toISOString(),
                         description: '',
                         displayName: data?.extensionName,
-                        license: '',
+                        license: data?.extensionLicense.title,
                         name: data?.extensionID,
                       },
                     },
@@ -84,7 +84,7 @@ export const ExtensionCreationPage: React.FC<unknown> = () => {
                       event: NotificationEvents.ShowNotification,
                       data: {
                         type: NotificationTypes.Success,
-                        message: t('Extension created successfully!'),
+                        title: t('Extension created successfully!'),
                       },
                     });
 

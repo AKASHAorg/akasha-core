@@ -8,8 +8,12 @@ import {
   useUpdateInterestsMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { AkashaIndexedStreamStreamType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import {
+  IModalNavigationOptions,
+  NotificationEvents,
+  NotificationTypes,
+} from '@akashaorg/typings/lib/ui';
 import { BeamContentResolver, TagFeed } from '@akashaorg/ui-lib-feed';
-import { IModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import getSDK from '@akashaorg/awf-sdk';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
@@ -30,7 +34,7 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
-  const { navigateToModal, worldConfig } = useRootComponentProps();
+  const { uiEvents, worldConfig, navigateToModal } = useRootComponentProps();
   const isLoggedIn = !!authenticatedDID;
   const _navigateToModal = React.useRef(navigateToModal);
   const showLoginModal = React.useCallback(
@@ -105,7 +109,43 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
     context: { source: sdk.current.services.gql.contextSources.composeDB },
   });
 
-  const executeInterestsMutation = (interests: string[]) => {
+  const showSuccessSnackbar = (subscribing: boolean) => {
+    uiEvents.next({
+      event: NotificationEvents.ShowNotification,
+      data: {
+        type: NotificationTypes.Success,
+        title: subscribing ? t('Subscribed to topic') : t('Unsubscribed from topic'),
+        description: subscribing
+          ? `"${tagName}" ${t('has been added to your interests')}`
+          : `"${tagName}" ${t('has been removed from your interests')}`,
+      },
+    });
+  };
+
+  const handleTagClick = (tagName: string, subscribing = true) => {
+    // if not logged in, show modal
+    if (!isLoggedIn) {
+      showLoginModal();
+      return;
+    }
+    // if subscribing, and limit is already reached, return snackbar
+    if (subscribing && tagSubscriptions.length === 10) {
+      uiEvents.next({
+        event: NotificationEvents.ShowNotification,
+        data: {
+          type: NotificationTypes.Error,
+          title: t('Interests limit reached'),
+          description: t(
+            'You have reached the limit of 10 interests. Please remove some interests from your profile to add new ones.',
+          ),
+        },
+      });
+      return;
+    }
+    const interests = subscribing
+      ? [...tagSubscriptions, tagName]
+      : tagSubscriptions.filter(tag => tag !== tagName);
+
     if (tagSubscriptionsId) {
       updateInterestsMutation({
         variables: {
@@ -119,6 +159,7 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
             },
           },
         },
+        onCompleted: () => showSuccessSnackbar(subscribing),
         onError: () => {
           refetchTagSubscriptions();
         },
@@ -135,29 +176,12 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
             },
           },
         },
+        onCompleted: () => showSuccessSnackbar(subscribing),
         onError: () => {
           refetchTagSubscriptions();
         },
       });
     }
-  };
-
-  const handleTagSubscribe = (tagName: string) => {
-    if (!isLoggedIn) {
-      showLoginModal();
-      return;
-    }
-    const newInterests = [...tagSubscriptions, tagName];
-    executeInterestsMutation(newInterests);
-  };
-
-  const handleTagUnsubscribe = (tagName: string) => {
-    if (!isLoggedIn) {
-      showLoginModal();
-      return;
-    }
-    const newInterests = tagSubscriptions.filter(topic => topic !== tagName);
-    executeInterestsMutation(newInterests);
   };
 
   const listOfTags = React.useMemo(() => [tagName], [tagName]);
@@ -186,8 +210,8 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
               subscribedTags={tagSubscriptions}
               isLoading={loading || updateLoading}
               mentionsLabel={beamCount + (beamCount > 1 ? ' Beams' : ' Beam')}
-              handleSubscribeTag={() => handleTagSubscribe(tagName)}
-              handleUnsubscribeTag={() => handleTagUnsubscribe(tagName)}
+              handleSubscribeTag={() => handleTagClick(tagName)}
+              handleUnsubscribeTag={() => handleTagClick(tagName, false)}
             />
           </Stack>
         )}
