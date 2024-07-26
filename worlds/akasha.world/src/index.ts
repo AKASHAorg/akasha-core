@@ -14,36 +14,36 @@ declare const __LOAD_LOCAL_SOURCES__: boolean;
   const { default: getSDK } = await System.import('@akashaorg/awf-sdk');
 
   const origin = window.location.origin;
-  let registryOverrides: (Partial<AkashaApp> & { sources: string[] })[] = [
+  let registryOverrides: (Partial<AkashaApp> & { source: string })[] = [
     {
       name: '@akashaorg/app-routing',
       applicationType: AkashaAppApplicationType.App,
-      sources: [`${origin}/apps/routing`],
+      source: `${origin}/apps/routing/index.js`,
     },
     {
       name: '@akashaorg/ui-widget-layout',
       applicationType: AkashaAppApplicationType.Widget,
-      sources: [`${origin}/widgets/layout`],
+      source: `${origin}/widgets/layout/index.js`,
     },
     {
       name: '@akashaorg/ui-widget-sidebar',
       applicationType: AkashaAppApplicationType.Widget,
-      sources: [`${origin}/widgets/sidebar`],
+      source: `${origin}/widgets/sidebar/index.js`,
     },
     {
       name: '@akashaorg/ui-widget-topbar',
       applicationType: AkashaAppApplicationType.Widget,
-      sources: [`${origin}/widgets/top-bar`],
+      source: `${origin}/widgets/top-bar/index.js`,
     },
     {
       name: '@akashaorg/ui-widget-mini-profile',
       applicationType: AkashaAppApplicationType.Widget,
-      sources: [`${origin}/widgets/mini-profile`],
+      source: `${origin}/widgets/mini-profile/index.js`,
     },
     {
       name: '@akashaorg/ui-widget-my-apps',
       applicationType: AkashaAppApplicationType.Widget,
-      sources: [`${origin}/widgets/my-apps`],
+      source: `${origin}/widgets/my-apps/index.js`,
     },
   ];
 
@@ -65,13 +65,14 @@ declare const __LOAD_LOCAL_SOURCES__: boolean;
     layout: '@akashaorg/ui-widget-layout',
     // define an app that will load at root '/' path
     homepageApp: '@akashaorg/app-antenna',
+    // define the extensions app for this world
+    extensionsApp: '@akashaorg/app-extensions',
     // define pre-installed apps,
     // homepageApp is always loaded by default
     defaultApps: [
       '@akashaorg/app-routing',
       '@akashaorg/app-vibes',
       '@akashaorg/app-auth-ewa',
-      '@akashaorg/app-extensions',
       '@akashaorg/app-search',
       '@akashaorg/app-profile',
       '@akashaorg/app-notifications',

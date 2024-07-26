@@ -240,25 +240,31 @@ class AWF_IpfsConnector {
     return cid.toV1();
   }
 
-  @validate(z.array(z.string()))
-  multiAddrToUri(addrList: string[]) {
-    const results: string[] = [];
-    if (!addrList?.length) {
+  private addrToUri = (addr: string) => {
+    if (addr.substring(0, 6) === '/ipfs/') {
+      return this.buildOriginLink(addr.substring(6));
+    } else if (addr.substring(0, 7) === 'ipfs://') {
+      return this.buildOriginLink(addr.substring(7));
+    } else if (addr.substring(0, 1) === '/') {
+      return multiaddrToUri(addr);
+    } else if (addr.startsWith('https://')) {
+      return addr;
+    }
+  };
+
+  @validate(z.array(z.string()).or(z.string()))
+  multiAddrToUri(addrList: string | string[]) {
+    if (Array.isArray(addrList)) {
+      const results: string[] = [];
+      for (const addr of addrList) {
+        const result = this.addrToUri(addr);
+        if (result) {
+          results.push(result);
+        }
+      }
       return results;
     }
-    for (const addr of addrList) {
-      if (addr.substring(0, 6) === '/ipfs/') {
-        results.push(this.buildOriginLink(addr.substring(6)));
-      } else if (addr.substring(0, 7) === 'ipfs://') {
-        results.push(this.buildOriginLink(addr.substring(7)));
-      } else if (addr.substring(0, 1) === '/') {
-        results.push(multiaddrToUri(addr));
-      } else if (addr.startsWith('https://')) {
-        results.push(addr);
-      }
-    }
-
-    return results;
+    return this.addrToUri(addrList);
   }
 }
 

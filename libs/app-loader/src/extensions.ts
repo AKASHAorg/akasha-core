@@ -1,6 +1,6 @@
 import { WorldConfig } from '@akashaorg/typings/lib/ui';
 import getSDK from '@akashaorg/awf-sdk';
-import { SortOrder } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { AkashaApp, SortOrder } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { ILogger } from '@akashaorg/typings/lib/sdk/log';
 
 /**
@@ -45,33 +45,13 @@ const getPublishedAppLatestVersion = async (appName: string, logger?: ILogger) =
     log.warn(`No published versions found for app ${appName}`);
     return;
   }
-  // const { source, version, id, createdAt } = appNode.releases.edges[0].node;
 
   return appNode;
-
-  // @Todo: remove this
-  /*{
-    sources: sdk.services.common.ipfs.multiAddrToUri([source]),
-    id,
-    createdAt,
-    name: appName,
-    enabled: true,
-    author: did,
-    integrationID: id,
-    integrationType: appNode.applicationType,
-    manifestData: {
-      version,
-      description: appNode.description,
-      displayName: appNode.displayName,
-      keywords: appNode.keywords,
-      license: appNode.license,
-      contributors: appNode.contributors?.map(contributor => contributor.akashaProfile.did.id),
-      mainFile: 'index.js',
-    },
-  };*/
 };
 
-export const getRemoteLatestExtensionInfos = async (extensions: { name: string }[]) => {
+export const getRemoteLatestExtensionInfos = async (
+  extensions: { name: string }[],
+): Promise<Awaited<ReturnType<typeof getPublishedAppLatestVersion>>[]> => {
   const pkgInfos = [];
   for (const extension of extensions) {
     const app = await getPublishedAppLatestVersion(extension.name);
@@ -79,32 +59,38 @@ export const getRemoteLatestExtensionInfos = async (extensions: { name: string }
       pkgInfos.push(app);
     }
   }
-  return Promise.resolve(pkgInfos);
+  return pkgInfos;
 };
 
-export const getExtensionsData = async (extNames: string[], worldConfig: WorldConfig) => {
-  const remote = extNames.filter(extName => {
-    return !worldConfig.registryOverrides.some(ext => ext.name === extName);
+export const filterExtensionsByLocation = (extNames: string[], worldConfig: WorldConfig) => {
+  const result = {
+    remote: [] as { name: string }[],
+    local: [] as (Partial<AkashaApp> & { source: string; isLocal: boolean })[],
+  };
+  extNames.forEach(ext => {
+    const localExtension = worldConfig.registryOverrides.find(extension => extension.name === ext);
+    if (localExtension) {
+      result.local.push({ ...localExtension, isLocal: true });
+    } else {
+      result.remote.push({ name: ext });
+    }
   });
-  const local = extNames
-    .filter(extensionName => {
-      return !remote.includes(extensionName);
-    })
-    .map(e => worldConfig.registryOverrides.find(ext => ext.name === e));
-
-  const remotes = await getRemoteLatestExtensionInfos(remote.map(e => ({ name: e })));
-
-  return remotes.concat(local);
+  return result;
 };
 
 export const getWorldDefaultExtensions = async (worldConfig: WorldConfig) => {
   const defaultWorldExt = [
     worldConfig.layout,
     worldConfig.homepageApp,
+    worldConfig.extensionsApp,
     ...worldConfig.defaultApps,
     ...worldConfig.defaultWidgets,
   ];
-  return getExtensionsData(defaultWorldExt, worldConfig);
+  const { local, remote } = filterExtensionsByLocation(defaultWorldExt, worldConfig);
+
+  const remoteExtensionData = await getRemoteLatestExtensionInfos(remote);
+
+  return [...local, ...remoteExtensionData];
 };
 
 export const getUserInstalledExtensions = async () => {

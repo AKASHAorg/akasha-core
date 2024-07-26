@@ -13,7 +13,7 @@ import { DEV_MODE_KEY } from './constants';
 import { ContentBlockStore } from './plugins/content-block-store';
 import { ExtensionPointStore } from './plugins/extension-point-store';
 import { WidgetStore } from './plugins/widget-store';
-import { InstalledAppStore } from './plugins/installed-app-store';
+// import { InstalledAppStore } from './plugins/installed-app-store';
 import React from 'react';
 import { Akasha } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import { DevMode } from './components/pages';
@@ -92,7 +92,7 @@ export const registerPlugin = async (
   const contentBlockStore = ContentBlockStore.getInstance(props.uiEvents);
   const extensionPointStore = ExtensionPointStore.getInstance(props.uiEvents);
   const widgetStore = WidgetStore.getInstance(props.uiEvents);
-  const installedAppStore = InstalledAppStore.getInstance(props.uiEvents);
+  // const installedAppStore = InstalledAppStore.getInstance(props.uiEvents);
 
   return {
     contentBlockStore: {
@@ -106,9 +106,6 @@ export const registerPlugin = async (
     widgetStore: {
       getWidgets: widgetStore.getWidgets,
       getMatchingWidgets: widgetStore.getMatchingWidgets,
-    },
-    installedAppStore: {
-      getInstalledApps: installedAppStore.getInstalledApps,
     },
   };
 };

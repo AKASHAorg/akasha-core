@@ -12,10 +12,10 @@ import {
   WorldConfig,
 } from '@akashaorg/typings/lib/ui';
 import { Subject, Subscription } from 'rxjs';
-import { hidePageSplash, showPageSplash } from './splash-screen';
+import { hidePageSplash, showPageSplash, show404, hide404 } from './html-template-handlers';
 import * as singleSpa from 'single-spa';
 import {
-  getExtensionsData,
+  getRemoteLatestExtensionInfos,
   getUserInstalledExtensions,
   getWorldDefaultExtensions,
 } from './extensions';
@@ -24,15 +24,16 @@ import { ILogger } from '@akashaorg/typings/lib/sdk/log';
 import Logging from '@akashaorg/awf-sdk/src/logging/index';
 import {
   checkActivityFn,
+  extractAppNameFromPath,
   getDomElement,
-  navigateToModal,
   getModalFromParams,
+  navigateToModal,
   parseQueryString,
 } from './utils';
 import EventBus from '@akashaorg/awf-sdk/src/common/event-bus';
 import { APP_EVENTS, AUTH_EVENTS } from '@akashaorg/typings/lib/sdk';
 import { IntegrationSchema } from '@akashaorg/awf-sdk/src/db/integrations.schema';
-import { AkashaApp, AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 const isWindow = window && typeof window !== 'undefined';
 
@@ -53,7 +54,7 @@ export default class AppLoader {
   uiEvents: Subject<UIEventData>;
   extensionConfigs: Map<string, IAppConfig & { name: string }>;
   extensionModules: Map<string, SystemModuleType>;
-  extensionData: AkashaApp[];
+  extensionData: Awaited<ReturnType<typeof getWorldDefaultExtensions>>;
   layoutConfig: IAppConfig;
   logger: ILogger;
   parentLogger: Logging;
@@ -62,6 +63,7 @@ export default class AppLoader {
   user: { id: string };
   globalChannelSub: Subscription;
   userExtensions: IntegrationSchema[];
+  appNotFound: boolean;
   constructor(worldConfig: WorldConfig) {
     this.worldConfig = worldConfig;
     this.uiEvents = new Subject<UIEventData>();
@@ -76,6 +78,7 @@ export default class AppLoader {
     this.user = null;
     this.globalChannelSub = null;
     this.userExtensions = [];
+    this.appNotFound = false;
   }
 
   start = async () => {
@@ -96,9 +99,10 @@ export default class AppLoader {
     singleSpa.setUnmountMaxTime(5000, false);
 
     this.extensionData = await getWorldDefaultExtensions(this.worldConfig);
-    const layoutManifest = this.extensionData.find(data => data.name === this.worldConfig.layout);
 
-    if (!layoutManifest) {
+    const layoutData = this.extensionData.find(data => data.name === this.worldConfig.layout);
+
+    if (!layoutData) {
       this.logger.error('layout not found. Cannot continue.');
       return;
     }
@@ -114,15 +118,47 @@ export default class AppLoader {
     const sdk = getSDK();
     await sdk.api.auth.getCurrentUser();
   };
-  onBeforeFirstMount = () => hidePageSplash();
+  onBeforeFirstMount = () => {
+    hidePageSplash();
+  };
   onFirstMount = () => {
     this.singleSpaRegister(this.extensionConfigs);
   };
   onRouting = (ev: CustomEvent) => {
-    const actuallyMountedApps = ev.detail.appsByNewStatus.MOUNTED.filter(
+    const newURL = new URL(ev.detail.newUrl);
+    const { appsByNewStatus } = ev.detail;
+    if (this.appNotFound) {
+      hide404(this.layoutConfig.extensionSlots.applicationSlotId);
+    }
+
+    const actuallyMountedApps = appsByNewStatus.MOUNTED.filter(
       (name: string) => name !== this.worldConfig.layout,
     );
-    if ((!actuallyMountedApps || !actuallyMountedApps.length) && location.pathname === '/') {
+
+    if (
+      newURL.pathname !== '/' &&
+      appsByNewStatus.MOUNTED.length === 0 &&
+      singleSpa.getAppNames().length > 0
+    ) {
+      // wrong typings for the parameters of the checkActivityFunctions
+      // provided by the single-spa. More info: https://github.com/single-spa/single-spa/issues/1000
+      const matchingApps = singleSpa.checkActivityFunctions(newURL as unknown as Location);
+      if (matchingApps.filter(name => name !== this.worldConfig.layout).length === 0) {
+        this.logger.warn(`No application matches path: ${newURL.pathname}`);
+        const appName = extractAppNameFromPath(newURL.pathname);
+        // hide if template was already mounted
+        console.log(this.extensionConfigs, '<<<ext configs');
+        hide404(this.layoutConfig.extensionSlots.applicationSlotId);
+        show404(
+          this.layoutConfig.extensionSlots.applicationSlotId,
+          appName,
+          `/${this.worldConfig.extensionsApp}${this.extensionConfigs.get(this.worldConfig.extensionsApp)?.routes.default || '/'}`,
+        );
+        this.appNotFound = true;
+      }
+    }
+
+    if ((!actuallyMountedApps || !actuallyMountedApps.length) && newURL.pathname === '/') {
       const homepageAppName = this.worldConfig.homepageApp;
       if (!homepageAppName) {
         this.logger.error(`There is no homepageApp defined in the world config! Cannot redirect!`);
@@ -133,32 +169,34 @@ export default class AppLoader {
       }
     }
   };
-  importModules = async extensionData => {
+  importModules = async (extensionData: typeof this.extensionData) => {
     if (!extensionData.length) return;
+    const sdk = getSDK();
     const modules = new Map();
     for (const extension of extensionData) {
       if (this.extensionModules.has(extension.name) || modules.has(extension.name)) {
         continue;
       }
-      if (!extension.enabled) {
-        continue;
+      if ('isLocal' in extension && Object.hasOwn(extension, 'isLocal')) {
+        if (!extension.source || typeof extension.source !== 'string') {
+          this.logger.warn(
+            `Locally loaded extensions requires a 'source: string' property but ${typeof extension.source} was provided for: ${extension.name}. Skipping!`,
+          );
+          continue;
+        }
+        const source = sdk.services.common.ipfs.buildOriginLink(extension.source);
+        const module = await System.import<SystemModuleType>(`${source}`);
+        modules.set(extension.name, module);
+      } else {
+        const latestReleaseNode = extension.releases?.edges[0]?.node;
+        if (!latestReleaseNode || !latestReleaseNode?.source) {
+          this.logger.warn(`There is no release or release source for the app: ${extension.name}`);
+          continue;
+        }
+        const source = sdk.services.common.ipfs.multiAddrToUri(latestReleaseNode.source);
+        const module = await System.import<SystemModuleType>(`${source}/index.js`);
+        modules.set(extension.name, module);
       }
-      if (extension.sources.length === 0) {
-        this.logger.warn(`No source path was found for integration ${extension.name}. Skipping!`);
-        continue;
-      }
-
-      if (extension.sources.length > 1) {
-        this.logger.info(
-          `Multiple sources found for integration ${extensionData.name}. Using ${extensionData.sources[0]}`,
-        );
-      }
-      const source = getSDK().services.common.ipfs.buildOriginLink(extensionData.sources[0]);
-      const mainFile = extensionData?.mainFile || 'index.js';
-      // does not play well with local overwrites
-      //const sourceURL = new URL(mainFile, source);
-      const module = await System.import<SystemModuleType>(`${source}/${mainFile}`);
-      modules.set(extensionData.name, module);
     }
     return modules;
   };
@@ -209,9 +247,8 @@ export default class AppLoader {
   loadUserExtensions = async () => {
     // @TODO: implement when ready
     this.userExtensions = await getUserInstalledExtensions();
-    const manifests = await getExtensionsData(
-      this.userExtensions.map(e => e.name),
-      this.worldConfig,
+    const manifests = await getRemoteLatestExtensionInfos(
+      this.userExtensions.map(e => ({ name: e.name })),
     );
     const modules = await this.importModules(manifests);
     const _plugins = await this.loadPlugins(modules);
@@ -219,6 +256,7 @@ export default class AppLoader {
     const extensionConfigs = this.registerExtensions(modules);
     this.singleSpaRegister(extensionConfigs);
   };
+
   loadPlugins = async (extensionModules: Map<string, SystemModuleType>) => {
     const plugins = {};
     for (const [name, module] of extensionModules) {
@@ -238,6 +276,7 @@ export default class AppLoader {
     }
     return plugins;
   };
+
   initializeExtensions = async (extensionModules: Map<string, SystemModuleType>) => {
     for (const [name, module] of extensionModules) {
       if (module.initialize && typeof module.initialize === 'function') {
@@ -245,12 +284,13 @@ export default class AppLoader {
           uiEvents: this.uiEvents,
           plugins: this.plugins,
           worldConfig: this.worldConfig,
-          layoutSlots: this.layoutConfig.extensionsSlots,
+          layoutSlots: this.layoutConfig.extensionSlots,
           logger: this.parentLogger.create(`${name}_initialize`),
         });
       }
     }
   };
+
   loadLayoutConfig = async () => {
     const layoutModule = this.extensionModules.get(this.worldConfig.layout);
     if (!layoutModule) {
@@ -274,7 +314,7 @@ export default class AppLoader {
       if (this.extensionConfigs.has(name) || extensionConfigs.has(name)) continue;
       if (mod.register && typeof mod.register === 'function') {
         const config = mod.register({
-          layoutSlots: this.layoutConfig.extensionsSlots,
+          layoutSlots: this.layoutConfig.extensionSlots,
           worldConfig: this.worldConfig,
           logger: this.parentLogger.create(name),
           uiEvents: this.uiEvents,
@@ -308,12 +348,6 @@ export default class AppLoader {
             data: { ...config, appName: name },
           });
         }
-        if (extensionData && extensionData.applicationType === AkashaAppApplicationType.App) {
-          this.uiEvents.next({
-            event: AppEvents.RegisterApplication,
-            data: { config, appData: extensionData },
-          });
-        }
       }
     }
     return extensionConfigs;
@@ -335,7 +369,7 @@ export default class AppLoader {
         getModalFromParams: getModalFromParams,
         parseQueryString: parseQueryString,
         worldConfig: this.worldConfig,
-        layoutSlots: layoutConf.extensionsSlots,
+        layoutSlots: layoutConf.extensionSlots,
         uiEvents: this.uiEvents,
         logger,
         plugins: this.plugins,
@@ -368,7 +402,7 @@ export default class AppLoader {
         getModalFromParams: getModalFromParams,
         parseQueryString: parseQueryString,
         worldConfig: this.worldConfig,
-        layoutSlots: this.layoutConfig.extensionsSlots,
+        layoutSlots: this.layoutConfig.extensionSlots,
         uiEvents: this.uiEvents,
         logger: this.parentLogger.create(name),
         plugins: this.plugins,

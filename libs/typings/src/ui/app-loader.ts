@@ -91,6 +91,10 @@ export type WorldConfig = {
    */
   homepageApp: string;
   /**
+   * The extensions app that will be used by this world.
+   */
+  extensionsApp: string;
+  /**
    * Define this world's title
    */
   title: string;
@@ -106,7 +110,7 @@ export type WorldConfig = {
     siteId: string;
     trackerUrl: string;
   };
-  registryOverrides?: Partial<AkashaApp>[];
+  registryOverrides?: (Partial<AkashaApp> & { source: string })[];
   socialLinks?: { icon: IconType; link: string }[];
 };
 

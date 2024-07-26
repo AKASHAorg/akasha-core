@@ -21,6 +21,7 @@ export enum ExtensionStatus {
  **/
 export const enum AppEvents {
   RegisterApplication = 'register-application',
+  AppNotFound = 'app-not-found',
 }
 /**
  * Type defining info about developer of an extension
@@ -34,7 +35,14 @@ export type Developer = {
  **/
 export type AppRegisterEvent = {
   event: AppEvents.RegisterApplication;
-  data: { config: IAppConfig; appData: AkashaApp };
+  data: {
+    config: IAppConfig;
+    appData: Partial<Omit<AkashaApp, 'author'>> & {
+      source?: string;
+      isLocal?: boolean;
+      author?: { id: string; isViewer?: boolean };
+    };
+  };
 };
 
 /**
@@ -90,7 +98,7 @@ export interface IAppConfig {
    * Can be used to target a specific app's extension
    * Note that this is optional
    */
-  extensionsSlots?: {
+  extensionSlots?: {
     [key: string]: string;
   };
   /**
