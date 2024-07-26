@@ -3,7 +3,6 @@ import '@akashaorg/design-system-core/src/twind/globals.css';
 
 import { WorldConfig } from '@akashaorg/typings/lib/ui';
 import { AkashaApp, AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import overwrites from './registry-overrides';
 
 console.time('AppLoader:firstMount');
 
@@ -49,7 +48,7 @@ declare const __LOAD_LOCAL_SOURCES__: boolean;
   ];
 
   if (__DEV__ || __LOAD_LOCAL_SOURCES__) {
-    registryOverrides = overwrites;
+    registryOverrides = (await import('./registry-overrides')).default;
   }
 
   const loaderConfig: WorldConfig = {
