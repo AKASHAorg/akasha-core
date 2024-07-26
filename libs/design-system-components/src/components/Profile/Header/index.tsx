@@ -31,7 +31,6 @@ export type HeaderProps = {
   background?: Profile['background'];
   avatar?: Profile['avatar'];
   profileName: Profile['name'];
-  ensName?: 'loading' | string;
   viewerIsOwner?: boolean;
   menuItems?: MenuProps['items'];
   copyLabel?: string;
@@ -57,7 +56,6 @@ const Header: React.FC<HeaderProps> = ({
   background,
   avatar,
   profileName,
-  ensName,
   viewerIsOwner,
   menuItems,
   copyLabel,
@@ -198,31 +196,6 @@ const Header: React.FC<HeaderProps> = ({
                 )}
               </Stack>
             </Stack>
-          </Stack>
-          <Stack direction="column" spacing="gap-y-4">
-            {ensName === 'loading' ? (
-              <>
-                <TextLine width="w-24" animated />
-                <TextLine width="w-72" animated />
-              </>
-            ) : (
-              ensName && (
-                <>
-                  <Divider />
-                  <Stack direction="column" spacing="gap-y-1.5">
-                    <Text variant="label">ENS Name</Text>
-                    <CopyToClipboard value={ensName}>
-                      <Text
-                        variant="body2"
-                        color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-                      >
-                        {ensName}
-                      </Text>
-                    </CopyToClipboard>
-                  </Stack>
-                </>
-              )
-            )}
           </Stack>
         </Stack>
       </Card>

@@ -2,8 +2,8 @@ import { Editor, Transforms, Element, Node, Point } from 'slate';
 import { ReactEditor } from 'slate-react';
 import ReactDOM from 'react-dom';
 import {
+  CustomElement,
   CustomText,
-  // ImageElement,
   LinkElement,
   MentionElement,
   TagElement,
@@ -78,33 +78,8 @@ const CustomEditor = {
     }
   },
 
-  // insertImage(
-  //   editor: Editor,
-  //   url: string,
-  //   fallbackUrl: string,
-  //   size: {
-  //     width: string;
-  //     height: string;
-  //     naturalWidth: string;
-  //     naturalHeight: string;
-  //   },
-  // ) {
-  //   const text = { text: '' };
-  //   const image: ImageElement = { url, fallbackUrl, size, type: 'image', children: [text] };
-  //   // move selection to the end before inserting to make sure image is last element
-  //   Transforms.select(editor, Editor.end(editor, []));
-  //   Transforms.insertNodes(editor, image);
-  //   // give slate time to render the image element
-  //   requestAnimationFrame(() => moveSelectionBeforeImage(editor));
-  // },
-
   insertText(editor: Editor, text: string) {
     ReactEditor.focus(editor);
-    // if the last element is an image and the user doesn't have
-    // an active selection move the selection before the image
-    // if (!editor.selection) {
-    //   moveSelectionBeforeImage(editor);
-    // }
     const textElem: CustomText = { text };
     Transforms.insertNodes(editor, textElem);
   },
@@ -185,21 +160,16 @@ const CustomEditor = {
   },
 };
 
-// export const moveSelectionBeforeImage = (editor: Editor) => {
-//   const [match] = Editor.nodes(editor, {
-//     match: n => Element.isElement(n) && n.type === 'image',
-//     mode: 'all',
-//   });
-//   if (match?.length) {
-//     const imageNode = match[0];
-//     const imagePath = ReactEditor.findPath(editor, imageNode);
-//     // move the selection before the image
-//     if (Node.isNode(imageNode)) {
-//       ReactEditor.focus(editor);
-//       Transforms.select(editor, Editor.end(editor, Path.previous(imagePath)));
-//     }
-//   }
-// };
+export const isEditorEmpty = (editorState?: CustomElement[]) => {
+  return !editorState?.find(content => {
+    if (content && 'children' in content) {
+      return content.children.find(childContent =>
+        'text' in childContent ? !!childContent.text : true,
+      );
+    }
+    return content && 'text' in content ? !!content.text : false;
+  });
+};
 
 interface IPortal {
   children: React.ReactNode;
