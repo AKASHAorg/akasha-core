@@ -21,21 +21,20 @@ const meta: Meta<MeterProps> = {
 
 type Story = StoryObj<MeterProps>;
 
-const baseArgs: Story = {
+export const Default: Story = { args: { size: 100, value: 60, thickness: 2, type: 'circle' } };
+
+export const BarMeter: Story = {
+  args: { size: 100, value: 60, thickness: 2, type: 'bar' },
+};
+
+export const BarMeterWithDirection: Story = {
   args: {
     size: 100,
     value: 60,
     thickness: 2,
-    type: 'circle',
+    type: 'bar',
+    direction: 'horizontal',
   },
-};
-
-export const Default: Story = { args: { ...baseArgs.args } };
-
-export const BarMeter: Story = { args: { ...baseArgs.args, type: 'bar' } };
-
-export const BarMeterWithDirection: Story = {
-  args: { ...baseArgs.args, type: 'bar', direction: 'horizontal' },
 };
 
 export default meta;

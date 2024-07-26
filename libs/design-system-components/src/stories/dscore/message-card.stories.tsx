@@ -22,14 +22,8 @@ const meta: Meta<MessageCardProps> = {
 
 type Story = StoryObj<MessageCardProps>;
 
-const baseArgs: Story = {
-  args: {
-    title: 'Title',
-    elevation: '1',
-    message: 'A sample message...',
-  },
+export const Default: Story = {
+  args: { title: 'Title', elevation: '1', message: 'A sample message...' },
 };
-
-export const Default: Story = { args: { ...baseArgs.args } };
 
 export default meta;

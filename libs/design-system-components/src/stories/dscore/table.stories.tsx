@@ -17,53 +17,85 @@ const meta: Meta<TableProps> = {
 
 type Story = StoryObj<TableProps>;
 
-const baseArgs: Story = {
+export const Default: Story = {
   args: {
     tableTitle: 'Table title',
+    rows: [
+      {
+        value: [
+          <Text key={0}>The Sliding Mr. Bones (Next Stop, Pottersville)</Text>,
+          <Text key={1}>Malcolm Lockyer</Text>,
+          <Text key={2}>1961</Text>,
+        ],
+        clickHandler: () => {
+          /** */
+        },
+      },
+      {
+        value: [
+          <Text key={0}>Witchy woman</Text>,
+          <Text key={1}>The Eagles</Text>,
+          <Text key={2}>1972</Text>,
+        ],
+        clickHandler: () => {
+          /** */
+        },
+      },
+      {
+        value: [
+          <Text key={0}>Shining Star</Text>,
+          <Text key={1}>Earth, Wind, and Fire</Text>,
+          <Text key={2}>1975</Text>,
+        ],
+        clickHandler: () => {
+          /** */
+        },
+      },
+    ],
   },
 };
 
-const theadValues = [
-  <Text key={0}>Song</Text>,
-  <Text key={1}>Artist</Text>,
-  <Text key={2}>Year</Text>,
-];
-
-const rows = [
-  {
-    value: [
-      <Text key={0}>The Sliding Mr. Bones (Next Stop, Pottersville)</Text>,
-      <Text key={1}>Malcolm Lockyer</Text>,
-      <Text key={2}>1961</Text>,
+export const TableWithHeadValues: Story = {
+  args: {
+    tableTitle: 'Table title',
+    theadValues: [
+      <Text key={0}>Song</Text>,
+      <Text key={1}>Artist</Text>,
+      <Text key={2}>Year</Text>,
     ],
-    clickHandler: () => {
-      /** */
-    },
-  },
-  {
-    value: [
-      <Text key={0}>Witchy woman</Text>,
-      <Text key={1}>The Eagles</Text>,
-      <Text key={2}>1972</Text>,
+    rows: [
+      {
+        value: [
+          <Text key={0}>The Sliding Mr. Bones (Next Stop, Pottersville)</Text>,
+          <Text key={1}>Malcolm Lockyer</Text>,
+          <Text key={2}>1961</Text>,
+        ],
+        clickHandler: () => {
+          /** */
+        },
+      },
+      {
+        value: [
+          <Text key={0}>Witchy woman</Text>,
+          <Text key={1}>The Eagles</Text>,
+          <Text key={2}>1972</Text>,
+        ],
+        clickHandler: () => {
+          /** */
+        },
+      },
+      {
+        value: [
+          <Text key={0}>Shining Star</Text>,
+          <Text key={1}>Earth, Wind, and Fire</Text>,
+          <Text key={2}>1975</Text>,
+        ],
+        clickHandler: () => {
+          /** */
+        },
+      },
     ],
-    clickHandler: () => {
-      /** */
-    },
   },
-  {
-    value: [
-      <Text key={0}>Shining Star</Text>,
-      <Text key={1}>Earth, Wind, and Fire</Text>,
-      <Text key={2}>1975</Text>,
-    ],
-    clickHandler: () => {
-      /** */
-    },
-  },
-];
-
-export const Default: Story = { args: { ...baseArgs.args, rows } };
-
-export const TableWithHeadValues: Story = { args: { ...baseArgs.args, theadValues, rows } };
+};
 
 export default meta;

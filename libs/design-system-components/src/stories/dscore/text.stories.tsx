@@ -36,20 +36,20 @@ const meta: Meta<TextProps> = {
 
 type Story = StoryObj<TextProps>;
 
-const baseArgs: Story = {
+export const Default: Story = {
+  args: { children: 'Almost before we knew it, we had left the ground' },
+};
+
+export const TextWithLineClamp: Story = {
   args: {
     children: 'Almost before we knew it, we had left the ground',
+    lineClamp: 2,
+    customStyle: 'w-32',
   },
 };
 
-export const Default: Story = { args: { ...baseArgs.args } };
-
-export const TextWithLineClamp: Story = {
-  args: { ...baseArgs.args, lineClamp: 2, customStyle: 'w-32' },
-};
-
 export const UnselectableText: Story = {
-  args: { ...baseArgs.args, selectable: false },
+  args: { children: 'Almost before we knew it, we had left the ground', selectable: false },
 };
 
 export default meta;
