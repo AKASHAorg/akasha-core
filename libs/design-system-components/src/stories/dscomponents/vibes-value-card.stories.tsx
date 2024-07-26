@@ -9,17 +9,11 @@ const meta: Meta<VibesValueCardProps> = {
 
 type Story = StoryObj<VibesValueCardProps>;
 
-const baseArgs: Story = {
+export const Default: Story = {
   args: {
     label: 'Transparency',
     assetName: 'transparency',
     publicImgPath: '',
-  },
-};
-
-export const Default: Story = {
-  args: {
-    ...baseArgs.args,
     description:
       'It needs to be easy for everyone to see what actions are performed. Our communities shall be build on tools and processes that strive for openness, communication and accountability.',
     ctaLabel: 'Discuss this value',
@@ -28,7 +22,7 @@ export const Default: Story = {
 };
 
 export const MiniCard: Story = {
-  args: { ...baseArgs.args, isMini: true },
+  args: { label: 'Transparency', assetName: 'transparency', publicImgPath: '', isMini: true },
 };
 
 export default meta;

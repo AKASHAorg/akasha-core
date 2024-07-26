@@ -9,14 +9,6 @@ const meta: Meta<AccordionProps> = {
   title: 'DSCore/Accordion/Accordion',
   component: Accordion,
   tags: ['autodocs'],
-  argTypes: {
-    customStyle: { defaultValue: '', control: 'text' },
-    contentStyle: { defaultValue: '', control: 'text' },
-    accordionId: { control: 'number' },
-    open: { control: 'boolean' },
-    headerDivider: { control: 'boolean' },
-    handleClick: { action: 'accordion clicked' },
-  },
 };
 
 type Story = StoryObj<AccordionProps>;

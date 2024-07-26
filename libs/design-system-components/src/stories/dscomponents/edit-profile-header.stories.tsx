@@ -9,29 +9,23 @@ const meta: Meta<HeaderProps> = {
 
 type Story = StoryObj<HeaderProps>;
 
-const profileId = 'did:key:003410490050000320006570034567114572000';
-
-const avatar = {
-  default: {
-    src: 'https://next.akasha-world-framework.pages.dev/images/avatar-1-min.webp',
-    height: 360,
-    width: 360,
-  },
-};
-
-const coverImage = {
-  default: {
-    src: 'https://static.licdn.com/sc/h/55k1z8997gh8dwtihm11aajyq',
-    height: 360,
-    width: 360,
-  },
-};
-
 export const Default: Story = {
   args: {
-    coverImage,
-    avatar,
-    profileId,
+    profileId: 'did:key:003410490050000320006570034567114572000',
+    coverImage: {
+      default: {
+        src: 'https://static.licdn.com/sc/h/55k1z8997gh8dwtihm11aajyq',
+        height: 360,
+        width: 360,
+      },
+    },
+    avatar: {
+      default: {
+        src: 'https://next.akasha-world-framework.pages.dev/images/avatar-1-min.webp',
+        height: 360,
+        width: 360,
+      },
+    },
     title: 'Avatar & Cover Image',
     cancelLabel: 'Cancel',
     deleteLabel: 'Delete',

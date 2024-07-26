@@ -1,15 +1,11 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { EntryCardProps } from '../../components/Entry/EntryCard';
 import { EntityTypes } from '@akashaorg/typings/lib/ui';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import VibesConsoleContentCard, {
   VibesConsoleContentCardProps,
 } from '../../components/VibesConsoleContentCard';
-import {
-  ItemType,
-  ProfileItemData,
-} from '../../components/VibesConsoleContentCard/mini-profile-cta';
+import { ItemType } from '../../components/VibesConsoleContentCard/mini-profile-cta';
 
 const meta: Meta<VibesConsoleContentCardProps> = {
   title: 'DSComponents/Vibes/VibesConsoleContentCard',
@@ -19,69 +15,53 @@ const meta: Meta<VibesConsoleContentCardProps> = {
 
 type Story = StoryObj<VibesConsoleContentCardProps>;
 
-const sampleEntryData: EntryCardProps = {
-  isLoggedIn: true,
-  entryData: {
-    active: true,
-    authorId: 'did:pkh:eip155:5:0xa2aabe32856a8d50c748d50a5111312d986208a8',
-    createdAt: new Date('Jan 01 2024').toISOString(),
-    id: 'kjzl6kcym7w8y90evf7vartzsbj9jbzdq',
-  },
-  profileAvatar: (
-    <ProfileAvatarButton
-      label="Profile Avatar Button"
-      profileId="did:pkh:eip155:5:0xa2aabe32856a8d50c748d50a5111312d986208a8"
-      avatar={{ src: 'https://placebeard.it/360x360', height: 360, width: 360 }}
-    />
-  ),
-  itemType: EntityTypes?.REFLECT,
-  flagAsLabel: 'Flag',
-  notEditableLabel: 'A reflection created over 10 minutes ago cannot be edited.',
-  slateContent: [
-    {
-      type: 'paragraph',
-      children: [
-        {
-          text: 'This content will be reported, for test purposes',
-        },
-      ],
-    },
-  ],
-  onEdit: () => ({}),
-  onEntryFlag: () => ({}),
-  onMentionClick: () => ({}),
-  onReflect: () => ({}),
-};
-
-const sampleProfileData: ProfileItemData = {
-  avatar: {
-    height: 320,
-    src: 'https://placebeard.it/360x360',
-    width: 320,
-  },
-  alternativeAvatars: [],
-  name: 'Golden Showers',
-  did: { id: 'somerandomdid' },
-  nsfw: false,
-};
-
-const sampleEntry = {
-  id: 'B-19089',
-  itemData: sampleEntryData,
-  appName: 'Antenna',
-  itemType: 'Beam' as ItemType,
-  primaryReason: 'Sexual or human exploitation',
-  reportCount: 46,
-  lastReportDate: new Date('Feb 01 2024'),
-};
-
 const handleButtonClick = () => {
   /** */
 };
 
-const baseArgs: Story = {
+export const AntennaBeam: Story = {
   args: {
-    entry: sampleEntry,
+    entry: {
+      id: 'B-19089',
+      itemData: {
+        isLoggedIn: true,
+        entryData: {
+          active: true,
+          authorId: 'did:pkh:eip155:5:0xa2aabe32856a8d50c748d50a5111312d986208a8',
+          createdAt: new Date('Jan 01 2024').toISOString(),
+          id: 'kjzl6kcym7w8y90evf7vartzsbj9jbzdq',
+        },
+        profileAvatar: (
+          <ProfileAvatarButton
+            label="Profile Avatar Button"
+            profileId="did:pkh:eip155:5:0xa2aabe32856a8d50c748d50a5111312d986208a8"
+            avatar={{ src: 'https://placebeard.it/360x360', height: 360, width: 360 }}
+          />
+        ),
+        itemType: EntityTypes?.REFLECT,
+        flagAsLabel: 'Flag',
+        notEditableLabel: 'A reflection created over 10 minutes ago cannot be edited.',
+        slateContent: [
+          {
+            type: 'paragraph',
+            children: [
+              {
+                text: 'This content will be reported, for test purposes',
+              },
+            ],
+          },
+        ],
+        onEdit: () => ({}),
+        onEntryFlag: () => ({}),
+        onMentionClick: () => ({}),
+        onReflect: () => ({}),
+      },
+      appName: 'Antenna',
+      itemType: 'Beam' as ItemType,
+      primaryReason: 'Sexual or human exploitation',
+      reportCount: 46,
+      lastReportDate: new Date('Feb 01 2024'),
+    },
     caseLabel: 'Case',
     nsfwLabel: 'Profile tagged NSFW',
     viewProfileLabel: 'View Profile',
@@ -94,44 +74,124 @@ const baseArgs: Story = {
   },
 };
 
-export const AntennaBeam: Story = {
-  args: {
-    ...baseArgs.args,
-  },
-};
-
 export const AntennaReflection: Story = {
   args: {
-    ...baseArgs.args,
-    entry: { ...sampleEntry, itemType: 'Reflection', id: 'R-19090' },
+    entry: {
+      id: 'R-19090',
+      itemData: {
+        isLoggedIn: true,
+        entryData: {
+          active: true,
+          authorId: 'did:pkh:eip155:5:0xa2aabe32856a8d50c748d50a5111312d986208a8',
+          createdAt: new Date('Jan 01 2024').toISOString(),
+          id: 'kjzl6kcym7w8y90evf7vartzsbj9jbzdq',
+        },
+        profileAvatar: (
+          <ProfileAvatarButton
+            label="Profile Avatar Button"
+            profileId="did:pkh:eip155:5:0xa2aabe32856a8d50c748d50a5111312d986208a8"
+            avatar={{ src: 'https://placebeard.it/360x360', height: 360, width: 360 }}
+          />
+        ),
+        itemType: EntityTypes?.REFLECT,
+        flagAsLabel: 'Flag',
+        notEditableLabel: 'A reflection created over 10 minutes ago cannot be edited.',
+        slateContent: [
+          {
+            type: 'paragraph',
+            children: [
+              {
+                text: 'This content will be reported, for test purposes',
+              },
+            ],
+          },
+        ],
+        onEdit: () => ({}),
+        onEntryFlag: () => ({}),
+        onMentionClick: () => ({}),
+        onReflect: () => ({}),
+      },
+      appName: 'Antenna',
+      itemType: 'Reflection',
+      primaryReason: 'Sexual or human exploitation',
+      reportCount: 46,
+      lastReportDate: new Date('Feb 01 2024'),
+    },
+    caseLabel: 'Case',
+    nsfwLabel: 'Profile tagged NSFW',
+    viewProfileLabel: 'View Profile',
+    reportedForLabels: { first: 'A', second: 'has been reported for' },
+    lastReportLabel: 'Last Report',
+    primaryButtonLabel: 'Keep',
+    secondaryButtonLabel: 'Delist',
+    onButtonClick: () => handleButtonClick,
+    onReasonClick: () => ({}),
   },
 };
 
 export const Profile: Story = {
   args: {
-    ...baseArgs.args,
     entry: {
-      ...sampleEntry,
-      itemData: sampleProfileData,
+      id: 'P-17078',
+      itemData: {
+        avatar: {
+          height: 320,
+          src: 'https://placebeard.it/360x360',
+          width: 320,
+        },
+        alternativeAvatars: [],
+        name: 'Golden Showers',
+        did: { id: 'somerandomdid' },
+        nsfw: false,
+      },
       appName: 'Profile',
       itemType: 'Profile',
-      id: 'P-17078',
+      primaryReason: 'Sexual or human exploitation',
+      reportCount: 46,
+      lastReportDate: new Date('Feb 01 2024'),
     },
+    caseLabel: 'Case',
+    nsfwLabel: 'Profile tagged NSFW',
+    viewProfileLabel: 'View Profile',
+    reportedForLabels: { first: 'A', second: 'has been reported for' },
+    lastReportLabel: 'Last Report',
+    primaryButtonLabel: 'Keep',
     secondaryButtonLabel: 'Suspend',
+    onButtonClick: () => handleButtonClick,
+    onReasonClick: () => ({}),
   },
 };
 
 export const NSFWProfile: Story = {
   args: {
-    ...baseArgs.args,
     entry: {
-      ...sampleEntry,
-      itemData: { ...sampleProfileData, nsfw: true },
+      id: 'P-17079',
+      itemData: {
+        avatar: {
+          height: 320,
+          src: 'https://placebeard.it/360x360',
+          width: 320,
+        },
+        alternativeAvatars: [],
+        name: 'Golden Showers',
+        did: { id: 'somerandomdid' },
+        nsfw: true,
+      },
       appName: 'Profile',
       itemType: 'Profile',
-      id: 'P-17079',
+      primaryReason: 'Sexual or human exploitation',
+      reportCount: 46,
+      lastReportDate: new Date('Feb 01 2024'),
     },
+    caseLabel: 'Case',
+    nsfwLabel: 'Profile tagged NSFW',
+    viewProfileLabel: 'View Profile',
+    reportedForLabels: { first: 'A', second: 'has been reported for' },
+    lastReportLabel: 'Last Report',
+    primaryButtonLabel: 'Keep',
     secondaryButtonLabel: 'Suspend',
+    onButtonClick: () => handleButtonClick,
+    onReasonClick: () => ({}),
   },
 };
 
