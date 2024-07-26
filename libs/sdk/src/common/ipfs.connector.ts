@@ -36,7 +36,7 @@ class AWF_IpfsConnector {
   #w3upClient: Client | null;
   private _config: AWF_Config;
 
-  constructor(
+  constructor (
     @inject(TYPES.Log) log: Logging,
     @inject(TYPES.Ceramic) ceramic: CeramicService,
     @inject(TYPES.Config) config: AWF_Config,
@@ -47,7 +47,7 @@ class AWF_IpfsConnector {
     this.#w3upClient = null;
   }
 
-  getSettings() {
+  getSettings () {
     return {
       pathGateway: this._config.getOption('ipfs_path_gateway'),
       originGateway: this._config.getOption('ipfs_origin_gateway'),
@@ -70,7 +70,7 @@ class AWF_IpfsConnector {
    *
    * @returns {Promise<void>}
    */
-  private async _createClient() {
+  private async _createClient () {
     const serialisedSession = this._ceramic.serialize();
     if (!serialisedSession) {
       throw new Error('Must start a did-session first!');
@@ -100,7 +100,7 @@ class AWF_IpfsConnector {
    *
    * @returns {Promise<Delegation>} The deserialized storage delegation proof.
    */
-  private async _getStorageProof() {
+  private async _getStorageProof () {
     const delegateBaseUrl = this._config.getOption('w3_storage_delegate_base_url');
     if (!delegateBaseUrl) {
       throw new Error('Must set env.W3_STORAGE_DELEGATE_BASE_URL');
@@ -136,7 +136,7 @@ class AWF_IpfsConnector {
    * @returns {Promise<string>} - The IPFS CID of the uploaded file
    */
   @validate(z.instanceof(Blob))
-  async uploadFile(file: Blob) {
+  async uploadFile (file: Blob) {
     if (!this.#w3upClient) {
       await this._createClient();
     }
@@ -156,7 +156,7 @@ class AWF_IpfsConnector {
   }
 
   @validate(z.union([z.string(), z.instanceof(CID)]), z.boolean().optional())
-  async catDocument<T>(docHash: string | CID, jsonResponse = false): Promise<T> {
+  async catDocument<T> (docHash: string | CID, jsonResponse = false): Promise<T> {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 60000);
     return fetch(this.buildFallBackLink(docHash), { signal: controller.signal }).then(res => {
@@ -177,13 +177,13 @@ class AWF_IpfsConnector {
    * @param doc - legal docs
    */
   @validate(LegalDocsSchema)
-  async getLegalDoc(doc: LEGAL_DOCS) {
+  async getLegalDoc (doc: LEGAL_DOCS) {
     const selectedDoc = this.LEGAL_DOCS_SOURCE[doc];
     return this.catDocument<never>(selectedDoc);
   }
 
   @validate(z.union([z.string(), z.instanceof(CID)]))
-  validateCid(hash: string | CID) {
+  validateCid (hash: string | CID) {
     if (typeof hash === 'string' && hash.startsWith('https://')) {
       return { link: hash };
     }
@@ -195,7 +195,7 @@ class AWF_IpfsConnector {
   }
 
   @validate(z.union([z.string(), z.instanceof(CID)]))
-  buildOriginLink(hash: string | CID) {
+  buildOriginLink (hash: string | CID) {
     const { link, cid } = this.validateCid(hash);
     if (link) {
       return link;
@@ -204,7 +204,7 @@ class AWF_IpfsConnector {
   }
 
   @validate(z.union([z.string(), z.instanceof(CID)]))
-  buildFallBackLink(hash: string | CID) {
+  buildFallBackLink (hash: string | CID) {
     const { link, cid } = this.validateCid(hash);
     if (link) {
       return link;
@@ -213,7 +213,7 @@ class AWF_IpfsConnector {
   }
 
   @validate(z.union([z.string(), z.instanceof(CID)]))
-  buildPathLink(hash: string | CID) {
+  buildPathLink (hash: string | CID) {
     const { link, cid } = this.validateCid(hash);
     if (link) {
       return link;
@@ -222,7 +222,7 @@ class AWF_IpfsConnector {
   }
 
   @validate(z.union([z.string(), z.instanceof(CID)]))
-  buildIpfsLinks(hash: string | CID) {
+  buildIpfsLinks (hash: string | CID) {
     const originLink = this.buildOriginLink(hash);
     const fallbackLink = this.buildFallBackLink(hash);
     const pathLink = this.buildPathLink(hash);
@@ -235,12 +235,13 @@ class AWF_IpfsConnector {
   }
 
   @validate(z.string())
-  transformBase16HashToV1(hash: string) {
+  transformBase16HashToV1 (hash: string) {
     const cid = CID.parse(hash, base16.decoder);
     return cid.toV1();
   }
 
-  private addrToUri = (addr: string) => {
+  @validate(z.string())
+  addrToUri(addr: string) {
     if (addr.substring(0, 6) === '/ipfs/') {
       return this.buildOriginLink(addr.substring(6));
     } else if (addr.substring(0, 7) === 'ipfs://') {
@@ -250,10 +251,10 @@ class AWF_IpfsConnector {
     } else if (addr.startsWith('https://')) {
       return addr;
     }
-  };
+  }
 
   @validate(z.array(z.string()).or(z.string()))
-  multiAddrToUri(addrList: string | string[]) {
+  multiAddrToUri (addrList: string | string[]) {
     if (Array.isArray(addrList)) {
       const results: string[] = [];
       for (const addr of addrList) {
