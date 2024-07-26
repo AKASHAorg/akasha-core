@@ -47,10 +47,10 @@ declare const __LOAD_LOCAL_SOURCES__: boolean;
     },
   ];
 
-  if (__DEV__ || __LOAD_LOCAL_SOURCES__) {
-    const overwrites = await import('./registry-overrides');
-    registryOverrides = overwrites.default;
-  }
+  // if (__DEV__ || __LOAD_LOCAL_SOURCES__) {
+  //   const overwrites = await import('./registry-overrides');
+  //   registryOverrides = overwrites.default;
+  // }
 
   const loaderConfig: WorldConfig = {
     title: 'AKASHA World',
