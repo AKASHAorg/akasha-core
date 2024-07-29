@@ -1,7 +1,7 @@
 import { useRootComponentProps } from '../use-root-props';
 import { useSyncExternalStore } from 'react';
 import { getProfileInfo } from './get-profile-info';
-import { AuthenticationStore } from './user-store';
+import { AuthenticationStore } from './authentication-store';
 import { AkashaProfile } from '@akashaorg/typings/lib/ui';
 
 export function useAkashaStore() {
