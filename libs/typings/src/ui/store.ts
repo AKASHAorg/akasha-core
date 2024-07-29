@@ -10,9 +10,9 @@ type Login = {
 };
 
 /**
- * Interface defining the state of a user object
+ * Interface defining the state of an authentication object
  */
-export interface IUserState<T> {
+export interface IAuthenticationState<T> {
   authenticatedDID: string;
   authenticatedProfile: T;
   authenticatedProfileError: Error | null;
@@ -21,12 +21,12 @@ export interface IUserState<T> {
 }
 
 /**
- * Interface defining a user state store
+ * Interface defining authentication state store
  */
-export interface IUserStore<T> {
+export interface IAuthenticationStore<T> {
   login({ provider, checkRegistered }: Login): void;
   logout(): void;
   restoreSession(): void;
   subscribe(listener: () => void): () => void;
-  getSnapshot(): IUserState<T>;
+  getSnapshot(): IAuthenticationState<T>;
 }

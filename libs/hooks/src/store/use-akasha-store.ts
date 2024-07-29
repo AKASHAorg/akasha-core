@@ -1,11 +1,17 @@
-import { AkashaProfile, IUserStore } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps } from '../use-root-props';
 import { useSyncExternalStore } from 'react';
+import { getProfileInfo } from './get-profile-info';
+import { AuthenticationStore } from './user-store';
+import { AkashaProfile } from '@akashaorg/typings/lib/ui';
 
 export function useAkashaStore() {
   const { plugins } = useRootComponentProps();
-  const userStore = plugins['@akashaorg/app-profile']?.profile
-    ?.userStore as IUserStore<AkashaProfile>;
-  const data = useSyncExternalStore(userStore?.subscribe, userStore?.getSnapshot);
-  return { data, userStore };
+  const authenticationStore = AuthenticationStore.getInstance<AkashaProfile>(
+    plugins['@akashaorg/app-profile']?.profile?.getProfileInfo || getProfileInfo,
+  );
+  const data = useSyncExternalStore(
+    authenticationStore?.subscribe,
+    authenticationStore?.getSnapshot,
+  );
+  return { data, authenticationStore };
 }

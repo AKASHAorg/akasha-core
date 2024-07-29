@@ -1,8 +1,8 @@
-import { IUserState, IUserStore } from '@akashaorg/typings/lib/ui/store';
+import { IAuthenticationState, IAuthenticationStore } from '@akashaorg/typings/lib/ui/store';
 import { genProfileByDID } from './user';
 import { AkashaProfile } from '@akashaorg/typings/lib/ui';
 
-export function getUserInfo(): IUserState<AkashaProfile> {
+export function getUserInfo(): IAuthenticationState<AkashaProfile> {
   return {
     authenticatedDID: null,
     authenticatedProfile: null,
@@ -12,12 +12,14 @@ export function getUserInfo(): IUserState<AkashaProfile> {
   };
 }
 
-export function getUserStore(initialState?: IUserState<AkashaProfile>): IUserStore<AkashaProfile> {
+export function getAuthenticationStore(
+  initialState?: IAuthenticationState<AkashaProfile>,
+): IAuthenticationStore<AkashaProfile> {
   const profileDID = 'did:pkh:eip155:5:0xc47a483494db8fe455ba29a53a7f75349dfc02ff';
   let state = initialState ? initialState : getUserInfo();
   const listeners = new Set<() => void>();
 
-  function setState(newState: IUserState<AkashaProfile>) {
+  function setState(newState: IAuthenticationState<AkashaProfile>) {
     state = {
       ...state,
       ...newState,

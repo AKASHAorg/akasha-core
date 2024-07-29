@@ -5,7 +5,7 @@ import {
   screen,
   renderWithAllProviders,
   genAppProps,
-  getUserStore,
+  getAuthenticationStore,
   waitFor,
   within,
 } from '@akashaorg/af-testing';
@@ -43,7 +43,7 @@ describe('< MyAntennaPage /> component', () => {
     it('should render a beam on tag feed for subscribed topics', async () => {
       const { mocks: tagFeedMocks, profileData, beamData } = getTagFeedMocks();
       jest.spyOn(useAkashaStore, 'useAkashaStore').mockReturnValue({
-        userStore: getUserStore(),
+        authenticationStore: getAuthenticationStore(),
         data: {
           authenticatedDID: AUTHENTICATED_DID,
           authenticatedProfile: AUTHENTICATED_PROFILE,
