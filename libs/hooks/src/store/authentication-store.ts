@@ -1,5 +1,9 @@
 import getSDK from '@akashaorg/awf-sdk';
-import type { IGetProfileInfo, IUserState, IUserStore } from '@akashaorg/typings/lib/ui';
+import type {
+  IGetProfileInfo,
+  IAuthenticationState,
+  IAuthenticationStore,
+} from '@akashaorg/typings/lib/ui';
 import { createStore } from 'jotai';
 import { atomWithImmer } from 'jotai-immer';
 
@@ -9,8 +13,8 @@ const store = createStore();
  * Singleton store for managing login, logout, session restoration and fetching profile.
  * It uses jotai to manage the store
  */
-export class UserStore<T> implements IUserStore<T> {
-  #initialState: IUserState<T> = {
+export class AuthenticationStore<T> implements IAuthenticationStore<T> {
+  #initialState: IAuthenticationState<T> = {
     authenticatedDID: null,
     authenticatedProfile: null,
     authenticatedProfileError: null,
@@ -20,24 +24,26 @@ export class UserStore<T> implements IUserStore<T> {
   #sdk = getSDK();
   static #instance = null;
   #getProfileInfo: IGetProfileInfo<T>['getProfileInfo'];
-  #userAtom = atomWithImmer<IUserState<T>>(this.#initialState);
+  #userAtom = atomWithImmer<IAuthenticationState<T>>(this.#initialState);
 
   /**
    * Prevent singleton store from being instantiated outside of this class
    */
   private constructor(getProfileInfo: IGetProfileInfo<T>['getProfileInfo']) {
     this.#getProfileInfo = getProfileInfo;
-    this.restoreSession();
+    this.#restoreSession();
   }
 
   /**
-   * Get the singleton instance of the user store
+   * Get the singleton instance
    */
-  static getInstance<T>(getProfileInfo: IGetProfileInfo<T>['getProfileInfo']): UserStore<T> {
-    if (!UserStore.#instance) {
-      UserStore.#instance = new UserStore<T>(getProfileInfo);
+  static getInstance<T>(
+    getProfileInfo: IGetProfileInfo<T>['getProfileInfo'],
+  ): AuthenticationStore<T> {
+    if (!AuthenticationStore.#instance) {
+      AuthenticationStore.#instance = new AuthenticationStore<T>(getProfileInfo);
     }
-    return UserStore.#instance;
+    return AuthenticationStore.#instance;
   }
 
   /**
@@ -102,7 +108,7 @@ export class UserStore<T> implements IUserStore<T> {
   /**
    * Initiates session restore for current authenticated user
    **/
-  restoreSession = async () => {
+  #restoreSession = async () => {
     try {
       store.set(this.#userAtom, prev => ({
         ...prev,
