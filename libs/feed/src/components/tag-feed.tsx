@@ -55,7 +55,14 @@ const TagFeed = (props: TagFeedProps) => {
       return indexedStreamQuery.data.node?.akashaIndexedStreamList;
     }
   }, [indexedStreamQuery.data]);
-  const beams = React.useMemo(() => indexedBeamStream?.edges || [], [indexedBeamStream]);
+  // @TODO: replace with cache policy
+  const beams = React.useMemo(
+    () =>
+      indexedBeamStream?.edges.filter(
+        (beam, i, arr) => arr.findIndex(a => a.node.stream === beam.node.stream) === i,
+      ) || [],
+    [indexedBeamStream],
+  );
   const pageInfo = React.useMemo(() => {
     return indexedBeamStream?.pageInfo;
   }, [indexedBeamStream]);
@@ -81,11 +88,6 @@ const TagFeed = (props: TagFeedProps) => {
     );
   }
 
-  // @TODO: replace with cache policy
-  const filteredBeams = beams.filter(
-    (beam, i, arr) => arr.findIndex(a => a.node.stream === beam.node.stream) === i,
-  );
-
   if (isAuthenticating) return <>{loadingIndicatorRef.current()}</>;
 
   return (
@@ -98,17 +100,17 @@ const TagFeed = (props: TagFeedProps) => {
           details={<>{indexedStreamQuery.error.message}</>}
         />
       )}
-      {filteredBeams.length > 0 && (
+      {beams.length > 0 && (
         <DynamicInfiniteScroll
           dataTestId={dataTestId}
-          count={filteredBeams.length}
+          count={beams.length}
           estimatedHeight={estimatedHeight}
           overScan={scrollOptions.overScan}
           itemSpacing={itemSpacing}
           hasNextPage={pageInfo && pageInfo.hasNextPage}
           loading={indexedStreamQuery.loading}
           onLoadMore={async () => {
-            const lastCursor = filteredBeams[filteredBeams.length - 1]?.cursor;
+            const lastCursor = beams[beams.length - 1]?.cursor;
             if (indexedStreamQuery.loading || indexedStreamQuery.error || !lastCursor) return;
             if (lastCursor) {
               await indexedStreamQuery.fetchMore({
@@ -123,7 +125,7 @@ const TagFeed = (props: TagFeedProps) => {
           customStyle="mb-4"
         >
           {({ itemIndex }) => {
-            const beam = filteredBeams[itemIndex];
+            const beam = beams[itemIndex];
             return renderItem(beam.node);
           }}
         </DynamicInfiniteScroll>
