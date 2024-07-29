@@ -194,8 +194,6 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
               : null,
             name: profileData?.name ?? '',
             bio: profileData?.description ?? '',
-            ens: '',
-            userName: '',
             nsfw: profileData?.nsfw ?? false,
             links: profileData?.links?.map(link => link.href) ?? [],
           }}
@@ -242,7 +240,6 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
           description={t(
             'You can add your personal websites or social links to be shared on your profile',
           )}
-          socialLinks={profileData?.links || []}
           cancelButton={{
             label: t('Cancel'),
             disabled: isProcessing,

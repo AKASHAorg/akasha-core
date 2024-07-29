@@ -13,7 +13,7 @@ import { PowerIcon } from '@akashaorg/design-system-core/lib/components/Icon/her
 export type SidebarHeaderProps = {
   authenticatedDID: string;
   isLoggedIn: boolean;
-  isLoading: boolean;
+  isAuthenticating: boolean;
   logoutClickHandler: () => void;
   loginClickHandler: () => void;
   handleAvatarClick: (authenticatedDID: string) => void;
@@ -22,7 +22,7 @@ export type SidebarHeaderProps = {
 const SidebarHeader: React.FC<SidebarHeaderProps> = ({
   authenticatedDID,
   isLoggedIn,
-  isLoading,
+  isAuthenticating,
   loginClickHandler,
   logoutClickHandler,
   handleAvatarClick,
@@ -48,10 +48,8 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
     }
   }, [data]);
 
-  const headerBackground = isLoading ? 'bg(secondaryLight/30 dark:grey5)' : '';
-
   //this padding style will adjust the header's vertical space to maintain the same height through different states
-  const headerPadding = profileName && isLoggedIn && !isLoading ? 'pb-[2.125rem]' : '';
+  const headerPadding = profileName && isLoggedIn && !isAuthenticating ? 'pb-[2.125rem]' : '';
 
   if (error) return null;
 
@@ -59,7 +57,9 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
     <Stack
       direction="row"
       justifyItems="stretch"
-      customStyle={`p-4 border(b-1 grey9 dark:grey3) rounded-t-2xl ${headerPadding} ${headerBackground}`}
+      padding="p-4"
+      background={isAuthenticating ? { light: 'secondaryLight/30', dark: 'grey5' } : null}
+      customStyle={`border(b-1 grey9 dark:grey3) rounded-t-2xl ${headerPadding}`}
     >
       <Stack customStyle="w-fit h-fit mr-2">
         <Avatar
@@ -111,8 +111,10 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
         )}
       </Stack>
       <Stack customStyle="w-fit h-fit self-start">
-        {isLoading && <Button variant="primary" size="sm" loading onClick={logoutClickHandler} />}
-        {!isLoading && (
+        {isAuthenticating && (
+          <Button variant="primary" size="sm" loading onClick={logoutClickHandler} />
+        )}
+        {!isAuthenticating && (
           <>
             {isLoggedIn && (
               <Button icon={<PowerIcon />} size="sm" iconOnly={true} onClick={logoutClickHandler} />

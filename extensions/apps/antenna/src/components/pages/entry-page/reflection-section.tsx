@@ -4,11 +4,11 @@ import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ReflectEditor from '../../reflect-editor';
 import EditableReflection from '@akashaorg/ui-lib-feed/lib/components/editable-reflection';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import routes, { REFLECT } from '../../../routes';
 import { useTranslation } from 'react-i18next';
 import { ReflectionData } from '@akashaorg/typings/lib/ui';
 import { transformSource } from '@akashaorg/ui-awf-hooks';
-import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
 import { useRouterState } from '@tanstack/react-router';
 
 type ReflectionSectionProps = {
@@ -26,19 +26,15 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
   const [isReflecting, setIsReflecting] = useState(
     routerState.location.pathname.endsWith(routes[REFLECT]),
   );
-
-  const wrapperRef = useCloseActions(() => {
-    setIsReflecting(false);
-  });
+  const activeReflection = reflectionData?.active;
 
   return (
     <Stack
       dataTestId="reflection-section"
-      ref={wrapperRef}
       spacing="gap-y-2"
-      customStyle="grow mb-2"
+      customStyle={`grow ${activeReflection ? 'mb-2' : ''}`}
     >
-      <Stack customStyle="grow">
+      <Card customStyle="grow" type="plain">
         <EditableReflection
           reflectionData={reflectionData}
           contentClickable={false}
@@ -53,32 +49,34 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
             setIsReflecting(!isReflecting);
           }}
         />
-        <Divider />
-      </Stack>
-      <Stack padding="px-2" customStyle="mt-auto">
-        {!isLoggedIn && (
-          <EditorPlaceholder
-            onClick={() =>
-              showLoginModal(
-                'Member Only Feature',
-                'You need to connect first to be able to use this feature.',
-              )
-            }
-            profileId={null}
-            actionLabel={t('Reflect')}
-            placeholderLabel={t('Share your thoughts')}
-            transformSource={transformSource}
-          />
-        )}
-        {isLoggedIn && reflectionData?.active && (
-          <ReflectEditor
-            beamId={beamId}
-            reflectToId={reflectionId}
-            showEditor={isReflecting}
-            setShowEditor={setIsReflecting}
-          />
-        )}
-      </Stack>
+        {activeReflection && <Divider />}
+      </Card>
+      {activeReflection && (
+        <Stack padding="px-2" customStyle="mt-auto">
+          {!isLoggedIn && (
+            <EditorPlaceholder
+              onClick={() =>
+                showLoginModal(
+                  'Member Only Feature',
+                  'You need to connect first to be able to use this feature.',
+                )
+              }
+              profileId={null}
+              actionLabel={t('Reflect')}
+              placeholderLabel={t('Share your thoughts')}
+              transformSource={transformSource}
+            />
+          )}
+          {isLoggedIn && (
+            <ReflectEditor
+              beamId={beamId}
+              reflectToId={reflectionId}
+              showEditor={isReflecting}
+              setShowEditor={setIsReflecting}
+            />
+          )}
+        </Stack>
+      )}
     </Stack>
   );
 };

@@ -164,7 +164,6 @@ const EditableReflection: React.FC<ReflectionCardProps> = props => {
               setEdit(false);
             }}
           />
-          {/*@TODO reflect error logic goes here */}
         </div>
       ) : (
         <>

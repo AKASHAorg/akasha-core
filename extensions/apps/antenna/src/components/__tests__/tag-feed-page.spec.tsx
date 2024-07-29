@@ -6,7 +6,7 @@ import {
   screen,
   renderWithAllProviders,
   genAppProps,
-  getUserStore,
+  getAuthenticationStore,
   waitFor,
   within,
 } from '@akashaorg/af-testing';
@@ -51,7 +51,7 @@ describe('< TagFeedPage /> component', () => {
       const { mocks } = getTagFeedPageMocks({ count: 1 });
       const { mocks: tagFeedMocks, profileData, beamData } = getTagFeedMocks();
       jest.spyOn(useAkashaStore, 'useAkashaStore').mockReturnValue({
-        userStore: getUserStore(),
+        authenticationStore: getAuthenticationStore(),
         data: {
           authenticatedDID: AUTHENTICATED_DID,
           authenticatedProfile: AUTHENTICATED_PROFILE,
@@ -83,7 +83,7 @@ describe('< TagFeedPage /> component', () => {
   describe('should subscribe to a topic', () => {
     beforeEach(async () => {
       jest.spyOn(useAkashaStore, 'useAkashaStore').mockReturnValue({
-        userStore: getUserStore(),
+        authenticationStore: getAuthenticationStore(),
         data: {
           authenticatedDID: AUTHENTICATED_DID,
           authenticatedProfile: AUTHENTICATED_PROFILE,
