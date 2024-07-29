@@ -12,7 +12,6 @@
 
 
 
-
 > Monorepo for AKASHA Core
 
 ## Table of contents
