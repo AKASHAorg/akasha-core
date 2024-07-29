@@ -1,5 +1,6 @@
 const SPLASH_TEMPLATE_ID = '#splash-screen-tpl';
 const FOUR_OH_FOUR_TEMPLATE_ID = '#four-oh-four-tpl';
+const ERROR_TEMPLATE_ID = '#error-tpl';
 
 /**
  * Show the splash screen
@@ -50,6 +51,27 @@ export const show404 = (parentId: string, appName: string, extensionAppUrl: stri
 
 export const hide404 = (parentId: string): void => {
   const template: HTMLTemplateElement | null = document.querySelector(FOUR_OH_FOUR_TEMPLATE_ID);
+  if (template) {
+    const rootNode = template.content.firstElementChild;
+    const parentNode = document.getElementById(parentId);
+    if (rootNode && parentNode && document.getElementById(rootNode.id)) {
+      parentNode.removeChild(document.getElementById(rootNode.id));
+    }
+  }
+};
+
+export const showError = (parentId: string, message?: string): void => {
+  const template: HTMLTemplateElement | null = document.querySelector(ERROR_TEMPLATE_ID);
+  const templateRootNode = template.content.firstElementChild;
+  if (template) {
+    const parentNode = document.getElementById(parentId);
+    if (parentNode && !parentNode.querySelector(templateRootNode.id)) {
+      parentNode.appendChild(template.content.cloneNode(true));
+    }
+  }
+};
+export const hideError = (parentId: string): void => {
+  const template: HTMLTemplateElement | null = document.querySelector(ERROR_TEMPLATE_ID);
   if (template) {
     const rootNode = template.content.firstElementChild;
     const parentNode = document.getElementById(parentId);

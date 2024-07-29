@@ -12,7 +12,14 @@ import {
   WorldConfig,
 } from '@akashaorg/typings/lib/ui';
 import { Subject, Subscription } from 'rxjs';
-import { hidePageSplash, showPageSplash, show404, hide404 } from './html-template-handlers';
+import {
+  hidePageSplash,
+  showPageSplash,
+  show404,
+  hide404,
+  showError,
+  hideError,
+} from './html-template-handlers';
 import * as singleSpa from 'single-spa';
 import {
   getRemoteLatestExtensionInfos,
@@ -64,6 +71,7 @@ export default class AppLoader {
   globalChannelSub: Subscription;
   userExtensions: IntegrationSchema[];
   appNotFound: boolean;
+  erroredApps: string[];
   constructor(worldConfig: WorldConfig) {
     this.worldConfig = worldConfig;
     this.uiEvents = new Subject<UIEventData>();
@@ -79,6 +87,7 @@ export default class AppLoader {
     this.globalChannelSub = null;
     this.userExtensions = [];
     this.appNotFound = false;
+    this.erroredApps = [];
   }
 
   start = async () => {
@@ -89,6 +98,9 @@ export default class AppLoader {
       window.addEventListener('single-spa:routing-event', this.onRouting);
       singleSpa.addErrorHandler(err => {
         this.logger.error(`single-spa error: ${err}`);
+        this.erroredApps.push(err.appOrParcelName);
+        hideError(this.layoutConfig.extensionSlots.applicationSlotId);
+        showError(this.layoutConfig.extensionSlots.applicationSlotId);
       });
     }
 
@@ -130,6 +142,21 @@ export default class AppLoader {
     if (this.appNotFound) {
       hide404(this.layoutConfig.extensionSlots.applicationSlotId);
     }
+    // make sure we are no longer on the path of the broken app
+    if (this.erroredApps.length && !appsByNewStatus.SKIP_BECAUSE_BROKEN.length) {
+      // Note: The broken apps are siloed by the single-spa and it will not even try to mount them again.
+      // So, this error is only seen now. Afterwards no error will be thrown and we cannot show a card anymore.
+      hideError(this.layoutConfig.extensionSlots.applicationSlotId);
+      // unload the app. Currently this does not have any effect on the frontend.
+      // if we decide to also unregister the app, it will have some side-effects like plugins will no longer work
+      // alternatively we can choose just to remove the menuItem from the sidebar.
+      // @TODO: decide if we can also unregister the broken app.
+      this.erroredApps.forEach(appName => {
+        singleSpa.unloadApplication(appName);
+      });
+
+      this.erroredApps = [];
+    }
 
     const actuallyMountedApps = appsByNewStatus.MOUNTED.filter(
       (name: string) => name !== this.worldConfig.layout,
@@ -147,7 +174,6 @@ export default class AppLoader {
         this.logger.warn(`No application matches path: ${newURL.pathname}`);
         const appName = extractAppNameFromPath(newURL.pathname);
         // hide if template was already mounted
-        console.log(this.extensionConfigs, '<<<ext configs');
         hide404(this.layoutConfig.extensionSlots.applicationSlotId);
         show404(
           this.layoutConfig.extensionSlots.applicationSlotId,
