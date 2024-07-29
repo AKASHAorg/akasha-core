@@ -1,6 +1,6 @@
 import React, { SyntheticEvent } from 'react';
 import * as z from 'zod';
-import { Controller } from 'react-hook-form';
+import { Controller, useWatch } from 'react-hook-form';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -9,57 +9,69 @@ import DropDown from '@akashaorg/design-system-core/lib/components/Dropdown';
 import { apply, tw } from '@twind/core';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import {
+  AkashaAppApplicationType,
+  AppProviderValue,
+} from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { ButtonType } from '../types/common.types';
-import { Image } from '@akashaorg/typings/lib/ui';
+import { Licenses } from '../AppCreationForm';
+import { ContactInfo } from './ContactInfo';
 
 export enum FieldName {
-  extensionType = 'extensionType',
-  extensionID = 'extensionID',
-  extensionName = 'extensionName',
-  logoImage = 'logoImage',
-  coverImage = 'coverImage',
+  license = 'license',
+  licenseOther = 'licenseOther',
+  contributors = 'contributors',
+  contactInfo = 'contactInfo',
 }
 
-type ExtensionEditStep1FormValues = {
-  logoImage?: Image | File | null;
-  coverImage?: Image | File | null;
-  extensionType?: AkashaAppApplicationType;
-  extensionID?: string;
-  extensionName?: string;
+export type ExtensionEditStep3FormValues = {
+  license?: string;
+  licenseOther?: string;
+  contributors?: string[];
+  contactInfo?: string[];
 };
 
-export type ExtensionEditStep1FormProps = {
-  defaultValues?: ExtensionEditStep1FormValues;
+export type ExtensionEditStep3FormProps = {
+  licenseFieldLabel?: string;
+  collaboratorsFieldLabel?: string;
+  collaboratorsDescriptionLabel?: string;
+  contactInfoFieldLabel?: string;
+  contactInfoDescriptionLabel?: string;
+  contactInfoPlaceholderLabel?: string;
+  addLabel?: string;
+  defaultValues?: ExtensionEditStep3FormValues;
   cancelButton: ButtonType;
   nextButton: {
     label: string;
-    handleClick: (data: ExtensionEditStep1FormValues) => void;
+    handleClick: (data: ExtensionEditStep3FormValues) => void;
   };
   errorMessage?: { fieldName: string; message: string };
 };
 
-const ExtensionEditStep1Form: React.FC<ExtensionEditStep1FormProps> = props => {
+const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
   const {
     defaultValues = {
-      extensionType: AkashaAppApplicationType.App,
-      extensionID: '',
-      extensionName: '',
-      logoImage: null,
-      coverImage: null,
+      license: '',
+      licenseOther: '',
+      contributors: [],
+      contactInfo: [],
     },
     cancelButton,
     nextButton,
     errorMessage,
+    contactInfoFieldLabel,
+    contactInfoDescriptionLabel,
+    contactInfoPlaceholderLabel,
+    addLabel,
   } = props;
 
   const {
     control,
     setError,
-    setValue,
+    trigger,
     getValues,
     formState: { errors, dirtyFields },
-  } = useForm<ExtensionEditStep1FormValues>({
+  } = useForm<ExtensionEditStep3FormValues>({
     defaultValues,
     resolver: zodResolver(schema),
     mode: 'onChange',
@@ -74,20 +86,26 @@ const ExtensionEditStep1Form: React.FC<ExtensionEditStep1FormProps> = props => {
     }
   }, [errorMessage, errors]);
 
-  const extensionTypes = [
-    AkashaAppApplicationType.App,
-    AkashaAppApplicationType.Plugin,
-    AkashaAppApplicationType.Widget,
+  const licenses: Licenses | string[] = [
+    Licenses.MIT,
+    Licenses.GPL,
+    Licenses.APACHE,
+    Licenses.BSD,
+    Licenses.MPL,
+    Licenses.OTHER,
   ];
 
-  const isFormDirty =
-    Object.keys(dirtyFields).includes(FieldName.extensionID) &&
-    Object.keys(dirtyFields).includes(FieldName.extensionName);
   const isValid = !Object.keys(errors).length;
+
+  const licenseValue = useWatch({ control, name: FieldName.license });
 
   const onSave = (event: SyntheticEvent) => {
     event.preventDefault();
     const formValues = getValues();
+
+    if (formValues.license === Licenses.OTHER) {
+      formValues.license = formValues.licenseOther;
+    }
     if (isValid) {
       nextButton.handleClick({
         ...formValues,
@@ -101,62 +119,59 @@ const ExtensionEditStep1Form: React.FC<ExtensionEditStep1FormProps> = props => {
         <Stack padding="px-4 pb-16" spacing="gap-y-4">
           <Controller
             control={control}
-            name={FieldName.extensionType}
+            name={FieldName.license}
             render={({ field: { name, value, onChange, ref } }) => (
-              <DropDown
-                label="Extension Type"
-                name={name}
-                selected={value}
-                menuItems={extensionTypes}
-                setSelected={onChange}
-                ref={ref}
-                required={true}
-                requiredFieldAsteriskColor={{ light: 'errorLight', dark: 'errorDark' }}
-              />
+              <>
+                <DropDown
+                  label="License"
+                  name={name}
+                  selected={value}
+                  menuItems={licenses}
+                  setSelected={onChange}
+                  ref={ref}
+                  required={true}
+                  requiredFieldAsteriskColor={{ light: 'errorLight', dark: 'errorDark' }}
+                />
+              </>
             )}
+            defaultValue={
+              licenses.includes(defaultValues.license) ? defaultValues.license : Licenses.OTHER
+            }
+          />
+          {licenseValue === Licenses.OTHER && (
+            <Controller
+              control={control}
+              name={FieldName.licenseOther}
+              render={({ field: { name, value, onChange, ref }, fieldState: { error } }) => (
+                <TextField
+                  id={name}
+                  customStyle="mt-2"
+                  value={value}
+                  placeholder={'Please specify your license type'}
+                  type={'text'}
+                  caption={error?.message}
+                  status={error?.message ? 'error' : null}
+                  onChange={onChange}
+                  inputRef={ref}
+                  required={true}
+                  requiredFieldAsteriskColor={{ light: 'errorLight', dark: 'errorDark' }}
+                />
+              )}
+              defaultValue={defaultValues.license}
+            />
+          )}
+          <Divider />
+          <ContactInfo
+            contactLabel={contactInfoFieldLabel}
+            description={contactInfoDescriptionLabel}
+            addButtonLabel={addLabel}
+            control={control}
+            contactInfo={defaultValues.contactInfo}
+            onDeleteInfoField={async () => {
+              await trigger();
+            }}
           />
           <Divider />
-          <Controller
-            control={control}
-            name={FieldName.extensionID}
-            render={({ field: { name, value, onChange, ref }, fieldState: { error } }) => (
-              <TextField
-                id={name}
-                type="text"
-                name={name}
-                label={'Extension ID'}
-                placeholder="unique extension identifier"
-                value={value}
-                caption={error?.message}
-                status={error?.message ? 'error' : null}
-                onChange={onChange}
-                inputRef={ref}
-                required={true}
-                requiredFieldAsteriskColor={{ light: 'errorLight', dark: 'errorDark' }}
-              />
-            )}
-          />
-          <Divider />
-          <Controller
-            control={control}
-            name={FieldName.extensionName}
-            render={({ field: { name, value, onChange, ref }, fieldState: { error } }) => (
-              <TextField
-                id={name}
-                type="text"
-                name={name}
-                label={'Extension Display Name'}
-                placeholder="extension x"
-                value={value}
-                caption={error?.message}
-                status={error?.message ? 'error' : null}
-                onChange={onChange}
-                inputRef={ref}
-                required={true}
-                requiredFieldAsteriskColor={{ light: 'errorLight', dark: 'errorDark' }}
-              />
-            )}
-          />
         </Stack>
         <Divider />
 
@@ -180,7 +195,7 @@ const ExtensionEditStep1Form: React.FC<ExtensionEditStep1FormProps> = props => {
   );
 };
 
-export default ExtensionEditStep1Form;
+export default ExtensionEditStep3Form;
 
 const schema = z.object({
   extensionID: z

@@ -224,7 +224,8 @@ const extensionEditStep4Route = createRoute({
   getParentRoute: () => extensionEditMainRoute,
   path: '/step4',
   component: () => {
-    return <ExtensionEditStep4Page />;
+    const { extensionId } = extensionEditMainRoute.useParams();
+    return <ExtensionEditStep4Page extensionId={extensionId} />;
   },
 });
 

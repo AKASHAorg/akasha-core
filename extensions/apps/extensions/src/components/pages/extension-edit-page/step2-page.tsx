@@ -1,7 +1,6 @@
 import React, { useContext, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
-import routes, { MY_EXTENSIONS } from '../../../routes';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
@@ -74,11 +73,11 @@ export const ExtensionEditStep2Page: React.FC<ExtensionEditStep2PageProps> = ({ 
           defaultValues={defaultValues}
           errorMessage={errorMessage}
           cancelButton={{
-            label: t('Cancel'),
+            label: t('Back'),
             disabled: false,
             handleClick: () => {
               navigate({
-                to: routes[MY_EXTENSIONS],
+                to: '/edit-extension/$extensionId/step1',
               });
             },
           }}

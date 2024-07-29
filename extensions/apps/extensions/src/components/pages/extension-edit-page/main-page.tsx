@@ -8,7 +8,7 @@ import { NotConnnected } from '../../not-connected';
 import { hasOwn, useAkashaStore } from '@akashaorg/ui-awf-hooks';
 import { useGetAppsByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { atomWithStorage, createJSONStorage } from 'jotai/utils';
-import { AppImageSource } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { AppImageSource, AppProviderValue } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { ExtensionEditStep2FormValues } from '@akashaorg/design-system-components/lib/components/ExtensionEditStep2Form';
 
 export const AtomContext = createContext(null);
@@ -19,6 +19,9 @@ export type FormData = {
   displayName?: string;
   logoImage?: AppImageSource;
   coverImage?: AppImageSource;
+  license?: string;
+  meta?: AppProviderValue[];
+  contributors?: string[];
 } & ExtensionEditStep2FormValues;
 
 type ExtensionEditMainPageProps = {
@@ -63,6 +66,9 @@ export const ExtensionEditMainPage: React.FC<ExtensionEditMainPageProps> = ({ ex
           description: '',
           gallery: [],
           links: [],
+          contributors: [],
+          license: '',
+          meta: [],
         },
         storage,
       ),
