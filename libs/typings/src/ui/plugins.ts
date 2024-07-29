@@ -1,5 +1,3 @@
-import { IUserStore } from './store';
-
 /**
  * Interface defining plugin configuration object
  */
@@ -28,6 +26,5 @@ export interface IGetProfileInfo<T> {
  * Interface defining a profile plugin
  */
 export interface IProfilePlugin<T> {
-  get userStore(): IUserStore<T>;
   getProfileInfo: IGetProfileInfo<T>['getProfileInfo'];
 }

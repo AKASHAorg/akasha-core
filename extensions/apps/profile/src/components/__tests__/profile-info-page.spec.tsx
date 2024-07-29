@@ -7,7 +7,7 @@ import {
   screen,
   renderWithAllProviders,
   genAppProps,
-  getUserStore,
+  getAuthenticationStore,
   waitFor,
 } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
@@ -104,7 +104,7 @@ describe('< ProfileInfoPage /> component', () => {
 
     it('should display "fill my info" card for authenticated user with empty profile', async () => {
       jest.spyOn(useAkashaStore, 'useAkashaStore').mockReturnValue({
-        userStore: getUserStore(),
+        authenticationStore: getAuthenticationStore(),
         data: {
           authenticatedDID: AUTHENTICATED_DID,
           authenticatedProfile: AUTHENTICATED_PROFILE,
@@ -131,7 +131,7 @@ describe('< ProfileInfoPage /> component', () => {
 
     it('should display NSFW pill for authenticated users viewing their own profile', async () => {
       jest.spyOn(useAkashaStore, 'useAkashaStore').mockReturnValue({
-        userStore: getUserStore(),
+        authenticationStore: getAuthenticationStore(),
         data: {
           authenticatedDID: AUTHENTICATED_DID,
           authenticatedProfile: AUTHENTICATED_PROFILE,
@@ -150,7 +150,7 @@ describe('< ProfileInfoPage /> component', () => {
   describe('should allow user to interact with profile info', () => {
     beforeEach(() => {
       jest.spyOn(useAkashaStore, 'useAkashaStore').mockReturnValue({
-        userStore: getUserStore(),
+        authenticationStore: getAuthenticationStore(),
         data: {
           authenticatedDID: AUTHENTICATED_DID,
           authenticatedProfile: AUTHENTICATED_PROFILE,

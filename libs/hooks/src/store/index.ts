@@ -1,2 +1,2 @@
 export * from './use-akasha-store';
-export * from './user-store';
+export * from './authentication-store';

@@ -1,7 +1,6 @@
 import React, { Suspense, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { EventTypes, MenuItemAreaType, IMenuItem } from '@akashaorg/typings/lib/ui';
-import { AUTH_EVENTS, WEB3_EVENTS } from '@akashaorg/typings/lib/sdk/events';
 import {
   useAccordion,
   useAkashaStore,
@@ -9,7 +8,6 @@ import {
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
 import { startMobileSidebarHidingBreakpoint } from '@akashaorg/design-system-core/lib/utils/breakpoints';
-import getSDK from '@akashaorg/awf-sdk';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
@@ -36,8 +34,8 @@ const SidebarComponent: React.FC<unknown> = () => {
   } = useRootComponentProps();
 
   const {
-    data: { authenticatedDID },
-    userStore,
+    data: { authenticatedDID, isAuthenticating },
+    authenticationStore,
   } = useAkashaStore();
 
   const { t } = useTranslation('ui-widget-sidebar');
@@ -47,19 +45,12 @@ const SidebarComponent: React.FC<unknown> = () => {
   const [routeData, setRouteData] = useState(null);
   const [activeOption, setActiveOption] = useState<IMenuItem | null>(null);
   const [clickedOptions, setClickedOptions] = useState<{ name: string; route: IMenuItem }[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
   const isLoggedIn = !!authenticatedDID;
 
   const { activeAccordionId, setActiveAccordionId, handleAccordionClick } = useAccordion();
   const [dismissed, dismissCard] = useDismissedCard('@akashaorg/ui-widget-sidebar_cta-card');
 
   const routing = getRoutingPlugin();
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      setIsLoading(false);
-    }
-  }, [isLoggedIn]);
 
   useEffect(() => {
     const mql = window.matchMedia(startMobileSidebarHidingBreakpoint);
@@ -73,28 +64,6 @@ const SidebarComponent: React.FC<unknown> = () => {
       window.removeEventListener('resize', resize);
     };
   }, []);
-
-  useEffect(() => {
-    const sdk = getSDK();
-
-    const subSDK = sdk.api.globalChannel.subscribe({
-      next: (eventData: { data: { name: string }; event: AUTH_EVENTS | WEB3_EVENTS }) => {
-        if (eventData.event === AUTH_EVENTS.CONNECT_ADDRESS && !isLoggedIn) {
-          setIsLoading(true);
-          return;
-        }
-        //listener in case user rejects signin popup
-        if (eventData.event === WEB3_EVENTS.DISCONNECTED) {
-          setIsLoading(false);
-          return;
-        }
-      },
-    });
-
-    return () => {
-      subSDK.unsubscribe();
-    };
-  }, [isLoggedIn]);
 
   useEffect(() => {
     let sub;
@@ -177,9 +146,7 @@ const SidebarComponent: React.FC<unknown> = () => {
   }
 
   function handleLogout() {
-    setIsLoading(true);
-    userStore.logout();
-    setIsLoading(false);
+    authenticationStore.logout();
   }
 
   const handleLogoutClick = () => {
@@ -253,7 +220,7 @@ const SidebarComponent: React.FC<unknown> = () => {
             isLoggedIn={isLoggedIn}
             logoutClickHandler={handleLogoutClick}
             loginClickHandler={handleLoginClick}
-            isLoading={isLoading}
+            isAuthenticating={isAuthenticating}
             handleAvatarClick={handleAvatarClick}
           />
         </Suspense>
