@@ -26,7 +26,6 @@ export interface IAuthenticationState<T> {
 export interface IAuthenticationStore<T> {
   login({ provider, checkRegistered }: Login): void;
   logout(): void;
-  restoreSession(): void;
   subscribe(listener: () => void): () => void;
   getSnapshot(): IAuthenticationState<T>;
 }

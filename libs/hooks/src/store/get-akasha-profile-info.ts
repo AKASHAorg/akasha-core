@@ -4,7 +4,7 @@ import { GetProfileByDidDocument } from '../generated';
 import { hasOwn } from '../utils/has-own';
 
 //Fallback function that fetches AKASHA profile info if a profile plugin isn't available
-export async function getProfileInfo({ profileDID }) {
+export async function getAkashaProfileInfo({ profileDID }) {
   const profileQuery = await getSDK().services.gql.queryClient.query<GetProfileByDidQuery>({
     query: GetProfileByDidDocument,
     variables: {

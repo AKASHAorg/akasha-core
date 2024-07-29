@@ -31,7 +31,7 @@ export class AuthenticationStore<T> implements IAuthenticationStore<T> {
    */
   private constructor(getProfileInfo: IGetProfileInfo<T>['getProfileInfo']) {
     this.#getProfileInfo = getProfileInfo;
-    this.restoreSession();
+    this.#restoreSession();
   }
 
   /**
@@ -108,7 +108,7 @@ export class AuthenticationStore<T> implements IAuthenticationStore<T> {
   /**
    * Initiates session restore for current authenticated user
    **/
-  restoreSession = async () => {
+  #restoreSession = async () => {
     try {
       store.set(this.#userAtom, prev => ({
         ...prev,
