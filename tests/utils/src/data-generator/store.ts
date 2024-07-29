@@ -43,18 +43,6 @@ export function getAuthenticationStore(
     logout: () => {
       setState(getUserInfo());
     },
-    restoreSession: () => {
-      setState({ ...state, isAuthenticating: true });
-      setTimeout(
-        () =>
-          setState({
-            ...state,
-            authenticatedProfile: genProfileByDID({ profileDID }).akashaProfile,
-            authenticatedDID: profileDID,
-          }),
-        1000,
-      );
-    },
     subscribe: (listener: () => void) => {
       listeners.add(listener);
       return () => {
