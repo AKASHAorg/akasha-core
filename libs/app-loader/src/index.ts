@@ -112,9 +112,6 @@ export default class AppLoader {
     this.renderLayout();
 
     this.listenGlobalChannel().catch();
-    // automatic logging in if previous session is detected
-    const sdk = getSDK();
-    await sdk.api.auth.getCurrentUser();
   };
   onBeforeFirstMount = () => hidePageSplash();
   onFirstMount = () => {
