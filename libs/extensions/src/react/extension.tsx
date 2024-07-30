@@ -25,7 +25,7 @@ export const Extension = <D,>(props: ExtensionComponentProps<D>) => {
   } = props;
   const { getExtensionsPlugin, getContext, logger } = useRootComponentProps();
   const extensionStore = React.useRef<IExtensionPointStorePlugin>(
-    getExtensionsPlugin().extensionStore,
+    getExtensionsPlugin().extensionPointStore,
   );
   const [parcelConfigs, setParcelConfigs] = React.useState([]);
   const [isEmpty, setIsEmpty] = React.useState(false);
