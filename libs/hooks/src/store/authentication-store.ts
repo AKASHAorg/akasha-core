@@ -115,7 +115,6 @@ export class AuthenticationStore<T> implements IAuthenticationStore<T> {
         isAuthenticating: true,
       }));
       const result = await this.#sdk.api.auth.getCurrentUser();
-      console.log('current user session', result);
       if (!result) {
         store.set(this.#userAtom, prev => ({
           ...prev,
@@ -125,7 +124,6 @@ export class AuthenticationStore<T> implements IAuthenticationStore<T> {
       }
       this.#handleLoggedInState(result?.id);
     } catch (error) {
-      console.log('restore session error', error);
       store.set(this.#userAtom, prev => ({
         ...prev,
         authenticationError: error,
