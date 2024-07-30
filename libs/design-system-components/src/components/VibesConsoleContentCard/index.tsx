@@ -67,6 +67,7 @@ const VibesConsoleContentCard: React.FC<VibesConsoleContentCardProps> = props =>
           <Button
             aria-label="itemType"
             icon={entry.itemType === 'Profile' ? <Profile /> : <Antenna />}
+            solidIcon={entry.itemType !== 'Profile'}
             variant="primary"
             onClick={() => {
               /** */
