@@ -54,7 +54,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   menuItems: {
     label: 'Antenna',
     type: MenuItemType.App,
-    logo: { type: LogoTypeSource.ICON, value: <Antenna /> },
+    logo: { type: LogoTypeSource.ICON, value: <Antenna />, solidIcon: true },
     area: [MenuItemAreaType.AppArea],
     subRoutes: [
       {
