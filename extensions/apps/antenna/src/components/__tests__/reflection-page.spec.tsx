@@ -8,7 +8,7 @@ import {
   renderWithAllProviders,
   genAppProps,
   waitFor,
-  getUserStore,
+  getAuthenticationStore,
   within,
 } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
@@ -159,7 +159,7 @@ describe('< ReflectionPage /> component', () => {
 
     beforeEach(async () => {
       jest.spyOn(useAkashaStore, 'useAkashaStore').mockReturnValue({
-        userStore: getUserStore(),
+        authenticationStore: getAuthenticationStore(),
         data: {
           authenticatedDID: AUTHENTICATED_DID,
           authenticatedProfile: AUTHENTICATED_PROFILE,

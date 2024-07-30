@@ -47,7 +47,6 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
     },
     [],
   );
-
   const sdk = React.useRef(getSDK());
   const tagFilters = useMemo(
     () => [
@@ -78,7 +77,6 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
   }, [beamCountData]);
 
   // fetch user's interest subscription
-
   const { data: tagSubscriptionsData, refetch: refetchTagSubscriptions } =
     useGetInterestsByDidQuery({
       variables: { id: authenticatedDID },
@@ -241,7 +239,6 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
         {beamCount > 0 && (
           <TagFeed
             dataTestId="tag-feed"
-            tags={listOfTags}
             estimatedHeight={150}
             itemSpacing={8}
             filters={{

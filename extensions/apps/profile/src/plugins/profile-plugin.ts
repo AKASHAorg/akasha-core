@@ -1,5 +1,5 @@
 import getSDK from '@akashaorg/awf-sdk';
-import { hasOwn, UserStore } from '@akashaorg/ui-awf-hooks';
+import { hasOwn } from '@akashaorg/ui-awf-hooks';
 import { GetProfileByDidQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 import { GetProfileByDidDocument } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { ApolloClient } from '@apollo/client';
@@ -30,11 +30,4 @@ export class ProfilePlugin implements IProfilePlugin<AkashaProfile> {
 
     return { data: profileData, error };
   };
-
-  /**
-   * Get the user store for AKASHA profile app
-   */
-  get userStore() {
-    return UserStore.getInstance<AkashaProfile>(this.getProfileInfo);
-  }
 }

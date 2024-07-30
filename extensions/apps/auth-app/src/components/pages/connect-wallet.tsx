@@ -34,7 +34,7 @@ const ConnectWallet: React.FC = () => {
 
   const {
     data: { authenticatedDID, authenticationError },
-    userStore,
+    authenticationStore,
   } = useAkashaStore();
   const isLoggedIn = !!authenticatedDID;
 
@@ -42,12 +42,12 @@ const ConnectWallet: React.FC = () => {
   const [isSignInRetry, setIsSignInRetry] = useState(false);
 
   const onDisconnect = () => {
-    userStore.logout();
+    authenticationStore.logout();
     navigate({ to: '/' });
   };
 
   const onSignIn = provider => {
-    userStore.login({ provider });
+    authenticationStore.login({ provider });
   };
 
   const signInCall = useRef(onSignIn);
