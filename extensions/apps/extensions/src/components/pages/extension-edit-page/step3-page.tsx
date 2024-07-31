@@ -45,15 +45,20 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
     return formValue.lastCompletedStep > 2
       ? {
           ...formValue,
-          contactInfo: formValue.meta.map(elem => {
-            if (elem.provider === extensionId && elem.property === 'contactInfo') {
-              return elem.value;
+          contactInfo: formValue.links.map(elem => {
+            if (elem.label === `${extensionId}-contactInfo`) {
+              return elem.href;
             }
           }),
         }
       : {
           ...appData,
           contactInfo: [],
+          //   contactInfo: appData.links.map(elem => {
+          //     if (elem.label === `${extensionId}-contactInfo`) {
+          //       return elem.href;
+          //     }
+          //   }),
           contributors: appData.contributors.map(profile => profile.akashaProfile?.did?.id),
         };
   }, [appData]);
@@ -98,13 +103,15 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
               setErrorMessage(null);
               const step3Data = {
                 ...data,
-                meta: data.contactInfo.map(info => {
-                  return {
-                    provider: appData.id,
-                    property: 'contactInfo',
-                    value: info,
-                  };
-                }),
+                links: [
+                  ...formValue.links,
+                  ...data.contactInfo.map(info => {
+                    return {
+                      label: `${extensionId}-contactInfo`,
+                      href: info,
+                    };
+                  }),
+                ],
               };
               setForm(prev => {
                 return { ...prev, ...step3Data, lastCompletedStep: 3 };

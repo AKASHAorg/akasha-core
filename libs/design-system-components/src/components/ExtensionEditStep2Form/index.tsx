@@ -12,6 +12,7 @@ import { AppImageSource, AppLinkSource } from '@akashaorg/typings/lib/sdk/graphq
 import { ButtonType } from '../types/common.types';
 import { NSFW } from './NSFW';
 import { DocumentationLinks } from './DocumentationLinks';
+import { Gallery, GalleryProps } from './Gallery';
 
 export enum FieldName {
   nsfw = 'nsfw',
@@ -46,7 +47,7 @@ export type ExtensionEditStep2FormProps = {
     handleClick: (data: ExtensionEditStep2FormValues) => void;
   };
   errorMessage?: { fieldName: string; message: string };
-};
+} & GalleryProps;
 
 const ExtensionEditStep2Form: React.FC<ExtensionEditStep2FormProps> = props => {
   const {
@@ -70,6 +71,10 @@ const ExtensionEditStep2Form: React.FC<ExtensionEditStep2FormProps> = props => {
     linkTitleLabel,
     linkPlaceholderLabel,
     addLabel,
+    handleImageDelete,
+    handleImageUpload,
+    uploading,
+    images,
   } = props;
 
   const {
@@ -132,6 +137,17 @@ const ExtensionEditStep2Form: React.FC<ExtensionEditStep2FormProps> = props => {
               />
             )}
             defaultValue={defaultValues.description}
+          />
+          <Divider />
+
+          <Gallery
+            galleryFieldLabel={galleryFieldLabel}
+            galleryDescriptionLabel={galleryDescriptionLabel}
+            addLabel={addLabel}
+            images={images}
+            handleImageUpload={handleImageUpload}
+            handleImageDelete={handleImageDelete}
+            uploading={uploading}
           />
           <Divider />
 

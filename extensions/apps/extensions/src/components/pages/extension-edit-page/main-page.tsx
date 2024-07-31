@@ -20,7 +20,6 @@ export type FormData = {
   logoImage?: AppImageSource;
   coverImage?: AppImageSource;
   license?: string;
-  meta?: AppProviderValue[];
   contributors?: string[];
 } & ExtensionEditStep2FormValues;
 
@@ -68,7 +67,6 @@ export const ExtensionEditMainPage: React.FC<ExtensionEditMainPageProps> = ({ ex
           links: [],
           contributors: [],
           license: '',
-          meta: [],
         },
         storage,
       ),
