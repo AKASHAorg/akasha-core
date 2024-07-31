@@ -5,7 +5,6 @@ import { hasOwn } from './utils/has-own';
 const RootComponentPropsContext = React.createContext(null);
 const DEFAULT_ROUTING_PLUGIN = '@akashaorg/app-routing';
 const DEFAULT_TRANSLATION_PLUGIN = '@akashaorg/ui-widget-layout';
-const DEFAULT_EXTENSIONS_PLUGIN = '@akashaorg/app-extensions';
 
 const RootComponentPropsProvider = ({
   children,
@@ -53,12 +52,12 @@ const useRootComponentProps = <T extends IRootComponentProps>() => {
   );
 
   const getExtensionsPlugin = React.useCallback(() => {
-    if (hasOwn(ctx?.plugins, DEFAULT_EXTENSIONS_PLUGIN)) {
-      return ctx.plugins[DEFAULT_EXTENSIONS_PLUGIN];
+    if (hasOwn(ctx?.plugins, ctx.worldConfig.extensionsApp)) {
+      return ctx.plugins[ctx.worldConfig.extensionsApp];
     }
     console.warn('Extension plugin not available yet!');
     return {};
-  }, [ctx?.plugins]);
+  }, [ctx.plugins, ctx.worldConfig.extensionsApp]);
 
   const getContext = React.useCallback(() => ctx, [ctx]);
 

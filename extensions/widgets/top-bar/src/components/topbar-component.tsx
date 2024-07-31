@@ -12,7 +12,7 @@ import {
 import { filter } from 'rxjs';
 
 const TopbarComponent: React.FC<unknown> = () => {
-  const { uiEvents, layoutConfig, logger, worldConfig, encodeAppName, getRoutingPlugin } =
+  const { uiEvents, layoutSlots, logger, worldConfig, encodeAppName, getRoutingPlugin } =
     useRootComponentProps();
   const {
     data: { authenticatedDID },
@@ -172,7 +172,7 @@ const TopbarComponent: React.FC<unknown> = () => {
         onBackClick={handleBackClick}
         currentLocation={location?.pathname}
         onBrandClick={handleBrandClick}
-        modalSlotId={layoutConfig.modalSlotId}
+        modalSlotId={layoutSlots.modalSlotId}
       />
     </ErrorBoundary>
   );

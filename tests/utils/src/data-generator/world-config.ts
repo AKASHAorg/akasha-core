@@ -14,6 +14,7 @@ export const genWorldConfig = (overrides?: WorldConfigOverrides) => {
     layout: '@test/layout',
     homepageApp: '@test/homepageApp',
     title: 'Test World Title',
+    extensionsApp: '@test/extensionsApp',
     registryOverrides: [],
     ...overrides,
   };

@@ -2,8 +2,7 @@ import '@akashaorg/design-system-core/src/twind/main.css';
 import '@akashaorg/design-system-core/src/twind/globals.css';
 
 import { WorldConfig } from '@akashaorg/typings/lib/ui';
-import { missingRequiredFields } from './registry-overrides';
-import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { AkashaApp, AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 console.time('AppLoader:firstMount');
 
@@ -15,42 +14,36 @@ declare const __LOAD_LOCAL_SOURCES__: boolean;
   const { default: getSDK } = await System.import('@akashaorg/awf-sdk');
 
   const origin = window.location.origin;
-  let registryOverrides = [
+  let registryOverrides: (Partial<AkashaApp> & { source: string })[] = [
     {
       name: '@akashaorg/app-routing',
-      integrationType: AkashaAppApplicationType.App,
-      sources: [`${origin}/apps/routing`],
-      ...missingRequiredFields,
+      applicationType: AkashaAppApplicationType.App,
+      source: `${origin}/apps/routing/index.js`,
     },
     {
       name: '@akashaorg/ui-widget-layout',
-      integrationType: AkashaAppApplicationType.Widget,
-      sources: [`${origin}/widgets/layout`],
-      ...missingRequiredFields,
+      applicationType: AkashaAppApplicationType.Widget,
+      source: `${origin}/widgets/layout/index.js`,
     },
     {
       name: '@akashaorg/ui-widget-sidebar',
-      integrationType: AkashaAppApplicationType.Widget,
-      sources: [`${origin}/widgets/sidebar`],
-      ...missingRequiredFields,
+      applicationType: AkashaAppApplicationType.Widget,
+      source: `${origin}/widgets/sidebar/index.js`,
     },
     {
       name: '@akashaorg/ui-widget-topbar',
-      integrationType: AkashaAppApplicationType.Widget,
-      sources: [`${origin}/widgets/top-bar`],
-      ...missingRequiredFields,
+      applicationType: AkashaAppApplicationType.Widget,
+      source: `${origin}/widgets/top-bar/index.js`,
     },
     {
       name: '@akashaorg/ui-widget-mini-profile',
-      integrationType: AkashaAppApplicationType.Widget,
-      sources: [`${origin}/widgets/mini-profile`],
-      ...missingRequiredFields,
+      applicationType: AkashaAppApplicationType.Widget,
+      source: `${origin}/widgets/mini-profile/index.js`,
     },
     {
       name: '@akashaorg/ui-widget-my-apps',
-      integrationType: AkashaAppApplicationType.Widget,
-      sources: [`${origin}/widgets/my-apps`],
-      ...missingRequiredFields,
+      applicationType: AkashaAppApplicationType.Widget,
+      source: `${origin}/widgets/my-apps/index.js`,
     },
   ];
 
@@ -72,13 +65,14 @@ declare const __LOAD_LOCAL_SOURCES__: boolean;
     layout: '@akashaorg/ui-widget-layout',
     // define an app that will load at root '/' path
     homepageApp: '@akashaorg/app-antenna',
+    // define the extensions app for this world
+    extensionsApp: '@akashaorg/app-extensions',
     // define pre-installed apps,
     // homepageApp is always loaded by default
     defaultApps: [
       '@akashaorg/app-routing',
       '@akashaorg/app-vibes',
       '@akashaorg/app-auth-ewa',
-      '@akashaorg/app-extensions',
       '@akashaorg/app-search',
       '@akashaorg/app-profile',
       '@akashaorg/app-notifications',
@@ -97,8 +91,8 @@ declare const __LOAD_LOCAL_SOURCES__: boolean;
       '@akashaorg/ui-widget-my-apps',
     ],
     analytics: {
-      trackerUrl: process.env.MATOMO_TRACKER_URL,
-      siteId: process.env.MATOMO_SITE_ID,
+      trackerUrl: process.env.MATOMO_TRACKER_URL || '',
+      siteId: process.env.MATOMO_SITE_ID || '',
     },
     registryOverrides,
     socialLinks: [
