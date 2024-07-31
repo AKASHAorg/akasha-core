@@ -21,6 +21,7 @@ import type AWF_IpfsConnector from './common/ipfs.connector.js';
 import type AppSettings from './settings/apps.js';
 import type AWF_Misc from './common/misc.js';
 import type AWF_Ceramic from './common/ceramic.js';
+import type AWF_Lit from './common/lit.js';
 
 export { Logger } from 'pino';
 
@@ -42,6 +43,7 @@ export interface SDK_Services {
     web3: Web3Connector;
     ipfs: AWF_IpfsConnector;
     misc: AWF_Misc;
+    lit: AWF_Lit;
   };
 }
 
@@ -103,6 +105,7 @@ export function init(): AWF_SDK {
   // console.log('lazy load gql client', fetchService);
 
   const ceramic = container.get<AWF_Ceramic>(TYPES.Ceramic);
+  const lit = container.get<AWF_Lit>(TYPES.Lit);
 
   return {
     services: {
@@ -117,6 +120,7 @@ export function init(): AWF_SDK {
         web3,
         ipfs,
         misc,
+        lit,
       },
     },
     api: {
