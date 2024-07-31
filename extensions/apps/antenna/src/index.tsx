@@ -32,9 +32,9 @@ import { PhotoIcon } from '@akashaorg/design-system-core/lib/components/Icon/her
  * ```
  */
 
-export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
+export const register = (opts: IntegrationRegistrationOptions): IAppConfig => ({
   loadingFn: () => import('./components'),
-  mountsIn: opts.layoutConfig?.applicationSlotId,
+  mountsIn: opts.layoutSlots?.applicationSlotId,
 
   /**
    * routes that are defined here can be used by
@@ -48,8 +48,6 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     [REFLECT]: routes[REFLECT],
     [REFLECTION]: routes[REFLECTION],
   },
-  title: 'AKASHA World',
-  logo: { type: LogoTypeSource.ICON, value: <Antenna /> },
   i18nNamespace: ['app-antenna', 'ui-lib-feed'],
   menuItems: {
     label: 'Antenna',
@@ -89,7 +87,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       },
     },
   ],
-  extensions: [
+  extensionPoints: [
     {
       mountsIn: 'beam-editor_*',
       loadingFn: () => import('./extensions/beam-editor'),

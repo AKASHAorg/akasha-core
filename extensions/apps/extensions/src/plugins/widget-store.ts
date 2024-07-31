@@ -7,7 +7,7 @@ import {
   WidgetRegisterEvent,
 } from '@akashaorg/typings/lib/ui';
 import { hasOwn } from '@akashaorg/ui-awf-hooks';
-import { pathToActiveWhen } from 'single-spa';
+import { checkActivity } from './utils';
 
 export class WidgetStore extends BaseStore {
   static instance: WidgetStore;
@@ -33,7 +33,12 @@ export class WidgetStore extends BaseStore {
         matchingWidgets.push(widget);
       }
       if (widget.mountsIn === slotName && typeof widget.activeWhen === 'function') {
-        const isActive = widget.activeWhen(location, pathToActiveWhen);
+        let isActive = checkActivity(widget.activeWhen, location);
+
+        if (Array.isArray(widget.activeWhen) && widget.activeWhen.length > 0) {
+          isActive = widget.activeWhen.some(activity => checkActivity(activity, location));
+        }
+
         if (isActive) {
           matchingWidgets.push(widget);
         }

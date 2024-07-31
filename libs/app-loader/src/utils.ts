@@ -1,12 +1,8 @@
-import {
-  IAppConfig,
-  IModalNavigationOptions,
-  IQueryString,
-  ExtensionManifest,
-} from '@akashaorg/typings/lib/ui';
+import { IAppConfig, IModalNavigationOptions, IQueryString } from '@akashaorg/typings/lib/ui';
 import * as singleSpa from 'single-spa';
 import qs from 'qs';
 import { Logger } from '@akashaorg/awf-sdk';
+import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 export const encodeName = (appName: string) => {
   return appName;
@@ -19,12 +15,14 @@ export const decodeName = (appName: string) => {
 export interface CheckActivityOptions {
   config: IAppConfig;
   encodedAppName: string;
-  manifest?: ExtensionManifest;
+  // removed or reported
+  enabled?: boolean;
   location?: Location;
+  extensionType: AkashaAppApplicationType;
 }
 
-export const checkActivityFn = (opts: CheckActivityOptions) => {
-  const { config, encodedAppName, manifest } = opts;
+export const checkActivityFn = (opts: CheckActivityOptions): singleSpa.Activity => {
+  const { config, extensionType, encodedAppName, enabled = true } = opts;
 
   let { location } = opts;
 
@@ -32,18 +30,38 @@ export const checkActivityFn = (opts: CheckActivityOptions) => {
     location = window.location;
   }
 
-  if (manifest && manifest.hasOwnProperty('enabled') && manifest.enabled === false) {
-    return false;
+  if (!enabled) {
+    return () => false;
   }
 
-  if (config.hasOwnProperty('activeWhen') && typeof config.activeWhen === 'function') {
-    return config.activeWhen(location, (path, exact?: boolean) => {
-      // path can contain the app name;
-      return singleSpa.pathToActiveWhen(path, exact);
-    });
+  if (extensionType === AkashaAppApplicationType.App) {
+    return `/${encodedAppName}`;
   }
 
-  return singleSpa.pathToActiveWhen(`/${encodedAppName}`)(location);
+  if (config.activeWhen) {
+    if (typeof config.activeWhen === 'string') {
+      return config.activeWhen;
+    }
+    if (Array.isArray(config.activeWhen)) {
+      if (config.activeWhen.every(path => typeof path === 'string')) {
+        return config.activeWhen;
+      }
+      return config.activeWhen.map(activity => {
+        if (typeof activity === 'string') {
+          return activity;
+        }
+        return providedLocation =>
+          activity(location, (path, exact) =>
+            singleSpa.pathToActiveWhen(path, exact)(providedLocation),
+          );
+      });
+    }
+  } else {
+    // should default to true if:
+    // extensionType is not APP
+    // is enabled
+    return () => true;
+  }
 };
 
 export const getModalFromParams = (location: Location) => {
@@ -110,8 +128,7 @@ export const navigateToModal = (opts: IModalNavigationOptions) => {
 };
 
 export const parseQueryString = (queryString: string): IQueryString => {
-  const query = qs.parse(queryString, { ignoreQueryPrefix: true });
-  return query;
+  return qs.parse(queryString, { ignoreQueryPrefix: true });
 };
 
 /* find key in object recursively */
@@ -135,8 +152,8 @@ export const findKey = (key: string, obj: unknown): string | null => {
   return null;
 };
 
-export const getDomElement = (integrationConfig: IAppConfig, name: string, logger: Logger) => {
-  const domNode = document.getElementById(integrationConfig.mountsIn || '');
+export const getDomElement = (extensionConfig: IAppConfig, name: string, logger: Logger) => {
+  const domNode = document.getElementById(extensionConfig.mountsIn || '');
 
   if (!domNode) {
     logger.warn(`Node ${domNode} is undefined! App: ${name}`);
@@ -157,4 +174,18 @@ export const escapeRegExp = (str: string) => {
 export const stringToRegExp = (str: string) => {
   const wildcard = str.split(/\*+/).map(escapeRegExp).join('.*');
   return new RegExp(`^${wildcard}$`);
+};
+
+export const extractAppNameFromPath = (path: string) => {
+  let devName: string;
+  let appName: string;
+  if (path.startsWith('/')) {
+    [, devName, appName] = path.split('/');
+  } else {
+    [devName, appName] = path.split('/');
+  }
+  if (devName.startsWith('@')) {
+    return `${devName}/${appName}`;
+  }
+  return devName;
 };

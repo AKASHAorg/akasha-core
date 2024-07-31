@@ -7,6 +7,7 @@ export const INFO = 'App Info';
 export const CREATE_EXTENSION = 'Create Extension';
 
 export default {
+  default: '/explore',
   [HOME]: '/explore',
   [EXTENSIONS]: '/extensions-hub',
   [INSTALLED]: '/installed-extensions',
