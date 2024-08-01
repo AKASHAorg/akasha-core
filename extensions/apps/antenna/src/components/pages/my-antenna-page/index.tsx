@@ -97,7 +97,7 @@ const MyAntennaPage: React.FC<unknown> = () => {
             description={t(
               "Personalize your antenna! Pick favorite topics, and enjoy beams tailored to your interests. Don't miss a thing!",
             )}
-            secondaryDescription={t('Your customized view of AKASHA World')}
+            secondaryDescription={t('Your customized view of AKASHA World 🌏 ✨')}
             isMinified={userHasSubscriptions}
             ctaLabel={userHasSubscriptions ? t('Edit Interests') : t('Customize My Feed')}
             onClickCTA={handleCTAClick}
