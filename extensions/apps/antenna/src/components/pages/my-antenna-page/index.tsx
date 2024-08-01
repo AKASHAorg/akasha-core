@@ -90,7 +90,7 @@ const MyAntennaPage: React.FC<unknown> = () => {
         </Stack>
       )}
       {!loadingTagSubs && (
-        <Stack spacing="gap-y-2" fullWidth={true}>
+        <Stack spacing="gap-y-4" fullWidth={true}>
           <MyAntennaIntroCard
             assetName="news-feed"
             heading={t('Add some magic to your feed 🪄')}
@@ -106,7 +106,7 @@ const MyAntennaPage: React.FC<unknown> = () => {
             <TagFeed
               dataTestId="tag-feed"
               estimatedHeight={150}
-              itemSpacing={8}
+              itemSpacing={16}
               filters={{
                 and: [
                   ...tagFilters,

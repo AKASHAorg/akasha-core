@@ -35,8 +35,14 @@ const MyAntennaIntroCard: React.FC<MyAntennaIntroCardProps> = ({
   ctaLabel,
 }: MyAntennaIntroCardProps) => {
   return (
-    <Card customStyle="gap-1">
-      <Stack spacing="gap-y-3" fullWidth={true}>
+    <Card padding={0}>
+      <Stack
+        padding="p-4"
+        spacing="gap-y-3"
+        fullWidth={true}
+        customStyle="rounded-2xl"
+        {...(isMinified && { background: { light: 'grey9', dark: 'grey3' } })}
+      >
         {!isMinified && (
           <>
             {assetName && (
@@ -50,7 +56,7 @@ const MyAntennaIntroCard: React.FC<MyAntennaIntroCardProps> = ({
             <Text variant="h6" align="center">
               {heading}
             </Text>
-            <Text variant="body1" align="center" customStyle=" px-8">
+            <Text variant="body1" align="center" customStyle="px-8">
               {description}
             </Text>
           </>
@@ -62,6 +68,7 @@ const MyAntennaIntroCard: React.FC<MyAntennaIntroCardProps> = ({
           <Button
             variant={isMinified ? 'secondary' : 'primary'}
             label={ctaLabel}
+            customStyle="ml-8 w-(1/2 md:auto)"
             onClick={onClickCTA}
           />
         </Stack>
