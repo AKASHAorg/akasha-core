@@ -62,13 +62,18 @@ const MyAntennaIntroCard: React.FC<MyAntennaIntroCardProps> = ({
           </>
         )}
 
-        <Stack direction="row" align="center" justify={isMinified ? 'between' : 'end'}>
+        <Stack
+          direction="row"
+          spacing="gap-x-3"
+          align="center"
+          justify={isMinified ? 'between' : 'end'}
+        >
           {isMinified && <Text variant="subtitle2">{secondaryDescription}</Text>}
 
           <Button
             variant={isMinified ? 'secondary' : 'primary'}
             label={ctaLabel}
-            customStyle="ml-8 w-(1/2 md:auto)"
+            customStyle="w-(1/2 md:auto)"
             onClick={onClickCTA}
           />
         </Stack>
