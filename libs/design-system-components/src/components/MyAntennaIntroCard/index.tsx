@@ -63,7 +63,7 @@ const MyAntennaIntroCard: React.FC<MyAntennaIntroCardProps> = ({
         )}
 
         <Stack direction="row" align="center" justify={isMinified ? 'between' : 'end'}>
-          {isMinified && <Text variant="body1">{secondaryDescription}</Text>}
+          {isMinified && <Text variant="footnotes2">{secondaryDescription}</Text>}
 
           <Button
             variant={isMinified ? 'secondary' : 'primary'}
