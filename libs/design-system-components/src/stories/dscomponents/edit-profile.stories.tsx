@@ -55,7 +55,6 @@ export const Default: Story = {
       }),
     },
     name: { label: 'Name', initialValue: 'Mr. Snowman' },
-    userName: { label: 'Username', initialValue: 'snowman' },
     bio: {
       label: 'Bio',
       initialValue: 'Bio',
