@@ -24,7 +24,7 @@ const getPublishedAppLatestVersion = async (appName: string, logger?: ILogger) =
       id: did,
       first: 1,
       filters: { where: { name: { equalTo: appName } } },
-      sorting: { createdAt: SortOrder.Desc },
+      sorting: { createdAt: SortOrder.Asc },
     },
     { context: { source: sdk.services.gql.contextSources.default } },
   );
