@@ -1,8 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import Stepper, { StepperProps } from '../../components/Stepper';
 
-Stepper.displayName = 'Spinner';
-
 const meta: Meta<StepperProps> = {
   title: 'DSComponents/Steppers/Stepper',
   component: Stepper,
