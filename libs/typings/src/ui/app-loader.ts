@@ -1,21 +1,24 @@
-import { IconType, ExtensionManifest, IRootComponentProps } from './index';
+import { IconType, IRootComponentProps } from './index';
 import { UIEventData } from './ui-events';
-import { IPluginConf } from './plugins';
+import { IPlugin } from './plugins';
+import { AkashaApp } from '../sdk/graphql-types-new';
+
+export type ExtensionActivityFn = (
+  location: Location,
+  pathToActiveWhen: (path: string, exact?: boolean) => boolean,
+  layoutConfig?: LayoutSlots,
+) => boolean;
 
 /**
- * Type defining single-spa activity function
+ * Type defining single-spa activity
  * @see {@link https://single-spa.js.org/docs/configuration/#configactivewhen}
  */
-export type ActivityFn = (
-  location: Location,
-  pathToActiveWhen: (path: string, exact?: boolean) => (location: Location) => boolean,
-  layoutConfig?: LayoutConfig,
-) => boolean;
+export type ExtensionActivity = string | ExtensionActivityFn | (string | ExtensionActivityFn)[];
 
 /**
  * Type defining layout slots where apps and widgets among others are loaded
  */
-export type LayoutConfig = {
+export type LayoutSlots = {
   /**
    * load modals inside this node
    */
@@ -28,7 +31,7 @@ export type LayoutConfig = {
    * load root widgets inside this node
    * do not use this for app defined widgets
    */
-  rootWidgetSlotId?: string;
+  contextualWidgetSlotId?: string;
   /**
    * load app defined widgets into this node
    */
@@ -59,9 +62,9 @@ export interface IntegrationRegistrationOptions {
     title: string;
   };
   uiEvents: IRootComponentProps['uiEvents'];
-  layoutConfig: LayoutConfig;
+  layoutSlots: LayoutSlots;
   extensionData?: UIEventData['data'];
-  plugins?: IPluginConf;
+  plugins?: IPlugin;
   logger: unknown;
 }
 
@@ -88,6 +91,10 @@ export type WorldConfig = {
    */
   homepageApp: string;
   /**
+   * The extensions app that will be used by this world.
+   */
+  extensionsApp: string;
+  /**
    * Define this world's title
    */
   title: string;
@@ -103,7 +110,7 @@ export type WorldConfig = {
     siteId: string;
     trackerUrl: string;
   };
-  registryOverrides?: ExtensionManifest[];
+  registryOverrides?: (Partial<AkashaApp> & { source: string })[];
   socialLinks?: { icon: IconType; link: string }[];
 };
 

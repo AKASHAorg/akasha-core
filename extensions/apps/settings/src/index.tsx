@@ -10,11 +10,10 @@ import React from 'react';
 import { Cog8ToothIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import routes from './routes';
 
-export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
+export const register = (opts: IntegrationRegistrationOptions): IAppConfig => ({
   loadingFn: () => import('./components'),
   i18nNamespace: ['app-settings-ewa'],
-  mountsIn: opts.layoutConfig?.applicationSlotId,
-  logo: { type: LogoTypeSource.ICON, value: <Cog8ToothIcon /> },
+  mountsIn: opts.layoutSlots?.applicationSlotId,
   menuItems: {
     label: 'Settings',
     type: MenuItemType.App,

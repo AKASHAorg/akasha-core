@@ -1,4 +1,3 @@
-import LitJsSdk from '@lit-protocol/sdk-browser';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '@akashaorg/typings/lib/sdk/index.js';
 import DB from '../db/index.js';
@@ -10,14 +9,21 @@ import Gql from '../gql/index.js';
 import pino from 'pino';
 import { z } from 'zod';
 import { validate } from './validator.js';
+import { LitNodeClient, encryptString, decryptToString } from '@lit-protocol/lit-node-client';
+import { LitNetwork } from '@lit-protocol/constants';
+import {
+  createSiweMessageWithRecaps,
+  LitAbility,
+  LitActionResource,
+} from '@lit-protocol/auth-helpers';
+import { SessionSigsMap } from '@lit-protocol/types/src/lib/interfaces';
 
-const buildAccessControlConditions = (ethAddress: string) => {
+const buildAccessControlConditions = (ethAddress: string, chain: string = 'ethereum') => {
   return [
     {
-      conditionType: 'evmBasic',
       contractAddress: '',
       standardContractType: '',
-      chain: 'ethereum',
+      chain: chain,
       method: '',
       parameters: [':userAddress'],
       returnValueTest: {
@@ -35,6 +41,7 @@ export default class Lit {
   private _log: pino.Logger;
   private _settings: Settings;
   private _gql: Gql;
+  private _sessionsSigs: SessionSigsMap | undefined;
   constructor(
     @inject(TYPES.Db) db: DB,
     @inject(TYPES.Web3) web3: Web3Connector,
@@ -50,63 +57,118 @@ export default class Lit {
     this._settings = settings;
     this._gql = gql;
   }
-  protected litNodeClient;
+  protected litNodeClient: LitNodeClient | undefined;
   async connect() {
     if (!this.litNodeClient) {
-      this.litNodeClient = new LitJsSdk.LitNodeClient();
+      this.litNodeClient = new LitNodeClient({
+        litNetwork: LitNetwork.DatilDev,
+        debug: process.env.NODE_ENV !== 'production',
+      });
       await this.litNodeClient.connect();
     }
+  }
+
+  async createSession() {
+    if (!this.litNodeClient) {
+      throw new Error('Lit client not connected');
+    }
+
+    const { getLatestBlockhash } = this.litNodeClient;
+    // Create a session key and sign it using the authNeededCallback defined above
+    this._sessionsSigs = await this.litNodeClient.getSessionSigs({
+      expiration: new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(),
+      chain: 'ethereum',
+      resourceAbilityRequests: [
+        {
+          resource: new LitActionResource('*'),
+          ability: LitAbility.LitActionExecution,
+        },
+      ],
+      authNeededCallback: async ({ uri, expiration, resourceAbilityRequests }) => {
+        if (!this._web3.state.address) {
+          throw new Error('No wallet connected');
+        }
+        if (!uri) {
+          throw new Error('No uri provided');
+        }
+        if (!expiration) {
+          throw new Error('No expiration provided');
+        }
+        if (!resourceAbilityRequests) {
+          throw new Error('No resourceAbilityRequests provided');
+        }
+        // Prepare the SIWE message for signing
+        const toSign = await createSiweMessageWithRecaps({
+          uri: uri,
+          expiration: expiration,
+          resources: resourceAbilityRequests,
+          walletAddress: this._web3.state.address,
+          nonce: await getLatestBlockhash(),
+          litNodeClient: this.litNodeClient,
+        });
+        const signature = await this._web3.signMessage(toSign);
+
+        // Create an AuthSig using the derived signature, the message, and wallet address
+        return {
+          sig: signature,
+          derivedVia: 'web3.eth.personal.sign',
+          signedMessage: toSign,
+          address: this._web3.state.address,
+        };
+      },
+    });
+
+    return this._sessionsSigs;
   }
 
   @validate(z.string().min(2))
   async encryptText(text: string) {
     if (!this.litNodeClient) {
-      await this.connect();
+      throw new Error('Lit client not connected');
     }
-    const authSig = await LitJsSdk.checkAndSignAuthMessage({
-      chain: this._web3.network,
-      chainId: this._web3.networkId[this._web3.network],
-    });
-    const { encryptedString, symmetricKey } = await LitJsSdk.encryptString(text);
     const ethAddress = await this._web3.getCurrentEthAddress();
     if (!ethAddress) {
       throw new Error('No eth address connected!');
     }
-    const encryptedSymmetricKey = await this.litNodeClient.saveEncryptionKey({
-      accessControlConditions: buildAccessControlConditions(ethAddress),
-      symmetricKey,
-      authSig,
-      chain: this._web3.network,
-    });
+    const { ciphertext, dataToEncryptHash } = await encryptString(
+      {
+        accessControlConditions: buildAccessControlConditions(ethAddress, 'ethereum') as never,
+        dataToEncrypt: text,
+      },
+      this.litNodeClient,
+    );
 
     return {
-      encryptedString,
-      encryptedSymmetricKey: LitJsSdk.uint8arrayToString(encryptedSymmetricKey, 'base16'),
+      ciphertext,
+      dataToEncryptHash,
     };
   }
   @validate(z.string().min(2), z.string())
-  async decryptText(encryptedString: string, encryptedSymmetricKey: string) {
+  async decryptText(ciphertext: string, dataToEncryptHash: string) {
     if (!this.litNodeClient) {
-      await this.connect();
+      throw new Error('Lit client not connected');
     }
-    const authSig = await LitJsSdk.checkAndSignAuthMessage({ chain: this._web3.network });
     const ethAddress = await this._web3.getCurrentEthAddress();
     if (!ethAddress) {
       throw new Error('No eth address connected!');
     }
-    const symmetricKey = await this.litNodeClient.getEncryptionKey({
-      accessControlConditions: buildAccessControlConditions(ethAddress),
-      toDecrypt: encryptedSymmetricKey,
-      chain: this._web3.network,
-      authSig,
-    });
+    const decrypted = await decryptToString(
+      {
+        accessControlConditions: buildAccessControlConditions(ethAddress) as never,
+        chain: this._web3.network,
+        sessionSigs: this._sessionsSigs,
+        ciphertext,
+        dataToEncryptHash,
+      },
+      this.litNodeClient,
+    );
 
-    return LitJsSdk.decryptString(encryptedString, symmetricKey);
+    return { data: decrypted };
   }
 
   async disconnect() {
     if (this.litNodeClient) {
-      await LitJsSdk.disconnectWeb3();
+      await this.litNodeClient.disconnect();
       this.litNodeClient = undefined;
     }
   }

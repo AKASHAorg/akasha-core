@@ -1,23 +1,18 @@
 import 'systemjs-webpack-interop/auto-public-path';
-import type {
-  IntegrationRegistrationOptions,
-  LayoutWidgetInterface,
-} from '@akashaorg/typings/lib/ui';
+import type { LayoutWidgetInterface } from '@akashaorg/typings/lib/ui';
 import { TranslationPlugin } from './translation';
 
-export const register: (props: IntegrationRegistrationOptions) => LayoutWidgetInterface = () => {
+export const register = (): LayoutWidgetInterface => {
   return {
     loadingFn: () => import('./components'),
-    activeWhen: () => true,
     mountsIn: 'root',
-    extensionsMap: {
+    extensionSlots: {
       applicationSlotId: 'app-slot',
       topbarSlotId: 'topbar-slot',
       sidebarSlotId: 'sidebar-slot',
-      rootWidgetSlotId: 'root-widget-slot',
+      contextualWidgetSlotId: 'contextual-widget-slot',
       widgetSlotId: 'widget-slot',
       modalSlotId: 'modal-slot',
-      focusedPluginSlotId: 'focused-plugin-slot',
       cookieWidgetSlotId: 'cookie-widget-slot',
       snackbarNotifSlotId: 'snackbar-notif-slot',
     },
@@ -28,7 +23,7 @@ export const register: (props: IntegrationRegistrationOptions) => LayoutWidgetIn
  *
  * export the translation's getPlugin function here
  */
-export const getPlugin = async () => {
+export const registerPlugin = async () => {
   TranslationPlugin.i18n = await TranslationPlugin.initTranslation();
   return {
     translation: {

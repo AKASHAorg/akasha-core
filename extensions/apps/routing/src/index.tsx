@@ -7,6 +7,7 @@ import {
   IRootComponentProps,
   RouteRegistrationEvents,
   RoutesRegisterEvent,
+  IPlugin,
 } from '@akashaorg/typings/lib/ui';
 import getSDK from '@akashaorg/awf-sdk';
 import { APP_EVENTS } from '@akashaorg/typings/lib/sdk';
@@ -178,12 +179,12 @@ export class RoutingPlugin {
   };
 }
 
-export const getPlugin = async (
+export const registerPlugin = async (
   props: IRootComponentProps & {
     encodeAppName: (name: string) => string;
     decodeAppName: (name: string) => string;
   },
-) => {
+): Promise<IPlugin> => {
   RoutingPlugin.logger = props.logger;
   RoutingPlugin.initRouteObservation(props.uiEvents);
   RoutingPlugin.decodeAppName = props.decodeAppName;

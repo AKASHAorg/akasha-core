@@ -5,7 +5,7 @@ import { filterEvent } from '@akashaorg/ui-awf-hooks';
 export class BaseStore {
   #uiEvents: IRootExtensionProps<unknown>['uiEvents'];
   #uiEventsSub: Subscription;
-  constructor(uiEvents) {
+  constructor(uiEvents: IRootExtensionProps['uiEvents']) {
     this.#uiEvents = uiEvents;
   }
 

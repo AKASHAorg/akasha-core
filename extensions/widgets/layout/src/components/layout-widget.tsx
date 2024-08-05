@@ -38,7 +38,7 @@ const Layout: React.FC<unknown> = () => {
     !window.matchMedia(startMobileSidebarHidingBreakpoint).matches,
   );
 
-  const { uiEvents, layoutConfig } = useRootComponentProps();
+  const { uiEvents, layoutSlots } = useRootComponentProps();
   // initialise fallback theme, if none is set
   useTheme();
   const widgetStickyStyle = useSticky(widgetContainerRef, widgetContentRef, 8);
@@ -188,7 +188,7 @@ const Layout: React.FC<unknown> = () => {
                 <Stack padding="pt-0 xl:pt-4" customStyle="h-screen" ref={wrapperRef}>
                   <Widget
                     fullHeight
-                    name={layoutConfig.sidebarSlotId}
+                    name={layoutSlots.sidebarSlotId}
                     loadingIndicator={<SidebarLoader />}
                   />
                 </Stack>
@@ -196,7 +196,7 @@ const Layout: React.FC<unknown> = () => {
                 <Stack padding="pt-0 xl:pt-4" customStyle="h-screen">
                   <Widget
                     fullHeight
-                    name={layoutConfig.sidebarSlotId}
+                    name={layoutSlots.sidebarSlotId}
                     loadingIndicator={<SidebarLoader />}
                   />
                 </Stack>
@@ -209,7 +209,7 @@ const Layout: React.FC<unknown> = () => {
               padding="pt-4"
               customStyle="sticky top-0 z-10 bg(white dark:black) rounded-b-2xl"
             >
-              <Widget name={layoutConfig.topbarSlotId} loadingIndicator={<TopbarLoader />} />
+              <Widget name={layoutSlots.topbarSlotId} loadingIndicator={<TopbarLoader />} />
             </Stack>
             <Stack padding="pt-4" spacing="gap-y-4">
               {!isPlatformHealthy && (
@@ -236,9 +236,9 @@ const Layout: React.FC<unknown> = () => {
                   </Stack>
                 </Card>
               )}
-              <div id={layoutConfig.applicationSlotId} />
+              <div id={layoutSlots.applicationSlotId} />
               <Stack customStyle="sticky bottom-2">
-                <Extension name={layoutConfig.snackbarNotifSlotId} />
+                <Extension name={layoutSlots.snackbarNotifSlotId} />
               </Stack>
             </Stack>
           </Stack>
@@ -255,18 +255,18 @@ const Layout: React.FC<unknown> = () => {
               >
                 <Stack customStyle="my-4">
                   <Widget
-                    name={layoutConfig.widgetSlotId}
+                    name={layoutSlots.contextualWidgetSlotId}
                     loadingIndicator={<MiniProfileWidgetLoader />}
                   />
                   <Widget
-                    name={layoutConfig.rootWidgetSlotId}
+                    name={layoutSlots.widgetSlotId}
                     loadingIndicator={<TrendingWidgetLoader />}
                   />
                 </Stack>
               </Stack>
             </Stack>
             <Stack customStyle="fixed bottom-2 lg:(w-[21rem])">
-              <Widget name={layoutConfig.cookieWidgetSlotId} />
+              <Widget name={layoutSlots.cookieWidgetSlotId} />
             </Stack>
           </Stack>
         </Stack>
