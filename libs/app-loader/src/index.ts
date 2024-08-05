@@ -214,7 +214,7 @@ export default class AppLoader {
         const module = await System.import<SystemModuleType>(`${source}`);
         modules.set(extension.name, module);
       } else {
-        const latestReleaseNode = extension.releases?.edges[0]?.node;
+        const latestReleaseNode = extension.releases?.edges.at(-1)?.node; // newest release is the last one in the list
         if (!latestReleaseNode || !latestReleaseNode?.source) {
           this.logger.warn(`There is no release or release source for the app: ${extension.name}`);
           continue;
