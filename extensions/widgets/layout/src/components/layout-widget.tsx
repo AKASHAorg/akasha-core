@@ -145,13 +145,7 @@ const Layout: React.FC<unknown> = () => {
     };
   }, []);
 
-  const layoutStyle = `
-      grid min-h-full
-      lg:${showWidgets ? 'grid-cols-[8fr_4fr]' : 'grid-cols-[2fr_8fr_2fr]'}
-      ${showSidebar ? 'xl:grid-cols-[3fr_6fr_3fr] ' : 'xl:grid-cols-[1.5fr_6fr_3fr_1.5fr]'}
-      xl:max-w-7xl xl:mx-auto gap-x-4
-      w-full
-      `;
+  const layoutStyle = `grid min-h-full lg:${showWidgets ? 'grid-cols-[8fr_4fr]' : 'grid-cols-[2fr_8fr_2fr]'} ${showSidebar ? 'xl:grid-cols-[3fr_6fr_3fr] ' : 'xl:grid-cols-[1.5fr_6fr_3fr_1.5fr]'} xl:max-w-7xl xl:mx-auto gap-x-3 w-full`;
 
   // the bg(black/30 dark:white/30) is for the overlay background when the sidebar is open on mobile
   const mobileLayoverStyle = `
@@ -204,7 +198,10 @@ const Layout: React.FC<unknown> = () => {
             </Stack>
           </Stack>
 
-          <Stack customStyle={`${showWidgets ? '' : 'lg:(col-start-2 col-end-3) col-start-1'}`}>
+          <Stack
+            customStyle={`${showWidgets ? '' : 'lg:(col-start-2 col-end-3) col-start-1'}`}
+            padding="px-2"
+          >
             <Stack
               padding="pt-4"
               customStyle="sticky top-0 z-10 bg(white dark:black) rounded-b-2xl"
@@ -245,6 +242,7 @@ const Layout: React.FC<unknown> = () => {
 
           <Stack
             ref={widgetContainerRef}
+            padding="pr-2" // right padding to match with main area on screen sizes when sidebar visibility toggles
             customStyle={`relative min-h-[${widgetStickyStyle.contentHeight}px] h-full`}
           >
             <Stack customStyle="h-full hidden lg:flex">
