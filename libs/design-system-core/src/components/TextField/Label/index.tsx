@@ -8,7 +8,7 @@ const Label: React.FC<PropsWithChildren<LabelProps>> = ({
   id,
   required,
   disabled,
-  requiredFieldAsteriskColor,
+  requiredFieldAsteriskColor = { light: 'secondaryLight', dark: 'secondaryDark' },
   children,
 }) => {
   const labelStyle = disabled ? `text-grey4` : ``;
@@ -18,7 +18,7 @@ const Label: React.FC<PropsWithChildren<LabelProps>> = ({
       {required && (
         <sup
           className={tw(
-            `-top-0.5 left-1 ${getColorClasses(requiredFieldAsteriskColor ?? { light: 'secondaryLight', dark: 'secondaryDark' }, 'text')}`,
+            `-top-0.5 left-1 text-base ${getColorClasses(requiredFieldAsteriskColor, 'text')}`,
           )}
         >
           *
