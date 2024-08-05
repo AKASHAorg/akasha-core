@@ -27,7 +27,7 @@ export const Multiline: React.FC<MultlineProps> = forwardRef(
           {...rest}
           aria-labelledby={id}
           className={tw(`resize-none w-full ${textAreaStyle}`)}
-          maxLength={MAX_LENGTH}
+          maxLength={rest.maxLength || MAX_LENGTH}
           ref={ref}
           onChange={event => {
             setLetterCount(event.target.value.length);
@@ -35,7 +35,7 @@ export const Multiline: React.FC<MultlineProps> = forwardRef(
           }}
         ></textarea>
         <EditorMeter
-          max={MAX_LENGTH}
+          max={rest.maxLength || MAX_LENGTH}
           value={letterCount}
           background="grey6"
           customStyle="ml-auto mt-auto shrink-0"
