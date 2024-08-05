@@ -78,12 +78,7 @@ export const InstalledExtensions: React.FC<InstalledExtensionsProps> = props => 
           <Text variant="body2" color={{ light: 'grey5', dark: 'grey6' }}>
             {sections[1].description}
           </Text>
-          <AppList
-            apps={defaultExtensions}
-            onLoadMore={() => {
-              return new Promise(null);
-            }}
-          />
+          <AppList apps={defaultExtensions} onLoadMore={() => null} />
         </Stack>
       </Card>
     </Stack>
