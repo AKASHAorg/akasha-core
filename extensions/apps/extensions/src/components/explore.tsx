@@ -49,12 +49,7 @@ export const Explore: React.FC<TExploreProps> = props => {
                   <Text variant="h6">{latestExtensionsLabel}</Text>
                   <Button variant="text" label={buttonLabel} onClick={onViewAllClick} />
                 </Stack>
-                <AppList
-                  apps={latestExtensions}
-                  onLoadMore={() => {
-                    return new Promise(null);
-                  }}
-                />
+                <AppList apps={latestExtensions} onLoadMore={() => null} />
               </Stack>
             </Card>
           )}
