@@ -74,6 +74,10 @@ class AWF_Misc {
     }
     return info?.didDocument;
   }
+
+  public getIndexingDID() {
+    return this._config.getOption('indexing_did');
+  }
 }
 
 export default AWF_Misc;

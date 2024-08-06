@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { apply, tw } from '@twind/core';
-import Cropper, { CropperProps } from 'react-easy-crop';
-import { Point, Area } from 'react-easy-crop/types';
+import Cropper, { CropperProps, Point, Area } from 'react-easy-crop';
 
 import Icon from '../Icon';
 import { MagnifyingGlassMinusIcon, MagnifyingGlassPlusIcon } from '../Icon/hero-icons-outline';
