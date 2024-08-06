@@ -15,9 +15,12 @@ import {
 import { transformSource, hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useSaveImage } from './use-save-image';
 import { PartialAkashaProfileInput } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { deleteImageAndGetProfileContent } from './delete-image-and-get-profile-content';
-import { EditProfileFormValues } from '@akashaorg/design-system-components/lib/components/EditProfile/types';
-import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
+import {
+  NotificationEvents,
+  NotificationTypes,
+  PublishProfileData,
+} from '@akashaorg/typings/lib/ui';
+import { getAvatarImage, getCoverImage } from './get-profile-images';
 
 type EditProfilePageProps = {
   profileDID: string;
@@ -27,11 +30,9 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
   const { profileDID } = props;
   const { t } = useTranslation('app-profile');
   const { getRoutingPlugin, logger, uiEvents } = useRootComponentProps();
-  const { avatarImage, coverImage, saveImage, loading: isSavingImage } = useSaveImage();
+  const { newAvatarImage, newCoverImage, saveImage, loading: isSavingImage } = useSaveImage();
   const [showNsfwModal, setShowNsfwModal] = useState(false);
-  const [nsfwFormValues, setNsfwFormValues] = useState<EditProfileFormValues>();
-  const [profileContentOnImageDelete, setProfileContentOnImageDelete] =
-    useState<PartialAkashaProfileInput | null>(null);
+  const [nsfwFormValues, setNsfwFormValues] = useState<PublishProfileData>();
   const navigateTo = getRoutingPlugin().navigateTo;
   const { data, error } = useGetProfileByDidSuspenseQuery({
     variables: { id: profileDID },
@@ -112,17 +113,17 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
   };
 
   const createProfile = async (
-    formValues: EditProfileFormValues,
+    publishProfileData: PublishProfileData,
     profileImages: Pick<PartialAkashaProfileInput, 'avatar' | 'background'>,
   ) => {
     createProfileMutation({
       variables: {
         i: {
           content: {
-            name: formValues.name,
-            description: formValues.bio,
-            links: formValues.links.map(link => ({ href: link })),
-            nsfw: formValues.nsfw,
+            name: publishProfileData.name,
+            description: publishProfileData.bio,
+            links: publishProfileData.links.map(link => ({ href: link })),
+            nsfw: publishProfileData.nsfw,
             createdAt: new Date().toISOString(),
             ...profileImages,
           },
@@ -132,7 +133,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
   };
 
   const updateProfile = async (
-    formValues: EditProfileFormValues,
+    publishProfileData: PublishProfileData,
     profileImages: Pick<PartialAkashaProfileInput, 'avatar' | 'background'>,
   ) => {
     updateProfileMutation({
@@ -140,10 +141,10 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
         i: {
           id: profileData.id,
           content: {
-            name: formValues.name,
-            description: formValues.bio,
-            links: formValues.links.map(link => ({ href: link })),
-            nsfw: formValues.nsfw,
+            name: publishProfileData.name,
+            description: publishProfileData.bio,
+            links: publishProfileData.links.map(link => ({ href: link })),
+            nsfw: publishProfileData.nsfw,
             ...profileImages,
           },
         },
@@ -151,36 +152,16 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
     });
   };
 
-  const getProfileImageVersions = (
-    avatarImage: PartialAkashaProfileInput['avatar'],
-    coverImage: PartialAkashaProfileInput['background'],
-  ) => {
-    const avatarImageObj = avatarImage ? { avatar: avatarImage } : {};
-    const coverImageObj = coverImage ? { background: coverImage } : {};
-    return { ...avatarImageObj, ...coverImageObj };
-  };
-
-  const onProfileSave = async (formValues: EditProfileFormValues) => {
+  const onProfileSave = async (publishProfileData: PublishProfileData) => {
+    const profileImages = {
+      ...getAvatarImage(newAvatarImage, !publishProfileData.avatar),
+      ...getCoverImage(newCoverImage, !publishProfileData.coverImage),
+    };
     if (!profileData?.id) {
-      await createProfile(formValues, getProfileImageVersions(avatarImage, coverImage));
+      await createProfile(publishProfileData, profileImages);
       return;
     }
-
-    if (profileContentOnImageDelete) {
-      updateProfileMutation({
-        variables: {
-          i: {
-            id: profileData.id,
-            content: profileContentOnImageDelete,
-            options: { replace: true },
-          },
-        },
-      });
-      setProfileContentOnImageDelete(null);
-      return;
-    }
-
-    updateProfile(formValues, getProfileImageVersions(avatarImage, coverImage));
+    updateProfile(publishProfileData, profileImages);
   };
 
   return (
@@ -221,10 +202,6 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
             isSavingImage,
             publicImagePath: '/images',
             onImageSave: (type, image) => saveImage({ type, image, onError: onSaveImageError }),
-            onImageDelete: type =>
-              setProfileContentOnImageDelete(
-                deleteImageAndGetProfileContent({ profileData, type }),
-              ),
             transformSource,
           }}
           name={{ label: t('Name'), initialValue: profileData?.name }}
@@ -250,13 +227,13 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
           saveButton={{
             label: t('Save'),
             loading: isProcessing,
-            handleClick: async formValues => {
-              if (formValues?.nsfw && !profileData?.nsfw) {
-                setNsfwFormValues(formValues);
+            handleClick: async publishProfileData => {
+              if (publishProfileData?.nsfw && !profileData?.nsfw) {
+                setNsfwFormValues(publishProfileData);
                 setShowNsfwModal(true);
                 return;
               }
-              onProfileSave(formValues);
+              onProfileSave(publishProfileData);
             },
           }}
         />

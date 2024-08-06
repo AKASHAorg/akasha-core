@@ -38,7 +38,6 @@ export type HeaderProps = {
   onAvatarChange: (avatar?: File) => void;
   onCoverImageChange: (coverImage?: File) => void;
   onImageSave: (type: ProfileImageType, image?: File) => void;
-  onImageDelete: (type: ProfileImageType) => void;
 };
 
 export const Header: React.FC<HeaderProps> = ({
@@ -59,7 +58,6 @@ export const Header: React.FC<HeaderProps> = ({
   onAvatarChange,
   onCoverImageChange,
   onImageSave,
-  onImageDelete,
 }) => {
   const uploadInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
   const [showAvatarActions, setShowAvatarActions] = useState(false);
@@ -157,12 +155,10 @@ export const Header: React.FC<HeaderProps> = ({
   const onDelete = () => {
     switch (profileImageType) {
       case 'avatar':
-        onImageDelete('avatar');
         onAvatarChange(null);
         setAvatarUrl(null);
         break;
       case 'cover-image':
-        onImageDelete('cover-image');
         onCoverImageChange(null);
         setCoverImageUrl(null);
     }
