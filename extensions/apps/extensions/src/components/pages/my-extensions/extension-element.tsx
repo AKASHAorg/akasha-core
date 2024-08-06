@@ -196,7 +196,11 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
         <Stack spacing="gap-y-4">
           <Stack direction="row" justify="between" spacing="gap-x-8">
             <Stack direction="row" spacing="gap-x-3">
-              <AppAvatar appType={extensionData.applicationType} avatar={extensionData.logoImage} />
+              <AppAvatar
+                appType={extensionData.applicationType}
+                avatar={extensionData.logoImage}
+                extensionId={extensionData.id}
+              />
               <Stack direction="column" justify="between">
                 <Stack direction="row" spacing="gap-2">
                   <Text variant="button-sm">{extensionData.name}</Text>

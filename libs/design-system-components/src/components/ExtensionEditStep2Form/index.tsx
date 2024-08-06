@@ -189,13 +189,6 @@ const ExtensionEditStep2Form: React.FC<ExtensionEditStep2FormProps> = props => {
 export default ExtensionEditStep2Form;
 
 const schema = z.object({
-  description: z
-    .string()
-    .trim()
-    .min(30, { message: 'Must be at least 30 characters' })
-    .refine(
-      value => /^[a-zA-Z0-9-_.]+$/.test(value),
-      'Description should contain only alphabets, numbers or -_.',
-    ),
+  description: z.string().trim().min(30, { message: 'Must be at least 30 characters' }),
   nsfw: z.boolean(),
 });

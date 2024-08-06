@@ -91,8 +91,8 @@ export const ExtensionEditStep1Page: React.FC<ExtensionEditStep1PageProps> = ({ 
           defaultValues={defaultValues}
           extensionType={appData?.applicationType}
           header={{
-            coverImage: coverImage,
-            logoImage: logoImage,
+            coverImage: coverImage || defaultValues.coverImage,
+            logoImage: logoImage || defaultValues.logoImage,
             dragToRepositionLabel: t('Drag the image to reposition'),
             cancelLabel: t('Cancel'),
             deleteLabel: t('Delete'),

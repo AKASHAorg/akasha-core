@@ -5,7 +5,6 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import DropDown from '@akashaorg/design-system-core/lib/components/Dropdown';
 import { apply, tw } from '@twind/core';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -64,7 +63,7 @@ const ExtensionEditStep1Form: React.FC<ExtensionEditStep1FormProps> = props => {
     setError,
     setValue,
     getValues,
-    formState: { errors, dirtyFields },
+    formState: { errors },
   } = useForm<ExtensionEditStep1FormValues>({
     defaultValues,
     resolver: zodResolver(schema),

@@ -1,4 +1,4 @@
-import React, { SyntheticEvent } from 'react';
+import React, { SyntheticEvent, useState } from 'react';
 import * as z from 'zod';
 import { Controller, useWatch } from 'react-hook-form';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
@@ -9,13 +9,11 @@ import DropDown from '@akashaorg/design-system-core/lib/components/Dropdown';
 import { apply, tw } from '@twind/core';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  AkashaAppApplicationType,
-  AppProviderValue,
-} from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { ButtonType } from '../types/common.types';
 import { Licenses } from '../AppCreationForm';
 import { ContactInfo } from './ContactInfo';
+import { AkashaProfile, Image } from '@akashaorg/typings/lib/ui';
+import { Collaborators } from './Collaborators';
 
 export enum FieldName {
   license = 'license',
@@ -35,17 +33,22 @@ export type ExtensionEditStep3FormProps = {
   licenseFieldLabel?: string;
   collaboratorsFieldLabel?: string;
   collaboratorsDescriptionLabel?: string;
+  collaboratorsSearchPlaceholderLabel?: string;
+  extensionContributorsLabel: string;
   contactInfoFieldLabel?: string;
   contactInfoDescriptionLabel?: string;
   contactInfoPlaceholderLabel?: string;
   addLabel?: string;
   defaultValues?: ExtensionEditStep3FormValues;
+  handleGetContributors?: (query: string) => void;
+  contributors?: AkashaProfile[];
   cancelButton: ButtonType;
   nextButton: {
     label: string;
     handleClick: (data: ExtensionEditStep3FormValues) => void;
   };
   errorMessage?: { fieldName: string; message: string };
+  transformSource: (src: Image) => Image;
 };
 
 const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
@@ -56,12 +59,18 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
       contributors: [],
       contactInfo: [],
     },
+    handleGetContributors,
+    contributors,
+    transformSource,
     cancelButton,
     nextButton,
     errorMessage,
     contactInfoFieldLabel,
     contactInfoDescriptionLabel,
-    contactInfoPlaceholderLabel,
+    collaboratorsFieldLabel,
+    collaboratorsDescriptionLabel,
+    collaboratorsSearchPlaceholderLabel,
+    extensionContributorsLabel,
     addLabel,
   } = props;
 
@@ -70,7 +79,7 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
     setError,
     trigger,
     getValues,
-    formState: { errors, dirtyFields },
+    formState: { errors },
   } = useForm<ExtensionEditStep3FormValues>({
     defaultValues,
     resolver: zodResolver(schema),
@@ -99,10 +108,12 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
 
   const licenseValue = useWatch({ control, name: FieldName.license });
 
+  const [addedContributors, setAddedContributors] = useState<AkashaProfile[]>([]);
+
   const onSave = (event: SyntheticEvent) => {
     event.preventDefault();
     const formValues = getValues();
-
+    formValues.contributors = addedContributors.map(profile => profile.did?.id);
     if (formValues.license === Licenses.OTHER) {
       formValues.license = formValues.licenseOther;
     }
@@ -161,6 +172,19 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
             />
           )}
           <Divider />
+          <Collaborators
+            addedContributors={addedContributors}
+            setAddedContributors={setAddedContributors}
+            contributors={contributors}
+            handleGetContributors={handleGetContributors}
+            contributorsFieldLabel={collaboratorsFieldLabel}
+            contributorsDescriptionLabel={collaboratorsDescriptionLabel}
+            contributorsSearchPlaceholderLabel={collaboratorsSearchPlaceholderLabel}
+            extensionContributorsLabel={extensionContributorsLabel}
+            addButtonLabel={addLabel}
+            transformSource={transformSource}
+          />
+          <Divider />
           <ContactInfo
             contactLabel={contactInfoFieldLabel}
             description={contactInfoDescriptionLabel}
@@ -198,16 +222,5 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
 export default ExtensionEditStep3Form;
 
 const schema = z.object({
-  extensionID: z
-    .string()
-    .trim()
-    .min(6, { message: 'Must be at least 6 characters' })
-    .refine(
-      value => /^[a-zA-Z0-9-_.]+$/.test(value),
-      'ID should contain only alphabets, numbers or -_.',
-    ),
-  extensionType: z.string(),
-  extensionName: z.string().trim().min(4, { message: 'Must be at least 4 characters' }).optional(),
-  logoImage: z.any().optional(),
-  coverImage: z.any().optional(),
+  extensionLicense: z.object({ id: z.string(), type: z.string(), title: z.string() }).required(),
 });

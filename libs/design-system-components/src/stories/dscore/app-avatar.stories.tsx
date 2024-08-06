@@ -26,6 +26,7 @@ const avatar = { src: 'https://placebeard.it/360x360', height: 360, width: 360 }
 const baseArgs: Story = {
   args: {
     appType: AkashaAppApplicationType.App,
+    extensionId: 'k2t6wzhkhabz2zolcv1p1iw5i2ubcwt7w1ulma6j433zfn8qawjy9l72cubfc5',
     avatar,
   },
 };

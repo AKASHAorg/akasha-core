@@ -50,7 +50,7 @@ export const ExtensionEditStep2Page: React.FC<ExtensionEditStep2PageProps> = ({ 
   const [formValue, setForm] = useAtom<FormData>(useContext(AtomContext));
 
   const defaultValues = useMemo(() => {
-    return formValue.lastCompletedStep > 1 ? formValue : appData;
+    return formValue.lastCompletedStep > 0 ? formValue : appData;
   }, [appData]);
 
   const [uploading, setUploading] = useState(false);

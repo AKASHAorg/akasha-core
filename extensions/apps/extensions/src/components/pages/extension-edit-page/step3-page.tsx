@@ -5,10 +5,11 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import ExtensionEditStep3Form from '@akashaorg/design-system-components/lib/components/ExtensionEditStep3Form';
-import { hasOwn, useAkashaStore } from '@akashaorg/ui-awf-hooks';
+import { hasOwn, useAkashaStore, useMentions } from '@akashaorg/ui-awf-hooks';
 import { useAtom } from 'jotai';
 import { useGetAppsByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { AtomContext, FormData } from './main-page';
+import { transformSource } from '@akashaorg/ui-awf-hooks';
 
 type ExtensionEditStep3PageProps = {
   extensionId: string;
@@ -21,7 +22,7 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
   const [errorMessage, setErrorMessage] = useState(null);
 
   const {
-    data: { authenticatedProfile },
+    data: { authenticatedDID },
   } = useAkashaStore();
 
   const {
@@ -32,7 +33,7 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
     variables: {
       id: extensionId,
     },
-    skip: !authenticatedProfile?.did.id,
+    skip: !authenticatedDID,
   });
 
   const appData = useMemo(() => {
@@ -42,7 +43,7 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
   const [formValue, setForm] = useAtom<FormData>(useContext(AtomContext));
 
   const defaultValues = useMemo(() => {
-    return formValue.lastCompletedStep > 2
+    return formValue.lastCompletedStep > 1
       ? {
           ...formValue,
           contactInfo: formValue.links.map(elem => {
@@ -59,9 +60,14 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
           //       return elem.href;
           //     }
           //   }),
-          contributors: appData.contributors.map(profile => profile.akashaProfile?.did?.id),
+          contributors: appData?.contributors?.map(profile => profile.akashaProfile?.did?.id) || [],
         };
   }, [appData]);
+
+  const { setMentionQuery, mentions } = useMentions(authenticatedDID);
+  const handleGetMentions = (query: string) => {
+    setMentionQuery(query);
+  };
 
   return (
     <Stack spacing="gap-y-4">
@@ -79,6 +85,8 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
           licenseFieldLabel={t('License')}
           collaboratorsFieldLabel={t('Collaborators')}
           collaboratorsDescriptionLabel={t('Add people who helped you create the extension')}
+          collaboratorsSearchPlaceholderLabel={t('Search for a contributor')}
+          extensionContributorsLabel={t('Extension Contributors')}
           contactInfoFieldLabel={t('Contact Info')}
           contactInfoDescriptionLabel={t(
             'Add your contact information here for users to contact you about questions or suggestions',
@@ -86,6 +94,9 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
           contactInfoPlaceholderLabel={t('Contact url/email')}
           defaultValues={defaultValues}
           errorMessage={errorMessage}
+          handleGetContributors={handleGetMentions}
+          contributors={mentions}
+          transformSource={transformSource}
           cancelButton={{
             label: t('Back'),
             disabled: false,
