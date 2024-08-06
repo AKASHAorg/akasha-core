@@ -4,6 +4,7 @@ import {
   AkashaProfile as ProfileData,
   AkashaFollow,
 } from '../sdk/graphql-types-new';
+import { Image } from './media';
 
 /**
  * Type defining plain old javascript object of a profile data
@@ -59,3 +60,15 @@ export type AkashaFollowDocument = {
  * @see {@link AkashaFollowDocument}
  **/
 export type FollowList = Map<string, AkashaFollowDocument>;
+
+/**
+ * Type defining profile data to be published
+ **/
+export type PublishProfileData = {
+  name?: string;
+  bio?: string;
+  nsfw?: boolean;
+  links: string[];
+  avatar?: Image | File;
+  coverImage?: Image | File;
+};
