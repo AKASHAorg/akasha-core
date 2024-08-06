@@ -5,8 +5,8 @@ import type { Subject } from 'rxjs';
 import type { UIEventData } from './ui-events';
 import type { IModalNavigationOptions } from './navigation';
 import type i18n from 'i18next';
-import type { IPluginConf } from './plugins';
-import type { WorldConfig, IQueryString, LayoutConfig } from './app-loader';
+import type { IPlugin } from './plugins';
+import type { WorldConfig, IQueryString, LayoutSlots } from './app-loader';
 import type { ILogger } from '../sdk/log';
 
 /**
@@ -17,8 +17,8 @@ export interface IRootComponentProps {
   domElement?: HTMLElement;
   uiEvents: Subject<UIEventData>;
   i18next?: typeof i18n;
-  plugins?: IPluginConf;
-  layoutConfig: LayoutConfig;
+  plugins?: IPlugin;
+  layoutSlots: LayoutSlots;
   logger: ILogger;
   name?: string;
   singleSpa: typeof singleSpa;

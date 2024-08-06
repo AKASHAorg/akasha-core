@@ -1,16 +1,11 @@
 import 'systemjs-webpack-interop/auto-public-path';
 import { IntegrationRegistrationOptions, WidgetInterface } from '@akashaorg/typings/lib/ui';
-import { extensionPointsMap } from './extension-points';
-/**
- * All widgets must export an object like this:
- */
-export const register: (
-  opts: IntegrationRegistrationOptions,
-) => WidgetInterface = registrationOpts => {
+import { extensionSlots } from './extension-points';
+
+export const register = (opts: IntegrationRegistrationOptions): WidgetInterface => {
   return {
-    mountsIn: registrationOpts.layoutConfig?.topbarSlotId,
+    mountsIn: opts.layoutSlots?.topbarSlotId,
     loadingFn: () => import('./components'),
-    activeWhen: () => true,
-    extensionsMap: extensionPointsMap,
+    extensionSlots,
   };
 };

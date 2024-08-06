@@ -10,10 +10,9 @@ import React from 'react';
 import { VibesConsole } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import routes, { HOME, DASHBOARD } from './routes';
 
-export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
+export const register = (opts: IntegrationRegistrationOptions): IAppConfig => ({
   loadingFn: () => import('./components'),
-  mountsIn: opts.layoutConfig?.applicationSlotId,
-  logo: { type: LogoTypeSource.ICON, value: <VibesConsole /> },
+  mountsIn: opts.layoutSlots?.applicationSlotId,
   i18nNamespace: ['app-vibes-console'],
   routes: {
     ...routes,

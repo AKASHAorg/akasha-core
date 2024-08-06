@@ -38,7 +38,7 @@ const Layout: React.FC<unknown> = () => {
     !window.matchMedia(startMobileSidebarHidingBreakpoint).matches,
   );
 
-  const { uiEvents, layoutConfig } = useRootComponentProps();
+  const { uiEvents, layoutSlots } = useRootComponentProps();
   // initialise fallback theme, if none is set
   useTheme();
   const widgetStickyStyle = useSticky(widgetContainerRef, widgetContentRef, 8);
@@ -145,13 +145,7 @@ const Layout: React.FC<unknown> = () => {
     };
   }, []);
 
-  const layoutStyle = `
-      grid min-h-full
-      lg:${showWidgets ? 'grid-cols-[8fr_4fr]' : 'grid-cols-[2fr_8fr_2fr]'}
-      ${showSidebar ? 'xl:grid-cols-[3fr_6fr_3fr] ' : 'xl:grid-cols-[1.5fr_6fr_3fr_1.5fr]'}
-      xl:max-w-7xl xl:mx-auto gap-x-4
-      w-full
-      `;
+  const layoutStyle = `grid min-h-full lg:${showWidgets ? 'grid-cols-[8fr_4fr]' : 'grid-cols-[2fr_8fr_2fr]'} ${showSidebar ? 'xl:grid-cols-[3fr_6fr_3fr] ' : 'xl:grid-cols-[1.5fr_6fr_3fr_1.5fr]'} xl:max-w-7xl xl:mx-auto gap-x-3 w-full`;
 
   // the bg(black/30 dark:white/30) is for the overlay background when the sidebar is open on mobile
   const mobileLayoverStyle = `
@@ -188,7 +182,7 @@ const Layout: React.FC<unknown> = () => {
                 <Stack padding="pt-0 xl:pt-4" customStyle="h-screen" ref={wrapperRef}>
                   <Widget
                     fullHeight
-                    name={layoutConfig.sidebarSlotId}
+                    name={layoutSlots.sidebarSlotId}
                     loadingIndicator={<SidebarLoader />}
                   />
                 </Stack>
@@ -196,7 +190,7 @@ const Layout: React.FC<unknown> = () => {
                 <Stack padding="pt-0 xl:pt-4" customStyle="h-screen">
                   <Widget
                     fullHeight
-                    name={layoutConfig.sidebarSlotId}
+                    name={layoutSlots.sidebarSlotId}
                     loadingIndicator={<SidebarLoader />}
                   />
                 </Stack>
@@ -204,12 +198,15 @@ const Layout: React.FC<unknown> = () => {
             </Stack>
           </Stack>
 
-          <Stack customStyle={`${showWidgets ? '' : 'lg:(col-start-2 col-end-3) col-start-1'}`}>
+          <Stack
+            customStyle={`${showWidgets ? '' : 'lg:(col-start-2 col-end-3) col-start-1'}`}
+            padding="px-2"
+          >
             <Stack
               padding="pt-4"
               customStyle="sticky top-0 z-10 bg(white dark:black) rounded-b-2xl"
             >
-              <Widget name={layoutConfig.topbarSlotId} loadingIndicator={<TopbarLoader />} />
+              <Widget name={layoutSlots.topbarSlotId} loadingIndicator={<TopbarLoader />} />
             </Stack>
             <Stack padding="pt-4" spacing="gap-y-4">
               {!isPlatformHealthy && (
@@ -236,15 +233,16 @@ const Layout: React.FC<unknown> = () => {
                   </Stack>
                 </Card>
               )}
-              <div id={layoutConfig.applicationSlotId} />
+              <div id={layoutSlots.applicationSlotId} />
               <Stack customStyle="sticky bottom-2">
-                <Extension name={layoutConfig.snackbarNotifSlotId} />
+                <Extension name={layoutSlots.snackbarNotifSlotId} />
               </Stack>
             </Stack>
           </Stack>
 
           <Stack
             ref={widgetContainerRef}
+            padding="pr-2" // right padding to match with main area on screen sizes when sidebar visibility toggles
             customStyle={`relative min-h-[${widgetStickyStyle.contentHeight}px] h-full`}
           >
             <Stack customStyle="h-full hidden lg:flex">
@@ -255,18 +253,18 @@ const Layout: React.FC<unknown> = () => {
               >
                 <Stack customStyle="my-4">
                   <Widget
-                    name={layoutConfig.widgetSlotId}
+                    name={layoutSlots.contextualWidgetSlotId}
                     loadingIndicator={<MiniProfileWidgetLoader />}
                   />
                   <Widget
-                    name={layoutConfig.rootWidgetSlotId}
+                    name={layoutSlots.widgetSlotId}
                     loadingIndicator={<TrendingWidgetLoader />}
                   />
                 </Stack>
               </Stack>
             </Stack>
             <Stack customStyle="fixed bottom-2 lg:(w-[21rem])">
-              <Widget name={layoutConfig.cookieWidgetSlotId} />
+              <Widget name={layoutSlots.cookieWidgetSlotId} />
             </Stack>
           </Stack>
         </Stack>

@@ -1,20 +1,11 @@
 import singleSpa from 'single-spa';
-import { ActivityFn, LayoutConfig } from './app-loader';
+import { ExtensionActivity } from './app-loader';
 import { IMenuItem } from './sidebar-menu-items';
 import { IRootComponentProps } from './root-component';
 import { ContentBlockConfig } from './editor-blocks';
-import { ExtensionInterface } from './extension-point';
+import { ExtensionPointInterface } from './extension-point';
 import { Profile } from './profile';
-
-/**
- * Enum defining extension types
- **/
-export enum ExtensionTypes {
-  APP = 'App',
-  WIDGET = 'Widget',
-  PLUGIN = 'Plugin',
-  NONE = 'None',
-}
+import { AkashaApp } from '../sdk/graphql-types-new';
 
 /**
  * Enum defining extension status for an extension developer
@@ -35,35 +26,8 @@ export type ExtensionImageType = 'logo-image' | 'cover-image';
  **/
 export const enum AppEvents {
   RegisterApplication = 'register-application',
+  AppNotFound = 'app-not-found',
 }
-
-/**
- * Type defining metadata info about an extension
- **/
-export type ExtensionManifest = {
-  id?: string | null;
-  name: string;
-  version: string;
-  integrationType: string;
-  sources?: Array<string> | null;
-  integrationID: string;
-  author: string;
-  enabled: boolean;
-  createdAt?: number | null;
-  links?: {
-    publicRepository?: string | null;
-    documentation?: string | null;
-    detailedDescription?: string | null;
-  } | null;
-  manifestData: {
-    mainFile: string;
-    license?: string | null;
-    keywords?: Array<string | null> | null;
-    description?: string | null;
-    displayName?: string | null;
-  };
-};
-
 /**
  * Type defining info about developer of an extension
  */
@@ -76,13 +40,15 @@ export type Developer = {
  **/
 export type AppRegisterEvent = {
   event: AppEvents.RegisterApplication;
-  data: { config: IAppConfig; manifest: ExtensionManifest };
+  data: {
+    config: IAppConfig;
+    appData: Partial<Omit<AkashaApp, 'author'>> & {
+      source?: string;
+      isLocal?: boolean;
+      author?: { id: string; isViewer?: boolean };
+    };
+  };
 };
-
-/**
- * Type defining app name
- **/
-export type AppName = string;
 
 /**
  * Interface defining configuration object for loading an app
@@ -105,7 +71,7 @@ export interface IAppConfig {
    *
    * This functionality is most useful for widgets.
    */
-  activeWhen?: ActivityFn;
+  activeWhen?: ExtensionActivity;
   /**
    * The id of the html element that this app will mount in
    * The applications and widgets have a predefined slots provided by the
@@ -131,13 +97,15 @@ export interface IAppConfig {
    *  More info in the documentation.
    */
   contentBlocks?: ContentBlockConfig[];
-  extensions?: ExtensionInterface[];
+  extensionPoints?: ExtensionPointInterface[];
   /**
    * A simple mapping of the extensions exposed by this app.
    * Can be used to target a specific app's extension
    * Note that this is optional
    */
-  extensionsMap?: LayoutConfig;
+  extensionSlots?: {
+    [key: string]: string;
+  };
   /**
    * Keywords that defines this widget.
    * Useful for filtering through integrations
@@ -152,4 +120,9 @@ export interface IAppConfig {
    * This property is used by the sidebar widget to construct the menu
    */
   menuItems: IMenuItem | IMenuItem[];
+  /**
+   * Method to register newly deployed composeDB Models (streamId's and runtime definitions)
+   * use methods provided by the sdk
+   */
+  registerResources?: () => void;
 }

@@ -4,14 +4,15 @@ import {
   IntegrationRegistrationOptions,
   MenuItemAreaType,
   LogoTypeSource,
+  IPlugin,
 } from '@akashaorg/typings/lib/ui';
 import { ProfilePlugin } from './plugins/profile-plugin';
 import routes, { BEAMS, EDIT, FOLLOWERS, FOLLOWING, INTERESTS } from './routes';
 /**
  * All plugins must export an object like this:
  */
-export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
-  mountsIn: opts.layoutConfig?.applicationSlotId,
+export const register = (opts: IntegrationRegistrationOptions): IAppConfig => ({
+  mountsIn: opts.layoutSlots?.applicationSlotId,
   loadingFn: () => import('./components'),
   i18nNamespace: ['app-profile', 'ui-lib-feed'],
   menuItems: [
@@ -27,7 +28,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       })),
     },
   ],
-  extensions: [
+  extensionPoints: [
     {
       mountsIn: 'login',
       loadingFn: () => import('./extensions/login-modal'),
@@ -51,7 +52,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   },
 });
 
-export const getPlugin = async () => {
+export const registerPlugin = async (): Promise<IPlugin> => {
   return {
     profile: new ProfilePlugin(),
   };

@@ -6,6 +6,8 @@ import { Header, HeaderProps } from './Header';
 import { EditProfileFormValues } from '../types';
 import { ButtonType } from '../../types/common.types';
 
+const MAX_BIO_LENGTH = 200;
+
 type InputType = { label: string; initialValue: string };
 
 export type GeneralProps = {
@@ -62,6 +64,7 @@ export const General: React.FC<GeneralProps> = ({
             value={value}
             onChange={onChange}
             inputRef={ref}
+            maxLength={MAX_BIO_LENGTH}
             type="multiline"
           />
         )}

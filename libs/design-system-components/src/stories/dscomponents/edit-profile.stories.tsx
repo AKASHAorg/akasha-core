@@ -47,7 +47,6 @@ export const Default: Story = {
       dragToRepositionLabel: 'Drag to reposition',
       isSavingImage: false,
       onImageSave: () => ({}),
-      onImageDelete: () => ({}),
       transformSource: () => ({
         src: 'https://placebeard.it/360x360',
         width: 360,
@@ -55,7 +54,6 @@ export const Default: Story = {
       }),
     },
     name: { label: 'Name', initialValue: 'Mr. Snowman' },
-    userName: { label: 'Username', initialValue: 'snowman' },
     bio: {
       label: 'Bio',
       initialValue: 'Bio',

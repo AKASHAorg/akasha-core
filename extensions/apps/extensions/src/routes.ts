@@ -8,6 +8,7 @@ export const CREATE_EXTENSION = 'Create Extension';
 export const EDIT_EXTENSION = 'Edit Extension';
 
 export default {
+  default: '/explore',
   [HOME]: '/explore',
   [EXTENSIONS]: '/extensions-hub',
   [INSTALLED]: '/installed-extensions',

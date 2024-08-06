@@ -13,10 +13,10 @@ import { MagnifyingGlassIcon } from '@akashaorg/design-system-core/lib/component
 /**
  * All the plugins must export an object like this:
  */
-export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
+export const register = (opts: IntegrationRegistrationOptions): IAppConfig => ({
   loadingFn: () => import('./components'),
   i18nNamespace: ['app-search'],
-  mountsIn: opts.layoutConfig?.applicationSlotId,
+  mountsIn: opts.layoutSlots?.applicationSlotId,
   menuItems: {
     label: 'Search',
     area: [MenuItemAreaType.SearchArea, MenuItemAreaType.AppArea],

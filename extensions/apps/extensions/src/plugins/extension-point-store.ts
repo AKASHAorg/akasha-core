@@ -1,23 +1,23 @@
 import {
-  ExtensionEvents,
-  ExtensionInterface,
-  ExtensionRegisterEvent,
+  ExtensionActivityFn,
+  ExtensionPointEvents,
+  ExtensionPointInterface,
+  ExtensionPointRegisterEvent,
   IRootExtensionProps,
 } from '@akashaorg/typings/lib/ui';
 import { BaseStore } from './base-store';
 import { hasOwn } from '@akashaorg/ui-awf-hooks';
-import { pathToActiveWhen } from 'single-spa';
-import { stringToRegExp } from './utils';
+import { checkActivity, stringToRegExp } from './utils';
 
-export class ExtensionStore extends BaseStore {
-  static instance: ExtensionStore;
-  readonly #extensions: ExtensionInterface[];
+export class ExtensionPointStore extends BaseStore {
+  static instance: ExtensionPointStore;
+  readonly #extensions: ExtensionPointInterface[];
   constructor(uiEvents: IRootExtensionProps['uiEvents']) {
     super(uiEvents);
     this.#extensions = [];
 
-    this.subscribeRegisterEvents(ExtensionEvents.RegisterExtension, {
-      next: (eventInfo: ExtensionRegisterEvent) => {
+    this.subscribeRegisterEvents(ExtensionPointEvents.RegisterExtensionPoint, {
+      next: (eventInfo: ExtensionPointRegisterEvent) => {
         if (!Array.isArray(eventInfo.data)) {
           return;
         }
@@ -37,7 +37,12 @@ export class ExtensionStore extends BaseStore {
         matchingExtensions.push(ext);
       }
       if (stringToRegExp(ext.mountsIn).test(slotName) && typeof ext.activeWhen === 'function') {
-        const isActive = ext.activeWhen(location, pathToActiveWhen);
+        let isActive = checkActivity(ext.activeWhen, location);
+
+        if (Array.isArray(ext.activeWhen) && ext.activeWhen.length > 0) {
+          isActive = ext.activeWhen.some(activity => checkActivity(activity, location));
+        }
+
         if (isActive) {
           matchingExtensions.push(ext);
         }
@@ -48,7 +53,7 @@ export class ExtensionStore extends BaseStore {
 
   static getInstance(uiEvents: IRootExtensionProps<unknown>['uiEvents']) {
     if (!this.instance) {
-      this.instance = new ExtensionStore(uiEvents);
+      this.instance = new ExtensionPointStore(uiEvents);
     }
     return this.instance;
   }

@@ -10,8 +10,8 @@ import {
 import React from 'react';
 import { DocumentTextIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
-export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
-  mountsIn: opts.layoutConfig?.applicationSlotId,
+export const register = (opts: IntegrationRegistrationOptions): IAppConfig => ({
+  mountsIn: opts.layoutSlots?.applicationSlotId,
   routes: {
     legal: routes[HOME],
     devGuidelines: routes[DG],

@@ -102,7 +102,8 @@ export const transformSource = (image?: Image): Image => {
   const defaultUrl = getMediaUrl(image.src);
 
   return {
-    ...image,
+    height: image.height,
+    width: image.width,
     src: defaultUrl.originLink || defaultUrl.fallbackLink,
   };
 };

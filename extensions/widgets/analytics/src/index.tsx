@@ -1,12 +1,9 @@
 import 'systemjs-webpack-interop/auto-public-path';
 import { IntegrationRegistrationOptions, WidgetInterface } from '@akashaorg/typings/lib/ui';
-/**
- * All widgets must export an object like this:
- */
-export const register: (opts: IntegrationRegistrationOptions) => WidgetInterface = opts => {
+
+export const register = (opts: IntegrationRegistrationOptions): WidgetInterface => {
   return {
-    mountsIn: opts.layoutConfig.cookieWidgetSlotId,
+    mountsIn: opts.layoutSlots?.cookieWidgetSlotId,
     loadingFn: () => import('./components'),
-    activeWhen: () => true,
   };
 };

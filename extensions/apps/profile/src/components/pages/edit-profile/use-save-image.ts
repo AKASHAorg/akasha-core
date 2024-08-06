@@ -12,8 +12,8 @@ interface ISaveImage {
 
 export function useSaveImage() {
   const [loading, setLoading] = useState(false);
-  const [avatarImage, setAvatarImage] = useState<ProfileImageVersions | null>(null);
-  const [coverImage, setCoverImage] = useState<ProfileImageVersions | null>(null);
+  const [newAvatarImage, setNewAvatarImage] = useState<ProfileImageVersions | null>(null);
+  const [newCoverImage, setNewCoverImage] = useState<ProfileImageVersions | null>(null);
   const { logger } = useRootComponentProps();
 
   const saveImage = async ({ type, image, onError }: ISaveImage) => {
@@ -21,10 +21,10 @@ export function useSaveImage() {
       setLoading(true);
       switch (type) {
         case 'avatar':
-          setAvatarImage(await saveAndGetImageObj('avatar', image));
+          setNewAvatarImage(await saveAndGetImageObj('avatar', image));
           break;
         case 'cover-image':
-          setCoverImage(await saveAndGetImageObj('coverImage', image));
+          setNewCoverImage(await saveAndGetImageObj('coverImage', image));
           break;
       }
     } catch (error) {
@@ -35,5 +35,5 @@ export function useSaveImage() {
     }
   };
 
-  return { avatarImage, coverImage, loading, saveImage };
+  return { newAvatarImage, newCoverImage, loading, saveImage };
 }

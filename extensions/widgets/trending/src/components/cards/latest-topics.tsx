@@ -247,7 +247,7 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
     }
 
     // if subscribing, and limit is already reached, return snackbar
-    if (subscribing && localSubscribedTagsRef.current.length === 10) {
+    if (subscribing && localSubscribedTagsRef.current.length >= 10) {
       uiEvents.next({
         event: NotificationEvents.ShowNotification,
         data: {
