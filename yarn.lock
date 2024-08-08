@@ -12122,6 +12122,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@t3-oss/env-core@npm:0.11.0":
+  version: 0.11.0
+  resolution: "@t3-oss/env-core@npm:0.11.0"
+  peerDependencies:
+    typescript: ">=5.0.0"
+    zod: ^3.0.0
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 10/e6e934056e212ba14aca2ce33d0eb3cf2119ae39809bbf590ae63f173120c43c0461f47ab7bc2569f3ddcf7831f019e70e7ca38a5c7787f30b3a9de3f030cd15
+  languageName: node
+  linkType: hard
+
 "@tanstack/history@npm:1.15.13":
   version: 1.15.13
   resolution: "@tanstack/history@npm:1.15.13"
@@ -33588,6 +33601,7 @@ __metadata:
     "@swc/cli": "npm:~0.1.62"
     "@swc/core": "npm:~1.3.85"
     "@swc/helpers": "npm:~0.5.2"
+    "@t3-oss/env-core": "npm:0.11.0"
     "@tanstack/react-router": "npm:1.16.6"
     "@tanstack/react-virtual": "npm:3.5.0"
     "@tanstack/router-devtools": "npm:1.16.6"
@@ -33722,7 +33736,7 @@ __metadata:
     resize-observer-polyfill: "npm:^1.5.1"
     resolve: "npm:1.22.8"
     rimraf: "npm:3.0.2"
-    rxjs: "npm:7.3.0"
+    rxjs: "npm:7.8.1"
     safe-buffer: "npm:5.2.1"
     semver: "npm:7.6.2"
     sharp: "npm:0.33.4"
@@ -33840,16 +33854,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rxjs@npm:7.3.0":
-  version: 7.3.0
-  resolution: "rxjs@npm:7.3.0"
-  dependencies:
-    tslib: "npm:~2.1.0"
-  checksum: 10/329fed093e7f75a49d3464a946d9f05b42a74678a90edb2763eb4238d6b302e455aea808468d281ddaf3c78167c7d87d8b9a88bba61b624f2ab1f92a4fd75e49
-  languageName: node
-  linkType: hard
-
-"rxjs@npm:^7.5.5, rxjs@npm:^7.8.0, rxjs@npm:^7.8.1":
+"rxjs@npm:7.8.1, rxjs@npm:^7.5.5, rxjs@npm:^7.8.0, rxjs@npm:^7.8.1":
   version: 7.8.1
   resolution: "rxjs@npm:7.8.1"
   dependencies:
@@ -36606,13 +36611,6 @@ __metadata:
   version: 2.6.2
   resolution: "tslib@npm:2.6.2"
   checksum: 10/bd26c22d36736513980091a1e356378e8b662ded04204453d353a7f34a4c21ed0afc59b5f90719d4ba756e581a162ecbf93118dc9c6be5acf70aa309188166ca
-  languageName: node
-  linkType: hard
-
-"tslib@npm:~2.1.0":
-  version: 2.1.0
-  resolution: "tslib@npm:2.1.0"
-  checksum: 10/15a0efbca455d7ce0bb2b7eaabbda70293082519e7d7f14b660d2fdb7a70c64f8dbd142067b1de25c84d4acc87922e699726cfe38864af92b056d14dcd01670f
   languageName: node
   linkType: hard
 
