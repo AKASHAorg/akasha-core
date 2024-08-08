@@ -11,15 +11,16 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
+import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import { Plugin } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
+import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import TextField from '@akashaorg/design-system-core/lib/components/TextField';
-import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
+import Label from './label';
+import Section from './section';
 import { AppInfoPill } from '../AppInfo/info-pill';
+import ExtensionImageGallery from '../ExtensionImageGallery';
 import Stepper from '../Stepper';
-import { Color } from '@akashaorg/design-system-core/lib/components/types/common.types';
-import { getColorClasses } from '@akashaorg/design-system-core/lib/utils';
 
 type ExtensionData = {
   logoImage: AppImageSource;
@@ -34,28 +35,35 @@ type ExtensionData = {
   links: { label: string; href: string }[];
   contactInfo: string;
   license: { name: string; description: string };
-  contributors: string[];
+  contributors: {
+    label: string;
+    profileId: string;
+    avatar: { src: string; height: number; width: number };
+  }[];
+  tags: string[];
 };
 
 export type ReviewAndPublishProps = {
   extensionData: ExtensionData;
   title: string;
+  subtitle: { part1: string; part2: string };
   pluginLabel: string;
   extensionId: string;
   extensionDisplayName: string;
-  githubRepoLabel: string;
+  sourceFileLabel: string;
   nsfwLabel: string;
   nsfwDescription: string;
   activeAccordionId: string;
   descriptionLabel: string;
   galleryLabel: string;
+  imageUploadedLabel: string;
   documentationLabel: string;
   licenseLabel: string;
   contributorsLabel: string;
   contactInfoLabel: string;
+  tagsLabel: string;
   backButtonLabel: string;
   publishButtonLabel: string;
-  onToggleNSFW: () => void;
   onAccordionClick: () => void;
   onClickBack: () => void;
   onClickPublish: () => void;
@@ -65,55 +73,49 @@ const ReviewAndPublish: React.FC<ReviewAndPublishProps> = props => {
   const {
     extensionData,
     title,
+    subtitle,
     pluginLabel,
     extensionId,
     extensionDisplayName,
-    githubRepoLabel,
+    sourceFileLabel,
     nsfwLabel,
     nsfwDescription,
     activeAccordionId,
     descriptionLabel,
     galleryLabel,
+    imageUploadedLabel,
     documentationLabel,
     licenseLabel,
     contributorsLabel,
     contactInfoLabel,
+    tagsLabel,
     backButtonLabel,
     publishButtonLabel,
-    onToggleNSFW,
     onAccordionClick,
     onClickBack,
     onClickPublish,
   } = props;
 
-  const asteriskColor: Color = { light: 'errorLight', dark: 'errorDark' };
-
-  const getAccordionTitleNode = (label: string, isRequired = true) => {
+  const getAccordionTitleNode = (title: string, isRequired = true) => {
     return (
       <Stack direction="row" spacing="gap-x-1" align="center">
         <Icon icon={<CheckCircleIcon />} solid={true} color="success" />
-        <Text variant="h6">
-          {label}
-          {isRequired && (
-            <sup
-              className={tw(
-                `-top-0.5 left-1 text-base ${getColorClasses({ light: 'errorLight', dark: 'errorDark' }, 'text')}`,
-              )}
-            >
-              *
-            </sup>
-          )}
-        </Text>
+        <Label title={title} isRequired={isRequired} />
       </Stack>
     );
   };
+
+  const asteriskStyle = tw(`-top-0.5 left-1 text-base text(errorLight dark:errorDark)`);
 
   return (
     <Card padding={0}>
       <Stack padding="p-4 pb-6" spacing="gap-y-4">
         <Stack spacing="gap-y-4" align="center">
-          <Stepper length={4} currentStep={4} />
+          <Stepper length={2} currentStep={1} />
           <Text variant="h5">{title}</Text>
+          <Text as="span" variant="body2" color={{ light: 'grey4', dark: 'grey6' }}>
+            {subtitle.part1} <span className={asteriskStyle}>*</span> {subtitle.part2}
+          </Text>
         </Stack>
         <Stack spacing="gap-y-3" fullWidth>
           <Stack customStyle="relative h-24 rounded-2xl bg-grey6" fullWidth>
@@ -138,52 +140,27 @@ const ReviewAndPublish: React.FC<ReviewAndPublishProps> = props => {
           )}
         </Stack>
 
-        <TextField
-          type="text"
-          readOnly={true}
-          required={true}
-          id={extensionId}
-          name={extensionId}
-          label={extensionId}
-          value={extensionData.id}
-          requiredFieldAsteriskColor={asteriskColor}
-        />
-        <Divider />
+        <Section title={extensionId} isRequired>
+          <Text variant="body2">{extensionData.id}</Text>
+        </Section>
 
-        <TextField
-          type="text"
-          readOnly={true}
-          required={true}
-          id={extensionDisplayName}
-          name={extensionDisplayName}
-          label={extensionDisplayName}
-          value={extensionData.displayName}
-          requiredFieldAsteriskColor={asteriskColor}
-        />
-        <Divider />
+        <Section title={extensionDisplayName}>
+          <Text variant="body2">{extensionData.displayName}</Text>
+        </Section>
 
-        <TextField
-          type="text"
-          readOnly={true}
-          required={true}
-          id={githubRepoLabel}
-          name={githubRepoLabel}
-          label={githubRepoLabel}
-          value={extensionData.github}
-          requiredFieldAsteriskColor={asteriskColor}
-        />
-        <Divider />
+        <Section title={sourceFileLabel} isRequired>
+          <Link to={extensionData.github} target="_blank">
+            <Text variant="body2" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
+              {extensionData.github}
+            </Text>
+          </Link>
+        </Section>
 
-        <Stack spacing="gap-y-2">
-          <Stack direction="row" align="center" justify="between">
-            <Text variant="h6">{nsfwLabel}</Text>
-            <Toggle checked={extensionData.nsfw} onChange={onToggleNSFW} />
-          </Stack>
+        <Section title={nsfwLabel} isRequired hasToggle isToggleChecked={extensionData.nsfw}>
           <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }}>
             {nsfwDescription}
           </Text>
-        </Stack>
-        <Divider />
+        </Section>
 
         {/* wrap each accordion in a Stack to guard against the main wrapper's spacing */}
         <Stack spacing="gap-y-3">
@@ -196,23 +173,40 @@ const ReviewAndPublish: React.FC<ReviewAndPublishProps> = props => {
           />
         </Stack>
         <Divider />
+
         <Stack spacing="gap-y-3">
           <Accordion
             accordionId={galleryLabel}
             open={galleryLabel === activeAccordionId}
             titleNode={getAccordionTitleNode(galleryLabel, false)}
-            contentNode={<Text variant="body2">{extensionData.description}</Text>}
+            contentNode={
+              <Stack spacing="gap-y-3">
+                <ExtensionImageGallery
+                  images={extensionData.gallery.map((image, idx) => ({
+                    src: image.src,
+                    size: { width: image.width, height: image.height },
+                    name: image.src + idx,
+                  }))}
+                  showOverlay={false}
+                  toggleOverlay={() => ({})}
+                />
+                <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey7' }}>
+                  {imageUploadedLabel}
+                </Text>
+              </Stack>
+            }
             handleClick={onAccordionClick}
           />
         </Stack>
         <Divider />
+
         <Stack spacing="gap-y-3">
           <Accordion
             accordionId={documentationLabel}
             open={documentationLabel === activeAccordionId}
             titleNode={getAccordionTitleNode(documentationLabel)}
             contentNode={
-              <Stack spacing="gap-y-2">
+              <Stack spacing="gap-y-3">
                 {extensionData.links.map(link => (
                   <Stack key={`${link.label} ${link.href}`}>
                     <Text variant="button-md">{link.label}</Text>
@@ -232,6 +226,7 @@ const ReviewAndPublish: React.FC<ReviewAndPublishProps> = props => {
           />
         </Stack>
         <Divider />
+
         <Stack spacing="gap-y-3">
           <Accordion
             accordionId={licenseLabel}
@@ -247,16 +242,24 @@ const ReviewAndPublish: React.FC<ReviewAndPublishProps> = props => {
           />
         </Stack>
         <Divider />
+
         <Stack spacing="gap-y-3">
           <Accordion
             accordionId={contributorsLabel}
             open={contributorsLabel === activeAccordionId}
             titleNode={getAccordionTitleNode(contributorsLabel, false)}
-            contentNode={<Text variant="body2">{extensionData.description}</Text>}
+            contentNode={
+              <Stack spacing="gap-y-4">
+                {extensionData.contributors.map(el => (
+                  <ProfileAvatarButton key={el.label + el.profileId} {...el} />
+                ))}
+              </Stack>
+            }
             handleClick={onAccordionClick}
           />
         </Stack>
         <Divider />
+
         <Stack spacing="gap-y-3">
           <Accordion
             accordionId={contactInfoLabel}
@@ -267,6 +270,22 @@ const ReviewAndPublish: React.FC<ReviewAndPublishProps> = props => {
           />
         </Stack>
         <Divider />
+
+        <Stack spacing="gap-y-3">
+          <Accordion
+            accordionId={tagsLabel}
+            open={tagsLabel === activeAccordionId}
+            titleNode={getAccordionTitleNode(tagsLabel)}
+            contentNode={
+              <Stack direction="row" spacing="gap-2" customStyle="flex-wrap">
+                {extensionData.tags.map((tag, idx) => (
+                  <Pill key={tag + idx} label={tag} type="action" />
+                ))}
+              </Stack>
+            }
+            handleClick={onAccordionClick}
+          />
+        </Stack>
       </Stack>
 
       <Divider />
