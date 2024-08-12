@@ -109,18 +109,15 @@ const PrivacyOption: React.FC = () => {
             {t(
               ", and keeping it secure, stable, and optimized so you'll feel like this is your kind of thing — to use, celebrate, and help grow. If you're a privacy geek like us, you'll find ",
             )}
-            <Button plain={true} onClick={handlePrivacyPolicyClick}>
-              <Text
-                as="span"
-                color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-                align="center"
-              >
-                {t('our privacy policy')}
-              </Text>
-            </Button>
+            <Button
+              size="lg"
+              variant="text"
+              label={t('our privacy policy')}
+              onClick={handlePrivacyPolicyClick}
+            />
             {t(' makes for perfect bedtime reading. ')}
             {t(
-              "And the best thing about AKASHA World is that when we write “our app” and “our Privacy Policy” that means “your app” and “your Privacy Policy” because we're doing this thing together.",
+              "The best thing is that when we write “our app” and “our Privacy Policy” that means “your app” and “your Privacy Policy” because we're doing this together.",
             )}
           </Text>
         </Stack>

@@ -13,7 +13,9 @@ const Bio: React.FC<BioProps> = ({ title, biography }) => {
     <Card radius={20} padding={'p-4'}>
       <Stack direction="column" spacing="gap-y-2.5">
         <Text variant="label">{title}</Text>
-        <Text variant="body2">{biography}</Text>
+        <Text variant="body2" breakWord>
+          {biography}
+        </Text>
       </Stack>
     </Card>
   );

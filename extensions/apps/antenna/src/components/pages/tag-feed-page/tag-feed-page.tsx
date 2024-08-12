@@ -127,7 +127,7 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
       return;
     }
     // if subscribing, and limit is already reached, return snackbar
-    if (subscribing && tagSubscriptions.length === 10) {
+    if (subscribing && tagSubscriptions.length >= 10) {
       uiEvents.next({
         event: NotificationEvents.ShowNotification,
         data: {

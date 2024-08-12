@@ -1,17 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { SocialLink } from './social-link';
 import { PlusIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import { Controller, Control } from 'react-hook-form';
+import { Controller, Control, useFieldArray } from 'react-hook-form';
 import { EditProfileFormValues } from '../types';
 
 export type SocialLinksProps = {
   linkLabel: string;
   addNewLinkButtonLabel: string;
   control: Control<EditProfileFormValues>;
-  initialLinks: EditProfileFormValues['links'];
   description: string;
   customStyle?: string;
 };
@@ -21,15 +20,12 @@ export const SocialLinks: React.FC<SocialLinksProps> = ({
   addNewLinkButtonLabel,
   description,
   control,
-  initialLinks,
   customStyle = '',
 }) => {
-  const [links, setLinks] = useState(
-    initialLinks.map(link => ({ id: crypto.randomUUID(), href: link })),
-  );
+  const { fields, append, remove } = useFieldArray({ name: 'links', control });
 
   const onAddNew = () => {
-    setLinks([...links, { id: crypto.randomUUID(), href: '' }]);
+    append({ id: crypto.randomUUID(), href: '' });
   };
 
   return (
@@ -49,17 +45,20 @@ export const SocialLinks: React.FC<SocialLinksProps> = ({
           {description}
         </Text>
       </Stack>
-      {links.map((link, index) => {
+      {fields.map((link, index) => {
         const defaultValue = link.href ? { defaultValue: link.href } : {};
         return (
           <Controller
             key={link.id}
             control={control}
-            name={`links.${index}`}
+            name={`links.${index}.href`}
             render={({ field: { name, value, onChange, ref }, fieldState: { error } }) => (
               <SocialLink
                 type="text"
-                onDelete={() => setLinks(links.filter(_link => _link.id !== link.id))}
+                onDelete={() => {
+                  const foundIndex = fields.findIndex(field => field.id === link.id);
+                  if (foundIndex !== -1) remove(foundIndex);
+                }}
                 name={name}
                 value={value || ''}
                 caption={error?.message}

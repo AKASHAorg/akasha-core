@@ -47,7 +47,6 @@ export const Default: Story = {
     onAvatarChange: () => ({}),
     onCoverImageChange: () => ({}),
     onImageSave: () => ({}),
-    onImageDelete: () => ({}),
   },
 };
 

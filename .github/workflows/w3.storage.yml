@@ -25,22 +25,28 @@ jobs:
           cache: 'yarn'
           cache-dependency-path: yarn.lock
       - run: node --version
+      - name: Get Secrets
+        uses: bitwarden/sm-action@v2
+        with:
+          access_token: ${{ secrets.BW_ACCESS_TOKEN }}
+          secrets: |
+            d2e58f1e-c9a7-47ed-9fef-b1c500adf641 > W3_STORAGE_DELEGATE
       - name: install root dependencies
         env:
           CI: 1
           NODE_ENV: production
-          LOG_LEVEL: warn
-          WALLETCONNECT_PROJECT_ID: ${{ secrets.WALLETCONNECT_PROJECT_ID }}
-          API_STATUS_PATH: ${{ secrets.API_STATUS_PATH }}
-          CERAMIC_API_ENDPOINT: ${{ secrets.CERAMIC_API_ENDPOINT }}
-          GRAPHQL_URI: ${{ secrets.GRAPHQL_URI }}
-          INDEXING_DID: ${{ secrets.INDEXING_DID }}
+          PUBLIC_LOG_LEVEL: warn
+          PUBLIC_WALLET_CONNECT_PROJECT_ID: ${{ secrets.PUBLIC_WALLET_CONNECT_PROJECT_ID }}
+          PUBLIC_API_STATUS_PATH: ${{ secrets.PUBLIC_API_STATUS_PATH }}
+          PUBLIC_CERAMIC_API_ENDPOINT: ${{ secrets.PUBLIC_CERAMIC_API_ENDPOINT }}
+          PUBLIC_GRAPHQL_URI: ${{ secrets.PUBLIC_GRAPHQL_URI }}
+          PUBLIC_INDEXING_DID: ${{ secrets.PUBLIC_INDEXING_DID }}
+          PUBLIC_W3_STORAGE_DELEGATE_BASE_URL: ${{ secrets.PUBLIC_W3_STORAGE_DELEGATE_BASE_URL }}
           INFURA_ID: ${{ secrets.INFURA_ID }}
           INFURA_IPFS_ID: ${{ secrets.INFURA_IPFS_ID }}
           INFURA_IPFS_SECRET: ${{ secrets.INFURA_IPFS_SECRET }}
           MATOMO_SITE_ID: ${{ secrets.MATOMO_SITE_ID }}
           MATOMO_TRACKER_URL: ${{ secrets.MATOMO_TRACKER_URL }}
-          W3_STORAGE_DELEGATE_BASE_URL: ${{ secrets.W3_STORAGE_DELEGATE_BASE_URL }}
         run: |
           yarn install --immutable
           yarn build:all
@@ -58,15 +64,16 @@ jobs:
           CI: 1
           AFFECTED_EXTENSIONS: ${{ steps.affected-projects.outputs.AFFECTED_EXTENSIONS }}
           NODE_ENV: production
-          LOG_LEVEL: warn
-          API_STATUS_PATH: ${{ secrets.API_STATUS_PATH }}
+          PUBLIC_LOG_LEVEL: warn
+          PUBLIC_WALLET_CONNECT_PROJECT_ID: ${{ secrets.PUBLIC_WALLET_CONNECT_PROJECT_ID }}
+          PUBLIC_API_STATUS_PATH: ${{ secrets.PUBLIC_API_STATUS_PATH }}
+          PUBLIC_CERAMIC_API_ENDPOINT: ${{ secrets.PUBLIC_CERAMIC_API_ENDPOINT }}
+          PUBLIC_GRAPHQL_URI: ${{ secrets.PUBLIC_GRAPHQL_URI }}
+          PUBLIC_INDEXING_DID: ${{ secrets.PUBLIC_INDEXING_DID }}
+          PUBLIC_W3_STORAGE_DELEGATE_BASE_URL: ${{ secrets.PUBLIC_W3_STORAGE_DELEGATE_BASE_URL }}
           W3_STORAGE_DID_KEY: ${{ secrets.W3_STORAGE_DID_KEY }}
-          W3_STORAGE_DELEGATE: ${{ secrets.W3_STORAGE_DELEGATE }}
+          W3_STORAGE_DELEGATE: ${{ env.W3_STORAGE_DELEGATE }}
           DID_PUBLISHER_PRIVATE_KEY: ${{ secrets.DID_PUBLISHER_PRIVATE_KEY }}
-          WALLETCONNECT_PROJECT_ID: ${{ secrets.WALLETCONNECT_PROJECT_ID }}
-          CERAMIC_API_ENDPOINT: ${{ secrets.CERAMIC_API_ENDPOINT }}
-          GRAPHQL_URI: ${{ secrets.GRAPHQL_URI }}
-          W3_STORAGE_DELEGATE_BASE_URL: ${{ secrets.W3_STORAGE_DELEGATE_BASE_URL }}
         run: yarn run extensions:upload
       - name: Trigger update message
         run: |
