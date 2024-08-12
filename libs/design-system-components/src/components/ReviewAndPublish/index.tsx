@@ -57,6 +57,7 @@ export type ReviewAndPublishProps = {
   descriptionLabel: string;
   galleryLabel: string;
   imageUploadedLabel: string;
+  viewAllLabel: string;
   documentationLabel: string;
   licenseLabel: string;
   contributorsLabel: string;
@@ -64,6 +65,7 @@ export type ReviewAndPublishProps = {
   tagsLabel: string;
   backButtonLabel: string;
   publishButtonLabel: string;
+  onViewGalleryClick: () => void;
   onAccordionClick: () => void;
   onClickBack: () => void;
   onClickPublish: () => void;
@@ -84,6 +86,7 @@ const ReviewAndPublish: React.FC<ReviewAndPublishProps> = props => {
     descriptionLabel,
     galleryLabel,
     imageUploadedLabel,
+    viewAllLabel,
     documentationLabel,
     licenseLabel,
     contributorsLabel,
@@ -91,6 +94,7 @@ const ReviewAndPublish: React.FC<ReviewAndPublishProps> = props => {
     tagsLabel,
     backButtonLabel,
     publishButtonLabel,
+    onViewGalleryClick,
     onAccordionClick,
     onClickBack,
     onClickPublish,
@@ -182,7 +186,7 @@ const ReviewAndPublish: React.FC<ReviewAndPublishProps> = props => {
             contentNode={
               <Stack spacing="gap-y-3">
                 <ExtensionImageGallery
-                  images={extensionData.gallery.map((image, idx) => ({
+                  images={extensionData.gallery.slice(0, 3).map((image, idx) => ({
                     src: image.src,
                     size: { width: image.width, height: image.height },
                     name: image.src + idx,
@@ -190,9 +194,12 @@ const ReviewAndPublish: React.FC<ReviewAndPublishProps> = props => {
                   showOverlay={false}
                   toggleOverlay={() => ({})}
                 />
-                <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey7' }}>
-                  {imageUploadedLabel}
-                </Text>
+                <Stack direction="row" align="center" justify="between">
+                  <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey7' }}>
+                    {imageUploadedLabel}
+                  </Text>
+                  <Button variant="text" label={viewAllLabel} onClick={onViewGalleryClick} />
+                </Stack>
               </Stack>
             }
             handleClick={onAccordionClick}
@@ -264,7 +271,7 @@ const ReviewAndPublish: React.FC<ReviewAndPublishProps> = props => {
           <Accordion
             accordionId={contactInfoLabel}
             open={contactInfoLabel === activeAccordionId}
-            titleNode={getAccordionTitleNode(contactInfoLabel)}
+            titleNode={getAccordionTitleNode(contactInfoLabel, false)}
             contentNode={<Text variant="body2">{extensionData.contactInfo}</Text>}
             handleClick={onAccordionClick}
           />
@@ -291,8 +298,13 @@ const ReviewAndPublish: React.FC<ReviewAndPublishProps> = props => {
       <Divider />
 
       <Stack direction="row" padding="p-4" spacing="gap-x-2" align="center" justify="end">
-        <Button variant="secondary" label={backButtonLabel} onClick={onClickBack} />
-        <Button variant="primary" label={publishButtonLabel} onClick={onClickPublish} />
+        <Button variant="text" label={backButtonLabel} onClick={onClickBack} />
+        <Button
+          variant="primary"
+          label={publishButtonLabel}
+          onClick={onClickPublish}
+          customStyle="w-36"
+        />
       </Stack>
     </Card>
   );
