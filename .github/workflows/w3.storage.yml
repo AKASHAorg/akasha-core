@@ -25,6 +25,12 @@ jobs:
           cache: 'yarn'
           cache-dependency-path: yarn.lock
       - run: node --version
+      - name: Get Secrets
+        uses: bitwarden/sm-action@v2
+        with:
+          access_token: ${{ secrets.BW_ACCESS_TOKEN }}
+          secrets: |
+            d2e58f1e-c9a7-47ed-9fef-b1c500adf641 > W3_STORAGE_DELEGATE
       - name: install root dependencies
         env:
           CI: 1
@@ -66,7 +72,7 @@ jobs:
           PUBLIC_INDEXING_DID: ${{ secrets.PUBLIC_INDEXING_DID }}
           PUBLIC_W3_STORAGE_DELEGATE_BASE_URL: ${{ secrets.PUBLIC_W3_STORAGE_DELEGATE_BASE_URL }}
           W3_STORAGE_DID_KEY: ${{ secrets.W3_STORAGE_DID_KEY }}
-          W3_STORAGE_DELEGATE: ${{ secrets.W3_STORAGE_DELEGATE }}
+          W3_STORAGE_DELEGATE: ${{ env.W3_STORAGE_DELEGATE }}
           DID_PUBLISHER_PRIVATE_KEY: ${{ secrets.DID_PUBLISHER_PRIVATE_KEY }}
         run: yarn run extensions:upload
       - name: Trigger update message
