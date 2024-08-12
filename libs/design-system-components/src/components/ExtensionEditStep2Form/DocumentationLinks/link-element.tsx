@@ -5,7 +5,6 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { TrashIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
-import { TextFieldProps } from '@akashaorg/design-system-core/lib/components/TextField/types';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { AppLinkSource } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 

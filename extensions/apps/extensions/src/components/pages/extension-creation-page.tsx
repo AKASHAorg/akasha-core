@@ -1,36 +1,31 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import routes, { CREATE_EXTENSION, MY_EXTENSIONS } from '../../routes';
 import { useRootComponentProps, useAkashaStore } from '@akashaorg/ui-awf-hooks';
-import { useCreateAppMutation } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import getSDK from '@akashaorg/awf-sdk';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import AppCreationForm, {
-  FieldName,
-} from '@akashaorg/design-system-components/lib/components/AppCreationForm';
+import AppCreationForm from '@akashaorg/design-system-components/lib/components/AppCreationForm';
 import { NotConnnected } from '../not-connected';
+import { DRAFT_EXTENSIONS } from '../../constants';
 
 export const ExtensionCreationPage: React.FC<unknown> = () => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
   const { uiEvents } = useRootComponentProps();
-  const sdk = React.useRef(getSDK());
-  const [errorMessage, setErrorMessage] = useState(null);
 
-  const [createAppMutation, { loading }] = useCreateAppMutation({
-    context: { source: sdk.current.services.gql.contextSources.composeDB },
-  });
+  // const [createAppMutation, { loading }] = useCreateAppMutation({
+  //   context: { source: sdk.current.services.gql.contextSources.composeDB },
+  // });
 
   const {
-    data: { authenticatedProfile },
+    data: { authenticatedDID },
   } = useAkashaStore();
 
-  if (!authenticatedProfile?.did.id) {
+  if (!authenticatedDID) {
     return (
       <NotConnnected
         description={t('To create an extension you must be connected ⚡️')}
@@ -48,7 +43,14 @@ export const ExtensionCreationPage: React.FC<unknown> = () => {
         <Divider />
         <Stack>
           <AppCreationForm
-            errorMessage={errorMessage}
+            extensionDisplayNameFieldLabel={t('Extension Display Name')}
+            extensionDisplayNamePlaceholderLabel={t('extension x')}
+            extensionNameFieldLabel={t('Extension ID')}
+            extensionNamePlaceholderLabel={t('unique extension identifier')}
+            extensionLicenseFieldLabel={t('Extension License')}
+            extensionLicenseOtherPlaceholderLabel={t('Please specify your license type')}
+            extensionTypeFieldLabel={t('Extension Type')}
+            extensionSourceURLLabel={t('Extension Source URL')}
             cancelButton={{
               label: 'Cancel',
               disabled: false,
@@ -60,52 +62,35 @@ export const ExtensionCreationPage: React.FC<unknown> = () => {
             }}
             createButton={{
               label: 'Create',
-              loading: loading,
-              handleClick: data => {
-                //reset the previous error message
-                setErrorMessage(null);
-                createAppMutation({
-                  variables: {
-                    i: {
-                      content: {
-                        applicationType: data?.extensionType,
-                        createdAt: new Date().toISOString(),
-                        description: '',
-                        displayName: data?.extensionName,
-                        license: data?.extensionLicense,
-                        name: data?.extensionID,
-                      },
-                    },
-                  },
-                  onError: err => {
-                    if (
-                      err.message.includes('data/displayName must NOT have fewer than 4 characters')
-                    ) {
-                      setErrorMessage({
-                        fieldName: FieldName.extensionName,
-                        message: 'Must be at least 4 characters',
-                      });
-                    }
-                    if (err.message.includes('Immutable field')) {
-                      setErrorMessage({
-                        fieldName: FieldName.extensionID,
-                        message: 'You have created an app with this Extension ID. Try another ID.',
-                      });
-                    }
-                  },
-                  onCompleted: () => {
-                    uiEvents.next({
-                      event: NotificationEvents.ShowNotification,
-                      data: {
-                        type: NotificationTypes.Success,
-                        title: t('Extension created successfully!'),
-                      },
-                    });
 
-                    navigate({
-                      to: routes[MY_EXTENSIONS],
-                    });
+              handleClick: data => {
+                const newExtension = {
+                  id: crypto.randomUUID(),
+                  applicationType: data?.extensionType,
+                  createdAt: new Date().toISOString(),
+                  description: '',
+                  displayName: data?.extensionDisplayName,
+                  license: data?.extensionLicense,
+                  name: data?.extensionID,
+                  localDraft: true,
+                };
+                const existingDraftExtensions =
+                  JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [];
+                localStorage.setItem(
+                  `${DRAFT_EXTENSIONS}-${authenticatedDID}`,
+                  JSON.stringify([...existingDraftExtensions, newExtension]),
+                );
+
+                uiEvents.next({
+                  event: NotificationEvents.ShowNotification,
+                  data: {
+                    type: NotificationTypes.Success,
+                    title: t('Extension created successfully!'),
                   },
+                });
+
+                navigate({
+                  to: routes[MY_EXTENSIONS],
                 });
               },
             }}

@@ -40,13 +40,13 @@ export type ExtensionEditStep2FormProps = {
   linkTitleLabel?: string;
   linkPlaceholderLabel?: string;
   addLabel?: string;
+  contactInfoLinkLabel: string;
   defaultValues?: ExtensionEditStep2FormValues;
   cancelButton: ButtonType;
   nextButton: {
     label: string;
     handleClick: (data: ExtensionEditStep2FormValues) => void;
   };
-  errorMessage?: { fieldName: string; message: string };
 } & GalleryProps;
 
 const ExtensionEditStep2Form: React.FC<ExtensionEditStep2FormProps> = props => {
@@ -59,7 +59,6 @@ const ExtensionEditStep2Form: React.FC<ExtensionEditStep2FormProps> = props => {
     },
     cancelButton,
     nextButton,
-    errorMessage,
     nsfwFieldLabel,
     nsfwDescriptionLabel,
     descriptionFieldLabel,
@@ -71,6 +70,7 @@ const ExtensionEditStep2Form: React.FC<ExtensionEditStep2FormProps> = props => {
     linkTitleLabel,
     linkPlaceholderLabel,
     addLabel,
+    contactInfoLinkLabel,
     handleImageDelete,
     handleImageUpload,
     uploading,
@@ -79,24 +79,14 @@ const ExtensionEditStep2Form: React.FC<ExtensionEditStep2FormProps> = props => {
 
   const {
     control,
-    setError,
     getValues,
     trigger,
-    formState: { errors, dirtyFields },
+    formState: { errors },
   } = useForm<ExtensionEditStep2FormValues>({
     defaultValues,
     resolver: zodResolver(schema),
     mode: 'onChange',
   });
-
-  React.useEffect(() => {
-    if (errorMessage) {
-      setError(errorMessage.fieldName as FieldName, {
-        type: 'custom',
-        message: errorMessage.message,
-      });
-    }
-  }, [errorMessage, errors]);
 
   const isValid = !Object.keys(errors).length;
 
@@ -106,6 +96,17 @@ const ExtensionEditStep2Form: React.FC<ExtensionEditStep2FormProps> = props => {
     if (isValid) {
       nextButton.handleClick({
         ...formValues,
+        links: formValues.links
+          .map(link => {
+            if (link.href && link.label) {
+              return {
+                href: link.href,
+                label: link.label,
+              };
+            }
+            return null;
+          })
+          .filter(link => link),
       });
     }
   };
@@ -124,7 +125,7 @@ const ExtensionEditStep2Form: React.FC<ExtensionEditStep2FormProps> = props => {
           <Controller
             control={control}
             name={FieldName.description}
-            render={({ field: { name, value, onChange, ref } }) => (
+            render={({ field: { name, value, onChange, ref }, fieldState: { error } }) => (
               <TextField
                 id={name}
                 name={name}
@@ -132,6 +133,8 @@ const ExtensionEditStep2Form: React.FC<ExtensionEditStep2FormProps> = props => {
                 placeholder={descriptionPlaceholderLabel}
                 value={value}
                 onChange={onChange}
+                caption={error?.message}
+                status={error?.message ? 'error' : null}
                 inputRef={ref}
                 type="multiline"
               />
@@ -158,6 +161,7 @@ const ExtensionEditStep2Form: React.FC<ExtensionEditStep2FormProps> = props => {
             linkTitlePlaceholderLabel={linkPlaceholderLabel}
             addNewLinkButtonLabel={addLabel}
             control={control}
+            contactInfoLinkLabel={contactInfoLinkLabel}
             documentationLinks={defaultValues.links}
             onDeleteLink={async () => {
               await trigger();
@@ -189,6 +193,10 @@ const ExtensionEditStep2Form: React.FC<ExtensionEditStep2FormProps> = props => {
 export default ExtensionEditStep2Form;
 
 const schema = z.object({
-  description: z.string().trim().min(30, { message: 'Must be at least 30 characters' }),
+  description: z
+    .string()
+    .trim()
+    .min(30, { message: 'Must be at least 30 characters' })
+    .max(2000, { message: 'Must be less than 2000 characters' }),
   nsfw: z.boolean(),
 });

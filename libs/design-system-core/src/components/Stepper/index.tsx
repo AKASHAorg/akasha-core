@@ -1,6 +1,6 @@
 import React from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Stack from '../Stack';
+import Icon from '../Icon';
 import { CheckIcon } from '@heroicons/react/24/solid';
 
 export type StepperProps = {

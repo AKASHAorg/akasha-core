@@ -36,7 +36,6 @@ export type ExtensionEditStep1FormProps = {
     label: string;
     handleClick: (data: ExtensionEditStep1FormValues) => void;
   };
-  errorMessage?: { fieldName: string; message: string };
   extensionIdLabel?: string;
   extensionDisplayNameLabel?: string;
 };
@@ -53,14 +52,12 @@ const ExtensionEditStep1Form: React.FC<ExtensionEditStep1FormProps> = props => {
     },
     cancelButton,
     nextButton,
-    errorMessage,
     extensionIdLabel,
     extensionDisplayNameLabel,
   } = props;
 
   const {
     control,
-    setError,
     setValue,
     getValues,
     formState: { errors },
@@ -69,15 +66,6 @@ const ExtensionEditStep1Form: React.FC<ExtensionEditStep1FormProps> = props => {
     resolver: zodResolver(schema),
     mode: 'onChange',
   });
-
-  React.useEffect(() => {
-    if (errorMessage) {
-      setError(errorMessage.fieldName as FieldName, {
-        type: 'custom',
-        message: errorMessage.message,
-      });
-    }
-  }, [errorMessage, errors]);
 
   const isValid = !Object.keys(errors).length;
 

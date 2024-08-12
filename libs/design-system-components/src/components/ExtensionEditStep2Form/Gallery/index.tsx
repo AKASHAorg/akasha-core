@@ -33,7 +33,7 @@ export const Gallery: React.FC<GalleryProps> = props => {
   const uploadInputRef: RefObject<HTMLInputElement> = useRef(null);
   const imageUploadDisabled = React.useMemo(() => {
     return images.length > 15 || uploading;
-  }, [images]);
+  }, [images, uploading]);
 
   const handleMediaClick = () => {
     if (uploadInputRef.current && !imageUploadDisabled) {
@@ -63,13 +63,17 @@ export const Gallery: React.FC<GalleryProps> = props => {
           <Stack direction="row" align="center" spacing="gap-1">
             <Image
               alt={imageObj.name}
-              src={imageObj.originalSrc}
+              src={imageObj.originalSrc || imageObj.displaySrc || imageObj.src}
               customStyle="object-contain w-8 h-8 rounded-lg"
             />
-            <Text>{imageObj.name}</Text>
+            <Text>{imageObj.name || `uploaded-image-${index + 1}`}</Text>
           </Stack>
           <button onClick={() => handleImageDelete(imageObj)}>
-            <Icon accentColor icon={<TrashIcon />} />
+            <Icon
+              size="md"
+              color={{ light: 'errorLight', dark: 'errorDark' }}
+              icon={<TrashIcon />}
+            />
           </button>
         </Stack>
       ))}

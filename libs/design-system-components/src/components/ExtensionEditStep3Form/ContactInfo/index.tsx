@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -26,7 +26,11 @@ export const ContactInfo: React.FC<ContactInfoProps> = ({
   control,
   onDeleteInfoField,
 }) => {
-  const [infoFields, setInfoFields] = useState(contactInfo || ['']);
+  const [infoFields, setInfoFields] = useState(['']);
+
+  useEffect(() => {
+    setInfoFields(contactInfo);
+  }, [contactInfo]);
 
   const onAddNew = () => {
     setInfoFields([...infoFields, '']);

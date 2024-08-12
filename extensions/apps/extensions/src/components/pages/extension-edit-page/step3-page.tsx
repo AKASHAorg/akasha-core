@@ -1,15 +1,15 @@
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import ExtensionEditStep3Form from '@akashaorg/design-system-components/lib/components/ExtensionEditStep3Form';
-import { hasOwn, useAkashaStore, useMentions } from '@akashaorg/ui-awf-hooks';
+import { useAkashaStore, useMentions } from '@akashaorg/ui-awf-hooks';
 import { useAtom } from 'jotai';
-import { useGetAppsByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { AtomContext, FormData } from './main-page';
 import { transformSource } from '@akashaorg/ui-awf-hooks';
+import { CONTACT_INFO, DRAFT_EXTENSIONS } from '../../../constants';
+import { Extension } from '@akashaorg/typings/lib/ui';
 
 type ExtensionEditStep3PageProps = {
   extensionId: string;
@@ -19,26 +19,15 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
 
-  const [errorMessage, setErrorMessage] = useState(null);
-
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
 
-  const {
-    data: appsByIdReq,
-    error,
-    loading,
-  } = useGetAppsByIdQuery({
-    variables: {
-      id: extensionId,
-    },
-    skip: !authenticatedDID,
-  });
-
-  const appData = useMemo(() => {
-    return appsByIdReq?.node && hasOwn(appsByIdReq?.node, 'id') ? appsByIdReq?.node : null;
-  }, [appsByIdReq]);
+  const draftExtensions: Extension[] = useMemo(
+    () => JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [],
+    [authenticatedDID],
+  );
+  const extensionData = draftExtensions.find(draftExtension => draftExtension.id === extensionId);
 
   const [formValue, setForm] = useAtom<FormData>(useContext(AtomContext));
 
@@ -46,23 +35,21 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
     return formValue.lastCompletedStep > 1
       ? {
           ...formValue,
-          contactInfo: formValue.links.map(elem => {
-            if (elem.label === `${extensionId}-contactInfo`) {
+          contactInfo: formValue?.links.map(elem => {
+            if (elem.label === `${extensionId}-${CONTACT_INFO}`) {
               return elem.href;
             }
           }),
         }
       : {
-          ...appData,
-          contactInfo: [],
-          //   contactInfo: appData.links.map(elem => {
-          //     if (elem.label === `${extensionId}-contactInfo`) {
-          //       return elem.href;
-          //     }
-          //   }),
-          contributors: appData?.contributors?.map(profile => profile.akashaProfile?.did?.id) || [],
+          ...extensionData,
+          contactInfo: extensionData?.links.map(elem => {
+            if (elem.label === `${extensionId}-${CONTACT_INFO}`) {
+              return elem.href;
+            }
+          }),
         };
-  }, [appData]);
+  }, [extensionData, formValue, extensionId]);
 
   const { setMentionQuery, mentions } = useMentions(authenticatedDID);
   const handleGetMentions = (query: string) => {
@@ -76,64 +63,57 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
           {t('Present your Extension')}
         </Text>
       </Stack>
-      <Stack align="center" justify="center">
-        {loading && <Spinner />}
-      </Stack>
-      {!loading && (
-        <ExtensionEditStep3Form
-          addLabel={t('Add')}
-          licenseFieldLabel={t('License')}
-          collaboratorsFieldLabel={t('Collaborators')}
-          collaboratorsDescriptionLabel={t('Add people who helped you create the extension')}
-          collaboratorsSearchPlaceholderLabel={t('Search for a contributor')}
-          extensionContributorsLabel={t('Extension Contributors')}
-          contactInfoFieldLabel={t('Contact Info')}
-          contactInfoDescriptionLabel={t(
-            'Add your contact information here for users to contact you about questions or suggestions',
-          )}
-          contactInfoPlaceholderLabel={t('Contact url/email')}
-          defaultValues={defaultValues}
-          errorMessage={errorMessage}
-          handleGetContributors={handleGetMentions}
-          contributors={mentions}
-          transformSource={transformSource}
-          cancelButton={{
-            label: t('Back'),
-            disabled: false,
-            handleClick: () => {
-              navigate({
-                to: '/edit-extension/$extensionId/step2',
-              });
-            },
-          }}
-          nextButton={{
-            label: t('Next'),
-
-            handleClick: data => {
-              //reset the previous error message
-              setErrorMessage(null);
-              const step3Data = {
-                ...data,
-                links: [
-                  ...formValue.links,
-                  ...data.contactInfo.map(info => {
-                    return {
-                      label: `${extensionId}-contactInfo`,
-                      href: info,
-                    };
-                  }),
-                ],
-              };
-              setForm(prev => {
-                return { ...prev, ...step3Data, lastCompletedStep: 3 };
-              });
-              navigate({
-                to: '/edit-extension/$extensionId/step4',
-              });
-            },
-          }}
-        />
-      )}
+      <ExtensionEditStep3Form
+        addLabel={t('Add')}
+        licenseFieldLabel={t('License')}
+        collaboratorsFieldLabel={t('Collaborators')}
+        collaboratorsDescriptionLabel={t('Add people who helped you create the extension')}
+        collaboratorsSearchPlaceholderLabel={t('Search for a contributor')}
+        extensionContributorsLabel={t('Extension Contributors')}
+        contactInfoFieldLabel={t('Contact Info')}
+        contactInfoDescriptionLabel={t(
+          'Add your contact information here for users to contact you about questions or suggestions',
+        )}
+        contactInfoPlaceholderLabel={t('Contact url/email')}
+        defaultValues={defaultValues}
+        handleGetFollowingProfiles={handleGetMentions}
+        followingProfiles={mentions}
+        transformSource={transformSource}
+        cancelButton={{
+          label: t('Back'),
+          disabled: false,
+          handleClick: () => {
+            navigate({
+              to: '/edit-extension/$extensionId/step2',
+            });
+          },
+        }}
+        nextButton={{
+          label: t('Next'),
+          handleClick: data => {
+            const step3Data = {
+              ...data,
+              links: [
+                // remove the old contact info data from links
+                ...formValue.links.filter(link => link.label !== `${extensionId}-${CONTACT_INFO}`),
+                // add latest contact info
+                ...data.contactInfo.map(info => {
+                  return {
+                    label: `${extensionId}-${CONTACT_INFO}`,
+                    href: info,
+                  };
+                }),
+              ],
+            };
+            setForm(prev => {
+              return { ...prev, ...step3Data, lastCompletedStep: 3 };
+            });
+            navigate({
+              to: '/edit-extension/$extensionId/step4',
+            });
+          },
+        }}
+      />
     </Stack>
   );
 };

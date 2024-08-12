@@ -5,7 +5,13 @@ import { IRootComponentProps } from './root-component';
 import { ContentBlockConfig } from './editor-blocks';
 import { ExtensionPointInterface } from './extension-point';
 import { Profile } from './profile';
-import { AkashaApp } from '../sdk/graphql-types-new';
+import {
+  AkashaApp,
+  AkashaAppApplicationType,
+  AppImageSource,
+  AppLinkSource,
+  AppProviderValue,
+} from '../sdk/graphql-types-new';
 
 /**
  * Enum defining extension status for an extension developer
@@ -20,6 +26,28 @@ export enum ExtensionStatus {
  * Type defining extension image types
  **/
 export type ExtensionImageType = 'logo-image' | 'cover-image';
+
+export type Extension = {
+  id?: string;
+  name?: string;
+  displayName?: string;
+  applicationType?: AkashaAppApplicationType;
+  license?: string;
+  description?: string;
+  keywords?: [string];
+  author?: string;
+  contributors?: [string];
+  createdAt?: Date;
+  version?: string;
+  logoImage?: AppImageSource;
+  coverImage?: AppImageSource;
+  gallery?: [AppImageSource];
+  links?: [AppLinkSource];
+  meta?: [AppProviderValue];
+  nsfw?: boolean;
+  // this prop is only for local storage draft extensions
+  localDraft?: boolean;
+};
 
 /**
  * Enum defining events related to loading and unloading of an app

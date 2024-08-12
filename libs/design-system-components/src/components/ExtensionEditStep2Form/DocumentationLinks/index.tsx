@@ -16,6 +16,7 @@ export type DocumentationLinksProps = {
   linkTitlePlaceholderLabel?: string;
   customStyle?: string;
   control: Control<ExtensionEditStep2FormValues>;
+  contactInfoLinkLabel: string;
   documentationLinks: AppLinkSource[];
   onDeleteLink: () => void;
 };
@@ -28,18 +29,22 @@ export const DocumentationLinks: React.FC<DocumentationLinksProps> = ({
   linkTitlePlaceholderLabel,
   documentationLinks,
   customStyle = '',
+  contactInfoLinkLabel,
   control,
   onDeleteLink,
 }) => {
-  const linkWithPseudoId = useMemo(
-    () => documentationLinks?.map((link, index) => ({ _id: index + 1, ...link })),
-    [documentationLinks],
+  const linksWithPseudoId = useMemo(
+    () =>
+      documentationLinks
+        ?.map((link, index) => ({ _id: index + 1, ...link }))
+        .filter(link => link.label !== contactInfoLinkLabel),
+    [documentationLinks, contactInfoLinkLabel],
   );
 
   const [links, setLinks] = useState(
     !documentationLinks || documentationLinks?.length === 0
       ? [{ _id: 1, href: '', label: '' }]
-      : linkWithPseudoId,
+      : linksWithPseudoId,
   );
 
   const onAddNew = () => {

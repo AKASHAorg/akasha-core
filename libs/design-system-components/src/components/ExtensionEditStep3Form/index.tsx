@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useState } from 'react';
+import React, { SyntheticEvent, useEffect, useMemo, useState } from 'react';
 import * as z from 'zod';
 import { Controller, useWatch } from 'react-hook-form';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
@@ -40,14 +40,13 @@ export type ExtensionEditStep3FormProps = {
   contactInfoPlaceholderLabel?: string;
   addLabel?: string;
   defaultValues?: ExtensionEditStep3FormValues;
-  handleGetContributors?: (query: string) => void;
-  contributors?: AkashaProfile[];
+  handleGetFollowingProfiles?: (query: string) => void;
+  followingProfiles?: AkashaProfile[];
   cancelButton: ButtonType;
   nextButton: {
     label: string;
     handleClick: (data: ExtensionEditStep3FormValues) => void;
   };
-  errorMessage?: { fieldName: string; message: string };
   transformSource: (src: Image) => Image;
 };
 
@@ -59,12 +58,12 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
       contributors: [],
       contactInfo: [],
     },
-    handleGetContributors,
-    contributors,
+    handleGetFollowingProfiles,
+    followingProfiles,
     transformSource,
     cancelButton,
     nextButton,
-    errorMessage,
+    licenseFieldLabel,
     contactInfoFieldLabel,
     contactInfoDescriptionLabel,
     collaboratorsFieldLabel,
@@ -76,7 +75,6 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
 
   const {
     control,
-    setError,
     trigger,
     getValues,
     formState: { errors },
@@ -85,15 +83,6 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
     resolver: zodResolver(schema),
     mode: 'onChange',
   });
-
-  React.useEffect(() => {
-    if (errorMessage) {
-      setError(errorMessage.fieldName as FieldName, {
-        type: 'custom',
-        message: errorMessage.message,
-      });
-    }
-  }, [errorMessage, errors]);
 
   const licenses: Licenses | string[] = [
     Licenses.MIT,
@@ -108,7 +97,24 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
 
   const licenseValue = useWatch({ control, name: FieldName.license });
 
-  const [addedContributors, setAddedContributors] = useState<AkashaProfile[]>([]);
+  // TODO: this works with one exception, if the user unfollows one of the original contributors
+  // it will not hydrate the form values with it
+  // to fix this a list of original contributor profiles needs to be passed as prop
+  const defaultContributorProfiles = useMemo(() => {
+    return defaultValues.contributors?.map(contributorDID => {
+      return followingProfiles?.find(
+        followingProfile => followingProfile.did.id === contributorDID,
+      );
+    });
+  }, [defaultValues.contributors, followingProfiles]);
+
+  const [addedContributors, setAddedContributors] = useState<AkashaProfile[]>(
+    defaultContributorProfiles || [],
+  );
+
+  useEffect(() => {
+    setAddedContributors(defaultContributorProfiles);
+  }, [defaultContributorProfiles]);
 
   const onSave = (event: SyntheticEvent) => {
     event.preventDefault();
@@ -120,6 +126,7 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
     if (isValid) {
       nextButton.handleClick({
         ...formValues,
+        contactInfo: formValues.contactInfo?.filter(link => link),
       });
     }
   };
@@ -134,7 +141,7 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
             render={({ field: { name, value, onChange, ref } }) => (
               <>
                 <DropDown
-                  label="License"
+                  label={licenseFieldLabel}
                   name={name}
                   selected={value}
                   menuItems={licenses}
@@ -175,8 +182,8 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
           <Collaborators
             addedContributors={addedContributors}
             setAddedContributors={setAddedContributors}
-            contributors={contributors}
-            handleGetContributors={handleGetContributors}
+            contributors={followingProfiles}
+            handleGetContributors={handleGetFollowingProfiles}
             contributorsFieldLabel={collaboratorsFieldLabel}
             contributorsDescriptionLabel={collaboratorsDescriptionLabel}
             contributorsSearchPlaceholderLabel={collaboratorsSearchPlaceholderLabel}

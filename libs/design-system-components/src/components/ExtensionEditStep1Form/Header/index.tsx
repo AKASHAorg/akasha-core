@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -32,7 +32,6 @@ export type HeaderProps = {
   dragToRepositionLabel: string;
   isSavingImage: boolean;
   publicImagePath: string;
-  transformSource: (src: Image) => Image;
   onLogoImageChange: (logoImage?: File) => void;
   onCoverImageChange: (coverImage?: File) => void;
   onImageSave: (type: ExtensionImageType, image?: File) => void;
@@ -51,7 +50,6 @@ export const Header: React.FC<HeaderProps> = ({
   confirmationLabel,
   dragToRepositionLabel,
   isSavingImage,
-  transformSource,
   onLogoImageChange,
   onCoverImageChange,
   onImageSave,
@@ -63,10 +61,10 @@ export const Header: React.FC<HeaderProps> = ({
   const [appImageType, setAppImageType] = useState<ExtensionImageType>();
   const [showEditImage, setShowEditImage] = useState(false);
   const [showDeleteImage, setShowDeleteImage] = useState(false);
-  const [logoImageUrl, setLogoImageUrl] = useState(transformSource(logoImage));
-  const [coverImageUrl, setCoverImageUrl] = useState(transformSource(coverImage));
-  const [uploadedLogoImageUrl, setUploadedLogoImageUrl] = useState(transformSource(logoImage));
-  const [uploadedCoverImageUrl, setUploadedCoverImageUrl] = useState(transformSource(coverImage));
+  const [logoImageUrl, setLogoImageUrl] = useState(logoImage);
+  const [coverImageUrl, setCoverImageUrl] = useState(coverImage);
+  const [uploadedLogoImageUrl, setUploadedLogoImageUrl] = useState(logoImage);
+  const [uploadedCoverImageUrl, setUploadedCoverImageUrl] = useState(coverImage);
 
   useEffect(() => {
     if (!isSavingImage) {
@@ -179,7 +177,7 @@ export const Header: React.FC<HeaderProps> = ({
         <Card
           radius={20}
           background={{ light: 'grey7', dark: 'grey5' }}
-          customStyle={`flex p-4 h-28 w-full bg-no-repeat bg-center bg-cover bg-[url(${coverImageUrl?.src})]`}
+          customStyle={`flex p-4 h-28 w-full bg-no-repeat bg-center bg-cover bg-[url(${coverImageUrl?.src || coverImage?.src})]`}
         >
           <Stack
             ref={editCoverRef}
@@ -211,7 +209,7 @@ export const Header: React.FC<HeaderProps> = ({
         >
           <AppAvatar
             appType={extensionType}
-            avatar={logoImageUrl}
+            avatar={logoImageUrl || logoImage}
             customStyle={`border-2 ${getColorClasses(
               {
                 light: 'white',
@@ -255,7 +253,9 @@ export const Header: React.FC<HeaderProps> = ({
           setShowEditImage(false);
         }}
         images={
-          appImageType === 'logo-image' ? [uploadedLogoImageUrl?.src] : [uploadedCoverImageUrl?.src]
+          appImageType === 'logo-image'
+            ? [uploadedLogoImageUrl?.src || logoImage?.src]
+            : [uploadedCoverImageUrl?.src || coverImage?.src]
         }
         dragToRepositionLabel={dragToRepositionLabel}
         isSavingImage={isSavingImage}

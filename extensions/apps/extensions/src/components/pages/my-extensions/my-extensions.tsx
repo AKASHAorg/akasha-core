@@ -24,6 +24,7 @@ import { ExtensionElement } from './extension-element';
 import { NotConnnected } from '../../not-connected';
 import appRoutes, { MY_EXTENSIONS } from '../../../routes';
 import { capitalize } from 'lodash';
+import { DRAFT_EXTENSIONS } from '../../../constants';
 
 const ENTRY_HEIGHT = 92;
 
@@ -31,6 +32,10 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
   const { t } = useTranslation('app-extensions');
 
   const navigate = useNavigate();
+
+  const {
+    data: { authenticatedDID },
+  } = useAkashaStore();
 
   const handleNavigateToCreateApp = () => {
     navigate({ to: '/create-extension' });
@@ -100,21 +105,17 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
   };
 
   const {
-    data: { authenticatedProfile },
-  } = useAkashaStore();
-
-  const {
     data: appsByPubReq,
     error,
     loading,
     fetchMore,
   } = useGetAppsByPublisherDidQuery({
     variables: {
-      id: authenticatedProfile?.did.id,
+      id: authenticatedDID,
       first: 10,
       sorting: { createdAt: SortOrder.Desc },
     },
-    skip: !authenticatedProfile?.did.id,
+    skip: !authenticatedDID,
   });
   const appsList = useMemo(() => {
     return appsByPubReq?.node && hasOwn(appsByPubReq.node, 'akashaAppList')
@@ -123,21 +124,32 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
   }, [appsByPubReq]);
 
   const appsData = useMemo(() => {
-    return appsList?.edges?.map(edge => edge.node);
+    return appsList?.edges?.map(edge => edge.node) || [];
   }, [appsList]);
 
   const pageInfo = useMemo(() => {
     return appsList?.pageInfo;
   }, [appsList]);
 
-  const appElements = appsData?.filter(ext => {
-    if (selectedType.id === '0') {
-      return true;
-    }
-    return ext?.applicationType === selectedType.title?.toUpperCase();
-  });
+  const appElements = useMemo(() => {
+    return appsData?.filter(ext => {
+      if (selectedType.id === '0') {
+        return true;
+      }
+      return ext?.applicationType === selectedType.title?.toUpperCase();
+    });
+  }, [appsData, selectedType]);
 
-  if (!authenticatedProfile?.did.id) {
+  const existingDraftExtensions = useMemo(
+    () => JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [],
+    [authenticatedDID],
+  );
+  const allMyExtensions = useMemo(
+    () => [...existingDraftExtensions, ...appElements],
+    [existingDraftExtensions, appElements],
+  );
+
+  if (!authenticatedDID) {
     return (
       <NotConnnected
         description={t('To check your extensions you must be connected ⚡️')}
@@ -189,17 +201,17 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
           details={<>{error.message}</>}
         />
       )}
-      {!error && appElements?.length === 0 && (
+      {!error && allMyExtensions?.length === 0 && (
         <DefaultEmptyCard
           noBorder={true}
           infoText={t('You haven’t created any extensions yet')}
           assetName="longbeam-notfound"
         />
       )}
-      {!error && appElements?.length > 0 && (
+      {!error && allMyExtensions?.length > 0 && (
         <Card>
           <DynamicInfiniteScroll
-            count={appElements.length}
+            count={allMyExtensions.length}
             estimatedHeight={ENTRY_HEIGHT}
             overScan={1}
             itemSpacing={16}
@@ -214,11 +226,11 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
             }}
           >
             {({ itemIndex }) => {
-              const app = appElements[itemIndex];
+              const extensionData = allMyExtensions[itemIndex];
               return (
                 <ExtensionElement
-                  extensionData={app}
-                  showDivider={itemIndex < appElements.length - 1}
+                  extensionData={extensionData}
+                  showDivider={itemIndex < allMyExtensions.length - 1}
                   filter={selectedStatus}
                 />
               );
