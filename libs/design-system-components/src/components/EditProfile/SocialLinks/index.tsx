@@ -59,6 +59,7 @@ export const SocialLinks: React.FC<SocialLinksProps> = ({
                   const foundIndex = fields.findIndex(field => field.id === link.id);
                   if (foundIndex !== -1) remove(foundIndex);
                 }}
+                aria-label={`link.${index}`}
                 name={name}
                 value={value || ''}
                 caption={error?.message}
