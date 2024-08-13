@@ -1,35 +1,36 @@
 import React, { useMemo } from 'react';
+import { capitalize } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
-
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Link from '@akashaorg/design-system-core/lib/components/Link';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { BookOpenIcon } from '@heroicons/react/24/outline';
+import { hasOwn, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useGetAppsByPublisherDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import { ExtensionStatus } from '@akashaorg/typings/lib/ui';
+import { SortOrder, AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import DropDownFilter, {
   DropdownMenuItemGroupType,
 } from '@akashaorg/design-system-components/lib/components/BaseDropdownFilter';
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
 import DynamicInfiniteScroll from '@akashaorg/design-system-components/lib/components/DynamicInfiniteScroll';
-
-import { useGetAppsByPublisherDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { hasOwn, useAkashaStore } from '@akashaorg/ui-awf-hooks';
-import { SortOrder, AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { ExtensionStatus } from '@akashaorg/typings/lib/ui';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Link from '@akashaorg/design-system-core/lib/components/Link';
+import NotConnectedCard from '@akashaorg/design-system-components/lib/components/NotConnectedCard';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { ExtensionElement } from './extension-element';
-import { NotConnnected } from './not-connected';
-import { capitalize } from 'lodash';
+import appRoutes, { MY_EXTENSIONS } from '../../../routes';
 
 const ENTRY_HEIGHT = 92;
 
 export const MyExtensionsPage: React.FC<unknown> = () => {
+  const { baseRouteName, getRoutingPlugin } = useRootComponentProps();
   const { t } = useTranslation('app-extensions');
 
   const navigate = useNavigate();
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const handleNavigateToCreateApp = () => {
     navigate({ to: '/create-extension' });
@@ -136,8 +137,26 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
     return ext?.applicationType === selectedType.title?.toUpperCase();
   });
 
+  const handleConnectButtonClick = () => {
+    navigateTo?.({
+      appName: '@akashaorg/app-auth-ewa',
+      getNavigationUrl: (routes: Record<string, string>) => {
+        return `${routes.Connect}?${new URLSearchParams({
+          redirectTo: `${baseRouteName}/${appRoutes[MY_EXTENSIONS]}`,
+        }).toString()}`;
+      },
+    });
+  };
+
   if (!authenticatedProfile?.did.id) {
-    return <NotConnnected />;
+    return (
+      <NotConnectedCard
+        title={t('Uh-oh! You are not connected!')}
+        subtitle={t('To check your extensions you must be connected ⚡️')}
+        buttonLabel={t('Connect')}
+        onButtonClick={handleConnectButtonClick}
+      />
+    );
   }
 
   return (

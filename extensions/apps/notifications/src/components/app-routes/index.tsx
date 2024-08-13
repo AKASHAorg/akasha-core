@@ -48,14 +48,14 @@ const settingsRoute = createRoute({
 const customiseNotificationsOptionsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[CUSTOMISE_NOTIFICATION_OPTIONS_PAGE]}`,
-  component: () => <CustomiseNotificationPage initial={true} />,
+  component: () => <CustomiseNotificationPage />,
 });
 
 const customiseNotificationsWelcomePageRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[CUSTOMISE_NOTIFICATION_WELCOME_PAGE]}`,
   component: () => {
-    return <WelcomePage finalStep={false} />;
+    return <WelcomePage />;
   },
 });
 
