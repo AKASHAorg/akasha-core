@@ -53,14 +53,17 @@ export const Collaborators: React.FC<CollaboratorsProps> = ({
 
   const handleAddContributor = (profile: AkashaProfile) => {
     if (addedContributors.length < 16) {
-      setAddedContributors(prev => Array.from(new Set([...prev, profile])));
+      setAddedContributors(prev => {
+        const res = Array.from(new Set([...prev, profile]));
+        return res;
+      });
       setSearchValue('');
       setShowSuggestions(false);
     }
   };
 
   const handleRemoveContributor = (profile: AkashaProfile) => {
-    setAddedContributors(prev => prev.filter(addedProfile => profile.id !== addedProfile.id));
+    setAddedContributors(prev => prev.filter(addedProfile => profile.id !== addedProfile?.id));
   };
 
   return (
@@ -94,9 +97,10 @@ export const Collaborators: React.FC<CollaboratorsProps> = ({
               <Card
                 radius={20}
                 padding={16}
-                customStyle="absolute max-h-28 w-full overflow-y-auto scrollbar z-10"
+                elevation="2"
+                customStyle="absolute max-h-96 w-full overflow-y-auto scrollbar z-10"
               >
-                <Stack direction="column">
+                <Stack direction="column" spacing="gap-2">
                   {contributors.map((profile, index) => (
                     <Stack key={index} direction="row" justify="between" align="center">
                       <ProfileAvatarButton
@@ -120,7 +124,7 @@ export const Collaborators: React.FC<CollaboratorsProps> = ({
           {addedContributors.length > 0 && (
             <Stack spacing="gap-4">
               <Text variant="h6">{extensionContributorsLabel}</Text>
-              <Stack direction="column">
+              <Stack direction="column" spacing="gap-4">
                 {addedContributors.map((profile, index) => (
                   <Stack
                     key={index}

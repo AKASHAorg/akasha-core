@@ -7,10 +7,8 @@ import routes, { EDIT_EXTENSION } from '../../../routes';
 import { useTranslation } from 'react-i18next';
 import { NotConnnected } from '../../not-connected';
 import { useAkashaStore } from '@akashaorg/ui-awf-hooks';
-import { atomWithStorage, createJSONStorage } from 'jotai/utils';
 import { AppImageSource } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { ExtensionEditStep2FormValues } from '@akashaorg/design-system-components/lib/components/ExtensionEditStep2Form';
-import { useAtomValue } from 'jotai';
 
 export const AtomContext = createContext(null);
 
@@ -27,7 +25,6 @@ export type FormData = {
 type ExtensionEditMainPageProps = {
   extensionId: string;
 };
-const storage = createJSONStorage(() => sessionStorage);
 
 export const ExtensionEditMainPage: React.FC<ExtensionEditMainPageProps> = ({ extensionId }) => {
   const { t } = useTranslation('app-extensions');
@@ -36,28 +33,10 @@ export const ExtensionEditMainPage: React.FC<ExtensionEditMainPageProps> = ({ ex
     data: { authenticatedDID },
   } = useAkashaStore();
 
-  const formData = useMemo(
-    () =>
-      atomWithStorage<FormData>(
-        extensionId,
-        {
-          lastCompletedStep: 0,
-          name: '',
-          displayName: '',
-          logoImage: { src: '' },
-          coverImage: { src: '' },
-          nsfw: false,
-          description: '',
-          gallery: [],
-          links: [],
-          contributors: [],
-          license: '',
-        },
-        storage,
-      ),
+  const formValue = useMemo(
+    () => JSON.parse(sessionStorage.getItem(extensionId)) || {},
     [extensionId],
   );
-  const formValue = useAtomValue(formData);
 
   if (!authenticatedDID) {
     return (
@@ -70,11 +49,9 @@ export const ExtensionEditMainPage: React.FC<ExtensionEditMainPageProps> = ({ ex
   return (
     <Card padding={0}>
       <Stack padding={16} justify="center" align="center">
-        <Stepper length={4} currentStep={formValue.lastCompletedStep + 1} />
+        <Stepper length={4} currentStep={(formValue.lastCompletedStep || 0) + 1} />
       </Stack>
-      <AtomContext.Provider value={formData}>
-        <Outlet />
-      </AtomContext.Provider>
+      <Outlet />
     </Card>
   );
 };

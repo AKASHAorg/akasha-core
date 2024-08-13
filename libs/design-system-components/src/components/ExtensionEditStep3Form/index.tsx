@@ -31,6 +31,7 @@ export type ExtensionEditStep3FormValues = {
 
 export type ExtensionEditStep3FormProps = {
   licenseFieldLabel?: string;
+  licenseOtherPlaceholderLabel?: string;
   collaboratorsFieldLabel?: string;
   collaboratorsDescriptionLabel?: string;
   collaboratorsSearchPlaceholderLabel?: string;
@@ -42,6 +43,7 @@ export type ExtensionEditStep3FormProps = {
   defaultValues?: ExtensionEditStep3FormValues;
   handleGetFollowingProfiles?: (query: string) => void;
   followingProfiles?: AkashaProfile[];
+  allFollowingProfiles?: AkashaProfile[];
   cancelButton: ButtonType;
   nextButton: {
     label: string;
@@ -60,10 +62,12 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
     },
     handleGetFollowingProfiles,
     followingProfiles,
+    allFollowingProfiles,
     transformSource,
     cancelButton,
     nextButton,
     licenseFieldLabel,
+    licenseOtherPlaceholderLabel,
     contactInfoFieldLabel,
     contactInfoDescriptionLabel,
     collaboratorsFieldLabel,
@@ -101,12 +105,14 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
   // it will not hydrate the form values with it
   // to fix this a list of original contributor profiles needs to be passed as prop
   const defaultContributorProfiles = useMemo(() => {
-    return defaultValues.contributors?.map(contributorDID => {
-      return followingProfiles?.find(
-        followingProfile => followingProfile.did.id === contributorDID,
-      );
-    });
-  }, [defaultValues.contributors, followingProfiles]);
+    return defaultValues.contributors
+      ?.map(contributorDID => {
+        return allFollowingProfiles?.find(
+          followingProfile => followingProfile.did.id === contributorDID,
+        );
+      })
+      .filter(profile => profile?.id);
+  }, [defaultValues.contributors, allFollowingProfiles]);
 
   const [addedContributors, setAddedContributors] = useState<AkashaProfile[]>(
     defaultContributorProfiles || [],
@@ -165,7 +171,7 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
                   id={name}
                   customStyle="mt-2"
                   value={value}
-                  placeholder={'Please specify your license type'}
+                  placeholder={licenseOtherPlaceholderLabel}
                   type={'text'}
                   caption={error?.message}
                   status={error?.message ? 'error' : null}
@@ -175,7 +181,7 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
                   requiredFieldAsteriskColor={{ light: 'errorLight', dark: 'errorDark' }}
                 />
               )}
-              defaultValue={defaultValues.license}
+              defaultValue={licenses.includes(defaultValues.license) ? '' : defaultValues.license}
             />
           )}
           <Divider />

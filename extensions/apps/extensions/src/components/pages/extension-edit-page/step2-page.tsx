@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -11,8 +11,6 @@ import {
   useAkashaStore,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
-import { useAtom } from 'jotai';
-import { AtomContext, FormData } from './main-page';
 import {
   GalleryImage,
   NotificationEvents,
@@ -40,18 +38,30 @@ export const ExtensionEditStep2Page: React.FC<ExtensionEditStep2PageProps> = ({ 
   );
   const extensionData = draftExtensions.find(draftExtension => draftExtension.id === extensionId);
 
-  const [formValue, setForm] = useAtom<FormData>(useContext(AtomContext));
+  const formValue = useMemo(
+    () => JSON.parse(sessionStorage.getItem(extensionId)) || {},
+    [extensionId],
+  );
 
   const defaultValues = useMemo(() => {
-    return formValue.lastCompletedStep > 0 ? formValue : extensionData;
+    return formValue.lastCompletedStep > 1 ? formValue : extensionData;
   }, [extensionData, formValue]);
+
+  const formDefault = useMemo(() => {
+    return {
+      nsfw: defaultValues.nsfw,
+      description: defaultValues.description,
+      gallery: defaultValues.gallery,
+      links: defaultValues.links,
+    };
+  }, [defaultValues]);
 
   const [uploading, setUploading] = useState(false);
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
 
   useEffect(() => {
     setGalleryImages(
-      defaultValues.gallery.map(img => {
+      formDefault?.gallery?.map(img => {
         const imgWithGateway = transformSource(img);
         return {
           ...img,
@@ -64,7 +74,7 @@ export const ExtensionEditStep2Page: React.FC<ExtensionEditStep2PageProps> = ({ 
         };
       }),
     );
-  }, [setGalleryImages, defaultValues]);
+  }, [setGalleryImages, formDefault]);
 
   const onUpload = async (image: File | string, isUrl?: boolean) => {
     if (!image) return null;
@@ -151,7 +161,7 @@ export const ExtensionEditStep2Page: React.FC<ExtensionEditStep2PageProps> = ({ 
         handleImageUpload={uploadNewImage}
         handleImageDelete={handleDeleteImage}
         images={galleryImages}
-        defaultValues={defaultValues}
+        defaultValues={formDefault}
         contactInfoLinkLabel={`${extensionId}-${CONTACT_INFO}`}
         cancelButton={{
           label: t('Back'),
@@ -175,9 +185,15 @@ export const ExtensionEditStep2Page: React.FC<ExtensionEditStep2PageProps> = ({ 
                 };
               }),
             };
-            setForm(prev => {
-              return { ...prev, ...step1Data, lastCompletedStep: 2 };
-            });
+            sessionStorage.setItem(
+              extensionId,
+              JSON.stringify({
+                ...formValue,
+                ...step1Data,
+                lastCompletedStep:
+                  formValue.lastCompletedStep < 2 ? 2 : formValue.lastCompletedStep,
+              }),
+            );
             navigate({
               to: '/edit-extension/$extensionId/step3',
             });

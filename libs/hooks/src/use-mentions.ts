@@ -5,8 +5,8 @@ import { hasOwn } from './utils/has-own';
 /**
  * Hook to retrieve and set the mentions associated with a profile.
  * @param authenticatedDID - string
- * @returns { setMentionQuery, mentions  } - Object containing the mentions associated
- * with the authenticatedDID and a setMentionQuery method to control the querying
+ * @returns { setMentionQuery, mentions, allFollowing  } - Object containing the mentions associated
+ * with the authenticatedDID and a setMentionQuery method to control the querying and all the profiles followed
  * of mention data.
  * @example useMentions hook
  * ```typescript
@@ -38,7 +38,7 @@ const useMentions = (authenticatedDID: string) => {
     profile.name?.toLowerCase().startsWith(mentionQuery),
   );
 
-  return { setMentionQuery, mentions };
+  return { setMentionQuery, mentions, allFollowing: followingList };
 };
 
 export { useMentions };

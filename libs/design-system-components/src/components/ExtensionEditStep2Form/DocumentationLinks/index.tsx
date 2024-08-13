@@ -48,8 +48,8 @@ export const DocumentationLinks: React.FC<DocumentationLinksProps> = ({
   );
 
   const onAddNew = () => {
-    if (links.length < 10) {
-      setLinks(prev => [...prev, { _id: prev.length + 1, href: '', label: '' }]);
+    if (links?.length < 10) {
+      setLinks(prev => [...prev, { _id: prev?.length + 1, href: '', label: '' }]);
     }
   };
 
@@ -76,7 +76,7 @@ export const DocumentationLinks: React.FC<DocumentationLinksProps> = ({
             key={link._id}
             control={control}
             name={`links.${index}`}
-            render={({ field: { value, onChange, ref }, fieldState: { error } }) => (
+            render={({ field: { value, onChange } }) => (
               <LinkElement
                 linkElementLabel={linkElementLabel}
                 linkTitlePlaceholder={linkTitlePlaceholderLabel}
@@ -86,9 +86,6 @@ export const DocumentationLinks: React.FC<DocumentationLinksProps> = ({
                 }}
                 value={value}
                 onChange={onChange}
-                // caption={error?.message}
-                // status={error?.message ? 'error' : null}
-                // inputRef={ref}
               />
             )}
             shouldUnregister={true}

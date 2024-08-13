@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import routes, { MY_EXTENSIONS } from '../../../routes';
@@ -8,8 +8,6 @@ import ExtensionEditStep1Form from '@akashaorg/design-system-components/lib/comp
 import { useSaveImage } from '../../../utils/use-save-image';
 import { transformSource, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { Extension, NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
-import { useAtom } from 'jotai';
-import { AtomContext, FormData } from './main-page';
 import { DRAFT_EXTENSIONS } from '../../../constants';
 
 type ExtensionEditStep1PageProps = {
@@ -31,13 +29,27 @@ export const ExtensionEditStep1Page: React.FC<ExtensionEditStep1PageProps> = ({ 
     [authenticatedDID],
   );
 
+  const formValue = useMemo(
+    () => JSON.parse(sessionStorage.getItem(extensionId)) || {},
+    [extensionId],
+  );
+
   const extensionData = draftExtensions.find(draftExtension => draftExtension.id === extensionId);
 
   const { logoImage, coverImage, saveImage, loading: isSavingImage } = useSaveImage();
 
-  const [formValue, setForm] = useAtom<FormData>(useContext(AtomContext));
+  const defaultValues = useMemo(() => {
+    return formValue.lastCompletedStep > 0 ? formValue : extensionData;
+  }, [extensionData, formValue]);
 
-  const defaultValues = formValue.lastCompletedStep > 0 ? formValue : extensionData;
+  const formDefault = useMemo(() => {
+    return {
+      name: defaultValues.name,
+      displayName: defaultValues.displayName,
+      logoImage: defaultValues.logoImage,
+      coverImage: defaultValues.coverImage,
+    };
+  }, [defaultValues]);
 
   const onSaveImageError = () => {
     uiEvents.next({
@@ -59,11 +71,11 @@ export const ExtensionEditStep1Page: React.FC<ExtensionEditStep1PageProps> = ({ 
       <ExtensionEditStep1Form
         extensionIdLabel={t('Extension Id')}
         extensionDisplayNameLabel={t('Extension Display Name')}
-        defaultValues={defaultValues}
+        defaultValues={formDefault}
         extensionType={extensionData?.applicationType}
         header={{
-          coverImage: transformSource(coverImage || defaultValues?.coverImage),
-          logoImage: transformSource(logoImage || defaultValues?.logoImage),
+          coverImage: transformSource(coverImage || formDefault?.coverImage),
+          logoImage: transformSource(logoImage || formDefault?.logoImage),
           dragToRepositionLabel: t('Drag the image to reposition'),
           cancelLabel: t('Cancel'),
           deleteLabel: t('Delete'),
@@ -99,12 +111,18 @@ export const ExtensionEditStep1Page: React.FC<ExtensionEditStep1PageProps> = ({ 
           handleClick: data => {
             const step1Data = {
               ...data,
-              logoImage: logoImage || defaultValues.logoImage,
-              coverImage: coverImage || defaultValues.coverImage,
+              logoImage: logoImage || formDefault.logoImage,
+              coverImage: coverImage || formDefault.coverImage,
             };
-            setForm(prev => {
-              return { ...prev, ...step1Data, lastCompletedStep: 1 };
-            });
+            sessionStorage.setItem(
+              extensionId,
+              JSON.stringify({
+                ...formValue,
+                ...step1Data,
+                lastCompletedStep:
+                  formValue.lastCompletedStep < 1 ? 1 : formValue.lastCompletedStep,
+              }),
+            );
             navigate({
               to: '/edit-extension/$extensionId/step2',
             });

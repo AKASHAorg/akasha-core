@@ -32,7 +32,7 @@ export const Gallery: React.FC<GalleryProps> = props => {
 
   const uploadInputRef: RefObject<HTMLInputElement> = useRef(null);
   const imageUploadDisabled = React.useMemo(() => {
-    return images.length > 15 || uploading;
+    return images?.length > 15 || uploading;
   }, [images, uploading]);
 
   const handleMediaClick = () => {
@@ -58,7 +58,7 @@ export const Gallery: React.FC<GalleryProps> = props => {
           {galleryDescriptionLabel}
         </Text>
       </Stack>
-      {images.map((imageObj, index) => (
+      {images?.map((imageObj, index) => (
         <Stack key={index} direction="row" justify="between">
           <Stack direction="row" align="center" spacing="gap-1">
             <Image

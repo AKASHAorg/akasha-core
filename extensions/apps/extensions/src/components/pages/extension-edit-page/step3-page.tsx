@@ -1,12 +1,10 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ExtensionEditStep3Form from '@akashaorg/design-system-components/lib/components/ExtensionEditStep3Form';
 import { useAkashaStore, useMentions } from '@akashaorg/ui-awf-hooks';
-import { useAtom } from 'jotai';
-import { AtomContext, FormData } from './main-page';
 import { transformSource } from '@akashaorg/ui-awf-hooks';
 import { CONTACT_INFO, DRAFT_EXTENSIONS } from '../../../constants';
 import { Extension } from '@akashaorg/typings/lib/ui';
@@ -29,10 +27,13 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
   );
   const extensionData = draftExtensions.find(draftExtension => draftExtension.id === extensionId);
 
-  const [formValue, setForm] = useAtom<FormData>(useContext(AtomContext));
+  const formValue = useMemo(
+    () => JSON.parse(sessionStorage.getItem(extensionId)) || {},
+    [extensionId],
+  );
 
   const defaultValues = useMemo(() => {
-    return formValue.lastCompletedStep > 1
+    return formValue.lastCompletedStep > 2
       ? {
           ...formValue,
           contactInfo: formValue?.links.map(elem => {
@@ -51,7 +52,15 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
         };
   }, [extensionData, formValue, extensionId]);
 
-  const { setMentionQuery, mentions } = useMentions(authenticatedDID);
+  const formDefault = useMemo(() => {
+    return {
+      license: defaultValues.license,
+      contributors: defaultValues.contributors,
+      contactInfo: defaultValues.contactInfo,
+    };
+  }, [defaultValues]);
+
+  const { setMentionQuery, mentions, allFollowing } = useMentions(authenticatedDID);
   const handleGetMentions = (query: string) => {
     setMentionQuery(query);
   };
@@ -66,6 +75,7 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
       <ExtensionEditStep3Form
         addLabel={t('Add')}
         licenseFieldLabel={t('License')}
+        licenseOtherPlaceholderLabel={t('Please specify your license type')}
         collaboratorsFieldLabel={t('Collaborators')}
         collaboratorsDescriptionLabel={t('Add people who helped you create the extension')}
         collaboratorsSearchPlaceholderLabel={t('Search for a contributor')}
@@ -75,9 +85,10 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
           'Add your contact information here for users to contact you about questions or suggestions',
         )}
         contactInfoPlaceholderLabel={t('Contact url/email')}
-        defaultValues={defaultValues}
+        defaultValues={formDefault}
         handleGetFollowingProfiles={handleGetMentions}
         followingProfiles={mentions}
+        allFollowingProfiles={allFollowing}
         transformSource={transformSource}
         cancelButton={{
           label: t('Back'),
@@ -105,9 +116,15 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
                 }),
               ],
             };
-            setForm(prev => {
-              return { ...prev, ...step3Data, lastCompletedStep: 3 };
-            });
+            sessionStorage.setItem(
+              extensionId,
+              JSON.stringify({
+                ...formValue,
+                ...step3Data,
+                lastCompletedStep:
+                  formValue.lastCompletedStep < 3 ? 3 : formValue.lastCompletedStep,
+              }),
+            );
             navigate({
               to: '/edit-extension/$extensionId/step4',
             });

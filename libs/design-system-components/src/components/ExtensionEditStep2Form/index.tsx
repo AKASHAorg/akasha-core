@@ -88,7 +88,7 @@ const ExtensionEditStep2Form: React.FC<ExtensionEditStep2FormProps> = props => {
     mode: 'onChange',
   });
 
-  const isValid = !Object.keys(errors).length;
+  const isValid = !Object.keys(errors)?.length;
 
   const onSave = (event: SyntheticEvent) => {
     event.preventDefault();

@@ -1,12 +1,9 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import { AtomContext, FormData } from './main-page';
-import { useAtom } from 'jotai';
-import { RESET } from 'jotai/utils';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { Extension, NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import { DRAFT_EXTENSIONS } from '../../../constants';
@@ -24,7 +21,10 @@ export const ExtensionEditStep4Page: React.FC<ExtensionEditStep4PageProps> = ({ 
     data: { authenticatedDID },
   } = useAkashaStore();
 
-  const [formValue, setForm] = useAtom<FormData>(useContext(AtomContext));
+  const formValue = useMemo(
+    () => JSON.parse(sessionStorage.getItem(extensionId)) || {},
+    [extensionId],
+  );
 
   const existingDraftExtensions: Extension[] = useMemo(
     () => JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [],
@@ -39,7 +39,7 @@ export const ExtensionEditStep4Page: React.FC<ExtensionEditStep4PageProps> = ({ 
       `${DRAFT_EXTENSIONS}-${authenticatedDID}`,
       JSON.stringify(newDraftExtensions),
     );
-    setForm(RESET);
+    sessionStorage.removeItem(extensionId);
     uiEvents.next({
       event: NotificationEvents.ShowNotification,
       data: {
