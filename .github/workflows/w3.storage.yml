@@ -30,7 +30,7 @@ jobs:
         with:
           access_token: ${{ secrets.BW_ACCESS_TOKEN }}
           secrets: |
-            d2e58f1e-c9a7-47ed-9fef-b1c500adf641 > W3_STORAGE_DELEGATE
+            470c7a84-3010-485a-a5e9-b1cb00bdfc15 > W3_STORAGE_DELEGATE
       - name: install root dependencies
         env:
           CI: 1
