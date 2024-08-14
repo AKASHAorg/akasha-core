@@ -4,7 +4,7 @@ import {
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 export const getAvatarImage = (
-  newAvatarImage: ProfileImageVersions | undefined,
+  newAvatarImage: ProfileImageVersions | null,
   isImageDeleted: boolean,
 ): Pick<PartialAkashaProfileInput, 'avatar'> => {
   if (isImageDeleted) {
@@ -17,7 +17,7 @@ export const getAvatarImage = (
 };
 
 export const getCoverImage = (
-  newCoverImage: ProfileImageVersions | undefined,
+  newCoverImage: ProfileImageVersions | null,
   isImageDeleted: boolean,
 ): Pick<PartialAkashaProfileInput, 'background'> => {
   if (isImageDeleted) {
