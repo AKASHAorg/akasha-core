@@ -27,19 +27,19 @@ const meta: Meta<SubtitleTextIconProps> = {
 
 type Story = StoryObj<SubtitleTextIconProps>;
 
-const baseArgs: Story = {
+export const Default: Story = { args: { label: 'Subtitle Text Label', subtitle: 'some subtitle' } };
+
+export const WithIcon: Story = {
+  args: { label: 'Subtitle Text Label', subtitle: 'some subtitle', icon: <BeakerIcon /> },
+};
+
+export const WithIconBackgroundColor: Story = {
   args: {
     label: 'Subtitle Text Label',
     subtitle: 'some subtitle',
+    icon: <BeakerIcon />,
+    backgroundColor: true,
   },
-};
-
-export const Default: Story = { args: { ...baseArgs.args } };
-
-export const WithIcon: Story = { args: { ...baseArgs.args, icon: <BeakerIcon /> } };
-
-export const WithIconBackgroundColor: Story = {
-  args: { ...baseArgs.args, icon: <BeakerIcon />, backgroundColor: true },
 };
 
 export default meta;

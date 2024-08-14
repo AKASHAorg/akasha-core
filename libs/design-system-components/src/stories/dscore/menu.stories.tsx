@@ -24,7 +24,7 @@ const meta: Meta<MenuProps> = {
 
 type Story = StoryObj<MenuProps>;
 
-const baseArgs: Story = {
+export const Default: Story = {
   args: {
     anchor: {
       icon: <EllipsisVerticalIcon />,
@@ -48,10 +48,54 @@ const baseArgs: Story = {
   },
 };
 
-export const Default: Story = { args: { ...baseArgs.args } };
+export const MenuDisabled: Story = {
+  args: {
+    anchor: {
+      icon: <EllipsisVerticalIcon />,
+      variant: 'primary',
+      greyBg: true,
+      iconOnly: true,
+    },
+    items: [
+      {
+        label: 'Copy',
+        icon: <LinkIcon />,
+        onClick: () => ({}),
+      },
+      {
+        label: 'Flag',
+        icon: <FlagIcon />,
+        color: { light: 'errorLight', dark: 'errorDark' },
+        onClick: () => ({}),
+      },
+    ],
+    disabled: true,
+  },
+};
 
-export const MenuDisabled: Story = { args: { ...baseArgs.args, disabled: true } };
-
-export const MenuWithoutListDivider: Story = { args: { ...baseArgs.args, showDivider: false } };
+export const MenuWithoutListDivider: Story = {
+  args: {
+    anchor: {
+      icon: <EllipsisVerticalIcon />,
+      variant: 'primary',
+      greyBg: true,
+      iconOnly: true,
+    },
+    items: [
+      {
+        label: 'Copy',
+        icon: <LinkIcon />,
+        onClick: () => ({}),
+      },
+      {
+        label: 'Flag',
+        icon: <FlagIcon />,
+        color: { light: 'errorLight', dark: 'errorDark' },
+        onClick: () => ({}),
+      },
+    ],
+    showDivider: false,
+  },
+};
 
 export default meta;

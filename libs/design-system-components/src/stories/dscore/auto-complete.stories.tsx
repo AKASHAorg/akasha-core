@@ -24,15 +24,19 @@ const meta: Meta<AutoCompleteProps> = {
 
 type Story = StoryObj<AutoCompleteProps>;
 
-const baseArgs: Story = {
+export const Default: Story = {
   args: {
     options: ['AKASHA', 'AKIRA', 'Travel', 'Cooking', 'Ethereum', 'Finance'],
     customStyle: 'w-[50%]',
   },
 };
 
-export const Default: Story = { args: { ...baseArgs.args } };
-
-export const AutoCompleteDisabled: Story = { args: { ...baseArgs.args, disabled: true } };
+export const AutoCompleteDisabled: Story = {
+  args: {
+    options: ['AKASHA', 'AKIRA', 'Travel', 'Cooking', 'Ethereum', 'Finance'],
+    customStyle: 'w-[50%]',
+    disabled: true,
+  },
+};
 
 export default meta;

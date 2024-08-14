@@ -17,17 +17,10 @@ const meta: Meta<TabListProps> = {
 
 type Story = StoryObj<TabListProps>;
 
-const baseArgs: Story = {
-  args: {
-    labels: ['Tab 1', 'Tab 2', 'Tab 3'],
-    selected: 0,
-  },
-};
-
-export const Default: Story = { args: { ...baseArgs.args } };
+export const Default: Story = { args: { labels: ['Tab 1', 'Tab 2', 'Tab 3'], selected: 0 } };
 
 export const TabListWithDivider: Story = {
-  args: { ...baseArgs.args, selected: 1, tabListDivider: true },
+  args: { labels: ['Tab 1', 'Tab 2', 'Tab 3'], selected: 1, tabListDivider: true },
 };
 
 export default meta;

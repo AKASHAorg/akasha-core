@@ -24,15 +24,8 @@ const meta: Meta<IconProps> = {
 
 type Story = StoryObj<IconProps>;
 
-const baseArgs: Story = {
-  args: {
-    icon: <Akasha />,
-    solid: true,
-  },
-};
+export const Default: Story = { args: { icon: <Akasha />, solid: true } };
 
-export const Default: Story = { args: { ...baseArgs.args } };
-
-export const IconWithSize: Story = { args: { ...baseArgs.args, size: 'xl' } };
+export const IconWithSize: Story = { args: { icon: <Akasha />, solid: true, size: 'xl' } };
 
 export default meta;

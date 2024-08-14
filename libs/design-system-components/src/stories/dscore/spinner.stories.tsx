@@ -16,20 +16,14 @@ const meta: Meta<SpinnerProps> = {
 
 type Story = StoryObj<SpinnerProps>;
 
-const baseArgs: Story = {
-  args: {
-    size: 'sm',
-  },
-};
-
-export const Default: Story = { args: { ...baseArgs.args } };
+export const Default: Story = { args: { size: 'sm' } };
 
 export const SpinnerWithLoadingLabel: Story = {
-  args: { ...baseArgs.args, loadingLabel: 'loading...' },
+  args: { size: 'sm', loadingLabel: 'loading...' },
 };
 
-export const SpinnerWithColor: Story = { args: { ...baseArgs.args, color: 'blue' } };
+export const SpinnerWithColor: Story = { args: { size: 'sm', color: 'blue' } };
 
-export const PartialSpinner: Story = { args: { ...baseArgs.args, partialSpinner: true } };
+export const PartialSpinner: Story = { args: { size: 'sm', partialSpinner: true } };
 
 export default meta;

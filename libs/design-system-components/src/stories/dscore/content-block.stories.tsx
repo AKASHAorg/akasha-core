@@ -16,14 +16,10 @@ const meta: Meta<ContentBlockProps> = {
 
 type Story = StoryObj<ContentBlockProps>;
 
-const baseArgs: Story = {
-  args: {
-    blockTitle: 'Content Block',
-  },
+export const Default: Story = { args: { blockTitle: 'Content Block' } };
+
+export const ContentBlockWithoutDivider: Story = {
+  args: { blockTitle: 'Content Block', showDivider: false },
 };
-
-export const Default: Story = { args: { ...baseArgs.args } };
-
-export const ContentBlockWithoutDivider: Story = { args: { ...baseArgs.args, showDivider: false } };
 
 export default meta;

@@ -5,7 +5,6 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import MiniProfileCTA, {
   MiniProfileCTAProps,
-  ProfileItemData,
 } from '../../components/VibesConsoleContentCard/mini-profile-cta';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -18,35 +17,38 @@ const meta: Meta<MiniProfileCTAProps> = {
 
 type Story = StoryObj<MiniProfileCTAProps>;
 
-const sampleProfileData: ProfileItemData = {
-  avatar: {
-    height: 320,
-    src: 'https://placebeard.it/360x360',
-    width: 320,
-  },
-  alternativeAvatars: [],
-  name: 'Golden Showers',
-  did: { id: 'somerandomdid' },
-  nsfw: false,
-};
-
-const baseArgs: Story = {
+export const Default: Story = {
   args: {
-    itemData: sampleProfileData,
+    itemData: {
+      avatar: {
+        height: 320,
+        src: 'https://placebeard.it/360x360',
+        width: 320,
+      },
+      alternativeAvatars: [],
+      name: 'Golden Showers',
+      did: { id: 'somerandomdid' },
+      nsfw: false,
+    },
     nsfwLabel: 'Profile tagged NSFW',
     ctaExt: <Button variant="text" size="md" label="View Profile" />,
   },
 };
 
-export const Default: Story = {
-  args: {
-    ...baseArgs.args,
-  },
-};
-
 export const IconButtonCTAExt: Story = {
   args: {
-    ...baseArgs.args,
+    itemData: {
+      avatar: {
+        height: 320,
+        src: 'https://placebeard.it/360x360',
+        width: 320,
+      },
+      alternativeAvatars: [],
+      name: 'Golden Showers',
+      did: { id: 'somerandomdid' },
+      nsfw: false,
+    },
+    nsfwLabel: 'Profile tagged NSFW',
     ctaExt: (
       <Stack
         direction="row"
