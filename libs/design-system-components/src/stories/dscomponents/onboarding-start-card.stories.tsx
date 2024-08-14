@@ -11,7 +11,7 @@ const meta: Meta<OnboardingStartCardProps> = {
 
 type Story = StoryObj<OnboardingStartCardProps>;
 
-const baseArgs: Story = {
+export const Default: Story = {
   args: {
     inputPlaceholderLabel: 'Search',
     titleLabel: 'Search',
@@ -20,13 +20,12 @@ const baseArgs: Story = {
   },
 };
 
-export const Default: Story = {
-  args: { ...baseArgs.args },
-};
-
 export const ButtonDisabled: Story = {
   args: {
-    ...baseArgs.args,
+    inputPlaceholderLabel: 'Search',
+    titleLabel: 'Search',
+    buttonLabel: 'Search',
+    handleSearch: () => ({}),
     isButtonEnabled: false,
   },
 };

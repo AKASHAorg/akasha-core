@@ -27,26 +27,29 @@ const meta: Meta<AppIconProps> = {
 
 type Story = StoryObj<AppIconProps>;
 
-const baseArgs: Story = {
+export const Default: Story = {
+  args: { placeholderIcon: <Akasha />, solid: true },
+};
+
+export const AppIconWithNotification: Story = {
+  args: { placeholderIcon: <Akasha />, solid: true, hasNewNotifs: true },
+};
+
+export const AppIconWithSpecificSize: Story = {
+  args: { placeholderIcon: <Akasha />, solid: true, size: 'xl' },
+};
+
+export const AppIconCustomColored: Story = {
   args: {
     placeholderIcon: <Akasha />,
     solid: true,
-    stackedIcon: true,
+    iconColor: 'white',
+    background: 'secondaryDark',
   },
 };
 
-export const Default: Story = { args: { ...baseArgs.args } };
-
-export const AppIconWithNnotification: Story = { args: { ...baseArgs.args, hasNewNotifs: true } };
-
-export const AppIconWithSpecificSize: Story = { args: { ...baseArgs.args, size: 'xl' } };
-
-export const AppIconCustomColored: Story = {
-  args: { ...baseArgs.args, iconColor: 'white', background: 'secondaryDark' },
-};
-
 export const AppIconStacked: Story = {
-  args: { ...baseArgs.args, stackedIcon: true },
+  args: { placeholderIcon: <Akasha />, solid: true, stackedIcon: true },
 };
 
 export default meta;

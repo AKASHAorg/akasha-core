@@ -13,7 +13,7 @@ const meta: Meta<FollowersProps> = {
 
 type Story = StoryObj<FollowersProps>;
 
-const baseArgs: Story = {
+export const Default: Story = {
   args: {
     authenticatedDID: 'did:key:55FaD4201494x0rt17C9892i9fae4d52fe3BD124',
     followList: new Map(),
@@ -31,34 +31,62 @@ const baseArgs: Story = {
       <DuplexButton variant="secondary" active={false} inactiveLabel="Follow" />
     ),
     onProfileClick: () => ({}),
-  },
-};
-
-const followerData = {
-  id: 'some id',
-  createdAt: Date.now(),
-  name: 'Coffee Lover',
-  did: { id: 'did:key:73FaD4201494x0rt17B9892i9fae4d52fe3BD377', isViewer: false },
-  followersCount: 0,
-};
-
-export const Default: Story = {
-  args: {
-    ...baseArgs.args,
-    followers: [{ id: '0', isFollowing: false, did: { akashaProfile: followerData } }],
+    followers: [
+      {
+        id: '0',
+        isFollowing: false,
+        did: {
+          akashaProfile: {
+            id: 'some id',
+            createdAt: Date.now(),
+            name: 'Coffee Lover',
+            did: { id: 'did:key:73FaD4201494x0rt17B9892i9fae4d52fe3BD377', isViewer: false },
+            followersCount: 0,
+          },
+        },
+      },
+    ],
   },
 };
 
 export const NoFollowers: Story = {
   args: {
-    ...baseArgs.args,
+    authenticatedDID: 'did:key:55FaD4201494x0rt17C9892i9fae4d52fe3BD124',
+    followList: new Map(),
+    profileAnchorLink: '#',
+    publicImgPath: '',
+    emptyEntryTitleLabel: <>This user has no followers yet!</>,
+    emptyEntryBodyLabel: <></>,
+    onLoadMore: () => Promise.resolve({}),
+    transformSource: () => ({
+      src: 'https://placebeard.it/360x360',
+      width: 360,
+      height: 360,
+    }),
+    renderFollowElement: () => (
+      <DuplexButton variant="secondary" active={false} inactiveLabel="Follow" />
+    ),
+    onProfileClick: () => ({}),
     followers: [],
   },
 };
 
 export const IsViewer: Story = {
   args: {
-    ...baseArgs.args,
+    authenticatedDID: 'did:key:55FaD4201494x0rt17C9892i9fae4d52fe3BD124',
+    followList: new Map(),
+    profileAnchorLink: '#',
+    publicImgPath: '',
+    onLoadMore: () => Promise.resolve({}),
+    transformSource: () => ({
+      src: 'https://placebeard.it/360x360',
+      width: 360,
+      height: 360,
+    }),
+    renderFollowElement: () => (
+      <DuplexButton variant="secondary" active={false} inactiveLabel="Follow" />
+    ),
+    onProfileClick: () => ({}),
     emptyEntryTitleLabel: <>You have no followers yet</>,
     emptyEntryBodyLabel: (
       <>Interact with apps, to get people who are interested in your content to follow you</>

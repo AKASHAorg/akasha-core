@@ -17,19 +17,19 @@ const meta: Meta<StackedAvatarProps> = {
 
 type Story = StoryObj<StackedAvatarProps>;
 
-const baseArgs: Story = {
+export const Default: Story = {
   args: {
     userData: userData.map(item => ({ ...item, avatar: item.avatar?.default })),
     maxAvatars: 4,
   },
 };
 
-export const Default: Story = {
-  args: { ...baseArgs.args },
-};
-
 export const StackedAvatarWithSize: Story = {
-  args: { ...baseArgs.args, size: 'xl' },
+  args: {
+    userData: userData.map(item => ({ ...item, avatar: item.avatar?.default })),
+    maxAvatars: 4,
+    size: 'xl',
+  },
 };
 
 export default meta;

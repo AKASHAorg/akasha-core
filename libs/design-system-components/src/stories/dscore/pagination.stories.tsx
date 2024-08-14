@@ -25,22 +25,20 @@ const meta: Meta<PaginationProps> = {
 
 type Story = StoryObj<PaginationProps>;
 
-const baseArgs: Story = {
-  args: {
-    pageCount: 10,
-    currentPage: 1,
-  },
-};
-
-export const Default: Story = { args: { ...baseArgs.args } };
+export const Default: Story = { args: { pageCount: 10, currentPage: 1 } };
 
 export const PaginationWithButtons: Story = {
-  args: { ...baseArgs.args, currentPage: 2, prevButtonLabel: 'Prev', nextButtonLabel: 'Next' },
+  args: {
+    pageCount: 10,
+    currentPage: 2,
+    prevButtonLabel: 'Prev',
+    nextButtonLabel: 'Next',
+  },
 };
 
 export const PaginationPrevDisabled: Story = {
   args: {
-    ...baseArgs.args,
+    pageCount: 10,
     currentPage: 1,
     prevButtonLabel: 'Prev',
     nextButtonLabel: 'Next',
@@ -50,7 +48,7 @@ export const PaginationPrevDisabled: Story = {
 
 export const PaginationNextDisabled: Story = {
   args: {
-    ...baseArgs.args,
+    pageCount: 10,
     currentPage: 10,
     prevButtonLabel: 'Prev',
     nextButtonLabel: 'Next',

@@ -23,20 +23,21 @@ const meta: Meta<ProfileAvatarButtonProps> = {
 
 type Story = StoryObj<ProfileAvatarButtonProps>;
 
-const profileId = 'did:pkh:eip155:5:0x36c703c4d22af437dc883e2e0884e57404e16493';
-
-const avatar = { src: 'https://placebeard.it/360x360', height: 360, width: 360 };
-
-const baseArgs: Story = {
+export const Default: Story = {
   args: {
     label: 'Profile Avatar Button',
-    profileId,
-    avatar,
+    profileId: 'did:pkh:eip155:5:0x36c703c4d22af437dc883e2e0884e57404e16493',
+    avatar: { src: 'https://placebeard.it/360x360', height: 360, width: 360 },
   },
 };
 
-export const Default: Story = { args: { ...baseArgs.args } };
-
-export const NotTruncatedButton: Story = { args: { ...baseArgs.args, truncateText: false } };
+export const NotTruncatedButton: Story = {
+  args: {
+    label: 'Profile Avatar Button',
+    profileId: 'did:pkh:eip155:5:0x36c703c4d22af437dc883e2e0884e57404e16493',
+    avatar: { src: 'https://placebeard.it/360x360', height: 360, width: 360 },
+    truncateText: false,
+  },
+};
 
 export default meta;
