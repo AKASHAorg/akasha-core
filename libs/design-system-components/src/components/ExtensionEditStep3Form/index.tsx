@@ -105,13 +105,15 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
   // it will not hydrate the form values with it
   // to fix this a list of original contributor profiles needs to be passed as prop
   const defaultContributorProfiles = useMemo(() => {
-    return defaultValues.contributors
-      ?.map(contributorDID => {
-        return allFollowingProfiles?.find(
-          followingProfile => followingProfile.did.id === contributorDID,
-        );
-      })
-      .filter(profile => profile?.id);
+    return (
+      defaultValues.contributors
+        ?.map(contributorDID => {
+          return allFollowingProfiles?.find(
+            followingProfile => followingProfile.did.id === contributorDID,
+          );
+        })
+        .filter(profile => profile?.id) || []
+    );
   }, [defaultValues.contributors, allFollowingProfiles]);
 
   const [addedContributors, setAddedContributors] = useState<AkashaProfile[]>(
@@ -125,7 +127,7 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
   const onSave = (event: SyntheticEvent) => {
     event.preventDefault();
     const formValues = getValues();
-    formValues.contributors = addedContributors.map(profile => profile.did?.id);
+    formValues.contributors = addedContributors?.map(profile => profile.did?.id);
     if (formValues.license === Licenses.OTHER) {
       formValues.license = formValues.licenseOther;
     }
@@ -203,7 +205,7 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
             description={contactInfoDescriptionLabel}
             addButtonLabel={addLabel}
             control={control}
-            contactInfo={defaultValues.contactInfo}
+            contactInfo={defaultValues.contactInfo || ['']}
             onDeleteInfoField={async () => {
               await trigger();
             }}

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -16,8 +16,7 @@ export type DocumentationLinksProps = {
   linkTitlePlaceholderLabel?: string;
   customStyle?: string;
   control: Control<ExtensionEditStep2FormValues>;
-  contactInfoLinkLabel: string;
-  documentationLinks: AppLinkSource[];
+  documentationLinks: (AppLinkSource & { _id?: number })[];
   onDeleteLink: () => void;
 };
 
@@ -29,27 +28,20 @@ export const DocumentationLinks: React.FC<DocumentationLinksProps> = ({
   linkTitlePlaceholderLabel,
   documentationLinks,
   customStyle = '',
-  contactInfoLinkLabel,
   control,
   onDeleteLink,
 }) => {
-  const linksWithPseudoId = useMemo(
-    () =>
-      documentationLinks
-        ?.map((link, index) => ({ _id: index + 1, ...link }))
-        .filter(link => link.label !== contactInfoLinkLabel),
-    [documentationLinks, contactInfoLinkLabel],
-  );
-
   const [links, setLinks] = useState(
     !documentationLinks || documentationLinks?.length === 0
       ? [{ _id: 1, href: '', label: '' }]
-      : linksWithPseudoId,
+      : documentationLinks,
   );
 
   const onAddNew = () => {
     if (links?.length < 10) {
-      setLinks(prev => [...prev, { _id: prev?.length + 1, href: '', label: '' }]);
+      setLinks(prev => {
+        return [...prev, { _id: prev?.length + 1, href: '', label: '' }];
+      });
     }
   };
 

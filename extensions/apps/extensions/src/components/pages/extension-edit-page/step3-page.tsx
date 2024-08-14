@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -8,6 +8,8 @@ import { useAkashaStore, useMentions } from '@akashaorg/ui-awf-hooks';
 import { transformSource } from '@akashaorg/ui-awf-hooks';
 import { CONTACT_INFO, DRAFT_EXTENSIONS } from '../../../constants';
 import { Extension } from '@akashaorg/typings/lib/ui';
+import { useAtom } from 'jotai';
+import { AtomContext, FormData } from './main-page';
 
 type ExtensionEditStep3PageProps = {
   extensionId: string;
@@ -36,21 +38,27 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
     return formValue.lastCompletedStep > 2
       ? {
           ...formValue,
-          contactInfo: formValue?.links.map(elem => {
-            if (elem.label === `${extensionId}-${CONTACT_INFO}`) {
-              return elem.href;
-            }
-          }),
+          contactInfo: formValue?.links
+            ?.map(elem => {
+              if (elem.label === `${extensionId}-${CONTACT_INFO}`) {
+                return elem.href;
+              }
+            })
+            .filter(link => link),
         }
       : {
           ...extensionData,
-          contactInfo: extensionData?.links.map(elem => {
-            if (elem.label === `${extensionId}-${CONTACT_INFO}`) {
-              return elem.href;
-            }
-          }),
+          contactInfo: extensionData?.links
+            ?.map(elem => {
+              if (elem.label === `${extensionId}-${CONTACT_INFO}`) {
+                return elem.href;
+              }
+            })
+            .filter(link => link),
         };
   }, [extensionData, formValue, extensionId]);
+
+  const [, setForm] = useAtom<FormData>(useContext(AtomContext));
 
   const formDefault = useMemo(() => {
     return {
@@ -116,15 +124,16 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
                 }),
               ],
             };
-            sessionStorage.setItem(
-              extensionId,
-              JSON.stringify({
-                ...formValue,
+            setForm(prev => {
+              return {
+                ...prev,
                 ...step3Data,
                 lastCompletedStep:
-                  formValue.lastCompletedStep < 3 ? 3 : formValue.lastCompletedStep,
-              }),
-            );
+                  !formValue.lastCompletedStep || formValue.lastCompletedStep < 3
+                    ? 3
+                    : formValue.lastCompletedStep,
+              };
+            });
             navigate({
               to: '/edit-extension/$extensionId/step4',
             });

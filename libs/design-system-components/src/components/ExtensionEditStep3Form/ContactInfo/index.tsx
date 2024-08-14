@@ -29,7 +29,9 @@ export const ContactInfo: React.FC<ContactInfoProps> = ({
   const [infoFields, setInfoFields] = useState(['']);
 
   useEffect(() => {
-    setInfoFields(contactInfo);
+    if (contactInfo?.length > 0) {
+      setInfoFields(contactInfo);
+    }
   }, [contactInfo]);
 
   const onAddNew = () => {
@@ -53,7 +55,7 @@ export const ContactInfo: React.FC<ContactInfoProps> = ({
           {description}
         </Text>
       </Stack>
-      {infoFields.map((infoField, index) => {
+      {infoFields?.map((infoField, index) => {
         return (
           <Controller
             key={index}

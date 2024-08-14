@@ -33,7 +33,7 @@ export const ExtensionEditStep4Page: React.FC<ExtensionEditStep4PageProps> = ({ 
 
   const handleUpdateExtension = () => {
     const newDraftExtensions = existingDraftExtensions.map(oldDraftExt =>
-      oldDraftExt.id === extensionId ? formValue : oldDraftExt,
+      oldDraftExt.id === extensionId ? { ...oldDraftExt, ...formValue } : oldDraftExt,
     );
     localStorage.setItem(
       `${DRAFT_EXTENSIONS}-${authenticatedDID}`,

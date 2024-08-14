@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -18,6 +18,8 @@ import {
   Extension,
 } from '@akashaorg/typings/lib/ui';
 import { CONTACT_INFO, DRAFT_EXTENSIONS } from '../../../constants';
+import { useAtom } from 'jotai';
+import { AtomContext, FormData } from './main-page';
 
 type ExtensionEditStep2PageProps = {
   extensionId: string;
@@ -52,28 +54,34 @@ export const ExtensionEditStep2Page: React.FC<ExtensionEditStep2PageProps> = ({ 
       nsfw: defaultValues.nsfw,
       description: defaultValues.description,
       gallery: defaultValues.gallery,
-      links: defaultValues.links,
+      links: defaultValues.links
+        ?.map((link, index) => ({ _id: index + 1, ...link }))
+        .filter(link => link.label !== `${extensionId}-${CONTACT_INFO}`),
     };
-  }, [defaultValues]);
+  }, [defaultValues, extensionId]);
+
+  const [, setForm] = useAtom<FormData>(useContext(AtomContext));
 
   const [uploading, setUploading] = useState(false);
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
 
   useEffect(() => {
-    setGalleryImages(
-      formDefault?.gallery?.map(img => {
-        const imgWithGateway = transformSource(img);
-        return {
-          ...img,
-          src: img.src,
-          displaySrc: imgWithGateway.src,
-          size: {
-            height: img.height,
-            width: img.width,
-          },
-        };
-      }),
-    );
+    if (formDefault?.gallery?.length > 0) {
+      setGalleryImages(
+        formDefault?.gallery?.map(img => {
+          const imgWithGateway = transformSource(img);
+          return {
+            ...img,
+            src: img.src,
+            displaySrc: imgWithGateway.src,
+            size: {
+              height: img.height,
+              width: img.width,
+            },
+          };
+        }),
+      );
+    }
   }, [setGalleryImages, formDefault]);
 
   const onUpload = async (image: File | string, isUrl?: boolean) => {
@@ -162,7 +170,6 @@ export const ExtensionEditStep2Page: React.FC<ExtensionEditStep2PageProps> = ({ 
         handleImageDelete={handleDeleteImage}
         images={galleryImages}
         defaultValues={formDefault}
-        contactInfoLinkLabel={`${extensionId}-${CONTACT_INFO}`}
         cancelButton={{
           label: t('Back'),
           disabled: false,
@@ -175,7 +182,7 @@ export const ExtensionEditStep2Page: React.FC<ExtensionEditStep2PageProps> = ({ 
         nextButton={{
           label: t('Next'),
           handleClick: data => {
-            const step1Data = {
+            const step2Data = {
               ...data,
               gallery: galleryImages?.map(galleryImage => {
                 return {
@@ -185,15 +192,16 @@ export const ExtensionEditStep2Page: React.FC<ExtensionEditStep2PageProps> = ({ 
                 };
               }),
             };
-            sessionStorage.setItem(
-              extensionId,
-              JSON.stringify({
-                ...formValue,
-                ...step1Data,
+            setForm(prev => {
+              return {
+                ...prev,
+                ...step2Data,
                 lastCompletedStep:
-                  formValue.lastCompletedStep < 2 ? 2 : formValue.lastCompletedStep,
-              }),
-            );
+                  !formValue.lastCompletedStep || formValue.lastCompletedStep < 2
+                    ? 2
+                    : formValue.lastCompletedStep,
+              };
+            });
             navigate({
               to: '/edit-extension/$extensionId/step3',
             });

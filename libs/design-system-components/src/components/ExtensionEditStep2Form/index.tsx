@@ -25,7 +25,7 @@ export type ExtensionEditStep2FormValues = {
   nsfw?: boolean;
   description?: string;
   gallery?: AppImageSource[];
-  links?: AppLinkSource[];
+  links?: (AppLinkSource & { _id?: number })[];
 };
 
 export type ExtensionEditStep2FormProps = {
@@ -40,7 +40,6 @@ export type ExtensionEditStep2FormProps = {
   linkTitleLabel?: string;
   linkPlaceholderLabel?: string;
   addLabel?: string;
-  contactInfoLinkLabel: string;
   defaultValues?: ExtensionEditStep2FormValues;
   cancelButton: ButtonType;
   nextButton: {
@@ -70,7 +69,6 @@ const ExtensionEditStep2Form: React.FC<ExtensionEditStep2FormProps> = props => {
     linkTitleLabel,
     linkPlaceholderLabel,
     addLabel,
-    contactInfoLinkLabel,
     handleImageDelete,
     handleImageUpload,
     uploading,
@@ -97,7 +95,7 @@ const ExtensionEditStep2Form: React.FC<ExtensionEditStep2FormProps> = props => {
       nextButton.handleClick({
         ...formValues,
         links: formValues.links
-          .map(link => {
+          ?.map(link => {
             if (link.href && link.label) {
               return {
                 href: link.href,
@@ -161,7 +159,6 @@ const ExtensionEditStep2Form: React.FC<ExtensionEditStep2FormProps> = props => {
             linkTitlePlaceholderLabel={linkPlaceholderLabel}
             addNewLinkButtonLabel={addLabel}
             control={control}
-            contactInfoLinkLabel={contactInfoLinkLabel}
             documentationLinks={defaultValues.links}
             onDeleteLink={async () => {
               await trigger();

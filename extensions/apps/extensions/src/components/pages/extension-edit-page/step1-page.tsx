@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import routes, { MY_EXTENSIONS } from '../../../routes';
@@ -9,6 +9,8 @@ import { useSaveImage } from '../../../utils/use-save-image';
 import { transformSource, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { Extension, NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import { DRAFT_EXTENSIONS } from '../../../constants';
+import { useAtom } from 'jotai';
+import { AtomContext, FormData } from './main-page';
 
 type ExtensionEditStep1PageProps = {
   extensionId: string;
@@ -50,6 +52,8 @@ export const ExtensionEditStep1Page: React.FC<ExtensionEditStep1PageProps> = ({ 
       coverImage: defaultValues.coverImage,
     };
   }, [defaultValues]);
+
+  const [, setForm] = useAtom<FormData>(useContext(AtomContext));
 
   const onSaveImageError = () => {
     uiEvents.next({
@@ -114,15 +118,16 @@ export const ExtensionEditStep1Page: React.FC<ExtensionEditStep1PageProps> = ({ 
               logoImage: logoImage || formDefault.logoImage,
               coverImage: coverImage || formDefault.coverImage,
             };
-            sessionStorage.setItem(
-              extensionId,
-              JSON.stringify({
-                ...formValue,
+            setForm(prev => {
+              return {
+                ...prev,
                 ...step1Data,
                 lastCompletedStep:
-                  formValue.lastCompletedStep < 1 ? 1 : formValue.lastCompletedStep,
-              }),
-            );
+                  !formValue.lastCompletedStep || formValue.lastCompletedStep < 1
+                    ? 1
+                    : formValue.lastCompletedStep,
+              };
+            });
             navigate({
               to: '/edit-extension/$extensionId/step2',
             });

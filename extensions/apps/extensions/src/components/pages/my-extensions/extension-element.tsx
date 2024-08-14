@@ -59,7 +59,11 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
         },
       },
     },
-    skip: !extensionData?.id.trim() || extensionData?.id.length < 10 || extensionData?.localDraft,
+    skip:
+      !extensionData?.id ||
+      !extensionData?.id?.trim() ||
+      extensionData?.id?.length < 10 ||
+      extensionData?.localDraft,
   });
 
   const appStreamData =

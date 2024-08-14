@@ -3,6 +3,9 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Stepper from '@akashaorg/design-system-core/lib/components/Stepper';
 import { Outlet } from '@tanstack/react-router';
+import { atomWithStorage, createJSONStorage } from 'jotai/utils';
+import { useAtomValue } from 'jotai';
+
 import routes, { EDIT_EXTENSION } from '../../../routes';
 import { useTranslation } from 'react-i18next';
 import { NotConnnected } from '../../not-connected';
@@ -11,6 +14,8 @@ import { AppImageSource } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { ExtensionEditStep2FormValues } from '@akashaorg/design-system-components/lib/components/ExtensionEditStep2Form';
 
 export const AtomContext = createContext(null);
+
+const storage = createJSONStorage(() => sessionStorage);
 
 export type FormData = {
   lastCompletedStep?: number;
@@ -33,10 +38,31 @@ export const ExtensionEditMainPage: React.FC<ExtensionEditMainPageProps> = ({ ex
     data: { authenticatedDID },
   } = useAkashaStore();
 
-  const formValue = useMemo(
-    () => JSON.parse(sessionStorage.getItem(extensionId)) || {},
+  const formData = useMemo(
+    () =>
+      atomWithStorage<FormData>(
+        extensionId,
+        {
+          lastCompletedStep: 0,
+          name: '',
+          displayName: '',
+          logoImage: { src: '' },
+          coverImage: { src: '' },
+          nsfw: false,
+          description: '',
+          gallery: [],
+          links: [],
+          contributors: [],
+          license: '',
+        },
+        storage,
+      ),
     [extensionId],
   );
+
+  const formValue = useAtomValue(formData);
+
+  StorageEvent;
 
   if (!authenticatedDID) {
     return (
@@ -49,9 +75,11 @@ export const ExtensionEditMainPage: React.FC<ExtensionEditMainPageProps> = ({ ex
   return (
     <Card padding={0}>
       <Stack padding={16} justify="center" align="center">
-        <Stepper length={4} currentStep={(formValue.lastCompletedStep || 0) + 1} />
+        <Stepper length={4} currentStep={formValue.lastCompletedStep + 1} />
       </Stack>
-      <Outlet />
+      <AtomContext.Provider value={formData}>
+        <Outlet />
+      </AtomContext.Provider>
     </Card>
   );
 };

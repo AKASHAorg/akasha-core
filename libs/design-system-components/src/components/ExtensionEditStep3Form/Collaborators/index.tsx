@@ -52,7 +52,7 @@ export const Collaborators: React.FC<CollaboratorsProps> = ({
   };
 
   const handleAddContributor = (profile: AkashaProfile) => {
-    if (addedContributors.length < 16) {
+    if (addedContributors?.length < 16) {
       setAddedContributors(prev => {
         const res = Array.from(new Set([...prev, profile]));
         return res;
@@ -92,7 +92,7 @@ export const Collaborators: React.FC<CollaboratorsProps> = ({
             onInputChange={handleChange}
             onFocus={() => setShowSuggestions(true)}
           />
-          {showSuggestions && contributors.length > 0 && searchValue.length > 1 && (
+          {showSuggestions && contributors?.length > 0 && searchValue?.length > 1 && (
             <Stack direction="row" customStyle={'relative'}>
               <Card
                 radius={20}
@@ -101,7 +101,7 @@ export const Collaborators: React.FC<CollaboratorsProps> = ({
                 customStyle="absolute max-h-96 w-full overflow-y-auto scrollbar z-10"
               >
                 <Stack direction="column" spacing="gap-2">
-                  {contributors.map((profile, index) => (
+                  {contributors?.map((profile, index) => (
                     <Stack key={index} direction="row" justify="between" align="center">
                       <ProfileAvatarButton
                         profileId={profile.did?.id}
@@ -121,11 +121,11 @@ export const Collaborators: React.FC<CollaboratorsProps> = ({
               </Card>
             </Stack>
           )}
-          {addedContributors.length > 0 && (
+          {addedContributors?.length > 0 && (
             <Stack spacing="gap-4">
               <Text variant="h6">{extensionContributorsLabel}</Text>
               <Stack direction="column" spacing="gap-4">
-                {addedContributors.map((profile, index) => (
+                {addedContributors?.map((profile, index) => (
                   <Stack
                     key={index}
                     direction="row"
