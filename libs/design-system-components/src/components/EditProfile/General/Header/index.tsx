@@ -103,7 +103,9 @@ export const Header: React.FC<HeaderProps> = ({
     }
   };
 
-  const showEditAndDelete = profileImageType === 'avatar' ? !!avatarUrl : !!coverImageUrl;
+  const showEditAndDeleteMenuOptions =
+    (profileImageType === 'avatar' && !!avatarUrl) ||
+    (profileImageType === 'cover-image' && !!coverImageUrl);
 
   const dropDownActions: ListProps['items'] = [
     {
@@ -114,7 +116,7 @@ export const Header: React.FC<HeaderProps> = ({
         closeActionsDropDown();
       },
     },
-    ...(showEditAndDelete
+    ...(showEditAndDeleteMenuOptions
       ? [
           {
             label: 'Edit',
