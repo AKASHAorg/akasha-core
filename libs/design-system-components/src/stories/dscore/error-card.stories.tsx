@@ -23,7 +23,7 @@ const meta: Meta<ErrorCardProps> = {
 
 type Story = StoryObj<ErrorCardProps>;
 
-const baseArgs: Story = {
+export const Default: Story = {
   args: {
     boxSize: '18.75rem',
     publicImgPath: '',
@@ -31,13 +31,21 @@ const baseArgs: Story = {
     titleLabel: 'This page is for our marvelous AKASHA World moderators',
     subtitleLabel:
       'To view this page you must be an AKASHA World Moderator and log in with your wallet to continue',
+    hasButton: true,
   },
 };
 
-export const Default: Story = { args: { ...baseArgs.args, hasButton: true } };
-
 export const ErrorCardWithButton: Story = {
-  args: { ...baseArgs.args, hasButton: true, buttonLabel: 'Connect a wallet' },
+  args: {
+    boxSize: '18.75rem',
+    publicImgPath: '',
+    errorType: 'no-authentication',
+    titleLabel: 'This page is for our marvelous AKASHA World moderators',
+    subtitleLabel:
+      'To view this page you must be an AKASHA World Moderator and log in with your wallet to continue',
+    hasButton: true,
+    buttonLabel: 'Connect a wallet',
+  },
 };
 
 export default meta;

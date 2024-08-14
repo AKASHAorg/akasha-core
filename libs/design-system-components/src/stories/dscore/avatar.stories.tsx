@@ -15,35 +15,44 @@ const meta: Meta<AvatarProps> = {
 
 type Story = StoryObj<AvatarProps>;
 
-const profileId = 'did:pkh:eip155:5:0x36c703c4d22af437dc883e2e0884e57404e16493';
-
-const avatar = { src: 'https://placebeard.it/360x360', height: 360, width: 360 };
-
-const baseArgs: Story = {
+export const Default: Story = {
   args: {
-    profileId,
-    avatar,
+    profileId: 'did:pkh:eip155:5:0x36c703c4d22af437dc883e2e0884e57404e16493',
+    avatar: { src: 'https://placebeard.it/360x360', height: 360, width: 360 },
   },
 };
 
-export const Default: Story = {
-  args: { ...baseArgs.args },
-};
-
 export const ActiveAvatar: Story = {
-  args: { ...baseArgs.args, active: true },
+  args: {
+    profileId: 'did:pkh:eip155:5:0x36c703c4d22af437dc883e2e0884e57404e16493',
+    avatar: { src: 'https://placebeard.it/360x360', height: 360, width: 360 },
+    active: true,
+  },
 };
 
 export const FadedAvatar: Story = {
-  args: { ...baseArgs.args, faded: true },
+  args: {
+    profileId: 'did:pkh:eip155:5:0x36c703c4d22af437dc883e2e0884e57404e16493',
+    avatar: { src: 'https://placebeard.it/360x360', height: 360, width: 360 },
+    faded: true,
+  },
 };
 
 export const AvatarWithBorderColor: Story = {
-  args: { ...baseArgs.args, border: 'sm', borderColor: 'darkerBlue' },
+  args: {
+    profileId: 'did:pkh:eip155:5:0x36c703c4d22af437dc883e2e0884e57404e16493',
+    avatar: { src: 'https://placebeard.it/360x360', height: 360, width: 360 },
+    border: 'sm',
+    borderColor: 'darkerBlue',
+  },
 };
 
 export const AvatarWithSpecifiedSize: Story = {
-  args: { ...baseArgs.args, size: 'xl' },
+  args: {
+    profileId: 'did:pkh:eip155:5:0x36c703c4d22af437dc883e2e0884e57404e16493',
+    avatar: { src: 'https://placebeard.it/360x360', height: 360, width: 360 },
+    size: 'xl',
+  },
 };
 
 export default meta;

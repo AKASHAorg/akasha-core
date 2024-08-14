@@ -28,17 +28,11 @@ const meta: Meta<PillProps> = {
 
 type Story = StoryObj<PillProps>;
 
-const baseArgs: Story = {
-  args: {
-    label: 'Pill label',
-  },
-};
-
-export const Default: Story = { args: { ...baseArgs.args, type: 'action' } };
+export const Default: Story = { args: { label: 'Pill label', type: 'action' } };
 
 export const InfoPill: Story = {
   args: {
-    ...baseArgs.args,
+    label: 'Pill label',
     type: 'info',
     background: 'blue',
     borderColor: 'success',
@@ -47,11 +41,11 @@ export const InfoPill: Story = {
 };
 
 export const LeadingIconPill: Story = {
-  args: { ...baseArgs.args, type: 'action', icon: <EnvelopeIcon />, iconDirection: 'left' },
+  args: { label: 'Pill label', type: 'action', icon: <EnvelopeIcon />, iconDirection: 'left' },
 };
 
 export const TrailingIconPill: Story = {
-  args: { ...baseArgs.args, type: 'action', icon: <XMarkIcon />, iconDirection: 'right' },
+  args: { label: 'Pill label', type: 'action', icon: <XMarkIcon />, iconDirection: 'right' },
 };
 
 export default meta;

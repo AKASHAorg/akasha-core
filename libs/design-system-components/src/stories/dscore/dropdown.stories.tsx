@@ -19,7 +19,7 @@ const meta: Meta<DropdownProps> = {
 
 type Story = StoryObj<DropdownProps>;
 
-const baseArgs: Story = {
+export const Default: Story = {
   args: {
     name: 'Dropdown',
     menuItems: [
@@ -30,11 +30,9 @@ const baseArgs: Story = {
   },
 };
 
-export const Default: Story = { args: { ...baseArgs.args } };
-
 export const DropdownWithoutIcon: Story = {
   args: {
-    ...baseArgs.args,
+    name: 'Dropdown',
     menuItems: [
       { id: '1', title: 'Option 1' },
       { id: '2', title: 'Option 2' },
@@ -44,14 +42,24 @@ export const DropdownWithoutIcon: Story = {
 
 export const DropdownWithLabel: Story = {
   args: {
-    ...baseArgs.args,
+    name: 'Dropdown',
+    menuItems: [
+      { id: '1', icon: <BeakerIcon />, title: 'Option 1' },
+      { id: '2', icon: <ArchiveBoxIcon />, title: 'Option 2' },
+      { id: '3', icon: <ArchiveBoxIcon />, title: 'Option 3' },
+    ],
     label: 'Select one',
   },
 };
 
 export const DropdownWithPlaceholderLabel: Story = {
   args: {
-    ...baseArgs.args,
+    name: 'Dropdown',
+    menuItems: [
+      { id: '1', icon: <BeakerIcon />, title: 'Option 1' },
+      { id: '2', icon: <ArchiveBoxIcon />, title: 'Option 2' },
+      { id: '3', icon: <ArchiveBoxIcon />, title: 'Option 3' },
+    ],
     placeholderLabel: 'Select an option',
   },
 };
