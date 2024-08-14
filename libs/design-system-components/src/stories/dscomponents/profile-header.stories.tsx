@@ -9,11 +9,9 @@ const meta: Meta<HeaderProps> = {
 
 type Story = StoryObj<HeaderProps>;
 
-const profileId = 'did:key:003410490050000320006570034567114572000';
-
-const baseArgs: Story = {
+export const Default: Story = {
   args: {
-    profileId,
+    profileId: 'did:key:003410490050000320006570034567114572000',
     profileName: 'Coffee Lover',
     onClickCoverImage: () => ({}),
     onClickAvatar: () => ({}),
@@ -27,15 +25,19 @@ const baseArgs: Story = {
   },
 };
 
-export const Default: Story = {
-  args: {
-    ...baseArgs.args,
-  },
-};
-
 export const IsViewer: Story = {
   args: {
-    ...baseArgs.args,
+    profileId: 'did:key:003410490050000320006570034567114572000',
+    profileName: 'Coffee Lover',
+    onClickCoverImage: () => ({}),
+    onClickAvatar: () => ({}),
+    onClickProfileName: () => ({}),
+    onCloseOverlay: () => ({}),
+    transformSource: () => ({
+      src: 'https://placebeard.it/360x360',
+      width: 360,
+      height: 360,
+    }),
     viewerIsOwner: true,
   },
 };

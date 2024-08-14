@@ -27,34 +27,93 @@ const meta: Meta<TCardProps> = {
 
 type Story = StoryObj<TCardProps>;
 
-const cardContents = (
-  <React.Fragment>
-    <Text>Card content</Text>
-    <Text>Card content</Text>
-    <Text>Card content</Text>
-  </React.Fragment>
-);
-
-const baseArgs: Story = {
+export const Default: Story = {
   args: {
-    children: cardContents,
+    children: (
+      <React.Fragment>
+        <Text>Card content</Text>
+        <Text>Card content</Text>
+        <Text>Card content</Text>
+      </React.Fragment>
+    ),
     type: 'regular',
     customStyle: 'w-[25%]',
   },
 };
 
-export const Default: Story = { args: { ...baseArgs.args } };
-
 export const FullWidthCard: Story = {
-  args: { ...baseArgs.args, fullWidth: true, customStyle: '' },
+  args: {
+    children: (
+      <React.Fragment>
+        <Text>Card content</Text>
+        <Text>Card content</Text>
+        <Text>Card content</Text>
+      </React.Fragment>
+    ),
+    type: 'regular',
+    fullWidth: true,
+    customStyle: '',
+  },
 };
 
-export const CardWithElevation: Story = { args: { ...baseArgs.args, elevation: '2' } };
+export const CardWithElevation: Story = {
+  args: {
+    children: (
+      <React.Fragment>
+        <Text>Card content</Text>
+        <Text>Card content</Text>
+        <Text>Card content</Text>
+      </React.Fragment>
+    ),
+    type: 'regular',
+    customStyle: 'w-[25%]',
+    elevation: '2',
+  },
+};
 
-export const CardWithDashedBorder: Story = { args: { ...baseArgs.args, dashedBorder: true } };
+export const CardWithDashedBorder: Story = {
+  args: {
+    children: (
+      <React.Fragment>
+        <Text>Card content</Text>
+        <Text>Card content</Text>
+        <Text>Card content</Text>
+      </React.Fragment>
+    ),
+    type: 'regular',
+    customStyle: 'w-[25%]',
+    dashedBorder: true,
+  },
+};
 
-export const CardWithAccentBorder: Story = { args: { ...baseArgs.args, accentBorder: true } };
+export const CardWithAccentBorder: Story = {
+  args: {
+    children: (
+      <React.Fragment>
+        <Text>Card content</Text>
+        <Text>Card content</Text>
+        <Text>Card content</Text>
+      </React.Fragment>
+    ),
+    type: 'regular',
+    customStyle: 'w-[25%]',
+    accentBorder: true,
+  },
+};
 
-export const CardWithoutBorderRadius: Story = { args: { ...baseArgs.args, noBorderRadius: true } };
+export const CardWithoutBorderRadius: Story = {
+  args: {
+    children: (
+      <React.Fragment>
+        <Text>Card content</Text>
+        <Text>Card content</Text>
+        <Text>Card content</Text>
+      </React.Fragment>
+    ),
+    type: 'regular',
+    customStyle: 'w-[25%]',
+    noBorderRadius: true,
+  },
+};
 
 export default meta;

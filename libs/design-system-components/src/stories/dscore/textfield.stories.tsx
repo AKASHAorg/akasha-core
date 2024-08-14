@@ -21,14 +21,8 @@ const meta: Meta = {
 
 type Story = StoryObj<TextFieldProps>;
 
-const baseArgs: Story = {
-  args: {
-    type: 'text',
-  },
-};
-
 export const Default: Story = {
-  args: { ...baseArgs.args },
+  args: { type: 'text' },
 };
 
 export const TextFieldMultiline: Story = {
@@ -36,35 +30,35 @@ export const TextFieldMultiline: Story = {
 };
 
 export const TextFieldWithLabel: Story = {
-  args: { ...baseArgs.args, label: 'Label' },
+  args: { type: 'text', label: 'Label' },
 };
 
 export const TextFieldWithCaption: Story = {
-  args: { ...baseArgs.args, caption: 'some caption' },
+  args: { type: 'text', caption: 'some caption' },
 };
 
 export const TextFieldWithPlaceholder: Story = {
-  args: { ...baseArgs.args, placeholder: "what's on your mind?..." },
+  args: { type: 'text', placeholder: "what's on your mind?..." },
 };
 
 export const TextFieldWithIcons: Story = {
-  args: { ...baseArgs.args, iconLeft: <CheckCircleIcon />, iconRight: <CheckCircleIcon /> },
+  args: { type: 'text', iconLeft: <CheckCircleIcon />, iconRight: <CheckCircleIcon /> },
 };
 
 export const TextFieldSuccess: Story = {
-  args: { ...baseArgs.args, status: 'success', caption: 'Success caption' },
+  args: { type: 'text', status: 'success', caption: 'Success caption' },
 };
 
 export const TextFieldWarning: Story = {
-  args: { ...baseArgs.args, status: 'warning', caption: 'Warning caption' },
+  args: { type: 'text', status: 'warning', caption: 'Warning caption' },
 };
 
 export const TextFieldError: Story = {
-  args: { ...baseArgs.args, status: 'error', caption: 'Error caption' },
+  args: { type: 'text', status: 'error', caption: 'Error caption' },
 };
 
 export const TextFieldDisabled: Story = {
-  args: { ...baseArgs.args, disabled: true },
+  args: { type: 'text', disabled: true },
 };
 
 export default meta;

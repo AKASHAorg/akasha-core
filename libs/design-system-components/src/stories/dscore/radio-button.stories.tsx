@@ -20,20 +20,18 @@ const meta: Meta<RadioButtonProps> = {
 
 type Story = StoryObj<RadioButtonProps>;
 
-const baseArgs: Story = {
-  args: {
-    id: '1',
-    label: 'Radio button',
-    value: 'Radio button',
-  },
+export const Default: Story = { args: { id: '1', label: 'Radio button', value: 'Radio button' } };
+
+export const RadioButtonSelected: Story = {
+  args: { id: '1', label: 'Radio button', value: 'Radio button', isSelected: true },
 };
 
-export const Default: Story = { args: { ...baseArgs.args } };
+export const RadioButtonError: Story = {
+  args: { id: '1', label: 'Radio button', value: 'Radio button', error: true },
+};
 
-export const RadioButtonSelected: Story = { args: { ...baseArgs.args, isSelected: true } };
-
-export const RadioButtonError: Story = { args: { ...baseArgs.args, error: true } };
-
-export const RadioButtonLarge: Story = { args: { ...baseArgs.args, size: 'large' } };
+export const RadioButtonLarge: Story = {
+  args: { id: '1', label: 'Radio button', value: 'Radio button', size: 'large' },
+};
 
 export default meta;

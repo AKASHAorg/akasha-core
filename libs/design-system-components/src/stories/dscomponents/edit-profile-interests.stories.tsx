@@ -71,10 +71,9 @@ export const Default: Story = {
     cancelButton: { label: 'Cancel', handleClick: () => ({}) },
     saveButton: {
       label: 'Save',
-      handleClick: interests => {
-        console.log(interests);
-      },
+      handleClick: () => ({}),
     },
+    onFormDirty: () => ({}),
   },
 };
 

@@ -9,25 +9,19 @@ const meta: Meta<EditProfileProps> = {
 
 type Story = StoryObj<EditProfileProps>;
 
-const avatar = { default: { src: 'https://placebeard.it/360x360', height: 360, width: 360 } };
-
-const coverImage = {
-  default: {
-    src: 'https://static.licdn.com/sc/h/55k1z8997gh8dwtihm11aajyq',
-    height: 360,
-    width: 360,
-  },
-};
-
-const profileId = 'did:key:003410490050000320006570034567114572000';
-
 export const Default: Story = {
   args: {
     header: {
       title: 'Avatar & Cover Image',
-      coverImage: coverImage,
-      avatar: avatar,
-      profileId,
+      profileId: 'did:key:003410490050000320006570034567114572000',
+      coverImage: {
+        default: {
+          src: 'https://static.licdn.com/sc/h/55k1z8997gh8dwtihm11aajyq',
+          height: 360,
+          width: 360,
+        },
+      },
+      avatar: { default: { src: 'https://placebeard.it/360x360', height: 360, width: 360 } },
       cancelLabel: 'Cancel',
       deleteLabel: 'Delete',
       saveLabel: 'Save',

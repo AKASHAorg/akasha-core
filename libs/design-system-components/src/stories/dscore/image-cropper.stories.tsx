@@ -17,15 +17,13 @@ const meta: Meta<ImageCropperProps> = {
 
 type Story = StoryObj<ImageCropperProps>;
 
-const avatar = {
-  height: 320,
-  src: 'https://placebeard.it/320x320',
-  width: 320,
-};
-
 export const Default: Story = {
   args: {
-    image: avatar,
+    image: {
+      height: 320,
+      src: 'https://placebeard.it/320x320',
+      width: 320,
+    },
     dragToRepositionLabel: 'Drag the image to reposition',
   },
 };

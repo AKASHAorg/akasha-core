@@ -4,6 +4,7 @@ import CookieCard, { CookieCardProps } from '../../components/CookieCard';
 const meta: Meta<CookieCardProps> = {
   title: 'DSComponents/Cards/CookieCard',
   component: CookieCard,
+  tags: ['autodocs'],
 };
 
 type Story = StoryObj<CookieCardProps>;
