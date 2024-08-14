@@ -10,13 +10,13 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Label from '@akashaorg/design-system-core/lib/components/Label';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import { Plugin } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Label from './label';
 import Section from './section';
 import { AppInfoPill } from '../AppInfo/info-pill';
 import ExtensionImageGallery from '../ExtensionImageGallery';
@@ -104,7 +104,7 @@ const ReviewAndPublish: React.FC<ReviewAndPublishProps> = props => {
     return (
       <Stack direction="row" spacing="gap-x-1" align="center">
         <Icon icon={<CheckCircleIcon />} solid={true} color="success" />
-        <Label title={title} isRequired={isRequired} />
+        <Label required={isRequired}>{title}</Label>
       </Stack>
     );
   };
@@ -144,7 +144,7 @@ const ReviewAndPublish: React.FC<ReviewAndPublishProps> = props => {
           )}
         </Stack>
 
-        <Section title={extensionId} isRequired>
+        <Section title={extensionId} required>
           <Text variant="body2">{extensionData.id}</Text>
         </Section>
 
@@ -152,7 +152,7 @@ const ReviewAndPublish: React.FC<ReviewAndPublishProps> = props => {
           <Text variant="body2">{extensionData.displayName}</Text>
         </Section>
 
-        <Section title={sourceFileLabel} isRequired>
+        <Section title={sourceFileLabel} required>
           <Link to={extensionData.github} target="_blank">
             <Text variant="body2" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
               {extensionData.github}
@@ -160,7 +160,7 @@ const ReviewAndPublish: React.FC<ReviewAndPublishProps> = props => {
           </Link>
         </Section>
 
-        <Section title={nsfwLabel} isRequired hasToggle isToggleChecked={extensionData.nsfw}>
+        <Section title={nsfwLabel} required hasToggle isToggleChecked={extensionData.nsfw}>
           <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }}>
             {nsfwDescription}
           </Text>
