@@ -11,18 +11,14 @@ const meta: Meta<EntryProps> = {
 
 type Story = StoryObj<EntryProps>;
 
-const profileId = 'did:key:003410490050000320006570034567114572000';
-
-const avatar = { default: { src: 'https://placebeard.it/360x360', height: 360, width: 360 } };
-
 export const Default: Story = {
   args: {
     profileAnchorLink: '',
-    avatar,
+    avatar: { default: { src: 'https://placebeard.it/360x360', height: 360, width: 360 } },
     name: 'Coffee Lover',
     profileIds: {
       id: 'id',
-      did: profileId,
+      did: 'did:key:003410490050000320006570034567114572000',
     },
     followId: 'id',
     isFollowing: false,

@@ -18,7 +18,7 @@ const meta: Meta<DidFieldProps> = {
 
 type Story = StoryObj<DidFieldProps>;
 
-const baseArgs: Story = {
+export const Default: Story = {
   args: {
     did: 'did:pkh:bip122:000000000019d6689c085ae165831e93:128Lkh3S7CkDTBZ8W7BbpsN3YYizJMp8p6',
     copyLabel: 'Copy',
@@ -26,31 +26,45 @@ const baseArgs: Story = {
   },
 };
 
-export const Default: Story = { args: { ...baseArgs.args } };
-
-export const DidFieldWithSpecificColor: Story = { args: { ...baseArgs.args, textColor: 'grey7' } };
+export const DidFieldWithSpecificColor: Story = {
+  args: {
+    did: 'did:pkh:bip122:000000000019d6689c085ae165831e93:128Lkh3S7CkDTBZ8W7BbpsN3YYizJMp8p6',
+    copyLabel: 'Copy',
+    copiedLabel: 'Copied',
+    textColor: 'grey7',
+  },
+};
 
 export const DidFieldEth: Story = {
-  args: { ...baseArgs.args, did: 'did:pkh:eip155:5:0xc1cb6a6dd8099718157b20467311486c1fa8b415' },
+  args: {
+    did: 'did:pkh:eip155:5:0xc1cb6a6dd8099718157b20467311486c1fa8b415',
+    copyLabel: 'Copy',
+    copiedLabel: 'Copied',
+  },
 };
 
 export const DidFieldSolana: Story = {
   args: {
-    ...baseArgs.args,
     did: 'did:pkh:solana:4sGjMW1sUnHzSxGspuhpqLDx6wiyjNtZ:CKg5d12Jhpej1JqtmxLJgaFqqeYjxgPqToJ4LBdvG9Ev',
+    copyLabel: 'Copy',
+    copiedLabel: 'Copied',
   },
 };
 
 export const DidFieldInvalid: Story = {
   args: {
-    ...baseArgs.args,
+    did: 'did:pkh:bip122:000000000019d6689c085ae165831e93:128Lkh3S7CkDTBZ8W7BbpsN3YYizJMp8p6',
+    copyLabel: 'Copy',
+    copiedLabel: 'Copied',
     isValid: false,
   },
 };
 
 export const DidFieldNotCopiable: Story = {
   args: {
-    ...baseArgs.args,
+    did: 'did:pkh:bip122:000000000019d6689c085ae165831e93:128Lkh3S7CkDTBZ8W7BbpsN3YYizJMp8p6',
+    copyLabel: 'Copy',
+    copiedLabel: 'Copied',
     copiable: false,
   },
 };
