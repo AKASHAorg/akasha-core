@@ -2,7 +2,6 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import { ErrorInfoCard } from '@akashaorg/design-system-core/lib/components/ErrorLoader/error-info-card';
 import MarkdownCard from '@akashaorg/design-system-core/lib/components/MarkdownCard';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -22,15 +21,11 @@ const PageRenderer: React.FC<PageRendererProps> = props => {
 
   if (error) {
     return (
-      <ErrorInfoCard error={error}>
-        {message => (
-          <ErrorLoader
-            type="script-error"
-            title={t('There was an error loading the docs')}
-            details={message}
-          />
-        )}
-      </ErrorInfoCard>
+      <ErrorLoader
+        type="script-error"
+        title={t('There was an error loading the docs')}
+        details={error.message}
+      />
     );
   }
 

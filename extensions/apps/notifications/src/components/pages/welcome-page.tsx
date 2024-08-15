@@ -93,7 +93,7 @@ const WelcomePage: React.FC<WelcomePageProps> = props => {
     <Card radius={16} padding={'p-2'} dataTestId="notifications">
       <Stack justify="center" align="center" customStyle="mb-32">
         <Image
-          src={`/images/${finalStep ? 'notificationapp-success-min' : 'not-connected'}.webp`}
+          src={`/images/${finalStep ? 'notificationapp-success-min' : 'not-authenticated'}.webp`}
           customStyle="w-[180px] h-[180px] m-auto my-4"
         />
 

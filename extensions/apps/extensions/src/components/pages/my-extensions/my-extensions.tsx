@@ -199,7 +199,7 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
         <ErrorLoader
           type="script-error"
           title={'Sorry, there was an error when fetching apps'}
-          details={<>{error.message}</>}
+          details={error.message}
         />
       )}
       {!error && appElements?.length === 0 && (
