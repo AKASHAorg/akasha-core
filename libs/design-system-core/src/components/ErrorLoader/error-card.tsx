@@ -9,11 +9,11 @@ import { ErrorLoaderProps } from '.';
 const ErrorCard: React.FC<
   React.PropsWithChildren<ErrorLoaderProps & { imageSrc: string }>
 > = props => {
-  const { children, imageSrc, title, details, customStyle = '' } = props;
+  const { children, imageSrc, title, details, dataTestId, customStyle = '' } = props;
 
   return (
-    <Card padding="p-8" customStyle={customStyle}>
-      <Stack spacing="gap-y-4" align="center">
+    <Card padding="p-8" customStyle={customStyle} dataTestId={dataTestId}>
+      <Stack spacing="gap-y-6" align="center">
         <Image
           src={imageSrc}
           loading="lazy"

@@ -25,12 +25,13 @@ export type ErrorLoaderProps = React.PropsWithChildren<{
    * Additional details about the error
    */
   details: string;
+  dataTestId?: string;
   customStyle?: string; // use valid twind classes;
 }>;
 
 /**
  * An ErrorLoader serves the purpose of displaying an error card with an image and a messagge
- * explaining to the user the error in detail.
+ * explaining to the user the error in detail. It can also have an optional call to action button
  * @param type -  error type
  * @param publicImgPath - (optional) path of the image to be displayed
  * @param title - error title

@@ -17,7 +17,6 @@ import DynamicInfiniteScroll from '@akashaorg/design-system-components/lib/compo
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
-import NotConnectedCard from '@akashaorg/design-system-components/lib/components/NotConnectedCard';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { ExtensionElement } from './extension-element';
@@ -150,12 +149,13 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
 
   if (!authenticatedProfile?.did.id) {
     return (
-      <NotConnectedCard
-        title={t('Uh-oh! You are not connected!')}
-        subtitle={t('To check your extensions you must be connected ⚡️')}
-        buttonLabel={t('Connect')}
-        onButtonClick={handleConnectButtonClick}
-      />
+      <ErrorLoader
+        type="not-authenticated"
+        title={`${t('Uh-oh')}! ${t('You are not connected')}!`}
+        details={`${t('To check your extensions you must be connected')} ⚡️`}
+      >
+        <Button variant="primary" label={t('Connect')} onClick={handleConnectButtonClick} />
+      </ErrorLoader>
     );
   }
 
@@ -205,7 +205,7 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
       {!error && appElements?.length === 0 && (
         <DefaultEmptyCard
           noBorder={true}
-          infoText={t('You haven’t created any extensions yet')}
+          infoText={t("You haven't created any extensions yet")}
           assetName="longbeam-notfound"
         />
       )}

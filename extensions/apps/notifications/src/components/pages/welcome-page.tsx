@@ -4,8 +4,8 @@ import { useRootComponentProps, useSaveSettings, useAkashaStore } from '@akashao
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
-import NotConnectedCard from '@akashaorg/design-system-components/lib/components/NotConnectedCard';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import routes, { CUSTOMISE_NOTIFICATION_OPTIONS_PAGE, SHOW_NOTIFICATIONS_PAGE } from '../../routes';
@@ -80,13 +80,14 @@ const WelcomePage: React.FC<WelcomePageProps> = props => {
 
   if (!authenticatedProfile?.did.id)
     return (
-      <NotConnectedCard
-        title={t('Uh-oh! You are not connected!')}
-        subtitle={t('To check your notifications you must be connected ⚡️')}
-        buttonLabel={t('Connect')}
+      <ErrorLoader
+        type="not-authenticated"
+        title={`${t('Uh-oh')}! ${t('You are not connected')}!`}
+        details={`${t('To check your notifications you must be connected')} ⚡️`}
         dataTestId="notifications"
-        onButtonClick={handleConnectButtonClick}
-      />
+      >
+        <Button variant="primary" label={t('Connect')} onClick={handleConnectButtonClick} />
+      </ErrorLoader>
     );
 
   return (
