@@ -1,74 +1,38 @@
-import React, { PropsWithChildren } from 'react';
+import React from 'react';
 import { tw } from '@twind/core';
-
-import { ErrorLoaderProps } from '.';
-import Text from '../Text';
 import Card from '../Card';
+import Image from '../Image';
 import Stack from '../Stack';
+import Text from '../Text';
+import { ErrorLoaderProps } from '.';
 
-interface ErrorRendererProps {
-  customStyle?: string; // use valid twind classes;
-}
-
-const ErrorRenderer: React.FC<PropsWithChildren<ErrorRendererProps>> = props => {
-  const { children, customStyle = '' } = props;
-
-  return (
-    <details className={tw(`w-full ${customStyle}`)}>
-      <summary className={tw('whitespace-nowrap')}>Expand to see error details</summary>
-      <div
-        className={tw(
-          'w-full bg-white right-0 border-1 border-errorLight dark:border-errorDark text-[0.8em]',
-        )}
-      >
-        {children}
-      </div>
-    </details>
-  );
-};
-
-const ErrorCard: React.FC<PropsWithChildren<ErrorLoaderProps & { imageSrc: string }>> = props => {
-  const { children, title, imageSrc, details, devDetails, customStyle = '' } = props;
-
-  const isDevMode = false;
-  const message = details ?? devDetails;
+const ErrorCard: React.FC<
+  React.PropsWithChildren<ErrorLoaderProps & { imageSrc: string }>
+> = props => {
+  const { children, imageSrc, title, details, customStyle = '' } = props;
 
   return (
-    <Card customStyle={`items-center mb-0 ${customStyle}`}>
-      <Stack>
-        <img
+    <Card padding="p-8" customStyle={customStyle}>
+      <Stack spacing="gap-y-4" align="center">
+        <Image
+          src={imageSrc}
           loading="lazy"
           decoding="async"
           alt="error-card"
-          className={tw('max-w-[50%] h-auto my-0 mx-auto py-8 px-0')}
-          src={imageSrc}
+          className={tw('w-48 h-48')}
         />
-      </Stack>
-      <Text variant="h5" align="center" customStyle="px-4">
-        {title}
-      </Text>
-      {isDevMode && devDetails ? (
-        <ErrorRenderer customStyle={customStyle}>
-          <Text
-            variant="body2"
-            align="center"
-            color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-            customStyle="px-4 pt-4 w-full"
-          >
-            {message}
+
+        <Stack spacing="gap-y-1" align="center" customStyle="w(64 md:96)">
+          <Text variant="h5" align="center">
+            {title}
           </Text>
-        </ErrorRenderer>
-      ) : (
-        <Text
-          variant="body2"
-          color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-          customStyle="text-center pt-4 px-4 w-full"
-          align="center"
-        >
-          {message}
-        </Text>
-      )}
-      <Stack customStyle={'pt-6 pb-4'}>{children}</Stack>
+          <Text variant="body2" align="center">
+            {details}
+          </Text>
+        </Stack>
+
+        {children}
+      </Stack>
     </Card>
   );
 };
