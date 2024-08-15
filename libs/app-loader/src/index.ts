@@ -1,5 +1,4 @@
 import {
-  AppEvents,
   ContentBlockEvents,
   ExtensionPointEvents,
   IAppConfig,
@@ -408,7 +407,10 @@ export default class AppLoader {
       if (!conf.loadingFn || typeof conf.loadingFn !== 'function') continue;
 
       const extensionData = this.extensionData.find(m => m.name === name);
-      if (extensionData.applicationType !== AkashaAppApplicationType.App) continue;
+
+      // exclude only widgets that are always active (ie activeWhen is not explicitly defined)
+      if (extensionData.applicationType !== AkashaAppApplicationType.App && !conf.activeWhen)
+        continue;
 
       const activeWhen: singleSpa.Activity = checkActivityFn({
         config: conf,
