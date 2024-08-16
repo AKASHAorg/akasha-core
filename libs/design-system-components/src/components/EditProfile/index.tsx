@@ -85,7 +85,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
   };
 
   return (
-    <form onSubmit={onSave} className={tw(apply`h-full ${customStyle}`)}>
+    <form data-testid="edit-profile" onSubmit={onSave} className={tw(apply`h-full ${customStyle}`)}>
       <Stack direction="column" spacing="gap-y-4">
         <General
           {...rest}

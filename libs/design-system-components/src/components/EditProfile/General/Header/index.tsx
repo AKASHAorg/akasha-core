@@ -194,6 +194,7 @@ export const Header: React.FC<HeaderProps> = ({
       <Text variant="h6">{title}</Text>
       <Stack customStyle="relative mb-8">
         <Card
+          dataTestId="cover-image"
           radius={20}
           background={{ light: 'grey7', dark: 'grey5' }}
           customStyle={`flex p-4 h-28 w-full bg-no-repeat bg-center bg-cover bg-[url(${
@@ -208,6 +209,7 @@ export const Header: React.FC<HeaderProps> = ({
           >
             <Button
               icon={<PencilSquareIcon />}
+              aria-label="cover-image"
               size="xs"
               variant="primary"
               onClick={() => {
@@ -250,6 +252,7 @@ export const Header: React.FC<HeaderProps> = ({
           <Stack customStyle="absolute">
             <Button
               icon={<PencilSquareIcon />}
+              aria-label="avatar"
               size="xs"
               variant="primary"
               onClick={() => {

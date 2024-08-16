@@ -44,7 +44,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
   const avatar = profileData?.avatar;
   const sdk = getSDK();
 
-  const onUpdateSuccess = () => {
+  const onSuccess = () => {
     uiEvents.next({
       event: NotificationEvents.ShowNotification,
       data: {
@@ -55,7 +55,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
     navigateToProfileInfoPage();
   };
 
-  const onUpdateError = () => {
+  const onError = () => {
     uiEvents.next({
       event: NotificationEvents.ShowNotification,
       data: {
@@ -79,18 +79,18 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
   const [createProfileMutation, { loading: createProfileProcessing }] = useCreateProfileMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
     onCompleted: () => {
-      onUpdateSuccess();
+      onSuccess();
     },
     onError: error => {
-      onUpdateError();
+      onError();
       logger.error(`error in creating a profile: ${JSON.stringify(error)}`);
     },
   });
   const [updateProfileMutation, { loading: updateProfileProcessing }] = useUpdateProfileMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
-    onCompleted: onUpdateSuccess,
+    onCompleted: onSuccess,
     onError: error => {
-      onUpdateError();
+      onError();
       logger.error(`error in updating a profile: ${JSON.stringify(error)}`);
     },
   });

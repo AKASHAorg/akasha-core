@@ -14,6 +14,7 @@ import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { InMemoryCache } from '@apollo/client';
 
 const { mocks, profileData, beamData } = getBeamFeedMocks();
+const { name, did, avatar } = profileData.akashaProfile;
 
 const baseComponent = (mocks: Readonly<MockedResponse<unknown, unknown>[]> | undefined) => (
   <MockedProvider mocks={mocks} cache={new InMemoryCache(APOLLO_TYPE_POLICIES)}>
@@ -41,11 +42,11 @@ describe('< GlobalAntennaPage /> component', () => {
       );
       expect(within(beamFeed).getByTestId('avatar-source')).toHaveAttribute(
         'srcset',
-        profileData.akashaProfile.avatar.default.src,
+        avatar.default.src,
       );
       const infoBox = within(beamFeed).getByTestId('info-box');
-      await waitFor(() => expect(infoBox).toHaveTextContent(profileData.akashaProfile.name));
-      expect(infoBox).toHaveTextContent(truncateDid(profileData.akashaProfile.did.id));
+      await waitFor(() => expect(infoBox).toHaveTextContent(name));
+      expect(infoBox).toHaveTextContent(truncateDid(did.id));
       expect(infoBox).toHaveTextContent(formatRelativeTime(beamData.createdAt, 'en'));
       expect(screen.getByText(/published via/i)).toBeInTheDocument();
     });
