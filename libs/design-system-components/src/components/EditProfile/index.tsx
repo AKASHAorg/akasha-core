@@ -13,7 +13,7 @@ import {
   isFormWithExceptionOfLinksDirty,
 } from './types';
 import { ButtonType } from '../types/common.types';
-import { NSFW, NSFWProps } from './NSFW';
+import { InputType, NSFW } from '../NSFW';
 import { PublishProfileData } from '@akashaorg/typings/lib/ui';
 
 type SocialLinkForm = Pick<SocialLinksProps, 'linkLabel' | 'addNewLinkButtonLabel' | 'description'>;
@@ -29,9 +29,10 @@ export type EditProfileProps = {
     handleClick: (formValues: PublishProfileData) => void;
   };
   customStyle?: string;
+  nsfwFieldLabel?: string;
+  nsfw?: InputType;
 } & GeneralForm &
-  SocialLinkForm &
-  Pick<NSFWProps, 'nsfwFormLabel' | 'nsfw'>;
+  SocialLinkForm;
 
 const EditProfile: React.FC<EditProfileProps> = ({
   defaultValues = {
@@ -45,6 +46,8 @@ const EditProfile: React.FC<EditProfileProps> = ({
   cancelButton,
   saveButton,
   customStyle = '',
+  nsfw,
+  nsfwFieldLabel,
   ...rest
 }) => {
   const { control, setValue, getValues, formState } = useForm<EditProfileFormValues>({
@@ -95,7 +98,14 @@ const EditProfile: React.FC<EditProfileProps> = ({
           }}
         />
         <SocialLinks {...rest} control={control} />
-        <NSFW {...rest} control={control} disabled={rest.nsfw.initialValue} />
+        <NSFW
+          nsfw={nsfw}
+          nsfwFieldLabel={nsfwFieldLabel}
+          control={control}
+          name={'nsfw'}
+          disabled={nsfw.initialValue}
+          defaultValue={nsfw.initialValue}
+        />
         <Stack direction="row" spacing="gap-x-2" customStyle="ml-auto mt-auto">
           <Button
             variant="text"

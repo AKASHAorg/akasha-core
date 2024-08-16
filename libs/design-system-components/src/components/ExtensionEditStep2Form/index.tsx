@@ -10,7 +10,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AppImageSource, AppLinkSource } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { ButtonType } from '../types/common.types';
-import { NSFW } from './NSFW';
+import { NSFW } from '../NSFW';
 import { DocumentationLinks } from './DocumentationLinks';
 import { Gallery, GalleryProps } from './Gallery';
 
@@ -115,8 +115,10 @@ const ExtensionEditStep2Form: React.FC<ExtensionEditStep2FormProps> = props => {
         <Stack padding="px-4 pb-16" spacing="gap-y-4">
           <NSFW
             control={control}
+            name={'nsfw'}
             nsfw={{ label: nsfwDescriptionLabel, initialValue: defaultValues.nsfw }}
             nsfwFieldLabel={nsfwFieldLabel}
+            defaultValue={defaultValues.nsfw}
           />
           <Divider />
 
@@ -201,5 +203,5 @@ const schema = z.object({
     ])
     .optional()
     .transform(e => (e === '' ? undefined : e)),
-  nsfw: z.boolean(),
+  nsfw: z.boolean().optional(),
 });
