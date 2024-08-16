@@ -5,7 +5,7 @@ import { IRootComponentProps } from './root-component';
 import { ContentBlockConfig } from './editor-blocks';
 import { ExtensionPointInterface } from './extension-point';
 import { Profile } from './profile';
-import { AkashaApp, AkashaAppInterface } from '../sdk/graphql-types-new';
+import { AkashaApp, AkashaAppApplicationType, AkashaAppInterface } from '../sdk/graphql-types-new';
 
 /**
  * Enum defining extension status for an extension developer
@@ -25,6 +25,7 @@ export type Extension = Omit<AkashaAppInterface, 'author' | 'contributors'> & {
   id?: string;
   author?: string;
   contributors?: [string];
+  applicationType?: AkashaAppApplicationType;
   // this prop is only for local storage draft extensions
   localDraft?: boolean;
 };
