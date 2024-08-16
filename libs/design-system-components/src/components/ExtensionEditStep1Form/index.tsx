@@ -111,7 +111,6 @@ const ExtensionEditStep1Form: React.FC<ExtensionEditStep1FormProps> = props => {
                 onChange={onChange}
                 inputRef={ref}
                 required={true}
-                requiredFieldAsteriskColor={{ light: 'errorLight', dark: 'errorDark' }}
               />
             )}
             defaultValue={defaultValues.name}
@@ -133,7 +132,6 @@ const ExtensionEditStep1Form: React.FC<ExtensionEditStep1FormProps> = props => {
                 onChange={onChange}
                 inputRef={ref}
                 required={true}
-                requiredFieldAsteriskColor={{ light: 'errorLight', dark: 'errorDark' }}
               />
             )}
             defaultValue={defaultValues.displayName}

@@ -9,13 +9,18 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import AppCreationForm from '@akashaorg/design-system-components/lib/components/AppCreationForm';
-import { NotConnnected } from '../not-connected';
 import { DRAFT_EXTENSIONS } from '../../constants';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 
 export const ExtensionCreationPage: React.FC<unknown> = () => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
   const { uiEvents } = useRootComponentProps();
+
+  const { baseRouteName, getRoutingPlugin } = useRootComponentProps();
+
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   // const [createAppMutation, { loading }] = useCreateAppMutation({
   //   context: { source: sdk.current.services.gql.contextSources.composeDB },
@@ -25,12 +30,26 @@ export const ExtensionCreationPage: React.FC<unknown> = () => {
     data: { authenticatedDID },
   } = useAkashaStore();
 
+  const handleConnectButtonClick = () => {
+    navigateTo?.({
+      appName: '@akashaorg/app-auth-ewa',
+      getNavigationUrl: (routes: Record<string, string>) => {
+        return `${routes.Connect}?${new URLSearchParams({
+          redirectTo: `${baseRouteName}/${routes[CREATE_EXTENSION]}`,
+        }).toString()}`;
+      },
+    });
+  };
+
   if (!authenticatedDID) {
     return (
-      <NotConnnected
-        description={t('To create an extension you must be connected ⚡️')}
-        redirectRoute={routes[CREATE_EXTENSION]}
-      />
+      <ErrorLoader
+        type="not-authenticated"
+        title={`${t('Uh-oh')}! ${t('You are not connected')}!`}
+        details={`${t('To create an extension you must be connected')} ⚡️`}
+      >
+        <Button variant="primary" label={t('Connect')} onClick={handleConnectButtonClick} />
+      </ErrorLoader>
     );
   }
 

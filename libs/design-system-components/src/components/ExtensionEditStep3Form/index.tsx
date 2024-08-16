@@ -156,7 +156,6 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
                   setSelected={onChange}
                   ref={ref}
                   required={true}
-                  requiredFieldAsteriskColor={{ light: 'errorLight', dark: 'errorDark' }}
                 />
               </>
             )}
@@ -180,7 +179,6 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
                   onChange={onChange}
                   inputRef={ref}
                   required={true}
-                  requiredFieldAsteriskColor={{ light: 'errorLight', dark: 'errorDark' }}
                 />
               )}
               defaultValue={licenses.includes(defaultValues.license) ? '' : defaultValues.license}

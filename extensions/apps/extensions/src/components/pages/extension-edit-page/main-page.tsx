@@ -6,12 +6,13 @@ import { Outlet } from '@tanstack/react-router';
 import { atomWithStorage, createJSONStorage } from 'jotai/utils';
 import { useAtomValue } from 'jotai';
 
-import routes, { EDIT_EXTENSION } from '../../../routes';
+import appRoutes, { EDIT_EXTENSION } from '../../../routes';
 import { useTranslation } from 'react-i18next';
-import { NotConnnected } from '../../not-connected';
-import { useAkashaStore } from '@akashaorg/ui-awf-hooks';
+import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { AppImageSource } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { ExtensionEditStep2FormValues } from '@akashaorg/design-system-components/lib/components/ExtensionEditStep2Form';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 
 export const AtomContext = createContext(null);
 
@@ -33,6 +34,10 @@ type ExtensionEditMainPageProps = {
 
 export const ExtensionEditMainPage: React.FC<ExtensionEditMainPageProps> = ({ extensionId }) => {
   const { t } = useTranslation('app-extensions');
+
+  const { baseRouteName, getRoutingPlugin } = useRootComponentProps();
+
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const {
     data: { authenticatedDID },
@@ -64,14 +69,29 @@ export const ExtensionEditMainPage: React.FC<ExtensionEditMainPageProps> = ({ ex
 
   StorageEvent;
 
+  const handleConnectButtonClick = () => {
+    navigateTo?.({
+      appName: '@akashaorg/app-auth-ewa',
+      getNavigationUrl: (routes: Record<string, string>) => {
+        return `${routes.Connect}?${new URLSearchParams({
+          redirectTo: `${baseRouteName}/${appRoutes[EDIT_EXTENSION]}/${extensionId}`,
+        }).toString()}`;
+      },
+    });
+  };
+
   if (!authenticatedDID) {
     return (
-      <NotConnnected
-        description={t('To check your extensions you must be connected ⚡️')}
-        redirectRoute={routes[EDIT_EXTENSION]}
-      />
+      <ErrorLoader
+        type="not-authenticated"
+        title={`${t('Uh-oh')}! ${t('You are not connected')}!`}
+        details={`${t('To check your extensions you must be connected')} ⚡️`}
+      >
+        <Button variant="primary" label={t('Connect')} onClick={handleConnectButtonClick} />
+      </ErrorLoader>
     );
   }
+
   return (
     <Card padding={0}>
       <Stack padding={16} justify="center" align="center">

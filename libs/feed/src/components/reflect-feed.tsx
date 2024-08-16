@@ -186,7 +186,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
         <ErrorLoader
           type="script-error"
           title={'Sorry, there was an error when fetching reflections'}
-          details={<>{reflectionStreamQuery.error.message}</>}
+          details={reflectionStreamQuery.error.message}
         />
       )}
       {reflections && (

@@ -13,6 +13,7 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Label from '@akashaorg/design-system-core/lib/components/Label';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
+import Stepper from '@akashaorg/design-system-core/lib/components/Stepper';
 import { Plugin } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -20,7 +21,6 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Section from './section';
 import { AppInfoPill } from '../AppInfo/info-pill';
 import ExtensionImageGallery from '../ExtensionImageGallery';
-import Stepper from '../Stepper';
 
 type ExtensionData = {
   logoImage: AppImageSource;

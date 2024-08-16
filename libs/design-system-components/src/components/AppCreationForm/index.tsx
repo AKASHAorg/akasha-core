@@ -238,7 +238,6 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
                 onChange={onChange}
                 inputRef={ref}
                 required={true}
-                requiredFieldAsteriskColor={{ light: 'errorLight', dark: 'errorDark' }}
               />
             )}
           />
