@@ -33,6 +33,10 @@ export const TextFieldWithLabel: Story = {
   args: { type: 'text', label: 'Label' },
 };
 
+export const RequiredTextFieldWithLabel: Story = {
+  args: { type: 'text', label: 'Label', required: true },
+};
+
 export const TextFieldWithCaption: Story = {
   args: { type: 'text', caption: 'some caption' },
 };
@@ -57,8 +61,16 @@ export const TextFieldError: Story = {
   args: { type: 'text', status: 'error', caption: 'Error caption' },
 };
 
+export const ReadOnlyTextField: Story = {
+  args: { type: 'text', value: 'this text is read only', readOnly: true },
+};
+
 export const TextFieldDisabled: Story = {
-  args: { type: 'text', disabled: true },
+  args: {
+    type: 'text',
+    value: 'this field is disabled and cannot be interacted with',
+    disabled: true,
+  },
 };
 
 export default meta;
