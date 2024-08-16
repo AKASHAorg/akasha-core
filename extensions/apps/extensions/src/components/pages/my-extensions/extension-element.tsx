@@ -225,7 +225,7 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
               </Stack>
             </Stack>
 
-            <Stack direction="column" justify="between">
+            <Stack direction="column" justify="between" align="end">
               <Menu
                 anchor={{
                   icon: <EllipsisHorizontalIcon />,

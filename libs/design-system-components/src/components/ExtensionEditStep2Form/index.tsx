@@ -191,9 +191,15 @@ export default ExtensionEditStep2Form;
 
 const schema = z.object({
   description: z
-    .string()
-    .trim()
-    .min(30, { message: 'Must be at least 30 characters' })
-    .max(2000, { message: 'Must be less than 2000 characters' }),
+    .union([
+      z
+        .string()
+        .trim()
+        .min(30, { message: 'Must be at least 30 characters' })
+        .max(2000, { message: 'Must be less than 2000 characters' }),
+      z.string().length(0),
+    ])
+    .optional()
+    .transform(e => (e === '' ? undefined : e)),
   nsfw: z.boolean(),
 });

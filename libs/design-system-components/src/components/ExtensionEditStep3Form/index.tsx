@@ -237,5 +237,15 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
 export default ExtensionEditStep3Form;
 
 const schema = z.object({
-  extensionLicense: z.object({ id: z.string(), type: z.string(), title: z.string() }).required(),
+  extensionLicense: z.string(),
+  contactInfo: z.array(
+    z
+      .union([
+        z.string().email({ message: 'Email or URL is required' }),
+        z.string().url({ message: 'Email or URL is required' }),
+        z.string().length(0),
+      ])
+      .optional()
+      .transform(e => (e === '' ? undefined : e)),
+  ),
 });
