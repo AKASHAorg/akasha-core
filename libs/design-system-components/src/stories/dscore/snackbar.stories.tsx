@@ -27,31 +27,48 @@ const meta: Meta<SnackbarProps> = {
 
 type Story = StoryObj<SnackbarProps>;
 
-const baseArgs: Story = {
+export const Default: Story = {
+  args: { title: 'Snackbar', description: 'Some important information will appear here' },
+};
+
+export const CautionSnackbar: Story = {
   args: {
     title: 'Snackbar',
     description: 'Some important information will appear here',
+    type: NotificationTypes.Caution,
   },
 };
 
-export const Default: Story = { args: { ...baseArgs.args } };
-
-export const CautionSnackbar: Story = {
-  args: { ...baseArgs.args, type: NotificationTypes.Caution },
-};
-
 export const SuccessSnackbar: Story = {
-  args: { ...baseArgs.args, type: NotificationTypes.Success },
+  args: {
+    title: 'Snackbar',
+    description: 'Some important information will appear here',
+    type: NotificationTypes.Success,
+  },
 };
 
-export const ErrorSnackbar: Story = { args: { ...baseArgs.args, type: NotificationTypes.Error } };
+export const ErrorSnackbar: Story = {
+  args: {
+    title: 'Snackbar',
+    description: 'Some important information will appear here',
+    type: NotificationTypes.Error,
+  },
+};
 
 export const NonDismissableSnackbar: Story = {
-  args: { ...baseArgs.args, dismissable: false },
+  args: {
+    title: 'Snackbar',
+    description: 'Some important information will appear here',
+    dismissable: false,
+  },
 };
 
 export const SnackbarWithCTALabel: Story = {
-  args: { ...baseArgs.args, ctaLabel: 'Dismiss' },
+  args: {
+    title: 'Snackbar',
+    description: 'Some important information will appear here',
+    ctaLabel: 'Dismiss',
+  },
 };
 
 export default meta;

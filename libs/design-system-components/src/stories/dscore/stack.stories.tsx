@@ -31,26 +31,47 @@ const meta: Meta<StackProps> = {
 
 type Story = StoryObj<StackProps>;
 
-const children = (
-  <React.Fragment>
-    <Text>item 1</Text>
-    <Text>item 2</Text>
-    <Text>item 3</Text>
-    <Text>item 4</Text>
-  </React.Fragment>
-);
-
-const baseArgs: Story = {
+export const Default: Story = {
   args: {
-    children,
-    direction: 'column',
+    children: (
+      <React.Fragment>
+        <Text>item 1</Text>
+        <Text>item 2</Text>
+        <Text>item 3</Text>
+        <Text>item 4</Text>
+      </React.Fragment>
+    ),
   },
 };
 
-export const Default: Story = { args: { ...baseArgs.args } };
+export const StackWithDirection: Story = {
+  args: {
+    children: (
+      <React.Fragment>
+        <Text>item 1</Text>
+        <Text>item 2</Text>
+        <Text>item 3</Text>
+        <Text>item 4</Text>
+      </React.Fragment>
+    ),
+    direction: 'row',
+    spacing: 'gap-x-6',
+  },
+};
 
-export const StackWithDirection: Story = { args: { ...baseArgs.args, direction: 'row' } };
-
-export const StackWithSpacing: Story = { args: { ...baseArgs.args, spacing: 'gap-y-6' } };
+export const StackWithSpacing: Story = {
+  args: {
+    children: (
+      <React.Fragment>
+        <Text>item 1</Text>
+        <Text>item 2</Text>
+        <Text>item 3</Text>
+        <Text>item 4</Text>
+      </React.Fragment>
+    ),
+    direction: 'column',
+    spacing: 'gap-y-6',
+  },
+};
 
 export default meta;

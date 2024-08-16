@@ -18,26 +18,34 @@ const meta: Meta<BasicPopoverProps> = {
 
 type Story = StoryObj<BasicPopoverProps>;
 
-const targetNode = document.createElement('div');
-document.body.appendChild(targetNode);
+const target = document.createElement('div');
+document.body.appendChild(target);
 
-const Contents = (
-  <React.Fragment>
-    <div>Popover content</div>
-    <div>Popover content</div>
-    <div>Popover content</div>
-  </React.Fragment>
-);
-
-const baseArgs: Story = {
+export const Default: Story = {
   args: {
-    target: targetNode,
-    children: Contents,
+    target,
+    children: (
+      <React.Fragment>
+        <div>Popover content</div>
+        <div>Popover content</div>
+        <div>Popover content</div>
+      </React.Fragment>
+    ),
   },
 };
 
-export const Default: Story = { args: { ...baseArgs.args } };
-
-export const BasicPopoverWithSpecifiedGap: Story = { args: { ...baseArgs.args, gap: '-0.313rem' } };
+export const BasicPopoverWithSpecifiedGap: Story = {
+  args: {
+    target,
+    children: (
+      <React.Fragment>
+        <div>Popover content</div>
+        <div>Popover content</div>
+        <div>Popover content</div>
+      </React.Fragment>
+    ),
+    gap: '-0.313rem',
+  },
+};
 
 export default meta;

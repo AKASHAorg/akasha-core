@@ -30,7 +30,7 @@ const meta: Meta<DuplexButtonProps> = {
 
 type Story = StoryObj<DuplexButtonProps>;
 
-export const baseArgs: Story = {
+export const Default: Story = {
   args: {
     inactiveLabel: 'Follow',
     activeLabel: 'Following',
@@ -47,13 +47,37 @@ export const baseArgs: Story = {
   },
 };
 
-export const Default: Story = { args: { ...baseArgs.args } };
-
-export const InactiveButton: Story = { args: { ...baseArgs.args, active: false } };
+export const InactiveButton: Story = {
+  args: {
+    inactiveLabel: 'Follow',
+    activeLabel: 'Following',
+    activeHoverLabel: 'Unfollow',
+    active: false,
+    activeVariant: 'secondary',
+    inactiveVariant: 'secondary',
+    hoverColors: {
+      background: { light: 'transparent', dark: 'transparent' },
+      border: { light: 'errorLight', dark: 'errorDark' },
+      text: { light: 'errorLight', dark: 'errorDark' },
+      icon: { light: 'errorLight', dark: 'errorDark' },
+    },
+  },
+};
 
 export const DuplexButtonWithIcon: Story = {
   args: {
-    ...baseArgs.args,
+    inactiveLabel: 'Follow',
+    activeLabel: 'Following',
+    activeHoverLabel: 'Unfollow',
+    active: true,
+    activeVariant: 'secondary',
+    inactiveVariant: 'secondary',
+    hoverColors: {
+      background: { light: 'transparent', dark: 'transparent' },
+      border: { light: 'errorLight', dark: 'errorDark' },
+      text: { light: 'errorLight', dark: 'errorDark' },
+      icon: { light: 'errorLight', dark: 'errorDark' },
+    },
     iconDirection: 'left',
     activeIcon: <CheckIcon />,
     activeHoverIcon: <XMarkIcon />,

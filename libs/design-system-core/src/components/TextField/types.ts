@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Status, Radius, Color } from '../types/common.types';
+import { Status, Radius } from '../types/common.types';
 import { StackProps } from '../Stack';
 
 export type MultlineProps = {
@@ -19,13 +19,6 @@ export type InputProps = {
   fullWidth?: boolean;
 } & JSX.IntrinsicElements['input'];
 
-export type LabelProps = {
-  id?: string;
-  required?: boolean;
-  disabled?: JSX.IntrinsicElements['input']['disabled'];
-  requiredFieldAsteriskColor?: Color;
-};
-
 export type CaptionProps = {
   status?: Status;
   justifyContents?: StackProps['justify'];
@@ -39,5 +32,4 @@ export type TextFieldProps = (InputProps | MultlineProps) & {
   justifyCaption?: CaptionProps['justifyContents'];
   customStyle?: string;
   inputRef?: InputProps['ref'] & MultlineProps['ref'];
-  requiredFieldAsteriskColor?: Color;
 };

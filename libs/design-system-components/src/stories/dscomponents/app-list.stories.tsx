@@ -4,15 +4,13 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import AppList, { AppListProps } from '../../components/AppList';
 
-const Wrapped: React.FC<AppListProps> = props => (
-  <Stack customStyle="w-[50%]">
-    <AppList {...props} />
-  </Stack>
-);
-
 const meta: Meta<AppListProps> = {
   title: 'DSComponents/Extensions/AppList',
-  component: Wrapped,
+  component: props => (
+    <Stack customStyle="w-[50%]">
+      <AppList {...props} />
+    </Stack>
+  ),
   tags: ['autodocs'],
 };
 
@@ -26,14 +24,17 @@ export const Default: Story = {
         description:
           'Play with your friends in AKASHA World and enjoy a couple of puzzle games or drawing games or any kind of game!',
         action: <Button label="Install" variant="primary" />,
+        logoImage: { src: 'https://placebeard.it/360x360', height: 360, width: 360 },
       },
       {
         name: 'Articles App',
         description:
           'Read articles written by AKASHA community you can also write your own articles or collaborate with other authors!',
         action: <Button label="Install" variant="primary" />,
+        logoImage: { src: 'https://placebeard.it/360x360', height: 360, width: 360 },
       },
     ],
+    onLoadMore: () => Promise.resolve({}),
   },
 };
 

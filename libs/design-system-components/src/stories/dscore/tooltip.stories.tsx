@@ -17,7 +17,7 @@ const meta: Meta<TooltipProps> = {
 
 type Story = StoryObj<TooltipProps>;
 
-const baseArgs: Story = {
+export const Default: Story = {
   args: {
     content: 'some useful tip',
     placement: 'top',
@@ -27,22 +27,32 @@ const baseArgs: Story = {
   },
 };
 
-export const Default: Story = {
-  args: { ...baseArgs.args },
-};
-
 export const TooltipWithArrow: Story = {
-  args: { ...baseArgs.args, arrow: true },
+  args: {
+    content: 'some useful tip',
+    placement: 'top',
+    children: <Text>Hover to learn more</Text>,
+    customStyle: 'm-16',
+    arrow: true,
+  },
 };
 
 export const ControlledTooltip: Story = {
-  args: { ...baseArgs.args, arrow: true, open: true },
+  args: {
+    content: 'some useful tip',
+    placement: 'top',
+    children: <Text>Hover to learn more</Text>,
+    customStyle: 'm-16',
+    arrow: true,
+    open: true,
+  },
 };
 
 export const CenterArrowToReferenceTooltip: Story = {
   args: {
-    ...baseArgs.args,
-    arrow: true,
+    arrow: false,
+    children: <Text>Hover to learn more</Text>,
+    customStyle: 'm-16',
     centerArrowToReference: true,
     placement: 'bottom',
     content: (

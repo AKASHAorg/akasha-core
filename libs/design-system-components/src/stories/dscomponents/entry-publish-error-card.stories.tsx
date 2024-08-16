@@ -11,7 +11,7 @@ const meta: Meta<PublishErrorCardProps> = {
 
 type Story = StoryObj<PublishErrorCardProps>;
 
-export const BaseEntryPublishErrorCard: Story = {
+export const Default: Story = {
   args: {
     isCard: true,
     message: 'Sorry, an error occured!',

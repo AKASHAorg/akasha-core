@@ -4,10 +4,11 @@ import { Color } from '@akashaorg/design-system-core/lib/components/types/common
 
 export type AppInfoPillsProps = {
   background: Color;
+  customStyle?: string;
 };
 
 export const AppInfoPill: React.FC<PropsWithChildren<AppInfoPillsProps>> = props => {
-  const { background, children } = props;
+  const { background, children, customStyle } = props;
   return (
     <Stack
       direction="row"
@@ -16,7 +17,7 @@ export const AppInfoPill: React.FC<PropsWithChildren<AppInfoPillsProps>> = props
       padding="px-2"
       spacing="gap-x-1"
       background={background}
-      customStyle="m-h-[18px] m-w-[18px] rounded-3xl"
+      customStyle={`m-h-[18px] m-w-[18px] rounded-3xl ${customStyle}`}
     >
       {children}
     </Stack>

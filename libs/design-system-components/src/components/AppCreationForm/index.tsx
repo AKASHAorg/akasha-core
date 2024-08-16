@@ -138,7 +138,6 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
                 setSelected={onChange}
                 ref={ref}
                 required={true}
-                requiredFieldAsteriskColor={{ light: 'errorLight', dark: 'errorDark' }}
               />
             )}
           />
@@ -159,7 +158,6 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
                 onChange={onChange}
                 inputRef={ref}
                 required={true}
-                requiredFieldAsteriskColor={{ light: 'errorLight', dark: 'errorDark' }}
               />
             )}
           />
@@ -180,7 +178,6 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
                 onChange={onChange}
                 inputRef={ref}
                 required={true}
-                requiredFieldAsteriskColor={{ light: 'errorLight', dark: 'errorDark' }}
               />
             )}
           />
@@ -198,7 +195,6 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
                   setSelected={onChange}
                   ref={ref}
                   required={true}
-                  requiredFieldAsteriskColor={{ light: 'errorLight', dark: 'errorDark' }}
                 />
               </>
             )}
@@ -220,7 +216,6 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
                   onChange={onChange}
                   inputRef={ref}
                   required={true}
-                  requiredFieldAsteriskColor={{ light: 'errorLight', dark: 'errorDark' }}
                 />
               )}
               defaultValue=""
