@@ -1,5 +1,4 @@
 import {
-  AppEvents,
   ContentBlockEvents,
   ExtensionPointEvents,
   IAppConfig,
@@ -13,15 +12,16 @@ import {
 } from '@akashaorg/typings/lib/ui';
 import { Subject, Subscription } from 'rxjs';
 import {
-  hidePageSplash,
-  showPageSplash,
-  show404,
   hide404,
-  showError,
   hideError,
+  hidePageSplash,
+  show404,
+  showError,
+  showPageSplash,
 } from './html-template-handlers';
 import * as singleSpa from 'single-spa';
 import {
+  getReleaseById,
   getRemoteLatestExtensionInfos,
   getUserInstalledExtensions,
   getWorldDefaultExtensions,
@@ -38,9 +38,12 @@ import {
   parseQueryString,
 } from './utils';
 import EventBus from '@akashaorg/awf-sdk/src/common/event-bus';
-import { APP_EVENTS, AUTH_EVENTS } from '@akashaorg/typings/lib/sdk';
-import { IntegrationSchema } from '@akashaorg/awf-sdk/src/db/integrations.schema';
+import { AUTH_EVENTS, EXTENSION_EVENTS } from '@akashaorg/typings/lib/sdk';
+import { InstalledExtensionSchema } from '@akashaorg/awf-sdk/src/db/installed-extensions.schema';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { ContentBlockStore } from './plugins/content-block-store';
+import { ExtensionPointStore } from './plugins/extension-point-store';
+import { WidgetStore } from './plugins/widget-store';
 
 const isWindow = window && typeof window !== 'undefined';
 
@@ -69,7 +72,7 @@ export default class AppLoader {
   globalChannel: EventBus;
   user: { id: string };
   globalChannelSub: Subscription;
-  userExtensions: IntegrationSchema[];
+  userExtensions: InstalledExtensionSchema[];
   appNotFound: boolean;
   erroredApps: string[];
   constructor(worldConfig: WorldConfig) {
@@ -119,7 +122,8 @@ export default class AppLoader {
       return;
     }
     this.extensionModules = await this.importModules(this.extensionData);
-    this.plugins = await this.loadPlugins(this.extensionModules);
+    await this.loadCorePlugins();
+    await this.loadPlugins(this.extensionModules);
     await this.loadLayoutConfig();
     await this.initializeExtensions(this.extensionModules);
     this.extensionConfigs = this.registerExtensions(this.extensionModules);
@@ -240,10 +244,10 @@ export default class AppLoader {
           case AUTH_EVENTS.SIGN_OUT:
             this.handleLogout();
             break;
-          case APP_EVENTS.INFO_READY:
+          case EXTENSION_EVENTS.INFO_READY:
             this.handleExtensionInstall(resp.data);
             break;
-          case APP_EVENTS.REMOVED:
+          case EXTENSION_EVENTS.REMOVED:
             this.handleExtensionUninstall(resp.data);
             break;
           default:
@@ -264,17 +268,58 @@ export default class AppLoader {
     // unload user extensions
   };
 
-  handleExtensionInstall = (_extensionData: unknown) => {
-    // listen for extension installs
+  fireGlobalChannelEvent = (event, data) => {
+    this.globalChannel.next({
+      event,
+      data,
+    });
   };
-  handleExtensionUninstall = (_extensionData: unknown) => {
+
+  handleExtensionInstall = async (releaseData: { id?: string; version?: string }) => {
+    // listen for extension installs
+    if (!this.user?.id) {
+      // user not logged in, cannot continue
+      return;
+    }
+    const releaseNode = await getReleaseById(releaseData.id);
+    if (!releaseNode) {
+      console.log('error or release not found');
+      this.fireGlobalChannelEvent(EXTENSION_EVENTS.INSTALL_STATUS, {
+        error: 'release id not found',
+      });
+      return;
+    }
+
+    const src = releaseNode.source;
+
+    if (!src) {
+      this.fireGlobalChannelEvent(EXTENSION_EVENTS.INSTALL_STATUS, {
+        error: 'release does not have a source',
+      });
+      return;
+    }
+
+    this.extensionData.push({ source: src, isLocal: false });
+    const module = await this.importModules([{ source: src, isLocal: false }]);
+    const plugins = await this.loadPlugins(module);
+    this.plugins = Object.assign(this.plugins, plugins);
+    await this.initializeExtensions(module);
+    const extensionConfig = this.registerExtensions(module);
+    this.singleSpaRegister(extensionConfig);
+    this.fireGlobalChannelEvent(EXTENSION_EVENTS.INSTALL_STATUS, {
+      progress: 'extension registered',
+    });
+  };
+
+  handleExtensionUninstall = (data: { name?: string }) => {
     // listen for extension uninstalls
   };
+
   loadUserExtensions = async () => {
     // @TODO: implement when ready
     this.userExtensions = await getUserInstalledExtensions();
     const manifests = await getRemoteLatestExtensionInfos(
-      this.userExtensions.map(e => ({ name: e.name })),
+      this.userExtensions.map(e => ({ name: e.appName })),
     );
     const modules = await this.importModules(manifests);
     const _plugins = await this.loadPlugins(modules);
@@ -283,15 +328,37 @@ export default class AppLoader {
     this.singleSpaRegister(extensionConfigs);
   };
 
+  loadCorePlugins = async () => {
+    const contentBlockStore = ContentBlockStore.getInstance(this.uiEvents);
+    const extensionPointStore = ExtensionPointStore.getInstance(this.uiEvents);
+    const widgetStore = WidgetStore.getInstance(this.uiEvents);
+
+    this.plugins = Object.assign({}, this.plugins, {
+      core: {
+        contentBlockStore: {
+          getInfos: contentBlockStore.getContentBlockInfos,
+          getMatchingBlocks: contentBlockStore.getMatchingBlocks,
+        },
+        extensionPointStore: {
+          getExtensionPoints: extensionPointStore.getExtensions,
+          getMatchingExtensionPoints: extensionPointStore.getMatchingExtensions,
+        },
+        widgetStore: {
+          getWidgets: widgetStore.getWidgets,
+          getMatchingWidgets: widgetStore.getMatchingWidgets,
+        },
+      },
+    });
+  };
+
   loadPlugins = async (extensionModules: Map<string, SystemModuleType>) => {
-    const plugins = {};
     for (const [name, module] of extensionModules) {
       if (this.extensionConfigs.has(name)) {
         continue;
       }
       if (module.registerPlugin && typeof module.registerPlugin === 'function') {
         // load plugin;
-        plugins[name] = await module.registerPlugin({
+        this.plugins[name] = await module.registerPlugin({
           worldConfig: this.worldConfig,
           logger: this.parentLogger.create(`${name}_plugin`),
           uiEvents: this.uiEvents,
@@ -300,7 +367,6 @@ export default class AppLoader {
         });
       }
     }
-    return plugins;
   };
 
   initializeExtensions = async (extensionModules: Map<string, SystemModuleType>) => {
@@ -333,6 +399,7 @@ export default class AppLoader {
       });
     }
   };
+
   registerExtensions = (extensionModules: Map<string, SystemModuleType>) => {
     const extensionConfigs = new Map();
     for (const [name, mod] of extensionModules) {

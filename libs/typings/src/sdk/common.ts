@@ -1,5 +1,5 @@
 import {
-  APP_EVENTS,
+  EXTENSION_EVENTS,
   AUTH_EVENTS,
   COMMENTS_EVENTS,
   ENS_EVENTS,
@@ -37,7 +37,7 @@ export type GlobalEventBusData<D = unknown> = {
   data: D;
   event:
     | AUTH_EVENTS
-    | APP_EVENTS
+    | EXTENSION_EVENTS
     | COMMENTS_EVENTS
     | ENS_EVENTS
     | ENTRY_EVENTS

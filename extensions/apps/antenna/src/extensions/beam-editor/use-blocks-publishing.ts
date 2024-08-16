@@ -34,13 +34,13 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
   const sdk = React.useRef(getSDK());
   const [isNsfw, setIsNsfw] = React.useState(false);
   const [editorTags, setEditorTags] = React.useState([]);
-  const { getExtensionsPlugin } = useRootComponentProps();
+  const { getCorePlugins } = useRootComponentProps();
 
   React.useLayoutEffect(() => {
-    if (getExtensionsPlugin()) {
-      setAvailableBlocks(getExtensionsPlugin().contentBlockStore.getInfos());
+    if (getCorePlugins()) {
+      setAvailableBlocks(getCorePlugins().contentBlockStore.getInfos());
     }
-  }, [getExtensionsPlugin]);
+  }, [getCorePlugins]);
 
   const [createBeam, createBeamQuery] = useCreateBeamMutation({
     context: { source: sdk.current.services.gql.contextSources.composeDB },

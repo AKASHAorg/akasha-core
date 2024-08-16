@@ -15,8 +15,8 @@ export type WidgetExtensionProps = {
 
 export const Widget: React.FC<WidgetExtensionProps> = props => {
   const { name, loadingIndicator, onError, customStyle = '', fullHeight } = props;
-  const { getExtensionsPlugin, getContext, logger } = useRootComponentProps();
-  const widgetStore = React.useRef<WidgetStorePlugin>(getExtensionsPlugin().widgetStore);
+  const { getCorePlugins, getContext, logger } = useRootComponentProps();
+  const widgetStore = React.useRef<WidgetStorePlugin>(getCorePlugins().widgetStore);
   const [parcelConfigs, setParcelConfigs] = React.useState([]);
   const location = useRoutingEvents();
 

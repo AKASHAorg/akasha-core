@@ -9,7 +9,7 @@ import {
   RouteRegistrationEvents,
   RoutesRegisterEvent,
 } from '@akashaorg/typings/lib/ui';
-import { APP_EVENTS } from '@akashaorg/typings/lib/sdk';
+import { EXTENSION_EVENTS } from '@akashaorg/typings/lib/sdk';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { filterEvent, useRootComponentProps, withProviders } from '@akashaorg/ui-awf-hooks';
 
@@ -42,8 +42,11 @@ const IntegrationInstallModal: React.FC<
 
   React.useEffect(() => {
     const subSDK = sdk.api.globalChannel.subscribe({
-      next: (eventData: { data: { name: string }; event: APP_EVENTS }) => {
-        if (eventData.event === APP_EVENTS.INFO_READY && eventData.data.name === integrationName) {
+      next: (eventData: { data: { name: string }; event: EXTENSION_EVENTS }) => {
+        if (
+          eventData.event === EXTENSION_EVENTS.INFO_READY &&
+          eventData.data.name === integrationName
+        ) {
           setModalState(2);
         }
       },

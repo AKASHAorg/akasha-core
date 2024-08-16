@@ -54,12 +54,13 @@ export enum ENS_EVENTS {
   CLAIM = '#ens#Claim',
 }
 
-export enum APP_EVENTS {
-  INFO_READY = '#integration#ReleaseInfoReady',
-  REMOVED = '#integration#Removed',
-  TOGGLE_STATUS = '#integration#ToggleStatus',
-  UPDATE_VERSION = '#integration#UpdateVersion',
-  UPDATE_CONFIG = '#integration#UpdateConfig',
+export enum EXTENSION_EVENTS {
+  INFO_READY = '#extension#ReleaseInfoReady',
+  REMOVED = '#extension#Removed',
+  TOGGLE_STATUS = '#extension#ToggleStatus',
+  UPDATE_VERSION = '#extension#UpdateVersion',
+  UPDATE_CONFIG = '#extension#UpdateConfig',
+  INSTALL_STATUS = '#extension#InstallStatus',
 }
 
 export enum GQL_EVENTS {

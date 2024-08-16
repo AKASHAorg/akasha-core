@@ -51,20 +51,20 @@ const useRootComponentProps = <T extends IRootComponentProps>() => {
     [ctx?.plugins],
   );
 
-  const getExtensionsPlugin = React.useCallback(() => {
-    if (hasOwn(ctx?.plugins, ctx.worldConfig.extensionsApp)) {
-      return ctx.plugins[ctx.worldConfig.extensionsApp];
+  const getCorePlugins = React.useCallback(() => {
+    if (hasOwn(ctx?.plugins, 'core')) {
+      return ctx.plugins.core;
     }
-    console.warn('Extension plugin not available yet!');
+    console.warn('Core plugins not available yet!');
     return {};
-  }, [ctx.plugins, ctx.worldConfig.extensionsApp]);
+  }, [ctx.plugins]);
 
   const getContext = React.useCallback(() => ctx, [ctx]);
 
   return {
     getRoutingPlugin,
     getTranslationPlugin,
-    getExtensionsPlugin,
+    getCorePlugins,
     getContext,
     ...ctx,
   };

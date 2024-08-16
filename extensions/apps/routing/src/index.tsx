@@ -10,7 +10,7 @@ import {
   IPlugin,
 } from '@akashaorg/typings/lib/ui';
 import getSDK from '@akashaorg/awf-sdk';
-import { APP_EVENTS } from '@akashaorg/typings/lib/sdk';
+import { EXTENSION_EVENTS } from '@akashaorg/typings/lib/sdk';
 import { RouteRepository } from './types';
 import { filterEvent } from '@akashaorg/ui-awf-hooks';
 
@@ -29,7 +29,7 @@ export class RoutingPlugin {
     const globalChannel = getSDK().api.globalChannel;
     globalChannel.subscribe({
       next(evData) {
-        if (evData.event === APP_EVENTS.REMOVED) {
+        if (evData.event === EXTENSION_EVENTS.REMOVED) {
           const removed = evData.data as { name: string };
           const { all, activeIntegrationNames, byArea } = RoutingPlugin.routeRepository;
           delete all[removed.name];

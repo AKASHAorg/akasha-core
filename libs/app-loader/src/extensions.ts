@@ -49,6 +49,24 @@ const getPublishedAppLatestVersion = async (appName: string, logger?: ILogger) =
   return appNode;
 };
 
+export const getReleaseById = async (releaseId: string) => {
+  const sdk = getSDK();
+  try {
+    const release = await sdk.services.gql.client.GetAppReleaseByID({ id: releaseId });
+    if (!release && !release?.node) {
+      // @todo handle release not found or release id mismatch
+      return null;
+    }
+    if (release.node && 'id' in release.node) {
+      return release.node;
+    }
+    return null;
+  } catch (err) {
+    // @todo emit event with error
+    return null;
+  }
+};
+
 export const getRemoteLatestExtensionInfos = async (
   extensions: { name: string }[],
 ): Promise<Awaited<ReturnType<typeof getPublishedAppLatestVersion>>[]> => {

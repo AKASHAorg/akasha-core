@@ -30,8 +30,8 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
     showBlockName,
     onBlockInfoChange,
   } = props;
-  const { navigateToModal, getExtensionsPlugin, getRoutingPlugin } = useRootComponentProps();
-  const contentBlockStoreRef = useRef(getExtensionsPlugin()?.contentBlockStore);
+  const { navigateToModal, getCorePlugins, getRoutingPlugin } = useRootComponentProps();
+  const contentBlockStoreRef = useRef(getCorePlugins()?.contentBlockStore);
   const _onBlockInfoChange = useRef(onBlockInfoChange);
   const { t } = useTranslation('ui-lib-feed');
   const navigateTo = getRoutingPlugin().navigateTo;
@@ -141,6 +141,7 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
           customStyle="rounded-[10px]"
         >
           <Card
+            type={'regular'}
             background={{ light: 'white', dark: 'grey3' }}
             elevation="2"
             margin="m-3.5"

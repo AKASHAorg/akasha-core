@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 import {
-  APP_EVENTS,
+  EXTENSION_EVENTS,
   IntegrationIdSchema,
   IntegrationName,
   IntegrationNameSchema,
@@ -47,7 +47,7 @@ class AppSettings {
    */
   @validate(IntegrationNameSchema)
   async get(appName: IntegrationName) {
-    const collection = this._db.getCollections().integrations;
+    const collection = this._db.getCollections().installedExtensions;
     const doc = await collection?.where('name').equals(appName).first();
     return createFormattedValue(doc);
   }
@@ -56,22 +56,54 @@ class AppSettings {
    * Returns all installed apps
    */
   async getAll() {
-    const collection = this._db.getCollections().integrations;
+    const collection = this._db.getCollections().installedExtensions;
     const doc = await collection?.toArray();
     return createFormattedValue(doc);
   }
 
   /**
    * Persist installed app configuration for the current user
-   * @param app - Object
-   * @param isLocal - True only for development. Default is false
+   * @param userDid - did of the user who installs this extension
+   * @param release - extension release data
    */
   @validate(
-    z.object({ name: IntegrationNameSchema, id: IntegrationIdSchema }).partial(),
-    z.boolean().optional(),
+    z.string(),
+    z
+      .object({
+        appName: IntegrationNameSchema,
+        releaseId: IntegrationIdSchema,
+        version: z.string(),
+      })
+      .partial(),
   )
-  async install(app: { name: string; id?: string }, isLocal = false) {
-    return throwError('Not implemented', ['sdk', 'settings', 'apps', 'install']);
+  async install(userDid: string, release: { appName: string; releaseId: string; version: string }) {
+    const table = this._db.getCollections().installedExtensions;
+    const collection = await table
+      ?.where({ id: release.releaseId, version: release.version, userDid })
+      .first();
+    if (!collection) {
+      await table?.add({
+        id: release.releaseId,
+        version: release.version,
+        appName: release.appName,
+        installedByDid: userDid,
+      });
+      this._globalChannel.next({
+        event: EXTENSION_EVENTS.INSTALL_STATUS,
+        data: { status: 'created' },
+      });
+      return true;
+    }
+    // update version
+    if (collection && collection.version !== release.version) {
+      collection.version = release.version;
+      table?.update(collection.appName, { version: release.version });
+      this._globalChannel.next({
+        event: EXTENSION_EVENTS.UPDATE_VERSION,
+        data: { version: release.version },
+      });
+      return true;
+    }
   }
 
   /**
@@ -82,32 +114,58 @@ class AppSettings {
   async uninstall(appName: IntegrationName): Promise<void> {
     const currentInfo = await this.get(appName);
     if (currentInfo?.data?.id) {
-      const collection = this._db.getCollections().integrations;
+      const collection = this._db.getCollections().installedExtensions;
       await collection?.where('id').equals(currentInfo.data.id).delete();
       this._globalChannel.next({
         data: { name: appName },
-        event: APP_EVENTS.REMOVED,
+        event: EXTENSION_EVENTS.REMOVED,
       });
     }
   }
   @validate(IntegrationNameSchema)
   async toggleAppStatus(appName: IntegrationName): Promise<boolean> {
-    const collection = this._db.getCollections().integrations;
-    const doc = await collection?.where('name').equals(appName).first();
-    if (doc && doc.id) {
-      doc.status = !doc.status;
-      await collection?.where('id').equals(doc.id).modify(doc);
-      this._globalChannel.next({
-        data: { status: doc.status, name: appName },
-        event: APP_EVENTS.TOGGLE_STATUS,
-      });
-      return doc.status;
-    }
+    // @todo: coming soon
+    // const collection = this._db.getCollections().installedExtensions;
+    // const doc = await collection?.where('name').equals(appName).first();
+    // if (doc && doc.id) {
+    //   doc.status = !doc.status;
+    //   await collection?.where('id').equals(doc.id).modify(doc);
+    //   this._globalChannel.next({
+    //     data: { status: doc.status, name: appName },
+    //     event: EXTENSION_EVENTS.TOGGLE_STATUS,
+    //   });
+    //   return doc.status;
+    // }
     return false;
   }
 
-  async updateVersion(app: VersionInfo) {
-    return throwError('Not implemented', ['sdk', 'settings', 'apps', 'updateVersion']);
+  async updateVersion(app: { appName: string; releaseVersion: string }) {
+    const table = this._db.getCollections().installedExtensions;
+
+    const collection = await table
+      ?.where({ appName: app.appName, version: app.releaseVersion })
+      .first();
+
+    if (!collection) {
+      this._log.warn('app not found!');
+      return;
+    }
+
+    if (collection && collection.version === app.releaseVersion) {
+      this._log.warn('app has the same version!');
+      return;
+    }
+
+    if (collection && collection.version !== app.releaseVersion) {
+      const oldVersion = collection.version;
+      collection.version = app.releaseVersion;
+      table?.update(collection.appName, { version: app.releaseVersion });
+      this._globalChannel.next({
+        event: EXTENSION_EVENTS.UPDATE_VERSION,
+        data: { oldVersion, currentVersion: app.releaseVersion },
+      });
+      return true;
+    }
   }
 
   async updateConfig(app: ConfigInfo) {

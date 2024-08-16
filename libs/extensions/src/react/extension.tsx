@@ -23,9 +23,9 @@ export const Extension = <D,>(props: ExtensionComponentProps<D>) => {
     customStyle = '',
     extensionData,
   } = props;
-  const { getExtensionsPlugin, getContext, logger } = useRootComponentProps();
+  const { getCorePlugins, getContext, logger } = useRootComponentProps();
   const extensionStore = React.useRef<IExtensionPointStorePlugin>(
-    getExtensionsPlugin().extensionPointStore,
+    getCorePlugins().extensionPointStore,
   );
   const [parcelConfigs, setParcelConfigs] = React.useState([]);
   const [isEmpty, setIsEmpty] = React.useState(false);
