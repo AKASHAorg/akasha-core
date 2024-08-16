@@ -165,7 +165,7 @@ const BeamFeed = (props: BeamFeedProps) => {
         <ErrorLoader
           type="script-error"
           title={'Sorry, there was an error when fetching beams'}
-          details={<>{beamStreamQuery.error.message}</>}
+          details={beamStreamQuery.error.message}
         />
       )}
       {beams && (

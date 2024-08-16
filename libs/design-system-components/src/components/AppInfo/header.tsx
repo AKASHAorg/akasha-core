@@ -55,7 +55,12 @@ export const AppInfoHeader: React.FC<AppInfoHeaderProps> = props => {
           <Stack direction="row" spacing="gap-x-1" customStyle="flex-wrap">
             {integrationType === 'plugin' && (
               <AppInfoPill background={{ light: 'tertiaryLight', dark: 'tertiaryDark' }}>
-                <Icon icon={<Plugin />} size="xs" />
+                <Icon
+                  size="sm"
+                  icon={<Plugin />}
+                  color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                  solid={true}
+                />
                 <Text variant="footnotes2" color={{ light: 'secondaryLight', dark: 'white' }}>
                   {pluginLabel}
                 </Text>

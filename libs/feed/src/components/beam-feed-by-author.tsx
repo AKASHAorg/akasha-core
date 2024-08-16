@@ -155,7 +155,7 @@ const BeamFeedByAuthor = (props: BeamFeedByAuthorProps) => {
         <ErrorLoader
           type="script-error"
           title={'Sorry, there was an error when fetching beams'}
-          details={<>{beamQuery.error.message}</>}
+          details={beamQuery.error.message}
         />
       )}
       {beams.length > 0 && (
