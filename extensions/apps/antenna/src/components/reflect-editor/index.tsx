@@ -129,7 +129,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
     };
     setNewContent({ ...content, authorId: null, id: null });
     //Create unique id for pending reflection using randomUUID().
-    pendingReflectionIdRef.current = `${PENDING_REFLECTION_PREFIX}-${crypto?.randomUUID?.()}`;
+    pendingReflectionIdRef.current = `${PENDING_REFLECTION_PREFIX}-${crypto.randomUUID()}`;
     addPendingReflection({
       ...content,
       id: pendingReflectionIdRef.current,

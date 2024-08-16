@@ -50,6 +50,7 @@ describe('< TagFeedPage /> component', () => {
     it('should render a beam on tag feed for subscribed topics', async () => {
       const { mocks } = getTagFeedPageMocks({ count: 1 });
       const { mocks: tagFeedMocks, profileData, beamData } = getTagFeedMocks();
+      const { name, did, avatar } = profileData.akashaProfile;
       jest.spyOn(useAkashaStore, 'useAkashaStore').mockReturnValue({
         authenticationStore: getAuthenticationStore(),
         data: {
@@ -66,15 +67,15 @@ describe('< TagFeedPage /> component', () => {
       await waitFor(() =>
         expect(within(tagFeed).getByTestId('avatar-source')).toHaveAttribute(
           'srcset',
-          profileData.akashaProfile.avatar.default.src,
+          avatar.default.src,
         ),
       );
       expect(within(tagFeed).getByTestId('reflections-count')).toHaveTextContent(
         String(TAG_FEED.reflectionsCount),
       );
       const infoBox = within(tagFeed).getByTestId('info-box');
-      await waitFor(() => expect(infoBox).toHaveTextContent(profileData.akashaProfile.name));
-      expect(infoBox).toHaveTextContent(truncateDid(profileData.akashaProfile.did.id));
+      await waitFor(() => expect(infoBox).toHaveTextContent(name));
+      expect(infoBox).toHaveTextContent(truncateDid(did.id));
       expect(infoBox).toHaveTextContent(formatRelativeTime(beamData.createdAt, 'en'));
       expect(screen.getByText(/published via/i)).toBeInTheDocument();
     });

@@ -5,8 +5,7 @@ import Icon from '../Icon';
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from '../Icon/hero-icons-outline';
 import Text from '../Text';
 import Link from '../Link';
-import Label from '../TextField/Label';
-import { Color } from '../types/common.types';
+import Label from '../Label';
 import { useCloseActions } from '../../utils';
 
 export type DropdownMenuItemType = {
@@ -25,7 +24,6 @@ export type DropdownProps = {
   setSelected: React.Dispatch<React.SetStateAction<DropdownMenuItemType>>;
   ref?: React.Ref<HTMLDivElement>;
   required?: boolean;
-  requiredFieldAsteriskColor?: Color;
 };
 
 /**
@@ -38,7 +36,6 @@ export type DropdownProps = {
  * @param selected - (optional) selected item by default
  * @param menuItems - a list of menu items to be displayed on activation
  * @param setSelected - handler function to set the selected item
- * @param requiredFieldAsteriskColor - (optional) set the color of the asterisk symbol in case this component
  * is used in a form and it is a required field
  * ```tsx
  *  <Dropdown
@@ -53,16 +50,8 @@ export type DropdownProps = {
  *   />
  * ```
  **/
-const Dropdown: React.FC<DropdownProps> = React.forwardRef((props, ref) => {
-  const {
-    label,
-    placeholderLabel,
-    menuItems,
-    selected,
-    setSelected,
-    required,
-    requiredFieldAsteriskColor,
-  } = props;
+const Dropdown: React.FC<DropdownProps> = React.forwardRef(props => {
+  const { label, placeholderLabel, menuItems, selected, setSelected, required } = props;
 
   const [dropOpen, setDropOpen] = React.useState<boolean>(false);
 
@@ -98,11 +87,7 @@ const Dropdown: React.FC<DropdownProps> = React.forwardRef((props, ref) => {
 
   return (
     <Stack customStyle="relative min-w-[8rem] gap-y-2 " ref={anchorRef}>
-      {label && (
-        <Label required={required} requiredFieldAsteriskColor={requiredFieldAsteriskColor}>
-          {label}
-        </Label>
-      )}
+      {label && <Label required={required}>{label}</Label>}
       <button
         className={tx`inline-flex items-center justify-between min-w-[8rem] p-2 rounded-lg bg-(white dark:grey5) rounded-lg border-(1 solid ${
           dropOpen ? 'secondaryLight dark:secondark-dark' : 'grey8 dark:grey3'

@@ -2,12 +2,12 @@ import React from 'react';
 import Stack from '../Stack';
 import Caption from './Caption';
 import { Input } from './Input';
-import Label from './Label';
+import Label from '../Label';
 import { Multiline } from './Multiline';
 import { TextFieldProps } from './types';
 
 /**
- * The TextField component create versatile and highly-customizable inputs that can be used in
+ * The TextField component creates versatile and highly-customizable inputs that can be used in
  * forms or any place that requires an input. It supports both single-line and multi-line text input,
  * as well as additional features like labels, captions, and validation status. The component accepts
  * all props of an Input component, plus more.
@@ -24,7 +24,6 @@ import { TextFieldProps } from './types';
  * @param required - boolean (optional) whether it is a required field
  * @param customStyle - (optional) apply any other custom styles. Please use standard Tailwind CSS classes
  * @param inputRef - (optional) pass the ref here
- * @param requiredFieldAsteriskColor - (optional) set the color of the asterisk symbol in case this component
  * is used in a form and it is a required field
  * @example
  * ```tsx
@@ -35,7 +34,6 @@ const TextField: React.FC<TextFieldProps> = props => {
   const {
     id,
     required,
-    requiredFieldAsteriskColor,
     label,
     status,
     caption,
@@ -49,12 +47,7 @@ const TextField: React.FC<TextFieldProps> = props => {
   return (
     <Stack direction="column" spacing="gap-y-2" customStyle={customStyle}>
       {label && (
-        <Label
-          id={id}
-          required={required}
-          disabled={disabled}
-          requiredFieldAsteriskColor={requiredFieldAsteriskColor}
-        >
+        <Label id={id} required={required} disabled={disabled}>
           {label}
         </Label>
       )}

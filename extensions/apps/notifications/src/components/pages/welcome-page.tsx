@@ -4,8 +4,9 @@ import { useRootComponentProps, useSaveSettings, useAkashaStore } from '@akashao
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import routes, { CUSTOMISE_NOTIFICATION_OPTIONS_PAGE, SHOW_NOTIFICATIONS_PAGE } from '../../routes';
 
@@ -18,54 +19,18 @@ export type WelcomePageProps = {
 const WelcomePage: React.FC<WelcomePageProps> = props => {
   const { finalStep = false } = props;
 
-  const {
-    data: { authenticatedDID },
-  } = useAkashaStore();
-  const isLoggedIn = !!authenticatedDID;
-
-  const { t } = useTranslation('app-notifications');
-
   const navigate = useNavigate();
-
-  const header = finalStep ? t('All Done') : t('Welcome to the Notifications App');
-  const description = finalStep
-    ? t(
-        'You will receive notifications based on your choices now! You can always change that or even pause it from the notifications settings!',
-      )
-    : t(
-        `Get the latest updates about what's going on with your world. You can personalize your notifications and get only what you want to see!`,
-      );
-  const welcomeImage = isLoggedIn
-    ? '/images/notificationapp-welcome-min.webp'
-    : '/images/notificationapp-Notconnected-min.webp';
-  const image = finalStep ? '/images/notificationapp-success-min.webp' : welcomeImage;
-
-  const leftButtonLabel = finalStep ? undefined : t('Skip this step');
-  const rightButtonLabel = finalStep
-    ? t('Go to my notifications')
-    : t('Customize my notifications');
-
-  const { baseRouteName, getRoutingPlugin, uiEvents } = useRootComponentProps();
-
-  const navigateTo = getRoutingPlugin().navigateTo;
-
+  const { baseRouteName, name: appName, uiEvents, getRoutingPlugin } = useRootComponentProps();
+  const {
+    data: { authenticatedProfile },
+  } = useAkashaStore();
   const _uiEvents = useRef(uiEvents);
-
-  // @TODO: get this data from useRootComponentProps
-  const appName = '@akashaorg/app-notifications';
+  const { t } = useTranslation('app-notifications');
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const { saveNotificationSettings } = useSaveSettings();
 
-  const goToNextStep = () => {
-    // navigate to step 2
-    navigate({ to: routes[CUSTOMISE_NOTIFICATION_OPTIONS_PAGE] });
-  };
-
-  const goToNotificationsPage = () => {
-    navigate({ to: routes[SHOW_NOTIFICATIONS_PAGE] });
-  };
-
-  const connect = () => {
+  const handleConnectButtonClick = () => {
     navigateTo?.({
       appName: '@akashaorg/app-auth-ewa',
       getNavigationUrl: (routes: Record<string, string>) => {
@@ -82,49 +47,74 @@ const WelcomePage: React.FC<WelcomePageProps> = props => {
         event: NotificationEvents.ShowNotification,
         data: {
           type: NotificationTypes.Success,
-          title: 'Notification settings updated successfully',
+          title: t('Notification settings updated successfully'),
         },
       });
 
-      goToNotificationsPage();
+      navigate({ to: routes[SHOW_NOTIFICATIONS_PAGE] });
     } else {
-      goToNextStep();
+      // navigate to next step
+      navigate({ to: routes[CUSTOMISE_NOTIFICATION_OPTIONS_PAGE] });
     }
   };
 
   const skipCustomization = () => {
     saveNotificationSettings(
       { app: appName, options: { default: true } },
-      { onComplete: () => goToNotificationsPage() },
+      { onComplete: () => navigate({ to: routes[SHOW_NOTIFICATIONS_PAGE] }) },
     );
   };
+
+  const header = finalStep ? t('All Done') : t('Welcome to the Notifications App');
+  const description = finalStep
+    ? t(
+        'You will receive notifications based on your choices now! You can always change that or even pause it from the notifications settings!',
+      )
+    : t(
+        `Get the latest updates about what's going on with your world. You can personalize your notifications and get only what you want to see!`,
+      );
+
+  const rightButtonLabel = finalStep
+    ? t('Go to my notifications')
+    : t('Customize my notifications');
+
+  if (!authenticatedProfile?.did.id)
+    return (
+      <ErrorLoader
+        type="not-authenticated"
+        title={`${t('Uh-oh')}! ${t('You are not connected')}!`}
+        details={`${t('To check your notifications you must be connected')} ⚡️`}
+        dataTestId="notifications"
+      >
+        <Button variant="primary" label={t('Connect')} onClick={handleConnectButtonClick} />
+      </ErrorLoader>
+    );
 
   return (
     <Card radius={16} padding={'p-2'} dataTestId="notifications">
       <Stack justify="center" align="center" customStyle="mb-32">
-        {image && <Image src={image} customStyle="w-[180px] h-[180px] m-auto my-4" />}
+        <Image
+          src={`/images/${finalStep ? 'notificationapp-success-min' : 'not-authenticated'}.webp`}
+          customStyle="w-[180px] h-[180px] m-auto my-4"
+        />
 
         <Text variant={finalStep ? 'h5' : 'h6'} align="center">
-          {isLoggedIn ? header : t('Uh-oh! You are not connected!')}
+          {header}
         </Text>
         <Text variant="footnotes2" align="center" color={{ light: 'black', dark: 'grey6' }}>
-          {isLoggedIn ? description : t('To check your notifications you must be connected ⚡️')}
+          {description}
         </Text>
       </Stack>
       <Stack direction="row" fullWidth justify="end" spacing="gap-x-4" customStyle="pr-2 pb-2">
-        {isLoggedIn && leftButtonLabel && (
+        {!finalStep && (
           <Button
             variant="text"
-            label={leftButtonLabel}
+            label={t('Skip this step')}
             color="secondaryLight dark:secondaryDark"
             onClick={skipCustomization}
           />
         )}
-        <Button
-          variant="primary"
-          label={isLoggedIn ? rightButtonLabel : t('Connect')}
-          onClick={isLoggedIn ? confirmCustomization : connect}
-        />
+        <Button variant="primary" label={rightButtonLabel} onClick={confirmCustomization} />
       </Stack>
     </Card>
   );

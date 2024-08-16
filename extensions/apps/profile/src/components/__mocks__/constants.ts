@@ -18,6 +18,12 @@ export const PROFILE_STATS = {
   totalReflections: 5,
 };
 
+export const NEW_PROFILE = {
+  name: 'coffeelover',
+  bio: 'bio',
+  link: 'https://x.com/coffeelover',
+};
+
 export const APOLLO_TYPE_POLICIES = {
   typePolicies: {
     AkashaReflectConnection: {

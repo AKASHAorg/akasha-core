@@ -97,7 +97,7 @@ const TagFeed = (props: TagFeedProps) => {
         <ErrorLoader
           type="script-error"
           title={'Sorry, there was an error when fetching beams'}
-          details={<>{indexedStreamQuery.error.message}</>}
+          details={indexedStreamQuery.error.message}
         />
       )}
       {beams.length > 0 && (
