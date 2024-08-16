@@ -103,6 +103,10 @@ export const Header: React.FC<HeaderProps> = ({
     }
   };
 
+  const showEditAndDeleteMenuOptions =
+    (profileImageType === 'avatar' && !!avatarUrl) ||
+    (profileImageType === 'cover-image' && !!coverImageUrl);
+
   const dropDownActions: ListProps['items'] = [
     {
       label: 'Upload',
@@ -112,23 +116,27 @@ export const Header: React.FC<HeaderProps> = ({
         closeActionsDropDown();
       },
     },
-    {
-      label: 'Edit',
-      icon: <PencilIcon />,
-      onClick: () => {
-        setShowEditImage(true);
-        closeActionsDropDown();
-      },
-    },
-    {
-      label: 'Delete',
-      icon: <TrashIcon />,
-      color: { light: 'errorLight', dark: 'errorDark' },
-      onClick: () => {
-        setShowDeleteImage(true);
-        closeActionsDropDown();
-      },
-    },
+    ...(showEditAndDeleteMenuOptions
+      ? [
+          {
+            label: 'Edit',
+            icon: <PencilIcon />,
+            onClick: () => {
+              setShowEditImage(true);
+              closeActionsDropDown();
+            },
+          },
+          {
+            label: 'Delete',
+            icon: <TrashIcon />,
+            color: { light: 'errorLight', dark: 'errorDark' } as const,
+            onClick: () => {
+              setShowDeleteImage(true);
+              closeActionsDropDown();
+            },
+          },
+        ]
+      : []),
   ];
 
   const imageModalProps: Partial<CropperProps> =

@@ -72,6 +72,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
   const onSave = (event: SyntheticEvent) => {
     event.preventDefault();
     const formValues = getValues();
+
     if (isValid && isFormDirty) {
       saveButton.handleClick({
         ...formValues,
