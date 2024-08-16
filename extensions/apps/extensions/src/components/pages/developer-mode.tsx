@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
-import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 import { DeveloperMode } from '../developer-mode';
 import { DEV_MODE_KEY } from '../../constants';
-import routes, { MY_EXTENSIONS } from '../../routes';
+import appRoutes, { DEVELOPER_MODE, MY_EXTENSIONS } from '../../routes';
 
 export enum DevMode {
   ENABLED = 'ENABLED',
@@ -18,8 +19,12 @@ export enum DevMode {
 
 export const DeveloperModePage: React.FC<unknown> = () => {
   const navigate = useNavigate();
-  const { uiEvents } = useRootComponentProps();
+  const { baseRouteName, uiEvents, getRoutingPlugin } = useRootComponentProps();
   const { t } = useTranslation('app-extensions');
+  const {
+    data: { authenticatedProfile },
+  } = useAkashaStore();
+  const navigateTo = getRoutingPlugin().navigateTo;
   // get the dev mode preference, if any, from local storage
   const localValue = window.localStorage.getItem(DEV_MODE_KEY);
 
@@ -50,9 +55,32 @@ export const DeveloperModePage: React.FC<unknown> = () => {
 
   const handleCTAClick = () => {
     navigate({
-      to: routes[MY_EXTENSIONS],
+      to: appRoutes[MY_EXTENSIONS],
     });
   };
+
+  const handleConnectButtonClick = () => {
+    navigateTo?.({
+      appName: '@akashaorg/app-auth-ewa',
+      getNavigationUrl: (routes: Record<string, string>) => {
+        return `${routes.Connect}?${new URLSearchParams({
+          redirectTo: `${baseRouteName}/${appRoutes[DEVELOPER_MODE]}`,
+        }).toString()}`;
+      },
+    });
+  };
+
+  if (!authenticatedProfile?.did.id) {
+    return (
+      <ErrorLoader
+        type="not-authenticated"
+        title={`${t('Uh-oh')}! ${t('You are not connected')}!`}
+        details={`${t('To toggle developer mode you must be connected')} ⚡️`}
+      >
+        <Button variant="primary" label={t('Connect')} onClick={handleConnectButtonClick} />
+      </ErrorLoader>
+    );
+  }
 
   return (
     <DeveloperMode
