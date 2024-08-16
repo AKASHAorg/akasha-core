@@ -1,4 +1,3 @@
-import values from 'lodash/values';
 import { Image } from '@akashaorg/typings/lib/ui';
 import { FormState } from 'react-hook-form';
 
@@ -19,7 +18,7 @@ export function isFormWithExceptionOfLinksDirty(
 ) {
   const _dirtyFields = { ...dirtyFields };
   delete _dirtyFields.links;
-  return values(_dirtyFields).flat().includes(true);
+  return objValues(_dirtyFields).includes(true);
 }
 
 export function isFormExcludingAllExceptLinksDirty(
@@ -39,4 +38,10 @@ export function isFormExcludingAllExceptLinksDirty(
       !areAllLinksEmpty &&
       linkDirtyFields?.map(field => field.href)?.includes(true))
   );
+}
+
+function objValues(obj: object) {
+  return Object.values(obj).flatMap(value => {
+    return typeof value === 'object' && value !== null ? objValues(value) : [value];
+  });
 }
