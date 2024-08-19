@@ -67,8 +67,6 @@ export const ExtensionEditMainPage: React.FC<ExtensionEditMainPageProps> = ({ ex
 
   const formValue = useAtomValue(formData);
 
-  StorageEvent;
-
   const handleConnectButtonClick = () => {
     navigateTo?.({
       appName: '@akashaorg/app-auth-ewa',
