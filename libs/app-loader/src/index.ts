@@ -1,4 +1,5 @@
 import {
+  AppEvents,
   ContentBlockEvents,
   ExtensionPointEvents,
   IAppConfig,
