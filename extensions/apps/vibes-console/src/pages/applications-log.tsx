@@ -14,18 +14,9 @@ export const ApplicationsLog: React.FC<unknown> = () => {
   const navigate = useNavigate();
   const { t } = useTranslation('vibes-console');
   // list filters
-  const statusPlaceholder = t('Status');
-  const tenurePlaceholder = t('Member since');
-  const defaultStatus = {
-    id: null,
-    iconName: null,
-    title: statusPlaceholder,
-  };
-  const defaultTenure = {
-    id: null,
-    iconName: null,
-    title: tenurePlaceholder,
-  };
+  const defaultStatus = 'Status';
+  const defaultTenure = 'Member since';
+
   const [filterByStatus, setfilterByStatus] = useState(defaultStatus);
   const [filterByTenure, setfilterByTenure] = useState(defaultTenure);
   const resetFilters = () => {
@@ -55,26 +46,16 @@ export const ApplicationsLog: React.FC<unknown> = () => {
         <Stack direction="row" align="center" spacing="gap-x-3">
           <Dropdown
             name="filterByStatus"
-            placeholderLabel={statusPlaceholder}
+            placeholderLabel={defaultStatus}
             selected={filterByStatus}
-            menuItems={[
-              { id: '1', title: 'Pending' },
-              { id: '2', title: 'Approved' },
-              { id: '3', title: 'Rejected' },
-              { id: '4', title: 'Withdrawn' },
-            ]}
+            menuItems={['Pending', 'Approved', 'Rejected', 'Withdrawn']}
             setSelected={setfilterByStatus}
           />
           <Dropdown
             name="filterByTenure"
-            placeholderLabel={tenurePlaceholder}
+            placeholderLabel={defaultTenure}
             selected={filterByTenure}
-            menuItems={[
-              { id: '1', title: '2020' },
-              { id: '2', title: '2021' },
-              { id: '3', title: '2022' },
-              { id: '4', title: '2023' },
-            ]}
+            menuItems={['2020', '2021', '2022', '2023']}
             setSelected={setfilterByTenure}
           />
         </Stack>

@@ -46,7 +46,7 @@ export const DevInfoPage: React.FC<DevInfoPageProps> = () => {
           <AppList
             apps={ownExtensions}
             onLoadMore={() => {
-              return new Promise(null);
+              return new Promise(res => res);
             }}
           />
           <Divider />
@@ -54,7 +54,7 @@ export const DevInfoPage: React.FC<DevInfoPageProps> = () => {
           <AppList
             apps={ownExtensions.slice(0, 1)}
             onLoadMore={() => {
-              return new Promise(null);
+              return new Promise(res => res);
             }}
           />
         </Stack>

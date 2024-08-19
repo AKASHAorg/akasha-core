@@ -21,6 +21,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { ExtensionElement } from './extension-element';
 import appRoutes, { MY_EXTENSIONS } from '../../../routes';
+import { DRAFT_EXTENSIONS } from '../../../constants';
 
 const ENTRY_HEIGHT = 92;
 
@@ -30,6 +31,10 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
 
   const navigate = useNavigate();
   const navigateTo = getRoutingPlugin().navigateTo;
+
+  const {
+    data: { authenticatedDID },
+  } = useAkashaStore();
 
   const handleNavigateToCreateApp = () => {
     navigate({ to: '/create-extension' });
@@ -99,21 +104,17 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
   };
 
   const {
-    data: { authenticatedProfile },
-  } = useAkashaStore();
-
-  const {
     data: appsByPubReq,
     error,
     loading,
     fetchMore,
   } = useGetAppsByPublisherDidQuery({
     variables: {
-      id: authenticatedProfile?.did.id,
+      id: authenticatedDID,
       first: 10,
       sorting: { createdAt: SortOrder.Desc },
     },
-    skip: !authenticatedProfile?.did.id,
+    skip: !authenticatedDID,
   });
   const appsList = useMemo(() => {
     return appsByPubReq?.node && hasOwn(appsByPubReq.node, 'akashaAppList')
@@ -122,19 +123,30 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
   }, [appsByPubReq]);
 
   const appsData = useMemo(() => {
-    return appsList?.edges?.map(edge => edge.node);
+    return appsList?.edges?.map(edge => edge.node) || [];
   }, [appsList]);
 
   const pageInfo = useMemo(() => {
     return appsList?.pageInfo;
   }, [appsList]);
 
-  const appElements = appsData?.filter(ext => {
-    if (selectedType.id === '0') {
-      return true;
-    }
-    return ext?.applicationType === selectedType.title?.toUpperCase();
-  });
+  const appElements = useMemo(() => {
+    return appsData?.filter(ext => {
+      if (selectedType.id === '0') {
+        return true;
+      }
+      return ext?.applicationType === selectedType.title?.toUpperCase();
+    });
+  }, [appsData, selectedType]);
+
+  const existingDraftExtensions = useMemo(
+    () => JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [],
+    [authenticatedDID],
+  );
+  const allMyExtensions = useMemo(
+    () => [...existingDraftExtensions, ...appElements],
+    [existingDraftExtensions, appElements],
+  );
 
   const handleConnectButtonClick = () => {
     navigateTo?.({
@@ -147,7 +159,7 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
     });
   };
 
-  if (!authenticatedProfile?.did.id) {
+  if (!authenticatedDID) {
     return (
       <ErrorLoader
         type="not-authenticated"
@@ -202,17 +214,17 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
           details={error.message}
         />
       )}
-      {!error && appElements?.length === 0 && (
+      {!error && allMyExtensions?.length === 0 && (
         <DefaultEmptyCard
           noBorder={true}
           infoText={t("You haven't created any extensions yet")}
           assetName="longbeam-notfound"
         />
       )}
-      {!error && appElements?.length > 0 && (
+      {!error && allMyExtensions?.length > 0 && (
         <Card>
           <DynamicInfiniteScroll
-            count={appElements.length}
+            count={allMyExtensions.length}
             estimatedHeight={ENTRY_HEIGHT}
             overScan={1}
             itemSpacing={16}
@@ -227,11 +239,11 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
             }}
           >
             {({ itemIndex }) => {
-              const app = appElements[itemIndex];
+              const extensionData = allMyExtensions[itemIndex];
               return (
                 <ExtensionElement
-                  extensionData={app}
-                  showDivider={itemIndex < appElements.length - 1}
+                  extensionData={extensionData}
+                  showDivider={itemIndex < allMyExtensions.length - 1}
                   filter={selectedStatus}
                 />
               );

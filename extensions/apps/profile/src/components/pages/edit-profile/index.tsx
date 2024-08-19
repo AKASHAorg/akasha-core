@@ -211,7 +211,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
             description: t('Note: this is an irreversible action.'),
             initialValue: profileData?.nsfw,
           }}
-          nsfwFormLabel={t('NSFW Profile')}
+          nsfwFieldLabel={t('NSFW Profile')}
           linkLabel={t('External URLs')}
           addNewLinkButtonLabel={t('Add new')}
           description={t(

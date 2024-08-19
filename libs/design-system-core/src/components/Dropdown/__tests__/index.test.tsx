@@ -1,15 +1,10 @@
 import React from 'react';
 import { act, fireEvent } from '@testing-library/react';
 
-import Dropdown, { DropdownMenuItemType } from '../';
-import { ArchiveBoxIcon, BeakerIcon } from '@heroicons/react/24/outline';
+import Dropdown from '../';
 import { customRender } from '../../../test-utils';
 
-const menuItems: DropdownMenuItemType[] = [
-  { id: '1', icon: <BeakerIcon />, title: 'Option 1' },
-  { id: '2', icon: <ArchiveBoxIcon />, title: 'Option 2' },
-  { id: '3', icon: <ArchiveBoxIcon />, title: 'Option 3' },
-];
+const menuItems: string[] = ['Option 1', 'Option 2', 'Option 3'];
 
 const label = 'Select one';
 const placeholderLabel = 'Select an option';
@@ -53,7 +48,7 @@ describe('<Dropdown /> Component', () => {
   it('shows selected menu option by default', () => {
     const { getByText } = componentWrapper;
 
-    const defaultSelected = getByText(selected.title);
+    const defaultSelected = getByText(selected);
 
     expect(defaultSelected).toBeDefined();
   });
@@ -91,7 +86,7 @@ describe('<Dropdown /> Component with placeholder', () => {
 
     fireEvent.click(button);
 
-    const randomOption = getByText(menuItems[Math.floor(Math.random() * menuItems.length)].title);
+    const randomOption = getByText(menuItems[Math.floor(Math.random() * menuItems.length)]);
 
     expect(randomOption).toBeDefined();
   });
