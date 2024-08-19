@@ -10,9 +10,10 @@ export type SearchBarProps = {
   inputPlaceholderLabel?: string;
   fullWidth?: boolean;
   customStyle?: string;
-  onSearch: (keyword: string) => void;
+  onSearch?: (keyword: string) => void;
   onKeyUp?: (ev: React.KeyboardEvent<HTMLInputElement>) => void;
   onInputChange: (ev: React.ChangeEvent<HTMLInputElement>) => void;
+  onFocus?: React.FocusEventHandler<HTMLInputElement>;
 };
 
 /**
@@ -34,6 +35,7 @@ const SearchBar: React.FC<SearchBarProps> = props => {
     fullWidth,
     onSearch,
     onKeyUp,
+    onFocus,
   } = props;
 
   const handleSearch = (ev: React.KeyboardEvent<HTMLInputElement>) => {
@@ -67,6 +69,7 @@ const SearchBar: React.FC<SearchBarProps> = props => {
         onChange={onInputChange}
         onKeyDown={handleSearch}
         onKeyUp={handleKeyUp}
+        onFocus={onFocus}
       />
       <Icon icon={<MagnifyingGlassIcon />} />
     </Stack>

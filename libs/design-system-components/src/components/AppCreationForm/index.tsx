@@ -15,9 +15,10 @@ import { ButtonType } from '../types/common.types';
 export enum FieldName {
   extensionType = 'extensionType',
   extensionID = 'extensionID',
-  extensionName = 'extensionName',
+  extensionDisplayName = 'extensionDisplayName',
   extensionLicense = 'extensionLicense',
   extensionLicenseOther = 'extensionLicenseOther',
+  extensionSourceURL = 'extensionSourceURL',
 }
 
 export enum Licenses {
@@ -30,14 +31,23 @@ export enum Licenses {
 }
 
 type AppCreationFormValues = {
-  extensionType: { id: string; type: AkashaAppApplicationType; title: string };
+  extensionType: AkashaAppApplicationType;
   extensionID: string;
-  extensionName: string;
-  extensionLicense: { id: string; type: Licenses; title: string };
+  extensionDisplayName: string;
+  extensionLicense: Licenses | string;
   extensionLicenseOther: string;
+  extensionSourceURL: string;
 };
 
 export type AppCreationFormProps = {
+  extensionNameFieldLabel?: string;
+  extensionNamePlaceholderLabel?: string;
+  extensionDisplayNameFieldLabel?: string;
+  extensionDisplayNamePlaceholderLabel?: string;
+  extensionTypeFieldLabel?: string;
+  extensionLicenseFieldLabel?: string;
+  extensionLicenseOtherPlaceholderLabel?: string;
+  extensionSourceURLLabel?: string;
   defaultValues?: AppCreationFormValues;
   cancelButton: ButtonType;
   createButton: {
@@ -45,24 +55,30 @@ export type AppCreationFormProps = {
     loading?: boolean;
     handleClick: (data: AppCreationFormValues) => void;
   };
-  errorMessage?: { fieldName: string; message: string };
 };
 
 const AppCreationForm: React.FC<AppCreationFormProps> = ({
   defaultValues = {
-    extensionType: { id: '1', type: AkashaAppApplicationType.App, title: 'Application' },
+    extensionType: AkashaAppApplicationType.App,
     extensionID: '',
-    extensionName: '',
-    extensionLicense: { id: '1', type: Licenses.MIT, title: Licenses.MIT },
+    extensionDisplayName: '',
+    extensionLicense: Licenses.MIT,
     extensionLicenseOther: '',
+    extensionSourceURL: '',
   },
   cancelButton,
   createButton,
-  errorMessage,
+  extensionDisplayNameFieldLabel,
+  extensionDisplayNamePlaceholderLabel,
+  extensionNameFieldLabel,
+  extensionNamePlaceholderLabel,
+  extensionLicenseFieldLabel,
+  extensionLicenseOtherPlaceholderLabel,
+  extensionTypeFieldLabel,
+  extensionSourceURLLabel,
 }) => {
   const {
     control,
-    setError,
     getValues,
     formState: { errors, dirtyFields },
   } = useForm<AppCreationFormValues>({
@@ -71,42 +87,33 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
     mode: 'onChange',
   });
 
-  React.useEffect(() => {
-    if (errorMessage) {
-      setError(errorMessage.fieldName as FieldName, {
-        type: 'custom',
-        message: errorMessage.message,
-      });
-    }
-  }, [errorMessage, errors]);
-
   const extensionLicenseValue = useWatch({ control, name: FieldName.extensionLicense });
 
   const extensionTypes = [
-    { id: '1', type: AkashaAppApplicationType.App, title: AkashaAppApplicationType.App },
-    { id: '2', type: AkashaAppApplicationType.Plugin, title: AkashaAppApplicationType.Plugin },
-    { id: '3', type: AkashaAppApplicationType.Widget, title: AkashaAppApplicationType.Widget },
+    AkashaAppApplicationType.App,
+    AkashaAppApplicationType.Plugin,
+    AkashaAppApplicationType.Widget,
   ];
 
   const extensionLicenses = [
-    { id: '1', type: Licenses.MIT, title: Licenses.MIT },
-    { id: '2', type: Licenses.GPL, title: Licenses.GPL },
-    { id: '3', type: Licenses.APACHE, title: Licenses.APACHE },
-    { id: '4', type: Licenses.BSD, title: Licenses.BSD },
-    { id: '5', type: Licenses.MPL, title: Licenses.MPL },
-    { id: '6', type: Licenses.OTHER, title: Licenses.OTHER },
+    Licenses.MIT,
+    Licenses.GPL,
+    Licenses.APACHE,
+    Licenses.BSD,
+    Licenses.MPL,
+    Licenses.OTHER,
   ];
 
   const isFormDirty =
     Object.keys(dirtyFields).includes(FieldName.extensionID) &&
-    Object.keys(dirtyFields).includes(FieldName.extensionName);
+    Object.keys(dirtyFields).includes(FieldName.extensionDisplayName);
   const isValid = !Object.keys(errors).length;
 
   const onSave = (event: SyntheticEvent) => {
     event.preventDefault();
     const formValues = getValues();
-    if (formValues.extensionLicense.type === Licenses.OTHER) {
-      formValues.extensionLicense.title = formValues.extensionLicenseOther;
+    if (formValues.extensionLicense === Licenses.OTHER) {
+      formValues.extensionLicense = formValues.extensionLicenseOther;
     }
     if (isValid && isFormDirty) {
       createButton.handleClick({
@@ -124,7 +131,7 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
             name={FieldName.extensionType}
             render={({ field: { name, value, onChange, ref } }) => (
               <DropDown
-                label="Extension Type"
+                label={extensionTypeFieldLabel}
                 name={name}
                 selected={value}
                 menuItems={extensionTypes}
@@ -133,7 +140,6 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
                 required={true}
               />
             )}
-            defaultValue={extensionTypes[0]}
           />
           <Divider />
           <Controller
@@ -144,8 +150,8 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
                 id={name}
                 type="text"
                 name={name}
-                label={'Extension ID'}
-                placeholder="unique extension identifier"
+                label={extensionNameFieldLabel}
+                placeholder={extensionNamePlaceholderLabel}
                 value={value}
                 caption={error?.message}
                 status={error?.message ? 'error' : null}
@@ -154,19 +160,18 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
                 required={true}
               />
             )}
-            defaultValue=""
           />
           <Divider />
           <Controller
             control={control}
-            name={FieldName.extensionName}
+            name={FieldName.extensionDisplayName}
             render={({ field: { name, value, onChange, ref }, fieldState: { error } }) => (
               <TextField
                 id={name}
                 type="text"
                 name={name}
-                label={'Extension Display Name'}
-                placeholder="extension x"
+                label={extensionDisplayNameFieldLabel}
+                placeholder={extensionDisplayNamePlaceholderLabel}
                 value={value}
                 caption={error?.message}
                 status={error?.message ? 'error' : null}
@@ -175,7 +180,6 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
                 required={true}
               />
             )}
-            defaultValue=""
           />
           <Divider />
           <Controller
@@ -184,7 +188,7 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
             render={({ field: { name, value, onChange, ref } }) => (
               <>
                 <DropDown
-                  label="Extension License"
+                  label={extensionLicenseFieldLabel}
                   name={name}
                   selected={value}
                   menuItems={extensionLicenses}
@@ -196,7 +200,7 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
             )}
             defaultValue={extensionLicenses[0]}
           />
-          {extensionLicenseValue.type === Licenses.OTHER && (
+          {extensionLicenseValue === Licenses.OTHER && (
             <Controller
               control={control}
               name={FieldName.extensionLicenseOther}
@@ -205,7 +209,7 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
                   id={name}
                   customStyle="mt-2"
                   value={value}
-                  placeholder={'Please specify your license type'}
+                  placeholder={extensionLicenseOtherPlaceholderLabel}
                   type={'text'}
                   caption={error?.message}
                   status={error?.message ? 'error' : null}
@@ -217,6 +221,26 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
               defaultValue=""
             />
           )}
+          <Divider />
+          <Controller
+            control={control}
+            name={FieldName.extensionSourceURL}
+            render={({ field: { name, value, onChange, ref }, fieldState: { error } }) => (
+              <TextField
+                id={name}
+                type="text"
+                name={name}
+                label={extensionSourceURLLabel}
+                placeholder="https://localhost:"
+                value={value}
+                caption={error?.message}
+                status={error?.message ? 'error' : null}
+                onChange={onChange}
+                inputRef={ref}
+                required={true}
+              />
+            )}
+          />
         </Stack>
         <Divider />
 
@@ -252,8 +276,9 @@ const schema = z.object({
       value => /^[a-zA-Z0-9-_.]+$/.test(value),
       'ID should contain only alphabets, numbers or -_.',
     ),
-  extensionType: z.object({ id: z.string(), type: z.string(), title: z.string() }).required(),
-  extensionName: z.string().trim().min(4, { message: 'Must be at least 4 characters' }),
-  extensionLicense: z.object({ id: z.string(), type: z.string(), title: z.string() }).required(),
+  extensionType: z.string(),
+  extensionDisplayName: z.string().trim().min(4, { message: 'Must be at least 4 characters' }),
+  extensionLicense: z.string(),
   extensionLicenseOther: z.string().trim().min(3, { message: 'Must be at least 3 characters' }),
+  extensionSourceURL: z.string(),
 });

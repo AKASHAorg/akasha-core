@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import Stepper, { StepperProps } from '../../components/Stepper';
+import Stepper, { StepperProps } from '@akashaorg/design-system-core/lib/components/Stepper';
 
 const meta: Meta<StepperProps> = {
   title: 'DSComponents/Steppers/Stepper',

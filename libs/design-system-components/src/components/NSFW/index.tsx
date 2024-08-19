@@ -2,30 +2,37 @@ import React from 'react';
 import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import { Controller, Control } from 'react-hook-form';
-import { EditProfileFormValues } from '../types';
+import { Controller, Control, FieldValues, Path, PathValue } from 'react-hook-form';
 
-type InputType = { label: string; description: string; initialValue: boolean };
+export type InputType = { label: string; description?: string; initialValue: boolean };
 
-export type NSFWProps = {
+export type NSFWProps<T extends FieldValues> = {
   nsfw: InputType;
-  nsfwFormLabel: string;
-  control: Control<EditProfileFormValues>;
+  nsfwFieldLabel: string;
+  control: Control<T>;
+  name: Path<T>;
+  defaultValue: PathValue<T, Path<T>>;
   disabled?: boolean;
   customStyle?: string;
 };
 
-export const NSFW: React.FC<NSFWProps> = props => {
-  const { nsfw, nsfwFormLabel, control, disabled, customStyle } = props;
-
+export const NSFW = <T extends FieldValues>({
+  nsfw,
+  nsfwFieldLabel,
+  control,
+  name,
+  disabled,
+  customStyle,
+  defaultValue,
+}: NSFWProps<T>) => {
   return (
     <Stack direction="column" spacing="gap-y-2" customStyle={customStyle}>
       <Text variant="h6" as="label">
-        {nsfwFormLabel}
+        {nsfwFieldLabel}
       </Text>
       <Controller
         control={control}
-        name="nsfw"
+        name={name}
         render={({ field: { name, value, onChange } }) => (
           <Stack spacing="gap-y-1">
             <Stack direction="row" justify="between">
@@ -41,12 +48,14 @@ export const NSFW: React.FC<NSFWProps> = props => {
                 disabled={disabled}
               />
             </Stack>
-            <Text variant="button-md" as="label" color={{ light: 'grey4', dark: 'grey6' }}>
-              {nsfw.description}
-            </Text>
+            {nsfw.description && (
+              <Text variant="button-md" as="label" color={{ light: 'grey4', dark: 'grey6' }}>
+                {nsfw.description}
+              </Text>
+            )}
           </Stack>
         )}
-        defaultValue={nsfw.initialValue}
+        defaultValue={defaultValue}
       />
     </Stack>
   );

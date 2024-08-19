@@ -66,7 +66,7 @@ export const InstalledExtensions: React.FC<InstalledExtensionsProps> = props => 
             <AppList
               apps={installedExtensions}
               onLoadMore={() => {
-                return new Promise(null);
+                return new Promise(res => res);
               }}
             />
           )}

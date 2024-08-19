@@ -3,7 +3,7 @@ import React from 'react';
 import Link from '../Link';
 import AvatarImage from '../Avatar/avatar-image';
 import Stack from '../Stack';
-
+import { getImageFromSeed } from '../../utils';
 import { getColorClasses, getRadiusClasses } from '../../utils';
 import {
   AkashaAppApplicationType,
@@ -12,9 +12,12 @@ import {
 
 export type AppAvatarProps = {
   appType: AkashaAppApplicationType;
+  extensionId?: string;
   avatar?: AppImageSource;
+
   publicImgPath?: string;
   onClick?: React.MouseEventHandler;
+  customStyle?: string;
 };
 
 /**
@@ -31,7 +34,7 @@ export type AppAvatarProps = {
  * ```
  **/
 const AppAvatar: React.FC<AppAvatarProps> = props => {
-  const { appType, publicImgPath = '/images', avatar, onClick } = props;
+  const { appType, extensionId, publicImgPath = '/images', avatar, onClick, customStyle } = props;
 
   let avatarFallback: string;
 
@@ -39,22 +42,24 @@ const AppAvatar: React.FC<AppAvatarProps> = props => {
     avatarFallback = avatar?.src;
   }
 
+  const seed = getImageFromSeed(extensionId, 3);
+
   if (!avatar?.src) {
     switch (appType) {
       case AkashaAppApplicationType.App:
-        avatarFallback = `${publicImgPath}/App-${Math.floor(Math.random() * 3) + 1}.webp`;
+        avatarFallback = `${publicImgPath}/App-${seed}.webp`;
         break;
       case AkashaAppApplicationType.Widget:
-        avatarFallback = `${publicImgPath}/Widget-${Math.floor(Math.random() * 3) + 1}.webp`;
+        avatarFallback = `${publicImgPath}/Widget-${seed}.webp`;
         break;
       case AkashaAppApplicationType.Plugin:
-        avatarFallback = `${publicImgPath}/Plugin-${Math.floor(Math.random() * 3) + 1}.webp`;
+        avatarFallback = `${publicImgPath}/Plugin-${seed}.webp`;
         break;
       case AkashaAppApplicationType.Other:
-        avatarFallback = `${publicImgPath}/Other-${Math.floor(Math.random() * 3) + 1}.webp`;
+        avatarFallback = `${publicImgPath}/Other-${seed}.webp`;
         break;
       default:
-        avatarFallback = `${publicImgPath}/App-${Math.floor(Math.random() * 3) + 1}.webp`;
+        avatarFallback = `${publicImgPath}/App-${seed}.webp`;
         break;
     }
   }
@@ -62,7 +67,7 @@ const AppAvatar: React.FC<AppAvatarProps> = props => {
   const className = `shrink-0 overflow-hidden	${getRadiusClasses(10)} ${getColorClasses(
     { light: 'grey6', dark: 'grey5' },
     'bg',
-  )} w-[3.75rem] h-[3.75rem]`;
+  )} w-[3.75rem] h-[3.75rem] ${customStyle}`;
 
   return (
     <Link onClick={onClick} tabIndex={-1}>

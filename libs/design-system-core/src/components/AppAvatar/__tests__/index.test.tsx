@@ -16,7 +16,11 @@ describe('<AppAvatar /> Component', () => {
   beforeEach(() => {
     act(() => {
       componentWrapper = customRender(
-        <AppAvatar appType={AkashaAppApplicationType.App} avatar={avatar} />,
+        <AppAvatar
+          appType={AkashaAppApplicationType.App}
+          avatar={avatar}
+          extensionId="k2t6wzhkhabz2zolcv1p1iw5i2ubcwt7w1ulma6j433zfn8qawjy9l72cubfc5"
+        />,
         {},
       );
     });
