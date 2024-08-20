@@ -8,8 +8,9 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import routes, { REFLECT } from '../../../routes';
 import { useTranslation } from 'react-i18next';
 import { ReflectionData } from '@akashaorg/typings/lib/ui';
-import { transformSource } from '@akashaorg/ui-awf-hooks';
+import { hasOwn, transformSource } from '@akashaorg/ui-awf-hooks';
 import { useRouterState } from '@tanstack/react-router';
+import { useGetBeamByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
 type ReflectionSectionProps = {
   beamId: string;
@@ -26,7 +27,15 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
   const [isReflecting, setIsReflecting] = useState(
     routerState.location.pathname.endsWith(routes[REFLECT]),
   );
-  const activeReflection = reflectionData?.active;
+
+  const { data: beamData } = useGetBeamByIdQuery({
+    variables: { id: beamId },
+    skip: !beamId,
+  });
+
+  const activeParentBeam =
+    beamData && hasOwn(beamData.node, 'active') ? beamData.node.active : false;
+  const activeReflection = activeParentBeam ? reflectionData?.active : false;
 
   return (
     <Stack
