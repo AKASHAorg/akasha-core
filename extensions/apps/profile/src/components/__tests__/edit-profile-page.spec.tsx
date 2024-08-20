@@ -1,13 +1,22 @@
 import React from 'react';
 import EditProfilePage from '../pages/edit-profile';
 import userEvent from '@testing-library/user-event';
+import * as ImageCropper from '@akashaorg/design-system-core/lib/components/ImageCropper';
+import * as mediaUtils from '@akashaorg/ui-awf-hooks/lib/utils/media-utils';
 import { screen, renderWithAllProviders, genAppProps } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { InMemoryCache } from '@apollo/client';
-import { APOLLO_TYPE_POLICIES, NEW_PROFILE, PROFILE_DID } from '../__mocks__/constants';
+import {
+  APOLLO_TYPE_POLICIES,
+  NEW_AVATAR_URL,
+  NEW_COVER_IMAGE_URL,
+  NEW_PROFILE,
+  PROFILE_DID,
+} from '../__mocks__/constants';
 import { getEmptyProfileMock, getProfileInfoMocks } from '../__mocks__/get-profile-info-mocks';
 import { getEditProfileMocks } from '../__mocks__/get-edit-profile-mocks';
+import { ImageCropperMock } from '../__mocks__/image-cropper-mock';
 
 const baseComponent = (
   mocks: Readonly<MockedResponse<unknown, unknown>[]> | undefined,
@@ -71,7 +80,7 @@ describe('< EditProfilePage /> component', () => {
     });
   });
 
-  describe('should create profile', () => {
+  describe('should create or edit profile', () => {
     const emptyProfileMock = getEmptyProfileMock(PROFILE_DID);
     it('should submit form when proper name is provided', async () => {
       const user = userEvent.setup();
@@ -90,7 +99,7 @@ describe('< EditProfilePage /> component', () => {
       expect(screen.getByText(/must be at least 3 characters/i)).toBeInTheDocument();
     });
 
-    it('should submit all form fields', async () => {
+    it('should submit name, bio, social links and nsfw fields', async () => {
       const user = userEvent.setup();
       const { mocks: editProfileMocks } = getEditProfileMocks({ profileDID: PROFILE_DID });
       renderWithAllProviders(baseComponent([...emptyProfileMock, ...editProfileMocks]), {});
@@ -148,6 +157,105 @@ describe('< EditProfilePage /> component', () => {
       expect(await screen.findByRole('button', { name: /save/i })).toBeDisabled();
       await user.click(screen.getByLabelText('toggle'));
       expect(await screen.findByRole('button', { name: /save/i })).toBeEnabled();
+    });
+
+    //edit avatar image follows the same logic as upload
+    it('should upload avatar image', async () => {
+      const avatarImageFile = new File(['avatar-image'], 'avatar-image.webp', {
+        type: 'image/webp',
+      });
+      const user = userEvent.setup();
+      const { mocks } = getProfileInfoMocks({ profileDID: PROFILE_DID });
+      /* jsdom can not render visual items hence we can not properly test image upload flow without mocking ImageCropper component */
+      jest
+        .spyOn(ImageCropper, 'default')
+        .mockImplementation(props => <ImageCropperMock {...props} mockImage={avatarImageFile} />);
+      jest.spyOn(mediaUtils, 'saveMediaFile').mockImplementation(jest.fn());
+      Object.defineProperty(window, 'URL', {
+        writable: true,
+        value: {
+          createObjectURL: () => NEW_AVATAR_URL,
+        },
+      });
+      renderWithAllProviders(baseComponent(mocks), {});
+      await user.click(await screen.findByRole('button', { name: 'avatar' }));
+      expect(screen.getByRole('button', { name: /save/i })).toBeDisabled();
+      await user.click(screen.getByText(/upload/i));
+      await user.upload(screen.getByLabelText('image-upload'), avatarImageFile);
+      expect(await screen.findByText(/edit avatar/i)).toBeInTheDocument();
+      await user.click(screen.getByRole('button', { name: /crop/i }));
+      await user.click(screen.getByRole('button', { name: /save/i }));
+      expect(screen.queryByText(/edit avatar/i)).not.toBeInTheDocument();
+      expect(screen.getByTestId('avatar-source')).toHaveAttribute('srcset', NEW_AVATAR_URL);
+      expect(screen.getByRole('button', { name: /save/i })).toBeEnabled();
+    });
+
+    //edit cover image follows the same logic as upload
+    it('should upload cover image', async () => {
+      const coverImageFile = new File(['cover-image'], 'cover-image.webp', {
+        type: 'image/webp',
+      });
+      const user = userEvent.setup();
+      const { mocks } = getProfileInfoMocks({ profileDID: PROFILE_DID });
+      /* jsdom can not render visual items hence we can not properly test image upload flow without mocking ImageCropper component */
+      jest
+        .spyOn(ImageCropper, 'default')
+        .mockImplementation(props => <ImageCropperMock {...props} mockImage={coverImageFile} />);
+      jest.spyOn(mediaUtils, 'saveMediaFile').mockImplementation(jest.fn());
+      Object.defineProperty(window, 'URL', {
+        writable: true,
+        value: {
+          createObjectURL: () => NEW_COVER_IMAGE_URL,
+        },
+      });
+      renderWithAllProviders(baseComponent(mocks), {});
+      await user.click(await screen.findByRole('button', { name: 'cover-image' }));
+      expect(screen.getByRole('button', { name: /save/i })).toBeDisabled();
+      await user.click(screen.getByText(/upload/i));
+      await user.upload(screen.getByLabelText('image-upload'), coverImageFile);
+      expect(await screen.findByText(/edit cover/i)).toBeInTheDocument();
+      await user.click(screen.getByRole('button', { name: /crop/i }));
+      await user.click(screen.getByRole('button', { name: /save/i }));
+      expect(screen.queryByText(/edit cover/i)).not.toBeInTheDocument();
+      expect(screen.getByTestId('cover-image')).toHaveStyle(
+        `background-image: url(${NEW_COVER_IMAGE_URL})`,
+      );
+      expect(screen.getByRole('button', { name: /save/i })).toBeEnabled();
+    });
+
+    it('should delete avatar image', async () => {
+      const user = userEvent.setup();
+      const { mocks } = getProfileInfoMocks({ profileDID: PROFILE_DID });
+      renderWithAllProviders(baseComponent(mocks), {});
+      await user.click(await screen.findByRole('button', { name: 'avatar' }));
+      expect(screen.getByRole('button', { name: /save/i })).toBeDisabled();
+      await user.click(screen.getByText(/delete/i));
+      expect(await screen.findByText(/delete avatar/i)).toBeInTheDocument();
+      await user.click(screen.getByRole('button', { name: /delete/i }));
+      expect(screen.queryByText(/delete avatar/i)).not.toBeInTheDocument();
+      expect(screen.getByTestId('avatar-source')).not.toHaveAttribute('srcset');
+      expect(screen.getByRole('button', { name: /save/i })).toBeEnabled();
+    });
+
+    it('should delete cover image', async () => {
+      const user = userEvent.setup();
+      const {
+        mocks,
+        profileData: {
+          akashaProfile: { background },
+        },
+      } = getProfileInfoMocks({ profileDID: PROFILE_DID });
+      renderWithAllProviders(baseComponent(mocks), {});
+      await user.click(await screen.findByRole('button', { name: 'cover-image' }));
+      expect(screen.getByRole('button', { name: /save/i })).toBeDisabled();
+      await user.click(screen.getByText(/delete/i));
+      expect(await screen.findByText(/delete cover/i)).toBeInTheDocument();
+      await user.click(screen.getByRole('button', { name: /delete/i }));
+      expect(screen.queryByText(/delete cover/i)).not.toBeInTheDocument();
+      expect(screen.getByTestId('cover-image')).not.toHaveStyle(
+        `background-image: url(${background.default.src})`,
+      );
+      expect(screen.getByRole('button', { name: /save/i })).toBeEnabled();
     });
   });
 });
