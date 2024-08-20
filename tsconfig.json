@@ -20,7 +20,10 @@
     "forceConsistentCasingInFileNames": true,
     "lib": ["dom", "esnext"],
     "module": "esnext",
-    "target": "es2022"
+    "target": "es2022",
+    "paths": {
+      "@akashaorg/package-utils-plugin": ["./tools/package-utils-plugin/src/index.ts"]
+    }
   },
   "references": [
     {
