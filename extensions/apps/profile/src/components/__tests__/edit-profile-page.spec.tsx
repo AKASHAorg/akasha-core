@@ -234,7 +234,12 @@ describe('< EditProfilePage /> component', () => {
 
     it('should delete cover image', async () => {
       const user = userEvent.setup();
-      const { mocks } = getProfileInfoMocks({ profileDID: PROFILE_DID });
+      const {
+        mocks,
+        profileData: {
+          akashaProfile: { background },
+        },
+      } = getProfileInfoMocks({ profileDID: PROFILE_DID });
       renderWithAllProviders(baseComponent(mocks), {});
       await user.click(await screen.findByRole('button', { name: 'cover-image' }));
       expect(screen.getByRole('button', { name: /save/i })).toBeDisabled();
@@ -242,7 +247,9 @@ describe('< EditProfilePage /> component', () => {
       expect(await screen.findByText(/delete cover/i)).toBeInTheDocument();
       await user.click(screen.getByRole('button', { name: /delete/i }));
       expect(screen.queryByText(/delete cover/i)).not.toBeInTheDocument();
-      // expect(screen.getByTestId('avatar-source')).not.toHaveAttribute('srcset');
+      expect(screen.getByTestId('cover-image')).not.toHaveStyle(
+        `background-image: url(${background.default.src})`,
+      );
       expect(screen.getByRole('button', { name: /save/i })).toBeEnabled();
     });
   });
