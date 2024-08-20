@@ -181,6 +181,7 @@ describe('< EditProfilePage /> component', () => {
       await user.click(screen.getByText(/upload/i));
       await user.upload(screen.getByLabelText('image-upload'), avatarImageFile);
       expect(await screen.findByText(/edit avatar/i)).toBeInTheDocument();
+      await user.click(screen.getByRole('button', { name: /crop/i }));
       await user.click(screen.getByRole('button', { name: /save/i }));
       expect(screen.queryByText(/edit avatar/i)).not.toBeInTheDocument();
       expect(screen.getByTestId('avatar-source')).toHaveAttribute('srcset', NEW_AVATAR_URL);
@@ -210,6 +211,7 @@ describe('< EditProfilePage /> component', () => {
       await user.click(screen.getByText(/upload/i));
       await user.upload(screen.getByLabelText('image-upload'), coverImageFile);
       expect(await screen.findByText(/edit cover/i)).toBeInTheDocument();
+      await user.click(screen.getByRole('button', { name: /crop/i }));
       await user.click(screen.getByRole('button', { name: /save/i }));
       expect(screen.queryByText(/edit cover/i)).not.toBeInTheDocument();
       expect(screen.getByTestId('cover-image')).toHaveStyle(
