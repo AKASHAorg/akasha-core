@@ -183,7 +183,7 @@ describe('< EditProfilePage /> component', () => {
       expect(await screen.findByText(/edit avatar/i)).toBeInTheDocument();
       await user.click(screen.getByRole('button', { name: /crop/i }));
       await user.click(screen.getByRole('button', { name: /save/i }));
-      expect(screen.queryByText(/edit avatar/i)).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: /crop/i })).not.toBeInTheDocument();
       expect(screen.getByTestId('avatar-source')).toHaveAttribute('srcset', NEW_AVATAR_URL);
       expect(screen.getByRole('button', { name: /save/i })).toBeEnabled();
     });
@@ -213,7 +213,7 @@ describe('< EditProfilePage /> component', () => {
       expect(await screen.findByText(/edit cover/i)).toBeInTheDocument();
       await user.click(screen.getByRole('button', { name: /crop/i }));
       await user.click(screen.getByRole('button', { name: /save/i }));
-      expect(screen.queryByText(/edit cover/i)).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: /crop/i })).not.toBeInTheDocument();
       expect(screen.getByTestId('cover-image')).toHaveStyle(
         `background-image: url(${NEW_COVER_IMAGE_URL})`,
       );
