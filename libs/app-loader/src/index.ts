@@ -409,9 +409,7 @@ export default class AppLoader {
 
       const extensionData = this.extensionData.find(m => m.name === name);
 
-      // exclude only widgets that are always active (ie activeWhen is not explicitly defined)
-      if (extensionData.applicationType !== AkashaAppApplicationType.App && !conf.activeWhen)
-        continue;
+      if (extensionData.applicationType !== AkashaAppApplicationType.App) continue;
 
       const activeWhen: singleSpa.Activity = checkActivityFn({
         config: conf,
