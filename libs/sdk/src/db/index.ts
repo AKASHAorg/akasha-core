@@ -1,9 +1,9 @@
 import { injectable } from 'inversify';
-import settingsSchema from './settings.schema.js';
-import appSchema from './integrations.schema.js';
-import { validate } from '../common/validator.js';
+import settingsSchema from './settings.schema';
+import appSchema from './integrations.schema';
+import { validate } from '../common/validator';
 import { z } from 'zod';
-import DbWrapper from './db.wrapper.js';
+import DbWrapper from './db.wrapper';
 
 export const availableCollections = Object.freeze({
   Settings: settingsSchema.name,

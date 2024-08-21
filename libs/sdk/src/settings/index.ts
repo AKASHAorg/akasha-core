@@ -1,8 +1,8 @@
 import { injectable, inject } from 'inversify';
-import { TYPES } from '@akashaorg/typings/lib/sdk/index.js';
-import DB from '../db/index.js';
-import { createFormattedValue } from '../helpers/observable.js';
-import { validate } from '../common/validator.js';
+import { TYPES } from '@akashaorg/typings/lib/sdk';
+import DB from '../db';
+import { createFormattedValue } from '../helpers/observable';
+import { validate } from '../common/validator';
 import { z } from 'zod';
 
 @injectable()

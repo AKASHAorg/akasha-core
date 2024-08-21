@@ -1,13 +1,13 @@
 import { inject, injectable } from 'inversify';
-import { validate } from './validator.js';
+import { validate } from './validator';
 import { z } from 'zod';
 import { AccountId } from 'caip';
 import { Resolver } from 'did-resolver';
 import { getResolver } from 'pkh-did-resolver';
 import KeyResolver from 'key-did-resolver';
 import { isAddress } from 'ethers';
-import { TYPES } from '@akashaorg/typings/lib/sdk/index.js';
-import AWF_Config from './config.js';
+import { TYPES } from '@akashaorg/typings/lib/sdk';
+import AWF_Config from './config';
 
 @injectable()
 class AWF_Misc {

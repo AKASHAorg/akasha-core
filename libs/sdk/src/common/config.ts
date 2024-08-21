@@ -1,5 +1,5 @@
 import { injectable } from 'inversify';
-import { env } from './env.js';
+import { env } from './env';
 
 export const SDKConfigOptions = [
   'ceramic_api_endpoint',

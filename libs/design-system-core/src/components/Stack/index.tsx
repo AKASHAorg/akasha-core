@@ -1,4 +1,4 @@
-import React, { LegacyRef, PropsWithChildren, forwardRef } from 'react';
+import React, { PropsWithChildren, forwardRef } from 'react';
 import { getPaddingClasses, getColorClasses } from '../../utils';
 import { getAlignClasses, getAlignSelfClasses } from './getAlignClasses';
 import { getDirectionClasses } from './getDirectionClasses';
@@ -30,7 +30,6 @@ export type StackProps = PropsWithChildren<{
   customStyle?: string;
   fullWidth?: boolean;
   dataTestId?: string;
-  ref?: LegacyRef<HTMLDivElement>;
   id?: string;
 }>;
 
@@ -62,7 +61,7 @@ export type StackProps = PropsWithChildren<{
     </Stack>
  * ```
  **/
-const Stack: React.FC<StackProps> = forwardRef(
+const Stack = forwardRef<HTMLDivElement, StackProps>(
   (
     {
       direction = 'column',

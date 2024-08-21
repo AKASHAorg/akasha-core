@@ -6,15 +6,15 @@ import {
   PROVIDER_ERROR_CODES,
   TYPES,
   WEB3_EVENTS,
-} from '@akashaorg/typings/lib/sdk/index.js';
-import Logging from '../logging/index.js';
-import EventBus from './event-bus.js';
+} from '@akashaorg/typings/lib/sdk';
+import Logging from '../logging';
+import EventBus from './event-bus';
 import pino from 'pino';
-import { createFormattedValue } from '../helpers/observable.js';
-import { validate } from './validator.js';
+import { createFormattedValue } from '../helpers/observable';
+import { validate } from './validator';
 import { z } from 'zod';
 import { createWeb3Modal, defaultConfig } from '@web3modal/ethers';
-import AWF_Config from './config.js';
+import AWF_Config from './config';
 
 @injectable()
 class Web3Connector {

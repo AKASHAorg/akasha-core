@@ -111,7 +111,7 @@ const config = [
         process: ['process'],
       }),
       new InjectManifest({
-        swSrc: './src/sw.js',
+        swSrc: './src/sw',
         swDest: path.resolve(__dirname, '../../dist/', 'sw.js'),
         exclude: [/\.map$/, /^manifest.*\.js$/, /\.d.ts$/, /\.ts$/],
       }),
