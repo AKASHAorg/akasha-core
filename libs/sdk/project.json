@@ -13,7 +13,7 @@
       }
     },
     "build": {
-      "dependsOn": ["prepare"],
+      "dependsOn": ["prepare", "extract-package-json"],
       "executor": "nx:run-commands",
       "options": {
         "cwd": "libs/sdk",
