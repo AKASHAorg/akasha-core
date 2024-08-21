@@ -159,7 +159,6 @@ describe('< EditProfilePage /> component', () => {
       expect(await screen.findByRole('button', { name: /save/i })).toBeEnabled();
     });
 
-    //edit avatar image follows the same logic as upload
     it('should upload avatar image', async () => {
       const avatarImageFile = new File(['avatar-image'], 'avatar-image.webp', {
         type: 'image/webp',
@@ -190,7 +189,36 @@ describe('< EditProfilePage /> component', () => {
       expect(screen.getByRole('button', { name: /save/i })).toBeEnabled();
     });
 
-    //edit cover image follows the same logic as upload
+    it('should edit avatar image', async () => {
+      const avatarImageFile = new File(['avatar-image'], 'avatar-image.webp', {
+        type: 'image/webp',
+      });
+      const user = userEvent.setup();
+      const { mocks } = getProfileInfoMocks({ profileDID: PROFILE_DID });
+      /* jsdom can not render visual items hence we can not properly test image upload flow without mocking ImageCropper component */
+      jest
+        .spyOn(ImageCropper, 'default')
+        .mockImplementation(props => <ImageCropperMock {...props} mockImage={avatarImageFile} />);
+      jest.spyOn(mediaUtils, 'saveMediaFile').mockImplementation(jest.fn());
+      Object.defineProperty(window, 'URL', {
+        writable: true,
+        value: {
+          createObjectURL: () => NEW_AVATAR_URL,
+        },
+      });
+      renderWithAllProviders(baseComponent(mocks), {});
+      await user.click(await screen.findByRole('button', { name: 'avatar' }));
+      expect(screen.getByRole('button', { name: /save/i })).toBeDisabled();
+      await user.click(screen.getByText(/edit/i));
+      await user.upload(screen.getByLabelText('image-upload'), avatarImageFile);
+      expect(await screen.findByText(/edit avatar/i)).toBeInTheDocument();
+      await user.click(screen.getByRole('button', { name: /crop/i }));
+      await user.click(screen.getByRole('button', { name: /save/i }));
+      await waitFor(() => expect(screen.queryByText(/edit avatar/i)).not.toBeInTheDocument());
+      expect(screen.getByTestId('avatar-source')).toHaveAttribute('srcset', NEW_AVATAR_URL);
+      expect(screen.getByRole('button', { name: /save/i })).toBeEnabled();
+    });
+
     it('should upload cover image', async () => {
       const coverImageFile = new File(['cover-image'], 'cover-image.webp', {
         type: 'image/webp',
@@ -212,6 +240,38 @@ describe('< EditProfilePage /> component', () => {
       await user.click(await screen.findByRole('button', { name: 'cover-image' }));
       expect(screen.getByRole('button', { name: /save/i })).toBeDisabled();
       await user.click(screen.getByText(/upload/i));
+      await user.upload(screen.getByLabelText('image-upload'), coverImageFile);
+      expect(await screen.findByText(/edit cover/i)).toBeInTheDocument();
+      await user.click(screen.getByRole('button', { name: /crop/i }));
+      await user.click(screen.getByRole('button', { name: /save/i }));
+      await waitFor(() => expect(screen.queryByText(/edit cover/i)).not.toBeInTheDocument());
+      expect(screen.getByTestId('cover-image')).toHaveStyle(
+        `background-image: url(${NEW_COVER_IMAGE_URL})`,
+      );
+      expect(screen.getByRole('button', { name: /save/i })).toBeEnabled();
+    });
+
+    it('should edit cover image', async () => {
+      const coverImageFile = new File(['cover-image'], 'cover-image.webp', {
+        type: 'image/webp',
+      });
+      const user = userEvent.setup();
+      const { mocks } = getProfileInfoMocks({ profileDID: PROFILE_DID });
+      /* jsdom can not render visual items hence we can not properly test image upload flow without mocking ImageCropper component */
+      jest
+        .spyOn(ImageCropper, 'default')
+        .mockImplementation(props => <ImageCropperMock {...props} mockImage={coverImageFile} />);
+      jest.spyOn(mediaUtils, 'saveMediaFile').mockImplementation(jest.fn());
+      Object.defineProperty(window, 'URL', {
+        writable: true,
+        value: {
+          createObjectURL: () => NEW_COVER_IMAGE_URL,
+        },
+      });
+      renderWithAllProviders(baseComponent(mocks), {});
+      await user.click(await screen.findByRole('button', { name: 'cover-image' }));
+      expect(screen.getByRole('button', { name: /save/i })).toBeDisabled();
+      await user.click(screen.getByText(/edit/i));
       await user.upload(screen.getByLabelText('image-upload'), coverImageFile);
       expect(await screen.findByText(/edit cover/i)).toBeInTheDocument();
       await user.click(screen.getByRole('button', { name: /crop/i }));
