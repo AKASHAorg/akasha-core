@@ -8,34 +8,25 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import routes, { REFLECT } from '../../../routes';
 import { useTranslation } from 'react-i18next';
 import { ReflectionData } from '@akashaorg/typings/lib/ui';
-import { hasOwn, transformSource } from '@akashaorg/ui-awf-hooks';
+import { transformSource } from '@akashaorg/ui-awf-hooks';
 import { useRouterState } from '@tanstack/react-router';
-import { useGetBeamByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
 type ReflectionSectionProps = {
-  beamId: string;
-  reflectionId: string;
+  isBeamActive: boolean;
   reflectionData: ReflectionData;
   isLoggedIn: boolean;
   showLoginModal: (title?: string, message?: string) => void;
 };
 
 const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
-  const { beamId, reflectionId, reflectionData, isLoggedIn, showLoginModal } = props;
+  const { isBeamActive, reflectionData, isLoggedIn, showLoginModal } = props;
   const { t } = useTranslation('app-antenna');
   const routerState = useRouterState();
   const [isReflecting, setIsReflecting] = useState(
     routerState.location.pathname.endsWith(routes[REFLECT]),
   );
 
-  const { data: beamData } = useGetBeamByIdQuery({
-    variables: { id: beamId },
-    skip: !beamId,
-  });
-
-  const activeParentBeam =
-    beamData && hasOwn(beamData.node, 'active') ? beamData.node.active : false;
-  const activeReflection = activeParentBeam ? reflectionData?.active : false;
+  const activeReflection = isBeamActive ? reflectionData?.active : false;
 
   return (
     <Stack
@@ -78,8 +69,8 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
           )}
           {isLoggedIn && (
             <ReflectEditor
-              beamId={beamId}
-              reflectToId={reflectionId}
+              beamId={reflectionData.beamID}
+              reflectToId={reflectionData.id}
               showEditor={isReflecting}
               setShowEditor={setIsReflecting}
             />

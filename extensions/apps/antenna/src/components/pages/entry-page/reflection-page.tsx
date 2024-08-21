@@ -6,11 +6,17 @@ import ReflectionSection from './reflection-section';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import { EntityTypes, ReflectionData } from '@akashaorg/typings/lib/ui';
-import { useAkashaStore, useAnalytics, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import {
+  hasOwn,
+  useAkashaStore,
+  useAnalytics,
+  useRootComponentProps,
+} from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { ReflectionPreview } from '@akashaorg/ui-lib-feed';
 import { useNavigate } from '@tanstack/react-router';
 import { EditableReflectionResolver, ReflectFeed } from '@akashaorg/ui-lib-feed';
+import { useGetBeamByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
 type ReflectionPageProps = {
   reflectionData: ReflectionData;
@@ -26,6 +32,17 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
   const [analyticsActions] = useAnalytics();
   const navigate = useNavigate();
   const isLoggedIn = !!authenticatedDID;
+
+  const { data } = useGetBeamByIdQuery({
+    variables: { id: reflectionData.beamID },
+    skip: !reflectionData.beamID,
+  });
+
+  const isBeamActive = React.useMemo(() => {
+    if (data && hasOwn(data.node, 'active')) {
+      return data.node.active;
+    }
+  }, [data]);
 
   const filters = useMemo(() => {
     return {
@@ -76,8 +93,7 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
               onClick={() => onNavigateToOriginalBeam(reflectionData.beamID)}
             />
             <ReflectionSection
-              beamId={reflectionData.beamID}
-              reflectionId={reflectionData.id}
+              isBeamActive={isBeamActive}
               reflectionData={reflectionData}
               isLoggedIn={isLoggedIn}
               showLoginModal={showLoginModal}
