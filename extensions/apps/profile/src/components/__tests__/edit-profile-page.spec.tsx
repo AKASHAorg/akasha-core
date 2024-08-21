@@ -3,7 +3,7 @@ import EditProfilePage from '../pages/edit-profile';
 import userEvent from '@testing-library/user-event';
 import * as ImageCropper from '@akashaorg/design-system-core/lib/components/ImageCropper';
 import * as mediaUtils from '@akashaorg/ui-awf-hooks/lib/utils/media-utils';
-import { screen, renderWithAllProviders, genAppProps } from '@akashaorg/af-testing';
+import { screen, renderWithAllProviders, genAppProps, waitFor } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { InMemoryCache } from '@apollo/client';
@@ -185,6 +185,7 @@ describe('< EditProfilePage /> component', () => {
       expect(await screen.findByText(/edit avatar/i)).toBeInTheDocument();
       await user.click(screen.getByRole('button', { name: /crop/i }));
       await user.click(screen.getByRole('button', { name: /save/i }));
+      await waitFor(() => expect(screen.queryByText(/edit avatar/i)).not.toBeInTheDocument());
       expect(screen.getByTestId('avatar-source')).toHaveAttribute('srcset', NEW_AVATAR_URL);
       expect(screen.getByRole('button', { name: /save/i })).toBeEnabled();
     });
@@ -215,6 +216,7 @@ describe('< EditProfilePage /> component', () => {
       expect(await screen.findByText(/edit cover/i)).toBeInTheDocument();
       await user.click(screen.getByRole('button', { name: /crop/i }));
       await user.click(screen.getByRole('button', { name: /save/i }));
+      await waitFor(() => expect(screen.queryByText(/edit cover/i)).not.toBeInTheDocument());
       expect(screen.getByTestId('cover-image')).toHaveStyle(
         `background-image: url(${NEW_COVER_IMAGE_URL})`,
       );
