@@ -33,17 +33,21 @@ export class WidgetStore extends BaseStore {
       if (widget.mountsIn === slotName && !hasOwn(widget, 'activeWhen')) {
         matchingWidgets.push(widget);
       }
-      // CASE 2: activeWhen is specified as a string
-      if (widget.mountsIn === slotName && typeof widget.activeWhen === 'string') {
+      // CASE 2: activeWhen is specified as a string or function
+      else if (
+        (widget.mountsIn === slotName && typeof widget.activeWhen === 'string') ||
+        typeof widget.activeWhen === 'function'
+      ) {
         if (checkActivity(widget.activeWhen, location)) {
           matchingWidgets.push(widget);
         }
       }
-      // CASE 3: activeWhen is specified as an array of strings
-      if (widget.mountsIn === slotName && Array.isArray(widget.activeWhen)) {
+      // CASE 3: activeWhen is specified as an array of strings or array of functions
+      else if (widget.mountsIn === slotName && Array.isArray(widget.activeWhen)) {
         // check through the activeWhen values and add widget if there is a match
         widget.activeWhen.forEach(when => {
-          if (checkActivity(when, location)) {
+          const alreadyExist = matchingWidgets.some(wi => wi.appName === widget.appName);
+          if (checkActivity(when, location) && !alreadyExist) {
             matchingWidgets.push(widget);
           }
         });
