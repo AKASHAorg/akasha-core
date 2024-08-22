@@ -6,7 +6,7 @@ import * as Signer from '@ucanto/principal/ed25519';
 import { filesFromPaths } from 'files-from-path';
 import semver from 'semver';
 import { AkashaAppApplicationType, SortOrder } from '@akashaorg/typings/lib/sdk/graphql-types-new.js';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 //import path from 'path';
 import pkgMapping from './pkg.mapping.mjs';
 import { fromString } from 'uint8arrays/from-string';
