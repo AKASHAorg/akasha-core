@@ -22,13 +22,13 @@ export interface CheckActivityOptions {
 }
 
 export const checkActivityFn = (opts: CheckActivityOptions): singleSpa.Activity => {
-  const { config, extensionType, encodedAppName, enabled = true } = opts;
-
-  let { location } = opts;
-
-  if (!location) {
-    location = window.location;
-  }
+  const {
+    config,
+    extensionType,
+    encodedAppName,
+    enabled = true,
+    location = window.location,
+  } = opts;
 
   if (!enabled) {
     return () => false;
