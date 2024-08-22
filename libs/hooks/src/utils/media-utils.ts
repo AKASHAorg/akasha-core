@@ -1,4 +1,4 @@
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 import { logError } from './error-handler';
 import { type Image } from '@akashaorg/typings/lib/ui';
 

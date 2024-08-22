@@ -1,4 +1,4 @@
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAkashaStore } from './store';
 

@@ -1,6 +1,6 @@
 import { mockSDK } from '@akashaorg/af-testing';
 
-jest.mock('@akashaorg/awf-sdk', () => {
+jest.mock('@akashaorg/core-sdk', () => {
   return () => mockSDK({});
 });
 

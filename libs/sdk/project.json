@@ -1,5 +1,5 @@
 {
-  "name": "@akashaorg/awf-sdk",
+  "name": "@akashaorg/core-sdk",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/sdk/src",
   "projectType": "application",
@@ -13,7 +13,7 @@
       }
     },
     "build": {
-      "dependsOn": ["prepare"],
+      "dependsOn": ["prepare", "extract-package-json"],
       "executor": "nx:run-commands",
       "options": {
         "cwd": "libs/sdk",
@@ -29,6 +29,12 @@
       "options": {
         "cwd": "libs/sdk",
         "command": "graphql-codegen-esm --config codegen.cjs --project default"
+      }
+    },
+    "extract-package-json": {
+      "executor": "@akashaorg/package-utils-plugin:extract-dependencies",
+      "options": {
+        "outputPath":  "{workspaceRoot}/dist/npm/core-sdk"
       }
     }
   },

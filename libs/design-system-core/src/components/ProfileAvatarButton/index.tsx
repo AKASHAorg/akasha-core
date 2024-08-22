@@ -39,7 +39,7 @@ export type ProfileAvatarButtonProps = {
  * ```
  **/
 const ProfileAvatarButton = React.forwardRef(
-  (props: ProfileAvatarButtonProps, ref: React.LegacyRef<HTMLDivElement>) => {
+  (props: ProfileAvatarButtonProps, ref: React.Ref<HTMLDivElement>) => {
     const {
       customStyle = '',
       avatar,

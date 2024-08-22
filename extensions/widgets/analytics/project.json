@@ -9,7 +9,7 @@
         "@akashaorg/ui-awf-hooks:build",
         "@akashaorg/design-system-core:prepare",
         "@akashaorg/design-system-components:prepare",
-        "@akashaorg/awf-sdk:build",
+        "@akashaorg/core-sdk:build",
         "@akashaorg/typings:prepare"
       ],
       "executor": "nx:run-commands",

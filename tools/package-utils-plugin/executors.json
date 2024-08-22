@@ -1,0 +1,9 @@
+{
+  "executors": {
+    "extract-dependencies": {
+      "implementation": "./src/executors/extract-dependencies/executor",
+      "schema": "./src/executors/extract-dependencies/schema.json",
+      "description": "extract-dependencies executor"
+    }
+  }
+}

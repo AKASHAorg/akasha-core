@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import isEqual from 'lodash/isEqual';
 import difference from 'lodash/difference';
 import pullAll from 'lodash/pullAll';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import {
   useCreateInterestsMutation,

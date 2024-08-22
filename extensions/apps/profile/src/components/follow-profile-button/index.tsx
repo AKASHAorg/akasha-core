@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 import {
   CheckIcon,
   UserPlusIcon,

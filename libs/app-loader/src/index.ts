@@ -26,9 +26,8 @@ import {
   getUserInstalledExtensions,
   getWorldDefaultExtensions,
 } from './extensions';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK, { SDK_Services, SDK_API } from '@akashaorg/core-sdk';
 import { ILogger } from '@akashaorg/typings/lib/sdk/log';
-import Logging from '@akashaorg/awf-sdk/src/logging/index';
 import {
   checkActivityFn,
   extractAppNameFromPath,
@@ -37,9 +36,8 @@ import {
   navigateToModal,
   parseQueryString,
 } from './utils';
-import EventBus from '@akashaorg/awf-sdk/src/common/event-bus';
 import { APP_EVENTS, AUTH_EVENTS } from '@akashaorg/typings/lib/sdk';
-import { IntegrationSchema } from '@akashaorg/awf-sdk/src/db/integrations.schema';
+import { IntegrationSchema } from '@akashaorg/core-sdk/lib/db/integrations.schema';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 const isWindow = window && typeof window !== 'undefined';
@@ -64,9 +62,9 @@ export default class AppLoader {
   extensionData: Awaited<ReturnType<typeof getWorldDefaultExtensions>>;
   layoutConfig: IAppConfig;
   logger: ILogger;
-  parentLogger: Logging;
+  parentLogger: SDK_Services['log'];
   plugins: IPlugin;
-  globalChannel: EventBus;
+  globalChannel: SDK_API['globalChannel'];
   user: { id: string };
   globalChannelSub: Subscription;
   userExtensions: IntegrationSchema[];
