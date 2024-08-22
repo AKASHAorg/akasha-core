@@ -157,6 +157,11 @@ describe('< ProfileInfoPage /> component', () => {
           isAuthenticating: false,
         },
       });
+      jest.spyOn(useProfileStats, 'useProfileStats').mockReturnValue({
+        data: { ...PROFILE_STATS },
+        loading: false,
+        error: null,
+      });
     });
 
     it('should follow other profile', async () => {
@@ -166,8 +171,15 @@ describe('< ProfileInfoPage /> component', () => {
         profileDID: PROFILE_DID,
         isFollowing: true,
       });
+      const followingMock = getFollowMock({
+        profileDID: PROFILE_DID,
+        isFollowing: true,
+      });
       const user = userEvent.setup();
-      renderWithAllProviders(baseComponent([...mocks, ...followMock, ...followProfileMocks]), {});
+      renderWithAllProviders(
+        baseComponent([...mocks, ...followMock, ...followingMock, ...followProfileMocks]),
+        {},
+      );
       expect(await screen.findByText(profileData.akashaProfile.name)).toBeInTheDocument();
       expect(screen.getByText(truncateDid(profileData.akashaProfile.did.id))).toBeInTheDocument();
       expect(screen.getByTestId('avatar-source')).toHaveAttribute(

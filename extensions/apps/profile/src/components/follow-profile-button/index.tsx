@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
@@ -36,7 +36,7 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
     data: { authenticatedDID },
   } = useAkashaStore();
   const isLoggedIn = !!authenticatedDID;
-  const { data, error } = useGetFollowDocumentsByDidQuery({
+  const { data, error, refetch } = useGetFollowDocumentsByDidQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
       id: authenticatedDID,
@@ -72,6 +72,7 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
     onCompleted: async ({ setAkashaFollow }) => {
       const document = setAkashaFollow.document;
       if (iconOnly) sendSuccessNotification(document.profile?.name, isFollowing);
+      refetch();
     },
   });
 
@@ -80,6 +81,7 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
     onCompleted: async ({ updateAkashaFollow }) => {
       const document = updateAkashaFollow.document;
       if (iconOnly) sendSuccessNotification(document.profile?.name, isFollowing);
+      refetch();
     },
   });
 
@@ -114,7 +116,7 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
     }
   };
 
-  const handleUnFollow = (profileID: string, followId?: string) => {
+  const handleUnFollow = (followId?: string) => {
     if (disableActions) {
       return;
     }
@@ -141,7 +143,7 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
         aria-label="follow"
         onClick={
           isFollowing
-            ? () => handleUnFollow(profileID, followDocumentId)
+            ? () => handleUnFollow(followDocumentId)
             : () => handleFollow(profileID, followDocumentId)
         }
         icon={isFollowing ? <Following role="img" aria-label="following" /> : <UserPlusIcon />}
@@ -171,7 +173,7 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
         }}
         customStyle={disabledStyle}
         onClickInactive={() => handleFollow(profileID, followDocumentId)}
-        onClickActive={() => handleUnFollow(profileID, followDocumentId)}
+        onClickActive={() => handleUnFollow(followDocumentId)}
       />
     );
 
