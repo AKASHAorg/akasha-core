@@ -13,6 +13,8 @@
     "module": "esnext",
     "target": "es2020",
     "strict": true,
+    "rootDir": "./src",
+    "outDir": "../../dist/npm/core-sdk/lib"
   },
   "include": [
     "./src",

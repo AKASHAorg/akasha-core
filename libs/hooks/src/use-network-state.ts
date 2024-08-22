@@ -1,4 +1,4 @@
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 import { filter } from 'rxjs';
 import { GlobalEventBusData, WEB3_EVENTS } from '@akashaorg/typings/lib/sdk';
 import React, { useEffect, useState } from 'react';

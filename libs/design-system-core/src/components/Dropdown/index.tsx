@@ -15,7 +15,6 @@ export type DropdownProps = {
   selected?: string;
   menuItems: string[];
   setSelected: React.Dispatch<React.SetStateAction<string>>;
-  ref?: React.Ref<HTMLDivElement>;
   required?: boolean;
 };
 
@@ -29,7 +28,7 @@ export type DropdownProps = {
  * @param selected - (optional) selected item by default
  * @param menuItems - a list of menu items to be displayed on activation
  * @param setSelected - handler function to set the selected item
- * is used in a form and it is a required field
+ * is used in a form, and it is a required field
  * ```tsx
  *  <Dropdown
  *    name='dropdown'
@@ -43,7 +42,7 @@ export type DropdownProps = {
  *   />
  * ```
  **/
-const Dropdown: React.FC<DropdownProps> = React.forwardRef(props => {
+const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>((props, ref) => {
   const { label, placeholderLabel, menuItems, selected, setSelected, required } = props;
 
   const [dropOpen, setDropOpen] = React.useState<boolean>(false);

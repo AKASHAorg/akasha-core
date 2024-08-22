@@ -1,5 +1,5 @@
-import getSDK from '@akashaorg/awf-sdk';
-import { Logger } from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
+import { Logger } from '@akashaorg/core-sdk';
 import type {
   BeamData,
   RawBeamData,

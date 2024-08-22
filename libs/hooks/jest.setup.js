@@ -5,7 +5,7 @@ import { mockNotifications, mockNotificationsProfiles } from './src/__mocks__/no
  * sdk mock for Hooks package.
  * Include only methods needed for the hooks tests
  */
-jest.mock('@akashaorg/awf-sdk', () => () => ({
+jest.mock('@akashaorg/core-sdk', () => () => ({
   api: {
     auth: {
       getMessages: () => Promise.resolve({ data: mockNotifications }),

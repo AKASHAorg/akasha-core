@@ -1,5 +1,5 @@
 import { BehaviorSubject, filter, NextObserver, Subscription } from 'rxjs';
-import getSdk from '@akashaorg/awf-sdk';
+import getSdk from '@akashaorg/core-sdk';
 import { AUTH_EVENTS, GlobalEventBusData } from '@akashaorg/typings/lib/sdk';
 import { IRootComponentProps } from '@akashaorg/typings/lib/ui';
 

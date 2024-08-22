@@ -1,4 +1,4 @@
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 import { ContentBlockModes } from '@akashaorg/typings/lib/ui';
 import { MatchingBlock } from './common.types';
 import { hasOwn } from '@akashaorg/ui-awf-hooks';

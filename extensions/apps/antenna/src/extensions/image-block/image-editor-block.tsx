@@ -36,7 +36,7 @@ import {
   XMarkIcon,
   ArrowPathIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 
 // @TODO: replace this with actual data

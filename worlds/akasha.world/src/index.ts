@@ -11,7 +11,7 @@ declare const __LOAD_LOCAL_SOURCES__: boolean;
 
 (async function bootstrap(System) {
   const { default: AppLoader } = await System.import('@akashaorg/ui-app-loader');
-  const { default: getSDK } = await System.import('@akashaorg/awf-sdk');
+  const { default: getSDK } = await System.import('@akashaorg/core-sdk');
 
   const origin = window.location.origin;
   let registryOverrides: (Partial<AkashaApp> & { source: string })[] = [

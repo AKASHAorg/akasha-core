@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 
 async function resolveDid(did: string) {
   const sdk = getSDK();

@@ -1,9 +1,9 @@
 import { inject, injectable } from 'inversify';
 import pino from 'pino';
-import { validate } from '../common/validator.js';
+import { validate } from '../common/validator';
 import { z } from 'zod';
-import AWF_Config from '../common/config.js';
-import { TYPES } from '@akashaorg/typings/lib/sdk/index.js';
+import AWF_Config from '../common/config';
+import { TYPES } from '@akashaorg/typings/lib/sdk';
 
 /**
  * @module Logger
