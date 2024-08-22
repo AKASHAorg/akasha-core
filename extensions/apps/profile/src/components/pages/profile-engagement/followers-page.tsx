@@ -9,14 +9,12 @@ import ProfileEngagementLoading from '@akashaorg/design-system-components/lib/co
 import routes, { FOLLOWERS } from '../../../routes';
 import { IModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import {
-  useGetFollowDocumentsByDidQuery,
   useGetFollowersListByDidQuery,
   useGetProfileByDidQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import {
   transformSource,
   hasOwn,
-  getFollowList,
   useRootComponentProps,
   useAkashaStore,
 } from '@akashaorg/ui-awf-hooks';
@@ -71,19 +69,6 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
       ? data?.node.akashaProfile?.followers?.pageInfo
       : null;
   }, [data]);
-  const followProfileIds = useMemo(
-    () => followers.map(follower => follower.did?.akashaProfile?.id).filter(id => !!id),
-    [followers],
-  );
-  const { data: followDocuments } = useGetFollowDocumentsByDidQuery({
-    fetchPolicy: 'cache-and-network',
-    variables: {
-      id: authenticatedDID,
-      following: followProfileIds,
-      last: followProfileIds.length,
-    },
-    skip: !isLoggedIn || !followProfileIds.length,
-  });
 
   if (
     !data /* data is undefined until prefetching is complete therefore we display skeleton */ ||
@@ -94,12 +79,6 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
         <ProfileEngagementLoading />
       </EngagementTab>
     );
-
-  const followList = getFollowList(
-    followDocuments?.node && hasOwn(followDocuments?.node, 'akashaFollowList')
-      ? followDocuments?.node?.akashaFollowList?.edges?.map(edge => edge?.node)
-      : null,
-  );
 
   const showLoginModal = (redirectTo?: { modal: IModalNavigationOptions }) => {
     navigateToModal({
@@ -143,7 +122,6 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
         <Followers
           authenticatedDID={authenticatedDID}
           followers={followers}
-          followList={followList}
           profileAnchorLink={'/@akashaorg/app-profile'}
           emptyEntryTitleLabel={
             <>
@@ -171,14 +149,8 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
             }
             return null;
           }}
-          renderFollowElement={(profileId, followId, isFollowing) => (
-            <FollowProfileButton
-              profileID={profileId}
-              isLoggedIn={isLoggedIn}
-              followId={followId}
-              isFollowing={isFollowing}
-              showLoginModal={showLoginModal}
-            />
+          renderFollowElement={profileId => (
+            <FollowProfileButton profileID={profileId} showLoginModal={showLoginModal} />
           )}
           onProfileClick={onProfileClick}
           transformSource={transformSource}

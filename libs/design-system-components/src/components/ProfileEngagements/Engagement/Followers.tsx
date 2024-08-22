@@ -5,19 +5,18 @@ import Entry from '../Entry';
 import { useIntersection } from 'react-use';
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils';
 import { AkashaFollowers } from '@akashaorg/typings/lib/ui';
-import { ENTRY_HEIGHT, EngagementProps } from '../types';
+import { ENTRY_HEIGHT, EngagementProp } from '../types';
 
 export type FollowersProps = {
   followers: AkashaFollowers;
   publicImgPath?: string;
   emptyEntryTitleLabel: ReactElement;
   emptyEntryBodyLabel: ReactElement;
-} & EngagementProps;
+} & EngagementProp;
 
 const Followers: React.FC<FollowersProps> = ({
   publicImgPath,
   authenticatedDID,
-  followList,
   followers,
   profileAnchorLink,
   emptyEntryTitleLabel,
@@ -76,8 +75,6 @@ const Followers: React.FC<FollowersProps> = ({
             }}
             avatar={engagement?.did?.akashaProfile?.avatar}
             name={engagement?.did?.akashaProfile?.name}
-            followId={followList.get(engagement?.did?.akashaProfile?.id)?.id}
-            isFollowing={followList.get(engagement?.did?.akashaProfile?.id)?.isFollowing}
             transformSource={transformSource}
             renderFollowElement={
               authenticatedDID !== engagement?.did?.akashaProfile?.did?.id

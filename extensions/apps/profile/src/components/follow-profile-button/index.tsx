@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
@@ -17,27 +17,42 @@ import {
 import { useTranslation } from 'react-i18next';
 import {
   useCreateFollowMutation,
+  useGetFollowDocumentsByDidQuery,
   useUpdateFollowMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { hasOwn, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 export type FollowProfileButtonProps = {
   profileID?: string;
-  isLoggedIn: boolean;
-  isFollowing: boolean;
-  followId: string | null;
   iconOnly?: boolean;
   showLoginModal: (redirectTo?: { modal: IModalNavigationOptions }) => void;
 };
 
 const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
-  const { profileID, isLoggedIn, isFollowing, followId, iconOnly, showLoginModal } = props;
+  const { profileID, iconOnly, showLoginModal } = props;
   const { t } = useTranslation('app-profile');
   const { uiEvents } = useRootComponentProps();
-  const [following, setFollowing] = useState(isFollowing);
-  const [followDocumentId, setFollowDocumentId] = useState(followId);
-
+  const {
+    data: { authenticatedDID },
+  } = useAkashaStore();
+  const isLoggedIn = !!authenticatedDID;
+  const { data, error } = useGetFollowDocumentsByDidQuery({
+    fetchPolicy: 'cache-and-network',
+    variables: {
+      id: authenticatedDID,
+      following: [profileID],
+      last: 1,
+    },
+    skip: !isLoggedIn || !profileID,
+  });
   const sdk = getSDK();
+  const followDocument =
+    data?.node && hasOwn(data.node, 'akashaFollowList')
+      ? data?.node.akashaFollowList?.edges[0]
+      : null;
+
+  const followDocumentId = followDocument?.node?.id;
+  const isFollowing = followDocument?.node?.isFollowing;
 
   const sendSuccessNotification = (profileName: string, following: boolean) => {
     uiEvents.next({
@@ -52,17 +67,11 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
     });
   };
 
-  const onCompleted = (followId: string, isFollowing: boolean, profileName: string) => {
-    setFollowing(isFollowing);
-    setFollowDocumentId(followId);
-    if (iconOnly) sendSuccessNotification(profileName, isFollowing);
-  };
-
   const [createFollowMutation, { loading: createFollowLoading }] = useCreateFollowMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
     onCompleted: async ({ setAkashaFollow }) => {
       const document = setAkashaFollow.document;
-      onCompleted(document.id, document.isFollowing, document.profile?.name);
+      if (iconOnly) sendSuccessNotification(document.profile?.name, isFollowing);
     },
   });
 
@@ -70,21 +79,11 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
     context: { source: sdk.services.gql.contextSources.composeDB },
     onCompleted: async ({ updateAkashaFollow }) => {
       const document = updateAkashaFollow.document;
-      onCompleted(document.id, document.isFollowing, document.profile?.name);
+      if (iconOnly) sendSuccessNotification(document.profile?.name, isFollowing);
     },
   });
 
   const loading = createFollowLoading || updateFollowLoading;
-
-  //reset `following` whenever isFollowing prop changes
-  useEffect(() => {
-    setFollowing(isFollowing);
-  }, [isFollowing]);
-
-  //reset `followDocumentId` whenever followId prop changes
-  useEffect(() => {
-    setFollowDocumentId(followId);
-  }, [followId]);
 
   // this approach is required to have a clickable tooltip, if btn is disabled via prop, tooltip can only be hover based
   const disableActions = !profileID;
@@ -134,16 +133,18 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
     });
   };
 
+  if (error) return null;
+
   const FollowButton = () =>
     iconOnly ? (
       <Button
         aria-label="follow"
         onClick={
-          following
+          isFollowing
             ? () => handleUnFollow(profileID, followDocumentId)
             : () => handleFollow(profileID, followDocumentId)
         }
-        icon={following ? <Following role="img" aria-label="following" /> : <UserPlusIcon />}
+        icon={isFollowing ? <Following role="img" aria-label="following" /> : <UserPlusIcon />}
         variant={'primary'}
         loading={loading}
         greyBg={true}
@@ -155,7 +156,7 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
         inactiveLabel={t('Follow')}
         activeLabel={t('Following')}
         activeHoverLabel={t('Unfollow')}
-        active={following}
+        active={isFollowing}
         iconDirection="left"
         activeIcon={<CheckIcon />}
         activeHoverIcon={<XMarkIcon />}
