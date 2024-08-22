@@ -23518,10 +23518,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hono@npm:^3.10.2":
-  version: 3.12.12
-  resolution: "hono@npm:3.12.12"
-  checksum: 10/1020c90065e0824b4dc24e3326da081a634ce4b95b04c6d3b695d7dfb3bcc9cc66ace506fff5fdd2ec560891809eb974cede2e634ba79405726e8f690f2c3efc
+"hono@npm:^4.5.8":
+  version: 4.5.8
+  resolution: "hono@npm:4.5.8"
+  checksum: 10/1d071a827fb9562a008955dd24bdde8cd6575890120b8cf7276cdda2a58735487666807927a99f57d0e43304202c2c493daefb5eaf4683fcb3eed9d4190a0ccc
   languageName: node
   linkType: hard
 
@@ -33679,7 +33679,7 @@ __metadata:
     graphql-request: "npm:6.1.0"
     graphql-tag: "npm:2.12.6"
     hardhat: "npm:2.19.2"
-    hono: "npm:^3.10.2"
+    hono: "npm:^4.5.8"
     html-webpack-plugin: "npm:5.5.0"
     husky: "npm:8.0.1"
     i18next: "npm:22.4.14"
