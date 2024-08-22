@@ -12,7 +12,7 @@
     "apps:watch": "nx watch --projects=tag:scope:extension --includeDependentProjects -- nx build \\$NX_PROJECT_NAME",
     "world:dev": "nx start @akashaorg/akasha.world --verbose",
     "world:deploy": "nx deploy @akashaorg/akasha.world --verbose",
-    "extensions:upload": "NODE_OPTIONS=\"--no-warnings\" ts-node ./tools/scripts/upload-w3-storage.mjs"
+    "extensions:upload": "NODE_OPTIONS=\"--no-warnings\" ts-node --project ./tools/scripts/tsconfig.json ./tools/scripts/upload-w3-storage.mjs"
   },
   "dependencies": {
     "@apollo/client": "3.10.4",
