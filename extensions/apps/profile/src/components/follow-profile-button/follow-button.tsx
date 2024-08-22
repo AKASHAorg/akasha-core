@@ -1,5 +1,5 @@
 import React from 'react';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import { Following } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
