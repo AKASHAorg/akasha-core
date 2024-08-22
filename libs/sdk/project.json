@@ -12,6 +12,14 @@
         "command": "tsc --build"
       }
     },
+    "prepare-local": {
+      "dependsOn": ["prepare"],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "libs/sdk",
+        "command": "tsc -p tsconfig.local.json"
+      }
+    },
     "build": {
       "dependsOn": ["prepare", "extract-package-json"],
       "executor": "nx:run-commands",
