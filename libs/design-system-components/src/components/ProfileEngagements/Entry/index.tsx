@@ -42,7 +42,7 @@ const Entry: React.FC<EntryProps> = props => {
           onProfileClick(profileIds.did);
         }}
       />
-      {renderFollowElement(profileIds.id)}
+      {renderFollowElement?.(profileIds.id)}
     </Stack>
   );
 };

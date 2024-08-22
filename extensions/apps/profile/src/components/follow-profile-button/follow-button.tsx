@@ -130,7 +130,7 @@ export const FollowButton = ({
         icon: { light: 'errorLight', dark: 'errorDark' },
       }}
       customStyle={disabledStyle}
-      onClickInactive={() => handleFollow(profileID, followDocumentId, isFollowing)}
+      onClickInactive={() => handleFollow(profileID, followDocumentId, !isFollowing)}
       onClickActive={() => handleFollow(profileID, followDocumentId, !isFollowing)}
     />
   );
