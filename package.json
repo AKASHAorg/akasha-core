@@ -286,7 +286,7 @@
     "libs/*",
     "tests/*"
   ],
-  "packageManager": "yarn@4.1.1",
+  "packageManager": "yarn@4.4.0",
   "engines": {
     "node": ">=20.9.0",
     "yarn": "^4.1.1"

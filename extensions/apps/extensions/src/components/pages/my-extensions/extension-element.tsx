@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';

@@ -1,4 +1,5 @@
-// const path = require('path');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const path = require('path');
 
 module.exports = {
   automock: false,
@@ -21,6 +22,9 @@ module.exports = {
   coverageReporters: ['text-summary'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   unmockedModulePathPatterns: ['lodash', 'core-js'],
+  moduleNameMapper: {
+    '^@akashaorg/core-sdk': path.join(__dirname, './dist/npm/core-sdk'),
+  },
   globals: {
     'ts-jest': {
       useESM: true,

@@ -1,5 +1,5 @@
 {
-  "name": "@akashaorg/awf-sdk",
+  "name": "@akashaorg/core-sdk",
   "version": "0.1.1-alpha",
   "keywords": [
     "web3",
@@ -12,6 +12,7 @@
   "module": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "type": "module",
+  "description": "SDK for building decentralized applications on akasha.world",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "bugs": "https://github.com/AKASHAorg/akasha-core/issues",
   "license": "Apache-2.0",

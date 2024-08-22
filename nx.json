@@ -87,7 +87,7 @@
   },
   "workspaceLayout": {
     "libsDir": "libs",
-    "appsDir": "apps"
+    "appsDir": "extensions"
   },
   "affected": {
     "defaultBase": "next"

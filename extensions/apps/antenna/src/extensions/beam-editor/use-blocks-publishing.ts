@@ -7,7 +7,7 @@ import {
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import type { AkashaBeamInput } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { useCreateBeamMutation } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 import type { CreateBeamMutation } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 
 /**

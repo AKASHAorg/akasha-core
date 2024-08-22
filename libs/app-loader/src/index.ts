@@ -26,7 +26,7 @@ import {
   getUserInstalledExtensions,
   getWorldDefaultExtensions,
 } from './extensions';
-import getSDK, { SDK_Services, SDK_API } from '@akashaorg/awf-sdk';
+import getSDK, { SDK_Services, SDK_API } from '@akashaorg/core-sdk';
 import { ILogger } from '@akashaorg/typings/lib/sdk/log';
 import {
   checkActivityFn,
@@ -37,7 +37,7 @@ import {
   parseQueryString,
 } from './utils';
 import { APP_EVENTS, AUTH_EVENTS } from '@akashaorg/typings/lib/sdk';
-import { IntegrationSchema } from '@akashaorg/awf-sdk/lib/db/integrations.schema';
+import { IntegrationSchema } from '@akashaorg/core-sdk/lib/db/integrations.schema';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 const isWindow = window && typeof window !== 'undefined';

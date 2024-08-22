@@ -13,9 +13,9 @@
     "skipLibCheck": true,
     "paths": {
       "@akashaorg/package-utils-plugin": ["./tools/package-utils-plugin/src/index.ts"],
-      "@akashaorg/awf-sdk": ["./dist/npm/sdk/lib"],
-      "@akashaorg/awf-sdk/lib/*": [
-        "./dist/npm/sdk/lib/*"
+      "@akashaorg/core-sdk": ["./dist/npm/core-sdk/lib"],
+      "@akashaorg/core-sdk/lib/*": [
+        "./dist/npm/core-sdk/lib/*"
       ],
     }
   },

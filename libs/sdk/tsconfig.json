@@ -14,7 +14,7 @@
     "target": "es2020",
     "strict": true,
     "rootDir": "./src",
-    "outDir": "../../dist/npm/sdk/lib"
+    "outDir": "../../dist/npm/core-sdk/lib"
   },
   "include": [
     "./src",

@@ -9,7 +9,7 @@
         "@akashaorg/ui-awf-hooks:build",
         "@akashaorg/design-system-core:prepare",
         "@akashaorg/design-system-components:prepare",
-        "@akashaorg/awf-sdk:build",
+        "@akashaorg/core-sdk:build",
         "@akashaorg/ui-lib-extensions:prepare",
         "@akashaorg/ui-lib-feed:prepare",
         "@akashaorg/typings:prepare"

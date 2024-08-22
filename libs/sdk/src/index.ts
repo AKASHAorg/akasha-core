@@ -59,7 +59,7 @@ let sdk: AWF_SDK;
  * @public
  * @example
  * ```ts
- * import getSDK from '@akashaorg/awf-sdk';
+ * import getSDK from '@akashaorg/core-sdk';
  * const sdk = getSDK();
  * ```
  */
@@ -76,7 +76,7 @@ export default function getSDK(): AWF_SDK {
  * @public
  * @example
  * ```ts
- * import {init} from '@akashaorg/awf-sdk';
+ * import {init} from '@akashaorg/core-sdk';
  * const sdk = init();
  * ```
  */

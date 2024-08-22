@@ -1,7 +1,7 @@
 import { IAppConfig, IModalNavigationOptions, IQueryString } from '@akashaorg/typings/lib/ui';
 import * as singleSpa from 'single-spa';
 import qs from 'qs';
-import { Logger } from '@akashaorg/awf-sdk';
+import { Logger } from '@akashaorg/core-sdk';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 export const encodeName = (appName: string) => {

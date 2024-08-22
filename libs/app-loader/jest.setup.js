@@ -16,7 +16,7 @@ global.System = {
  *
  * using .doMock() here instead of .mock() to fix error about referencing out-of-scope variables.
  */
-jest.doMock('@akashaorg/awf-sdk', () => () => ({
+jest.doMock('@akashaorg/core-sdk', () => () => ({
   api: {
     icRegistry: {
       getLatestReleaseInfo: jest.fn(relInfos =>

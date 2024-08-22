@@ -14,7 +14,7 @@ import {
   GetInterestsByDidDocument,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { hasOwn, useRootComponentProps, useAkashaStore } from '@akashaorg/ui-awf-hooks';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 import { useApolloClient } from '@apollo/client';
 import { ProfileLabeled } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
