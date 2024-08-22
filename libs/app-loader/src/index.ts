@@ -408,6 +408,7 @@ export default class AppLoader {
       if (!conf.loadingFn || typeof conf.loadingFn !== 'function') continue;
 
       const extensionData = this.extensionData.find(m => m.name === name);
+
       if (extensionData.applicationType !== AkashaAppApplicationType.App) continue;
 
       const activeWhen: singleSpa.Activity = checkActivityFn({
