@@ -27,10 +27,12 @@ import {
 } from '@tanstack/react-router';
 import { ICreateRouter, IRouterContext } from '@akashaorg/typings/lib/ui';
 import {
+  getBeamActive,
   getBeamById,
   getBeamData,
   getBeamStatus,
-  getBeamStreamId,
+  getBeamStreamById,
+  getReflectionActive,
   getReflectionById,
   getReflectionData,
 } from './data-loaders';
@@ -70,7 +72,7 @@ const beamRoute = createRoute({
   loader: ({ context, params }) => ({
     beam: defer(getBeamById({ apolloClient: context.apolloClient, beamId: params.beamId })),
     beamStream: defer(
-      getBeamStreamId({
+      getBeamStreamById({
         apolloClient: context.apolloClient,
         beamId: params.beamId,
       }),
@@ -88,6 +90,7 @@ const beamRoute = createRoute({
                 return (
                   <BeamPage
                     beamId={beamId}
+                    isActive={getBeamActive(beamStreamData)}
                     beamData={mapBeamEntryData(getBeamData(beamById))}
                     beamStatus={getBeamStatus(beamStreamData)}
                   />
@@ -116,6 +119,7 @@ const beamReflectRoute = createRoute({
                 return (
                   <BeamPage
                     beamId={beamId}
+                    isActive={getBeamActive(beamStreamData)}
                     beamData={mapBeamEntryData(getBeamData(beamById))}
                     beamStatus={getBeamStatus(beamStreamData)}
                   />
@@ -139,13 +143,28 @@ const reflectionsRoute = createRoute({
         reflectionId: params.reflectionId,
       }),
     ),
+    reflectionStream: defer(
+      getBeamStreamById({
+        apolloClient: context.apolloClient,
+        beamId: params.reflectionId,
+      }),
+    ),
   }),
   component: () => {
-    const { reflection } = reflectionsRoute.useLoaderData();
+    const { reflection, reflectionStream } = reflectionsRoute.useLoaderData();
     return (
       <Suspense fallback={<EntrySectionLoading />}>
-        <Await promise={reflection}>
-          {data => <ReflectionPage reflectionData={mapReflectEntryData(getReflectionData(data))} />}
+        <Await promise={reflectionStream}>
+          {reflectionStreamData => (
+            <Await promise={reflection}>
+              {data => (
+                <ReflectionPage
+                  isActive={getReflectionActive(reflectionStreamData)}
+                  reflectionData={mapReflectEntryData(getReflectionData(data))}
+                />
+              )}
+            </Await>
+          )}
         </Await>
       </Suspense>
     );
@@ -156,11 +175,20 @@ const reflectionsReflectRoute = createRoute({
   getParentRoute: () => reflectionsRoute,
   path: routes[REFLECT],
   component: () => {
-    const { reflection } = reflectionsRoute.useLoaderData();
+    const { reflection, reflectionStream } = reflectionsRoute.useLoaderData();
     return (
       <Suspense fallback={<EntrySectionLoading />}>
-        <Await promise={reflection}>
-          {data => <ReflectionPage reflectionData={mapReflectEntryData(getReflectionData(data))} />}
+        <Await promise={reflectionStream}>
+          {reflectionStreamData => (
+            <Await promise={reflection}>
+              {data => (
+                <ReflectionPage
+                  isActive={getReflectionActive(reflectionStreamData)}
+                  reflectionData={mapReflectEntryData(getReflectionData(data))}
+                />
+              )}
+            </Await>
+          )}
         </Await>
       </Suspense>
     );
