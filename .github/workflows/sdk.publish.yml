@@ -1,0 +1,47 @@
+name: Publish @akashaorg/core-sdk to npmjs
+on:
+  push:
+    branches:
+      - next
+    paths:
+      - "libs/sdk/package.json"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: Staging
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - run: corepack enable
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'yarn'
+          cache-dependency-path: yarn.lock
+          registry-url: 'https://registry.npmjs.org'
+      - run: node --version
+      - name: Get Secrets
+        uses: bitwarden/sm-action@v2
+        with:
+          access_token: ${{ secrets.BW_ACCESS_TOKEN }}
+          secrets: |
+            4ac8adf4-03bd-4b3c-bd77-b1d500cf9863 > NPM_TOKEN
+
+      - name: install root dependencies
+        env:
+          CI: 1
+          NODE_ENV: production
+        run: |
+          yarn install --immutable
+      - run: echo "${GITHUB_WORKSPACE}/node_modules/.bin" >> $GITHUB_PATH
+      - run: nx run @akashaorg/core-sdk:prepare-publish
+      - name: Publish @akashaorg/core-sdk
+        working-directory: dist/npm/core-sdk
+        run: npm publish --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ env.NPM_TOKEN }}

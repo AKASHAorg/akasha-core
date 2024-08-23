@@ -67,7 +67,6 @@ export function getFollowMock(params?: IGetFollowMock) {
       request: {
         query: GetFollowDocumentsByDidDocument,
       },
-      maxUsageCount: 2,
       variableMatcher: () => true,
       result: {
         data: {

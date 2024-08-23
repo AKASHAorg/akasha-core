@@ -8,6 +8,10 @@
     "outputPath": {
       "type": "string",
       "description": "Output path for the generated package.json"
+    },
+    "cwd": {
+      "type": "string",
+      "description": "Set working directory for the executor"
     }
   },
   "required": ["outputPath"]
