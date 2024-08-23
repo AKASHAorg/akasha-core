@@ -24,7 +24,7 @@ export interface ProfileAvatarNotificationAppProps {
 }
 
 const ProfileAvatarNotificationApp = React.forwardRef(
-  (props: ProfileAvatarNotificationAppProps, ref: React.LegacyRef<HTMLDivElement>) => {
+  (props: ProfileAvatarNotificationAppProps, ref: React.Ref<HTMLDivElement>) => {
     const {
       customStyle = '',
       size,

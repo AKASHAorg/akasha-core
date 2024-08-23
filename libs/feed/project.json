@@ -8,7 +8,7 @@
       "dependsOn": [
         "@akashaorg/ui-awf-hooks:build",
         "@akashaorg/design-system-components:prepare",
-        "@akashaorg/awf-sdk:build",
+        "@akashaorg/core-sdk:build",
         "@akashaorg/ui-lib-extensions:prepare",
         "@akashaorg/typings:prepare"
       ],

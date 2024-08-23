@@ -1,5 +1,5 @@
 import { WorldConfig } from '@akashaorg/typings/lib/ui';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 import { AkashaApp, SortOrder } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { ILogger } from '@akashaorg/typings/lib/sdk/log';
 

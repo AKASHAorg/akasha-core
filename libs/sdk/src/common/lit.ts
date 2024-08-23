@@ -1,14 +1,14 @@
 import { inject, injectable } from 'inversify';
-import { TYPES } from '@akashaorg/typings/lib/sdk/index.js';
-import DB from '../db/index.js';
-import Web3Connector from './web3.connector.js';
-import EventBus from './event-bus.js';
-import Logging from '../logging/index.js';
-import Settings from '../settings/index.js';
-import Gql from '../gql/index.js';
+import { TYPES } from '@akashaorg/typings/lib/sdk';
+import DB from '../db';
+import Web3Connector from './web3.connector';
+import EventBus from './event-bus';
+import Logging from '../logging';
+import Settings from '../settings';
+import Gql from '../gql';
 import pino from 'pino';
 import { z } from 'zod';
-import { validate } from './validator.js';
+import { validate } from './validator';
 import { LitNodeClient, encryptString, decryptToString } from '@lit-protocol/lit-node-client';
 import { LitNetwork } from '@lit-protocol/constants';
 import {

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOMClient from 'react-dom/client';
 import singleSpaReact from 'single-spa-react';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 import InstallApp from '@akashaorg/design-system-components/lib/components/InstallApp';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import {

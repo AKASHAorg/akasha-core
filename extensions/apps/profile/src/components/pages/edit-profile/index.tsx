@@ -5,7 +5,7 @@ import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import EditProfile from '@akashaorg/design-system-components/lib/components/EditProfile';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 import { useTranslation } from 'react-i18next';
 import {
   useCreateProfileMutation,

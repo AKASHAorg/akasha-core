@@ -16,7 +16,7 @@ import {
 import { BeamContentResolver, getNsfwFiltersForTagFeed, TagFeed } from '@akashaorg/ui-lib-feed';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { AkashaIndexedStreamStreamType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 
 const MY_ANTENNA_OVERSCAN = 10;
 

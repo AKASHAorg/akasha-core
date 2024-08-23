@@ -9,7 +9,6 @@ import { getElevationClasses } from '@akashaorg/design-system-core/lib/utils';
 
 export type MentionPopover = {
   values: Profile[];
-  ref: React.Ref<HTMLDivElement>;
   currentIndex: number;
   setIndex: React.Dispatch<React.SetStateAction<number>>;
   handleSelect: (index: number) => void;
@@ -17,7 +16,7 @@ export type MentionPopover = {
   noMentionsLabel?: string;
 };
 
-export const MentionPopover: React.FC<MentionPopover> = React.forwardRef((props, ref) => {
+export const MentionPopover = React.forwardRef<HTMLDivElement, MentionPopover>((props, ref) => {
   const { values, currentIndex, setIndex, handleSelect, transformSource, noMentionsLabel } = props;
 
   const boxShadow = getElevationClasses('2');

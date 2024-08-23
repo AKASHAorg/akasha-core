@@ -8,13 +8,12 @@ import { tw, tx } from '@twind/core';
 export interface ITagPopover {
   postsLabel?: string;
   values: Tag[];
-  ref: React.Ref<HTMLDivElement>;
   currentIndex: number;
   setIndex: React.Dispatch<React.SetStateAction<number>>;
   handleSelect: (index: number) => void;
 }
 
-export const TagPopover: React.FC<ITagPopover> = React.forwardRef((props, ref) => {
+export const TagPopover = React.forwardRef<HTMLDivElement, ITagPopover>((props, ref) => {
   const { postsLabel, values, currentIndex, setIndex, handleSelect } = props;
 
   return (

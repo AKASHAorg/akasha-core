@@ -1,4 +1,4 @@
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 import { hasOwn } from '@akashaorg/ui-awf-hooks';
 import { GetProfileByDidQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 import { GetProfileByDidDocument } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';

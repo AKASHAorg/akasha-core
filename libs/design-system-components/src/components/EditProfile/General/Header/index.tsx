@@ -177,16 +177,13 @@ export const Header: React.FC<HeaderProps> = ({
     if (image) {
       switch (profileImageType) {
         case 'avatar':
-          onAvatarChange(image);
           setUploadedAvatarUrl({ src: URL.createObjectURL(image), width: 0, height: 0 });
           break;
         case 'cover-image':
-          onCoverImageChange(image);
           setUploadedCoverImageUrl({ src: URL.createObjectURL(image), width: 0, height: 0 });
       }
       setShowEditImage(true);
     }
-    uploadInputRef.current.value = null;
   };
 
   return (
@@ -296,7 +293,13 @@ export const Header: React.FC<HeaderProps> = ({
         onDelete={onDelete}
         onClose={() => setShowDeleteImage(false)}
       />
-      <input ref={uploadInputRef} type="file" onChange={e => onUpload(e.target.files[0])} hidden />
+      <input
+        ref={uploadInputRef}
+        type="file"
+        aria-label="image-upload"
+        onChange={e => onUpload(e.target.files[0])}
+        hidden
+      />
     </Stack>
   );
 };

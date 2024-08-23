@@ -47,3 +47,7 @@ export const APOLLO_TYPE_POLICIES = {
     },
   },
 };
+
+export const NEW_AVATAR_URL = 'https://placehold.co/76x76';
+
+export const NEW_COVER_IMAGE_URL = 'https://placehold.co/600x200';

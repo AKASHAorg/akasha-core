@@ -1,20 +1,20 @@
 import { Container } from 'inversify';
-import { TYPES } from '@akashaorg/typings/lib/sdk/index.js';
-import Logging from './logging/index.js';
-import Gql from './gql/index.js';
-import Settings from './settings/index.js';
-import Stash from './stash/index.js';
-import DB from './db/index.js';
-import Web3Connector from './common/web3.connector.js';
-import EventBus from './common/event-bus.js';
-import AWF_Auth from './auth/index.js';
-import AWF_Profile from './profiles/index.js';
-import AWF_IpfsConnector from './common/ipfs.connector.js';
-import AppSettings from './settings/apps.js';
-import AWF_Misc from './common/misc.js';
-import AWF_Lit from './common/lit.js';
-import AWF_Ceramic from './common/ceramic.js';
-import AWF_Config from './common/config.js';
+import { TYPES } from '@akashaorg/typings/lib/sdk';
+import Logging from './logging';
+import Gql from './gql';
+import Settings from './settings';
+import Stash from './stash';
+import DB from './db';
+import Web3Connector from './common/web3.connector';
+import EventBus from './common/event-bus';
+import AWF_Auth from './auth';
+import AWF_Profile from './profiles';
+import AWF_IpfsConnector from './common/ipfs.connector';
+import AppSettings from './settings/apps';
+import AWF_Misc from './common/misc';
+import AWF_Lit from './common/lit';
+import AWF_Ceramic from './common/ceramic';
+import AWF_Config from './common/config';
 
 const diContainer = new Container({
   defaultScope: 'Singleton',

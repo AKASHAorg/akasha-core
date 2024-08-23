@@ -1,16 +1,16 @@
 import { inject, injectable } from 'inversify';
-import { TYPES } from '@akashaorg/typings/lib/sdk/index.js';
-import AWF_Auth from '../auth/index.js';
+import { TYPES } from '@akashaorg/typings/lib/sdk';
+import AWF_Auth from '../auth';
 
-import { resizeImage } from '../helpers/img.js';
+import { resizeImage } from '../helpers/img';
 
-import { createFormattedValue } from '../helpers/observable.js';
-import IpfsConnector from '../common/ipfs.connector.js';
+import { createFormattedValue } from '../helpers/observable';
+import IpfsConnector from '../common/ipfs.connector';
 import { z } from 'zod';
-import { validate } from '../common/validator.js';
-import Gql from '../gql/index.js';
-import CeramicService from '../common/ceramic.js';
-import { hasOwn } from '../helpers/types.js';
+import { validate } from '../common/validator';
+import Gql from '../gql';
+import CeramicService from '../common/ceramic';
+import { hasOwn } from '../helpers/types';
 // tslint:disable-next-line:no-var-requires
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 
@@ -102,7 +102,7 @@ class AWF_Profile {
       throw new Error('Must be logged in to upload media');
     }
     if (data.isUrl) {
-      const { default: urlSource } = await import('ipfs-utils/src/files/url-source.js');
+      const { default: urlSource } = await import('ipfs-utils/src/files/url-source');
       const source = urlSource(data.content);
       const arr: BlobPart[] = [];
 

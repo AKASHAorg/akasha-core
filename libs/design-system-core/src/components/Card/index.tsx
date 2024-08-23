@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, forwardRef, LegacyRef } from 'react';
+import React, { PropsWithChildren, forwardRef } from 'react';
 import { apply, tw } from '@twind/core';
 import {
   getColorClasses,
@@ -22,7 +22,6 @@ type RegularCardType = {
 };
 
 type CommonCardProps = {
-  ref?: LegacyRef<HTMLDivElement>;
   dataTestId?: string;
   customStyle?: string;
 } & React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
@@ -54,7 +53,7 @@ export type TCardProps = PropsWithChildren<
  *  <Card background={{ dark: 'grey3', light: 'grey9' }} onClick={clickHandler} padding="p-4" />
  * ```
  **/
-const Card: React.FC<TCardProps> = forwardRef((props, ref) => {
+const Card = forwardRef<HTMLDivElement, TCardProps>((props, ref) => {
   if (props.type === 'plain') {
     const { dataTestId, customStyle = '', ...rest } = props;
     return (

@@ -1,4 +1,4 @@
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 import { setupI18next } from './i18n';
 import i18next, { i18n } from 'i18next';
 

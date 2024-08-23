@@ -13,7 +13,7 @@ import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { useUpdateAppMutation } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 import { DRAFT_EXTENSIONS } from '../../constants';
 
 const Component: React.FC<IRootExtensionProps> = () => {

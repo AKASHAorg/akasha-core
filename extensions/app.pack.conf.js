@@ -1,7 +1,7 @@
 module.exports = {
   externals: [
     {
-      '@akashaorg/awf-sdk': '@akashaorg/awf-sdk',
+      '@akashaorg/core-sdk': '@akashaorg/core-sdk',
     },
     {
       '@akashaorg/ui-awf-hooks': '@akashaorg/ui-awf-hooks',

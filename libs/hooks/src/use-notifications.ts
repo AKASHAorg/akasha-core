@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 import { GQL_EVENTS } from '@akashaorg/typings/lib/sdk';
 
 /**
