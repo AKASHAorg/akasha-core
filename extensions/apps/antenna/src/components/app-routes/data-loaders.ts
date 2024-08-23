@@ -3,6 +3,7 @@ import {
   GetBeamByIdQuery,
   GetBeamStreamQuery,
   GetReflectionByIdQuery,
+  GetReflectionStreamQuery,
 } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 import { IRouterContext } from '@akashaorg/typings/lib/ui';
 import { hasOwn } from '@akashaorg/ui-awf-hooks';
@@ -10,6 +11,7 @@ import {
   GetBeamByIdDocument,
   GetBeamStreamDocument,
   GetReflectionByIdDocument,
+  GetReflectionStreamDocument,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
 export async function getBeamById({ apolloClient, beamId }: IRouterContext & { beamId: string }) {
@@ -21,7 +23,7 @@ export async function getBeamById({ apolloClient, beamId }: IRouterContext & { b
   return data;
 }
 
-export async function getBeamStreamId({
+export async function getBeamStreamById({
   apolloClient,
   beamId,
 }: IRouterContext & { beamId: string }) {
@@ -62,6 +64,18 @@ export function getBeamStatus(beamStream: GetBeamStreamQuery) {
   return null;
 }
 
+export function getBeamActive(beamStream: GetBeamStreamQuery) {
+  if (
+    beamStream?.node &&
+    hasOwn(beamStream.node, 'akashaBeamStreamList') &&
+    beamStream.node.akashaBeamStreamList.edges?.[0]?.node &&
+    hasOwn(beamStream.node.akashaBeamStreamList.edges[0].node, 'active')
+  ) {
+    return beamStream.node.akashaBeamStreamList.edges[0].node.active;
+  }
+  return null;
+}
+
 export function getBeamData(beamByIdQuery: GetBeamByIdQuery) {
   if (beamByIdQuery?.node && hasOwn(beamByIdQuery.node, 'id')) {
     return beamByIdQuery?.node;
@@ -76,6 +90,35 @@ export function getReflectionData(reflectionByIdQuery: GetReflectionByIdQuery) {
     hasOwn(reflectionByIdQuery.node, 'id')
   ) {
     return reflectionByIdQuery.node;
+  }
+  return null;
+}
+
+export async function getReflectionStreamById({
+  apolloClient,
+  reflectionId,
+}: IRouterContext & { reflectionId: string }) {
+  const sdk = getSDK();
+  const { data } = await apolloClient.query<GetReflectionStreamQuery>({
+    query: GetReflectionStreamDocument,
+    variables: {
+      first: 1,
+      indexer: sdk.services.gql.indexingDID,
+      filters: { where: { reflectionID: { equalTo: reflectionId } } },
+    },
+    fetchPolicy: 'cache-first',
+  });
+  return data;
+}
+
+export function getReflectionActive(reflectionStream: GetReflectionStreamQuery) {
+  if (
+    reflectionStream?.node &&
+    hasOwn(reflectionStream.node, 'akashaReflectStreamList') &&
+    reflectionStream.node.akashaReflectStreamList.edges?.[0]?.node &&
+    hasOwn(reflectionStream.node.akashaReflectStreamList.edges[0].node, 'active')
+  ) {
+    return reflectionStream.node.akashaReflectStreamList.edges[0].node.active;
   }
   return null;
 }
