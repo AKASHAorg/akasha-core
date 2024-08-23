@@ -56,7 +56,6 @@ export const FollowButton = ({
   const [createFollowMutation, { loading: createFollowLoading }] = useCreateFollowMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
     onCompleted: async ({ setAkashaFollow }) => {
-      console.log('completed');
       const document = setAkashaFollow.document;
       if (iconOnly) sendSuccessNotification(document.profile?.name, isFollowing);
     },
