@@ -38,10 +38,16 @@ const {
   reflectionData,
 } = getReflectionSectionMocks();
 
-const baseComponent = (mocks: Readonly<MockedResponse<unknown, unknown>[]> | undefined) => (
+const baseComponent = (
+  mocks: Readonly<MockedResponse<unknown, unknown>[]> | undefined,
+  isActive?: boolean,
+) => (
   <MockedProvider mocks={mocks} cache={new InMemoryCache(APOLLO_TYPE_POLICIES)}>
     <AnalyticsProvider {...genAppProps()}>
-      <ReflectionPage reflectionData={mapReflectEntryData(reflectionData)} />
+      <ReflectionPage
+        isActive={isActive ?? true}
+        reflectionData={mapReflectEntryData(reflectionData)}
+      />
     </AnalyticsProvider>
   </MockedProvider>
 );
@@ -137,7 +143,10 @@ describe('< ReflectionPage /> component', () => {
       const { mocks } = getReflectionSectionMocks({
         isBeamActive: false,
       });
-      renderWithAllProviders(baseComponent([...mocks, ...getEmptyReflectionStreamMock()]), {});
+      renderWithAllProviders(
+        baseComponent([...mocks, ...getEmptyReflectionStreamMock()], false),
+        {},
+      );
       expect(screen.queryByRole('button', { name: 'Reflect' })).not.toBeInTheDocument();
       expect(screen.queryByText(/Share your thoughts/i)).not.toBeInTheDocument();
     });

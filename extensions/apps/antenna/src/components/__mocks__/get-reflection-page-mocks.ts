@@ -1,11 +1,13 @@
 import {
   genBeamData,
+  genBeamStream,
   genContentBlock,
   genProfileByDID,
   genReflectionData,
 } from '@akashaorg/af-testing';
 import {
   GetBeamByIdDocument,
+  GetBeamStreamDocument,
   GetContentBlockByIdDocument,
   GetProfileByDidDocument,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
@@ -49,6 +51,18 @@ export function getReflectionSectionMocks(params?: IGetReflectionSectionMocks) {
         result: {
           data: {
             node: beamData,
+          },
+        },
+      },
+      {
+        request: {
+          query: GetBeamStreamDocument,
+        },
+        variableMatcher: () => true,
+        // maxUsageCount: 3,
+        result: {
+          data: {
+            node: genBeamStream({ beamId: reflectionData.beam.id }),
           },
         },
       },

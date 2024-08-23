@@ -44,10 +44,12 @@ const {
 const baseComponent = (
   mocks: Readonly<MockedResponse<unknown, unknown>[]> | undefined,
   mockedBeamData?: RawBeamData,
+  isActive?: boolean,
 ) => (
   <MockedProvider mocks={mocks} cache={new InMemoryCache(APOLLO_TYPE_POLICIES)}>
     <AnalyticsProvider {...genAppProps()}>
       <BeamPage
+        isActive={isActive ?? true}
         beamStatus={AkashaBeamStreamModerationStatus.Ok}
         beamData={mapBeamEntryData(mockedBeamData ?? beamData)}
         beamId={BEAM_ID}
@@ -143,10 +145,14 @@ describe('< BeamPage /> component', () => {
 
     it('should disable reflection editor when the beam is delisted', async () => {
       renderWithAllProviders(
-        baseComponent([...beamSectionMocks, ...getEmptyReflectionStreamMock()], {
-          ...beamData,
-          active: false,
-        }),
+        baseComponent(
+          [...beamSectionMocks, ...getEmptyReflectionStreamMock()],
+          {
+            ...beamData,
+            active: false,
+          },
+          false,
+        ),
         {},
       );
       expect(screen.queryByRole('button', { name: 'Reflect' })).not.toBeInTheDocument();
