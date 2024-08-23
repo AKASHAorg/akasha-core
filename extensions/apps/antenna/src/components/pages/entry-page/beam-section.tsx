@@ -12,7 +12,7 @@ import { transformSource } from '@akashaorg/ui-awf-hooks';
 import { useRouterState } from '@tanstack/react-router';
 
 type BeamSectionProps = {
-  beamId: string;
+  isBeamActive: boolean;
   beamData: BeamData;
   isLoggedIn: boolean;
   showNSFWCard: boolean;
@@ -20,13 +20,13 @@ type BeamSectionProps = {
 };
 
 const BeamSection: React.FC<BeamSectionProps> = props => {
-  const { beamId, beamData, isLoggedIn, showNSFWCard, showLoginModal } = props;
+  const { isBeamActive, beamData, isLoggedIn, showNSFWCard, showLoginModal } = props;
   const { t } = useTranslation('app-antenna');
   const routerState = useRouterState();
   const [isReflecting, setIsReflecting] = useState(
     routerState.location.pathname.endsWith(routes[REFLECT]),
   );
-  const activeBeam = beamData?.active;
+  const activeBeam = isBeamActive;
 
   return (
     <Stack
@@ -73,8 +73,8 @@ const BeamSection: React.FC<BeamSectionProps> = props => {
           )}
           {isLoggedIn && (
             <ReflectEditor
-              beamId={beamId}
-              reflectToId={beamId}
+              beamId={beamData.id}
+              reflectToId={beamData.id}
               showEditor={isReflecting}
               setShowEditor={setIsReflecting}
             />
