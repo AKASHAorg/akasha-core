@@ -9,14 +9,12 @@ import ProfileEngagementLoading from '@akashaorg/design-system-components/lib/co
 import routes, { FOLLOWING } from '../../../routes';
 import { IModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import {
-  useGetFollowDocumentsByDidQuery,
   useGetFollowingListByDidQuery,
   useGetProfileByDidQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import {
   transformSource,
   hasOwn,
-  getFollowList,
   useRootComponentProps,
   useAkashaStore,
 } from '@akashaorg/ui-awf-hooks';
@@ -70,16 +68,6 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
       ? data?.node.akashaFollowList?.pageInfo
       : null;
   }, [data]);
-  const followProfileIds = useMemo(() => following.map(follow => follow.profile?.id), [following]);
-  const { data: followDocuments } = useGetFollowDocumentsByDidQuery({
-    fetchPolicy: 'cache-and-network',
-    variables: {
-      id: authenticatedDID,
-      following: followProfileIds,
-      last: followProfileIds.length,
-    },
-    skip: !isLoggedIn || !followProfileIds.length,
-  });
 
   if (
     !data /* data is undefined until prefetching is complete therefore we display skeleton */ ||
@@ -90,12 +78,6 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
         <ProfileEngagementLoading />
       </EngagementTab>
     );
-
-  const followList = getFollowList(
-    followDocuments?.node && hasOwn(followDocuments.node, 'akashaFollowList')
-      ? followDocuments.node?.akashaFollowList?.edges.map(edge => edge?.node)
-      : null,
-  );
 
   const showLoginModal = (redirectTo?: { modal: IModalNavigationOptions }) => {
     navigateToModal({
@@ -137,7 +119,6 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
       {data && (
         <Following
           authenticatedDID={authenticatedDID}
-          followList={followList}
           following={following}
           profileAnchorLink={'/@akashaorg/app-profile'}
           emptyEntryTitleLabel={
@@ -166,14 +147,8 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
             }
             return null;
           }}
-          renderFollowElement={(profileId, followId, isFollowing) => (
-            <FollowProfileButton
-              profileID={profileId}
-              isLoggedIn={isLoggedIn}
-              followId={followId}
-              isFollowing={isFollowing}
-              showLoginModal={showLoginModal}
-            />
+          renderFollowElement={profileId => (
+            <FollowProfileButton profileID={profileId} showLoginModal={showLoginModal} />
           )}
           onProfileClick={onProfileClick}
           transformSource={transformSource}

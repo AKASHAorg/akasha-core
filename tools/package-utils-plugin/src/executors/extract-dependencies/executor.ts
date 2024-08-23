@@ -1,7 +1,8 @@
 import { createPackageJson, createLockFile, getLockFileName } from '@nx/js';
-import { writeFileSync } from 'fs';
+import { writeFileSync, copyFileSync, existsSync } from 'fs';
 import { detectPackageManager, ExecutorContext, writeJsonFile } from '@nx/devkit';
 import { ExtractDependenciesExecutorOptions } from './schema';
+import { resolve } from 'path';
 
 export default async function buildExecutor(
   options: ExtractDependenciesExecutorOptions,
@@ -24,6 +25,13 @@ export default async function buildExecutor(
   writeFileSync(`${options.outputPath}/${lockFileName}`, lockFile, {
     encoding: 'utf-8',
   });
+
+  const readmeName = 'README.md';
+  const readmeFile = resolve(context.cwd, options.cwd || '', readmeName);
+  // Copy README.md if it exists
+  if (existsSync(readmeFile)) {
+    copyFileSync(readmeFile, `${options.outputPath}/${readmeName}`);
+  }
 
   return { success: true };
 }

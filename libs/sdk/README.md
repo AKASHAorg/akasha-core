@@ -46,7 +46,7 @@ In terms of folder structure, the SDK consists of the following modules:
 To instantiate the SDK, you can use one of the methods it exports:
 
 ```typescript
-import getSDK from "@akashaorg/awf-sdk";
+import getSDK from "@akashaorg/core-sdk";
 
 const sdk = getSDK();
 
@@ -56,7 +56,7 @@ const sdk = getSDK();
 or:
 
 ```ts
-import { init } from "@akashaorg/awf-sdk";
+import { init } from "@akashaorg/core-sdk";
 
 const sdk = init();
 ```
@@ -70,7 +70,7 @@ Web3, IPFS and some DID-related services are available under the `common` namesp
 For example, to open the web3 modal and connect a wallet, you may call the `connect` method inside `web3`:
 
 ```typescript
-import getSDK from "@akashaorg/awf-sdk";
+import getSDK from "@akashaorg/core-sdk";
 getSDK().services.common.web3.connect();
 ;
 ```
@@ -82,7 +82,7 @@ Ceramic-related services are available under the `ceramic` namespace inside `ser
 For example, to attach an authenticated DID to a ceramic node to be able to perform GraphQL mutations, you may call the `getComposeClient` method inside `ceramic`:
 
 ```typescript
-import getSDK from "@akashaorg/awf-sdk";
+import getSDK from "@akashaorg/core-sdk";
 getSDK().services.ceramic.getComposeClient().setDID('an authenticated DID');
 ;
 ```
@@ -93,7 +93,7 @@ GraphQL-related services are available under the `gql` namespace inside `service
 Below is an example of how to access the current DID used for indexing streams through the SDK:
 
 ```typescript
-import getSDK from "@akashaorg/awf-sdk";
+import getSDK from "@akashaorg/core-sdk";
 const indexingDID = getSDK().services.gql.indexingDID;
 ```
 #### Access database-related services
@@ -103,7 +103,7 @@ Database-related services are available under the `db` namespace inside `service
 Below is an example of how to access the current IndexedDB database stored in the browser:
 
 ```typescript
-import getSDK from "@akashaorg/awf-sdk";
+import getSDK from "@akashaorg/core-sdk";
 getSDK().services.db.getDb();
 ```
 #### Access logging services
@@ -113,7 +113,7 @@ Logging service is available under the `log` namespace inside `services`. Loggin
 Below is an example of how to create a logger associated with a specific app and then use it to log an error:
 
 ```typescript
-import getSDK from "@akashaorg/awf-sdk";
+import getSDK from "@akashaorg/core-sdk";
  getSDK().services.log.create('example-app-name');
 
   if (error) {
@@ -133,7 +133,7 @@ Authentication-related endpoints are available under the `auth` namespace inside
 For example, to get the current logged in user, you can use: 
 
 ```typescript
-import getSDK from "@akashaorg/awf-sdk";
+import getSDK from "@akashaorg/core-sdk";
 const currentUser = await getSDK().api.auth.getCurrentUser();
 // currentUser will be null when the user is not logged in, otherwise, it will be an object containing the DID and ethAddress (if any) of the logged in user. 
 ```
@@ -145,7 +145,7 @@ Endpoints related to the SDK's global channel are available under the `globalCha
 For example, to perform certain action when certain events are emitted, you can access the global channel and subscribe to those events:
 
 ```typescript
-import getSDK from "@akashaorg/awf-sdk";
+import getSDK from "@akashaorg/core-sdk";
   React.useEffect(() => {
     const subSDK = sdk.api.globalChannel.subscribe({
       next: (eventData: { data: { name: string }; event: APP_EVENTS }) => {
@@ -167,6 +167,6 @@ Profile-related endpoints are available under the `profile` namespace inside `ap
 For example, to get the stats related to a profile, you will need to call the `getProfileStats` endpoint under the `profile` namespace:
 
 ```typescript
-import getSDK from "@akashaorg/awf-sdk";
+import getSDK from "@akashaorg/core-sdk";
 const res = await getSDK().api.profile.getProfileStats('a profile DID');
 ```

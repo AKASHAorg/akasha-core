@@ -8,7 +8,6 @@ import MiniProfileWidgetLoader from '@akashaorg/design-system-components/lib/com
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { IRootComponentProps } from '@akashaorg/typings/lib/ui';
 import {
-  getFollowList,
   hasOwn,
   transformSource,
   useAkashaStore,
@@ -18,7 +17,6 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 import {
   useGetBeamByIdQuery,
-  useGetFollowDocumentsByDidQuery,
   useGetProfileByDidQuery,
   useGetReflectionByIdQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
@@ -50,7 +48,6 @@ const ProfileCardWidget: React.FC<ProfileCardWidgetProps> = props => {
     variables: { id: reflectionId },
     skip: !reflectionId,
   });
-  const isLoggedIn = !!authenticatedDID;
   // set data based on beam or reflect page
   const data = beamId ? beam : reflection;
   const dataLoading = beamId ? beamLoading : reflectionLoading;
@@ -66,21 +63,6 @@ const ProfileCardWidget: React.FC<ProfileCardWidgetProps> = props => {
       : null;
 
   const { data: stats, loading: statsLoading } = useProfileStats(authorId);
-  const { data: followDocuments } = useGetFollowDocumentsByDidQuery({
-    variables: {
-      id: authenticatedDID,
-      following: [authorId],
-      last: 1,
-    },
-    skip: !isLoggedIn,
-  });
-  const followList = isLoggedIn
-    ? getFollowList(
-        followDocuments?.node && hasOwn(followDocuments.node, 'akashaFollowList')
-          ? followDocuments.node?.akashaFollowList?.edges?.map(edge => edge?.node)
-          : null,
-      )
-    : null;
 
   const handleCardClick = () => {
     plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
@@ -121,9 +103,6 @@ const ProfileCardWidget: React.FC<ProfileCardWidgetProps> = props => {
                     name={`follow_${authorProfileData?.id}`}
                     extensionData={{
                       profileID: authorProfileData?.id,
-                      isFollowing: followList?.get(authorProfileData?.id)?.isFollowing,
-                      followId: followList?.get(authorProfileData?.id)?.id,
-                      isLoggedIn,
                     }}
                   />
                 }

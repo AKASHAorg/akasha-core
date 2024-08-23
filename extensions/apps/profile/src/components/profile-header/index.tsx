@@ -1,7 +1,7 @@
 import React, { Suspense, useCallback, useMemo } from 'react';
 import routes, { EDIT } from '../../routes';
-import FollowButton from './follow-button';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import FollowProfileButton from '../follow-profile-button';
 import {
   FlagIcon,
   LinkIcon,
@@ -154,7 +154,13 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
       menuItems={menuItems}
       copyLabel={t('Copy to clipboard')}
       copiedLabel={t('Copied')}
-      followElement={<FollowButton profileID={profileData?.id} showLoginModal={showLoginModal} />}
+      followElement={
+        <FollowProfileButton
+          profileID={profileData?.id}
+          showLoginModal={showLoginModal}
+          iconOnly={true}
+        />
+      }
       badges={[...nsfwBadge]}
       activeOverlay={activeOverlay}
       plain={plain}

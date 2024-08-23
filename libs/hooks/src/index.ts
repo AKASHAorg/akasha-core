@@ -11,7 +11,6 @@ export * from './use-connect-wallet';
 export * from './store';
 export { hasOwn } from './utils/has-own';
 export { sortByKey } from './utils/sort-by-key';
-export { getFollowList } from './utils/getFollowList';
 export { createReactiveVar } from './utils/create-reactive-var';
 export {
   useNetworkState,
