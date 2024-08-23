@@ -5,7 +5,7 @@ import { CarReader } from '@ipld/car';
 import * as Signer from '@ucanto/principal/ed25519';
 import { filesFromPaths } from 'files-from-path';
 import semver from 'semver';
-import { AkashaAppApplicationType, SortOrder } from '@akashaorg/typings/lib/sdk/graphql-types-new.js';
+import { AkashaAppApplicationType, SortOrder } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import getSDK from '@akashaorg/core-sdk';
 //import path from 'path';
 import pkgMapping from './pkg.mapping.mjs';
@@ -56,7 +56,7 @@ async function authenticate () {
   if (!process.env.DID_PUBLISHER_PRIVATE_KEY) {
     throw new Error('DID_PUBLISHER_PRIVATE_KEY env var not set');
   }
-  const privateKey = fromString(process.env.DID_PUBLISHER_PRIVATE_KEY, "base16")
+  const privateKey = fromString(process.env.DID_PUBLISHER_PRIVATE_KEY, 'base16');
 
   const did = new DID({
     resolver: getResolver(),
@@ -88,7 +88,7 @@ async function uploadExtensions () {
   if (affected.length && Array.isArray(affected)) {
     for (const pkgName of affected) {
       if (!pkgMapping[pkgName]) {
-        console.warn(`Could not find ${ pkgName } in pkg.mapping.js`);
+        console.warn(`Could not find ${pkgName} in pkg.mapping.js`);
         continue;
       }
       let pkgID;
@@ -97,13 +97,13 @@ async function uploadExtensions () {
         first: 1,
         filters: { where: { name: { equalTo: pkgName.toString() } } },
         sorting: { createdAt: SortOrder.Desc },
-      }, { context: { source: sdk.services.gql.contextSources.composeDB }});
+      }, { context: { source: sdk.services.gql.contextSources.composeDB } });
       pkgID = pkgInfo?.node?.akashaAppList?.edges
         ? pkgInfo?.node?.akashaAppList?.edges[0]?.node?.id
         : undefined;
       if (!pkgID) {
-        console.info(`Could not find ${ pkgName } in the registry`);
-        const {default: pkgInfo} = await import(`${ pkgMapping[pkgName] }/manifest.json`, {
+        console.info(`Could not find ${pkgName} in the registry`);
+        const { default: pkgInfo } = await import(`${pkgMapping[pkgName]}/manifest.json`, {
           with: {
             type: 'json',
           },
@@ -119,22 +119,22 @@ async function uploadExtensions () {
               displayName: pkgInfo.displayName,
             },
           },
-        }, { context: { source: sdk.services.gql.contextSources.composeDB }});
+        }, { context: { source: sdk.services.gql.contextSources.composeDB } });
         pkgID = newPkg.setAkashaApp.document.id;
-        console.info(`Created ${ pkgName } with ID ${ pkgID }`);
+        console.info(`Created ${pkgName} with ID ${pkgID}`);
       }
-      console.log(`Uploading ${ pkgName }`);
+      console.log(`Uploading ${pkgName}`);
       const files = await filesFromPaths([pkgMapping[pkgName]]);
       const directoryCid = await client.uploadDirectory(files);
 
-      console.log(`Uploaded ${ pkgName } ${ directoryCid }`);
+      console.log(`Uploaded ${pkgName} ${directoryCid}`);
 
       const appRelease = await sdk.services.gql.client.GetAppsReleasesByPublisherDID({
         id: did.id,
         filters: { where: { applicationID: { equalTo: pkgID } } },
         first: 1,
         sorting: { createdAt: SortOrder.Desc },
-      }, { context: { source: sdk.services.gql.contextSources.composeDB }});
+      }, { context: { source: sdk.services.gql.contextSources.composeDB } });
 
       const version = appRelease?.node?.akashaAppReleaseList?.edges[0]?.node?.version
         ? semver.inc(appRelease?.node?.akashaAppReleaseList?.edges[0]?.node?.version, 'patch')
@@ -142,14 +142,14 @@ async function uploadExtensions () {
       await sdk.services.gql.client.SetAppRelease({
         i: {
           content: {
-            source: `ipfs://${ directoryCid }`,
+            source: `ipfs://${directoryCid}`,
             version: version,
             createdAt: new Date().toISOString(),
             applicationID: pkgID,
           },
         },
-      }, { context: { source: sdk.services.gql.contextSources.composeDB }});
-      console.log(`Release new version for ${ pkgName } ${ version }`);
+      }, { context: { source: sdk.services.gql.contextSources.composeDB } });
+      console.log(`Release new version for ${pkgName} ${version}`);
     }
   }
 }
