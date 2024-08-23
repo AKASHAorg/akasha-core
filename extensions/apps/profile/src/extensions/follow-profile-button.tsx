@@ -9,14 +9,11 @@ import { I18nextProvider } from 'react-i18next';
 
 type FollowProfileButtonExtensionData = {
   profileID?: string;
-  isLoggedIn: boolean;
-  isFollowing: boolean;
-  followId: string;
 };
 
 const Index = (props: IRootExtensionProps<FollowProfileButtonExtensionData>) => {
   const { navigateToModal, extensionData } = props;
-  const { profileID, isLoggedIn, isFollowing, followId } = extensionData;
+  const { profileID } = extensionData;
   const { getTranslationPlugin } = useRootComponentProps();
   const showLoginModal = (redirectTo?: { modal: IModalNavigationOptions }) => {
     navigateToModal({
@@ -27,13 +24,7 @@ const Index = (props: IRootExtensionProps<FollowProfileButtonExtensionData>) => 
 
   return (
     <I18nextProvider i18n={getTranslationPlugin().i18n}>
-      <FollowProfileButton
-        profileID={profileID}
-        isLoggedIn={isLoggedIn}
-        isFollowing={!!isFollowing}
-        followId={followId}
-        showLoginModal={showLoginModal}
-      />
+      <FollowProfileButton profileID={profileID} showLoginModal={showLoginModal} />
     </I18nextProvider>
   );
 };

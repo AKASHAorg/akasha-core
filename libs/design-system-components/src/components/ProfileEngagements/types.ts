@@ -1,20 +1,15 @@
-import { FollowList, type Image } from '@akashaorg/typings/lib/ui';
+import { type Image } from '@akashaorg/typings/lib/ui';
 import { ReactElement } from 'react';
 
 export const LOADING_LIST_SIZE = 5;
 
 export const ENTRY_HEIGHT = 72;
 
-export type EngagementProps = {
+export type EngagementProp = {
   authenticatedDID: string;
   profileAnchorLink: string;
-  followList: FollowList;
   onLoadMore: () => Promise<unknown>;
   transformSource: (src: Image) => Image;
-  renderFollowElement: (
-    profileId: string,
-    followId: string,
-    isFollowing: boolean,
-  ) => ReactElement | null;
+  renderFollowElement: (profileId: string) => ReactElement | null;
   onProfileClick: (profileId: string) => void;
 };

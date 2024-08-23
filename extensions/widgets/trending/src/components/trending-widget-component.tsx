@@ -6,14 +6,8 @@ import TrendingWidgetLoadingCard from '@akashaorg/design-system-components/lib/c
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import { useTranslation } from 'react-i18next';
+import { hasOwn, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import {
-  getFollowList,
-  hasOwn,
-  useAkashaStore,
-  useRootComponentProps,
-} from '@akashaorg/ui-awf-hooks';
-import {
-  useGetFollowDocumentsByDidQuery,
   useGetInterestsByDidQuery,
   useGetInterestsStreamQuery,
   useGetProfileStreamQuery,
@@ -68,15 +62,6 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
     return [];
   }, [latestProfileStreamReq.data]);
 
-  const { data: followDocuments } = useGetFollowDocumentsByDidQuery({
-    variables: {
-      id: authenticatedDID,
-      following: latestProfileIDs,
-      last: latestProfileIDs.length,
-    },
-    skip: !isLoggedIn || !latestProfileIDs.length,
-  });
-
   const latestTopics =
     latestTopicsReqData?.node && hasOwn(latestTopicsReqData.node, 'akashaInterestsStreamList')
       ? latestTopicsReqData?.node.akashaInterestsStreamList?.edges.map(edge => edge.node.value)
@@ -97,14 +82,6 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
       ? tagSubscriptionsData.node.akashaProfileInterests?.id
       : null;
   }, [isLoggedIn, tagSubscriptionsData]);
-
-  const followList = isLoggedIn
-    ? getFollowList(
-        followDocuments?.node && hasOwn(followDocuments.node, 'akashaFollowList')
-          ? followDocuments.node?.akashaFollowList?.edges?.map(edge => edge?.node)
-          : null,
-      )
-    : null;
 
   const showLoginModal = () => {
     navigateToModal({ name: 'login' });
@@ -195,8 +172,6 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
                           <LatestProfiles
                             key={profileID}
                             profileID={profileID}
-                            followList={followList}
-                            isLoggedIn={isLoggedIn}
                             authenticatedDID={authenticatedDID}
                             uiEvents={uiEvents}
                             onClickProfile={handleProfileClick}
