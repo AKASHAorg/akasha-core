@@ -129,14 +129,13 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
           <Controller
             control={control}
             name={FieldName.extensionType}
-            render={({ field: { name, value, onChange, ref } }) => (
+            render={({ field: { name, value, onChange } }) => (
               <DropDown
                 label={extensionTypeFieldLabel}
                 name={name}
                 selected={value}
                 menuItems={extensionTypes}
                 setSelected={onChange}
-                ref={ref}
                 required={true}
               />
             )}
@@ -185,7 +184,7 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
           <Controller
             control={control}
             name={FieldName.extensionLicense}
-            render={({ field: { name, value, onChange, ref } }) => (
+            render={({ field: { name, value, onChange } }) => (
               <>
                 <DropDown
                   label={extensionLicenseFieldLabel}
@@ -193,7 +192,6 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
                   selected={value}
                   menuItems={extensionLicenses}
                   setSelected={onChange}
-                  ref={ref}
                   required={true}
                 />
               </>

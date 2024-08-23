@@ -238,7 +238,7 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
             }}
           />
           <Divider />
-          <Stack direction="column">
+          <Stack direction="column" spacing="gap-2">
             <Text variant="h6">{tagsLabel}</Text>
             <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
               {tagsDescriptionLabel}
@@ -265,13 +265,17 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
               multiple
             />
             <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
-              {` ${keywords}/${MAX_TAGS} ${tagsAddedLabel}`}
+              {`${keywords.size}/${MAX_TAGS} ${tagsAddedLabel}`}
             </Text>
           </Stack>
           <Divider />
           <Stack direction="column" spacing="gap-2">
             <Stack direction="row" align="center" spacing="gap-x-1">
-              <Icon icon={<ExclamationTriangleIcon />} size="sm" />
+              <Icon
+                icon={<ExclamationTriangleIcon />}
+                size="sm"
+                color={{ light: 'warningLight', dark: 'warningDark' }}
+              />
               <Text variant="button-md">{noteLabel}</Text>
             </Stack>
             <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
