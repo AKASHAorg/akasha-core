@@ -1,11 +1,9 @@
-import React, { useLayoutEffect, useMemo, useRef } from 'react';
-import getSDK from '@akashaorg/core-sdk';
+import React, { useLayoutEffect, useMemo } from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import BeamSection from './beam-section';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import {
-  hasOwn,
   useAkashaStore,
   useAnalytics,
   useNsfwToggling,
@@ -18,16 +16,16 @@ import { AkashaBeamStreamModerationStatus } from '@akashaorg/typings/lib/sdk/gra
 import { useNavigate } from '@tanstack/react-router';
 import { EditableReflectionResolver, ReflectFeed } from '@akashaorg/ui-lib-feed';
 import { BeamData } from '@akashaorg/typings/lib/ui';
-import { useGetBeamStreamQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
 type BeamPageProps = {
   beamId: string;
+  isActive: boolean;
   beamStatus: AkashaBeamStreamModerationStatus;
   beamData: BeamData;
 };
 
 const BeamPage: React.FC<BeamPageProps> = props => {
-  const { beamId, beamStatus, beamData } = props;
+  const { beamId, isActive, beamStatus, beamData } = props;
   const { t } = useTranslation('app-antenna');
   const { navigateToModal, logger } = useRootComponentProps();
   const {
@@ -38,30 +36,9 @@ const BeamPage: React.FC<BeamPageProps> = props => {
   const navigate = useNavigate();
   const isLoggedIn = !!authenticatedDID;
 
-  const indexingDID = useRef(getSDK().services.gql.indexingDID);
-
   const filters = useMemo(() => {
     return { where: { beamID: { equalTo: beamId } } };
   }, [beamId]);
-
-  const { data: beamStreamData } = useGetBeamStreamQuery({
-    variables: {
-      indexer: indexingDID.current,
-      filters: { where: { beamID: { equalTo: beamId } } },
-      last: 1,
-    },
-    skip: !beamId,
-  });
-
-  const isBeamActive = React.useMemo(() => {
-    let beamStreamActive: boolean;
-
-    if (beamStreamData && hasOwn(beamStreamData.node, 'akashaBeamStreamList')) {
-      beamStreamActive = beamStreamData.node.akashaBeamStreamList.edges[0]?.node?.active ?? false;
-    }
-
-    return beamData.active && beamStreamActive;
-  }, [beamData.active, beamStreamData]);
 
   const showLoginModal = (title?: string, message?: string) => {
     navigateToModal({
@@ -96,7 +73,7 @@ const BeamPage: React.FC<BeamPageProps> = props => {
         reflectToId={beamId}
         header={
           <BeamSection
-            isBeamActive={isBeamActive}
+            isActive={isActive && beamData.active}
             beamData={beamData}
             isLoggedIn={isLoggedIn}
             showNSFWCard={showNsfwCard}

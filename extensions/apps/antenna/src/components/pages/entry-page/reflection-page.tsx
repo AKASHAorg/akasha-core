@@ -20,15 +20,15 @@ import { EditableReflectionResolver, ReflectFeed } from '@akashaorg/ui-lib-feed'
 import {
   useGetBeamByIdQuery,
   useGetBeamStreamQuery,
-  useGetReflectionStreamQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
 type ReflectionPageProps = {
+  isActive: boolean;
   reflectionData: ReflectionData;
 };
 
 const ReflectionPage: React.FC<ReflectionPageProps> = props => {
-  const { reflectionData } = props;
+  const { isActive, reflectionData } = props;
   const { t } = useTranslation('app-antenna');
   const {
     data: { authenticatedDID },
@@ -54,14 +54,14 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
     skip: !reflectionData.beamID,
   });
 
-  const { data: reflectionStreamData } = useGetReflectionStreamQuery({
-    variables: {
-      indexer: indexingDID.current,
-      filters: { where: { reflectionID: { equalTo: reflectionData.id } } },
-      last: 1,
-    },
-    skip: !reflectionData.id,
-  });
+  // const { data: reflectionStreamData } = useGetReflectionStreamQuery({
+  //   variables: {
+  //     indexer: indexingDID.current,
+  //     filters: { where: { reflectionID: { equalTo: reflectionData.id } } },
+  //     last: 1,
+  //   },
+  //   skip: !reflectionData.id,
+  // });
   /**
    * a beam is considered active if:
    * 1. data from getBeamById query has active as true and
@@ -87,14 +87,14 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
    * 1. reflectionData passed as prop has active as true and
    * 2. data from getReflectionStream query has active as true
    */
-  const isReflectionActive = React.useMemo(() => {
-    let reflectionStreamActive: boolean;
-    if (reflectionStreamData && hasOwn(reflectionStreamData.node, 'akashaReflectStreamList')) {
-      reflectionStreamActive =
-        reflectionStreamData.node.akashaReflectStreamList.edges[0]?.node?.active ?? false;
-    }
-    return reflectionData.active && reflectionStreamActive;
-  }, [reflectionStreamData, reflectionData.active]);
+  // const isReflectionActive = React.useMemo(() => {
+  //   let reflectionStreamActive: boolean;
+  //   if (reflectionStreamData && hasOwn(reflectionStreamData.node, 'akashaReflectStreamList')) {
+  //     reflectionStreamActive =
+  //       reflectionStreamData.node.akashaReflectStreamList.edges[0]?.node?.active ?? false;
+  //   }
+  //   return reflectionData.active && reflectionStreamActive;
+  // }, [reflectionStreamData, reflectionData.active]);
 
   const filters = useMemo(() => {
     return {
@@ -146,7 +146,7 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
             />
             <ReflectionSection
               isBeamActive={isBeamActive}
-              isReflectionActive={isReflectionActive}
+              isActive={isActive}
               reflectionData={reflectionData}
               isLoggedIn={isLoggedIn}
               showLoginModal={showLoginModal}

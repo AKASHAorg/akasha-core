@@ -13,21 +13,21 @@ import { useRouterState } from '@tanstack/react-router';
 
 type ReflectionSectionProps = {
   isBeamActive: boolean;
-  isReflectionActive: boolean;
+  isActive: boolean;
   reflectionData: ReflectionData;
   isLoggedIn: boolean;
   showLoginModal: (title?: string, message?: string) => void;
 };
 
 const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
-  const { isBeamActive, isReflectionActive, reflectionData, isLoggedIn, showLoginModal } = props;
+  const { isBeamActive, isActive, reflectionData, isLoggedIn, showLoginModal } = props;
   const { t } = useTranslation('app-antenna');
   const routerState = useRouterState();
   const [isReflecting, setIsReflecting] = useState(
     routerState.location.pathname.endsWith(routes[REFLECT]),
   );
 
-  const activeReflection = isBeamActive ? isReflectionActive : false;
+  const activeReflection = isBeamActive ? isActive : false;
 
   return (
     <Stack
