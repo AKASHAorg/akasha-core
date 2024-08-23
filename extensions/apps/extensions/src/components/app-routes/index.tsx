@@ -22,7 +22,6 @@ import {
   ExtensionEditStep1Page,
   ExtensionEditStep2Page,
   ExtensionEditStep3Page,
-  ExtensionEditStep4Page,
 } from '../pages/extension-edit-page';
 import {
   DevInfoPage,
@@ -191,9 +190,6 @@ const extensionEditMainRoute = createRoute({
     const { extensionId } = extensionEditMainRoute.useParams();
     return <ExtensionEditMainPage extensionId={extensionId} />;
   },
-  // beforeLoad: () => {
-  //   throw redirect({ to: '/edit-extension/$extensionId/step1', replace: true });
-  // },
 });
 
 const extensionEditStep1Route = createRoute({
@@ -220,14 +216,6 @@ const extensionEditStep3Route = createRoute({
     return <ExtensionEditStep3Page extensionId={extensionId} />;
   },
 });
-const extensionEditStep4Route = createRoute({
-  getParentRoute: () => extensionEditMainRoute,
-  path: '/step4',
-  component: () => {
-    const { extensionId } = extensionEditMainRoute.useParams();
-    return <ExtensionEditStep4Page extensionId={extensionId} />;
-  },
-});
 
 const routeTree = rootRoute.addChildren([
   defaultRoute,
@@ -252,7 +240,6 @@ const routeTree = rootRoute.addChildren([
     extensionEditStep1Route,
     extensionEditStep2Route,
     extensionEditStep3Route,
-    extensionEditStep4Route,
   ]),
 ]);
 

@@ -280,5 +280,5 @@ const schema = z.object({
   extensionDisplayName: z.string().trim().min(4, { message: 'Must be at least 4 characters' }),
   extensionLicense: z.string(),
   extensionLicenseOther: z.string().trim().min(3, { message: 'Must be at least 3 characters' }),
-  extensionSourceURL: z.string(),
+  extensionSourceURL: z.string().url({ message: 'URL is required' }),
 });
