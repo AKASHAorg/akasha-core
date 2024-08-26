@@ -8,6 +8,10 @@ import { Portal } from './helpers';
 import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 import { getElevationClasses } from '@akashaorg/design-system-core/lib/utils';
 
+const MAX_MENTIONS_DISPLAY = 3;
+
+const PROFILE_AVATAR_HEIGHT = 72;
+
 export type MentionPopover = {
   values: Profile[];
   setIndex: React.Dispatch<React.SetStateAction<number>>;
@@ -34,7 +38,7 @@ export const MentionPopover = React.forwardRef<HTMLDivElement, MentionPopover>((
       <Stack
         padding="p-0"
         background={{ light: 'white', dark: 'grey3' }}
-        customStyle={`absolute -top-[9999px] -left-[9999px] z-50 rounded-lg border(grey8 dark:grey8) ${boxShadow} overflow-auto max-h-[168px] w-72 ${customStyle}`}
+        customStyle={`absolute -top-[9999px] -left-[9999px] z-50 rounded-lg border(grey8 dark:grey8) ${boxShadow} overflow-auto ${`max-h-[${PROFILE_AVATAR_HEIGHT * MAX_MENTIONS_DISPLAY}px]`} w-72 ${customStyle}`}
         ref={ref}
       >
         {values.length === 0 && (
@@ -54,7 +58,7 @@ export const MentionPopover = React.forwardRef<HTMLDivElement, MentionPopover>((
                 setIndex(i);
               }}
               hover={true}
-              customStyle="px-2 py-4"
+              customStyle={`px-2 py-4 h-[${PROFILE_AVATAR_HEIGHT}px]`}
             >
               <ProfileAvatarButton
                 label={value.name}
