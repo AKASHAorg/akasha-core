@@ -551,7 +551,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
                 setIndex={setIndex}
                 transformSource={transformSource}
                 noMentionsLabel={noMentionsLabel}
-                customStyle={`w-[${mentionPopoverWidth.current}px] sm:w-72 `}
+                customStyle={`w-[${mentionPopoverWidth.current}px] sm:w-[272px] `}
               />
             )}
             {tagTargetRange && tags.length > 0 && (

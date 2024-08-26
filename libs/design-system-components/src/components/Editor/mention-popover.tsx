@@ -10,7 +10,7 @@ import { getElevationClasses } from '@akashaorg/design-system-core/lib/utils';
 
 const MAX_MENTIONS_DISPLAY = 3;
 
-const PROFILE_AVATAR_HEIGHT = 72;
+const PROFILE_AVATAR_HEIGHT = 56;
 
 export type MentionPopover = {
   values: Profile[];
@@ -42,7 +42,7 @@ export const MentionPopover = React.forwardRef<HTMLDivElement, MentionPopover>((
         ref={ref}
       >
         {values.length === 0 && (
-          <Card customStyle="py-4 px-2" type="plain">
+          <Card customStyle="py-2 px-4" type="plain">
             <Text align="center">{noMentionsLabel}</Text>
           </Card>
         )}
@@ -58,7 +58,7 @@ export const MentionPopover = React.forwardRef<HTMLDivElement, MentionPopover>((
                 setIndex(i);
               }}
               hover={true}
-              customStyle={`px-2 py-4 h-[${PROFILE_AVATAR_HEIGHT}px]`}
+              customStyle={`px-4 py-2 h-[${PROFILE_AVATAR_HEIGHT}px]`}
             >
               <ProfileAvatarButton
                 label={value.name}
