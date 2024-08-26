@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useCallback, useEffect, useLayoutEffect } from 'react';
 import {
   createEditor,
   Editor,
@@ -140,11 +140,9 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
 
   const [publishDisabledInternal, setPublishDisabledInternal] = useState(true);
   const [showMaxEncodedLengthErr, setShowMaxEncodedLengthErr] = useState(false);
-  const isMobile =
-    Math.min(window.screen.width, window.screen.height) < 640 ||
-    navigator.userAgent.indexOf('Mobi') > -1;
 
   const editorContainerRef = useRef<HTMLDivElement>(null);
+  const mentionPopoverWidth = useRef<number>(0);
 
   /**
    * initialise editor with all the required plugins
@@ -183,6 +181,11 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
     }
   };
 
+  useLayoutEffect(() => {
+    const editorContainerRect = editorContainerRef.current.getBoundingClientRect();
+    if (editorContainerRect) mentionPopoverWidth.current = editorContainerRect.width;
+  }, []);
+
   /**
    * set the selection at the end of the content when component is mounted
    */
@@ -201,11 +204,6 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
       if (el) {
         el.style.top = `${rect.top + window.scrollY + 20}px`;
         el.style.left = `${rect.left + window.scrollX}px`;
-
-        if (isMobile) {
-          const editorContainerRect = editorContainerRef.current.getBoundingClientRect();
-          if (editorContainerRect) el.style.width = `${editorContainerRect.width}px`;
-        }
       }
     }
     if (tagTargetRange && tags && tags.length > 0) {
@@ -217,16 +215,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
         el.style.left = `${rect.left + window.scrollX}px`;
       }
     }
-  }, [
-    tags,
-    editor,
-    index,
-    mentionTargetRange,
-    tagTargetRange,
-    editorState,
-    mentionPopoverRef,
-    isMobile,
-  ]);
+  }, [tags, editor, index, mentionTargetRange, tagTargetRange, editorState, mentionPopoverRef]);
 
   /**
    * creates the object for publishing and resets the editor state after
@@ -562,6 +551,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
                 setIndex={setIndex}
                 transformSource={transformSource}
                 noMentionsLabel={noMentionsLabel}
+                customStyle={`w-[${mentionPopoverWidth.current}px] sm:w-72 `}
               />
             )}
             {tagTargetRange && tags.length > 0 && (

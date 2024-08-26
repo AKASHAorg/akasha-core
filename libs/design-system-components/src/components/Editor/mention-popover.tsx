@@ -38,7 +38,7 @@ export const MentionPopover = React.forwardRef<HTMLDivElement, MentionPopover>((
       <Stack
         padding="p-0"
         background={{ light: 'white', dark: 'grey3' }}
-        customStyle={`absolute -top-[9999px] -left-[9999px] z-50 rounded-lg border(grey8 dark:grey8) ${boxShadow} overflow-auto ${`max-h-[${PROFILE_AVATAR_HEIGHT * MAX_MENTIONS_DISPLAY}px]`} w-72 ${customStyle}`}
+        customStyle={`absolute -top-[9999px] -left-[9999px] z-50 rounded-lg border(grey8 dark:grey8) ${boxShadow} overflow-auto ${`max-h-[${PROFILE_AVATAR_HEIGHT * MAX_MENTIONS_DISPLAY}px]`} ${customStyle}`}
         ref={ref}
       >
         {values.length === 0 && (
