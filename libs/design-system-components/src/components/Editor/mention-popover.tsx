@@ -54,7 +54,7 @@ export const MentionPopover = React.forwardRef<HTMLDivElement, MentionPopover>((
                 setIndex(i);
               }}
               hover={true}
-              customStyle="p-2"
+              customStyle="px-2 py-4"
             >
               <ProfileAvatarButton
                 label={value.name}
