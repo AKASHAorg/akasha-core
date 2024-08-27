@@ -7,7 +7,7 @@ import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { useGetAppsByPublisherDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 import { SortOrder } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { GetAppsByPublisherDidQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 import { getReportedError, getReportedProgress } from './utils';
@@ -196,7 +196,7 @@ export const InstallExtensionPage = ({ appId }: { appId: string }) => {
       {(isAuthenticating || loading) && <div>Loading...</div>}
       {!authenticatedDID && !isAuthenticating && called && !loading && (
         <ErrorLoader
-          type="no-login"
+          type="not-authenticated"
           title={t('Login Required')}
           details={t('You must be logged in to install {{appDisplayName}}', {
             appDisplayName: getAppDisplayName(data),

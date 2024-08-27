@@ -1,10 +1,10 @@
 import type AppLoader from '../index';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 import { AUTH_EVENTS } from '@akashaorg/typings/lib/sdk';
-import { ILogger } from '@akashaorg/typings/lib/sdk/log';
 import { GetAppsByPublisherDidQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 import { DeepTarget, SystemModuleType } from '../type-utils';
 import { IAppConfig } from '@akashaorg/typings/lib/ui';
+import { ILogger } from '@akashaorg/typings/lib/sdk/log';
 
 type AkashaAppEdgeNode = DeepTarget<
   GetAppsByPublisherDidQuery,
@@ -70,6 +70,7 @@ export class ExtensionInstaller {
   }) => void)[];
   #sdk: ReturnType<typeof getSDK>;
   #logger: ILogger;
+  #extensionName: string;
   #user: { id?: string };
   #extensionInfo?: AkashaAppEdgeNode;
   #extensionModule: SystemModuleType;
@@ -109,9 +110,11 @@ export class ExtensionInstaller {
   }
 
   resetAndCleanup() {
-    this.#extensionInfo = null;
-    this.#extensionModule = null;
-    this.#extensionConfig = null;
+    this.#extensionInfo = undefined;
+    this.#extensionModule = undefined;
+    this.#extensionConfig = undefined;
+    this.listeners = [];
+    this.#extensionName = undefined;
   }
 
   async fetchExtensionStep(extensionID: string): Promise<boolean> {
@@ -146,12 +149,45 @@ export class ExtensionInstaller {
       return false;
     }
   }
-  async retryFromError(errorStatus) {
-    console.log('Should retry from error status', errorStatus);
+  async retryFromError(errorStatus: symbol) {
+    console.log('retrying from error', errorStatus);
+    if (!this.#extensionName) {
+      return false;
+    }
+    switch (errorStatus) {
+      // start from the beginning
+      case this.getStaticStatusCodes().error.EXTENSION_FETCH_ERROR:
+      case this.getStaticStatusCodes().error.EXTENSION_IMPORT_ERROR:
+        return this.installExtension(this.#extensionName);
+      // directly run postInstall
+      case this.getStaticStatusCodes().error.EXTENSION_INITIALIZATION_FAILED:
+        return this.postInstallExtension();
+      // try to remove the extension from db and rerun postInstall
+      case this.getStaticStatusCodes().error.EXTENSION_INFO_SAVE_FAILED:
+        try {
+          await this.#sdk.services.appSettings.uninstall(this.#extensionName);
+        } catch (err) {
+          // do nothing.
+        }
+        return this.postInstallExtension();
+      case this.getStaticStatusCodes().error.EXTENSION_REGISTER_RESOURCES_FAILED:
+        // @todo: cleanup the resources (from the db? through the sdk?) and rerun install
+        return this.installExtension(this.#extensionName);
+      case this.getStaticStatusCodes().error.EXTENSION_FINALIZATION_FAILED:
+        return this.postInstallExtension();
+    }
   }
+  // the tricky part of cancelling is when the extension reaches the single-spa register.
+  // @todo: more cleanups might be necessary on the app-loader
   async cancelInstallation() {
-    console.log('cancel and cleanup');
+    try {
+      await this.#sdk.services.appSettings.uninstall(this.#extensionInfo.name);
+    } catch (err) {
+      this.#logger.error(err);
+    }
+    this.resetAndCleanup();
   }
+
   async postInstallExtension() {
     if (
       this.#extensionModule.initialize &&
@@ -208,6 +244,7 @@ export class ExtensionInstaller {
       this.notifyErrorStatus(this.getStaticStatusCodes().error.USER_NOT_CONNECTED);
       return;
     }
+    this.#extensionName = extensionID;
     if (!(await this.fetchExtensionStep(extensionID))) {
       return;
     }

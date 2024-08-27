@@ -49,7 +49,7 @@ class AppSettings {
   @validate(IntegrationNameSchema)
   async get(appName: IntegrationName) {
     const collection = this._db.getCollections().installedExtensions;
-    const doc = await collection?.where('name').equals(appName).first();
+    const doc = await collection?.where('appName').equals(appName).first();
     return createFormattedValue(doc);
   }
 
@@ -105,12 +105,12 @@ class AppSettings {
     const currentInfo = await this.get(appName);
     if (currentInfo?.data?.releaseId) {
       const collection = this._db.getCollections().installedExtensions;
-      await collection?.where('id').equals(currentInfo.data.releaseId).delete();
+      await collection?.where('appName').equals(currentInfo.data.releaseId).delete();
     }
   }
   @validate(IntegrationNameSchema)
   async toggleAppStatus(appName: IntegrationName): Promise<boolean> {
-    // @todo: coming soon
+    // @todo: currently not planned.
     // const collection = this._db.getCollections().installedExtensions;
     // const doc = await collection?.where('name').equals(appName).first();
     // if (doc && doc.id) {
@@ -126,32 +126,33 @@ class AppSettings {
   }
 
   async updateVersion(app: { appName: string; releaseVersion: string }) {
-    const table = this._db.getCollections().installedExtensions;
-
-    const collection = await table
-      ?.where({ appName: app.appName, version: app.releaseVersion })
-      .first();
-
-    if (!collection) {
-      this._log.warn('app not found!');
-      return;
-    }
-
-    if (collection && collection.version === app.releaseVersion) {
-      this._log.warn('app has the same version!');
-      return;
-    }
-
-    if (collection && collection.version !== app.releaseVersion) {
-      const oldVersion = collection.version;
-      collection.version = app.releaseVersion;
-      table?.update(collection.appName, { version: app.releaseVersion });
-      this._globalChannel.next({
-        event: EXTENSION_EVENTS.UPDATE_VERSION,
-        data: { oldVersion, currentVersion: app.releaseVersion },
-      });
-      return true;
-    }
+    // @TODO: update the release version of an app
+    // const table = this._db.getCollections().installedExtensions;
+    //
+    // const collection = await table
+    //   ?.where({ appName: app.appName, version: app.releaseVersion })
+    //   .first();
+    //
+    // if (!collection) {
+    //   this._log.warn('app not found!');
+    //   return;
+    // }
+    //
+    // if (collection && collection.version === app.releaseVersion) {
+    //   this._log.warn('app has the same version!');
+    //   return;
+    // }
+    //
+    // if (collection && collection.version !== app.releaseVersion) {
+    //   const oldVersion = collection.version;
+    //   collection.version = app.releaseVersion;
+    //   table?.update(collection.appName, { version: app.releaseVersion });
+    //   this._globalChannel.next({
+    //     event: EXTENSION_EVENTS.UPDATE_VERSION,
+    //     data: { oldVersion, currentVersion: app.releaseVersion },
+    //   });
+    //   return true;
+    // }
   }
 
   async updateConfig(app: ConfigInfo) {
