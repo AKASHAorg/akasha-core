@@ -58,7 +58,7 @@ const ProfileAvatarButton = React.forwardRef(
 
     return (
       <Link to={href} onClick={onClick} customStyle="block">
-        <Stack direction="row" align="start" spacing="gap-x-2" customStyle={customStyle}>
+        <Stack direction="row" align="center" spacing="gap-x-2" customStyle={customStyle}>
           <Avatar
             dataTestId="avatar-box"
             aria-label="avatar-box"
@@ -69,7 +69,7 @@ const ProfileAvatarButton = React.forwardRef(
           />
           <Stack
             justify="center"
-            spacing="gap-y-1"
+            spacing="gap-y-0"
             customStyle="align-top"
             dataTestId="info-box"
             aria-label="info-box"
