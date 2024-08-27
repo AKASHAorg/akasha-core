@@ -5,6 +5,7 @@ import {
   GetReflectionByIdQuery,
   GetReflectionStreamQuery,
 } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
+import { AkashaBeamStreamModerationStatus } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { IRouterContext } from '@akashaorg/typings/lib/ui';
 import { hasOwn } from '@akashaorg/ui-awf-hooks';
 import {
@@ -14,7 +15,10 @@ import {
   GetReflectionStreamDocument,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
-export async function getBeamById({ apolloClient, beamId }: IRouterContext & { beamId: string }) {
+export async function getBeamById({
+  apolloClient,
+  beamId,
+}: IRouterContext & { beamId: string }): Promise<GetBeamByIdQuery> {
   const { data } = await apolloClient.query<GetBeamByIdQuery>({
     query: GetBeamByIdDocument,
     variables: { id: beamId },
@@ -26,7 +30,7 @@ export async function getBeamById({ apolloClient, beamId }: IRouterContext & { b
 export async function getBeamStreamById({
   apolloClient,
   beamId,
-}: IRouterContext & { beamId: string }) {
+}: IRouterContext & { beamId: string }): Promise<GetBeamStreamQuery> {
   const sdk = getSDK();
   const { data } = await apolloClient.query<GetBeamStreamQuery>({
     query: GetBeamStreamDocument,
@@ -40,19 +44,13 @@ export async function getBeamStreamById({
   return data;
 }
 
-export async function getReflectionById({
-  apolloClient,
-  reflectionId,
-}: IRouterContext & { reflectionId: string }) {
-  const { data } = await apolloClient.query<GetReflectionByIdQuery>({
-    query: GetReflectionByIdDocument,
-    variables: { id: reflectionId },
-    fetchPolicy: 'cache-first',
-  });
-  return data;
+export function getBeamData(beamByIdQuery: GetBeamByIdQuery) {
+  if (beamByIdQuery?.node && hasOwn(beamByIdQuery.node, 'id')) {
+    return beamByIdQuery?.node;
+  }
 }
 
-export function getBeamStatus(beamStream: GetBeamStreamQuery) {
+export function getBeamStatus(beamStream: GetBeamStreamQuery): AkashaBeamStreamModerationStatus {
   if (
     beamStream?.node &&
     hasOwn(beamStream.node, 'akashaBeamStreamList') &&
@@ -61,43 +59,32 @@ export function getBeamStatus(beamStream: GetBeamStreamQuery) {
   ) {
     return beamStream.node.akashaBeamStreamList.edges[0].node.status;
   }
-  return null;
 }
 
-export function getBeamActive(beamStream: GetBeamStreamQuery) {
-  if (
-    beamStream?.node &&
-    hasOwn(beamStream.node, 'akashaBeamStreamList') &&
-    beamStream.node.akashaBeamStreamList.edges?.[0]?.node &&
-    hasOwn(beamStream.node.akashaBeamStreamList.edges[0].node, 'active')
-  ) {
-    return beamStream.node.akashaBeamStreamList.edges[0].node.active;
-  }
-  return null;
+export function getBeamActive(streamData: GetBeamStreamQuery) {
+  return (
+    streamData?.node &&
+    hasOwn(streamData.node, 'akashaBeamStreamList') &&
+    streamData.node.akashaBeamStreamList.edges?.[0]?.node?.active
+  );
 }
 
-export function getBeamData(beamByIdQuery: GetBeamByIdQuery) {
-  if (beamByIdQuery?.node && hasOwn(beamByIdQuery.node, 'id')) {
-    return beamByIdQuery?.node;
-  }
-  return null;
-}
-
-export function getReflectionData(reflectionByIdQuery: GetReflectionByIdQuery) {
-  if (
-    reflectionByIdQuery &&
-    hasOwn(reflectionByIdQuery, 'node') &&
-    hasOwn(reflectionByIdQuery.node, 'id')
-  ) {
-    return reflectionByIdQuery.node;
-  }
-  return null;
+export async function getReflectionById({
+  apolloClient,
+  reflectionId,
+}: IRouterContext & { reflectionId: string }): Promise<GetReflectionByIdQuery> {
+  const { data } = await apolloClient.query<GetReflectionByIdQuery>({
+    query: GetReflectionByIdDocument,
+    variables: { id: reflectionId },
+    fetchPolicy: 'cache-first',
+  });
+  return data;
 }
 
 export async function getReflectionStreamById({
   apolloClient,
   reflectionId,
-}: IRouterContext & { reflectionId: string }) {
+}: IRouterContext & { reflectionId: string }): Promise<GetReflectionStreamQuery> {
   const sdk = getSDK();
   const { data } = await apolloClient.query<GetReflectionStreamQuery>({
     query: GetReflectionStreamDocument,
@@ -111,14 +98,20 @@ export async function getReflectionStreamById({
   return data;
 }
 
-export function getReflectionActive(reflectionStream: GetReflectionStreamQuery) {
+export function getReflectionData(reflectionByIdQuery: GetReflectionByIdQuery) {
   if (
-    reflectionStream?.node &&
-    hasOwn(reflectionStream.node, 'akashaReflectStreamList') &&
-    reflectionStream.node.akashaReflectStreamList.edges?.[0]?.node &&
-    hasOwn(reflectionStream.node.akashaReflectStreamList.edges[0].node, 'active')
+    reflectionByIdQuery &&
+    hasOwn(reflectionByIdQuery, 'node') &&
+    hasOwn(reflectionByIdQuery.node, 'id')
   ) {
-    return reflectionStream.node.akashaReflectStreamList.edges[0].node.active;
+    return reflectionByIdQuery.node;
   }
-  return null;
+}
+
+export function getReflectionActive(streamData: GetReflectionStreamQuery) {
+  return (
+    streamData?.node &&
+    hasOwn(streamData.node, 'akashaReflectStreamList') &&
+    streamData.node.akashaReflectStreamList?.edges?.[0].node?.active
+  );
 }

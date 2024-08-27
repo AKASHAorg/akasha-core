@@ -21,6 +21,7 @@ import {
   useGetBeamByIdQuery,
   useGetBeamStreamQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import { getBeamActive } from '../../app-routes/data-loaders';
 
 type ReflectionPageProps = {
   isActive: boolean;
@@ -54,14 +55,6 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
     skip: !reflectionData.beamID,
   });
 
-  // const { data: reflectionStreamData } = useGetReflectionStreamQuery({
-  //   variables: {
-  //     indexer: indexingDID.current,
-  //     filters: { where: { reflectionID: { equalTo: reflectionData.id } } },
-  //     last: 1,
-  //   },
-  //   skip: !reflectionData.id,
-  // });
   /**
    * a beam is considered active if:
    * 1. data from getBeamById query has active as true and
@@ -69,32 +62,13 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
    */
   const isBeamActive = React.useMemo(() => {
     let beamByIdActive: boolean;
-    let beamStreamActive: boolean;
 
     if (beamByIdData && hasOwn(beamByIdData.node, 'active')) {
       beamByIdActive = beamByIdData.node.active;
     }
 
-    if (beamStreamData && hasOwn(beamStreamData.node, 'akashaBeamStreamList')) {
-      beamStreamActive = beamStreamData.node.akashaBeamStreamList.edges[0]?.node?.active ?? false;
-    }
-
-    return beamByIdActive && beamStreamActive;
+    return beamByIdActive && getBeamActive(beamStreamData);
   }, [beamByIdData, beamStreamData]);
-
-  /**
-   * a reflection is considered active if:
-   * 1. reflectionData passed as prop has active as true and
-   * 2. data from getReflectionStream query has active as true
-   */
-  // const isReflectionActive = React.useMemo(() => {
-  //   let reflectionStreamActive: boolean;
-  //   if (reflectionStreamData && hasOwn(reflectionStreamData.node, 'akashaReflectStreamList')) {
-  //     reflectionStreamActive =
-  //       reflectionStreamData.node.akashaReflectStreamList.edges[0]?.node?.active ?? false;
-  //   }
-  //   return reflectionData.active && reflectionStreamActive;
-  // }, [reflectionStreamData, reflectionData.active]);
 
   const filters = useMemo(() => {
     return {

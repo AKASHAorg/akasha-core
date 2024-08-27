@@ -35,6 +35,7 @@ import {
   getReflectionActive,
   getReflectionById,
   getReflectionData,
+  getReflectionStreamById,
 } from './data-loaders';
 import { mapBeamEntryData, mapReflectEntryData } from '@akashaorg/ui-awf-hooks';
 
@@ -144,9 +145,9 @@ const reflectionsRoute = createRoute({
       }),
     ),
     reflectionStream: defer(
-      getBeamStreamById({
+      getReflectionStreamById({
         apolloClient: context.apolloClient,
-        beamId: params.reflectionId,
+        reflectionId: params.reflectionId,
       }),
     ),
   }),
