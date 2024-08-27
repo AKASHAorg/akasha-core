@@ -1,32 +1,29 @@
-import {
-  ExtensionActivityFn,
-  ExtensionPointEvents,
-  ExtensionPointInterface,
-  ExtensionPointRegisterEvent,
-  IRootExtensionProps,
-} from '@akashaorg/typings/lib/ui';
-import { BaseStore } from './base-store';
+import { ExtensionPointInterface } from '@akashaorg/typings/lib/ui';
 import { hasOwn } from '@akashaorg/ui-awf-hooks';
 import { checkActivity, stringToRegExp } from './utils';
 
-export class ExtensionPointStore extends BaseStore {
+export class ExtensionPointStore {
   static instance: ExtensionPointStore;
-  readonly #extensions: ExtensionPointInterface[];
-  constructor(uiEvents: IRootExtensionProps['uiEvents']) {
-    super(uiEvents);
-    this.#extensions = [];
+  readonly #extensions: (ExtensionPointInterface & { appName: string })[];
 
-    this.subscribeRegisterEvents(ExtensionPointEvents.RegisterExtensionPoint, {
-      next: (eventInfo: ExtensionPointRegisterEvent) => {
-        if (!Array.isArray(eventInfo.data)) {
-          return;
-        }
-        this.#extensions.push(...eventInfo.data);
-      },
-    });
+  constructor() {
+    this.#extensions = [];
   }
 
-  getExtensions = () => {
+  registerExtensionPoint = (extensionPoint: ExtensionPointInterface & { appName: string }) => {
+    this.#extensions.push(extensionPoint);
+  };
+
+  registerExtensionPoints = (
+    extensionPoints: (ExtensionPointInterface & { appName: string })[],
+  ) => {
+    if (!Array.isArray(extensionPoints)) {
+      return;
+    }
+    extensionPoints.forEach(extensionPoint => this.registerExtensionPoint(extensionPoint));
+  };
+
+  getExtensionPoints = () => {
     return this.#extensions;
   };
 
@@ -51,9 +48,9 @@ export class ExtensionPointStore extends BaseStore {
     return matchingExtensions;
   };
 
-  static getInstance(uiEvents: IRootExtensionProps<unknown>['uiEvents']) {
+  static getInstance() {
     if (!this.instance) {
-      this.instance = new ExtensionPointStore(uiEvents);
+      this.instance = new ExtensionPointStore();
     }
     return this.instance;
   }

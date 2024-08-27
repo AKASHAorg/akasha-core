@@ -2,6 +2,8 @@ import { WorldConfig } from '@akashaorg/typings/lib/ui';
 import getSDK from '@akashaorg/awf-sdk';
 import { AkashaApp, SortOrder } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { ILogger } from '@akashaorg/typings/lib/sdk/log';
+import { GetAppsByPublisherDidQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
+import { DeepTarget } from './type-utils';
 
 /**
  * Retrieves the latest version of a published app from the Akasha Registry.
@@ -11,7 +13,7 @@ import { ILogger } from '@akashaorg/typings/lib/sdk/log';
  * @returns The latest version of the app, including its source, version, ID, creation date, and manifest data.
  * @throws Error if the DID_PUBLISHER_PUBLIC_KEY environment variable is not defined.
  */
-const getPublishedAppLatestVersion = async (appName: string, logger?: ILogger) => {
+export const getRemoteExtensionLatestVersion = async (appName: string, logger?: ILogger) => {
   const sdk = getSDK();
   //this will change to INDEXING_DID once we have the passive indexing feature
   const did = process.env?.DID_PUBLISHER_PUBLIC_KEY;
@@ -67,12 +69,17 @@ export const getReleaseById = async (releaseId: string) => {
   }
 };
 
+type AkashaNode = DeepTarget<
+  GetAppsByPublisherDidQuery,
+  ['node', 'akashaAppList', 'edges', 0, 'node']
+>;
+
 export const getRemoteLatestExtensionInfos = async (
   extensions: { name: string }[],
-): Promise<Awaited<ReturnType<typeof getPublishedAppLatestVersion>>[]> => {
-  const pkgInfos = [];
+): Promise<AkashaNode[]> => {
+  const pkgInfos: AkashaNode[] = [];
   for (const extension of extensions) {
-    const app = await getPublishedAppLatestVersion(extension.name);
+    const app = await getRemoteExtensionLatestVersion(extension.name);
     if (app) {
       pkgInfos.push(app);
     }

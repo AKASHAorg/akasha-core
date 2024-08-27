@@ -8,7 +8,7 @@ import {
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import AppInfo from '@akashaorg/design-system-components/lib/components/AppInfo';
 import { useTranslation } from 'react-i18next';
-import { transformSource, useAkashaStore } from '@akashaorg/ui-awf-hooks';
+import { transformSource, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetAppReleaseByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { Developer } from '@akashaorg/typings/lib/ui';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
@@ -40,6 +40,7 @@ type InfoPageProps = {
 export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
+  const { navigateToModal } = useRootComponentProps();
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
@@ -48,6 +49,22 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
     variables: { id: appId },
     skip: !isLoggedIn || true,
   });
+
+  const handleInstallClick = () => {
+    if (!authenticatedDID) {
+      return navigateToModal({
+        name: 'login',
+        redirectTo: location.pathname,
+      });
+    }
+
+    navigate({
+      to: '/install/$appId',
+      params: {
+        appId: appId,
+      },
+    }).catch(err => console.error('cannot navigate to /install/$appId', err));
+  };
 
   return (
     <Stack>
@@ -120,9 +137,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
           licenseTitle={t('License')}
           license={'License A' /* appReleaseInfo?.application?.license */}
           contactSupportTitle={t('Contact Support')}
-          onInstall={() => {
-            /*TODO: connect new hooks when they are ready*/
-          }}
+          onInstall={handleInstallClick}
           onUninstall={() => {
             /*TODO: connect new hooks when they are ready*/
           }}

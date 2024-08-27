@@ -1,27 +1,41 @@
-import { BaseStore } from './base-store';
-import {
-  IRootComponentProps,
-  IRootExtensionProps,
-  WidgetEvents,
-  WidgetInterface,
-  WidgetRegisterEvent,
-} from '@akashaorg/typings/lib/ui';
+import { WidgetInterface } from '@akashaorg/typings/lib/ui';
 import { hasOwn } from '@akashaorg/ui-awf-hooks';
 import { checkActivity } from './utils';
 
-export class WidgetStore extends BaseStore {
+export class WidgetStore {
   static instance: WidgetStore;
   readonly #widgets: (WidgetInterface & { appName: string })[];
-  constructor(uiEvents: IRootComponentProps['uiEvents']) {
-    super(uiEvents);
+  #widgetRemoveCallbacks: Map<string, (() => void)[]>;
+  constructor() {
     this.#widgets = [];
-    this.subscribeRegisterEvents(WidgetEvents.RegisterWidget, {
-      next: (eventInfo: WidgetRegisterEvent) => {
-        if (eventInfo.data) {
-          this.#widgets.push(eventInfo.data);
-        }
-      },
-    });
+    this.#widgetRemoveCallbacks = new Map();
+  }
+
+  registerWidget(widget: WidgetInterface & { appName: string }) {
+    this.#widgets.push(widget);
+  }
+
+  onWidgetUnload(widgetName: string, cb: () => void) {
+    if (this.#widgetRemoveCallbacks.has(widgetName)) {
+      this.#widgetRemoveCallbacks.set(widgetName, [
+        ...this.#widgetRemoveCallbacks.get(widgetName),
+        cb,
+      ]);
+    } else {
+      this.#widgetRemoveCallbacks.set(widgetName, [cb]);
+    }
+  }
+
+  unregisterWidget(widgetName: string) {
+    const removedWidget =
+      this.#widgets.splice(
+        this.#widgets.findIndex(({ appName }) => appName === widgetName),
+        1,
+      )[0] ?? null;
+
+    if (removedWidget) {
+      this.#widgetRemoveCallbacks.get(widgetName)?.forEach(cb => cb());
+    }
   }
 
   getWidgets = () => this.#widgets;
@@ -31,24 +45,31 @@ export class WidgetStore extends BaseStore {
     for (const widget of this.#widgets) {
       if (widget.mountsIn === slotName && !hasOwn(widget, 'activeWhen')) {
         matchingWidgets.push(widget);
+        continue;
       }
-      if (widget.mountsIn === slotName && typeof widget.activeWhen === 'function') {
-        let isActive = checkActivity(widget.activeWhen, location);
+      let isActive = false;
 
-        if (Array.isArray(widget.activeWhen) && widget.activeWhen.length > 0) {
-          isActive = widget.activeWhen.some(activity => checkActivity(activity, location));
-        }
+      if (widget.mountsIn !== slotName) {
+        continue;
+      }
 
-        if (isActive) {
-          matchingWidgets.push(widget);
-        }
+      if (Array.isArray(widget.activeWhen) && widget.activeWhen.length > 0) {
+        isActive = widget.activeWhen.some(activity => checkActivity(activity, location));
+      }
+
+      if (typeof widget.activeWhen === 'function' || typeof widget.activeWhen === 'string') {
+        isActive = checkActivity(widget.activeWhen, location);
+      }
+
+      if (isActive) {
+        matchingWidgets.push(widget);
       }
     }
     return matchingWidgets;
   };
-  static getInstance(uiEvents: IRootExtensionProps<unknown>['uiEvents']) {
+  static getInstance() {
     if (!this.instance) {
-      this.instance = new WidgetStore(uiEvents);
+      this.instance = new WidgetStore();
     }
     return this.instance;
   }

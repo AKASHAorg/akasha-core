@@ -2,13 +2,6 @@ import { ParcelConfigObject } from 'single-spa';
 import type { ExtensionActivity, LayoutSlots } from './app-loader';
 
 /**
- * Enum defining events related to loading and unloading of a widget
- **/
-export const enum WidgetEvents {
-  RegisterWidget = 'register-widget',
-}
-
-/**
  * Type defining widget loading base configuration object
  **/
 type BaseWidgetInterface = {
@@ -32,18 +25,11 @@ export type LayoutWidgetInterface = BaseWidgetInterface & {
 };
 
 /**
- * Type defining widget registration event
- **/
-export type WidgetRegisterEvent = {
-  event: WidgetEvents.RegisterWidget;
-  data: WidgetInterface & { appName: string };
-};
-
-/**
  * Interface defining widget state store defined as a plugin
  **/
 export interface WidgetStorePlugin {
   getWidgets: () => WidgetInterface[];
+  onWidgetUnload: (name: string, callback: () => void) => void;
   getMatchingWidgets: (
     slotName: string,
     location: Location,

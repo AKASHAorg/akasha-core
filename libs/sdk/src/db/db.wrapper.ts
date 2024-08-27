@@ -11,7 +11,7 @@ export default class DbWrapper extends Dexie {
   constructor(dbName: string) {
     super(dbName);
     this.version(1).stores({
-      installedExtensions: 'id, name, integrationType, version, sources, status, config',
+      installedExtensions: '++, &releaseId, version, [releaseId+version]',
       devExtensions: '++id, name, integrationType, sources',
       settings: '++id, &serviceName, *options',
     });

@@ -28,6 +28,17 @@ export const Widget: React.FC<WidgetExtensionProps> = props => {
   }, [location, name]);
 
   React.useEffect(() => {
+    for (const parcelConf of widgets) {
+      widgetStore.current.onWidgetUnload(parcelConf.appName, () => {
+        setParcelConfigs(prev =>
+          prev.filter(parcel => parcel.widget.appName !== parcelConf.appName),
+        );
+        setIsParcelMounted(false);
+      });
+    }
+  }, [widgets]);
+
+  React.useEffect(() => {
     const resolveConfigs = async () => {
       const newWidgets = [];
 

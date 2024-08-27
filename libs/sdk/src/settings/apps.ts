@@ -14,6 +14,7 @@ import EventBus from '../common/event-bus.js';
 import pino from 'pino';
 import { validate } from '../common/validator.js';
 import { z } from 'zod';
+import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 declare const __DEV__: boolean;
 
@@ -63,46 +64,35 @@ class AppSettings {
 
   /**
    * Persist installed app configuration for the current user
-   * @param userDid - did of the user who installs this extension
    * @param release - extension release data
    */
   @validate(
-    z.string(),
-    z
-      .object({
-        appName: IntegrationNameSchema,
-        releaseId: IntegrationIdSchema,
-        version: z.string(),
-      })
-      .partial(),
+    z.object({
+      appName: IntegrationNameSchema,
+      releaseId: IntegrationIdSchema,
+      source: z.string(),
+      version: z.string(),
+      applicationType: z.nativeEnum(AkashaAppApplicationType),
+    }),
   )
-  async install(userDid: string, release: { appName: string; releaseId: string; version: string }) {
+  async install(release: {
+    appName: string;
+    releaseId: string;
+    version: string;
+    source: string;
+    applicationType: AkashaAppApplicationType;
+  }) {
     const table = this._db.getCollections().installedExtensions;
     const collection = await table
-      ?.where({ id: release.releaseId, version: release.version, userDid })
+      ?.where({ releaseId: release.releaseId, version: release.version })
       .first();
     if (!collection) {
-      await table?.add({
-        id: release.releaseId,
-        version: release.version,
-        appName: release.appName,
-        installedByDid: userDid,
-      });
-      this._globalChannel.next({
-        event: EXTENSION_EVENTS.INSTALL_STATUS,
-        data: { status: 'created' },
-      });
-      return true;
+      await table?.add(release);
     }
     // update version
     if (collection && collection.version !== release.version) {
       collection.version = release.version;
       table?.update(collection.appName, { version: release.version });
-      this._globalChannel.next({
-        event: EXTENSION_EVENTS.UPDATE_VERSION,
-        data: { version: release.version },
-      });
-      return true;
     }
   }
 
@@ -113,13 +103,9 @@ class AppSettings {
   @validate(IntegrationNameSchema)
   async uninstall(appName: IntegrationName): Promise<void> {
     const currentInfo = await this.get(appName);
-    if (currentInfo?.data?.id) {
+    if (currentInfo?.data?.releaseId) {
       const collection = this._db.getCollections().installedExtensions;
-      await collection?.where('id').equals(currentInfo.data.id).delete();
-      this._globalChannel.next({
-        data: { name: appName },
-        event: EXTENSION_EVENTS.REMOVED,
-      });
+      await collection?.where('id').equals(currentInfo.data.releaseId).delete();
     }
   }
   @validate(IntegrationNameSchema)

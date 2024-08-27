@@ -78,8 +78,7 @@ declare const __LOAD_LOCAL_SOURCES__: boolean;
       '@akashaorg/app-notifications',
       '@akashaorg/app-legal',
       '@akashaorg/app-settings-ewa',
-      '@akashaorg/app-vibes-console',
-      '@severs/test-app',
+      // '@akashaorg/app-vibes-console',
     ],
     // pre-installed widgets;
     // layout widget is always loaded by default

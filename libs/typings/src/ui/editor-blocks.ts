@@ -1,3 +1,4 @@
+import React from 'react';
 import singleSpa from 'single-spa';
 import { IRootComponentProps } from './root-component';
 import { GetContentBlockByIdQuery } from '../sdk/graphql-operation-types-new';
@@ -49,21 +50,6 @@ export type ContentBlockRootProps = IRootComponentProps & {
   blockInfo: Omit<ContentBlock, 'loadingFn'> & ContentBlockConfig & { mode: ContentBlockModes };
   blockData: GetContentBlockByIdQuery['node'];
   content: BlockLabeledValue;
-};
-
-/**
- * Enum defining events related to loading and unloading of content blocks
- **/
-export const enum ContentBlockEvents {
-  RegisterContentBlock = 'register-content-block',
-}
-
-/**
- * Type defining content block registration event
- **/
-export type ContentBlockRegisterEvent = {
-  event: ContentBlockEvents.RegisterContentBlock;
-  data?: (ContentBlockConfig & { appName: string })[];
 };
 
 /**

@@ -33,7 +33,7 @@ export const Extension = <D,>(props: ExtensionComponentProps<D>) => {
   const location = useRoutingEvents();
   const extensions = React.useMemo(() => {
     if (!extensionStore.current) return [];
-    const exts = extensionStore.current.getMatchingExtensionPoints(name, location);
+    const exts = extensionStore.current.getMatchingExtensions(name, location);
     if (!exts.length) {
       setIsEmpty(true);
       return [];

@@ -4,15 +4,10 @@ import {
   MenuItemAreaType,
   IntegrationRegistrationOptions,
   LogoTypeSource,
-  IRootComponentProps,
   MenuItemType,
-  IPlugin,
 } from '@akashaorg/typings/lib/ui';
 import routes, { EXTENSIONS, HOME, INSTALLED, MY_EXTENSIONS } from './routes';
 import { DEV_MODE_KEY } from './constants';
-import { ContentBlockStore } from './plugins/content-block-store';
-import { ExtensionPointStore } from './plugins/extension-point-store';
-import { WidgetStore } from './plugins/widget-store';
 import React from 'react';
 import { Akasha } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import { DevMode } from './components/pages';
@@ -71,10 +66,6 @@ export const register = (opts: IntegrationRegistrationOptions): IAppConfig => ({
     subRoutes: generateSubRoutes(),
   },
   extensionPoints: [
-    {
-      mountsIn: 'install-app',
-      loadingFn: () => import('./extensions/install-app'),
-    },
     {
       mountsIn: 'remove-extension-confirmation',
       loadingFn: () => import('./extensions/remove-extension-confirmation'),

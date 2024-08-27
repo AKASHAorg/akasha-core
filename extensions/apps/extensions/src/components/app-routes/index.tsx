@@ -16,6 +16,7 @@ import {
   DeveloperModePage,
   DevMode,
   ExtensionCreationPage,
+  InstallExtensionPage,
 } from '../pages';
 import {
   DevInfoPage,
@@ -77,6 +78,15 @@ const developerModeRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/developer-mode',
   component: DeveloperModePage,
+});
+
+const extensionInstallRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/install/$appId',
+  component: () => {
+    const { appId } = extensionInstallRoute.useParams();
+    return <InstallExtensionPage appId={appId} />;
+  },
 });
 
 const infoRoute = createRoute({
@@ -194,6 +204,7 @@ const routeTree = rootRoute.addChildren([
     appLicenseInfoRoute,
     supportInfoRoute,
     appDescriptionRoute,
+    extensionInstallRoute,
   ]),
   extensionCreateRoute,
 ]);

@@ -1,11 +1,11 @@
+import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+
 export type InstalledExtensionSchema = {
-  id: string;
+  releaseId: string;
   version: string;
   appName: string;
-  // users can enable/disable this app
-  disabledByUser?: boolean;
-  // did who installed this app
-  installedByDid: string;
+  source: string;
+  applicationType: AkashaAppApplicationType;
 };
 
 export default {
