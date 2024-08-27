@@ -85,9 +85,9 @@ const beamRoute = createRoute({
     return (
       <Suspense fallback={<EntrySectionLoading />}>
         <Await promise={beamStream}>
-          {beamStreamData => (
+          {({ data: beamStreamData }) => (
             <Await promise={beam}>
-              {beamById => {
+              {({ data: beamById }) => {
                 return (
                   <BeamPage
                     beamId={beamId}
@@ -114,9 +114,9 @@ const beamReflectRoute = createRoute({
     return (
       <Suspense fallback={<EntrySectionLoading />}>
         <Await promise={beamStream}>
-          {beamStreamData => (
+          {({ data: beamStreamData }) => (
             <Await promise={beam}>
-              {beamById => {
+              {({ data: beamById }) => {
                 return (
                   <BeamPage
                     beamId={beamId}
@@ -156,12 +156,12 @@ const reflectionsRoute = createRoute({
     return (
       <Suspense fallback={<EntrySectionLoading />}>
         <Await promise={reflectionStream}>
-          {reflectionStreamData => (
+          {({ data: reflectionStreamData }) => (
             <Await promise={reflection}>
-              {data => (
+              {({ data: reflectionById }) => (
                 <ReflectionPage
                   isActive={getReflectionActive(reflectionStreamData)}
-                  reflectionData={mapReflectEntryData(getReflectionData(data))}
+                  reflectionData={mapReflectEntryData(getReflectionData(reflectionById))}
                 />
               )}
             </Await>
@@ -180,12 +180,12 @@ const reflectionsReflectRoute = createRoute({
     return (
       <Suspense fallback={<EntrySectionLoading />}>
         <Await promise={reflectionStream}>
-          {reflectionStreamData => (
+          {({ data: reflectionStreamData }) => (
             <Await promise={reflection}>
-              {data => (
+              {({ data: reflectionById }) => (
                 <ReflectionPage
                   isActive={getReflectionActive(reflectionStreamData)}
-                  reflectionData={mapReflectEntryData(getReflectionData(data))}
+                  reflectionData={mapReflectEntryData(getReflectionData(reflectionById))}
                 />
               )}
             </Await>

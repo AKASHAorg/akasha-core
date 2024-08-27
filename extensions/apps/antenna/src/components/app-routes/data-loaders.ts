@@ -1,4 +1,5 @@
 import getSDK from '@akashaorg/core-sdk';
+import { ApolloError } from '@apollo/client';
 import {
   GetBeamByIdQuery,
   GetBeamStreamQuery,
@@ -15,24 +16,41 @@ import {
   GetReflectionStreamDocument,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
+/**
+ * Gets beam data by specifying its id in the query's variable
+ * @param param0 - an object containing the apolloClient and beamId
+ * @returns an object containing the data and error values from the query
+ * @example
+ * ```typescript
+ * const { data, error } = getBeamById({ apolloClient: context.apolloClient, beamId: params.beamId }
+ * ```
+ */
 export async function getBeamById({
   apolloClient,
   beamId,
-}: IRouterContext & { beamId: string }): Promise<GetBeamByIdQuery> {
-  const { data } = await apolloClient.query<GetBeamByIdQuery>({
+}: IRouterContext & { beamId: string }): Promise<{ data: GetBeamByIdQuery; error: ApolloError }> {
+  const { data, error } = await apolloClient.query<GetBeamByIdQuery>({
     query: GetBeamByIdDocument,
     variables: { id: beamId },
     fetchPolicy: 'cache-first',
   });
-  return data;
+  return { data, error };
 }
 
+/**
+ * Gets specific beam data from beam stream
+ * @param param0 - an object containing the apolloClient and beamId
+ * @returns an object containing the data and error values from the query
+ * ```typescript
+ * const { data, error } = getBeamStreamById({ apolloClient: context.apolloClient, beamId: params.beamId }
+ * ```
+ */
 export async function getBeamStreamById({
   apolloClient,
   beamId,
-}: IRouterContext & { beamId: string }): Promise<GetBeamStreamQuery> {
+}: IRouterContext & { beamId: string }): Promise<{ data: GetBeamStreamQuery; error: ApolloError }> {
   const sdk = getSDK();
-  const { data } = await apolloClient.query<GetBeamStreamQuery>({
+  const { data, error } = await apolloClient.query<GetBeamStreamQuery>({
     query: GetBeamStreamDocument,
     variables: {
       first: 1,
@@ -41,15 +59,47 @@ export async function getBeamStreamById({
     },
     fetchPolicy: 'cache-first',
   });
-  return data;
+  return { data, error };
 }
 
+/**
+ * Extracts beam data from the returned query result
+ * @param beamByIdQuery - query response data
+ * @returns an object containing the beam
+ * @example
+ * ```typescript
+ * import { Await } from '@tanstack/react-router'
+ * const { beam } = beamRoute.useLoaderData()
+ * <Await promise={beam}>
+ * {({ data: beamById }) => {
+ * const beamData = getBeamData(beamById)
+ * // do something with beamData
+ * }}
+ * </Await>
+ * ```
+ */
 export function getBeamData(beamByIdQuery: GetBeamByIdQuery) {
   if (beamByIdQuery?.node && hasOwn(beamByIdQuery.node, 'id')) {
     return beamByIdQuery?.node;
   }
 }
 
+/**
+ * Extracts the moderation status of a beam from a beam stream list
+ * @param beamStream - query response data
+ * @returns boolean value of the status
+ * @example
+ * ```typescript
+ * import { Await } from '@tanstack/react-router'
+ * const { beamStream } = beamRoute.useLoaderData()
+ * <Await promise={beamStream}>
+ * {({ data: beamStreamData }) => {
+ * const beamStatus = getBeamStatus(beamStreamData)
+ * // do something with beamStatus
+ * }}
+ * </Await>
+ * ```
+ */
 export function getBeamStatus(beamStream: GetBeamStreamQuery): AkashaBeamStreamModerationStatus {
   if (
     beamStream?.node &&
@@ -61,6 +111,22 @@ export function getBeamStatus(beamStream: GetBeamStreamQuery): AkashaBeamStreamM
   }
 }
 
+/**
+ * Extracts the active status of a beam from a beam stream list
+ * @param streamData - query response data
+ * @returns boolean value of the status
+ * @example
+ * ```typescript
+ * import { Await } from '@tanstack/react-router'
+ * const { beamStream } = beamRoute.useLoaderData()
+ * <Await promise={beamStream}>
+ * {({ data: beamStreamData }) => {
+ * const isActive = getBeamActive(beamStreamData)
+ * // do something with isActive
+ * }}
+ * </Await>
+ * ```
+ */
 export function getBeamActive(streamData: GetBeamStreamQuery) {
   return (
     streamData?.node &&
@@ -69,24 +135,47 @@ export function getBeamActive(streamData: GetBeamStreamQuery) {
   );
 }
 
+/**
+ * Gets reflection data by specifying its id in the query's variable
+ * @param param0 - an object containing the apolloClient and reflectionId
+ * @returns an object containing the data and error values from the query
+ * @example
+ * ```typescript
+ * const { data, error} = getReflectionById({ apolloClient: context.apolloClient, reflectionId: params.reflectionId }
+ * ```
+ */
 export async function getReflectionById({
   apolloClient,
   reflectionId,
-}: IRouterContext & { reflectionId: string }): Promise<GetReflectionByIdQuery> {
-  const { data } = await apolloClient.query<GetReflectionByIdQuery>({
+}: IRouterContext & { reflectionId: string }): Promise<{
+  data: GetReflectionByIdQuery;
+  error: ApolloError;
+}> {
+  const { data, error } = await apolloClient.query<GetReflectionByIdQuery>({
     query: GetReflectionByIdDocument,
     variables: { id: reflectionId },
     fetchPolicy: 'cache-first',
   });
-  return data;
+  return { data, error };
 }
 
+/**
+ * Gets specific reflection data from reflection stream
+ * @param param0 - an object containing the apolloClient and reflectionId
+ * @returns an object containing the data and error values from the query
+ * ```typescript
+ * const { data, error } = getReflectionStreamById({ apolloClient: context.apolloClient, reflectionId: params.reflectionId }
+ * ```
+ */
 export async function getReflectionStreamById({
   apolloClient,
   reflectionId,
-}: IRouterContext & { reflectionId: string }): Promise<GetReflectionStreamQuery> {
+}: IRouterContext & { reflectionId: string }): Promise<{
+  data: GetReflectionStreamQuery;
+  error: ApolloError;
+}> {
   const sdk = getSDK();
-  const { data } = await apolloClient.query<GetReflectionStreamQuery>({
+  const { data, error } = await apolloClient.query<GetReflectionStreamQuery>({
     query: GetReflectionStreamDocument,
     variables: {
       first: 1,
@@ -95,9 +184,25 @@ export async function getReflectionStreamById({
     },
     fetchPolicy: 'cache-first',
   });
-  return data;
+  return { data, error };
 }
 
+/**
+ * Extracts reflection data from the returned query result
+ * @param reflectionByIdQuery - query response data
+ * @returns an object containing the reflection
+ * @example
+ * ```typescript
+ * import { Await } from '@tanstack/react-router'
+ * const { reflection } = reflectionRoute.useLoaderData()
+ * <Await promise={reflection}>
+ * {({ data: reflectionById }) => {
+ * const reflectionData = getReflectionData(reflectionById)
+ * // do something with reflectionData
+ * }}
+ * </Await>
+ * ```
+ */
 export function getReflectionData(reflectionByIdQuery: GetReflectionByIdQuery) {
   if (
     reflectionByIdQuery &&
@@ -108,6 +213,22 @@ export function getReflectionData(reflectionByIdQuery: GetReflectionByIdQuery) {
   }
 }
 
+/**
+ * Extracts the active status of a reflection from a reflection stream list
+ * @param streamData - query response data
+ * @returns boolean value of the status
+ * @example
+ * ```typescript
+ * import { Await } from '@tanstack/react-router'
+ * const { reflectionStream } = reflectionRoute.useLoaderData()
+ * <Await promise={reflectionStream}>
+ * {({ data: reflectionStreamData }) => {
+ * const isActive = getReflectionActive(reflectionStreamData)
+ * // do something with isActive
+ * }}
+ * </Await>
+ * ```
+ */
 export function getReflectionActive(streamData: GetReflectionStreamQuery) {
   return (
     streamData?.node &&
