@@ -1,26 +1,26 @@
 import { inject, injectable } from 'inversify';
-import { GQL_EVENTS, TYPES } from '@akashaorg/typings/lib/sdk/index.js';
-import { getSdk, Sdk } from './api.js';
-import Logging from '../logging/index.js';
+import { GQL_EVENTS, TYPES } from '@akashaorg/typings/lib/sdk';
+import { getSdk, Sdk } from './api';
+import Logging from '../logging';
 import pino from 'pino';
-import CeramicService from '../common/ceramic.js';
+import CeramicService from '../common/ceramic';
 import type { DocumentNode } from 'graphql';
-import EventBus from '../common/event-bus.js';
-import { validate } from '../common/validator.js';
+import EventBus from '../common/event-bus';
+import { validate } from '../common/validator';
 import { z } from 'zod';
-import type { FetchResult } from '@apollo/client/link/core/types.js';
+import type { FetchResult } from '@apollo/client/link/core/types';
 
-import { ApolloClient, gql, ApolloLink, Observable, split } from '@apollo/client/core/index.js';
-import { HttpLink } from '@apollo/client/link/http/index.js';
-import { InMemoryCache } from '@apollo/client/cache/index.js';
+import { ApolloClient, gql, ApolloLink, Observable, split } from '@apollo/client/core';
+import { HttpLink } from '@apollo/client/link/http';
+import { InMemoryCache } from '@apollo/client/cache';
 
-import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries/index.js';
+import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries';
 import { sha256 } from 'crypto-hash';
-import { getMainDefinition, relayStylePagination } from '@apollo/client/utilities/index.js';
+import { getMainDefinition, relayStylePagination } from '@apollo/client/utilities';
 
-import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev/index.js';
+import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev';
 import { VIEWER_ID_HEADER } from '@composedb/constants';
-import AWF_Config from '../common/config.js';
+import AWF_Config from '../common/config';
 
 const enum ContextSources {
   DEFAULT = 'gql#DEFAULT',

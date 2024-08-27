@@ -21,31 +21,30 @@ const meta: Meta<ToggleProps> = {
 
 type Story = StoryObj<ToggleProps>;
 
-const baseArgs: Story = {
-  args: {
-    label: 'toggle',
-    size: 'small',
-  },
-};
-
 export const Default: Story = {
-  args: { ...baseArgs.args },
+  args: { label: 'toggle', size: 'small' },
 };
 
 export const ToggleChecked: Story = {
-  args: { ...baseArgs.args, checked: true },
+  args: { label: 'toggle', size: 'small', checked: true },
 };
 
 export const ToggleWithIcons: Story = {
-  args: { ...baseArgs.args, iconChecked: <SunIcon />, iconUnchecked: <MoonIcon /> },
+  args: { label: 'toggle', size: 'small', iconChecked: <SunIcon />, iconUnchecked: <MoonIcon /> },
 };
 
 export const ToggleWithIconsChecked: Story = {
-  args: { ...baseArgs.args, checked: true, iconChecked: <SunIcon />, iconUnchecked: <MoonIcon /> },
+  args: {
+    label: 'toggle',
+    size: 'small',
+    checked: true,
+    iconChecked: <SunIcon />,
+    iconUnchecked: <MoonIcon />,
+  },
 };
 
 export const ToggleDisabled: Story = {
-  args: { ...baseArgs.args, disabled: true },
+  args: { label: 'toggle', size: 'small', disabled: true },
 };
 
 export default meta;

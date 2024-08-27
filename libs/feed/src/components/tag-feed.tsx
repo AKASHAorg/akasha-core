@@ -3,7 +3,7 @@ import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoade
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import DynamicInfiniteScroll from '@akashaorg/design-system-components/lib/components/DynamicInfiniteScroll';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 import { AnalyticsEventData } from '@akashaorg/typings/lib/ui';
 import {
   SortOrder,
@@ -97,7 +97,7 @@ const TagFeed = (props: TagFeedProps) => {
         <ErrorLoader
           type="script-error"
           title={'Sorry, there was an error when fetching beams'}
-          details={<>{indexedStreamQuery.error.message}</>}
+          details={indexedStreamQuery.error.message}
         />
       )}
       {beams.length > 0 && (

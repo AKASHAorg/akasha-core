@@ -3,7 +3,7 @@ import { AnalyticsProvider } from '../use-analytics';
 import { IRootComponentProps } from '@akashaorg/typings/lib/ui';
 import { RootComponentPropsProvider } from '../use-root-props';
 import { ApolloProvider } from '@apollo/client';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 
 /**
  * Higher order component that wraps a component with all necessary providers

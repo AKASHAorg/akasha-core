@@ -30,33 +30,46 @@ type Story = StoryObj<ButtonProps>;
 
 export default meta;
 
-const baseArgs: Story = {
-  args: { label: 'Button', size: 'sm', variant: 'primary' },
-};
-
 export const BaseButton: Story = {
   args: {
-    ...baseArgs.args,
+    label: 'Button',
+    size: 'sm',
+    variant: 'primary',
   },
 };
-export const IconOnlyButton: Story = { args: { ...baseArgs.args, icon: <PlusIcon />, size: 'xs' } };
+export const IconOnlyButton: Story = {
+  args: { label: 'Button', variant: 'primary', icon: <PlusIcon />, size: 'xs' },
+};
 
 export const ButtonWithIcon: Story = {
-  args: { ...baseArgs.args, icon: <PlusIcon />, iconDirection: 'left' },
+  args: {
+    label: 'Button',
+    size: 'sm',
+    variant: 'primary',
+    icon: <PlusIcon />,
+    iconDirection: 'left',
+  },
 };
 
 export const ButtonActive: Story = {
-  args: { ...baseArgs.args, active: true, icon: <CheckIcon />, iconDirection: 'right' },
+  args: {
+    label: 'Button',
+    size: 'sm',
+    variant: 'primary',
+    active: true,
+    icon: <CheckIcon />,
+    iconDirection: 'right',
+  },
 };
 
 export const ButtonGreyBg: Story = {
-  args: { ...baseArgs.args, greyBg: true },
+  args: { label: 'Button', size: 'sm', variant: 'primary', greyBg: true },
 };
 
 export const ButtonLoading: Story = {
-  args: { ...baseArgs.args, loading: true },
+  args: { label: 'Button', size: 'sm', variant: 'primary', loading: true },
 };
 
 export const ButtonDisabled: Story = {
-  args: { ...baseArgs.args, disabled: true },
+  args: { label: 'Button', size: 'sm', variant: 'primary', disabled: true },
 };

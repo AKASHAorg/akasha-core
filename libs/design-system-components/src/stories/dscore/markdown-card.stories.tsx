@@ -16,14 +16,10 @@ const meta: Meta<MarkdownCardProps> = {
 
 type Story = StoryObj<MarkdownCardProps>;
 
-const baseArgs: Story = {
-  args: {
-    mdText: '**Hello World**',
-  },
+export const Default: Story = { args: { mdText: '**Hello World**' } };
+
+export const MarkdownCardWithWrapper: Story = {
+  args: { mdText: '**Hello World**', hasWrapper: true },
 };
-
-export const Default: Story = { args: { ...baseArgs.args } };
-
-export const MarkdownCardWithWrapper: Story = { args: { ...baseArgs.args, hasWrapper: true } };
 
 export default meta;

@@ -1,4 +1,4 @@
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 import {
   GetBeamByIdQuery,
   GetBeamStreamQuery,

@@ -22,7 +22,7 @@ import {
   type BlockLabeledValue,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { useCreateContentBlockMutation } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 
 // @TODO: replace this with actual data
 const TEST_APP_VERSION_ID = 'k2t6wzhkhabz3aut9p2mhjzp80hzo7bee18l1pt94syakfbfcj7phve27kiwwp';

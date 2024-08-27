@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 import { hasOwn } from '@akashaorg/ui-awf-hooks';
 import { useGetIndexedStreamCountQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { AkashaIndexedStreamStreamType } from '@akashaorg/typings/lib/sdk/graphql-types-new';

@@ -84,8 +84,9 @@ const Toggle: React.FC<ToggleProps> = ({
       <input
         id={id}
         name={name}
+        aria-label="toggle"
         type="checkbox"
-        value=""
+        value={label}
         checked={checked}
         disabled={disabled}
         onChange={handleChange}

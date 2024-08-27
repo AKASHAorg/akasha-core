@@ -4,19 +4,18 @@ import Entry from '../Entry';
 import InfiniteScroll from '../../InfiniteScroll';
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils';
 import { AkashaFollowing } from '@akashaorg/typings/lib/ui';
-import { ENTRY_HEIGHT, EngagementProps } from '../types';
+import { ENTRY_HEIGHT, EngagementProp } from '../types';
 
 export type FollowingProps = {
   following: AkashaFollowing;
   publicImgPath?: string;
   emptyEntryTitleLabel: ReactElement;
   emptyEntryBodyLabel: ReactElement;
-} & EngagementProps;
+} & EngagementProp;
 
 const Following: React.FC<FollowingProps> = ({
   publicImgPath,
   authenticatedDID,
-  followList,
   following,
   profileAnchorLink,
   emptyEntryTitleLabel,
@@ -65,8 +64,6 @@ const Following: React.FC<FollowingProps> = ({
             }}
             avatar={engagement?.profile?.avatar}
             name={engagement?.profile?.name}
-            followId={followList.get(engagement?.profile?.id)?.id}
-            isFollowing={followList.get(engagement?.profile?.id)?.isFollowing}
             transformSource={transformSource}
             renderFollowElement={
               authenticatedDID !== engagement?.profile?.did.id ? renderFollowElement : null

@@ -1,32 +1,38 @@
-import React, { SyntheticEvent } from 'react';
+import React, { SyntheticEvent, useMemo } from 'react';
 import * as z from 'zod';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { SocialLinks, SocialLinksProps } from './SocialLinks';
 import { apply, tw } from '@twind/core';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { General, GeneralProps } from './General';
-import { EditProfileFormValues } from './types';
+import {
+  EditProfileFormValues,
+  isFormExcludingAllExceptLinksDirty,
+  isFormWithExceptionOfLinksDirty,
+} from './types';
 import { ButtonType } from '../types/common.types';
-import { NSFW, NSFWProps } from './NSFW';
+import { InputType, NSFW } from '../NSFW';
+import { PublishProfileData } from '@akashaorg/typings/lib/ui';
 
 type SocialLinkForm = Pick<SocialLinksProps, 'linkLabel' | 'addNewLinkButtonLabel' | 'description'>;
 
 type GeneralForm = Pick<GeneralProps, 'header' | 'name' | 'bio'>;
 
 export type EditProfileProps = {
-  defaultValues?: EditProfileFormValues;
+  defaultValues?: PublishProfileData;
   cancelButton: ButtonType;
   saveButton: {
     label: string;
     loading?: boolean;
-    handleClick: (formValues: EditProfileFormValues) => void;
+    handleClick: (formValues: PublishProfileData) => void;
   };
   customStyle?: string;
+  nsfwFieldLabel?: string;
+  nsfw?: InputType;
 } & GeneralForm &
-  SocialLinkForm &
-  Pick<NSFWProps, 'nsfwFormLabel' | 'nsfw'>;
+  SocialLinkForm;
 
 const EditProfile: React.FC<EditProfileProps> = ({
   defaultValues = {
@@ -40,32 +46,46 @@ const EditProfile: React.FC<EditProfileProps> = ({
   cancelButton,
   saveButton,
   customStyle = '',
+  nsfw,
+  nsfwFieldLabel,
   ...rest
 }) => {
   const { control, setValue, getValues, formState } = useForm<EditProfileFormValues>({
-    defaultValues,
+    defaultValues: {
+      ...defaultValues,
+      links: defaultValues.links.map(link => ({ id: crypto.randomUUID(), href: link })),
+    },
     resolver: zodResolver(schema),
     mode: 'onChange',
   });
-  const { isDirty, dirtyFields, errors } = formState;
+  const { dirtyFields, errors } = formState;
+
+  const links = useWatch({ name: 'links', control });
+
+  const formExcludingAllExceptLinksDirty = useMemo(() => {
+    return isFormExcludingAllExceptLinksDirty(dirtyFields.links, links, defaultValues.links.length);
+  }, [defaultValues.links.length, links, dirtyFields.links]);
+
+  //dirty check for links should be done different than all other fields as it requires more check than what react hook form library can do
   const isFormDirty =
-    (isDirty && !!Object.keys(dirtyFields).length) ||
-    defaultValues.links.length > (getValues(`links`)?.filter(link => link)?.length || 0);
+    isFormWithExceptionOfLinksDirty(dirtyFields) || formExcludingAllExceptLinksDirty;
+
   const isValid = !Object.keys(errors).length;
 
   const onSave = (event: SyntheticEvent) => {
     event.preventDefault();
     const formValues = getValues();
+
     if (isValid && isFormDirty) {
       saveButton.handleClick({
         ...formValues,
-        links: formValues.links?.filter(link => link) || [],
+        links: formValues.links?.map(link => link.href)?.filter(link => link) || [],
       });
     }
   };
 
   return (
-    <form onSubmit={onSave} className={tw(apply`h-full ${customStyle}`)}>
+    <form data-testid="edit-profile" onSubmit={onSave} className={tw(apply`h-full ${customStyle}`)}>
       <Stack direction="column" spacing="gap-y-4">
         <General
           {...rest}
@@ -77,8 +97,15 @@ const EditProfile: React.FC<EditProfileProps> = ({
             setValue('coverImage', coverImage, { shouldDirty: true });
           }}
         />
-        <SocialLinks {...rest} control={control} initialLinks={defaultValues.links} />
-        <NSFW {...rest} control={control} disabled={rest.nsfw.initialValue} />
+        <SocialLinks {...rest} control={control} />
+        <NSFW
+          nsfw={nsfw}
+          nsfwFieldLabel={nsfwFieldLabel}
+          control={control}
+          name={'nsfw'}
+          disabled={nsfw.initialValue}
+          defaultValue={nsfw.initialValue}
+        />
         <Stack direction="row" spacing="gap-x-2" customStyle="ml-auto mt-auto">
           <Button
             variant="text"
@@ -118,12 +145,15 @@ const schema = z.object({
   nsfw: z.boolean().optional(),
   links: z
     .array(
-      z
-        .string()
-        .url({
-          message: `Hmm this doesn't look like a URL 🤔`,
-        })
-        .optional(),
+      z.object({
+        id: z.string(),
+        href: z
+          .string()
+          .url({
+            message: `Hmm this doesn't look like a URL 🤔`,
+          })
+          .or(z.literal('')),
+      }),
     )
     .optional(),
 });

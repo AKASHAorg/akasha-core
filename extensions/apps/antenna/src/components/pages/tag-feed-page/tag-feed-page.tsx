@@ -15,7 +15,7 @@ import {
 } from '@akashaorg/typings/lib/ui';
 import { BeamContentResolver, TagFeed } from '@akashaorg/ui-lib-feed';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TagProfileCard from '@akashaorg/design-system-components/lib/components/TagProfileCard';
@@ -127,7 +127,7 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
       return;
     }
     // if subscribing, and limit is already reached, return snackbar
-    if (subscribing && tagSubscriptions.length === 10) {
+    if (subscribing && tagSubscriptions.length >= 10) {
       uiEvents.next({
         event: NotificationEvents.ShowNotification,
         data: {

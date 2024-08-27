@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "version": 2,
+  "title": "ExtractDependencies executor",
+  "description": "",
+  "type": "object",
+  "properties": {
+    "outputPath": {
+      "type": "string",
+      "description": "Output path for the generated package.json"
+    },
+    "cwd": {
+      "type": "string",
+      "description": "Set working directory for the executor"
+    }
+  },
+  "required": ["outputPath"]
+}

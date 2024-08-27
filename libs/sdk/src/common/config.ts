@@ -1,4 +1,5 @@
 import { injectable } from 'inversify';
+import { env } from './env';
 
 export const SDKConfigOptions = [
   'ceramic_api_endpoint',
@@ -19,16 +20,16 @@ class AWF_Config {
 
   constructor() {
     this.#_config = {
-      ceramic_api_endpoint: process.env.CERAMIC_API_ENDPOINT as string,
-      graphql_uri: process.env.GRAPHQL_URI as string,
-      indexing_did: process.env.INDEXING_DID as string,
-      w3_storage_delegate_base_url: process.env.W3_STORAGE_DELEGATE_BASE_URL as string,
-      wallet_connect_project_id: process.env.WALLETCONNECT_PROJECT_ID as string,
-      log_level: process.env.LOG_LEVEL || 'warn',
+      ceramic_api_endpoint: env.PUBLIC_CERAMIC_API_ENDPOINT,
+      graphql_uri: env.PUBLIC_GRAPHQL_URI,
+      indexing_did: env.PUBLIC_INDEXING_DID,
+      w3_storage_delegate_base_url: env.PUBLIC_W3_STORAGE_DELEGATE_BASE_URL,
+      wallet_connect_project_id: env.PUBLIC_WALLET_CONNECT_PROJECT_ID,
+      log_level: env.PUBLIC_LOG_LEVEL || 'warn',
       ipfs_path_gateway: 'https://cloudflare-ipfs.com/ipfs/',
       ipfs_origin_gateway: 'ipfs.w3s.link',
       ipfs_fallback_gateway: 'ipfs.cf-ipfs.com',
-      api_status_path: process.env.API_STATUS_PATH as string,
+      api_status_path: env.PUBLIC_API_STATUS_PATH || '',
     };
   }
 

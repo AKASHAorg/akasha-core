@@ -19,6 +19,13 @@ import {
   InstallExtensionPage,
 } from '../pages';
 import {
+  ExtensionEditMainPage,
+  ExtensionEditStep1Page,
+  ExtensionEditStep2Page,
+  ExtensionEditStep3Page,
+  ExtensionEditStep4Page,
+} from '../pages/extension-edit-page';
+import {
   DevInfoPage,
   CollaboratorsPage,
   VersionInfoPage,
@@ -187,6 +194,51 @@ const extensionCreateRoute = createRoute({
   },
 });
 
+const extensionEditMainRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: `/edit-extension/$extensionId`,
+  component: () => {
+    const { extensionId } = extensionEditMainRoute.useParams();
+    return <ExtensionEditMainPage extensionId={extensionId} />;
+  },
+  // beforeLoad: () => {
+  //   throw redirect({ to: '/edit-extension/$extensionId/step1', replace: true });
+  // },
+});
+
+const extensionEditStep1Route = createRoute({
+  getParentRoute: () => extensionEditMainRoute,
+  path: '/step1',
+  component: () => {
+    const { extensionId } = extensionEditMainRoute.useParams();
+    return <ExtensionEditStep1Page extensionId={extensionId} />;
+  },
+});
+const extensionEditStep2Route = createRoute({
+  getParentRoute: () => extensionEditMainRoute,
+  path: '/step2',
+  component: () => {
+    const { extensionId } = extensionEditMainRoute.useParams();
+    return <ExtensionEditStep2Page extensionId={extensionId} />;
+  },
+});
+const extensionEditStep3Route = createRoute({
+  getParentRoute: () => extensionEditMainRoute,
+  path: '/step3',
+  component: () => {
+    const { extensionId } = extensionEditMainRoute.useParams();
+    return <ExtensionEditStep3Page extensionId={extensionId} />;
+  },
+});
+const extensionEditStep4Route = createRoute({
+  getParentRoute: () => extensionEditMainRoute,
+  path: '/step4',
+  component: () => {
+    const { extensionId } = extensionEditMainRoute.useParams();
+    return <ExtensionEditStep4Page extensionId={extensionId} />;
+  },
+});
+
 const routeTree = rootRoute.addChildren([
   defaultRoute,
   exploreRoute,
@@ -207,6 +259,12 @@ const routeTree = rootRoute.addChildren([
     extensionInstallRoute,
   ]),
   extensionCreateRoute,
+  extensionEditMainRoute.addChildren([
+    extensionEditStep1Route,
+    extensionEditStep2Route,
+    extensionEditStep3Route,
+    extensionEditStep4Route,
+  ]),
 ]);
 
 export const router = ({ baseRouteName, apolloClient }: ICreateRouter) =>

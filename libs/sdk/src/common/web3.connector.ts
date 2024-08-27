@@ -1,21 +1,20 @@
 import { inject, injectable } from 'inversify';
 import { BrowserProvider, ethers } from 'ethers';
 import {
-  EthProviders,
-  EthProvidersSchema,
+  // EthProviders,
+  // EthProvidersSchema,
   PROVIDER_ERROR_CODES,
   TYPES,
   WEB3_EVENTS,
-} from '@akashaorg/typings/lib/sdk/index.js';
-import Logging from '../logging/index.js';
-import EventBus from './event-bus.js';
+} from '@akashaorg/typings/lib/sdk';
+import Logging from '../logging';
+import EventBus from './event-bus';
 import pino from 'pino';
-import { createFormattedValue } from '../helpers/observable.js';
-import { validate } from './validator.js';
+import { createFormattedValue } from '../helpers/observable';
+import { validate } from './validator';
 import { z } from 'zod';
 import { createWeb3Modal, defaultConfig } from '@web3modal/ethers';
-import type { Web3Modal } from '@web3modal/ethers/dist/types/src/client';
-import AWF_Config from './config.js';
+import AWF_Config from './config';
 
 @injectable()
 class Web3Connector {
@@ -24,7 +23,7 @@ class Web3Connector {
   #web3Instance: ethers.BrowserProvider | undefined | null;
   #globalChannel: EventBus;
   #wallet: ethers.Wallet | null;
-  #w3modal: Web3Modal;
+  #w3modal: ReturnType<typeof createWeb3Modal>;
   #currentProviderType: string | undefined | null;
   readonly network = 'sepolia';
   #networkId = '0xaa36a7';
@@ -131,7 +130,7 @@ class Web3Connector {
   async connect(): Promise<{ connected: boolean; unsubscribe?: () => void }> {
     if (!this.#w3modal.getIsConnected()) {
       // eslint-disable-next-line no-async-promise-executor
-      return new Promise(async (resolve, reject) => {
+      return new Promise(async resolve => {
         const unsubscribe = this.#w3modal.subscribeProvider(state => {
           if (state.provider && state.isConnected && state.address) {
             resolve({ connected: true, unsubscribe });

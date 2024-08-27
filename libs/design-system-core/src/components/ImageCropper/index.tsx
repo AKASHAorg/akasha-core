@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { apply, tw } from '@twind/core';
-import Cropper, { CropperProps } from 'react-easy-crop';
-import { Point, Area } from 'react-easy-crop/types';
+import Cropper, { CropperProps, Point, Area } from 'react-easy-crop';
 
 import Icon from '../Icon';
 import { MagnifyingGlassMinusIcon, MagnifyingGlassPlusIcon } from '../Icon/hero-icons-outline';
@@ -21,7 +20,7 @@ const MAX_ZOOM = 3;
 const ZOOM_STEP = 0.01;
 
 const CROPPER_WIDTH = 320;
-const CROPPWER_HEIGHT = 224;
+const CROPPER_HEIGHT = 224;
 
 /**
  * An ImageCropper component makes the task of cropping an image much easier. It also makes
@@ -53,8 +52,7 @@ const ImageCropper: React.FC<ImageCropperProps> = ({
         onCrop(cropped);
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [image, imageUrl],
+    [imageUrl, onCrop],
   );
 
   return (
@@ -62,7 +60,7 @@ const ImageCropper: React.FC<ImageCropperProps> = ({
       <div
         className={tw(
           apply`relative w-[${CROPPER_WIDTH / 16}rem] h-[${
-            CROPPWER_HEIGHT / 16
+            CROPPER_HEIGHT / 16
           }rem] overflow-hidden bg-transparent ${getRadiusClasses(20)}`,
         )}
       >
@@ -70,7 +68,7 @@ const ImageCropper: React.FC<ImageCropperProps> = ({
           image={imageUrl}
           crop={crop}
           zoom={zoom}
-          aspect={CROPPER_WIDTH / CROPPWER_HEIGHT}
+          aspect={CROPPER_WIDTH / CROPPER_HEIGHT}
           onCropChange={setCrop}
           onCropComplete={onCropComplete}
           onZoomChange={setZoom}
@@ -89,7 +87,6 @@ const ImageCropper: React.FC<ImageCropperProps> = ({
           min={MIN_ZOOM}
           max={MAX_ZOOM}
           step={ZOOM_STEP}
-          aria-labelledby="Zoom"
           onChange={e => setZoom(Number(e.target.value))}
           className={tw(`w-[${(CROPPER_WIDTH - 64) / 16}rem]`)}
         />

@@ -1,12 +1,29 @@
 {
-  "name": "@akashaorg/awf-sdk",
-  "version": "0.1.0",
-  "main": "src/index.js",
+  "name": "@akashaorg/core-sdk",
+  "version": "0.1.2-alpha",
+  "keywords": [
+    "web3",
+    "ethereum",
+    "ipfs",
+    "ceramic",
+    "akasha"
+  ],
+  "main": "./lib/index.js",
+  "module": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "type": "module",
+  "description": "SDK for building decentralized applications on akasha.world",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
+  "bugs": "https://github.com/AKASHAorg/akasha-core/issues",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/AKASHAorg/akasha-core.git"
+  },
+  "files": [
+    "lib/**"
+  ],
+  "exports": {
+    ".": "./lib/index.js"
   }
 }

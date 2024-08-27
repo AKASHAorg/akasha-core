@@ -93,7 +93,7 @@ const PrivacyOption: React.FC = () => {
         {/* essential cookies */}
         <Stack padding="py-4" customStyle="border(b-1 solid grey8 dark:grey5)">
           <Stack direction="row" justify="between" align="center" customStyle="mb-2">
-            <Text weight="bold">{t('Essential cookies')}</Text>
+            <Text weight="bold">{t('Essential Cookies')}</Text>
 
             {/* always checked and cannot be toggled */}
             <Toggle checked={true} disabled={true} />
@@ -107,20 +107,17 @@ const PrivacyOption: React.FC = () => {
               {'AKASHA World'}
             </Text>
             {t(
-              ", and keeping it secure, stable, and optimized so you'll feel like this is your kind of thing — to use, celebrate, and help grow. If you're a privacy geek like us, you'll find ",
+              " and keeping it secure, stable, and optimized, so you'll feel like this is your kind of thing — to use, celebrate, and grow. If you're a privacy geek like us, you'll find ",
             )}
-            <Button plain={true} onClick={handlePrivacyPolicyClick}>
-              <Text
-                as="span"
-                color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-                align="center"
-              >
-                {t('our privacy policy')}
-              </Text>
-            </Button>
+            <Button
+              size="lg"
+              variant="text"
+              label={t('our privacy policy')}
+              onClick={handlePrivacyPolicyClick}
+            />
             {t(' makes for perfect bedtime reading. ')}
             {t(
-              "And the best thing about AKASHA World is that when we write “our app” and “our Privacy Policy” that means “your app” and “your Privacy Policy” because we're doing this thing together.",
+              "The best thing is that when we write “our app” and “our Privacy Policy”, that means “your app” and “your Privacy Policy” because we're doing this together.",
             )}
           </Text>
         </Stack>
@@ -128,7 +125,7 @@ const PrivacyOption: React.FC = () => {
         {/* tracking analytics */}
         <Stack padding="py-4" customStyle="border(b-1 solid grey8 dark:grey5)">
           <Stack direction="row" justify="between" align="center" customStyle="mb-2">
-            <Text weight="bold">{t('Tracking and analytics')}</Text>
+            <Text weight="bold">{t('Tracking and Analytics')}</Text>
 
             <Toggle
               checked={checkedTracking}

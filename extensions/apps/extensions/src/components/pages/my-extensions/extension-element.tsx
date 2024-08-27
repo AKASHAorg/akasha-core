@@ -1,7 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import getSDK from '@akashaorg/awf-sdk';
-
+import getSDK from '@akashaorg/core-sdk';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
@@ -22,24 +21,14 @@ import {
 } from '@heroicons/react/24/outline';
 import { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
 import { EllipsisHorizontalIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-
-import { hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { hasOwn, transformSource, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetAppsStreamQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import {
   AkashaAppApplicationType,
   AkashaAppsStreamModerationStatus,
-  AppImageSource,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { ExtensionStatus } from '@akashaorg/typings/lib/ui';
-
-type Extension = {
-  id?: string;
-  name?: string;
-  displayName?: string;
-  logoImage?: AppImageSource;
-  description?: string;
-  applicationType?: AkashaAppApplicationType;
-};
+import { ExtensionStatus, Extension } from '@akashaorg/typings/lib/ui';
+import { useNavigate } from '@tanstack/react-router';
 
 type ExtensionElement = {
   extensionData: Extension;
@@ -56,6 +45,7 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
   const sdk = React.useRef(getSDK());
 
   const { navigateToModal } = useRootComponentProps();
+  const navigate = useNavigate();
 
   const { data: appStreamReq } = useGetAppsStreamQuery({
     variables: {
@@ -64,12 +54,16 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
       filters: {
         where: {
           applicationID: {
-            equalTo: extensionData.id,
+            equalTo: extensionData?.id,
           },
         },
       },
     },
-    skip: !extensionData.id.trim() || extensionData.id.length < 10,
+    skip:
+      !extensionData?.id ||
+      !extensionData?.id?.trim() ||
+      extensionData?.id?.length < 10 ||
+      extensionData?.localDraft,
   });
 
   const appStreamData =
@@ -121,6 +115,13 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
     });
   };
 
+  const handleExtensionEdit = () => {
+    navigate({
+      to: `/edit-extension/$extensionId/step1`,
+      params: { extensionId: extensionData.id },
+    });
+  };
+
   const menuItems = (extensionStatus: string): MenuProps['items'] | [] => {
     switch (extensionStatus) {
       case ExtensionStatus.Pending:
@@ -141,7 +142,7 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
           {
             label: t('Edit'),
             icon: <PencilIcon />,
-            onClick: () => {},
+            onClick: handleExtensionEdit,
           },
           {
             label: t('Unpublish'),
@@ -160,7 +161,7 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
           {
             label: t('Edit'),
             icon: <PencilIcon />,
-            onClick: () => {},
+            onClick: handleExtensionEdit,
           },
           {
             label: t('Delete'),
@@ -187,7 +188,11 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
         <Stack spacing="gap-y-4">
           <Stack direction="row" justify="between" spacing="gap-x-8">
             <Stack direction="row" spacing="gap-x-3">
-              <AppAvatar appType={extensionData.applicationType} avatar={extensionData.logoImage} />
+              <AppAvatar
+                appType={extensionData.applicationType}
+                avatar={transformSource(extensionData.logoImage)}
+                extensionId={extensionData.id}
+              />
               <Stack direction="column" justify="between">
                 <Stack direction="row" spacing="gap-2">
                   <Text variant="button-sm">{extensionData.name}</Text>
@@ -213,13 +218,14 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
                   weight="normal"
                   color={{ light: 'grey4', dark: 'grey7' }}
                   lineClamp={2}
+                  truncate
                 >
                   {extensionData.description || extensionData.displayName}
                 </Text>
               </Stack>
             </Stack>
 
-            <Stack direction="column" justify="between">
+            <Stack direction="column" justify="between" align="end">
               <Menu
                 anchor={{
                   icon: <EllipsisHorizontalIcon />,

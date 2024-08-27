@@ -2,42 +2,42 @@
 *.cjs @kenshyx @didd
 *.yml @kenshyx @didd
 *.toml @kenshyx @didd
-*.md @josenriagu @SeverS @themonster2015
+*.md @josenriagu @SeverS 
 *.config.js @kenshyx @didd
 *.conf.js @kenshyx @didd
 *.stories.tsx @josenriagu @didd
 *.spec.ts @kenshyx @didd
-*.spec.tsx @themonster2015 @didd
+*.spec.tsx  @didd
 
 .github/ @kenshyx @didd
 .circleci/ @kenshyx @didd
 
-/extensions/apps/antenna/ @SeverS @quininez @didd @themonster2015
-/extensions/apps/auth-app/ @didd @josenriagu @themonster2015
+/extensions/apps/antenna/ @SeverS @quininez @didd 
+/extensions/apps/auth-app/ @didd @josenriagu 
 /extensions/apps/extensions/ @SeverS @quininez @didd
 /extensions/apps/legal/ @quininez @josenriagu
-/extensions/apps/notifications/ @quininez @themonster2015
-/extensions/apps/profile/ @didd @themonster2015 @quininez
+/extensions/apps/notifications/ @quininez 
+/extensions/apps/profile/ @didd  @quininez
 /extensions/apps/routing/ @SeverS @didd
-/extensions/apps/search/ @quininez @themonster2015
-/extensions/apps/settings/ @themonster2015 @josenriagu
-/extensions/apps/vibes/ @themonster2015 @josenriagu
-/extensions/apps/vibes-console/ @themonster2015 @josenriagu
+/extensions/apps/search/ @quininez 
+/extensions/apps/settings/  @josenriagu
+/extensions/apps/vibes/  @josenriagu
+/extensions/apps/vibes-console/  @josenriagu
 
 /extensions/widgets/analytics/ @SeverS @josenriagu
 /extensions/widgets/layout/ @SeverS @josenriagu @quininez
 /extensions/widgets/mini-profile/ @quininez @josenriagu
-/extensions/widgets/my-apps/ @quininez @themonster2015
-/extensions/widgets/sidebar/ @josenriagu @themonster2015 @didd
-/extensions/widgets/top-bar/ @themonster2015 @josenriagu
-/extensions/widgets/trending/ @themonster2015 @josenriagu @didd
+/extensions/widgets/my-apps/ @quininez 
+/extensions/widgets/sidebar/ @josenriagu  @didd
+/extensions/widgets/top-bar/  @josenriagu
+/extensions/widgets/trending/  @josenriagu @didd
 
 /libs/app-loader/ @SeverS @kenshyx
 /libs/composedb/ @kenshyx @josenriagu @SeverS
-/libs/design-system-components/ @josenriagu @didd @themonster2015 @quininez
-/libs/design-system-core/ @josenriagu @didd @themonster2015 @quininez
+/libs/design-system-components/ @josenriagu @didd  @quininez
+/libs/design-system-core/ @josenriagu @didd  @quininez
 /libs/extensions/ @SeverS @quininez @didd
-/libs/feed/ @SeverS @themonster2015 @didd
+/libs/feed/ @SeverS  @didd
 /libs/hooks/ @kenshyx @quininez @didd @SeverS
 /libs/sdk/ @kenshyx @josenriagu @SeverS
 /libs/typings/ @kenshyx @SeverS @quininez

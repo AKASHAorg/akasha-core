@@ -4,7 +4,7 @@ import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import DynamicInfiniteScroll from '@akashaorg/design-system-components/lib/components/DynamicInfiniteScroll';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 import { AnalyticsEventData, EntityTypes } from '@akashaorg/typings/lib/ui';
 import {
   AkashaReflectStreamEdge,
@@ -186,7 +186,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
         <ErrorLoader
           type="script-error"
           title={'Sorry, there was an error when fetching reflections'}
-          details={<>{reflectionStreamQuery.error.message}</>}
+          details={reflectionStreamQuery.error.message}
         />
       )}
       {reflections && (

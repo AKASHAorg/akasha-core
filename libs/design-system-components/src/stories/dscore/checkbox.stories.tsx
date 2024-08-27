@@ -25,23 +25,41 @@ const meta: Meta<CheckboxProps> = {
 
 type Story = StoryObj<CheckboxProps>;
 
-const baseArgs: Story = {
+export const Default: Story = {
+  args: { label: 'Checkbox', name: 'checkbox', value: 'Checkbox', isSelected: false },
+};
+
+export const CheckboxSelected: Story = {
+  args: {
+    label: 'Checkbox',
+    name: 'checkbox',
+    value: 'Checkbox',
+    isSelected: true,
+  },
+};
+
+export const CheckboxWithError: Story = {
+  args: { label: 'Checkbox', name: 'checkbox', value: 'Checkbox', isSelected: false, error: true },
+};
+
+export const CheckboxDisabled: Story = {
   args: {
     label: 'Checkbox',
     name: 'checkbox',
     value: 'Checkbox',
     isSelected: false,
+    isDisabled: true,
   },
 };
 
-export const Default: Story = { args: { ...baseArgs.args } };
-
-export const CheckboxSelected: Story = { args: { ...baseArgs.args, isSelected: true } };
-
-export const CheckboxWithError: Story = { args: { ...baseArgs.args, error: true } };
-
-export const CheckboxDisabled: Story = { args: { ...baseArgs.args, isDisabled: true } };
-
-export const CheckboxIndeterminate: Story = { args: { ...baseArgs.args, indeterminate: true } };
+export const CheckboxIndeterminate: Story = {
+  args: {
+    label: 'Checkbox',
+    name: 'checkbox',
+    value: 'Checkbox',
+    isSelected: false,
+    indeterminate: true,
+  },
+};
 
 export default meta;

@@ -1,24 +1,15 @@
-import React, { ReactElement } from 'react';
+import React from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
-import type { Image, Profile } from '@akashaorg/typings/lib/ui';
+import type { Profile } from '@akashaorg/typings/lib/ui';
+import type { EngagementProp } from '../types';
 
 export type EntryProps = {
-  profileAnchorLink: string;
   profileIds: { did: string; id: string };
   avatar: Profile['avatar'];
   name: string;
-  followId: string;
-  isFollowing: boolean;
   customStyle?: string;
-  renderFollowElement: (
-    profileId: string,
-    followId: string,
-    isFollowing: boolean,
-  ) => ReactElement | null;
-  onProfileClick: (profileId: string) => void;
-  transformSource: (src: Image) => Image;
-};
+} & Omit<EngagementProp, 'authenticatedDID' | 'onLoadMore'>;
 
 const Entry: React.FC<EntryProps> = props => {
   const {
@@ -26,8 +17,6 @@ const Entry: React.FC<EntryProps> = props => {
     profileIds,
     avatar,
     name,
-    followId,
-    isFollowing,
     customStyle = '',
     renderFollowElement,
     onProfileClick,
@@ -53,7 +42,7 @@ const Entry: React.FC<EntryProps> = props => {
           onProfileClick(profileIds.did);
         }}
       />
-      {renderFollowElement && renderFollowElement(profileIds.id, followId, isFollowing)}
+      {renderFollowElement?.(profileIds.id)}
     </Stack>
   );
 };

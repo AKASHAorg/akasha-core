@@ -1,5 +1,5 @@
 import { WorldConfig } from '@akashaorg/typings/lib/ui';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 import { AkashaApp, SortOrder } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { ILogger } from '@akashaorg/typings/lib/sdk/log';
 import { GetAppsByPublisherDidQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
@@ -11,15 +11,14 @@ import { DeepTarget } from './type-utils';
  * @param appName - The name of the app to retrieve.
  * @param logger - An optional logger instance to use for logging.
  * @returns The latest version of the app, including its source, version, ID, creation date, and manifest data.
- * @throws Error if the DID_PUBLISHER_PUBLIC_KEY environment variable is not defined.
+ * @throws Error if the PUBLIC_INDEXING_DID environment variable is not defined.
  */
 export const getRemoteExtensionLatestVersion = async (appName: string, logger?: ILogger) => {
   const sdk = getSDK();
-  //this will change to INDEXING_DID once we have the passive indexing feature
-  const did = process.env?.DID_PUBLISHER_PUBLIC_KEY;
+  const did = sdk.services.common.misc.getIndexingDID();
   const log = logger || console;
   if (!did) {
-    throw new Error('DID_PUBLISHER_PUBLIC_KEY is not defined');
+    throw new Error('Indexing DID is not defined');
   }
   const app = await sdk.services.gql.client.GetAppsByPublisherDID(
     {

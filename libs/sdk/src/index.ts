@@ -4,24 +4,24 @@
  * @packageDocumentation
  */
 import 'reflect-metadata';
-import 'systemjs-webpack-interop/auto-public-path/index.js';
-import * as typings from '@akashaorg/typings/lib/sdk/index.js';
-import container /*, { importLazy }*/ from './container.js';
-import type Logging from './logging/index.js';
-import type Settings from './settings/index.js';
-import type Gql from './gql/index.js';
+import 'systemjs-webpack-interop/auto-public-path';
+import * as typings from '@akashaorg/typings/lib/sdk';
+import container /*, { importLazy }*/ from './container';
+import type Logging from './logging';
+import type Settings from './settings';
+import type Gql from './gql';
 
-import type DB from './db/index.js';
-import type Stash from './stash/index.js';
-import type Web3Connector from './common/web3.connector.js';
-import type EventBus from './common/event-bus.js';
-import type AWF_Auth from './auth/index.js';
-import type AWF_Profile from './profiles/index.js';
-import type AWF_IpfsConnector from './common/ipfs.connector.js';
-import type AppSettings from './settings/apps.js';
-import type AWF_Misc from './common/misc.js';
-import type AWF_Ceramic from './common/ceramic.js';
-import type AWF_Lit from './common/lit.js';
+import type DB from './db';
+import type Stash from './stash';
+import type Web3Connector from './common/web3.connector';
+import type EventBus from './common/event-bus';
+import type AWF_Auth from './auth/index';
+import type AWF_Profile from './profiles/index';
+import type AWF_IpfsConnector from './common/ipfs.connector';
+import type AppSettings from './settings/apps';
+import type AWF_Misc from './common/misc';
+import type AWF_Ceramic from './common/ceramic';
+import type AWF_Lit from './common/lit';
 
 export { Logger } from 'pino';
 
@@ -59,7 +59,7 @@ let sdk: AWF_SDK;
  * @public
  * @example
  * ```ts
- * import getSDK from '@akashaorg/awf-sdk';
+ * import getSDK from '@akashaorg/core-sdk';
  * const sdk = getSDK();
  * ```
  */
@@ -76,7 +76,7 @@ export default function getSDK(): AWF_SDK {
  * @public
  * @example
  * ```ts
- * import {init} from '@akashaorg/awf-sdk';
+ * import {init} from '@akashaorg/core-sdk';
  * const sdk = init();
  * ```
  */

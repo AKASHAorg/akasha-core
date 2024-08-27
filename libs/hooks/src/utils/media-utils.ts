@@ -1,4 +1,4 @@
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 import { logError } from './error-handler';
 import { type Image } from '@akashaorg/typings/lib/ui';
 
@@ -102,7 +102,8 @@ export const transformSource = (image?: Image): Image => {
   const defaultUrl = getMediaUrl(image.src);
 
   return {
-    ...image,
+    height: image.height,
+    width: image.width,
     src: defaultUrl.originLink || defaultUrl.fallbackLink,
   };
 };

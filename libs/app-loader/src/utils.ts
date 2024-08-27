@@ -1,7 +1,7 @@
 import { IAppConfig, IModalNavigationOptions, IQueryString } from '@akashaorg/typings/lib/ui';
 import * as singleSpa from 'single-spa';
 import qs from 'qs';
-import { Logger } from '@akashaorg/awf-sdk';
+import { Logger } from '@akashaorg/core-sdk';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 export const encodeName = (appName: string) => {
@@ -22,13 +22,13 @@ export interface CheckActivityOptions {
 }
 
 export const checkActivityFn = (opts: CheckActivityOptions): singleSpa.Activity => {
-  const { config, extensionType, encodedAppName, enabled = true } = opts;
-
-  let { location } = opts;
-
-  if (!location) {
-    location = window.location;
-  }
+  const {
+    config,
+    extensionType,
+    encodedAppName,
+    enabled = true,
+    location = window.location,
+  } = opts;
 
   if (!enabled) {
     return () => false;

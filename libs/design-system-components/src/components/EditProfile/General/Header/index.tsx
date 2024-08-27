@@ -38,7 +38,6 @@ export type HeaderProps = {
   onAvatarChange: (avatar?: File) => void;
   onCoverImageChange: (coverImage?: File) => void;
   onImageSave: (type: ProfileImageType, image?: File) => void;
-  onImageDelete: (type: ProfileImageType) => void;
 };
 
 export const Header: React.FC<HeaderProps> = ({
@@ -59,7 +58,6 @@ export const Header: React.FC<HeaderProps> = ({
   onAvatarChange,
   onCoverImageChange,
   onImageSave,
-  onImageDelete,
 }) => {
   const uploadInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
   const [showAvatarActions, setShowAvatarActions] = useState(false);
@@ -105,6 +103,10 @@ export const Header: React.FC<HeaderProps> = ({
     }
   };
 
+  const showEditAndDeleteMenuOptions =
+    (profileImageType === 'avatar' && !!avatarUrl) ||
+    (profileImageType === 'cover-image' && !!coverImageUrl);
+
   const dropDownActions: ListProps['items'] = [
     {
       label: 'Upload',
@@ -114,23 +116,27 @@ export const Header: React.FC<HeaderProps> = ({
         closeActionsDropDown();
       },
     },
-    {
-      label: 'Edit',
-      icon: <PencilIcon />,
-      onClick: () => {
-        setShowEditImage(true);
-        closeActionsDropDown();
-      },
-    },
-    {
-      label: 'Delete',
-      icon: <TrashIcon />,
-      color: { light: 'errorLight', dark: 'errorDark' },
-      onClick: () => {
-        setShowDeleteImage(true);
-        closeActionsDropDown();
-      },
-    },
+    ...(showEditAndDeleteMenuOptions
+      ? [
+          {
+            label: 'Edit',
+            icon: <PencilIcon />,
+            onClick: () => {
+              setShowEditImage(true);
+              closeActionsDropDown();
+            },
+          },
+          {
+            label: 'Delete',
+            icon: <TrashIcon />,
+            color: { light: 'errorLight', dark: 'errorDark' } as const,
+            onClick: () => {
+              setShowDeleteImage(true);
+              closeActionsDropDown();
+            },
+          },
+        ]
+      : []),
   ];
 
   const imageModalProps: Partial<CropperProps> =
@@ -157,12 +163,10 @@ export const Header: React.FC<HeaderProps> = ({
   const onDelete = () => {
     switch (profileImageType) {
       case 'avatar':
-        onImageDelete('avatar');
         onAvatarChange(null);
         setAvatarUrl(null);
         break;
       case 'cover-image':
-        onImageDelete('cover-image');
         onCoverImageChange(null);
         setCoverImageUrl(null);
     }
@@ -173,16 +177,13 @@ export const Header: React.FC<HeaderProps> = ({
     if (image) {
       switch (profileImageType) {
         case 'avatar':
-          onAvatarChange(image);
           setUploadedAvatarUrl({ src: URL.createObjectURL(image), width: 0, height: 0 });
           break;
         case 'cover-image':
-          onCoverImageChange(image);
           setUploadedCoverImageUrl({ src: URL.createObjectURL(image), width: 0, height: 0 });
       }
       setShowEditImage(true);
     }
-    uploadInputRef.current.value = null;
   };
 
   return (
@@ -190,6 +191,7 @@ export const Header: React.FC<HeaderProps> = ({
       <Text variant="h6">{title}</Text>
       <Stack customStyle="relative mb-8">
         <Card
+          dataTestId="cover-image"
           radius={20}
           background={{ light: 'grey7', dark: 'grey5' }}
           customStyle={`flex p-4 h-28 w-full bg-no-repeat bg-center bg-cover bg-[url(${
@@ -204,6 +206,7 @@ export const Header: React.FC<HeaderProps> = ({
           >
             <Button
               icon={<PencilSquareIcon />}
+              aria-label="cover-image"
               size="xs"
               variant="primary"
               onClick={() => {
@@ -246,6 +249,7 @@ export const Header: React.FC<HeaderProps> = ({
           <Stack customStyle="absolute">
             <Button
               icon={<PencilSquareIcon />}
+              aria-label="avatar"
               size="xs"
               variant="primary"
               onClick={() => {
@@ -289,7 +293,13 @@ export const Header: React.FC<HeaderProps> = ({
         onDelete={onDelete}
         onClose={() => setShowDeleteImage(false)}
       />
-      <input ref={uploadInputRef} type="file" onChange={e => onUpload(e.target.files[0])} hidden />
+      <input
+        ref={uploadInputRef}
+        type="file"
+        aria-label="image-upload"
+        onChange={e => onUpload(e.target.files[0])}
+        hidden
+      />
     </Stack>
   );
 };

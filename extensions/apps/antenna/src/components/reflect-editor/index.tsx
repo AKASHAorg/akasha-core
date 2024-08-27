@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import ReflectionEditor from '@akashaorg/design-system-components/lib/components/ReflectionEditor';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 import {
   transformSource,
   encodeSlateToBase64,
@@ -129,7 +129,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
     };
     setNewContent({ ...content, authorId: null, id: null });
     //Create unique id for pending reflection using randomUUID().
-    pendingReflectionIdRef.current = `${PENDING_REFLECTION_PREFIX}-${crypto?.randomUUID?.()}`;
+    pendingReflectionIdRef.current = `${PENDING_REFLECTION_PREFIX}-${crypto.randomUUID()}`;
     addPendingReflection({
       ...content,
       id: pendingReflectionIdRef.current,

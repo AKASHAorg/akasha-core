@@ -21,24 +21,16 @@ const meta: Meta<AppAvatarProps> = {
 
 type Story = StoryObj<AppAvatarProps>;
 
-const avatar = { src: 'https://placebeard.it/360x360', height: 360, width: 360 };
-
-const baseArgs: Story = {
-  args: {
-    appType: AkashaAppApplicationType.App,
-    avatar,
-  },
-};
-
 export const AvatarWithAppPlaceholder: Story = {
   args: {
-    ...baseArgs.args,
+    avatar: { src: 'https://placebeard.it/360x360', height: 360, width: 360 },
+    appType: AkashaAppApplicationType.App,
   },
 };
 
 export const AvatarWithWidgetPlaceholder: Story = {
   args: {
-    ...baseArgs.args,
+    avatar: { src: 'https://placebeard.it/360x360', height: 360, width: 360 },
     appType: AkashaAppApplicationType.Widget,
   },
 };

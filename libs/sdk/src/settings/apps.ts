@@ -5,14 +5,14 @@ import {
   IntegrationName,
   IntegrationNameSchema,
   TYPES,
-} from '@akashaorg/typings/lib/sdk/index.js';
-import DB from '../db/index.js';
-import { createFormattedValue } from '../helpers/observable.js';
-import Logging from '../logging/index.js';
-import { throwError } from '../common/error-handling.js';
-import EventBus from '../common/event-bus.js';
+} from '@akashaorg/typings/lib/sdk';
+import DB from '../db';
+import { createFormattedValue } from '../helpers/observable';
+import Logging from '../logging';
+import { throwError } from '../common/error-handling';
+import EventBus from '../common/event-bus';
 import pino from 'pino';
-import { validate } from '../common/validator.js';
+import { validate } from '../common/validator';
 import { z } from 'zod';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 

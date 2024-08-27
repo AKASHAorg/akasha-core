@@ -1,14 +1,20 @@
 import singleSpaReact from 'single-spa-react';
 import ReactDOMClient from 'react-dom/client';
-import React from 'react';
-import { useRootComponentProps, withProviders, useModalData } from '@akashaorg/ui-awf-hooks';
-import { IRootExtensionProps } from '@akashaorg/typings/lib/ui';
+import React, { useMemo } from 'react';
+import {
+  useRootComponentProps,
+  withProviders,
+  useModalData,
+  useAkashaStore,
+} from '@akashaorg/ui-awf-hooks';
+import { Extension, IRootExtensionProps } from '@akashaorg/typings/lib/ui';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { useUpdateAppMutation } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
+import { DRAFT_EXTENSIONS } from '../../constants';
 
 const Component: React.FC<IRootExtensionProps> = () => {
   const sdk = getSDK();
@@ -18,24 +24,47 @@ const Component: React.FC<IRootExtensionProps> = () => {
     context: { source: sdk.services.gql.contextSources.composeDB },
   });
 
+  const {
+    data: { authenticatedDID },
+  } = useAkashaStore();
+
   const handleModalClose = React.useCallback(() => {
     window.history.replaceState(null, null, location.pathname);
   }, []);
 
+  const existingDraftExtensions: Extension[] = useMemo(
+    () => JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [],
+    [authenticatedDID],
+  );
+
+  const handleRemoveDraft = () => {
+    const newDraftExtensions = existingDraftExtensions.filter(
+      draftExt => draftExt.id !== modalData['extensionId'],
+    );
+    localStorage.setItem(
+      `${DRAFT_EXTENSIONS}-${authenticatedDID}`,
+      JSON.stringify(newDraftExtensions),
+    );
+    handleModalClose();
+  };
   const handleRemove = () => {
-    updateApp({
-      variables: {
-        i: {
-          content: {},
-          id: modalData['appId'],
-          options: {
-            shouldIndex: false,
+    if (existingDraftExtensions.some(ext => ext.id === modalData['extensionId'])) {
+      handleRemoveDraft();
+    } else {
+      updateApp({
+        variables: {
+          i: {
+            content: {},
+            id: modalData['extensionId'],
+            options: {
+              shouldIndex: false,
+            },
           },
         },
-      },
-    })
-      .then(() => handleModalClose())
-      .catch(err => console.error(err));
+      })
+        .then(() => handleModalClose())
+        .catch(err => console.error(err));
+    }
   };
 
   const isQueryCalled = updateAppQuery.called && updateAppQuery.loading;

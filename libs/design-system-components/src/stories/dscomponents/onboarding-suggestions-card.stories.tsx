@@ -11,7 +11,7 @@ const meta: Meta<OnboardingSuggestionsCardProps> = {
 
 type Story = StoryObj<OnboardingSuggestionsCardProps>;
 
-export const BaseOnboardingSuggestionsCard: Story = {
+export const Default: Story = {
   args: {
     topicsLabel: 'TOPICS TO FOLLOW',
     peopleLabel: 'PEOPLE TO FOLLOW',

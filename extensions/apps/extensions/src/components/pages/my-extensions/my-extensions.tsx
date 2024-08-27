@@ -1,35 +1,40 @@
 import React, { useMemo } from 'react';
+import { capitalize } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
-
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Link from '@akashaorg/design-system-core/lib/components/Link';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { BookOpenIcon } from '@heroicons/react/24/outline';
+import { hasOwn, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useGetAppsByPublisherDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import { ExtensionStatus } from '@akashaorg/typings/lib/ui';
+import { SortOrder, AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import DropDownFilter, {
   DropdownMenuItemGroupType,
 } from '@akashaorg/design-system-components/lib/components/BaseDropdownFilter';
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
 import DynamicInfiniteScroll from '@akashaorg/design-system-components/lib/components/DynamicInfiniteScroll';
-
-import { useGetAppsByPublisherDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { hasOwn, useAkashaStore } from '@akashaorg/ui-awf-hooks';
-import { SortOrder, AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { ExtensionStatus } from '@akashaorg/typings/lib/ui';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Link from '@akashaorg/design-system-core/lib/components/Link';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { ExtensionElement } from './extension-element';
-import { NotConnnected } from './not-connected';
-import { capitalize } from 'lodash';
+import appRoutes, { MY_EXTENSIONS } from '../../../routes';
+import { DRAFT_EXTENSIONS } from '../../../constants';
 
 const ENTRY_HEIGHT = 92;
 
 export const MyExtensionsPage: React.FC<unknown> = () => {
+  const { baseRouteName, getRoutingPlugin } = useRootComponentProps();
   const { t } = useTranslation('app-extensions');
 
   const navigate = useNavigate();
+  const navigateTo = getRoutingPlugin().navigateTo;
+
+  const {
+    data: { authenticatedDID },
+  } = useAkashaStore();
 
   const handleNavigateToCreateApp = () => {
     navigate({ to: '/create-extension' });
@@ -99,21 +104,17 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
   };
 
   const {
-    data: { authenticatedProfile },
-  } = useAkashaStore();
-
-  const {
     data: appsByPubReq,
     error,
     loading,
     fetchMore,
   } = useGetAppsByPublisherDidQuery({
     variables: {
-      id: authenticatedProfile?.did.id,
+      id: authenticatedDID,
       first: 10,
       sorting: { createdAt: SortOrder.Desc },
     },
-    skip: !authenticatedProfile?.did.id,
+    skip: !authenticatedDID,
   });
   const appsList = useMemo(() => {
     return appsByPubReq?.node && hasOwn(appsByPubReq.node, 'akashaAppList')
@@ -122,22 +123,52 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
   }, [appsByPubReq]);
 
   const appsData = useMemo(() => {
-    return appsList?.edges?.map(edge => edge.node);
+    return appsList?.edges?.map(edge => edge.node) || [];
   }, [appsList]);
 
   const pageInfo = useMemo(() => {
     return appsList?.pageInfo;
   }, [appsList]);
 
-  const appElements = appsData?.filter(ext => {
-    if (selectedType.id === '0') {
-      return true;
-    }
-    return ext?.applicationType === selectedType.title?.toUpperCase();
-  });
+  const appElements = useMemo(() => {
+    return appsData?.filter(ext => {
+      if (selectedType.id === '0') {
+        return true;
+      }
+      return ext?.applicationType === selectedType.title?.toUpperCase();
+    });
+  }, [appsData, selectedType]);
 
-  if (!authenticatedProfile?.did.id) {
-    return <NotConnnected />;
+  const existingDraftExtensions = useMemo(
+    () => JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [],
+    [authenticatedDID],
+  );
+  const allMyExtensions = useMemo(
+    () => [...existingDraftExtensions, ...appElements],
+    [existingDraftExtensions, appElements],
+  );
+
+  const handleConnectButtonClick = () => {
+    navigateTo?.({
+      appName: '@akashaorg/app-auth-ewa',
+      getNavigationUrl: (routes: Record<string, string>) => {
+        return `${routes.Connect}?${new URLSearchParams({
+          redirectTo: `${baseRouteName}/${appRoutes[MY_EXTENSIONS]}`,
+        }).toString()}`;
+      },
+    });
+  };
+
+  if (!authenticatedDID) {
+    return (
+      <ErrorLoader
+        type="not-authenticated"
+        title={`${t('Uh-oh')}! ${t('You are not connected')}!`}
+        details={`${t('To check your extensions you must be connected')} ⚡️`}
+      >
+        <Button variant="primary" label={t('Connect')} onClick={handleConnectButtonClick} />
+      </ErrorLoader>
+    );
   }
 
   return (
@@ -180,20 +211,20 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
         <ErrorLoader
           type="script-error"
           title={'Sorry, there was an error when fetching apps'}
-          details={<>{error.message}</>}
+          details={error.message}
         />
       )}
-      {!error && appElements?.length === 0 && (
+      {!error && allMyExtensions?.length === 0 && (
         <DefaultEmptyCard
           noBorder={true}
-          infoText={t('You haven’t created any extensions yet')}
+          infoText={t("You haven't created any extensions yet")}
           assetName="longbeam-notfound"
         />
       )}
-      {!error && appElements?.length > 0 && (
+      {!error && allMyExtensions?.length > 0 && (
         <Card>
           <DynamicInfiniteScroll
-            count={appElements.length}
+            count={allMyExtensions.length}
             estimatedHeight={ENTRY_HEIGHT}
             overScan={1}
             itemSpacing={16}
@@ -208,11 +239,11 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
             }}
           >
             {({ itemIndex }) => {
-              const app = appElements[itemIndex];
+              const extensionData = allMyExtensions[itemIndex];
               return (
                 <ExtensionElement
-                  extensionData={app}
-                  showDivider={itemIndex < appElements.length - 1}
+                  extensionData={extensionData}
+                  showDivider={itemIndex < allMyExtensions.length - 1}
                   filter={selectedStatus}
                 />
               );

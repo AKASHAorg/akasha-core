@@ -1,10 +1,11 @@
+import twindConfig from '@akashaorg/design-system-core/src/twind/twind.config';
 import * as useRootComponentProps from '@akashaorg/ui-awf-hooks/lib/use-root-props';
 import * as useAkashaStore from '@akashaorg/ui-awf-hooks/lib/store/use-akasha-store';
 import * as useAnalytics from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 import { genAppProps, getUserInfo, getAuthenticationStore } from '@akashaorg/af-testing';
 import { install } from '@twind/core';
-import twindConfig from '@akashaorg/design-system-core/src/twind/twind.config';
 import '@testing-library/jest-dom';
+import getSdk from '@akashaorg/core-sdk';
 
 install(twindConfig);
 
@@ -48,7 +49,7 @@ jest.mock('react-use', () => ({
  * Include only methods needed for the apps tests
  *
  */
-jest.mock('@akashaorg/awf-sdk', () => () => {
+jest.mock('@akashaorg/core-sdk', () => () => {
   const { ReplaySubject } = require('rxjs');
   return {
     api: {
@@ -96,7 +97,6 @@ jest.mock('@akashaorg/awf-sdk', () => () => {
 
 jest.mock('react-i18next', () => ({
   ...jest.requireActual('react-i18next'),
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => {
     return {
       t: str => str,
@@ -129,7 +129,7 @@ global.IntersectionObserver = mockIntersectionObserver;
 global.scrollTo = jest.fn();
 
 Object.defineProperty(window, 'matchMedia', {
-  writable: true,
+  writable: false,
   value: jest.fn().mockImplementation(query => ({
     matches: false,
     media: query,
@@ -138,4 +138,11 @@ Object.defineProperty(window, 'matchMedia', {
     removeEventListener: jest.fn(),
     dispatchEvent: jest.fn(),
   })),
+});
+
+Object.defineProperty(window, 'crypto', {
+  writable: false,
+  value: {
+    randomUUID: () => Date.now(),
+  },
 });

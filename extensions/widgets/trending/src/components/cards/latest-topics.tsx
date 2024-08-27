@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import isEqual from 'lodash/isEqual';
 import difference from 'lodash/difference';
 import pullAll from 'lodash/pullAll';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import {
   useCreateInterestsMutation,
@@ -247,7 +247,7 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
     }
 
     // if subscribing, and limit is already reached, return snackbar
-    if (subscribing && localSubscribedTagsRef.current.length === 10) {
+    if (subscribing && localSubscribedTagsRef.current.length >= 10) {
       uiEvents.next({
         event: NotificationEvents.ShowNotification,
         data: {

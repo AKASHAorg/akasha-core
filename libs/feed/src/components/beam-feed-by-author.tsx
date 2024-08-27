@@ -11,7 +11,7 @@ import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import DynamicInfiniteScroll from '@akashaorg/design-system-components/lib/components/DynamicInfiniteScroll';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 import { AnalyticsEventData, RawBeamData } from '@akashaorg/typings/lib/ui';
 import {
   AkashaBeamFiltersInput,
@@ -155,7 +155,7 @@ const BeamFeedByAuthor = (props: BeamFeedByAuthorProps) => {
         <ErrorLoader
           type="script-error"
           title={'Sorry, there was an error when fetching beams'}
-          details={<>{beamQuery.error.message}</>}
+          details={beamQuery.error.message}
         />
       )}
       {beams.length > 0 && (

@@ -1,11 +1,3 @@
-import {
-  IAppConfig,
-  IPlugin,
-  IRootComponentProps,
-  RouteRegistrationEvents,
-  UIEventData,
-  WorldConfig,
-} from '@akashaorg/typings/lib/ui';
 import { Subject, Subscription } from 'rxjs';
 import {
   hide404,
@@ -22,9 +14,17 @@ import {
   getUserInstalledExtensions,
   getWorldDefaultExtensions,
 } from './extensions';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK, { SDK_Services, SDK_API } from '@akashaorg/core-sdk';
+import { InstalledExtensionSchema } from '@akashaorg/core-sdk/lib/db/installed-extensions.schema';
+import {
+  IAppConfig,
+  IPlugin,
+  IRootComponentProps,
+  RouteRegistrationEvents,
+  UIEventData,
+  WorldConfig,
+} from '@akashaorg/typings/lib/ui';
 import { ILogger } from '@akashaorg/typings/lib/sdk/log';
-import Logging from '@akashaorg/awf-sdk/src/logging/index';
 import {
   checkActivityFn,
   extractAppNameFromPath,
@@ -33,9 +33,7 @@ import {
   navigateToModal,
   parseQueryString,
 } from './utils';
-import EventBus from '@akashaorg/awf-sdk/src/common/event-bus';
 import { AUTH_EVENTS, EXTENSION_EVENTS } from '@akashaorg/typings/lib/sdk';
-import { InstalledExtensionSchema } from '@akashaorg/awf-sdk/src/db/installed-extensions.schema';
 import { AkashaApp, AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { ContentBlockStore } from './plugins/content-block-store';
 import { ExtensionPointStore } from './plugins/extension-point-store';
@@ -53,15 +51,16 @@ export default class AppLoader {
   extensionData: Awaited<ReturnType<typeof getWorldDefaultExtensions>>;
   layoutConfig: IAppConfig;
   logger: ILogger;
-  parentLogger: Logging;
+  parentLogger: SDK_Services['log'];
   plugins: IPlugin & {
     core?: {
       contentBlockStore: ContentBlockStore;
       extensionPointStore: ExtensionPointStore;
       widgetStore: WidgetStore;
+      extensionInstaller: ExtensionInstaller;
     };
   };
-  globalChannel: EventBus;
+  globalChannel: SDK_API['globalChannel'];
   user: { id: string };
   globalChannelSub: Subscription;
   userExtensions: InstalledExtensionSchema[];
@@ -535,6 +534,7 @@ export default class AppLoader {
       if (!conf.loadingFn || typeof conf.loadingFn !== 'function') continue;
 
       const extensionData = this.extensionData.find(m => m.name === name);
+
       if (extensionData.applicationType !== AkashaAppApplicationType.App) continue;
 
       // apps are always mounted in the applicationSlotId

@@ -1,4 +1,6 @@
+import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 import ErrorLoader, {
   ErrorLoaderProps,
 } from '@akashaorg/design-system-core/lib/components/ErrorLoader';
@@ -20,10 +22,21 @@ type Story = StoryObj<ErrorLoaderProps>;
 export const Default: Story = {
   args: {
     publicImgPath: '',
-    type: 'no-login',
-    title: 'No Ethereum address detected',
-    details:
-      'You need to login or allow access to your current Ethereum address in your Web3 Ethereum client like MetaMask, and then reload, please',
+    type: 'not-authenticated',
+    title: 'Uh-oh! You are not connected!',
+    details: 'To access this resource, you must be connected ⚡️',
+  },
+};
+
+export const ErrorLoaderWithCTA: Story = {
+  args: {
+    publicImgPath: '',
+    type: 'not-authenticated',
+    title: 'Uh-oh! You are not connected!',
+    details: 'To access this resource, you must be connected ⚡️',
+    children: (
+      <Button variant="primary" label="Take Action" onClick={() => console.log('clicked button')} />
+    ),
   },
 };
 

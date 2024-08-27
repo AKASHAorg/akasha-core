@@ -18,6 +18,12 @@ export const PROFILE_STATS = {
   totalReflections: 5,
 };
 
+export const NEW_PROFILE = {
+  name: 'coffeelover',
+  bio: 'bio',
+  link: 'https://x.com/coffeelover',
+};
+
 export const APOLLO_TYPE_POLICIES = {
   typePolicies: {
     AkashaReflectConnection: {
@@ -41,3 +47,7 @@ export const APOLLO_TYPE_POLICIES = {
     },
   },
 };
+
+export const NEW_AVATAR_URL = 'https://placehold.co/76x76';
+
+export const NEW_COVER_IMAGE_URL = 'https://placehold.co/600x200';

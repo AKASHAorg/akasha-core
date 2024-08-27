@@ -1,4 +1,4 @@
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 import { logError } from './utils/error-handler';
 import { useEffect, useState } from 'react';
 

@@ -9,7 +9,7 @@ import {
   RoutesRegisterEvent,
   IPlugin,
 } from '@akashaorg/typings/lib/ui';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 import { EXTENSION_EVENTS } from '@akashaorg/typings/lib/sdk';
 import { RouteRepository } from './types';
 import { filterEvent } from '@akashaorg/ui-awf-hooks';

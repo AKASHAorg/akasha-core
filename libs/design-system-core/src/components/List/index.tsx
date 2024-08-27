@@ -1,4 +1,4 @@
-import React, { Fragment, LegacyRef, forwardRef } from 'react';
+import React, { Fragment, forwardRef } from 'react';
 import Card from '../Card';
 import Stack from '../Stack';
 import Tooltip from '../Tooltip';
@@ -19,7 +19,6 @@ export type ListItem = {
 export type ListProps = {
   items: ListItem[];
   showDivider?: boolean;
-  ref?: LegacyRef<HTMLDivElement>;
   customStyle?: string;
   onSelected?: ({ index, label }: Selected) => void;
 };
@@ -44,7 +43,7 @@ export type ListProps = {
  *     />
  * ```
  **/
-const List: React.FC<ListProps> = forwardRef(
+const List = forwardRef<HTMLDivElement, ListProps>(
   ({ items, showDivider = true, customStyle = '', onSelected }, ref) => {
     const borderStyle = showDivider
       ? `border-b ${getColorClasses(
