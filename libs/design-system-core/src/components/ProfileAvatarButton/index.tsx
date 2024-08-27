@@ -6,6 +6,8 @@ import ProfileNameField from '../ProfileNameField';
 import Stack from '../Stack';
 import { type Image } from '@akashaorg/typings/lib/ui';
 
+type Variant = '1' | '2' | '3' | '4';
+
 export type ProfileAvatarButtonProps = {
   avatar?: Image;
   alternativeAvatars?: Image[];
@@ -14,6 +16,7 @@ export type ProfileAvatarButtonProps = {
   truncateText?: boolean;
   href?: string;
   metadata?: ReactElement;
+  variant?: Variant;
   customStyle?: string;
   onClick?: React.MouseEventHandler<HTMLAnchorElement>;
 };
@@ -29,7 +32,8 @@ export type ProfileAvatarButtonProps = {
  * @param truncateText - boolean (optional) whether to truncate the label (profile name) when it's too long
  * @param href - (optional) provide href link here
  * @param metadata - string (optional) provide metadata here
- * @param customStyle - (optional) apply your custom styling (Make sure to use standard Tailwind classes)
+ * @param variant - (optional) profile avatar button variant, the default is '2'
+ * @param customStyle -  (optional) apply your custom styling (Make sure to use standard Tailwind classes)
  * @param onClick - handler that will be called when clicking on the avatar
  * @example
  * ```tsx
@@ -48,6 +52,7 @@ const ProfileAvatarButton = React.forwardRef(
       truncateText = true,
       href,
       metadata,
+      variant = '2',
       onClick,
     } = props;
 
@@ -57,7 +62,7 @@ const ProfileAvatarButton = React.forwardRef(
           <Avatar
             dataTestId="avatar-box"
             aria-label="avatar-box"
-            size="md"
+            size={VARIANTS_MAP[variant].avatar}
             avatar={avatar}
             profileId={profileId}
             customStyle="shrink-0 cursor-pointer"
@@ -70,7 +75,12 @@ const ProfileAvatarButton = React.forwardRef(
             aria-label="info-box"
           >
             <Stack direction="row" align="center" spacing="gap-x-1" ref={ref}>
-              <ProfileNameField did={profileId} profileName={label} truncateText={truncateText} />
+              <ProfileNameField
+                did={profileId}
+                profileName={label}
+                truncateText={truncateText}
+                size={VARIANTS_MAP[variant].profileName}
+              />
               {metadata}
             </Stack>
             <DidField did={profileId} isValid={true} copiable={false} />
@@ -80,5 +90,27 @@ const ProfileAvatarButton = React.forwardRef(
     );
   },
 );
+
+const VARIANTS_MAP: Record<
+  Variant,
+  { profileName: 'sm' | 'md' | 'lg'; avatar: 'sm' | 'md' | 'lg' }
+> = {
+  '1': {
+    profileName: 'sm',
+    avatar: 'sm',
+  },
+  '2': {
+    profileName: 'sm',
+    avatar: 'md',
+  },
+  '3': {
+    profileName: 'md',
+    avatar: 'md',
+  },
+  '4': {
+    profileName: 'lg',
+    avatar: 'lg',
+  },
+};
 
 export default ProfileAvatarButton;
