@@ -43,7 +43,9 @@ export const MentionPopover = React.forwardRef<HTMLDivElement, MentionPopover>((
       >
         {values.length === 0 && (
           <Card customStyle="py-2 px-4" type="plain">
-            <Text align="center">{noMentionsLabel}</Text>
+            <Text variant="body2" align="start" color={{ light: 'grey4', dark: 'grey6' }}>
+              {noMentionsLabel}
+            </Text>
           </Card>
         )}
         {values.length > 0 &&

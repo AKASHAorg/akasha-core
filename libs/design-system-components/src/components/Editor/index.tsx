@@ -202,7 +202,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
       const domRange = ReactEditor.toDOMRange(editor, mentionTargetRange);
       const rect = domRange.getBoundingClientRect();
       if (el) {
-        el.style.top = `${rect.top + window.scrollY + 20}px`;
+        el.style.top = `${rect.top + window.scrollY + 24}px`;
         el.style.left = `${rect.left + window.scrollX}px`;
       }
     }

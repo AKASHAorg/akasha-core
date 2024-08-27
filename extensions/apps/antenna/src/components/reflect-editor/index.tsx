@@ -169,7 +169,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
       emojiPlaceholderLabel={t('Search')}
       disableActionLabel={t('Authenticating')}
       maxEncodedLengthErrLabel={t('Text block exceeds line limit, please review!')}
-      noMentionsLabel={t('You are not following someone with that name')}
+      noMentionsLabel={t('You are not following anyone with that name')}
       editorState={editorState}
       showEditor={showEditor}
       setShowEditor={setShowEditor}
