@@ -283,6 +283,9 @@ export default class AppLoader {
     const extensionConfigs = this.registerExtensions(modules);
     this.singleSpaRegister(extensionConfigs);
   };
+  redirectHomeApp = () => {
+    singleSpa.navigateToUrl(`/${this.worldConfig.homepageApp}/`);
+  };
   // @todo: avoid needing for a full page refresh
   /**
    * Things to consider:
@@ -294,6 +297,12 @@ export default class AppLoader {
    *    - parcels have an api to unmount.
    **/
   handleLogout = async () => {
+    const mounted = singleSpa.getMountedApps();
+
+    const isUserExtMounted = mounted.some(name =>
+      this.userExtensions.some(ext => ext.appName === name),
+    );
+
     // unload user extensions
     for (const ext of this.userExtensions) {
       if (ext.applicationType === AkashaAppApplicationType.Widget) {
@@ -322,6 +331,10 @@ export default class AppLoader {
         event: EXTENSION_EVENTS.REMOVED,
         data: { name: ext.appName },
       });
+    }
+    // if any of the mounted extensions are the user installed ones redirect to homepageApp
+    if (isUserExtMounted) {
+      this.redirectHomeApp();
     }
   };
   // no need for other cleanups because we'll trigger a full page refresh
