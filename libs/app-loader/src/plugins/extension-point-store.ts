@@ -5,7 +5,7 @@ export class ExtensionPointStore {
   static instance: ExtensionPointStore;
   readonly #extensions: (ExtensionPointInterface & { appName: string })[];
 
-  constructor() {
+  private constructor() {
     this.#extensions = [];
   }
 

@@ -529,7 +529,8 @@ export default class AppLoader {
       },
     });
   };
-
+  // this function will be called at the end of the
+  // installation flow. the singlespa.register function must be called last
   finalizeExtensionInstallation = (
     extensionInfo: AkashaApp,
     extensionModule: SystemModuleType,
@@ -541,6 +542,7 @@ export default class AppLoader {
     this.registerAdditionalEntities(extensionConfig, extensionInfo.applicationType);
     this.singleSpaRegister(new Map().set(extensionInfo.name, extensionConfig));
   };
+
   singleSpaRegister = (extensionConfigs: Map<string, IAppConfig & { name: string }>) => {
     for (const [name, conf] of extensionConfigs) {
       if (singleSpa.getAppNames().includes(name)) continue;

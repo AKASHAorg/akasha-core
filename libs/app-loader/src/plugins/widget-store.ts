@@ -5,7 +5,7 @@ export class WidgetStore {
   static instance: WidgetStore;
   readonly #widgets: (WidgetInterface & { appName: string })[];
   #widgetRemoveCallbacks: Map<string, (() => void)[]>;
-  constructor() {
+  private constructor() {
     this.#widgets = [];
     this.#widgetRemoveCallbacks = new Map();
   }

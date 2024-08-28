@@ -116,14 +116,13 @@ export class ExtensionInstaller {
     this.listeners = [];
     this.#extensionName = undefined;
   }
-
+  // get the extension information from the registry
   async fetchExtensionStep(extensionID: string): Promise<boolean> {
     this.notifyCurrentStatus(this.getStaticStatusCodes().status.FETCHING_EXTENSION_DATA);
     try {
       const extensionData = await this.#getLatestExtensionVersion(extensionID);
       if (extensionData) {
         this.#extensionInfo = extensionData;
-        this.#logger.info('Extension data fetched');
         return true;
       }
       this.notifyErrorStatus(this.getStaticStatusCodes().error.EXTENSION_NOT_FOUND);
@@ -133,7 +132,7 @@ export class ExtensionInstaller {
       return false;
     }
   }
-
+  // import systemjs module
   async #importModuleStep(): Promise<boolean> {
     this.notifyCurrentStatus(this.getStaticStatusCodes().status.IMPORTING_MODULE);
     try {
@@ -142,15 +141,14 @@ export class ExtensionInstaller {
         return false;
       }
       this.#extensionModule = module;
-      this.#logger.info('Module imported');
       return true;
     } catch (err) {
       this.notifyErrorStatus(this.getStaticStatusCodes().error.EXTENSION_IMPORT_ERROR);
       return false;
     }
   }
+  // depending on the error, we want to retry installation
   async retryFromError(errorStatus: symbol) {
-    console.log('retrying from error', errorStatus);
     if (!this.#extensionName) {
       return false;
     }
@@ -187,7 +185,13 @@ export class ExtensionInstaller {
     }
     this.resetAndCleanup();
   }
-
+  // if the extension that is being installed does have
+  // additional resources to register (aka. composeDB models)
+  // the installExtension function will return right after registering resources.
+  // otherwise, this method will be called from inside the installExtension function
+  // this method will resume the installation after successfully registered resources
+  // the actual confirmation and error handling of the signature required by those resources
+  // is handled directly in the installation component/page
   async postInstallExtension() {
     if (
       this.#extensionModule.initialize &&
@@ -196,7 +200,6 @@ export class ExtensionInstaller {
       this.notifyCurrentStatus(this.getStaticStatusCodes().status.INITIALIZING_EXTENSION);
       try {
         await this.#initializeExtension(this.#extensionInfo.name, this.#extensionModule);
-        this.#logger.info('Extension initialized');
       } catch (err) {
         this.notifyErrorStatus(this.getStaticStatusCodes().error.EXTENSION_INITIALIZATION_FAILED);
         return;
@@ -210,7 +213,6 @@ export class ExtensionInstaller {
       return;
     }
     this.#extensionConfig = extConf;
-    this.#logger.info('Extension registered!');
     // at this point we are safe to register it into singleSpa
     // since everything went well we can also store the config into the local db.
     this.notifyCurrentStatus(this.getStaticStatusCodes().status.SAVING_EXTENSION_INFO);
@@ -227,18 +229,16 @@ export class ExtensionInstaller {
       this.notifyErrorStatus(this.getStaticStatusCodes().error.EXTENSION_INFO_SAVE_FAILED);
       return;
     }
-    this.#logger.info('Extension saved to local db');
     this.notifyCurrentStatus(this.getStaticStatusCodes().status.FINALIZING_INSTALL);
     try {
       this.#finalizeInstall(this.#extensionInfo, this.#extensionModule, this.#extensionConfig);
       this.notifyCurrentStatus(this.getStaticStatusCodes().status.INSTALL_SUCCESS);
-      this.#logger.info('Installation completed successfuly');
     } catch (err) {
       this.notifyErrorStatus(this.getStaticStatusCodes().error.EXTENSION_FINALIZATION_FAILED);
       return;
     }
   }
-
+  // the main function that will start the installation of the extension.
   async installExtension(extensionID: string) {
     if (!this.#user?.id) {
       this.notifyErrorStatus(this.getStaticStatusCodes().error.USER_NOT_CONNECTED);
@@ -285,7 +285,6 @@ export class ExtensionInstaller {
         // handle signature in the install screen
         return;
       }
-      this.#logger.info('---running post install flow----');
       await this.postInstallExtension();
     }
   }

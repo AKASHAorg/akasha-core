@@ -30,7 +30,7 @@ const isNotEmpty = (
 export class ContentBlockStore {
   static instance: ContentBlockStore;
   #blocks: (ContentBlockConfig & { appName: string })[];
-  constructor() {
+  private constructor() {
     this.#blocks = [];
   }
 
