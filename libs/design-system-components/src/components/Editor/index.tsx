@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useCallback, useEffect, useLayoutEffect } from 'react';
 import {
   createEditor,
   Editor,
@@ -141,11 +141,8 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
   const [publishDisabledInternal, setPublishDisabledInternal] = useState(true);
   const [showMaxEncodedLengthErr, setShowMaxEncodedLengthErr] = useState(false);
 
-  /**
-   * display only 3 results in the tag and mention popovers
-   */
-  const slicedTags = React.useMemo(() => tags.slice(0, 3), [tags]);
-  const slicedMentions = React.useMemo(() => mentions.slice(0, 3), [mentions]);
+  const editorContainerRef = useRef<HTMLDivElement>(null);
+  const mentionPopoverWidth = useRef<number>(0);
 
   /**
    * initialise editor with all the required plugins
@@ -184,6 +181,11 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
     }
   };
 
+  useLayoutEffect(() => {
+    const editorContainerRect = editorContainerRef.current.getBoundingClientRect();
+    if (editorContainerRect) mentionPopoverWidth.current = editorContainerRect.width;
+  }, []);
+
   /**
    * set the selection at the end of the content when component is mounted
    */
@@ -200,7 +202,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
       const domRange = ReactEditor.toDOMRange(editor, mentionTargetRange);
       const rect = domRange.getBoundingClientRect();
       if (el) {
-        el.style.top = `${rect.top + window.scrollY + 20}px`;
+        el.style.top = `${rect.top + window.scrollY + 24}px`;
         el.style.left = `${rect.left + window.scrollX}px`;
       }
     }
@@ -378,13 +380,13 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
         switch (event.key) {
           case 'ArrowDown': {
             event.preventDefault();
-            const prevIndex = index >= slicedMentions.length - 1 ? 0 : index + 1;
+            const prevIndex = index >= mentions.length - 1 ? 0 : index + 1;
             setIndex(prevIndex);
             break;
           }
           case 'ArrowUp': {
             event.preventDefault();
-            const nextIndex = index <= 0 ? slicedMentions.length - 1 : index - 1;
+            const nextIndex = index <= 0 ? mentions.length - 1 : index - 1;
             setIndex(nextIndex);
             break;
           }
@@ -393,7 +395,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
           case ' ':
             event.preventDefault();
             Transforms.select(editor, mentionRange);
-            CustomEditor.insertMention(editor, slicedMentions[index]);
+            CustomEditor.insertMention(editor, mentions[index]);
             setMentionTargetRange(null);
             break;
           case 'Escape':
@@ -412,13 +414,13 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
         switch (event.key) {
           case 'ArrowDown': {
             event.preventDefault();
-            const prevIndex = index >= slicedTags.length - 1 ? 0 : index + 1;
+            const prevIndex = index >= tags.length - 1 ? 0 : index + 1;
             setIndex(prevIndex);
             break;
           }
           case 'ArrowUp': {
             event.preventDefault();
-            const nextIndex = index <= 0 ? slicedTags.length - 1 : index - 1;
+            const nextIndex = index <= 0 ? tags.length - 1 : index - 1;
             setIndex(nextIndex);
             break;
           }
@@ -426,7 +428,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
           case 'Enter':
             event.preventDefault();
             Transforms.select(editor, tagRange);
-            CustomEditor.insertTag(editor, slicedTags[index]);
+            CustomEditor.insertTag(editor, tags[index]);
             setTagTargetRange(null);
             break;
           case ' ':
@@ -437,7 +439,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
             } else {
               event.preventDefault();
               Transforms.select(editor, tagRange);
-              CustomEditor.insertTag(editor, slicedTags[index]);
+              CustomEditor.insertTag(editor, tags[index]);
             }
             setTagTargetRange(null);
             break;
@@ -463,17 +465,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
         setTagTargetRange(null);
       }
     },
-    [
-      index,
-      mentionTargetRange,
-      tagTargetRange,
-      mentions,
-      tags,
-      editor,
-      slicedMentions,
-      slicedTags,
-      createTag,
-    ],
+    [index, mentionTargetRange, tagTargetRange, mentions, tags, editor, createTag],
   );
 
   /**
@@ -532,7 +524,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
           </Stack>
         )}
         {/* w-0 min-w-full is used to prevent parent width expansion without setting a fixed width */}
-        <Stack customStyle="w-0 min-w-full">
+        <Stack ref={editorContainerRef} customStyle="w-0 min-w-full">
           <Slate editor={editor} value={editorState || editorDefaultValue} onChange={handleChange}>
             <Editable
               placeholder={placeholderLabel}
@@ -555,18 +547,18 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
               <MentionPopover
                 handleSelect={handleInsertMention}
                 ref={mentionPopoverRef}
-                values={slicedMentions}
-                currentIndex={index}
+                values={mentions}
                 setIndex={setIndex}
                 transformSource={transformSource}
                 noMentionsLabel={noMentionsLabel}
+                customStyle={`w-[${mentionPopoverWidth.current}px] sm:w-[272px] `}
               />
             )}
             {tagTargetRange && tags.length > 0 && (
               <TagPopover
                 handleSelect={handleInsertTag}
                 ref={mentionPopoverRef}
-                values={slicedTags}
+                values={tags}
                 currentIndex={index}
                 setIndex={setIndex}
               />

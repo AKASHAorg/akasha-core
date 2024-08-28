@@ -40,6 +40,7 @@ const ReflectionEditor = forwardRef<HTMLDivElement, ReflectionEditorProps>((prop
     maxEncodedLengthErrLabel,
     disablePublish,
     mentions,
+    noMentionsLabel,
     tags,
     placeholderButtonLabel,
     showCancelButton,
@@ -99,6 +100,7 @@ const ReflectionEditor = forwardRef<HTMLDivElement, ReflectionEditorProps>((prop
             maxEncodedLengthErrLabel={maxEncodedLengthErrLabel}
             disablePublish={disablePublish}
             mentions={mentions}
+            noMentionsLabel={noMentionsLabel}
             tags={tags}
             withMeter={true}
             editorState={editorState}

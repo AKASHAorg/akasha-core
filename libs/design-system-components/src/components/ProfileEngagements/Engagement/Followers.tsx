@@ -5,14 +5,14 @@ import Entry from '../Entry';
 import { useIntersection } from 'react-use';
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils';
 import { AkashaFollowers } from '@akashaorg/typings/lib/ui';
-import { ENTRY_HEIGHT, EngagementProp } from '../types';
+import { ENTRY_HEIGHT, EngagementProps } from '../types';
 
 export type FollowersProps = {
   followers: AkashaFollowers;
   publicImgPath?: string;
   emptyEntryTitleLabel: ReactElement;
   emptyEntryBodyLabel: ReactElement;
-} & EngagementProp;
+} & EngagementProps;
 
 const Followers: React.FC<FollowersProps> = ({
   publicImgPath,

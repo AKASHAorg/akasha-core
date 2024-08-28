@@ -1,38 +1,52 @@
 import React from 'react';
-import { tw, tx } from '@twind/core';
-import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
-import { Portal } from './helpers';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Portal } from './helpers';
+import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 import { getElevationClasses } from '@akashaorg/design-system-core/lib/utils';
+
+const MAX_MENTIONS_DISPLAY = 3;
+
+const PROFILE_AVATAR_HEIGHT = 52;
 
 export type MentionPopover = {
   values: Profile[];
-  currentIndex: number;
   setIndex: React.Dispatch<React.SetStateAction<number>>;
   handleSelect: (index: number) => void;
   transformSource: (src: Image) => Image;
   noMentionsLabel?: string;
+  customStyle?: string;
 };
 
 export const MentionPopover = React.forwardRef<HTMLDivElement, MentionPopover>((props, ref) => {
-  const { values, currentIndex, setIndex, handleSelect, transformSource, noMentionsLabel } = props;
+  const {
+    values,
+    noMentionsLabel,
+    customStyle = '',
+    setIndex,
+    handleSelect,
+    transformSource,
+  } = props;
 
   const boxShadow = getElevationClasses('2');
 
   return (
     <Portal>
-      <div
-        className={tw(
-          `absolute -top-[9999px] -left-[9999px] z-50 p-1 bg(white dark:grey3) rounded-lg border(grey8 dark:grey8) ${boxShadow}`,
-        )}
+      <Stack
+        padding="p-0"
+        background={{ light: 'white', dark: 'grey3' }}
+        customStyle={`absolute -top-[9999px] -left-[9999px] z-50 rounded-lg border(grey8 dark:grey8) ${boxShadow} overflow-auto ${`max-h-[${PROFILE_AVATAR_HEIGHT * MAX_MENTIONS_DISPLAY}px]`} ${customStyle}`}
         ref={ref}
       >
         {values.length === 0 && (
-          <div className={tw(`max-w-[13rem] py-4 px-2`)}>
-            <Text align="center">{noMentionsLabel}</Text>
-          </div>
+          <Card customStyle="py-2 px-4" type="plain">
+            <Text variant="body2" align="start" color={{ light: 'grey4', dark: 'grey6' }}>
+              {noMentionsLabel}
+            </Text>
+          </Card>
         )}
         {values.length > 0 &&
           values.map((value, i) => (
@@ -45,32 +59,21 @@ export const MentionPopover = React.forwardRef<HTMLDivElement, MentionPopover>((
               onMouseEnter={() => {
                 setIndex(i);
               }}
+              hover={true}
+              customStyle={`px-4 py-2 h-[${PROFILE_AVATAR_HEIGHT}px]`}
             >
-              <div
-                className={tx(
-                  `p-2 cursor-pointer rounded-sm max-w-xs min-w-[12rem] truncate hover:text(secondaryLight dark:secondaryDark) ${
-                    i === currentIndex && 'bg(white dark:grey3)'
-                  }`,
+              <ProfileAvatarButton
+                label={value.name}
+                avatar={transformSource(value?.avatar?.default)}
+                alternativeAvatars={value?.avatar?.alternatives?.map(alternative =>
+                  transformSource(alternative),
                 )}
-              >
-                <ProfileAvatarButton
-                  label={value.name}
-                  avatar={transformSource(value?.avatar?.default)}
-                  alternativeAvatars={value?.avatar?.alternatives?.map(alternative =>
-                    transformSource(alternative),
-                  )}
-                  profileId={value.did.id}
-                />
-              </div>
+                profileId={value.did.id}
+                variant="1"
+              />
             </Button>
           ))}
-      </div>
+      </Stack>
     </Portal>
   );
 });
-
-MentionPopover.defaultProps = {
-  noMentionsLabel: 'You are not following someone with that name',
-};
-
-MentionPopover.displayName = 'MentionPopover';
