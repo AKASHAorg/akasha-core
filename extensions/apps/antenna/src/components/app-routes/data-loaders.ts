@@ -22,7 +22,7 @@ import {
  * @returns an object containing the data and error values from the query
  * @example
  * ```typescript
- * const { data, error } = getBeamById({ apolloClient: context.apolloClient, beamId: params.beamId }
+ * const { data, error } = getBeamById({ apolloClient, beamId: 'kjzl6kcym7w8y7gyq' });
  * ```
  */
 export async function getBeamById({
@@ -42,7 +42,7 @@ export async function getBeamById({
  * @param param0 - an object containing the apolloClient and beamId
  * @returns an object containing the data and error values from the query
  * ```typescript
- * const { data, error } = getBeamStreamById({ apolloClient: context.apolloClient, beamId: params.beamId }
+ * const { data, error } = getBeamStreamById({ apolloClient, beamId: 'kjzl6kcym7w8y7gyq' });
  * ```
  */
 export async function getBeamStreamById({
@@ -68,8 +68,11 @@ export async function getBeamStreamById({
  * @returns an object containing the beam
  * @example
  * ```typescript
- * const beamData:GetBeamByIdQuery = useGetBeamByIdQuery(...variables)
- * const beamNode:GetBeamByIdQuery['node'] = selectBeamNode(beamData)
+ * import type { GetBeamByIdQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
+ * import { useGetBeamByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+ *
+ * const beamData: GetBeamByIdQuery = useGetBeamByIdQuery();
+ * const beamNode: GetBeamByIdQuery['node'] = selectBeamNode(beamData);
  * ```
  */
 export function selectBeamNode(beamByIdQuery: GetBeamByIdQuery) {
@@ -81,11 +84,15 @@ export function selectBeamNode(beamByIdQuery: GetBeamByIdQuery) {
 /**
  * Extracts the moderation status of a beam from a beam stream list
  * @param beamStream - query response data
- * @returns boolean value of the status
+ * @returns AkashaBeamStreamModerationStatus
  * @example
  * ```typescript
- * const beamStream:GetBeamStreamQuery = useGetBeamStreamQuery(...variables)
- * const beamStatus: AkashaBeamStreamModerationStatus = selectBeamStatusField(beamStream)
+ * import type { GetBeamStreamQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
+ * import { AkashaBeamStreamModerationStatus } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+ * import { useGetBeamStreamQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+ *
+ * const beamStream: GetBeamStreamQuery = useGetBeamStreamQuery();
+ * const beamStatus: AkashaBeamStreamModerationStatus = selectBeamStatusField(beamStream);
  * ```
  */
 export function selectBeamStatusField(
@@ -104,11 +111,14 @@ export function selectBeamStatusField(
 /**
  * Extracts the active status of a beam from a beam stream list
  * @param streamData - query response data
- * @returns boolean value of the status
+ * @returns boolean
  * @example
  * ```typescript
- * const beamStream:GetBeamStreamQuery = useGetBeamStreamQuery(...variables)
- * const beamActive: boolean = selectBeamActiveField(beamStream)
+ * import type { GetBeamStreamQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
+ * import { useGetBeamStreamQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+ *
+ * const beamStream: GetBeamStreamQuery = useGetBeamStreamQuery();
+ * const beamActive: boolean = selectBeamActiveField(beamStream);
  * ```
  */
 export function selectBeamActiveField(streamData: GetBeamStreamQuery) {
@@ -125,7 +135,10 @@ export function selectBeamActiveField(streamData: GetBeamStreamQuery) {
  * @returns an object containing the data and error values from the query
  * @example
  * ```typescript
- * const { data, error} = getReflectionById({ apolloClient: context.apolloClient, reflectionId: params.reflectionId }
+ * const { data, error } = getReflectionById({
+  apolloClient,
+  reflectionId: 'kjzl6kcym7w8y8w8',
+});
  * ```
  */
 export async function getReflectionById({
@@ -148,7 +161,10 @@ export async function getReflectionById({
  * @param param0 - an object containing the apolloClient and reflectionId
  * @returns an object containing the data and error values from the query
  * ```typescript
- * const { data, error } = getReflectionStreamById({ apolloClient: context.apolloClient, reflectionId: params.reflectionId }
+ * const { data, error } = getReflectionStreamById({
+  apolloClient,
+  reflectionId: 'kjzl6kcym7w8y8w8',
+});
  * ```
  */
 export async function getReflectionStreamById({
@@ -177,8 +193,11 @@ export async function getReflectionStreamById({
  * @returns an object containing the reflection
  * @example
  * ```typescript
- * const reflectionData:GetReflectionByIdQuery = useGetReflectionByIdQuery(...variables)
- * const reflectionNode:GetReflectionByIdQuery['node'] = selectReflectionNode(reflectionData)
+ * import type { GetReflectionByIdQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
+ * import { useGetReflectionByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+ *
+ * const reflectionData: GetReflectionByIdQuery = useGetReflectionByIdQuery();
+ * const reflectionNode: GetReflectionByIdQuery['node'] = selectReflectionNode(reflectionData);
  * ```
  */
 export function selectReflectionNode(reflectionByIdQuery: GetReflectionByIdQuery) {
@@ -197,8 +216,11 @@ export function selectReflectionNode(reflectionByIdQuery: GetReflectionByIdQuery
  * @returns boolean value of the status
  * @example
  * ```typescript
- * const reflectionStream:GetReflectionStreamQuery = useGetReflectionStreamQuery(...variables)
- * const reflectionActive: boolean = selectReflectionActiveField(reflectionStream)
+ * import type { GetReflectionStreamQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
+ * import { useGetReflectionStreamQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+ *
+ * const reflectionStream: GetReflectionStreamQuery = useGetReflectionStreamQuery();
+ * const reflectionActive: boolean = selectReflectionActiveField(reflectionStream);
  * ```
  */
 export function selectReflectionActiveField(streamData: GetReflectionStreamQuery) {
