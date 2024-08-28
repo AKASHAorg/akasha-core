@@ -8,6 +8,7 @@ import { IconOnlyButton } from './IconOnlyButton';
 import { ButtonProps, ButtonSize } from './types';
 import { getTextClasses } from './getTextClasses';
 import { getContainerClasses } from './getContainerClasses';
+import { getColorClasses } from '../../utils';
 
 /**
  * A Button allows users to take actions when appropriate with a tap(on touch-screen devices)
@@ -58,18 +59,30 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
     breakPointSize,
     customStyle = '',
     active,
-    hover = true,
+    hover = plain ? false : true,
     hoverColors,
     ...rest
   } = props;
 
   if (plain) {
     const disabledStyle = disabled ? 'opacity-50' : '';
+    const hoverStyle =
+      !disabled && hover
+        ? getColorClasses(
+            hoverColors?.background
+              ? hoverColors.background
+              : {
+                  light: 'secondaryLight/30',
+                  dark: 'secondaryDark/30',
+                },
+            'hover:bg',
+          )
+        : '';
     return (
       <button
         ref={ref}
         type="button"
-        className={tw(`${disabledStyle} ${customStyle}`)}
+        className={tw(`${disabledStyle} ${hoverStyle} ${customStyle}`)}
         disabled={disabled}
         {...rest}
       >

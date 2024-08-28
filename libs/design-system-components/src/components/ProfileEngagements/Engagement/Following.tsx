@@ -4,14 +4,14 @@ import Entry from '../Entry';
 import InfiniteScroll from '../../InfiniteScroll';
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils';
 import { AkashaFollowing } from '@akashaorg/typings/lib/ui';
-import { ENTRY_HEIGHT, EngagementProp } from '../types';
+import { ENTRY_HEIGHT, EngagementProps } from '../types';
 
 export type FollowingProps = {
   following: AkashaFollowing;
   publicImgPath?: string;
   emptyEntryTitleLabel: ReactElement;
   emptyEntryBodyLabel: ReactElement;
-} & EngagementProp;
+} & EngagementProps;
 
 const Following: React.FC<FollowingProps> = ({
   publicImgPath,
