@@ -18,11 +18,13 @@ export enum FieldName {
   displayName = 'displayName',
   logoImage = 'logoImage',
   coverImage = 'coverImage',
+  sourceURL = 'sourceURL',
 }
 
 export type ExtensionEditStep1FormValues = {
   name?: string;
   displayName?: string;
+  sourceURL?: string;
   logoImage?: Image | File | null;
   coverImage?: Image | File | null;
 };
@@ -38,6 +40,8 @@ export type ExtensionEditStep1FormProps = {
   };
   extensionIdLabel?: string;
   extensionDisplayNameLabel?: string;
+  sourceLabel?: string;
+  sourcePlaceholderLabel?: string;
 };
 
 const ExtensionEditStep1Form: React.FC<ExtensionEditStep1FormProps> = props => {
@@ -47,6 +51,7 @@ const ExtensionEditStep1Form: React.FC<ExtensionEditStep1FormProps> = props => {
     defaultValues = {
       name: '',
       displayName: '',
+      sourceURL: '',
       logoImage: null,
       coverImage: null,
     },
@@ -54,6 +59,8 @@ const ExtensionEditStep1Form: React.FC<ExtensionEditStep1FormProps> = props => {
     nextButton,
     extensionIdLabel,
     extensionDisplayNameLabel,
+    sourceLabel,
+    sourcePlaceholderLabel,
   } = props;
 
   const {
@@ -136,6 +143,27 @@ const ExtensionEditStep1Form: React.FC<ExtensionEditStep1FormProps> = props => {
             )}
             defaultValue={defaultValues.displayName}
           />
+          <Divider />
+          <Controller
+            control={control}
+            name={FieldName.sourceURL}
+            render={({ field: { name, value, onChange, ref }, fieldState: { error } }) => (
+              <TextField
+                id={name}
+                type="text"
+                name={name}
+                label={sourceLabel}
+                placeholder={sourcePlaceholderLabel}
+                value={value}
+                caption={error?.message}
+                status={error?.message ? 'error' : null}
+                onChange={onChange}
+                inputRef={ref}
+                required={true}
+              />
+            )}
+            defaultValue={defaultValues.sourceURL}
+          />
         </Stack>
         <Divider />
 
@@ -171,6 +199,7 @@ const schema = z.object({
       'ID should contain only alphabets, numbers or -_.',
     ),
   displayName: z.string().trim().min(4, { message: 'Must be at least 4 characters' }).optional(),
+  sourceURL: z.string().url({ message: 'URL is required' }).optional(),
   logoImage: z.any().optional(),
   coverImage: z.any().optional(),
 });
