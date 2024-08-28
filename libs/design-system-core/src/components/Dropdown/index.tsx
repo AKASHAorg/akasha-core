@@ -42,7 +42,7 @@ export type DropdownProps = {
  *   />
  * ```
  **/
-const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>((props, ref) => {
+const Dropdown: React.FC<DropdownProps> = props => {
   const { label, placeholderLabel, menuItems, selected, setSelected, required } = props;
 
   const [dropOpen, setDropOpen] = React.useState<boolean>(false);
@@ -150,6 +150,6 @@ const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>((props, ref) =>
       )}
     </Stack>
   );
-});
+};
 
 export default Dropdown;

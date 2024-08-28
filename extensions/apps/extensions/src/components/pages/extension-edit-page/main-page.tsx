@@ -5,7 +5,6 @@ import Stepper from '@akashaorg/design-system-core/lib/components/Stepper';
 import { Outlet } from '@tanstack/react-router';
 import { atomWithStorage, createJSONStorage } from 'jotai/utils';
 import { useAtomValue } from 'jotai';
-
 import appRoutes, { EDIT_EXTENSION } from '../../../routes';
 import { useTranslation } from 'react-i18next';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
@@ -20,12 +19,14 @@ const storage = createJSONStorage(() => sessionStorage);
 
 export type FormData = {
   lastCompletedStep?: number;
+  sourceURL?: string;
   name?: string;
   displayName?: string;
   logoImage?: AppImageSource;
   coverImage?: AppImageSource;
   license?: string;
   contributors?: string[];
+  keywords?: string[];
 } & ExtensionEditStep2FormValues;
 
 type ExtensionEditMainPageProps = {
@@ -49,6 +50,7 @@ export const ExtensionEditMainPage: React.FC<ExtensionEditMainPageProps> = ({ ex
         extensionId,
         {
           lastCompletedStep: 0,
+          sourceURL: '',
           name: '',
           displayName: '',
           logoImage: { src: '' },
@@ -59,6 +61,7 @@ export const ExtensionEditMainPage: React.FC<ExtensionEditMainPageProps> = ({ ex
           links: [],
           contributors: [],
           license: '',
+          keywords: [],
         },
         storage,
       ),
@@ -93,7 +96,7 @@ export const ExtensionEditMainPage: React.FC<ExtensionEditMainPageProps> = ({ ex
   return (
     <Card padding={0}>
       <Stack padding={16} justify="center" align="center">
-        <Stepper length={4} currentStep={formValue.lastCompletedStep + 1} />
+        <Stepper length={3} currentStep={formValue.lastCompletedStep + 1} />
       </Stack>
       <AtomContext.Provider value={formData}>
         <Outlet />

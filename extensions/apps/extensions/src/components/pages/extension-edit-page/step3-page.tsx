@@ -1,15 +1,13 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ExtensionEditStep3Form from '@akashaorg/design-system-components/lib/components/ExtensionEditStep3Form';
-import { useAkashaStore, useMentions } from '@akashaorg/ui-awf-hooks';
+import { useAkashaStore, useMentions, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { transformSource } from '@akashaorg/ui-awf-hooks';
 import { CONTACT_INFO, DRAFT_EXTENSIONS } from '../../../constants';
-import { Extension } from '@akashaorg/typings/lib/ui';
-import { useAtom } from 'jotai';
-import { AtomContext, FormData } from './main-page';
+import { Extension, NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 
 type ExtensionEditStep3PageProps = {
   extensionId: string;
@@ -18,6 +16,7 @@ type ExtensionEditStep3PageProps = {
 export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ extensionId }) => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
+  const { uiEvents } = useRootComponentProps();
 
   const {
     data: { authenticatedDID },
@@ -58,19 +57,40 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
         };
   }, [extensionData, formValue, extensionId]);
 
-  const [, setForm] = useAtom<FormData>(useContext(AtomContext));
-
   const formDefault = useMemo(() => {
     return {
       license: defaultValues.license,
       contributors: defaultValues.contributors,
       contactInfo: defaultValues.contactInfo,
+      keywords: defaultValues.keywords,
     };
   }, [defaultValues]);
 
   const { setMentionQuery, mentions, allFollowing } = useMentions(authenticatedDID);
   const handleGetMentions = (query: string) => {
     setMentionQuery(query);
+  };
+
+  const handleUpdateExtension = step3Data => {
+    const newDraftExtensions = draftExtensions.map(oldDraftExt =>
+      oldDraftExt.id === extensionId ? { ...oldDraftExt, ...formValue, ...step3Data } : oldDraftExt,
+    );
+    localStorage.setItem(
+      `${DRAFT_EXTENSIONS}-${authenticatedDID}`,
+      JSON.stringify(newDraftExtensions),
+    );
+    sessionStorage.removeItem(extensionId);
+    uiEvents.next({
+      event: NotificationEvents.ShowNotification,
+      data: {
+        type: NotificationTypes.Success,
+        title: t('Extension Info Updated'),
+        description: t('{{extensionName}} updated succesfully', { extensionName: formValue.name }),
+      },
+    });
+    navigate({
+      to: '/my-extensions',
+    });
   };
 
   return (
@@ -93,6 +113,14 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
           'Add your contact information here for users to contact you about questions or suggestions',
         )}
         contactInfoPlaceholderLabel={t('Contact url/email')}
+        tagsLabel={t('Tags')}
+        tagsDescriptionLabel={t('Adding tags increases your extensions discoverability.')}
+        addTagsPlaceholderLabel={t('Type a tag and press space, comma or enter')}
+        tagsAddedLabel={t('tags added')}
+        noteLabel={t('Important note')}
+        noteDescriptionLabel={t(
+          'Extensions that are saved locally will be lost if cache is cleared or if accessed from a different device.',
+        )}
         defaultValues={formDefault}
         handleGetFollowingProfiles={handleGetMentions}
         followingProfiles={mentions}
@@ -108,7 +136,7 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
           },
         }}
         nextButton={{
-          label: t('Next'),
+          label: t('Save'),
           handleClick: data => {
             const step3Data = {
               ...data,
@@ -124,19 +152,7 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
                 }),
               ],
             };
-            setForm(prev => {
-              return {
-                ...prev,
-                ...step3Data,
-                lastCompletedStep:
-                  !formValue.lastCompletedStep || formValue.lastCompletedStep < 3
-                    ? 3
-                    : formValue.lastCompletedStep,
-              };
-            });
-            navigate({
-              to: '/edit-extension/$extensionId/step4',
-            });
+            handleUpdateExtension(step3Data);
           },
         }}
       />

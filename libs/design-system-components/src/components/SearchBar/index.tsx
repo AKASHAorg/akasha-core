@@ -76,8 +76,4 @@ const SearchBar: React.FC<SearchBarProps> = props => {
   );
 };
 
-SearchBar.defaultProps = {
-  inputPlaceholderLabel: 'Search',
-};
-
 export default SearchBar;

@@ -75,6 +75,8 @@ export const ExtensionEditStep1Page: React.FC<ExtensionEditStep1PageProps> = ({ 
       <ExtensionEditStep1Form
         extensionIdLabel={t('Extension Id')}
         extensionDisplayNameLabel={t('Extension Display Name')}
+        sourceLabel={t('Source URL')}
+        sourcePlaceholderLabel={t('web server URL')}
         defaultValues={formDefault}
         extensionType={extensionData?.applicationType}
         header={{

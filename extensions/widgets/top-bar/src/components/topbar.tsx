@@ -160,12 +160,5 @@ const Topbar: React.FC<ITopbarProps> = props => {
     </Card>
   );
 };
-Topbar.defaultProps = {
-  onBackClick: () => {
-    return;
-  },
-  onBrandClick: () => {
-    return;
-  },
-};
+
 export default Topbar;
