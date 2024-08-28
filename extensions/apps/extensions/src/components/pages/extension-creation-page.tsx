@@ -92,6 +92,7 @@ export const ExtensionCreationPage: React.FC<unknown> = () => {
                   license: data?.extensionLicense,
                   name: data?.extensionID,
                   localDraft: true,
+                  sourceURL: data?.extensionSourceURL,
                 };
                 const existingDraftExtensions =
                   JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [];
