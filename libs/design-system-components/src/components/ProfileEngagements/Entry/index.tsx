@@ -2,14 +2,14 @@ import React from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import type { Profile } from '@akashaorg/typings/lib/ui';
-import type { EngagementProp } from '../types';
+import type { EngagementProps } from '../types';
 
 export type EntryProps = {
   profileIds: { did: string; id: string };
   avatar: Profile['avatar'];
   name: string;
   customStyle?: string;
-} & Omit<EngagementProp, 'authenticatedDID' | 'onLoadMore'>;
+} & Omit<EngagementProps, 'authenticatedDID' | 'onLoadMore'>;
 
 const Entry: React.FC<EntryProps> = props => {
   const {
