@@ -5,7 +5,7 @@ import Divider, { DividerProps } from '@akashaorg/design-system-core/lib/compone
 const meta: Meta<DividerProps> = {
   title: 'DSCore/Dividers/Divider',
   component: Divider,
-  tags: ['autodocs'],
+
   argTypes: {
     customStyle: { control: 'text' },
   },

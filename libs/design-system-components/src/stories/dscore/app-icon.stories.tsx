@@ -6,7 +6,7 @@ import { Akasha } from '@akashaorg/design-system-core/lib/components/Icon/akasha
 const meta: Meta<AppIconProps> = {
   title: 'DSCore/Icons/AppIcon',
   component: AppIcon,
-  tags: ['autodocs'],
+
   argTypes: {
     placeholderIcon: { control: 'object' },
     solid: { control: 'boolean' },

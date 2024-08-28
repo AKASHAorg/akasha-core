@@ -8,7 +8,7 @@ ScrollTopButton.displayName = 'ScrollTopButton';
 const meta: Meta<ScrollTopButtonProps> = {
   title: 'DSCore/Buttons/ScrollTopButton',
   component: ScrollTopButton,
-  tags: ['autodocs'],
+
   argTypes: {
     hide: { control: 'boolean' },
   },

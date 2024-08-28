@@ -4,7 +4,6 @@ import VibesValueCard, { VibesValueCardProps } from '../../components/VibesValue
 const meta: Meta<VibesValueCardProps> = {
   title: 'DSComponents/Vibes/VibesValueCard',
   component: VibesValueCard,
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj<VibesValueCardProps>;

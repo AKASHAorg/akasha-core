@@ -7,7 +7,7 @@ module.exports = {
   ],
   docs: {
     autodocs: 'tag',
-    defaultName: 'Documentation',
+    defaultName: 'Overview',
   },
   typescript: {
     reactDocgen: 'react-docgen-typescript',

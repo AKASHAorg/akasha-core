@@ -8,7 +8,7 @@ import SubtitleTextIcon, {
 const meta: Meta<SubtitleTextIconProps> = {
   title: 'DSCore/Icons/SubtitleTextIcon',
   component: SubtitleTextIcon,
-  tags: ['autodocs'],
+
   argTypes: {
     customStyle: { control: 'text' },
     icon: { control: 'object' },

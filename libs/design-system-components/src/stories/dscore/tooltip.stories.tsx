@@ -6,7 +6,6 @@ import Tooltip, { TooltipProps } from '@akashaorg/design-system-core/lib/compone
 const meta: Meta<TooltipProps> = {
   title: 'DSCore/Tooltip/Tooltip',
   component: Tooltip,
-  tags: ['autodocs'],
   argTypes: {
     arrow: { control: 'boolean' },
     open: { control: 'boolean' },

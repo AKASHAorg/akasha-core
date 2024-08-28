@@ -5,7 +5,7 @@ import Checkbox, { CheckboxProps } from '@akashaorg/design-system-core/lib/compo
 const meta: Meta<CheckboxProps> = {
   title: 'DSCore/Buttons/Checkbox',
   component: Checkbox,
-  tags: ['autodocs'],
+
   argTypes: {
     id: { control: 'text' },
     label: { control: 'text' },

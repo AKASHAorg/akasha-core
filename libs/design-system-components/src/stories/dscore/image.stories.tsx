@@ -4,7 +4,7 @@ import Image, { ImageProps } from '@akashaorg/design-system-core/lib/components/
 const meta: Meta<ImageProps> = {
   title: 'DSCore/Images/Image',
   component: Image,
-  tags: ['autodocs'],
+
   argTypes: {
     src: { control: 'text' },
   },

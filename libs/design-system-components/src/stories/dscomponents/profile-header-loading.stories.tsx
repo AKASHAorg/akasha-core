@@ -4,7 +4,6 @@ import { ProfileHeaderLoading } from '../../components/Profile';
 const meta: Meta = {
   title: 'DSComponents/Loaders/Profile/ProfileHeaderLoading',
   component: ProfileHeaderLoading,
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj;

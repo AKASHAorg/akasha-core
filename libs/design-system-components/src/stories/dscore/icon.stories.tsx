@@ -6,7 +6,7 @@ import { Akasha } from '@akashaorg/design-system-core/lib/components/Icon/akasha
 const meta: Meta<IconProps> = {
   title: 'DSCore/Icons/Icon',
   component: Icon,
-  tags: ['autodocs'],
+
   argTypes: {
     color: { control: 'text' },
     icon: { control: 'object' },

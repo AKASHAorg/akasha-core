@@ -15,7 +15,6 @@ const Component: React.FC<SwitchCardProps> = props => {
 const meta: Meta<SwitchCardProps> = {
   title: 'DSComponents/Cards/SwitchCard',
   component: Component,
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj<SwitchCardProps>;

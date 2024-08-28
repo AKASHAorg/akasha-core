@@ -10,7 +10,6 @@ const meta: Meta = {
       <TrendingWidgetLoader />
     </Stack>
   ),
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj;

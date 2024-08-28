@@ -5,7 +5,7 @@ import DatePicker from '@akashaorg/design-system-core/lib/components/DatePicker'
 const meta: Meta = {
   title: 'DSCore/Datepicker/DatePicker',
   component: DatePicker,
-  tags: ['autodocs'],
+
   argTypes: {
     placeholderLabel: { control: 'text' },
   },

@@ -11,7 +11,7 @@ import Menu, { MenuProps } from '@akashaorg/design-system-core/lib/components/Me
 const meta: Meta<MenuProps> = {
   title: 'DSCore/Menu/Menu',
   component: Menu,
-  tags: ['autodocs'],
+
   argTypes: {
     anchor: { control: 'text' },
     disabled: { control: 'boolean' },

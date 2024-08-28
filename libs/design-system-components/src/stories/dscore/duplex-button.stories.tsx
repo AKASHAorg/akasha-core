@@ -11,7 +11,7 @@ import {
 const meta: Meta<DuplexButtonProps> = {
   title: 'DSCore/Buttons/DuplexButton',
   component: DuplexButton,
-  tags: ['autodocs'],
+
   argTypes: {
     inactiveLabel: { control: 'text' },
     inactiveVariant: { control: 'text' },

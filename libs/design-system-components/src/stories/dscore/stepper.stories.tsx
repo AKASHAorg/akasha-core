@@ -4,7 +4,7 @@ import Stepper, { StepperProps } from '@akashaorg/design-system-core/lib/compone
 const meta: Meta<StepperProps> = {
   title: 'DSComponents/Steppers/Stepper',
   component: Stepper,
-  tags: ['autodocs'],
+
   argTypes: {
     length: { control: 'number' },
     currentStep: { control: 'number' },

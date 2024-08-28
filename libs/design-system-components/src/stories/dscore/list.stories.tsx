@@ -13,7 +13,7 @@ List.displayName = 'List';
 const meta: Meta<ListProps> = {
   title: 'DSCore/Lists/List',
   component: List,
-  tags: ['autodocs'],
+
   argTypes: {
     items: { control: 'object' },
     showDivider: { control: 'boolean' },

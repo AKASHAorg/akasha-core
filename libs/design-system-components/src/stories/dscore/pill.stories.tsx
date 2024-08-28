@@ -10,7 +10,7 @@ import Pill, { PillProps } from '@akashaorg/design-system-core/lib/components/Pi
 const meta: Meta<PillProps> = {
   title: 'DSCore/Buttons/Pill',
   component: Pill,
-  tags: ['autodocs'],
+
   argTypes: {
     customStyle: { control: 'text' },
     label: { control: 'text' },

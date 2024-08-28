@@ -6,7 +6,7 @@ import EditorMeter, {
 const meta: Meta<EditorMeterProps> = {
   title: 'DSCore/Meters/EditorMeter',
   component: EditorMeter,
-  tags: ['autodocs'],
+
   argTypes: {
     max: { control: 'number' },
     value: { control: 'number' },

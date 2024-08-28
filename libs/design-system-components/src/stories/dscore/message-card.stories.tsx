@@ -6,7 +6,7 @@ import MessageCard, {
 const meta: Meta<MessageCardProps> = {
   title: 'DSCore/Cards/MessageCard',
   component: MessageCard,
-  tags: ['autodocs'],
+
   argTypes: {
     title: { control: 'text' },
     message: { control: 'text' },

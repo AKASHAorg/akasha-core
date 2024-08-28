@@ -7,7 +7,7 @@ import AutoComplete, {
 const meta: Meta<AutoCompleteProps> = {
   title: 'DSCore/Fields/AutoComplete',
   component: AutoComplete,
-  tags: ['autodocs'],
+
   argTypes: {
     options: { control: 'object' },
     placeholder: { control: 'text' },

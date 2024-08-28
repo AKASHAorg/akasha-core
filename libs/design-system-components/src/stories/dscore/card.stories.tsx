@@ -9,7 +9,7 @@ Card.displayName = 'Card';
 const meta: Meta<TCardProps> = {
   title: 'DSCore/Cards/Card',
   component: Card,
-  tags: ['autodocs'],
+
   argTypes: {
     type: { control: 'select', options: ['plain', 'regular'] },
     elevation: { control: 'text' },

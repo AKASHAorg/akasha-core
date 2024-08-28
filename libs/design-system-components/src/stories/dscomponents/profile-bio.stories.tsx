@@ -4,7 +4,6 @@ import Bio, { BioProps } from '../../components/Profile/Bio';
 const meta: Meta<BioProps> = {
   title: 'DSComponents/Profile/ProfileBio',
   component: Bio,
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj<BioProps>;

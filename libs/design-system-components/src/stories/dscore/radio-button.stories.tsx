@@ -6,7 +6,7 @@ import RadioButton, {
 const meta: Meta<RadioButtonProps> = {
   title: 'DSCore/Buttons/RadioButton',
   component: RadioButton,
-  tags: ['autodocs'],
+
   argTypes: {
     id: { control: 'text' },
     label: { control: 'text' },

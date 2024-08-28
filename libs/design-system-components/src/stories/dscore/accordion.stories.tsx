@@ -8,7 +8,6 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 const meta: Meta<AccordionProps> = {
   title: 'DSCore/Accordion/Accordion',
   component: Accordion,
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj<AccordionProps>;

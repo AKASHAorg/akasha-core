@@ -8,7 +8,7 @@ import Modal, { ModalProps } from '@akashaorg/design-system-core/lib/components/
 const meta: Meta<ModalProps> = {
   title: 'DSCore/Modals/Modal',
   component: Modal,
-  tags: ['autodocs'],
+
   argTypes: {
     show: { control: 'boolean' },
     actions: { control: 'object' },

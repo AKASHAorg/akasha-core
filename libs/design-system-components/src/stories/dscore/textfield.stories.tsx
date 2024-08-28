@@ -7,7 +7,6 @@ import { TextFieldProps } from '@akashaorg/design-system-core/lib/components/Tex
 const meta: Meta = {
   title: 'DSCore/Fields/TextField',
   component: TextField,
-  tags: ['autodocs'],
   argTypes: {
     label: { control: 'text' },
     caption: { control: 'text' },

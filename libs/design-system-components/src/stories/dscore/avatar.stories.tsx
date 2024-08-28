@@ -5,7 +5,7 @@ import Avatar, { AvatarProps } from '@akashaorg/design-system-core/lib/component
 const meta: Meta<AvatarProps> = {
   title: 'DSCore/Avatars/Avatar',
   component: Avatar,
-  tags: ['autodocs'],
+
   argTypes: {
     profileId: { crontrol: 'text' },
     active: { control: 'boolean' },

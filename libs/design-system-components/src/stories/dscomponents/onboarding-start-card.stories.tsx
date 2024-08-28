@@ -6,7 +6,6 @@ import OnboardingStartCard, {
 const meta: Meta<OnboardingStartCardProps> = {
   title: 'DSComponents/Cards/OnboardingStartCard',
   component: OnboardingStartCard,
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj<OnboardingStartCardProps>;

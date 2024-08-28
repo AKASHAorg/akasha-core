@@ -4,7 +4,7 @@ import Meter, { MeterProps } from '@akashaorg/design-system-core/lib/components/
 const meta: Meta<MeterProps> = {
   title: 'DSCore/Meters/Meter',
   component: Meter,
-  tags: ['autodocs'],
+
   argTypes: {
     size: { control: 'number' },
     thickness: { control: 'number' },

@@ -8,7 +8,7 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 const meta: Meta = {
   title: 'DSCore/CopyToClipboard/CopyToClipboard',
   component: CopyToClipboard,
-  tags: ['autodocs'],
+
   argTypes: {
     value: { control: 'text' },
     copyText: { control: 'text' },

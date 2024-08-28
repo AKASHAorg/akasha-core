@@ -4,7 +4,7 @@ import Text, { TextProps } from '@akashaorg/design-system-core/lib/components/Te
 const meta: Meta<TextProps> = {
   title: 'DSCore/Text/Text',
   component: Text,
-  tags: ['autodocs'],
+
   argTypes: {
     variant: {
       control: 'select',

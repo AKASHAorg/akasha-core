@@ -5,7 +5,7 @@ import AppAvatar, { AppAvatarProps } from '@akashaorg/design-system-core/lib/com
 const meta: Meta<AppAvatarProps> = {
   title: 'DSCore/Avatars/AppAvatar',
   component: AppAvatar,
-  tags: ['autodocs'],
+
   argTypes: {
     appType: {
       options: [

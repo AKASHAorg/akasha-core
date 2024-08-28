@@ -8,7 +8,7 @@ Stack.displayName = 'Stack';
 const meta: Meta<StackProps> = {
   title: 'DSCore/Stack/Stack',
   component: Stack,
-  tags: ['autodocs'],
+
   argTypes: {
     direction: {
       control: 'select',

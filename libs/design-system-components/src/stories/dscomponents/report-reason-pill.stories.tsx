@@ -4,7 +4,6 @@ import ReportReasonPill, { ReportReasonPillProps } from '../../components/Report
 const meta: Meta<ReportReasonPillProps> = {
   title: 'DSComponents/Vibes/ReportReasonPill',
   component: ReportReasonPill,
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj<ReportReasonPillProps>;

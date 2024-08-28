@@ -4,7 +4,6 @@ import TextLine, { TextLineProps } from '@akashaorg/design-system-core/lib/compo
 const meta: Meta<TextLineProps> = {
   title: 'DSCore/Lines/TextLine',
   component: TextLine,
-  tags: ['autodocs'],
   argTypes: {
     title: { control: 'text' },
     round: { control: 'text' },

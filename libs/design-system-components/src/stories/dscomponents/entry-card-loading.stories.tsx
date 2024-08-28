@@ -10,7 +10,6 @@ const meta: Meta = {
       <EntryLoadingPlaceholder />
     </Stack>
   ),
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj;

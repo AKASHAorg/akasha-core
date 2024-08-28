@@ -15,7 +15,6 @@ const Component: React.FC<SearchBarProps> = props => {
 const meta: Meta<SearchBarProps> = {
   title: 'DSComponents/Bars/SearchBar',
   component: Component,
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj<SearchBarProps>;
