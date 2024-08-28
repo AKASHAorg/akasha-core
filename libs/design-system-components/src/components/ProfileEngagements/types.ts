@@ -5,7 +5,7 @@ export const LOADING_LIST_SIZE = 5;
 
 export const ENTRY_HEIGHT = 72;
 
-export type EngagementProp = {
+export type EngagementProps = {
   authenticatedDID: string;
   profileAnchorLink: string;
   onLoadMore: () => Promise<unknown>;
