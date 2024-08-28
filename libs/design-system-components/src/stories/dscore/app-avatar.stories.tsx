@@ -5,7 +5,6 @@ import AppAvatar, { AppAvatarProps } from '@akashaorg/design-system-core/lib/com
 const meta: Meta<AppAvatarProps> = {
   title: 'DSCore/Avatars/AppAvatar',
   component: AppAvatar,
-
   argTypes: {
     appType: {
       options: [
@@ -21,16 +20,18 @@ const meta: Meta<AppAvatarProps> = {
 
 type Story = StoryObj<AppAvatarProps>;
 
+const avatar = { src: 'https://placebeard.it/360x360', height: 360, width: 360 };
+
 export const AvatarWithAppPlaceholder: Story = {
   args: {
-    avatar: { src: 'https://placebeard.it/360x360', height: 360, width: 360 },
+    avatar,
     appType: AkashaAppApplicationType.App,
   },
 };
 
 export const AvatarWithWidgetPlaceholder: Story = {
   args: {
-    avatar: { src: 'https://placebeard.it/360x360', height: 360, width: 360 },
+    avatar,
     appType: AkashaAppApplicationType.Widget,
   },
 };

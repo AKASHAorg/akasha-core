@@ -7,7 +7,6 @@ import AutoComplete, {
 const meta: Meta<AutoCompleteProps> = {
   title: 'DSCore/Fields/AutoComplete',
   component: AutoComplete,
-
   argTypes: {
     options: { control: 'object' },
     placeholder: { control: 'text' },
@@ -24,17 +23,22 @@ const meta: Meta<AutoCompleteProps> = {
 
 type Story = StoryObj<AutoCompleteProps>;
 
-export const Default: Story = {
+const baseArgs: Story = {
   args: {
     options: ['AKASHA', 'AKIRA', 'Travel', 'Cooking', 'Ethereum', 'Finance'],
     customStyle: 'w-[50%]',
   },
 };
 
+export const Default: Story = {
+  args: {
+    ...baseArgs.args,
+  },
+};
+
 export const AutoCompleteDisabled: Story = {
   args: {
-    options: ['AKASHA', 'AKIRA', 'Travel', 'Cooking', 'Ethereum', 'Finance'],
-    customStyle: 'w-[50%]',
+    ...baseArgs.args,
     disabled: true,
   },
 };
