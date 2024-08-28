@@ -14,12 +14,19 @@ import { Licenses } from '../AppCreationForm';
 import { ContactInfo } from './ContactInfo';
 import { AkashaProfile, Image } from '@akashaorg/typings/lib/ui';
 import { Collaborators } from './Collaborators';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { ExclamationTriangleIcon } from '@heroicons/react/24/solid';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import AutoComplete from '@akashaorg/design-system-core/lib/components/AutoComplete';
+
+const MAX_TAGS = 4;
 
 export enum FieldName {
   license = 'license',
   licenseOther = 'licenseOther',
   contributors = 'contributors',
   contactInfo = 'contactInfo',
+  keywords = 'keywords',
 }
 
 export type ExtensionEditStep3FormValues = {
@@ -27,6 +34,7 @@ export type ExtensionEditStep3FormValues = {
   licenseOther?: string;
   contributors?: string[];
   contactInfo?: string[];
+  keywords?: string[];
 };
 
 export type ExtensionEditStep3FormProps = {
@@ -40,6 +48,12 @@ export type ExtensionEditStep3FormProps = {
   contactInfoDescriptionLabel?: string;
   contactInfoPlaceholderLabel?: string;
   addLabel?: string;
+  tagsLabel?: string;
+  tagsDescriptionLabel?: string;
+  addTagsPlaceholderLabel?: string;
+  tagsAddedLabel?: string;
+  noteLabel?: string;
+  noteDescriptionLabel?: string;
   defaultValues?: ExtensionEditStep3FormValues;
   handleGetFollowingProfiles?: (query: string) => void;
   followingProfiles?: AkashaProfile[];
@@ -59,6 +73,7 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
       licenseOther: '',
       contributors: [],
       contactInfo: [],
+      keywords: [],
     },
     handleGetFollowingProfiles,
     followingProfiles,
@@ -75,6 +90,12 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
     collaboratorsSearchPlaceholderLabel,
     extensionContributorsLabel,
     addLabel,
+    tagsLabel,
+    addTagsPlaceholderLabel,
+    tagsDescriptionLabel,
+    tagsAddedLabel,
+    noteLabel,
+    noteDescriptionLabel,
   } = props;
 
   const {
@@ -124,10 +145,21 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
     setAddedContributors(defaultContributorProfiles);
   }, [defaultContributorProfiles]);
 
+  const [query, setQuery] = useState('');
+  const [keywords, setKeywords] = useState(new Set(defaultValues.keywords));
+
+  const maxTagsSelected = keywords.size >= MAX_TAGS;
+
+  //@TODO: here it should be a list of available indexed keywords for extensions
+  const availableKeywords = [];
+
   const onSave = (event: SyntheticEvent) => {
     event.preventDefault();
     const formValues = getValues();
+
     formValues.contributors = addedContributors?.map(profile => profile.did?.id);
+    formValues.keywords = [...keywords]?.filter(keyword => keyword);
+
     if (formValues.license === Licenses.OTHER) {
       formValues.license = formValues.licenseOther;
     }
@@ -146,18 +178,15 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
           <Controller
             control={control}
             name={FieldName.license}
-            render={({ field: { name, value, onChange, ref } }) => (
-              <>
-                <DropDown
-                  label={licenseFieldLabel}
-                  name={name}
-                  selected={value}
-                  menuItems={licenses}
-                  setSelected={onChange}
-                  ref={ref}
-                  required={true}
-                />
-              </>
+            render={({ field: { name, value, onChange } }) => (
+              <DropDown
+                label={licenseFieldLabel}
+                name={name}
+                selected={value}
+                menuItems={licenses}
+                setSelected={onChange}
+                required={true}
+              />
             )}
             defaultValue={
               licenses.includes(defaultValues.license) ? defaultValues.license : Licenses.OTHER
@@ -209,6 +238,50 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
             }}
           />
           <Divider />
+          <Stack direction="column" spacing="gap-2">
+            <Text variant="h6">{tagsLabel}</Text>
+            <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
+              {tagsDescriptionLabel}
+            </Text>
+            <AutoComplete
+              value={query}
+              options={availableKeywords}
+              placeholder={addTagsPlaceholderLabel}
+              tags={keywords}
+              separators={['Comma', 'Space', 'Enter']}
+              customStyle="grow mt-2"
+              onSelected={({ index }) => {
+                setKeywords(prev => prev.add(availableKeywords[index]));
+                setQuery('');
+              }}
+              onChange={value => {
+                if (typeof value === 'string') {
+                  setQuery(value);
+                  return;
+                }
+                setKeywords(new Set(value));
+              }}
+              disabled={maxTagsSelected}
+              multiple
+            />
+            <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
+              {`${keywords.size}/${MAX_TAGS} ${tagsAddedLabel}`}
+            </Text>
+          </Stack>
+          <Divider />
+          <Stack direction="column" spacing="gap-2">
+            <Stack direction="row" align="center" spacing="gap-x-1">
+              <Icon
+                icon={<ExclamationTriangleIcon />}
+                size="sm"
+                color={{ light: 'warningLight', dark: 'warningDark' }}
+              />
+              <Text variant="button-md">{noteLabel}</Text>
+            </Stack>
+            <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
+              {noteDescriptionLabel}
+            </Text>
+          </Stack>
         </Stack>
         <Divider />
 
