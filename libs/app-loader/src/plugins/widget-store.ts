@@ -1,5 +1,4 @@
 import { WidgetInterface } from '@akashaorg/typings/lib/ui';
-import { hasOwn } from '@akashaorg/ui-awf-hooks';
 import { checkActivity } from './utils';
 
 export class WidgetStore {
@@ -43,7 +42,7 @@ export class WidgetStore {
   getMatchingWidgets = (slotName: string, location: Location) => {
     const matchingWidgets = [];
     for (const widget of this.#widgets) {
-      if (widget.mountsIn === slotName && !hasOwn(widget, 'activeWhen')) {
+      if (widget.mountsIn === slotName && widget.activeWhen === undefined) {
         matchingWidgets.push(widget);
         continue;
       }

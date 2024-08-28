@@ -1,5 +1,4 @@
 import { ExtensionPointInterface } from '@akashaorg/typings/lib/ui';
-import { hasOwn } from '@akashaorg/ui-awf-hooks';
 import { checkActivity, stringToRegExp } from './utils';
 
 export class ExtensionPointStore {
@@ -30,7 +29,7 @@ export class ExtensionPointStore {
   getMatchingExtensions = (slotName: string, location: Location) => {
     const matchingExtensions = [];
     for (const ext of this.#extensions) {
-      if (stringToRegExp(ext.mountsIn).test(slotName) && !hasOwn(ext, 'activeWhen')) {
+      if (stringToRegExp(ext.mountsIn).test(slotName) && ext?.activeWhen === undefined) {
         matchingExtensions.push(ext);
       }
       if (stringToRegExp(ext.mountsIn).test(slotName) && typeof ext.activeWhen === 'function') {

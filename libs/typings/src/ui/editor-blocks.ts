@@ -94,6 +94,26 @@ export type BlockInstanceMethods = {
 };
 
 /**
+ * Local content block is `created` locally but not yet published.
+ * This is the case of a block added to the editor
+ **/
+export type LocalContentBlock = {
+  appName: string;
+  propertyType: string;
+};
+
+/**
+ * A content block that matches a particular slot in the beam
+ * This is used to match the renderer of that block with the data from the beam
+ **/
+export type MatchingBlock = {
+  /** the config of the content block, as defined in the registration */
+  blockInfo: ContentBlockConfig & { appName: string };
+  blockData?: unknown;
+  content?: unknown;
+};
+
+/**
  * Interface defining content block state store defined as a plugin
  **/
 export interface IContentBlockStorePlugin {
@@ -105,17 +125,6 @@ export interface IContentBlockStorePlugin {
   >;
 
   getMatchingBlocks: (
-    blockInfo:
-      | {
-          appName: string;
-          propertyType: string;
-        }
-      | GetContentBlockByIdQuery['node'],
-  ) => {
-    blockInfo: ContentBlockConfig & {
-      appName: string;
-    };
-    blockData?: unknown;
-    content?: unknown;
-  }[];
+    blockInfo: LocalContentBlock | GetContentBlockByIdQuery['node'],
+  ) => MatchingBlock[];
 }

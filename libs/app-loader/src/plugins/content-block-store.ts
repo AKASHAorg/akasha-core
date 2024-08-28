@@ -1,7 +1,23 @@
-import { ContentBlockConfig, IContentBlockStorePlugin } from '@akashaorg/typings/lib/ui';
-import { hasOwn } from '@akashaorg/ui-awf-hooks';
+import {
+  ContentBlockConfig,
+  IContentBlockStorePlugin,
+  LocalContentBlock,
+} from '@akashaorg/typings/lib/ui';
 import { BlockLabeledValue } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { GetContentBlockByIdQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
+import { FilterEmpty } from '../type-utils';
 
+const isLocalBlock = (
+  blockInfo: LocalContentBlock | GetContentBlockByIdQuery['node'],
+): blockInfo is LocalContentBlock => {
+  return 'appName' in blockInfo && 'propertyType' in blockInfo;
+};
+
+const isNotEmpty = (
+  blockInfo: GetContentBlockByIdQuery['node'],
+): blockInfo is FilterEmpty<GetContentBlockByIdQuery['node']> => {
+  return Object.keys(blockInfo).length > 0;
+};
 /**
  * When app-loader loads the applications config (the return object of the register function);
  * it checks if the config has the 'contentBlocks' property.
@@ -36,7 +52,7 @@ export class ContentBlockStore {
       console.warn('Block info not defined:', blockInfo);
       return [];
     }
-    if (hasOwn(blockInfo, 'propertyType') && hasOwn(blockInfo, 'appName')) {
+    if (isLocalBlock(blockInfo)) {
       const blocks = this.#blocks
         .map(block => {
           if (
@@ -67,13 +83,7 @@ export class ContentBlockStore {
       }
       return blocks;
     } else {
-      if (
-        hasOwn(blockInfo, 'appVersion') &&
-        hasOwn(blockInfo.appVersion, 'application') &&
-        hasOwn(blockInfo.appVersion.application, 'name') &&
-        hasOwn(blockInfo, 'content') &&
-        Array.isArray(blockInfo.content)
-      ) {
+      if (isNotEmpty(blockInfo)) {
         let applicationName = blockInfo.appVersion.application.name;
         // @TODO: remove this if statement
         if (applicationName === 'antenna-test') {
