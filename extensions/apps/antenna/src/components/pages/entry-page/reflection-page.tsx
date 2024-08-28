@@ -21,7 +21,7 @@ import {
   useGetBeamByIdQuery,
   useGetBeamStreamQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { getBeamActive } from '../../app-routes/data-loaders';
+import { selectBeamActiveField } from '../../app-routes/data-loaders';
 
 type ReflectionPageProps = {
   isActive: boolean;
@@ -67,7 +67,7 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
       beamByIdActive = beamByIdData.node.active;
     }
 
-    return beamByIdActive && getBeamActive(beamStreamData);
+    return beamByIdActive && selectBeamActiveField(beamStreamData);
   }, [beamByIdData, beamStreamData]);
 
   const filters = useMemo(() => {

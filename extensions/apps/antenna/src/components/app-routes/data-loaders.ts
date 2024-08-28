@@ -68,17 +68,11 @@ export async function getBeamStreamById({
  * @returns an object containing the beam
  * @example
  * ```typescript
- * import { Await } from '@tanstack/react-router'
- * const { beam } = beamRoute.useLoaderData()
- * <Await promise={beam}>
- * {({ data: beamById }) => {
- * const beamData = getBeamData(beamById)
- * // do something with beamData
- * }}
- * </Await>
+ * const beamData:GetBeamByIdQuery = useGetBeamByIdQuery(...variables)
+ * const beamNode:GetBeamByIdQuery['node'] = selectBeamNode(beamData)
  * ```
  */
-export function getBeamData(beamByIdQuery: GetBeamByIdQuery) {
+export function selectBeamNode(beamByIdQuery: GetBeamByIdQuery) {
   if (beamByIdQuery?.node && hasOwn(beamByIdQuery.node, 'id')) {
     return beamByIdQuery?.node;
   }
@@ -90,17 +84,13 @@ export function getBeamData(beamByIdQuery: GetBeamByIdQuery) {
  * @returns boolean value of the status
  * @example
  * ```typescript
- * import { Await } from '@tanstack/react-router'
- * const { beamStream } = beamRoute.useLoaderData()
- * <Await promise={beamStream}>
- * {({ data: beamStreamData }) => {
- * const beamStatus = getBeamStatus(beamStreamData)
- * // do something with beamStatus
- * }}
- * </Await>
+ * const beamStream:GetBeamStreamQuery = useGetBeamStreamQuery(...variables)
+ * const beamStatus: AkashaBeamStreamModerationStatus = selectBeamStatusField(beamStream)
  * ```
  */
-export function getBeamStatus(beamStream: GetBeamStreamQuery): AkashaBeamStreamModerationStatus {
+export function selectBeamStatusField(
+  beamStream: GetBeamStreamQuery,
+): AkashaBeamStreamModerationStatus {
   if (
     beamStream?.node &&
     hasOwn(beamStream.node, 'akashaBeamStreamList') &&
@@ -117,17 +107,11 @@ export function getBeamStatus(beamStream: GetBeamStreamQuery): AkashaBeamStreamM
  * @returns boolean value of the status
  * @example
  * ```typescript
- * import { Await } from '@tanstack/react-router'
- * const { beamStream } = beamRoute.useLoaderData()
- * <Await promise={beamStream}>
- * {({ data: beamStreamData }) => {
- * const isActive = getBeamActive(beamStreamData)
- * // do something with isActive
- * }}
- * </Await>
+ * const beamStream:GetBeamStreamQuery = useGetBeamStreamQuery(...variables)
+ * const beamActive: boolean = selectBeamActiveField(beamStream)
  * ```
  */
-export function getBeamActive(streamData: GetBeamStreamQuery) {
+export function selectBeamActiveField(streamData: GetBeamStreamQuery) {
   return (
     streamData?.node &&
     hasOwn(streamData.node, 'akashaBeamStreamList') &&
@@ -193,17 +177,11 @@ export async function getReflectionStreamById({
  * @returns an object containing the reflection
  * @example
  * ```typescript
- * import { Await } from '@tanstack/react-router'
- * const { reflection } = reflectionRoute.useLoaderData()
- * <Await promise={reflection}>
- * {({ data: reflectionById }) => {
- * const reflectionData = getReflectionData(reflectionById)
- * // do something with reflectionData
- * }}
- * </Await>
+ * const reflectionData:GetReflectionByIdQuery = useGetReflectionByIdQuery(...variables)
+ * const reflectionNode:GetReflectionByIdQuery['node'] = selectReflectionNode(reflectionData)
  * ```
  */
-export function getReflectionData(reflectionByIdQuery: GetReflectionByIdQuery) {
+export function selectReflectionNode(reflectionByIdQuery: GetReflectionByIdQuery) {
   if (
     reflectionByIdQuery &&
     hasOwn(reflectionByIdQuery, 'node') &&
@@ -219,17 +197,11 @@ export function getReflectionData(reflectionByIdQuery: GetReflectionByIdQuery) {
  * @returns boolean value of the status
  * @example
  * ```typescript
- * import { Await } from '@tanstack/react-router'
- * const { reflectionStream } = reflectionRoute.useLoaderData()
- * <Await promise={reflectionStream}>
- * {({ data: reflectionStreamData }) => {
- * const isActive = getReflectionActive(reflectionStreamData)
- * // do something with isActive
- * }}
- * </Await>
+ * const reflectionStream:GetReflectionStreamQuery = useGetReflectionStreamQuery(...variables)
+ * const reflectionActive: boolean = selectReflectionActiveField(reflectionStream)
  * ```
  */
-export function getReflectionActive(streamData: GetReflectionStreamQuery) {
+export function selectReflectionActiveField(streamData: GetReflectionStreamQuery) {
   return (
     streamData?.node &&
     hasOwn(streamData.node, 'akashaReflectStreamList') &&

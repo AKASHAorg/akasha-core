@@ -27,15 +27,15 @@ import {
 } from '@tanstack/react-router';
 import { ICreateRouter, IRouterContext } from '@akashaorg/typings/lib/ui';
 import {
-  getBeamActive,
   getBeamById,
-  getBeamData,
-  getBeamStatus,
   getBeamStreamById,
-  getReflectionActive,
   getReflectionById,
-  getReflectionData,
   getReflectionStreamById,
+  selectBeamActiveField,
+  selectBeamNode,
+  selectBeamStatusField,
+  selectReflectionActiveField,
+  selectReflectionNode,
 } from './data-loaders';
 import { mapBeamEntryData, mapReflectEntryData } from '@akashaorg/ui-awf-hooks';
 
@@ -91,9 +91,9 @@ const beamRoute = createRoute({
                 return (
                   <BeamPage
                     beamId={beamId}
-                    isActive={getBeamActive(beamStreamData)}
-                    beamData={mapBeamEntryData(getBeamData(beamById))}
-                    beamStatus={getBeamStatus(beamStreamData)}
+                    isActive={selectBeamActiveField(beamStreamData)}
+                    beamData={mapBeamEntryData(selectBeamNode(beamById))}
+                    beamStatus={selectBeamStatusField(beamStreamData)}
                   />
                 );
               }}
@@ -120,9 +120,9 @@ const beamReflectRoute = createRoute({
                 return (
                   <BeamPage
                     beamId={beamId}
-                    isActive={getBeamActive(beamStreamData)}
-                    beamData={mapBeamEntryData(getBeamData(beamById))}
-                    beamStatus={getBeamStatus(beamStreamData)}
+                    isActive={selectBeamActiveField(beamStreamData)}
+                    beamData={mapBeamEntryData(selectBeamNode(beamById))}
+                    beamStatus={selectBeamStatusField(beamStreamData)}
                   />
                 );
               }}
@@ -160,8 +160,8 @@ const reflectionsRoute = createRoute({
             <Await promise={reflection}>
               {({ data: reflectionById }) => (
                 <ReflectionPage
-                  isActive={getReflectionActive(reflectionStreamData)}
-                  reflectionData={mapReflectEntryData(getReflectionData(reflectionById))}
+                  isActive={selectReflectionActiveField(reflectionStreamData)}
+                  reflectionData={mapReflectEntryData(selectReflectionNode(reflectionById))}
                 />
               )}
             </Await>
@@ -184,8 +184,8 @@ const reflectionsReflectRoute = createRoute({
             <Await promise={reflection}>
               {({ data: reflectionById }) => (
                 <ReflectionPage
-                  isActive={getReflectionActive(reflectionStreamData)}
-                  reflectionData={mapReflectEntryData(getReflectionData(reflectionById))}
+                  isActive={selectReflectionActiveField(reflectionStreamData)}
+                  reflectionData={mapReflectEntryData(selectReflectionNode(reflectionById))}
                 />
               )}
             </Await>
