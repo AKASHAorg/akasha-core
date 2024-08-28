@@ -81,17 +81,20 @@
   <div id="four-oh-four-root" class="text-black dark:text-white">
     <div class="flex flex-col items-center bg-white dark:bg-grey2 p-4 rounded-2xl">
       <img src="/images/new404.webp" alt="Error"
-           class="h-auto mx-auto my-0 px-0 py-8 max-w-[50%]" />
-      <h1 class="font-bold text-xl mt-2">Application not found!</h1>
-      <div class="items-start pt-3">
-        <p>Application <span id="app-name" class="font-bold"></span> not found or is not installed.
+           class="h-auto mx-auto my-0 px-0 py-8 max-w-[12rem]" />
+      <h1 class="font-bold text-xl mt-2 text-xl">Oops! Extension not found</h1>
+      <div class="items-start my-4 text-grey4 dark:text-grey6 text:sm">
+        <p>
+          It appears that the extension <span id="app-name" class="font-bold"></span> does not exist on <span id="world-title"></span>.
+          It may have been moved, deleted, or the URL might be incorrect.
         </p>
-        <p>If this app was installed by you, make sure you are connected.</p>
-        <p>Otherwise, you may need to install it from the Extensions App.</p>
+        <p class="mt-4">
+          If you installed this app, make sure you are connected. Otherwise, you might need to install it from the Extensions App.
+        </p>
       </div>
-      <div class="flex flex-row gap-2 mt-4">
+      <div class="flex flex-row gap-2">
         <a href="#" onclick="singleSpaNavigate(event)" id="search-extension-button"
-           class="bg-transparent border-1 rounded-3xl py-2 px-4">
+           class="rounded-3xl py-2 px-4 bg-gradient-to-r from-primaryStart to-primaryStop">
           <span class="font-bold text-sm">Go to Extensions</span>
         </a>
       </div>
@@ -102,7 +105,7 @@
   <div id="error-root" class="text-black dark:text-white">
     <div class="flex flex-col items-center bg-white dark:bg-grey2 p-4 rounded-2xl">
       <img src="/images/general-error.webp" alt="Error"
-           class="h-auto mx-auto my-0 px-0 py-8 max-w-[50%]" />
+           class="h-auto mx-auto my-0 px-0 py-8 max-w-[12rem]" />
       <h1 class="font-bold text-xl mt-2">This application has an error!</h1>
       <div class="pt-3 text-center">
         <p>Please try to refresh the page and if it still doesn't work, make sure you have the
