@@ -1,12 +1,33 @@
-import { genProfileByDID, genReflectionData } from '@akashaorg/af-testing';
-import { GetProfileByDidDocument } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { REFLECTION_ID, REFLECTION_SECTION } from './constants';
+import {
+  genBeamData,
+  genBeamStream,
+  genContentBlock,
+  genProfileByDID,
+  genReflectionData,
+} from '@akashaorg/af-testing';
+import {
+  GetBeamByIdDocument,
+  GetBeamStreamDocument,
+  GetContentBlockByIdDocument,
+  GetProfileByDidDocument,
+} from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import { BEAM_FEED, BEAM_SECTION, REFLECTION_ID, REFLECTION_SECTION } from './constants';
 
-export function getReflectionSectionMocks() {
+export interface IGetReflectionSectionMocks {
+  isBeamActive?: boolean;
+}
+
+export function getReflectionSectionMocks(params?: IGetReflectionSectionMocks) {
   const reflectionData = genReflectionData({
     reflectionId: REFLECTION_ID,
     authorProfileDID: REFLECTION_SECTION.authorProfileDID,
     content: REFLECTION_SECTION.content,
+  });
+  const beamData = genBeamData({
+    beamId: reflectionData.beam.id,
+    active: params?.isBeamActive,
+    authorProfileDID: BEAM_SECTION.authorProfileDID,
+    reflectionsCount: BEAM_SECTION.reflectionsCount,
   });
   const profileData = genProfileByDID({ profileDID: REFLECTION_SECTION.authorProfileDID });
   return {
@@ -22,6 +43,44 @@ export function getReflectionSectionMocks() {
           },
         },
       },
+      {
+        request: {
+          query: GetBeamByIdDocument,
+        },
+        variableMatcher: () => true,
+        result: {
+          data: {
+            node: beamData,
+          },
+        },
+      },
+      {
+        request: {
+          query: GetBeamStreamDocument,
+        },
+        variableMatcher: () => true,
+        // maxUsageCount: 3,
+        result: {
+          data: {
+            node: genBeamStream({ beamId: reflectionData.beam.id }),
+          },
+        },
+      },
+      ...beamData.content.map(block => ({
+        request: {
+          query: GetContentBlockByIdDocument,
+        },
+        variableMatcher: () => true,
+        result: {
+          data: {
+            node: genContentBlock({
+              blockId: block.blockID,
+              authorProfileDID: BEAM_FEED.authorProfileDID,
+              content: BEAM_FEED.content,
+            }),
+          },
+        },
+      })),
     ],
     reflectionData,
     profileData,

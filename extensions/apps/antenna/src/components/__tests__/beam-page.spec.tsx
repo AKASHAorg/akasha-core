@@ -33,6 +33,7 @@ import {
 } from '../__mocks__';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { InMemoryCache } from '@apollo/client';
+import { RawBeamData } from '@akashaorg/typings/lib/ui';
 
 const {
   mocks: beamSectionMocks,
@@ -40,12 +41,17 @@ const {
   beamData,
 } = getBeamSectionMocks();
 
-const baseComponent = (mocks: Readonly<MockedResponse<unknown, unknown>[]> | undefined) => (
+const baseComponent = (
+  mocks: Readonly<MockedResponse<unknown, unknown>[]> | undefined,
+  mockedBeamData?: RawBeamData,
+  isActive?: boolean,
+) => (
   <MockedProvider mocks={mocks} cache={new InMemoryCache(APOLLO_TYPE_POLICIES)}>
     <AnalyticsProvider {...genAppProps()}>
       <BeamPage
+        isActive={isActive ?? true}
         beamStatus={AkashaBeamStreamModerationStatus.Ok}
-        beamData={mapBeamEntryData(beamData)}
+        beamData={mapBeamEntryData(mockedBeamData ?? beamData)}
         beamId={BEAM_ID}
       />
     </AnalyticsProvider>
@@ -135,6 +141,22 @@ describe('< BeamPage /> component', () => {
       expect(infoBox).toHaveTextContent(
         formatRelativeTime(previewData.akashaReflectIndex.edges[0].node.createdAt, 'en'),
       );
+    });
+
+    it('should disable reflection editor when the beam is delisted', async () => {
+      renderWithAllProviders(
+        baseComponent(
+          [...beamSectionMocks, ...getEmptyReflectionStreamMock()],
+          {
+            ...beamData,
+            active: false,
+          },
+          false,
+        ),
+        {},
+      );
+      expect(screen.queryByRole('button', { name: 'Reflect' })).not.toBeInTheDocument();
+      expect(screen.queryByText(/Share your thoughts/i)).not.toBeInTheDocument();
     });
   });
 

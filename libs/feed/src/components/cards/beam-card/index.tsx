@@ -86,9 +86,6 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       reflectionsCount={beamData?.reflectionsCount}
       reflectAnchorLink="/@akashaorg/app-antenna/beam"
       sortedContents={sortedEntryContent}
-      flagAsLabel={t('Flag')}
-      removeEntryLabel={t('Remove')}
-      onEntryRemove={handleEntryRemove}
       isViewer={authenticatedDID === beamData.authorId}
       removed={{
         author: (
@@ -167,7 +164,6 @@ const BeamCard: React.FC<BeamCardProps> = props => {
         onReflect();
       }}
       onContentClick={onContentClick}
-      onEntryFlag={handleFlagBeam}
       profileAvatar={
         <AuthorProfileAvatar
           authorId={beamData.authorId}
@@ -175,16 +171,23 @@ const BeamCard: React.FC<BeamCardProps> = props => {
           createdAt={beamData?.createdAt}
         />
       }
-      actionsRight={
-        <ActionButtons
-          appName={appName}
-          showBlockName={showBlockName}
-          showHiddenContent={showHiddenContent}
-          onShowBlockName={() => {
-            setShowBlockName(!showBlockName);
-          }}
-        />
-      }
+      // add these props only when beam is active
+      {...(beamData.active && {
+        flagAsLabel: t('Flag'),
+        removeEntryLabel: t('Remove'),
+        onEntryFlag: handleFlagBeam,
+        onEntryRemove: handleEntryRemove,
+        actionsRight: (
+          <ActionButtons
+            appName={appName}
+            showBlockName={showBlockName}
+            showHiddenContent={showHiddenContent}
+            onShowBlockName={() => {
+              setShowBlockName(!showBlockName);
+            }}
+          />
+        ),
+      })}
       {...rest}
     >
       {({ blockID }) => (

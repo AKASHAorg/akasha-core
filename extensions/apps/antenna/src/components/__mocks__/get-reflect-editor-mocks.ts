@@ -46,7 +46,7 @@ export function getReflectEditorMocks({
         query: GetFollowingListByDidDocument,
       },
       variableMatcher: () => true,
-      maxUsageCount: 2,
+      maxUsageCount: 3,
       result: {
         data: {
           node: {
