@@ -49,8 +49,8 @@ export const ContentBlockExtension: React.FC<ContentBlockExtensionProps> = props
     onClickInstall,
     ...remainingProps
   } = props;
-  const { logger, getExtensionsPlugin } = useRootComponentProps();
-  const contentBlockStoreRef = useRef(getExtensionsPlugin()?.contentBlockStore);
+  const { logger, getCorePlugins } = useRootComponentProps();
+  const contentBlockStoreRef = useRef(getCorePlugins()?.contentBlockStore);
   const [hasContentLoadError, setHasContentLoadError] = useState(false);
   const [state, setState] = useState<{
     parcels: (MatchingBlock & { config: ParcelConfigObject })[];
@@ -116,7 +116,7 @@ export const ContentBlockExtension: React.FC<ContentBlockExtensionProps> = props
    */
   // if only blockID, fetch the necessary data
   useEffect(() => {
-    if (hasOwn(remainingProps, 'blockID')) {
+    if (hasOwn(remainingProps, 'blockID') && !hasOwn(remainingProps, 'blockData')) {
       fetchBlockInfo({
         variables: {
           id: remainingProps.blockID,

@@ -18,8 +18,8 @@ export type EditorBlockExtensionProps = {
 
 export const EditorBlockExtension: React.FC<EditorBlockExtensionProps> = props => {
   const { blockRef, propertyType, appName, onError, externalHandler } = props;
-  const { logger, getExtensionsPlugin } = useRootComponentProps();
-  const contentBlockStoreRef = useRef(getExtensionsPlugin()?.contentBlockStore);
+  const { logger, getCorePlugins } = useRootComponentProps();
+  const contentBlockStoreRef = useRef(getCorePlugins()?.contentBlockStore);
   const [state, setState] = useState<{
     parcels: (MatchingBlock & { config: ParcelConfigObject })[];
     isMatched: boolean;

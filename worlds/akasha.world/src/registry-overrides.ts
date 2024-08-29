@@ -18,11 +18,11 @@ const overrides = [
     applicationType: AkashaAppApplicationType.App,
     source: `${origin}/apps/vibes/index.js`,
   },
-  {
-    name: '@akashaorg/app-vibes-console',
-    applicationType: AkashaAppApplicationType.App,
-    source: `${origin}/apps/vibes-console/index.js`,
-  },
+  // {
+  //   name: '@akashaorg/app-vibes-console',
+  //   applicationType: AkashaAppApplicationType.App,
+  //   source: `${origin}/apps/vibes-console/index.js`,
+  // },
   {
     name: '@akashaorg/app-auth-ewa',
     applicationType: AkashaAppApplicationType.App,
