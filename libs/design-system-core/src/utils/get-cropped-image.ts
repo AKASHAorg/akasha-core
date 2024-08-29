@@ -26,11 +26,22 @@ const rotateSize = (width: number, height: number, rotation: number) => {
  */
 const createImage = (url: string): Promise<HTMLImageElement> =>
   new Promise((resolve, reject) => {
-    const image = new Image();
-    image.addEventListener('load', () => resolve(image));
-    image.addEventListener('error', error => reject(error));
-    image.setAttribute('crossOrigin', 'anonymous');
-    image.src = url;
+    fetch(url)
+      .then(response => response.blob())
+      .then(blob => {
+        const image = new Image();
+        const imageObjectUrl = URL.createObjectURL(blob);
+        image.src = imageObjectUrl;
+        image.onload = () => {
+          URL.revokeObjectURL(imageObjectUrl);
+          resolve(image);
+        };
+        image.onerror = error => {
+          URL.revokeObjectURL(imageObjectUrl);
+          reject(error);
+        };
+      })
+      .catch(error => reject(error));
   });
 
 /**
