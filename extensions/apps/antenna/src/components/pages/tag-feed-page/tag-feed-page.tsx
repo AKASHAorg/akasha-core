@@ -205,9 +205,12 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
                 name: tagName,
                 totalPosts: beamCount,
               }}
+              subscribeLabel={t('Subscribe')}
+              subscribedLabel={t('Subscribed')}
+              unsubscribeLabel={t('Unsubscribe')}
               subscribedTags={tagSubscriptions}
               isLoading={loading || updateLoading}
-              mentionsLabel={beamCount + (beamCount > 1 ? ' Beams' : ' Beam')}
+              mentionsLabel={`${beamCount} ${beamCount > 1 ? t('Beams') : t('Beam')}`}
               handleSubscribeTag={() => handleTagClick(tagName)}
               handleUnsubscribeTag={() => handleTagClick(tagName, false)}
             />

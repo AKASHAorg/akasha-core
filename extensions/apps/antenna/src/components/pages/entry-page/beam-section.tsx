@@ -12,7 +12,7 @@ import { transformSource } from '@akashaorg/ui-awf-hooks';
 import { useRouterState } from '@tanstack/react-router';
 
 type BeamSectionProps = {
-  beamId: string;
+  isActive: boolean;
   beamData: BeamData;
   isLoggedIn: boolean;
   showNSFWCard: boolean;
@@ -20,19 +20,18 @@ type BeamSectionProps = {
 };
 
 const BeamSection: React.FC<BeamSectionProps> = props => {
-  const { beamId, beamData, isLoggedIn, showNSFWCard, showLoginModal } = props;
+  const { isActive, beamData, isLoggedIn, showNSFWCard, showLoginModal } = props;
   const { t } = useTranslation('app-antenna');
   const routerState = useRouterState();
   const [isReflecting, setIsReflecting] = useState(
     routerState.location.pathname.endsWith(routes[REFLECT]),
   );
-  const activeBeam = beamData?.active;
 
   return (
     <Stack
       dataTestId="beam-section"
       spacing="gap-y-2"
-      customStyle={`grow ${activeBeam ? 'mb-2' : ''}`}
+      customStyle={`grow ${isActive ? 'mb-2' : ''}`}
     >
       <Card customStyle="grow" type="plain">
         <BeamCard
@@ -53,9 +52,9 @@ const BeamSection: React.FC<BeamSectionProps> = props => {
             setIsReflecting(!isReflecting);
           }}
         />
-        {activeBeam && <Divider />}
+        {isActive && <Divider />}
       </Card>
-      {activeBeam && (
+      {isActive && (
         <Stack padding="px-2" customStyle="mt-auto">
           {!isLoggedIn && (
             <EditorPlaceholder
@@ -73,8 +72,8 @@ const BeamSection: React.FC<BeamSectionProps> = props => {
           )}
           {isLoggedIn && (
             <ReflectEditor
-              beamId={beamId}
-              reflectToId={beamId}
+              beamId={beamData.id}
+              reflectToId={beamData.id}
               showEditor={isReflecting}
               setShowEditor={setIsReflecting}
             />
