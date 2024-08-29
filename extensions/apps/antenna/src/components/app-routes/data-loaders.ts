@@ -1,5 +1,4 @@
 import getSDK from '@akashaorg/core-sdk';
-import { ApolloError } from '@apollo/client';
 import {
   GetBeamByIdQuery,
   GetBeamStreamQuery,
@@ -22,19 +21,16 @@ import {
  * @returns an object containing the data and error values from the query
  * @example
  * ```typescript
- * const { data, error } = getBeamById({ apolloClient, beamId: 'kjzl6kcym7w8y7gyq' });
+ * const response = getBeamById({ apolloClient, beamId: 'kjzl6kcym7w8y7gyq' });
  * ```
  */
-export async function getBeamById({
-  apolloClient,
-  beamId,
-}: IRouterContext & { beamId: string }): Promise<{ data: GetBeamByIdQuery; error: ApolloError }> {
-  const { data, error } = await apolloClient.query<GetBeamByIdQuery>({
+export async function getBeamById({ apolloClient, beamId }: IRouterContext & { beamId: string }) {
+  const response = await apolloClient.query<GetBeamByIdQuery>({
     query: GetBeamByIdDocument,
     variables: { id: beamId },
     fetchPolicy: 'cache-first',
   });
-  return { data, error };
+  return response;
 }
 
 /**
@@ -42,15 +38,15 @@ export async function getBeamById({
  * @param param0 - an object containing the apolloClient and beamId
  * @returns an object containing the data and error values from the query
  * ```typescript
- * const { data, error } = getBeamStreamById({ apolloClient, beamId: 'kjzl6kcym7w8y7gyq' });
+ * const response = getBeamStreamById({ apolloClient, beamId: 'kjzl6kcym7w8y7gyq' });
  * ```
  */
 export async function getBeamStreamById({
   apolloClient,
   beamId,
-}: IRouterContext & { beamId: string }): Promise<{ data: GetBeamStreamQuery; error: ApolloError }> {
+}: IRouterContext & { beamId: string }) {
   const sdk = getSDK();
-  const { data, error } = await apolloClient.query<GetBeamStreamQuery>({
+  const response = await apolloClient.query<GetBeamStreamQuery>({
     query: GetBeamStreamDocument,
     variables: {
       first: 1,
@@ -59,7 +55,7 @@ export async function getBeamStreamById({
     },
     fetchPolicy: 'cache-first',
   });
-  return { data, error };
+  return response;
 }
 
 /**
@@ -135,7 +131,7 @@ export function selectBeamActiveField(streamData: GetBeamStreamQuery) {
  * @returns an object containing the data and error values from the query
  * @example
  * ```typescript
- * const { data, error } = getReflectionById({
+ * const response = getReflectionById({
   apolloClient,
   reflectionId: 'kjzl6kcym7w8y8w8',
 });
@@ -144,16 +140,13 @@ export function selectBeamActiveField(streamData: GetBeamStreamQuery) {
 export async function getReflectionById({
   apolloClient,
   reflectionId,
-}: IRouterContext & { reflectionId: string }): Promise<{
-  data: GetReflectionByIdQuery;
-  error: ApolloError;
-}> {
-  const { data, error } = await apolloClient.query<GetReflectionByIdQuery>({
+}: IRouterContext & { reflectionId: string }) {
+  const response = await apolloClient.query<GetReflectionByIdQuery>({
     query: GetReflectionByIdDocument,
     variables: { id: reflectionId },
     fetchPolicy: 'cache-first',
   });
-  return { data, error };
+  return response;
 }
 
 /**
@@ -161,7 +154,7 @@ export async function getReflectionById({
  * @param param0 - an object containing the apolloClient and reflectionId
  * @returns an object containing the data and error values from the query
  * ```typescript
- * const { data, error } = getReflectionStreamById({
+ * const response = getReflectionStreamById({
   apolloClient,
   reflectionId: 'kjzl6kcym7w8y8w8',
 });
@@ -170,12 +163,9 @@ export async function getReflectionById({
 export async function getReflectionStreamById({
   apolloClient,
   reflectionId,
-}: IRouterContext & { reflectionId: string }): Promise<{
-  data: GetReflectionStreamQuery;
-  error: ApolloError;
-}> {
+}: IRouterContext & { reflectionId: string }) {
   const sdk = getSDK();
-  const { data, error } = await apolloClient.query<GetReflectionStreamQuery>({
+  const response = await apolloClient.query<GetReflectionStreamQuery>({
     query: GetReflectionStreamDocument,
     variables: {
       first: 1,
@@ -184,7 +174,7 @@ export async function getReflectionStreamById({
     },
     fetchPolicy: 'cache-first',
   });
-  return { data, error };
+  return response;
 }
 
 /**
