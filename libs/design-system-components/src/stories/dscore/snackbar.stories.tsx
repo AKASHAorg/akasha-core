@@ -5,7 +5,7 @@ import { NotificationTypes } from '@akashaorg/typings/lib/ui';
 const meta: Meta<SnackbarProps> = {
   title: 'DSCore/Bars/Snackbar',
   component: Snackbar,
-  tags: ['autodocs'],
+
   argTypes: {
     title: { control: 'text' },
     type: {

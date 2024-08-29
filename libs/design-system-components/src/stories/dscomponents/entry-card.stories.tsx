@@ -12,7 +12,6 @@ const meta: Meta<EntryCardProps> = {
       <EntryCard {...props} />
     </Stack>
   ),
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj<EntryCardProps>;

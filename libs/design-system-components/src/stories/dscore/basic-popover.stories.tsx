@@ -7,7 +7,7 @@ import BasicPopover, {
 const meta: Meta<BasicPopoverProps> = {
   title: 'DSCore/Popovers/BasicPopover',
   component: BasicPopover,
-  tags: ['autodocs'],
+
   argTypes: {
     gap: { control: 'text' },
     target: { control: 'object' },

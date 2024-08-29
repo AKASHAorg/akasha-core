@@ -7,7 +7,7 @@ import { userData } from '@akashaorg/design-system-core/lib/utils';
 const meta: Meta<StackedAvatarProps> = {
   title: 'DSCore/Avatars/StackedAvatar',
   component: StackedAvatar,
-  tags: ['autodocs'],
+
   argTypes: {
     userData: { crontrol: 'object' },
     maxAvatars: { control: 'number' },

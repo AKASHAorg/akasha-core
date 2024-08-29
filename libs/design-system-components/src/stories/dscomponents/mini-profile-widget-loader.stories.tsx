@@ -10,7 +10,6 @@ const meta: Meta = {
       <MiniProfileWidgetLoader />
     </Stack>
   ),
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj;

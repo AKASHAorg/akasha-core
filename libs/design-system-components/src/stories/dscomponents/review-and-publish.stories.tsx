@@ -11,7 +11,6 @@ const meta: Meta<ReviewAndPublishProps> = {
       <ReviewAndPublish {...props} />
     </Stack>
   ),
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj<ReviewAndPublishProps>;

@@ -4,7 +4,6 @@ import ProfileEngagementLoading from '../../components/ProfileEngagements/placeh
 const meta: Meta = {
   title: 'DSComponents/Loaders/Profile/ProfileEngagementLoading',
   component: ProfileEngagementLoading,
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj;

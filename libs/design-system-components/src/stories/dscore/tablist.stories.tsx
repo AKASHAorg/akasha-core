@@ -4,7 +4,7 @@ import TabList, { TabListProps } from '@akashaorg/design-system-core/lib/compone
 const meta: Meta<TabListProps> = {
   title: 'DSCore/Tabs/TabList',
   component: TabList,
-  tags: ['autodocs'],
+
   argTypes: {
     labels: { control: 'object' },
     selected: { control: 'number' },

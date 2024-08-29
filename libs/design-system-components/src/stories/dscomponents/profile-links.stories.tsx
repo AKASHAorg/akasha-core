@@ -4,7 +4,6 @@ import Links, { LinksProps } from '../../components/Profile/Links';
 const meta: Meta<LinksProps> = {
   title: 'DSComponents/Profile/ProfileLinks',
   component: Links,
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj<LinksProps>;

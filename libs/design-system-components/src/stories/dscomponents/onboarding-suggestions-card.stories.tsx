@@ -6,7 +6,6 @@ import OnboardingSuggestionsCard, {
 const meta: Meta<OnboardingSuggestionsCardProps> = {
   title: 'DSComponents/Cards/OnboardingSuggestionsCard',
   component: OnboardingSuggestionsCard,
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj<OnboardingSuggestionsCardProps>;

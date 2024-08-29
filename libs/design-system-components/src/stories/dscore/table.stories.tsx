@@ -6,7 +6,7 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 const meta: Meta<TableProps> = {
   title: 'DSCore/Table/Table',
   component: Table,
-  tags: ['autodocs'],
+
   argTypes: {
     tableTitle: { control: 'text' },
     customThStyle: { control: 'text' },

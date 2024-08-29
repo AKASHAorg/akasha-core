@@ -9,7 +9,6 @@ import Toggle, { ToggleProps } from '@akashaorg/design-system-core/lib/component
 const meta: Meta<ToggleProps> = {
   title: 'DSCore/Buttons/Toggle',
   component: Toggle,
-  tags: ['autodocs'],
   argTypes: {
     label: { control: 'text' },
     size: { control: 'select', options: ['small', 'large'] },

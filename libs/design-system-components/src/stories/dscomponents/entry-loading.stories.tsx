@@ -4,7 +4,6 @@ import EntryLoading from '../../components/ProfileEngagements/placeholders/entry
 const meta: Meta = {
   title: 'DSComponents/Loaders/Profile/EntryLoading',
   component: EntryLoading,
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj;

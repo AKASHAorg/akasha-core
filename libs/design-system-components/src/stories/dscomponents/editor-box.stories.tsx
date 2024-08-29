@@ -4,7 +4,6 @@ import EditorBox, { EditorBoxProps } from '../../components/Editor';
 const meta: Meta<EditorBoxProps> = {
   title: 'DSComponents/Editor/EditorBox',
   component: EditorBox,
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj<EditorBoxProps>;

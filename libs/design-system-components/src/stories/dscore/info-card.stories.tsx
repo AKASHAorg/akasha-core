@@ -5,7 +5,7 @@ import InfoCard, { InfoCardProps } from '@akashaorg/design-system-core/lib/compo
 const meta: Meta<InfoCardProps> = {
   title: 'DSCore/Cards/InfoCard',
   component: InfoCard,
-  tags: ['autodocs'],
+
   argTypes: {
     assetName: { control: 'text' },
     publicImgPath: { control: 'text' },

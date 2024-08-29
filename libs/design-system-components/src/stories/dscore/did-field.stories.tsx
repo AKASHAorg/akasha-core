@@ -5,7 +5,7 @@ import DidField, { DidFieldProps } from '@akashaorg/design-system-core/lib/compo
 const meta: Meta<DidFieldProps> = {
   title: 'DSCore/Fields/DidField',
   component: DidField,
-  tags: ['autodocs'],
+
   argTypes: {
     did: { control: 'text' },
     isValid: { control: 'boolean' },

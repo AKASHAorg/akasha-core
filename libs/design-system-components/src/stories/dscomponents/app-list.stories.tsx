@@ -11,7 +11,6 @@ const meta: Meta<AppListProps> = {
       <AppList {...props} />
     </Stack>
   ),
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj<AppListProps>;

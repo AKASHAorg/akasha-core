@@ -4,7 +4,6 @@ import VersionInfo, { VersionInfoProps } from '../../components/VersionInfo';
 const meta: Meta<VersionInfoProps> = {
   title: 'DSComponents/Extensions/VersionInfo',
   component: VersionInfo,
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj<VersionInfoProps>;

@@ -4,7 +4,7 @@ import Label, { LabelProps } from '@akashaorg/design-system-core/lib/components/
 const meta: Meta = {
   title: 'DSCore/Labels/Label',
   component: Label,
-  tags: ['autodocs'],
+
   argTypes: {
     disabled: { control: 'boolean' },
     required: { control: 'boolean' },

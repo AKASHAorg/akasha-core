@@ -12,7 +12,6 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 const meta: Meta<MiniProfileCTAProps> = {
   title: 'DSComponents/Vibes/MiniProfileCTA',
   component: MiniProfileCTA,
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj<MiniProfileCTAProps>;

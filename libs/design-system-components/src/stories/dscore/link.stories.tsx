@@ -6,7 +6,7 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 const meta: Meta<LinkProps> = {
   title: 'DSCore/Link/Link',
   component: Link,
-  tags: ['autodocs'],
+
   argTypes: {
     to: { control: 'text' },
     target: {

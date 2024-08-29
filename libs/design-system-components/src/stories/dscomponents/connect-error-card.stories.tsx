@@ -4,7 +4,6 @@ import ConnectErrorCard, { ConnectErrorCardProps } from '../../components/Connec
 const meta: Meta<ConnectErrorCardProps> = {
   title: 'DSComponents/Errors/ConnectErrorCard',
   component: ConnectErrorCard,
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj<ConnectErrorCardProps>;

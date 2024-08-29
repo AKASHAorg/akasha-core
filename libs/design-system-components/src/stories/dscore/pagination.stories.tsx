@@ -6,7 +6,7 @@ import Pagination, {
 const meta: Meta<PaginationProps> = {
   title: 'DSCore/Pagination/Pagination',
   component: Pagination,
-  tags: ['autodocs'],
+
   argTypes: {
     pageCount: { control: 'number' },
     currentPage: { control: 'number' },

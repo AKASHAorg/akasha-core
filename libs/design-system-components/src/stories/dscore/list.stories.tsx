@@ -8,12 +8,16 @@ import {
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import List, { ListProps } from '@akashaorg/design-system-core/lib/components/List';
 
+ArrowUpOnSquareIcon.displayName = 'ArrowUpOnSquareIcon';
+PencilIcon.displayName = 'PencilIcon';
+TrashIcon.displayName = 'TrashIcon';
+
 List.displayName = 'List';
 
 const meta: Meta<ListProps> = {
   title: 'DSCore/Lists/List',
   component: List,
-  tags: ['autodocs'],
+
   argTypes: {
     items: { control: 'object' },
     showDivider: { control: 'boolean' },

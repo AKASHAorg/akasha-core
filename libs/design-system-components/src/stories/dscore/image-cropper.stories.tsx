@@ -7,7 +7,7 @@ import ImageCropper, {
 const meta: Meta<ImageCropperProps> = {
   title: 'DSCore/Cropper/ImageCropper',
   component: ImageCropper,
-  tags: ['autodocs'],
+
   argTypes: {
     image: { control: 'object' },
     dragToRepositionLabel: { control: 'text' },

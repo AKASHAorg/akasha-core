@@ -10,7 +10,6 @@ const meta: Meta<InstallAppProps> = {
       <InstallApps {...props} />
     </Stack>
   ),
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj<InstallAppProps>;

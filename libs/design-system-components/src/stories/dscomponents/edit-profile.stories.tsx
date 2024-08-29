@@ -4,7 +4,6 @@ import EditProfile, { EditProfileProps } from '../../components/EditProfile';
 const meta: Meta<EditProfileProps> = {
   title: 'DSComponents/Profile/Edit',
   component: EditProfile,
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj<EditProfileProps>;
@@ -68,7 +67,6 @@ export const Default: Story = {
       description: '',
       initialValue: false,
     },
-    nsfwFormLabel: 'NSFW Profile',
   },
 };
 

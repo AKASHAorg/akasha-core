@@ -10,7 +10,6 @@ const meta: Meta = {
       <SidebarLoader />
     </Stack>
   ),
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj;

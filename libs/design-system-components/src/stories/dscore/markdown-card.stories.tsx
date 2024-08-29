@@ -7,7 +7,7 @@ import MarkdownCard, {
 const meta: Meta<MarkdownCardProps> = {
   title: 'DSCore/Cards/MarkdownCard',
   component: MarkdownCard,
-  tags: ['autodocs'],
+
   argTypes: {
     mdText: { control: 'text' },
     hasWrapper: { control: 'boolean' },

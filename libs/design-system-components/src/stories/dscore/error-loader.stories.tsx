@@ -8,7 +8,7 @@ import ErrorLoader, {
 const meta: Meta<ErrorLoaderProps> = {
   title: 'DSCore/Cards/ErrorLoader',
   component: ErrorLoader,
-  tags: ['autodocs'],
+
   argTypes: {
     type: { control: 'text' },
     publicImgPath: { control: 'text' },

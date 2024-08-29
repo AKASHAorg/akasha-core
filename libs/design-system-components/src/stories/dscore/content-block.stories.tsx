@@ -6,7 +6,7 @@ import ContentBlock, {
 const meta: Meta<ContentBlockProps> = {
   title: 'DSCore/Blocks/ContentBlock',
   component: ContentBlock,
-  tags: ['autodocs'],
+
   argTypes: {
     blockTitle: { control: 'text' },
     blockVariant: { control: 'text' },
