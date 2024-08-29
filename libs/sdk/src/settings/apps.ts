@@ -110,50 +110,10 @@ class AppSettings {
   }
   @validate(IntegrationNameSchema)
   async toggleAppStatus(appName: IntegrationName): Promise<boolean> {
-    // @todo: currently not planned.
-    // const collection = this._db.getCollections().installedExtensions;
-    // const doc = await collection?.where('name').equals(appName).first();
-    // if (doc && doc.id) {
-    //   doc.status = !doc.status;
-    //   await collection?.where('id').equals(doc.id).modify(doc);
-    //   this._globalChannel.next({
-    //     data: { status: doc.status, name: appName },
-    //     event: EXTENSION_EVENTS.TOGGLE_STATUS,
-    //   });
-    //   return doc.status;
-    // }
     return false;
   }
 
-  async updateVersion(app: { appName: string; releaseVersion: string }) {
-    // @TODO: update the release version of an app
-    // const table = this._db.getCollections().installedExtensions;
-    //
-    // const collection = await table
-    //   ?.where({ appName: app.appName, version: app.releaseVersion })
-    //   .first();
-    //
-    // if (!collection) {
-    //   this._log.warn('app not found!');
-    //   return;
-    // }
-    //
-    // if (collection && collection.version === app.releaseVersion) {
-    //   this._log.warn('app has the same version!');
-    //   return;
-    // }
-    //
-    // if (collection && collection.version !== app.releaseVersion) {
-    //   const oldVersion = collection.version;
-    //   collection.version = app.releaseVersion;
-    //   table?.update(collection.appName, { version: app.releaseVersion });
-    //   this._globalChannel.next({
-    //     event: EXTENSION_EVENTS.UPDATE_VERSION,
-    //     data: { oldVersion, currentVersion: app.releaseVersion },
-    //   });
-    //   return true;
-    // }
-  }
+  async updateVersion(app: { appName: string; releaseVersion: string }) {}
 
   async updateConfig(app: ConfigInfo) {
     return throwError('Not implemented', ['sdk', 'settings', 'apps', 'updateConfig']);
