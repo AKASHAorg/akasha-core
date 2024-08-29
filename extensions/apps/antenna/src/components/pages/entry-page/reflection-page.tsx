@@ -1,4 +1,5 @@
-import React, { useLayoutEffect, useMemo } from 'react';
+import React, { useLayoutEffect, useMemo, useRef } from 'react';
+import getSDK from '@akashaorg/core-sdk';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import BackToOriginalBeam from '@akashaorg/ui-lib-feed/lib/components/back-to-original-beam';
@@ -6,18 +7,29 @@ import ReflectionSection from './reflection-section';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import { EntityTypes, ReflectionData } from '@akashaorg/typings/lib/ui';
-import { useAkashaStore, useAnalytics, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import {
+  hasOwn,
+  useAkashaStore,
+  useAnalytics,
+  useRootComponentProps,
+} from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { ReflectionPreview } from '@akashaorg/ui-lib-feed';
 import { useNavigate } from '@tanstack/react-router';
 import { EditableReflectionResolver, ReflectFeed } from '@akashaorg/ui-lib-feed';
+import {
+  useGetBeamByIdQuery,
+  useGetBeamStreamQuery,
+} from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import { selectBeamActiveField } from '../../app-routes/data-loaders';
 
 type ReflectionPageProps = {
+  isActive: boolean;
   reflectionData: ReflectionData;
 };
 
 const ReflectionPage: React.FC<ReflectionPageProps> = props => {
-  const { reflectionData } = props;
+  const { isActive, reflectionData } = props;
   const { t } = useTranslation('app-antenna');
   const {
     data: { authenticatedDID },
@@ -26,6 +38,37 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
   const [analyticsActions] = useAnalytics();
   const navigate = useNavigate();
   const isLoggedIn = !!authenticatedDID;
+
+  const indexingDID = useRef(getSDK().services.gql.indexingDID);
+
+  const { data: beamByIdData } = useGetBeamByIdQuery({
+    variables: { id: reflectionData.beamID },
+    skip: !reflectionData.beamID,
+  });
+
+  const { data: beamStreamData } = useGetBeamStreamQuery({
+    variables: {
+      indexer: indexingDID.current,
+      filters: { where: { beamID: { equalTo: reflectionData.beamID } } },
+      last: 1,
+    },
+    skip: !reflectionData.beamID,
+  });
+
+  /**
+   * a beam is considered active if:
+   * 1. data from getBeamById query has active as true and
+   * 2. data from getBeamStream query has active as true
+   */
+  const isBeamActive = React.useMemo(() => {
+    let beamByIdActive: boolean;
+
+    if (beamByIdData && hasOwn(beamByIdData.node, 'active')) {
+      beamByIdActive = beamByIdData.node.active;
+    }
+
+    return beamByIdActive && selectBeamActiveField(beamStreamData);
+  }, [beamByIdData, beamStreamData]);
 
   const filters = useMemo(() => {
     return {
@@ -76,8 +119,8 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
               onClick={() => onNavigateToOriginalBeam(reflectionData.beamID)}
             />
             <ReflectionSection
-              beamId={reflectionData.beamID}
-              reflectionId={reflectionData.id}
+              isBeamActive={isBeamActive}
+              isActive={isActive}
               reflectionData={reflectionData}
               isLoggedIn={isLoggedIn}
               showLoginModal={showLoginModal}

@@ -2,6 +2,7 @@ import { toBinary } from '../toBinary';
 
 interface IGenBeamData {
   beamId: string;
+  active?: boolean;
   authorProfileDID: string;
   isViewer?: boolean;
   nsfw?: boolean;
@@ -26,6 +27,7 @@ interface IGenContentBlock {
 
 const genBeamData = ({
   beamId,
+  active = true,
   authorProfileDID,
   isViewer = false,
   nsfw = false,
@@ -34,7 +36,7 @@ const genBeamData = ({
   return {
     id: beamId,
     reflectionsCount,
-    active: true,
+    active,
     embeddedStream: null,
     author: {
       id: authorProfileDID,
