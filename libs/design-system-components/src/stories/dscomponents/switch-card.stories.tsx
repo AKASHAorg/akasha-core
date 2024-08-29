@@ -2,7 +2,7 @@ import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import SwitchCard, { SwitchCardProps } from '../../components/SwitchCard';
 
-const Component: React.FC<SwitchCardProps> = props => {
+const SwitchCardComponent: React.FC<SwitchCardProps> = props => {
   const [activeButton, setActiveButton] = React.useState<string>('Kept');
 
   const onTabClick = (value: string) => () => {
@@ -14,7 +14,7 @@ const Component: React.FC<SwitchCardProps> = props => {
 
 const meta: Meta<SwitchCardProps> = {
   title: 'DSComponents/Cards/SwitchCard',
-  component: Component,
+  component: SwitchCardComponent,
 };
 
 type Story = StoryObj<SwitchCardProps>;

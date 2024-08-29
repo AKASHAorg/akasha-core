@@ -3,13 +3,15 @@ import type { Meta, StoryObj } from '@storybook/react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import EntryLoadingPlaceholder from '../../components/Entry/EntryCardLoading';
 
+const EntryLoadingPlaceholderComponent = () => (
+  <Stack customStyle="w-[50%]">
+    <EntryLoadingPlaceholder />
+  </Stack>
+);
+
 const meta: Meta = {
   title: 'DSComponents/Loaders/EntryLoadingPlaceholder',
-  component: () => (
-    <Stack customStyle="w-[50%]">
-      <EntryLoadingPlaceholder />
-    </Stack>
-  ),
+  component: EntryLoadingPlaceholderComponent,
 };
 
 type Story = StoryObj;

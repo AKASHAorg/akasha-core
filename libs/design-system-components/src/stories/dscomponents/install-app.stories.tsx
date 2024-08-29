@@ -3,13 +3,15 @@ import type { Meta, StoryObj } from '@storybook/react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import InstallApps, { InstallAppProps } from '../../components/InstallApp';
 
+const InstallAppsComponent = (props: InstallAppProps) => (
+  <Stack customStyle="w-[35%]">
+    <InstallApps {...props} />
+  </Stack>
+);
+
 const meta: Meta<InstallAppProps> = {
   title: 'DSComponents/Extensions/AppInstallation',
-  component: props => (
-    <Stack customStyle="w-[35%]">
-      <InstallApps {...props} />
-    </Stack>
-  ),
+  component: InstallAppsComponent,
 };
 
 type Story = StoryObj<InstallAppProps>;

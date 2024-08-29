@@ -2,7 +2,7 @@ import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import SearchBar, { SearchBarProps } from '../../components/SearchBar';
 
-const Component: React.FC<SearchBarProps> = props => {
+const SearchBarComponent: React.FC<SearchBarProps> = props => {
   const [inputValue, setInputValue] = React.useState('');
 
   const handleInputChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
@@ -14,7 +14,7 @@ const Component: React.FC<SearchBarProps> = props => {
 
 const meta: Meta<SearchBarProps> = {
   title: 'DSComponents/Bars/SearchBar',
-  component: Component,
+  component: SearchBarComponent,
 };
 
 type Story = StoryObj<SearchBarProps>;

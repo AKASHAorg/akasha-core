@@ -7,13 +7,18 @@ import {
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import AppInfo, { AppInfoProps } from '../../components/AppInfo';
 
+FlagIcon.displayName = 'FlagIcon';
+ShareIcon.displayName = 'ShareIcon';
+
+const AppInfoComponent = (props: AppInfoProps) => (
+  <Stack customStyle="w-[50%]">
+    <AppInfo {...props} />
+  </Stack>
+);
+
 const meta: Meta<AppInfoProps> = {
   title: 'DSComponents/Extensions/AppInfo',
-  component: props => (
-    <Stack customStyle="w-[50%]">
-      <AppInfo {...props} />
-    </Stack>
-  ),
+  component: AppInfoComponent,
 };
 
 type Story = StoryObj<AppInfoProps>;
@@ -36,14 +41,10 @@ export const AppNotInstalled: Story = {
       icon: <FlagIcon />,
       color: { light: 'errorLight', dark: 'errorDark' },
     },
-    onInstall: () => ({}),
-    onUninstall: () => ({}),
-
     notification: { title: 'notification title', message: 'notification message', action: <></> },
     version: 'Version 2.8.0',
     versionLabel: 'Version',
     updateButtonLabel: 'Update',
-
     packageName: 'Package name',
     packageNameTitle: 'PackageName title',
     developers: [{ profileId, avatar, name: 'Coffee Lover' }],
@@ -72,6 +73,8 @@ export const AppNotInstalled: Story = {
     extensionId: 'Extensions Id',
     licenseTitle: 'License',
     license: 'AGPL-3.0',
+    onInstall: () => ({}),
+    onUninstall: () => ({}),
     onAppDescriptionClick: () => ({}),
     onSelectDeveloper: () => ({}),
     onCollaboratorsClick: () => ({}),
@@ -102,9 +105,6 @@ export const AppInstallLoading: Story = {
       icon: <FlagIcon />,
       color: { light: 'errorLight', dark: 'errorDark' },
     },
-    onInstall: () => ({}),
-    onUninstall: () => ({}),
-
     notification: { title: 'notification title', message: 'notification message', action: <></> },
     version: 'Version 2.8.0',
     versionLabel: 'Version',
@@ -138,6 +138,8 @@ export const AppInstallLoading: Story = {
     extensionId: 'Extensions Id',
     licenseTitle: 'License',
     license: 'AGPL-3.0',
+    onInstall: () => ({}),
+    onUninstall: () => ({}),
     onAppDescriptionClick: () => ({}),
     onSelectDeveloper: () => ({}),
     onCollaboratorsClick: () => ({}),
@@ -168,9 +170,6 @@ export const AppInstalled: Story = {
       icon: <FlagIcon />,
       color: { light: 'errorLight', dark: 'errorDark' },
     },
-    onInstall: () => ({}),
-    onUninstall: () => ({}),
-
     notification: { title: 'notification title', message: 'notification message', action: <></> },
     version: 'Version 2.8.0',
     versionLabel: 'Version',
@@ -204,6 +203,8 @@ export const AppInstalled: Story = {
     extensionId: 'Extensions Id',
     licenseTitle: 'License',
     license: 'AGPL-3.0',
+    onInstall: () => ({}),
+    onUninstall: () => ({}),
     onAppDescriptionClick: () => ({}),
     onSelectDeveloper: () => ({}),
     onCollaboratorsClick: () => ({}),

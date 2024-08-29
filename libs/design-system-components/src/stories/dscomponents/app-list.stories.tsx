@@ -4,13 +4,15 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import AppList, { AppListProps } from '../../components/AppList';
 
+const AppListComponent = (props: AppListProps) => (
+  <Stack customStyle="w-[50%]">
+    <AppList {...props} />
+  </Stack>
+);
+
 const meta: Meta<AppListProps> = {
   title: 'DSComponents/Extensions/AppList',
-  component: props => (
-    <Stack customStyle="w-[50%]">
-      <AppList {...props} />
-    </Stack>
-  ),
+  component: AppListComponent,
 };
 
 type Story = StoryObj<AppListProps>;

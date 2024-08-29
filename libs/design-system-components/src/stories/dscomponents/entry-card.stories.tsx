@@ -5,13 +5,15 @@ import { EntityTypes } from '@akashaorg/typings/lib/ui';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
+const EntryCardComponent = (props: EntryCardProps) => (
+  <Stack customStyle="w-[50%]">
+    <EntryCard {...props} />
+  </Stack>
+);
+
 const meta: Meta<EntryCardProps> = {
   title: 'DSComponents/Cards/EntryCard',
-  component: props => (
-    <Stack customStyle="w-[50%]">
-      <EntryCard {...props} />
-    </Stack>
-  ),
+  component: EntryCardComponent,
 };
 
 type Story = StoryObj<EntryCardProps>;
