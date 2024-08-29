@@ -1,8 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import Dropdown, { DropdownProps } from '@akashaorg/design-system-core/lib/components/Dropdown';
 
-Dropdown.displayName = 'Dropdown';
-
 const meta: Meta<DropdownProps> = {
   title: 'DSCore/Buttons/Dropdown',
   component: Dropdown,

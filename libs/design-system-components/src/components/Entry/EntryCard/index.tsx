@@ -127,22 +127,22 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     contentClickable && !showNSFWCard ? 'cursor-pointer' : 'cursor-default';
 
   const menuItems: ListItem[] = [
-    ...(!isViewer
+    ...(!isViewer && flagAsLabel
       ? [
           {
             icon: <FlagIcon />,
-            label: flagAsLabel ?? '',
+            label: flagAsLabel,
             color: { light: 'errorLight', dark: 'errorDark' } as const,
             disabled: disableReporting,
             onClick: onEntryFlag,
           },
         ]
       : []),
-    ...(isViewer && rest.itemType === EntityTypes.BEAM
+    ...(isViewer && removeEntryLabel && rest.itemType === EntityTypes.BEAM
       ? [
           {
             icon: <TrashIcon />,
-            label: removeEntryLabel ?? '',
+            label: removeEntryLabel,
             color: { light: 'errorLight', dark: 'errorDark' } as const,
             onClick: onEntryRemove,
           },

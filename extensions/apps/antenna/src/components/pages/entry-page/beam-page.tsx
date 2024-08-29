@@ -19,12 +19,13 @@ import { BeamData } from '@akashaorg/typings/lib/ui';
 
 type BeamPageProps = {
   beamId: string;
+  isActive: boolean;
   beamStatus: AkashaBeamStreamModerationStatus;
   beamData: BeamData;
 };
 
 const BeamPage: React.FC<BeamPageProps> = props => {
-  const { beamId, beamStatus, beamData } = props;
+  const { beamId, isActive, beamStatus, beamData } = props;
   const { t } = useTranslation('app-antenna');
   const { navigateToModal, logger } = useRootComponentProps();
   const {
@@ -72,7 +73,7 @@ const BeamPage: React.FC<BeamPageProps> = props => {
         reflectToId={beamId}
         header={
           <BeamSection
-            beamId={beamId}
+            isActive={isActive && beamData.active}
             beamData={beamData}
             isLoggedIn={isLoggedIn}
             showNSFWCard={showNsfwCard}
