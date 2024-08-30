@@ -30,6 +30,7 @@ import {
   getPendingReflectMock,
   getReflectEditorMocks,
   getReflectFeedMocks,
+  NEW_REFLECTION_BEYOND_TEXT_LIMIT,
 } from '../__mocks__';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { InMemoryCache } from '@apollo/client';
@@ -239,6 +240,28 @@ describe('< BeamPage /> component', () => {
       );
       expect(infoBox).toHaveTextContent(truncateDid(reflectFeedProfileData.akashaProfile.did.id));
       expect(infoBox).toHaveTextContent(formatRelativeTime(newReflectionData.createdAt, 'en'));
+    });
+
+    it('should show error when text exceeds block limit', async () => {
+      jest
+        .spyOn(getEditorValueForTest, 'getEditorValueForTest')
+        .mockReturnValue(NEW_REFLECTION_BEYOND_TEXT_LIMIT);
+
+      renderWithAllProviders(
+        baseComponent([
+          ...beamSectionMocks,
+          ...getEmptyReflectionStreamMock(),
+          ...reflectEditorMocks,
+          ...reflectFeedMocks,
+        ]),
+        {},
+      );
+      const user = userEvent.setup();
+      const reflectButton = screen.getByRole('button', { name: 'Reflect' });
+      user.click(reflectButton);
+      expect(
+        await screen.findByText(/text block exceeds line limit, please review!/i),
+      ).toBeInTheDocument();
     });
   });
 });

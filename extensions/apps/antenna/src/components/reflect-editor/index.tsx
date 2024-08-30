@@ -88,22 +88,33 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
   }, []);
 
   /*
-   * Currently jsdom doesn't support contenteditable and as a result slate editor as well.
+   * Currently jsdom doesn't support contenteditable and as a result slate editor can't be tested in jsdom.
    * This effect is a workaround to set the value of the editor during tests
    **/
   React.useEffect(() => {
     const editorValueForTest = getEditorValueForTest();
     if (editorValueForTest) {
-      setEditorState([
-        {
-          type: 'paragraph',
-          children: [
-            {
-              text: editorValueForTest,
-            },
-          ],
-        },
-      ]);
+      setEditorState(
+        Array.isArray(editorValueForTest)
+          ? editorValueForTest.map(value => ({
+              type: 'paragraph',
+              children: [
+                {
+                  text: value,
+                },
+              ],
+            }))
+          : [
+              {
+                type: 'paragraph',
+                children: [
+                  {
+                    text: editorValueForTest,
+                  },
+                ],
+              },
+            ],
+      );
     }
   }, []);
 
