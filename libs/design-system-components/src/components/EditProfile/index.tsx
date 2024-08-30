@@ -16,6 +16,10 @@ import { ButtonType } from '../types/common.types';
 import { InputType, NSFW } from '../NSFW';
 import { PublishProfileData } from '@akashaorg/typings/lib/ui';
 
+const MIN_NAME_CHARACTERS = 3;
+
+const MAX_NAME_CHARACTERS = 50;
+
 type SocialLinkForm = Pick<SocialLinksProps, 'linkLabel' | 'addNewLinkButtonLabel' | 'description'>;
 
 type GeneralForm = Pick<GeneralProps, 'header' | 'name' | 'bio'>;
@@ -133,7 +137,8 @@ const schema = z.object({
   name: z
     .string()
     .trim()
-    .min(3, { message: 'Must be at least 3 characters' })
+    .min(MIN_NAME_CHARACTERS, { message: `Must be at least ${MIN_NAME_CHARACTERS} characters` })
+    .max(MAX_NAME_CHARACTERS, { message: `Must be maximum of ${MAX_NAME_CHARACTERS} characters` })
     .refine(
       value => /^[a-zA-Z0-9-_.]+$/.test(value),
       'Name should contain only alphabets, numbers or -_.',
