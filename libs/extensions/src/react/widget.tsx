@@ -15,8 +15,8 @@ export type WidgetExtensionProps = {
 
 export const Widget: React.FC<WidgetExtensionProps> = props => {
   const { name, loadingIndicator, onError, customStyle = '', fullHeight } = props;
-  const { getExtensionsPlugin, getContext, logger } = useRootComponentProps();
-  const widgetStore = React.useRef<WidgetStorePlugin>(getExtensionsPlugin().widgetStore);
+  const { getCorePlugins, getContext, logger } = useRootComponentProps();
+  const widgetStore = React.useRef<WidgetStorePlugin>(getCorePlugins().widgetStore);
   const [parcelConfigs, setParcelConfigs] = React.useState([]);
   const location = useRoutingEvents();
 
@@ -26,6 +26,17 @@ export const Widget: React.FC<WidgetExtensionProps> = props => {
     if (!widgetStore.current) return [];
     return widgetStore.current.getMatchingWidgets(name, location);
   }, [location, name]);
+
+  React.useEffect(() => {
+    for (const parcelConf of widgets) {
+      widgetStore.current.onWidgetUnload(parcelConf.appName, () => {
+        setParcelConfigs(prev =>
+          prev.filter(parcel => parcel.widget.appName !== parcelConf.appName),
+        );
+        setIsParcelMounted(false);
+      });
+    }
+  }, [widgets]);
 
   React.useEffect(() => {
     const resolveConfigs = async () => {

@@ -1,13 +1,13 @@
 import { injectable } from 'inversify';
 import settingsSchema from './settings.schema';
-import appSchema from './integrations.schema';
+import installedExtensionSchema from './installed-extensions.schema';
 import { validate } from '../common/validator';
 import { z } from 'zod';
 import DbWrapper from './db.wrapper';
 
 export const availableCollections = Object.freeze({
   Settings: settingsSchema.name,
-  Integrations: appSchema.name,
+  InstalledExtensions: installedExtensionSchema.name,
 });
 
 @injectable()
@@ -45,7 +45,7 @@ class DB {
 
   public getCollections() {
     return {
-      integrations: this._db?.integrations,
+      installedExtensions: this._db?.installedExtensions,
       settings: this._db?.settings,
     };
   }

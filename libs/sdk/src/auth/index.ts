@@ -358,6 +358,11 @@ class AWF_Auth {
     await this._lit.disconnect();
     await this._ceramic.disconnect();
     await this._gql.resetCache();
+    // notify appLoader on sign out
+    this._globalChannel.next({
+      event: AUTH_EVENTS.SIGN_OUT,
+      data: {},
+    });
     return true;
   }
 

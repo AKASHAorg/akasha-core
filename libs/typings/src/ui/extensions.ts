@@ -5,7 +5,7 @@ import { IRootComponentProps } from './root-component';
 import { ContentBlockConfig } from './editor-blocks';
 import { ExtensionPointInterface } from './extension-point';
 import { Profile } from './profile';
-import { AkashaApp, AkashaAppApplicationType, AkashaAppInterface } from '../sdk/graphql-types-new';
+import { AkashaAppApplicationType, AkashaAppInterface } from '../sdk/graphql-types-new';
 
 /**
  * Enum defining extension status for an extension developer
@@ -31,33 +31,11 @@ export type Extension = Omit<AkashaAppInterface, 'author' | 'contributors'> & {
 };
 
 /**
- * Enum defining events related to loading and unloading of an app
- **/
-export const enum AppEvents {
-  RegisterApplication = 'register-application',
-  AppNotFound = 'app-not-found',
-}
-/**
  * Type defining info about developer of an extension
  */
 export type Developer = {
   profileId: Profile['did']['id'];
 } & Pick<Profile, 'avatar' | 'name'>;
-
-/**
- * Type defining app registration event
- **/
-export type AppRegisterEvent = {
-  event: AppEvents.RegisterApplication;
-  data: {
-    config: IAppConfig;
-    appData: Partial<Omit<AkashaApp, 'author'>> & {
-      source?: string;
-      isLocal?: boolean;
-      author?: { id: string; isViewer?: boolean };
-    };
-  };
-};
 
 /**
  * Interface defining configuration object for loading an app

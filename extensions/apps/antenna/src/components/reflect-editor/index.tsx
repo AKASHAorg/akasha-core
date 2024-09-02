@@ -53,13 +53,16 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
   const sdk = getSDK();
   const isReflectOfReflection = reflectToId !== beamId;
 
-  const [publishReflection, publishReflectionMutation] = useCreateReflectMutation({
+  const [publishReflection] = useCreateReflectMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
     onCompleted: () => {
       analyticsActions.trackEvent({
         category: AnalyticsCategories.REFLECT,
         action: 'Reflect Published',
       });
+    },
+    onError: () => {
+      handleError();
     },
   });
   const { addPendingReflection, removePendingReflection, updatePendingReflection } =
@@ -85,32 +88,42 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
   }, []);
 
   /*
-   * Currently jsdom doesn't support contenteditable and as a result slate editor as well.
+   * Currently jsdom doesn't support contenteditable and as a result slate editor can't be tested in jsdom.
    * This effect is a workaround to set the value of the editor during tests
    **/
   React.useEffect(() => {
     const editorValueForTest = getEditorValueForTest();
     if (editorValueForTest) {
-      setEditorState([
-        {
-          type: 'paragraph',
-          children: [
-            {
-              text: editorValueForTest,
-            },
-          ],
-        },
-      ]);
+      setEditorState(
+        Array.isArray(editorValueForTest)
+          ? editorValueForTest.map(value => ({
+              type: 'paragraph',
+              children: [
+                {
+                  text: value,
+                },
+              ],
+            }))
+          : [
+              {
+                type: 'paragraph',
+                children: [
+                  {
+                    text: editorValueForTest,
+                  },
+                ],
+              },
+            ],
+      );
     }
   }, []);
 
-  React.useEffect(() => {
-    if (publishReflectionMutation.error) {
-      setShowEditor(true);
-      setEditorState(newContent.content.flatMap(item => decodeb64SlateContent(item.value)));
-      showAlertNotification(`${t(`Something went wrong when publishing the reflection`)}.`);
-    }
-  }, [newContent?.content, publishReflectionMutation, showAlertNotification, t, setShowEditor]);
+  const handleError = () => {
+    setShowEditor(true);
+    setEditorState(newContent.content.flatMap(item => decodeb64SlateContent(item.value)));
+    showAlertNotification(`${t(`Something went wrong when publishing the reflection`)}.`);
+    removePendingReflection(pendingReflectionIdRef.current);
+  };
 
   const handlePublish = async (data: IPublishData) => {
     const reflection = isReflectOfReflection ? { reflection: reflectToId, isReply: true } : {};
@@ -154,8 +167,6 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         ...response.data.createAkashaReflect.document,
         published: true,
       });
-    } else {
-      removePendingReflection(pendingReflectionIdRef.current);
     }
   };
 

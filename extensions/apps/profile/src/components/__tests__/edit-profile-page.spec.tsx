@@ -99,6 +99,16 @@ describe('< EditProfilePage /> component', () => {
       expect(screen.getByText(/must be at least 3 characters/i)).toBeInTheDocument();
     });
 
+    it('should show error if name is more than 50 characters long', async () => {
+      const user = userEvent.setup();
+      renderWithAllProviders(baseComponent(emptyProfileMock), {});
+      await user.type(
+        await screen.findByLabelText(/name/i),
+        'coffeeeeeeeeeeeeeeeeeeeeloverrrrrrrrrrrrrrrrrrrrrrr',
+      );
+      expect(screen.getByText(/must be maximum of 50 characters/i)).toBeInTheDocument();
+    });
+
     it('should submit name, bio, social links and nsfw fields', async () => {
       const user = userEvent.setup();
       const { mocks: editProfileMocks } = getEditProfileMocks({ profileDID: PROFILE_DID });

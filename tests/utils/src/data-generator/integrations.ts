@@ -17,7 +17,7 @@ const log: any = {
 export const genAppProps = (): IRootComponentProps & {
   getRoutingPlugin: (ns?: string) => any;
   getTranslationPlugin: (ns?: string) => any;
-  getExtensionsPlugin: () => any;
+  getCorePlugins: () => any;
 } => ({
   logger: log,
   navigateToModal: () => ({}),
@@ -32,7 +32,7 @@ export const genAppProps = (): IRootComponentProps & {
     getUrlForApp: jest.fn(),
   }),
   getTranslationPlugin: () => ({ i18n: {} }),
-  getExtensionsPlugin: () => ({
+  getCorePlugins: () => ({
     //TODO revisit this mock
     contentBlockStore: {
       getMatchingBlocks: () => [],
