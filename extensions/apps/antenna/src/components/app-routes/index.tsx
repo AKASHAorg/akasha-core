@@ -5,7 +5,6 @@ import BeamPage from '../pages/entry-page/beam-page';
 import ReflectionPage from '../pages/entry-page/reflection-page';
 import TagFeedPage from '../pages/tag-feed-page/tag-feed-page';
 import EditorPage from '../pages/editor-page/editor-page';
-import ErrorComponent from './error-component';
 import EntrySectionLoading from '../pages/entry-page/entry-section-loading';
 import routes, {
   GLOBAL_ANTENNA,
@@ -24,6 +23,7 @@ import {
   Outlet,
   defer,
   Await,
+  CatchBoundary,
 } from '@tanstack/react-router';
 import { ICreateRouter, IRouterContext } from '@akashaorg/typings/lib/ui';
 import {
@@ -35,9 +35,11 @@ import {
   getReflectionData,
 } from './data-loaders';
 import { mapBeamEntryData, mapReflectEntryData } from '@akashaorg/ui-awf-hooks';
+import { NotFoundComponent } from './not-found-component';
 
 const rootRoute = createRootRouteWithContext<IRouterContext>()({
   component: Outlet,
+  notFoundComponent: () => <NotFoundComponent />,
 });
 
 const defaultRoute = createRoute({
@@ -51,22 +53,33 @@ const defaultRoute = createRoute({
 const antennaRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[GLOBAL_ANTENNA],
+  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
-    return <GlobalAntennaPage />;
+    return (
+      <CatchBoundary getResetKey={() => 'antenna_reset'} errorComponent={NotFoundComponent}>
+        <GlobalAntennaPage />
+      </CatchBoundary>
+    );
   },
 });
 
 const myAntennaRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[MY_ANTENNA],
+  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
-    return <MyAntennaPage />;
+    return (
+      <CatchBoundary getResetKey={() => 'myAntenna_reset'} errorComponent={NotFoundComponent}>
+        <MyAntennaPage />
+      </CatchBoundary>
+    );
   },
 });
 
 const beamRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[BEAM]}/$beamId`,
+  notFoundComponent: () => <NotFoundComponent />,
   loader: ({ context, params }) => ({
     beam: defer(getBeamById({ apolloClient: context.apolloClient, beamId: params.beamId })),
     beamStream: defer(
@@ -80,23 +93,25 @@ const beamRoute = createRoute({
     const { beamId } = beamRoute.useParams();
     const { beam, beamStream } = beamRoute.useLoaderData();
     return (
-      <Suspense fallback={<EntrySectionLoading />}>
-        <Await promise={beamStream}>
-          {beamStreamData => (
-            <Await promise={beam}>
-              {beamById => {
-                return (
-                  <BeamPage
-                    beamId={beamId}
-                    beamData={mapBeamEntryData(getBeamData(beamById))}
-                    beamStatus={getBeamStatus(beamStreamData)}
-                  />
-                );
-              }}
-            </Await>
-          )}
-        </Await>
-      </Suspense>
+      <CatchBoundary getResetKey={() => 'beamRoute_reset'} errorComponent={NotFoundComponent}>
+        <Suspense fallback={<EntrySectionLoading />}>
+          <Await promise={beamStream}>
+            {beamStreamData => (
+              <Await promise={beam}>
+                {beamById => {
+                  return (
+                    <BeamPage
+                      beamId={beamId}
+                      beamData={mapBeamEntryData(getBeamData(beamById))}
+                      beamStatus={getBeamStatus(beamStreamData)}
+                    />
+                  );
+                }}
+              </Await>
+            )}
+          </Await>
+        </Suspense>
+      </CatchBoundary>
     );
   },
 });
@@ -104,27 +119,33 @@ const beamRoute = createRoute({
 const beamReflectRoute = createRoute({
   getParentRoute: () => beamRoute,
   path: routes[REFLECT],
+  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     const { beamId } = beamReflectRoute.useParams();
     const { beam, beamStream } = beamRoute.useLoaderData();
     return (
-      <Suspense fallback={<EntrySectionLoading />}>
-        <Await promise={beamStream}>
-          {beamStreamData => (
-            <Await promise={beam}>
-              {beamById => {
-                return (
-                  <BeamPage
-                    beamId={beamId}
-                    beamData={mapBeamEntryData(getBeamData(beamById))}
-                    beamStatus={getBeamStatus(beamStreamData)}
-                  />
-                );
-              }}
-            </Await>
-          )}
-        </Await>
-      </Suspense>
+      <CatchBoundary
+        getResetKey={() => 'beamReflectRoute_reset'}
+        errorComponent={NotFoundComponent}
+      >
+        <Suspense fallback={<EntrySectionLoading />}>
+          <Await promise={beamStream}>
+            {beamStreamData => (
+              <Await promise={beam}>
+                {beamById => {
+                  return (
+                    <BeamPage
+                      beamId={beamId}
+                      beamData={mapBeamEntryData(getBeamData(beamById))}
+                      beamStatus={getBeamStatus(beamStreamData)}
+                    />
+                  );
+                }}
+              </Await>
+            )}
+          </Await>
+        </Suspense>
+      </CatchBoundary>
     );
   },
 });
@@ -132,6 +153,7 @@ const beamReflectRoute = createRoute({
 const reflectionsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[REFLECTION]}/$reflectionId`,
+  notFoundComponent: () => <NotFoundComponent />,
   loader: ({ context, params }) => ({
     reflection: defer(
       getReflectionById({
@@ -143,11 +165,18 @@ const reflectionsRoute = createRoute({
   component: () => {
     const { reflection } = reflectionsRoute.useLoaderData();
     return (
-      <Suspense fallback={<EntrySectionLoading />}>
-        <Await promise={reflection}>
-          {data => <ReflectionPage reflectionData={mapReflectEntryData(getReflectionData(data))} />}
-        </Await>
-      </Suspense>
+      <CatchBoundary
+        getResetKey={() => 'reflectionsRoute_reset'}
+        errorComponent={NotFoundComponent}
+      >
+        <Suspense fallback={<EntrySectionLoading />}>
+          <Await promise={reflection}>
+            {data => (
+              <ReflectionPage reflectionData={mapReflectEntryData(getReflectionData(data))} />
+            )}
+          </Await>
+        </Suspense>
+      </CatchBoundary>
     );
   },
 });
@@ -155,14 +184,22 @@ const reflectionsRoute = createRoute({
 const reflectionsReflectRoute = createRoute({
   getParentRoute: () => reflectionsRoute,
   path: routes[REFLECT],
+  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     const { reflection } = reflectionsRoute.useLoaderData();
     return (
-      <Suspense fallback={<EntrySectionLoading />}>
-        <Await promise={reflection}>
-          {data => <ReflectionPage reflectionData={mapReflectEntryData(getReflectionData(data))} />}
-        </Await>
-      </Suspense>
+      <CatchBoundary
+        getResetKey={() => 'reflectionsReflect_reset'}
+        errorComponent={NotFoundComponent}
+      >
+        <Suspense fallback={<EntrySectionLoading />}>
+          <Await promise={reflection}>
+            {data => (
+              <ReflectionPage reflectionData={mapReflectEntryData(getReflectionData(data))} />
+            )}
+          </Await>
+        </Suspense>
+      </CatchBoundary>
     );
   },
 });
@@ -170,17 +207,27 @@ const reflectionsReflectRoute = createRoute({
 const tagFeedRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[TAGS]}/$tagName`,
+  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     const { tagName } = tagFeedRoute.useParams();
-    return <TagFeedPage tagName={tagName} />;
+    return (
+      <CatchBoundary getResetKey={() => 'tagFeed_reset'} errorComponent={NotFoundComponent}>
+        <TagFeedPage tagName={tagName} />
+      </CatchBoundary>
+    );
   },
 });
 
 const editorRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[EDITOR],
+  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
-    return <EditorPage />;
+    return (
+      <CatchBoundary getResetKey={() => 'editor_reset'} errorComponent={NotFoundComponent}>
+        <EditorPage />
+      </CatchBoundary>
+    );
   },
 });
 
@@ -201,7 +248,10 @@ export const router = ({ baseRouteName, apolloClient }: ICreateRouter) =>
     context: {
       apolloClient,
     },
+    // errors thrown in the route loaders are caught here.
+    // for a more granular errors, every loader should have an error handler
+    // by default we'll treat loader errors as resource/page not found
     defaultErrorComponent: ({ error }) => {
-      return <ErrorComponent error={(error as unknown as Error).message} />;
+      return <NotFoundComponent error={error} />;
     },
   });

@@ -6,11 +6,11 @@ import TermsOfUse from '../pages/terms-of-use';
 import CodeOfConduct from '../pages/code-of-conduct';
 import PrivacyPolicy from '../pages/privacy-policy';
 import DeveloperGuidelines from '../pages/developer-guidelines';
-import ErrorComponent from './error-component';
 import routes, { HOME, TOS, TOU, PP, COC, DG } from '../../routes';
 import { createRootRoute, createRoute, createRouter, redirect } from '@tanstack/react-router';
 
 import { ICreateRouter } from '@akashaorg/typings/lib/ui';
+import { NotFoundComponent } from './not-found-component';
 
 const rootRoute = createRootRoute({
   component: Outlet,
@@ -27,12 +27,14 @@ const defaultRoute = createRoute({
 const mainRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[HOME]}`,
+  notFoundComponent: () => <NotFoundComponent />,
   component: MainPage,
 });
 
 const termsOfServiceRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[TOS]}`,
+  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return <TermsOfService />;
   },
@@ -41,6 +43,7 @@ const termsOfServiceRoute = createRoute({
 const termsOfUseRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[TOU]}`,
+  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return <TermsOfUse />;
   },
@@ -49,6 +52,7 @@ const termsOfUseRoute = createRoute({
 const codeOfConductRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[COC]}`,
+  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return <CodeOfConduct />;
   },
@@ -57,6 +61,7 @@ const codeOfConductRoute = createRoute({
 const privacyPolicyRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[PP]}`,
+  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return <PrivacyPolicy />;
   },
@@ -65,6 +70,7 @@ const privacyPolicyRoute = createRoute({
 const developerGuidelinesRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[DG]}`,
+  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return <DeveloperGuidelines />;
   },
@@ -85,7 +91,5 @@ export const router = ({ baseRouteName }: ICreateRouter) =>
     routeTree,
     basepath: baseRouteName,
 
-    defaultErrorComponent: ({ error }) => (
-      <ErrorComponent error={(error as unknown as Error).message} />
-    ),
+    defaultErrorComponent: ({ error }) => <NotFoundComponent error={error} />,
   });

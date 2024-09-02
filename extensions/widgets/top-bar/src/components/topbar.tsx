@@ -86,9 +86,13 @@ const Topbar: React.FC<ITopbarProps> = props => {
     isLoggedIn,
     sidebarVisible,
     onSidebarToggle,
-    onBrandClick,
+    onBrandClick = () => {
+      return;
+    },
     onAppWidgetClick,
-    onBackClick,
+    onBackClick = () => {
+      return;
+    },
   } = props;
 
   const [displayWidgetTogglingButton, setDisplayWidgetTogglingButton] = React.useState(
@@ -160,12 +164,5 @@ const Topbar: React.FC<ITopbarProps> = props => {
     </Card>
   );
 };
-Topbar.defaultProps = {
-  onBackClick: () => {
-    return;
-  },
-  onBrandClick: () => {
-    return;
-  },
-};
+
 export default Topbar;

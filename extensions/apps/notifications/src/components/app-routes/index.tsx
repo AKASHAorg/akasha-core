@@ -2,7 +2,6 @@ import React from 'react';
 import CustomiseNotificationPage from '../pages/customise-notification-page';
 import NotificationsPage from '../pages/notifications-page';
 import WelcomePage from '../pages/welcome-page';
-import ErrorComponent from './error-component';
 import routes, {
   CUSTOMISE_NOTIFICATION_WELCOME_PAGE,
   CUSTOMISE_NOTIFICATION_OPTIONS_PAGE,
@@ -18,6 +17,7 @@ import {
   redirect,
 } from '@tanstack/react-router';
 import { ICreateRouter, IRouterContext } from '@akashaorg/typings/lib/ui';
+import { NotFoundComponent } from './not-found-component';
 
 const rootRoute = createRootRouteWithContext<IRouterContext>()({
   component: Outlet,
@@ -34,6 +34,7 @@ const defaultRoute = createRoute({
 const showNotificationsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[SHOW_NOTIFICATIONS_PAGE]}`,
+  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return <NotificationsPage />;
   },
@@ -42,18 +43,21 @@ const showNotificationsRoute = createRoute({
 const settingsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[SETTINGS_PAGE]}`,
+  notFoundComponent: () => <NotFoundComponent />,
   component: () => <CustomiseNotificationPage initial={false} />,
 });
 
 const customiseNotificationsOptionsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[CUSTOMISE_NOTIFICATION_OPTIONS_PAGE]}`,
+  notFoundComponent: () => <NotFoundComponent />,
   component: () => <CustomiseNotificationPage />,
 });
 
 const customiseNotificationsWelcomePageRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[CUSTOMISE_NOTIFICATION_WELCOME_PAGE]}`,
+  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return <WelcomePage />;
   },
@@ -62,6 +66,7 @@ const customiseNotificationsWelcomePageRoute = createRoute({
 const customiseNotificationsConfirmationPageRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[CUSTOMISE_NOTIFICATION_CONFIRMATION_PAGE]}`,
+  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return <WelcomePage finalStep={true} />;
   },
@@ -83,7 +88,5 @@ export const router = ({ baseRouteName, apolloClient }: ICreateRouter) =>
     context: {
       apolloClient,
     },
-    defaultErrorComponent: ({ error }) => (
-      <ErrorComponent error={(error as unknown as Error).message} />
-    ),
+    defaultErrorComponent: ({ error }) => <NotFoundComponent error={error} />,
   });

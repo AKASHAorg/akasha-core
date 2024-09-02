@@ -7,6 +7,7 @@ export type ErrorBoundaryProps = {
   fallback?: React.ReactElement;
   errorObj?: Pick<ErrorLoaderProps, 'type' | 'title'>;
   logger?: ILogger;
+  onDidCatch?: (err: Error) => void;
 };
 
 export type ErrorBoundaryState = { hasError: boolean; error: Error };
@@ -39,17 +40,23 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
   componentDidCatch(error: Error): void {
     this.setState({ hasError: true, error });
     this.props.logger?.error(error?.message);
+    this.props?.onDidCatch(error);
   }
 
   render() {
-    const {
-      errorObj: { type = 'script-error', title = 'An error occured' },
-      fallback = <ErrorLoader type={type} title={title} details={this.state.error?.message} />,
-      children,
-    } = this.props;
+    const { errorObj, fallback, children } = this.props;
 
-    if (this.state.hasError) {
-      return fallback;
+    if (this.state.hasError && errorObj) {
+      if ('fallback' in this.props) {
+        return React.cloneElement(fallback, { ...errorObj });
+      }
+      return (
+        <ErrorLoader
+          type={errorObj.type}
+          title={errorObj.title}
+          details={this.state.error?.message}
+        />
+      );
     }
 
     return children;
@@ -57,12 +64,12 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
 }
 
 export const withErrorBoundary =
-  <T extends ErrorBoundaryProps>(WrappedComponent: React.ComponentType<T>) =>
+  <T extends ErrorBoundaryProps>(WrappedComponent: React.JSXElementConstructor<T>) =>
   (props: T) => {
     const { fallback } = props;
 
     return (
-      <ErrorBoundary fallback={fallback}>
+      <ErrorBoundary {...props}>
         <WrappedComponent {...props} />
       </ErrorBoundary>
     );

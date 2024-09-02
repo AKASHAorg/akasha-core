@@ -25,7 +25,7 @@ export type ProfileSearchCardProps = {
 
 /**
  * Component used in the search app to display user profiles
- * @param isFollowing - wheter the logged in user is following this profile
+ * @param isFollowing - whether the logged in user is following this profile
  * @param profileData - data for this profile
  * @param followingLabel - text for number of users that this profile is following
  * @param followersLabel - text for number of users following this profile
@@ -40,20 +40,18 @@ export type ProfileSearchCardProps = {
  * @param handleFollow - handler for following this profile
  * @param handleUnfollow - handler for unfollowing this profile
  */
-const ProfileSearchCard: React.FC<ProfileSearchCardProps> = props => {
-  const {
-    handleFollow,
-    handleUnfollow,
-    isFollowing,
-    profileData,
-    followingLabel,
-    followLabel,
-    unfollowLabel,
-    authenticatedDID,
-    onClickProfile,
-    transformSource,
-  } = props;
-
+const ProfileSearchCard = ({
+  handleFollow,
+  handleUnfollow,
+  isFollowing,
+  profileData,
+  followingLabel,
+  authenticatedDID,
+  onClickProfile,
+  transformSource,
+  followLabel = 'Follow',
+  unfollowLabel = 'Unfollow',
+}: ProfileSearchCardProps) => {
   return (
     <Stack direction="row" align="center" justify="between" customStyle={'py-2'}>
       <ProfileAvatarButton
@@ -82,12 +80,6 @@ const ProfileSearchCard: React.FC<ProfileSearchCardProps> = props => {
       )}
     </Stack>
   );
-};
-
-ProfileSearchCard.defaultProps = {
-  followLabel: 'Follow',
-  unfollowLabel: 'Unfollow',
-  followersLabel: 'Followers',
 };
 
 export default ProfileSearchCard;

@@ -7,11 +7,11 @@ import FollowersPage from '../pages/profile-engagement/followers-page';
 import ProfileInfoPage from '../pages/profile-info';
 import ProfileBeamsPage from '../pages/profile-beams';
 import ProfileHeader from '../profile-header';
-import ErrorComponent from './error-component';
 import ProfileWithAuthorization from '../profile-with-authorization';
 import menuRoute, { BEAMS, EDIT, INTERESTS, FOLLOWERS, FOLLOWING } from '../../routes';
 import { ProfileLoading } from '@akashaorg/design-system-components/lib/components/Profile';
 import {
+  CatchBoundary,
   createRootRouteWithContext,
   createRoute,
   createRouter,
@@ -25,6 +25,7 @@ import {
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { ENGAGEMENTS_PER_PAGE } from '../pages/profile-engagement/types';
 import { ICreateRouter, IRouterContext } from '@akashaorg/typings/lib/ui';
+import { NotFoundComponent } from './not-found-component';
 
 const rootRoute = createRootRouteWithContext<IRouterContext>()({
   component: () => (
@@ -38,6 +39,7 @@ const rootRoute = createRootRouteWithContext<IRouterContext>()({
 const profileInfoRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '$profileDID',
+  notFoundComponent: () => <NotFoundComponent />,
   loader: ({ context, params }) => {
     context.apolloClient.query({
       query: GetProfileByDidDocument,
@@ -49,9 +51,11 @@ const profileInfoRoute = createRoute({
   component: () => {
     const { profileDID } = profileInfoRoute.useParams();
     return (
-      <Suspense fallback={<ProfileLoading />}>
-        <ProfileInfoPage profileDID={profileDID} />
-      </Suspense>
+      <CatchBoundary getResetKey={() => 'profile_info_reset'} errorComponent={NotFoundComponent}>
+        <Suspense fallback={<ProfileLoading />}>
+          <ProfileInfoPage profileDID={profileDID} />
+        </Suspense>
+      </CatchBoundary>
     );
   },
 });
@@ -59,14 +63,17 @@ const profileInfoRoute = createRoute({
 const profileEditRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `$profileDID${menuRoute[EDIT]}`,
+  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     const { profileDID } = profileEditRoute.useParams();
     return (
-      <Suspense fallback={<ProfileLoading />}>
-        <ProfileWithAuthorization editingProfile={true} profileDID={profileDID}>
-          <EditProfilePage profileDID={profileDID} />
-        </ProfileWithAuthorization>
-      </Suspense>
+      <CatchBoundary getResetKey={() => 'profile_edit_reset'} errorComponent={NotFoundComponent}>
+        <Suspense fallback={<ProfileLoading />}>
+          <ProfileWithAuthorization editingProfile={true} profileDID={profileDID}>
+            <EditProfilePage profileDID={profileDID} />
+          </ProfileWithAuthorization>
+        </Suspense>
+      </CatchBoundary>
     );
   },
 });
@@ -74,6 +81,7 @@ const profileEditRoute = createRoute({
 const followersRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `$profileDID${menuRoute[FOLLOWERS]}`,
+  notFoundComponent: () => <NotFoundComponent />,
   loader: ({ context, params }) => {
     context.apolloClient.query({
       query: GetFollowersListByDidDocument,
@@ -86,12 +94,14 @@ const followersRoute = createRoute({
   component: () => {
     const { profileDID } = followersRoute.useParams();
     return (
-      <ProfileWithAuthorization profileDID={profileDID}>
-        <Card radius={20} padding="p-0">
-          <ProfileHeader profileDID={profileDID} plain={true} customStyle="sticky top-3.5 z-50" />
-          <FollowersPage profileDID={profileDID} />
-        </Card>
-      </ProfileWithAuthorization>
+      <CatchBoundary getResetKey={() => 'followers_reset'} errorComponent={NotFoundComponent}>
+        <ProfileWithAuthorization profileDID={profileDID}>
+          <Card radius={20} padding="p-0">
+            <ProfileHeader profileDID={profileDID} plain={true} customStyle="sticky top-3.5 z-50" />
+            <FollowersPage profileDID={profileDID} />
+          </Card>
+        </ProfileWithAuthorization>
+      </CatchBoundary>
     );
   },
 });
@@ -99,6 +109,7 @@ const followersRoute = createRoute({
 const followingRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `$profileDID${menuRoute[FOLLOWING]}`,
+  notFoundComponent: () => <NotFoundComponent />,
   loader: ({ context, params }) => {
     context.apolloClient.query({
       query: GetFollowingListByDidDocument,
@@ -111,12 +122,14 @@ const followingRoute = createRoute({
   component: () => {
     const { profileDID } = followingRoute.useParams();
     return (
-      <ProfileWithAuthorization profileDID={profileDID}>
-        <Card radius={20} padding="p-0">
-          <ProfileHeader profileDID={profileDID} plain={true} customStyle="sticky top-3.5 z-50" />
-          <FollowingPage profileDID={profileDID} />
-        </Card>
-      </ProfileWithAuthorization>
+      <CatchBoundary getResetKey={() => 'following_reset'} errorComponent={NotFoundComponent}>
+        <ProfileWithAuthorization profileDID={profileDID}>
+          <Card radius={20} padding="p-0">
+            <ProfileHeader profileDID={profileDID} plain={true} customStyle="sticky top-3.5 z-50" />
+            <FollowingPage profileDID={profileDID} />
+          </Card>
+        </ProfileWithAuthorization>
+      </CatchBoundary>
     );
   },
 });
@@ -124,13 +137,16 @@ const followingRoute = createRoute({
 const interestsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `$profileDID${menuRoute[INTERESTS]}`,
+  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     const { profileDID } = interestsRoute.useParams();
     return (
-      <ProfileWithAuthorization profileDID={profileDID}>
-        <ProfileHeader profileDID={profileDID} />
-        <InterestsPage profileDID={profileDID} />
-      </ProfileWithAuthorization>
+      <CatchBoundary getResetKey={() => 'interests_reset'} errorComponent={NotFoundComponent}>
+        <ProfileWithAuthorization profileDID={profileDID}>
+          <ProfileHeader profileDID={profileDID} />
+          <InterestsPage profileDID={profileDID} />
+        </ProfileWithAuthorization>
+      </CatchBoundary>
     );
   },
 });
@@ -138,13 +154,16 @@ const interestsRoute = createRoute({
 const beamsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `$profileDID${menuRoute[BEAMS]}`,
+  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     const { profileDID } = beamsRoute.useParams();
     return (
-      <ProfileWithAuthorization profileDID={profileDID}>
-        <ProfileHeader profileDID={profileDID} />
-        <ProfileBeamsPage profileDID={profileDID} />
-      </ProfileWithAuthorization>
+      <CatchBoundary getResetKey={() => 'profile_beams_reset'} errorComponent={NotFoundComponent}>
+        <ProfileWithAuthorization profileDID={profileDID}>
+          <ProfileHeader profileDID={profileDID} />
+          <ProfileBeamsPage profileDID={profileDID} />
+        </ProfileWithAuthorization>
+      </CatchBoundary>
     );
   },
 });
@@ -165,7 +184,5 @@ export const router = ({ baseRouteName, apolloClient }: ICreateRouter) =>
     context: {
       apolloClient,
     },
-    defaultErrorComponent: ({ error }) => (
-      <ErrorComponent error={(error as unknown as Error).message} />
-    ),
+    defaultErrorComponent: ({ error }) => <NotFoundComponent error={error} />,
   });

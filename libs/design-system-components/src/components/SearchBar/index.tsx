@@ -31,7 +31,7 @@ const SearchBar: React.FC<SearchBarProps> = props => {
     inputValue,
     customStyle,
     onInputChange,
-    inputPlaceholderLabel,
+    inputPlaceholderLabel = 'Search',
     fullWidth,
     onSearch,
     onKeyUp,
@@ -74,10 +74,6 @@ const SearchBar: React.FC<SearchBarProps> = props => {
       <Icon icon={<MagnifyingGlassIcon />} />
     </Stack>
   );
-};
-
-SearchBar.defaultProps = {
-  inputPlaceholderLabel: 'Search',
 };
 
 export default SearchBar;

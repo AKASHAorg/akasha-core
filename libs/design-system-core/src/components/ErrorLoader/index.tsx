@@ -14,7 +14,8 @@ export type ErrorLoaderProps = React.PropsWithChildren<{
     | 'no-connection'
     | 'not-registered'
     | 'not-authenticated'
-    | 'script-error';
+    | 'script-error'
+    | 'page-not-found';
   /* Path to public folder */
   publicImgPath?: string;
   /**
@@ -71,6 +72,9 @@ const ErrorLoader: React.FC<ErrorLoaderProps> = ({ children, ...props }) => {
       break;
     case 'not-authenticated':
       imagesrc = `${publicImgPath}/not-authenticated.webp`;
+      break;
+    case 'page-not-found':
+      imagesrc = `${publicImgPath}/new404.webp`;
       break;
     default:
       imagesrc = `${publicImgPath}/general-error.webp`;
