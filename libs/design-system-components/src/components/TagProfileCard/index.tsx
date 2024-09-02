@@ -17,10 +17,10 @@ export type TagProfileCard = {
   subscribedTags: string[];
   isLoading: boolean;
   // labels
-  mentionsLabel?: string;
-  subscribeLabel?: string;
-  unsubscribeLabel?: string;
-  subscribedLabel?: string;
+  mentionsLabel: string;
+  subscribeLabel: string;
+  unsubscribeLabel: string;
+  subscribedLabel: string;
   customStyle?: string;
   // handlers
   handleSubscribeTag: (tagName: string) => void;

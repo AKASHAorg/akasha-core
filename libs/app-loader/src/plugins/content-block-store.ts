@@ -1,14 +1,23 @@
 import {
-  ContentBlockEvents,
-  ContentBlockRegisterEvent,
+  ContentBlockConfig,
   IContentBlockStorePlugin,
-  IRootComponentProps,
-  IRootExtensionProps,
+  LocalContentBlock,
 } from '@akashaorg/typings/lib/ui';
-import { hasOwn } from '@akashaorg/ui-awf-hooks';
 import { BlockLabeledValue } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { BaseStore } from './base-store';
+import { GetContentBlockByIdQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
+import { FilterEmpty } from '../type-utils';
 
+const isLocalBlock = (
+  blockInfo: LocalContentBlock | GetContentBlockByIdQuery['node'],
+): blockInfo is LocalContentBlock => {
+  return 'appName' in blockInfo && 'propertyType' in blockInfo;
+};
+
+const isNotEmpty = (
+  blockInfo: GetContentBlockByIdQuery['node'],
+): blockInfo is FilterEmpty<GetContentBlockByIdQuery['node']> => {
+  return Object.keys(blockInfo).length > 0;
+};
 /**
  * When app-loader loads the applications config (the return object of the register function);
  * it checks if the config has the 'contentBlocks' property.
@@ -18,29 +27,32 @@ import { BaseStore } from './base-store';
  *
  * The getMatchingBlocks method takes as param, 'blockInfo', iterates over the blocks and tries to find the block(s)  matching the 'propertyType' and the 'appName' of the passed 'blockInfo'
  */
-export class ContentBlockStore extends BaseStore {
+export class ContentBlockStore {
   static instance: ContentBlockStore;
-  #blocks: ContentBlockRegisterEvent['data'];
-
-  constructor(uiEvents: IRootComponentProps['uiEvents']) {
-    super(uiEvents);
+  #blocks: (ContentBlockConfig & { appName: string })[];
+  private constructor() {
     this.#blocks = [];
-    this.subscribeRegisterEvents(ContentBlockEvents.RegisterContentBlock, {
-      next: (eventInfo: ContentBlockRegisterEvent) => {
-        if (!Array.isArray(eventInfo.data)) {
-          return;
-        }
-        this.#blocks.push(...eventInfo.data);
-      },
-    });
   }
+
+  public registerContentBlock = (blockInfo: ContentBlockConfig & { appName: string }) => {
+    this.#blocks.push(blockInfo);
+  };
+
+  public registerContentBlocks = (blockInfos: (ContentBlockConfig & { appName: string })[]) => {
+    if (!Array.isArray(blockInfos)) {
+      return;
+    }
+    blockInfos.forEach(blockInfo => {
+      this.registerContentBlock(blockInfo);
+    });
+  };
 
   public getMatchingBlocks: IContentBlockStorePlugin['getMatchingBlocks'] = blockInfo => {
     if (!blockInfo) {
       console.warn('Block info not defined:', blockInfo);
       return [];
     }
-    if (hasOwn(blockInfo, 'propertyType') && hasOwn(blockInfo, 'appName')) {
+    if (isLocalBlock(blockInfo)) {
       const blocks = this.#blocks
         .map(block => {
           if (
@@ -71,13 +83,7 @@ export class ContentBlockStore extends BaseStore {
       }
       return blocks;
     } else {
-      if (
-        hasOwn(blockInfo, 'appVersion') &&
-        hasOwn(blockInfo.appVersion, 'application') &&
-        hasOwn(blockInfo.appVersion.application, 'name') &&
-        hasOwn(blockInfo, 'content') &&
-        Array.isArray(blockInfo.content)
-      ) {
+      if (isNotEmpty(blockInfo)) {
         let applicationName = blockInfo.appVersion.application.name;
         // @TODO: remove this if statement
         if (applicationName === 'antenna-test') {
@@ -103,7 +109,7 @@ export class ContentBlockStore extends BaseStore {
     }
   };
 
-  public getContentBlockInfos = () => {
+  public getInfos = () => {
     return this.#blocks.map(cblock => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { loadingFn, ...info } = cblock;
@@ -111,9 +117,9 @@ export class ContentBlockStore extends BaseStore {
     });
   };
 
-  static getInstance(uiEvents: IRootExtensionProps<unknown>['uiEvents']) {
+  static getInstance() {
     if (!this.instance) {
-      this.instance = new ContentBlockStore(uiEvents);
+      this.instance = new ContentBlockStore();
     }
     return this.instance;
   }

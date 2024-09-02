@@ -1,32 +1,29 @@
-import {
-  AppEvents,
-  ContentBlockEvents,
-  ExtensionPointEvents,
-  IAppConfig,
-  IntegrationRegistrationOptions,
-  IPlugin,
-  IRootComponentProps,
-  RouteRegistrationEvents,
-  UIEventData,
-  WidgetEvents,
-  WorldConfig,
-} from '@akashaorg/typings/lib/ui';
 import { Subject, Subscription } from 'rxjs';
 import {
-  hidePageSplash,
-  showPageSplash,
-  show404,
   hide404,
-  showError,
   hideError,
+  hidePageSplash,
+  show404,
+  showError,
+  showPageSplash,
 } from './html-template-handlers';
 import * as singleSpa from 'single-spa';
 import {
+  getRemoteExtensionLatestVersion,
   getRemoteLatestExtensionInfos,
   getUserInstalledExtensions,
   getWorldDefaultExtensions,
 } from './extensions';
 import getSDK, { SDK_Services, SDK_API } from '@akashaorg/core-sdk';
+import { InstalledExtensionSchema } from '@akashaorg/core-sdk/lib/db/installed-extensions.schema';
+import {
+  IAppConfig,
+  IPlugin,
+  IRootComponentProps,
+  RouteRegistrationEvents,
+  UIEventData,
+  WorldConfig,
+} from '@akashaorg/typings/lib/ui';
 import { ILogger } from '@akashaorg/typings/lib/sdk/log';
 import {
   checkActivityFn,
@@ -36,23 +33,15 @@ import {
   navigateToModal,
   parseQueryString,
 } from './utils';
-import { APP_EVENTS, AUTH_EVENTS } from '@akashaorg/typings/lib/sdk';
-import { IntegrationSchema } from '@akashaorg/core-sdk/lib/db/integrations.schema';
-import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { AUTH_EVENTS, EXTENSION_EVENTS } from '@akashaorg/typings/lib/sdk';
+import { AkashaApp, AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { ContentBlockStore } from './plugins/content-block-store';
+import { ExtensionPointStore } from './plugins/extension-point-store';
+import { WidgetStore } from './plugins/widget-store';
+import { ExtensionInstaller } from './plugins/extension-installer';
+import { SystemModuleType } from './type-utils';
 
 const isWindow = window && typeof window !== 'undefined';
-
-type SystemModuleType = {
-  register?: (opts: IntegrationRegistrationOptions) => IAppConfig;
-  initialize?: (opts: Partial<IntegrationRegistrationOptions>) => Promise<void> | void;
-  registerPlugin?: (
-    opts: Omit<IntegrationRegistrationOptions, 'layoutSlots'> & {
-      encodeAppName: (name: string) => string;
-      decodeAppName: (name: string) => string;
-    },
-  ) => Promise<IPlugin>;
-  uninstall?: (opts: IntegrationRegistrationOptions) => Promise<void> | void;
-};
 
 export default class AppLoader {
   worldConfig: WorldConfig;
@@ -63,11 +52,18 @@ export default class AppLoader {
   layoutConfig: IAppConfig;
   logger: ILogger;
   parentLogger: SDK_Services['log'];
-  plugins: IPlugin;
+  plugins: IPlugin & {
+    core?: {
+      contentBlockStore: ContentBlockStore;
+      extensionPointStore: ExtensionPointStore;
+      widgetStore: WidgetStore;
+      extensionInstaller: ExtensionInstaller;
+    };
+  };
   globalChannel: SDK_API['globalChannel'];
   user: { id: string };
   globalChannelSub: Subscription;
-  userExtensions: IntegrationSchema[];
+  userExtensions: InstalledExtensionSchema[];
   appNotFound: boolean;
   erroredApps: string[];
   constructor(worldConfig: WorldConfig) {
@@ -117,7 +113,9 @@ export default class AppLoader {
       return;
     }
     this.extensionModules = await this.importModules(this.extensionData);
-    this.plugins = await this.loadPlugins(this.extensionModules);
+    await this.loadCorePlugins();
+    const plugins = await this.loadPlugins(this.extensionConfigs, this.extensionModules);
+    this.plugins = { ...this.plugins, ...plugins };
     await this.loadLayoutConfig();
     await this.initializeExtensions(this.extensionModules);
     this.extensionConfigs = this.registerExtensions(this.extensionModules);
@@ -128,12 +126,15 @@ export default class AppLoader {
     const sdk = getSDK();
     await sdk.api.auth.getCurrentUser();
   };
+
   onBeforeFirstMount = () => {
     hidePageSplash();
   };
+
   onFirstMount = () => {
     this.singleSpaRegister(this.extensionConfigs);
   };
+
   onRouting = (ev: CustomEvent) => {
     const newURL = new URL(ev.detail.newUrl);
     const { appsByNewStatus } = ev.detail;
@@ -142,8 +143,8 @@ export default class AppLoader {
     }
     // make sure we are no longer on the path of the broken app
     if (this.erroredApps.length && !appsByNewStatus.SKIP_BECAUSE_BROKEN.length) {
-      // Note: The broken apps are siloed by the single-spa and it will not even try to mount them again.
-      // So, this error is only seen now. Afterwards no error will be thrown and we cannot show a card anymore.
+      // Note: The broken apps are siloed by the single-spa, and it will not even try to mount them again.
+      // So, this error is only seen now. Afterward no error will be thrown and we cannot show a card anymore.
       hideError(this.layoutConfig.extensionSlots.applicationSlotId);
       // unload the app. Currently this does not have any effect on the frontend.
       // if we decide to also unregister the app, it will have some side-effects like plugins will no longer work
@@ -194,37 +195,48 @@ export default class AppLoader {
       }
     }
   };
-  importModules = async (extensionData: typeof this.extensionData) => {
+
+  importModules = async (
+    extensionData: AppLoader['extensionData'],
+  ): Promise<AppLoader['extensionModules']> => {
     if (!extensionData.length) return;
-    const sdk = getSDK();
     const modules = new Map();
     for (const extension of extensionData) {
       if (this.extensionModules.has(extension.name) || modules.has(extension.name)) {
         continue;
       }
-      if ('isLocal' in extension && Object.hasOwn(extension, 'isLocal')) {
-        if (!extension.source || typeof extension.source !== 'string') {
-          this.logger.warn(
-            `Locally loaded extensions requires a 'source: string' property but ${typeof extension.source} was provided for: ${extension.name}. Skipping!`,
-          );
-          continue;
-        }
-        const source = sdk.services.common.ipfs.buildOriginLink(extension.source);
-        const module = await System.import<SystemModuleType>(`${source}`);
-        modules.set(extension.name, module);
-      } else {
-        const latestReleaseNode = extension.releases?.edges.at(-1)?.node; // newest release is the last one in the list
-        if (!latestReleaseNode || !latestReleaseNode?.source) {
-          this.logger.warn(`There is no release or release source for the app: ${extension.name}`);
-          continue;
-        }
-        const source = sdk.services.common.ipfs.multiAddrToUri(latestReleaseNode.source);
-        const module = await System.import<SystemModuleType>(`${source}/index.js`);
+      const module = await this.importModule(extension);
+      if (module) {
         modules.set(extension.name, module);
       }
     }
     return modules;
   };
+
+  importModule = async (extensionData: AppLoader['extensionData'][0]) => {
+    const sdk = getSDK();
+    if ('isLocal' in extensionData && Object.hasOwn(extensionData, 'isLocal')) {
+      if (!extensionData.source || typeof extensionData.source !== 'string') {
+        this.logger.warn(
+          `Locally loaded extensions requires a 'source: string' property but ${typeof extensionData.source} was provided for: ${extensionData.name}. Skipping!`,
+        );
+        return null;
+      }
+      const source = sdk.services.common.ipfs.buildOriginLink(extensionData.source);
+      return System.import<SystemModuleType>(`${source}`);
+    } else {
+      const latestReleaseNode = extensionData.releases?.edges[0]?.node;
+      if (!latestReleaseNode || !latestReleaseNode?.source) {
+        this.logger.warn(
+          `There is no release or release source for the app: ${extensionData.name}`,
+        );
+        return null;
+      }
+      const source = sdk.services.common.ipfs.multiAddrToUri(latestReleaseNode.source);
+      return System.import<SystemModuleType>(`${source}/index.js`);
+    }
+  };
+
   listenGlobalChannel = async () => {
     // listen for user login event and fetch the extensions
     const sdk = getSDK();
@@ -233,17 +245,11 @@ export default class AppLoader {
     this.globalChannelSub = sdk.api.globalChannel.subscribe({
       next: resp => {
         switch (resp.event) {
-          case AUTH_EVENTS.SIGN_IN:
+          case AUTH_EVENTS.READY:
             this.handleLogin(resp.data);
             break;
           case AUTH_EVENTS.SIGN_OUT:
             this.handleLogout();
-            break;
-          case APP_EVENTS.INFO_READY:
-            this.handleExtensionInstall(resp.data);
-            break;
-          case APP_EVENTS.REMOVED:
-            this.handleExtensionUninstall(resp.data);
             break;
           default:
             break;
@@ -251,41 +257,133 @@ export default class AppLoader {
       },
     });
   };
-  handleLogin = (loginData: { id?: string }) => {
-    // user logged in
-    if (loginData && loginData.id) {
-      this.user = { id: loginData.id };
-      //@Todo: fix this
-      //this.loadUserExtensions().catch(err => this.logger.error(err));
-    }
-  };
-  handleLogout = () => {
-    // unload user extensions
-  };
 
-  handleExtensionInstall = (_extensionData: unknown) => {
-    // listen for extension installs
-  };
-  handleExtensionUninstall = (_extensionData: unknown) => {
-    // listen for extension uninstalls
-  };
-  loadUserExtensions = async () => {
-    // @TODO: implement when ready
+  handleLogin = async (loginData: { id?: string }) => {
+    // user logged in
+    if (!loginData?.id) {
+      return;
+    }
+    this.user = { id: loginData.id };
     this.userExtensions = await getUserInstalledExtensions();
-    const manifests = await getRemoteLatestExtensionInfos(
-      this.userExtensions.map(e => ({ name: e.name })),
+    if (!this.userExtensions?.length) {
+      // no extensions to load
+      return;
+    }
+    const extData = await getRemoteLatestExtensionInfos(
+      this.userExtensions.map(e => ({ name: e.appName })),
     );
-    const modules = await this.importModules(manifests);
-    const _plugins = await this.loadPlugins(modules);
+
+    if (extData.length) {
+      this.extensionData = [...this.extensionData, ...extData];
+    }
+
+    const modules = await this.importModules(extData);
+    const plugins = await this.loadPlugins(this.extensionConfigs, modules);
+    this.plugins = { ...this.plugins, ...plugins };
     await this.initializeExtensions(modules);
     const extensionConfigs = this.registerExtensions(modules);
     this.singleSpaRegister(extensionConfigs);
   };
+  redirectHomeApp = () => {
+    singleSpa.navigateToUrl(`/${this.worldConfig.homepageApp}/`);
+  };
+  // @todo: avoid needing for a full page refresh
+  /**
+   * Things to consider:
+   * Plugins of the installed extensions will be removed.
+   *   - plugins are passed as props so we need a way to update every extension
+   * Cannot call singlespa.unregisterApplication
+   *    - this will make that extension to be blacklisted (until a full page refresh)
+   *  ExtensionPoints also needs to be unloaded.
+   *    - parcels have an api to unmount.
+   **/
+  handleLogout = async () => {
+    const mounted = singleSpa.getMountedApps();
 
-  loadPlugins = async (extensionModules: Map<string, SystemModuleType>) => {
+    const isUserExtMounted = mounted.some(name =>
+      this.userExtensions.some(ext => ext.appName === name),
+    );
+
+    // unload user extensions
+    for (const ext of this.userExtensions) {
+      if (ext.applicationType === AkashaAppApplicationType.Widget) {
+        this.plugins.core.widgetStore.unregisterWidget(ext.appName);
+        return;
+      }
+      // is an app.
+      await singleSpa.unregisterApplication(ext.appName);
+      const module = this.extensionModules.get(ext.appName);
+      if (module) {
+        const plugins = await this.loadPlugins(new Map(), new Map().set(ext.appName, module));
+        for (const ns of Object.keys(plugins)) {
+          if (this.plugins[ns]) {
+            delete this.plugins[ns];
+          }
+        }
+        if (this.extensionModules.has(ext.appName)) {
+          this.extensionModules.delete(ext.appName);
+        }
+        if (this.extensionConfigs.has(ext.appName)) {
+          this.extensionConfigs.delete(ext.appName);
+        }
+        this.userExtensions = this.userExtensions.filter(uExt => uExt.appName === ext.appName);
+      }
+      this.globalChannel.next({
+        event: EXTENSION_EVENTS.REMOVED,
+        data: { name: ext.appName },
+      });
+    }
+    // if any of the mounted extensions are the user installed ones redirect to homepageApp
+    if (isUserExtMounted) {
+      this.redirectHomeApp();
+    }
+  };
+  // no need for other cleanups because we'll trigger a full page refresh
+  uninstallExtension = async (extensionName: string) => {
+    const sdk = getSDK();
+    try {
+      await sdk.services.appSettings.uninstall(extensionName);
+      return true;
+    } catch (err) {
+      return false;
+    }
+  };
+
+  loadCorePlugins = async () => {
+    const contentBlockStore = ContentBlockStore.getInstance();
+    const extensionPointStore = ExtensionPointStore.getInstance();
+    const widgetStore = WidgetStore.getInstance();
+    const extensionInstaller = new ExtensionInstaller({
+      importModule: this.importModule,
+      getLatestExtensionVersion: getRemoteExtensionLatestVersion,
+      initializeExtension: this.initializeExtension,
+      registerExtension: this.registerExtension,
+      finalizeInstall: this.finalizeExtensionInstallation,
+      registerAdditionalResources: this.registerAdditionalResources,
+    });
+
+    extensionInstaller.listenAuthEvents();
+    // add it directly to the plugins map
+    this.plugins = Object.assign({}, this.plugins, {
+      core: {
+        contentBlockStore: contentBlockStore,
+        extensionPointStore: extensionPointStore,
+        widgetStore: widgetStore,
+        extensionInstaller,
+        extensionUninstaller: {
+          uninstallExtension: this.uninstallExtension,
+        },
+      },
+    });
+  };
+
+  loadPlugins = async (
+    existingConfigs: AppLoader['extensionConfigs'],
+    extensionModules: Map<string, SystemModuleType>,
+  ) => {
     const plugins = {};
     for (const [name, module] of extensionModules) {
-      if (this.extensionConfigs.has(name)) {
+      if (existingConfigs.has(name)) {
         continue;
       }
       if (module.registerPlugin && typeof module.registerPlugin === 'function') {
@@ -302,16 +400,30 @@ export default class AppLoader {
     return plugins;
   };
 
+  registerAdditionalResources = async (name: string, extensionModule: SystemModuleType) => {
+    await extensionModule.registerResources({
+      uiEvents: this.uiEvents,
+      plugins: this.plugins,
+      worldConfig: this.worldConfig,
+      layoutSlots: this.layoutConfig.extensionSlots,
+      logger: this.parentLogger.create(`${name}_registerResources`),
+    });
+  };
+
+  initializeExtension = async (name: string, extensionModule: SystemModuleType) => {
+    await extensionModule.initialize({
+      uiEvents: this.uiEvents,
+      plugins: this.plugins,
+      worldConfig: this.worldConfig,
+      layoutSlots: this.layoutConfig.extensionSlots,
+      logger: this.parentLogger.create(`${name}_initialize`),
+    });
+  };
+
   initializeExtensions = async (extensionModules: Map<string, SystemModuleType>) => {
     for (const [name, module] of extensionModules) {
       if (module.initialize && typeof module.initialize === 'function') {
-        await module.initialize({
-          uiEvents: this.uiEvents,
-          plugins: this.plugins,
-          worldConfig: this.worldConfig,
-          layoutSlots: this.layoutConfig.extensionSlots,
-          logger: this.parentLogger.create(`${name}_initialize`),
-        });
+        await this.initializeExtension(name, module);
       }
     }
   };
@@ -332,51 +444,68 @@ export default class AppLoader {
       });
     }
   };
-  registerExtensions = (extensionModules: Map<string, SystemModuleType>) => {
-    const extensionConfigs = new Map();
-    for (const [name, mod] of extensionModules) {
-      if (name === this.worldConfig.layout) continue;
-      if (this.extensionConfigs.has(name) || extensionConfigs.has(name)) continue;
-      if (mod.register && typeof mod.register === 'function') {
+
+  registerAdditionalEntities = (
+    config: IAppConfig & { name: string },
+    extensionType?: AkashaAppApplicationType,
+  ) => {
+    // fire register events
+    // @TODO: refactor this after moving the routing plugin to core plugins
+    this.uiEvents.next({
+      event: RouteRegistrationEvents.RegisterRoutes,
+      data: {
+        name: config.name,
+        menuItems: config?.menuItems,
+        navRoutes: config?.routes,
+      },
+    });
+    if (config?.contentBlocks) {
+      this.plugins.core.contentBlockStore.registerContentBlocks(
+        config.contentBlocks.map(block => ({ ...block, appName: config.name })),
+      );
+    }
+    if (config?.extensionPoints) {
+      this.plugins.core.extensionPointStore.registerExtensionPoints(
+        config.extensionPoints.map(ext => ({ ...ext, appName: config.name })),
+      );
+    }
+    if (extensionType === AkashaAppApplicationType.Widget) {
+      this.plugins.core.widgetStore.registerWidget({ ...config, appName: config.name });
+    }
+  };
+
+  registerExtension = (name: string, mod: SystemModuleType) => {
+    if (mod.register && typeof mod.register === 'function') {
+      try {
         const config = mod.register({
           layoutSlots: this.layoutConfig.extensionSlots,
           worldConfig: this.worldConfig,
           logger: this.parentLogger.create(name),
           uiEvents: this.uiEvents,
         });
-        extensionConfigs.set(name, { ...config, name });
-        // fire register events
-        this.uiEvents.next({
-          event: RouteRegistrationEvents.RegisterRoutes,
-          data: {
-            name,
-            menuItems: config?.menuItems,
-            navRoutes: config?.routes,
-          },
-        });
-        if (config?.contentBlocks) {
-          this.uiEvents.next({
-            event: ContentBlockEvents.RegisterContentBlock,
-            data: config.contentBlocks.map(eb => ({ ...eb, appName: name })),
-          });
-        }
-        if (config?.extensionPoints) {
-          this.uiEvents.next({
-            event: ExtensionPointEvents.RegisterExtensionPoint,
-            data: config.extensionPoints.map(ext => ({ ...ext, appName: name })),
-          });
-        }
-        const extensionData = this.extensionData.find(man => man.name === name);
-        if (extensionData && extensionData.applicationType === AkashaAppApplicationType.Widget) {
-          this.uiEvents.next({
-            event: WidgetEvents.RegisterWidget,
-            data: { ...config, appName: name },
-          });
-        }
+        return { name, ...config };
+      } catch (err) {
+        return null;
+      }
+    }
+    return null;
+  };
+
+  registerExtensions = (extensionModules: Map<string, SystemModuleType>) => {
+    const extensionConfigs = new Map();
+    for (const [name, mod] of extensionModules) {
+      if (name === this.worldConfig.layout) continue;
+      if (this.extensionConfigs.has(name) || extensionConfigs.has(name)) continue;
+      const config = this.registerExtension(name, mod);
+      if (config) {
+        const extensionData = this.extensionData.find(data => data.name === config.name);
+        this.registerAdditionalEntities(config, extensionData?.applicationType);
+        extensionConfigs.set(name, { ...config, applicationType: extensionData.applicationType });
       }
     }
     return extensionConfigs;
   };
+
   renderLayout = () => {
     const layoutConf = this.layoutConfig;
     const logger = this.parentLogger.create(this.worldConfig.layout);
@@ -388,7 +517,7 @@ export default class AppLoader {
         domElement: getDomElement(layoutConf, this.worldConfig.layout, logger),
         singleSpa,
         baseRouteName: `/${this.worldConfig.layout}`,
-        encodeAppName: (name: string) => name,
+        encodeAppName: (name: string) => encodeURIComponent(name),
         decodeAppName: (name: string) => decodeURIComponent(name),
         navigateToModal: navigateToModal,
         getModalFromParams: getModalFromParams,
@@ -401,6 +530,20 @@ export default class AppLoader {
       },
     });
   };
+  // this function will be called at the end of the
+  // installation flow. the singlespa.register function must be called last
+  finalizeExtensionInstallation = (
+    extensionInfo: AkashaApp,
+    extensionModule: SystemModuleType,
+    extensionConfig: IAppConfig & { name: string },
+  ) => {
+    this.extensionModules.set(extensionInfo.name, extensionModule);
+    this.extensionConfigs.set(extensionInfo.name, extensionConfig);
+    this.extensionData.push(extensionInfo);
+    this.registerAdditionalEntities(extensionConfig, extensionInfo.applicationType);
+    this.singleSpaRegister(new Map().set(extensionInfo.name, extensionConfig));
+  };
+
   singleSpaRegister = (extensionConfigs: Map<string, IAppConfig & { name: string }>) => {
     for (const [name, conf] of extensionConfigs) {
       if (singleSpa.getAppNames().includes(name)) continue;
@@ -409,6 +552,11 @@ export default class AppLoader {
       const extensionData = this.extensionData.find(m => m.name === name);
 
       if (extensionData.applicationType !== AkashaAppApplicationType.App) continue;
+
+      // apps are always mounted in the applicationSlotId
+      if (!conf.mountsIn) {
+        conf.mountsIn = this.layoutConfig.extensionSlots.applicationSlotId;
+      }
 
       const activeWhen: singleSpa.Activity = checkActivityFn({
         config: conf,
@@ -422,7 +570,7 @@ export default class AppLoader {
         domElementGetter: () => getDomElement(conf, name, this.logger),
         singleSpa,
         baseRouteName: `/${name}`,
-        encodeAppName: name => name,
+        encodeAppName: name => encodeURIComponent(name),
         decodeAppName: name => decodeURIComponent(name),
         navigateToModal: navigateToModal,
         getModalFromParams: getModalFromParams,

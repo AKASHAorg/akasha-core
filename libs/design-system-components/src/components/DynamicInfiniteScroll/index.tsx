@@ -89,7 +89,7 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
 
   useLayoutEffect(() => {
     parentOffsetRef.current = parentRef.current?.offsetTop ?? 0;
-  }, []);
+  }, [parentRef.current?.offsetTop]);
 
   useLayoutEffect(() => {
     const headerHeight = getHeaderHeight();

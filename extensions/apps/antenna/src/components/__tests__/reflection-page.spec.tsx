@@ -38,10 +38,16 @@ const {
   reflectionData,
 } = getReflectionSectionMocks();
 
-const baseComponent = (mocks: Readonly<MockedResponse<unknown, unknown>[]> | undefined) => (
+const baseComponent = (
+  mocks: Readonly<MockedResponse<unknown, unknown>[]> | undefined,
+  isActive?: boolean,
+) => (
   <MockedProvider mocks={mocks} cache={new InMemoryCache(APOLLO_TYPE_POLICIES)}>
     <AnalyticsProvider {...genAppProps()}>
-      <ReflectionPage reflectionData={mapReflectEntryData(reflectionData)} />
+      <ReflectionPage
+        isActive={isActive ?? true}
+        reflectionData={mapReflectEntryData(reflectionData)}
+      />
     </AnalyticsProvider>
   </MockedProvider>
 );
@@ -71,10 +77,9 @@ describe('< ReflectionPage /> component', () => {
         baseComponent([...reflectionSectionMocks, ...getEmptyReflectionStreamMock()]),
         {},
       );
+      expect(await screen.findByRole('button', { name: 'Reflect' })).toBeInTheDocument();
       expect(screen.getByText(/Share your thoughts/i)).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: 'Reflect' })).toBeInTheDocument();
       const reflectionSection = screen.getByTestId('reflection-section');
-      expect(screen.getByText(/back to original beam/i)).toBeInTheDocument();
       await waitFor(() =>
         expect(within(reflectionSection).getAllByTestId('avatar-source')[0]).toHaveAttribute(
           'srcset',
@@ -133,6 +138,18 @@ describe('< ReflectionPage /> component', () => {
         await within(reflectFeed).findByText(REFLECT_FEED.preview.content),
       ).toBeInTheDocument();
     });
+
+    it('should disable reflection editor when the beam is delisted', async () => {
+      const { mocks } = getReflectionSectionMocks({
+        isBeamActive: false,
+      });
+      renderWithAllProviders(
+        baseComponent([...mocks, ...getEmptyReflectionStreamMock()], false),
+        {},
+      );
+      expect(screen.queryByRole('button', { name: 'Reflect' })).not.toBeInTheDocument();
+      expect(screen.queryByText(/Share your thoughts/i)).not.toBeInTheDocument();
+    });
   });
 
   describe('should publish reflection', () => {
@@ -182,7 +199,7 @@ describe('< ReflectionPage /> component', () => {
         {},
       );
       const user = userEvent.setup();
-      const reflectButton = screen.getByRole('button', { name: 'Reflect' });
+      const reflectButton = await screen.findByRole('button', { name: 'Reflect' });
       user.click(reflectButton);
       await waitFor(() => expect(reflectButton).toBeInTheDocument());
       await waitFor(() => expect(screen.getByRole('textbox')).toHaveTextContent(NEW_REFLECTION));
@@ -201,7 +218,7 @@ describe('< ReflectionPage /> component', () => {
         {},
       );
       const user = userEvent.setup();
-      const reflectButton = screen.getByRole('button', { name: 'Reflect' });
+      const reflectButton = await screen.findByRole('button', { name: 'Reflect' });
       const reflectFeed = screen.getByTestId('reflect-feed');
       user.click(reflectButton);
       await waitFor(() => expect(reflectButton).toBeInTheDocument());

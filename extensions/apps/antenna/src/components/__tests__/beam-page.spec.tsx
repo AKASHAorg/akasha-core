@@ -30,9 +30,11 @@ import {
   getPendingReflectMock,
   getReflectEditorMocks,
   getReflectFeedMocks,
+  NEW_REFLECTION_BEYOND_TEXT_LIMIT,
 } from '../__mocks__';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { InMemoryCache } from '@apollo/client';
+import { RawBeamData } from '@akashaorg/typings/lib/ui';
 
 const {
   mocks: beamSectionMocks,
@@ -40,12 +42,17 @@ const {
   beamData,
 } = getBeamSectionMocks();
 
-const baseComponent = (mocks: Readonly<MockedResponse<unknown, unknown>[]> | undefined) => (
+const baseComponent = (
+  mocks: Readonly<MockedResponse<unknown, unknown>[]> | undefined,
+  mockedBeamData?: RawBeamData,
+  isActive?: boolean,
+) => (
   <MockedProvider mocks={mocks} cache={new InMemoryCache(APOLLO_TYPE_POLICIES)}>
     <AnalyticsProvider {...genAppProps()}>
       <BeamPage
+        isActive={isActive ?? true}
         beamStatus={AkashaBeamStreamModerationStatus.Ok}
-        beamData={mapBeamEntryData(beamData)}
+        beamData={mapBeamEntryData(mockedBeamData ?? beamData)}
         beamId={BEAM_ID}
       />
     </AnalyticsProvider>
@@ -136,6 +143,22 @@ describe('< BeamPage /> component', () => {
         formatRelativeTime(previewData.akashaReflectIndex.edges[0].node.createdAt, 'en'),
       );
     });
+
+    it('should disable reflection editor when the beam is delisted', async () => {
+      renderWithAllProviders(
+        baseComponent(
+          [...beamSectionMocks, ...getEmptyReflectionStreamMock()],
+          {
+            ...beamData,
+            active: false,
+          },
+          false,
+        ),
+        {},
+      );
+      expect(screen.queryByRole('button', { name: 'Reflect' })).not.toBeInTheDocument();
+      expect(screen.queryByText(/Share your thoughts/i)).not.toBeInTheDocument();
+    });
   });
 
   describe('should publish reflection', () => {
@@ -217,6 +240,28 @@ describe('< BeamPage /> component', () => {
       );
       expect(infoBox).toHaveTextContent(truncateDid(reflectFeedProfileData.akashaProfile.did.id));
       expect(infoBox).toHaveTextContent(formatRelativeTime(newReflectionData.createdAt, 'en'));
+    });
+
+    it('should show error when text exceeds block limit', async () => {
+      jest
+        .spyOn(getEditorValueForTest, 'getEditorValueForTest')
+        .mockReturnValue(NEW_REFLECTION_BEYOND_TEXT_LIMIT);
+
+      renderWithAllProviders(
+        baseComponent([
+          ...beamSectionMocks,
+          ...getEmptyReflectionStreamMock(),
+          ...reflectEditorMocks,
+          ...reflectFeedMocks,
+        ]),
+        {},
+      );
+      const user = userEvent.setup();
+      const reflectButton = screen.getByRole('button', { name: 'Reflect' });
+      user.click(reflectButton);
+      expect(
+        await screen.findByText(/text block exceeds line limit, please review!/i),
+      ).toBeInTheDocument();
     });
   });
 });

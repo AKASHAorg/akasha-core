@@ -17,13 +17,13 @@ import {
   DeveloperModePage,
   DevMode,
   ExtensionCreationPage,
+  InstallExtensionPage,
 } from '../pages';
 import {
   ExtensionEditMainPage,
   ExtensionEditStep1Page,
   ExtensionEditStep2Page,
   ExtensionEditStep3Page,
-  ExtensionEditStep4Page,
 } from '../pages/extension-edit-page';
 import {
   DevInfoPage,
@@ -106,6 +106,15 @@ const developerModeRoute = createRoute({
       <DeveloperModePage />
     </CatchBoundary>
   ),
+});
+
+const extensionInstallRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/install/$appId',
+  component: () => {
+    const { appId } = extensionInstallRoute.useParams();
+    return <InstallExtensionPage appId={appId} />;
+  },
 });
 
 const infoRoute = createRoute({
@@ -272,9 +281,6 @@ const extensionEditMainRoute = createRoute({
       </CatchBoundary>
     );
   },
-  // beforeLoad: () => {
-  //   throw redirect({ to: '/edit-extension/$extensionId/step1', replace: true });
-  // },
 });
 
 const extensionEditStep1Route = createRoute({
@@ -325,22 +331,6 @@ const extensionEditStep3Route = createRoute({
     );
   },
 });
-const extensionEditStep4Route = createRoute({
-  getParentRoute: () => extensionEditMainRoute,
-  path: '/step4',
-  notFoundComponent: () => <NotFoundComponent />,
-  component: () => {
-    const { extensionId } = extensionEditMainRoute.useParams();
-    return (
-      <CatchBoundary
-        getResetKey={() => 'edit_extension_step4_reset'}
-        errorComponent={NotFoundComponent}
-      >
-        <ExtensionEditStep4Page extensionId={extensionId} />
-      </CatchBoundary>
-    );
-  },
-});
 
 const routeTree = rootRoute.addChildren([
   defaultRoute,
@@ -359,13 +349,13 @@ const routeTree = rootRoute.addChildren([
     appLicenseInfoRoute,
     supportInfoRoute,
     appDescriptionRoute,
+    extensionInstallRoute,
   ]),
   extensionCreateRoute,
   extensionEditMainRoute.addChildren([
     extensionEditStep1Route,
     extensionEditStep2Route,
     extensionEditStep3Route,
-    extensionEditStep4Route,
   ]),
 ]);
 

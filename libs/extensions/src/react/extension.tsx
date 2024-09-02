@@ -23,9 +23,9 @@ export const Extension = <D,>(props: ExtensionComponentProps<D>) => {
     customStyle = '',
     extensionData,
   } = props;
-  const { getExtensionsPlugin, getContext, logger } = useRootComponentProps();
+  const { getCorePlugins, getContext, logger } = useRootComponentProps();
   const extensionStore = React.useRef<IExtensionPointStorePlugin>(
-    getExtensionsPlugin().extensionPointStore,
+    getCorePlugins().extensionPointStore,
   );
   const [parcelConfigs, setParcelConfigs] = React.useState([]);
   const [isEmpty, setIsEmpty] = React.useState(false);
@@ -33,7 +33,7 @@ export const Extension = <D,>(props: ExtensionComponentProps<D>) => {
   const location = useRoutingEvents();
   const extensions = React.useMemo(() => {
     if (!extensionStore.current) return [];
-    const exts = extensionStore.current.getMatchingExtensionPoints(name, location);
+    const exts = extensionStore.current.getMatchingExtensions(name, location);
     if (!exts.length) {
       setIsEmpty(true);
       return [];

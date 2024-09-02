@@ -107,6 +107,7 @@ const ReflectionEditor = forwardRef<HTMLDivElement, ReflectionEditorProps>((prop
             cancelButtonLabel={cancelButtonLabel}
             showCancelButton={showCancelButton}
             showDraft={showDraft}
+            maxEncodedLength={3000}
             setEditorState={setEditorState}
             onPublish={handlePublish}
             getMentions={getMentions}

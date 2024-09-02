@@ -10,7 +10,7 @@ import routes, { DEVELOPER_MODE, EXTENSIONS } from '../../routes';
 export const ExplorePage: React.FC<unknown> = () => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
-  const { getRoutingPlugin } = useRootComponentProps();
+  const { getRoutingPlugin, encodeAppName } = useRootComponentProps();
   const navigateTo = getRoutingPlugin().navigateTo;
 
   const isInstalled = false;
@@ -20,7 +20,7 @@ export const ExplorePage: React.FC<unknown> = () => {
       navigate({
         to: '/info/$appId',
         params: {
-          appId,
+          appId: encodeAppName(appId),
         },
       });
     } else {
@@ -65,7 +65,7 @@ export const ExplorePage: React.FC<unknown> = () => {
               variant={isInstalled ? 'secondary' : 'primary'}
               label={isInstalled ? t('Installed') : t('Open')}
               customStyle="w-fit self-end"
-              onClick={() => handleButtonClick('vibesconsole')}
+              onClick={() => handleButtonClick('@akashaorg/app-vibes-console')}
             />
           ),
         },

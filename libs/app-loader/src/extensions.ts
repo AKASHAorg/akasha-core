@@ -2,6 +2,8 @@ import { WorldConfig } from '@akashaorg/typings/lib/ui';
 import getSDK from '@akashaorg/core-sdk';
 import { AkashaApp, SortOrder } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { ILogger } from '@akashaorg/typings/lib/sdk/log';
+import { GetAppsByPublisherDidQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
+import { DeepTarget } from './type-utils';
 
 /**
  * Retrieves the latest version of a published app from the Akasha Registry.
@@ -11,7 +13,7 @@ import { ILogger } from '@akashaorg/typings/lib/sdk/log';
  * @returns The latest version of the app, including its source, version, ID, creation date, and manifest data.
  * @throws Error if the PUBLIC_INDEXING_DID environment variable is not defined.
  */
-const getPublishedAppLatestVersion = async (appName: string, logger?: ILogger) => {
+export const getRemoteExtensionLatestVersion = async (appName: string, logger?: ILogger) => {
   const sdk = getSDK();
   const did = sdk.services.common.misc.getIndexingDID();
   const log = logger || console;
@@ -48,12 +50,35 @@ const getPublishedAppLatestVersion = async (appName: string, logger?: ILogger) =
   return appNode;
 };
 
+export const getReleaseById = async (releaseId: string) => {
+  const sdk = getSDK();
+  try {
+    const release = await sdk.services.gql.client.GetAppReleaseByID({ id: releaseId });
+    if (!release && !release?.node) {
+      // @todo handle release not found or release id mismatch
+      return null;
+    }
+    if (release.node && 'id' in release.node) {
+      return release.node;
+    }
+    return null;
+  } catch (err) {
+    // @todo emit event with error
+    return null;
+  }
+};
+
+type AkashaNode = DeepTarget<
+  GetAppsByPublisherDidQuery,
+  ['node', 'akashaAppList', 'edges', 0, 'node']
+>;
+
 export const getRemoteLatestExtensionInfos = async (
   extensions: { name: string }[],
-): Promise<Awaited<ReturnType<typeof getPublishedAppLatestVersion>>[]> => {
-  const pkgInfos = [];
+): Promise<AkashaNode[]> => {
+  const pkgInfos: AkashaNode[] = [];
   for (const extension of extensions) {
-    const app = await getPublishedAppLatestVersion(extension.name);
+    const app = await getRemoteExtensionLatestVersion(extension.name);
     if (app) {
       pkgInfos.push(app);
     }

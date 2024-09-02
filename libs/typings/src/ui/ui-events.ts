@@ -1,9 +1,5 @@
 import { IMenuItem } from './sidebar-menu-items';
-import { ContentBlockRegisterEvent } from './editor-blocks';
 import { AnalyticsEventData } from './analytics';
-import { ExtensionPointRegisterEvent } from './extension-point';
-import { WidgetRegisterEvent } from './widgets';
-import { AppRegisterEvent } from './extensions';
 
 /**
  * Enum defining events related to loading and unloading of global routes
@@ -80,8 +76,6 @@ export type NotificationEvent = {
  **/
 export enum EventTypes {
   Instantiated = 'instantiated',
-  InstallExtension = 'install-extension',
-  UninstallExtension = 'uninstall-extension',
   ShowSidebar = 'show-sidebar',
   HideSidebar = 'hide-sidebar',
   ShowWidgets = 'show-widgets',
@@ -125,10 +119,6 @@ export type UIEventData =
       event: EventTypes;
       data?: EventDataTypes;
     }
-  | ContentBlockRegisterEvent
-  | ExtensionPointRegisterEvent
-  | WidgetRegisterEvent
-  | AppRegisterEvent
   | RoutesRegisterEvent
   | AnalyticsEventData
   | ThemingEvent

@@ -47,8 +47,6 @@ import { withMentions, withTags, withLinks } from './plugins';
 import { MarkButton, BlockButton } from './formatting-buttons';
 
 const MAX_TEXT_LENGTH = 500;
-// this is to account for the limitations on the ceramic storage side
-const MAX_ENCODED_LENGTH = 6000;
 
 export type EditorBoxProps = {
   avatar?: Profile['avatar'];
@@ -73,6 +71,8 @@ export type EditorBoxProps = {
   cancelButtonLabel?: string;
   showDraft?: boolean;
   showPostButton?: boolean;
+  // this is to account for the limitations on the ceramic storage side
+  maxEncodedLength?: number;
   customStyle?: string;
   onPublish?: (publishData: IPublishData) => void;
   onClear?: () => void;
@@ -124,6 +124,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
     showCancelButton,
     showPostButton = true,
     transformSource,
+    maxEncodedLength = 6000,
     customStyle = '',
     handleDisablePublish,
     encodingFunction,
@@ -292,11 +293,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
     })(value);
 
     /** disable publishing if encoded content length or text are too long */
-    if (
-      textLength > 0 &&
-      textLength <= MAX_TEXT_LENGTH &&
-      encodedNodeLength <= MAX_ENCODED_LENGTH
-    ) {
+    if (textLength > 0 && textLength <= MAX_TEXT_LENGTH && encodedNodeLength <= maxEncodedLength) {
       setPublishDisabledInternal(false);
       if (typeof handleDisablePublish === 'function') {
         handleDisablePublish?.(false);
@@ -304,7 +301,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
     } else if (
       textLength === 0 ||
       textLength > MAX_TEXT_LENGTH ||
-      encodedNodeLength > MAX_ENCODED_LENGTH
+      encodedNodeLength > maxEncodedLength
     ) {
       setPublishDisabledInternal(true);
       if (typeof handleDisablePublish === 'function') {
@@ -312,9 +309,9 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
       }
     }
 
-    if (encodedNodeLength <= MAX_ENCODED_LENGTH) {
+    if (encodedNodeLength <= maxEncodedLength) {
       setShowMaxEncodedLengthErr(false);
-    } else if (encodedNodeLength > MAX_ENCODED_LENGTH && textLength < MAX_TEXT_LENGTH) {
+    } else if (encodedNodeLength > maxEncodedLength && textLength < MAX_TEXT_LENGTH) {
       setShowMaxEncodedLengthErr(true);
     }
 

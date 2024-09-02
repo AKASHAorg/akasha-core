@@ -1,3 +1,4 @@
+import React from 'react';
 import singleSpa from 'single-spa';
 import { IRootComponentProps } from './root-component';
 import { GetContentBlockByIdQuery } from '../sdk/graphql-operation-types-new';
@@ -52,21 +53,6 @@ export type ContentBlockRootProps = IRootComponentProps & {
 };
 
 /**
- * Enum defining events related to loading and unloading of content blocks
- **/
-export const enum ContentBlockEvents {
-  RegisterContentBlock = 'register-content-block',
-}
-
-/**
- * Type defining content block registration event
- **/
-export type ContentBlockRegisterEvent = {
-  event: ContentBlockEvents.RegisterContentBlock;
-  data?: (ContentBlockConfig & { appName: string })[];
-};
-
-/**
  * Type defining params of a function that creates content block
  **/
 export type CreateContentBlock = {
@@ -108,6 +94,26 @@ export type BlockInstanceMethods = {
 };
 
 /**
+ * Local content block is `created` locally but not yet published.
+ * This is the case of a block added to the editor
+ **/
+export type LocalContentBlock = {
+  appName: string;
+  propertyType: string;
+};
+
+/**
+ * A content block that matches a particular slot in the beam
+ * This is used to match the renderer of that block with the data from the beam
+ **/
+export type MatchingBlock = {
+  /** the config of the content block, as defined in the registration */
+  blockInfo: ContentBlockConfig & { appName: string };
+  blockData?: unknown;
+  content?: unknown;
+};
+
+/**
  * Interface defining content block state store defined as a plugin
  **/
 export interface IContentBlockStorePlugin {
@@ -119,17 +125,6 @@ export interface IContentBlockStorePlugin {
   >;
 
   getMatchingBlocks: (
-    blockInfo:
-      | {
-          appName: string;
-          propertyType: string;
-        }
-      | GetContentBlockByIdQuery['node'],
-  ) => {
-    blockInfo: ContentBlockConfig & {
-      appName: string;
-    };
-    blockData?: unknown;
-    content?: unknown;
-  }[];
+    blockInfo: LocalContentBlock | GetContentBlockByIdQuery['node'],
+  ) => MatchingBlock[];
 }

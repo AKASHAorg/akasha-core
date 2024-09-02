@@ -68,7 +68,6 @@ export const Default: Story = {
       description: '',
       initialValue: false,
     },
-    nsfwFormLabel: 'NSFW Profile',
   },
 };
 

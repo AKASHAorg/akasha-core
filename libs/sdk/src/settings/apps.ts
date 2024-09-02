@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 import {
-  APP_EVENTS,
+  EXTENSION_EVENTS,
   IntegrationIdSchema,
   IntegrationName,
   IntegrationNameSchema,
@@ -14,6 +14,7 @@ import EventBus from '../common/event-bus';
 import pino from 'pino';
 import { validate } from '../common/validator';
 import { z } from 'zod';
+import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 declare const __DEV__: boolean;
 
@@ -47,8 +48,8 @@ class AppSettings {
    */
   @validate(IntegrationNameSchema)
   async get(appName: IntegrationName) {
-    const collection = this._db.getCollections().integrations;
-    const doc = await collection?.where('name').equals(appName).first();
+    const collection = this._db.getCollections().installedExtensions;
+    const doc = await collection?.where('appName').equals(appName).first();
     return createFormattedValue(doc);
   }
 
@@ -56,22 +57,43 @@ class AppSettings {
    * Returns all installed apps
    */
   async getAll() {
-    const collection = this._db.getCollections().integrations;
+    const collection = this._db.getCollections().installedExtensions;
     const doc = await collection?.toArray();
     return createFormattedValue(doc);
   }
 
   /**
    * Persist installed app configuration for the current user
-   * @param app - Object
-   * @param isLocal - True only for development. Default is false
+   * @param release - extension release data
    */
   @validate(
-    z.object({ name: IntegrationNameSchema, id: IntegrationIdSchema }).partial(),
-    z.boolean().optional(),
+    z.object({
+      appName: IntegrationNameSchema,
+      releaseId: IntegrationIdSchema,
+      source: z.string(),
+      version: z.string(),
+      applicationType: z.nativeEnum(AkashaAppApplicationType),
+    }),
   )
-  async install(app: { name: string; id?: string }, isLocal = false) {
-    return throwError('Not implemented', ['sdk', 'settings', 'apps', 'install']);
+  async install(release: {
+    appName: string;
+    releaseId: string;
+    version: string;
+    source: string;
+    applicationType: AkashaAppApplicationType;
+  }) {
+    const table = this._db.getCollections().installedExtensions;
+    const collection = await table
+      ?.where({ releaseId: release.releaseId, version: release.version })
+      .first();
+    if (!collection) {
+      await table?.add(release);
+    }
+    // update version
+    if (collection && collection.version !== release.version) {
+      collection.version = release.version;
+      table?.update(collection.appName, { version: release.version });
+    }
   }
 
   /**
@@ -81,34 +103,17 @@ class AppSettings {
   @validate(IntegrationNameSchema)
   async uninstall(appName: IntegrationName): Promise<void> {
     const currentInfo = await this.get(appName);
-    if (currentInfo?.data?.id) {
-      const collection = this._db.getCollections().integrations;
-      await collection?.where('id').equals(currentInfo.data.id).delete();
-      this._globalChannel.next({
-        data: { name: appName },
-        event: APP_EVENTS.REMOVED,
-      });
+    if (currentInfo?.data?.releaseId) {
+      const collection = this._db.getCollections().installedExtensions;
+      await collection?.where('appName').equals(currentInfo.data.releaseId).delete();
     }
   }
   @validate(IntegrationNameSchema)
   async toggleAppStatus(appName: IntegrationName): Promise<boolean> {
-    const collection = this._db.getCollections().integrations;
-    const doc = await collection?.where('name').equals(appName).first();
-    if (doc && doc.id) {
-      doc.status = !doc.status;
-      await collection?.where('id').equals(doc.id).modify(doc);
-      this._globalChannel.next({
-        data: { status: doc.status, name: appName },
-        event: APP_EVENTS.TOGGLE_STATUS,
-      });
-      return doc.status;
-    }
     return false;
   }
 
-  async updateVersion(app: VersionInfo) {
-    return throwError('Not implemented', ['sdk', 'settings', 'apps', 'updateVersion']);
-  }
+  async updateVersion(app: { appName: string; releaseVersion: string }) {}
 
   async updateConfig(app: ConfigInfo) {
     return throwError('Not implemented', ['sdk', 'settings', 'apps', 'updateConfig']);
