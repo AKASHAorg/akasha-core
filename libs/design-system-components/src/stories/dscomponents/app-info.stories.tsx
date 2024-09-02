@@ -4,21 +4,14 @@ import {
   FlagIcon,
   ShareIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import AppInfo, { AppInfoProps } from '../../components/AppInfo';
 
 FlagIcon.displayName = 'FlagIcon';
 ShareIcon.displayName = 'ShareIcon';
 
-const AppInfoComponent = (props: AppInfoProps) => (
-  <Stack customStyle="w-[50%]">
-    <AppInfo {...props} />
-  </Stack>
-);
-
 const meta: Meta<AppInfoProps> = {
   title: 'DSComponents/Extensions/AppInfo',
-  component: AppInfoComponent,
+  component: AppInfo,
 };
 
 type Story = StoryObj<AppInfoProps>;
