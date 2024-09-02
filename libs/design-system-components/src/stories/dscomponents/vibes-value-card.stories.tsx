@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import VibesValueCard, { VibesValueCardProps } from '../../components/VibesValuesCard/value-card';
 
+VibesValueCard.displayName = 'VibesValueCard';
+
 const meta: Meta<VibesValueCardProps> = {
   title: 'DSComponents/Vibes/VibesValueCard',
   component: VibesValueCard,

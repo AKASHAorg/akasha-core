@@ -8,7 +8,6 @@ ScrollTopButton.displayName = 'ScrollTopButton';
 const meta: Meta<ScrollTopButtonProps> = {
   title: 'DSCore/Buttons/ScrollTopButton',
   component: ScrollTopButton,
-
   argTypes: {
     hide: { control: 'boolean' },
   },

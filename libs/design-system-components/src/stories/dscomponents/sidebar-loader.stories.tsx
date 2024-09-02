@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import SidebarLoader from '../../components/Loaders/sidebar-loader';
 
+SidebarLoader.displayName = 'SidebarLoader';
+
 const meta: Meta = {
   title: 'DSComponents/Loaders/SidebarLoader',
   component: SidebarLoader,

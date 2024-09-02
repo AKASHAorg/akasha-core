@@ -3,10 +3,11 @@ import type { Meta, StoryObj } from '@storybook/react';
 import Link, { LinkProps } from '@akashaorg/design-system-core/lib/components/Link';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
+Link.displayName = 'Link';
+
 const meta: Meta<LinkProps> = {
   title: 'DSCore/Link/Link',
   component: Link,
-
   argTypes: {
     to: { control: 'text' },
     target: {

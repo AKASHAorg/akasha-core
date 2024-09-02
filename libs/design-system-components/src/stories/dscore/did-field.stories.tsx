@@ -2,10 +2,11 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import DidField, { DidFieldProps } from '@akashaorg/design-system-core/lib/components/DidField';
 
+DidField.displayName = 'DidField';
+
 const meta: Meta<DidFieldProps> = {
   title: 'DSCore/Fields/DidField',
   component: DidField,
-
   argTypes: {
     did: { control: 'text' },
     isValid: { control: 'boolean' },

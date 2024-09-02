@@ -8,7 +8,6 @@ import Modal, { ModalProps } from '@akashaorg/design-system-core/lib/components/
 const meta: Meta<ModalProps> = {
   title: 'DSCore/Modals/Modal',
   component: Modal,
-
   argTypes: {
     show: { control: 'boolean' },
     actions: { control: 'object' },
@@ -34,6 +33,8 @@ const ModalComponent: React.FC<Omit<ModalProps, 'show' | 'onClose'>> = props => 
     </>
   );
 };
+
+ModalComponent.displayName = 'Modal';
 
 export const Default: Story = {
   render: () => (

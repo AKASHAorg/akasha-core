@@ -8,10 +8,11 @@ import {
   XMarkIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
+DuplexButton.displayName = 'DuplexButton';
+
 const meta: Meta<DuplexButtonProps> = {
   title: 'DSCore/Buttons/DuplexButton',
   component: DuplexButton,
-
   argTypes: {
     inactiveLabel: { control: 'text' },
     inactiveVariant: { control: 'text' },

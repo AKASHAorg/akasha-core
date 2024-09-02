@@ -7,10 +7,11 @@ import {
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Pill, { PillProps } from '@akashaorg/design-system-core/lib/components/Pill';
 
+Pill.displayName = 'Pill';
+
 const meta: Meta<PillProps> = {
   title: 'DSCore/Buttons/Pill',
   component: Pill,
-
   argTypes: {
     customStyle: { control: 'text' },
     label: { control: 'text' },

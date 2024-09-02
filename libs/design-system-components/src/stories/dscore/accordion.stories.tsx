@@ -5,7 +5,10 @@ import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
+Accordion.displayName = 'Accordion';
+Avatar.displayName = 'Avatar';
 Stack.displayName = 'Stack';
+Text.displayName = 'Text';
 
 const meta: Meta<AccordionProps> = {
   title: 'DSCore/Accordion/Accordion',

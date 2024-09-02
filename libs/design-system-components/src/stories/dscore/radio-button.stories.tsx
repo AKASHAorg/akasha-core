@@ -3,10 +3,11 @@ import RadioButton, {
   RadioButtonProps,
 } from '@akashaorg/design-system-core/lib/components/RadioButton';
 
+RadioButton.displayName = 'RadioButton';
+
 const meta: Meta<RadioButtonProps> = {
   title: 'DSCore/Buttons/RadioButton',
   component: RadioButton,
-
   argTypes: {
     id: { control: 'text' },
     label: { control: 'text' },

@@ -2,10 +2,11 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import Checkbox, { CheckboxProps } from '@akashaorg/design-system-core/lib/components/Checkbox';
 
+Checkbox.displayName = 'Checkbox';
+
 const meta: Meta<CheckboxProps> = {
   title: 'DSCore/Buttons/Checkbox',
   component: Checkbox,
-
   argTypes: {
     id: { control: 'text' },
     label: { control: 'text' },

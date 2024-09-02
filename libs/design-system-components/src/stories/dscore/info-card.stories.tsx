@@ -2,10 +2,11 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import InfoCard, { InfoCardProps } from '@akashaorg/design-system-core/lib/components/InfoCard';
 
+InfoCard.displayName = 'InfoCard';
+
 const meta: Meta<InfoCardProps> = {
   title: 'DSCore/Cards/InfoCard',
   component: InfoCard,
-
   argTypes: {
     assetName: { control: 'text' },
     publicImgPath: { control: 'text' },

@@ -12,7 +12,6 @@ Button.displayName = 'Button';
 const meta: Meta<ButtonProps> = {
   title: 'DSCore/Buttons/Button',
   component: Button,
-
   argTypes: {
     label: { control: 'text' },
     size: { options: ['xs', 'sm', 'md', 'lg'], control: { type: 'select' } },

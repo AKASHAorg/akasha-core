@@ -4,6 +4,8 @@ import AutoComplete, {
   AutoCompleteProps,
 } from '@akashaorg/design-system-core/lib/components/AutoComplete';
 
+AutoComplete.displayName = 'AutoComplete';
+
 const meta: Meta<AutoCompleteProps> = {
   title: 'DSCore/Fields/AutoComplete',
   component: AutoComplete,

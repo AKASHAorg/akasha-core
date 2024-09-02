@@ -2,6 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import AppAvatar, { AppAvatarProps } from '@akashaorg/design-system-core/lib/components/AppAvatar';
 
+AppAvatar.displayName = 'AppAvatar';
+
 const meta: Meta<AppAvatarProps> = {
   title: 'DSCore/Avatars/AppAvatar',
   component: AppAvatar,

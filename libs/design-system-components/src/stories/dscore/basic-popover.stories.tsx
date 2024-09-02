@@ -4,10 +4,11 @@ import BasicPopover, {
   BasicPopoverProps,
 } from '@akashaorg/design-system-core/lib/components/BasicPopover';
 
+BasicPopover.displayName = 'BasicPopover';
+
 const meta: Meta<BasicPopoverProps> = {
   title: 'DSCore/Popovers/BasicPopover',
   component: BasicPopover,
-
   argTypes: {
     gap: { control: 'text' },
     target: { control: 'object' },

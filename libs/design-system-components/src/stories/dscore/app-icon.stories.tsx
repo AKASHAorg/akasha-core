@@ -3,6 +3,8 @@ import type { Meta, StoryObj } from '@storybook/react';
 import AppIcon, { AppIconProps } from '@akashaorg/design-system-core/lib/components/AppIcon';
 import { Akasha } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 
+AppIcon.displayName = 'AppIcon';
+
 const meta: Meta<AppIconProps> = {
   title: 'DSCore/Icons/AppIcon',
   component: AppIcon,

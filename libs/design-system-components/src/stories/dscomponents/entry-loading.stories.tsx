@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import EntryLoading from '../../components/ProfileEngagements/placeholders/entry-loading';
 
+EntryLoading.displayName = 'EntryLoading';
+
 const meta: Meta = {
   title: 'DSComponents/Loaders/Profile/EntryLoading',
   component: EntryLoading,

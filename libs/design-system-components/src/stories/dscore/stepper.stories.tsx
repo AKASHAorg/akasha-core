@@ -1,10 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import Stepper, { StepperProps } from '@akashaorg/design-system-core/lib/components/Stepper';
 
+Stepper.displayName = 'Stepper';
+
 const meta: Meta<StepperProps> = {
   title: 'DSComponents/Steppers/Stepper',
   component: Stepper,
-
   argTypes: {
     length: { control: 'number' },
     currentStep: { control: 'number' },

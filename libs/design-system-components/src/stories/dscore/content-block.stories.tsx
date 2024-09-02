@@ -3,10 +3,11 @@ import ContentBlock, {
   ContentBlockProps,
 } from '@akashaorg/design-system-core/lib/components/ContentBlock';
 
+ContentBlock.displayName = 'ContentBlock';
+
 const meta: Meta<ContentBlockProps> = {
   title: 'DSCore/Blocks/ContentBlock',
   component: ContentBlock,
-
   argTypes: {
     blockTitle: { control: 'text' },
     blockVariant: { control: 'text' },

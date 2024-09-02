@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import TrendingWidgetLoader from '../../components/Loaders/trending-widget-loader';
 
+TrendingWidgetLoader.displayName = 'TrendingWidgetLoader';
+
 const meta: Meta = {
   title: 'DSComponents/Loaders/TrendingWidgetLoader',
   component: TrendingWidgetLoader,

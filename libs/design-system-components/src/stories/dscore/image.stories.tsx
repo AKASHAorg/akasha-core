@@ -1,10 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import Image, { ImageProps } from '@akashaorg/design-system-core/lib/components/Image';
 
+Image.displayName = 'Image';
+
 const meta: Meta<ImageProps> = {
   title: 'DSCore/Images/Image',
   component: Image,
-
   argTypes: {
     src: { control: 'text' },
   },

@@ -12,6 +12,8 @@ const SwitchCardComponent: React.FC<SwitchCardProps> = props => {
   return <SwitchCard {...props} activeButton={activeButton} onTabClick={onTabClick} />;
 };
 
+SwitchCardComponent.displayName = 'SwitchCard';
+
 const meta: Meta<SwitchCardProps> = {
   title: 'DSComponents/Cards/SwitchCard',
   component: SwitchCardComponent,

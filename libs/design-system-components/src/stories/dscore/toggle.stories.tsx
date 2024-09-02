@@ -6,6 +6,8 @@ import {
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Toggle, { ToggleProps } from '@akashaorg/design-system-core/lib/components/Toggle';
 
+Toggle.displayName = 'Toggle';
+
 const meta: Meta<ToggleProps> = {
   title: 'DSCore/Buttons/Toggle',
   component: Toggle,

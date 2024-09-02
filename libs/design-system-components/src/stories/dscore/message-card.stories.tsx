@@ -3,10 +3,11 @@ import MessageCard, {
   MessageCardProps,
 } from '@akashaorg/design-system-core/lib/components/MessageCard';
 
+MessageCard.displayName = 'MessageCard';
+
 const meta: Meta<MessageCardProps> = {
   title: 'DSCore/Cards/MessageCard',
   component: MessageCard,
-
   argTypes: {
     title: { control: 'text' },
     message: { control: 'text' },

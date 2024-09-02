@@ -5,10 +5,11 @@ import CopyToClipboard, {
 } from '@akashaorg/design-system-core/lib/components/CopyToClipboard';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
+CopyToClipboard.displayName = 'CopyToClipboard';
+
 const meta: Meta = {
   title: 'DSCore/CopyToClipboard/CopyToClipboard',
   component: CopyToClipboard,
-
   argTypes: {
     value: { control: 'text' },
     copyText: { control: 'text' },

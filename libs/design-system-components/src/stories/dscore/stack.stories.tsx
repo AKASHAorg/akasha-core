@@ -8,7 +8,6 @@ Stack.displayName = 'Stack';
 const meta: Meta<StackProps> = {
   title: 'DSCore/Stack/Stack',
   component: Stack,
-
   argTypes: {
     direction: {
       control: 'select',

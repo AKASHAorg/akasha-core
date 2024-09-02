@@ -3,10 +3,11 @@ import type { Meta, StoryObj } from '@storybook/react';
 import Icon, { IconProps } from '@akashaorg/design-system-core/lib/components/Icon';
 import { Akasha } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 
+Icon.displayName = 'Icon';
+
 const meta: Meta<IconProps> = {
   title: 'DSCore/Icons/Icon',
   component: Icon,
-
   argTypes: {
     color: { control: 'text' },
     icon: { control: 'object' },

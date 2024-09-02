@@ -12,6 +12,8 @@ const SearchBarComponent: React.FC<SearchBarProps> = props => {
   return <SearchBar {...props} inputValue={inputValue} onInputChange={handleInputChange} />;
 };
 
+SearchBarComponent.displayName = 'SearchBar';
+
 const meta: Meta<SearchBarProps> = {
   title: 'DSComponents/Bars/SearchBar',
   component: SearchBarComponent,

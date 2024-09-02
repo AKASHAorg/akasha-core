@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import MiniProfileWidgetLoader from '../../components/Loaders/mini-profile-widget-loader';
 
+MiniProfileWidgetLoader.displayName = 'MiniProfileWidgetLoader';
+
 const meta: Meta = {
   title: 'DSComponents/Loaders/MiniProfileWidgetLoader',
   component: MiniProfileWidgetLoader,

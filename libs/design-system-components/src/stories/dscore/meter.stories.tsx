@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import Meter, { MeterProps } from '@akashaorg/design-system-core/lib/components/Meter';
 
+Meter.displayName = 'Meter';
+
 const meta: Meta<MeterProps> = {
   title: 'DSCore/Meters/Meter',
   component: Meter,

@@ -4,6 +4,8 @@ import { CheckCircleIcon } from '@akashaorg/design-system-core/lib/components/Ic
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 import { TextFieldProps } from '@akashaorg/design-system-core/lib/components/TextField/types';
 
+TextField.displayName = 'TextField';
+
 const meta: Meta = {
   title: 'DSCore/Fields/TextField',
   component: TextField,
