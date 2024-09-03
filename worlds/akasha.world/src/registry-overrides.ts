@@ -56,11 +56,6 @@ const overrides = [
     source: `${origin}/apps/settings/index.js`,
   },
   {
-    name: '@akashaorg/app-routing',
-    applicationType: AkashaAppApplicationType.App,
-    source: `${origin}/apps/routing/index.js`,
-  },
-  {
     name: '@akashaorg/ui-widget-sidebar',
     applicationType: AkashaAppApplicationType.Widget,
     source: `${origin}/widgets/sidebar/index.js`,
