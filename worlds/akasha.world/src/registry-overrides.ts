@@ -33,12 +33,11 @@ const overrides = [
     applicationType: AkashaAppApplicationType.App,
     source: `${origin}/apps/profile/index.js`,
   },
-  // {
-  //   name: '@akashaorg/app-notifications',
-  //   applicationType: AkashaAppApplicationType.App,
-  //   source: `${origin}/apps/notifications/index.js`,
-  //
-  // },
+  {
+    name: '@akashaorg/app-notifications',
+    applicationType: AkashaAppApplicationType.App,
+    source: `${origin}/apps/notifications/index.js`,
+  },
   // {
   //   name: '@akashaorg/app-legal',
   //   applicationType: AkashaAppApplicationType.App,
