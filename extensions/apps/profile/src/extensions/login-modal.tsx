@@ -11,10 +11,10 @@ import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 import { IRootExtensionProps } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps, withProviders, useModalData } from '@akashaorg/ui-awf-hooks';
 
-const LoginModal = (_props: IRootExtensionProps) => {
+const LoginModal = () => {
   const { t } = useTranslation('app-profile');
   const location = window.location;
-  const { getRoutingPlugin } = useRootComponentProps();
+  const { getCorePlugins } = useRootComponentProps();
 
   const { modalData } = useModalData();
 
@@ -39,7 +39,7 @@ const LoginModal = (_props: IRootExtensionProps) => {
   };
 
   const handleConnectClick = () => {
-    getRoutingPlugin().navigateTo?.(
+    getCorePlugins().routing.navigateTo?.(
       {
         appName: '@akashaorg/app-auth-ewa',
         getNavigationUrl: appRoutes => {
@@ -76,11 +76,12 @@ const LoginModal = (_props: IRootExtensionProps) => {
   );
 };
 
-const Wrapped = (props: IRootExtensionProps) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const Wrapped = (_: IRootExtensionProps) => {
   const { getTranslationPlugin } = useRootComponentProps();
   return (
     <I18nextProvider i18n={getTranslationPlugin().i18n}>
-      <LoginModal {...props} />
+      <LoginModal />
     </I18nextProvider>
   );
 };

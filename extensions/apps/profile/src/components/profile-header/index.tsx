@@ -38,7 +38,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
-  const { uiEvents, navigateToModal, getRoutingPlugin } = useRootComponentProps();
+  const { uiEvents, navigateToModal, getCorePlugins } = useRootComponentProps();
 
   const { data, error } = useGetProfileByDidSuspenseQuery({
     fetchPolicy:
@@ -58,7 +58,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
     [navigateToModal],
   );
   const isViewer = !!authenticatedDID && profileDID === authenticatedDID;
-  const navigateTo = getRoutingPlugin().navigateTo;
+  const navigateTo = getCorePlugins().routing.navigateTo;
 
   const handleClickAvatar = () => {
     if (!profileData?.avatar) return;

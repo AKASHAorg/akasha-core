@@ -11,8 +11,8 @@ import type { IRootComponentProps } from '@akashaorg/typings/lib/ui';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 
 const LoginBoltButton = () => {
-  const { getRoutingPlugin } = useRootComponentProps();
-  const navigateTo = React.useRef(getRoutingPlugin().navigateTo);
+  const { getCorePlugins } = useRootComponentProps();
+  const navigateTo = React.useRef(getCorePlugins().routing.navigateTo);
 
   const onLoginClick = React.useCallback(() => {
     navigateTo.current({

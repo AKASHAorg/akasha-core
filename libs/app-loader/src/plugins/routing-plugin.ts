@@ -1,26 +1,21 @@
 import 'systemjs-webpack-interop/auto-public-path';
 import * as singleSpa from 'single-spa';
-import { MenuItemAreaType, NavigateToParams, IMenuItem } from '@akashaorg/typings/lib/ui';
+import {
+  MenuItemAreaType,
+  NavigateToParams,
+  IMenuItem,
+  IRoutingPlugin,
+  RouteRepository,
+} from '@akashaorg/typings/lib/ui';
 import { ILogger } from '@akashaorg/typings/lib/sdk/log';
 
-type RouteMenuItem = IMenuItem & { navRoutes: Record<string, string> };
-
-export interface RouteRepository {
-  all: Record<string, RouteMenuItem>;
-  activeExtensionsNames: {
-    apps?: string[];
-    widgets?: string[];
-  };
-  byArea: { [key in MenuItemAreaType]?: Array<RouteMenuItem> };
-}
-
-export class RoutingPlugin {
-  readonly #routeRepository: RouteRepository;
+export class RoutingPlugin implements IRoutingPlugin {
+  #routeRepository: RouteRepository;
   readonly #logger: ILogger;
   static #instance: RoutingPlugin;
   readonly #encodeAppName: (name: string) => string;
   readonly #decodeAppName: (name: string) => string;
-  #changeListeners: ((repository: RouteRepository) => void)[];
+  #changeListeners: (() => void)[];
   private constructor(
     logger: ILogger,
     encodeAppName: (name: string) => string,
@@ -69,16 +64,29 @@ export class RoutingPlugin {
     });
   }
 
-  addRouteToRepository(name: string, menuItem: IMenuItem, navRoutes: Record<string, string>) {
+  #addRouteToRepository(name: string, menuItem: IMenuItem, navRoutes: Record<string, string>) {
     const appMenuItemData = {
       ...menuItem,
       navRoutes: navRoutes,
       name: name,
     };
 
-    this.#routeRepository.all[name] = appMenuItemData;
-    menuItem?.area?.forEach((menuArea: MenuItemAreaType) =>
-      this.#routeRepository.byArea[menuArea].push(appMenuItemData),
+    this.#routeRepository = {
+      ...this.#routeRepository,
+      all: {
+        ...this.#routeRepository.all,
+        [name]: appMenuItemData,
+      },
+    };
+    menuItem?.area?.forEach(
+      (menuArea: MenuItemAreaType) =>
+        (this.#routeRepository = {
+          ...this.#routeRepository,
+          byArea: {
+            ...this.#routeRepository.byArea,
+            [menuArea]: this.#routeRepository.byArea[menuArea].concat(appMenuItemData),
+          },
+        }),
     );
   }
 
@@ -92,26 +100,29 @@ export class RoutingPlugin {
     }
     if (Array.isArray(routeData.menuItems)) {
       routeData.menuItems.forEach(menuItem => {
-        this.addRouteToRepository(routeData.name, menuItem, routeData.navRoutes);
+        this.#addRouteToRepository(routeData.name, menuItem, routeData.navRoutes);
       });
-      this.#changeListeners.forEach(listnr => listnr(this.#routeRepository));
+      this.#changeListeners.forEach(listener => listener());
     } else {
-      this.addRouteToRepository(routeData.name, routeData.menuItems, routeData.navRoutes);
-      this.#changeListeners.forEach(listnr => listnr(this.#routeRepository));
+      this.#addRouteToRepository(routeData.name, routeData.menuItems, routeData.navRoutes);
+      this.#changeListeners.forEach(listener => listener());
     }
   }
 
   unregisterRoute(extensionName: string) {
-    delete this.#routeRepository.all[extensionName];
-    delete this.#routeRepository.activeExtensionsNames[extensionName];
-    for (const area in this.#routeRepository.byArea) {
-      if (this.#routeRepository.byArea.hasOwnProperty(area)) {
-        this.#routeRepository.byArea[area] = this.#routeRepository.byArea[area].filter(
-          (menuItem: RouteMenuItem) => menuItem.name !== extensionName,
-        );
+    const repo = { ...this.#routeRepository };
+
+    delete repo.all[extensionName];
+    delete repo.activeExtensionsNames[extensionName];
+
+    for (const area in repo.byArea) {
+      if (repo.byArea.hasOwnProperty(area)) {
+        repo.byArea[area] = repo.byArea[area].filter(menuItem => menuItem.name !== extensionName);
       }
     }
-    this.#changeListeners.forEach(listnr => listnr(this.#routeRepository));
+
+    this.#routeRepository = repo;
+    this.#changeListeners.forEach(listener => listener());
   }
 
   navigateTo({ appName, getNavigationUrl }: NavigateToParams, replace?: boolean) {
@@ -195,11 +206,17 @@ export class RoutingPlugin {
     }
     return this.navigateTo(options.fallback);
   }
-
+  /**
+   * Subscribe to changes. When using in React, it's recommended to be used with useSyncExternalStore
+   **/
   subscribe(listener: () => void) {
     this.#changeListeners.push(listener);
     return () => {
       this.#changeListeners.filter(cb => cb !== listener);
     };
+  }
+  // make it useSyncExternalStore friendly
+  getSnapshot() {
+    return this.#routeRepository;
   }
 }

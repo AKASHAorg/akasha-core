@@ -12,7 +12,7 @@ import {
 import { filter } from 'rxjs';
 
 const TopbarComponent: React.FC<unknown> = () => {
-  const { uiEvents, layoutSlots, logger, worldConfig, encodeAppName, getRoutingPlugin } =
+  const { uiEvents, layoutSlots, logger, worldConfig, encodeAppName, getCorePlugins } =
     useRootComponentProps();
   const {
     data: { authenticatedDID },
@@ -21,7 +21,7 @@ const TopbarComponent: React.FC<unknown> = () => {
   const historyCount = React.useRef(0);
   const isNavigatingBackRef = React.useRef(false);
   const isLoggedIn = !!authenticatedDID;
-  const navigateTo = getRoutingPlugin().navigateTo;
+  const navigateTo = getCorePlugins().routing.navigateTo;
 
   const { t } = useTranslation('ui-widget-topbar');
 

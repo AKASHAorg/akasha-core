@@ -30,9 +30,9 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
   const {
     data: { authenticatedDID, isAuthenticating: authenticating },
   } = useAkashaStore();
-  const { getRoutingPlugin, navigateToModal } = useRootComponentProps();
+  const { getCorePlugins, navigateToModal } = useRootComponentProps();
   const isLoggedIn = !!authenticatedDID;
-  const navigateTo = getRoutingPlugin().navigateTo;
+  const navigateTo = getCorePlugins().routing.navigateTo;
   const { t } = useTranslation('app-profile');
 
   const profileDataReq = useGetProfileByDidQuery({

@@ -15,8 +15,8 @@ const NsfwOption: React.FC = () => {
   } = useAkashaStore();
   const isLoggedIn = !!authenticatedDID;
 
-  const { getRoutingPlugin, uiEvents } = useRootComponentProps();
-  const routingPlugin = useRef(getRoutingPlugin());
+  const { getCorePlugins, uiEvents } = useRootComponentProps();
+  const routingPlugin = useRef(getCorePlugins().routing);
   const _uiEvents = React.useRef(uiEvents);
 
   const { showNsfw, toggleShowNsfw } = useNsfwToggling();

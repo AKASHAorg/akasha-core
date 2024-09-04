@@ -16,9 +16,9 @@ export const ReportItemPage: React.FC<ReportItemPageProps> = props => {
   const [step, setStep] = useState<number>(0);
   const { t } = useTranslation('app-vibes');
   const navigate = useNavigate();
-  const { getRoutingPlugin } = useRootComponentProps();
+  const { getCorePlugins } = useRootComponentProps();
 
-  const navigateTo = getRoutingPlugin().navigateTo;
+  const navigateTo = getCorePlugins().routing.navigateTo;
   const moderationCategories = reasons.map(({ title }) => ({
     value: title,
     label: t('{{title}}', { title }),

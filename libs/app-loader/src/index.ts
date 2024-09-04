@@ -17,6 +17,7 @@ import {
 import getSDK, { SDK_Services, SDK_API } from '@akashaorg/core-sdk';
 import { InstalledExtensionSchema } from '@akashaorg/core-sdk/lib/db/installed-extensions.schema';
 import {
+  CorePlugins,
   IAppConfig,
   IPlugin,
   IRootComponentProps,
@@ -55,14 +56,15 @@ export default class AppLoader {
   logger: ILogger;
   parentLogger: SDK_Services['log'];
   plugins: IPlugin & {
-    core?: {
-      contentBlockStore: ContentBlockStore;
-      extensionPointStore: ExtensionPointStore;
-      widgetStore: WidgetStore;
-      extensionInstaller: ExtensionInstaller;
-      extensionUninstaller: { uninstallExtension: (name: string) => void };
-      routing: RoutingPlugin;
-    };
+    core: CorePlugins;
+    // {
+    //   contentBlockStore: ContentBlockStore;
+    //   extensionPointStore: ExtensionPointStore;
+    //   widgetStore: WidgetStore;
+    //   extensionInstaller: ExtensionInstaller;
+    //   extensionUninstaller: { uninstallExtension: (name: string) => void };
+    //   routing: RoutingPlugin;
+    // };
   };
   globalChannel: SDK_API['globalChannel'];
   user: { id: string };
@@ -79,7 +81,6 @@ export default class AppLoader {
     this.layoutConfig = null;
     this.parentLogger = getSDK().services.log;
     this.logger = this.parentLogger.create('app-loader');
-    this.plugins = {};
     this.globalChannel = getSDK().api.globalChannel;
     this.user = null;
     this.globalChannelSub = null;
