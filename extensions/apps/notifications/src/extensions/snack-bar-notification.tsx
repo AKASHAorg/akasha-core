@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useSyncExternalStore } from 'react';
+import React, { useState, useEffect, useMemo, useSyncExternalStore, ReactElement } from 'react';
 import ReactDOMClient from 'react-dom/client';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import singleSpaReact from 'single-spa-react';
@@ -15,6 +15,7 @@ import {
   NotificationEvents,
   type NotificationEvent,
   NotificationTypes,
+  LogoTypeSource,
 } from '@akashaorg/typings/lib/ui';
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
@@ -110,12 +111,16 @@ const SnackBarNotification: React.FC<IRootExtensionProps> = () => {
   const findAppIcon = (appName: string) => {
     return defaultInstalledApps?.find(({ name }) => name === appName);
   };
-
+  // @TODO: icon typings are generally wrong!
   const icon = (
     <AppIcon
       size="xs"
       accentColor={true}
-      placeholderIcon={findAppIcon(appTitle)?.logo?.value ?? null}
+      placeholderIcon={
+        findAppIcon(appTitle).logo.type === LogoTypeSource.ICON
+          ? (findAppIcon(appTitle).logo?.value as ReactElement)
+          : null
+      }
     />
   );
 

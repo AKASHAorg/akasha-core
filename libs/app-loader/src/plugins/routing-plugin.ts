@@ -209,14 +209,14 @@ export class RoutingPlugin implements IRoutingPlugin {
   /**
    * Subscribe to changes. When using in React, it's recommended to be used with useSyncExternalStore
    **/
-  subscribe(listener: () => void) {
+  subscribe = (listener: () => void) => {
     this.#changeListeners.push(listener);
     return () => {
       this.#changeListeners.filter(cb => cb !== listener);
     };
-  }
+  };
   // make it useSyncExternalStore friendly
-  getSnapshot() {
+  getSnapshot = () => {
     return this.#routeRepository;
-  }
+  };
 }

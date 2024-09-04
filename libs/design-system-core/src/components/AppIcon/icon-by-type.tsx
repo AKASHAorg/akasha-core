@@ -7,11 +7,7 @@ import Icon from '../Icon';
 import { AppIconProps } from '.';
 import { Color } from '../types/common.types';
 
-const isStringIcon = (
-  appImg: AppIconProps['appImg'],
-): appImg is Omit<AppIconProps['appImg'], 'value'> & { value: string } => {
-  return appImg.type === LogoTypeSource.ICON || appImg.type === LogoTypeSource.IPFS;
-};
+const isStringIcon = (appImg: AppIconProps['appImg']): appImg is <AppIconProps['appImg']> => {}
 
 export type AppImgProps = Pick<
   AppIconProps,
@@ -29,10 +25,10 @@ const IconByType: React.FC<AppImgProps> = ({
   accentColor,
   color,
 }) => {
-  if (appImg.type === LogoTypeSource.ICON) {
+  if (appImg?.type === LogoTypeSource.ICON && typeof appImg?.type !== 'string') {
     return (
       <Icon
-        icon={appImg?.value as React.ReactElement}
+        icon={appImg?.value}
         size={size}
         breakPointSize={breakPointSize}
         accentColor={accentColor}
@@ -42,7 +38,10 @@ const IconByType: React.FC<AppImgProps> = ({
     );
   }
 
-  if (isStringIcon(appImg)) {
+  if (
+    (appImg?.type === LogoTypeSource.String || appImg?.type === LogoTypeSource.IPFS) &&
+    typeof appImg.value === 'string'
+  ) {
     return (
       <img
         loading="lazy"

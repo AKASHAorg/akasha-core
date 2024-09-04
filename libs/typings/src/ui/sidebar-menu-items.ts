@@ -11,11 +11,16 @@ type LogoTypes = 'icon' | 'source' | 'string' | 'ipfs' | 'avatar';
 /**
  * Type defining logo types and their corresponding value
  **/
-export type LogoSourceType = {
-  type: Extract<LogoTypes, 'icon'>;
-  solidIcon?: boolean;
-  value: string | ReactElement;
-};
+export type LogoSourceType =
+  | {
+      type: Extract<LogoTypes, 'icon'>;
+      solidIcon?: boolean;
+      value: React.ReactElement;
+    }
+  | {
+      type: Exclude<LogoTypes, 'icon'>;
+      value: string;
+    };
 
 /**
  * Enum defining logo types
@@ -36,7 +41,7 @@ export interface IMenuItem {
   route?: string;
   type?: MenuItemType;
   area?: ValueOf<MenuItemAreaType>[]; // area is optional because subroutes dont have an area to be mounted
-  logo?: Omit<LogoSourceType, 'type'> & { type: LogoSourceType['type'] | LogoTypeSource };
+  logo?: LogoSourceType;
   name?: string;
   subRoutes?: IMenuItem[];
 }
