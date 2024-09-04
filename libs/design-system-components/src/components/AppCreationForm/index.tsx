@@ -128,7 +128,7 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
   return (
     <form onSubmit={onSave} className={tw(apply`h-full`)}>
       <Stack direction="column" spacing="gap-y-4">
-        <Stack padding="px-4 pb-16" spacing="gap-y-4">
+        <Stack padding="px-4 pb-3" spacing="gap-y-4">
           <Controller
             control={control}
             name={FieldName.extensionType}
@@ -242,10 +242,10 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
               />
             )}
           />
+          <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
+            {disclaimerLabel}
+          </Text>
         </Stack>
-        <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
-          {disclaimerLabel}
-        </Text>
 
         <Divider />
 

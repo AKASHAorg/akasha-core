@@ -69,7 +69,7 @@ export const ExtensionCreationPage: React.FC<unknown> = () => {
             extensionTypeFieldLabel={t('Extension Type')}
             extensionSourceURLLabel={t('Source URL')}
             disclaimerLabel={t(
-              `Don't worry if you don't have all the information now. You can add or edit all details later when submitting or editing the app.A`,
+              `Don't worry if you don't have all the information now. You can add or edit all details later when submitting or editing the app.`,
             )}
             cancelButton={{
               label: t('Cancel'),

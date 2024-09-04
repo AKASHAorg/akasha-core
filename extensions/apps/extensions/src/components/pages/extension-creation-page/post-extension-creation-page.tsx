@@ -58,8 +58,8 @@ export const PostExtensionCreationPage: React.FC<{ extensionId: string }> = ({ e
   }
 
   return (
-    <Card padding="py-4 px-0" margin="mb-2">
-      <Stack spacing="gap-y-8">
+    <Card padding="py-6 px-4">
+      <Stack spacing="gap-y-8" align="center">
         <Text variant="h5" weight="semibold" align="center">
           {t('Your extension has been created locally')}
         </Text>
@@ -69,20 +69,23 @@ export const PostExtensionCreationPage: React.FC<{ extensionId: string }> = ({ e
           customStyle="rounded-[10px]"
           direction="row"
           spacing="gap-2"
+          padding={8}
         >
           <AppAvatar avatar={extensionData.avatar} appType={extensionData.applicationType} />
           <Stack direction="column" justify="between">
-            <Text variant="h6">{extensionData.displayName || extensionData.name}</Text>
-            <Stack direction="column" spacing="gap-1">
+            <Text variant="h6" truncate>
+              {extensionData.displayName || extensionData.name}
+            </Text>
+            <Stack direction="column">
               <Text variant="footnotes1">{authenticatedProfile.name}</Text>
               <DidField did={authenticatedDID} />
             </Stack>
           </Stack>
         </Stack>
 
-        <Text variant="subtitle2">
+        <Text variant="subtitle2" align="center">
           {t(
-            'You can now test and edit your extension before submitting it for review. Once approved, it will be added to AKASHA World.',
+            'You can now edit your app before submitting it for review. Once approved, it will be added to AKASHA World.',
           )}
         </Text>
 
@@ -90,12 +93,12 @@ export const PostExtensionCreationPage: React.FC<{ extensionId: string }> = ({ e
           <Stack direction="row" spacing="gap-1" align="center" justify="center">
             <Icon
               icon={<ExclamationTriangleIcon />}
-              size="xs"
+              size="sm"
               color={{ light: 'warningLight', dark: 'warningDark' }}
             />
             <Text variant="subtitle2">{t('Important Note: ')}</Text>
           </Stack>
-          <Text variant="subtitle2">
+          <Text variant="subtitle2" align="center">
             {t(
               'Extensions that are saved locally will be lost if cache is cleared or if accessed from a different device.',
             )}
