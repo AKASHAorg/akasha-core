@@ -4,7 +4,6 @@ import NsfwOption from '../pages/nsfw-option';
 import PrivacyOption from '../pages/privacy-option';
 import ThemeOption from '../pages/theme-option';
 import SettingsPage from '../pages/settings-page';
-import ErrorComponent from './error-component';
 import routes, { APPS, NSFW, PRIVACY, THEME, HOME } from '../../routes';
 import {
   CatchBoundary,
@@ -20,6 +19,7 @@ import { NotFoundComponent } from './not-found-component';
 
 const rootRoute = createRootRoute({
   component: Outlet,
+  notFoundComponent: () => <NotFoundComponent />,
 });
 
 const defaultRoute = createRoute({
@@ -33,7 +33,6 @@ const defaultRoute = createRoute({
 const settingsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[HOME]}`,
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => (
     <CatchBoundary getResetKey={() => 'settings_reset'} errorComponent={NotFoundComponent}>
       <SettingsPage />
@@ -44,7 +43,6 @@ const settingsRoute = createRoute({
 const nsfwRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[NSFW]}`,
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => (
     <CatchBoundary getResetKey={() => 'nsfw_reset'} errorComponent={NotFoundComponent}>
       <NsfwOption />
@@ -55,7 +53,6 @@ const nsfwRoute = createRoute({
 const appsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[APPS]}`,
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => (
     <CatchBoundary getResetKey={() => 'apps_reset'} errorComponent={NotFoundComponent}>
       <AppsOption />
@@ -66,7 +63,6 @@ const appsRoute = createRoute({
 const privacyRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[PRIVACY]}`,
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => (
     <CatchBoundary getResetKey={() => 'privacy_reset'} errorComponent={NotFoundComponent}>
       <PrivacyOption />
@@ -77,7 +73,6 @@ const privacyRoute = createRoute({
 const themeRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[THEME]}`,
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => (
     <CatchBoundary getResetKey={() => 'theme_reset'} errorComponent={NotFoundComponent}>
       <ThemeOption />

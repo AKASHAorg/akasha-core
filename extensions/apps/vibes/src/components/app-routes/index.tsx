@@ -29,6 +29,7 @@ import { NotFoundComponent } from './not-found-component';
 
 const rootRoute = createRootRouteWithContext<IRouterContext>()({
   component: Outlet,
+  notFoundComponent: () => <NotFoundComponent />,
 });
 
 const defaultRoute = createRoute({
@@ -42,7 +43,6 @@ const defaultRoute = createRoute({
 const overviewRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[HOME],
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return (
       <CatchBoundary getResetKey={() => 'overview_reset'} errorComponent={NotFoundComponent}>
@@ -55,7 +55,6 @@ const overviewRoute = createRoute({
 const moderationValueRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${baseOverviewUrl}/values/$value`,
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     const { value } = moderationValueRoute.useParams();
     return (
@@ -72,7 +71,6 @@ const moderationValueRoute = createRoute({
 const moderatorsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[MODERATORS],
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     const getModeratorsQuery = { data: [], isFetching: false };
     const allModerators = getModeratorsQuery.data;
@@ -91,7 +89,6 @@ const moderatorsRoute = createRoute({
 const viewModeratorRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${baseModeratorsUrl}/$moderatorId`,
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     const { moderatorId } = viewModeratorRoute.useParams();
     return (
@@ -105,7 +102,6 @@ const viewModeratorRoute = createRoute({
 const historyRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[HISTORY],
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return (
       <CatchBoundary getResetKey={() => 'history_reset'} errorComponent={NotFoundComponent}>
@@ -118,7 +114,6 @@ const historyRoute = createRoute({
 const historyItemRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${baseHistoryUrl}/$itemId`,
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     const { itemId } = historyItemRoute.useParams();
     return (
@@ -132,7 +127,6 @@ const historyItemRoute = createRoute({
 const reportItemRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/report/$itemType/$itemId',
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     const { itemType, itemId } = reportItemRoute.useParams();
     return (

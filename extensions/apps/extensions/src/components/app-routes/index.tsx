@@ -42,6 +42,7 @@ import { NotFoundComponent } from './not-found-component';
 
 const rootRoute = createRootRouteWithContext<IRouterContext>()({
   component: Outlet,
+  notFoundComponent: () => <NotFoundComponent />,
 });
 
 const defaultRoute = createRoute({
@@ -55,7 +56,6 @@ const defaultRoute = createRoute({
 const exploreRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/explore',
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => (
     <CatchBoundary getResetKey={() => 'explore_reset'} errorComponent={NotFoundComponent}>
       <ExplorePage />
@@ -66,14 +66,12 @@ const exploreRoute = createRoute({
 const extensionsHubRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/extensions-hub',
-  notFoundComponent: () => <NotFoundComponent />,
   component: ExtensionsHubPage,
 });
 
 const installedExtensionsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/installed-extensions',
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => (
     <CatchBoundary getResetKey={() => 'installed_reset'} errorComponent={NotFoundComponent}>
       <InstalledExtensionsPage />
@@ -84,7 +82,6 @@ const installedExtensionsRoute = createRoute({
 const myExtensionsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/my-extensions',
-  notFoundComponent: () => <NotFoundComponent />,
   beforeLoad: () => {
     if (window.localStorage.getItem(DEV_MODE_KEY) !== DevMode.ENABLED) {
       throw redirect({ to: '/explore', replace: true });
@@ -100,7 +97,6 @@ const myExtensionsRoute = createRoute({
 const developerModeRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/developer-mode',
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => (
     <CatchBoundary getResetKey={() => 'dev_mode_reset'} errorComponent={NotFoundComponent}>
       <DeveloperModePage />
@@ -134,7 +130,6 @@ const infoRoute = createRoute({
 const devInfoRoute = createRoute({
   getParentRoute: () => infoRoute,
   path: '/developer/$devDid',
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     const { devDid } = devInfoRoute.useParams();
     return (
@@ -148,7 +143,6 @@ const devInfoRoute = createRoute({
 const collaboratorsInfoRoute = createRoute({
   getParentRoute: () => infoRoute,
   path: '/collaborators',
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     const { appId } = infoRoute.useParams();
     return (
@@ -162,7 +156,6 @@ const collaboratorsInfoRoute = createRoute({
 const versionInfoRoute = createRoute({
   getParentRoute: () => infoRoute,
   path: '/versions',
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     const { appId } = infoRoute.useParams();
     return (
@@ -176,7 +169,6 @@ const versionInfoRoute = createRoute({
 const versionHistoryRoute = createRoute({
   getParentRoute: () => infoRoute,
   path: '/version-history',
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     const { appId } = versionHistoryRoute.useParams();
     return (
@@ -190,7 +182,6 @@ const versionHistoryRoute = createRoute({
 const auditLogRoute = createRoute({
   getParentRoute: () => infoRoute,
   path: '/audit-log',
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     const { appId } = auditLogRoute.useParams();
     return (
@@ -204,7 +195,6 @@ const auditLogRoute = createRoute({
 const permissionInfoRoute = createRoute({
   getParentRoute: () => infoRoute,
   path: '/permissions',
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     const { appId } = permissionInfoRoute.useParams();
     return (
@@ -218,7 +208,6 @@ const permissionInfoRoute = createRoute({
 const appLicenseInfoRoute = createRoute({
   getParentRoute: () => infoRoute,
   path: '/license',
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     const { appId } = appLicenseInfoRoute.useParams();
     return (
@@ -232,7 +221,6 @@ const appLicenseInfoRoute = createRoute({
 const supportInfoRoute = createRoute({
   getParentRoute: () => infoRoute,
   path: '/contact',
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     const { appId } = supportInfoRoute.useParams();
     return (
@@ -246,7 +234,6 @@ const supportInfoRoute = createRoute({
 const appDescriptionRoute = createRoute({
   getParentRoute: () => infoRoute,
   path: '/description',
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     const { appId } = appDescriptionRoute.useParams();
     return (
@@ -260,7 +247,6 @@ const appDescriptionRoute = createRoute({
 const extensionCreateRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/create-extension',
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return <ExtensionCreationPage />;
   },
@@ -286,7 +272,6 @@ const extensionEditMainRoute = createRoute({
 const extensionEditStep1Route = createRoute({
   getParentRoute: () => extensionEditMainRoute,
   path: '/step1',
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     const { extensionId } = extensionEditMainRoute.useParams();
     return (
@@ -302,7 +287,6 @@ const extensionEditStep1Route = createRoute({
 const extensionEditStep2Route = createRoute({
   getParentRoute: () => extensionEditMainRoute,
   path: '/step2',
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     const { extensionId } = extensionEditMainRoute.useParams();
     return (
@@ -318,7 +302,6 @@ const extensionEditStep2Route = createRoute({
 const extensionEditStep3Route = createRoute({
   getParentRoute: () => extensionEditMainRoute,
   path: '/step3',
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     const { extensionId } = extensionEditMainRoute.useParams();
     return (

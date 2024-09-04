@@ -47,6 +47,7 @@ import { NotFoundComponent } from './not-found-component';
 
 const rootRoute = createRootRouteWithContext<IRouterContext>()({
   component: Outlet,
+  notFoundComponent: () => <NotFoundComponent />,
 });
 
 const defaultRoute = createRoute({
@@ -60,7 +61,6 @@ const defaultRoute = createRoute({
 const applicationsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[HOME],
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return (
       <CatchBoundary getResetKey={() => 'apps_reset'} errorComponent={NotFoundComponent}>
@@ -73,7 +73,6 @@ const applicationsRoute = createRoute({
 const becomeModeratorRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[BECOME_MODERATOR],
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return (
       <CatchBoundary getResetKey={() => 'become_mod_reset'} errorComponent={NotFoundComponent}>
@@ -86,7 +85,6 @@ const becomeModeratorRoute = createRoute({
 const selfApplicationsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[MY_APPLICATIONS],
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return (
       <CatchBoundary getResetKey={() => 'self_apps_reset'} errorComponent={NotFoundComponent}>
@@ -99,7 +97,6 @@ const selfApplicationsRoute = createRoute({
 const selfApplicationDetailRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[MY_APPLICATION_DETAIL],
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return (
       <CatchBoundary
@@ -115,7 +112,6 @@ const selfApplicationDetailRoute = createRoute({
 const selfApplicationWithdrawRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[WITHDRAW_APPLICATION],
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return (
       <CatchBoundary
@@ -131,7 +127,6 @@ const selfApplicationWithdrawRoute = createRoute({
 const applicationsLogRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[APPLICATIONS],
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return (
       <CatchBoundary getResetKey={() => 'apps_log_reset'} errorComponent={NotFoundComponent}>
@@ -144,7 +139,6 @@ const applicationsLogRoute = createRoute({
 const applicationDetailRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[APPLICATION_DETAIL],
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return (
       <CatchBoundary getResetKey={() => 'app_detail_reset'} errorComponent={NotFoundComponent}>
@@ -157,7 +151,6 @@ const applicationDetailRoute = createRoute({
 const dashboardRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[DASHBOARD],
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return (
       <CatchBoundary getResetKey={() => 'dashboard_reset'} errorComponent={NotFoundComponent}>
@@ -170,7 +163,6 @@ const dashboardRoute = createRoute({
 const viewItemReportsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${baseDashboardUrl}/item/$id/reports`,
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     const { id } = viewItemReportsRoute.useParams();
     return (
@@ -187,7 +179,6 @@ const viewItemReportsRoute = createRoute({
 const viewItemReportFlagsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${baseDashboardUrl}/item/$id/reports/$reportId`,
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     const { id, reportId } = viewItemReportFlagsRoute.useParams();
     return (
@@ -204,7 +195,6 @@ const viewItemReportFlagsRoute = createRoute({
 const reviewItemRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${baseDashboardUrl}/$action/$itemType/$id`,
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     const { action, itemType, id } = reviewItemRoute.useParams();
     return (
@@ -218,7 +208,6 @@ const reviewItemRoute = createRoute({
 const settingsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[SETTINGS],
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return (
       <CatchBoundary getResetKey={() => 'settings_reset'} errorComponent={NotFoundComponent}>
@@ -231,7 +220,6 @@ const settingsRoute = createRoute({
 const editMaxApplicantsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[EDIT_MAX_MODERATORS],
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return (
       <CatchBoundary
@@ -247,7 +235,6 @@ const editMaxApplicantsRoute = createRoute({
 const assignAdminRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[ASSIGN_ADMIN],
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return (
       <CatchBoundary getResetKey={() => 'assign_admin_reset'} errorComponent={NotFoundComponent}>
@@ -260,7 +247,6 @@ const assignAdminRoute = createRoute({
 const respondAdminRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[RESPOND_ADMIN],
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return (
       <CatchBoundary getResetKey={() => 'respond_admin_reset'} errorComponent={NotFoundComponent}>
@@ -273,7 +259,6 @@ const respondAdminRoute = createRoute({
 const resignModeratorRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[RESIGN_MODERATOR],
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return (
       <CatchBoundary
@@ -289,7 +274,6 @@ const resignModeratorRoute = createRoute({
 const resignConfirmationRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[RESIGN_CONFIRMATION],
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return (
       <CatchBoundary getResetKey={() => 'resign_confirm_reset'} errorComponent={NotFoundComponent}>

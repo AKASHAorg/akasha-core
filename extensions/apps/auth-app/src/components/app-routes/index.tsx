@@ -16,6 +16,7 @@ import { NotFoundComponent } from './not-found-component';
 
 const rootRoute = createRootRouteWithContext<IRouterContext>()({
   component: Outlet,
+  notFoundComponent: () => <NotFoundComponent />,
 });
 
 const defaultRoute = createRoute({
@@ -40,7 +41,6 @@ const mainRoute = createRoute({
 const connectRoute = createRoute({
   getParentRoute: () => mainRoute,
   path: `${routes[CONNECT]}`,
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => (
     <CatchBoundary getResetKey={() => 'connect_reset'} errorComponent={NotFoundComponent}>
       <ChooseProvider />
@@ -51,7 +51,6 @@ const connectRoute = createRoute({
 const web3ModalRoute = createRoute({
   getParentRoute: () => mainRoute,
   path: `${routes[CONNECT]}${routes[WEB3MODAL]}`,
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => (
     <CatchBoundary getResetKey={() => 'web3_modal_reset'} errorComponent={NotFoundComponent}>
       <ConnectWallet />

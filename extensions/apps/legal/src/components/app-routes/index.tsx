@@ -14,6 +14,7 @@ import { NotFoundComponent } from './not-found-component';
 
 const rootRoute = createRootRoute({
   component: Outlet,
+  notFoundComponent: () => <NotFoundComponent />,
 });
 
 const defaultRoute = createRoute({
@@ -27,14 +28,12 @@ const defaultRoute = createRoute({
 const mainRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[HOME]}`,
-  notFoundComponent: () => <NotFoundComponent />,
   component: MainPage,
 });
 
 const termsOfServiceRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[TOS]}`,
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return <TermsOfService />;
   },
@@ -43,7 +42,6 @@ const termsOfServiceRoute = createRoute({
 const termsOfUseRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[TOU]}`,
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return <TermsOfUse />;
   },
@@ -52,7 +50,6 @@ const termsOfUseRoute = createRoute({
 const codeOfConductRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[COC]}`,
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return <CodeOfConduct />;
   },
@@ -61,7 +58,6 @@ const codeOfConductRoute = createRoute({
 const privacyPolicyRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[PP]}`,
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return <PrivacyPolicy />;
   },
@@ -70,7 +66,6 @@ const privacyPolicyRoute = createRoute({
 const developerGuidelinesRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[DG]}`,
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return <DeveloperGuidelines />;
   },

@@ -21,6 +21,7 @@ import { NotFoundComponent } from './not-found-component';
 
 const rootRoute = createRootRouteWithContext<IRouterContext>()({
   component: Outlet,
+  notFoundComponent: () => <NotFoundComponent />,
 });
 
 const defaultRoute = createRoute({
@@ -34,7 +35,6 @@ const defaultRoute = createRoute({
 const showNotificationsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[SHOW_NOTIFICATIONS_PAGE]}`,
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return <NotificationsPage />;
   },
@@ -43,21 +43,18 @@ const showNotificationsRoute = createRoute({
 const settingsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[SETTINGS_PAGE]}`,
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => <CustomiseNotificationPage initial={false} />,
 });
 
 const customiseNotificationsOptionsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[CUSTOMISE_NOTIFICATION_OPTIONS_PAGE]}`,
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => <CustomiseNotificationPage />,
 });
 
 const customiseNotificationsWelcomePageRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[CUSTOMISE_NOTIFICATION_WELCOME_PAGE]}`,
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return <WelcomePage />;
   },
@@ -66,7 +63,6 @@ const customiseNotificationsWelcomePageRoute = createRoute({
 const customiseNotificationsConfirmationPageRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[CUSTOMISE_NOTIFICATION_CONFIRMATION_PAGE]}`,
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return <WelcomePage finalStep={true} />;
   },

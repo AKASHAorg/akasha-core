@@ -56,7 +56,6 @@ const defaultRoute = createRoute({
 const antennaRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[GLOBAL_ANTENNA],
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return (
       <CatchBoundary getResetKey={() => 'antenna_reset'} errorComponent={NotFoundComponent}>
@@ -69,7 +68,6 @@ const antennaRoute = createRoute({
 const myAntennaRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[MY_ANTENNA],
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return (
       <CatchBoundary getResetKey={() => 'myAntenna_reset'} errorComponent={NotFoundComponent}>
@@ -123,7 +121,6 @@ const beamRoute = createRoute({
 const beamReflectRoute = createRoute({
   getParentRoute: () => beamRoute,
   path: routes[REFLECT],
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     const { beamId } = beamReflectRoute.useParams();
     const { beam, beamStream } = beamRoute.useLoaderData();
@@ -202,7 +199,6 @@ const reflectionsRoute = createRoute({
 const reflectionsReflectRoute = createRoute({
   getParentRoute: () => reflectionsRoute,
   path: routes[REFLECT],
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     const { reflection, reflectionStream } = reflectionsRoute.useLoaderData();
     return (
@@ -232,7 +228,6 @@ const reflectionsReflectRoute = createRoute({
 const tagFeedRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[TAGS]}/$tagName`,
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     const { tagName } = tagFeedRoute.useParams();
     return (
@@ -246,7 +241,6 @@ const tagFeedRoute = createRoute({
 const editorRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[EDITOR],
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return (
       <CatchBoundary getResetKey={() => 'editor_reset'} errorComponent={NotFoundComponent}>

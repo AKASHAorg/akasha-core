@@ -34,12 +34,12 @@ const rootRoute = createRootRouteWithContext<IRouterContext>()({
       <Outlet />
     </>
   ),
+  notFoundComponent: () => <NotFoundComponent />,
 });
 
 const profileInfoRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '$profileDID',
-  notFoundComponent: () => <NotFoundComponent />,
   loader: ({ context, params }) => {
     context.apolloClient.query({
       query: GetProfileByDidDocument,
@@ -63,7 +63,6 @@ const profileInfoRoute = createRoute({
 const profileEditRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `$profileDID${menuRoute[EDIT]}`,
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     const { profileDID } = profileEditRoute.useParams();
     return (
@@ -81,7 +80,6 @@ const profileEditRoute = createRoute({
 const followersRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `$profileDID${menuRoute[FOLLOWERS]}`,
-  notFoundComponent: () => <NotFoundComponent />,
   loader: ({ context, params }) => {
     context.apolloClient.query({
       query: GetFollowersListByDidDocument,
@@ -109,7 +107,6 @@ const followersRoute = createRoute({
 const followingRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `$profileDID${menuRoute[FOLLOWING]}`,
-  notFoundComponent: () => <NotFoundComponent />,
   loader: ({ context, params }) => {
     context.apolloClient.query({
       query: GetFollowingListByDidDocument,
@@ -137,7 +134,6 @@ const followingRoute = createRoute({
 const interestsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `$profileDID${menuRoute[INTERESTS]}`,
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     const { profileDID } = interestsRoute.useParams();
     return (
@@ -154,7 +150,6 @@ const interestsRoute = createRoute({
 const beamsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `$profileDID${menuRoute[BEAMS]}`,
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     const { profileDID } = beamsRoute.useParams();
     return (

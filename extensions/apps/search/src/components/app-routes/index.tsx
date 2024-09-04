@@ -2,7 +2,6 @@ import React from 'react';
 import SearchPage from '../pages/search-page';
 import OnboardingPage from '../pages/onboarding-page';
 import SettingsPage from '../pages/search-settings-page';
-import ErrorComponent from './error-component';
 import routes, { ONBOARDING, RESULTS, SETTINGS } from '../../routes';
 import {
   CatchBoundary,
@@ -17,6 +16,7 @@ import { NotFoundComponent } from './not-found-component';
 
 const rootRoute = createRootRouteWithContext<IRouterContext>()({
   component: Outlet,
+  notFoundComponent: () => <NotFoundComponent />,
 });
 
 const defaultRoute = createRoute({
@@ -30,7 +30,6 @@ const defaultRoute = createRoute({
 const settingsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[SETTINGS]}`,
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => (
     <CatchBoundary getResetKey={() => 'settings_reset'} errorComponent={NotFoundComponent}>
       <SettingsPage />
@@ -47,7 +46,6 @@ const searchRoute = createRoute({
 const searchIndexRoute = createRoute({
   getParentRoute: () => searchRoute,
   path: `/`,
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => (
     <CatchBoundary getResetKey={() => 'search_index_reset'} errorComponent={NotFoundComponent}>
       <SearchPage />
@@ -58,7 +56,6 @@ const searchIndexRoute = createRoute({
 const resultsRoute = createRoute({
   getParentRoute: () => searchRoute,
   path: `$searchKeyword`,
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     const { searchKeyword } = resultsRoute.useParams();
     return (
@@ -72,7 +69,6 @@ const resultsRoute = createRoute({
 const onboardingRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[ONBOARDING]}`,
-  notFoundComponent: () => <NotFoundComponent />,
   component: () => (
     <CatchBoundary getResetKey={() => 'onboarding_reset'} errorComponent={NotFoundComponent}>
       <OnboardingPage />
