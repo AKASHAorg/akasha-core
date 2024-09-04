@@ -36,7 +36,7 @@ const IconByType: React.FC<AppImgProps> = ({
     );
   }
 
-  if (appImg?.type === (LogoTypeSource.STRING || LogoTypeSource.IPFS)) {
+  if (appImg?.type === LogoTypeSource.STRING || appImg?.type === LogoTypeSource.IPFS) {
     return (
       <img
         loading="lazy"
