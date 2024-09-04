@@ -13,8 +13,8 @@ export const BecomeModerator: React.FC<unknown> = () => {
 
   const navigate = useNavigate();
   const { t } = useTranslation('vibes-console');
-  const { getRoutingPlugin } = useRootComponentProps();
-  const navigateTo = getRoutingPlugin().navigateTo;
+  const { getCorePlugins } = useRootComponentProps();
+  const navigateTo = getCorePlugins().routing.navigateTo;
 
   const handleLinkClick = (link: string) => {
     if (link.includes('values')) {

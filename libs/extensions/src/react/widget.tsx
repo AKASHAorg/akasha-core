@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useRoutingEvents } from './use-routing-events';
-import { WidgetInterface, WidgetStorePlugin } from '@akashaorg/typings/lib/ui';
+import { WidgetInterface, IWidgetStorePlugin } from '@akashaorg/typings/lib/ui';
 import Parcel from 'single-spa-react/parcel';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
@@ -16,7 +16,7 @@ export type WidgetExtensionProps = {
 export const Widget: React.FC<WidgetExtensionProps> = props => {
   const { name, loadingIndicator, onError, customStyle = '', fullHeight } = props;
   const { getCorePlugins, getContext, logger } = useRootComponentProps();
-  const widgetStore = React.useRef<WidgetStorePlugin>(getCorePlugins().widgetStore);
+  const widgetStore = React.useRef<IWidgetStorePlugin>(getCorePlugins().widgetStore);
   const [parcelConfigs, setParcelConfigs] = React.useState([]);
   const location = useRoutingEvents();
 

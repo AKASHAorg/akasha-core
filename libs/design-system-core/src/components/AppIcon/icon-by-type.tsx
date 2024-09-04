@@ -7,6 +7,12 @@ import Icon from '../Icon';
 import { AppIconProps } from '.';
 import { Color } from '../types/common.types';
 
+const isStringIcon = (
+  appImg: AppIconProps['appImg'],
+): appImg is Omit<AppIconProps['appImg'], 'value'> & { value: string } => {
+  return appImg.type === LogoTypeSource.ICON || appImg.type === LogoTypeSource.IPFS;
+};
+
 export type AppImgProps = Pick<
   AppIconProps,
   'appImg' | 'size' | 'placeholderIcon' | 'breakPointSize' | 'accentColor' | 'solid'
@@ -23,10 +29,10 @@ const IconByType: React.FC<AppImgProps> = ({
   accentColor,
   color,
 }) => {
-  if (appImg?.type === LogoTypeSource.ICON) {
+  if (appImg.type === LogoTypeSource.ICON) {
     return (
       <Icon
-        icon={appImg?.value}
+        icon={appImg?.value as React.ReactElement}
         size={size}
         breakPointSize={breakPointSize}
         accentColor={accentColor}
@@ -36,7 +42,7 @@ const IconByType: React.FC<AppImgProps> = ({
     );
   }
 
-  if (appImg?.type === (LogoTypeSource.String || LogoTypeSource.IPFS)) {
+  if (isStringIcon(appImg)) {
     return (
       <img
         loading="lazy"

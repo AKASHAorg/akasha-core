@@ -1,4 +1,5 @@
 import { ValueOf } from './type-utils';
+import { ReactElement } from 'react';
 
 /**
  * @internal
@@ -13,19 +14,15 @@ type LogoTypes = 'icon' | 'source' | 'string' | 'ipfs' | 'avatar';
 export type LogoSourceType = {
   type: Extract<LogoTypes, 'icon'>;
   solidIcon?: boolean;
-  value: React.ReactElement;
+  value: string | ReactElement;
 };
-// | {
-//     type: Exclude<LogoTypes, 'icon'>;
-//     value: string;
-//   };
 
 /**
  * Enum defining logo types
  **/
 export enum LogoTypeSource {
   ICON = 'icon',
-  String = 'string',
+  STRING = 'string',
   IPFS = 'ipfs',
   AVATAR = 'avatar',
 }
@@ -39,7 +36,7 @@ export interface IMenuItem {
   route?: string;
   type?: MenuItemType;
   area?: ValueOf<MenuItemAreaType>[]; // area is optional because subroutes dont have an area to be mounted
-  logo?: LogoSourceType | { type: LogoTypeSource };
+  logo?: Omit<LogoSourceType, 'type'> & { type: LogoSourceType['type'] | LogoTypeSource };
   name?: string;
   subRoutes?: IMenuItem[];
 }

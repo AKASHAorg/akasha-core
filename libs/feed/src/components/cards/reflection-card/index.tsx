@@ -32,13 +32,13 @@ export type ReflectionCardProps = Pick<
 const ReflectionCard: React.FC<ReflectionCardProps> = props => {
   const { t } = useTranslation('ui-lib-feed');
   const { reflectionData, hidePublishTime, pending, onReflect, ...rest } = props;
-  const { getRoutingPlugin } = useRootComponentProps();
+  const { getCorePlugins } = useRootComponentProps();
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
   const isLoggedIn = !!authenticatedDID;
 
-  const navigateTo = getRoutingPlugin().navigateTo;
+  const navigateTo = getCorePlugins().routing.navigateTo;
 
   const handleMentionClick = profileDID => {
     navigateTo({
