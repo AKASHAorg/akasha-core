@@ -173,10 +173,11 @@ export const isEditorEmpty = (editorState?: CustomElement[]) => {
 
 interface IPortal {
   children: React.ReactNode;
+  targetNode?: HTMLElement;
 }
 
-export const Portal: React.FC<IPortal> = ({ children }) => {
-  return ReactDOM.createPortal(children, document.body);
+export const Portal: React.FC<IPortal> = ({ children, targetNode = document.body }) => {
+  return ReactDOM.createPortal(children, targetNode);
 };
 
 export { CustomEditor };
