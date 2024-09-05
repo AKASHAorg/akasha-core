@@ -13,7 +13,7 @@ const ProfileWithAuthorization: React.FC<
   const {
     data: { authenticatedDID, isAuthenticating: authenticating },
   } = useAkashaStore();
-  const { getRoutingPlugin } = useRootComponentProps();
+  const { getCorePlugins } = useRootComponentProps();
 
   useEffect(() => {
     /* redirect user to profile info page if authentication isn't in progress
@@ -23,13 +23,13 @@ const ProfileWithAuthorization: React.FC<
       !authenticating &&
       (!authenticatedDID || (editingProfile && authenticatedDID && profileDID !== authenticatedDID))
     ) {
-      getRoutingPlugin().navigateTo({
+      getCorePlugins().routing.navigateTo({
         appName: '@akashaorg/app-profile',
         getNavigationUrl: () => `/${profileDID}`,
       });
       return;
     }
-  }, [authenticatedDID, editingProfile, getRoutingPlugin, authenticating, profileDID]);
+  }, [authenticatedDID, editingProfile, getCorePlugins, authenticating, profileDID]);
 
   return <>{children}</>;
 };

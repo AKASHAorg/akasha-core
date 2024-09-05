@@ -17,8 +17,8 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 
 const RoundedNotificationButton = () => {
-  const { getRoutingPlugin, uiEvents } = useRootComponentProps();
-  const navigateTo = React.useRef(getRoutingPlugin().navigateTo);
+  const { getCorePlugins, uiEvents } = useRootComponentProps();
+  const navigateTo = React.useRef(getCorePlugins().routing.navigateTo);
   const uiEventsRef = React.useRef(uiEvents);
   const [snoozeNotifications, setSnoozeNotifications] = React.useState(false);
   // Not implemented yet.

@@ -9,9 +9,9 @@ export const SlateReadonlyBlock = (
 ) => {
   const content = decodeb64SlateContent(props.content.value, props.logger);
 
-  const { getRoutingPlugin } = useRootComponentProps();
+  const { getCorePlugins } = useRootComponentProps();
 
-  const navigateTo = React.useRef(getRoutingPlugin().navigateTo);
+  const navigateTo = React.useRef(getCorePlugins().routing.navigateTo);
 
   const handleMentionClick = profileDID => {
     navigateTo?.current({

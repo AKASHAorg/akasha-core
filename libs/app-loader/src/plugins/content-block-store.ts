@@ -27,18 +27,18 @@ const isNotEmpty = (
  *
  * The getMatchingBlocks method takes as param, 'blockInfo', iterates over the blocks and tries to find the block(s)  matching the 'propertyType' and the 'appName' of the passed 'blockInfo'
  */
-export class ContentBlockStore {
+export class ContentBlockStore implements IContentBlockStorePlugin {
   static instance: ContentBlockStore;
   #blocks: (ContentBlockConfig & { appName: string })[];
   private constructor() {
     this.#blocks = [];
   }
 
-  public registerContentBlock = (blockInfo: ContentBlockConfig & { appName: string }) => {
+  public registerContentBlock = blockInfo => {
     this.#blocks.push(blockInfo);
   };
 
-  public registerContentBlocks = (blockInfos: (ContentBlockConfig & { appName: string })[]) => {
+  public registerContentBlocks = blockInfos => {
     if (!Array.isArray(blockInfos)) {
       return;
     }
@@ -47,7 +47,7 @@ export class ContentBlockStore {
     });
   };
 
-  public getMatchingBlocks: IContentBlockStorePlugin['getMatchingBlocks'] = blockInfo => {
+  public getMatchingBlocks = blockInfo => {
     if (!blockInfo) {
       console.warn('Block info not defined:', blockInfo);
       return [];
@@ -110,10 +110,11 @@ export class ContentBlockStore {
   };
 
   public getInfos = () => {
-    return this.#blocks.map(cblock => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { loadingFn, ...info } = cblock;
-      return info;
+    return this.#blocks.map(contentBlock => {
+      return {
+        ...contentBlock,
+        loadingFn: undefined,
+      };
     });
   };
 

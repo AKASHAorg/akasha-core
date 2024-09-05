@@ -16,7 +16,7 @@ const BeamContentResolver: React.FC<BeamContentResolverProps> = ({
   showNSFWCard,
   customStyle = '',
 }) => {
-  const { getRoutingPlugin, navigateToModal } = useRootComponentProps();
+  const { getCorePlugins, navigateToModal } = useRootComponentProps();
   const _navigateToModal = React.useRef(navigateToModal);
 
   const showLoginModal = React.useCallback(
@@ -53,13 +53,13 @@ const BeamContentResolver: React.FC<BeamContentResolverProps> = ({
         showNSFWCard={showNSFWCard ?? beamData.nsfw}
         showLoginModal={showLoginModal}
         onContentClick={function () {
-          getRoutingPlugin().navigateTo({
+          getCorePlugins().routing.navigateTo({
             appName: '@akashaorg/app-antenna',
             getNavigationUrl: navRoutes => `${navRoutes.Beam}/${beamData.id}`,
           });
         }}
         onReflect={function () {
-          getRoutingPlugin().navigateTo({
+          getCorePlugins().routing.navigateTo({
             appName: '@akashaorg/app-antenna',
             getNavigationUrl: navRoutes => `${navRoutes.Beam}/${beamData.id}${navRoutes.Reflect}`,
           });

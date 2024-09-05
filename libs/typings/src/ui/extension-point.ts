@@ -14,6 +14,10 @@ export type ExtensionPointInterface = {
  * Interface defining an extension point state store defined as a plugin
  **/
 export interface IExtensionPointStorePlugin {
+  registerExtensionPoints: (
+    extensionPoints: (ExtensionPointInterface & { appName: string })[],
+  ) => void;
+  registerExtensionPoint(extensionPoint: ExtensionPointInterface & { appName: string }): void;
   getExtensionPoints: () => ExtensionPointInterface[];
   getMatchingExtensions: (
     slotName: string,

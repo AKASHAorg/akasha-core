@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useMemo, useState } from 'react';
+import React, { Suspense, useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import { useTranslation } from 'react-i18next';
 import { EventTypes, MenuItemAreaType, IMenuItem } from '@akashaorg/typings/lib/ui';
 import {
@@ -30,7 +30,7 @@ const SidebarComponent: React.FC<unknown> = () => {
     logger,
     uiEvents,
     worldConfig: { defaultApps, socialLinks },
-    getRoutingPlugin,
+    getCorePlugins,
   } = useRootComponentProps();
 
   const {
@@ -42,15 +42,14 @@ const SidebarComponent: React.FC<unknown> = () => {
   const [isMobile, setIsMobile] = useState(
     window.matchMedia(startMobileSidebarHidingBreakpoint).matches,
   );
-  const [routeData, setRouteData] = useState(null);
+  const routing = getCorePlugins().routing;
+  const routeData = useSyncExternalStore(routing.subscribe, routing.getSnapshot);
   const [activeOption, setActiveOption] = useState<IMenuItem | null>(null);
   const [clickedOptions, setClickedOptions] = useState<{ name: string; route: IMenuItem }[]>([]);
   const isLoggedIn = !!authenticatedDID;
 
   const { activeAccordionId, setActiveAccordionId, handleAccordionClick } = useAccordion();
   const [dismissed, dismissCard] = useDismissedCard('@akashaorg/ui-widget-sidebar_cta-card');
-
-  const routing = getRoutingPlugin();
 
   useEffect(() => {
     const mql = window.matchMedia(startMobileSidebarHidingBreakpoint);
@@ -65,38 +64,20 @@ const SidebarComponent: React.FC<unknown> = () => {
     };
   }, []);
 
-  useEffect(() => {
-    let sub;
-    if (routing) {
-      sub = routing.routeObserver.subscribe({
-        next: routeData => {
-          setRouteData({ ...routeData.byArea });
-        },
-      });
-    }
-    return () => {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    };
-  }, [routing]);
-
   // sort according to worldConfig index
   const worldApps = useMemo(() => {
-    return routeData?.[MenuItemAreaType.AppArea]?.sort(
-      (a: { name: string }, b: { name: string }) => {
-        if (defaultApps.indexOf(a.name) < defaultApps.indexOf(b.name)) {
-          return -1;
-        } else if (defaultApps.indexOf(a.name) > defaultApps.indexOf(b.name)) {
-          return 1;
-        }
-        return 0;
-      },
-    );
+    return routeData?.byArea[MenuItemAreaType.AppArea]?.sort((a, b) => {
+      if (defaultApps.indexOf(a.name) < defaultApps.indexOf(b.name)) {
+        return -1;
+      } else if (defaultApps.indexOf(a.name) > defaultApps.indexOf(b.name)) {
+        return 1;
+      }
+      return 0;
+    });
   }, [defaultApps, routeData]);
 
   const userInstalledApps = useMemo(() => {
-    return routeData?.[MenuItemAreaType.UserAppArea];
+    return routeData.byArea[MenuItemAreaType.UserAppArea];
   }, [routeData]);
 
   const handleNavigation = (appName: string, route: string) => {
