@@ -11,6 +11,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { ButtonType } from '../types/common.types';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export enum FieldName {
   extensionType = 'extensionType',
@@ -48,6 +49,7 @@ export type AppCreationFormProps = {
   extensionLicenseFieldLabel?: string;
   extensionLicenseOtherPlaceholderLabel?: string;
   extensionSourceURLLabel?: string;
+  disclaimerLabel?: string;
   defaultValues?: AppCreationFormValues;
   cancelButton: ButtonType;
   createButton: {
@@ -76,6 +78,7 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
   extensionLicenseOtherPlaceholderLabel,
   extensionTypeFieldLabel,
   extensionSourceURLLabel,
+  disclaimerLabel,
 }) => {
   const {
     control,
@@ -125,7 +128,7 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
   return (
     <form onSubmit={onSave} className={tw(apply`h-full`)}>
       <Stack direction="column" spacing="gap-y-4">
-        <Stack padding="px-4 pb-16" spacing="gap-y-4">
+        <Stack padding="px-4 pb-3" spacing="gap-y-4">
           <Controller
             control={control}
             name={FieldName.extensionType}
@@ -239,7 +242,11 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
               />
             )}
           />
+          <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
+            {disclaimerLabel}
+          </Text>
         </Stack>
+
         <Divider />
 
         <Stack direction="row" spacing="gap-x-2" customStyle="ml-auto mt-auto px-4">
