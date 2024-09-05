@@ -77,7 +77,7 @@ const SidebarComponent: React.FC<unknown> = () => {
   }, [defaultApps, routeData]);
 
   const userInstalledApps = useMemo(() => {
-    return routeData?.[MenuItemAreaType.UserAppArea];
+    return routeData.byArea[MenuItemAreaType.UserAppArea];
   }, [routeData]);
 
   const handleNavigation = (appName: string, route: string) => {

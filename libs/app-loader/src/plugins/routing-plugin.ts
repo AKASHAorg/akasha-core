@@ -37,17 +37,21 @@ export class RoutingPlugin implements IRoutingPlugin {
   #listenEvents = () => {
     window.addEventListener('single-spa:before-app-change', (e: CustomEvent) => {
       if (e.detail?.appsByNewStatus?.MOUNTED?.length) {
-        this.#routeRepository.activeExtensionsNames = e.detail?.appsByNewStatus?.MOUNTED.reduce(
-          (acc: { apps: string[]; widgets: string[] }, appName: string) => {
-            if (this.#routeRepository.all[appName]) {
-              acc.apps = [...acc.apps, appName];
-            } else {
-              acc.widgets = [...acc.widgets, appName];
-            }
-            return acc;
-          },
-          { apps: [], widgets: [] },
-        );
+        this.#routeRepository = {
+          ...this.#routeRepository,
+          activeExtensionsNames: e.detail?.appsByNewStatus?.MOUNTED.reduce(
+            (acc: { apps: string[]; widgets: string[] }, appName: string) => {
+              if (this.#routeRepository.all[appName]) {
+                acc.apps = [...acc.apps, appName];
+              } else {
+                acc.widgets = [...acc.widgets, appName];
+              }
+              return acc;
+            },
+            { apps: [], widgets: [] },
+          ),
+        };
+        this.#changeListeners.forEach(listener => listener());
       }
     });
   };
