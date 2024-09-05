@@ -6,7 +6,7 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 
 export const NotFoundComponent = (props: { error?: Error; reset?: (key: string) => void }) => {
   const { t } = useTranslation();
-  const { getRoutingPlugin, logger, worldConfig } = useRootComponentProps();
+  const { getCorePlugins, logger, worldConfig } = useRootComponentProps();
 
   useEffect(() => {
     if (props.error) {
@@ -15,7 +15,7 @@ export const NotFoundComponent = (props: { error?: Error; reset?: (key: string) 
   }, [logger, props.error]);
 
   const navigateHome = () => {
-    getRoutingPlugin().navigateTo({
+    getCorePlugins().routing.navigateTo({
       appName: worldConfig.homepageApp,
       getNavigationUrl: () => '/',
     });
