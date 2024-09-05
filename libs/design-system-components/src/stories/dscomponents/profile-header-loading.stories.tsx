@@ -1,10 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { ProfileHeaderLoading } from '../../components/Profile';
+import ProfileHeaderLoading from '../../components/Profile/placeholders/profile-header-loading';
+
+ProfileHeaderLoading.displayName = 'ProfileHeaderLoading';
 
 const meta: Meta = {
   title: 'DSComponents/Loaders/Profile/ProfileHeaderLoading',
   component: ProfileHeaderLoading,
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj;

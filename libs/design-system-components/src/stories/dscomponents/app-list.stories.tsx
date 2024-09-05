@@ -1,17 +1,11 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import AppList, { AppListProps } from '../../components/AppList';
 
 const meta: Meta<AppListProps> = {
   title: 'DSComponents/Extensions/AppList',
-  component: props => (
-    <Stack customStyle="w-[50%]">
-      <AppList {...props} />
-    </Stack>
-  ),
-  tags: ['autodocs'],
+  component: AppList,
 };
 
 type Story = StoryObj<AppListProps>;

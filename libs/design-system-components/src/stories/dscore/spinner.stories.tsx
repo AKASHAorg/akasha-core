@@ -6,7 +6,6 @@ Spinner.displayName = 'Spinner';
 const meta: Meta<SpinnerProps> = {
   title: 'DSCore/Spinners/Spinner',
   component: Spinner,
-  tags: ['autodocs'],
   argTypes: {
     size: { control: 'text', options: ['sm', 'md', 'lg', 'xl', 'xxl'] },
     loadingLabel: { control: 'text' },

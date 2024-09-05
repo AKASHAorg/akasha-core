@@ -69,7 +69,6 @@ export const MentionPopover = React.forwardRef<HTMLDivElement, MentionPopover>((
                   transformSource(alternative),
                 )}
                 profileId={value.did.id}
-                variant="1"
               />
             </Button>
           ))}

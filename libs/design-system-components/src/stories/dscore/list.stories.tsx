@@ -1,6 +1,5 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-
 import {
   ArrowUpOnSquareIcon,
   PencilIcon,
@@ -9,11 +8,15 @@ import {
 import List, { ListProps } from '@akashaorg/design-system-core/lib/components/List';
 
 List.displayName = 'List';
+ArrowUpOnSquareIcon.displayName = 'ArrowUpOnSquareIcon';
+PencilIcon.displayName = 'PencilIcon';
+TrashIcon.displayName = 'TrashIcon';
+
+List.displayName = 'List';
 
 const meta: Meta<ListProps> = {
   title: 'DSCore/Lists/List',
   component: List,
-  tags: ['autodocs'],
   argTypes: {
     items: { control: 'object' },
     showDivider: { control: 'boolean' },
