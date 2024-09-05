@@ -18,9 +18,9 @@ export const PostExtensionCreationPage: React.FC<{ extensionId: string }> = ({ e
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
 
-  const { baseRouteName, getRoutingPlugin } = useRootComponentProps();
+  const { baseRouteName, getCorePlugins } = useRootComponentProps();
 
-  const navigateTo = getRoutingPlugin().navigateTo;
+  const navigateTo = getCorePlugins().routing.navigateTo;
 
   const {
     data: { authenticatedDID, authenticatedProfile },
