@@ -33,8 +33,11 @@ export const MentionPopover = React.forwardRef<HTMLDivElement, MentionPopover>((
 
   const boxShadow = getElevationClasses('2');
 
+  // create portal on editor page, so that it clears when the component unmounts
+  const beamEditorPage = document.getElementById('beam-editor_feed_page');
+
   return (
-    <Portal>
+    <Portal targetNode={beamEditorPage}>
       <Stack
         padding="p-0"
         background={{ light: 'white', dark: 'grey3' }}
