@@ -20,10 +20,10 @@ export type OverviewPageProps = BasePageProps & {
 export const Overview: React.FC<OverviewPageProps> = props => {
   const { isModerator } = props;
   const navigate = useNavigate();
-  const { getRoutingPlugin } = useRootComponentProps();
+  const { getCorePlugins } = useRootComponentProps();
   const { t } = useTranslation('app-vibes');
 
-  const navigateTo = getRoutingPlugin().navigateTo;
+  const navigateTo = getCorePlugins().routing.navigateTo;
 
   const handleClickApply = () => {
     navigateTo({

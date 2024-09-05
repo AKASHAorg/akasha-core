@@ -2,10 +2,11 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import Avatar, { AvatarProps } from '@akashaorg/design-system-core/lib/components/Avatar';
 
+Avatar.displayName = 'Avatar';
+
 const meta: Meta<AvatarProps> = {
   title: 'DSCore/Avatars/Avatar',
   component: Avatar,
-  tags: ['autodocs'],
   argTypes: {
     profileId: { crontrol: 'text' },
     active: { control: 'boolean' },

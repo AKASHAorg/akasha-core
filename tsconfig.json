@@ -71,9 +71,6 @@
       "path": "./extensions/apps/auth-app"
     },
     {
-      "path": "./extensions/apps/routing"
-    },
-    {
       "path": "./extensions/apps/settings"
     },
     {

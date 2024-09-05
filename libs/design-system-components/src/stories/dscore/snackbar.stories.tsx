@@ -2,10 +2,11 @@ import type { Meta, StoryObj } from '@storybook/react';
 import Snackbar, { SnackbarProps } from '@akashaorg/design-system-core/lib/components/Snackbar';
 import { NotificationTypes } from '@akashaorg/typings/lib/ui';
 
+Snackbar.displayName = 'Snackbar';
+
 const meta: Meta<SnackbarProps> = {
   title: 'DSCore/Bars/Snackbar',
   component: Snackbar,
-  tags: ['autodocs'],
   argTypes: {
     title: { control: 'text' },
     type: {

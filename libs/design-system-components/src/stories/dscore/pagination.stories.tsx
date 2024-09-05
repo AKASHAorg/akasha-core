@@ -3,10 +3,11 @@ import Pagination, {
   PaginationProps,
 } from '@akashaorg/design-system-core/lib/components/Pagination';
 
+Pagination.displayName = 'Pagination';
+
 const meta: Meta<PaginationProps> = {
   title: 'DSCore/Pagination/Pagination',
   component: Pagination,
-  tags: ['autodocs'],
   argTypes: {
     pageCount: { control: 'number' },
     currentPage: { control: 'number' },

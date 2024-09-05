@@ -25,8 +25,8 @@ const PrivacyOption: React.FC = () => {
     cookieType === CookieConsentTypes.ALL,
   );
 
-  const { uiEvents, getRoutingPlugin } = useRootComponentProps();
-  const routingPlugin = useRef(getRoutingPlugin());
+  const { uiEvents, getCorePlugins } = useRootComponentProps();
+  const routingPlugin = useRef(getCorePlugins().routing);
   const uiEventsRef = useRef(uiEvents);
 
   useEffect(() => {

@@ -1,10 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import TabList, { TabListProps } from '@akashaorg/design-system-core/lib/components/TabList';
 
+TabList.displayName = 'TabList';
+
 const meta: Meta<TabListProps> = {
   title: 'DSCore/Tabs/TabList',
   component: TabList,
-  tags: ['autodocs'],
   argTypes: {
     labels: { control: 'object' },
     selected: { control: 'number' },

@@ -9,10 +9,11 @@ import MiniProfileCTA, {
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
+MiniProfileCTA.displayName = 'MiniProfileCTA';
+
 const meta: Meta<MiniProfileCTAProps> = {
   title: 'DSComponents/Vibes/MiniProfileCTA',
   component: MiniProfileCTA,
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj<MiniProfileCTAProps>;

@@ -23,7 +23,7 @@ const CookieWidget: React.FC<unknown> = () => {
   const [cookieType, setCookieType] = useState(null);
 
   const { t } = useTranslation('ui-widget-analytics');
-  const { uiEvents, worldConfig, getRoutingPlugin } = useRootComponentProps();
+  const { uiEvents, worldConfig, getCorePlugins } = useRootComponentProps();
   const eventSub = useRef(null);
   const analyticsConfig = useRef(worldConfig.analytics);
   const _uiEvents = useRef(uiEvents);
@@ -84,7 +84,7 @@ const CookieWidget: React.FC<unknown> = () => {
             ),
             settingsLabel: t('settings '),
             onSettingsClick: () =>
-              getRoutingPlugin().navigateTo?.({
+              getCorePlugins().routing.navigateTo?.({
                 appName: '@akashaorg/app-settings-ewa',
                 getNavigationUrl: navRoutes => navRoutes.Home,
               }),
@@ -94,7 +94,7 @@ const CookieWidget: React.FC<unknown> = () => {
             introLabel: t('For more info, see our '),
             ctaLabel: t('Privacy Policy'),
             onPrivacyClick: () =>
-              getRoutingPlugin().navigateTo?.({
+              getCorePlugins().routing.navigateTo?.({
                 appName: '@akashaorg/app-legal',
                 getNavigationUrl: navRoutes => navRoutes.privacyPolicy,
               }),

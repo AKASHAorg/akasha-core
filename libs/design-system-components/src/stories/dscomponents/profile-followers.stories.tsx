@@ -8,7 +8,6 @@ import Followers, {
 const meta: Meta<FollowersProps> = {
   title: 'DSComponents/Profile/Followers',
   component: Followers,
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj<FollowersProps>;
@@ -16,7 +15,6 @@ type Story = StoryObj<FollowersProps>;
 export const Default: Story = {
   args: {
     authenticatedDID: 'did:key:55FaD4201494x0rt17C9892i9fae4d52fe3BD124',
-    followList: new Map(),
     profileAnchorLink: '#',
     publicImgPath: '',
     emptyEntryTitleLabel: <>This user has no followers yet!</>,
@@ -52,7 +50,6 @@ export const Default: Story = {
 export const NoFollowers: Story = {
   args: {
     authenticatedDID: 'did:key:55FaD4201494x0rt17C9892i9fae4d52fe3BD124',
-    followList: new Map(),
     profileAnchorLink: '#',
     publicImgPath: '',
     emptyEntryTitleLabel: <>This user has no followers yet!</>,
@@ -74,7 +71,6 @@ export const NoFollowers: Story = {
 export const IsViewer: Story = {
   args: {
     authenticatedDID: 'did:key:55FaD4201494x0rt17C9892i9fae4d52fe3BD124',
-    followList: new Map(),
     profileAnchorLink: '#',
     publicImgPath: '',
     onLoadMore: () => Promise.resolve({}),

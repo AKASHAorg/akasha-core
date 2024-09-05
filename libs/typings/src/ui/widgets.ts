@@ -27,9 +27,20 @@ export type LayoutWidgetInterface = BaseWidgetInterface & {
 /**
  * Interface defining widget state store defined as a plugin
  **/
-export interface WidgetStorePlugin {
+export interface IWidgetStorePlugin {
+  registerWidget(widgetConf: WidgetInterface & { appName: string }): void;
+  unregisterWidget(widgetName: string): void;
+  /**
+   * get all the installed widgets
+   **/
   getWidgets: () => WidgetInterface[];
+  /** registers a callback function which is called when the widget
+   * is removed/unregistered
+   **/
   onWidgetUnload: (name: string, callback: () => void) => void;
+  /**
+   * Matches the slotName with the widget's mountsIn property
+   **/
   getMatchingWidgets: (
     slotName: string,
     location: Location,
