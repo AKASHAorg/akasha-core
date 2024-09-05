@@ -117,12 +117,14 @@ export type MatchingBlock = {
  * Interface defining content block state store defined as a plugin
  **/
 export interface IContentBlockStorePlugin {
+  registerContentBlocks(blockInfos: (ContentBlockConfig & { appName: string })[]): void;
+  registerContentBlock(blockInfo: ContentBlockConfig & { appName: string }): void;
   getInfos(): Omit<
     ContentBlockConfig & {
       appName: string;
     },
     'loadingFn'
-  >;
+  >[];
 
   getMatchingBlocks: (
     blockInfo: LocalContentBlock | GetContentBlockByIdQuery['node'],

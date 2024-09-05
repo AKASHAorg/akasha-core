@@ -11,7 +11,7 @@ import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 const SettingsPage: React.FC = () => {
   const { t } = useTranslation('app-settings-ewa');
-  const { getRoutingPlugin } = useRootComponentProps();
+  const { getCorePlugins } = useRootComponentProps();
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
@@ -23,7 +23,7 @@ const SettingsPage: React.FC = () => {
   }, [isLoggedIn]);
 
   const handleSettingsOptionClick = (option: SettingsOption) => () => {
-    return getRoutingPlugin().navigateTo?.({
+    return getCorePlugins().routing.navigateTo?.({
       appName: '@akashaorg/app-settings-ewa',
       getNavigationUrl: navRoutes => navRoutes[option],
     });

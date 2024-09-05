@@ -20,12 +20,12 @@ import NoAppsMessage from './no-apps-message';
 const ICWidget: React.FC<unknown> = () => {
   const { t } = useTranslation('ui-widget-my-apps');
   const [activeTabIndex, setActiveTabIndex] = useState(0);
-  const { logger, worldConfig, navigateToModal, getRoutingPlugin } = useRootComponentProps();
+  const { logger, worldConfig, navigateToModal, getCorePlugins } = useRootComponentProps();
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
   const isLoggedIn = !!authenticatedDID;
-  const navigateTo = getRoutingPlugin().navigateTo;
+  const navigateTo = getCorePlugins().routing.navigateTo;
 
   const showLoginModal = (redirectTo?: { modal: IModalNavigationOptions }) => {
     navigateToModal({ name: 'login', redirectTo });

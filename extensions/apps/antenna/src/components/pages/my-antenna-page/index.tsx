@@ -22,12 +22,12 @@ const MY_ANTENNA_OVERSCAN = 10;
 
 const MyAntennaPage: React.FC<unknown> = () => {
   const { t } = useTranslation('app-antenna');
-  const { getRoutingPlugin, navigateToModal, worldConfig } = useRootComponentProps();
+  const { getCorePlugins, navigateToModal, worldConfig } = useRootComponentProps();
   const { showNsfw } = useNsfwToggling();
   const {
     data: { authenticatedProfile },
   } = useAkashaStore();
-  const navigateTo = React.useRef(getRoutingPlugin().navigateTo);
+  const navigateTo = React.useRef(getCorePlugins().routing.navigateTo);
   const _navigateToModal = React.useRef(navigateToModal);
   const showLoginModal = React.useCallback(
     (redirectTo?: { modal: IModalNavigationOptions }, message?: string) => {

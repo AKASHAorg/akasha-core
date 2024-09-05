@@ -1,7 +1,19 @@
-import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
+import React, {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useCallback,
+  useSyncExternalStore,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { MenuItemAreaType, NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
+import {
+  IMenuItem,
+  MenuItemAreaType,
+  NotificationEvents,
+  NotificationTypes,
+} from '@akashaorg/typings/lib/ui';
 import {
   useRootComponentProps,
   useSaveSettings,
@@ -40,7 +52,7 @@ const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
   initial = true,
 }) => {
   const { t } = useTranslation('app-notifications');
-  const { uiEvents, getRoutingPlugin } = useRootComponentProps();
+  const { uiEvents, getCorePlugins } = useRootComponentProps();
 
   const navigate = useNavigate();
 
@@ -55,9 +67,10 @@ const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
 
   const { saveNotificationSettings } = useSaveSettings();
 
-  const [routeData, setRouteData] = useState(null);
-
-  const routing = getRoutingPlugin();
+  const routeData = useSyncExternalStore(
+    getCorePlugins().routing.subscribe,
+    getCorePlugins().routing.getSnapshot,
+  );
 
   const [appNames, setAppNames] = useState<string[]>([]);
 
@@ -66,24 +79,8 @@ const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
     [],
   );
 
-  useEffect(() => {
-    let sub;
-    if (routing) {
-      sub = routing.routeObserver.subscribe({
-        next: routeData => {
-          setRouteData({ ...routeData.byArea });
-        },
-      });
-    }
-    return () => {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    };
-  }, [routing]);
-
   const defaultInstalledApps = useMemo(() => {
-    return routeData?.[MenuItemAreaType.AppArea];
+    return routeData?.byArea?.[MenuItemAreaType.AppArea];
   }, [routeData]);
 
   React.useEffect(() => {

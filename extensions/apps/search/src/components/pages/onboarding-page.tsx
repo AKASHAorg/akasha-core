@@ -9,9 +9,9 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 const OnboardingPage: React.FC = () => {
   const { t } = useTranslation('app-search');
 
-  const { getRoutingPlugin, navigateToModal } = useRootComponentProps();
+  const { getCorePlugins, navigateToModal } = useRootComponentProps();
 
-  const navigateTo = getRoutingPlugin().navigateTo;
+  const navigateTo = getCorePlugins().routing.navigateTo;
 
   const {
     data: { authenticatedDID },

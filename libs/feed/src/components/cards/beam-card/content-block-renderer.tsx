@@ -30,11 +30,11 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
     showBlockName,
     onBlockInfoChange,
   } = props;
-  const { navigateToModal, getCorePlugins, getRoutingPlugin } = useRootComponentProps();
+  const { navigateToModal, getCorePlugins } = useRootComponentProps();
   const contentBlockStoreRef = useRef(getCorePlugins()?.contentBlockStore);
   const _onBlockInfoChange = useRef(onBlockInfoChange);
   const { t } = useTranslation('ui-lib-feed');
-  const navigateTo = getRoutingPlugin().navigateTo;
+  const navigateTo = getCorePlugins().routing.navigateTo;
   const contentBlockReq = useGetContentBlockByIdQuery({
     variables: { id: blockID },
     fetchPolicy: 'cache-first',

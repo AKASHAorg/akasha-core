@@ -36,7 +36,8 @@ type ProfileCardWidgetProps = {
 const ProfileCardWidget: React.FC<ProfileCardWidgetProps> = props => {
   const { beamId, reflectionId } = props;
   const { t } = useTranslation('ui-widget-mini-profile');
-  const { plugins, logger } = useRootComponentProps();
+  const { logger, getCorePlugins } = useRootComponentProps();
+  const navigateTo = getCorePlugins().routing.navigateTo;
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
@@ -65,7 +66,7 @@ const ProfileCardWidget: React.FC<ProfileCardWidgetProps> = props => {
   const { data: stats, loading: statsLoading } = useProfileStats(authorId);
 
   const handleCardClick = () => {
-    plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
+    navigateTo?.({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${authorId}`,
     });

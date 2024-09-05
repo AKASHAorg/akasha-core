@@ -4,14 +4,14 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import { Outlet } from '@tanstack/react-router';
 
 const MainPage: React.FC = () => {
-  const { worldConfig, getRoutingPlugin } = useRootComponentProps();
+  const { worldConfig, getCorePlugins } = useRootComponentProps();
 
   const {
     data: { authenticatedDID, authenticatedProfile },
   } = useAkashaStore();
   const isLoggedIn = !!authenticatedDID;
 
-  const routingPlugin = useRef(getRoutingPlugin());
+  const routingPlugin = useRef(getCorePlugins().routing);
   useEffect(() => {
     const searchParam = new URLSearchParams(location.search);
 

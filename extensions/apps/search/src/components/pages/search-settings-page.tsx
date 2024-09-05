@@ -14,7 +14,7 @@ import routes, { RESULTS } from '../../routes';
 
 const SettingsPage: React.FC = () => {
   const { t } = useTranslation('app-search');
-  const { getRoutingPlugin, uiEvents } = useRootComponentProps();
+  const { getCorePlugins, uiEvents } = useRootComponentProps();
 
   const _uiEvents = useRef(uiEvents);
 
@@ -34,7 +34,7 @@ const SettingsPage: React.FC = () => {
     setShowNsfwContent(!showNsfwContent);
   };
 
-  const navigateTo = getRoutingPlugin().navigateTo;
+  const navigateTo = getCorePlugins().routing.navigateTo;
 
   const goToSearchPage = () => {
     return navigateTo?.({

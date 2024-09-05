@@ -4,8 +4,8 @@ import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { ResignConfirmation } from '../components/dashboard';
 
 export const ResignConfirmationPage: React.FC<unknown> = () => {
-  const { getRoutingPlugin } = useRootComponentProps();
-  const navigateTo = getRoutingPlugin().navigateTo;
+  const { getCorePlugins } = useRootComponentProps();
+  const navigateTo = getCorePlugins().routing.navigateTo;
 
   const { t } = useTranslation('app-vibes-console');
 
