@@ -357,11 +357,7 @@ export default class AppLoader {
     const contentBlockStore = ContentBlockStore.getInstance();
     const extensionPointStore = ExtensionPointStore.getInstance();
     const widgetStore = WidgetStore.getInstance();
-    const routingPlugin = RoutingPlugin.getInstance(
-      this.parentLogger.create('RoutingPlugin'),
-      encodeAppName,
-      decodeAppName,
-    );
+    const routingPlugin = RoutingPlugin.getInstance(this.parentLogger.create('RoutingPlugin'));
     const extensionInstaller = new ExtensionInstaller({
       importModule: this.importModule,
       getLatestExtensionVersion: getRemoteExtensionLatestVersion,

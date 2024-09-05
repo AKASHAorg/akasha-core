@@ -117,7 +117,7 @@ const SnackBarNotification: React.FC<IRootExtensionProps> = () => {
       size="xs"
       accentColor={true}
       placeholderIcon={
-        findAppIcon(appTitle).logo.type === LogoTypeSource.ICON
+        findAppIcon(appTitle)?.logo?.type === LogoTypeSource.ICON
           ? (findAppIcon(appTitle).logo?.value as ReactElement)
           : null
       }

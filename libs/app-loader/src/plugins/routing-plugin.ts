@@ -13,40 +13,28 @@ export class RoutingPlugin implements IRoutingPlugin {
   #routeRepository: RouteRepository;
   readonly #logger: ILogger;
   static #instance: RoutingPlugin;
-  readonly #encodeAppName: (name: string) => string;
-  readonly #decodeAppName: (name: string) => string;
   #changeListeners: (() => void)[];
-  private constructor(
-    logger: ILogger,
-    encodeAppName: (name: string) => string,
-    decodeAppName: (name: string) => string,
-  ) {
+  private constructor(logger: ILogger) {
     this.#routeRepository = {
       all: {},
       activeExtensionsNames: {},
       byArea: Object.values(MenuItemAreaType).reduce((acc, curr) => ({ ...acc, [curr]: [] }), {}),
     };
     this.#logger = logger;
-    this.#encodeAppName = encodeAppName;
-    this.#decodeAppName = decodeAppName;
     this.#changeListeners = [];
   }
   /**
    * Get singleton instance
    **/
-  static getInstance(
-    logger: ILogger,
-    encodeAppName: (name: string) => string,
-    decodeAppName: (name: string) => string,
-  ) {
+  static getInstance(logger: ILogger) {
     if (!this.#instance) {
-      this.#instance = new RoutingPlugin(logger, encodeAppName, decodeAppName);
+      this.#instance = new RoutingPlugin(logger);
       this.#instance.#listenEvents();
     }
     return this.#instance;
   }
 
-  #listenEvents() {
+  #listenEvents = () => {
     window.addEventListener('single-spa:before-app-change', (e: CustomEvent) => {
       if (e.detail?.appsByNewStatus?.MOUNTED?.length) {
         this.#routeRepository.activeExtensionsNames = e.detail?.appsByNewStatus?.MOUNTED.reduce(
@@ -62,9 +50,13 @@ export class RoutingPlugin implements IRoutingPlugin {
         );
       }
     });
-  }
+  };
 
-  #addRouteToRepository(name: string, menuItem: IMenuItem, navRoutes: Record<string, string>) {
+  #addRouteToRepository = (
+    name: string,
+    menuItem: IMenuItem,
+    navRoutes: Record<string, string>,
+  ) => {
     const appMenuItemData = {
       ...menuItem,
       navRoutes: navRoutes,
@@ -88,13 +80,13 @@ export class RoutingPlugin implements IRoutingPlugin {
           },
         }),
     );
-  }
+  };
 
-  registerRoute(routeData: {
+  registerRoute = (routeData: {
     name: string;
     menuItems?: IMenuItem | IMenuItem[];
     navRoutes?: Record<string, string>;
-  }) {
+  }) => {
     if (this.#routeRepository.all[routeData.name]) {
       return;
     }
@@ -107,9 +99,9 @@ export class RoutingPlugin implements IRoutingPlugin {
       this.#addRouteToRepository(routeData.name, routeData.menuItems, routeData.navRoutes);
       this.#changeListeners.forEach(listener => listener());
     }
-  }
+  };
 
-  unregisterRoute(extensionName: string) {
+  unregisterRoute = (extensionName: string) => {
     const repo = { ...this.#routeRepository };
 
     delete repo.all[extensionName];
@@ -123,9 +115,9 @@ export class RoutingPlugin implements IRoutingPlugin {
 
     this.#routeRepository = repo;
     this.#changeListeners.forEach(listener => listener());
-  }
+  };
 
-  navigateTo({ appName, getNavigationUrl }: NavigateToParams, replace?: boolean) {
+  navigateTo = ({ appName, getNavigationUrl }: NavigateToParams, replace?: boolean) => {
     const app = this.#routeRepository.all[appName];
     let url: string;
 
@@ -142,7 +134,7 @@ export class RoutingPlugin implements IRoutingPlugin {
       url = '/';
     }
 
-    const targetUrl = `/${this.#encodeAppName(appName)}${url}`;
+    const targetUrl = `/${appName}${url}`;
     // no need to navigate because the paths are the same
     if (targetUrl === location.pathname && !location.search) {
       return;
@@ -153,9 +145,9 @@ export class RoutingPlugin implements IRoutingPlugin {
     } else {
       singleSpa.navigateToUrl(targetUrl);
     }
-  }
+  };
 
-  getUrlForApp({ appName, getNavigationUrl }: NavigateToParams) {
+  getUrlForApp = ({ appName, getNavigationUrl }: NavigateToParams) => {
     const app = this.#routeRepository.all[appName];
     let url = '';
     if (getNavigationUrl) {
@@ -173,8 +165,8 @@ export class RoutingPlugin implements IRoutingPlugin {
       url = '/';
     }
 
-    return `/${this.#encodeAppName(appName)}${url}`;
-  }
+    return `/${appName}${url}`;
+  };
   /**
    * handle redirections from search params
    * if redirectTo is found in the search param then it will redirect to that path
@@ -191,21 +183,20 @@ export class RoutingPlugin implements IRoutingPlugin {
    * ```
    */
 
-  handleRedirect(options: { search: URLSearchParams; fallback: NavigateToParams }) {
+  handleRedirect = (options: { search: URLSearchParams; fallback: NavigateToParams }) => {
     const redirectTo = options.search.get('redirectTo');
     if (redirectTo) {
       // appName is at index 1 in "/@akashaorg/app-name/some-path"
       const [, appName, ...path] = redirectTo.split('/');
-      const decodedAppName = this.#decodeAppName(appName);
       return this.navigateTo({
-        appName: decodedAppName,
+        appName,
         getNavigationUrl: () => {
           return `/${path.join('/')}`;
         },
       });
     }
     return this.navigateTo(options.fallback);
-  }
+  };
   /**
    * Subscribe to changes. When using in React, it's recommended to be used with useSyncExternalStore
    **/

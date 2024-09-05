@@ -1,5 +1,4 @@
 import { ValueOf } from './type-utils';
-import { ReactElement } from 'react';
 
 /**
  * @internal

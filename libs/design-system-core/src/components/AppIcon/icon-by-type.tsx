@@ -41,7 +41,7 @@ const IconByType: React.FC<AppImgProps> = ({
       <img
         loading="lazy"
         decoding="async"
-        alt={appImg.type}
+        alt={appImg?.type}
         className={tw(apply`rounded-[50%] object-contain`)}
         src={appImg?.value}
       />
