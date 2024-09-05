@@ -3,7 +3,7 @@ import getSDK from '@akashaorg/core-sdk';
 import { AUTH_EVENTS } from '@akashaorg/typings/lib/sdk';
 import { GetAppsByPublisherDidQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 import { DeepTarget, SystemModuleType } from '../type-utils';
-import { IAppConfig } from '@akashaorg/typings/lib/ui';
+import { IAppConfig, IExtensionInstallerPlugin } from '@akashaorg/typings/lib/ui';
 import { ILogger } from '@akashaorg/typings/lib/sdk/log';
 
 type AkashaAppEdgeNode = DeepTarget<
@@ -54,7 +54,7 @@ const statusCodes = {
   },
 };
 
-export class ExtensionInstaller {
+export class ExtensionInstaller implements IExtensionInstallerPlugin {
   readonly #importModule: ExtensionInstallerOptions['importModule'];
   readonly #getLatestExtensionVersion: ExtensionInstallerOptions['getLatestExtensionVersion'];
   readonly #initializeExtension: ExtensionInstallerOptions['initializeExtension'];
@@ -148,9 +148,9 @@ export class ExtensionInstaller {
     }
   }
   // depending on the error, we want to retry installation
-  async retryFromError(errorStatus: symbol) {
+  async retryFromError(errorStatus) {
     if (!this.#extensionName) {
-      return false;
+      return;
     }
     switch (errorStatus) {
       // start from the beginning
@@ -185,13 +185,7 @@ export class ExtensionInstaller {
     }
     this.resetAndCleanup();
   }
-  // if the extension that is being installed does have
-  // additional resources to register (aka. composeDB models)
-  // the installExtension function will return right after registering resources.
-  // otherwise, this method will be called from inside the installExtension function
-  // this method will resume the installation after successfully registered resources
-  // the actual confirmation and error handling of the signature required by those resources
-  // is handled directly in the installation component/page
+
   async postInstallExtension() {
     if (
       this.#extensionModule.initialize &&
@@ -238,7 +232,7 @@ export class ExtensionInstaller {
       return;
     }
   }
-  // the main function that will start the installation of the extension.
+
   async installExtension(extensionID: string) {
     if (!this.#user?.id) {
       this.notifyErrorStatus(this.getStaticStatusCodes().error.USER_NOT_CONNECTED);

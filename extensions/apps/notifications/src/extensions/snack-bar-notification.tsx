@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useSyncExternalStore, ReactElement } from 'react';
 import ReactDOMClient from 'react-dom/client';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import singleSpaReact from 'single-spa-react';
@@ -15,21 +15,22 @@ import {
   NotificationEvents,
   type NotificationEvent,
   NotificationTypes,
+  LogoTypeSource,
 } from '@akashaorg/typings/lib/ui';
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 const SnackBarNotification: React.FC<IRootExtensionProps> = () => {
-  const { uiEvents, getRoutingPlugin } = useRootComponentProps();
+  const { uiEvents, getCorePlugins } = useRootComponentProps();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [ctaLabel, setCTALabel] = useState('');
   const [appTitle, setAppTitle] = useState(null);
   const [dismissable, setDismissable] = useState(true);
   const [notifType, setNotifType] = useState(NotificationTypes.Success);
-
-  const [routeData, setRouteData] = useState(null);
+  const routing = getCorePlugins().routing;
+  const routeData = useSyncExternalStore(routing.subscribe, routing.getSnapshot);
   const mutationEvents = useListenForMutationEvents();
 
   const [currentAppId, setCurrentAppId] = useState('');
@@ -51,26 +52,8 @@ const SnackBarNotification: React.FC<IRootExtensionProps> = () => {
     }
   }, [title]);
 
-  const routing = getRoutingPlugin();
-
-  useEffect(() => {
-    let sub;
-    if (routing) {
-      sub = routing.routeObserver.subscribe({
-        next: routeData => {
-          setRouteData({ ...routeData.byArea });
-        },
-      });
-    }
-    return () => {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    };
-  }, [routing]);
-
   const defaultInstalledApps = useMemo(() => {
-    return routeData?.[MenuItemAreaType.AppArea];
+    return routeData?.byArea[MenuItemAreaType.AppArea];
   }, [routeData]);
 
   useEffect(() => {
@@ -92,8 +75,7 @@ const SnackBarNotification: React.FC<IRootExtensionProps> = () => {
         setNotifType(NotificationTypes.Success);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mutationEvents]);
+  }, [currentAppId, mutationEvents, timeoutHandle]);
 
   useEffect(() => {
     const eventsSub = uiEvents.pipe(filterEvent(NotificationEvents.ShowNotification)).subscribe({
@@ -119,8 +101,7 @@ const SnackBarNotification: React.FC<IRootExtensionProps> = () => {
         eventsSub.unsubscribe();
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [uiEvents]);
 
   const dismissHandler = () => {
     setTitle('');
@@ -130,12 +111,16 @@ const SnackBarNotification: React.FC<IRootExtensionProps> = () => {
   const findAppIcon = (appName: string) => {
     return defaultInstalledApps?.find(({ name }) => name === appName);
   };
-
+  // @TODO: icon typings are generally wrong!
   const icon = (
     <AppIcon
       size="xs"
       accentColor={true}
-      placeholderIcon={findAppIcon(appTitle)?.logo?.value ?? null}
+      placeholderIcon={
+        findAppIcon(appTitle)?.logo?.type === LogoTypeSource.ICON
+          ? (findAppIcon(appTitle).logo?.value as ReactElement)
+          : null
+      }
     />
   );
 

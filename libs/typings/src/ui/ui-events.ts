@@ -1,25 +1,4 @@
-import { IMenuItem } from './sidebar-menu-items';
 import { AnalyticsEventData } from './analytics';
-
-/**
- * Enum defining events related to loading and unloading of global routes
- **/
-export const enum RouteRegistrationEvents {
-  RegisterRoutes = 'register-routes',
-}
-
-/**
- * Type defining route registration event
- **/
-export type RoutesRegisterEvent = {
-  event: RouteRegistrationEvents;
-  data: {
-    // name = extension name
-    name: string;
-    menuItems?: IMenuItem | IMenuItem[];
-    navRoutes?: Record<string, string>;
-  };
-};
 
 /**
  * Enum defining events related to theming
@@ -119,7 +98,6 @@ export type UIEventData =
       event: EventTypes;
       data?: EventDataTypes;
     }
-  | RoutesRegisterEvent
   | AnalyticsEventData
   | ThemingEvent
   | NotificationEvent;

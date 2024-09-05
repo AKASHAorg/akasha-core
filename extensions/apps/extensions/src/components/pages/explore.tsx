@@ -10,8 +10,8 @@ import routes, { DEVELOPER_MODE, EXTENSIONS } from '../../routes';
 export const ExplorePage: React.FC<unknown> = () => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
-  const { getRoutingPlugin, encodeAppName } = useRootComponentProps();
-  const navigateTo = getRoutingPlugin().navigateTo;
+  const { getCorePlugins, encodeAppName } = useRootComponentProps();
+  const navigateTo = getCorePlugins().routing.navigateTo;
 
   const isInstalled = false;
 

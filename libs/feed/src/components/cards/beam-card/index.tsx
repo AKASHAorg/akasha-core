@@ -43,14 +43,14 @@ const BeamCard: React.FC<BeamCardProps> = props => {
     ...rest
   } = props;
 
-  const { getRoutingPlugin, navigateToModal } = useRootComponentProps();
+  const { getCorePlugins, navigateToModal } = useRootComponentProps();
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
   const [appName, setAppName] = useState('');
   const [blockNameMap, setBlockNameMap] = useState(new Map());
   const [showBlockName, setShowBlockName] = useState(false);
-  const navigateTo = getRoutingPlugin().navigateTo;
+  const navigateTo = getCorePlugins().routing.navigateTo;
 
   const { showNsfw } = useNsfwToggling();
 

@@ -17,10 +17,10 @@ import {
 import getSDK, { SDK_Services, SDK_API } from '@akashaorg/core-sdk';
 import { InstalledExtensionSchema } from '@akashaorg/core-sdk/lib/db/installed-extensions.schema';
 import {
+  CorePlugins,
   IAppConfig,
   IPlugin,
   IRootComponentProps,
-  RouteRegistrationEvents,
   UIEventData,
   WorldConfig,
 } from '@akashaorg/typings/lib/ui';
@@ -40,8 +40,11 @@ import { ExtensionPointStore } from './plugins/extension-point-store';
 import { WidgetStore } from './plugins/widget-store';
 import { ExtensionInstaller } from './plugins/extension-installer';
 import { SystemModuleType } from './type-utils';
+import { RoutingPlugin } from './plugins/routing-plugin';
 
 const isWindow = window && typeof window !== 'undefined';
+const encodeAppName = (name: string) => (isWindow ? encodeURIComponent(name) : name);
+const decodeAppName = (name: string) => (isWindow ? decodeURIComponent(name) : name);
 
 export default class AppLoader {
   worldConfig: WorldConfig;
@@ -53,12 +56,15 @@ export default class AppLoader {
   logger: ILogger;
   parentLogger: SDK_Services['log'];
   plugins: IPlugin & {
-    core?: {
-      contentBlockStore: ContentBlockStore;
-      extensionPointStore: ExtensionPointStore;
-      widgetStore: WidgetStore;
-      extensionInstaller: ExtensionInstaller;
-    };
+    core: CorePlugins;
+    // {
+    //   contentBlockStore: ContentBlockStore;
+    //   extensionPointStore: ExtensionPointStore;
+    //   widgetStore: WidgetStore;
+    //   extensionInstaller: ExtensionInstaller;
+    //   extensionUninstaller: { uninstallExtension: (name: string) => void };
+    //   routing: RoutingPlugin;
+    // };
   };
   globalChannel: SDK_API['globalChannel'];
   user: { id: string };
@@ -75,7 +81,6 @@ export default class AppLoader {
     this.layoutConfig = null;
     this.parentLogger = getSDK().services.log;
     this.logger = this.parentLogger.create('app-loader');
-    this.plugins = {};
     this.globalChannel = getSDK().api.globalChannel;
     this.user = null;
     this.globalChannelSub = null;
@@ -352,6 +357,7 @@ export default class AppLoader {
     const contentBlockStore = ContentBlockStore.getInstance();
     const extensionPointStore = ExtensionPointStore.getInstance();
     const widgetStore = WidgetStore.getInstance();
+    const routingPlugin = RoutingPlugin.getInstance(this.parentLogger.create('RoutingPlugin'));
     const extensionInstaller = new ExtensionInstaller({
       importModule: this.importModule,
       getLatestExtensionVersion: getRemoteExtensionLatestVersion,
@@ -372,6 +378,7 @@ export default class AppLoader {
         extensionUninstaller: {
           uninstallExtension: this.uninstallExtension,
         },
+        routing: routingPlugin,
       },
     });
   };
@@ -448,15 +455,10 @@ export default class AppLoader {
     config: IAppConfig & { name: string },
     extensionType?: AkashaAppApplicationType,
   ) => {
-    // fire register events
-    // @TODO: refactor this after moving the routing plugin to core plugins
-    this.uiEvents.next({
-      event: RouteRegistrationEvents.RegisterRoutes,
-      data: {
-        name: config.name,
-        menuItems: config?.menuItems,
-        navRoutes: config?.routes,
-      },
+    this.plugins.core.routing.registerRoute({
+      name: config.name,
+      menuItems: config?.menuItems,
+      navRoutes: config?.routes,
     });
     if (config?.contentBlocks) {
       this.plugins.core.contentBlockStore.registerContentBlocks(
@@ -569,8 +571,8 @@ export default class AppLoader {
         domElementGetter: () => getDomElement(conf, name, this.logger),
         singleSpa,
         baseRouteName: `/${name}`,
-        encodeAppName: name => encodeURIComponent(name),
-        decodeAppName: name => decodeURIComponent(name),
+        encodeAppName,
+        decodeAppName,
         navigateToModal: navigateToModal,
         getModalFromParams: getModalFromParams,
         parseQueryString: parseQueryString,

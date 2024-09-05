@@ -16,11 +16,6 @@ declare const __LOAD_LOCAL_SOURCES__: boolean;
   const origin = window.location.origin;
   let registryOverrides: (Partial<AkashaApp> & { source: string })[] = [
     {
-      name: '@akashaorg/app-routing',
-      applicationType: AkashaAppApplicationType.App,
-      source: `${origin}/apps/routing/index.js`,
-    },
-    {
       name: '@akashaorg/ui-widget-layout',
       applicationType: AkashaAppApplicationType.Widget,
       source: `${origin}/widgets/layout/index.js`,
@@ -70,7 +65,6 @@ declare const __LOAD_LOCAL_SOURCES__: boolean;
     // define pre-installed apps,
     // homepageApp is always loaded by default
     defaultApps: [
-      '@akashaorg/app-routing',
       '@akashaorg/app-vibes',
       '@akashaorg/app-auth-ewa',
       '@akashaorg/app-search',

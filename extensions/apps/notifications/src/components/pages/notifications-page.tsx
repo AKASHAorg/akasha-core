@@ -39,9 +39,9 @@ const NotificationsPage: React.FC = () => {
   const { data, isLoading } = useGetSettings('@akashaorg/app-notifications');
 
   const { t } = useTranslation('app-notifications');
-  const { getRoutingPlugin, uiEvents } = useRootComponentProps();
+  const { getCorePlugins, uiEvents } = useRootComponentProps();
 
-  const navigateTo = getRoutingPlugin().navigateTo;
+  const navigateTo = getCorePlugins().routing.navigateTo;
 
   const _uiEvents = useRef(uiEvents);
 

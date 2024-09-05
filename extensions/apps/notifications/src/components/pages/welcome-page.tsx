@@ -20,13 +20,13 @@ const WelcomePage: React.FC<WelcomePageProps> = props => {
   const { finalStep = false } = props;
 
   const navigate = useNavigate();
-  const { baseRouteName, name: appName, uiEvents, getRoutingPlugin } = useRootComponentProps();
+  const { baseRouteName, name: appName, uiEvents, getCorePlugins } = useRootComponentProps();
   const {
     data: { authenticatedProfile },
   } = useAkashaStore();
   const _uiEvents = useRef(uiEvents);
   const { t } = useTranslation('app-notifications');
-  const navigateTo = getRoutingPlugin().navigateTo;
+  const navigateTo = getCorePlugins().routing.navigateTo;
 
   const { saveNotificationSettings } = useSaveSettings();
 

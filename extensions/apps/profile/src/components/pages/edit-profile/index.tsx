@@ -29,11 +29,11 @@ type EditProfilePageProps = {
 const EditProfilePage: React.FC<EditProfilePageProps> = props => {
   const { profileDID } = props;
   const { t } = useTranslation('app-profile');
-  const { getRoutingPlugin, logger, uiEvents } = useRootComponentProps();
+  const { getCorePlugins, logger, uiEvents } = useRootComponentProps();
   const { newAvatarImage, newCoverImage, saveImage, loading: isSavingImage } = useSaveImage();
   const [showNsfwModal, setShowNsfwModal] = useState(false);
   const [nsfwFormValues, setNsfwFormValues] = useState<PublishProfileData>();
-  const navigateTo = getRoutingPlugin().navigateTo;
+  const navigateTo = getCorePlugins().routing.navigateTo;
   const { data, error } = useGetProfileByDidSuspenseQuery({
     variables: { id: profileDID },
   });

@@ -11,8 +11,8 @@ const EditorPage: React.FC<unknown> = () => {
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
-  const { getRoutingPlugin } = useRootComponentProps();
-  const navigateTo = React.useRef(getRoutingPlugin().navigateTo);
+  const { getCorePlugins } = useRootComponentProps();
+  const navigateTo = React.useRef(getCorePlugins().routing.navigateTo);
   const { t } = useTranslation();
 
   return (

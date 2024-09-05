@@ -18,9 +18,9 @@ export const ExtensionCreationPage: React.FC<unknown> = () => {
   const { t } = useTranslation('app-extensions');
   const { uiEvents } = useRootComponentProps();
 
-  const { baseRouteName, getRoutingPlugin } = useRootComponentProps();
+  const { baseRouteName, getCorePlugins } = useRootComponentProps();
 
-  const navigateTo = getRoutingPlugin().navigateTo;
+  const navigateTo = getCorePlugins().routing.navigateTo;
 
   // const [createAppMutation, { loading }] = useCreateAppMutation({
   //   context: { source: sdk.current.services.gql.contextSources.composeDB },
