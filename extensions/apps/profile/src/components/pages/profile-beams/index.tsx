@@ -17,8 +17,8 @@ type ProfileBeamsPageProps = {
 const ProfileBeamsPage: React.FC<ProfileBeamsPageProps> = props => {
   const { profileDID } = props;
   const [analyticsActions] = useAnalytics();
-  const { getRoutingPlugin } = useRootComponentProps();
-  const navigateTo = React.useRef(getRoutingPlugin().navigateTo);
+  const { getCorePlugins } = useRootComponentProps();
+  const navigateTo = React.useRef(getCorePlugins().routing.navigateTo);
 
   return (
     <Stack direction="column" spacing="gap-y-4" fullWidth>

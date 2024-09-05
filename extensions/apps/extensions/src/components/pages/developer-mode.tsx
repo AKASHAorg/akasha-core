@@ -19,12 +19,12 @@ export enum DevMode {
 
 export const DeveloperModePage: React.FC<unknown> = () => {
   const navigate = useNavigate();
-  const { baseRouteName, uiEvents, getRoutingPlugin } = useRootComponentProps();
+  const { baseRouteName, uiEvents, getCorePlugins } = useRootComponentProps();
   const { t } = useTranslation('app-extensions');
   const {
     data: { authenticatedProfile },
   } = useAkashaStore();
-  const navigateTo = getRoutingPlugin().navigateTo;
+  const navigateTo = getCorePlugins().routing.navigateTo;
   // get the dev mode preference, if any, from local storage
   const localValue = window.localStorage.getItem(DEV_MODE_KEY);
 

@@ -22,8 +22,8 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
     data: { authenticatedDID },
   } = useAkashaStore();
   const isLoggedIn = !!authenticatedDID;
-  const { plugins, uiEvents, logger, navigateToModal } = useRootComponentProps();
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  const { uiEvents, logger, navigateToModal, getCorePlugins } = useRootComponentProps();
+  const navigateTo = getCorePlugins().routing.navigateTo;
 
   const currentIndexingDID = useGetIndexingDID();
   const {

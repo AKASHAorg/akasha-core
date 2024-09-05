@@ -26,7 +26,7 @@ export type LogoSourceType =
  **/
 export enum LogoTypeSource {
   ICON = 'icon',
-  String = 'string',
+  STRING = 'string',
   IPFS = 'ipfs',
   AVATAR = 'avatar',
 }
