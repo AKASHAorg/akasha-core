@@ -1,22 +1,20 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
-import routes, { CREATE_EXTENSION, MY_EXTENSIONS } from '../../routes';
+import routes, { CREATE_EXTENSION, MY_EXTENSIONS } from '../../../routes';
 import { useRootComponentProps, useAkashaStore } from '@akashaorg/ui-awf-hooks';
-import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import AppCreationForm from '@akashaorg/design-system-components/lib/components/AppCreationForm';
-import { DRAFT_EXTENSIONS } from '../../constants';
+import { DRAFT_EXTENSIONS } from '../../../constants';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 
 export const ExtensionCreationPage: React.FC<unknown> = () => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
-  const { uiEvents } = useRootComponentProps();
 
   const { baseRouteName, getCorePlugins } = useRootComponentProps();
 
@@ -69,9 +67,12 @@ export const ExtensionCreationPage: React.FC<unknown> = () => {
             extensionLicenseFieldLabel={t('Extension License')}
             extensionLicenseOtherPlaceholderLabel={t('Please specify your license type')}
             extensionTypeFieldLabel={t('Extension Type')}
-            extensionSourceURLLabel={t('Extension Source URL')}
+            extensionSourceURLLabel={t('Source URL')}
+            disclaimerLabel={t(
+              `Don't worry if you don't have all the information now. You can add or edit all details later when submitting or editing the app.`,
+            )}
             cancelButton={{
-              label: 'Cancel',
+              label: t('Cancel'),
               disabled: false,
               handleClick: () => {
                 navigate({
@@ -80,7 +81,7 @@ export const ExtensionCreationPage: React.FC<unknown> = () => {
               },
             }}
             createButton={{
-              label: 'Create',
+              label: t('Create locally'),
 
               handleClick: data => {
                 const newExtension = {
@@ -101,16 +102,9 @@ export const ExtensionCreationPage: React.FC<unknown> = () => {
                   JSON.stringify([...existingDraftExtensions, newExtension]),
                 );
 
-                uiEvents.next({
-                  event: NotificationEvents.ShowNotification,
-                  data: {
-                    type: NotificationTypes.Success,
-                    title: t('Extension created successfully!'),
-                  },
-                });
-
                 navigate({
-                  to: routes[MY_EXTENSIONS],
+                  to: `/create-extension/$extensionId`,
+                  params: { extensionId: newExtension.id },
                 });
               },
             }}
