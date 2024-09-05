@@ -3,7 +3,6 @@ import { IRootComponentProps, IRootExtensionProps } from '@akashaorg/typings/lib
 import { hasOwn } from './utils/has-own';
 
 const RootComponentPropsContext = React.createContext(null);
-const DEFAULT_ROUTING_PLUGIN = '@akashaorg/app-routing';
 const DEFAULT_TRANSLATION_PLUGIN = '@akashaorg/ui-widget-layout';
 
 const RootComponentPropsProvider = ({
@@ -29,16 +28,6 @@ const RootComponentPropsProvider = ({
  */
 const useRootComponentProps = <T extends IRootComponentProps>() => {
   const ctx = React.useContext<T>(RootComponentPropsContext);
-  const getRoutingPlugin = React.useCallback(
-    (ns = DEFAULT_ROUTING_PLUGIN) => {
-      if (hasOwn(ctx?.plugins, ns)) {
-        return ctx?.plugins[ns].routing;
-      }
-      console.warn('Routing plugin not available yet');
-      return {};
-    },
-    [ctx?.plugins],
-  );
 
   const getTranslationPlugin = React.useCallback(
     (ns = DEFAULT_TRANSLATION_PLUGIN): { i18n: IRootComponentProps['i18next'] } => {
@@ -52,17 +41,12 @@ const useRootComponentProps = <T extends IRootComponentProps>() => {
   );
 
   const getCorePlugins = React.useCallback(() => {
-    if (hasOwn(ctx?.plugins, 'core')) {
-      return ctx.plugins.core;
-    }
-    console.warn('Core plugins not available yet!');
-    return {};
+    return ctx.plugins.core;
   }, [ctx.plugins]);
 
   const getContext = React.useCallback(() => ctx, [ctx]);
 
   return {
-    getRoutingPlugin,
     getTranslationPlugin,
     getCorePlugins,
     getContext,

@@ -33,11 +33,11 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
   const {
     data: { authenticatedDID, isAuthenticating: authenticating },
   } = useAkashaStore();
-  const { getRoutingPlugin } = useRootComponentProps();
+  const { getCorePlugins } = useRootComponentProps();
   const [isProcessing, setIsProcessing] = useState(false);
   const [activeInterests, setActiveInterests] = useState([]);
   const isLoggedIn = !!authenticatedDID;
-  const navigateTo = getRoutingPlugin().navigateTo;
+  const navigateTo = getCorePlugins().routing.navigateTo;
   const apolloClient = useApolloClient();
 
   const { data: profileInterestsQueryData, loading: loadingProfileInterests } =

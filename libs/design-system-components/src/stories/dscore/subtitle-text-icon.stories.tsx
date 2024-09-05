@@ -5,10 +5,11 @@ import SubtitleTextIcon, {
   SubtitleTextIconProps,
 } from '@akashaorg/design-system-core/lib/components/SubtitleTextIcon';
 
+SubtitleTextIcon.displayName = 'SubtitleTextIcon';
+
 const meta: Meta<SubtitleTextIconProps> = {
   title: 'DSCore/Icons/SubtitleTextIcon',
   component: SubtitleTextIcon,
-  tags: ['autodocs'],
   argTypes: {
     customStyle: { control: 'text' },
     icon: { control: 'object' },

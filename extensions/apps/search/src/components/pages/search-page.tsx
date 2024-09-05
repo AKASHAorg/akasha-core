@@ -57,7 +57,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
   const [analyticsActions] = useAnalytics();
   const { t } = useTranslation('app-search');
-  const { getRoutingPlugin, navigateToModal } = useRootComponentProps();
+  const { getCorePlugins, navigateToModal } = useRootComponentProps();
 
   const {
     data: { authenticatedDID },
@@ -74,7 +74,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
   const toggleTagSubscriptionReq = null;
 
-  const navigateTo = getRoutingPlugin().navigateTo;
+  const navigateTo = getCorePlugins().routing.navigateTo;
 
   const handleEntryNavigation = useEntryNavigation(navigateTo);
 
@@ -223,7 +223,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     const trimmedValue = inputValue.trim();
     if (!trimmedValue) return;
     const encodedSearchKey = encodeURIComponent(trimmedValue);
-    getRoutingPlugin().navigateTo?.({
+    getCorePlugins().routing.navigateTo?.({
       appName: '@akashaorg/app-search',
       getNavigationUrl: routes => `${routes.Results}/${encodedSearchKey}`,
     });

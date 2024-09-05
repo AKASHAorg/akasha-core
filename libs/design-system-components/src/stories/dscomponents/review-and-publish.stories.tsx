@@ -1,17 +1,10 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ReviewAndPublish, { ReviewAndPublishProps } from '../../components/ReviewAndPublish';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 const meta: Meta<ReviewAndPublishProps> = {
   title: 'DSComponents/Extensions/ReviewAndPublish',
-  component: props => (
-    <Stack customStyle="w-[50%]">
-      <ReviewAndPublish {...props} />
-    </Stack>
-  ),
-  tags: ['autodocs'],
+  component: ReviewAndPublish,
 };
 
 type Story = StoryObj<ReviewAndPublishProps>;

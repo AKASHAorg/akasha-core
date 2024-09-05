@@ -14,7 +14,7 @@ import { getReportedError, getReportedProgress } from './utils';
 
 export const InstallExtensionPage = ({ appId }: { appId: string }) => {
   const { t } = useTranslation('app-extensions');
-  const { getCorePlugins, decodeAppName, getRoutingPlugin } = useRootComponentProps();
+  const { decodeAppName, getCorePlugins } = useRootComponentProps();
   const decodeName = React.useRef(decodeAppName);
   const installer = useRef(getCorePlugins().extensionInstaller);
   const installerStatusCodes = React.useRef(installer.current.getStaticStatusCodes());
@@ -51,7 +51,7 @@ export const InstallExtensionPage = ({ appId }: { appId: string }) => {
   );
 
   const handleLoginClick = useCallback(() => {
-    getRoutingPlugin().navigateTo({
+    getCorePlugins().routing.navigateTo({
       appName: '@akashaorg/app-auth-ewa',
       getNavigationUrl: (appRoutes: Record<string, string>) => {
         return `${appRoutes.Connect}?${new URLSearchParams({
@@ -59,7 +59,7 @@ export const InstallExtensionPage = ({ appId }: { appId: string }) => {
         })}`;
       },
     });
-  }, [getRoutingPlugin]);
+  }, [getCorePlugins]);
 
   const triggerResourceRegistration = useCallback(() => {
     // handle signature;
@@ -164,7 +164,7 @@ export const InstallExtensionPage = ({ appId }: { appId: string }) => {
       return {
         label: t('Open the app'),
         onClick: () => {
-          getRoutingPlugin().navigateTo({
+          getCorePlugins().routing.navigateTo({
             appName: decodeName.current(appId),
           });
         },
@@ -178,9 +178,9 @@ export const InstallExtensionPage = ({ appId }: { appId: string }) => {
     }
     return {
       label: t('Cancel installation'),
-      onClick: () => installer.current.cancelInstallation(reportedStatus),
+      onClick: () => installer.current.cancelInstallation(),
     };
-  }, [appId, getRoutingPlugin, isInstalled, reportedError, reportedStatus, t]);
+  }, [appId, getCorePlugins, isInstalled, reportedError, reportedStatus, t]);
 
   if (error) {
     return (

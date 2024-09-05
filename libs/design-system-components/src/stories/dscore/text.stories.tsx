@@ -1,10 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import Text, { TextProps } from '@akashaorg/design-system-core/lib/components/Text';
 
+Text.displayName = 'Text';
+
 const meta: Meta<TextProps> = {
   title: 'DSCore/Text/Text',
   component: Text,
-  tags: ['autodocs'],
   argTypes: {
     variant: {
       control: 'select',

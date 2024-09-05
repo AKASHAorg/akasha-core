@@ -36,9 +36,9 @@ type ExtensionEditMainPageProps = {
 export const ExtensionEditMainPage: React.FC<ExtensionEditMainPageProps> = ({ extensionId }) => {
   const { t } = useTranslation('app-extensions');
 
-  const { baseRouteName, getRoutingPlugin } = useRootComponentProps();
+  const { baseRouteName, getCorePlugins } = useRootComponentProps();
 
-  const navigateTo = getRoutingPlugin().navigateTo;
+  const navigateTo = getCorePlugins().routing.navigateTo;
 
   const {
     data: { authenticatedDID },

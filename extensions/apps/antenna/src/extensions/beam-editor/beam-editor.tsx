@@ -32,7 +32,7 @@ export const BeamEditor: React.FC = () => {
 
   const { t } = useTranslation('app-antenna');
 
-  const { getRoutingPlugin } = useRootComponentProps();
+  const { getCorePlugins } = useRootComponentProps();
   /*
    * get the logged-in user info and info about their profile's NSFW property
    */
@@ -61,7 +61,7 @@ export const BeamEditor: React.FC = () => {
     updateBlockDisablePublishState,
   } = useBlocksPublishing({
     onComplete: beamData => {
-      getRoutingPlugin().navigateTo({
+      getCorePlugins().routing.navigateTo({
         appName: '@akashaorg/app-antenna',
         getNavigationUrl: navRoutes => `${navRoutes.Beam}/${beamData.document.id}`,
       });
@@ -85,6 +85,7 @@ export const BeamEditor: React.FC = () => {
     }
     // blocksInUse changes when you type due to checking for disablePublishing state
     // that's why we only care about the length here
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [blocksInUse.length]);
 
   useEffect(() => {

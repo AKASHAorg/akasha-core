@@ -32,7 +32,7 @@ type ProfileInfoPageProps = {
 const ProfileInfoPage: React.FC<ProfileInfoPageProps> = props => {
   const { profileDID } = props;
   const { t } = useTranslation('app-profile');
-  const { getRoutingPlugin, navigateToModal, uiEvents } = useRootComponentProps();
+  const { getCorePlugins, navigateToModal, uiEvents } = useRootComponentProps();
   const {
     data: { authenticatedDID, isAuthenticating: authenticating },
   } = useAkashaStore();
@@ -59,7 +59,7 @@ const ProfileInfoPage: React.FC<ProfileInfoPageProps> = props => {
     }
   }, [isLoggedIn, showNsfwSetting]);
 
-  const navigateTo = getRoutingPlugin().navigateTo;
+  const navigateTo = getCorePlugins().routing.navigateTo;
 
   const hasProfile = !!data?.node;
   const isViewer = !!authenticatedDID && profileDID === authenticatedDID;

@@ -6,7 +6,6 @@ import EntryPublishErrorCard, {
 const meta: Meta<PublishErrorCardProps> = {
   title: 'DSComponents/Errors/EntryPublishErrorCard',
   component: EntryPublishErrorCard,
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj<PublishErrorCardProps>;

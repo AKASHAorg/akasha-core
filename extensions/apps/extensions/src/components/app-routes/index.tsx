@@ -16,6 +16,7 @@ import {
   DeveloperModePage,
   DevMode,
   ExtensionCreationPage,
+  PostExtensionCreationPage,
   InstallExtensionPage,
 } from '../pages';
 import {
@@ -193,6 +194,15 @@ const extensionCreateRoute = createRoute({
   },
 });
 
+const postExtensionCreateRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/create-extension/$extensionId',
+  component: () => {
+    const { extensionId } = postExtensionCreateRoute.useParams();
+    return <PostExtensionCreationPage extensionId={extensionId} />;
+  },
+});
+
 const extensionEditMainRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `/edit-extension/$extensionId`,
@@ -247,6 +257,7 @@ const routeTree = rootRoute.addChildren([
     extensionInstallRoute,
   ]),
   extensionCreateRoute,
+  postExtensionCreateRoute,
   extensionEditMainRoute.addChildren([
     extensionEditStep1Route,
     extensionEditStep2Route,

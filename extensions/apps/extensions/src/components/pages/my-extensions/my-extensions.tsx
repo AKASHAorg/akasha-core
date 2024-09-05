@@ -26,11 +26,11 @@ import { DRAFT_EXTENSIONS } from '../../../constants';
 const ENTRY_HEIGHT = 92;
 
 export const MyExtensionsPage: React.FC<unknown> = () => {
-  const { baseRouteName, getRoutingPlugin } = useRootComponentProps();
+  const { baseRouteName, getCorePlugins } = useRootComponentProps();
   const { t } = useTranslation('app-extensions');
 
   const navigate = useNavigate();
-  const navigateTo = getRoutingPlugin().navigateTo;
+  const navigateTo = getCorePlugins().routing.navigateTo;
 
   const {
     data: { authenticatedDID },

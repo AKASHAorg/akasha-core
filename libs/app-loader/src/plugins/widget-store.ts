@@ -1,7 +1,7 @@
-import { WidgetInterface } from '@akashaorg/typings/lib/ui';
+import { IWidgetStorePlugin, WidgetInterface } from '@akashaorg/typings/lib/ui';
 import { checkActivity } from './utils';
 
-export class WidgetStore {
+export class WidgetStore implements IWidgetStorePlugin {
   static instance: WidgetStore;
   readonly #widgets: (WidgetInterface & { appName: string })[];
   #widgetRemoveCallbacks: Map<string, (() => void)[]>;

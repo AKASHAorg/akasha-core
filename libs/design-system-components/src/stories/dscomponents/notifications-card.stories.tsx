@@ -4,7 +4,6 @@ import NotificationsCard, { NotificationsCardProps } from '../../components/Noti
 const meta: Meta<NotificationsCardProps> = {
   title: 'DSComponents/Cards/NotificationsCard',
   component: NotificationsCard,
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj<NotificationsCardProps>;

@@ -8,11 +8,11 @@ import routes, { EXTENSIONS } from '../../routes';
 
 export const InstalledExtensionsPage: React.FC<unknown> = () => {
   const navigate = useNavigate();
-  const { getRoutingPlugin } = useRootComponentProps();
+  const { getCorePlugins } = useRootComponentProps();
   const { t } = useTranslation('app-extensions');
 
   const handleAppClick = (appName: string) => {
-    getRoutingPlugin().navigateTo({
+    getCorePlugins().routing.navigateTo({
       appName,
     });
   };

@@ -1,16 +1,9 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import InstallApps, { InstallAppProps } from '../../components/InstallApp';
 
 const meta: Meta<InstallAppProps> = {
   title: 'DSComponents/Extensions/AppInstallation',
-  component: props => (
-    <Stack customStyle="w-[35%]">
-      <InstallApps {...props} />
-    </Stack>
-  ),
-  tags: ['autodocs'],
+  component: InstallApps,
 };
 
 type Story = StoryObj<InstallAppProps>;

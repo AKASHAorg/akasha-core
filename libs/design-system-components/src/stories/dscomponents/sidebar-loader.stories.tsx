@@ -1,16 +1,11 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import SidebarLoader from '../../components/Loaders/sidebar-loader';
+
+SidebarLoader.displayName = 'SidebarLoader';
 
 const meta: Meta = {
   title: 'DSComponents/Loaders/SidebarLoader',
-  component: () => (
-    <Stack customStyle="w-[25%]">
-      <SidebarLoader />
-    </Stack>
-  ),
-  tags: ['autodocs'],
+  component: SidebarLoader,
 };
 
 type Story = StoryObj;

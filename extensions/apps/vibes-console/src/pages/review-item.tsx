@@ -19,9 +19,9 @@ export const ReviewItemPage: React.FC<ReviewItemPageProps> = props => {
 
   const navigate = useNavigate();
   const { t } = useTranslation('app-vibes-console');
-  const { getRoutingPlugin, uiEvents } = useRootComponentProps();
+  const { getCorePlugins, uiEvents } = useRootComponentProps();
 
-  const navigateTo = getRoutingPlugin().navigateTo;
+  const navigateTo = getCorePlugins().routing.navigateTo;
 
   const handleReasonClick = (id: string) => {
     navigate({

@@ -1,7 +1,7 @@
-import { ExtensionPointInterface } from '@akashaorg/typings/lib/ui';
+import { ExtensionPointInterface, IExtensionPointStorePlugin } from '@akashaorg/typings/lib/ui';
 import { checkActivity, stringToRegExp } from './utils';
 
-export class ExtensionPointStore {
+export class ExtensionPointStore implements IExtensionPointStorePlugin {
   static instance: ExtensionPointStore;
   readonly #extensions: (ExtensionPointInterface & { appName: string })[];
 
