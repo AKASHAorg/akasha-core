@@ -1,10 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import Label, { LabelProps } from '@akashaorg/design-system-core/lib/components/Label';
 
+Label.displayName = 'Label';
+
 const meta: Meta = {
   title: 'DSCore/Labels/Label',
   component: Label,
-  tags: ['autodocs'],
   argTypes: {
     disabled: { control: 'boolean' },
     required: { control: 'boolean' },

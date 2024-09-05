@@ -10,7 +10,6 @@ import { ItemType } from '../../components/VibesConsoleContentCard/mini-profile-
 const meta: Meta<VibesConsoleContentCardProps> = {
   title: 'DSComponents/Vibes/VibesConsoleContentCard',
   component: VibesConsoleContentCard,
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj<VibesConsoleContentCardProps>;

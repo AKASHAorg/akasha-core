@@ -5,7 +5,6 @@ import ProfileSearchCard, { ProfileSearchCardProps } from '../../components/Prof
 const meta: Meta<ProfileSearchCardProps> = {
   title: 'DSComponents/Cards/ProfileSearchCard',
   component: ProfileSearchCard,
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj<ProfileSearchCardProps>;

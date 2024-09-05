@@ -4,7 +4,6 @@ import Stats, { StatsProps } from '../../components/Profile/Stats';
 const meta: Meta<StatsProps> = {
   title: 'DSComponents/Profile/ProfileStatsCard',
   component: Stats,
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj<StatsProps>;

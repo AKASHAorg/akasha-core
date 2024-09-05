@@ -4,7 +4,6 @@ import EditInterests, { EditInterestsProps } from '../../components/EditInterest
 const meta: Meta<EditInterestsProps> = {
   title: 'DSComponents/Profile/Edit/Interests',
   component: EditInterests,
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj<EditInterestsProps>;

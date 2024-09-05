@@ -4,7 +4,6 @@ import VibesIntroCard, { VibesIntroCardProps } from '../../components/VibesIntro
 const meta: Meta<VibesIntroCardProps> = {
   title: 'DSComponents/Vibes/VibesIntroCard',
   component: VibesIntroCard,
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj<VibesIntroCardProps>;

@@ -1,16 +1,11 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TrendingWidgetLoader from '../../components/Loaders/trending-widget-loader';
+
+TrendingWidgetLoader.displayName = 'TrendingWidgetLoader';
 
 const meta: Meta = {
   title: 'DSComponents/Loaders/TrendingWidgetLoader',
-  component: () => (
-    <Stack customStyle="w-[50%]">
-      <TrendingWidgetLoader />
-    </Stack>
-  ),
-  tags: ['autodocs'],
+  component: TrendingWidgetLoader,
 };
 
 type Story = StoryObj;
