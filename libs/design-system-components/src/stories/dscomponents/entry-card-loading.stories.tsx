@@ -1,16 +1,11 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import EntryLoadingPlaceholder from '../../components/Entry/EntryCardLoading';
+
+EntryLoadingPlaceholder.displayName = 'EntryLoadingPlaceholder';
 
 const meta: Meta = {
   title: 'DSComponents/Loaders/EntryLoadingPlaceholder',
-  component: () => (
-    <Stack customStyle="w-[50%]">
-      <EntryLoadingPlaceholder />
-    </Stack>
-  ),
-  tags: ['autodocs'],
+  component: EntryLoadingPlaceholder,
 };
 
 type Story = StoryObj;

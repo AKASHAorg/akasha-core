@@ -3,10 +3,11 @@ import type { Meta, StoryObj } from '@storybook/react';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Tooltip, { TooltipProps } from '@akashaorg/design-system-core/lib/components/Tooltip';
 
+Tooltip.displayName = 'Tooltip';
+
 const meta: Meta<TooltipProps> = {
   title: 'DSCore/Tooltip/Tooltip',
   component: Tooltip,
-  tags: ['autodocs'],
   argTypes: {
     arrow: { control: 'boolean' },
     open: { control: 'boolean' },

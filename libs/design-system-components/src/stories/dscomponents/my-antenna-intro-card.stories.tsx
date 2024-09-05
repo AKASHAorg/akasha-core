@@ -4,7 +4,6 @@ import MyAntennaIntroCard, { MyAntennaIntroCardProps } from '../../components/My
 const meta: Meta<MyAntennaIntroCardProps> = {
   title: 'DSComponents/Cards/MyAntennaIntroCard',
   component: MyAntennaIntroCard,
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj<MyAntennaIntroCardProps>;

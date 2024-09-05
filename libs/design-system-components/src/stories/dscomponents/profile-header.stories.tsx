@@ -4,7 +4,6 @@ import Header, { HeaderProps } from '../../components/Profile/Header';
 const meta: Meta<HeaderProps> = {
   title: 'DSComponents/Profile/ProfileHeader',
   component: Header,
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj<HeaderProps>;

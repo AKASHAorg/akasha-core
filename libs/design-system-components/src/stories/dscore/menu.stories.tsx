@@ -1,6 +1,5 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-
 import {
   EllipsisVerticalIcon,
   FlagIcon,
@@ -8,12 +7,21 @@ import {
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Menu, { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
 
+Menu.displayName = 'Menu';
+EllipsisVerticalIcon.displayName = 'EllipsisVerticalIcon';
+FlagIcon.displayName = 'FlagIcon';
+LinkIcon.displayName = 'LinkIcon';
+
 const meta: Meta<MenuProps> = {
   title: 'DSCore/Menu/Menu',
   component: Menu,
-  tags: ['autodocs'],
   argTypes: {
-    anchor: { control: 'text' },
+    anchor: {
+      icon: { control: 'object' },
+      variant: { control: 'text' },
+      greyBg: { control: 'boolean' },
+      iconOnly: { control: 'boolean' },
+    },
     disabled: { control: 'boolean' },
     items: { control: 'object' },
     showDivider: { control: 'boolean' },

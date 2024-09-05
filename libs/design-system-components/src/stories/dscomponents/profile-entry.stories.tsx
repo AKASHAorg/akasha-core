@@ -6,7 +6,6 @@ import Entry, { EntryProps } from '../../components/ProfileEngagements/Entry';
 const meta: Meta<EntryProps> = {
   title: 'DSComponents/Profile/Entry',
   component: Entry,
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj<EntryProps>;
@@ -20,8 +19,6 @@ export const Default: Story = {
       id: 'id',
       did: 'did:key:003410490050000320006570034567114572000',
     },
-    followId: 'id',
-    isFollowing: false,
     transformSource: () => ({
       src: 'https://placebeard.it/360x360',
       width: 360,

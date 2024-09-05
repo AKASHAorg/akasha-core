@@ -5,7 +5,6 @@ import TagSearchCard, { TagSearchCardProps } from '../../components/TagSearchCar
 const meta: Meta<TagSearchCardProps> = {
   title: 'DSComponents/Cards/TagSearchCard',
   component: TagSearchCard,
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj<TagSearchCardProps>;

@@ -8,7 +8,6 @@ ProfileAvatarButton.displayName = 'ProfileAvatarButton';
 const meta: Meta<ProfileAvatarButtonProps> = {
   title: 'DSCore/Buttons/ProfileAvatarButton',
   component: ProfileAvatarButton,
-  tags: ['autodocs'],
   argTypes: {
     customStyle: { control: 'text' },
     avatar: { control: 'object' },

@@ -3,16 +3,10 @@ import type { Meta, StoryObj } from '@storybook/react';
 import EntryCard, { EntryCardProps } from '../../components/Entry/EntryCard';
 import { EntityTypes } from '@akashaorg/typings/lib/ui';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 const meta: Meta<EntryCardProps> = {
   title: 'DSComponents/Cards/EntryCard',
-  component: props => (
-    <Stack customStyle="w-[50%]">
-      <EntryCard {...props} />
-    </Stack>
-  ),
-  tags: ['autodocs'],
+  component: EntryCard,
 };
 
 type Story = StoryObj<EntryCardProps>;

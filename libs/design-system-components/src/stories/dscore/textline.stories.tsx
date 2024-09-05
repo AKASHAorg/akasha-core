@@ -1,10 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import TextLine, { TextLineProps } from '@akashaorg/design-system-core/lib/components/TextLine';
 
+TextLine.displayName = 'TextLine';
+
 const meta: Meta<TextLineProps> = {
   title: 'DSCore/Lines/TextLine',
   component: TextLine,
-  tags: ['autodocs'],
   argTypes: {
     title: { control: 'text' },
     round: { control: 'text' },

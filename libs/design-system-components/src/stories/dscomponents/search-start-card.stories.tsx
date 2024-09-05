@@ -5,7 +5,6 @@ import SearchStartCard, { SearchStartProps } from '../../components/SearchStartC
 const meta: Meta<SearchStartProps> = {
   title: 'DSComponents/Cards/SearchStartCard',
   component: SearchStartCard,
-  tags: ['autodocs'],
 };
 
 type Story = StoryObj<SearchStartProps>;
