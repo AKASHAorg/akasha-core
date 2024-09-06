@@ -164,8 +164,6 @@ export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
     [TermsFields.DISCLAIMERS]: t('Disclaimers'),
   };
 
-  console.log(data, 'app data');
-
   if (!authenticatedDID && !isAuthenticating && called && !loading) {
     return (
       <ErrorLoader
