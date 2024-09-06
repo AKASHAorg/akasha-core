@@ -315,112 +315,117 @@ export const BeamEditor: React.FC = () => {
           ))}
           <div ref={bottomRef} />
         </Stack>
-        <Stack
-          background={{ light: 'white', dark: 'grey2' }}
-          customStyle={`absolute overflow-auto top-0 left-0 h-full w-full z-1 divide(y grey8 dark:grey5) ${
-            uiState === 'blocks' ? 'flex' : 'hidden'
-          }`}
-        >
-          {blocksInUse.length > 9 && (
-            <button onClick={handleClickCancel}>
-              <Stack padding={32} align="center" justify="center" fullWidth>
-                <Text>{t('You have reached the maximum number of blocks for a beam.')}</Text>
-              </Stack>
-            </button>
-          )}
-          {blocksInUse.length < 10 &&
-            availableBlocks.map((block, idx) => (
-              <button key={idx} onClick={() => handleAddBlock(block)}>
-                <Stack padding={16} fullWidth direction="row" justify="between" align="center">
-                  <Stack direction="row" align="center" spacing="gap-2">
-                    <Stack
-                      align="center"
-                      justify="center"
-                      customStyle={'h-8 w-8 group relative rounded-full bg(grey9 dark:grey5)'}
-                    >
-                      <Icon size="sm" icon={block.icon} />
-                    </Stack>
-                    <Text>{block.displayName}</Text>
-                  </Stack>
+        {uiState === 'blocks' && (
+          <Stack
+            zIndex="99"
+            background={{ light: 'white', dark: 'grey2' }}
+            customStyle="absolute overflow-auto top-0 left-0 h-full w-full divide(y grey8 dark:grey5)
+            "
+          >
+            {blocksInUse.length > 9 && (
+              <button onClick={handleClickCancel}>
+                <Stack padding={32} align="center" justify="center" fullWidth>
+                  <Text>{t('You have reached the maximum number of blocks for a beam.')}</Text>
                 </Stack>
               </button>
-            ))}
-        </Stack>
-        <Stack
-          background={{ light: 'white', dark: 'grey2' }}
-          customStyle={`absolute top-0 left-0 h-full w-full z-1 overflow-auto ${
-            uiState === 'tags' ? 'flex' : 'hidden'
-          }`}
-        >
-          <Stack padding={16} spacing="gap-4">
-            <Stack direction="row" spacing="gap-x-1" align="center">
-              <Text variant="h6">{t('Beam Tags')}</Text>
-              <Text variant="footnotes2" color="grey7">
-                ({t('10 max')}.)
+            )}
+            {blocksInUse.length < 10 &&
+              availableBlocks.map((block, idx) => (
+                <button key={idx} onClick={() => handleAddBlock(block)}>
+                  <Stack padding={16} fullWidth direction="row" justify="between" align="center">
+                    <Stack direction="row" align="center" spacing="gap-2">
+                      <Stack
+                        align="center"
+                        justify="center"
+                        customStyle={'h-8 w-8 group relative rounded-full bg(grey9 dark:grey5)'}
+                      >
+                        <Icon size="sm" icon={block.icon} />
+                      </Stack>
+                      <Text>{block.displayName}</Text>
+                    </Stack>
+                  </Stack>
+                </button>
+              ))}
+          </Stack>
+        )}
+        {uiState === 'tags' && (
+          <Stack
+            zIndex="99"
+            background={{ light: 'white', dark: 'grey2' }}
+            customStyle="absolute top-0 left-0 h-full w-full overflow-auto"
+          >
+            <Stack padding={16} spacing="gap-4">
+              <Stack direction="row" spacing="gap-x-1" align="center">
+                <Text variant="h6">{t('Beam Tags')}</Text>
+                <Text variant="footnotes2" color="grey7">
+                  ({t('10 max')}.)
+                </Text>
+              </Stack>
+              <Text variant="subtitle2" color="grey7">
+                {t(
+                  'Use up to 10 tags to categorize your posts on AKASHA World, helping others discover your content more easily.',
+                )}
               </Text>
-            </Stack>
-            <Text variant="subtitle2" color="grey7">
-              {t(
-                'Use up to 10 tags to categorize your posts on AKASHA World, helping others discover your content more easily.',
-              )}
-            </Text>
-            <Stack spacing="gap-y-1">
-              <SearchBar
-                inputValue={tagValue}
-                inputPlaceholderLabel={t('Search for tags')}
-                onInputChange={handleChange}
-                onKeyUp={handleKeyUp}
-                onSearch={() => {
-                  /** */
-                }}
-                fullWidth={true}
-                customStyle={`${
-                  errorMessage
-                    ? 'focus-within:border-errorLight dark:focus-within:border-errorDark))'
-                    : ''
-                }`}
-              />
+              <Stack spacing="gap-y-1">
+                <SearchBar
+                  inputValue={tagValue}
+                  inputPlaceholderLabel={t('Search for tags')}
+                  onInputChange={handleChange}
+                  onKeyUp={handleKeyUp}
+                  onSearch={() => {
+                    /** */
+                  }}
+                  fullWidth={true}
+                  customStyle={`${
+                    errorMessage
+                      ? 'focus-within:border-errorLight dark:focus-within:border-errorDark))'
+                      : ''
+                  }`}
+                />
 
-              {errorMessage && (
-                <Text variant="footnotes2" color={{ light: 'errorLight', dark: 'errorDark' }}>
-                  {t('{{errorMessage}}', { errorMessage })}
+                {errorMessage && (
+                  <Text variant="footnotes2" color={{ light: 'errorLight', dark: 'errorDark' }}>
+                    {t('{{errorMessage}}', { errorMessage })}
+                  </Text>
+                )}
+              </Stack>
+              {newTags.length === 0 && (
+                <Text variant="body2" weight="bold">
+                  {t("You haven't added any tags yet")}
                 </Text>
               )}
-            </Stack>
-            {newTags.length === 0 && (
-              <Text variant="body2" weight="bold">
-                {t("You haven't added any tags yet")}
-              </Text>
-            )}
-            <Stack fullWidth direction="row" align="center" justify="end" spacing="gap-2">
-              <Button
-                variant="text"
-                label={t('Clear All')}
-                disabled={!newTags.length}
-                onClick={() => setNewTags([])}
-              />
-              <Button
-                variant="secondary"
-                label={t('Add')}
-                disabled={tagValue.length < 3 || tagValue.length > 30 || newTags.includes(tagValue)}
-                onClick={addTag}
-              />
-            </Stack>
-            <Stack direction="row" spacing="gap-2" customStyle="flex-wrap">
-              {newTags.map((tag, index) => (
-                <Pill
-                  key={index}
-                  label={tag}
-                  active={!editorTags.includes(tag)}
-                  icon={<XMarkIcon />}
-                  iconDirection="right"
-                  onPillClick={() => handleDeleteTag(tag)}
-                  type="action"
+              <Stack fullWidth direction="row" align="center" justify="end" spacing="gap-2">
+                <Button
+                  variant="text"
+                  label={t('Clear All')}
+                  disabled={!newTags.length}
+                  onClick={() => setNewTags([])}
                 />
-              ))}
+                <Button
+                  variant="secondary"
+                  label={t('Add')}
+                  disabled={
+                    tagValue.length < 3 || tagValue.length > 30 || newTags.includes(tagValue)
+                  }
+                  onClick={addTag}
+                />
+              </Stack>
+              <Stack direction="row" spacing="gap-2" customStyle="flex-wrap">
+                {newTags.map((tag, index) => (
+                  <Pill
+                    key={index}
+                    label={tag}
+                    active={!editorTags.includes(tag)}
+                    icon={<XMarkIcon />}
+                    iconDirection="right"
+                    onPillClick={() => handleDeleteTag(tag)}
+                    type="action"
+                  />
+                ))}
+              </Stack>
             </Stack>
           </Stack>
-        </Stack>
+        )}
       </Stack>
       <Footer
         uiState={uiState}
