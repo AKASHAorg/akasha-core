@@ -39,6 +39,7 @@ import {
 import ErrorComponent from './error-component';
 
 import { DEV_MODE_KEY } from '../../constants';
+import { ExtensionInstallTerms } from '../pages/install-extension/install-terms-conditions';
 
 const rootRoute = createRootRouteWithContext<IRouterContext>()({
   component: Outlet,
@@ -87,11 +88,30 @@ const developerModeRoute = createRoute({
   component: DeveloperModePage,
 });
 
-const extensionInstallRoute = createRoute({
+const extensionInstallRootRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/install/$appId',
+  beforeLoad: ({ navigate }) => {
+    navigate({ to: extensionInstallTermsRoute.path, replace: true }).catch(e =>
+      console.error('failed to navigate', e),
+    );
+  },
+});
+
+const extensionInstallTermsRoute = createRoute({
+  getParentRoute: () => extensionInstallRootRoute,
+  path: '/terms',
   component: () => {
-    const { appId } = extensionInstallRoute.useParams();
+    const { appId } = extensionInstallRootRoute.useParams();
+    return <ExtensionInstallTerms appId={appId} />;
+  },
+});
+
+const extensionInstallRoute = createRoute({
+  getParentRoute: () => extensionInstallRootRoute,
+  path: '/progress',
+  component: () => {
+    const { appId } = extensionInstallRootRoute.useParams();
     return <InstallExtensionPage appId={appId} />;
   },
 });
@@ -254,8 +274,8 @@ const routeTree = rootRoute.addChildren([
     appLicenseInfoRoute,
     supportInfoRoute,
     appDescriptionRoute,
-    extensionInstallRoute,
   ]),
+  extensionInstallRootRoute.addChildren([extensionInstallTermsRoute, extensionInstallRoute]),
   extensionCreateRoute,
   postExtensionCreateRoute,
   extensionEditMainRoute.addChildren([

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { ChangeEvent } from 'react';
 import Text from '../Text';
 import Stack from '../Stack';
 import { tw, apply } from '@twind/core';
@@ -25,7 +25,7 @@ export type CheckboxProps = {
   isSelected?: boolean;
   isDisabled?: boolean;
   //handler
-  handleChange?: () => void;
+  handleChange?: (ev: ChangeEvent<HTMLInputElement>) => void;
   customStyle?: string;
 };
 

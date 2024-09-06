@@ -30,7 +30,7 @@ export type AppAvatarProps = {
  * const profileId = 'did:pkh:eip155:5:0x36c703c42dfa2437dc883e2e0884e57404e16493';
  * const avatar = { src: 'https://placebeard.it/360x360', height: 360, width: 360 };
  *
- * <AppAvatar avatar={avatar} appType={AkashaAppApplicationType.App} avatar={avatar} />
+ * <AppAvatar appType={AkashaAppApplicationType.App} avatar={avatar} />
  * ```
  **/
 const AppAvatar: React.FC<AppAvatarProps> = props => {
