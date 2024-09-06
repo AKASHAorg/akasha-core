@@ -39,15 +39,15 @@ const NotificationsCard: React.FC<NotificationsCardProps> = props => {
   const {
     notifications,
     isFetching,
-    followingLabel,
-    mentionedPostLabel,
-    mentionedCommentLabel,
-    replyToPostLabel,
-    replyToReplyLabel,
-    repostLabel,
-    moderatedPostLabel,
-    moderatedReplyLabel,
-    moderatedAccountLabel,
+    mentionedPostLabel = 'mentioned you in a post',
+    mentionedCommentLabel = 'mentioned you in a comment',
+    replyToPostLabel = 'replied to your post',
+    replyToReplyLabel = 'replied to your reply',
+    followingLabel = 'is now following you',
+    repostLabel = 'reposted your post',
+    moderatedPostLabel = 'moderated your post',
+    moderatedReplyLabel = 'moderated your reply',
+    moderatedAccountLabel = 'suspended your account',
     emptyTitle,
     handleMessageRead,
     handleEntryClick,
@@ -206,16 +206,4 @@ const NotificationsCard: React.FC<NotificationsCardProps> = props => {
   );
 };
 
-NotificationsCard.defaultProps = {
-  mentionedPostLabel: 'mentioned you in a post',
-  mentionedCommentLabel: 'mentioned you in a comment',
-  replyToPostLabel: 'replied to your post',
-  replyToReplyLabel: 'replied to your reply',
-  followingLabel: 'is now following you',
-  repostLabel: 'reposted your post',
-  markAsReadLabel: 'Mark as read',
-  moderatedPostLabel: 'moderated your post',
-  moderatedReplyLabel: 'moderated your reply',
-  moderatedAccountLabel: 'suspended your account',
-};
 export default NotificationsCard;
