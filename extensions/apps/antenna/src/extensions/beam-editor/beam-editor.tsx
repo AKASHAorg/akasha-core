@@ -319,7 +319,7 @@ export const BeamEditor: React.FC = () => {
           <Stack
             zIndex="99"
             background={{ light: 'white', dark: 'grey2' }}
-            customStyle="absolute overflow-auto top-0 left-0 h-full w-full divide(y grey8 dark:grey5) 
+            customStyle="absolute overflow-auto top-0 left-0 h-full w-full divide(y grey8 dark:grey5)
             "
           >
             {blocksInUse.length > 9 && (
