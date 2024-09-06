@@ -13,7 +13,7 @@ const ErrorCard: React.FC<
 
   return (
     <Card padding="p-8" customStyle={customStyle} dataTestId={dataTestId}>
-      <Stack spacing="gap-y-6" align="center">
+      <Stack spacing="gap-y-4" align="center">
         <Image
           src={imageSrc}
           loading="lazy"
@@ -22,15 +22,14 @@ const ErrorCard: React.FC<
           className={tw('w-48 h-48')}
         />
 
-        <Stack spacing="gap-y-1" align="center" customStyle="w(64 md:96)">
-          <Text variant="h5" align="center">
+        <Stack spacing="gap-y-1" align="center">
+          <Text variant="h5" align="center" selectable={false}>
             {title}
           </Text>
-          <Text variant="body2" align="center">
+          <Text variant="body2" customStyle="text-grey4 dark:text-grey6 my-4" selectable={false}>
             {details}
           </Text>
         </Stack>
-
         {children}
       </Stack>
     </Card>

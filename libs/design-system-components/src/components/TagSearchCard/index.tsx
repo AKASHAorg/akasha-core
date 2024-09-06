@@ -33,9 +33,9 @@ const TagSearchCard: React.FC<TagSearchCardProps> = props => {
   const {
     tag,
     subscribedTags,
-    subscribeLabel,
-    subscribedLabel,
-    unsubscribeLabel,
+    subscribeLabel = 'Subscribe',
+    subscribedLabel = 'Subscribed',
+    unsubscribeLabel = 'Unsubscribe',
     tagAnchorLink,
     onClickTag,
     handleSubscribeTag,
@@ -80,10 +80,5 @@ const TagSearchCard: React.FC<TagSearchCardProps> = props => {
     </Stack>
   );
 };
-TagSearchCard.defaultProps = {
-  // mentionsLabel: 'beams',
-  subscribeLabel: 'Subscribe',
-  subscribedLabel: 'Subscribed',
-  unsubscribeLabel: 'Unsubscribe',
-};
+
 export default TagSearchCard;

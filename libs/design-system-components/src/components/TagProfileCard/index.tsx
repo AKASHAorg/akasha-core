@@ -37,10 +37,10 @@ const TagProfileCard: React.FC<TagProfileCard> = props => {
     subscribedTags,
     handleSubscribeTag,
     handleUnsubscribeTag,
-    subscribeLabel,
-    subscribedLabel,
-    unsubscribeLabel,
-    mentionsLabel,
+    mentionsLabel = 'Beams',
+    subscribeLabel = 'Subscribe',
+    subscribedLabel = 'Subscribed',
+    unsubscribeLabel = 'Unsubscribe',
     customStyle = '',
   } = props;
 

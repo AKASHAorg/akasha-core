@@ -86,9 +86,13 @@ const Topbar: React.FC<ITopbarProps> = props => {
     isLoggedIn,
     sidebarVisible,
     onSidebarToggle,
-    onBrandClick,
+    onBrandClick = () => {
+      return;
+    },
     onAppWidgetClick,
-    onBackClick,
+    onBackClick = () => {
+      return;
+    },
   } = props;
 
   const [displayWidgetTogglingButton, setDisplayWidgetTogglingButton] = React.useState(
