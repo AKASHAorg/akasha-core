@@ -176,8 +176,11 @@ interface IPortal {
   targetNode?: HTMLElement;
 }
 
-export const Portal: React.FC<IPortal> = ({ children, targetNode = document.body }) => {
-  return ReactDOM.createPortal(children, targetNode);
+export const Portal: React.FC<IPortal> = ({ children, targetNode }) => {
+  if (targetNode) {
+    return ReactDOM.createPortal(children, targetNode);
+  }
+  return ReactDOM.createPortal(children, document.body);
 };
 
 export { CustomEditor };
