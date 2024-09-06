@@ -29,21 +29,38 @@ export const hidePageSplash = (): void => {
   }
 };
 
-export const show404 = (parentId: string, appName: string, extensionAppUrl: string): void => {
+export const show404 = (
+  parentId: string,
+  appName: string,
+  extensionAppUrl: string,
+  worldTitle?: string,
+): void => {
   const template: HTMLTemplateElement | null = document.querySelector(FOUR_OH_FOUR_TEMPLATE_ID);
   const templateRootNode = template.content.firstElementChild;
   if (template) {
     const parentNode = document.getElementById(parentId);
+
     template.content
       .getElementById('search-extension-button')
       .setAttribute('href', extensionAppUrl);
+
     if (parentNode && !parentNode.querySelector(templateRootNode.id)) {
       parentNode.appendChild(template.content.cloneNode(true));
+
       const appNameNode: HTMLElement | null = document.querySelector(
         `#${templateRootNode.id} #app-name`,
       );
+
+      const worldTitleNode: HTMLElement | null = document.querySelector(
+        `#${templateRootNode.id} #world-title`,
+      );
+
       if (appNameNode) {
         appNameNode.innerText = appName;
+      }
+
+      if (worldTitleNode && worldTitle) {
+        worldTitleNode.innerText = worldTitle;
       }
     }
   }

@@ -4,9 +4,9 @@ import NsfwOption from '../pages/nsfw-option';
 import PrivacyOption from '../pages/privacy-option';
 import ThemeOption from '../pages/theme-option';
 import SettingsPage from '../pages/settings-page';
-import ErrorComponent from './error-component';
 import routes, { APPS, NSFW, PRIVACY, THEME, HOME } from '../../routes';
 import {
+  CatchBoundary,
   Outlet,
   createRootRoute,
   createRoute,
@@ -15,9 +15,11 @@ import {
 } from '@tanstack/react-router';
 
 import { ICreateRouter } from '@akashaorg/typings/lib/ui';
+import { NotFoundComponent } from './not-found-component';
 
 const rootRoute = createRootRoute({
   component: Outlet,
+  notFoundComponent: () => <NotFoundComponent />,
 });
 
 const defaultRoute = createRoute({
@@ -31,31 +33,51 @@ const defaultRoute = createRoute({
 const settingsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[HOME]}`,
-  component: SettingsPage,
+  component: () => (
+    <CatchBoundary getResetKey={() => 'settings_reset'} errorComponent={NotFoundComponent}>
+      <SettingsPage />
+    </CatchBoundary>
+  ),
 });
 
 const nsfwRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[NSFW]}`,
-  component: NsfwOption,
+  component: () => (
+    <CatchBoundary getResetKey={() => 'nsfw_reset'} errorComponent={NotFoundComponent}>
+      <NsfwOption />
+    </CatchBoundary>
+  ),
 });
 
 const appsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[APPS]}`,
-  component: AppsOption,
+  component: () => (
+    <CatchBoundary getResetKey={() => 'apps_reset'} errorComponent={NotFoundComponent}>
+      <AppsOption />
+    </CatchBoundary>
+  ),
 });
 
 const privacyRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[PRIVACY]}`,
-  component: PrivacyOption,
+  component: () => (
+    <CatchBoundary getResetKey={() => 'privacy_reset'} errorComponent={NotFoundComponent}>
+      <PrivacyOption />
+    </CatchBoundary>
+  ),
 });
 
 const themeRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `${routes[THEME]}`,
-  component: ThemeOption,
+  component: () => (
+    <CatchBoundary getResetKey={() => 'theme_reset'} errorComponent={NotFoundComponent}>
+      <ThemeOption />
+    </CatchBoundary>
+  ),
 });
 
 const routeTree = rootRoute.addChildren([
@@ -72,7 +94,5 @@ export const router = ({ baseRouteName }: ICreateRouter) =>
     routeTree,
     basepath: baseRouteName,
 
-    defaultErrorComponent: ({ error }) => (
-      <ErrorComponent error={(error as unknown as Error).message} />
-    ),
+    defaultErrorComponent: ({ error }) => <NotFoundComponent error={error} />,
   });
