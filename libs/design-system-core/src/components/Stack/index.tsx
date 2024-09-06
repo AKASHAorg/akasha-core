@@ -31,6 +31,7 @@ export type StackProps = PropsWithChildren<{
   fullWidth?: boolean;
   dataTestId?: string;
   id?: string;
+  zIndex?: string;
 }>;
 
 /**
@@ -78,6 +79,7 @@ const Stack = forwardRef<HTMLDivElement, StackProps>(
       dataTestId,
       children,
       id,
+      zIndex,
     },
     ref,
   ) => {
@@ -99,6 +101,7 @@ const Stack = forwardRef<HTMLDivElement, StackProps>(
         )}
         data-testid={dataTestId}
         ref={ref}
+        style={{ zIndex }}
       >
         {children}
       </div>

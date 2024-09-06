@@ -29,7 +29,7 @@ export type MentionElement = {
   name?: string;
   id?: string;
   children?: EmptyText[];
-  did: Profile['did'];
+  did: Profile['did']['id'];
   align?: 'left' | 'center' | 'right';
 };
 

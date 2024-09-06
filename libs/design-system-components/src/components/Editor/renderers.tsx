@@ -4,7 +4,7 @@ import { tw } from '@twind/core';
 
 const MentionElement = (props: any) => {
   const { handleMentionClick, attributes, element, children } = props;
-  const mention = element.userName || element.name || element.ethAddress;
+  const mention = element.name || element.did;
   const displayedMention = mention && mention.startsWith('@') ? mention : `@${mention}`;
   return (
     <button
@@ -12,7 +12,7 @@ const MentionElement = (props: any) => {
       {...attributes}
       contentEditable={false}
       onClick={(ev: Event) => {
-        handleMentionClick(element.did.id);
+        handleMentionClick(element.did);
         ev.stopPropagation();
         ev.preventDefault();
         return false;

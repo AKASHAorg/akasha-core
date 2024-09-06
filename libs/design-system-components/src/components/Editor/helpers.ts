@@ -84,11 +84,12 @@ const CustomEditor = {
     Transforms.insertNodes(editor, textElem);
   },
 
-  insertMention(editor: Editor, mentionData: Profile) {
+  insertMention(editor: Editor, profileData: Profile) {
     const baseMention: { type: 'mention'; children: [{ text: '' }] } = {
       type: 'mention',
       children: [{ text: '' }],
     };
+    const mentionData = { name: profileData.name, did: profileData.did.id };
     const mention: MentionElement = Object.assign(baseMention, mentionData);
     Transforms.insertNodes(editor, mention);
     ReactEditor.focus(editor);
@@ -173,9 +174,13 @@ export const isEditorEmpty = (editorState?: CustomElement[]) => {
 
 interface IPortal {
   children: React.ReactNode;
+  targetNode?: HTMLElement;
 }
 
-export const Portal: React.FC<IPortal> = ({ children }) => {
+export const Portal: React.FC<IPortal> = ({ children, targetNode }) => {
+  if (targetNode) {
+    return ReactDOM.createPortal(children, targetNode);
+  }
   return ReactDOM.createPortal(children, document.body);
 };
 
