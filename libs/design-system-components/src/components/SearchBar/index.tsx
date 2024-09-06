@@ -31,7 +31,7 @@ const SearchBar: React.FC<SearchBarProps> = props => {
     inputValue,
     customStyle,
     onInputChange,
-    inputPlaceholderLabel,
+    inputPlaceholderLabel = 'Search',
     fullWidth,
     onSearch,
     onKeyUp,

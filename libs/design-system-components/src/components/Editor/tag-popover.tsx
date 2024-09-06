@@ -14,7 +14,7 @@ export interface ITagPopover {
 }
 
 export const TagPopover = React.forwardRef<HTMLDivElement, ITagPopover>((props, ref) => {
-  const { postsLabel, values, currentIndex, setIndex, handleSelect } = props;
+  const { postsLabel = 'posts', values, currentIndex, setIndex, handleSelect } = props;
 
   return (
     <Portal>
@@ -55,7 +55,3 @@ export const TagPopover = React.forwardRef<HTMLDivElement, ITagPopover>((props, 
 });
 
 TagPopover.displayName = 'TagPopover';
-
-TagPopover.defaultProps = {
-  postsLabel: 'posts',
-};

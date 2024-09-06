@@ -5,9 +5,9 @@ import {
   createRoute,
   createRouter,
   redirect,
+  CatchBoundary,
 } from '@tanstack/react-router';
 import { ICreateRouter, IRouterContext } from '@akashaorg/typings/lib/ui';
-import ErrorComponent from './error-component';
 import {
   ModeratorDetailPage,
   Moderators,
@@ -25,9 +25,11 @@ import routes, {
   baseModeratorsUrl,
   baseOverviewUrl,
 } from '../../routes';
+import { NotFoundComponent } from './not-found-component';
 
 const rootRoute = createRootRouteWithContext<IRouterContext>()({
   component: Outlet,
+  notFoundComponent: () => <NotFoundComponent />,
 });
 
 const defaultRoute = createRoute({
@@ -42,7 +44,11 @@ const overviewRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[HOME],
   component: () => {
-    return <Overview isModerator={false} />;
+    return (
+      <CatchBoundary getResetKey={() => 'overview_reset'} errorComponent={NotFoundComponent}>
+        <Overview isModerator={false} />
+      </CatchBoundary>
+    );
   },
 });
 
@@ -51,7 +57,14 @@ const moderationValueRoute = createRoute({
   path: `${baseOverviewUrl}/values/$value`,
   component: () => {
     const { value } = moderationValueRoute.useParams();
-    return <VibesValue value={value} />;
+    return (
+      <CatchBoundary
+        getResetKey={() => 'moderation_value_reset'}
+        errorComponent={NotFoundComponent}
+      >
+        <VibesValue value={value} />
+      </CatchBoundary>
+    );
   },
 });
 
@@ -63,7 +76,12 @@ const moderatorsRoute = createRoute({
     const allModerators = getModeratorsQuery.data;
 
     return (
-      <Moderators isFetchingModerators={getModeratorsQuery.isFetching} moderators={allModerators} />
+      <CatchBoundary getResetKey={() => 'moderators_reset'} errorComponent={NotFoundComponent}>
+        <Moderators
+          isFetchingModerators={getModeratorsQuery.isFetching}
+          moderators={allModerators}
+        />
+      </CatchBoundary>
     );
   },
 });
@@ -73,7 +91,11 @@ const viewModeratorRoute = createRoute({
   path: `${baseModeratorsUrl}/$moderatorId`,
   component: () => {
     const { moderatorId } = viewModeratorRoute.useParams();
-    return <ModeratorDetailPage moderatorId={moderatorId} />;
+    return (
+      <CatchBoundary getResetKey={() => 'moderator_reset'} errorComponent={NotFoundComponent}>
+        <ModeratorDetailPage moderatorId={moderatorId} />
+      </CatchBoundary>
+    );
   },
 });
 
@@ -81,7 +103,11 @@ const historyRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes[HISTORY],
   component: () => {
-    return <TransparencyLog />;
+    return (
+      <CatchBoundary getResetKey={() => 'history_reset'} errorComponent={NotFoundComponent}>
+        <TransparencyLog />
+      </CatchBoundary>
+    );
   },
 });
 
@@ -90,7 +116,11 @@ const historyItemRoute = createRoute({
   path: `${baseHistoryUrl}/$itemId`,
   component: () => {
     const { itemId } = historyItemRoute.useParams();
-    return <TransparencyLogItem itemId={itemId} />;
+    return (
+      <CatchBoundary getResetKey={() => 'history_item_reset'} errorComponent={NotFoundComponent}>
+        <TransparencyLogItem itemId={itemId} />
+      </CatchBoundary>
+    );
   },
 });
 
@@ -99,7 +129,11 @@ const reportItemRoute = createRoute({
   path: '/report/$itemType/$itemId',
   component: () => {
     const { itemType, itemId } = reportItemRoute.useParams();
-    return <ReportItemPage itemType={itemType} itemId={itemId} />;
+    return (
+      <CatchBoundary getResetKey={() => 'report_item_reset'} errorComponent={NotFoundComponent}>
+        <ReportItemPage itemType={itemType} itemId={itemId} />
+      </CatchBoundary>
+    );
   },
 });
 
@@ -118,7 +152,5 @@ export const router = ({ baseRouteName, apolloClient }: ICreateRouter) =>
     context: {
       apolloClient,
     },
-    defaultErrorComponent: ({ error }) => (
-      <ErrorComponent error={(error as unknown as Error).message} />
-    ),
+    defaultErrorComponent: ({ error }) => <NotFoundComponent error={error} />,
   });

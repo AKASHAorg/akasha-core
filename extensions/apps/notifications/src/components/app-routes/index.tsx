@@ -2,7 +2,6 @@ import React from 'react';
 import CustomiseNotificationPage from '../pages/customise-notification-page';
 import NotificationsPage from '../pages/notifications-page';
 import WelcomePage from '../pages/welcome-page';
-import ErrorComponent from './error-component';
 import routes, {
   CUSTOMISE_NOTIFICATION_WELCOME_PAGE,
   CUSTOMISE_NOTIFICATION_OPTIONS_PAGE,
@@ -18,9 +17,11 @@ import {
   redirect,
 } from '@tanstack/react-router';
 import { ICreateRouter, IRouterContext } from '@akashaorg/typings/lib/ui';
+import { NotFoundComponent } from './not-found-component';
 
 const rootRoute = createRootRouteWithContext<IRouterContext>()({
   component: Outlet,
+  notFoundComponent: () => <NotFoundComponent />,
 });
 
 const defaultRoute = createRoute({
@@ -83,7 +84,5 @@ export const router = ({ baseRouteName, apolloClient }: ICreateRouter) =>
     context: {
       apolloClient,
     },
-    defaultErrorComponent: ({ error }) => (
-      <ErrorComponent error={(error as unknown as Error).message} />
-    ),
+    defaultErrorComponent: ({ error }) => <NotFoundComponent error={error} />,
   });

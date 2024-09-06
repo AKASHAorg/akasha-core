@@ -183,6 +183,7 @@ export default class AppLoader {
           this.layoutConfig.extensionSlots.applicationSlotId,
           appName,
           `/${this.worldConfig.extensionsApp}${this.extensionConfigs.get(this.worldConfig.extensionsApp)?.routes.default || '/'}`,
+          this.worldConfig.title,
         );
         this.appNotFound = true;
       }
