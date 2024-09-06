@@ -5,6 +5,7 @@ import {
   createRoute,
   createRouter,
   redirect,
+  CatchBoundary,
 } from '@tanstack/react-router';
 import { ICreateRouter, IRouterContext } from '@akashaorg/typings/lib/ui';
 import {
@@ -36,12 +37,13 @@ import {
   ContactSupportPage,
   AppDescriptionPage,
 } from '../pages/info-page/sub-pages';
-import ErrorComponent from './error-component';
 
 import { DEV_MODE_KEY } from '../../constants';
+import { NotFoundComponent } from './not-found-component';
 
 const rootRoute = createRootRouteWithContext<IRouterContext>()({
   component: Outlet,
+  notFoundComponent: () => <NotFoundComponent />,
 });
 
 const defaultRoute = createRoute({
@@ -55,7 +57,11 @@ const defaultRoute = createRoute({
 const exploreRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/explore',
-  component: ExplorePage,
+  component: () => (
+    <CatchBoundary getResetKey={() => 'explore_reset'} errorComponent={NotFoundComponent}>
+      <ExplorePage />
+    </CatchBoundary>
+  ),
 });
 
 const extensionsHubRoute = createRoute({
@@ -67,7 +73,11 @@ const extensionsHubRoute = createRoute({
 const installedExtensionsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/installed-extensions',
-  component: InstalledExtensionsPage,
+  component: () => (
+    <CatchBoundary getResetKey={() => 'installed_reset'} errorComponent={NotFoundComponent}>
+      <InstalledExtensionsPage />
+    </CatchBoundary>
+  ),
 });
 
 const myExtensionsRoute = createRoute({
@@ -78,13 +88,21 @@ const myExtensionsRoute = createRoute({
       throw redirect({ to: '/explore', replace: true });
     }
   },
-  component: MyExtensionsPage,
+  component: () => (
+    <CatchBoundary getResetKey={() => 'my_extensions_reset'} errorComponent={NotFoundComponent}>
+      <MyExtensionsPage />
+    </CatchBoundary>
+  ),
 });
 
 const developerModeRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/developer-mode',
-  component: DeveloperModePage,
+  component: () => (
+    <CatchBoundary getResetKey={() => 'dev_mode_reset'} errorComponent={NotFoundComponent}>
+      <DeveloperModePage />
+    </CatchBoundary>
+  ),
 });
 
 const extensionInstallRoute = createRoute({
@@ -99,9 +117,14 @@ const extensionInstallRoute = createRoute({
 const infoRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/info/$appId',
+  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     const { appId } = infoRoute.useParams();
-    return <InfoPage appId={appId} />;
+    return (
+      <CatchBoundary getResetKey={() => 'app_info_root_reset'} errorComponent={NotFoundComponent}>
+        <InfoPage appId={appId} />
+      </CatchBoundary>
+    );
   },
 });
 
@@ -110,7 +133,11 @@ const devInfoRoute = createRoute({
   path: '/developer/$devDid',
   component: () => {
     const { devDid } = devInfoRoute.useParams();
-    return <DevInfoPage devDid={devDid} />;
+    return (
+      <CatchBoundary getResetKey={() => 'dev_info_root_reset'} errorComponent={NotFoundComponent}>
+        <DevInfoPage devDid={devDid} />
+      </CatchBoundary>
+    );
   },
 });
 
@@ -119,7 +146,11 @@ const collaboratorsInfoRoute = createRoute({
   path: '/collaborators',
   component: () => {
     const { appId } = infoRoute.useParams();
-    return <CollaboratorsPage appId={appId} />;
+    return (
+      <CatchBoundary getResetKey={() => 'collaborators_reset'} errorComponent={NotFoundComponent}>
+        <CollaboratorsPage appId={appId} />
+      </CatchBoundary>
+    );
   },
 });
 
@@ -128,7 +159,11 @@ const versionInfoRoute = createRoute({
   path: '/versions',
   component: () => {
     const { appId } = infoRoute.useParams();
-    return <VersionInfoPage appId={appId} />;
+    return (
+      <CatchBoundary getResetKey={() => 'app_info_root_reset'} errorComponent={NotFoundComponent}>
+        <VersionInfoPage appId={appId} />
+      </CatchBoundary>
+    );
   },
 });
 
@@ -137,7 +172,11 @@ const versionHistoryRoute = createRoute({
   path: '/version-history',
   component: () => {
     const { appId } = versionHistoryRoute.useParams();
-    return <VersionHistoryPage appId={appId} />;
+    return (
+      <CatchBoundary getResetKey={() => 'version_history_reset'} errorComponent={NotFoundComponent}>
+        <VersionHistoryPage appId={appId} />
+      </CatchBoundary>
+    );
   },
 });
 
@@ -146,7 +185,11 @@ const auditLogRoute = createRoute({
   path: '/audit-log',
   component: () => {
     const { appId } = auditLogRoute.useParams();
-    return <AuditLogPage appId={appId} />;
+    return (
+      <CatchBoundary getResetKey={() => 'audit_log_reset'} errorComponent={NotFoundComponent}>
+        <AuditLogPage appId={appId} />
+      </CatchBoundary>
+    );
   },
 });
 
@@ -155,7 +198,11 @@ const permissionInfoRoute = createRoute({
   path: '/permissions',
   component: () => {
     const { appId } = permissionInfoRoute.useParams();
-    return <PermissionsPage appId={appId} />;
+    return (
+      <CatchBoundary getResetKey={() => 'permissions_reset'} errorComponent={NotFoundComponent}>
+        <PermissionsPage appId={appId} />
+      </CatchBoundary>
+    );
   },
 });
 
@@ -164,7 +211,11 @@ const appLicenseInfoRoute = createRoute({
   path: '/license',
   component: () => {
     const { appId } = appLicenseInfoRoute.useParams();
-    return <LicensePage appId={appId} />;
+    return (
+      <CatchBoundary getResetKey={() => 'license_reset'} errorComponent={NotFoundComponent}>
+        <LicensePage appId={appId} />
+      </CatchBoundary>
+    );
   },
 });
 
@@ -173,7 +224,11 @@ const supportInfoRoute = createRoute({
   path: '/contact',
   component: () => {
     const { appId } = supportInfoRoute.useParams();
-    return <ContactSupportPage appId={appId} />;
+    return (
+      <CatchBoundary getResetKey={() => 'contact_reset'} errorComponent={NotFoundComponent}>
+        <ContactSupportPage appId={appId} />
+      </CatchBoundary>
+    );
   },
 });
 
@@ -182,7 +237,11 @@ const appDescriptionRoute = createRoute({
   path: '/description',
   component: () => {
     const { appId } = appDescriptionRoute.useParams();
-    return <AppDescriptionPage appId={appId} />;
+    return (
+      <CatchBoundary getResetKey={() => 'description_reset'} errorComponent={NotFoundComponent}>
+        <AppDescriptionPage appId={appId} />
+      </CatchBoundary>
+    );
   },
 });
 
@@ -206,9 +265,17 @@ const postExtensionCreateRoute = createRoute({
 const extensionEditMainRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `/edit-extension/$extensionId`,
+  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     const { extensionId } = extensionEditMainRoute.useParams();
-    return <ExtensionEditMainPage extensionId={extensionId} />;
+    return (
+      <CatchBoundary
+        getResetKey={() => 'edit_extension_main_reset'}
+        errorComponent={NotFoundComponent}
+      >
+        <ExtensionEditMainPage extensionId={extensionId} />
+      </CatchBoundary>
+    );
   },
 });
 
@@ -217,7 +284,14 @@ const extensionEditStep1Route = createRoute({
   path: '/step1',
   component: () => {
     const { extensionId } = extensionEditMainRoute.useParams();
-    return <ExtensionEditStep1Page extensionId={extensionId} />;
+    return (
+      <CatchBoundary
+        getResetKey={() => 'edit_extension_step1_reset'}
+        errorComponent={NotFoundComponent}
+      >
+        <ExtensionEditStep1Page extensionId={extensionId} />
+      </CatchBoundary>
+    );
   },
 });
 const extensionEditStep2Route = createRoute({
@@ -225,7 +299,14 @@ const extensionEditStep2Route = createRoute({
   path: '/step2',
   component: () => {
     const { extensionId } = extensionEditMainRoute.useParams();
-    return <ExtensionEditStep2Page extensionId={extensionId} />;
+    return (
+      <CatchBoundary
+        getResetKey={() => 'edit_extension_step2_reset'}
+        errorComponent={NotFoundComponent}
+      >
+        <ExtensionEditStep2Page extensionId={extensionId} />
+      </CatchBoundary>
+    );
   },
 });
 const extensionEditStep3Route = createRoute({
@@ -233,7 +314,14 @@ const extensionEditStep3Route = createRoute({
   path: '/step3',
   component: () => {
     const { extensionId } = extensionEditMainRoute.useParams();
-    return <ExtensionEditStep3Page extensionId={extensionId} />;
+    return (
+      <CatchBoundary
+        getResetKey={() => 'edit_extension_step3_reset'}
+        errorComponent={NotFoundComponent}
+      >
+        <ExtensionEditStep3Page extensionId={extensionId} />
+      </CatchBoundary>
+    );
   },
 });
 
@@ -272,7 +360,5 @@ export const router = ({ baseRouteName, apolloClient }: ICreateRouter) =>
     context: {
       apolloClient,
     },
-    defaultErrorComponent: ({ error }) => (
-      <ErrorComponent error={(error as unknown as Error).message} />
-    ),
+    defaultErrorComponent: ({ error }) => <NotFoundComponent error={error} />,
   });

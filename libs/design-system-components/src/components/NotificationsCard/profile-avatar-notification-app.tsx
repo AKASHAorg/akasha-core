@@ -27,7 +27,7 @@ const ProfileAvatarNotificationApp = React.forwardRef(
   (props: ProfileAvatarNotificationAppProps, ref: React.Ref<HTMLDivElement>) => {
     const {
       customStyle = '',
-      size,
+      size = 'md',
       avatar,
       label,
       info,
@@ -86,11 +86,5 @@ const ProfileAvatarNotificationApp = React.forwardRef(
     );
   },
 );
-
-const defaultProps = {
-  size: 'md' as AvatarSize,
-};
-
-ProfileAvatarNotificationApp.defaultProps = defaultProps;
 
 export default ProfileAvatarNotificationApp;

@@ -6,14 +6,15 @@ import TermsOfUse from '../pages/terms-of-use';
 import CodeOfConduct from '../pages/code-of-conduct';
 import PrivacyPolicy from '../pages/privacy-policy';
 import DeveloperGuidelines from '../pages/developer-guidelines';
-import ErrorComponent from './error-component';
 import routes, { HOME, TOS, TOU, PP, COC, DG } from '../../routes';
 import { createRootRoute, createRoute, createRouter, redirect } from '@tanstack/react-router';
 
 import { ICreateRouter } from '@akashaorg/typings/lib/ui';
+import { NotFoundComponent } from './not-found-component';
 
 const rootRoute = createRootRoute({
   component: Outlet,
+  notFoundComponent: () => <NotFoundComponent />,
 });
 
 const defaultRoute = createRoute({
@@ -85,7 +86,5 @@ export const router = ({ baseRouteName }: ICreateRouter) =>
     routeTree,
     basepath: baseRouteName,
 
-    defaultErrorComponent: ({ error }) => (
-      <ErrorComponent error={(error as unknown as Error).message} />
-    ),
+    defaultErrorComponent: ({ error }) => <NotFoundComponent error={error} />,
   });
