@@ -84,11 +84,12 @@ const CustomEditor = {
     Transforms.insertNodes(editor, textElem);
   },
 
-  insertMention(editor: Editor, mentionData: Profile) {
+  insertMention(editor: Editor, profileData: Profile) {
     const baseMention: { type: 'mention'; children: [{ text: '' }] } = {
       type: 'mention',
       children: [{ text: '' }],
     };
+    const mentionData = { name: profileData.name, did: profileData.did.id };
     const mention: MentionElement = Object.assign(baseMention, mentionData);
     Transforms.insertNodes(editor, mention);
     ReactEditor.focus(editor);
