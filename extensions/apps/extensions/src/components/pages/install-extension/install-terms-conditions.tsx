@@ -193,7 +193,7 @@ export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
       </Text>
       <Stack direction="column" spacing="gap-y-4" customStyle="mx-4 mb-4">
         {Object.keys(acceptedTerms).map(stateKey => (
-          <Stack direction="row" spacing="gap-x-3" key={stateKey}>
+          <Stack direction="row" spacing="gap-x-2" key={stateKey} align={'center'}>
             <Checkbox
               key={stateKey}
               id={stateKey}
@@ -202,8 +202,14 @@ export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
               label={fieldLabels[stateKey]}
               handleChange={handleCheckboxChange}
               value={'unknown'}
+              customStyle={'gap-x-3'}
             />
-            <a href={TermsLinks[stateKey]} target="_blank" rel="noopener noreferrer">
+            <a
+              href={TermsLinks[stateKey]}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-1.5"
+            >
               <Icon
                 color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
                 icon={<ArrowTopRightOnSquareIcon />}
@@ -240,10 +246,11 @@ const TermsHeader = ({
   appPublisher: string;
   appLogo?: AppImageSource;
 }) => {
+  const { t } = useTranslation();
   return (
     <Stack padding="p-4">
-      <Text variant="h5">User agreement</Text>
-      <Stack direction="row" spacing="gap-x-2">
+      <Text variant="h5">{t('User Agreement')}</Text>
+      <Stack direction="row" spacing="gap-x-2" customStyle="mt-3">
         <AppAvatar
           customStyle="w-10 h-10"
           appType={AkashaAppApplicationType.App}
@@ -251,7 +258,9 @@ const TermsHeader = ({
         />
         <Stack direction="column" justify="between">
           <Text variant="button-md">{appDisplayName}</Text>
-          <Text variant="footnotes2">{appPublisher}</Text>
+          <Text variant="footnotes2" customStyle="max-w-[35ch] sm:max-w-full truncate">
+            {appPublisher}
+          </Text>
         </Stack>
       </Stack>
     </Stack>

@@ -164,13 +164,11 @@ const Checkbox: React.FC<CheckboxProps> = ({
   const labelUi = (
     <>
       {label && (
-        <Text
-          variant="body2"
-          as="label"
-          customStyle={indeterminate ? textColorIndeterminate : textColor}
-        >
-          {label}
-        </Text>
+        <label htmlFor={id} className={'select-none'}>
+          <Text variant="body2" customStyle={indeterminate ? textColorIndeterminate : textColor}>
+            {label}
+          </Text>
+        </label>
       )}
     </>
   );

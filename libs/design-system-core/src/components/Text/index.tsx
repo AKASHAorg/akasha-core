@@ -1,4 +1,9 @@
-import React, { AriaAttributes, PropsWithChildren } from 'react';
+import React, {
+  AriaAttributes,
+  HTMLInputTypeAttribute,
+  LabelHTMLAttributes,
+  PropsWithChildren,
+} from 'react';
 import { apply, tw } from '@twind/core';
 
 import { getTag } from './getTag';
