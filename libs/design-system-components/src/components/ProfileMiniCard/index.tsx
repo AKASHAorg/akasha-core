@@ -52,7 +52,7 @@ const ProfileMiniCard: React.FC<ProfileMiniCardProps> = props => {
           <Avatar
             size="xl"
             border="sm"
-            borderColor="darkerBlue"
+            borderColor="white"
             avatar={transformSource(profileData?.avatar?.default)}
             alternativeAvatars={profileData?.avatar?.alternatives?.map(alternative =>
               transformSource(alternative),
@@ -63,7 +63,7 @@ const ProfileMiniCard: React.FC<ProfileMiniCardProps> = props => {
           />
         </Stack>
       </Stack>
-      <Stack spacing="gap-y-4" align="center" padding="p-4" customStyle="pt-6">
+      <Stack spacing="gap-y-2" align="center" padding="p-4" customStyle="pt-6">
         <Stack spacing="gap-y-1" padding="pt-3" align="center">
           {profileData?.name && (
             <Text variant="h6" breakWord={true}>
@@ -74,41 +74,27 @@ const ProfileMiniCard: React.FC<ProfileMiniCardProps> = props => {
             <DidField did={profileData.did.id} isValid={true} copiable={false} />
           )}
         </Stack>
-        <Stack direction="row" spacing="gap-x-2" align="center" justify="center">
+        <Stack direction="row" spacing="gap-x-1" align="center" justify="center">
           {statsLoading ? (
             <>
               <TextLine width="w-14" height="h-5" animated />
-              <Text variant="subtitle2" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
-                •
-              </Text>
+              <RenderText label="|" />
               <TextLine width="w-14" height="h-5" animated />
-              <Text variant="subtitle2" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
-                •
-              </Text>
+              <RenderText label="|" />
               <TextLine width="w-14" height="h-5" animated />
             </>
           ) : (
             <>
-              <Text variant="subtitle2">
-                {beams} {beamsLabel}
-              </Text>
-              <Text variant="subtitle2" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
-                •
-              </Text>
-              <Text variant="subtitle2">
-                {followers} {followersLabel}
-              </Text>
-              <Text variant="subtitle2" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
-                •
-              </Text>
-              <Text variant="subtitle2">
-                {following} {followingLabel}
-              </Text>
+              <RenderText label={`${beams} ${beamsLabel}`} />
+              <RenderText label="|" />
+              <RenderText label={`${followers} ${followersLabel}`} />
+              <RenderText label="|" />
+              <RenderText label={`${following} ${followingLabel}`} />
             </>
           )}
         </Stack>
         {profileData?.description && (
-          <Text breakWord={true} align="center" lineClamp={3}>
+          <Text variant="footnotes2" breakWord={true} align="center" lineClamp={3}>
             {profileData.description}
           </Text>
         )}
@@ -117,5 +103,11 @@ const ProfileMiniCard: React.FC<ProfileMiniCardProps> = props => {
     </Card>
   );
 };
+
+const RenderText = ({ label }: { label: string }) => (
+  <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey7' }}>
+    {label}
+  </Text>
+);
 
 export default ProfileMiniCard;
