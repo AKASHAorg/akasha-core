@@ -28,4 +28,3 @@ The core pages include:
 ### Installed Extensions
 > Find all your installed and default extensions in a given world.
 
-test
