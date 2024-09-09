@@ -1,19 +1,17 @@
 import React from 'react';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
-import { IModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import { useTranslation } from 'react-i18next';
 import { useGetFollowDocumentsByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { hasOwn, useAkashaStore } from '@akashaorg/ui-awf-hooks';
-import { FollowButton } from './follow-button';
+import { FollowButton, FollowButtonProps } from './follow-button';
 
-export type FollowProfileButtonProps = {
-  profileID?: string;
-  iconOnly?: boolean;
-  showLoginModal: (redirectTo?: { modal: IModalNavigationOptions }) => void;
-};
+export type FollowProfileButtonProps = Omit<
+  FollowButtonProps,
+  'followDocumentId' | 'isFollowing' | 'isLoggedIn'
+>;
 
 const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
-  const { profileID, iconOnly, showLoginModal } = props;
+  const { profileID, iconOnly, customizeButton, showLoginModal } = props;
   const { t } = useTranslation('app-profile');
   const {
     data: { authenticatedDID },
@@ -51,6 +49,7 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
         iconOnly={iconOnly}
         isFollowing={isFollowing}
         isLoggedIn={isLoggedIn}
+        customizeButton={customizeButton}
         showLoginModal={showLoginModal}
       />
     </Tooltip>
@@ -61,6 +60,7 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
       iconOnly={iconOnly}
       isFollowing={isFollowing}
       isLoggedIn={isLoggedIn}
+      customizeButton={customizeButton}
       showLoginModal={showLoginModal}
     />
   );
