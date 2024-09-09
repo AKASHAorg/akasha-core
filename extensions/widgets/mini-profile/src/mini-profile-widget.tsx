@@ -3,7 +3,7 @@ import ReactDOMClient from 'react-dom/client';
 import singleSpaReact from 'single-spa-react';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
-import ProfileMiniCard from '@akashaorg/design-system-components/lib/components/ProfileMiniCard';
+import MiniProfileCard from '@akashaorg/design-system-components/lib/components/MiniProfileCard';
 import MiniProfileWidgetLoader from '@akashaorg/design-system-components/lib/components/Loaders/mini-profile-widget-loader';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { IRootComponentProps } from '@akashaorg/typings/lib/ui';
@@ -89,7 +89,7 @@ const ProfileCardWidget: React.FC<ProfileCardWidgetProps> = props => {
           <>
             {(authorProfileLoading || dataLoading) && <MiniProfileWidgetLoader />}
             {authorProfileData && (
-              <ProfileMiniCard
+              <MiniProfileCard
                 profileData={authorProfileData}
                 authenticatedDID={authenticatedDID}
                 beamsLabel={beams === 1 ? t('Beam') : t('Beams')}

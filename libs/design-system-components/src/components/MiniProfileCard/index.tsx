@@ -8,7 +8,7 @@ import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 import { getImageFromSeed } from '@akashaorg/design-system-core/lib/utils';
 
-export type ProfileMiniCardProps = {
+export type MiniProfileCardProps = {
   publicImagePath?: string;
   profileData: Profile | null;
   authenticatedDID: string;
@@ -22,7 +22,7 @@ export type ProfileMiniCardProps = {
   footerExt?: React.ReactNode;
 };
 
-const ProfileMiniCard: React.FC<ProfileMiniCardProps> = props => {
+const MiniProfileCard: React.FC<MiniProfileCardProps> = props => {
   const {
     publicImagePath = '/images',
     profileData,
@@ -110,4 +110,4 @@ const RenderText = ({ label }: { label: string }) => (
   </Text>
 );
 
-export default ProfileMiniCard;
+export default MiniProfileCard;
