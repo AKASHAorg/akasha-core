@@ -13,9 +13,9 @@ import {
   Widget,
 } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import {
-  ArrowUpOnSquareIcon,
   ClockIcon,
   EyeIcon,
+  PaperAirplaneIcon,
   PencilIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
@@ -122,6 +122,13 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
     });
   };
 
+  const handleExtensionSubmit = () => {
+    navigate({
+      to: `/submit-extension/$extensionId/step1`,
+      params: { extensionId: extensionData.id },
+    });
+  };
+
   const menuItems = (extensionStatus: string): MenuProps['items'] | [] => {
     switch (extensionStatus) {
       case ExtensionStatus.Pending:
@@ -154,9 +161,9 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
       case ExtensionStatus.Draft:
         return [
           {
-            label: t('Publish'),
-            icon: <ArrowUpOnSquareIcon />,
-            onClick: () => {},
+            label: t('Submit'),
+            icon: <PaperAirplaneIcon />,
+            onClick: handleExtensionSubmit,
           },
           {
             label: t('Edit'),
