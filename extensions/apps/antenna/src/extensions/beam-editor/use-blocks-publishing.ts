@@ -262,10 +262,10 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
     }
   };
 
-  const updateBlockDisablePublishState = (value: boolean, index: number) => {
+  const updateBlockDisablePublishState = (value: boolean, key: number) => {
     setBlocksInUse(prev => {
       const next = prev.map(elem => {
-        if (elem.order === index) {
+        if (elem.key === key) {
           return { ...elem, disablePublish: value };
         } else {
           return elem;
