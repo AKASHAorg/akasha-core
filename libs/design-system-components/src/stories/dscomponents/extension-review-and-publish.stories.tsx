@@ -1,10 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import ReviewAndPublish, { ReviewAndPublishProps } from '../../components/ReviewAndPublish';
+import ExtensionReviewAndPublish, {
+  ReviewAndPublishProps,
+} from '../../components/ExtensionReviewAndPublish';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 const meta: Meta<ReviewAndPublishProps> = {
-  title: 'DSComponents/Extensions/ReviewAndPublish',
-  component: ReviewAndPublish,
+  title: 'DSComponents/Extensions/ExtensionReviewAndPublish',
+  component: ExtensionReviewAndPublish,
 };
 
 type Story = StoryObj<ReviewAndPublishProps>;

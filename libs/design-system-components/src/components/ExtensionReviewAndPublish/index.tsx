@@ -112,7 +112,7 @@ const ReviewAndPublish: React.FC<ReviewAndPublishProps> = props => {
   const asteriskStyle = tw(`-top-0.5 left-1 text-base text(errorLight dark:errorDark)`);
 
   return (
-    <Card padding={0}>
+    <>
       <Stack padding="p-4 pb-6" spacing="gap-y-4">
         <Stack spacing="gap-y-4" align="center">
           <Stepper length={2} currentStep={1} />
@@ -306,7 +306,7 @@ const ReviewAndPublish: React.FC<ReviewAndPublishProps> = props => {
           customStyle="w-36"
         />
       </Stack>
-    </Card>
+    </>
   );
 };
 

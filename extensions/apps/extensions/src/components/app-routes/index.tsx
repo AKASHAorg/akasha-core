@@ -27,6 +27,11 @@ import {
   ExtensionEditStep3Page,
 } from '../pages/extension-edit-page';
 import {
+  ExtensionSubmitMainPage,
+  ExtensionSubmitStep1Page,
+  ExtensionSubmitStep2Page,
+} from '../pages/extension-submit-page';
+import {
   DevInfoPage,
   CollaboratorsPage,
   VersionInfoPage,
@@ -320,6 +325,54 @@ const extensionEditStep3Route = createRoute({
         errorComponent={NotFoundComponent}
       >
         <ExtensionEditStep3Page extensionId={extensionId} />
+      </CatchBoundary>
+    );
+  },
+});
+
+const extensionSubmitMainRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: `/submit-extension/$extensionId`,
+  notFoundComponent: () => <NotFoundComponent />,
+  component: () => {
+    const { extensionId } = extensionSubmitMainRoute.useParams();
+    return (
+      <CatchBoundary
+        getResetKey={() => 'submit_extension_main_reset'}
+        errorComponent={NotFoundComponent}
+      >
+        <ExtensionSubmitMainPage extensionId={extensionId} />
+      </CatchBoundary>
+    );
+  },
+});
+
+const extensionSubmitStep1Route = createRoute({
+  getParentRoute: () => extensionSubmitMainRoute,
+  path: '/step1',
+  component: () => {
+    const { extensionId } = extensionSubmitMainRoute.useParams();
+    return (
+      <CatchBoundary
+        getResetKey={() => 'submit_extension_step1_reset'}
+        errorComponent={NotFoundComponent}
+      >
+        <ExtensionSubmitStep1Page extensionId={extensionId} />
+      </CatchBoundary>
+    );
+  },
+});
+const extensionSubmitStep2Route = createRoute({
+  getParentRoute: () => extensionSubmitMainRoute,
+  path: '/step2',
+  component: () => {
+    const { extensionId } = extensionSubmitMainRoute.useParams();
+    return (
+      <CatchBoundary
+        getResetKey={() => 'submit_extension_step2_reset'}
+        errorComponent={NotFoundComponent}
+      >
+        <ExtensionSubmitStep2Page extensionId={extensionId} />
       </CatchBoundary>
     );
   },
