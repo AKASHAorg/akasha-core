@@ -110,6 +110,11 @@ const extensionInstallRootRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/install/$appId',
   notFoundComponent: () => <NotFoundComponent />,
+});
+
+const extensionInstallIndexRoute = createRoute({
+  getParentRoute: () => extensionInstallRootRoute,
+  path: '/',
   beforeLoad: ({ navigate }) => {
     navigate({ to: extensionInstallTermsRoute.path, replace: true }).catch(e =>
       console.error('failed to navigate', e),
@@ -364,7 +369,11 @@ const routeTree = rootRoute.addChildren([
     supportInfoRoute,
     appDescriptionRoute,
   ]),
-  extensionInstallRootRoute.addChildren([extensionInstallTermsRoute, extensionInstallRoute]),
+  extensionInstallRootRoute.addChildren([
+    extensionInstallIndexRoute,
+    extensionInstallTermsRoute,
+    extensionInstallRoute,
+  ]),
   extensionCreateRoute,
   postExtensionCreateRoute,
   extensionEditMainRoute.addChildren([

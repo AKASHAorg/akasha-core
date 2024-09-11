@@ -4,14 +4,16 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
 import { useTranslation } from 'react-i18next';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import { ArrowTopRightOnSquareIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import {
+  ArrowPathIcon,
+  ArrowTopRightOnSquareIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { useNavigate } from '@tanstack/react-router';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
 import {
   AkashaAppApplicationType,
-  AkashaAppEdge,
   AppImageSource,
   SortOrder,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
@@ -20,7 +22,14 @@ import { useGetAppsByPublisherDidQuery } from '@akashaorg/ui-awf-hooks/lib/gener
 import getSDK from '@akashaorg/core-sdk';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import { GetAppsByPublisherDidQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
+import {
+  selectAkashaApp,
+  selectAppDisplayName,
+  selectAppLogoImage,
+  selectAppType,
+  selectAppVersion,
+  selectPublisherName,
+} from './utils';
 
 enum TermsFields {
   PRIVACY_POLICY = 'privacyPolicy',
@@ -43,58 +52,20 @@ type AcceptedTerms = {
   [TermsFields.DISCLAIMERS]: boolean;
 };
 
-const isEdgeList = (
-  resp: GetAppsByPublisherDidQuery,
-): resp is { node: { akashaAppList: { edges: AkashaAppEdge[] } } } => {
-  return (
-    resp?.node !== undefined &&
-    'akashaAppList' in resp.node &&
-    resp?.node.akashaAppList.edges !== undefined &&
-    Array.isArray(resp?.node.akashaAppList.edges)
-  );
-};
-
-const selectAppDisplayName = (respData: GetAppsByPublisherDidQuery) => {
-  if (isEdgeList(respData)) {
-    return respData?.node?.akashaAppList.edges[0]?.node.displayName;
-  }
-};
-
-const selectAppPublisher = (respData: GetAppsByPublisherDidQuery) => {
-  if (isEdgeList(respData)) {
-    return respData?.node?.akashaAppList.edges[0]?.node.author;
-  }
-};
-
-const selectPublisherName = (data: GetAppsByPublisherDidQuery) => {
-  const author = selectAppPublisher(data);
-  if (!author) {
-    return 'Unknown';
-  }
-  if (author.akashaProfile) {
-    return author.akashaProfile.name;
-  }
-  return author.id;
-};
-
-const selectAppLogoImage = (data: GetAppsByPublisherDidQuery) => {
-  if (isEdgeList(data)) {
-    const firstEdge = data.node.akashaAppList.edges[0];
-    if (firstEdge?.node.logoImage) {
-      return firstEdge.node.logoImage;
-    }
-    return null;
-  }
-  return null;
-};
-
 export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
   const { decodeAppName, getCorePlugins } = useRootComponentProps();
   const decodeName = useRef(decodeAppName);
 
+  const installerPlugin = getCorePlugins().extensionInstaller;
+
   const idxDid = getSDK().services.gql.indexingDID;
 
-  const { data, loading, called, error } = useGetAppsByPublisherDidQuery({
+  const {
+    data: appInfo,
+    loading: loadingAppInfo,
+    called: appInfoQueryCalled,
+    error: appInfoQueryError,
+  } = useGetAppsByPublisherDidQuery({
     variables: {
       id: idxDid,
       first: 1,
@@ -138,13 +109,25 @@ export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
     });
   }, [getCorePlugins]);
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     if (!allTermsAccepted) return;
-    navigate({
+    // const sdk = getSDK();
+
+    await installerPlugin.acceptUserAgreement(selectAkashaApp(appInfo));
+    // await sdk.services.db.getCollections().installedExtensions.add({
+    //   appName: decodeAppName(appId),
+    //   version: selectAppVersion(appInfo),
+    //   releaseId: '',
+    //   source: '',
+    //   applicationType: selectAppType(appInfo) ?? AkashaAppApplicationType.App,
+    //   termsAccepted: true,
+    // });
+
+    await navigate({
       to: '/install/$appId/progress',
       params: { appId },
       replace: true,
-    }).catch(err => console.error('Failed to navigate!', err));
+    });
   };
 
   const handleCancel = () => {
@@ -164,13 +147,19 @@ export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
     [TermsFields.DISCLAIMERS]: t('Disclaimers'),
   };
 
-  if (!authenticatedDID && !isAuthenticating && called && !loading) {
+  const isAppInfoLoading = loadingAppInfo && appInfoQueryCalled;
+  if (isAuthenticating) {
+    return null;
+  }
+
+  if (!authenticatedDID && !isAuthenticating) {
+    const appDisplayName = isAppInfoLoading ? t('this app') : selectAppDisplayName(appInfo);
     return (
       <ErrorLoader
         type="not-authenticated"
         title={t('Login Required')}
         details={t('You must be logged in to install {{appDisplayName}}', {
-          appDisplayName: selectAppDisplayName(data),
+          appDisplayName,
         })}
       >
         <Button label={t('Login')} onClick={handleLoginClick} />
@@ -178,12 +167,23 @@ export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
     );
   }
 
+  if (appInfoQueryError) {
+    return (
+      <ErrorLoader
+        type={'no-apps'}
+        title={t('Oops, failed to get extension info')}
+        details={t('This error means we cannot get extension information at this moment.')}
+      />
+    );
+  }
+
   return (
     <Card padding="p-0">
       <TermsHeader
-        appDisplayName={selectAppDisplayName(data)}
-        appPublisher={selectPublisherName(data)}
-        appLogo={selectAppLogoImage(data)}
+        isLoading={isAppInfoLoading}
+        appDisplayName={selectAppDisplayName(appInfo)}
+        appPublisher={selectPublisherName(appInfo)}
+        appLogo={selectAppLogoImage(appInfo)}
       />
       <Divider />
       <Text variant="subtitle2" selectable={false} customStyle="m-4">
@@ -199,7 +199,7 @@ export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
               name={stateKey}
               label={fieldLabels[stateKey]}
               handleChange={handleCheckboxChange}
-              value={'unknown'}
+              value={'value'}
               customStyle={'gap-x-3'}
             />
             <a
@@ -239,26 +239,47 @@ const TermsHeader = ({
   appDisplayName,
   appPublisher,
   appLogo,
+  isLoading,
 }: {
   appDisplayName: string;
   appPublisher: string;
   appLogo?: AppImageSource;
+  isLoading: boolean;
 }) => {
   const { t } = useTranslation();
   return (
-    <Stack padding="p-4">
+    <Stack padding="p-3">
       <Text variant="h5">{t('User Agreement')}</Text>
-      <Stack direction="row" spacing="gap-x-2" customStyle="mt-3">
-        <AppAvatar
-          customStyle="w-10 h-10"
-          appType={AkashaAppApplicationType.App}
-          avatar={appLogo}
-        />
+      <Stack direction="row" spacing="gap-x-2" customStyle="mt-3" align="center">
+        {isLoading && <Icon icon={<ArrowPathIcon />} />}
+        {!isLoading && (
+          <AppAvatar
+            customStyle="w-10 h-10 cursor-default"
+            appType={AkashaAppApplicationType.App}
+            avatar={appLogo}
+          />
+        )}
         <Stack direction="column" justify="between">
-          <Text variant="button-md">{appDisplayName}</Text>
-          <Text variant="footnotes2" customStyle="max-w-[35ch] sm:max-w-full truncate">
-            {appPublisher}
-          </Text>
+          {isLoading && (
+            <Text variant="button-sm" selectable={false}>
+              {t('Loading extension info...')}
+            </Text>
+          )}
+          {!isLoading && (
+            <>
+              <Text variant="button-md" selectable={false}>
+                {appDisplayName}
+              </Text>
+              <Text
+                variant="footnotes2"
+                color={{ light: 'grey7', dark: 'grey4' }}
+                customStyle="max-w-[35ch] sm:max-w-full truncate"
+                selectable={false}
+              >
+                {appPublisher}
+              </Text>
+            </>
+          )}
         </Stack>
       </Stack>
     </Stack>

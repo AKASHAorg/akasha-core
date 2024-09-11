@@ -8,7 +8,7 @@ export default class DbWrapper extends Dexie {
 
   constructor(dbName: string) {
     super(dbName);
-    this.version(1).stores({
+    this.version(2).stores({
       installedExtensions: '++, &releaseId, version, [releaseId+version], appName',
       settings: '++id, &serviceName, *options',
     });
