@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Button from '../Button';
 import Card from '../Card';
 import Stack from '../Stack';
@@ -19,6 +19,7 @@ export type MenuProps = {
  * A Menu component takes all the props of a List component, plus more:
  * @param anchor - the anchored menu icon to be displayed
  * @param disabled - boolean (optional) whether to disable the menu completely
+ * @param onMenuClick - click handler
  * @example
  * ```tsx
  *   <Menu
@@ -35,13 +36,46 @@ export type MenuProps = {
  **/
 const Menu: React.FC<MenuProps> = ({ anchor, disabled, onMenuClick, ...rest }) => {
   const [showList, setShowList] = useState(false);
-  const anchorRef = useCloseActions(() => {
-    setShowList(false);
-  });
+  const menuButtonRef = useRef(null);
+  const anchorRef = useCloseActions(
+    () => {
+      setShowList(false);
+    },
+    null,
+    false,
+  );
 
   const handleCloseList = () => {
     setShowList(false);
   };
+
+  const handleDocumentClick = useCallback(
+    ev => {
+      if (anchorRef.current?.contains(ev.target) || ev.target === menuButtonRef.current) {
+        return;
+      }
+      ev.preventDefault();
+      ev.stopPropagation();
+      setShowList(false);
+    },
+    [anchorRef],
+  );
+
+  useEffect(() => {
+    // if the popover is open, add an event handler to prevent nav when clicking outside the menu
+    if (showList) {
+      document.addEventListener('click', handleDocumentClick, true);
+    } else {
+      // this ensures that the previous handler is executed before removing it
+      document.removeEventListener('click', handleDocumentClick, true);
+    }
+  }, [anchorRef, handleDocumentClick, showList]);
+
+  useEffect(() => {
+    return () => {
+      document.removeEventListener('click', handleDocumentClick, true);
+    };
+  }, [handleDocumentClick]);
 
   return (
     rest.items?.length > 0 && (
@@ -49,6 +83,7 @@ const Menu: React.FC<MenuProps> = ({ anchor, disabled, onMenuClick, ...rest }) =
         <Stack ref={anchorRef} direction="column" spacing="gap-y-1">
           <Button
             {...anchor}
+            ref={menuButtonRef}
             disabled={disabled}
             onClick={(event: React.SyntheticEvent) => {
               setShowList(!showList);
