@@ -44,7 +44,7 @@ const createImage = (imageObjectUrl: string): Promise<HTMLImageElement> =>
  * @param rotation - number
  * @param ImageSrcType - string
  * @param flip - object
- * @returns an object containing data(an array of image blob and it's object url) and error fields.
+ * @returns an object containing data(an array of image blob and it's associated url) and error fields.
  */
 export async function getCroppedImage(
   imageSrc: string,
@@ -110,7 +110,6 @@ export async function getCroppedImage(
     // paste generated rotate image at the top left corner
     ctx.putImageData(data, 0, 0);
 
-    // return Blob and its associated url
     return {
       data: new Promise(resolve => {
         canvas.toBlob(
