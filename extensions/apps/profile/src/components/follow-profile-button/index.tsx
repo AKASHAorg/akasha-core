@@ -34,6 +34,15 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
   const isFollowing = !!followDocument?.node?.isFollowing;
   const disableActions = !profileID;
 
+  // if already following and variant is specified as primary, convert to secondary
+  const _customizeButton = {
+    ...customizeButton,
+    variant:
+      isFollowing && customizeButton?.variant === 'primary'
+        ? 'secondary'
+        : customizeButton?.variant,
+  };
+
   if (error) return null;
 
   return disableActions ? (
@@ -49,7 +58,7 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
         iconOnly={iconOnly}
         isFollowing={isFollowing}
         isLoggedIn={isLoggedIn}
-        customizeButton={customizeButton}
+        customizeButton={_customizeButton}
         showLoginModal={showLoginModal}
       />
     </Tooltip>
@@ -60,7 +69,7 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
       iconOnly={iconOnly}
       isFollowing={isFollowing}
       isLoggedIn={isLoggedIn}
-      customizeButton={customizeButton}
+      customizeButton={_customizeButton}
       showLoginModal={showLoginModal}
     />
   );
