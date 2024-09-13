@@ -307,7 +307,7 @@ export const BeamEditor: React.FC = () => {
                 <EditorBlockExtension
                   appName={block.appName}
                   propertyType={block.propertyType}
-                  externalHandler={value => updateBlockDisablePublishState(value, block.order)}
+                  externalHandler={value => updateBlockDisablePublishState(value, block.key)}
                   blockRef={block.blockRef}
                 />
               </Stack>

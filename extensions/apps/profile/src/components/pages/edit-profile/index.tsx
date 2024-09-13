@@ -153,11 +153,12 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
   };
 
   const onProfileSave = async (publishProfileData: PublishProfileData) => {
+    const isNewProfile = !profileData?.id;
     const profileImages = {
-      ...getAvatarImage(newAvatarImage, !publishProfileData.avatar),
-      ...getCoverImage(newCoverImage, !publishProfileData.coverImage),
+      ...getAvatarImage(newAvatarImage, isNewProfile ? false : !publishProfileData.avatar),
+      ...getCoverImage(newCoverImage, isNewProfile ? false : !publishProfileData.coverImage),
     };
-    if (!profileData?.id) {
+    if (isNewProfile) {
       await createProfile(publishProfileData, profileImages);
       return;
     }
