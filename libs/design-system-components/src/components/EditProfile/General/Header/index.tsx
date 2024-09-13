@@ -207,7 +207,7 @@ export const Header: React.FC<HeaderProps> = ({
             <Button
               icon={<PencilSquareIcon />}
               aria-label="cover-image"
-              size="xs"
+              size="sm"
               variant="primary"
               onClick={() => {
                 setShowCoverDropdown(!showCoverActions);
@@ -250,7 +250,7 @@ export const Header: React.FC<HeaderProps> = ({
             <Button
               icon={<PencilSquareIcon />}
               aria-label="avatar"
-              size="xs"
+              size="sm"
               variant="primary"
               onClick={() => {
                 setShowAvatarActions(!showAvatarActions);
