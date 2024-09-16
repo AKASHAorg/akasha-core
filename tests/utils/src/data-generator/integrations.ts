@@ -37,6 +37,7 @@ const corePluginsMock = {
     getMatchingWidgets: () => [],
   },
   extensionInstaller: {
+    acceptUserAgreement: () => Promise.resolve(),
     installExtension: () => Promise.resolve(),
     postInstallExtension: () => Promise.resolve(),
     cancelInstallation: () => Promise.resolve(),
