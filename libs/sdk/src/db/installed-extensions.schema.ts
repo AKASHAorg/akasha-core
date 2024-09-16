@@ -6,6 +6,7 @@ export type InstalledExtensionSchema = {
   appName: string;
   source: string;
   applicationType: AkashaAppApplicationType;
+  termsAccepted: boolean;
 };
 
 export default {
