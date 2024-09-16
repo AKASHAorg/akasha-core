@@ -65,7 +65,7 @@ const config = [
       filename: 'akasha.sdk.js',
       //library: 'awfSDK',
       libraryTarget: 'system',
-      publicPath: 'auto',
+      publicPath: '/libs/sdk/',
       crossOriginLoading: 'anonymous',
       clean: true,
     },
