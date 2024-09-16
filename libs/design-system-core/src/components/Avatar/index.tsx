@@ -1,14 +1,17 @@
 import React from 'react';
+import { type Image } from '@akashaorg/typings/lib/ui';
+import Card from '../Card';
+import { EyeSlashIcon } from '../Icon/hero-icons-outline';
+import Icon from '../Icon';
 import Link from '../Link';
 import Stack from '../Stack';
 import AvatarImage from './avatar-image';
+import { Color } from '../types/common.types';
 import {
   generateActiveOverlayClass,
   generateAvatarContainerStyle,
   getImageFromSeed,
 } from '../../utils';
-import { type Image } from '@akashaorg/typings/lib/ui';
-import Card from '../Card';
 
 export type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 
@@ -25,9 +28,10 @@ type AvatarContentProps = {
   border?: AvatarBorderSize;
   size?: AvatarSize;
   borderColor?: AvatarBorderColor;
-  backgroundColor?: string;
+  backgroundColor?: { light: Color; dark: Color };
   faded?: boolean;
   isClickable?: boolean;
+  isNSFW?: boolean;
   profileId?: string | null;
   publicImgPath?: string;
   customStyle?: string;
@@ -49,6 +53,7 @@ const AvatarContent: React.FC<AvatarContentProps> = props => {
     backgroundColor,
     faded,
     isClickable = false,
+    isNSFW = false,
     profileId = '0x0000000000000000000000000000000',
     publicImgPath = '/images',
     customStyle = '',
@@ -65,20 +70,32 @@ const AvatarContent: React.FC<AvatarContentProps> = props => {
     borderColor,
     customStyle,
     isClickable,
-    backgroundColor,
+    backgroundColor: isNSFW ? { light: 'grey9', dark: 'grey5' } : backgroundColor,
   });
 
   const activeOverlayClass = generateActiveOverlayClass();
 
   return (
     <Card dataTestId={dataTestId} type="plain" onClick={onClick}>
-      <Stack customStyle={containerStyle}>
-        {(avatar || avatarFallback) && (
-          <React.Suspense fallback={<></>}>
-            <AvatarImage url={avatar?.src} alt={alt} fallbackUrl={avatarFallback} faded={faded} />
-          </React.Suspense>
+      <Stack direction="row" align="center" justify="center" customStyle={containerStyle}>
+        {isNSFW && (
+          <Icon icon={<EyeSlashIcon />} color={{ light: 'errorLight', dark: 'errorDark' }} />
         )}
-        {active && <Stack customStyle={activeOverlayClass} />}
+        {!isNSFW && (
+          <>
+            {(avatar || avatarFallback) && (
+              <React.Suspense fallback={<></>}>
+                <AvatarImage
+                  url={avatar?.src}
+                  alt={alt}
+                  fallbackUrl={avatarFallback}
+                  faded={faded}
+                />
+              </React.Suspense>
+            )}
+            {active && <Stack customStyle={activeOverlayClass} />}
+          </>
+        )}
       </Stack>
     </Card>
   );

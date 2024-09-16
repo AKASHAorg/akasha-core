@@ -64,6 +64,7 @@ const Following: React.FC<FollowingProps> = ({
             }}
             avatar={engagement?.profile?.avatar}
             name={engagement?.profile?.name}
+            isNSFW={engagement?.profile?.nsfw}
             transformSource={transformSource}
             renderFollowElement={
               authenticatedDID !== engagement?.profile?.did.id ? renderFollowElement : null

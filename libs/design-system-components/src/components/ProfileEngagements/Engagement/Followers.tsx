@@ -75,6 +75,7 @@ const Followers: React.FC<FollowersProps> = ({
             }}
             avatar={engagement?.did?.akashaProfile?.avatar}
             name={engagement?.did?.akashaProfile?.name}
+            isNSFW={engagement?.did?.akashaProfile?.nsfw}
             transformSource={transformSource}
             renderFollowElement={
               authenticatedDID !== engagement?.did?.akashaProfile?.did?.id

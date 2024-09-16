@@ -1,19 +1,17 @@
 import React from 'react';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
-import { IModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import { useTranslation } from 'react-i18next';
 import { useGetFollowDocumentsByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { hasOwn, useAkashaStore } from '@akashaorg/ui-awf-hooks';
-import { FollowButton } from './follow-button';
+import { FollowButton, FollowButtonProps } from './follow-button';
 
-export type FollowProfileButtonProps = {
-  profileID?: string;
-  iconOnly?: boolean;
-  showLoginModal: (redirectTo?: { modal: IModalNavigationOptions }) => void;
-};
+export type FollowProfileButtonProps = Omit<
+  FollowButtonProps,
+  'followDocumentId' | 'isFollowing' | 'isLoggedIn'
+>;
 
 const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
-  const { profileID, iconOnly, showLoginModal } = props;
+  const { profileID, iconOnly, customizeButton, showLoginModal } = props;
   const { t } = useTranslation('app-profile');
   const {
     data: { authenticatedDID },
@@ -36,6 +34,15 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
   const isFollowing = !!followDocument?.node?.isFollowing;
   const disableActions = !profileID;
 
+  // if already following and variant is specified as primary, convert to secondary
+  const _customizeButton = {
+    ...customizeButton,
+    variant:
+      isFollowing && customizeButton?.variant === 'primary'
+        ? 'secondary'
+        : customizeButton?.variant,
+  };
+
   if (error) return null;
 
   return disableActions ? (
@@ -51,6 +58,7 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
         iconOnly={iconOnly}
         isFollowing={isFollowing}
         isLoggedIn={isLoggedIn}
+        customizeButton={_customizeButton}
         showLoginModal={showLoginModal}
       />
     </Tooltip>
@@ -61,6 +69,7 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
       iconOnly={iconOnly}
       isFollowing={isFollowing}
       isLoggedIn={isLoggedIn}
+      customizeButton={_customizeButton}
       showLoginModal={showLoginModal}
     />
   );
