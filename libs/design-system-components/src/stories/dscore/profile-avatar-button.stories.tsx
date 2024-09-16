@@ -30,9 +30,28 @@ export const Default: Story = {
   },
 };
 
+export const DefaultNSFW: Story = {
+  args: {
+    label: 'Profile Avatar Button',
+    NSFWLabel: 'NSFW',
+    profileId: 'did:pkh:eip155:5:0x36c703c4d22af437dc883e2e0884e57404e16493',
+    avatar: { src: 'https://placebeard.it/360x360', height: 360, width: 360 },
+  },
+};
+
 export const NotTruncatedButton: Story = {
   args: {
     label: 'Profile Avatar Button',
+    profileId: 'did:pkh:eip155:5:0x36c703c4d22af437dc883e2e0884e57404e16493',
+    avatar: { src: 'https://placebeard.it/360x360', height: 360, width: 360 },
+    truncateText: false,
+  },
+};
+
+export const NotTruncatedButtonNSFW: Story = {
+  args: {
+    label: 'Profile Avatar Button',
+    NSFWLabel: 'NSFW',
     profileId: 'did:pkh:eip155:5:0x36c703c4d22af437dc883e2e0884e57404e16493',
     avatar: { src: 'https://placebeard.it/360x360', height: 360, width: 360 },
     truncateText: false,
