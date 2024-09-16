@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import InstallApp, {
   InstallAppProps,
 } from '@akashaorg/design-system-components/lib/components/InstallApp';
@@ -16,8 +16,8 @@ export const InstallExtensionPage = ({ appId }: { appId: string }) => {
   const { t } = useTranslation('app-extensions');
   const { decodeAppName, getCorePlugins } = useRootComponentProps();
   const decodeName = React.useRef(decodeAppName);
-  const installer = useRef(getCorePlugins().extensionInstaller);
-  const installerStatusCodes = React.useRef(installer.current.getStaticStatusCodes());
+  const installer = getCorePlugins().extensionInstaller;
+  const installerStatusCodes = React.useRef(installer.getStaticStatusCodes());
   const isInstalling = React.useRef(false);
   const [isInstalled, setIsInstalled] = React.useState(false);
   const [reportedStatus, setReportedStatus] = useState<symbol>();
@@ -67,21 +67,38 @@ export const InstallExtensionPage = ({ appId }: { appId: string }) => {
 
   useEffect(() => {
     if (shouldRegisterResources /* && signedSuccessfully */) {
-      // then continue the install process
-      installer.current.postInstallExtension();
+      // then continue the installation process
+      installer.postInstallExtension();
     }
-  }, [shouldRegisterResources]);
+  }, [installer, shouldRegisterResources]);
 
   useEffect(() => {
-    const appName = decodeName.current(appId);
-    if (!isInstalling.current) {
-      isInstalling.current = true;
-      installer.current.installExtension(appName);
+    const startInstaller = async () => {
+      const appName = decodeName.current(appId);
+      const sdk = getSDK();
+      if (!isInstalling.current) {
+        const appLocalData = await sdk.services.db
+          .getCollections()
+          .installedExtensions.where({ appName })
+          .first();
+        if (!appLocalData) {
+          console.error('Terms not accepted, redirect to terms....');
+        }
+        if (appLocalData?.termsAccepted) {
+          isInstalling.current = true;
+          await installer.installExtension(appName);
+        } else {
+          console.error(appLocalData, 'Terms not accepted, redirect to terms...');
+        }
+      }
+    };
+    if (authenticatedDID) {
+      startInstaller();
     }
-  }, [appId]);
+  }, [appId, authenticatedDID, installer]);
 
   useEffect(() => {
-    return installer.current.subscribe(
+    return installer.subscribe(
       ({ currentStatus, errorStatus }: { currentStatus: symbol; errorStatus: symbol }) => {
         // the following steps will continue automatically
         // if there are no errors and if there are no resources to register
@@ -135,7 +152,7 @@ export const InstallExtensionPage = ({ appId }: { appId: string }) => {
         }
       },
     );
-  }, [retryableError, triggerResourceRegistration]);
+  }, [installer, retryableError, triggerResourceRegistration]);
 
   const installStatus = useMemo((): InstallAppProps['status'] => {
     if (isInstalled) {
@@ -173,14 +190,22 @@ export const InstallExtensionPage = ({ appId }: { appId: string }) => {
     if (reportedError?.code && reportedError?.retryable) {
       return {
         label: t('Retry'),
-        onClick: () => installer.current.retryFromError(reportedError.code),
+        onClick: () => installer.retryFromError(reportedError.code),
       };
     }
     return {
       label: t('Cancel installation'),
-      onClick: () => installer.current.cancelInstallation(),
+      onClick: () => installer.cancelInstallation(),
     };
-  }, [appId, getCorePlugins, isInstalled, reportedError, reportedStatus, t]);
+  }, [
+    appId,
+    getCorePlugins,
+    installer,
+    isInstalled,
+    reportedError?.code,
+    reportedError?.retryable,
+    t,
+  ]);
 
   if (error) {
     return (
