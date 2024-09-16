@@ -4,14 +4,6 @@ import qs from 'qs';
 import { Logger } from '@akashaorg/core-sdk';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
-export const encodeName = (appName: string) => {
-  return appName;
-};
-
-export const decodeName = (appName: string) => {
-  return decodeURIComponent(appName);
-};
-
 export interface CheckActivityOptions {
   config: IAppConfig;
   encodedAppName: string;

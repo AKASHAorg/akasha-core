@@ -3,6 +3,7 @@ import { IExtensionPointStorePlugin } from './extension-point';
 import { NavigateToParams } from './navigation';
 import { IMenuItem, MenuItemAreaType } from './sidebar-menu-items';
 import { IWidgetStorePlugin } from './widgets';
+import { AkashaApp } from '../sdk/graphql-types-new';
 
 /**
  * Interface defining plugin configuration object
@@ -106,6 +107,8 @@ export interface IExtensionInstallerPlugin {
    * The installation should be resumed by calling postInstallExtension().
    */
   installExtension(extensionName: string): Promise<void>;
+
+  acceptUserAgreement(extensionData: AkashaApp): Promise<void>;
 
   /**
    * Resumes the installation after additional resources were registered
