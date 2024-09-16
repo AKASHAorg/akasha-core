@@ -73,6 +73,7 @@ class AppSettings {
       source: z.string(),
       version: z.string(),
       applicationType: z.nativeEnum(AkashaAppApplicationType),
+      termsAccepted: z.optional(z.boolean()),
     }),
   )
   async install(release: {
@@ -81,18 +82,21 @@ class AppSettings {
     version: string;
     source: string;
     applicationType: AkashaAppApplicationType;
+    termsAccepted?: boolean;
   }) {
     const table = this._db.getCollections().installedExtensions;
-    const collection = await table
-      ?.where({ releaseId: release.releaseId, version: release.version })
-      .first();
+    const collection = await table?.get({ appName: release.appName });
     if (!collection) {
-      await table?.add(release);
+      await table?.add({ ...release, termsAccepted: release.termsAccepted ?? false });
     }
     // update version
     if (collection && collection.version !== release.version) {
       collection.version = release.version;
-      table?.update(collection.appName, { version: release.version });
+      table?.update(collection.appName, {
+        version: release.version,
+        releaseId: release.releaseId,
+        source: release.source,
+      });
     }
   }
 
@@ -105,7 +109,7 @@ class AppSettings {
     const currentInfo = await this.get(appName);
     if (currentInfo?.data?.releaseId) {
       const collection = this._db.getCollections().installedExtensions;
-      await collection?.where('appName').equals(currentInfo.data.releaseId).delete();
+      await collection?.delete(appName);
     }
   }
   @validate(IntegrationNameSchema)

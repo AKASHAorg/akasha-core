@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { ChangeEvent } from 'react';
 import Text from '../Text';
 import Stack from '../Stack';
 import { tw, apply } from '@twind/core';
@@ -25,7 +25,7 @@ export type CheckboxProps = {
   isSelected?: boolean;
   isDisabled?: boolean;
   //handler
-  handleChange?: () => void;
+  handleChange?: (ev: ChangeEvent<HTMLInputElement>) => void;
   customStyle?: string;
 };
 
@@ -164,13 +164,11 @@ const Checkbox: React.FC<CheckboxProps> = ({
   const labelUi = (
     <>
       {label && (
-        <Text
-          variant="body2"
-          as="label"
-          customStyle={indeterminate ? textColorIndeterminate : textColor}
-        >
-          {label}
-        </Text>
+        <label htmlFor={id} className={'select-none'}>
+          <Text variant="body2" customStyle={indeterminate ? textColorIndeterminate : textColor}>
+            {label}
+          </Text>
+        </label>
       )}
     </>
   );

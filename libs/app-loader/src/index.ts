@@ -46,6 +46,17 @@ const isWindow = window && typeof window !== 'undefined';
 const encodeAppName = (name: string) => (isWindow ? encodeURIComponent(name) : name);
 const decodeAppName = (name: string) => (isWindow ? decodeURIComponent(name) : name);
 
+const selectLatestRelease = (extData: AppLoader['extensionData'][0]) => {
+  if (extData.releasesCount > 0) {
+    return extData.releases.edges
+      .slice()
+      .sort((a, b) => {
+        return Date.parse(b.node.createdAt) - Date.parse(a.node.createdAt);
+      })
+      .at(0);
+  }
+};
+
 export default class AppLoader {
   worldConfig: WorldConfig;
   uiEvents: Subject<UIEventData>;
@@ -57,14 +68,6 @@ export default class AppLoader {
   parentLogger: SDK_Services['log'];
   plugins: IPlugin & {
     core: CorePlugins;
-    // {
-    //   contentBlockStore: ContentBlockStore;
-    //   extensionPointStore: ExtensionPointStore;
-    //   widgetStore: WidgetStore;
-    //   extensionInstaller: ExtensionInstaller;
-    //   extensionUninstaller: { uninstallExtension: (name: string) => void };
-    //   routing: RoutingPlugin;
-    // };
   };
   globalChannel: SDK_API['globalChannel'];
   user: { id: string };
@@ -219,29 +222,73 @@ export default class AppLoader {
   };
 
   importModule = async (extensionData: AppLoader['extensionData'][0]) => {
-    const sdk = getSDK();
     if ('isLocal' in extensionData && Object.hasOwn(extensionData, 'isLocal')) {
       if (!extensionData.source || typeof extensionData.source !== 'string') {
         this.logger.warn(
-          `Locally loaded extensions requires a 'source: string' property but ${typeof extensionData.source} was provided for: ${extensionData.name}. Skipping!`,
+          'Locally loaded extensions requires a `source: string` property but %s was provided for: %s. Skipping!',
+          typeof extensionData.source,
+          extensionData.name,
         );
         return null;
       }
-      const source = sdk.services.common.ipfs.buildOriginLink(extensionData.source);
-      return System.import<SystemModuleType>(`${source}`);
+      try {
+        const source = this.getUriFromSource(extensionData.source);
+        if (source) {
+          return System.import<SystemModuleType>(`${source}`);
+        }
+      } catch (err) {
+        this.logger.error(
+          'Locally loaded extension %s failed to load. %s',
+          extensionData.name,
+          extensionData.source,
+        );
+        return;
+      }
     } else {
-      const latestReleaseNode = extensionData.releases?.edges[0]?.node;
-      if (!latestReleaseNode || !latestReleaseNode?.source) {
+      const latestRelease = selectLatestRelease(extensionData);
+      if (!latestRelease || !latestRelease?.node) {
+        this.logger.warn('The release node is missing for the app: %s', extensionData.name);
+        return null;
+      }
+      if (!latestRelease.node?.source) {
         this.logger.warn(
-          `There is no release or release source for the app: ${extensionData.name}`,
+          'The release does not have a source. Cannot load app: %s. %o',
+          extensionData.name,
+          extensionData,
         );
         return null;
       }
-      const source = sdk.services.common.ipfs.multiAddrToUri(latestReleaseNode.source);
-      return System.import<SystemModuleType>(`${source}/index.js`);
+      try {
+        const source = this.getUriFromSource(latestRelease.node.source);
+        if (source) {
+          return System.import<SystemModuleType>(`${source}`);
+        }
+      } catch (err) {
+        this.logger.error(
+          'Cannot import the script files of %s. error: %s',
+          extensionData.name,
+          err.message,
+        );
+      }
     }
   };
-
+  getUriFromSource = (source: string) => {
+    if (source.startsWith('https://')) {
+      if (!source.endsWith('.js')) {
+        this.logger.warn(
+          'When using HTTPS:// protocol make sure you include the full path to the entry file. eg. `https://example.com/path/to/index.js',
+        );
+        return null;
+      }
+      return source;
+    }
+    if (source.startsWith('ipfs://') || source.startsWith('/ipfs/')) {
+      const hash = source.replace('ipfs://', '').replace('/ipfs/', '');
+      const src = getSDK().services.common.ipfs.buildIpfsLinks(hash);
+      return `${src.originLink}/index.js`;
+    }
+    return null;
+  };
   listenGlobalChannel = async () => {
     // listen for user login event and fetch the extensions
     const sdk = getSDK();
@@ -274,13 +321,21 @@ export default class AppLoader {
       // no extensions to load
       return;
     }
-    const extData = await getRemoteLatestExtensionInfos(
+
+    const resp = await getRemoteLatestExtensionInfos(
       this.userExtensions.map(e => ({ name: e.appName })),
     );
 
-    if (extData.length) {
-      this.extensionData = [...this.extensionData, ...extData];
+    const extData = [];
+    for (const extension of this.userExtensions) {
+      extData.push({
+        ...resp.find(ext => ext.name === extension.appName),
+        ...extension,
+        isLocal: true,
+      });
     }
+
+    this.extensionData = [...this.extensionData, ...extData];
 
     const modules = await this.importModules(extData);
     const plugins = await this.loadPlugins(this.extensionConfigs, modules);
