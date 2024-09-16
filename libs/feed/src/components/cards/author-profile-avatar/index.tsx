@@ -49,6 +49,7 @@ const AuthorProfileAvatar: React.FC<AuthorProfileAvatarProps> = props => {
       profileId={authorId}
       href={`/@akashaorg/app-profile/${authorId}`}
       label={profileData?.name}
+      {...(profileData.nsfw && { NSFWLabel: 'NSFW' })}
       avatar={transformSource(profileData?.avatar?.default)}
       alternativeAvatars={profileData?.avatar?.alternatives?.map(alternative =>
         transformSource(alternative),

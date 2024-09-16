@@ -43,6 +43,7 @@ export const LatestProfiles: React.FC<LatestProfilesProps> = props => {
         <ProfileAvatarButton
           profileId={profileData.did.id}
           label={profileData.name}
+          {...(profileData.nsfw && { NSFWLabel: 'NSFW' })}
           avatar={transformSource(profileData?.avatar?.default)}
           alternativeAvatars={profileData?.avatar?.alternatives?.map(alternative =>
             transformSource(alternative),
