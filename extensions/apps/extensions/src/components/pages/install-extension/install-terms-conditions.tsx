@@ -26,10 +26,9 @@ import {
   selectAkashaApp,
   selectAppDisplayName,
   selectAppLogoImage,
-  selectAppType,
-  selectAppVersion,
   selectPublisherName,
 } from './utils';
+import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 
 enum TermsFields {
   PRIVACY_POLICY = 'privacyPolicy',
@@ -53,7 +52,7 @@ type AcceptedTerms = {
 };
 
 export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
-  const { decodeAppName, getCorePlugins } = useRootComponentProps();
+  const { decodeAppName, getCorePlugins, uiEvents } = useRootComponentProps();
   const decodeName = useRef(decodeAppName);
 
   const installerPlugin = getCorePlugins().extensionInstaller;
@@ -111,17 +110,8 @@ export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
 
   const handleContinue = async () => {
     if (!allTermsAccepted) return;
-    // const sdk = getSDK();
 
     await installerPlugin.acceptUserAgreement(selectAkashaApp(appInfo));
-    // await sdk.services.db.getCollections().installedExtensions.add({
-    //   appName: decodeAppName(appId),
-    //   version: selectAppVersion(appInfo),
-    //   releaseId: '',
-    //   source: '',
-    //   applicationType: selectAppType(appInfo) ?? AkashaAppApplicationType.App,
-    //   termsAccepted: true,
-    // });
 
     await navigate({
       to: '/install/$appId/progress',
@@ -136,6 +126,14 @@ export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
       params: { appId },
       replace: true,
     }).catch(err => console.error('Failed to navigate!', err));
+
+    uiEvents.next({
+      event: NotificationEvents.ShowNotification,
+      data: {
+        type: NotificationTypes.Error,
+        title: t('Installation cancelled'),
+      },
+    });
   };
 
   const allTermsAccepted = Object.values(acceptedTerms).every(Boolean);
