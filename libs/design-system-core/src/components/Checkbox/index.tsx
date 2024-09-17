@@ -136,13 +136,13 @@ const Checkbox: React.FC<CheckboxProps> = ({
   ${minusMarkStyles}
   before:border(1 ${isDisabled ? 'grey4' : 'secondaryLight dark:secondaryDark'})
   before:${isDisabled ? 'bg-grey4' : 'bg-(secondaryLight dark:secondaryDark)'}
-  w-4 h-4 relative
+  invisible w-4 h-4 relative
   `;
 
   const selectedPseudoCheckboxStyle = apply`
     ${instancePseudoCheckboxStyle}
     ${cursorStyle}
-    w-4 h-4 relative
+    invisible w-4 h-4 relative
     `;
 
   const unselectedPseudoCheckboxStyle = apply`
