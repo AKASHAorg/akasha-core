@@ -87,11 +87,12 @@ export const ImageEditorBlock = (
   const [showEditModal, setShowEditModal] = useState(false);
 
   React.useEffect(() => {
-    const disablePublish = imageGalleryImages.length === 0;
+    const disablePublish =
+      imageGalleryImages.length === 0 || !!imageGalleryImages.find(image => !image.name);
     if (typeof props.blockInfo.externalHandler === 'function') {
       props.blockInfo.externalHandler(disablePublish);
     }
-  }, [imageGalleryImages.length, props.blockInfo]);
+  }, [imageGalleryImages, props.blockInfo]);
 
   const createBlock = useCallback(
     async ({ nsfw }: CreateContentBlock) => {
