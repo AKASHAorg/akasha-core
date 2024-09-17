@@ -65,7 +65,26 @@ export const InactiveButton: Story = {
   },
 };
 
-export const DuplexButtonWithIcon: Story = {
+export const PrimaryDuplexButtonWithIcon: Story = {
+  args: {
+    inactiveLabel: 'Follow',
+    activeLabel: 'Following',
+    activeHoverLabel: 'Unfollow',
+    active: true,
+    activeVariant: 'primary',
+    inactiveVariant: 'primary',
+    hoverColors: {
+      background: { light: 'transparent', dark: 'transparent' },
+      border: { light: 'errorLight', dark: 'errorDark' },
+      text: { light: 'errorLight', dark: 'errorDark' },
+    },
+    iconDirection: 'left',
+    activeIcon: <CheckIcon />,
+    activeHoverIcon: <XMarkIcon />,
+  },
+};
+
+export const SecondaryDuplexButtonWithIcon: Story = {
   args: {
     inactiveLabel: 'Follow',
     activeLabel: 'Following',

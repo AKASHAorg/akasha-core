@@ -12,6 +12,7 @@ export type ProfileAvatarButtonProps = {
   avatar?: Image;
   alternativeAvatars?: Image[];
   label?: string;
+  NSFWLabel?: string;
   profileId: string;
   truncateText?: boolean;
   href?: string;
@@ -28,6 +29,7 @@ export type ProfileAvatarButtonProps = {
  * @param avatar - (optional) object containing info about the image to be displayed, such as `src`, `height`, and `width`.
  * @param alternativeAvatars - (optional) a list of alternative images for the avatar
  * @param label - (optional) it is usually the profile name
+ * @param NSFWLabel - (optional) adds label for NSFW profiles
  * @param profileId - the profile DID address
  * @param truncateText - boolean (optional) whether to truncate the label (profile name) when it's too long
  * @param href - (optional) provide href link here
@@ -48,6 +50,7 @@ const ProfileAvatarButton = React.forwardRef(
       customStyle = '',
       avatar,
       label,
+      NSFWLabel = '',
       profileId,
       truncateText = true,
       href,
@@ -65,6 +68,7 @@ const ProfileAvatarButton = React.forwardRef(
             size={VARIANTS_MAP[variant].avatar}
             avatar={avatar}
             profileId={profileId}
+            isNSFW={!!NSFWLabel.length}
             customStyle="shrink-0 cursor-pointer"
           />
           <Stack
@@ -78,6 +82,7 @@ const ProfileAvatarButton = React.forwardRef(
               <ProfileNameField
                 did={profileId}
                 profileName={label}
+                NSFWLabel={NSFWLabel}
                 truncateText={truncateText}
                 size={VARIANTS_MAP[variant].profileName}
               />

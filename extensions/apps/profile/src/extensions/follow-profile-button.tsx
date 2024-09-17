@@ -1,19 +1,18 @@
 import React from 'react';
-import ReactDOMClient from 'react-dom/client';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import singleSpaReact from 'single-spa-react';
-import FollowProfileButton from '../components/follow-profile-button';
-import { useRootComponentProps, withProviders } from '@akashaorg/ui-awf-hooks';
-import { IModalNavigationOptions, IRootExtensionProps } from '@akashaorg/typings/lib/ui';
+import ReactDOMClient from 'react-dom/client';
 import { I18nextProvider } from 'react-i18next';
+import { useRootComponentProps, withProviders } from '@akashaorg/ui-awf-hooks';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import { IModalNavigationOptions, IRootExtensionProps } from '@akashaorg/typings/lib/ui';
+import FollowProfileButton from '../components/follow-profile-button';
+import { FollowButtonProps } from '../components/follow-profile-button/follow-button';
 
-type FollowProfileButtonExtensionData = {
-  profileID?: string;
-};
+type FollowProfileButtonExtensionData = Pick<FollowButtonProps, 'profileID' | 'customizeButton'>;
 
 const Index = (props: IRootExtensionProps<FollowProfileButtonExtensionData>) => {
   const { navigateToModal, extensionData } = props;
-  const { profileID } = extensionData;
+  const { profileID, customizeButton } = extensionData;
   const { getTranslationPlugin } = useRootComponentProps();
   const showLoginModal = (redirectTo?: { modal: IModalNavigationOptions }) => {
     navigateToModal({
@@ -24,7 +23,11 @@ const Index = (props: IRootExtensionProps<FollowProfileButtonExtensionData>) => 
 
   return (
     <I18nextProvider i18n={getTranslationPlugin().i18n}>
-      <FollowProfileButton profileID={profileID} showLoginModal={showLoginModal} />
+      <FollowProfileButton
+        profileID={profileID}
+        showLoginModal={showLoginModal}
+        customizeButton={customizeButton}
+      />
     </I18nextProvider>
   );
 };
