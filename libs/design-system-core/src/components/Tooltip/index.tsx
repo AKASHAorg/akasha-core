@@ -167,6 +167,7 @@ const Tooltip: React.FC<TooltipProps> = props => {
               ref={setArrowElement}
               style={{
                 ...arrowStyle,
+                zIndex: 99,
                 [PLACEMENT_TO_CSS_POSITION_MAP[contextualPlacement]]: `-${ARROW_SIZE}px`,
               }}
               className={tw(getArrowClasses(contextualPlacement, ARROW_SIZE, backgroundColor))}
