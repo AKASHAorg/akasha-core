@@ -48,7 +48,7 @@ const ProfileNameField: React.FC<ProfileNameFieldProps> = ({
   showMissingNameWarning,
   missingNameWarningLabel,
 }) => {
-  const textTruncateStyle = `${truncateText ? 'max-w([7rem] xs:[2rem])' : ''}`;
+  const textTruncateStyle = `${truncateText ? `max-w(${NSFWLabel.length ? '[5rem]' : '[7rem]'} xs:[2rem])` : ''}`;
 
   const networkType = getDidNetworkType(did);
   const truncatedDid = truncateDid(did, networkType);
