@@ -149,14 +149,14 @@ const Layout: React.FC<unknown> = () => {
 
   // the bg(black/30 dark:white/30) is for the overlay background when the sidebar is open on mobile
   const mobileLayoverStyle = `
-      fixed xl:sticky h-full ${
+      fixed xl:sticky h-full z-[99] ${
         showSidebar && window.matchMedia(startMobileSidebarHidingBreakpoint).matches
           ? 'min-w([100vw] xl:max) bg(black/30 dark:white/10) z-[99] left-0 right-0'
           : ''
       }`;
 
   const sidebarSlotStyle = `
-      sticky top-0 h-screen transition-all duration-300 transform ${
+      sticky top-0 h-screen transition-all duration-200 transform z-[99] ${
         showSidebar ? 'w-fit translate-x-0' : '-translate-x-full xl:hidden'
       } ${needSidebarToggling ? 'fixed left-0' : ''}
       `;

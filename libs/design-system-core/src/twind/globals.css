@@ -50,3 +50,10 @@
   background-color: #989898;
   border-radius: 20px;
 }
+
+* {
+  /* reset platform specific styling */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}

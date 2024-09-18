@@ -130,7 +130,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
   after:${minusMarkColor}
   `;
 
-  const instanceInderterminateCheckboxStyle = apply`
+  const instanceIndeterminateCheckboxStyle = apply`
   ${basePseudoCheckboxStyles}
   ${checkboxSizes}
   ${minusMarkStyles}
@@ -153,7 +153,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
 
   const getInputClassname = () => {
     if (indeterminate) {
-      return instanceInderterminateCheckboxStyle;
+      return instanceIndeterminateCheckboxStyle;
     }
     if (isSelected) {
       return selectedPseudoCheckboxStyle;
