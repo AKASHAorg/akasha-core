@@ -45,6 +45,7 @@ import {
 } from '../pages/info-page/sub-pages';
 
 import { DEV_MODE_KEY } from '../../constants';
+import { ExtensionInstallTerms } from '../pages/install-extension/install-terms-conditions';
 import { NotFoundComponent } from './not-found-component';
 
 const rootRoute = createRootRouteWithContext<IRouterContext>()({
@@ -111,11 +112,36 @@ const developerModeRoute = createRoute({
   ),
 });
 
-const extensionInstallRoute = createRoute({
+const extensionInstallRootRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/install/$appId',
+  notFoundComponent: () => <NotFoundComponent />,
+});
+
+const extensionInstallIndexRoute = createRoute({
+  getParentRoute: () => extensionInstallRootRoute,
+  path: '/',
+  beforeLoad: ({ navigate }) => {
+    navigate({ to: extensionInstallTermsRoute.path, replace: true }).catch(e =>
+      console.error('failed to navigate', e),
+    );
+  },
+});
+
+const extensionInstallTermsRoute = createRoute({
+  getParentRoute: () => extensionInstallRootRoute,
+  path: '/terms',
   component: () => {
-    const { appId } = extensionInstallRoute.useParams();
+    const { appId } = extensionInstallRootRoute.useParams();
+    return <ExtensionInstallTerms appId={appId} />;
+  },
+});
+
+const extensionInstallRoute = createRoute({
+  getParentRoute: () => extensionInstallRootRoute,
+  path: '/progress',
+  component: () => {
+    const { appId } = extensionInstallRootRoute.useParams();
     return <InstallExtensionPage appId={appId} />;
   },
 });
@@ -410,6 +436,10 @@ const routeTree = rootRoute.addChildren([
     appLicenseInfoRoute,
     supportInfoRoute,
     appDescriptionRoute,
+  ]),
+  extensionInstallRootRoute.addChildren([
+    extensionInstallIndexRoute,
+    extensionInstallTermsRoute,
     extensionInstallRoute,
   ]),
   extensionCreateRoute,
