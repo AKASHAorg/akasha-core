@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Text, { TextProps } from '@akashaorg/design-system-core/lib/components/Text';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ErrorIcon from './error-icon';
@@ -9,16 +8,26 @@ import InstallIcon from './install-icon';
 import SuccessIcon from './success-icon';
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils/getColorClasses';
 import { apply, tw } from '@twind/core';
+import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
+import {
+  AkashaAppApplicationType,
+  AppImageSource,
+} from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 export type InstallAppProps = {
   title: string;
   appName: string;
+  appAvatar?: AppImageSource;
+  appType: AkashaAppApplicationType;
+  publisherName?: string;
+  publisherDID: string;
   progressInfo: string;
   status: 'in-progress' | 'error' | 'complete';
-  action: { label: string; onClick: () => void };
+  actions?: { label: string; onClick: () => void }[];
+  successLabel: string;
 };
 
-const errorStyle = getColorClasses({ light: 'warningLight', dark: 'warningDark' }, '[&>*]:fill');
+const errorStyle = getColorClasses({ light: 'errorLight', dark: 'errorDark' }, '[&>*]:fill');
 const errorAnimationStyle = `animate-ping absolute h-full w-full ${errorStyle} opacity-75`;
 
 const installStyle = `animate-bounce ${getColorClasses(
@@ -29,20 +38,73 @@ const installStyle = `animate-bounce ${getColorClasses(
 const successStyle = getColorClasses('success', '[&>*]:fill');
 const successAnimationStyle = `animate-ping absolute h-full w-full ${successStyle} opacity-75`;
 
-const InstallApp: React.FC<InstallAppProps> = ({
+const TruncateText = ({
+  text,
+  visibleCount,
+  textProps,
+}: {
+  text: string;
+  visibleCount: number;
+  textProps: TextProps;
+}) => {
+  const [first, last] = useMemo(() => {
+    return [text.slice(0, text.length - visibleCount), text.slice(text.length - visibleCount)];
+  }, [text]);
+
+  return (
+    <Text {...textProps} customStyle={`${textProps.customStyle} flex`}>
+      <span
+        title={text}
+        className="max-w-[20ch] md:max-w-[30ch] overflow-hidden truncate inline-block"
+      >
+        {first}
+      </span>
+      <span className="inline-block">{last}</span>
+    </Text>
+  );
+};
+
+const InstallApp = ({
   title,
   appName,
+  appAvatar,
+  appType,
+  publisherName,
+  publisherDID,
   progressInfo,
   status,
-  action,
-}) => {
+  actions = [],
+  successLabel = 'Success',
+}: InstallAppProps) => {
   return (
-    <Card radius={20} padding={'p-4'}>
+    <Card padding="p-6">
       <Stack align="center" direction="column" spacing="gap-y-8">
         <Text variant="h5">{title}</Text>
-        <InfoCard titleLabel={appName} />
+        <Stack
+          direction="row"
+          spacing="gap-x-4"
+          padding={{ x: 8, y: 10 }}
+          background={{ light: 'grey9', dark: 'grey3' }}
+          customStyle="rounded-xl"
+        >
+          <AppAvatar appType={appType} avatar={appAvatar} width={4} height={4} />
+          <Stack direction="column" justify="between">
+            <Text variant="button-lg">{appName}</Text>
+            <Stack>
+              <Text variant="footnotes2">{publisherName}</Text>
+              <TruncateText
+                text={publisherDID}
+                visibleCount={6}
+                textProps={{
+                  variant: 'footnotes2',
+                  color: { light: 'secondaryLight', dark: 'secondaryDark' },
+                }}
+              />
+            </Stack>
+          </Stack>
+        </Stack>
         <Stack direction="column" customStyle="max-w-xs">
-          <Stack align="center" direction="column" spacing="gap-y-2">
+          <Stack align="center" direction="column" spacing="gap-y-4">
             {status === 'error' && (
               <div className={tw('relative')}>
                 <ErrorIcon className={tw(apply`${errorAnimationStyle}`)} />
@@ -51,10 +113,15 @@ const InstallApp: React.FC<InstallAppProps> = ({
             )}
             {status === 'in-progress' && <InstallIcon className={installStyle} />}
             {status === 'complete' && (
-              <div className={tw('relative')}>
-                <SuccessIcon className={tw(apply`${successAnimationStyle}`)} />
-                <SuccessIcon className={tw(apply`${successStyle}`)} />
-              </div>
+              <Stack direction="row" spacing="gap-x-4" align="center">
+                <div className={tw('relative')}>
+                  <SuccessIcon className={tw(apply`${successAnimationStyle}`)} />
+                  <SuccessIcon className={tw(apply`${successStyle}`)} />
+                </div>
+                <Text color="success" variant="button-lg">
+                  {successLabel}
+                </Text>
+              </Stack>
             )}
             <Text
               align="center"
@@ -65,7 +132,17 @@ const InstallApp: React.FC<InstallAppProps> = ({
               {progressInfo}
             </Text>
           </Stack>
-          <Button label={action.label} onClick={action.onClick} variant="text" size="lg" />
+        </Stack>
+        <Stack>
+          {actions.map(action => (
+            <Button
+              key={action.label}
+              label={action.label}
+              onClick={action.onClick}
+              variant="text"
+              size="lg"
+            />
+          ))}
         </Stack>
       </Stack>
     </Card>

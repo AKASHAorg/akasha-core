@@ -8,13 +8,19 @@ import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoade
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { useGetAppsByPublisherDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 import getSDK from '@akashaorg/core-sdk';
-import { SortOrder } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import {
+  AkashaAppApplicationType,
+  AkashaAppEdge,
+  SortOrder,
+} from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { GetAppsByPublisherDidQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 import { getReportedError, getReportedProgress } from './utils';
+import { AkashaProfile } from '@akashaorg/typings/lib/ui';
+import { useNavigate } from '@tanstack/react-router';
 
 export const InstallExtensionPage = ({ appId }: { appId: string }) => {
   const { t } = useTranslation('app-extensions');
-  const { decodeAppName, getCorePlugins } = useRootComponentProps();
+  const { decodeAppName, getCorePlugins, plugins, logger } = useRootComponentProps();
   const decodeName = React.useRef(decodeAppName);
   const installer = getCorePlugins().extensionInstaller;
   const installerStatusCodes = React.useRef(installer.getStaticStatusCodes());
@@ -23,7 +29,9 @@ export const InstallExtensionPage = ({ appId }: { appId: string }) => {
   const [reportedStatus, setReportedStatus] = useState<symbol>();
   const [reportedError, setReportedError] = useState<{ code: symbol; retryable: boolean }>(null);
   const [shouldRegisterResources, setShouldRegisterResources] = useState<boolean>(false);
+  const [authorProfileData, setAuthorProfileData] = React.useState<AkashaProfile>(null);
   const idxDid = getSDK().services.gql.indexingDID;
+  const navigate = useNavigate();
 
   const {
     data: { authenticatedDID, isAuthenticating },
@@ -37,6 +45,26 @@ export const InstallExtensionPage = ({ appId }: { appId: string }) => {
       sorting: { createdAt: SortOrder.Desc },
     },
   });
+
+  const appAuthorId = useMemo(() => {
+    if (data) {
+      return selectAppPublisherProfile(data).id;
+    }
+  }, [data]);
+
+  useEffect(() => {
+    const getAuthorProfile = async () => {
+      if (appAuthorId && plugins['@akashaorg/app-profile']) {
+        const resp = await plugins['@akashaorg/app-profile'].profile.getProfileInfo({
+          profileDID: appAuthorId,
+        });
+        if (resp.data) {
+          setAuthorProfileData(resp.data);
+        }
+      }
+    };
+    getAuthorProfile().catch(err => logger.warn(err));
+  }, [appAuthorId]);
 
   const retryableError: symbol[] = useMemo(
     () => [
@@ -73,6 +101,12 @@ export const InstallExtensionPage = ({ appId }: { appId: string }) => {
   }, [installer, shouldRegisterResources]);
 
   useEffect(() => {
+    if (isInstalled) {
+      // navigate to app
+    }
+  }, [isInstalled]);
+
+  useEffect(() => {
     const startInstaller = async () => {
       const appName = decodeName.current(appId);
       const sdk = getSDK();
@@ -82,18 +116,27 @@ export const InstallExtensionPage = ({ appId }: { appId: string }) => {
           .installedExtensions.where({ appName })
           .first();
         if (!appLocalData) {
-          console.error('Terms not accepted, redirect to terms....');
+          navigate({
+            to: '/install/$appId/terms',
+            params: { appId },
+            replace: true,
+          }).catch(err => logger.error('Failed to navigate: %o', err));
+          return;
         }
         if (appLocalData?.termsAccepted) {
           isInstalling.current = true;
           await installer.installExtension(appName);
         } else {
-          console.error(appLocalData, 'Terms not accepted, redirect to terms...');
+          navigate({
+            to: '/install/$appId/terms',
+            params: { appId },
+            replace: true,
+          }).catch(err => logger.error('Failed to navigate: %o', err));
         }
       }
     };
     if (authenticatedDID) {
-      startInstaller();
+      startInstaller().catch(err => logger.error(err));
     }
   }, [appId, authenticatedDID, installer]);
 
@@ -166,9 +209,12 @@ export const InstallExtensionPage = ({ appId }: { appId: string }) => {
 
   const progressInfo = useMemo(() => {
     if (isInstalled) {
-      return `${t('Application {{displayName}} successfully installed.', {
-        displayName: getAppDisplayName(data),
-      })}`;
+      return `${t(
+        'Extension {{displayName}} has been installed. The page will refresh and load it.',
+        {
+          displayName: selectAppDisplayName(data),
+        },
+      )}`;
     }
     if (reportedError?.code) {
       return getReportedError(reportedError, installerStatusCodes.current.error, t);
@@ -176,27 +222,29 @@ export const InstallExtensionPage = ({ appId }: { appId: string }) => {
     return getReportedProgress(reportedStatus, installerStatusCodes.current.status, t);
   }, [data, isInstalled, reportedError, reportedStatus, t]);
 
-  const action = useMemo(() => {
+  const actions = useMemo(() => {
     if (isInstalled) {
-      return {
-        label: t('Open the app'),
+      return;
+    }
+    const actions = [];
+    if (shouldRegisterResources) {
+      actions.push({
+        label: t('Authorise'),
         onClick: () => {
-          getCorePlugins().routing.navigateTo({
-            appName: decodeName.current(appId),
-          });
+          logger.info('Authorise new resources');
         },
-      };
+      });
     }
     if (reportedError?.code && reportedError?.retryable) {
-      return {
+      actions.push({
         label: t('Retry'),
         onClick: () => installer.retryFromError(reportedError.code),
-      };
+      });
     }
-    return {
+    return actions.concat({
       label: t('Cancel installation'),
       onClick: () => installer.cancelInstallation(),
-    };
+    });
   }, [
     appId,
     getCorePlugins,
@@ -218,13 +266,13 @@ export const InstallExtensionPage = ({ appId }: { appId: string }) => {
   }
   return (
     <>
-      {(isAuthenticating || loading) && <div>Loading...</div>}
+      {(isAuthenticating || loading) && <div>Loading..</div>}
       {!authenticatedDID && !isAuthenticating && called && !loading && (
         <ErrorLoader
           type="not-authenticated"
           title={t('Login Required')}
           details={t('You must be logged in to install {{appDisplayName}}', {
-            appDisplayName: getAppDisplayName(data),
+            appDisplayName: selectAppDisplayName(data),
           })}
         >
           <Button label={t('Login')} onClick={handleLoginClick} />
@@ -232,19 +280,51 @@ export const InstallExtensionPage = ({ appId }: { appId: string }) => {
       )}
       {authenticatedDID && called && !loading && (
         <InstallApp
-          title={isInstalled ? t('Application installed') : t('Installation in progress')}
-          appName={getAppDisplayName(data)}
+          title={isInstalled ? t('Installation complete') : t('Installation in progress')}
+          appName={selectAppDisplayName(data)}
+          appAvatar={selectAppAvatar(data)}
+          publisherName={authorProfileData?.name}
+          publisherDID={appAuthorId}
+          appType={selectAppType(data) ?? AkashaAppApplicationType.App}
           progressInfo={progressInfo}
           status={installStatus}
-          action={action}
+          actions={actions}
+          successLabel={t('Finished')}
         />
       )}
     </>
   );
 };
 
-const getAppDisplayName = (respData: GetAppsByPublisherDidQuery) => {
-  if (respData?.node && 'akashaAppList' in respData.node) {
+const hasAppListNode = (
+  respData: GetAppsByPublisherDidQuery,
+): respData is { node: { akashaAppList: { edges: AkashaAppEdge[] } } } => {
+  return (
+    respData.node &&
+    'akashaAppList' in respData.node &&
+    Array.isArray(respData.node.akashaAppList.edges)
+  );
+};
+
+const selectAppDisplayName = (respData: GetAppsByPublisherDidQuery) => {
+  if (hasAppListNode(respData)) {
     return respData.node.akashaAppList.edges[0]?.node.displayName;
+  }
+};
+
+const selectAppAvatar = (respData: GetAppsByPublisherDidQuery) => {
+  if (hasAppListNode(respData)) {
+    return respData.node.akashaAppList.edges[0]?.node.logoImage;
+  }
+};
+
+const selectAppPublisherProfile = (respData: GetAppsByPublisherDidQuery) => {
+  if (hasAppListNode(respData)) {
+    return respData.node.akashaAppList.edges[0]?.node.author;
+  }
+};
+const selectAppType = (respData: GetAppsByPublisherDidQuery) => {
+  if (hasAppListNode(respData)) {
+    return respData.node.akashaAppList.edges[0]?.node.applicationType;
   }
 };

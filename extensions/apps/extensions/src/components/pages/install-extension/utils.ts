@@ -70,21 +70,23 @@ export const getReportedProgress = (
 ) => {
   switch (reportedStatus) {
     case statusCodes.FETCHING_EXTENSION_DATA:
-      return tFunc('Fetching extension data');
+      return tFunc('Retrieving latest release info...');
     case statusCodes.IMPORTING_MODULE:
-      return tFunc('Importing module');
+      return tFunc('Importing extension modules...');
     case statusCodes.INITIALIZING_EXTENSION:
-      return tFunc('Initializing extension');
+      return tFunc('Initializing extension...');
     case statusCodes.REGISTERING_EXTENSION:
-      return tFunc('Registering extension');
+      return tFunc('Registering extension and it`s plugins...');
     case statusCodes.SAVING_EXTENSION_INFO:
-      return tFunc('Saving extension info');
+      return tFunc('Saving configuration...');
     case statusCodes.FINALIZING_INSTALL:
-      return tFunc('Finalizing install');
+      return tFunc('Finalizing install...');
     case statusCodes.REGISTERING_RESOURCES:
-      return tFunc('Registering resources');
+      return tFunc(
+        'Click the button below to authorise access to new resources. You will be prompted with 1 signature.',
+      );
     case statusCodes.REGISTERING_RESOURCES_SUCCESS:
-      return tFunc('Registering resources success');
+      return tFunc('You have authorised new resources. Continuing installation...');
   }
   return '';
 };
@@ -97,33 +99,31 @@ export const getReportedError = (
   let errorMessage = '';
   switch (reportedError.code) {
     case statusCodes.USER_NOT_CONNECTED:
-      errorMessage = tFunc('You need to login.');
+      errorMessage = tFunc('You need to login to install new extensions.');
       break;
     case statusCodes.EXTENSION_NOT_FOUND:
       errorMessage = tFunc('Extension was not found in the Extensions Registry.');
       break;
     case statusCodes.EXTENSION_FETCH_ERROR:
-      errorMessage = tFunc('Cannot fetch extension information. Please try again.');
+      errorMessage = tFunc('Failed to retrieve release info.');
       break;
     case statusCodes.EXTENSION_DATA_INVALID:
-      errorMessage = tFunc('Extension is not valid.');
+      errorMessage = tFunc('Extension or release data is not valid.');
       break;
     case statusCodes.EXTENSION_IMPORT_ERROR:
-      errorMessage = tFunc('Failed to import the extension. Please try again.');
+      errorMessage = tFunc('Failed to import the extension.');
       break;
     case statusCodes.EXTENSION_INITIALIZATION_FAILED:
-      errorMessage = tFunc('Failed to initialize extension. Please try again.');
+      errorMessage = tFunc('Failed to initialize extension.');
       break;
     case statusCodes.EXTENSION_REGISTER_RESOURCES_FAILED:
-      errorMessage = tFunc('Failed to register new resources for the extension. Please try again.');
+      errorMessage = tFunc('Failed to register new resources for the extension.');
       break;
     case statusCodes.EXTENSION_REGISTRATION_FAILED:
-      errorMessage = tFunc('Failed to register the extension. Please try again.');
+      errorMessage = tFunc('Failed to register the extension.');
       break;
     case statusCodes.EXTENSION_INFO_SAVE_FAILED:
-      errorMessage = tFunc(
-        'Failed to save extension information to local database. Please try again.',
-      );
+      errorMessage = tFunc('Failed to save extension information to local database.');
       break;
     case statusCodes.EXTENSION_FINALIZATION_FAILED:
       errorMessage = tFunc(

@@ -4,9 +4,9 @@
   "scripts": {
     "clean": "tsc --build --clean tsconfig.json",
     "clean:all": "yarn clean && nx reset",
-    "prepare": "nx run-many --target=prepare --all --verbose",
-    "build:libs": "nx run-many -t build --projects=tag:type:lib --verbose",
-    "build:apps": "nx run-many -t build --projects=tag:scope:extension --verbose",
+    "prepare": "nx run-many --target=prepare --all --verbose --skip-nx-cache",
+    "build:libs": "nx run-many -t build --projects=tag:type:lib --verbose --skip-nx-cache",
+    "build:apps": "nx run-many -t build --projects=tag:scope:extension --verbose --skip-nx-cache",
     "extract:translations": "nx run-many -t translations --projects=tag:scope:extension --verbose",
     "build:all": "yarn && yarn prepare && yarn build:libs && yarn build:apps && yarn extract:translations",
     "apps:watch": "nx watch --projects=tag:scope:extension --includeDependentProjects -- nx build \\$NX_PROJECT_NAME",

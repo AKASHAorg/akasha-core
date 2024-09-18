@@ -5,8 +5,8 @@ const commons = require('./app.pack.conf');
 const path = require('path');
 const Dotenv = require('dotenv-webpack');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
-const { SubresourceIntegrityPlugin } = require("webpack-subresource-integrity");
-const WebpackAssetsManifest = require("webpack-assets-manifest");
+const { SubresourceIntegrityPlugin } = require('webpack-subresource-integrity');
+const WebpackAssetsManifest = require('webpack-assets-manifest');
 const CopyPlugin = require('copy-webpack-plugin');
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -26,7 +26,7 @@ const exp = {
       },
       {
         test: /\.css$/i,
-        use: ["style-loader", "css-loader"],
+        use: ['style-loader', 'css-loader'],
       },
     ],
   },
@@ -79,7 +79,7 @@ const exp = {
     }),
     new webpack.DefinePlugin({
       __DEV__: !isProduction,
-      "globalThis.__DEV__": !isProduction,
+      'globalThis.__DEV__': !isProduction,
     }),
     new webpack.AutomaticPrefetchPlugin(),
     new SubresourceIntegrityPlugin({
