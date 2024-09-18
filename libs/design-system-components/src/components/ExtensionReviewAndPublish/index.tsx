@@ -1,59 +1,38 @@
 import React from 'react';
 import { tw } from '@twind/core';
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
-import {
-  AkashaAppApplicationType,
-  AppImageSource,
-} from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import Accordion from '@akashaorg/design-system-core/lib/components/Accordion';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Label from '@akashaorg/design-system-core/lib/components/Label';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
-import Stepper from '@akashaorg/design-system-core/lib/components/Stepper';
-import { Plugin } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
+import {
+  Plugin,
+  App,
+  Widget,
+} from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Section from './section';
 import { AppInfoPill } from '../AppInfo/info-pill';
 import ExtensionImageGallery from '../ExtensionImageGallery';
+import { Extension, Image } from '@akashaorg/typings/lib/ui';
+import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
+import { getImageFromSeed } from '@akashaorg/design-system-core/lib/utils';
 
-type ExtensionData = {
-  logoImage: AppImageSource;
-  coverImage: AppImageSource;
-  id: string;
-  displayName: string;
-  github: string;
-  nsfw: boolean;
-  applicationType: AkashaAppApplicationType;
-  description: string;
-  gallery: AppImageSource[];
-  links: { label: string; href: string }[];
-  contactInfo: string;
-  license: { name: string; description: string };
-  contributors: {
-    label: string;
-    profileId: string;
-    avatar: { src: string; height: number; width: number };
-  }[];
-  tags: string[];
-};
-
-export type ReviewAndPublishProps = {
-  extensionData: ExtensionData;
+export type ExtensionReviewAndPublishProps = {
+  extensionData: Extension;
   title: string;
   subtitle: { part1: string; part2: string };
-  pluginLabel: string;
-  extensionId: string;
-  extensionDisplayName: string;
+  extensionNameLabel: string;
+  extensionDisplayNameLabel: string;
   sourceFileLabel: string;
   nsfwLabel: string;
   nsfwDescription: string;
-  activeAccordionId: string;
   descriptionLabel: string;
   galleryLabel: string;
   imageUploadedLabel: string;
@@ -65,24 +44,22 @@ export type ReviewAndPublishProps = {
   tagsLabel: string;
   backButtonLabel: string;
   publishButtonLabel: string;
-  onViewGalleryClick: () => void;
-  onAccordionClick: () => void;
-  onClickBack: () => void;
-  onClickPublish: () => void;
+  publicImagePath?: string;
+  onViewGalleryClick?: () => void;
+  onClickCancel: () => void;
+  onClickNext: () => void;
+  transformSource: (src: Image) => Image;
 };
 
-const ReviewAndPublish: React.FC<ReviewAndPublishProps> = props => {
+const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = props => {
   const {
     extensionData,
-    title,
     subtitle,
-    pluginLabel,
-    extensionId,
-    extensionDisplayName,
+    extensionNameLabel,
+    extensionDisplayNameLabel,
     sourceFileLabel,
     nsfwLabel,
     nsfwDescription,
-    activeAccordionId,
     descriptionLabel,
     galleryLabel,
     imageUploadedLabel,
@@ -94,11 +71,27 @@ const ReviewAndPublish: React.FC<ReviewAndPublishProps> = props => {
     tagsLabel,
     backButtonLabel,
     publishButtonLabel,
+    publicImagePath = '/images',
     onViewGalleryClick,
-    onAccordionClick,
-    onClickBack,
-    onClickPublish,
+    onClickCancel,
+    onClickNext,
+    transformSource,
   } = props;
+
+  const [activeAccordionId, setActiveAccordionId] = React.useState(null);
+
+  const transformedCoverImage = transformSource(extensionData.coverImage);
+  const seed = getImageFromSeed(extensionData.id, 3);
+  const coverImageFallback = `${publicImagePath}/extension-cover-desktop-${seed}.webp`;
+  const backgroundUrl = transformedCoverImage?.src ?? coverImageFallback;
+
+  const onAccordionClick = accordionId => {
+    if (activeAccordionId === accordionId) {
+      setActiveAccordionId(null);
+    } else {
+      setActiveAccordionId(accordionId);
+    }
+  };
 
   const getAccordionTitleNode = (title: string, isRequired = true) => {
     return (
@@ -109,53 +102,69 @@ const ReviewAndPublish: React.FC<ReviewAndPublishProps> = props => {
     );
   };
 
+  const getApplicationIconByType = (type: AkashaAppApplicationType) => {
+    switch (type) {
+      case AkashaAppApplicationType.App:
+        return <App />;
+      case AkashaAppApplicationType.Plugin:
+        return <Plugin />;
+      case AkashaAppApplicationType.Widget:
+        return <Widget />;
+      default:
+        return <App />;
+    }
+  };
+
   const asteriskStyle = tw(`-top-0.5 left-1 text-base text(errorLight dark:errorDark)`);
 
   return (
     <>
-      <Stack padding="p-4 pb-6" spacing="gap-y-4">
-        <Stack spacing="gap-y-4" align="center">
-          <Stepper length={2} currentStep={1} />
-          <Text variant="h5">{title}</Text>
-          <Text as="span" variant="body2" color={{ light: 'grey4', dark: 'grey6' }}>
-            {subtitle.part1} <span className={asteriskStyle}>*</span> {subtitle.part2}
-          </Text>
-        </Stack>
+      <Stack padding={16} spacing="gap-y-4">
+        <Text as="span" variant="body2" color={{ light: 'grey4', dark: 'grey6' }}>
+          {subtitle.part1} <span className={asteriskStyle}>*</span> {subtitle.part2}
+        </Text>
+
         <Stack spacing="gap-y-3" fullWidth>
-          <Stack customStyle="relative h-24 rounded-2xl bg-grey6" fullWidth>
-            <Stack customStyle="absolute w-16 h-16 left-4 -bottom-8 rounded-2xl bg-grey8" />
+          <Stack
+            customStyle={`relative h-24 rounded-2xl  bg(center no-repeat cover [url(${backgroundUrl})])`}
+            fullWidth
+          >
+            <AppAvatar
+              appType={extensionData.applicationType}
+              avatar={transformSource(extensionData.logoImage)}
+              extensionId={extensionData.id}
+              customStyle="absolute left-4 -bottom-8"
+            />
           </Stack>
 
-          {extensionData.applicationType === AkashaAppApplicationType.Plugin && (
-            <AppInfoPill
-              background={{ light: 'tertiaryLight', dark: 'tertiaryDark' }}
-              customStyle="w-fit self-end"
-            >
-              <Icon
-                size="sm"
-                icon={<Plugin />}
-                color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-                solid={true}
-              />
-              <Text variant="footnotes2" color={{ light: 'secondaryLight', dark: 'white' }}>
-                {pluginLabel}
-              </Text>
-            </AppInfoPill>
-          )}
+          <AppInfoPill
+            background={{ light: 'tertiaryLight', dark: 'tertiaryDark' }}
+            customStyle="w-fit self-end"
+          >
+            <Icon
+              size="sm"
+              icon={getApplicationIconByType(extensionData.applicationType)}
+              color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+              solid={true}
+            />
+            <Text variant="footnotes2" color={{ light: 'secondaryLight', dark: 'white' }}>
+              {extensionData.applicationType}
+            </Text>
+          </AppInfoPill>
         </Stack>
 
-        <Section title={extensionId} required>
-          <Text variant="body2">{extensionData.id}</Text>
+        <Section title={extensionNameLabel} required>
+          <Text variant="body2">{extensionData.name}</Text>
         </Section>
 
-        <Section title={extensionDisplayName}>
+        <Section title={extensionDisplayNameLabel}>
           <Text variant="body2">{extensionData.displayName}</Text>
         </Section>
 
         <Section title={sourceFileLabel} required>
-          <Link to={extensionData.github} target="_blank">
+          <Link to={extensionData.sourceURL} target="_blank">
             <Text variant="body2" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
-              {extensionData.github}
+              {extensionData.sourceURL}
             </Text>
           </Link>
         </Section>
@@ -186,7 +195,7 @@ const ReviewAndPublish: React.FC<ReviewAndPublishProps> = props => {
             contentNode={
               <Stack spacing="gap-y-3">
                 <ExtensionImageGallery
-                  images={extensionData.gallery.slice(0, 3).map((image, idx) => ({
+                  images={extensionData.gallery?.slice(0, 3).map((image, idx) => ({
                     src: image.src,
                     size: { width: image.width, height: image.height },
                     name: image.src + idx,
@@ -214,8 +223,8 @@ const ReviewAndPublish: React.FC<ReviewAndPublishProps> = props => {
             titleNode={getAccordionTitleNode(documentationLabel)}
             contentNode={
               <Stack spacing="gap-y-3">
-                {extensionData.links.map(link => (
-                  <Stack key={`${link.label} ${link.href}`}>
+                {extensionData.links?.map((link, index) => (
+                  <Stack key={index}>
                     <Text variant="button-md">{link.label}</Text>
                     <Link to={link.href} target="_blank">
                       <Text
@@ -241,8 +250,7 @@ const ReviewAndPublish: React.FC<ReviewAndPublishProps> = props => {
             titleNode={getAccordionTitleNode(licenseLabel)}
             contentNode={
               <Stack>
-                <Text variant="button-md">{extensionData.license.name}</Text>
-                <Text variant="body2">{extensionData.license.description}</Text>
+                <Text variant="button-md">{extensionData.license}</Text>
               </Stack>
             }
             handleClick={onAccordionClick}
@@ -257,8 +265,9 @@ const ReviewAndPublish: React.FC<ReviewAndPublishProps> = props => {
             titleNode={getAccordionTitleNode(contributorsLabel, false)}
             contentNode={
               <Stack spacing="gap-y-4">
-                {extensionData.contributors.map(el => (
-                  <ProfileAvatarButton key={el.label + el.profileId} {...el} />
+                {extensionData.contributors?.map((el, index) => (
+                  // @TODO: provide also the avatar and name for profiles
+                  <ProfileAvatarButton key={index} profileId={el} />
                 ))}
               </Stack>
             }
@@ -285,7 +294,7 @@ const ReviewAndPublish: React.FC<ReviewAndPublishProps> = props => {
             titleNode={getAccordionTitleNode(tagsLabel)}
             contentNode={
               <Stack direction="row" spacing="gap-2" customStyle="flex-wrap">
-                {extensionData.tags.map((tag, idx) => (
+                {extensionData.keywords?.map((tag, idx) => (
                   <Pill key={tag + idx} label={tag} type="action" />
                 ))}
               </Stack>
@@ -298,11 +307,11 @@ const ReviewAndPublish: React.FC<ReviewAndPublishProps> = props => {
       <Divider />
 
       <Stack direction="row" padding="p-4" spacing="gap-x-2" align="center" justify="end">
-        <Button variant="text" label={backButtonLabel} onClick={onClickBack} />
+        <Button variant="text" label={backButtonLabel} onClick={onClickCancel} />
         <Button
           variant="primary"
           label={publishButtonLabel}
-          onClick={onClickPublish}
+          onClick={onClickNext}
           customStyle="w-36"
         />
       </Stack>
@@ -310,4 +319,4 @@ const ReviewAndPublish: React.FC<ReviewAndPublishProps> = props => {
   );
 };
 
-export default ReviewAndPublish;
+export default ExtensionReviewAndPublish;

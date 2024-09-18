@@ -1,14 +1,10 @@
 import React, { ReactElement } from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import ProfileNameField from '@akashaorg/design-system-core/lib/components/ProfileNameField';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import CopyToClipboard from '@akashaorg/design-system-core/lib/components/CopyToClipboard';
 import ImageOverlay from '../../ImageOverlay';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import Menu, { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';

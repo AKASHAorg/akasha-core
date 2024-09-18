@@ -30,6 +30,7 @@ import {
   ExtensionSubmitMainPage,
   ExtensionSubmitStep1Page,
   ExtensionSubmitStep2Page,
+  ExtensionSubmitStep3Page,
 } from '../pages/extension-submit-page';
 import {
   DevInfoPage,
@@ -377,6 +378,20 @@ const extensionSubmitStep2Route = createRoute({
     );
   },
 });
+const extensionSubmitStep3Route = createRoute({
+  getParentRoute: () => extensionSubmitMainRoute,
+  path: '/step3',
+  component: () => {
+    return (
+      <CatchBoundary
+        getResetKey={() => 'submit_extension_step3_reset'}
+        errorComponent={NotFoundComponent}
+      >
+        <ExtensionSubmitStep3Page />
+      </CatchBoundary>
+    );
+  },
+});
 
 const routeTree = rootRoute.addChildren([
   defaultRoute,
@@ -403,7 +418,9 @@ const routeTree = rootRoute.addChildren([
     extensionEditStep1Route,
     extensionEditStep2Route,
     extensionEditStep3Route,
+    extensionSubmitStep3Route,
   ]),
+  extensionSubmitMainRoute.addChildren([extensionSubmitStep1Route, extensionSubmitStep2Route]),
 ]);
 
 export const router = ({ baseRouteName, apolloClient }: ICreateRouter) =>

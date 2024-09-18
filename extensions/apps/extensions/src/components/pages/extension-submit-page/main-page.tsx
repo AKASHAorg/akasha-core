@@ -1,7 +1,5 @@
 import React from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Stepper from '@akashaorg/design-system-core/lib/components/Stepper';
 import { Outlet } from '@tanstack/react-router';
 import appRoutes, { SUBMIT_EXTENSION } from '../../../routes';
 import { useTranslation } from 'react-i18next';
@@ -51,9 +49,6 @@ export const ExtensionSubmitMainPage: React.FC<ExtensionSubmitMainPageProps> = (
 
   return (
     <Card padding={0}>
-      <Stack padding={16} justify="center" align="center">
-        <Stepper length={3} currentStep={1} />
-      </Stack>
       <Outlet />
     </Card>
   );

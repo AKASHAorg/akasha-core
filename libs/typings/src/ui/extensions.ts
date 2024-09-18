@@ -26,8 +26,11 @@ export type Extension = Omit<AkashaAppInterface, 'author' | 'contributors'> & {
   author?: string;
   contributors?: [string];
   applicationType?: AkashaAppApplicationType;
+  nsfw?: boolean;
   // this prop is only for local storage draft extensions
   localDraft?: boolean;
+  sourceURL?: string;
+  contactInfo?: string;
 };
 
 /**
