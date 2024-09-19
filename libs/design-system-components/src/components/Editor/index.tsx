@@ -359,12 +359,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
       const afterText = Editor.string(editor, afterRange);
       const afterMatch = afterText.match(/^(\s|$)/);
 
-      //check whether the @ character at the current selection is removed which happens when the value of beforeMentionMatch is anything but null or an array
-      if (
-        beforeMentionMatch !== null &&
-        !Array.isArray(beforeMentionMatch) &&
-        mentionsLimitReached
-      ) {
+      if (!beforeMentionMatch && mentionsLimitReached) {
         setMentionsLimitReached(false);
       }
 
