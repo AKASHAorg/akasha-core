@@ -61,6 +61,14 @@ export const FollowButton = ({
 
   const [createFollowMutation, { loading: createFollowLoading }] = useCreateFollowMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
+    onQueryUpdated: observableQuery => {
+      /*
+       ** When creating a follow document using this mutation, a cache is created for it in memory and the object doesn't contain profileID(stream id of a profile) field.
+       ** As a result, when the query associated with this mutation is executed since it uses profileID to fetch data it won't find it in the cache and returns null.
+       ** Hence, the data this component receives is stale which requires a refetch to fix the missing profileID in the cache.
+       **/
+      return observableQuery.refetch();
+    },
     onCompleted: async ({ setAkashaFollow }) => {
       const document = setAkashaFollow.document;
       if (iconOnly) sendSuccessNotification(document.profile?.name, isFollowing);
