@@ -5,7 +5,7 @@ type ReflectProviderValue{
   value: String! @string(minLength: 3, maxLength: 3000)
 }
 
-interface AkashaBeamInterface @loadModel(id: "kjzl6hvfrbw6c8yiu45yc60bmqlqcrxomepric4o8tr6rr8nzr3o30s3ay9izlr") {
+interface AkashaBeamInterface @loadModel(id: "kjzl6hvfrbw6c5rvaehvw3bo06g91zzskdmqcamf87cou0c3rcjfga8otgn1dmh") {
   id: ID!
 }
 
@@ -26,7 +26,7 @@ interface AkashaReflectInterface @createModel(description: "A Reflection on a Be
 }
 
 type AkashaReflect implements AkashaReflectInterface
-  @createModel(accountRelation: LIST, description: "A Reflection on a Beam v0.4.0")
+  @createModel(accountRelation: LIST, description: "A Reflection on a Beam v0.5.0")
   @createIndex(fields:[{path:["active"]}])
   @createIndex(fields:[{path:["beamID"]}])
   @createIndex(fields:[{path:["createdAt"]}])

@@ -22,6 +22,8 @@ fragment BeamFragmentM on AkashaBeam{
   version
   createdAt
   nsfw
+  appID
+  appVersionID
   reflections(last: 1){
     edges {
       cursor

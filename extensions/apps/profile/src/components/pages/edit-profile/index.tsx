@@ -116,7 +116,15 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
     publishProfileData: PublishProfileData,
     profileImages: Pick<PartialAkashaProfileInput, 'avatar' | 'background'>,
   ) => {
-    createProfileMutation({
+    const info = await sdk.services.gql.getAPI().GetAppsByPublisherDID({
+      id: sdk.services.gql.indexingDID,
+      filters: { where: { name: { equalTo: '@akashaorg/app-profile' } } },
+      last: 1,
+    });
+    if (!info.node || !('akashaAppList' in info.node)) {
+      throw new Error('@akashaorg/app-profile not found');
+    }
+    return createProfileMutation({
       variables: {
         i: {
           content: {
@@ -124,6 +132,8 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
             description: publishProfileData.bio,
             links: publishProfileData.links.map(link => ({ href: link })),
             nsfw: publishProfileData.nsfw,
+            appID: info.node.akashaAppList.edges[0].node.id,
+            appVersionID: info.node.akashaAppList.edges[0].node.releases.edges[0].node.id,
             createdAt: new Date().toISOString(),
             ...profileImages,
           },
@@ -144,7 +154,8 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
             name: publishProfileData.name,
             description: publishProfileData.bio,
             links: publishProfileData.links.map(link => ({ href: link })),
-            nsfw: publishProfileData.nsfw,
+            // composedDB strips immutable fields on update
+            // nsfw: publishProfileData.nsfw,
             ...profileImages,
           },
         },

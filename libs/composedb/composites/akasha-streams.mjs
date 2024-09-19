@@ -51,7 +51,7 @@ interface AkashaIndexStreamInterface
 }
 
 type AkashaBeamStream implements AkashaIndexStreamInterface
-  @createModel(accountRelation: SET, description: "Moderated Beams list v0.4.0",  accountRelationFields: ["beamID"])
+  @createModel(accountRelation: SET, description: "Moderated Beams list v0.5.0",  accountRelationFields: ["beamID"])
   @createIndex(fields:[{path: ["active"]}])
   @createIndex(fields:[{path: ["beamID"]}])
   @createIndex(fields:[{path: ["createdAt"]}])
@@ -67,10 +67,11 @@ type AkashaBeamStream implements AkashaIndexStreamInterface
     status: ModerationStatus
     moderationID: StreamID @documentReference(model: "Node") @immutable
     moderation: Node @relationDocument(property: "moderationID")
+    appID: StreamID @documentReference(model: "AkashaAppInterface") @immutable
 }
 
 type AkashaContentBlockStream implements AkashaIndexStreamInterface
-  @createModel(accountRelation: SET, description: "Moderated Content Blocks v0.4.0", accountRelationFields: ["blockID"])
+  @createModel(accountRelation: SET, description: "Moderated Content Blocks v0.5.0", accountRelationFields: ["blockID"])
   @createIndex(fields:[{path: ["active"]}])
   @createIndex(fields:[{path: ["blockID"]}])
   @createIndex(fields:[{path: ["createdAt"]}])
@@ -89,7 +90,7 @@ type AkashaContentBlockStream implements AkashaIndexStreamInterface
 }
 
 type AkashaReflectStream implements AkashaIndexStreamInterface
-  @createModel(accountRelation: SET, description: "Moderated Beam Reflections v0.4.0", accountRelationFields: ["reflectionID"])
+  @createModel(accountRelation: SET, description: "Moderated Beam Reflections v0.5.0", accountRelationFields: ["reflectionID"])
   @createIndex(fields:[{path: ["active"]}])
   @createIndex(fields:[{path: ["reflectionID"]}])
   @createIndex(fields:[{path: ["createdAt"]}])
@@ -115,7 +116,7 @@ type AkashaReflectStream implements AkashaIndexStreamInterface
 }
 
 type AkashaProfileStream implements AkashaIndexStreamInterface
-  @createModel(accountRelation: SET, description: "Moderated Profiles list v0.4.0", accountRelationFields: ["profileID"])
+  @createModel(accountRelation: SET, description: "Moderated Profiles list v0.5.0", accountRelationFields: ["profileID"])
   @createIndex(fields:[{path: ["active"]}])
   @createIndex(fields:[{path: ["profileID"]}])
   @createIndex(fields:[{path: ["createdAt"]}])
@@ -130,11 +131,12 @@ type AkashaProfileStream implements AkashaIndexStreamInterface
     status: ModerationStatus
     moderationID: StreamID @documentReference(model: "Node") @immutable
     moderation: Node @relationDocument(property: "moderationID")
+    appID: StreamID @documentReference(model: "AkashaAppInterface") @immutable
 }
 
 
 type AkashaInterestsStream implements AkashaIndexStreamInterface
-  @createModel(accountRelation: SET, description: "Moderated Interests suggestion list v0.4.0", accountRelationFields: ["labelType", "value"])
+  @createModel(accountRelation: SET, description: "Moderated Interests suggestion list v0.5.0", accountRelationFields: ["labelType", "value"])
   @createIndex(fields:[{path: ["active"]}])
   @createIndex(fields:[{path: ["labelType"]}])
   @createIndex(fields:[{path: ["value"]}])
@@ -155,7 +157,7 @@ type AkashaInterestsStream implements AkashaIndexStreamInterface
 
 
 type AkashaAppsStream implements AkashaIndexStreamInterface
-  @createModel(accountRelation: SET, description: "Moderated Apps suggestion list v0.4.0", accountRelationFields: ["applicationID"])
+  @createModel(accountRelation: SET, description: "Moderated Apps suggestion list v0.5.0", accountRelationFields: ["applicationID"])
   @createIndex(fields:[{path: ["active"]}])
   @createIndex(fields:[{path: ["applicationID"]}])
   @createIndex(fields:[{path: ["createdAt"]}])
@@ -174,7 +176,7 @@ type AkashaAppsStream implements AkashaIndexStreamInterface
 }
 
 type AkashaIndexedStream implements AkashaIndexStreamInterface
-  @createModel(accountRelation: SET, description: "Indexed Content v0.4.0", accountRelationFields: ["stream","indexType", "indexValue"])
+  @createModel(accountRelation: SET, description: "Indexed Content v0.5.0", accountRelationFields: ["stream","indexType", "indexValue"])
   @createIndex(fields:[{path: ["active"]}])
   @createIndex(fields:[{path: ["createdAt"]}])
   @createIndex(fields:[{path: ["status"]}])
