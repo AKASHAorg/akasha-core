@@ -49,8 +49,6 @@ import { MarkButton, BlockButton } from './formatting-buttons';
 
 const MAX_TEXT_LENGTH = 500;
 
-const MENTION_CHARACTER = '@';
-
 type Node = Descendant | { children: Descendant[] };
 
 export type EditorBoxProps = {
@@ -361,7 +359,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
       const afterText = Editor.string(editor, afterRange);
       const afterMatch = afterText.match(/^(\s|$)/);
 
-      //check whether the last @ character is removed which happens when the value is anything but null or an array
+      //check whether the @ character at the current selection is removed which happens when the value of beforeMentionMatch is anything but null or an array
       if (
         beforeMentionMatch !== null &&
         !Array.isArray(beforeMentionMatch) &&
@@ -370,13 +368,17 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
         setMentionsLimitReached(false);
       }
 
-      if (
-        !mentionsLimitReached &&
-        beforeMentionMatch &&
-        afterMatch &&
-        beforeRange &&
-        typeof getMentions === 'function'
-      ) {
+      if (beforeMentionMatch && afterMatch && beforeRange && typeof getMentions === 'function') {
+        if (mentionsLimit) {
+          if (
+            countMentions({
+              children: editorState,
+            }) === mentionsLimit.count
+          ) {
+            setMentionsLimitReached(true);
+            return;
+          }
+        }
         setMentionTargetRange(beforeRange);
         getMentions(beforeMentionMatch[1]);
         setIndex(0);
@@ -405,16 +407,6 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
 
   const onKeyDown = useCallback(
     event => {
-      if (mentionsLimit && event.key === MENTION_CHARACTER) {
-        if (
-          countMentions({
-            children: editorState,
-          }) === mentionsLimit.count
-        ) {
-          setMentionsLimitReached(true);
-        }
-      }
-
       /**
        * key handler for the mention popover
        * inserts the mention on tab, enter or space keypress
@@ -508,17 +500,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
         setTagTargetRange(null);
       }
     },
-    [
-      index,
-      mentionTargetRange,
-      tagTargetRange,
-      mentions,
-      tags,
-      editor,
-      createTag,
-      editorState,
-      mentionsLimit,
-    ],
+    [index, mentionTargetRange, tagTargetRange, mentions, tags, editor, createTag],
   );
 
   /**
