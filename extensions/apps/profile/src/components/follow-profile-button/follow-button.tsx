@@ -19,11 +19,16 @@ import {
   useCreateFollowMutation,
   useUpdateFollowMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import { ButtonProps } from '@akashaorg/design-system-core/lib/components/Button/types';
 
-type FollowButtonProps = {
+export type FollowButtonProps = {
   profileID: string;
   followDocumentId: string;
-  iconOnly: boolean;
+  iconOnly?: boolean;
+  customizeButton?: {
+    size: ButtonProps['size'];
+    variant: ButtonProps['variant'];
+  };
   isFollowing: boolean;
   isLoggedIn: boolean;
   showLoginModal: (redirectTo?: { modal: IModalNavigationOptions }) => void;
@@ -32,6 +37,7 @@ export const FollowButton = ({
   profileID,
   followDocumentId,
   iconOnly,
+  customizeButton,
   isFollowing,
   isLoggedIn,
   showLoginModal,
@@ -104,7 +110,7 @@ export const FollowButton = ({
       aria-label="follow"
       onClick={() => handleFollow(profileID, followDocumentId, !isFollowing)}
       icon={isFollowing ? <Following role="img" aria-label="following" /> : <UserPlusIcon />}
-      variant={'primary'}
+      variant="primary"
       loading={loading}
       greyBg={true}
       iconOnly={true}
@@ -112,6 +118,8 @@ export const FollowButton = ({
     />
   ) : (
     <DuplexButton
+      size={customizeButton?.size}
+      variant={customizeButton?.variant}
       inactiveLabel={t('Follow')}
       activeLabel={t('Following')}
       activeHoverLabel={t('Unfollow')}
@@ -122,12 +130,14 @@ export const FollowButton = ({
       inactiveVariant="secondary"
       loading={loading}
       fixedWidth={'w-[7rem]'}
-      hoverColors={{
-        background: { light: 'transparent', dark: 'transparent' },
-        border: { light: 'errorLight', dark: 'errorDark' },
-        text: { light: 'errorLight', dark: 'errorDark' },
-        icon: { light: 'errorLight', dark: 'errorDark' },
-      }}
+      {...(customizeButton?.variant !== 'primary' && {
+        hoverColors: {
+          background: { light: 'transparent', dark: 'transparent' },
+          border: { light: 'errorLight', dark: 'errorDark' },
+          text: { light: 'errorLight', dark: 'errorDark' },
+          icon: { light: 'errorLight', dark: 'errorDark' },
+        },
+      })}
       customStyle={disabledStyle}
       onClickInactive={() => handleFollow(profileID, followDocumentId, !isFollowing)}
       onClickActive={() => handleFollow(profileID, followDocumentId, !isFollowing)}

@@ -1,3 +1,6 @@
+import { AvatarSize, AvatarBorderSize, AvatarBorderColor } from '../components/Avatar';
+import { Color } from '../components/types/common.types';
+
 export const avatarSizesMap = {
   xs: 'w-6 h-6',
   sm: 'w-8 h-8',
@@ -22,6 +25,15 @@ export const avatarBorderColorsMap = {
   accent: 'secondaryDark',
 };
 
+interface IGenerateAvatarContainerStyleProps {
+  size: AvatarSize;
+  border: AvatarBorderSize;
+  borderColor: AvatarBorderColor;
+  customStyle: string;
+  isClickable: boolean;
+  backgroundColor: { light: Color; dark: Color };
+}
+
 export const generateAvatarContainerStyle = ({
   size,
   border,
@@ -29,10 +41,10 @@ export const generateAvatarContainerStyle = ({
   customStyle,
   isClickable,
   backgroundColor,
-}) =>
+}: IGenerateAvatarContainerStyleProps) =>
   `box-border cursor-${isClickable ? 'pointer' : 'default'} select-none relative overflow-hidden ${
     avatarSizesMap[size]
-  } rounded-full bg-${backgroundColor ? backgroundColor : 'white'} border-${
+  } rounded-full bg-(${backgroundColor?.light ?? 'white'} dark:${backgroundColor?.dark ?? 'white'}) border-${
     border ? avatarBorderSizesMap[border] : '0'
   } border-${borderColor ? avatarBorderColorsMap[borderColor] : 'transparent'} ${customStyle}`;
 
