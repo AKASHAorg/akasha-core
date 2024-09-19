@@ -20,7 +20,7 @@
     "@composedb/client": "0.7.1",
     "@composedb/types": "0.7.1",
     "@didtools/cacao": "3.0.1",
-    "@didtools/pkh-ethereum": "0.6.0",
+    "@didtools/pkh-ethereum": "0.5.0",
     "@headlessui/react": "1.7.18",
     "@heroicons/react": "2.1.1",
     "@hookform/resolvers": "3.0.0",
