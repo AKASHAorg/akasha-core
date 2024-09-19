@@ -22,6 +22,8 @@ fragment UserProfileFragment on AkashaProfile{
     }
   }
   description
+  appVersionID
+  appID
   avatar {
     default {
       src
@@ -95,6 +97,7 @@ query GetProfileStream($indexer: ID!, $after: String, $before: String, $first: I
             createdAt
             moderationID
             status
+            appID
           }
           cursor
         }

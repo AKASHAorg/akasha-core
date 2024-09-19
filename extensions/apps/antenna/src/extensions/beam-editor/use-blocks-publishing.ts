@@ -35,6 +35,10 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
   const [isNsfw, setIsNsfw] = React.useState(false);
   const [editorTags, setEditorTags] = React.useState([]);
   const { getCorePlugins } = useRootComponentProps();
+  const [appInfo, setAppInfo] = React.useState<{
+    appID: string;
+    appVersionID: string;
+  }>();
 
   React.useLayoutEffect(() => {
     if (getCorePlugins()) {
@@ -58,6 +62,67 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
   >([]);
 
   const defaultTextBlock = availableBlocks.find(block => block.propertyType === DEFAULT_TEXT_BLOCK);
+
+  React.useEffect(() => {
+    let shouldFetch = true;
+    const fetchAppInfo = async () => {
+      const info = await sdk.current.services.gql.getAPI().GetAppsByPublisherDID({
+        id: sdk.current.services.gql.indexingDID,
+        filters: { where: { name: { equalTo: '@akashaorg/app-antenna' } } },
+        last: 1,
+      });
+      if (info.node && 'akashaAppList' in info.node) {
+        return {
+          appID: info.node.akashaAppList.edges[0].node.id,
+          appVersionID: info.node.akashaAppList.edges[0].node.releases.edges[0].node.id,
+        };
+      }
+    };
+    fetchAppInfo().then(r => shouldFetch && setAppInfo(r));
+
+    return () => {
+      shouldFetch = false;
+    };
+  }, []);
+
+  React.useEffect(() => {
+    if (!blocksInUse.length) return;
+    if (blocksInUse.every(bl => bl.status === 'success') && appInfo) {
+      const tagLabelType = sdk.current.services.gql.labelTypes.TAG;
+      const tags = editorTags.map(tagName => {
+        return {
+          labelType: tagLabelType,
+          value: tagName,
+        };
+      });
+      const beamContent: AkashaBeamInput = {
+        active: true,
+        nsfw: isNsfw,
+        tags: tags,
+        content: blocksInUse.map(blockData => ({
+          blockID: blockData.response?.blockID,
+          order: blockData.order,
+        })),
+        createdAt: new Date().toISOString(),
+        appID: appInfo.appID,
+        appVersionID: appInfo.appVersionID,
+      };
+
+      if (createBeamQuery.loading || createBeamQuery.error) return;
+      if (createBeamQuery.called) return;
+
+      createBeam({
+        variables: {
+          i: {
+            content: beamContent,
+          },
+        },
+      }).then(resp => {
+        setBlocksInUse([]);
+        setIsPublishing(false);
+      });
+    }
+  }, [blocksInUse, appInfo, editorTags, isNsfw, createBeam, createBeamQuery]);
 
   // always add the default block
   React.useEffect(() => {
@@ -93,6 +158,8 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
           order: blockData.order,
         })),
         createdAt: new Date().toISOString(),
+        appID: appInfo.appID,
+        appVersionID: appInfo.appVersionID,
       };
 
       if (createBeamQuery.loading || createBeamQuery.error) return;
