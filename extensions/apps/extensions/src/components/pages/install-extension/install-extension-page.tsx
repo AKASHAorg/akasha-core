@@ -64,7 +64,7 @@ export const InstallExtensionPage = ({ appId }: { appId: string }) => {
       }
     };
     getAuthorProfile().catch(err => logger.warn(err));
-  }, [appAuthorId]);
+  }, [appAuthorId, logger, plugins]);
 
   const retryableError: symbol[] = useMemo(
     () => [
@@ -102,9 +102,13 @@ export const InstallExtensionPage = ({ appId }: { appId: string }) => {
 
   useEffect(() => {
     if (isInstalled) {
-      // navigate to app
+      // navigation using replace it's important here
+      // because we also want to refresh the page
+      setTimeout(() => {
+        window.location.replace(`/${decodeName.current(appId)}`);
+      }, 3000);
     }
-  }, [isInstalled]);
+  }, [appId, isInstalled]);
 
   useEffect(() => {
     const startInstaller = async () => {
@@ -138,7 +142,7 @@ export const InstallExtensionPage = ({ appId }: { appId: string }) => {
     if (authenticatedDID) {
       startInstaller().catch(err => logger.error(err));
     }
-  }, [appId, authenticatedDID, installer]);
+  }, [appId, authenticatedDID, installer, logger, navigate]);
 
   useEffect(() => {
     return installer.subscribe(
@@ -204,8 +208,14 @@ export const InstallExtensionPage = ({ appId }: { appId: string }) => {
     if (reportedError?.code) {
       return 'error';
     }
+    if (shouldRegisterResources && 1 < 0 /* successfullySigned */) {
+      return 'complete';
+    }
+    if (shouldRegisterResources) {
+      return 'authorize-request';
+    }
     return 'in-progress';
-  }, [isInstalled, reportedError]);
+  }, [isInstalled, reportedError?.code, shouldRegisterResources]);
 
   const progressInfo = useMemo(() => {
     if (isInstalled) {
@@ -221,6 +231,15 @@ export const InstallExtensionPage = ({ appId }: { appId: string }) => {
     }
     return getReportedProgress(reportedStatus, installerStatusCodes.current.status, t);
   }, [data, isInstalled, reportedError, reportedStatus, t]);
+
+  const successLabel = useMemo(() => {
+    if (isInstalled) {
+      return t('Finished');
+    }
+    if (shouldRegisterResources && 1 < 0 /*successfullySigned*/) {
+      return t('Request authorised');
+    }
+  }, [isInstalled, shouldRegisterResources, t]);
 
   const actions = useMemo(() => {
     if (isInstalled) {
@@ -245,15 +264,7 @@ export const InstallExtensionPage = ({ appId }: { appId: string }) => {
       label: t('Cancel installation'),
       onClick: () => installer.cancelInstallation(),
     });
-  }, [
-    appId,
-    getCorePlugins,
-    installer,
-    isInstalled,
-    reportedError?.code,
-    reportedError?.retryable,
-    t,
-  ]);
+  }, [installer, isInstalled, logger, reportedError, shouldRegisterResources, t]);
 
   if (error) {
     return (
@@ -264,9 +275,9 @@ export const InstallExtensionPage = ({ appId }: { appId: string }) => {
       />
     );
   }
+
   return (
     <>
-      {(isAuthenticating || loading) && <div>Loading..</div>}
       {!authenticatedDID && !isAuthenticating && called && !loading && (
         <ErrorLoader
           type="not-authenticated"
@@ -289,7 +300,7 @@ export const InstallExtensionPage = ({ appId }: { appId: string }) => {
           progressInfo={progressInfo}
           status={installStatus}
           actions={actions}
-          successLabel={t('Finished')}
+          successLabel={successLabel}
         />
       )}
     </>

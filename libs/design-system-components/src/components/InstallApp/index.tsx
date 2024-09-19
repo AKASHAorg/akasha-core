@@ -13,6 +13,12 @@ import {
   AkashaAppApplicationType,
   AppImageSource,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
+import {
+  Akasha,
+  Walletconnect,
+} from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
+import IndicatorDots from '../IndicatorDots';
 
 export type InstallAppProps = {
   title: string;
@@ -22,7 +28,7 @@ export type InstallAppProps = {
   publisherName?: string;
   publisherDID: string;
   progressInfo: string;
-  status: 'in-progress' | 'error' | 'complete';
+  status: 'in-progress' | 'error' | 'complete' | 'authorize-request';
   actions?: { label: string; onClick: () => void }[];
   successLabel: string;
 };
@@ -49,7 +55,7 @@ const TruncateText = ({
 }) => {
   const [first, last] = useMemo(() => {
     return [text.slice(0, text.length - visibleCount), text.slice(text.length - visibleCount)];
-  }, [text]);
+  }, [text, visibleCount]);
 
   return (
     <Text {...textProps} customStyle={`${textProps.customStyle} flex`}>
@@ -105,6 +111,28 @@ const InstallApp = ({
         </Stack>
         <Stack direction="column" customStyle="max-w-xs">
           <Stack align="center" direction="column" spacing="gap-y-4">
+            {status === 'authorize-request' && (
+              <Stack direction="row" align="center" justify="center">
+                <AppIcon
+                  placeholderIcon={<Walletconnect />}
+                  background={{ gradient: 'gradient-to-b', from: 'orange-50', to: 'orange-200' }}
+                  radius={24}
+                  size={{ width: 40, height: 40 }}
+                  backgroundSize={40}
+                  iconColor="self-color"
+                />
+                <IndicatorDots size="sm" />
+                <AppIcon
+                  placeholderIcon={<Akasha />}
+                  solid={true}
+                  background={{ gradient: 'gradient-to-b', from: 'blue-200', to: 'red-200' }}
+                  radius={8}
+                  size={{ width: 24, height: 24 }}
+                  backgroundSize={40}
+                  iconColor="black"
+                />
+              </Stack>
+            )}
             {status === 'error' && (
               <div className={tw('relative')}>
                 <ErrorIcon className={tw(apply`${errorAnimationStyle}`)} />
