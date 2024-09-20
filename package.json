@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@apollo/client": "3.10.4",
-    "@ceramicnetwork/http-client": "5.4.0",
+    "@ceramicnetwork/http-client": "6.4.0",
     "@composedb/client": "0.7.1",
     "@composedb/types": "0.7.1",
     "@didtools/cacao": "3.0.1",

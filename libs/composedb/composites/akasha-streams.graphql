@@ -1,21 +1,21 @@
 
-interface AkashaBeamInterface @loadModel(id: "kjzl6hvfrbw6c8yiu45yc60bmqlqcrxomepric4o8tr6rr8nzr3o30s3ay9izlr") {
+interface AkashaBeamInterface @loadModel(id: "kjzl6hvfrbw6c5rvaehvw3bo06g91zzskdmqcamf87cou0c3rcjfga8otgn1dmh") {
   id: ID!
 }
 
-interface AkashaContentBlockInterface @loadModel(id: "kjzl6hvfrbw6c9zxtxl9ou1i86lqo2inne8dqvyi83f26p695s98mhkw40mwwsv") {
+interface AkashaContentBlockInterface @loadModel(id: "kjzl6hvfrbw6camingc354x7fs0zfvcdntuls7514mom4gpzntbv0gtyaeqduwg") {
   id: ID!
 }
 
-interface AkashaProfileInterface @loadModel(id: "kjzl6hvfrbw6caajs6qkzc286dy6slgraq9dcgfw0m681dq5nh52djd0p9ngbct") {
+interface AkashaProfileInterface @loadModel(id: "kjzl6hvfrbw6c8iuza101yr8ovi9pu4qub5ghbeqhr1g15xv6xm1bkeuof4dxxd") {
   id: ID!
 }
 
-interface AkashaReflectInterface @loadModel(id: "kjzl6hvfrbw6c6qb11x4adb625uyxl7zmrd947qdhidxppkhk56atsjtjh3tv28") {
+interface AkashaReflectInterface @loadModel(id: "kjzl6hvfrbw6c9aglcacfejq5fxzy0pxc8eraoyy03b9lv2mlx5o9u85zqnrhf5") {
   id: ID!
 }
 
-interface AkashaAppInterface @loadModel(id: "kjzl6hvfrbw6c86gj8z6avu2zk6ykczk5t1sgb8waul05g4lr5nd5zy1l7t3ajt") {
+interface AkashaAppInterface @loadModel(id: "kjzl6hvfrbw6c7mp2kgev6yk8hrxqkwj28l92a74x3p6wi1gcms00yx9ckxsokn") {
   id: ID!
 }
 
@@ -49,7 +49,7 @@ interface AkashaIndexStreamInterface
 }
 
 type AkashaBeamStream implements AkashaIndexStreamInterface
-  @createModel(accountRelation: SET, description: "Moderated Beams list v0.4.0",  accountRelationFields: ["beamID"])
+  @createModel(accountRelation: SET, description: "Moderated Beams list v0.5.0",  accountRelationFields: ["beamID"])
   @createIndex(fields:[{path: ["active"]}])
   @createIndex(fields:[{path: ["beamID"]}])
   @createIndex(fields:[{path: ["createdAt"]}])
@@ -65,10 +65,11 @@ type AkashaBeamStream implements AkashaIndexStreamInterface
     status: ModerationStatus
     moderationID: StreamID @documentReference(model: "Node") @immutable
     moderation: Node @relationDocument(property: "moderationID")
+    appID: StreamID @documentReference(model: "AkashaAppInterface") @immutable
 }
 
 type AkashaContentBlockStream implements AkashaIndexStreamInterface
-  @createModel(accountRelation: SET, description: "Moderated Content Blocks v0.4.0", accountRelationFields: ["blockID"])
+  @createModel(accountRelation: SET, description: "Moderated Content Blocks v0.5.0", accountRelationFields: ["blockID"])
   @createIndex(fields:[{path: ["active"]}])
   @createIndex(fields:[{path: ["blockID"]}])
   @createIndex(fields:[{path: ["createdAt"]}])
@@ -87,7 +88,7 @@ type AkashaContentBlockStream implements AkashaIndexStreamInterface
 }
 
 type AkashaReflectStream implements AkashaIndexStreamInterface
-  @createModel(accountRelation: SET, description: "Moderated Beam Reflections v0.4.0", accountRelationFields: ["reflectionID"])
+  @createModel(accountRelation: SET, description: "Moderated Beam Reflections v0.5.0", accountRelationFields: ["reflectionID"])
   @createIndex(fields:[{path: ["active"]}])
   @createIndex(fields:[{path: ["reflectionID"]}])
   @createIndex(fields:[{path: ["createdAt"]}])
@@ -113,7 +114,7 @@ type AkashaReflectStream implements AkashaIndexStreamInterface
 }
 
 type AkashaProfileStream implements AkashaIndexStreamInterface
-  @createModel(accountRelation: SET, description: "Moderated Profiles list v0.4.0", accountRelationFields: ["profileID"])
+  @createModel(accountRelation: SET, description: "Moderated Profiles list v0.5.0", accountRelationFields: ["profileID"])
   @createIndex(fields:[{path: ["active"]}])
   @createIndex(fields:[{path: ["profileID"]}])
   @createIndex(fields:[{path: ["createdAt"]}])
@@ -128,11 +129,12 @@ type AkashaProfileStream implements AkashaIndexStreamInterface
     status: ModerationStatus
     moderationID: StreamID @documentReference(model: "Node") @immutable
     moderation: Node @relationDocument(property: "moderationID")
+    appID: StreamID @documentReference(model: "AkashaAppInterface") @immutable
 }
 
 
 type AkashaInterestsStream implements AkashaIndexStreamInterface
-  @createModel(accountRelation: SET, description: "Moderated Interests suggestion list v0.4.0", accountRelationFields: ["labelType", "value"])
+  @createModel(accountRelation: SET, description: "Moderated Interests suggestion list v0.5.0", accountRelationFields: ["labelType", "value"])
   @createIndex(fields:[{path: ["active"]}])
   @createIndex(fields:[{path: ["labelType"]}])
   @createIndex(fields:[{path: ["value"]}])
@@ -153,7 +155,7 @@ type AkashaInterestsStream implements AkashaIndexStreamInterface
 
 
 type AkashaAppsStream implements AkashaIndexStreamInterface
-  @createModel(accountRelation: SET, description: "Moderated Apps suggestion list v0.4.0", accountRelationFields: ["applicationID"])
+  @createModel(accountRelation: SET, description: "Moderated Apps suggestion list v0.5.0", accountRelationFields: ["applicationID"])
   @createIndex(fields:[{path: ["active"]}])
   @createIndex(fields:[{path: ["applicationID"]}])
   @createIndex(fields:[{path: ["createdAt"]}])
@@ -172,7 +174,7 @@ type AkashaAppsStream implements AkashaIndexStreamInterface
 }
 
 type AkashaIndexedStream implements AkashaIndexStreamInterface
-  @createModel(accountRelation: SET, description: "Indexed Content v0.4.0", accountRelationFields: ["stream","indexType", "indexValue"])
+  @createModel(accountRelation: SET, description: "Indexed Content v0.5.0", accountRelationFields: ["stream","indexType", "indexValue"])
   @createIndex(fields:[{path: ["active"]}])
   @createIndex(fields:[{path: ["createdAt"]}])
   @createIndex(fields:[{path: ["status"]}])

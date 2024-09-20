@@ -9,7 +9,10 @@ import { Image } from './media';
 /**
  * Type defining plain old javascript object of a profile data
  **/
-export type AkashaProfile = Omit<ProfileData, 'followers' | 'did' | 'followersCount'> & {
+export type AkashaProfile = Omit<
+  ProfileData,
+  'followers' | 'did' | 'followersCount' | 'appID' | 'appVersionID'
+> & {
   did: Partial<CeramicAccount>;
   followers?: AkashaFollowConnection;
   followersCount?: number;
