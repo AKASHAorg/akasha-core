@@ -146,7 +146,7 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
             onClick: () => {},
           },
           {
-            label: t('Submit'),
+            label: t('Submit Release'),
             icon: <PaperAirplaneIcon />,
             onClick: handleReleaseSubmit,
           },
@@ -159,7 +159,7 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
             onClick: () => {},
           },
           {
-            label: t('Submit'),
+            label: t('Submit Release'),
             icon: <PaperAirplaneIcon />,
             onClick: handleReleaseSubmit,
           },
@@ -178,7 +178,7 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
       case ExtensionStatus.Draft:
         return [
           {
-            label: t('Submit'),
+            label: t('Publish'),
             icon: <PaperAirplaneIcon />,
             onClick: handleExtensionSubmit,
           },

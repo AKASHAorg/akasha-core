@@ -10,7 +10,7 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import ExtensionReviewAndPublish from '@akashaorg/design-system-components/lib/components/ExtensionReviewAndPublish';
 import { transformSource, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { Extension, NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
-import { CONTACT_INFO, DRAFT_EXTENSIONS } from '../../constants';
+import { DRAFT_EXTENSIONS } from '../../constants';
 import getSDK from '@akashaorg/core-sdk';
 import { useCreateAppMutation } from '@akashaorg/ui-awf-hooks/lib/generated';
 import { SubmitType } from '../app-routes';
@@ -35,9 +35,8 @@ export const ExtensionSubmitPage: React.FC<ExtensionSubmitPageProps> = ({ extens
 
   const [createAppMutation] = useCreateAppMutation({
     context: { source: sdk.current.services.gql.contextSources.composeDB },
-
     onError: () => {
-      showAlertNotification(`${t(`Something went wrong when creating the extension`)}.`);
+      showAlertNotification(`${t(`Something went wrong when publishing the extension`)}.`);
     },
   });
 
@@ -69,11 +68,39 @@ export const ExtensionSubmitPage: React.FC<ExtensionSubmitPageProps> = ({ extens
 
   const extensionData = draftExtensions.find(draftExtension => draftExtension.id === extensionId);
 
-  const extData = {
-    ...extensionData,
-    links: extensionData.links?.filter(link => link.label !== `${extensionId}-${CONTACT_INFO}`),
-    contactInfo: extensionData.links?.find(link => link.label === `${extensionId}-${CONTACT_INFO}`)
-      ?.href,
+  const handleClickSubmit = () => {
+    const extData = {
+      applicationType: extensionData?.applicationType,
+      contributors: extensionData?.contributors,
+      coverImage: extensionData?.coverImage,
+      createdAt: new Date().toISOString(),
+      description: extensionData?.description,
+      displayName: extensionData?.displayName,
+      gallery: extensionData?.gallery,
+      keywords: extensionData?.keywords,
+      license: extensionData?.license,
+      links: extensionData?.links,
+      logoImage: extensionData?.logoImage,
+      name: extensionData?.name,
+      nsfw: extensionData?.nsfw,
+    };
+    createAppMutation({
+      variables: {
+        i: {
+          content: extData,
+        },
+      },
+    });
+    navigate({
+      to: '/post-submit',
+      search: { type: SubmitType.EXTENSION },
+    });
+  };
+
+  const handleClickCancel = () => {
+    navigate({
+      to: '/my-extensions',
+    });
   };
 
   if (!authenticatedDID) {
@@ -97,7 +124,7 @@ export const ExtensionSubmitPage: React.FC<ExtensionSubmitPageProps> = ({ extens
           </Text>
         </Stack>
         <ExtensionReviewAndPublish
-          extensionData={extData}
+          extensionData={extensionData}
           title={t('Review Extension')}
           subtitle={{
             part1: 'Please note that fields marked with',
@@ -105,7 +132,6 @@ export const ExtensionSubmitPage: React.FC<ExtensionSubmitPageProps> = ({ extens
           }}
           extensionNameLabel={t('Extension Name')}
           extensionDisplayNameLabel={t('Extension Display Name')}
-          sourceFileLabel={t('Github Repository')}
           nsfwLabel={t('Extension NSFW')}
           nsfwDescription={t('You marked it as Not Safe For Work')}
           descriptionLabel={t('Description')}
@@ -120,24 +146,8 @@ export const ExtensionSubmitPage: React.FC<ExtensionSubmitPageProps> = ({ extens
           backButtonLabel={t('Cancel')}
           publishButtonLabel={t('Submit')}
           transformSource={transformSource}
-          onClickCancel={() => {
-            navigate({
-              to: '/my-extensions',
-            });
-          }}
-          onClickSubmit={() => {
-            createAppMutation({
-              variables: {
-                i: {
-                  content: extensionData,
-                },
-              },
-            });
-            navigate({
-              to: '/post-submit',
-              search: { type: SubmitType.EXTENSION },
-            });
-          }}
+          onClickCancel={handleClickCancel}
+          onClickSubmit={handleClickSubmit}
         />
       </Stack>
     </Card>

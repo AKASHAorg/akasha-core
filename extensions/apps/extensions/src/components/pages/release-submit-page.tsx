@@ -64,6 +64,39 @@ export const ExtensionReleaseSubmitPage: React.FC<ExtensionReleaseSubmitPageProp
     });
   };
 
+  const handleClickSubmit = appReleaseFormData => {
+    const appReleaseContent = {
+      applicationID: extensionId,
+      version: appReleaseFormData?.versionNumber,
+      source: appReleaseFormData?.sourceURL,
+      createdAt: new Date().toISOString(),
+      meta: [
+        {
+          provider: 'AkashaApp',
+          property: 'description',
+          value: appReleaseFormData?.description,
+        },
+      ],
+    };
+    setAppReleaseMutation({
+      variables: {
+        i: {
+          content: appReleaseContent,
+        },
+      },
+    });
+    navigate({
+      to: `/post-submit`,
+      search: { type: SubmitType.EXTENSION },
+    });
+  };
+
+  const handleClickCancel = () => {
+    navigate({
+      to: '/my-extensions',
+    });
+  };
+
   if (!authenticatedDID) {
     return (
       <ErrorLoader
@@ -90,41 +123,11 @@ export const ExtensionReleaseSubmitPage: React.FC<ExtensionReleaseSubmitPageProp
           sourceURLPlaceholderLabel={t('Webpack dev server / ipfs')}
           cancelButton={{
             label: t('Cancel'),
-            disabled: false,
-            handleClick: () => {
-              navigate({
-                to: '/my-extensions',
-              });
-            },
+            handleClick: handleClickCancel,
           }}
           nextButton={{
             label: t('Submit'),
-            handleClick: appReleaseData => {
-              const appReleaseContent = {
-                applicationID: extensionId,
-                version: appReleaseData?.versionNumber,
-                source: appReleaseData?.sourceURL,
-                createdAt: new Date().toISOString(),
-                meta: [
-                  {
-                    provider: 'AkashaApp',
-                    property: 'description',
-                    value: appReleaseData?.description,
-                  },
-                ],
-              };
-              setAppReleaseMutation({
-                variables: {
-                  i: {
-                    content: appReleaseContent,
-                  },
-                },
-              });
-              navigate({
-                to: `/post-submit`,
-                search: { type: SubmitType.EXTENSION },
-              });
-            },
+            handleClick: handleClickSubmit,
           }}
         />
       </Stack>

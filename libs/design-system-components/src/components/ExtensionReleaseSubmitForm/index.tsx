@@ -169,15 +169,9 @@ export default ExtensionReleaseSubmit;
 const schema = z.object({
   versionNumber: z.string(),
   description: z
-    .union([
-      z
-        .string()
-        .trim()
-        .min(10, { message: 'Must be at least 10 characters' })
-        .max(2000, { message: 'Must be less than 2000 characters' }),
-      z.string().length(0),
-    ])
-    .optional()
-    .transform(e => (e === '' ? undefined : e)),
-  sourceURL: z.string().url({ message: 'URL is required' }).optional(),
+    .string()
+    .trim()
+    .min(10, { message: 'Must be at least 10 characters' })
+    .max(2000, { message: 'Must be less than 2000 characters' }),
+  sourceURL: z.string().url({ message: 'URL is required' }),
 });

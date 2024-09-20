@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { tw } from '@twind/core';
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
@@ -30,7 +30,6 @@ export type ExtensionReviewAndPublishProps = {
   subtitle: { part1: string; part2: string };
   extensionNameLabel: string;
   extensionDisplayNameLabel: string;
-  sourceFileLabel: string;
   nsfwLabel: string;
   nsfwDescription: string;
   descriptionLabel: string;
@@ -57,7 +56,6 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
     subtitle,
     extensionNameLabel,
     extensionDisplayNameLabel,
-    sourceFileLabel,
     nsfwLabel,
     nsfwDescription,
     descriptionLabel,
@@ -80,10 +78,20 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
 
   const [activeAccordionId, setActiveAccordionId] = React.useState(null);
 
-  const transformedCoverImage = transformSource(extensionData.coverImage);
-  const seed = getImageFromSeed(extensionData.id, 3);
+  const transformedCoverImage = transformSource(extensionData?.coverImage);
+  const seed = getImageFromSeed(extensionData?.id, 3);
   const coverImageFallback = `${publicImagePath}/extension-cover-desktop-${seed}.webp`;
   const backgroundUrl = transformedCoverImage?.src ?? coverImageFallback;
+
+  const disablePublish = useMemo(
+    () =>
+      !extensionData?.applicationType ||
+      !extensionData?.displayName ||
+      !extensionData?.name ||
+      !extensionData?.license ||
+      !extensionData?.description,
+    [extensionData],
+  );
 
   const onAccordionClick = accordionId => {
     if (activeAccordionId === accordionId) {
@@ -130,9 +138,9 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
             fullWidth
           >
             <AppAvatar
-              appType={extensionData.applicationType}
-              avatar={transformSource(extensionData.logoImage)}
-              extensionId={extensionData.id}
+              appType={extensionData?.applicationType}
+              avatar={transformSource(extensionData?.logoImage)}
+              extensionId={extensionData?.id}
               customStyle="absolute left-4 -bottom-8"
             />
           </Stack>
@@ -143,33 +151,25 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
           >
             <Icon
               size="sm"
-              icon={getApplicationIconByType(extensionData.applicationType)}
+              icon={getApplicationIconByType(extensionData?.applicationType)}
               color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
               solid={true}
             />
             <Text variant="footnotes2" color={{ light: 'secondaryLight', dark: 'white' }}>
-              {extensionData.applicationType}
+              {extensionData?.applicationType}
             </Text>
           </AppInfoPill>
         </Stack>
 
         <Section title={extensionNameLabel} required>
-          <Text variant="body2">{extensionData.name}</Text>
+          <Text variant="body2">{extensionData?.name}</Text>
         </Section>
 
         <Section title={extensionDisplayNameLabel}>
-          <Text variant="body2">{extensionData.displayName}</Text>
+          <Text variant="body2">{extensionData?.displayName}</Text>
         </Section>
 
-        <Section title={sourceFileLabel} required>
-          <Link to={extensionData.sourceURL} target="_blank">
-            <Text variant="body2" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
-              {extensionData.sourceURL}
-            </Text>
-          </Link>
-        </Section>
-
-        <Section title={nsfwLabel} required hasToggle isToggleChecked={extensionData.nsfw}>
+        <Section title={nsfwLabel} required hasToggle isToggleChecked={extensionData?.nsfw}>
           <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }}>
             {nsfwDescription}
           </Text>
@@ -181,7 +181,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
             accordionId={descriptionLabel}
             open={descriptionLabel === activeAccordionId}
             titleNode={getAccordionTitleNode(descriptionLabel)}
-            contentNode={<Text variant="body2">{extensionData.description}</Text>}
+            contentNode={<Text variant="body2">{extensionData?.description}</Text>}
             handleClick={onAccordionClick}
           />
         </Stack>
@@ -195,7 +195,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
             contentNode={
               <Stack spacing="gap-y-3">
                 <ExtensionImageGallery
-                  images={extensionData.gallery?.slice(0, 3).map((image, idx) => ({
+                  images={extensionData?.gallery?.slice(0, 3).map((image, idx) => ({
                     src: image.src,
                     size: { width: image.width, height: image.height },
                     name: image.src + idx,
@@ -220,10 +220,10 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
           <Accordion
             accordionId={documentationLabel}
             open={documentationLabel === activeAccordionId}
-            titleNode={getAccordionTitleNode(documentationLabel)}
+            titleNode={getAccordionTitleNode(documentationLabel, false)}
             contentNode={
               <Stack spacing="gap-y-3">
-                {extensionData.links?.map((link, index) => (
+                {extensionData?.links?.map((link, index) => (
                   <Stack key={index}>
                     <Text variant="button-md">{link.label}</Text>
                     <Link to={link.href} target="_blank">
@@ -250,7 +250,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
             titleNode={getAccordionTitleNode(licenseLabel)}
             contentNode={
               <Stack>
-                <Text variant="button-md">{extensionData.license}</Text>
+                <Text variant="button-md">{extensionData?.license}</Text>
               </Stack>
             }
             handleClick={onAccordionClick}
@@ -265,7 +265,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
             titleNode={getAccordionTitleNode(contributorsLabel, false)}
             contentNode={
               <Stack spacing="gap-y-4">
-                {extensionData.contributors?.map((el, index) => (
+                {extensionData?.contributors?.map((el, index) => (
                   // @TODO: provide also the avatar and name for profiles
                   <ProfileAvatarButton key={index} profileId={el} />
                 ))}
@@ -281,7 +281,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
             accordionId={contactInfoLabel}
             open={contactInfoLabel === activeAccordionId}
             titleNode={getAccordionTitleNode(contactInfoLabel, false)}
-            contentNode={<Text variant="body2">{extensionData.contactInfo}</Text>}
+            contentNode={<Text variant="body2">{extensionData?.contactInfo}</Text>}
             handleClick={onAccordionClick}
           />
         </Stack>
@@ -294,7 +294,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
             titleNode={getAccordionTitleNode(tagsLabel)}
             contentNode={
               <Stack direction="row" spacing="gap-2" customStyle="flex-wrap">
-                {extensionData.keywords?.map((tag, idx) => (
+                {extensionData?.keywords?.map((tag, idx) => (
                   <Pill key={tag + idx} label={tag} type="action" />
                 ))}
               </Stack>
@@ -310,6 +310,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
         <Button variant="text" label={backButtonLabel} onClick={onClickCancel} />
         <Button
           variant="primary"
+          disabled={disablePublish}
           label={publishButtonLabel}
           onClick={onClickSubmit}
           customStyle="w-36"
