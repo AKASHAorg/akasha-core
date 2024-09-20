@@ -3,7 +3,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import TrendingWidgetItemLoader from '@akashaorg/design-system-components/lib/components/TrendingWidgetLoadingCard/trending-widget-item-loader';
 import { IRootComponentProps } from '@akashaorg/typings/lib/ui';
-import { hasOwn, transformSource } from '@akashaorg/ui-awf-hooks';
+import { hasOwn, transformSource, useNsfwToggling } from '@akashaorg/ui-awf-hooks';
 import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
 import { useGetProfileByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
@@ -28,6 +28,10 @@ export const LatestProfiles: React.FC<LatestProfilesProps> = props => {
     return null;
   }, [profileReq.data?.node]);
 
+  const { showNsfw } = useNsfwToggling();
+
+  const isViewer = authenticatedDID === profileData?.did?.id;
+
   if (profileReq.loading) return <TrendingWidgetItemLoader />;
 
   return (
@@ -43,7 +47,7 @@ export const LatestProfiles: React.FC<LatestProfilesProps> = props => {
         <ProfileAvatarButton
           profileId={profileData.did.id}
           label={profileData.name}
-          {...(profileData.nsfw && { NSFWLabel: 'NSFW' })}
+          {...(profileData.nsfw && { nsfwLabel: 'NSFW', nsfwAvatar: !(isViewer || showNsfw) })}
           avatar={transformSource(profileData?.avatar?.default)}
           alternativeAvatars={profileData?.avatar?.alternatives?.map(alternative =>
             transformSource(alternative),
@@ -51,7 +55,7 @@ export const LatestProfiles: React.FC<LatestProfilesProps> = props => {
           onClick={() => onClickProfile(profileData.did.id)}
         />
 
-        {authenticatedDID !== profileData.did.id && (
+        {!isViewer && (
           <Extension
             name={`follow_${profileData.id}`}
             extensionData={{

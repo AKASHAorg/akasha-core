@@ -16,6 +16,7 @@ export type FollowingProps = {
 const Following: React.FC<FollowingProps> = ({
   publicImgPath,
   authenticatedDID,
+  showNsfw,
   following,
   profileAnchorLink,
   emptyEntryTitleLabel,
@@ -64,6 +65,7 @@ const Following: React.FC<FollowingProps> = ({
             }}
             avatar={engagement?.profile?.avatar}
             name={engagement?.profile?.name}
+            nsfwAvatar={!(authenticatedDID === engagement?.profile?.did.id || showNsfw)}
             isNSFW={engagement?.profile?.nsfw}
             transformSource={transformSource}
             renderFollowElement={
