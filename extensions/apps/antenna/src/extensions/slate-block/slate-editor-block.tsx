@@ -25,7 +25,7 @@ import { useCreateContentBlockMutation } from '@akashaorg/ui-awf-hooks/lib/gener
 import getSDK from '@akashaorg/core-sdk';
 
 // @TODO: replace this with actual data
-const TEST_APP_VERSION_ID = 'k2t6wzhkhabz3aut9p2mhjzp80hzo7bee18l1pt94syakfbfcj7phve27kiwwp';
+const TEST_APP_VERSION_ID = 'k2t6wzhkhabz1fn33yk62djozfu62wp39d93nrimw87yb8tf21lq9ps55okpvv';
 
 export const SlateEditorBlock = (
   props: ContentBlockRootProps & { blockRef?: RefObject<BlockInstanceMethods> },
@@ -153,6 +153,7 @@ export const SlateEditorBlock = (
       transformSource={transformSource}
       handleDisablePublish={props.blockInfo?.externalHandler}
       encodingFunction={encodeSlateToBase64}
+      mentionsLimit={{ count: 1, label: t('Only one person can be mentioned per block.') }}
     />
   );
 };

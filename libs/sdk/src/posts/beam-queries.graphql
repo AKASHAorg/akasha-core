@@ -24,6 +24,8 @@ fragment BeamFragment on AkashaBeam{
   version
   createdAt
   nsfw
+  appVersionID
+  appID
   reflections(last: 1){
     edges {
       cursor
@@ -115,6 +117,7 @@ query GetBeamStream($indexer: ID!, $after: String, $before: String, $first: Int,
            active
            status
            moderationID
+           appID
          }
          cursor
        }

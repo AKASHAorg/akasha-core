@@ -185,9 +185,9 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
             },
           },
           onCompleted: data => {
-            subscriptionId.current = data.createAkashaProfileInterests?.document.id;
+            subscriptionId.current = data.setAkashaProfileInterests?.document.id;
 
-            const returnedData = data.createAkashaProfileInterests?.document.topics.map(
+            const returnedData = data.setAkashaProfileInterests?.document.topics.map(
               topic => topic.value,
             );
 

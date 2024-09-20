@@ -66,6 +66,8 @@ const genBeamData = ({
       'k2zn3ty0zptz513z3s2buzbzn0v2o96ql5w592syhkz99pfkusu3f76xivwd1xxdkf1iz77i3zonlnul74i2q657f69oxu9wry816kzucgklvvvbsy1ryth',
     createdAt: '2024-06-06T10:15:48.452Z',
     nsfw,
+    appVersionID: 'k2t6wzhkhabz3cypdahnph5pmxph7hg8k7118bdoxcodwjemo1y39x0wg89ibf',
+    appID: 'kt6wzhkhabz49drt2sgrwt2k8s10vvscaucv7ufm2b7sad14g2aljdqn5yr2h',
     reflections: {
       edges: [],
       pageInfo: {
@@ -143,6 +145,7 @@ const genBeamStream = ({
             active: true,
             status: null,
             moderationID: null,
+            appID: 'kt6wzhkhabz49drt2sgrwt2k8s10vvscaucv7ufm2b7sad14g2aljdqn5yr2h',
             __typename: 'AkashaBeamStream',
           },
           cursor: pageInfo.startCursor,

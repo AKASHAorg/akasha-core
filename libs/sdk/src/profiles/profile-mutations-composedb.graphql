@@ -44,13 +44,15 @@ fragment UserProfileFragmentM on AkashaProfile{
     }
   }
 
+  appID
+  appVersionID
   createdAt
   nsfw
 }
 
 # create new Profile document attached to did
-mutation CreateProfile($i: CreateAkashaProfileInput!){
-  createAkashaProfile(input: $i){
+mutation CreateProfile($i: SetAkashaProfileInput!){
+  setAkashaProfile(input: $i){
     document {
       ...UserProfileFragmentM
     }
@@ -69,8 +71,8 @@ mutation UpdateProfile($i: UpdateAkashaProfileInput!){
 }
 
 # create an Interests document for the authenticated Did account
-mutation CreateInterests($i: CreateAkashaProfileInterestsInput!){
-  createAkashaProfileInterests(input: $i){
+mutation CreateInterests($i: SetAkashaProfileInterestsInput!){
+  setAkashaProfileInterests(input: $i){
     document {
       topics {
         value

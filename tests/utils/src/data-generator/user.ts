@@ -42,6 +42,8 @@ const genProfileByDID = ({
         alternatives: null,
         __typename: 'ProfileImageVersions',
       },
+      appVersionID: 'k2t6wzhkhabz3cypdahnph5pmxph7hg8k7118bdoxcodwjemo1y39x0wg89ibf',
+      appID: 'kt6wzhkhabz49drt2sgrwt2k8s10vvscaucv7ufm2b7sad14g2aljdqn5yr2h',
       description: faker.lorem.sentence(),
       avatar: {
         default: {

@@ -21,6 +21,7 @@ interface AkashaAppInterface {
   logoImage: AppImageSource
   meta: [AppProviderValue]
   name: String!
+  nsfw: Boolean
   "Current version of the document"
   version: CeramicCommitID!
 }
@@ -37,6 +38,10 @@ interface AkashaAppReleaseInterface {
 
 interface AkashaBeamInterface {
   active: Boolean!
+  app: AkashaAppInterface
+  appID: CeramicStreamID!
+  appVersion: AkashaAppReleaseInterface
+  appVersionID: CeramicStreamID!
   "Account controlling the document"
   author: CeramicAccount!
   content: [BeamBlockRecord!]!
@@ -89,6 +94,10 @@ interface AkashaProfileInterestsInterface {
 }
 
 interface AkashaProfileInterface {
+  app: AkashaAppInterface
+  appID: CeramicStreamID!
+  appVersion: AkashaAppReleaseInterface
+  appVersionID: CeramicStreamID!
   avatar: ProfileImageVersions
   background: ProfileImageVersions
   createdAt: DateTime!
@@ -143,6 +152,7 @@ type AkashaApp implements AkashaAppInterface & Node {
   logoImage: AppImageSource
   meta: [AppProviderValue]
   name: String!
+  nsfw: Boolean
   releases(
     "Returns only documents created by the provided account"
     account: ID,
@@ -269,6 +279,10 @@ type AkashaAppsStreamEdge {
 
 type AkashaBeam implements AkashaBeamInterface & Node {
   active: Boolean!
+  app: AkashaAppInterface
+  appID: CeramicStreamID!
+  appVersion: AkashaAppReleaseInterface
+  appVersionID: CeramicStreamID!
   "Account controlling the document"
   author: CeramicAccount!
   content: [BeamBlockRecord!]!
@@ -335,6 +349,7 @@ type AkashaBeamInterfaceEdge {
 
 type AkashaBeamStream implements AkashaIndexStreamInterface & Node {
   active: Boolean!
+  appID: CeramicStreamID
   beam: AkashaBeamInterface
   beamID: CeramicStreamID!
   createdAt: DateTime!
@@ -582,6 +597,10 @@ type AkashaInterestsStreamEdge {
 }
 
 type AkashaProfile implements AkashaProfileInterface & Node {
+  app: AkashaAppInterface
+  appID: CeramicStreamID!
+  appVersion: AkashaAppReleaseInterface
+  appVersionID: CeramicStreamID!
   avatar: ProfileImageVersions
   background: ProfileImageVersions
   createdAt: DateTime!
@@ -686,6 +705,7 @@ type AkashaProfileInterfaceEdge {
 
 type AkashaProfileStream implements AkashaIndexStreamInterface & Node {
   active: Boolean!
+  appID: CeramicStreamID
   createdAt: DateTime!
   id: ID!
   moderation: Node
@@ -2331,6 +2351,7 @@ input AkashaAppInput {
   logoImage: AppImageSourceInput
   meta: [AppProviderValueInput]
   name: String!
+  nsfw: Boolean
 }
 
 input AkashaAppInterfaceFiltersInput {
@@ -2346,6 +2367,7 @@ input AkashaAppInterfaceObjectFilterInput {
   displayName: StringValueFilterInput
   license: StringValueFilterInput
   name: StringValueFilterInput
+  nsfw: BooleanValueFilterInput
 }
 
 input AkashaAppInterfaceSortingInput {
@@ -2354,6 +2376,7 @@ input AkashaAppInterfaceSortingInput {
   displayName: SortOrder
   license: SortOrder
   name: SortOrder
+  nsfw: SortOrder
 }
 
 input AkashaAppObjectFilterInput {
@@ -2466,6 +2489,8 @@ input AkashaBeamFiltersInput {
 
 input AkashaBeamInput {
   active: Boolean!
+  appID: CeramicStreamID!
+  appVersionID: CeramicStreamID!
   content: [BeamBlockRecordInput]!
   createdAt: DateTime!
   embeddedStream: BeamEmbeddedTypeInput
@@ -2483,12 +2508,16 @@ input AkashaBeamInterfaceFiltersInput {
 
 input AkashaBeamInterfaceObjectFilterInput {
   active: BooleanValueFilterInput
+  appID: StringValueFilterInput
+  appVersionID: StringValueFilterInput
   createdAt: StringValueFilterInput
   nsfw: BooleanValueFilterInput
 }
 
 input AkashaBeamInterfaceSortingInput {
   active: SortOrder
+  appID: SortOrder
+  appVersionID: SortOrder
   createdAt: SortOrder
   nsfw: SortOrder
 }
@@ -2514,6 +2543,7 @@ input AkashaBeamStreamFiltersInput {
 
 input AkashaBeamStreamInput {
   active: Boolean!
+  appID: CeramicStreamID
   beamID: CeramicStreamID!
   createdAt: DateTime!
   moderationID: CeramicStreamID
@@ -2851,6 +2881,8 @@ input AkashaProfileFiltersInput {
 }
 
 input AkashaProfileInput {
+  appID: CeramicStreamID!
+  appVersionID: CeramicStreamID!
   avatar: ProfileImageVersionsInput
   background: ProfileImageVersionsInput
   createdAt: DateTime!
@@ -2872,6 +2904,8 @@ input AkashaProfileInterfaceFiltersInput {
 }
 
 input AkashaProfileInterfaceObjectFilterInput {
+  appID: StringValueFilterInput
+  appVersionID: StringValueFilterInput
   createdAt: StringValueFilterInput
   description: StringValueFilterInput
   name: StringValueFilterInput
@@ -2879,6 +2913,8 @@ input AkashaProfileInterfaceObjectFilterInput {
 }
 
 input AkashaProfileInterfaceSortingInput {
+  appID: SortOrder
+  appVersionID: SortOrder
   createdAt: SortOrder
   description: SortOrder
   name: SortOrder
@@ -2906,6 +2942,7 @@ input AkashaProfileStreamFiltersInput {
 
 input AkashaProfileStreamInput {
   active: Boolean!
+  appID: CeramicStreamID
   createdAt: DateTime!
   moderationID: CeramicStreamID
   profileID: CeramicStreamID!
@@ -3286,7 +3323,6 @@ input PartialAkashaProfileInput {
   description: String
   links: [ProfileLinkSourceInput]
   name: String
-  nsfw: Boolean
 }
 
 input PartialAkashaProfileInterestsInput {
