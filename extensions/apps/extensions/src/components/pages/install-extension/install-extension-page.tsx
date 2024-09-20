@@ -101,13 +101,19 @@ export const InstallExtensionPage = ({ appId }: { appId: string }) => {
   }, [installer, shouldRegisterResources]);
 
   useEffect(() => {
+    let timeout;
     if (isInstalled) {
       // navigation using replace it's important here
       // because we also want to refresh the page
-      setTimeout(() => {
+      timeout = setTimeout(() => {
         window.location.replace(`/${decodeName.current(appId)}`);
       }, 3000);
     }
+    return () => {
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+    };
   }, [appId, isInstalled]);
 
   useEffect(() => {
