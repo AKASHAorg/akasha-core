@@ -27,7 +27,7 @@ interface AkashaReflectInterface @createModel(description: "A Reflection on a Be
 }
 
 type AkashaReflect implements AkashaReflectInterface
-  @createModel(accountRelation: LIST, description: "A Reflection on a Beam v0.4.0")
+  @createModel(accountRelation: LIST, description: "A Reflection on a Beam v0.5.0")
   @createIndex(fields:[{path:["active"]}])
   @createIndex(fields:[{path:["beamID"]}])
   @createIndex(fields:[{path:["createdAt"]}])

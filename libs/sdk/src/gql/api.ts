@@ -36,6 +36,8 @@ export const BeamFragmentMFragmentDoc = /*#__PURE__*/ gql`
   version
   createdAt
   nsfw
+  appID
+  appVersionID
   reflections(last: 1) {
     edges {
       cursor
@@ -106,6 +108,8 @@ export const BeamFragmentDoc = /*#__PURE__*/ gql`
   version
   createdAt
   nsfw
+  appVersionID
+  appID
   reflections(last: 1) {
     edges {
       cursor
@@ -295,6 +299,8 @@ export const UserProfileFragmentMFragmentDoc = /*#__PURE__*/ gql`
       hasNextPage
     }
   }
+  appID
+  appVersionID
   createdAt
   nsfw
 }
@@ -373,6 +379,8 @@ export const UserProfileFragmentDoc = /*#__PURE__*/ gql`
     }
   }
   description
+  appVersionID
+  appID
   avatar {
     default {
       src
@@ -539,6 +547,7 @@ export const GetBeamStreamDocument = /*#__PURE__*/ gql`
             active
             status
             moderationID
+            appID
           }
           cursor
         }
@@ -890,8 +899,8 @@ export const IndexProfileDocument = /*#__PURE__*/ gql`
 }
     ${IndexedProfileFragmentDoc}`;
 export const CreateProfileDocument = /*#__PURE__*/ gql`
-    mutation CreateProfile($i: CreateAkashaProfileInput!) {
-  createAkashaProfile(input: $i) {
+    mutation CreateProfile($i: SetAkashaProfileInput!) {
+  setAkashaProfile(input: $i) {
     document {
       ...UserProfileFragmentM
     }
@@ -910,8 +919,8 @@ export const UpdateProfileDocument = /*#__PURE__*/ gql`
 }
     ${UserProfileFragmentMFragmentDoc}`;
 export const CreateInterestsDocument = /*#__PURE__*/ gql`
-    mutation CreateInterests($i: CreateAkashaProfileInterestsInput!) {
-  createAkashaProfileInterests(input: $i) {
+    mutation CreateInterests($i: SetAkashaProfileInterestsInput!) {
+  setAkashaProfileInterests(input: $i) {
     document {
       topics {
         value
@@ -1084,6 +1093,7 @@ export const GetProfileStreamDocument = /*#__PURE__*/ gql`
             createdAt
             moderationID
             status
+            appID
           }
           cursor
         }
