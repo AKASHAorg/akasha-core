@@ -9,7 +9,7 @@ import { getDidNetworkType, truncateDid } from '../../utils/did-utils';
 export type ProfileNameFieldProps = {
   did: string;
   profileName?: string;
-  NSFWLabel?: string;
+  nsfwLabel?: string;
   truncateText?: boolean;
   size?: 'sm' | 'md' | 'lg';
   showMissingNameWarning?: boolean;
@@ -25,7 +25,7 @@ export type ProfileNameFieldProps = {
  * a profile name is required when setting up your profile).
  * @param did - the profile DID address
  * @param profileName - (optional) profile name if any
- * @param NSFWLabel - (optional) adds label for NSFW profiles
+ * @param nsfwLabel - (optional) adds label for NSFW profiles
  * @param truncateText - boolean (optional) whether to truncate the label (profile name) when it's too long
  * @param size - (optional) the default size is `sm`
  * @param showMissingNameWarning - boolean (optional) whether to include a tooltip with explanation when hovering over a DID
@@ -42,13 +42,13 @@ export type ProfileNameFieldProps = {
 const ProfileNameField: React.FC<ProfileNameFieldProps> = ({
   did,
   profileName,
-  NSFWLabel = '',
+  nsfwLabel = '',
   truncateText,
   size = 'sm',
   showMissingNameWarning,
   missingNameWarningLabel,
 }) => {
-  const textTruncateStyle = `${truncateText ? `max-w(${NSFWLabel.length ? '[5rem]' : '[7rem]'} xs:[2rem])` : ''}`;
+  const textTruncateStyle = `${truncateText ? `max-w(${nsfwLabel.length ? '[5rem]' : '[7rem]'} xs:[2rem])` : ''}`;
 
   const networkType = getDidNetworkType(did);
   const truncatedDid = truncateDid(did, networkType);
@@ -64,13 +64,13 @@ const ProfileNameField: React.FC<ProfileNameFieldProps> = ({
         >
           {profileName}
         </Text>
-        {!!NSFWLabel.length && (
+        {!!nsfwLabel.length && (
           <Text
             variant={`button-${size}`}
             weight="bold"
             color={{ light: 'errorLight', dark: 'errorDark' }}
           >
-            {NSFWLabel}
+            {nsfwLabel}
           </Text>
         )}
       </Stack>
