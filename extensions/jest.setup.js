@@ -5,7 +5,6 @@ import * as useAnalytics from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 import { genAppProps, getUserInfo, getAuthenticationStore } from '@akashaorg/af-testing';
 import { install } from '@twind/core';
 import '@testing-library/jest-dom';
-import getSdk from '@akashaorg/core-sdk';
 
 install(twindConfig);
 
@@ -75,6 +74,16 @@ jest.mock('@akashaorg/core-sdk', () => () => {
           composeDB: Symbol.for('composeDB'),
           default: Symbol.for('defaultContextSource'),
         },
+        getAPI: () => ({
+          GetAppsByPublisherDID: () =>
+            Promise.resolve({
+              node: {
+                akashaAppList: {
+                  edges: [{ node: { id: 'id', releases: { edges: [{ node: { id: 'id' } }] } } }],
+                },
+              },
+            }),
+        }),
       },
       common: {
         misc: {

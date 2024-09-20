@@ -5,7 +5,7 @@ import { tw } from '@twind/core';
 const MentionElement = (props: any) => {
   const { handleMentionClick, attributes, element, children } = props;
   const mention = element.name || element.did;
-  const displayedMention = mention && mention.startsWith('@') ? mention : `@${mention}`;
+  const displayedMention = `${mention && mention.startsWith('@') ? mention : `@${mention}`} `;
   return (
     <button
       className={tw(`text-secondaryLight dark:text-secondaryDark text-${element.align}`)}
