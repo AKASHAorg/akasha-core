@@ -1,7 +1,15 @@
-interface AkashaContentBlockInterface @loadModel(id: "kjzl6hvfrbw6c9zxtxl9ou1i86lqo2inne8dqvyi83f26p695s98mhkw40mwwsv") {
+interface AkashaContentBlockInterface @loadModel(id: "kjzl6hvfrbw6camingc354x7fs0zfvcdntuls7514mom4gpzntbv0gtyaeqduwg") {
   id: ID!
 }
 
+interface AkashaAppReleaseInterface @loadModel(id: "kjzl6hvfrbw6c8lieadu4bugco13jdp0j9agrrsflezai2uuhtzkv97xnantmdu") {
+  id: ID!
+}
+
+interface AkashaAppInterface @loadModel(id: "kjzl6hvfrbw6c7mp2kgev6yk8hrxqkwj28l92a74x3p6wi1gcms00yx9ckxsokn") {
+  id: ID!
+
+}
 
 type BeamBlockRecord{
   order: Int! @int(min: 0, max: 10)
@@ -21,7 +29,7 @@ type BeamLabeled{
 }
 
 interface AkashaBeamInterface
- @createModel(description: "AKASHA Beam interface") {
+ @createModel(description: "AKASHA Beam interface v0.1.0") {
     author: DID! @documentAccount
     content: [BeamBlockRecord!]! @list(maxLength: 10) @immutable
     tags: [BeamLabeled] @list(maxLength: 10) @immutable
@@ -31,10 +39,14 @@ interface AkashaBeamInterface
     active: Boolean!
     createdAt: DateTime! @immutable
     nsfw: Boolean
+    appVersionID: StreamID! @documentReference(model: "AkashaAppReleaseInterface") @immutable
+    appVersion: AkashaAppReleaseInterface! @relationDocument(property: "appVersionID")
+    appID: StreamID! @documentReference(model: "AkashaAppInterface") @immutable
+    app: AkashaAppInterface! @relationDocument(property: "appID")
  }
 
 type AkashaBeam implements AkashaBeamInterface
-  @createModel(accountRelation: LIST, description: "AKASHA Beam v0.4.0")
+  @createModel(accountRelation: LIST, description: "AKASHA Beam v0.5.0")
   @createIndex(fields:[{path:["active"]}])
   @createIndex(fields:[{path:["createdAt"]}])
   @createIndex(fields:[{path:["nsfw"]}])
@@ -48,4 +60,8 @@ type AkashaBeam implements AkashaBeamInterface
     active: Boolean!
     createdAt: DateTime! @immutable
     nsfw: Boolean
+    appVersionID: StreamID! @documentReference(model: "AkashaAppReleaseInterface") @immutable
+    appVersion: AkashaAppReleaseInterface! @relationDocument(property: "appVersionID")
+    appID: StreamID! @documentReference(model: "AkashaAppInterface") @immutable
+    app: AkashaAppInterface! @relationDocument(property: "appID")
 }

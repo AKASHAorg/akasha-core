@@ -28,7 +28,7 @@ await did.authenticate()
  * Runs GraphiQL server to view & query composites.
  */
 const server = await serveEncodedDefinition({
-  ceramicURL: process.env.CERAMIC_API_ENDPOINT || "http://127.0.0.1:7007",
+  ceramicURL: process.env.PUBLIC_CERAMIC_API_ENDPOINT || "http://127.0.0.1:7007",
   graphiql: true,
   path: path.resolve(__dirname, '../lib/runtime-definition.json'),
   port: 5001,

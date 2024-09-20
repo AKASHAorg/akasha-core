@@ -13,7 +13,7 @@ export default function compose(akashaProfileIdInterface){
 }
 
   type AkashaFollow implements AkashaFollowInterface
-    @createModel(accountRelation: SET, description: "Following list v0.4.0",  accountRelationFields: ["profileID"])
+    @createModel(accountRelation: SET, description: "Following list v0.5.0",  accountRelationFields: ["profileID"])
     @createIndex(fields:[{path:["isFollowing"]}])
     @createIndex(fields:[{path:["profileID"]}])
     @createIndex(fields:[{path:["profileID"]}, {path:["isFollowing"]}])

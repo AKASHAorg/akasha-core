@@ -89,10 +89,10 @@ export type ResolversTypes = {
   AkashaApp: ResolverTypeWrapper<Types.AkashaApp>;
   String: ResolverTypeWrapper<Types.Scalars['String']['output']>;
   ID: ResolverTypeWrapper<Types.Scalars['ID']['output']>;
+  Boolean: ResolverTypeWrapper<Types.Scalars['Boolean']['output']>;
   Int: ResolverTypeWrapper<Types.Scalars['Int']['output']>;
   AkashaAppApplicationType: Types.AkashaAppApplicationType;
   AkashaAppApplicationTypeValueFilterInput: Types.AkashaAppApplicationTypeValueFilterInput;
-  Boolean: ResolverTypeWrapper<Types.Scalars['Boolean']['output']>;
   AkashaAppConnection: ResolverTypeWrapper<Types.AkashaAppConnection>;
   AkashaAppEdge: ResolverTypeWrapper<Types.AkashaAppEdge>;
   AkashaAppFiltersInput: Types.AkashaAppFiltersInput;
@@ -470,9 +470,9 @@ export type ResolversParentTypes = {
   AkashaApp: Types.AkashaApp;
   String: Types.Scalars['String']['output'];
   ID: Types.Scalars['ID']['output'];
+  Boolean: Types.Scalars['Boolean']['output'];
   Int: Types.Scalars['Int']['output'];
   AkashaAppApplicationTypeValueFilterInput: Types.AkashaAppApplicationTypeValueFilterInput;
-  Boolean: Types.Scalars['Boolean']['output'];
   AkashaAppConnection: Types.AkashaAppConnection;
   AkashaAppEdge: Types.AkashaAppEdge;
   AkashaAppFiltersInput: Types.AkashaAppFiltersInput;
@@ -906,6 +906,7 @@ export type AkashaAppResolvers<ContextType = any, ParentType extends ResolversPa
   logoImage?: Resolver<Types.Maybe<ResolversTypes['AppImageSource']>, ParentType, ContextType>;
   meta?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['AppProviderValue']>>>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  nsfw?: Resolver<Types.Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   releases?: Resolver<ResolversTypes['AkashaAppReleaseInterfaceConnection'], ParentType, ContextType, Partial<Types.AkashaAppReleasesArgs>>;
   releasesCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.AkashaAppReleasesCountArgs>>;
   version?: Resolver<ResolversTypes['CeramicCommitID'], ParentType, ContextType>;
@@ -940,6 +941,7 @@ export type AkashaAppInterfaceResolvers<ContextType = any, ParentType extends Re
   logoImage?: Resolver<Types.Maybe<ResolversTypes['AppImageSource']>, ParentType, ContextType>;
   meta?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['AppProviderValue']>>>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  nsfw?: Resolver<Types.Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   version?: Resolver<ResolversTypes['CeramicCommitID'], ParentType, ContextType>;
 };
 
@@ -1027,6 +1029,10 @@ export type AkashaAppsStreamEdgeResolvers<ContextType = any, ParentType extends 
 
 export type AkashaBeamResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaBeam'] = ResolversParentTypes['AkashaBeam']> = {
   active?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  app?: Resolver<Types.Maybe<ResolversTypes['AkashaAppInterface']>, ParentType, ContextType>;
+  appID?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
+  appVersion?: Resolver<Types.Maybe<ResolversTypes['AkashaAppReleaseInterface']>, ParentType, ContextType>;
+  appVersionID?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
   author?: Resolver<ResolversTypes['CeramicAccount'], ParentType, ContextType>;
   content?: Resolver<Array<ResolversTypes['BeamBlockRecord']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
@@ -1056,6 +1062,10 @@ export type AkashaBeamEdgeResolvers<ContextType = any, ParentType extends Resolv
 export type AkashaBeamInterfaceResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaBeamInterface'] = ResolversParentTypes['AkashaBeamInterface']> = {
   __resolveType: TypeResolveFn<'AkashaBeam', ParentType, ContextType>;
   active?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  app?: Resolver<Types.Maybe<ResolversTypes['AkashaAppInterface']>, ParentType, ContextType>;
+  appID?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
+  appVersion?: Resolver<Types.Maybe<ResolversTypes['AkashaAppReleaseInterface']>, ParentType, ContextType>;
+  appVersionID?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
   author?: Resolver<ResolversTypes['CeramicAccount'], ParentType, ContextType>;
   content?: Resolver<Array<ResolversTypes['BeamBlockRecord']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
@@ -1081,6 +1091,7 @@ export type AkashaBeamInterfaceEdgeResolvers<ContextType = any, ParentType exten
 
 export type AkashaBeamStreamResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaBeamStream'] = ResolversParentTypes['AkashaBeamStream']> = {
   active?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  appID?: Resolver<Types.Maybe<ResolversTypes['CeramicStreamID']>, ParentType, ContextType>;
   beam?: Resolver<Types.Maybe<ResolversTypes['AkashaBeamInterface']>, ParentType, ContextType>;
   beamID?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
@@ -1321,6 +1332,10 @@ export type AkashaInterestsStreamEdgeResolvers<ContextType = any, ParentType ext
 };
 
 export type AkashaProfileResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaProfile'] = ResolversParentTypes['AkashaProfile']> = {
+  app?: Resolver<Types.Maybe<ResolversTypes['AkashaAppInterface']>, ParentType, ContextType>;
+  appID?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
+  appVersion?: Resolver<Types.Maybe<ResolversTypes['AkashaAppReleaseInterface']>, ParentType, ContextType>;
+  appVersionID?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
   avatar?: Resolver<Types.Maybe<ResolversTypes['ProfileImageVersions']>, ParentType, ContextType>;
   background?: Resolver<Types.Maybe<ResolversTypes['ProfileImageVersions']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
@@ -1387,6 +1402,10 @@ export type AkashaProfileInterestsInterfaceEdgeResolvers<ContextType = any, Pare
 
 export type AkashaProfileInterfaceResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaProfileInterface'] = ResolversParentTypes['AkashaProfileInterface']> = {
   __resolveType: TypeResolveFn<'AkashaProfile', ParentType, ContextType>;
+  app?: Resolver<Types.Maybe<ResolversTypes['AkashaAppInterface']>, ParentType, ContextType>;
+  appID?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
+  appVersion?: Resolver<Types.Maybe<ResolversTypes['AkashaAppReleaseInterface']>, ParentType, ContextType>;
+  appVersionID?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
   avatar?: Resolver<Types.Maybe<ResolversTypes['ProfileImageVersions']>, ParentType, ContextType>;
   background?: Resolver<Types.Maybe<ResolversTypes['ProfileImageVersions']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
@@ -1412,6 +1431,7 @@ export type AkashaProfileInterfaceEdgeResolvers<ContextType = any, ParentType ex
 
 export type AkashaProfileStreamResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaProfileStream'] = ResolversParentTypes['AkashaProfileStream']> = {
   active?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  appID?: Resolver<Types.Maybe<ResolversTypes['CeramicStreamID']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   moderation?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType>;
