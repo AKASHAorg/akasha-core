@@ -1,16 +1,15 @@
 {
   "name": "@akashaorg/composedb-models",
-  "private": true,
-  "version": "0.0.1",
+  "version": "0.1.0",
   "type": "module",
-  "description": "composedb models used by AKASHA",
+  "description": "composedb models used in akasha-core",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/AKASHAorg/akasha-core.git"
   },
-  "main": "lib/index.js",
+  "main": "lib/runtime-definition.js",
   "files": [
     "lib"
   ],
