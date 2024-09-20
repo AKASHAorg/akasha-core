@@ -5,7 +5,13 @@ import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import ProfileAvatarLoading from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton/ProfileAvatarLoading';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import { formatDate, formatRelativeTime } from '@akashaorg/design-system-core/lib/utils';
-import { hasOwn, transformSource, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import {
+  hasOwn,
+  transformSource,
+  useAkashaStore,
+  useNsfwToggling,
+  useRootComponentProps,
+} from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
@@ -18,6 +24,9 @@ type AuthorProfileAvatarProps = {
 
 const AuthorProfileAvatar: React.FC<AuthorProfileAvatarProps> = props => {
   const { authorId, createdAt, hidePublishTime, pending } = props;
+  const {
+    data: { authenticatedDID },
+  } = useAkashaStore();
   const { t } = useTranslation('ui-lib-feed');
   const { getTranslationPlugin, getCorePlugins } = useRootComponentProps();
   const navigateTo = getCorePlugins().routing.navigateTo;
@@ -27,6 +36,7 @@ const AuthorProfileAvatar: React.FC<AuthorProfileAvatarProps> = props => {
     variables: { id: authorId },
     fetchPolicy: 'cache-first',
   });
+  const { showNsfw } = useNsfwToggling();
 
   const onAvatarClick = (id: string) => {
     navigateTo({
@@ -49,7 +59,10 @@ const AuthorProfileAvatar: React.FC<AuthorProfileAvatarProps> = props => {
       profileId={authorId}
       href={`/@akashaorg/app-profile/${authorId}`}
       label={profileData?.name}
-      {...(profileData.nsfw && { NSFWLabel: 'NSFW' })}
+      {...(profileData.nsfw && {
+        nsfwLabel: 'NSFW',
+        nsfwAvatar: !(authenticatedDID === profileData?.did?.id || showNsfw),
+      })}
       avatar={transformSource(profileData?.avatar?.default)}
       alternativeAvatars={profileData?.avatar?.alternatives?.map(alternative =>
         transformSource(alternative),
