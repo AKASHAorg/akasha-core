@@ -16,18 +16,18 @@ export enum FieldName {
   sourceURL = 'sourceURL',
 }
 
-export type ExtensionSubmitStep2FormValues = {
+export type ExtensionReleaseSubmitValues = {
   versionNumber?: string;
   description?: string;
   sourceURL?: string;
 };
 
-export type ExtensionSubmitStep2FormProps = {
-  defaultValues?: ExtensionSubmitStep2FormValues;
+export type ExtensionReleaseSubmitProps = {
+  defaultValues?: ExtensionReleaseSubmitValues;
   cancelButton: ButtonType;
   nextButton: {
     label: string;
-    handleClick: (data: ExtensionSubmitStep2FormValues) => void;
+    handleClick: (data: ExtensionReleaseSubmitValues) => void;
   };
   versionNumberLabel?: string;
   descriptionFieldLabel?: string;
@@ -36,7 +36,7 @@ export type ExtensionSubmitStep2FormProps = {
   sourceURLPlaceholderLabel?: string;
 };
 
-const ExtensionSubmitStep2Form: React.FC<ExtensionSubmitStep2FormProps> = props => {
+const ExtensionReleaseSubmit: React.FC<ExtensionReleaseSubmitProps> = props => {
   const {
     defaultValues = {
       versionNumber: '',
@@ -56,7 +56,7 @@ const ExtensionSubmitStep2Form: React.FC<ExtensionSubmitStep2FormProps> = props 
     control,
     getValues,
     formState: { errors },
-  } = useForm<ExtensionSubmitStep2FormValues>({
+  } = useForm<ExtensionReleaseSubmitValues>({
     defaultValues,
     resolver: zodResolver(schema),
     mode: 'onChange',
@@ -164,7 +164,7 @@ const ExtensionSubmitStep2Form: React.FC<ExtensionSubmitStep2FormProps> = props 
   );
 };
 
-export default ExtensionSubmitStep2Form;
+export default ExtensionReleaseSubmit;
 
 const schema = z.object({
   versionNumber: z.string(),

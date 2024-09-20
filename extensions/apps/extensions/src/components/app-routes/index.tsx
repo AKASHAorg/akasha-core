@@ -26,12 +26,9 @@ import {
   ExtensionEditStep2Page,
   ExtensionEditStep3Page,
 } from '../pages/extension-edit-page';
-import {
-  ExtensionSubmitMainPage,
-  ExtensionSubmitStep1Page,
-  ExtensionSubmitStep2Page,
-  ExtensionSubmitStep3Page,
-} from '../pages/extension-submit-page';
+import { ExtensionSubmitPage } from '../pages/extension-submit-page';
+import { ExtensionReleaseSubmitPage } from '../pages/release-submit-page';
+import { PostSubmitPage } from '../pages/post-submit-page';
 import {
   DevInfoPage,
   CollaboratorsPage,
@@ -357,63 +354,59 @@ const extensionEditStep3Route = createRoute({
   },
 });
 
-const extensionSubmitMainRoute = createRoute({
+const extensionSubmitRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `/submit-extension/$extensionId`,
   notFoundComponent: () => <NotFoundComponent />,
   component: () => {
-    const { extensionId } = extensionSubmitMainRoute.useParams();
+    const { extensionId } = extensionSubmitRoute.useParams();
     return (
       <CatchBoundary
-        getResetKey={() => 'submit_extension_main_reset'}
+        getResetKey={() => 'submit_extension_reset'}
         errorComponent={NotFoundComponent}
       >
-        <ExtensionSubmitMainPage extensionId={extensionId} />
+        <ExtensionSubmitPage extensionId={extensionId} />
       </CatchBoundary>
     );
   },
 });
 
-const extensionSubmitStep1Route = createRoute({
-  getParentRoute: () => extensionSubmitMainRoute,
-  path: '/step1',
+const extensionReleaseSubmitRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: `/submit-release/$extensionId`,
+  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
-    const { extensionId } = extensionSubmitMainRoute.useParams();
+    const { extensionId } = extensionReleaseSubmitRoute.useParams();
     return (
-      <CatchBoundary
-        getResetKey={() => 'submit_extension_step1_reset'}
-        errorComponent={NotFoundComponent}
-      >
-        <ExtensionSubmitStep1Page extensionId={extensionId} />
+      <CatchBoundary getResetKey={() => 'submit_release_reset'} errorComponent={NotFoundComponent}>
+        <ExtensionReleaseSubmitPage extensionId={extensionId} />
       </CatchBoundary>
     );
   },
 });
-const extensionSubmitStep2Route = createRoute({
-  getParentRoute: () => extensionSubmitMainRoute,
-  path: '/step2',
-  component: () => {
-    const { extensionId } = extensionSubmitMainRoute.useParams();
-    return (
-      <CatchBoundary
-        getResetKey={() => 'submit_extension_step2_reset'}
-        errorComponent={NotFoundComponent}
-      >
-        <ExtensionSubmitStep2Page extensionId={extensionId} />
-      </CatchBoundary>
-    );
+
+type SubmitSearch = { type: SubmitType };
+
+export enum SubmitType {
+  EXTENSION = 'extension',
+  RELEASE = 'release',
+}
+
+const postSubmitRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: `/post-submit`,
+  notFoundComponent: () => <NotFoundComponent />,
+  validateSearch: (search: Record<string, unknown>): SubmitSearch => {
+    return { type: search.type as SubmitType };
   },
-});
-const extensionSubmitStep3Route = createRoute({
-  getParentRoute: () => extensionSubmitMainRoute,
-  path: '/step3',
   component: () => {
+    const from = postSubmitRoute.useSearch();
     return (
       <CatchBoundary
-        getResetKey={() => 'submit_extension_step3_reset'}
+        getResetKey={() => 'submit_extension_reset'}
         errorComponent={NotFoundComponent}
       >
-        <ExtensionSubmitStep3Page />
+        <PostSubmitPage type={from.type} />
       </CatchBoundary>
     );
   },
@@ -448,9 +441,10 @@ const routeTree = rootRoute.addChildren([
     extensionEditStep1Route,
     extensionEditStep2Route,
     extensionEditStep3Route,
-    extensionSubmitStep3Route,
   ]),
-  extensionSubmitMainRoute.addChildren([extensionSubmitStep1Route, extensionSubmitStep2Route]),
+  extensionSubmitRoute,
+  extensionReleaseSubmitRoute,
+  postSubmitRoute,
 ]);
 
 export const router = ({ baseRouteName, apolloClient }: ICreateRouter) =>

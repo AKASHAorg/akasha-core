@@ -47,7 +47,7 @@ export type ExtensionReviewAndPublishProps = {
   publicImagePath?: string;
   onViewGalleryClick?: () => void;
   onClickCancel: () => void;
-  onClickNext: () => void;
+  onClickSubmit: () => void;
   transformSource: (src: Image) => Image;
 };
 
@@ -74,7 +74,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
     publicImagePath = '/images',
     onViewGalleryClick,
     onClickCancel,
-    onClickNext,
+    onClickSubmit,
     transformSource,
   } = props;
 
@@ -311,7 +311,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
         <Button
           variant="primary"
           label={publishButtonLabel}
-          onClick={onClickNext}
+          onClick={onClickSubmit}
           customStyle="w-36"
         />
       </Stack>

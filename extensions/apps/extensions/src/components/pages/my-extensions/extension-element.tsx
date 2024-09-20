@@ -124,7 +124,14 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
 
   const handleExtensionSubmit = () => {
     navigate({
-      to: `/submit-extension/$extensionId/step1`,
+      to: `/submit-extension/$extensionId`,
+      params: { extensionId: extensionData.id },
+    });
+  };
+
+  const handleReleaseSubmit = () => {
+    navigate({
+      to: `/submit-release/$extensionId`,
       params: { extensionId: extensionData.id },
     });
   };
@@ -138,6 +145,11 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
             icon: <ClockIcon />,
             onClick: () => {},
           },
+          {
+            label: t('Submit'),
+            icon: <PaperAirplaneIcon />,
+            onClick: handleReleaseSubmit,
+          },
         ];
       case ExtensionStatus.Published:
         return [
@@ -145,6 +157,11 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
             label: t('View'),
             icon: <EyeIcon />,
             onClick: () => {},
+          },
+          {
+            label: t('Submit'),
+            icon: <PaperAirplaneIcon />,
+            onClick: handleReleaseSubmit,
           },
           {
             label: t('Edit'),

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
-import { CREATE_EXTENSION } from '../../../routes';
+import { CREATE_EXTENSION } from '../../routes';
 import { useRootComponentProps, useAkashaStore } from '@akashaorg/ui-awf-hooks';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -10,7 +10,11 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 
-export const ExtensionSubmitStep3Page: React.FC = () => {
+type PostSubmitPageProps = {
+  type: 'extension' | 'release';
+};
+
+export const PostSubmitPage: React.FC<PostSubmitPageProps> = ({ type }) => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
 
@@ -53,13 +57,14 @@ export const ExtensionSubmitStep3Page: React.FC = () => {
     <Card padding="py-6 px-4">
       <Stack spacing="gap-y-8" align="center">
         <Text variant="h5" weight="semibold" align="center">
-          {t('Your extension has been created locally')}
+          {type === 'extension' && t('Extension Submitted')}
+          {type === 'release' && t('Release Submitted')}
         </Text>
         <InfoCard
           bodyLabel={
             <>
               {t(
-                'Your extension is under review, this process might take sometime to ensure that your extension doesn’t violate our Code of Conduct.',
+                'Your submission is under review, this process might take sometime to ensure that your extension doesn’t violate our Code of Conduct.',
               )}
             </>
           }
