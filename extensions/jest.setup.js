@@ -74,6 +74,16 @@ jest.mock('@akashaorg/core-sdk', () => () => {
           composeDB: Symbol.for('composeDB'),
           default: Symbol.for('defaultContextSource'),
         },
+        getAPI: () => ({
+          GetAppsByPublisherDID: () =>
+            Promise.resolve({
+              node: {
+                akashaAppList: {
+                  edges: [{ node: { id: 'id', releases: { edges: [{ node: { id: 'id' } }] } } }],
+                },
+              },
+            }),
+        }),
       },
       common: {
         misc: {
