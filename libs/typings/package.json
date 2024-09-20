@@ -1,7 +1,7 @@
 {
   "name": "@akashaorg/typings",
   "version": "0.1.0",
-  "description": "AWF typings for development purpose",
+  "description": "akasha-core typings for development purpose",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "type": "module",
   "license": "Apache-2.0",
