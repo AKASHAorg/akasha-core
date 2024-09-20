@@ -27,7 +27,7 @@ export type TooltipProps = PropsWithChildren<
   TProps | ({ open: boolean; onOpen: () => void; onClose: () => void } & TProps)
 >;
 
-const ARROW_SIZE = 4;
+const ARROW_SIZE = 8;
 
 type CSSPosition = 'top' | 'left' | 'bottom' | 'right';
 
@@ -177,7 +177,7 @@ const Tooltip: React.FC<TooltipProps> = props => {
             padding={0}
             elevation="3"
             background={isContentOfTypeString ? backgroundColor : null}
-            customStyle={`flex-wrap ${contentStyle} ${contentCustomStyle} items-center justify-center`}
+            customStyle={`flex-wrap ${contentStyle} ${contentCustomStyle} items-center justify-center dark:shadow-none`}
           >
             <Stack ref={contentRef} align="center" justify="center">
               {isContentOfTypeString ? (
