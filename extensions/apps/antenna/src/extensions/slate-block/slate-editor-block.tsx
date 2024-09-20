@@ -153,6 +153,7 @@ export const SlateEditorBlock = (
       transformSource={transformSource}
       handleDisablePublish={props.blockInfo?.externalHandler}
       encodingFunction={encodeSlateToBase64}
+      mentionsLimit={{ count: 1, label: t('Only one person can be mentioned per block.') }}
     />
   );
 };

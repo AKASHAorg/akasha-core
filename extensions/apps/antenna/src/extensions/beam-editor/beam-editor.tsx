@@ -317,9 +317,8 @@ export const BeamEditor: React.FC = () => {
         </Stack>
         {uiState === 'blocks' && (
           <Stack
-            zIndex="99"
             background={{ light: 'white', dark: 'grey2' }}
-            customStyle="absolute overflow-auto top-0 left-0 h-full w-full divide(y grey8 dark:grey5)
+            customStyle="absolute overflow-auto top-0 left-0 h-full w-full divide(y grey8 dark:grey5) z-[99]
             "
           >
             {blocksInUse.length > 9 && (
@@ -350,9 +349,8 @@ export const BeamEditor: React.FC = () => {
         )}
         {uiState === 'tags' && (
           <Stack
-            zIndex="99"
             background={{ light: 'white', dark: 'grey2' }}
-            customStyle="absolute top-0 left-0 h-full w-full overflow-auto"
+            customStyle="absolute top-0 left-0 h-full w-full overflow-auto z-[99]"
           >
             <Stack padding={16} spacing="gap-4">
               <Stack direction="row" spacing="gap-x-1" align="center">

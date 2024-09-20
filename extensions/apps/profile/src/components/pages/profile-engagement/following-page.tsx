@@ -17,6 +17,7 @@ import {
   hasOwn,
   useRootComponentProps,
   useAkashaStore,
+  useNsfwToggling,
 } from '@akashaorg/ui-awf-hooks';
 import { ENGAGEMENTS_PER_PAGE } from './types';
 import { useTranslation } from 'react-i18next';
@@ -34,6 +35,7 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
   const isLoggedIn = !!authenticatedDID;
   const navigateTo = getCorePlugins().routing.navigateTo;
   const { t } = useTranslation('app-profile');
+  const { showNsfw } = useNsfwToggling();
 
   const profileDataReq = useGetProfileByDidQuery({
     fetchPolicy:
@@ -119,6 +121,7 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
       {data && (
         <Following
           authenticatedDID={authenticatedDID}
+          showNsfw={showNsfw}
           following={following}
           profileAnchorLink={'/@akashaorg/app-profile'}
           emptyEntryTitleLabel={

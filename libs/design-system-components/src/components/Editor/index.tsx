@@ -19,6 +19,7 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import MessageCard from '@akashaorg/design-system-core/lib/components/MessageCard';
 
 import {
   BoldAlt,
@@ -48,6 +49,8 @@ import { MarkButton, BlockButton } from './formatting-buttons';
 
 const MAX_TEXT_LENGTH = 500;
 
+type Node = Descendant | { children: Descendant[] };
+
 export type EditorBoxProps = {
   avatar?: Profile['avatar'];
   showAvatar?: boolean;
@@ -73,6 +76,7 @@ export type EditorBoxProps = {
   showPostButton?: boolean;
   // this is to account for the limitations on the ceramic storage side
   maxEncodedLength?: number;
+  mentionsLimit?: { count: number; label: string };
   customStyle?: string;
   onPublish?: (publishData: IPublishData) => void;
   onClear?: () => void;
@@ -125,6 +129,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
     showPostButton = true,
     transformSource,
     maxEncodedLength = 6000,
+    mentionsLimit,
     customStyle = '',
     handleDisablePublish,
     encodingFunction,
@@ -136,6 +141,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
   const [tagTargetRange, setTagTargetRange] = useState<Range | null>(null);
   const [index, setIndex] = useState(0);
   const [createTag, setCreateTag] = useState('');
+  const [mentionsLimitReached, setMentionsLimitReached] = useState(false);
 
   const [letterCount, setLetterCount] = useState(0);
 
@@ -237,7 +243,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
      * wrap slateContent in object to make recursive getMetadata work
      */
     const initContent: { children: Descendant[] } = { children: slateContent };
-    (function getMetadata(node: Descendant | { children: Descendant[] }) {
+    (function getMetadata(node: Node) {
       if (Element.isElement(node) && node.type === 'mention') {
         metadata.mentions.push(node.id);
       }
@@ -253,6 +259,19 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
     CustomEditor.clearEditor(editor);
     ReactEditor.focus(editor);
     onPublish(data);
+  };
+
+  const countMentions = (node: Node) => {
+    let count = 0;
+    (function getCount(node: Node) {
+      if (Element.isElement(node) && node.type === 'mention') {
+        count++;
+      }
+      if (Element.isElement(node) && node.children) {
+        node.children.map((n: Descendant) => getCount(n));
+      }
+    })(node);
+    return count;
   };
 
   /**
@@ -272,6 +291,9 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
         nodeArr.forEach((node: Descendant) => {
           if (SlateText.isText(node)) {
             textLength += node.text.length;
+          }
+          if (Element.isElement(node) && node.type === 'mention' && node.name?.length) {
+            textLength += node.name.length;
           }
           if (Element.isElement(node) && node.type === 'tag' && node.name?.length) {
             textLength += node.name?.length;
@@ -340,7 +362,21 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
       const afterText = Editor.string(editor, afterRange);
       const afterMatch = afterText.match(/^(\s|$)/);
 
+      if (!beforeMentionMatch && mentionsLimitReached) {
+        setMentionsLimitReached(false);
+      }
+
       if (beforeMentionMatch && afterMatch && beforeRange && typeof getMentions === 'function') {
+        if (mentionsLimit) {
+          if (
+            countMentions({
+              children: editorState,
+            }) === mentionsLimit.count
+          ) {
+            setMentionsLimitReached(true);
+            return;
+          }
+        }
         setMentionTargetRange(beforeRange);
         getMentions(beforeMentionMatch[1]);
         setIndex(0);
@@ -522,6 +558,18 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
         )}
         {/* w-0 min-w-full is used to prevent parent width expansion without setting a fixed width */}
         <Stack ref={editorContainerRef} customStyle="w-0 min-w-full">
+          {mentionsLimitReached && (
+            <MessageCard
+              message={mentionsLimit.label}
+              icon={
+                <Icon
+                  icon={<ExclamationTriangleIcon />}
+                  color={{ light: 'warningLight', dark: 'warningLight' }}
+                />
+              }
+              background={{ light: 'warningDark/30', dark: 'warningDark/30' }}
+            />
+          )}
           <Slate editor={editor} value={editorState || editorDefaultValue} onChange={handleChange}>
             <Editable
               placeholder={placeholderLabel}

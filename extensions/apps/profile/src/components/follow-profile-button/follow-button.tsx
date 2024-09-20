@@ -16,6 +16,7 @@ import {
 } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import {
+  GetFollowDocumentsByDidDocument,
   useCreateFollowMutation,
   useUpdateFollowMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
@@ -61,6 +62,14 @@ export const FollowButton = ({
 
   const [createFollowMutation, { loading: createFollowLoading }] = useCreateFollowMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
+    awaitRefetchQueries: true,
+    /*
+     ** When creating a new follow document, a cache is created for it in memory and the object doesn't contain
+     ** profileID(stream id of a profile) field because such named field isn't available in the mutation result.
+     ** As a result, when the query associated with this mutation is executed, it won't find it in the cache and returns null.
+     ** Hence, the data this component receives is stale which requires a refetch.
+     **/
+    refetchQueries: [GetFollowDocumentsByDidDocument],
     onCompleted: async ({ setAkashaFollow }) => {
       const document = setAkashaFollow.document;
       if (iconOnly) sendSuccessNotification(document.profile?.name, isFollowing);

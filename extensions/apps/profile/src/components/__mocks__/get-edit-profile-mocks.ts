@@ -18,7 +18,7 @@ export function getEditProfileMocks({ profileDID, nsfw }: IGetProfileInfoMocks) 
         variableMatcher: () => true,
         result: {
           data: {
-            createAkashaProfile: {
+            setAkashaProfile: {
               document: profileData,
               clientMutationId: '',
             },

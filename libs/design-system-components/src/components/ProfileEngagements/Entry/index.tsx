@@ -9,8 +9,9 @@ export type EntryProps = {
   avatar: Profile['avatar'];
   name: string;
   isNSFW: boolean;
+  nsfwAvatar: boolean;
   customStyle?: string;
-} & Omit<EngagementProps, 'authenticatedDID' | 'onLoadMore'>;
+} & Omit<EngagementProps, 'showNsfw' | 'authenticatedDID' | 'onLoadMore'>;
 
 const Entry: React.FC<EntryProps> = props => {
   const {
@@ -19,6 +20,7 @@ const Entry: React.FC<EntryProps> = props => {
     avatar,
     name,
     isNSFW,
+    nsfwAvatar,
     customStyle = '',
     renderFollowElement,
     onProfileClick,
@@ -39,7 +41,10 @@ const Entry: React.FC<EntryProps> = props => {
         avatar={transformSource(avatar?.default)}
         alternativeAvatars={avatar?.alternatives?.map(alternative => transformSource(alternative))}
         label={name}
-        {...(isNSFW && { NSFWLabel: 'NSFW' })}
+        {...(isNSFW && {
+          nsfwAvatar,
+          nsfwLabel: 'NSFW',
+        })}
         href={`${profileAnchorLink}/${profileIds.did}`}
         onClick={() => {
           onProfileClick(profileIds.did);
