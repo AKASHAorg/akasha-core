@@ -7,6 +7,7 @@ export const ENTRY_HEIGHT = 72;
 
 export type EngagementProps = {
   authenticatedDID: string;
+  showNsfw: boolean;
   profileAnchorLink: string;
   onLoadMore: () => Promise<unknown>;
   transformSource: (src: Image) => Image;
