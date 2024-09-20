@@ -33,8 +33,22 @@ export const ExtensionSubmitPage: React.FC<ExtensionSubmitPageProps> = ({ extens
     data: { authenticatedDID },
   } = useAkashaStore();
 
-  const [createAppMutation] = useCreateAppMutation({
+  const [createAppMutation, { loading }] = useCreateAppMutation({
     context: { source: sdk.current.services.gql.contextSources.composeDB },
+    onCompleted: () => {
+      //remove published extension from list of local extensions
+      const newLocalDraftExtensions = draftExtensions.filter(
+        draftExtension => draftExtension.id !== extensionId,
+      );
+      localStorage.setItem(
+        `${DRAFT_EXTENSIONS}-${authenticatedDID}`,
+        JSON.stringify(newLocalDraftExtensions),
+      );
+      navigate({
+        to: '/post-submit',
+        search: { type: SubmitType.EXTENSION },
+      });
+    },
     onError: () => {
       showAlertNotification(`${t(`Something went wrong when publishing the extension`)}.`);
     },
@@ -91,10 +105,6 @@ export const ExtensionSubmitPage: React.FC<ExtensionSubmitPageProps> = ({ extens
         },
       },
     });
-    navigate({
-      to: '/post-submit',
-      search: { type: SubmitType.EXTENSION },
-    });
   };
 
   const handleClickCancel = () => {
@@ -133,7 +143,9 @@ export const ExtensionSubmitPage: React.FC<ExtensionSubmitPageProps> = ({ extens
           extensionNameLabel={t('Extension Name')}
           extensionDisplayNameLabel={t('Extension Display Name')}
           nsfwLabel={t('Extension NSFW')}
-          nsfwDescription={t('You marked it as Not Safe For Work')}
+          nsfwDescription={t('You marked it as{{nsfw}} Safe For Work', {
+            nsfw: extensionData?.nsfw ? ' Not' : '',
+          })}
           descriptionLabel={t('Description')}
           galleryLabel={t('Gallery')}
           imageUploadedLabel={t('images uploaded')}
@@ -145,6 +157,7 @@ export const ExtensionSubmitPage: React.FC<ExtensionSubmitPageProps> = ({ extens
           tagsLabel={t('Tags')}
           backButtonLabel={t('Cancel')}
           publishButtonLabel={t('Submit')}
+          loading={loading}
           transformSource={transformSource}
           onClickCancel={handleClickCancel}
           onClickSubmit={handleClickSubmit}

@@ -83,11 +83,14 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
   };
 
   const getExtensionStatus = () => {
+    if (extensionData?.localDraft) {
+      return ExtensionStatus.LocalDraft;
+    }
     switch (appStreamData?.edges[0]?.node?.status) {
       case null:
         return ExtensionStatus.Draft;
       case AkashaAppsStreamModerationStatus.InReview:
-        return ExtensionStatus.Pending;
+        return ExtensionStatus.InReview;
       case AkashaAppsStreamModerationStatus.Ok:
         return ExtensionStatus.Published;
       default:
@@ -97,11 +100,13 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
 
   const getStatusIndicatorStyle = () => {
     switch (getExtensionStatus()) {
+      case ExtensionStatus.LocalDraft:
+        return 'bg-grey6';
       case ExtensionStatus.Draft:
         return 'bg-grey6';
       case ExtensionStatus.Published:
         return 'bg-success';
-      case ExtensionStatus.Pending:
+      case ExtensionStatus.InReview:
         return 'bg-(errorLight dark:errorDark)';
       default:
         return 'bg-grey6';
@@ -138,7 +143,7 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
 
   const menuItems = (extensionStatus: string): MenuProps['items'] | [] => {
     switch (extensionStatus) {
-      case ExtensionStatus.Pending:
+      case ExtensionStatus.InReview:
         return [
           {
             label: t('Check status'),
@@ -175,12 +180,31 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
             color: { light: 'errorLight', dark: 'errorDark' },
           },
         ];
-      case ExtensionStatus.Draft:
+      case ExtensionStatus.LocalDraft:
         return [
           {
             label: t('Publish'),
             icon: <PaperAirplaneIcon />,
             onClick: handleExtensionSubmit,
+          },
+          {
+            label: t('Edit'),
+            icon: <PencilIcon />,
+            onClick: handleExtensionEdit,
+          },
+          {
+            label: t('Delete'),
+            icon: <XMarkIcon />,
+            onClick: handleExtensionRemove,
+            color: { light: 'errorLight', dark: 'errorDark' },
+          },
+        ];
+      case ExtensionStatus.Draft:
+        return [
+          {
+            label: t('Submit Release'),
+            icon: <PaperAirplaneIcon />,
+            onClick: handleReleaseSubmit,
           },
           {
             label: t('Edit'),

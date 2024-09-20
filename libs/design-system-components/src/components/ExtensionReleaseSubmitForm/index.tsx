@@ -34,6 +34,7 @@ export type ExtensionReleaseSubmitProps = {
   descriptionPlaceholderLabel?: string;
   sourceURLFieldLabel?: string;
   sourceURLPlaceholderLabel?: string;
+  loading?: boolean;
 };
 
 const ExtensionReleaseSubmit: React.FC<ExtensionReleaseSubmitProps> = props => {
@@ -50,24 +51,30 @@ const ExtensionReleaseSubmit: React.FC<ExtensionReleaseSubmitProps> = props => {
     descriptionPlaceholderLabel,
     sourceURLFieldLabel,
     sourceURLPlaceholderLabel,
+    loading,
   } = props;
 
   const {
     control,
     getValues,
-    formState: { errors },
+    formState: { errors, dirtyFields },
   } = useForm<ExtensionReleaseSubmitValues>({
     defaultValues,
     resolver: zodResolver(schema),
     mode: 'onChange',
   });
 
+  const isFormDirty =
+    Object.keys(dirtyFields).includes(FieldName.versionNumber) &&
+    Object.keys(dirtyFields).includes(FieldName.description) &&
+    Object.keys(dirtyFields).includes(FieldName.sourceURL);
+
   const isValid = !Object.keys(errors).length;
 
   const onSave = (event: SyntheticEvent) => {
     event.preventDefault();
     const formValues = getValues();
-    if (isValid) {
+    if (isValid && isFormDirty) {
       nextButton.handleClick({
         ...formValues,
       });
@@ -153,8 +160,9 @@ const ExtensionReleaseSubmit: React.FC<ExtensionReleaseSubmitProps> = props => {
           />
           <Button
             variant="primary"
+            loading={loading}
             label={nextButton.label}
-            disabled={!isValid}
+            disabled={!isValid || !isFormDirty}
             onClick={onSave}
             type="submit"
           />

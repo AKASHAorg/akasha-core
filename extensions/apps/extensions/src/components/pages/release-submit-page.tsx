@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import appRoutes, { SUBMIT_EXTENSION } from '../../routes';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
@@ -11,7 +12,6 @@ import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui
 import ExtensionReleaseSubmitForm from '@akashaorg/design-system-components/lib/components/ExtensionReleaseSubmitForm';
 import { useSetAppReleaseMutation } from '@akashaorg/ui-awf-hooks/lib/generated';
 import getSDK from '@akashaorg/core-sdk';
-
 import { SubmitType } from '../app-routes';
 
 type ExtensionReleaseSubmitPageProps = {
@@ -33,9 +33,14 @@ export const ExtensionReleaseSubmitPage: React.FC<ExtensionReleaseSubmitPageProp
     data: { authenticatedDID },
   } = useAkashaStore();
 
-  const [setAppReleaseMutation] = useSetAppReleaseMutation({
+  const [setAppReleaseMutation, { loading }] = useSetAppReleaseMutation({
     context: { source: sdk.current.services.gql.contextSources.composeDB },
-    onCompleted: () => {},
+    onCompleted: () => {
+      navigate({
+        to: `/post-submit`,
+        search: { type: SubmitType.RELEASE },
+      });
+    },
     onError: () => {
       showAlertNotification(
         `${t(`Something went wrong when setting the release for this extension`)}.`,
@@ -85,10 +90,6 @@ export const ExtensionReleaseSubmitPage: React.FC<ExtensionReleaseSubmitPageProp
         },
       },
     });
-    navigate({
-      to: `/post-submit`,
-      search: { type: SubmitType.EXTENSION },
-    });
   };
 
   const handleClickCancel = () => {
@@ -110,27 +111,30 @@ export const ExtensionReleaseSubmitPage: React.FC<ExtensionReleaseSubmitPageProp
   }
 
   return (
-    <Stack spacing="gap-y-2">
-      <Stack padding={16}>
-        <Text variant="h5" weight="semibold" align="center">
-          {t('Release Notes')}
-        </Text>
-        <ExtensionReleaseSubmitForm
-          versionNumberLabel={t('Version Number')}
-          descriptionFieldLabel={t('Description')}
-          descriptionPlaceholderLabel={t('A brief description about this release')}
-          sourceURLFieldLabel={t('Source URL')}
-          sourceURLPlaceholderLabel={t('Webpack dev server / ipfs')}
-          cancelButton={{
-            label: t('Cancel'),
-            handleClick: handleClickCancel,
-          }}
-          nextButton={{
-            label: t('Submit'),
-            handleClick: handleClickSubmit,
-          }}
-        />
+    <Card padding={0}>
+      <Stack spacing="gap-y-2">
+        <Stack padding={16}>
+          <Text variant="h5" weight="semibold" align="center">
+            {t('Release Notes')}
+          </Text>
+          <ExtensionReleaseSubmitForm
+            versionNumberLabel={t('Version Number')}
+            descriptionFieldLabel={t('Description')}
+            descriptionPlaceholderLabel={t('A brief description about this release')}
+            sourceURLFieldLabel={t('Source URL')}
+            sourceURLPlaceholderLabel={t('Webpack dev server / ipfs')}
+            loading={loading}
+            cancelButton={{
+              label: t('Cancel'),
+              handleClick: handleClickCancel,
+            }}
+            nextButton={{
+              label: t('Submit'),
+              handleClick: handleClickSubmit,
+            }}
+          />
+        </Stack>
       </Stack>
-    </Stack>
+    </Card>
   );
 };

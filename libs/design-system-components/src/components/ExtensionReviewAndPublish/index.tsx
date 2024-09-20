@@ -44,6 +44,7 @@ export type ExtensionReviewAndPublishProps = {
   backButtonLabel: string;
   publishButtonLabel: string;
   publicImagePath?: string;
+  loading?: boolean;
   onViewGalleryClick?: () => void;
   onClickCancel: () => void;
   onClickSubmit: () => void;
@@ -70,6 +71,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
     backButtonLabel,
     publishButtonLabel,
     publicImagePath = '/images',
+    loading,
     onViewGalleryClick,
     onClickCancel,
     onClickSubmit,
@@ -310,6 +312,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
         <Button variant="text" label={backButtonLabel} onClick={onClickCancel} />
         <Button
           variant="primary"
+          loading={loading}
           disabled={disablePublish}
           label={publishButtonLabel}
           onClick={onClickSubmit}
