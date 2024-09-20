@@ -1,4 +1,5 @@
-type ProfileImageSource {
+export default function compose(akashaAppIdInterface, akashaAppReleaseIdInterface) {
+  return `type ProfileImageSource {
   width: Int! @int(min: 24, max: 8000)
   height: Int! @int(min: 24, max: 8000)
   src: URI!
@@ -18,11 +19,11 @@ type ProfileLabeled{
   value: String! @string(minLength:2, maxLength: 60)
 }
 
-interface AkashaAppReleaseInterface @loadModel(id: "kjzl6hvfrbw6c8lieadu4bugco13jdp0j9agrrsflezai2uuhtzkv97xnantmdu") {
+interface AkashaAppReleaseInterface @loadModel(id: "${ akashaAppReleaseIdInterface }") {
   id: ID!
 }
 
-interface AkashaAppInterface @loadModel(id: "kjzl6hvfrbw6c7mp2kgev6yk8hrxqkwj28l92a74x3p6wi1gcms00yx9ckxsokn") {
+interface AkashaAppInterface @loadModel(id: "${ akashaAppIdInterface }") {
   id: ID!
 
 }
@@ -73,4 +74,6 @@ type AkashaProfile implements AkashaProfileInterface
     appVersion: AkashaAppReleaseInterface! @relationDocument(property: "appVersionID")
     appID: StreamID! @documentReference(model: "AkashaAppInterface") @immutable
     app: AkashaAppInterface! @relationDocument(property: "appID")
+}
+`
 }
