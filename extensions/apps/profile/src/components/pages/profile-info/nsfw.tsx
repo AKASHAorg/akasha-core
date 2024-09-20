@@ -41,7 +41,7 @@ const NSFW: React.FC<NSFWProps> = props => {
           {descriptionSecondLine}
         </Text>
       </Stack>
-      <Stack direction="row" spacing="gap-x-1">
+      <Stack direction="row" spacing="gap-x-4">
         <Button variant="secondary" label={cancelLabel} onClick={onCancel} />
         <Button variant="primary" label={clickToViewLabel} onClick={onClickToView} />
       </Stack>
