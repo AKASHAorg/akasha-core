@@ -116,6 +116,9 @@ const CustomEditor = {
     Transforms.insertNodes(editor, link);
     ReactEditor.focus(editor);
     Transforms.move(editor);
+    //add an empty character after a link to allow typing text
+    this.insertText(editor, ' ');
+    ReactEditor.focus(editor);
   },
 
   deleteImage(editor: Editor, element: Element) {
