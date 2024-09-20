@@ -292,6 +292,9 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
           if (SlateText.isText(node)) {
             textLength += node.text.length;
           }
+          if (Element.isElement(node) && node.type === 'mention' && node.name?.length) {
+            textLength += node.name.length;
+          }
           if (Element.isElement(node) && node.type === 'tag' && node.name?.length) {
             textLength += node.name?.length;
           }

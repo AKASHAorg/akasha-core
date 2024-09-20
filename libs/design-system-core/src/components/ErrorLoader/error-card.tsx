@@ -9,7 +9,15 @@ import { ErrorLoaderProps } from '.';
 const ErrorCard: React.FC<
   React.PropsWithChildren<ErrorLoaderProps & { imageSrc: string }>
 > = props => {
-  const { children, imageSrc, title, details, dataTestId, customStyle = '' } = props;
+  const {
+    children,
+    imageSrc,
+    title,
+    details,
+    dataTestId,
+    imageBoxStyle = 'w-48 h-48',
+    customStyle = '',
+  } = props;
 
   return (
     <Card padding="p-8" customStyle={customStyle} dataTestId={dataTestId}>
@@ -19,7 +27,7 @@ const ErrorCard: React.FC<
           loading="lazy"
           decoding="async"
           alt="error-card"
-          className={tw('w-48 h-48')}
+          className={tw(imageBoxStyle)}
         />
 
         <Stack spacing="gap-y-1" align="center">
