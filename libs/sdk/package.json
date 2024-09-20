@@ -1,6 +1,6 @@
 {
   "name": "@akashaorg/core-sdk",
-  "version": "0.1.6-alpha",
+  "version": "0.1.7-alpha",
   "keywords": [
     "web3",
     "ethereum",
@@ -22,8 +22,5 @@
   },
   "files": [
     "lib/**"
-  ],
-  "exports": {
-    ".": "./lib/index.js"
-  }
+  ]
 }
