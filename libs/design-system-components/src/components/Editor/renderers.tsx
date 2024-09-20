@@ -63,8 +63,7 @@ const LinkElement = ({ attributes, children, element, handleLinkClick }: any) =>
         return ev.stopPropagation();
       }}
     >
-      {element.url}
-      {children}
+      {element.url} {children}
     </a>
   );
 };
