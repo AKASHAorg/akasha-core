@@ -14,7 +14,7 @@ export const InstallationInProgress: Story = {
     appName: 'Direct Messaging',
     progressInfo: 'Saving application information...',
     status: 'in-progress',
-    action: { label: 'Cancel installation', onClick: () => ({}) },
+    actions: [{ label: 'Cancel installation', onClick: () => ({}) }],
   },
 };
 
@@ -25,7 +25,7 @@ export const InstallationError: Story = {
     progressInfo:
       'Something went wrong while installing the app, please check your network and try again!',
     status: 'error',
-    action: { label: 'Dismiss', onClick: () => ({}) },
+    actions: [{ label: 'Dismiss', onClick: () => ({}) }],
   },
 };
 
@@ -35,7 +35,7 @@ export const InstallationCompleted: Story = {
     appName: 'Direct Messaging',
     progressInfo: 'Installation Completed!',
     status: 'complete',
-    action: { label: 'Open the Application', onClick: () => ({}) },
+    actions: [{ label: 'Open the Application', onClick: () => ({}) }],
   },
 };
 

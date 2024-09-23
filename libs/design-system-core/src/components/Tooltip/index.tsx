@@ -175,7 +175,7 @@ const Tooltip: React.FC<TooltipProps> = props => {
           )}
           <Card
             padding={0}
-            elevation="3"
+            elevation="2"
             background={isContentOfTypeString ? backgroundColor : null}
             customStyle={`flex-wrap ${contentStyle} ${contentCustomStyle} items-center justify-center dark:shadow-none`}
           >
