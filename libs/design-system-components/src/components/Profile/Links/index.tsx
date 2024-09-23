@@ -43,7 +43,7 @@ const Links: React.FC<LinksProps> = ({ title, links }) => {
             : { icon: <LinkIcon />, solid: false };
 
           return (
-            <CopyToClipboard key={`${link.href}${index}`} value={link.href}>
+            <CopyToClipboard key={`${link.href}${index}`} stringToBeCopied={link.href}>
               <Stack direction="row" align="center" spacing="gap-x-2">
                 <AppIcon placeholderIcon={icon} solid={solid} size="xs" accentColor />
                 <Text
