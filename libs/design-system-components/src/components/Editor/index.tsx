@@ -414,22 +414,16 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
     (event: KeyboardEvent<HTMLDivElement>) => {
       const { selection } = editor;
       /**
-       * Default left/right behavior is unit:'character'.
+       * Default space behavior is unit:'character'.
        * This fails to distinguish between two cursor positions, such as
        * <inline>foo<cursor/></inline> vs <inline>foo</inline><cursor/>.
-       * Here we modify the behavior to unit:'offset'.
-       * This lets the user step into and out of the inline without stepping over characters.
+       * Here we modify the behavior to unit:'offset' at first then resume the default behavior.
+       * This lets the user step into and out of the inline.
        */
       if (selection && Range.isCollapsed(selection)) {
-        if (event.key === 'ArrowLeft') {
-          event.preventDefault();
-          Transforms.move(editor, { unit: 'offset', reverse: true });
-          return;
-        }
-        if (event.key === 'ArrowRight') {
-          event.preventDefault();
+        if (event.code === 'Space') {
           Transforms.move(editor, { unit: 'offset' });
-          return;
+          Transforms.move(editor, { unit: 'character' });
         }
       }
       /**
