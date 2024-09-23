@@ -1,11 +1,11 @@
-import React, { PropsWithChildren, useEffect, useState } from 'react';
+import React, { PropsWithChildren, useState } from 'react';
 import { useCopyToClipboard } from 'react-use';
 
 import Button from '../Button';
 import Tooltip from '../Tooltip';
 
 export type CopyToClipboardProps = PropsWithChildren<{
-  value: string;
+  stringToBeCopied: string;
   copyText?: string;
   copiedText?: string;
 }>;
@@ -15,7 +15,7 @@ export type CopyToClipboardProps = PropsWithChildren<{
  * the user the purpose of the component and copy the content of component to the Clipboard.
  * The user can then paste the copied content elsewhere. The copied content remains in memory
  * until the user copies something else.
- * @param value - the value to be copied
+ * @param stringToBeCopied - the string to be copied
  * @param copyText - (optional) text that will be displayed in the tooltip before copying
  * @param copiedText - (optional) text that will be displayed in the tooltip after copying
  * ```tsx
@@ -25,7 +25,7 @@ export type CopyToClipboardProps = PropsWithChildren<{
  * ```
  **/
 const CopyToClipboard: React.FC<CopyToClipboardProps> = ({
-  value,
+  stringToBeCopied,
   copyText = 'Copy to clipboard',
   copiedText = 'Copied',
   children,
@@ -34,24 +34,30 @@ const CopyToClipboard: React.FC<CopyToClipboardProps> = ({
   const [, copyToClipboard] = useCopyToClipboard();
 
   const onCopy = () => {
-    copyToClipboard(value);
+    copyToClipboard(stringToBeCopied);
     setCopied(true);
   };
 
-  useEffect(() => {
-    if (copied) {
-      setTimeout(() => {
-        setCopied(false);
-      }, 3000);
-    }
-  }, [copied]);
+  const closeToolTip = () =>
+    setTimeout(() => {
+      setCopied(false);
+    }, 1000);
 
   return (
-    <Button onClick={onCopy} plain>
-      <Tooltip content={copied ? copiedText : copyText} placement="bottom">
+    <Tooltip
+      placement="bottom"
+      content={copied ? copiedText : copyText}
+      // this makes the tooltip controlled once copied, so as to show the label instantly
+      {...(copied && {
+        open: copied,
+        onClose: closeToolTip,
+        onOpen: () => setCopied(true),
+      })}
+    >
+      <Button onClick={onCopy} plain>
         {children}
-      </Tooltip>
-    </Button>
+      </Button>
+    </Tooltip>
   );
 };
 
