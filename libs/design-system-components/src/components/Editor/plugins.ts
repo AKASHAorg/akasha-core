@@ -41,15 +41,9 @@ const withTags = (editor: Editor) => {
 };
 
 const withLinks = (editor: Editor) => {
-  const { isInline, isVoid } = editor;
+  const { isInline } = editor;
 
-  editor.isInline = element => {
-    return element.type === 'link' ? true : isInline(element);
-  };
-
-  editor.isVoid = element => {
-    return element.type === 'link' ? true : isVoid(element);
-  };
+  editor.isInline = element => element.type === 'link' || isInline(element);
 
   return editor;
 };

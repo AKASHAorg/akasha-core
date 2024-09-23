@@ -1,4 +1,11 @@
-import React, { useState, useRef, useCallback, useEffect, useLayoutEffect } from 'react';
+import React, {
+  useState,
+  useRef,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  KeyboardEvent,
+} from 'react';
 import {
   createEditor,
   Editor,
@@ -168,7 +175,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
   const { insertData, insertText } = editor;
 
   const handleInsertLink = (text: string) => {
-    CustomEditor.insertLink(editor, { url: text.trim() });
+    CustomEditor.insertLink(editor, text.trim());
   };
 
   editor.insertText = text => {
@@ -404,7 +411,21 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
   };
 
   const onKeyDown = useCallback(
-    event => {
+    (event: KeyboardEvent<HTMLDivElement>) => {
+      const { selection } = editor;
+      /**
+       * Default space behavior is unit:'character'.
+       * This fails to distinguish between two cursor positions, such as
+       * <inline>foo<cursor/></inline> vs <inline>foo</inline><cursor/>.
+       * Here we modify the behavior to unit:'offset' at first then resume the default behavior.
+       * This lets the user step out of the inline.
+       */
+      if (selection && Range.isCollapsed(selection)) {
+        if (event.code === 'Space') {
+          Transforms.move(editor, { unit: 'offset' });
+          Transforms.move(editor, { unit: 'character' });
+        }
+      }
       /**
        * key handler for the mention popover
        * inserts the mention on tab, enter or space keypress

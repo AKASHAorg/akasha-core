@@ -7,7 +7,7 @@ import { Profile } from './profile';
  * Type defining empty text
  * @internal
  */
-type EmptyText = {
+type Text = {
   text: string;
 };
 
@@ -18,7 +18,7 @@ export type LinkElement = {
   type: 'link';
   align?: 'left' | 'center' | 'right';
   url: string;
-  children: EmptyText[];
+  children: Text[];
 };
 
 /**
@@ -28,7 +28,7 @@ export type MentionElement = {
   type: 'mention';
   name?: string;
   id?: string;
-  children?: EmptyText[];
+  children?: Text[];
   did: Profile['did']['id'];
   align?: 'left' | 'center' | 'right';
 };
@@ -40,7 +40,7 @@ export type TagElement = {
   type: 'tag';
   name: string;
   totalPosts: number;
-  children: EmptyText[];
+  children: Text[];
   align?: 'left' | 'center' | 'right';
 };
 

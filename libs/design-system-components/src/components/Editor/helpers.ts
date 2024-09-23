@@ -107,15 +107,13 @@ const CustomEditor = {
     Transforms.move(editor);
   },
 
-  insertLink(editor: Editor, linkData: { url: string }) {
-    const baseLink: { type: 'link'; children: [{ text: '' }] } = {
+  insertLink(editor, url: string) {
+    const link: LinkElement = {
       type: 'link',
-      children: [{ text: '' }],
+      url,
+      children: [{ text: url }],
     };
-    const link: LinkElement = Object.assign(baseLink, linkData);
     Transforms.insertNodes(editor, link);
-    ReactEditor.focus(editor);
-    Transforms.move(editor);
   },
 
   deleteImage(editor: Editor, element: Element) {

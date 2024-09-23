@@ -48,7 +48,6 @@ const LinkElement = ({ attributes, children, element, handleLinkClick }: any) =>
         `text-secondaryLight dark:text-secondaryDark no-underline text-${element.align}`,
       )}
       {...attributes}
-      contentEditable={false}
       href={element.url as string}
       size="large"
       target="_blank"
@@ -63,7 +62,7 @@ const LinkElement = ({ attributes, children, element, handleLinkClick }: any) =>
         return ev.stopPropagation();
       }}
     >
-      {element.url} {children}
+      {children}
     </a>
   );
 };
@@ -117,7 +116,7 @@ const renderElement = (
 };
 
 const Leaf = ({ attributes, children, leaf }: RenderLeafProps) => {
-  let textStyle = 'text-black dark:text-white';
+  const textStyle = leaf.disabled ? 'text-color-grey8' : '';
   if (leaf.bold) {
     children = <strong>{children}</strong>;
   }
@@ -126,9 +125,6 @@ const Leaf = ({ attributes, children, leaf }: RenderLeafProps) => {
   }
   if (leaf.underline) {
     children = <u>{children}</u>;
-  }
-  if (leaf.disabled) {
-    textStyle = `text-color-grey8`;
   }
 
   return (
