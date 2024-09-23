@@ -167,7 +167,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
           <Text variant="body2">{extensionData?.name}</Text>
         </Section>
 
-        <Section title={extensionDisplayNameLabel}>
+        <Section title={extensionDisplayNameLabel} required>
           <Text variant="body2">{extensionData?.displayName}</Text>
         </Section>
 

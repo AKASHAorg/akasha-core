@@ -138,7 +138,7 @@ export const ExtensionSubmitPage: React.FC<ExtensionSubmitPageProps> = ({ extens
           title={t('Review Extension')}
           subtitle={{
             part1: 'Please note that fields marked with',
-            part2: 'cannot be edited once submitted.',
+            part2: 'are required and cannot be edited once submitted.',
           }}
           extensionNameLabel={t('Extension Name')}
           extensionDisplayNameLabel={t('Extension Display Name')}
