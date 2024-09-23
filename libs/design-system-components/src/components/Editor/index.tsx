@@ -418,7 +418,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
        * This fails to distinguish between two cursor positions, such as
        * <inline>foo<cursor/></inline> vs <inline>foo</inline><cursor/>.
        * Here we modify the behavior to unit:'offset' at first then resume the default behavior.
-       * This lets the user step into and out of the inline.
+       * This lets the user step out of the inline.
        */
       if (selection && Range.isCollapsed(selection)) {
         if (event.code === 'Space') {
