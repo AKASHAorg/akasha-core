@@ -28,7 +28,7 @@ const ChooseProvider: React.FC<unknown> = () => {
         {`✨ ${t('Welcome to AKASHA World')} ✨`}
       </Text>
 
-      <Stack alignSelf="center" customStyle="h-[11.25rem] w-[11.25rem]">
+      <Stack alignSelf="center" customStyle="h-44 w-44">
         <Image customStyle="object-contain" src="/images/auth.webp" />
       </Stack>
 
