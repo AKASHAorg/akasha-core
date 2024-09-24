@@ -234,26 +234,28 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
     <>
       {showElement() && (
         <Stack spacing="gap-y-4">
-          <Stack direction="row" justify="between" spacing="gap-x-8">
-            <Stack direction="row" spacing="gap-x-3">
+          <Stack direction="row" justify="between" spacing="gap-x-8" fullWidth>
+            <Stack direction="row" spacing="gap-x-3" customStyle="max-h-[60px] w-[80%]">
               <AppAvatar
                 appType={extensionData.applicationType}
                 avatar={transformSource(extensionData.logoImage)}
                 extensionId={extensionData.id}
               />
-              <Stack direction="column" justify="between">
+              <Stack direction="column" justify="between" customStyle="min-w-0" fullWidth>
                 <Stack direction="row" spacing="gap-2">
-                  <Text variant="button-sm">{extensionData.name}</Text>
+                  <Text variant="button-sm" truncate>
+                    {extensionData.name}
+                  </Text>
 
                   {extensionData?.applicationType && (
                     <Stack
-                      customStyle="w-[18px] h-[18px] rounded-full"
+                      customStyle="w-[18px] h-[18px] rounded-full shrink-0"
                       background={{ light: 'secondaryLight', dark: 'secondaryDark' }}
                       justify="center"
                       align="center"
                     >
                       <Icon
-                        color={{ light: 'secondaryLight', dark: 'white' }}
+                        color={{ light: 'white', dark: 'white' }}
                         size={'xs'}
                         solid
                         icon={getIconByAppType(extensionData?.applicationType)}
@@ -265,7 +267,6 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
                   variant="footnotes2"
                   weight="normal"
                   color={{ light: 'grey4', dark: 'grey7' }}
-                  lineClamp={2}
                   truncate
                 >
                   {extensionData.description || extensionData.displayName}
@@ -273,7 +274,7 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
               </Stack>
             </Stack>
 
-            <Stack direction="column" justify="between" align="end">
+            <Stack direction="column" justify="between" align="end" customStyle="shrink-0">
               <Menu
                 anchor={{
                   icon: <EllipsisHorizontalIcon />,
