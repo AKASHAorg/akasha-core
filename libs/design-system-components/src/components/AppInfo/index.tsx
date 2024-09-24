@@ -291,7 +291,7 @@ const AppInfo: React.FC<AppInfoProps> = ({
 
           <ContentBlock blockTitle={documentationTitle}>
             <Stack customStyle="flex-wrap">
-              <CopyToClipboard value={documentationLink}>
+              <CopyToClipboard stringToBeCopied={documentationLink}>
                 <Button variant="text" size="md" label={documentationLink} />
               </CopyToClipboard>
             </Stack>

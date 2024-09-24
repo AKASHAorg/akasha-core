@@ -29,8 +29,8 @@ const Web3ConnectCard: React.FC<TWeb3ConnectCardProps> = props => {
     titleLabel,
     subtitleLabel,
     leftIconType,
-    iconSize = { width: 40, height: 40 },
-    boxSize = { width: 40, height: 40 },
+    iconSize = { width: 58, height: 58 },
+    boxSize = { width: 58, height: 58 },
     boxBgColor = 'transparent',
     iconColor = 'self-color',
     handleClick,
@@ -55,7 +55,7 @@ const Web3ConnectCard: React.FC<TWeb3ConnectCardProps> = props => {
           backgroundSize={boxSize}
           background={boxBgColor}
         />
-        <Stack>
+        <Stack spacing="gap-y-2">
           <Text variant="h6">{titleLabel}</Text>
           {subtitleLabel && (
             <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey7' }}>

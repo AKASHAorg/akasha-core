@@ -1,4 +1,5 @@
 import React, { useState, PropsWithChildren, ReactNode } from 'react';
+import Card from '../Card';
 import Stack from '../Stack';
 import Text, { TextProps } from '../Text';
 import { apply, tw } from '@twind/core';
@@ -26,7 +27,7 @@ export type TooltipProps = PropsWithChildren<
   TProps | ({ open: boolean; onOpen: () => void; onClose: () => void } & TProps)
 >;
 
-const ARROW_SIZE = 4;
+const ARROW_SIZE = 8;
 
 type CSSPosition = 'top' | 'left' | 'bottom' | 'right';
 
@@ -70,9 +71,9 @@ const Tooltip: React.FC<TooltipProps> = props => {
     centerArrowToReference,
     arrow = true,
     textColor = { light: 'black', dark: 'white' },
-    backgroundColor = { light: 'secondaryDark/50', dark: 'grey4' },
+    backgroundColor = { light: 'grey9', dark: 'grey3' },
     customStyle = '',
-    contentCustomStyle,
+    contentCustomStyle = '',
     children,
   } = props;
 
@@ -154,7 +155,10 @@ const Tooltip: React.FC<TooltipProps> = props => {
       {('open' in props ? props.open : showTooltip) && (
         <div
           ref={setContent}
-          style={{ ...styles.popper, zIndex: 99 }}
+          style={{
+            ...styles.popper,
+            zIndex: 99,
+          }}
           {...attributes.popper}
           className={tw(getContentClasses(contextualPlacement, ARROW_SIZE))}
         >
@@ -163,26 +167,28 @@ const Tooltip: React.FC<TooltipProps> = props => {
               ref={setArrowElement}
               style={{
                 ...arrowStyle,
+                zIndex: 99,
                 [PLACEMENT_TO_CSS_POSITION_MAP[contextualPlacement]]: `-${ARROW_SIZE}px`,
               }}
               className={tw(getArrowClasses(contextualPlacement, ARROW_SIZE, backgroundColor))}
             />
           )}
-          <Stack
-            ref={contentRef}
-            align="center"
-            justify="center"
+          <Card
+            padding={0}
+            elevation="2"
             background={isContentOfTypeString ? backgroundColor : null}
-            customStyle={`flex-wrap ${contentStyle} ${contentCustomStyle}`}
+            customStyle={`flex-wrap ${contentStyle} ${contentCustomStyle} items-center justify-center dark:shadow-none`}
           >
-            {isContentOfTypeString ? (
-              <Text color={textColor} variant={textSize}>
-                {content}
-              </Text>
-            ) : (
-              content
-            )}
-          </Stack>
+            <Stack ref={contentRef} align="center" justify="center">
+              {isContentOfTypeString ? (
+                <Text color={textColor} variant={textSize}>
+                  {content}
+                </Text>
+              ) : (
+                content
+              )}
+            </Stack>
+          </Card>
         </div>
       )}
     </Stack>

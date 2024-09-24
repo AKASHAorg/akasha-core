@@ -139,14 +139,13 @@ export const FollowButton = ({
       inactiveVariant="secondary"
       loading={loading}
       fixedWidth={'w-[7rem]'}
-      {...(customizeButton?.variant !== 'primary' && {
-        hoverColors: {
-          background: { light: 'transparent', dark: 'transparent' },
-          border: { light: 'errorLight', dark: 'errorDark' },
-          text: { light: 'errorLight', dark: 'errorDark' },
-          icon: { light: 'errorLight', dark: 'errorDark' },
-        },
-      })}
+      hover={true}
+      hoverColors={{
+        background: { light: 'transparent', dark: 'transparent' },
+        border: { light: 'errorLight', dark: 'errorDark' },
+        text: { light: 'errorLight', dark: 'errorDark' },
+        icon: { light: 'errorLight', dark: 'errorDark' },
+      }}
       customStyle={disabledStyle}
       onClickInactive={() => handleFollow(profileID, followDocumentId, !isFollowing)}
       onClickActive={() => handleFollow(profileID, followDocumentId, !isFollowing)}

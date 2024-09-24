@@ -38,7 +38,7 @@ export const ButtonIcon: React.FC<
     <Icon
       icon={icon}
       solid={solid}
-      size={size}
+      size={size === 'xs' ? 'sm' : size}
       breakPointSize={breakPointSize}
       color={color}
       accentColor={
