@@ -13,6 +13,7 @@ import ExtensionReleaseSubmitForm from '@akashaorg/design-system-components/lib/
 import { useSetAppReleaseMutation } from '@akashaorg/ui-awf-hooks/lib/generated';
 import getSDK from '@akashaorg/core-sdk';
 import { SubmitType } from '../app-routes';
+import { PROPERTY, PROVIDER } from '../../constants';
 
 type ExtensionReleaseSubmitPageProps = {
   extensionId: string;
@@ -77,8 +78,8 @@ export const ExtensionReleaseSubmitPage: React.FC<ExtensionReleaseSubmitPageProp
       createdAt: new Date().toISOString(),
       meta: [
         {
-          provider: 'AkashaApp',
-          property: 'description',
+          provider: PROVIDER,
+          property: PROPERTY,
           value: appReleaseFormData?.description,
         },
       ],

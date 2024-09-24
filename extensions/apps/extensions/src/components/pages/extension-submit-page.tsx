@@ -10,7 +10,7 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import ExtensionReviewAndPublish from '@akashaorg/design-system-components/lib/components/ExtensionReviewAndPublish';
 import { transformSource, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { Extension, NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
-import { DRAFT_EXTENSIONS } from '../../constants';
+import { CONTACT_INFO, DRAFT_EXTENSIONS } from '../../constants';
 import getSDK from '@akashaorg/core-sdk';
 import { useCreateAppMutation } from '@akashaorg/ui-awf-hooks/lib/generated';
 import { SubmitType } from '../app-routes';
@@ -29,17 +29,50 @@ export const ExtensionSubmitPage: React.FC<ExtensionSubmitPageProps> = ({ extens
   const navigateTo = getCorePlugins().routing.navigateTo;
   const sdk = useRef(getSDK());
 
+  const showAlertNotification = React.useCallback((title: string) => {
+    uiEventsRef.current.next({
+      event: NotificationEvents.ShowNotification,
+      data: {
+        type: NotificationTypes.Info,
+        title,
+      },
+    });
+  }, []);
+
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
 
+  const draftExtensions: Extension[] = useMemo(() => {
+    try {
+      return JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [];
+    } catch (error) {
+      showAlertNotification(error);
+    }
+  }, [authenticatedDID, showAlertNotification]);
+
+  const extensionData = draftExtensions?.find(draftExtension => draftExtension.id === extensionId);
+
+  const displayExtData = useMemo(() => {
+    return {
+      ...extensionData,
+      links: extensionData.links?.filter(link => link.label !== `${extensionId}-${CONTACT_INFO}`),
+      contactInfo: extensionData.links?.find(
+        link => link.label === `${extensionId}-${CONTACT_INFO}`,
+      )?.href,
+    };
+  }, [extensionData, extensionId]);
+
   const [createAppMutation, { loading }] = useCreateAppMutation({
     context: { source: sdk.current.services.gql.contextSources.composeDB },
     onCompleted: () => {
-      //remove published extension from list of local extensions
+      // after the extension has been published to the ceramic model
+      // search for it in the list of local draft extensions and
+      // remove the published extension from list of local extensions
       const newLocalDraftExtensions = draftExtensions.filter(
         draftExtension => draftExtension.id !== extensionId,
       );
+      // save the new list of local draft extensions in local storage
       localStorage.setItem(
         `${DRAFT_EXTENSIONS}-${authenticatedDID}`,
         JSON.stringify(newLocalDraftExtensions),
@@ -64,23 +97,6 @@ export const ExtensionSubmitPage: React.FC<ExtensionSubmitPageProps> = ({ extens
       },
     });
   };
-
-  const showAlertNotification = React.useCallback((title: string) => {
-    uiEventsRef.current.next({
-      event: NotificationEvents.ShowNotification,
-      data: {
-        type: NotificationTypes.Info,
-        title,
-      },
-    });
-  }, []);
-
-  const draftExtensions: Extension[] = useMemo(
-    () => JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [],
-    [authenticatedDID],
-  );
-
-  const extensionData = draftExtensions.find(draftExtension => draftExtension.id === extensionId);
 
   const handleClickSubmit = () => {
     const extData = {
@@ -134,7 +150,7 @@ export const ExtensionSubmitPage: React.FC<ExtensionSubmitPageProps> = ({ extens
           </Text>
         </Stack>
         <ExtensionReviewAndPublish
-          extensionData={extensionData}
+          extensionData={displayExtData}
           title={t('Review Extension')}
           subtitle={{
             part1: 'Please note that fields marked with',

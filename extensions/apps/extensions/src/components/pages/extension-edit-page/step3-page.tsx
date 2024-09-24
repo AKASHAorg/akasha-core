@@ -17,15 +17,34 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
   const { uiEvents } = useRootComponentProps();
+  const uiEventsRef = React.useRef(uiEvents);
 
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
 
-  const draftExtensions: Extension[] = useMemo(
-    () => JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [],
-    [authenticatedDID],
+  const showAlertNotification = React.useCallback(
+    (type: NotificationTypes, title: string, description?: string) => {
+      uiEventsRef.current.next({
+        event: NotificationEvents.ShowNotification,
+        data: {
+          type,
+          title,
+          description,
+        },
+      });
+    },
+    [],
   );
+
+  const draftExtensions: Extension[] = useMemo(() => {
+    try {
+      return JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [];
+    } catch (error) {
+      showAlertNotification(NotificationTypes.Error, error);
+    }
+  }, [authenticatedDID, showAlertNotification]);
+
   const extensionData = draftExtensions.find(draftExtension => draftExtension.id === extensionId);
 
   const formValue = useMemo(
@@ -80,14 +99,13 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
       JSON.stringify(newDraftExtensions),
     );
     sessionStorage.removeItem(extensionId);
-    uiEvents.next({
-      event: NotificationEvents.ShowNotification,
-      data: {
-        type: NotificationTypes.Success,
-        title: t('Extension Info Updated'),
-        description: t('{{extensionName}} updated succesfully', { extensionName: formValue.name }),
-      },
-    });
+
+    showAlertNotification(
+      NotificationTypes.Success,
+      t('Extension Info Updated'),
+      t('{{extensionName}} updated succesfully', { extensionName: formValue.name }),
+    );
+
     navigate({
       to: '/my-extensions',
     });

@@ -23,6 +23,7 @@ import ExtensionImageGallery from '../ExtensionImageGallery';
 import { Extension, Image } from '@akashaorg/typings/lib/ui';
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
 import { getImageFromSeed } from '@akashaorg/design-system-core/lib/utils';
+import { XCircleIcon } from '@heroicons/react/24/outline';
 
 export type ExtensionReviewAndPublishProps = {
   extensionData: Extension;
@@ -103,10 +104,14 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
     }
   };
 
-  const getAccordionTitleNode = (title: string, isRequired = true) => {
+  const getAccordionTitleNode = (title: string, fieldHasData: boolean, isRequired = true) => {
     return (
       <Stack direction="row" spacing="gap-x-1" align="center">
-        <Icon icon={<CheckCircleIcon />} solid={true} color="success" />
+        <Icon
+          icon={fieldHasData ? <CheckCircleIcon /> : <XCircleIcon />}
+          solid={true}
+          color={fieldHasData ? 'success' : 'grey3'}
+        />
         <Label required={isRequired}>{title}</Label>
       </Stack>
     );
@@ -124,6 +129,11 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
         return <App />;
     }
   };
+
+  const galleryImagesWithSource = useMemo(
+    () => extensionData?.gallery?.map(img => transformSource(img)) || [],
+    [extensionData.gallery, transformSource],
+  );
 
   const asteriskStyle = tw(`-top-0.5 left-1 text-base text(errorLight dark:errorDark)`);
 
@@ -182,9 +192,9 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
           <Accordion
             accordionId={descriptionLabel}
             open={descriptionLabel === activeAccordionId}
-            titleNode={getAccordionTitleNode(descriptionLabel)}
+            titleNode={getAccordionTitleNode(descriptionLabel, !!extensionData?.description)}
             contentNode={<Text variant="body2">{extensionData?.description}</Text>}
-            handleClick={onAccordionClick}
+            handleClick={extensionData?.description ? onAccordionClick : undefined}
           />
         </Stack>
         <Divider />
@@ -193,27 +203,31 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
           <Accordion
             accordionId={galleryLabel}
             open={galleryLabel === activeAccordionId}
-            titleNode={getAccordionTitleNode(galleryLabel, false)}
+            titleNode={getAccordionTitleNode(
+              galleryLabel,
+              galleryImagesWithSource?.length > 0,
+              false,
+            )}
             contentNode={
               <Stack spacing="gap-y-3">
                 <ExtensionImageGallery
-                  images={extensionData?.gallery?.slice(0, 3).map((image, idx) => ({
-                    src: image.src,
-                    size: { width: image.width, height: image.height },
-                    name: image.src + idx,
+                  images={galleryImagesWithSource?.slice(0, 3).map((image, idx) => ({
+                    src: image?.src,
+                    size: { width: image?.width, height: image?.height },
+                    name: image?.src + idx,
                   }))}
                   showOverlay={false}
                   toggleOverlay={() => ({})}
                 />
                 <Stack direction="row" align="center" justify="between">
                   <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey7' }}>
-                    {imageUploadedLabel}
+                    {`${galleryImagesWithSource?.length} ${imageUploadedLabel}`}
                   </Text>
                   <Button variant="text" label={viewAllLabel} onClick={onViewGalleryClick} />
                 </Stack>
               </Stack>
             }
-            handleClick={onAccordionClick}
+            handleClick={galleryImagesWithSource?.length > 0 ? onAccordionClick : undefined}
           />
         </Stack>
         <Divider />
@@ -222,7 +236,11 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
           <Accordion
             accordionId={documentationLabel}
             open={documentationLabel === activeAccordionId}
-            titleNode={getAccordionTitleNode(documentationLabel, false)}
+            titleNode={getAccordionTitleNode(
+              documentationLabel,
+              extensionData?.links?.length > 0,
+              false,
+            )}
             contentNode={
               <Stack spacing="gap-y-3">
                 {extensionData?.links?.map((link, index) => (
@@ -240,7 +258,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
                 ))}
               </Stack>
             }
-            handleClick={onAccordionClick}
+            handleClick={extensionData?.links?.length > 0 ? onAccordionClick : undefined}
           />
         </Stack>
         <Divider />
@@ -249,13 +267,13 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
           <Accordion
             accordionId={licenseLabel}
             open={licenseLabel === activeAccordionId}
-            titleNode={getAccordionTitleNode(licenseLabel)}
+            titleNode={getAccordionTitleNode(licenseLabel, !!extensionData?.license)}
             contentNode={
               <Stack>
                 <Text variant="button-md">{extensionData?.license}</Text>
               </Stack>
             }
-            handleClick={onAccordionClick}
+            handleClick={extensionData?.license ? onAccordionClick : undefined}
           />
         </Stack>
         <Divider />
@@ -264,7 +282,11 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
           <Accordion
             accordionId={contributorsLabel}
             open={contributorsLabel === activeAccordionId}
-            titleNode={getAccordionTitleNode(contributorsLabel, false)}
+            titleNode={getAccordionTitleNode(
+              contributorsLabel,
+              extensionData?.contributors?.length > 0,
+              false,
+            )}
             contentNode={
               <Stack spacing="gap-y-4">
                 {extensionData?.contributors?.map((el, index) => (
@@ -273,7 +295,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
                 ))}
               </Stack>
             }
-            handleClick={onAccordionClick}
+            handleClick={extensionData?.contributors?.length > 0 ? onAccordionClick : undefined}
           />
         </Stack>
         <Divider />
@@ -282,9 +304,9 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
           <Accordion
             accordionId={contactInfoLabel}
             open={contactInfoLabel === activeAccordionId}
-            titleNode={getAccordionTitleNode(contactInfoLabel, false)}
+            titleNode={getAccordionTitleNode(contactInfoLabel, !!extensionData?.contactInfo, false)}
             contentNode={<Text variant="body2">{extensionData?.contactInfo}</Text>}
-            handleClick={onAccordionClick}
+            handleClick={extensionData?.contactInfo ? onAccordionClick : undefined}
           />
         </Stack>
         <Divider />
@@ -293,7 +315,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
           <Accordion
             accordionId={tagsLabel}
             open={tagsLabel === activeAccordionId}
-            titleNode={getAccordionTitleNode(tagsLabel)}
+            titleNode={getAccordionTitleNode(tagsLabel, extensionData?.keywords?.length > 0)}
             contentNode={
               <Stack direction="row" spacing="gap-2" customStyle="flex-wrap">
                 {extensionData?.keywords?.map((tag, idx) => (
@@ -301,7 +323,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
                 ))}
               </Stack>
             }
-            handleClick={onAccordionClick}
+            handleClick={extensionData?.keywords?.length > 0 ? onAccordionClick : undefined}
           />
         </Stack>
       </Stack>

@@ -29,16 +29,31 @@ export const ExtensionEditStep2Page: React.FC<ExtensionEditStep2PageProps> = ({ 
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
   const { uiEvents } = useRootComponentProps();
+  const uiEventsRef = React.useRef(uiEvents);
 
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
 
-  const draftExtensions: Extension[] = useMemo(
-    () => JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [],
-    [authenticatedDID],
-  );
-  const extensionData = draftExtensions.find(draftExtension => draftExtension.id === extensionId);
+  const showAlertNotification = React.useCallback((title: string) => {
+    uiEventsRef.current.next({
+      event: NotificationEvents.ShowNotification,
+      data: {
+        type: NotificationTypes.Error,
+        title,
+      },
+    });
+  }, []);
+
+  const draftExtensions: Extension[] = useMemo(() => {
+    try {
+      return JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [];
+    } catch (error) {
+      showAlertNotification(error);
+    }
+  }, [authenticatedDID, showAlertNotification]);
+
+  const extensionData = draftExtensions?.find(draftExtension => draftExtension.id === extensionId);
 
   const formValue = useMemo(
     () => JSON.parse(sessionStorage.getItem(extensionId)) || {},
@@ -72,11 +87,11 @@ export const ExtensionEditStep2Page: React.FC<ExtensionEditStep2PageProps> = ({ 
           const imgWithGateway = transformSource(img);
           return {
             ...img,
-            src: img.src,
-            displaySrc: imgWithGateway.src,
+            src: img?.src,
+            displaySrc: imgWithGateway?.src,
             size: {
-              height: img.height,
-              width: img.width,
+              height: img?.height,
+              width: img?.width,
             },
           };
         }),
@@ -114,13 +129,7 @@ export const ExtensionEditStep2Page: React.FC<ExtensionEditStep2PageProps> = ({ 
       return imageObj;
     } catch (error) {
       setUploading(false);
-      uiEvents.next({
-        event: NotificationEvents.ShowNotification,
-        data: {
-          type: NotificationTypes.Error,
-          title: t("The image wasn't uploaded correctly. Please try again!"),
-        },
-      });
+      showAlertNotification(t("The image wasn't uploaded correctly. Please try again!"));
       return null;
     }
   };

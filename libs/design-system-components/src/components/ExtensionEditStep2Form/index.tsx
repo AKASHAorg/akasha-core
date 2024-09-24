@@ -176,13 +176,7 @@ const ExtensionEditStep2Form: React.FC<ExtensionEditStep2FormProps> = props => {
             onClick={cancelButton.handleClick}
             disabled={cancelButton.disabled}
           />
-          <Button
-            variant="primary"
-            label={nextButton.label}
-            disabled={!isValid}
-            onClick={onSave}
-            type="submit"
-          />
+          <Button variant="primary" label={nextButton.label} disabled={!isValid} onClick={onSave} />
         </Stack>
       </Stack>
     </form>
