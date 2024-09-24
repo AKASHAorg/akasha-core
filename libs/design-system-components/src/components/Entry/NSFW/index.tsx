@@ -4,6 +4,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import React from 'react';
 import { EyeSlashIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 
 export type NSFWProps = {
   sensitiveContentLabel: string;
@@ -14,15 +15,23 @@ export type NSFWProps = {
 const NSFW: React.FC<NSFWProps> = props => {
   const { sensitiveContentLabel, clickToViewLabel, onClickToView } = props;
   return (
-    <Stack align="center" justify="center">
-      <Stack direction="row" spacing="gap-x-1">
-        <Icon icon={<EyeSlashIcon />} color="errorLight" />
-        <Text variant="button-sm" color="errorLight">
-          {sensitiveContentLabel}
-        </Text>
-      </Stack>
-      <Button variant="text" label={clickToViewLabel} onClick={onClickToView} />
-    </Stack>
+    <Card
+      elevation="none"
+      fullWidth={true}
+      background={{ light: 'grey9', dark: 'grey5' }}
+      customStyle={'items-center'}
+      padding="p-4"
+    >
+      <Card customStyle={'max-w-min'} elevation={'2'} padding="p-2" radius={10}>
+        <Stack direction={'row'} align="center" spacing="gap-x-2">
+          <Icon icon={<EyeSlashIcon />} color="errorLight" />
+          <Text variant="button-sm" color="errorLight" customStyle="whitespace-nowrap">
+            {sensitiveContentLabel}
+          </Text>
+        </Stack>
+        <Button variant="text" label={clickToViewLabel} onClick={onClickToView} />
+      </Card>
+    </Card>
   );
 };
 
