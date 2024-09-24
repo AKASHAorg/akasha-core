@@ -218,14 +218,16 @@ class AWF_Auth {
     if (!this.#_didSession) {
       throw new Error('DID session could not be initialised!');
     }
-
-    const swResponse = await executeOnSW({
-      type: SwActionType.ENCRYPT,
-      value: this.#_didSession.serialize(),
-    });
-    if (swResponse) {
-      localStorage.setItem(this.sessKey, JSON.stringify(swResponse));
+    if (typeof this.#_didSession.serialize === 'function') {
+      const swResponse = await executeOnSW({
+        type: SwActionType.ENCRYPT,
+        value: this.#_didSession.serialize(),
+      });
+      if (swResponse) {
+        localStorage.setItem(this.sessKey, JSON.stringify(swResponse));
+      }
     }
+
     localStorage.setItem(this.currentUserKey, JSON.stringify(this.currentUser));
 
     this._globalChannel.next({
