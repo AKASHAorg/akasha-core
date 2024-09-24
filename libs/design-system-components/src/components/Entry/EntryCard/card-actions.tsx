@@ -25,7 +25,13 @@ const CardActions: React.FC<CardActionProps> = props => {
     onReflect,
     customStyle = '',
   } = props;
-  const reflectIconUi = <Icon icon={<ChatBubbleLeftRightIcon />} accentColor={true} />;
+  const reflectIconUi = (
+    <Icon
+      icon={<ChatBubbleLeftRightIcon />}
+      disabled={disableActions}
+      accentColor={!disableActions}
+    />
+  );
   return (
     <Stack direction="row" align="center" justify="end" spacing="gap-x-2" customStyle={customStyle}>
       <>{actionsRight}</>
@@ -42,7 +48,10 @@ const CardActions: React.FC<CardActionProps> = props => {
             <Text
               variant="body2"
               weight="normal"
-              color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+              color={{
+                light: disableActions ? 'grey4' : 'secondaryLight',
+                dark: disableActions ? 'grey7' : 'secondaryDark',
+              }}
             >
               {reflectionsCount}
             </Text>
