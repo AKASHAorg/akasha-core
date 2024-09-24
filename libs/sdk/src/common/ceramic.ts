@@ -13,6 +13,12 @@ import { ComposeClient } from '@composedb/client';
 import { AccountId } from 'caip';
 import { sha256 } from 'crypto-hash';
 import { definition } from '@akashaorg/composedb-models/lib/runtime-definition';
+import { DID } from 'dids';
+import { Ed25519Provider } from 'key-did-provider-ed25519';
+import KeyResolver from 'key-did-resolver';
+import { fromString } from 'uint8arrays/from-string';
+import { validate } from './validator';
+import { z } from 'zod';
 
 @injectable()
 export default class CeramicService {
@@ -89,6 +95,18 @@ Functionality:
     });
     this._composeClient.setDID(this._didSession.did);
     return this._didSession;
+  }
+
+  @validate(z.string().length(64))
+  async connectWithKey(key: string) {
+    const privateKey = fromString(key, 'base16');
+    const did = new DID({
+      provider: new Ed25519Provider(privateKey),
+      resolver: KeyResolver.getResolver(),
+    });
+    await did.authenticate();
+    this._composeClient.setDID(did);
+    return did;
   }
 
   async restoreSession(serialisedSession: string): Promise<DIDSession> {
