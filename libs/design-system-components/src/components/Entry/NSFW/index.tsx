@@ -24,8 +24,12 @@ const NSFW: React.FC<NSFWProps> = props => {
     >
       <Card customStyle={'max-w-min'} elevation={'2'} padding="p-2" radius={10}>
         <Stack direction={'row'} align="center" spacing="gap-x-2">
-          <Icon icon={<EyeSlashIcon />} color="errorLight" />
-          <Text variant="button-sm" color="errorLight" customStyle="whitespace-nowrap">
+          <Icon icon={<EyeSlashIcon />} color={{ light: 'errorLight', dark: 'errorDark' }} />
+          <Text
+            variant="button-sm"
+            color={{ light: 'errorLight', dark: 'errorDark' }}
+            customStyle="whitespace-nowrap"
+          >
             {sensitiveContentLabel}
           </Text>
         </Stack>
