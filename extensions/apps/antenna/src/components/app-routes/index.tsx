@@ -5,6 +5,7 @@ import BeamPage from '../pages/entry-page/beam-page';
 import ReflectionPage from '../pages/entry-page/reflection-page';
 import TagFeedPage from '../pages/tag-feed-page/tag-feed-page';
 import EditorPage from '../pages/editor-page/editor-page';
+import ReflectEditor from '../reflect-editor';
 import EntrySectionLoading from '../pages/entry-page/entry-section-loading';
 import routes, {
   GLOBAL_ANTENNA,
@@ -106,6 +107,14 @@ const beamRoute = createRoute({
                       isActive={selectBeamActiveField(beamStreamData)}
                       beamData={mapBeamEntryData(selectBeamNode(beamById))}
                       beamStatus={selectBeamStatusField(beamStreamData)}
+                      renderEditor={({ beamId, reflectToId, showEditor, setShowEditor }) => (
+                        <ReflectEditor
+                          beamId={beamId}
+                          reflectToId={reflectToId}
+                          showEditor={showEditor}
+                          setShowEditor={setShowEditor}
+                        />
+                      )}
                     />
                   );
                 }}
@@ -140,6 +149,14 @@ const beamReflectRoute = createRoute({
                       isActive={selectBeamActiveField(beamStreamData)}
                       beamData={mapBeamEntryData(selectBeamNode(beamById))}
                       beamStatus={selectBeamStatusField(beamStreamData)}
+                      renderEditor={({ beamId, reflectToId, showEditor, setShowEditor }) => (
+                        <ReflectEditor
+                          beamId={beamId}
+                          reflectToId={reflectToId}
+                          showEditor={showEditor}
+                          setShowEditor={setShowEditor}
+                        />
+                      )}
                     />
                   );
                 }}
@@ -185,6 +202,14 @@ const reflectionsRoute = createRoute({
                   <ReflectionPage
                     isActive={selectReflectionActiveField(reflectionStreamData)}
                     reflectionData={mapReflectEntryData(selectReflectionNode(reflectionById))}
+                    renderEditor={({ beamId, reflectToId, showEditor, setShowEditor }) => (
+                      <ReflectEditor
+                        beamId={beamId}
+                        reflectToId={reflectToId}
+                        showEditor={showEditor}
+                        setShowEditor={setShowEditor}
+                      />
+                    )}
                   />
                 )}
               </Await>
@@ -214,6 +239,14 @@ const reflectionsReflectRoute = createRoute({
                   <ReflectionPage
                     isActive={selectReflectionActiveField(reflectionStreamData)}
                     reflectionData={mapReflectEntryData(selectReflectionNode(reflectionById))}
+                    renderEditor={({ beamId, reflectToId, showEditor, setShowEditor }) => (
+                      <ReflectEditor
+                        beamId={beamId}
+                        reflectToId={reflectToId}
+                        showEditor={showEditor}
+                        setShowEditor={setShowEditor}
+                      />
+                    )}
                   />
                 )}
               </Await>

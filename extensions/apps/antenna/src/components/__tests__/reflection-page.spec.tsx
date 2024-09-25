@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { createRef } from 'react';
 import ReflectionPage from '../pages/entry-page/reflection-page';
+import ReflectEditor from '../reflect-editor';
 import userEvent from '@testing-library/user-event';
 import * as useAkashaStore from '@akashaorg/ui-awf-hooks/lib/store/use-akasha-store';
-import * as getEditorValueForTest from '../reflect-editor/get-editor-value-for-test';
 import {
   screen,
   renderWithAllProviders,
@@ -31,12 +31,15 @@ import {
 } from '../__mocks__';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { InMemoryCache } from '@apollo/client';
+import { EditorActions } from '@akashaorg/design-system-components/lib/components/Editor';
 
 const {
   mocks: reflectionSectionMocks,
   profileData: reflectionSectionProfileData,
   reflectionData,
 } = getReflectionSectionMocks();
+
+const editorActionsRef = createRef<EditorActions>();
 
 const baseComponent = (
   mocks: Readonly<MockedResponse<unknown, unknown>[]> | undefined,
@@ -47,6 +50,15 @@ const baseComponent = (
       <ReflectionPage
         isActive={isActive ?? true}
         reflectionData={mapReflectEntryData(reflectionData)}
+        renderEditor={({ beamId, reflectToId, showEditor, setShowEditor }) => (
+          <ReflectEditor
+            beamId={beamId}
+            reflectToId={reflectToId}
+            showEditor={showEditor}
+            setShowEditor={setShowEditor}
+            editorActionsRef={editorActionsRef}
+          />
+        )}
       />
     </AnalyticsProvider>
   </MockedProvider>
@@ -185,7 +197,6 @@ describe('< ReflectionPage /> component', () => {
           isAuthenticating: false,
         },
       });
-      jest.spyOn(getEditorValueForTest, 'getEditorValueForTest').mockReturnValue(NEW_REFLECTION);
     });
 
     it('should render pending reflect card', async () => {
@@ -201,7 +212,8 @@ describe('< ReflectionPage /> component', () => {
       const user = userEvent.setup();
       const reflectButton = await screen.findByRole('button', { name: 'Reflect' });
       user.click(reflectButton);
-      await waitFor(() => expect(reflectButton).toBeInTheDocument());
+      expect(await screen.findByRole('textbox')).toBeInTheDocument();
+      editorActionsRef.current?.insertText(NEW_REFLECTION);
       await waitFor(() => expect(screen.getByRole('textbox')).toHaveTextContent(NEW_REFLECTION));
       user.click(screen.getByRole('button', { name: 'Reflect' }));
       expect(await screen.findByTestId('pending-reflection-card')).toBeInTheDocument();
@@ -221,10 +233,10 @@ describe('< ReflectionPage /> component', () => {
       const reflectButton = await screen.findByRole('button', { name: 'Reflect' });
       const reflectFeed = screen.getByTestId('reflect-feed');
       user.click(reflectButton);
-      await waitFor(() => expect(reflectButton).toBeInTheDocument());
+      expect(await screen.findByRole('textbox')).toBeInTheDocument();
+      editorActionsRef.current?.insertText(NEW_REFLECTION);
       await waitFor(() => expect(screen.getByRole('textbox')).toHaveTextContent(NEW_REFLECTION));
       user.click(screen.getByRole('button', { name: 'Reflect' }));
-      expect(await screen.findByTestId('pending-reflection-card')).toBeInTheDocument();
       expect(await within(reflectFeed).findByTestId('reflection-card')).toBeInTheDocument();
       expect(within(reflectFeed).getByText(NEW_REFLECTION)).toBeInTheDocument();
       const infoBox = within(reflectFeed).getByTestId('info-box');

@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { createRef } from 'react';
 import BeamPage from '../pages/entry-page/beam-page';
+import ReflectEditor from '../reflect-editor';
 import userEvent from '@testing-library/user-event';
 import * as useAkashaStore from '@akashaorg/ui-awf-hooks/lib/store/use-akasha-store';
-import * as getEditorValueForTest from '../reflect-editor/get-editor-value-for-test';
 import {
   screen,
   renderWithAllProviders,
@@ -10,6 +10,7 @@ import {
   waitFor,
   getAuthenticationStore,
   within,
+  act,
 } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 import { AkashaBeamStreamModerationStatus } from '@akashaorg/typings/lib/sdk/graphql-types-new';
@@ -35,12 +36,16 @@ import {
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { InMemoryCache } from '@apollo/client';
 import { RawBeamData } from '@akashaorg/typings/lib/ui';
+import { EditorActions } from '@akashaorg/design-system-components/lib/components/Editor';
+import { P } from 'pino';
 
 const {
   mocks: beamSectionMocks,
   profileData: beamSectionProfileData,
   beamData,
 } = getBeamSectionMocks();
+
+const editorActionsRef = createRef<EditorActions>();
 
 const baseComponent = (
   mocks: Readonly<MockedResponse<unknown, unknown>[]> | undefined,
@@ -54,6 +59,15 @@ const baseComponent = (
         beamStatus={AkashaBeamStreamModerationStatus.Ok}
         beamData={mapBeamEntryData(mockedBeamData ?? beamData)}
         beamId={BEAM_ID}
+        renderEditor={({ beamId, reflectToId, showEditor, setShowEditor }) => (
+          <ReflectEditor
+            beamId={beamId}
+            reflectToId={reflectToId}
+            showEditor={showEditor}
+            setShowEditor={setShowEditor}
+            editorActionsRef={editorActionsRef}
+          />
+        )}
       />
     </AnalyticsProvider>
   </MockedProvider>
@@ -190,7 +204,6 @@ describe('< BeamPage /> component', () => {
           isAuthenticating: false,
         },
       });
-      jest.spyOn(getEditorValueForTest, 'getEditorValueForTest').mockReturnValue(NEW_REFLECTION);
     });
 
     it('should render pending reflect card', async () => {
@@ -206,6 +219,8 @@ describe('< BeamPage /> component', () => {
       const user = userEvent.setup();
       const reflectButton = screen.getByRole('button', { name: 'Reflect' });
       user.click(reflectButton);
+      expect(await screen.findByRole('textbox')).toBeInTheDocument();
+      editorActionsRef.current?.insertText(NEW_REFLECTION);
       await waitFor(() => expect(screen.getByRole('textbox')).toHaveTextContent(NEW_REFLECTION));
       user.click(screen.getByRole('button', { name: 'Reflect' }));
       expect(await screen.findByTestId('pending-reflection-card')).toBeInTheDocument();
@@ -225,8 +240,10 @@ describe('< BeamPage /> component', () => {
       const reflectButton = screen.getByRole('button', { name: 'Reflect' });
       const reflectFeed = screen.getByTestId('reflect-feed');
       user.click(reflectButton);
+      expect(await screen.findByRole('textbox')).toBeInTheDocument();
+      editorActionsRef.current?.insertText(NEW_REFLECTION);
       await waitFor(() => expect(screen.getByRole('textbox')).toHaveTextContent(NEW_REFLECTION));
-      user.click(screen.getByRole('button', { name: 'Reflect' }));
+      await user.click(screen.getByRole('button', { name: 'Reflect' }));
       expect(await screen.findByTestId('pending-reflection-card')).toBeInTheDocument();
       expect(await within(reflectFeed).findByTestId('reflection-card')).toBeInTheDocument();
       expect(within(reflectFeed).getByText(NEW_REFLECTION)).toBeInTheDocument();
@@ -243,10 +260,6 @@ describe('< BeamPage /> component', () => {
     });
 
     it('should show error when text exceeds block limit', async () => {
-      jest
-        .spyOn(getEditorValueForTest, 'getEditorValueForTest')
-        .mockReturnValue(NEW_REFLECTION_BEYOND_TEXT_LIMIT);
-
       renderWithAllProviders(
         baseComponent([
           ...beamSectionMocks,
@@ -259,6 +272,12 @@ describe('< BeamPage /> component', () => {
       const user = userEvent.setup();
       const reflectButton = screen.getByRole('button', { name: 'Reflect' });
       user.click(reflectButton);
+      expect(await screen.findByRole('textbox')).toBeInTheDocument();
+      NEW_REFLECTION_BEYOND_TEXT_LIMIT.forEach(text => {
+        editorActionsRef.current?.insertText(text);
+        editorActionsRef.current?.insertBreak();
+      });
+      await user.click(screen.getByRole('button', { name: 'Reflect' }));
       expect(
         await screen.findByText(/text block exceeds line limit, please review!/i),
       ).toBeInTheDocument();

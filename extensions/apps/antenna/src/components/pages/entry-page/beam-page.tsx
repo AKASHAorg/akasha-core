@@ -1,6 +1,6 @@
-import React, { useLayoutEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import BeamSection from './beam-section';
+import BeamSection, { BeamSectionProps } from './beam-section';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import {
@@ -22,10 +22,11 @@ type BeamPageProps = {
   isActive: boolean;
   beamStatus: AkashaBeamStreamModerationStatus;
   beamData: BeamData;
+  renderEditor: BeamSectionProps['renderEditor'];
 };
 
 const BeamPage: React.FC<BeamPageProps> = props => {
-  const { beamId, isActive, beamStatus, beamData } = props;
+  const { beamId, isActive, beamStatus, beamData, renderEditor } = props;
   const { t } = useTranslation('app-antenna');
   const { navigateToModal, logger } = useRootComponentProps();
   const {
@@ -62,11 +63,6 @@ const BeamPage: React.FC<BeamPageProps> = props => {
     );
   }, [authenticating, beamStatus, isLoggedIn, showNsfw]);
 
-  useLayoutEffect(() => {
-    //resets initial scroll to top when page mounts
-    scrollTo(0, 0);
-  }, []);
-
   return (
     <Card padding="p-0" margin="mb-4">
       <ReflectFeed
@@ -78,6 +74,7 @@ const BeamPage: React.FC<BeamPageProps> = props => {
             isLoggedIn={isLoggedIn}
             showNSFWCard={showNsfwCard}
             showLoginModal={showLoginModal}
+            renderEditor={renderEditor}
           />
         }
         scrollRestorationStorageKey="beam-reflect-feed"
