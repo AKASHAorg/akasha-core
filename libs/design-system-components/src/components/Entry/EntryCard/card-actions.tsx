@@ -40,7 +40,7 @@ const CardActions: React.FC<CardActionProps> = props => {
         onClick={() => {
           if (!disableActions) onReflect();
         }}
-        customStyle="h-fit"
+        customStyle={`h-fit cursor-${disableActions ? 'not-allowed' : 'pointer'}`}
       >
         {reflectionsCount ? (
           <Stack dataTestId="reflections-count" direction="row" align="end" spacing="gap-x-1">
