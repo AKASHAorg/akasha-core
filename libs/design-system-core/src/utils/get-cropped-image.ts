@@ -29,7 +29,6 @@ const createImage = (imageObjectUrl: string): Promise<HTMLImageElement> =>
     const image = new Image();
     image.src = imageObjectUrl;
     image.onload = () => {
-      URL.revokeObjectURL(imageObjectUrl);
       resolve(image);
     };
     image.onerror = error => {

@@ -416,14 +416,22 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
       /**
        * Default space behavior is unit:'character'.
        * This fails to distinguish between two cursor positions, such as
-       * <inline>foo<cursor/></inline> vs <inline>foo</inline><cursor/>.
+       * <link>foo<cursor/></link> vs <link>foo</link><cursor/>.
        * Here we modify the behavior to unit:'offset' at first then resume the default behavior.
-       * This lets the user step out of the inline.
+       * This lets the user step out of a link.
        */
       if (selection && Range.isCollapsed(selection)) {
         if (event.code === 'Space') {
-          Transforms.move(editor, { unit: 'offset' });
-          Transforms.move(editor, { unit: 'character' });
+          // Check if the selection is inside a link node
+          const previousNode = Editor.above(editor, {
+            match: n => Element.isElement(n) && n.type === 'link',
+          });
+
+          // If the cursor is inside a link, move the cursor out
+          if (previousNode?.length) {
+            Transforms.move(editor, { unit: 'offset' });
+            Transforms.move(editor, { unit: 'character' });
+          }
         }
       }
       /**
