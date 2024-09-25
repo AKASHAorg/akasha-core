@@ -86,7 +86,6 @@ const ProfileNameField: React.FC<ProfileNameFieldProps> = ({
           placement="bottom"
           content={missingNameWarningLabel}
           trigger="click"
-          backgroundColor={{ light: 'grey6', dark: 'grey4' }}
           customStyle="justify-center"
           contentCustomStyle="w-52"
         >
