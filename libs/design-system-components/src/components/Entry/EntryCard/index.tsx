@@ -236,7 +236,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
                     justifySelf="start"
                     alignSelf="start"
                     align="start"
-                    spacing="gap-y-1"
+                    spacing="gap-y-2"
                     fullWidth={true}
                   >
                     {rest.itemType === EntityTypes.REFLECT ? (

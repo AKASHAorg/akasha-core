@@ -63,41 +63,43 @@ const MiniProfileCard: React.FC<MiniProfileCardProps> = props => {
           />
         </Stack>
       </Stack>
-      <Stack spacing="gap-y-2" align="center" padding="p-4" customStyle="pt-6">
-        <Stack spacing="gap-y-1" padding="pt-3" align="center">
-          {profileData?.name && (
-            <Text variant="h6" breakWord={true}>
-              {profileData.name}
+      <Stack spacing="gap-y-4" align="center" padding="pt-6 pb-4 px-4">
+        <Stack spacing="gap-y-2" align="center">
+          <Stack spacing="gap-y-1" align="center" customStyle="mt-3">
+            {profileData?.name && (
+              <Text variant="h6" breakWord={true}>
+                {profileData.name}
+              </Text>
+            )}
+            {profileData?.did?.id && (
+              <DidField did={profileData.did.id} isValid={true} copiable={false} />
+            )}
+          </Stack>
+          <Stack direction="row" spacing="gap-x-1" align="center" justify="center">
+            {statsLoading ? (
+              <>
+                <TextLine width="w-14" height="h-5" animated />
+                <RenderText label="|" />
+                <TextLine width="w-14" height="h-5" animated />
+                <RenderText label="|" />
+                <TextLine width="w-14" height="h-5" animated />
+              </>
+            ) : (
+              <>
+                <RenderText label={`${beams} ${beamsLabel}`} />
+                <RenderText label="|" />
+                <RenderText label={`${followers} ${followersLabel}`} />
+                <RenderText label="|" />
+                <RenderText label={`${following} ${followingLabel}`} />
+              </>
+            )}
+          </Stack>
+          {profileData?.description && (
+            <Text variant="footnotes2" breakWord={true} align="center" lineClamp={3}>
+              {profileData.description}
             </Text>
           )}
-          {profileData?.did?.id && (
-            <DidField did={profileData.did.id} isValid={true} copiable={false} />
-          )}
         </Stack>
-        <Stack direction="row" spacing="gap-x-1" align="center" justify="center">
-          {statsLoading ? (
-            <>
-              <TextLine width="w-14" height="h-5" animated />
-              <RenderText label="|" />
-              <TextLine width="w-14" height="h-5" animated />
-              <RenderText label="|" />
-              <TextLine width="w-14" height="h-5" animated />
-            </>
-          ) : (
-            <>
-              <RenderText label={`${beams} ${beamsLabel}`} />
-              <RenderText label="|" />
-              <RenderText label={`${followers} ${followersLabel}`} />
-              <RenderText label="|" />
-              <RenderText label={`${following} ${followingLabel}`} />
-            </>
-          )}
-        </Stack>
-        {profileData?.description && (
-          <Text variant="footnotes2" breakWord={true} align="center" lineClamp={3}>
-            {profileData.description}
-          </Text>
-        )}
         {authenticatedDID !== profileData?.did?.id && footerExt}
       </Stack>
     </Card>

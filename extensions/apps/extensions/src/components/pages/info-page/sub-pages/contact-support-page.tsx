@@ -14,7 +14,7 @@ type ContactSupportPageProps = {
   appId: string;
 };
 
-export const ContactSupportPage: React.FC<ContactSupportPageProps> = ({ appId }) => {
+export const ContactSupportPage: React.FC<ContactSupportPageProps> = () => {
   const { t } = useTranslation('app-extensions');
   // @TODO get contact data from the hook when available
 
@@ -33,7 +33,7 @@ export const ContactSupportPage: React.FC<ContactSupportPageProps> = ({ appId })
             mockContactDetails.map((contactDetails, idx) => {
               const icon = contactDetails.includes('@') ? <EnvelopeIcon /> : <Discord />;
               return (
-                <CopyToClipboard key={idx} value={contactDetails}>
+                <CopyToClipboard key={idx} stringToBeCopied={contactDetails}>
                   <Stack direction="row" align="center" spacing="gap-x-2">
                     <AppIcon placeholderIcon={icon} solid={false} size="xs" accentColor />
                     <Text

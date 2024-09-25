@@ -140,12 +140,7 @@ const Header: React.FC<HeaderProps> = ({
               />
               <Stack direction="row" spacing="gap-2" customStyle="flex-wrap">
                 {badges?.map(badge => (
-                  <Tooltip
-                    key={badge.label}
-                    content={badge.toolTipLabel}
-                    placement="bottom"
-                    backgroundColor={{ light: 'grey6', dark: 'grey4' }}
-                  >
+                  <Tooltip key={badge.label} content={badge.toolTipLabel} placement="bottom">
                     <Pill
                       label={badge.label}
                       color={{ light: 'errorDark2', dark: 'white' }}

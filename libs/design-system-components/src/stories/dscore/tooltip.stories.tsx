@@ -46,6 +46,8 @@ export const ControlledTooltip: Story = {
     customStyle: 'm-16',
     arrow: true,
     open: true,
+    onOpen: () => ({}),
+    onClose: () => ({}),
   },
 };
 

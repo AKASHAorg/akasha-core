@@ -61,7 +61,7 @@ const DidField: React.FC<DidFieldProps> = ({
   );
 
   return copiable ? (
-    <CopyToClipboard value={did} copyText={copyLabel} copiedText={copiedLabel}>
+    <CopyToClipboard stringToBeCopied={did} copyText={copyLabel} copiedText={copiedLabel}>
       {didDisplayBlock}
     </CopyToClipboard>
   ) : (

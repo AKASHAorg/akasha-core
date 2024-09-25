@@ -23,16 +23,16 @@ const ChooseProvider: React.FC<unknown> = () => {
   };
 
   return (
-    <Stack dataTestId="providers-list" spacing="gap-y-6">
+    <Stack dataTestId="providers-list" spacing="gap-y-4">
       <Text variant="h5" align="center">
         {`✨ ${t('Welcome to AKASHA World')} ✨`}
       </Text>
 
-      <Stack alignSelf="center" customStyle="h-40 w-40">
+      <Stack alignSelf="center" customStyle="h-44 w-44">
         <Image customStyle="object-contain" src="/images/auth.webp" />
       </Stack>
 
-      <Stack spacing="gap-y-2" customStyle="md:px-4">
+      <Stack spacing="gap-y-2" customStyle="md:px-2">
         <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey7' }}>
           {t('Connect your wallet')}
         </Text>
