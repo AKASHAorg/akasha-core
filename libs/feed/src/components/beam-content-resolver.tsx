@@ -13,7 +13,7 @@ export type BeamContentResolverProps = {
 
 const BeamContentResolver: React.FC<BeamContentResolverProps> = ({
   beamId,
-  showNSFWCard,
+  showNSFWCard = false,
   customStyle = '',
 }) => {
   const { getCorePlugins, navigateToModal } = useRootComponentProps();
