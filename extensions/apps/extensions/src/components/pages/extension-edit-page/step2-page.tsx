@@ -17,7 +17,7 @@ import {
   NotificationTypes,
   Extension,
 } from '@akashaorg/typings/lib/ui';
-import { CONTACT_INFO, DRAFT_EXTENSIONS } from '../../../constants';
+import { DRAFT_EXTENSIONS } from '../../../constants';
 import { useAtom } from 'jotai';
 import { AtomContext, FormData } from './main-page';
 
@@ -45,6 +45,7 @@ export const ExtensionEditStep2Page: React.FC<ExtensionEditStep2PageProps> = ({ 
     });
   }, []);
 
+  // fetch the draft extensions that are saved only on local storage
   const draftExtensions: Extension[] = useMemo(() => {
     try {
       return JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [];
@@ -69,11 +70,9 @@ export const ExtensionEditStep2Page: React.FC<ExtensionEditStep2PageProps> = ({ 
       nsfw: defaultValues.nsfw,
       description: defaultValues.description,
       gallery: defaultValues.gallery,
-      links: defaultValues.links
-        ?.map((link, index) => ({ _id: index + 1, ...link }))
-        .filter(link => link.label !== `${extensionId}-${CONTACT_INFO}`),
+      links: defaultValues.links?.map((link, index) => ({ _id: index + 1, ...link })),
     };
-  }, [defaultValues, extensionId]);
+  }, [defaultValues]);
 
   const [, setForm] = useAtom<FormData>(useContext(AtomContext));
 
@@ -169,8 +168,10 @@ export const ExtensionEditStep2Page: React.FC<ExtensionEditStep2PageProps> = ({ 
         galleryDescriptionLabel={t(
           'Having a gallery to show off the extension will increase installs',
         )}
-        documentationFieldLabel={t('Documentation')}
-        documentationDescriptionLabel={t('Add any documentation necessary to help others ')}
+        usefulLinksFieldLabel={t('Useful Links')}
+        usefulLinksDescriptionLabel={t(
+          'Include any relevant links, such as documentation or contact information, that you believe will be helpful to others.',
+        )}
         linkTitleLabel={t('Link')}
         linkPlaceholderLabel={t('Link title')}
         addLabel={t('Add')}

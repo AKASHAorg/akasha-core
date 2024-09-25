@@ -6,7 +6,7 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ExtensionEditStep3Form from '@akashaorg/design-system-components/lib/components/ExtensionEditStep3Form';
 import { useAkashaStore, useMentions, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { transformSource } from '@akashaorg/ui-awf-hooks';
-import { CONTACT_INFO, DRAFT_EXTENSIONS } from '../../../constants';
+import { DRAFT_EXTENSIONS } from '../../../constants';
 import { Extension, NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 
 type ExtensionEditStep3PageProps = {
@@ -37,6 +37,7 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
     [],
   );
 
+  // fetch the draft extensions that are saved only on local storage
   const draftExtensions: Extension[] = useMemo(() => {
     try {
       return JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [];
@@ -53,34 +54,13 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
   );
 
   const defaultValues = useMemo(() => {
-    return formValue.lastCompletedStep > 2
-      ? {
-          ...formValue,
-          contactInfo: formValue?.links
-            ?.map(elem => {
-              if (elem.label === `${extensionId}-${CONTACT_INFO}`) {
-                return elem.href;
-              }
-            })
-            .filter(link => link),
-        }
-      : {
-          ...extensionData,
-          contactInfo: extensionData?.links
-            ?.map(elem => {
-              if (elem.label === `${extensionId}-${CONTACT_INFO}`) {
-                return elem.href;
-              }
-            })
-            .filter(link => link),
-        };
-  }, [extensionData, formValue, extensionId]);
+    return formValue.lastCompletedStep > 2 ? formValue : extensionData;
+  }, [extensionData, formValue]);
 
   const formDefault = useMemo(() => {
     return {
       license: defaultValues.license,
       contributors: defaultValues.contributors,
-      contactInfo: defaultValues.contactInfo,
       keywords: defaultValues.keywords,
     };
   }, [defaultValues]);
@@ -126,11 +106,6 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
         collaboratorsDescriptionLabel={t('Add people who helped you create the extension')}
         collaboratorsSearchPlaceholderLabel={t('Search for a contributor')}
         extensionContributorsLabel={t('Extension Contributors')}
-        contactInfoFieldLabel={t('Contact Info')}
-        contactInfoDescriptionLabel={t(
-          'Add your contact information here for users to contact you about questions or suggestions',
-        )}
-        contactInfoPlaceholderLabel={t('Contact url/email')}
         tagsLabel={t('Tags')}
         tagsDescriptionLabel={t('Adding tags increases your extensions discoverability.')}
         addTagsPlaceholderLabel={t('Type a tag and press space, comma or enter')}
@@ -156,21 +131,7 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
         nextButton={{
           label: t('Save'),
           handleClick: data => {
-            const step3Data = {
-              ...data,
-              links: [
-                // remove the old contact info data from links
-                ...formValue.links.filter(link => link.label !== `${extensionId}-${CONTACT_INFO}`),
-                // add latest contact info
-                ...data.contactInfo.map(info => {
-                  return {
-                    label: `${extensionId}-${CONTACT_INFO}`,
-                    href: info,
-                  };
-                }),
-              ],
-            };
-            handleUpdateExtension(step3Data);
+            handleUpdateExtension(data);
           },
         }}
       />

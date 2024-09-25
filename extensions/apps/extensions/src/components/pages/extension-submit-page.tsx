@@ -10,7 +10,7 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import ExtensionReviewAndPublish from '@akashaorg/design-system-components/lib/components/ExtensionReviewAndPublish';
 import { transformSource, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { Extension, NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
-import { CONTACT_INFO, DRAFT_EXTENSIONS } from '../../constants';
+import { DRAFT_EXTENSIONS } from '../../constants';
 import getSDK from '@akashaorg/core-sdk';
 import { useCreateAppMutation } from '@akashaorg/ui-awf-hooks/lib/generated';
 import { SubmitType } from '../app-routes';
@@ -43,6 +43,7 @@ export const ExtensionSubmitPage: React.FC<ExtensionSubmitPageProps> = ({ extens
     data: { authenticatedDID },
   } = useAkashaStore();
 
+  // fetch the draft extensions that are saved only on local storage
   const draftExtensions: Extension[] = useMemo(() => {
     try {
       return JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [];
@@ -52,16 +53,6 @@ export const ExtensionSubmitPage: React.FC<ExtensionSubmitPageProps> = ({ extens
   }, [authenticatedDID, showAlertNotification]);
 
   const extensionData = draftExtensions?.find(draftExtension => draftExtension.id === extensionId);
-
-  const displayExtData = useMemo(() => {
-    return {
-      ...extensionData,
-      links: extensionData.links?.filter(link => link.label !== `${extensionId}-${CONTACT_INFO}`),
-      contactInfo: extensionData.links?.find(
-        link => link.label === `${extensionId}-${CONTACT_INFO}`,
-      )?.href,
-    };
-  }, [extensionData, extensionId]);
 
   const [createAppMutation, { loading }] = useCreateAppMutation({
     context: { source: sdk.current.services.gql.contextSources.composeDB },
@@ -150,13 +141,13 @@ export const ExtensionSubmitPage: React.FC<ExtensionSubmitPageProps> = ({ extens
           </Text>
         </Stack>
         <ExtensionReviewAndPublish
-          extensionData={displayExtData}
+          extensionData={extensionData}
           title={t('Review Extension')}
           subtitle={{
             part1: 'Please note that fields marked with',
             part2: 'are required and cannot be edited once submitted.',
           }}
-          extensionNameLabel={t('Extension Name')}
+          extensionNameLabel={t('Extension ID')}
           extensionDisplayNameLabel={t('Extension Display Name')}
           nsfwLabel={t('Extension NSFW')}
           nsfwDescription={t('You marked it as{{nsfw}} Safe For Work', {
@@ -166,10 +157,9 @@ export const ExtensionSubmitPage: React.FC<ExtensionSubmitPageProps> = ({ extens
           galleryLabel={t('Gallery')}
           imageUploadedLabel={t('images uploaded')}
           viewAllLabel={t('View All')}
-          documentationLabel={t('Documentation')}
+          usefulLinksLabel={t('Useful Links')}
           licenseLabel={t('License')}
           contributorsLabel={t('Contributors')}
-          contactInfoLabel={t('Contact Info')}
           tagsLabel={t('Tags')}
           backButtonLabel={t('Cancel')}
           publishButtonLabel={t('Submit')}

@@ -37,6 +37,7 @@ export const ExtensionEditStep1Page: React.FC<ExtensionEditStep1PageProps> = ({ 
     });
   }, []);
 
+  // fetch the draft extensions that are saved only on local storage
   const draftExtensions: Extension[] = useMemo(() => {
     try {
       return JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [];
@@ -81,7 +82,7 @@ export const ExtensionEditStep1Page: React.FC<ExtensionEditStep1PageProps> = ({ 
         </Text>
       </Stack>
       <ExtensionEditStep1Form
-        extensionIdLabel={t('Extension Id')}
+        extensionIdLabel={t('Extension ID')}
         extensionDisplayNameLabel={t('Extension Display Name')}
         sourceLabel={t('Source URL')}
         sourcePlaceholderLabel={t('web server URL')}

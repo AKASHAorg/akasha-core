@@ -37,10 +37,9 @@ export type ExtensionReviewAndPublishProps = {
   galleryLabel: string;
   imageUploadedLabel: string;
   viewAllLabel: string;
-  documentationLabel: string;
+  usefulLinksLabel: string;
   licenseLabel: string;
   contributorsLabel: string;
-  contactInfoLabel: string;
   tagsLabel: string;
   backButtonLabel: string;
   publishButtonLabel: string;
@@ -64,10 +63,9 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
     galleryLabel,
     imageUploadedLabel,
     viewAllLabel,
-    documentationLabel,
+    usefulLinksLabel,
     licenseLabel,
     contributorsLabel,
-    contactInfoLabel,
     tagsLabel,
     backButtonLabel,
     publishButtonLabel,
@@ -92,7 +90,8 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
       !extensionData?.displayName ||
       !extensionData?.name ||
       !extensionData?.license ||
-      !extensionData?.description,
+      !extensionData?.description ||
+      extensionData?.keywords?.length === 0,
     [extensionData],
   );
 
@@ -109,8 +108,8 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
       <Stack direction="row" spacing="gap-x-1" align="center">
         <Icon
           icon={fieldHasData ? <CheckCircleIcon /> : <XCircleIcon />}
-          solid={true}
-          color={fieldHasData ? 'success' : 'grey3'}
+          solid={fieldHasData}
+          color={fieldHasData ? 'success' : { light: 'warningLight', dark: 'warningDark' }}
         />
         <Label required={isRequired}>{title}</Label>
       </Stack>
@@ -139,7 +138,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
 
   return (
     <>
-      <Stack padding={16} spacing="gap-y-4">
+      <Stack padding={16} spacing="gap-y-4" customStyle="w-0 min-w-full">
         <Text as="span" variant="body2" color={{ light: 'grey4', dark: 'grey6' }}>
           {subtitle.part1} <span className={asteriskStyle}>*</span> {subtitle.part2}
         </Text>
@@ -174,11 +173,15 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
         </Stack>
 
         <Section title={extensionNameLabel} required>
-          <Text variant="body2">{extensionData?.name}</Text>
+          <Text variant="body2" truncate>
+            {extensionData?.name}
+          </Text>
         </Section>
 
         <Section title={extensionDisplayNameLabel} required>
-          <Text variant="body2">{extensionData?.displayName}</Text>
+          <Text variant="body2" truncate>
+            {extensionData?.displayName}
+          </Text>
         </Section>
 
         <Section title={nsfwLabel} required hasToggle isToggleChecked={extensionData?.nsfw}>
@@ -193,8 +196,12 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
             accordionId={descriptionLabel}
             open={descriptionLabel === activeAccordionId}
             titleNode={getAccordionTitleNode(descriptionLabel, !!extensionData?.description)}
-            contentNode={<Text variant="body2">{extensionData?.description}</Text>}
-            handleClick={extensionData?.description ? onAccordionClick : undefined}
+            contentNode={
+              <Text variant="body2" breakWord>
+                {extensionData?.description}
+              </Text>
+            }
+            handleClick={extensionData?.description ? onAccordionClick : () => {}}
           />
         </Stack>
         <Divider />
@@ -227,17 +234,17 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
                 </Stack>
               </Stack>
             }
-            handleClick={galleryImagesWithSource?.length > 0 ? onAccordionClick : undefined}
+            handleClick={galleryImagesWithSource?.length > 0 ? onAccordionClick : () => {}}
           />
         </Stack>
         <Divider />
 
         <Stack spacing="gap-y-3">
           <Accordion
-            accordionId={documentationLabel}
-            open={documentationLabel === activeAccordionId}
+            accordionId={usefulLinksLabel}
+            open={usefulLinksLabel === activeAccordionId}
             titleNode={getAccordionTitleNode(
-              documentationLabel,
+              usefulLinksLabel,
               extensionData?.links?.length > 0,
               false,
             )}
@@ -258,7 +265,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
                 ))}
               </Stack>
             }
-            handleClick={extensionData?.links?.length > 0 ? onAccordionClick : undefined}
+            handleClick={extensionData?.links?.length > 0 ? onAccordionClick : () => {}}
           />
         </Stack>
         <Divider />
@@ -273,7 +280,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
                 <Text variant="button-md">{extensionData?.license}</Text>
               </Stack>
             }
-            handleClick={extensionData?.license ? onAccordionClick : undefined}
+            handleClick={extensionData?.license ? onAccordionClick : () => {}}
           />
         </Stack>
         <Divider />
@@ -295,18 +302,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
                 ))}
               </Stack>
             }
-            handleClick={extensionData?.contributors?.length > 0 ? onAccordionClick : undefined}
-          />
-        </Stack>
-        <Divider />
-
-        <Stack spacing="gap-y-3">
-          <Accordion
-            accordionId={contactInfoLabel}
-            open={contactInfoLabel === activeAccordionId}
-            titleNode={getAccordionTitleNode(contactInfoLabel, !!extensionData?.contactInfo, false)}
-            contentNode={<Text variant="body2">{extensionData?.contactInfo}</Text>}
-            handleClick={extensionData?.contactInfo ? onAccordionClick : undefined}
+            handleClick={extensionData?.contributors?.length > 0 ? onAccordionClick : () => {}}
           />
         </Stack>
         <Divider />
@@ -323,7 +319,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
                 ))}
               </Stack>
             }
-            handleClick={extensionData?.keywords?.length > 0 ? onAccordionClick : undefined}
+            handleClick={extensionData?.keywords?.length > 0 ? onAccordionClick : () => {}}
           />
         </Stack>
       </Stack>
