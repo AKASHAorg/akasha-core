@@ -122,7 +122,7 @@ const CustomEditor = {
   },
 
   insertLink(editor, url: string) {
-    //if the link is to be inserted in another link then treat it an ordinary text element
+    //if the link is to be inserted in another link then treat it as an ordinary text element
     if (this.isLinkActive(editor)) {
       Transforms.insertNodes(editor, { text: url });
       return;
