@@ -79,16 +79,21 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
     },
     {
       id: '1',
-      title: ExtensionStatus.Draft,
+      title: ExtensionStatus.LocalDraft,
       type: 'opt',
     },
     {
       id: '2',
-      title: ExtensionStatus.Pending,
+      title: ExtensionStatus.Draft,
       type: 'opt',
     },
     {
       id: '3',
+      title: ExtensionStatus.InReview,
+      type: 'opt',
+    },
+    {
+      id: '4',
       title: ExtensionStatus.Published,
       type: 'opt',
     },

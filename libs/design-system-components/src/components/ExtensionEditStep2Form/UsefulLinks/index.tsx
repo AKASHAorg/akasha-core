@@ -8,33 +8,31 @@ import { AppLinkSource } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { Controller, Control } from 'react-hook-form';
 import { ExtensionEditStep2FormValues } from '..';
 
-export type DocumentationLinksProps = {
-  documentationTitleLabel: string;
+export type UsefulLinksProps = {
+  usefulLinksTitleLabel: string;
   addNewLinkButtonLabel: string;
-  documentationDescriptionLabel: string;
+  usefulLinksDescriptionLabel: string;
   linkElementLabel?: string;
   linkTitlePlaceholderLabel?: string;
   customStyle?: string;
   control: Control<ExtensionEditStep2FormValues>;
-  documentationLinks: (AppLinkSource & { _id?: number })[];
+  usefulLinks: (AppLinkSource & { _id?: number })[];
   onDeleteLink: () => void;
 };
 
-export const DocumentationLinks: React.FC<DocumentationLinksProps> = ({
-  documentationTitleLabel,
+export const UsefulLinks: React.FC<UsefulLinksProps> = ({
+  usefulLinksTitleLabel,
   addNewLinkButtonLabel,
-  documentationDescriptionLabel,
+  usefulLinksDescriptionLabel,
   linkElementLabel,
   linkTitlePlaceholderLabel,
-  documentationLinks,
+  usefulLinks,
   customStyle = '',
   control,
   onDeleteLink,
 }) => {
   const [links, setLinks] = useState(
-    !documentationLinks || documentationLinks?.length === 0
-      ? [{ _id: 1, href: '', label: '' }]
-      : documentationLinks,
+    !usefulLinks || usefulLinks?.length === 0 ? [{ _id: 1, href: '', label: '' }] : usefulLinks,
   );
 
   const onAddNew = () => {
@@ -49,7 +47,7 @@ export const DocumentationLinks: React.FC<DocumentationLinksProps> = ({
     <Stack direction="column" spacing="gap-y-4" customStyle={customStyle}>
       <Stack spacing="gap-y-1" direction="column">
         <Stack direction="row" spacing="gap-x-2" justify="between" align="center">
-          <Text variant="h6">{documentationTitleLabel}</Text>
+          <Text variant="h6">{usefulLinksTitleLabel}</Text>
           <Button
             variant="text"
             icon={<PlusIcon />}
@@ -59,7 +57,7 @@ export const DocumentationLinks: React.FC<DocumentationLinksProps> = ({
           />
         </Stack>
         <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
-          {documentationDescriptionLabel}
+          {usefulLinksDescriptionLabel}
         </Text>
       </Stack>
       {links?.map((link, index) => {
