@@ -1,10 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import ReviewAndPublish, { ReviewAndPublishProps } from '../../components/ReviewAndPublish';
+import ExtensionReviewAndPublish, {
+  ReviewAndPublishProps,
+} from '../../components/ExtensionReviewAndPublish';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 const meta: Meta<ReviewAndPublishProps> = {
-  title: 'DSComponents/Extensions/ReviewAndPublish',
-  component: ReviewAndPublish,
+  title: 'DSComponents/Extensions/ExtensionReviewAndPublish',
+  component: ExtensionReviewAndPublish,
 };
 
 type Story = StoryObj<ReviewAndPublishProps>;
@@ -51,11 +53,7 @@ export const Default: Story = {
           href: 'https://sdkdocumentation.com',
         },
       ],
-      license: {
-        name: 'Lesser general public license',
-        description:
-          'Developers can link to open source libraries within their software and use any licensing type for the code.',
-      },
+      license: 'Lesser general public license',
       contributors: [
         {
           label: 'JasonTheElephant',

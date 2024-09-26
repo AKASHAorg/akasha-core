@@ -26,6 +26,9 @@ import {
   ExtensionEditStep2Page,
   ExtensionEditStep3Page,
 } from '../pages/extension-edit-page';
+import { ExtensionSubmitPage } from '../pages/extension-submit-page';
+import { ExtensionReleaseSubmitPage } from '../pages/release-submit-page';
+import { PostSubmitPage } from '../pages/post-submit-page';
 import {
   DevInfoPage,
   CollaboratorsPage,
@@ -351,6 +354,64 @@ const extensionEditStep3Route = createRoute({
   },
 });
 
+const extensionSubmitRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: `/submit-extension/$extensionId`,
+  notFoundComponent: () => <NotFoundComponent />,
+  component: () => {
+    const { extensionId } = extensionSubmitRoute.useParams();
+    return (
+      <CatchBoundary
+        getResetKey={() => 'submit_extension_reset'}
+        errorComponent={NotFoundComponent}
+      >
+        <ExtensionSubmitPage extensionId={extensionId} />
+      </CatchBoundary>
+    );
+  },
+});
+
+const extensionReleaseSubmitRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: `/submit-release/$extensionId`,
+  notFoundComponent: () => <NotFoundComponent />,
+  component: () => {
+    const { extensionId } = extensionReleaseSubmitRoute.useParams();
+    return (
+      <CatchBoundary getResetKey={() => 'submit_release_reset'} errorComponent={NotFoundComponent}>
+        <ExtensionReleaseSubmitPage extensionId={extensionId} />
+      </CatchBoundary>
+    );
+  },
+});
+
+type SubmitSearch = { type: SubmitType };
+
+export enum SubmitType {
+  EXTENSION = 'extension',
+  RELEASE = 'release',
+}
+
+const postSubmitRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: `/post-submit`,
+  notFoundComponent: () => <NotFoundComponent />,
+  validateSearch: (search: Record<string, unknown>): SubmitSearch => {
+    return { type: search.type as SubmitType };
+  },
+  component: () => {
+    const from = postSubmitRoute.useSearch();
+    return (
+      <CatchBoundary
+        getResetKey={() => 'submit_extension_reset'}
+        errorComponent={NotFoundComponent}
+      >
+        <PostSubmitPage type={from.type} />
+      </CatchBoundary>
+    );
+  },
+});
+
 const routeTree = rootRoute.addChildren([
   defaultRoute,
   exploreRoute,
@@ -381,6 +442,9 @@ const routeTree = rootRoute.addChildren([
     extensionEditStep2Route,
     extensionEditStep3Route,
   ]),
+  extensionSubmitRoute,
+  extensionReleaseSubmitRoute,
+  postSubmitRoute,
 ]);
 
 export const router = ({ baseRouteName, apolloClient }: ICreateRouter) =>
