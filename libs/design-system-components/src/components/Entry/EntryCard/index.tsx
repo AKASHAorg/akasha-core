@@ -164,6 +164,10 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     <Card
       type="plain"
       dataTestId={dataTestId}
+      /**
+       * attach onClick handler if;
+       * 'showNSFWContent' state (initially derived from the inverse of the 'showNSFWCard' prop) is true
+       */
       {...(showNSFWContent && { onClick: onContentClick })}
     >
       <Stack spacing="gap-y-2" padding="p-4" customStyle={`grow min-h-[inherit] ${hoverStyle}`}>
@@ -200,6 +204,10 @@ const EntryCard: React.FC<EntryCardProps> = props => {
             <Card
               type="plain"
               customStyle={contentClickableStyle}
+              /**
+               * attach onClick handler if
+               * 'showNSFWContent' and 'noWrapperCard' are both true
+               */
               {...(showNSFWContent && noWrapperCard && { onClick: onContentClick })}
             >
               <Stack
