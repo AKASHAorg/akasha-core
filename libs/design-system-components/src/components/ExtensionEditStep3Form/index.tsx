@@ -11,7 +11,6 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ButtonType } from '../types/common.types';
 import { Licenses } from '../AppCreationForm';
-import { ContactInfo } from './ContactInfo';
 import { AkashaProfile, Image } from '@akashaorg/typings/lib/ui';
 import { Collaborators } from './Collaborators';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
@@ -25,7 +24,6 @@ export enum FieldName {
   license = 'license',
   licenseOther = 'licenseOther',
   contributors = 'contributors',
-  contactInfo = 'contactInfo',
   keywords = 'keywords',
 }
 
@@ -44,9 +42,6 @@ export type ExtensionEditStep3FormProps = {
   collaboratorsDescriptionLabel?: string;
   collaboratorsSearchPlaceholderLabel?: string;
   extensionContributorsLabel: string;
-  contactInfoFieldLabel?: string;
-  contactInfoDescriptionLabel?: string;
-  contactInfoPlaceholderLabel?: string;
   addLabel?: string;
   tagsLabel?: string;
   tagsDescriptionLabel?: string;
@@ -83,8 +78,6 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
     nextButton,
     licenseFieldLabel,
     licenseOtherPlaceholderLabel,
-    contactInfoFieldLabel,
-    contactInfoDescriptionLabel,
     collaboratorsFieldLabel,
     collaboratorsDescriptionLabel,
     collaboratorsSearchPlaceholderLabel,
@@ -100,7 +93,6 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
 
   const {
     control,
-    trigger,
     getValues,
     formState: { errors },
   } = useForm<ExtensionEditStep3FormValues>({
@@ -164,10 +156,7 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
       formValues.license = formValues.licenseOther;
     }
     if (isValid) {
-      nextButton.handleClick({
-        ...formValues,
-        contactInfo: formValues.contactInfo?.filter(link => link),
-      });
+      nextButton.handleClick(formValues);
     }
   };
 
@@ -227,17 +216,7 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
             transformSource={transformSource}
           />
           <Divider />
-          <ContactInfo
-            contactLabel={contactInfoFieldLabel}
-            description={contactInfoDescriptionLabel}
-            addButtonLabel={addLabel}
-            control={control}
-            contactInfo={defaultValues.contactInfo || ['']}
-            onDeleteInfoField={async () => {
-              await trigger();
-            }}
-          />
-          <Divider />
+
           <Stack direction="column" spacing="gap-2">
             <Text variant="h6">{tagsLabel}</Text>
             <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
@@ -292,13 +271,7 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
             onClick={cancelButton.handleClick}
             disabled={cancelButton.disabled}
           />
-          <Button
-            variant="primary"
-            label={nextButton.label}
-            disabled={!isValid}
-            onClick={onSave}
-            type="submit"
-          />
+          <Button variant="primary" label={nextButton.label} disabled={!isValid} onClick={onSave} />
         </Stack>
       </Stack>
     </form>
@@ -309,14 +282,4 @@ export default ExtensionEditStep3Form;
 
 const schema = z.object({
   extensionLicense: z.string(),
-  contactInfo: z.array(
-    z
-      .union([
-        z.string().email({ message: 'Email or URL is required' }),
-        z.string().url({ message: 'Email or URL is required' }),
-        z.string().length(0),
-      ])
-      .optional()
-      .transform(e => (e === '' ? undefined : e)),
-  ),
 });

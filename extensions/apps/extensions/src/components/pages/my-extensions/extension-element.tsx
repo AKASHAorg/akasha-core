@@ -13,9 +13,9 @@ import {
   Widget,
 } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import {
-  ArrowUpOnSquareIcon,
   ClockIcon,
   EyeIcon,
+  PaperAirplaneIcon,
   PencilIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
@@ -83,11 +83,14 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
   };
 
   const getExtensionStatus = () => {
+    if (extensionData?.localDraft) {
+      return ExtensionStatus.LocalDraft;
+    }
     switch (appStreamData?.edges[0]?.node?.status) {
       case null:
         return ExtensionStatus.Draft;
       case AkashaAppsStreamModerationStatus.InReview:
-        return ExtensionStatus.Pending;
+        return ExtensionStatus.InReview;
       case AkashaAppsStreamModerationStatus.Ok:
         return ExtensionStatus.Published;
       default:
@@ -97,11 +100,13 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
 
   const getStatusIndicatorStyle = () => {
     switch (getExtensionStatus()) {
+      case ExtensionStatus.LocalDraft:
+        return 'bg-grey6';
       case ExtensionStatus.Draft:
         return 'bg-grey6';
       case ExtensionStatus.Published:
         return 'bg-success';
-      case ExtensionStatus.Pending:
+      case ExtensionStatus.InReview:
         return 'bg-(errorLight dark:errorDark)';
       default:
         return 'bg-grey6';
@@ -122,14 +127,33 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
     });
   };
 
+  const handleExtensionSubmit = () => {
+    navigate({
+      to: `/submit-extension/$extensionId`,
+      params: { extensionId: extensionData.id },
+    });
+  };
+
+  const handleReleaseSubmit = () => {
+    navigate({
+      to: `/submit-release/$extensionId`,
+      params: { extensionId: extensionData.id },
+    });
+  };
+
   const menuItems = (extensionStatus: string): MenuProps['items'] | [] => {
     switch (extensionStatus) {
-      case ExtensionStatus.Pending:
+      case ExtensionStatus.InReview:
         return [
           {
             label: t('Check status'),
             icon: <ClockIcon />,
             onClick: () => {},
+          },
+          {
+            label: t('Submit Release'),
+            icon: <PaperAirplaneIcon />,
+            onClick: handleReleaseSubmit,
           },
         ];
       case ExtensionStatus.Published:
@@ -138,6 +162,11 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
             label: t('View'),
             icon: <EyeIcon />,
             onClick: () => {},
+          },
+          {
+            label: t('Submit Release'),
+            icon: <PaperAirplaneIcon />,
+            onClick: handleReleaseSubmit,
           },
           {
             label: t('Edit'),
@@ -151,12 +180,31 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
             color: { light: 'errorLight', dark: 'errorDark' },
           },
         ];
-      case ExtensionStatus.Draft:
+      case ExtensionStatus.LocalDraft:
         return [
           {
             label: t('Publish'),
-            icon: <ArrowUpOnSquareIcon />,
-            onClick: () => {},
+            icon: <PaperAirplaneIcon />,
+            onClick: handleExtensionSubmit,
+          },
+          {
+            label: t('Edit'),
+            icon: <PencilIcon />,
+            onClick: handleExtensionEdit,
+          },
+          {
+            label: t('Delete'),
+            icon: <XMarkIcon />,
+            onClick: handleExtensionRemove,
+            color: { light: 'errorLight', dark: 'errorDark' },
+          },
+        ];
+      case ExtensionStatus.Draft:
+        return [
+          {
+            label: t('Submit Release'),
+            icon: <PaperAirplaneIcon />,
+            onClick: handleReleaseSubmit,
           },
           {
             label: t('Edit'),
@@ -186,26 +234,28 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
     <>
       {showElement() && (
         <Stack spacing="gap-y-4">
-          <Stack direction="row" justify="between" spacing="gap-x-8">
-            <Stack direction="row" spacing="gap-x-3">
+          <Stack direction="row" justify="between" spacing="gap-x-8" fullWidth>
+            <Stack direction="row" spacing="gap-x-3" customStyle="max-h-[60px] w-[80%]">
               <AppAvatar
                 appType={extensionData.applicationType}
                 avatar={transformSource(extensionData.logoImage)}
                 extensionId={extensionData.id}
               />
-              <Stack direction="column" justify="between">
+              <Stack direction="column" justify="between" customStyle="min-w-0" fullWidth>
                 <Stack direction="row" spacing="gap-2">
-                  <Text variant="button-sm">{extensionData.name}</Text>
+                  <Text variant="button-sm" truncate>
+                    {extensionData.name}
+                  </Text>
 
                   {extensionData?.applicationType && (
                     <Stack
-                      customStyle="w-[18px] h-[18px] rounded-full"
+                      customStyle="w-[18px] h-[18px] rounded-full shrink-0"
                       background={{ light: 'secondaryLight', dark: 'secondaryDark' }}
                       justify="center"
                       align="center"
                     >
                       <Icon
-                        color={{ light: 'secondaryLight', dark: 'white' }}
+                        color={{ light: 'white', dark: 'white' }}
                         size={'xs'}
                         solid
                         icon={getIconByAppType(extensionData?.applicationType)}
@@ -217,7 +267,6 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
                   variant="footnotes2"
                   weight="normal"
                   color={{ light: 'grey4', dark: 'grey7' }}
-                  lineClamp={2}
                   truncate
                 >
                   {extensionData.description || extensionData.displayName}
@@ -225,7 +274,7 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
               </Stack>
             </Stack>
 
-            <Stack direction="column" justify="between" align="end">
+            <Stack direction="column" justify="between" align="end" customStyle="shrink-0">
               <Menu
                 anchor={{
                   icon: <EllipsisHorizontalIcon />,

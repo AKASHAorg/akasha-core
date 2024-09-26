@@ -8,7 +8,7 @@ export type InfoCardProps = {
   assetName?: string;
   assetExtension?: string;
   publicImgPath?: string;
-  titleLabel: ReactNode;
+  titleLabel?: ReactNode;
   bodyLabel?: ReactNode;
   titleVariant?: TextProps['variant'];
   bodyVariant?: TextProps['variant'];
@@ -79,7 +79,7 @@ const InfoCard: React.FC<InfoCardProps> = ({
         spacing="gap-y-2"
         customStyle={customWidthStyle}
       >
-        <Text variant={titleVariant}>{titleLabel}</Text>
+        {titleLabel && <Text variant={titleVariant}>{titleLabel}</Text>}
         {bodyLabel && (
           <Text
             variant={bodyVariant}

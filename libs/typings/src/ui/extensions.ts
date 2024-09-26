@@ -11,8 +11,9 @@ import { AkashaAppApplicationType, AkashaAppInterface } from '../sdk/graphql-typ
  * Enum defining extension status for an extension developer
  **/
 export enum ExtensionStatus {
+  LocalDraft = 'Local Draft',
   Draft = 'Draft',
-  Pending = 'Pending',
+  InReview = 'In Review',
   Published = 'Published',
 }
 
@@ -26,8 +27,11 @@ export type Extension = Omit<AkashaAppInterface, 'author' | 'contributors'> & {
   author?: string;
   contributors?: [string];
   applicationType?: AkashaAppApplicationType;
+  nsfw?: boolean;
   // this prop is only for local storage draft extensions
   localDraft?: boolean;
+  sourceURL?: string;
+  contactInfo?: string;
 };
 
 /**
