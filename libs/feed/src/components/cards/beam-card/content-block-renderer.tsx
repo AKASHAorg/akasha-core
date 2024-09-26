@@ -9,8 +9,14 @@ import {
   MatchingBlock,
 } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
 import { useTranslation } from 'react-i18next';
-import { useGetContentBlockByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import {
+  useGetAppsByPublisherDidSuspenseQuery,
+  useGetContentBlockByIdQuery,
+} from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { Transition } from '@headlessui/react';
+import getSDK from '@akashaorg/core-sdk';
+import { SortOrder } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { GetAppsByPublisherDidQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 
 type ContentBlockRendererProps = {
   blockID: string;
@@ -30,6 +36,8 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
     showBlockName,
     onBlockInfoChange,
   } = props;
+  const sdk = useRef(getSDK());
+  const indexingDID = sdk.current.services.common.misc.getIndexingDID();
   const { navigateToModal, getCorePlugins } = useRootComponentProps();
   const contentBlockStoreRef = useRef(getCorePlugins()?.contentBlockStore);
   const _onBlockInfoChange = useRef(onBlockInfoChange);
@@ -38,6 +46,7 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
   const contentBlockReq = useGetContentBlockByIdQuery({
     variables: { id: blockID },
     fetchPolicy: 'cache-first',
+    nextFetchPolicy: 'network-only',
   });
   const blockData = useMemo(() => {
     // Get all the block's data from the hook, including the nsfw property
@@ -47,13 +56,33 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
   }, [contentBlockReq.data]);
   const contentBlockPropertyType = blockData?.content?.[0]?.propertyType;
   const contentBlockLabel = blockData?.content?.[0]?.label;
+  // {
+  //   id: did,
+  //     first: 1,
+  //   filters: { where: { name: { equalTo: appName } } },
+  //   sorting: { createdAt: SortOrder.Desc },
+  // },
+  // { context: { source: sdk.services.gql.contextSources.default } },
+
+  const appQuery = useGetAppsByPublisherDidSuspenseQuery({
+    variables: {
+      id: indexingDID,
+      first: 1,
+      filters: { where: { name: { equalTo: contentBlockLabel } } },
+      sorting: { createdAt: SortOrder.Asc },
+    },
+    context: { source: sdk.current.services.gql.contextSources.default },
+    skip: !!indexingDID && !!contentBlockLabel,
+  });
+
+  const appDisplayName = selectAppDisplayName(appQuery?.data);
+
   useEffect(() => {
     _onBlockInfoChange.current?.({
-      appName: BLOCK_LABEL_TO_APP_DISPLAY_NAME_MAP[contentBlockLabel],
-      blockName:
-        contentBlockPropertyType /*@TODO need to fetch the proper human readable block name*/,
+      appName: appDisplayName,
+      blockName: contentBlockPropertyType,
     });
-  }, [contentBlockPropertyType, contentBlockLabel]);
+  }, [contentBlockPropertyType, contentBlockLabel, appDisplayName]);
 
   const matchingBlocks: MatchingBlock[] = !blockData
     ? []
@@ -169,9 +198,8 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
   );
 };
 
-// @TODO properly fetch app's display name
-const BLOCK_LABEL_TO_APP_DISPLAY_NAME_MAP = {
-  '@akashaorg/app-antenna': 'Antenna',
+const selectAppDisplayName = (queryData: GetAppsByPublisherDidQuery) => {
+  return queryData.node;
 };
 
 export default ContentBlockRenderer;
