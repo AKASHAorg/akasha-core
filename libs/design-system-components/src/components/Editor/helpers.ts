@@ -1,4 +1,4 @@
-import { Editor, Transforms, Element, Node, Point } from 'slate';
+import { Editor, Transforms, Element, Node, Point, Range } from 'slate';
 import { ReactEditor } from 'slate-react';
 import ReactDOM from 'react-dom';
 import {
@@ -107,13 +107,42 @@ const CustomEditor = {
     Transforms.move(editor);
   },
 
+  isLinkActive(editor: Editor) {
+    const [link] = Editor.nodes(editor, {
+      match: n => !Editor.isEditor(n) && Element.isElement(n) && n.type === 'link',
+    });
+    return !!link;
+  },
+
+  stepOutOfLinkElement(editor: Editor, addEmptySpace = true) {
+    //step out
+    Transforms.move(editor, { unit: 'offset' });
+    //add empty space
+    if (addEmptySpace) Editor.insertText(editor, ' ');
+  },
+
   insertLink(editor, url: string) {
+    //if the link is to be inserted in another link then treat it an ordinary text element
+    if (this.isLinkActive(editor)) {
+      Transforms.insertNodes(editor, { text: url });
+      return;
+    }
+    const { selection } = editor;
     const link: LinkElement = {
       type: 'link',
       url,
       children: [{ text: url }],
     };
+    //if there is no Point after the current selection it means the link is the last element to be inserted
+    const isLastElement = !Editor.after(editor, selection);
     Transforms.insertNodes(editor, link);
+    /*
+     ** after inserting a link step out of it
+     ** add a space after the link if it's the last element
+     */
+    if (selection && Range.isCollapsed(selection)) {
+      this.stepOutOfLinkElement(editor, isLastElement);
+    }
   },
 
   deleteImage(editor: Editor, element: Element) {

@@ -413,24 +413,17 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
   const onKeyDown = useCallback(
     (event: KeyboardEvent<HTMLDivElement>) => {
       const { selection } = editor;
-      /**
-       * Default space behavior is unit:'character'.
-       * This fails to distinguish between two cursor positions, such as
-       * <link>foo<cursor/></link> vs <link>foo</link><cursor/>.
-       * Here we modify the behavior to unit:'offset' at first then resume the default behavior.
-       * This lets the user step out of a link.
-       */
+
       if (selection && Range.isCollapsed(selection)) {
         if (event.code === 'Space') {
           // Check if the selection is inside a link node
-          const previousNode = Editor.above(editor, {
-            match: n => Element.isElement(n) && n.type === 'link',
-          });
+          const isLinkActive = CustomEditor.isLinkActive(editor);
 
-          // If the cursor is inside a link, move the cursor out
-          if (previousNode?.length) {
-            Transforms.move(editor, { unit: 'offset' });
-            Transforms.move(editor, { unit: 'character' });
+          // If the cursor is inside a link, step out of it
+          if (isLinkActive) {
+            event.preventDefault();
+            CustomEditor.stepOutOfLinkElement(editor);
+            return;
           }
         }
       }
