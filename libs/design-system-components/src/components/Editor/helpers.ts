@@ -107,11 +107,11 @@ const CustomEditor = {
     Transforms.move(editor);
   },
 
-  isLinkActive(editor: Editor) {
-    const [link] = Editor.nodes(editor, {
+  nearestLinkNode(editor: Editor) {
+    const [linkNode] = Editor.nodes(editor, {
       match: n => !Editor.isEditor(n) && Element.isElement(n) && n.type === 'link',
     });
-    return !!link;
+    return { linkNode, isActive: !!linkNode };
   },
 
   stepOutOfLinkElement(editor: Editor, addEmptySpace = true) {
@@ -123,7 +123,7 @@ const CustomEditor = {
 
   insertLink(editor, url: string) {
     //if the link is to be inserted in another link then treat it as an ordinary text element
-    if (this.isLinkActive(editor)) {
+    if (this.nearestLinkNode(editor).isActive) {
       Transforms.insertNodes(editor, { text: url });
       return;
     }

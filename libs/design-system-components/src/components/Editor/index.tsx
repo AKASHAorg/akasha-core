@@ -417,13 +417,18 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
       if (selection && Range.isCollapsed(selection)) {
         if (event.code === 'Space') {
           // Check if the selection is inside a link node
-          const isLinkActive = CustomEditor.isLinkActive(editor);
+          const { linkNode, isActive: isLinkActive } = CustomEditor.nearestLinkNode(editor);
 
-          // If the cursor is inside a link, step out of it
+          // If the cursor is at the end of the link, step out of it
           if (isLinkActive) {
-            event.preventDefault();
-            CustomEditor.stepOutOfLinkElement(editor);
-            return;
+            const [, path] = linkNode;
+            const end = Editor.end(editor, path);
+            //check if the cursor is at the end of the link element
+            if (Range.equals(selection, { anchor: selection.anchor, focus: end })) {
+              event.preventDefault();
+              CustomEditor.stepOutOfLinkElement(editor);
+              return;
+            }
           }
         }
       }
