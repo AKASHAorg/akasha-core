@@ -21,15 +21,30 @@ export const ExtensionEditStep1Page: React.FC<ExtensionEditStep1PageProps> = ({ 
   const { t } = useTranslation('app-extensions');
 
   const { uiEvents } = useRootComponentProps();
+  const uiEventsRef = React.useRef(uiEvents);
 
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
 
-  const draftExtensions: Extension[] = useMemo(
-    () => JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [],
-    [authenticatedDID],
-  );
+  const showAlertNotification = React.useCallback((title: string) => {
+    uiEventsRef.current.next({
+      event: NotificationEvents.ShowNotification,
+      data: {
+        type: NotificationTypes.Error,
+        title,
+      },
+    });
+  }, []);
+
+  // fetch the draft extensions that are saved only on local storage
+  const draftExtensions: Extension[] = useMemo(() => {
+    try {
+      return JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [];
+    } catch (error) {
+      showAlertNotification(error);
+    }
+  }, [authenticatedDID, showAlertNotification]);
 
   const formValue = useMemo(
     () => JSON.parse(sessionStorage.getItem(extensionId)) || {},
@@ -56,13 +71,7 @@ export const ExtensionEditStep1Page: React.FC<ExtensionEditStep1PageProps> = ({ 
   const [, setForm] = useAtom<FormData>(useContext(AtomContext));
 
   const onSaveImageError = () => {
-    uiEvents.next({
-      event: NotificationEvents.ShowNotification,
-      data: {
-        type: NotificationTypes.Error,
-        title: t("The image wasn't uploaded correctly. Please try again!"),
-      },
-    });
+    showAlertNotification(t("The image wasn't uploaded correctly. Please try again!"));
   };
 
   return (
@@ -73,7 +82,7 @@ export const ExtensionEditStep1Page: React.FC<ExtensionEditStep1PageProps> = ({ 
         </Text>
       </Stack>
       <ExtensionEditStep1Form
-        extensionIdLabel={t('Extension Id')}
+        extensionIdLabel={t('Extension ID')}
         extensionDisplayNameLabel={t('Extension Display Name')}
         sourceLabel={t('Source URL')}
         sourcePlaceholderLabel={t('web server URL')}

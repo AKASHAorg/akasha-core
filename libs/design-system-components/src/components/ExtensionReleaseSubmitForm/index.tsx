@@ -9,77 +9,72 @@ import { apply, tw } from '@twind/core';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ButtonType } from '../types/common.types';
-import { Header, HeaderProps } from './Header';
-import { Image } from '@akashaorg/typings/lib/ui';
-import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 export enum FieldName {
-  name = 'name',
-  displayName = 'displayName',
-  logoImage = 'logoImage',
-  coverImage = 'coverImage',
+  versionNumber = 'versionNumber',
+  description = 'description',
   sourceURL = 'sourceURL',
 }
 
-export type ExtensionEditStep1FormValues = {
-  name?: string;
-  displayName?: string;
+export type ExtensionReleaseSubmitValues = {
+  versionNumber?: string;
+  description?: string;
   sourceURL?: string;
-  logoImage?: Image | File | null;
-  coverImage?: Image | File | null;
 };
 
-export type ExtensionEditStep1FormProps = {
-  header: Omit<HeaderProps, 'onLogoImageChange' | 'onCoverImageChange'>;
-  extensionType: AkashaAppApplicationType;
-  defaultValues?: ExtensionEditStep1FormValues;
+export type ExtensionReleaseSubmitProps = {
+  defaultValues?: ExtensionReleaseSubmitValues;
   cancelButton: ButtonType;
   nextButton: {
     label: string;
-    handleClick: (data: ExtensionEditStep1FormValues) => void;
+    handleClick: (data: ExtensionReleaseSubmitValues) => void;
   };
-  extensionIdLabel?: string;
-  extensionDisplayNameLabel?: string;
-  sourceLabel?: string;
-  sourcePlaceholderLabel?: string;
+  versionNumberLabel?: string;
+  descriptionFieldLabel?: string;
+  descriptionPlaceholderLabel?: string;
+  sourceURLFieldLabel?: string;
+  sourceURLPlaceholderLabel?: string;
+  loading?: boolean;
 };
 
-const ExtensionEditStep1Form: React.FC<ExtensionEditStep1FormProps> = props => {
+const ExtensionReleaseSubmit: React.FC<ExtensionReleaseSubmitProps> = props => {
   const {
-    header,
-    extensionType,
     defaultValues = {
-      name: '',
-      displayName: '',
+      versionNumber: '',
+      description: '',
       sourceURL: '',
-      logoImage: null,
-      coverImage: null,
     },
     cancelButton,
     nextButton,
-    extensionIdLabel,
-    extensionDisplayNameLabel,
-    sourceLabel,
-    sourcePlaceholderLabel,
+    versionNumberLabel,
+    descriptionFieldLabel,
+    descriptionPlaceholderLabel,
+    sourceURLFieldLabel,
+    sourceURLPlaceholderLabel,
+    loading,
   } = props;
 
   const {
     control,
-    setValue,
     getValues,
-    formState: { errors },
-  } = useForm<ExtensionEditStep1FormValues>({
+    formState: { errors, dirtyFields },
+  } = useForm<ExtensionReleaseSubmitValues>({
     defaultValues,
     resolver: zodResolver(schema),
     mode: 'onChange',
   });
+
+  const isFormDirty =
+    Object.keys(dirtyFields).includes(FieldName.versionNumber) &&
+    Object.keys(dirtyFields).includes(FieldName.description) &&
+    Object.keys(dirtyFields).includes(FieldName.sourceURL);
 
   const isValid = !Object.keys(errors).length;
 
   const onSave = (event: SyntheticEvent) => {
     event.preventDefault();
     const formValues = getValues();
-    if (isValid) {
+    if (isValid && isFormDirty) {
       nextButton.handleClick({
         ...formValues,
       });
@@ -89,29 +84,17 @@ const ExtensionEditStep1Form: React.FC<ExtensionEditStep1FormProps> = props => {
   return (
     <form onSubmit={onSave} className={tw(apply`h-full`)}>
       <Stack direction="column" spacing="gap-y-4">
-        <Stack padding="px-4">
-          <Header
-            {...header}
-            extensionType={extensionType}
-            onLogoImageChange={logoImage => {
-              setValue('logoImage', logoImage, { shouldDirty: true });
-            }}
-            onCoverImageChange={coverImage => {
-              setValue('coverImage', coverImage, { shouldDirty: true });
-            }}
-          />
-        </Stack>
         <Stack padding="px-4 pb-16" spacing="gap-y-4">
           <Controller
             control={control}
-            name={FieldName.name}
+            name={FieldName.versionNumber}
             render={({ field: { name, value, onChange, ref }, fieldState: { error } }) => (
               <TextField
                 id={name}
                 type="text"
                 name={name}
-                label={extensionIdLabel}
-                placeholder="unique extension identifier"
+                label={versionNumberLabel}
+                placeholder="e.g. 1.0.0"
                 value={value}
                 caption={error?.message}
                 status={error?.message ? 'error' : null}
@@ -120,28 +103,29 @@ const ExtensionEditStep1Form: React.FC<ExtensionEditStep1FormProps> = props => {
                 required={true}
               />
             )}
-            defaultValue={defaultValues.name}
+            defaultValue={defaultValues.versionNumber}
           />
           <Divider />
           <Controller
             control={control}
-            name={FieldName.displayName}
+            name={FieldName.description}
             render={({ field: { name, value, onChange, ref }, fieldState: { error } }) => (
               <TextField
                 id={name}
-                type="text"
                 name={name}
-                label={extensionDisplayNameLabel}
-                placeholder="extension x"
+                label={descriptionFieldLabel}
+                placeholder={descriptionPlaceholderLabel}
                 value={value}
+                onChange={onChange}
                 caption={error?.message}
                 status={error?.message ? 'error' : null}
-                onChange={onChange}
                 inputRef={ref}
+                type="multiline"
+                maxLength={2000}
                 required={true}
               />
             )}
-            defaultValue={defaultValues.displayName}
+            defaultValue={defaultValues.description}
           />
           <Divider />
           <Controller
@@ -152,8 +136,8 @@ const ExtensionEditStep1Form: React.FC<ExtensionEditStep1FormProps> = props => {
                 id={name}
                 type="text"
                 name={name}
-                label={sourceLabel}
-                placeholder={sourcePlaceholderLabel}
+                label={sourceURLFieldLabel}
+                placeholder={sourceURLPlaceholderLabel}
                 value={value}
                 caption={error?.message}
                 status={error?.message ? 'error' : null}
@@ -174,26 +158,28 @@ const ExtensionEditStep1Form: React.FC<ExtensionEditStep1FormProps> = props => {
             onClick={cancelButton.handleClick}
             disabled={cancelButton.disabled}
           />
-          <Button variant="primary" label={nextButton.label} disabled={!isValid} onClick={onSave} />
+          <Button
+            variant="primary"
+            loading={loading}
+            label={nextButton.label}
+            disabled={!isValid || !isFormDirty}
+            onClick={onSave}
+            type="submit"
+          />
         </Stack>
       </Stack>
     </form>
   );
 };
 
-export default ExtensionEditStep1Form;
+export default ExtensionReleaseSubmit;
 
 const schema = z.object({
-  name: z
+  versionNumber: z.string(),
+  description: z
     .string()
     .trim()
-    .min(6, { message: 'Must be at least 6 characters' })
-    .refine(
-      value => /^[a-zA-Z0-9-_.]+$/.test(value),
-      'ID should contain only alphabets, numbers or -_.',
-    ),
-  displayName: z.string().trim().min(4, { message: 'Must be at least 4 characters' }).optional(),
-  sourceURL: z.string().url({ message: 'URL is required' }).optional(),
-  logoImage: z.any().optional(),
-  coverImage: z.any().optional(),
+    .min(10, { message: 'Must be at least 10 characters' })
+    .max(2000, { message: 'Must be less than 2000 characters' }),
+  sourceURL: z.string().url({ message: 'URL is required' }),
 });
