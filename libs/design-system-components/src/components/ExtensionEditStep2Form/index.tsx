@@ -11,7 +11,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { AppImageSource, AppLinkSource } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { ButtonType } from '../types/common.types';
 import { NSFW } from '../NSFW';
-import { DocumentationLinks } from './DocumentationLinks';
+import { UsefulLinks } from './UsefulLinks';
 import { Gallery, GalleryProps } from './Gallery';
 
 export enum FieldName {
@@ -35,8 +35,8 @@ export type ExtensionEditStep2FormProps = {
   descriptionPlaceholderLabel?: string;
   galleryFieldLabel?: string;
   galleryDescriptionLabel?: string;
-  documentationFieldLabel?: string;
-  documentationDescriptionLabel?: string;
+  usefulLinksFieldLabel?: string;
+  usefulLinksDescriptionLabel?: string;
   linkTitleLabel?: string;
   linkPlaceholderLabel?: string;
   addLabel?: string;
@@ -64,8 +64,8 @@ const ExtensionEditStep2Form: React.FC<ExtensionEditStep2FormProps> = props => {
     descriptionPlaceholderLabel,
     galleryFieldLabel,
     galleryDescriptionLabel,
-    documentationFieldLabel,
-    documentationDescriptionLabel,
+    usefulLinksFieldLabel,
+    usefulLinksDescriptionLabel,
     linkTitleLabel,
     linkPlaceholderLabel,
     addLabel,
@@ -154,14 +154,14 @@ const ExtensionEditStep2Form: React.FC<ExtensionEditStep2FormProps> = props => {
           />
           <Divider />
 
-          <DocumentationLinks
-            documentationTitleLabel={documentationFieldLabel}
-            documentationDescriptionLabel={documentationDescriptionLabel}
+          <UsefulLinks
+            usefulLinksTitleLabel={usefulLinksFieldLabel}
+            usefulLinksDescriptionLabel={usefulLinksDescriptionLabel}
             linkElementLabel={linkTitleLabel}
             linkTitlePlaceholderLabel={linkPlaceholderLabel}
             addNewLinkButtonLabel={addLabel}
             control={control}
-            documentationLinks={defaultValues.links}
+            usefulLinks={defaultValues.links}
             onDeleteLink={async () => {
               await trigger();
             }}
@@ -176,13 +176,7 @@ const ExtensionEditStep2Form: React.FC<ExtensionEditStep2FormProps> = props => {
             onClick={cancelButton.handleClick}
             disabled={cancelButton.disabled}
           />
-          <Button
-            variant="primary"
-            label={nextButton.label}
-            disabled={!isValid}
-            onClick={onSave}
-            type="submit"
-          />
+          <Button variant="primary" label={nextButton.label} disabled={!isValid} onClick={onSave} />
         </Stack>
       </Stack>
     </form>

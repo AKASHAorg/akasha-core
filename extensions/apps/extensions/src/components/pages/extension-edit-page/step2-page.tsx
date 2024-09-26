@@ -17,7 +17,7 @@ import {
   NotificationTypes,
   Extension,
 } from '@akashaorg/typings/lib/ui';
-import { CONTACT_INFO, DRAFT_EXTENSIONS } from '../../../constants';
+import { DRAFT_EXTENSIONS } from '../../../constants';
 import { useAtom } from 'jotai';
 import { AtomContext, FormData } from './main-page';
 
@@ -29,16 +29,32 @@ export const ExtensionEditStep2Page: React.FC<ExtensionEditStep2PageProps> = ({ 
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
   const { uiEvents } = useRootComponentProps();
+  const uiEventsRef = React.useRef(uiEvents);
 
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
 
-  const draftExtensions: Extension[] = useMemo(
-    () => JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [],
-    [authenticatedDID],
-  );
-  const extensionData = draftExtensions.find(draftExtension => draftExtension.id === extensionId);
+  const showAlertNotification = React.useCallback((title: string) => {
+    uiEventsRef.current.next({
+      event: NotificationEvents.ShowNotification,
+      data: {
+        type: NotificationTypes.Error,
+        title,
+      },
+    });
+  }, []);
+
+  // fetch the draft extensions that are saved only on local storage
+  const draftExtensions: Extension[] = useMemo(() => {
+    try {
+      return JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [];
+    } catch (error) {
+      showAlertNotification(error);
+    }
+  }, [authenticatedDID, showAlertNotification]);
+
+  const extensionData = draftExtensions?.find(draftExtension => draftExtension.id === extensionId);
 
   const formValue = useMemo(
     () => JSON.parse(sessionStorage.getItem(extensionId)) || {},
@@ -54,11 +70,9 @@ export const ExtensionEditStep2Page: React.FC<ExtensionEditStep2PageProps> = ({ 
       nsfw: defaultValues.nsfw,
       description: defaultValues.description,
       gallery: defaultValues.gallery,
-      links: defaultValues.links
-        ?.map((link, index) => ({ _id: index + 1, ...link }))
-        .filter(link => link.label !== `${extensionId}-${CONTACT_INFO}`),
+      links: defaultValues.links?.map((link, index) => ({ _id: index + 1, ...link })),
     };
-  }, [defaultValues, extensionId]);
+  }, [defaultValues]);
 
   const [, setForm] = useAtom<FormData>(useContext(AtomContext));
 
@@ -72,11 +86,11 @@ export const ExtensionEditStep2Page: React.FC<ExtensionEditStep2PageProps> = ({ 
           const imgWithGateway = transformSource(img);
           return {
             ...img,
-            src: img.src,
-            displaySrc: imgWithGateway.src,
+            src: img?.src,
+            displaySrc: imgWithGateway?.src,
             size: {
-              height: img.height,
-              width: img.width,
+              height: img?.height,
+              width: img?.width,
             },
           };
         }),
@@ -114,13 +128,7 @@ export const ExtensionEditStep2Page: React.FC<ExtensionEditStep2PageProps> = ({ 
       return imageObj;
     } catch (error) {
       setUploading(false);
-      uiEvents.next({
-        event: NotificationEvents.ShowNotification,
-        data: {
-          type: NotificationTypes.Error,
-          title: t("The image wasn't uploaded correctly. Please try again!"),
-        },
-      });
+      showAlertNotification(t("The image wasn't uploaded correctly. Please try again!"));
       return null;
     }
   };
@@ -160,8 +168,10 @@ export const ExtensionEditStep2Page: React.FC<ExtensionEditStep2PageProps> = ({ 
         galleryDescriptionLabel={t(
           'Having a gallery to show off the extension will increase installs',
         )}
-        documentationFieldLabel={t('Documentation')}
-        documentationDescriptionLabel={t('Add any documentation necessary to help others ')}
+        usefulLinksFieldLabel={t('Useful Links')}
+        usefulLinksDescriptionLabel={t(
+          'Include any relevant links, such as documentation or contact information, that you believe will be helpful to others.',
+        )}
         linkTitleLabel={t('Link')}
         linkPlaceholderLabel={t('Link title')}
         addLabel={t('Add')}

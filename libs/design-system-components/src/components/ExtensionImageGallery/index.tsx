@@ -17,7 +17,7 @@ export type ExtensionImageGalleryProps = {
  * @param showOverlay - conditional rendering for the zooming overlay
  */
 const ExtensionImageGallery: React.FC<ExtensionImageGalleryProps> = props => {
-  const { images, showOverlay, toggleOverlay } = props;
+  const { images = [], showOverlay, toggleOverlay } = props;
   const [clickedImg, setClickedImg] = React.useState(null);
 
   const handleClickImage = (img: GalleryImage) => {

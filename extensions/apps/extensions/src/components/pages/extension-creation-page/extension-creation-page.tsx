@@ -20,10 +20,6 @@ export const ExtensionCreationPage: React.FC<unknown> = () => {
 
   const navigateTo = getCorePlugins().routing.navigateTo;
 
-  // const [createAppMutation, { loading }] = useCreateAppMutation({
-  //   context: { source: sdk.current.services.gql.contextSources.composeDB },
-  // });
-
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
