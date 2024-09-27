@@ -2,17 +2,17 @@
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "private": true,
   "scripts": {
-    "clean": "tsc --build --clean tsconfig.json",
-    "clean:all": "yarn clean && nx reset",
-    "prepare": "nx run-many --target=prepare --all --verbose",
-    "build:libs": "nx run-many -t build --projects=tag:type:lib --verbose",
-    "build:apps": "nx run-many -t build --projects=tag:scope:extension --verbose",
-    "extract:translations": "nx run-many -t translations --projects=tag:scope:extension --verbose",
-    "build:all": "yarn && yarn prepare && yarn build:libs && yarn build:apps && yarn extract:translations",
-    "apps:watch": "nx watch --projects=tag:scope:extension --includeDependentProjects -- nx build \\$NX_PROJECT_NAME",
-    "world:dev": "nx start @akashaorg/akasha.world --verbose",
-    "world:deploy": "nx deploy @akashaorg/akasha.world --verbose",
-    "extensions:upload": "nx run @akashaorg/core-sdk:prepare-local && NODE_OPTIONS=\"--no-warnings\" tsx ./tools/scripts/upload-w3-storage.mjs"
+    "clean": "tsc --build --clean tsconfig.json --skip-nx-cache",
+    "clean:all": "yarn clean && nx reset --skip-nx-cache",
+    "prepare": "nx run-many --target=prepare --all --verbose --skip-nx-cache",
+    "build:libs": "nx run-many -t build --projects=tag:type:lib --verbose --skip-nx-cache",
+    "build:apps": "nx run-many -t build --projects=tag:scope:extension --verbose --skip-nx-cache",
+    "extract:translations": "nx run-many -t translations --projects=tag:scope:extension --verbose --skip-nx-cache",
+    "build:all": "yarn && yarn prepare && yarn build:libs && yarn build:apps && yarn extract:translations --skip-nx-cache",
+    "apps:watch": "nx watch --projects=tag:scope:extension --includeDependentProjects -- nx build \\$NX_PROJECT_NAME --skip-nx-cache",
+    "world:dev": "nx start @akashaorg/akasha.world --verbose --skip-nx-cache",
+    "world:deploy": "nx deploy @akashaorg/akasha.world --verbose --skip-nx-cache",
+    "extensions:upload": "nx run @akashaorg/core-sdk:prepare-local && NODE_OPTIONS=\"--no-warnings\" tsx ./tools/scripts/upload-w3-storage.mjs --skip-nx-cache"
   },
   "dependencies": {
     "@apollo/client": "3.10.4",
