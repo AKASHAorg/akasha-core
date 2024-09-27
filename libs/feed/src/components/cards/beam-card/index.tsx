@@ -25,7 +25,6 @@ import {
   selectReflectionsCount,
 } from '@akashaorg/ui-awf-hooks/lib/selectors/get-beam-by-id-query';
 import getSDK from '@akashaorg/core-sdk';
-import { useGetAppsByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 
 type BeamCardProps = Pick<
   EntryCardProps,
