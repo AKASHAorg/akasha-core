@@ -61,10 +61,10 @@ export const ExtensionEditStep1Page: React.FC<ExtensionEditStep1PageProps> = ({ 
 
   const formDefault = useMemo(() => {
     return {
-      name: defaultValues.name,
-      displayName: defaultValues.displayName,
-      logoImage: defaultValues.logoImage,
-      coverImage: defaultValues.coverImage,
+      name: defaultValues?.name,
+      displayName: defaultValues?.displayName,
+      logoImage: defaultValues?.logoImage,
+      coverImage: defaultValues?.coverImage,
     };
   }, [defaultValues]);
 

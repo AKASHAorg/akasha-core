@@ -67,10 +67,10 @@ export const ExtensionEditStep2Page: React.FC<ExtensionEditStep2PageProps> = ({ 
 
   const formDefault = useMemo(() => {
     return {
-      nsfw: defaultValues.nsfw,
-      description: defaultValues.description,
-      gallery: defaultValues.gallery,
-      links: defaultValues.links?.map((link, index) => ({ _id: index + 1, ...link })),
+      nsfw: defaultValues?.nsfw,
+      description: defaultValues?.description,
+      gallery: defaultValues?.gallery,
+      links: defaultValues?.links?.map((link, index) => ({ _id: index + 1, ...link })),
     };
   }, [defaultValues]);
 

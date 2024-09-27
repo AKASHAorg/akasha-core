@@ -22,16 +22,14 @@ export enum ExtensionStatus {
  **/
 export type ExtensionImageType = 'logo-image' | 'cover-image';
 
-export type Extension = Omit<AkashaAppInterface, 'author' | 'contributors'> & {
+export type Extension = Omit<AkashaAppInterface, 'contributors' | 'version'> & {
   id?: string;
-  author?: string;
   contributors?: [string];
   applicationType?: AkashaAppApplicationType;
   nsfw?: boolean;
   // this prop is only for local storage draft extensions
   localDraft?: boolean;
   sourceURL?: string;
-  contactInfo?: string;
 };
 
 /**

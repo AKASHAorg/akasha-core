@@ -59,9 +59,9 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
 
   const formDefault = useMemo(() => {
     return {
-      license: defaultValues.license,
-      contributors: defaultValues.contributors,
-      keywords: defaultValues.keywords,
+      license: defaultValues?.license,
+      contributors: defaultValues?.contributors,
+      keywords: defaultValues?.keywords,
     };
   }, [defaultValues]);
 

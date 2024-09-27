@@ -1,4 +1,4 @@
-import React, { SyntheticEvent } from 'react';
+import React, { SyntheticEvent, useEffect } from 'react';
 import * as z from 'zod';
 import { Controller, useWatch } from 'react-hook-form';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
@@ -51,6 +51,9 @@ export type AppCreationFormProps = {
   extensionSourceURLLabel?: string;
   disclaimerLabel?: string;
   defaultValues?: AppCreationFormValues;
+  handleCheckExtName?: (fieldValue: string) => void;
+  isDuplicateExtName?: boolean;
+  loading?: boolean;
   cancelButton: ButtonType;
   createButton: {
     label: string;
@@ -68,6 +71,9 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
     extensionLicenseOther: '',
     extensionSourceURL: '',
   },
+  handleCheckExtName,
+  isDuplicateExtName,
+  loading,
   cancelButton,
   createButton,
   extensionDisplayNameFieldLabel,
@@ -83,6 +89,8 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
   const {
     control,
     getValues,
+    setError,
+    clearErrors,
     formState: { errors, dirtyFields },
   } = useForm<AppCreationFormValues>({
     defaultValues,
@@ -125,6 +133,15 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
     }
   };
 
+  useEffect(() => {
+    if (isDuplicateExtName) {
+      setError('extensionID', { message: 'Extension ID must be unique!' });
+    } else {
+      clearErrors('extensionID');
+    }
+  }, [isDuplicateExtName, setError, clearErrors]);
+  console.log('is duplicate ext: ', isDuplicateExtName);
+
   return (
     <form onSubmit={onSave} className={tw(apply`h-full`)}>
       <Stack direction="column" spacing="gap-y-4">
@@ -158,6 +175,7 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
                 caption={error?.message}
                 status={error?.message ? 'error' : null}
                 onChange={onChange}
+                onBlur={() => handleCheckExtName(value)}
                 inputRef={ref}
                 required={true}
               />
@@ -260,7 +278,7 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
             variant="primary"
             label={createButton.label}
             loading={createButton.loading}
-            disabled={isValid ? !isFormDirty : true}
+            disabled={!isFormDirty || !isValid || loading}
             onClick={onSave}
             type="submit"
           />
