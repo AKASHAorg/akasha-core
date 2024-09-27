@@ -37,7 +37,6 @@ import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { InMemoryCache } from '@apollo/client';
 import { RawBeamData } from '@akashaorg/typings/lib/ui';
 import { EditorActions } from '@akashaorg/design-system-components/lib/components/Editor';
-import { P } from 'pino';
 
 const {
   mocks: beamSectionMocks,
