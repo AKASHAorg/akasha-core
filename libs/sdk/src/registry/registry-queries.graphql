@@ -7,7 +7,7 @@ fragment AkashaAppFragment on AkashaApp{
   displayName
   keywords
   createdAt
-  releases(last: 5){
+  releases(first: 5, sorting: {createdAt: DESC} ){
     edges {
       node {
         id

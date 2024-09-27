@@ -315,7 +315,7 @@ export const AkashaAppFragmentMFragmentDoc = /*#__PURE__*/ gql`
   name
   displayName
   keywords
-  releases(last: 5) {
+  releases(first: 5, sorting: {createdAt: DESC}) {
     edges {
       node {
         id
@@ -416,7 +416,7 @@ export const AkashaAppFragmentDoc = /*#__PURE__*/ gql`
   displayName
   keywords
   createdAt
-  releases(last: 5) {
+  releases(first: 5, sorting: {createdAt: DESC}) {
     edges {
       node {
         id
