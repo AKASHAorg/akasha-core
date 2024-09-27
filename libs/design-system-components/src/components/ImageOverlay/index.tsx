@@ -82,7 +82,7 @@ const ImageOverlay: React.FC<IImageOverlay> = props => {
 
   return (
     <Portal>
-      <Stack customStyle="fixed top-0 w-screen h-screen bg-black/80 z-20">
+      <Stack customStyle="fixed top-0 w-screen h-screen bg-black/80 z-[105]">
         <Stack direction="row" customStyle="justify-end sm:justify-between p-4 sm:p-12">
           <Stack direction="row" spacing="gap-3">
             {images.length > 1 && (

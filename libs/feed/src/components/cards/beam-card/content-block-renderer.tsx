@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import NSFW from '@akashaorg/design-system-components/lib/components/Entry/NSFW';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
@@ -9,14 +9,8 @@ import {
   MatchingBlock,
 } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
 import { useTranslation } from 'react-i18next';
-import {
-  useGetAppsByPublisherDidSuspenseQuery,
-  useGetContentBlockByIdQuery,
-} from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import { useGetContentBlockByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { Transition } from '@headlessui/react';
-import getSDK from '@akashaorg/core-sdk';
-import { SortOrder } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { GetAppsByPublisherDidQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 
 type ContentBlockRendererProps = {
   blockID: string;
@@ -24,23 +18,12 @@ type ContentBlockRendererProps = {
   showHiddenContent: boolean;
   beamIsNsfw: boolean;
   showBlockName: boolean;
-  onBlockInfoChange?: (blockInfo: { blockName: string; appName: string }) => void;
   onContentClick?: () => void;
 };
 const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
-  const {
-    blockID,
-    authenticatedDID,
-    showHiddenContent,
-    beamIsNsfw,
-    showBlockName,
-    onBlockInfoChange,
-  } = props;
-  const sdk = useRef(getSDK());
-  const indexingDID = sdk.current.services.common.misc.getIndexingDID();
+  const { blockID, authenticatedDID, showHiddenContent, beamIsNsfw, showBlockName } = props;
   const { navigateToModal, getCorePlugins } = useRootComponentProps();
   const contentBlockStoreRef = useRef(getCorePlugins()?.contentBlockStore);
-  const _onBlockInfoChange = useRef(onBlockInfoChange);
   const { t } = useTranslation('ui-lib-feed');
   const navigateTo = getCorePlugins().routing.navigateTo;
   const contentBlockReq = useGetContentBlockByIdQuery({
@@ -54,35 +37,6 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
       ? contentBlockReq.data.node
       : null;
   }, [contentBlockReq.data]);
-  const contentBlockPropertyType = blockData?.content?.[0]?.propertyType;
-  const contentBlockLabel = blockData?.content?.[0]?.label;
-  // {
-  //   id: did,
-  //     first: 1,
-  //   filters: { where: { name: { equalTo: appName } } },
-  //   sorting: { createdAt: SortOrder.Desc },
-  // },
-  // { context: { source: sdk.services.gql.contextSources.default } },
-
-  const appQuery = useGetAppsByPublisherDidSuspenseQuery({
-    variables: {
-      id: indexingDID,
-      first: 1,
-      filters: { where: { name: { equalTo: contentBlockLabel } } },
-      sorting: { createdAt: SortOrder.Asc },
-    },
-    context: { source: sdk.current.services.gql.contextSources.default },
-    skip: !!indexingDID && !!contentBlockLabel,
-  });
-
-  const appDisplayName = selectAppDisplayName(appQuery?.data);
-
-  useEffect(() => {
-    _onBlockInfoChange.current?.({
-      appName: appDisplayName,
-      blockName: contentBlockPropertyType,
-    });
-  }, [contentBlockPropertyType, contentBlockLabel, appDisplayName]);
 
   const matchingBlocks: MatchingBlock[] = !blockData
     ? []
@@ -196,10 +150,6 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
       )}
     </Card>
   );
-};
-
-const selectAppDisplayName = (queryData: GetAppsByPublisherDidQuery) => {
-  return queryData.node;
 };
 
 export default ContentBlockRenderer;

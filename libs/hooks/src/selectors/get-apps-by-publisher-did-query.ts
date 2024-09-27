@@ -14,13 +14,13 @@ const isEdgeList = (
 
 export const selectAppDisplayName = (respData: GetAppsByPublisherDidQuery) => {
   if (isEdgeList(respData)) {
-    return respData?.node?.akashaAppList.edges[0]?.node.displayName;
+    return respData.node.akashaAppList.edges[0]?.node.displayName;
   }
 };
 
 export const selectAppPublisher = (respData: GetAppsByPublisherDidQuery) => {
   if (isEdgeList(respData)) {
-    return respData?.node?.akashaAppList.edges[0]?.node.author;
+    return respData.node.akashaAppList.edges[0]?.node.author;
   }
 };
 
