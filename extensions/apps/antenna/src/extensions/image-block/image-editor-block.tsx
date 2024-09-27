@@ -16,10 +16,14 @@ import {
   NotificationEvents,
   CreateContentBlock,
 } from '@akashaorg/typings/lib/ui';
-import { useCreateContentBlockMutation } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import {
+  useCreateContentBlockMutation,
+  useGetAppsByPublisherDidQuery,
+} from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import {
   AkashaContentBlockBlockDef,
   type BlockLabeledValue,
+  SortOrder,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -38,9 +42,7 @@ import {
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import getSDK from '@akashaorg/core-sdk';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-
-// @TODO: replace this with actual data
-const TEST_APP_VERSION_ID = 'k2t6wzhkhabz1fn33yk62djozfu62wp39d93nrimw87yb8tf21lq9ps55okpvv';
+import { selectLatestAppVersionId } from '@akashaorg/ui-awf-hooks/lib/selectors/get-apps-by-publisher-did-query';
 
 const isImgUrl = async url => {
   const response = await fetch(url, { method: 'HEAD' });
@@ -53,6 +55,19 @@ export const ImageEditorBlock = (
 ) => {
   const { t } = useTranslation('app-antenna');
   const sdk = useRef(getSDK());
+  //
+  const indexingDid = sdk.current.services.common.misc.getIndexingDID();
+
+  const appReq = useGetAppsByPublisherDidQuery({
+    variables: {
+      id: indexingDid,
+      first: 1,
+      filters: { where: { name: { equalTo: props.blockInfo.appName } } },
+      sorting: { createdAt: SortOrder.Desc },
+    },
+    context: { source: sdk.current.services.gql.contextSources.default },
+  });
+  const appVersionID = selectLatestAppVersionId(appReq.data);
   const { uiEvents, logger } = useRootComponentProps();
   const _uiEvents = useRef(uiEvents);
   const [createContentBlock, contentBlockQuery] = useCreateContentBlockMutation();
@@ -96,6 +111,16 @@ export const ImageEditorBlock = (
 
   const createBlock = useCallback(
     async ({ nsfw }: CreateContentBlock) => {
+      if (!appVersionID) {
+        return {
+          response: {
+            blockID: null,
+            error: t('Extension not found!'),
+          },
+          blockInfo: props.blockInfo,
+          retryCount: retryCount.current,
+        };
+      }
       const imageData = {
         images: contentBlockImages.map(imageObj => {
           return {
@@ -118,8 +143,7 @@ export const ImageEditorBlock = (
           variables: {
             i: {
               content: {
-                // @TODO: replace this mock appVersionID
-                appVersionID: TEST_APP_VERSION_ID,
+                appVersionID: appVersionID,
                 createdAt: new Date().toISOString(),
                 content: [contentBlockValue],
                 active: true,

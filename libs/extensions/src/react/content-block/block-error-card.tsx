@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { MouseEventHandler } from 'react';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -12,7 +12,7 @@ export type BlockError = {
 
 type BlockErrorCardProps = BlockError & {
   refreshLabel?: string;
-  onRefresh?: () => void;
+  onRefresh?: MouseEventHandler<HTMLButtonElement>;
 };
 
 export const BlockErrorCard: React.FC<BlockErrorCardProps> = props => {

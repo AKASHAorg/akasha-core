@@ -40,7 +40,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
   componentDidCatch(error: Error): void {
     this.setState({ hasError: true, error });
     this.props.logger?.error(error?.message);
-    this.props?.onDidCatch(error);
+    this.props.onDidCatch?.(error);
   }
 
   render() {
@@ -66,8 +66,6 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
 export const withErrorBoundary =
   <T extends ErrorBoundaryProps>(WrappedComponent: React.JSXElementConstructor<T>) =>
   (props: T) => {
-    const { fallback } = props;
-
     return (
       <ErrorBoundary {...props}>
         <WrappedComponent {...props} />

@@ -27,7 +27,7 @@ import {
   selectAppDisplayName,
   selectAppLogoImage,
   selectPublisherName,
-} from './utils';
+} from '@akashaorg/ui-awf-hooks/lib/selectors/get-apps-by-publisher-did-query';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 
 enum TermsFields {

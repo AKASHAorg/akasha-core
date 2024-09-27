@@ -12,7 +12,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import DynamicInfiniteScroll from '@akashaorg/design-system-components/lib/components/DynamicInfiniteScroll';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import getSDK from '@akashaorg/core-sdk';
-import { AnalyticsEventData, RawBeamData } from '@akashaorg/typings/lib/ui';
+import { AnalyticsEventData } from '@akashaorg/typings/lib/ui';
 import {
   AkashaBeamFiltersInput,
   AkashaBeamSortingInput,
@@ -24,7 +24,10 @@ import {
   GetBeamStreamDocument,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { useApolloClient } from '@apollo/client';
-import { GetBeamsByAuthorDidQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
+import {
+  GetBeamByIdQuery,
+  GetBeamsByAuthorDidQuery,
+} from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 
 export type BeamFeedByAuthorProps = {
   did: string;
@@ -38,7 +41,7 @@ export type BeamFeedByAuthorProps = {
   };
   scrollTopIndicator?: (listRect: DOMRect, onScrollToTop: () => void) => React.ReactNode;
   loadingIndicator?: () => ReactElement;
-  renderItem: (data?: RawBeamData) => ReactElement;
+  renderItem: (data?: GetBeamByIdQuery) => ReactElement;
   trackEvent?: (data: AnalyticsEventData['data']) => void;
 };
 
@@ -56,11 +59,13 @@ const BeamFeedByAuthor = (props: BeamFeedByAuthorProps) => {
   } = props;
   const indexingDID = React.useRef(getSDK().services.gql.indexingDID);
   const [fetchBeam, beamQuery] = useGetBeamsByAuthorDidLazyQuery();
+
   const beamList = React.useMemo(() => {
     if (beamQuery.data?.node && hasOwn(beamQuery.data.node, 'akashaBeamList')) {
       return beamQuery.data.node?.akashaBeamList;
     }
   }, [beamQuery.data]);
+
   const beams = React.useMemo(() => beamList?.edges || [], [beamList]);
   const pageInfo = React.useMemo(() => {
     return beamList?.pageInfo;
@@ -186,7 +191,7 @@ const BeamFeedByAuthor = (props: BeamFeedByAuthorProps) => {
           >
             {({ itemIndex }) => {
               const beam = beams[itemIndex];
-              return renderItem(beam.node);
+              return renderItem(beam);
             }}
           </DynamicInfiniteScroll>
         </Card>
