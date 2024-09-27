@@ -20,12 +20,14 @@ import { Draft } from '../../utils';
 import {
   AkashaContentBlockBlockDef,
   type BlockLabeledValue,
+  SortOrder,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { useCreateContentBlockMutation } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import {
+  useCreateContentBlockMutation,
+  useGetAppsByPublisherDidQuery,
+} from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import getSDK from '@akashaorg/core-sdk';
-
-// @TODO: replace this with actual data
-const TEST_APP_VERSION_ID = 'k2t6wzhkhabz1fn33yk62djozfu62wp39d93nrimw87yb8tf21lq9ps55okpvv';
+import { selectLatestAppVersionId } from '@akashaorg/ui-awf-hooks/lib/selectors/get-apps-by-publisher-did-query';
 
 export const SlateEditorBlock = (
   props: ContentBlockRootProps & { blockRef?: RefObject<BlockInstanceMethods> },
@@ -41,6 +43,19 @@ export const SlateEditorBlock = (
 
   const [createContentBlock, contentBlockQuery] = useCreateContentBlockMutation();
 
+  const indexingDid = sdk.current.services.common.misc.getIndexingDID();
+
+  const appReq = useGetAppsByPublisherDidQuery({
+    variables: {
+      id: indexingDid,
+      first: 1,
+      filters: { where: { name: { equalTo: props.blockInfo.appName } } },
+      sorting: { createdAt: SortOrder.Desc },
+    },
+    context: { source: sdk.current.services.gql.contextSources.default },
+  });
+  const appVersionID = selectLatestAppVersionId(appReq.data);
+
   const beamDraft = new Draft<IPublishData['slateContent']>({
     storage: localStorage,
     appName: name,
@@ -54,6 +69,16 @@ export const SlateEditorBlock = (
 
   const createBlock = useCallback(
     async ({ nsfw }: CreateContentBlock) => {
+      if (!appVersionID) {
+        return {
+          response: {
+            blockID: null,
+            error: t('Extension not found!'),
+          },
+          blockInfo: props.blockInfo,
+          retryCount: retryCount.current,
+        };
+      }
       const content = encodeSlateToBase64(editorState);
       const contentBlockValue: BlockLabeledValue = {
         label: props.blockInfo.appName,
@@ -65,8 +90,7 @@ export const SlateEditorBlock = (
           variables: {
             i: {
               content: {
-                // @TODO: replace this mock appVersionID
-                appVersionID: TEST_APP_VERSION_ID,
+                appVersionID: appVersionID,
                 createdAt: new Date().toISOString(),
                 content: [contentBlockValue],
                 active: true,

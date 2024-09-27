@@ -61,3 +61,9 @@ export const selectAkashaApp = (data: GetAppsByPublisherDidQuery) => {
 export const selectAppVersion = (appInfo: GetAppsByPublisherDidQuery) => {
   return selectAkashaApp(appInfo).version;
 };
+
+export const selectLatestAppVersionId = (data: GetAppsByPublisherDidQuery) => {
+  if (isEdgeList(data)) {
+    return data.node.akashaAppList.edges[0]?.node.releases.edges.at(-1).node.id;
+  }
+};
