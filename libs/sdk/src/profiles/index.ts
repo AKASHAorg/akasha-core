@@ -11,9 +11,9 @@ import { validate } from '../common/validator';
 import Gql from '../gql';
 import CeramicService from '../common/ceramic';
 import { hasOwn } from '../helpers/types';
-// tslint:disable-next-line:no-var-requires
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-
+import { PushAPI, CONSTANTS } from '@pushprotocol/restapi';
+import Web3Connector from '../common/web3.connector';
+import type { PushStream } from '@pushprotocol/restapi/src/lib/pushstream/PushStream';
 
 @injectable()
 class AWF_Profile {
@@ -21,17 +21,21 @@ class AWF_Profile {
   private _auth: AWF_Auth;
   private _ipfs: IpfsConnector;
   readonly _ceramic: CeramicService;
-
+  private readonly _web3: Web3Connector;
+  private _pushClient?: PushAPI;
+  private _notificationsStream?: PushStream;
   constructor(
     @inject(TYPES.Gql) gql: Gql,
     @inject(TYPES.Auth) auth: AWF_Auth,
     @inject(TYPES.IPFS) ipfs: IpfsConnector,
     @inject(TYPES.Ceramic) ceramic: CeramicService,
+    @inject(TYPES.Web3) web3: Web3Connector,
   ) {
     this._auth = auth;
     this._ipfs = ipfs;
     this._gql = gql;
     this._ceramic = ceramic;
+    this._web3 = web3;
   }
 
   /**
@@ -143,6 +147,54 @@ class AWF_Profile {
     }
     const cid: string = CID.toString();
     return { CID: cid, size: resized.size, blob: resized.image };
+  }
+
+  async initNotifications() {
+    const signer = await this._web3.getSigner();
+    this._pushClient = await PushAPI.initialize(signer, {
+      env: CONSTANTS.ENV.STAGING,
+      // account: pushAccount,
+    });
+
+    this._notificationsStream = await this._pushClient.initStream([CONSTANTS.STREAM.NOTIF]);
+
+    this._notificationsStream.on(CONSTANTS.STREAM.NOTIF, (data: any) => {
+      console.log(data);
+    });
+
+    await this._notificationsStream.connect();
+  }
+
+  get notificationsClient() {
+    if (!this._pushClient) {
+      throw new Error('Notifications client not initialized');
+    }
+    return this._pushClient;
+  }
+
+  get notificationsStream() {
+    if (!this._notificationsStream) {
+      throw new Error('Notifications stream not initialized');
+    }
+    return this._notificationsStream;
+  }
+
+  async getSubscriptions() {
+    const subs = await this.notificationsClient.notification.subscriptions({ limit: 100 });
+    const info = await this.notificationsClient.channel.info();
+
+    return {
+      subscriptions: subs,
+      channelInfo: info,
+    };
+  }
+
+  async getNotifications() {
+    const inboxNotifications = await this.notificationsClient.notification.list('INBOX', {
+      account: this._web3.CAIP10.address,
+      limit: 125,
+    });
+    console.info('inboxNotifications', inboxNotifications);
   }
 }
 
