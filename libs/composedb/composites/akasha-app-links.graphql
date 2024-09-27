@@ -2,7 +2,7 @@ interface AkashaAppReleaseInterface @loadModel(id: "kjzl6hvfrbw6c8lieadu4bugco13
   id: ID!
 }
 
-type AkashaApp @loadModel(id: "kjzl6hvfrbw6c54ufn6whf1z78go3l03fxnmlh8fj4vw90r6q2ugbo8m2yjhj68") {
+type AkashaApp @loadModel(id: "kjzl6hvfrbw6c55lze6s2ab18ebzwg51e9q1xrw5uxl1pf3z10dg39lxruh7heo") {
   id: ID!
   releases: [AkashaAppReleaseInterface] @relationFrom(model: "AkashaAppReleaseInterface", property: "applicationID")
   releasesCount: Int! @relationCountFrom(model: "AkashaAppReleaseInterface", property: "applicationID")

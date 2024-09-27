@@ -192,6 +192,7 @@ export type AkashaAppObjectFilterInput = {
   createdAt?: InputMaybe<StringValueFilterInput>;
   displayName?: InputMaybe<StringValueFilterInput>;
   name?: InputMaybe<StringValueFilterInput>;
+  nsfw?: InputMaybe<BooleanValueFilterInput>;
 };
 
 export type AkashaAppRelease = AkashaAppReleaseInterface & Node & {
@@ -299,6 +300,7 @@ export type AkashaAppSortingInput = {
   createdAt?: InputMaybe<SortOrder>;
   displayName?: InputMaybe<SortOrder>;
   name?: InputMaybe<SortOrder>;
+  nsfw?: InputMaybe<SortOrder>;
 };
 
 export type AkashaAppsStream = AkashaIndexStreamInterface & Node & {
@@ -509,12 +511,16 @@ export type AkashaBeamInterfaceSortingInput = {
 
 export type AkashaBeamObjectFilterInput = {
   active?: InputMaybe<BooleanValueFilterInput>;
+  appID?: InputMaybe<StringValueFilterInput>;
+  appVersionID?: InputMaybe<StringValueFilterInput>;
   createdAt?: InputMaybe<StringValueFilterInput>;
   nsfw?: InputMaybe<BooleanValueFilterInput>;
 };
 
 export type AkashaBeamSortingInput = {
   active?: InputMaybe<SortOrder>;
+  appID?: InputMaybe<SortOrder>;
+  appVersionID?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
   nsfw?: InputMaybe<SortOrder>;
 };
@@ -582,6 +588,7 @@ export type AkashaBeamStreamModerationStatusValueFilterInput = {
 
 export type AkashaBeamStreamObjectFilterInput = {
   active?: InputMaybe<BooleanValueFilterInput>;
+  appID?: InputMaybe<StringValueFilterInput>;
   beamID?: InputMaybe<StringValueFilterInput>;
   createdAt?: InputMaybe<StringValueFilterInput>;
   moderationID?: InputMaybe<StringValueFilterInput>;
@@ -590,6 +597,7 @@ export type AkashaBeamStreamObjectFilterInput = {
 
 export type AkashaBeamStreamSortingInput = {
   active?: InputMaybe<SortOrder>;
+  appID?: InputMaybe<SortOrder>;
   beamID?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
   moderationID?: InputMaybe<SortOrder>;
@@ -1391,12 +1399,16 @@ export type AkashaProfileInterfaceSortingInput = {
 };
 
 export type AkashaProfileObjectFilterInput = {
+  appID?: InputMaybe<StringValueFilterInput>;
+  appVersionID?: InputMaybe<StringValueFilterInput>;
   createdAt?: InputMaybe<StringValueFilterInput>;
   name?: InputMaybe<StringValueFilterInput>;
   nsfw?: InputMaybe<BooleanValueFilterInput>;
 };
 
 export type AkashaProfileSortingInput = {
+  appID?: InputMaybe<SortOrder>;
+  appVersionID?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
   name?: InputMaybe<SortOrder>;
   nsfw?: InputMaybe<SortOrder>;
@@ -1465,6 +1477,7 @@ export type AkashaProfileStreamModerationStatusValueFilterInput = {
 
 export type AkashaProfileStreamObjectFilterInput = {
   active?: InputMaybe<BooleanValueFilterInput>;
+  appID?: InputMaybe<StringValueFilterInput>;
   createdAt?: InputMaybe<StringValueFilterInput>;
   moderationID?: InputMaybe<StringValueFilterInput>;
   profileID?: InputMaybe<StringValueFilterInput>;
@@ -1473,6 +1486,7 @@ export type AkashaProfileStreamObjectFilterInput = {
 
 export type AkashaProfileStreamSortingInput = {
   active?: InputMaybe<SortOrder>;
+  appID?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
   moderationID?: InputMaybe<SortOrder>;
   profileID?: InputMaybe<SortOrder>;
