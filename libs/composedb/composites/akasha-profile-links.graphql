@@ -3,7 +3,7 @@ interface AkashaFollowInterface @loadModel(id: "kjzl6hvfrbw6cb893zwezpclu033att8
 }
 
 
-type AkashaProfile @loadModel(id: "kjzl6hvfrbw6c95s98ss8nidzuteyvjy5eipc0ov71gpt7wt6e4za6qnzqt3ccd") {
+type AkashaProfile @loadModel(id: "kjzl6hvfrbw6c658wkvs6zu89f4zbddi1el5tshaybo00y5jtcmf78n7a0z8ynw") {
   id: ID!
   followers: [AkashaFollowInterface] @relationFrom(model: "AkashaFollowInterface", property: "profileID")
   followersCount: Int! @relationCountFrom(model: "AkashaFollowInterface", property: "profileID")
