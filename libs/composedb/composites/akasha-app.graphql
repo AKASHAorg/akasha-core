@@ -42,11 +42,12 @@ interface AkashaAppInterface @createModel(description: "AKASHA Application inter
 }
 
 type AkashaApp implements AkashaAppInterface
-  @createModel(accountRelation: SET, description: "AKASHA Application v0.4.0", accountRelationFields:["name"])
+  @createModel(accountRelation: SET, description: "AKASHA Application v0.4.1", accountRelationFields:["name"])
   @createIndex(fields:[{path:["name"]}])
   @createIndex(fields:[{path:["displayName"]}])
   @createIndex(fields:[{path:["applicationType"]}])
   @createIndex(fields:[{path:["createdAt"]}])
+  @createIndex(fields:[{path:["nsfw"]}])
   @createIndex(fields:[{path:["applicationType"]}, {path:["createdAt"]}])
 {
     name: String! @string(minLength:4, maxLength: 48) @immutable

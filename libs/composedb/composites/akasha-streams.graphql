@@ -49,12 +49,13 @@ interface AkashaIndexStreamInterface
 }
 
 type AkashaBeamStream implements AkashaIndexStreamInterface
-  @createModel(accountRelation: SET, description: "Moderated Beams list v0.5.0",  accountRelationFields: ["beamID"])
+  @createModel(accountRelation: SET, description: "Moderated Beams list v0.5.1",  accountRelationFields: ["beamID"])
   @createIndex(fields:[{path: ["active"]}])
   @createIndex(fields:[{path: ["beamID"]}])
   @createIndex(fields:[{path: ["createdAt"]}])
   @createIndex(fields:[{path: ["status"]}])
   @createIndex(fields:[{path: ["moderationID"]}])
+  @createIndex(fields:[{path: ["appID"]}])
   @createIndex(fields:[{path:["active"]}, {path:["createdAt"]}, {path:["status"]}])
   @createIndex(fields:[{path:["beamID"]}, {path:["active"]}, {path:["status"]}])
   {
@@ -114,12 +115,13 @@ type AkashaReflectStream implements AkashaIndexStreamInterface
 }
 
 type AkashaProfileStream implements AkashaIndexStreamInterface
-  @createModel(accountRelation: SET, description: "Moderated Profiles list v0.5.0", accountRelationFields: ["profileID"])
+  @createModel(accountRelation: SET, description: "Moderated Profiles list v0.5.1", accountRelationFields: ["profileID"])
   @createIndex(fields:[{path: ["active"]}])
   @createIndex(fields:[{path: ["profileID"]}])
   @createIndex(fields:[{path: ["createdAt"]}])
   @createIndex(fields:[{path: ["status"]}])
   @createIndex(fields:[{path: ["moderationID"]}])
+  @createIndex(fields:[{path: ["appID"]}])
   @createIndex(fields:[{path: ["active"]}, {path: ["status"]}])
   {
     profileID: StreamID! @documentReference(model: "AkashaProfileInterface")

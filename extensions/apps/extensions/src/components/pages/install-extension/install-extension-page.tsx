@@ -7,13 +7,14 @@ import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { useGetAppsByPublisherDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
-import getSDK from '@akashaorg/core-sdk';
 import {
-  AkashaAppApplicationType,
-  AkashaAppEdge,
-  SortOrder,
-} from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { GetAppsByPublisherDidQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
+  selectAppDisplayName,
+  selectAppPublisher,
+  selectAppLogoImage,
+  selectAppType,
+} from '@akashaorg/ui-awf-hooks/lib/selectors/get-apps-by-publisher-did-query';
+import getSDK from '@akashaorg/core-sdk';
+import { AkashaAppApplicationType, SortOrder } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { getReportedError, getReportedProgress } from './utils';
 import { AkashaProfile } from '@akashaorg/typings/lib/ui';
 import { useNavigate } from '@tanstack/react-router';
@@ -48,7 +49,7 @@ export const InstallExtensionPage = ({ appId }: { appId: string }) => {
 
   const appAuthorId = useMemo(() => {
     if (data) {
-      return selectAppPublisherProfile(data).id;
+      return selectAppPublisher(data).id;
     }
   }, [data]);
 
@@ -299,7 +300,7 @@ export const InstallExtensionPage = ({ appId }: { appId: string }) => {
         <InstallApp
           title={isInstalled ? t('Installation complete') : t('Installation in progress')}
           appName={selectAppDisplayName(data)}
-          appAvatar={selectAppAvatar(data)}
+          appAvatar={selectAppLogoImage(data)}
           publisherName={authorProfileData?.name}
           publisherDID={appAuthorId}
           appType={selectAppType(data) ?? AkashaAppApplicationType.App}
@@ -311,37 +312,4 @@ export const InstallExtensionPage = ({ appId }: { appId: string }) => {
       )}
     </>
   );
-};
-
-const hasAppListNode = (
-  respData: GetAppsByPublisherDidQuery,
-): respData is { node: { akashaAppList: { edges: AkashaAppEdge[] } } } => {
-  return (
-    respData.node &&
-    'akashaAppList' in respData.node &&
-    Array.isArray(respData.node.akashaAppList.edges)
-  );
-};
-
-const selectAppDisplayName = (respData: GetAppsByPublisherDidQuery) => {
-  if (hasAppListNode(respData)) {
-    return respData.node.akashaAppList.edges[0]?.node.displayName;
-  }
-};
-
-const selectAppAvatar = (respData: GetAppsByPublisherDidQuery) => {
-  if (hasAppListNode(respData)) {
-    return respData.node.akashaAppList.edges[0]?.node.logoImage;
-  }
-};
-
-const selectAppPublisherProfile = (respData: GetAppsByPublisherDidQuery) => {
-  if (hasAppListNode(respData)) {
-    return respData.node.akashaAppList.edges[0]?.node.author;
-  }
-};
-const selectAppType = (respData: GetAppsByPublisherDidQuery) => {
-  if (hasAppListNode(respData)) {
-    return respData.node.akashaAppList.edges[0]?.node.applicationType;
-  }
 };

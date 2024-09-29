@@ -10,11 +10,9 @@ import {
   waitFor,
   getAuthenticationStore,
   within,
-  act,
 } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 import { AkashaBeamStreamModerationStatus } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { mapBeamEntryData } from '@akashaorg/ui-awf-hooks';
 import { formatRelativeTime, truncateDid } from '@akashaorg/design-system-core/lib/utils';
 import {
   AUTHENTICATED_DID,
@@ -56,7 +54,7 @@ const baseComponent = (
       <BeamPage
         isActive={isActive ?? true}
         beamStatus={AkashaBeamStreamModerationStatus.Ok}
-        beamData={mapBeamEntryData(mockedBeamData ?? beamData)}
+        beamData={{ node: mockedBeamData ?? beamData }}
         beamId={BEAM_ID}
         renderEditor={({ beamId, reflectToId, showEditor, setShowEditor }) => (
           <ReflectEditor

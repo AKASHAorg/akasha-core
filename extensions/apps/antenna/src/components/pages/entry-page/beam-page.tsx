@@ -15,13 +15,14 @@ import { ReflectionPreview } from '@akashaorg/ui-lib-feed';
 import { AkashaBeamStreamModerationStatus } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { useNavigate } from '@tanstack/react-router';
 import { EditableReflectionResolver, ReflectFeed } from '@akashaorg/ui-lib-feed';
-import { BeamData } from '@akashaorg/typings/lib/ui';
+import { GetBeamByIdQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
+import { selectBeamActive } from '@akashaorg/ui-awf-hooks/lib/selectors/get-beam-by-id-query';
 
 type BeamPageProps = {
   beamId: string;
   isActive: boolean;
   beamStatus: AkashaBeamStreamModerationStatus;
-  beamData: BeamData;
+  beamData: GetBeamByIdQuery;
   renderEditor: BeamSectionProps['renderEditor'];
 };
 
@@ -63,13 +64,15 @@ const BeamPage: React.FC<BeamPageProps> = props => {
     );
   }, [authenticating, beamStatus, isLoggedIn, showNsfw]);
 
+  const isBeamActive = selectBeamActive(beamData);
+
   return (
     <Card padding="p-0" margin="mb-4">
       <ReflectFeed
         reflectToId={beamId}
         header={
           <BeamSection
-            isActive={isActive && beamData.active}
+            isActive={isActive && isBeamActive}
             beamData={beamData}
             isLoggedIn={isLoggedIn}
             showNSFWCard={showNsfwCard}

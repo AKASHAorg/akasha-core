@@ -56,6 +56,7 @@ function fromBinary(binary: string) {
 
 /**
  * Utility to map reflect entry data
+ * @deprecated Use selectors and pass only the required data to child components.
  */
 export const mapReflectEntryData = (reflection?: RawReflectionData): ReflectionData => {
   if (!reflection) return null;
@@ -73,6 +74,30 @@ export const mapReflectEntryData = (reflection?: RawReflectionData): ReflectionD
 
 /**
  * Utility to map beam entry data
+ * @deprecated Use selectors and pass only the required data to child components.
+ * For example if you have a component that expects an object representing the beam data, but it does not
+ * use all the properties:
+ *
+ * ```
+ * const beamReq = useGetBeamsById();
+ * <MyBeam beamData={{
+ *   id: selectBeamId(beamReq.data),
+ *   createdAt: selectCreatedAt(beamReq.data)
+ * }}>
+ *
+ * // now you can easily decouple MyBeam component
+ * const MyBeam = (props: {beamData: {id: string, createdAt: string}})
+ * ```
+ * Any kind of manipulation and transform of data should happen as close to the displaying component as possible.
+ * If the component that receives the data is not using (only passing it down) it should not modify it!
+ *
+ * If an external or third party library is required to do the transforms,then do it in the last child that has access
+ * to that library. Example: Image component requires the src to be a valid URL but the src you have from the
+ * model is multiAddr and requires transformation using the SDK.
+ * In this case you would do the transform it exactly before passing it to the image:
+ * ```
+ * <Image src={sdk.services.multiAddrToURL(selectImageSrc(props.beamData))} />
+ * ```
  */
 export const mapBeamEntryData = (beam?: RawBeamData): BeamData => {
   if (!beam) return null;
@@ -88,5 +113,7 @@ export const mapBeamEntryData = (beam?: RawBeamData): BeamData => {
       ?.filter(labeledTag => labeledTag.labelType === sdk.services.gql.labelTypes.TAG)
       .map(labeledTag => labeledTag.value),
     reflectionsCount: beam?.reflectionsCount,
+    appVersionID: beam.appVersionID,
+    appID: beam.appID,
   };
 };

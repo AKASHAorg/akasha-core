@@ -33,12 +33,11 @@ import {
   getReflectionById,
   getReflectionStreamById,
   selectBeamActiveField,
-  selectBeamNode,
   selectBeamStatusField,
   selectReflectionActiveField,
   selectReflectionNode,
 } from './data-loaders';
-import { mapBeamEntryData, mapReflectEntryData } from '@akashaorg/ui-awf-hooks';
+import { mapReflectEntryData } from '@akashaorg/ui-awf-hooks';
 import { NotFoundComponent } from './not-found-component';
 
 const rootRoute = createRootRouteWithContext<IRouterContext>()({
@@ -105,7 +104,7 @@ const beamRoute = createRoute({
                     <BeamPage
                       beamId={beamId}
                       isActive={selectBeamActiveField(beamStreamData)}
-                      beamData={mapBeamEntryData(selectBeamNode(beamById))}
+                      beamData={beamById}
                       beamStatus={selectBeamStatusField(beamStreamData)}
                       renderEditor={({ beamId, reflectToId, showEditor, setShowEditor }) => (
                         <ReflectEditor
@@ -147,7 +146,7 @@ const beamReflectRoute = createRoute({
                     <BeamPage
                       beamId={beamId}
                       isActive={selectBeamActiveField(beamStreamData)}
-                      beamData={mapBeamEntryData(selectBeamNode(beamById))}
+                      beamData={beamById}
                       beamStatus={selectBeamStatusField(beamStreamData)}
                       renderEditor={({ beamId, reflectToId, showEditor, setShowEditor }) => (
                         <ReflectEditor
