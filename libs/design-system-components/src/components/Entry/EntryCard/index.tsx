@@ -115,12 +115,11 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     ...rest
   } = props;
 
-  /* showNSFWContent determines whether to display the content underneath the
-   * overlay, so if the showNSFWCard prop is true (which means to show the
-   * overlay), showNSFWContent should be false. It is later toggled through an
-   * onClickToView handler.
+  /**
+   * showNSFWContent determines whether to display the content underneath the overlay,
+   * so if the showNSFWCard prop is true (which means to show the overlay), showNSFWContent should be false.
+   * It is later toggled through an onClickToView handler.
    */
-
   const [showNSFWContent, setShowNSFWContent] = useState(!showNSFWCard);
   const showHiddenStyle = showHiddenContent ? '' : 'max-h-[50rem]';
   const contentClickableStyle =
@@ -162,7 +161,15 @@ const EntryCard: React.FC<EntryCardProps> = props => {
   };
 
   const entryCardUi = (
-    <Card dataTestId={dataTestId} type="plain" onClick={!showNSFWContent ? null : onContentClick}>
+    <Card
+      type="plain"
+      dataTestId={dataTestId}
+      /**
+       * attach onClick handler if;
+       * 'showNSFWContent' state (initially derived from the inverse of the 'showNSFWCard' prop) is true
+       */
+      {...(showNSFWContent && { onClick: onContentClick })}
+    >
       <Stack spacing="gap-y-2" padding="p-4" customStyle={`grow min-h-[inherit] ${hoverStyle}`}>
         <Stack direction="row" justify="between">
           {profileAvatar}
@@ -195,9 +202,13 @@ const EntryCard: React.FC<EntryCardProps> = props => {
         {entryData.active && (
           <ErrorBoundary {...errorBoundaryProps}>
             <Card
-              onClick={!showNSFWContent || !noWrapperCard ? null : onContentClick}
-              customStyle={contentClickableStyle}
               type="plain"
+              customStyle={contentClickableStyle}
+              /**
+               * attach onClick handler if
+               * 'showNSFWContent' and 'noWrapperCard' are both true
+               */
+              {...(showNSFWContent && noWrapperCard && { onClick: onContentClick })}
             >
               <Stack
                 align="center"

@@ -132,7 +132,7 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
             customStyle="w-fit h-[60px]"
           >
             {/* showHiddenContent is the flag used to hide nsfw blocks in the
-             * feed when NSFW settings is off and shows the overlay over it when
+             * feed when 'Show NSFW Content' setting is off and shows the overlay over it when
              * on beam page (set to true in BeamSection(beam page), otherwise false)
              *  */}
             <NSFW
