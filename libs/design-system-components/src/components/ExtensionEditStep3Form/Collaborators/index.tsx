@@ -102,8 +102,8 @@ export const Collaborators: React.FC<CollaboratorsProps> = ({
                 {contributors?.map((profile, index) => (
                   <Stack key={index} direction="row" justify="between" align="center">
                     <ProfileAvatarButton
-                      profileId={profile.did?.id}
-                      label={profile.name}
+                      profileId={profile?.did?.id}
+                      label={profile?.name}
                       avatar={transformSource(profile?.avatar?.default)}
                       alternativeAvatars={profile?.avatar?.alternatives?.map(alternative =>
                         transformSource(alternative),
