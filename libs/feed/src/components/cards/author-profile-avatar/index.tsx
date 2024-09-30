@@ -59,7 +59,7 @@ const AuthorProfileAvatar: React.FC<AuthorProfileAvatarProps> = props => {
       profileId={authorId}
       href={`/@akashaorg/app-profile/${authorId}`}
       label={profileData?.name}
-      {...(profileData.nsfw && {
+      {...(profileData?.nsfw && {
         nsfwLabel: 'NSFW',
         nsfwAvatar: !(authenticatedDID === profileData?.did?.id || showNsfw),
       })}
