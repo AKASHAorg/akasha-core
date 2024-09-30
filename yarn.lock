@@ -7610,6 +7610,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@ipld/dag-cbor@npm:^9.0.3, @ipld/dag-cbor@npm:^9.2.1":
+  version: 9.2.1
+  resolution: "@ipld/dag-cbor@npm:9.2.1"
+  dependencies:
+    cborg: "npm:^4.0.0"
+    multiformats: "npm:^13.1.0"
+  checksum: 10/83cf36909be31c67e5721eed3837f9a707831ee542a22297aa7a976b80921e74a0c850b8199c20e9a9b0e7e38fae1f0a501ce42da2132062b14a8d1d565cd178
+  languageName: node
+  linkType: hard
+
 "@ipld/dag-json@npm:^10.0.0":
   version: 10.2.0
   resolution: "@ipld/dag-json@npm:10.2.0"
@@ -11553,6 +11563,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@storacha/one-webcrypto@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "@storacha/one-webcrypto@npm:1.0.1"
+  checksum: 10/4d683ea2e90f6d04aa98a4f9a35a3bbb0b3d8fffe517259147244180d18534214c630240a1ad068fa5122a1ac429d908bf2722a72bdfb39beabd1e656efbdb06
+  languageName: node
+  linkType: hard
+
 "@storybook/addon-actions@npm:8.1.11, @storybook/addon-actions@npm:^8.1.11":
   version: 8.1.11
   resolution: "@storybook/addon-actions@npm:8.1.11"
@@ -15224,29 +15241,45 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@web3-storage/access@npm:^18.4.0":
-  version: 18.4.0
-  resolution: "@web3-storage/access@npm:18.4.0"
+"@web3-storage/access@npm:^20.0.1":
+  version: 20.0.1
+  resolution: "@web3-storage/access@npm:20.0.1"
   dependencies:
     "@ipld/car": "npm:^5.1.1"
     "@ipld/dag-ucan": "npm:^3.4.0"
     "@scure/bip39": "npm:^1.2.1"
+    "@storacha/one-webcrypto": "npm:^1.0.1"
     "@ucanto/client": "npm:^9.0.1"
     "@ucanto/core": "npm:^10.0.1"
     "@ucanto/interface": "npm:^10.0.1"
     "@ucanto/principal": "npm:^9.0.1"
     "@ucanto/transport": "npm:^9.1.1"
     "@ucanto/validator": "npm:^9.0.2"
-    "@web3-storage/capabilities": "npm:^17.1.0"
+    "@web3-storage/capabilities": "npm:^17.2.0"
     "@web3-storage/did-mailto": "npm:^2.1.0"
     bigint-mod-arith: "npm:^3.1.2"
     conf: "npm:11.0.2"
     multiformats: "npm:^12.1.2"
-    one-webcrypto: "git+https://github.com/web3-storage/one-webcrypto.git"
     p-defer: "npm:^4.0.0"
     type-fest: "npm:^4.9.0"
     uint8arrays: "npm:^4.0.6"
-  checksum: 10/d294351b71c6bc3cf7158c5869df4d4eed1eeac3547ef2cfd385dff79433400c37a4b8faeba6915232b30df45cf7128f97d1250a45580ee2e6df9981716cd425
+  checksum: 10/149fc9b5338cff1471057eadec7100b019f1b59550f9ff3f3fb791b3de740dd0547e65bfdd9d6eca205c2ed13bf338923c08cfa270b03c4ea10aa655e733c972
+  languageName: node
+  linkType: hard
+
+"@web3-storage/blob-index@npm:^1.0.3, @web3-storage/blob-index@npm:^1.0.4":
+  version: 1.0.4
+  resolution: "@web3-storage/blob-index@npm:1.0.4"
+  dependencies:
+    "@ipld/dag-cbor": "npm:^9.0.6"
+    "@storacha/one-webcrypto": "npm:^1.0.1"
+    "@ucanto/core": "npm:^10.0.1"
+    "@ucanto/interface": "npm:^10.0.1"
+    "@web3-storage/capabilities": "npm:^17.2.0"
+    carstream: "npm:^2.1.0"
+    multiformats: "npm:^13.0.1"
+    uint8arrays: "npm:^5.0.3"
+  checksum: 10/63f9915e318dea3fd3bbd8ad6ef4f8d03823b93f4251d748c6f51ad1d8df49fd207559566d60cfcfed91e43d8f6230e0178668924d9f3b63a9d4c648c2aba095
   languageName: node
   linkType: hard
 
@@ -15265,18 +15298,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@web3-storage/capabilities@npm:^17.1.0":
-  version: 17.1.1
-  resolution: "@web3-storage/capabilities@npm:17.1.1"
+"@web3-storage/capabilities@npm:^17.2.0":
+  version: 17.3.0
+  resolution: "@web3-storage/capabilities@npm:17.3.0"
   dependencies:
     "@ucanto/core": "npm:^10.0.1"
     "@ucanto/interface": "npm:^10.0.1"
     "@ucanto/principal": "npm:^9.0.1"
     "@ucanto/transport": "npm:^9.1.1"
     "@ucanto/validator": "npm:^9.0.2"
-    "@web3-storage/data-segment": "npm:^3.2.0"
+    "@web3-storage/data-segment": "npm:^5.2.0"
     uint8arrays: "npm:^5.0.3"
-  checksum: 10/cb642c1ea0eee423570005808a58449ec14e7953ba935e2d6f74df4b286392c7a26478c80f4f204689e3d257fe44581f91b52b9ec0c61fb9f9faf886699717aa
+  checksum: 10/616375cc993f80de48ec775c74c566e9ae28609db43440e361c097fe39286cd59ff321c3c3254aff1093fc943923d20c582053cd24df3e68614c6f16cd17a6f0
   languageName: node
   linkType: hard
 
@@ -15302,6 +15335,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@web3-storage/data-segment@npm:^5.2.0":
+  version: 5.2.0
+  resolution: "@web3-storage/data-segment@npm:5.2.0"
+  dependencies:
+    "@ipld/dag-cbor": "npm:^9.2.1"
+    multiformats: "npm:^13.3.0"
+    sync-multihash-sha2: "npm:^1.0.0"
+  checksum: 10/90ce5a3428512c1af55e9c6f56fe9d25dfc5fe7f363fff7a793980edf412cb96d15ab05a88101523466d61efb3dabdb46ccdcfe99e353581eea90ace512ce3f0
+  languageName: node
+  linkType: hard
+
 "@web3-storage/did-mailto@npm:^2.1.0":
   version: 2.1.0
   resolution: "@web3-storage/did-mailto@npm:2.1.0"
@@ -15323,9 +15367,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@web3-storage/upload-client@npm:^14.1.1":
-  version: 14.1.1
-  resolution: "@web3-storage/upload-client@npm:14.1.1"
+"@web3-storage/upload-client@npm:^17.0.1":
+  version: 17.0.1
+  resolution: "@web3-storage/upload-client@npm:17.0.1"
   dependencies:
     "@ipld/car": "npm:^5.2.2"
     "@ipld/dag-cbor": "npm:^9.0.6"
@@ -15335,20 +15379,21 @@ __metadata:
     "@ucanto/core": "npm:^10.0.1"
     "@ucanto/interface": "npm:^10.0.1"
     "@ucanto/transport": "npm:^9.1.1"
-    "@web3-storage/capabilities": "npm:^17.1.0"
+    "@web3-storage/blob-index": "npm:^1.0.3"
+    "@web3-storage/capabilities": "npm:^17.2.0"
     "@web3-storage/data-segment": "npm:^5.1.0"
     "@web3-storage/filecoin-client": "npm:^3.3.3"
     ipfs-utils: "npm:^9.0.14"
     multiformats: "npm:^12.1.2"
     p-retry: "npm:^5.1.2"
     varint: "npm:^6.0.0"
-  checksum: 10/8ced11a632e6809f4814180d409e8774770b8bc820fb3ed0aeae27e4b9741238c1134f7eb70582bf09526daf295f8ab451fcae42ae7c0f6344c9397d3bbdf6ac
+  checksum: 10/0e605cdc84c85e24609d592ff058c157dfa541c59d7b0bdb04ee64fde3ac8e2720a8632fdf268cf406ec9062003a7719f5b75d921fed4f46e006682d662d8d77
   languageName: node
   linkType: hard
 
-"@web3-storage/w3up-client@npm:13.1.1":
-  version: 13.1.1
-  resolution: "@web3-storage/w3up-client@npm:13.1.1"
+"@web3-storage/w3up-client@npm:16.2.0":
+  version: 16.2.0
+  resolution: "@web3-storage/w3up-client@npm:16.2.0"
   dependencies:
     "@ipld/dag-ucan": "npm:^3.4.0"
     "@ucanto/client": "npm:^9.0.1"
@@ -15356,12 +15401,13 @@ __metadata:
     "@ucanto/interface": "npm:^10.0.1"
     "@ucanto/principal": "npm:^9.0.1"
     "@ucanto/transport": "npm:^9.1.1"
-    "@web3-storage/access": "npm:^18.4.0"
-    "@web3-storage/capabilities": "npm:^17.1.0"
+    "@web3-storage/access": "npm:^20.0.1"
+    "@web3-storage/blob-index": "npm:^1.0.4"
+    "@web3-storage/capabilities": "npm:^17.2.0"
     "@web3-storage/did-mailto": "npm:^2.1.0"
     "@web3-storage/filecoin-client": "npm:^3.3.3"
-    "@web3-storage/upload-client": "npm:^14.1.1"
-  checksum: 10/0b5961ad0c0c2cc123bed2c269aaa9f91375c75470542599db4f21aad7f7dab6fea7c4950360063cb2ffe70cc67f22987527346a8f0e1699e059e24b51d129f9
+    "@web3-storage/upload-client": "npm:^17.0.1"
+  checksum: 10/46b27cfadbbfa428a57fb6b10d35923ceac8f28068dfb3ce3c412aeca32ae1dd9963266febd678e622bdbcfa1df4160a61e49071ddc77a35dab68bc13091d0ad
   languageName: node
   linkType: hard
 
@@ -18123,6 +18169,17 @@ __metadata:
     debug: "npm:^4.3.1"
     tslib: "npm:^2.2.0"
   checksum: 10/186a76662e31ab16fe46fe0785ed2a511969d0c5198e2d7baec6b44f71c9b3bf8c05e7627036dc86c2d3ddc229c846559350c13f904fdd8da3590d7054715ba8
+  languageName: node
+  linkType: hard
+
+"carstream@npm:^2.1.0":
+  version: 2.2.0
+  resolution: "carstream@npm:2.2.0"
+  dependencies:
+    "@ipld/dag-cbor": "npm:^9.0.3"
+    multiformats: "npm:^13.0.1"
+    uint8arraylist: "npm:^2.4.3"
+  checksum: 10/b962784edb0f4a8f31c9851a247b3c23f66a9232cdee88a5ef599f76e232afbc1c1625da3e2edfe68dc559db6e7890ca540c30e7d71fd0576f198226a58f9a81
   languageName: node
   linkType: hard
 
@@ -30072,6 +30129,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"multiformats@npm:^13.0.1, multiformats@npm:^13.3.0":
+  version: 13.3.0
+  resolution: "multiformats@npm:13.3.0"
+  checksum: 10/59c75b08f54593e355b3a5b35e8693f9e3b7f04b860cf6e39aca2d2245073c8ebfdfa31ca9ee1a08fdaffdc737476484cf509f632d28048127baa962b70d23d8
+  languageName: node
+  linkType: hard
+
 "multiformats@npm:^9.4.2, multiformats@npm:^9.4.5, multiformats@npm:^9.5.4, multiformats@npm:^9.6.2, multiformats@npm:^9.7.1":
   version: 9.9.0
   resolution: "multiformats@npm:9.9.0"
@@ -31097,13 +31161,6 @@ __metadata:
   dependencies:
     wrappy: "npm:1"
   checksum: 10/cd0a88501333edd640d95f0d2700fbde6bff20b3d4d9bdc521bdd31af0656b5706570d6c6afe532045a20bb8dc0849f8332d6f2a416e0ba6d3d3b98806c7db68
-  languageName: node
-  linkType: hard
-
-"one-webcrypto@git+https://github.com/web3-storage/one-webcrypto.git":
-  version: 1.0.3
-  resolution: "one-webcrypto@https://github.com/web3-storage/one-webcrypto.git#commit=5148cd14d5489a8ac4cd38223870e02db15a2382"
-  checksum: 10/57dc46707845446730751f0619120fcadda709c6a669609083845fa6dc2649af0cb4c493e007c3aef3247072dc1b4922cfc1c5a0aef18721054d5a8a6c7f43e3
   languageName: node
   linkType: hard
 
@@ -34745,7 +34802,7 @@ __metadata:
     "@typescript-eslint/parser": "npm:^6.13.2"
     "@ucanto/core": "npm:10.0.1"
     "@ucanto/principal": "npm:9.0.1"
-    "@web3-storage/w3up-client": "npm:13.1.1"
+    "@web3-storage/w3up-client": "npm:16.2.0"
     "@web3modal/ethers": "npm:4.1.1"
     "@web3modal/ui": "npm:4.1.1"
     "@welldone-software/why-did-you-render": "npm:^7.0.1"
