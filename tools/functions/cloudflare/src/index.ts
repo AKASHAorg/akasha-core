@@ -4,10 +4,10 @@ import { importDAG } from '@ucanto/core/delegation';
 import * as Signer from '@ucanto/principal/ed25519';
 import * as Client from '@web3-storage/w3up-client';
 import { Hono } from 'hono';
-import type { Abilities } from '@web3-storage/w3up-client/dist/src/types';
 import { Block } from 'multiformats';
 import { fromString } from 'uint8arrays/from-string';
 import { StoreMemory } from '@web3-storage/access/stores/store-memory';
+import { ServiceAbility } from '@web3-storage/capabilities/types';
 
 type Bindings = {
   PROOFS_BUCKET: R2Bucket;
@@ -55,7 +55,12 @@ app.post('/create-proof/:did', async c => {
 
     // Create a delegation for a specific DID
     const audience = DID.parse(did);
-    const abilities: Abilities[] = ['store/add', 'upload/add'];
+    const abilities: ServiceAbility[] = [
+      'space/blob/add',
+      'space/index/add',
+      'store/add',
+      'upload/add',
+    ];
     const expiration = Math.floor(Date.now() / 1000) + 60 * 60 * 24; // 24 hours from now
     const delegation = await client.createDelegation(audience, abilities, {
       expiration,

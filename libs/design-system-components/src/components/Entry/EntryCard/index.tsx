@@ -92,7 +92,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     disableReporting,
     isViewer,
     isLoggedIn,
-    disableActions,
+    disableActions = false,
     noWrapperCard = false,
     hideActionButtons,
     showHiddenContent,

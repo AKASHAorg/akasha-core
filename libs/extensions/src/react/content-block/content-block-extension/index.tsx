@@ -1,4 +1,11 @@
-import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  MouseEventHandler,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { ParcelConfigObject } from 'single-spa';
 import { hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { BlockInstanceMethods, ContentBlockModes } from '@akashaorg/typings/lib/ui';
@@ -57,9 +64,12 @@ export const ContentBlockExtension: React.FC<ContentBlockExtensionProps> = props
   }>({
     parcels: [],
   });
-  const [fetchBlockInfo, blockInfoQuery] = useGetContentBlockByIdLazyQuery();
+  const [fetchBlockInfo, blockInfoQuery] = useGetContentBlockByIdLazyQuery({
+    nextFetchPolicy: 'network-only',
+  });
   // fetch data error
   const fetchDataError = useMemo(() => {
+    if (blockInfoQuery.loading) return null;
     return hasOwn(remainingProps, 'blockData')
       ? remainingProps?.error
       : blockInfoQuery.error?.message;
@@ -122,6 +132,7 @@ export const ContentBlockExtension: React.FC<ContentBlockExtensionProps> = props
           id: remainingProps.blockID,
         },
       }).catch(err => logger.error(`failed to fetch content block: ${JSON.stringify(err)}`));
+      setHasContentLoadError(false);
     }
   }, [logger, fetchBlockInfo, remainingProps]);
 
@@ -132,6 +143,23 @@ export const ContentBlockExtension: React.FC<ContentBlockExtensionProps> = props
       });
     };
   }, []);
+
+  const handleRefresh: MouseEventHandler<HTMLButtonElement> = React.useCallback(
+    ev => {
+      ev.stopPropagation();
+      if (hasOwn(remainingProps, 'blockID')) {
+        blockInfoQuery
+          .refetch({
+            id: remainingProps?.blockID,
+          })
+          .catch(err => logger.error('Error when refetching block: %o', err));
+      }
+      if (hasOwn(remainingProps, 'blockData')) {
+        remainingProps.onRefresh?.();
+      }
+    },
+    [blockInfoQuery, logger, remainingProps],
+  );
 
   const appInfo = useMemo(() => {
     if (blockData) {
@@ -147,16 +175,7 @@ export const ContentBlockExtension: React.FC<ContentBlockExtensionProps> = props
         fetchDataError={fetchDataError}
         hasContentLoadError={hasContentLoadError}
         refreshLabel={hasOwn(remainingProps, 'refreshLabel') ? remainingProps.refreshLabel : ''}
-        handleRefresh={() => {
-          if (hasOwn(remainingProps, 'blockID')) {
-            blockInfoQuery.refetch({
-              id: remainingProps?.blockID,
-            });
-          }
-          if (hasOwn(remainingProps, 'blockData')) {
-            remainingProps.onRefresh?.();
-          }
-        }}
+        handleRefresh={handleRefresh}
       />
     );
   }
