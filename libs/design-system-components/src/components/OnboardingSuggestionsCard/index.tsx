@@ -88,22 +88,22 @@ const OnboardingSuggestionsCard: React.FC<OnboardingSuggestionsCardProps> = prop
           {profiles?.map((profile, index) => (
             <Stack key={index} direction="row" align="center" justify="between">
               <ProfileAvatarButton
-                profileId={profile.did.id}
-                onClick={() => onClickProfile(profile.did.id)}
-                label={profile.name}
+                profileId={profile?.did?.id}
+                onClick={() => onClickProfile(profile?.did?.id)}
+                label={profile?.name}
                 avatar={transformSource(profile?.avatar?.default)}
                 alternativeAvatars={profile?.avatar?.alternatives?.map(alternative =>
                   transformSource(alternative),
                 )}
               />
-              {loggedUserDID !== profile.did.id && (
+              {loggedUserDID !== profile?.did?.id && (
                 <DuplexButton
                   inactiveLabel={followLabel}
                   activeLabel={followingLabel}
                   activeHoverLabel={unfollowLabel}
-                  onClickInactive={() => onClickFollow(profile.did.id)}
-                  onClickActive={() => onClickUnfollow(profile.did.id)}
-                  active={followedProfiles?.includes(profile.did.id)}
+                  onClickInactive={() => onClickFollow(profile?.did?.id)}
+                  onClickActive={() => onClickUnfollow(profile?.did?.id)}
+                  active={followedProfiles?.includes(profile?.did?.id)}
                   icon={<UserCircleIcon />}
                   allowMinimization
                 />
