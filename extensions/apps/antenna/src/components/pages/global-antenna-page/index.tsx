@@ -103,10 +103,12 @@ const GlobalAntennaPage: React.FC<unknown> = () => {
           trackEvent={analyticsActions.trackEvent}
           renderItem={itemData => {
             if (!hasOwn(itemData, 'content')) {
-              /* Set the showNSFWCard prop to false so as to prevent the
-               * NSFW beams from being displayed in the antenna feed when NSFW setting is off.
-               **/
-              return <BeamContentResolver beamId={itemData.beamID} />;
+              /**
+               * Set the showNSFWCard prop to false
+               * so as to prevent NSFW beams from being displayed
+               * in the antenna feed when NSFW setting is off
+               */
+              return <BeamContentResolver beamId={itemData.beamID} showNSFWCard={false} />;
             }
           }}
         />
