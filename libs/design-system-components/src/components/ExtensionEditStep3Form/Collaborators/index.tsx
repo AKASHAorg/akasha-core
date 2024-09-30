@@ -62,8 +62,8 @@ export const Collaborators: React.FC<CollaboratorsProps> = ({
     }
   };
 
-  const handleRemoveContributor = (profile?: AkashaProfile) => {
-    setAddedContributors(prev => prev.filter(addedProfile => profile?.id !== addedProfile?.id));
+  const handleRemoveContributor = (profile: AkashaProfile) => {
+    setAddedContributors(prev => prev.filter(addedProfile => profile.id !== addedProfile?.id));
   };
 
   return (
