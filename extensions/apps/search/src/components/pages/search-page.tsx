@@ -378,9 +378,9 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                 {searchProfilesState?.map((profileData: Profile, index: number) => (
                   <Stack key={index} customStyle="pb-4">
                     <ProfileSearchCard
-                      handleFollow={() => handleFollowProfile(profileData.did.id)}
-                      handleUnfollow={() => handleUnfollowProfile(profileData.did.id)}
-                      isFollowing={followedProfiles.includes(profileData?.did.id)}
+                      handleFollow={() => handleFollowProfile(profileData?.did?.id)}
+                      handleUnfollow={() => handleUnfollowProfile(profileData?.did?.id)}
+                      isFollowing={followedProfiles.includes(profileData?.did?.id)}
                       profileData={profileData}
                       followLabel={t('Follow')}
                       unfollowLabel={t('Unfollow')}
@@ -388,7 +388,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                       followingLabel={t('Following')}
                       followersLabel={t('Followers')}
                       shareProfileLabel={t('Share')}
-                      onClickProfile={() => handleProfileClick(profileData.did.id)}
+                      onClickProfile={() => handleProfileClick(profileData?.did?.id)}
                       transformSource={transformSource}
                     />
                   </Stack>

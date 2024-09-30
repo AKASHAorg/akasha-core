@@ -56,13 +56,13 @@ const ProfileSearchCard = ({
     <Stack direction="row" align="center" justify="between" customStyle={'py-2'}>
       <ProfileAvatarButton
         onClick={onClickProfile}
-        label={profileData.name}
+        label={profileData?.name}
         avatar={transformSource(profileData?.avatar?.default)}
         alternativeAvatars={profileData?.avatar?.alternatives?.map(alternative =>
           transformSource(alternative),
         )}
         truncateText={false}
-        profileId={profileData.did.id}
+        profileId={profileData?.did?.id}
       />
 
       {!authenticatedDID && (
