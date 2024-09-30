@@ -25,7 +25,9 @@ const CardActions: React.FC<CardActionProps> = props => {
     onReflect,
     customStyle = '',
   } = props;
-  const reflectIconUi = <Icon icon={<ChatBubbleLeftRightIcon />} accentColor={true} />;
+  const reflectIconUi = (
+    <Icon icon={<ChatBubbleLeftRightIcon />} disabled={disableActions} accentColor={true} />
+  );
   return (
     <Stack direction="row" align="center" justify="end" spacing="gap-x-2" customStyle={customStyle}>
       <>{actionsRight}</>
@@ -34,7 +36,7 @@ const CardActions: React.FC<CardActionProps> = props => {
         onClick={() => {
           if (!disableActions) onReflect();
         }}
-        customStyle="h-fit"
+        customStyle={`h-fit cursor-${disableActions ? 'not-allowed' : 'pointer'}`}
       >
         {reflectionsCount ? (
           <Stack dataTestId="reflections-count" direction="row" align="end" spacing="gap-x-1">
@@ -42,7 +44,11 @@ const CardActions: React.FC<CardActionProps> = props => {
             <Text
               variant="body2"
               weight="normal"
-              color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+              color={{
+                light: 'secondaryLight',
+                dark: 'secondaryDark',
+              }}
+              {...(disableActions && { customStyle: 'opacity-50' })}
             >
               {reflectionsCount}
             </Text>
