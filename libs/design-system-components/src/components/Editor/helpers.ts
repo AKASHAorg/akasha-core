@@ -89,7 +89,7 @@ const CustomEditor = {
       type: 'mention',
       children: [{ text: '' }],
     };
-    const mentionData = { name: profileData.name, did: profileData.did.id };
+    const mentionData = { name: profileData?.name, did: profileData?.did?.id };
     const mention: MentionElement = Object.assign(baseMention, mentionData);
     Transforms.insertNodes(editor, mention);
     ReactEditor.focus(editor);

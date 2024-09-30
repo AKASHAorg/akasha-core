@@ -2,13 +2,13 @@ import React from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
-import {
-  hasOwn,
-  mapBeamEntryData,
-  useAnalytics,
-  useRootComponentProps,
-} from '@akashaorg/ui-awf-hooks';
+import { useAnalytics, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { BeamCard, BeamFeedByAuthor } from '@akashaorg/ui-lib-feed';
+import {
+  selectBeamContent,
+  selectBeamId,
+  selectNsfw,
+} from '@akashaorg/ui-awf-hooks/lib/selectors/get-beam-by-id-query';
 
 type ProfileBeamsPageProps = {
   profileDID: string;
@@ -34,28 +34,32 @@ const ProfileBeamsPage: React.FC<ProfileBeamsPageProps> = props => {
           </ScrollTopWrapper>
         )}
         renderItem={itemData => {
-          if (hasOwn(itemData, 'content'))
+          const nsfw = selectNsfw(itemData);
+          const beamId = selectBeamId(itemData);
+          const beamContent = selectBeamContent(itemData);
+          if (beamContent) {
             return (
               <BeamCard
-                beamData={mapBeamEntryData(itemData)}
+                beamData={itemData}
                 contentClickable={true}
-                showNSFWCard={itemData?.nsfw}
+                showNSFWCard={nsfw}
                 showHiddenContent={false}
                 onContentClick={() =>
                   navigateTo.current({
                     appName: '@akashaorg/app-antenna',
-                    getNavigationUrl: navRoutes => `${navRoutes.Beam}/${itemData.id}`,
+                    getNavigationUrl: navRoutes => `${navRoutes.Beam}/${beamId}`,
                   })
                 }
                 onReflect={() =>
                   navigateTo.current({
                     appName: '@akashaorg/app-antenna',
                     getNavigationUrl: navRoutes =>
-                      `${navRoutes.Beam}/${itemData.id}${navRoutes.Reflect}`,
+                      `${navRoutes.Beam}/${beamId}${navRoutes.Reflect}`,
                   })
                 }
               />
             );
+          }
         }}
         trackEvent={analyticsActions.trackEvent}
       />

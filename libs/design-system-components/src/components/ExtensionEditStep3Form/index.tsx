@@ -149,7 +149,7 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
     event.preventDefault();
     const formValues = getValues();
 
-    formValues.contributors = addedContributors?.map(profile => profile.did?.id);
+    formValues.contributors = addedContributors?.map(profile => profile?.did?.id);
     formValues.keywords = [...keywords]?.filter(keyword => keyword);
 
     if (formValues.license === Licenses.OTHER) {

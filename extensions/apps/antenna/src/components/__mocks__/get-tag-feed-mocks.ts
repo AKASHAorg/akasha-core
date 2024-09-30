@@ -9,6 +9,7 @@ import {
   GetBeamByIdDocument,
   GetProfileByDidDocument,
   GetContentBlockByIdDocument,
+  GetAppsByIdDocument,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { BEAM_ID, TAG_FEED } from './constants';
 
@@ -69,6 +70,20 @@ export function getTagFeedMocks() {
           },
         },
       })),
+      {
+        request: {
+          query: GetAppsByIdDocument,
+        },
+        variableMatcher: () => true,
+        result: {
+          data: {
+            node: {
+              id: 'application-id',
+              displayName: 'Za Antenna',
+            },
+          },
+        },
+      },
     ],
     beamData,
     profileData,

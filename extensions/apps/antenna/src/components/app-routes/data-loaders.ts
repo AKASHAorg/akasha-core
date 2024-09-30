@@ -73,7 +73,7 @@ export async function getBeamStreamById({
  */
 export function selectBeamNode(beamByIdQuery: GetBeamByIdQuery) {
   if (beamByIdQuery?.node && hasOwn(beamByIdQuery.node, 'id')) {
-    return beamByIdQuery?.node;
+    return { ...beamByIdQuery?.node, author: { id: beamByIdQuery?.node?.author?.id } };
   }
 }
 

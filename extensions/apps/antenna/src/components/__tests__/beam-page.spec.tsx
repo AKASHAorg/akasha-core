@@ -13,7 +13,6 @@ import {
 } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 import { AkashaBeamStreamModerationStatus } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { mapBeamEntryData } from '@akashaorg/ui-awf-hooks';
 import { formatRelativeTime, truncateDid } from '@akashaorg/design-system-core/lib/utils';
 import {
   AUTHENTICATED_DID,
@@ -46,18 +45,20 @@ const baseComponent = (
   mocks: Readonly<MockedResponse<unknown, unknown>[]> | undefined,
   mockedBeamData?: RawBeamData,
   isActive?: boolean,
-) => (
-  <MockedProvider mocks={mocks} cache={new InMemoryCache(APOLLO_TYPE_POLICIES)}>
-    <AnalyticsProvider {...genAppProps()}>
-      <BeamPage
-        isActive={isActive ?? true}
-        beamStatus={AkashaBeamStreamModerationStatus.Ok}
-        beamData={mapBeamEntryData(mockedBeamData ?? beamData)}
-        beamId={BEAM_ID}
-      />
-    </AnalyticsProvider>
-  </MockedProvider>
-);
+) => {
+  return (
+    <MockedProvider mocks={mocks} cache={new InMemoryCache(APOLLO_TYPE_POLICIES)}>
+      <AnalyticsProvider {...genAppProps()}>
+        <BeamPage
+          isActive={isActive ?? true}
+          beamStatus={AkashaBeamStreamModerationStatus.Ok}
+          beamData={{ node: mockedBeamData ?? beamData }}
+          beamId={BEAM_ID}
+        />
+      </AnalyticsProvider>
+    </MockedProvider>
+  );
+};
 
 describe('< BeamPage /> component', () => {
   describe('should render beam page', () => {
