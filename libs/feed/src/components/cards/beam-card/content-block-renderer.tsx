@@ -11,6 +11,10 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useGetContentBlockByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { Transition } from '@headlessui/react';
+import {
+  selectBlockApp,
+  selectBlockData,
+} from '@akashaorg/ui-awf-hooks/lib/selectors/get-content-block-by-id-query';
 
 type ContentBlockRendererProps = {
   blockID: string;
@@ -20,6 +24,7 @@ type ContentBlockRendererProps = {
   showBlockName: boolean;
   onContentClick?: () => void;
 };
+
 const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
   const { blockID, authenticatedDID, showHiddenContent, beamIsNsfw, showBlockName } = props;
   const { navigateToModal, getCorePlugins } = useRootComponentProps();
@@ -31,22 +36,20 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
     fetchPolicy: 'cache-first',
     nextFetchPolicy: 'network-only',
   });
-  const blockData = useMemo(() => {
-    // Get all the block's data from the hook, including the nsfw property
-    return contentBlockReq.data?.node && hasOwn(contentBlockReq.data.node, 'id')
-      ? contentBlockReq.data.node
-      : null;
-  }, [contentBlockReq.data]);
 
-  const matchingBlocks: MatchingBlock[] = !blockData
-    ? []
-    : contentBlockStoreRef.current.getMatchingBlocks(blockData);
+  const blockData = selectBlockData(contentBlockReq.data);
+  const blockApp = selectBlockApp(contentBlockReq.data);
+
+  const matchingBlocks: MatchingBlock[] =
+    !blockData || !blockApp ? [] : contentBlockStoreRef.current.getMatchingBlocks(blockData);
+
   const foundBlock = matchingBlocks.find(matchingBlock => {
     if (matchingBlock.blockData && hasOwn(matchingBlock.blockData, 'id'))
       return matchingBlock.blockData?.id === blockID;
 
     return false;
   });
+
   const blockDisplayName = foundBlock?.blockInfo?.displayName ?? '';
 
   /**
@@ -74,6 +77,16 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
     });
   };
 
+  const contentBlockErrors = useMemo(() => {
+    if (contentBlockReq.error) {
+      // handle errors...
+      return '';
+    }
+    if (!blockApp) {
+      return '';
+    }
+  }, [contentBlockReq.error, blockApp]);
+
   return (
     <Card type="plain" customStyle="w-full">
       {!showNSFWCard && (
@@ -95,7 +108,7 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
             blockData={blockData}
             matchingBlocks={matchingBlocks}
             cacheBlockConfig={true}
-            error={contentBlockReq.error?.message ?? ''}
+            error={contentBlockErrors}
             fetchError={{
               errorTitle: t('Network error occurred'),
               errorDescription: t('Click on refresh to try reloading the block.'),
