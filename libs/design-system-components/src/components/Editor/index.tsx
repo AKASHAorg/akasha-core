@@ -5,6 +5,8 @@ import React, {
   useEffect,
   useLayoutEffect,
   KeyboardEvent,
+  RefObject,
+  useImperativeHandle,
 } from 'react';
 import {
   createEditor,
@@ -58,6 +60,8 @@ const MAX_TEXT_LENGTH = 500;
 
 type Node = Descendant | { children: Descendant[] };
 
+export type EditorActions = { insertText: (text: string) => void; insertBreak: () => void };
+
 export type EditorBoxProps = {
   avatar?: Profile['avatar'];
   showAvatar?: boolean;
@@ -85,6 +89,7 @@ export type EditorBoxProps = {
   maxEncodedLength?: number;
   mentionsLimit?: { count: number; label: string };
   customStyle?: string;
+  editorActionsRef?: RefObject<EditorActions>;
   onPublish?: (publishData: IPublishData) => void;
   onClear?: () => void;
   onCancelClick?: () => void;
@@ -110,8 +115,6 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
   const {
     avatar,
     showAvatar = true,
-    // showDraft = false,
-    // onClear,
     profileId,
     actionLabel,
     placeholderLabel,
@@ -138,6 +141,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
     maxEncodedLength = 6000,
     mentionsLimit,
     customStyle = '',
+    editorActionsRef,
     handleDisablePublish,
     encodingFunction,
   } = props;
@@ -199,6 +203,15 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
     const editorContainerRect = editorContainerRef.current.getBoundingClientRect();
     if (editorContainerRect) mentionPopoverWidth.current = editorContainerRect.width;
   }, []);
+
+  useImperativeHandle(
+    editorActionsRef,
+    () => {
+      const { insertText, insertBreak } = editor;
+      return { insertText, insertBreak };
+    },
+    [editor],
+  );
 
   /**
    * set the selection at the end of the content when component is mounted
@@ -413,24 +426,21 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
   const onKeyDown = useCallback(
     (event: KeyboardEvent<HTMLDivElement>) => {
       const { selection } = editor;
-      /**
-       * Default space behavior is unit:'character'.
-       * This fails to distinguish between two cursor positions, such as
-       * <link>foo<cursor/></link> vs <link>foo</link><cursor/>.
-       * Here we modify the behavior to unit:'offset' at first then resume the default behavior.
-       * This lets the user step out of a link.
-       */
+
       if (selection && Range.isCollapsed(selection)) {
         if (event.code === 'Space') {
-          // Check if the selection is inside a link node
-          const previousNode = Editor.above(editor, {
-            match: n => Element.isElement(n) && n.type === 'link',
-          });
+          const { linkNode, isActive: isLinkActive } = CustomEditor.nearestLinkNode(editor);
 
-          // If the cursor is inside a link, move the cursor out
-          if (previousNode?.length) {
-            Transforms.move(editor, { unit: 'offset' });
-            Transforms.move(editor, { unit: 'character' });
+          // Step out of a link
+          if (isLinkActive) {
+            const [, path] = linkNode;
+            const end = Editor.end(editor, path);
+            // Step out of a link only if the cursor is at the end of it
+            if (Range.equals(selection, { anchor: selection.anchor, focus: end })) {
+              event.preventDefault();
+              CustomEditor.stepOutOfLinkElement(editor);
+              return;
+            }
           }
         }
       }

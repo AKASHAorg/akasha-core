@@ -3,7 +3,7 @@ import getSDK from '@akashaorg/core-sdk';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import BackToOriginalBeam from '@akashaorg/ui-lib-feed/lib/components/back-to-original-beam';
-import ReflectionSection from './reflection-section';
+import ReflectionSection, { ReflectionSectionProps } from './reflection-section';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import { EntityTypes, ReflectionData } from '@akashaorg/typings/lib/ui';
@@ -26,10 +26,11 @@ import { selectBeamActiveField } from '../../app-routes/data-loaders';
 type ReflectionPageProps = {
   isActive: boolean;
   reflectionData: ReflectionData;
+  renderEditor: ReflectionSectionProps['renderEditor'];
 };
 
 const ReflectionPage: React.FC<ReflectionPageProps> = props => {
-  const { isActive, reflectionData } = props;
+  const { isActive, reflectionData, renderEditor } = props;
   const { t } = useTranslation('app-antenna');
   const {
     data: { authenticatedDID },
@@ -124,6 +125,7 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
               reflectionData={reflectionData}
               isLoggedIn={isLoggedIn}
               showLoginModal={showLoginModal}
+              renderEditor={renderEditor}
             />
           </Stack>
         }

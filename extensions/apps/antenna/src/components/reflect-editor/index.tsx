@@ -1,5 +1,7 @@
 import React, { useRef, useState } from 'react';
-import ReflectionEditor from '@akashaorg/design-system-components/lib/components/ReflectionEditor';
+import ReflectionEditor, {
+  ReflectionEditorProps,
+} from '@akashaorg/design-system-components/lib/components/ReflectionEditor';
 import getSDK from '@akashaorg/core-sdk';
 import {
   transformSource,
@@ -24,7 +26,6 @@ import {
   usePendingReflections,
   PENDING_REFLECTION_PREFIX,
 } from '@akashaorg/ui-awf-hooks/lib/use-pending-reflections';
-import { getEditorValueForTest } from './get-editor-value-for-test';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
 import { isEditorEmpty } from '@akashaorg/design-system-components/lib/components/Editor/helpers';
 
@@ -32,11 +33,12 @@ export type ReflectEditorProps = {
   beamId: string;
   reflectToId: string;
   showEditor: boolean;
+  editorActionsRef?: ReflectionEditorProps['editorActionsRef'];
   setShowEditor: (showEditor: boolean) => void;
 };
 
 const ReflectEditor: React.FC<ReflectEditorProps> = props => {
-  const { beamId, reflectToId, showEditor, setShowEditor } = props;
+  const { beamId, reflectToId, showEditor, editorActionsRef, setShowEditor } = props;
   const { t } = useTranslation('app-antenna');
   const { uiEvents } = useRootComponentProps();
   const [analyticsActions] = useAnalytics();
@@ -85,37 +87,6 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         title,
       },
     });
-  }, []);
-
-  /*
-   * Currently jsdom doesn't support contenteditable and as a result slate editor can't be tested in jsdom.
-   * This effect is a workaround to set the value of the editor during tests
-   **/
-  React.useEffect(() => {
-    const editorValueForTest = getEditorValueForTest();
-    if (editorValueForTest) {
-      setEditorState(
-        Array.isArray(editorValueForTest)
-          ? editorValueForTest.map(value => ({
-              type: 'paragraph',
-              children: [
-                {
-                  text: value,
-                },
-              ],
-            }))
-          : [
-              {
-                type: 'paragraph',
-                children: [
-                  {
-                    text: editorValueForTest,
-                  },
-                ],
-              },
-            ],
-      );
-    }
   }, []);
 
   const handleError = () => {
@@ -188,6 +159,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
       profileId={authenticatedDID}
       disablePublish={!authenticatedDID}
       mentions={mentions}
+      editorActionsRef={editorActionsRef}
       getMentions={handleGetMentions}
       background={{ light: 'white', dark: 'grey2' }}
       onPublish={data => {

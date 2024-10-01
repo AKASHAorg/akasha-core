@@ -49,6 +49,7 @@ const ReflectionEditor = forwardRef<HTMLDivElement, ReflectionEditorProps>((prop
     showDraft,
     background,
     customStyle = '',
+    editorActionsRef,
     setEditorState,
     onCancelClick,
     getMentions,
@@ -108,6 +109,7 @@ const ReflectionEditor = forwardRef<HTMLDivElement, ReflectionEditorProps>((prop
             showCancelButton={showCancelButton}
             showDraft={showDraft}
             maxEncodedLength={3000}
+            editorActionsRef={editorActionsRef}
             setEditorState={setEditorState}
             onPublish={handlePublish}
             getMentions={getMentions}
