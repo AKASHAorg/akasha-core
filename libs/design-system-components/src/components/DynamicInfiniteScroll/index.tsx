@@ -143,7 +143,7 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
       )}
       <Card
         ref={parentRef}
-        customStyle={`relative min-h-[${virtualizer.isScrolling && loading && hasNextPage ? totalSize + overScan * estimatedHeight : totalSize}px] ${customStyle}`}
+        customStyle={`relative w-full min-h-[${virtualizer.isScrolling && loading && hasNextPage ? totalSize + overScan * estimatedHeight : totalSize}px] ${customStyle}`}
         dataTestId={dataTestId}
         type="plain"
       >
