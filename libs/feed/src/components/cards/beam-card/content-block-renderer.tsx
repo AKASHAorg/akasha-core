@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import NSFW from '@akashaorg/design-system-components/lib/components/Entry/NSFW';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
@@ -18,26 +18,18 @@ type ContentBlockRendererProps = {
   showHiddenContent: boolean;
   beamIsNsfw: boolean;
   showBlockName: boolean;
-  onBlockInfoChange?: (blockInfo: { blockName: string; appName: string }) => void;
   onContentClick?: () => void;
 };
 const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
-  const {
-    blockID,
-    authenticatedDID,
-    showHiddenContent,
-    beamIsNsfw,
-    showBlockName,
-    onBlockInfoChange,
-  } = props;
+  const { blockID, authenticatedDID, showHiddenContent, beamIsNsfw, showBlockName } = props;
   const { navigateToModal, getCorePlugins } = useRootComponentProps();
   const contentBlockStoreRef = useRef(getCorePlugins()?.contentBlockStore);
-  const _onBlockInfoChange = useRef(onBlockInfoChange);
   const { t } = useTranslation('ui-lib-feed');
   const navigateTo = getCorePlugins().routing.navigateTo;
   const contentBlockReq = useGetContentBlockByIdQuery({
     variables: { id: blockID },
     fetchPolicy: 'cache-first',
+    nextFetchPolicy: 'network-only',
   });
   const blockData = useMemo(() => {
     // Get all the block's data from the hook, including the nsfw property
@@ -45,15 +37,6 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
       ? contentBlockReq.data.node
       : null;
   }, [contentBlockReq.data]);
-  const contentBlockPropertyType = blockData?.content?.[0]?.propertyType;
-  const contentBlockLabel = blockData?.content?.[0]?.label;
-  useEffect(() => {
-    _onBlockInfoChange.current?.({
-      appName: BLOCK_LABEL_TO_APP_DISPLAY_NAME_MAP[contentBlockLabel],
-      blockName:
-        contentBlockPropertyType /*@TODO need to fetch the proper human readable block name*/,
-    });
-  }, [contentBlockPropertyType, contentBlockLabel]);
 
   const matchingBlocks: MatchingBlock[] = !blockData
     ? []
@@ -149,7 +132,7 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
             customStyle="w-fit h-[60px]"
           >
             {/* showHiddenContent is the flag used to hide nsfw blocks in the
-             * feed when NSFW settings is off and shows the overlay over it when
+             * feed when 'Show NSFW Content' setting is off and shows the overlay over it when
              * on beam page (set to true in BeamSection(beam page), otherwise false)
              *  */}
             <NSFW
@@ -167,11 +150,6 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
       )}
     </Card>
   );
-};
-
-// @TODO properly fetch app's display name
-const BLOCK_LABEL_TO_APP_DISPLAY_NAME_MAP = {
-  '@akashaorg/app-antenna': 'Antenna',
 };
 
 export default ContentBlockRenderer;

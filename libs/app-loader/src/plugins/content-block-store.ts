@@ -84,11 +84,7 @@ export class ContentBlockStore implements IContentBlockStorePlugin {
       return blocks;
     } else {
       if (isNotEmpty(blockInfo)) {
-        let applicationName = blockInfo.appVersion.application.name;
-        // @TODO: remove this if statement
-        if (applicationName === 'antenna-test') {
-          applicationName = '@akashaorg/app-antenna';
-        }
+        const applicationName = blockInfo.appVersion?.application?.name;
         if (!applicationName) {
           console.error('Application name is not defined! blockInfo', blockInfo);
           return [];

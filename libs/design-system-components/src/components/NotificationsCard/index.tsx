@@ -123,7 +123,7 @@ const NotificationsCard: React.FC<NotificationsCardProps> = props => {
         label = followingLabel;
         clickHandler = () => {
           handleMessageRead(notif.id);
-          handleProfileClick(profileData.did.id);
+          handleProfileClick(profileData?.did?.id);
         };
         break;
       case 'MODERATED_POST':
@@ -157,7 +157,7 @@ const NotificationsCard: React.FC<NotificationsCardProps> = props => {
         label = '';
         break;
     }
-    const name = profileData.name || profileData.userName || profileData.ethAddress;
+    const name = profileData?.name || profileData?.userName || profileData?.ethAddress;
     const fullLabel = (
       <>
         <span className="text(secondaryLight dark:secondaryDark)">{name}</span> {' ' + label}
@@ -173,7 +173,7 @@ const NotificationsCard: React.FC<NotificationsCardProps> = props => {
         <Stack key={index} padding="py-3 pl-4" customStyle="flex-row">
           <ProfileAvatarNotificationApp
             profileId={profileData.did?.id}
-            avatar={profileData.avatar}
+            avatar={profileData?.avatar}
             label={fullLabel}
             info={relativeTime}
             onClickAvatar={clickHandler}

@@ -10,10 +10,12 @@ import { useTranslation } from 'react-i18next';
 import { BeamData } from '@akashaorg/typings/lib/ui';
 import { transformSource } from '@akashaorg/ui-awf-hooks';
 import { useRouterState } from '@tanstack/react-router';
+import { GetBeamByIdQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
+import { selectBeamId } from '@akashaorg/ui-awf-hooks/lib/selectors/get-beam-by-id-query';
 
 type BeamSectionProps = {
   isActive: boolean;
-  beamData: BeamData;
+  beamData: GetBeamByIdQuery;
   isLoggedIn: boolean;
   showNSFWCard: boolean;
   showLoginModal: (title?: string, message?: string) => void;
@@ -26,6 +28,8 @@ const BeamSection: React.FC<BeamSectionProps> = props => {
   const [isReflecting, setIsReflecting] = useState(
     routerState.location.pathname.endsWith(routes[REFLECT]),
   );
+
+  const beamId = selectBeamId(beamData);
 
   return (
     <Stack
@@ -72,8 +76,8 @@ const BeamSection: React.FC<BeamSectionProps> = props => {
           )}
           {isLoggedIn && (
             <ReflectEditor
-              beamId={beamData.id}
-              reflectToId={beamData.id}
+              beamId={beamId}
+              reflectToId={beamId}
               showEditor={isReflecting}
               setShowEditor={setIsReflecting}
             />

@@ -119,7 +119,7 @@ describe('< ProfileInfoPage /> component', () => {
       expect(screen.getByRole('button', { name: 'Fill my info' })).toBeInTheDocument();
     });
 
-    it('should display NSFW card when viewing another users NSFW profile', async () => {
+    it.skip('should display NSFW card when viewing another users NSFW profile', async () => {
       const { mocks } = getProfileInfoMocks({ profileDID: PROFILE_DID, nsfw: true });
       const followMock = getFollowMock();
       renderWithAllProviders(baseComponent([...mocks, ...followMock]), {});

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { MouseEventHandler } from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { type BlockError, BlockErrorCard } from '../block-error-card';
 
@@ -8,7 +8,7 @@ export type RenderErrorProps = {
   fetchDataError: string;
   hasContentLoadError: boolean;
   refreshLabel?: string;
-  handleRefresh: () => void;
+  handleRefresh?: MouseEventHandler<HTMLButtonElement>;
 };
 
 export const RenderError: React.FC<RenderErrorProps> = props => {
