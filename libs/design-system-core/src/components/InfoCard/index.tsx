@@ -79,8 +79,12 @@ const InfoCard: React.FC<InfoCardProps> = ({
         spacing="gap-y-2"
         customStyle={customWidthStyle}
       >
-        {titleLabel && <Text variant={titleVariant}>{titleLabel}</Text>}
-        {bodyLabel && (
+        {titleLabel && typeof titleLabel === 'string' ? (
+          <Text variant={titleVariant}>{titleLabel}</Text>
+        ) : (
+          titleLabel && <>{titleLabel}</>
+        )}
+        {bodyLabel && typeof bodyLabel === 'string' ? (
           <Text
             variant={bodyVariant}
             color={{ light: 'grey5', dark: 'grey6' }}
@@ -89,6 +93,8 @@ const InfoCard: React.FC<InfoCardProps> = ({
           >
             {bodyLabel}
           </Text>
+        ) : (
+          bodyLabel && <>{bodyLabel}</>
         )}
       </Stack>
     </Stack>

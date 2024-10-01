@@ -6,6 +6,7 @@ import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import { useTranslation } from 'react-i18next';
 import { InstalledExtension, useInstalledExtensions } from './use-installed-extensions';
 
@@ -35,7 +36,7 @@ export const InstalledExtensions: React.FC<InstalledExtensionsProps> = props => 
 
   const { t } = useTranslation('app-extensions');
 
-  const { data, loading } = useInstalledExtensions();
+  const { data, error, loading } = useInstalledExtensions();
 
   const addAction = (ext: InstalledExtension) => ({
     ...ext,
@@ -57,6 +58,21 @@ export const InstalledExtensions: React.FC<InstalledExtensionsProps> = props => 
               <Spinner />
               <Text variant="button-md">{t('Loading installed extensions')}</Text>
             </Stack>
+          )}
+          {error && (
+            <InfoCard
+              titleLabel={
+                <Text variant="h5" align="center">
+                  {t(`Uh-oh! We couldn't load`)} <br /> {t(`the extensions list!`)}
+                </Text>
+              }
+              bodyLabel={
+                <Text variant="body2" align="center" customStyle="w-60 sm:w-auto">
+                  {t('There might be an issue with the database. Please try again later!')}
+                </Text>
+              }
+              assetName="SearchApp_NotFound-min"
+            />
           )}
           {installedExtensions && (
             <>
