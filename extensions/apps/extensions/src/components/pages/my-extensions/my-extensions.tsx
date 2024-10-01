@@ -34,7 +34,7 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
   const navigate = useNavigate();
   const navigateTo = getCorePlugins().routing.navigateTo;
 
-  const showAlertNotification = React.useCallback((title: string) => {
+  const showErrorNotification = React.useCallback((title: string) => {
     uiEventsRef.current.next({
       event: NotificationEvents.ShowNotification,
       data: {
@@ -161,9 +161,9 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
     try {
       return JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [];
     } catch (error) {
-      showAlertNotification(error);
+      showErrorNotification(error);
     }
-  }, [authenticatedDID, showAlertNotification]);
+  }, [authenticatedDID, showErrorNotification]);
 
   const allMyExtensions = useMemo(
     () => [...existingDraftExtensions, ...appElements],

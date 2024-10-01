@@ -29,7 +29,7 @@ export const ExtensionEditStep1Page: React.FC<ExtensionEditStep1PageProps> = ({ 
     data: { authenticatedDID },
   } = useAkashaStore();
 
-  const showAlertNotification = React.useCallback((title: string) => {
+  const showErrorNotification = React.useCallback((title: string) => {
     uiEventsRef.current.next({
       event: NotificationEvents.ShowNotification,
       data: {
@@ -44,9 +44,9 @@ export const ExtensionEditStep1Page: React.FC<ExtensionEditStep1PageProps> = ({ 
     try {
       return JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [];
     } catch (error) {
-      showAlertNotification(error);
+      showErrorNotification(error);
     }
-  }, [authenticatedDID, showAlertNotification]);
+  }, [authenticatedDID, showErrorNotification]);
 
   const formValue = useMemo(
     () => JSON.parse(sessionStorage.getItem(extensionId)) || {},
@@ -73,7 +73,7 @@ export const ExtensionEditStep1Page: React.FC<ExtensionEditStep1PageProps> = ({ 
   const [, setForm] = useAtom<FormData>(useContext(AtomContext));
 
   const onSaveImageError = () => {
-    showAlertNotification(t("The image wasn't uploaded correctly. Please try again!"));
+    showErrorNotification(t("The image wasn't uploaded correctly. Please try again!"));
   };
 
   const [currentExtName, setCurrentExtName] = useState('');
@@ -103,9 +103,9 @@ export const ExtensionEditStep1Page: React.FC<ExtensionEditStep1PageProps> = ({ 
 
   useEffect(() => {
     if (appInfoQueryError) {
-      showAlertNotification(appInfoQueryError.message);
+      showErrorNotification(appInfoQueryError.message);
     }
-  }, [appInfoQueryError, showAlertNotification]);
+  }, [appInfoQueryError, showErrorNotification]);
 
   return (
     <Stack spacing="gap-y-4">

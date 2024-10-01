@@ -23,7 +23,7 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
     data: { authenticatedDID },
   } = useAkashaStore();
 
-  const showAlertNotification = React.useCallback(
+  const showNotification = React.useCallback(
     (type: NotificationTypes, title: string, description?: string) => {
       uiEventsRef.current.next({
         event: NotificationEvents.ShowNotification,
@@ -42,9 +42,9 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
     try {
       return JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [];
     } catch (error) {
-      showAlertNotification(NotificationTypes.Error, error);
+      showNotification(NotificationTypes.Error, error);
     }
-  }, [authenticatedDID, showAlertNotification]);
+  }, [authenticatedDID, showNotification]);
 
   const extensionData = draftExtensions.find(draftExtension => draftExtension.id === extensionId);
 
@@ -80,7 +80,7 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
     );
     sessionStorage.removeItem(extensionId);
 
-    showAlertNotification(
+    showNotification(
       NotificationTypes.Success,
       t('Extension Info Updated'),
       t('{{extensionName}} updated succesfully', { extensionName: formValue.name }),

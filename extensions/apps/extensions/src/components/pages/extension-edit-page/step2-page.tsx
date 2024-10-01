@@ -35,7 +35,7 @@ export const ExtensionEditStep2Page: React.FC<ExtensionEditStep2PageProps> = ({ 
     data: { authenticatedDID },
   } = useAkashaStore();
 
-  const showAlertNotification = React.useCallback((title: string) => {
+  const showErrorNotification = React.useCallback((title: string) => {
     uiEventsRef.current.next({
       event: NotificationEvents.ShowNotification,
       data: {
@@ -50,9 +50,9 @@ export const ExtensionEditStep2Page: React.FC<ExtensionEditStep2PageProps> = ({ 
     try {
       return JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [];
     } catch (error) {
-      showAlertNotification(error);
+      showErrorNotification(error);
     }
-  }, [authenticatedDID, showAlertNotification]);
+  }, [authenticatedDID, showErrorNotification]);
 
   const extensionData = draftExtensions?.find(draftExtension => draftExtension.id === extensionId);
 
@@ -128,7 +128,7 @@ export const ExtensionEditStep2Page: React.FC<ExtensionEditStep2PageProps> = ({ 
       return imageObj;
     } catch (error) {
       setUploading(false);
-      showAlertNotification(t("The image wasn't uploaded correctly. Please try again!"));
+      showErrorNotification(t("The image wasn't uploaded correctly. Please try again!"));
       return null;
     }
   };

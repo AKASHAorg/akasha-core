@@ -38,7 +38,7 @@ export const ExtensionCreationPage: React.FC<unknown> = () => {
     });
   };
 
-  const showAlertNotification = React.useCallback((title: string) => {
+  const showErrorNotification = React.useCallback((title: string) => {
     uiEventsRef.current.next({
       event: NotificationEvents.ShowNotification,
       data: {
@@ -52,9 +52,9 @@ export const ExtensionCreationPage: React.FC<unknown> = () => {
     try {
       return JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [];
     } catch (error) {
-      showAlertNotification(error);
+      showErrorNotification(error);
     }
-  }, [authenticatedDID, showAlertNotification]);
+  }, [authenticatedDID, showErrorNotification]);
 
   const [currentExtName, setCurrentExtName] = useState('');
 
@@ -83,9 +83,9 @@ export const ExtensionCreationPage: React.FC<unknown> = () => {
 
   useEffect(() => {
     if (appInfoQueryError) {
-      showAlertNotification(appInfoQueryError.message);
+      showErrorNotification(appInfoQueryError.message);
     }
-  }, [appInfoQueryError, showAlertNotification]);
+  }, [appInfoQueryError, showErrorNotification]);
 
   if (!authenticatedDID) {
     return (
