@@ -1,9 +1,15 @@
-import { genBeamData, genContentBlock, genProfileByDID } from '@akashaorg/af-testing';
+import {
+  genBeamData,
+  genContentBlock,
+  genExtensionData,
+  genProfileByDID,
+} from '@akashaorg/af-testing';
 import {
   GetProfileByDidDocument,
   GetContentBlockByIdDocument,
+  GetAppsByIdDocument,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { BEAM_ID, BEAM_SECTION } from './constants';
+import { AUTHENTICATED_DID, BEAM_ID, BEAM_SECTION } from './constants';
 
 export function getBeamSectionMocks() {
   const beamData = genBeamData({
@@ -11,6 +17,7 @@ export function getBeamSectionMocks() {
     authorProfileDID: BEAM_SECTION.authorProfileDID,
     reflectionsCount: BEAM_SECTION.reflectionsCount,
   });
+
   const profileData = genProfileByDID({ profileDID: BEAM_SECTION.authorProfileDID });
   return {
     mocks: [
@@ -22,6 +29,19 @@ export function getBeamSectionMocks() {
         result: {
           data: {
             node: profileData,
+          },
+        },
+      },
+      {
+        request: {
+          query: GetAppsByIdDocument,
+          variables: {
+            id: beamData.appID,
+          },
+        },
+        result: {
+          data: {
+            node: genExtensionData({ appId: beamData.appID }),
           },
         },
       },

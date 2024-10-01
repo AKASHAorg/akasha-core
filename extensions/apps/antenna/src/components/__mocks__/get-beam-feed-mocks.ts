@@ -2,9 +2,11 @@ import {
   genBeamData,
   genBeamStream,
   genContentBlock,
+  genExtensionData,
   genProfileByDID,
 } from '@akashaorg/af-testing';
 import {
+  GetAppsByIdDocument,
   GetBeamByIdDocument,
   GetBeamStreamDocument,
   GetContentBlockByIdDocument,
@@ -52,6 +54,19 @@ export function getBeamFeedMocks() {
         result: {
           data: {
             node: beamData,
+          },
+        },
+      },
+      {
+        request: {
+          query: GetAppsByIdDocument,
+          variables: {
+            id: beamData.appID,
+          },
+        },
+        result: {
+          data: {
+            node: genExtensionData({ appId: beamData.appID }),
           },
         },
       },

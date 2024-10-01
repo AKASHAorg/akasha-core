@@ -1,9 +1,11 @@
 import { GetInterestsByDidDocument } from '@akashaorg/ui-awf-hooks/src/generated';
 import { AUTHENTICATED_DID } from './constants';
-import { genInterestsByDID } from '@akashaorg/af-testing';
+import { genExtensionData, genInterestsByDID } from '@akashaorg/af-testing';
 import { GetAppsByIdDocument } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import { genBeamData } from '@akashaorg/af-testing/lib/data-generator/beam';
 
 export function getMyAntennaPageMocks() {
+  const beamData = genBeamData({ beamId: 'test_beam_id', authorProfileDID: AUTHENTICATED_DID });
   return {
     mocks: [
       {
@@ -20,14 +22,13 @@ export function getMyAntennaPageMocks() {
       {
         request: {
           query: GetAppsByIdDocument,
+          variables: {
+            id: beamData.appID,
+          },
         },
-        variableMatcher: () => true,
         result: {
           data: {
-            node: {
-              id: 'application-id',
-              displayName: 'Za Antenna',
-            },
+            node: genExtensionData({ appId: beamData.appID }),
           },
         },
       },
