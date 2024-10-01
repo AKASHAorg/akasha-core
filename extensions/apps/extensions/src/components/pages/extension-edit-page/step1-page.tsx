@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import routes, { MY_EXTENSIONS } from '../../../routes';
@@ -11,6 +11,8 @@ import { Extension, NotificationEvents, NotificationTypes } from '@akashaorg/typ
 import { DRAFT_EXTENSIONS } from '../../../constants';
 import { useAtom } from 'jotai';
 import { AtomContext, FormData } from './main-page';
+import { useGetAppsQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
+import { selectAkashaApp } from '../extension-creation-page/utils';
 
 type ExtensionEditStep1PageProps = {
   extensionId: string;
@@ -27,7 +29,7 @@ export const ExtensionEditStep1Page: React.FC<ExtensionEditStep1PageProps> = ({ 
     data: { authenticatedDID },
   } = useAkashaStore();
 
-  const showAlertNotification = React.useCallback((title: string) => {
+  const showErrorNotification = React.useCallback((title: string) => {
     uiEventsRef.current.next({
       event: NotificationEvents.ShowNotification,
       data: {
@@ -42,9 +44,9 @@ export const ExtensionEditStep1Page: React.FC<ExtensionEditStep1PageProps> = ({ 
     try {
       return JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [];
     } catch (error) {
-      showAlertNotification(error);
+      showErrorNotification(error);
     }
-  }, [authenticatedDID, showAlertNotification]);
+  }, [authenticatedDID, showErrorNotification]);
 
   const formValue = useMemo(
     () => JSON.parse(sessionStorage.getItem(extensionId)) || {},
@@ -61,18 +63,49 @@ export const ExtensionEditStep1Page: React.FC<ExtensionEditStep1PageProps> = ({ 
 
   const formDefault = useMemo(() => {
     return {
-      name: defaultValues.name,
-      displayName: defaultValues.displayName,
-      logoImage: defaultValues.logoImage,
-      coverImage: defaultValues.coverImage,
+      name: defaultValues?.name,
+      displayName: defaultValues?.displayName,
+      logoImage: defaultValues?.logoImage,
+      coverImage: defaultValues?.coverImage,
     };
   }, [defaultValues]);
 
   const [, setForm] = useAtom<FormData>(useContext(AtomContext));
 
   const onSaveImageError = () => {
-    showAlertNotification(t("The image wasn't uploaded correctly. Please try again!"));
+    showErrorNotification(t("The image wasn't uploaded correctly. Please try again!"));
   };
+
+  const [currentExtName, setCurrentExtName] = useState('');
+
+  const {
+    data: appInfo,
+    loading: loadingAppInfo,
+    error: appInfoQueryError,
+  } = useGetAppsQuery({
+    variables: {
+      first: 1,
+      filters: { where: { name: { equalTo: currentExtName } } },
+    },
+    skip: !currentExtName,
+  });
+
+  const handleCheckExtName = (fieldValue: string) => {
+    setCurrentExtName(fieldValue);
+  };
+
+  const isDuplicateLocalExtName = useMemo(
+    () => !!draftExtensions.find(ext => ext.name === currentExtName),
+    [draftExtensions, currentExtName],
+  );
+
+  const isDuplicatePublishedExtName = useMemo(() => !!selectAkashaApp(appInfo), [appInfo]);
+
+  useEffect(() => {
+    if (appInfoQueryError) {
+      showErrorNotification(appInfoQueryError.message);
+    }
+  }, [appInfoQueryError, showErrorNotification]);
 
   return (
     <Stack spacing="gap-y-4">
@@ -112,6 +145,9 @@ export const ExtensionEditStep1Page: React.FC<ExtensionEditStep1PageProps> = ({ 
           onImageSave: (type, image) => saveImage({ type, image, onError: onSaveImageError }),
           onImageDelete: () => {},
         }}
+        handleCheckExtName={handleCheckExtName}
+        isDuplicateExtName={isDuplicateLocalExtName || isDuplicatePublishedExtName}
+        loading={loadingAppInfo}
         cancelButton={{
           label: t('Cancel'),
           disabled: false,

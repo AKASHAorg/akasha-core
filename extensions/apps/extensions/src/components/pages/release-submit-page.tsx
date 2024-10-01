@@ -43,17 +43,17 @@ export const ExtensionReleaseSubmitPage: React.FC<ExtensionReleaseSubmitPageProp
       });
     },
     onError: () => {
-      showAlertNotification(
+      showErrorNotification(
         `${t(`Something went wrong when setting the release for this extension`)}.`,
       );
     },
   });
 
-  const showAlertNotification = React.useCallback((title: string) => {
+  const showErrorNotification = React.useCallback((title: string) => {
     uiEventsRef.current.next({
       event: NotificationEvents.ShowNotification,
       data: {
-        type: NotificationTypes.Info,
+        type: NotificationTypes.Error,
         title,
       },
     });
