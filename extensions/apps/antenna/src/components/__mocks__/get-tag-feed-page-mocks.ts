@@ -1,4 +1,9 @@
-import { genIndexedStreamCount, genInterestsByDID } from '@akashaorg/af-testing';
+import {
+  genBeamData,
+  genExtensionData,
+  genIndexedStreamCount,
+  genInterestsByDID,
+} from '@akashaorg/af-testing';
 import {
   GetAppsByIdDocument,
   GetIndexedStreamCountDocument,
@@ -12,6 +17,7 @@ interface IGetTagFeedPageMocks {
 }
 
 export function getTagFeedPageMocks({ count, tag }: IGetTagFeedPageMocks) {
+  const beamData = genBeamData({ beamId: 'beam1', authorProfileDID: AUTHENTICATED_DID });
   return {
     mocks: [
       {
@@ -39,14 +45,13 @@ export function getTagFeedPageMocks({ count, tag }: IGetTagFeedPageMocks) {
       {
         request: {
           query: GetAppsByIdDocument,
+          variables: {
+            id: beamData.appID,
+          },
         },
-        variableMatcher: () => true,
         result: {
           data: {
-            node: {
-              id: 'application-id',
-              displayName: 'Za Antenna',
-            },
+            node: genExtensionData({ appId: beamData.appID }),
           },
         },
       },
