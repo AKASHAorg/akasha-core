@@ -15,6 +15,7 @@ import {
   selectBlockApp,
   selectBlockData,
 } from '@akashaorg/ui-awf-hooks/lib/selectors/get-content-block-by-id-query';
+import { NetworkStatus } from '@apollo/client';
 
 type ContentBlockRendererProps = {
   blockID: string;
@@ -79,13 +80,13 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
 
   const contentBlockErrors = useMemo(() => {
     if (contentBlockReq.error) {
-      // handle errors...
-      return '';
+      return contentBlockReq.error?.message;
     }
-    if (!blockApp) {
-      return '';
+    if (!blockApp && contentBlockReq.networkStatus === NetworkStatus.ready) {
+      return 'Cannot render the content. Extension is missing.';
     }
-  }, [contentBlockReq.error, blockApp]);
+    return '';
+  }, [contentBlockReq, blockApp]);
 
   return (
     <Card type="plain" customStyle="w-full">
@@ -110,8 +111,10 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
             cacheBlockConfig={true}
             error={contentBlockErrors}
             fetchError={{
-              errorTitle: t('Network error occurred'),
-              errorDescription: t('Click on refresh to try reloading the block.'),
+              errorTitle: !blockApp ? t('Cannot display content') : t('Network error occurred'),
+              errorDescription: !blockApp
+                ? t('Extension was removed or not available anymore.')
+                : t('Click on refresh to try reloading the block.'),
             }}
             contentLoadError={{
               errorTitle: t('Content not loaded correctly'),
@@ -121,7 +124,7 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
             notInstalledTitle={t('not installed')}
             notInstalledDescription1={t('Please install')}
             notInstalledDescription2={t('to view this content.')}
-            refreshLabel={t('Refresh')}
+            refreshLabel={!blockApp ? undefined : t('Refresh')}
             onRefresh={() => {
               contentBlockReq.refetch({ id: blockID });
             }}
