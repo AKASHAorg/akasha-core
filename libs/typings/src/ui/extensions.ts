@@ -35,13 +35,6 @@ export type Extension = Omit<AkashaAppInterface, 'author' | 'contributors'> & {
 };
 
 /**
- * Type defining info about developer of an extension
- */
-export type Developer = {
-  profileId: Profile['did']['id'];
-} & Pick<Profile, 'avatar' | 'name'>;
-
-/**
  * Interface defining configuration object for loading an app
  **/
 export interface IAppConfig {

@@ -9,29 +9,18 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import AppInfo from '@akashaorg/design-system-components/lib/components/AppInfo';
 import { useTranslation } from 'react-i18next';
 import { transformSource, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { useGetAppReleaseByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { Developer } from '@akashaorg/typings/lib/ui';
+import { formatRelativeTime, truncateDid } from '@akashaorg/design-system-core/lib/utils';
+import {
+  useGetAppReleaseByIdQuery,
+  useGetAppsQuery,
+} from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-
-export const mockProfile: Developer = {
-  avatar: {
-    default: {
-      src: 'https://avatar.iran.liara.run/public',
-      height: 320,
-      width: 320,
-    },
-  },
-  profileId: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
-  name: 'Tetrarcha',
-};
-
-const developers = [
-  {
-    profileId: mockProfile.profileId,
-    name: mockProfile.name,
-    avatar: mockProfile.avatar,
-  },
-];
+import {
+  selectAkashaApp,
+  selectLatestRelease,
+} from '@akashaorg/ui-awf-hooks/lib/selectors/get-apps-query';
+import { NetworkStatus } from '@apollo/client';
+import { useMemo } from 'react';
 
 type InfoPageProps = {
   appId: string;
@@ -40,12 +29,20 @@ type InfoPageProps = {
 export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
-  const { navigateToModal } = useRootComponentProps();
+  const { navigateToModal, decodeAppName } = useRootComponentProps();
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
   const isLoggedIn = !!authenticatedDID;
-  const { error } = useGetAppReleaseByIdQuery({
+
+  const appReq = useGetAppsQuery({
+    variables: {
+      first: 1,
+      filters: { where: { name: { equalTo: decodeAppName(appId) } } },
+    },
+  });
+
+  const { error, data, networkStatus } = useGetAppReleaseByIdQuery({
     variables: { id: appId },
     skip: !isLoggedIn || true,
   });
@@ -66,6 +63,9 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
     }).catch(err => console.error('cannot navigate to /install/$appId', err));
   };
 
+  const appData = selectAkashaApp(appReq.data);
+  const latestRelease = useMemo(() => selectLatestRelease(appReq.data), [appReq.data]);
+
   return (
     <Stack>
       {error && (
@@ -75,14 +75,14 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
           details={t('We cannot show this app right now')}
         />
       )}
-      {!error && (
+      {!error && appReq.networkStatus === NetworkStatus.ready && (
         <AppInfo
-          integrationName="Extension Name"
-          integrationType="plugin"
-          nsfw={true}
+          integrationName={appData.displayName}
+          integrationType={appData.applicationType}
+          nsfw={appData.nsfw}
           nsfwLabel="NSFW"
           pluginLabel={t('Plugin')}
-          share={{ label: 'Share', icon: <ShareIcon /> }}
+          share={{ label: t('Share'), icon: <ShareIcon /> }}
           report={{
             label: t('Flag'),
             icon: <FlagIcon />,
@@ -105,17 +105,18 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
           }}
           versionLabel={t('is available')}
           updateButtonLabel={t('Update')}
-          packageName="TBD package name"
+          packageName={appData.name}
           packageNameTitle={'Package name'}
           extensionIdTitle={'Extension Id'}
-          extensionId="zhzhahdhaskdh"
-          developers={developers}
+          extensionId={appData.id}
+          developers={appData.contributors?.map(contrib => ({
+            name: contrib.akashaProfile.name,
+            profileId: contrib.id,
+            avatar: contrib.akashaProfile.avatar,
+          }))}
           descriptionTitle={t('Description')}
           readMore={t('Read more')}
-          descriptionBody={
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. /n Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-            /* appReleaseInfo?.application?.description */
-          }
+          descriptionBody={appData.description}
           galleryTitle={t('Gallery')}
           viewAllGalleryCTA={t('View all')}
           developersTitle={t('Developer')}
@@ -125,17 +126,18 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
           latestReleaseTitle={t('Latest Release')}
           languageLabel={t('Languages')}
           languages={['English', 'Spanish']}
-          version={t('Version 2.8.10')}
+          version={t('Version {{appVersion}}', { appVersion: latestRelease?.node?.version })}
           versionInfo={t('Latest release')}
-          versionDate={t('December 2022')}
+          versionDate={formatRelativeTime(latestRelease?.node?.createdAt)}
           versionDescription={
-            'Only two lines of text will be displayed here then if you go to View info aaaa...' /* appReleaseInfo?.application?.description */
+            latestRelease?.node?.meta?.filter(metadata => metadata.property === 'changelog')[0]
+              ?.value ?? t('this release has no changelog.')
           }
           goToVersionInfoPageLabel={t('View info')}
           documentationTitle={t('Documentation')}
           documentationLink={'Link 1'}
           licenseTitle={t('License')}
-          license={'License A' /* appReleaseInfo?.application?.license */}
+          license={appData.license}
           contactSupportTitle={t('Contact Support')}
           onInstall={handleInstallClick}
           onUninstall={() => {

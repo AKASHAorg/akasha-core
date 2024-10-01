@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { type Developer, type Image } from '@akashaorg/typings/lib/ui';
+import { type Image } from '@akashaorg/typings/lib/ui';
 import { type Color } from '@akashaorg/design-system-core/lib/components/types/common.types';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
@@ -16,12 +16,13 @@ import { AppInfoHeader, AppInfoHeaderProps } from './header';
 import { AppInfoNotificationCards, AppInfoNotificationCardsProps } from './notification-cards';
 import ExtensionImageGallery from '../ExtensionImageGallery';
 import { userData } from '@akashaorg/design-system-core/lib/utils';
+import { ProfileImageVersions } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 export type AppInfoProps = AppInfoHeaderProps &
   AppInfoNotificationCardsProps & {
     packageName: string;
     packageNameTitle: string;
-    developers: Developer[];
+    developers: { profileId: string; name: string; avatar: ProfileImageVersions }[];
     descriptionTitle: string;
     readMore: string;
     descriptionBody: string;
@@ -177,7 +178,7 @@ const AppInfo: React.FC<AppInfoProps> = ({
           </ContentBlock>
           <ContentBlock blockTitle={developersTitle}>
             <Stack spacing="gap-y-2">
-              {developers.map(developer => (
+              {developers?.map(developer => (
                 <Card
                   key={developer.profileId}
                   onClick={() => {
