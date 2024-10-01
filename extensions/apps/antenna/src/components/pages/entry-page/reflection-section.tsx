@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import ReflectEditor from '../../reflect-editor';
+import { ReflectEditorProps } from '../../reflect-editor';
 import EditableReflection from '@akashaorg/ui-lib-feed/lib/components/editable-reflection';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import routes, { REFLECT } from '../../../routes';
@@ -11,16 +11,18 @@ import { ReflectionData } from '@akashaorg/typings/lib/ui';
 import { transformSource } from '@akashaorg/ui-awf-hooks';
 import { useRouterState } from '@tanstack/react-router';
 
-type ReflectionSectionProps = {
+export type ReflectionSectionProps = {
   isBeamActive: boolean;
   isActive: boolean;
   reflectionData: ReflectionData;
   isLoggedIn: boolean;
+  renderEditor: (props: ReflectEditorProps) => ReactElement;
   showLoginModal: (title?: string, message?: string) => void;
 };
 
 const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
-  const { isBeamActive, isActive, reflectionData, isLoggedIn, showLoginModal } = props;
+  const { isBeamActive, isActive, reflectionData, isLoggedIn, renderEditor, showLoginModal } =
+    props;
   const { t } = useTranslation('app-antenna');
   const routerState = useRouterState();
   const [isReflecting, setIsReflecting] = useState(
@@ -68,14 +70,13 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
               transformSource={transformSource}
             />
           )}
-          {isLoggedIn && (
-            <ReflectEditor
-              beamId={reflectionData.beamID}
-              reflectToId={reflectionData.id}
-              showEditor={isReflecting}
-              setShowEditor={setIsReflecting}
-            />
-          )}
+          {isLoggedIn &&
+            renderEditor({
+              beamId: reflectionData.beamID,
+              reflectToId: reflectionData.id,
+              showEditor: isReflecting,
+              setShowEditor: setIsReflecting,
+            })}
         </Stack>
       )}
     </Stack>

@@ -5,6 +5,8 @@ import React, {
   useEffect,
   useLayoutEffect,
   KeyboardEvent,
+  RefObject,
+  useImperativeHandle,
 } from 'react';
 import {
   createEditor,
@@ -58,6 +60,8 @@ const MAX_TEXT_LENGTH = 500;
 
 type Node = Descendant | { children: Descendant[] };
 
+export type EditorActions = { insertText: (text: string) => void; insertBreak: () => void };
+
 export type EditorBoxProps = {
   avatar?: Profile['avatar'];
   showAvatar?: boolean;
@@ -85,6 +89,7 @@ export type EditorBoxProps = {
   maxEncodedLength?: number;
   mentionsLimit?: { count: number; label: string };
   customStyle?: string;
+  editorActionsRef?: RefObject<EditorActions>;
   onPublish?: (publishData: IPublishData) => void;
   onClear?: () => void;
   onCancelClick?: () => void;
@@ -110,8 +115,6 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
   const {
     avatar,
     showAvatar = true,
-    // showDraft = false,
-    // onClear,
     profileId,
     actionLabel,
     placeholderLabel,
@@ -138,6 +141,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
     maxEncodedLength = 6000,
     mentionsLimit,
     customStyle = '',
+    editorActionsRef,
     handleDisablePublish,
     encodingFunction,
   } = props;
@@ -199,6 +203,15 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
     const editorContainerRect = editorContainerRef.current.getBoundingClientRect();
     if (editorContainerRect) mentionPopoverWidth.current = editorContainerRect.width;
   }, []);
+
+  useImperativeHandle(
+    editorActionsRef,
+    () => {
+      const { insertText, insertBreak } = editor;
+      return { insertText, insertBreak };
+    },
+    [editor],
+  );
 
   /**
    * set the selection at the end of the content when component is mounted

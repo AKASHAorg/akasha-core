@@ -76,7 +76,7 @@ export const APOLLO_TYPE_POLICIES = {
   },
 };
 
-const emptyCharactersArr = Array(8).fill('');
+const emptyCharactersArr = Array<string>(8).fill('');
 export const NEW_REFLECTION_BEYOND_TEXT_LIMIT = [
   'random text',
   ...emptyCharactersArr,
