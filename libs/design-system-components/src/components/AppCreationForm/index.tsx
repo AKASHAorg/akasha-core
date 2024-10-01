@@ -140,7 +140,6 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
       clearErrors('extensionID');
     }
   }, [isDuplicateExtName, setError, clearErrors]);
-  console.log('is duplicate ext: ', isDuplicateExtName);
 
   return (
     <form onSubmit={onSave} className={tw(apply`h-full`)}>
@@ -295,12 +294,17 @@ const schema = z.object({
     .string()
     .trim()
     .min(6, { message: 'Must be at least 6 characters' })
+    .max(48, { message: 'Must be maximum 48 characters' })
     .refine(
       value => /^[a-zA-Z0-9-_.]+$/.test(value),
       'ID should contain only alphabets, numbers or -_.',
     ),
   extensionType: z.string(),
-  extensionDisplayName: z.string().trim().min(4, { message: 'Must be at least 4 characters' }),
+  extensionDisplayName: z
+    .string()
+    .trim()
+    .min(4, { message: 'Must be at least 4 characters' })
+    .max(24, { message: 'Must be maximum 24 characters' }),
   extensionLicense: z.string(),
   extensionLicenseOther: z.string().trim().min(3, { message: 'Must be at least 3 characters' }),
   extensionSourceURL: z.string().url({ message: 'URL is required' }),

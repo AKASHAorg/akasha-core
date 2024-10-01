@@ -192,14 +192,16 @@ const schema = z.object({
     .optional()
     .transform(e => (e === '' ? undefined : e)),
   nsfw: z.boolean().optional(),
-  links: z.array(
-    z.object({
-      label: z
-        .string()
-        .trim()
-        .min(4, { message: 'Must be at least 4 characters' })
-        .max(30, { message: 'Must be less than 30 characters' }),
-      href: z.string().url({ message: 'Must be URL' }),
-    }),
-  ),
+  links: z
+    .array(
+      z.object({
+        label: z
+          .string()
+          .trim()
+          .min(4, { message: 'Must be at least 4 characters' })
+          .max(40, { message: 'Must be less than 40 characters' }),
+        href: z.string().url({ message: 'Must be URL' }),
+      }),
+    )
+    .max(10, { message: 'Maximum 10 links' }),
 });

@@ -210,11 +210,16 @@ const schema = z.object({
     .string()
     .trim()
     .min(6, { message: 'Must be at least 6 characters' })
+    .max(48, { message: 'Must be maximum 48 characters' })
     .refine(
       value => /^[a-zA-Z0-9-_.]+$/.test(value),
       'ID should contain only alphabets, numbers or -_.',
     ),
-  displayName: z.string().trim().min(4, { message: 'Must be at least 4 characters' }).optional(),
+  displayName: z
+    .string()
+    .trim()
+    .min(4, { message: 'Must be at least 4 characters' })
+    .max(24, { message: 'Must be maximum 24 characters' }),
   sourceURL: z.string().url({ message: 'URL is required' }).optional(),
   logoImage: z.any().optional(),
   coverImage: z.any().optional(),
