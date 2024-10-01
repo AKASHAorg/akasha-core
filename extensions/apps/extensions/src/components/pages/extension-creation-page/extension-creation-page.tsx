@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import routes, { CREATE_EXTENSION, MY_EXTENSIONS } from '../../../routes';
@@ -11,13 +11,16 @@ import AppCreationForm from '@akashaorg/design-system-components/lib/components/
 import { DRAFT_EXTENSIONS } from '../../../constants';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Extension, NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
+import { useGetAppsQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
+import { selectAkashaApp } from './utils';
 
 export const ExtensionCreationPage: React.FC<unknown> = () => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
 
-  const { baseRouteName, getCorePlugins } = useRootComponentProps();
-
+  const { uiEvents, baseRouteName, getCorePlugins } = useRootComponentProps();
+  const uiEventsRef = React.useRef(uiEvents);
   const navigateTo = getCorePlugins().routing.navigateTo;
 
   const {
@@ -34,6 +37,55 @@ export const ExtensionCreationPage: React.FC<unknown> = () => {
       },
     });
   };
+
+  const showErrorNotification = React.useCallback((title: string) => {
+    uiEventsRef.current.next({
+      event: NotificationEvents.ShowNotification,
+      data: {
+        type: NotificationTypes.Error,
+        title,
+      },
+    });
+  }, []);
+
+  const draftExtensions: Extension[] = useMemo(() => {
+    try {
+      return JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [];
+    } catch (error) {
+      showErrorNotification(error);
+    }
+  }, [authenticatedDID, showErrorNotification]);
+
+  const [currentExtName, setCurrentExtName] = useState('');
+
+  const {
+    data: appInfo,
+    loading: loadingAppInfo,
+    error: appInfoQueryError,
+  } = useGetAppsQuery({
+    variables: {
+      first: 1,
+      filters: { where: { name: { equalTo: currentExtName } } },
+    },
+    skip: !currentExtName,
+  });
+
+  const handleCheckExtName = (fieldValue: string) => {
+    setCurrentExtName(fieldValue);
+  };
+
+  const isDuplicateLocalExtName = useMemo(
+    () => !!draftExtensions.find(ext => ext.name === currentExtName),
+    [draftExtensions, currentExtName],
+  );
+
+  const isDuplicatePublishedExtName = useMemo(() => !!selectAkashaApp(appInfo), [appInfo]);
+
+  useEffect(() => {
+    if (appInfoQueryError) {
+      showErrorNotification(appInfoQueryError.message);
+    }
+  }, [appInfoQueryError, showErrorNotification]);
 
   if (!authenticatedDID) {
     return (
@@ -67,6 +119,9 @@ export const ExtensionCreationPage: React.FC<unknown> = () => {
             disclaimerLabel={t(
               `Don't worry if you don't have all the information now. You can add or edit all details later when submitting or editing the app.`,
             )}
+            handleCheckExtName={handleCheckExtName}
+            isDuplicateExtName={isDuplicateLocalExtName || isDuplicatePublishedExtName}
+            loading={loadingAppInfo}
             cancelButton={{
               label: t('Cancel'),
               disabled: false,
@@ -78,7 +133,6 @@ export const ExtensionCreationPage: React.FC<unknown> = () => {
             }}
             createButton={{
               label: t('Create locally'),
-
               handleClick: data => {
                 const newExtension = {
                   id: crypto.randomUUID(),
@@ -91,11 +145,10 @@ export const ExtensionCreationPage: React.FC<unknown> = () => {
                   localDraft: true,
                   sourceURL: data?.extensionSourceURL,
                 };
-                const existingDraftExtensions =
-                  JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [];
+
                 localStorage.setItem(
                   `${DRAFT_EXTENSIONS}-${authenticatedDID}`,
-                  JSON.stringify([...existingDraftExtensions, newExtension]),
+                  JSON.stringify([...draftExtensions, newExtension]),
                 );
 
                 navigate({

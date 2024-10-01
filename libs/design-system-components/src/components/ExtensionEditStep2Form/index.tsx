@@ -50,12 +50,7 @@ export type ExtensionEditStep2FormProps = {
 
 const ExtensionEditStep2Form: React.FC<ExtensionEditStep2FormProps> = props => {
   const {
-    defaultValues = {
-      nsfw: false,
-      description: '',
-      gallery: [],
-      links: [],
-    },
+    defaultValues,
     cancelButton,
     nextButton,
     nsfwFieldLabel,
@@ -161,7 +156,6 @@ const ExtensionEditStep2Form: React.FC<ExtensionEditStep2FormProps> = props => {
             linkTitlePlaceholderLabel={linkPlaceholderLabel}
             addNewLinkButtonLabel={addLabel}
             control={control}
-            usefulLinks={defaultValues.links}
             onDeleteLink={async () => {
               await trigger();
             }}
@@ -198,4 +192,16 @@ const schema = z.object({
     .optional()
     .transform(e => (e === '' ? undefined : e)),
   nsfw: z.boolean().optional(),
+  links: z
+    .array(
+      z.object({
+        label: z
+          .string()
+          .trim()
+          .min(4, { message: 'Must be at least 4 characters' })
+          .max(40, { message: 'Must be less than 40 characters' }),
+        href: z.string().url({ message: 'Must be URL' }),
+      }),
+    )
+    .max(10, { message: 'Maximum 10 links' }),
 });

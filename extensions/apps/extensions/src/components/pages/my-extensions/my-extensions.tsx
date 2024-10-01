@@ -5,7 +5,7 @@ import { useNavigate } from '@tanstack/react-router';
 import { BookOpenIcon } from '@heroicons/react/24/outline';
 import { hasOwn, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetAppsByPublisherDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { ExtensionStatus } from '@akashaorg/typings/lib/ui';
+import { ExtensionStatus, NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import { SortOrder, AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
@@ -26,11 +26,23 @@ import { DRAFT_EXTENSIONS } from '../../../constants';
 const ENTRY_HEIGHT = 92;
 
 export const MyExtensionsPage: React.FC<unknown> = () => {
-  const { baseRouteName, getCorePlugins } = useRootComponentProps();
+  const { uiEvents, baseRouteName, getCorePlugins } = useRootComponentProps();
+  const uiEventsRef = React.useRef(uiEvents);
+
   const { t } = useTranslation('app-extensions');
 
   const navigate = useNavigate();
   const navigateTo = getCorePlugins().routing.navigateTo;
+
+  const showErrorNotification = React.useCallback((title: string) => {
+    uiEventsRef.current.next({
+      event: NotificationEvents.ShowNotification,
+      data: {
+        type: NotificationTypes.Error,
+        title,
+      },
+    });
+  }, []);
 
   const {
     data: { authenticatedDID },
@@ -144,10 +156,15 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
     });
   }, [appsData, selectedType]);
 
-  const existingDraftExtensions = useMemo(
-    () => JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [],
-    [authenticatedDID],
-  );
+  // fetch the draft extensions that are saved only on local storage
+  const existingDraftExtensions = useMemo(() => {
+    try {
+      return JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [];
+    } catch (error) {
+      showErrorNotification(error);
+    }
+  }, [authenticatedDID, showErrorNotification]);
+
   const allMyExtensions = useMemo(
     () => [...existingDraftExtensions, ...appElements],
     [existingDraftExtensions, appElements],

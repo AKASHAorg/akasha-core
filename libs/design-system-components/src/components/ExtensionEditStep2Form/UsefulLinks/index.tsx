@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { LinkElement } from './link-element';
 import { PlusIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import { AppLinkSource } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { Controller, Control } from 'react-hook-form';
+import { Controller, Control, useFieldArray } from 'react-hook-form';
 import { ExtensionEditStep2FormValues } from '..';
 
 export type UsefulLinksProps = {
@@ -16,7 +15,6 @@ export type UsefulLinksProps = {
   linkTitlePlaceholderLabel?: string;
   customStyle?: string;
   control: Control<ExtensionEditStep2FormValues>;
-  usefulLinks: (AppLinkSource & { _id?: number })[];
   onDeleteLink: () => void;
 };
 
@@ -26,20 +24,15 @@ export const UsefulLinks: React.FC<UsefulLinksProps> = ({
   usefulLinksDescriptionLabel,
   linkElementLabel,
   linkTitlePlaceholderLabel,
-  usefulLinks,
   customStyle = '',
   control,
   onDeleteLink,
 }) => {
-  const [links, setLinks] = useState(
-    !usefulLinks || usefulLinks?.length === 0 ? [{ _id: 1, href: '', label: '' }] : usefulLinks,
-  );
+  const { fields, append, remove } = useFieldArray({ control, name: 'links' });
 
   const onAddNew = () => {
-    if (links?.length < 10) {
-      setLinks(prev => {
-        return [...prev, { _id: prev?.length + 1, href: '', label: '' }];
-      });
+    if (fields?.length < 10) {
+      append({ href: '', label: '' });
     }
   };
 
@@ -60,22 +53,24 @@ export const UsefulLinks: React.FC<UsefulLinksProps> = ({
           {usefulLinksDescriptionLabel}
         </Text>
       </Stack>
-      {links?.map((link, index) => {
+      {fields?.map((link, index) => {
         return (
           <Controller
-            key={link._id}
+            key={link.id}
             control={control}
             name={`links.${index}`}
-            render={({ field: { value, onChange } }) => (
+            render={({ field: { value, onChange, ref }, fieldState: { error } }) => (
               <LinkElement
                 linkElementLabel={linkElementLabel}
                 linkTitlePlaceholder={linkTitlePlaceholderLabel}
                 onDelete={() => {
-                  setLinks(links.filter(_link => _link._id !== link._id));
+                  remove(index);
                   onDeleteLink();
                 }}
-                value={value}
+                value={{ ...value, _id: index }}
                 onChange={onChange}
+                error={error as unknown}
+                inputRef={ref}
               />
             )}
             shouldUnregister={true}

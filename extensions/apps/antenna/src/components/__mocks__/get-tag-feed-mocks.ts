@@ -1,6 +1,7 @@
 import {
   genBeamData,
   genContentBlock,
+  genExtensionData,
   genProfileByDID,
   getIndexedStream,
 } from '@akashaorg/af-testing';
@@ -55,6 +56,19 @@ export function getTagFeedMocks() {
           },
         },
       },
+      {
+        request: {
+          query: GetAppsByIdDocument,
+          variables: {
+            id: beamData.appID,
+          },
+        },
+        result: {
+          data: {
+            node: genExtensionData({ appId: beamData.appID }),
+          },
+        },
+      },
       ...beamData.content.map(block => ({
         request: {
           query: GetContentBlockByIdDocument,
@@ -70,20 +84,6 @@ export function getTagFeedMocks() {
           },
         },
       })),
-      {
-        request: {
-          query: GetAppsByIdDocument,
-        },
-        variableMatcher: () => true,
-        result: {
-          data: {
-            node: {
-              id: 'application-id',
-              displayName: 'Za Antenna',
-            },
-          },
-        },
-      },
     ],
     beamData,
     profileData,
