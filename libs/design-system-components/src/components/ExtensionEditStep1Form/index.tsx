@@ -1,4 +1,4 @@
-import React, { SyntheticEvent } from 'react';
+import React, { SyntheticEvent, useEffect } from 'react';
 import * as z from 'zod';
 import { Controller } from 'react-hook-form';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
@@ -38,6 +38,9 @@ export type ExtensionEditStep1FormProps = {
     label: string;
     handleClick: (data: ExtensionEditStep1FormValues) => void;
   };
+  handleCheckExtName?: (fieldValue: string) => void;
+  isDuplicateExtName?: boolean;
+  loading?: boolean;
   extensionIdLabel?: string;
   extensionDisplayNameLabel?: string;
   sourceLabel?: string;
@@ -57,6 +60,9 @@ const ExtensionEditStep1Form: React.FC<ExtensionEditStep1FormProps> = props => {
     },
     cancelButton,
     nextButton,
+    handleCheckExtName,
+    isDuplicateExtName,
+    loading,
     extensionIdLabel,
     extensionDisplayNameLabel,
     sourceLabel,
@@ -67,6 +73,8 @@ const ExtensionEditStep1Form: React.FC<ExtensionEditStep1FormProps> = props => {
     control,
     setValue,
     getValues,
+    setError,
+    clearErrors,
     formState: { errors },
   } = useForm<ExtensionEditStep1FormValues>({
     defaultValues,
@@ -85,6 +93,14 @@ const ExtensionEditStep1Form: React.FC<ExtensionEditStep1FormProps> = props => {
       });
     }
   };
+
+  useEffect(() => {
+    if (isDuplicateExtName) {
+      setError('name', { message: 'Extension ID must be unique!' });
+    } else {
+      clearErrors('name');
+    }
+  }, [isDuplicateExtName, setError, clearErrors]);
 
   return (
     <form onSubmit={onSave} className={tw(apply`h-full`)}>
@@ -116,6 +132,7 @@ const ExtensionEditStep1Form: React.FC<ExtensionEditStep1FormProps> = props => {
                 caption={error?.message}
                 status={error?.message ? 'error' : null}
                 onChange={onChange}
+                onBlur={() => handleCheckExtName(value)}
                 inputRef={ref}
                 required={true}
               />
@@ -174,7 +191,12 @@ const ExtensionEditStep1Form: React.FC<ExtensionEditStep1FormProps> = props => {
             onClick={cancelButton.handleClick}
             disabled={cancelButton.disabled}
           />
-          <Button variant="primary" label={nextButton.label} disabled={!isValid} onClick={onSave} />
+          <Button
+            variant="primary"
+            label={nextButton.label}
+            disabled={!isValid || loading}
+            onClick={onSave}
+          />
         </Stack>
       </Stack>
     </form>

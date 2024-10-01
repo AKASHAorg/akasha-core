@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import routes, { MY_EXTENSIONS } from '../../../routes';
@@ -11,6 +11,8 @@ import { Extension, NotificationEvents, NotificationTypes } from '@akashaorg/typ
 import { DRAFT_EXTENSIONS } from '../../../constants';
 import { useAtom } from 'jotai';
 import { AtomContext, FormData } from './main-page';
+import { useGetAppsQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
+import { selectAkashaApp } from '../extension-creation-page/utils';
 
 type ExtensionEditStep1PageProps = {
   extensionId: string;
@@ -74,6 +76,37 @@ export const ExtensionEditStep1Page: React.FC<ExtensionEditStep1PageProps> = ({ 
     showAlertNotification(t("The image wasn't uploaded correctly. Please try again!"));
   };
 
+  const [currentExtName, setCurrentExtName] = useState('');
+
+  const {
+    data: appInfo,
+    loading: loadingAppInfo,
+    error: appInfoQueryError,
+  } = useGetAppsQuery({
+    variables: {
+      first: 1,
+      filters: { where: { name: { equalTo: currentExtName } } },
+    },
+    skip: !currentExtName,
+  });
+
+  const handleCheckExtName = (fieldValue: string) => {
+    setCurrentExtName(fieldValue);
+  };
+
+  const isDuplicateLocalExtName = useMemo(
+    () => !!draftExtensions.find(ext => ext.name === currentExtName),
+    [draftExtensions, currentExtName],
+  );
+
+  const isDuplicatePublishedExtName = useMemo(() => !!selectAkashaApp(appInfo), [appInfo]);
+
+  useEffect(() => {
+    if (appInfoQueryError) {
+      showAlertNotification(appInfoQueryError.message);
+    }
+  }, [appInfoQueryError, showAlertNotification]);
+
   return (
     <Stack spacing="gap-y-4">
       <Stack padding={16}>
@@ -112,6 +145,9 @@ export const ExtensionEditStep1Page: React.FC<ExtensionEditStep1PageProps> = ({ 
           onImageSave: (type, image) => saveImage({ type, image, onError: onSaveImageError }),
           onImageDelete: () => {},
         }}
+        handleCheckExtName={handleCheckExtName}
+        isDuplicateExtName={isDuplicateLocalExtName || isDuplicatePublishedExtName}
+        loading={loadingAppInfo}
         cancelButton={{
           label: t('Cancel'),
           disabled: false,

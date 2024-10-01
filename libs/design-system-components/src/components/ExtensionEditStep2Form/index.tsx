@@ -199,7 +199,7 @@ const schema = z.object({
         .trim()
         .min(4, { message: 'Must be at least 4 characters' })
         .max(30, { message: 'Must be less than 30 characters' }),
-      href: z.string().url({ message: 'must be URL' }),
+      href: z.string().url({ message: 'Must be URL' }),
     }),
   ),
 });
