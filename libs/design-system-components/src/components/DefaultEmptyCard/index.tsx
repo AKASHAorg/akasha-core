@@ -21,8 +21,8 @@ export type DefaultEmptyCardProps = {
 
 /**
  * Card component used to display generic info and images
- * @param assetName - name of the image from the public folder, if not provided
- will render a placeholder card instead
+ * @param assetName - name of the image from the public folder,
+ * if not provided will render a placeholder card instead
  * @param infoText - descriptive text
  * @param buttonLabel - button text
  * @param noBorder - defaults to false, can be set true to remove the card outer border
