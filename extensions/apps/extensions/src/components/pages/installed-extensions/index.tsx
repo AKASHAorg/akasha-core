@@ -26,7 +26,7 @@ export const InstalledExtensionsPage: React.FC<unknown> = () => {
     });
   };
 
-  const handleClickDiscover = () => {
+  const handleDiscoverClick = () => {
     navigate({
       to: routes[EXTENSIONS],
     });
@@ -77,40 +77,38 @@ export const InstalledExtensionsPage: React.FC<unknown> = () => {
       {installedExtensions && (
         <Card padding="p-4">
           <Stack spacing="gap-y-3" align="center">
-            <>
-              {!installedExtensions.length && (
-                <>
-                  <Stack customStyle="h-52 w-52">
-                    <Image
-                      customStyle="object-contain"
-                      src={`${PUBLIC_IMAGE_PATH}/longbeam-notfound.webp`}
-                    />
-                  </Stack>
-                  <Text variant="h6">{t('No extensions installed yet!')}</Text>
-                  <Stack align="center">
-                    <Text as="span" color={{ light: 'grey5', dark: 'grey6' }}>
-                      <Button
-                        variant="text"
-                        size="md"
-                        label={t('Discover')}
-                        onClick={handleClickDiscover}
-                      />{' '}
-                      {t('cool extensions and install them')}
-                    </Text>
-                    <Text variant="body2" color={{ light: 'grey5', dark: 'grey6' }}>
-                      {t('to customize your world')}
-                    </Text>
-                  </Stack>
-                </>
-              )}
-              {!!installedExtensions.length && (
-                <AppList
-                  apps={installedExtensions}
-                  //implementation requires pagination support on installed extensions service on sdk
-                  onLoadMore={() => null}
-                />
-              )}
-            </>
+            {!installedExtensions.length && (
+              <>
+                <Stack customStyle="h-52 w-52">
+                  <Image
+                    customStyle="object-contain"
+                    src={`${PUBLIC_IMAGE_PATH}/longbeam-notfound.webp`}
+                  />
+                </Stack>
+                <Text variant="h6">{t('No extensions installed yet!')}</Text>
+                <Stack align="center">
+                  <Text as="span" color={{ light: 'grey5', dark: 'grey6' }}>
+                    <Button
+                      variant="text"
+                      size="md"
+                      label={t('Discover')}
+                      onClick={handleDiscoverClick}
+                    />{' '}
+                    {t('cool extensions and install them')}
+                  </Text>
+                  <Text variant="body2" color={{ light: 'grey5', dark: 'grey6' }}>
+                    {t('to customize your world')}
+                  </Text>
+                </Stack>
+              </>
+            )}
+            {!!installedExtensions.length && (
+              <AppList
+                apps={installedExtensions}
+                //implementation requires pagination support on installed extensions service on sdk
+                onLoadMore={() => null}
+              />
+            )}
           </Stack>
         </Card>
       )}
