@@ -6,7 +6,7 @@ import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
-import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import routes, { EXTENSIONS } from '../../../routes';
 import { useTranslation } from 'react-i18next';
 import { InstalledExtension, useInstalledExtensions } from './use-installed-extensions';
@@ -49,6 +49,9 @@ export const InstalledExtensionsPage: React.FC<unknown> = () => {
       <Text variant="h5">{t('Installed Extensions')}</Text>
       <Card padding="p-4">
         <Stack spacing="gap-y-3" align="center">
+          {
+            //@TODO replace with Loader component once its created
+          }
           {loading && (
             <Stack spacing="gap-y-5" align="center">
               <Spinner />
@@ -56,18 +59,24 @@ export const InstalledExtensionsPage: React.FC<unknown> = () => {
             </Stack>
           )}
           {error && (
-            <InfoCard
-              titleLabel={
-                <Text variant="h5" align="center">
-                  {t(`Uh-oh! We couldn't load`)} <br /> {t(`the extensions list!`)}
+            <ErrorLoader
+              title={
+                <Text variant="h5" align="center" selectable={false}>
+                  {t(`Uh-oh! We couldn't load`)} <br />
+                  {t(`the extensions list!`)}
                 </Text>
               }
-              bodyLabel={
-                <Text variant="body2" align="center" customStyle="w-60 sm:w-auto">
+              details={
+                <Text
+                  variant="body2"
+                  align="center"
+                  selectable={false}
+                  customStyle="w-60 sm:w-auto"
+                >
                   {t('There might be an issue with the database. Please try again later!')}
                 </Text>
               }
-              assetName="SearchApp_NotFound-min"
+              type="list-not-available"
             />
           )}
           {installedExtensions && (
