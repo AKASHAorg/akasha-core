@@ -47,39 +47,36 @@ export const InstalledExtensionsPage: React.FC<unknown> = () => {
   return (
     <Stack spacing="gap-y-4">
       <Text variant="h5">{t('Installed Extensions')}</Text>
-      <Card padding="p-4">
-        <Stack spacing="gap-y-3" align="center">
-          {
-            //@TODO replace with Loader component once its created
+      {
+        //@TODO replace with Loader component once its created
+      }
+      {loading && (
+        <Card padding="p-4">
+          <Stack spacing="gap-y-5" align="center">
+            <Spinner />
+            <Text variant="button-md">{t('Loading installed extensions')}</Text>
+          </Stack>
+        </Card>
+      )}
+      {error && (
+        <ErrorLoader
+          title={
+            <Text variant="h5" align="center" selectable={false}>
+              {t(`Uh-oh! We couldn't load`)} <br />
+              {t(`the extensions list!`)}
+            </Text>
           }
-          {loading && (
-            <Stack spacing="gap-y-5" align="center">
-              <Spinner />
-              <Text variant="button-md">{t('Loading installed extensions')}</Text>
-            </Stack>
-          )}
-          {error && (
-            <ErrorLoader
-              title={
-                <Text variant="h5" align="center" selectable={false}>
-                  {t(`Uh-oh! We couldn't load`)} <br />
-                  {t(`the extensions list!`)}
-                </Text>
-              }
-              details={
-                <Text
-                  variant="body2"
-                  align="center"
-                  selectable={false}
-                  customStyle="w-60 sm:w-auto"
-                >
-                  {t('There might be an issue with the database. Please try again later!')}
-                </Text>
-              }
-              type="list-not-available"
-            />
-          )}
-          {installedExtensions && (
+          details={
+            <Text variant="body2" align="center" selectable={false} customStyle="w-60 sm:w-auto">
+              {t('There might be an issue with the database. Please try again later!')}
+            </Text>
+          }
+          type="list-not-available"
+        />
+      )}
+      {installedExtensions && (
+        <Card padding="p-4">
+          <Stack spacing="gap-y-3" align="center">
             <>
               {!installedExtensions.length && (
                 <>
@@ -114,9 +111,9 @@ export const InstalledExtensionsPage: React.FC<unknown> = () => {
                 />
               )}
             </>
-          )}
-        </Stack>
-      </Card>
+          </Stack>
+        </Card>
+      )}
       <Card padding="p-4" margin="mb-2">
         <Stack spacing="gap-y-3">
           <Text variant="h6">{t('Default Extensions')}</Text>
