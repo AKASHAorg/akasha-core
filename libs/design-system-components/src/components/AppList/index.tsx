@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import DynamicInfiniteScroll from '../DynamicInfiniteScroll';
+import DynamicInfiniteScroll, { DynamicInfiniteScrollProps } from '../DynamicInfiniteScroll';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -26,10 +26,7 @@ export type App = {
 export type AppListProps = {
   apps: App[];
   showAppTypeIndicator?: boolean;
-  loading?: boolean;
-  hasNextPage?: boolean;
-  onLoadMore: () => Promise<unknown>;
-};
+} & Pick<DynamicInfiniteScrollProps, 'hasNextPage' | 'loading' | 'onLoadMore'>;
 
 const ENTRY_HEIGHT = 92;
 
