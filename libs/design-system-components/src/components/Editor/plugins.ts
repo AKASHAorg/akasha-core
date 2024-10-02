@@ -15,31 +15,6 @@ const withMentions = (editor: Editor) => {
   return editor;
 };
 
-const withTags = (editor: Editor) => {
-  const { isInline, isVoid, insertText } = editor;
-
-  editor.insertText = (text: string) => {
-    const { selection } = editor;
-    const [parentNode]: any = selection ? Editor.parent(editor, selection) : [undefined];
-
-    if (parentNode?.type === 'tag') {
-      Transforms.insertText(editor, text);
-    } else {
-      insertText(text);
-    }
-  };
-
-  editor.isInline = element => {
-    return element.type === 'tag' ? true : isInline(element);
-  };
-
-  editor.isVoid = element => {
-    return element.type === 'tag' ? true : isVoid(element);
-  };
-
-  return editor;
-};
-
 const withLinks = (editor: Editor) => {
   const { isInline } = editor;
 
@@ -95,4 +70,4 @@ const withCorrectVoidBehavior = editor => {
   return editor;
 };
 
-export { withMentions, withTags, withLinks, withCorrectVoidBehavior };
+export { withMentions, withLinks, withCorrectVoidBehavior };

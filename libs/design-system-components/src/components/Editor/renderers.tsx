@@ -35,23 +35,6 @@ const MentionElement = (props: any) => {
   );
 };
 
-const TagElement = ({ attributes, children, element, handleTagClick }: any) => {
-  return (
-    <button
-      className={tw(`text-secondaryLight dark:text-secondaryDark text-${element.align}`)}
-      {...attributes}
-      contentEditable={false}
-      onClick={(ev: Event) => {
-        handleTagClick(element.name);
-        ev.stopPropagation();
-      }}
-    >
-      #{element.name}
-      {children}
-    </button>
-  );
-};
-
 const LinkElement = ({ attributes, children, element, handleLinkClick }: any) => {
   return (
     <a
@@ -90,8 +73,6 @@ const renderElement = (
   switch (props.element.type) {
     case 'mention':
       return <MentionElement handleMentionClick={handleMentionClick} {...props} />;
-    case 'tag':
-      return <TagElement handleTagClick={handleTagClick} {...props} />;
     case 'link':
       return <LinkElement handleLinkClick={handleLinkClick} {...props} />;
     case 'list-item':

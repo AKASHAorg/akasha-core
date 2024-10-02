@@ -1,14 +1,9 @@
-import { Editor, Transforms, Element, Node, Point, Range } from 'slate';
+import { Editor, Transforms, Element, Node, Point, Range, Descendant } from 'slate';
 import { ReactEditor } from 'slate-react';
 import ReactDOM from 'react-dom';
-import {
-  CustomElement,
-  CustomText,
-  LinkElement,
-  MentionElement,
-  TagElement,
-} from '@akashaorg/typings/lib/ui';
+import { CustomElement, CustomText, LinkElement, MentionElement } from '@akashaorg/typings/lib/ui';
 import { Profile } from '@akashaorg/typings/lib/ui';
+import { ExtendedNode } from '.';
 
 export const LIST_TYPES = ['numbered-list', 'bulleted-list'];
 export const TEXT_ALIGN_TYPES = ['left', 'center', 'right'];
@@ -92,17 +87,6 @@ const CustomEditor = {
     const mentionData = { name: profileData?.name, did: profileData?.did?.id };
     const mention: MentionElement = Object.assign(baseMention, mentionData);
     Transforms.insertNodes(editor, mention);
-    ReactEditor.focus(editor);
-    Transforms.move(editor);
-  },
-
-  insertTag(editor: Editor, tagData: { name: string; totalPosts: number }) {
-    const baseTag: { type: 'tag'; children: [{ text: '' }] } = {
-      type: 'tag',
-      children: [{ text: '' }],
-    };
-    const tag: TagElement = Object.assign(baseTag, tagData);
-    Transforms.insertNodes(editor, tag);
     ReactEditor.focus(editor);
     Transforms.move(editor);
   },
@@ -197,6 +181,19 @@ export const isEditorEmpty = (editorState?: CustomElement[]) => {
     }
     return content && 'text' in content ? !!content.text : false;
   });
+};
+
+export const countMentions = (node: ExtendedNode) => {
+  let count = 0;
+  (function getCount(node: ExtendedNode) {
+    if (Element.isElement(node) && node.type === 'mention') {
+      count++;
+    }
+    if (Element.isElement(node) && node.children) {
+      node.children.map((n: Descendant) => getCount(n));
+    }
+  })(node);
+  return count;
 };
 
 interface IPortal {
