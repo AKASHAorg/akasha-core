@@ -4723,7 +4723,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@didtools/cacao@npm:^2.0.0, @didtools/cacao@npm:^2.1.0":
+"@didtools/cacao@npm:^2.0.0":
   version: 2.1.0
   resolution: "@didtools/cacao@npm:2.1.0"
   dependencies:
@@ -4787,7 +4787,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@didtools/pkh-ethereum@npm:0.5.0, @didtools/pkh-ethereum@npm:^0.5.0":
+"@didtools/pkh-ethereum@npm:0.5.0":
   version: 0.5.0
   resolution: "@didtools/pkh-ethereum@npm:0.5.0"
   dependencies:
@@ -4812,16 +4812,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@didtools/pkh-ethereum@npm:^0.4.1":
-  version: 0.4.1
-  resolution: "@didtools/pkh-ethereum@npm:0.4.1"
+"@didtools/pkh-ethereum@npm:^0.6.0":
+  version: 0.6.0
+  resolution: "@didtools/pkh-ethereum@npm:0.6.0"
   dependencies:
-    "@didtools/cacao": "npm:^2.1.0"
-    "@noble/curves": "npm:^1.1.0"
-    "@noble/hashes": "npm:^1.3.1"
+    "@didtools/cacao": "npm:^3.0.0"
+    "@noble/curves": "npm:^1.2.0"
+    "@noble/hashes": "npm:^1.3.2"
     "@stablelib/random": "npm:^1.0.2"
     caip: "npm:^1.1.0"
-  checksum: 10/d7276db48f96bdf9cab72e623e04a14ee8512a70c1532b8444ecbd995ac3447e6b65c8190bd69cf3d34869647a889e064b3f020270bc87099ce2bbf60fb10a22
+  checksum: 10/07a11a13f8143d4068a60dcdee64a0060c43608f51d84b305ee98dfc43e90b90128cf2a6cfc245fe4100f4fb505f588c1df2cf54e396e2fbe1066254f7e79de7
   languageName: node
   linkType: hard
 
@@ -7590,7 +7590,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ipld/dag-cbor@npm:^7.0.0, @ipld/dag-cbor@npm:^7.0.1":
+"@ipld/dag-cbor@npm:^7.0.0":
   version: 7.0.3
   resolution: "@ipld/dag-cbor@npm:7.0.3"
   dependencies:
@@ -19889,16 +19889,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dag-jose-utils@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "dag-jose-utils@npm:3.0.0"
-  dependencies:
-    "@ipld/dag-cbor": "npm:^7.0.1"
-    multiformats: "npm:^11.0.1"
-  checksum: 10/598b5c10b1468c1cc928a94a5c69d7de8c611dd7208e856070667f8b0ed0adc5d8ef26770fd8ab459639be705866815ff6f8414b2de01a79a2c898001897f01e
-  languageName: node
-  linkType: hard
-
 "dag-jose-utils@npm:^4.0.0":
   version: 4.0.0
   resolution: "dag-jose-utils@npm:4.0.0"
@@ -20505,9 +20495,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"did-session@npm:3.1.0":
-  version: 3.1.0
-  resolution: "did-session@npm:3.1.0"
+"did-session@npm:4.0.0":
+  version: 4.0.0
+  resolution: "did-session@npm:4.0.0"
   dependencies:
     "@didtools/key-webcrypto": "npm:^0.2.0"
     "@stablelib/random": "npm:^1.0.2"
@@ -20516,17 +20506,17 @@ __metadata:
     key-did-provider-ed25519: "npm:^4.0.2"
     key-did-resolver: "npm:^4.0.0"
     uint8arrays: "npm:^5.0.1"
-  checksum: 10/ca180e5f743e125c8ead9c00fb9cc3bd9d6b0181e4259a558694a063457e765d0555e419b0c61ef61cd312e17ad15a482151822d4612655f7bff393ef7c7fb18
+  checksum: 10/a62cf397320e52b0e92aaa59da77ea31d8a52c868b84381fd94fc6c8476147a3ff645fe4c86afff2210a767c8b995f386e8a39716212c0e9eaa0e84349317950
   languageName: node
   linkType: hard
 
-"dids@npm:5.0.2, dids@npm:^5.0.0, dids@npm:^5.0.2":
-  version: 5.0.2
-  resolution: "dids@npm:5.0.2"
+"dids@npm:5.0.3":
+  version: 5.0.3
+  resolution: "dids@npm:5.0.3"
   dependencies:
     "@didtools/cacao": "npm:^3.0.1"
     "@didtools/codecs": "npm:^3.0.0"
-    "@didtools/pkh-ethereum": "npm:^0.5.0"
+    "@didtools/pkh-ethereum": "npm:^0.6.0"
     "@stablelib/random": "npm:^1.0.2"
     codeco: "npm:^1.2.0"
     dag-jose-utils: "npm:^4.0.0"
@@ -20535,26 +20525,7 @@ __metadata:
     multiformats: "npm:^13.0.0"
     rpc-utils: "npm:^0.6.2"
     uint8arrays: "npm:^5.0.1"
-  checksum: 10/a17d6a306ec263b41266eccd20844a88075ea5147bbdf7e03ea16b96c44b64c230efdc541c6c3ef21265c5febaf97664e7c0d818d323252e4d2c117a3ecf9067
-  languageName: node
-  linkType: hard
-
-"dids@npm:^4.0.4":
-  version: 4.0.4
-  resolution: "dids@npm:4.0.4"
-  dependencies:
-    "@didtools/cacao": "npm:^2.1.0"
-    "@didtools/codecs": "npm:^1.0.1"
-    "@didtools/pkh-ethereum": "npm:^0.4.1"
-    "@stablelib/random": "npm:^1.0.1"
-    codeco: "npm:^1.1.0"
-    dag-jose-utils: "npm:^3.0.0"
-    did-jwt: "npm:^7.2.0"
-    did-resolver: "npm:^4.1.0"
-    multiformats: "npm:^11.0.2"
-    rpc-utils: "npm:^0.6.1"
-    uint8arrays: "npm:^4.0.3"
-  checksum: 10/50dcd09fb476a6c574dd537874d59aca1163cfa1f847c17d99c838c930c3cb120ba4469dd680799fb36c9dbd8a25581bc2298980d53a10f4ef2ea4a775193e11
+  checksum: 10/1ab0abce0b7cf16052767f896029ce03d40cf1031c15528f908898cd7a43019bf25ce8fc2e040eb1354fd6441325859abd78fa2d31fed812a50f9825588b6568
   languageName: node
   linkType: hard
 
@@ -34825,8 +34796,8 @@ __metadata:
     dexie: "npm:3.2.3"
     did-jwt: "npm:^8.0.0"
     did-resolver: "npm:4.1.0"
-    did-session: "npm:3.1.0"
-    dids: "npm:5.0.2"
+    did-session: "npm:4.0.0"
+    dids: "npm:5.0.3"
     dotenv: "npm:16.4.5"
     dotenv-webpack: "npm:8.0.1"
     esbuild-loader: "npm:4.2.2"
@@ -34962,7 +34933,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rpc-utils@npm:^0.6.1, rpc-utils@npm:^0.6.2":
+"rpc-utils@npm:^0.6.2":
   version: 0.6.2
   resolution: "rpc-utils@npm:0.6.2"
   dependencies:
