@@ -12,8 +12,6 @@ export type TextLineProps = {
   customStyle?: string;
 };
 
-const baseStyle = `bg-gradient-to-r from-grey6 via-grey8 to-white dark:from-grey5 dark:via-grey7 dark:to-white`;
-
 /**
  * The TextLine component offers a quick way to include placeholder text lines in your app. These placeeholder text
  * lines are useful as loading indicators before the real content gets rendered. The component
@@ -38,6 +36,8 @@ const TextLine: React.FC<TextLineProps> = props => {
     round = 'rounded',
     customStyle = '',
   } = props;
+
+  const baseStyle = `bg-gradient-to-r from-grey6 via-grey8 to-white dark:from-grey5 dark:via-grey7 dark:to-white`;
 
   const widthStyle = getWidthClasses(width);
   const heightStyle = getHeightClasses(height);
