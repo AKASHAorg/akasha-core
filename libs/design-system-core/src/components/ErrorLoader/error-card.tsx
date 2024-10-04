@@ -31,7 +31,7 @@ const ErrorCard: React.FC<
         {typeof details === 'object' ? (
           <>{details}</>
         ) : (
-          <Text variant="body2" customStyle="text-grey4 dark:text-grey6 my-4" selectable={false}>
+          <Text variant="body2" selectable={false}>
             {details}
           </Text>
         )}
