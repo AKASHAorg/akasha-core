@@ -11,14 +11,18 @@ import Menu from '@akashaorg/design-system-core/lib/components/Menu';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { AppInfoPill } from './info-pill';
-import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import {
+  AkashaAppApplicationType,
+  AppImageSource,
+} from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import { InformationCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
+import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
 
 export type AppInfoHeaderProps = {
   displayName: string;
-  extensionType: string;
+  extensionType: AkashaAppApplicationType;
   nsfw: boolean;
   nsfwLabel: string;
   extensionTypeLabel: string;
@@ -27,7 +31,7 @@ export type AppInfoHeaderProps = {
   onInstallClick: MouseEventHandler<HTMLButtonElement>;
   onUninstallClick: MouseEventHandler<HTMLButtonElement>;
   onOpenClick: MouseEventHandler<HTMLButtonElement>;
-  extensionIconSrc: string;
+  extensionAvatar: AppImageSource;
   isInstalled?: boolean;
   isDefaultWorldExtension?: boolean;
   defaultAppPillLabel?: string;
@@ -49,7 +53,7 @@ export const AppInfoHeader: React.FC<AppInfoHeaderProps> = props => {
     onInstallClick,
     onUninstallClick,
     onOpenClick,
-    extensionIconSrc,
+    extensionAvatar,
     isInstalled = false,
     isDefaultWorldExtension = false,
     defaultAppPillLabel = 'Default',
@@ -73,13 +77,7 @@ export const AppInfoHeader: React.FC<AppInfoHeaderProps> = props => {
   return (
     <Stack direction="row" align="start" justify="between" padding="pb-3">
       <Stack direction="row" align="stretch" spacing="gap-x-2" customStyle={'flex-grow'}>
-        <Stack
-          background={{
-            light: 'grey8',
-            dark: 'grey5',
-          }}
-          customStyle={`rounded-lg w-28 h-28 bg(center no-repeat cover [url(${extensionIconSrc})])`}
-        />
+        <AppAvatar appType={extensionType} avatar={extensionAvatar} width={7} height={7} />
         <Stack justify="between" customStyle={'flex-grow'}>
           <Stack>
             <Stack direction="row" align="start" spacing="gap-x-2" justify="between">

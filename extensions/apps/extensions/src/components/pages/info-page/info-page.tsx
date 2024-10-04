@@ -119,6 +119,13 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
     }
   }, [appData?.applicationType, t]);
 
+  const coverImageSrc = useMemo(() => {
+    if (appData?.coverImage?.src) {
+      return transformSource(appData.coverImage.src);
+    }
+    return '/public?';
+  }, [appData]);
+
   const isDefaultWorldExtension = useMemo(() => {
     if (!appId) {
       return false;
@@ -146,7 +153,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
             radius={{ top: 20 }}
             background={{ light: 'grey7', dark: 'grey5' }}
             // @todo: do we have a placeholder cover?
-            customStyle={`h-32 bg(center no-repeat cover [url(${appData.coverImage?.src})])`}
+            customStyle={`h-32 bg(center no-repeat cover [url(${coverImageSrc})])`}
           />
           <Stack>
             <Stack spacing="gap-y-6">
@@ -155,7 +162,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                   displayName={appData.displayName}
                   extensionType={appData.applicationType}
                   // @todo: do we have a placeholder app logo?
-                  extensionIconSrc={transformSource(appData.logoImage?.src)?.src}
+                  extensionAvatar={appData.logoImage}
                   nsfw={appData.nsfw}
                   nsfwLabel={'NSFW'}
                   extensionTypeLabel={extensionTypeLabel}
