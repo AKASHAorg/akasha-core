@@ -13,11 +13,11 @@ import { selectApps } from '@akashaorg/ui-awf-hooks/lib/selectors/get-apps-by-pu
 import { useTranslation } from 'react-i18next';
 import { type InstalledExtension } from './use-installed-extensions';
 
-export const DefaultExtensionsList: React.FC<unknown> = () => {
+export const DefaultExtensionsList = () => {
   const { t } = useTranslation('app-extensions');
   const { getCorePlugins, worldConfig } = useRootComponentProps();
   const sdk = getSDK();
-  const defaultApps = worldConfig.defaultApps || [];
+  const defaultApps = [worldConfig.homepageApp, ...(worldConfig.defaultApps || [])];
 
   const { data, error, loading } = useGetAppsByPublisherDidQuery({
     variables: {
