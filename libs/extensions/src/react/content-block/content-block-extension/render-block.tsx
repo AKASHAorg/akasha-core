@@ -11,7 +11,7 @@ import { GetContentBlockByIdQuery } from '@akashaorg/typings/lib/sdk/graphql-ope
 
 export type RenderBlockProps = {
   state: { parcels: (MatchingBlock & { config: ParcelConfigObject })[] };
-  appInfo: { name: string; displayName: string; id: string };
+  appInfo: { name: string; displayName?: string; id: string };
   blockId: BlockParcelProps['blockId'];
   blockRef: BlockParcelProps['blockRef'];
   blockData: GetContentBlockByIdQuery['node'];
@@ -57,7 +57,7 @@ export const RenderBlock: React.FC<RenderBlockProps> = props => {
         >
           <Stack direction="row" spacing="gap-x-1">
             <Text variant="button-sm">
-              {appInfo.displayName} {notInstalledTitle}
+              {appInfo?.displayName} {notInstalledTitle}
             </Text>
             <Button
               onClick={onClickInstall}
@@ -67,7 +67,7 @@ export const RenderBlock: React.FC<RenderBlockProps> = props => {
             />
           </Stack>
           <Text variant="footnotes2" weight="normal">
-            {notInstalledDescription1} {appInfo.displayName} {notInstalledDescription2}
+            {notInstalledDescription1} {appInfo?.displayName} {notInstalledDescription2}
           </Text>
         </Stack>
       )}

@@ -2,6 +2,17 @@ import * as React from 'react';
 import { RenderElementProps, RenderLeafProps } from 'slate-react';
 import { tw } from '@twind/core';
 
+/*
+ ** A workaround for a chromium bug that incorrectly positions a cursor inside an inline element
+ ** It helps during a step out of an inline element
+ ** https://bugs.chromium.org/p/chromium/issues/detail?id=1249405
+ */
+const InlineChromiumBugfix = () => (
+  <span contentEditable={false} className="text-[0]">
+    {String.fromCodePoint(160) /* Non-breaking space */}
+  </span>
+);
+
 const MentionElement = (props: any) => {
   const { handleMentionClick, attributes, element, children } = props;
   const mention = element.name || element.did;
@@ -62,7 +73,9 @@ const LinkElement = ({ attributes, children, element, handleLinkClick }: any) =>
         return ev.stopPropagation();
       }}
     >
+      <InlineChromiumBugfix />
       {children}
+      <InlineChromiumBugfix />
     </a>
   );
 };

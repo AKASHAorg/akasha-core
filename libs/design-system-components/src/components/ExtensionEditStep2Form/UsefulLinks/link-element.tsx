@@ -7,6 +7,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { AppLinkSource } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { FieldError } from 'react-hook-form';
 
 export type LinkElementProps = {
   linkElementLabel?: string;
@@ -14,6 +15,8 @@ export type LinkElementProps = {
   onDelete: () => void;
   onChange: (...event: any[]) => void;
   value: AppLinkSource & { _id?: number };
+  error?: { href?: FieldError; label?: FieldError };
+  inputRef?: React.LegacyRef<HTMLInputElement> & React.LegacyRef<HTMLTextAreaElement>;
 };
 
 export const LinkElement: React.FC<LinkElementProps> = ({
@@ -22,6 +25,8 @@ export const LinkElement: React.FC<LinkElementProps> = ({
   onDelete,
   onChange,
   value,
+  error,
+  inputRef,
 }) => {
   return (
     <Stack fullWidth direction="column" spacing="gap-2">
@@ -46,13 +51,18 @@ export const LinkElement: React.FC<LinkElementProps> = ({
         value={value?.label}
         placeholder={linkTitlePlaceholder}
         onChange={ev => onChange({ ...value, label: ev.target.value })}
+        caption={error?.label?.message}
+        status={error?.label?.message ? 'error' : null}
       />
       <TextField
+        inputRef={inputRef}
         type="text"
         customStyle="grow"
         value={value?.href}
         placeholder="URL"
         onChange={ev => onChange({ ...value, href: ev.target.value })}
+        caption={error?.href?.message}
+        status={error?.href?.message ? 'error' : null}
       />
     </Stack>
   );

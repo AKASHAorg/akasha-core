@@ -29,11 +29,11 @@ export const ExtensionSubmitPage: React.FC<ExtensionSubmitPageProps> = ({ extens
   const navigateTo = getCorePlugins().routing.navigateTo;
   const sdk = useRef(getSDK());
 
-  const showAlertNotification = React.useCallback((title: string) => {
+  const showErrorNotification = React.useCallback((title: string) => {
     uiEventsRef.current.next({
       event: NotificationEvents.ShowNotification,
       data: {
-        type: NotificationTypes.Info,
+        type: NotificationTypes.Error,
         title,
       },
     });
@@ -48,9 +48,9 @@ export const ExtensionSubmitPage: React.FC<ExtensionSubmitPageProps> = ({ extens
     try {
       return JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [];
     } catch (error) {
-      showAlertNotification(error);
+      showErrorNotification(error);
     }
-  }, [authenticatedDID, showAlertNotification]);
+  }, [authenticatedDID, showErrorNotification]);
 
   const extensionData = draftExtensions?.find(draftExtension => draftExtension.id === extensionId);
 
@@ -74,7 +74,7 @@ export const ExtensionSubmitPage: React.FC<ExtensionSubmitPageProps> = ({ extens
       });
     },
     onError: () => {
-      showAlertNotification(`${t(`Something went wrong when publishing the extension`)}.`);
+      showErrorNotification(`${t(`Something went wrong when publishing the extension`)}.`);
     },
   });
 

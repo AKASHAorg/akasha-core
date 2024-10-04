@@ -1,9 +1,14 @@
 import React from 'react';
 import BeamCard from './cards/beam-card';
 import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
-import { hasOwn, mapBeamEntryData, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetBeamByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { IModalNavigationOptions } from '@akashaorg/typings/lib/ui';
+import {
+  selectBeamId,
+  selectNsfw,
+} from '@akashaorg/ui-awf-hooks/lib/selectors/get-beam-by-id-query';
+import { isNodeWithId } from '@akashaorg/ui-awf-hooks/lib/selectors/selector-utils';
 
 export type BeamContentResolverProps = {
   beamId: string;
@@ -13,7 +18,7 @@ export type BeamContentResolverProps = {
 
 const BeamContentResolver: React.FC<BeamContentResolverProps> = ({
   beamId,
-  showNSFWCard,
+  showNSFWCard = false,
   customStyle = '',
 }) => {
   const { getCorePlugins, navigateToModal } = useRootComponentProps();
@@ -39,29 +44,28 @@ const BeamContentResolver: React.FC<BeamContentResolverProps> = ({
 
   if (beamReq.loading) return <EntryCardLoading />;
 
-  const beamData = beamReq.data?.node && hasOwn(beamReq.data.node, 'id') ? beamReq.data.node : null;
-
   return (
-    beamData && (
+    isNodeWithId(beamReq.data) && (
       <BeamCard
-        beamData={mapBeamEntryData(beamData)}
+        beamData={beamReq.data}
         contentClickable={true}
         /* Display the overlay according to the passed prop showNSFWCard
          * or the nsfw property of the beam object just fetched through the
          * useIndividualBeam hook (see BeamFeed).
          * */
-        showNSFWCard={showNSFWCard ?? beamData.nsfw}
+        showNSFWCard={showNSFWCard ?? selectNsfw(beamReq.data)}
         showLoginModal={showLoginModal}
         onContentClick={function () {
           getCorePlugins().routing.navigateTo({
             appName: '@akashaorg/app-antenna',
-            getNavigationUrl: navRoutes => `${navRoutes.Beam}/${beamData.id}`,
+            getNavigationUrl: navRoutes => `${navRoutes.Beam}/${selectBeamId(beamReq.data)}`,
           });
         }}
         onReflect={function () {
           getCorePlugins().routing.navigateTo({
             appName: '@akashaorg/app-antenna',
-            getNavigationUrl: navRoutes => `${navRoutes.Beam}/${beamData.id}${navRoutes.Reflect}`,
+            getNavigationUrl: navRoutes =>
+              `${navRoutes.Beam}/${selectBeamId(beamReq.data)}${navRoutes.Reflect}`,
           });
         }}
         customStyle={customStyle}

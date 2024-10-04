@@ -77,7 +77,7 @@ describe('< TagFeedPage /> component', () => {
       await waitFor(() => expect(infoBox).toHaveTextContent(name));
       expect(infoBox).toHaveTextContent(truncateDid(did.id));
       expect(infoBox).toHaveTextContent(formatRelativeTime(beamData.createdAt, 'en'));
-      expect(screen.getByText(/published via/i)).toBeInTheDocument();
+      expect(await screen.findByText(/published via/i)).toBeInTheDocument();
     });
   });
 

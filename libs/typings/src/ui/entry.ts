@@ -1,5 +1,10 @@
 import { Descendant } from 'slate';
-import { AkashaBeam, AkashaReflect } from '../sdk/graphql-types-new';
+import {
+  AkashaAppInterface,
+  AkashaAppReleaseInterface,
+  AkashaBeam,
+  AkashaReflect,
+} from '../sdk/graphql-types-new';
 import { IMetadata } from './editor';
 
 /**
@@ -47,6 +52,8 @@ export type EntryData = {
  */
 export type BeamData = EntryData & { content: AkashaBeam['content'] } & {
   reflectionsCount?: number;
+  appVersionID: string;
+  appID: string;
 };
 
 /**
@@ -60,10 +67,7 @@ export type ReflectionData = EntryData & {
 /**
  * Type defining plain old javascript object of a beam data obtained from an api
  */
-export type RawBeamData = Pick<
-  AkashaBeam,
-  'id' | 'active' | 'createdAt' | 'content' | 'nsfw' | 'tags' | 'reflectionsCount'
-> & {
+export type RawBeamData = Omit<AkashaBeam, 'author'> & {
   author: {
     id: string;
   };

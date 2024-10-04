@@ -344,6 +344,9 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
         {!isFetchingSearch && searchKeyword && !searchState[activeButton]?.results?.length && (
           <Stack customStyle="mt-8">
+            {
+              //@TODO replace with error loader
+            }
             <InfoCard
               titleLabel=""
               bodyLabel={
@@ -356,7 +359,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
               }
               bodyVariant="body1"
               customWidthStyle="w-[90%] md:w-[50%] m-auto"
-              assetName="SearchApp_NotFound-min.webp"
+              assetName="list-not-available.webp"
             />
           </Stack>
         )}
@@ -378,9 +381,9 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                 {searchProfilesState?.map((profileData: Profile, index: number) => (
                   <Stack key={index} customStyle="pb-4">
                     <ProfileSearchCard
-                      handleFollow={() => handleFollowProfile(profileData.did.id)}
-                      handleUnfollow={() => handleUnfollowProfile(profileData.did.id)}
-                      isFollowing={followedProfiles.includes(profileData?.did.id)}
+                      handleFollow={() => handleFollowProfile(profileData?.did?.id)}
+                      handleUnfollow={() => handleUnfollowProfile(profileData?.did?.id)}
+                      isFollowing={followedProfiles.includes(profileData?.did?.id)}
                       profileData={profileData}
                       followLabel={t('Follow')}
                       unfollowLabel={t('Unfollow')}
@@ -388,7 +391,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                       followingLabel={t('Following')}
                       followersLabel={t('Followers')}
                       shareProfileLabel={t('Share')}
-                      onClickProfile={() => handleProfileClick(profileData.did.id)}
+                      onClickProfile={() => handleProfileClick(profileData?.did?.id)}
                       transformSource={transformSource}
                     />
                   </Stack>

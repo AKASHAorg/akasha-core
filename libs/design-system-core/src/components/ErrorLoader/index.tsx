@@ -5,27 +5,17 @@ export type ErrorLoaderProps = React.PropsWithChildren<{
   /**
    * Error type
    */
-  type:
-    | 'missing-feed-customization'
-    | 'missing-notifications'
-    | 'missing-saved-items'
-    | 'network-not-supported'
-    | 'no-apps'
-    | 'no-connection'
-    | 'not-registered'
-    | 'not-authenticated'
-    | 'script-error'
-    | 'page-not-found';
+  type: 'no-apps' | 'not-authenticated' | 'script-error' | 'page-not-found' | 'list-not-available';
   /* Path to public folder */
   publicImgPath?: string;
   /**
    * The error title
    */
-  title: string;
+  title: React.ReactNode;
   /**
    * Additional details about the error
    */
-  details: string;
+  details: React.ReactNode;
   dataTestId?: string;
   imageBoxStyle?: string; // use valid twind classes
   customStyle?: string; // use valid twind classes
@@ -51,32 +41,17 @@ const ErrorLoader: React.FC<ErrorLoaderProps> = ({ children, ...props }) => {
   let imagesrc: string;
 
   switch (type) {
-    case 'missing-feed-customization':
-      imagesrc = `${publicImgPath}/no-feed-customization-error.webp`;
-      break;
-    case 'missing-notifications':
-      imagesrc = `${publicImgPath}/no-notifications-error.webp`;
-      break;
-    case 'missing-saved-items':
-      imagesrc = `${publicImgPath}/no-saved-posts-error.webp`;
-      break;
-    case 'network-not-supported':
-      imagesrc = `${publicImgPath}/network-not-supported-error.webp`;
-      break;
     case 'no-apps':
       imagesrc = `${publicImgPath}/no-apps-error.webp`;
-      break;
-    case 'no-connection':
-      imagesrc = `${publicImgPath}/no-internet-connection-error.webp`;
-      break;
-    case 'not-registered':
-      imagesrc = `${publicImgPath}/login-widget-illustration.webp`;
       break;
     case 'not-authenticated':
       imagesrc = `${publicImgPath}/not-authenticated.webp`;
       break;
     case 'page-not-found':
       imagesrc = `${publicImgPath}/new404.webp`;
+      break;
+    case 'list-not-available':
+      imagesrc = `${publicImgPath}/list-not-available.webp`;
       break;
     default:
       imagesrc = `${publicImgPath}/general-error.webp`;

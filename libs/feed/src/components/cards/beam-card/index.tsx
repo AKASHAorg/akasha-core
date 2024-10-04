@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import EntryCard, {
   EntryCardProps,
 } from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
@@ -6,12 +6,25 @@ import ContentBlockRenderer from './content-block-renderer';
 import ActionButtons from './action-buttons';
 import AuthorProfileAvatar from '../author-profile-avatar';
 import { sortByKey, useAkashaStore } from '@akashaorg/ui-awf-hooks';
-import { EntityTypes, BeamData } from '@akashaorg/typings/lib/ui';
+import { EntityTypes } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps, useNsfwToggling } from '@akashaorg/ui-awf-hooks';
 import { Trans, useTranslation } from 'react-i18next';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { GetBeamByIdQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
+import {
+  selectAppId,
+  selectBeamActive,
+  selectBeamAuthor,
+  selectBeamContent,
+  selectBeamId,
+  selectBeamTags,
+  selectCreatedAt,
+  selectNsfw,
+  selectReflectionsCount,
+} from '@akashaorg/ui-awf-hooks/lib/selectors/get-beam-by-id-query';
+import getSDK from '@akashaorg/core-sdk';
 
 type BeamCardProps = Pick<
   EntryCardProps,
@@ -24,7 +37,7 @@ type BeamCardProps = Pick<
   | 'showHiddenContent'
   | 'customStyle'
 > & {
-  beamData: BeamData;
+  beamData: GetBeamByIdQuery;
   hidePublishTime?: boolean;
   showNSFWCard: boolean;
   showLoginModal?: () => void;
@@ -43,23 +56,32 @@ const BeamCard: React.FC<BeamCardProps> = props => {
     ...rest
   } = props;
 
+  const sdk = useRef(getSDK());
+
   const { getCorePlugins, navigateToModal } = useRootComponentProps();
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
-  const [appName, setAppName] = useState('');
-  const [blockNameMap, setBlockNameMap] = useState(new Map());
   const [showBlockName, setShowBlockName] = useState(false);
   const navigateTo = getCorePlugins().routing.navigateTo;
 
   const { showNsfw } = useNsfwToggling();
 
   const handleFlagBeam = () => {
+    if (!beamId) return;
     navigateTo({
       appName: '@akashaorg/app-vibes',
-      getNavigationUrl: () => `/report/beam/${beamData.id}`,
+      getNavigationUrl: () => `/report/beam/${beamId}`,
     });
   };
+
+  const beamContent = selectBeamContent(beamData);
+  const reflectionsCount = selectReflectionsCount(beamData);
+  const beamAuthor = selectBeamAuthor(beamData);
+
+  const beamId = useMemo<string | null>(() => {
+    return selectBeamId(beamData);
+  }, [beamData]);
 
   const handleTagClick = (tag: string) => {
     navigateTo({
@@ -71,22 +93,39 @@ const BeamCard: React.FC<BeamCardProps> = props => {
   const handleEntryRemove = () => {
     navigateToModal({
       name: `remove-beam-confirmation`,
-      beamId: beamData.id,
+      beamId,
     });
   };
 
   const sortedEntryContent = React.useMemo(() => {
-    return sortByKey(beamData.content, 'order');
-  }, [beamData.content]);
+    return sortByKey(beamContent, 'order');
+  }, [beamContent]);
+
+  const beamTagsList = useMemo(() => {
+    const tags = selectBeamTags(beamData);
+    if (tags?.length) {
+      return tags
+        .filter(labeledTag => labeledTag.labelType === sdk.current.services.gql.labelTypes.TAG)
+        .map(labeledTag => labeledTag.value);
+    }
+    return [];
+  }, [beamData]);
 
   return (
     <EntryCard
       dataTestId="beam-card"
-      entryData={beamData}
-      reflectionsCount={beamData?.reflectionsCount}
+      entryData={{
+        id: beamId,
+        active: selectBeamActive(beamData),
+        authorId: selectBeamAuthor(beamData).id,
+        createdAt: selectCreatedAt(beamData),
+        nsfw: selectNsfw(beamData),
+        tags: beamTagsList,
+      }}
+      reflectionsCount={reflectionsCount}
       reflectAnchorLink="/@akashaorg/app-antenna/beam"
       sortedContents={sortedEntryContent}
-      isViewer={authenticatedDID === beamData.authorId}
+      isViewer={authenticatedDID === beamAuthor.id}
       removed={{
         author: (
           <Trans
@@ -166,20 +205,20 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       onContentClick={onContentClick}
       profileAvatar={
         <AuthorProfileAvatar
-          authorId={beamData.authorId}
+          authorId={beamAuthor.id}
           hidePublishTime={hidePublishTime}
-          createdAt={beamData?.createdAt}
+          createdAt={selectCreatedAt(beamData)}
         />
       }
       // add these props only when beam is active
-      {...(beamData.active && {
+      {...(selectBeamActive(beamData) && {
         flagAsLabel: t('Flag'),
         removeEntryLabel: t('Remove'),
         onEntryFlag: handleFlagBeam,
         onEntryRemove: handleEntryRemove,
         actionsRight: (
           <ActionButtons
-            appName={appName}
+            appId={selectAppId(beamData)}
             showBlockName={showBlockName}
             showHiddenContent={showHiddenContent}
             onShowBlockName={() => {
@@ -198,10 +237,6 @@ const BeamCard: React.FC<BeamCardProps> = props => {
             showHiddenContent={showHiddenContent}
             beamIsNsfw={showNSFWCard}
             showBlockName={showBlockName}
-            onBlockInfoChange={blockInfo => {
-              setAppName(blockInfo?.appName);
-              setBlockNameMap(new Map(blockNameMap.set(blockID, blockInfo?.blockName)));
-            }}
           />
         </React.Suspense>
       )}

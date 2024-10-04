@@ -6,3 +6,4 @@ export * from './world-config';
 export * from './integrations';
 export * from './store';
 export * from './interests';
+export * from './extension';

@@ -55,7 +55,7 @@ const InfiniteScroll: React.FC<InfiniteScrollType> = props => {
   const totalSize = rowVirtualizer.getTotalSize();
   const additionalSize = loadMore ? 16 : 0;
   return (
-    <Stack customStyle={`relative h-[${totalSize + additionalSize}px]`}>
+    <Stack customStyle={`relative h-[${totalSize + additionalSize}px]`} fullWidth>
       {virtualItems.map((virtualItem, index, items) => (
         <Stack
           key={virtualItem.key}
@@ -67,7 +67,7 @@ const InfiniteScroll: React.FC<InfiniteScrollType> = props => {
       <Stack
         align="center"
         justify="center"
-        padding={loadMore ? 'pb-4' : 'pb-0'}
+        padding="pb-0"
         customStyle="absolute bottom-0"
         fullWidth
         ref={loadMoreRef}

@@ -35,7 +35,7 @@ const useMentions = (authenticatedDID: string) => {
   }, [followingReq]);
 
   const mentions = followingList.filter(profile =>
-    profile.name?.toLowerCase().startsWith(mentionQuery),
+    profile?.name?.toLowerCase().startsWith(mentionQuery),
   );
 
   return { setMentionQuery, mentions, allFollowing: followingList };

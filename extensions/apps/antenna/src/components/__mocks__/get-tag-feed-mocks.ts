@@ -1,6 +1,7 @@
 import {
   genBeamData,
   genContentBlock,
+  genExtensionData,
   genProfileByDID,
   getIndexedStream,
 } from '@akashaorg/af-testing';
@@ -9,6 +10,7 @@ import {
   GetBeamByIdDocument,
   GetProfileByDidDocument,
   GetContentBlockByIdDocument,
+  GetAppsByIdDocument,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { BEAM_ID, TAG_FEED } from './constants';
 
@@ -51,6 +53,19 @@ export function getTagFeedMocks() {
         result: {
           data: {
             node: beamData,
+          },
+        },
+      },
+      {
+        request: {
+          query: GetAppsByIdDocument,
+          variables: {
+            id: beamData.appID,
+          },
+        },
+        result: {
+          data: {
+            node: genExtensionData({ appId: beamData.appID }),
           },
         },
       },

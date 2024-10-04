@@ -5,6 +5,7 @@ import BeamPage from '../pages/entry-page/beam-page';
 import ReflectionPage from '../pages/entry-page/reflection-page';
 import TagFeedPage from '../pages/tag-feed-page/tag-feed-page';
 import EditorPage from '../pages/editor-page/editor-page';
+import ReflectEditor from '../reflect-editor';
 import EntrySectionLoading from '../pages/entry-page/entry-section-loading';
 import routes, {
   GLOBAL_ANTENNA,
@@ -32,12 +33,11 @@ import {
   getReflectionById,
   getReflectionStreamById,
   selectBeamActiveField,
-  selectBeamNode,
   selectBeamStatusField,
   selectReflectionActiveField,
   selectReflectionNode,
 } from './data-loaders';
-import { mapBeamEntryData, mapReflectEntryData } from '@akashaorg/ui-awf-hooks';
+import { mapReflectEntryData } from '@akashaorg/ui-awf-hooks';
 import { NotFoundComponent } from './not-found-component';
 
 const rootRoute = createRootRouteWithContext<IRouterContext>()({
@@ -104,8 +104,16 @@ const beamRoute = createRoute({
                     <BeamPage
                       beamId={beamId}
                       isActive={selectBeamActiveField(beamStreamData)}
-                      beamData={mapBeamEntryData(selectBeamNode(beamById))}
+                      beamData={beamById}
                       beamStatus={selectBeamStatusField(beamStreamData)}
+                      renderEditor={({ beamId, reflectToId, showEditor, setShowEditor }) => (
+                        <ReflectEditor
+                          beamId={beamId}
+                          reflectToId={reflectToId}
+                          showEditor={showEditor}
+                          setShowEditor={setShowEditor}
+                        />
+                      )}
                     />
                   );
                 }}
@@ -138,8 +146,16 @@ const beamReflectRoute = createRoute({
                     <BeamPage
                       beamId={beamId}
                       isActive={selectBeamActiveField(beamStreamData)}
-                      beamData={mapBeamEntryData(selectBeamNode(beamById))}
+                      beamData={beamById}
                       beamStatus={selectBeamStatusField(beamStreamData)}
+                      renderEditor={({ beamId, reflectToId, showEditor, setShowEditor }) => (
+                        <ReflectEditor
+                          beamId={beamId}
+                          reflectToId={reflectToId}
+                          showEditor={showEditor}
+                          setShowEditor={setShowEditor}
+                        />
+                      )}
                     />
                   );
                 }}
@@ -185,6 +201,14 @@ const reflectionsRoute = createRoute({
                   <ReflectionPage
                     isActive={selectReflectionActiveField(reflectionStreamData)}
                     reflectionData={mapReflectEntryData(selectReflectionNode(reflectionById))}
+                    renderEditor={({ beamId, reflectToId, showEditor, setShowEditor }) => (
+                      <ReflectEditor
+                        beamId={beamId}
+                        reflectToId={reflectToId}
+                        showEditor={showEditor}
+                        setShowEditor={setShowEditor}
+                      />
+                    )}
                   />
                 )}
               </Await>
@@ -214,6 +238,14 @@ const reflectionsReflectRoute = createRoute({
                   <ReflectionPage
                     isActive={selectReflectionActiveField(reflectionStreamData)}
                     reflectionData={mapReflectEntryData(selectReflectionNode(reflectionById))}
+                    renderEditor={({ beamId, reflectToId, showEditor, setShowEditor }) => (
+                      <ReflectEditor
+                        beamId={beamId}
+                        reflectToId={reflectToId}
+                        showEditor={showEditor}
+                        setShowEditor={setShowEditor}
+                      />
+                    )}
                   />
                 )}
               </Await>

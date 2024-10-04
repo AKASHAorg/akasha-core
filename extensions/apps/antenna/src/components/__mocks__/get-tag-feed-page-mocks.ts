@@ -1,5 +1,11 @@
-import { genIndexedStreamCount, genInterestsByDID } from '@akashaorg/af-testing';
 import {
+  genBeamData,
+  genExtensionData,
+  genIndexedStreamCount,
+  genInterestsByDID,
+} from '@akashaorg/af-testing';
+import {
+  GetAppsByIdDocument,
   GetIndexedStreamCountDocument,
   GetInterestsByDidDocument,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
@@ -11,6 +17,7 @@ interface IGetTagFeedPageMocks {
 }
 
 export function getTagFeedPageMocks({ count, tag }: IGetTagFeedPageMocks) {
+  const beamData = genBeamData({ beamId: 'beam1', authorProfileDID: AUTHENTICATED_DID });
   return {
     mocks: [
       {
@@ -32,6 +39,19 @@ export function getTagFeedPageMocks({ count, tag }: IGetTagFeedPageMocks) {
         result: {
           data: {
             node: genInterestsByDID({ profileDID: AUTHENTICATED_DID, tag }),
+          },
+        },
+      },
+      {
+        request: {
+          query: GetAppsByIdDocument,
+          variables: {
+            id: beamData.appID,
+          },
+        },
+        result: {
+          data: {
+            node: genExtensionData({ appId: beamData.appID }),
           },
         },
       },

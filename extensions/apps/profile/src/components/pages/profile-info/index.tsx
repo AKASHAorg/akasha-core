@@ -110,7 +110,7 @@ const ProfileInfoPage: React.FC<ProfileInfoPageProps> = props => {
     setShowNSFW(true);
   };
 
-  if (profileData?.nsfw && !showNSFW && authenticatedDID !== profileData.did.id)
+  if (profileData?.nsfw && !showNSFW && authenticatedDID !== profileData?.did?.id)
     return (
       <Card>
         <NSFW
