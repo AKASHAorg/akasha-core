@@ -30,6 +30,7 @@ export type ErrorLoaderProps = React.PropsWithChildren<{
  * @param publicImgPath - (optional) path of the image to be displayed
  * @param title - error title
  * @param details - additional details about the error
+ * @param noWrapperCard - flag to determine whether to wrap the ErrorLoader with Card component or not
  * @param imageBoxStyle - provide custom twind classes for image container, if needed
  * @param customStyle - provide custom twind classes for general Card wrapper, if needed
  * @example
