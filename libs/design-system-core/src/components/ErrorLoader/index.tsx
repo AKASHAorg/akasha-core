@@ -1,5 +1,6 @@
 import * as React from 'react';
 import ErrorCard from './error-card';
+import Card from '../Card';
 
 export type ErrorLoaderProps = React.PropsWithChildren<{
   /**
@@ -17,6 +18,7 @@ export type ErrorLoaderProps = React.PropsWithChildren<{
    */
   details: React.ReactNode;
   dataTestId?: string;
+  noWrapperCard?: boolean;
   imageBoxStyle?: string; // use valid twind classes
   customStyle?: string; // use valid twind classes
 }>;
@@ -36,7 +38,16 @@ export type ErrorLoaderProps = React.PropsWithChildren<{
  * ```
  **/
 const ErrorLoader: React.FC<ErrorLoaderProps> = ({ children, ...props }) => {
-  const { type, publicImgPath = '/images' } = props;
+  const {
+    type,
+    publicImgPath = '/images',
+    title,
+    details,
+    noWrapperCard,
+    imageBoxStyle,
+    dataTestId,
+    customStyle,
+  } = props;
 
   let imagesrc: string;
 
@@ -58,10 +69,24 @@ const ErrorLoader: React.FC<ErrorLoaderProps> = ({ children, ...props }) => {
       break;
   }
 
-  return (
-    <ErrorCard imageSrc={imagesrc} {...props}>
+  const errorCardUi = (
+    <ErrorCard
+      type={type}
+      title={title}
+      details={details}
+      imageSrc={imagesrc}
+      imageBoxStyle={imageBoxStyle}
+    >
       {children}
     </ErrorCard>
+  );
+
+  return noWrapperCard ? (
+    <> {errorCardUi}</>
+  ) : (
+    <Card padding="p-8" dataTestId={dataTestId} customStyle={customStyle}>
+      {errorCardUi}
+    </Card>
   );
 };
 

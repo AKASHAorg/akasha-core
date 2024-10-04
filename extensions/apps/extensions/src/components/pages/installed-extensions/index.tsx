@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { InstalledExtension, useInstalledExtensions } from './use-installed-extensions';
 import { useNavigate } from '@tanstack/react-router';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { DefaultExtensionsList } from './default-extensions-list';
 
 const PUBLIC_IMAGE_PATH = '/images';
 
@@ -42,10 +43,9 @@ export const InstalledExtensionsPage: React.FC<unknown> = () => {
   });
 
   const installedExtensions = data?.map(addAction);
-  const defaultExtensions = [];
 
   return (
-    <Stack spacing="gap-y-4">
+    <Stack spacing="gap-y-4" customStyle="mb-2">
       <Text variant="h5">{t('Installed Extensions')}</Text>
       {
         //@TODO replace with Loader component once its created
@@ -112,17 +112,7 @@ export const InstalledExtensionsPage: React.FC<unknown> = () => {
           </Stack>
         </Card>
       )}
-      <Card padding="p-4" margin="mb-2">
-        <Stack spacing="gap-y-3">
-          <Text variant="h6">{t('Default Extensions')}</Text>
-          <Text variant="body2" color={{ light: 'grey5', dark: 'grey6' }}>
-            {t(
-              'The default extensions are the ones that come preinstalled with AKASHA World. You cannot uninstall them.',
-            )}
-          </Text>
-          <AppList apps={defaultExtensions} onLoadMore={() => null} />
-        </Stack>
-      </Card>
+      <DefaultExtensionsList />
     </Stack>
   );
 };

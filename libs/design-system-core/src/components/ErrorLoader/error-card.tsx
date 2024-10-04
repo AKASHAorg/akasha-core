@@ -1,6 +1,5 @@
 import React from 'react';
 import { tw } from '@twind/core';
-import Card from '../Card';
 import Image from '../Image';
 import Stack from '../Stack';
 import Text from '../Text';
@@ -9,46 +8,36 @@ import { ErrorLoaderProps } from '.';
 const ErrorCard: React.FC<
   React.PropsWithChildren<ErrorLoaderProps & { imageSrc: string }>
 > = props => {
-  const {
-    children,
-    imageSrc,
-    title,
-    details,
-    dataTestId,
-    imageBoxStyle = 'w-48 h-48',
-    customStyle = '',
-  } = props;
+  const { children, imageSrc, title, details, imageBoxStyle = 'w-48 h-48' } = props;
 
   return (
-    <Card padding="p-8" customStyle={customStyle} dataTestId={dataTestId}>
-      <Stack spacing="gap-y-4" align="center">
-        <Image
-          src={imageSrc}
-          loading="lazy"
-          decoding="async"
-          alt="error-card"
-          className={tw(imageBoxStyle)}
-        />
+    <Stack spacing="gap-y-4" align="center">
+      <Image
+        src={imageSrc}
+        loading="lazy"
+        decoding="async"
+        alt="error-card"
+        className={tw(imageBoxStyle)}
+      />
 
-        <Stack spacing="gap-y-1" align="center">
-          {typeof title === 'object' ? (
-            <>{title}</>
-          ) : (
-            <Text variant="h5" align="center" selectable={false}>
-              {title}
-            </Text>
-          )}
-          {typeof details === 'object' ? (
-            <>{details}</>
-          ) : (
-            <Text variant="body2" customStyle="text-grey4 dark:text-grey6 my-4" selectable={false}>
-              {details}
-            </Text>
-          )}
-        </Stack>
-        {children}
+      <Stack spacing="gap-y-1" align="center">
+        {typeof title === 'object' ? (
+          <>{title}</>
+        ) : (
+          <Text variant="h5" align="center" selectable={false}>
+            {title}
+          </Text>
+        )}
+        {typeof details === 'object' ? (
+          <>{details}</>
+        ) : (
+          <Text variant="body2" customStyle="text-grey4 dark:text-grey6 my-4" selectable={false}>
+            {details}
+          </Text>
+        )}
       </Stack>
-    </Card>
+      {children}
+    </Stack>
   );
 };
 

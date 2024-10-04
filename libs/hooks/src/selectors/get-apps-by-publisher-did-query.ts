@@ -12,6 +12,12 @@ const isEdgeList = (
   );
 };
 
+export const selectApps = (respData: GetAppsByPublisherDidQuery) => {
+  if (isEdgeList(respData)) {
+    return respData.node.akashaAppList.edges.map(edge => edge?.node);
+  }
+};
+
 export const selectAppDisplayName = (respData: GetAppsByPublisherDidQuery) => {
   if (isEdgeList(respData)) {
     return respData.node.akashaAppList.edges[0]?.node.displayName;
