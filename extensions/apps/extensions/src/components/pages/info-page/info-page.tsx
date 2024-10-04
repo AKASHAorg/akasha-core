@@ -1,15 +1,20 @@
 import * as React from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import {
+  ChevronRightIcon,
   FlagIcon,
   ShareIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import AppInfo from '@akashaorg/design-system-components/lib/components/AppInfo';
 import { useTranslation } from 'react-i18next';
 import { transformSource, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { formatRelativeTime, truncateDid } from '@akashaorg/design-system-core/lib/utils';
+import {
+  formatDate,
+  formatRelativeTime,
+  truncateDid,
+} from '@akashaorg/design-system-core/lib/utils';
 import {
   useGetAppReleaseByIdQuery,
   useGetAppsQuery,
@@ -20,7 +25,17 @@ import {
   selectLatestRelease,
 } from '@akashaorg/ui-awf-hooks/lib/selectors/get-apps-query';
 import { NetworkStatus } from '@apollo/client';
-import { useMemo } from 'react';
+import { AppInfoHeader } from '@akashaorg/design-system-components/lib/components/AppInfo/header';
+import Section, { DividerPosition } from '@akashaorg/design-system-core/lib/components/Section';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import ExtensionImageGallery from '@akashaorg/design-system-components/lib/components/ExtensionImageGallery';
+import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import CopyToClipboard from '@akashaorg/design-system-core/lib/components/CopyToClipboard';
+import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
+import Pill from '@akashaorg/design-system-core/lib/components/Pill';
+import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 type InfoPageProps = {
   appId: string;
@@ -29,11 +44,15 @@ type InfoPageProps = {
 export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
-  const { navigateToModal, decodeAppName } = useRootComponentProps();
+  const { navigateToModal, decodeAppName, getDefaultExtensionNames, getCorePlugins } =
+    useRootComponentProps();
+  const [showImageGalleryOverlay, setShowImageGalleryOverlay] = useState(false);
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
   const isLoggedIn = !!authenticatedDID;
+
+  const navigateTo = useRef(getCorePlugins().routing.navigateTo);
 
   const appReq = useGetAppsQuery({
     variables: {
@@ -63,151 +82,285 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
     }).catch(err => console.error('cannot navigate to /install/$appId', err));
   };
 
+  const handleUninstallClick = () => {
+    // @todo: navigate to uninstall modal
+  };
+
+  const handleOpenClick = () => {
+    navigateTo.current({
+      appName: decodeAppName(appId),
+      getNavigationUrl: () => '/',
+    });
+  };
+
+  const handleExtensionReportClick = () => {
+    navigateTo.current({
+      appName: '@akashaorg/app-vibes',
+      getNavigationUrl: () => `/report/extension/${appData.id}`,
+    });
+  };
+
   const appData = selectAkashaApp(appReq.data);
   const latestRelease = useMemo(() => selectLatestRelease(appReq.data), [appReq.data]);
 
+  const extensionTypeLabel = useMemo(() => {
+    if (!appData?.applicationType) {
+      return '';
+    }
+    switch (appData.applicationType) {
+      case AkashaAppApplicationType.App:
+        return t('App');
+      case AkashaAppApplicationType.Plugin:
+        return t('Plugin');
+      case AkashaAppApplicationType.Widget:
+        return t('Widget');
+      default:
+        return t('Other');
+    }
+  }, [appData?.applicationType, t]);
+
+  const coverImageSrc = useMemo(() => {
+    if (appData?.coverImage?.src) {
+      return transformSource(appData.coverImage.src);
+    }
+    return '/public?';
+  }, [appData]);
+
+  const isDefaultWorldExtension = useMemo(() => {
+    if (!appId) {
+      return false;
+    }
+
+    return getDefaultExtensionNames().includes(decodeAppName(appId));
+  }, [appId, decodeAppName, getDefaultExtensionNames]);
+
   return (
-    <Stack>
+    <>
       {error && (
-        <ErrorLoader
-          type="script-error"
-          title={t('There was an error loading the app info')}
-          details={t('We cannot show this app right now')}
-        />
+        <Stack>
+          <ErrorLoader
+            type="script-error"
+            title={t('There was an error loading the app info')}
+            details={t('We cannot show this app right now')}
+          />
+        </Stack>
       )}
       {!error && appReq.networkStatus === NetworkStatus.ready && (
-        <AppInfo
-          integrationName={appData.displayName}
-          integrationType={appData.applicationType}
-          nsfw={appData.nsfw}
-          nsfwLabel="NSFW"
-          pluginLabel={t('Plugin')}
-          share={{ label: t('Share'), icon: <ShareIcon /> }}
-          report={{
-            label: t('Flag'),
-            icon: <FlagIcon />,
-            onClick: () => ({}),
-            color: { light: 'errorLight', dark: 'errorDark' },
-          }}
-          status="not-installed"
-          notification={{
-            title: t('Notification'),
-            message: t('Some important information will appear here'),
-            action: (
-              <Button
-                size="md"
-                variant="text"
-                label={t('Button')}
-                onClick={null}
-                customStyle="self-start"
-              />
-            ),
-          }}
-          versionLabel={t('is available')}
-          updateButtonLabel={t('Update')}
-          packageName={appData.name}
-          packageNameTitle={'Package name'}
-          extensionIdTitle={'Extension Id'}
-          extensionId={appData.id}
-          developers={appData.contributors?.map(contrib => ({
-            name: contrib.akashaProfile.name,
-            profileId: contrib.id,
-            avatar: contrib.akashaProfile.avatar,
-          }))}
-          descriptionTitle={t('Description')}
-          readMore={t('Read more')}
-          descriptionBody={appData.description}
-          galleryTitle={t('Gallery')}
-          viewAllGalleryCTA={t('View all')}
-          developersTitle={t('Developer')}
-          permissionTitle={t('Extension Permission')}
-          collaboratorsTitle={t('Collaborators')}
-          generalInfoTitle={t('General Information')}
-          latestReleaseTitle={t('Latest Release')}
-          languageLabel={t('Languages')}
-          languages={['English', 'Spanish']}
-          version={t('Version {{appVersion}}', { appVersion: latestRelease?.node?.version })}
-          versionInfo={t('Latest release')}
-          versionDate={formatRelativeTime(latestRelease?.node?.createdAt)}
-          versionDescription={
-            latestRelease?.node?.meta?.filter(metadata => metadata.property === 'changelog')[0]
-              ?.value ?? t('this release has no changelog.')
-          }
-          goToVersionInfoPageLabel={t('View info')}
-          documentationTitle={t('Documentation')}
-          documentationLink={'Link 1'}
-          licenseTitle={t('License')}
-          license={appData.license}
-          contactSupportTitle={t('Contact Support')}
-          onInstall={handleInstallClick}
-          onUninstall={() => {
-            /*TODO: connect new hooks when they are ready*/
-          }}
-          onSelectDeveloper={() => {
-            navigate({
-              to: '/info/$appId/developer/$devDid',
-              params: {
-                appId,
-                devDid: '1',
-              },
-            });
-          }}
-          onCollaboratorsClick={() => {
-            navigate({
-              to: '/info/$appId/collaborators',
-              params: {
-                appId,
-              },
-            });
-          }}
-          onAppVersionClick={() => {
-            navigate({
-              to: '/info/$appId/versions',
-            });
-          }}
-          onLatestUpdateClick={() => {
-            navigate({
-              to: '/info/$appId/audit-log',
-              params: {
-                appId,
-              },
-            });
-          }}
-          onPermissionInfoClick={() => {
-            navigate({
-              to: '/info/$appId/permissions',
-              params: {
-                appId,
-              },
-            });
-          }}
-          onLicenseClick={() => {
-            navigate({
-              to: '/info/$appId/license',
-              params: {
-                appId,
-              },
-            });
-          }}
-          onContactSupportClick={() => {
-            navigate({
-              to: '/info/$appId/contact',
-              params: {
-                appId,
-              },
-            });
-          }}
-          onAppDescriptionClick={() => {
-            navigate({
-              to: '/info/$appId/description',
-              params: {
-                appId,
-              },
-            });
-          }}
-          transformSource={transformSource}
-        />
+        <>
+          <Card
+            dataTestId="cover-image"
+            elevation={'none'}
+            radius={{ top: 20 }}
+            background={{ light: 'grey7', dark: 'grey5' }}
+            // @todo: do we have a placeholder cover?
+            customStyle={`h-32 bg(center no-repeat cover [url(${coverImageSrc})])`}
+          />
+          <Stack>
+            <Stack spacing="gap-y-6">
+              <Card padding="p-4" margin="mb-2" radius={{ bottom: 20 }}>
+                <AppInfoHeader
+                  displayName={appData.displayName}
+                  extensionType={appData.applicationType}
+                  // @todo: do we have a placeholder app logo?
+                  extensionAvatar={appData.logoImage}
+                  nsfw={appData.nsfw}
+                  nsfwLabel={'NSFW'}
+                  extensionTypeLabel={extensionTypeLabel}
+                  share={{ label: t('Share'), icon: <ShareIcon /> }}
+                  report={{
+                    label: t('Flag'),
+                    icon: <FlagIcon />,
+                    // @todo: fix reporting handler
+                    onClick: handleExtensionReportClick,
+                    color: { light: 'errorLight', dark: 'errorDark' },
+                  }}
+                  onInstallClick={handleInstallClick}
+                  // @todo: add onUninstall handler
+                  onUninstallClick={handleUninstallClick}
+                  onOpenClick={handleOpenClick}
+                  isDefaultWorldExtension={isDefaultWorldExtension}
+                  // todo: fix isInstalled prop
+                  isInstalled={false}
+                  defaultAppPillLabel={t('Default')}
+                />
+
+                {appData.description && (
+                  <Section
+                    dividerPosition={DividerPosition.Top}
+                    title={t('Description')}
+                    viewMoreLabel={t('Read More')}
+                    onClickviewMoreLabel={() => {
+                      navigate({
+                        to: '/info/$appId/description',
+                        params: {
+                          appId,
+                        },
+                      });
+                    }}
+                  >
+                    <Text lineClamp={2} variant="body1">
+                      {appData.description}
+                    </Text>
+                  </Section>
+                )}
+                <Section title={t('Developer')} dividerPosition={DividerPosition.Top}>
+                  {appData.author?.akashaProfile && (
+                    // @todo: fix navigation to developer sub-page
+                    <Card onClick={() => {}} type="plain">
+                      <Stack direction="row" align="center">
+                        <ProfileAvatarButton
+                          profileId={appData.author?.akashaProfile?.id}
+                          label={appData.author?.akashaProfile?.name}
+                          avatar={transformSource(appData.author?.akashaProfile?.avatar?.default)}
+                          alternativeAvatars={appData.author?.akashaProfile?.avatar?.alternatives?.map(
+                            alternative => transformSource(alternative),
+                          )}
+                        />
+                        <Icon
+                          icon={<ChevronRightIcon />}
+                          size="sm"
+                          color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                          customStyle="ml-auto"
+                        />
+                      </Stack>
+                    </Card>
+                  )}
+                </Section>
+                {appData.gallery?.length && (
+                  <Section
+                    dividerPosition={DividerPosition.Top}
+                    title={t('Gallery')}
+                    viewMoreLabel={t('View All')}
+                    onClickviewMoreLabel={() => {
+                      setShowImageGalleryOverlay(!showImageGalleryOverlay);
+                    }}
+                  >
+                    <ExtensionImageGallery
+                      images={appData.gallery?.map(gImage => ({
+                        ...gImage,
+                        src: transformSource(gImage.src).src,
+                      }))}
+                      showOverlay={showImageGalleryOverlay}
+                      toggleOverlay={() => setShowImageGalleryOverlay(!showImageGalleryOverlay)}
+                    />
+                  </Section>
+                )}
+
+                <Section title={t('General Information')} dividerPosition={DividerPosition.Top}>
+                  <Stack spacing="gap-y-2">
+                    <Stack direction="row" justify="between">
+                      <Text variant="body2" color={{ light: 'grey4', dark: 'grey7' }}>
+                        {t('Package name')}
+                      </Text>
+                      <Button variant="text" size="md" label={appData.name} />
+                    </Stack>
+                    <Divider />
+                    <Stack direction="row" justify="between">
+                      <Text variant="body2" color={{ light: 'grey4', dark: 'grey7' }}>
+                        {t('Extension ID')}
+                      </Text>
+                      <Button variant="text" size="md" label={truncateDid(appData.id)} />
+                    </Stack>
+                    <Divider />
+                    <Stack direction="row" justify="between">
+                      <Text variant="body2" color={{ light: 'grey4', dark: 'grey7' }}>
+                        {t('Latest update')}
+                      </Text>
+                      <Button
+                        variant="text"
+                        size="md"
+                        label={formatRelativeTime(latestRelease?.node?.createdAt)}
+                        onClick={() => {
+                          navigate({
+                            to: '/info/$appId/audit-log',
+                            params: {
+                              appId,
+                            },
+                          });
+                        }}
+                      />
+                    </Stack>
+                    <Divider />
+                    <Stack direction="row" justify="between">
+                      <Text variant="body2" color={{ light: 'grey4', dark: 'grey7' }}>
+                        {t('License')}
+                      </Text>
+                      <Button
+                        variant="text"
+                        size="md"
+                        label={appData.license}
+                        onClick={() => {
+                          navigate({
+                            to: '/info/$appId/license',
+                            params: {
+                              appId,
+                            },
+                          });
+                        }}
+                      />
+                    </Stack>
+                    <Divider />
+                    <Stack direction="row" justify="between">
+                      <Text variant="body2" color={{ light: 'grey4', dark: 'grey7' }}>
+                        {t('Created on')}
+                      </Text>
+                      <Text variant="body2">{formatDate(appData.createdAt, 'DD MMM YYYY')}</Text>
+                    </Stack>
+                  </Stack>
+                </Section>
+                {appData.links?.length > 0 && (
+                  <Section title={t('Useful Links')} dividerPosition={DividerPosition.Top}>
+                    <Stack customStyle="flex-wrap">
+                      {appData.links?.map((link, idx) => (
+                        <CopyToClipboard key={`${link.href}_${idx}`} stringToBeCopied={link.href}>
+                          <Button variant="text" size="md" label={link.label} />
+                        </CopyToClipboard>
+                      ))}
+                    </Stack>
+                  </Section>
+                )}
+                {appData.contributors?.length > 0 && (
+                  <Section title={t('Collaborators')} dividerPosition={DividerPosition.Top}>
+                    {appData.contributors.map(contributor => (
+                      // todo: resolve contributors
+                      <div key={contributor.id}>{contributor.id}</div>
+                    ))}
+                  </Section>
+                )}
+                <Section
+                  title={t('Latest Release')}
+                  dividerPosition={DividerPosition.Top}
+                  viewMoreLabel={t('View Info')}
+                  onClickviewMoreLabel={() => {}}
+                >
+                  <Stack spacing="gap-y-4">
+                    <Stack>
+                      <Text variant="body1" color={{ light: 'grey4', dark: 'grey7' }}>
+                        {t('Version')} {latestRelease.node?.version}
+                      </Text>
+                      <Text variant="footnotes2">
+                        {formatDate(latestRelease.node?.createdAt, 'MMM YYYY')}
+                      </Text>
+                    </Stack>
+                    <Text lineClamp={2} variant="body1">
+                      {latestRelease.node?.meta?.find(meta => meta.property === 'description')
+                        ?.value || t('This release has no description added.')}
+                    </Text>
+                  </Stack>
+                </Section>
+
+                {appData.keywords?.length > 0 && (
+                  <Section title={''} showDivider={false}>
+                    {appData.keywords?.map((keyword, idx) => (
+                      <Pill type="info" key={`${keyword}_${idx}`} label={keyword} />
+                    ))}
+                  </Section>
+                )}
+              </Card>
+            </Stack>
+          </Stack>
+        </>
       )}
-    </Stack>
+    </>
   );
 };
