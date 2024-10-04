@@ -11,7 +11,7 @@ import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetAppsByPublisherDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 import { selectApps } from '@akashaorg/ui-awf-hooks/lib/selectors/get-apps-by-publisher-did-query';
 import { useTranslation } from 'react-i18next';
-import { InstalledExtension } from './use-installed-extensions';
+import { type InstalledExtension } from './use-installed-extensions';
 
 export const DefaultExtensionsList: React.FC<unknown> = () => {
   const { t } = useTranslation('app-extensions');
@@ -85,7 +85,13 @@ export const DefaultExtensionsList: React.FC<unknown> = () => {
             noWrapperCard={true}
           />
         )}
-        {defaultExtensions && <AppList apps={defaultExtensions} onLoadMore={() => null} />}
+        {defaultExtensions && (
+          <AppList
+            apps={defaultExtensions}
+            //implementation requires pagination support on installed extensions service on sdk
+            onLoadMore={() => null}
+          />
+        )}
       </Stack>
     </Card>
   );

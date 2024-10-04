@@ -75,7 +75,7 @@ const AppList: React.FC<AppListProps> = ({
             <Stack direction="row" justify="between" align="center" spacing="gap-x-8">
               <Stack direction="row" spacing="gap-x-3">
                 <AppAvatar appType={app.applicationType} avatar={app.logoImage} />
-                <Stack direction="column" justify="between">
+                <Stack direction="column" spacing="gap-y-1">
                   <Stack direction="row" spacing="gap-2">
                     <Text variant="button-sm">{app.displayName}</Text>
                     {showAppTypeIndicator && (

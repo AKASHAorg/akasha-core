@@ -9,7 +9,7 @@ import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import routes, { EXTENSIONS } from '../../../routes';
 import { useTranslation } from 'react-i18next';
-import { InstalledExtension, useInstalledExtensions } from './use-installed-extensions';
+import { type InstalledExtension, useInstalledExtensions } from './use-installed-extensions';
 import { useNavigate } from '@tanstack/react-router';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { DefaultExtensionsList } from './default-extensions-list';
