@@ -12,6 +12,7 @@ import { useGetAppsByPublisherDidQuery } from '@akashaorg/ui-awf-hooks/lib/gener
 import { selectApps } from '@akashaorg/ui-awf-hooks/lib/selectors/get-apps-by-publisher-did-query';
 import { useTranslation } from 'react-i18next';
 import { type InstalledExtension } from './use-installed-extensions';
+import { SortOrder } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 export const DefaultExtensionsList = () => {
   const { t } = useTranslation('app-extensions');
@@ -26,6 +27,7 @@ export const DefaultExtensionsList = () => {
         or: defaultApps.map(app => ({ where: { name: { equalTo: app } } })),
       },
       last: defaultApps.length,
+      sorting: { createdAt: SortOrder.Asc },
     },
   });
 
