@@ -116,28 +116,28 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
   const handleExtensionRemove = () => {
     navigateToModal({
       name: `remove-extension-confirmation`,
-      extensionId: extensionData.id,
+      extensionId: extensionData?.id,
     });
   };
 
   const handleExtensionEdit = () => {
     navigate({
       to: `/edit-extension/$extensionId/step1`,
-      params: { extensionId: extensionData.id },
+      params: { extensionId: extensionData?.id },
     });
   };
 
   const handleExtensionSubmit = () => {
     navigate({
       to: `/submit-extension/$extensionId`,
-      params: { extensionId: extensionData.id },
+      params: { extensionId: extensionData?.id },
     });
   };
 
   const handleReleaseSubmit = () => {
     navigate({
       to: `/submit-release/$extensionId`,
-      params: { extensionId: extensionData.id },
+      params: { extensionId: extensionData?.id },
     });
   };
 
@@ -237,14 +237,14 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
           <Stack direction="row" justify="between" spacing="gap-x-8" fullWidth>
             <Stack direction="row" spacing="gap-x-3" customStyle="max-h-[60px] w-[80%]">
               <AppAvatar
-                appType={extensionData.applicationType}
-                avatar={transformSource(extensionData.logoImage)}
-                extensionId={extensionData.id}
+                appType={extensionData?.applicationType}
+                avatar={transformSource(extensionData?.logoImage)}
+                extensionId={extensionData?.id}
               />
               <Stack direction="column" justify="between" customStyle="min-w-0" fullWidth>
                 <Stack direction="row" spacing="gap-2">
                   <Text variant="button-sm" truncate>
-                    {extensionData.name}
+                    {extensionData?.name}
                   </Text>
 
                   {extensionData?.applicationType && (
@@ -269,7 +269,7 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
                   color={{ light: 'grey4', dark: 'grey7' }}
                   truncate
                 >
-                  {extensionData.description || extensionData.displayName}
+                  {extensionData?.description || extensionData?.displayName}
                 </Text>
               </Stack>
             </Stack>

@@ -21,7 +21,7 @@ type DynamicInfiniteScrollItem = {
   itemsSize: number;
 };
 
-type DynamicInfiniteScrollType = {
+export type DynamicInfiniteScrollProps = {
   count: number;
   estimatedHeight: number;
   enableScrollRestoration?: boolean;
@@ -39,7 +39,7 @@ type DynamicInfiniteScrollType = {
 };
 
 //@TODO: merge with InfiniteScroll component and move to design system core
-const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
+const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollProps> = props => {
   const {
     count,
     estimatedHeight,
@@ -143,7 +143,7 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollType> = props => {
       )}
       <Card
         ref={parentRef}
-        customStyle={`relative min-h-[${virtualizer.isScrolling && loading && hasNextPage ? totalSize + overScan * estimatedHeight : totalSize}px] ${customStyle}`}
+        customStyle={`relative w-full min-h-[${virtualizer.isScrolling && loading && hasNextPage ? totalSize + overScan * estimatedHeight : totalSize}px] ${customStyle}`}
         dataTestId={dataTestId}
         type="plain"
       >

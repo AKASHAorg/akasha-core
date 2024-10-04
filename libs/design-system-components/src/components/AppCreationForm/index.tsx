@@ -1,4 +1,4 @@
-import React, { SyntheticEvent } from 'react';
+import React, { SyntheticEvent, useEffect } from 'react';
 import * as z from 'zod';
 import { Controller, useWatch } from 'react-hook-form';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
@@ -51,6 +51,9 @@ export type AppCreationFormProps = {
   extensionSourceURLLabel?: string;
   disclaimerLabel?: string;
   defaultValues?: AppCreationFormValues;
+  handleCheckExtName?: (fieldValue: string) => void;
+  isDuplicateExtName?: boolean;
+  loading?: boolean;
   cancelButton: ButtonType;
   createButton: {
     label: string;
@@ -68,6 +71,9 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
     extensionLicenseOther: '',
     extensionSourceURL: '',
   },
+  handleCheckExtName,
+  isDuplicateExtName,
+  loading,
   cancelButton,
   createButton,
   extensionDisplayNameFieldLabel,
@@ -83,6 +89,8 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
   const {
     control,
     getValues,
+    setError,
+    clearErrors,
     formState: { errors, dirtyFields },
   } = useForm<AppCreationFormValues>({
     defaultValues,
@@ -125,6 +133,14 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
     }
   };
 
+  useEffect(() => {
+    if (isDuplicateExtName) {
+      setError('extensionID', { message: 'Extension ID must be unique!' });
+    } else {
+      clearErrors('extensionID');
+    }
+  }, [isDuplicateExtName, setError, clearErrors]);
+
   return (
     <form onSubmit={onSave} className={tw(apply`h-full`)}>
       <Stack direction="column" spacing="gap-y-4">
@@ -158,6 +174,7 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
                 caption={error?.message}
                 status={error?.message ? 'error' : null}
                 onChange={onChange}
+                onBlur={() => handleCheckExtName(value)}
                 inputRef={ref}
                 required={true}
               />
@@ -260,7 +277,7 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
             variant="primary"
             label={createButton.label}
             loading={createButton.loading}
-            disabled={isValid ? !isFormDirty : true}
+            disabled={!isFormDirty || !isValid || loading}
             onClick={onSave}
             type="submit"
           />
@@ -277,12 +294,17 @@ const schema = z.object({
     .string()
     .trim()
     .min(6, { message: 'Must be at least 6 characters' })
+    .max(48, { message: 'Must be maximum 48 characters' })
     .refine(
       value => /^[a-zA-Z0-9-_.]+$/.test(value),
       'ID should contain only alphabets, numbers or -_.',
     ),
   extensionType: z.string(),
-  extensionDisplayName: z.string().trim().min(4, { message: 'Must be at least 4 characters' }),
+  extensionDisplayName: z
+    .string()
+    .trim()
+    .min(4, { message: 'Must be at least 4 characters' })
+    .max(24, { message: 'Must be maximum 24 characters' }),
   extensionLicense: z.string(),
   extensionLicenseOther: z.string().trim().min(3, { message: 'Must be at least 3 characters' }),
   extensionSourceURL: z.string().url({ message: 'URL is required' }),

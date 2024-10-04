@@ -31,12 +31,20 @@ const ErrorCard: React.FC<
         />
 
         <Stack spacing="gap-y-1" align="center">
-          <Text variant="h5" align="center" selectable={false}>
-            {title}
-          </Text>
-          <Text variant="body2" customStyle="text-grey4 dark:text-grey6 my-4" selectable={false}>
-            {details}
-          </Text>
+          {typeof title === 'object' ? (
+            <>{title}</>
+          ) : (
+            <Text variant="h5" align="center" selectable={false}>
+              {title}
+            </Text>
+          )}
+          {typeof details === 'object' ? (
+            <>{details}</>
+          ) : (
+            <Text variant="body2" customStyle="text-grey4 dark:text-grey6 my-4" selectable={false}>
+              {details}
+            </Text>
+          )}
         </Stack>
         {children}
       </Stack>
