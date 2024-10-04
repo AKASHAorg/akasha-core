@@ -276,7 +276,7 @@ export const BeamEditor: React.FC = () => {
         onSelectCheckbox={handleNsfwCheckbox}
       />
       <Stack customStyle="relative h-full overflow-hidden">
-        <Stack customStyle="overflow-auto h-full">
+        <Stack customStyle="overflow-y-auto overflow-x-hidden h-full">
           {blocksInUse.map((block, idx) => (
             <Card
               key={block.key}

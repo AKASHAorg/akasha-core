@@ -1,7 +1,7 @@
 import { Editor, Transforms, Element, Node, Point, Range, Descendant } from 'slate';
 import { ReactEditor } from 'slate-react';
 import ReactDOM from 'react-dom';
-import { CustomElement, CustomText, LinkElement, MentionElement } from '@akashaorg/typings/lib/ui';
+import { CustomText, LinkElement, MentionElement } from '@akashaorg/typings/lib/ui';
 import { Profile } from '@akashaorg/typings/lib/ui';
 import { ExtendedNode } from '.';
 
@@ -172,7 +172,7 @@ const CustomEditor = {
   },
 };
 
-export const isEditorEmpty = (editorState?: CustomElement[]) => {
+export const isEditorEmpty = (editorState?: Descendant[]) => {
   return !editorState?.find(content => {
     if (content && 'children' in content) {
       return content.children.find(childContent =>

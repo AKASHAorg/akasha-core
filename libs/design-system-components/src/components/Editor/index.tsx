@@ -54,12 +54,18 @@ import { renderElement, renderLeaf } from './renderers';
 import { withMentions, withLinks } from './plugins';
 
 import { MarkButton, BlockButton } from './formatting-buttons';
+import { tw } from '@twind/core';
 
 const MAX_TEXT_LENGTH = 500;
 
 export type ExtendedNode = Descendant | { children: Descendant[] };
 
-export type EditorActions = { insertText: (text: string) => void; insertBreak: () => void };
+export type EditorActions = {
+  insertText: (text: string) => void;
+  insertBreak: () => void;
+  children: Descendant[];
+  overwriteEditorChildren?: (value: Descendant[]) => void;
+};
 
 export type EditorBoxProps = {
   avatar?: Profile['avatar'];
@@ -77,7 +83,7 @@ export type EditorBoxProps = {
   withToolbar?: boolean;
   mentions?: Profile[];
   publishingApp?: string;
-  editorState?: Descendant[];
+  initialEditorValue?: Descendant[];
   ref?: React.Ref<unknown>;
   showCancelButton?: boolean;
   cancelButtonLabel?: string;
@@ -91,7 +97,6 @@ export type EditorBoxProps = {
   onPublish?: (publishData: IPublishData) => void;
   onClear?: () => void;
   onCancelClick?: () => void;
-  setEditorState: React.Dispatch<React.SetStateAction<Descendant[]>>;
   getMentions?: (query: string) => void;
   handleDisablePublish?: (value: boolean) => void;
   transformSource: (avatar: Image) => Image;
@@ -102,7 +107,6 @@ export type EditorBoxProps = {
 /**
  * Editor component based on the slate.js framework
  * @param uploadRequest - upload a file and returns a promise that resolves to an array
- * @param editorState - the state of the editor is controlled from the parent component
  * @param withMeter - display the letter counter, maximum length is internally defined at 500
  * @param withToolbar - display the rich text formatting toolbar
  * @param transformSource - utility function to provide ipfs images with gateways to be accessed
@@ -126,8 +130,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
     getMentions,
     mentions = [],
     publishingApp = 'AkashaApp',
-    editorState,
-    setEditorState,
+    initialEditorValue,
     cancelButtonLabel,
     onCancelClick,
     showCancelButton,
@@ -195,13 +198,20 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
     if (editorContainerRect) mentionPopoverWidth.current = editorContainerRect.width;
   }, []);
 
+  const overWriteEditorChildren = useCallback(
+    () => (value: Descendant[]) => {
+      editor.children = value;
+    },
+    [editor],
+  );
+
   useImperativeHandle(
     editorActionsRef,
     () => {
-      const { insertText, insertBreak } = editor;
-      return { insertText, insertBreak };
+      const { insertText, insertBreak, children } = editor;
+      return { insertText, insertBreak, children, overWriteEditorChildren };
     },
-    [editor],
+    [editor, overWriteEditorChildren],
   );
 
   /**
@@ -224,7 +234,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
         el.style.left = `${rect.left + window.scrollX}px`;
       }
     }
-  }, [editor, index, mentionTargetRange, editorState, mentionPopoverRef]);
+  }, [editor, index, mentionTargetRange, mentionPopoverRef]);
 
   /**
    * creates the object for publishing and resets the editor state after
@@ -232,7 +242,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
    * todo version should be passed as a prop
    */
   const handlePublish = () => {
-    const slateContent = editorState;
+    const slateContent = editor.children;
 
     const metadata: IMetadata = {
       app: publishingApp,
@@ -323,9 +333,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
       setLetterCount(textLength);
     }
 
-    setEditorState(value);
-
-    const { selection } = editor;
+    const { selection, children } = editor;
 
     /**
      * handles text matching and mentions
@@ -350,7 +358,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
         if (mentionsLimit) {
           if (
             countMentions({
-              children: editorState,
+              children,
             }) === mentionsLimit.count
           ) {
             setMentionsLimitReached(true);
@@ -482,7 +490,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
           )}
           <Slate
             editor={editor}
-            initialValue={editorState || editorDefaultValue}
+            initialValue={initialEditorValue || editorDefaultValue}
             onChange={handleChange}
           >
             <Editable
@@ -501,6 +509,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
               }
               renderLeaf={renderLeaf}
               onKeyDown={onKeyDown}
+              className={tw('focus:outline-none')}
             />
             {mentionTargetRange && (
               <MentionPopover

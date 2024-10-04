@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import dayjs from 'dayjs';
 import ReflectionCard, { ReflectionCardProps } from '../cards/reflection-card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -37,8 +37,6 @@ const EditableReflection: React.FC<ReflectionCardProps> = props => {
   const [newContent, setNewContent] = useState(null);
   const [edit, setEdit] = useState(false);
 
-  const [editorState, setEditorState] = useState(null);
-
   const sdk = getSDK();
 
   const {
@@ -49,8 +47,12 @@ const EditableReflection: React.FC<ReflectionCardProps> = props => {
     setMentionQuery(query);
   };
 
+  const editorActionsRef = useRef(null);
+
   useEffect(() => {
-    setEditorState(reflectionData.content.flatMap(item => decodeb64SlateContent(item.value)));
+    editorActionsRef?.current?.overwriteEditorChildern(
+      reflectionData.content.flatMap(item => decodeb64SlateContent(item.value)),
+    );
   }, [reflectionData.content]);
 
   const [editReflection, { loading: editInProgress }] = useUpdateAkashaReflectMutation({
@@ -146,12 +148,12 @@ const EditableReflection: React.FC<ReflectionCardProps> = props => {
             disableActionLabel={t('Authenticating')}
             placeholderButtonLabel={t('Reflect')}
             maxEncodedLengthErrLabel={t('Text block exceeds line limit, please review!')}
-            editorState={editorState}
             avatar={authenticatedProfile?.avatar}
             profileId={authenticatedProfile?.did?.id}
             disablePublish={!authenticatedDID}
             mentions={mentions}
             getMentions={handleGetMentions}
+            editorActionsRef={editorActionsRef}
             onPublish={data => {
               if (!authenticatedDID) {
                 return;
@@ -159,7 +161,6 @@ const EditableReflection: React.FC<ReflectionCardProps> = props => {
 
               handleEdit(data);
             }}
-            setEditorState={setEditorState}
             onCancelClick={() => {
               setEdit(false);
             }}

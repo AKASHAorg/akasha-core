@@ -13,6 +13,8 @@ const InlineChromiumBugfix = () => (
   </span>
 );
 
+const allowedSchemes = ['http:', 'https:', 'mailto:', 'tel:'];
+
 const MentionElement = (props: any) => {
   const { handleMentionClick, attributes, element, children } = props;
   const mention = element.name || element.did;
@@ -36,13 +38,29 @@ const MentionElement = (props: any) => {
 };
 
 const LinkElement = ({ attributes, children, element, handleLinkClick }: any) => {
+  // If you allow untrusted input in the href attribute of a hyperlink, attackers can use
+  // the javascript:, data: or vbscript: schemes to hijack your users.
+  // Mitigate by parsing the URL and checking against an allow list
+  const safeUrl = React.useMemo(() => {
+    let parsedUrl: URL = null;
+    try {
+      parsedUrl = new URL(element.url);
+    } catch (err) {
+      console.error(err);
+    }
+    if (parsedUrl && allowedSchemes.includes(parsedUrl.protocol)) {
+      return parsedUrl.href;
+    }
+    return 'about:blank';
+  }, [element.url]);
+
   return (
     <a
       className={tw(
         `text-secondaryLight dark:text-secondaryDark no-underline text-${element.align}`,
       )}
       {...attributes}
-      href={element.url as string}
+      href={safeUrl}
       size="large"
       target="_blank"
       rel="noopener noreferrer"

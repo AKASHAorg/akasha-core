@@ -20,7 +20,7 @@ export const BlockButton: React.FC<ToolbarButtonProps> = ({ format, icon, style 
   );
   return (
     <button
-      onClick={event => {
+      onMouseDown={event => {
         event.preventDefault();
         CustomEditor.toggleBlock(editor, format);
       }}
@@ -44,7 +44,7 @@ export const MarkButton: React.FC<ToolbarButtonProps> = ({ format, icon, style }
   const active = CustomEditor.isMarkActive(editor, format);
   return (
     <button
-      onClick={event => {
+      onMouseDown={event => {
         event.preventDefault();
         CustomEditor.toggleMark(editor, format);
       }}
