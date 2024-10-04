@@ -112,7 +112,7 @@ export const InstalledExtensionsList = () => {
                 </Stack>
                 <Text variant="h6">{t('No extensions installed yet!')}</Text>
                 <Stack align="center">
-                  <Text as="span" color={{ light: 'grey5', dark: 'grey6' }}>
+                  <Text as="span" variant="body2" color={{ light: 'grey5', dark: 'grey6' }}>
                     <Button
                       variant="text"
                       size="md"

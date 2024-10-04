@@ -85,7 +85,7 @@ const ErrorLoader: React.FC<ErrorLoaderProps> = ({ children, ...props }) => {
   return noWrapperCard ? (
     <> {errorCardUi}</>
   ) : (
-    <Card padding="p-8" dataTestId={dataTestId} customStyle={customStyle}>
+    <Card padding="p-6" dataTestId={dataTestId} customStyle={customStyle}>
       {errorCardUi}
     </Card>
   );
