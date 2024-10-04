@@ -26,7 +26,7 @@ export const DefaultExtensionsList = () => {
       filters: {
         or: defaultApps.map(app => ({ where: { name: { equalTo: app } } })),
       },
-      last: defaultApps.length,
+      first: defaultApps.length,
       sorting: { createdAt: SortOrder.Asc },
     },
   });
@@ -90,7 +90,7 @@ export const DefaultExtensionsList = () => {
         {defaultExtensions && (
           <AppList
             apps={defaultExtensions}
-            //implementation requires pagination support on installed extensions service on sdk
+            //@TODO implement pagination as the list can grow
             onLoadMore={() => null}
           />
         )}

@@ -70,19 +70,21 @@ export const InstalledExtensionsList = () => {
       </ErrorLoader>
     );
 
+  if (loading || isAuthenticating)
+    return (
+      <Card padding="p-4">
+        {
+          //@TODO replace with Loader component once its created
+        }
+        <Stack spacing="gap-y-5" align="center">
+          <Spinner />
+          <Text variant="button-md">{t('Loading installed extensions')}</Text>
+        </Stack>
+      </Card>
+    );
+
   return (
     <>
-      {
-        //@TODO replace with Loader component once its created
-      }
-      {(loading || isAuthenticating) && (
-        <Card padding="p-4">
-          <Stack spacing="gap-y-5" align="center">
-            <Spinner />
-            <Text variant="button-md">{t('Loading installed extensions')}</Text>
-          </Stack>
-        </Card>
-      )}
       {error && (
         <ErrorLoader
           title={
