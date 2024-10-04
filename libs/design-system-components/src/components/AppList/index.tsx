@@ -26,7 +26,7 @@ export type App = {
 export type AppListProps = {
   apps: App[];
   showAppTypeIndicator?: boolean;
-} & Pick<DynamicInfiniteScrollProps, 'itemSpacing' | 'hasNextPage' | 'loading' | 'onLoadMore'>;
+} & Pick<DynamicInfiniteScrollProps, 'hasNextPage' | 'loading' | 'onLoadMore'>;
 
 const ENTRY_HEIGHT = 92;
 
@@ -36,7 +36,6 @@ const ITEM_SPACING = 16;
  * Component that renders a list of apps
  * @param apps - array of extensions
  * @param loading -  boolean (optional) indicates if data is loading
- * @param itemSpacing - number (optional) sets the spacing between list items
  * @param hasNextPage - boolean (optional) used for pagination to indicate if next set of data is available
  * @param onLoadMore - handler for loading more data
  */
