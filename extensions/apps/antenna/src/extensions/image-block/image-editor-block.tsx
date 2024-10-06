@@ -171,7 +171,16 @@ export const ImageEditorBlock = (
         };
       }
     },
-    [alignState, caption, createContentBlock, contentBlockImages, props.blockInfo, logger],
+    [
+      alignState,
+      caption,
+      createContentBlock,
+      contentBlockImages,
+      props.blockInfo,
+      logger,
+      appVersionID,
+      t,
+    ],
   );
 
   const retryCreate = useCallback(
@@ -475,6 +484,8 @@ export const ImageEditorBlock = (
           </Stack>
           {showCaption && (
             <TextField
+              // eslint-disable-next-line
+              autoFocus
               value={caption}
               placeholder={t('Write caption here')}
               type={'text'}

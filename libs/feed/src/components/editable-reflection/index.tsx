@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import dayjs from 'dayjs';
 import ReflectionCard, { ReflectionCardProps } from '../cards/reflection-card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -46,14 +46,6 @@ const EditableReflection: React.FC<ReflectionCardProps> = props => {
   const handleGetMentions = (query: string) => {
     setMentionQuery(query);
   };
-
-  const editorActionsRef = useRef(null);
-
-  useEffect(() => {
-    editorActionsRef?.current?.overwriteEditorChildern(
-      reflectionData.content.flatMap(item => decodeb64SlateContent(item.value)),
-    );
-  }, [reflectionData.content]);
 
   const [editReflection, { loading: editInProgress }] = useUpdateAkashaReflectMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
@@ -151,9 +143,11 @@ const EditableReflection: React.FC<ReflectionCardProps> = props => {
             avatar={authenticatedProfile?.avatar}
             profileId={authenticatedProfile?.did?.id}
             disablePublish={!authenticatedDID}
+            initialEditorValue={reflectionData?.content?.flatMap(item =>
+              decodeb64SlateContent(item?.value),
+            )}
             mentions={mentions}
             getMentions={handleGetMentions}
-            editorActionsRef={editorActionsRef}
             onPublish={data => {
               if (!authenticatedDID) {
                 return;

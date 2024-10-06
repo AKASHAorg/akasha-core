@@ -170,7 +170,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
    * and prevent link preview generation when there are images
    * already uploaded or currently uploading
    */
-  const { insertData, insertText } = editor;
+  const { insertData, insertText, children } = editor;
 
   const handleInsertLink = (text: string) => {
     CustomEditor.insertLink(editor, text.trim());
@@ -198,20 +198,13 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
     if (editorContainerRect) mentionPopoverWidth.current = editorContainerRect.width;
   }, []);
 
-  const overWriteEditorChildren = useCallback(
-    () => (value: Descendant[]) => {
-      editor.children = value;
-    },
-    [editor],
-  );
-
   useImperativeHandle(
     editorActionsRef,
     () => {
-      const { insertText, insertBreak, children } = editor;
-      return { insertText, insertBreak, children, overWriteEditorChildren };
+      const { insertText, insertBreak } = editor;
+      return { insertText, insertBreak, children };
     },
-    [editor, overWriteEditorChildren],
+    [editor, children],
   );
 
   /**
@@ -265,7 +258,6 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
     const textContent: string = serializeToPlainText({ children: slateContent });
     const data = { metadata, slateContent, textContent, author: profileId };
     CustomEditor.clearEditor(editor);
-    ReactEditor.focus(editor);
     onPublish(data);
   };
 

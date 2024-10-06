@@ -85,16 +85,16 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
     });
   }, []);
 
+  const [showOldContent, setShowOldContent] = useState(false);
   const handleError = () => {
+    setShowOldContent(true);
     setShowEditor(true);
-    editorActionsRef?.current?.overwriteEditorChildren(
-      newContent.content.flatMap(item => decodeb64SlateContent(item.value)),
-    );
     showAlertNotification(`${t(`Something went wrong when publishing the reflection`)}.`);
     removePendingReflection(pendingReflectionIdRef.current);
   };
 
   const handlePublish = async (data: IPublishData) => {
+    setShowOldContent(false);
     const reflection = isReflectOfReflection ? { reflection: reflectToId, isReply: true } : {};
     const content = {
       active: true,
@@ -126,7 +126,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
     const response = await publishReflection({
       variables: {
         i: {
-          content,
+          content: content,
         },
       },
     });
@@ -152,6 +152,9 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
       noMentionsLabel={t('You are not following anyone with that name')}
       showEditor={showEditor}
       setShowEditor={setShowEditor}
+      initialEditorValue={
+        showOldContent && newContent?.content?.flatMap(item => decodeb64SlateContent(item?.value))
+      }
       avatar={authenticatedProfile?.avatar}
       profileId={authenticatedDID}
       disablePublish={!authenticatedDID}
