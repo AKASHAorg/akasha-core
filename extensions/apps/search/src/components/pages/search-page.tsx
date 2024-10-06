@@ -344,6 +344,9 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
         {!isFetchingSearch && searchKeyword && !searchState[activeButton]?.results?.length && (
           <Stack customStyle="mt-8">
+            {
+              //@TODO replace with error loader
+            }
             <InfoCard
               titleLabel=""
               bodyLabel={
@@ -356,7 +359,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
               }
               bodyVariant="body1"
               customWidthStyle="w-[90%] md:w-[50%] m-auto"
-              assetName="SearchApp_NotFound-min.webp"
+              assetName="list-not-available.webp"
             />
           </Stack>
         )}

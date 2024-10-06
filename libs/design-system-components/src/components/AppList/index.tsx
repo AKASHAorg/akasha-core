@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import InfiniteScroll from '../InfiniteScroll';
+import DynamicInfiniteScroll, { DynamicInfiniteScrollProps } from '../DynamicInfiniteScroll';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -16,7 +16,6 @@ import {
 } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 
 export type App = {
-  name?: string;
   displayName?: string;
   logoImage?: AppImageSource;
   description?: string;
@@ -27,17 +26,24 @@ export type App = {
 export type AppListProps = {
   apps: App[];
   showAppTypeIndicator?: boolean;
-  onLoadMore: () => Promise<unknown>;
-};
+} & Pick<DynamicInfiniteScrollProps, 'hasNextPage' | 'loading' | 'onLoadMore'>;
 
 const ENTRY_HEIGHT = 92;
 
 /**
  * Component that renders a list of apps
  * @param apps - array of extensions
- * @param onAppSelected - handler for clicking on an app from the list
+ * @param loading -  boolean (optional) indicates if data is loading
+ * @param hasNextPage - boolean (optional) used for pagination to indicate if next set of data is available
+ * @param onLoadMore - handler for loading more data
  */
-const AppList: React.FC<AppListProps> = ({ apps, showAppTypeIndicator, onLoadMore }) => {
+const AppList: React.FC<AppListProps> = ({
+  apps,
+  showAppTypeIndicator,
+  loading,
+  hasNextPage,
+  onLoadMore,
+}) => {
   const getIconByAppType = (applicationType: AkashaAppApplicationType) => {
     switch (applicationType) {
       case AkashaAppApplicationType.App:
@@ -50,10 +56,13 @@ const AppList: React.FC<AppListProps> = ({ apps, showAppTypeIndicator, onLoadMor
   };
 
   return (
-    <InfiniteScroll
-      totalElements={apps.length}
-      itemHeight={ENTRY_HEIGHT}
+    <DynamicInfiniteScroll
+      count={apps.length}
+      estimatedHeight={ENTRY_HEIGHT}
       overScan={1}
+      itemSpacing={0}
+      hasNextPage={hasNextPage}
+      loading={loading}
       onLoadMore={onLoadMore}
     >
       {({ index, itemIndex }) => {
@@ -65,7 +74,7 @@ const AppList: React.FC<AppListProps> = ({ apps, showAppTypeIndicator, onLoadMor
                 <AppAvatar appType={app.applicationType} avatar={app.logoImage} />
                 <Stack direction="column" justify="between">
                   <Stack direction="row" spacing="gap-2">
-                    <Text variant="button-sm">{app.name}</Text>
+                    <Text variant="button-sm">{app.displayName}</Text>
                     {showAppTypeIndicator && (
                       <Stack
                         customStyle="w-[18px] h-[18px] rounded-full"
@@ -99,7 +108,7 @@ const AppList: React.FC<AppListProps> = ({ apps, showAppTypeIndicator, onLoadMor
           </Stack>
         );
       }}
-    </InfiniteScroll>
+    </DynamicInfiniteScroll>
   );
 };
 
