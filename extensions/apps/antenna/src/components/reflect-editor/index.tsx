@@ -1,5 +1,7 @@
 import React, { useRef, useState } from 'react';
-import ReflectionEditor from '@akashaorg/design-system-components/lib/components/ReflectionEditor';
+import ReflectionEditor, {
+  ReflectionEditorProps,
+} from '@akashaorg/design-system-components/lib/components/ReflectionEditor';
 import getSDK from '@akashaorg/core-sdk';
 import {
   transformSource,
@@ -31,17 +33,17 @@ export type ReflectEditorProps = {
   reflectToId: string;
   showEditor: boolean;
   setShowEditor: (showEditor: boolean) => void;
+  editorActionsRef?: ReflectionEditorProps['editorActionsRef'];
 };
 
 const ReflectEditor: React.FC<ReflectEditorProps> = props => {
-  const { beamId, reflectToId, showEditor, setShowEditor } = props;
+  const { beamId, reflectToId, showEditor, setShowEditor, editorActionsRef } = props;
   const { t } = useTranslation('app-antenna');
   const { uiEvents } = useRootComponentProps();
   const [analyticsActions] = useAnalytics();
   const [newContent, setNewContent] = useState<ReflectionData>(null);
   const uiEventsRef = React.useRef(uiEvents);
   const pendingReflectionIdRef = useRef(null);
-  const editorActionsRef = useRef(null);
   const wrapperRef = useCloseActions(() => {
     if (isEditorEmpty(editorActionsRef?.current?.children)) {
       setShowEditor(false);
