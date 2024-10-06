@@ -149,7 +149,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
     updateProfileMutation({
       variables: {
         i: {
-          id: profileData.id,
+          id: profileData?.id,
           content: {
             name: publishProfileData.name,
             description: publishProfileData.bio,

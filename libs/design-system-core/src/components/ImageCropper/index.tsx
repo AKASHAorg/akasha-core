@@ -82,7 +82,7 @@ const ImageCropper: React.FC<ImageCropperProps> = ({
       <Text variant="footnotes2" align="center" weight="normal">
         {dragToRepositionLabel}
       </Text>
-      <Stack direction="row" justify="evenly" spacing="gap-x-2">
+      <Stack direction="row" justify="evenly" align="center" spacing="gap-x-2">
         <Icon icon={<MagnifyingGlassMinusIcon />} size="lg" />
         <input
           aria-label="range-input"
@@ -91,8 +91,10 @@ const ImageCropper: React.FC<ImageCropperProps> = ({
           min={MIN_ZOOM}
           max={MAX_ZOOM}
           step={ZOOM_STEP}
+          className={tw(
+            `w-[${(CROPPER_WIDTH - 64) / 16}rem] h-2 bg(gray-200 dark:gray-700) rounded-lg appearance-none cursor-pointer`,
+          )}
           onChange={e => setZoom(Number(e.target.value))}
-          className={tw(`w-[${(CROPPER_WIDTH - 64) / 16}rem]`)}
         />
         <Icon icon={<MagnifyingGlassPlusIcon />} size="lg" />
       </Stack>
