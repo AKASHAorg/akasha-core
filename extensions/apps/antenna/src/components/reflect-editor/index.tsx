@@ -128,7 +128,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
     const response = await publishReflection({
       variables: {
         i: {
-          content: content,
+          content,
         },
       },
     });
