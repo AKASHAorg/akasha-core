@@ -9,6 +9,7 @@ import ProfileBeamsPage from '../pages/profile-beams';
 import ProfileHeader from '../profile-header';
 import ProfileWithAuthorization from '../profile-with-authorization';
 import menuRoute, { BEAMS, EDIT, INTERESTS, FOLLOWERS, FOLLOWING } from '../../routes';
+import getSDK from '@akashaorg/core-sdk';
 import { ProfileLoading } from '@akashaorg/design-system-components/lib/components/Profile';
 import {
   CatchBoundary,
@@ -17,6 +18,7 @@ import {
   createRouter,
   Outlet,
   ScrollRestoration,
+  redirect,
 } from '@tanstack/react-router';
 import {
   GetProfileByDidDocument,
@@ -35,6 +37,17 @@ const rootRoute = createRootRouteWithContext<IRouterContext>()({
     </>
   ),
   notFoundComponent: () => <NotFoundComponent />,
+});
+
+const defaultRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/',
+  beforeLoad: async () => {
+    const result = await getSDK().api.auth.getCurrentUser();
+    if (result?.id) {
+      throw redirect({ to: '/$profileDID', params: { profileDID: result.id }, replace: true });
+    }
+  },
 });
 
 const profileInfoRoute = createRoute({
@@ -164,6 +177,7 @@ const beamsRoute = createRoute({
 });
 
 const routeTree = rootRoute.addChildren([
+  defaultRoute,
   profileInfoRoute,
   profileEditRoute,
   followersRoute,
