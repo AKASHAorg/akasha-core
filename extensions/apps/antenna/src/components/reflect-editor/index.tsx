@@ -20,7 +20,6 @@ import {
   NotificationTypes,
   NotificationEvents,
   ReflectionData,
-  CustomElement,
 } from '@akashaorg/typings/lib/ui';
 import {
   usePendingReflections,
@@ -33,21 +32,20 @@ export type ReflectEditorProps = {
   beamId: string;
   reflectToId: string;
   showEditor: boolean;
-  editorActionsRef?: ReflectionEditorProps['editorActionsRef'];
   setShowEditor: (showEditor: boolean) => void;
+  editorActionsRef?: ReflectionEditorProps['editorActionsRef'];
 };
 
 const ReflectEditor: React.FC<ReflectEditorProps> = props => {
-  const { beamId, reflectToId, showEditor, editorActionsRef, setShowEditor } = props;
+  const { beamId, reflectToId, showEditor, setShowEditor, editorActionsRef } = props;
   const { t } = useTranslation('app-antenna');
   const { uiEvents } = useRootComponentProps();
   const [analyticsActions] = useAnalytics();
-  const [editorState, setEditorState] = useState<CustomElement[] | null>(null);
   const [newContent, setNewContent] = useState<ReflectionData>(null);
   const uiEventsRef = React.useRef(uiEvents);
   const pendingReflectionIdRef = useRef(null);
   const wrapperRef = useCloseActions(() => {
-    if (isEditorEmpty(editorState)) {
+    if (isEditorEmpty(editorActionsRef?.current?.children)) {
       setShowEditor(false);
     }
   });
@@ -89,14 +87,16 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
     });
   }, []);
 
+  const [showOldContent, setShowOldContent] = useState(false);
   const handleError = () => {
+    setShowOldContent(true);
     setShowEditor(true);
-    setEditorState(newContent.content.flatMap(item => decodeb64SlateContent(item.value)));
     showAlertNotification(`${t(`Something went wrong when publishing the reflection`)}.`);
     removePendingReflection(pendingReflectionIdRef.current);
   };
 
   const handlePublish = async (data: IPublishData) => {
+    setShowOldContent(false);
     const reflection = isReflectOfReflection ? { reflection: reflectToId, isReply: true } : {};
     const content = {
       active: true,
@@ -152,9 +152,11 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
       disableActionLabel={t('Authenticating')}
       maxEncodedLengthErrLabel={t('Text block exceeds line limit, please review!')}
       noMentionsLabel={t('You are not following anyone with that name')}
-      editorState={editorState}
       showEditor={showEditor}
       setShowEditor={setShowEditor}
+      initialEditorValue={
+        showOldContent && newContent?.content?.flatMap(item => decodeb64SlateContent(item?.value))
+      }
       avatar={authenticatedProfile?.avatar}
       profileId={authenticatedDID}
       disablePublish={!authenticatedDID}
@@ -168,7 +170,6 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         }
         handlePublish(data);
       }}
-      setEditorState={setEditorState}
       transformSource={transformSource}
       encodingFunction={encodeSlateToBase64}
     />

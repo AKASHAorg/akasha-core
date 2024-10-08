@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import dayjs from 'dayjs';
 import ReflectionCard, { ReflectionCardProps } from '../cards/reflection-card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -37,8 +37,6 @@ const EditableReflection: React.FC<ReflectionCardProps> = props => {
   const [newContent, setNewContent] = useState(null);
   const [edit, setEdit] = useState(false);
 
-  const [editorState, setEditorState] = useState(null);
-
   const sdk = getSDK();
 
   const {
@@ -48,10 +46,6 @@ const EditableReflection: React.FC<ReflectionCardProps> = props => {
   const handleGetMentions = (query: string) => {
     setMentionQuery(query);
   };
-
-  useEffect(() => {
-    setEditorState(reflectionData.content.flatMap(item => decodeb64SlateContent(item.value)));
-  }, [reflectionData.content]);
 
   const [editReflection, { loading: editInProgress }] = useUpdateAkashaReflectMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
@@ -146,10 +140,12 @@ const EditableReflection: React.FC<ReflectionCardProps> = props => {
             disableActionLabel={t('Authenticating')}
             placeholderButtonLabel={t('Reflect')}
             maxEncodedLengthErrLabel={t('Text block exceeds line limit, please review!')}
-            editorState={editorState}
             avatar={authenticatedProfile?.avatar}
             profileId={authenticatedProfile?.did?.id}
             disablePublish={!authenticatedDID}
+            initialEditorValue={reflectionData?.content?.flatMap(item =>
+              decodeb64SlateContent(item?.value),
+            )}
             mentions={mentions}
             getMentions={handleGetMentions}
             onPublish={data => {
@@ -159,7 +155,6 @@ const EditableReflection: React.FC<ReflectionCardProps> = props => {
 
               handleEdit(data);
             }}
-            setEditorState={setEditorState}
             onCancelClick={() => {
               setEdit(false);
             }}
