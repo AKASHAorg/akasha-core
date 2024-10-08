@@ -149,17 +149,26 @@ class AWF_Profile {
     return { CID: cid, size: resized.size, blob: resized.image };
   }
 
-  async initNotifications() {
+  async initNotificationsStream() {
     const signer = await this._web3.getSigner();
+    // @Todo: explore case with signer being null, no authenticated user
     this._pushClient = await PushAPI.initialize(signer, {
       env: CONSTANTS.ENV.STAGING,
       // account: pushAccount,
     });
 
     this._notificationsStream = await this._pushClient.initStream([CONSTANTS.STREAM.NOTIF]);
-
     this._notificationsStream.on(CONSTANTS.STREAM.NOTIF, (data: any) => {
       console.log(data);
+      const notification = new Notification(data?.message?.notification.body, {
+        body: data?.message?.notification.body,
+        icon: data?.channel?.icon,
+        data: data?.message?.payload,
+      });
+      notification.onclick = (event: any) => {
+        event.preventDefault();
+        window.open(data?.message?.payload?.cta || data?.channel?.url, '_blank');
+      };
     });
 
     await this._notificationsStream.connect();
@@ -176,6 +185,8 @@ class AWF_Profile {
     if (!this._notificationsStream) {
       throw new Error('Notifications stream not initialized');
     }
+    // this can be used for managing the event listeners
+    // for example, to unsubscribe from the stream
     return this._notificationsStream;
   }
 
@@ -195,6 +206,24 @@ class AWF_Profile {
       limit: 125,
     });
     console.info('inboxNotifications', inboxNotifications);
+  }
+
+  async enableBrowserNotifications() {
+    if (!this._pushClient) {
+      throw new Error('Notifications client not initialized');
+    }
+    if (!('Notification' in window)) {
+      // Check if the browser supports notifications
+      throw new Error('This browser does not support desktop notification');
+    } else if (Notification.permission === 'granted') {
+      return true;
+    } else if (Notification.permission !== 'denied') {
+      // We need to ask the user for permission
+      await Notification.requestPermission();
+    }
+
+    // @ts-ignore
+    return Notification.permission === 'granted';
   }
 }
 
