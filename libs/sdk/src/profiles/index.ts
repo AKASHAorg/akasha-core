@@ -159,12 +159,12 @@ class AWF_Profile {
 
     this._notificationsStream = await this._pushClient.initStream([CONSTANTS.STREAM.NOTIF]);
     this._notificationsStream.on(CONSTANTS.STREAM.NOTIF, (data: any) => {
-      console.log(data);
       const notification = new Notification(data?.message?.notification.body, {
         body: data?.message?.notification.body,
         icon: data?.channel?.icon,
         data: data?.message?.payload,
       });
+      // can assign event listeners to the notification
       notification.onclick = (event: any) => {
         event.preventDefault();
         window.open(data?.message?.payload?.cta || data?.channel?.url, '_blank');
@@ -205,7 +205,7 @@ class AWF_Profile {
       account: this._web3.CAIP10.address,
       limit: 125,
     });
-    console.info('inboxNotifications', inboxNotifications);
+    return inboxNotifications;
   }
 
   async enableBrowserNotifications() {
