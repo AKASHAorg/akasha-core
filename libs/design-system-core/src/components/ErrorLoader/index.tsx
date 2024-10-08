@@ -1,5 +1,6 @@
 import * as React from 'react';
 import ErrorCard from './error-card';
+import Card from '../Card';
 
 export type ErrorLoaderProps = React.PropsWithChildren<{
   /**
@@ -17,6 +18,7 @@ export type ErrorLoaderProps = React.PropsWithChildren<{
    */
   details: React.ReactNode;
   dataTestId?: string;
+  noWrapperCard?: boolean;
   imageBoxStyle?: string; // use valid twind classes
   customStyle?: string; // use valid twind classes
 }>;
@@ -28,6 +30,7 @@ export type ErrorLoaderProps = React.PropsWithChildren<{
  * @param publicImgPath - (optional) path of the image to be displayed
  * @param title - error title
  * @param details - additional details about the error
+ * @param noWrapperCard - flag to determine whether to wrap the ErrorLoader with Card component or not
  * @param imageBoxStyle - provide custom twind classes for image container, if needed
  * @param customStyle - provide custom twind classes for general Card wrapper, if needed
  * @example
@@ -36,7 +39,16 @@ export type ErrorLoaderProps = React.PropsWithChildren<{
  * ```
  **/
 const ErrorLoader: React.FC<ErrorLoaderProps> = ({ children, ...props }) => {
-  const { type, publicImgPath = '/images' } = props;
+  const {
+    type,
+    publicImgPath = '/images',
+    title,
+    details,
+    noWrapperCard,
+    imageBoxStyle,
+    dataTestId,
+    customStyle,
+  } = props;
 
   let imagesrc: string;
 
@@ -58,10 +70,24 @@ const ErrorLoader: React.FC<ErrorLoaderProps> = ({ children, ...props }) => {
       break;
   }
 
-  return (
-    <ErrorCard imageSrc={imagesrc} {...props}>
+  const errorCardUi = (
+    <ErrorCard
+      type={type}
+      title={title}
+      details={details}
+      imageSrc={imagesrc}
+      imageBoxStyle={imageBoxStyle}
+    >
       {children}
     </ErrorCard>
+  );
+
+  return noWrapperCard ? (
+    <> {errorCardUi}</>
+  ) : (
+    <Card padding="p-6" dataTestId={dataTestId} customStyle={customStyle}>
+      {errorCardUi}
+    </Card>
   );
 };
 

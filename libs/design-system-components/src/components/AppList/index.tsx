@@ -30,6 +30,8 @@ export type AppListProps = {
 
 const ENTRY_HEIGHT = 92;
 
+const ITEM_SPACING = 16;
+
 /**
  * Component that renders a list of apps
  * @param apps - array of extensions
@@ -60,7 +62,7 @@ const AppList: React.FC<AppListProps> = ({
       count={apps.length}
       estimatedHeight={ENTRY_HEIGHT}
       overScan={1}
-      itemSpacing={0}
+      itemSpacing={ITEM_SPACING}
       hasNextPage={hasNextPage}
       loading={loading}
       onLoadMore={onLoadMore}
@@ -72,7 +74,7 @@ const AppList: React.FC<AppListProps> = ({
             <Stack direction="row" justify="between" align="center" spacing="gap-x-8">
               <Stack direction="row" spacing="gap-x-3">
                 <AppAvatar appType={app.applicationType} avatar={app.logoImage} />
-                <Stack direction="column" justify="between">
+                <Stack direction="column" spacing="gap-y-1">
                   <Stack direction="row" spacing="gap-2">
                     <Text variant="button-sm">{app.displayName}</Text>
                     {showAppTypeIndicator && (
