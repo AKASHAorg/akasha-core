@@ -31,6 +31,7 @@
     "@lit-protocol/lit-node-client": "6.3.0",
     "@lottiefiles/react-lottie-player": "3.4.9",
     "@multiformats/multiaddr-to-uri": "9.0.1",
+    "@pushprotocol/restapi": "^1.7.28",
     "@t3-oss/env-core": "0.11.0",
     "@ucanto/core": "10.0.1",
     "@ucanto/principal": "9.0.1",
