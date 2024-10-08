@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createEditor, Descendant } from 'slate';
 import { Slate, withReact, Editable, RenderElementProps } from 'slate-react';
-import { withMentions, withTags, withLinks } from '../Editor/plugins';
+import { withMentions, withLinks } from '../Editor/plugins';
 import { renderElement, renderLeaf } from '../Editor/renderers';
 import { editorDefaultValue } from '../Editor/initialValue';
 
@@ -29,10 +29,7 @@ const ReadOnlyEditor: React.FC<IReadOnlyEditor> = props => {
   /**
    * initialise the editor with required plugins to parse content
    */
-  const editor = React.useMemo(
-    () => withLinks(withTags(withMentions(withReact(createEditor())))),
-    [],
-  );
+  const editor = React.useMemo(() => withLinks(withMentions(withReact(createEditor()))), []);
 
   React.useEffect(() => {
     editor.children = content;
@@ -43,7 +40,7 @@ const ReadOnlyEditor: React.FC<IReadOnlyEditor> = props => {
     <>
       <Slate
         editor={editor}
-        value={value}
+        initialValue={value}
         onChange={() => {
           /**
            * it is a read only editor

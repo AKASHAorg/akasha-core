@@ -65,7 +65,7 @@ export const SlateEditorBlock = (
   const canSaveDraft = props.blockInfo.mode === ContentBlockModes.EDIT;
   const draftBeamData = canSaveDraft ? beamDraft.get() : null;
 
-  const [editorState, setEditorState] = useState(draftBeamData);
+  const editorActionsRef = useRef(null);
 
   const createBlock = useCallback(
     async ({ nsfw }: CreateContentBlock) => {
@@ -79,7 +79,11 @@ export const SlateEditorBlock = (
           retryCount: retryCount.current,
         };
       }
-      const content = encodeSlateToBase64(editorState);
+
+      const editorValue = editorActionsRef?.current?.children;
+
+      const content = encodeSlateToBase64(editorValue);
+
       const contentBlockValue: BlockLabeledValue = {
         label: props.blockInfo.appName,
         propertyType: props.blockInfo.propertyType,
@@ -118,7 +122,7 @@ export const SlateEditorBlock = (
         };
       }
     },
-    [createContentBlock, editorState, props.blockInfo, logger],
+    [createContentBlock, props.blockInfo, logger, appVersionID, t],
   );
 
   const retryCreate = useCallback(
@@ -168,10 +172,8 @@ export const SlateEditorBlock = (
       mentions={mentions}
       withMeter={isFocusedEditor}
       withToolbar={isFocusedEditor}
-      editorState={editorState}
-      setEditorState={(value: IPublishData['slateContent']) => {
-        setEditorState(value);
-      }}
+      initialEditorValue={draftBeamData}
+      editorActionsRef={editorActionsRef}
       showCancelButton={false}
       showPostButton={false}
       transformSource={transformSource}

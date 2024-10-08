@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Descendant } from 'slate';
 import { transformSource, encodeSlateToBase64 } from '@akashaorg/ui-awf-hooks';
 import { ProfileImageVersions } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { EditorActions } from '@akashaorg/design-system-components/lib/components/Editor';
 
 type ReflectionEditorRendererProps = {
   actionLabel: string;
@@ -15,8 +16,8 @@ type ReflectionEditorRendererProps = {
   avatar: ProfileImageVersions;
   profileId: string;
   disablePublish: boolean;
-  editorState: Descendant[];
-  setEditorState: React.Dispatch<React.SetStateAction<Descendant[]>>;
+  initialEditorValue?: Descendant[];
+  editorActionsRef?: React.RefObject<EditorActions>;
   mentions: AkashaProfile[];
   getMentions: (query: string) => void;
   onPublish: (data: IPublishData) => void;
@@ -34,8 +35,8 @@ const ReflectionEditorRenderer: React.FC<ReflectionEditorRendererProps> = props 
     avatar,
     profileId,
     disablePublish,
-    editorState,
-    setEditorState,
+    initialEditorValue,
+    editorActionsRef,
     mentions,
     getMentions,
     onPublish,
@@ -52,7 +53,8 @@ const ReflectionEditorRenderer: React.FC<ReflectionEditorRendererProps> = props 
       disableActionLabel={disableActionLabel}
       placeholderButtonLabel={placeholderButtonLabel}
       maxEncodedLengthErrLabel={maxEncodedLengthErrLabel}
-      editorState={editorState}
+      initialEditorValue={initialEditorValue}
+      editorActionsRef={editorActionsRef}
       showEditor={showEditor}
       setShowEditor={setShowEditor}
       showCancelButton={true}
@@ -64,7 +66,6 @@ const ReflectionEditorRenderer: React.FC<ReflectionEditorRendererProps> = props 
       background={{ light: 'white', dark: 'grey2' }}
       customStyle="px-2 pt-2"
       onPublish={onPublish}
-      setEditorState={setEditorState}
       onCancelClick={onCancelClick}
       transformSource={transformSource}
       encodingFunction={encodeSlateToBase64}

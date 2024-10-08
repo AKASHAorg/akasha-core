@@ -46,21 +46,26 @@ import {
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import EditorMeter from '@akashaorg/design-system-core/lib/components/EditorMeter';
 
-import { CustomEditor } from './helpers';
-import { TagPopover } from './tag-popover';
+import { countMentions, CustomEditor } from './helpers';
 import { serializeToPlainText } from './serialize';
 import { MentionPopover } from './mention-popover';
 import { editorDefaultValue } from './initialValue';
 import { renderElement, renderLeaf } from './renderers';
-import { withMentions, withTags, withLinks } from './plugins';
+import { withMentions, withLinks } from './plugins';
 
 import { MarkButton, BlockButton } from './formatting-buttons';
+import { tw } from '@twind/core';
 
 const MAX_TEXT_LENGTH = 500;
 
-type Node = Descendant | { children: Descendant[] };
+export type ExtendedNode = Descendant | { children: Descendant[] };
 
-export type EditorActions = { insertText: (text: string) => void; insertBreak: () => void };
+export type EditorActions = {
+  insertText: (text: string) => void;
+  insertBreak: () => void;
+  children: Descendant[];
+  overwriteEditorChildren?: (value: Descendant[]) => void;
+};
 
 export type EditorBoxProps = {
   avatar?: Profile['avatar'];
@@ -77,9 +82,8 @@ export type EditorBoxProps = {
   withMeter?: boolean;
   withToolbar?: boolean;
   mentions?: Profile[];
-  tags?: { name: string; totalPosts: number }[];
   publishingApp?: string;
-  editorState?: Descendant[];
+  initialEditorValue?: Descendant[];
   ref?: React.Ref<unknown>;
   showCancelButton?: boolean;
   cancelButtonLabel?: string;
@@ -93,9 +97,7 @@ export type EditorBoxProps = {
   onPublish?: (publishData: IPublishData) => void;
   onClear?: () => void;
   onCancelClick?: () => void;
-  setEditorState: React.Dispatch<React.SetStateAction<Descendant[]>>;
   getMentions?: (query: string) => void;
-  getTags?: (query: string) => void;
   handleDisablePublish?: (value: boolean) => void;
   transformSource: (avatar: Image) => Image;
   encodingFunction: (value: Descendant[]) => string;
@@ -105,7 +107,6 @@ export type EditorBoxProps = {
 /**
  * Editor component based on the slate.js framework
  * @param uploadRequest - upload a file and returns a promise that resolves to an array
- * @param editorState - the state of the editor is controlled from the parent component
  * @param withMeter - display the letter counter, maximum length is internally defined at 500
  * @param withToolbar - display the rich text formatting toolbar
  * @param transformSource - utility function to provide ipfs images with gateways to be accessed
@@ -127,12 +128,9 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
     withMeter,
     withToolbar,
     getMentions,
-    getTags,
     mentions = [],
-    tags = [],
     publishingApp = 'AkashaApp',
-    editorState,
-    setEditorState,
+    initialEditorValue,
     cancelButtonLabel,
     onCancelClick,
     showCancelButton,
@@ -149,9 +147,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
   const mentionPopoverRef: React.RefObject<HTMLDivElement> = useRef(null);
 
   const [mentionTargetRange, setMentionTargetRange] = useState<Range | null>(null);
-  const [tagTargetRange, setTagTargetRange] = useState<Range | null>(null);
   const [index, setIndex] = useState(0);
-  const [createTag, setCreateTag] = useState('');
   const [mentionsLimitReached, setMentionsLimitReached] = useState(false);
 
   const [letterCount, setLetterCount] = useState(0);
@@ -165,9 +161,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
   /**
    * initialise editor with all the required plugins
    */
-  const editorRef = useRef(
-    withLinks(withTags(withMentions(withHistory(withReact(createEditor()))))),
-  );
+  const editorRef = useRef(withLinks(withMentions(withHistory(withReact(createEditor())))));
 
   const editor = editorRef.current;
 
@@ -176,7 +170,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
    * and prevent link preview generation when there are images
    * already uploaded or currently uploading
    */
-  const { insertData, insertText } = editor;
+  const { insertData, insertText, children } = editor;
 
   const handleInsertLink = (text: string) => {
     CustomEditor.insertLink(editor, text.trim());
@@ -208,9 +202,9 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
     editorActionsRef,
     () => {
       const { insertText, insertBreak } = editor;
-      return { insertText, insertBreak };
+      return { insertText, insertBreak, children };
     },
-    [editor],
+    [editor, children],
   );
 
   /**
@@ -233,28 +227,18 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
         el.style.left = `${rect.left + window.scrollX}px`;
       }
     }
-    if (tagTargetRange && tags && tags.length > 0) {
-      const el = mentionPopoverRef.current;
-      const domRange = ReactEditor.toDOMRange(editor, tagTargetRange);
-      const rect = domRange.getBoundingClientRect();
-      if (el) {
-        el.style.top = `${rect.top + window.screenY + 20}px`;
-        el.style.left = `${rect.left + window.scrollX}px`;
-      }
-    }
-  }, [tags, editor, index, mentionTargetRange, tagTargetRange, editorState, mentionPopoverRef]);
+  }, [editor, index, mentionTargetRange, mentionPopoverRef]);
 
   /**
    * creates the object for publishing and resets the editor state after
-   * metadata contains tags, mentions, quote, the publishing app and the version of the document
+   * metadata contains mentions, quote, the publishing app and the version of the document
    * todo version should be passed as a prop
    */
   const handlePublish = () => {
-    const slateContent = editorState;
+    const slateContent = editor.children;
 
     const metadata: IMetadata = {
       app: publishingApp,
-      tags: [],
       mentions: [],
       version: 1,
     };
@@ -263,12 +247,9 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
      * wrap slateContent in object to make recursive getMetadata work
      */
     const initContent: { children: Descendant[] } = { children: slateContent };
-    (function getMetadata(node: Node) {
+    (function getMetadata(node: ExtendedNode) {
       if (Element.isElement(node) && node.type === 'mention') {
         metadata.mentions.push(node.id);
-      }
-      if (Element.isElement(node) && node.type === 'tag') {
-        metadata.tags.push(node.name);
       }
       if (Element.isElement(node) && node.children) {
         node.children.map((n: Descendant) => getMetadata(n));
@@ -277,21 +258,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
     const textContent: string = serializeToPlainText({ children: slateContent });
     const data = { metadata, slateContent, textContent, author: profileId };
     CustomEditor.clearEditor(editor);
-    ReactEditor.focus(editor);
     onPublish(data);
-  };
-
-  const countMentions = (node: Node) => {
-    let count = 0;
-    (function getCount(node: Node) {
-      if (Element.isElement(node) && node.type === 'mention') {
-        count++;
-      }
-      if (Element.isElement(node) && node.children) {
-        node.children.map((n: Descendant) => getCount(n));
-      }
-    })(node);
-    return count;
   };
 
   /**
@@ -314,9 +281,6 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
           }
           if (Element.isElement(node) && node.type === 'mention' && node.name?.length) {
             textLength += node.name.length;
-          }
-          if (Element.isElement(node) && node.type === 'tag' && node.name?.length) {
-            textLength += node.name?.length;
           }
           if (Element.isElement(node) && node.type === 'link' && node.url?.length) {
             textLength += node.url?.length;
@@ -361,12 +325,10 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
       setLetterCount(textLength);
     }
 
-    setEditorState(value);
-
-    const { selection } = editor;
+    const { selection, children } = editor;
 
     /**
-     * handles text matching for tags and mentions
+     * handles text matching and mentions
      */
     if (selection && Range.isCollapsed(selection)) {
       const [start] = Range.edges(selection);
@@ -375,8 +337,6 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
       const beforeRange = before && Editor.range(editor, before, start);
       const beforeText = beforeRange && Editor.string(editor, beforeRange);
       const beforeMentionMatch = beforeText && beforeText.toLocaleLowerCase().match(/^@(\w+)$/);
-      // @todo: proper matching /^#([a-z0-9]*)(\-?|.?)([a-z0-9]*)$/
-      const beforeTagMatch = beforeText && beforeText.toLocaleLowerCase().match(/^#(\w+)$/);
       const after = Editor.after(editor, start);
       const afterRange = Editor.range(editor, start, after);
       const afterText = Editor.string(editor, afterRange);
@@ -390,7 +350,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
         if (mentionsLimit) {
           if (
             countMentions({
-              children: editorState,
+              children,
             }) === mentionsLimit.count
           ) {
             setMentionsLimitReached(true);
@@ -403,22 +363,6 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
         return;
       } else {
         setMentionTargetRange(null);
-      }
-
-      /**
-       * creates the target range for tags
-       * setCreateTag is used for creating new tags from the matched text
-       */
-      if (beforeTagMatch && afterMatch && beforeRange && typeof getTags === 'function') {
-        const tagName = beforeTagMatch[1];
-        // .concat(beforeTagMatch[2], beforeTagMatch[3]);
-        setTagTargetRange(beforeRange);
-        getTags(tagName);
-        setCreateTag(tagName);
-        setIndex(0);
-        return;
-      } else {
-        setTagTargetRange(null);
       }
     }
   };
@@ -476,68 +420,12 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
             break;
         }
       };
-      /**
-       * key handler for the tag popover
-       * inserts the tag on tab, enter keypress
-       * if the user is still on the first position of the popover, on space keypress creates a  new tag
-       * this handles new tag creation when we have tags matching the typed chars
-       */
-      const selectTag = (event: KeyboardEvent, tagRange: Range) => {
-        switch (event.key) {
-          case 'ArrowDown': {
-            event.preventDefault();
-            const prevIndex = index >= tags.length - 1 ? 0 : index + 1;
-            setIndex(prevIndex);
-            break;
-          }
-          case 'ArrowUp': {
-            event.preventDefault();
-            const nextIndex = index <= 0 ? tags.length - 1 : index - 1;
-            setIndex(nextIndex);
-            break;
-          }
-          case 'Tab':
-          case 'Enter':
-            event.preventDefault();
-            Transforms.select(editor, tagRange);
-            CustomEditor.insertTag(editor, tags[index]);
-            setTagTargetRange(null);
-            break;
-          case ' ':
-            if (index === 0 && createTag.length > 1) {
-              event.preventDefault();
-              Transforms.select(editor, tagRange);
-              CustomEditor.insertTag(editor, { name: createTag, totalPosts: 0 });
-            } else {
-              event.preventDefault();
-              Transforms.select(editor, tagRange);
-              CustomEditor.insertTag(editor, tags[index]);
-            }
-            setTagTargetRange(null);
-            break;
-          case 'Escape':
-            event.preventDefault();
-            setTagTargetRange(null);
-            break;
-        }
-      };
 
       if (mentionTargetRange && mentions.length > 0) {
         selectMention(event, mentionTargetRange);
       }
-      if (tagTargetRange && tags.length > 0) {
-        selectTag(event, tagTargetRange);
-        /**
-         * handles new tag creation when there are no matches for the typed chars
-         * user can create a new tag by pressing tab, enter or space
-         */
-      } else if (tagTargetRange && [9, 13, 32].includes(event.keyCode) && createTag.length > 1) {
-        Transforms.select(editor, tagTargetRange);
-        CustomEditor.insertTag(editor, { name: createTag, totalPosts: 0 });
-        setTagTargetRange(null);
-      }
     },
-    [index, mentionTargetRange, tagTargetRange, mentions, tags, editor, createTag],
+    [index, mentionTargetRange, mentions, editor],
   );
 
   /**
@@ -550,23 +438,6 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
       setMentionTargetRange(null);
     }
   };
-
-  /**
-   * used for inserting tags when clicking on popover
-   */
-  const handleInsertTag = (tagIndex: number) => {
-    if (tagTargetRange && tags.length > 0) {
-      Transforms.select(editor, tagTargetRange);
-      CustomEditor.insertTag(editor, tags[tagIndex]);
-      setTagTargetRange(null);
-    }
-  };
-
-  // const handleInsertEmoji = (emojiCode: string) => {
-  //   CustomEditor.insertText(editor, emojiCode);
-  // };
-
-  // image insertion
 
   const publishDisabled = publishDisabledInternal || disablePublish;
 
@@ -609,7 +480,11 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
               background={{ light: 'warningDark/30', dark: 'warningDark/30' }}
             />
           )}
-          <Slate editor={editor} value={editorState || editorDefaultValue} onChange={handleChange}>
+          <Slate
+            editor={editor}
+            initialValue={initialEditorValue || editorDefaultValue}
+            onChange={handleChange}
+          >
             <Editable
               placeholder={placeholderLabel}
               autoComplete="off"
@@ -626,6 +501,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
               }
               renderLeaf={renderLeaf}
               onKeyDown={onKeyDown}
+              className={tw('focus:outline-none')}
             />
             {mentionTargetRange && (
               <MentionPopover
@@ -636,15 +512,6 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
                 transformSource={transformSource}
                 noMentionsLabel={noMentionsLabel}
                 customStyle={`w-[${mentionPopoverWidth.current}px] sm:w-[272px] `}
-              />
-            )}
-            {tagTargetRange && tags.length > 0 && (
-              <TagPopover
-                handleSelect={handleInsertTag}
-                ref={mentionPopoverRef}
-                values={tags}
-                currentIndex={index}
-                setIndex={setIndex}
               />
             )}
             <Stack
