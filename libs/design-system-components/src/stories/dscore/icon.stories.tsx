@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import Icon, { IconProps } from '@akashaorg/design-system-core/lib/components/Icon';
 import {
   Akasha,
@@ -12,7 +13,7 @@ import {
   Antenna,
   App,
   Blocks,
-  BoldAlt,
+  Bold,
   Caption,
   Discord,
   DidKey,
@@ -42,7 +43,6 @@ import {
   TextIcon,
   Twitter,
   Underline,
-  VibesConsole,
   Vibes,
   Walletconnect,
   Widget,
@@ -77,68 +77,71 @@ export const Default: Story = { args: { icon: <Akasha />, solid: true } };
 export const IconWithSize: Story = { args: { icon: <Akasha />, solid: true, size: 'xl' } };
 
 const solidCustomIconsArr = [
-  <Akasha key={0} />,
-  <Antenna key={7} />,
-  <App key={8} />,
-  <Discord key={12} />,
-  <IntegrationAppCTA key={18} />,
-  <Plugin key={32} />,
-  <Telegram key={36} />,
-  <TextIcon key={37} />,
-  <Twitter key={38} />,
-  <Widget key={43} />,
+  { icon: <Akasha key={0} />, name: 'Akasha' },
+  { icon: <Antenna key={7} />, name: 'Antenna' },
+  { icon: <App key={8} />, name: 'App' },
+  { icon: <Discord key={12} />, name: 'Discord' },
+  { icon: <IntegrationAppCTA key={18} />, name: 'IntegrationAppCTA' },
+  { icon: <Plugin key={32} />, name: 'Plugin' },
+  { icon: <Telegram key={36} />, name: 'Telegram' },
+  { icon: <TextIcon key={37} />, name: 'TextIcon' },
+  { icon: <Twitter key={38} />, name: 'Twitter' },
+  { icon: <Widget key={43} />, name: 'Widget' },
 ];
 
 const outlineCustomIconsArr = [
-  <AlignCenter key={1} />,
-  <AlignLeft key={2} />,
-  <AlignRight key={3} />,
-  <AlignTextCenter key={4} />,
-  <AlignTextLeft key={5} />,
-  <AlignTextRight key={6} />,
-  <Blocks key={9} />,
-  <BoldAlt key={10} />,
-  <Caption key={11} />,
-  <DidKey key={13} />,
-  <Eth key={14} />,
-  <Faq key={15} />,
-  <Following key={16} />,
-  <Github key={17} />,
-  <Italic key={19} />,
-  <LicenseAllRights key={20} />,
-  <LicenseAttribution key={21} />,
-  <LicenseNoDerivatives key={22} />,
-  <LicenseNoRights key={23} />,
-  <LicenseNonCommercial key={24} />,
-  <LicenseShareAlike key={25} />,
-  <LicenseSomeRights key={26} />,
-  <LicenseWtfpl key={27} />,
-  <ListBulleted key={28} />,
-  <ListNumbered key={29} />,
-  <Metamask key={30} />,
-  <NoEth key={31} />,
-  <Profile key={33} />,
-  <Shield key={34} />,
-  <Solana key={35} />,
-  <Underline key={39} />,
-  <VibesConsole key={40} />,
-  <Vibes key={41} />,
-  <Walletconnect key={42} />,
+  { icon: <AlignCenter key={1} />, name: 'AlignCenter' },
+  { icon: <AlignLeft key={2} />, name: 'AlignLeft' },
+  { icon: <AlignRight key={3} />, name: 'AlignRight' },
+  { icon: <AlignTextCenter key={4} />, name: 'AlignTextCenter' },
+  { icon: <AlignTextLeft key={5} />, name: 'AlignTextLeft' },
+  { icon: <AlignTextRight key={6} />, name: 'AlignTextRight' },
+  { icon: <Blocks key={9} />, name: 'Blocks' },
+  { icon: <Bold key={10} />, name: 'Bold' },
+  { icon: <Caption key={11} />, name: 'Caption' },
+  { icon: <DidKey key={13} />, name: 'DidKey' },
+  { icon: <Eth key={14} />, name: 'Eth' },
+  { icon: <Faq key={15} />, name: 'Faq' },
+  { icon: <Following key={16} />, name: 'Following' },
+  { icon: <Github key={17} />, name: 'Github' },
+  { icon: <Italic key={19} />, name: 'Italic' },
+  { icon: <LicenseAllRights key={20} />, name: 'LicenseAllRights' },
+  { icon: <LicenseAttribution key={21} />, name: 'LicenseAttribution' },
+  { icon: <LicenseNoDerivatives key={22} />, name: 'LicenseNoDerivatives' },
+  { icon: <LicenseNoRights key={23} />, name: 'LicenseNoRights' },
+  { icon: <LicenseNonCommercial key={24} />, name: 'LicenseNonCommercial' },
+  { icon: <LicenseShareAlike key={25} />, name: 'LicenseShareAlike' },
+  { icon: <LicenseSomeRights key={26} />, name: 'LicenseSomeRights' },
+  { icon: <LicenseWtfpl key={27} />, name: 'LicenseWtfpl' },
+  { icon: <ListBulleted key={28} />, name: 'ListBulleted' },
+  { icon: <ListNumbered key={29} />, name: 'ListNumbered' },
+  { icon: <Metamask key={30} />, name: 'Metamask' },
+  { icon: <NoEth key={31} />, name: 'NoEth' },
+  { icon: <Profile key={33} />, name: 'Profile' },
+  { icon: <Shield key={34} />, name: 'Shield' },
+  { icon: <Solana key={35} />, name: 'Solana' },
+  { icon: <Underline key={39} />, name: 'Underline' },
+  { icon: <Vibes key={41} />, name: 'Vibes' },
+  { icon: <Walletconnect key={42} />, name: 'Walletconnect' },
 ];
 
 export const CustomIcons: Story = {
   render: () => (
-    <Stack spacing="gap-y-3">
-      <Stack direction="row" spacing="gap-x-2">
-        <Text>Solid:</Text>
-        {solidCustomIconsArr.map(icon => (
-          <Icon key={icon.key} icon={icon} solid={true} />
+    <Stack spacing="gap-y-4">
+      <Stack direction="row" spacing="gap-3" customStyle="flex-wrap">
+        <Text weight="bold">Solid:</Text>
+        {solidCustomIconsArr.map(({ icon, name }) => (
+          <Tooltip key={icon.key} placement="top" content={name} trigger="hover">
+            <Icon icon={icon} solid={true} />
+          </Tooltip>
         ))}
       </Stack>
-      <Stack direction="row" spacing="gap-x-2">
-        <Text>Outline:</Text>
-        {outlineCustomIconsArr.map(icon => (
-          <Icon key={icon.key} icon={icon} />
+      <Stack direction="row" spacing="gap-3" customStyle="flex-wrap">
+        <Text weight="bold">Outline:</Text>
+        {outlineCustomIconsArr.map(({ icon, name }) => (
+          <Tooltip key={icon.key} placement="top" content={name} trigger="hover">
+            <Icon icon={icon} />
+          </Tooltip>
         ))}
       </Stack>
     </Stack>

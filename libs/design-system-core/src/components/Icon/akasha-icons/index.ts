@@ -10,7 +10,7 @@ import AlignTextRight from './align-text-right';
 import Antenna from './antenna';
 import App from './app';
 import Blocks from './blocks';
-import BoldAlt from './bold-alt';
+import Bold from './bold';
 import Caption from './caption';
 import DidKey from './didKey';
 import Discord from './discord';
@@ -40,7 +40,6 @@ import Telegram from './telegram';
 import TextIcon from './text-icon';
 import Twitter from './twitter';
 import Underline from './underline';
-import VibesConsole from './vibes-console';
 import Vibes from './vibes';
 import Walletconnect from './walletconnect';
 import Widget from './widget';
@@ -60,7 +59,7 @@ export type CustomIconTypes = Extract<
   | 'Antenna'
   | 'App'
   | 'Blocks'
-  | 'BoldAlt'
+  | 'Bold'
   | 'Caption'
   | 'DidKey'
   | 'Discord'
@@ -90,7 +89,6 @@ export type CustomIconTypes = Extract<
   | 'TextIcon'
   | 'Twitter'
   | 'Underline'
-  | 'VibesConsole'
   | 'Vibes'
   | 'Walletconnect'
   | 'Widget'
@@ -107,7 +105,7 @@ export {
   Antenna,
   App,
   Blocks,
-  BoldAlt,
+  Bold,
   Caption,
   Discord,
   DidKey,
@@ -137,7 +135,6 @@ export {
   TextIcon,
   Twitter,
   Underline,
-  VibesConsole,
   Vibes,
   Walletconnect,
   Widget,
