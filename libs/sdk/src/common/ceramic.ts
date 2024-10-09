@@ -75,14 +75,14 @@ Functionality:
 6. Set the DID on the ComposeClient instance
 */
   async connect(): Promise<DIDSession> {
-    const chainNameSpace = 'eip155';
-    const chainId = this._web3.networkId[this._web3.network];
-    const chainIdNameSpace = `${chainNameSpace}:${chainId}`;
     const ethAddress = await this._web3.getCurrentEthAddress();
     if (!ethAddress) {
       throw new Error('No eth address connected!');
     }
-    const accountId = new AccountId({ address: ethAddress, chainId: chainIdNameSpace });
+    const accountId = new AccountId({
+      address: ethAddress,
+      chainId: this._web3.CAIP10.chainIdNameSpace,
+    });
     const web3Provider = this._web3.walletProvider;
     if (!web3Provider) {
       throw new Error('No provider found for ceramic:connect!');

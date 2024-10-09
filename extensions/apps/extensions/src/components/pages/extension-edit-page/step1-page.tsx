@@ -12,7 +12,7 @@ import { DRAFT_EXTENSIONS } from '../../../constants';
 import { useAtom } from 'jotai';
 import { AtomContext, FormData } from './main-page';
 import { useGetAppsQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
-import { selectAkashaApp } from '../extension-creation-page/utils';
+import { selectAkashaApp } from '@akashaorg/ui-awf-hooks/lib/selectors/get-apps-query';
 
 type ExtensionEditStep1PageProps = {
   extensionId: string;

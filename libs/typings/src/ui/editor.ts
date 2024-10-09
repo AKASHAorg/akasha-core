@@ -34,17 +34,6 @@ export type MentionElement = {
 };
 
 /**
- * Type defining tag element of an editor
- */
-export type TagElement = {
-  type: 'tag';
-  name: string;
-  totalPosts: number;
-  children: Text[];
-  align?: 'left' | 'center' | 'right';
-};
-
-/**
  * Type defining paragraph element of an editor
  */
 export type ParagraphElement = {
@@ -86,7 +75,6 @@ export type NumberedListElement = {
 export type CustomElement =
   | LinkElement
   | MentionElement
-  | TagElement
   | ParagraphElement
   | ListItemElement
   | BulletedListElement
@@ -126,7 +114,6 @@ export interface IMetadata {
     size: { width: number; height: number; naturalWidth: number; naturalHeight: number };
     id: string;
   }[];
-  tags: string[];
   mentions: string[];
 }
 

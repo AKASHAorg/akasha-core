@@ -54,6 +54,7 @@ const config = [
         https: false,
         dns: false,
         fs: false,
+        zlib: false,
         assert: require.resolve('assert'),
         path: require.resolve('path-browserify/'),
         stream: require.resolve('stream-browserify/'),
