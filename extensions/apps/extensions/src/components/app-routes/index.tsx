@@ -142,23 +142,29 @@ const extensionInstallRoute = createRoute({
     return <InstallExtensionPage appId={appId} />;
   },
 });
-
-const infoRoute = createRoute({
+const infoRootRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/info/$appId',
+  component: () => <Outlet />,
+});
+
+const infoIndexRoute = createRoute({
+  getParentRoute: () => infoRootRoute,
+  path: '/',
   notFoundComponent: () => <NotFoundComponent />,
   component: () => {
-    const { appId } = infoRoute.useParams();
+    const { appId } = infoRootRoute.useParams();
     return (
       <CatchBoundary getResetKey={() => 'app_info_root_reset'} errorComponent={NotFoundComponent}>
         <InfoPage appId={appId} />
+        <Outlet />
       </CatchBoundary>
     );
   },
 });
 
 const devInfoRoute = createRoute({
-  getParentRoute: () => infoRoute,
+  getParentRoute: () => infoRootRoute,
   path: '/developer/$devDid',
   component: () => {
     const { devDid } = devInfoRoute.useParams();
@@ -171,10 +177,10 @@ const devInfoRoute = createRoute({
 });
 
 const collaboratorsInfoRoute = createRoute({
-  getParentRoute: () => infoRoute,
+  getParentRoute: () => infoRootRoute,
   path: '/collaborators',
   component: () => {
-    const { appId } = infoRoute.useParams();
+    const { appId } = infoRootRoute.useParams();
     return (
       <CatchBoundary getResetKey={() => 'collaborators_reset'} errorComponent={NotFoundComponent}>
         <CollaboratorsPage appId={appId} />
@@ -184,10 +190,10 @@ const collaboratorsInfoRoute = createRoute({
 });
 
 const versionInfoRoute = createRoute({
-  getParentRoute: () => infoRoute,
+  getParentRoute: () => infoRootRoute,
   path: '/versions',
   component: () => {
-    const { appId } = infoRoute.useParams();
+    const { appId } = infoRootRoute.useParams();
     return (
       <CatchBoundary getResetKey={() => 'app_info_root_reset'} errorComponent={NotFoundComponent}>
         <VersionInfoPage appId={appId} />
@@ -197,7 +203,7 @@ const versionInfoRoute = createRoute({
 });
 
 const versionHistoryRoute = createRoute({
-  getParentRoute: () => infoRoute,
+  getParentRoute: () => infoRootRoute,
   path: '/version-history',
   component: () => {
     const { appId } = versionHistoryRoute.useParams();
@@ -210,7 +216,7 @@ const versionHistoryRoute = createRoute({
 });
 
 const auditLogRoute = createRoute({
-  getParentRoute: () => infoRoute,
+  getParentRoute: () => infoRootRoute,
   path: '/audit-log',
   component: () => {
     const { appId } = auditLogRoute.useParams();
@@ -223,7 +229,7 @@ const auditLogRoute = createRoute({
 });
 
 const permissionInfoRoute = createRoute({
-  getParentRoute: () => infoRoute,
+  getParentRoute: () => infoRootRoute,
   path: '/permissions',
   component: () => {
     const { appId } = permissionInfoRoute.useParams();
@@ -236,7 +242,7 @@ const permissionInfoRoute = createRoute({
 });
 
 const appLicenseInfoRoute = createRoute({
-  getParentRoute: () => infoRoute,
+  getParentRoute: () => infoRootRoute,
   path: '/license',
   component: () => {
     const { appId } = appLicenseInfoRoute.useParams();
@@ -249,7 +255,7 @@ const appLicenseInfoRoute = createRoute({
 });
 
 const supportInfoRoute = createRoute({
-  getParentRoute: () => infoRoute,
+  getParentRoute: () => infoRootRoute,
   path: '/contact',
   component: () => {
     const { appId } = supportInfoRoute.useParams();
@@ -262,10 +268,10 @@ const supportInfoRoute = createRoute({
 });
 
 const appDescriptionRoute = createRoute({
-  getParentRoute: () => infoRoute,
+  getParentRoute: () => infoRootRoute,
   path: '/description',
   component: () => {
-    const { appId } = appDescriptionRoute.useParams();
+    const { appId } = infoRootRoute.useParams();
     return (
       <CatchBoundary getResetKey={() => 'description_reset'} errorComponent={NotFoundComponent}>
         <AppDescriptionPage appId={appId} />
@@ -419,7 +425,8 @@ const routeTree = rootRoute.addChildren([
   installedExtensionsRoute,
   myExtensionsRoute,
   developerModeRoute,
-  infoRoute.addChildren([
+  infoRootRoute.addChildren([
+    infoIndexRoute,
     devInfoRoute,
     collaboratorsInfoRoute,
     versionInfoRoute,

@@ -236,7 +236,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                     <ExtensionImageGallery
                       images={appData.gallery?.map(gImage => ({
                         ...gImage,
-                        src: transformSource(gImage.src).src,
+                        src: transformSource(gImage.src)?.src,
                       }))}
                       showOverlay={showImageGalleryOverlay}
                       toggleOverlay={() => setShowImageGalleryOverlay(!showImageGalleryOverlay)}
@@ -334,14 +334,14 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                   <Stack spacing="gap-y-4">
                     <Stack>
                       <Text variant="body1" color={{ light: 'grey4', dark: 'grey7' }}>
-                        {t('Version')} {latestRelease.node?.version}
+                        {t('Version')} {latestRelease?.node?.version}
                       </Text>
                       <Text variant="footnotes2">
-                        {formatDate(latestRelease.node?.createdAt, 'MMM YYYY')}
+                        {formatDate(latestRelease?.node?.createdAt, 'MMM YYYY')}
                       </Text>
                     </Stack>
                     <Text lineClamp={2} variant="body1">
-                      {latestRelease.node?.meta?.find(meta => meta.property === 'description')
+                      {latestRelease?.node?.meta?.find(meta => meta.property === 'description')
                         ?.value || t('This release has no description added.')}
                     </Text>
                   </Stack>
