@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { createRef, Suspense } from 'react';
 import GlobalAntennaPage from '../pages/global-antenna-page';
 import MyAntennaPage from '../pages/my-antenna-page';
 import BeamPage from '../pages/entry-page/beam-page';
@@ -39,6 +39,9 @@ import {
 } from './data-loaders';
 import { mapReflectEntryData } from '@akashaorg/ui-awf-hooks';
 import { NotFoundComponent } from './not-found-component';
+import { EditorActions } from '@akashaorg/design-system-components/lib/components/Editor';
+
+const editorActionsRef = createRef<EditorActions>();
 
 const rootRoute = createRootRouteWithContext<IRouterContext>()({
   component: Outlet,
@@ -112,6 +115,7 @@ const beamRoute = createRoute({
                           reflectToId={reflectToId}
                           showEditor={showEditor}
                           setShowEditor={setShowEditor}
+                          editorActionsRef={editorActionsRef}
                         />
                       )}
                     />
@@ -154,6 +158,7 @@ const beamReflectRoute = createRoute({
                           reflectToId={reflectToId}
                           showEditor={showEditor}
                           setShowEditor={setShowEditor}
+                          editorActionsRef={editorActionsRef}
                         />
                       )}
                     />
@@ -207,6 +212,7 @@ const reflectionsRoute = createRoute({
                         reflectToId={reflectToId}
                         showEditor={showEditor}
                         setShowEditor={setShowEditor}
+                        editorActionsRef={editorActionsRef}
                       />
                     )}
                   />
@@ -244,6 +250,7 @@ const reflectionsReflectRoute = createRoute({
                         reflectToId={reflectToId}
                         showEditor={showEditor}
                         setShowEditor={setShowEditor}
+                        editorActionsRef={editorActionsRef}
                       />
                     )}
                   />

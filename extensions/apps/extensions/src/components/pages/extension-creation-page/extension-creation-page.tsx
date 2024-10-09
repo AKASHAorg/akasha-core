@@ -13,7 +13,7 @@ import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoade
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { Extension, NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import { useGetAppsQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
-import { selectAkashaApp } from './utils';
+import { selectAkashaApp } from '@akashaorg/ui-awf-hooks/lib/selectors/get-apps-query';
 
 export const ExtensionCreationPage: React.FC<unknown> = () => {
   const navigate = useNavigate();

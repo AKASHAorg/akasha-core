@@ -41,19 +41,16 @@ const ReflectionEditor = forwardRef<HTMLDivElement, ReflectionEditorProps>((prop
     disablePublish,
     mentions,
     noMentionsLabel,
-    tags,
     placeholderButtonLabel,
     showCancelButton,
     cancelButtonLabel,
-    editorState = editorDefaultValue,
+    initialEditorValue = editorDefaultValue,
     showDraft,
     background,
     customStyle = '',
     editorActionsRef,
-    setEditorState,
     onCancelClick,
     getMentions,
-    getTags,
     onPublish,
     onClear,
     transformSource,
@@ -102,18 +99,15 @@ const ReflectionEditor = forwardRef<HTMLDivElement, ReflectionEditorProps>((prop
             disablePublish={disablePublish}
             mentions={mentions}
             noMentionsLabel={noMentionsLabel}
-            tags={tags}
             withMeter={true}
-            editorState={editorState}
+            initialEditorValue={initialEditorValue}
             cancelButtonLabel={cancelButtonLabel}
             showCancelButton={showCancelButton}
             showDraft={showDraft}
             maxEncodedLength={3000}
             editorActionsRef={editorActionsRef}
-            setEditorState={setEditorState}
             onPublish={handlePublish}
             getMentions={getMentions}
-            getTags={getTags}
             onClear={onClear}
             onCancelClick={onCancelClick}
             transformSource={transformSource}

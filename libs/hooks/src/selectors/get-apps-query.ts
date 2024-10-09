@@ -19,6 +19,7 @@ export const selectAkashaApp = (data: GetAppsQuery): AkashaApp => {
     return data.akashaAppIndex.edges[0].node;
   }
 };
+
 const isNodeWithReleases = (data: AkashaApp) => {
   return (
     data.releases &&
@@ -27,7 +28,6 @@ const isNodeWithReleases = (data: AkashaApp) => {
     Array.isArray(data.releases.edges)
   );
 };
-
 export const selectLatestRelease = (data: GetAppsQuery) => {
   if (
     isAkashaAppEdgeNode(data) &&

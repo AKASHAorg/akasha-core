@@ -329,6 +329,15 @@ class Web3Connector {
     return this.#_checkCurrentNetwork();
   }
 
+  get CAIP10() {
+    const chainIdNameSpace = `eip155:${this.state.chainId}`;
+    const address = `${chainIdNameSpace}:${this.state.address}`;
+    return {
+      address,
+      chainIdNameSpace,
+    };
+  }
+
   /**
    * Ensures that the web3 provider is connected to the specified network
    */
