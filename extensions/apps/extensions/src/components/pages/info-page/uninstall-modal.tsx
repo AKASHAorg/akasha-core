@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import getSDK from '@akashaorg/core-sdk';
 import Modal, { ModalProps } from '@akashaorg/design-system-core/lib/components/Modal';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -34,7 +34,7 @@ export const UninstallModal: React.FC<UninstallModalProps> = props => {
     try {
       setModalState(UninstallModalStates.LOADING);
       await sdk.services.appSettings.uninstall(appName);
-      //uninstall executes instantly and the timeout is to allow smooth transition from confirmation to page refresh states
+      //uninstall executes instantly and the timeout is to allow smooth transition from confirmation to loading state
       setTimeout(() => {
         setModalState(UninstallModalStates.RELOAD_PAGE);
       }, 500);
@@ -43,7 +43,10 @@ export const UninstallModal: React.FC<UninstallModalProps> = props => {
         window.location.reload();
       }, 3000);
     } catch (err) {
-      setModalState(UninstallModalStates.ERROR);
+      //uninstall executes instantly and the timeout is to allow smooth transition from confirmation to error state
+      setTimeout(() => {
+        setModalState(UninstallModalStates.ERROR);
+      }, 500);
       logger.error(`uninstall failed: ${JSON.stringify(err)}`);
     }
   }, [appName]);
@@ -87,6 +90,13 @@ export const UninstallModal: React.FC<UninstallModalProps> = props => {
     }
   }, [onModalClose, onUninstall, t, modalState]);
 
+  useEffect(() => {
+    //ensure every time a modal is shown it starts from confirmation state
+    if (show) {
+      setModalState(UninstallModalStates.CONFIRMATION);
+    }
+  }, [show]);
+
   return (
     <Modal
       {...modalProps}
@@ -121,7 +131,7 @@ export const UninstallModal: React.FC<UninstallModalProps> = props => {
         </Text>
       )}
       {modalState === UninstallModalStates.ERROR && (
-        <Text>
+        <Text variant="body1" align="center">
           {t(
             'An error occurred while trying to uninstall the extension. Please check your network connection and try again.',
           )}
