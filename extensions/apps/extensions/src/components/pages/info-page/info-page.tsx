@@ -36,6 +36,8 @@ import CopyToClipboard from '@akashaorg/design-system-core/lib/components/CopyTo
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { useInstalledExtensions } from '@akashaorg/ui-awf-hooks/lib/use-installed-extensions';
+import AppCoverImage from './AppCoverImage';
 
 type InfoPageProps = {
   appId: string;
@@ -65,6 +67,13 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
     variables: { id: appId },
     skip: !isLoggedIn || true,
   });
+
+  const installedExtensionsReq = useInstalledExtensions();
+  const isInstalled = useMemo(() => {
+    if (installedExtensionsReq.data) {
+      return installedExtensionsReq.data.some(ext => ext.name === decodeAppName(appId));
+    }
+  }, [appId, decodeAppName, installedExtensionsReq.data]);
 
   const handleInstallClick = () => {
     if (!authenticatedDID) {
@@ -121,9 +130,9 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
 
   const coverImageSrc = useMemo(() => {
     if (appData?.coverImage?.src) {
-      return transformSource(appData.coverImage.src);
+      return transformSource(appData.coverImage.src)?.src;
     }
-    return '/public?';
+    return null;
   }, [appData]);
 
   const isDefaultWorldExtension = useMemo(() => {
@@ -147,21 +156,13 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
       )}
       {!error && appReq.networkStatus === NetworkStatus.ready && (
         <>
-          <Card
-            dataTestId="cover-image"
-            elevation={'none'}
-            radius={{ top: 20 }}
-            background={{ light: 'grey7', dark: 'grey5' }}
-            // @todo: do we have a placeholder cover?
-            customStyle={`h-32 bg(center no-repeat cover [url(${coverImageSrc})])`}
-          />
+          <AppCoverImage src={coverImageSrc} appType={appData.applicationType} />
           <Stack>
             <Stack spacing="gap-y-6">
               <Card padding="p-4" margin="mb-2" radius={{ bottom: 20 }}>
                 <AppInfoHeader
                   displayName={appData.displayName}
                   extensionType={appData.applicationType}
-                  // @todo: do we have a placeholder app logo?
                   extensionAvatar={appData.logoImage}
                   nsfw={appData.nsfw}
                   nsfwLabel={'NSFW'}
@@ -170,17 +171,14 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                   report={{
                     label: t('Flag'),
                     icon: <FlagIcon />,
-                    // @todo: fix reporting handler
                     onClick: handleExtensionReportClick,
                     color: { light: 'errorLight', dark: 'errorDark' },
                   }}
                   onInstallClick={handleInstallClick}
-                  // @todo: add onUninstall handler
                   onUninstallClick={handleUninstallClick}
                   onOpenClick={handleOpenClick}
                   isDefaultWorldExtension={isDefaultWorldExtension}
-                  // todo: fix isInstalled prop
-                  isInstalled={false}
+                  isInstalled={isInstalled}
                   defaultAppPillLabel={t('Default')}
                 />
 

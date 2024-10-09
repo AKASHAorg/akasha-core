@@ -6,8 +6,8 @@ import {
   selectAppLogoImage,
   selectAppDescription,
   selectAppType,
-} from '@akashaorg/ui-awf-hooks/lib/selectors/get-app-release-by-id-query';
-import { useGetAppReleaseByIdLazyQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
+} from './selectors/get-app-release-by-id-query';
+import { useGetAppReleaseByIdLazyQuery } from './generated';
 import { AkashaApp } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { InstalledExtensionSchema } from '@akashaorg/core-sdk/lib/db/installed-extensions.schema';
 
