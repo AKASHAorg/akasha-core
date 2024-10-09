@@ -37,6 +37,7 @@ import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/Pr
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { useInstalledExtensions } from '@akashaorg/ui-awf-hooks/lib/use-installed-extensions';
+import { UninstallModal } from './uninstall-modal';
 import AppCoverImage from './AppCoverImage';
 
 type InfoPageProps = {
@@ -48,6 +49,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
   const { t } = useTranslation('app-extensions');
   const { navigateToModal, decodeAppName, getDefaultExtensionNames, getCorePlugins } =
     useRootComponentProps();
+  const [showUninstallModal, setShowUninstallModal] = useState(false);
   const [showImageGalleryOverlay, setShowImageGalleryOverlay] = useState(false);
   const {
     data: { authenticatedDID },
@@ -92,7 +94,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
   };
 
   const handleUninstallClick = () => {
-    // @todo: navigate to uninstall modal
+    setShowUninstallModal(true);
   };
 
   const handleOpenClick = () => {
@@ -357,6 +359,14 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
               </Card>
             </Stack>
           </Stack>
+          <UninstallModal
+            appName={appData.name}
+            appDisplayName={appData.displayName}
+            show={showUninstallModal}
+            onModalClose={() => {
+              setShowUninstallModal(false);
+            }}
+          />
         </>
       )}
     </>
