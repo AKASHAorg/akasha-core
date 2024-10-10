@@ -39,6 +39,7 @@ export type AppInfoHeaderProps = {
   uninstallExtensionLabel?: string;
   openExtensionLabel?: string;
   defaultExtensionTooltipContent?: string;
+  isInstallable?: boolean;
 };
 
 export const AppInfoHeader: React.FC<AppInfoHeaderProps> = props => {
@@ -55,6 +56,7 @@ export const AppInfoHeader: React.FC<AppInfoHeaderProps> = props => {
     onOpenClick,
     extensionAvatar,
     isInstalled = false,
+    isInstallable = true,
     isDefaultWorldExtension = false,
     defaultAppPillLabel = 'Default',
     installExtensionLabel = 'Install',
@@ -154,7 +156,7 @@ export const AppInfoHeader: React.FC<AppInfoHeaderProps> = props => {
               )}
             </Stack>
           )}
-          {!isInstalled && !isDefaultWorldExtension && (
+          {!isInstalled && !isDefaultWorldExtension && isInstallable && (
             <Stack direction="row" spacing="gap-x-1" customStyle="flex-wrap">
               <Button variant="primary" label={installExtensionLabel} onClick={onInstallClick} />
             </Stack>

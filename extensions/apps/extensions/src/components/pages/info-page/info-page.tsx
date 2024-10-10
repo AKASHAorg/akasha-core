@@ -39,6 +39,7 @@ import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-typ
 import { useInstalledExtensions } from '@akashaorg/ui-awf-hooks/lib/use-installed-extensions';
 import AppCoverImage from './AppCoverImage';
 import StackedAvatar from '@akashaorg/design-system-core/lib/components/StackedAvatar';
+import { AppInfoNotificationCards } from '@akashaorg/design-system-components/lib/components/AppInfo/notification-cards';
 
 type InfoPageProps = {
   appId: string;
@@ -129,6 +130,15 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
     });
   };
 
+  const handleCollaboratorsClick = () => {
+    navigate({
+      to: '/info/$appId/collaborators',
+      params: {
+        appId: decodeAppName(appId),
+      },
+    });
+  };
+
   const appData = selectAkashaApp(appReq.data);
   const latestRelease = useMemo(() => selectLatestRelease(appReq.data), [appReq.data]);
 
@@ -213,8 +223,18 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                   onOpenClick={handleOpenClick}
                   isDefaultWorldExtension={isDefaultWorldExtension}
                   isInstalled={isInstalled}
+                  isInstallable={!!latestRelease}
                   defaultAppPillLabel={t('Default')}
                 />
+
+                {!latestRelease && (
+                  <AppInfoNotificationCards
+                    notification={{
+                      message: t('This extension has no releases yet, so it cannot be installed.'),
+                      title: t('No releases found'),
+                    }}
+                  />
+                )}
 
                 {appData.description && (
                   <Section
@@ -352,37 +372,42 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                 )}
                 {contributorAvatars?.length > 0 && (
                   <Section title={t('Collaborators')} dividerPosition={DividerPosition.Top}>
-                    <Stack direction="row" align="center">
-                      <StackedAvatar userData={contributorAvatars} maxAvatars={4} size="xs" />
-                      <Icon
-                        icon={<ChevronRightIcon />}
-                        size="sm"
-                        color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-                        customStyle="ml-auto"
-                      />
-                    </Stack>
+                    <Card type="plain" onClick={handleCollaboratorsClick}>
+                      <Stack direction="row" align="center">
+                        <StackedAvatar userData={contributorAvatars} maxAvatars={4} size="xs" />
+                        <Icon
+                          icon={<ChevronRightIcon />}
+                          size="sm"
+                          color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                          customStyle="ml-auto"
+                        />
+                      </Stack>
+                    </Card>
                   </Section>
                 )}
                 <Section
                   title={t('Latest Release')}
                   dividerPosition={DividerPosition.Top}
-                  viewMoreLabel={t('View Info')}
+                  viewMoreLabel={latestRelease ? t('View Info') : undefined}
                   onClickviewMoreLabel={handleReleasesClick}
                 >
-                  <Stack spacing="gap-y-4">
-                    <Stack>
-                      <Text variant="body1" color={{ light: 'grey4', dark: 'grey7' }}>
-                        {t('Version')} {latestRelease?.node?.version}
-                      </Text>
-                      <Text variant="footnotes2">
-                        {formatDate(latestRelease?.node?.createdAt, 'MMM YYYY')}
+                  {!!latestRelease && (
+                    <Stack spacing="gap-y-4">
+                      <Stack>
+                        <Text variant="body1" color={{ light: 'grey4', dark: 'grey7' }}>
+                          {t('Version')} {latestRelease?.node?.version}
+                        </Text>
+                        <Text variant="footnotes2">
+                          {formatDate(latestRelease?.node?.createdAt, 'MMM YYYY')}
+                        </Text>
+                      </Stack>
+                      <Text lineClamp={2} variant="body1">
+                        {latestRelease?.node?.meta?.find(meta => meta.property === 'description')
+                          ?.value || t('This release has no description added.')}
                       </Text>
                     </Stack>
-                    <Text lineClamp={2} variant="body1">
-                      {latestRelease?.node?.meta?.find(meta => meta.property === 'description')
-                        ?.value || t('This release has no description added.')}
-                    </Text>
-                  </Stack>
+                  )}
+                  <Text variant="body1">{t('This extension does not have a release yet.')}</Text>
                 </Section>
 
                 {appData.keywords?.length > 0 && (
