@@ -77,52 +77,52 @@ export const Default: Story = { args: { icon: <Akasha />, solid: true } };
 export const IconWithSize: Story = { args: { icon: <Akasha />, solid: true, size: 'xl' } };
 
 const solidCustomIconsArr = [
-  { icon: <Akasha key={0} />, name: 'Akasha' },
-  { icon: <Antenna key={7} />, name: 'Antenna' },
-  { icon: <App key={8} />, name: 'App' },
-  { icon: <Discord key={12} />, name: 'Discord' },
-  { icon: <IntegrationAppCTA key={18} />, name: 'IntegrationAppCTA' },
-  { icon: <Plugin key={32} />, name: 'Plugin' },
-  { icon: <Telegram key={36} />, name: 'Telegram' },
-  { icon: <TextIcon key={37} />, name: 'TextIcon' },
-  { icon: <Twitter key={38} />, name: 'Twitter' },
-  { icon: <Widget key={43} />, name: 'Widget' },
+  { icon: <Akasha />, name: 'Akasha' },
+  { icon: <Antenna />, name: 'Antenna' },
+  { icon: <App />, name: 'App' },
+  { icon: <Discord />, name: 'Discord' },
+  { icon: <IntegrationAppCTA />, name: 'IntegrationAppCTA' },
+  { icon: <Plugin />, name: 'Plugin' },
+  { icon: <Telegram />, name: 'Telegram' },
+  { icon: <TextIcon />, name: 'TextIcon' },
+  { icon: <Twitter />, name: 'Twitter' },
+  { icon: <Widget />, name: 'Widget' },
 ];
 
 const outlineCustomIconsArr = [
-  { icon: <AlignCenter key={1} />, name: 'AlignCenter' },
-  { icon: <AlignLeft key={2} />, name: 'AlignLeft' },
-  { icon: <AlignRight key={3} />, name: 'AlignRight' },
-  { icon: <AlignTextCenter key={4} />, name: 'AlignTextCenter' },
-  { icon: <AlignTextLeft key={5} />, name: 'AlignTextLeft' },
-  { icon: <AlignTextRight key={6} />, name: 'AlignTextRight' },
-  { icon: <Blocks key={9} />, name: 'Blocks' },
-  { icon: <Bold key={10} />, name: 'Bold' },
-  { icon: <Caption key={11} />, name: 'Caption' },
-  { icon: <DidKey key={13} />, name: 'DidKey' },
-  { icon: <Eth key={14} />, name: 'Eth' },
-  { icon: <Faq key={15} />, name: 'Faq' },
-  { icon: <Following key={16} />, name: 'Following' },
-  { icon: <Github key={17} />, name: 'Github' },
-  { icon: <Italic key={19} />, name: 'Italic' },
-  { icon: <LicenseAllRights key={20} />, name: 'LicenseAllRights' },
-  { icon: <LicenseAttribution key={21} />, name: 'LicenseAttribution' },
-  { icon: <LicenseNoDerivatives key={22} />, name: 'LicenseNoDerivatives' },
-  { icon: <LicenseNoRights key={23} />, name: 'LicenseNoRights' },
-  { icon: <LicenseNonCommercial key={24} />, name: 'LicenseNonCommercial' },
-  { icon: <LicenseShareAlike key={25} />, name: 'LicenseShareAlike' },
-  { icon: <LicenseSomeRights key={26} />, name: 'LicenseSomeRights' },
-  { icon: <LicenseWtfpl key={27} />, name: 'LicenseWtfpl' },
-  { icon: <ListBulleted key={28} />, name: 'ListBulleted' },
-  { icon: <ListNumbered key={29} />, name: 'ListNumbered' },
-  { icon: <Metamask key={30} />, name: 'Metamask' },
-  { icon: <NoEth key={31} />, name: 'NoEth' },
-  { icon: <Profile key={33} />, name: 'Profile' },
-  { icon: <Shield key={34} />, name: 'Shield' },
-  { icon: <Solana key={35} />, name: 'Solana' },
-  { icon: <Underline key={39} />, name: 'Underline' },
-  { icon: <Vibes key={41} />, name: 'Vibes' },
-  { icon: <Walletconnect key={42} />, name: 'Walletconnect' },
+  { icon: <AlignCenter />, name: 'AlignCenter' },
+  { icon: <AlignLeft />, name: 'AlignLeft' },
+  { icon: <AlignRight />, name: 'AlignRight' },
+  { icon: <AlignTextCenter />, name: 'AlignTextCenter' },
+  { icon: <AlignTextLeft />, name: 'AlignTextLeft' },
+  { icon: <AlignTextRight />, name: 'AlignTextRight' },
+  { icon: <Blocks />, name: 'Blocks' },
+  { icon: <Bold />, name: 'Bold' },
+  { icon: <Caption />, name: 'Caption' },
+  { icon: <DidKey />, name: 'DidKey' },
+  { icon: <Eth />, name: 'Eth' },
+  { icon: <Faq />, name: 'Faq' },
+  { icon: <Following />, name: 'Following' },
+  { icon: <Github />, name: 'Github' },
+  { icon: <Italic />, name: 'Italic' },
+  { icon: <LicenseAllRights />, name: 'LicenseAllRights' },
+  { icon: <LicenseAttribution />, name: 'LicenseAttribution' },
+  { icon: <LicenseNoDerivatives />, name: 'LicenseNoDerivatives' },
+  { icon: <LicenseNoRights />, name: 'LicenseNoRights' },
+  { icon: <LicenseNonCommercial />, name: 'LicenseNonCommercial' },
+  { icon: <LicenseShareAlike />, name: 'LicenseShareAlike' },
+  { icon: <LicenseSomeRights />, name: 'LicenseSomeRights' },
+  { icon: <LicenseWtfpl />, name: 'LicenseWtfpl' },
+  { icon: <ListBulleted />, name: 'ListBulleted' },
+  { icon: <ListNumbered />, name: 'ListNumbered' },
+  { icon: <Metamask />, name: 'Metamask' },
+  { icon: <NoEth />, name: 'NoEth' },
+  { icon: <Profile />, name: 'Profile' },
+  { icon: <Shield />, name: 'Shield' },
+  { icon: <Solana />, name: 'Solana' },
+  { icon: <Underline />, name: 'Underline' },
+  { icon: <Vibes />, name: 'Vibes' },
+  { icon: <Walletconnect />, name: 'Walletconnect' },
 ];
 
 export const CustomIcons: Story = {
@@ -130,16 +130,16 @@ export const CustomIcons: Story = {
     <Stack spacing="gap-y-4">
       <Stack direction="row" spacing="gap-3" customStyle="flex-wrap">
         <Text weight="bold">Solid:</Text>
-        {solidCustomIconsArr.map(({ icon, name }) => (
-          <Tooltip key={icon.key} placement="top" content={name} trigger="hover">
+        {solidCustomIconsArr.map(({ icon, name }, idx) => (
+          <Tooltip key={name + idx} placement="top" content={name} trigger="hover">
             <Icon icon={icon} solid={true} />
           </Tooltip>
         ))}
       </Stack>
       <Stack direction="row" spacing="gap-3" customStyle="flex-wrap">
         <Text weight="bold">Outline:</Text>
-        {outlineCustomIconsArr.map(({ icon, name }) => (
-          <Tooltip key={icon.key} placement="top" content={name} trigger="hover">
+        {outlineCustomIconsArr.map(({ icon, name }, idx) => (
+          <Tooltip key={name + idx} placement="top" content={name} trigger="hover">
             <Icon icon={icon} />
           </Tooltip>
         ))}
