@@ -178,7 +178,10 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
       return appData.contributors
         .filter(contrib => !!contrib?.akashaProfile)
         .map(contrib => {
-          return { ...contrib.akashaProfile, avatar: contrib.akashaProfile.avatar?.default };
+          return {
+            ...contrib.akashaProfile,
+            avatar: transformSource(contrib.akashaProfile.avatar?.default),
+          };
         });
     }
   }, [appData?.contributors]);
