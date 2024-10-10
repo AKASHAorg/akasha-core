@@ -13,10 +13,12 @@ import { selectApps } from '@akashaorg/ui-awf-hooks/lib/selectors/get-apps-by-pu
 import { useTranslation } from 'react-i18next';
 import { type InstalledExtension } from '@akashaorg/ui-awf-hooks/lib/use-installed-extensions';
 import { SortOrder } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { useNavigate } from '@tanstack/react-router';
 
 export const DefaultExtensionsList = () => {
   const { t } = useTranslation('app-extensions');
-  const { getCorePlugins, worldConfig } = useRootComponentProps();
+  const navigate = useNavigate();
+  const { worldConfig, encodeAppName } = useRootComponentProps();
   const sdk = getSDK();
   const defaultApps = [worldConfig.homepageApp, ...(worldConfig.defaultApps || [])];
 
@@ -32,8 +34,9 @@ export const DefaultExtensionsList = () => {
   });
 
   const handleAppClick = (appName: string) => {
-    getCorePlugins().routing.navigateTo({
-      appName,
+    navigate({
+      to: '/info/$appId',
+      params: { appId: encodeAppName(appName) },
     });
   };
 
