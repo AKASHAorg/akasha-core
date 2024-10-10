@@ -407,7 +407,9 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                       </Text>
                     </Stack>
                   )}
-                  <Text variant="body1">{t('This extension does not have a release yet.')}</Text>
+                  {!latestRelease && (
+                    <Text variant="body1">{t('This extension does not have a release yet.')}</Text>
+                  )}
                 </Section>
 
                 {appData.keywords?.length > 0 && (
