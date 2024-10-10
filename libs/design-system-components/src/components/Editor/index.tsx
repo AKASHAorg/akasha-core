@@ -31,7 +31,7 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import MessageCard from '@akashaorg/design-system-core/lib/components/MessageCard';
 
 import {
-  BoldAlt,
+  Bold,
   Italic,
   Underline,
   ListNumbered,
@@ -522,7 +522,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
             >
               {withToolbar && (
                 <Stack direction="row">
-                  <MarkButton format="bold" icon={<BoldAlt />} style={'rounded-l-sm'} />
+                  <MarkButton format="bold" icon={<Bold />} style={'rounded-l-sm'} />
                   <MarkButton format="italic" icon={<Italic />} />
                   <MarkButton format="underline" icon={<Underline />} />
                   <BlockButton format="left" icon={<AlignTextLeft />} />
