@@ -24,10 +24,8 @@ export const Default: Story = {
     withMeter: true,
     withToolbar: true,
     encodingFunction: () => '',
-    setEditorState: () => ({}),
     onPublish: () => ({}),
     getMentions: () => ({}),
-    getTags: () => ({}),
     transformSource: () => ({
       src: 'https://placebeard.it/360x360',
       width: 360,

@@ -7,7 +7,7 @@ import {
   LogoTypeSource,
 } from '@akashaorg/typings/lib/ui';
 import React from 'react';
-import { VibesConsole } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
+import { App } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import routes, { HOME, DASHBOARD } from './routes';
 
 export const register = (opts: IntegrationRegistrationOptions): IAppConfig => ({
@@ -20,7 +20,7 @@ export const register = (opts: IntegrationRegistrationOptions): IAppConfig => ({
   menuItems: {
     label: 'Vibes Console',
     type: MenuItemType.App,
-    logo: { type: LogoTypeSource.ICON, value: <VibesConsole /> },
+    logo: { type: LogoTypeSource.ICON, value: <App /> },
     area: [MenuItemAreaType.UserAppArea],
     subRoutes: [
       {
