@@ -194,7 +194,14 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
           />
         </Stack>
       )}
-      {!error && appReq.networkStatus === NetworkStatus.ready && (
+      {!error && appReq.networkStatus === NetworkStatus.ready && !appData && (
+        <ErrorLoader
+          type="no-apps"
+          title={t('Extension not found!')}
+          details={t('The extension you are trying to view cannot be found.')}
+        />
+      )}
+      {!error && appReq.networkStatus === NetworkStatus.ready && !!appData && (
         <>
           <AppCoverImage src={coverImageSrc} appType={appData.applicationType} />
           <Stack>
