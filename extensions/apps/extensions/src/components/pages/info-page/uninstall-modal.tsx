@@ -49,7 +49,7 @@ export const UninstallModal: React.FC<UninstallModalProps> = props => {
       }, 500);
       logger.error(`uninstall failed: ${JSON.stringify(err)}`);
     }
-  }, [appName]);
+  }, [appName, logger]);
 
   const modalProps: Pick<ModalProps, 'title' | 'actions'> = React.useMemo(() => {
     switch (modalState) {
@@ -106,7 +106,7 @@ export const UninstallModal: React.FC<UninstallModalProps> = props => {
         }
       }}
       show={show}
-      customStyle="w-80 md:w-[48rem]"
+      customStyle="w-80 md:w-[38rem] md:px-6"
     >
       {modalState === UninstallModalStates.CONFIRMATION && (
         <Text variant="body1" align="center">

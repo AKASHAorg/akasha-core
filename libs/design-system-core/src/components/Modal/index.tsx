@@ -89,19 +89,17 @@ const Modal: React.FC<ModalProps> = ({
                 <Card radius={20} padding={'py-4'} customStyle={`${customStyle} relative`}>
                   <Stack direction="column" spacing="gap-y-4">
                     {title && (
-                      <Dialog.Title className={tw('px-4')}>
-                        <Stack direction="row" justify="center">
-                          <Text align="center" variant="h5" {...title} customStyle="grow">
-                            {title.label}
-                          </Text>
-                          <Button onClick={onClose} plain customStyle="ml-auto">
-                            <Icon
-                              icon={<XMarkIcon />}
-                              size="md"
-                              color={{ light: 'grey4', dark: 'grey7' }}
-                            />
-                          </Button>
-                        </Stack>
+                      <Dialog.Title as="div">
+                        <Text align="center" variant="h5" {...title}>
+                          {title.label}
+                        </Text>
+                        <Button onClick={onClose} plain customStyle="absolute top-4 right-4">
+                          <Icon
+                            icon={<XMarkIcon />}
+                            size="md"
+                            color={{ light: 'grey4', dark: 'grey7' }}
+                          />
+                        </Button>
                       </Dialog.Title>
                     )}
 
