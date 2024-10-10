@@ -66,9 +66,9 @@ const Pill: React.FC<PillProps> = props => {
         align="center"
         justify="center"
         background={props.background}
-        customStyle={`m-h-[18px] m-w-[18px] rounded-full ${borderStyle} ${props.customStyle}`}
+        customStyle={`min-h-min min-w-min rounded-full py-1 px-2 ${borderStyle} ${props.customStyle}`}
       >
-        <Text variant="footnotes2" weight={props.weight} color={props.color}>
+        <Text variant="footnotes2" selectable={false} weight={props.weight} color={props.color}>
           {props.label}
         </Text>
       </Stack>

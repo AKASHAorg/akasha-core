@@ -38,6 +38,7 @@ import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { useInstalledExtensions } from '@akashaorg/ui-awf-hooks/lib/use-installed-extensions';
 import AppCoverImage from './AppCoverImage';
+import StackedAvatar from '@akashaorg/design-system-core/lib/components/StackedAvatar';
 
 type InfoPageProps = {
   appId: string;
@@ -109,6 +110,25 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
     });
   };
 
+  const handleReleasesClick = () => {
+    navigate({
+      to: '/info/$appId/versions',
+      params: {
+        appId: decodeAppName(appId),
+      },
+    });
+  };
+
+  const handleDeveloperClick = () => {
+    navigate({
+      to: '/info/$appId/developer/$devDid',
+      params: {
+        appId: decodeAppName(appId),
+        devDid: appData.author.id,
+      },
+    });
+  };
+
   const appData = selectAkashaApp(appReq.data);
   const latestRelease = useMemo(() => selectLatestRelease(appReq.data), [appReq.data]);
 
@@ -130,7 +150,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
 
   const coverImageSrc = useMemo(() => {
     if (appData?.coverImage?.src) {
-      return transformSource(appData.coverImage.src)?.src;
+      return transformSource(appData.coverImage)?.src;
     }
     return null;
   }, [appData]);
@@ -142,6 +162,16 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
 
     return getDefaultExtensionNames().includes(decodeAppName(appId));
   }, [appId, decodeAppName, getDefaultExtensionNames]);
+
+  const contributorAvatars = useMemo(() => {
+    if (appData?.contributors?.length) {
+      return appData.contributors
+        .filter(contrib => !!contrib?.akashaProfile)
+        .map(contrib => {
+          return { ...contrib.akashaProfile, avatar: contrib.akashaProfile.avatar?.default };
+        });
+    }
+  }, [appData?.contributors]);
 
   return (
     <>
@@ -163,7 +193,11 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                 <AppInfoHeader
                   displayName={appData.displayName}
                   extensionType={appData.applicationType}
-                  extensionAvatar={appData.logoImage}
+                  extensionAvatar={{
+                    width: appData.logoImage?.width,
+                    height: appData.logoImage?.height,
+                    src: transformSource(appData.logoImage)?.src,
+                  }}
                   nsfw={appData.nsfw}
                   nsfwLabel={'NSFW'}
                   extensionTypeLabel={extensionTypeLabel}
@@ -203,8 +237,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                 )}
                 <Section title={t('Developer')} dividerPosition={DividerPosition.Top}>
                   {appData.author?.akashaProfile && (
-                    // @todo: fix navigation to developer sub-page
-                    <Card onClick={() => {}} type="plain">
+                    <Card onClick={handleDeveloperClick} type="plain">
                       <Stack direction="row" align="center">
                         <ProfileAvatarButton
                           profileId={appData.author?.akashaProfile?.id}
@@ -236,7 +269,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                     <ExtensionImageGallery
                       images={appData.gallery?.map(gImage => ({
                         ...gImage,
-                        src: transformSource(gImage.src)?.src,
+                        src: transformSource(gImage)?.src,
                       }))}
                       showOverlay={showImageGalleryOverlay}
                       toggleOverlay={() => setShowImageGalleryOverlay(!showImageGalleryOverlay)}
@@ -317,19 +350,24 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                     </Stack>
                   </Section>
                 )}
-                {appData.contributors?.length > 0 && (
+                {contributorAvatars?.length > 0 && (
                   <Section title={t('Collaborators')} dividerPosition={DividerPosition.Top}>
-                    {appData.contributors.map(contributor => (
-                      // todo: resolve contributors
-                      <div key={contributor.id}>{contributor.id}</div>
-                    ))}
+                    <Stack direction="row" align="center">
+                      <StackedAvatar userData={contributorAvatars} maxAvatars={4} size="xs" />
+                      <Icon
+                        icon={<ChevronRightIcon />}
+                        size="sm"
+                        color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                        customStyle="ml-auto"
+                      />
+                    </Stack>
                   </Section>
                 )}
                 <Section
                   title={t('Latest Release')}
                   dividerPosition={DividerPosition.Top}
                   viewMoreLabel={t('View Info')}
-                  onClickviewMoreLabel={() => {}}
+                  onClickviewMoreLabel={handleReleasesClick}
                 >
                   <Stack spacing="gap-y-4">
                     <Stack>
@@ -348,10 +386,17 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                 </Section>
 
                 {appData.keywords?.length > 0 && (
-                  <Section title={''} showDivider={false}>
-                    {appData.keywords?.map((keyword, idx) => (
-                      <Pill type="info" key={`${keyword}_${idx}`} label={keyword} />
-                    ))}
+                  <Section title={''} dividerPosition={DividerPosition.Top}>
+                    <Stack direction="row" spacing="gap-x-2">
+                      {appData.keywords?.map((keyword, idx) => (
+                        <Pill
+                          borderColor={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                          type="info"
+                          key={`${keyword}_${idx}`}
+                          label={keyword}
+                        />
+                      ))}
+                    </Stack>
                   </Section>
                 )}
               </Card>
