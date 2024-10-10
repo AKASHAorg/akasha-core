@@ -7,9 +7,10 @@ import AlignRight from './align-right';
 import AlignTextCenter from './align-text-center';
 import AlignTextLeft from './align-text-left';
 import AlignTextRight from './align-text-right';
-import App from './app';
 import Antenna from './antenna';
-import BoldAlt from './bold-alt';
+import App from './app';
+import Blocks from './blocks';
+import Bold from './bold';
 import Caption from './caption';
 import DidKey from './didKey';
 import Discord from './discord';
@@ -19,7 +20,6 @@ import Following from './following';
 import Github from './github';
 import IntegrationAppCTA from './integration-app-cta';
 import Italic from './italic';
-import LicenseWtfpl from './license-wtfpl';
 import LicenseAllRights from './license-all-rights';
 import LicenseAttribution from './license-attribution';
 import LicenseNoDerivatives from './license-no-derivatives';
@@ -27,6 +27,7 @@ import LicenseNoRights from './license-no-rights';
 import LicenseNonCommercial from './license-non-commercial';
 import LicenseShareAlike from './license-share-alike';
 import LicenseSomeRights from './license-some-rights';
+import LicenseWtfpl from './license-wtfpl';
 import ListBulleted from './list-bulleted';
 import ListNumbered from './list-numbered';
 import Metamask from './metamask';
@@ -40,10 +41,8 @@ import TextIcon from './text-icon';
 import Twitter from './twitter';
 import Underline from './underline';
 import Vibes from './vibes';
-import VibesConsole from './vibes-console';
 import Walletconnect from './walletconnect';
 import Widget from './widget';
-import Blocks from './blocks';
 
 /**
  * maintain alphabetical order for custom icon names
@@ -57,9 +56,10 @@ export type CustomIconTypes = Extract<
   | 'AlignTextCenter'
   | 'AlignTextLeft'
   | 'AlignTextRight'
-  | 'App'
   | 'Antenna'
-  | 'BoldAlt'
+  | 'App'
+  | 'Blocks'
+  | 'Bold'
   | 'Caption'
   | 'DidKey'
   | 'Discord'
@@ -69,7 +69,6 @@ export type CustomIconTypes = Extract<
   | 'Github'
   | 'IntegrationAppCTA'
   | 'Italic'
-  | 'LicenseWtfpl'
   | 'LicenseAllRights'
   | 'LicenseAttribution'
   | 'LicenseNoDerivatives'
@@ -77,6 +76,7 @@ export type CustomIconTypes = Extract<
   | 'LicenseNonCommercial'
   | 'LicenseShareAlike'
   | 'LicenseSomeRights'
+  | 'LicenseWtfpl'
   | 'ListNumbered'
   | 'ListBulleted'
   | 'Metamask'
@@ -90,10 +90,8 @@ export type CustomIconTypes = Extract<
   | 'Twitter'
   | 'Underline'
   | 'Vibes'
-  | 'VibesConsole'
   | 'Walletconnect'
   | 'Widget'
-  | 'Blocks'
 >;
 
 export {
@@ -104,9 +102,10 @@ export {
   AlignTextCenter,
   AlignTextLeft,
   AlignTextRight,
-  App,
   Antenna,
-  BoldAlt,
+  App,
+  Blocks,
+  Bold,
   Caption,
   Discord,
   DidKey,
@@ -116,7 +115,6 @@ export {
   Github,
   IntegrationAppCTA,
   Italic,
-  LicenseWtfpl,
   LicenseAllRights,
   LicenseAttribution,
   LicenseNoDerivatives,
@@ -124,6 +122,7 @@ export {
   LicenseNonCommercial,
   LicenseShareAlike,
   LicenseSomeRights,
+  LicenseWtfpl,
   ListBulleted,
   ListNumbered,
   Metamask,
@@ -137,8 +136,6 @@ export {
   Twitter,
   Underline,
   Vibes,
-  VibesConsole,
   Walletconnect,
   Widget,
-  Blocks,
 };

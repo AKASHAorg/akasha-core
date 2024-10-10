@@ -14,14 +14,14 @@ export const Default: Story = {
   args: {
     apps: [
       {
-        name: 'Supercarts',
+        displayName: 'Supercarts',
         description:
           'Play with your friends in AKASHA World and enjoy a couple of puzzle games or drawing games or any kind of game!',
         action: <Button label="Install" variant="primary" />,
         logoImage: { src: 'https://placebeard.it/360x360', height: 360, width: 360 },
       },
       {
-        name: 'Articles App',
+        displayName: 'Articles App',
         description:
           'Read articles written by AKASHA community you can also write your own articles or collaborate with other authors!',
         action: <Button label="Install" variant="primary" />,
