@@ -7,7 +7,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import ExtensionHeader from '@akashaorg/design-system-components/lib/components/ExtensionHeader';
 import ExtensionVersionBulletPointCard from '@akashaorg/design-system-components/lib/components/ExtensionVersionBulletPointCard';
-import ContentBlock from '@akashaorg/design-system-core/lib/components/ContentBlock';
+import Section from '@akashaorg/design-system-core/lib/components/Section';
 import { ChevronRightIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
 export const mockAppVersionData = {
@@ -92,8 +92,8 @@ export const VersionInfoPage: React.FC<VersionInfoPageProps> = ({ appId }) => {
             </Text>
           </Stack>
           <Divider />
-          <ContentBlock
-            blockTitle={t('Version History')}
+          <Section
+            title={t('Version History')}
             viewMoreIcon={<ChevronRightIcon />}
             showDivider={false}
             onClickviewMoreLabel={() => {
@@ -104,7 +104,7 @@ export const VersionInfoPage: React.FC<VersionInfoPageProps> = ({ appId }) => {
                 },
               });
             }}
-          ></ContentBlock>
+          ></Section>
         </Stack>
       </Card>
     </>

@@ -11,7 +11,7 @@ import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetAppsByPublisherDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 import { selectApps } from '@akashaorg/ui-awf-hooks/lib/selectors/get-apps-by-publisher-did-query';
 import { useTranslation } from 'react-i18next';
-import { type InstalledExtension } from './use-installed-extensions';
+import { type InstalledExtension } from '@akashaorg/ui-awf-hooks/lib/use-installed-extensions';
 import { SortOrder } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 export const DefaultExtensionsList = () => {
