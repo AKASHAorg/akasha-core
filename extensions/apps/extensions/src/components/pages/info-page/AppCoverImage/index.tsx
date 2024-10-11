@@ -55,7 +55,7 @@ const AppCoverImage = (props: AppCoverImageProps) => {
         </>
       )}
       <img
-        className="rounded-t-2xl"
+        className="rounded-t-2xl w-full"
         src={src || `${publicImgPath}/${coverByType.desktop}.webp`}
         alt="App Cover"
       />

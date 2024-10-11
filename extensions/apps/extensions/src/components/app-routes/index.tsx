@@ -44,6 +44,15 @@ import {
 import { DEV_MODE_KEY } from '../../constants';
 import { ExtensionInstallTerms } from '../pages/install-extension/install-terms-conditions';
 import { NotFoundComponent } from './not-found-component';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+
+const RouteErrorComponent = () => (
+  <ErrorLoader
+    type="script-error"
+    title="Oops, this page returned an error :("
+    details="There is an error somewhere in this page and we need to display this card to avoid other issues."
+  />
+);
 
 const rootRoute = createRootRouteWithContext<IRouterContext>()({
   component: Outlet,
@@ -62,7 +71,7 @@ const exploreRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/explore',
   component: () => (
-    <CatchBoundary getResetKey={() => 'explore_reset'} errorComponent={NotFoundComponent}>
+    <CatchBoundary getResetKey={() => 'explore_reset'} errorComponent={RouteErrorComponent}>
       <ExplorePage />
     </CatchBoundary>
   ),
@@ -78,7 +87,7 @@ const installedExtensionsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/installed-extensions',
   component: () => (
-    <CatchBoundary getResetKey={() => 'installed_reset'} errorComponent={NotFoundComponent}>
+    <CatchBoundary getResetKey={() => 'installed_reset'} errorComponent={RouteErrorComponent}>
       <InstalledExtensionsPage />
     </CatchBoundary>
   ),
@@ -93,7 +102,7 @@ const myExtensionsRoute = createRoute({
     }
   },
   component: () => (
-    <CatchBoundary getResetKey={() => 'my_extensions_reset'} errorComponent={NotFoundComponent}>
+    <CatchBoundary getResetKey={() => 'my_extensions_reset'} errorComponent={RouteErrorComponent}>
       <MyExtensionsPage />
     </CatchBoundary>
   ),
@@ -103,7 +112,7 @@ const developerModeRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/developer-mode',
   component: () => (
-    <CatchBoundary getResetKey={() => 'dev_mode_reset'} errorComponent={NotFoundComponent}>
+    <CatchBoundary getResetKey={() => 'dev_mode_reset'} errorComponent={RouteErrorComponent}>
       <DeveloperModePage />
     </CatchBoundary>
   ),
@@ -142,28 +151,34 @@ const extensionInstallRoute = createRoute({
     return <InstallExtensionPage appId={appId} />;
   },
 });
-
-const infoRoute = createRoute({
+const infoRootRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/info/$appId',
+  component: () => <Outlet />,
+});
+
+const infoIndexRoute = createRoute({
+  getParentRoute: () => infoRootRoute,
+  path: '/',
   notFoundComponent: () => <NotFoundComponent />,
   component: () => {
-    const { appId } = infoRoute.useParams();
+    const { appId } = infoRootRoute.useParams();
     return (
-      <CatchBoundary getResetKey={() => 'app_info_root_reset'} errorComponent={NotFoundComponent}>
+      <CatchBoundary getResetKey={() => 'app_info_root_reset'} errorComponent={RouteErrorComponent}>
         <InfoPage appId={appId} />
+        <Outlet />
       </CatchBoundary>
     );
   },
 });
 
 const devInfoRoute = createRoute({
-  getParentRoute: () => infoRoute,
+  getParentRoute: () => infoRootRoute,
   path: '/developer/$devDid',
   component: () => {
     const { devDid } = devInfoRoute.useParams();
     return (
-      <CatchBoundary getResetKey={() => 'dev_info_root_reset'} errorComponent={NotFoundComponent}>
+      <CatchBoundary getResetKey={() => 'dev_info_root_reset'} errorComponent={RouteErrorComponent}>
         <DevInfoPage devDid={devDid} />
       </CatchBoundary>
     );
@@ -171,12 +186,12 @@ const devInfoRoute = createRoute({
 });
 
 const collaboratorsInfoRoute = createRoute({
-  getParentRoute: () => infoRoute,
+  getParentRoute: () => infoRootRoute,
   path: '/collaborators',
   component: () => {
-    const { appId } = infoRoute.useParams();
+    const { appId } = infoRootRoute.useParams();
     return (
-      <CatchBoundary getResetKey={() => 'collaborators_reset'} errorComponent={NotFoundComponent}>
+      <CatchBoundary getResetKey={() => 'collaborators_reset'} errorComponent={RouteErrorComponent}>
         <CollaboratorsPage appId={appId} />
       </CatchBoundary>
     );
@@ -184,12 +199,12 @@ const collaboratorsInfoRoute = createRoute({
 });
 
 const versionInfoRoute = createRoute({
-  getParentRoute: () => infoRoute,
+  getParentRoute: () => infoRootRoute,
   path: '/versions',
   component: () => {
-    const { appId } = infoRoute.useParams();
+    const { appId } = infoRootRoute.useParams();
     return (
-      <CatchBoundary getResetKey={() => 'app_info_root_reset'} errorComponent={NotFoundComponent}>
+      <CatchBoundary getResetKey={() => 'app_info_root_reset'} errorComponent={RouteErrorComponent}>
         <VersionInfoPage appId={appId} />
       </CatchBoundary>
     );
@@ -197,12 +212,15 @@ const versionInfoRoute = createRoute({
 });
 
 const versionHistoryRoute = createRoute({
-  getParentRoute: () => infoRoute,
+  getParentRoute: () => infoRootRoute,
   path: '/version-history',
   component: () => {
     const { appId } = versionHistoryRoute.useParams();
     return (
-      <CatchBoundary getResetKey={() => 'version_history_reset'} errorComponent={NotFoundComponent}>
+      <CatchBoundary
+        getResetKey={() => 'version_history_reset'}
+        errorComponent={RouteErrorComponent}
+      >
         <VersionHistoryPage appId={appId} />
       </CatchBoundary>
     );
@@ -210,12 +228,12 @@ const versionHistoryRoute = createRoute({
 });
 
 const auditLogRoute = createRoute({
-  getParentRoute: () => infoRoute,
+  getParentRoute: () => infoRootRoute,
   path: '/audit-log',
   component: () => {
     const { appId } = auditLogRoute.useParams();
     return (
-      <CatchBoundary getResetKey={() => 'audit_log_reset'} errorComponent={NotFoundComponent}>
+      <CatchBoundary getResetKey={() => 'audit_log_reset'} errorComponent={RouteErrorComponent}>
         <AuditLogPage appId={appId} />
       </CatchBoundary>
     );
@@ -223,12 +241,12 @@ const auditLogRoute = createRoute({
 });
 
 const permissionInfoRoute = createRoute({
-  getParentRoute: () => infoRoute,
+  getParentRoute: () => infoRootRoute,
   path: '/permissions',
   component: () => {
     const { appId } = permissionInfoRoute.useParams();
     return (
-      <CatchBoundary getResetKey={() => 'permissions_reset'} errorComponent={NotFoundComponent}>
+      <CatchBoundary getResetKey={() => 'permissions_reset'} errorComponent={RouteErrorComponent}>
         <PermissionsPage appId={appId} />
       </CatchBoundary>
     );
@@ -236,38 +254,25 @@ const permissionInfoRoute = createRoute({
 });
 
 const appLicenseInfoRoute = createRoute({
-  getParentRoute: () => infoRoute,
+  getParentRoute: () => infoRootRoute,
   path: '/license',
   component: () => {
     const { appId } = appLicenseInfoRoute.useParams();
     return (
-      <CatchBoundary getResetKey={() => 'license_reset'} errorComponent={NotFoundComponent}>
+      <CatchBoundary getResetKey={() => 'license_reset'} errorComponent={RouteErrorComponent}>
         <LicensePage appId={appId} />
       </CatchBoundary>
     );
   },
 });
 
-const supportInfoRoute = createRoute({
-  getParentRoute: () => infoRoute,
-  path: '/contact',
-  component: () => {
-    const { appId } = supportInfoRoute.useParams();
-    return (
-      <CatchBoundary getResetKey={() => 'contact_reset'} errorComponent={NotFoundComponent}>
-        <ContactSupportPage appId={appId} />
-      </CatchBoundary>
-    );
-  },
-});
-
 const appDescriptionRoute = createRoute({
-  getParentRoute: () => infoRoute,
+  getParentRoute: () => infoRootRoute,
   path: '/description',
   component: () => {
-    const { appId } = appDescriptionRoute.useParams();
+    const { appId } = infoRootRoute.useParams();
     return (
-      <CatchBoundary getResetKey={() => 'description_reset'} errorComponent={NotFoundComponent}>
+      <CatchBoundary getResetKey={() => 'description_reset'} errorComponent={RouteErrorComponent}>
         <AppDescriptionPage appId={appId} />
       </CatchBoundary>
     );
@@ -300,7 +305,7 @@ const extensionEditMainRoute = createRoute({
     return (
       <CatchBoundary
         getResetKey={() => 'edit_extension_main_reset'}
-        errorComponent={NotFoundComponent}
+        errorComponent={RouteErrorComponent}
       >
         <ExtensionEditMainPage extensionId={extensionId} />
       </CatchBoundary>
@@ -316,7 +321,7 @@ const extensionEditStep1Route = createRoute({
     return (
       <CatchBoundary
         getResetKey={() => 'edit_extension_step1_reset'}
-        errorComponent={NotFoundComponent}
+        errorComponent={RouteErrorComponent}
       >
         <ExtensionEditStep1Page extensionId={extensionId} />
       </CatchBoundary>
@@ -331,7 +336,7 @@ const extensionEditStep2Route = createRoute({
     return (
       <CatchBoundary
         getResetKey={() => 'edit_extension_step2_reset'}
-        errorComponent={NotFoundComponent}
+        errorComponent={RouteErrorComponent}
       >
         <ExtensionEditStep2Page extensionId={extensionId} />
       </CatchBoundary>
@@ -346,7 +351,7 @@ const extensionEditStep3Route = createRoute({
     return (
       <CatchBoundary
         getResetKey={() => 'edit_extension_step3_reset'}
-        errorComponent={NotFoundComponent}
+        errorComponent={RouteErrorComponent}
       >
         <ExtensionEditStep3Page extensionId={extensionId} />
       </CatchBoundary>
@@ -363,7 +368,7 @@ const extensionSubmitRoute = createRoute({
     return (
       <CatchBoundary
         getResetKey={() => 'submit_extension_reset'}
-        errorComponent={NotFoundComponent}
+        errorComponent={RouteErrorComponent}
       >
         <ExtensionSubmitPage extensionId={extensionId} />
       </CatchBoundary>
@@ -378,7 +383,10 @@ const extensionReleaseSubmitRoute = createRoute({
   component: () => {
     const { extensionId } = extensionReleaseSubmitRoute.useParams();
     return (
-      <CatchBoundary getResetKey={() => 'submit_release_reset'} errorComponent={NotFoundComponent}>
+      <CatchBoundary
+        getResetKey={() => 'submit_release_reset'}
+        errorComponent={RouteErrorComponent}
+      >
         <ExtensionReleaseSubmitPage extensionId={extensionId} />
       </CatchBoundary>
     );
@@ -404,7 +412,7 @@ const postSubmitRoute = createRoute({
     return (
       <CatchBoundary
         getResetKey={() => 'submit_extension_reset'}
-        errorComponent={NotFoundComponent}
+        errorComponent={RouteErrorComponent}
       >
         <PostSubmitPage type={from.type} />
       </CatchBoundary>
@@ -419,7 +427,8 @@ const routeTree = rootRoute.addChildren([
   installedExtensionsRoute,
   myExtensionsRoute,
   developerModeRoute,
-  infoRoute.addChildren([
+  infoRootRoute.addChildren([
+    infoIndexRoute,
     devInfoRoute,
     collaboratorsInfoRoute,
     versionInfoRoute,
@@ -427,7 +436,6 @@ const routeTree = rootRoute.addChildren([
     auditLogRoute,
     permissionInfoRoute,
     appLicenseInfoRoute,
-    supportInfoRoute,
     appDescriptionRoute,
   ]),
   extensionInstallRootRoute.addChildren([

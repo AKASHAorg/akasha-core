@@ -7,10 +7,10 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { InformationCircleIcon } from '@heroicons/react/24/solid';
 
 export type AppInfoNotificationCardsProps = {
-  notification: { title: string; message: string; action: React.ReactNode };
-  version: string;
-  versionLabel: string;
-  updateButtonLabel: string;
+  notification: { title: string; message: string; action?: React.ReactNode };
+  version?: string;
+  versionLabel?: string;
+  updateButtonLabel?: string;
 };
 
 export const AppInfoNotificationCards: React.FC<AppInfoNotificationCardsProps> = props => {
@@ -37,14 +37,16 @@ export const AppInfoNotificationCards: React.FC<AppInfoNotificationCardsProps> =
           </Stack>
         </Stack>
       </Card>
-      <Card radius={8} background={{ light: 'grey9', dark: 'grey3' }} customStyle="p-4">
-        <Stack direction="row" align="center" justify="between">
-          <Text as="span">
-            <Button variant="text" size="md" label={version} /> {versionLabel}
-          </Text>
-          <Button variant="primary" label={updateButtonLabel} />
-        </Stack>
-      </Card>
+      {updateButtonLabel && (
+        <Card radius={8} background={{ light: 'grey9', dark: 'grey3' }} customStyle="p-4">
+          <Stack direction="row" align="center" justify="between">
+            <Text as="span">
+              <Button variant="text" size="md" label={version} /> {versionLabel}
+            </Text>
+            <Button variant="primary" label={updateButtonLabel} />
+          </Stack>
+        </Card>
+      )}
     </>
   );
 };

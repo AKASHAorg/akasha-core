@@ -15,10 +15,7 @@ import {
   formatRelativeTime,
   truncateDid,
 } from '@akashaorg/design-system-core/lib/utils';
-import {
-  useGetAppReleaseByIdQuery,
-  useGetAppsQuery,
-} from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import { useGetAppsQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import {
   selectAkashaApp,
@@ -39,6 +36,8 @@ import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-typ
 import { useInstalledExtensions } from '@akashaorg/ui-awf-hooks/lib/use-installed-extensions';
 import { UninstallModal } from './uninstall-modal';
 import AppCoverImage from './AppCoverImage';
+import StackedAvatar from '@akashaorg/design-system-core/lib/components/StackedAvatar';
+import { AppInfoNotificationCards } from '@akashaorg/design-system-components/lib/components/AppInfo/notification-cards';
 
 type InfoPageProps = {
   appId: string;
@@ -47,14 +46,14 @@ type InfoPageProps = {
 export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
-  const { navigateToModal, decodeAppName, getDefaultExtensionNames, getCorePlugins } =
+  const { navigateToModal, decodeAppName, getDefaultExtensionNames, getCorePlugins, logger } =
     useRootComponentProps();
   const [showUninstallModal, setShowUninstallModal] = useState(false);
+
   const [showImageGalleryOverlay, setShowImageGalleryOverlay] = useState(false);
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
-  const isLoggedIn = !!authenticatedDID;
 
   const navigateTo = useRef(getCorePlugins().routing.navigateTo);
 
@@ -63,11 +62,6 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
       first: 1,
       filters: { where: { name: { equalTo: decodeAppName(appId) } } },
     },
-  });
-
-  const { error, data, networkStatus } = useGetAppReleaseByIdQuery({
-    variables: { id: appId },
-    skip: !isLoggedIn || true,
   });
 
   const installedExtensionsReq = useInstalledExtensions();
@@ -88,13 +82,13 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
     navigate({
       to: '/install/$appId',
       params: {
-        appId: appId,
+        appId,
       },
-    }).catch(err => console.error('cannot navigate to /install/$appId', err));
+    }).catch(err => logger.error('cannot navigate to /install/$appId : %o', err));
   };
 
   const handleUninstallClick = () => {
-    setShowUninstallModal(true);
+    // @todo: navigate to uninstall modal
   };
 
   const handleOpenClick = () => {
@@ -109,6 +103,61 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
       appName: '@akashaorg/app-vibes',
       getNavigationUrl: () => `/report/extension/${appData.id}`,
     });
+  };
+
+  const handleReleasesClick = () => {
+    navigate({
+      to: '/info/$appId/versions',
+      params: {
+        appId,
+      },
+    }).catch(err => logger.error('cannot navigate to /info/$appId/versions : %o', err));
+  };
+
+  const handleDeveloperClick = () => {
+    navigate({
+      to: '/info/$appId/developer/$devDid',
+      params: {
+        appId,
+        devDid: appData.author.id,
+      },
+    }).catch(err => logger.error('cannot navigate to /info/$appId/developer/$devDid : %o', err));
+  };
+
+  const handleCollaboratorsClick = () => {
+    navigate({
+      to: '/info/$appId/collaborators',
+      params: {
+        appId,
+      },
+    }).catch(err => logger.error('cannot navigate to /info/$appId/collaborators : %o', err));
+  };
+
+  const handleLatestUpdateClick = () => {
+    navigate({
+      to: '/info/$appId/audit-log',
+      params: {
+        appId,
+      },
+    }).catch(err => logger.error('cannot navigate to /info/$appId/audit-log : %o', err));
+  };
+
+  const handleLicenseClick = () => {
+    navigate({
+      to: '/info/$appId/license',
+      params: {
+        appId,
+      },
+    }).catch(err => logger.error('cannot navigate to /info/$appId/license : %o', err));
+  };
+
+  const handleDescriptionClick = () => {
+    navigate({
+      to: '/info/$appId/description',
+      params: {
+        appId,
+      },
+    }).catch(err => logger.error('cannot navigate to /info/$appId/license : %o', err));
   };
 
   const appData = selectAkashaApp(appReq.data);
@@ -132,7 +181,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
 
   const coverImageSrc = useMemo(() => {
     if (appData?.coverImage?.src) {
-      return transformSource(appData.coverImage.src)?.src;
+      return transformSource(appData.coverImage)?.src;
     }
     return null;
   }, [appData]);
@@ -145,9 +194,22 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
     return getDefaultExtensionNames().includes(decodeAppName(appId));
   }, [appId, decodeAppName, getDefaultExtensionNames]);
 
+  const contributorAvatars = useMemo(() => {
+    if (appData?.contributors?.length) {
+      return appData.contributors
+        .filter(contrib => !!contrib?.akashaProfile)
+        .map(contrib => {
+          return {
+            ...contrib.akashaProfile,
+            avatar: transformSource(contrib.akashaProfile.avatar?.default),
+          };
+        });
+    }
+  }, [appData?.contributors]);
+
   return (
     <>
-      {error && (
+      {appReq.error && (
         <Stack>
           <ErrorLoader
             type="script-error"
@@ -156,7 +218,14 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
           />
         </Stack>
       )}
-      {!error && appReq.networkStatus === NetworkStatus.ready && (
+      {!appReq.error && appReq.networkStatus === NetworkStatus.ready && !appData && (
+        <ErrorLoader
+          type="no-apps"
+          title={t('Extension not found!')}
+          details={t('The extension you are trying to view cannot be found.')}
+        />
+      )}
+      {!appReq.error && appReq.networkStatus === NetworkStatus.ready && !!appData && (
         <>
           <AppCoverImage src={coverImageSrc} appType={appData.applicationType} />
           <Stack>
@@ -165,7 +234,11 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                 <AppInfoHeader
                   displayName={appData.displayName}
                   extensionType={appData.applicationType}
-                  extensionAvatar={appData.logoImage}
+                  extensionAvatar={{
+                    width: appData.logoImage?.width,
+                    height: appData.logoImage?.height,
+                    src: transformSource(appData.logoImage)?.src,
+                  }}
                   nsfw={appData.nsfw}
                   nsfwLabel={'NSFW'}
                   extensionTypeLabel={extensionTypeLabel}
@@ -181,22 +254,25 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                   onOpenClick={handleOpenClick}
                   isDefaultWorldExtension={isDefaultWorldExtension}
                   isInstalled={isInstalled}
+                  isInstallable={!!latestRelease}
                   defaultAppPillLabel={t('Default')}
                 />
+
+                {!latestRelease && (
+                  <AppInfoNotificationCards
+                    notification={{
+                      message: t('This extension has no releases yet, so it cannot be installed.'),
+                      title: t('No releases found'),
+                    }}
+                  />
+                )}
 
                 {appData.description && (
                   <Section
                     dividerPosition={DividerPosition.Top}
                     title={t('Description')}
                     viewMoreLabel={t('Read More')}
-                    onClickviewMoreLabel={() => {
-                      navigate({
-                        to: '/info/$appId/description',
-                        params: {
-                          appId,
-                        },
-                      });
-                    }}
+                    onClickviewMoreLabel={handleDescriptionClick}
                   >
                     <Text lineClamp={2} variant="body1">
                       {appData.description}
@@ -205,8 +281,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                 )}
                 <Section title={t('Developer')} dividerPosition={DividerPosition.Top}>
                   {appData.author?.akashaProfile && (
-                    // @todo: fix navigation to developer sub-page
-                    <Card onClick={() => {}} type="plain">
+                    <Card onClick={handleDeveloperClick} type="plain">
                       <Stack direction="row" align="center">
                         <ProfileAvatarButton
                           profileId={appData.author?.akashaProfile?.id}
@@ -238,7 +313,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                     <ExtensionImageGallery
                       images={appData.gallery?.map(gImage => ({
                         ...gImage,
-                        src: transformSource(gImage.src).src,
+                        src: transformSource(gImage)?.src,
                       }))}
                       showOverlay={showImageGalleryOverlay}
                       toggleOverlay={() => setShowImageGalleryOverlay(!showImageGalleryOverlay)}
@@ -270,14 +345,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                         variant="text"
                         size="md"
                         label={formatRelativeTime(latestRelease?.node?.createdAt)}
-                        onClick={() => {
-                          navigate({
-                            to: '/info/$appId/audit-log',
-                            params: {
-                              appId,
-                            },
-                          });
-                        }}
+                        onClick={handleLatestUpdateClick}
                       />
                     </Stack>
                     <Divider />
@@ -289,14 +357,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                         variant="text"
                         size="md"
                         label={appData.license}
-                        onClick={() => {
-                          navigate({
-                            to: '/info/$appId/license',
-                            params: {
-                              appId,
-                            },
-                          });
-                        }}
+                        onClick={handleLicenseClick}
                       />
                     </Stack>
                     <Divider />
@@ -319,41 +380,60 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                     </Stack>
                   </Section>
                 )}
-                {appData.contributors?.length > 0 && (
+                {contributorAvatars?.length > 0 && (
                   <Section title={t('Collaborators')} dividerPosition={DividerPosition.Top}>
-                    {appData.contributors.map(contributor => (
-                      // todo: resolve contributors
-                      <div key={contributor.id}>{contributor.id}</div>
-                    ))}
+                    <Card type="plain" onClick={handleCollaboratorsClick}>
+                      <Stack direction="row" align="center">
+                        <StackedAvatar userData={contributorAvatars} maxAvatars={4} size="xs" />
+                        <Icon
+                          icon={<ChevronRightIcon />}
+                          size="sm"
+                          color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                          customStyle="ml-auto"
+                        />
+                      </Stack>
+                    </Card>
                   </Section>
                 )}
                 <Section
                   title={t('Latest Release')}
                   dividerPosition={DividerPosition.Top}
-                  viewMoreLabel={t('View Info')}
-                  onClickviewMoreLabel={() => {}}
+                  viewMoreLabel={latestRelease ? t('View Info') : undefined}
+                  onClickviewMoreLabel={handleReleasesClick}
                 >
-                  <Stack spacing="gap-y-4">
-                    <Stack>
-                      <Text variant="body1" color={{ light: 'grey4', dark: 'grey7' }}>
-                        {t('Version')} {latestRelease.node?.version}
-                      </Text>
-                      <Text variant="footnotes2">
-                        {formatDate(latestRelease.node?.createdAt, 'MMM YYYY')}
+                  {!!latestRelease && (
+                    <Stack spacing="gap-y-4">
+                      <Stack>
+                        <Text variant="body1" color={{ light: 'grey4', dark: 'grey7' }}>
+                          {t('Version')} {latestRelease?.node?.version}
+                        </Text>
+                        <Text variant="footnotes2">
+                          {formatDate(latestRelease?.node?.createdAt, 'MMM YYYY')}
+                        </Text>
+                      </Stack>
+                      <Text lineClamp={2} variant="body1">
+                        {latestRelease?.node?.meta?.find(meta => meta.property === 'description')
+                          ?.value || t('This release has no description added.')}
                       </Text>
                     </Stack>
-                    <Text lineClamp={2} variant="body1">
-                      {latestRelease.node?.meta?.find(meta => meta.property === 'description')
-                        ?.value || t('This release has no description added.')}
-                    </Text>
-                  </Stack>
+                  )}
+                  {!latestRelease && (
+                    <Text variant="body1">{t('This extension does not have a release yet.')}</Text>
+                  )}
                 </Section>
 
                 {appData.keywords?.length > 0 && (
-                  <Section title={''} showDivider={false}>
-                    {appData.keywords?.map((keyword, idx) => (
-                      <Pill type="info" key={`${keyword}_${idx}`} label={keyword} />
-                    ))}
+                  <Section title={''} dividerPosition={DividerPosition.Top}>
+                    <Stack direction="row" spacing="gap-x-2">
+                      {appData.keywords?.map((keyword, idx) => (
+                        <Pill
+                          borderColor={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                          type="info"
+                          key={`${keyword}_${idx}`}
+                          label={keyword}
+                        />
+                      ))}
+                    </Stack>
                   </Section>
                 )}
               </Card>
