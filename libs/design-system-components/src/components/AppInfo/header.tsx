@@ -142,23 +142,34 @@ export const AppInfoHeader: React.FC<AppInfoHeaderProps> = props => {
             </Stack>
           </Stack>
           {(isInstalled || isDefaultWorldExtension) && (
-            <Stack direction="row" spacing="gap-x-1" customStyle="flex-wrap">
+            <Stack direction="row" spacing="gap-x-1">
               {!isDefaultWorldExtension && (
                 <Button
                   variant="secondary"
                   label={uninstallExtensionLabel}
                   onClick={onUninstallClick}
+                  customStyle="w-1/2 md:w-min"
                 />
               )}
               {(extensionType === AkashaAppApplicationType.App ||
                 extensionType === AkashaAppApplicationType.Other) && (
-                <Button variant="primary" label={openExtensionLabel} onClick={onOpenClick} />
+                <Button
+                  variant="primary"
+                  label={openExtensionLabel}
+                  onClick={onOpenClick}
+                  customStyle="w-1/2 md:w-min"
+                />
               )}
             </Stack>
           )}
           {!isInstalled && !isDefaultWorldExtension && isInstallable && (
-            <Stack direction="row" spacing="gap-x-1" customStyle="flex-wrap">
-              <Button variant="primary" label={installExtensionLabel} onClick={onInstallClick} />
+            <Stack direction="row" spacing="gap-x-1" customStyle="flex-wrap w-full md:w-min">
+              <Button
+                customStyle="w-full md:w-min"
+                variant="primary"
+                label={installExtensionLabel}
+                onClick={onInstallClick}
+              />
             </Stack>
           )}
         </Stack>

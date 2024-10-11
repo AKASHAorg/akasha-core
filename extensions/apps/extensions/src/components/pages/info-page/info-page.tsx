@@ -15,10 +15,7 @@ import {
   formatRelativeTime,
   truncateDid,
 } from '@akashaorg/design-system-core/lib/utils';
-import {
-  useGetAppReleaseByIdQuery,
-  useGetAppsQuery,
-} from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import { useGetAppsQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import {
   selectAkashaApp,
@@ -48,13 +45,12 @@ type InfoPageProps = {
 export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
-  const { navigateToModal, decodeAppName, getDefaultExtensionNames, getCorePlugins } =
+  const { navigateToModal, decodeAppName, getDefaultExtensionNames, getCorePlugins, logger } =
     useRootComponentProps();
   const [showImageGalleryOverlay, setShowImageGalleryOverlay] = useState(false);
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
-  const isLoggedIn = !!authenticatedDID;
 
   const navigateTo = useRef(getCorePlugins().routing.navigateTo);
 
@@ -63,11 +59,6 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
       first: 1,
       filters: { where: { name: { equalTo: decodeAppName(appId) } } },
     },
-  });
-
-  const { error, data, networkStatus } = useGetAppReleaseByIdQuery({
-    variables: { id: appId },
-    skip: !isLoggedIn || true,
   });
 
   const installedExtensionsReq = useInstalledExtensions();
@@ -88,9 +79,9 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
     navigate({
       to: '/install/$appId',
       params: {
-        appId: appId,
+        appId,
       },
-    }).catch(err => console.error('cannot navigate to /install/$appId', err));
+    }).catch(err => logger.error('cannot navigate to /install/$appId : %o', err));
   };
 
   const handleUninstallClick = () => {
@@ -115,28 +106,55 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
     navigate({
       to: '/info/$appId/versions',
       params: {
-        appId: decodeAppName(appId),
+        appId,
       },
-    });
+    }).catch(err => logger.error('cannot navigate to /info/$appId/versions : %o', err));
   };
 
   const handleDeveloperClick = () => {
     navigate({
       to: '/info/$appId/developer/$devDid',
       params: {
-        appId: decodeAppName(appId),
+        appId,
         devDid: appData.author.id,
       },
-    });
+    }).catch(err => logger.error('cannot navigate to /info/$appId/developer/$devDid : %o', err));
   };
 
   const handleCollaboratorsClick = () => {
     navigate({
       to: '/info/$appId/collaborators',
       params: {
-        appId: decodeAppName(appId),
+        appId,
       },
-    });
+    }).catch(err => logger.error('cannot navigate to /info/$appId/collaborators : %o', err));
+  };
+
+  const handleLatestUpdateClick = () => {
+    navigate({
+      to: '/info/$appId/audit-log',
+      params: {
+        appId,
+      },
+    }).catch(err => logger.error('cannot navigate to /info/$appId/audit-log : %o', err));
+  };
+
+  const handleLicenseClick = () => {
+    navigate({
+      to: '/info/$appId/license',
+      params: {
+        appId,
+      },
+    }).catch(err => logger.error('cannot navigate to /info/$appId/license : %o', err));
+  };
+
+  const handleDescriptionClick = () => {
+    navigate({
+      to: '/info/$appId/description',
+      params: {
+        appId,
+      },
+    }).catch(err => logger.error('cannot navigate to /info/$appId/license : %o', err));
   };
 
   const appData = selectAkashaApp(appReq.data);
@@ -188,7 +206,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
 
   return (
     <>
-      {error && (
+      {appReq.error && (
         <Stack>
           <ErrorLoader
             type="script-error"
@@ -197,14 +215,14 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
           />
         </Stack>
       )}
-      {!error && appReq.networkStatus === NetworkStatus.ready && !appData && (
+      {!appReq.error && appReq.networkStatus === NetworkStatus.ready && !appData && (
         <ErrorLoader
           type="no-apps"
           title={t('Extension not found!')}
           details={t('The extension you are trying to view cannot be found.')}
         />
       )}
-      {!error && appReq.networkStatus === NetworkStatus.ready && !!appData && (
+      {!appReq.error && appReq.networkStatus === NetworkStatus.ready && !!appData && (
         <>
           <AppCoverImage src={coverImageSrc} appType={appData.applicationType} />
           <Stack>
@@ -251,14 +269,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                     dividerPosition={DividerPosition.Top}
                     title={t('Description')}
                     viewMoreLabel={t('Read More')}
-                    onClickviewMoreLabel={() => {
-                      navigate({
-                        to: '/info/$appId/description',
-                        params: {
-                          appId,
-                        },
-                      });
-                    }}
+                    onClickviewMoreLabel={handleDescriptionClick}
                   >
                     <Text lineClamp={2} variant="body1">
                       {appData.description}
@@ -331,14 +342,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                         variant="text"
                         size="md"
                         label={formatRelativeTime(latestRelease?.node?.createdAt)}
-                        onClick={() => {
-                          navigate({
-                            to: '/info/$appId/audit-log',
-                            params: {
-                              appId,
-                            },
-                          });
-                        }}
+                        onClick={handleLatestUpdateClick}
                       />
                     </Stack>
                     <Divider />
@@ -350,14 +354,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                         variant="text"
                         size="md"
                         label={appData.license}
-                        onClick={() => {
-                          navigate({
-                            to: '/info/$appId/license',
-                            params: {
-                              appId,
-                            },
-                          });
-                        }}
+                        onClick={handleLicenseClick}
                       />
                     </Stack>
                     <Divider />
