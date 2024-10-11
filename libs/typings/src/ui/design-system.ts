@@ -72,7 +72,7 @@ export type IconType =
   | 'AlignRight'
   | 'AlignJustify'
   | 'Antenna'
-  | 'BoldAlt'
+  | 'Bold'
   | 'DidKey'
   | 'Discord'
   | 'Eth'

@@ -46,10 +46,21 @@ const useRootComponentProps = <T extends IRootComponentProps>() => {
 
   const getContext = React.useCallback(() => ctx, [ctx]);
 
+  const getDefaultExtensionNames = () => {
+    return [
+      ...ctx.worldConfig.defaultApps,
+      ...ctx.worldConfig.defaultWidgets,
+      ctx.worldConfig.homepageApp,
+      ctx.worldConfig.extensionsApp,
+      ctx.worldConfig.layout,
+    ];
+  };
+
   return {
     getTranslationPlugin,
     getCorePlugins,
     getContext,
+    getDefaultExtensionNames,
     ...ctx,
   };
 };

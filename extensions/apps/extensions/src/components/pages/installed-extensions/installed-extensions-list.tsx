@@ -7,9 +7,12 @@ import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
-import appRoutes, { EXTENSIONS, INSTALLED } from '../../../routes';
+import appRoutes, { INSTALLED } from '../../../routes';
 import { useTranslation } from 'react-i18next';
-import { type InstalledExtension, useInstalledExtensions } from './use-installed-extensions';
+import {
+  type InstalledExtension,
+  useInstalledExtensions,
+} from '@akashaorg/ui-awf-hooks/lib/use-installed-extensions';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useNavigate } from '@tanstack/react-router';
 
@@ -17,20 +20,21 @@ const PUBLIC_IMAGE_PATH = '/images';
 
 export const InstalledExtensionsList = () => {
   const navigate = useNavigate();
-  const { getCorePlugins, baseRouteName } = useRootComponentProps();
+  const { getCorePlugins, encodeAppName, baseRouteName } = useRootComponentProps();
   const { t } = useTranslation('app-extensions');
 
   const navigateTo = getCorePlugins().routing.navigateTo;
 
   const handleAppClick = (appName: string) => {
-    navigateTo?.({
-      appName,
+    navigate({
+      to: '/info/$appId',
+      params: { appId: encodeAppName(appName) },
     });
   };
 
   const handleDiscoverClick = () => {
     navigate({
-      to: appRoutes[EXTENSIONS],
+      to: '/extensions-hub',
     });
   };
 

@@ -5,43 +5,53 @@ import Text, { TextProps } from '../Text';
 import Button from '../Button';
 import Icon from '../Icon';
 
-export type ContentBlockProps = {
-  blockTitle: string;
+export enum DividerPosition {
+  Top,
+  Bottom,
+}
+
+export type SectionProps = {
+  title: string;
   viewMoreLabel?: string;
   viewMoreIcon?: React.ReactElement; //only speficy either viewMoreLabel or viewMoreIcon, not both
   onClickviewMoreLabel?: () => void;
-  blockVariant?: TextProps['variant'];
+  titleVariant?: TextProps['variant'];
   showDivider?: boolean;
+  dividerPosition?: DividerPosition;
 };
 
 /**
- * A ContentBlock component is a specific type of container that display content in a pre-determined
- * style. You can find examples of Content Block usage when browsing a specific app inside
+ * A Section component is a specific type of container that display content in a pre-determined
+ * style. You can find examples of Section usage when browsing a specific app inside
  * the Extensions app in Akasha World.
  * @param blockTitle - assign a title to be displayed
  * @param viewMoreLabel - (optional) text that a user can click to view more content
  * @param viewMoreIcon - (optional) icon that a user can click to view more content. Only
  * a viewMoreLabel or viewMoreIcon should be provided at a time.
  * @param onClickviewMoreLabel - (optional) click handler for the viewMoreLabel/viewMoreIcon props
- * @param blockVariant - (optional) customize the text variant
+ * @param titleVariant - (optional) customize the text variant
  * @param showDivider - boolean (optional) whether to show a divider at the bottom of the block
+ * @param dividerPosition - the position of the divider
+ * @param children - component's child nodes
  * @example
  * ```tsx
- *  <ContentBlock
- *    blockTitle='Version History'
+ *  <Section
+ *    title='Version History'
  *    viewMoreIcon={<ChevronRightIcon />}
  *    showDivider={false}
+ *    dividerPosition={DividerPosition.Top || DividerPosition.Bottom}
  *    onClickviewMoreLabel={viewMoreClickHandler}
  *   />
  * ```
  **/
-const ContentBlock: React.FC<PropsWithChildren<ContentBlockProps>> = ({
-  blockTitle,
+const Section: React.FC<PropsWithChildren<SectionProps>> = ({
+  title,
   viewMoreLabel,
   viewMoreIcon,
   onClickviewMoreLabel,
-  blockVariant = 'h6',
+  titleVariant = 'h6',
   showDivider = true,
+  dividerPosition = DividerPosition.Bottom,
   children,
 }) => {
   const ClickWrapper = ({ children }) => {
@@ -53,10 +63,11 @@ const ContentBlock: React.FC<PropsWithChildren<ContentBlockProps>> = ({
   };
 
   const BaseCompnt = (
-    <Stack direction="column" spacing="gap-y-4">
+    <Stack direction="column" spacing="gap-y-6" padding="py-3">
+      {showDivider && dividerPosition === DividerPosition.Top && <Divider />}
       <Stack direction="column" spacing="gap-y-2">
         <Stack justify="between" direction="row">
-          <Text variant={blockVariant}>{blockTitle}</Text>
+          <Text variant={titleVariant}>{title}</Text>
           {!!viewMoreLabel && (
             <Button size="md" variant="text" label={viewMoreLabel} onClick={onClickviewMoreLabel} />
           )}
@@ -71,7 +82,7 @@ const ContentBlock: React.FC<PropsWithChildren<ContentBlockProps>> = ({
         </Stack>
         {children}
       </Stack>
-      {showDivider && <Divider />}
+      {showDivider && dividerPosition === DividerPosition.Bottom && <Divider />}
     </Stack>
   );
   if (viewMoreIcon) {
@@ -80,4 +91,4 @@ const ContentBlock: React.FC<PropsWithChildren<ContentBlockProps>> = ({
   return BaseCompnt;
 };
 
-export default ContentBlock;
+export default Section;

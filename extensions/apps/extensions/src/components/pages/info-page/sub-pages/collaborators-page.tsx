@@ -8,7 +8,6 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { ChevronRightIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import { mockProfile } from '../info-page';
 import ExtensionHeader from '@akashaorg/design-system-components/lib/components/ExtensionHeader';
 
 type CollaboratorsPageProps = {
@@ -20,9 +19,6 @@ export const CollaboratorsPage: React.FC<CollaboratorsPageProps> = ({ appId }) =
   const { t } = useTranslation('app-extensions');
 
   const developers = [];
-  for (let index = 1; index < 5; index++) {
-    developers.push({ ...mockProfile, id: index });
-  }
 
   return (
     <>

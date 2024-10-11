@@ -59,6 +59,11 @@ fragment AppReleaseFragment on AkashaAppRelease{
   source
   version
   createdAt
+  meta {
+    provider
+    property
+    value
+  }
 }
 
 query GetApps($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaAppFiltersInput, $sorting: AkashaAppSortingInput){

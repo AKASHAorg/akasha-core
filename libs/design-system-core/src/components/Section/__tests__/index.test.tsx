@@ -1,16 +1,16 @@
 import * as React from 'react';
 import { act } from '@testing-library/react';
-import ContentBlock from '../';
+import Section from '../';
 import { customRender } from '../../../test-utils';
 
-describe('<ContentBlock /> Component', () => {
+describe('<Section /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
-  const blockTitle = 'Block title';
+  const blockTitle = 'Section title';
 
   beforeEach(() => {
     act(() => {
-      componentWrapper = customRender(<ContentBlock blockTitle={blockTitle} />, {});
+      componentWrapper = customRender(<Section title={blockTitle} />, {});
     });
   });
 
@@ -27,6 +27,6 @@ describe('<ContentBlock /> Component', () => {
 
     const found = getByText(blockTitle);
 
-    expect(found).toBeDefined();
+    expect(found).toBeInTheDocument();
   });
 });
