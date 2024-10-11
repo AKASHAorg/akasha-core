@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useSlate } from 'slate-react';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Icon, { IconProps } from '@akashaorg/design-system-core/lib/components/Icon';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 import { CustomEditor, TEXT_ALIGN_TYPES } from './helpers';
@@ -8,6 +8,7 @@ import { CustomEditor, TEXT_ALIGN_TYPES } from './helpers';
 export type ToolbarButtonProps = {
   format: string;
   icon: JSX.Element;
+  iconSize?: IconProps['size'];
   style?: string;
 };
 
@@ -39,7 +40,12 @@ export const BlockButton: React.FC<ToolbarButtonProps> = ({ format, icon, style 
   );
 };
 
-export const MarkButton: React.FC<ToolbarButtonProps> = ({ format, icon, style }) => {
+export const MarkButton: React.FC<ToolbarButtonProps> = ({
+  format,
+  icon,
+  iconSize = 'sm',
+  style,
+}) => {
   const editor = useSlate();
   const active = CustomEditor.isMarkActive(editor, format);
   return (
@@ -57,7 +63,7 @@ export const MarkButton: React.FC<ToolbarButtonProps> = ({ format, icon, style }
           active ? { light: 'secondaryLight/30', dark: 'grey4' } : { light: 'grey8', dark: 'grey3' }
         }
       >
-        <Icon size="lg" icon={icon} customStyle="absolute" solid accentColor />
+        <Icon size={iconSize} icon={icon} customStyle="absolute" solid accentColor />
       </Stack>
     </button>
   );
