@@ -1,111 +1,178 @@
-import React from 'react';
-import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import React, { MouseEventHandler, useMemo } from 'react';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { Plugin } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
-import { ArrowDownIcon, ArrowPathIcon, EllipsisVerticalIcon } from '@heroicons/react/24/outline';
+import {
+  Plugin,
+  App,
+  Widget,
+} from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
+import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
 import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
 import Menu from '@akashaorg/design-system-core/lib/components/Menu';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import { DuplexAppButton } from './duplex-app-button';
 import { AppInfoPill } from './info-pill';
+import {
+  AkashaAppApplicationType,
+  AppImageSource,
+} from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
+import { InformationCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
+import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
 
 export type AppInfoHeaderProps = {
-  integrationName: string;
-  integrationType: string;
+  displayName: string;
+  extensionType: AkashaAppApplicationType;
   nsfw: boolean;
   nsfwLabel: string;
-  pluginLabel: string;
+  extensionTypeLabel: string;
   share: ListItem;
   report: ListItem;
-  status: 'installed' | 'not-installed' | 'loading';
-  onInstall: () => void;
-  onUninstall: () => void;
+  onInstallClick: MouseEventHandler<HTMLButtonElement>;
+  onUninstallClick: MouseEventHandler<HTMLButtonElement>;
+  onOpenClick: MouseEventHandler<HTMLButtonElement>;
+  extensionAvatar: AppImageSource;
+  isInstalled?: boolean;
+  isDefaultWorldExtension?: boolean;
+  defaultAppPillLabel?: string;
+  installExtensionLabel?: string;
+  uninstallExtensionLabel?: string;
+  openExtensionLabel?: string;
+  defaultExtensionTooltipContent?: string;
+  isInstallable?: boolean;
 };
 
 export const AppInfoHeader: React.FC<AppInfoHeaderProps> = props => {
   const {
-    integrationName,
-    integrationType,
+    displayName,
+    extensionType,
     nsfw,
     nsfwLabel,
-    pluginLabel,
+    extensionTypeLabel,
     share,
     report,
-    status,
-    onInstall,
-    onUninstall,
+    onInstallClick,
+    onUninstallClick,
+    onOpenClick,
+    extensionAvatar,
+    isInstalled = false,
+    isInstallable = true,
+    isDefaultWorldExtension = false,
+    defaultAppPillLabel = 'Default',
+    installExtensionLabel = 'Install',
+    uninstallExtensionLabel = 'Uninstall',
+    openExtensionLabel = 'Open',
+    defaultExtensionTooltipContent = `This extension is preinstalled in this world and cannot be uninstalled`,
   } = props;
 
+  const pillIconByAppType = useMemo(() => {
+    switch (extensionType) {
+      case AkashaAppApplicationType.App:
+        return <App />;
+      case AkashaAppApplicationType.Widget:
+        return <Widget />;
+      default:
+        return <Plugin />;
+    }
+  }, [extensionType]);
+
   return (
-    <Stack direction="row" align="center" justify="between" customStyle="-mt-3">
-      <Stack direction="row" align="start" spacing="gap-x-2">
-        <Stack
-          background={{
-            light: 'grey8',
-            dark: 'grey5',
-          }}
-          customStyle="-mt-4 rounded-lg w-[4.375rem] h-[4.375rem]"
-        />
-        <Stack>
-          <Text variant="h6" weight="semibold">
-            {integrationName}
-          </Text>
-          <Stack direction="row" spacing="gap-x-1" customStyle="flex-wrap">
-            {integrationType === 'plugin' && (
+    <Stack direction="row" align="start" justify="between" padding="pb-3">
+      <Stack direction="row" align="stretch" spacing="gap-x-2" customStyle={'flex-grow'}>
+        <AppAvatar appType={extensionType} avatar={extensionAvatar} width={7} height={7} />
+        <Stack justify="between" customStyle={'flex-grow'}>
+          <Stack>
+            <Stack direction="row" align="start" spacing="gap-x-2" justify="between">
+              <Text variant="h6" weight="semibold">
+                {displayName}
+              </Text>
+              {isDefaultWorldExtension && (
+                <Tooltip
+                  placement={'bottom'}
+                  content={defaultExtensionTooltipContent}
+                  customStyle="self-center"
+                  contentCustomStyle="max-w-sm"
+                >
+                  <Icon size="md" icon={<InformationCircleIcon />} />
+                </Tooltip>
+              )}
+              {!isDefaultWorldExtension && (
+                <Menu
+                  anchor={{
+                    icon: <EllipsisVerticalIcon />,
+                    variant: 'primary',
+                    size: 'xs',
+                    greyBg: true,
+                    iconOnly: true,
+                  }}
+                  items={[share, report]}
+                />
+              )}
+            </Stack>
+            <Stack direction="row" spacing="gap-x-1" customStyle="flex-wrap">
+              {isDefaultWorldExtension && (
+                <AppInfoPill
+                  background={{
+                    gradient: 'gradient-to-r',
+                    from: 'primaryStart',
+                    to: 'primaryStop',
+                  }}
+                >
+                  <Text variant="footnotes2">{defaultAppPillLabel}</Text>
+                </AppInfoPill>
+              )}
               <AppInfoPill background={{ light: 'tertiaryLight', dark: 'tertiaryDark' }}>
                 <Icon
                   size="sm"
-                  icon={<Plugin />}
+                  icon={pillIconByAppType}
                   color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
                   solid={true}
                 />
                 <Text variant="footnotes2" color={{ light: 'secondaryLight', dark: 'white' }}>
-                  {pluginLabel}
+                  {extensionTypeLabel}
                 </Text>
               </AppInfoPill>
-            )}
-            {nsfw && (
-              <AppInfoPill background={{ light: 'errorFade', dark: 'errorDark' }}>
-                <Text variant="footnotes2" color={{ light: 'errorDark', dark: 'white' }}>
-                  {nsfwLabel}
-                </Text>
-              </AppInfoPill>
-            )}
+              {nsfw && (
+                <AppInfoPill background={{ light: 'errorFade', dark: 'errorDark' }}>
+                  <Text variant="footnotes2" color={{ light: 'errorDark', dark: 'white' }}>
+                    {nsfwLabel}
+                  </Text>
+                </AppInfoPill>
+              )}
+            </Stack>
           </Stack>
+          {(isInstalled || isDefaultWorldExtension) && (
+            <Stack direction="row" spacing="gap-x-1">
+              {!isDefaultWorldExtension && (
+                <Button
+                  variant="secondary"
+                  label={uninstallExtensionLabel}
+                  onClick={onUninstallClick}
+                  customStyle="w-1/2 md:w-min"
+                />
+              )}
+              {(extensionType === AkashaAppApplicationType.App ||
+                extensionType === AkashaAppApplicationType.Other) && (
+                <Button
+                  variant="primary"
+                  label={openExtensionLabel}
+                  onClick={onOpenClick}
+                  customStyle="w-1/2 md:w-min"
+                />
+              )}
+            </Stack>
+          )}
+          {!isInstalled && !isDefaultWorldExtension && isInstallable && (
+            <Stack direction="row" spacing="gap-x-1" customStyle="flex-wrap w-full md:w-min">
+              <Button
+                customStyle="w-full md:w-min"
+                variant="primary"
+                label={installExtensionLabel}
+                onClick={onInstallClick}
+              />
+            </Stack>
+          )}
         </Stack>
-      </Stack>
-      <Stack direction="row" align="start" spacing="gap-x-2">
-        {/* using align 'start' here, because Menu component has a gap between its anchor and popover */}
-        {status === 'installed' && <DuplexAppButton onUninstall={onUninstall} />}
-        {status === 'not-installed' && (
-          <Button
-            icon={<ArrowDownIcon />}
-            variant="primary"
-            size="xs"
-            iconOnly
-            onClick={onInstall}
-          />
-        )}
-        {status === 'loading' && (
-          <AppIcon
-            placeholderIcon={<ArrowPathIcon />}
-            iconColor="white"
-            background="secondaryDark"
-            size="xs"
-          />
-        )}
-        <Menu
-          anchor={{
-            icon: <EllipsisVerticalIcon />,
-            variant: 'primary',
-            size: 'xs',
-            greyBg: true,
-            iconOnly: true,
-          }}
-          items={[share, report]}
-        />
       </Stack>
     </Stack>
   );

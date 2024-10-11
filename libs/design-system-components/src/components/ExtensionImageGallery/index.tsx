@@ -2,10 +2,9 @@ import * as React from 'react';
 import { tw, apply } from '@twind/core';
 import { ImageBlockGridItem } from '../ImageBlockGallery/image-block-grid-item';
 import ImageOverlay from '../ImageOverlay';
-import { type GalleryImage } from '@akashaorg/typings/lib/ui';
 
 export type ExtensionImageGalleryProps = {
-  images: GalleryImage[];
+  images: { height?: number; width?: number; src: string }[];
   showOverlay: boolean;
   toggleOverlay: () => void;
 };
@@ -20,7 +19,7 @@ const ExtensionImageGallery: React.FC<ExtensionImageGalleryProps> = props => {
   const { images = [], showOverlay, toggleOverlay } = props;
   const [clickedImg, setClickedImg] = React.useState(null);
 
-  const handleClickImage = (img: GalleryImage) => {
+  const handleClickImage = (img: { src: string; size: { height: number; width: number } }) => {
     toggleOverlay();
     setClickedImg(img);
   };
@@ -34,13 +33,16 @@ const ExtensionImageGallery: React.FC<ExtensionImageGalleryProps> = props => {
 
   return (
     <>
-      <div className={images.length === 1 ? tw('flex') : tw(`${gridStyle}`)}>
-        {images.map((image, index) => (
+      <div className={images?.length === 1 ? tw('flex') : tw(`${gridStyle}`)}>
+        {images?.map((image, index) => (
           <ImageBlockGridItem
-            image={image}
+            image={{ src: image.src, size: { width: image.width, height: image.height } }}
             key={index}
             handleClickImage={handleClickImage}
-            images={images}
+            images={images.map(img => ({
+              src: img.src,
+              size: { width: img.width, height: img.height },
+            }))}
             gridStyle={style}
             aspectRatio="aspect-video"
           />
@@ -48,7 +50,10 @@ const ExtensionImageGallery: React.FC<ExtensionImageGalleryProps> = props => {
       </div>
       {showOverlay && (
         <ImageOverlay
-          images={images}
+          images={images?.map(img => ({
+            src: img.src,
+            size: { width: img.width, height: img.height },
+          }))}
           clickedImg={clickedImg ?? images[0]}
           closeModal={toggleOverlay}
         />
