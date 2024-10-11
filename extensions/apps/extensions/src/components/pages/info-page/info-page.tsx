@@ -88,7 +88,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
   };
 
   const handleUninstallClick = () => {
-    // @todo: navigate to uninstall modal
+    setShowUninstallModal(true);
   };
 
   const handleOpenClick = () => {
