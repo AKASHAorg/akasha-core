@@ -16,18 +16,18 @@ export enum FieldName {
   sourceURL = 'sourceURL',
 }
 
-export type ExtensionReleaseSubmitValues = {
+export type ExtensionReleasePublishValues = {
   versionNumber?: string;
   description?: string;
   sourceURL?: string;
 };
 
-export type ExtensionReleaseSubmitProps = {
-  defaultValues?: ExtensionReleaseSubmitValues;
+export type ExtensionReleasePublishProps = {
+  defaultValues?: ExtensionReleasePublishValues;
   cancelButton: ButtonType;
   nextButton: {
     label: string;
-    handleClick: (data: ExtensionReleaseSubmitValues) => void;
+    handleClick: (data: ExtensionReleasePublishValues) => void;
   };
   versionNumberLabel?: string;
   descriptionFieldLabel?: string;
@@ -37,7 +37,7 @@ export type ExtensionReleaseSubmitProps = {
   loading?: boolean;
 };
 
-const ExtensionReleaseSubmit: React.FC<ExtensionReleaseSubmitProps> = props => {
+const ExtensionReleasePublish: React.FC<ExtensionReleasePublishProps> = props => {
   const {
     defaultValues = {
       versionNumber: '',
@@ -58,7 +58,7 @@ const ExtensionReleaseSubmit: React.FC<ExtensionReleaseSubmitProps> = props => {
     control,
     getValues,
     formState: { errors, dirtyFields },
-  } = useForm<ExtensionReleaseSubmitValues>({
+  } = useForm<ExtensionReleasePublishValues>({
     defaultValues,
     resolver: zodResolver(schema),
     mode: 'onChange',
@@ -172,7 +172,7 @@ const ExtensionReleaseSubmit: React.FC<ExtensionReleaseSubmitProps> = props => {
   );
 };
 
-export default ExtensionReleaseSubmit;
+export default ExtensionReleasePublish;
 
 const schema = z.object({
   versionNumber: z.string(),

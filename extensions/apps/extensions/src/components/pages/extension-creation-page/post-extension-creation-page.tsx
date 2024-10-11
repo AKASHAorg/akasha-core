@@ -37,8 +37,12 @@ export const PostExtensionCreationPage: React.FC<{ extensionId: string }> = ({ e
     });
   };
 
-  const handleNavigate = () => {
-    navigate({ to: '/my-extensions' });
+  const handleNavigateToEdit = () => {
+    navigate({ to: '/edit-extension/$extensionId/step1', params: { extensionId } });
+  };
+
+  const handleNavigateToReleaseManager = () => {
+    navigate({ to: '/release-manager/$extensionId', params: { extensionId } });
   };
 
   const existingDraftExtensions =
@@ -85,9 +89,19 @@ export const PostExtensionCreationPage: React.FC<{ extensionId: string }> = ({ e
 
         <Text variant="subtitle2" align="center">
           {t(
-            'You can now edit your app before submitting it for review. Once approved, it will be added to AKASHA World.',
+            `You're almost there!
+You can add more details to your extension, such as a description, gallery & more! You can also manage releases to set it up locally or submit a release when you're ready.`,
           )}
         </Text>
+
+        <Stack direction="row" justify="between">
+          <Button variant="secondary" label={t('Add Details')} onClick={handleNavigateToEdit} />
+          <Button
+            variant="primary"
+            label={t('Manage Releases')}
+            onClick={handleNavigateToReleaseManager}
+          />
+        </Stack>
 
         <Stack direction="column" spacing="gap-2">
           <Stack direction="row" spacing="gap-1" align="center" justify="center">
@@ -104,8 +118,6 @@ export const PostExtensionCreationPage: React.FC<{ extensionId: string }> = ({ e
             )}
           </Text>
         </Stack>
-
-        <Button variant="text" onClick={handleNavigate} label={t('Go to My Extensions')} />
       </Stack>
     </Card>
   );

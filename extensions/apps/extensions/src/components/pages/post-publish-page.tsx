@@ -10,11 +10,11 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 
-type PostSubmitPageProps = {
+type PostPublishPageProps = {
   type: 'extension' | 'release';
 };
 
-export const PostSubmitPage: React.FC<PostSubmitPageProps> = ({ type }) => {
+export const PostPublishPage: React.FC<PostPublishPageProps> = ({ type }) => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
 

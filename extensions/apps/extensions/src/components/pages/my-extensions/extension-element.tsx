@@ -7,39 +7,39 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Menu from '@akashaorg/design-system-core/lib/components/Menu';
-import {
-  Plugin,
-  App,
-  Widget,
-} from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
+
 import {
   ClockIcon,
   EyeIcon,
   PaperAirplaneIcon,
   PencilIcon,
-  XMarkIcon,
+  RectangleStackIcon,
+  TrashIcon,
 } from '@heroicons/react/24/outline';
 import { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
 import { EllipsisHorizontalIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { hasOwn, transformSource, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetAppsStreamQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import {
-  AkashaAppApplicationType,
-  AkashaAppsStreamModerationStatus,
-} from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { ExtensionStatus, Extension } from '@akashaorg/typings/lib/ui';
 import { useNavigate } from '@tanstack/react-router';
+import {
+  getExtensionStatus,
+  getIconByAppType,
+  getStatusIndicatorStyle,
+} from '../../../utils/extension-utils';
 
 type ExtensionElement = {
   extensionData: Extension;
   showDivider?: boolean;
-  filter: { id?: string; title?: string; opt?: string };
+  filter?: { id?: string; title?: string; opt?: string };
+  showMenu?: boolean;
 };
 
 export const ExtensionElement: React.FC<ExtensionElement> = ({
   extensionData,
-  showDivider,
+  showDivider = false,
   filter,
+  showMenu = false,
 }) => {
   const { t } = useTranslation('app-extensions');
   const sdk = React.useRef(getSDK());
@@ -71,48 +71,6 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
       ? appStreamReq.node.akashaAppsStreamList
       : null;
 
-  const getIconByAppType = (applicationType: AkashaAppApplicationType) => {
-    switch (applicationType) {
-      case AkashaAppApplicationType.App:
-        return <App />;
-      case AkashaAppApplicationType.Plugin:
-        return <Plugin />;
-      case AkashaAppApplicationType.Widget:
-        return <Widget />;
-    }
-  };
-
-  const getExtensionStatus = () => {
-    if (extensionData?.localDraft) {
-      return ExtensionStatus.LocalDraft;
-    }
-    switch (appStreamData?.edges[0]?.node?.status) {
-      case null:
-        return ExtensionStatus.Draft;
-      case AkashaAppsStreamModerationStatus.InReview:
-        return ExtensionStatus.InReview;
-      case AkashaAppsStreamModerationStatus.Ok:
-        return ExtensionStatus.Published;
-      default:
-        return ExtensionStatus.Draft;
-    }
-  };
-
-  const getStatusIndicatorStyle = () => {
-    switch (getExtensionStatus()) {
-      case ExtensionStatus.LocalDraft:
-        return 'bg-grey6';
-      case ExtensionStatus.Draft:
-        return 'bg-grey6';
-      case ExtensionStatus.Published:
-        return 'bg-success';
-      case ExtensionStatus.InReview:
-        return 'bg-(errorLight dark:errorDark)';
-      default:
-        return 'bg-grey6';
-    }
-  };
-
   const handleExtensionRemove = () => {
     navigateToModal({
       name: `remove-extension-confirmation`,
@@ -129,14 +87,14 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
 
   const handleExtensionSubmit = () => {
     navigate({
-      to: `/submit-extension/$extensionId`,
+      to: `/publish-extension/$extensionId`,
       params: { extensionId: extensionData?.id },
     });
   };
 
-  const handleReleaseSubmit = () => {
+  const handleReleaseManager = () => {
     navigate({
-      to: `/submit-release/$extensionId`,
+      to: `/release-manager/$extensionId`,
       params: { extensionId: extensionData?.id },
     });
   };
@@ -151,31 +109,31 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
             onClick: () => {},
           },
           {
-            label: t('Submit Release'),
-            icon: <PaperAirplaneIcon />,
-            onClick: handleReleaseSubmit,
+            label: t('Release Manager'),
+            icon: <RectangleStackIcon />,
+            onClick: handleReleaseManager,
           },
         ];
       case ExtensionStatus.Published:
         return [
           {
-            label: t('View'),
+            label: t('View Extension'),
             icon: <EyeIcon />,
             onClick: () => {},
           },
           {
-            label: t('Submit Release'),
-            icon: <PaperAirplaneIcon />,
-            onClick: handleReleaseSubmit,
+            label: t('Release Manager'),
+            icon: <RectangleStackIcon />,
+            onClick: handleReleaseManager,
           },
           {
-            label: t('Edit'),
+            label: t('Edit Extension'),
             icon: <PencilIcon />,
             onClick: handleExtensionEdit,
           },
           {
-            label: t('Unpublish'),
-            icon: <XMarkIcon />,
+            label: t('Delete Extension'),
+            icon: <TrashIcon />,
             onClick: () => {},
             color: { light: 'errorLight', dark: 'errorDark' },
           },
@@ -183,18 +141,23 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
       case ExtensionStatus.LocalDraft:
         return [
           {
-            label: t('Publish'),
+            label: t('Publish Extension'),
             icon: <PaperAirplaneIcon />,
             onClick: handleExtensionSubmit,
           },
           {
-            label: t('Edit'),
+            label: t('Edit Extension'),
             icon: <PencilIcon />,
             onClick: handleExtensionEdit,
           },
           {
-            label: t('Delete'),
-            icon: <XMarkIcon />,
+            label: t('Release Manager'),
+            icon: <RectangleStackIcon />,
+            onClick: handleReleaseManager,
+          },
+          {
+            label: t('Delete Extension'),
+            icon: <TrashIcon />,
             onClick: handleExtensionRemove,
             color: { light: 'errorLight', dark: 'errorDark' },
           },
@@ -202,18 +165,18 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
       case ExtensionStatus.Draft:
         return [
           {
-            label: t('Submit Release'),
-            icon: <PaperAirplaneIcon />,
-            onClick: handleReleaseSubmit,
+            label: t('Release Manager'),
+            icon: <RectangleStackIcon />,
+            onClick: handleReleaseManager,
           },
           {
-            label: t('Edit'),
+            label: t('Edit Extension'),
             icon: <PencilIcon />,
             onClick: handleExtensionEdit,
           },
           {
-            label: t('Delete'),
-            icon: <XMarkIcon />,
+            label: t('Delete Extension'),
+            icon: <TrashIcon />,
             onClick: handleExtensionRemove,
             color: { light: 'errorLight', dark: 'errorDark' },
           },
@@ -224,10 +187,17 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
   };
 
   const showElement = () => {
-    if (filter.id === '0') {
+    if (!filter) {
       return true;
+    } else if (filter) {
+      if (filter.id === '0') {
+        return true;
+      }
+      return (
+        filter.title ===
+        getExtensionStatus(extensionData?.localDraft, appStreamData?.edges[0]?.node?.status)
+      );
     }
-    return filter.title === getExtensionStatus();
   };
 
   return (
@@ -275,21 +245,33 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
             </Stack>
 
             <Stack direction="column" justify="between" align="end" customStyle="shrink-0">
-              <Menu
-                anchor={{
-                  icon: <EllipsisHorizontalIcon />,
-                  variant: 'primary',
-                  greyBg: true,
-                  iconOnly: true,
-                  'aria-label': 'settings',
-                }}
-                items={menuItems(getExtensionStatus())}
-                customStyle="w-max z-99"
-              />
+              {showMenu && (
+                <Menu
+                  anchor={{
+                    icon: <EllipsisHorizontalIcon />,
+                    variant: 'primary',
+                    greyBg: true,
+                    iconOnly: true,
+                    'aria-label': 'settings',
+                  }}
+                  items={menuItems(
+                    getExtensionStatus(
+                      extensionData?.localDraft,
+                      appStreamData?.edges[0]?.node?.status,
+                    ),
+                  )}
+                  customStyle="w-max z-99"
+                />
+              )}
               <Stack direction="row" align="center" spacing="gap-x-1.5">
-                <Stack customStyle={`w-2 h-2 rounded-full ${getStatusIndicatorStyle()}`} />
+                <Stack
+                  customStyle={`w-2 h-2 rounded-full ${getStatusIndicatorStyle(extensionData?.localDraft, appStreamData?.edges[0]?.node?.status)}`}
+                />
                 <Text variant="footnotes2" weight="normal">
-                  {getExtensionStatus()}
+                  {getExtensionStatus(
+                    extensionData?.localDraft,
+                    appStreamData?.edges[0]?.node?.status,
+                  )}
                 </Text>
               </Stack>
             </Stack>

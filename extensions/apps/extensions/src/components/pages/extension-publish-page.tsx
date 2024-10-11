@@ -10,16 +10,16 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import ExtensionReviewAndPublish from '@akashaorg/design-system-components/lib/components/ExtensionReviewAndPublish';
 import { transformSource, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { Extension, NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
-import { DRAFT_EXTENSIONS } from '../../constants';
+import { DRAFT_EXTENSIONS, DRAFT_RELEASES } from '../../constants';
 import getSDK from '@akashaorg/core-sdk';
 import { useCreateAppMutation } from '@akashaorg/ui-awf-hooks/lib/generated';
 import { SubmitType } from '../app-routes';
 
-type ExtensionSubmitPageProps = {
+type ExtensionPublishPageProps = {
   extensionId: string;
 };
 
-export const ExtensionSubmitPage: React.FC<ExtensionSubmitPageProps> = ({ extensionId }) => {
+export const ExtensionPublishPage: React.FC<ExtensionPublishPageProps> = ({ extensionId }) => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
 
@@ -54,9 +54,21 @@ export const ExtensionSubmitPage: React.FC<ExtensionSubmitPageProps> = ({ extens
 
   const extensionData = draftExtensions?.find(draftExtension => draftExtension.id === extensionId);
 
+  const draftReleases = useMemo(() => {
+    try {
+      return JSON.parse(localStorage.getItem(`${DRAFT_RELEASES}-${authenticatedDID}`)) || [];
+    } catch (error) {
+      showErrorNotification(error);
+    }
+  }, [authenticatedDID, showErrorNotification]);
+
+  const localRelease = draftReleases?.find(
+    draftRelease => draftRelease.applicationID === extensionId,
+  );
+
   const [createAppMutation, { loading }] = useCreateAppMutation({
     context: { source: sdk.current.services.gql.contextSources.composeDB },
-    onCompleted: () => {
+    onCompleted: data => {
       // after the extension has been published to the ceramic model
       // search for it in the list of local draft extensions and
       // remove the published extension from list of local extensions
@@ -68,8 +80,19 @@ export const ExtensionSubmitPage: React.FC<ExtensionSubmitPageProps> = ({ extens
         `${DRAFT_EXTENSIONS}-${authenticatedDID}`,
         JSON.stringify(newLocalDraftExtensions),
       );
+      // remove the local release tied to the draft extension
+      const newLocalDraftReleases = draftReleases.filter(
+        draftRelease => draftRelease.applicationID !== extensionId,
+      );
+      // update the local draft release to reflect the published app id
+      const newLocalRelease = { ...localRelease, applicationID: data?.setAkashaApp?.document?.id };
+      // save the new list of local draft releases in local storage
+      localStorage.setItem(
+        `${DRAFT_RELEASES}-${authenticatedDID}`,
+        JSON.stringify([...newLocalDraftReleases, newLocalRelease]),
+      );
       navigate({
-        to: '/post-submit',
+        to: '/post-publish',
         search: { type: SubmitType.EXTENSION },
       });
     },
@@ -89,7 +112,7 @@ export const ExtensionSubmitPage: React.FC<ExtensionSubmitPageProps> = ({ extens
     });
   };
 
-  const handleClickSubmit = () => {
+  const handleClickPublish = () => {
     const extData = {
       applicationType: extensionData?.applicationType,
       contributors: extensionData?.contributors,
@@ -166,7 +189,7 @@ export const ExtensionSubmitPage: React.FC<ExtensionSubmitPageProps> = ({ extens
           loading={loading}
           transformSource={transformSource}
           onClickCancel={handleClickCancel}
-          onClickSubmit={handleClickSubmit}
+          onClickSubmit={handleClickPublish}
         />
       </Stack>
     </Card>
