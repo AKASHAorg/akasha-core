@@ -468,6 +468,11 @@ export const AppReleaseFragmentDoc = /*#__PURE__*/ gql`
   source
   version
   createdAt
+  meta {
+    provider
+    property
+    value
+  }
 }
     `;
 export const IndexBeamDocument = /*#__PURE__*/ gql`
