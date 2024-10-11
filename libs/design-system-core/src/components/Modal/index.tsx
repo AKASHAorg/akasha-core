@@ -15,7 +15,7 @@ export type ActionsAlign = 'center' | 'end';
 
 export type ModalProps = PropsWithChildren<{
   show: boolean;
-  actions: ButtonProps[];
+  actions?: ButtonProps[];
   title?: { label: string } & TextProps;
   showDivider?: boolean;
   actionsAlign?: ActionsAlign;
@@ -27,7 +27,7 @@ export type ModalProps = PropsWithChildren<{
  * A Modal component displays content in a dialog box in a layer above the main application's
  * content to grab the user's attention.
  * @param show - boolean that control the show/hide state of the modal
- * @param actions - a list of Button props that will be made available in the modal dialogue
+ * @param actions - (optional) a list of Button props that will be made available in the modal dialogue
  * for the user to take action
  * @param title - (optional) title of the modal coupled with customization props (please use Text component's props)
  * @param showDivider - boolean (optional) whether to show the divider
@@ -58,7 +58,7 @@ const Modal: React.FC<ModalProps> = ({
   actionsAlign,
   customStyle = '',
   children,
-  onClose,
+  onClose = () => {},
 }) => {
   return (
     <Transition show={show} as={Fragment}>
@@ -89,19 +89,17 @@ const Modal: React.FC<ModalProps> = ({
                 <Card radius={20} padding={'py-4'} customStyle={`${customStyle} relative`}>
                   <Stack direction="column" spacing="gap-y-4">
                     {title && (
-                      <Dialog.Title className={tw('px-4')}>
-                        <Stack align="center" justify="center">
-                          <Text align="center" variant="h5" {...title}>
-                            {title.label}
-                          </Text>
-                          <Button onClick={onClose} plain customStyle="absolute top-4 right-4">
-                            <Icon
-                              icon={<XMarkIcon />}
-                              size="md"
-                              color={{ light: 'grey4', dark: 'grey7' }}
-                            />
-                          </Button>
-                        </Stack>
+                      <Dialog.Title as="div">
+                        <Text align="center" variant="h5" {...title}>
+                          {title.label}
+                        </Text>
+                        <Button onClick={onClose} plain customStyle="absolute top-4 right-4">
+                          <Icon
+                            icon={<XMarkIcon />}
+                            size="md"
+                            color={{ light: 'grey4', dark: 'grey7' }}
+                          />
+                        </Button>
                       </Dialog.Title>
                     )}
 
@@ -115,16 +113,18 @@ const Modal: React.FC<ModalProps> = ({
                       customStyle="px-4"
                     >
                       {children}
-                      <Stack
-                        direction="row"
-                        spacing="gap-x-4"
-                        justify={actionsAlign}
-                        customStyle="mt-auto"
-                      >
-                        {actions.map((action, index) => (
-                          <Button key={index} size="md" {...action} />
-                        ))}
-                      </Stack>
+                      {actions && (
+                        <Stack
+                          direction="row"
+                          spacing="gap-x-4"
+                          justify={actionsAlign}
+                          customStyle="mt-auto"
+                        >
+                          {actions.map((action, index) => (
+                            <Button key={index} size="md" {...action} />
+                          ))}
+                        </Stack>
+                      )}
                     </Stack>
                   </Stack>
                 </Card>

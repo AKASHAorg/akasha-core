@@ -192,7 +192,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
 
 export const BUTTON_SIZE_MAP: Record<Exclude<ButtonSize, 'xs'>, string> = {
   sm: 'h-8 rounded-3xl',
-  md: 'h-12 rounded-3xl',
+  md: 'h-10 rounded-3xl',
   lg: 'h-14 rounded-[1.875rem]',
 };
 
@@ -212,7 +212,7 @@ const BUTTON_SIZE_MAP_BY_BREAKPOINT = (
   breakPoint: string,
 ): Record<Exclude<ButtonSize, 'xs'>, string> => ({
   sm: `${breakPoint}:h-8`,
-  md: `${breakPoint}:h-12`,
+  md: `${breakPoint}:h-10`,
   lg: `${breakPoint}:h-14`,
 });
 

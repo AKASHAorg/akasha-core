@@ -109,7 +109,7 @@ class AppSettings {
     const currentInfo = await this.get(appName);
     if (currentInfo?.data?.releaseId) {
       const collection = this._db.getCollections().installedExtensions;
-      await collection?.delete(appName);
+      await collection?.where('appName')?.equals(appName)?.delete();
     }
   }
   @validate(IntegrationNameSchema)
