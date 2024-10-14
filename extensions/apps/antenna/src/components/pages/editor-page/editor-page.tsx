@@ -27,7 +27,6 @@ const EditorPage: React.FC<unknown> = () => {
               type={'not-authenticated'}
               title={t('Uh-oh! You are not connected!')}
               details={t('To create Beams you must be connected ⚡️')}
-              imageBoxStyle="w-72 h-36"
             >
               <Button
                 label={t('Connect')}
