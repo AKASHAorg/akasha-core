@@ -117,7 +117,10 @@ const renderElement = (
 
     default:
       return (
-        <p className={tw(`text-black dark:text-white ${textAlignStyle}`)} {...props.attributes}>
+        <p
+          className={tw(`text-black dark:text-white break-words ${textAlignStyle}`)}
+          {...props.attributes}
+        >
           {props.children}
         </p>
       );
