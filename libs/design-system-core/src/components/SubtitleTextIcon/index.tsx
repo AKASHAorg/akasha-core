@@ -32,7 +32,7 @@ export type SubtitleTextIconProps = {
  * @param backgroundColor - boolean (optional) whether the icon will have a grey rounded background around it
  * @param label - (optional) customize the top label
  * @param labelSize - (optional) for customizing the size of the label
- * @param subtitle - (optional)  customize the bottom subtitle 
+ * @param subtitle - (optional)  customize the bottom subtitle
  * @param gap - (optional) for customizing the gap between the elements
  * @param maxWidth - (optional) for customizing the max width of the whole component
  * @param customStyle - (optional) apply any other custom styles. Please use standard Tailwind CSS classes
