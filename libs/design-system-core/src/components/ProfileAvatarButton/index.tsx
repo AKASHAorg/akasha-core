@@ -63,7 +63,7 @@ const ProfileAvatarButton = React.forwardRef(
     } = props;
 
     return (
-      <Link to={href} onClick={onClick} customStyle="block">
+      <Link to={href} onClick={onClick} customStyle="group block">
         <Stack direction="row" align="center" spacing="gap-x-2" customStyle={customStyle}>
           <Avatar
             dataTestId="avatar-box"
@@ -88,6 +88,7 @@ const ProfileAvatarButton = React.forwardRef(
                 nsfwLabel={nsfwLabel}
                 truncateText={truncateText}
                 size={VARIANTS_MAP[variant].profileName}
+                hover={true}
               />
               {metadata}
             </Stack>

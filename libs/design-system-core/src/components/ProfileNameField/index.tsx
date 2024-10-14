@@ -15,6 +15,7 @@ export type ProfileNameFieldProps = {
   size?: 'sm' | 'md' | 'lg';
   showMissingNameWarning?: boolean;
   missingNameWarningLabel?: string;
+  hover?: boolean;
 };
 
 /**
@@ -31,6 +32,7 @@ export type ProfileNameFieldProps = {
  * @param size - (optional) the default size is `sm`
  * @param showMissingNameWarning - boolean (optional) whether to include a tooltip with explanation when hovering over a DID
  * @param missingNameWarningLabel - (optional) the text that will be in the tooltip
+ * @param hover - (optional) boolean flag to enable or disable hover
  * @example
  * ```tsx
  *    <ProfileNameField
@@ -48,8 +50,18 @@ const ProfileNameField: React.FC<ProfileNameFieldProps> = ({
   size = 'sm',
   showMissingNameWarning,
   missingNameWarningLabel,
+  hover = false,
 }) => {
   const textTruncateStyle = `${truncateText ? `max-w(${nsfwLabel.length ? '[5rem]' : '[7rem]'} xs:[2rem])` : ''}`;
+  const textHoverStyle = hover
+    ? `cursor-pointer hover:underline ${getColorClasses(
+        { light: 'black', dark: 'white' },
+        'hover:decoration',
+      )} group-hover:underline ${getColorClasses(
+        { light: 'black', dark: 'white' },
+        'group-hover:decoration',
+      )}`
+    : '';
 
   const networkType = getDidNetworkType(did);
   const truncatedDid = truncateDid(did, networkType);
@@ -61,10 +73,7 @@ const ProfileNameField: React.FC<ProfileNameFieldProps> = ({
           variant={`button-${size}`}
           weight="bold"
           truncate={true}
-          customStyle={`${textTruncateStyle} cursor-pointer hover:underline ${getColorClasses(
-            { light: 'black', dark: 'white' },
-            'hover:decoration',
-          )}`}
+          customStyle={`${textTruncateStyle} ${textHoverStyle}`}
         >
           {profileName}
         </Text>
@@ -82,7 +91,7 @@ const ProfileNameField: React.FC<ProfileNameFieldProps> = ({
   }
   return (
     <Stack direction="row" spacing="gap-2">
-      <Text variant={`button-${size}`} weight="bold">
+      <Text variant={`button-${size}`} weight="bold" customStyle={textHoverStyle}>
         {truncatedDid}
       </Text>
       {showMissingNameWarning && (

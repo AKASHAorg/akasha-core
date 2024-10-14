@@ -87,7 +87,7 @@ const SidebarComponent: React.FC<unknown> = () => {
     });
   };
 
-  const handleAvatarClick = (id: string) => {
+  const handleProfileAvatarClick = (id: string) => {
     if (!id) {
       return;
     }
@@ -202,7 +202,7 @@ const SidebarComponent: React.FC<unknown> = () => {
             logoutClickHandler={handleLogoutClick}
             loginClickHandler={handleLoginClick}
             isAuthenticating={isAuthenticating}
-            handleAvatarClick={handleAvatarClick}
+            handleProfileAvatarClick={handleProfileAvatarClick}
           />
         </Suspense>
         {/*
