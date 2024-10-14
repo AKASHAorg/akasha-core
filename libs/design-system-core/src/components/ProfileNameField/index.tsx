@@ -5,6 +5,7 @@ import Stack from '../Stack';
 import Icon from '../Icon';
 import { ExclamationTriangleIcon } from '../Icon/hero-icons-outline';
 import { getDidNetworkType, truncateDid } from '../../utils/did-utils';
+import { getColorClasses } from '../../utils';
 
 export type ProfileNameFieldProps = {
   did: string;
@@ -60,7 +61,10 @@ const ProfileNameField: React.FC<ProfileNameFieldProps> = ({
           variant={`button-${size}`}
           weight="bold"
           truncate={true}
-          customStyle={textTruncateStyle}
+          customStyle={`${textTruncateStyle} cursor-pointer hover:underline ${getColorClasses(
+            { light: 'black', dark: 'white' },
+            'hover:decoration',
+          )}`}
         >
           {profileName}
         </Text>

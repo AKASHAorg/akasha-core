@@ -4,6 +4,7 @@ import Stack from '../Stack';
 import Icon from '../Icon';
 import Text from '../Text';
 import Card from '../Card';
+import { getColorClasses } from '../../utils';
 
 export type SubtitleTextIconProps = {
   icon?: React.ReactElement;
@@ -88,8 +89,16 @@ const SubtitleTextIcon: React.FC<SubtitleTextIconProps> = props => {
         </Stack>
       )}
 
-      <Stack customStyle="max-w(xl:[8rem] lg:[10rem] md:[6rem] xs:[2rem])">
-        <Text variant={labelSize} weight="bold" truncate={true}>
+      <Stack customStyle="group max-w(xl:[8rem] lg:[10rem] md:[6rem] xs:[2rem])">
+        <Text
+          variant={labelSize}
+          weight="bold"
+          truncate={true}
+          customStyle={`group-hover:underline ${getColorClasses(
+            { light: 'black', dark: 'white' },
+            'group-hover:decoration',
+          )}`}
+        >
           {label}
         </Text>
 
