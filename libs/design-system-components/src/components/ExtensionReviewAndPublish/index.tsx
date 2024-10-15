@@ -131,7 +131,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
 
   const galleryImagesWithSource = useMemo(
     () => extensionData?.gallery?.map(img => transformSource(img)) || [],
-    [extensionData.gallery, transformSource],
+    [extensionData?.gallery, transformSource],
   );
 
   const asteriskStyle = tw(`-top-0.5 left-1 text-base text(errorLight dark:errorDark)`);

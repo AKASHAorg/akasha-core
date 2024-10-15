@@ -8,7 +8,7 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { Extension, NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import { ExtensionElement } from '../my-extensions/extension-element';
-import { DRAFT_EXTENSIONS } from '../../../constants';
+import { DRAFT_EXTENSIONS, PROPERTY, PROVIDER } from '../../../constants';
 import {
   useGetAppReleaseByIdQuery,
   useGetAppsByIdQuery,
@@ -88,6 +88,10 @@ export const ExtensionReleaseInfoPage: React.FC<ExtensionReleaseInfoPageProps> =
 
   const createdAt = releaseData ? formatDate(releaseData.createdAt, 'D MMM YYYY', locale) : '';
 
+  const description = releaseData?.meta.find(
+    metaProperty => metaProperty.property === PROPERTY && metaProperty.provider === PROVIDER,
+  )?.value;
+
   const handleConnectButtonClick = () => {
     navigateTo?.({
       appName: '@akashaorg/app-auth-ewa',
@@ -112,12 +116,12 @@ export const ExtensionReleaseInfoPage: React.FC<ExtensionReleaseInfoPageProps> =
   }
 
   return (
-    <Card padding={16} background={{ light: 'grey9', dark: 'grey3' }}>
-      <Stack spacing="gap-y-8">
+    <Card padding={16} background={{ light: 'white', dark: 'grey2' }}>
+      <Stack spacing="gap-y-6">
         <Card padding={8} background={{ light: 'grey9', dark: 'grey3' }}>
           <ExtensionElement extensionData={extensionData as Extension} />
         </Card>
-        <Stack direction="row" padding={16} justify="between">
+        <Stack direction="row" justify="between">
           <Text variant="h6" weight="semibold">
             {t('Version Number')}
           </Text>
@@ -131,20 +135,32 @@ export const ExtensionReleaseInfoPage: React.FC<ExtensionReleaseInfoPageProps> =
             /> */}
           </Stack>
         </Stack>
+
         <Divider />
-        <Text variant="h6" weight="semibold">
-          {t('Description')}
-        </Text>
-        <Text variant="body2" breakWord>
-          {releaseData?.version}
-        </Text>
-        <Text variant="h6" weight="semibold">
-          {t('Source URL')}
-        </Text>
-        <Text variant="body2" truncate>
-          {releaseData?.source}
-        </Text>
-        <Stack direction="row" padding={16} justify="between">
+
+        <Stack spacing="gap-y-4">
+          <Text variant="h6" weight="semibold" breakWord>
+            {t('Description')}
+          </Text>
+          <Text variant="body2" breakWord>
+            {description}
+          </Text>
+        </Stack>
+
+        <Divider />
+
+        <Stack spacing="gap-y-4">
+          <Text variant="h6" weight="semibold">
+            {t('Source URL')}
+          </Text>
+          <Text variant="body2" color={{ light: 'secondaryLight', dark: 'secondaryDark' }} truncate>
+            {releaseData?.source}
+          </Text>
+        </Stack>
+
+        <Divider />
+
+        <Stack direction="row" justify="between">
           <Text variant="h6" weight="semibold">
             {t('Published on')}
           </Text>

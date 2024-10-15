@@ -398,8 +398,8 @@ const extensionReleaseManagerRoute = createRoute({
 });
 
 const releasePublishRoute = createRoute({
-  getParentRoute: () => extensionReleaseManagerRoute,
-  path: `/publish-release`,
+  getParentRoute: () => rootRoute,
+  path: `/release-manager/$extensionId/publish-release`,
   notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     const { extensionId } = releasePublishRoute.useParams();
@@ -415,8 +415,8 @@ const releasePublishRoute = createRoute({
 });
 
 const editTestReleaseRoute = createRoute({
-  getParentRoute: () => extensionReleaseManagerRoute,
-  path: `/edit-test-release`,
+  getParentRoute: () => rootRoute,
+  path: `/release-manager/$extensionId/edit-test-release`,
   notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     const { extensionId } = editTestReleaseRoute.useParams();
@@ -432,8 +432,8 @@ const editTestReleaseRoute = createRoute({
 });
 
 const releaseInfoRoute = createRoute({
-  getParentRoute: () => extensionReleaseManagerRoute,
-  path: `/release-info/$releaseId`,
+  getParentRoute: () => rootRoute,
+  path: `/release-manager/$extensionId/release-info/$releaseId`,
   notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     const { extensionId, releaseId } = releaseInfoRoute.useParams();
@@ -500,11 +500,10 @@ const routeTree = rootRoute.addChildren([
     extensionEditStep3Route,
   ]),
   extensionPublishRoute,
-  extensionReleaseManagerRoute.addChildren([
-    releasePublishRoute,
-    editTestReleaseRoute,
-    releaseInfoRoute,
-  ]),
+  extensionReleaseManagerRoute,
+  releasePublishRoute,
+  editTestReleaseRoute,
+  releaseInfoRoute,
   postPublishRoute,
 ]);
 

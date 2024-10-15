@@ -35,6 +35,8 @@ export type ExtensionReleasePublishProps = {
   sourceURLFieldLabel?: string;
   sourceURLPlaceholderLabel?: string;
   loading?: boolean;
+  requireVersionNumber?: boolean;
+  requireDescription?: boolean;
 };
 
 const ExtensionReleasePublish: React.FC<ExtensionReleasePublishProps> = props => {
@@ -52,6 +54,8 @@ const ExtensionReleasePublish: React.FC<ExtensionReleasePublishProps> = props =>
     sourceURLFieldLabel,
     sourceURLPlaceholderLabel,
     loading,
+    requireVersionNumber,
+    requireDescription,
   } = props;
 
   const {
@@ -64,10 +68,7 @@ const ExtensionReleasePublish: React.FC<ExtensionReleasePublishProps> = props =>
     mode: 'onChange',
   });
 
-  const isFormDirty =
-    Object.keys(dirtyFields).includes(FieldName.versionNumber) &&
-    Object.keys(dirtyFields).includes(FieldName.description) &&
-    Object.keys(dirtyFields).includes(FieldName.sourceURL);
+  const isFormDirty = Object.keys(dirtyFields).includes(FieldName.sourceURL);
 
   const isValid = !Object.keys(errors).length;
 
@@ -100,7 +101,7 @@ const ExtensionReleasePublish: React.FC<ExtensionReleasePublishProps> = props =>
                 status={error?.message ? 'error' : null}
                 onChange={onChange}
                 inputRef={ref}
-                required={true}
+                required={requireVersionNumber}
               />
             )}
             defaultValue={defaultValues.versionNumber}
@@ -122,7 +123,7 @@ const ExtensionReleasePublish: React.FC<ExtensionReleasePublishProps> = props =>
                 inputRef={ref}
                 type="multiline"
                 maxLength={2000}
-                required={true}
+                required={requireDescription}
               />
             )}
             defaultValue={defaultValues.description}

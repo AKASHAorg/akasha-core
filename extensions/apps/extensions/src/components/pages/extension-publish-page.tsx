@@ -160,7 +160,7 @@ export const ExtensionPublishPage: React.FC<ExtensionPublishPageProps> = ({ exte
       <Stack spacing="gap-y-2">
         <Stack padding={16}>
           <Text variant="h5" weight="semibold" align="center">
-            {t('Edit Extension Presentation')}
+            {t('Review and Publish Extension')}
           </Text>
         </Stack>
         <ExtensionReviewAndPublish
@@ -185,7 +185,7 @@ export const ExtensionPublishPage: React.FC<ExtensionPublishPageProps> = ({ exte
           contributorsLabel={t('Contributors')}
           tagsLabel={t('Tags')}
           backButtonLabel={t('Cancel')}
-          publishButtonLabel={t('Submit')}
+          publishButtonLabel={t('Publish')}
           loading={loading}
           transformSource={transformSource}
           onClickCancel={handleClickCancel}

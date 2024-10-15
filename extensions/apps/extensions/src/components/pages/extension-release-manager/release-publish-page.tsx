@@ -125,6 +125,8 @@ export const ExtensionReleasePublishPage: React.FC<ExtensionReleasePublishPagePr
             sourceURLFieldLabel={t('Source URL')}
             sourceURLPlaceholderLabel={t('Webpack dev server / ipfs')}
             loading={loading}
+            requireVersionNumber={true}
+            requireDescription={true}
             cancelButton={{
               label: t('Cancel'),
               handleClick: handleClickCancel,

@@ -121,15 +121,16 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
             icon: <EyeIcon />,
             onClick: () => {},
           },
-          {
-            label: t('Release Manager'),
-            icon: <RectangleStackIcon />,
-            onClick: handleReleaseManager,
-          },
+
           {
             label: t('Edit Extension'),
             icon: <PencilIcon />,
             onClick: handleExtensionEdit,
+          },
+          {
+            label: t('Release Manager'),
+            icon: <RectangleStackIcon />,
+            onClick: handleReleaseManager,
           },
           {
             label: t('Delete Extension'),
@@ -165,14 +166,14 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
       case ExtensionStatus.Draft:
         return [
           {
-            label: t('Release Manager'),
-            icon: <RectangleStackIcon />,
-            onClick: handleReleaseManager,
-          },
-          {
             label: t('Edit Extension'),
             icon: <PencilIcon />,
             onClick: handleExtensionEdit,
+          },
+          {
+            label: t('Release Manager'),
+            icon: <RectangleStackIcon />,
+            onClick: handleReleaseManager,
           },
           {
             label: t('Delete Extension'),
@@ -244,7 +245,13 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
               </Stack>
             </Stack>
 
-            <Stack direction="column" justify="between" align="end" customStyle="shrink-0">
+            <Stack
+              direction="column"
+              justify={showMenu ? 'between' : 'end'}
+              align="end"
+              customStyle="shrink-0"
+              padding={showMenu ? 'p-0' : 'pr-4'}
+            >
               {showMenu && (
                 <Menu
                   anchor={{

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import appRoutes, { SUBMIT_EXTENSION } from '../../../routes';
@@ -25,6 +25,10 @@ import {
   selectAppsReleasesPageInfo,
 } from '@akashaorg/ui-awf-hooks/lib/selectors/get-apps-releases-query';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { formatDate } from '@akashaorg/design-system-core/lib/utils';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { ChevronRightIcon } from '@heroicons/react/24/outline';
+import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 
 const ENTRY_HEIGHT = 82;
 
@@ -38,9 +42,16 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
 
-  const { uiEvents, baseRouteName, getCorePlugins } = useRootComponentProps();
+  const { uiEvents, baseRouteName, getCorePlugins, getTranslationPlugin } = useRootComponentProps();
+  const locale = getTranslationPlugin().i18n?.languages?.[0] || 'en';
   const navigateTo = getCorePlugins().routing.navigateTo;
   const uiEventsRef = React.useRef(uiEvents);
+
+  const [showModal, setShowModal] = useState(false);
+
+  const handleModalClose = () => {
+    setShowModal(false);
+  };
 
   const {
     data: { authenticatedDID },
@@ -120,11 +131,29 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
   };
 
   const handleTestReleaseNav = () => {
-    navigate({ to: '/release-manager/$extensionId/edit-test-release' });
+    // if there is no local test release create it now
+    if (!localRelease) {
+      const newRelease = {
+        applicationID: extensionId,
+        version: '0.0.1',
+        description: 'Introduced the core functionality allowing developer to test.',
+        source: '',
+      };
+
+      localStorage.setItem(
+        `${DRAFT_RELEASES}-${authenticatedDID}`,
+        JSON.stringify([...draftReleases, newRelease]),
+      );
+    }
+    navigate({ to: '/release-manager/$extensionId/edit-test-release', params: { extensionId } });
   };
 
   const handlePublishReleaseNav = () => {
-    navigate({ to: '/release-manager/$extensionId/publish-release' });
+    navigate({ to: '/release-manager/$extensionId/publish-release', params: { extensionId } });
+  };
+
+  const handlePublishExtensionNav = () => {
+    navigate({ to: '/publish-extension/$extensionId', params: { extensionId } });
   };
 
   const handleNavigateToReleaseInfoPage = releaseId => {
@@ -132,6 +161,10 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
       to: '/release-manager/$extensionId/release-info/$releaseId',
       params: { extensionId, releaseId },
     });
+  };
+
+  const handleClickPublishReleaseButton = () => {
+    publishedAppData ? handlePublishReleaseNav() : setShowModal(true);
   };
 
   if (!authenticatedDID) {
@@ -147,84 +180,123 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
   }
 
   return (
-    <Stack padding={16} spacing="gap-y-6">
-      <Text variant="h5" weight="semibold" align="start">
-        {t('Release Manager')}
-      </Text>
-      <Card padding={8} background={{ light: 'grey9', dark: 'grey2' }}>
-        <ExtensionElement extensionData={extensionData as Extension} />
-      </Card>
-      <Stack direction="row" justify="between">
-        <Text variant="h6" weight="semibold">
-          {t('Local Release')}
+    <>
+      <Stack padding={16} spacing="gap-y-6">
+        <Text variant="h5" weight="semibold" align="start">
+          {t('Release Manager')}
         </Text>
-        <Button label={t('Test release')} variant="secondary" onClick={handleTestReleaseNav} />
-      </Stack>
-      <Card padding={16} background={{ light: 'grey9', dark: 'grey2' }}>
-        <Stack spacing="gap-4">
-          <Text variant="body2" weight="semibold">
-            {`Release ${localRelease?.version}`}
+        <Card padding={8} background={{ light: 'grey9', dark: 'grey2' }}>
+          <Stack customStyle="w-0 min-w-full" padding={0}>
+            <ExtensionElement extensionData={extensionData as Extension} />
+          </Stack>
+        </Card>
+        <Stack direction="row" justify="between">
+          <Text variant="h6" weight="semibold">
+            {t('Local Release')}
           </Text>
-          <Text variant="footnotes2">{`Release ${localRelease?.description}`}</Text>
+          <Button label={t('Test release')} variant="secondary" onClick={handleTestReleaseNav} />
         </Stack>
-      </Card>
-      <Stack direction="row" justify="between">
-        <Text variant="h5" weight="semibold">
-          {t('Published Releases')}
-        </Text>
-        <Button label={t('Create release')} variant="primary" onClick={handlePublishReleaseNav} />
-      </Stack>
-      {appReleases.length === 0 && (
-        <InfoCard
-          assetName="longbeam-notfound"
-          titleLabel={t('You haven’t published any releases yet')}
-        />
-      )}
-      <Card padding={16} background={{ light: 'grey9', dark: 'grey2' }}>
-        <DynamicInfiniteScroll
-          count={appReleases.length}
-          estimatedHeight={ENTRY_HEIGHT}
-          overScan={1}
-          itemSpacing={16}
-          hasNextPage={pageInfo && pageInfo.hasNextPage}
-          loading={loadingAppsReleasesQuery}
-          onLoadMore={() => {
-            return fetchMore({
-              variables: {
-                after: pageInfo.endCursor,
-              },
-            });
-          }}
-        >
-          {({ itemIndex }) => {
-            const releaseData = appReleases[itemIndex]?.node;
-            return (
-              <Stack spacing="gap-y-4">
-                <Button plain onClick={() => handleNavigateToReleaseInfoPage(releaseData.id)}>
-                  <Stack direction="row" justify="between">
-                    <Stack justify="between">
-                      <Text variant="body2" weight="semibold">
-                        {`Release ${releaseData?.version}`}
-                      </Text>
-                      <Text variant="footnotes2">{releaseData?.createdAt}</Text>
-                    </Stack>
-                    <Stack>
-                      {itemIndex === 0 && (
-                        <Pill
-                          type="info"
-                          borderColor={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-                          label={t('Current')}
-                        />
-                      )}
-                    </Stack>
+        {localRelease && (
+          <Card padding={16} background={{ light: 'grey9', dark: 'grey2' }}>
+            <Stack spacing="gap-4">
+              <Text variant="body2" weight="semibold">
+                {`Release ${localRelease?.version}`}
+              </Text>
+              <Text variant="footnotes2">{`Release ${localRelease?.description}`}</Text>
+            </Stack>
+          </Card>
+        )}
+        <Stack direction="row" justify="between">
+          <Text variant="h6" weight="semibold">
+            {t('Published Releases')}
+          </Text>
+          <Button
+            label={t('Create release')}
+            variant="primary"
+            onClick={handleClickPublishReleaseButton}
+          />
+        </Stack>
+        {appReleases?.length === 0 && (
+          <InfoCard
+            assetName="longbeam-notfound"
+            titleLabel={t('You haven’t published any releases yet')}
+          />
+        )}
+        {appReleases?.length > 0 && (
+          <Card padding={16} background={{ light: 'grey9', dark: 'grey2' }}>
+            <DynamicInfiniteScroll
+              count={appReleases?.length}
+              estimatedHeight={ENTRY_HEIGHT}
+              overScan={1}
+              itemSpacing={16}
+              hasNextPage={pageInfo && pageInfo?.hasNextPage}
+              loading={loadingAppsReleasesQuery}
+              onLoadMore={() => {
+                return fetchMore({
+                  variables: {
+                    after: pageInfo?.endCursor,
+                  },
+                });
+              }}
+            >
+              {({ itemIndex }) => {
+                const releaseData = appReleases[itemIndex]?.node;
+                const createdAt = releaseData
+                  ? formatDate(releaseData.createdAt, 'D MMM YYYY', locale)
+                  : '';
+                return (
+                  <Stack spacing="gap-y-4">
+                    <Button plain onClick={() => handleNavigateToReleaseInfoPage(releaseData.id)}>
+                      <Stack direction="row" justify="between" align="center">
+                        <Stack spacing="gap-y-4">
+                          <Stack direction="row" spacing="gap-x-2" align="center">
+                            <Text variant="body2" weight="semibold">
+                              {`Release ${releaseData?.version}`}
+                            </Text>
+                            {itemIndex === 0 && (
+                              <Pill
+                                type="info"
+                                borderColor={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                                label={t('Current')}
+                              />
+                            )}
+                          </Stack>
+                          <Text variant="footnotes2">{createdAt}</Text>
+                        </Stack>
+                        <Icon icon={<ChevronRightIcon />} accentColor={true} size="xl" />
+                      </Stack>
+                    </Button>
+                    {itemIndex < appReleases?.length - 1 && <Divider />}
                   </Stack>
-                </Button>
-                {itemIndex < appReleases.length - 1 && <Divider />}
-              </Stack>
-            );
-          }}
-        </DynamicInfiniteScroll>
-      </Card>
-    </Stack>
+                );
+              }}
+            </DynamicInfiniteScroll>
+          </Card>
+        )}
+      </Stack>
+      <Modal
+        show={showModal}
+        actions={[
+          {
+            label: t('Cancel'),
+            variant: 'secondary',
+
+            onClick: handleModalClose,
+          },
+          {
+            label: t('Publish Extension'),
+            variant: 'primary',
+            onClick: handlePublishExtensionNav,
+          },
+        ]}
+        title={{ label: t('Release Cannot Be Published') }}
+      >
+        <Text variant="body1">
+          {t(
+            'It appears your extension is currently in draft mode. To proceed with publishing a release, you’ll need to publish the extension first.',
+          )}
+        </Text>
+      </Modal>
+    </>
   );
 };

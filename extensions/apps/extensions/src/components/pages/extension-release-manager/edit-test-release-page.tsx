@@ -75,6 +75,10 @@ export const EditTestReleasePage: React.FC<EditTestReleasePageProps> = ({ extens
       `${DRAFT_RELEASES}-${authenticatedDID}`,
       JSON.stringify([...newLocalDraftReleases, newLocalRelease]),
     );
+    navigate({
+      to: '/release-manager/$extensionId',
+      params: { extensionId },
+    });
   };
 
   const handleClickCancel = () => {
