@@ -6,12 +6,10 @@ import * as useAkashaStore from '@akashaorg/ui-awf-hooks/lib/store/use-akasha-st
 import {
   screen,
   renderWithAllProviders,
-  genAppProps,
   waitFor,
   getAuthenticationStore,
   within,
 } from '@akashaorg/af-testing';
-import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 import { mapReflectEntryData } from '@akashaorg/ui-awf-hooks';
 import { formatRelativeTime, truncateDid } from '@akashaorg/design-system-core/lib/utils';
 import {
@@ -46,21 +44,19 @@ const baseComponent = (
   isActive?: boolean,
 ) => (
   <MockedProvider mocks={mocks} cache={new InMemoryCache(APOLLO_TYPE_POLICIES)}>
-    <AnalyticsProvider {...genAppProps()}>
-      <ReflectionPage
-        isActive={isActive ?? true}
-        reflectionData={mapReflectEntryData(reflectionData)}
-        renderEditor={({ beamId, reflectToId, showEditor, setShowEditor }) => (
-          <ReflectEditor
-            beamId={beamId}
-            reflectToId={reflectToId}
-            showEditor={showEditor}
-            setShowEditor={setShowEditor}
-            editorActionsRef={editorActionsRef}
-          />
-        )}
-      />
-    </AnalyticsProvider>
+    <ReflectionPage
+      isActive={isActive ?? true}
+      reflectionData={mapReflectEntryData(reflectionData)}
+      renderEditor={({ beamId, reflectToId, showEditor, setShowEditor }) => (
+        <ReflectEditor
+          beamId={beamId}
+          reflectToId={reflectToId}
+          showEditor={showEditor}
+          setShowEditor={setShowEditor}
+          editorActionsRef={editorActionsRef}
+        />
+      )}
+    />
   </MockedProvider>
 );
 
