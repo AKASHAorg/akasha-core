@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
-import appRoutes, { SUBMIT_EXTENSION } from '../../../routes';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -124,7 +123,7 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
       appName: '@akashaorg/app-auth-ewa',
       getNavigationUrl: (routes: Record<string, string>) => {
         return `${routes.Connect}?${new URLSearchParams({
-          redirectTo: `${baseRouteName}/${appRoutes[SUBMIT_EXTENSION]}/${extensionId}`,
+          redirectTo: `${baseRouteName}/release-manager/${extensionId}`,
         }).toString()}`;
       },
     });
@@ -200,9 +199,9 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
           <Card padding={16} background={{ light: 'grey9', dark: 'grey2' }}>
             <Stack spacing="gap-4">
               <Text variant="body2" weight="semibold">
-                {`Release ${localRelease?.version}`}
+                {`Release ${localRelease?.version || '0.0.1'}`}
               </Text>
-              <Text variant="footnotes2">{`Release ${localRelease?.description}`}</Text>
+              <Text variant="footnotes2">{`Release ${localRelease?.description || t('A local test release')}`}</Text>
             </Stack>
           </Card>
         )}
@@ -276,6 +275,7 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
       </Stack>
       <Modal
         show={showModal}
+        onClose={handleModalClose}
         actions={[
           {
             label: t('Cancel'),
@@ -291,11 +291,13 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
         ]}
         title={{ label: t('Release Cannot Be Published') }}
       >
-        <Text variant="body1">
-          {t(
-            'It appears your extension is currently in draft mode. To proceed with publishing a release, you’ll need to publish the extension first.',
-          )}
-        </Text>
+        <Stack customStyle="max-w-[567px]">
+          <Text variant="body1" align="center">
+            {t(
+              'It appears your extension is currently in draft mode. To proceed with publishing a release, you’ll need to publish the extension first.',
+            )}
+          </Text>
+        </Stack>
       </Modal>
     </>
   );
