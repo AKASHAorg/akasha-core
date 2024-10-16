@@ -20,6 +20,8 @@ import AutoComplete from '@akashaorg/design-system-core/lib/components/AutoCompl
 
 const MAX_TAGS = 4;
 
+const MIN_TAG_CHARACTERS = 3;
+
 export enum FieldName {
   license = 'license',
   licenseOther = 'licenseOther',
@@ -32,7 +34,7 @@ export type ExtensionEditStep3FormValues = {
   licenseOther?: string;
   contributors?: string[];
   contactInfo?: string[];
-  keywords?: string[];
+  keywords?: string | string[];
 };
 
 export type ExtensionEditStep3FormProps = {
@@ -94,6 +96,7 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
   const {
     control,
     getValues,
+    trigger,
     formState: { errors },
   } = useForm<ExtensionEditStep3FormValues>({
     defaultValues,
@@ -137,7 +140,6 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
     setAddedContributors(defaultContributorProfiles);
   }, [defaultContributorProfiles]);
 
-  const [query, setQuery] = useState('');
   const [keywords, setKeywords] = useState(new Set(defaultValues.keywords));
 
   const maxTagsSelected = keywords.size >= MAX_TAGS;
@@ -222,27 +224,52 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
             <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
               {tagsDescriptionLabel}
             </Text>
-            <AutoComplete
-              value={query}
-              options={availableKeywords}
-              placeholder={addTagsPlaceholderLabel}
-              tags={keywords}
-              separators={['Comma', 'Space', 'Enter']}
-              customStyle="grow mt-2"
-              onSelected={({ index }) => {
-                setKeywords(prev => prev.add(availableKeywords[index]));
-                setQuery('');
-              }}
-              onChange={value => {
-                if (typeof value === 'string') {
-                  setQuery(value);
-                  return;
+            <Controller
+              control={control}
+              name={FieldName.keywords}
+              render={({ field: { value, onChange }, fieldState: { error } }) => {
+                const errorArr = Array.isArray(error)
+                  ? //clean up error array
+                    error.filter(err => err)
+                  : [];
+                const errorMessage = errorArr.length ? errorArr?.[0]?.message : '';
+                let newValue = typeof value === 'string' ? value : '';
+                /*
+                 ** If an error has occurred and value is an array then the last element of the array
+                 ** which is the current value of the input field should be maintained.
+                 **/
+                if (Array.isArray(value) && value.length && errorMessage) {
+                  newValue = value[value.length - 1];
                 }
-                setKeywords(new Set(value));
+                return (
+                  <AutoComplete
+                    value={newValue}
+                    options={availableKeywords}
+                    placeholder={addTagsPlaceholderLabel}
+                    tags={keywords}
+                    caption={errorMessage ? errorMessage : ''}
+                    status={errorMessage ? 'error' : null}
+                    separators={['Comma', 'Space', 'Enter']}
+                    customStyle="grow mt-2"
+                    onSelected={({ index }) => {
+                      const newKeyWords = keywords.add(availableKeywords[index]);
+                      onChange([...newKeyWords]);
+                      setKeywords(newKeyWords);
+                    }}
+                    onChange={async value => {
+                      onChange(value);
+                      if (Array.isArray(value)) {
+                        const validKeywords = await trigger('keywords');
+                        if (validKeywords) setKeywords(new Set(value));
+                      }
+                    }}
+                    disabled={maxTagsSelected}
+                    multiple
+                  />
+                );
               }}
-              disabled={maxTagsSelected}
-              multiple
             />
+
             <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
               {`${keywords.size}/${MAX_TAGS} ${tagsAddedLabel}`}
             </Text>
@@ -282,4 +309,11 @@ export default ExtensionEditStep3Form;
 
 const schema = z.object({
   extensionLicense: z.string(),
+  keywords: z
+    .array(
+      z.string().min(MIN_TAG_CHARACTERS, {
+        message: `Tags must be at least ${MIN_TAG_CHARACTERS} characters long.`,
+      }),
+    )
+    .optional(),
 });
