@@ -1,7 +1,9 @@
 import React from 'react';
 import getSDK from '@akashaorg/core-sdk';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
+import DuplexButton, {
+  DuplexButtonProps,
+} from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import { Following } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import {
   CheckIcon,
@@ -20,16 +22,11 @@ import {
   useCreateFollowMutation,
   useUpdateFollowMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { ButtonProps } from '@akashaorg/design-system-core/lib/components/Button/types';
 
-export type FollowButtonProps = {
+export type FollowButtonProps = Pick<DuplexButtonProps, 'activeVariant' | 'inactiveVariant'> & {
   profileID: string;
   followDocumentId: string;
   iconOnly?: boolean;
-  customizeButton?: {
-    size: ButtonProps['size'];
-    variant: ButtonProps['variant'];
-  };
   isFollowing: boolean;
   isLoggedIn: boolean;
   showLoginModal: (redirectTo?: { modal: IModalNavigationOptions }) => void;
@@ -38,7 +35,8 @@ export const FollowButton = ({
   profileID,
   followDocumentId,
   iconOnly,
-  customizeButton,
+  activeVariant,
+  inactiveVariant,
   isFollowing,
   isLoggedIn,
   showLoginModal,
@@ -127,25 +125,17 @@ export const FollowButton = ({
     />
   ) : (
     <DuplexButton
-      size={customizeButton?.size}
-      variant={customizeButton?.variant}
       inactiveLabel={t('Follow')}
       activeLabel={t('Following')}
       activeHoverLabel={t('Unfollow')}
+      activeVariant={activeVariant ?? 'secondary'}
       active={isFollowing}
       iconDirection="left"
       activeIcon={<CheckIcon />}
       activeHoverIcon={<XMarkIcon />}
-      inactiveVariant="secondary"
+      inactiveVariant={inactiveVariant ?? 'secondary'}
       loading={loading}
       fixedWidth={'w-[7rem]'}
-      hover={true}
-      hoverColors={{
-        background: { light: 'transparent', dark: 'transparent' },
-        border: { light: 'errorLight', dark: 'errorDark' },
-        text: { light: 'errorLight', dark: 'errorDark' },
-        icon: { light: 'errorLight', dark: 'errorDark' },
-      }}
       customStyle={disabledStyle}
       onClickInactive={() => handleFollow(profileID, followDocumentId, !isFollowing)}
       onClickActive={() => handleFollow(profileID, followDocumentId, !isFollowing)}

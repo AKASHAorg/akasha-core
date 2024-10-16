@@ -104,7 +104,7 @@ const ProfileCardWidget: React.FC<ProfileCardWidgetProps> = props => {
                     name={`follow_${authorProfileData?.id}`}
                     extensionData={{
                       profileID: authorProfileData?.id,
-                      customizeButton: { variant: 'primary' },
+                      inactiveVariant: 'primary',
                     }}
                   />
                 }

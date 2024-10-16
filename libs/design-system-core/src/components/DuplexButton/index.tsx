@@ -1,12 +1,14 @@
 import React, { useEffect, useState, EventHandler, SyntheticEvent } from 'react';
 
 import Button from '../Button';
-import Icon from '../Icon/';
 import { ButtonProps } from '../Button/types';
+import { getLabel } from './utilities/get-label';
+import { getIcon } from './utilities/get-icon';
 
-export type DuplexButtonProps = Omit<ButtonProps, 'label'> & {
-  onClickInactive?: EventHandler<SyntheticEvent>;
-  onClickActive?: EventHandler<SyntheticEvent>;
+export type DuplexButtonProps = Pick<
+  ButtonProps,
+  'iconDirection' | 'size' | 'icon' | 'loading' | 'customStyle'
+> & {
   inactiveLabel?: string;
   inactiveVariant?: ButtonProps['variant'];
   activeLabel?: string;
@@ -17,6 +19,8 @@ export type DuplexButtonProps = Omit<ButtonProps, 'label'> & {
   activeHoverIcon?: React.ReactElement;
   allowMinimization?: boolean;
   fixedWidth?: string;
+  onClickInactive?: EventHandler<SyntheticEvent>;
+  onClickActive?: EventHandler<SyntheticEvent>;
 };
 
 /**
@@ -34,7 +38,6 @@ export type DuplexButtonProps = Omit<ButtonProps, 'label'> & {
  * @param active - boolean (optional) whether the button's state is active
  * @param activeIcon - (optional) icon for active state
  * @param activeHoverIcon - (optional) icon on hover for active state
- * @param allowMinimization - boolean (optional) whether to allow minimization of the button on smaller screens.
  * @param fixedWidth - (optional) specify a fixed width for the button
  * @example
  * ```tsx
@@ -53,7 +56,6 @@ const DuplexButton: React.FC<DuplexButtonProps> = props => {
     onClickActive,
     onClickInactive,
     size = 'sm',
-    customStyle = '',
     inactiveLabel,
     inactiveVariant = 'primary',
     activeLabel,
@@ -61,30 +63,15 @@ const DuplexButton: React.FC<DuplexButtonProps> = props => {
     activeHoverLabel,
     active,
     icon,
-    activeIcon,
-    activeHoverIcon,
-    allowMinimization,
+    iconDirection,
+    activeIcon = icon,
+    activeHoverIcon = icon,
     loading,
     fixedWidth,
-    ...rest
+    customStyle = '',
   } = props;
 
   const [hovered, setHovered] = useState(false);
-  const [iconOnly, setIconOnly] = useState(window.matchMedia('(max-width: 992px)').matches);
-  const activeHoverIconElem = activeHoverIcon ?? icon;
-  const activeIconElem = activeIcon ?? icon;
-
-  useEffect(() => {
-    const mql = window.matchMedia('(max-width: 992px)');
-    const resize = e => {
-      setIconOnly(e.matches);
-    };
-    mql.addEventListener('change', resize);
-
-    return () => {
-      mql.removeEventListener('change', resize);
-    };
-  }, []);
 
   useEffect(() => {
     //Reset hovered state when button is set as active
@@ -92,48 +79,36 @@ const DuplexButton: React.FC<DuplexButtonProps> = props => {
   }, [active]);
 
   if (loading) {
-    return <Button loading={true} customStyle={fixedWidth} {...rest} />;
+    return <Button loading={true} customStyle={fixedWidth} />;
   }
 
-  const getLabel = () => {
-    if (active) return hovered ? activeHoverLabel : activeLabel;
-    return inactiveLabel;
-  };
-
-  const getIcon = () => {
-    if (active) return hovered ? activeHoverIconElem : activeIconElem;
-    return icon;
-  };
-
-  if (iconOnly && allowMinimization) {
-    return (
-      <Button
-        onClick={active ? onClickActive : onClickInactive}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-        plain
-        customStyle={fixedWidth}
-      >
-        <Icon
-          icon={getIcon()}
-          customStyle="text-secondaryLight h-5 w-5 rounded-sm border-1 border-secondaryLight p-1"
-        />
-      </Button>
-    );
-  }
+  const label = getLabel({ active, hovered, activeHoverLabel, activeLabel, inactiveLabel });
+  const iconUi = getIcon({ active, hovered, icon, activeHoverIcon, activeIcon });
+  const variant = active ? activeVariant : inactiveVariant;
+  const hoverColors = active
+    ? {
+        hoverColors: {
+          background: { light: 'transparent', dark: 'transparent' },
+          border: { light: 'errorLight', dark: 'errorDark' },
+          text: { light: 'errorLight', dark: 'errorDark' },
+          icon: { light: 'errorLight', dark: 'errorDark' },
+        } as const,
+      }
+    : {};
 
   return (
     <Button
-      label={getLabel()}
+      {...hoverColors}
+      label={label}
       onClick={active ? onClickActive : onClickInactive}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      icon={getIcon()}
-      variant={active ? activeVariant : inactiveVariant}
+      icon={iconUi}
+      variant={variant}
       size={size}
-      hover={hovered && active}
+      hover={true}
+      iconDirection={iconDirection}
       customStyle={`${customStyle} ${fixedWidth}`}
-      {...rest}
     />
   );
 };
