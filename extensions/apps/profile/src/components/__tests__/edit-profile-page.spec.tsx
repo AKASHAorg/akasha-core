@@ -3,8 +3,7 @@ import EditProfilePage from '../pages/edit-profile';
 import userEvent from '@testing-library/user-event';
 import * as ImageCropper from '@akashaorg/design-system-core/lib/components/ImageCropper';
 import * as mediaUtils from '@akashaorg/ui-awf-hooks/lib/utils/media-utils';
-import { screen, renderWithAllProviders, genAppProps, waitFor } from '@akashaorg/af-testing';
-import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
+import { screen, renderWithAllProviders, waitFor } from '@akashaorg/af-testing';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { InMemoryCache } from '@apollo/client';
 import {
@@ -23,9 +22,7 @@ const baseComponent = (
   profileDID?: string,
 ) => (
   <MockedProvider mocks={mocks} cache={new InMemoryCache(APOLLO_TYPE_POLICIES)}>
-    <AnalyticsProvider {...genAppProps()}>
-      <EditProfilePage profileDID={profileDID ?? PROFILE_DID} />
-    </AnalyticsProvider>
+    <EditProfilePage profileDID={profileDID ?? PROFILE_DID} />
   </MockedProvider>
 );
 
