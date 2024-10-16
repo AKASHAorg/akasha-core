@@ -1,13 +1,6 @@
 import React from 'react';
 import GlobalAntennaPage from '../pages/global-antenna-page';
-import {
-  screen,
-  genAppProps,
-  waitFor,
-  renderWithAllProviders,
-  within,
-} from '@akashaorg/af-testing';
-import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
+import { screen, waitFor, renderWithAllProviders, within } from '@akashaorg/af-testing';
 import { formatRelativeTime, truncateDid } from '@akashaorg/design-system-core/lib/utils';
 import { APOLLO_TYPE_POLICIES, BEAM_FEED, getBeamFeedMocks } from '../__mocks__';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
@@ -18,9 +11,7 @@ const { name, did, avatar } = profileData.akashaProfile;
 
 const baseComponent = (mocks: Readonly<MockedResponse<unknown, unknown>[]> | undefined) => (
   <MockedProvider mocks={mocks} cache={new InMemoryCache(APOLLO_TYPE_POLICIES)}>
-    <AnalyticsProvider {...genAppProps()}>
-      <GlobalAntennaPage />
-    </AnalyticsProvider>
+    <GlobalAntennaPage />
   </MockedProvider>
 );
 

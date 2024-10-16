@@ -39,13 +39,14 @@ const MiniProfileCard: React.FC<MiniProfileCardProps> = props => {
 
   const seed = getImageFromSeed(profileData?.did?.id, 3);
   const coverImageFallback = `${publicImagePath}/profile-cover-${seed}.webp`;
+  const coverImage = transformSource(profileData?.background?.default);
 
   return (
     <Card radius="rounded-2xl" margin="mb-4" padding="p-0" customStyle="max-h-[30rem]">
       <Stack
         align="center"
         customStyle={`h-28 rounded-t-2xl bg(center cover [url(${
-          transformSource(profileData?.background?.default?.src) ?? coverImageFallback
+          coverImage?.src ?? coverImageFallback
         })])`}
       >
         <Stack customStyle="relative top-16">
