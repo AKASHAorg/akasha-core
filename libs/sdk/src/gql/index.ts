@@ -178,7 +178,9 @@ class Gql {
       cache: this._apolloCache,
       link: directionalLink,
       version: '0.1.1dev',
-      connectToDevTools: __DEV__,
+      devtools: {
+        enabled: __DEV__,
+      },
       defaultOptions: {
         watchQuery: {
           fetchPolicy: 'network-only',
