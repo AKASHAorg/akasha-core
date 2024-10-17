@@ -4,12 +4,10 @@ import * as useAkashaStore from '@akashaorg/ui-awf-hooks/lib/store/use-akasha-st
 import {
   screen,
   renderWithAllProviders,
-  genAppProps,
   getAuthenticationStore,
   waitFor,
   within,
 } from '@akashaorg/af-testing';
-import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 import {
   APOLLO_TYPE_POLICIES,
   AUTHENTICATED_DID,
@@ -26,9 +24,7 @@ const { mocks } = getMyAntennaPageMocks();
 
 const baseComponent = (mocks?: Readonly<MockedResponse<unknown, unknown>[]> | undefined) => (
   <MockedProvider mocks={mocks} cache={new InMemoryCache(APOLLO_TYPE_POLICIES)}>
-    <AnalyticsProvider {...genAppProps()}>
-      <MyAntennaPage />
-    </AnalyticsProvider>
+    <MyAntennaPage />
   </MockedProvider>
 );
 
