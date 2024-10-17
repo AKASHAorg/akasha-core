@@ -186,9 +186,6 @@ class Gql {
           fetchPolicy: 'network-only',
           nextFetchPolicy: 'cache-and-network',
         },
-        query: {
-          fetchPolicy: 'cache-first',
-        },
       },
     });
 

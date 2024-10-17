@@ -172,7 +172,6 @@ class AWF_Profile {
     });
 
     await this._notificationsStream.connect();
-    return true;
   }
 
   get notificationsClient() {
