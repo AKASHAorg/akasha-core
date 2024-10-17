@@ -1,7 +1,6 @@
-import React, { useRef } from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
-import appRoutes, { SUBMIT_EXTENSION } from '../../routes';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -9,22 +8,16 @@ import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoade
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
-import ExtensionReleaseSubmitForm from '@akashaorg/design-system-components/lib/components/ExtensionReleaseSubmitForm';
-import { useSetAppReleaseMutation } from '@akashaorg/ui-awf-hooks/lib/generated';
-import getSDK from '@akashaorg/core-sdk';
-import { SubmitType } from '../app-routes';
-import { PROPERTY, PROVIDER } from '../../constants';
+import ExtensionReleasePublishForm from '@akashaorg/design-system-components/lib/components/ExtensionReleasePublishForm';
+import { DRAFT_RELEASES } from '../../../constants';
 
-type ExtensionReleaseSubmitPageProps = {
+type EditTestReleasePageProps = {
   extensionId: string;
 };
 
-export const ExtensionReleaseSubmitPage: React.FC<ExtensionReleaseSubmitPageProps> = ({
-  extensionId,
-}) => {
+export const EditTestReleasePage: React.FC<EditTestReleasePageProps> = ({ extensionId }) => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
-  const sdk = useRef(getSDK());
 
   const { uiEvents, baseRouteName, getCorePlugins } = useRootComponentProps();
   const navigateTo = getCorePlugins().routing.navigateTo;
@@ -33,21 +26,6 @@ export const ExtensionReleaseSubmitPage: React.FC<ExtensionReleaseSubmitPageProp
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
-
-  const [setAppReleaseMutation, { loading }] = useSetAppReleaseMutation({
-    context: { source: sdk.current.services.gql.contextSources.composeDB },
-    onCompleted: () => {
-      navigate({
-        to: `/post-submit`,
-        search: { type: SubmitType.RELEASE },
-      });
-    },
-    onError: () => {
-      showErrorNotification(
-        `${t(`Something went wrong when setting the release for this extension`)}.`,
-      );
-    },
-  });
 
   const showErrorNotification = React.useCallback((title: string) => {
     uiEventsRef.current.next({
@@ -64,38 +42,49 @@ export const ExtensionReleaseSubmitPage: React.FC<ExtensionReleaseSubmitPageProp
       appName: '@akashaorg/app-auth-ewa',
       getNavigationUrl: (routes: Record<string, string>) => {
         return `${routes.Connect}?${new URLSearchParams({
-          redirectTo: `${baseRouteName}/${appRoutes[SUBMIT_EXTENSION]}/${extensionId}`,
+          redirectTo: `${baseRouteName}/release-manager/${extensionId}/edit-test-release`,
         }).toString()}`;
       },
     });
   };
 
+  const draftReleases = useMemo(() => {
+    try {
+      return JSON.parse(localStorage.getItem(`${DRAFT_RELEASES}-${authenticatedDID}`)) || [];
+    } catch (error) {
+      showErrorNotification(error);
+    }
+  }, [authenticatedDID, showErrorNotification]);
+
+  const localRelease = draftReleases.find(release => release.applicationID === extensionId);
+
   const handleClickSubmit = appReleaseFormData => {
-    const appReleaseContent = {
-      applicationID: extensionId,
+    // remove the old local test release so we can update it
+    const newLocalDraftReleases = draftReleases.filter(
+      draftRelease => draftRelease.applicationID !== extensionId,
+    );
+    // update the local draft release to reflect the form data
+    const newLocalRelease = {
+      ...localRelease,
       version: appReleaseFormData?.versionNumber,
       source: appReleaseFormData?.sourceURL,
-      createdAt: new Date().toISOString(),
-      meta: [
-        {
-          provider: PROVIDER,
-          property: PROPERTY,
-          value: appReleaseFormData?.description,
-        },
-      ],
+      description: appReleaseFormData?.description,
     };
-    setAppReleaseMutation({
-      variables: {
-        i: {
-          content: appReleaseContent,
-        },
-      },
+    // save the new list of local draft releases in local storage
+    localStorage.setItem(
+      `${DRAFT_RELEASES}-${authenticatedDID}`,
+      JSON.stringify([...newLocalDraftReleases, newLocalRelease]),
+    );
+    navigate({
+      to: '/release-manager/$extensionId',
+      params: { extensionId },
     });
   };
 
   const handleClickCancel = () => {
     navigate({
-      to: '/my-extensions',
+      to: '/release-manager/$extensionId',
+      params: { extensionId },
     });
   };
 
@@ -118,19 +107,18 @@ export const ExtensionReleaseSubmitPage: React.FC<ExtensionReleaseSubmitPageProp
           <Text variant="h5" weight="semibold" align="center">
             {t('Release Notes')}
           </Text>
-          <ExtensionReleaseSubmitForm
+          <ExtensionReleasePublishForm
             versionNumberLabel={t('Version Number')}
             descriptionFieldLabel={t('Description')}
             descriptionPlaceholderLabel={t('A brief description about this release')}
             sourceURLFieldLabel={t('Source URL')}
             sourceURLPlaceholderLabel={t('Webpack dev server / ipfs')}
-            loading={loading}
             cancelButton={{
               label: t('Cancel'),
               handleClick: handleClickCancel,
             }}
             nextButton={{
-              label: t('Submit'),
+              label: t('Test Release'),
               handleClick: handleClickSubmit,
             }}
           />

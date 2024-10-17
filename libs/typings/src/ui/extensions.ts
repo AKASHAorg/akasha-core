@@ -29,7 +29,6 @@ export type Extension = Omit<AkashaAppInterface, 'contributors' | 'version'> & {
   nsfw?: boolean;
   // this prop is only for local storage draft extensions
   localDraft?: boolean;
-  sourceURL?: string;
 };
 
 /**

@@ -5,7 +5,12 @@ import { useNavigate } from '@tanstack/react-router';
 import { BookOpenIcon } from '@heroicons/react/24/outline';
 import { hasOwn, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetAppsByPublisherDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { ExtensionStatus, NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
+import {
+  Extension,
+  ExtensionStatus,
+  NotificationEvents,
+  NotificationTypes,
+} from '@akashaorg/typings/lib/ui';
 import { SortOrder, AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
@@ -157,7 +162,7 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
   }, [appsData, selectedType]);
 
   // fetch the draft extensions that are saved only on local storage
-  const existingDraftExtensions = useMemo(() => {
+  const existingDraftExtensions: Extension[] = useMemo(() => {
     try {
       return JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [];
     } catch (error) {
@@ -264,9 +269,10 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
               const extensionData = allMyExtensions[itemIndex];
               return (
                 <ExtensionElement
-                  extensionData={extensionData}
+                  extensionData={extensionData as Extension}
                   showDivider={itemIndex < allMyExtensions.length - 1}
                   filter={selectedStatus}
+                  showMenu
                 />
               );
             }}

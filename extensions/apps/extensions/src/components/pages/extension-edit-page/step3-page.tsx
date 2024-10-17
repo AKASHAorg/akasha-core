@@ -5,7 +5,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ExtensionEditStep3Form from '@akashaorg/design-system-components/lib/components/ExtensionEditStep3Form';
 import { useAkashaStore, useMentions, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { transformSource } from '@akashaorg/ui-awf-hooks';
+import { transformSource, useProfilesList } from '@akashaorg/ui-awf-hooks';
 import { DRAFT_EXTENSIONS } from '../../../constants';
 import { Extension, NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 
@@ -65,10 +65,12 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
     };
   }, [defaultValues]);
 
-  const { setMentionQuery, mentions, allFollowing } = useMentions(authenticatedDID);
+  const { setMentionQuery, mentions } = useMentions(authenticatedDID);
   const handleGetMentions = (query: string) => {
     setMentionQuery(query);
   };
+
+  const { profilesData } = useProfilesList(defaultValues?.contributors || []);
 
   const handleUpdateExtension = step3Data => {
     const newDraftExtensions = draftExtensions.map(oldDraftExt =>
@@ -117,7 +119,7 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
         defaultValues={formDefault}
         handleGetFollowingProfiles={handleGetMentions}
         followingProfiles={mentions}
-        allFollowingProfiles={allFollowing}
+        contributorsProfiles={profilesData}
         transformSource={transformSource}
         cancelButton={{
           label: t('Back'),

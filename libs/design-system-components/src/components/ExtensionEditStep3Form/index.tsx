@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useEffect, useMemo, useState } from 'react';
+import React, { SyntheticEvent, useEffect, useState } from 'react';
 import * as z from 'zod';
 import { Controller, useWatch } from 'react-hook-form';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
@@ -52,7 +52,7 @@ export type ExtensionEditStep3FormProps = {
   defaultValues?: ExtensionEditStep3FormValues;
   handleGetFollowingProfiles?: (query: string) => void;
   followingProfiles?: AkashaProfile[];
-  allFollowingProfiles?: AkashaProfile[];
+  contributorsProfiles?: AkashaProfile[];
   cancelButton: ButtonType;
   nextButton: {
     label: string;
@@ -72,7 +72,7 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
     },
     handleGetFollowingProfiles,
     followingProfiles,
-    allFollowingProfiles,
+    contributorsProfiles,
     transformSource,
     cancelButton,
     nextButton,
@@ -114,28 +114,13 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
 
   const licenseValue = useWatch({ control, name: FieldName.license });
 
-  // TODO: this works with one exception, if the user unfollows one of the original contributors
-  // it will not hydrate the form values with it
-  // to fix this a list of original contributor profiles needs to be passed as prop
-  const defaultContributorProfiles = useMemo(() => {
-    return (
-      defaultValues.contributors
-        ?.map(contributorDID => {
-          return allFollowingProfiles?.find(
-            followingProfile => followingProfile.did.id === contributorDID,
-          );
-        })
-        .filter(profile => profile?.id) || []
-    );
-  }, [defaultValues.contributors, allFollowingProfiles]);
-
   const [addedContributors, setAddedContributors] = useState<AkashaProfile[]>(
-    defaultContributorProfiles || [],
+    contributorsProfiles || [],
   );
 
   useEffect(() => {
-    setAddedContributors(defaultContributorProfiles);
-  }, [defaultContributorProfiles]);
+    setAddedContributors(contributorsProfiles);
+  }, [contributorsProfiles]);
 
   const [query, setQuery] = useState('');
   const [keywords, setKeywords] = useState(new Set(defaultValues.keywords));
