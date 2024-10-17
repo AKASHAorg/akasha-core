@@ -105,7 +105,6 @@ const OnboardingSuggestionsCard: React.FC<OnboardingSuggestionsCardProps> = prop
                   onClickActive={() => onClickUnfollow(profile?.did?.id)}
                   active={followedProfiles?.includes(profile?.did?.id)}
                   icon={<UserCircleIcon />}
-                  allowMinimization
                 />
               )}
             </Stack>

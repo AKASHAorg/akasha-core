@@ -67,12 +67,6 @@ const TagProfileCard: React.FC<TagProfileCard> = props => {
               iconDirection="left"
               inactiveVariant="secondary"
               loading={isLoading}
-              hoverColors={{
-                background: { light: 'transparent', dark: 'transparent' },
-                border: { light: 'errorLight', dark: 'errorDark' },
-                text: { light: 'errorLight', dark: 'errorDark' },
-                icon: { light: 'errorLight', dark: 'errorDark' },
-              }}
               onClickInactive={() => handleSubscribeTag(tag.name)}
               onClickActive={() => handleUnsubscribeTag(tag.name)}
               active={subscribedTags?.includes(tag.name)}

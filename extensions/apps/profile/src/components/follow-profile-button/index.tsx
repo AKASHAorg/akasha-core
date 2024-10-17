@@ -11,7 +11,7 @@ export type FollowProfileButtonProps = Omit<
 >;
 
 const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
-  const { profileID, iconOnly, customizeButton, showLoginModal } = props;
+  const { profileID, iconOnly, activeVariant, inactiveVariant, showLoginModal } = props;
   const { t } = useTranslation('app-profile');
   const {
     data: { authenticatedDID },
@@ -34,16 +34,20 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
   const isFollowing = !!followDocument?.node?.isFollowing;
   const disableActions = !profileID;
 
-  // if already following and variant is specified as primary, convert to secondary
-  const _customizeButton = {
-    ...customizeButton,
-    variant:
-      isFollowing && customizeButton?.variant === 'primary'
-        ? 'secondary'
-        : customizeButton?.variant,
-  };
-
   if (error) return null;
+
+  const followButtonUi = (
+    <FollowButton
+      profileID={profileID}
+      followDocumentId={followDocumentId}
+      iconOnly={iconOnly}
+      isFollowing={isFollowing}
+      isLoggedIn={isLoggedIn}
+      activeVariant={activeVariant}
+      inactiveVariant={inactiveVariant}
+      showLoginModal={showLoginModal}
+    />
+  );
 
   return disableActions ? (
     <Tooltip
@@ -52,26 +56,10 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
       trigger="click"
       contentCustomStyle="w-52"
     >
-      <FollowButton
-        profileID={profileID}
-        followDocumentId={followDocumentId}
-        iconOnly={iconOnly}
-        isFollowing={isFollowing}
-        isLoggedIn={isLoggedIn}
-        customizeButton={_customizeButton}
-        showLoginModal={showLoginModal}
-      />
+      {followButtonUi}
     </Tooltip>
   ) : (
-    <FollowButton
-      profileID={profileID}
-      followDocumentId={followDocumentId}
-      iconOnly={iconOnly}
-      isFollowing={isFollowing}
-      isLoggedIn={isLoggedIn}
-      customizeButton={_customizeButton}
-      showLoginModal={showLoginModal}
-    />
+    <> {followButtonUi}</>
   );
 };
 

@@ -74,7 +74,6 @@ const ProfileSearchCard = ({
             onClickInactive={() => handleFollow}
             onClickActive={() => handleUnfollow}
             active={isFollowing}
-            allowMinimization={false}
           />
         </div>
       )}

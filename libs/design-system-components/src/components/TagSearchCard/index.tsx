@@ -73,7 +73,6 @@ const TagSearchCard: React.FC<TagSearchCardProps> = props => {
             onClickInactive={() => handleSubscribeTag(tag.name)}
             onClickActive={() => handleUnsubscribeTag(tag.name)}
             active={subscribedTags?.includes(tag.name)}
-            allowMinimization={false}
           />
         </Stack>
       )}
