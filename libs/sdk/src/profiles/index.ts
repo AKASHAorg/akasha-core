@@ -219,11 +219,11 @@ class AWF_Profile {
       return true;
     } else if (Notification.permission !== 'denied') {
       // We need to ask the user for permission
-      await Notification.requestPermission();
+      const perm = await Notification.requestPermission();
+      return perm === 'granted';
     }
 
-    // @ts-ignore
-    return Notification.permission === 'granted';
+    return false;
   }
 }
 
