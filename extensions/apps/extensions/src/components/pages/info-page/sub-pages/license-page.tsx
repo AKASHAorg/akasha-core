@@ -4,13 +4,23 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import ExtensionHeader from '@akashaorg/design-system-components/lib/components/ExtensionHeader';
+import InfoSubRouteHeader from '../InfoSubroutePageHeader';
+import {
+  AkashaAppApplicationType,
+  AppImageSource,
+} from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 type LicensePageProps = {
   appId: string;
+  license?: string;
+  extensionLogo?: AppImageSource;
+  extensionName?: string;
+  extensionDisplayName?: string;
+  extensionType?: AkashaAppApplicationType;
 };
 
-export const LicensePage: React.FC<LicensePageProps> = ({ appId }) => {
+export const LicensePage = (props: LicensePageProps) => {
+  const { license, extensionDisplayName, extensionName, extensionLogo, extensionType } = props;
   const { t } = useTranslation('app-extensions');
   // @TODO get license data from the hook when available
 
@@ -20,12 +30,15 @@ export const LicensePage: React.FC<LicensePageProps> = ({ appId }) => {
     <>
       <Card padding="p-4">
         <Stack spacing="gap-y-4">
-          <ExtensionHeader
-            appName={'Extension Name'}
-            packageName="Package name"
-            pageTitle={t('Permissions')}
+          <InfoSubRouteHeader
+            pageTitle={t('License')}
+            appName={extensionDisplayName}
+            packageName={extensionName}
+            appLogo={extensionLogo}
+            appType={extensionType}
           />
           <Divider />
+          <Text variant="h6">{`"${license}"`}</Text>
           {!!mockLicenseData && (
             <Stack spacing="gap-y-4">
               <Text variant="body2">{t('{{licenseText}}', { licenseText: mockLicenseData })}</Text>

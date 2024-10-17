@@ -118,7 +118,9 @@ export const AppInfoHeader: React.FC<AppInfoHeaderProps> = props => {
                     to: 'primaryStop',
                   }}
                 >
-                  <Text variant="footnotes2">{defaultAppPillLabel}</Text>
+                  <Text variant="footnotes2" color={{ light: 'white', dark: 'white' }}>
+                    {defaultAppPillLabel}
+                  </Text>
                 </AppInfoPill>
               )}
               <AppInfoPill background={{ light: 'tertiaryLight', dark: 'tertiaryDark' }}>

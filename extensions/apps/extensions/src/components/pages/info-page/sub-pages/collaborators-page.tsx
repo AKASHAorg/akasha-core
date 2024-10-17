@@ -8,13 +8,31 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { ChevronRightIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import ExtensionHeader from '@akashaorg/design-system-components/lib/components/ExtensionHeader';
+import ExtensionSubRouteHeader from '../InfoSubroutePageHeader';
+import {
+  AkashaAppApplicationType,
+  AppImageSource,
+} from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { selectExtensionCollaborators } from '@akashaorg/ui-awf-hooks/lib/selectors/get-apps-query';
 
 type CollaboratorsPageProps = {
   appId: string;
+  extensionLogo?: AppImageSource;
+  extensionName?: string;
+  extensionDisplayName?: string;
+  collaborators?: ReturnType<typeof selectExtensionCollaborators>;
+  extensionType?: AkashaAppApplicationType;
 };
 
-export const CollaboratorsPage: React.FC<CollaboratorsPageProps> = ({ appId }) => {
+export const CollaboratorsPage = (props: CollaboratorsPageProps) => {
+  const {
+    appId,
+    extensionLogo,
+    extensionName,
+    extensionDisplayName,
+    extensionType,
+    collaborators,
+  } = props;
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
 
@@ -24,22 +42,24 @@ export const CollaboratorsPage: React.FC<CollaboratorsPageProps> = ({ appId }) =
     <>
       <Card padding="p-4">
         <Stack spacing="gap-y-4">
-          <ExtensionHeader
-            appName={'Extension Name'}
-            packageName="Package name"
+          <ExtensionSubRouteHeader
             pageTitle={t('Collaborators')}
+            appName={extensionDisplayName}
+            packageName={extensionName}
+            appType={extensionType}
+            appLogo={extensionLogo}
           />
           <Divider />
           <Stack direction="column" spacing="gap-y-4">
-            {developers.map((developer, idx) => (
-              <Stack direction="column" spacing="gap-y-4" key={developer.id}>
+            {collaborators?.map((collab, idx) => (
+              <Stack direction="column" spacing="gap-y-4" key={`${collab.akashaProfile?.id}-idx`}>
                 <Card
                   onClick={() => {
                     navigate({
                       to: '/info/$appId/developer/$devDid',
                       params: {
                         appId,
-                        devDid: developer.profileId,
+                        devDid: collab.akashaProfile?.did.id,
                       },
                     });
                   }}
@@ -47,11 +67,11 @@ export const CollaboratorsPage: React.FC<CollaboratorsPageProps> = ({ appId }) =
                 >
                   <Stack direction="row" align="center">
                     <ProfileAvatarButton
-                      profileId={developer.profileId}
-                      label={developer.name}
-                      avatar={transformSource(developer?.avatar?.default)}
-                      alternativeAvatars={developer?.avatar?.alternatives?.map(alternative =>
-                        transformSource(alternative),
+                      profileId={collab.akashaProfile?.did.id}
+                      label={collab.akashaProfile?.name}
+                      avatar={transformSource(collab?.akashaProfile?.avatar?.default)}
+                      alternativeAvatars={collab.akashaProfile?.avatar?.alternatives?.map(
+                        alternative => transformSource(alternative),
                       )}
                     />
                     <Icon

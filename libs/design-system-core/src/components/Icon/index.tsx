@@ -64,7 +64,6 @@ const Icon: React.FC<IconProps> = props => {
   const breakPointStyle = breakPointSize
     ? ICON_SIZE_MAP_BY_BREAKPOINT(breakPointSize.breakPoint)[breakPointSize.size]
     : '';
-
   const sizeStyle =
     typeof size === 'object'
       ? `${getWidthClasses(size?.width)} ${getHeightClasses(size?.height)}`
