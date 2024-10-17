@@ -92,8 +92,9 @@ export const ExtensionPublishPage: React.FC<ExtensionPublishPageProps> = ({ exte
         JSON.stringify([...newLocalDraftReleases, newLocalRelease]),
       );
       navigate({
-        to: '/post-publish',
+        to: '/post-publish/$extensionId',
         search: { type: SubmitType.EXTENSION },
+        params: { extensionId },
       });
     },
     onError: () => {

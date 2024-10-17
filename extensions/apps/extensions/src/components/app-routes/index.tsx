@@ -454,16 +454,17 @@ export enum SubmitType {
 
 const postPublishRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: `/post-publish`,
+  path: `/post-publish/$extensionId`,
   notFoundComponent: () => <NotFoundComponent />,
   validateSearch: (search: Record<string, unknown>): SubmitSearch => {
     return { type: search.type as SubmitType };
   },
   component: () => {
     const from = postPublishRoute.useSearch();
+    const { extensionId } = postPublishRoute.useParams();
     return (
       <CatchBoundary getResetKey={() => 'post_publish_reset'} errorComponent={RouteErrorComponent}>
-        <PostPublishPage type={from.type} />
+        <PostPublishPage type={from.type} extensionId={extensionId} />
       </CatchBoundary>
     );
   },

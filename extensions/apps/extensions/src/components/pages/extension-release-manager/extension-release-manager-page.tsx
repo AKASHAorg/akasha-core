@@ -9,7 +9,7 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import DynamicInfiniteScroll from '@akashaorg/design-system-components/lib/components/DynamicInfiniteScroll';
-import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useAkashaStore, useDismissedCard, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { Extension, NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import {
   useGetAppsByIdQuery,
@@ -26,7 +26,7 @@ import {
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { ChevronRightIcon } from '@heroicons/react/24/outline';
+import { ChevronRightIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 
 const ENTRY_HEIGHT = 82;
@@ -45,6 +45,10 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
   const locale = getTranslationPlugin().i18n?.languages?.[0] || 'en';
   const navigateTo = getCorePlugins().routing.navigateTo;
   const uiEventsRef = React.useRef(uiEvents);
+
+  const [dismissed, dismissCard] = useDismissedCard(
+    '@akashaorg/ui-release-manager_draft-info-card',
+  );
 
   const [showModal, setShowModal] = useState(false);
 
@@ -181,6 +185,26 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
   return (
     <>
       <Stack padding={16} spacing="gap-y-6">
+        {!dismissed && (
+          <Stack
+            padding="p-4"
+            background={{ light: 'grey9', dark: 'grey5' }}
+            customStyle="rounded-3xl"
+          >
+            <Stack direction="row" align="center" justify="between">
+              <Stack customStyle="w-9/12">
+                <Text variant="body2" weight="light">
+                  {t(
+                    'We’ve generated a first draft release for you as soon as you created your extension. You can use it to submit your first release or test it locally!',
+                  )}
+                </Text>
+              </Stack>
+              <Button plain={true} onClick={dismissCard}>
+                <Icon icon={<XMarkIcon />} size="sm" />
+              </Button>
+            </Stack>
+          </Stack>
+        )}
         <Text variant="h5" weight="semibold" align="start">
           {t('Release Manager')}
         </Text>

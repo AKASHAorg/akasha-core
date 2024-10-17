@@ -37,8 +37,9 @@ export const ExtensionReleasePublishPage: React.FC<ExtensionReleasePublishPagePr
     context: { source: sdk.current.services.gql.contextSources.composeDB },
     onCompleted: () => {
       navigate({
-        to: `/post-publish`,
+        to: `/post-publish/$extensionId`,
         search: { type: SubmitType.RELEASE },
+        params: { extensionId },
       });
     },
     onError: () => {
