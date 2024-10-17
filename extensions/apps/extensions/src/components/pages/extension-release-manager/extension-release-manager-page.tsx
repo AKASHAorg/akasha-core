@@ -191,7 +191,7 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
             background={{ light: 'grey9', dark: 'grey5' }}
             customStyle="rounded-3xl"
           >
-            <Stack direction="row" align="center" justify="between">
+            <Stack direction="row" align="start" justify="between">
               <Stack customStyle="w-9/12">
                 <Text variant="body2" weight="light">
                   {t(

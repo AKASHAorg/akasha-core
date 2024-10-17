@@ -37,3 +37,4 @@ export { useProfileStats } from './use-profile-stats';
 export { useSaveSettings, useGetSettings } from './use-settings';
 export { useNsfwToggling } from './use-nsfw';
 export { useMentions } from './use-mentions';
+export { useProfilesList } from './use-profiles-list';
