@@ -197,7 +197,7 @@ export const ImageEditorBlock = (
   useImperativeHandle(
     props.blockRef,
     () => ({
-      createBlock: createBlock,
+      createBlock,
       retryBlockCreation: retryCreate,
       handleFocusBlock,
     }),
