@@ -172,7 +172,6 @@ class AWF_Profile {
     });
 
     await this._notificationsStream.connect();
-    return true;
   }
 
   get notificationsClient() {
@@ -220,11 +219,11 @@ class AWF_Profile {
       return true;
     } else if (Notification.permission !== 'denied') {
       // We need to ask the user for permission
-      const perm = await Notification.requestPermission();
-      return perm === 'granted';
+      await Notification.requestPermission();
     }
 
-    return false;
+    // @ts-ignore
+    return Notification.permission === 'granted';
   }
 }
 
