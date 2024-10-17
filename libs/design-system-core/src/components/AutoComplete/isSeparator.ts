@@ -1,5 +1,5 @@
 import { Separator } from './types';
 
-export function isSeparator(key: string, separators: Separator[]): key is Separator {
-  return !!separators.find(separator => separator === key);
+export function isSeparator(code: string, separators: Separator[]): code is Separator {
+  return !!separators.find(separator => separator === code);
 }

@@ -78,6 +78,7 @@ interface ISaveMediaFile {
 
 /**
  * Utility to save media file
+ * Every image is cast into JPEG  primarily to reduce storage space and the associated fee
  */
 export const saveMediaFile = async ({ name, content, isUrl }: ISaveMediaFile) => {
   const sdk = getSDK();
