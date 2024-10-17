@@ -34,7 +34,7 @@ export type ExtensionEditStep3FormValues = {
   licenseOther?: string;
   contributors?: string[];
   contactInfo?: string[];
-  keywords?: string | string[];
+  keywords?: string[];
 };
 
 export type ExtensionEditStep3FormProps = {
@@ -96,9 +96,8 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
   const {
     control,
     getValues,
-    trigger,
     formState: { errors },
-  } = useForm<ExtensionEditStep3FormValues>({
+  } = useForm<Omit<ExtensionEditStep3FormValues, 'keywords'> & { keywords?: string | string[] }>({
     defaultValues,
     resolver: zodResolver(schema),
     mode: 'onChange',
@@ -151,14 +150,16 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
     event.preventDefault();
     const formValues = getValues();
 
-    formValues.contributors = addedContributors?.map(profile => profile?.did?.id);
-    formValues.keywords = [...keywords]?.filter(keyword => keyword);
-
     if (formValues.license === Licenses.OTHER) {
       formValues.license = formValues.licenseOther;
     }
+
     if (isValid) {
-      nextButton.handleClick(formValues);
+      nextButton.handleClick({
+        ...formValues,
+        contributors: addedContributors?.map(profile => profile?.did?.id),
+        keywords: [...keywords]?.filter(keyword => keyword),
+      });
     }
   };
 
@@ -228,22 +229,10 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
               control={control}
               name={FieldName.keywords}
               render={({ field: { value, onChange }, fieldState: { error } }) => {
-                const errorArr = Array.isArray(error)
-                  ? //clean up error array
-                    error.filter(err => err)
-                  : [];
-                const errorMessage = errorArr.length ? errorArr?.[0]?.message : '';
-                let newValue = typeof value === 'string' ? value : '';
-                /*
-                 ** If an error has occurred and value is an array then the last element of the array
-                 ** which is the current value of the input field should be maintained.
-                 **/
-                if (Array.isArray(value) && value.length && errorMessage) {
-                  newValue = value[value.length - 1];
-                }
+                const errorMessage = error?.message ?? '';
                 return (
                   <AutoComplete
-                    value={newValue}
+                    value={typeof value === 'string' ? value : ''}
                     options={availableKeywords}
                     placeholder={addTagsPlaceholderLabel}
                     tags={keywords}
@@ -256,11 +245,10 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
                       onChange([...newKeyWords]);
                       setKeywords(newKeyWords);
                     }}
-                    onChange={async value => {
+                    onChange={value => {
                       onChange(value);
                       if (Array.isArray(value)) {
-                        const validKeywords = await trigger('keywords');
-                        if (validKeywords) setKeywords(new Set(value));
+                        if (!errorMessage) setKeywords(new Set(value));
                       }
                     }}
                     disabled={maxTagsSelected}
@@ -310,10 +298,14 @@ export default ExtensionEditStep3Form;
 const schema = z.object({
   extensionLicense: z.string(),
   keywords: z
-    .array(
-      z.string().min(MIN_TAG_CHARACTERS, {
-        message: `Tags must be at least ${MIN_TAG_CHARACTERS} characters long.`,
-      }),
-    )
-    .optional(),
+    .array(z.string())
+    .optional()
+    .or(
+      z
+        .string()
+        .min(MIN_TAG_CHARACTERS, {
+          message: `Tags must be at least ${MIN_TAG_CHARACTERS} characters long.`,
+        })
+        .or(z.literal('')),
+    ),
 });
