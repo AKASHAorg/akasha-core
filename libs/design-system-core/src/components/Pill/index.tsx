@@ -15,11 +15,11 @@ type ActionPillProps = Pick<
   onPillClick?: (active?: boolean) => void;
 };
 
-type InfoPillProps = Pick<TextProps, 'weight' | 'color'> & {
+export type InfoPillProps = Pick<TextProps, 'weight' | 'color' | 'customStyle'> & {
   label: string;
   borderColor?: Color;
   background?: Color;
-  customStyle?: string;
+  customTextStyle?: string;
 };
 
 export type PillProps =
@@ -58,18 +58,24 @@ export type PillProps =
  **/
 const Pill: React.FC<PillProps> = props => {
   if (props.type === 'info') {
-    const borderStyle = props.borderColor
-      ? `border ${getColorClasses(props.borderColor, 'border')}`
-      : '';
+    const { borderColor, background, color, label, weight, customStyle, customTextStyle } = props;
+
+    const borderStyle = borderColor ? `border ${getColorClasses(borderColor, 'border')}` : '';
     return (
       <Stack
         align="center"
         justify="center"
-        background={props.background}
-        customStyle={`min-h-min min-w-min rounded-full py-1 px-2 ${borderStyle} ${props.customStyle}`}
+        background={background}
+        customStyle={`min-h-min min-w-min rounded-full py-1 px-2 ${borderStyle} ${customStyle}`}
       >
-        <Text variant="footnotes2" selectable={false} weight={props.weight} color={props.color}>
-          {props.label}
+        <Text
+          variant="footnotes2"
+          selectable={false}
+          weight={weight}
+          color={color}
+          customStyle={customTextStyle}
+        >
+          {label}
         </Text>
       </Stack>
     );
