@@ -6,12 +6,10 @@ import * as useAkashaStore from '@akashaorg/ui-awf-hooks/lib/store/use-akasha-st
 import {
   screen,
   renderWithAllProviders,
-  genAppProps,
   waitFor,
   getAuthenticationStore,
   within,
 } from '@akashaorg/af-testing';
-import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 import { AkashaBeamStreamModerationStatus } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { formatRelativeTime, truncateDid } from '@akashaorg/design-system-core/lib/utils';
 import {
@@ -50,23 +48,21 @@ const baseComponent = (
   isActive?: boolean,
 ) => (
   <MockedProvider mocks={mocks} cache={new InMemoryCache(APOLLO_TYPE_POLICIES)}>
-    <AnalyticsProvider {...genAppProps()}>
-      <BeamPage
-        isActive={isActive ?? true}
-        beamStatus={AkashaBeamStreamModerationStatus.Ok}
-        beamData={{ node: mockedBeamData ?? beamData }}
-        beamId={BEAM_ID}
-        renderEditor={({ beamId, reflectToId, showEditor, setShowEditor }) => (
-          <ReflectEditor
-            beamId={beamId}
-            reflectToId={reflectToId}
-            showEditor={showEditor}
-            setShowEditor={setShowEditor}
-            editorActionsRef={editorActionsRef}
-          />
-        )}
-      />
-    </AnalyticsProvider>
+    <BeamPage
+      isActive={isActive ?? true}
+      beamStatus={AkashaBeamStreamModerationStatus.Ok}
+      beamData={{ node: mockedBeamData ?? beamData }}
+      beamId={BEAM_ID}
+      renderEditor={({ beamId, reflectToId, showEditor, setShowEditor }) => (
+        <ReflectEditor
+          beamId={beamId}
+          reflectToId={reflectToId}
+          showEditor={showEditor}
+          setShowEditor={setShowEditor}
+          editorActionsRef={editorActionsRef}
+        />
+      )}
+    />
   </MockedProvider>
 );
 

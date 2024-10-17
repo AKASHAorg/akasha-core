@@ -31,6 +31,7 @@ type ProfileHeaderProps = {
   plain?: boolean;
   customStyle?: string;
 };
+
 const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
   const [activeOverlay, setActiveOverlay] = React.useState<'avatar' | 'coverImage' | null>(null);
   const { profileDID, plain, customStyle = '' } = props;

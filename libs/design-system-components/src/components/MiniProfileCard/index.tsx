@@ -6,7 +6,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import type { Image, Profile } from '@akashaorg/typings/lib/ui';
-import { getImageFromSeed } from '@akashaorg/design-system-core/lib/utils';
+import { getColorClasses, getImageFromSeed } from '@akashaorg/design-system-core/lib/utils';
 
 export type MiniProfileCardProps = {
   publicImagePath?: string;
@@ -39,13 +39,14 @@ const MiniProfileCard: React.FC<MiniProfileCardProps> = props => {
 
   const seed = getImageFromSeed(profileData?.did?.id, 3);
   const coverImageFallback = `${publicImagePath}/profile-cover-${seed}.webp`;
+  const coverImage = transformSource(profileData?.background?.default);
 
   return (
     <Card radius="rounded-2xl" margin="mb-4" padding="p-0" customStyle="max-h-[30rem]">
       <Stack
         align="center"
         customStyle={`h-28 rounded-t-2xl bg(center cover [url(${
-          transformSource(profileData?.background?.default?.src) ?? coverImageFallback
+          coverImage?.src ?? coverImageFallback
         })])`}
       >
         <Stack customStyle="relative top-16">
@@ -67,7 +68,14 @@ const MiniProfileCard: React.FC<MiniProfileCardProps> = props => {
         <Stack spacing="gap-y-2" align="center">
           <Stack spacing="gap-y-1" align="center" customStyle="mt-3">
             {profileData?.name && (
-              <Text variant="h6" breakWord={true}>
+              <Text
+                variant="h6"
+                breakWord={true}
+                customStyle={`cursor-pointer hover:underline ${getColorClasses(
+                  { light: 'black', dark: 'white' },
+                  'hover:decoration',
+                )}`}
+              >
                 {profileData.name}
               </Text>
             )}

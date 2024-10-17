@@ -6,11 +6,9 @@ import * as useProfileStats from '@akashaorg/ui-awf-hooks/lib/use-profile-stats'
 import {
   screen,
   renderWithAllProviders,
-  genAppProps,
   getAuthenticationStore,
   waitFor,
 } from '@akashaorg/af-testing';
-import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { InMemoryCache } from '@apollo/client';
 import {
@@ -33,9 +31,7 @@ const baseComponent = (
   profileDID?: string,
 ) => (
   <MockedProvider mocks={mocks} cache={new InMemoryCache(APOLLO_TYPE_POLICIES)}>
-    <AnalyticsProvider {...genAppProps()}>
-      <ProfileInfoPage profileDID={profileDID ?? PROFILE_DID} />
-    </AnalyticsProvider>
+    <ProfileInfoPage profileDID={profileDID ?? PROFILE_DID} />
   </MockedProvider>
 );
 

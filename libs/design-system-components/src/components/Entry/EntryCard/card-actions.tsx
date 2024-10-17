@@ -1,9 +1,11 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useState } from 'react';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import { ChatBubbleLeftRightIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { ChatBubbleLeftRightIcon as ChatBubbleLeftRightIconSolid } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-solid';
 
 export type CardActionProps = {
   itemId: string;
@@ -25,8 +27,28 @@ const CardActions: React.FC<CardActionProps> = props => {
     onReflect,
     customStyle = '',
   } = props;
+  const [hovered, setHovered] = useState(false);
   const reflectIconUi = (
-    <Icon icon={<ChatBubbleLeftRightIcon />} disabled={disableActions} accentColor={true} />
+    <Card
+      onMouseEnter={() => {
+        setHovered(true);
+      }}
+      onMouseLeave={() => {
+        setHovered(false);
+      }}
+      type="plain"
+    >
+      {hovered ? (
+        <Icon
+          icon={<ChatBubbleLeftRightIconSolid />}
+          disabled={disableActions}
+          accentColor={true}
+          solid
+        />
+      ) : (
+        <Icon icon={<ChatBubbleLeftRightIcon />} disabled={disableActions} accentColor={true} />
+      )}
+    </Card>
   );
   return (
     <Stack direction="row" align="center" justify="end" spacing="gap-x-2" customStyle={customStyle}>
