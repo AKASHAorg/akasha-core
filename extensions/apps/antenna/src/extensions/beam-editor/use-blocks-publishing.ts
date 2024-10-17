@@ -168,6 +168,7 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
               ]);
             }
             if (data.response && data.response.error) {
+              setIsPublishing(false);
               setBlocksInUse(prevState => [
                 ...prevState.slice(0, idx),
                 { ...block, status: 'error', response: data.response },
@@ -175,23 +176,20 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
               ]);
             }
           } catch (err) {
+            setIsPublishing(false);
             setErrors(prev => [
               ...prev,
               new Error(`Failed to create content blocks: ${err.message}`),
             ]);
-            const data = await block.blockRef.current.createBlock({
-              nsfw: !!blocksWithActiveNsfw.get(idx),
-            });
-            if (data.response) {
-              setBlocksInUse(prev => [
-                ...prev.slice(0, idx),
-                { ...block, status: 'success', response: data.response },
-                ...prev.slice(idx + 1),
-              ]);
-            }
+            setBlocksInUse(prevState => [
+              ...prevState.slice(0, idx),
+              { ...block, status: 'error', response: err.message },
+              ...prevState.slice(idx + 1),
+            ]);
           }
         }
       }
+      setIsPublishing(false);
     },
     [blocksInUse],
   );
