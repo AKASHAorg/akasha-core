@@ -91,12 +91,6 @@ export const TopicRow: React.FC<TopicRowProps> = props => {
         inactiveVariant="secondary"
         loading={isLoading}
         fixedWidth={'w-[7rem]'}
-        hoverColors={{
-          background: { light: 'transparent', dark: 'transparent' },
-          border: { light: 'errorLight', dark: 'errorDark' },
-          text: { light: 'errorLight', dark: 'errorDark' },
-          icon: { light: 'errorLight', dark: 'errorDark' },
-        }}
         onClickActive={() => handleTopicSubscription(tag, false)}
         onClickInactive={() => handleTopicSubscription(tag)}
       />
