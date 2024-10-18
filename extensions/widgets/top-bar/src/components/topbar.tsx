@@ -140,7 +140,8 @@ const Topbar: React.FC<ITopbarProps> = props => {
             color="white"
             background={{ light: 'errorLight', dark: 'errorDark' }}
             borderColor={{ light: 'errorLight', dark: 'errorDark' }}
-            customStyle="w-fit px-2"
+            customStyle="w-fit py-0 px-2"
+            customTextStyle="text-[9px] leading-3"
           />
         </Stack>
       </Button>
