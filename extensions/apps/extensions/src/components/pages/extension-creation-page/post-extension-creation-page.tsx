@@ -31,14 +31,18 @@ export const PostExtensionCreationPage: React.FC<{ extensionId: string }> = ({ e
       appName: '@akashaorg/app-auth-ewa',
       getNavigationUrl: (routes: Record<string, string>) => {
         return `${routes.Connect}?${new URLSearchParams({
-          redirectTo: `${baseRouteName}/${routes[CREATE_EXTENSION]}`,
+          redirectTo: `${baseRouteName}/${routes[CREATE_EXTENSION]}/${extensionId}`,
         }).toString()}`;
       },
     });
   };
 
-  const handleNavigate = () => {
-    navigate({ to: '/my-extensions' });
+  const handleNavigateToEdit = () => {
+    navigate({ to: '/edit-extension/$extensionId/step1', params: { extensionId } });
+  };
+
+  const handleNavigateToReleaseManager = () => {
+    navigate({ to: '/release-manager/$extensionId', params: { extensionId } });
   };
 
   const existingDraftExtensions =
@@ -68,6 +72,7 @@ export const PostExtensionCreationPage: React.FC<{ extensionId: string }> = ({ e
           background={{ light: 'grey9', dark: 'grey3' }}
           customStyle="rounded-[10px]"
           direction="row"
+          align="center"
           spacing="gap-2"
           padding={8}
         >
@@ -85,27 +90,36 @@ export const PostExtensionCreationPage: React.FC<{ extensionId: string }> = ({ e
 
         <Text variant="subtitle2" align="center">
           {t(
-            'You can now edit your app before submitting it for review. Once approved, it will be added to AKASHA World.',
+            `You're almost there!
+You can add more details to your extension, such as a description, gallery & more! You can also manage releases to set it up locally or submit a release when you're ready.`,
           )}
         </Text>
 
-        <Stack direction="column" spacing="gap-2">
-          <Stack direction="row" spacing="gap-1" align="center" justify="center">
-            <Icon
-              icon={<ExclamationTriangleIcon />}
-              size="sm"
-              color={{ light: 'warningLight', dark: 'warningDark' }}
-            />
-            <Text variant="subtitle2">{t('Important Note: ')}</Text>
-          </Stack>
-          <Text variant="subtitle2" align="center">
-            {t(
-              'Extensions that are saved locally will be lost if cache is cleared or if accessed from a different device.',
-            )}
-          </Text>
+        <Stack direction="row" spacing="gap-4">
+          <Button variant="secondary" label={t('Add Details')} onClick={handleNavigateToEdit} />
+          <Button
+            variant="primary"
+            label={t('Manage Releases')}
+            onClick={handleNavigateToReleaseManager}
+          />
         </Stack>
-
-        <Button variant="text" onClick={handleNavigate} label={t('Go to My Extensions')} />
+        <Card background={{ light: 'grey9', dark: 'grey3' }}>
+          <Stack direction="column" spacing="gap-2">
+            <Stack direction="row" spacing="gap-1" align="center" justify="center">
+              <Icon
+                icon={<ExclamationTriangleIcon />}
+                size="sm"
+                color={{ light: 'warningLight', dark: 'warningDark' }}
+              />
+              <Text variant="subtitle2">{t('Important Note: ')}</Text>
+            </Stack>
+            <Text variant="subtitle2" align="center">
+              {t(
+                'Extensions that are saved locally will be lost if cache is cleared or if accessed from a different device.',
+              )}
+            </Text>
+          </Stack>
+        </Card>
       </Stack>
     </Card>
   );
