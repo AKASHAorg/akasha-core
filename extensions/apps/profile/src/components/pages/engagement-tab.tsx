@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useMatchRoute, useNavigate } from '@tanstack/react-router';
 
 export type EngagementTabProps = {
-  profileDID?: string;
+  profileDID: string;
 };
 
 const EngagementTab: React.FC<PropsWithChildren<EngagementTabProps>> = props => {
@@ -17,13 +17,12 @@ const EngagementTab: React.FC<PropsWithChildren<EngagementTabProps>> = props => 
   const matchRoute = useMatchRoute();
 
   const activeTab = useMemo(() => {
-    if (matchRoute({ from: '/$profileDID/followers' })) {
+    if (matchRoute({ to: '/$profileDID/followers', pending: true })) {
       return 0;
     }
-    if (matchRoute({ from: '/$profileDID/following' })) {
+    if (matchRoute({ to: '/$profileDID/following', pending: true })) {
       return 1;
     }
-    return 0;
   }, [matchRoute]);
 
   const onTabChange = (selectedIndex: number) => {

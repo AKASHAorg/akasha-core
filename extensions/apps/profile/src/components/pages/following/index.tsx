@@ -57,7 +57,7 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
     authenticating
   )
     return (
-      <EngagementTab>
+      <EngagementTab profileDID={profileDID}>
         <ProfileEngagementLoading />
       </EngagementTab>
     );

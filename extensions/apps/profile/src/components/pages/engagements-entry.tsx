@@ -2,7 +2,6 @@ import React from 'react';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import FollowProfileButton from '../follow-profile-button';
-import EntryLoading from '@akashaorg/design-system-components/lib/components/ProfileEngagements/placeholders/entry-loading';
 import { AkashaProfile, IModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import { useGetProfileByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { selectProfileData } from '@akashaorg/ui-awf-hooks/lib/selectors/get-profile-by-id-query';
@@ -28,7 +27,7 @@ export const EngagementsEntry: React.FC<EngagementsEntryProps> = props => {
   } = props;
   const { getCorePlugins, navigateToModal } = useRootComponentProps();
 
-  const { data, loading } = useGetProfileByIdQuery({
+  const { data } = useGetProfileByIdQuery({
     fetchPolicy: 'cache-and-network',
     variables: { id: profileID },
     skip: !!profileInfo,
@@ -55,8 +54,6 @@ export const EngagementsEntry: React.FC<EngagementsEntryProps> = props => {
   const profileDID = profileData?.did?.id;
 
   const viewerIsOwner = authenticatedDID === profileDID;
-
-  if (loading) return <EntryLoading />;
 
   return (
     <Stack
