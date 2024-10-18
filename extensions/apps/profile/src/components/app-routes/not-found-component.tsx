@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { useTranslation } from 'react-i18next';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 
 export const NotFoundComponent = (props: { error?: Error; reset?: (key: string) => void }) => {
   const { t } = useTranslation();

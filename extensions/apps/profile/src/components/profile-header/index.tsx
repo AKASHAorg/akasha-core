@@ -21,10 +21,10 @@ import {
   transformSource,
   useValidDid,
   useRootComponentProps,
-  hasOwn,
   useAkashaStore,
 } from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import { selectProfileData } from '@akashaorg/ui-awf-hooks/lib/selectors/get-profile-by-did-query';
 
 type ProfileHeaderProps = {
   profileDID: string;
@@ -47,8 +47,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
     variables: { id: profileDID },
   });
   const { validDid, isEthAddress } = useValidDid(profileDID, !!data?.node);
-  const { akashaProfile: profileData } =
-    data?.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
+  const profileData = selectProfileData(data);
   const showLoginModal = useCallback(
     (redirectTo?: { modal: IModalNavigationOptions }) => {
       navigateToModal({

@@ -184,7 +184,7 @@ export const Header: React.FC<HeaderProps> = ({
       }
       setShowEditImage(true);
     }
-    uploadInputRef.current.value = null;
+    uploadInputRef.current.value = '';
   };
 
   return (

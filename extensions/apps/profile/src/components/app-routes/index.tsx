@@ -2,8 +2,8 @@ import React, { Suspense } from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import InterestsPage from '../pages/interests';
 import EditProfilePage from '../pages/edit-profile';
-import FollowingPage from '../pages/profile-engagement/following-page';
-import FollowersPage from '../pages/profile-engagement/followers-page';
+import FollowingPage from '../pages/following';
+import FollowersPage from '../pages/followers';
 import ProfileInfoPage from '../pages/profile-info';
 import ProfileBeamsPage from '../pages/profile-beams';
 import ProfileHeader from '../profile-header';
@@ -25,7 +25,8 @@ import {
   GetFollowersListByDidDocument,
   GetFollowingListByDidDocument,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { ENGAGEMENTS_PER_PAGE } from '../pages/profile-engagement/types';
+import { FOLLOWERS_PER_PAGE } from '../pages/followers/constants';
+import { FOLLOWING_PER_PAGE } from '../pages/following/constants';
 import { ICreateRouter, IRouterContext } from '@akashaorg/typings/lib/ui';
 import { NotFoundComponent } from './not-found-component';
 
@@ -98,7 +99,7 @@ const followersRoute = createRoute({
       query: GetFollowersListByDidDocument,
       variables: {
         id: params.profileDID,
-        first: ENGAGEMENTS_PER_PAGE,
+        first: FOLLOWERS_PER_PAGE,
       },
     });
   },
@@ -125,7 +126,7 @@ const followingRoute = createRoute({
       query: GetFollowingListByDidDocument,
       variables: {
         id: params.profileDID,
-        first: ENGAGEMENTS_PER_PAGE,
+        first: FOLLOWING_PER_PAGE,
       },
     });
   },

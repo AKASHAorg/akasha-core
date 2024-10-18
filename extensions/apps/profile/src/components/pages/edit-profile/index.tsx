@@ -12,7 +12,7 @@ import {
   useGetProfileByDidSuspenseQuery,
   useUpdateProfileMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { transformSource, hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { transformSource, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useSaveImage } from './use-save-image';
 import { PartialAkashaProfileInput } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import {
@@ -21,6 +21,7 @@ import {
   PublishProfileData,
 } from '@akashaorg/typings/lib/ui';
 import { getAvatarImage, getCoverImage } from './get-profile-images';
+import { selectProfileData } from '@akashaorg/ui-awf-hooks/lib/selectors/get-profile-by-did-query';
 
 type EditProfilePageProps = {
   profileDID: string;
@@ -38,8 +39,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
     variables: { id: profileDID },
   });
 
-  const { akashaProfile: profileData } =
-    data?.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
+  const profileData = selectProfileData(data);
   const background = profileData?.background;
   const avatar = profileData?.avatar;
   const sdk = getSDK();
