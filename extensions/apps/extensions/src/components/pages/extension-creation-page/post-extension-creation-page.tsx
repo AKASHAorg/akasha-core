@@ -31,7 +31,7 @@ export const PostExtensionCreationPage: React.FC<{ extensionId: string }> = ({ e
       appName: '@akashaorg/app-auth-ewa',
       getNavigationUrl: (routes: Record<string, string>) => {
         return `${routes.Connect}?${new URLSearchParams({
-          redirectTo: `${baseRouteName}/${routes[CREATE_EXTENSION]}`,
+          redirectTo: `${baseRouteName}/${routes[CREATE_EXTENSION]}/${extensionId}`,
         }).toString()}`;
       },
     });
@@ -72,6 +72,7 @@ export const PostExtensionCreationPage: React.FC<{ extensionId: string }> = ({ e
           background={{ light: 'grey9', dark: 'grey3' }}
           customStyle="rounded-[10px]"
           direction="row"
+          align="center"
           spacing="gap-2"
           padding={8}
         >
@@ -94,7 +95,7 @@ You can add more details to your extension, such as a description, gallery & mor
           )}
         </Text>
 
-        <Stack direction="row" justify="between">
+        <Stack direction="row" spacing="gap-4">
           <Button variant="secondary" label={t('Add Details')} onClick={handleNavigateToEdit} />
           <Button
             variant="primary"
@@ -102,22 +103,23 @@ You can add more details to your extension, such as a description, gallery & mor
             onClick={handleNavigateToReleaseManager}
           />
         </Stack>
-
-        <Stack direction="column" spacing="gap-2">
-          <Stack direction="row" spacing="gap-1" align="center" justify="center">
-            <Icon
-              icon={<ExclamationTriangleIcon />}
-              size="sm"
-              color={{ light: 'warningLight', dark: 'warningDark' }}
-            />
-            <Text variant="subtitle2">{t('Important Note: ')}</Text>
+        <Card background={{ light: 'grey9', dark: 'grey3' }}>
+          <Stack direction="column" spacing="gap-2">
+            <Stack direction="row" spacing="gap-1" align="center" justify="center">
+              <Icon
+                icon={<ExclamationTriangleIcon />}
+                size="sm"
+                color={{ light: 'warningLight', dark: 'warningDark' }}
+              />
+              <Text variant="subtitle2">{t('Important Note: ')}</Text>
+            </Stack>
+            <Text variant="subtitle2" align="center">
+              {t(
+                'Extensions that are saved locally will be lost if cache is cleared or if accessed from a different device.',
+              )}
+            </Text>
           </Stack>
-          <Text variant="subtitle2" align="center">
-            {t(
-              'Extensions that are saved locally will be lost if cache is cleared or if accessed from a different device.',
-            )}
-          </Text>
-        </Stack>
+        </Card>
       </Stack>
     </Card>
   );
