@@ -30,13 +30,13 @@ export const getExtensionStatus = (
   }
   switch (streamModerationStatus) {
     case null:
-      return ExtensionStatus.Draft;
+      return ExtensionStatus.InReview;
     case AkashaAppsStreamModerationStatus.InReview:
       return ExtensionStatus.InReview;
     case AkashaAppsStreamModerationStatus.Ok:
       return ExtensionStatus.Published;
     default:
-      return ExtensionStatus.Draft;
+      return ExtensionStatus.InReview;
   }
 };
 
@@ -46,8 +46,6 @@ export const getStatusIndicatorStyle = (
 ) => {
   switch (getExtensionStatus(isLocalDraft, streamModerationStatus)) {
     case ExtensionStatus.LocalDraft:
-      return 'bg-grey6';
-    case ExtensionStatus.Draft:
       return 'bg-grey6';
     case ExtensionStatus.Published:
       return 'bg-success';
