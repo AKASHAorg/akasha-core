@@ -14,7 +14,7 @@ import { selectProfileData } from './selectors/get-profile-by-did-query';
 const useProfilesList = (profileDIDs: string[]) => {
   const [profilesData, setProfilesData] = React.useState([]);
 
-  const [profileDataReq] = useGetProfileByDidLazyQuery({
+  const [profileDataReq, { loading, error }] = useGetProfileByDidLazyQuery({
     fetchPolicy: 'cache-and-network',
   });
 
@@ -29,7 +29,7 @@ const useProfilesList = (profileDIDs: string[]) => {
     fetchData();
   }, [profileDIDs, profileDataReq]);
 
-  return { profilesData };
+  return { profilesData, loading, error };
 };
 
 export { useProfilesList };
