@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useEffect, useMemo, useState } from 'react';
+import React, { SyntheticEvent, useEffect, useState } from 'react';
 import * as z from 'zod';
 import { Controller, useWatch } from 'react-hook-form';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
@@ -19,6 +19,8 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import AutoComplete from '@akashaorg/design-system-core/lib/components/AutoComplete';
 
 const MAX_TAGS = 4;
+
+const MIN_TAG_CHARACTERS = 3;
 
 export enum FieldName {
   license = 'license',
@@ -52,7 +54,7 @@ export type ExtensionEditStep3FormProps = {
   defaultValues?: ExtensionEditStep3FormValues;
   handleGetFollowingProfiles?: (query: string) => void;
   followingProfiles?: AkashaProfile[];
-  allFollowingProfiles?: AkashaProfile[];
+  contributorsProfiles?: AkashaProfile[];
   cancelButton: ButtonType;
   nextButton: {
     label: string;
@@ -72,7 +74,7 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
     },
     handleGetFollowingProfiles,
     followingProfiles,
-    allFollowingProfiles,
+    contributorsProfiles,
     transformSource,
     cancelButton,
     nextButton,
@@ -95,7 +97,7 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
     control,
     getValues,
     formState: { errors },
-  } = useForm<ExtensionEditStep3FormValues>({
+  } = useForm<Omit<ExtensionEditStep3FormValues, 'keywords'> & { keywords?: string | string[] }>({
     defaultValues,
     resolver: zodResolver(schema),
     mode: 'onChange',
@@ -114,30 +116,14 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
 
   const licenseValue = useWatch({ control, name: FieldName.license });
 
-  // TODO: this works with one exception, if the user unfollows one of the original contributors
-  // it will not hydrate the form values with it
-  // to fix this a list of original contributor profiles needs to be passed as prop
-  const defaultContributorProfiles = useMemo(() => {
-    return (
-      defaultValues.contributors
-        ?.map(contributorDID => {
-          return allFollowingProfiles?.find(
-            followingProfile => followingProfile.did.id === contributorDID,
-          );
-        })
-        .filter(profile => profile?.id) || []
-    );
-  }, [defaultValues.contributors, allFollowingProfiles]);
-
   const [addedContributors, setAddedContributors] = useState<AkashaProfile[]>(
-    defaultContributorProfiles || [],
+    contributorsProfiles || [],
   );
 
   useEffect(() => {
-    setAddedContributors(defaultContributorProfiles);
-  }, [defaultContributorProfiles]);
+    setAddedContributors(contributorsProfiles);
+  }, [contributorsProfiles]);
 
-  const [query, setQuery] = useState('');
   const [keywords, setKeywords] = useState(new Set(defaultValues.keywords));
 
   const maxTagsSelected = keywords.size >= MAX_TAGS;
@@ -149,14 +135,16 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
     event.preventDefault();
     const formValues = getValues();
 
-    formValues.contributors = addedContributors?.map(profile => profile?.did?.id);
-    formValues.keywords = [...keywords]?.filter(keyword => keyword);
-
     if (formValues.license === Licenses.OTHER) {
       formValues.license = formValues.licenseOther;
     }
+
     if (isValid) {
-      nextButton.handleClick(formValues);
+      nextButton.handleClick({
+        ...formValues,
+        contributors: addedContributors?.map(profile => profile?.did?.id),
+        keywords: [...keywords]?.filter(keyword => keyword),
+      });
     }
   };
 
@@ -222,27 +210,39 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
             <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
               {tagsDescriptionLabel}
             </Text>
-            <AutoComplete
-              value={query}
-              options={availableKeywords}
-              placeholder={addTagsPlaceholderLabel}
-              tags={keywords}
-              separators={['Comma', 'Space', 'Enter']}
-              customStyle="grow mt-2"
-              onSelected={({ index }) => {
-                setKeywords(prev => prev.add(availableKeywords[index]));
-                setQuery('');
+            <Controller
+              control={control}
+              name={FieldName.keywords}
+              render={({ field: { value, onChange }, fieldState: { error } }) => {
+                const errorMessage = error?.message ?? '';
+                return (
+                  <AutoComplete
+                    value={typeof value === 'string' ? value : ''}
+                    options={availableKeywords}
+                    placeholder={addTagsPlaceholderLabel}
+                    tags={keywords}
+                    caption={errorMessage ? errorMessage : ''}
+                    status={errorMessage ? 'error' : null}
+                    separators={['Comma', 'Space', 'Enter']}
+                    customStyle="grow mt-2"
+                    onSelected={({ index }) => {
+                      const newKeyWords = keywords.add(availableKeywords[index]);
+                      onChange([...newKeyWords]);
+                      setKeywords(newKeyWords);
+                    }}
+                    onChange={value => {
+                      onChange(value);
+                      if (Array.isArray(value)) {
+                        if (!errorMessage) setKeywords(new Set(value));
+                      }
+                    }}
+                    disabled={maxTagsSelected}
+                    multiple
+                  />
+                );
               }}
-              onChange={value => {
-                if (typeof value === 'string') {
-                  setQuery(value);
-                  return;
-                }
-                setKeywords(new Set(value));
-              }}
-              disabled={maxTagsSelected}
-              multiple
             />
+
             <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
               {`${keywords.size}/${MAX_TAGS} ${tagsAddedLabel}`}
             </Text>
@@ -282,4 +282,15 @@ export default ExtensionEditStep3Form;
 
 const schema = z.object({
   extensionLicense: z.string(),
+  keywords: z
+    .array(z.string())
+    .optional()
+    .or(
+      z
+        .string()
+        .min(MIN_TAG_CHARACTERS, {
+          message: `Tags must be at least ${MIN_TAG_CHARACTERS} characters long.`,
+        })
+        .or(z.literal('')),
+    ),
 });

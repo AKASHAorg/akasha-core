@@ -5,12 +5,18 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { ArrowPathIcon, CheckIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 
+export enum BlockCreationStatus {
+  PENDING,
+  ERROR,
+  SUCCESS,
+}
+
 export interface IBlockStatusToolbar {
   creatingBlockLabel?: string;
   successLabel?: string;
   errorLabel?: string;
   retryLabel?: string;
-  blockCreationStatus: 'pending' | 'success' | 'error';
+  blockCreationStatus: BlockCreationStatus;
   handleRetry?: () => void;
 }
 
@@ -35,7 +41,7 @@ const BlockStatusToolbar: React.FC<IBlockStatusToolbar> = props => {
     handleRetry,
   } = props;
 
-  if (blockCreationStatus === 'pending') {
+  if (blockCreationStatus === BlockCreationStatus.PENDING) {
     return (
       <Stack direction="row" align="center" spacing="gap-2">
         <Stack
@@ -48,7 +54,7 @@ const BlockStatusToolbar: React.FC<IBlockStatusToolbar> = props => {
         <Text>{creatingBlockLabel}</Text>
       </Stack>
     );
-  } else if (blockCreationStatus === 'success') {
+  } else if (blockCreationStatus === BlockCreationStatus.SUCCESS) {
     return (
       <Stack direction="row" align="center" spacing="gap-2">
         <Stack
@@ -61,7 +67,7 @@ const BlockStatusToolbar: React.FC<IBlockStatusToolbar> = props => {
         <Text color={{ light: 'success', dark: 'success' }}>{successLabel}</Text>
       </Stack>
     );
-  } else if (blockCreationStatus === 'error') {
+  } else if (blockCreationStatus === BlockCreationStatus.ERROR) {
     return (
       <Stack direction="row" align="center" spacing="gap-2">
         <Stack

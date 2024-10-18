@@ -19,7 +19,6 @@ export enum FieldName {
   extensionDisplayName = 'extensionDisplayName',
   extensionLicense = 'extensionLicense',
   extensionLicenseOther = 'extensionLicenseOther',
-  extensionSourceURL = 'extensionSourceURL',
 }
 
 export enum Licenses {
@@ -37,7 +36,6 @@ type AppCreationFormValues = {
   extensionDisplayName: string;
   extensionLicense: Licenses | string;
   extensionLicenseOther: string;
-  extensionSourceURL: string;
 };
 
 export type AppCreationFormProps = {
@@ -48,7 +46,6 @@ export type AppCreationFormProps = {
   extensionTypeFieldLabel?: string;
   extensionLicenseFieldLabel?: string;
   extensionLicenseOtherPlaceholderLabel?: string;
-  extensionSourceURLLabel?: string;
   disclaimerLabel?: string;
   defaultValues?: AppCreationFormValues;
   handleCheckExtName?: (fieldValue: string) => void;
@@ -69,7 +66,6 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
     extensionDisplayName: '',
     extensionLicense: Licenses.MIT,
     extensionLicenseOther: '',
-    extensionSourceURL: '',
   },
   handleCheckExtName,
   isDuplicateExtName,
@@ -83,7 +79,6 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
   extensionLicenseFieldLabel,
   extensionLicenseOtherPlaceholderLabel,
   extensionTypeFieldLabel,
-  extensionSourceURLLabel,
   disclaimerLabel,
 }) => {
   const {
@@ -239,26 +234,7 @@ const AppCreationForm: React.FC<AppCreationFormProps> = ({
               defaultValue=""
             />
           )}
-          <Divider />
-          <Controller
-            control={control}
-            name={FieldName.extensionSourceURL}
-            render={({ field: { name, value, onChange, ref }, fieldState: { error } }) => (
-              <TextField
-                id={name}
-                type="text"
-                name={name}
-                label={extensionSourceURLLabel}
-                placeholder="https://localhost:"
-                value={value}
-                caption={error?.message}
-                status={error?.message ? 'error' : null}
-                onChange={onChange}
-                inputRef={ref}
-                required={true}
-              />
-            )}
-          />
+
           <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
             {disclaimerLabel}
           </Text>
@@ -307,5 +283,4 @@ const schema = z.object({
     .max(24, { message: 'Must be maximum 24 characters' }),
   extensionLicense: z.string(),
   extensionLicenseOther: z.string().trim().min(3, { message: 'Must be at least 3 characters' }),
-  extensionSourceURL: z.string().url({ message: 'URL is required' }),
 });
