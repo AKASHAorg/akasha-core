@@ -79,7 +79,11 @@ export const PostPublishPage: React.FC<PostPublishPageProps> = ({ type, extensio
           bodyVariant="body1"
           assetName="under-review"
         />
-        <Button variant="text" onClick={handleNavigate} label={t('Go to My Extensions')} />
+        <Button
+          variant="text"
+          onClick={handleNavigate}
+          label={type === 'extension' ? t('Go to My Extensions') : t('Go to Release Manager')}
+        />
       </Stack>
     </Card>
   );

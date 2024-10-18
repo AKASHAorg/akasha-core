@@ -136,6 +136,8 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
       first: 10,
       sorting: { createdAt: SortOrder.Desc },
     },
+    fetchPolicy: 'cache-first',
+    notifyOnNetworkStatusChange: true,
     skip: !authenticatedDID,
   });
   const appsList = useMemo(() => {

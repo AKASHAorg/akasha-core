@@ -75,6 +75,8 @@ export const ExtensionCreationPage: React.FC<unknown> = () => {
       first: 1,
       filters: { where: { name: { equalTo: currentExtName } } },
     },
+    fetchPolicy: 'cache-first',
+    notifyOnNetworkStatusChange: true,
     skip: !currentExtName,
   });
 

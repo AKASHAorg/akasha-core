@@ -84,7 +84,11 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
     data: appsByIdReq,
     loading: loadingAppsByIdQuery,
     error: appsByIdError,
-  } = useGetAppsByIdQuery({ variables: { id: extensionId } });
+  } = useGetAppsByIdQuery({
+    variables: { id: extensionId },
+    fetchPolicy: 'cache-first',
+    notifyOnNetworkStatusChange: true,
+  });
 
   const publishedAppData = appsByIdReq?.node;
 
@@ -116,6 +120,8 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
       filters: { where: { applicationID: { equalTo: extensionId } } },
       sorting: { createdAt: SortOrder.Desc },
     },
+    fetchPolicy: 'cache-first',
+    notifyOnNetworkStatusChange: true,
   });
 
   const appReleases = selectAppsReleases(appsReleasesReq);

@@ -9,7 +9,6 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Menu from '@akashaorg/design-system-core/lib/components/Menu';
 
 import {
-  ClockIcon,
   EyeIcon,
   PaperAirplaneIcon,
   PencilIcon,
@@ -45,6 +44,7 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
   const sdk = React.useRef(getSDK());
 
   const { navigateToModal } = useRootComponentProps();
+
   const navigate = useNavigate();
 
   const { data: appStreamReq } = useGetAppsStreamQuery({
@@ -59,6 +59,8 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
         },
       },
     },
+    fetchPolicy: 'cache-first',
+    notifyOnNetworkStatusChange: true,
     skip:
       !extensionData?.id ||
       !extensionData?.id?.trim() ||
@@ -104,14 +106,20 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
       case ExtensionStatus.InReview:
         return [
           {
-            label: t('Check status'),
-            icon: <ClockIcon />,
-            onClick: () => {},
+            label: t('Edit Extension'),
+            icon: <PencilIcon />,
+            onClick: handleExtensionEdit,
           },
           {
             label: t('Release Manager'),
             icon: <RectangleStackIcon />,
             onClick: handleReleaseManager,
+          },
+          {
+            label: t('Delete Extension'),
+            icon: <TrashIcon />,
+            onClick: handleExtensionRemove,
+            color: { light: 'errorLight', dark: 'errorDark' },
           },
         ];
       case ExtensionStatus.Published:
@@ -163,25 +171,6 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
             color: { light: 'errorLight', dark: 'errorDark' },
           },
         ];
-      case ExtensionStatus.Draft:
-        return [
-          {
-            label: t('Edit Extension'),
-            icon: <PencilIcon />,
-            onClick: handleExtensionEdit,
-          },
-          {
-            label: t('Release Manager'),
-            icon: <RectangleStackIcon />,
-            onClick: handleReleaseManager,
-          },
-          {
-            label: t('Delete Extension'),
-            icon: <TrashIcon />,
-            onClick: handleExtensionRemove,
-            color: { light: 'errorLight', dark: 'errorDark' },
-          },
-        ];
       default:
         return [];
     }
@@ -206,13 +195,13 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
       {showElement() && (
         <Stack spacing="gap-y-4">
           <Stack direction="row" justify="between" spacing="gap-x-8" fullWidth>
-            <Stack direction="row" spacing="gap-x-3" customStyle="max-h-[60px] w-[80%]">
+            <Stack direction="row" spacing="gap-x-3" customStyle="max-h-[60px] w-[60%]">
               <AppAvatar
                 appType={extensionData?.applicationType}
                 avatar={transformSource(extensionData?.logoImage)}
                 extensionId={extensionData?.id}
               />
-              <Stack direction="column" justify="between" customStyle="min-w-0" fullWidth>
+              <Stack direction="column" justify="between" customStyle="w-0 min-w-full">
                 <Stack direction="row" spacing="gap-2">
                   <Text variant="button-sm" truncate>
                     {extensionData?.name}

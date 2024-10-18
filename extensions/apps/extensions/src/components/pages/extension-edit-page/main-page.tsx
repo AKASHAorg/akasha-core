@@ -50,7 +50,6 @@ export const ExtensionEditMainPage: React.FC<ExtensionEditMainPageProps> = ({ ex
         extensionId,
         {
           lastCompletedStep: 0,
-          sourceURL: '',
           name: '',
           displayName: '',
           logoImage: { src: '' },

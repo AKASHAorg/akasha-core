@@ -62,7 +62,11 @@ export const ExtensionReleaseInfoPage: React.FC<ExtensionReleaseInfoPageProps> =
     data: appsByIdReq,
     loading: loadingAppsByIdQuery,
     error: appsByIdError,
-  } = useGetAppsByIdQuery({ variables: { id: extensionId } });
+  } = useGetAppsByIdQuery({
+    variables: { id: extensionId },
+    fetchPolicy: 'cache-first',
+    notifyOnNetworkStatusChange: true,
+  });
 
   const publishedAppData = appsByIdReq?.node;
 
@@ -77,7 +81,11 @@ export const ExtensionReleaseInfoPage: React.FC<ExtensionReleaseInfoPageProps> =
     data: releaseByIdReq,
     loading: loadingReleaseByIdQuery,
     error: releaseByIdError,
-  } = useGetAppReleaseByIdQuery({ variables: { id: releaseId } });
+  } = useGetAppReleaseByIdQuery({
+    variables: { id: releaseId },
+    fetchPolicy: 'cache-first',
+    notifyOnNetworkStatusChange: true,
+  });
 
   const releaseData = useMemo(() => {
     if (releaseByIdReq?.node && 'id' in releaseByIdReq.node) {
