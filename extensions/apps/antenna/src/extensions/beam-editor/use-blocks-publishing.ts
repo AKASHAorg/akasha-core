@@ -9,6 +9,7 @@ import type { AkashaBeamInput } from '@akashaorg/typings/lib/sdk/graphql-types-n
 import { useCreateBeamMutation } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import getSDK from '@akashaorg/core-sdk';
 import type { CreateBeamMutation } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
+import { BlockCreationStatus } from '@akashaorg/design-system-components/lib/components/BlockStatusToolbar';
 
 /**
  * Steps when publishBeam is called:
@@ -23,9 +24,11 @@ import type { CreateBeamMutation } from '@akashaorg/typings/lib/sdk/graphql-oper
 const DEFAULT_TEXT_BLOCK = 'slate-block';
 const MAX_ALLOWED_BLOCKS = 10;
 const MAX_ALLOWED_TAGS = 10;
+
 export type UseBlocksPublishingProps = {
   onComplete?: (beamData: CreateBeamMutation['createAkashaBeam']) => void;
 };
+
 export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
   const { onComplete } = props;
   const [availableBlocks, setAvailableBlocks] = React.useState([]);
@@ -55,7 +58,7 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
       appName: string;
       blockRef: React.RefObject<BlockInstanceMethods>;
       key: number;
-      status?: 'success' | 'pending' | 'error';
+      status?: BlockCreationStatus;
       response?: { blockID: string; error?: string };
       disablePublish?: boolean;
     })[]
@@ -102,7 +105,7 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
 
   React.useEffect(() => {
     if (!blocksInUse.length) return;
-    if (blocksInUse.every(bl => bl.status === 'success') && appInfo) {
+    if (blocksInUse.every(bl => bl.status === BlockCreationStatus.SUCCESS) && appInfo) {
       const tagLabelType = sdk.current.services.gql.labelTypes.TAG;
       const tags = editorTags.map(tagName => {
         return {
@@ -150,10 +153,15 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
       setIsNsfw(nsfw);
       setEditorTags(editorTags);
       for (const [idx, block] of blocksInUse.entries()) {
-        if (!block.status) {
+        /**
+         * attempt/re-attempt block creation if:
+         * the status has not yet been defined
+         * or the block creation failed (status === 'error)
+         */
+        if (!block.status || block.status === BlockCreationStatus.ERROR) {
           setBlocksInUse(prev => [
             ...prev.slice(0, idx),
-            { ...block, status: 'pending' },
+            { ...block, status: BlockCreationStatus.PENDING },
             ...prev.slice(idx + 1),
           ]);
           try {
@@ -163,35 +171,33 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
             if (data.response && data.response.blockID) {
               setBlocksInUse(prev => [
                 ...prev.slice(0, idx),
-                { ...block, status: 'success', response: data.response },
+                { ...block, status: BlockCreationStatus.SUCCESS, response: data.response },
                 ...prev.slice(idx + 1),
               ]);
             }
             if (data.response && data.response.error) {
+              setIsPublishing(false);
               setBlocksInUse(prevState => [
                 ...prevState.slice(0, idx),
-                { ...block, status: 'error', response: data.response },
+                { ...block, status: BlockCreationStatus.ERROR, response: data.response },
                 ...prevState.slice(idx + 1),
               ]);
             }
           } catch (err) {
+            setIsPublishing(false);
             setErrors(prev => [
               ...prev,
               new Error(`Failed to create content blocks: ${err.message}`),
             ]);
-            const data = await block.blockRef.current.createBlock({
-              nsfw: !!blocksWithActiveNsfw.get(idx),
-            });
-            if (data.response) {
-              setBlocksInUse(prev => [
-                ...prev.slice(0, idx),
-                { ...block, status: 'success', response: data.response },
-                ...prev.slice(idx + 1),
-              ]);
-            }
+            setBlocksInUse(prevState => [
+              ...prevState.slice(0, idx),
+              { ...block, status: BlockCreationStatus.ERROR, response: err.message },
+              ...prevState.slice(idx + 1),
+            ]);
           }
         }
       }
+      setIsPublishing(false);
     },
     [blocksInUse],
   );
