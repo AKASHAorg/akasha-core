@@ -113,8 +113,16 @@ const AutoComplete: React.FC<AutoCompleteProps> = props => {
         caption={caption}
         status={status}
         onChange={event => {
+          const value = event.target.value;
+          /*
+           ** On Mac there is 'add period with double-space' setting that adds dot while hitting space in split second difference.
+           ** If it occurs then do nothing.
+           **/
+          if (separators.includes('Space') && value.endsWith('. ')) {
+            return;
+          }
           setShowSuggestions(true);
-          if (onChange) onChange(event.target.value);
+          if (onChange) onChange(value);
         }}
         onFocus={() => {
           setShowSuggestions(true);
@@ -122,7 +130,7 @@ const AutoComplete: React.FC<AutoCompleteProps> = props => {
         onKeyDown={event => {
           if (multiple) {
             if (isSeparator(event.code, separators)) {
-              if (value) {
+              if (value && status !== 'error') {
                 if (onChange) onChange('');
                 updateTag(value);
                 setShowSuggestions(false);
