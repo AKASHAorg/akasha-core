@@ -10,11 +10,12 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 
-type PostSubmitPageProps = {
+type PostPublishPageProps = {
   type: 'extension' | 'release';
+  extensionId: string;
 };
 
-export const PostSubmitPage: React.FC<PostSubmitPageProps> = ({ type }) => {
+export const PostPublishPage: React.FC<PostPublishPageProps> = ({ type, extensionId }) => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
 
@@ -38,7 +39,11 @@ export const PostSubmitPage: React.FC<PostSubmitPageProps> = ({ type }) => {
   };
 
   const handleNavigate = () => {
-    navigate({ to: '/my-extensions' });
+    if (type === 'extension') {
+      navigate({ to: '/my-extensions' });
+    } else if (type === 'release') {
+      navigate({ to: '/release-manager/$extensionId', params: { extensionId } });
+    }
   };
 
   if (!authenticatedDID) {
@@ -57,21 +62,28 @@ export const PostSubmitPage: React.FC<PostSubmitPageProps> = ({ type }) => {
     <Card padding="py-6 px-4">
       <Stack spacing="gap-y-8" align="center">
         <Text variant="h5" weight="semibold" align="center">
-          {type === 'extension' && t('Extension Submitted')}
-          {type === 'release' && t('Release Submitted')}
+          {type === 'extension' && t('Extension Published')}
+          {type === 'release' && t('Release Published')}
         </Text>
         <InfoCard
           bodyLabel={
             <>
-              {t(
-                'Your submission is under review, this process might take sometime to ensure that your extension doesn’t violate our Code of Conduct.',
-              )}
+              {type === 'extension' &&
+                t(
+                  'Your submission is under review, this process might take sometime to ensure that your extension doesn’t violate our Code of Conduct.',
+                )}
+              {type === 'release' &&
+                t('Your extension has been successfully updated with the latest release!')}
             </>
           }
           bodyVariant="body1"
           assetName="under-review"
         />
-        <Button variant="text" onClick={handleNavigate} label={t('Go to My Extensions')} />
+        <Button
+          variant="text"
+          onClick={handleNavigate}
+          label={type === 'extension' ? t('Go to My Extensions') : t('Go to Release Manager')}
+        />
       </Stack>
     </Card>
   );

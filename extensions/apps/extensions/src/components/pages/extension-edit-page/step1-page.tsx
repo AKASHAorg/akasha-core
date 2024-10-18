@@ -87,6 +87,8 @@ export const ExtensionEditStep1Page: React.FC<ExtensionEditStep1PageProps> = ({ 
       first: 1,
       filters: { where: { name: { equalTo: currentExtName } } },
     },
+    fetchPolicy: 'cache-first',
+    notifyOnNetworkStatusChange: true,
     skip: !currentExtName,
   });
 
@@ -117,8 +119,6 @@ export const ExtensionEditStep1Page: React.FC<ExtensionEditStep1PageProps> = ({ 
       <ExtensionEditStep1Form
         extensionIdLabel={t('Extension ID')}
         extensionDisplayNameLabel={t('Extension Display Name')}
-        sourceLabel={t('Source URL')}
-        sourcePlaceholderLabel={t('web server URL')}
         defaultValues={formDefault}
         extensionType={extensionData?.applicationType}
         header={{

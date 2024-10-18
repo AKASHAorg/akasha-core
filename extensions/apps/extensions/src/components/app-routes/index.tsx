@@ -26,9 +26,14 @@ import {
   ExtensionEditStep2Page,
   ExtensionEditStep3Page,
 } from '../pages/extension-edit-page';
-import { ExtensionSubmitPage } from '../pages/extension-submit-page';
-import { ExtensionReleaseSubmitPage } from '../pages/release-submit-page';
-import { PostSubmitPage } from '../pages/post-submit-page';
+import { ExtensionPublishPage } from '../pages/extension-publish-page';
+import {
+  ExtensionReleaseManagerPage,
+  EditTestReleasePage,
+  ExtensionReleasePublishPage,
+  ExtensionReleaseInfoPage,
+} from '../pages/extension-release-manager';
+import { PostPublishPage } from '../pages/post-publish-page';
 import {
   DevInfoPage,
   CollaboratorsPage,
@@ -37,7 +42,6 @@ import {
   AuditLogPage,
   PermissionsPage,
   LicensePage,
-  ContactSupportPage,
   AppDescriptionPage,
 } from '../pages/info-page/sub-pages';
 
@@ -359,35 +363,83 @@ const extensionEditStep3Route = createRoute({
   },
 });
 
-const extensionSubmitRoute = createRoute({
+const extensionPublishRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: `/submit-extension/$extensionId`,
+  path: `/publish-extension/$extensionId`,
   notFoundComponent: () => <NotFoundComponent />,
   component: () => {
-    const { extensionId } = extensionSubmitRoute.useParams();
+    const { extensionId } = extensionPublishRoute.useParams();
     return (
       <CatchBoundary
-        getResetKey={() => 'submit_extension_reset'}
+        getResetKey={() => 'publish_extension_reset'}
         errorComponent={RouteErrorComponent}
       >
-        <ExtensionSubmitPage extensionId={extensionId} />
+        <ExtensionPublishPage extensionId={extensionId} />
       </CatchBoundary>
     );
   },
 });
 
-const extensionReleaseSubmitRoute = createRoute({
+const extensionReleaseManagerRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: `/submit-release/$extensionId`,
+  path: `/release-manager/$extensionId`,
   notFoundComponent: () => <NotFoundComponent />,
   component: () => {
-    const { extensionId } = extensionReleaseSubmitRoute.useParams();
+    const { extensionId } = extensionReleaseManagerRoute.useParams();
     return (
       <CatchBoundary
-        getResetKey={() => 'submit_release_reset'}
+        getResetKey={() => 'release_manager_reset'}
         errorComponent={RouteErrorComponent}
       >
-        <ExtensionReleaseSubmitPage extensionId={extensionId} />
+        <ExtensionReleaseManagerPage extensionId={extensionId} />
+      </CatchBoundary>
+    );
+  },
+});
+
+const releasePublishRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: `/release-manager/$extensionId/publish-release`,
+  notFoundComponent: () => <NotFoundComponent />,
+  component: () => {
+    const { extensionId } = releasePublishRoute.useParams();
+    return (
+      <CatchBoundary
+        getResetKey={() => 'publish_release_reset'}
+        errorComponent={RouteErrorComponent}
+      >
+        <ExtensionReleasePublishPage extensionId={extensionId} />
+      </CatchBoundary>
+    );
+  },
+});
+
+const editTestReleaseRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: `/release-manager/$extensionId/edit-test-release`,
+  notFoundComponent: () => <NotFoundComponent />,
+  component: () => {
+    const { extensionId } = editTestReleaseRoute.useParams();
+    return (
+      <CatchBoundary
+        getResetKey={() => 'edit_test_release_reset'}
+        errorComponent={RouteErrorComponent}
+      >
+        <EditTestReleasePage extensionId={extensionId} />
+      </CatchBoundary>
+    );
+  },
+});
+
+const releaseInfoRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: `/release-manager/$extensionId/release-info/$releaseId`,
+  notFoundComponent: () => <NotFoundComponent />,
+  component: () => {
+    const { extensionId, releaseId } = releaseInfoRoute.useParams();
+    return (
+      <CatchBoundary getResetKey={() => 'release_info_reset'} errorComponent={RouteErrorComponent}>
+        <ExtensionReleaseInfoPage extensionId={extensionId} releaseId={releaseId} />
       </CatchBoundary>
     );
   },
@@ -400,21 +452,19 @@ export enum SubmitType {
   RELEASE = 'release',
 }
 
-const postSubmitRoute = createRoute({
+const postPublishRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: `/post-submit`,
+  path: `/post-publish/$extensionId`,
   notFoundComponent: () => <NotFoundComponent />,
   validateSearch: (search: Record<string, unknown>): SubmitSearch => {
     return { type: search.type as SubmitType };
   },
   component: () => {
-    const from = postSubmitRoute.useSearch();
+    const from = postPublishRoute.useSearch();
+    const { extensionId } = postPublishRoute.useParams();
     return (
-      <CatchBoundary
-        getResetKey={() => 'submit_extension_reset'}
-        errorComponent={RouteErrorComponent}
-      >
-        <PostSubmitPage type={from.type} />
+      <CatchBoundary getResetKey={() => 'post_publish_reset'} errorComponent={RouteErrorComponent}>
+        <PostPublishPage type={from.type} extensionId={extensionId} />
       </CatchBoundary>
     );
   },
@@ -450,9 +500,12 @@ const routeTree = rootRoute.addChildren([
     extensionEditStep2Route,
     extensionEditStep3Route,
   ]),
-  extensionSubmitRoute,
-  extensionReleaseSubmitRoute,
-  postSubmitRoute,
+  extensionPublishRoute,
+  extensionReleaseManagerRoute,
+  releasePublishRoute,
+  editTestReleaseRoute,
+  releaseInfoRoute,
+  postPublishRoute,
 ]);
 
 export const router = ({ baseRouteName, apolloClient }: ICreateRouter) =>

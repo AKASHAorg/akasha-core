@@ -16,18 +16,18 @@ export enum FieldName {
   sourceURL = 'sourceURL',
 }
 
-export type ExtensionReleaseSubmitValues = {
+export type ExtensionReleasePublishValues = {
   versionNumber?: string;
   description?: string;
   sourceURL?: string;
 };
 
-export type ExtensionReleaseSubmitProps = {
-  defaultValues?: ExtensionReleaseSubmitValues;
+export type ExtensionReleasePublishProps = {
+  defaultValues?: ExtensionReleasePublishValues;
   cancelButton: ButtonType;
   nextButton: {
     label: string;
-    handleClick: (data: ExtensionReleaseSubmitValues) => void;
+    handleClick: (data: ExtensionReleasePublishValues) => void;
   };
   versionNumberLabel?: string;
   descriptionFieldLabel?: string;
@@ -35,9 +35,11 @@ export type ExtensionReleaseSubmitProps = {
   sourceURLFieldLabel?: string;
   sourceURLPlaceholderLabel?: string;
   loading?: boolean;
+  requireVersionNumber?: boolean;
+  requireDescription?: boolean;
 };
 
-const ExtensionReleaseSubmit: React.FC<ExtensionReleaseSubmitProps> = props => {
+const ExtensionReleasePublish: React.FC<ExtensionReleasePublishProps> = props => {
   const {
     defaultValues = {
       versionNumber: '',
@@ -52,22 +54,21 @@ const ExtensionReleaseSubmit: React.FC<ExtensionReleaseSubmitProps> = props => {
     sourceURLFieldLabel,
     sourceURLPlaceholderLabel,
     loading,
+    requireVersionNumber,
+    requireDescription,
   } = props;
 
   const {
     control,
     getValues,
     formState: { errors, dirtyFields },
-  } = useForm<ExtensionReleaseSubmitValues>({
+  } = useForm<ExtensionReleasePublishValues>({
     defaultValues,
     resolver: zodResolver(schema),
     mode: 'onChange',
   });
 
-  const isFormDirty =
-    Object.keys(dirtyFields).includes(FieldName.versionNumber) &&
-    Object.keys(dirtyFields).includes(FieldName.description) &&
-    Object.keys(dirtyFields).includes(FieldName.sourceURL);
+  const isFormDirty = Object.keys(dirtyFields).includes(FieldName.sourceURL);
 
   const isValid = !Object.keys(errors).length;
 
@@ -100,7 +101,7 @@ const ExtensionReleaseSubmit: React.FC<ExtensionReleaseSubmitProps> = props => {
                 status={error?.message ? 'error' : null}
                 onChange={onChange}
                 inputRef={ref}
-                required={true}
+                required={requireVersionNumber}
               />
             )}
             defaultValue={defaultValues.versionNumber}
@@ -122,7 +123,7 @@ const ExtensionReleaseSubmit: React.FC<ExtensionReleaseSubmitProps> = props => {
                 inputRef={ref}
                 type="multiline"
                 maxLength={2000}
-                required={true}
+                required={requireDescription}
               />
             )}
             defaultValue={defaultValues.description}
@@ -172,7 +173,7 @@ const ExtensionReleaseSubmit: React.FC<ExtensionReleaseSubmitProps> = props => {
   );
 };
 
-export default ExtensionReleaseSubmit;
+export default ExtensionReleasePublish;
 
 const schema = z.object({
   versionNumber: z.string(),

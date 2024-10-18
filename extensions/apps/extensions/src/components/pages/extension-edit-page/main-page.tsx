@@ -50,7 +50,6 @@ export const ExtensionEditMainPage: React.FC<ExtensionEditMainPageProps> = ({ ex
         extensionId,
         {
           lastCompletedStep: 0,
-          sourceURL: '',
           name: '',
           displayName: '',
           logoImage: { src: '' },
@@ -75,7 +74,7 @@ export const ExtensionEditMainPage: React.FC<ExtensionEditMainPageProps> = ({ ex
       appName: '@akashaorg/app-auth-ewa',
       getNavigationUrl: (routes: Record<string, string>) => {
         return `${routes.Connect}?${new URLSearchParams({
-          redirectTo: `${baseRouteName}/${appRoutes[EDIT_EXTENSION]}/${extensionId}`,
+          redirectTo: `${baseRouteName}/${appRoutes[EDIT_EXTENSION]}/${extensionId}/step1`,
         }).toString()}`;
       },
     });
