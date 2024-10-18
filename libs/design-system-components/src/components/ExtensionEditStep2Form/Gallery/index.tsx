@@ -82,7 +82,10 @@ export const Gallery: React.FC<GalleryProps> = props => {
         ref={uploadInputRef}
         type="file"
         accept="image/png, image/jpeg, image/webp"
-        onChange={e => handleImageUpload(e.target.files[0])}
+        onChange={e => {
+          handleImageUpload(e.target.files[0]);
+          uploadInputRef.current.value = null;
+        }}
         hidden
       />
     </Stack>
