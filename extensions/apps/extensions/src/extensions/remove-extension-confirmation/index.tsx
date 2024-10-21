@@ -14,7 +14,7 @@ import { I18nextProvider, useTranslation } from 'react-i18next';
 import { useUpdateAppMutation } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import getSDK from '@akashaorg/core-sdk';
-import { DRAFT_EXTENSIONS } from '../../constants';
+import { DRAFT_EXTENSIONS, DRAFT_RELEASES } from '../../constants';
 
 const Component: React.FC<IRootExtensionProps> = () => {
   const sdk = getSDK();
@@ -32,23 +32,47 @@ const Component: React.FC<IRootExtensionProps> = () => {
     window.history.replaceState(null, null, location.pathname);
   }, []);
 
-  const existingDraftExtensions: Extension[] = useMemo(
-    () => JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [],
-    [authenticatedDID],
-  );
+  const draftExtensions: Extension[] = useMemo(() => {
+    try {
+      return JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [];
+    } catch (error) {
+      // @TODO: err handling
+      console.error(error);
+    }
+  }, [authenticatedDID]);
+
+  const draftReleases = useMemo(() => {
+    try {
+      return JSON.parse(localStorage.getItem(`${DRAFT_RELEASES}-${authenticatedDID}`)) || [];
+    } catch (error) {
+      // @TODO: err handling
+      console.error(error);
+    }
+  }, [authenticatedDID]);
+
+  const clearExtensionLocalRelease = () => {
+    const newLocalDraftReleases = draftReleases.filter(
+      draftRelease => draftRelease.applicationID !== modalData['extensionId'],
+    );
+    localStorage.setItem(
+      `${DRAFT_RELEASES}-${authenticatedDID}`,
+      JSON.stringify(newLocalDraftReleases),
+    );
+  };
 
   const handleRemoveDraft = () => {
-    const newDraftExtensions = existingDraftExtensions.filter(
+    const newDraftExtensions = draftExtensions.filter(
       draftExt => draftExt.id !== modalData['extensionId'],
     );
     localStorage.setItem(
       `${DRAFT_EXTENSIONS}-${authenticatedDID}`,
       JSON.stringify(newDraftExtensions),
     );
+    clearExtensionLocalRelease();
     handleModalClose();
   };
   const handleRemove = () => {
-    if (existingDraftExtensions.some(ext => ext.id === modalData['extensionId'])) {
+    if (draftExtensions.some(ext => ext.id === modalData['extensionId'])) {
       handleRemoveDraft();
     } else {
       updateApp({
@@ -62,7 +86,11 @@ const Component: React.FC<IRootExtensionProps> = () => {
           },
         },
       })
-        .then(() => handleModalClose())
+        .then(() => {
+          clearExtensionLocalRelease();
+          handleModalClose();
+        })
+        // @TODO: err handling
         .catch(err => console.error(err));
     }
   };

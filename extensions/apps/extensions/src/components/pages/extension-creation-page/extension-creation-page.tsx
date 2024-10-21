@@ -8,7 +8,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import AppCreationForm from '@akashaorg/design-system-components/lib/components/AppCreationForm';
-import { DRAFT_EXTENSIONS } from '../../../constants';
+import { DRAFT_EXTENSIONS, DRAFT_RELEASES } from '../../../constants';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { Extension, NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
@@ -56,6 +56,14 @@ export const ExtensionCreationPage: React.FC<unknown> = () => {
     }
   }, [authenticatedDID, showErrorNotification]);
 
+  const draftReleases = useMemo(() => {
+    try {
+      return JSON.parse(localStorage.getItem(`${DRAFT_RELEASES}-${authenticatedDID}`)) || [];
+    } catch (error) {
+      showErrorNotification(error);
+    }
+  }, [authenticatedDID, showErrorNotification]);
+
   const [currentExtName, setCurrentExtName] = useState('');
 
   const {
@@ -67,6 +75,8 @@ export const ExtensionCreationPage: React.FC<unknown> = () => {
       first: 1,
       filters: { where: { name: { equalTo: currentExtName } } },
     },
+    fetchPolicy: 'cache-first',
+    notifyOnNetworkStatusChange: true,
     skip: !currentExtName,
   });
 
@@ -115,9 +125,8 @@ export const ExtensionCreationPage: React.FC<unknown> = () => {
             extensionLicenseFieldLabel={t('Extension License')}
             extensionLicenseOtherPlaceholderLabel={t('Please specify your license type')}
             extensionTypeFieldLabel={t('Extension Type')}
-            extensionSourceURLLabel={t('Source URL')}
             disclaimerLabel={t(
-              `Don't worry if you don't have all the information now. You can add or edit all details later when submitting or editing the app.`,
+              `📝 You can modify or update any details later when editing the extension.`,
             )}
             handleCheckExtName={handleCheckExtName}
             isDuplicateExtName={isDuplicateLocalExtName || isDuplicatePublishedExtName}
@@ -134,8 +143,9 @@ export const ExtensionCreationPage: React.FC<unknown> = () => {
             createButton={{
               label: t('Create locally'),
               handleClick: data => {
+                const extensionId = crypto.randomUUID();
                 const newExtension = {
-                  id: crypto.randomUUID(),
+                  id: extensionId,
                   applicationType: data?.extensionType,
                   createdAt: new Date().toISOString(),
                   description: '',
@@ -143,12 +153,23 @@ export const ExtensionCreationPage: React.FC<unknown> = () => {
                   license: data?.extensionLicense,
                   name: data?.extensionID,
                   localDraft: true,
-                  sourceURL: data?.extensionSourceURL,
                 };
 
                 localStorage.setItem(
                   `${DRAFT_EXTENSIONS}-${authenticatedDID}`,
                   JSON.stringify([...draftExtensions, newExtension]),
+                );
+
+                const newRelease = {
+                  applicationID: extensionId,
+                  version: '0.0.1',
+                  description: 'Introduced the core functionality allowing developer to test.',
+                  source: '',
+                };
+
+                localStorage.setItem(
+                  `${DRAFT_RELEASES}-${authenticatedDID}`,
+                  JSON.stringify([...draftReleases, newRelease]),
                 );
 
                 navigate({

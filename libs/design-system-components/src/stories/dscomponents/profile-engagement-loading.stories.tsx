@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import ProfileEngagementLoading from '../../components/ProfileEngagements/placeholders/profile-engagement-loading';
+import ProfileEngagementLoading from '../../components/Profile/placeholders/profile-engagement-loading';
 
 ProfileEngagementLoading.displayName = 'ProfileEngagementLoading';
 

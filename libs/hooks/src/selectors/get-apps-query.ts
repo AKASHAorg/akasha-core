@@ -40,3 +40,31 @@ export const selectLatestRelease = (data: GetAppsQuery) => {
     return releases[0];
   }
 };
+
+export const selectExtensionDescription = (data: GetAppsQuery) => {
+  return selectAkashaApp(data)?.description;
+};
+
+export const selectExtensionLicense = (data: GetAppsQuery) => {
+  return selectAkashaApp(data)?.license;
+};
+
+export const selectExtensionLogo = (data: GetAppsQuery) => {
+  return selectAkashaApp(data)?.logoImage;
+};
+
+export const selectExtensionName = (data: GetAppsQuery) => {
+  return selectAkashaApp(data)?.name;
+};
+
+export const selectExtensionDisplayName = (data: GetAppsQuery) => {
+  return selectAkashaApp(data)?.displayName;
+};
+
+export const selectExtensionType = (data: GetAppsQuery) => {
+  return selectAkashaApp(data)?.applicationType;
+};
+
+export const selectExtensionCollaborators = (data: GetAppsQuery) => {
+  return selectAkashaApp(data)?.contributors;
+};

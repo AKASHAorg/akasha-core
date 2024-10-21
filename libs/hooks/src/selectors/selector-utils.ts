@@ -6,3 +6,9 @@ export const isNodeWithId = <T extends { node?: { id?: string } }>(
 ): data is T & { node: NotEmpty<NonNullable<T['node']>> } => {
   return !!data?.node && typeof data.node === 'object' && 'id' in data.node;
 };
+
+export const isNodeWithIsViewer = <T extends { node?: { isViewer?: boolean } }>(
+  data: T,
+): data is T & { node: NotEmpty<NonNullable<T['node']>> } => {
+  return !!data?.node && typeof data.node === 'object' && 'isViewer' in data.node;
+};

@@ -34,11 +34,11 @@ export type DynamicInfiniteScrollProps = {
   customStyle?: string;
   header?: ReactElement;
   dataTestId?: string;
-  onLoadMore: () => Promise<unknown>;
+  onLoadMore: () => Promise<unknown> | void;
   children: (item: DynamicInfiniteScrollItem) => ReactElement;
 };
 
-//@TODO: merge with InfiniteScroll component and move to design system core
+//@todo rename component to InfiniteScroll and create a storybook for it
 const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollProps> = props => {
   const {
     count,

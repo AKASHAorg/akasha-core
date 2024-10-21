@@ -298,7 +298,7 @@ export const ImageEditorBlock = (
         size: uploadedImage?.size,
       },
     ]);
-    uploadInputRef.current.value = null;
+    uploadInputRef.current.value = '';
   };
 
   const uploadEditedImage = async (image: File, indexOfEditedImage: number) => {

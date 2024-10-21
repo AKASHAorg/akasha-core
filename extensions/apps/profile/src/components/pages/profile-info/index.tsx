@@ -16,7 +16,6 @@ import {
 import { useTranslation } from 'react-i18next';
 import { EventTypes, IModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import {
-  hasOwn,
   useAkashaStore,
   useNsfwToggling,
   useProfileStats,
@@ -24,6 +23,7 @@ import {
   useValidDid,
 } from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import { selectProfileData } from '@akashaorg/ui-awf-hooks/lib/selectors/get-profile-by-did-query';
 
 type ProfileInfoPageProps = {
   profileDID: string;
@@ -45,8 +45,7 @@ const ProfileInfoPage: React.FC<ProfileInfoPageProps> = props => {
   });
   const { validDid, isLoading: validDidCheckLoading } = useValidDid(profileDID, !!data?.node);
   const { data: statData } = useProfileStats(profileDID, true);
-  const { akashaProfile: profileData } =
-    data?.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
+  const profileData = selectProfileData(data);
   const isLoggedIn = !!authenticatedDID;
   const { showNsfw: showNsfwSetting } = useNsfwToggling();
   const [showNSFW, setShowNSFW] = useState(false);
