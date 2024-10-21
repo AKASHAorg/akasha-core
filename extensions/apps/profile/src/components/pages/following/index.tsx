@@ -1,26 +1,20 @@
-import React, { useMemo } from 'react';
-import FollowProfileButton from '../../follow-profile-button';
-import Following from '@akashaorg/design-system-components/lib/components/ProfileEngagements/Engagement/Following';
-import EngagementTab from './engagement-tab';
+import React from 'react';
+import Following from './following';
+import EngagementTab from '../engagement-tab';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import ProfileEngagementLoading from '@akashaorg/design-system-components/lib/components/ProfileEngagements/placeholders/profile-engagement-loading';
+import ProfileEngagementLoading from '@akashaorg/design-system-components/lib/components/Profile/placeholders/profile-engagement-loading';
 import routes, { FOLLOWING } from '../../../routes';
-import { IModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import {
   useGetFollowingListByDidQuery,
   useGetProfileByDidQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import {
-  transformSource,
-  hasOwn,
-  useRootComponentProps,
-  useAkashaStore,
-  useNsfwToggling,
-} from '@akashaorg/ui-awf-hooks';
-import { ENGAGEMENTS_PER_PAGE } from './types';
+import { useRootComponentProps, useAkashaStore, useNsfwToggling } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
+import { FOLLOWING_PER_PAGE } from './constants';
+import { selectProfileData } from '@akashaorg/ui-awf-hooks/lib/selectors/get-profile-by-did-query';
+import { selectPageInfo } from '@akashaorg/ui-awf-hooks/lib/selectors/get-followers-list-by-did-query';
 
 type FollowingPageProps = {
   profileDID: string;
@@ -31,7 +25,7 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
   const {
     data: { authenticatedDID, isAuthenticating: authenticating },
   } = useAkashaStore();
-  const { getCorePlugins, navigateToModal } = useRootComponentProps();
+  const { getCorePlugins } = useRootComponentProps();
   const isLoggedIn = !!authenticatedDID;
   const navigateTo = getCorePlugins().routing.navigateTo;
   const { t } = useTranslation('app-profile');
@@ -43,56 +37,30 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
     variables: { id: profileDID },
     skip: authenticatedDID === profileDID,
   });
-  const { akashaProfile: profileData } =
-    profileDataReq.data?.node && hasOwn(profileDataReq.data.node, 'akashaProfile')
-      ? profileDataReq.data.node
-      : { akashaProfile: null };
 
-  const { data, error, fetchMore } = useGetFollowingListByDidQuery({
+  const profileData = selectProfileData(profileDataReq.data);
+
+  const { data, loading, error, fetchMore } = useGetFollowingListByDidQuery({
     fetchPolicy:
       'cache-only' /* data is prefetched during route matching as a result we read from cache here */,
     variables: {
       id: profileDID,
-      first: ENGAGEMENTS_PER_PAGE,
+      first: FOLLOWING_PER_PAGE,
     },
     skip: !isLoggedIn,
   });
 
-  const following = useMemo(
-    () =>
-      data?.node && hasOwn(data.node, 'akashaFollowList')
-        ? data?.node?.akashaFollowList?.edges?.map(edge => edge?.node) || []
-        : [],
-    [data?.node],
-  );
-  const pageInfo = useMemo(() => {
-    return data?.node && hasOwn(data?.node, 'akashaFollowList')
-      ? data?.node.akashaFollowList?.pageInfo
-      : null;
-  }, [data]);
+  const pageInfo = selectPageInfo(data);
 
   if (
     !data /* data is undefined until prefetching is complete therefore we display skeleton */ ||
     authenticating
   )
     return (
-      <EngagementTab>
+      <EngagementTab profileDID={profileDID}>
         <ProfileEngagementLoading />
       </EngagementTab>
     );
-
-  const showLoginModal = (redirectTo?: { modal: IModalNavigationOptions }) => {
-    navigateToModal({
-      name: 'login',
-      redirectTo,
-    });
-  };
-  const onProfileClick = (profileDID: string) => {
-    navigateTo?.({
-      appName: '@akashaorg/app-profile',
-      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${profileDID}`,
-    });
-  };
 
   const onError = () => {
     navigateTo?.({
@@ -104,7 +72,7 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
   const viewerIsOwner = authenticatedDID === profileDID;
 
   return (
-    <EngagementTab profileDID={profileDID} navigateTo={navigateTo}>
+    <EngagementTab profileDID={profileDID}>
       {error && (
         <Stack customStyle="mt-8">
           <InfoCard
@@ -122,7 +90,7 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
         <Following
           authenticatedDID={authenticatedDID}
           showNsfw={showNsfw}
-          following={following}
+          followingsData={data}
           profileAnchorLink={'/@akashaorg/app-profile'}
           emptyEntryTitleLabel={
             <>
@@ -140,21 +108,15 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
               </>
             ) : null
           }
+          hasNextPage={pageInfo && pageInfo.hasNextPage}
+          loading={loading}
           onLoadMore={() => {
-            if (pageInfo && pageInfo.hasNextPage) {
-              return fetchMore({
-                variables: {
-                  after: pageInfo.endCursor,
-                },
-              });
-            }
-            return null;
+            fetchMore({
+              variables: {
+                after: pageInfo.endCursor,
+              },
+            });
           }}
-          renderFollowElement={profileId => (
-            <FollowProfileButton profileID={profileId} showLoginModal={showLoginModal} />
-          )}
-          onProfileClick={onProfileClick}
-          transformSource={transformSource}
         />
       )}
     </EngagementTab>

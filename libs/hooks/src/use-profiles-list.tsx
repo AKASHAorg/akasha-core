@@ -23,7 +23,7 @@ const useProfilesList = (profileDIDs: string[]) => {
       const results = await Promise.all(
         profileDIDs.map(did => profileDataReq({ variables: { id: did } })),
       );
-      const profiles = results.map(res => selectProfileData(res));
+      const profiles = results.map(res => selectProfileData(res.data));
       setProfilesData(profiles);
     };
     fetchData();

@@ -1,26 +1,20 @@
-import React, { useMemo } from 'react';
-import FollowProfileButton from '../../follow-profile-button';
-import Followers from '@akashaorg/design-system-components/lib/components/ProfileEngagements/Engagement/Followers';
-import EngagementTab from './engagement-tab';
+import React from 'react';
+import Followers from './followers';
+import EngagementTab from '../engagement-tab';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import ProfileEngagementLoading from '@akashaorg/design-system-components/lib/components/ProfileEngagements/placeholders/profile-engagement-loading';
+import ProfileEngagementLoading from '@akashaorg/design-system-components/lib/components/Profile/placeholders/profile-engagement-loading';
 import routes, { FOLLOWERS } from '../../../routes';
-import { IModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import {
   useGetFollowersListByDidQuery,
   useGetProfileByDidQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import {
-  transformSource,
-  hasOwn,
-  useRootComponentProps,
-  useAkashaStore,
-  useNsfwToggling,
-} from '@akashaorg/ui-awf-hooks';
-import { ENGAGEMENTS_PER_PAGE } from './types';
+import { useRootComponentProps, useAkashaStore, useNsfwToggling } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
+import { FOLLOWERS_PER_PAGE } from './constants';
+import { selectProfileData } from '@akashaorg/ui-awf-hooks/lib/selectors/get-profile-by-did-query';
+import { selectPageInfo } from '@akashaorg/ui-awf-hooks/lib/selectors/get-followers-list-by-did-query';
 
 type FollowersPageProps = {
   profileDID: string;
@@ -28,14 +22,14 @@ type FollowersPageProps = {
 
 const FollowersPage: React.FC<FollowersPageProps> = props => {
   const { profileDID } = props;
+  const { t } = useTranslation('app-profile');
+  const { showNsfw } = useNsfwToggling();
   const {
     data: { authenticatedDID, isAuthenticating: authenticating },
   } = useAkashaStore();
-  const { getCorePlugins, navigateToModal } = useRootComponentProps();
+  const { getCorePlugins } = useRootComponentProps();
   const isLoggedIn = !!authenticatedDID;
   const navigateTo = getCorePlugins().routing.navigateTo;
-  const { t } = useTranslation('app-profile');
-  const { showNsfw } = useNsfwToggling();
 
   const profileDataReq = useGetProfileByDidQuery({
     fetchPolicy:
@@ -43,58 +37,30 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
     variables: { id: profileDID },
     skip: authenticatedDID === profileDID,
   });
-  const { akashaProfile: profileData } =
-    profileDataReq.data?.node && hasOwn(profileDataReq.data.node, 'akashaProfile')
-      ? profileDataReq.data.node
-      : { akashaProfile: null };
 
-  const { data, error, fetchMore } = useGetFollowersListByDidQuery({
+  const profileData = selectProfileData(profileDataReq.data);
+
+  const { data, loading, error, fetchMore } = useGetFollowersListByDidQuery({
     fetchPolicy:
       'cache-only' /* data is prefetched during route matching as a result we read from cache here */,
     variables: {
       id: profileDID,
-      first: ENGAGEMENTS_PER_PAGE,
+      first: FOLLOWERS_PER_PAGE,
     },
     skip: !isLoggedIn,
   });
-  const followers = useMemo(
-    () =>
-      data?.node && hasOwn(data.node, 'akashaProfile')
-        ? data.node?.akashaProfile?.followers?.edges
-            ?.map(edge => edge?.node)
-            .filter(node => node.did.akashaProfile) || []
-        : [],
-    [data?.node],
-  );
-  const pageInfo = useMemo(() => {
-    return data?.node && hasOwn(data?.node, 'akashaProfile')
-      ? data?.node.akashaProfile?.followers?.pageInfo
-      : null;
-  }, [data]);
+
+  const pageInfo = selectPageInfo(data);
 
   if (
     !data /* data is undefined until prefetching is complete therefore we display skeleton */ ||
     authenticating
   )
     return (
-      <EngagementTab>
+      <EngagementTab profileDID={profileDID}>
         <ProfileEngagementLoading />
       </EngagementTab>
     );
-
-  const showLoginModal = (redirectTo?: { modal: IModalNavigationOptions }) => {
-    navigateToModal({
-      name: 'login',
-      redirectTo,
-    });
-  };
-
-  const onProfileClick = (profileDID: string) => {
-    navigateTo?.({
-      appName: '@akashaorg/app-profile',
-      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${profileDID}`,
-    });
-  };
 
   const onError = () => {
     navigateTo?.({
@@ -106,7 +72,7 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
   const viewerIsOwner = authenticatedDID === profileDID;
 
   return (
-    <EngagementTab profileDID={profileDID} navigateTo={navigateTo}>
+    <EngagementTab profileDID={profileDID}>
       {error && (
         <Stack customStyle="mt-8">
           <InfoCard
@@ -124,7 +90,7 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
         <Followers
           authenticatedDID={authenticatedDID}
           showNsfw={showNsfw}
-          followers={followers}
+          followersData={data}
           profileAnchorLink={'/@akashaorg/app-profile'}
           emptyEntryTitleLabel={
             <>
@@ -142,21 +108,15 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
               </>
             ) : null
           }
+          hasNextPage={pageInfo && pageInfo.hasNextPage}
+          loading={loading}
           onLoadMore={() => {
-            if (pageInfo && pageInfo.hasNextPage) {
-              return fetchMore({
-                variables: {
-                  after: pageInfo.endCursor,
-                },
-              });
-            }
-            return null;
+            fetchMore({
+              variables: {
+                after: pageInfo.endCursor,
+              },
+            });
           }}
-          renderFollowElement={profileId => (
-            <FollowProfileButton profileID={profileId} showLoginModal={showLoginModal} />
-          )}
-          onProfileClick={onProfileClick}
-          transformSource={transformSource}
         />
       )}
     </EngagementTab>
