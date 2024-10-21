@@ -37,11 +37,12 @@ const Followers: React.FC<FollowersProps> = ({
         titleLabel={emptyEntryTitleLabel}
         bodyLabel={emptyEntryBodyLabel}
         assetName="longbeam-notfound"
+        customStyle="px-4"
       />
     );
   }
 
-  const borderBottomStyle = `border-b ${getColorClasses(
+  const borderBottomStyle = `pb-[${ITEM_SPACING / 16}rem] border-b ${getColorClasses(
     {
       light: 'grey8',
       dark: 'grey5',
