@@ -12,7 +12,7 @@ import {
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { useRootComponentProps, useAkashaStore, useNsfwToggling } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
-import { FOLLOWERS_PER_PAGE } from './constants';
+import { FOLLOWERS_PER_PAGE, ITEM_SPACING } from './constants';
 import { selectProfileData } from '@akashaorg/ui-awf-hooks/lib/selectors/get-profile-by-did-query';
 import { selectPageInfo } from '@akashaorg/ui-awf-hooks/lib/selectors/get-followers-list-by-did-query';
 
@@ -58,7 +58,7 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
   )
     return (
       <EngagementTab profileDID={profileDID}>
-        <ProfileEngagementLoading />
+        <ProfileEngagementLoading itemSpacing={ITEM_SPACING} />
       </EngagementTab>
     );
 
