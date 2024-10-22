@@ -422,6 +422,11 @@ export const AkashaAppFragmentDoc = /*#__PURE__*/ gql`
         createdAt
         source
         version
+        meta {
+          property
+          provider
+          value
+        }
       }
       cursor
     }
@@ -455,6 +460,11 @@ export const AkashaAppFragmentDoc = /*#__PURE__*/ gql`
     akashaProfile {
       ...UserProfileFragment
     }
+  }
+  meta {
+    property
+    provider
+    value
   }
 }
     `;
