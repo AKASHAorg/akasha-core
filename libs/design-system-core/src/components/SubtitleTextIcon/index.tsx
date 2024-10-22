@@ -8,7 +8,6 @@ import { IconType } from '@akashaorg/typings/lib/ui';
 
 export type SubtitleTextIconProps = {
   icon?: React.ReactElement;
-  solid?: boolean;
   backgroundSize?: string;
   backgroundColor?: boolean;
   label?: string | number;
@@ -27,7 +26,6 @@ export type SubtitleTextIconProps = {
  * main text and a subtitle below it) and its associated icon side-by-side. It is used mainly in the
  * `Latest Topics` widget in Akasha World.
  * @param icon - (optional) supply the icon to be placed on the left side.
- * @param solid - boolean (optional) whether the icon will be applied solid style
  * @param backgroundSize - (optional) for customizing the background size of the icon
  * @param backgroundColor - boolean (optional) whether the icon will have a grey rounded background around it
  * @param label - (optional) customize the top label
@@ -51,7 +49,6 @@ export type SubtitleTextIconProps = {
 const SubtitleTextIcon: React.FC<SubtitleTextIconProps> = props => {
   const {
     icon,
-    solid,
     backgroundColor,
     backgroundSize,
     label,
@@ -82,7 +79,6 @@ const SubtitleTextIcon: React.FC<SubtitleTextIconProps> = props => {
           <Stack direction="row" align="center" justify="center" customStyle={iconBackgroundStyle}>
             <Icon
               icon={icon}
-              solid={solid}
               size={{ width: 'w-4', height: 'h-5' }}
               color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
             />

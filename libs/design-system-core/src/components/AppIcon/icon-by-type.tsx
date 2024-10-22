@@ -9,7 +9,7 @@ import { Color } from '../types/common.types';
 
 export type AppImgProps = Pick<
   AppIconProps,
-  'appImg' | 'size' | 'placeholderIcon' | 'breakPointSize' | 'accentColor' | 'solid'
+  'appImg' | 'size' | 'placeholderIcon' | 'breakPointSize' | 'accentColor'
 > & {
   color?: Color;
 };
@@ -18,7 +18,6 @@ const IconByType: React.FC<AppImgProps> = ({
   appImg,
   size,
   placeholderIcon,
-  solid = false,
   breakPointSize,
   accentColor,
   color,
@@ -31,7 +30,6 @@ const IconByType: React.FC<AppImgProps> = ({
         breakPointSize={breakPointSize}
         accentColor={accentColor}
         color={color}
-        solid={solid}
       />
     );
   }
@@ -50,7 +48,6 @@ const IconByType: React.FC<AppImgProps> = ({
   return (
     <Icon
       icon={placeholderIcon}
-      solid={solid}
       size={size}
       breakPointSize={breakPointSize}
       accentColor={accentColor}

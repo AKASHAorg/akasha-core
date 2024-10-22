@@ -18,7 +18,6 @@ export interface IconProps {
   dataTestId?: string;
   customStyle?: string;
   hoverColor?: Color;
-  solid?: boolean;
   rotateAnimation?: boolean;
 }
 
@@ -37,7 +36,6 @@ export interface IconProps {
  * @param dataTestId - (optional) useful when writing tests for the component
  * @param customStyle - (optional) apply your custom styling (Make sure to use standard Tailwind classes)
  * @param hoverColor - (optional) specify a color for hover state here (Please note that you can specify colors for light and dark mode separately)
- * @param solid - boolean (optional) a solid icon looks different from an outlined one
  * @param rotateAnimation - boolean (optional) for those who want to add rotate animation to their icon
  * @example
  * ```tsx
@@ -57,7 +55,6 @@ const Icon: React.FC<IconProps> = props => {
     dataTestId,
     customStyle = '',
     hoverColor,
-    solid = false,
     rotateAnimation = false,
   } = props;
 
@@ -70,29 +67,18 @@ const Icon: React.FC<IconProps> = props => {
       : `${ICON_SIZE_MAP[size]} ${breakPointStyle}`;
 
   const baseStyle = `select-none ${
-    hover
-      ? `cursor-pointer ${getColorClasses(
-          hoverColor,
-          solid ? 'group-hover:[&>*]:fill' : 'group-hover:[&>*]:stroke',
-        )}`
-      : ''
+    hover ? `cursor-pointer ${getColorClasses(hoverColor, 'group-hover:[&>*]:stroke')}` : ''
   }`;
 
   let colorStyle: string;
   if (color) {
-    colorStyle = `${getColorClasses(color, solid ? '[&>*]:fill' : '[&>*]:stroke')}`;
+    colorStyle = `${getColorClasses(color, '[&>*]:stroke')}`;
   } else {
-    colorStyle = solid
-      ? '[&>*]:fill-black dark:[&>*]:fill-white'
-      : '[&>*]:stroke-black dark:[&>*]:stroke-white';
+    colorStyle = '[&>*]:stroke-black dark:[&>*]:stroke-white';
   }
 
   const accentColorStyle = accentColor
-    ? `${
-        solid
-          ? '[&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark'
-          : '[&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark'
-      }`
+    ? '[&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark'
     : '';
 
   // Note: setting accentColor to true will overrride other color styles

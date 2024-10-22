@@ -36,7 +36,7 @@ const Stepper: React.FC<StepperProps> = props => {
               customStyle={`w-8 h-8 rounded-full ${getRingStyle(index)}`}
             >
               {index < currentStep ? (
-                <Icon icon={<CheckIcon />} color="white" solid={true} />
+                <Icon icon={<CheckIcon />} color="white" />
               ) : (
                 <Stack
                   background={

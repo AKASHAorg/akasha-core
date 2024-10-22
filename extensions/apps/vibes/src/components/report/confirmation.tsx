@@ -68,13 +68,7 @@ export const ReportItemConfirmation: React.FC<ReportItemConfirmationProps> = pro
 
           <Link to={ctaUrl} target="_blank">
             <Stack direction="row" align="center" spacing="gap-x-2">
-              <Icon
-                size="sm"
-                accentColor={true}
-                icon={<Discord />}
-                solid={true}
-                customStyle="mx-auto my-0"
-              />
+              <Icon size="sm" accentColor={true} icon={<Discord />} customStyle="mx-auto my-0" />
 
               <Text
                 variant="footnotes2"

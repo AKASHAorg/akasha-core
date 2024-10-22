@@ -61,7 +61,7 @@ export const register = (opts: IntegrationRegistrationOptions): IAppConfig => ({
   menuItems: {
     label: 'Extensions',
     type: MenuItemType.App,
-    logo: { type: LogoTypeSource.ICON, solidIcon: true, value: <Akasha /> },
+    logo: { type: LogoTypeSource.ICON, value: <Akasha /> },
     area: [MenuItemAreaType.AppArea],
     subRoutes: generateSubRoutes(),
   },

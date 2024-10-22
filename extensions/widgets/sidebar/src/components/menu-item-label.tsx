@@ -28,7 +28,6 @@ const MenuItemLabel: React.FC<MenuItemLabelProps> = props => {
             accentColor={true}
             stackedIcon={menuItem.label === 'Notifications'}
             placeholderIcon={menuItem.logo.value}
-            solid={menuItem.logo.solidIcon}
           />
         )}
       </Stack>

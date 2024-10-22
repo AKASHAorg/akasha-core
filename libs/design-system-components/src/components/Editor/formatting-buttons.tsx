@@ -34,7 +34,7 @@ export const BlockButton: React.FC<ToolbarButtonProps> = ({ format, icon, style 
           active ? { light: 'secondaryLight/30', dark: 'grey4' } : { light: 'grey8', dark: 'grey3' }
         }
       >
-        <Icon size="lg" icon={icon} customStyle="absolute" solid accentColor />
+        <Icon size="lg" icon={icon} customStyle="absolute" accentColor />
       </Stack>
     </button>
   );
@@ -63,7 +63,7 @@ export const MarkButton: React.FC<ToolbarButtonProps> = ({
           active ? { light: 'secondaryLight/30', dark: 'grey4' } : { light: 'grey8', dark: 'grey3' }
         }
       >
-        <Icon size={iconSize} icon={icon} customStyle="absolute" solid accentColor />
+        <Icon size={iconSize} icon={icon} customStyle="absolute" accentColor />
       </Stack>
     </button>
   );

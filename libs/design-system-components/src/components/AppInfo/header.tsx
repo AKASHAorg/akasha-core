@@ -128,7 +128,6 @@ export const AppInfoHeader: React.FC<AppInfoHeaderProps> = props => {
                   size="sm"
                   icon={pillIconByAppType}
                   color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-                  solid={true}
                 />
                 <Text variant="footnotes2" color={{ light: 'secondaryLight', dark: 'white' }}>
                   {extensionTypeLabel}

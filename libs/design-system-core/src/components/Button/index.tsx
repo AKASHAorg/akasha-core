@@ -26,7 +26,6 @@ import { getColorClasses } from '../../utils';
  * @param iconOnly - boolean (optional) whether it is an icon-only button with no label
  * @param greyBg - boolean (optional) whether to apply grey background styling
  * @param plainIcon - boolean (optional) whether to apply plain-icon styling to the icon
- * @param solidIcon - boolean (optional) whether to apply solid-icon styling to the icon
  * @param plain - boolean (optional) a plain button has no styling applied, can be used as a
  * click wrapper
  * @param breakPointSize - (optional) customize sizes for the break points
@@ -54,7 +53,6 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
     iconOnly = false,
     greyBg = false,
     plainIcon = false,
-    solidIcon = false,
     children,
     breakPointSize,
     customStyle = '',
@@ -96,7 +94,6 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
     return (
       <IconOnlyButton
         icon={icon}
-        solidIcon={solidIcon}
         size={size}
         variant={variant}
         loading={loading}
@@ -156,7 +153,6 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
               <ButtonIcon
                 size={size}
                 icon={icon}
-                solid={solidIcon}
                 variant={variant}
                 greyBg={greyBg}
                 loading={false}
@@ -173,7 +169,6 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
               <ButtonIcon
                 size={size}
                 icon={icon}
-                solid={solidIcon}
                 variant={variant}
                 greyBg={greyBg}
                 loading={false}

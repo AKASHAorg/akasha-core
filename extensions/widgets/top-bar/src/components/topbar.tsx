@@ -78,7 +78,7 @@ const WorldIcon = (props: WorldIconProps) => {
       />
     );
   }
-  return <Icon icon={fallback} solid={true} customStyle="w-18 h-7" />;
+  return <Icon icon={fallback} customStyle="w-18 h-7" />;
 };
 
 const Topbar: React.FC<ITopbarProps> = props => {
@@ -153,7 +153,6 @@ const Topbar: React.FC<ITopbarProps> = props => {
               <Button
                 iconOnly={true}
                 icon={<Akasha />}
-                solidIcon={true}
                 onClick={onAppWidgetClick}
                 variant="primary"
               />

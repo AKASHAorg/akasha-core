@@ -13,7 +13,6 @@ type LogoTypes = 'icon' | 'source' | 'string' | 'ipfs' | 'avatar';
 export type LogoSourceType =
   | {
       type: Extract<LogoTypes, 'icon'>;
-      solidIcon?: boolean;
       value: React.ReactElement;
     }
   | {
