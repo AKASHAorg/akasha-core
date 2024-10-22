@@ -26,7 +26,6 @@ export const AppInfoNotificationCards: React.FC<AppInfoNotificationCardsProps> =
         <Stack spacing="gap-x-3" fullWidth direction="row" align="start">
           <Icon
             icon={<InformationCircleIcon />}
-            solid={true}
             size="lg"
             color={{ light: 'errorLight', dark: 'errorDark' }}
           />

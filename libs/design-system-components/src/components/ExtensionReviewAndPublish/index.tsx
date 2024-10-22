@@ -108,7 +108,6 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
       <Stack direction="row" spacing="gap-x-1" align="center">
         <Icon
           icon={fieldHasData ? <CheckCircleIcon /> : <XCircleIcon />}
-          solid={fieldHasData}
           color={fieldHasData ? 'success' : { light: 'warningLight', dark: 'warningDark' }}
         />
         <Label required={isRequired}>{title}</Label>
@@ -164,7 +163,6 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
               size="sm"
               icon={getApplicationIconByType(extensionData?.applicationType)}
               color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-              solid={true}
             />
             <Text variant="footnotes2" color={{ light: 'secondaryLight', dark: 'white' }}>
               {extensionData?.applicationType}

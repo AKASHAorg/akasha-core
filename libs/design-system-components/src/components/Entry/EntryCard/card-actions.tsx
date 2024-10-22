@@ -43,7 +43,6 @@ const CardActions: React.FC<CardActionProps> = props => {
           icon={<ChatBubbleLeftRightIconSolid />}
           disabled={disableActions}
           accentColor={true}
-          solid
         />
       ) : (
         <Icon icon={<ChatBubbleLeftRightIcon />} disabled={disableActions} accentColor={true} />

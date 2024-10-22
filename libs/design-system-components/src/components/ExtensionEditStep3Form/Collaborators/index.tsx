@@ -133,7 +133,6 @@ export const Collaborators: React.FC<CollaboratorsProps> = ({
                   <Button plain onClick={() => handleRemoveContributor(profile)}>
                     <Icon
                       icon={<TrashIcon />}
-                      solid={false}
                       size="md"
                       color={{ light: 'errorLight', dark: 'errorDark' }}
                     />

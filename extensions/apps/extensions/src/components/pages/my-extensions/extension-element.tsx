@@ -217,7 +217,6 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
                       <Icon
                         color={{ light: 'white', dark: 'white' }}
                         size={'xs'}
-                        solid
                         icon={getIconByAppType(extensionData?.applicationType)}
                       />
                     </Stack>

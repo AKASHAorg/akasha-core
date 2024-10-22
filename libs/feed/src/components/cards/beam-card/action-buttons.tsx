@@ -33,7 +33,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = props => {
     <>
       {appDisplayName && (
         <Stack direction="row" align="center" spacing="gap-x-2" customStyle="mr-auto">
-          <Icon icon={<Antenna />} solid={true} accentColor size="sm" />
+          <Icon icon={<Antenna />} accentColor size="sm" />
           <Text variant="footnotes2" weight="normal" color={{ light: 'grey7', dark: 'grey6' }}>
             {t('Published via {{name}}', { name: appDisplayName })}
           </Text>

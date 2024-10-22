@@ -244,13 +244,7 @@ const SidebarComponent: React.FC<unknown> = () => {
             <Stack direction="row" spacing="gap-x-4" customStyle="w-fit h-fit mt-6">
               {modSocialLinks.map((socialLink, idx) => (
                 <Link key={idx} to={socialLink.link} target="_blank">
-                  <Button
-                    icon={socialLink.icon}
-                    solidIcon={idx > 0}
-                    variant="primary"
-                    greyBg={true}
-                    iconOnly={true}
-                  />
+                  <Button icon={socialLink.icon} variant="primary" greyBg={true} iconOnly={true} />
                 </Link>
               ))}
             </Stack>

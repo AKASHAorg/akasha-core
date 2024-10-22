@@ -197,7 +197,6 @@ const ConnectWallet: React.FC = () => {
         <IndicatorDots isSuccess={isLoggedIn} hasErrors={hasErrors} />
         <AppIcon
           placeholderIcon={<Akasha />}
-          solid={true}
           background={{ gradient: 'gradient-to-b', from: 'blue-200', to: 'red-200' }}
           radius={24}
           size={{ width: 54, height: 54 }}

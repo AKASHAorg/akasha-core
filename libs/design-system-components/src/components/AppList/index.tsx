@@ -87,7 +87,6 @@ const AppList: React.FC<AppListProps> = ({
                         <Icon
                           color={{ light: 'secondaryLight', dark: 'white' }}
                           size={'xs'}
-                          solid
                           icon={getIconByAppType(app.applicationType)}
                         />
                       </Stack>

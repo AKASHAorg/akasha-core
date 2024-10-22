@@ -124,7 +124,6 @@ const InstallApp = ({
                 <IndicatorDots size="sm" />
                 <AppIcon
                   placeholderIcon={<Akasha />}
-                  solid={true}
                   background={{ gradient: 'gradient-to-b', from: 'blue-200', to: 'red-200' }}
                   radius={8}
                   size={{ width: 24, height: 24 }}

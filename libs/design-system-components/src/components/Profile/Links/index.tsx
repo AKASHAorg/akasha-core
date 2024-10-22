@@ -24,12 +24,12 @@ export type LinksProps = {
 };
 
 const Links: React.FC<LinksProps> = ({ title, links }) => {
-  const iconsMap: Record<string, { icon: React.ReactElement; solid: boolean }> = {
-    Github: { icon: <Github />, solid: false },
-    Twitter: { icon: <Twitter />, solid: true },
-    Discord: { icon: <Discord />, solid: true },
-    Telegram: { icon: <Telegram />, solid: true },
-    LinkIcon: { icon: <LinkIcon />, solid: false },
+  const iconsMap: Record<string, React.ReactElement> = {
+    Github: <Github />,
+    Twitter: <Twitter />,
+    Discord: <Discord />,
+    Telegram: <Telegram />,
+    LinkIcon: <LinkIcon />,
   };
 
   return (
@@ -38,14 +38,12 @@ const Links: React.FC<LinksProps> = ({ title, links }) => {
         <Text variant="label">{title}</Text>
         {links.map((link, index) => {
           const iconType = getIconFromLink(link.href);
-          const { icon, solid } = iconsMap[iconType]
-            ? iconsMap[iconType]
-            : { icon: <LinkIcon />, solid: false };
+          const icon = iconsMap[iconType] ? iconsMap[iconType] : <LinkIcon />;
 
           return (
             <CopyToClipboard key={`${link.href}${index}`} stringToBeCopied={link.href}>
               <Stack direction="row" align="center" spacing="gap-x-2">
-                <AppIcon placeholderIcon={icon} solid={solid} size="xs" accentColor />
+                <AppIcon placeholderIcon={icon} size="xs" accentColor />
                 <Text
                   variant="body2"
                   color={{ light: 'secondaryLight', dark: 'secondaryDark' }}

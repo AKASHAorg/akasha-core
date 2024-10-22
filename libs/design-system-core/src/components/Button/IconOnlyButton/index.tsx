@@ -10,7 +10,6 @@ import { getContainerClasses } from '../getContainerClasses';
 
 type IconOnlyButtonProps = {
   icon: ButtonProps['icon'];
-  solidIcon: ButtonProps['solidIcon'];
   size: ButtonProps['size'];
   variant: ButtonProps['variant'];
   loading: ButtonProps['loading'];
@@ -30,7 +29,6 @@ export const IconOnlyButton: React.FC<IconOnlyButtonProps & HTMLAttributes<HTMLB
     (
       {
         icon,
-        solidIcon,
         size,
         variant,
         loading,
@@ -74,7 +72,6 @@ export const IconOnlyButton: React.FC<IconOnlyButtonProps & HTMLAttributes<HTMLB
             <ButtonIcon
               size={size}
               icon={loading ? <ArrowPathIcon /> : icon}
-              solid={solidIcon}
               variant={variant}
               greyBg={greyBg}
               loading={loading}

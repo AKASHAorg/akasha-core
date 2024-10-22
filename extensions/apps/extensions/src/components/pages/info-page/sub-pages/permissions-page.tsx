@@ -12,7 +12,7 @@ type PermissionsPageProps = {
   appId: string;
 };
 
-export const PermissionsPage: React.FC<PermissionsPageProps> = ({ appId }) => {
+export const PermissionsPage: React.FC<PermissionsPageProps> = () => {
   const { t } = useTranslation('app-extensions');
   // @TODO get permission info from the hook when available
 
@@ -44,7 +44,7 @@ export const PermissionsPage: React.FC<PermissionsPageProps> = ({ appId }) => {
                     justify="center"
                     customStyle={'bg(grey8 dark:grey3) rounded-full w-8 h-8'}
                   >
-                    <Icon icon={<KeyIcon />} solid={false} size={{ width: 'w-4', height: 'h-5' }} />
+                    <Icon icon={<KeyIcon />} size={{ width: 'w-4', height: 'h-5' }} />
                   </Stack>
                   <Text variant="footnotes2">{t('{{permission}}', { permission })}</Text>
                 </Stack>

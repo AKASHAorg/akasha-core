@@ -65,17 +65,17 @@ const meta: Meta<IconProps> = {
     hover: { control: 'boolean' },
     customStyle: { control: 'text' },
     hoverColor: { control: 'object' },
-    solid: { control: 'boolean' },
     rotateAnimation: { control: 'boolean' },
   },
 };
 
 type Story = StoryObj<IconProps>;
 
-export const Default: Story = { args: { icon: <Akasha />, solid: true } };
+export const Default: Story = { args: { icon: <Akasha /> } };
 
-export const IconWithSize: Story = { args: { icon: <Akasha />, solid: true, size: 'xl' } };
+export const IconWithSize: Story = { args: { icon: <Akasha />, size: 'xl' } };
 
+// @TODO: replace with updated outline icons
 const solidCustomIconsArr = [
   { icon: <Akasha />, name: 'Akasha' },
   { icon: <Antenna />, name: 'Antenna' },
@@ -132,7 +132,7 @@ export const CustomIcons: Story = {
         <Text weight="bold">Solid:</Text>
         {solidCustomIconsArr.map(({ icon, name }, idx) => (
           <Tooltip key={name + idx} placement="top" content={name} trigger="hover">
-            <Icon icon={icon} solid={true} />
+            <Icon icon={icon} />
           </Tooltip>
         ))}
       </Stack>

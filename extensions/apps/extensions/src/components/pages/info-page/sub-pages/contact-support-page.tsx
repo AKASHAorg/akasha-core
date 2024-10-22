@@ -35,7 +35,7 @@ export const ContactSupportPage: React.FC<ContactSupportPageProps> = () => {
               return (
                 <CopyToClipboard key={idx} stringToBeCopied={contactDetails}>
                   <Stack direction="row" align="center" spacing="gap-x-2">
-                    <AppIcon placeholderIcon={icon} solid={false} size="xs" accentColor />
+                    <AppIcon placeholderIcon={icon} size="xs" accentColor />
                     <Text
                       variant="body2"
                       color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
