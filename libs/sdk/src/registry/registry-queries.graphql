@@ -14,6 +14,11 @@ fragment AkashaAppFragment on AkashaApp{
         createdAt
         source
         version
+        meta {
+          property
+          provider
+          value
+        }
       }
       cursor
     }
@@ -47,6 +52,11 @@ fragment AkashaAppFragment on AkashaApp{
     akashaProfile {
       ...UserProfileFragment
     }
+  }
+  meta {
+    property
+    provider
+    value
   }
 }
 
