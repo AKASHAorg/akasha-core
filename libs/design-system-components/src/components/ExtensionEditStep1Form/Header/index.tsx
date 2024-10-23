@@ -134,9 +134,9 @@ export const Header: React.FC<HeaderProps> = ({
           imageWidth: 213,
           imageHeight: 213,
           aspect: 213 / 213,
-          cropShape: 'rect' as const,
+          cropShape: 'rect',
         }
-      : { aspect: 560 / 169, objectFit: 'contain' as const };
+      : { aspect: 560 / 169, objectFit: 'contain' };
 
   const onSave = (image: File) => {
     if (image) {
