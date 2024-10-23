@@ -3,14 +3,13 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import List, { ListProps } from '@akashaorg/design-system-core/lib/components/List';
-import EditImageModal from '../../EditImageModal';
+import ImageModal, { ImageModalProps } from '../../ImageModal';
 import {
   ArrowUpOnSquareIcon,
   PencilIcon,
   PencilSquareIcon,
   TrashIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import { CropperProps } from 'react-easy-crop';
 import { ExtensionImageType, type Image } from '@akashaorg/typings/lib/ui';
 import { ModalProps } from '@akashaorg/design-system-core/lib/components/Modal';
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils/getColorClasses';
@@ -32,6 +31,7 @@ export type HeaderProps = {
   dragToRepositionLabel: string;
   isSavingImage: boolean;
   publicImagePath: string;
+  logoPreviewTitle: string;
   onLogoImageChange: (logoImage?: File) => void;
   onCoverImageChange: (coverImage?: File) => void;
   onImageSave: (type: ExtensionImageType, image?: File) => void;
@@ -50,6 +50,7 @@ export const Header: React.FC<HeaderProps> = ({
   confirmationLabel,
   dragToRepositionLabel,
   isSavingImage,
+  logoPreviewTitle,
   onLogoImageChange,
   onCoverImageChange,
   onImageSave,
@@ -119,10 +120,23 @@ export const Header: React.FC<HeaderProps> = ({
     },
   ];
 
-  const imageModalProps: Partial<CropperProps> =
+  const imageModalProps: Partial<ImageModalProps> =
     appImageType === 'logo-image'
-      ? { aspect: 250 / 250, cropShape: 'rect' }
-      : { aspect: 560 / 169, objectFit: 'contain' };
+      ? {
+          previewTitle: logoPreviewTitle,
+          previews: [
+            { dimension: 110 },
+            { dimension: 60 },
+            { dimension: 40, circular: true },
+            { dimension: 32, circular: true },
+            { dimension: 16, circular: true },
+          ],
+          imageWidth: 213,
+          imageHeight: 213,
+          aspect: 213 / 213,
+          cropShape: 'rect' as const,
+        }
+      : { aspect: 560 / 169, objectFit: 'contain' as const };
 
   const onSave = (image: File) => {
     if (image) {
@@ -243,7 +257,7 @@ export const Header: React.FC<HeaderProps> = ({
           </Stack>
         </Stack>
       </Stack>
-      <EditImageModal
+      <ImageModal
         show={showEditImage}
         title={appImageType === 'logo-image' ? imageTitle.logoImage : imageTitle.coverImage}
         cancelLabel={cancelLabel}
@@ -257,6 +271,7 @@ export const Header: React.FC<HeaderProps> = ({
             ? [uploadedLogoImageUrl?.src || logoImage?.src]
             : [uploadedCoverImageUrl?.src || coverImage?.src]
         }
+        rightAlignActions={true}
         dragToRepositionLabel={dragToRepositionLabel}
         isSavingImage={isSavingImage}
         onSave={onSave}
