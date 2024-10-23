@@ -33,6 +33,7 @@ export type ImageModalProps = {
   dragToRepositionLabel: string;
   imageWidth?: number;
   imageHeight?: number;
+  removeCropAreaBoxShadow?: boolean;
   onSave: (image: Blob, indexOfEditedImage?: number) => void;
 } & Pick<ModalProps, 'rightAlignActions' | 'onClose'> &
   Partial<Pick<CropperProps, 'aspect' | 'objectFit' | 'cropShape'>> &
@@ -40,15 +41,18 @@ export type ImageModalProps = {
 
 /**
  * Component used to crop user uploaded images
- * @param title - modal text title
+ * @param title - title of the modal
  * @param show - controls the visibility of the modal
- * @param cancelLabel - label for the action to exit the modal
- * @param saveLabel - label for the action of cropping the selected image
+ * @param cancelLabel - label for cancel button
+ * @param saveLabel - label for save button
  * @param isSavingImage - status for saving the cropped image, prevents
  exiting the modal while true
- * @param images - an array of the images currently in the gallery of an image content block
- * @param onSave - handler for uploading the cropped image and replacing the old image with it
- * @param onClose - handler to close the modal
+ * @param images - an array of the images
+ * @param dragToRepositionLabel - label for dragging image
+ * @param imageWidth - (optional) width of the image container
+ * @param imageHeight - (optional) height of the image container
+ * @param removeCropAreaBoxShadow - (optional) flag to remove box shadow on crop area
+ * @param onSave - handler for saving the cropped image
  */
 const ImageModal: React.FC<ImageModalProps> = ({
   title,
@@ -66,6 +70,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
   previewTitle,
   previews,
   rightAlignActions,
+  removeCropAreaBoxShadow,
   onSave,
   onClose,
 }) => {
@@ -96,6 +101,8 @@ const ImageModal: React.FC<ImageModalProps> = ({
     },
     [imageUrl],
   );
+
+  const cropAreaStyle = removeCropAreaBoxShadow ? { cropAreaStyle: { boxShadow: 'none' } } : {};
 
   return (
     <Modal
@@ -144,12 +151,13 @@ const ImageModal: React.FC<ImageModalProps> = ({
           onCropComplete={onCropComplete}
           onCropAreaChange={setCroppedArea}
           onZoomChange={setZoom}
+          style={cropAreaStyle}
         />
       </Card>
       <Text variant="footnotes2" align="center" weight="normal">
         {dragToRepositionLabel}
       </Text>
-      <Stack direction="column" spacing="gap-y-4" padding="p-4">
+      <Stack direction="column" spacing="gap-y-4" padding="px-4" fullWidth>
         <Stack direction="row" align="center" spacing="gap-x-2">
           <Icon icon={<MagnifyingGlassMinusIcon />} size="lg" />
           <input
