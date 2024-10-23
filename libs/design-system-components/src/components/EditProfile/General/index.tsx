@@ -1,5 +1,4 @@
 import React from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 import { Controller, Control } from 'react-hook-form';
 import { Header, HeaderProps } from './Header';
@@ -16,7 +15,6 @@ export type GeneralProps = {
   ens?: InputType;
   bio: InputType;
   ensButton?: ButtonType;
-  customStyle?: string;
   control: Control<EditProfileFormValues>;
   onAvatarChange: (avatar: File) => void;
   onCoverImageChange: (coverImage: File) => void;
@@ -27,12 +25,11 @@ export const General: React.FC<GeneralProps> = ({
   name: nameField,
   bio: bioField,
   control,
-  customStyle = '',
   onAvatarChange,
   onCoverImageChange,
 }) => {
   return (
-    <Stack direction="column" spacing="gap-y-4" customStyle={customStyle}>
+    <React.Fragment>
       <Header {...header} onAvatarChange={onAvatarChange} onCoverImageChange={onCoverImageChange} />
       <Controller
         control={control}
@@ -70,6 +67,6 @@ export const General: React.FC<GeneralProps> = ({
         )}
         defaultValue={bioField.initialValue || ''}
       />
-    </Stack>
+    </React.Fragment>
   );
 };

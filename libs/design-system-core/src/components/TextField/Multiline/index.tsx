@@ -20,13 +20,13 @@ export const Multiline: React.FC<MultlineProps> = forwardRef(
     return (
       <Stack
         direction="row"
-        customStyle={`${containerStyle} ${radiusStyle} py-2.5`}
+        customStyle={`${containerStyle} ${radiusStyle} py-2`}
         spacing="gap-x-2"
       >
         <textarea
           {...rest}
           aria-labelledby={id}
-          className={tw(`resize-none w-full ${textAreaStyle}`)}
+          className={tw(`resize-none w-full ${textAreaStyle} !p-0`)}
           maxLength={rest.maxLength || MAX_LENGTH}
           ref={ref}
           onChange={event => {
