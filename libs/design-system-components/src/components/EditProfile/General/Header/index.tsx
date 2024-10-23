@@ -5,7 +5,7 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import List, { ListProps } from '@akashaorg/design-system-core/lib/components/List';
-import EditImageModal from '../../../EditImageModal';
+import ImageModal from '../../../ImageModal';
 import {
   ArrowUpOnSquareIcon,
   PencilIcon,
@@ -266,7 +266,7 @@ export const Header: React.FC<HeaderProps> = ({
           </Stack>
         </Stack>
       </Stack>
-      <EditImageModal
+      <ImageModal
         show={showEditImage}
         title={profileImageType === 'avatar' ? imageTitle.avatar : imageTitle.coverImage}
         cancelLabel={cancelLabel}

@@ -128,6 +128,7 @@ export const ExtensionEditStep1Page: React.FC<ExtensionEditStep1PageProps> = ({ 
           cancelLabel: t('Cancel'),
           deleteLabel: t('Delete'),
           saveLabel: t('Save'),
+          logoPreviewTitle: t('Logo preview'),
           imageTitle: {
             logoImage: { label: t('Edit Logo Image') },
             coverImage: { label: t('Edit Cover Image') },
