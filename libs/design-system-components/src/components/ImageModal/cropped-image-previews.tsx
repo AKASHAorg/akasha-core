@@ -10,21 +10,27 @@ export type ImagePreview = {
   circular?: boolean;
 };
 
-export type ImagePreviewProps = {
+export type CroppedImagePreviewProps = {
   previewTitle: string;
   previews: ImagePreview[];
   imageUrl: string;
   croppedArea: Area;
 };
 
-export const ImagePreviews: React.FC<ImagePreviewProps> = props => {
+/**
+ * Component used to display previews of the cropped image
+ * @param previewTitle - preview title
+ * @param previews - an array of preview meta data
+ * @param imageUrl - url of the image
+ * @param croppedArea - cropped area of the image(the starting x and y coordinates, and the width and height)
+ */
+export const CroppedImagePreviews: React.FC<CroppedImagePreviewProps> = props => {
   const { previewTitle, previews, imageUrl, croppedArea } = props;
   const scale = 100 / croppedArea.width;
   const transform = {
     x: `${-croppedArea.x * scale}%`,
     y: `${-croppedArea.y * scale}%`,
   };
-
   return (
     <Stack spacing="gap-y-2.5">
       <Text variant="button-md">{previewTitle}</Text>

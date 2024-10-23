@@ -9,7 +9,7 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Cropper, { Area, CropperProps, Point } from 'react-easy-crop';
 import { tw } from '@twind/core';
 import { type Image } from '@akashaorg/typings/lib/ui';
-import { ImagePreviewProps, ImagePreviews } from './image-previews';
+import { CroppedImagePreviewProps, CroppedImagePreviews } from './cropped-image-previews';
 import {
   MagnifyingGlassMinusIcon,
   MagnifyingGlassPlusIcon,
@@ -37,7 +37,7 @@ export type ImageModalProps = {
   onSave: (image: Blob, indexOfEditedImage?: number) => void;
 } & Pick<ModalProps, 'rightAlignActions' | 'onClose'> &
   Partial<Pick<CropperProps, 'aspect' | 'objectFit' | 'cropShape'>> &
-  Partial<Pick<ImagePreviewProps, 'previewTitle' | 'previews'>>;
+  Partial<Pick<CroppedImagePreviewProps, 'previewTitle' | 'previews'>>;
 
 /**
  * Component used to crop user uploaded images
@@ -175,7 +175,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
           <Icon icon={<MagnifyingGlassPlusIcon />} size="lg" />
         </Stack>
         {previews?.length > 0 && (
-          <ImagePreviews
+          <CroppedImagePreviews
             previewTitle={previewTitle}
             previews={previews}
             imageUrl={imageUrl}
