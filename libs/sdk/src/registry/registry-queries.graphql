@@ -1,4 +1,4 @@
-fragment AkashaAppFragment on AkashaApp{
+fragment AkashaAppFragment on AkashaApp {
   id
   applicationType
   description
@@ -7,7 +7,7 @@ fragment AkashaAppFragment on AkashaApp{
   displayName
   keywords
   createdAt
-  releases(first: 5, sorting: {createdAt: DESC} ){
+  releases(first: 5, sorting: { createdAt: DESC }) {
     edges {
       node {
         id
@@ -46,6 +46,10 @@ fragment AkashaAppFragment on AkashaApp{
     width
     src
   }
+  links {
+    href
+    label
+  }
   contributors {
     id
     isViewer
@@ -60,7 +64,7 @@ fragment AkashaAppFragment on AkashaApp{
   }
 }
 
-fragment AppReleaseFragment on AkashaAppRelease{
+fragment AppReleaseFragment on AkashaAppRelease {
   application {
     ...AkashaAppFragment
   }
@@ -76,8 +80,22 @@ fragment AppReleaseFragment on AkashaAppRelease{
   }
 }
 
-query GetApps($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaAppFiltersInput, $sorting: AkashaAppSortingInput){
-  akashaAppIndex(after: $after, before: $before, first: $first, last: $last, filters: $filters, sorting:  $sorting){
+query GetApps(
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+  $filters: AkashaAppFiltersInput
+  $sorting: AkashaAppSortingInput
+) {
+  akashaAppIndex(
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+    filters: $filters
+    sorting: $sorting
+  ) {
     edges {
       node {
         ...AkashaAppFragment
@@ -93,10 +111,25 @@ query GetApps($after: String, $before: String, $first: Int, $last: Int, $filters
   }
 }
 
-query GetAppsStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaAppsStreamFiltersInput, $sorting: AkashaAppsStreamSortingInput){
-  node(id: $indexer){
-    ... on CeramicAccount{
-      akashaAppsStreamList(after: $after, before: $before, first: $first, last: $last, filters: $filters, sorting:  $sorting){
+query GetAppsStream(
+  $indexer: ID!
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+  $filters: AkashaAppsStreamFiltersInput
+  $sorting: AkashaAppsStreamSortingInput
+) {
+  node(id: $indexer) {
+    ... on CeramicAccount {
+      akashaAppsStreamList(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        filters: $filters
+        sorting: $sorting
+      ) {
         edges {
           node {
             moderationID
@@ -120,16 +153,31 @@ query GetAppsStream($indexer: ID!, $after: String, $before: String, $first: Int,
 
 query GetAppsByID($id: ID!) {
   node(id: $id) {
-    ...on AkashaApp {
+    ... on AkashaApp {
       ...AkashaAppFragment
     }
   }
 }
 
-query GetAppsByPublisherDID($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaAppFiltersInput, $sorting: AkashaAppSortingInput) {
+query GetAppsByPublisherDID(
+  $id: ID!
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+  $filters: AkashaAppFiltersInput
+  $sorting: AkashaAppSortingInput
+) {
   node(id: $id) {
-    ...on CeramicAccount {
-      akashaAppList(after: $after, before: $before, first: $first, last: $last, filters: $filters, sorting:  $sorting){
+    ... on CeramicAccount {
+      akashaAppList(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        filters: $filters
+        sorting: $sorting
+      ) {
         edges {
           node {
             ...AkashaAppFragment
@@ -147,10 +195,25 @@ query GetAppsByPublisherDID($id: ID!, $after: String, $before: String, $first: I
   }
 }
 
-query GetAppsReleasesByPublisherDID($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaAppReleaseFiltersInput, $sorting: AkashaAppReleaseSortingInput) {
+query GetAppsReleasesByPublisherDID(
+  $id: ID!
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+  $filters: AkashaAppReleaseFiltersInput
+  $sorting: AkashaAppReleaseSortingInput
+) {
   node(id: $id) {
-    ...on CeramicAccount {
-      akashaAppReleaseList(after: $after, before: $before, first: $first, last: $last, filters: $filters, sorting:  $sorting){
+    ... on CeramicAccount {
+      akashaAppReleaseList(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        filters: $filters
+        sorting: $sorting
+      ) {
         edges {
           node {
             ...AppReleaseFragment
@@ -168,8 +231,22 @@ query GetAppsReleasesByPublisherDID($id: ID!, $after: String, $before: String, $
   }
 }
 
-query GetAppsReleases($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaAppReleaseFiltersInput, $sorting: AkashaAppReleaseSortingInput){
-  akashaAppReleaseIndex(after: $after, before: $before, first: $first, last: $last, filters:  $filters, sorting: $sorting){
+query GetAppsReleases(
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+  $filters: AkashaAppReleaseFiltersInput
+  $sorting: AkashaAppReleaseSortingInput
+) {
+  akashaAppReleaseIndex(
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+    filters: $filters
+    sorting: $sorting
+  ) {
     edges {
       node {
         ...AppReleaseFragment
@@ -187,7 +264,7 @@ query GetAppsReleases($after: String, $before: String, $first: Int, $last: Int, 
 
 query GetAppReleaseByID($id: ID!) {
   node(id: $id) {
-    ...on AkashaAppRelease {
+    ... on AkashaAppRelease {
       ...AppReleaseFragment
     }
   }
