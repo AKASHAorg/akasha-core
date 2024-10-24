@@ -15,6 +15,8 @@ import {
   MagnifyingGlassPlusIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { getCroppedImage } from './get-cropped-image';
+import { XCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-solid';
+import { getColorClasses } from '@akashaorg/design-system-core/lib/utils';
 
 const MIN_ZOOM = 1;
 const MAX_ZOOM = 3;
@@ -31,6 +33,7 @@ export type ImageModalProps = {
   isSavingImage: boolean;
   images: (string | Image)[];
   dragToRepositionLabel: string;
+  errorLabel: string;
   width?: number;
   height?: number;
   onSave: (image: Blob, indexOfEditedImage?: number) => void;
@@ -48,6 +51,7 @@ export type ImageModalProps = {
  exiting the modal while true
  * @param images - an array of the images
  * @param dragToRepositionLabel - label for dragging image
+ * @param errorLabel - text describing cropping error
  * @param width - (optional) width of the image container
  * @param height - (optional) height of the image container
  * @param onSave - handler for saving the cropped image
@@ -60,6 +64,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
   saveLabel,
   isSavingImage,
   dragToRepositionLabel,
+  errorLabel,
   aspect,
   objectFit,
   cropShape,
@@ -81,6 +86,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
   const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [selectedImageIndex, setSelectedIndexImage] = useState(0);
+  const [showCropError, setShowCropError] = useState(false);
 
   const aspectRatio = aspect ? aspect : width / height;
   const selectedImage = images[selectedImageIndex];
@@ -100,10 +106,15 @@ const ImageModal: React.FC<ImageModalProps> = ({
       if (response.data) {
         const [croppedImageBlob] = await response.data;
         onSave(croppedImageBlob, selectedImageIndex);
+        return;
       }
     }
-    //@TODO: if there is an error while cropping an image then we need to handle this properly
+    setShowCropError(true);
   };
+
+  const imageContainerBorderStyle = showCropError
+    ? `border-4 ${getColorClasses({ light: 'errorLight', dark: 'errorDark' }, 'border')}`
+    : '';
 
   return (
     <Modal
@@ -117,6 +128,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
           variant: 'primary',
           label: saveLabel,
           loading: isSavingImage,
+          disabled: showCropError,
           onClick: handleSaveClick,
         },
       ]}
@@ -138,9 +150,10 @@ const ImageModal: React.FC<ImageModalProps> = ({
         padding="p-0"
         elevation="none"
         radius={20}
+        border={showCropError}
         customStyle={`relative w-[${width / 16}rem] h-[${
           height / 16
-        }rem] overflow-hidden bg-transparent`}
+        }rem] overflow-hidden bg-transparent ${imageContainerBorderStyle}`}
       >
         <Cropper
           image={imageUrl}
@@ -155,6 +168,23 @@ const ImageModal: React.FC<ImageModalProps> = ({
           onZoomChange={setZoom}
         />
       </Card>
+      {showCropError && (
+        <Stack direction="row" spacing="gap-x-1" align="center">
+          <Icon
+            icon={<XCircleIcon />}
+            size="lg"
+            solid
+            color={{ light: 'errorLight', dark: 'errorDark' }}
+          />
+          <Text
+            variant="footnotes2"
+            weight="normal"
+            color={{ light: 'errorLight', dark: 'errorDark' }}
+          >
+            {errorLabel}
+          </Text>
+        </Stack>
+      )}
       <Text variant="footnotes2" align="center" weight="normal">
         {dragToRepositionLabel}
       </Text>

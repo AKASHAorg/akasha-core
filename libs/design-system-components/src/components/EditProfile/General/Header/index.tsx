@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
@@ -32,6 +32,7 @@ export type HeaderProps = {
   deleteTitle: { avatar: ModalProps['title']; coverImage: ModalProps['title'] };
   confirmationLabel: { avatar: string; coverImage: string };
   dragToRepositionLabel: string;
+  cropErrorLabel: string;
   isSavingImage: boolean;
   publicImagePath: string;
   transformSource: (src: Image) => Image;
@@ -52,6 +53,7 @@ export const Header: React.FC<HeaderProps> = ({
   deleteTitle,
   confirmationLabel,
   dragToRepositionLabel,
+  cropErrorLabel,
   isSavingImage,
   publicImagePath,
   transformSource,
@@ -281,6 +283,7 @@ export const Header: React.FC<HeaderProps> = ({
         }}
         images={images}
         dragToRepositionLabel={dragToRepositionLabel}
+        errorLabel={cropErrorLabel}
         isSavingImage={isSavingImage}
         onSave={onSave}
         {...imageModalProps}

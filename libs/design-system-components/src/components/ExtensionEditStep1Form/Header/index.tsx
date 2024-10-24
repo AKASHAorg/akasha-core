@@ -29,6 +29,7 @@ export type HeaderProps = {
   deleteTitle: { logoImage: ModalProps['title']; coverImage: ModalProps['title'] };
   confirmationLabel: { logoImage: string; coverImage: string };
   dragToRepositionLabel: string;
+  cropErrorLabel: string;
   isSavingImage: boolean;
   publicImagePath: string;
   logoPreviewTitle: string;
@@ -49,6 +50,7 @@ export const Header: React.FC<HeaderProps> = ({
   deleteTitle,
   confirmationLabel,
   dragToRepositionLabel,
+  cropErrorLabel,
   isSavingImage,
   logoPreviewTitle,
   onLogoImageChange,
@@ -275,6 +277,7 @@ export const Header: React.FC<HeaderProps> = ({
         images={images}
         rightAlignActions={true}
         dragToRepositionLabel={dragToRepositionLabel}
+        errorLabel={cropErrorLabel}
         isSavingImage={isSavingImage}
         onSave={onSave}
         {...imageModalProps}

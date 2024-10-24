@@ -513,6 +513,7 @@ export const ImageEditorBlock = (
             onClose={handleCloseModal}
             images={imageUrls}
             dragToRepositionLabel={t('Drag the image to reposition')}
+            errorLabel={t('Unable to crop the image. Please try again!')}
             isSavingImage={uploading}
             onSave={uploadEditedImage}
           />
