@@ -92,25 +92,6 @@ export const ExtensionEditStep2Page: React.FC<ExtensionEditStep2PageProps> = ({ 
     }),
   );
 
-  // useEffect(() => {
-  //   if (formDefault?.gallery?.length > 0) {
-  //     setGalleryImages(
-  //       formDefault?.gallery?.map(img => {
-  //         const imgWithGateway = transformSource(img);
-  //         return {
-  //           ...img,
-  //           src: img?.src,
-  //           displaySrc: imgWithGateway?.src,
-  //           size: {
-  //             height: img?.height,
-  //             width: img?.width,
-  //           },
-  //         };
-  //       }),
-  //     );
-  //   }
-  // }, [setGalleryImages, formDefault.gallery]);
-
   const onUpload = async (image: File | string, isUrl?: boolean) => {
     if (!image) return null;
     setUploading(true);
