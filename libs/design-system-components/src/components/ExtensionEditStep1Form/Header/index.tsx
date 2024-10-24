@@ -131,10 +131,9 @@ export const Header: React.FC<HeaderProps> = ({
             { dimension: 32, circular: true },
             { dimension: 16, circular: true },
           ],
-          removeCropAreaBoxShadow: true,
-          imageWidth: 213,
-          imageHeight: 213,
-          aspect: 213 / 213,
+          width: 312,
+          height: 224,
+          aspect: 1 / 1,
           cropShape: 'rect',
         }
       : { aspect: 560 / 169, objectFit: 'contain' };

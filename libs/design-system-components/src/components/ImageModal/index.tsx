@@ -31,9 +31,8 @@ export type ImageModalProps = {
   isSavingImage: boolean;
   images: (string | Image)[];
   dragToRepositionLabel: string;
-  imageWidth?: number;
-  imageHeight?: number;
-  removeCropAreaBoxShadow?: boolean;
+  width?: number;
+  height?: number;
   onSave: (image: Blob, indexOfEditedImage?: number) => void;
 } & Pick<ModalProps, 'rightAlignActions' | 'onClose'> &
   Partial<Pick<CropperProps, 'aspect' | 'objectFit' | 'cropShape'>> &
@@ -49,9 +48,8 @@ export type ImageModalProps = {
  exiting the modal while true
  * @param images - an array of the images
  * @param dragToRepositionLabel - label for dragging image
- * @param imageWidth - (optional) width of the image container
- * @param imageHeight - (optional) height of the image container
- * @param removeCropAreaBoxShadow - (optional) flag to remove box shadow on crop area
+ * @param width - (optional) width of the image container
+ * @param height - (optional) height of the image container
  * @param onSave - handler for saving the cropped image
  */
 const ImageModal: React.FC<ImageModalProps> = ({
@@ -65,12 +63,11 @@ const ImageModal: React.FC<ImageModalProps> = ({
   aspect,
   objectFit,
   cropShape,
-  imageWidth = CROPPER_WIDTH,
-  imageHeight = CROPPER_HEIGHT,
+  width = CROPPER_WIDTH,
+  height = CROPPER_HEIGHT,
   previewTitle,
   previews,
   rightAlignActions,
-  removeCropAreaBoxShadow,
   onSave,
   onClose,
 }) => {
@@ -78,14 +75,14 @@ const ImageModal: React.FC<ImageModalProps> = ({
   const [croppedArea, setCroppedArea] = useState<Area>({
     x: 0,
     y: 0,
-    width: imageWidth,
-    height: imageHeight,
+    width,
+    height,
   });
   const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [selectedImageIndex, setSelectedIndexImage] = useState(0);
 
-  const aspectRatio = aspect ? aspect : imageWidth / imageHeight;
+  const aspectRatio = aspect ? aspect : width / height;
   const selectedImage = images[selectedImageIndex];
   const imageUrl = typeof selectedImage === 'string' ? selectedImage : selectedImage?.src;
   const onCropComplete = useCallback(
@@ -102,8 +99,6 @@ const ImageModal: React.FC<ImageModalProps> = ({
     [imageUrl],
   );
 
-  const cropAreaStyle = removeCropAreaBoxShadow ? { cropAreaStyle: { boxShadow: 'none' } } : {};
-
   return (
     <Modal
       title={title}
@@ -119,8 +114,9 @@ const ImageModal: React.FC<ImageModalProps> = ({
           onClick: () => onSave(croppedImage, selectedImageIndex),
         },
       ]}
+      showDivider={true}
     >
-      {images.length > 0 && (
+      {images.length >= 2 && (
         <Stack direction="row" justify="start" align="center" spacing="gap-2">
           {images.map((imageData, index) => {
             const imageUrl = typeof imageData === 'string' ? imageData : imageData?.src;
@@ -136,8 +132,8 @@ const ImageModal: React.FC<ImageModalProps> = ({
         padding="p-0"
         elevation="none"
         radius={20}
-        customStyle={`relative w-[${imageWidth / 16}rem] h-[${
-          imageHeight / 16
+        customStyle={`relative w-[${width / 16}rem] h-[${
+          height / 16
         }rem] overflow-hidden bg-transparent`}
       >
         <Cropper
@@ -151,13 +147,12 @@ const ImageModal: React.FC<ImageModalProps> = ({
           onCropComplete={onCropComplete}
           onCropAreaChange={setCroppedArea}
           onZoomChange={setZoom}
-          style={cropAreaStyle}
         />
       </Card>
       <Text variant="footnotes2" align="center" weight="normal">
         {dragToRepositionLabel}
       </Text>
-      <Stack direction="column" spacing="gap-y-4" padding="px-4" fullWidth>
+      <Stack direction="column" spacing="gap-y-4" fullWidth={true} customStyle="mb-2">
         <Stack direction="row" align="center" spacing="gap-x-2">
           <Icon icon={<MagnifyingGlassMinusIcon />} size="lg" />
           <input
