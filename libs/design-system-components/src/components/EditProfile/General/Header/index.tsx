@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
@@ -67,10 +67,7 @@ export const Header: React.FC<HeaderProps> = ({
   const [showDeleteImage, setShowDeleteImage] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState(transformSource(avatar?.default));
   const [coverImageUrl, setCoverImageUrl] = useState(transformSource(coverImage?.default));
-  const [uploadedAvatarUrl, setUploadedAvatarUrl] = useState(transformSource(avatar?.default));
-  const [uploadedCoverImageUrl, setUploadedCoverImageUrl] = useState(
-    transformSource(coverImage?.default),
-  );
+  const [images, setImages] = useState([]);
   const alternativeAvatars = useRef(
     avatar?.alternatives?.map(alternative => transformSource(alternative)),
   );
@@ -122,6 +119,13 @@ export const Header: React.FC<HeaderProps> = ({
             label: 'Edit',
             icon: <PencilIcon />,
             onClick: () => {
+              switch (profileImageType) {
+                case 'avatar':
+                  setImages([avatarUrl]);
+                  break;
+                case 'cover-image':
+                  setImages([coverImageUrl]);
+              }
               setShowEditImage(true);
               closeActionsDropDown();
             },
@@ -177,10 +181,10 @@ export const Header: React.FC<HeaderProps> = ({
     if (image) {
       switch (profileImageType) {
         case 'avatar':
-          setUploadedAvatarUrl({ src: URL.createObjectURL(image), width: 0, height: 0 });
+          setImages([{ src: URL.createObjectURL(image), width: 0, height: 0 }]);
           break;
         case 'cover-image':
-          setUploadedCoverImageUrl({ src: URL.createObjectURL(image), width: 0, height: 0 });
+          setImages([{ src: URL.createObjectURL(image), width: 0, height: 0 }]);
       }
       setShowEditImage(true);
     }
@@ -275,9 +279,7 @@ export const Header: React.FC<HeaderProps> = ({
           if (isSavingImage) return;
           setShowEditImage(false);
         }}
-        images={
-          profileImageType === 'avatar' ? [uploadedAvatarUrl?.src] : [uploadedCoverImageUrl?.src]
-        }
+        images={images}
         dragToRepositionLabel={dragToRepositionLabel}
         isSavingImage={isSavingImage}
         onSave={onSave}

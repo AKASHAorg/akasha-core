@@ -64,8 +64,7 @@ export const Header: React.FC<HeaderProps> = ({
   const [showDeleteImage, setShowDeleteImage] = useState(false);
   const [logoImageUrl, setLogoImageUrl] = useState(logoImage);
   const [coverImageUrl, setCoverImageUrl] = useState(coverImage);
-  const [uploadedLogoImageUrl, setUploadedLogoImageUrl] = useState(logoImage);
-  const [uploadedCoverImageUrl, setUploadedCoverImageUrl] = useState(coverImage);
+  const [images, setImages] = useState([]);
 
   useEffect(() => {
     if (!isSavingImage) {
@@ -105,6 +104,13 @@ export const Header: React.FC<HeaderProps> = ({
       label: 'Edit',
       icon: <PencilIcon />,
       onClick: () => {
+        switch (appImageType) {
+          case 'logo-image':
+            setImages([logoImageUrl]);
+            break;
+          case 'cover-image':
+            setImages([coverImageUrl]);
+        }
         setShowEditImage(true);
         closeActionsDropDown();
       },
@@ -174,11 +180,11 @@ export const Header: React.FC<HeaderProps> = ({
       switch (appImageType) {
         case 'logo-image':
           onLogoImageChange(image);
-          setUploadedLogoImageUrl({ src: URL.createObjectURL(image), width: 0, height: 0 });
+          setImages([{ src: URL.createObjectURL(image), width: 0, height: 0 }]);
           break;
         case 'cover-image':
           onCoverImageChange(image);
-          setUploadedCoverImageUrl({ src: URL.createObjectURL(image), width: 0, height: 0 });
+          setImages([{ src: URL.createObjectURL(image), width: 0, height: 0 }]);
       }
       setShowEditImage(true);
     }
@@ -266,11 +272,7 @@ export const Header: React.FC<HeaderProps> = ({
           if (isSavingImage) return;
           setShowEditImage(false);
         }}
-        images={
-          appImageType === 'logo-image'
-            ? [uploadedLogoImageUrl?.src || logoImage?.src]
-            : [uploadedCoverImageUrl?.src || coverImage?.src]
-        }
+        images={images}
         rightAlignActions={true}
         dragToRepositionLabel={dragToRepositionLabel}
         isSavingImage={isSavingImage}
