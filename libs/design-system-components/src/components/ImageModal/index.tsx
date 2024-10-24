@@ -71,13 +71,13 @@ const ImageModal: React.FC<ImageModalProps> = ({
   onSave,
   onClose,
 }) => {
-  const [croppedImage, setCroppedImage] = useState<Blob>(null);
   const [croppedArea, setCroppedArea] = useState<Area>({
     x: 0,
     y: 0,
     width,
     height,
   });
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area>(null);
   const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [selectedImageIndex, setSelectedIndexImage] = useState(0);
@@ -88,16 +88,22 @@ const ImageModal: React.FC<ImageModalProps> = ({
   const onCropComplete = useCallback(
     async (_, croppedAreaPixels: Area) => {
       if (imageUrl && croppedAreaPixels.width && croppedAreaPixels.height) {
-        const response = await getCroppedImage(imageUrl, croppedAreaPixels, 0);
-        if (response.data) {
-          const [croppedImageBlob] = await response.data;
-          setCroppedImage(croppedImageBlob);
-        }
-        //@TODO: if there is an error while cropping an image then we need to handle this properly
+        setCroppedAreaPixels(croppedAreaPixels);
       }
     },
     [imageUrl],
   );
+
+  const handleSaveClick = async () => {
+    if (croppedAreaPixels) {
+      const response = await getCroppedImage(imageUrl, croppedAreaPixels, 0);
+      if (response.data) {
+        const [croppedImageBlob] = await response.data;
+        onSave(croppedImageBlob, selectedImageIndex);
+      }
+    }
+    //@TODO: if there is an error while cropping an image then we need to handle this properly
+  };
 
   return (
     <Modal
@@ -111,7 +117,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
           variant: 'primary',
           label: saveLabel,
           loading: isSavingImage,
-          onClick: () => onSave(croppedImage, selectedImageIndex),
+          onClick: handleSaveClick,
         },
       ]}
       showDivider={true}
