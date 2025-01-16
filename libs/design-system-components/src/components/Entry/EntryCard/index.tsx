@@ -75,6 +75,7 @@ export type EntryCardProps = {
   ref?: Ref<HTMLDivElement>;
   dataTestId?: string;
   menuItems: ListItem[];
+  nsfwText: string;
   onReflect?: () => void;
   onTagClick?: (tag: string) => void;
   onMentionClick?: (profileId: string) => void;
@@ -107,6 +108,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     actionsRight,
     reflectionsCount,
     customStyle = '',
+    nsfwText,
     onTagClick,
     onContentClick,
     onReflect,
