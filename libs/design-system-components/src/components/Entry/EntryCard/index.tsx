@@ -12,10 +12,13 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import EntryCardRemoved from '../EntryCardRemoved';
 import CardActions from './card-actions';
+import InlineNotification from '@akashaorg/design-system-core/lib/components/InlineNotification';
 import { EllipsisHorizontalIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import ReadOnlyEditor from '../../ReadOnlyEditor';
 import NSFW, { NSFWProps } from '../NSFW';
 import Menu from '@akashaorg/design-system-core/lib/components/Menu';
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils';
+import { Descendant } from 'slate';
 import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { type EntryData, EntityTypes, NavigateToParams } from '@akashaorg/typings/lib/ui';
 import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
@@ -31,10 +34,9 @@ type BeamProps = {
 };
 
 type ReflectProps = {
-  content?: ReactNode;
   itemType: EntityTypes.REFLECT;
   navigateTo?: (args: NavigateToParams) => void;
-};
+} & ({ slateContent: Descendant[] } | { errorTitle: string; errorMessage: string });
 
 export type EntryCardProps = {
   entryData: EntryData;
@@ -111,6 +113,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     showLoginModal,
     dataTestId,
     menuItems,
+    ...rest
   } = props;
 
   /**
@@ -189,7 +192,6 @@ const EntryCard: React.FC<EntryCardProps> = props => {
               >
                 {/* show the overlay in two cases: the user not logged in, or the beam is nsfw and
               the nsfw setting is off */}
-<<<<<<< HEAD
                 {((showNSFWCard && !nsfwUserSetting && !showNSFWContent) ||
                   (!isLoggedIn && showNSFWCard)) && (
                   <NSFW
@@ -202,63 +204,6 @@ const EntryCard: React.FC<EntryCardProps> = props => {
                             null,
                             'To view explicit or sensitive content, please connect to confirm your consent.',
                           );
-=======
-              {((showNSFWCard && !nsfwUserSetting && !showNSFWContent) ||
-                (!isLoggedIn && showNSFWCard)) && (
-                <NSFW
-                  {...nsfw}
-                  onClickToView={event => {
-                    event.stopPropagation();
-                    if (!isLoggedIn) {
-                      if (showLoginModal && typeof showLoginModal === 'function') {
-                        showLoginModal(
-                          null,
-                          'To view explicit or sensitive content, please connect to confirm your consent.',
-                        );
-                      }
-                    } else {
-                      setShowNSFWContent(true);
-                    }
-                  }}
-                />
-              )}
-              {/*
-               * display the content in case: the content is not nsfw or, the showNSFWContent flag
-               * is true or, the nsfw setting is on and the user is logged in.
-               */}
-              {(!entryData.nsfw || showNSFWContent || (nsfwUserSetting && isLoggedIn)) && (
-                <Stack
-                  justifySelf="start"
-                  alignSelf="start"
-                  align="start"
-                  spacing="gap-y-2"
-                  customStyle="grow"
-                  fullWidth={true}
-                >
-                  {(props as ReflectProps).content ||
-                    (props as BeamProps).sortedContents?.map(item => (
-                      <Fragment key={item.blockID}>
-                        {(props as BeamProps).children({ blockID: item.blockID })}
-                      </Fragment>
-                    ))}
-                </Stack>
-              )}
-              {showHiddenContent && entryData.tags?.length > 0 && (
-                <Stack
-                  justify="start"
-                  direction="row"
-                  spacing="gap-2"
-                  customStyle="flex-wrap mt-auto"
-                  fullWidth
-                >
-                  {entryData.tags?.map((tag, index) => (
-                    <Pill
-                      key={index}
-                      label={tag}
-                      onPillClick={() => {
-                        if (typeof onTagClick === 'function') {
-                          onTagClick(tag);
->>>>>>> b4076a9ca (feat: extract ReflectionCard related logic from EntryCard)
                         }
                       } else {
                         setShowNSFWContent(true);
