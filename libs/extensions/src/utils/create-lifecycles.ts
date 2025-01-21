@@ -1,4 +1,4 @@
-import { IRootComponentProps, SupportedUILibs, WidgetInterface } from '@akashaorg/typings/lib/ui';
+import { IRootComponentProps, SupportedUILibs } from '@akashaorg/typings/lib/ui';
 
 export type CreateLifecyclesOptions = {
   logger: IRootComponentProps['logger'];

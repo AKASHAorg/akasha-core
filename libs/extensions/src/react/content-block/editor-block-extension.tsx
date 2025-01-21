@@ -47,9 +47,15 @@ export const EditorBlockExtension: React.FC<EditorBlockExtensionProps> = props =
         { matchingBlocks, mode: ContentBlockModes.EDIT },
         {
           logger,
-          onScriptError: () => {},
-          onRenderError: () => {},
-          onModuleError: () => {},
+          onScriptError: err => {
+            onError?.(err);
+          },
+          onRenderError: err => {
+            onError?.(err);
+          },
+          onModuleError: err => {
+            onError?.(err);
+          },
         },
       )
         .then(newBlocks => {

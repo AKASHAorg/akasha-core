@@ -679,7 +679,34 @@ export default class AppLoader {
 
     singleSpa.registerApplication({
       name: this.worldConfig.layout,
-      app: () => createLoadingFunction(layoutConf.rootComponent, layoutConf.UILib, { logger }),
+      app: () =>
+        createLoadingFunction(layoutConf.rootComponent, layoutConf.UILib, {
+          logger,
+          onRenderError: () => {
+            showError({
+              slot: this.layoutConfig?.extensionSlots.applicationSlotId,
+              onRefresh: () => {
+                window.location.reload();
+              },
+            });
+          },
+          onScriptError: () => {
+            showError({
+              slot: this.layoutConfig?.extensionSlots.applicationSlotId,
+              onRefresh: () => {
+                window.location.reload();
+              },
+            });
+          },
+          onModuleError: () => {
+            showError({
+              slot: this.layoutConfig?.extensionSlots.applicationSlotId,
+              onRefresh: () => {
+                window.location.reload();
+              },
+            });
+          },
+        }),
       activeWhen: () => true,
       customProps: {
         domElement: getDomElement(layoutConf, this.worldConfig.layout, logger),
@@ -758,7 +785,39 @@ export default class AppLoader {
       };
       singleSpa.registerApplication({
         name,
-        app: () => createLoadingFunction(conf.rootComponent, conf.UILib, { logger }),
+        app: () =>
+          createLoadingFunction(conf.rootComponent, conf.UILib, {
+            logger,
+            onRenderError: () => {
+              showError({
+                slot: conf.mountsIn,
+                onRefresh: () => {
+                  window.location.reload();
+                },
+              });
+            },
+            onScriptError: () => {
+              showError({
+                slot: conf.mountsIn,
+                onRefresh: () => {
+                  window.location.reload();
+                },
+              });
+            },
+            onModuleError: () => {
+              showError({
+                slot: conf.mountsIn,
+                onRefresh: () => {
+                  window.location.reload();
+                },
+                onUnload: () => {
+                  System.delete(System.resolve(conf.name));
+                  this.plugins.core.routing.unregisterRoute(conf.name);
+                  singleSpa.unloadApplication(conf.name);
+                },
+              });
+            },
+          }),
         activeWhen,
         customProps: {
           ...customProps,

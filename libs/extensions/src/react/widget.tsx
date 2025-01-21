@@ -1,6 +1,4 @@
 import * as React from 'react';
-import singleSpaReact from 'single-spa-react';
-import ReactDOMClient from 'react-dom/client';
 import { useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { useRoutingEvents } from './use-routing-events';
 import { WidgetInterface, IWidgetStorePlugin } from '@akashaorg/typings/lib/ui';
@@ -50,9 +48,15 @@ export const Widget: React.FC<WidgetExtensionProps> = props => {
         try {
           const lifecycles = await createLifecycles(widget.rootComponent, widget.UILib, {
             logger: logger,
-            onModuleError: () => {},
-            onRenderError: () => {},
-            onScriptError: () => {},
+            onModuleError: () => {
+              onError?.(widget, 'Failed to load module.');
+            },
+            onRenderError: () => {
+              onError?.(widget, 'Failed to render.');
+            },
+            onScriptError: () => {
+              onError?.(widget, 'An unknown error occurred.');
+            },
           });
           newWidgets.push({ config: lifecycles, widget });
         } catch (err) {
