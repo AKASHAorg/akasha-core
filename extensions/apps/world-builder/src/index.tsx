@@ -11,8 +11,8 @@ import routes from './routes';
 import { Squares2X2Icon } from '@heroicons/react/24/outline';
 
 export const register = (opts: IntegrationRegistrationOptions): IAppConfig => ({
-  loadingFn: () => import('./components'),
   mountsIn: opts.layoutSlots?.applicationSlotId,
+  rootComponent: () => import('./components'),
   i18nNamespace: ['app-world-builder'],
   routes: {
     ...routes,
