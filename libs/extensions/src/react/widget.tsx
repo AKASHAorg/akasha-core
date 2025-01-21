@@ -4,6 +4,7 @@ import { useRoutingEvents } from './use-routing-events';
 import { WidgetInterface, IWidgetStorePlugin } from '@akashaorg/typings/lib/ui';
 import Parcel from 'single-spa-react/parcel';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { createLifecycles } from '../utils/create-lifecycles';
 
 export type WidgetExtensionProps = {
   name: string;
@@ -45,8 +46,19 @@ export const Widget: React.FC<WidgetExtensionProps> = props => {
       for (const widget of widgets) {
         if (newWidgets.find(p => p.widget.appName === widget.appName)) return;
         try {
-          const config = await widget.loadingFn();
-          newWidgets.push({ config, widget });
+          const lifecycles = await createLifecycles(widget.rootComponent, widget.UILib, {
+            logger: logger,
+            onModuleError: () => {
+              onError?.(widget, 'Failed to load module.');
+            },
+            onRenderError: () => {
+              onError?.(widget, 'Failed to render.');
+            },
+            onScriptError: () => {
+              onError?.(widget, 'An unknown error occurred.');
+            },
+          });
+          newWidgets.push({ config: lifecycles, widget });
         } catch (err) {
           logger.error(`error getting widget config, ${widget.appName}`);
           onError?.(widget);
@@ -56,7 +68,7 @@ export const Widget: React.FC<WidgetExtensionProps> = props => {
       setParcelConfigs(newWidgets);
     };
 
-    resolveConfigs().catch();
+    resolveConfigs().catch(err => onError(undefined, err.message));
   }, [widgets, onError, logger]);
 
   const handleParcelError = React.useCallback(
