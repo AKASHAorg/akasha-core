@@ -123,11 +123,8 @@ class Web3Connector {
       // eslint-disable-next-line no-async-promise-executor
       return new Promise(async resolve => {
         this.#w3modal.subscribeAccount(state => {
-          if (state.isConnected && state.address) {
+          if (state.isConnected && state.address && state.status === 'connected') {
             resolve({ connected: true });
-            if (this.#w3modal.getState().open) {
-              this.#w3modal.close();
-            }
           }
         });
 
