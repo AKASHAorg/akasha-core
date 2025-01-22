@@ -155,6 +155,17 @@ class Web3Connector {
     this.#w3modal.updateOptions(config);
   }
 
+  /**
+   * Sets the Web3Modal instance for the connector.
+   *
+   * @param w3modal - The AppKit instance of the Web3Modal.
+   */
+  setModalInstance(w3modal: AppKit) {
+    this.#log.info('Setting Web3Modal instance');
+    this.#w3modal = w3modal;
+    this.#log.info(w3modal.getState());
+  }
+
   /*
    * Get the current Web3Modal theme
    */
