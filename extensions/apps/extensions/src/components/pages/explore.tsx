@@ -60,8 +60,28 @@ export const ExplorePage: React.FC<unknown> = () => {
         }),
         nsfw: false,
       },
+      name: '@akashaorg/app-vibes-console',
       displayName: t('Vibes Console'),
       description: `${t("Dive into AKASHA WORLD's Vibes Console!")} 💫 ${t("Your spot to become a moderator, explore applicants, and curate content. Together, let's shape our vibrant community!")} 🌟🔍✨`,
+      applicationType: AkashaAppApplicationType.App,
+    },
+    {
+      id: '',
+      coverImageSrc: null,
+      author: {
+        profileDID: 'k2t6wzhkhabz1ftv1zfwnlrzcz5yyg0fxyf580fkvzr22g8ra8fa8y7hpdz0jc',
+        name: 'AKASHA',
+        alternativeAvatars: null,
+        avatar: transformSource({
+          src: 'ipfs://bafkreidk5aoxy2bde5nc6w4l6slxos3lbj5n75y766irlrb7vnfxgv4hwu',
+          width: 192,
+          height: 192,
+        }),
+        nsfw: false,
+      },
+      name: '@akashaorg/app-world-builder',
+      displayName: t('World Builder'),
+      description: `${t("Check out AKASHA WORLD's World Builder!")} 💫 ${t('The place to imagine new possibilities and create new worlds for dedicated communities. Define what is part of the space your community will live in with our easy to use configurator!')} 🌟🔍✨`,
       applicationType: AkashaAppApplicationType.App,
     },
   ];
@@ -96,7 +116,7 @@ export const ExplorePage: React.FC<unknown> = () => {
           <Button
             variant={isInstalled ? 'secondary' : 'primary'}
             label={isInstalled ? t('Installed') : t('Open')}
-            onClick={() => handleButtonClick('@akashaorg/app-vibes-console')}
+            onClick={() => handleButtonClick(ext.name)}
             customStyle="w-fit self-end"
           />
         ),
