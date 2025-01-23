@@ -1,5 +1,5 @@
 import React from 'react';
-import { useRootComponentProps, withProviders } from '@akashaorg/ui-core-hooks';
+import { useNotifications, useRootComponentProps, withProviders } from '@akashaorg/ui-core-hooks';
 import { BellAlert } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 
 import { NotificationEvents, type UIEventData } from '@akashaorg/typings/lib/ui';
@@ -19,6 +19,7 @@ const RoundedNotificationButton = () => {
   const uiEventsRef = React.useRef(uiEvents);
   const [snoozeNotifications, setSnoozeNotifications] = React.useState(false);
   const [hasNewNotifications, setHasNewNotifications] = React.useState(false);
+  const { previouslyEnabled } = useNotifications();
   // check if snooze notification option has already been set
   React.useEffect(() => {
     if (window.localStorage) {
@@ -80,7 +81,9 @@ const RoundedNotificationButton = () => {
       await sdk.services.common.notification.listenToNotificationEvents();
     };
 
-    init();
+    if (previouslyEnabled) {
+      init();
+    }
 
     return () => {
       if (subSDK) {
