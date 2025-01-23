@@ -22,16 +22,19 @@ export function useNotifications() {
   const [readOnlyMode, setReadOnlyMode] = useState(false);
   const [waitingForSignature, setWaitingForSignature] = useState(false);
 
-  // Initialise notificaitons readOnly client (without signature)
+  // Initialise notifications readOnly client (without signature)
   useEffect(() => {
-    sdk.services.common.notification
-      .initialize({ readonly: true })
-      .then(() => {
-        setReadOnlyMode(true);
-      })
-      .catch(error => {
-        console.error(error);
-      });
+    // if the user has already enabled notifications before
+    if (previouslyEnabled) {
+      sdk.services.common.notification
+        .initialize({ readonly: true })
+        .then(() => {
+          setReadOnlyMode(true);
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    }
   }, []);
 
   const enableNotifications = async () => {

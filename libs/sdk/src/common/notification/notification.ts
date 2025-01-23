@@ -106,39 +106,41 @@ class NotificationService {
    * @throws {Error} If `notificationsClient` is not initialized in read mode.
    */
   async listenToNotificationEvents() {
-    // Initialize a notification stream using the notifications client.
-    this._notificationsStream = await this.notificationsClient.initStream(
-      [CONSTANTS.STREAM.NOTIF],
-      {
-        filter: {
-          channels: [this._notificationChannelId],
+    if (!this._notificationsStream) {
+      // Initialize a notification stream using the notifications client.
+      this._notificationsStream = await this.notificationsClient.initStream(
+        [CONSTANTS.STREAM.NOTIF],
+        {
+          filter: {
+            channels: [this._notificationChannelId],
+          },
         },
-      },
-    );
-    // Listen for incoming notifications on the specified stream.
-    this._notificationsStream.on(CONSTANTS.STREAM.NOTIF, (data: any) => {
-      // Set new notifications badge
-      this._globalChannel.next({
-        data: {},
-        event: NOTIFICATION_EVENTS.NEW_NOTIFICATIONS,
+      );
+      // Listen for incoming notifications on the specified stream.
+      this._notificationsStream.on(CONSTANTS.STREAM.NOTIF, (data: any) => {
+        // Set new notifications badge
+        this._globalChannel.next({
+          data: {},
+          event: NOTIFICATION_EVENTS.NEW_NOTIFICATIONS,
+        });
+
+        if (Notification.permission == 'granted') {
+          // Extract notification data and create a browser Notification instance.
+          const notification = new Notification(data?.message?.notification.body, {
+            body: data?.message?.notification.body,
+            icon: data?.channel?.icon,
+            data: data?.message?.payload,
+          });
+          // Add a click event listener to the notification.
+          notification.onclick = (event: any) => {
+            event.preventDefault();
+            window.open(data?.message?.payload?.cta || data?.channel?.url, '_blank');
+          };
+        }
       });
 
-      if (Notification.permission == 'granted') {
-        // Extract notification data and create a browser Notification instance.
-        const notification = new Notification(data?.message?.notification.body, {
-          body: data?.message?.notification.body,
-          icon: data?.channel?.icon,
-          data: data?.message?.payload,
-        });
-        // Add a click event listener to the notification.
-        notification.onclick = (event: any) => {
-          event.preventDefault();
-          window.open(data?.message?.payload?.cta || data?.channel?.url, '_blank');
-        };
-      }
-    });
-
-    await this._notificationsStream.connect();
+      await this._notificationsStream.connect();
+    }
   }
 
   /**
@@ -151,6 +153,13 @@ class NotificationService {
       this._notificationsStream.removeAllListeners(CONSTANTS.STREAM.NOTIF);
       this._notificationsStream = undefined;
     }
+  }
+  /**
+   * Disconnect to notifications events and set _pushClient to undefined
+   */
+  async disconnect() {
+    await this.stopListeningToNotificationEvents();
+    this._pushClient = undefined;
   }
   /**
    * Retrieves the settings of notification channel.
@@ -191,7 +200,7 @@ class NotificationService {
     const channelSubscriptionInfo = subscriptions.find(
       subscription => subscription.channel === this._notificationChannelId,
     );
-    if (!channelSubscriptionInfo) return null;
+    if (!channelSubscriptionInfo) return [];
 
     // Parse the response
     const result = ChannelUserSettingsSchema.safeParse(channelSubscriptionInfo);
