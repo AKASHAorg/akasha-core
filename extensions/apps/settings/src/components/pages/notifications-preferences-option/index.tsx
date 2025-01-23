@@ -50,8 +50,10 @@ const NotificationsPreferencesOption: React.FC = () => {
   useEffect(() => {
     if ((notificationsEnabled || readOnlyMode) && initialLoading) {
       sdk.services.common.notification.getSettingsOfUser().then(fetchedPreferences => {
-        if (fetchedPreferences) {
+        if (fetchedPreferences.length > 0) {
           setPreferences(fetchedPreferences);
+        } else {
+          setPreferences(DEFAULT_PREFERENCES);
         }
         setInitialLoading(false);
       });

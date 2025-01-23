@@ -17,10 +17,11 @@ export const preferencesObjectFactory = (val: boolean): UserSettingType[] => {
       appName: AppName.PROFILE,
       enabled: val,
     },
-    {
-      index: 3,
-      appName: AppName.VIBES,
-      enabled: val,
-    },
+    // Currently we don't have Vibes Notifications
+    // {
+    //   index: 3,
+    //   appName: AppName.VIBES,
+    //   enabled: val,
+    // },
   ];
 };
