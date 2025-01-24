@@ -31,6 +31,7 @@ import { DIDSession } from 'did-session';
 import type { DagJWS } from 'dids';
 import type { JWE } from 'did-jwt';
 import { Eip1193Provider } from 'ethers';
+import NotificationService from '../common/notification/notification';
 
 // in memory atm
 const devKeys: { pubKey: string; addedAt: string; name?: string }[] = [];
@@ -52,6 +53,7 @@ class AWF_Auth {
   private _gql: Gql;
   private _lit: Lit;
   private _ceramic: CeramicService;
+  private _notificationService: NotificationService;
   private sessKey;
   private currentUser?: CurrentUser;
   private _lockSignIn?: boolean;
@@ -71,6 +73,7 @@ class AWF_Auth {
     @inject(TYPES.Gql) gql: Gql,
     @inject(TYPES.Lit) lit: Lit,
     @inject(TYPES.Ceramic) ceramic: CeramicService,
+    @inject(TYPES.Notification) notificationService: NotificationService,
   ) {
     this._db = db;
     this._web3 = web3;
@@ -80,6 +83,7 @@ class AWF_Auth {
     this._gql = gql;
     this._lit = lit;
     this._ceramic = ceramic;
+    this._notificationService = notificationService;
   }
 
   /**
@@ -321,6 +325,7 @@ class AWF_Auth {
     await this._ceramic.disconnect();
     await this._gql.setContextViewerID('');
     await this._web3.disconnect();
+    await this._notificationService.disconnect();
     await this._lit.disconnect();
     await this._gql.resetCache();
     // notify appLoader on sign out
