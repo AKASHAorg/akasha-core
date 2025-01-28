@@ -11,7 +11,7 @@
     For more info check https://tailwindcss.com/docs/customizing-colors#using-css-variables
   */
   :root {
-    --foundation-primary: #ff89b6, #4e71ff;
+    --foundation-primary: #ff89b6 #4e71ff;
     --foundation-secondary: 114 34 210; /* #7222d2 */
     --foundation-secondary-dark: 186 154 224; /* #ba9ae0 */
     --gradient-primary-start: 255 137 182; /* #ff89b6 */
@@ -76,9 +76,9 @@
   --foreground: 0 0% 98%;
   --muted: 240 3.8% 46.1%;
   --muted-foreground: 0 0% 98%;
-  --card: 220, 8%, 15%;
+  --card: 220 8% 15%;
   --card-foreground: 0 0% 98%;
-  --popover: 220, 8%, 15%;
+  --popover: 220 8% 15%;
   --popover-foreground: 0 0% 98%;
   --border: 240 5.2% 33.9%;
   --input: 240 5.3% 26.1%;
@@ -89,7 +89,7 @@
   --secondary: 252.5 94.7% 85.1%;
   --secondary-foreground: 0 0% 98%;
   --accent: 251.4 91.3% 95.5%;
-  --accent-foreground: 220, 8%, 15%;
+  --accent-foreground: 220 8% 15%;
   --destructive: 0 90.6% 70.8%;
   --destructive-foreground: 0 0% 98%;
   --ring: 252.5 94.7% 85.1%;
