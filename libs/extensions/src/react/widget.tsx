@@ -14,11 +14,22 @@ export type WidgetExtensionProps = {
   fullHeight?: boolean;
 };
 
-export const Widget: React.FC<WidgetExtensionProps> = props => {
+const WidgetComponent: React.FC<WidgetExtensionProps> = props => {
   const { name, loadingIndicator, onError, customStyle = '', fullHeight } = props;
   const { getCorePlugins, getContext, logger } = useRootComponentProps();
   const widgetStore = React.useRef<IWidgetStorePlugin>(getCorePlugins().widgetStore);
-  const [parcelConfigs, setParcelConfigs] = React.useState([]);
+  const [parcelConfigs, setParcelConfigs] = React.useState<
+    {
+      config: {
+        name: string;
+        bootstrap: () => Promise<never>;
+        mount: () => Promise<never>;
+        unmount: () => Promise<never>;
+        update: () => Promise<never>;
+      };
+      widget: WidgetInterface & { appName: string };
+    }[]
+  >([]);
   const location = useRoutingEvents();
 
   const [isParcelMounted, setIsParcelMounted] = React.useState(false);
@@ -43,8 +54,8 @@ export const Widget: React.FC<WidgetExtensionProps> = props => {
     const resolveConfigs = async () => {
       const newWidgets = [];
 
-      for (const widget of widgets) {
-        if (newWidgets.find(p => p.widget.appName === widget.appName)) return;
+      for (const [idx, widget] of widgets.entries()) {
+        if (newWidgets.find(p => p.widget.appName === widget.appName)) continue;
         try {
           const lifecycles = await createLifecycles(widget.rootComponent, widget.UILib, {
             logger: logger,
@@ -58,7 +69,13 @@ export const Widget: React.FC<WidgetExtensionProps> = props => {
               onError?.(widget, 'An unknown error occurred.');
             },
           });
-          newWidgets.push({ config: lifecycles, widget });
+          newWidgets.push({
+            config: {
+              ...lifecycles,
+              name: `${widget.appName}_${idx}`,
+            },
+            widget,
+          });
         } catch (err) {
           logger.error(`error getting widget config, ${widget.appName}`);
           onError?.(widget);
@@ -72,7 +89,7 @@ export const Widget: React.FC<WidgetExtensionProps> = props => {
   }, [widgets, onError, logger]);
 
   const handleParcelError = React.useCallback(
-    (widget, index: number) => err => {
+    (widget: WidgetInterface & { appName: string }, index: number) => (err: Error) => {
       onError?.(widget, `Failed to mount: ${err.message}`);
       if (logger) logger.error(`Failed to mount parcel: ${widget.appName}_${index}`);
     },
@@ -93,15 +110,18 @@ export const Widget: React.FC<WidgetExtensionProps> = props => {
           parcelDidMount={() => {
             setIsParcelMounted(true);
           }}
-          key={parcelConf.widget.appName}
-          config={{
-            ...parcelConf.config,
-            name: `${parcelConf.widget.appName}_${index}`,
-          }}
           {...getContext()}
+          key={parcelConf.widget.appName}
+          config={parcelConf.config}
           handleError={handleParcelError(parcelConf.widget, index)}
         />
       ))}
     </Stack>
   );
 };
+
+export class Widget extends React.PureComponent<WidgetExtensionProps> {
+  render() {
+    return <WidgetComponent {...this.props} />;
+  }
+}

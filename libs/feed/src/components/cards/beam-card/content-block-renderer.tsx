@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 import NSFW from '@akashaorg/design-system-components/lib/components/Entry/NSFW';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
@@ -41,8 +41,9 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
   const blockData = selectBlockData(contentBlockReq.data);
   const blockApp = selectBlockApp(contentBlockReq.data);
 
-  const matchingBlocks: MatchingBlock[] =
-    !blockData || !blockApp ? [] : contentBlockStoreRef.current.getMatchingBlocks(blockData);
+  const matchingBlocks: MatchingBlock[] = useMemo(() => {
+    return !blockData || !blockApp ? [] : contentBlockStoreRef.current.getMatchingBlocks(blockData);
+  }, [blockData, blockApp]);
 
   const foundBlock = matchingBlocks.find(matchingBlock => {
     if (matchingBlock.blockData && hasOwn(matchingBlock.blockData, 'id'))
@@ -63,20 +64,51 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
 
   const showNSFWCard = beamIsNsfw && !authenticatedDID;
 
-  const showLoginModal = () => {
+  const fetchErrorMsg = useMemo(
+    () => ({
+      errorTitle: !blockApp ? t('Cannot display content') : t('Network error occurred'),
+      errorDescription: !blockApp
+        ? t('Extension was removed or not available anymore.')
+        : t('Click on refresh to try reloading the block.'),
+    }),
+    [blockApp, t],
+  );
+
+  const contentLoadErrorMsg = useMemo(
+    () => ({
+      errorTitle: t('Content not loaded correctly'),
+      errorDescription: t('Unable to load content, please try again later.'),
+    }),
+    [t],
+  );
+  const showLoginModal = useCallback(() => {
     navigateToModal({
       name: 'login',
       message: 'To view explicit or sensitive content, please connect to confirm your consent.',
     });
-  };
+  }, [navigateToModal]);
 
-  const handleClickInstall = (e: React.SyntheticEvent) => {
-    e.stopPropagation();
-    navigateTo({
-      appName: '@akashaorg/app-extensions',
-      getNavigationUrl: () => `/info/${encodeAppName(blockApp.name)}`,
-    });
-  };
+  const onViewNSFWClick = useCallback(() => {
+    if (!authenticatedDID) {
+      showLoginModal();
+      return;
+    }
+  }, [authenticatedDID, showLoginModal]);
+
+  const handleClickInstall = useCallback(
+    (e: React.SyntheticEvent) => {
+      e.stopPropagation();
+      navigateTo({
+        appName: '@akashaorg/app-extensions',
+        getNavigationUrl: () => `/info/${encodeAppName(blockApp.name)}`,
+      });
+    },
+    [blockApp, navigateTo],
+  );
+
+  const onContentBlockRefresh = useCallback(() => {
+    contentBlockReq.refetch({ id: blockID });
+  }, [blockID, contentBlockReq]);
 
   const contentBlockErrors = useMemo(() => {
     if (contentBlockReq.error) {
@@ -110,24 +142,14 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
             matchingBlocks={matchingBlocks}
             cacheBlockConfig={true}
             error={contentBlockErrors}
-            fetchError={{
-              errorTitle: !blockApp ? t('Cannot display content') : t('Network error occurred'),
-              errorDescription: !blockApp
-                ? t('Extension was removed or not available anymore.')
-                : t('Click on refresh to try reloading the block.'),
-            }}
-            contentLoadError={{
-              errorTitle: t('Content not loaded correctly'),
-              errorDescription: t('Unable to load content, please try again later.'),
-            }}
+            fetchError={fetchErrorMsg}
+            contentLoadError={contentLoadErrorMsg}
             installButtonLabel={t('Install')}
             notInstalledTitle={t('not installed')}
             notInstalledDescription1={t('Please install')}
             notInstalledDescription2={t('to view this content.')}
             refreshLabel={!blockApp ? undefined : t('Refresh')}
-            onRefresh={() => {
-              contentBlockReq.refetch({ id: blockID });
-            }}
+            onRefresh={onContentBlockRefresh}
             onClickInstall={handleClickInstall}
           />
         </>
@@ -154,12 +176,7 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
             <NSFW
               clickToViewLabel={t('Click to View')}
               sensitiveContentLabel={t('Sensitive Content!')}
-              onClickToView={() => {
-                if (!authenticatedDID) {
-                  showLoginModal();
-                  return;
-                }
-              }}
+              onClickToView={onViewNSFWClick}
             />
           </Card>
         </Stack>

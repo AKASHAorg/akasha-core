@@ -22,18 +22,3 @@ const SlateBlockExtension = (
   );
 };
 export default withProviders<ContentBlockRootProps>(SlateBlockExtension);
-
-/*
-export const { bootstrap, mount, unmount } = singleSpaReact({
-  React,
-  ReactDOMClient,
-  rootComponent: withProviders<ContentBlockRootProps>(SlateBlockExtension),
-  errorBoundary: (err, errorInfo, props: IRootComponentProps & ContentBlockRootProps) => {
-    if (props.logger) {
-      props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
-    }
-
-    return <ErrorLoader type="script-error" title="Error in slate-block" details={err.message} />;
-  },
-});
-*/

@@ -15,7 +15,7 @@ export type ExtensionComponentProps<D> = {
   extensionData?: D;
 };
 
-export const Extension = <D,>(props: ExtensionComponentProps<D>) => {
+export const ExtensionRoot = <D,>(props: ExtensionComponentProps<D>) => {
   const {
     name,
     loadingIndicator,
@@ -47,7 +47,7 @@ export const Extension = <D,>(props: ExtensionComponentProps<D>) => {
       const newExtensions = [];
 
       for (const extension of extensions) {
-        if (newExtensions.find(parcel => parcel.extension.appName === extension.appName)) return;
+        if (newExtensions.find(parcel => parcel.extension.appName === extension.appName)) continue;
 
         try {
           const lifecycles = await createLifecycles(extension.rootComponent, undefined, {
@@ -95,3 +95,9 @@ export const Extension = <D,>(props: ExtensionComponentProps<D>) => {
     </Stack>
   );
 };
+
+export class Extension<T> extends React.PureComponent<ExtensionComponentProps<T>> {
+  render() {
+    return <ExtensionRoot {...this.props} />;
+  }
+}

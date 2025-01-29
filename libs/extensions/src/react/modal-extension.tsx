@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Extension } from './extension';
 import { useRootComponentProps } from '@akashaorg/ui-core-hooks';
 
-export const ModalExtension = () => {
+const ModalExtensionRoot = () => {
   const { getModalFromParams } = useRootComponentProps();
   const getModalFromParamsRef = React.useRef(getModalFromParams);
   const [activeModal, setActiveModal] = React.useState<string>();
@@ -25,3 +25,9 @@ export const ModalExtension = () => {
 
   return activeModal && <Extension name={activeModal} />;
 };
+
+export class ModalExtension extends React.PureComponent {
+  render() {
+    return <ModalExtensionRoot />;
+  }
+}

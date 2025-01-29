@@ -230,7 +230,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       {...rest}
     >
       {({ blockID }) => (
-        <React.Suspense fallback={<></>}>
+        <React.Suspense fallback={null}>
           <ContentBlockRenderer
             blockID={blockID}
             authenticatedDID={authenticatedDID}
