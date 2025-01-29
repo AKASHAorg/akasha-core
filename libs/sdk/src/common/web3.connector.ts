@@ -123,11 +123,8 @@ class Web3Connector {
       // eslint-disable-next-line no-async-promise-executor
       return new Promise(async resolve => {
         this.#w3modal.subscribeAccount(state => {
-          if (state.isConnected && state.address) {
+          if (state.isConnected && state.address && state.status === 'connected') {
             resolve({ connected: true });
-            if (this.#w3modal.getState().open) {
-              this.#w3modal.close();
-            }
           }
         });
 
@@ -153,6 +150,17 @@ class Web3Connector {
    */
   updateModalOptions(config: Partial<OptionsControllerState>) {
     this.#w3modal.updateOptions(config);
+  }
+
+  /**
+   * Sets the Web3Modal instance for the connector.
+   *
+   * @param w3modal - The AppKit instance of the Web3Modal.
+   */
+  setModalInstance(w3modal: AppKit) {
+    this.#log.info('Setting Web3Modal instance');
+    this.#w3modal = w3modal;
+    this.#log.info(w3modal.getState());
   }
 
   /*

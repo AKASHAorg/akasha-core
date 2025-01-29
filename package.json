@@ -87,7 +87,7 @@
     "uint8arrays": "4.0.4",
     "url-loader": "4.1.1",
     "util": "0.12.5",
-    "web3-utils": "1.8.1",
+    "web3-utils": "4.3.3",
     "zod": "3.24.1"
   },
   "devDependencies": {
@@ -267,7 +267,7 @@
     "tslib": "2.4.1",
     "tsx": "^4.17.0",
     "typescript": "5.6.3",
-    "webpack": "5.95.0",
+    "webpack": "5.97.1",
     "webpack-assets-manifest": "5.2.1",
     "webpack-bundle-analyzer": "4.6.1",
     "webpack-cli": "5.1.4",

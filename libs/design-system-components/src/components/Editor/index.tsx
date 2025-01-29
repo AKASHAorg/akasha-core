@@ -103,6 +103,13 @@ export type EditorBoxProps = {
   encodingFunction: (value: Descendant[]) => string;
 };
 
+const renderElementFn = (renderProps: RenderElementProps) =>
+  renderElement(
+    renderProps,
+    () => null,
+    () => null,
+    () => null,
+  );
 /* eslint-disable complexity */
 /**
  * Editor component based on the slate.js framework
@@ -447,14 +454,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
   };
 
   const publishDisabled = publishDisabledInternal || disablePublish;
-
-  const renderElementFn = (renderProps: RenderElementProps) =>
-    renderElement(
-      renderProps,
-      () => null,
-      () => null,
-      () => null,
-    );
+  const [, forceUpdate] = React.useReducer(x => x + 1, 0);
 
   return (
     <Stack
@@ -525,17 +525,27 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
             >
               {withToolbar && (
                 <Stack direction="row">
-                  <MarkButton format="bold" icon={<Bold />} style={'rounded-l-[0.125rem]'} />
-                  <MarkButton format="italic" icon={<Italic />} />
-                  <MarkButton format="underline" icon={<Underline />} />
-                  <BlockButton format="left" icon={<AlignTextLeft />} />
-                  <BlockButton format="center" icon={<AlignTextCenter />} />
-                  <BlockButton format="right" icon={<AlignTextRight />} />
-                  <BlockButton format="numbered-list" icon={<ListNumbered />} />
+                  <MarkButton
+                    format="bold"
+                    icon={<Bold />}
+                    style={'rounded-l-[0.125rem]'}
+                    callback={forceUpdate}
+                  />
+                  <MarkButton format="italic" icon={<Italic />} callback={forceUpdate} />
+                  <MarkButton format="underline" icon={<Underline />} callback={forceUpdate} />
+                  <BlockButton format="left" icon={<AlignTextLeft />} callback={forceUpdate} />
+                  <BlockButton format="center" icon={<AlignTextCenter />} callback={forceUpdate} />
+                  <BlockButton format="right" icon={<AlignTextRight />} callback={forceUpdate} />
+                  <BlockButton
+                    format="numbered-list"
+                    icon={<ListNumbered />}
+                    callback={forceUpdate}
+                  />
                   <BlockButton
                     format="bulleted-list"
                     icon={<ListBulleted />}
                     style={'rounded-r-[0.125rem]'}
+                    callback={forceUpdate}
                   />
                 </Stack>
               )}

@@ -18,6 +18,7 @@ import EnableAllSetting from './enable-all-setting';
 import { findAppIndex, preferencesObjectFactory } from './utils';
 import LoadingSettingsPlaceholder from './loading-settings-placeholder';
 import { UserSettingType } from '@akashaorg/typings/lib/sdk';
+import ConnectErrorCard from '@akashaorg/design-system-components/lib/components/ConnectErrorCard';
 
 export enum AppName {
   ANTENNA = 'Antenna App',
@@ -46,15 +47,24 @@ const NotificationsPreferencesOption: React.FC = () => {
   const [enableAllChecked, setEnableAllChecked] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [initialLoading, setInitialLoading] = useState<boolean>(true);
+  const [errorInFetchingPreferences, setErrorInFetchingPreferences] = useState<boolean>(false);
 
   useEffect(() => {
     if ((notificationsEnabled || readOnlyMode) && initialLoading) {
-      sdk.services.common.notification.getSettingsOfUser().then(fetchedPreferences => {
-        if (fetchedPreferences) {
-          setPreferences(fetchedPreferences);
-        }
-        setInitialLoading(false);
-      });
+      sdk.services.common.notification
+        .getSettingsOfUser()
+        .then(fetchedPreferences => {
+          if (fetchedPreferences.length > 0) {
+            setPreferences(fetchedPreferences);
+          } else {
+            setPreferences(DEFAULT_PREFERENCES);
+          }
+          setInitialLoading(false);
+        })
+        .catch(() => {
+          setErrorInFetchingPreferences(true);
+          setInitialLoading(false);
+        });
     }
   }, [sdk.services.common.notification, notificationsEnabled, readOnlyMode, initialLoading]);
 
@@ -145,60 +155,71 @@ const NotificationsPreferencesOption: React.FC = () => {
 
   return (
     <Stack spacing="gap-y-4" customStyle="mb-2">
-      <Text variant="h5">{t('Notification Preferences')}</Text>
-      {!notificationsEnabled && (
-        <UnlockCard onClick={handleUnlockPreferences} loading={waitingForSignature} />
-      )}
-
-      <Card
-        padding="pb-3"
-        customStyle={tw(`${!notificationsEnabled && 'opacity-50 pointer-events-none'}`)}
-      >
-        <Stack padding="px-3 pb-6">
-          <EnableAllSetting
-            isSelected={enableAllChecked}
-            onChange={e => handleToggleAll(e.target.checked)}
-          />
-          <Text variant="h6">{t('Default Extensions')}</Text>
-
-          {initialLoading ? (
-            <LoadingSettingsPlaceholder />
-          ) : (
-            <>
-              <ProfileSetting
-                isSelected={preferences[PROFILE_ARR_INDEX].enabled}
-                onChange={e => handleSetPreference(e.target.checked, PROFILE_ARR_INDEX)}
-              />
-
-              <AntennaSetting
-                isSelected={preferences[ANTENNA_ARR_INDEX].enabled}
-                onChange={e => handleSetPreference(e.target.checked, ANTENNA_ARR_INDEX)}
-              />
-            </>
+      {!errorInFetchingPreferences && (
+        <>
+          <Text variant="h5">{t('Notification Preferences')}</Text>
+          {!notificationsEnabled && (
+            <UnlockCard onClick={handleUnlockPreferences} loading={waitingForSignature} />
           )}
-        </Stack>
+          <Card
+            padding="pb-3"
+            customStyle={tw(`${!notificationsEnabled && 'opacity-50 pointer-events-none'}`)}
+          >
+            <Stack padding="px-3 pb-6">
+              <EnableAllSetting
+                isSelected={enableAllChecked}
+                onChange={e => handleToggleAll(e.target.checked)}
+              />
+              <Text variant="h6">{t('Default Extensions')}</Text>
 
-        {/* Buttons */}
-        <Stack direction="row" customStyle="border(t-1 solid grey8 dark:grey5) pt-4 px-3">
-          <Button
-            onClick={handleReset}
-            variant="text"
-            size="md"
-            color="dark:secondaryLight secondaryDark"
-            label={t('Reset')}
-            customStyle="ml-auto"
-          />
-          <Button
-            onClick={handleSave}
-            variant="primary"
-            size="md"
-            color="dark:secondaryLight secondaryDark"
-            label={t('Save')}
-            customStyle="ml-4"
-            loading={loading}
-          />
-        </Stack>
-      </Card>
+              {initialLoading ? (
+                <LoadingSettingsPlaceholder />
+              ) : (
+                <>
+                  <ProfileSetting
+                    isSelected={preferences[PROFILE_ARR_INDEX].enabled}
+                    onChange={e => handleSetPreference(e.target.checked, PROFILE_ARR_INDEX)}
+                  />
+
+                  <AntennaSetting
+                    isSelected={preferences[ANTENNA_ARR_INDEX].enabled}
+                    onChange={e => handleSetPreference(e.target.checked, ANTENNA_ARR_INDEX)}
+                  />
+                </>
+              )}
+            </Stack>
+
+            {/* Buttons */}
+            <Stack direction="row" customStyle="border(t-1 solid grey8 dark:grey5) pt-4 px-3">
+              <Button
+                onClick={handleReset}
+                variant="text"
+                size="md"
+                color="dark:secondaryLight secondaryDark"
+                label={t('Reset')}
+                customStyle="ml-auto"
+              />
+              <Button
+                onClick={handleSave}
+                variant="primary"
+                size="md"
+                color="dark:secondaryLight secondaryDark"
+                label={t('Save')}
+                customStyle="ml-4"
+                loading={loading}
+              />
+            </Stack>
+          </Card>
+        </>
+      )}
+      {errorInFetchingPreferences && !initialLoading && (
+        <>
+          <ConnectErrorCard
+            title={t('Failed')}
+            message={t('Error in fetching preferences')}
+          ></ConnectErrorCard>
+        </>
+      )}
     </Stack>
   );
 };

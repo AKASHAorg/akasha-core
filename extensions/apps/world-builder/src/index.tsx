@@ -8,7 +8,7 @@ import {
 } from '@akashaorg/typings/lib/ui';
 import React from 'react';
 import routes from './routes';
-import { Squares2X2Icon } from '@heroicons/react/24/outline';
+import { Earth } from 'lucide-react';
 
 export const register = (opts: IntegrationRegistrationOptions): IAppConfig => ({
   mountsIn: opts.layoutSlots?.applicationSlotId,
@@ -18,9 +18,9 @@ export const register = (opts: IntegrationRegistrationOptions): IAppConfig => ({
     ...routes,
   },
   menuItems: {
-    label: 'Vibes Console',
+    label: 'World Builder',
     type: MenuItemType.App,
-    logo: { type: LogoTypeSource.ICON, value: <Squares2X2Icon /> },
+    logo: { type: LogoTypeSource.ICON, value: <Earth /> },
     area: [MenuItemAreaType.UserAppArea],
     subRoutes: [],
   },

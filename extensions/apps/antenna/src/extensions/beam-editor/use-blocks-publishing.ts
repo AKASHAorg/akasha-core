@@ -214,7 +214,6 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
           }
         }
       }
-      setIsPublishing(false);
     },
     [blocksInUse],
   );

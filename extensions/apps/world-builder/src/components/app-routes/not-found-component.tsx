@@ -10,7 +10,7 @@ export const NotFoundComponent = (props: { error?: Error; reset?: (key: string) 
 
   useEffect(() => {
     if (props.error) {
-      logger.warn(`Error in VibesConsole app: ${props.error}`);
+      logger.warn(`Error in World Builder app: ${props.error}`);
     }
   }, [logger, props.error]);
 
