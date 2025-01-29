@@ -9,12 +9,10 @@ export const useSticky = (
   const prevScrollY = useRef(0);
   const wasScrollingDown = useRef(false);
 
-  const [style, setStyle] = useState({
-    position: 'sticky',
-    stickyPosition: 'top-0',
-    contentHeight: 0,
-    offset: 0,
-  });
+  const [position, setPosition] = useState('sticky');
+  const [stickyPosition, setStickyPosition] = useState('top-0');
+  const [contentHeight, setContentHeight] = useState(0);
+  const [offset, setOffset] = useState(0);
 
   const { observe, unobserve } = useResizeObserver();
 
@@ -38,21 +36,17 @@ export const useSticky = (
       const scrollUpOffset = innerHeight - contentRect.height - containerTop;
       const scrollChanged = wasScrollingDown.current !== isScrollingDown;
       if (innerHeight - contentRect.height >= containerTop) {
-        setStyle({
-          offset: 0,
-          contentHeight: contentRect.height,
-          position: 'sticky',
-          stickyPosition: 'top-0',
-        });
+        setPosition('sticky');
+        setStickyPosition('top-0');
+        setContentHeight(contentRect.height);
+        setOffset(0);
       } else {
-        setStyle(prev => ({
-          position: 'sticky',
-          stickyPosition: isScrollingDown
-            ? `top-[${scrollDownOffset}px]`
-            : `bottom-[${scrollUpOffset}px]`,
-          contentHeight: contentRect.height,
-          offset: scrollChanged ? containerOffset : prev.offset,
-        }));
+        setPosition('sticky');
+        setStickyPosition(
+          isScrollingDown ? `top-[${scrollDownOffset}px]` : `bottom-[${scrollUpOffset}px]`,
+        );
+        setContentHeight(contentRect.height);
+        setOffset(prev => (scrollChanged ? containerOffset : prev));
       }
       wasScrollingDown.current = isScrollingDown;
     },
@@ -66,9 +60,9 @@ export const useSticky = (
   }, [update]);
 
   const onSizeChange = useCallback(() => {
-    const changed = contentRef.current.offsetHeight > style.contentHeight;
+    const changed = contentRef.current.offsetHeight > contentHeight;
     update(changed);
-  }, [contentRef, style.contentHeight, update]);
+  }, [contentRef, contentHeight, update]);
 
   useLayoutEffect(() => {
     const contentNode = contentRef.current;
@@ -89,5 +83,5 @@ export const useSticky = (
     };
   }, [onScroll, update]);
 
-  return style;
+  return [position, stickyPosition, contentHeight, offset];
 };

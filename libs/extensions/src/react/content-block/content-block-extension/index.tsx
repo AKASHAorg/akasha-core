@@ -42,7 +42,7 @@ export type ContentBlockExtensionProps = {
     }
 );
 
-export const ContentBlockExtension: React.FC<ContentBlockExtensionProps> = props => {
+const ContentBlockExtensionRoot: React.FC<ContentBlockExtensionProps> = props => {
   const {
     blockRef,
     fetchError,
@@ -200,3 +200,9 @@ export const ContentBlockExtension: React.FC<ContentBlockExtensionProps> = props
     />
   );
 };
+
+export class ContentBlockExtension extends React.PureComponent<ContentBlockExtensionProps> {
+  render() {
+    return <ContentBlockExtensionRoot {...this.props} />;
+  }
+}

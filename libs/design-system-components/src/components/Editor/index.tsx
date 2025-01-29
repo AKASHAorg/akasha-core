@@ -103,6 +103,13 @@ export type EditorBoxProps = {
   encodingFunction: (value: Descendant[]) => string;
 };
 
+const renderElementFn = (renderProps: RenderElementProps) =>
+  renderElement(
+    renderProps,
+    () => null,
+    () => null,
+    () => null,
+  );
 /* eslint-disable complexity */
 /**
  * Editor component based on the slate.js framework
@@ -447,7 +454,6 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
   };
 
   const publishDisabled = publishDisabledInternal || disablePublish;
-
   const [, forceUpdate] = React.useReducer(x => x + 1, 0);
 
   return (
@@ -495,14 +501,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
               spellCheck={false}
               // eslint-disable-next-line
               autoFocus={true}
-              renderElement={(renderProps: RenderElementProps) =>
-                renderElement(
-                  renderProps,
-                  () => null,
-                  () => null,
-                  () => null,
-                )
-              }
+              renderElement={renderElementFn}
               renderLeaf={renderLeaf}
               onKeyDown={onKeyDown}
               className={tw('focus:outline-none')}

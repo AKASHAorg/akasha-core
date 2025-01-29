@@ -166,7 +166,7 @@ export default class AppLoader {
     await this.loadLayoutConfig();
     await this.initializeExtensions(this.extensionModules);
     this.extensionConfigs = this.registerExtensions(this.extensionModules);
-    this.renderLayout();
+    await this.renderLayout();
 
     this.listenGlobalChannel().catch();
     // automatic logging in if previous session is detected

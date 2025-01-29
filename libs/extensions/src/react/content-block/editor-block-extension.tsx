@@ -16,7 +16,7 @@ export type EditorBlockExtensionProps = {
   externalHandler?: (value: never) => void;
 };
 
-export const EditorBlockExtension: React.FC<EditorBlockExtensionProps> = props => {
+const EditorBlockExtensionRoot: React.FC<EditorBlockExtensionProps> = props => {
   const { blockRef, propertyType, appName, onError, externalHandler } = props;
   const { logger, getCorePlugins } = useRootComponentProps();
   const contentBlockStoreRef = useRef(getCorePlugins()?.contentBlockStore);
@@ -107,3 +107,9 @@ export const EditorBlockExtension: React.FC<EditorBlockExtensionProps> = props =
     </>
   );
 };
+
+export class EditorBlockExtension extends React.PureComponent<EditorBlockExtensionProps> {
+  render() {
+    return <EditorBlockExtensionRoot {...this.props} />;
+  }
+}

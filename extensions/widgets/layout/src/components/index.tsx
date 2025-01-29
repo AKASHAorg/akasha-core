@@ -28,6 +28,12 @@ import SidebarLoader from '@akashaorg/design-system-components/lib/components/Lo
 import { css } from '@twind/core';
 import { useSticky } from './use-sticky';
 
+const sidebarLoadingIndicator = <SidebarLoader />;
+const miniProfileLoadingIndicator = <MiniProfileWidgetLoader />;
+const trendingWidgetLoadingIndicator = <TrendingWidgetLoader />;
+const topbarLoadingIndicator = <TopbarLoader />;
+const exclamationTriangleIcon = <ExclamationTriangleIcon />;
+
 const Layout: React.FC<unknown> = () => {
   const widgetContainerRef = useRef<HTMLDivElement>(null);
   const widgetContentRef = useRef<HTMLDivElement>(null);
@@ -42,7 +48,13 @@ const Layout: React.FC<unknown> = () => {
   const { uiEvents, layoutSlots } = useRootComponentProps();
   // initialise fallback theme, if none is set
   useTheme();
-  const widgetStickyStyle = useSticky(widgetContainerRef, widgetContentRef, 8);
+
+  const [position, stickyPos, contentHeight, offset] = useSticky(
+    widgetContainerRef,
+    widgetContentRef,
+    8,
+  );
+
   useEffect(() => {
     const mql = window.matchMedia(startMobileSidebarHidingBreakpoint);
 
@@ -94,9 +106,11 @@ const Layout: React.FC<unknown> = () => {
     setShowSidebar(false);
   };
 
-  const handleWidgetsShow = () => {
+  const handleWidgetsShow = React.useCallback(() => {
+    if (showWidgets) return;
     setshowWidgets(true);
-  };
+  }, [showWidgets]);
+
   const handleWidgetsHide = () => {
     setshowWidgets(false);
   };
@@ -144,7 +158,7 @@ const Layout: React.FC<unknown> = () => {
         eventsSub.unsubscribe();
       }
     };
-  }, []);
+  }, [handleWidgetsShow]);
 
   const layoutStyle = `grid min-h-full lg:${showWidgets ? 'grid-cols-[8fr_4fr]' : 'grid-cols-[2fr_8fr_2fr]'} ${showSidebar ? 'xl:grid-cols-[3fr_6fr_3fr] ' : 'xl:grid-cols-[1.5fr_6fr_3fr_1.5fr]'} xl:max-w-7xl xl:mx-auto gap-x-3 w-full`;
 
@@ -184,7 +198,7 @@ const Layout: React.FC<unknown> = () => {
                   <Widget
                     fullHeight
                     name={layoutSlots.sidebarSlotId}
-                    loadingIndicator={<SidebarLoader />}
+                    loadingIndicator={sidebarLoadingIndicator}
                   />
                 </Stack>
               ) : (
@@ -192,7 +206,7 @@ const Layout: React.FC<unknown> = () => {
                   <Widget
                     fullHeight
                     name={layoutSlots.sidebarSlotId}
-                    loadingIndicator={<SidebarLoader />}
+                    loadingIndicator={sidebarLoadingIndicator}
                   />
                 </Stack>
               )}
@@ -207,7 +221,7 @@ const Layout: React.FC<unknown> = () => {
               padding="pt-4"
               customStyle="sticky top-0 z-10 bg(white dark:black) rounded-b-2xl"
             >
-              <Widget name={layoutSlots.topbarSlotId} loadingIndicator={<TopbarLoader />} />
+              <Widget name={layoutSlots.topbarSlotId} loadingIndicator={topbarLoadingIndicator} />
             </Stack>
             <Stack padding="pt-4" spacing="gap-y-4">
               {!isPlatformHealthy && (
@@ -218,7 +232,7 @@ const Layout: React.FC<unknown> = () => {
                   <Stack direction="row">
                     <Icon
                       color={{ light: 'grey3', dark: 'grey3' }}
-                      icon={<ExclamationTriangleIcon />}
+                      icon={exclamationTriangleIcon}
                       customStyle="mr-4"
                     />
                     <Stack>
@@ -244,22 +258,22 @@ const Layout: React.FC<unknown> = () => {
           <Stack
             ref={widgetContainerRef}
             padding="pr-2" // right padding to match with main area on screen sizes when sidebar visibility toggles
-            customStyle={`relative min-h-[${widgetStickyStyle.contentHeight}px] h-full`}
+            customStyle={`relative min-h-[${contentHeight}px] h-full`}
           >
             <Stack customStyle="h-full hidden lg:flex">
-              <Stack customStyle={`mt-[${widgetStickyStyle.offset}px]`} />
+              <Stack customStyle={`mt-[${offset}px]`} />
               <Stack
                 ref={widgetContentRef}
-                customStyle={`${widgetStickyStyle.position} ${widgetStickyStyle.stickyPosition} ${showWidgets ? '' : 'hidden'} self-start`}
+                customStyle={`${position} ${stickyPos} ${showWidgets ? '' : 'hidden'} self-start`}
               >
                 <Stack customStyle="my-4">
                   <Widget
                     name={layoutSlots.contextualWidgetSlotId}
-                    loadingIndicator={<MiniProfileWidgetLoader />}
+                    loadingIndicator={miniProfileLoadingIndicator}
                   />
                   <Widget
                     name={layoutSlots.widgetSlotId}
-                    loadingIndicator={<TrendingWidgetLoader />}
+                    loadingIndicator={trendingWidgetLoadingIndicator}
                   />
                 </Stack>
               </Stack>

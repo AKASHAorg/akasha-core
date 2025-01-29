@@ -20,7 +20,7 @@ export type BlockParcelProps = {
     }
 );
 
-export const BlockParcel: React.FC<BlockParcelProps> = props => {
+const BlockParcelRoot: React.FC<BlockParcelProps> = props => {
   const { matchingBlock, blockId, index, blockRef, onError, ...rest } = props;
   const { getContext, logger } = useRootComponentProps();
   const handleParcelError = React.useCallback(
@@ -70,3 +70,9 @@ export const BlockParcel: React.FC<BlockParcelProps> = props => {
     </Stack>
   );
 };
+
+export class BlockParcel extends React.PureComponent<BlockParcelProps> {
+  render() {
+    return <BlockParcelRoot {...this.props} />;
+  }
+}

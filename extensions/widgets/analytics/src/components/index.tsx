@@ -118,4 +118,4 @@ const App = () => {
     </I18nextProvider>
   );
 };
-export default withProviders(React.memo(App));
+export default withProviders(App);

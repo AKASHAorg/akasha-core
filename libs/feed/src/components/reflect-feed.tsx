@@ -113,7 +113,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
     const updateCache = async () => {
       for (const pendingReflection of pendingReflections) {
         if (pendingReflection.published) {
-          const query = await apolloClient.cache.readQuery<GetReflectionStreamQuery>({
+          const query = apolloClient.cache.readQuery<GetReflectionStreamQuery>({
             query: GetReflectionStreamDocument,
             variables,
           });
