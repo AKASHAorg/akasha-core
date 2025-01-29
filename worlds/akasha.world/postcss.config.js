@@ -1,4 +1,4 @@
-const postCSSConfig = require('../../libs/postcss.config');
+const baseConfig = require('../../libs/postcss.config');
 module.exports = {
-  ...postCSSConfig,
+  ...baseConfig,
 };
