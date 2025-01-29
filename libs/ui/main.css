@@ -1,6 +1,5 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss' source(none);
+@source "../ui";
 
 @layer base {
   html {
@@ -65,37 +64,36 @@
     --warning-foreground: 54.5 91.7% 95.3%;
     --radius: 1.5rem;
   }
+
+  .dark {
+    --background: 240 5.9% 10%;
+    --foreground: 0 0% 98%;
+    --muted: 240 3.8% 46.1%;
+    --muted-foreground: 0 0% 98%;
+    --card: 220 8% 15%;
+    --card-foreground: 0 0% 98%;
+    --popover: 220 8% 15%;
+    --popover-foreground: 0 0% 98%;
+    --border: 240 5.2% 33.9%;
+    --input: 240 5.3% 26.1%;
+    --primary: 262.1 83.3% 57.8%;
+    --primary-start: 329 86% 70%;
+    --primary-end: 239 84% 67%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 252.5 94.7% 85.1%;
+    --secondary-foreground: 0 0% 98%;
+    --accent: 251.4 91.3% 95.5%;
+    --accent-foreground: 220 8% 15%;
+    --destructive: 0 90.6% 70.8%;
+    --destructive-foreground: 0 0% 98%;
+    --ring: 252.5 94.7% 85.1%;
+    --success: 152.4 76% 80.4%;
+    --success-foreground: 164.2 85.7% 16.5%;
+    --warning: 54.9 96.7% 88%;
+    --warning-foreground: 35.5 91.7% 32.9%;
+  }
 }
 
 * {
   border-color: hsl(var(--border));
-}
-
-.dark {
-  --background: 240 5.9% 10%;
-  --foreground: 0 0% 98%;
-  --muted: 240 3.8% 46.1%;
-  --muted-foreground: 0 0% 98%;
-  --card: 220 8% 15%;
-  --card-foreground: 0 0% 98%;
-  --popover: 220 8% 15%;
-  --popover-foreground: 0 0% 98%;
-  --border: 240 5.2% 33.9%;
-  --input: 240 5.3% 26.1%;
-  --primary: 262.1 83.3% 57.8%;
-  --primary-start: 329 86% 70%;
-  --primary-end: 239 84% 67%;
-  --primary-foreground: 0 0% 98%;
-  --secondary: 252.5 94.7% 85.1%;
-  --secondary-foreground: 0 0% 98%;
-  --accent: 251.4 91.3% 95.5%;
-  --accent-foreground: 220 8% 15%;
-  --destructive: 0 90.6% 70.8%;
-  --destructive-foreground: 0 0% 98%;
-  --ring: 252.5 94.7% 85.1%;
-  --success: 152.4 76% 80.4%;
-  --success-foreground: 164.2 85.7% 16.5%;
-  --warning: 54.9 96.7% 88%;
-  --warning-foreground: 35.5 91.7% 32.9%;
-  --radius: 1.5rem;
 }
