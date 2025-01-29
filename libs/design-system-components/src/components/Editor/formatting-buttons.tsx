@@ -10,9 +10,10 @@ export type ToolbarButtonProps = {
   icon: JSX.Element;
   iconSize?: IconProps['size'];
   style?: string;
+  callback?: () => void;
 };
 
-export const BlockButton: React.FC<ToolbarButtonProps> = ({ format, icon, style }) => {
+export const BlockButton: React.FC<ToolbarButtonProps> = ({ format, icon, style, callback }) => {
   const editor = useSlate();
   const active = CustomEditor.isBlockActive(
     editor,
@@ -24,6 +25,7 @@ export const BlockButton: React.FC<ToolbarButtonProps> = ({ format, icon, style 
       onClick={event => {
         event.preventDefault();
         CustomEditor.toggleBlock(editor, format);
+        callback();
       }}
     >
       <Stack
@@ -45,6 +47,7 @@ export const MarkButton: React.FC<ToolbarButtonProps> = ({
   icon,
   iconSize = 'sm',
   style,
+  callback,
 }) => {
   const editor = useSlate();
   const active = CustomEditor.isMarkActive(editor, format);
@@ -53,6 +56,7 @@ export const MarkButton: React.FC<ToolbarButtonProps> = ({
       onClick={event => {
         event.preventDefault();
         CustomEditor.toggleMark(editor, format);
+        callback();
       }}
     >
       <Stack
