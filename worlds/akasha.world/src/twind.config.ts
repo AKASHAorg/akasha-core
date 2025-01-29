@@ -5,6 +5,7 @@ import presetLineClamp from '@twind/preset-line-clamp';
 import twindBaseConfig from '../../../twindBaseConfig';
 import presetContainerQueries from '@twind/preset-container-queries';
 
+//@TODO: gradually migrate from using twind/core to tailwindcss
 export default defineConfig({
   presets: [presetAutoprefix(), presetTailwind(), presetLineClamp(), presetContainerQueries()],
   ...twindBaseConfig,
