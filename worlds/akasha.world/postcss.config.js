@@ -1,5 +1,4 @@
+const postCSSConfig = require('../../libs/postcss.config');
 module.exports = {
-  plugins: {
-    '@tailwindcss/postcss': {},
-  },
+  ...postCSSConfig,
 };
