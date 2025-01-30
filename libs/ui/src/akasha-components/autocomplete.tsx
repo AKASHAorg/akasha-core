@@ -107,7 +107,7 @@ export const Autocomplete = forwardRef<
 
     return (
       <CommandPrimitive ref={ref} onKeyDown={handleKeyDown}>
-        <div className={cn('border rounded-[0.75rem]', className)}>
+        <div className={cn('border rounded-[0.5rem]', className)}>
           <CommandInput
             ref={inputRef}
             value={inputValue}
@@ -126,7 +126,7 @@ export const Autocomplete = forwardRef<
               isOpen ? 'block' : 'hidden',
             )}
           >
-            <CommandList className="rounded-[0.75rem] ring-1 ring-muted">
+            <CommandList className="rounded-[0.5rem] ring-1 ring-muted">
               {isLoading ? (
                 <CommandPrimitive.Loading>
                   <div className="p-1">
