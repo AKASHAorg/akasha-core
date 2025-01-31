@@ -2,7 +2,9 @@ import React from 'react';
 import AppList from '@akashaorg/design-system-components/lib/components/AppList';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import ErrorLoader, {
+  ErrorLoaderButton,
+} from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -89,12 +91,9 @@ export const InstalledExtensionsList = () => {
         title={`${t('Uh-oh')}! ${t('You are not connected')}!`}
         details={`${t('To check installed extensions you must be connected')} ⚡️`}
       >
-        <Button
-          variant="primary"
-          size="md"
-          label={t('Connect')}
-          onClick={handleConnectButtonClick}
-        />
+        <ErrorLoaderButton variant="default" onClick={handleConnectButtonClick}>
+          {t('Connect')}
+        </ErrorLoaderButton>
       </ErrorLoader>
     );
 
@@ -115,17 +114,8 @@ export const InstalledExtensionsList = () => {
     <>
       {error && (
         <ErrorLoader
-          title={
-            <Text variant="h5" align="center" selectable={false}>
-              {t(`Uh-oh! We couldn't load`)} <br />
-              {t(`the extensions list!`)}
-            </Text>
-          }
-          details={
-            <Text variant="body2" align="center" selectable={false} customStyle="w-60 sm:w-auto">
-              {t('There might be an issue with the database. Please try again later!')}
-            </Text>
-          }
+          title={t(`Uh-oh! We couldn't load the extensions list!`)}
+          details={t('There might be an issue with the database. Please try again later!')}
           type="list-not-available"
         />
       )}

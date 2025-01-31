@@ -12,7 +12,7 @@ interface ErrorLoaderProps extends React.PropsWithChildren {
   /* Path to public folder */
   publicImgPath?: string;
   title: string;
-  message: string;
+  details: string;
 }
 
 /**
@@ -32,7 +32,7 @@ interface ErrorLoaderProps extends React.PropsWithChildren {
  **/
 const ErrorLoader = ({
   title,
-  message,
+  details,
   children,
   publicImgPath = '/images',
   type,
@@ -73,7 +73,7 @@ const ErrorLoader = ({
   });
 
   return (
-    <Card className="w-[348px] py-5 flex flex-col items-center justify-center rounded-3xl">
+    <Card className="w-full py-5 flex flex-col items-center justify-center rounded-3xl">
       <ImageRoot>
         <Image
           src={imagesrc}
@@ -89,7 +89,7 @@ const ErrorLoader = ({
 
       <CardContent className="flex flex-col items-center justify-center pb-0">
         <Typography variant="xs" className="text-muted-foreground">
-          {message}
+          {details}
         </Typography>
       </CardContent>
 
@@ -106,4 +106,5 @@ const ErrorLoaderButton = ({ ...props }: ButtonProps) => {
   return <Button {...props} />;
 };
 
-export { ErrorLoader, ErrorLoaderButton };
+export { ErrorLoader, ErrorLoaderButton, ErrorLoaderProps };
+export default ErrorLoader;

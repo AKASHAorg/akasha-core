@@ -13,7 +13,9 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import ExtensionCreationForm from '@akashaorg/design-system-components/lib/components/ExtensionCreationForm';
 import { DRAFT_EXTENSIONS } from '../../../constants';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import ErrorLoader, {
+  ErrorLoaderButton,
+} from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { Extension, NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 
@@ -78,12 +80,9 @@ export const ExtensionCreationPage: React.FC<unknown> = () => {
         title={`${t('Uh-oh')}! ${t('You are not connected')}!`}
         details={`${t('To create an extension you must be connected')} ⚡️`}
       >
-        <Button
-          variant="primary"
-          size="md"
-          label={t('Connect')}
-          onClick={handleConnectButtonClick}
-        />
+        <ErrorLoaderButton variant="default" onClick={handleConnectButtonClick}>
+          {t('Connect')}
+        </ErrorLoaderButton>
       </ErrorLoader>
     );
   }

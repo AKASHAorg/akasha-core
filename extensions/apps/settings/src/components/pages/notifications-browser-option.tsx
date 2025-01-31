@@ -3,8 +3,9 @@ import { useTranslation } from 'react-i18next';
 import PageLayout from './base-layout';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import ErrorLoader, {
+  ErrorLoaderButton,
+} from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import appRoutes, { BROWSER_NOTIFICATIONS } from '../../routes';
 import NotificationSettingsCard, {
   NotificationsImageSrc,
@@ -71,12 +72,9 @@ const BrowserNotificationsOption: React.FC = () => {
           title={t('Uh-oh! You are not connected!')}
           details={t('To check browser notifications options you must be connected ⚡️')}
         >
-          <Button
-            label={t('Connect')}
-            size="md"
-            variant="primary"
-            onClick={handleConnectButtonClick}
-          />
+          <ErrorLoaderButton variant="default" onClick={handleConnectButtonClick}>
+            {t('Connect')}
+          </ErrorLoaderButton>
         </ErrorLoader>
       </Stack>
     );

@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import ErrorLoader, {
+  ErrorLoaderButton,
+} from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { useTranslation } from 'react-i18next';
 import { useRootComponentProps } from '@akashaorg/ui-core-hooks';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 
 export const NotFoundComponent = (props: { error?: Error; reset?: (key: string) => void }) => {
   const { t } = useTranslation();
@@ -30,7 +31,9 @@ export const NotFoundComponent = (props: { error?: Error; reset?: (key: string) 
         { worldTitle: worldConfig.title },
       )}
     >
-      <Button label={t('Home')} variant="primary" onClick={navigateHome} />
+      <ErrorLoaderButton variant="default" onClick={navigateHome}>
+        {t('Home')}
+      </ErrorLoaderButton>
     </ErrorLoader>
   );
 };

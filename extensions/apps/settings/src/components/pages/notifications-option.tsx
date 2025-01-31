@@ -8,7 +8,9 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import { ISettingsItem, SettingsOption } from '../../utils/settings-items';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import ErrorLoader, {
+  ErrorLoaderButton,
+} from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import NotificationSettingsCard from '@akashaorg/design-system-components/lib/components/NotificationSettingsCard';
 import appRoutes, { NOTIFICATIONS } from '../../routes';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
@@ -73,12 +75,9 @@ const NotificationsOption: React.FC = () => {
           title={t('Uh-oh! You are not connected!')}
           details={t('To check notifications options you must be connected ⚡️')}
         >
-          <Button
-            label={t('Connect')}
-            size="md"
-            variant="primary"
-            onClick={handleConnectButtonClick}
-          />
+          <ErrorLoaderButton variant="default" onClick={handleConnectButtonClick}>
+            {t('Connect')}
+          </ErrorLoaderButton>
         </ErrorLoader>
       </Stack>
     );

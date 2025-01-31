@@ -90,19 +90,10 @@ export const DefaultExtensionsList = () => {
       )}
       {error && (
         <ErrorLoader
-          title={
-            <Text variant="h5" align="center" selectable={false}>
-              {t(`Uh-oh! We couldn't load`)} <br />
-              {t(`the extensions list!`)}
-            </Text>
-          }
-          details={
-            <Text variant="body2" align="center" selectable={false} customStyle="w-60 sm:w-auto">
-              {t(`It seems there's a problem with the server. Please try again later!`)}
-            </Text>
-          }
+          title={t(`Uh-oh! We couldn't load the extensions list!`)}
+          details={t(`It seems there's a problem with the server. Please try again later!`)}
           type="list-not-available"
-          noWrapperCard={true}
+          //noWrapperCard={true}
         />
       )}
       {defaultExtensions?.length > 0 && (

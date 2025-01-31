@@ -1,8 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRootComponentProps, useAkashaStore, useNotifications } from '@akashaorg/ui-core-hooks';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import ErrorLoader, {
+  ErrorLoaderButton,
+} from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import NotificationSettingsCard from '@akashaorg/design-system-components/lib/components/NotificationSettingsCard';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -44,14 +45,11 @@ const WelcomePage: React.FC<WelcomePageProps> = () => {
         type="not-authenticated"
         title={`${t('Uh-oh')}! ${t('You are not connected')}!`}
         details={`${t('To check your notifications you must be connected')} ⚡️`}
-        dataTestId="notifications"
+        //dataTestId="notifications"
       >
-        <Button
-          variant="primary"
-          label={t('Connect')}
-          size="md"
-          onClick={handleConnectButtonClick}
-        />
+        <ErrorLoaderButton variant="default" onClick={handleConnectButtonClick}>
+          {t('Connect')}
+        </ErrorLoaderButton>
       </ErrorLoader>
     );
 

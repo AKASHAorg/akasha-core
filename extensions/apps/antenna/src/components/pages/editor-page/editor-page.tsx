@@ -1,7 +1,8 @@
 import * as React from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import ErrorLoader, {
+  ErrorLoaderButton,
+} from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { useTranslation } from 'react-i18next';
 import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
@@ -28,10 +29,8 @@ const EditorPage: React.FC<unknown> = () => {
               title={t('Uh-oh! You are not connected!')}
               details={t('To create Beams you must be connected ⚡️')}
             >
-              <Button
-                label={t('Connect')}
-                size="md"
-                variant="primary"
+              <ErrorLoaderButton
+                variant="default"
                 onClick={() =>
                   navigateTo.current({
                     appName: '@akashaorg/app-auth-ewa',
@@ -39,7 +38,9 @@ const EditorPage: React.FC<unknown> = () => {
                       `${navRoutes.Connect}?redirectTo=${encodeURIComponent(location.pathname)}`,
                   })
                 }
-              />
+              >
+                {t('Connect')}
+              </ErrorLoaderButton>
             </ErrorLoader>
           </Stack>
         )}
