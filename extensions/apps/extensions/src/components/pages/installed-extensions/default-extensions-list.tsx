@@ -93,7 +93,7 @@ export const DefaultExtensionsList = () => {
           title={t(`Uh-oh! We couldn't load the extensions list!`)}
           details={t(`It seems there's a problem with the server. Please try again later!`)}
           type="list-not-available"
-          //noWrapperCard={true}
+          className="border-none bg-transparent"
         />
       )}
       {defaultExtensions?.length > 0 && (

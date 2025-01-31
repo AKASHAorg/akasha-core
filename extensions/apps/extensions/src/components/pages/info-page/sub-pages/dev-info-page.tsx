@@ -145,7 +145,7 @@ export const DevInfoPage = (props: DevInfoPageProps) => {
             <>
               <Divider />
               <ErrorLoader
-                //noWrapperCard={true}
+                className="border-none bg-transparent"
                 type="list-not-available"
                 title={`${t('Uh-oh')}!${t("We couldn't load the extension list")}!`}
                 details={`${t('It seems there is a problem retreving the list of extensions')}. ${t('Please try again later')}!`}

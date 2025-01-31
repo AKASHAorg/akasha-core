@@ -101,7 +101,7 @@ export const ReleasesPage = (props: ReleasesPageProps) => {
             <>
               <Divider />
               <ErrorLoader
-                //noWrapperCard={true}
+                className="border-none bg-transparent"
                 type="list-not-available"
                 title={t('Loading error')}
                 details={t('There was an error loading the releases')}

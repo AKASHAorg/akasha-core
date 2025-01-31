@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { cn } from '@akashaorg/ui/lib/library/utils';
 
 import { Image, ImageFallback, ImageRoot } from '@akashaorg/ui/lib/akasha-components/image';
 import { Button, ButtonProps } from '@akashaorg/ui/lib/akasha-components/button';
@@ -13,6 +14,7 @@ interface ErrorLoaderProps extends React.PropsWithChildren {
   publicImgPath?: string;
   title: string;
   details: string;
+  className?: string;
 }
 
 /**
@@ -36,6 +38,7 @@ const ErrorLoader = ({
   children,
   publicImgPath = '/images',
   type,
+  className,
 }: ErrorLoaderProps) => {
   let imagesrc: string;
 
@@ -73,7 +76,9 @@ const ErrorLoader = ({
   });
 
   return (
-    <Card className="w-full py-5 flex flex-col items-center justify-center rounded-3xl">
+    <Card
+      className={cn('w-full py-5 flex flex-col items-center justify-center rounded-3xl', className)}
+    >
       <ImageRoot>
         <Image
           src={imagesrc}
@@ -88,7 +93,7 @@ const ErrorLoader = ({
       </CardTitle>
 
       <CardContent className="flex flex-col items-center justify-center pb-0">
-        <Typography variant="xs" className="text-muted-foreground">
+        <Typography variant="xs" className="text-muted-foreground text-center">
           {details}
         </Typography>
       </CardContent>
