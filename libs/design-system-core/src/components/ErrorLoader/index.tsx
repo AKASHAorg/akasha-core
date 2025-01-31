@@ -23,7 +23,7 @@ interface ErrorLoaderProps extends React.PropsWithChildren {
  * @param type -  error type
  * @param publicImgPath - (optional) path of the image to be displayed
  * @param title - error title
- * @param message - additional details about the error
+ * @param details - additional details about the error
  * @param children - optional call to action button
  * @example
  * ```tsx
