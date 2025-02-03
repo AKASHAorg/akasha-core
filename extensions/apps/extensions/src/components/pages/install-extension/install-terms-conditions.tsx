@@ -21,7 +21,7 @@ import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import { useGetAppsByPublisherDidQuery } from '@akashaorg/ui-core-hooks/lib/generated';
 import getSDK from '@akashaorg/core-sdk';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import ErrorLoader from '@akashaorg/ui/lib/akasha-components/error-loader';
 import {
   selectAkashaApp,
   selectAppDisplayName,

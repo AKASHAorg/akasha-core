@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import ErrorLoader, {
   ErrorLoaderProps,
-} from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+} from '@akashaorg/ui/lib/akasha-components/error-loader';
 
 ErrorLoader.displayName = 'ErrorLoader';
 

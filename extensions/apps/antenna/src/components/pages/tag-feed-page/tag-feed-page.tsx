@@ -16,7 +16,7 @@ import {
 import { BeamContentResolver, TagFeed } from '@akashaorg/ui-lib-feed';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import getSDK from '@akashaorg/core-sdk';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import ErrorLoader from '@akashaorg/ui/lib/akasha-components/error-loader';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TagProfileCard from '@akashaorg/design-system-components/lib/components/TagProfileCard';
 import TagFeedHeaderLoader from './tag-feed-header-loader';

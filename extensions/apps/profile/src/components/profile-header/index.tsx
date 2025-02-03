@@ -1,6 +1,6 @@
 import React, { Suspense, useCallback, useMemo } from 'react';
 import routes, { EDIT } from '../../routes';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import ErrorLoader from '@akashaorg/ui/lib/akasha-components/error-loader';
 import FollowProfileButton from '../follow-profile-button';
 import {
   FlagIcon,

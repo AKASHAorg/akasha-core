@@ -5,7 +5,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import ErrorLoader from '@akashaorg/ui/lib/akasha-components/error-loader';
 import ExtensionSubRouteHeader from '../../InfoSubroutePageHeader';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';

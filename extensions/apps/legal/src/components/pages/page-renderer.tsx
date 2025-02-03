@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import ErrorLoader from '@akashaorg/ui/lib/akasha-components/error-loader';
 import MarkdownCard from '@akashaorg/design-system-core/lib/components/MarkdownCard';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';

@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import ErrorLoader from '@akashaorg/ui/lib/akasha-components/error-loader';
 import TrendingWidgetLoadingCard from '@akashaorg/design-system-components/lib/components/TrendingWidgetLoadingCard';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Card from '@akashaorg/design-system-core/lib/components/Card';

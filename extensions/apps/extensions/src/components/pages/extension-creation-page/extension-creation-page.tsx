@@ -13,9 +13,7 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import ExtensionCreationForm from '@akashaorg/design-system-components/lib/components/ExtensionCreationForm';
 import { DRAFT_EXTENSIONS } from '../../../constants';
-import ErrorLoader, {
-  ErrorLoaderButton,
-} from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import ErrorLoader, { ErrorLoaderButton } from '@akashaorg/ui/lib/akasha-components/error-loader';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { Extension, NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 

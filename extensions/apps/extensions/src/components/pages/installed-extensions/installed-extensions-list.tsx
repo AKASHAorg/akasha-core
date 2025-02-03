@@ -2,9 +2,7 @@ import React from 'react';
 import AppList from '@akashaorg/design-system-components/lib/components/AppList';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import ErrorLoader, {
-  ErrorLoaderButton,
-} from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import ErrorLoader, { ErrorLoaderButton } from '@akashaorg/ui/lib/akasha-components/error-loader';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';

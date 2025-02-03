@@ -28,7 +28,7 @@ import { useNavigate } from '@tanstack/react-router';
 import { AtomContext } from './main-page';
 import { useAtom } from 'jotai';
 import { DRAFT_EXTENSIONS, MAX_CONTRIBUTORS } from '../../../constants';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import ErrorLoader from '@akashaorg/ui/lib/akasha-components/error-loader';
 
 export type ExtensionEditContributorsPageProps = {
   extensionId: string;

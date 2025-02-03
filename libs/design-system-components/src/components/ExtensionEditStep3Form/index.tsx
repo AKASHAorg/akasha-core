@@ -20,7 +20,7 @@ import { AkashaProfile, Image } from '@akashaorg/typings/lib/ui';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/solid';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { ApolloError } from '@apollo/client';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import ErrorLoader from '@akashaorg/ui/lib/akasha-components/error-loader';
 import Label from '@akashaorg/design-system-core/lib/components/Label';
 
 const MAX_TAGS = 4;

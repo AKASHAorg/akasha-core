@@ -4,7 +4,7 @@ import { tw } from '@twind/core';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { useAkashaStore, useNotifications, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import ErrorLoader from '@akashaorg/ui/lib/akasha-components/error-loader';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import appRoutes, { PREFERENCES } from '../../../routes';
 import Card from '@akashaorg/design-system-core/lib/components/Card';

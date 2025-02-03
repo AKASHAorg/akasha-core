@@ -8,9 +8,7 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import { ISettingsItem, SettingsOption } from '../../utils/settings-items';
-import ErrorLoader, {
-  ErrorLoaderButton,
-} from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import ErrorLoader, { ErrorLoaderButton } from '@akashaorg/ui/lib/akasha-components/error-loader';
 import NotificationSettingsCard from '@akashaorg/design-system-components/lib/components/NotificationSettingsCard';
 import appRoutes, { NOTIFICATIONS } from '../../routes';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';

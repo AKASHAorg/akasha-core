@@ -15,7 +15,7 @@ import { useGetAppsReleasesQuery } from '@akashaorg/ui-core-hooks/lib/generated'
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
 import { NetworkStatus } from '@apollo/client';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import ErrorLoader from '@akashaorg/ui/lib/akasha-components/error-loader';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import {
   selectAppsReleases,

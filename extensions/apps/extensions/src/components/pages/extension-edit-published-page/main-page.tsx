@@ -6,9 +6,7 @@ import appRoutes, { EDIT_PUBLISHED_EXTENSION } from '../../../routes';
 import { useTranslation } from 'react-i18next';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { AppImageSource, AppLinkSource } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import ErrorLoader, {
-  ErrorLoaderButton,
-} from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import ErrorLoader, { ErrorLoaderButton } from '@akashaorg/ui/lib/akasha-components/error-loader';
 
 export const AtomContext = createContext(null);
 

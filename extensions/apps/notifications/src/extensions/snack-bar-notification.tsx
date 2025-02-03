@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useSyncExternalStore, ReactElement } from 'react';
 import ReactDOMClient from 'react-dom/client';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import ErrorLoader from '@akashaorg/ui/lib/akasha-components/error-loader';
 import singleSpaReact from 'single-spa-react';
 import {
   withProviders,

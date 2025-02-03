@@ -1,9 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRootComponentProps, useAkashaStore, useNotifications } from '@akashaorg/ui-core-hooks';
-import ErrorLoader, {
-  ErrorLoaderButton,
-} from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import ErrorLoader, { ErrorLoaderButton } from '@akashaorg/ui/lib/akasha-components/error-loader';
 import NotificationSettingsCard from '@akashaorg/design-system-components/lib/components/NotificationSettingsCard';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';

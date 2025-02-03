@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { cn } from '@akashaorg/ui/lib/library/utils';
 
-import { Image, ImageFallback, ImageRoot } from '@akashaorg/ui/lib/akasha-components/image';
-import { Button, ButtonProps } from '@akashaorg/ui/lib/akasha-components/button';
-import { Card, CardTitle, CardContent, CardFooter } from '@akashaorg/ui/lib/components/card';
-import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
+import { Image, ImageFallback, ImageRoot } from '@/akasha-components/image';
+import { Button, ButtonProps } from '@/akasha-components/button';
+import { Card, CardTitle, CardContent, CardFooter } from '@/components/card';
+import { Typography } from '@/akasha-components/typography';
+import { cn } from '@/library/utils';
 interface ErrorLoaderProps extends React.PropsWithChildren {
   /**
    * Error type
@@ -13,7 +13,7 @@ interface ErrorLoaderProps extends React.PropsWithChildren {
   /* Path to public folder */
   publicImgPath?: string;
   title: string;
-  details: string;
+  details?: string;
   className?: string;
 }
 
@@ -92,11 +92,13 @@ const ErrorLoader = ({
         <Typography variant="h5">{title}</Typography>
       </CardTitle>
 
-      <CardContent className="flex flex-col items-center justify-center pb-0">
-        <Typography variant="xs" className="text-muted-foreground text-center">
-          {details}
-        </Typography>
-      </CardContent>
+      {details && (
+        <CardContent className="flex flex-col items-center justify-center pb-0">
+          <Typography variant="xs" className="text-muted-foreground text-center">
+            {details}
+          </Typography>
+        </CardContent>
+      )}
 
       {cardButton && (
         <CardFooter className="flex flex-col items-center justify-center pt-10 pb-0">

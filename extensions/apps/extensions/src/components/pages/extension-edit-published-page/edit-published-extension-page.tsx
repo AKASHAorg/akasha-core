@@ -6,7 +6,7 @@ import { useGetAppsByIdQuery, useUpdateAppMutation } from '@akashaorg/ui-core-ho
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import ErrorLoader from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import ExtensionEditPublishedForm, {
   ExtensionEditPublishedFormValues,

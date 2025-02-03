@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useMemo, useRef, useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import ErrorLoader from '@akashaorg/ui/lib/akasha-components/error-loader';
 import {
   ChevronRightIcon,
   FlagIcon,

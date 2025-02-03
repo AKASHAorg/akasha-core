@@ -7,9 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { AppImageSource } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { ExtensionEditStep2FormValues } from '@akashaorg/design-system-components/lib/components/ExtensionEditStep2Form';
-import ErrorLoader, {
-  ErrorLoaderButton,
-} from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import ErrorLoader, { ErrorLoaderButton } from '@akashaorg/ui/lib/akasha-components/error-loader';
 
 export const AtomContext = createContext(null);
 

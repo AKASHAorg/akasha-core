@@ -7,9 +7,7 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import ErrorLoader, {
-  ErrorLoaderButton,
-} from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import ErrorLoader, { ErrorLoaderButton } from '@akashaorg/ui/lib/akasha-components/error-loader';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 
 export const PostPublishPage: React.FC = () => {

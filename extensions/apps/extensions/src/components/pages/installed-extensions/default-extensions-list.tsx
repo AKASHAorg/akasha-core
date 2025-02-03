@@ -5,7 +5,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import ErrorLoader from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { transformSource, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { useGetAppsByPublisherDidQuery } from '@akashaorg/ui-core-hooks/lib/generated';
 import { selectApps } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-by-publisher-did-query';

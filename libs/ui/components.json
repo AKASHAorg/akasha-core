@@ -12,6 +12,7 @@
   "iconLibrary": "lucide",
   "aliases": {
     "components": "@/components",
+    "akasha-components": "@/akasha-components",
     "utils": "@/library/utils",
     "hooks": "@/hooks",
     "lib": "@/library",

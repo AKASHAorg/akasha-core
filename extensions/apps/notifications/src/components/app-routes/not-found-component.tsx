@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react';
-import ErrorLoader, {
-  ErrorLoaderButton,
-} from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import ErrorLoader, { ErrorLoaderButton } from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { useTranslation } from 'react-i18next';
 import { useRootComponentProps } from '@akashaorg/ui-core-hooks';
 

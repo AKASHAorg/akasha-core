@@ -3,9 +3,7 @@ import { useTranslation } from 'react-i18next';
 import PageLayout from './base-layout';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import ErrorLoader, {
-  ErrorLoaderButton,
-} from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import ErrorLoader, { ErrorLoaderButton } from '@akashaorg/ui/lib/akasha-components/error-loader';
 import appRoutes, { BROWSER_NOTIFICATIONS } from '../../routes';
 import NotificationSettingsCard, {
   NotificationsImageSrc,

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import ErrorLoader from '@akashaorg/ui/lib/akasha-components/error-loader';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ProfileStatsView from '../../profile-stats';
 import ProfileNotFound from '@akashaorg/design-system-components/lib/components/ProfileNotFound';

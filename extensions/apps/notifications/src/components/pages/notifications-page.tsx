@@ -22,7 +22,7 @@ import { UserSettingType } from '@akashaorg/typings/lib/sdk';
 
 import { useGetAppsByPublisherDidQuery } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
 import { selectApps } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-by-publisher-did-query';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import ErrorLoader from '@akashaorg/ui/lib/akasha-components/error-loader';
 
 const NotificationsPage: React.FC = () => {
   const sdk = getSDK();

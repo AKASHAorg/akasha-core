@@ -1,5 +1,5 @@
 import React from 'react';
-import ErrorLoader, { ErrorLoaderProps } from '../ErrorLoader';
+import ErrorLoader, { ErrorLoaderProps } from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { ILogger } from '@akashaorg/typings/lib/sdk/log';
 
 export type ErrorBoundaryProps = {
