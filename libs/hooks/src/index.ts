@@ -12,8 +12,6 @@ export { hasOwn } from './utils/has-own';
 export { sortByKey } from './utils/sort-by-key';
 export { createReactiveVar } from './utils/create-reactive-var';
 export {
-  useNetworkState,
-  useCurrentNetwork,
   useRequiredNetwork,
   switchToRequiredNetwork,
   useNetworkChangeListener,
@@ -30,7 +28,6 @@ export { useModalData } from './use-modal-data';
 // the following hooks needs refactor/reimplementation
 export { useListenForMutationEvents } from './use-mutation-events-listener';
 
-export { useShowFeedback } from './use-show-feedback';
 export { useTheme } from './use-theme';
 export { useProfileStats } from './use-profile-stats';
 export { useSaveSettings, useGetSettings } from './use-settings';
