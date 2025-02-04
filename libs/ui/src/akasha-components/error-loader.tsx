@@ -1,15 +1,11 @@
 import * as React from 'react';
 
 import { Image, ImageFallback, ImageRoot } from '@/akasha-components/image';
-import { Card, CardTitle, CardDescription, CardFooter } from '@/components/card';
+import { Card, CardTitle, CardDescription, CardFooter } from '@/akasha-components/card';
 import { cn } from '@/library/utils';
 
 interface ErrorLoaderProps extends React.HTMLAttributes<HTMLDivElement> {
-  /**
-   * Error type
-   */
   type: 'no-apps' | 'not-authenticated' | 'script-error' | 'page-not-found' | 'list-not-available';
-  /* Path to public folder */
   publicImgPath?: string;
 }
 
@@ -64,8 +60,12 @@ const ErrorLoader = ({
 
   return (
     <Card className={cn(className)} {...props}>
-      <ImageRoot className={cn('justify-items-center px-6 pt-6')}>
-        <Image src={imageSrc} alt="Error Image" className="h-50 w-50 object-contain rounded-lg" />
+      <ImageRoot className={cn('flex justify-center px-6 pt-6')}>
+        <Image
+          src={imageSrc}
+          alt="Error Image"
+          className="size-[12.5rem] object-contain rounded-[0.5rem]"
+        />
         <ImageFallback>Failed to load image</ImageFallback>
       </ImageRoot>
       {children}
