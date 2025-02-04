@@ -83,6 +83,7 @@ export default class AppLoader {
   erroredApps: string[];
   isLoadingUserExtensions: boolean;
   navigationCanceledExtensions: Set<string>;
+
   constructor(worldConfig: WorldConfig) {
     this.worldConfig = worldConfig;
     this.uiEvents = new Subject<UIEventData>();
@@ -329,7 +330,12 @@ export default class AppLoader {
       try {
         const source = this.getUriFromSource(extensionData.source);
         if (source) {
-          return System.import<SystemModuleType>(`${source}`);
+          System.addImportMap({
+            imports: {
+              [extensionData.name]: source,
+            },
+          });
+          return System.import<SystemModuleType>(extensionData.name);
         }
       } catch (err) {
         this.logger.error(
@@ -356,6 +362,11 @@ export default class AppLoader {
       try {
         const source = this.getUriFromSource(latestRelease.node.source);
         if (source) {
+          System.addImportMap({
+            imports: {
+              [extensionData.name]: source,
+            },
+          });
           return System.import<SystemModuleType>(`${source}`);
         }
       } catch (err) {
@@ -733,15 +744,19 @@ export default class AppLoader {
     extensionInfo: AkashaApp,
     extensionModule: SystemModuleType,
     extensionConfig: IAppConfig & { name: string },
+    isDevMode = false,
   ) => {
     this.extensionModules.set(extensionInfo.name, extensionModule);
     this.extensionConfigs.set(extensionInfo.name, extensionConfig);
     this.extensionData.push(extensionInfo);
     this.registerAdditionalEntities(extensionConfig, extensionInfo.applicationType);
-    this.singleSpaRegister(new Map().set(extensionInfo.name, extensionConfig));
+    this.singleSpaRegister(new Map().set(extensionInfo.name, extensionConfig), isDevMode);
   };
 
-  singleSpaRegister = (extensionConfigs: Map<string, IAppConfig & { name: string }>) => {
+  singleSpaRegister = (
+    extensionConfigs: Map<string, IAppConfig & { name: string }>,
+    isDevMode = false,
+  ) => {
     for (const [name, conf] of extensionConfigs) {
       const logger = this.parentLogger.create(name);
       if (singleSpa.getAppNames().includes(name)) continue;
@@ -787,6 +802,7 @@ export default class AppLoader {
         name,
         app: () =>
           createLoadingFunction(conf.rootComponent, conf.UILib, {
+            deleteSourcesOnUnmount: isDevMode,
             logger,
             onRenderError: () => {
               showError({

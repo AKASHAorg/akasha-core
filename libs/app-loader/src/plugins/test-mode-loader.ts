@@ -19,6 +19,7 @@ type ExtensionTestModeConfig = {
     info: AkashaAppEdgeNode,
     extensionModule: SystemModuleType,
     extensionConfig: IAppConfig & { name: string },
+    isDevMode?: boolean,
   ) => void;
 };
 
@@ -71,6 +72,7 @@ export class TestModeLoader implements ITestModeLoaderPlugin {
   getTestSessionKey = () => {
     return `EXTENSIONS_IN_TEST_MODE_${this.#user.id}`;
   };
+
   getStaticStatusCodes() {
     return staticInstallStatusCodes;
   }
@@ -170,6 +172,7 @@ export class TestModeLoader implements ITestModeLoaderPlugin {
           },
           extensionModule,
           extensionConfig,
+          true,
         );
         this.#notifyCurrentStatus(this.getStaticStatusCodes().status.EXTENSION_TEST_LOAD_SUCCESS);
       } else {

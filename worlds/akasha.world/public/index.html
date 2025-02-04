@@ -39,18 +39,15 @@
     crossorigin="anonymous"
   ></script>
 
-  <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.10.2/system.min.js"
-    integrity="sha512-q8mW8h6inMCO7EwhzsalSSa2wxgUhZq7EYa37ZxIkqgrd/oOI5tO9+E42Hq+4zq3pSb6pkf+tJAXWckjxHdLZw=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
-  ></script>
-  <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.10.2/extras/named-exports.min.js"
-    integrity="sha512-R1m4kK4v2B7kiU+dGztkBxEfMnJkPaQA+WNjSkIWq7+DYEuA1t/UguVwHKjh8SAUJV9yg6uarhA/weCCdV1r2Q=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
-  ></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.15.1/system.min.js"
+          integrity="sha512-uqwFgHHxg9qZmWJnFhtUQjSmyeWU3NByQQfx1U5DGjJ1iNfAbbgMxEDQuuxQgq2D133Cn3b5jD4cIBCPj4VKpA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.15.1/extras/named-exports.min.js"
+          integrity="sha512-kJuYYMm2TgeHIkXYI/atujo5tvUxI4WRF5zJcKUYJShoUd3gauoq7gt03TvSH9i0A6dx9K7TzdaR2TUEYW8/mg=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.15.1/extras/dynamic-import-maps.min.js"
+          integrity="sha512-Xhy6NHUMyoo0b0otMX2Fklq9nI/Ey7eC+I8z8nXOhy4IixzJ24IIvTW5LfVfJkWMYqhDBK7FwZhf+JwhTdxdzQ=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="/scripts/theme.js"></script>
 
   <meta name="importmap-type" content="systemjs-importmap" />
@@ -89,7 +86,8 @@
       <h1 class="font-bold text-xl mt-2 text-xl">Oops! Extension not found</h1>
       <div class="items-start my-4 text-grey4 dark:text-grey6 text-sm">
         <p>
-          It appears that the extension <span id="app-name" class="font-bold"></span> does not exist on <span id="world-title"></span>.
+          It appears that the extension <span id="app-name" class="font-bold"></span> does not exist on <span
+          id="world-title"></span>.
           It may have been moved, deleted, or the URL might be incorrect.
         </p>
         <p class="mt-4">
@@ -157,15 +155,15 @@
   </div>
 </template>
 <script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
       navigator.serviceWorker
-        .register('/sw.js', { scope: '/' })
+        .register("/sw.js", { scope: "/" })
         .then(registration => {
-          console.log('SW registered: ', registration);
+          console.log("SW registered: ", registration);
         })
         .catch(registrationError => {
-          console.log('SW registration failed: ', registrationError);
+          console.log("SW registration failed: ", registrationError);
         });
     });
   }

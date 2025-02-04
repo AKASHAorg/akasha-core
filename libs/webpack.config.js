@@ -1,6 +1,5 @@
 /* eslint-disable */
 const webpack = require('webpack');
-// const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const commons = require('./app.pack.conf');
 const path = require('path');
 const Dotenv = require('dotenv-webpack');
@@ -52,11 +51,6 @@ const exp = {
     clean: true,
   },
   plugins: [
-    // new CleanWebpackPlugin({
-    //   verbose: true,
-    //   dry: false,
-    //   dangerouslyAllowCleanPatternsOutsideProject: process.env.NODE_ENV !== 'production',
-    // }),
     new WebpackManifestPlugin({
       generate: (seed, files, entries) => {
         const packageJson = require(path.join(process.cwd(), './package.json'));
@@ -99,12 +93,6 @@ const exp = {
     new WebpackAssetsManifest({
       integrity: true,
     }),
-    // new webpack.ProgressPlugin({
-    //   entries: false,
-    //   modules: true,
-    //   modulesCount: 10,
-    //   profile: true,
-    // }),
   ],
   devtool: isProduction ? undefined : 'eval-source-map',
   externals: commons.externals,
