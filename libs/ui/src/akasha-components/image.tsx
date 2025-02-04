@@ -1,5 +1,3 @@
-'use client';
-
 import * as React from 'react';
 import { Loader2 } from 'lucide-react';
 
@@ -105,5 +103,6 @@ const Image = React.forwardRef<HTMLImageElement, ImageProps>(
     );
   },
 );
+Image.displayName = 'Image';
 
 export { ImageRoot, ImageFallback, Image };
