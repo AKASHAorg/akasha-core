@@ -1,5 +1,7 @@
-export const HOME = 'Form';
+export const HOME = 'Home';
+export const SAVE_CONFIG = 'Save Config';
 
 export default {
-  [HOME]: '/form',
+  [HOME]: '/home',
+  [SAVE_CONFIG]: '/save-config',
 };

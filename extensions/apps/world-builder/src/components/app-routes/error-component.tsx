@@ -1,6 +1,6 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import { useTranslation } from 'react-i18next';
 
 type ErrorComponentProps = {
   error: string;
@@ -13,5 +13,13 @@ const ErrorComponent: React.FC<ErrorComponentProps> = props => {
     <ErrorLoader type="script-error" title={t('Error in World Builder app')} details={error} />
   );
 };
+
+export const RouteErrorComponent = () => (
+  <ErrorLoader
+    type="script-error"
+    title="Oops, this page returned an error :("
+    details="There is an error somewhere in this page and we need to display this card to avoid other issues."
+  />
+);
 
 export default ErrorComponent;
