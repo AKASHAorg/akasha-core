@@ -1,5 +1,3 @@
-'use client';
-
 import * as React from 'react';
 import { Loader2 } from 'lucide-react';
 
@@ -20,16 +18,20 @@ const useImageContext = () => {
   return context;
 };
 
-const ImageRoot = ({ children }: { children: React.ReactNode }) => {
-  const [isLoading, setLoading] = React.useState(true);
-  const [hasError, setError] = React.useState(false);
+const ImageRoot = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ children, ...props }, ref) => {
+    const [isLoading, setLoading] = React.useState(true);
+    const [hasError, setError] = React.useState(false);
 
-  return (
-    <ImageContext.Provider value={{ isLoading, hasError, setLoading, setError }}>
-      {children}
-    </ImageContext.Provider>
-  );
-};
+    return (
+      <ImageContext.Provider value={{ isLoading, hasError, setLoading, setError }}>
+        <div ref={ref} {...props}>
+          {children}
+        </div>
+      </ImageContext.Provider>
+    );
+  },
+);
 
 const ImageFallback = React.forwardRef<
   HTMLSpanElement,
@@ -101,5 +103,6 @@ const Image = React.forwardRef<HTMLImageElement, ImageProps>(
     );
   },
 );
+Image.displayName = 'Image';
 
 export { ImageRoot, ImageFallback, Image };

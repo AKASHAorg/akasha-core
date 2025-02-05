@@ -8,14 +8,18 @@ export const Ethereum = React.forwardRef<SVGSVGElement, Omit<LucideProps, 'ref'>
     height="24"
     viewBox="0 0 24 24"
     fill="none"
-    stroke="currentColor"
     strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
     ref={ref}
     {...props}
   >
-    <path d="M12 1 6.4 11.336l5.6 3.876M12 1v14.212M12 1l5.6 10.336-5.6 3.876m-6-.861 6 8.613v-4.737L6 14.35Zm12 0L12.104 23v-4.737L18 14.35Z" />
+    <path d="M11.9999 16.4904V1.6001L5.5 12.606L11.9999 16.4904Z" fill="#FFE644" />
+    <path d="M11.9999 1.6001L18.5 12.606L11.9999 16.4904V1.6001Z" fill="#EC7463" />
+    <path d="M5.5 13.4421L11.9999 17.3263V22.3507" fill="#009ECB" />
+    <path d="M18.5 13.4421L11.9999 17.3263V22.3507" fill="#4D68AE" />
+    <path d="M11.9999 8.72216L5.5 12.606L11.9999 16.4904V8.72216Z" fill="#57A759" />
+    <path d="M11.9999 8.72216L18.5 12.606L11.9999 16.4904V8.72216Z" fill="#8E5298" />
   </svg>
 ));
 Ethereum.displayName = 'Ethereum';

@@ -23,93 +23,11 @@ const checkNetworkState = async () => {
   return res;
 };
 
-/**
- * Hook to check if the web3 provider is set to function on the Rinkeby test network
- * @param enabler - boolean (optional) that can control when to start verifying network state
- * @returns networkNotSupported: true if web3 provider is not on the specified network
- * @example useNetworkState hook
- * ```typescript
- * const networkStateQuery = useNetworkState(true);
- *
- * const networkNotSupported = networkStateQuery.data.networkNotSupported;
- * ```
- */
-export function useNetworkState(enabler?: boolean) {
-  const [data, setData] = useState<{
-    networkNotSupported: boolean;
-  }>(undefined);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isFetched, setIsFetched] = useState<boolean>(false);
-  const [error, setError] = useState<Error | null>(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await checkNetworkState();
-        if (res) {
-          setData(res);
-          setIsLoading(false);
-          setIsFetched(true);
-        }
-      } catch (err) {
-        setError(err);
-        logError('useNetworkState', err);
-        setIsLoading(false);
-        setIsFetched(true);
-      }
-    };
-
-    if (enabler) {
-      fetchData();
-    }
-  }, [enabler]);
-
-  return { data, isLoading, error, isFetched };
-}
-
 const getCurrentNetwork = () => {
   const sdk = getSDK();
   const res = sdk.services.common.web3.network;
   return res;
 };
-
-/**
- * Hook to check the user's current web3 network
- * @returns network name
- * @example useCurrentNetwork hook
- * ```typescript
- * const currentNetworkQuery = useCurrentNetwork(true);
- *
- * const network = currentNetworkQuery.data;
- * ```
- */
-export function useCurrentNetwork(enabler?: boolean) {
-  const [data, setData] = useState<string>(undefined);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<Error | null>(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await getCurrentNetwork();
-        if (res) {
-          setData(res);
-          setIsLoading(false);
-        }
-      } catch (err) {
-        setError(err);
-        logError('useCurrentNetwork', err);
-        setIsLoading(false);
-      }
-    };
-
-    if (enabler) {
-      fetchData();
-    }
-  }, [enabler]);
-
-  return { data, isLoading, error };
-}
 
 const getRequiredNetwork = async () => {
   const sdk = getSDK();

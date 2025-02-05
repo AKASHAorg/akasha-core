@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { cn } from '@/library/utils';
+import { typographyVariants } from '@/akasha-components/typography';
 
 const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
@@ -24,7 +25,11 @@ const CardTitle = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivE
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
-      className={cn('text-2xl text-center font-semibold leading-none tracking-tight', className)}
+      className={cn(
+        'text-center font-bold leading-none tracking-tight',
+        typographyVariants({ variant: 'h5' }),
+        className,
+      )}
       {...props}
     />
   ),
@@ -53,7 +58,7 @@ const CardFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDiv
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
-      className={cn('flex items-center justify-self-end p-6 pt-0', className)}
+      className={cn('flex items-center justify-end w-full gap-2 p-6 pt-0', className)}
       {...props}
     />
   ),

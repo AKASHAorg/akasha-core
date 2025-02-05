@@ -6,51 +6,22 @@ import { cn } from '@/library/utils';
 const iconContainerStyles = cva('flex items-center justify-center relative bg-muted', {
   variants: {
     variant: {
-      square: '',
-      round: '',
+      square: 'rounded-[0.5rem]',
+      round: 'rounded-full',
     },
     size: {
-      lg: '',
-      md: '',
-      sm: '',
-      xs: '',
+      xl: 'size-28 [&_svg]:size-10',
+      lg: 'size-12 [&_svg]:size-6',
+      md: 'size-10 [&_svg]:size-5',
+      sm: 'size-8 [&_svg]:size-4',
+      xs: 'size-4 [&_svg]:size-4',
     },
   },
   compoundVariants: [
     {
       variant: 'square',
-      size: 'lg',
-      class: 'size-28 [&_svg]:size-10 rounded-3xl',
-    },
-    {
-      variant: 'square',
-      size: 'md',
-      class: 'size-14 [&_svg]:size-6 rounded-2xl',
-    },
-    {
-      variant: 'square',
-      size: 'sm',
-      class: 'size-10 [&_svg]:size-5 rounded-xl',
-    },
-    {
-      variant: 'round',
-      size: 'lg',
-      class: 'size-12 [&_svg]:size-6 rounded-full',
-    },
-    {
-      variant: 'round',
-      size: 'md',
-      class: 'size-10 [&_svg]:size-5 rounded-full',
-    },
-    {
-      variant: 'round',
-      size: 'sm',
-      class: 'size-8 [&_svg]:size-4 rounded-full',
-    },
-    {
-      variant: 'round',
       size: 'xs',
-      class: 'size-5 [&_svg]:size-3 rounded-full',
+      class: 'rounded-[0.25rem]',
     },
   ],
   defaultVariants: {
@@ -71,7 +42,12 @@ const IconContainer = React.forwardRef<HTMLDivElement, IconContainerProps>(
       <div ref={ref} className={iconContainerStyles({ variant, size, className })} {...props}>
         {children}
         {showNotificationDot && (
-          <div className={cn('absolute rounded-full w-3 h-3 bg-orange-500 top-0 right-0')} />
+          <div
+            className={cn(
+              'absolute rounded-full w-3 h-3 bg-orange-500 top-0 right-0',
+              variant === 'square' && '-right-1',
+            )}
+          />
         )}
       </div>
     );
