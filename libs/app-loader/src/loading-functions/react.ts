@@ -6,7 +6,7 @@ import { LoadingFunctionOptions } from './index';
 
 export const getLifecycles = (
   rootComponent: IAppConfig['rootComponent'],
-  { deleteSourcesOnUnmount, logger, onRenderError, onModuleError }: LoadingFunctionOptions,
+  { deleteSourcesOnUnmount, onRenderError, onModuleError }: LoadingFunctionOptions,
 ) => {
   const lifecycles = singleSpaReact({
     React,
@@ -42,8 +42,7 @@ export const getLifecycles = (
     bootstrap: lifecycles.bootstrap,
     mount: lifecycles.mount,
     unmount: (props: IRootComponentProps) => {
-      if (deleteSourcesOnUnmount) {
-        logger.info('Removing sources for app: %s', props.name);
+      if (deleteSourcesOnUnmount && System.has(props.name)) {
         System.delete(System.resolve(props.name));
       }
       return lifecycles.unmount(props);
