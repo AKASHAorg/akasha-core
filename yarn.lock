@@ -103,6 +103,8 @@ __metadata:
 "@akashaorg/ui@workspace:libs/ui":
   version: 0.0.0-use.local
   resolution: "@akashaorg/ui@workspace:libs/ui"
+  dependencies:
+    "@radix-ui/react-slot": "npm:^1.1.1"
   languageName: unknown
   linkType: soft
 
@@ -11718,7 +11720,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@radix-ui/react-slot@npm:1.1.1":
+"@radix-ui/react-slot@npm:1.1.1, @radix-ui/react-slot@npm:^1.1.1":
   version: 1.1.1
   resolution: "@radix-ui/react-slot@npm:1.1.1"
   dependencies:
@@ -39923,7 +39925,7 @@ __metadata:
 
 "typescript@patch:typescript@npm%3A5.6.3#optional!builtin<compat/typescript>":
   version: 5.6.3
-  resolution: "typescript@patch:typescript@npm%3A5.6.3#optional!builtin<compat/typescript>::version=5.6.3&hash=74658d"
+  resolution: "typescript@patch:typescript@npm%3A5.6.3#optional!builtin<compat/typescript>::version=5.6.3&hash=5adc0c"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver

@@ -24,5 +24,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "dependencies": {
+    "@radix-ui/react-slot": "^1.1.1"
   }
 }
