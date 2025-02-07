@@ -120,7 +120,7 @@ export const HomePage: React.FC = () => {
           </div>
         </div>
       </CardContent>
-      <CardFooter className="justify-end">
+      <CardFooter>
         <Button className="px-6 h-8" onClick={handleNavigateToForm} disabled={!acceptedTerms}>
           {t('Next')}
         </Button>
