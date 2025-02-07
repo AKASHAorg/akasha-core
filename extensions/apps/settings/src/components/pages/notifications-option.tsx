@@ -109,6 +109,10 @@ const NotificationsOption: React.FC = () => {
             isLoading={waitingForSignature}
             noWrapperCard={true}
             handleButtonClick={handleEnableNotifications}
+            /*
+              The current implementation of PushProtocol now requires two signatures for users that subscribe only
+              for the first time.
+            */
             text={t(`You’ll be prompted with {{numberOfSignatures}} signature`, {
               numberOfSignatures: previouslyEnabled ? 1 : 2,
             })}
