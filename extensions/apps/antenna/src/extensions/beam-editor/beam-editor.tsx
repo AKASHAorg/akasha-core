@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, ChangeEvent, KeyboardEvent, useMemo
 import { useTranslation } from 'react-i18next';
 import { hasOwn, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { type ContentBlock } from '@akashaorg/typings/lib/ui';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { XMarkIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
@@ -11,6 +11,7 @@ import SearchBar from '@akashaorg/design-system-components/lib/components/Search
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import UnsavedChangesModal from '@akashaorg/design-system-components/lib/components/UnsavedChangesModal';
+
 import { EditorBlockExtension } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
 import { Header } from './header';
 import { Footer } from './footer';
@@ -446,20 +447,18 @@ export const BeamEditor: React.FC = () => {
                 </Text>
               )}
               <Stack fullWidth direction="row" align="center" justify="end" spacing="gap-2">
+                <Button variant="link" disabled={!newTags.length} onClick={() => setNewTags([])}>
+                  {t('Clear All')}
+                </Button>
                 <Button
-                  variant="text"
-                  label={t('Clear All')}
-                  disabled={!newTags.length}
-                  onClick={() => setNewTags([])}
-                />
-                <Button
-                  variant="secondary"
-                  label={t('Add')}
+                  variant="outline"
                   disabled={
                     tagValue.length < 3 || tagValue.length > 30 || newTags.includes(tagValue)
                   }
                   onClick={addTag}
-                />
+                >
+                  {t('Add')}
+                </Button>
               </Stack>
               <Stack direction="row" spacing="gap-2" customStyle="flex-wrap">
                 {newTags.map((tag, index) => (

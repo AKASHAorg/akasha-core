@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAkashaStore, useNotifications, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Cog8ToothIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
 import NotificationCard from '@akashaorg/design-system-components/lib/components/NotificationCard';
@@ -175,12 +175,7 @@ const NotificationsPage: React.FC = () => {
           title={t('Uh-oh! You are not connected!')}
           details={t('To check notifications you must be connected ⚡️')}
         >
-          <Button
-            label={t('Connect')}
-            size="md"
-            variant="primary"
-            onClick={handleConnectButtonClick}
-          />
+          <Button onClick={handleConnectButtonClick}>{t('Connect')}</Button>
         </ErrorLoader>
       </Stack>
     );
@@ -194,13 +189,9 @@ const NotificationsPage: React.FC = () => {
             <>{t('Notifications')}</>
           </Text>
           <Stack direction="column" spacing="gap-y-1" customStyle="absolute right-0">
-            <Button
-              iconOnly={true}
-              variant="primary"
-              icon={<Cog8ToothIcon />}
-              greyBg={true}
-              onClick={goToSettings}
-            />
+            <Button variant="outline" size="icon" onClick={goToSettings}>
+              <Cog8ToothIcon />
+            </Button>
           </Stack>
         </Stack>
         {/** If the user has not subscribed to the notifications before show the button to navigate to settings*/}
@@ -221,12 +212,12 @@ const NotificationsPage: React.FC = () => {
               {appOptions.map((option, index) => (
                 <Button
                   key={index}
-                  variant="secondary"
+                  variant="outline"
                   size="sm"
-                  active={option.active}
-                  label={option.appName}
                   onClick={() => handleOptionChange(index)}
-                ></Button>
+                >
+                  {option.appName}
+                </Button>
               ))}
             </Stack>
             <Stack>

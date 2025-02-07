@@ -36,9 +36,7 @@ export const NotFoundComponent = (props: { error?: Error; reset?: (key: string) 
         )}
       </ErrorLoaderDescription>
       <ErrorLoaderFooter>
-        <Button variant="default" onClick={navigateHome}>
-          {t('Home')}
-        </Button>
+        <Button onClick={navigateHome}>{t('Home')}</Button>
       </ErrorLoaderFooter>
     </ErrorLoader>
   );

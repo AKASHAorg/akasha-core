@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { LinkElement } from './link-element';
@@ -43,14 +43,10 @@ export const UsefulLinks: React.FC<UsefulLinksProps> = ({
           <Text variant="h6" as="label">
             {usefulLinksTitleLabel}
           </Text>
-          <Button
-            variant="text"
-            size="md"
-            icon={<PlusIcon />}
-            iconDirection="left"
-            label={addNewLinkButtonLabel}
-            onClick={onAddNew}
-          />
+          <Button variant="link" onClick={onAddNew}>
+            {<PlusIcon />}
+            {addNewLinkButtonLabel}
+          </Button>
         </Stack>
         <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
           {usefulLinksDescriptionLabel}

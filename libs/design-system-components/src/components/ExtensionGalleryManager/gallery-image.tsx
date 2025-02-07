@@ -2,7 +2,6 @@ import React from 'react';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import {
@@ -42,11 +41,10 @@ export const GalleryImage: React.FC<GalleryImageProps> = props => {
         //action buttons
       }
       <Stack direction="row" spacing="gap-x-2" customStyle="absolute top-2 right-2">
-        <Button
+        <button
           onClick={onDelete}
           disabled={state === GalleryImageState.LOADING}
-          customStyle={state === GalleryImageState.LOADING ? 'cursor-not-allowed' : ''}
-          plain
+          className={state === GalleryImageState.LOADING ? 'cursor-not-allowed' : ''}
         >
           <AppIcon
             placeholderIcon={<TrashIcon />}
@@ -56,7 +54,7 @@ export const GalleryImage: React.FC<GalleryImageProps> = props => {
             iconSize="sm"
             hover
           />
-        </Button>
+        </button>
       </Stack>
       {state && (
         <Stack

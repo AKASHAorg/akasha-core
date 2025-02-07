@@ -15,7 +15,7 @@ import {
   useGetAppsQuery,
   useGetAppsStreamQuery,
 } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import {
   selectAkashaApp,
   selectLatestRelease,
@@ -373,24 +373,18 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                       <Text variant="body2" color={{ light: 'grey4', dark: 'grey7' }}>
                         {t('Latest update')}
                       </Text>
-                      <Button
-                        variant="text"
-                        size="md"
-                        label={formatDate(latestRelease?.node?.createdAt, 'DD MMM YYYY')}
-                        onClick={handleReleasesClick}
-                      />
+                      <Button variant="link" onClick={handleReleasesClick}>
+                        {formatDate(latestRelease?.node?.createdAt, 'DD MMM YYYY')}
+                      </Button>
                     </Stack>
                     <Divider />
                     <Stack direction="row" justify="between">
                       <Text variant="body2" color={{ light: 'grey4', dark: 'grey7' }}>
                         {t('License')}
                       </Text>
-                      <Button
-                        variant="text"
-                        size="md"
-                        label={appData.license}
-                        onClick={handleLicenseClick}
-                      />
+                      <Button variant="link" onClick={handleLicenseClick}>
+                        {appData.license}
+                      </Button>
                     </Stack>
                     <Divider />
                     <Stack direction="row" justify="between">

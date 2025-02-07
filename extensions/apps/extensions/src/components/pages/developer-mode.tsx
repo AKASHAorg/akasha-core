@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -77,12 +77,7 @@ export const DeveloperModePage: React.FC<unknown> = () => {
         title={`${t('Uh-oh')}! ${t('You are not connected')}!`}
         details={`${t('To toggle developer mode you must be connected')} ⚡️`}
       >
-        <Button
-          variant="primary"
-          size="md"
-          label={t('Connect')}
-          onClick={handleConnectButtonClick}
-        />
+        <Button onClick={handleConnectButtonClick}>{t('Connect')}</Button>
       </ErrorLoader>
     );
   }
@@ -107,13 +102,9 @@ export const DeveloperModePage: React.FC<unknown> = () => {
           ),
           ...(devMode === DevMode.ENABLED && {
             ctaNode: (
-              <Button
-                size="md"
-                variant="text"
-                label={t('Go to My Extensions')}
-                customStyle="w-fit self-end"
-                onClick={handleCTAClick}
-              />
+              <Button variant="link" onClick={handleCTAClick} className="w-fit self-end">
+                {t('Go to My Extensions')}
+              </Button>
             ),
           }),
         },
@@ -126,7 +117,7 @@ export const DeveloperModePage: React.FC<unknown> = () => {
           ),
           ctaNode: (
             <Link target="_blank" to="https://docs.akasha.world" customStyle="w-fit self-end">
-              <Button size="md" variant="text" label={t('Read AW Developer Guide ')} />
+              <Button variant="link">{t('Read AW Developer Guide ')}</Button>
             </Link>
           ),
         },

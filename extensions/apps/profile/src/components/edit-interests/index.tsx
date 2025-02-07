@@ -3,7 +3,7 @@ import { apply, tw } from '@twind/core';
 import { useTranslation } from 'react-i18next';
 import { ProfileLabeled } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import AutoComplete from '@akashaorg/design-system-core/lib/components/AutoComplete';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import {
   CheckIcon,
   XMarkIcon,
@@ -236,15 +236,14 @@ const EditInterests: React.FC<EditInterestsProps> = ({
         </Stack>
         <Stack direction="row" spacing="gap-x-2" customStyle="ml-auto mt-auto">
           <Button
-            variant="text"
-            label={cancelButton.label}
+            variant="link"
             onClick={cancelButton.handleClick}
             disabled={cancelButton.disabled}
-          />
+          >
+            {cancelButton.label}
+          </Button>
           <Button
-            variant="primary"
             loading={saveButton.loading}
-            label={saveButton.label}
             onClick={event => {
               event.preventDefault();
               const newInterest = getNewInterest();
@@ -261,7 +260,9 @@ const EditInterests: React.FC<EditInterestsProps> = ({
             }}
             disabled={!isFormDirty}
             type="submit"
-          />
+          >
+            {saveButton.label}
+          </Button>
         </Stack>
       </Stack>
     </form>

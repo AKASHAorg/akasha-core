@@ -1,6 +1,6 @@
 import React from 'react';
 import { ContentBlockModes } from '@akashaorg/typings/lib/ui';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
@@ -59,12 +59,9 @@ export const RenderBlock: React.FC<RenderBlockProps> = props => {
             <Text variant="button-sm">
               {appInfo?.displayName} {notInstalledTitle}
             </Text>
-            <Button
-              onClick={onClickInstall}
-              variant="text"
-              label={installButtonLabel}
-              customStyle="ml-auto"
-            />
+            <Button onClick={onClickInstall} variant="link" className="ml-auto">
+              {installButtonLabel}
+            </Button>
           </Stack>
           <Text variant="footnotes2" weight="normal">
             {notInstalledDescription1} {appInfo?.displayName} {notInstalledDescription2}

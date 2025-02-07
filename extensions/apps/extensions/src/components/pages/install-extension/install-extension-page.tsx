@@ -5,7 +5,7 @@ import InstallApp, {
 import { useTranslation } from 'react-i18next';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { useGetAppsByPublisherDidQuery } from '@akashaorg/ui-core-hooks/lib/generated';
 import {
   selectAppDisplayName,
@@ -293,7 +293,7 @@ export const InstallExtensionPage = ({ appId }: { appId: string }) => {
             appDisplayName: selectAppDisplayName(data),
           })}
         >
-          <Button label={t('Login')} onClick={handleLoginClick} />
+          <Button onClick={handleLoginClick}>{t('Login')}</Button>
         </ErrorLoader>
       )}
       {authenticatedDID && called && !loading && (

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -212,17 +212,15 @@ export const Header: React.FC<HeaderProps> = ({
             customStyle="relative mt-auto ml-auto"
           >
             <Button
-              icon={<PencilSquareIcon />}
-              aria-label="cover-image"
-              size="xs"
-              variant="primary"
+              variant="outline"
+              size="icon"
               onClick={() => {
                 setShowCoverDropdown(!showCoverActions);
                 setProfileImageType('cover-image');
               }}
-              greyBg
-              iconOnly
-            />
+            >
+              <PencilSquareIcon />
+            </Button>
             {showCoverActions && (
               <List items={dropDownActions} customStyle="absolute right-0 top-7 w-auto z-10" />
             )}
@@ -255,17 +253,16 @@ export const Header: React.FC<HeaderProps> = ({
           />
           <Stack customStyle="absolute">
             <Button
-              icon={<PencilSquareIcon />}
               aria-label="avatar"
-              size="xs"
-              variant="primary"
               onClick={() => {
                 setShowAvatarActions(!showAvatarActions);
                 setProfileImageType('avatar');
               }}
-              greyBg
-              iconOnly
-            />
+              variant="outline"
+              size="icon"
+            >
+              <PencilSquareIcon />
+            </Button>
             {showAvatarActions && (
               <List items={dropDownActions} customStyle="absolute top-7 w-auto z-10" />
             )}

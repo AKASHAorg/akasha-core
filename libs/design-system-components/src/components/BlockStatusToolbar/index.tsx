@@ -3,7 +3,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { ArrowPathIcon, CheckIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 
 export enum BlockCreationStatus {
   PENDING,
@@ -82,7 +82,11 @@ const BlockStatusToolbar: React.FC<IBlockStatusToolbar> = props => {
           />
         </Stack>
         <Text color={{ light: 'errorLight', dark: 'errorDark' }}>{errorLabel}</Text>
-        {!!handleRetry && <Button variant="text" onClick={handleRetry} label={retryLabel} />}
+        {!!handleRetry && (
+          <Button variant="link" onClick={handleRetry}>
+            {retryLabel}
+          </Button>
+        )}
       </Stack>
     );
   }

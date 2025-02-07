@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { SocialLink } from './social-link';
@@ -33,13 +33,10 @@ export const SocialLinks: React.FC<SocialLinksProps> = ({
       <Stack spacing="gap-y-1" direction="column">
         <Stack direction="row" spacing="gap-x-2" justify="between" align="center">
           <Text variant="h6">{linkLabel}</Text>
-          <Button
-            variant="text"
-            icon={<PlusIcon />}
-            iconDirection="left"
-            label={addNewLinkButtonLabel}
-            onClick={onAddNew}
-          />
+          <Button variant="link" onClick={onAddNew}>
+            <PlusIcon />
+            {addNewLinkButtonLabel}
+          </Button>
         </Stack>
         <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
           {description}

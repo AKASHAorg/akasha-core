@@ -24,7 +24,7 @@ import { Editable, Slate, withReact, ReactEditor, RenderElementProps } from 'sla
 import type { IMetadata, IPublishData, Image, Profile } from '@akashaorg/typings/lib/ui';
 
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -551,15 +551,12 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
               )}
               <Stack direction="row" align="center" spacing="gap-x-2">
                 {withMeter && <EditorMeter value={letterCount} max={MAX_TEXT_LENGTH} />}
-                {showCancelButton && <Button label={cancelButtonLabel} onClick={onCancelClick} />}
+                {showCancelButton && <Button onClick={onCancelClick}>{cancelButtonLabel}</Button>}
                 {showPostButton && (
-                  <Button
-                    variant={'primary'}
-                    icon={disablePublish ? <ArrowPathIcon /> : null}
-                    label={disablePublish ? disableActionLabel : actionLabel}
-                    onClick={handlePublish}
-                    disabled={publishDisabled}
-                  />
+                  <Button onClick={handlePublish} disabled={publishDisabled}>
+                    {disablePublish && <ArrowPathIcon />}
+                    {disablePublish ? disableActionLabel : actionLabel}
+                  </Button>
                 )}
               </Stack>
             </Stack>

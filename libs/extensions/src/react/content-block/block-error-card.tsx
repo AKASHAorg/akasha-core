@@ -1,5 +1,5 @@
 import React, { MouseEventHandler } from 'react';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -38,13 +38,9 @@ export const BlockErrorCard: React.FC<BlockErrorCardProps> = props => {
           {errorDescription}
         </Text>
         {refreshLabel && (
-          <Button
-            variant="text"
-            size="md"
-            label={refreshLabel}
-            onClick={onRefresh}
-            customStyle="ml-auto mt-auto"
-          />
+          <Button variant="link" onClick={onRefresh} className="ml-auto mt-auto">
+            {refreshLabel}
+          </Button>
         )}
       </Stack>
     </Stack>

@@ -5,7 +5,11 @@
   "projectType": "library",
   "targets": {
     "prepare": {
-      "dependsOn": ["@akashaorg/typings:prepare", "@akashaorg/design-system-core:prepare"],
+      "dependsOn": [
+        "@akashaorg/typings:prepare",
+        "@akashaorg/design-system-core:prepare",
+        "@akashaorg/ui:prepare"
+      ],
       "executor": "nx:run-commands",
       "options": {
         "cwd": "libs/design-system-components",

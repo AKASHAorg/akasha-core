@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { ArrowLongRightIcon } from '@heroicons/react/24/outline';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import { ExtensionsHub } from '../extensions-hub';
 import routes, { DEVELOPER_MODE } from '../../routes';
@@ -45,12 +45,9 @@ export const ExtensionsHubPage: React.FC<unknown> = () => {
               to="https://github.com/AKASHAorg/akasha-core/issues"
               customStyle="w-fit self-end"
             >
-              <Button
-                size="md"
-                variant="text"
-                label={t('Share your thoughts!')}
-                customStyle="w-fit self-end"
-              />
+              <Button variant="link" className="w-fit self-end">
+                {t('Share your thoughts!')}
+              </Button>
             </Link>
           ),
         },
@@ -60,15 +57,10 @@ export const ExtensionsHubPage: React.FC<unknown> = () => {
             'Create awesome extensions, spark your imagination, and be part of an enthusiastic developer community!',
           ),
           ctaNode: (
-            <Button
-              size="md"
-              variant="text"
-              iconDirection="right"
-              icon={<ArrowLongRightIcon />}
-              label={t('Start your journey')}
-              customStyle="w-fit self-end"
-              onClick={handleCTAClick}
-            />
+            <Button variant="link" onClick={handleCTAClick} className="w-fit self-end">
+              {t('Start your journey')}
+              <ArrowLongRightIcon />
+            </Button>
           ),
         },
       ]}

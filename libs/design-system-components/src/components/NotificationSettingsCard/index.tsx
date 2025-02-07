@@ -2,7 +2,7 @@ import React from 'react';
 
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 
@@ -54,14 +54,9 @@ const NotificationSettingsCard: React.FC<NotificationSettingsCardProps> = ({
       </Text>
 
       {showButton && (
-        <Button
-          label={buttonLabel}
-          variant="primary"
-          size="md"
-          customStyle="w-fit"
-          loading={isLoading}
-          onClick={handleButtonClick}
-        />
+        <Button loading={isLoading} onClick={handleButtonClick} className="w-fit">
+          {buttonLabel}
+        </Button>
       )}
     </Stack>
   );

@@ -3,7 +3,7 @@ import Following from './following';
 import EngagementTab from '../engagement-tab';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import ProfileEngagementLoading from '@akashaorg/design-system-components/lib/components/Profile/placeholders/profile-engagement-loading';
 import routes, { FOLLOWING } from '../../../routes';
 import {
@@ -79,7 +79,12 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
             titleLabel={t('Oops! Something went wrong!')}
             bodyLabel={
               <>
-                {t('Click')} {<Button label="here" variant="text" onClick={onError} />}{' '}
+                {t('Click')}{' '}
+                {
+                  <Button variant="link" onClick={onError}>
+                    {t('here')}
+                  </Button>
+                }{' '}
                 {t('to try again!')}
               </>
             }
