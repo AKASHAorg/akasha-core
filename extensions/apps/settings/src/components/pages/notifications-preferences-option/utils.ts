@@ -62,6 +62,7 @@ export const getAppInfoFromChannelSetting = (settings: ChannelSettings[], value)
 
 const getAppInfoByAppName = (appName: string) => {
   const appInfo = appInformation.find(appInfo => appInfo.appName === appName);
+  // In case a new Option is added in the PushProtocol's channel and we did not cover the title and the description in the appInformation array this will generate a default title and description so it be present in the list of apps
   if (!appInfo) {
     return {
       title: appName,
