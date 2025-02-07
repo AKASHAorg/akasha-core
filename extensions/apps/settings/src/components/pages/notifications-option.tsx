@@ -41,7 +41,7 @@ const NotificationsOption: React.FC = () => {
     success: {
       title: t('In-app notifications enabled'),
       description: t(
-        // The current implementation of 'Initialize' method of PushProtocolAPI does not subscribe the user to all the channels by default
+        // The current implementation of 'Initialize' method of PushProtocolAPI does not subscribe the user to all the channel options by default
         'Notifications for all default apps are disabled. Manage them in preferences.',
       ),
     },
