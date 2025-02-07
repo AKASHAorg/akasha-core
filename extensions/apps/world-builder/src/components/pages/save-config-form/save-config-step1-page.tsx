@@ -34,7 +34,7 @@ export const SaveConfigStep1Page: React.FC = () => {
         </CardTitle>
       </CardHeader>
       <CardContent></CardContent>
-      <CardFooter className="justify-end">
+      <CardFooter>
         <Button className="px-6 h-8" variant="outline" onClick={handleCancel}>
           {t('Cancel')}
         </Button>
