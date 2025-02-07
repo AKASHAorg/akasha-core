@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 export enum ChannelOptionIndexes {
   ANTENNA = 1,
   PROFILE = 2,
@@ -82,6 +84,13 @@ export type PushOrgNotification = {
   timestamp?: Date;
   isUnread?: boolean;
 };
+
+export const NotificationSettingTypeSchema = z.object({
+  index: z.number(),
+  default: z.boolean(),
+  description: z.string(),
+});
+export type ChannelSettings = z.infer<typeof NotificationSettingTypeSchema>;
 
 export type NotificationMetaTypes =
   | FollowNotificationMetaData

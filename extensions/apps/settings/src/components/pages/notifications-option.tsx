@@ -29,7 +29,8 @@ const NotificationsOption: React.FC = () => {
   const { t } = useTranslation('app-settings-ewa');
   const _uiEvents = React.useRef(uiEvents);
   const navigateTo = getCorePlugins().routing.navigateTo;
-  const { notificationsEnabled, waitingForSignature, enableNotifications } = useNotifications();
+  const { previouslyEnabled, notificationsEnabled, waitingForSignature, enableNotifications } =
+    useNotifications();
 
   const {
     data: { authenticatedDID, isAuthenticating },
@@ -39,7 +40,9 @@ const NotificationsOption: React.FC = () => {
   const TOAST_TEXTS = {
     success: {
       title: t('In-app notifications enabled'),
-      description: t('Notifications for all default apps are enabled. Manage them in preferences.'),
+      description: t(
+        'Notifications for all default apps are disabled. Manage them in preferences.',
+      ),
     },
     error: {
       title: t('Couldn’t enable notifications'),
@@ -106,7 +109,9 @@ const NotificationsOption: React.FC = () => {
             isLoading={waitingForSignature}
             noWrapperCard={true}
             handleButtonClick={handleEnableNotifications}
-            text={t('You’ll be prompted with 1 signature')}
+            text={t(`You’ll be prompted with {{numberOfSignatures}} signature`, {
+              numberOfSignatures: previouslyEnabled ? 1 : 2,
+            })}
             title={t('Turn on in-app notifications')}
             buttonLabel={t('Turn on')}
           />

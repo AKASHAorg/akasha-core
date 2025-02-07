@@ -1,27 +1,72 @@
-import { UserSettingType } from '@akashaorg/typings/lib/sdk';
-import { AppName } from './index';
+import { ChannelSettings, UserSettingType } from '@akashaorg/typings/lib/sdk';
 
-export const findAppIndex = (appName: AppName, preferences: UserSettingType[]) =>
-  preferences.findIndex(e => e.appName === appName);
+enum AppName {
+  ANTENNA = 'Antenna App',
+  PROFILE = 'Profile App',
+  VIBES = 'Vibes App',
+}
 
-export const preferencesObjectFactory = (val: boolean): UserSettingType[] => {
-  // Order of items in array determines the setting category in payload (PushOrg api requirement)
-  return [
-    {
-      index: 1,
-      appName: AppName.ANTENNA,
-      enabled: val,
-    },
-    {
-      index: 2,
-      appName: AppName.PROFILE,
-      enabled: val,
-    },
-    // Currently we don't have Vibes Notifications
-    // {
-    //   index: 3,
-    //   appName: AppName.VIBES,
-    //   enabled: val,
-    // },
-  ];
+const appInformation = [
+  {
+    appName: AppName.ANTENNA,
+    title: 'Antenna',
+    description:
+      'Get notifications about new reflections on your beams people you follow & your interests.',
+  },
+  {
+    appName: AppName.PROFILE,
+    title: 'Profile',
+    description: 'Get notifications about new followers',
+  },
+  {
+    appName: AppName.VIBES,
+    title: 'Vibes',
+    description: 'Get notifications from Vibes app',
+  },
+];
+
+export type AppInfo = {
+  index: number;
+  enabled: boolean;
+  appName: string;
+  title: string;
+  description: string;
+};
+
+export const getAppInfoFromUserSetting = (settings: UserSettingType[]): AppInfo[] => {
+  return settings.map(setting => {
+    const appInfo = getAppInfoByAppName(setting.appName);
+    return {
+      index: setting.index,
+      appName: setting.appName,
+      title: appInfo.title,
+      description: appInfo.description,
+      enabled: setting.enabled,
+    };
+  });
+};
+
+export const getAppInfoFromChannelSetting = (settings: ChannelSettings[], value): AppInfo[] => {
+  return settings.map(setting => {
+    // description is actually the title of the option returned by PushProtocol channel api
+    const appInfo = getAppInfoByAppName(setting.description);
+    return {
+      index: setting.index,
+      appName: setting.description,
+      title: appInfo.title,
+      description: appInfo.description,
+      enabled: value,
+    };
+  });
+};
+
+const getAppInfoByAppName = (appName: string) => {
+  const appInfo = appInformation.find(appInfo => appInfo.appName === appName);
+  if (!appInfo) {
+    return {
+      title: appName,
+      description: `Get notifications from ${appName}`,
+    };
+  }
+  return appInfo;
 };
