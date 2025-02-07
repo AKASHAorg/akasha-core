@@ -8,7 +8,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@akashaorg/ui/lib/components/Card';
+} from '@akashaorg/ui/lib/components/card';
 import {
   ErrorLoader,
   ErrorLoaderTitle,
