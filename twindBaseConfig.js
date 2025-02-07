@@ -10,9 +10,9 @@ function withOpacity(variable) {
 function withHslOpacity(variable) {
   return ({ opacityValue }) => {
     if (opacityValue === undefined) {
-      return `hsl(var(${variable}))`;
+      return `oklch(var(${variable}))`;
     }
-    return `hsl(var(${variable}) / ${opacityValue})`;
+    return `oklch(var(${variable}) / ${opacityValue})`;
   };
 }
 

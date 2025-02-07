@@ -19,12 +19,6 @@ This package contains all hooks required for proper functioning of the AKASHA Co
 
 - getLegalDoc
 
-### [useNetworkState](./src/use-network-state.ts)
-
-> handles checks to ensure that the user is on the appropriate ethereum network required for the app. Available actions include;
-
-- checkNetwork
-
 ### [useNotifications](./src/use-notifications.ts)
 
 > handles enabling of notifications and exposes status of pending signature request.

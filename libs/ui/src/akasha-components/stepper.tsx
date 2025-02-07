@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import * as React from 'react';
 import { Check, Dot } from 'lucide-react';
 
 import { cn } from '@/library/utils';
@@ -8,7 +8,7 @@ interface StepperProps extends React.HTMLAttributes<HTMLElement> {
   numberOfSteps: number;
 }
 
-export const Stepper = forwardRef<HTMLElement, StepperProps>(
+export const Stepper = React.forwardRef<HTMLElement, StepperProps>(
   ({ currentStep, numberOfSteps, className, ...props }, ref) => {
     return (
       <nav ref={ref} className={cn('w-full', className)} {...props} aria-label="Progress">
@@ -46,9 +46,13 @@ export const Stepper = forwardRef<HTMLElement, StepperProps>(
                   aria-label={`Step ${stepNumber}`}
                 >
                   {isCompleted ? (
-                    <Check className="text-primary-foreground transition-colors duration-300" />
+                    <Check
+                      size={20}
+                      className="text-primary-foreground transition-colors duration-300"
+                    />
                   ) : (
                     <Dot
+                      size={20}
                       strokeWidth={8}
                       className={cn(
                         isActive ? 'text-primary' : 'text-muted',
@@ -65,3 +69,4 @@ export const Stepper = forwardRef<HTMLElement, StepperProps>(
     );
   },
 );
+Stepper.displayName = 'Stepper';

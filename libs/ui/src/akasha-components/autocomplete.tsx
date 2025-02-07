@@ -1,6 +1,4 @@
-'use client';
-
-import React, { forwardRef, useCallback, useRef, useState, type KeyboardEvent } from 'react';
+import * as React from 'react';
 import { Command as CommandPrimitive } from 'cmdk';
 import { Check } from 'lucide-react';
 
@@ -31,7 +29,7 @@ type AutoCompleteProps = {
     }
 );
 
-export const Autocomplete = forwardRef<
+export const Autocomplete = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive>,
   AutoCompleteProps
 >(
@@ -39,12 +37,12 @@ export const Autocomplete = forwardRef<
     { options, emptyMessage, disabled, isLoading = false, placeholder, className, ...props },
     ref,
   ) => {
-    const inputRef = useRef<HTMLInputElement>(null);
-    const [isOpen, setOpen] = useState(false);
-    const [inputValue, setInputValue] = useState<string>('');
+    const inputRef = React.useRef<HTMLInputElement>(null);
+    const [isOpen, setOpen] = React.useState(false);
+    const [inputValue, setInputValue] = React.useState<string>('');
 
-    const handleKeyDown = useCallback(
-      (event: KeyboardEvent<HTMLDivElement>) => {
+    const handleKeyDown = React.useCallback(
+      (event: React.KeyboardEvent<HTMLDivElement>) => {
         const input = inputRef.current;
         if (!input) {
           return;
@@ -75,14 +73,14 @@ export const Autocomplete = forwardRef<
       [isOpen, options, props],
     );
 
-    const handleBlur = useCallback(() => {
+    const handleBlur = React.useCallback(() => {
       setOpen(false);
       if (props.multiple === false) {
         setInputValue(props.value?.label || '');
       }
     }, [props.value, props.multiple]);
 
-    const handleSelectOption = useCallback(
+    const handleSelectOption = React.useCallback(
       (selectedOption: Option) => {
         if (props.multiple === true) {
           const isSelected = props.value?.some(option => option.value === selectedOption.value);
@@ -107,7 +105,12 @@ export const Autocomplete = forwardRef<
 
     return (
       <CommandPrimitive ref={ref} onKeyDown={handleKeyDown}>
-        <div className={cn('border rounded-[0.5rem]', className)}>
+        <div
+          className={cn(
+            'flex items-center overflow-hidden border rounded-[0.5rem] h-10',
+            className,
+          )}
+        >
           <CommandInput
             ref={inputRef}
             value={inputValue}
@@ -116,7 +119,7 @@ export const Autocomplete = forwardRef<
             onFocus={() => setOpen(true)}
             placeholder={placeholder}
             disabled={disabled}
-            className="text-base"
+            className="text-sm w-full"
           />
         </div>
         <div className="relative mt-1">
@@ -126,7 +129,7 @@ export const Autocomplete = forwardRef<
               isOpen ? 'block' : 'hidden',
             )}
           >
-            <CommandList className="rounded-[0.5rem] ring-1 ring-muted">
+            <CommandList className="rounded-[0.5rem] ring-1 ring-border">
               {isLoading ? (
                 <CommandPrimitive.Loading>
                   <div className="p-1">
@@ -175,3 +178,4 @@ export const Autocomplete = forwardRef<
     );
   },
 );
+Autocomplete.displayName = 'Autocomplete';
