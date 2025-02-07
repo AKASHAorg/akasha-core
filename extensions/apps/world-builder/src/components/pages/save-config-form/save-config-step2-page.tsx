@@ -3,7 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Stepper } from '@akashaorg/ui/lib/akasha-components/stepper';
-import { CardContent, CardFooter, CardHeader, CardTitle } from '@akashaorg/ui/lib/components/Card';
+import {
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@akashaorg/ui/lib/akasha-components/card';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 

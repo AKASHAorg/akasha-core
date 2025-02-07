@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
-} from '@akashaorg/ui/lib/components/Card';
+} from '@akashaorg/ui/lib/akasha-components/card';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Image, ImageRoot } from '@akashaorg/ui/lib/akasha-components/image';
 

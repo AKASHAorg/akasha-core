@@ -10,7 +10,7 @@ import {
   ErrorLoaderDescription,
   ErrorLoaderFooter,
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
-import { Card } from '@akashaorg/ui/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 
 export const SAVE_WORLD_CONFIG_FORM = 'save-world-config-form';
