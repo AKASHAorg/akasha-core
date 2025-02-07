@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Stepper } from '@akashaorg/ui/lib/akasha-components/stepper';
 import { CardContent, CardFooter, CardHeader, CardTitle } from '@akashaorg/ui/lib/components/Card';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
@@ -20,7 +21,9 @@ export const SaveConfigStep1Page: React.FC = () => {
   return (
     <>
       <CardHeader>
-        <Stepper currentStep={1} numberOfSteps={3} />
+        <Stack className="items-center">
+          <Stepper currentStep={1} numberOfSteps={3} className="max-w-[250px]" />
+        </Stack>
         <CardTitle className="text-center">
           <Typography variant="h5">{t('World Config')}</Typography>
         </CardTitle>

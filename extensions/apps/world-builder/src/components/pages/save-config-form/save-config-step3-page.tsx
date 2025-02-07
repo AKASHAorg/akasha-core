@@ -5,6 +5,7 @@ import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Stepper } from '@akashaorg/ui/lib/akasha-components/stepper';
 import { CardContent, CardFooter, CardHeader, CardTitle } from '@akashaorg/ui/lib/components/Card';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 
 export const SaveConfigStep3Page: React.FC = () => {
   const navigate = useNavigate();
@@ -20,7 +21,9 @@ export const SaveConfigStep3Page: React.FC = () => {
   return (
     <>
       <CardHeader>
-        <Stepper currentStep={1} numberOfSteps={3} />
+        <Stack className="items-center">
+          <Stepper currentStep={3} numberOfSteps={3} className="max-w-[250px]" />
+        </Stack>
         <CardTitle className="text-center">
           <Typography variant="h5">{t(`World's Foundations`)}</Typography>
         </CardTitle>
