@@ -8,7 +8,7 @@ import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks'
 import { AppImageSource } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { ExtensionEditStep2FormValues } from '@akashaorg/design-system-components/lib/components/ExtensionEditStep2Form';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import { Button } from '@akashaorg/ui/lib/akasha-components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 
 export const AtomContext = createContext(null);
 

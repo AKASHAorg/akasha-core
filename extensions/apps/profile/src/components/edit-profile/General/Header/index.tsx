@@ -212,6 +212,7 @@ export const Header: React.FC<HeaderProps> = ({
             customStyle="relative mt-auto ml-auto"
           >
             <Button
+              aria-label="cover-image"
               variant="outline"
               size="icon"
               onClick={() => {
