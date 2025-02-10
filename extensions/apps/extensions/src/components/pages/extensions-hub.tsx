@@ -3,22 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { ArrowLongRightIcon } from '@heroicons/react/24/outline';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Link from '@akashaorg/design-system-core/lib/components/Link';
 import { ExtensionsHub } from '../extensions-hub';
 import routes, { DEVELOPER_MODE } from '../../routes';
 
 export const ExtensionsHubPage: React.FC<unknown> = () => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
-
-  const handleAppClick = (appId: string) => {
-    navigate({
-      to: '/info/$appId',
-      params: {
-        appId,
-      },
-    });
-  };
 
   const handleCTAClick = () => {
     navigate({
@@ -40,15 +30,15 @@ export const ExtensionsHubPage: React.FC<unknown> = () => {
             'Create awesome extensions, spark your imagination, and be part of an enthusiastic developer community!',
           ),
           ctaNode: (
-            <Link
-              target="_blank"
-              to="https://github.com/AKASHAorg/akasha-core/issues"
-              customStyle="w-fit self-end"
-            >
-              <Button variant="link" className="w-fit self-end">
+            <Button variant="link" className="w-fit self-end" asChild>
+              <a
+                rel="noreferrer"
+                href={'https://github.com/AKASHAorg/akasha-core/issues'}
+                target="_blank"
+              >
                 {t('Share your thoughts!')}
-              </Button>
-            </Link>
+              </a>
+            </Button>
           ),
         },
         {

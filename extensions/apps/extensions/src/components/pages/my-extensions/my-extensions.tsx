@@ -205,7 +205,9 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
         customStyle="rounded-[20px]"
       >
         <Text variant="body1">{t('Create an extension ✨ 🚀')}</Text>
-        <Button onClick={handleNavigateToCreateApp}>{t('Create')}</Button>
+        <Button size="sm" onClick={handleNavigateToCreateApp}>
+          {t('Create')}
+        </Button>
       </Stack>
       <Stack direction="row" justify="between" align="center" spacing="gap-4">
         <Dropdown
@@ -220,7 +222,7 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
           setSelected={setSelectedStatus}
           customStyle="grow"
         />
-        <Button variant="link" onClick={handleResetClick}>
+        <Button variant="link" size="sm" onClick={handleResetClick}>
           {t('Reset')}
         </Button>
       </Stack>

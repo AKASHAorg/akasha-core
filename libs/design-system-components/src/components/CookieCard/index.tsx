@@ -1,6 +1,5 @@
 import React from 'react';
 
-import Link from '@akashaorg/design-system-core/lib/components/Link';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -59,38 +58,26 @@ const CookieCard: React.FC<CookieCardProps> = props => {
           <Text variant="body2">
             {paragraphTwo.introLabel}
 
-            <Link target="_blank" to={paragraphTwo.analyticsURL}>
-              {paragraphTwo.analyticsLabel}
-            </Link>
+            <Button variant="link" asChild>
+              <a rel="noreferrer" href={paragraphTwo.analyticsURL}>
+                {paragraphTwo.analyticsLabel}
+              </a>
+            </Button>
 
             {paragraphTwo.middleParagraphLabeL}
 
-            <button onClick={paragraphTwo.onSettingsClick}>
-              <Text
-                as="span"
-                variant="body2"
-                color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-                align="center"
-              >
-                {paragraphTwo.settingsLabel}
-              </Text>
-            </button>
+            <Button variant="link" onClick={paragraphTwo.onSettingsClick}>
+              {paragraphTwo.settingsLabel}
+            </Button>
 
             {paragraphTwo.lastParagraphLabel}
           </Text>
 
           <Text variant="body2">
             {paragraphThree.introLabel}{' '}
-            <button onClick={paragraphThree.onPrivacyClick}>
-              <Text
-                as="span"
-                variant="body2"
-                color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-                align="center"
-              >
-                {paragraphThree.ctaLabel}
-              </Text>
-            </button>
+            <Button variant="link" onClick={paragraphThree.onPrivacyClick}>
+              {paragraphThree.ctaLabel}
+            </Button>
           </Text>
         </Stack>
 

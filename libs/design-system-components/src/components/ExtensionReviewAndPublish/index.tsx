@@ -321,7 +321,12 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
         >
           <Stack align="center" direction="row" spacing="gap-x-2">
             <Text variant="button-sm">{needToMakeChangesLabel}</Text>
-            <Button variant="outline" onClick={editExtension.handleClick} className="ml-auto">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={editExtension.handleClick}
+              className="ml-auto"
+            >
               {editExtension.label}
             </Button>
           </Stack>

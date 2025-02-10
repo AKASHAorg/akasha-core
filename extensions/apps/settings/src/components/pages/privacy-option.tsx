@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
@@ -141,28 +140,24 @@ const PrivacyOption: React.FC = () => {
             {t(
               ' is used so we can all work all the more brilliantly to improve it, you can opt-in to our own ',
             )}
-            <Link target="_blank" to={'https://matomo.org'}>
-              <Text
-                as="span"
-                weight="bold"
-                color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-              >
+            <Button variant="link" asChild>
+              <a rel="noreferrer" target="_blank" href="https://matomo.org">
                 {'Matomo'}
-              </Text>
-            </Link>
+              </a>
+            </Button>
             {t(
               " analytics. We don't store personal identifiable information (PII) and you can opt-out at any time. ",
             )}
-            <Link
-              target="_blank"
-              to={
-                'https://forum.akasha.org/t/implementing-analytics-on-ethereum-world-an-open-discussion-on-the-rationale-and-your-choices/100'
-              }
-            >
-              <Text as="span" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
+
+            <Button variant="link" asChild>
+              <a
+                rel="noreferrer"
+                target="_blank"
+                href="https://forum.akasha.org/t/implementing-analytics-on-ethereum-world-an-open-discussion-on-the-rationale-and-your-choices/100"
+              >
                 {t('Click here')}
-              </Text>
-            </Link>
+              </a>
+            </Button>
             {t(' to learn more.')}
           </Text>
         </Stack>
@@ -173,15 +168,9 @@ const PrivacyOption: React.FC = () => {
           </Stack>
           <Text>
             {t("Discover more about AKASHA World's Legal and Terms of Use")}{' '}
-            <button onClick={handleLegalAppNav}>
-              <Text
-                as="span"
-                color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-                align="center"
-              >
-                {t('here')}
-              </Text>
-            </button>
+            <Button variant="link" onClick={handleLegalAppNav}>
+              {t('here')}
+            </Button>
           </Text>
         </Stack>
       </Stack>

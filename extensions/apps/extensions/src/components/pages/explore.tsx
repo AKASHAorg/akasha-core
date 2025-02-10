@@ -110,6 +110,7 @@ export const ExplorePage: React.FC<unknown> = () => {
         action: (
           <Button
             variant={isInstalled ? 'outline' : 'default'}
+            size="sm"
             onClick={() => handleButtonClick(ext.name)}
             className="w-fit self-end"
           >

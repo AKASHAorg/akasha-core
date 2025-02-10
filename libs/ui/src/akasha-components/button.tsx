@@ -63,6 +63,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             [typographyVariants({ variant: 'xs' })]: size === 'sm',
           },
           buttonVariants({ variant, size, className }),
+          { 'p-0': variant === 'link' || asChild },
         )}
         ref={ref}
         disabled={loading || disabled}

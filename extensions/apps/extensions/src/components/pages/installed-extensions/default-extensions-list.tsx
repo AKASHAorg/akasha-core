@@ -65,7 +65,7 @@ export const DefaultExtensionsList = () => {
     nsfwLabel: t('NSFW'),
     isDefaultWorldExtension: true,
     action: (
-      <Button variant="outline" onClick={() => handleAppClick(app.name)}>
+      <Button variant="outline" size="sm" onClick={() => handleAppClick(app.name)}>
         {t('Open')}
       </Button>
     ),

@@ -76,7 +76,7 @@ export const InstalledExtensionsList = () => {
     defaultLabel: t('Default'),
     nsfwLabel: t('NSFW'),
     action: (
-      <Button variant="outline" onClick={() => handleAppClick(ext.name)}>
+      <Button variant="outline" size="sm" onClick={() => handleAppClick(ext.name)}>
         {t('Open')}
       </Button>
     ),
@@ -142,7 +142,7 @@ export const InstalledExtensionsList = () => {
                   <Button variant="link" onClick={handleDiscoverClick} className="inline-block">
                     {t('Discover')}
                   </Button>
-                  {t('cool extensions and install them')}
+                  {t(' cool extensions and install them')}
                 </Text>
                 <Text variant="body2" color={{ light: 'grey5', dark: 'grey6' }}>
                   {t('to customize your world')}

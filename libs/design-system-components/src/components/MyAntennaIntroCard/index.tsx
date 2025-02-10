@@ -71,7 +71,8 @@ const MyAntennaIntroCard: React.FC<MyAntennaIntroCardProps> = ({
           {isMinified && <Text variant="subtitle2">{secondaryDescription}</Text>}
 
           <Button
-            variant={isMinified ? 'secondary' : 'default'}
+            variant={isMinified ? 'outline' : 'default'}
+            size="sm"
             className="w-(1/2 md:auto)"
             onClick={onClickCTA}
           >

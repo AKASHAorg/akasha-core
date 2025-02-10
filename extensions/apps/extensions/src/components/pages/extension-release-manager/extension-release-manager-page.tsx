@@ -304,7 +304,7 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
           <Text variant="h6" weight="semibold">
             {t('Local Release')}
           </Text>
-          <Button variant="outline" onClick={handleTestReleaseNav}>
+          <Button variant="outline" size="sm" onClick={handleTestReleaseNav}>
             {t('Test release')}
           </Button>
         </Stack>
@@ -322,7 +322,9 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
           <Text variant="h6" weight="semibold">
             {t('Published Releases')}
           </Text>
-          <Button onClick={handleClickPublishReleaseButton}>{t('Create release')}</Button>
+          <Button size="sm" onClick={handleClickPublishReleaseButton}>
+            {t('Create release')}
+          </Button>
         </Stack>
         {appReleases?.length === 0 && (
           <InfoCard
