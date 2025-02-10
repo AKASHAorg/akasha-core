@@ -19,7 +19,7 @@
     "@akashaorg/typings": "workspace:^",
     "@apollo/client": "3.11.8",
     "@ceramicnetwork/http-client": "6.4.0",
-    "@coinbase/wallet-sdk": "4.2.4",
+    "@coinbase/wallet-sdk": "4.3.0",
     "@composedb/client": "0.7.1",
     "@composedb/types": "0.7.1",
     "@didtools/cacao": "3.0.1",
