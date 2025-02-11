@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTheme } from '@akashaorg/ui-core-hooks';
 import { ThemingEvents } from '@akashaorg/typings/lib/ui';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import {
   ArrowLeftEndOnRectangleIcon,
@@ -115,22 +115,14 @@ const Topbar: React.FC<ITopbarProps> = props => {
   return (
     <Card customStyle={customStyle}>
       <Stack direction="row" spacing="gap-x-2">
-        <Button
-          iconOnly={true}
-          icon={sidebarVisible ? <ArrowLeftEndOnRectangleIcon /> : <ArrowRightEndOnRectangleIcon />}
-          onClick={onSidebarToggle}
-          greyBg={true}
-          variant="primary"
-        />
-        <Button
-          iconOnly={true}
-          greyBg={true}
-          variant="primary"
-          icon={<ChevronLeftIcon />}
-          onClick={onBackClick}
-        />
+        <Button variant="outline" size="icon" onClick={onSidebarToggle}>
+          {sidebarVisible ? <ArrowLeftEndOnRectangleIcon /> : <ArrowRightEndOnRectangleIcon />}{' '}
+        </Button>
+        <Button variant="outline" size="icon" onClick={onBackClick}>
+          <ChevronLeftIcon />
+        </Button>
       </Stack>
-      <Button plain={true} customStyle="p-0 !ml-0 cursor-pointer" onClick={onBrandClick}>
+      <button onClick={onBrandClick} className="p-0 !ml-0 cursor-pointer">
         <Stack align="center" justify="center" direction="column" spacing="gap-y-1">
           <WorldIcon fallback={<Akasha />} />
           <Pill
@@ -143,19 +135,15 @@ const Topbar: React.FC<ITopbarProps> = props => {
             borderColor={{ light: 'errorLight', dark: 'errorDark' }}
           />
         </Stack>
-      </Button>
+      </button>
       <Stack direction="row" spacing="gap-x-2">
         {!isLoggedIn && <Extension name="topbar_login_button" />}
         {isLoggedIn && (
           <>
             {displayWidgetTogglingButton && (
-              <Button
-                iconOnly={true}
-                icon={<Akasha />}
-                solidIcon={true}
-                onClick={onAppWidgetClick}
-                variant="primary"
-              />
+              <Button variant="outline" size="icon" onClick={onAppWidgetClick}>
+                <Akasha />
+              </Button>
             )}
             <Extension name="topbar_notification_button" />
           </>

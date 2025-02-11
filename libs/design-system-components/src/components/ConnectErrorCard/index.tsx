@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { ExclamationTriangleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
@@ -46,12 +46,9 @@ const ConnectErrorCard: React.FC<ConnectErrorCardProps> = ({ title, message, act
           {message}
         </Text>
         {action && (
-          <Button
-            variant="primary"
-            label={action.label}
-            onClick={action.onClick}
-            customStyle="ml-auto"
-          />
+          <Button onClick={action.onClick} className="ml-auto">
+            {action.label}
+          </Button>
         )}
       </Stack>
     </Card>

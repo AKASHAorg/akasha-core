@@ -31,47 +31,43 @@ const ErrorLoaderFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<
 );
 ErrorLoaderFooter.displayName = CardFooter.displayName;
 
-const ErrorLoader = ({
-  children,
-  publicImgPath = '/images',
-  type,
-  className,
-  ...props
-}: ErrorLoaderProps) => {
-  let imageSrc: string;
+const ErrorLoader = React.forwardRef<HTMLDivElement, ErrorLoaderProps>(
+  ({ children, publicImgPath = '/images', type, className, ...props }, ref) => {
+    let imageSrc: string;
 
-  switch (type) {
-    case 'no-apps':
-      imageSrc = `${publicImgPath}/no-apps-error.webp`;
-      break;
-    case 'not-authenticated':
-      imageSrc = `${publicImgPath}/not-authenticated.webp`;
-      break;
-    case 'page-not-found':
-      imageSrc = `${publicImgPath}/new404.webp`;
-      break;
-    case 'list-not-available':
-      imageSrc = `${publicImgPath}/list-not-available.webp`;
-      break;
-    default:
-      imageSrc = `${publicImgPath}/general-error.webp`;
-      break;
-  }
+    switch (type) {
+      case 'no-apps':
+        imageSrc = `${publicImgPath}/no-apps-error.webp`;
+        break;
+      case 'not-authenticated':
+        imageSrc = `${publicImgPath}/not-authenticated.webp`;
+        break;
+      case 'page-not-found':
+        imageSrc = `${publicImgPath}/new404.webp`;
+        break;
+      case 'list-not-available':
+        imageSrc = `${publicImgPath}/list-not-available.webp`;
+        break;
+      default:
+        imageSrc = `${publicImgPath}/general-error.webp`;
+        break;
+    }
 
-  return (
-    <Card className={cn(className)} {...props}>
-      <ImageRoot className={cn('flex justify-center px-6 pt-6')}>
-        <Image
-          src={imageSrc}
-          alt="Error Image"
-          className="size-[12.5rem] object-contain rounded-[0.5rem]"
-        />
-        <ImageFallback>Failed to load image</ImageFallback>
-      </ImageRoot>
-      {children}
-    </Card>
-  );
-};
+    return (
+      <Card ref={ref} className={cn(className)} {...props}>
+        <ImageRoot className={cn('flex justify-center px-6 pt-6')}>
+          <Image
+            src={imageSrc}
+            alt="Error Image"
+            className="size-[12.5rem] object-contain rounded-lg"
+          />
+          <ImageFallback>Failed to load image</ImageFallback>
+        </ImageRoot>
+        {children}
+      </Card>
+    );
+  },
+);
 ErrorLoader.displayName = Card.displayName;
 
 export { ErrorLoader, ErrorLoaderTitle, ErrorLoaderDescription, ErrorLoaderFooter };

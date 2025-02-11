@@ -1,6 +1,6 @@
 import React from 'react';
 import getSDK from '@akashaorg/core-sdk';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import DuplexButton, {
   DuplexButtonProps,
 } from '@akashaorg/design-system-core/lib/components/DuplexButton';
@@ -147,13 +147,13 @@ export const FollowButton = ({
     <Button
       aria-label="follow"
       onClick={() => handleFollow(profileID, followDocumentId, !isFollowing)}
-      icon={isFollowing ? <Following role="img" aria-label="following" /> : <UserPlusIcon />}
-      variant="primary"
       loading={loading}
-      greyBg={true}
-      iconOnly={true}
-      customStyle={disabledStyle}
-    />
+      variant="outline"
+      size="icon"
+      className={disabledStyle}
+    >
+      {isFollowing ? <Following role="img" aria-label="following" /> : <UserPlusIcon />}
+    </Button>
   ) : (
     <DuplexButton
       inactiveLabel={t('Follow')}

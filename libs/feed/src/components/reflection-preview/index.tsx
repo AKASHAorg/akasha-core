@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import ReflectionCard from '../cards/reflection-card';
 import { useGetReflectReflectionsQuery } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
@@ -89,11 +89,12 @@ const ReflectionPreview: React.FC<ReflectionPreviewProps> = props => {
         </Stack>
         {reflections.length > MAXIMUM_REFLECTION_PREVIEWS && (
           <Button
-            variant="text"
-            label={t('View more')}
+            variant="link"
             onClick={() => onNavigate({ id: reflectionId, authorId: null }, EntityTypes.REFLECT)}
-            customStyle="mr-auto"
-          />
+            className="mr-auto"
+          >
+            {t('View more')}
+          </Button>
         )}
       </Stack>
     )

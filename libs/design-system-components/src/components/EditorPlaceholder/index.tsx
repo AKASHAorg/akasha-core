@@ -2,7 +2,7 @@ import React from 'react';
 import { tw } from '@twind/core';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 
@@ -62,7 +62,7 @@ const EditorPlaceholder: React.FC<EditorPlaceholderType> = props => {
           </Text>
         </div>
 
-        <Button variant="primary" label={actionLabel} size="sm" />
+        <Button size="sm">{actionLabel}</Button>
       </div>
     </Card>
   );

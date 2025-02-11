@@ -1,5 +1,4 @@
 import React from 'react';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -53,17 +52,15 @@ export const MentionPopover = React.forwardRef<HTMLDivElement, MentionPopover>((
         )}
         {values.length > 0 &&
           values.map((value, i) => (
-            <Button
+            <button
               key={i}
-              plain={true}
               onClick={() => {
                 handleSelect(i);
               }}
               onMouseEnter={() => {
                 setIndex(i);
               }}
-              hover={true}
-              customStyle={`px-4 py-2 h-[${PROFILE_AVATAR_HEIGHT}px]`}
+              className={`px-4 py-2 h-[${PROFILE_AVATAR_HEIGHT}px]`}
             >
               <ProfileAvatarButton
                 label={value.name}
@@ -73,7 +70,7 @@ export const MentionPopover = React.forwardRef<HTMLDivElement, MentionPopover>((
                 )}
                 profileId={value.did.id}
               />
-            </Button>
+            </button>
           ))}
       </Stack>
     </Portal>

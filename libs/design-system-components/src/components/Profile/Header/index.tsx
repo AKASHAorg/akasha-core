@@ -4,7 +4,7 @@ import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import ProfileNameField from '@akashaorg/design-system-core/lib/components/ProfileNameField';
 import ImageOverlay from '../../ImageOverlay';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Menu, { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
@@ -127,9 +127,9 @@ const Header: React.FC<HeaderProps> = ({
             </Stack>
             <Stack direction="column" spacing="gap-y-1">
               <Stack direction="row" align="center" spacing="gap-x-1">
-                <Button plain={true} onClick={onClickProfileName}>
+                <button onClick={onClickProfileName}>
                   <ProfileNameField did={profileId} profileName={profileName} size="lg" />
-                </Button>
+                </button>
               </Stack>
               <DidField
                 did={profileId}
@@ -155,14 +155,9 @@ const Header: React.FC<HeaderProps> = ({
             <Stack customStyle="relative ml-auto mt-2">
               <Stack direction="row" align="center" spacing="gap-x-2">
                 {viewerIsOwner ? (
-                  <Button
-                    aria-label="edit"
-                    icon={<Cog6ToothIcon />}
-                    variant="primary"
-                    onClick={handleEdit}
-                    greyBg
-                    iconOnly
-                  />
+                  <Button aria-label="edit" variant="outline" size="icon" onClick={handleEdit}>
+                    <Cog6ToothIcon />
+                  </Button>
                 ) : (
                   <>
                     {actionElement}

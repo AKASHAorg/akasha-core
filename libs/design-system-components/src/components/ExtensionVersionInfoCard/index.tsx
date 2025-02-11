@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ExtensionVersionBulletPointCard from '../ExtensionVersionBulletPointCard';
 
@@ -45,12 +45,12 @@ const ExtensionVersionInfoCard: React.FC<ExtensionVersionInfoCardProps> = ({
             </Text>
             <Stack customStyle="sm:w-3/12 w-4/12">
               <Button
-                size="md"
-                customStyle="self-end"
-                variant="text"
-                label={viewMoreLabel}
+                variant="link"
                 onClick={() => setShowAllReleaseInfo(!showAllReleaseInfo)}
-              />
+                className="self-end"
+              >
+                {viewMoreLabel}
+              </Button>
             </Stack>
           </Stack>
         </Stack>

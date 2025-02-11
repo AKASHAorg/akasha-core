@@ -1,5 +1,5 @@
-import React, { Fragment, useState } from 'react';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import React, { useState } from 'react';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
@@ -54,12 +54,12 @@ export const Gallery: React.FC<GalleryProps> = props => {
             {galleryFieldLabel}
           </Text>
           <Button
-            variant="text"
-            size="md"
+            variant="link"
             {...(!galleryHasImages && { icon: <PlusIcon />, iconDirection: 'left' })}
-            label={galleryHasImages ? updateGalleryLabel : addLabel}
             onClick={handleMediaClick}
-          />
+          >
+            {galleryHasImages ? updateGalleryLabel : addLabel}
+          </Button>
         </Stack>
         <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
           {galleryDescriptionLabel}

@@ -2,7 +2,7 @@ import React from 'react';
 import { ArrowLongLeftIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 
 type BackToOriginalBeamProps = {
   label: string;
@@ -19,13 +19,10 @@ const BackToOriginalBeam: React.FC<BackToOriginalBeamProps> = props => {
       padding="p-4"
     >
       <Stack direction="row" spacing="gap-x-2">
-        <Button
-          variant="text"
-          icon={<ArrowLongLeftIcon />}
-          iconDirection="left"
-          label={label}
-          onClick={onClick}
-        />
+        <Button variant="link" onClick={onClick}>
+          <ArrowLongLeftIcon />
+          {label}
+        </Button>
       </Stack>
     </Card>
   );

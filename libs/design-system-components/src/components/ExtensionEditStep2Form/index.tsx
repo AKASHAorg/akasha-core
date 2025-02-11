@@ -1,7 +1,7 @@
 import React, { SyntheticEvent } from 'react';
 import * as z from 'zod';
 import { Controller } from 'react-hook-form';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
@@ -166,19 +166,15 @@ const ExtensionEditStep2Form: React.FC<ExtensionEditStep2FormProps> = props => {
 
         <Stack direction="row" justify="end" spacing="gap-x-2" customStyle="px-4 pb-4">
           <Button
-            variant="text"
-            size="md"
-            label={cancelButton.label}
+            variant="link"
             onClick={cancelButton.handleClick}
             disabled={cancelButton.disabled}
-          />
-          <Button
-            variant="primary"
-            size="md"
-            label={nextButton.label}
-            disabled={!isValid}
-            onClick={onSave}
-          />
+          >
+            {cancelButton.label}
+          </Button>
+          <Button disabled={!isValid} onClick={onSave}>
+            {nextButton.label}
+          </Button>
         </Stack>
       </Stack>
     </form>

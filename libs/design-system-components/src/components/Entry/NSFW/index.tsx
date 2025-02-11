@@ -1,4 +1,4 @@
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -33,7 +33,9 @@ const NSFW: React.FC<NSFWProps> = props => {
             {sensitiveContentLabel}
           </Text>
         </Stack>
-        <Button variant="text" label={clickToViewLabel} onClick={onClickToView} />
+        <Button variant="link" onClick={onClickToView}>
+          {clickToViewLabel}
+        </Button>
       </Card>
     </Card>
   );

@@ -13,7 +13,7 @@ import {
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import { InformationCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
 
 export type AppInfoHeaderProps = {
@@ -134,31 +134,27 @@ export const AppInfoHeader: React.FC<AppInfoHeaderProps> = props => {
               <Stack direction="row" spacing="gap-x-1">
                 {!isDefaultWorldExtension && (
                   <Button
-                    variant="secondary"
-                    label={uninstallExtensionLabel}
+                    variant="outline"
+                    size="sm"
                     onClick={onUninstallClick}
-                    customStyle="w-1/2 md:w-min"
-                  />
+                    className="w-1/2 md:w-min"
+                  >
+                    {uninstallExtensionLabel}
+                  </Button>
                 )}
                 {(extensionType === AkashaAppApplicationType.App ||
                   extensionType === AkashaAppApplicationType.Other) && (
-                  <Button
-                    variant="primary"
-                    label={openExtensionLabel}
-                    onClick={onOpenClick}
-                    customStyle="w-1/2 md:w-min"
-                  />
+                  <Button size="sm" onClick={onOpenClick} className="w-1/2 md:w-min">
+                    {openExtensionLabel}
+                  </Button>
                 )}
               </Stack>
             )}
             {!isInstalled && !isDefaultWorldExtension && isInstallable && (
               <Stack direction="row" spacing="gap-x-1" customStyle="flex-wrap w-full md:w-min">
-                <Button
-                  customStyle="w-full md:w-min"
-                  variant="primary"
-                  label={installExtensionLabel}
-                  onClick={onInstallClick}
-                />
+                <Button size="sm" onClick={onInstallClick} className="w-full md:w-min">
+                  {installExtensionLabel}
+                </Button>
               </Stack>
             )}
           </Stack>

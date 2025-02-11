@@ -6,7 +6,7 @@ import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PublishProfileData } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps } from '@akashaorg/ui-core-hooks';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { InputType, NSFW } from '@akashaorg/design-system-components/lib/components/NSFW';
 import UnsavedChangesModal from '@akashaorg/design-system-components/lib/components/UnsavedChangesModal';
@@ -187,19 +187,15 @@ const EditProfile: React.FC<EditProfileProps> = ({
         />
         <Stack direction="row" spacing="gap-x-2" customStyle="ml-auto mt-auto">
           <Button
-            variant="text"
-            label={cancelButton.label}
+            variant="link"
             onClick={cancelButton.handleClick}
             disabled={cancelButton.disabled}
-          />
-          <Button
-            variant="primary"
-            label={saveButton.label}
-            loading={saveButton.loading}
-            disabled={isDisabled}
-            onClick={onSave}
-            type="submit"
-          />
+          >
+            {cancelButton.label}
+          </Button>
+          <Button loading={saveButton.loading} disabled={isDisabled} onClick={onSave} type="submit">
+            {saveButton.label}
+          </Button>
         </Stack>
       </Stack>
     </form>

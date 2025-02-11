@@ -8,7 +8,7 @@ import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks'
 import { AppImageSource } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { ExtensionEditStep2FormValues } from '@akashaorg/design-system-components/lib/components/ExtensionEditStep2Form';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 
 export const AtomContext = createContext(null);
 
@@ -82,12 +82,7 @@ export const ExtensionEditMainPage: React.FC<ExtensionEditMainPageProps> = ({ ex
         title={`${t('Uh-oh')}! ${t('You are not connected')}!`}
         details={`${t('To check your extensions you must be connected')} ⚡️`}
       >
-        <Button
-          variant="primary"
-          size="md"
-          label={t('Connect')}
-          onClick={handleConnectButtonClick}
-        />
+        <Button onClick={handleConnectButtonClick}>{t('Connect')}</Button>
       </ErrorLoader>
     );
   }

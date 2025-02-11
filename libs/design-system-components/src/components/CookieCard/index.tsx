@@ -1,7 +1,6 @@
 import React from 'react';
 
-import Link from '@akashaorg/design-system-core/lib/components/Link';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -59,21 +58,16 @@ const CookieCard: React.FC<CookieCardProps> = props => {
           <Text variant="body2">
             {paragraphTwo.introLabel}
 
-            <Link target="_blank" to={paragraphTwo.analyticsURL}>
-              {paragraphTwo.analyticsLabel}
-            </Link>
+            <Button variant="link" asChild>
+              <a rel="noreferrer" href={paragraphTwo.analyticsURL}>
+                {paragraphTwo.analyticsLabel}
+              </a>
+            </Button>
 
             {paragraphTwo.middleParagraphLabeL}
 
-            <Button plain={true} onClick={paragraphTwo.onSettingsClick}>
-              <Text
-                as="span"
-                variant="body2"
-                color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-                align="center"
-              >
-                {paragraphTwo.settingsLabel}
-              </Text>
+            <Button variant="link" onClick={paragraphTwo.onSettingsClick}>
+              {paragraphTwo.settingsLabel}
             </Button>
 
             {paragraphTwo.lastParagraphLabel}
@@ -81,28 +75,20 @@ const CookieCard: React.FC<CookieCardProps> = props => {
 
           <Text variant="body2">
             {paragraphThree.introLabel}{' '}
-            <Button plain={true} onClick={paragraphThree.onPrivacyClick}>
-              <Text
-                as="span"
-                variant="body2"
-                color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-                align="center"
-              >
-                {paragraphThree.ctaLabel}
-              </Text>
+            <Button variant="link" onClick={paragraphThree.onPrivacyClick}>
+              {paragraphThree.ctaLabel}
             </Button>
           </Text>
         </Stack>
 
         <Stack direction="row" spacing="gap-x-4" customStyle="mt-4 ml-auto">
-          <Button variant="text" label={onlyEssentialLabel} onClick={onClickOnlyEssential} />
+          <Button variant="link" onClick={onClickOnlyEssential}>
+            {onlyEssentialLabel}
+          </Button>
 
-          <Button
-            variant="primary"
-            label={acceptAllLabel}
-            customStyle="w-44"
-            onClick={onClickAcceptAll}
-          />
+          <Button onClick={onClickAcceptAll} className="w-44">
+            {acceptAllLabel}
+          </Button>
         </Stack>
       </Stack>
     </Card>
