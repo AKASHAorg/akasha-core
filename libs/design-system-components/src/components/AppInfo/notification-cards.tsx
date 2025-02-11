@@ -1,6 +1,6 @@
 import React from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -41,9 +41,10 @@ export const AppInfoNotificationCards: React.FC<AppInfoNotificationCardsProps> =
         <Card radius={8} background={{ light: 'grey9', dark: 'grey3' }} customStyle="p-4">
           <Stack direction="row" align="center" justify="between">
             <Text as="span">
-              <Button variant="text" size="md" label={version} /> {versionLabel}
+              <Button variant="link">{version}</Button>
+              {versionLabel}
             </Text>
-            <Button variant="primary" label={updateButtonLabel} />
+            <Button>{updateButtonLabel}</Button>
           </Stack>
         </Card>
       )}

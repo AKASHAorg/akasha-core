@@ -14,7 +14,7 @@ import DynamicInfiniteScroll from '@akashaorg/design-system-components/lib/compo
 import { useGetAppsReleasesQuery } from '@akashaorg/ui-core-hooks/lib/generated';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
 import { NetworkStatus } from '@apollo/client';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import {
@@ -161,18 +161,8 @@ export const ReleasesPage = (props: ReleasesPageProps) => {
                         {!description && t('This release has no description added')}
                       </Text>
                       {!isExpanded && description && (
-                        <Button
-                          plain={true}
-                          variant="text"
-                          onClick={handleReadMoreClick(release.node?.id)}
-                        >
-                          <Text
-                            variant="footnotes2"
-                            color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-                            customStyle="whitespace-nowrap"
-                          >
-                            {t('Read More')}
-                          </Text>
+                        <Button variant="link" onClick={handleReadMoreClick(release.node?.id)}>
+                          {t('Read More')}
                         </Button>
                       )}
                     </Stack>

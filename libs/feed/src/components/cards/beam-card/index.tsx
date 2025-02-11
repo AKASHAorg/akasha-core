@@ -11,7 +11,7 @@ import { useRootComponentProps, useNsfwToggling } from '@akashaorg/ui-core-hooks
 import { Trans, useTranslation } from 'react-i18next';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { GetBeamByIdQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 import {
   selectAppId,
@@ -162,11 +162,9 @@ const BeamCard: React.FC<BeamCardProps> = props => {
               txt: <Text variant="button-sm" />,
               lnk: <Link to={''} />,
               btn: (
-                <Button
-                  variant="text"
-                  onClick={() => console.log('tap to view')}
-                  label={t('Tap to view')}
-                />
+                <Button variant="link" onClick={() => console.log('tap to view')}>
+                  {t('Tap to view')}
+                </Button>
               ),
             }}
           />

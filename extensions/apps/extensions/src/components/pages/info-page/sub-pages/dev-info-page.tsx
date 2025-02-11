@@ -15,7 +15,7 @@ import {
   selectApps,
   selectPageInfo,
 } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-by-publisher-did-query';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import { NetworkStatus } from '@apollo/client';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
@@ -124,7 +124,7 @@ export const DevInfoPage = (props: DevInfoPageProps) => {
           defaultLabel: t('Default'),
           nsfwLabel: t('NSFW'),
           nsfw: app?.nsfw,
-          action: <Button onClick={handleAppOpen(app.name)} label={t('Open')} />,
+          action: <Button onClick={handleAppOpen(app.name)}>{t('Open')}</Button>,
         })),
     [appsReq.data, handleAppOpen, t],
   );

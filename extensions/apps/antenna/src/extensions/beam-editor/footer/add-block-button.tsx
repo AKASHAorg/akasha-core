@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { PlusIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
 export type AddBlockButtonProps = {
@@ -11,15 +11,9 @@ export type AddBlockButtonProps = {
 export const AddBlock: React.FC<AddBlockButtonProps> = props => {
   const { disabled = false, addBlockLabel, handleClickAddBlock } = props;
   return (
-    <Button
-      greyBg={true}
-      variant="text"
-      size="md"
-      icon={<PlusIcon />}
-      iconDirection="left"
-      label={addBlockLabel}
-      disabled={disabled}
-      onClick={handleClickAddBlock}
-    />
+    <Button variant="link" disabled={disabled} onClick={handleClickAddBlock}>
+      <PlusIcon />
+      {addBlockLabel}
+    </Button>
   );
 };

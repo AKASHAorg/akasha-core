@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { tw, tx } from '@twind/core';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import {
@@ -75,8 +74,7 @@ const EntryCardHidden: React.FC<IEntryCardHiddenProps> = props => {
             )}
             {footerTextLabel && footerTextLabel}
             {ctaLabel && (
-              <Button
-                plain={true}
+              <button
                 onClick={e => {
                   e.stopPropagation();
                   // open call to action url if specified
@@ -86,7 +84,7 @@ const EntryCardHidden: React.FC<IEntryCardHiddenProps> = props => {
                 <Text variant={'h4'} color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
                   {ctaLabel}
                 </Text>
-              </Button>
+              </button>
             )}
           </Text>
         )}

@@ -1,7 +1,7 @@
 import React, { SyntheticEvent, useEffect, useState } from 'react';
 import * as z from 'zod';
 import { Controller, useWatch } from 'react-hook-form';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
@@ -248,21 +248,20 @@ const ExtensionCreationForm: React.FC<ExtensionCreationFormProps> = ({
 
         <Stack direction="row" spacing="gap-x-2" customStyle="ml-auto mt-auto px-4">
           <Button
-            variant="text"
-            size="md"
-            label={cancelButton.label}
+            variant="link"
             onClick={cancelButton.handleClick}
             disabled={cancelButton.disabled}
-          />
+          >
+            {cancelButton.label}
+          </Button>
           <Button
-            variant="primary"
-            size="md"
-            label={createButton.label}
             loading={createButton.loading}
             disabled={!isFormDirty || !isValid || loading}
             onClick={onSave}
             type="submit"
-          />
+          >
+            {createButton.label}
+          </Button>
         </Stack>
       </Stack>
     </form>

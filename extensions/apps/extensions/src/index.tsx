@@ -6,7 +6,7 @@ import {
   LogoTypeSource,
   MenuItemType,
 } from '@akashaorg/typings/lib/ui';
-import routes, { EXTENSIONS, HOME, INSTALLED, MY_EXTENSIONS } from './routes';
+import routes, { HOME, INSTALLED, MY_EXTENSIONS } from './routes';
 import { DEV_MODE_KEY } from './constants';
 import React from 'react';
 import { Akasha } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
@@ -19,12 +19,6 @@ const generateSubRoutes = () => {
       label: HOME,
       index: 0,
       route: routes[HOME],
-      type: MenuItemType.Internal,
-    },
-    {
-      label: EXTENSIONS,
-      index: 1,
-      route: routes[EXTENSIONS],
       type: MenuItemType.Internal,
     },
     {

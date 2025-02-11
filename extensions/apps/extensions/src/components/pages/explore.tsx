@@ -1,6 +1,6 @@
 import React from 'react';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
-import routes, { DEVELOPER_MODE, EXTENSIONS } from '../../routes';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
+import routes, { DEVELOPER_MODE, HOME } from '../../routes';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { transformSource, useRootComponentProps } from '@akashaorg/ui-core-hooks';
@@ -34,7 +34,7 @@ export const ExplorePage: React.FC<unknown> = () => {
 
   const handleViewAllLatestExtensions = () => {
     navigate({
-      to: routes[EXTENSIONS],
+      to: routes[HOME], // @TODO: update this flow
     });
   };
 
@@ -95,15 +95,10 @@ export const ExplorePage: React.FC<unknown> = () => {
           'Create awesome extensions, spark your imagination, and be part of an enthusiastic developer community!',
         ),
         action: (
-          <Button
-            size="md"
-            variant="text"
-            iconDirection="right"
-            icon={<ArrowLongRightIcon />}
-            label={t('Start your journey')}
-            customStyle="w-fit self-end"
-            onClick={handleCTAClick}
-          />
+          <Button variant="link" className="w-fit self-end" onClick={handleCTAClick}>
+            {t('Start your journey')}
+            <ArrowLongRightIcon />
+          </Button>
         ),
       }}
       popularExtensionsLabel={t('Popular Extensions')}
@@ -114,11 +109,13 @@ export const ExplorePage: React.FC<unknown> = () => {
         }),
         action: (
           <Button
-            variant={isInstalled ? 'secondary' : 'primary'}
-            label={isInstalled ? t('Installed') : t('Open')}
+            variant={isInstalled ? 'outline' : 'default'}
+            size="sm"
             onClick={() => handleButtonClick(ext.name)}
-            customStyle="w-fit self-end"
-          />
+            className="w-fit self-end"
+          >
+            {isInstalled ? t('Installed') : t('Open')}
+          </Button>
         ),
       }))}
       viewAllLabel={t('View All')}

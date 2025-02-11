@@ -8,7 +8,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 
 export const PostPublishPage: React.FC = () => {
   const navigate = useNavigate();
@@ -44,12 +44,7 @@ export const PostPublishPage: React.FC = () => {
         title={`${t('Uh-oh')}! ${t('You are not connected')}!`}
         details={`${t('To view this page you must be connected')} ⚡️`}
       >
-        <Button
-          variant="primary"
-          size="md"
-          label={t('Connect')}
-          onClick={handleConnectButtonClick}
-        />
+        <Button onClick={handleConnectButtonClick}>{t('Connect')}</Button>
       </ErrorLoader>
     );
   }
@@ -71,7 +66,9 @@ export const PostPublishPage: React.FC = () => {
           bodyVariant="body1"
           assetName="under-review"
         />
-        <Button variant="text" onClick={handleNavigate} label={t('Go to My Extensions')} />
+        <Button variant="link" onClick={handleNavigate}>
+          {t('Go to My Extensions')}
+        </Button>
       </Stack>
     </Card>
   );

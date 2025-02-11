@@ -7,6 +7,11 @@ interface DuplexButtonProps {
   children: React.ReactNode;
 }
 
+interface DuplexButtonProps extends React.HTMLAttributes<HTMLDivElement> {
+  active: boolean;
+  children: React.ReactNode;
+}
+
 const DuplexButtonContext = React.createContext<{
   active: boolean;
   hovered: boolean;
@@ -21,20 +26,24 @@ const useDuplexButtonContext = () => {
   return context;
 };
 
-const DuplexButton = ({ children, active }: DuplexButtonProps) => {
-  const [hovered, setHovered] = React.useState(false);
-  return (
-    <DuplexButtonContext.Provider
-      value={{
-        active,
-        hovered,
-        onHovered: hovered => setHovered(hovered),
-      }}
-    >
-      {children}
-    </DuplexButtonContext.Provider>
-  );
-};
+const DuplexButton = React.forwardRef<HTMLDivElement, DuplexButtonProps>(
+  ({ children, active, ...props }, ref) => {
+    const [hovered, setHovered] = React.useState(false);
+    return (
+      <DuplexButtonContext.Provider
+        value={{
+          active,
+          hovered,
+          onHovered: hovered => setHovered(hovered),
+        }}
+      >
+        <div ref={ref} {...props}>
+          {children}
+        </div>
+      </DuplexButtonContext.Provider>
+    );
+  },
+);
 DuplexButton.displayName = 'DuplexButton';
 
 const DuplexButtonActive = React.forwardRef<HTMLButtonElement, ButtonProps>(({ ...props }, ref) => {

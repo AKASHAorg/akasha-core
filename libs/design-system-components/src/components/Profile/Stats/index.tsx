@@ -1,7 +1,6 @@
 import React from 'react';
 
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text, { TextProps } from '@akashaorg/design-system-core/lib/components/Text';
@@ -53,7 +52,7 @@ const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following })
       <Stack spacing="gap-4" fullWidth>
         <Stack direction="row" justify="between">
           {stats.map((stat, index) => (
-            <Button onClick={stat.onClick} key={stat.label + index} disabled={stat.disabled} plain>
+            <button onClick={stat.onClick} key={stat.label + index} disabled={stat.disabled}>
               <Stack align="center" customStyle="group">
                 <AppIcon
                   placeholderIcon={stat.icon}
@@ -70,7 +69,7 @@ const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following })
                   {stat.total}
                 </Text>
               </Stack>
-            </Button>
+            </button>
           ))}
         </Stack>
       </Stack>

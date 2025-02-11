@@ -8,6 +8,7 @@
       "dependsOn": [
         "@akashaorg/ui-core-hooks:build",
         "@akashaorg/design-system-components:prepare",
+        "@akashaorg/ui:prepare",
         "@akashaorg/core-sdk:build",
         "@akashaorg/ui-lib-extensions:prepare",
         "@akashaorg/ui-lib-feed:prepare",
@@ -26,10 +27,7 @@
         "cwd": "extensions/widgets/top-bar",
         "command": "webpack --config webpack.config.cjs"
       },
-      "outputs": [
-        "{projectRoot}/lib",
-        "{workspaceRoot}/dist/widgets/top-bar"
-      ]
+      "outputs": ["{projectRoot}/lib", "{workspaceRoot}/dist/widgets/top-bar"]
     },
     "translations": {
       "executor": "./tools/executors/i18n:extract",

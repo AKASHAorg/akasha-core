@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Tag } from '@akashaorg/typings/lib/ui';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Portal } from './helpers';
 import { tw, tx } from '@twind/core';
@@ -25,9 +24,8 @@ export const TagPopover = React.forwardRef<HTMLDivElement, ITagPopover>((props, 
         ref={ref}
       >
         {values.map((value, i) => (
-          <Button
+          <button
             key={i}
-            plain={true}
             onClick={() => {
               handleSelect(i);
             }}
@@ -47,7 +45,7 @@ export const TagPopover = React.forwardRef<HTMLDivElement, ITagPopover>((props, 
                 {`${value.totalPosts} ${postsLabel}`}
               </Text>
             </div>
-          </Button>
+          </button>
         ))}
       </div>
     </Portal>

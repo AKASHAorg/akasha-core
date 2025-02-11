@@ -1,4 +1,4 @@
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -42,8 +42,10 @@ const NSFW: React.FC<NSFWProps> = props => {
         </Text>
       </Stack>
       <Stack direction="row" spacing="gap-x-4">
-        <Button variant="secondary" label={cancelLabel} onClick={onCancel} />
-        <Button variant="primary" label={clickToViewLabel} onClick={onClickToView} />
+        <Button variant="outline" onClick={onCancel}>
+          {cancelLabel}
+        </Button>
+        <Button onClick={onClickToView}>{clickToViewLabel}</Button>
       </Stack>
     </Stack>
   );

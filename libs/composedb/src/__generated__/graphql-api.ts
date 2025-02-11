@@ -354,6 +354,77 @@ export const AppReleaseFragmentMFragmentDoc = /*#__PURE__*/ gql`
   createdAt
 }
     `;
+export const AkashaWorldFragmentMFragmentDoc = /*#__PURE__*/ gql`
+    fragment AkashaWorldFragmentM on AkashaWorld {
+  id
+  icon {
+    default {
+      sizes
+      src
+      width
+      height
+    }
+  }
+  active
+  instanceURL
+  createdAt
+  creator {
+    id
+  }
+  extensionPublishers {
+    id
+    akashaProfile {
+      name
+      id
+      avatar {
+        default {
+          src
+          width
+          height
+        }
+      }
+    }
+  }
+}
+    `;
+export const AkashaWorldConfigMFragmentDoc = /*#__PURE__*/ gql`
+    fragment AkashaWorldConfigM on AkashaWorldConfig {
+  id
+  worldID
+  creator {
+    id
+  }
+  active
+  createdAt
+  homepageExtension
+  registryExtension
+  layoutExtension
+}
+    `;
+export const AkashaWorldConfigExtensionMFragmentDoc = /*#__PURE__*/ gql`
+    fragment AkashaWorldConfigExtensionM on AkashaWorldConfigExtension {
+  id
+  active
+  createdAt
+  worldConfigID
+  extensionID
+  extension {
+    name
+    displayName
+    author {
+      id
+    }
+    logoImage {
+      src
+      width
+      height
+    }
+  }
+  creator {
+    id
+  }
+}
+    `;
 export const UserProfileFragmentDoc = /*#__PURE__*/ gql`
     fragment UserProfileFragment on AkashaProfile {
   id
@@ -487,6 +558,77 @@ export const AppReleaseFragmentDoc = /*#__PURE__*/ gql`
     provider
     property
     value
+  }
+}
+    `;
+export const AkashaWorldFragmentDoc = /*#__PURE__*/ gql`
+    fragment AkashaWorldFragment on AkashaWorld {
+  id
+  icon {
+    default {
+      sizes
+      src
+      width
+      height
+    }
+  }
+  active
+  instanceURL
+  createdAt
+  creator {
+    id
+  }
+  extensionPublishers {
+    id
+    akashaProfile {
+      name
+      id
+      avatar {
+        default {
+          src
+          width
+          height
+        }
+      }
+    }
+  }
+}
+    `;
+export const AkashaWorldConfigFragmentDoc = /*#__PURE__*/ gql`
+    fragment AkashaWorldConfigFragment on AkashaWorldConfig {
+  id
+  worldID
+  creator {
+    id
+  }
+  active
+  createdAt
+  homepageExtension
+  registryExtension
+  layoutExtension
+}
+    `;
+export const AkashaWorldConfigExtensionFragmentDoc = /*#__PURE__*/ gql`
+    fragment AkashaWorldConfigExtensionFragment on AkashaWorldConfigExtension {
+  id
+  active
+  createdAt
+  worldConfigID
+  extensionID
+  extension {
+    name
+    displayName
+    author {
+      id
+    }
+    logoImage {
+      src
+      width
+      height
+    }
+  }
+  creator {
+    id
   }
 }
     `;
@@ -1369,6 +1511,66 @@ export const UpdateAppDocument = /*#__PURE__*/ gql`
 }
     ${AkashaAppFragmentMFragmentDoc}
 ${UserProfileFragmentMFragmentDoc}`;
+export const CreateWorldDocument = /*#__PURE__*/ gql`
+    mutation CreateWorld($i: SetAkashaWorldInput!) {
+  setAkashaWorld(input: $i) {
+    document {
+      ...AkashaWorldFragmentM
+    }
+    clientMutationId
+  }
+}
+    ${AkashaWorldFragmentMFragmentDoc}`;
+export const UpdateWorldDocument = /*#__PURE__*/ gql`
+    mutation UpdateWorld($i: UpdateAkashaWorldInput!) {
+  updateAkashaWorld(input: $i) {
+    document {
+      ...AkashaWorldFragmentM
+    }
+    clientMutationId
+  }
+}
+    ${AkashaWorldFragmentMFragmentDoc}`;
+export const CreateAkashaWorldConfigDocument = /*#__PURE__*/ gql`
+    mutation CreateAkashaWorldConfig($i: SetAkashaWorldConfigInput!) {
+  setAkashaWorldConfig(input: $i) {
+    document {
+      ...AkashaWorldConfigM
+    }
+    clientMutationId
+  }
+}
+    ${AkashaWorldConfigMFragmentDoc}`;
+export const UpdateAkashaWorldConfigDocument = /*#__PURE__*/ gql`
+    mutation UpdateAkashaWorldConfig($i: UpdateAkashaWorldConfigInput!) {
+  updateAkashaWorldConfig(input: $i) {
+    document {
+      ...AkashaWorldConfigM
+    }
+    clientMutationId
+  }
+}
+    ${AkashaWorldConfigMFragmentDoc}`;
+export const CreateAkashaWorldConfigExtensionDocument = /*#__PURE__*/ gql`
+    mutation CreateAkashaWorldConfigExtension($i: SetAkashaWorldConfigExtensionInput!) {
+  setAkashaWorldConfigExtension(input: $i) {
+    document {
+      ...AkashaWorldConfigExtensionM
+    }
+    clientMutationId
+  }
+}
+    ${AkashaWorldConfigExtensionMFragmentDoc}`;
+export const UpdateAkashaWorldConfigExtensionDocument = /*#__PURE__*/ gql`
+    mutation UpdateAkashaWorldConfigExtension($i: UpdateAkashaWorldConfigExtensionInput!) {
+  updateAkashaWorldConfigExtension(input: $i) {
+    document {
+      ...AkashaWorldConfigExtensionM
+    }
+    clientMutationId
+  }
+}
+    ${AkashaWorldConfigExtensionMFragmentDoc}`;
 export const GetAppsDocument = /*#__PURE__*/ gql`
     query GetApps($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaAppFiltersInput, $sorting: AkashaAppSortingInput) {
   akashaAppIndex(
@@ -1537,6 +1739,110 @@ export const GetAppReleaseByIdDocument = /*#__PURE__*/ gql`
     ${AppReleaseFragmentDoc}
 ${AkashaAppFragmentDoc}
 ${UserProfileFragmentDoc}`;
+export const GetWorldByIdDocument = /*#__PURE__*/ gql`
+    query GetWorldByID($id: ID!) {
+  node(id: $id) {
+    ... on AkashaWorld {
+      ...AkashaWorldFragment
+    }
+  }
+}
+    ${AkashaWorldFragmentDoc}`;
+export const GetWorldByNameDocument = /*#__PURE__*/ gql`
+    query GetWorldByName($name: String!) {
+  akashaWorldIndex(
+    first: 2
+    filters: {and: [{where: {name: {equalTo: $name}}}, {where: {active: {equalTo: true}}}]}
+  ) {
+    edges {
+      node {
+        ...AkashaWorldFragment
+      }
+    }
+  }
+}
+    ${AkashaWorldFragmentDoc}`;
+export const GetWorldConfigDocument = /*#__PURE__*/ gql`
+    query GetWorldConfig($worldID: String!, $creator: ID) {
+  akashaWorldConfigIndex(
+    first: 1
+    filters: {and: [{where: {worldID: {equalTo: $worldID}}}, {where: {active: {equalTo: true}}}]}
+  ) {
+    edges {
+      node {
+        ...AkashaWorldConfigFragment
+        extensions(account: $creator, first: 100) {
+          edges {
+            node {
+              ...AkashaWorldConfigExtensionFragment
+            }
+          }
+        }
+      }
+    }
+  }
+}
+    ${AkashaWorldConfigFragmentDoc}
+${AkashaWorldConfigExtensionFragmentDoc}`;
+export const GetWorldConfigByIdDocument = /*#__PURE__*/ gql`
+    query GetWorldConfigByID($configID: ID!) {
+  node(id: $configID) {
+    ... on AkashaWorldConfig {
+      ...AkashaWorldConfigFragment
+    }
+  }
+}
+    ${AkashaWorldConfigFragmentDoc}`;
+export const GetWorldConfigExtensionsDocument = /*#__PURE__*/ gql`
+    query GetWorldConfigExtensions($configID: String!) {
+  akashaWorldConfigExtensionIndex(
+    first: 100
+    filters: {and: [{where: {worldConfigID: {equalTo: $configID}}}, {where: {active: {equalTo: true}}}]}
+  ) {
+    edges {
+      node {
+        ...AkashaWorldConfigExtensionFragment
+      }
+    }
+  }
+}
+    ${AkashaWorldConfigExtensionFragmentDoc}`;
+export const GetWorldFullInfoDocument = /*#__PURE__*/ gql`
+    query GetWorldFullInfo($id: ID!, $creator: ID) {
+  node(id: $id) {
+    ... on AkashaWorld {
+      ...AkashaWorldFragment
+      metaInfo(first: 1, account: $creator) {
+        edges {
+          node {
+            description
+            id
+            guidelinesUrl
+            socialLinks {
+              href
+              name
+            }
+            keywords
+            worldID
+          }
+        }
+      }
+      configInfo(
+        first: 1
+        filters: {and: [{where: {active: {equalTo: true}}}]}
+        account: $creator
+      ) {
+        edges {
+          node {
+            ...AkashaWorldConfigFragment
+          }
+        }
+      }
+    }
+  }
+}
+    ${AkashaWorldFragmentDoc}
+${AkashaWorldConfigFragmentDoc}`;
 export type Requester<C = {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
 export function getSdk<C>(requester: Requester<C>) {
   return {
@@ -1681,6 +1987,24 @@ export function getSdk<C>(requester: Requester<C>) {
     UpdateApp(variables: Types.UpdateAppMutationVariables, options?: C): Promise<Types.UpdateAppMutation> {
       return requester<Types.UpdateAppMutation, Types.UpdateAppMutationVariables>(UpdateAppDocument, variables, options) as Promise<Types.UpdateAppMutation>;
     },
+    CreateWorld(variables: Types.CreateWorldMutationVariables, options?: C): Promise<Types.CreateWorldMutation> {
+      return requester<Types.CreateWorldMutation, Types.CreateWorldMutationVariables>(CreateWorldDocument, variables, options) as Promise<Types.CreateWorldMutation>;
+    },
+    UpdateWorld(variables: Types.UpdateWorldMutationVariables, options?: C): Promise<Types.UpdateWorldMutation> {
+      return requester<Types.UpdateWorldMutation, Types.UpdateWorldMutationVariables>(UpdateWorldDocument, variables, options) as Promise<Types.UpdateWorldMutation>;
+    },
+    CreateAkashaWorldConfig(variables: Types.CreateAkashaWorldConfigMutationVariables, options?: C): Promise<Types.CreateAkashaWorldConfigMutation> {
+      return requester<Types.CreateAkashaWorldConfigMutation, Types.CreateAkashaWorldConfigMutationVariables>(CreateAkashaWorldConfigDocument, variables, options) as Promise<Types.CreateAkashaWorldConfigMutation>;
+    },
+    UpdateAkashaWorldConfig(variables: Types.UpdateAkashaWorldConfigMutationVariables, options?: C): Promise<Types.UpdateAkashaWorldConfigMutation> {
+      return requester<Types.UpdateAkashaWorldConfigMutation, Types.UpdateAkashaWorldConfigMutationVariables>(UpdateAkashaWorldConfigDocument, variables, options) as Promise<Types.UpdateAkashaWorldConfigMutation>;
+    },
+    CreateAkashaWorldConfigExtension(variables: Types.CreateAkashaWorldConfigExtensionMutationVariables, options?: C): Promise<Types.CreateAkashaWorldConfigExtensionMutation> {
+      return requester<Types.CreateAkashaWorldConfigExtensionMutation, Types.CreateAkashaWorldConfigExtensionMutationVariables>(CreateAkashaWorldConfigExtensionDocument, variables, options) as Promise<Types.CreateAkashaWorldConfigExtensionMutation>;
+    },
+    UpdateAkashaWorldConfigExtension(variables: Types.UpdateAkashaWorldConfigExtensionMutationVariables, options?: C): Promise<Types.UpdateAkashaWorldConfigExtensionMutation> {
+      return requester<Types.UpdateAkashaWorldConfigExtensionMutation, Types.UpdateAkashaWorldConfigExtensionMutationVariables>(UpdateAkashaWorldConfigExtensionDocument, variables, options) as Promise<Types.UpdateAkashaWorldConfigExtensionMutation>;
+    },
     GetApps(variables?: Types.GetAppsQueryVariables, options?: C): Promise<Types.GetAppsQuery> {
       return requester<Types.GetAppsQuery, Types.GetAppsQueryVariables>(GetAppsDocument, variables, options) as Promise<Types.GetAppsQuery>;
     },
@@ -1701,6 +2025,24 @@ export function getSdk<C>(requester: Requester<C>) {
     },
     GetAppReleaseByID(variables: Types.GetAppReleaseByIdQueryVariables, options?: C): Promise<Types.GetAppReleaseByIdQuery> {
       return requester<Types.GetAppReleaseByIdQuery, Types.GetAppReleaseByIdQueryVariables>(GetAppReleaseByIdDocument, variables, options) as Promise<Types.GetAppReleaseByIdQuery>;
+    },
+    GetWorldByID(variables: Types.GetWorldByIdQueryVariables, options?: C): Promise<Types.GetWorldByIdQuery> {
+      return requester<Types.GetWorldByIdQuery, Types.GetWorldByIdQueryVariables>(GetWorldByIdDocument, variables, options) as Promise<Types.GetWorldByIdQuery>;
+    },
+    GetWorldByName(variables: Types.GetWorldByNameQueryVariables, options?: C): Promise<Types.GetWorldByNameQuery> {
+      return requester<Types.GetWorldByNameQuery, Types.GetWorldByNameQueryVariables>(GetWorldByNameDocument, variables, options) as Promise<Types.GetWorldByNameQuery>;
+    },
+    GetWorldConfig(variables: Types.GetWorldConfigQueryVariables, options?: C): Promise<Types.GetWorldConfigQuery> {
+      return requester<Types.GetWorldConfigQuery, Types.GetWorldConfigQueryVariables>(GetWorldConfigDocument, variables, options) as Promise<Types.GetWorldConfigQuery>;
+    },
+    GetWorldConfigByID(variables: Types.GetWorldConfigByIdQueryVariables, options?: C): Promise<Types.GetWorldConfigByIdQuery> {
+      return requester<Types.GetWorldConfigByIdQuery, Types.GetWorldConfigByIdQueryVariables>(GetWorldConfigByIdDocument, variables, options) as Promise<Types.GetWorldConfigByIdQuery>;
+    },
+    GetWorldConfigExtensions(variables: Types.GetWorldConfigExtensionsQueryVariables, options?: C): Promise<Types.GetWorldConfigExtensionsQuery> {
+      return requester<Types.GetWorldConfigExtensionsQuery, Types.GetWorldConfigExtensionsQueryVariables>(GetWorldConfigExtensionsDocument, variables, options) as Promise<Types.GetWorldConfigExtensionsQuery>;
+    },
+    GetWorldFullInfo(variables: Types.GetWorldFullInfoQueryVariables, options?: C): Promise<Types.GetWorldFullInfoQuery> {
+      return requester<Types.GetWorldFullInfoQuery, Types.GetWorldFullInfoQueryVariables>(GetWorldFullInfoDocument, variables, options) as Promise<Types.GetWorldFullInfoQuery>;
     }
   };
 }

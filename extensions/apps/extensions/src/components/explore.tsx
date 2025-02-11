@@ -1,6 +1,6 @@
 import React from 'react';
 import AppList from '@akashaorg/design-system-components/lib/components/AppList';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -56,13 +56,9 @@ export const Explore: React.FC<TExploreProps> = props => {
         <Stack spacing="gap-y-4">
           <Stack direction="row" align="center" spacing="gap-x-2">
             <Text variant="h6">{popularExtensionsLabel}</Text>
-            <Button
-              variant="text"
-              size="md"
-              label={viewAllLabel}
-              onClick={onViewAllClick}
-              customStyle="ml-auto"
-            />
+            <Button variant="link" onClick={onViewAllClick} className="ml-auto">
+              {viewAllLabel}
+            </Button>
           </Stack>
           <AppList apps={popularExtensions.slice(1)} onLoadMore={() => null} />
         </Stack>

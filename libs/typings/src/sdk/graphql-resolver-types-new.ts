@@ -73,7 +73,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping of interface types */
 export type ResolversInterfaceTypes<_RefType extends Record<string, unknown>> = {
-  AkashaAppInterface: ( Omit<Types.AkashaApp, 'author' | 'contributors' | 'coverImage' | 'gallery' | 'logoImage' | 'releases'> & { author: _RefType['CeramicAccount'], contributors?: Types.Maybe<Array<Types.Maybe<_RefType['CeramicAccount']>>>, coverImage?: Types.Maybe<_RefType['AppImageSource']>, gallery?: Types.Maybe<Array<Types.Maybe<_RefType['AppImageSource']>>>, logoImage?: Types.Maybe<_RefType['AppImageSource']>, releases: _RefType['AkashaAppReleaseInterfaceConnection'] } );
+  AkashaAppInterface: ( Omit<Types.AkashaApp, 'author' | 'contributors' | 'coverImage' | 'gallery' | 'logoImage' | 'releases' | 'worldConfigs'> & { author: _RefType['CeramicAccount'], contributors?: Types.Maybe<Array<Types.Maybe<_RefType['CeramicAccount']>>>, coverImage?: Types.Maybe<_RefType['AppImageSource']>, gallery?: Types.Maybe<Array<Types.Maybe<_RefType['AppImageSource']>>>, logoImage?: Types.Maybe<_RefType['AppImageSource']>, releases: _RefType['AkashaAppReleaseInterfaceConnection'], worldConfigs: _RefType['AkashaWorldConfigExtensionInterfaceConnection'] } );
   AkashaAppReleaseInterface: ( Omit<Types.AkashaAppRelease, 'application'> & { application?: Types.Maybe<_RefType['AkashaAppInterface']> } );
   AkashaBeamInterface: ( Omit<Types.AkashaBeam, 'app' | 'appVersion' | 'author' | 'mentions' | 'reflections'> & { app?: Types.Maybe<_RefType['AkashaAppInterface']>, appVersion?: Types.Maybe<_RefType['AkashaAppReleaseInterface']>, author: _RefType['CeramicAccount'], mentions?: Types.Maybe<Array<Types.Maybe<_RefType['CeramicAccount']>>>, reflections: _RefType['AkashaReflectInterfaceConnection'] } );
   AkashaContentBlockInterface: ( Omit<Types.AkashaBlockStorage, 'appVersion' | 'author' | 'block'> & { appVersion?: Types.Maybe<_RefType['AkashaAppReleaseInterface']>, author: _RefType['CeramicAccount'], block?: Types.Maybe<_RefType['AkashaContentBlock']> } ) | ( Omit<Types.AkashaContentBlock, 'appVersion' | 'author'> & { appVersion?: Types.Maybe<_RefType['AkashaAppReleaseInterface']>, author: _RefType['CeramicAccount'] } );
@@ -82,12 +82,16 @@ export type ResolversInterfaceTypes<_RefType extends Record<string, unknown>> = 
   AkashaProfileInterestsInterface: ( Omit<Types.AkashaProfileInterests, 'did'> & { did: _RefType['CeramicAccount'] } );
   AkashaProfileInterface: ( Omit<Types.AkashaProfile, 'app' | 'appVersion' | 'did' | 'followers'> & { app?: Types.Maybe<_RefType['AkashaAppInterface']>, appVersion?: Types.Maybe<_RefType['AkashaAppReleaseInterface']>, did: _RefType['CeramicAccount'], followers: _RefType['AkashaFollowInterfaceConnection'] } );
   AkashaReflectInterface: ( Omit<Types.AkashaReflect, 'author' | 'beam' | 'reflectionView'> & { author: _RefType['CeramicAccount'], beam?: Types.Maybe<_RefType['AkashaBeamInterface']>, reflectionView?: Types.Maybe<_RefType['Node']> } );
-  Node: ( Omit<Types.AkashaApp, 'author' | 'contributors' | 'coverImage' | 'gallery' | 'logoImage' | 'releases'> & { author: _RefType['CeramicAccount'], contributors?: Types.Maybe<Array<Types.Maybe<_RefType['CeramicAccount']>>>, coverImage?: Types.Maybe<_RefType['AppImageSource']>, gallery?: Types.Maybe<Array<Types.Maybe<_RefType['AppImageSource']>>>, logoImage?: Types.Maybe<_RefType['AppImageSource']>, releases: _RefType['AkashaAppReleaseInterfaceConnection'] } ) | ( Omit<Types.AkashaAppRelease, 'application'> & { application?: Types.Maybe<_RefType['AkashaAppInterface']> } ) | ( Omit<Types.AkashaAppsStream, 'application' | 'moderation'> & { application?: Types.Maybe<_RefType['AkashaAppInterface']>, moderation?: Types.Maybe<_RefType['Node']> } ) | ( Omit<Types.AkashaBeam, 'app' | 'appVersion' | 'author' | 'mentions' | 'reflections'> & { app?: Types.Maybe<_RefType['AkashaAppInterface']>, appVersion?: Types.Maybe<_RefType['AkashaAppReleaseInterface']>, author: _RefType['CeramicAccount'], mentions?: Types.Maybe<Array<Types.Maybe<_RefType['CeramicAccount']>>>, reflections: _RefType['AkashaReflectInterfaceConnection'] } ) | ( Omit<Types.AkashaBeamStream, 'beam' | 'moderation'> & { beam?: Types.Maybe<_RefType['AkashaBeamInterface']>, moderation?: Types.Maybe<_RefType['Node']> } ) | ( Omit<Types.AkashaBlockStorage, 'appVersion' | 'author' | 'block'> & { appVersion?: Types.Maybe<_RefType['AkashaAppReleaseInterface']>, author: _RefType['CeramicAccount'], block?: Types.Maybe<_RefType['AkashaContentBlock']> } ) | ( Omit<Types.AkashaContentBlock, 'appVersion' | 'author'> & { appVersion?: Types.Maybe<_RefType['AkashaAppReleaseInterface']>, author: _RefType['CeramicAccount'] } ) | ( Omit<Types.AkashaContentBlockStream, 'block' | 'moderation'> & { block?: Types.Maybe<_RefType['AkashaContentBlockInterface']>, moderation?: Types.Maybe<_RefType['Node']> } ) | ( Omit<Types.AkashaFollow, 'did' | 'profile'> & { did: _RefType['CeramicAccount'], profile?: Types.Maybe<_RefType['AkashaProfileInterface']> } ) | ( Omit<Types.AkashaIndexedStream, 'moderation' | 'streamView'> & { moderation?: Types.Maybe<_RefType['Node']>, streamView?: Types.Maybe<_RefType['Node']> } ) | ( Omit<Types.AkashaInterestsStream, 'moderation'> & { moderation?: Types.Maybe<_RefType['Node']> } ) | ( Omit<Types.AkashaProfile, 'app' | 'appVersion' | 'did' | 'followers'> & { app?: Types.Maybe<_RefType['AkashaAppInterface']>, appVersion?: Types.Maybe<_RefType['AkashaAppReleaseInterface']>, did: _RefType['CeramicAccount'], followers: _RefType['AkashaFollowInterfaceConnection'] } ) | ( Omit<Types.AkashaProfileInterests, 'did'> & { did: _RefType['CeramicAccount'] } ) | ( Omit<Types.AkashaProfileStream, 'moderation' | 'profile'> & { moderation?: Types.Maybe<_RefType['Node']>, profile?: Types.Maybe<_RefType['AkashaProfileInterface']> } ) | ( Omit<Types.AkashaReflect, 'author' | 'beam' | 'reflectionView'> & { author: _RefType['CeramicAccount'], beam?: Types.Maybe<_RefType['AkashaBeamInterface']>, reflectionView?: Types.Maybe<_RefType['Node']> } ) | ( Omit<Types.AkashaReflectStream, 'moderation' | 'reflection'> & { moderation?: Types.Maybe<_RefType['Node']>, reflection?: Types.Maybe<_RefType['AkashaReflectInterface']> } ) | ( Omit<Types.CeramicAccount, 'akashaApp' | 'akashaAppInterfaceList' | 'akashaAppList' | 'akashaAppRelease' | 'akashaAppReleaseInterfaceList' | 'akashaAppReleaseList' | 'akashaAppsStream' | 'akashaAppsStreamList' | 'akashaBeamInterfaceList' | 'akashaBeamList' | 'akashaBeamStream' | 'akashaBeamStreamList' | 'akashaBlockStorage' | 'akashaBlockStorageList' | 'akashaContentBlockInterfaceList' | 'akashaContentBlockList' | 'akashaContentBlockStream' | 'akashaContentBlockStreamList' | 'akashaFollow' | 'akashaFollowInterfaceList' | 'akashaFollowList' | 'akashaIndexStreamInterfaceList' | 'akashaIndexedStream' | 'akashaIndexedStreamList' | 'akashaInterestsStream' | 'akashaInterestsStreamList' | 'akashaProfile' | 'akashaProfileInterests' | 'akashaProfileInterestsInterfaceList' | 'akashaProfileInterfaceList' | 'akashaProfileStream' | 'akashaProfileStreamList' | 'akashaReflectInterfaceList' | 'akashaReflectList' | 'akashaReflectStream' | 'akashaReflectStreamList'> & { akashaApp?: Types.Maybe<_RefType['AkashaApp']>, akashaAppInterfaceList?: Types.Maybe<_RefType['AkashaAppInterfaceConnection']>, akashaAppList?: Types.Maybe<_RefType['AkashaAppConnection']>, akashaAppRelease?: Types.Maybe<_RefType['AkashaAppRelease']>, akashaAppReleaseInterfaceList?: Types.Maybe<_RefType['AkashaAppReleaseInterfaceConnection']>, akashaAppReleaseList?: Types.Maybe<_RefType['AkashaAppReleaseConnection']>, akashaAppsStream?: Types.Maybe<_RefType['AkashaAppsStream']>, akashaAppsStreamList?: Types.Maybe<_RefType['AkashaAppsStreamConnection']>, akashaBeamInterfaceList?: Types.Maybe<_RefType['AkashaBeamInterfaceConnection']>, akashaBeamList?: Types.Maybe<_RefType['AkashaBeamConnection']>, akashaBeamStream?: Types.Maybe<_RefType['AkashaBeamStream']>, akashaBeamStreamList?: Types.Maybe<_RefType['AkashaBeamStreamConnection']>, akashaBlockStorage?: Types.Maybe<_RefType['AkashaBlockStorage']>, akashaBlockStorageList?: Types.Maybe<_RefType['AkashaBlockStorageConnection']>, akashaContentBlockInterfaceList?: Types.Maybe<_RefType['AkashaContentBlockInterfaceConnection']>, akashaContentBlockList?: Types.Maybe<_RefType['AkashaContentBlockConnection']>, akashaContentBlockStream?: Types.Maybe<_RefType['AkashaContentBlockStream']>, akashaContentBlockStreamList?: Types.Maybe<_RefType['AkashaContentBlockStreamConnection']>, akashaFollow?: Types.Maybe<_RefType['AkashaFollow']>, akashaFollowInterfaceList?: Types.Maybe<_RefType['AkashaFollowInterfaceConnection']>, akashaFollowList?: Types.Maybe<_RefType['AkashaFollowConnection']>, akashaIndexStreamInterfaceList?: Types.Maybe<_RefType['AkashaIndexStreamInterfaceConnection']>, akashaIndexedStream?: Types.Maybe<_RefType['AkashaIndexedStream']>, akashaIndexedStreamList?: Types.Maybe<_RefType['AkashaIndexedStreamConnection']>, akashaInterestsStream?: Types.Maybe<_RefType['AkashaInterestsStream']>, akashaInterestsStreamList?: Types.Maybe<_RefType['AkashaInterestsStreamConnection']>, akashaProfile?: Types.Maybe<_RefType['AkashaProfile']>, akashaProfileInterests?: Types.Maybe<_RefType['AkashaProfileInterests']>, akashaProfileInterestsInterfaceList?: Types.Maybe<_RefType['AkashaProfileInterestsInterfaceConnection']>, akashaProfileInterfaceList?: Types.Maybe<_RefType['AkashaProfileInterfaceConnection']>, akashaProfileStream?: Types.Maybe<_RefType['AkashaProfileStream']>, akashaProfileStreamList?: Types.Maybe<_RefType['AkashaProfileStreamConnection']>, akashaReflectInterfaceList?: Types.Maybe<_RefType['AkashaReflectInterfaceConnection']>, akashaReflectList?: Types.Maybe<_RefType['AkashaReflectConnection']>, akashaReflectStream?: Types.Maybe<_RefType['AkashaReflectStream']>, akashaReflectStreamList?: Types.Maybe<_RefType['AkashaReflectStreamConnection']> } );
+  AkashaWorldConfigExtensionInterface: ( Omit<Types.AkashaWorldConfigExtension, 'creator' | 'extension' | 'worldConfig'> & { creator: _RefType['CeramicAccount'], extension?: Types.Maybe<_RefType['AkashaAppInterface']>, worldConfig?: Types.Maybe<_RefType['AkashaWorldConfigInterface']> } );
+  AkashaWorldConfigInterface: ( Omit<Types.AkashaWorldConfig, 'creator' | 'extensions' | 'world'> & { creator: _RefType['CeramicAccount'], extensions: _RefType['AkashaWorldConfigExtensionInterfaceConnection'], world?: Types.Maybe<_RefType['AkashaWorldInterface']> } );
+  AkashaWorldInterface: ( Omit<Types.AkashaWorld, 'configInfo' | 'creator' | 'extensionPublishers' | 'metaInfo'> & { configInfo: _RefType['AkashaWorldConfigInterfaceConnection'], creator: _RefType['CeramicAccount'], extensionPublishers?: Types.Maybe<Array<Types.Maybe<_RefType['CeramicAccount']>>>, metaInfo: _RefType['AkashaWorldMetaInfoInterfaceConnection'] } );
+  AkashaWorldMetaInfoInterface: ( Omit<Types.AkashaWorldMetaInfo, 'socialLinks' | 'world'> & { socialLinks?: Types.Maybe<Array<Types.Maybe<_RefType['SocialLink']>>>, world?: Types.Maybe<_RefType['AkashaWorldInterface']> } );
+  Node: ( Omit<Types.AkashaApp, 'author' | 'contributors' | 'coverImage' | 'gallery' | 'logoImage' | 'releases' | 'worldConfigs'> & { author: _RefType['CeramicAccount'], contributors?: Types.Maybe<Array<Types.Maybe<_RefType['CeramicAccount']>>>, coverImage?: Types.Maybe<_RefType['AppImageSource']>, gallery?: Types.Maybe<Array<Types.Maybe<_RefType['AppImageSource']>>>, logoImage?: Types.Maybe<_RefType['AppImageSource']>, releases: _RefType['AkashaAppReleaseInterfaceConnection'], worldConfigs: _RefType['AkashaWorldConfigExtensionInterfaceConnection'] } ) | ( Omit<Types.AkashaAppRelease, 'application'> & { application?: Types.Maybe<_RefType['AkashaAppInterface']> } ) | ( Omit<Types.AkashaAppsStream, 'application' | 'moderation'> & { application?: Types.Maybe<_RefType['AkashaAppInterface']>, moderation?: Types.Maybe<_RefType['Node']> } ) | ( Omit<Types.AkashaBeam, 'app' | 'appVersion' | 'author' | 'mentions' | 'reflections'> & { app?: Types.Maybe<_RefType['AkashaAppInterface']>, appVersion?: Types.Maybe<_RefType['AkashaAppReleaseInterface']>, author: _RefType['CeramicAccount'], mentions?: Types.Maybe<Array<Types.Maybe<_RefType['CeramicAccount']>>>, reflections: _RefType['AkashaReflectInterfaceConnection'] } ) | ( Omit<Types.AkashaBeamStream, 'beam' | 'moderation'> & { beam?: Types.Maybe<_RefType['AkashaBeamInterface']>, moderation?: Types.Maybe<_RefType['Node']> } ) | ( Omit<Types.AkashaBlockStorage, 'appVersion' | 'author' | 'block'> & { appVersion?: Types.Maybe<_RefType['AkashaAppReleaseInterface']>, author: _RefType['CeramicAccount'], block?: Types.Maybe<_RefType['AkashaContentBlock']> } ) | ( Omit<Types.AkashaContentBlock, 'appVersion' | 'author'> & { appVersion?: Types.Maybe<_RefType['AkashaAppReleaseInterface']>, author: _RefType['CeramicAccount'] } ) | ( Omit<Types.AkashaContentBlockStream, 'block' | 'moderation'> & { block?: Types.Maybe<_RefType['AkashaContentBlockInterface']>, moderation?: Types.Maybe<_RefType['Node']> } ) | ( Omit<Types.AkashaFollow, 'did' | 'profile'> & { did: _RefType['CeramicAccount'], profile?: Types.Maybe<_RefType['AkashaProfileInterface']> } ) | ( Omit<Types.AkashaIndexedStream, 'moderation' | 'streamView'> & { moderation?: Types.Maybe<_RefType['Node']>, streamView?: Types.Maybe<_RefType['Node']> } ) | ( Omit<Types.AkashaInterestsStream, 'moderation'> & { moderation?: Types.Maybe<_RefType['Node']> } ) | ( Omit<Types.AkashaProfile, 'app' | 'appVersion' | 'did' | 'followers'> & { app?: Types.Maybe<_RefType['AkashaAppInterface']>, appVersion?: Types.Maybe<_RefType['AkashaAppReleaseInterface']>, did: _RefType['CeramicAccount'], followers: _RefType['AkashaFollowInterfaceConnection'] } ) | ( Omit<Types.AkashaProfileInterests, 'did'> & { did: _RefType['CeramicAccount'] } ) | ( Omit<Types.AkashaProfileStream, 'moderation' | 'profile'> & { moderation?: Types.Maybe<_RefType['Node']>, profile?: Types.Maybe<_RefType['AkashaProfileInterface']> } ) | ( Omit<Types.AkashaReflect, 'author' | 'beam' | 'reflectionView'> & { author: _RefType['CeramicAccount'], beam?: Types.Maybe<_RefType['AkashaBeamInterface']>, reflectionView?: Types.Maybe<_RefType['Node']> } ) | ( Omit<Types.AkashaReflectStream, 'moderation' | 'reflection'> & { moderation?: Types.Maybe<_RefType['Node']>, reflection?: Types.Maybe<_RefType['AkashaReflectInterface']> } ) | ( Omit<Types.AkashaWorld, 'configInfo' | 'creator' | 'extensionPublishers' | 'metaInfo'> & { configInfo: _RefType['AkashaWorldConfigInterfaceConnection'], creator: _RefType['CeramicAccount'], extensionPublishers?: Types.Maybe<Array<Types.Maybe<_RefType['CeramicAccount']>>>, metaInfo: _RefType['AkashaWorldMetaInfoInterfaceConnection'] } ) | ( Omit<Types.AkashaWorldConfig, 'creator' | 'extensions' | 'world'> & { creator: _RefType['CeramicAccount'], extensions: _RefType['AkashaWorldConfigExtensionInterfaceConnection'], world?: Types.Maybe<_RefType['AkashaWorldInterface']> } ) | ( Omit<Types.AkashaWorldConfigExtension, 'creator' | 'extension' | 'worldConfig'> & { creator: _RefType['CeramicAccount'], extension?: Types.Maybe<_RefType['AkashaAppInterface']>, worldConfig?: Types.Maybe<_RefType['AkashaWorldConfigInterface']> } ) | ( Omit<Types.AkashaWorldMetaInfo, 'socialLinks' | 'world'> & { socialLinks?: Types.Maybe<Array<Types.Maybe<_RefType['SocialLink']>>>, world?: Types.Maybe<_RefType['AkashaWorldInterface']> } ) | ( Omit<Types.CeramicAccount, 'akashaApp' | 'akashaAppInterfaceList' | 'akashaAppList' | 'akashaAppRelease' | 'akashaAppReleaseInterfaceList' | 'akashaAppReleaseList' | 'akashaAppsStream' | 'akashaAppsStreamList' | 'akashaBeamInterfaceList' | 'akashaBeamList' | 'akashaBeamStream' | 'akashaBeamStreamList' | 'akashaBlockStorage' | 'akashaBlockStorageList' | 'akashaContentBlockInterfaceList' | 'akashaContentBlockList' | 'akashaContentBlockStream' | 'akashaContentBlockStreamList' | 'akashaFollow' | 'akashaFollowInterfaceList' | 'akashaFollowList' | 'akashaIndexStreamInterfaceList' | 'akashaIndexedStream' | 'akashaIndexedStreamList' | 'akashaInterestsStream' | 'akashaInterestsStreamList' | 'akashaProfile' | 'akashaProfileInterests' | 'akashaProfileInterestsInterfaceList' | 'akashaProfileInterfaceList' | 'akashaProfileStream' | 'akashaProfileStreamList' | 'akashaReflectInterfaceList' | 'akashaReflectList' | 'akashaReflectStream' | 'akashaReflectStreamList' | 'akashaWorld' | 'akashaWorldConfig' | 'akashaWorldConfigExtension' | 'akashaWorldConfigExtensionInterfaceList' | 'akashaWorldConfigExtensionList' | 'akashaWorldConfigInterfaceList' | 'akashaWorldConfigList' | 'akashaWorldInterfaceList' | 'akashaWorldList' | 'akashaWorldMetaInfo' | 'akashaWorldMetaInfoInterfaceList' | 'akashaWorldMetaInfoList'> & { akashaApp?: Types.Maybe<_RefType['AkashaApp']>, akashaAppInterfaceList?: Types.Maybe<_RefType['AkashaAppInterfaceConnection']>, akashaAppList?: Types.Maybe<_RefType['AkashaAppConnection']>, akashaAppRelease?: Types.Maybe<_RefType['AkashaAppRelease']>, akashaAppReleaseInterfaceList?: Types.Maybe<_RefType['AkashaAppReleaseInterfaceConnection']>, akashaAppReleaseList?: Types.Maybe<_RefType['AkashaAppReleaseConnection']>, akashaAppsStream?: Types.Maybe<_RefType['AkashaAppsStream']>, akashaAppsStreamList?: Types.Maybe<_RefType['AkashaAppsStreamConnection']>, akashaBeamInterfaceList?: Types.Maybe<_RefType['AkashaBeamInterfaceConnection']>, akashaBeamList?: Types.Maybe<_RefType['AkashaBeamConnection']>, akashaBeamStream?: Types.Maybe<_RefType['AkashaBeamStream']>, akashaBeamStreamList?: Types.Maybe<_RefType['AkashaBeamStreamConnection']>, akashaBlockStorage?: Types.Maybe<_RefType['AkashaBlockStorage']>, akashaBlockStorageList?: Types.Maybe<_RefType['AkashaBlockStorageConnection']>, akashaContentBlockInterfaceList?: Types.Maybe<_RefType['AkashaContentBlockInterfaceConnection']>, akashaContentBlockList?: Types.Maybe<_RefType['AkashaContentBlockConnection']>, akashaContentBlockStream?: Types.Maybe<_RefType['AkashaContentBlockStream']>, akashaContentBlockStreamList?: Types.Maybe<_RefType['AkashaContentBlockStreamConnection']>, akashaFollow?: Types.Maybe<_RefType['AkashaFollow']>, akashaFollowInterfaceList?: Types.Maybe<_RefType['AkashaFollowInterfaceConnection']>, akashaFollowList?: Types.Maybe<_RefType['AkashaFollowConnection']>, akashaIndexStreamInterfaceList?: Types.Maybe<_RefType['AkashaIndexStreamInterfaceConnection']>, akashaIndexedStream?: Types.Maybe<_RefType['AkashaIndexedStream']>, akashaIndexedStreamList?: Types.Maybe<_RefType['AkashaIndexedStreamConnection']>, akashaInterestsStream?: Types.Maybe<_RefType['AkashaInterestsStream']>, akashaInterestsStreamList?: Types.Maybe<_RefType['AkashaInterestsStreamConnection']>, akashaProfile?: Types.Maybe<_RefType['AkashaProfile']>, akashaProfileInterests?: Types.Maybe<_RefType['AkashaProfileInterests']>, akashaProfileInterestsInterfaceList?: Types.Maybe<_RefType['AkashaProfileInterestsInterfaceConnection']>, akashaProfileInterfaceList?: Types.Maybe<_RefType['AkashaProfileInterfaceConnection']>, akashaProfileStream?: Types.Maybe<_RefType['AkashaProfileStream']>, akashaProfileStreamList?: Types.Maybe<_RefType['AkashaProfileStreamConnection']>, akashaReflectInterfaceList?: Types.Maybe<_RefType['AkashaReflectInterfaceConnection']>, akashaReflectList?: Types.Maybe<_RefType['AkashaReflectConnection']>, akashaReflectStream?: Types.Maybe<_RefType['AkashaReflectStream']>, akashaReflectStreamList?: Types.Maybe<_RefType['AkashaReflectStreamConnection']>, akashaWorld?: Types.Maybe<_RefType['AkashaWorld']>, akashaWorldConfig?: Types.Maybe<_RefType['AkashaWorldConfig']>, akashaWorldConfigExtension?: Types.Maybe<_RefType['AkashaWorldConfigExtension']>, akashaWorldConfigExtensionInterfaceList?: Types.Maybe<_RefType['AkashaWorldConfigExtensionInterfaceConnection']>, akashaWorldConfigExtensionList?: Types.Maybe<_RefType['AkashaWorldConfigExtensionConnection']>, akashaWorldConfigInterfaceList?: Types.Maybe<_RefType['AkashaWorldConfigInterfaceConnection']>, akashaWorldConfigList?: Types.Maybe<_RefType['AkashaWorldConfigConnection']>, akashaWorldInterfaceList?: Types.Maybe<_RefType['AkashaWorldInterfaceConnection']>, akashaWorldList?: Types.Maybe<_RefType['AkashaWorldConnection']>, akashaWorldMetaInfo?: Types.Maybe<_RefType['AkashaWorldMetaInfo']>, akashaWorldMetaInfoInterfaceList?: Types.Maybe<_RefType['AkashaWorldMetaInfoInterfaceConnection']>, akashaWorldMetaInfoList?: Types.Maybe<_RefType['AkashaWorldMetaInfoConnection']> } );
 };
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
-  AkashaApp: ResolverTypeWrapper<Omit<Types.AkashaApp, 'author' | 'contributors' | 'coverImage' | 'gallery' | 'logoImage' | 'releases'> & { author: ResolversTypes['CeramicAccount'], contributors?: Types.Maybe<Array<Types.Maybe<ResolversTypes['CeramicAccount']>>>, coverImage?: Types.Maybe<ResolversTypes['AppImageSource']>, gallery?: Types.Maybe<Array<Types.Maybe<ResolversTypes['AppImageSource']>>>, logoImage?: Types.Maybe<ResolversTypes['AppImageSource']>, releases: ResolversTypes['AkashaAppReleaseInterfaceConnection'] }>;
+  AkashaApp: ResolverTypeWrapper<Omit<Types.AkashaApp, 'author' | 'contributors' | 'coverImage' | 'gallery' | 'logoImage' | 'releases' | 'worldConfigs'> & { author: ResolversTypes['CeramicAccount'], contributors?: Types.Maybe<Array<Types.Maybe<ResolversTypes['CeramicAccount']>>>, coverImage?: Types.Maybe<ResolversTypes['AppImageSource']>, gallery?: Types.Maybe<Array<Types.Maybe<ResolversTypes['AppImageSource']>>>, logoImage?: Types.Maybe<ResolversTypes['AppImageSource']>, releases: ResolversTypes['AkashaAppReleaseInterfaceConnection'], worldConfigs: ResolversTypes['AkashaWorldConfigExtensionInterfaceConnection'] }>;
   String: ResolverTypeWrapper<Types.Scalars['String']['output']>;
   ID: ResolverTypeWrapper<Types.Scalars['ID']['output']>;
   Boolean: ResolverTypeWrapper<Types.Scalars['Boolean']['output']>;
@@ -273,6 +277,62 @@ export type ResolversTypes = {
   AkashaReflectStreamModerationStatusValueFilterInput: Types.AkashaReflectStreamModerationStatusValueFilterInput;
   AkashaReflectStreamObjectFilterInput: Types.AkashaReflectStreamObjectFilterInput;
   AkashaReflectStreamSortingInput: Types.AkashaReflectStreamSortingInput;
+  AkashaWorld: ResolverTypeWrapper<Omit<Types.AkashaWorld, 'configInfo' | 'creator' | 'extensionPublishers' | 'metaInfo'> & { configInfo: ResolversTypes['AkashaWorldConfigInterfaceConnection'], creator: ResolversTypes['CeramicAccount'], extensionPublishers?: Types.Maybe<Array<Types.Maybe<ResolversTypes['CeramicAccount']>>>, metaInfo: ResolversTypes['AkashaWorldMetaInfoInterfaceConnection'] }>;
+  AkashaWorldConfig: ResolverTypeWrapper<Omit<Types.AkashaWorldConfig, 'creator' | 'extensions' | 'world'> & { creator: ResolversTypes['CeramicAccount'], extensions: ResolversTypes['AkashaWorldConfigExtensionInterfaceConnection'], world?: Types.Maybe<ResolversTypes['AkashaWorldInterface']> }>;
+  AkashaWorldConfigConnection: ResolverTypeWrapper<Omit<Types.AkashaWorldConfigConnection, 'edges'> & { edges?: Types.Maybe<Array<Types.Maybe<ResolversTypes['AkashaWorldConfigEdge']>>> }>;
+  AkashaWorldConfigEdge: ResolverTypeWrapper<Omit<Types.AkashaWorldConfigEdge, 'node'> & { node?: Types.Maybe<ResolversTypes['AkashaWorldConfig']> }>;
+  AkashaWorldConfigExtension: ResolverTypeWrapper<Omit<Types.AkashaWorldConfigExtension, 'creator' | 'extension' | 'worldConfig'> & { creator: ResolversTypes['CeramicAccount'], extension?: Types.Maybe<ResolversTypes['AkashaAppInterface']>, worldConfig?: Types.Maybe<ResolversTypes['AkashaWorldConfigInterface']> }>;
+  AkashaWorldConfigExtensionConnection: ResolverTypeWrapper<Omit<Types.AkashaWorldConfigExtensionConnection, 'edges'> & { edges?: Types.Maybe<Array<Types.Maybe<ResolversTypes['AkashaWorldConfigExtensionEdge']>>> }>;
+  AkashaWorldConfigExtensionEdge: ResolverTypeWrapper<Omit<Types.AkashaWorldConfigExtensionEdge, 'node'> & { node?: Types.Maybe<ResolversTypes['AkashaWorldConfigExtension']> }>;
+  AkashaWorldConfigExtensionFiltersInput: Types.AkashaWorldConfigExtensionFiltersInput;
+  AkashaWorldConfigExtensionInput: Types.AkashaWorldConfigExtensionInput;
+  AkashaWorldConfigExtensionInterface: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['AkashaWorldConfigExtensionInterface']>;
+  AkashaWorldConfigExtensionInterfaceConnection: ResolverTypeWrapper<Omit<Types.AkashaWorldConfigExtensionInterfaceConnection, 'edges'> & { edges?: Types.Maybe<Array<Types.Maybe<ResolversTypes['AkashaWorldConfigExtensionInterfaceEdge']>>> }>;
+  AkashaWorldConfigExtensionInterfaceEdge: ResolverTypeWrapper<Omit<Types.AkashaWorldConfigExtensionInterfaceEdge, 'node'> & { node?: Types.Maybe<ResolversTypes['AkashaWorldConfigExtensionInterface']> }>;
+  AkashaWorldConfigExtensionInterfaceFiltersInput: Types.AkashaWorldConfigExtensionInterfaceFiltersInput;
+  AkashaWorldConfigExtensionInterfaceObjectFilterInput: Types.AkashaWorldConfigExtensionInterfaceObjectFilterInput;
+  AkashaWorldConfigExtensionInterfaceSortingInput: Types.AkashaWorldConfigExtensionInterfaceSortingInput;
+  AkashaWorldConfigExtensionObjectFilterInput: Types.AkashaWorldConfigExtensionObjectFilterInput;
+  AkashaWorldConfigExtensionSortingInput: Types.AkashaWorldConfigExtensionSortingInput;
+  AkashaWorldConfigFiltersInput: Types.AkashaWorldConfigFiltersInput;
+  AkashaWorldConfigInput: Types.AkashaWorldConfigInput;
+  AkashaWorldConfigInterface: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['AkashaWorldConfigInterface']>;
+  AkashaWorldConfigInterfaceConnection: ResolverTypeWrapper<Omit<Types.AkashaWorldConfigInterfaceConnection, 'edges'> & { edges?: Types.Maybe<Array<Types.Maybe<ResolversTypes['AkashaWorldConfigInterfaceEdge']>>> }>;
+  AkashaWorldConfigInterfaceEdge: ResolverTypeWrapper<Omit<Types.AkashaWorldConfigInterfaceEdge, 'node'> & { node?: Types.Maybe<ResolversTypes['AkashaWorldConfigInterface']> }>;
+  AkashaWorldConfigInterfaceFiltersInput: Types.AkashaWorldConfigInterfaceFiltersInput;
+  AkashaWorldConfigInterfaceObjectFilterInput: Types.AkashaWorldConfigInterfaceObjectFilterInput;
+  AkashaWorldConfigInterfaceSortingInput: Types.AkashaWorldConfigInterfaceSortingInput;
+  AkashaWorldConfigObjectFilterInput: Types.AkashaWorldConfigObjectFilterInput;
+  AkashaWorldConfigSortingInput: Types.AkashaWorldConfigSortingInput;
+  AkashaWorldConnection: ResolverTypeWrapper<Omit<Types.AkashaWorldConnection, 'edges'> & { edges?: Types.Maybe<Array<Types.Maybe<ResolversTypes['AkashaWorldEdge']>>> }>;
+  AkashaWorldEdge: ResolverTypeWrapper<Omit<Types.AkashaWorldEdge, 'node'> & { node?: Types.Maybe<ResolversTypes['AkashaWorld']> }>;
+  AkashaWorldFiltersInput: Types.AkashaWorldFiltersInput;
+  AkashaWorldImageSource: ResolverTypeWrapper<Types.AkashaWorldImageSource>;
+  AkashaWorldImageSourceInput: Types.AkashaWorldImageSourceInput;
+  AkashaWorldImageVersions: ResolverTypeWrapper<Types.AkashaWorldImageVersions>;
+  AkashaWorldImageVersionsInput: Types.AkashaWorldImageVersionsInput;
+  AkashaWorldInput: Types.AkashaWorldInput;
+  AkashaWorldInterface: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['AkashaWorldInterface']>;
+  AkashaWorldInterfaceConnection: ResolverTypeWrapper<Omit<Types.AkashaWorldInterfaceConnection, 'edges'> & { edges?: Types.Maybe<Array<Types.Maybe<ResolversTypes['AkashaWorldInterfaceEdge']>>> }>;
+  AkashaWorldInterfaceEdge: ResolverTypeWrapper<Omit<Types.AkashaWorldInterfaceEdge, 'node'> & { node?: Types.Maybe<ResolversTypes['AkashaWorldInterface']> }>;
+  AkashaWorldInterfaceFiltersInput: Types.AkashaWorldInterfaceFiltersInput;
+  AkashaWorldInterfaceObjectFilterInput: Types.AkashaWorldInterfaceObjectFilterInput;
+  AkashaWorldInterfaceSortingInput: Types.AkashaWorldInterfaceSortingInput;
+  AkashaWorldMetaInfo: ResolverTypeWrapper<Omit<Types.AkashaWorldMetaInfo, 'socialLinks' | 'world'> & { socialLinks?: Types.Maybe<Array<Types.Maybe<ResolversTypes['SocialLink']>>>, world?: Types.Maybe<ResolversTypes['AkashaWorldInterface']> }>;
+  AkashaWorldMetaInfoConnection: ResolverTypeWrapper<Omit<Types.AkashaWorldMetaInfoConnection, 'edges'> & { edges?: Types.Maybe<Array<Types.Maybe<ResolversTypes['AkashaWorldMetaInfoEdge']>>> }>;
+  AkashaWorldMetaInfoEdge: ResolverTypeWrapper<Omit<Types.AkashaWorldMetaInfoEdge, 'node'> & { node?: Types.Maybe<ResolversTypes['AkashaWorldMetaInfo']> }>;
+  AkashaWorldMetaInfoFiltersInput: Types.AkashaWorldMetaInfoFiltersInput;
+  AkashaWorldMetaInfoInput: Types.AkashaWorldMetaInfoInput;
+  AkashaWorldMetaInfoInterface: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['AkashaWorldMetaInfoInterface']>;
+  AkashaWorldMetaInfoInterfaceConnection: ResolverTypeWrapper<Omit<Types.AkashaWorldMetaInfoInterfaceConnection, 'edges'> & { edges?: Types.Maybe<Array<Types.Maybe<ResolversTypes['AkashaWorldMetaInfoInterfaceEdge']>>> }>;
+  AkashaWorldMetaInfoInterfaceEdge: ResolverTypeWrapper<Omit<Types.AkashaWorldMetaInfoInterfaceEdge, 'node'> & { node?: Types.Maybe<ResolversTypes['AkashaWorldMetaInfoInterface']> }>;
+  AkashaWorldMetaInfoInterfaceFiltersInput: Types.AkashaWorldMetaInfoInterfaceFiltersInput;
+  AkashaWorldMetaInfoInterfaceObjectFilterInput: Types.AkashaWorldMetaInfoInterfaceObjectFilterInput;
+  AkashaWorldMetaInfoInterfaceSortingInput: Types.AkashaWorldMetaInfoInterfaceSortingInput;
+  AkashaWorldMetaInfoObjectFilterInput: Types.AkashaWorldMetaInfoObjectFilterInput;
+  AkashaWorldMetaInfoSortingInput: Types.AkashaWorldMetaInfoSortingInput;
+  AkashaWorldObjectFilterInput: Types.AkashaWorldObjectFilterInput;
+  AkashaWorldSortingInput: Types.AkashaWorldSortingInput;
   AppImageSource: ResolverTypeWrapper<Types.AppImageSource>;
   AppImageSourceInput: Types.AppImageSourceInput;
   AppLinkSource: ResolverTypeWrapper<Types.AppLinkSource>;
@@ -294,7 +354,7 @@ export type ResolversTypes = {
   CacaoPayload: Types.CacaoPayload;
   CacaoSignature: Types.CacaoSignature;
   CacaoSignatureT: ResolverTypeWrapper<Types.Scalars['CacaoSignatureT']['output']>;
-  CeramicAccount: ResolverTypeWrapper<Omit<Types.CeramicAccount, 'akashaApp' | 'akashaAppInterfaceList' | 'akashaAppList' | 'akashaAppRelease' | 'akashaAppReleaseInterfaceList' | 'akashaAppReleaseList' | 'akashaAppsStream' | 'akashaAppsStreamList' | 'akashaBeamInterfaceList' | 'akashaBeamList' | 'akashaBeamStream' | 'akashaBeamStreamList' | 'akashaBlockStorage' | 'akashaBlockStorageList' | 'akashaContentBlockInterfaceList' | 'akashaContentBlockList' | 'akashaContentBlockStream' | 'akashaContentBlockStreamList' | 'akashaFollow' | 'akashaFollowInterfaceList' | 'akashaFollowList' | 'akashaIndexStreamInterfaceList' | 'akashaIndexedStream' | 'akashaIndexedStreamList' | 'akashaInterestsStream' | 'akashaInterestsStreamList' | 'akashaProfile' | 'akashaProfileInterests' | 'akashaProfileInterestsInterfaceList' | 'akashaProfileInterfaceList' | 'akashaProfileStream' | 'akashaProfileStreamList' | 'akashaReflectInterfaceList' | 'akashaReflectList' | 'akashaReflectStream' | 'akashaReflectStreamList'> & { akashaApp?: Types.Maybe<ResolversTypes['AkashaApp']>, akashaAppInterfaceList?: Types.Maybe<ResolversTypes['AkashaAppInterfaceConnection']>, akashaAppList?: Types.Maybe<ResolversTypes['AkashaAppConnection']>, akashaAppRelease?: Types.Maybe<ResolversTypes['AkashaAppRelease']>, akashaAppReleaseInterfaceList?: Types.Maybe<ResolversTypes['AkashaAppReleaseInterfaceConnection']>, akashaAppReleaseList?: Types.Maybe<ResolversTypes['AkashaAppReleaseConnection']>, akashaAppsStream?: Types.Maybe<ResolversTypes['AkashaAppsStream']>, akashaAppsStreamList?: Types.Maybe<ResolversTypes['AkashaAppsStreamConnection']>, akashaBeamInterfaceList?: Types.Maybe<ResolversTypes['AkashaBeamInterfaceConnection']>, akashaBeamList?: Types.Maybe<ResolversTypes['AkashaBeamConnection']>, akashaBeamStream?: Types.Maybe<ResolversTypes['AkashaBeamStream']>, akashaBeamStreamList?: Types.Maybe<ResolversTypes['AkashaBeamStreamConnection']>, akashaBlockStorage?: Types.Maybe<ResolversTypes['AkashaBlockStorage']>, akashaBlockStorageList?: Types.Maybe<ResolversTypes['AkashaBlockStorageConnection']>, akashaContentBlockInterfaceList?: Types.Maybe<ResolversTypes['AkashaContentBlockInterfaceConnection']>, akashaContentBlockList?: Types.Maybe<ResolversTypes['AkashaContentBlockConnection']>, akashaContentBlockStream?: Types.Maybe<ResolversTypes['AkashaContentBlockStream']>, akashaContentBlockStreamList?: Types.Maybe<ResolversTypes['AkashaContentBlockStreamConnection']>, akashaFollow?: Types.Maybe<ResolversTypes['AkashaFollow']>, akashaFollowInterfaceList?: Types.Maybe<ResolversTypes['AkashaFollowInterfaceConnection']>, akashaFollowList?: Types.Maybe<ResolversTypes['AkashaFollowConnection']>, akashaIndexStreamInterfaceList?: Types.Maybe<ResolversTypes['AkashaIndexStreamInterfaceConnection']>, akashaIndexedStream?: Types.Maybe<ResolversTypes['AkashaIndexedStream']>, akashaIndexedStreamList?: Types.Maybe<ResolversTypes['AkashaIndexedStreamConnection']>, akashaInterestsStream?: Types.Maybe<ResolversTypes['AkashaInterestsStream']>, akashaInterestsStreamList?: Types.Maybe<ResolversTypes['AkashaInterestsStreamConnection']>, akashaProfile?: Types.Maybe<ResolversTypes['AkashaProfile']>, akashaProfileInterests?: Types.Maybe<ResolversTypes['AkashaProfileInterests']>, akashaProfileInterestsInterfaceList?: Types.Maybe<ResolversTypes['AkashaProfileInterestsInterfaceConnection']>, akashaProfileInterfaceList?: Types.Maybe<ResolversTypes['AkashaProfileInterfaceConnection']>, akashaProfileStream?: Types.Maybe<ResolversTypes['AkashaProfileStream']>, akashaProfileStreamList?: Types.Maybe<ResolversTypes['AkashaProfileStreamConnection']>, akashaReflectInterfaceList?: Types.Maybe<ResolversTypes['AkashaReflectInterfaceConnection']>, akashaReflectList?: Types.Maybe<ResolversTypes['AkashaReflectConnection']>, akashaReflectStream?: Types.Maybe<ResolversTypes['AkashaReflectStream']>, akashaReflectStreamList?: Types.Maybe<ResolversTypes['AkashaReflectStreamConnection']> }>;
+  CeramicAccount: ResolverTypeWrapper<Omit<Types.CeramicAccount, 'akashaApp' | 'akashaAppInterfaceList' | 'akashaAppList' | 'akashaAppRelease' | 'akashaAppReleaseInterfaceList' | 'akashaAppReleaseList' | 'akashaAppsStream' | 'akashaAppsStreamList' | 'akashaBeamInterfaceList' | 'akashaBeamList' | 'akashaBeamStream' | 'akashaBeamStreamList' | 'akashaBlockStorage' | 'akashaBlockStorageList' | 'akashaContentBlockInterfaceList' | 'akashaContentBlockList' | 'akashaContentBlockStream' | 'akashaContentBlockStreamList' | 'akashaFollow' | 'akashaFollowInterfaceList' | 'akashaFollowList' | 'akashaIndexStreamInterfaceList' | 'akashaIndexedStream' | 'akashaIndexedStreamList' | 'akashaInterestsStream' | 'akashaInterestsStreamList' | 'akashaProfile' | 'akashaProfileInterests' | 'akashaProfileInterestsInterfaceList' | 'akashaProfileInterfaceList' | 'akashaProfileStream' | 'akashaProfileStreamList' | 'akashaReflectInterfaceList' | 'akashaReflectList' | 'akashaReflectStream' | 'akashaReflectStreamList' | 'akashaWorld' | 'akashaWorldConfig' | 'akashaWorldConfigExtension' | 'akashaWorldConfigExtensionInterfaceList' | 'akashaWorldConfigExtensionList' | 'akashaWorldConfigInterfaceList' | 'akashaWorldConfigList' | 'akashaWorldInterfaceList' | 'akashaWorldList' | 'akashaWorldMetaInfo' | 'akashaWorldMetaInfoInterfaceList' | 'akashaWorldMetaInfoList'> & { akashaApp?: Types.Maybe<ResolversTypes['AkashaApp']>, akashaAppInterfaceList?: Types.Maybe<ResolversTypes['AkashaAppInterfaceConnection']>, akashaAppList?: Types.Maybe<ResolversTypes['AkashaAppConnection']>, akashaAppRelease?: Types.Maybe<ResolversTypes['AkashaAppRelease']>, akashaAppReleaseInterfaceList?: Types.Maybe<ResolversTypes['AkashaAppReleaseInterfaceConnection']>, akashaAppReleaseList?: Types.Maybe<ResolversTypes['AkashaAppReleaseConnection']>, akashaAppsStream?: Types.Maybe<ResolversTypes['AkashaAppsStream']>, akashaAppsStreamList?: Types.Maybe<ResolversTypes['AkashaAppsStreamConnection']>, akashaBeamInterfaceList?: Types.Maybe<ResolversTypes['AkashaBeamInterfaceConnection']>, akashaBeamList?: Types.Maybe<ResolversTypes['AkashaBeamConnection']>, akashaBeamStream?: Types.Maybe<ResolversTypes['AkashaBeamStream']>, akashaBeamStreamList?: Types.Maybe<ResolversTypes['AkashaBeamStreamConnection']>, akashaBlockStorage?: Types.Maybe<ResolversTypes['AkashaBlockStorage']>, akashaBlockStorageList?: Types.Maybe<ResolversTypes['AkashaBlockStorageConnection']>, akashaContentBlockInterfaceList?: Types.Maybe<ResolversTypes['AkashaContentBlockInterfaceConnection']>, akashaContentBlockList?: Types.Maybe<ResolversTypes['AkashaContentBlockConnection']>, akashaContentBlockStream?: Types.Maybe<ResolversTypes['AkashaContentBlockStream']>, akashaContentBlockStreamList?: Types.Maybe<ResolversTypes['AkashaContentBlockStreamConnection']>, akashaFollow?: Types.Maybe<ResolversTypes['AkashaFollow']>, akashaFollowInterfaceList?: Types.Maybe<ResolversTypes['AkashaFollowInterfaceConnection']>, akashaFollowList?: Types.Maybe<ResolversTypes['AkashaFollowConnection']>, akashaIndexStreamInterfaceList?: Types.Maybe<ResolversTypes['AkashaIndexStreamInterfaceConnection']>, akashaIndexedStream?: Types.Maybe<ResolversTypes['AkashaIndexedStream']>, akashaIndexedStreamList?: Types.Maybe<ResolversTypes['AkashaIndexedStreamConnection']>, akashaInterestsStream?: Types.Maybe<ResolversTypes['AkashaInterestsStream']>, akashaInterestsStreamList?: Types.Maybe<ResolversTypes['AkashaInterestsStreamConnection']>, akashaProfile?: Types.Maybe<ResolversTypes['AkashaProfile']>, akashaProfileInterests?: Types.Maybe<ResolversTypes['AkashaProfileInterests']>, akashaProfileInterestsInterfaceList?: Types.Maybe<ResolversTypes['AkashaProfileInterestsInterfaceConnection']>, akashaProfileInterfaceList?: Types.Maybe<ResolversTypes['AkashaProfileInterfaceConnection']>, akashaProfileStream?: Types.Maybe<ResolversTypes['AkashaProfileStream']>, akashaProfileStreamList?: Types.Maybe<ResolversTypes['AkashaProfileStreamConnection']>, akashaReflectInterfaceList?: Types.Maybe<ResolversTypes['AkashaReflectInterfaceConnection']>, akashaReflectList?: Types.Maybe<ResolversTypes['AkashaReflectConnection']>, akashaReflectStream?: Types.Maybe<ResolversTypes['AkashaReflectStream']>, akashaReflectStreamList?: Types.Maybe<ResolversTypes['AkashaReflectStreamConnection']>, akashaWorld?: Types.Maybe<ResolversTypes['AkashaWorld']>, akashaWorldConfig?: Types.Maybe<ResolversTypes['AkashaWorldConfig']>, akashaWorldConfigExtension?: Types.Maybe<ResolversTypes['AkashaWorldConfigExtension']>, akashaWorldConfigExtensionInterfaceList?: Types.Maybe<ResolversTypes['AkashaWorldConfigExtensionInterfaceConnection']>, akashaWorldConfigExtensionList?: Types.Maybe<ResolversTypes['AkashaWorldConfigExtensionConnection']>, akashaWorldConfigInterfaceList?: Types.Maybe<ResolversTypes['AkashaWorldConfigInterfaceConnection']>, akashaWorldConfigList?: Types.Maybe<ResolversTypes['AkashaWorldConfigConnection']>, akashaWorldInterfaceList?: Types.Maybe<ResolversTypes['AkashaWorldInterfaceConnection']>, akashaWorldList?: Types.Maybe<ResolversTypes['AkashaWorldConnection']>, akashaWorldMetaInfo?: Types.Maybe<ResolversTypes['AkashaWorldMetaInfo']>, akashaWorldMetaInfoInterfaceList?: Types.Maybe<ResolversTypes['AkashaWorldMetaInfoInterfaceConnection']>, akashaWorldMetaInfoList?: Types.Maybe<ResolversTypes['AkashaWorldMetaInfoConnection']> }>;
   CeramicCommitID: ResolverTypeWrapper<Types.Scalars['CeramicCommitID']['output']>;
   CeramicStreamID: ResolverTypeWrapper<Types.Scalars['CeramicStreamID']['output']>;
   CreateAkashaBeamInput: Types.CreateAkashaBeamInput;
@@ -343,6 +403,14 @@ export type ResolversTypes = {
   EnableIndexingAkashaReflectPayload: ResolverTypeWrapper<Omit<Types.EnableIndexingAkashaReflectPayload, 'document' | 'node' | 'viewer'> & { document?: Types.Maybe<ResolversTypes['AkashaReflect']>, node?: Types.Maybe<ResolversTypes['Node']>, viewer?: Types.Maybe<ResolversTypes['CeramicAccount']> }>;
   EnableIndexingAkashaReflectStreamInput: Types.EnableIndexingAkashaReflectStreamInput;
   EnableIndexingAkashaReflectStreamPayload: ResolverTypeWrapper<Omit<Types.EnableIndexingAkashaReflectStreamPayload, 'document' | 'node' | 'viewer'> & { document?: Types.Maybe<ResolversTypes['AkashaReflectStream']>, node?: Types.Maybe<ResolversTypes['Node']>, viewer?: Types.Maybe<ResolversTypes['CeramicAccount']> }>;
+  EnableIndexingAkashaWorldConfigExtensionInput: Types.EnableIndexingAkashaWorldConfigExtensionInput;
+  EnableIndexingAkashaWorldConfigExtensionPayload: ResolverTypeWrapper<Omit<Types.EnableIndexingAkashaWorldConfigExtensionPayload, 'document' | 'node' | 'viewer'> & { document?: Types.Maybe<ResolversTypes['AkashaWorldConfigExtension']>, node?: Types.Maybe<ResolversTypes['Node']>, viewer?: Types.Maybe<ResolversTypes['CeramicAccount']> }>;
+  EnableIndexingAkashaWorldConfigInput: Types.EnableIndexingAkashaWorldConfigInput;
+  EnableIndexingAkashaWorldConfigPayload: ResolverTypeWrapper<Omit<Types.EnableIndexingAkashaWorldConfigPayload, 'document' | 'node' | 'viewer'> & { document?: Types.Maybe<ResolversTypes['AkashaWorldConfig']>, node?: Types.Maybe<ResolversTypes['Node']>, viewer?: Types.Maybe<ResolversTypes['CeramicAccount']> }>;
+  EnableIndexingAkashaWorldInput: Types.EnableIndexingAkashaWorldInput;
+  EnableIndexingAkashaWorldMetaInfoInput: Types.EnableIndexingAkashaWorldMetaInfoInput;
+  EnableIndexingAkashaWorldMetaInfoPayload: ResolverTypeWrapper<Omit<Types.EnableIndexingAkashaWorldMetaInfoPayload, 'document' | 'node' | 'viewer'> & { document?: Types.Maybe<ResolversTypes['AkashaWorldMetaInfo']>, node?: Types.Maybe<ResolversTypes['Node']>, viewer?: Types.Maybe<ResolversTypes['CeramicAccount']> }>;
+  EnableIndexingAkashaWorldPayload: ResolverTypeWrapper<Omit<Types.EnableIndexingAkashaWorldPayload, 'document' | 'node' | 'viewer'> & { document?: Types.Maybe<ResolversTypes['AkashaWorld']>, node?: Types.Maybe<ResolversTypes['Node']>, viewer?: Types.Maybe<ResolversTypes['CeramicAccount']> }>;
   IndexAppPayload: ResolverTypeWrapper<Types.IndexAppPayload>;
   IndexAppPayloadDocument: ResolverTypeWrapper<Types.IndexAppPayloadDocument>;
   IndexBeamPayload: ResolverTypeWrapper<Types.IndexBeamPayload>;
@@ -355,6 +423,7 @@ export type ResolversTypes = {
   IndexProfilePayloadDocument: ResolverTypeWrapper<Types.IndexProfilePayloadDocument>;
   IndexReflectPayload: ResolverTypeWrapper<Types.IndexReflectPayload>;
   IndexReflectPayloadDocument: ResolverTypeWrapper<Types.IndexReflectPayloadDocument>;
+  IntValueFilterInput: Types.IntValueFilterInput;
   JWS_Signature: Types.Jws_Signature;
   Mutation: ResolverTypeWrapper<{}>;
   Node: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['Node']>;
@@ -375,6 +444,10 @@ export type ResolversTypes = {
   PartialAkashaProfileStreamInput: Types.PartialAkashaProfileStreamInput;
   PartialAkashaReflectInput: Types.PartialAkashaReflectInput;
   PartialAkashaReflectStreamInput: Types.PartialAkashaReflectStreamInput;
+  PartialAkashaWorldConfigExtensionInput: Types.PartialAkashaWorldConfigExtensionInput;
+  PartialAkashaWorldConfigInput: Types.PartialAkashaWorldConfigInput;
+  PartialAkashaWorldInput: Types.PartialAkashaWorldInput;
+  PartialAkashaWorldMetaInfoInput: Types.PartialAkashaWorldMetaInfoInput;
   ProfileImageSource: ResolverTypeWrapper<Types.ProfileImageSource>;
   ProfileImageSourceInput: Types.ProfileImageSourceInput;
   ProfileImageVersions: ResolverTypeWrapper<Types.ProfileImageVersions>;
@@ -412,7 +485,17 @@ export type ResolversTypes = {
   SetAkashaProfileStreamPayload: ResolverTypeWrapper<Omit<Types.SetAkashaProfileStreamPayload, 'document' | 'node' | 'viewer'> & { document: ResolversTypes['AkashaProfileStream'], node?: Types.Maybe<ResolversTypes['Node']>, viewer?: Types.Maybe<ResolversTypes['CeramicAccount']> }>;
   SetAkashaReflectStreamInput: Types.SetAkashaReflectStreamInput;
   SetAkashaReflectStreamPayload: ResolverTypeWrapper<Omit<Types.SetAkashaReflectStreamPayload, 'document' | 'node' | 'viewer'> & { document: ResolversTypes['AkashaReflectStream'], node?: Types.Maybe<ResolversTypes['Node']>, viewer?: Types.Maybe<ResolversTypes['CeramicAccount']> }>;
+  SetAkashaWorldConfigExtensionInput: Types.SetAkashaWorldConfigExtensionInput;
+  SetAkashaWorldConfigExtensionPayload: ResolverTypeWrapper<Omit<Types.SetAkashaWorldConfigExtensionPayload, 'document' | 'node' | 'viewer'> & { document: ResolversTypes['AkashaWorldConfigExtension'], node?: Types.Maybe<ResolversTypes['Node']>, viewer?: Types.Maybe<ResolversTypes['CeramicAccount']> }>;
+  SetAkashaWorldConfigInput: Types.SetAkashaWorldConfigInput;
+  SetAkashaWorldConfigPayload: ResolverTypeWrapper<Omit<Types.SetAkashaWorldConfigPayload, 'document' | 'node' | 'viewer'> & { document: ResolversTypes['AkashaWorldConfig'], node?: Types.Maybe<ResolversTypes['Node']>, viewer?: Types.Maybe<ResolversTypes['CeramicAccount']> }>;
+  SetAkashaWorldInput: Types.SetAkashaWorldInput;
+  SetAkashaWorldMetaInfoInput: Types.SetAkashaWorldMetaInfoInput;
+  SetAkashaWorldMetaInfoPayload: ResolverTypeWrapper<Omit<Types.SetAkashaWorldMetaInfoPayload, 'document' | 'node' | 'viewer'> & { document: ResolversTypes['AkashaWorldMetaInfo'], node?: Types.Maybe<ResolversTypes['Node']>, viewer?: Types.Maybe<ResolversTypes['CeramicAccount']> }>;
+  SetAkashaWorldPayload: ResolverTypeWrapper<Omit<Types.SetAkashaWorldPayload, 'document' | 'node' | 'viewer'> & { document: ResolversTypes['AkashaWorld'], node?: Types.Maybe<ResolversTypes['Node']>, viewer?: Types.Maybe<ResolversTypes['CeramicAccount']> }>;
   SetOptionsInput: Types.SetOptionsInput;
+  SocialLink: ResolverTypeWrapper<Types.SocialLink>;
+  SocialLinkInput: Types.SocialLinkInput;
   SortOrder: Types.SortOrder;
   StringValueFilterInput: Types.StringValueFilterInput;
   URI: ResolverTypeWrapper<Types.Scalars['URI']['output']>;
@@ -448,6 +531,14 @@ export type ResolversTypes = {
   UpdateAkashaReflectPayload: ResolverTypeWrapper<Omit<Types.UpdateAkashaReflectPayload, 'document' | 'node' | 'viewer'> & { document: ResolversTypes['AkashaReflect'], node?: Types.Maybe<ResolversTypes['Node']>, viewer?: Types.Maybe<ResolversTypes['CeramicAccount']> }>;
   UpdateAkashaReflectStreamInput: Types.UpdateAkashaReflectStreamInput;
   UpdateAkashaReflectStreamPayload: ResolverTypeWrapper<Omit<Types.UpdateAkashaReflectStreamPayload, 'document' | 'node' | 'viewer'> & { document: ResolversTypes['AkashaReflectStream'], node?: Types.Maybe<ResolversTypes['Node']>, viewer?: Types.Maybe<ResolversTypes['CeramicAccount']> }>;
+  UpdateAkashaWorldConfigExtensionInput: Types.UpdateAkashaWorldConfigExtensionInput;
+  UpdateAkashaWorldConfigExtensionPayload: ResolverTypeWrapper<Omit<Types.UpdateAkashaWorldConfigExtensionPayload, 'document' | 'node' | 'viewer'> & { document: ResolversTypes['AkashaWorldConfigExtension'], node?: Types.Maybe<ResolversTypes['Node']>, viewer?: Types.Maybe<ResolversTypes['CeramicAccount']> }>;
+  UpdateAkashaWorldConfigInput: Types.UpdateAkashaWorldConfigInput;
+  UpdateAkashaWorldConfigPayload: ResolverTypeWrapper<Omit<Types.UpdateAkashaWorldConfigPayload, 'document' | 'node' | 'viewer'> & { document: ResolversTypes['AkashaWorldConfig'], node?: Types.Maybe<ResolversTypes['Node']>, viewer?: Types.Maybe<ResolversTypes['CeramicAccount']> }>;
+  UpdateAkashaWorldInput: Types.UpdateAkashaWorldInput;
+  UpdateAkashaWorldMetaInfoInput: Types.UpdateAkashaWorldMetaInfoInput;
+  UpdateAkashaWorldMetaInfoPayload: ResolverTypeWrapper<Omit<Types.UpdateAkashaWorldMetaInfoPayload, 'document' | 'node' | 'viewer'> & { document: ResolversTypes['AkashaWorldMetaInfo'], node?: Types.Maybe<ResolversTypes['Node']>, viewer?: Types.Maybe<ResolversTypes['CeramicAccount']> }>;
+  UpdateAkashaWorldPayload: ResolverTypeWrapper<Omit<Types.UpdateAkashaWorldPayload, 'document' | 'node' | 'viewer'> & { document: ResolversTypes['AkashaWorld'], node?: Types.Maybe<ResolversTypes['Node']>, viewer?: Types.Maybe<ResolversTypes['CeramicAccount']> }>;
   UpdateOptionsInput: Types.UpdateOptionsInput;
   WithAkashaAppInput: Types.WithAkashaAppInput;
   WithAkashaAppReleaseInput: Types.WithAkashaAppReleaseInput;
@@ -460,6 +551,10 @@ export type ResolversTypes = {
   WithAkashaInterestsStreamInput: Types.WithAkashaInterestsStreamInput;
   WithAkashaProfileStreamInput: Types.WithAkashaProfileStreamInput;
   WithAkashaReflectStreamInput: Types.WithAkashaReflectStreamInput;
+  WithAkashaWorldConfigExtensionInput: Types.WithAkashaWorldConfigExtensionInput;
+  WithAkashaWorldConfigInput: Types.WithAkashaWorldConfigInput;
+  WithAkashaWorldInput: Types.WithAkashaWorldInput;
+  WithAkashaWorldMetaInfoInput: Types.WithAkashaWorldMetaInfoInput;
   join__FieldSet: ResolverTypeWrapper<Types.Scalars['join__FieldSet']['output']>;
   join__Graph: Types.Join__Graph;
   link__Import: ResolverTypeWrapper<Types.Scalars['link__Import']['output']>;
@@ -468,7 +563,7 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
-  AkashaApp: Omit<Types.AkashaApp, 'author' | 'contributors' | 'coverImage' | 'gallery' | 'logoImage' | 'releases'> & { author: ResolversParentTypes['CeramicAccount'], contributors?: Types.Maybe<Array<Types.Maybe<ResolversParentTypes['CeramicAccount']>>>, coverImage?: Types.Maybe<ResolversParentTypes['AppImageSource']>, gallery?: Types.Maybe<Array<Types.Maybe<ResolversParentTypes['AppImageSource']>>>, logoImage?: Types.Maybe<ResolversParentTypes['AppImageSource']>, releases: ResolversParentTypes['AkashaAppReleaseInterfaceConnection'] };
+  AkashaApp: Omit<Types.AkashaApp, 'author' | 'contributors' | 'coverImage' | 'gallery' | 'logoImage' | 'releases' | 'worldConfigs'> & { author: ResolversParentTypes['CeramicAccount'], contributors?: Types.Maybe<Array<Types.Maybe<ResolversParentTypes['CeramicAccount']>>>, coverImage?: Types.Maybe<ResolversParentTypes['AppImageSource']>, gallery?: Types.Maybe<Array<Types.Maybe<ResolversParentTypes['AppImageSource']>>>, logoImage?: Types.Maybe<ResolversParentTypes['AppImageSource']>, releases: ResolversParentTypes['AkashaAppReleaseInterfaceConnection'], worldConfigs: ResolversParentTypes['AkashaWorldConfigExtensionInterfaceConnection'] };
   String: Types.Scalars['String']['output'];
   ID: Types.Scalars['ID']['output'];
   Boolean: Types.Scalars['Boolean']['output'];
@@ -643,6 +738,62 @@ export type ResolversParentTypes = {
   AkashaReflectStreamModerationStatusValueFilterInput: Types.AkashaReflectStreamModerationStatusValueFilterInput;
   AkashaReflectStreamObjectFilterInput: Types.AkashaReflectStreamObjectFilterInput;
   AkashaReflectStreamSortingInput: Types.AkashaReflectStreamSortingInput;
+  AkashaWorld: Omit<Types.AkashaWorld, 'configInfo' | 'creator' | 'extensionPublishers' | 'metaInfo'> & { configInfo: ResolversParentTypes['AkashaWorldConfigInterfaceConnection'], creator: ResolversParentTypes['CeramicAccount'], extensionPublishers?: Types.Maybe<Array<Types.Maybe<ResolversParentTypes['CeramicAccount']>>>, metaInfo: ResolversParentTypes['AkashaWorldMetaInfoInterfaceConnection'] };
+  AkashaWorldConfig: Omit<Types.AkashaWorldConfig, 'creator' | 'extensions' | 'world'> & { creator: ResolversParentTypes['CeramicAccount'], extensions: ResolversParentTypes['AkashaWorldConfigExtensionInterfaceConnection'], world?: Types.Maybe<ResolversParentTypes['AkashaWorldInterface']> };
+  AkashaWorldConfigConnection: Omit<Types.AkashaWorldConfigConnection, 'edges'> & { edges?: Types.Maybe<Array<Types.Maybe<ResolversParentTypes['AkashaWorldConfigEdge']>>> };
+  AkashaWorldConfigEdge: Omit<Types.AkashaWorldConfigEdge, 'node'> & { node?: Types.Maybe<ResolversParentTypes['AkashaWorldConfig']> };
+  AkashaWorldConfigExtension: Omit<Types.AkashaWorldConfigExtension, 'creator' | 'extension' | 'worldConfig'> & { creator: ResolversParentTypes['CeramicAccount'], extension?: Types.Maybe<ResolversParentTypes['AkashaAppInterface']>, worldConfig?: Types.Maybe<ResolversParentTypes['AkashaWorldConfigInterface']> };
+  AkashaWorldConfigExtensionConnection: Omit<Types.AkashaWorldConfigExtensionConnection, 'edges'> & { edges?: Types.Maybe<Array<Types.Maybe<ResolversParentTypes['AkashaWorldConfigExtensionEdge']>>> };
+  AkashaWorldConfigExtensionEdge: Omit<Types.AkashaWorldConfigExtensionEdge, 'node'> & { node?: Types.Maybe<ResolversParentTypes['AkashaWorldConfigExtension']> };
+  AkashaWorldConfigExtensionFiltersInput: Types.AkashaWorldConfigExtensionFiltersInput;
+  AkashaWorldConfigExtensionInput: Types.AkashaWorldConfigExtensionInput;
+  AkashaWorldConfigExtensionInterface: ResolversInterfaceTypes<ResolversParentTypes>['AkashaWorldConfigExtensionInterface'];
+  AkashaWorldConfigExtensionInterfaceConnection: Omit<Types.AkashaWorldConfigExtensionInterfaceConnection, 'edges'> & { edges?: Types.Maybe<Array<Types.Maybe<ResolversParentTypes['AkashaWorldConfigExtensionInterfaceEdge']>>> };
+  AkashaWorldConfigExtensionInterfaceEdge: Omit<Types.AkashaWorldConfigExtensionInterfaceEdge, 'node'> & { node?: Types.Maybe<ResolversParentTypes['AkashaWorldConfigExtensionInterface']> };
+  AkashaWorldConfigExtensionInterfaceFiltersInput: Types.AkashaWorldConfigExtensionInterfaceFiltersInput;
+  AkashaWorldConfigExtensionInterfaceObjectFilterInput: Types.AkashaWorldConfigExtensionInterfaceObjectFilterInput;
+  AkashaWorldConfigExtensionInterfaceSortingInput: Types.AkashaWorldConfigExtensionInterfaceSortingInput;
+  AkashaWorldConfigExtensionObjectFilterInput: Types.AkashaWorldConfigExtensionObjectFilterInput;
+  AkashaWorldConfigExtensionSortingInput: Types.AkashaWorldConfigExtensionSortingInput;
+  AkashaWorldConfigFiltersInput: Types.AkashaWorldConfigFiltersInput;
+  AkashaWorldConfigInput: Types.AkashaWorldConfigInput;
+  AkashaWorldConfigInterface: ResolversInterfaceTypes<ResolversParentTypes>['AkashaWorldConfigInterface'];
+  AkashaWorldConfigInterfaceConnection: Omit<Types.AkashaWorldConfigInterfaceConnection, 'edges'> & { edges?: Types.Maybe<Array<Types.Maybe<ResolversParentTypes['AkashaWorldConfigInterfaceEdge']>>> };
+  AkashaWorldConfigInterfaceEdge: Omit<Types.AkashaWorldConfigInterfaceEdge, 'node'> & { node?: Types.Maybe<ResolversParentTypes['AkashaWorldConfigInterface']> };
+  AkashaWorldConfigInterfaceFiltersInput: Types.AkashaWorldConfigInterfaceFiltersInput;
+  AkashaWorldConfigInterfaceObjectFilterInput: Types.AkashaWorldConfigInterfaceObjectFilterInput;
+  AkashaWorldConfigInterfaceSortingInput: Types.AkashaWorldConfigInterfaceSortingInput;
+  AkashaWorldConfigObjectFilterInput: Types.AkashaWorldConfigObjectFilterInput;
+  AkashaWorldConfigSortingInput: Types.AkashaWorldConfigSortingInput;
+  AkashaWorldConnection: Omit<Types.AkashaWorldConnection, 'edges'> & { edges?: Types.Maybe<Array<Types.Maybe<ResolversParentTypes['AkashaWorldEdge']>>> };
+  AkashaWorldEdge: Omit<Types.AkashaWorldEdge, 'node'> & { node?: Types.Maybe<ResolversParentTypes['AkashaWorld']> };
+  AkashaWorldFiltersInput: Types.AkashaWorldFiltersInput;
+  AkashaWorldImageSource: Types.AkashaWorldImageSource;
+  AkashaWorldImageSourceInput: Types.AkashaWorldImageSourceInput;
+  AkashaWorldImageVersions: Types.AkashaWorldImageVersions;
+  AkashaWorldImageVersionsInput: Types.AkashaWorldImageVersionsInput;
+  AkashaWorldInput: Types.AkashaWorldInput;
+  AkashaWorldInterface: ResolversInterfaceTypes<ResolversParentTypes>['AkashaWorldInterface'];
+  AkashaWorldInterfaceConnection: Omit<Types.AkashaWorldInterfaceConnection, 'edges'> & { edges?: Types.Maybe<Array<Types.Maybe<ResolversParentTypes['AkashaWorldInterfaceEdge']>>> };
+  AkashaWorldInterfaceEdge: Omit<Types.AkashaWorldInterfaceEdge, 'node'> & { node?: Types.Maybe<ResolversParentTypes['AkashaWorldInterface']> };
+  AkashaWorldInterfaceFiltersInput: Types.AkashaWorldInterfaceFiltersInput;
+  AkashaWorldInterfaceObjectFilterInput: Types.AkashaWorldInterfaceObjectFilterInput;
+  AkashaWorldInterfaceSortingInput: Types.AkashaWorldInterfaceSortingInput;
+  AkashaWorldMetaInfo: Omit<Types.AkashaWorldMetaInfo, 'socialLinks' | 'world'> & { socialLinks?: Types.Maybe<Array<Types.Maybe<ResolversParentTypes['SocialLink']>>>, world?: Types.Maybe<ResolversParentTypes['AkashaWorldInterface']> };
+  AkashaWorldMetaInfoConnection: Omit<Types.AkashaWorldMetaInfoConnection, 'edges'> & { edges?: Types.Maybe<Array<Types.Maybe<ResolversParentTypes['AkashaWorldMetaInfoEdge']>>> };
+  AkashaWorldMetaInfoEdge: Omit<Types.AkashaWorldMetaInfoEdge, 'node'> & { node?: Types.Maybe<ResolversParentTypes['AkashaWorldMetaInfo']> };
+  AkashaWorldMetaInfoFiltersInput: Types.AkashaWorldMetaInfoFiltersInput;
+  AkashaWorldMetaInfoInput: Types.AkashaWorldMetaInfoInput;
+  AkashaWorldMetaInfoInterface: ResolversInterfaceTypes<ResolversParentTypes>['AkashaWorldMetaInfoInterface'];
+  AkashaWorldMetaInfoInterfaceConnection: Omit<Types.AkashaWorldMetaInfoInterfaceConnection, 'edges'> & { edges?: Types.Maybe<Array<Types.Maybe<ResolversParentTypes['AkashaWorldMetaInfoInterfaceEdge']>>> };
+  AkashaWorldMetaInfoInterfaceEdge: Omit<Types.AkashaWorldMetaInfoInterfaceEdge, 'node'> & { node?: Types.Maybe<ResolversParentTypes['AkashaWorldMetaInfoInterface']> };
+  AkashaWorldMetaInfoInterfaceFiltersInput: Types.AkashaWorldMetaInfoInterfaceFiltersInput;
+  AkashaWorldMetaInfoInterfaceObjectFilterInput: Types.AkashaWorldMetaInfoInterfaceObjectFilterInput;
+  AkashaWorldMetaInfoInterfaceSortingInput: Types.AkashaWorldMetaInfoInterfaceSortingInput;
+  AkashaWorldMetaInfoObjectFilterInput: Types.AkashaWorldMetaInfoObjectFilterInput;
+  AkashaWorldMetaInfoSortingInput: Types.AkashaWorldMetaInfoSortingInput;
+  AkashaWorldObjectFilterInput: Types.AkashaWorldObjectFilterInput;
+  AkashaWorldSortingInput: Types.AkashaWorldSortingInput;
   AppImageSource: Types.AppImageSource;
   AppImageSourceInput: Types.AppImageSourceInput;
   AppLinkSource: Types.AppLinkSource;
@@ -664,7 +815,7 @@ export type ResolversParentTypes = {
   CacaoPayload: Types.CacaoPayload;
   CacaoSignature: Types.CacaoSignature;
   CacaoSignatureT: Types.Scalars['CacaoSignatureT']['output'];
-  CeramicAccount: Omit<Types.CeramicAccount, 'akashaApp' | 'akashaAppInterfaceList' | 'akashaAppList' | 'akashaAppRelease' | 'akashaAppReleaseInterfaceList' | 'akashaAppReleaseList' | 'akashaAppsStream' | 'akashaAppsStreamList' | 'akashaBeamInterfaceList' | 'akashaBeamList' | 'akashaBeamStream' | 'akashaBeamStreamList' | 'akashaBlockStorage' | 'akashaBlockStorageList' | 'akashaContentBlockInterfaceList' | 'akashaContentBlockList' | 'akashaContentBlockStream' | 'akashaContentBlockStreamList' | 'akashaFollow' | 'akashaFollowInterfaceList' | 'akashaFollowList' | 'akashaIndexStreamInterfaceList' | 'akashaIndexedStream' | 'akashaIndexedStreamList' | 'akashaInterestsStream' | 'akashaInterestsStreamList' | 'akashaProfile' | 'akashaProfileInterests' | 'akashaProfileInterestsInterfaceList' | 'akashaProfileInterfaceList' | 'akashaProfileStream' | 'akashaProfileStreamList' | 'akashaReflectInterfaceList' | 'akashaReflectList' | 'akashaReflectStream' | 'akashaReflectStreamList'> & { akashaApp?: Types.Maybe<ResolversParentTypes['AkashaApp']>, akashaAppInterfaceList?: Types.Maybe<ResolversParentTypes['AkashaAppInterfaceConnection']>, akashaAppList?: Types.Maybe<ResolversParentTypes['AkashaAppConnection']>, akashaAppRelease?: Types.Maybe<ResolversParentTypes['AkashaAppRelease']>, akashaAppReleaseInterfaceList?: Types.Maybe<ResolversParentTypes['AkashaAppReleaseInterfaceConnection']>, akashaAppReleaseList?: Types.Maybe<ResolversParentTypes['AkashaAppReleaseConnection']>, akashaAppsStream?: Types.Maybe<ResolversParentTypes['AkashaAppsStream']>, akashaAppsStreamList?: Types.Maybe<ResolversParentTypes['AkashaAppsStreamConnection']>, akashaBeamInterfaceList?: Types.Maybe<ResolversParentTypes['AkashaBeamInterfaceConnection']>, akashaBeamList?: Types.Maybe<ResolversParentTypes['AkashaBeamConnection']>, akashaBeamStream?: Types.Maybe<ResolversParentTypes['AkashaBeamStream']>, akashaBeamStreamList?: Types.Maybe<ResolversParentTypes['AkashaBeamStreamConnection']>, akashaBlockStorage?: Types.Maybe<ResolversParentTypes['AkashaBlockStorage']>, akashaBlockStorageList?: Types.Maybe<ResolversParentTypes['AkashaBlockStorageConnection']>, akashaContentBlockInterfaceList?: Types.Maybe<ResolversParentTypes['AkashaContentBlockInterfaceConnection']>, akashaContentBlockList?: Types.Maybe<ResolversParentTypes['AkashaContentBlockConnection']>, akashaContentBlockStream?: Types.Maybe<ResolversParentTypes['AkashaContentBlockStream']>, akashaContentBlockStreamList?: Types.Maybe<ResolversParentTypes['AkashaContentBlockStreamConnection']>, akashaFollow?: Types.Maybe<ResolversParentTypes['AkashaFollow']>, akashaFollowInterfaceList?: Types.Maybe<ResolversParentTypes['AkashaFollowInterfaceConnection']>, akashaFollowList?: Types.Maybe<ResolversParentTypes['AkashaFollowConnection']>, akashaIndexStreamInterfaceList?: Types.Maybe<ResolversParentTypes['AkashaIndexStreamInterfaceConnection']>, akashaIndexedStream?: Types.Maybe<ResolversParentTypes['AkashaIndexedStream']>, akashaIndexedStreamList?: Types.Maybe<ResolversParentTypes['AkashaIndexedStreamConnection']>, akashaInterestsStream?: Types.Maybe<ResolversParentTypes['AkashaInterestsStream']>, akashaInterestsStreamList?: Types.Maybe<ResolversParentTypes['AkashaInterestsStreamConnection']>, akashaProfile?: Types.Maybe<ResolversParentTypes['AkashaProfile']>, akashaProfileInterests?: Types.Maybe<ResolversParentTypes['AkashaProfileInterests']>, akashaProfileInterestsInterfaceList?: Types.Maybe<ResolversParentTypes['AkashaProfileInterestsInterfaceConnection']>, akashaProfileInterfaceList?: Types.Maybe<ResolversParentTypes['AkashaProfileInterfaceConnection']>, akashaProfileStream?: Types.Maybe<ResolversParentTypes['AkashaProfileStream']>, akashaProfileStreamList?: Types.Maybe<ResolversParentTypes['AkashaProfileStreamConnection']>, akashaReflectInterfaceList?: Types.Maybe<ResolversParentTypes['AkashaReflectInterfaceConnection']>, akashaReflectList?: Types.Maybe<ResolversParentTypes['AkashaReflectConnection']>, akashaReflectStream?: Types.Maybe<ResolversParentTypes['AkashaReflectStream']>, akashaReflectStreamList?: Types.Maybe<ResolversParentTypes['AkashaReflectStreamConnection']> };
+  CeramicAccount: Omit<Types.CeramicAccount, 'akashaApp' | 'akashaAppInterfaceList' | 'akashaAppList' | 'akashaAppRelease' | 'akashaAppReleaseInterfaceList' | 'akashaAppReleaseList' | 'akashaAppsStream' | 'akashaAppsStreamList' | 'akashaBeamInterfaceList' | 'akashaBeamList' | 'akashaBeamStream' | 'akashaBeamStreamList' | 'akashaBlockStorage' | 'akashaBlockStorageList' | 'akashaContentBlockInterfaceList' | 'akashaContentBlockList' | 'akashaContentBlockStream' | 'akashaContentBlockStreamList' | 'akashaFollow' | 'akashaFollowInterfaceList' | 'akashaFollowList' | 'akashaIndexStreamInterfaceList' | 'akashaIndexedStream' | 'akashaIndexedStreamList' | 'akashaInterestsStream' | 'akashaInterestsStreamList' | 'akashaProfile' | 'akashaProfileInterests' | 'akashaProfileInterestsInterfaceList' | 'akashaProfileInterfaceList' | 'akashaProfileStream' | 'akashaProfileStreamList' | 'akashaReflectInterfaceList' | 'akashaReflectList' | 'akashaReflectStream' | 'akashaReflectStreamList' | 'akashaWorld' | 'akashaWorldConfig' | 'akashaWorldConfigExtension' | 'akashaWorldConfigExtensionInterfaceList' | 'akashaWorldConfigExtensionList' | 'akashaWorldConfigInterfaceList' | 'akashaWorldConfigList' | 'akashaWorldInterfaceList' | 'akashaWorldList' | 'akashaWorldMetaInfo' | 'akashaWorldMetaInfoInterfaceList' | 'akashaWorldMetaInfoList'> & { akashaApp?: Types.Maybe<ResolversParentTypes['AkashaApp']>, akashaAppInterfaceList?: Types.Maybe<ResolversParentTypes['AkashaAppInterfaceConnection']>, akashaAppList?: Types.Maybe<ResolversParentTypes['AkashaAppConnection']>, akashaAppRelease?: Types.Maybe<ResolversParentTypes['AkashaAppRelease']>, akashaAppReleaseInterfaceList?: Types.Maybe<ResolversParentTypes['AkashaAppReleaseInterfaceConnection']>, akashaAppReleaseList?: Types.Maybe<ResolversParentTypes['AkashaAppReleaseConnection']>, akashaAppsStream?: Types.Maybe<ResolversParentTypes['AkashaAppsStream']>, akashaAppsStreamList?: Types.Maybe<ResolversParentTypes['AkashaAppsStreamConnection']>, akashaBeamInterfaceList?: Types.Maybe<ResolversParentTypes['AkashaBeamInterfaceConnection']>, akashaBeamList?: Types.Maybe<ResolversParentTypes['AkashaBeamConnection']>, akashaBeamStream?: Types.Maybe<ResolversParentTypes['AkashaBeamStream']>, akashaBeamStreamList?: Types.Maybe<ResolversParentTypes['AkashaBeamStreamConnection']>, akashaBlockStorage?: Types.Maybe<ResolversParentTypes['AkashaBlockStorage']>, akashaBlockStorageList?: Types.Maybe<ResolversParentTypes['AkashaBlockStorageConnection']>, akashaContentBlockInterfaceList?: Types.Maybe<ResolversParentTypes['AkashaContentBlockInterfaceConnection']>, akashaContentBlockList?: Types.Maybe<ResolversParentTypes['AkashaContentBlockConnection']>, akashaContentBlockStream?: Types.Maybe<ResolversParentTypes['AkashaContentBlockStream']>, akashaContentBlockStreamList?: Types.Maybe<ResolversParentTypes['AkashaContentBlockStreamConnection']>, akashaFollow?: Types.Maybe<ResolversParentTypes['AkashaFollow']>, akashaFollowInterfaceList?: Types.Maybe<ResolversParentTypes['AkashaFollowInterfaceConnection']>, akashaFollowList?: Types.Maybe<ResolversParentTypes['AkashaFollowConnection']>, akashaIndexStreamInterfaceList?: Types.Maybe<ResolversParentTypes['AkashaIndexStreamInterfaceConnection']>, akashaIndexedStream?: Types.Maybe<ResolversParentTypes['AkashaIndexedStream']>, akashaIndexedStreamList?: Types.Maybe<ResolversParentTypes['AkashaIndexedStreamConnection']>, akashaInterestsStream?: Types.Maybe<ResolversParentTypes['AkashaInterestsStream']>, akashaInterestsStreamList?: Types.Maybe<ResolversParentTypes['AkashaInterestsStreamConnection']>, akashaProfile?: Types.Maybe<ResolversParentTypes['AkashaProfile']>, akashaProfileInterests?: Types.Maybe<ResolversParentTypes['AkashaProfileInterests']>, akashaProfileInterestsInterfaceList?: Types.Maybe<ResolversParentTypes['AkashaProfileInterestsInterfaceConnection']>, akashaProfileInterfaceList?: Types.Maybe<ResolversParentTypes['AkashaProfileInterfaceConnection']>, akashaProfileStream?: Types.Maybe<ResolversParentTypes['AkashaProfileStream']>, akashaProfileStreamList?: Types.Maybe<ResolversParentTypes['AkashaProfileStreamConnection']>, akashaReflectInterfaceList?: Types.Maybe<ResolversParentTypes['AkashaReflectInterfaceConnection']>, akashaReflectList?: Types.Maybe<ResolversParentTypes['AkashaReflectConnection']>, akashaReflectStream?: Types.Maybe<ResolversParentTypes['AkashaReflectStream']>, akashaReflectStreamList?: Types.Maybe<ResolversParentTypes['AkashaReflectStreamConnection']>, akashaWorld?: Types.Maybe<ResolversParentTypes['AkashaWorld']>, akashaWorldConfig?: Types.Maybe<ResolversParentTypes['AkashaWorldConfig']>, akashaWorldConfigExtension?: Types.Maybe<ResolversParentTypes['AkashaWorldConfigExtension']>, akashaWorldConfigExtensionInterfaceList?: Types.Maybe<ResolversParentTypes['AkashaWorldConfigExtensionInterfaceConnection']>, akashaWorldConfigExtensionList?: Types.Maybe<ResolversParentTypes['AkashaWorldConfigExtensionConnection']>, akashaWorldConfigInterfaceList?: Types.Maybe<ResolversParentTypes['AkashaWorldConfigInterfaceConnection']>, akashaWorldConfigList?: Types.Maybe<ResolversParentTypes['AkashaWorldConfigConnection']>, akashaWorldInterfaceList?: Types.Maybe<ResolversParentTypes['AkashaWorldInterfaceConnection']>, akashaWorldList?: Types.Maybe<ResolversParentTypes['AkashaWorldConnection']>, akashaWorldMetaInfo?: Types.Maybe<ResolversParentTypes['AkashaWorldMetaInfo']>, akashaWorldMetaInfoInterfaceList?: Types.Maybe<ResolversParentTypes['AkashaWorldMetaInfoInterfaceConnection']>, akashaWorldMetaInfoList?: Types.Maybe<ResolversParentTypes['AkashaWorldMetaInfoConnection']> };
   CeramicCommitID: Types.Scalars['CeramicCommitID']['output'];
   CeramicStreamID: Types.Scalars['CeramicStreamID']['output'];
   CreateAkashaBeamInput: Types.CreateAkashaBeamInput;
@@ -713,6 +864,14 @@ export type ResolversParentTypes = {
   EnableIndexingAkashaReflectPayload: Omit<Types.EnableIndexingAkashaReflectPayload, 'document' | 'node' | 'viewer'> & { document?: Types.Maybe<ResolversParentTypes['AkashaReflect']>, node?: Types.Maybe<ResolversParentTypes['Node']>, viewer?: Types.Maybe<ResolversParentTypes['CeramicAccount']> };
   EnableIndexingAkashaReflectStreamInput: Types.EnableIndexingAkashaReflectStreamInput;
   EnableIndexingAkashaReflectStreamPayload: Omit<Types.EnableIndexingAkashaReflectStreamPayload, 'document' | 'node' | 'viewer'> & { document?: Types.Maybe<ResolversParentTypes['AkashaReflectStream']>, node?: Types.Maybe<ResolversParentTypes['Node']>, viewer?: Types.Maybe<ResolversParentTypes['CeramicAccount']> };
+  EnableIndexingAkashaWorldConfigExtensionInput: Types.EnableIndexingAkashaWorldConfigExtensionInput;
+  EnableIndexingAkashaWorldConfigExtensionPayload: Omit<Types.EnableIndexingAkashaWorldConfigExtensionPayload, 'document' | 'node' | 'viewer'> & { document?: Types.Maybe<ResolversParentTypes['AkashaWorldConfigExtension']>, node?: Types.Maybe<ResolversParentTypes['Node']>, viewer?: Types.Maybe<ResolversParentTypes['CeramicAccount']> };
+  EnableIndexingAkashaWorldConfigInput: Types.EnableIndexingAkashaWorldConfigInput;
+  EnableIndexingAkashaWorldConfigPayload: Omit<Types.EnableIndexingAkashaWorldConfigPayload, 'document' | 'node' | 'viewer'> & { document?: Types.Maybe<ResolversParentTypes['AkashaWorldConfig']>, node?: Types.Maybe<ResolversParentTypes['Node']>, viewer?: Types.Maybe<ResolversParentTypes['CeramicAccount']> };
+  EnableIndexingAkashaWorldInput: Types.EnableIndexingAkashaWorldInput;
+  EnableIndexingAkashaWorldMetaInfoInput: Types.EnableIndexingAkashaWorldMetaInfoInput;
+  EnableIndexingAkashaWorldMetaInfoPayload: Omit<Types.EnableIndexingAkashaWorldMetaInfoPayload, 'document' | 'node' | 'viewer'> & { document?: Types.Maybe<ResolversParentTypes['AkashaWorldMetaInfo']>, node?: Types.Maybe<ResolversParentTypes['Node']>, viewer?: Types.Maybe<ResolversParentTypes['CeramicAccount']> };
+  EnableIndexingAkashaWorldPayload: Omit<Types.EnableIndexingAkashaWorldPayload, 'document' | 'node' | 'viewer'> & { document?: Types.Maybe<ResolversParentTypes['AkashaWorld']>, node?: Types.Maybe<ResolversParentTypes['Node']>, viewer?: Types.Maybe<ResolversParentTypes['CeramicAccount']> };
   IndexAppPayload: Types.IndexAppPayload;
   IndexAppPayloadDocument: Types.IndexAppPayloadDocument;
   IndexBeamPayload: Types.IndexBeamPayload;
@@ -725,6 +884,7 @@ export type ResolversParentTypes = {
   IndexProfilePayloadDocument: Types.IndexProfilePayloadDocument;
   IndexReflectPayload: Types.IndexReflectPayload;
   IndexReflectPayloadDocument: Types.IndexReflectPayloadDocument;
+  IntValueFilterInput: Types.IntValueFilterInput;
   JWS_Signature: Types.Jws_Signature;
   Mutation: {};
   Node: ResolversInterfaceTypes<ResolversParentTypes>['Node'];
@@ -745,6 +905,10 @@ export type ResolversParentTypes = {
   PartialAkashaProfileStreamInput: Types.PartialAkashaProfileStreamInput;
   PartialAkashaReflectInput: Types.PartialAkashaReflectInput;
   PartialAkashaReflectStreamInput: Types.PartialAkashaReflectStreamInput;
+  PartialAkashaWorldConfigExtensionInput: Types.PartialAkashaWorldConfigExtensionInput;
+  PartialAkashaWorldConfigInput: Types.PartialAkashaWorldConfigInput;
+  PartialAkashaWorldInput: Types.PartialAkashaWorldInput;
+  PartialAkashaWorldMetaInfoInput: Types.PartialAkashaWorldMetaInfoInput;
   ProfileImageSource: Types.ProfileImageSource;
   ProfileImageSourceInput: Types.ProfileImageSourceInput;
   ProfileImageVersions: Types.ProfileImageVersions;
@@ -782,7 +946,17 @@ export type ResolversParentTypes = {
   SetAkashaProfileStreamPayload: Omit<Types.SetAkashaProfileStreamPayload, 'document' | 'node' | 'viewer'> & { document: ResolversParentTypes['AkashaProfileStream'], node?: Types.Maybe<ResolversParentTypes['Node']>, viewer?: Types.Maybe<ResolversParentTypes['CeramicAccount']> };
   SetAkashaReflectStreamInput: Types.SetAkashaReflectStreamInput;
   SetAkashaReflectStreamPayload: Omit<Types.SetAkashaReflectStreamPayload, 'document' | 'node' | 'viewer'> & { document: ResolversParentTypes['AkashaReflectStream'], node?: Types.Maybe<ResolversParentTypes['Node']>, viewer?: Types.Maybe<ResolversParentTypes['CeramicAccount']> };
+  SetAkashaWorldConfigExtensionInput: Types.SetAkashaWorldConfigExtensionInput;
+  SetAkashaWorldConfigExtensionPayload: Omit<Types.SetAkashaWorldConfigExtensionPayload, 'document' | 'node' | 'viewer'> & { document: ResolversParentTypes['AkashaWorldConfigExtension'], node?: Types.Maybe<ResolversParentTypes['Node']>, viewer?: Types.Maybe<ResolversParentTypes['CeramicAccount']> };
+  SetAkashaWorldConfigInput: Types.SetAkashaWorldConfigInput;
+  SetAkashaWorldConfigPayload: Omit<Types.SetAkashaWorldConfigPayload, 'document' | 'node' | 'viewer'> & { document: ResolversParentTypes['AkashaWorldConfig'], node?: Types.Maybe<ResolversParentTypes['Node']>, viewer?: Types.Maybe<ResolversParentTypes['CeramicAccount']> };
+  SetAkashaWorldInput: Types.SetAkashaWorldInput;
+  SetAkashaWorldMetaInfoInput: Types.SetAkashaWorldMetaInfoInput;
+  SetAkashaWorldMetaInfoPayload: Omit<Types.SetAkashaWorldMetaInfoPayload, 'document' | 'node' | 'viewer'> & { document: ResolversParentTypes['AkashaWorldMetaInfo'], node?: Types.Maybe<ResolversParentTypes['Node']>, viewer?: Types.Maybe<ResolversParentTypes['CeramicAccount']> };
+  SetAkashaWorldPayload: Omit<Types.SetAkashaWorldPayload, 'document' | 'node' | 'viewer'> & { document: ResolversParentTypes['AkashaWorld'], node?: Types.Maybe<ResolversParentTypes['Node']>, viewer?: Types.Maybe<ResolversParentTypes['CeramicAccount']> };
   SetOptionsInput: Types.SetOptionsInput;
+  SocialLink: Types.SocialLink;
+  SocialLinkInput: Types.SocialLinkInput;
   StringValueFilterInput: Types.StringValueFilterInput;
   URI: Types.Scalars['URI']['output'];
   UpdateAkashaAppInput: Types.UpdateAkashaAppInput;
@@ -817,6 +991,14 @@ export type ResolversParentTypes = {
   UpdateAkashaReflectPayload: Omit<Types.UpdateAkashaReflectPayload, 'document' | 'node' | 'viewer'> & { document: ResolversParentTypes['AkashaReflect'], node?: Types.Maybe<ResolversParentTypes['Node']>, viewer?: Types.Maybe<ResolversParentTypes['CeramicAccount']> };
   UpdateAkashaReflectStreamInput: Types.UpdateAkashaReflectStreamInput;
   UpdateAkashaReflectStreamPayload: Omit<Types.UpdateAkashaReflectStreamPayload, 'document' | 'node' | 'viewer'> & { document: ResolversParentTypes['AkashaReflectStream'], node?: Types.Maybe<ResolversParentTypes['Node']>, viewer?: Types.Maybe<ResolversParentTypes['CeramicAccount']> };
+  UpdateAkashaWorldConfigExtensionInput: Types.UpdateAkashaWorldConfigExtensionInput;
+  UpdateAkashaWorldConfigExtensionPayload: Omit<Types.UpdateAkashaWorldConfigExtensionPayload, 'document' | 'node' | 'viewer'> & { document: ResolversParentTypes['AkashaWorldConfigExtension'], node?: Types.Maybe<ResolversParentTypes['Node']>, viewer?: Types.Maybe<ResolversParentTypes['CeramicAccount']> };
+  UpdateAkashaWorldConfigInput: Types.UpdateAkashaWorldConfigInput;
+  UpdateAkashaWorldConfigPayload: Omit<Types.UpdateAkashaWorldConfigPayload, 'document' | 'node' | 'viewer'> & { document: ResolversParentTypes['AkashaWorldConfig'], node?: Types.Maybe<ResolversParentTypes['Node']>, viewer?: Types.Maybe<ResolversParentTypes['CeramicAccount']> };
+  UpdateAkashaWorldInput: Types.UpdateAkashaWorldInput;
+  UpdateAkashaWorldMetaInfoInput: Types.UpdateAkashaWorldMetaInfoInput;
+  UpdateAkashaWorldMetaInfoPayload: Omit<Types.UpdateAkashaWorldMetaInfoPayload, 'document' | 'node' | 'viewer'> & { document: ResolversParentTypes['AkashaWorldMetaInfo'], node?: Types.Maybe<ResolversParentTypes['Node']>, viewer?: Types.Maybe<ResolversParentTypes['CeramicAccount']> };
+  UpdateAkashaWorldPayload: Omit<Types.UpdateAkashaWorldPayload, 'document' | 'node' | 'viewer'> & { document: ResolversParentTypes['AkashaWorld'], node?: Types.Maybe<ResolversParentTypes['Node']>, viewer?: Types.Maybe<ResolversParentTypes['CeramicAccount']> };
   UpdateOptionsInput: Types.UpdateOptionsInput;
   WithAkashaAppInput: Types.WithAkashaAppInput;
   WithAkashaAppReleaseInput: Types.WithAkashaAppReleaseInput;
@@ -829,6 +1011,10 @@ export type ResolversParentTypes = {
   WithAkashaInterestsStreamInput: Types.WithAkashaInterestsStreamInput;
   WithAkashaProfileStreamInput: Types.WithAkashaProfileStreamInput;
   WithAkashaReflectStreamInput: Types.WithAkashaReflectStreamInput;
+  WithAkashaWorldConfigExtensionInput: Types.WithAkashaWorldConfigExtensionInput;
+  WithAkashaWorldConfigInput: Types.WithAkashaWorldConfigInput;
+  WithAkashaWorldInput: Types.WithAkashaWorldInput;
+  WithAkashaWorldMetaInfoInput: Types.WithAkashaWorldMetaInfoInput;
   join__FieldSet: Types.Scalars['join__FieldSet']['output'];
   link__Import: Types.Scalars['link__Import']['output'];
 };
@@ -911,6 +1097,8 @@ export type AkashaAppResolvers<ContextType = any, ParentType extends ResolversPa
   releases?: Resolver<ResolversTypes['AkashaAppReleaseInterfaceConnection'], ParentType, ContextType, Partial<Types.AkashaAppReleasesArgs>>;
   releasesCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.AkashaAppReleasesCountArgs>>;
   version?: Resolver<ResolversTypes['CeramicCommitID'], ParentType, ContextType>;
+  worldConfigs?: Resolver<ResolversTypes['AkashaWorldConfigExtensionInterfaceConnection'], ParentType, ContextType, Partial<Types.AkashaAppWorldConfigsArgs>>;
+  worldsConfigsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.AkashaAppWorldsConfigsCountArgs>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1542,6 +1730,221 @@ export type AkashaReflectStreamEdgeResolvers<ContextType = any, ParentType exten
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type AkashaWorldResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaWorld'] = ResolversParentTypes['AkashaWorld']> = {
+  active?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  configInfo?: Resolver<ResolversTypes['AkashaWorldConfigInterfaceConnection'], ParentType, ContextType, Partial<Types.AkashaWorldConfigInfoArgs>>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  creator?: Resolver<ResolversTypes['CeramicAccount'], ParentType, ContextType>;
+  extensionPublishers?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['CeramicAccount']>>>, ParentType, ContextType>;
+  icon?: Resolver<Types.Maybe<ResolversTypes['AkashaWorldImageVersions']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  instanceURL?: Resolver<Types.Maybe<ResolversTypes['URI']>, ParentType, ContextType>;
+  metaInfo?: Resolver<ResolversTypes['AkashaWorldMetaInfoInterfaceConnection'], ParentType, ContextType, Partial<Types.AkashaWorldMetaInfoArgs>>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AkashaWorldConfigResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaWorldConfig'] = ResolversParentTypes['AkashaWorldConfig']> = {
+  active?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  creator?: Resolver<ResolversTypes['CeramicAccount'], ParentType, ContextType>;
+  extensions?: Resolver<ResolversTypes['AkashaWorldConfigExtensionInterfaceConnection'], ParentType, ContextType, Partial<Types.AkashaWorldConfigExtensionsArgs>>;
+  homepageExtension?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  layoutExtension?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
+  registryExtension?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
+  world?: Resolver<Types.Maybe<ResolversTypes['AkashaWorldInterface']>, ParentType, ContextType>;
+  worldID?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AkashaWorldConfigConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaWorldConfigConnection'] = ResolversParentTypes['AkashaWorldConfigConnection']> = {
+  edges?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['AkashaWorldConfigEdge']>>>, ParentType, ContextType>;
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AkashaWorldConfigEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaWorldConfigEdge'] = ResolversParentTypes['AkashaWorldConfigEdge']> = {
+  cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  node?: Resolver<Types.Maybe<ResolversTypes['AkashaWorldConfig']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AkashaWorldConfigExtensionResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaWorldConfigExtension'] = ResolversParentTypes['AkashaWorldConfigExtension']> = {
+  active?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  creator?: Resolver<ResolversTypes['CeramicAccount'], ParentType, ContextType>;
+  extension?: Resolver<Types.Maybe<ResolversTypes['AkashaAppInterface']>, ParentType, ContextType>;
+  extensionID?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  optional?: Resolver<Types.Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  position?: Resolver<Types.Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  type?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  worldConfig?: Resolver<Types.Maybe<ResolversTypes['AkashaWorldConfigInterface']>, ParentType, ContextType>;
+  worldConfigID?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AkashaWorldConfigExtensionConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaWorldConfigExtensionConnection'] = ResolversParentTypes['AkashaWorldConfigExtensionConnection']> = {
+  edges?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['AkashaWorldConfigExtensionEdge']>>>, ParentType, ContextType>;
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AkashaWorldConfigExtensionEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaWorldConfigExtensionEdge'] = ResolversParentTypes['AkashaWorldConfigExtensionEdge']> = {
+  cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  node?: Resolver<Types.Maybe<ResolversTypes['AkashaWorldConfigExtension']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AkashaWorldConfigExtensionInterfaceResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaWorldConfigExtensionInterface'] = ResolversParentTypes['AkashaWorldConfigExtensionInterface']> = {
+  __resolveType: TypeResolveFn<'AkashaWorldConfigExtension', ParentType, ContextType>;
+  active?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  creator?: Resolver<ResolversTypes['CeramicAccount'], ParentType, ContextType>;
+  extension?: Resolver<Types.Maybe<ResolversTypes['AkashaAppInterface']>, ParentType, ContextType>;
+  extensionID?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  optional?: Resolver<Types.Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  position?: Resolver<Types.Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  type?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  worldConfig?: Resolver<Types.Maybe<ResolversTypes['AkashaWorldConfigInterface']>, ParentType, ContextType>;
+  worldConfigID?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
+};
+
+export type AkashaWorldConfigExtensionInterfaceConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaWorldConfigExtensionInterfaceConnection'] = ResolversParentTypes['AkashaWorldConfigExtensionInterfaceConnection']> = {
+  edges?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['AkashaWorldConfigExtensionInterfaceEdge']>>>, ParentType, ContextType>;
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AkashaWorldConfigExtensionInterfaceEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaWorldConfigExtensionInterfaceEdge'] = ResolversParentTypes['AkashaWorldConfigExtensionInterfaceEdge']> = {
+  cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  node?: Resolver<Types.Maybe<ResolversTypes['AkashaWorldConfigExtensionInterface']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AkashaWorldConfigInterfaceResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaWorldConfigInterface'] = ResolversParentTypes['AkashaWorldConfigInterface']> = {
+  __resolveType: TypeResolveFn<'AkashaWorldConfig', ParentType, ContextType>;
+  active?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  creator?: Resolver<ResolversTypes['CeramicAccount'], ParentType, ContextType>;
+  homepageExtension?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  layoutExtension?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
+  registryExtension?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
+  world?: Resolver<Types.Maybe<ResolversTypes['AkashaWorldInterface']>, ParentType, ContextType>;
+  worldID?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
+};
+
+export type AkashaWorldConfigInterfaceConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaWorldConfigInterfaceConnection'] = ResolversParentTypes['AkashaWorldConfigInterfaceConnection']> = {
+  edges?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['AkashaWorldConfigInterfaceEdge']>>>, ParentType, ContextType>;
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AkashaWorldConfigInterfaceEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaWorldConfigInterfaceEdge'] = ResolversParentTypes['AkashaWorldConfigInterfaceEdge']> = {
+  cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  node?: Resolver<Types.Maybe<ResolversTypes['AkashaWorldConfigInterface']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AkashaWorldConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaWorldConnection'] = ResolversParentTypes['AkashaWorldConnection']> = {
+  edges?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['AkashaWorldEdge']>>>, ParentType, ContextType>;
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AkashaWorldEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaWorldEdge'] = ResolversParentTypes['AkashaWorldEdge']> = {
+  cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  node?: Resolver<Types.Maybe<ResolversTypes['AkashaWorld']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AkashaWorldImageSourceResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaWorldImageSource'] = ResolversParentTypes['AkashaWorldImageSource']> = {
+  height?: Resolver<Types.Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  sizes?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  src?: Resolver<ResolversTypes['URI'], ParentType, ContextType>;
+  width?: Resolver<Types.Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AkashaWorldImageVersionsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaWorldImageVersions'] = ResolversParentTypes['AkashaWorldImageVersions']> = {
+  alternatives?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['AkashaWorldImageSource']>>>, ParentType, ContextType>;
+  default?: Resolver<ResolversTypes['AkashaWorldImageSource'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AkashaWorldInterfaceResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaWorldInterface'] = ResolversParentTypes['AkashaWorldInterface']> = {
+  __resolveType: TypeResolveFn<'AkashaWorld', ParentType, ContextType>;
+  active?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  creator?: Resolver<ResolversTypes['CeramicAccount'], ParentType, ContextType>;
+  extensionPublishers?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['CeramicAccount']>>>, ParentType, ContextType>;
+  icon?: Resolver<Types.Maybe<ResolversTypes['AkashaWorldImageVersions']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  instanceURL?: Resolver<Types.Maybe<ResolversTypes['URI']>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+};
+
+export type AkashaWorldInterfaceConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaWorldInterfaceConnection'] = ResolversParentTypes['AkashaWorldInterfaceConnection']> = {
+  edges?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['AkashaWorldInterfaceEdge']>>>, ParentType, ContextType>;
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AkashaWorldInterfaceEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaWorldInterfaceEdge'] = ResolversParentTypes['AkashaWorldInterfaceEdge']> = {
+  cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  node?: Resolver<Types.Maybe<ResolversTypes['AkashaWorldInterface']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AkashaWorldMetaInfoResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaWorldMetaInfo'] = ResolversParentTypes['AkashaWorldMetaInfo']> = {
+  description?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  guidelinesUrl?: Resolver<Types.Maybe<ResolversTypes['URI']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  keywords?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
+  socialLinks?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['SocialLink']>>>, ParentType, ContextType>;
+  world?: Resolver<Types.Maybe<ResolversTypes['AkashaWorldInterface']>, ParentType, ContextType>;
+  worldID?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AkashaWorldMetaInfoConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaWorldMetaInfoConnection'] = ResolversParentTypes['AkashaWorldMetaInfoConnection']> = {
+  edges?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['AkashaWorldMetaInfoEdge']>>>, ParentType, ContextType>;
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AkashaWorldMetaInfoEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaWorldMetaInfoEdge'] = ResolversParentTypes['AkashaWorldMetaInfoEdge']> = {
+  cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  node?: Resolver<Types.Maybe<ResolversTypes['AkashaWorldMetaInfo']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AkashaWorldMetaInfoInterfaceResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaWorldMetaInfoInterface'] = ResolversParentTypes['AkashaWorldMetaInfoInterface']> = {
+  __resolveType: TypeResolveFn<'AkashaWorldMetaInfo', ParentType, ContextType>;
+  description?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  guidelinesUrl?: Resolver<Types.Maybe<ResolversTypes['URI']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  keywords?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
+  socialLinks?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['SocialLink']>>>, ParentType, ContextType>;
+  world?: Resolver<Types.Maybe<ResolversTypes['AkashaWorldInterface']>, ParentType, ContextType>;
+  worldID?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
+};
+
+export type AkashaWorldMetaInfoInterfaceConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaWorldMetaInfoInterfaceConnection'] = ResolversParentTypes['AkashaWorldMetaInfoInterfaceConnection']> = {
+  edges?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['AkashaWorldMetaInfoInterfaceEdge']>>>, ParentType, ContextType>;
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AkashaWorldMetaInfoInterfaceEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaWorldMetaInfoInterfaceEdge'] = ResolversParentTypes['AkashaWorldMetaInfoInterfaceEdge']> = {
+  cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  node?: Resolver<Types.Maybe<ResolversTypes['AkashaWorldMetaInfoInterface']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type AppImageSourceResolvers<ContextType = any, ParentType extends ResolversParentTypes['AppImageSource'] = ResolversParentTypes['AppImageSource']> = {
   height?: Resolver<Types.Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   src?: Resolver<ResolversTypes['URI'], ParentType, ContextType>;
@@ -1655,6 +2058,26 @@ export type CeramicAccountResolvers<ContextType = any, ParentType extends Resolv
   akashaReflectStream?: Resolver<Types.Maybe<ResolversTypes['AkashaReflectStream']>, ParentType, ContextType, RequireFields<Types.CeramicAccountAkashaReflectStreamArgs, 'with'>>;
   akashaReflectStreamList?: Resolver<Types.Maybe<ResolversTypes['AkashaReflectStreamConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountAkashaReflectStreamListArgs>>;
   akashaReflectStreamListCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.CeramicAccountAkashaReflectStreamListCountArgs>>;
+  akashaWorld?: Resolver<Types.Maybe<ResolversTypes['AkashaWorld']>, ParentType, ContextType, RequireFields<Types.CeramicAccountAkashaWorldArgs, 'with'>>;
+  akashaWorldConfig?: Resolver<Types.Maybe<ResolversTypes['AkashaWorldConfig']>, ParentType, ContextType, RequireFields<Types.CeramicAccountAkashaWorldConfigArgs, 'with'>>;
+  akashaWorldConfigExtension?: Resolver<Types.Maybe<ResolversTypes['AkashaWorldConfigExtension']>, ParentType, ContextType, RequireFields<Types.CeramicAccountAkashaWorldConfigExtensionArgs, 'with'>>;
+  akashaWorldConfigExtensionInterfaceList?: Resolver<Types.Maybe<ResolversTypes['AkashaWorldConfigExtensionInterfaceConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountAkashaWorldConfigExtensionInterfaceListArgs>>;
+  akashaWorldConfigExtensionInterfaceListCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.CeramicAccountAkashaWorldConfigExtensionInterfaceListCountArgs>>;
+  akashaWorldConfigExtensionList?: Resolver<Types.Maybe<ResolversTypes['AkashaWorldConfigExtensionConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountAkashaWorldConfigExtensionListArgs>>;
+  akashaWorldConfigExtensionListCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.CeramicAccountAkashaWorldConfigExtensionListCountArgs>>;
+  akashaWorldConfigInterfaceList?: Resolver<Types.Maybe<ResolversTypes['AkashaWorldConfigInterfaceConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountAkashaWorldConfigInterfaceListArgs>>;
+  akashaWorldConfigInterfaceListCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.CeramicAccountAkashaWorldConfigInterfaceListCountArgs>>;
+  akashaWorldConfigList?: Resolver<Types.Maybe<ResolversTypes['AkashaWorldConfigConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountAkashaWorldConfigListArgs>>;
+  akashaWorldConfigListCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.CeramicAccountAkashaWorldConfigListCountArgs>>;
+  akashaWorldInterfaceList?: Resolver<Types.Maybe<ResolversTypes['AkashaWorldInterfaceConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountAkashaWorldInterfaceListArgs>>;
+  akashaWorldInterfaceListCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.CeramicAccountAkashaWorldInterfaceListCountArgs>>;
+  akashaWorldList?: Resolver<Types.Maybe<ResolversTypes['AkashaWorldConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountAkashaWorldListArgs>>;
+  akashaWorldListCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.CeramicAccountAkashaWorldListCountArgs>>;
+  akashaWorldMetaInfo?: Resolver<Types.Maybe<ResolversTypes['AkashaWorldMetaInfo']>, ParentType, ContextType, RequireFields<Types.CeramicAccountAkashaWorldMetaInfoArgs, 'with'>>;
+  akashaWorldMetaInfoInterfaceList?: Resolver<Types.Maybe<ResolversTypes['AkashaWorldMetaInfoInterfaceConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountAkashaWorldMetaInfoInterfaceListArgs>>;
+  akashaWorldMetaInfoInterfaceListCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.CeramicAccountAkashaWorldMetaInfoInterfaceListCountArgs>>;
+  akashaWorldMetaInfoList?: Resolver<Types.Maybe<ResolversTypes['AkashaWorldMetaInfoConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountAkashaWorldMetaInfoListArgs>>;
+  akashaWorldMetaInfoListCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.CeramicAccountAkashaWorldMetaInfoListCountArgs>>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   isViewer?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -1844,6 +2267,38 @@ export type EnableIndexingAkashaReflectStreamPayloadResolvers<ContextType = any,
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type EnableIndexingAkashaWorldConfigExtensionPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['EnableIndexingAkashaWorldConfigExtensionPayload'] = ResolversParentTypes['EnableIndexingAkashaWorldConfigExtensionPayload']> = {
+  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  document?: Resolver<Types.Maybe<ResolversTypes['AkashaWorldConfigExtension']>, ParentType, ContextType>;
+  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.EnableIndexingAkashaWorldConfigExtensionPayloadNodeArgs, 'id'>>;
+  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type EnableIndexingAkashaWorldConfigPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['EnableIndexingAkashaWorldConfigPayload'] = ResolversParentTypes['EnableIndexingAkashaWorldConfigPayload']> = {
+  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  document?: Resolver<Types.Maybe<ResolversTypes['AkashaWorldConfig']>, ParentType, ContextType>;
+  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.EnableIndexingAkashaWorldConfigPayloadNodeArgs, 'id'>>;
+  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type EnableIndexingAkashaWorldMetaInfoPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['EnableIndexingAkashaWorldMetaInfoPayload'] = ResolversParentTypes['EnableIndexingAkashaWorldMetaInfoPayload']> = {
+  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  document?: Resolver<Types.Maybe<ResolversTypes['AkashaWorldMetaInfo']>, ParentType, ContextType>;
+  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.EnableIndexingAkashaWorldMetaInfoPayloadNodeArgs, 'id'>>;
+  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type EnableIndexingAkashaWorldPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['EnableIndexingAkashaWorldPayload'] = ResolversParentTypes['EnableIndexingAkashaWorldPayload']> = {
+  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  document?: Resolver<Types.Maybe<ResolversTypes['AkashaWorld']>, ParentType, ContextType>;
+  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.EnableIndexingAkashaWorldPayloadNodeArgs, 'id'>>;
+  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type IndexAppPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['IndexAppPayload'] = ResolversParentTypes['IndexAppPayload']> = {
   document?: Resolver<Types.Maybe<ResolversTypes['IndexAppPayloadDocument']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -1927,6 +2382,10 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   enableIndexingAkashaProfileStream?: Resolver<Types.Maybe<ResolversTypes['EnableIndexingAkashaProfileStreamPayload']>, ParentType, ContextType, RequireFields<Types.MutationEnableIndexingAkashaProfileStreamArgs, 'input'>>;
   enableIndexingAkashaReflect?: Resolver<Types.Maybe<ResolversTypes['EnableIndexingAkashaReflectPayload']>, ParentType, ContextType, RequireFields<Types.MutationEnableIndexingAkashaReflectArgs, 'input'>>;
   enableIndexingAkashaReflectStream?: Resolver<Types.Maybe<ResolversTypes['EnableIndexingAkashaReflectStreamPayload']>, ParentType, ContextType, RequireFields<Types.MutationEnableIndexingAkashaReflectStreamArgs, 'input'>>;
+  enableIndexingAkashaWorld?: Resolver<Types.Maybe<ResolversTypes['EnableIndexingAkashaWorldPayload']>, ParentType, ContextType, RequireFields<Types.MutationEnableIndexingAkashaWorldArgs, 'input'>>;
+  enableIndexingAkashaWorldConfig?: Resolver<Types.Maybe<ResolversTypes['EnableIndexingAkashaWorldConfigPayload']>, ParentType, ContextType, RequireFields<Types.MutationEnableIndexingAkashaWorldConfigArgs, 'input'>>;
+  enableIndexingAkashaWorldConfigExtension?: Resolver<Types.Maybe<ResolversTypes['EnableIndexingAkashaWorldConfigExtensionPayload']>, ParentType, ContextType, RequireFields<Types.MutationEnableIndexingAkashaWorldConfigExtensionArgs, 'input'>>;
+  enableIndexingAkashaWorldMetaInfo?: Resolver<Types.Maybe<ResolversTypes['EnableIndexingAkashaWorldMetaInfoPayload']>, ParentType, ContextType, RequireFields<Types.MutationEnableIndexingAkashaWorldMetaInfoArgs, 'input'>>;
   indexApp?: Resolver<Types.Maybe<ResolversTypes['IndexAppPayload']>, ParentType, ContextType, Partial<Types.MutationIndexAppArgs>>;
   indexBeam?: Resolver<Types.Maybe<ResolversTypes['IndexBeamPayload']>, ParentType, ContextType, Partial<Types.MutationIndexBeamArgs>>;
   indexContentBlock?: Resolver<Types.Maybe<ResolversTypes['IndexContentBlockPayload']>, ParentType, ContextType, Partial<Types.MutationIndexContentBlockArgs>>;
@@ -1946,6 +2405,10 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   setAkashaProfileInterests?: Resolver<Types.Maybe<ResolversTypes['SetAkashaProfileInterestsPayload']>, ParentType, ContextType, RequireFields<Types.MutationSetAkashaProfileInterestsArgs, 'input'>>;
   setAkashaProfileStream?: Resolver<Types.Maybe<ResolversTypes['SetAkashaProfileStreamPayload']>, ParentType, ContextType, RequireFields<Types.MutationSetAkashaProfileStreamArgs, 'input'>>;
   setAkashaReflectStream?: Resolver<Types.Maybe<ResolversTypes['SetAkashaReflectStreamPayload']>, ParentType, ContextType, RequireFields<Types.MutationSetAkashaReflectStreamArgs, 'input'>>;
+  setAkashaWorld?: Resolver<Types.Maybe<ResolversTypes['SetAkashaWorldPayload']>, ParentType, ContextType, RequireFields<Types.MutationSetAkashaWorldArgs, 'input'>>;
+  setAkashaWorldConfig?: Resolver<Types.Maybe<ResolversTypes['SetAkashaWorldConfigPayload']>, ParentType, ContextType, RequireFields<Types.MutationSetAkashaWorldConfigArgs, 'input'>>;
+  setAkashaWorldConfigExtension?: Resolver<Types.Maybe<ResolversTypes['SetAkashaWorldConfigExtensionPayload']>, ParentType, ContextType, RequireFields<Types.MutationSetAkashaWorldConfigExtensionArgs, 'input'>>;
+  setAkashaWorldMetaInfo?: Resolver<Types.Maybe<ResolversTypes['SetAkashaWorldMetaInfoPayload']>, ParentType, ContextType, RequireFields<Types.MutationSetAkashaWorldMetaInfoArgs, 'input'>>;
   updateAkashaApp?: Resolver<Types.Maybe<ResolversTypes['UpdateAkashaAppPayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdateAkashaAppArgs, 'input'>>;
   updateAkashaAppRelease?: Resolver<Types.Maybe<ResolversTypes['UpdateAkashaAppReleasePayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdateAkashaAppReleaseArgs, 'input'>>;
   updateAkashaAppsStream?: Resolver<Types.Maybe<ResolversTypes['UpdateAkashaAppsStreamPayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdateAkashaAppsStreamArgs, 'input'>>;
@@ -1962,10 +2425,14 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   updateAkashaProfileStream?: Resolver<Types.Maybe<ResolversTypes['UpdateAkashaProfileStreamPayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdateAkashaProfileStreamArgs, 'input'>>;
   updateAkashaReflect?: Resolver<Types.Maybe<ResolversTypes['UpdateAkashaReflectPayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdateAkashaReflectArgs, 'input'>>;
   updateAkashaReflectStream?: Resolver<Types.Maybe<ResolversTypes['UpdateAkashaReflectStreamPayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdateAkashaReflectStreamArgs, 'input'>>;
+  updateAkashaWorld?: Resolver<Types.Maybe<ResolversTypes['UpdateAkashaWorldPayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdateAkashaWorldArgs, 'input'>>;
+  updateAkashaWorldConfig?: Resolver<Types.Maybe<ResolversTypes['UpdateAkashaWorldConfigPayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdateAkashaWorldConfigArgs, 'input'>>;
+  updateAkashaWorldConfigExtension?: Resolver<Types.Maybe<ResolversTypes['UpdateAkashaWorldConfigExtensionPayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdateAkashaWorldConfigExtensionArgs, 'input'>>;
+  updateAkashaWorldMetaInfo?: Resolver<Types.Maybe<ResolversTypes['UpdateAkashaWorldMetaInfoPayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdateAkashaWorldMetaInfoArgs, 'input'>>;
 };
 
 export type NodeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Node'] = ResolversParentTypes['Node']> = {
-  __resolveType: TypeResolveFn<'AkashaApp' | 'AkashaAppRelease' | 'AkashaAppsStream' | 'AkashaBeam' | 'AkashaBeamStream' | 'AkashaBlockStorage' | 'AkashaContentBlock' | 'AkashaContentBlockStream' | 'AkashaFollow' | 'AkashaIndexedStream' | 'AkashaInterestsStream' | 'AkashaProfile' | 'AkashaProfileInterests' | 'AkashaProfileStream' | 'AkashaReflect' | 'AkashaReflectStream' | 'CeramicAccount', ParentType, ContextType>;
+  __resolveType: TypeResolveFn<'AkashaApp' | 'AkashaAppRelease' | 'AkashaAppsStream' | 'AkashaBeam' | 'AkashaBeamStream' | 'AkashaBlockStorage' | 'AkashaContentBlock' | 'AkashaContentBlockStream' | 'AkashaFollow' | 'AkashaIndexedStream' | 'AkashaInterestsStream' | 'AkashaProfile' | 'AkashaProfileInterests' | 'AkashaProfileStream' | 'AkashaReflect' | 'AkashaReflectStream' | 'AkashaWorld' | 'AkashaWorldConfig' | 'AkashaWorldConfigExtension' | 'AkashaWorldMetaInfo' | 'CeramicAccount', ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
 };
 
@@ -2053,6 +2520,22 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   akashaReflectInterfaceIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaReflectInterfaceConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaReflectInterfaceIndexArgs>>;
   akashaReflectStreamCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.QueryAkashaReflectStreamCountArgs>>;
   akashaReflectStreamIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaReflectStreamConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaReflectStreamIndexArgs>>;
+  akashaWorldConfigCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.QueryAkashaWorldConfigCountArgs>>;
+  akashaWorldConfigExtensionCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.QueryAkashaWorldConfigExtensionCountArgs>>;
+  akashaWorldConfigExtensionIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaWorldConfigExtensionConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaWorldConfigExtensionIndexArgs>>;
+  akashaWorldConfigExtensionInterfaceCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.QueryAkashaWorldConfigExtensionInterfaceCountArgs>>;
+  akashaWorldConfigExtensionInterfaceIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaWorldConfigExtensionInterfaceConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaWorldConfigExtensionInterfaceIndexArgs>>;
+  akashaWorldConfigIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaWorldConfigConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaWorldConfigIndexArgs>>;
+  akashaWorldConfigInterfaceCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.QueryAkashaWorldConfigInterfaceCountArgs>>;
+  akashaWorldConfigInterfaceIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaWorldConfigInterfaceConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaWorldConfigInterfaceIndexArgs>>;
+  akashaWorldCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.QueryAkashaWorldCountArgs>>;
+  akashaWorldIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaWorldConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaWorldIndexArgs>>;
+  akashaWorldInterfaceCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.QueryAkashaWorldInterfaceCountArgs>>;
+  akashaWorldInterfaceIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaWorldInterfaceConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaWorldInterfaceIndexArgs>>;
+  akashaWorldMetaInfoCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.QueryAkashaWorldMetaInfoCountArgs>>;
+  akashaWorldMetaInfoIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaWorldMetaInfoConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaWorldMetaInfoIndexArgs>>;
+  akashaWorldMetaInfoInterfaceCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.QueryAkashaWorldMetaInfoInterfaceCountArgs>>;
+  akashaWorldMetaInfoInterfaceIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaWorldMetaInfoInterfaceConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaWorldMetaInfoInterfaceIndexArgs>>;
   node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.QueryNodeArgs, 'id'>>;
   nodes?: Resolver<Array<Types.Maybe<ResolversTypes['Node']>>, ParentType, ContextType, RequireFields<Types.QueryNodesArgs, 'ids'>>;
   serviceStatus?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -2167,6 +2650,44 @@ export type SetAkashaReflectStreamPayloadResolvers<ContextType = any, ParentType
   document?: Resolver<ResolversTypes['AkashaReflectStream'], ParentType, ContextType>;
   node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.SetAkashaReflectStreamPayloadNodeArgs, 'id'>>;
   viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type SetAkashaWorldConfigExtensionPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['SetAkashaWorldConfigExtensionPayload'] = ResolversParentTypes['SetAkashaWorldConfigExtensionPayload']> = {
+  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  document?: Resolver<ResolversTypes['AkashaWorldConfigExtension'], ParentType, ContextType>;
+  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.SetAkashaWorldConfigExtensionPayloadNodeArgs, 'id'>>;
+  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type SetAkashaWorldConfigPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['SetAkashaWorldConfigPayload'] = ResolversParentTypes['SetAkashaWorldConfigPayload']> = {
+  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  document?: Resolver<ResolversTypes['AkashaWorldConfig'], ParentType, ContextType>;
+  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.SetAkashaWorldConfigPayloadNodeArgs, 'id'>>;
+  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type SetAkashaWorldMetaInfoPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['SetAkashaWorldMetaInfoPayload'] = ResolversParentTypes['SetAkashaWorldMetaInfoPayload']> = {
+  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  document?: Resolver<ResolversTypes['AkashaWorldMetaInfo'], ParentType, ContextType>;
+  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.SetAkashaWorldMetaInfoPayloadNodeArgs, 'id'>>;
+  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type SetAkashaWorldPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['SetAkashaWorldPayload'] = ResolversParentTypes['SetAkashaWorldPayload']> = {
+  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  document?: Resolver<ResolversTypes['AkashaWorld'], ParentType, ContextType>;
+  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.SetAkashaWorldPayloadNodeArgs, 'id'>>;
+  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type SocialLinkResolvers<ContextType = any, ParentType extends ResolversParentTypes['SocialLink'] = ResolversParentTypes['SocialLink']> = {
+  href?: Resolver<ResolversTypes['URI'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2302,6 +2823,38 @@ export type UpdateAkashaReflectStreamPayloadResolvers<ContextType = any, ParentT
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type UpdateAkashaWorldConfigExtensionPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpdateAkashaWorldConfigExtensionPayload'] = ResolversParentTypes['UpdateAkashaWorldConfigExtensionPayload']> = {
+  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  document?: Resolver<ResolversTypes['AkashaWorldConfigExtension'], ParentType, ContextType>;
+  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.UpdateAkashaWorldConfigExtensionPayloadNodeArgs, 'id'>>;
+  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UpdateAkashaWorldConfigPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpdateAkashaWorldConfigPayload'] = ResolversParentTypes['UpdateAkashaWorldConfigPayload']> = {
+  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  document?: Resolver<ResolversTypes['AkashaWorldConfig'], ParentType, ContextType>;
+  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.UpdateAkashaWorldConfigPayloadNodeArgs, 'id'>>;
+  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UpdateAkashaWorldMetaInfoPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpdateAkashaWorldMetaInfoPayload'] = ResolversParentTypes['UpdateAkashaWorldMetaInfoPayload']> = {
+  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  document?: Resolver<ResolversTypes['AkashaWorldMetaInfo'], ParentType, ContextType>;
+  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.UpdateAkashaWorldMetaInfoPayloadNodeArgs, 'id'>>;
+  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UpdateAkashaWorldPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpdateAkashaWorldPayload'] = ResolversParentTypes['UpdateAkashaWorldPayload']> = {
+  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  document?: Resolver<ResolversTypes['AkashaWorld'], ParentType, ContextType>;
+  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.UpdateAkashaWorldPayloadNodeArgs, 'id'>>;
+  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export interface Join__FieldSetScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['join__FieldSet'], any> {
   name: 'join__FieldSet';
 }
@@ -2386,6 +2939,32 @@ export type Resolvers<ContextType = any> = {
   AkashaReflectStream?: AkashaReflectStreamResolvers<ContextType>;
   AkashaReflectStreamConnection?: AkashaReflectStreamConnectionResolvers<ContextType>;
   AkashaReflectStreamEdge?: AkashaReflectStreamEdgeResolvers<ContextType>;
+  AkashaWorld?: AkashaWorldResolvers<ContextType>;
+  AkashaWorldConfig?: AkashaWorldConfigResolvers<ContextType>;
+  AkashaWorldConfigConnection?: AkashaWorldConfigConnectionResolvers<ContextType>;
+  AkashaWorldConfigEdge?: AkashaWorldConfigEdgeResolvers<ContextType>;
+  AkashaWorldConfigExtension?: AkashaWorldConfigExtensionResolvers<ContextType>;
+  AkashaWorldConfigExtensionConnection?: AkashaWorldConfigExtensionConnectionResolvers<ContextType>;
+  AkashaWorldConfigExtensionEdge?: AkashaWorldConfigExtensionEdgeResolvers<ContextType>;
+  AkashaWorldConfigExtensionInterface?: AkashaWorldConfigExtensionInterfaceResolvers<ContextType>;
+  AkashaWorldConfigExtensionInterfaceConnection?: AkashaWorldConfigExtensionInterfaceConnectionResolvers<ContextType>;
+  AkashaWorldConfigExtensionInterfaceEdge?: AkashaWorldConfigExtensionInterfaceEdgeResolvers<ContextType>;
+  AkashaWorldConfigInterface?: AkashaWorldConfigInterfaceResolvers<ContextType>;
+  AkashaWorldConfigInterfaceConnection?: AkashaWorldConfigInterfaceConnectionResolvers<ContextType>;
+  AkashaWorldConfigInterfaceEdge?: AkashaWorldConfigInterfaceEdgeResolvers<ContextType>;
+  AkashaWorldConnection?: AkashaWorldConnectionResolvers<ContextType>;
+  AkashaWorldEdge?: AkashaWorldEdgeResolvers<ContextType>;
+  AkashaWorldImageSource?: AkashaWorldImageSourceResolvers<ContextType>;
+  AkashaWorldImageVersions?: AkashaWorldImageVersionsResolvers<ContextType>;
+  AkashaWorldInterface?: AkashaWorldInterfaceResolvers<ContextType>;
+  AkashaWorldInterfaceConnection?: AkashaWorldInterfaceConnectionResolvers<ContextType>;
+  AkashaWorldInterfaceEdge?: AkashaWorldInterfaceEdgeResolvers<ContextType>;
+  AkashaWorldMetaInfo?: AkashaWorldMetaInfoResolvers<ContextType>;
+  AkashaWorldMetaInfoConnection?: AkashaWorldMetaInfoConnectionResolvers<ContextType>;
+  AkashaWorldMetaInfoEdge?: AkashaWorldMetaInfoEdgeResolvers<ContextType>;
+  AkashaWorldMetaInfoInterface?: AkashaWorldMetaInfoInterfaceResolvers<ContextType>;
+  AkashaWorldMetaInfoInterfaceConnection?: AkashaWorldMetaInfoInterfaceConnectionResolvers<ContextType>;
+  AkashaWorldMetaInfoInterfaceEdge?: AkashaWorldMetaInfoInterfaceEdgeResolvers<ContextType>;
   AppImageSource?: AppImageSourceResolvers<ContextType>;
   AppLinkSource?: AppLinkSourceResolvers<ContextType>;
   AppProviderValue?: AppProviderValueResolvers<ContextType>;
@@ -2421,6 +3000,10 @@ export type Resolvers<ContextType = any> = {
   EnableIndexingAkashaProfileStreamPayload?: EnableIndexingAkashaProfileStreamPayloadResolvers<ContextType>;
   EnableIndexingAkashaReflectPayload?: EnableIndexingAkashaReflectPayloadResolvers<ContextType>;
   EnableIndexingAkashaReflectStreamPayload?: EnableIndexingAkashaReflectStreamPayloadResolvers<ContextType>;
+  EnableIndexingAkashaWorldConfigExtensionPayload?: EnableIndexingAkashaWorldConfigExtensionPayloadResolvers<ContextType>;
+  EnableIndexingAkashaWorldConfigPayload?: EnableIndexingAkashaWorldConfigPayloadResolvers<ContextType>;
+  EnableIndexingAkashaWorldMetaInfoPayload?: EnableIndexingAkashaWorldMetaInfoPayloadResolvers<ContextType>;
+  EnableIndexingAkashaWorldPayload?: EnableIndexingAkashaWorldPayloadResolvers<ContextType>;
   IndexAppPayload?: IndexAppPayloadResolvers<ContextType>;
   IndexAppPayloadDocument?: IndexAppPayloadDocumentResolvers<ContextType>;
   IndexBeamPayload?: IndexBeamPayloadResolvers<ContextType>;
@@ -2455,6 +3038,11 @@ export type Resolvers<ContextType = any> = {
   SetAkashaProfilePayload?: SetAkashaProfilePayloadResolvers<ContextType>;
   SetAkashaProfileStreamPayload?: SetAkashaProfileStreamPayloadResolvers<ContextType>;
   SetAkashaReflectStreamPayload?: SetAkashaReflectStreamPayloadResolvers<ContextType>;
+  SetAkashaWorldConfigExtensionPayload?: SetAkashaWorldConfigExtensionPayloadResolvers<ContextType>;
+  SetAkashaWorldConfigPayload?: SetAkashaWorldConfigPayloadResolvers<ContextType>;
+  SetAkashaWorldMetaInfoPayload?: SetAkashaWorldMetaInfoPayloadResolvers<ContextType>;
+  SetAkashaWorldPayload?: SetAkashaWorldPayloadResolvers<ContextType>;
+  SocialLink?: SocialLinkResolvers<ContextType>;
   URI?: GraphQLScalarType;
   UpdateAkashaAppPayload?: UpdateAkashaAppPayloadResolvers<ContextType>;
   UpdateAkashaAppReleasePayload?: UpdateAkashaAppReleasePayloadResolvers<ContextType>;
@@ -2472,6 +3060,10 @@ export type Resolvers<ContextType = any> = {
   UpdateAkashaProfileStreamPayload?: UpdateAkashaProfileStreamPayloadResolvers<ContextType>;
   UpdateAkashaReflectPayload?: UpdateAkashaReflectPayloadResolvers<ContextType>;
   UpdateAkashaReflectStreamPayload?: UpdateAkashaReflectStreamPayloadResolvers<ContextType>;
+  UpdateAkashaWorldConfigExtensionPayload?: UpdateAkashaWorldConfigExtensionPayloadResolvers<ContextType>;
+  UpdateAkashaWorldConfigPayload?: UpdateAkashaWorldConfigPayloadResolvers<ContextType>;
+  UpdateAkashaWorldMetaInfoPayload?: UpdateAkashaWorldMetaInfoPayloadResolvers<ContextType>;
+  UpdateAkashaWorldPayload?: UpdateAkashaWorldPayloadResolvers<ContextType>;
   join__FieldSet?: GraphQLScalarType;
   link__Import?: GraphQLScalarType;
 };

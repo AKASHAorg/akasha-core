@@ -81,3 +81,126 @@ mutation UpdateApp($i: UpdateAkashaAppInput!){
     clientMutationId
   }
 }
+
+fragment AkashaWorldFragmentM on AkashaWorld{
+  id
+  icon {
+    default {
+      sizes
+      src
+      width
+      height
+    }
+  }
+  active
+  instanceURL
+  createdAt
+  creator {
+    id
+  }
+  extensionPublishers {
+    id
+    akashaProfile {
+      name
+      id
+      avatar {
+        default {
+          src
+          width
+          height
+        }
+      }
+    }
+  }
+}
+
+fragment AkashaWorldConfigM on AkashaWorldConfig{
+  id
+  worldID
+  creator {
+    id
+  }
+  active
+  createdAt
+  homepageExtension
+  registryExtension
+  layoutExtension
+
+}
+
+fragment AkashaWorldConfigExtensionM on AkashaWorldConfigExtension{
+  id
+  active
+  createdAt
+  worldConfigID
+  extensionID
+  extension {
+    name
+    displayName
+    author {
+      id
+    }
+    logoImage {
+      src
+      width
+      height
+    }
+  }
+  creator {
+    id
+  }
+}
+
+mutation CreateWorld($i: SetAkashaWorldInput!){
+  setAkashaWorld(input: $i){
+    document {
+      ...AkashaWorldFragmentM
+    }
+    clientMutationId
+  }
+}
+
+mutation UpdateWorld($i: UpdateAkashaWorldInput!){
+  updateAkashaWorld(input: $i){
+    document {
+      ...AkashaWorldFragmentM
+    }
+    clientMutationId
+  }
+}
+
+mutation CreateAkashaWorldConfig($i: SetAkashaWorldConfigInput!){
+  setAkashaWorldConfig(input: $i){
+    document {
+      ...AkashaWorldConfigM
+    }
+    clientMutationId
+  }
+}
+
+mutation UpdateAkashaWorldConfig($i: UpdateAkashaWorldConfigInput!){
+  updateAkashaWorldConfig(input: $i){
+    document {
+      ...AkashaWorldConfigM
+    }
+    clientMutationId
+  }
+}
+
+mutation CreateAkashaWorldConfigExtension($i: SetAkashaWorldConfigExtensionInput!){
+  setAkashaWorldConfigExtension(input: $i){
+    document {
+      ...AkashaWorldConfigExtensionM
+    }
+    clientMutationId
+  }
+}
+
+mutation UpdateAkashaWorldConfigExtension($i: UpdateAkashaWorldConfigExtensionInput!){
+  updateAkashaWorldConfigExtension(input: $i){
+    document {
+      ...AkashaWorldConfigExtensionM
+    }
+    clientMutationId
+  }
+}

@@ -7,7 +7,9 @@
     "prepare": {
       "dependsOn": [
         "@akashaorg/ui-core-hooks:build",
+        "@akashaorg/ui:prepare",
         "@akashaorg/design-system-core:prepare",
+        "@akashaorg/ui:prepare",
         "@akashaorg/design-system-components:prepare",
         "@akashaorg/core-sdk:build",
         "@akashaorg/ui-lib-extensions:prepare",
@@ -30,10 +32,7 @@
         "cwd": "extensions/apps/settings",
         "command": "webpack --config webpack.config.cjs"
       },
-      "outputs": [
-        "{projectRoot}/lib",
-        "{workspaceRoot}/dist/apps/settings"
-      ]
+      "outputs": ["{projectRoot}/lib", "{workspaceRoot}/dist/apps/settings"]
     },
     "translations": {
       "executor": "./tools/executors/i18n:extract",

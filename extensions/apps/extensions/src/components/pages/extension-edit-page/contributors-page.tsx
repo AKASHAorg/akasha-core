@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useContext, useEffect, useMemo, useState } from 'react';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import {
@@ -209,7 +209,7 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
                 {contributors?.length > 0 && (
                   <Stack direction="column" spacing="gap-2">
                     {contributors?.map((profile, index) => (
-                      <Button key={index} plain onClick={() => handleAddContributor(profile)}>
+                      <button key={index} onClick={() => handleAddContributor(profile)}>
                         <Stack
                           padding={16}
                           direction="row"
@@ -229,7 +229,7 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
                             contrib => contrib?.did?.id === profile?.did?.id,
                           ) && <Icon icon={<CheckIcon />} accentColor />}
                         </Stack>
-                      </Button>
+                      </button>
                     ))}
                   </Stack>
                 )}
@@ -288,14 +288,14 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
                       transformSource(alternative),
                     )}
                   />
-                  <Button plain onClick={() => handleRemoveContributor(profile)}>
+                  <button onClick={() => handleRemoveContributor(profile)}>
                     <Icon
                       icon={<TrashIcon />}
                       solid={false}
                       size="md"
                       color={{ light: 'errorLight', dark: 'errorDark' }}
                     />
-                  </Button>
+                  </button>
                 </Stack>
               ))}
             </Stack>
@@ -304,13 +304,12 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
       </Stack>
       <Divider />
       <Stack padding={16} direction="row" align="center" justify="end" spacing="gap-4">
-        <Button variant="text" label={t('Cancel')} onClick={handleNavigateBack} />
-        <Button
-          variant="primary"
-          label={t('Save')}
-          onClick={handleSave}
-          disabled={addedContributors?.length === 0}
-        />
+        <Button variant="link" onClick={handleNavigateBack}>
+          {t('Cancel')}
+        </Button>
+        <Button onClick={handleSave} disabled={addedContributors?.length === 0}>
+          {t('Save')}
+        </Button>
       </Stack>
     </Stack>
   );

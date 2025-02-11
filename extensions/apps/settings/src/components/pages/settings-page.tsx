@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { ChevronRightIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -49,13 +48,12 @@ const SettingsPage: React.FC = () => {
           return (
             <React.Fragment key={`${idx}${item.label}`}>
               {item.clickable && (
-                <Button
-                  plain={true}
-                  customStyle={`w-full ${baseStyle}`}
+                <button
                   onClick={handleSettingsOptionClick(item.label)}
+                  className={`w-full ${baseStyle}`}
                 >
                   {children}
-                </Button>
+                </button>
               )}
               {!item.clickable && <Stack customStyle={baseStyle}>{children}</Stack>}
             </React.Fragment>

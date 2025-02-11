@@ -4,7 +4,7 @@ import PageLayout from './base-layout';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import appRoutes, { BROWSER_NOTIFICATIONS } from '../../routes';
 import NotificationSettingsCard, {
   NotificationsImageSrc,
@@ -71,12 +71,7 @@ const BrowserNotificationsOption: React.FC = () => {
           title={t('Uh-oh! You are not connected!')}
           details={t('To check browser notifications options you must be connected ⚡️')}
         >
-          <Button
-            label={t('Connect')}
-            size="md"
-            variant="primary"
-            onClick={handleConnectButtonClick}
-          />
+          <Button onClick={handleConnectButtonClick}>{t('Connect')}</Button>
         </ErrorLoader>
       </Stack>
     );

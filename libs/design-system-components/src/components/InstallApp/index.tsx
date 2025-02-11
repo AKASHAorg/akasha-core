@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Text, { TextProps } from '@akashaorg/design-system-core/lib/components/Text';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ErrorIcon from './error-icon';
 import InstallIcon from './install-icon';
@@ -163,13 +163,9 @@ const InstallApp = ({
         </Stack>
         <Stack>
           {actions.map(action => (
-            <Button
-              key={action.label}
-              label={action.label}
-              onClick={action.onClick}
-              variant="text"
-              size="lg"
-            />
+            <Button key={action.label} onClick={action.onClick} variant="link">
+              {action.label}
+            </Button>
           ))}
         </Stack>
       </Stack>

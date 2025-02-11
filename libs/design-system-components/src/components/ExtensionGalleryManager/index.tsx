@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { GalleryImage, GalleryImageProps } from './gallery-image';
@@ -63,14 +63,14 @@ export const ExtensionGalleryManager: React.FC<ExtensionGalleryManagerProps> = p
           <Stack direction="row" spacing="gap-x-2" justify="between" align="center">
             <Text variant="h6">{galleryManagerTitle}</Text>
             <Button
-              variant="text"
-              size="md"
-              label={uploadImagesLabel}
+              variant="link"
               onClick={() => {
                 if (images.length !== maxGalleryImages) uploadInputRef.current.click();
               }}
               disabled={uploading}
-            />
+            >
+              {uploadImagesLabel}
+            </Button>
           </Stack>
           <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
             {galleryManagerDescription}
@@ -100,14 +100,13 @@ export const ExtensionGalleryManager: React.FC<ExtensionGalleryManagerProps> = p
             title={<Text variant="h6">{emptyGalleryLabel}</Text>}
             details={
               <Button
-                variant="primary"
-                size="md"
-                label={startUploadingLabel}
                 onClick={() => {
                   uploadInputRef.current.click();
                 }}
-                customStyle="mt-4"
-              />
+                className="mt-4"
+              >
+                {startUploadingLabel}
+              </Button>
             }
             type="list-not-available"
             noWrapperCard
@@ -137,21 +136,20 @@ export const ExtensionGalleryManager: React.FC<ExtensionGalleryManagerProps> = p
             {images.length}/{maxGalleryImages} {imagesLabel}
           </Text>
           <Button
-            variant="text"
-            size="md"
-            label={cancelButton.label}
+            variant="link"
             disabled={cancelButton.disabled}
             onClick={cancelButton.handleClick}
-            customStyle="ml-auto"
-          />
+            className="ml-auto"
+          >
+            {cancelButton.label}
+          </Button>
           <Button
-            variant="primary"
-            size="md"
             loading={uploading}
-            label={saveButton.label}
             disabled={saveButton.disabled}
             onClick={saveButton.handleClick}
-          />
+          >
+            {saveButton.label}
+          </Button>
         </Stack>
       </Stack>
     </Stack>

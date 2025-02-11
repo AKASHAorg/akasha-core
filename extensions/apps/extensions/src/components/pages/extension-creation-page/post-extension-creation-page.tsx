@@ -9,7 +9,7 @@ import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { DRAFT_EXTENSIONS } from '../../../constants';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
@@ -56,12 +56,7 @@ export const PostExtensionCreationPage: React.FC<{ extensionId: string }> = ({ e
         title={`${t('Uh-oh')}! ${t('You are not connected')}!`}
         details={`${t('To view this page you must be connected')} ⚡️`}
       >
-        <Button
-          variant="primary"
-          size="md"
-          label={t('Connect')}
-          onClick={handleConnectButtonClick}
-        />
+        <Button onClick={handleConnectButtonClick}>{t('Connect')}</Button>
       </ErrorLoader>
     );
   }
@@ -101,18 +96,10 @@ You can add more details to your extension, such as a description, gallery & mor
         </Text>
 
         <Stack direction="row" spacing="gap-4">
-          <Button
-            variant="secondary"
-            size="md"
-            label={t('Add Details')}
-            onClick={handleNavigateToEdit}
-          />
-          <Button
-            variant="primary"
-            size="md"
-            label={t('Manage Releases')}
-            onClick={handleNavigateToReleaseManager}
-          />
+          <Button variant="outline" onClick={handleNavigateToEdit}>
+            {t('Add Details')}
+          </Button>
+          <Button onClick={handleNavigateToReleaseManager}>{t('Manage Releases')}</Button>
         </Stack>
         <Card background={{ light: 'grey9', dark: 'grey3' }}>
           <Stack direction="column" spacing="gap-2">

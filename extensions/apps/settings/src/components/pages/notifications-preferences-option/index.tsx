@@ -5,7 +5,7 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { useAkashaStore, useNotifications, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import appRoutes, { PREFERENCES } from '../../../routes';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
@@ -142,12 +142,7 @@ const NotificationsPreferencesOption: React.FC = () => {
           title={t('Uh-oh! You are not connected!')}
           details={t('To check notifications preferences options you must be connected ⚡️')}
         >
-          <Button
-            label={t('Connect')}
-            size="md"
-            variant="primary"
-            onClick={handleConnectButtonClick}
-          />
+          <Button onClick={handleConnectButtonClick}>{t('Connect')}</Button>
         </ErrorLoader>
       </Stack>
     );
@@ -191,23 +186,12 @@ const NotificationsPreferencesOption: React.FC = () => {
 
             {/* Buttons */}
             <Stack direction="row" customStyle="border(t-1 solid grey8 dark:grey5) pt-4 px-3">
-              <Button
-                onClick={handleReset}
-                variant="text"
-                size="md"
-                color="dark:secondaryLight secondaryDark"
-                label={t('Reset')}
-                customStyle="ml-auto"
-              />
-              <Button
-                onClick={handleSave}
-                variant="primary"
-                size="md"
-                color="dark:secondaryLight secondaryDark"
-                label={t('Save')}
-                customStyle="ml-4"
-                loading={loading}
-              />
+              <Button onClick={handleReset} variant="link" className="ml-auto">
+                {t('Reset')}
+              </Button>
+              <Button onClick={handleSave} loading={loading} className="ml-4">
+                {t('Save')}
+              </Button>
             </Stack>
           </Card>
         </>

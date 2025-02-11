@@ -18,7 +18,7 @@ import {
   UIEventData,
 } from '@akashaorg/typings/lib/ui';
 import { SortOrder, AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Dropdown from '@akashaorg/design-system-core/lib/components/Dropdown';
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
@@ -183,12 +183,7 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
         title={`${t('Uh-oh')}! ${t('You are not connected')}!`}
         details={`${t('To check your extensions you must be connected')} ⚡️`}
       >
-        <Button
-          variant="primary"
-          size="md"
-          label={t('Connect')}
-          onClick={handleConnectButtonClick}
-        />
+        <Button onClick={handleConnectButtonClick}>{t('Connect')}</Button>
       </ErrorLoader>
     );
   }
@@ -210,7 +205,9 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
         customStyle="rounded-[20px]"
       >
         <Text variant="body1">{t('Create an extension ✨ 🚀')}</Text>
-        <Button variant="primary" label={t('Create')} onClick={handleNavigateToCreateApp} />
+        <Button size="sm" onClick={handleNavigateToCreateApp}>
+          {t('Create')}
+        </Button>
       </Stack>
       <Stack direction="row" justify="between" align="center" spacing="gap-4">
         <Dropdown
@@ -225,7 +222,9 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
           setSelected={setSelectedStatus}
           customStyle="grow"
         />
-        <Button variant="text" onClick={handleResetClick} label={t('Reset')} />
+        <Button variant="link" size="sm" onClick={handleResetClick}>
+          {t('Reset')}
+        </Button>
       </Stack>
       {error && (
         <ErrorLoader

@@ -1,5 +1,4 @@
 import React from 'react';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { TrashIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -10,7 +9,7 @@ export type DuplexAppButtonProps = {
 
 export const DuplexAppButton: React.FC<DuplexAppButtonProps> = ({ onUninstall }) => {
   return (
-    <Button plain onClick={onUninstall}>
+    <button onClick={onUninstall}>
       <Stack
         direction="row"
         align="center"
@@ -24,6 +23,6 @@ export const DuplexAppButton: React.FC<DuplexAppButtonProps> = ({ onUninstall })
           color={{ light: 'errorLight', dark: 'errorDark' }}
         />
       </Stack>
-    </Button>
+    </button>
   );
 };
