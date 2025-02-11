@@ -69,6 +69,29 @@ type AkashaApp implements Node & AkashaAppInterface
     account: ID
     filters: AkashaAppReleaseInterfaceFiltersInput
   ): Int!
+  worldConfigs(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+
+    """Returns only documents created by the provided account"""
+    account: ID
+    filters: AkashaWorldConfigExtensionInterfaceFiltersInput
+    sorting: AkashaWorldConfigExtensionInterfaceSortingInput
+  ): AkashaWorldConfigExtensionInterfaceConnection!
+  worldsConfigsCount(
+    """Counts only documents created by the provided account"""
+    account: ID
+    filters: AkashaWorldConfigExtensionInterfaceFiltersInput
+  ): Int!
 }
 
 enum AkashaAppApplicationType
@@ -2194,6 +2217,674 @@ input AkashaReflectStreamSortingInput
   reflectionID: SortOrder
 }
 
+type AkashaWorld implements Node & AkashaWorldInterface
+@join__implements(graph: COMPOSEDB, interface: "Node")
+@join__implements(graph: COMPOSEDB, interface: "AkashaWorldInterface")
+@join__type(graph: COMPOSEDB)
+{
+  id: ID!
+  icon: AkashaWorldImageVersions
+  name: String!
+  active: Boolean!
+  createdAt: DateTime!
+  instanceURL: URI
+  extensionPublishers: [CeramicAccount]
+
+  """Account controlling the document"""
+  creator: CeramicAccount!
+  configInfo(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+
+    """Returns only documents created by the provided account"""
+    account: ID
+    filters: AkashaWorldConfigInterfaceFiltersInput
+    sorting: AkashaWorldConfigInterfaceSortingInput
+  ): AkashaWorldConfigInterfaceConnection!
+  metaInfo(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+
+    """Returns only documents created by the provided account"""
+    account: ID
+    filters: AkashaWorldMetaInfoInterfaceFiltersInput
+    sorting: AkashaWorldMetaInfoInterfaceSortingInput
+  ): AkashaWorldMetaInfoInterfaceConnection!
+}
+
+type AkashaWorldConfig implements Node & AkashaWorldConfigInterface
+@join__implements(graph: COMPOSEDB, interface: "Node")
+@join__implements(graph: COMPOSEDB, interface: "AkashaWorldConfigInterface")
+@join__type(graph: COMPOSEDB)
+{
+  id: ID!
+  active: Boolean!
+  worldID: CeramicStreamID!
+  createdAt: DateTime!
+  layoutExtension: CeramicStreamID!
+  homepageExtension: CeramicStreamID!
+  registryExtension: CeramicStreamID!
+  world: AkashaWorldInterface
+
+  """Account controlling the document"""
+  creator: CeramicAccount!
+  extensions(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+
+    """Returns only documents created by the provided account"""
+    account: ID
+    filters: AkashaWorldConfigExtensionInterfaceFiltersInput
+    sorting: AkashaWorldConfigExtensionInterfaceSortingInput
+  ): AkashaWorldConfigExtensionInterfaceConnection!
+}
+
+"""A connection to a list of items."""
+type AkashaWorldConfigConnection
+@join__type(graph: COMPOSEDB)
+{
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [AkashaWorldConfigEdge]
+}
+
+"""An edge in a connection."""
+type AkashaWorldConfigEdge
+@join__type(graph: COMPOSEDB)
+{
+  """The item at the end of the edge"""
+  node: AkashaWorldConfig
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type AkashaWorldConfigExtension implements Node & AkashaWorldConfigExtensionInterface
+@join__implements(graph: COMPOSEDB, interface: "Node")
+@join__implements(graph: COMPOSEDB, interface: "AkashaWorldConfigExtensionInterface")
+@join__type(graph: COMPOSEDB)
+{
+  id: ID!
+  type: String
+  active: Boolean!
+  optional: Boolean
+  position: Int
+  createdAt: DateTime!
+  extensionID: CeramicStreamID!
+  worldConfigID: CeramicStreamID!
+
+  """Account controlling the document"""
+  creator: CeramicAccount!
+  extension: AkashaAppInterface
+  worldConfig: AkashaWorldConfigInterface
+}
+
+"""A connection to a list of items."""
+type AkashaWorldConfigExtensionConnection
+@join__type(graph: COMPOSEDB)
+{
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [AkashaWorldConfigExtensionEdge]
+}
+
+"""An edge in a connection."""
+type AkashaWorldConfigExtensionEdge
+@join__type(graph: COMPOSEDB)
+{
+  """The item at the end of the edge"""
+  node: AkashaWorldConfigExtension
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+input AkashaWorldConfigExtensionFiltersInput
+@join__type(graph: COMPOSEDB)
+{
+  where: AkashaWorldConfigExtensionObjectFilterInput
+  and: [AkashaWorldConfigExtensionFiltersInput!]
+  or: [AkashaWorldConfigExtensionFiltersInput!]
+  not: AkashaWorldConfigExtensionFiltersInput
+}
+
+input AkashaWorldConfigExtensionInput
+@join__type(graph: COMPOSEDB)
+{
+  type: String
+  active: Boolean!
+  optional: Boolean
+  position: Int
+  createdAt: DateTime!
+  extensionID: CeramicStreamID!
+  worldConfigID: CeramicStreamID!
+}
+
+interface AkashaWorldConfigExtensionInterface implements Node
+@join__implements(graph: COMPOSEDB, interface: "Node")
+@join__type(graph: COMPOSEDB)
+{
+  id: ID!
+  type: String
+  active: Boolean!
+  optional: Boolean
+  position: Int
+  createdAt: DateTime!
+  extensionID: CeramicStreamID!
+  worldConfigID: CeramicStreamID!
+
+  """Account controlling the document"""
+  creator: CeramicAccount!
+  extension: AkashaAppInterface
+  worldConfig: AkashaWorldConfigInterface
+}
+
+"""A connection to a list of items."""
+type AkashaWorldConfigExtensionInterfaceConnection
+@join__type(graph: COMPOSEDB)
+{
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [AkashaWorldConfigExtensionInterfaceEdge]
+}
+
+"""An edge in a connection."""
+type AkashaWorldConfigExtensionInterfaceEdge
+@join__type(graph: COMPOSEDB)
+{
+  """The item at the end of the edge"""
+  node: AkashaWorldConfigExtensionInterface
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+input AkashaWorldConfigExtensionInterfaceFiltersInput
+@join__type(graph: COMPOSEDB)
+{
+  where: AkashaWorldConfigExtensionInterfaceObjectFilterInput
+  and: [AkashaWorldConfigExtensionInterfaceFiltersInput!]
+  or: [AkashaWorldConfigExtensionInterfaceFiltersInput!]
+  not: AkashaWorldConfigExtensionInterfaceFiltersInput
+}
+
+input AkashaWorldConfigExtensionInterfaceObjectFilterInput
+@join__type(graph: COMPOSEDB)
+{
+  type: StringValueFilterInput
+  active: BooleanValueFilterInput
+  optional: BooleanValueFilterInput
+  position: IntValueFilterInput
+  createdAt: StringValueFilterInput
+  extensionID: StringValueFilterInput
+  worldConfigID: StringValueFilterInput
+}
+
+input AkashaWorldConfigExtensionInterfaceSortingInput
+@join__type(graph: COMPOSEDB)
+{
+  type: SortOrder
+  active: SortOrder
+  optional: SortOrder
+  position: SortOrder
+  createdAt: SortOrder
+  extensionID: SortOrder
+  worldConfigID: SortOrder
+}
+
+input AkashaWorldConfigExtensionObjectFilterInput
+@join__type(graph: COMPOSEDB)
+{
+  type: StringValueFilterInput
+  active: BooleanValueFilterInput
+  optional: BooleanValueFilterInput
+  position: IntValueFilterInput
+  createdAt: StringValueFilterInput
+  extensionID: StringValueFilterInput
+  worldConfigID: StringValueFilterInput
+}
+
+input AkashaWorldConfigExtensionSortingInput
+@join__type(graph: COMPOSEDB)
+{
+  type: SortOrder
+  active: SortOrder
+  optional: SortOrder
+  position: SortOrder
+  createdAt: SortOrder
+  extensionID: SortOrder
+  worldConfigID: SortOrder
+}
+
+input AkashaWorldConfigFiltersInput
+@join__type(graph: COMPOSEDB)
+{
+  where: AkashaWorldConfigObjectFilterInput
+  and: [AkashaWorldConfigFiltersInput!]
+  or: [AkashaWorldConfigFiltersInput!]
+  not: AkashaWorldConfigFiltersInput
+}
+
+input AkashaWorldConfigInput
+@join__type(graph: COMPOSEDB)
+{
+  active: Boolean!
+  worldID: CeramicStreamID!
+  createdAt: DateTime!
+  layoutExtension: CeramicStreamID!
+  homepageExtension: CeramicStreamID!
+  registryExtension: CeramicStreamID!
+}
+
+interface AkashaWorldConfigInterface implements Node
+@join__implements(graph: COMPOSEDB, interface: "Node")
+@join__type(graph: COMPOSEDB)
+{
+  id: ID!
+  active: Boolean!
+  worldID: CeramicStreamID!
+  createdAt: DateTime!
+  layoutExtension: CeramicStreamID!
+  homepageExtension: CeramicStreamID!
+  registryExtension: CeramicStreamID!
+  world: AkashaWorldInterface
+
+  """Account controlling the document"""
+  creator: CeramicAccount!
+}
+
+"""A connection to a list of items."""
+type AkashaWorldConfigInterfaceConnection
+@join__type(graph: COMPOSEDB)
+{
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [AkashaWorldConfigInterfaceEdge]
+}
+
+"""An edge in a connection."""
+type AkashaWorldConfigInterfaceEdge
+@join__type(graph: COMPOSEDB)
+{
+  """The item at the end of the edge"""
+  node: AkashaWorldConfigInterface
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+input AkashaWorldConfigInterfaceFiltersInput
+@join__type(graph: COMPOSEDB)
+{
+  where: AkashaWorldConfigInterfaceObjectFilterInput
+  and: [AkashaWorldConfigInterfaceFiltersInput!]
+  or: [AkashaWorldConfigInterfaceFiltersInput!]
+  not: AkashaWorldConfigInterfaceFiltersInput
+}
+
+input AkashaWorldConfigInterfaceObjectFilterInput
+@join__type(graph: COMPOSEDB)
+{
+  active: BooleanValueFilterInput
+  worldID: StringValueFilterInput
+  createdAt: StringValueFilterInput
+  layoutExtension: StringValueFilterInput
+  homepageExtension: StringValueFilterInput
+  registryExtension: StringValueFilterInput
+}
+
+input AkashaWorldConfigInterfaceSortingInput
+@join__type(graph: COMPOSEDB)
+{
+  active: SortOrder
+  worldID: SortOrder
+  createdAt: SortOrder
+  layoutExtension: SortOrder
+  homepageExtension: SortOrder
+  registryExtension: SortOrder
+}
+
+input AkashaWorldConfigObjectFilterInput
+@join__type(graph: COMPOSEDB)
+{
+  active: BooleanValueFilterInput
+  worldID: StringValueFilterInput
+  createdAt: StringValueFilterInput
+  layoutExtension: StringValueFilterInput
+  homepageExtension: StringValueFilterInput
+  registryExtension: StringValueFilterInput
+}
+
+input AkashaWorldConfigSortingInput
+@join__type(graph: COMPOSEDB)
+{
+  active: SortOrder
+  worldID: SortOrder
+  createdAt: SortOrder
+  layoutExtension: SortOrder
+  homepageExtension: SortOrder
+  registryExtension: SortOrder
+}
+
+"""A connection to a list of items."""
+type AkashaWorldConnection
+@join__type(graph: COMPOSEDB)
+{
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [AkashaWorldEdge]
+}
+
+"""An edge in a connection."""
+type AkashaWorldEdge
+@join__type(graph: COMPOSEDB)
+{
+  """The item at the end of the edge"""
+  node: AkashaWorld
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+input AkashaWorldFiltersInput
+@join__type(graph: COMPOSEDB)
+{
+  where: AkashaWorldObjectFilterInput
+  and: [AkashaWorldFiltersInput!]
+  or: [AkashaWorldFiltersInput!]
+  not: AkashaWorldFiltersInput
+}
+
+type AkashaWorldImageSource
+@join__type(graph: COMPOSEDB)
+{
+  src: URI!
+  sizes: String
+  width: Int
+  height: Int
+}
+
+input AkashaWorldImageSourceInput
+@join__type(graph: COMPOSEDB)
+{
+  src: URI!
+  sizes: String
+  width: Int
+  height: Int
+}
+
+type AkashaWorldImageVersions
+@join__type(graph: COMPOSEDB)
+{
+  default: AkashaWorldImageSource!
+  alternatives: [AkashaWorldImageSource]
+}
+
+input AkashaWorldImageVersionsInput
+@join__type(graph: COMPOSEDB)
+{
+  default: AkashaWorldImageSourceInput!
+  alternatives: [AkashaWorldImageSourceInput]
+}
+
+input AkashaWorldInput
+@join__type(graph: COMPOSEDB)
+{
+  icon: AkashaWorldImageVersionsInput
+  name: String!
+  active: Boolean!
+  createdAt: DateTime!
+  instanceURL: URI
+  extensionPublishers: [DID]
+}
+
+interface AkashaWorldInterface implements Node
+@join__implements(graph: COMPOSEDB, interface: "Node")
+@join__type(graph: COMPOSEDB)
+{
+  id: ID!
+  icon: AkashaWorldImageVersions
+  name: String!
+  active: Boolean!
+  createdAt: DateTime!
+  instanceURL: URI
+  extensionPublishers: [CeramicAccount]
+
+  """Account controlling the document"""
+  creator: CeramicAccount!
+}
+
+"""A connection to a list of items."""
+type AkashaWorldInterfaceConnection
+@join__type(graph: COMPOSEDB)
+{
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [AkashaWorldInterfaceEdge]
+}
+
+"""An edge in a connection."""
+type AkashaWorldInterfaceEdge
+@join__type(graph: COMPOSEDB)
+{
+  """The item at the end of the edge"""
+  node: AkashaWorldInterface
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+input AkashaWorldInterfaceFiltersInput
+@join__type(graph: COMPOSEDB)
+{
+  where: AkashaWorldInterfaceObjectFilterInput
+  and: [AkashaWorldInterfaceFiltersInput!]
+  or: [AkashaWorldInterfaceFiltersInput!]
+  not: AkashaWorldInterfaceFiltersInput
+}
+
+input AkashaWorldInterfaceObjectFilterInput
+@join__type(graph: COMPOSEDB)
+{
+  name: StringValueFilterInput
+  active: BooleanValueFilterInput
+  createdAt: StringValueFilterInput
+  instanceURL: StringValueFilterInput
+}
+
+input AkashaWorldInterfaceSortingInput
+@join__type(graph: COMPOSEDB)
+{
+  name: SortOrder
+  active: SortOrder
+  createdAt: SortOrder
+  instanceURL: SortOrder
+}
+
+type AkashaWorldMetaInfo implements Node & AkashaWorldMetaInfoInterface
+@join__implements(graph: COMPOSEDB, interface: "Node")
+@join__implements(graph: COMPOSEDB, interface: "AkashaWorldMetaInfoInterface")
+@join__type(graph: COMPOSEDB)
+{
+  id: ID!
+  worldID: CeramicStreamID!
+  keywords: [String]
+  description: String
+  socialLinks: [SocialLink]
+  guidelinesUrl: URI
+  world: AkashaWorldInterface
+}
+
+"""A connection to a list of items."""
+type AkashaWorldMetaInfoConnection
+@join__type(graph: COMPOSEDB)
+{
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [AkashaWorldMetaInfoEdge]
+}
+
+"""An edge in a connection."""
+type AkashaWorldMetaInfoEdge
+@join__type(graph: COMPOSEDB)
+{
+  """The item at the end of the edge"""
+  node: AkashaWorldMetaInfo
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+input AkashaWorldMetaInfoFiltersInput
+@join__type(graph: COMPOSEDB)
+{
+  where: AkashaWorldMetaInfoObjectFilterInput
+  and: [AkashaWorldMetaInfoFiltersInput!]
+  or: [AkashaWorldMetaInfoFiltersInput!]
+  not: AkashaWorldMetaInfoFiltersInput
+}
+
+input AkashaWorldMetaInfoInput
+@join__type(graph: COMPOSEDB)
+{
+  worldID: CeramicStreamID!
+  keywords: [String]
+  description: String
+  socialLinks: [SocialLinkInput]
+  guidelinesUrl: URI
+}
+
+interface AkashaWorldMetaInfoInterface implements Node
+@join__implements(graph: COMPOSEDB, interface: "Node")
+@join__type(graph: COMPOSEDB)
+{
+  id: ID!
+  worldID: CeramicStreamID!
+  keywords: [String]
+  description: String
+  socialLinks: [SocialLink]
+  guidelinesUrl: URI
+  world: AkashaWorldInterface
+}
+
+"""A connection to a list of items."""
+type AkashaWorldMetaInfoInterfaceConnection
+@join__type(graph: COMPOSEDB)
+{
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [AkashaWorldMetaInfoInterfaceEdge]
+}
+
+"""An edge in a connection."""
+type AkashaWorldMetaInfoInterfaceEdge
+@join__type(graph: COMPOSEDB)
+{
+  """The item at the end of the edge"""
+  node: AkashaWorldMetaInfoInterface
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+input AkashaWorldMetaInfoInterfaceFiltersInput
+@join__type(graph: COMPOSEDB)
+{
+  where: AkashaWorldMetaInfoInterfaceObjectFilterInput
+  and: [AkashaWorldMetaInfoInterfaceFiltersInput!]
+  or: [AkashaWorldMetaInfoInterfaceFiltersInput!]
+  not: AkashaWorldMetaInfoInterfaceFiltersInput
+}
+
+input AkashaWorldMetaInfoInterfaceObjectFilterInput
+@join__type(graph: COMPOSEDB)
+{
+  worldID: StringValueFilterInput
+  description: StringValueFilterInput
+  guidelinesUrl: StringValueFilterInput
+}
+
+input AkashaWorldMetaInfoInterfaceSortingInput
+@join__type(graph: COMPOSEDB)
+{
+  worldID: SortOrder
+  description: SortOrder
+  guidelinesUrl: SortOrder
+}
+
+input AkashaWorldMetaInfoObjectFilterInput
+@join__type(graph: COMPOSEDB)
+{
+  worldID: StringValueFilterInput
+  guidelinesUrl: StringValueFilterInput
+}
+
+input AkashaWorldMetaInfoSortingInput
+@join__type(graph: COMPOSEDB)
+{
+  worldID: SortOrder
+  guidelinesUrl: SortOrder
+}
+
+input AkashaWorldObjectFilterInput
+@join__type(graph: COMPOSEDB)
+{
+  name: StringValueFilterInput
+  active: BooleanValueFilterInput
+  createdAt: StringValueFilterInput
+}
+
+input AkashaWorldSortingInput
+@join__type(graph: COMPOSEDB)
+{
+  name: SortOrder
+  active: SortOrder
+  createdAt: SortOrder
+}
+
 type AppImageSource
 @join__type(graph: COMPOSEDB)
 {
@@ -2738,6 +3429,138 @@ type CeramicAccount implements Node
     sorting: AkashaReflectStreamSortingInput
   ): AkashaReflectStreamConnection
   akashaReflectStreamListCount(filters: AkashaReflectStreamFiltersInput): Int!
+  akashaWorld(with: WithAkashaWorldInput!): AkashaWorld
+  akashaWorldConfig(with: WithAkashaWorldConfigInput!): AkashaWorldConfig
+  akashaWorldConfigExtension(with: WithAkashaWorldConfigExtensionInput!): AkashaWorldConfigExtension
+  akashaWorldConfigExtensionInterfaceList(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    filters: AkashaWorldConfigExtensionInterfaceFiltersInput
+    sorting: AkashaWorldConfigExtensionInterfaceSortingInput
+  ): AkashaWorldConfigExtensionInterfaceConnection
+  akashaWorldConfigExtensionInterfaceListCount(filters: AkashaWorldConfigExtensionInterfaceFiltersInput): Int!
+  akashaWorldConfigExtensionList(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    filters: AkashaWorldConfigExtensionFiltersInput
+    sorting: AkashaWorldConfigExtensionSortingInput
+  ): AkashaWorldConfigExtensionConnection
+  akashaWorldConfigExtensionListCount(filters: AkashaWorldConfigExtensionFiltersInput): Int!
+  akashaWorldConfigInterfaceList(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    filters: AkashaWorldConfigInterfaceFiltersInput
+    sorting: AkashaWorldConfigInterfaceSortingInput
+  ): AkashaWorldConfigInterfaceConnection
+  akashaWorldConfigInterfaceListCount(filters: AkashaWorldConfigInterfaceFiltersInput): Int!
+  akashaWorldConfigList(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    filters: AkashaWorldConfigFiltersInput
+    sorting: AkashaWorldConfigSortingInput
+  ): AkashaWorldConfigConnection
+  akashaWorldConfigListCount(filters: AkashaWorldConfigFiltersInput): Int!
+  akashaWorldInterfaceList(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    filters: AkashaWorldInterfaceFiltersInput
+    sorting: AkashaWorldInterfaceSortingInput
+  ): AkashaWorldInterfaceConnection
+  akashaWorldInterfaceListCount(filters: AkashaWorldInterfaceFiltersInput): Int!
+  akashaWorldList(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    filters: AkashaWorldFiltersInput
+    sorting: AkashaWorldSortingInput
+  ): AkashaWorldConnection
+  akashaWorldListCount(filters: AkashaWorldFiltersInput): Int!
+  akashaWorldMetaInfo(with: WithAkashaWorldMetaInfoInput!): AkashaWorldMetaInfo
+  akashaWorldMetaInfoInterfaceList(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    filters: AkashaWorldMetaInfoInterfaceFiltersInput
+    sorting: AkashaWorldMetaInfoInterfaceSortingInput
+  ): AkashaWorldMetaInfoInterfaceConnection
+  akashaWorldMetaInfoInterfaceListCount(filters: AkashaWorldMetaInfoInterfaceFiltersInput): Int!
+  akashaWorldMetaInfoList(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    filters: AkashaWorldMetaInfoFiltersInput
+    sorting: AkashaWorldMetaInfoSortingInput
+  ): AkashaWorldMetaInfoConnection
+  akashaWorldMetaInfoListCount(filters: AkashaWorldMetaInfoFiltersInput): Int!
 }
 
 """A Ceramic Commit ID"""
@@ -3260,6 +4083,98 @@ type EnableIndexingAkashaReflectStreamPayload
   clientMutationId: String
 }
 
+input EnableIndexingAkashaWorldConfigExtensionInput
+@join__type(graph: COMPOSEDB)
+{
+  id: ID!
+  shouldIndex: Boolean!
+  clientMutationId: String
+}
+
+type EnableIndexingAkashaWorldConfigExtensionPayload
+@join__type(graph: COMPOSEDB)
+{
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Account currently authenticated on the Ceramic instance, if set"""
+  viewer: CeramicAccount
+  document: AkashaWorldConfigExtension
+  clientMutationId: String
+}
+
+input EnableIndexingAkashaWorldConfigInput
+@join__type(graph: COMPOSEDB)
+{
+  id: ID!
+  shouldIndex: Boolean!
+  clientMutationId: String
+}
+
+type EnableIndexingAkashaWorldConfigPayload
+@join__type(graph: COMPOSEDB)
+{
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Account currently authenticated on the Ceramic instance, if set"""
+  viewer: CeramicAccount
+  document: AkashaWorldConfig
+  clientMutationId: String
+}
+
+input EnableIndexingAkashaWorldInput
+@join__type(graph: COMPOSEDB)
+{
+  id: ID!
+  shouldIndex: Boolean!
+  clientMutationId: String
+}
+
+input EnableIndexingAkashaWorldMetaInfoInput
+@join__type(graph: COMPOSEDB)
+{
+  id: ID!
+  shouldIndex: Boolean!
+  clientMutationId: String
+}
+
+type EnableIndexingAkashaWorldMetaInfoPayload
+@join__type(graph: COMPOSEDB)
+{
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Account currently authenticated on the Ceramic instance, if set"""
+  viewer: CeramicAccount
+  document: AkashaWorldMetaInfo
+  clientMutationId: String
+}
+
+type EnableIndexingAkashaWorldPayload
+@join__type(graph: COMPOSEDB)
+{
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Account currently authenticated on the Ceramic instance, if set"""
+  viewer: CeramicAccount
+  document: AkashaWorld
+  clientMutationId: String
+}
+
 type IndexAppPayload
 @join__type(graph: STREAMS)
 {
@@ -3331,6 +4246,20 @@ type IndexReflectPayloadDocument
 @join__type(graph: STREAMS)
 {
   reflectionID: String!
+}
+
+input IntValueFilterInput
+@join__type(graph: COMPOSEDB)
+{
+  isNull: Boolean
+  equalTo: Int
+  notEqualTo: Int
+  in: [Int!]
+  notIn: [Int!]
+  lessThan: Int
+  lessThanOrEqualTo: Int
+  greaterThan: Int
+  greaterThanOrEqualTo: Int
 }
 
 scalar join__FieldSet
@@ -3415,6 +4344,18 @@ type Mutation
   setAkashaReflectStream(input: SetAkashaReflectStreamInput!): SetAkashaReflectStreamPayload @join__field(graph: COMPOSEDB)
   updateAkashaReflectStream(input: UpdateAkashaReflectStreamInput!): UpdateAkashaReflectStreamPayload @join__field(graph: COMPOSEDB)
   enableIndexingAkashaReflectStream(input: EnableIndexingAkashaReflectStreamInput!): EnableIndexingAkashaReflectStreamPayload @join__field(graph: COMPOSEDB)
+  setAkashaWorld(input: SetAkashaWorldInput!): SetAkashaWorldPayload @join__field(graph: COMPOSEDB)
+  updateAkashaWorld(input: UpdateAkashaWorldInput!): UpdateAkashaWorldPayload @join__field(graph: COMPOSEDB)
+  enableIndexingAkashaWorld(input: EnableIndexingAkashaWorldInput!): EnableIndexingAkashaWorldPayload @join__field(graph: COMPOSEDB)
+  setAkashaWorldConfig(input: SetAkashaWorldConfigInput!): SetAkashaWorldConfigPayload @join__field(graph: COMPOSEDB)
+  updateAkashaWorldConfig(input: UpdateAkashaWorldConfigInput!): UpdateAkashaWorldConfigPayload @join__field(graph: COMPOSEDB)
+  enableIndexingAkashaWorldConfig(input: EnableIndexingAkashaWorldConfigInput!): EnableIndexingAkashaWorldConfigPayload @join__field(graph: COMPOSEDB)
+  setAkashaWorldConfigExtension(input: SetAkashaWorldConfigExtensionInput!): SetAkashaWorldConfigExtensionPayload @join__field(graph: COMPOSEDB)
+  updateAkashaWorldConfigExtension(input: UpdateAkashaWorldConfigExtensionInput!): UpdateAkashaWorldConfigExtensionPayload @join__field(graph: COMPOSEDB)
+  enableIndexingAkashaWorldConfigExtension(input: EnableIndexingAkashaWorldConfigExtensionInput!): EnableIndexingAkashaWorldConfigExtensionPayload @join__field(graph: COMPOSEDB)
+  setAkashaWorldMetaInfo(input: SetAkashaWorldMetaInfoInput!): SetAkashaWorldMetaInfoPayload @join__field(graph: COMPOSEDB)
+  updateAkashaWorldMetaInfo(input: UpdateAkashaWorldMetaInfoInput!): UpdateAkashaWorldMetaInfoPayload @join__field(graph: COMPOSEDB)
+  enableIndexingAkashaWorldMetaInfo(input: EnableIndexingAkashaWorldMetaInfoInput!): EnableIndexingAkashaWorldMetaInfoPayload @join__field(graph: COMPOSEDB)
   indexProfile(jws: DID_JWS, capability: CACAO_CAPABILITY): IndexProfilePayload @join__field(graph: STREAMS)
   indexBeam(jws: DID_JWS, capability: CACAO_CAPABILITY): IndexBeamPayload @join__field(graph: STREAMS)
   indexReflection(jws: DID_JWS, capability: CACAO_CAPABILITY): IndexReflectPayload @join__field(graph: STREAMS)
@@ -3568,6 +4509,39 @@ input PartialAkashaReflectStreamInput
   status: AkashaReflectStreamModerationStatus
   isReply: Boolean
   replyTo: CeramicStreamID
+}
+
+input PartialAkashaWorldConfigExtensionInput
+@join__type(graph: COMPOSEDB)
+{
+  type: String
+  optional: Boolean
+  position: Int
+}
+
+input PartialAkashaWorldConfigInput
+@join__type(graph: COMPOSEDB)
+{
+  layoutExtension: CeramicStreamID
+  homepageExtension: CeramicStreamID
+  registryExtension: CeramicStreamID
+}
+
+input PartialAkashaWorldInput
+@join__type(graph: COMPOSEDB)
+{
+  icon: AkashaWorldImageVersionsInput
+  instanceURL: URI
+  extensionPublishers: [DID]
+}
+
+input PartialAkashaWorldMetaInfoInput
+@join__type(graph: COMPOSEDB)
+{
+  keywords: [String]
+  description: String
+  socialLinks: [SocialLinkInput]
+  guidelinesUrl: URI
 }
 
 type ProfileImageSource
@@ -4042,6 +5016,134 @@ type Query
     sorting: AkashaReflectStreamSortingInput
   ): AkashaReflectStreamConnection @join__field(graph: COMPOSEDB)
   akashaReflectStreamCount(filters: AkashaReflectStreamFiltersInput): Int! @join__field(graph: COMPOSEDB)
+  akashaWorldIndex(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    filters: AkashaWorldFiltersInput
+    sorting: AkashaWorldSortingInput
+  ): AkashaWorldConnection @join__field(graph: COMPOSEDB)
+  akashaWorldCount(filters: AkashaWorldFiltersInput): Int! @join__field(graph: COMPOSEDB)
+  akashaWorldConfigIndex(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    filters: AkashaWorldConfigFiltersInput
+    sorting: AkashaWorldConfigSortingInput
+  ): AkashaWorldConfigConnection @join__field(graph: COMPOSEDB)
+  akashaWorldConfigCount(filters: AkashaWorldConfigFiltersInput): Int! @join__field(graph: COMPOSEDB)
+  akashaWorldConfigExtensionIndex(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    filters: AkashaWorldConfigExtensionFiltersInput
+    sorting: AkashaWorldConfigExtensionSortingInput
+  ): AkashaWorldConfigExtensionConnection @join__field(graph: COMPOSEDB)
+  akashaWorldConfigExtensionCount(filters: AkashaWorldConfigExtensionFiltersInput): Int! @join__field(graph: COMPOSEDB)
+  akashaWorldConfigExtensionInterfaceIndex(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    filters: AkashaWorldConfigExtensionInterfaceFiltersInput
+    sorting: AkashaWorldConfigExtensionInterfaceSortingInput
+  ): AkashaWorldConfigExtensionInterfaceConnection @join__field(graph: COMPOSEDB)
+  akashaWorldConfigExtensionInterfaceCount(filters: AkashaWorldConfigExtensionInterfaceFiltersInput): Int! @join__field(graph: COMPOSEDB)
+  akashaWorldConfigInterfaceIndex(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    filters: AkashaWorldConfigInterfaceFiltersInput
+    sorting: AkashaWorldConfigInterfaceSortingInput
+  ): AkashaWorldConfigInterfaceConnection @join__field(graph: COMPOSEDB)
+  akashaWorldConfigInterfaceCount(filters: AkashaWorldConfigInterfaceFiltersInput): Int! @join__field(graph: COMPOSEDB)
+  akashaWorldInterfaceIndex(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    filters: AkashaWorldInterfaceFiltersInput
+    sorting: AkashaWorldInterfaceSortingInput
+  ): AkashaWorldInterfaceConnection @join__field(graph: COMPOSEDB)
+  akashaWorldInterfaceCount(filters: AkashaWorldInterfaceFiltersInput): Int! @join__field(graph: COMPOSEDB)
+  akashaWorldMetaInfoIndex(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    filters: AkashaWorldMetaInfoFiltersInput
+    sorting: AkashaWorldMetaInfoSortingInput
+  ): AkashaWorldMetaInfoConnection @join__field(graph: COMPOSEDB)
+  akashaWorldMetaInfoCount(filters: AkashaWorldMetaInfoFiltersInput): Int! @join__field(graph: COMPOSEDB)
+  akashaWorldMetaInfoInterfaceIndex(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    filters: AkashaWorldMetaInfoInterfaceFiltersInput
+    sorting: AkashaWorldMetaInfoInterfaceSortingInput
+  ): AkashaWorldMetaInfoInterfaceConnection @join__field(graph: COMPOSEDB)
+  akashaWorldMetaInfoInterfaceCount(filters: AkashaWorldMetaInfoInterfaceFiltersInput): Int! @join__field(graph: COMPOSEDB)
   serviceStatus: String @join__field(graph: STREAMS)
 }
 
@@ -4360,6 +5462,98 @@ type SetAkashaReflectStreamPayload
   clientMutationId: String
 }
 
+input SetAkashaWorldConfigExtensionInput
+@join__type(graph: COMPOSEDB)
+{
+  content: AkashaWorldConfigExtensionInput!
+  options: SetOptionsInput
+  clientMutationId: String
+}
+
+type SetAkashaWorldConfigExtensionPayload
+@join__type(graph: COMPOSEDB)
+{
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Account currently authenticated on the Ceramic instance, if set"""
+  viewer: CeramicAccount
+  document: AkashaWorldConfigExtension!
+  clientMutationId: String
+}
+
+input SetAkashaWorldConfigInput
+@join__type(graph: COMPOSEDB)
+{
+  content: AkashaWorldConfigInput!
+  options: SetOptionsInput
+  clientMutationId: String
+}
+
+type SetAkashaWorldConfigPayload
+@join__type(graph: COMPOSEDB)
+{
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Account currently authenticated on the Ceramic instance, if set"""
+  viewer: CeramicAccount
+  document: AkashaWorldConfig!
+  clientMutationId: String
+}
+
+input SetAkashaWorldInput
+@join__type(graph: COMPOSEDB)
+{
+  content: AkashaWorldInput!
+  options: SetOptionsInput
+  clientMutationId: String
+}
+
+input SetAkashaWorldMetaInfoInput
+@join__type(graph: COMPOSEDB)
+{
+  content: AkashaWorldMetaInfoInput!
+  options: SetOptionsInput
+  clientMutationId: String
+}
+
+type SetAkashaWorldMetaInfoPayload
+@join__type(graph: COMPOSEDB)
+{
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Account currently authenticated on the Ceramic instance, if set"""
+  viewer: CeramicAccount
+  document: AkashaWorldMetaInfo!
+  clientMutationId: String
+}
+
+type SetAkashaWorldPayload
+@join__type(graph: COMPOSEDB)
+{
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Account currently authenticated on the Ceramic instance, if set"""
+  viewer: CeramicAccount
+  document: AkashaWorld!
+  clientMutationId: String
+}
+
 input SetOptionsInput
 @join__type(graph: COMPOSEDB)
 {
@@ -4370,6 +5564,20 @@ input SetOptionsInput
   Maximum amount of time to lookup the stream over the network, in seconds - see https://developers.ceramic.network/reference/typescript/interfaces/_ceramicnetwork_common.CreateOpts.html#syncTimeoutSeconds
   """
   syncTimeout: Int
+}
+
+type SocialLink
+@join__type(graph: COMPOSEDB)
+{
+  href: URI!
+  name: String!
+}
+
+input SocialLinkInput
+@join__type(graph: COMPOSEDB)
+{
+  href: URI!
+  name: String!
 }
 
 enum SortOrder
@@ -4777,6 +5985,102 @@ type UpdateAkashaReflectStreamPayload
   clientMutationId: String
 }
 
+input UpdateAkashaWorldConfigExtensionInput
+@join__type(graph: COMPOSEDB)
+{
+  id: ID!
+  options: UpdateOptionsInput
+  content: PartialAkashaWorldConfigExtensionInput!
+  clientMutationId: String
+}
+
+type UpdateAkashaWorldConfigExtensionPayload
+@join__type(graph: COMPOSEDB)
+{
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Account currently authenticated on the Ceramic instance, if set"""
+  viewer: CeramicAccount
+  document: AkashaWorldConfigExtension!
+  clientMutationId: String
+}
+
+input UpdateAkashaWorldConfigInput
+@join__type(graph: COMPOSEDB)
+{
+  id: ID!
+  options: UpdateOptionsInput
+  content: PartialAkashaWorldConfigInput!
+  clientMutationId: String
+}
+
+type UpdateAkashaWorldConfigPayload
+@join__type(graph: COMPOSEDB)
+{
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Account currently authenticated on the Ceramic instance, if set"""
+  viewer: CeramicAccount
+  document: AkashaWorldConfig!
+  clientMutationId: String
+}
+
+input UpdateAkashaWorldInput
+@join__type(graph: COMPOSEDB)
+{
+  id: ID!
+  options: UpdateOptionsInput
+  content: PartialAkashaWorldInput!
+  clientMutationId: String
+}
+
+input UpdateAkashaWorldMetaInfoInput
+@join__type(graph: COMPOSEDB)
+{
+  id: ID!
+  options: UpdateOptionsInput
+  content: PartialAkashaWorldMetaInfoInput!
+  clientMutationId: String
+}
+
+type UpdateAkashaWorldMetaInfoPayload
+@join__type(graph: COMPOSEDB)
+{
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Account currently authenticated on the Ceramic instance, if set"""
+  viewer: CeramicAccount
+  document: AkashaWorldMetaInfo!
+  clientMutationId: String
+}
+
+type UpdateAkashaWorldPayload
+@join__type(graph: COMPOSEDB)
+{
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Account currently authenticated on the Ceramic instance, if set"""
+  viewer: CeramicAccount
+  document: AkashaWorld!
+  clientMutationId: String
+}
+
 input UpdateOptionsInput
 @join__type(graph: COMPOSEDB)
 {
@@ -4867,4 +6171,32 @@ input WithAkashaReflectStreamInput
 @join__type(graph: COMPOSEDB)
 {
   reflectionID: CeramicStreamID!
+}
+
+input WithAkashaWorldConfigExtensionInput
+@join__type(graph: COMPOSEDB)
+{
+  extensionID: CeramicStreamID!
+  worldConfigID: CeramicStreamID!
+  active: Boolean!
+}
+
+input WithAkashaWorldConfigInput
+@join__type(graph: COMPOSEDB)
+{
+  worldID: CeramicStreamID!
+  active: Boolean!
+}
+
+input WithAkashaWorldInput
+@join__type(graph: COMPOSEDB)
+{
+  name: String!
+  active: Boolean!
+}
+
+input WithAkashaWorldMetaInfoInput
+@join__type(graph: COMPOSEDB)
+{
+  worldID: CeramicStreamID!
 }

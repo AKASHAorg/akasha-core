@@ -51,6 +51,8 @@ export type AkashaApp = AkashaAppInterface & Node & {
   releasesCount: Scalars['Int']['output'];
   /** Current version of the document */
   version: Scalars['CeramicCommitID']['output'];
+  worldConfigs: AkashaWorldConfigExtensionInterfaceConnection;
+  worldsConfigsCount: Scalars['Int']['output'];
 };
 
 
@@ -68,6 +70,23 @@ export type AkashaAppReleasesArgs = {
 export type AkashaAppReleasesCountArgs = {
   account?: InputMaybe<Scalars['ID']['input']>;
   filters?: InputMaybe<AkashaAppReleaseInterfaceFiltersInput>;
+};
+
+
+export type AkashaAppWorldConfigsArgs = {
+  account?: InputMaybe<Scalars['ID']['input']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  filters?: InputMaybe<AkashaWorldConfigExtensionInterfaceFiltersInput>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  sorting?: InputMaybe<AkashaWorldConfigExtensionInterfaceSortingInput>;
+};
+
+
+export type AkashaAppWorldsConfigsCountArgs = {
+  account?: InputMaybe<Scalars['ID']['input']>;
+  filters?: InputMaybe<AkashaWorldConfigExtensionInterfaceFiltersInput>;
 };
 
 export enum AkashaAppApplicationType {
@@ -1712,6 +1731,510 @@ export type AkashaReflectStreamSortingInput = {
   status?: InputMaybe<SortOrder>;
 };
 
+export type AkashaWorld = AkashaWorldInterface & Node & {
+  active: Scalars['Boolean']['output'];
+  configInfo: AkashaWorldConfigInterfaceConnection;
+  createdAt: Scalars['DateTime']['output'];
+  /** Account controlling the document */
+  creator: CeramicAccount;
+  extensionPublishers?: Maybe<Array<Maybe<CeramicAccount>>>;
+  icon?: Maybe<AkashaWorldImageVersions>;
+  id: Scalars['ID']['output'];
+  instanceURL?: Maybe<Scalars['URI']['output']>;
+  metaInfo: AkashaWorldMetaInfoInterfaceConnection;
+  name: Scalars['String']['output'];
+};
+
+
+export type AkashaWorldConfigInfoArgs = {
+  account?: InputMaybe<Scalars['ID']['input']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  filters?: InputMaybe<AkashaWorldConfigInterfaceFiltersInput>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  sorting?: InputMaybe<AkashaWorldConfigInterfaceSortingInput>;
+};
+
+
+export type AkashaWorldMetaInfoArgs = {
+  account?: InputMaybe<Scalars['ID']['input']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  filters?: InputMaybe<AkashaWorldMetaInfoInterfaceFiltersInput>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  sorting?: InputMaybe<AkashaWorldMetaInfoInterfaceSortingInput>;
+};
+
+export type AkashaWorldConfig = AkashaWorldConfigInterface & Node & {
+  active: Scalars['Boolean']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  /** Account controlling the document */
+  creator: CeramicAccount;
+  extensions: AkashaWorldConfigExtensionInterfaceConnection;
+  homepageExtension: Scalars['CeramicStreamID']['output'];
+  id: Scalars['ID']['output'];
+  layoutExtension: Scalars['CeramicStreamID']['output'];
+  registryExtension: Scalars['CeramicStreamID']['output'];
+  world?: Maybe<AkashaWorldInterface>;
+  worldID: Scalars['CeramicStreamID']['output'];
+};
+
+
+export type AkashaWorldConfigExtensionsArgs = {
+  account?: InputMaybe<Scalars['ID']['input']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  filters?: InputMaybe<AkashaWorldConfigExtensionInterfaceFiltersInput>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  sorting?: InputMaybe<AkashaWorldConfigExtensionInterfaceSortingInput>;
+};
+
+/** A connection to a list of items. */
+export type AkashaWorldConfigConnection = {
+  /** A list of edges. */
+  edges?: Maybe<Array<Maybe<AkashaWorldConfigEdge>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+/** An edge in a connection. */
+export type AkashaWorldConfigEdge = {
+  /** A cursor for use in pagination */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge */
+  node?: Maybe<AkashaWorldConfig>;
+};
+
+export type AkashaWorldConfigExtension = AkashaWorldConfigExtensionInterface & Node & {
+  active: Scalars['Boolean']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  /** Account controlling the document */
+  creator: CeramicAccount;
+  extension?: Maybe<AkashaAppInterface>;
+  extensionID: Scalars['CeramicStreamID']['output'];
+  id: Scalars['ID']['output'];
+  optional?: Maybe<Scalars['Boolean']['output']>;
+  position?: Maybe<Scalars['Int']['output']>;
+  type?: Maybe<Scalars['String']['output']>;
+  worldConfig?: Maybe<AkashaWorldConfigInterface>;
+  worldConfigID: Scalars['CeramicStreamID']['output'];
+};
+
+/** A connection to a list of items. */
+export type AkashaWorldConfigExtensionConnection = {
+  /** A list of edges. */
+  edges?: Maybe<Array<Maybe<AkashaWorldConfigExtensionEdge>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+/** An edge in a connection. */
+export type AkashaWorldConfigExtensionEdge = {
+  /** A cursor for use in pagination */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge */
+  node?: Maybe<AkashaWorldConfigExtension>;
+};
+
+export type AkashaWorldConfigExtensionFiltersInput = {
+  and?: InputMaybe<Array<AkashaWorldConfigExtensionFiltersInput>>;
+  not?: InputMaybe<AkashaWorldConfigExtensionFiltersInput>;
+  or?: InputMaybe<Array<AkashaWorldConfigExtensionFiltersInput>>;
+  where?: InputMaybe<AkashaWorldConfigExtensionObjectFilterInput>;
+};
+
+export type AkashaWorldConfigExtensionInput = {
+  active: Scalars['Boolean']['input'];
+  createdAt: Scalars['DateTime']['input'];
+  extensionID: Scalars['CeramicStreamID']['input'];
+  optional?: InputMaybe<Scalars['Boolean']['input']>;
+  position?: InputMaybe<Scalars['Int']['input']>;
+  type?: InputMaybe<Scalars['String']['input']>;
+  worldConfigID: Scalars['CeramicStreamID']['input'];
+};
+
+export type AkashaWorldConfigExtensionInterface = {
+  active: Scalars['Boolean']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  /** Account controlling the document */
+  creator: CeramicAccount;
+  extension?: Maybe<AkashaAppInterface>;
+  extensionID: Scalars['CeramicStreamID']['output'];
+  id: Scalars['ID']['output'];
+  optional?: Maybe<Scalars['Boolean']['output']>;
+  position?: Maybe<Scalars['Int']['output']>;
+  type?: Maybe<Scalars['String']['output']>;
+  worldConfig?: Maybe<AkashaWorldConfigInterface>;
+  worldConfigID: Scalars['CeramicStreamID']['output'];
+};
+
+/** A connection to a list of items. */
+export type AkashaWorldConfigExtensionInterfaceConnection = {
+  /** A list of edges. */
+  edges?: Maybe<Array<Maybe<AkashaWorldConfigExtensionInterfaceEdge>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+/** An edge in a connection. */
+export type AkashaWorldConfigExtensionInterfaceEdge = {
+  /** A cursor for use in pagination */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge */
+  node?: Maybe<AkashaWorldConfigExtensionInterface>;
+};
+
+export type AkashaWorldConfigExtensionInterfaceFiltersInput = {
+  and?: InputMaybe<Array<AkashaWorldConfigExtensionInterfaceFiltersInput>>;
+  not?: InputMaybe<AkashaWorldConfigExtensionInterfaceFiltersInput>;
+  or?: InputMaybe<Array<AkashaWorldConfigExtensionInterfaceFiltersInput>>;
+  where?: InputMaybe<AkashaWorldConfigExtensionInterfaceObjectFilterInput>;
+};
+
+export type AkashaWorldConfigExtensionInterfaceObjectFilterInput = {
+  active?: InputMaybe<BooleanValueFilterInput>;
+  createdAt?: InputMaybe<StringValueFilterInput>;
+  extensionID?: InputMaybe<StringValueFilterInput>;
+  optional?: InputMaybe<BooleanValueFilterInput>;
+  position?: InputMaybe<IntValueFilterInput>;
+  type?: InputMaybe<StringValueFilterInput>;
+  worldConfigID?: InputMaybe<StringValueFilterInput>;
+};
+
+export type AkashaWorldConfigExtensionInterfaceSortingInput = {
+  active?: InputMaybe<SortOrder>;
+  createdAt?: InputMaybe<SortOrder>;
+  extensionID?: InputMaybe<SortOrder>;
+  optional?: InputMaybe<SortOrder>;
+  position?: InputMaybe<SortOrder>;
+  type?: InputMaybe<SortOrder>;
+  worldConfigID?: InputMaybe<SortOrder>;
+};
+
+export type AkashaWorldConfigExtensionObjectFilterInput = {
+  active?: InputMaybe<BooleanValueFilterInput>;
+  createdAt?: InputMaybe<StringValueFilterInput>;
+  extensionID?: InputMaybe<StringValueFilterInput>;
+  optional?: InputMaybe<BooleanValueFilterInput>;
+  position?: InputMaybe<IntValueFilterInput>;
+  type?: InputMaybe<StringValueFilterInput>;
+  worldConfigID?: InputMaybe<StringValueFilterInput>;
+};
+
+export type AkashaWorldConfigExtensionSortingInput = {
+  active?: InputMaybe<SortOrder>;
+  createdAt?: InputMaybe<SortOrder>;
+  extensionID?: InputMaybe<SortOrder>;
+  optional?: InputMaybe<SortOrder>;
+  position?: InputMaybe<SortOrder>;
+  type?: InputMaybe<SortOrder>;
+  worldConfigID?: InputMaybe<SortOrder>;
+};
+
+export type AkashaWorldConfigFiltersInput = {
+  and?: InputMaybe<Array<AkashaWorldConfigFiltersInput>>;
+  not?: InputMaybe<AkashaWorldConfigFiltersInput>;
+  or?: InputMaybe<Array<AkashaWorldConfigFiltersInput>>;
+  where?: InputMaybe<AkashaWorldConfigObjectFilterInput>;
+};
+
+export type AkashaWorldConfigInput = {
+  active: Scalars['Boolean']['input'];
+  createdAt: Scalars['DateTime']['input'];
+  homepageExtension: Scalars['CeramicStreamID']['input'];
+  layoutExtension: Scalars['CeramicStreamID']['input'];
+  registryExtension: Scalars['CeramicStreamID']['input'];
+  worldID: Scalars['CeramicStreamID']['input'];
+};
+
+export type AkashaWorldConfigInterface = {
+  active: Scalars['Boolean']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  /** Account controlling the document */
+  creator: CeramicAccount;
+  homepageExtension: Scalars['CeramicStreamID']['output'];
+  id: Scalars['ID']['output'];
+  layoutExtension: Scalars['CeramicStreamID']['output'];
+  registryExtension: Scalars['CeramicStreamID']['output'];
+  world?: Maybe<AkashaWorldInterface>;
+  worldID: Scalars['CeramicStreamID']['output'];
+};
+
+/** A connection to a list of items. */
+export type AkashaWorldConfigInterfaceConnection = {
+  /** A list of edges. */
+  edges?: Maybe<Array<Maybe<AkashaWorldConfigInterfaceEdge>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+/** An edge in a connection. */
+export type AkashaWorldConfigInterfaceEdge = {
+  /** A cursor for use in pagination */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge */
+  node?: Maybe<AkashaWorldConfigInterface>;
+};
+
+export type AkashaWorldConfigInterfaceFiltersInput = {
+  and?: InputMaybe<Array<AkashaWorldConfigInterfaceFiltersInput>>;
+  not?: InputMaybe<AkashaWorldConfigInterfaceFiltersInput>;
+  or?: InputMaybe<Array<AkashaWorldConfigInterfaceFiltersInput>>;
+  where?: InputMaybe<AkashaWorldConfigInterfaceObjectFilterInput>;
+};
+
+export type AkashaWorldConfigInterfaceObjectFilterInput = {
+  active?: InputMaybe<BooleanValueFilterInput>;
+  createdAt?: InputMaybe<StringValueFilterInput>;
+  homepageExtension?: InputMaybe<StringValueFilterInput>;
+  layoutExtension?: InputMaybe<StringValueFilterInput>;
+  registryExtension?: InputMaybe<StringValueFilterInput>;
+  worldID?: InputMaybe<StringValueFilterInput>;
+};
+
+export type AkashaWorldConfigInterfaceSortingInput = {
+  active?: InputMaybe<SortOrder>;
+  createdAt?: InputMaybe<SortOrder>;
+  homepageExtension?: InputMaybe<SortOrder>;
+  layoutExtension?: InputMaybe<SortOrder>;
+  registryExtension?: InputMaybe<SortOrder>;
+  worldID?: InputMaybe<SortOrder>;
+};
+
+export type AkashaWorldConfigObjectFilterInput = {
+  active?: InputMaybe<BooleanValueFilterInput>;
+  createdAt?: InputMaybe<StringValueFilterInput>;
+  homepageExtension?: InputMaybe<StringValueFilterInput>;
+  layoutExtension?: InputMaybe<StringValueFilterInput>;
+  registryExtension?: InputMaybe<StringValueFilterInput>;
+  worldID?: InputMaybe<StringValueFilterInput>;
+};
+
+export type AkashaWorldConfigSortingInput = {
+  active?: InputMaybe<SortOrder>;
+  createdAt?: InputMaybe<SortOrder>;
+  homepageExtension?: InputMaybe<SortOrder>;
+  layoutExtension?: InputMaybe<SortOrder>;
+  registryExtension?: InputMaybe<SortOrder>;
+  worldID?: InputMaybe<SortOrder>;
+};
+
+/** A connection to a list of items. */
+export type AkashaWorldConnection = {
+  /** A list of edges. */
+  edges?: Maybe<Array<Maybe<AkashaWorldEdge>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+/** An edge in a connection. */
+export type AkashaWorldEdge = {
+  /** A cursor for use in pagination */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge */
+  node?: Maybe<AkashaWorld>;
+};
+
+export type AkashaWorldFiltersInput = {
+  and?: InputMaybe<Array<AkashaWorldFiltersInput>>;
+  not?: InputMaybe<AkashaWorldFiltersInput>;
+  or?: InputMaybe<Array<AkashaWorldFiltersInput>>;
+  where?: InputMaybe<AkashaWorldObjectFilterInput>;
+};
+
+export type AkashaWorldImageSource = {
+  height?: Maybe<Scalars['Int']['output']>;
+  sizes?: Maybe<Scalars['String']['output']>;
+  src: Scalars['URI']['output'];
+  width?: Maybe<Scalars['Int']['output']>;
+};
+
+export type AkashaWorldImageSourceInput = {
+  height?: InputMaybe<Scalars['Int']['input']>;
+  sizes?: InputMaybe<Scalars['String']['input']>;
+  src: Scalars['URI']['input'];
+  width?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type AkashaWorldImageVersions = {
+  alternatives?: Maybe<Array<Maybe<AkashaWorldImageSource>>>;
+  default: AkashaWorldImageSource;
+};
+
+export type AkashaWorldImageVersionsInput = {
+  alternatives?: InputMaybe<Array<InputMaybe<AkashaWorldImageSourceInput>>>;
+  default: AkashaWorldImageSourceInput;
+};
+
+export type AkashaWorldInput = {
+  active: Scalars['Boolean']['input'];
+  createdAt: Scalars['DateTime']['input'];
+  extensionPublishers?: InputMaybe<Array<InputMaybe<Scalars['DID']['input']>>>;
+  icon?: InputMaybe<AkashaWorldImageVersionsInput>;
+  instanceURL?: InputMaybe<Scalars['URI']['input']>;
+  name: Scalars['String']['input'];
+};
+
+export type AkashaWorldInterface = {
+  active: Scalars['Boolean']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  /** Account controlling the document */
+  creator: CeramicAccount;
+  extensionPublishers?: Maybe<Array<Maybe<CeramicAccount>>>;
+  icon?: Maybe<AkashaWorldImageVersions>;
+  id: Scalars['ID']['output'];
+  instanceURL?: Maybe<Scalars['URI']['output']>;
+  name: Scalars['String']['output'];
+};
+
+/** A connection to a list of items. */
+export type AkashaWorldInterfaceConnection = {
+  /** A list of edges. */
+  edges?: Maybe<Array<Maybe<AkashaWorldInterfaceEdge>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+/** An edge in a connection. */
+export type AkashaWorldInterfaceEdge = {
+  /** A cursor for use in pagination */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge */
+  node?: Maybe<AkashaWorldInterface>;
+};
+
+export type AkashaWorldInterfaceFiltersInput = {
+  and?: InputMaybe<Array<AkashaWorldInterfaceFiltersInput>>;
+  not?: InputMaybe<AkashaWorldInterfaceFiltersInput>;
+  or?: InputMaybe<Array<AkashaWorldInterfaceFiltersInput>>;
+  where?: InputMaybe<AkashaWorldInterfaceObjectFilterInput>;
+};
+
+export type AkashaWorldInterfaceObjectFilterInput = {
+  active?: InputMaybe<BooleanValueFilterInput>;
+  createdAt?: InputMaybe<StringValueFilterInput>;
+  instanceURL?: InputMaybe<StringValueFilterInput>;
+  name?: InputMaybe<StringValueFilterInput>;
+};
+
+export type AkashaWorldInterfaceSortingInput = {
+  active?: InputMaybe<SortOrder>;
+  createdAt?: InputMaybe<SortOrder>;
+  instanceURL?: InputMaybe<SortOrder>;
+  name?: InputMaybe<SortOrder>;
+};
+
+export type AkashaWorldMetaInfo = AkashaWorldMetaInfoInterface & Node & {
+  description?: Maybe<Scalars['String']['output']>;
+  guidelinesUrl?: Maybe<Scalars['URI']['output']>;
+  id: Scalars['ID']['output'];
+  keywords?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  socialLinks?: Maybe<Array<Maybe<SocialLink>>>;
+  world?: Maybe<AkashaWorldInterface>;
+  worldID: Scalars['CeramicStreamID']['output'];
+};
+
+/** A connection to a list of items. */
+export type AkashaWorldMetaInfoConnection = {
+  /** A list of edges. */
+  edges?: Maybe<Array<Maybe<AkashaWorldMetaInfoEdge>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+/** An edge in a connection. */
+export type AkashaWorldMetaInfoEdge = {
+  /** A cursor for use in pagination */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge */
+  node?: Maybe<AkashaWorldMetaInfo>;
+};
+
+export type AkashaWorldMetaInfoFiltersInput = {
+  and?: InputMaybe<Array<AkashaWorldMetaInfoFiltersInput>>;
+  not?: InputMaybe<AkashaWorldMetaInfoFiltersInput>;
+  or?: InputMaybe<Array<AkashaWorldMetaInfoFiltersInput>>;
+  where?: InputMaybe<AkashaWorldMetaInfoObjectFilterInput>;
+};
+
+export type AkashaWorldMetaInfoInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  guidelinesUrl?: InputMaybe<Scalars['URI']['input']>;
+  keywords?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  socialLinks?: InputMaybe<Array<InputMaybe<SocialLinkInput>>>;
+  worldID: Scalars['CeramicStreamID']['input'];
+};
+
+export type AkashaWorldMetaInfoInterface = {
+  description?: Maybe<Scalars['String']['output']>;
+  guidelinesUrl?: Maybe<Scalars['URI']['output']>;
+  id: Scalars['ID']['output'];
+  keywords?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  socialLinks?: Maybe<Array<Maybe<SocialLink>>>;
+  world?: Maybe<AkashaWorldInterface>;
+  worldID: Scalars['CeramicStreamID']['output'];
+};
+
+/** A connection to a list of items. */
+export type AkashaWorldMetaInfoInterfaceConnection = {
+  /** A list of edges. */
+  edges?: Maybe<Array<Maybe<AkashaWorldMetaInfoInterfaceEdge>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+/** An edge in a connection. */
+export type AkashaWorldMetaInfoInterfaceEdge = {
+  /** A cursor for use in pagination */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge */
+  node?: Maybe<AkashaWorldMetaInfoInterface>;
+};
+
+export type AkashaWorldMetaInfoInterfaceFiltersInput = {
+  and?: InputMaybe<Array<AkashaWorldMetaInfoInterfaceFiltersInput>>;
+  not?: InputMaybe<AkashaWorldMetaInfoInterfaceFiltersInput>;
+  or?: InputMaybe<Array<AkashaWorldMetaInfoInterfaceFiltersInput>>;
+  where?: InputMaybe<AkashaWorldMetaInfoInterfaceObjectFilterInput>;
+};
+
+export type AkashaWorldMetaInfoInterfaceObjectFilterInput = {
+  description?: InputMaybe<StringValueFilterInput>;
+  guidelinesUrl?: InputMaybe<StringValueFilterInput>;
+  worldID?: InputMaybe<StringValueFilterInput>;
+};
+
+export type AkashaWorldMetaInfoInterfaceSortingInput = {
+  description?: InputMaybe<SortOrder>;
+  guidelinesUrl?: InputMaybe<SortOrder>;
+  worldID?: InputMaybe<SortOrder>;
+};
+
+export type AkashaWorldMetaInfoObjectFilterInput = {
+  guidelinesUrl?: InputMaybe<StringValueFilterInput>;
+  worldID?: InputMaybe<StringValueFilterInput>;
+};
+
+export type AkashaWorldMetaInfoSortingInput = {
+  guidelinesUrl?: InputMaybe<SortOrder>;
+  worldID?: InputMaybe<SortOrder>;
+};
+
+export type AkashaWorldObjectFilterInput = {
+  active?: InputMaybe<BooleanValueFilterInput>;
+  createdAt?: InputMaybe<StringValueFilterInput>;
+  name?: InputMaybe<StringValueFilterInput>;
+};
+
+export type AkashaWorldSortingInput = {
+  active?: InputMaybe<SortOrder>;
+  createdAt?: InputMaybe<SortOrder>;
+  name?: InputMaybe<SortOrder>;
+};
+
 export type AppImageSource = {
   height?: Maybe<Scalars['Int']['output']>;
   src: Scalars['URI']['output'];
@@ -1882,6 +2405,26 @@ export type CeramicAccount = Node & {
   akashaReflectStream?: Maybe<AkashaReflectStream>;
   akashaReflectStreamList?: Maybe<AkashaReflectStreamConnection>;
   akashaReflectStreamListCount: Scalars['Int']['output'];
+  akashaWorld?: Maybe<AkashaWorld>;
+  akashaWorldConfig?: Maybe<AkashaWorldConfig>;
+  akashaWorldConfigExtension?: Maybe<AkashaWorldConfigExtension>;
+  akashaWorldConfigExtensionInterfaceList?: Maybe<AkashaWorldConfigExtensionInterfaceConnection>;
+  akashaWorldConfigExtensionInterfaceListCount: Scalars['Int']['output'];
+  akashaWorldConfigExtensionList?: Maybe<AkashaWorldConfigExtensionConnection>;
+  akashaWorldConfigExtensionListCount: Scalars['Int']['output'];
+  akashaWorldConfigInterfaceList?: Maybe<AkashaWorldConfigInterfaceConnection>;
+  akashaWorldConfigInterfaceListCount: Scalars['Int']['output'];
+  akashaWorldConfigList?: Maybe<AkashaWorldConfigConnection>;
+  akashaWorldConfigListCount: Scalars['Int']['output'];
+  akashaWorldInterfaceList?: Maybe<AkashaWorldInterfaceConnection>;
+  akashaWorldInterfaceListCount: Scalars['Int']['output'];
+  akashaWorldList?: Maybe<AkashaWorldConnection>;
+  akashaWorldListCount: Scalars['Int']['output'];
+  akashaWorldMetaInfo?: Maybe<AkashaWorldMetaInfo>;
+  akashaWorldMetaInfoInterfaceList?: Maybe<AkashaWorldMetaInfoInterfaceConnection>;
+  akashaWorldMetaInfoInterfaceListCount: Scalars['Int']['output'];
+  akashaWorldMetaInfoList?: Maybe<AkashaWorldMetaInfoConnection>;
+  akashaWorldMetaInfoListCount: Scalars['Int']['output'];
   /** Globally unique identifier of the account (DID string) */
   id: Scalars['ID']['output'];
   /** Whether the Ceramic instance is currently authenticated with this account or not */
@@ -2279,6 +2822,146 @@ export type CeramicAccountAkashaReflectStreamListArgs = {
 
 export type CeramicAccountAkashaReflectStreamListCountArgs = {
   filters?: InputMaybe<AkashaReflectStreamFiltersInput>;
+};
+
+
+export type CeramicAccountAkashaWorldArgs = {
+  with: WithAkashaWorldInput;
+};
+
+
+export type CeramicAccountAkashaWorldConfigArgs = {
+  with: WithAkashaWorldConfigInput;
+};
+
+
+export type CeramicAccountAkashaWorldConfigExtensionArgs = {
+  with: WithAkashaWorldConfigExtensionInput;
+};
+
+
+export type CeramicAccountAkashaWorldConfigExtensionInterfaceListArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  filters?: InputMaybe<AkashaWorldConfigExtensionInterfaceFiltersInput>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  sorting?: InputMaybe<AkashaWorldConfigExtensionInterfaceSortingInput>;
+};
+
+
+export type CeramicAccountAkashaWorldConfigExtensionInterfaceListCountArgs = {
+  filters?: InputMaybe<AkashaWorldConfigExtensionInterfaceFiltersInput>;
+};
+
+
+export type CeramicAccountAkashaWorldConfigExtensionListArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  filters?: InputMaybe<AkashaWorldConfigExtensionFiltersInput>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  sorting?: InputMaybe<AkashaWorldConfigExtensionSortingInput>;
+};
+
+
+export type CeramicAccountAkashaWorldConfigExtensionListCountArgs = {
+  filters?: InputMaybe<AkashaWorldConfigExtensionFiltersInput>;
+};
+
+
+export type CeramicAccountAkashaWorldConfigInterfaceListArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  filters?: InputMaybe<AkashaWorldConfigInterfaceFiltersInput>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  sorting?: InputMaybe<AkashaWorldConfigInterfaceSortingInput>;
+};
+
+
+export type CeramicAccountAkashaWorldConfigInterfaceListCountArgs = {
+  filters?: InputMaybe<AkashaWorldConfigInterfaceFiltersInput>;
+};
+
+
+export type CeramicAccountAkashaWorldConfigListArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  filters?: InputMaybe<AkashaWorldConfigFiltersInput>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  sorting?: InputMaybe<AkashaWorldConfigSortingInput>;
+};
+
+
+export type CeramicAccountAkashaWorldConfigListCountArgs = {
+  filters?: InputMaybe<AkashaWorldConfigFiltersInput>;
+};
+
+
+export type CeramicAccountAkashaWorldInterfaceListArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  filters?: InputMaybe<AkashaWorldInterfaceFiltersInput>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  sorting?: InputMaybe<AkashaWorldInterfaceSortingInput>;
+};
+
+
+export type CeramicAccountAkashaWorldInterfaceListCountArgs = {
+  filters?: InputMaybe<AkashaWorldInterfaceFiltersInput>;
+};
+
+
+export type CeramicAccountAkashaWorldListArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  filters?: InputMaybe<AkashaWorldFiltersInput>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  sorting?: InputMaybe<AkashaWorldSortingInput>;
+};
+
+
+export type CeramicAccountAkashaWorldListCountArgs = {
+  filters?: InputMaybe<AkashaWorldFiltersInput>;
+};
+
+
+export type CeramicAccountAkashaWorldMetaInfoArgs = {
+  with: WithAkashaWorldMetaInfoInput;
+};
+
+
+export type CeramicAccountAkashaWorldMetaInfoInterfaceListArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  filters?: InputMaybe<AkashaWorldMetaInfoInterfaceFiltersInput>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  sorting?: InputMaybe<AkashaWorldMetaInfoInterfaceSortingInput>;
+};
+
+
+export type CeramicAccountAkashaWorldMetaInfoInterfaceListCountArgs = {
+  filters?: InputMaybe<AkashaWorldMetaInfoInterfaceFiltersInput>;
+};
+
+
+export type CeramicAccountAkashaWorldMetaInfoListArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  filters?: InputMaybe<AkashaWorldMetaInfoFiltersInput>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  sorting?: InputMaybe<AkashaWorldMetaInfoSortingInput>;
+};
+
+
+export type CeramicAccountAkashaWorldMetaInfoListCountArgs = {
+  filters?: InputMaybe<AkashaWorldMetaInfoFiltersInput>;
 };
 
 export type CreateAkashaBeamInput = {
@@ -2711,6 +3394,86 @@ export type EnableIndexingAkashaReflectStreamPayloadNodeArgs = {
   id: Scalars['ID']['input'];
 };
 
+export type EnableIndexingAkashaWorldConfigExtensionInput = {
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
+  shouldIndex: Scalars['Boolean']['input'];
+};
+
+export type EnableIndexingAkashaWorldConfigExtensionPayload = {
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  document?: Maybe<AkashaWorldConfigExtension>;
+  /** Fetches an object given its ID */
+  node?: Maybe<Node>;
+  /** Account currently authenticated on the Ceramic instance, if set */
+  viewer?: Maybe<CeramicAccount>;
+};
+
+
+export type EnableIndexingAkashaWorldConfigExtensionPayloadNodeArgs = {
+  id: Scalars['ID']['input'];
+};
+
+export type EnableIndexingAkashaWorldConfigInput = {
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
+  shouldIndex: Scalars['Boolean']['input'];
+};
+
+export type EnableIndexingAkashaWorldConfigPayload = {
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  document?: Maybe<AkashaWorldConfig>;
+  /** Fetches an object given its ID */
+  node?: Maybe<Node>;
+  /** Account currently authenticated on the Ceramic instance, if set */
+  viewer?: Maybe<CeramicAccount>;
+};
+
+
+export type EnableIndexingAkashaWorldConfigPayloadNodeArgs = {
+  id: Scalars['ID']['input'];
+};
+
+export type EnableIndexingAkashaWorldInput = {
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
+  shouldIndex: Scalars['Boolean']['input'];
+};
+
+export type EnableIndexingAkashaWorldMetaInfoInput = {
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
+  shouldIndex: Scalars['Boolean']['input'];
+};
+
+export type EnableIndexingAkashaWorldMetaInfoPayload = {
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  document?: Maybe<AkashaWorldMetaInfo>;
+  /** Fetches an object given its ID */
+  node?: Maybe<Node>;
+  /** Account currently authenticated on the Ceramic instance, if set */
+  viewer?: Maybe<CeramicAccount>;
+};
+
+
+export type EnableIndexingAkashaWorldMetaInfoPayloadNodeArgs = {
+  id: Scalars['ID']['input'];
+};
+
+export type EnableIndexingAkashaWorldPayload = {
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  document?: Maybe<AkashaWorld>;
+  /** Fetches an object given its ID */
+  node?: Maybe<Node>;
+  /** Account currently authenticated on the Ceramic instance, if set */
+  viewer?: Maybe<CeramicAccount>;
+};
+
+
+export type EnableIndexingAkashaWorldPayloadNodeArgs = {
+  id: Scalars['ID']['input'];
+};
+
 export type IndexAppPayload = {
   document?: Maybe<IndexAppPayloadDocument>;
 };
@@ -2760,6 +3523,18 @@ export type IndexReflectPayloadDocument = {
   reflectionID: Scalars['String']['output'];
 };
 
+export type IntValueFilterInput = {
+  equalTo?: InputMaybe<Scalars['Int']['input']>;
+  greaterThan?: InputMaybe<Scalars['Int']['input']>;
+  greaterThanOrEqualTo?: InputMaybe<Scalars['Int']['input']>;
+  in?: InputMaybe<Array<Scalars['Int']['input']>>;
+  isNull?: InputMaybe<Scalars['Boolean']['input']>;
+  lessThan?: InputMaybe<Scalars['Int']['input']>;
+  lessThanOrEqualTo?: InputMaybe<Scalars['Int']['input']>;
+  notEqualTo?: InputMaybe<Scalars['Int']['input']>;
+  notIn?: InputMaybe<Array<Scalars['Int']['input']>>;
+};
+
 export type Jws_Signature = {
   protected: Scalars['String']['input'];
   signature: Scalars['String']['input'];
@@ -2789,6 +3564,10 @@ export type Mutation = {
   enableIndexingAkashaProfileStream?: Maybe<EnableIndexingAkashaProfileStreamPayload>;
   enableIndexingAkashaReflect?: Maybe<EnableIndexingAkashaReflectPayload>;
   enableIndexingAkashaReflectStream?: Maybe<EnableIndexingAkashaReflectStreamPayload>;
+  enableIndexingAkashaWorld?: Maybe<EnableIndexingAkashaWorldPayload>;
+  enableIndexingAkashaWorldConfig?: Maybe<EnableIndexingAkashaWorldConfigPayload>;
+  enableIndexingAkashaWorldConfigExtension?: Maybe<EnableIndexingAkashaWorldConfigExtensionPayload>;
+  enableIndexingAkashaWorldMetaInfo?: Maybe<EnableIndexingAkashaWorldMetaInfoPayload>;
   indexApp?: Maybe<IndexAppPayload>;
   indexBeam?: Maybe<IndexBeamPayload>;
   indexContentBlock?: Maybe<IndexContentBlockPayload>;
@@ -2808,6 +3587,10 @@ export type Mutation = {
   setAkashaProfileInterests?: Maybe<SetAkashaProfileInterestsPayload>;
   setAkashaProfileStream?: Maybe<SetAkashaProfileStreamPayload>;
   setAkashaReflectStream?: Maybe<SetAkashaReflectStreamPayload>;
+  setAkashaWorld?: Maybe<SetAkashaWorldPayload>;
+  setAkashaWorldConfig?: Maybe<SetAkashaWorldConfigPayload>;
+  setAkashaWorldConfigExtension?: Maybe<SetAkashaWorldConfigExtensionPayload>;
+  setAkashaWorldMetaInfo?: Maybe<SetAkashaWorldMetaInfoPayload>;
   updateAkashaApp?: Maybe<UpdateAkashaAppPayload>;
   updateAkashaAppRelease?: Maybe<UpdateAkashaAppReleasePayload>;
   updateAkashaAppsStream?: Maybe<UpdateAkashaAppsStreamPayload>;
@@ -2824,6 +3607,10 @@ export type Mutation = {
   updateAkashaProfileStream?: Maybe<UpdateAkashaProfileStreamPayload>;
   updateAkashaReflect?: Maybe<UpdateAkashaReflectPayload>;
   updateAkashaReflectStream?: Maybe<UpdateAkashaReflectStreamPayload>;
+  updateAkashaWorld?: Maybe<UpdateAkashaWorldPayload>;
+  updateAkashaWorldConfig?: Maybe<UpdateAkashaWorldConfigPayload>;
+  updateAkashaWorldConfigExtension?: Maybe<UpdateAkashaWorldConfigExtensionPayload>;
+  updateAkashaWorldMetaInfo?: Maybe<UpdateAkashaWorldMetaInfoPayload>;
 };
 
 
@@ -2932,6 +3719,26 @@ export type MutationEnableIndexingAkashaReflectStreamArgs = {
 };
 
 
+export type MutationEnableIndexingAkashaWorldArgs = {
+  input: EnableIndexingAkashaWorldInput;
+};
+
+
+export type MutationEnableIndexingAkashaWorldConfigArgs = {
+  input: EnableIndexingAkashaWorldConfigInput;
+};
+
+
+export type MutationEnableIndexingAkashaWorldConfigExtensionArgs = {
+  input: EnableIndexingAkashaWorldConfigExtensionInput;
+};
+
+
+export type MutationEnableIndexingAkashaWorldMetaInfoArgs = {
+  input: EnableIndexingAkashaWorldMetaInfoInput;
+};
+
+
 export type MutationIndexAppArgs = {
   capability?: InputMaybe<Cacao_Capability>;
   jws?: InputMaybe<Did_Jws>;
@@ -3033,6 +3840,26 @@ export type MutationSetAkashaReflectStreamArgs = {
 };
 
 
+export type MutationSetAkashaWorldArgs = {
+  input: SetAkashaWorldInput;
+};
+
+
+export type MutationSetAkashaWorldConfigArgs = {
+  input: SetAkashaWorldConfigInput;
+};
+
+
+export type MutationSetAkashaWorldConfigExtensionArgs = {
+  input: SetAkashaWorldConfigExtensionInput;
+};
+
+
+export type MutationSetAkashaWorldMetaInfoArgs = {
+  input: SetAkashaWorldMetaInfoInput;
+};
+
+
 export type MutationUpdateAkashaAppArgs = {
   input: UpdateAkashaAppInput;
 };
@@ -3110,6 +3937,26 @@ export type MutationUpdateAkashaReflectArgs = {
 
 export type MutationUpdateAkashaReflectStreamArgs = {
   input: UpdateAkashaReflectStreamInput;
+};
+
+
+export type MutationUpdateAkashaWorldArgs = {
+  input: UpdateAkashaWorldInput;
+};
+
+
+export type MutationUpdateAkashaWorldConfigArgs = {
+  input: UpdateAkashaWorldConfigInput;
+};
+
+
+export type MutationUpdateAkashaWorldConfigExtensionArgs = {
+  input: UpdateAkashaWorldConfigExtensionInput;
+};
+
+
+export type MutationUpdateAkashaWorldMetaInfoArgs = {
+  input: UpdateAkashaWorldMetaInfoInput;
 };
 
 /** An object with an ID */
@@ -3220,6 +4067,31 @@ export type PartialAkashaReflectStreamInput = {
   status?: InputMaybe<AkashaReflectStreamModerationStatus>;
 };
 
+export type PartialAkashaWorldConfigExtensionInput = {
+  optional?: InputMaybe<Scalars['Boolean']['input']>;
+  position?: InputMaybe<Scalars['Int']['input']>;
+  type?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type PartialAkashaWorldConfigInput = {
+  homepageExtension?: InputMaybe<Scalars['CeramicStreamID']['input']>;
+  layoutExtension?: InputMaybe<Scalars['CeramicStreamID']['input']>;
+  registryExtension?: InputMaybe<Scalars['CeramicStreamID']['input']>;
+};
+
+export type PartialAkashaWorldInput = {
+  extensionPublishers?: InputMaybe<Array<InputMaybe<Scalars['DID']['input']>>>;
+  icon?: InputMaybe<AkashaWorldImageVersionsInput>;
+  instanceURL?: InputMaybe<Scalars['URI']['input']>;
+};
+
+export type PartialAkashaWorldMetaInfoInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  guidelinesUrl?: InputMaybe<Scalars['URI']['input']>;
+  keywords?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  socialLinks?: InputMaybe<Array<InputMaybe<SocialLinkInput>>>;
+};
+
 export type ProfileImageSource = {
   height: Scalars['Int']['output'];
   src: Scalars['URI']['output'];
@@ -3313,6 +4185,22 @@ export type Query = {
   akashaReflectInterfaceIndex?: Maybe<AkashaReflectInterfaceConnection>;
   akashaReflectStreamCount: Scalars['Int']['output'];
   akashaReflectStreamIndex?: Maybe<AkashaReflectStreamConnection>;
+  akashaWorldConfigCount: Scalars['Int']['output'];
+  akashaWorldConfigExtensionCount: Scalars['Int']['output'];
+  akashaWorldConfigExtensionIndex?: Maybe<AkashaWorldConfigExtensionConnection>;
+  akashaWorldConfigExtensionInterfaceCount: Scalars['Int']['output'];
+  akashaWorldConfigExtensionInterfaceIndex?: Maybe<AkashaWorldConfigExtensionInterfaceConnection>;
+  akashaWorldConfigIndex?: Maybe<AkashaWorldConfigConnection>;
+  akashaWorldConfigInterfaceCount: Scalars['Int']['output'];
+  akashaWorldConfigInterfaceIndex?: Maybe<AkashaWorldConfigInterfaceConnection>;
+  akashaWorldCount: Scalars['Int']['output'];
+  akashaWorldIndex?: Maybe<AkashaWorldConnection>;
+  akashaWorldInterfaceCount: Scalars['Int']['output'];
+  akashaWorldInterfaceIndex?: Maybe<AkashaWorldInterfaceConnection>;
+  akashaWorldMetaInfoCount: Scalars['Int']['output'];
+  akashaWorldMetaInfoIndex?: Maybe<AkashaWorldMetaInfoConnection>;
+  akashaWorldMetaInfoInterfaceCount: Scalars['Int']['output'];
+  akashaWorldMetaInfoInterfaceIndex?: Maybe<AkashaWorldMetaInfoInterfaceConnection>;
   /** Fetches an object given its ID */
   node?: Maybe<Node>;
   /** Fetches objects given their IDs */
@@ -3684,6 +4572,126 @@ export type QueryAkashaReflectStreamIndexArgs = {
 };
 
 
+export type QueryAkashaWorldConfigCountArgs = {
+  filters?: InputMaybe<AkashaWorldConfigFiltersInput>;
+};
+
+
+export type QueryAkashaWorldConfigExtensionCountArgs = {
+  filters?: InputMaybe<AkashaWorldConfigExtensionFiltersInput>;
+};
+
+
+export type QueryAkashaWorldConfigExtensionIndexArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  filters?: InputMaybe<AkashaWorldConfigExtensionFiltersInput>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  sorting?: InputMaybe<AkashaWorldConfigExtensionSortingInput>;
+};
+
+
+export type QueryAkashaWorldConfigExtensionInterfaceCountArgs = {
+  filters?: InputMaybe<AkashaWorldConfigExtensionInterfaceFiltersInput>;
+};
+
+
+export type QueryAkashaWorldConfigExtensionInterfaceIndexArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  filters?: InputMaybe<AkashaWorldConfigExtensionInterfaceFiltersInput>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  sorting?: InputMaybe<AkashaWorldConfigExtensionInterfaceSortingInput>;
+};
+
+
+export type QueryAkashaWorldConfigIndexArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  filters?: InputMaybe<AkashaWorldConfigFiltersInput>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  sorting?: InputMaybe<AkashaWorldConfigSortingInput>;
+};
+
+
+export type QueryAkashaWorldConfigInterfaceCountArgs = {
+  filters?: InputMaybe<AkashaWorldConfigInterfaceFiltersInput>;
+};
+
+
+export type QueryAkashaWorldConfigInterfaceIndexArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  filters?: InputMaybe<AkashaWorldConfigInterfaceFiltersInput>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  sorting?: InputMaybe<AkashaWorldConfigInterfaceSortingInput>;
+};
+
+
+export type QueryAkashaWorldCountArgs = {
+  filters?: InputMaybe<AkashaWorldFiltersInput>;
+};
+
+
+export type QueryAkashaWorldIndexArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  filters?: InputMaybe<AkashaWorldFiltersInput>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  sorting?: InputMaybe<AkashaWorldSortingInput>;
+};
+
+
+export type QueryAkashaWorldInterfaceCountArgs = {
+  filters?: InputMaybe<AkashaWorldInterfaceFiltersInput>;
+};
+
+
+export type QueryAkashaWorldInterfaceIndexArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  filters?: InputMaybe<AkashaWorldInterfaceFiltersInput>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  sorting?: InputMaybe<AkashaWorldInterfaceSortingInput>;
+};
+
+
+export type QueryAkashaWorldMetaInfoCountArgs = {
+  filters?: InputMaybe<AkashaWorldMetaInfoFiltersInput>;
+};
+
+
+export type QueryAkashaWorldMetaInfoIndexArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  filters?: InputMaybe<AkashaWorldMetaInfoFiltersInput>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  sorting?: InputMaybe<AkashaWorldMetaInfoSortingInput>;
+};
+
+
+export type QueryAkashaWorldMetaInfoInterfaceCountArgs = {
+  filters?: InputMaybe<AkashaWorldMetaInfoInterfaceFiltersInput>;
+};
+
+
+export type QueryAkashaWorldMetaInfoInterfaceIndexArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  filters?: InputMaybe<AkashaWorldMetaInfoInterfaceFiltersInput>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  sorting?: InputMaybe<AkashaWorldMetaInfoInterfaceSortingInput>;
+};
+
+
 export type QueryNodeArgs = {
   id: Scalars['ID']['input'];
 };
@@ -3965,11 +4973,101 @@ export type SetAkashaReflectStreamPayloadNodeArgs = {
   id: Scalars['ID']['input'];
 };
 
+export type SetAkashaWorldConfigExtensionInput = {
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  content: AkashaWorldConfigExtensionInput;
+  options?: InputMaybe<SetOptionsInput>;
+};
+
+export type SetAkashaWorldConfigExtensionPayload = {
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  document: AkashaWorldConfigExtension;
+  /** Fetches an object given its ID */
+  node?: Maybe<Node>;
+  /** Account currently authenticated on the Ceramic instance, if set */
+  viewer?: Maybe<CeramicAccount>;
+};
+
+
+export type SetAkashaWorldConfigExtensionPayloadNodeArgs = {
+  id: Scalars['ID']['input'];
+};
+
+export type SetAkashaWorldConfigInput = {
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  content: AkashaWorldConfigInput;
+  options?: InputMaybe<SetOptionsInput>;
+};
+
+export type SetAkashaWorldConfigPayload = {
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  document: AkashaWorldConfig;
+  /** Fetches an object given its ID */
+  node?: Maybe<Node>;
+  /** Account currently authenticated on the Ceramic instance, if set */
+  viewer?: Maybe<CeramicAccount>;
+};
+
+
+export type SetAkashaWorldConfigPayloadNodeArgs = {
+  id: Scalars['ID']['input'];
+};
+
+export type SetAkashaWorldInput = {
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  content: AkashaWorldInput;
+  options?: InputMaybe<SetOptionsInput>;
+};
+
+export type SetAkashaWorldMetaInfoInput = {
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  content: AkashaWorldMetaInfoInput;
+  options?: InputMaybe<SetOptionsInput>;
+};
+
+export type SetAkashaWorldMetaInfoPayload = {
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  document: AkashaWorldMetaInfo;
+  /** Fetches an object given its ID */
+  node?: Maybe<Node>;
+  /** Account currently authenticated on the Ceramic instance, if set */
+  viewer?: Maybe<CeramicAccount>;
+};
+
+
+export type SetAkashaWorldMetaInfoPayloadNodeArgs = {
+  id: Scalars['ID']['input'];
+};
+
+export type SetAkashaWorldPayload = {
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  document: AkashaWorld;
+  /** Fetches an object given its ID */
+  node?: Maybe<Node>;
+  /** Account currently authenticated on the Ceramic instance, if set */
+  viewer?: Maybe<CeramicAccount>;
+};
+
+
+export type SetAkashaWorldPayloadNodeArgs = {
+  id: Scalars['ID']['input'];
+};
+
 export type SetOptionsInput = {
   /** Inform indexers if they should index this document or not */
   shouldIndex?: InputMaybe<Scalars['Boolean']['input']>;
   /** Maximum amount of time to lookup the stream over the network, in seconds - see https://developers.ceramic.network/reference/typescript/interfaces/_ceramicnetwork_common.CreateOpts.html#syncTimeoutSeconds */
   syncTimeout?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type SocialLink = {
+  href: Scalars['URI']['output'];
+  name: Scalars['String']['output'];
+};
+
+export type SocialLinkInput = {
+  href: Scalars['URI']['input'];
+  name: Scalars['String']['input'];
 };
 
 export enum SortOrder {
@@ -4325,6 +5423,90 @@ export type UpdateAkashaReflectStreamPayloadNodeArgs = {
   id: Scalars['ID']['input'];
 };
 
+export type UpdateAkashaWorldConfigExtensionInput = {
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  content: PartialAkashaWorldConfigExtensionInput;
+  id: Scalars['ID']['input'];
+  options?: InputMaybe<UpdateOptionsInput>;
+};
+
+export type UpdateAkashaWorldConfigExtensionPayload = {
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  document: AkashaWorldConfigExtension;
+  /** Fetches an object given its ID */
+  node?: Maybe<Node>;
+  /** Account currently authenticated on the Ceramic instance, if set */
+  viewer?: Maybe<CeramicAccount>;
+};
+
+
+export type UpdateAkashaWorldConfigExtensionPayloadNodeArgs = {
+  id: Scalars['ID']['input'];
+};
+
+export type UpdateAkashaWorldConfigInput = {
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  content: PartialAkashaWorldConfigInput;
+  id: Scalars['ID']['input'];
+  options?: InputMaybe<UpdateOptionsInput>;
+};
+
+export type UpdateAkashaWorldConfigPayload = {
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  document: AkashaWorldConfig;
+  /** Fetches an object given its ID */
+  node?: Maybe<Node>;
+  /** Account currently authenticated on the Ceramic instance, if set */
+  viewer?: Maybe<CeramicAccount>;
+};
+
+
+export type UpdateAkashaWorldConfigPayloadNodeArgs = {
+  id: Scalars['ID']['input'];
+};
+
+export type UpdateAkashaWorldInput = {
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  content: PartialAkashaWorldInput;
+  id: Scalars['ID']['input'];
+  options?: InputMaybe<UpdateOptionsInput>;
+};
+
+export type UpdateAkashaWorldMetaInfoInput = {
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  content: PartialAkashaWorldMetaInfoInput;
+  id: Scalars['ID']['input'];
+  options?: InputMaybe<UpdateOptionsInput>;
+};
+
+export type UpdateAkashaWorldMetaInfoPayload = {
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  document: AkashaWorldMetaInfo;
+  /** Fetches an object given its ID */
+  node?: Maybe<Node>;
+  /** Account currently authenticated on the Ceramic instance, if set */
+  viewer?: Maybe<CeramicAccount>;
+};
+
+
+export type UpdateAkashaWorldMetaInfoPayloadNodeArgs = {
+  id: Scalars['ID']['input'];
+};
+
+export type UpdateAkashaWorldPayload = {
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  document: AkashaWorld;
+  /** Fetches an object given its ID */
+  node?: Maybe<Node>;
+  /** Account currently authenticated on the Ceramic instance, if set */
+  viewer?: Maybe<CeramicAccount>;
+};
+
+
+export type UpdateAkashaWorldPayloadNodeArgs = {
+  id: Scalars['ID']['input'];
+};
+
 export type UpdateOptionsInput = {
   /** Fully replace the document contents instead of performing a shallow merge */
   replace?: InputMaybe<Scalars['Boolean']['input']>;
@@ -4380,6 +5562,26 @@ export type WithAkashaProfileStreamInput = {
 
 export type WithAkashaReflectStreamInput = {
   reflectionID: Scalars['CeramicStreamID']['input'];
+};
+
+export type WithAkashaWorldConfigExtensionInput = {
+  active: Scalars['Boolean']['input'];
+  extensionID: Scalars['CeramicStreamID']['input'];
+  worldConfigID: Scalars['CeramicStreamID']['input'];
+};
+
+export type WithAkashaWorldConfigInput = {
+  active: Scalars['Boolean']['input'];
+  worldID: Scalars['CeramicStreamID']['input'];
+};
+
+export type WithAkashaWorldInput = {
+  active: Scalars['Boolean']['input'];
+  name: Scalars['String']['input'];
+};
+
+export type WithAkashaWorldMetaInfoInput = {
+  worldID: Scalars['CeramicStreamID']['input'];
 };
 
 export enum Join__Graph {
