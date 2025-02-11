@@ -10,7 +10,6 @@ import {
 import { ICreateRouter, IRootComponentProps } from '@akashaorg/typings/lib/ui';
 import {
   ExplorePage,
-  ExtensionsHubPage,
   InstalledExtensionsPage,
   MyExtensionsPage,
   DeveloperModePage,
@@ -63,12 +62,6 @@ const exploreRoute = createRoute({
       <ExplorePage />
     </CatchBoundary>
   ),
-});
-
-const extensionsHubRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/extensions-hub',
-  component: ExtensionsHubPage,
 });
 
 const installedExtensionsRoute = createRoute({
@@ -380,7 +373,6 @@ const postPublishRoute = createRoute({
 const routeTree = rootRoute.addChildren([
   defaultRoute,
   exploreRoute,
-  extensionsHubRoute,
   installedExtensionsRoute,
   myExtensionsRoute,
   developerModeRoute,
