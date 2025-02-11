@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
@@ -15,7 +15,7 @@ export const JoinVibesCard: React.FC<JoinVibesCardProps> = props => {
   const { title, description, ctaButtonLabel, onCtaButtonClick } = props;
 
   return (
-    <Card>
+    <Card className="shadow-none">
       <Stack spacing="gap-y-2">
         <Text variant="h6">{title}</Text>
         <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }}>

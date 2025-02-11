@@ -10,7 +10,7 @@ import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoade
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import DynamicInfiniteScroll from '@akashaorg/design-system-components/lib/components/DynamicInfiniteScroll';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import getSDK from '@akashaorg/core-sdk';
 import { AnalyticsEventData } from '@akashaorg/typings/lib/ui';
 import {
@@ -169,7 +169,7 @@ const BeamFeed = (props: BeamFeedProps) => {
         />
       )}
       {beams && (
-        <Card ref={vListContainerRef} type="plain">
+        <Card ref={vListContainerRef} className="p-0 border-none bg-transparent">
           <DynamicInfiniteScroll
             dataTestId={dataTestId}
             count={beams.length}

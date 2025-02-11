@@ -2,7 +2,7 @@ import React, { forwardRef } from 'react';
 import EditorPlaceholder from '../EditorPlaceholder';
 import EditorBox, { EditorBoxProps } from '../Editor';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import { editorDefaultValue } from '../Editor/initialValue';
 import { Colors, IPublishData } from '@akashaorg/typings/lib/ui';
 
@@ -10,7 +10,6 @@ export type ReflectionEditorProps = EditorBoxProps & {
   placeholderButtonLabel?: string;
   borderBottomOnly?: boolean;
   noBorderRound?: boolean;
-  background?: { light: Colors; dark: Colors };
   customStyle?: string;
   showEditor?: boolean;
   setShowEditor: (showEditor: boolean) => void;
@@ -46,7 +45,6 @@ const ReflectionEditor = forwardRef<HTMLDivElement, ReflectionEditorProps>((prop
     cancelButtonLabel,
     initialEditorValue = editorDefaultValue,
     showDraft,
-    background,
     customStyle = '',
     editorActionsRef,
     onCancelClick,
@@ -82,12 +80,7 @@ const ReflectionEditor = forwardRef<HTMLDivElement, ReflectionEditorProps>((prop
         />
       )}
       {showEditor && (
-        <Card
-          padding={'p-4'}
-          accentBorder={true}
-          background={!!background && background}
-          customStyle="overflow-hidden"
-        >
+        <Card className="p-4 border-accent overflow-hidden">
           <EditorBox
             avatar={avatar}
             profileId={profileId}

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import BeamCard from './cards/beam-card';
 import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import { useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { useGetBeamByIdQuery } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
 import { IModalNavigationOptions } from '@akashaorg/typings/lib/ui';
@@ -54,7 +54,7 @@ const BeamContentResolver: React.FC<BeamContentResolverProps> = ({
 
   if (beamReq.error)
     return (
-      <Card padding="p-0">
+      <Card className="p-0">
         <NetworkErrorCard
           title={t('Beam can’t be loaded')}
           message={t('Unable to load beam content. Click “Reload” to reload the beam.')}

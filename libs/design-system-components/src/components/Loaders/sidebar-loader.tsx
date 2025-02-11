@@ -1,5 +1,5 @@
 import React from 'react';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 
@@ -9,11 +9,7 @@ import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
  */
 const SidebarLoader: React.FC = () => {
   return (
-    <Card
-      customStyle="w-[19.5rem] max-w-[19.5rem] max-h(screen xl:[calc(100vh-20px)]) h(full xl:fit) space-y-4"
-      radius="rounded-r-2xl xl:rounded-2xl"
-      padding={'p-0'}
-    >
+    <Card className="p-0 rounded-r-2xl xl:rounded-2xl w-[19.5rem] max-w-[19.5rem] max-h-screen xl:max-h-[calc(100vh-20px)] h-full xl:h-fit space-y-4">
       <Stack
         direction="column"
         padding="px-6 pt-6"

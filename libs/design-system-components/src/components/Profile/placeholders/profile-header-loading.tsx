@@ -1,5 +1,5 @@
 import React from 'react';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 
@@ -10,17 +10,8 @@ const ProfileHeaderLoading: React.FC<ProfileHeaderLoadingProps> = props => {
   const { plain } = props;
   return (
     <div>
-      <Card
-        elevation={plain ? 'none' : '1'}
-        radius={{ top: 20 }}
-        background={{ light: 'grey6', dark: 'grey5' }}
-        customStyle="h-32"
-      ></Card>
-      <Card
-        elevation={plain ? 'none' : '1'}
-        radius={plain ? '' : { bottom: 20 }}
-        padding="px-[0.5rem] pb-[1rem] pt-0"
-      >
+      <Card className="h-32"></Card>
+      <Card className={`px-[0.5rem] pb-[1rem] pt-0 ${plain ? 'rounded-none' : ''}`}>
         <Stack padding="pl-2" fullWidth>
           <Stack direction="row" spacing="gap-x-2" customStyle="-ml-2">
             <Stack customStyle="relative w-20 h-[3.5rem] shrink-0">

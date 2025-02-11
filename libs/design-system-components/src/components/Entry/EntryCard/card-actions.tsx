@@ -3,7 +3,7 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import { ChatBubbleLeftRightIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { ChatBubbleLeftRightIcon as ChatBubbleLeftRightIconSolid } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-solid';
 
@@ -36,7 +36,7 @@ const CardActions: React.FC<CardActionProps> = props => {
       onMouseLeave={() => {
         setHovered(false);
       }}
-      type="plain"
+      className="p-0 border-none"
     >
       {hovered ? (
         <Icon

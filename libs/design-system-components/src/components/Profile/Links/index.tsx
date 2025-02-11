@@ -1,7 +1,7 @@
 import React from 'react';
 
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import CopyToClipboard from '@akashaorg/design-system-core/lib/components/CopyToClipboard';
 import { LinkIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import {
@@ -33,7 +33,7 @@ const Links: React.FC<LinksProps> = ({ title, links }) => {
   };
 
   return (
-    <Card radius={20} padding={'p-4'}>
+    <Card className="p-4">
       <Stack direction="column" spacing="gap-y-2.5">
         <Text variant="label">{title}</Text>
         {links.map((link, index) => {

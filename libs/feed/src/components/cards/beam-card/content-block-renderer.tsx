@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useRef } from 'react';
 import NSFW from '@akashaorg/design-system-components/lib/components/Entry/NSFW';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { hasOwn, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import {
@@ -121,7 +121,7 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
   }, [contentBlockReq, blockApp]);
 
   return (
-    <Card type="plain" customStyle="w-full">
+    <Card className="p-0 border-none w-full">
       {!showNSFWCard && (
         <>
           <Transition
@@ -161,14 +161,7 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
           background={{ light: 'grey9', dark: 'grey5' }}
           customStyle="rounded-[10px]"
         >
-          <Card
-            type={'regular'}
-            background={{ light: 'white', dark: 'grey3' }}
-            elevation="2"
-            margin="m-3.5"
-            padding="p-2"
-            customStyle="w-fit h-[60px]"
-          >
+          <Card className="bg-background m-3.5 p-2 w-fit h-[60px]">
             {/* showHiddenContent is the flag used to hide nsfw blocks in the
              * feed when 'Show NSFW Content' setting is off and shows the overlay over it when
              * on beam page (set to true in BeamSection(beam page), otherwise false)

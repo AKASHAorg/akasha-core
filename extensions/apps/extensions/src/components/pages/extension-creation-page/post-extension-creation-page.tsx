@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { CREATE_EXTENSION } from '../../../routes';
 import { useRootComponentProps, useAkashaStore } from '@akashaorg/ui-core-hooks';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -62,7 +62,7 @@ export const PostExtensionCreationPage: React.FC<{ extensionId: string }> = ({ e
   }
 
   return (
-    <Card padding="py-6 px-4">
+    <Card className="px-4">
       <Stack spacing="gap-y-8" align="center">
         <Text variant="h5" weight="semibold" align="center">
           {t('Your extension has been created locally')}
@@ -101,7 +101,7 @@ You can add more details to your extension, such as a description, gallery & mor
           </Button>
           <Button onClick={handleNavigateToReleaseManager}>{t('Manage Releases')}</Button>
         </Stack>
-        <Card background={{ light: 'grey9', dark: 'grey3' }}>
+        <Card className="shadow-none">
           <Stack direction="column" spacing="gap-2">
             <Stack direction="row" spacing="gap-1" align="center" justify="center">
               <Icon

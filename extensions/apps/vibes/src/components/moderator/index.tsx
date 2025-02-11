@@ -3,7 +3,7 @@ import { transformSource } from '@akashaorg/ui-core-hooks';
 import { Moderator } from '@akashaorg/typings/lib/ui';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -27,7 +27,7 @@ const ModeratorDetailCard: React.FC<ModeratorDetailCardProps> = props => {
   const textStyle = 'max-w([12.5rem] md:[7.5rem]) w-fit cursor-default';
 
   return (
-    <Card padding={16} customStyle="space-y-4">
+    <Card className="p-4 space-y-4">
       <Stack direction="row" justify="between">
         <Stack direction="row" spacing="gap-x-2" align="center">
           <Avatar

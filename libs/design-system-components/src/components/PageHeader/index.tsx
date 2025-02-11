@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from 'react';
 
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Text, { TextProps } from '@akashaorg/design-system-core/lib/components/Text';
@@ -29,7 +29,7 @@ export const PageHeader: React.FC<PropsWithChildren<PageHeaderProps>> = props =>
   } = props;
 
   return (
-    <Card padding={0} margin="mb-4" customStyle={customStyle}>
+    <Card className={`p-0 mb-4 ${customStyle}`}>
       {label && (
         <>
           <Stack padding="px-4 py-6">

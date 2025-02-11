@@ -1,5 +1,5 @@
 import React from 'react';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { FlagIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import MiniProfileCTA from '@akashaorg/design-system-components/lib/components/VibesConsoleContentCard/mini-profile-cta';
@@ -30,7 +30,7 @@ export const ReportItem: React.FC<ReportItemProps> = props => {
   const textColor = { light: 'grey5', dark: 'grey6' } as const;
 
   return (
-    <Card padding={0}>
+    <Card className="shadow-none p-0">
       <Stack padding="p-4" customStyle="border-b(1 solid grey8 dark:grey5)">
         <MiniProfileCTA
           itemData={{

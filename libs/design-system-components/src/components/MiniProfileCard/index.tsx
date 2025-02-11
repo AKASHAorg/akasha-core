@@ -1,6 +1,6 @@
 import React from 'react';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -42,7 +42,7 @@ const MiniProfileCard: React.FC<MiniProfileCardProps> = props => {
   const coverImage = transformSource(profileData?.background?.default);
 
   return (
-    <Card radius="rounded-2xl" margin="mb-4" padding="p-0" customStyle="max-h-[30rem]">
+    <Card className="p-0 mb-4 max-h-[30rem]">
       <Stack
         align="center"
         customStyle={`h-28 rounded-t-2xl bg(center cover [url(${

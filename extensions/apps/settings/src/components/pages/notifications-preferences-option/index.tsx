@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { tw } from '@twind/core';
+import { cn } from '@akashaorg/ui/lib/library/utils';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { useAkashaStore, useNotifications, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import appRoutes, { PREFERENCES } from '../../../routes';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import getSDK from '@akashaorg/core-sdk';
 import { UserSetting } from '@pushprotocol/restapi/src/lib';
@@ -157,8 +157,10 @@ const NotificationsPreferencesOption: React.FC = () => {
             <UnlockCard onClick={handleUnlockPreferences} loading={waitingForSignature} />
           )}
           <Card
-            padding="pb-3"
-            customStyle={tw(`${!notificationsEnabled && 'opacity-50 pointer-events-none'}`)}
+            className={cn(
+              'pb-3',
+              !notificationsEnabled && 'opacity-50 pointer-events-none',
+            )}
           >
             <Stack padding="px-3 pb-6">
               <EnableAllSetting

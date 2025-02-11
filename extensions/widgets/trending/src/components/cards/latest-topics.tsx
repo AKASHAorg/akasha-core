@@ -10,7 +10,7 @@ import {
   useUpdateInterestsMutation,
 } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TrendingWidgetLoadingCard from '@akashaorg/design-system-components/lib/components/TrendingWidgetLoadingCard';
@@ -281,7 +281,7 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
   if (tags.length === 0 && isLoadingTags) return <TrendingWidgetLoadingCard />;
 
   return (
-    <Card padding={16}>
+    <Card className="p-4">
       <Stack customStyle="mb-4">
         <Text variant="button-md" weight="bold">
           {titleLabel}

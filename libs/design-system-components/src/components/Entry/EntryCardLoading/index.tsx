@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from 'react';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ProfileAvatarLoading from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton/ProfileAvatarLoading';
@@ -31,13 +31,7 @@ const EntryLoadingPlaceholder: React.FC<
       </Stack>
     </Stack>
   );
-  return noWrapperCard ? (
-    loaderUi
-  ) : (
-    <Card padding="p-0" customStyle="grow min-h-[inherit]">
-      {loaderUi}
-    </Card>
-  );
+  return noWrapperCard ? loaderUi : <Card className="p-0 grow min-h-[inherit]">{loaderUi}</Card>;
 };
 
 export default EntryLoadingPlaceholder;

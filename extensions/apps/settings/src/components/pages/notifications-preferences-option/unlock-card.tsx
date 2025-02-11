@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import { Lock } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 
@@ -18,7 +18,7 @@ const UnlockCard: React.FC<IUnlockCardProps> = ({ onClick, loading }) => {
   const { t } = useTranslation('app-settings-ewa');
 
   return (
-    <Card background={{ light: 'grey9', dark: 'grey3' }} padding="p-3">
+    <Card className="p-3">
       <Stack direction="row" spacing="gap-x-3">
         <Icon
           icon={<Lock />}

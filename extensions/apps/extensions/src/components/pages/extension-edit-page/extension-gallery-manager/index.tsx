@@ -3,7 +3,7 @@ import ExtensionGalleryManager, {
   type Image,
 } from '@akashaorg/design-system-components/lib/components/ExtensionGalleryManager';
 import ImageOverlay from '@akashaorg/design-system-components/lib/components/ImageOverlay';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -65,7 +65,7 @@ export const ExtensionGalleryManagerPage: React.FC<ExtensionGalleryManagerPagePr
 
   if (isAuthenticating)
     return (
-      <Card padding="py-4">
+      <Card className="p-4">
         <>
           {
             //@TODO replace with Loader component once its created
@@ -234,7 +234,7 @@ export const ExtensionGalleryManagerPage: React.FC<ExtensionGalleryManagerPagePr
   };
 
   return (
-    <Card padding={0}>
+    <Card className="p-0">
       {galleryImages && (
         <>
           <ExtensionGalleryManager

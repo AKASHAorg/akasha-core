@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Table, { TableProps } from '@akashaorg/design-system-core/lib/components/Table';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -40,7 +40,7 @@ export const SectionRenderer: React.FC<SectionHeaderProps> = props => {
       )}
 
       {!!rows.length && (
-        <Card padding={0}>
+        <Card className="p-0">
           <Table
             theadValues={theadValues}
             rows={rows}

@@ -1,8 +1,8 @@
 import React from 'react';
 import { tw } from '@twind/core';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 
@@ -36,13 +36,7 @@ const EditorPlaceholder: React.FC<EditorPlaceholderType> = props => {
     transformSource,
   } = props;
   return (
-    <Card
-      border={true}
-      padding={0}
-      background={{ light: 'grey9', dark: 'grey3' }}
-      onClick={onClick}
-      customStyle="cursor-pointer"
-    >
+    <Card className="p-0 cursor-pointer" onClick={onClick}>
       <div className={tw(`flex justify-between p-4 `)}>
         <div className={tw(`flex flex-row items-center gap-4 flex-1`)}>
           <Avatar

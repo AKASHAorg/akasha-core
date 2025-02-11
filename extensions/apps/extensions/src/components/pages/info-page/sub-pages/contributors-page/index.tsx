@@ -1,5 +1,5 @@
 import React from 'react';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
@@ -40,7 +40,7 @@ export const ContributorsPage = (props: ContributorsPageProps) => {
 
   return (
     <>
-      <Card padding="p-4">
+      <Card className="p-4">
         <Stack spacing="gap-y-4">
           <ExtensionSubRouteHeader
             pageTitle={t('Contributors')}
@@ -77,7 +77,7 @@ export const ContributorsPage = (props: ContributorsPageProps) => {
                       },
                     });
                   }}
-                  type="plain"
+                  className="p-0 shadow-noneborder-none"
                 >
                   <Stack direction="row" align="center">
                     <ProfileAvatarButton

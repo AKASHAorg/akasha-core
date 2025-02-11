@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import { Outlet } from '@tanstack/react-router';
 
 const MainPage: React.FC = () => {
@@ -33,7 +33,7 @@ const MainPage: React.FC = () => {
     }
   }, [isLoggedIn, authenticatedDID, worldConfig.homepageApp, authenticatedProfile]);
   return (
-    <Card padding="px-4 py-6">
+    <Card className="px-4">
       <Outlet />
     </Card>
   );

@@ -1,7 +1,7 @@
 import React from 'react';
 import AppList from '@akashaorg/design-system-components/lib/components/AppList';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -64,12 +64,12 @@ export const InstalledExtensionsList = () => {
     }),
     author: ext.author
       ? {
-        profileDID: ext.author?.did?.id,
-        name: ext.author?.name,
-        avatar: transformSource(ext.author?.avatar?.default),
-        alternativeAvatars: ext.author?.avatar.alternatives?.map(alt => transformSource(alt)),
-        nsfw: ext.author?.nsfw,
-      }
+          profileDID: ext.author?.did?.id,
+          name: ext.author?.name,
+          avatar: transformSource(ext.author?.avatar?.default),
+          alternativeAvatars: ext.author?.avatar.alternatives?.map(alt => transformSource(alt)),
+          nsfw: ext.author?.nsfw,
+        }
       : null,
     description: ext?.description,
     nsfw: ext?.nsfw,
@@ -97,7 +97,7 @@ export const InstalledExtensionsList = () => {
 
   if (loading || isAuthenticating)
     return (
-      <Card padding="p-4">
+      <Card className="p-4">
         {
           //@TODO replace with Loader component once its created
         }

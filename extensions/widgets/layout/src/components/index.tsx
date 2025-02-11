@@ -20,7 +20,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { ExclamationTriangleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import TopbarLoader from '@akashaorg/design-system-components/lib/components/Loaders/topbar-loader';
 import MiniProfileWidgetLoader from '@akashaorg/design-system-components/lib/components/Loaders/mini-profile-widget-loader';
 import TrendingWidgetLoader from '@akashaorg/design-system-components/lib/components/Loaders/trending-widget-loader';
@@ -225,10 +225,7 @@ const Layout: React.FC<unknown> = () => {
             </Stack>
             <Stack padding="pt-4" spacing="gap-y-4">
               {!isPlatformHealthy && (
-                <Card
-                  margin="mb-4"
-                  customStyle="bg(warningLight dark:warningDark) border(errorLight dark:errorDark)"
-                >
+                <Card className="mb-4 border-warning-foreground background-warning">
                   <Stack direction="row">
                     <Icon
                       color={{ light: 'grey3', dark: 'grey3' }}

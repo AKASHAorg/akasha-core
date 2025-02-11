@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import InfoSubRouteHeader from '../InfoSubroutePageHeader';
@@ -28,7 +28,7 @@ export const LicensePage = (props: LicensePageProps) => {
     'Explanations of what does this license mean for consumer and also for app dev and collab.';
   return (
     <>
-      <Card padding="p-4">
+      <Card className="p-4">
         <Stack spacing="gap-y-4">
           <InfoSubRouteHeader
             pageTitle={t('License')}

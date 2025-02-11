@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
@@ -201,7 +201,7 @@ export const EditTestReleasePage: React.FC<EditTestReleasePageProps> = ({
           {t('Loading test mode')}
         </Text>
       </Modal>
-      <Card padding={0}>
+      <Card className="shadow-none p-0">
         <Stack spacing="gap-y-2">
           <Stack padding={16}>
             <Text variant="h5" weight="semibold" align="center">

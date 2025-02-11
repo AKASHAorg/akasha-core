@@ -1,5 +1,5 @@
 import React from 'react';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import ProfileStatLoading from './profile-stat-loading';
@@ -9,7 +9,7 @@ const ProfileLoading: React.FC = () => {
   return (
     <Stack spacing="gap-y-4">
       <ProfileHeaderLoading />
-      <Card radius={20} padding={'p-4'}>
+      <Card className="p-4">
         <Stack spacing="gap-2">
           <TextLine width="w-24" animated />
           <Stack spacing="gap-1">
@@ -19,7 +19,7 @@ const ProfileLoading: React.FC = () => {
         </Stack>
       </Card>
       <ProfileStatLoading />
-      <Card radius={20} padding={'p-4'}>
+      <Card className="p-4">
         <Stack spacing="gap-2">
           <TextLine width="w-24" animated />
           <TextLine width="w-full" animated />

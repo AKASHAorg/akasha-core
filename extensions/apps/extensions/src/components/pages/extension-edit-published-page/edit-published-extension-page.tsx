@@ -1,5 +1,5 @@
 import React, { useContext, useMemo, useRef } from 'react';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import { useTranslation } from 'react-i18next';
 import { transformSource, useRootComponentProps, useSaveImage } from '@akashaorg/ui-core-hooks';
 import { useGetAppsByIdQuery, useUpdateAppMutation } from '@akashaorg/ui-core-hooks/lib/generated';
@@ -200,7 +200,7 @@ export const EditPublishedExtensionPage: React.FC<EditPublishedExtensionPageProp
 
   if (extensionDataLoading) {
     return (
-      <Card>
+      <Card className="shadow-none">
         <Stack align="center" justify="center" spacing="gap-2" customStyle="h-full md:h-[563px]">
           <Icon
             icon={<ArrowPathIcon />}

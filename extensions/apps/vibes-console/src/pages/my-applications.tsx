@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import PaginatedTable from '@akashaorg/design-system-components/lib/components/PaginatedTable';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -24,7 +24,7 @@ export const MyApplications: React.FC<unknown> = () => {
 
   if (!loggedUserApplications.length) {
     return (
-      <Card>
+      <Card className="shadow-none">
         <NoItemFound title="No applications found" />
       </Card>
     );

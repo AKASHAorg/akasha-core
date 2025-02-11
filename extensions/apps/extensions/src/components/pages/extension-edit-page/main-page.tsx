@@ -1,6 +1,6 @@
 import React, { createContext, useMemo } from 'react';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
 import { Outlet } from '@tanstack/react-router';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import { atomWithStorage, createJSONStorage } from 'jotai/utils';
 import appRoutes, { EDIT_EXTENSION } from '../../../routes';
 import { useTranslation } from 'react-i18next';
@@ -88,7 +88,7 @@ export const ExtensionEditMainPage: React.FC<ExtensionEditMainPageProps> = ({ ex
   }
 
   return (
-    <Card padding={0}>
+    <Card className="shadow-none p-0">
       <AtomContext.Provider value={formData}>
         <Outlet />
       </AtomContext.Provider>

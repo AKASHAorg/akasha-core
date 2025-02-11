@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { hasOwn, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { type ContentBlock } from '@akashaorg/typings/lib/ui';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { XMarkIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
@@ -306,7 +306,7 @@ export const BeamEditor: React.FC = () => {
   const handleModalClose = () => setNewUrl(null);
 
   return (
-    <Card padding={0} customStyle="divide(y grey9 dark:grey3) h-[80vh] justify-between">
+    <Card className="p-0 divide-y divide-border h-[80vh] justify-between">
       {!!newUrl && (
         <UnsavedChangesModal
           showModal={!!newUrl}
@@ -335,7 +335,7 @@ export const BeamEditor: React.FC = () => {
             <Card
               key={block.key}
               id={`${block.propertyType}-${idx}`}
-              type="plain"
+              className="p-0 border-none bg-transparent"
               onClick={() => setFocusedBlock(block.key)}
             >
               <Stack padding={16} direction="column" spacing="gap-2">

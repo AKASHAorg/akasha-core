@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import {
@@ -88,7 +88,7 @@ export const ReleasesPage = (props: ReleasesPageProps) => {
 
   return (
     <>
-      <Card padding="p-4">
+      <Card className="p-4">
         <Stack spacing="gap-y-4">
           <InfoSubRouteHeader
             pageTitle={t('Releases')}

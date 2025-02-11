@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useCallback, useEffect, useRef } from 'react';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
 import { useTranslation } from 'react-i18next';
@@ -176,7 +176,7 @@ export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
   }
 
   return (
-    <Card padding="p-0">
+    <Card className="p-0">
       <TermsHeader
         isLoading={isAppInfoLoading}
         appDisplayName={selectAppDisplayName(appInfo)}

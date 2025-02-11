@@ -1,11 +1,11 @@
 import React from 'react';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 
 const ProfileStatLoading: React.FC = () => {
   return (
-    <Card radius={20} padding={'p-4'}>
+    <Card className="p-4">
       <Stack direction="row" justify="between">
         <Stack spacing="gap-2">
           <TextLine

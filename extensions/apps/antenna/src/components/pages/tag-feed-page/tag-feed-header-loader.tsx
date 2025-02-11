@@ -1,11 +1,11 @@
 import React from 'react';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 
 const TagFeedHeaderLoader: React.FC = () => {
   return (
-    <Card customStyle="mb-2">
+    <Card className="mb-2">
       <Stack direction="row" align="center" justify="between" spacing="gap-x-3">
         <Stack direction="row" spacing="gap-x-2" fullWidth>
           <TextLine

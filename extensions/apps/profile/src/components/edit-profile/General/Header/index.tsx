@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import List, { ListProps } from '@akashaorg/design-system-core/lib/components/List';
@@ -198,10 +198,8 @@ export const Header: React.FC<HeaderProps> = ({
       <Text variant="h6">{title}</Text>
       <Stack customStyle="relative mb-8">
         <Card
-          dataTestId="cover-image"
-          radius={20}
-          background={{ light: 'grey7', dark: 'grey5' }}
-          customStyle={`flex p-4 h-28 w-full bg-no-repeat bg-center bg-cover bg-[url(${
+          data-testid="cover-image"
+          className={`rounded-[20px] flex p-4 h-28 w-full bg-no-repeat bg-center bg-cover bg-[url(${
             coverImageUrl?.src ?? coverImageFallback
           })]`}
         >

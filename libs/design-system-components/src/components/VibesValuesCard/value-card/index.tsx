@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
@@ -32,11 +32,7 @@ const VibesValueCard: React.FC<VibesValueCardProps> = props => {
 
   return (
     <Button plain={true} onClick={onClick}>
-      <Card
-        padding="p-0"
-        elevation={isMini ? 'none' : '1'}
-        customStyle={`rounded-2xl cursor-pointer ${isMini ? 'bg(grey9 dark:grey3)' : ''}`}
-      >
+      <Card className="p-0 rounded-2xl cursor-pointer">
         <Stack
           justify={isMini ? 'between' : 'evenly'}
           padding={isMini ? 'p-3' : 'p-4'}

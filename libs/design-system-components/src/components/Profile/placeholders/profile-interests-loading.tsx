@@ -1,12 +1,12 @@
 import React from 'react';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 
 const ProfileInterestsLoading: React.FC = () => {
   return (
     <Stack direction="column" spacing="gap-y-4" fullWidth>
-      <Card radius={20} padding="p-4">
+      <Card className="p-4">
         <Stack direction="column" spacing="gap-y-2.5" customStyle="mb-16">
           <TextLine width="w-24" animated />
           <TextLine width="w-full" animated />

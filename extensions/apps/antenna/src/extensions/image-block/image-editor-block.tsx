@@ -26,7 +26,7 @@ import {
   SortOrder,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
@@ -398,7 +398,7 @@ export const ImageEditorBlock = (
   return (
     <>
       {uiState === 'menu' && (
-        <Card background={{ dark: 'grey3', light: 'grey9' }}>
+        <Card className="shadow-none rounded-2xl">
           <Stack direction="column">
             {imageGalleryImages.length > 0 && (
               <Stack direction="row" justify="end">

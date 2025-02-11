@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -27,7 +27,7 @@ export const ApplicationApprovedCard: React.FC<ApplicationApprovedCardProps> = p
   } = props;
 
   return (
-    <Card>
+    <Card className="shadow-none">
       <Stack spacing="gap-y-4">
         <Text variant="h5" align="center">
           🎉 {titleLabel}! 🎉

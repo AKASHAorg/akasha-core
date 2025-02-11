@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { useAkashaStore, useRootComponentProps, withProviders } from '@akashaorg/ui-core-hooks';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
@@ -77,7 +77,7 @@ const TestModeWidget = () => {
             </Button>
           )}
           {!isMinimized && (
-            <Card padding="p-4" fullWidth={true}>
+            <Card className="p-4 w-full">
               <Stack direction="row" justify="between" align={'baseline'}>
                 <Text variant="h6">{t('Testing Environment')}</Text>
                 <Button variant="outline" size="icon" onClick={toggleMinimize}>

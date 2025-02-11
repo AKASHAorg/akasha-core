@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import BeamSection, { BeamSectionProps } from './beam-section';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
@@ -67,7 +67,7 @@ const BeamPage: React.FC<BeamPageProps> = props => {
   const isBeamActive = selectBeamActive(beamData);
 
   return (
-    <Card padding="p-0" margin="mb-4">
+    <Card className="p-0 mb-4">
       <ReflectFeed
         reflectToId={beamId}
         header={

@@ -1,5 +1,5 @@
 import React, { createContext, useMemo } from 'react';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import { Outlet } from '@tanstack/react-router';
 import { atomWithStorage, createJSONStorage } from 'jotai/utils';
 import appRoutes, { EDIT_PUBLISHED_EXTENSION } from '../../../routes';
@@ -77,7 +77,7 @@ export const ExtensionEditPublishedMainPage: React.FC<ExtensionEditPublishedMain
   }
 
   return (
-    <Card padding={0}>
+    <Card className="shadow-none p-0">
       <AtomContext.Provider value={formData}>
         <Outlet />
       </AtomContext.Provider>

@@ -1,7 +1,6 @@
 import React from 'react';
 import AppList from '@akashaorg/design-system-components/lib/components/AppList';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ExtensionCard, {
@@ -10,7 +9,7 @@ import ExtensionCard, {
 import { ReactNode } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 import { getExtensionTypeLabel } from '../utils/extension-utils';
-
+import { Card } from '@akashaorg/ui/lib/components/card';
 export type TExploreProps = {
   titleLabel: string;
   popularExtensions?: ExtensionCardProps[];
@@ -63,7 +62,7 @@ export const Explore: React.FC<TExploreProps> = props => {
           <AppList apps={popularExtensions.slice(1)} onLoadMore={() => null} />
         </Stack>
       )}
-      <Card padding="p-4">
+      <Card className="p-4">
         <Stack spacing="gap-y-3">
           <Text variant="h6">{cta.title}</Text>
           <Text variant="body2">{cta.description}</Text>

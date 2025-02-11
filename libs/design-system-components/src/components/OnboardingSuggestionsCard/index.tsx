@@ -1,6 +1,6 @@
 import React from 'react';
 import { Tag, type Image, Profile } from '@akashaorg/typings/lib/ui';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import { UserCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
@@ -65,7 +65,7 @@ const OnboardingSuggestionsCard: React.FC<OnboardingSuggestionsCardProps> = prop
   } = props;
 
   return (
-    <Card>
+    <Card className="shadow-none">
       <Stack spacing="gap-4">
         <Stack spacing="gap-4">
           <Text variant="h5">{topicsLabel}</Text>

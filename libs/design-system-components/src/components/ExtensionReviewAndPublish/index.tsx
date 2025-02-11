@@ -9,7 +9,7 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Label from '@akashaorg/design-system-core/lib/components/Label';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Section from './section';
@@ -313,12 +313,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
             handleClick={extensionData?.keywords?.length > 0 ? onAccordionClick : () => {}}
           />
         </Stack>
-        <Card
-          padding="p-3"
-          elevation="none"
-          radius={10}
-          background={{ light: 'grey9', dark: 'grey3' }}
-        >
+        <Card className="p-3">
           <Stack align="center" direction="row" spacing="gap-x-2">
             <Text variant="button-sm">{needToMakeChangesLabel}</Text>
             <Button

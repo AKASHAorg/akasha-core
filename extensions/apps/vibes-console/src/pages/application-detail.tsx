@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { ApplicantDataCard, ApplicationDetail } from '../components/applications/application';
 import { NoItemFound } from '../components/no-item-found';
@@ -11,7 +11,7 @@ export const ApplicationDetailPage: React.FC<unknown> = () => {
   const applicant = null;
   if (!applicationData)
     return (
-      <Card>
+      <Card className="shadow-none">
         <NoItemFound title="Oops! This application detail does not exist" />
       </Card>
     );

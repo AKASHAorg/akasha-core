@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useMemo, useRef } from 'react';
 import getSDK from '@akashaorg/core-sdk';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import BackToOriginalBeam from '@akashaorg/ui-lib-feed/lib/components/back-to-original-beam';
 import ReflectionSection, { ReflectionSectionProps } from './reflection-section';
@@ -110,7 +110,7 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
   }, []);
 
   return (
-    <Card padding="p-0" margin="mb-4">
+    <Card className="shadow-none mb-4">
       <ReflectFeed
         reflectToId={reflectionData.id}
         header={

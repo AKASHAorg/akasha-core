@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -19,15 +19,12 @@ const BasicInfoCard: React.FC<BasicInfoCardProps> = ({
   customStyle = '',
 }) => {
   return (
-    <Card padding={'p-2'} customStyle={customStyle} elevation="none" border={false}>
+    <Card className={`p-2 border-none ${customStyle}`}>
       <Stack direction="column" align="center" justify="center" customStyle="mb-32">
         {image ? (
           <Image src={image} customStyle="w-[180px] h-[180px] m-auto my-4" />
         ) : (
-          <Card
-            customStyle="bg(grey8 dark:grey5) w-[180px] h-[180px] m-auto my-4"
-            radius="rounded-xl"
-          />
+          <Card className="bg-grey8 dark:bg-grey5 w-[180px] h-[180px] m-auto my-4 rounded-xl" />
         )}
         <Stack customStyle="w-[70%] m-auto gap-4">
           {titleLabel && (

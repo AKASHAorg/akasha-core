@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import ProfileNameField from '@akashaorg/design-system-core/lib/components/ProfileNameField';
@@ -15,6 +15,7 @@ import {
 import { getImageFromSeed, getColorClasses } from '@akashaorg/design-system-core/lib/utils';
 import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
+import { cn } from '@akashaorg/ui/lib/library/utils';
 
 type ProfileBadge = {
   toolTipLabel: string;
@@ -91,18 +92,12 @@ const Header: React.FC<HeaderProps> = ({
   return (
     <Stack customStyle={customStyle}>
       <Card
-        dataTestId="cover-image"
-        elevation={plain ? 'none' : '1'}
-        radius={{ top: 20 }}
-        background={{ light: 'grey7', dark: 'grey5' }}
-        customStyle={`h-32 bg(center no-repeat cover [url(${backgroundUrl})])`}
+        data-testid="cover-image"
+        className="h-32 bg-center bg-no-repeat bg-cover bg-muted"
+        style={{ backgroundImage: `url(${backgroundUrl})` }}
         {...(background && { onClick: onClickCoverImage })}
       />
-      <Card
-        elevation={plain ? 'none' : '1'}
-        radius={plain ? '' : { bottom: 20 }}
-        padding="px-[0.5rem] pb-[1rem] pt-0"
-      >
+      <Card className={cn('px-[0.5rem] pb-[1rem] pt-0', plain && 'rounded-none')}>
         <Stack direction="column" customStyle="pl-2" fullWidth>
           <Stack direction="row" spacing="gap-x-2" customStyle="-ml-2">
             <Stack customStyle={avatarContainer}>

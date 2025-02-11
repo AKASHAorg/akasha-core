@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import ReflectionCard from '../cards/reflection-card';
 import { useGetReflectReflectionsQuery } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
 import { EntityTypes, IContentClickDetails } from '@akashaorg/typings/lib/ui';
@@ -36,7 +36,7 @@ const ReflectionPreview: React.FC<ReflectionPreviewProps> = props => {
 
   if (reflectOfReflectionReq.error)
     return (
-      <Card type="plain" customStyle={`ml-4 mb-4 ${leftBorderStyle}`}>
+      <Card className="p-0 border-x-none border-r-none ml-4 mb-4 border border-l-secondary-foreground">
         <NetworkErrorCard
           title={t('Reflection can’t be loaded')}
           message={t('Unable to load reflection content. Click “Reload” to reload the reflection.')}

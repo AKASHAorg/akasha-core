@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { CREATE_EXTENSION } from '../../routes';
 import { useRootComponentProps, useAkashaStore } from '@akashaorg/ui-core-hooks';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -50,7 +50,7 @@ export const PostPublishPage: React.FC = () => {
   }
 
   return (
-    <Card padding="py-6 px-4">
+    <Card className="py-6 px-4">
       <Stack spacing="gap-y-8" align="center">
         <Text variant="h5" weight="semibold" align="center">
           {t('Extension Published')}

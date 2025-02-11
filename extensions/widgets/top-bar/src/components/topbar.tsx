@@ -9,7 +9,7 @@ import {
   ChevronLeftIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { Akasha } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { startWidgetsTogglingBreakpoint } from '@akashaorg/design-system-core/lib/utils/breakpoints';
@@ -109,11 +109,8 @@ const Topbar: React.FC<ITopbarProps> = props => {
     };
   }, []);
 
-  const customStyle =
-    'flex-row justify-between items-center py-1.5 px-2 space-x-4 xs:(fixed top-0 z-8)';
-
   return (
-    <Card customStyle={customStyle}>
+    <Card className="flex flex-row justify-between items-center py-1.5 px-2 space-x-4 xs:fixed xs:top-0 xs:z-8">
       <Stack direction="row" spacing="gap-x-2">
         <Button variant="outline" size="icon" onClick={onSidebarToggle}>
           {sidebarVisible ? <ArrowLeftEndOnRectangleIcon /> : <ArrowRightEndOnRectangleIcon />}{' '}

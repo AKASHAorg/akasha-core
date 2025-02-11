@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -15,7 +15,7 @@ const BecomeModeratorCard: React.FC<BecomeModeratorCardProps> = props => {
   const { titleLabel, subtitleLabel, buttonLabel, onClickApply } = props;
 
   return (
-    <Card padding={16}>
+    <Card className="p-4">
       <Stack spacing="gap-y-6">
         <Text variant="h5" weight="bold">
           {titleLabel}
