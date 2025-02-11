@@ -2,7 +2,7 @@ import React from 'react';
 import { ArrowLongLeftIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import { Card } from '@akashaorg/ui/lib/components/card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 
 type BackToOriginalBeamProps = {
   label: string;

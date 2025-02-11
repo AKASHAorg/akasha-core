@@ -1,13 +1,14 @@
 import * as React from 'react';
 
 import { cn } from '@/library/utils';
-import { typographyVariants } from '@/akasha-components/typography';
+
+import { typographyVariants } from '@/components/typography';
 
 const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
-      className={cn('rounded-lg border bg-card text-card-foreground shadow-sm', className)}
+      className={cn('rounded-lg border bg-card text-card-foreground shadow-sm p-6', className)}
       {...props}
     />
   ),
@@ -16,7 +17,7 @@ Card.displayName = 'Card';
 
 const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn('flex flex-col space-y-1.5 p-6', className)} {...props} />
+    <div ref={ref} className={cn('flex flex-col space-y-1.5 pb-6', className)} {...props} />
   ),
 );
 CardHeader.displayName = 'CardHeader';
@@ -49,7 +50,7 @@ CardDescription.displayName = 'CardDescription';
 
 const CardContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn('p-6 pt-0', className)} {...props} />
+    <div ref={ref} className={cn('flex justify-center', className)} {...props} />
   ),
 );
 CardContent.displayName = 'CardContent';
@@ -58,7 +59,7 @@ const CardFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDiv
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
-      className={cn('flex items-center justify-end w-full gap-2 p-6 pt-0', className)}
+      className={cn('flex items-center justify-end w-full gap-2 pt-6', className)}
       {...props}
     />
   ),
