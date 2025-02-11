@@ -1,14 +1,12 @@
 import { readdirSync, writeFileSync } from 'fs';
 import { CeramicClient } from '@ceramicnetwork/http-client';
-import path, { extname } from 'path';
+import path from 'path';
 import ora from 'ora';
 import {
   createComposite,
   readEncodedComposite,
   writeEncodedComposite,
   writeEncodedCompositeRuntime,
-  mergeEncodedComposites,
-  writeGraphQLSchema,
 } from '@composedb/devtools-node';
 
 import { DID } from 'dids';
@@ -25,6 +23,9 @@ import akashaProfileLinks from '../composites/akasha-profile-links.mjs';
 import akashaReflect from '../composites/akasha-reflect.mjs';
 import akashaBeamLinks from '../composites/akasha-beam-links.mjs';
 import akashaStreams from '../composites/akasha-streams.mjs';
+import akashaWorldConfig from '../composites/akasha-world-config.mjs';
+import akashaWorldConfigExtension from '../composites/akasha-world-extension.mjs';
+import akashaWorldLinks from '../composites/akasha-world-links.mjs';
 
 
 import dotenv from 'dotenv';
@@ -40,7 +41,7 @@ dotenv.config({
 });
 
 // Hexadecimal-encoded private key for a DID having admin access to the target Ceramic node
-const privateKey = fromString(process.env.DID_ADMIN_PRIVATE_KEY, "base16")
+const privateKey = fromString(process.env.DID_ADMIN_PRIVATE_KEY, 'base16');
 
 const did = new DID({
   resolver: getResolver(),
@@ -48,132 +49,154 @@ const did = new DID({
 });
 await did.authenticate();
 
-const ceramic = new CeramicClient(process.env.CERAMIC_API_ENDPOINT)
+const ceramic = new CeramicClient(process.env.CERAMIC_API_ENDPOINT);
 // An authenticated DID with admin access must be set on the Ceramic instance
 ceramic.did = did;
 const spinner = ora();
 
 export const fillModels = async () => {
 
-  const akashaApp = await createComposite(ceramic, './composites/akasha-app.graphql');
-  await writeEncodedComposite(akashaApp, './src/__generated__/akasha-app.json');
-  const { AkashaApp, AkashaAppInterface } = akashaApp.toRuntime().models;
-  spinner.info(`AkashaAppInterface: ${ AkashaAppInterface.id }`);
-  spinner.info(`AkashaApp: ${ AkashaApp.id }`);
+  // const akashaApp = await createComposite(ceramic, './composites/akasha-app.graphql');
+  // await writeEncodedComposite(akashaApp, './src/__generated__/akasha-app.json');
+  // const { AkashaApp, AkashaAppInterface } = akashaApp.toRuntime().models;
+  // spinner.info(`AkashaAppInterface: ${ AkashaAppInterface.id }`);
+  // spinner.info(`AkashaApp: ${ AkashaApp.id }`);
+  //
+  // const akashaAppR = appRelease(AkashaAppInterface.id);
+  // const akashaAppRPath = path.resolve(__dirname, '../composites/akasha-app-release.graphql');
+  // writeFileSync(akashaAppRPath, akashaAppR);
+  // const akashaAppRComposite = await createComposite(ceramic, akashaAppRPath);
+  // const { AkashaAppRelease, AkashaAppReleaseInterface } = akashaAppRComposite.toRuntime().models;
+  // spinner.info(`AkashaAppReleaseInterface: ${ AkashaAppReleaseInterface.id }`);
+  // spinner.info(`AkashaAppRelease: ${ AkashaAppRelease.id }`);
+  //
+  // const akashaAppLinks = appLinks(AkashaAppReleaseInterface.id, AkashaApp.id);
+  // const akashaAppLinksPath = path.resolve(__dirname, '../composites/akasha-app-links.graphql');
+  // writeFileSync(akashaAppLinksPath, akashaAppLinks);
+  // const akashaAppLinksC = await createComposite(ceramic, akashaAppLinksPath);
+  // spinner.info(`AkashaAppLinks done`);
+  //
+  // const akashaProfileComposite = akashaProfileCompose(AkashaAppInterface.id, AkashaAppReleaseInterface.id);
+  // const akashaProfilePath = path.resolve(__dirname, '../composites/akasha-profile.graphql');
+  // writeFileSync(akashaProfilePath, akashaProfileComposite);
+  // const akashaProfile = await createComposite(ceramic, akashaProfilePath);
+  // await writeEncodedComposite(akashaProfile, './src/__generated__/akasha-profile.json');
+  // const { AkashaProfile, AkashaProfileInterface } = akashaProfile.toRuntime().models;
+  //
+  // spinner.info(`AkashaProfileInterface: ${ AkashaProfileInterface.id }`);
+  // spinner.info(`AkashaProfile: ${ AkashaProfile.id }`);
+  //
+  // const akashaF = akashaFollow(AkashaProfileInterface.id);
+  // const akashaFPath = path.resolve(__dirname, '../composites/akasha-follow.graphql');
+  // writeFileSync(akashaFPath, akashaF);
+  // const akashaFollowComposite = await createComposite(ceramic, akashaFPath);
+  // const { AkashaFollow, AkashaFollowInterface } = akashaFollowComposite.toRuntime().models;
+  // spinner.info(`AkashaFollowInterface: ${ AkashaFollowInterface.id }`);
+  // spinner.info(`AkashaFollow: ${ AkashaFollow.id }`);
+  //
+  // const akashaFLinks = akashaProfileLinks(AkashaFollowInterface.id, AkashaProfile.id);
+  // const akashaFLinksPath = path.resolve(__dirname, '../composites/akasha-profile-links.graphql');
+  // writeFileSync(akashaFLinksPath, akashaFLinks);
+  // const akashaFLinksC = await createComposite(ceramic, akashaFLinksPath);
+  // spinner.info(`AkashaFollowLinks done`);
+  //
+  //
+  // const contentBl = akashaContentBlock(AkashaAppReleaseInterface.id);
+  // const contentBlPath = path.resolve(__dirname, '../composites/akasha-content-block.graphql');
+  // writeFileSync(contentBlPath, contentBl);
+  // const akashaContentBlockComposite = await createComposite(ceramic, contentBlPath);
+  // const {
+  //   AkashaContentBlock,
+  //   AkashaContentBlockInterface,
+  //   AkashaBlockStorage,
+  // } = akashaContentBlockComposite.toRuntime().models;
+  // spinner.info(`AkashaContentBlockInterface: ${ AkashaContentBlockInterface.id }`);
+  // spinner.info(`AkashaBlockStorage: ${ AkashaBlockStorage.id }`);
+  // spinner.info(`AkashaContentBlock: ${ AkashaContentBlock.id }`);
+  //
+  // const beamC = akashaBeam(AkashaContentBlockInterface.id, AkashaAppInterface.id, AkashaAppReleaseInterface.id);
+  // const beamCPath = path.resolve(__dirname, '../composites/akasha-beam.graphql');
+  // writeFileSync(beamCPath, beamC);
+  // const akashaBeamComposite = await createComposite(ceramic, beamCPath);
+  // const { AkashaBeam, AkashaBeamInterface } = akashaBeamComposite.toRuntime().models;
+  // spinner.info(`AkashaBeamInterface: ${ AkashaBeamInterface.id }`);
+  // spinner.info(`AkashaBeam: ${ AkashaBeam.id }`);
+  //
+  //
+  // const reflectC = akashaReflect(AkashaBeamInterface.id);
+  // const reflectCPath = path.resolve(__dirname, '../composites/akasha-reflect.graphql');
+  // writeFileSync(reflectCPath, reflectC);
+  // const akashaReflectComposite = await createComposite(ceramic, reflectCPath);
+  // const { AkashaReflect, AkashaReflectInterface } = akashaReflectComposite.toRuntime().models;
+  // spinner.info(`AkashaReflectInterface: ${ AkashaReflectInterface.id }`);
+  // spinner.info(`AkashaReflect: ${ AkashaReflect.id }`);
+  //
+  //
+  // const beamLinksC = akashaBeamLinks(AkashaBeam.id, AkashaReflectInterface.id);
+  // const beamLinksCPath = path.resolve(__dirname, '../composites/akasha-beam-links.graphql');
+  // writeFileSync(beamLinksCPath, beamLinksC);
+  // const beamLinksComposite = await createComposite(ceramic, beamLinksCPath);
+  // spinner.info(`AkashaBeamLinks done`);
+  //
+  //
+  // const streamsC = akashaStreams(AkashaBeamInterface.id, AkashaProfileInterface.id, AkashaContentBlockInterface.id, AkashaReflectInterface.id, AkashaAppInterface.id);
+  // const streamsCPath = path.resolve(__dirname, '../composites/akasha-streams.graphql');
+  // writeFileSync(streamsCPath, streamsC);
+  // const streamsComposite = await createComposite(ceramic, streamsCPath);
+  // spinner.info(`AkashaStreams done`);
 
-  const akashaAppR = appRelease(AkashaAppInterface.id);
-  const akashaAppRPath = path.resolve(__dirname, '../composites/akasha-app-release.graphql');
-  writeFileSync(akashaAppRPath, akashaAppR);
-  const akashaAppRComposite = await createComposite(ceramic, akashaAppRPath);
-  const { AkashaAppRelease, AkashaAppReleaseInterface } = akashaAppRComposite.toRuntime().models;
-  spinner.info(`AkashaAppReleaseInterface: ${ AkashaAppReleaseInterface.id }`);
-  spinner.info(`AkashaAppRelease: ${ AkashaAppRelease.id }`);
 
-  const akashaAppLinks = appLinks(AkashaAppReleaseInterface.id, AkashaApp.id);
-  const akashaAppLinksPath = path.resolve(__dirname, '../composites/akasha-app-links.graphql');
-  writeFileSync(akashaAppLinksPath, akashaAppLinks);
-  const akashaAppLinksC = await createComposite(ceramic, akashaAppLinksPath);
-  spinner.info(`AkashaAppLinks done`);
+  const AkashaApp = {
+    id: 'kjzl6hvfrbw6c55lze6s2ab18ebzwg51e9q1xrw5uxl1pf3z10dg39lxruh7heo'
+  }
+  const AkashaAppInterface = {
+    id: 'kjzl6hvfrbw6c7mp2kgev6yk8hrxqkwj28l92a74x3p6wi1gcms00yx9ckxsokn'
+  }
+  const akashaWorld = await createComposite(ceramic, './composites/akasha-world.graphql');
+  await writeEncodedComposite(akashaWorld, './src/__generated__/akasha-world.json');
+  const { AkashaWorld, AkashaWorldInterface } = akashaWorld.toRuntime().models;
+  spinner.info(`AkashaWorldInterface: ${ AkashaWorldInterface.id }`);
+  spinner.info(`AkashaWorld: ${ AkashaWorld.id }`);
 
-  const akashaProfileComposite = akashaProfileCompose(AkashaAppInterface.id, AkashaAppReleaseInterface.id);
-  const akashaProfilePath = path.resolve(__dirname, '../composites/akasha-profile.graphql');
-  writeFileSync(akashaProfilePath, akashaProfileComposite);
-  const akashaProfile = await createComposite(ceramic, akashaProfilePath);
-  await writeEncodedComposite(akashaProfile, './src/__generated__/akasha-profile.json');
-  const { AkashaProfile, AkashaProfileInterface } = akashaProfile.toRuntime().models;
-
-  spinner.info(`AkashaProfileInterface: ${ AkashaProfileInterface.id }`);
-  spinner.info(`AkashaProfile: ${ AkashaProfile.id }`);
-
-  const akashaF = akashaFollow(AkashaProfileInterface.id);
-  const akashaFPath = path.resolve(__dirname, '../composites/akasha-follow.graphql');
-  writeFileSync(akashaFPath, akashaF);
-  const akashaFollowComposite = await createComposite(ceramic, akashaFPath);
-  const { AkashaFollow, AkashaFollowInterface } = akashaFollowComposite.toRuntime().models;
-  spinner.info(`AkashaFollowInterface: ${ AkashaFollowInterface.id }`);
-  spinner.info(`AkashaFollow: ${ AkashaFollow.id }`);
-
-  const akashaFLinks = akashaProfileLinks(AkashaFollowInterface.id, AkashaProfile.id);
-  const akashaFLinksPath = path.resolve(__dirname, '../composites/akasha-profile-links.graphql');
-  writeFileSync(akashaFLinksPath, akashaFLinks);
-  const akashaFLinksC = await createComposite(ceramic, akashaFLinksPath);
-  spinner.info(`AkashaFollowLinks done`);
-
-
-  const contentBl = akashaContentBlock(AkashaAppReleaseInterface.id);
-  const contentBlPath = path.resolve(__dirname, '../composites/akasha-content-block.graphql');
-  writeFileSync(contentBlPath, contentBl);
-  const akashaContentBlockComposite = await createComposite(ceramic, contentBlPath);
+  const akashaWorldConfigR = akashaWorldConfig(AkashaAppInterface.id, AkashaWorldInterface.id);
+  const akashaWorldConfigRPath = path.resolve(__dirname, '../composites/akasha-world-config.graphql');
+  writeFileSync(akashaWorldConfigRPath, akashaWorldConfigR);
+  const akashaWorldConfigRComposite = await createComposite(ceramic, akashaWorldConfigRPath);
   const {
-    AkashaContentBlock,
-    AkashaContentBlockInterface,
-    AkashaBlockStorage,
-  } = akashaContentBlockComposite.toRuntime().models;
-  spinner.info(`AkashaContentBlockInterface: ${ AkashaContentBlockInterface.id }`);
-  spinner.info(`AkashaBlockStorage: ${ AkashaBlockStorage.id }`);
-  spinner.info(`AkashaContentBlock: ${ AkashaContentBlock.id }`);
-
-  const beamC = akashaBeam(AkashaContentBlockInterface.id, AkashaAppInterface.id, AkashaAppReleaseInterface.id);
-  const beamCPath = path.resolve(__dirname, '../composites/akasha-beam.graphql');
-  writeFileSync(beamCPath, beamC);
-  const akashaBeamComposite = await createComposite(ceramic, beamCPath);
-  const { AkashaBeam, AkashaBeamInterface } = akashaBeamComposite.toRuntime().models;
-  spinner.info(`AkashaBeamInterface: ${ AkashaBeamInterface.id }`);
-  spinner.info(`AkashaBeam: ${ AkashaBeam.id }`);
+    AkashaWorldConfigInterface,
+    AkashaWorldConfig,
+    AkashaWorldMetaInfoInterface,
+    AkashaWorldMetaInfo,
+  } = akashaWorldConfigRComposite.toRuntime().models;
+  spinner.info(`AkashaWorldConfigInterface: ${ AkashaWorldConfigInterface.id }`);
+  spinner.info(`AkashaWorldConfig: ${ AkashaWorldConfig.id }`);
+  spinner.info(`AkashaWorldMetaInfoInterface: ${ AkashaWorldMetaInfoInterface.id }`);
+  spinner.info(`AkashaWorldMetaInfo: ${ AkashaWorldMetaInfo.id }`);
 
 
-  const reflectC = akashaReflect(AkashaBeamInterface.id);
-  const reflectCPath = path.resolve(__dirname, '../composites/akasha-reflect.graphql');
-  writeFileSync(reflectCPath, reflectC);
-  const akashaReflectComposite = await createComposite(ceramic, reflectCPath);
-  const { AkashaReflect, AkashaReflectInterface } = akashaReflectComposite.toRuntime().models;
-  spinner.info(`AkashaReflectInterface: ${ AkashaReflectInterface.id }`);
-  spinner.info(`AkashaReflect: ${ AkashaReflect.id }`);
+  const akashaWorldConfigExtensionR = akashaWorldConfigExtension(AkashaAppInterface.id, AkashaWorldConfigInterface.id);
+  const akashaWorldConfigExtensionRPath = path.resolve(__dirname, '../composites/akasha-world-extension.graphql');
+  writeFileSync(akashaWorldConfigExtensionRPath, akashaWorldConfigExtensionR);
+  const akashaWorldConfigExtensionRComposite = await createComposite(ceramic, akashaWorldConfigExtensionRPath);
+  const {
+    AkashaWorldConfigExtensionInterface,
+    AkashaWorldConfigExtension,
+  } = akashaWorldConfigExtensionRComposite.toRuntime().models;
+  spinner.info(`AkashaWorldConfigExtensionInterface: ${ AkashaWorldConfigExtensionInterface.id }`);
+  spinner.info(`AkashaWorldConfigExtension: ${ AkashaWorldConfigExtension.id }`);
 
-
-  const beamLinksC = akashaBeamLinks(AkashaBeam.id, AkashaReflectInterface.id);
-  const beamLinksCPath = path.resolve(__dirname, '../composites/akasha-beam-links.graphql');
-  writeFileSync(beamLinksCPath, beamLinksC);
-  const beamLinksComposite = await createComposite(ceramic, beamLinksCPath);
-  spinner.info(`AkashaBeamLinks done`);
-
-
-  const streamsC = akashaStreams(AkashaBeamInterface.id, AkashaProfileInterface.id, AkashaContentBlockInterface.id, AkashaReflectInterface.id, AkashaAppInterface.id);
-  const streamsCPath = path.resolve(__dirname, '../composites/akasha-streams.graphql');
-  writeFileSync(streamsCPath, streamsC);
-  const streamsComposite = await createComposite(ceramic, streamsCPath);
-  spinner.info(`AkashaStreams done`);
-
-  const comp = Composite.from([
-    akashaProfile,
-    akashaApp,
-    akashaAppRComposite,
-    akashaAppLinksC,
-    akashaFollowComposite,
-    akashaFLinksC,
-    akashaContentBlockComposite,
-    akashaBeamComposite,
-    akashaReflectComposite,
-    beamLinksComposite,
-    streamsComposite,
-  ], {
-    commonEmbeds: [
-      'ProfileImageSource',
-      'ProfileImageVersions',
-      'ProfileLinkSource',
-      'ProfileLabeled',
-      'AppImageSource',
-      'AppLinkSource',
-      'AppProviderValue',
-      'BeamLabeled',
-      'BeamBlockRecord',
-      'BeamEmbeddedType',
-      'BlockLabeledValue',
-      'ReflectProviderValue',
-    ],
-  });
-
-  await writeEncodedComposite(comp,  path.resolve(__dirname, '../lib/runtime-definition.json'));
+  const akashaWorldLinksC = akashaWorldLinks(
+    AkashaWorldConfigExtensionInterface.id,
+    AkashaApp.id,
+    AkashaWorldConfigInterface.id,
+    AkashaWorldConfig.id,
+    AkashaWorldMetaInfoInterface.id,
+    AkashaWorld.id
+  );
+  const akashaWorldLinksCPath = path.resolve(__dirname, '../composites/akasha-world-links.graphql');
+  writeFileSync(akashaWorldLinksCPath, akashaWorldLinksC);
+  const akashaWorldLinksComposite = await createComposite(ceramic, akashaWorldLinksCPath);
+  spinner.info(`AkashaWorldLinks done: ${akashaWorldLinksComposite.hash}`);
 };
 
 /**
@@ -191,12 +214,14 @@ export const writeComposites = async () => {
 
 const encodeComposites = async (files) => {
   let composite;
+  const mergedComposites = [];
   await Promise.all(files.map(async (file, _id) => {
     try {
       if (!file.endsWith(`graphql`)) {
         return Promise.resolve();
       }
       composite = await createComposite(ceramic, path.resolve(__dirname, `../composites/${ file }`));
+      mergedComposites.push(composite);
       return await writeEncodedComposite(
         composite,
         path.resolve(__dirname, `../src/__generated__/${ file.split('.graphql')[0] }.json`),
@@ -207,23 +232,44 @@ const encodeComposites = async (files) => {
       console.error(err);
     }
   }));
+  const comp = Composite.from(mergedComposites, {
+    commonEmbeds: [
+      'ProfileImageSource',
+      'ProfileImageVersions',
+      'ProfileLinkSource',
+      'ProfileLabeled',
+      'AppImageSource',
+      'AppLinkSource',
+      'AppProviderValue',
+      'BeamLabeled',
+      'BeamBlockRecord',
+      'BeamEmbeddedType',
+      'BlockLabeledValue',
+      'ReflectProviderValue',
+      'AkashaWorldImageSource',
+      'AkashaWorldImageVersions',
+      'SocialLink',
+    ],
+  });
+
+  await writeEncodedComposite(comp, path.resolve(__dirname, '../lib/runtime-definition.json'));
 };
 
 const mergeComposites = async () => {
-    await writeEncodedCompositeRuntime(
-      ceramic,
-      path.resolve(__dirname, '../lib/runtime-definition.json'),
-      path.resolve(__dirname, '../src/runtime-definition.ts'),
-      path.resolve(__dirname, '../lib/schema.graphql'),
-    );
-    // await writeGraphQLSchema(
-    //   path.resolve(__dirname, '../lib/runtime-definition.json'),
-    //   path.resolve(__dirname, '../lib/schemas.graphql')
-    //   )
-    const deployedComposite = await readEncodedComposite(ceramic, path.resolve(__dirname, '../lib/runtime-definition.json'));
-    spinner.info('indexing composites');
-    await deployedComposite.startIndexingOn(ceramic);
-    spinner.succeed('composites indexed');
+  await writeEncodedCompositeRuntime(
+    ceramic,
+    path.resolve(__dirname, '../lib/runtime-definition.json'),
+    path.resolve(__dirname, '../src/runtime-definition.ts'),
+    path.resolve(__dirname, '../lib/schema.graphql'),
+  );
+  // await writeGraphQLSchema(
+  //   path.resolve(__dirname, '../lib/runtime-definition.json'),
+  //   path.resolve(__dirname, '../lib/schemas.graphql')
+  //   )
+  const deployedComposite = await readEncodedComposite(ceramic, path.resolve(__dirname, '../lib/runtime-definition.json'));
+  spinner.info('indexing composites');
+  await deployedComposite.startIndexingOn(ceramic);
+  spinner.succeed('composites indexed');
 };
 
 await writeComposites();

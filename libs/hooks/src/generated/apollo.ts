@@ -355,6 +355,77 @@ export const AppReleaseFragmentMFragmentDoc = /*#__PURE__*/ gql`
   createdAt
 }
     `;
+export const AkashaWorldFragmentMFragmentDoc = /*#__PURE__*/ gql`
+    fragment AkashaWorldFragmentM on AkashaWorld {
+  id
+  icon {
+    default {
+      sizes
+      src
+      width
+      height
+    }
+  }
+  active
+  instanceURL
+  createdAt
+  creator {
+    id
+  }
+  extensionPublishers {
+    id
+    akashaProfile {
+      name
+      id
+      avatar {
+        default {
+          src
+          width
+          height
+        }
+      }
+    }
+  }
+}
+    `;
+export const AkashaWorldConfigMFragmentDoc = /*#__PURE__*/ gql`
+    fragment AkashaWorldConfigM on AkashaWorldConfig {
+  id
+  worldID
+  creator {
+    id
+  }
+  active
+  createdAt
+  homepageExtension
+  registryExtension
+  layoutExtension
+}
+    `;
+export const AkashaWorldConfigExtensionMFragmentDoc = /*#__PURE__*/ gql`
+    fragment AkashaWorldConfigExtensionM on AkashaWorldConfigExtension {
+  id
+  active
+  createdAt
+  worldConfigID
+  extensionID
+  extension {
+    name
+    displayName
+    author {
+      id
+    }
+    logoImage {
+      src
+      width
+      height
+    }
+  }
+  creator {
+    id
+  }
+}
+    `;
 export const UserProfileFragmentDoc = /*#__PURE__*/ gql`
     fragment UserProfileFragment on AkashaProfile {
   id
@@ -488,6 +559,77 @@ export const AppReleaseFragmentDoc = /*#__PURE__*/ gql`
     provider
     property
     value
+  }
+}
+    `;
+export const AkashaWorldFragmentDoc = /*#__PURE__*/ gql`
+    fragment AkashaWorldFragment on AkashaWorld {
+  id
+  icon {
+    default {
+      sizes
+      src
+      width
+      height
+    }
+  }
+  active
+  instanceURL
+  createdAt
+  creator {
+    id
+  }
+  extensionPublishers {
+    id
+    akashaProfile {
+      name
+      id
+      avatar {
+        default {
+          src
+          width
+          height
+        }
+      }
+    }
+  }
+}
+    `;
+export const AkashaWorldConfigFragmentDoc = /*#__PURE__*/ gql`
+    fragment AkashaWorldConfigFragment on AkashaWorldConfig {
+  id
+  worldID
+  creator {
+    id
+  }
+  active
+  createdAt
+  homepageExtension
+  registryExtension
+  layoutExtension
+}
+    `;
+export const AkashaWorldConfigExtensionFragmentDoc = /*#__PURE__*/ gql`
+    fragment AkashaWorldConfigExtensionFragment on AkashaWorldConfigExtension {
+  id
+  active
+  createdAt
+  worldConfigID
+  extensionID
+  extension {
+    name
+    displayName
+    author {
+      id
+    }
+    logoImage {
+      src
+      width
+      height
+    }
+  }
+  creator {
+    id
   }
 }
     `;
@@ -2873,6 +3015,222 @@ export function useUpdateAppMutation(baseOptions?: Apollo.MutationHookOptions<Ty
 export type UpdateAppMutationHookResult = ReturnType<typeof useUpdateAppMutation>;
 export type UpdateAppMutationResult = Apollo.MutationResult<Types.UpdateAppMutation>;
 export type UpdateAppMutationOptions = Apollo.BaseMutationOptions<Types.UpdateAppMutation, Types.UpdateAppMutationVariables>;
+export const CreateWorldDocument = /*#__PURE__*/ gql`
+    mutation CreateWorld($i: SetAkashaWorldInput!) {
+  setAkashaWorld(input: $i) {
+    document {
+      ...AkashaWorldFragmentM
+    }
+    clientMutationId
+  }
+}
+    ${AkashaWorldFragmentMFragmentDoc}`;
+export type CreateWorldMutationFn = Apollo.MutationFunction<Types.CreateWorldMutation, Types.CreateWorldMutationVariables>;
+
+/**
+ * __useCreateWorldMutation__
+ *
+ * To run a mutation, you first call `useCreateWorldMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateWorldMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createWorldMutation, { data, loading, error }] = useCreateWorldMutation({
+ *   variables: {
+ *      i: // value for 'i'
+ *   },
+ * });
+ */
+export function useCreateWorldMutation(baseOptions?: Apollo.MutationHookOptions<Types.CreateWorldMutation, Types.CreateWorldMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<Types.CreateWorldMutation, Types.CreateWorldMutationVariables>(CreateWorldDocument, options);
+      }
+export type CreateWorldMutationHookResult = ReturnType<typeof useCreateWorldMutation>;
+export type CreateWorldMutationResult = Apollo.MutationResult<Types.CreateWorldMutation>;
+export type CreateWorldMutationOptions = Apollo.BaseMutationOptions<Types.CreateWorldMutation, Types.CreateWorldMutationVariables>;
+export const UpdateWorldDocument = /*#__PURE__*/ gql`
+    mutation UpdateWorld($i: UpdateAkashaWorldInput!) {
+  updateAkashaWorld(input: $i) {
+    document {
+      ...AkashaWorldFragmentM
+    }
+    clientMutationId
+  }
+}
+    ${AkashaWorldFragmentMFragmentDoc}`;
+export type UpdateWorldMutationFn = Apollo.MutationFunction<Types.UpdateWorldMutation, Types.UpdateWorldMutationVariables>;
+
+/**
+ * __useUpdateWorldMutation__
+ *
+ * To run a mutation, you first call `useUpdateWorldMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateWorldMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateWorldMutation, { data, loading, error }] = useUpdateWorldMutation({
+ *   variables: {
+ *      i: // value for 'i'
+ *   },
+ * });
+ */
+export function useUpdateWorldMutation(baseOptions?: Apollo.MutationHookOptions<Types.UpdateWorldMutation, Types.UpdateWorldMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<Types.UpdateWorldMutation, Types.UpdateWorldMutationVariables>(UpdateWorldDocument, options);
+      }
+export type UpdateWorldMutationHookResult = ReturnType<typeof useUpdateWorldMutation>;
+export type UpdateWorldMutationResult = Apollo.MutationResult<Types.UpdateWorldMutation>;
+export type UpdateWorldMutationOptions = Apollo.BaseMutationOptions<Types.UpdateWorldMutation, Types.UpdateWorldMutationVariables>;
+export const CreateAkashaWorldConfigDocument = /*#__PURE__*/ gql`
+    mutation CreateAkashaWorldConfig($i: SetAkashaWorldConfigInput!) {
+  setAkashaWorldConfig(input: $i) {
+    document {
+      ...AkashaWorldConfigM
+    }
+    clientMutationId
+  }
+}
+    ${AkashaWorldConfigMFragmentDoc}`;
+export type CreateAkashaWorldConfigMutationFn = Apollo.MutationFunction<Types.CreateAkashaWorldConfigMutation, Types.CreateAkashaWorldConfigMutationVariables>;
+
+/**
+ * __useCreateAkashaWorldConfigMutation__
+ *
+ * To run a mutation, you first call `useCreateAkashaWorldConfigMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateAkashaWorldConfigMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createAkashaWorldConfigMutation, { data, loading, error }] = useCreateAkashaWorldConfigMutation({
+ *   variables: {
+ *      i: // value for 'i'
+ *   },
+ * });
+ */
+export function useCreateAkashaWorldConfigMutation(baseOptions?: Apollo.MutationHookOptions<Types.CreateAkashaWorldConfigMutation, Types.CreateAkashaWorldConfigMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<Types.CreateAkashaWorldConfigMutation, Types.CreateAkashaWorldConfigMutationVariables>(CreateAkashaWorldConfigDocument, options);
+      }
+export type CreateAkashaWorldConfigMutationHookResult = ReturnType<typeof useCreateAkashaWorldConfigMutation>;
+export type CreateAkashaWorldConfigMutationResult = Apollo.MutationResult<Types.CreateAkashaWorldConfigMutation>;
+export type CreateAkashaWorldConfigMutationOptions = Apollo.BaseMutationOptions<Types.CreateAkashaWorldConfigMutation, Types.CreateAkashaWorldConfigMutationVariables>;
+export const UpdateAkashaWorldConfigDocument = /*#__PURE__*/ gql`
+    mutation UpdateAkashaWorldConfig($i: UpdateAkashaWorldConfigInput!) {
+  updateAkashaWorldConfig(input: $i) {
+    document {
+      ...AkashaWorldConfigM
+    }
+    clientMutationId
+  }
+}
+    ${AkashaWorldConfigMFragmentDoc}`;
+export type UpdateAkashaWorldConfigMutationFn = Apollo.MutationFunction<Types.UpdateAkashaWorldConfigMutation, Types.UpdateAkashaWorldConfigMutationVariables>;
+
+/**
+ * __useUpdateAkashaWorldConfigMutation__
+ *
+ * To run a mutation, you first call `useUpdateAkashaWorldConfigMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateAkashaWorldConfigMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateAkashaWorldConfigMutation, { data, loading, error }] = useUpdateAkashaWorldConfigMutation({
+ *   variables: {
+ *      i: // value for 'i'
+ *   },
+ * });
+ */
+export function useUpdateAkashaWorldConfigMutation(baseOptions?: Apollo.MutationHookOptions<Types.UpdateAkashaWorldConfigMutation, Types.UpdateAkashaWorldConfigMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<Types.UpdateAkashaWorldConfigMutation, Types.UpdateAkashaWorldConfigMutationVariables>(UpdateAkashaWorldConfigDocument, options);
+      }
+export type UpdateAkashaWorldConfigMutationHookResult = ReturnType<typeof useUpdateAkashaWorldConfigMutation>;
+export type UpdateAkashaWorldConfigMutationResult = Apollo.MutationResult<Types.UpdateAkashaWorldConfigMutation>;
+export type UpdateAkashaWorldConfigMutationOptions = Apollo.BaseMutationOptions<Types.UpdateAkashaWorldConfigMutation, Types.UpdateAkashaWorldConfigMutationVariables>;
+export const CreateAkashaWorldConfigExtensionDocument = /*#__PURE__*/ gql`
+    mutation CreateAkashaWorldConfigExtension($i: SetAkashaWorldConfigExtensionInput!) {
+  setAkashaWorldConfigExtension(input: $i) {
+    document {
+      ...AkashaWorldConfigExtensionM
+    }
+    clientMutationId
+  }
+}
+    ${AkashaWorldConfigExtensionMFragmentDoc}`;
+export type CreateAkashaWorldConfigExtensionMutationFn = Apollo.MutationFunction<Types.CreateAkashaWorldConfigExtensionMutation, Types.CreateAkashaWorldConfigExtensionMutationVariables>;
+
+/**
+ * __useCreateAkashaWorldConfigExtensionMutation__
+ *
+ * To run a mutation, you first call `useCreateAkashaWorldConfigExtensionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateAkashaWorldConfigExtensionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createAkashaWorldConfigExtensionMutation, { data, loading, error }] = useCreateAkashaWorldConfigExtensionMutation({
+ *   variables: {
+ *      i: // value for 'i'
+ *   },
+ * });
+ */
+export function useCreateAkashaWorldConfigExtensionMutation(baseOptions?: Apollo.MutationHookOptions<Types.CreateAkashaWorldConfigExtensionMutation, Types.CreateAkashaWorldConfigExtensionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<Types.CreateAkashaWorldConfigExtensionMutation, Types.CreateAkashaWorldConfigExtensionMutationVariables>(CreateAkashaWorldConfigExtensionDocument, options);
+      }
+export type CreateAkashaWorldConfigExtensionMutationHookResult = ReturnType<typeof useCreateAkashaWorldConfigExtensionMutation>;
+export type CreateAkashaWorldConfigExtensionMutationResult = Apollo.MutationResult<Types.CreateAkashaWorldConfigExtensionMutation>;
+export type CreateAkashaWorldConfigExtensionMutationOptions = Apollo.BaseMutationOptions<Types.CreateAkashaWorldConfigExtensionMutation, Types.CreateAkashaWorldConfigExtensionMutationVariables>;
+export const UpdateAkashaWorldConfigExtensionDocument = /*#__PURE__*/ gql`
+    mutation UpdateAkashaWorldConfigExtension($i: UpdateAkashaWorldConfigExtensionInput!) {
+  updateAkashaWorldConfigExtension(input: $i) {
+    document {
+      ...AkashaWorldConfigExtensionM
+    }
+    clientMutationId
+  }
+}
+    ${AkashaWorldConfigExtensionMFragmentDoc}`;
+export type UpdateAkashaWorldConfigExtensionMutationFn = Apollo.MutationFunction<Types.UpdateAkashaWorldConfigExtensionMutation, Types.UpdateAkashaWorldConfigExtensionMutationVariables>;
+
+/**
+ * __useUpdateAkashaWorldConfigExtensionMutation__
+ *
+ * To run a mutation, you first call `useUpdateAkashaWorldConfigExtensionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateAkashaWorldConfigExtensionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateAkashaWorldConfigExtensionMutation, { data, loading, error }] = useUpdateAkashaWorldConfigExtensionMutation({
+ *   variables: {
+ *      i: // value for 'i'
+ *   },
+ * });
+ */
+export function useUpdateAkashaWorldConfigExtensionMutation(baseOptions?: Apollo.MutationHookOptions<Types.UpdateAkashaWorldConfigExtensionMutation, Types.UpdateAkashaWorldConfigExtensionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<Types.UpdateAkashaWorldConfigExtensionMutation, Types.UpdateAkashaWorldConfigExtensionMutationVariables>(UpdateAkashaWorldConfigExtensionDocument, options);
+      }
+export type UpdateAkashaWorldConfigExtensionMutationHookResult = ReturnType<typeof useUpdateAkashaWorldConfigExtensionMutation>;
+export type UpdateAkashaWorldConfigExtensionMutationResult = Apollo.MutationResult<Types.UpdateAkashaWorldConfigExtensionMutation>;
+export type UpdateAkashaWorldConfigExtensionMutationOptions = Apollo.BaseMutationOptions<Types.UpdateAkashaWorldConfigExtensionMutation, Types.UpdateAkashaWorldConfigExtensionMutationVariables>;
 export const GetAppsDocument = /*#__PURE__*/ gql`
     query GetApps($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaAppFiltersInput, $sorting: AkashaAppSortingInput) {
   akashaAppIndex(
@@ -3300,3 +3658,307 @@ export type GetAppReleaseByIdQueryHookResult = ReturnType<typeof useGetAppReleas
 export type GetAppReleaseByIdLazyQueryHookResult = ReturnType<typeof useGetAppReleaseByIdLazyQuery>;
 export type GetAppReleaseByIdSuspenseQueryHookResult = ReturnType<typeof useGetAppReleaseByIdSuspenseQuery>;
 export type GetAppReleaseByIdQueryResult = Apollo.QueryResult<Types.GetAppReleaseByIdQuery, Types.GetAppReleaseByIdQueryVariables>;
+export const GetWorldByIdDocument = /*#__PURE__*/ gql`
+    query GetWorldByID($id: ID!) {
+  node(id: $id) {
+    ... on AkashaWorld {
+      ...AkashaWorldFragment
+    }
+  }
+}
+    ${AkashaWorldFragmentDoc}`;
+
+/**
+ * __useGetWorldByIdQuery__
+ *
+ * To run a query within a React component, call `useGetWorldByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetWorldByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetWorldByIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetWorldByIdQuery(baseOptions: Apollo.QueryHookOptions<Types.GetWorldByIdQuery, Types.GetWorldByIdQueryVariables> & ({ variables: Types.GetWorldByIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<Types.GetWorldByIdQuery, Types.GetWorldByIdQueryVariables>(GetWorldByIdDocument, options);
+      }
+export function useGetWorldByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Types.GetWorldByIdQuery, Types.GetWorldByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<Types.GetWorldByIdQuery, Types.GetWorldByIdQueryVariables>(GetWorldByIdDocument, options);
+        }
+export function useGetWorldByIdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<Types.GetWorldByIdQuery, Types.GetWorldByIdQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<Types.GetWorldByIdQuery, Types.GetWorldByIdQueryVariables>(GetWorldByIdDocument, options);
+        }
+export type GetWorldByIdQueryHookResult = ReturnType<typeof useGetWorldByIdQuery>;
+export type GetWorldByIdLazyQueryHookResult = ReturnType<typeof useGetWorldByIdLazyQuery>;
+export type GetWorldByIdSuspenseQueryHookResult = ReturnType<typeof useGetWorldByIdSuspenseQuery>;
+export type GetWorldByIdQueryResult = Apollo.QueryResult<Types.GetWorldByIdQuery, Types.GetWorldByIdQueryVariables>;
+export const GetWorldByNameDocument = /*#__PURE__*/ gql`
+    query GetWorldByName($name: String!) {
+  akashaWorldIndex(
+    first: 2
+    filters: {and: [{where: {name: {equalTo: $name}}}, {where: {active: {equalTo: true}}}]}
+  ) {
+    edges {
+      node {
+        ...AkashaWorldFragment
+      }
+    }
+  }
+}
+    ${AkashaWorldFragmentDoc}`;
+
+/**
+ * __useGetWorldByNameQuery__
+ *
+ * To run a query within a React component, call `useGetWorldByNameQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetWorldByNameQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetWorldByNameQuery({
+ *   variables: {
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useGetWorldByNameQuery(baseOptions: Apollo.QueryHookOptions<Types.GetWorldByNameQuery, Types.GetWorldByNameQueryVariables> & ({ variables: Types.GetWorldByNameQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<Types.GetWorldByNameQuery, Types.GetWorldByNameQueryVariables>(GetWorldByNameDocument, options);
+      }
+export function useGetWorldByNameLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Types.GetWorldByNameQuery, Types.GetWorldByNameQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<Types.GetWorldByNameQuery, Types.GetWorldByNameQueryVariables>(GetWorldByNameDocument, options);
+        }
+export function useGetWorldByNameSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<Types.GetWorldByNameQuery, Types.GetWorldByNameQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<Types.GetWorldByNameQuery, Types.GetWorldByNameQueryVariables>(GetWorldByNameDocument, options);
+        }
+export type GetWorldByNameQueryHookResult = ReturnType<typeof useGetWorldByNameQuery>;
+export type GetWorldByNameLazyQueryHookResult = ReturnType<typeof useGetWorldByNameLazyQuery>;
+export type GetWorldByNameSuspenseQueryHookResult = ReturnType<typeof useGetWorldByNameSuspenseQuery>;
+export type GetWorldByNameQueryResult = Apollo.QueryResult<Types.GetWorldByNameQuery, Types.GetWorldByNameQueryVariables>;
+export const GetWorldConfigDocument = /*#__PURE__*/ gql`
+    query GetWorldConfig($worldID: String!, $creator: ID) {
+  akashaWorldConfigIndex(
+    first: 1
+    filters: {and: [{where: {worldID: {equalTo: $worldID}}}, {where: {active: {equalTo: true}}}]}
+  ) {
+    edges {
+      node {
+        ...AkashaWorldConfigFragment
+        extensions(account: $creator, first: 100) {
+          edges {
+            node {
+              ...AkashaWorldConfigExtensionFragment
+            }
+          }
+        }
+      }
+    }
+  }
+}
+    ${AkashaWorldConfigFragmentDoc}
+${AkashaWorldConfigExtensionFragmentDoc}`;
+
+/**
+ * __useGetWorldConfigQuery__
+ *
+ * To run a query within a React component, call `useGetWorldConfigQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetWorldConfigQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetWorldConfigQuery({
+ *   variables: {
+ *      worldID: // value for 'worldID'
+ *      creator: // value for 'creator'
+ *   },
+ * });
+ */
+export function useGetWorldConfigQuery(baseOptions: Apollo.QueryHookOptions<Types.GetWorldConfigQuery, Types.GetWorldConfigQueryVariables> & ({ variables: Types.GetWorldConfigQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<Types.GetWorldConfigQuery, Types.GetWorldConfigQueryVariables>(GetWorldConfigDocument, options);
+      }
+export function useGetWorldConfigLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Types.GetWorldConfigQuery, Types.GetWorldConfigQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<Types.GetWorldConfigQuery, Types.GetWorldConfigQueryVariables>(GetWorldConfigDocument, options);
+        }
+export function useGetWorldConfigSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<Types.GetWorldConfigQuery, Types.GetWorldConfigQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<Types.GetWorldConfigQuery, Types.GetWorldConfigQueryVariables>(GetWorldConfigDocument, options);
+        }
+export type GetWorldConfigQueryHookResult = ReturnType<typeof useGetWorldConfigQuery>;
+export type GetWorldConfigLazyQueryHookResult = ReturnType<typeof useGetWorldConfigLazyQuery>;
+export type GetWorldConfigSuspenseQueryHookResult = ReturnType<typeof useGetWorldConfigSuspenseQuery>;
+export type GetWorldConfigQueryResult = Apollo.QueryResult<Types.GetWorldConfigQuery, Types.GetWorldConfigQueryVariables>;
+export const GetWorldConfigByIdDocument = /*#__PURE__*/ gql`
+    query GetWorldConfigByID($configID: ID!) {
+  node(id: $configID) {
+    ... on AkashaWorldConfig {
+      ...AkashaWorldConfigFragment
+    }
+  }
+}
+    ${AkashaWorldConfigFragmentDoc}`;
+
+/**
+ * __useGetWorldConfigByIdQuery__
+ *
+ * To run a query within a React component, call `useGetWorldConfigByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetWorldConfigByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetWorldConfigByIdQuery({
+ *   variables: {
+ *      configID: // value for 'configID'
+ *   },
+ * });
+ */
+export function useGetWorldConfigByIdQuery(baseOptions: Apollo.QueryHookOptions<Types.GetWorldConfigByIdQuery, Types.GetWorldConfigByIdQueryVariables> & ({ variables: Types.GetWorldConfigByIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<Types.GetWorldConfigByIdQuery, Types.GetWorldConfigByIdQueryVariables>(GetWorldConfigByIdDocument, options);
+      }
+export function useGetWorldConfigByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Types.GetWorldConfigByIdQuery, Types.GetWorldConfigByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<Types.GetWorldConfigByIdQuery, Types.GetWorldConfigByIdQueryVariables>(GetWorldConfigByIdDocument, options);
+        }
+export function useGetWorldConfigByIdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<Types.GetWorldConfigByIdQuery, Types.GetWorldConfigByIdQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<Types.GetWorldConfigByIdQuery, Types.GetWorldConfigByIdQueryVariables>(GetWorldConfigByIdDocument, options);
+        }
+export type GetWorldConfigByIdQueryHookResult = ReturnType<typeof useGetWorldConfigByIdQuery>;
+export type GetWorldConfigByIdLazyQueryHookResult = ReturnType<typeof useGetWorldConfigByIdLazyQuery>;
+export type GetWorldConfigByIdSuspenseQueryHookResult = ReturnType<typeof useGetWorldConfigByIdSuspenseQuery>;
+export type GetWorldConfigByIdQueryResult = Apollo.QueryResult<Types.GetWorldConfigByIdQuery, Types.GetWorldConfigByIdQueryVariables>;
+export const GetWorldConfigExtensionsDocument = /*#__PURE__*/ gql`
+    query GetWorldConfigExtensions($configID: String!) {
+  akashaWorldConfigExtensionIndex(
+    first: 100
+    filters: {and: [{where: {worldConfigID: {equalTo: $configID}}}, {where: {active: {equalTo: true}}}]}
+  ) {
+    edges {
+      node {
+        ...AkashaWorldConfigExtensionFragment
+      }
+    }
+  }
+}
+    ${AkashaWorldConfigExtensionFragmentDoc}`;
+
+/**
+ * __useGetWorldConfigExtensionsQuery__
+ *
+ * To run a query within a React component, call `useGetWorldConfigExtensionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetWorldConfigExtensionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetWorldConfigExtensionsQuery({
+ *   variables: {
+ *      configID: // value for 'configID'
+ *   },
+ * });
+ */
+export function useGetWorldConfigExtensionsQuery(baseOptions: Apollo.QueryHookOptions<Types.GetWorldConfigExtensionsQuery, Types.GetWorldConfigExtensionsQueryVariables> & ({ variables: Types.GetWorldConfigExtensionsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<Types.GetWorldConfigExtensionsQuery, Types.GetWorldConfigExtensionsQueryVariables>(GetWorldConfigExtensionsDocument, options);
+      }
+export function useGetWorldConfigExtensionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Types.GetWorldConfigExtensionsQuery, Types.GetWorldConfigExtensionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<Types.GetWorldConfigExtensionsQuery, Types.GetWorldConfigExtensionsQueryVariables>(GetWorldConfigExtensionsDocument, options);
+        }
+export function useGetWorldConfigExtensionsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<Types.GetWorldConfigExtensionsQuery, Types.GetWorldConfigExtensionsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<Types.GetWorldConfigExtensionsQuery, Types.GetWorldConfigExtensionsQueryVariables>(GetWorldConfigExtensionsDocument, options);
+        }
+export type GetWorldConfigExtensionsQueryHookResult = ReturnType<typeof useGetWorldConfigExtensionsQuery>;
+export type GetWorldConfigExtensionsLazyQueryHookResult = ReturnType<typeof useGetWorldConfigExtensionsLazyQuery>;
+export type GetWorldConfigExtensionsSuspenseQueryHookResult = ReturnType<typeof useGetWorldConfigExtensionsSuspenseQuery>;
+export type GetWorldConfigExtensionsQueryResult = Apollo.QueryResult<Types.GetWorldConfigExtensionsQuery, Types.GetWorldConfigExtensionsQueryVariables>;
+export const GetWorldFullInfoDocument = /*#__PURE__*/ gql`
+    query GetWorldFullInfo($id: ID!, $creator: ID) {
+  node(id: $id) {
+    ... on AkashaWorld {
+      ...AkashaWorldFragment
+      metaInfo(first: 1, account: $creator) {
+        edges {
+          node {
+            description
+            id
+            guidelinesUrl
+            socialLinks {
+              href
+              name
+            }
+            keywords
+            worldID
+          }
+        }
+      }
+      configInfo(
+        first: 1
+        filters: {and: [{where: {active: {equalTo: true}}}]}
+        account: $creator
+      ) {
+        edges {
+          node {
+            ...AkashaWorldConfigFragment
+          }
+        }
+      }
+    }
+  }
+}
+    ${AkashaWorldFragmentDoc}
+${AkashaWorldConfigFragmentDoc}`;
+
+/**
+ * __useGetWorldFullInfoQuery__
+ *
+ * To run a query within a React component, call `useGetWorldFullInfoQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetWorldFullInfoQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetWorldFullInfoQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      creator: // value for 'creator'
+ *   },
+ * });
+ */
+export function useGetWorldFullInfoQuery(baseOptions: Apollo.QueryHookOptions<Types.GetWorldFullInfoQuery, Types.GetWorldFullInfoQueryVariables> & ({ variables: Types.GetWorldFullInfoQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<Types.GetWorldFullInfoQuery, Types.GetWorldFullInfoQueryVariables>(GetWorldFullInfoDocument, options);
+      }
+export function useGetWorldFullInfoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Types.GetWorldFullInfoQuery, Types.GetWorldFullInfoQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<Types.GetWorldFullInfoQuery, Types.GetWorldFullInfoQueryVariables>(GetWorldFullInfoDocument, options);
+        }
+export function useGetWorldFullInfoSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<Types.GetWorldFullInfoQuery, Types.GetWorldFullInfoQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<Types.GetWorldFullInfoQuery, Types.GetWorldFullInfoQueryVariables>(GetWorldFullInfoDocument, options);
+        }
+export type GetWorldFullInfoQueryHookResult = ReturnType<typeof useGetWorldFullInfoQuery>;
+export type GetWorldFullInfoLazyQueryHookResult = ReturnType<typeof useGetWorldFullInfoLazyQuery>;
+export type GetWorldFullInfoSuspenseQueryHookResult = ReturnType<typeof useGetWorldFullInfoSuspenseQuery>;
+export type GetWorldFullInfoQueryResult = Apollo.QueryResult<Types.GetWorldFullInfoQuery, Types.GetWorldFullInfoQueryVariables>;
