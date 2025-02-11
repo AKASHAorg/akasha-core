@@ -5,7 +5,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ProfileStatsView from '../../profile-stats';
 import ProfileNotFound from '@akashaorg/design-system-components/lib/components/ProfileNotFound';
 import NSFW from './nsfw';
-import { Card } from '@akashaorg/ui/lib/components/card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import ProfileHeader from '../../profile-header';
 import routes, { EDIT } from '../../../routes';
 import {

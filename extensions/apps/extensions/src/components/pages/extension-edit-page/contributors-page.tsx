@@ -10,7 +10,7 @@ import {
 } from '@akashaorg/typings/lib/ui';
 import SearchBar from '@akashaorg/design-system-components/lib/components/SearchBar';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
-import { Card } from '@akashaorg/ui/lib/components/card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import { CheckIcon, ExclamationTriangleIcon, TrashIcon } from '@heroicons/react/24/outline';

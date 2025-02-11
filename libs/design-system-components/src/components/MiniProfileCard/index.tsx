@@ -1,6 +1,6 @@
 import React from 'react';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
-import { Card } from '@akashaorg/ui/lib/components/card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';

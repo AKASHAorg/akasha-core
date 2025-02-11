@@ -11,7 +11,7 @@ import {
   ChevronUpIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import { Card } from '@akashaorg/ui/lib/components/card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 
 export type DropdownMenuItemGroupType = {
   id: string;

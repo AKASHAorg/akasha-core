@@ -5,7 +5,7 @@ import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoade
 import MarkdownCard from '@akashaorg/design-system-core/lib/components/MarkdownCard';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import { Card } from '@akashaorg/ui/lib/components/card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export type PageRendererProps = {

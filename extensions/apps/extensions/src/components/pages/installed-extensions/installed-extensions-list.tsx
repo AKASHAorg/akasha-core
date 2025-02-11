@@ -1,7 +1,7 @@
 import React from 'react';
 import AppList from '@akashaorg/design-system-components/lib/components/AppList';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import { Card } from '@akashaorg/ui/lib/components/card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';

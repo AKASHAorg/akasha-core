@@ -9,7 +9,7 @@ import ExtensionCard, {
 import { ReactNode } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 import { getExtensionTypeLabel } from '../utils/extension-utils';
-import { Card } from '@akashaorg/ui/lib/components/card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 export type TExploreProps = {
   titleLabel: string;
   popularExtensions?: ExtensionCardProps[];

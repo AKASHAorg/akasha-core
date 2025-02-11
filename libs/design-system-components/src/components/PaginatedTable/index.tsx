@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Card } from '@akashaorg/ui/lib/components/card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Pagination, {
   PaginationProps,
 } from '@akashaorg/design-system-core/lib/components/Pagination';

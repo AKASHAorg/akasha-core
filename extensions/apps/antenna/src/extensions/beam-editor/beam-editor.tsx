@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { hasOwn, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { type ContentBlock } from '@akashaorg/typings/lib/ui';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import { Card } from '@akashaorg/ui/lib/components/card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { XMarkIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';

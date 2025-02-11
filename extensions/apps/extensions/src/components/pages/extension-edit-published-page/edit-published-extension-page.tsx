@@ -1,5 +1,5 @@
 import React, { useContext, useMemo, useRef } from 'react';
-import { Card } from '@akashaorg/ui/lib/components/card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { useTranslation } from 'react-i18next';
 import { transformSource, useRootComponentProps, useSaveImage } from '@akashaorg/ui-core-hooks';
 import { useGetAppsByIdQuery, useUpdateAppMutation } from '@akashaorg/ui-core-hooks/lib/generated';

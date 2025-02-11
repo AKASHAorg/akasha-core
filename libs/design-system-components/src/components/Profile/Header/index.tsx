@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { Card } from '@akashaorg/ui/lib/components/card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import ProfileNameField from '@akashaorg/design-system-core/lib/components/ProfileNameField';

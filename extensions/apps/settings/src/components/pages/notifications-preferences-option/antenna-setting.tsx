@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import { Card } from '@akashaorg/ui/lib/components/card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Info } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';

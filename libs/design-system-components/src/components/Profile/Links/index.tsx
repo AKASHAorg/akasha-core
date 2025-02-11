@@ -1,7 +1,7 @@
 import React from 'react';
 
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
-import { Card } from '@akashaorg/ui/lib/components/card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import CopyToClipboard from '@akashaorg/design-system-core/lib/components/CopyToClipboard';
 import { LinkIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import {

@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useCallback, useEffect, useRef } from 'react';
-import { Card } from '@akashaorg/ui/lib/components/card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
 import { useTranslation } from 'react-i18next';

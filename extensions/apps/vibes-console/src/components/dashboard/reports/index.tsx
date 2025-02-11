@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card } from '@akashaorg/ui/lib/components/card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { ReportsHeader, ReportsHeaderProps } from './header';
 import { ReportItem, ReportItemProps, TReport } from './item';

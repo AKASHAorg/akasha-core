@@ -1,5 +1,5 @@
 import React, { createContext, useMemo } from 'react';
-import { Card } from '@akashaorg/ui/lib/components/card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Outlet } from '@tanstack/react-router';
 import { atomWithStorage, createJSONStorage } from 'jotai/utils';
 import appRoutes, { EDIT_PUBLISHED_EXTENSION } from '../../../routes';

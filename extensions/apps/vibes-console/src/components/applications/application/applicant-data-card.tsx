@@ -3,7 +3,7 @@ import { transformSource } from '@akashaorg/ui-core-hooks';
 import { Profile } from '@akashaorg/typings/lib/ui';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import { Card } from '@akashaorg/ui/lib/components/card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';

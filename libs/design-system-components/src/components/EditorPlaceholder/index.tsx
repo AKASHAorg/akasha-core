@@ -2,7 +2,7 @@ import React from 'react';
 import { tw } from '@twind/core';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import { Card } from '@akashaorg/ui/lib/components/card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 

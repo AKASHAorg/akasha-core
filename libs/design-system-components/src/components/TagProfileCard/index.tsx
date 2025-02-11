@@ -1,7 +1,7 @@
 import React from 'react';
 import { tw } from '@twind/core';
 import { Tag } from '@akashaorg/typings/lib/ui';
-import { Card } from '@akashaorg/ui/lib/components/card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import {
   CheckIcon,

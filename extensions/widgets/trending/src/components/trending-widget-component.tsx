@@ -4,7 +4,7 @@ import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBou
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import TrendingWidgetLoadingCard from '@akashaorg/design-system-components/lib/components/TrendingWidgetLoadingCard';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import { Card } from '@akashaorg/ui/lib/components/card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { useTranslation } from 'react-i18next';
 import { hasOwn, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import {

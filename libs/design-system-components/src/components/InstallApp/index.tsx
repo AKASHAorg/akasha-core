@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Card } from '@akashaorg/ui/lib/components/card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Text, { TextProps } from '@akashaorg/design-system-core/lib/components/Text';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';

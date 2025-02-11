@@ -3,7 +3,7 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import { Card } from '@akashaorg/ui/lib/components/card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { ChatBubbleLeftRightIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { ChatBubbleLeftRightIcon as ChatBubbleLeftRightIconSolid } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-solid';
 

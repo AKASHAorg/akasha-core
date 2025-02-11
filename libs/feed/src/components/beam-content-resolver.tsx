@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import BeamCard from './cards/beam-card';
 import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
-import { Card } from '@akashaorg/ui/lib/components/card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { useGetBeamByIdQuery } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
 import { IModalNavigationOptions } from '@akashaorg/typings/lib/ui';

@@ -4,7 +4,7 @@ import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { ExtensionCardProps } from '@akashaorg/design-system-components/lib/components/ExtensionCard';
-import { Card } from '@akashaorg/ui/lib/components/card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 export type TExtensionsHubProps = {
   titleLabel: string;
   publicImgPath?: string;

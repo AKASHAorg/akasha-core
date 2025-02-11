@@ -27,7 +27,7 @@ import Section, { DividerPosition } from '@akashaorg/design-system-core/lib/comp
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ExtensionImageGallery from '@akashaorg/design-system-components/lib/components/ExtensionImageGallery';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import { Card } from '@akashaorg/ui/lib/components/card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import CopyToClipboard from '@akashaorg/design-system-core/lib/components/CopyToClipboard';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';

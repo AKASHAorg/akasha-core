@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from 'react';
 
-import { Card } from '@akashaorg/ui/lib/components/card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Text, { TextProps } from '@akashaorg/design-system-core/lib/components/Text';

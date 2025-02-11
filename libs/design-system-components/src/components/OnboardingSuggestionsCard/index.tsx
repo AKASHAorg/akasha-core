@@ -1,6 +1,6 @@
 import React from 'react';
 import { Tag, type Image, Profile } from '@akashaorg/typings/lib/ui';
-import { Card } from '@akashaorg/ui/lib/components/card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import { UserCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';

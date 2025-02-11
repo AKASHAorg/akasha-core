@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
-import { Card } from '@akashaorg/ui/lib/components/card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Outlet } from '@tanstack/react-router';
 
 const MainPage: React.FC = () => {

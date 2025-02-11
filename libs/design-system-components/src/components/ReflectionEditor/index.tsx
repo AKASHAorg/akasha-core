@@ -2,7 +2,7 @@ import React, { forwardRef } from 'react';
 import EditorPlaceholder from '../EditorPlaceholder';
 import EditorBox, { EditorBoxProps } from '../Editor';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import { Card } from '@akashaorg/ui/lib/components/card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { editorDefaultValue } from '../Editor/initialValue';
 import { Colors, IPublishData } from '@akashaorg/typings/lib/ui';
 

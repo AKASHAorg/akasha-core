@@ -1,6 +1,6 @@
 import React, { createContext, useMemo } from 'react';
 import { Outlet } from '@tanstack/react-router';
-import { Card } from '@akashaorg/ui/lib/components/card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { atomWithStorage, createJSONStorage } from 'jotai/utils';
 import appRoutes, { EDIT_EXTENSION } from '../../../routes';
 import { useTranslation } from 'react-i18next';

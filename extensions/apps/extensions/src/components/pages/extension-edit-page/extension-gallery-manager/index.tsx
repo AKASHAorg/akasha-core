@@ -3,7 +3,7 @@ import ExtensionGalleryManager, {
   type Image,
 } from '@akashaorg/design-system-components/lib/components/ExtensionGalleryManager';
 import ImageOverlay from '@akashaorg/design-system-components/lib/components/ImageOverlay';
-import { Card } from '@akashaorg/ui/lib/components/card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';

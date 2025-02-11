@@ -9,7 +9,7 @@ import {
   ChevronLeftIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { Akasha } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
-import { Card } from '@akashaorg/ui/lib/components/card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { startWidgetsTogglingBreakpoint } from '@akashaorg/design-system-core/lib/utils/breakpoints';

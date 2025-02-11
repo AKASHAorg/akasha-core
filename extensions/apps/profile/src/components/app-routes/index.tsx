@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { Card } from '@akashaorg/ui/lib/components/card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import InterestsPage from '../pages/interests';
 import EditProfilePage from '../pages/edit-profile';
 import FollowingPage from '../pages/following';

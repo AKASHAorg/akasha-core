@@ -3,7 +3,7 @@ import EntryCardLoading from '@akashaorg/design-system-components/lib/components
 import EditorPlaceholderLoading from '@akashaorg/design-system-components/lib/components/EditorPlaceholder/EditorPlaceholderLoading';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import { Card } from '@akashaorg/ui/lib/components/card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 const EntrySectionLoading: React.FC<unknown> = () => {
   return (
     <Card className="p-0">

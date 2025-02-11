@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import { Card } from '@akashaorg/ui/lib/components/card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import ReflectionCard from '../cards/reflection-card';
 import { useGetReflectReflectionsQuery } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
 import { EntityTypes, IContentClickDetails } from '@akashaorg/typings/lib/ui';
