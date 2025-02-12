@@ -47,7 +47,7 @@ export const HomePage: React.FC = () => {
   };
 
   const handleNavigateToForm = () => {
-    navigate({ to: '/save-config/step1' });
+    navigate({ to: '/world-data' });
   };
 
   const [acceptedTerms, setAcceptedTerms] = React.useState(false);

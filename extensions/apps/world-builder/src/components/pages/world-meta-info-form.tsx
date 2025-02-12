@@ -1,8 +1,16 @@
-import React, { createContext } from 'react';
-import { Outlet } from '@tanstack/react-router';
-import { atomWithStorage, createJSONStorage } from 'jotai/utils';
-import appRoutes, { SAVE_CONFIG } from '../../../routes';
+import React from 'react';
+import appRoutes, { WORLD_DATA_FORM } from '../../routes';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from '@tanstack/react-router';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@akashaorg/ui/lib/akasha-components/card';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import {
   ErrorLoader,
@@ -10,49 +18,34 @@ import {
   ErrorLoaderDescription,
   ErrorLoaderFooter,
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
-import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 
-export const SAVE_WORLD_CONFIG_FORM = 'save-world-config-form';
-
-export const AtomContext = createContext(null);
-
-const storage = createJSONStorage(() => sessionStorage);
-
-export type FormData = {
-  lastCompletedStep?: number;
-  name?: string;
-};
-
-export const SaveConfigMainPage: React.FC = () => {
+export const WorldMetaInfoFormPage: React.FC = () => {
   const { t } = useTranslation('app-extensions');
 
   const { baseRouteName, getCorePlugins } = useRootComponentProps();
-
+  const navigate = useNavigate();
   const navigateTo = getCorePlugins().routing.navigateTo;
 
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
 
-  const formData = atomWithStorage<FormData>(
-    SAVE_WORLD_CONFIG_FORM,
-    {
-      lastCompletedStep: 0,
-      name: '',
-    },
-    storage,
-  );
-
   const handleConnectButtonClick = () => {
     navigateTo?.({
       appName: '@akashaorg/app-auth-ewa',
       getNavigationUrl: (routes: Record<string, string>) => {
         return `${routes.Connect}?${new URLSearchParams({
-          redirectTo: `${baseRouteName}/${appRoutes[SAVE_CONFIG]}/step1`,
+          redirectTo: `${baseRouteName}/${appRoutes[WORLD_DATA_FORM]}`,
         }).toString()}`;
       },
     });
+  };
+
+  const handleSave = () => {
+    navigate({ to: '/dashboard' });
+  };
+  const handleCancel = () => {
+    navigate({ to: '/dashboard' });
   };
 
   if (!authenticatedDID) {
@@ -73,9 +66,20 @@ export const SaveConfigMainPage: React.FC = () => {
 
   return (
     <Card>
-      <AtomContext.Provider value={formData}>
-        <Outlet />
-      </AtomContext.Provider>
+      <CardHeader>
+        <CardTitle className="text-center">
+          <Typography variant="h5">{t('Customise your World')}</Typography>
+        </CardTitle>
+      </CardHeader>
+      <CardContent></CardContent>
+      <CardFooter>
+        <Button className="px-6 h-8" variant="outline" onClick={handleCancel}>
+          {t('Cancel')}
+        </Button>
+        <Button className="px-6 h-8" onClick={handleSave}>
+          {t('Next')}
+        </Button>
+      </CardFooter>
     </Card>
   );
 };

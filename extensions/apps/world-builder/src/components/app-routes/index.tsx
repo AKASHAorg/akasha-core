@@ -8,13 +8,12 @@ import {
   redirect,
 } from '@tanstack/react-router';
 import { ICreateRouter, IRouterContext } from '@akashaorg/typings/lib/ui';
-import { HomePage } from '../pages/index';
 import {
-  SaveConfigMainPage,
-  SaveConfigStep1Page,
-  SaveConfigStep2Page,
-  SaveConfigStep3Page,
-  SaveConfigSuccessPage,
+  HomePage,
+  DashboardPage,
+  WorldConfigFormPage,
+  WorldMetaInfoFormPage,
+  WorldDataFormPage,
 } from '../pages/index';
 import { NotFoundComponent } from './not-found-component';
 import { RouteErrorComponent } from './error-component';
@@ -44,77 +43,65 @@ const homeRoute = createRoute({
   },
 });
 
-const saveConfigMainRoute = createRoute({
+const dashboardRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: `/save-config`,
+  path: `/dashboard`,
   notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return (
       <CatchBoundary
-        getResetKey={() => 'save_config_main_reset'}
+        getResetKey={() => 'dashboard_main_reset'}
         errorComponent={RouteErrorComponent}
       >
-        <SaveConfigMainPage />
+        <DashboardPage />
       </CatchBoundary>
     );
   },
 });
 
-const saveConfigStep1Route = createRoute({
-  getParentRoute: () => saveConfigMainRoute,
-  path: '/step1',
+const worldDataRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: `/world-data`,
+  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return (
       <CatchBoundary
-        getResetKey={() => 'save_config_step1_reset'}
+        getResetKey={() => 'world_data_main_reset'}
         errorComponent={RouteErrorComponent}
       >
-        <SaveConfigStep1Page />
+        <WorldDataFormPage />
       </CatchBoundary>
     );
   },
 });
 
-const saveConfigStep2Route = createRoute({
-  getParentRoute: () => saveConfigMainRoute,
-  path: '/step2',
+const worldConfigRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: `/world-config`,
+  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return (
       <CatchBoundary
-        getResetKey={() => 'save_config_step2_reset'}
+        getResetKey={() => 'world_config_main_reset'}
         errorComponent={RouteErrorComponent}
       >
-        <SaveConfigStep2Page />
+        <WorldConfigFormPage />
       </CatchBoundary>
     );
   },
 });
 
-const saveConfigStep3Route = createRoute({
-  getParentRoute: () => saveConfigMainRoute,
-  path: '/step3',
+const worldMetaInfoRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: `/world-meta-info`,
+  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return (
       <CatchBoundary
-        getResetKey={() => 'save_config_step3_reset'}
+        getResetKey={() => 'world_meta_info_main_reset'}
         errorComponent={RouteErrorComponent}
       >
-        <SaveConfigStep3Page />
-      </CatchBoundary>
-    );
-  },
-});
-
-const saveConfigSuccessRoute = createRoute({
-  getParentRoute: () => saveConfigMainRoute,
-  path: '/success',
-  component: () => {
-    return (
-      <CatchBoundary
-        getResetKey={() => 'save_config_success_page_reset'}
-        errorComponent={RouteErrorComponent}
-      >
-        <SaveConfigSuccessPage />
+        <WorldMetaInfoFormPage />
       </CatchBoundary>
     );
   },
@@ -123,12 +110,10 @@ const saveConfigSuccessRoute = createRoute({
 const routeTree = rootRoute.addChildren([
   defaultRoute,
   homeRoute,
-  saveConfigMainRoute.addChildren([
-    saveConfigStep1Route,
-    saveConfigStep2Route,
-    saveConfigStep3Route,
-    saveConfigSuccessRoute,
-  ]),
+  dashboardRoute,
+  worldDataRoute,
+  worldConfigRoute,
+  worldMetaInfoRoute,
 ]);
 
 export const router = ({ baseRouteName, apolloClient }: ICreateRouter) =>

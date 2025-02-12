@@ -12,12 +12,12 @@ import {
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Image, ImageRoot } from '@akashaorg/ui/lib/akasha-components/image';
 
-export const SaveConfigSuccessPage: React.FC = () => {
+export const DashboardPage: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-world-builder');
 
   const handleOpenPreview = () => {
-    navigate({ to: '/save-config/success' });
+    navigate({ to: '/home' });
   };
 
   // TODO fetch real data
