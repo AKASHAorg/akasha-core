@@ -7,11 +7,10 @@ import { Antenna, Profile } from '@akashaorg/design-system-core/lib/components/I
 import MiniProfileCTA, { ItemType, ProfileItemData } from './mini-profile-cta';
 import ReportReasonPill from '../ReportReasonPill';
 import { formatDate, getElevationClasses } from '@akashaorg/design-system-core/lib/utils';
-import EntryCard, { EntryCardProps } from '../Entry/EntryCard';
-
+//import { EntryCardProps } from '@akashaorg/feed/lib/components/cards/entry-card';
 export type ReportEntry = {
   id: string;
-  itemData: EntryCardProps | ProfileItemData;
+  itemData: /* EntryCardProps | */ ProfileItemData;
   appName: string;
   itemType: ItemType;
   primaryReason: string;
@@ -94,9 +93,9 @@ const VibesConsoleContentCard: React.FC<VibesConsoleContentCardProps> = props =>
       </Stack>
 
       <Stack padding="p-5" spacing="gap-y-4">
-        {entry.itemType !== 'Profile' && (
+        {/*  {entry.itemType !== 'Profile' && (
           <EntryCard {...(entry.itemData as EntryCardProps)} customStyle={shadowStyle} />
-        )}
+        )} */}
 
         {entry.itemType === 'Profile' && (
           <Card padding="p-4" customStyle={shadowStyle}>

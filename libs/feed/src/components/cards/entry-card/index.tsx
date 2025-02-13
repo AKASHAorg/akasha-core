@@ -1,10 +1,10 @@
-import React, { ReactNode, Ref, useState, useMemo, useRef, RefObject } from 'react';
+import React, { ReactNode, Ref, useState, useMemo } from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import EntryCardRemoved from '../EntryCardRemoved';
+import EntryCardRemoved from '@akashaorg/design-system-components/lib/components/Entry/EntryCardRemoved';
 import CardActions from './card-actions';
 import { EllipsisHorizontalIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import NSFW, { NSFWProps } from '../NSFW';
+import NSFW, { NSFWProps } from '@akashaorg/design-system-components/lib/components/Entry/NSFW';
 import Menu from '@akashaorg/design-system-core/lib/components/Menu';
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils';
 import { type EntryData } from '@akashaorg/typings/lib/ui';

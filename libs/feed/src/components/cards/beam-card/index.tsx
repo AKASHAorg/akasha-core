@@ -1,12 +1,9 @@
 import React, { Fragment, useMemo, useRef, useState } from 'react';
-import EntryCard, {
-  EntryCardProps,
-} from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
+import EntryCard, { EntryCardProps } from '../entry-card';
 import ContentBlockRenderer from './content-block-renderer';
 import ActionButtons from './action-buttons';
 import AuthorProfileAvatar from '../author-profile-avatar';
 import { sortByKey, useAkashaStore } from '@akashaorg/ui-core-hooks';
-import { EntityTypes } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps, useNsfwToggling } from '@akashaorg/ui-core-hooks';
 import { Trans, useTranslation } from 'react-i18next';
 import Text from '@akashaorg/design-system-core/lib/components/Text';

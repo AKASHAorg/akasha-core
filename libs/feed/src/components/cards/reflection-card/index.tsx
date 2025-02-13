@@ -1,12 +1,10 @@
 import React from 'react';
-import EntryCard, {
-  EntryCardProps,
-} from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
+import EntryCard, { EntryCardProps } from '../entry-card';
 import AuthorProfileAvatar from '../author-profile-avatar';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import { useAkashaStore } from '@akashaorg/ui-core-hooks';
-import { EntityTypes, ReflectionData } from '@akashaorg/typings/lib/ui';
+import { ReflectionData } from '@akashaorg/typings/lib/ui';
 import { decodeb64SlateContent, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { Trans, useTranslation } from 'react-i18next';
 import { canDecodeContent } from '../../../utils/can-decode-content';
