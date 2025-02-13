@@ -223,7 +223,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
           {entryData.active && (
             <ErrorBoundary errorObj={errorBoundaryProps.current.errorObj}>
               <Card
-                className={`p-0 border-none shadow-none flex flex-col justify-start items-center w-full overflow-hidden grow ${showHiddenStyle} ${contentClickableStyle}`}
+                className={`p-0 rounded-none border-none shadow-none flex flex-col justify-start items-center w-full overflow-hidden grow ${showHiddenStyle} ${contentClickableStyle}`}
                 /**
                  * attach onClick handler if
                  * 'showNSFWContent' and 'noWrapperCard' are both true

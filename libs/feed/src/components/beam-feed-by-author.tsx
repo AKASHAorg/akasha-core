@@ -164,7 +164,7 @@ const BeamFeedByAuthor = (props: BeamFeedByAuthorProps) => {
         />
       )}
       {beams.length > 0 && (
-        <Card ref={vListContainerRef} className="p-0 border-none">
+        <Card ref={vListContainerRef} className="p-0 border-none bg-transparent">
           <DynamicInfiniteScroll
             count={beams.length}
             scrollRestorationStorageKey={scrollRestorationStorageKey}

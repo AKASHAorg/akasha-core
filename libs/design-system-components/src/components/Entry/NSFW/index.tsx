@@ -15,7 +15,7 @@ export type NSFWProps = {
 const NSFW: React.FC<NSFWProps> = props => {
   const { sensitiveContentLabel, clickToViewLabel, onClickToView } = props;
   return (
-    <Card className="w-full p-4">
+    <Card className="w-full p-4 flex place-content-center bg-muted">
       <Card className={'max-w-min'}>
         <Stack direction={'row'} align="center" spacing="gap-x-2">
           <Icon icon={<EyeSlashIcon />} color={{ light: 'errorLight', dark: 'errorDark' }} />

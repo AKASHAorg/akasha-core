@@ -121,7 +121,7 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
   }, [contentBlockReq, blockApp]);
 
   return (
-    <Card className="p-0 border-none w-full">
+    <Card className="p-0 border-none w-full rounded-none">
       {!showNSFWCard && (
         <>
           <Transition

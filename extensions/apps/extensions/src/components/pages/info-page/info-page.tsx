@@ -229,7 +229,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
           <AppCoverImage src={coverImageSrc} appType={appData.applicationType} />
           <Stack>
             <Stack spacing="gap-y-6">
-              <Card className="p-4 mb-2 rounded-20">
+              <Card className="p-4 mb-2 rounded-t-none">
                 <AppInfoHeader
                   displayName={appData.displayName}
                   extensionType={appData.applicationType}

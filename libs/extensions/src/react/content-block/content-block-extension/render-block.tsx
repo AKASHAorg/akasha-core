@@ -8,7 +8,7 @@ import { BlockParcel, BlockParcelProps } from '../block-parcel';
 import { ParcelConfigObject } from 'single-spa';
 import { MatchingBlock } from '../common.types';
 import { GetContentBlockByIdQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
-
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 export type RenderBlockProps = {
   state: { parcels: (MatchingBlock & { config: ParcelConfigObject })[] };
   appInfo: { name: string; displayName?: string; id: string };
@@ -49,12 +49,7 @@ export const RenderBlock: React.FC<RenderBlockProps> = props => {
         </Stack>
       )}
       {blockData && !matchingBlocks.length && (
-        <Stack
-          spacing="gap-y-2"
-          padding="p-4"
-          background={{ light: 'grey9', dark: 'grey1' }}
-          customStyle="rounded-[20px]"
-        >
+        <Card className="p-4 gap-y-2">
           <Stack direction="row" spacing="gap-x-1">
             <Text variant="button-sm">
               {appInfo?.displayName} {notInstalledTitle}
@@ -66,7 +61,7 @@ export const RenderBlock: React.FC<RenderBlockProps> = props => {
           <Text variant="footnotes2" weight="normal">
             {notInstalledDescription1} {appInfo?.displayName} {notInstalledDescription2}
           </Text>
-        </Stack>
+        </Card>
       )}
       {blockData &&
         !!matchingBlocks.length &&
