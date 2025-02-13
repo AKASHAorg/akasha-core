@@ -1,7 +1,7 @@
 import React, { ReactNode, Ref, useState, useMemo } from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import EntryCardRemoved from '@akashaorg/design-system-components/lib/components/Entry/EntryCardRemoved';
+import EntryCardRemoved from './entry-card-removed';
 import CardActions from './card-actions';
 import { EllipsisHorizontalIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import NSFW, { NSFWProps } from '@akashaorg/design-system-components/lib/components/Entry/NSFW';
