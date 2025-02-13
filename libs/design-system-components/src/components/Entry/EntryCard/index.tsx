@@ -1,42 +1,18 @@
-import React, {
-  ReactElement,
-  ReactNode,
-  Ref,
-  Fragment,
-  useState,
-  useMemo,
-  useRef,
-  RefObject,
-} from 'react';
+import React, { ReactNode, Ref, useState, useMemo, useRef, RefObject } from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import EntryCardRemoved from '../EntryCardRemoved';
 import CardActions from './card-actions';
-import InlineNotification from '@akashaorg/design-system-core/lib/components/InlineNotification';
 import { EllipsisHorizontalIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import ReadOnlyEditor from '../../ReadOnlyEditor';
 import NSFW, { NSFWProps } from '../NSFW';
 import Menu from '@akashaorg/design-system-core/lib/components/Menu';
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils';
-import { Descendant } from 'slate';
-import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { type EntryData, EntityTypes, NavigateToParams } from '@akashaorg/typings/lib/ui';
+import { type EntryData } from '@akashaorg/typings/lib/ui';
 import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import ErrorBoundary, {
   ErrorBoundaryProps,
 } from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
-
-type BeamProps = {
-  sortedContents: AkashaBeam['content'];
-  itemType: EntityTypes.BEAM;
-  children: (props: { blockID: string }) => ReactElement;
-};
-
-type ReflectProps = {
-  itemType: EntityTypes.REFLECT;
-  navigateTo?: (args: NavigateToParams) => void;
-} & ({ slateContent: Descendant[] } | { errorTitle: string; errorMessage: string });
 
 export type EntryCardProps = {
   entryData: EntryData;
@@ -76,6 +52,7 @@ export type EntryCardProps = {
   dataTestId?: string;
   menuItems: ListItem[];
   nsfwText: string;
+  children: ReactNode;
   onReflect?: () => void;
   onTagClick?: (tag: string) => void;
   onMentionClick?: (profileId: string) => void;
@@ -84,7 +61,7 @@ export type EntryCardProps = {
   onEntryFlag?: () => void;
   onEdit?: () => void;
   showLoginModal?: (title?: string, message?: string) => void;
-} & (BeamProps | ReflectProps);
+};
 
 const EntryCard: React.FC<EntryCardProps> = props => {
   const {
@@ -115,7 +92,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     showLoginModal,
     dataTestId,
     menuItems,
-    ...rest
+    children,
   } = props;
 
   /**
@@ -202,10 +179,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
                       event.stopPropagation();
                       if (!isLoggedIn) {
                         if (showLoginModal && typeof showLoginModal === 'function') {
-                          showLoginModal(
-                            null,
-                            'To view explicit or sensitive content, please connect to confirm your consent.',
-                          );
+                          showLoginModal(null, nsfwText);
                         }
                       } else {
                         setShowNSFWContent(true);
@@ -226,33 +200,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
                     customStyle="grow"
                     fullWidth={true}
                   >
-                    {rest.itemType === EntityTypes.REFLECT ? (
-                      <>
-                        {'slateContent' in rest && (
-                          <ReadOnlyEditor
-                            content={rest.slateContent}
-                            disabled={entryData.nsfw}
-                            handleMentionClick={rest.onMentionClick}
-                            handleLinkClick={url => {
-                              rest.navigateTo?.({ getNavigationUrl: () => url });
-                            }}
-                          />
-                        )}
-                        {'errorTitle' in rest && (
-                          <InlineNotification
-                            title={rest.errorTitle}
-                            message={rest.errorMessage}
-                            type="error"
-                          />
-                        )}
-                      </>
-                    ) : (
-                      rest.sortedContents?.map(item => (
-                        <Fragment key={item.blockID}>
-                          {rest.children({ blockID: item.blockID })}
-                        </Fragment>
-                      ))
-                    )}
+                    {children}
                   </Stack>
                 )}
                 {showHiddenContent && entryData.tags?.length > 0 && (
@@ -304,7 +252,6 @@ const EntryCard: React.FC<EntryCardProps> = props => {
       entryData.id,
       entryData.nsfw,
       entryData.tags,
-      errorBoundaryProps,
       hideActionButtons,
       hoverStyle,
       isLoggedIn,
@@ -312,6 +259,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
       menuItems,
       noWrapperCard,
       nsfw,
+      nsfwText,
       nsfwUserSetting,
       onContentClick,
       onReflect,
@@ -321,12 +269,12 @@ const EntryCard: React.FC<EntryCardProps> = props => {
       reflectionsCount,
       removed.author,
       removed.others,
-      rest,
       showHiddenContent,
       showHiddenStyle,
       showLoginModal,
       showNSFWCard,
       showNSFWContent,
+      children,
     ],
   );
 

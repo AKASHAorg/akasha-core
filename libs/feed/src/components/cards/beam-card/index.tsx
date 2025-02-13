@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { Fragment, useMemo, useRef, useState } from 'react';
 import EntryCard, {
   EntryCardProps,
 } from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
@@ -155,7 +155,6 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       }}
       reflectionsCount={reflectionsCount}
       reflectAnchorLink="/@akashaorg/app-antenna/beam"
-      sortedContents={sortedEntryContent}
       isViewer={isViewer}
       removed={{
         author: (
@@ -222,7 +221,6 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       nsfwUserSetting={showNsfw}
       showLoginModal={showLoginModal}
       isLoggedIn={!!authenticatedDID}
-      itemType={EntityTypes.BEAM}
       onTagClick={handleTagClick}
       onReflect={() => {
         if (!authenticatedDID) {
@@ -254,17 +252,19 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       }
       {...rest}
     >
-      {({ blockID }) => (
-        <React.Suspense fallback={null}>
-          <ContentBlockRenderer
-            blockID={blockID}
-            authenticatedDID={authenticatedDID}
-            showHiddenContent={showHiddenContent}
-            beamIsNsfw={showNSFWCard}
-            showBlockName={showBlockName}
-          />
-        </React.Suspense>
-      )}
+      {sortedEntryContent?.map(item => (
+        <Fragment key={item.blockID}>
+          <React.Suspense fallback={null}>
+            <ContentBlockRenderer
+              blockID={item.blockID}
+              authenticatedDID={authenticatedDID}
+              showHiddenContent={showHiddenContent}
+              beamIsNsfw={showNSFWCard}
+              showBlockName={showBlockName}
+            />
+          </React.Suspense>
+        </Fragment>
+      ))}
     </EntryCard>
   );
 };

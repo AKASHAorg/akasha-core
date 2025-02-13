@@ -58,29 +58,8 @@ const ReflectionCard: React.FC<ReflectionCardProps> = props => {
       getNavigationUrl: () => `/report/reflection/${reflectionData.id}`,
     });
   };
-  const content = (
-    <>
-      {canDecodeContent(reflectionData.content) ? (
-        <ReadOnlyEditor
-          content={reflectionData.content.flatMap(item => decodeb64SlateContent(item.value))}
-          disabled={reflectionData.nsfw}
-          handleMentionClick={handleMentionClick}
-          handleLinkClick={url => {
-            navigateTo?.({ getNavigationUrl: () => url });
-          }}
-        />
-      ) : (
-        <InlineNotification
-          title={t('Reflection can’t be loaded')}
-          message={t('Unable to decode reflection content.')}
-          type="error"
-        />
-      )}
-    </>
-  );
 
   const isViewer = authenticatedDID === reflectionData.authorId;
-  console.log({ isViewer });
   const menuItems: ListItem[] = !isViewer
     ? [
         {
@@ -97,7 +76,6 @@ const ReflectionCard: React.FC<ReflectionCardProps> = props => {
     <EntryCard
       menuItems={menuItems}
       nsfwText={t('To view explicit or sensitive content, please connect to confirm your consent.')}
-      content={content}
       dataTestId={pending ? 'pending-reflection-card' : 'reflection-card'}
       entryData={reflectionData}
       reflectAnchorLink="/@akashaorg/app-antenna/reflection"
@@ -152,7 +130,6 @@ const ReflectionCard: React.FC<ReflectionCardProps> = props => {
           />
         ),
       }}
-      itemType={EntityTypes.REFLECT}
       onReflect={onReflect}
       onEntryFlag={handleFlagReflection}
       onMentionClick={handleMentionClick}
@@ -165,7 +142,24 @@ const ReflectionCard: React.FC<ReflectionCardProps> = props => {
         />
       }
       {...rest}
-    />
+    >
+      {canDecodeContent(reflectionData.content) ? (
+        <ReadOnlyEditor
+          content={reflectionData.content.flatMap(item => decodeb64SlateContent(item.value))}
+          disabled={reflectionData.nsfw}
+          handleMentionClick={handleMentionClick}
+          handleLinkClick={url => {
+            navigateTo?.({ getNavigationUrl: () => url });
+          }}
+        />
+      ) : (
+        <InlineNotification
+          title={t('Reflection can’t be loaded')}
+          message={t('Unable to decode reflection content.')}
+          type="error"
+        />
+      )}
+    </EntryCard>
   );
 };
 
