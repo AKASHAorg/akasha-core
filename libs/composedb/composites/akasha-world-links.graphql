@@ -1,0 +1,31 @@
+interface AkashaWorldConfigExtensionInterface @loadModel(id: "kjzl6hvfrbw6c7ig149oppeo7doizirlhwrnzvggifpcbpl2d5eppxknjzpxkzk") {
+    id: ID!
+  }
+
+
+  type AkashaApp @loadModel(id: "kjzl6hvfrbw6c55lze6s2ab18ebzwg51e9q1xrw5uxl1pf3z10dg39lxruh7heo") {
+    id: ID!
+    worldConfigs: [AkashaWorldConfigExtensionInterface] @relationFrom(model: "AkashaWorldConfigExtensionInterface", property: "extensionID")
+    worldsConfigsCount: Int! @relationCountFrom(model: "AkashaWorldConfigExtensionInterface", property: "extensionID")
+  }
+
+  interface AkashaWorldConfigInterface @loadModel(id: "kjzl6hvfrbw6c63gmxylppyl2rrl9vukj5b2wrm0yqs91gihepveef303bmw2gk") {
+    id: ID!
+  }
+
+    interface AkashaWorldMetaInfoInterface @loadModel(id: "kjzl6hvfrbw6c7pnrxhwgq923dna7og4m49e00kur83qnb2f4sqrnl8lqrxla0g") {
+    id: ID!
+  }
+
+  type AkashaWorldConfig @loadModel(id: "kjzl6hvfrbw6cajh75htc40ommsetqkjlw0vlmi7u2fqumezuxprmbnoktdclp9") {
+    id: ID!
+    extensions: [AkashaWorldConfigExtensionInterface] @relationFrom(model: "AkashaWorldConfigExtensionInterface", property: "worldConfigID")
+  }
+
+
+  type AkashaWorld @loadModel(id: "kjzl6hvfrbw6c5o0dfdyz2dxc7724qkb9jhtdb3w2fvpbf74aplweuqbfk7yw7l") {
+    id: ID!
+    configInfo: [AkashaWorldConfigInterface] @relationFrom(model: "AkashaWorldConfigInterface", property: "worldID")
+    metaInfo: [AkashaWorldMetaInfoInterface] @relationFrom(model: "AkashaWorldMetaInfoInterface", property: "worldID")
+  }
+  

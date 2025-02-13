@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import routes, { DEVELOPER_MODE, EXTENSIONS } from '../../routes';
+import routes, { DEVELOPER_MODE, HOME } from '../../routes';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { transformSource, useRootComponentProps } from '@akashaorg/ui-core-hooks';
@@ -34,7 +34,7 @@ export const ExplorePage: React.FC<unknown> = () => {
 
   const handleViewAllLatestExtensions = () => {
     navigate({
-      to: routes[EXTENSIONS],
+      to: routes[HOME], // @TODO: update this flow
     });
   };
 
