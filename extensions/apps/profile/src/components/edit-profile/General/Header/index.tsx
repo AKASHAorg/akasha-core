@@ -199,7 +199,7 @@ export const Header: React.FC<HeaderProps> = ({
       <Stack customStyle="relative mb-8">
         <Card
           data-testid="cover-image"
-          className={`rounded-[20px] flex p-4 h-28 w-full bg-no-repeat bg-center bg-cover bg-[url(${
+          className={`rounded-[1.25rem] flex p-4 h-28 w-full bg-no-repeat bg-center bg-cover bg-[url(${
             coverImageUrl?.src ?? coverImageFallback
           })]`}
         >

@@ -307,7 +307,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   };
 
   return (
-    <Card className="p-4 rounded-[20px]">
+    <Card className="p-4 rounded-[1.25rem]">
       <Stack>
         <SearchStartCard
           searchKeyword={searchKeyword}

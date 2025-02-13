@@ -40,7 +40,7 @@ export const CroppedImagePreviews: React.FC<CroppedImagePreviewProps> = props =>
           <Card
             key={index}
             className={cn(
-              preview.circular ? 'rounded-full' : 'rounded-[10px]',
+              preview.circular ? 'rounded-full' : 'rounded-[0.625rem]',
               `p-0 relative overflow-hidden w-[${preview.dimension}px] h-[${preview.dimension}px]`,
             )}
           >

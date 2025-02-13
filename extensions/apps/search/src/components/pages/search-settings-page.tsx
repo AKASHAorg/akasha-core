@@ -91,7 +91,7 @@ const SettingsPage: React.FC = () => {
   };
 
   return (
-    <Card className="p-2 h-full md:h-min space-y-4 flex flex-col rounded-[20px]">
+    <Card className="p-2 h-full md:h-min space-y-4 flex flex-col rounded-[1.25rem]">
       <Text variant="h5" align="center">
         {t('Search Settings')}
       </Text>

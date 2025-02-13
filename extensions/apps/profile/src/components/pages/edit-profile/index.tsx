@@ -205,7 +205,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
 
   return (
     <Stack direction="column" spacing="gap-y-4" customStyle="h-full">
-      <Card className="py-4 h-full rounded-[20px]">
+      <Card className="py-4 h-full rounded-[1.25rem]">
         <EditProfile
           defaultValues={{
             avatar: profileData?.avatar ? transformSource(profileData.avatar?.default) : null,

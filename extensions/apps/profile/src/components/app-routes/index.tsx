@@ -99,7 +99,7 @@ const followersRoute = createRoute({
     return (
       <CatchBoundary getResetKey={() => 'followers_reset'} errorComponent={NotFoundComponent}>
         <ProfileWithAuthorization profileDID={profileDID}>
-          <Card className="p-0 rounded-[20px]">
+          <Card className="p-0 rounded-[1.25rem]">
             <ProfileHeader profileDID={profileDID} plain={true} customStyle="sticky top-3.5 z-50" />
             <FollowersPage profileDID={profileDID} />
           </Card>
@@ -117,7 +117,7 @@ const followingRoute = createRoute({
     return (
       <CatchBoundary getResetKey={() => 'following_reset'} errorComponent={NotFoundComponent}>
         <ProfileWithAuthorization profileDID={profileDID}>
-          <Card className="p-0 rounded-[20px]">
+          <Card className="p-0 rounded-[1.25rem]">
             <ProfileHeader profileDID={profileDID} plain={true} customStyle="sticky top-3.5 z-50" />
             <FollowingPage profileDID={profileDID} />
           </Card>

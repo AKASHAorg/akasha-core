@@ -159,9 +159,9 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
           justify="center"
           direction="row"
           background={{ light: 'grey9', dark: 'grey5' }}
-          customStyle="rounded-[10px]"
+          customStyle="rounded-[0.625rem]"
         >
-          <Card className="bg-background m-3.5 p-2 w-fit h-[60px]">
+          <Card className="bg-background m-3.5 p-2 w-fit h-[3.75rem]">
             {/* showHiddenContent is the flag used to hide nsfw blocks in the
              * feed when 'Show NSFW Content' setting is off and shows the overlay over it when
              * on beam page (set to true in BeamSection(beam page), otherwise false)

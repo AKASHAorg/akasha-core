@@ -22,9 +22,9 @@ const BasicInfoCard: React.FC<BasicInfoCardProps> = ({
     <Card className={`p-2 border-none ${customStyle}`}>
       <Stack direction="column" align="center" justify="center" customStyle="mb-32">
         {image ? (
-          <Image src={image} customStyle="w-[180px] h-[180px] m-auto my-4" />
+          <Image src={image} customStyle="w-[11.25rem] h-[11.25rem] m-auto my-4" />
         ) : (
-          <Card className="bg-grey8 dark:bg-grey5 w-[180px] h-[180px] m-auto my-4 rounded-xl" />
+          <Card className="bg-grey8 dark:bg-grey5 w-[11.25rem] h-[11.25rem] m-auto my-4 rounded-xl" />
         )}
         <Stack customStyle="w-[70%] m-auto gap-4">
           {titleLabel && (

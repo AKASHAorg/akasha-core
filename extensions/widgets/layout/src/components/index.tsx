@@ -219,7 +219,7 @@ const Layout: React.FC<unknown> = () => {
           >
             <Stack
               padding="pt-4"
-              customStyle="sticky top-0 z-10 bg(white dark:black) rounded-b-2xl"
+              customStyle="sticky top-0 z-10 bg(white dark:black) rounded-b-3xl"
             >
               <Widget name={layoutSlots.topbarSlotId} loadingIndicator={topbarLoadingIndicator} />
             </Stack>
