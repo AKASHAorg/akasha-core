@@ -1,8 +1,10 @@
 import React from 'react';
-import sortBy from 'lodash/sortBy';
+/* import sortBy from 'lodash/sortBy';
 import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
-import AuthorProfileAvatar from '@akashaorg/ui-lib-feed/lib/components/cards/author-profile-avatar';
+import AuthorProfileAvatar from '@akashaorg/ui-lib-feed/lib/components/cards/author-profile-avatar'; 
+import { mapBeamEntryData } from '@akashaorg/ui-core-hooks';
+*/
 import { useTranslation } from 'react-i18next';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import {
@@ -12,7 +14,7 @@ import {
   IContentClickDetails,
 } from '@akashaorg/typings/lib/ui';
 import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { mapBeamEntryData, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
+import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 
 import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
 import {
