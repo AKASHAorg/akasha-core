@@ -2,7 +2,7 @@ import React from 'react';
 /* import sortBy from 'lodash/sortBy';
 import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
-import AuthorProfileAvatar from '@akashaorg/ui-lib-feed/lib/components/cards/author-profile-avatar'; 
+import AuthorProfileAvatar from '@akashaorg/ui-lib-feed/lib/components/cards/author-profile-avatar';
 import { mapBeamEntryData } from '@akashaorg/ui-core-hooks';
 */
 import { useTranslation } from 'react-i18next';
