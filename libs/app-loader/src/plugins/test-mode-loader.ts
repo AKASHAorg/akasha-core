@@ -172,7 +172,6 @@ export class TestModeLoader implements ITestModeLoaderPlugin {
           },
           extensionModule,
           extensionConfig,
-          true,
         );
         this.#notifyCurrentStatus(this.getStaticStatusCodes().status.EXTENSION_TEST_LOAD_SUCCESS);
       } else {
