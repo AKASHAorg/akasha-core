@@ -1,5 +1,28 @@
-@import 'tailwindcss' source(none);
+@import 'tailwindcss';
 @source "../ui";
+
+@theme inline {
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+}
 
 @layer base {
   html {
@@ -62,7 +85,7 @@
     --success-foreground: 97.9% 0.021 166.1;
     --warning: 86% 0.173 91.8;
     --warning-foreground: 98.7% 0.026 102.2;
-    --radius: 1.5rem;
+    --radius: 0.5rem;
   }
 
   .dark {
@@ -91,6 +114,23 @@
     --success-foreground: 37.8% 0.073 168.9;
     --warning: 97.3% 0.07 103.2;
     --warning-foreground: 55.4% 0.121 66.4;
+  }
+}
+
+@layer component {
+  [data-slot='card'] {
+    --radius: 1.25rem;
+  }
+  [data-slot='card'] * {
+    --radius: 0.5rem;
+  }
+  [data-slot='card'] [data-slot='card'] {
+    --radius: 0.625rem;
+  }
+
+  [data-slot='button'],
+  [data-slot='badge'] {
+    --radius: 1.5rem;
   }
 }
 
