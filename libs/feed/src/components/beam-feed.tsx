@@ -169,7 +169,7 @@ const BeamFeed = (props: BeamFeedProps) => {
         />
       )}
       {beams && (
-        <Card ref={vListContainerRef} className="p-0 border-none bg-transparent">
+        <div ref={vListContainerRef}>
           <DynamicInfiniteScroll
             dataTestId={dataTestId}
             count={beams.length}
@@ -200,7 +200,7 @@ const BeamFeed = (props: BeamFeedProps) => {
               return renderItem(beam.node);
             }}
           </DynamicInfiniteScroll>
-        </Card>
+        </div>
       )}
     </>
   );
