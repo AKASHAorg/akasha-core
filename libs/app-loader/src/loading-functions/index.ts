@@ -1,11 +1,6 @@
 import { IAppConfig, IRootComponentProps, SupportedUILibs } from '@akashaorg/typings/lib/ui';
 
 export type LoadingFunctionOptions = {
-  /**
-   *  when true, the sources will also be removed when the app unmounts
-   *  useful in hmr.
-   */
-  deleteSourcesOnUnmount?: boolean;
   logger: IRootComponentProps['logger'];
   /**
    * Called when the application failed to render due to an error
