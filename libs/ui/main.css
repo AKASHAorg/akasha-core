@@ -85,6 +85,8 @@
     --success-foreground: 97.9% 0.021 166.1;
     --warning: 86% 0.173 91.8;
     --warning-foreground: 98.7% 0.026 102.2;
+    --nested-card: 98.5% 0 0;
+
     --radius: 0.5rem;
   }
 
@@ -114,6 +116,7 @@
     --success-foreground: 37.8% 0.073 168.9;
     --warning: 97.3% 0.07 103.2;
     --warning-foreground: 55.4% 0.121 66.4;
+    --nested-card: 37% 0.012 285.8;
   }
 }
 

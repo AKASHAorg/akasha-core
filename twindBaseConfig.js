@@ -89,6 +89,9 @@ export default {
           DEFAULT: withHslOpacity('--card'),
           foreground: withHslOpacity('--card-foreground'),
         },
+        'nested-card': {
+          DEFAULT: withHslOpacity('--nested-card'),
+        },
       },
       borderRadius: {
         large: '20px',
