@@ -744,18 +744,16 @@ export default class AppLoader {
     extensionInfo: AkashaApp,
     extensionModule: SystemModuleType,
     extensionConfig: IAppConfig & { name: string },
-    isDevMode = false,
   ) => {
     this.extensionModules.set(extensionInfo.name, extensionModule);
     this.extensionConfigs.set(extensionInfo.name, extensionConfig);
     this.extensionData.push(extensionInfo);
     this.registerAdditionalEntities(extensionConfig, extensionInfo.applicationType);
-    this.singleSpaRegister(new Map().set(extensionInfo.name, extensionConfig), isDevMode);
+    this.singleSpaRegister(new Map().set(extensionInfo.name, extensionConfig));
   };
 
   singleSpaRegister = (
-    extensionConfigs: Map<string, IAppConfig & { name: string }>,
-    isDevMode = false,
+    extensionConfigs: Map<string, IAppConfig & { name: string }>
   ) => {
     for (const [name, conf] of extensionConfigs) {
       const logger = this.parentLogger.create(name);
@@ -802,7 +800,6 @@ export default class AppLoader {
         name,
         app: () =>
           createLoadingFunction(conf.rootComponent, conf.UILib, {
-            deleteSourcesOnUnmount: isDevMode,
             logger,
             onRenderError: () => {
               showError({
