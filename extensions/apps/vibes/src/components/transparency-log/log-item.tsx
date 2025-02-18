@@ -1,5 +1,5 @@
 import React from 'react';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import ReportReasonPill from '@akashaorg/design-system-components/lib/components/ReportReasonPill';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -30,7 +30,7 @@ const TransparencyLogItemCard: React.FC<TransparencyLogItemCardProps> = props =>
   const textColor = { light: 'grey5', dark: 'grey7' } as const;
 
   return (
-    <Card padding={0}>
+    <Card className="p-0">
       <Stack
         spacing="gap-y-1"
         padding="p-4"

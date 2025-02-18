@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
@@ -48,7 +48,7 @@ const CookieCard: React.FC<CookieCardProps> = props => {
   } = props;
 
   return (
-    <Card elevation="3" radius={20} padding={'p-4'}>
+    <Card className="p-4">
       <Stack direction="column" spacing="gap-y-2">
         <Text variant="h6">{titleLabel}</Text>
 

@@ -27,7 +27,7 @@ export const ResignConfirmation: React.FC<ResignConfirmationProps> = props => {
   } = props;
 
   return (
-    <Card padding={20}>
+    <Card className="p-4">
       <Stack align="center" spacing="gap-y-6">
         <Text variant="h5" align="center">
           {titleLabel}

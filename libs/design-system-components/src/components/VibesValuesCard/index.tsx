@@ -27,7 +27,7 @@ const VibesValuesCard: React.FC<VibesValuesCardProps> = props => {
   const { titleLabel, subtitleLabel, ctaLabel, ctaUrl, values, onValueClick } = props;
 
   return (
-    <Card padding={16}>
+    <Card className="p-4">
       <Stack spacing="gap-y-4">
         <Text variant="h5">{titleLabel}</Text>
 

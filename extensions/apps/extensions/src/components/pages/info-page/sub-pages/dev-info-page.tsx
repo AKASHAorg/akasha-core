@@ -2,7 +2,7 @@ import React, { useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import AppList from '@akashaorg/design-system-components/lib/components/AppList';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -131,7 +131,7 @@ export const DevInfoPage = (props: DevInfoPageProps) => {
 
   return (
     <>
-      <Card padding="p-4">
+      <Card className="p-4">
         <Stack spacing="gap-y-4">
           <Text variant="h5">{t('Developer')}</Text>
           <ProfileAvatarButton

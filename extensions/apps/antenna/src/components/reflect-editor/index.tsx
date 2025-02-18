@@ -163,7 +163,6 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
       mentions={mentions}
       editorActionsRef={editorActionsRef}
       getMentions={handleGetMentions}
-      background={{ light: 'white', dark: 'grey2' }}
       onPublish={data => {
         if (!authenticatedDID) {
           return;

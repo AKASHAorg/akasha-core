@@ -11,7 +11,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import DynamicInfiniteScroll from '@akashaorg/design-system-components/lib/components/DynamicInfiniteScroll';
 
 import { type InboxNotification } from '@akashaorg/typings/lib/ui';
@@ -231,7 +231,7 @@ const NotificationsPage: React.FC = () => {
                   image={'/images/no-notifications-found.webp'}
                 />
               )}
-              <Card radius={16} customStyle="p-0">
+              <Card className="p-0 rounded-2xl">
                 <DynamicInfiniteScroll
                   count={notifications.length}
                   overScan={8}
