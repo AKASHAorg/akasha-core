@@ -1,5 +1,5 @@
 import React from 'react';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { ExclamationTriangleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -14,7 +14,7 @@ const InfoCard: React.FC<InfoCardProps> = props => {
   const { titleLabel, subtitleLabel } = props;
 
   return (
-    <Card elevation="none" padding={16} customStyle="bg(errorLight/30 dark:errorDark/30)">
+    <Card className="p-4 bg-destructive opacity-30">
       <Stack direction="row" align="center" spacing="gap-x-2">
         <Icon
           icon={<ExclamationTriangleIcon />}

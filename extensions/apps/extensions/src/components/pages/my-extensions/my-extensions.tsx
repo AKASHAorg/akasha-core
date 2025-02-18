@@ -19,7 +19,7 @@ import {
 } from '@akashaorg/typings/lib/ui';
 import { SortOrder, AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Dropdown from '@akashaorg/design-system-core/lib/components/Dropdown';
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
 import DynamicInfiniteScroll from '@akashaorg/design-system-components/lib/components/DynamicInfiniteScroll';
@@ -241,7 +241,7 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
         />
       )}
       {!error && allMyExtensions?.length > 0 && (
-        <Card>
+        <Card className="shadow-none">
           <DynamicInfiniteScroll
             count={allMyExtensions.length}
             estimatedHeight={ENTRY_HEIGHT}

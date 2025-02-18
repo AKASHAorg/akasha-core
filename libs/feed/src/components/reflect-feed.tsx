@@ -181,7 +181,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
   if (isAuthenticating) return <>{loadingIndicatorRef.current()}</>;
 
   return (
-    <Card type="plain">
+    <Card className="p-0 border-none">
       {reflectionStreamQuery.error && (
         <ErrorLoader
           type="script-error"
@@ -192,7 +192,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
       {reflections && (
         <DynamicInfiniteScroll
           header={
-            <Card type="plain" customStyle="min-h-[inherit]">
+            <Card className="min-h-[inherit] p-0 border-none">
               {header}
               {filteredPendingReflections.map((content, index, arr) => (
                 <PendingReflect

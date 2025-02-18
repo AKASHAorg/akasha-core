@@ -5,7 +5,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ProfileStatsView from '../../profile-stats';
 import ProfileNotFound from '@akashaorg/design-system-components/lib/components/ProfileNotFound';
 import NSFW from './nsfw';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import ProfileHeader from '../../profile-header';
 import routes, { EDIT } from '../../../routes';
 import {
@@ -111,7 +111,7 @@ const ProfileInfoPage: React.FC<ProfileInfoPageProps> = props => {
 
   if (profileData?.nsfw && !showNSFW && authenticatedDID !== profileData?.did?.id)
     return (
-      <Card>
+      <Card className="shadow-none">
         <NSFW
           sensitiveContentLabel={t('NSFW Profile')}
           descriptionFirstLine={t('This profile is marked as NSFW.')}

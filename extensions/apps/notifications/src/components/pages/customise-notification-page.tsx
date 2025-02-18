@@ -18,7 +18,7 @@ import {
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -247,7 +247,7 @@ const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
   }
 
   return (
-    <Card radius={16} padding={'py-2,px-0'} customStyle="h-full md:h-min space-y-4">
+    <Card className="h-full md:h-min space-y-4 rounded-2xl py-2 px-0">
       <Text variant="h5" align="center" customStyle="pb-2">
         {initial ? t('Customise Your Notifications') : t('Notification Settings')}
       </Text>

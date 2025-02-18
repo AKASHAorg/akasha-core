@@ -1,7 +1,8 @@
 import * as React from 'react';
 
 import { cn } from '@/library/utils';
-import { typographyVariants } from '@/akasha-components/typography';
+
+import { typographyVariants } from './typography';
 
 function Card({ className, ...props }: React.ComponentProps<'div'>) {
   return (

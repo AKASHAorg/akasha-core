@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Section from '@akashaorg/design-system-core/lib/components/Section';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -25,7 +25,7 @@ const VersionInfo: React.FC<VersionInfoProps> = ({
   additionalNotesBody,
 }) => {
   return (
-    <Card padding={'p-4'} radius={20}>
+    <Card className="p-4">
       <Stack direction="column" spacing="gap-y-4">
         <Section title={integrationName}>
           <Text variant="footnotes2" weight="normal" color="grey7">

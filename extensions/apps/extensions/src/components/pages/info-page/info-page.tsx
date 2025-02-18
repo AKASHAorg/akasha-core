@@ -27,7 +27,7 @@ import Section, { DividerPosition } from '@akashaorg/design-system-core/lib/comp
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ExtensionImageGallery from '@akashaorg/design-system-components/lib/components/ExtensionImageGallery';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import CopyToClipboard from '@akashaorg/design-system-core/lib/components/CopyToClipboard';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
@@ -229,7 +229,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
           <AppCoverImage src={coverImageSrc} appType={appData.applicationType} />
           <Stack>
             <Stack spacing="gap-y-6">
-              <Card padding="p-4" margin="mb-2" radius={{ bottom: 20 }}>
+              <Card className="p-4 mb-2 rounded-t-none">
                 <AppInfoHeader
                   displayName={appData.displayName}
                   extensionType={appData.applicationType}
@@ -287,7 +287,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                 )}
                 <Section title={t('Developer')} dividerPosition={DividerPosition.Top}>
                   {appData.author?.akashaProfile && (
-                    <Card onClick={handleDeveloperClick} type="plain">
+                    <Card className="shadow-none p-0 border-none" onClick={handleDeveloperClick}>
                       <Stack direction="row" align="center">
                         <ProfileAvatarButton
                           profileId={appData.author?.id}
@@ -413,7 +413,10 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                 )}
                 {contributorAvatars?.length > 0 && (
                   <Section title={t('Collaborators')} dividerPosition={DividerPosition.Top}>
-                    <Card type="plain" onClick={handleCollaboratorsClick}>
+                    <Card
+                      className="shadow-none p-0 border-none"
+                      onClick={handleCollaboratorsClick}
+                    >
                       <Stack direction="row" align="center">
                         <StackedAvatar userData={contributorAvatars} maxAvatars={4} size="xs" />
                         <Icon

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import TrendingWidgetItemLoader from './trending-widget-item-loader';
@@ -11,7 +11,7 @@ import TrendingWidgetItemLoader from './trending-widget-item-loader';
  */
 const TrendingWidgetLoadingCard: React.FC = () => {
   return (
-    <Card radius="rounded-2xl">
+    <Card>
       <Stack direction="column" spacing="gap-y-2" align="center" fullWidth>
         <Stack direction="column" spacing="gap-y-6" align="start" fullWidth>
           <TextLine width="w-3/6" height="h-[1.5rem]" animated />

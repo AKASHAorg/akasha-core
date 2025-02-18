@@ -1,6 +1,6 @@
 import React from 'react';
 import { startWidgetsTogglingBreakpoint } from '@akashaorg/design-system-core/lib/utils/breakpoints';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 
@@ -11,10 +11,7 @@ import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 const TopbarLoader: React.FC = () => {
   return (
     <div>
-      <Card
-        padding="p-0"
-        customStyle="flex-row justify-between items-center py-1.5 px-2 space-x-4 xs:(fixed top-0 z-[8]) w-full"
-      >
+      <Card className="p-0 flex flex-row justify-between items-center py-1.5 px-2 space-x-4 w-full xs:fixed xs:top-0 xs:z-[8]">
         <Stack direction="row" spacing="gap-x-2">
           {Array.from({ length: 2 }).map((el, index: number) => (
             <TextLine

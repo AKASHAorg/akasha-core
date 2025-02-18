@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
@@ -280,7 +280,7 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
         <Text variant="h5" weight="semibold" align="start">
           {t('Release Manager')}
         </Text>
-        <Card padding={8} background={{ light: 'grey9', dark: 'grey2' }}>
+        <Card className="p-2">
           {extensionDataReqLoading && (
             <Stack align="center" justify="center" fullWidth customStyle="h-full">
               <Spinner />
@@ -309,7 +309,7 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
           </Button>
         </Stack>
         {testRelease && (
-          <Card padding={16} background={{ light: 'grey9', dark: 'grey2' }}>
+          <Card className="p-4">
             <Stack spacing="gap-4">
               <Text variant="body2" weight="semibold">
                 {`Release ${testRelease?.version || '0.0.1'}`}
@@ -333,7 +333,7 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
           />
         )}
         {appReleases?.length > 0 && (
-          <Card padding={16} background={{ light: 'grey9', dark: 'grey2' }}>
+          <Card className="p-4">
             <DynamicInfiniteScroll
               count={appReleases?.length}
               estimatedHeight={ENTRY_HEIGHT}

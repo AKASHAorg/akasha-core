@@ -1,9 +1,10 @@
 import React from 'react';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Img from '@akashaorg/design-system-core/lib/components/Image';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Area } from 'react-easy-crop';
+import { cn } from '@akashaorg/ui/lib/library/utils';
 
 export type ImagePreview = {
   dimension: number;
@@ -38,10 +39,10 @@ export const CroppedImagePreviews: React.FC<CroppedImagePreviewProps> = props =>
         {previews.map((preview, index) => (
           <Card
             key={index}
-            padding={'p-0'}
-            elevation="none"
-            radius={preview.circular ? 'rounded-full' : 10}
-            customStyle={`relative overflow-hidden w-[${preview.dimension}px] h-[${preview.dimension}px]`}
+            className={cn(
+              preview.circular ? 'rounded-full' : 'rounded-[0.625rem]',
+              `p-0 relative overflow-hidden w-[${preview.dimension}px] h-[${preview.dimension}px]`,
+            )}
           >
             <Img
               src={imageUrl}

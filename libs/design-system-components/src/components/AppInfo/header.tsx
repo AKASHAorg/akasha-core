@@ -15,6 +15,7 @@ import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import { InformationCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 
 export type AppInfoHeaderProps = {
   displayName: string;
@@ -160,11 +161,7 @@ export const AppInfoHeader: React.FC<AppInfoHeaderProps> = props => {
           </Stack>
         </Stack>
         {isInReview && (
-          <Stack
-            padding="p-4"
-            background={{ light: 'grey9', dark: 'grey5' }}
-            customStyle="rounded-xl"
-          >
+          <Card className="p-4 bg-nested-card">
             <Stack direction="column" spacing="gap-2">
               <Stack direction="row" align="center" spacing="gap-2">
                 <Icon
@@ -180,7 +177,7 @@ export const AppInfoHeader: React.FC<AppInfoHeaderProps> = props => {
                 {isInReviewDescriptionLabel}
               </Text>
             </Stack>
-          </Stack>
+          </Card>
         )}
       </Stack>
     </Stack>

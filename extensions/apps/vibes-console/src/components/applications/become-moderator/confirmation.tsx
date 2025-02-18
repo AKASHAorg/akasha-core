@@ -1,5 +1,5 @@
 import React from 'react';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -26,7 +26,7 @@ export const BMConfirmation: React.FC<BMConfirmationProps> = props => {
   } = props;
 
   return (
-    <Card padding={16}>
+    <Card className="p-4">
       <Stack spacing="gap-y-4">
         <Text variant="h5" align="center">
           {titleLabel}

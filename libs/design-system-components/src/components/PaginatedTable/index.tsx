@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Pagination, {
   PaginationProps,
 } from '@akashaorg/design-system-core/lib/components/Pagination';
@@ -13,7 +13,7 @@ import Table, { TableProps } from '@akashaorg/design-system-core/lib/components/
 const PaginatedTable: React.FC<TableProps & PaginationProps> = props => {
   return (
     <Stack spacing="gap-y-3">
-      <Card padding={0}>
+      <Card className="p-0">
         <Table {...props} />
       </Card>
       <Pagination {...props} customStyle="justify-end" />
