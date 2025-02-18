@@ -99,8 +99,8 @@ const Header: React.FC<HeaderProps> = ({
       />
       <Card
         className={cn(
-          'px-[0.5rem] pb-[1rem] pt-0 rounded-t-none overflow-visible border-none',
-          plain && 'rounded-none',
+          'px-[0.5rem] pb-[1rem] pt-0 rounded-t-none overflow-visible',
+          plain && 'rounded-none border-b-0',
         )}
       >
         <Stack direction="column" customStyle="pl-2" fullWidth>
