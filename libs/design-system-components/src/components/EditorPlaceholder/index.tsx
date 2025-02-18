@@ -36,7 +36,7 @@ const EditorPlaceholder: React.FC<EditorPlaceholderType> = props => {
     transformSource,
   } = props;
   return (
-    <Card className="p-0 cursor-pointer" onClick={onClick}>
+    <Card className="p-0 cursor-pointer bg-nested-card" onClick={onClick}>
       <div className={tw(`flex justify-between p-4 `)}>
         <div className={tw(`flex flex-row items-center gap-4 flex-1`)}>
           <Avatar
