@@ -99,7 +99,7 @@ const Header: React.FC<HeaderProps> = ({
       />
       <Card
         className={cn(
-          'px-[0.5rem] pb-[1rem] pt-0 rounded-t-none overflow-visible',
+          'px-[0.5rem] pb-[1rem] pt-0 rounded-t-none overflow-visible border-none',
           plain && 'rounded-none',
         )}
       >
