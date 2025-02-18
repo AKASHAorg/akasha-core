@@ -2,6 +2,7 @@ import React from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
+import { cn } from '@akashaorg/ui/lib/library/utils';
 
 type ProfileHeaderLoadingProps = {
   plain?: boolean;
@@ -10,8 +11,13 @@ const ProfileHeaderLoading: React.FC<ProfileHeaderLoadingProps> = props => {
   const { plain } = props;
   return (
     <div>
-      <Card className="h-32"></Card>
-      <Card className={`px-[0.5rem] pb-[1rem] pt-0 ${plain ? 'rounded-none' : ''}`}>
+      <Card className="h-32 rounded-b-none border-b-0"></Card>
+      <Card
+        className={cn(
+          'px-[0.5rem] pb-[1rem] pt-0 rounded-t-none border-t-0 overflow-visible',
+          plain && 'rounded-b-none border-b-0',
+        )}
+      >
         <Stack padding="pl-2" fullWidth>
           <Stack direction="row" spacing="gap-x-2" customStyle="-ml-2">
             <Stack customStyle="relative w-20 h-[3.5rem] shrink-0">
