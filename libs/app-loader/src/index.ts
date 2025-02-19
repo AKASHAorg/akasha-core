@@ -19,8 +19,8 @@ import {
   getWorldDefaultExtensions,
 } from './extensions';
 import getSDK from '@akashaorg/core-sdk';
-import EventBus from '@akashaorg/core-sdk/lib/common/event-bus';
-import Logging from '@akashaorg/core-sdk/lib/logging';
+import type EventBus from '@akashaorg/core-sdk/lib/common/event-bus';
+import type Logging from '@akashaorg/core-sdk/lib/logging';
 import { InstalledExtensionSchema } from '@akashaorg/core-sdk/lib/db/installed-extensions.schema';
 import {
   CorePlugins,
