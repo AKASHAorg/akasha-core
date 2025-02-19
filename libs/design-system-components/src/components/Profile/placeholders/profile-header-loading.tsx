@@ -11,11 +11,11 @@ const ProfileHeaderLoading: React.FC<ProfileHeaderLoadingProps> = props => {
   const { plain } = props;
   return (
     <div>
-      <Card className="h-32 rounded-b-none border-b-0"></Card>
+      <Card className={cn('h-32 rounded-b-none', plain ? 'border-none' : 'border-b-0')}></Card>
       <Card
         className={cn(
           'px-[0.5rem] pb-[1rem] pt-0 rounded-t-none border-t-0 overflow-visible',
-          plain && 'rounded-b-none border-b-0',
+          plain && 'rounded-b-none border-none',
         )}
       >
         <Stack padding="pl-2" fullWidth>

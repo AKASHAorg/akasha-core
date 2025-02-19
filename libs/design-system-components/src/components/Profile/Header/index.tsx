@@ -93,14 +93,14 @@ const Header: React.FC<HeaderProps> = ({
     <Stack customStyle={customStyle}>
       <Card
         data-testid="cover-image"
-        className="h-32 bg-center bg-no-repeat bg-cover bg-muted rounded-b-none"
+        className="h-32 bg-center bg-no-repeat bg-cover bg-muted rounded-b-none border-none"
         style={{ backgroundImage: `url(${backgroundUrl})` }}
         {...(background && { onClick: onClickCoverImage })}
       />
       <Card
         className={cn(
           'px-[0.5rem] pb-[1rem] pt-0 rounded-t-none overflow-visible',
-          plain && 'rounded-none border-b-0',
+          plain && 'rounded-none border-b-0 border-x-0',
         )}
       >
         <Stack direction="column" customStyle="pl-2" fullWidth>
