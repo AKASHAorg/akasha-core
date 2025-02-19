@@ -9,6 +9,7 @@ import {
 import React from 'react';
 import routes from './routes';
 import { Earth } from 'lucide-react';
+import '../main.css';
 
 export const register = (opts: IntegrationRegistrationOptions): IAppConfig => ({
   mountsIn: opts.layoutSlots?.applicationSlotId,

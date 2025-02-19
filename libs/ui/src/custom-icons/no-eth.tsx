@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { LucideProps } from 'lucide-react';
 
-export const X = (props: LucideProps) => (
+export const NoEth = (props: LucideProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="24"
@@ -14,6 +14,6 @@ export const X = (props: LucideProps) => (
     strokeLinejoin="round"
     {...props}
   >
-    <path d="m10.802 12.811-6.955 7.938M18.962 3.251l-6.185 7.284M3.305 3.25l13.72 17.5h3.78L7.085 3.25h-3.78Z" />
+    <path d="M17.849 6.19c2.01-.37 3.49-.21 3.98.573 1.01 1.616-2.57 5.27-7.998 8.163-5.428 2.892-10.65 3.927-11.66 2.31-.533-.852.21-2.27 1.829-3.846M20 12a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z" />
   </svg>
 );
