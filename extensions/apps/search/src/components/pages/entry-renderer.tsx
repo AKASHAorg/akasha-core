@@ -1,18 +1,26 @@
 import React from 'react';
-import sortBy from 'lodash/sortBy';
+/* import sortBy from 'lodash/sortBy';
 import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
 import AuthorProfileAvatar from '@akashaorg/ui-lib-feed/lib/components/cards/author-profile-avatar';
+import { mapBeamEntryData } from '@akashaorg/ui-core-hooks';
+*/
 import { useTranslation } from 'react-i18next';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import {
   EntityTypes,
   NavigateToParams,
   Profile,
   IContentClickDetails,
 } from '@akashaorg/typings/lib/ui';
-import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
 import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { mapBeamEntryData, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
+import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
+
+import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
+import {
+  FlagIcon,
+  TrashIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
 export type EntryCardRendererProps = {
   itemData?: AkashaBeam;
@@ -69,17 +77,45 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
 
   const hideActionButtons = React.useMemo(() => itemType === EntityTypes.REFLECT, [itemType]);
 
+  const isViewer = authenticatedDID === itemData.author.id;
+  const menuItems: ListItem[] = [
+    ...(!isViewer
+      ? [
+          {
+            icon: <FlagIcon />,
+            label: t('Flag'),
+            color: { light: 'errorLight', dark: 'errorDark' } as const,
+            disabled: undefined, //disableReporting, - missing prop
+            onClick: handleFlag,
+          },
+        ]
+      : []),
+    ...(isViewer && itemType === EntityTypes.BEAM
+      ? [
+          {
+            icon: <TrashIcon />,
+            label: t('Delete Post'),
+            color: { light: 'errorLight', dark: 'errorDark' } as const,
+            onClick: handleEntryRemove,
+          },
+        ]
+      : []),
+  ];
+
   return (
     <>
       {itemData && itemData.author?.id && (
         <Stack customStyle="mb-2">
-          {!itemData.nsfw && itemData.active && (
+          {/* !itemData.nsfw && itemData.active && (
             <EntryCard
+              nsfwText={t(
+                'To view explicit or sensitive content, please connect to confirm your consent.',
+              )}
+              menuItems={menuItems}
               entryData={mapBeamEntryData(itemData)}
               sortedContents={sortBy(itemData.content, 'order')}
               itemType={EntityTypes.BEAM}
               onContentClick={handleContentClick}
-              flagAsLabel={t('Flag')}
               moderatedContentLabel={t('This content has been moderated')}
               reflectAnchorLink={`/@akashaorg/app-antenna/${
                 itemType === EntityTypes.REFLECT ? 'reflection' : 'beam'
@@ -101,7 +137,7 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
             >
               {({ blockID }) => <Extension name={`${blockID}_content_block`} />}
             </EntryCard>
-          )}
+          ) */}
         </Stack>
       )}
     </>
