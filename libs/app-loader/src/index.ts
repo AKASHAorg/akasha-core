@@ -18,7 +18,9 @@ import {
   getUserInstalledExtensions,
   getWorldDefaultExtensions,
 } from './extensions';
-import getSDK, { SDK_API, SDK_Services } from '@akashaorg/core-sdk';
+import getSDK from '@akashaorg/core-sdk';
+import EventBus from '@akashaorg/core-sdk/lib/common/event-bus';
+import Logging from '@akashaorg/core-sdk/lib/logging';
 import { InstalledExtensionSchema } from '@akashaorg/core-sdk/lib/db/installed-extensions.schema';
 import {
   CorePlugins,
@@ -71,11 +73,11 @@ export default class AppLoader {
   extensionData: Awaited<ReturnType<typeof getWorldDefaultExtensions>>;
   layoutConfig: IAppConfig;
   logger: ILogger;
-  parentLogger: SDK_Services['log'];
+  parentLogger: Logging;
   plugins: IPlugin & {
     core: CorePlugins;
   };
-  globalChannel: SDK_API['globalChannel'];
+  globalChannel: EventBus;
   user: { id: string };
   globalChannelSub: Subscription;
   userExtensions: InstalledExtensionSchema[];
@@ -752,9 +754,7 @@ export default class AppLoader {
     this.singleSpaRegister(new Map().set(extensionInfo.name, extensionConfig));
   };
 
-  singleSpaRegister = (
-    extensionConfigs: Map<string, IAppConfig & { name: string }>
-  ) => {
+  singleSpaRegister = (extensionConfigs: Map<string, IAppConfig & { name: string }>) => {
     for (const [name, conf] of extensionConfigs) {
       const logger = this.parentLogger.create(name);
       if (singleSpa.getAppNames().includes(name)) continue;
