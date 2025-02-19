@@ -5,7 +5,7 @@
   "tsx": true,
   "tailwind": {
     "config": "",
-    "css": "",
+    "css": "main.css",
     "baseColor": "zinc",
     "cssVariables": true
   },
@@ -13,8 +13,8 @@
   "aliases": {
     "components": "@/components",
     "hooks": "@/hooks",
-    "lib": "@/lib",
-    "utils": "@/ui/lib/utils",
+    "lib": "@/library",
+    "utils": "@/ui/library/utils",
     "ui": "@/ui"
   }
 }
