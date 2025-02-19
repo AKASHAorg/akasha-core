@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Info } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
@@ -37,7 +37,7 @@ const AntennaSetting: React.FC<IAntennaSettingProps> = ({ isSelected, onChange }
           'Get notifications about new reflections on your beams people you follow & your interests.',
         )}
       </Text>
-      <Card padding="p-3" customStyle="mt-4" background={{ light: 'grey9', dark: 'grey3' }}>
+      <Card className="p-3 mt-4">
         <Stack direction="row" spacing="gap-x-3" align="center">
           <Icon
             icon={<Info />}

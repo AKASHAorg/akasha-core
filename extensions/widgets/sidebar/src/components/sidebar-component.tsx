@@ -10,7 +10,7 @@ import {
 import { startMobileSidebarHidingBreakpoint } from '@akashaorg/design-system-core/lib/utils/breakpoints';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import {
   Discord,
@@ -188,11 +188,7 @@ const SidebarComponent: React.FC<unknown> = () => {
       }}
       logger={logger}
     >
-      <Card
-        customStyle="w-[19.5rem] max-w-[19.5rem] max-h(screen xl:[calc(100vh-20px)]) h(full xl:fit)"
-        radius="rounded-r-2xl xl:rounded-2xl"
-        padding="p-0"
-      >
+      <Card className="p-0 rounded-r-2xl xl:rounded-2xl w-[19.5rem] max-w-[19.5rem] max-h-screen xl:max-h-[calc(100vh-20px) h-full xl:h-fit">
         <Suspense
           fallback={<FallbackHeader authenticatedDID={authenticatedDID} isLoggedIn={isLoggedIn} />}
         >

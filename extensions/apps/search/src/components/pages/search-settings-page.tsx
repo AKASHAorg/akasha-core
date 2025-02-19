@@ -5,7 +5,7 @@ import { useRootComponentProps } from '@akashaorg/ui-core-hooks';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
@@ -91,7 +91,7 @@ const SettingsPage: React.FC = () => {
   };
 
   return (
-    <Card radius={16} padding={'p-2'} customStyle="h-full md:h-min space-y-4 flex flex-col">
+    <Card className="p-2 h-full md:h-min space-y-4 flex flex-col rounded-[1.25rem]">
       <Text variant="h5" align="center">
         {t('Search Settings')}
       </Text>

@@ -11,7 +11,7 @@ import {
   ChevronUpIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 
 export type DropdownMenuItemGroupType = {
   id: string;
@@ -133,7 +133,10 @@ const DropdownFilter: React.FC<IDropdownFilterProps> = ({
                                 cursor-pointer`,
                               )}
                             >
-                              <Card type="plain" onClick={handleChange(item)} customStyle="w-full">
+                              <Card
+                                onClick={handleChange(item)}
+                                className="w-full border-none p-0"
+                              >
                                 <Stack
                                   direction="row"
                                   align="center"
@@ -224,7 +227,10 @@ const DropdownFilter: React.FC<IDropdownFilterProps> = ({
                       } cursor-pointer`,
                     )}
                   >
-                    <Card type="plain" onClick={handleChange(menuItem)} customStyle="w-full">
+                    <Card
+                      onClick={handleChange(menuItem)}
+                      className="w-full border-none p-0"
+                    >
                       <Stack
                         direction="row"
                         align="center"

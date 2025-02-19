@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import {
   ApplicationApprovedCard,
@@ -29,7 +29,7 @@ export const SelfApplicationDetailPage: React.FC<unknown> = () => {
   const applicationData = null;
   if (!applicationData)
     return (
-      <Card>
+      <Card className="shadow-none">
         <NoItemFound title="Oops! This application detail does not exist" />
       </Card>
     );

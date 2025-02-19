@@ -1,6 +1,6 @@
 import React from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 
@@ -10,7 +10,7 @@ import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
  */
 const MiniProfileWidgetLoader: React.FC = () => {
   return (
-    <Card radius="rounded-2xl" margin="mb-4" padding="p-0" customStyle="max-h-[30rem]">
+    <Card className="mb-4 p-0 max-h-[30rem]">
       <Stack
         background={{ light: 'grey7', dark: 'grey5' }}
         align="center"

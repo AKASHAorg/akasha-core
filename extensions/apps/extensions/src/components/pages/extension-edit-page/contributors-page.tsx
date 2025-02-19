@@ -10,7 +10,7 @@ import {
 } from '@akashaorg/typings/lib/ui';
 import SearchBar from '@akashaorg/design-system-components/lib/components/SearchBar';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import { CheckIcon, ExclamationTriangleIcon, TrashIcon } from '@heroicons/react/24/outline';
@@ -190,12 +190,7 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
           )}
           {showSuggestions && searchValue?.length > 1 && (
             <Stack direction="row" customStyle={'relative z-10'}>
-              <Card
-                padding={0}
-                radius={20}
-                elevation="2"
-                customStyle="absolute max-h-96 w-full overflow-y-auto scrollbar"
-              >
+              <Card className="p-0 absolute max-h-96 w-full overflow-y-auto scrollbar">
                 {contributors?.length === 0 && (
                   <Stack padding={16} spacing="gap-y-2">
                     <Text variant="body2" weight="bold" color={{ light: 'grey4', dark: 'grey6' }}>
