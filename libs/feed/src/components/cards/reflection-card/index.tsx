@@ -1,15 +1,17 @@
 import React from 'react';
-import EntryCard, {
-  EntryCardProps,
-} from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
+import EntryCard, { EntryCardProps } from '../entry-card';
 import AuthorProfileAvatar from '../author-profile-avatar';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import { useAkashaStore } from '@akashaorg/ui-core-hooks';
-import { EntityTypes, ReflectionData } from '@akashaorg/typings/lib/ui';
+import { ReflectionData } from '@akashaorg/typings/lib/ui';
 import { decodeb64SlateContent, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { Trans, useTranslation } from 'react-i18next';
 import { canDecodeContent } from '../../../utils/can-decode-content';
+import ReadOnlyEditor from '@akashaorg/design-system-components/lib/components/ReadOnlyEditor';
+import InlineNotification from '@akashaorg/design-system-core/lib/components/InlineNotification';
+import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
+import { FlagIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
 export type ReflectionCardProps = Pick<
   EntryCardProps,
@@ -55,21 +57,27 @@ const ReflectionCard: React.FC<ReflectionCardProps> = props => {
     });
   };
 
+  const isViewer = authenticatedDID === reflectionData.authorId;
+  const menuItems: ListItem[] = !isViewer
+    ? [
+        {
+          icon: <FlagIcon />,
+          label: t('Flag'),
+          color: { light: 'errorLight', dark: 'errorDark' } as const,
+          disabled: false,
+          onClick: handleFlagReflection,
+        },
+      ]
+    : [];
+
   return (
     <EntryCard
+      menuItems={menuItems}
+      nsfwText={t('To view explicit or sensitive content, please connect to confirm your consent.')}
       dataTestId={pending ? 'pending-reflection-card' : 'reflection-card'}
       entryData={reflectionData}
       reflectAnchorLink="/@akashaorg/app-antenna/reflection"
-      {...(canDecodeContent(reflectionData.content)
-        ? {
-            slateContent: reflectionData.content.flatMap(item => decodeb64SlateContent(item.value)),
-          }
-        : {
-            errorTitle: t('Reflection can’t be loaded'),
-            errorMessage: t('Unable to decode reflection content.'),
-          })}
       noWrapperCard={true}
-      flagAsLabel={t('Flag')}
       isViewer={authenticatedDID === reflectionData.authorId}
       isLoggedIn={isLoggedIn}
       removed={{
@@ -120,7 +128,6 @@ const ReflectionCard: React.FC<ReflectionCardProps> = props => {
           />
         ),
       }}
-      itemType={EntityTypes.REFLECT}
       onReflect={onReflect}
       onEntryFlag={handleFlagReflection}
       onMentionClick={handleMentionClick}
@@ -133,7 +140,24 @@ const ReflectionCard: React.FC<ReflectionCardProps> = props => {
         />
       }
       {...rest}
-    />
+    >
+      {canDecodeContent(reflectionData.content) ? (
+        <ReadOnlyEditor
+          content={reflectionData.content.flatMap(item => decodeb64SlateContent(item.value))}
+          disabled={reflectionData.nsfw}
+          handleMentionClick={handleMentionClick}
+          handleLinkClick={url => {
+            navigateTo?.({ getNavigationUrl: () => url });
+          }}
+        />
+      ) : (
+        <InlineNotification
+          title={t('Reflection can’t be loaded')}
+          message={t('Unable to decode reflection content.')}
+          type="error"
+        />
+      )}
+    </EntryCard>
   );
 };
 
