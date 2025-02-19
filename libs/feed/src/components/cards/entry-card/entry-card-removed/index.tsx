@@ -14,7 +14,7 @@ const EntryCardRemoved: React.FC<EntryCardRemovedProps> = props => {
     <Card
       className={cn(
         props.type === 'author' ? 'muted opacity-50' : 'destructive opacity-30 border-destructive',
-        'rounded-[0.625rem] px-4 py-2',
+        'rounded-[0.625rem] px-4 py-2 bg-nested-card',
       )}
     >
       <Stack direction="row" spacing="gap-x-1">

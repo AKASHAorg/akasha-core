@@ -1,5 +1,5 @@
 import React, { ReactNode, Ref, useState, useMemo } from 'react';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import EntryCardRemoved from './entry-card-removed';
 import CardActions from './card-actions';
@@ -110,9 +110,8 @@ const EntryCard: React.FC<EntryCardProps> = props => {
   const entryCardUi = useMemo(
     () => (
       <Card
-        type="plain"
-        dataTestId={dataTestId}
-        customStyle="flex flex-col grow min-h-[inherit]"
+        className="flex flex-col grow p-0 border-none"
+        data-testid={dataTestId}
         /**
          * attach onClick handler if;
          * 'showNSFWContent' state (initially derived from the inverse of the 'showNSFWCard' prop) and contentClickable are true
@@ -150,8 +149,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
           )}
           {entryData.active && (
             <Card
-              type="plain"
-              customStyle={`flex flex-col justify-start items-center w-full overflow-hidden grow ${showHiddenStyle} ${contentClickableStyle}`}
+              className={`p-0 border-none flex flex-col justify-start items-center w-full overflow-hidden grow ${showHiddenStyle} ${contentClickableStyle}`}
               /**
                * attach onClick handler if
                * 'showNSFWContent' and 'noWrapperCard' are both true
@@ -269,7 +267,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
   return noWrapperCard ? (
     <> {entryCardUi}</>
   ) : (
-    <Card ref={ref} padding="p-0" customStyle={`grow min-h-[inherit] ${customStyle}`}>
+    <Card ref={ref} className={`p-0 grow min-h-[inherit] ${customStyle}`}>
       {entryCardUi}
     </Card>
   );

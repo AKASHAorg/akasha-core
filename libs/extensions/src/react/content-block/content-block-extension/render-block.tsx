@@ -49,7 +49,7 @@ export const RenderBlock: React.FC<RenderBlockProps> = props => {
         </Stack>
       )}
       {blockData && !matchingBlocks.length && (
-        <Card className="p-4 gap-y-2">
+        <Card className="p-4 gap-y-2 bg-nested-card">
           <Stack direction="row" spacing="gap-x-1">
             <Text variant="button-sm">
               {appInfo?.displayName} {notInstalledTitle}
