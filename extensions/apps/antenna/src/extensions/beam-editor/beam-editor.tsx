@@ -8,7 +8,7 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { XMarkIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import SearchBar from '@akashaorg/design-system-components/lib/components/SearchBar';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import UnsavedChangesModal from '@akashaorg/design-system-components/lib/components/UnsavedChangesModal';
 
@@ -329,8 +329,8 @@ export const BeamEditor: React.FC = () => {
         checkboxIsDisabled={profileData?.nsfw}
         onSelectCheckbox={handleNsfwCheckbox}
       />
-      <Stack customStyle="relative h-full overflow-hidden">
-        <Stack customStyle="overflow-y-auto overflow-x-hidden h-full">
+      <Stack className="relative h-full overflow-hidden">
+        <Stack className="overflow-y-auto overflow-x-hidden h-full">
           {blocksInUse.map((block, idx) => (
             <Card
               key={block.key}
@@ -338,7 +338,7 @@ export const BeamEditor: React.FC = () => {
               className="p-0 border-none bg-transparent"
               onClick={() => setFocusedBlock(block.key)}
             >
-              <Stack padding={16} direction="column" spacing="gap-2">
+              <Stack direction="column" spacing={2} className="p-4">
                 <BlockHeader
                   icon={block.icon}
                   blockCreationStatus={block.status}
@@ -370,14 +370,10 @@ export const BeamEditor: React.FC = () => {
           <div ref={bottomRef} />
         </Stack>
         {uiState === 'blocks' && (
-          <Stack
-            background={{ light: 'white', dark: 'grey2' }}
-            customStyle="absolute overflow-auto top-0 left-0 h-full w-full divide(y grey8 dark:grey5) z-[99]
-            "
-          >
+          <Stack className="bg-background absolute overflow-auto top-0 left-0 h-full w-full z-[99] divide-y divide-border">
             {blocksInUse.length > 9 && (
               <button onClick={handleClickCancel}>
-                <Stack padding={32} align="center" justify="center" fullWidth>
+                <Stack alignItems="center" justifyContent="center" className="p-8 w-full">
                   <Text>{t('You have reached the maximum number of blocks for a beam.')}</Text>
                 </Stack>
               </button>
@@ -385,12 +381,17 @@ export const BeamEditor: React.FC = () => {
             {blocksInUse.length < 10 &&
               availableBlocks.map((block, idx) => (
                 <button key={idx} onClick={() => handleAddBlock(block)}>
-                  <Stack padding={16} fullWidth direction="row" justify="between" align="center">
-                    <Stack direction="row" align="center" spacing="gap-2">
+                  <Stack
+                    direction="row"
+                    justifyContent="between"
+                    alignItems="center"
+                    className="p-4 w-full"
+                  >
+                    <Stack direction="row" alignItems="center" spacing={2}>
                       <Stack
-                        align="center"
-                        justify="center"
-                        customStyle={'h-8 w-8 group relative rounded-full bg(grey9 dark:grey5)'}
+                        alignItems="center"
+                        justifyContent="center"
+                        className="h-8 w-8 group relative rounded-full bg(grey9 dark:grey5)"
                       >
                         <Icon size="sm" icon={block.icon} />
                       </Stack>
@@ -402,12 +403,9 @@ export const BeamEditor: React.FC = () => {
           </Stack>
         )}
         {uiState === 'tags' && (
-          <Stack
-            background={{ light: 'white', dark: 'grey2' }}
-            customStyle="absolute top-0 left-0 h-full w-full overflow-auto z-[99]"
-          >
-            <Stack padding={16} spacing="gap-4">
-              <Stack direction="row" spacing="gap-x-1" align="center">
+          <Stack className="bg-background absolute top-0 left-0 h-full w-full overflow-auto z-[99]">
+            <Stack spacing={4} className="p-4">
+              <Stack direction="row" spacing={1} alignItems="center">
                 <Text variant="h6">{t('Beam Tags')}</Text>
                 <Text variant="footnotes2" color="grey7">
                   ({t('10 max')}.)
@@ -418,7 +416,7 @@ export const BeamEditor: React.FC = () => {
                   'Use up to 10 tags to categorize your posts on AKASHA World, helping others discover your content more easily.',
                 )}
               </Text>
-              <Stack spacing="gap-y-1">
+              <Stack spacing={1}>
                 <SearchBar
                   inputValue={tagValue}
                   inputPlaceholderLabel={t('Search for tags')}
@@ -446,7 +444,13 @@ export const BeamEditor: React.FC = () => {
                   {t("You haven't added any tags yet")}
                 </Text>
               )}
-              <Stack fullWidth direction="row" align="center" justify="end" spacing="gap-2">
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="end"
+                spacing={2}
+                className="w-full"
+              >
                 <Button variant="link" disabled={!newTags.length} onClick={() => setNewTags([])}>
                   {t('Clear All')}
                 </Button>
@@ -460,7 +464,7 @@ export const BeamEditor: React.FC = () => {
                   {t('Add')}
                 </Button>
               </Stack>
-              <Stack direction="row" spacing="gap-2" customStyle="flex-wrap">
+              <Stack direction="row" spacing={2} className="flex-wrap">
                 {newTags.map((tag, index) => (
                   <Pill
                     key={index}

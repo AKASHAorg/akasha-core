@@ -27,7 +27,7 @@ import {
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 import ImageBlockGallery from '@akashaorg/design-system-components/lib/components/ImageBlockGallery';
@@ -401,13 +401,13 @@ export const ImageEditorBlock = (
         <Card className="shadow-none rounded-2xl">
           <Stack direction="column">
             {imageGalleryImages.length > 0 && (
-              <Stack direction="row" justify="end">
+              <Stack direction="row" justifyContent="end">
                 <button onClick={handleCloseMenu}>
                   <Icon icon={<XMarkIcon />} accentColor />
                 </button>
               </Stack>
             )}
-            <Stack customStyle="pb-8">
+            <Stack className="pb-8">
               <Button
                 onClick={handleMediaClick}
                 disabled={imageUploadDisabled || maxImagesLimitReached}
@@ -417,9 +417,9 @@ export const ImageEditorBlock = (
               </Button>
             </Stack>
             <Divider />
-            <Stack direction="column" spacing="gap-2" customStyle="py-8">
+            <Stack direction="column" spacing={2} className="py-8">
               <Text variant="h6">{t('From URL')}</Text>
-              <Stack direction="row" justify="between">
+              <Stack direction="row" justifyContent="between">
                 <TextField
                   value={imageLink}
                   placeholder={t('Paste image link')}
@@ -440,14 +440,14 @@ export const ImageEditorBlock = (
               </Stack>
             </Stack>
             <Divider />
-            <Stack direction="column" spacing="gap-2" customStyle="overflow-auto pt-8">
-              <Stack direction="row" justify="between">
+            <Stack direction="column" spacing={2} className="overflow-auto pt-8">
+              <Stack direction="row" justifyContent="between">
                 <Text variant="h6">{t('Uploaded images')} </Text>
                 <Text variant="subtitle2">{`${contentBlockImages.length}/4 ${t('images')}`}</Text>
               </Stack>
               {contentBlockImages.map((imageObj, index) => (
-                <Stack key={index} direction="row" justify="between">
-                  <Stack direction="row" spacing="gap-1">
+                <Stack key={index} direction="row" justifyContent="between">
+                  <Stack direction="row" spacing={1}>
                     <Image
                       alt={imageObj.name}
                       src={imageObj.originalSrc}
@@ -466,19 +466,18 @@ export const ImageEditorBlock = (
       )}
       {uiState === 'gallery' && uploading && contentBlockImages.length === 0 && (
         <Stack
-          customStyle="w-4/5 h-48 sm:h-60 rounded-xl"
-          justify="center"
-          align="center"
-          background={{ light: 'grey8', dark: 'grey5' }}
-          spacing="gap-2"
+          justifyContent="center"
+          alignItems="center"
+          spacing={2}
+          className="w-4/5 h-48 sm:h-60 rounded-xl bg-background"
         >
           <Icon icon={<ArrowPathIcon />} rotateAnimation />
           <Text>{t('Uploading image')}</Text>
         </Stack>
       )}
       {uiState === 'gallery' && imageGalleryImages.length > 0 && (
-        <Stack spacing="gap-1">
-          <Stack alignSelf={alignState}>
+        <Stack spacing={1}>
+          <Stack>
             <ImageBlockGallery
               imageNotLoadedLabel={t('Cannot load image')}
               images={imageGalleryImages}

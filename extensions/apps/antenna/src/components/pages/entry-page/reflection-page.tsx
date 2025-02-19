@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useMemo, useRef } from 'react';
 import getSDK from '@akashaorg/core-sdk';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import BackToOriginalBeam from '@akashaorg/ui-lib-feed/lib/components/back-to-original-beam';
 import ReflectionSection, { ReflectionSectionProps } from './reflection-section';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
@@ -114,7 +114,7 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
       <ReflectFeed
         reflectToId={reflectionData.id}
         header={
-          <Stack spacing="gap-y-2">
+          <Stack spacing={2}>
             <BackToOriginalBeam
               label={t('Back to original beam')}
               onClick={() => onNavigateToOriginalBeam(reflectionData.beamID)}

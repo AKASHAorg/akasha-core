@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
@@ -53,12 +53,10 @@ export const Footer: React.FC<TFooterProps> = props => {
 
   return (
     <Stack
-      padding={16}
-      fullWidth
-      justify="between"
-      align="center"
+      justifyContent="between"
+      alignItems="center"
       direction="row"
-      customStyle="rounded-b-2xl"
+      className="p-4 w-full rounded-b-2xl"
     >
       {/* render content based on the value of uiState */}
       {uiState === 'blocks' && (
@@ -75,7 +73,7 @@ export const Footer: React.FC<TFooterProps> = props => {
       {uiState === 'tags' && (
         <>
           <Text variant="footnotes2" color="grey7">{`${tagsNumber}/${maxTags} ${tagsLabel}`}</Text>
-          <Stack direction="row" spacing="gap-2">
+          <Stack direction="row" spacing={2}>
             <Button variant="link" onClick={handleClickCancel}>
               {cancelLabel}
             </Button>
@@ -100,13 +98,12 @@ export const Footer: React.FC<TFooterProps> = props => {
           {!disableAddBlock && (
             <AddBlock addBlockLabel={addBlockLabel} handleClickAddBlock={handleClickAddBlock} />
           )}
-          <Stack direction="row" spacing="gap-4" align="center">
-            <Stack direction="row" spacing="gap-2" align="center">
+          <Stack direction="row" spacing={4} alignItems="center">
+            <Stack direction="row" spacing={2} alignItems="center">
               <Stack
-                align="center"
-                justify="center"
-                customStyle="w-[18px] h-[18px] rounded-[3px]"
-                background={{ light: 'grey9', dark: 'grey5' }}
+                alignItems="center"
+                justifyContent="center"
+                className="w-[18px] h-[18px] rounded-[3px] bg-card"
               >
                 <Text
                   variant="footnotes2"
