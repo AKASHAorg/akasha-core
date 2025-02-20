@@ -58,7 +58,7 @@ export const Footer: React.FC<TFooterProps> = props => {
       justify="between"
       align="center"
       direction="row"
-      customStyle="rounded-b-2xl"
+      customStyle="rounded-b-2xl mt-auto"
     >
       {/* render content based on the value of uiState */}
       {uiState === 'blocks' && (
