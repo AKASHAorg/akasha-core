@@ -93,7 +93,7 @@ export const WorldConfigFormStep1Page: React.FC<WorldConfigFormStep1Props> = ({ 
     <Card>
       <CardHeader>
         <Stack className="items-center">
-          <Stepper currentStep={1} numberOfSteps={2} className="max-w-[250px]" />
+          <Stepper currentStep={1} numberOfSteps={2} className="max-w-[112px]" />
         </Stack>
         <CardTitle className="text-center">
           <Typography variant="h5">{t('World Configurator')}</Typography>

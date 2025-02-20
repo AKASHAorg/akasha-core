@@ -20,7 +20,7 @@ import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks'
 import { HOME } from '../../../routes';
 import { LandingPageComponent } from './landing-page-component';
 import { useGetWorldsByCreatorDidQuery } from '@akashaorg/ui-core-hooks/lib/generated';
-import { Eye, Loader2 } from 'lucide-react';
+import { Eye, Loader2, Pencil } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { selectWorldData } from '@akashaorg/ui-core-hooks/lib/selectors/get-worlds-by-creator-did-query';
 
@@ -60,6 +60,10 @@ export const DashboardPage: React.FC = () => {
     navigate({ to: '/world-config-form/$worldId/step1', params: { worldId: worldData?.id } });
   };
 
+  const handleNavToWorldCreate = () => {
+    navigate({ to: '/world-create-form' });
+  };
+
   if (!authenticatedDID) {
     return (
       <ErrorLoader type="not-authenticated">
@@ -89,10 +93,12 @@ export const DashboardPage: React.FC = () => {
     return (
       <Card>
         <CardHeader>
-          <CardTitle className="justify-start">
-            <Typography variant="h5">{t('World Builder Dashboard')}</Typography>
+          <CardTitle className="flex justify-start">
+            <Typography variant="h5" className="text-left">
+              {t('World Builder Dashboard')}
+            </Typography>
           </CardTitle>
-          <CardDescription className="justify-start">
+          <CardDescription className="flex justify-start">
             <Typography variant="sm" className="text-left">
               {t(
                 'Right now, you can create only one world at a time 🌍✨ But don’t worry! More possibilities are coming soon! 🚀',
@@ -100,7 +106,7 @@ export const DashboardPage: React.FC = () => {
             </Typography>
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="flex-col gap-4">
           <Stack direction="column" spacing={4}>
             <Stack direction="row" justifyContent="between">
               <Typography variant="h6">{worldData?.name}</Typography>
@@ -116,7 +122,12 @@ export const DashboardPage: React.FC = () => {
             </Typography>
           </Stack>
           <Stack direction="column" spacing={4}>
-            <Typography variant="h6">{t('World Creation')}</Typography>
+            <Stack direction="row" justifyContent="between">
+              <Typography variant="h6">{t('World Creation')}</Typography>
+              <Button onClick={handleNavToWorldCreate}>
+                <Pencil />
+              </Button>
+            </Stack>
           </Stack>
           <Stack direction="column" spacing={4}>
             <Stack direction="row" justifyContent="between">
