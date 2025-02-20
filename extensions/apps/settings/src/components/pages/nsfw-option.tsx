@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NotificationTypes, NotificationEvents } from '@akashaorg/typings/lib/ui';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 import PageLayout from './base-layout';
@@ -43,8 +43,8 @@ const NsfwOption: React.FC = () => {
 
   return (
     <PageLayout title={t('NSFW Content')}>
-      <Stack padding="p-4">
-        <Stack direction="row" justify="between" align="center" customStyle="mb-2">
+      <Stack className="p-4">
+        <Stack direction="row" justifyContent="between" alignItems="center" className="mb-2">
           <Text weight="bold">{t('Show NSFW Content')}</Text>
           <Toggle checked={showNsfw} onChange={handleNsfwToggle} />
         </Stack>

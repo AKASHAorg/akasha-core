@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import PageLayout from './base-layout';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import appRoutes, { BROWSER_NOTIFICATIONS } from '../../routes';
@@ -91,7 +91,7 @@ const BrowserNotificationsOption: React.FC = () => {
 
   return (
     <PageLayout title={t('Browser notifications')}>
-      <Stack padding="p-4">
+      <Stack className="p-4">
         <NotificationSettingsCard
           noWrapperCard={true}
           isLoading={loading}

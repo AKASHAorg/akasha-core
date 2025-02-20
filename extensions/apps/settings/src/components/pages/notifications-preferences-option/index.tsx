@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { cn } from '@akashaorg/ui/lib/library/utils';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { useAkashaStore, useNotifications, useRootComponentProps } from '@akashaorg/ui-core-hooks';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import appRoutes, { PREFERENCES } from '../../../routes';
@@ -149,20 +149,15 @@ const NotificationsPreferencesOption: React.FC = () => {
   }
 
   return (
-    <Stack spacing="gap-y-4" customStyle="mb-2">
+    <Stack spacing={4} className="mb-2">
       {!errorInFetchingPreferences && (
         <>
           <Text variant="h5">{t('Notification Preferences')}</Text>
           {!notificationsEnabled && (
             <UnlockCard onClick={handleUnlockPreferences} loading={waitingForSignature} />
           )}
-          <Card
-            className={cn(
-              'pb-3',
-              !notificationsEnabled && 'opacity-50 pointer-events-none',
-            )}
-          >
-            <Stack padding="px-3 pb-6">
+          <Card className={cn('pb-3', !notificationsEnabled && 'opacity-50 pointer-events-none')}>
+            <Stack className="px-3 pb-6">
               <EnableAllSetting
                 isSelected={enableAllChecked}
                 onChange={e => handleToggleAll(e.target.checked)}
@@ -187,7 +182,7 @@ const NotificationsPreferencesOption: React.FC = () => {
             </Stack>
 
             {/* Buttons */}
-            <Stack direction="row" customStyle="border(t-1 solid grey8 dark:grey5) pt-4 px-3">
+            <Stack direction="row" className="border-t border-border pt-4 px-3">
               <Button onClick={handleReset} variant="link" className="ml-auto">
                 {t('Reset')}
               </Button>

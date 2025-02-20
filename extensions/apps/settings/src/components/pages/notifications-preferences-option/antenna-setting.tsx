@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Info } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
@@ -19,7 +19,7 @@ const AntennaSetting: React.FC<IAntennaSettingProps> = ({ isSelected, onChange }
 
   return (
     <Stack>
-      <Stack direction="row" justify="between" align="center">
+      <Stack direction="row" justifyContent="between" alignItems="center">
         <Text variant="body1">{t('Antenna')}</Text>
         <Checkbox
           id="antenna-checkbox"
@@ -38,7 +38,7 @@ const AntennaSetting: React.FC<IAntennaSettingProps> = ({ isSelected, onChange }
         )}
       </Text>
       <Card className="p-3 mt-4">
-        <Stack direction="row" spacing="gap-x-3" align="center">
+        <Stack direction="row" spacing={3} alignItems="center">
           <Icon
             icon={<Info />}
             size="lg"

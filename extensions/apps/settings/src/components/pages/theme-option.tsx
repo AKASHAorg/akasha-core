@@ -5,7 +5,7 @@ import {
   MoonIcon,
   SunIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 
@@ -26,8 +26,8 @@ const ThemeOption: React.FC = () => {
 
   return (
     <PageLayout title={t('Theme')}>
-      <Stack padding="p-4" spacing="gap-y-2">
-        <Stack direction="row" justify="between" align="center">
+      <Stack spacing={2} className="p-4">
+        <Stack direction="row" justifyContent="between" alignItems="center">
           <Text weight="bold">{t('What mode are you feeling today?')}</Text>
 
           <Toggle

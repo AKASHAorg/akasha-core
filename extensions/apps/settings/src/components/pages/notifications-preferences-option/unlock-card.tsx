@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Lock } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
@@ -19,14 +19,14 @@ const UnlockCard: React.FC<IUnlockCardProps> = ({ onClick, loading }) => {
 
   return (
     <Card className="p-3">
-      <Stack direction="row" spacing="gap-x-3">
+      <Stack direction="row" spacing={3}>
         <Icon
           icon={<Lock />}
           size="md"
           solid={true}
           color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
         />
-        <Stack direction="column" spacing="gap-y-1">
+        <Stack direction="column" spacing={1}>
           <Text variant="button-md" color={{ dark: 'white', light: 'black' }}>
             {t('Unlock preferences')}
           </Text>
