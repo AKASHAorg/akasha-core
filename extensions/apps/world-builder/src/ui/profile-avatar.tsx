@@ -6,6 +6,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { EyeOff } from 'lucide-react';
 
 import { cn } from '@/ui/library/utils';
+import { getImageFromSeed } from '@/ui/library/get-image-from-seed';
 
 const profileAvatarVariants = cva(
   'relative flex shrink-0 justify-center items-center overflow-hidden rounded-full',
@@ -26,6 +27,8 @@ const profileAvatarVariants = cva(
 );
 
 const ProfileAvatarContext = React.createContext<{
+  profileDID: string;
+  publicImgPath: string;
   nsfw: boolean;
 } | null>(null);
 
@@ -38,16 +41,20 @@ const useAvatarContext = () => {
 };
 
 const ProfileAvatar = ({
-  className,
-  size,
+  profileDID = '',
+  publicImgPath = '/images',
   nsfw = false,
+  size,
+  className,
   ...props
 }: React.ComponentProps<typeof AvatarPrimitive.Root> &
   VariantProps<typeof profileAvatarVariants> & {
+    profileDID?: string;
+    publicImgPath?: string;
     nsfw?: boolean;
   }) => {
   return (
-    <ProfileAvatarContext.Provider value={{ nsfw }}>
+    <ProfileAvatarContext.Provider value={{ nsfw, profileDID, publicImgPath }}>
       <AvatarPrimitive.Root
         data-slot="profile-avatar"
         className={cn(
@@ -83,10 +90,14 @@ const ProfileAvatarImage = ({
 };
 
 const ProfileAvatarFallback = ({
+  children,
   className,
   ...props
 }: React.ComponentProps<typeof AvatarPrimitive.Fallback>) => {
-  const { nsfw } = useAvatarContext();
+  const { profileDID, publicImgPath, nsfw } = useAvatarContext();
+
+  const seed = getImageFromSeed(profileDID, 7);
+  const avatarFallback = `${publicImgPath}/avatar-${seed}-min.webp`;
   return (
     !nsfw && (
       <AvatarPrimitive.Fallback
@@ -96,7 +107,20 @@ const ProfileAvatarFallback = ({
           className,
         )}
         {...props}
-      />
+      >
+        {React.Children.count(children) ? (
+          children
+        ) : (
+          <img
+            data-slot="image"
+            loading="lazy"
+            decoding="async"
+            src={avatarFallback}
+            alt="fallback"
+            className="object-contain"
+          />
+        )}
+      </AvatarPrimitive.Fallback>
     )
   );
 };
