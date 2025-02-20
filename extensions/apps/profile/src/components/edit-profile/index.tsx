@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { PublishProfileData } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { InputType, NSFW } from '@akashaorg/design-system-components/lib/components/NSFW';
 import UnsavedChangesModal from '@akashaorg/design-system-components/lib/components/UnsavedChangesModal';
 import { ButtonType } from '@akashaorg/design-system-components/lib/components/types/common.types';
@@ -158,7 +158,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
           handleLeavePage={handleLeavePage}
         />
       )}
-      <Stack direction="column" spacing="gap-y-6">
+      <Stack direction="column" spacing={6}>
         <General
           header={header}
           name={name}
@@ -185,7 +185,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
           disabled={nsfw.initialValue}
           defaultValue={nsfw.initialValue}
         />
-        <Stack direction="row" spacing="gap-x-2" customStyle="ml-auto mt-auto">
+        <Stack direction="row" spacing={2} className="ml-auto mt-auto">
           <Button
             variant="link"
             onClick={cancelButton.handleClick}

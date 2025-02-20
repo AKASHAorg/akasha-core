@@ -1,6 +1,6 @@
 import React from 'react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 
@@ -63,7 +63,7 @@ const LoginModal = () => {
       onClose={handleModalClose}
       customStyle="py-4 px-6 md:px-24"
     >
-      <Stack align="center" fullWidth={true} spacing="gap-y-2">
+      <Stack alignItems="center" spacing={2} className="w-full">
         <Text variant="body1" align="center">
           {t('{{message}}', { message: message.current })}
         </Text>
