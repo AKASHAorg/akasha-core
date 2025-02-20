@@ -1,7 +1,7 @@
 import React from 'react';
 import { tw } from '@twind/core';
 import { Tag } from '@akashaorg/typings/lib/ui';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import {
   CheckIcon,
@@ -10,6 +10,7 @@ import {
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import SubtitleTextIcon from '@akashaorg/design-system-core/lib/components/SubtitleTextIcon';
+import { cn } from '@akashaorg/ui/lib/library/utils';
 
 export type TagProfileCard = {
   // data
@@ -21,7 +22,7 @@ export type TagProfileCard = {
   subscribeLabel: string;
   unsubscribeLabel: string;
   subscribedLabel: string;
-  customStyle?: string;
+  className?: string;
   // handlers
   handleSubscribeTag: (tagName: string) => void;
   handleUnsubscribeTag: (tagName: string) => void;
@@ -41,11 +42,11 @@ const TagProfileCard: React.FC<TagProfileCard> = props => {
     subscribeLabel = 'Subscribe',
     subscribedLabel = 'Subscribed',
     unsubscribeLabel = 'Unsubscribe',
-    customStyle = '',
+    className = '',
   } = props;
 
   return (
-    <Card customStyle={customStyle}>
+    <Card className={cn(className)}>
       <Stack direction="row" align="center" justify="between" spacing="gap-x-3">
         <SubtitleTextIcon
           label={tag.name}

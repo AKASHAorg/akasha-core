@@ -44,7 +44,7 @@ const EngagementTab: React.FC<PropsWithChildren<EngagementTabProps>> = props => 
         selected={activeTab}
         labels={[t('Followers'), t('Following')]}
         onChange={selectedIndex => onTabChange(selectedIndex)}
-        customStyle="sticky bg(white dark:grey2) top-52 z-10"
+        customStyle="sticky top-52 z-10"
       />
       <Stack customStyle="my-4">{children}</Stack>
     </>

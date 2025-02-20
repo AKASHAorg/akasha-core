@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import InterestsPage from '../pages/interests';
 import EditProfilePage from '../pages/edit-profile';
 import FollowingPage from '../pages/following';
@@ -99,8 +99,8 @@ const followersRoute = createRoute({
     return (
       <CatchBoundary getResetKey={() => 'followers_reset'} errorComponent={NotFoundComponent}>
         <ProfileWithAuthorization profileDID={profileDID}>
-          <Card radius={20} padding="p-0">
-            <ProfileHeader profileDID={profileDID} plain={true} customStyle="sticky top-3.5 z-50" />
+          <Card className="p-0 rounded-[1.25rem]">
+            <ProfileHeader profileDID={profileDID} plain={true} customStyle="sticky top-0 z-50" />
             <FollowersPage profileDID={profileDID} />
           </Card>
         </ProfileWithAuthorization>
@@ -117,8 +117,8 @@ const followingRoute = createRoute({
     return (
       <CatchBoundary getResetKey={() => 'following_reset'} errorComponent={NotFoundComponent}>
         <ProfileWithAuthorization profileDID={profileDID}>
-          <Card radius={20} padding="p-0">
-            <ProfileHeader profileDID={profileDID} plain={true} customStyle="sticky top-3.5 z-50" />
+          <Card className="p-0 rounded-[1.25rem]">
+            <ProfileHeader profileDID={profileDID} plain={true} customStyle="sticky top-0 z-50" />
             <FollowingPage profileDID={profileDID} />
           </Card>
         </ProfileWithAuthorization>

@@ -1,11 +1,11 @@
 import React from 'react';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 
 const EditorPlaceholderLoading = () => {
   return (
-    <Card border={true} padding={0}>
+    <Card className="p-0">
       <Stack direction="row" justify="between" align="center" customStyle="px-4 py-2">
         <TextLine
           round="rounded-full"

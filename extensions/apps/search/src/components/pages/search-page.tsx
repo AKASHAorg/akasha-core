@@ -15,7 +15,7 @@ import {
   useAkashaStore,
 } from '@akashaorg/ui-core-hooks';
 import EntryCardRenderer from './entry-renderer';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
@@ -307,7 +307,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   };
 
   return (
-    <Card radius={16} padding="p-4">
+    <Card className="p-4 rounded-[1.25rem]">
       <Stack>
         <SearchStartCard
           searchKeyword={searchKeyword}
@@ -411,7 +411,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                     })}
                   />
                 }
-                <Card customStyle="pb-0">
+                <Card className="pb-0">
                   {searchTagsState?.map((tag: Tag, index: number) => (
                     <Stack key={index}>
                       <TagSearchCard

@@ -1,17 +1,16 @@
 import React from 'react';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Antenna, Profile } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import MiniProfileCTA, { ItemType, ProfileItemData } from './mini-profile-cta';
 import ReportReasonPill from '../ReportReasonPill';
-import { formatDate, getElevationClasses } from '@akashaorg/design-system-core/lib/utils';
-import EntryCard, { EntryCardProps } from '../Entry/EntryCard';
+import { formatDate } from '@akashaorg/design-system-core/lib/utils';
 
 export type ReportEntry = {
   id: string;
-  itemData: EntryCardProps | ProfileItemData;
+  itemData: /* EntryCardProps | */ ProfileItemData;
   appName: string;
   itemType: ItemType;
   primaryReason: string;
@@ -50,12 +49,10 @@ const VibesConsoleContentCard: React.FC<VibesConsoleContentCardProps> = props =>
 
   const buttonStyle = 'w-(full md:[9.25rem])';
 
-  const shadowStyle = getElevationClasses('2');
-
   const secondaryButtonAction = entry.itemType === 'Profile' ? 'Suspend' : 'Delist';
 
   return (
-    <Card padding={0}>
+    <Card className="p-0">
       <Stack
         direction="row"
         align="center"
@@ -94,12 +91,12 @@ const VibesConsoleContentCard: React.FC<VibesConsoleContentCardProps> = props =>
       </Stack>
 
       <Stack padding="p-5" spacing="gap-y-4">
-        {entry.itemType !== 'Profile' && (
+        {/*  {entry.itemType !== 'Profile' && (
           <EntryCard {...(entry.itemData as EntryCardProps)} customStyle={shadowStyle} />
-        )}
+        )} */}
 
         {entry.itemType === 'Profile' && (
-          <Card padding="p-4" customStyle={shadowStyle}>
+          <Card className="p-4">
             <MiniProfileCTA
               itemData={entry.itemData as ProfileItemData}
               nsfwLabel={nsfwLabel}

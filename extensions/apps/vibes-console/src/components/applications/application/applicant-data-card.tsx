@@ -3,7 +3,7 @@ import { transformSource } from '@akashaorg/ui-core-hooks';
 import { Profile } from '@akashaorg/typings/lib/ui';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -45,7 +45,7 @@ export const ApplicantDataCard: React.FC<ApplicantDataCardProps> = props => {
   const textStyle = 'max-w([12.5rem] md:[7.5rem]) w-fit cursor-default';
 
   return (
-    <Card padding={0}>
+    <Card className="p-0">
       <Stack padding="p-4" spacing="gap-y-4">
         <Stack direction="row" justify="between">
           <Stack direction="row" spacing="gap-x-2" align="center">

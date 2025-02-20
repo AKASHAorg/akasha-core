@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { CheckIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -164,7 +164,7 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
 
   return (
     <Stack direction="column" spacing="gap-y-4" fullWidth>
-      <Card radius={20} padding={'p-4'}>
+      <Card className="p-4 rounded-[1.25px]">
         {profileDID !== authenticatedDID && (
           <Stack direction="column" spacing="gap-y-2.5">
             <Text variant="h5">{t('Interests')} </Text>

@@ -1,7 +1,7 @@
 import React from 'react';
 import DynamicInfiniteScroll, { DynamicInfiniteScrollProps } from '../DynamicInfiniteScroll';
 import ExtensionCard, { ExtensionCardProps } from '../ExtensionCard';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { XCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-solid';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -54,7 +54,7 @@ const AppList: React.FC<AppListProps> = ({
       {({ itemIndex }) => {
         if (!apps[itemIndex]) {
           return (
-            <Card customStyle="h-full flex flex-col justify-center items-center">
+            <Card className="h-full flex flex-col justify-center items-center">
               <Icon
                 icon={<XCircleIcon />}
                 solid={true}

@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import SearchBar from '../SearchBar';
@@ -35,7 +35,7 @@ const OnboardingStartCard = ({
   const [inputValue, setInputValue] = React.useState<string>('');
 
   return (
-    <Card>
+    <Card className="shadow-none">
       <Stack align="center" spacing="gap-y-8" fullWidth={true}>
         <Stack direction="row" justify="between" fullWidth={true}>
           <Text variant="h5">{titleLabel}</Text>
