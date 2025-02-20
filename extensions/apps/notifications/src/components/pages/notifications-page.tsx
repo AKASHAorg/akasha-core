@@ -7,7 +7,7 @@ import { Cog8ToothIcon } from '@akashaorg/design-system-core/lib/components/Icon
 
 import NotificationCard from '@akashaorg/design-system-components/lib/components/NotificationCard';
 import BasicInfoCard from '@akashaorg/design-system-components/lib/components/NotificationCard/basic-info-card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
@@ -183,12 +183,12 @@ const NotificationsPage: React.FC = () => {
 
   return (
     <>
-      <Stack direction="column" customStyle="pb-32">
-        <Stack customStyle="pb-4 relative" direction="row">
+      <Stack direction="column" className="pb-32">
+        <Stack direction="row" className="pb-4 relative">
           <Text variant="h5" align="center">
             <>{t('Notifications')}</>
           </Text>
-          <Stack direction="column" spacing="gap-y-1" customStyle="absolute right-0">
+          <Stack direction="column" spacing={1} className="absolute right-0">
             <Button variant="outline" size="icon" onClick={goToSettings}>
               <Cog8ToothIcon />
             </Button>
@@ -208,7 +208,7 @@ const NotificationsPage: React.FC = () => {
         {/** If the user has previously subscribed show the App Options and notifications*/}
         {previouslyEnabled && (
           <>
-            <Stack direction="row" spacing="gap-x-2" customStyle="pb-4">
+            <Stack direction="row" spacing={2} className="pb-4">
               {appOptions.map((option, index) => (
                 <Button
                   key={index}
@@ -245,8 +245,8 @@ const NotificationsPage: React.FC = () => {
                   {({ itemIndex }) => {
                     const notification = notifications[itemIndex];
                     return (
-                      <Stack padding="pl-4 pr-4 pt-4 gap-y-4">
-                        <Stack key={itemIndex} customStyle="flex-row">
+                      <Stack className="pl-4 pr-4 pt-4 gap-y-4">
+                        <Stack key={itemIndex} className="flex-row">
                           <NotificationCard
                             onClick={() => clickNotification(notification)}
                             title={t(`{{title}}`, {
@@ -275,7 +275,7 @@ const NotificationsPage: React.FC = () => {
                         {itemIndex !== notifications.length - 1 && (
                           <Divider customStyle={`dark:border-grey5`} />
                         )}
-                        {itemIndex == notifications.length - 1 && <Stack customStyle="pb-4" />}
+                        {itemIndex == notifications.length - 1 && <Stack className="pb-4" />}
                       </Stack>
                     );
                   }}

@@ -19,7 +19,7 @@ import {
 } from '@akashaorg/typings/lib/ui';
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 
 const SnackBarNotification: React.FC<IRootExtensionProps> = () => {
   const { uiEvents, getCorePlugins } = useRootComponentProps();
@@ -125,18 +125,12 @@ const SnackBarNotification: React.FC<IRootExtensionProps> = () => {
   );
 
   return (
-    <Stack customStyle="z-50" fullWidth>
+    <Stack className="z-50 w-full">
       {title && (
         <Snackbar
           title={
             appTitle ? (
-              <Stack
-                direction="row"
-                align="center"
-                justify="center"
-                spacing="gap-x-2"
-                padding={'pb-4'}
-              >
+              <Stack direction="row" alignItems="center" justifyContent="center" spacing={2}>
                 {findAppIcon(appTitle) && icon} {findAppIcon(appTitle)?.label}
               </Stack>
             ) : (
