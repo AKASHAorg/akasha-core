@@ -104,11 +104,11 @@ Logging service is available under the log namespace inside services. Logging er
 ```tsx
 import getSDK from "@akashaorg/core-sdk";
 
-getSDK().services.log.create("example-app-name");
+getSDK().services.log.create('example-app-name');
 
 if (error) {
-  logger.warn("Your error message here");
-  // other action
+  logger.warn('Your error message here');
+  // ...
 }
 ```
 
@@ -124,8 +124,10 @@ Authentication-related endpoints are available under the `Auth namespace` inside
 import getSDK from "@akashaorg/core-sdk";
 
 const currentUser = await getSDK().api.auth.getCurrentUser();
-// currentUser will be null when the user is not logged in,
-// otherwise, it will be an object containing the DID and ethAddress (if any) of the logged in user.
+/**
+ * currentUser will be null when the user is not logged in,otherwise,
+ * it will be an object containing the DID and ethAddress (if any) of the logged in user
+*/
 ```
 
 ### Global Channel
@@ -134,21 +136,18 @@ Endpoints related to the SDK's global channel are available under the `globalCha
 
 ```tsx
 import getSDK from "@akashaorg/core-sdk";
-React.useEffect(() => {
-  const subSDK = sdk.api.globalChannel.subscribe({
-    next: (eventData: { data: { name: string }; event: APP_EVENTS }) => {
-      if (
-        eventData.event === APP_EVENTS.INFO_READY &&
-        eventData.data.name === integrationName
-      ) {
-        // perform some actions here
-      }
-    },
-  });
-  return () => {
-    subSDK.unsubscribe();
-  };
-}, []);
+
+const subSDK = await getSDK().api.globalChannel.subscribe({
+  next: (eventData: { data: { name: string }; event: APP_EVENTS }) => {
+    if (eventData.event === APP_EVENTS.INFO_READY && eventData.data.name === integrationName) {
+      // perform some actions here
+    }
+  },
+});
+
+const cleanupSubscription = () => {
+  subSDK.unsubscribe();
+}
 ```
 
 ### Profile
@@ -157,5 +156,6 @@ Profile-related endpoints are available under the `profile namespace` inside API
 
 ```tsx
 import getSDK from "@akashaorg/core-sdk";
-const res = await getSDK().api.profile.getProfileStats("a profile DID");
+
+const res = await getSDK().api.profile.getProfileStats('a profile DID');
 ```
