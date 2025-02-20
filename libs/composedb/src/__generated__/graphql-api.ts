@@ -366,6 +366,7 @@ export const AkashaWorldFragmentMFragmentDoc = /*#__PURE__*/ gql`
     }
   }
   active
+  name
   instanceURL
   createdAt
   creator {
@@ -573,6 +574,7 @@ export const AkashaWorldFragmentDoc = /*#__PURE__*/ gql`
     }
   }
   active
+  name
   instanceURL
   createdAt
   creator {
@@ -1762,6 +1764,28 @@ export const GetWorldByNameDocument = /*#__PURE__*/ gql`
   }
 }
     ${AkashaWorldFragmentDoc}`;
+export const GetWorldsByCreatorDidDocument = /*#__PURE__*/ gql`
+    query GetWorldsByCreatorDID($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
+  node(id: $id) {
+    ... on CeramicAccount {
+      akashaWorldList(after: $after, before: $before, first: $first, last: $last) {
+        edges {
+          node {
+            ...AkashaWorldFragment
+          }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+      }
+    }
+  }
+}
+    ${AkashaWorldFragmentDoc}`;
 export const GetWorldConfigDocument = /*#__PURE__*/ gql`
     query GetWorldConfig($worldID: String!, $creator: ID) {
   akashaWorldConfigIndex(
@@ -2031,6 +2055,9 @@ export function getSdk<C>(requester: Requester<C>) {
     },
     GetWorldByName(variables: Types.GetWorldByNameQueryVariables, options?: C): Promise<Types.GetWorldByNameQuery> {
       return requester<Types.GetWorldByNameQuery, Types.GetWorldByNameQueryVariables>(GetWorldByNameDocument, variables, options) as Promise<Types.GetWorldByNameQuery>;
+    },
+    GetWorldsByCreatorDID(variables: Types.GetWorldsByCreatorDidQueryVariables, options?: C): Promise<Types.GetWorldsByCreatorDidQuery> {
+      return requester<Types.GetWorldsByCreatorDidQuery, Types.GetWorldsByCreatorDidQueryVariables>(GetWorldsByCreatorDidDocument, variables, options) as Promise<Types.GetWorldsByCreatorDidQuery>;
     },
     GetWorldConfig(variables: Types.GetWorldConfigQueryVariables, options?: C): Promise<Types.GetWorldConfigQuery> {
       return requester<Types.GetWorldConfigQuery, Types.GetWorldConfigQueryVariables>(GetWorldConfigDocument, variables, options) as Promise<Types.GetWorldConfigQuery>;

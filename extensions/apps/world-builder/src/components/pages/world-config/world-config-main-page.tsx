@@ -1,18 +1,9 @@
-import React from 'react';
-import appRoutes, { WORLD_DATA_FORM } from '../../routes';
+import React, { createContext, useMemo } from 'react';
+import appRoutes, { WORLD_CONFIG_FORM } from '../../../routes';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from '@tanstack/react-router';
+import { Outlet } from '@tanstack/react-router';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import { Stepper } from '@akashaorg/ui/lib/akasha-components/stepper';
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@akashaorg/ui/lib/akasha-components/card';
-import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import {
   ErrorLoader,
@@ -20,12 +11,28 @@ import {
   ErrorLoaderDescription,
   ErrorLoaderFooter,
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
+import { atomWithStorage, createJSONStorage } from 'jotai/utils';
 
-export const WorldConfigFormPage: React.FC = () => {
+export const AtomContext = createContext(null);
+
+const storage = createJSONStorage(() => sessionStorage);
+
+export type FormData = {
+  lastCompletedStep?: number;
+  layoutExtension?: string;
+  registryExtension?: string;
+  homepageExtension?: string;
+  extensions?: string[];
+};
+
+type WorldConfigMainPageProps = {
+  worldId: string;
+};
+
+export const WorldConfigMainPage: React.FC<WorldConfigMainPageProps> = ({ worldId }) => {
   const { t } = useTranslation('app-extensions');
 
   const { baseRouteName, getCorePlugins } = useRootComponentProps();
-  const navigate = useNavigate();
   const navigateTo = getCorePlugins().routing.navigateTo;
 
   const {
@@ -37,18 +44,27 @@ export const WorldConfigFormPage: React.FC = () => {
       appName: '@akashaorg/app-auth-ewa',
       getNavigationUrl: (routes: Record<string, string>) => {
         return `${routes.Connect}?${new URLSearchParams({
-          redirectTo: `${baseRouteName}/${appRoutes[WORLD_DATA_FORM]}`,
+          redirectTo: `${baseRouteName}/${appRoutes[WORLD_CONFIG_FORM]}/step1`,
         }).toString()}`;
       },
     });
   };
 
-  const handleSave = () => {
-    navigate({ to: '/dashboard' });
-  };
-  const handleCancel = () => {
-    navigate({ to: '/dashboard' });
-  };
+  const formData = useMemo(
+    () =>
+      atomWithStorage<FormData>(
+        worldId,
+        {
+          lastCompletedStep: 0,
+          layoutExtension: '',
+          registryExtension: '',
+          homepageExtension: '',
+          extensions: [],
+        },
+        storage,
+      ),
+    [worldId],
+  );
 
   if (!authenticatedDID) {
     return (
@@ -68,23 +84,9 @@ export const WorldConfigFormPage: React.FC = () => {
 
   return (
     <Card>
-      <CardHeader>
-        <Stack className="items-center">
-          <Stepper currentStep={1} numberOfSteps={3} className="max-w-[250px]" />
-        </Stack>
-        <CardTitle className="text-center">
-          <Typography variant="h5">{t('World Config')}</Typography>
-        </CardTitle>
-      </CardHeader>
-      <CardContent></CardContent>
-      <CardFooter>
-        <Button className="px-6 h-8" variant="outline" onClick={handleCancel}>
-          {t('Cancel')}
-        </Button>
-        <Button className="px-6 h-8" onClick={handleSave}>
-          {t('Next')}
-        </Button>
-      </CardFooter>
+      <AtomContext.Provider value={formData}>
+        <Outlet />
+      </AtomContext.Provider>
     </Card>
   );
 };

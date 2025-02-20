@@ -8,23 +8,28 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
+  Card,
 } from '@akashaorg/ui/lib/akasha-components/card';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Image, ImageRoot } from '@akashaorg/ui/lib/akasha-components/image';
 
-export const DashboardPage: React.FC = () => {
+export const ConfigSuccessPage: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-world-builder');
 
+  const handleNavToDashboard = () => {
+    navigate({ to: '/dashboard' });
+  };
+
   const handleOpenPreview = () => {
-    navigate({ to: '/home' });
+    navigate({ to: '/dashboard' });
   };
 
   // TODO fetch real data
   const worldName = 'Test World';
 
   return (
-    <>
+    <Card>
       <CardHeader className="justify-center">
         <CardTitle className="text-center">
           <Typography variant="h5">
@@ -46,11 +51,14 @@ export const DashboardPage: React.FC = () => {
         <Typography variant="p">{t(`You can now preview this world!`)}</Typography>
         <Typography variant="p">{t(`The preview will open in a new tab`)}</Typography>
       </CardDescription>
-      <CardFooter className="justify-center">
+      <CardFooter>
+        <Button className="px-6 h-8" onClick={handleNavToDashboard}>
+          {t('Do it later')}
+        </Button>
         <Button className="px-6 h-8" onClick={handleOpenPreview}>
           {t('Preview World')}
         </Button>
       </CardFooter>
-    </>
+    </Card>
   );
 };

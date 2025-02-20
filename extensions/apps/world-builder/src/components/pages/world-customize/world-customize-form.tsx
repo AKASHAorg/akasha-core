@@ -1,5 +1,5 @@
 import React from 'react';
-import appRoutes, { WORLD_DATA_FORM } from '../../routes';
+import appRoutes, { WORLD_CUSTOMIZE_FORM } from '../../../routes';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
@@ -19,7 +19,7 @@ import {
   ErrorLoaderFooter,
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
 
-export const WorldMetaInfoFormPage: React.FC = () => {
+export const WorldCustomizeFormPage: React.FC = () => {
   const { t } = useTranslation('app-extensions');
 
   const { baseRouteName, getCorePlugins } = useRootComponentProps();
@@ -35,7 +35,7 @@ export const WorldMetaInfoFormPage: React.FC = () => {
       appName: '@akashaorg/app-auth-ewa',
       getNavigationUrl: (routes: Record<string, string>) => {
         return `${routes.Connect}?${new URLSearchParams({
-          redirectTo: `${baseRouteName}/${appRoutes[WORLD_DATA_FORM]}`,
+          redirectTo: `${baseRouteName}/${appRoutes[WORLD_CUSTOMIZE_FORM]}`,
         }).toString()}`;
       },
     });

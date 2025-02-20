@@ -101,6 +101,7 @@ class Gql {
             akashaReflectStreamList: relayStylePagination(['sorting', 'filters']),
             akashaBeamList: relayStylePagination(['sorting', 'filters']),
             akashaAppList: relayStylePagination(['sorting', 'filters']),
+            akashaWorldList: relayStylePagination(['sorting', 'filters']),
           },
         },
         AkashaProfile: {
