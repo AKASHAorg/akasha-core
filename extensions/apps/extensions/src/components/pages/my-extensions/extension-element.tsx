@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import getSDK from '@akashaorg/core-sdk';
 import ExtensionIcon from '@akashaorg/design-system-core/lib/components/ExtensionIcon';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -217,26 +217,25 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
   if (!showElement()) return null;
 
   return (
-    <Stack spacing="gap-y-4">
-      <Stack direction="row" justify="between" spacing="gap-x-8" fullWidth>
-        <Stack direction="row" spacing="gap-x-3" customStyle="max-h-[60px] w-[60%]">
+    <Stack spacing={4}>
+      <Stack direction="row" justifyContent="between" spacing={8} className="w-full">
+        <Stack direction="row" spacing={3} className="max-h-[60px] w-[60%]">
           <AppAvatar
             appType={extensionApplicationType}
             avatar={transformSource(extensionLogoImage)}
             extensionId={extensionId}
           />
-          <Stack direction="column" justify="between" customStyle="w-0 min-w-full">
-            <Stack direction="row" spacing="gap-2">
+          <Stack direction="column" justifyContent="between" className="w-0 min-w-full">
+            <Stack direction="row" spacing={2}>
               <Text variant="button-sm" truncate>
                 {extensionName}
               </Text>
 
               {extensionApplicationType && (
                 <Stack
-                  customStyle="w-[18px] h-[18px] rounded-full shrink-0"
-                  background={{ light: 'tertiaryLight', dark: 'tertiaryDark' }}
-                  justify="center"
-                  align="center"
+                  justifyContent="center"
+                  alignItems="center"
+                  className="w-[18px] h-[18px] rounded-full shrink-0 bg-inherit"
                 >
                   <ExtensionIcon size="xs" type={iconType} />
                 </Stack>
@@ -255,10 +254,9 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
 
         <Stack
           direction="column"
-          justify={showMenu ? 'between' : 'end'}
-          align="end"
-          customStyle="shrink-0"
-          padding={showMenu ? 'p-0' : 'pr-4'}
+          justifyContent={showMenu ? 'between' : 'end'}
+          alignItems="end"
+          className="shrink-0"
         >
           {showMenu && (
             <Menu
@@ -273,17 +271,18 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
               customStyle="w-max z-99"
             />
           )}
-          <Stack direction="row" align="center" spacing="gap-x-1.5">
+          <Stack direction="row" alignItems="center" spacing={1}>
             <Stack
-              customStyle={`w-2 h-2 rounded-full ${getStatusIndicatorStyle(isExtensionLocalDraft, appStreamStatus)}`}
-            />
-            <Text variant="footnotes2" weight="normal">
-              {getExtensionStatus(isExtensionLocalDraft, appStreamStatus)}
-            </Text>
+              className={`w-2 h-2 rounded-full ${getStatusIndicatorStyle(isExtensionLocalDraft, appStreamStatus)}`}
+            >
+              <Text variant="footnotes2" weight="normal">
+                {getExtensionStatus(isExtensionLocalDraft, appStreamStatus)}
+              </Text>
+            </Stack>
           </Stack>
         </Stack>
+        {showDivider && <Divider />}
       </Stack>
-      {showDivider && <Divider />}
     </Stack>
   );
 };

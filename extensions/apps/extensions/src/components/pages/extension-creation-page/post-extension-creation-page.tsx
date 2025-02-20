@@ -4,7 +4,7 @@ import { useNavigate } from '@tanstack/react-router';
 import { CREATE_EXTENSION } from '../../../routes';
 import { useRootComponentProps, useAkashaStore } from '@akashaorg/ui-core-hooks';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { DRAFT_EXTENSIONS } from '../../../constants';
@@ -63,21 +63,19 @@ export const PostExtensionCreationPage: React.FC<{ extensionId: string }> = ({ e
 
   return (
     <Card className="px-4">
-      <Stack spacing="gap-y-8" align="center">
+      <Stack spacing={8} alignItems="center">
         <Text variant="h5" weight="semibold" align="center">
           {t('Your extension has been created locally')}
         </Text>
 
         <Stack
-          background={{ light: 'grey9', dark: 'grey3' }}
-          customStyle="rounded-[10px]"
           direction="row"
-          align="center"
-          spacing="gap-2"
-          padding={8}
+          alignItems="center"
+          spacing={2}
+          className="bg-inherit rounded-[0.625rem] p-2"
         >
           <AppAvatar avatar={extensionData.avatar} appType={extensionData.applicationType} />
-          <Stack direction="column" justify="between">
+          <Stack direction="column" justifyContent="between">
             <Text variant="h6" truncate>
               {extensionData.displayName || extensionData.name}
             </Text>
@@ -95,15 +93,15 @@ You can add more details to your extension, such as a description, gallery & mor
           )}
         </Text>
 
-        <Stack direction="row" spacing="gap-4">
+        <Stack direction="row" spacing={4}>
           <Button variant="outline" onClick={handleNavigateToEdit}>
             {t('Add Details')}
           </Button>
           <Button onClick={handleNavigateToReleaseManager}>{t('Manage Releases')}</Button>
         </Stack>
         <Card className="shadow-none">
-          <Stack direction="column" spacing="gap-2">
-            <Stack direction="row" spacing="gap-1" align="center" justify="center">
+          <Stack direction="column" spacing={2}>
+            <Stack direction="row" spacing={1} alignItems="center" justifyContent="center">
               <Icon
                 icon={<ExclamationTriangleIcon />}
                 size="sm"

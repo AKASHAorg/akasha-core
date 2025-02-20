@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
@@ -127,8 +127,8 @@ export const ExtensionReleasePublishPage: React.FC<ExtensionReleasePublishPagePr
 
   return (
     <Card className="p-0">
-      <Stack spacing="gap-y-2">
-        <Stack padding={16}>
+      <Stack spacing={2}>
+        <Stack className="p-4">
           <Text variant="h5" weight="semibold" align="center">
             {t('Release Notes')}
           </Text>

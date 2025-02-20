@@ -26,7 +26,7 @@ import DynamicInfiniteScroll from '@akashaorg/design-system-components/lib/compo
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { ExtensionElement } from './extension-element';
 import appRoutes, { MY_EXTENSIONS } from '../../../routes';
@@ -189,8 +189,8 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
   }
 
   return (
-    <Stack spacing="gap-y-4">
-      <Stack direction="row" justify="between">
+    <Stack spacing={4}>
+      <Stack direction="row" justifyContent="between">
         <Text variant="h5">{t('My extensions')}</Text>
         <Link target="_blank" to="https://docs.akasha.world" customStyle="w-fit self-end">
           <Icon icon={<BookOpenIcon />} accentColor />
@@ -198,18 +198,16 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
       </Stack>
       <Stack
         direction="row"
-        justify="between"
-        align="center"
-        padding={12}
-        background={{ light: 'grey9', dark: 'grey5' }}
-        customStyle="rounded-[20px]"
+        justifyContent="between"
+        alignItems="center"
+        className="p-3 bg-inherit rounded-[1.25rem]"
       >
         <Text variant="body1">{t('Create an extension ✨ 🚀')}</Text>
         <Button size="sm" onClick={handleNavigateToCreateApp}>
           {t('Create')}
         </Button>
       </Stack>
-      <Stack direction="row" justify="between" align="center" spacing="gap-4">
+      <Stack direction="row" justifyContent="between" alignItems="center" spacing={4}>
         <Dropdown
           menuItems={extensionTypeMenuItems}
           selected={selectedType}

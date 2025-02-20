@@ -1,7 +1,7 @@
 import React from 'react';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import InfoSubRoutePageHeader from '../InfoSubroutePageHeader';
 import { useTranslation } from 'react-i18next';
@@ -26,7 +26,7 @@ export const AppDescriptionPage = (props: AppDescriptionPageProps) => {
   return (
     <>
       <Card className="p-4">
-        <Stack spacing="gap-y-4">
+        <Stack spacing={4}>
           <InfoSubRoutePageHeader
             pageTitle={t('Description')}
             appName={extensionDisplayName}
@@ -35,7 +35,7 @@ export const AppDescriptionPage = (props: AppDescriptionPageProps) => {
             appType={extensionType}
           />
           <Divider />
-          <Stack spacing="gap-y-4">
+          <Stack spacing={4}>
             <Text variant="body2">{description}</Text>
           </Stack>
         </Stack>

@@ -1,7 +1,7 @@
 import React from 'react';
 import AppList from '@akashaorg/design-system-components/lib/components/AppList';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { ExtensionCardProps } from '@akashaorg/design-system-components/lib/components/ExtensionCard';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
@@ -28,7 +28,7 @@ export const ExtensionsHub: React.FC<TExtensionsHubProps> = props => {
   } = props;
 
   return (
-    <Stack spacing="gap-y-4" customStyle="mb-2">
+    <Stack spacing={4} className="mb-2">
       <Text variant="h5">{titleLabel}</Text>
       {extensions.length > 0 && (
         <Card className="p-4">
@@ -37,10 +37,10 @@ export const ExtensionsHub: React.FC<TExtensionsHubProps> = props => {
       )}
       {sections.map((section, idx) => (
         <Card key={section.title + idx} className="p-4">
-          <Stack spacing="gap-y-3">
+          <Stack spacing={3}>
             <Text variant="h6">{section.title}</Text>
             {section.assetName && (
-              <Stack alignSelf="center" customStyle="h-52 w-52">
+              <Stack className="self-center h-52 w-52">
                 <Image
                   customStyle="object-contain"
                   src={`${publicImgPath}/${section.assetName}.${assetExtension}`}

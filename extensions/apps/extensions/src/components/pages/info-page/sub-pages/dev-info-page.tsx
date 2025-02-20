@@ -4,7 +4,7 @@ import { useNavigate } from '@tanstack/react-router';
 import AppList from '@akashaorg/design-system-components/lib/components/AppList';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import { ProfileImageVersions } from '@akashaorg/typings/lib/sdk/graphql-types-new';
@@ -132,7 +132,7 @@ export const DevInfoPage = (props: DevInfoPageProps) => {
   return (
     <>
       <Card className="p-4">
-        <Stack spacing="gap-y-4">
+        <Stack spacing={4}>
           <Text variant="h5">{t('Developer')}</Text>
           <ProfileAvatarButton
             profileId={devDid}
@@ -174,7 +174,7 @@ export const DevInfoPage = (props: DevInfoPageProps) => {
             </>
           )}
           {appsReq.loading && (
-            <Stack direction="column" align="center">
+            <Stack direction="column" alignItems="center">
               <Spinner />
             </Stack>
           )}

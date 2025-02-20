@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
@@ -256,15 +256,11 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
 
   return (
     <>
-      <Stack padding={16} spacing="gap-y-6">
+      <Stack spacing={6} className="p-4">
         {!dismissed && (
-          <Stack
-            padding="p-4"
-            background={{ light: 'grey9', dark: 'grey5' }}
-            customStyle="rounded-3xl"
-          >
-            <Stack direction="row" align="start" justify="between">
-              <Stack customStyle="w-9/12">
+          <Stack className="p-4 bg-card rounded-3xl">
+            <Stack direction="row" alignItems="start" justifyContent="between">
+              <Stack className="w-9/12">
                 <Text variant="body2" weight="light">
                   {t(
                     'We’ve generated a first draft release for you as soon as you created your extension. You can use it to submit your first release or test it locally!',
@@ -282,12 +278,12 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
         </Text>
         <Card className="p-2">
           {extensionDataReqLoading && (
-            <Stack align="center" justify="center" fullWidth customStyle="h-full">
+            <Stack alignItems="center" justifyContent="center" className="w-full h-full">
               <Spinner />
             </Stack>
           )}
           {!extensionDataReqLoading && (
-            <Stack customStyle="w-0 min-w-full" padding={0}>
+            <Stack className="w-0 min-w-full p-0">
               <ExtensionElement
                 extensionId={baseAppInfo?.id}
                 extensionName={baseAppInfo?.name}
@@ -300,7 +296,7 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
             </Stack>
           )}
         </Card>
-        <Stack direction="row" justify="between">
+        <Stack direction="row" justifyContent="between">
           <Text variant="h6" weight="semibold">
             {t('Local Release')}
           </Text>
@@ -310,7 +306,7 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
         </Stack>
         {testRelease && (
           <Card className="p-4">
-            <Stack spacing="gap-4">
+            <Stack spacing={4}>
               <Text variant="body2" weight="semibold">
                 {`Release ${testRelease?.version || '0.0.1'}`}
               </Text>
@@ -318,7 +314,7 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
             </Stack>
           </Card>
         )}
-        <Stack direction="row" justify="between">
+        <Stack direction="row" justifyContent="between">
           <Text variant="h6" weight="semibold">
             {t('Published Releases')}
           </Text>
@@ -355,11 +351,11 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
                   ? formatDate(releaseData.createdAt, 'D MMM YYYY', locale)
                   : '';
                 return (
-                  <Stack spacing="gap-y-4">
+                  <Stack spacing={4}>
                     <button onClick={() => handleNavigateToReleaseInfoPage(releaseData.id)}>
-                      <Stack direction="row" justify="between" align="center">
-                        <Stack spacing="gap-y-4">
-                          <Stack direction="row" spacing="gap-x-2" align="center">
+                      <Stack direction="row" justifyContent="between" alignItems="center">
+                        <Stack spacing={4}>
+                          <Stack direction="row" spacing={2} alignItems="center">
                             <Text variant="body2" weight="semibold">
                               {`Release ${releaseData?.version}`}
                             </Text>
@@ -402,7 +398,7 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
         ]}
         title={{ label: t('Release Cannot Be Published') }}
       >
-        <Stack customStyle="max-w-[567px]">
+        <Stack className="max-w-[567px]">
           <Text variant="body1" align="center">
             {t(
               'It appears your extension is currently in draft mode. To proceed with publishing a release, you’ll need to publish the extension first.',
