@@ -37,7 +37,10 @@ const Web3ConnectCard: React.FC<TWeb3ConnectCardProps> = props => {
   } = props;
 
   return (
-    <Card className="p-2 select-none hover:secondary border-accent w-full" onClick={handleClick}>
+    <Card
+      className="p-2 select-none hover:secondary border-accent w-full cursor-pointer"
+      onClick={handleClick}
+    >
       <Stack direction="row" align="center" spacing="gap-x-2">
         <AppIcon
           iconColor={iconColor}
