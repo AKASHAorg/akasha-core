@@ -137,7 +137,7 @@ Endpoints related to the SDK's global channel are available under the `globalCha
 ```tsx
 import getSDK from "@akashaorg/core-sdk";
 
-const subSDK = await getSDK().api.globalChannel.subscribe({
+const subSDK = getSDK().api.globalChannel.subscribe({
   next: (eventData: { data: { name: string }; event: APP_EVENTS }) => {
     if (eventData.event === APP_EVENTS.INFO_READY && eventData.data.name === integrationName) {
       // perform some actions here
