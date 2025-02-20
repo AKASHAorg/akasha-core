@@ -9,4 +9,10 @@ module.exports = Object.assign(baseConfig, {
     path: path.resolve(__dirname, '../../../dist/apps/world-builder'),
     publicPath: 'auto',
   }),
+  resolve: {
+    ...(baseConfig.resolve || {}),
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+    },
+  },
 });
