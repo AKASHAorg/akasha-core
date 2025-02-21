@@ -1,14 +1,12 @@
-export * from './auth';
-export * from './common/event-bus';
-export * from './common/ipfs.connector';
-export * from './common/misc';
-export * from './common/ceramic';
-export * from './common/lit';
-export * from './common/web3.connector';
-export * from './db';
-export * from './gql';
-export * from './logging';
-export * from './profiles';
-export * from './settings';
-export * from './settings/apps';
-export * from './stash';
+export * from './common/ipfs.connector'; // IPFS
+export * from './common/misc'; // Misc
+export * from './common/ceramic'; // Ceramic
+export * from './common/lit'; // Lit
+export * from './common/notification/notification'; // Notification
+export * from './common/web3.connector'; // Web3
+export * from './db'; // DB
+export * from './gql'; // graphQL
+export * from './logging'; // Logging
+export * from './settings'; // Settings
+export * from './settings/apps'; // App Settings
+export * from './stash'; // Stash
