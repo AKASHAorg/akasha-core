@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
@@ -17,8 +17,31 @@ import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 //   InfiniteScroll,
 //   InfiniteScrollList,
 // } from "@akashaorg/ui/lib/akasha-components/infinite-scroll";
+import {
+  ExtensionCard,
+  ExtensionCardAction,
+  ExtensionCardActionActive,
+  ExtensionCardActionInactive,
+  ExtensionCardAvatar,
+  ExtensionCardContent,
+  ExtensionCardDescription,
+  ExtensionCardName,
+} from '@/ui/extension-card';
+import {
+  ExtensionAvatar,
+  ExtensionAvatarImage,
+  ExtensionAvatarFallback,
+} from '@/ui/extension-avatar';
+import { ProfileAvatarButton, ProfileDidField, ProfileName } from '@/ui/profile-avatar-button';
+
 import { useGetAppsQuery } from '@akashaorg/ui-core-hooks/lib/generated';
-import { selectAkashaApps } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-query';
+import {
+  selectAkashaApps,
+  selectAkashaAppsPageInfo,
+} from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-query';
+import { transformSource } from '@akashaorg/ui-core-hooks';
+import { Badge } from '@akashaorg/ui/lib/components/badge';
+import { X } from 'lucide-react';
 
 type WorldConfigFormStep2Props = {
   worldId: string;
@@ -45,7 +68,20 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
     variables: { first: 10 },
   });
 
-  const akashaApps = selectAkashaApp(getAppsReq);
+  const akashaApps = selectAkashaApps(getAppsReq);
+  const pageInfo = selectAkashaAppsPageInfo(getAppsReq);
+
+  const [selectedExtensions, setSelectedExtensions] = useState([]);
+
+  const addExtension = ext => {
+    setSelectedExtensions(prev => {
+      return [...new Set([...prev, ext])];
+    });
+  };
+
+  const removeExtension = extId => {
+    setSelectedExtensions(prev => prev.filter(ext => ext.id === extId));
+  };
 
   return (
     <Card>
@@ -65,20 +101,106 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
           </Typography>
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <InfiniteScroll
-          count={akashaApps?.length}
-          estimatedHeight={60}
-          overScan={10}
-          itemSpacing={0}
-        >
-          <InfiniteScrollList>
-            {index => {
-              appData = akashaApps[index];
-              return <></>;
-            }}
-          </InfiniteScrollList>
-        </InfiniteScroll>
+      <CardContent className="gap-4">
+        <Card>
+          <CardContent className="bg-zinc-50">
+            <InfiniteScroll
+              count={akashaApps?.length}
+              estimatedHeight={60}
+              overScan={10}
+              itemSpacing={0}
+              onLoadMore={() => {
+                return fetchMore({
+                  variables: {
+                    after: pageInfo?.endCursor,
+                  },
+                });
+              }}
+            >
+              <InfiniteScrollList>
+                {index => {
+                  const extensionData = akashaApps[index];
+                  return (
+                    <ExtensionCard>
+                      <ExtensionCardAvatar>
+                        <ExtensionAvatar size="lg" extensionId="">
+                          <ExtensionAvatarImage
+                            src={transformSource(extensionData?.logoImage)?.src}
+                            alt="extension logo image"
+                          />
+                          <ExtensionAvatarFallback />
+                        </ExtensionAvatar>
+                      </ExtensionCardAvatar>
+                      <ExtensionCardContent>
+                        <ExtensionCardName>{extensionData?.displayName}</ExtensionCardName>
+                        <ProfileAvatarButton
+                          size="sm"
+                          profileDID={extensionData?.author?.akashaProfile?.did?.id}
+                        >
+                          <ProfileAvatarButton.Avatar>
+                            <ProfileAvatarButton.AvatarImage
+                              src={
+                                transformSource(
+                                  extensionData?.author?.akashaProfile?.avatar?.default,
+                                ).src
+                              }
+                              alt="author profile avatar"
+                            />
+                            <ProfileAvatarButton.AvatarFallback />
+                          </ProfileAvatarButton.Avatar>
+                          <ProfileName>{extensionData?.author?.akashaProfile?.name}</ProfileName>
+                          <ProfileDidField />
+                        </ProfileAvatarButton>
+                        <ExtensionCardDescription>
+                          {extensionData?.description}
+                        </ExtensionCardDescription>
+                      </ExtensionCardContent>
+                      <ExtensionCardAction active={selectedExtensions.indexOf(extensionData) > -1}>
+                        <ExtensionCardActionInactive
+                          onClick={() => {
+                            addExtension(extensionData);
+                          }}
+                        >
+                          {t('Add')}
+                        </ExtensionCardActionInactive>
+                        <ExtensionCardActionActive
+                          onClick={() => {
+                            removeExtension(extensionData?.id);
+                          }}
+                        >
+                          {t('Added')}
+                        </ExtensionCardActionActive>
+                      </ExtensionCardAction>
+                    </ExtensionCard>
+                  );
+                }}
+              </InfiniteScrollList>
+            </InfiniteScroll>
+          </CardContent>
+        </Card>
+        <Stack direction="column" spacing={2}>
+          <Typography variant="h5">{t('You have selected:')}</Typography>
+          {selectedExtensions?.length === 0 && (
+            <Typography variant="sm">{t('You haven’t selected any extensions yet.')}</Typography>
+          )}
+          {selectedExtensions?.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {selectedExtensions.map(ext => (
+                <Badge key={ext?.id} variant="secondary">
+                  {ext?.displayName}
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-auto p-1 ml-2"
+                    onClick={() => removeExtension(ext?.id)}
+                  >
+                    <X className="h-3 w-3" />
+                  </Button>
+                </Badge>
+              ))}
+            </div>
+          )}
+        </Stack>
       </CardContent>
       <CardFooter>
         <Button className="px-6 h-8" variant="outline" onClick={handleNavBack}>
