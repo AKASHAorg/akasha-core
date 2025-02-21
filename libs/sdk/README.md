@@ -3,7 +3,7 @@ sidebar_position: 41
 sidebar_label: SDK
 ---
 
-# SDK Overview
+# SDK
 
 The AKASHA SDK is used in every world instance and provides the core functionality to interact with different services and 3rd parties (ex. Metamask, Lit Protocol, Ceramic, ComposeDB, Infura, etc.).
 
