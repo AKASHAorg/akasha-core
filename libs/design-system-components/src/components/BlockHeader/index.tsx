@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import {
   ArrowDownIcon,
@@ -61,14 +61,14 @@ export const BlockHeader: React.FC<BlockHeaderProps> = props => {
   };
 
   return (
-    <Stack direction="row" justify="between">
-      <Stack direction="row" spacing="gap-x-1" align="center">
+    <Stack direction="row" justifyContent="between">
+      <Stack direction="row" spacing={1} alignItems="center">
         <Stack
-          align="center"
-          justify="center"
-          customStyle={
+          alignItems="center"
+          justifyContent="center"
+          className="
             'h-8 w-8 group relative rounded-full bg(secondaryLight/30 dark:secondaryDark)'
-          }
+          "
         >
           <Icon size="sm" icon={icon} />
         </Stack>
@@ -85,13 +85,13 @@ export const BlockHeader: React.FC<BlockHeaderProps> = props => {
       </Stack>
       <BlockStatusToolbar {...rest} />
       {isFocusedBlock && (
-        <Stack direction="row" spacing="gap-x-1" align="center">
+        <Stack direction="row" spacing={1} alignItems="center">
           {totalBlocksLength > 0 && (
             <button onClick={decreaseBlockOrder}>
               <Stack
-                align="center"
-                justify="center"
-                customStyle={'h-8 w-8 group relative rounded-full bg(grey9 dark:grey5)'}
+                alignItems="center"
+                justifyContent="center"
+                className="h-8 w-8 group relative rounded-full bg(grey9 dark:grey5)"
               >
                 <Icon icon={<ArrowUpIcon />} size="sm" accentColor disabled={blockOrder === 0} />
               </Stack>
@@ -100,9 +100,9 @@ export const BlockHeader: React.FC<BlockHeaderProps> = props => {
           {totalBlocksLength > 0 && (
             <button onClick={increaseBlockOrder}>
               <Stack
-                align="center"
-                justify="center"
-                customStyle={'h-8 w-8 group relative rounded-full bg(grey9 dark:grey5)'}
+                alignItems="center"
+                justifyContent="center"
+                className="h-8 w-8 group relative rounded-full bg(grey9 dark:grey5)"
               >
                 <Icon
                   icon={<ArrowDownIcon />}
@@ -115,9 +115,9 @@ export const BlockHeader: React.FC<BlockHeaderProps> = props => {
           )}
           <button onClick={removeBlock}>
             <Stack
-              align="center"
-              justify="center"
-              customStyle={'h-8 w-8 group relative rounded-full bg(grey9 dark:grey5)'}
+              alignItems="center"
+              justifyContent="center"
+              className="h-8 w-8 group relative rounded-full bg(grey9 dark:grey5)"
             >
               <Icon
                 icon={<TrashIcon />}

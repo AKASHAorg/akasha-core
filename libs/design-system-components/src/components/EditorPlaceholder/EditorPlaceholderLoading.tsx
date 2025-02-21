@@ -1,12 +1,12 @@
 import React from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 
 const EditorPlaceholderLoading = () => {
   return (
     <Card className="p-0">
-      <Stack direction="row" justify="between" align="center" customStyle="px-4 py-2">
+      <Stack direction="row" justifyContent="between" alignItems="center" className="px-4 py-2">
         <TextLine
           round="rounded-full"
           height="h-8"

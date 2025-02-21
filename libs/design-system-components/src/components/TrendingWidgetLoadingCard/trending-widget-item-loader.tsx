@@ -1,11 +1,17 @@
 import React from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 
 const TrendingWidgetItemLoader: React.FC = () => {
   return (
-    <Stack direction="row" spacing="gap-x-12" align="center" justify="between" fullWidth>
-      <Stack direction="row" spacing="gap-x-2" fullWidth>
+    <Stack
+      direction="row"
+      spacing={12}
+      alignItems="center"
+      justifyContent="between"
+      className="w-full"
+    >
+      <Stack direction="row" spacing={2} className="w-full">
         <TextLine
           round="rounded-full"
           height="h-10"
@@ -15,8 +21,8 @@ const TrendingWidgetItemLoader: React.FC = () => {
         />
         <Stack
           direction="column"
-          spacing="gap-y-1"
-          customStyle="max-w(xl:[10rem] lg:[8rem] md:[10rem] xs:[2rem])"
+          spacing={1}
+          className="max-w(xl:[10rem] lg:[8rem] md:[10rem] xs:[2rem])"
         >
           <TextLine title="tagName" animated={true} width="w-[110px]" height="h-[1rem]" />
           <TextLine title="tagName" animated={true} width="w-[88px]" height="h-[1rem]" />

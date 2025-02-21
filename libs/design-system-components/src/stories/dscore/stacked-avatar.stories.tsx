@@ -6,7 +6,7 @@ import { userData } from '@akashaorg/design-system-core/lib/utils';
 
 StackedAvatar.displayName = 'StackedAvatar';
 
-const meta: Meta<StackedAvatarProps> = {
+const meta: Meta<Stack edAvatarProps> = {
   title: 'DSCore/Avatars/StackedAvatar',
   component: StackedAvatar,
   argTypes: {
@@ -16,7 +16,7 @@ const meta: Meta<StackedAvatarProps> = {
   },
 };
 
-type Story = StoryObj<StackedAvatarProps>;
+type Story = StoryObj<Stack edAvatarProps>;
 
 export const Default: Story = {
   args: {

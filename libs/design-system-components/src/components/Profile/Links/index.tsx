@@ -10,7 +10,7 @@ import {
   Telegram,
   Twitter,
 } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import { getIconFromLink } from '../../../utils/get-icon-from-link';
@@ -34,7 +34,7 @@ const Links: React.FC<LinksProps> = ({ title, links }) => {
 
   return (
     <Card className="p-4">
-      <Stack direction="column" spacing="gap-y-2.5">
+      <Stack direction="column" spacing={2}>
         <Text variant="label">{title}</Text>
         {links.map((link, index) => {
           const iconType = getIconFromLink(link.href);
@@ -44,7 +44,7 @@ const Links: React.FC<LinksProps> = ({ title, links }) => {
 
           return (
             <CopyToClipboard key={`${link.href}${index}`} stringToBeCopied={link.href}>
-              <Stack direction="row" align="center" spacing="gap-x-2">
+              <Stack direction="row" alignItems="center" spacing={2}>
                 <AppIcon placeholderIcon={icon} solid={solid} size="xs" accentColor />
                 <Text
                   variant="body2"

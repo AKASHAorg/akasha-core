@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import { cn } from '@akashaorg/ui/lib/library/utils';
 
@@ -18,9 +18,9 @@ const ProfileHeaderLoading: React.FC<ProfileHeaderLoadingProps> = props => {
           plain && 'rounded-b-none border-none',
         )}
       >
-        <Stack padding="pl-2" fullWidth>
-          <Stack direction="row" spacing="gap-x-2" customStyle="-ml-2">
-            <Stack customStyle="relative w-20 h-[3.5rem] shrink-0">
+        <Stack className="pl-2 w-full">
+          <Stack direction="row" spacing={2} className="-ml-2">
+            <Stack className="relative w-20 h-[3.5rem] shrink-0">
               <TextLine
                 round="rounded-full"
                 height="h-20"
@@ -28,12 +28,12 @@ const ProfileHeaderLoading: React.FC<ProfileHeaderLoadingProps> = props => {
                 customStyle="shrink-0 absolute -top-6"
               />
             </Stack>
-            <Stack spacing="gap-y-1.5" customStyle="mt-1">
+            <Stack spacing={1} className="mt-1">
               <TextLine width="w-36" animated />
               <TextLine width="w-28" animated />
               <TextLine width="w-28" animated />
             </Stack>
-            <Stack direction="row" align="center" spacing="gap-x-2" customStyle="ml-auto">
+            <Stack direction="row" alignItems="center" spacing={2} className="ml-auto">
               <TextLine
                 round="rounded-full"
                 height="h-8"

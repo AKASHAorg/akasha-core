@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import AppCoverImage from '@akashaorg/design-system-core/lib/components/AppCoverImage';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -51,19 +51,19 @@ const ExtensionCard: React.FC<ExtensionCardProps> = props => {
 
   return (
     <Card elevation="1" padding={16} radius={20} customStyle={customStyle}>
-      <Stack spacing="gap-y-4">
+      <Stack spacing={4}>
         <AppCoverImage
           src={coverImageSrc}
           appType={applicationType}
           isNSFW={nsfw}
           customStyle={`${featured ? 'h-[9.625rem]' : 'h-[6.25rem]'} object-cover rounded-[0.625rem]`}
         />
-        <Stack spacing="gap-y-3">
-          <Stack justify="between" align="center" direction="row" spacing="gap-y-1">
+        <Stack spacing={3}>
+          <Stack justifyContent="between" alignItems="center" direction="row" spacing={1}>
             <Text variant="h6">{displayName}</Text>
             <>{action}</>
           </Stack>
-          <Stack direction="row" spacing="gap-x-2">
+          <Stack direction="row" spacing={2}>
             <Pill
               color={{ light: 'secondaryLight', dark: 'white' }}
               background={{ light: 'tertiaryLight', dark: 'tertiaryDark' }}
@@ -94,7 +94,7 @@ const ExtensionCard: React.FC<ExtensionCardProps> = props => {
               />
             )}
           </Stack>
-          <Stack direction="row" align="center" spacing="gap-x-2">
+          <Stack direction="row" alignItems="center" spacing={2}>
             <Avatar
               avatar={author?.avatar}
               alternativeAvatars={author?.alternativeAvatars}

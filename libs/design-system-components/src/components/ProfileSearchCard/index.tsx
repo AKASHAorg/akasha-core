@@ -2,7 +2,7 @@ import React from 'react';
 
 import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 
@@ -53,7 +53,7 @@ const ProfileSearchCard = ({
   unfollowLabel = 'Unfollow',
 }: ProfileSearchCardProps) => {
   return (
-    <Stack direction="row" align="center" justify="between" customStyle={'py-2'}>
+    <Stack direction="row" alignItems="center" justifyContent="between" className="py-2">
       <ProfileAvatarButton
         onClick={onClickProfile}
         label={profileData?.name}

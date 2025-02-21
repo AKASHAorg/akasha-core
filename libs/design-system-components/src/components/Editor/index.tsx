@@ -25,7 +25,7 @@ import type { IMetadata, IPublishData, Image, Profile } from '@akashaorg/typings
 
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import InlineNotification from '@akashaorg/design-system-core/lib/components/InlineNotification';
@@ -55,6 +55,7 @@ import { withMentions, withLinks } from './plugins';
 
 import { MarkButton, BlockButton } from './formatting-buttons';
 import { tw } from '@twind/core';
+import { cn } from '@akashaorg/ui/lib/library/utils';
 
 const MAX_TEXT_LENGTH = 500;
 
@@ -457,21 +458,19 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
   const [, forceUpdate] = React.useReducer(x => x + 1, 0);
 
   return (
-    <Stack
-      justify="between"
-      background={{ light: 'white', dark: 'grey2' }}
-      fullWidth
-      customStyle={customStyle}
-    >
+    <Stack justifyContent="between" className={cn('bg-inherit w-full', customStyle)}>
       <Stack
         direction="row"
-        justify="start"
-        spacing="gap-x-2"
-        customStyle={`h-full ${showAvatar && ` w-10/12 md:w-11/12 `} ${minHeight && `min-h-[${minHeight}]`}`}
-        fullWidth
+        justifyContent="start"
+        spacing={2}
+        className={cn(
+          'h-full',
+          showAvatar && 'w-10/12 md:w-11/12  w-full',
+          minHeight && `min-h-[${minHeight}]`,
+        )}
       >
         {showAvatar && (
-          <Stack padding="pb-2" customStyle="shrink-0">
+          <Stack className="pb-2 shrink-0">
             <Avatar
               avatar={transformSource(avatar?.default)}
               alternativeAvatars={avatar?.alternatives?.map(alternative =>
@@ -482,7 +481,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
           </Stack>
         )}
         {/* w-0 min-w-full is used to prevent parent width expansion without setting a fixed width */}
-        <Stack ref={editorContainerRef} customStyle="w-0 min-w-full">
+        <Stack ref={editorContainerRef} className="w-0 min-w-full">
           {mentionsLimitReached && (
             <InlineNotification
               message={mentionsLimit.label}
@@ -518,10 +517,9 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
               />
             )}
             <Stack
-              padding={'pt-2'}
               direction="row"
-              justify={withToolbar ? 'between' : 'end'}
-              fullWidth
+              justifyContent={withToolbar ? 'between' : 'end'}
+              className="w-full"
             >
               {withToolbar && (
                 <Stack direction="row">
@@ -549,7 +547,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
                   />
                 </Stack>
               )}
-              <Stack direction="row" align="center" spacing="gap-x-2">
+              <Stack direction="row" alignItems="center" spacing={2}>
                 {withMeter && <EditorMeter value={letterCount} max={MAX_TEXT_LENGTH} />}
                 {showCancelButton && <Button onClick={onCancelClick}>{cancelButtonLabel}</Button>}
                 {showPostButton && (
@@ -564,11 +562,8 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
           {showMaxEncodedLengthErr && (
             <Stack
               direction="row"
-              align="center"
-              background={{ light: 'errorLight/30', dark: 'errorDark/30' }}
-              fullWidth
-              customStyle="rounded"
-              padding={16}
+              alignItems="center"
+              className="bg(errorLight dark:errorDark) w-full rounded p-4"
             >
               <Icon
                 icon={<ExclamationTriangleIcon />}

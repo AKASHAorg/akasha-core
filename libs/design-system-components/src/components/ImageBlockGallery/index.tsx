@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { tw, apply } from '@twind/core';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { ArrowPathIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { ImageBlockGridItem } from './image-block-grid-item';
@@ -67,10 +67,11 @@ const ImageBlockGallery: React.FC<IImageGallery> = props => {
         {uploading && (
           <div className={tw('flex relative border(solid grey1) rounded')} style={style}>
             <Stack
-              customStyle={`rounded h-full w-[${images[0]?.size?.height}px] max-w-max aspect-square `}
-              justify="center"
-              align="center"
-              background={{ light: 'grey8', dark: 'grey5' }}
+              max-w-max
+              aspect-square
+              justifyContent="center"
+              alignItems="center"
+              className={`rounded h-full w-[${images[0]?.size?.height}px] bg(grey8 dark:grey5) max-w-max aspect-square`}
             >
               <Icon icon={<ArrowPathIcon />} rotateAnimation />
             </Stack>

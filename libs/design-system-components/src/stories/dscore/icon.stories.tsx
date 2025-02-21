@@ -49,7 +49,7 @@ import {
   Walletconnect,
   Widget,
 } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Squares2X2Icon } from '@heroicons/react/24/outline';
 
@@ -133,8 +133,8 @@ const outlineCustomIconsArr = [
 
 export const CustomIcons: Story = {
   render: () => (
-    <Stack spacing="gap-y-4">
-      <Stack direction="row" spacing="gap-3" customStyle="flex-wrap">
+    <Stack spacing={4}>
+      <Stack direction="row" spacing={3} className="flex-wrap">
         <Text weight="bold">Solid:</Text>
         {solidCustomIconsArr.map(({ icon, name }, idx) => (
           <Tooltip key={name + idx} placement="top" content={name} trigger="hover">
@@ -142,7 +142,7 @@ export const CustomIcons: Story = {
           </Tooltip>
         ))}
       </Stack>
-      <Stack direction="row" spacing="gap-3" customStyle="flex-wrap">
+      <Stack direction="row" spacing={3} className="flex-wrap">
         <Text weight="bold">Outline:</Text>
         {outlineCustomIconsArr.map(({ icon, name }, idx) => (
           <Tooltip key={name + idx} placement="top" content={name} trigger="hover">

@@ -3,7 +3,8 @@ import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
+import { cn } from '@akashaorg/ui/lib/library/utils';
 
 export type VibesValueCardProps = {
   publicImgPath?: string;
@@ -34,11 +35,10 @@ const VibesValueCard: React.FC<VibesValueCardProps> = props => {
     <Button plain={true} onClick={onClick}>
       <Card className="p-0 rounded-2xl cursor-pointer">
         <Stack
-          justify={isMini ? 'between' : 'evenly'}
-          padding={isMini ? 'p-3' : 'p-4'}
-          {...(isMini && { customStyle: 'h-32' })}
+          justifyContent={isMini ? 'between' : 'evenly'}
+          className={cn(isMini ? 'p-3 h-32' : 'p-4')}
         >
-          <Stack customStyle={`w-${isMini ? '16' : '72'} h-${isMini ? '16' : '72'} self-center`}>
+          <Stack className={cn('self-center', isMini ? 'h-16 w-16' : 'h-72 w-72')}>
             <img
               loading="lazy"
               decoding="async"
@@ -62,7 +62,7 @@ const VibesValueCard: React.FC<VibesValueCardProps> = props => {
           </Text>
 
           {!isMini && (
-            <Stack spacing="gap-y-4">
+            <Stack spacing={4}>
               {description && (
                 <Text variant="body1" weight="light">
                   {description}

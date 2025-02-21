@@ -1,6 +1,6 @@
 import React from 'react';
 import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Controller, Control, FieldValues, Path, PathValue } from 'react-hook-form';
 
@@ -26,7 +26,7 @@ export const NSFW = <T extends FieldValues>({
   defaultValue,
 }: NSFWProps<T>) => {
   return (
-    <Stack direction="column" spacing="gap-y-2" customStyle={customStyle}>
+    <Stack direction="column" spacing={2} className={customStyle}>
       <Text variant="h6" as="label">
         {nsfwFieldLabel}
       </Text>
@@ -34,8 +34,8 @@ export const NSFW = <T extends FieldValues>({
         control={control}
         name={name}
         render={({ field: { name, value, onChange } }) => (
-          <Stack spacing="gap-y-1">
-            <Stack direction="row" justify="between">
+          <Stack spacing={1}>
+            <Stack direction="row" justifyContent="between">
               <Text variant="body2" as="label" color={{ light: 'grey4', dark: 'grey6' }}>
                 {nsfw.label}
               </Text>

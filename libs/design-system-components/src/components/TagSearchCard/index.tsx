@@ -4,7 +4,7 @@ import { Tag } from '@akashaorg/typings/lib/ui';
 
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import { HashtagIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import SubtitleTextIcon from '@akashaorg/design-system-core/lib/components/SubtitleTextIcon';
@@ -43,9 +43,9 @@ const TagSearchCard: React.FC<TagSearchCardProps> = props => {
   } = props;
 
   return (
-    <Stack direction="row" align="center" justify="between" customStyle={'py-2'}>
+    <Stack direction="row" alignItems="center" justifyContent="between" className="py-2">
       <Link onClick={onClickTag} to={`${tagAnchorLink}/${tag?.name}`}>
-        <Stack align="center" justify="between" customStyle={'py-2'}>
+        <Stack alignItems="center" justifyContent="between" className="py-2">
           {tag && (
             <SubtitleTextIcon
               onClick={onClickTag}
@@ -57,7 +57,7 @@ const TagSearchCard: React.FC<TagSearchCardProps> = props => {
           )}
 
           {!tag && (
-            <Stack align="center" justify="between" customStyle={'py-2'}>
+            <Stack alignItems="center" justifyContent="between" className="py-2">
               <TextLine title="tagName" animated={false} width="140px" />
               <TextLine title="tagName" animated={false} width="80px" />
             </Stack>

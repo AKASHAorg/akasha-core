@@ -1,7 +1,7 @@
 import React from 'react';
 import AppIcon, { AppIconProps } from '@akashaorg/design-system-core/lib/components/AppIcon';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Color } from '@akashaorg/design-system-core/lib/components/types/common.types';
 import { IconProps } from '@akashaorg/design-system-core/lib/components/Icon';
@@ -38,7 +38,7 @@ const Web3ConnectCard: React.FC<TWeb3ConnectCardProps> = props => {
 
   return (
     <Card className="p-2 select-none hover:secondary border-accent w-full" onClick={handleClick}>
-      <Stack direction="row" align="center" spacing="gap-x-2">
+      <Stack direction="row" alignItems="center" spacing={2}>
         <AppIcon
           iconColor={iconColor}
           placeholderIcon={leftIconType}
@@ -47,7 +47,7 @@ const Web3ConnectCard: React.FC<TWeb3ConnectCardProps> = props => {
           backgroundSize={boxSize}
           background={boxBgColor}
         />
-        <Stack spacing="gap-y-2">
+        <Stack spacing={2}>
           <Text variant="h6">{titleLabel}</Text>
           {subtitleLabel && (
             <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey7' }}>

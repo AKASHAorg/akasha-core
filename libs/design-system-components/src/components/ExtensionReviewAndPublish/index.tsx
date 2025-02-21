@@ -10,7 +10,7 @@ import Label from '@akashaorg/design-system-core/lib/components/Label';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Section from './section';
 import { AppInfoPill } from '../AppInfo/info-pill';
@@ -113,7 +113,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
 
   const getAccordionTitleNode = (title: string, fieldHasData: boolean, isRequired = true) => {
     return (
-      <Stack direction="row" spacing="gap-x-1" align="center">
+      <Stack direction="row" spacing={1} alignItems="center">
         <Icon
           icon={fieldHasData ? <CheckCircleIcon /> : <XCircleIcon />}
           solid={fieldHasData}
@@ -133,15 +133,14 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
 
   return (
     <>
-      <Stack padding="p-4" spacing="gap-y-4" customStyle="mb-4" fullWidth>
+      <Stack spacing={4} className="p-4 mb-4 w-full">
         <Text as="span" variant="body2" color={{ light: 'grey4', dark: 'grey6' }}>
           {subtitle.part1} <span className={asteriskStyle}>*</span> {subtitle.part2}
         </Text>
 
-        <Stack spacing="gap-y-3" fullWidth>
+        <Stack spacing={3} className="w-full">
           <Stack
-            customStyle={`relative h-24 rounded-2xl  bg(center no-repeat cover [url(${backgroundUrl})])`}
-            fullWidth
+            className={`relative h-24 rounded-2xl  bg(center no-repeat cover [url(${backgroundUrl})])`}
           >
             <AppAvatar
               appType={extensionData?.applicationType}
@@ -186,7 +185,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
         </Section>
 
         {/* wrap each accordion in a Stack to guard against the main wrapper's spacing */}
-        <Stack spacing="gap-y-3">
+        <Stack spacing={3}>
           <Accordion
             accordionId={descriptionLabel}
             open={descriptionLabel === activeAccordionId}
@@ -201,7 +200,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
         </Stack>
         <Divider />
 
-        <Stack spacing="gap-y-3">
+        <Stack spacing={3}>
           <Accordion
             accordionId={galleryLabel}
             open={galleryLabel === activeAccordionId}
@@ -211,7 +210,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
               false,
             )}
             contentNode={
-              <Stack spacing="gap-y-3">
+              <Stack spacing={3}>
                 <ExtensionImageGallery
                   imageNotLoadedLabel={imageNotLoadedLabel}
                   images={galleryImagesWithSource?.slice(0, 3).map((image, idx) => ({
@@ -222,7 +221,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
                   showOverlay={false}
                   toggleOverlay={() => ({})}
                 />
-                <Stack direction="row" align="center" justify="between">
+                <Stack direction="row" alignItems="center" justifyContent="between">
                   <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey7' }}>
                     {`${galleryImagesWithSource?.length} ${imageUploadedLabel}`}
                   </Text>
@@ -237,7 +236,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
         </Stack>
         <Divider />
 
-        <Stack spacing="gap-y-3">
+        <Stack spacing={3}>
           <Accordion
             accordionId={usefulLinksLabel}
             open={usefulLinksLabel === activeAccordionId}
@@ -247,7 +246,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
               false,
             )}
             contentNode={
-              <Stack spacing="gap-y-3">
+              <Stack spacing={3}>
                 {extensionData?.links?.map((link, index) => (
                   <Stack key={index}>
                     <Text variant="button-md">{link.label}</Text>
@@ -268,7 +267,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
         </Stack>
         <Divider />
 
-        <Stack spacing="gap-y-3">
+        <Stack spacing={3}>
           <Accordion
             accordionId={licenseLabel}
             open={licenseLabel === activeAccordionId}
@@ -283,7 +282,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
         </Stack>
         <Divider />
 
-        <Stack spacing="gap-y-3">
+        <Stack spacing={3}>
           <Accordion
             accordionId={contributorsLabel}
             open={contributorsLabel === activeAccordionId}
@@ -298,13 +297,13 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
         </Stack>
         <Divider />
 
-        <Stack spacing="gap-y-3">
+        <Stack spacing={3}>
           <Accordion
             accordionId={tagsLabel}
             open={tagsLabel === activeAccordionId}
             titleNode={getAccordionTitleNode(tagsLabel, extensionData?.keywords?.length > 0)}
             contentNode={
-              <Stack direction="row" spacing="gap-2" customStyle="flex-wrap">
+              <Stack direction="row" spacing={2} className="flex-wrap">
                 {extensionData?.keywords?.map((tag, idx) => (
                   <Pill key={tag + idx} label={tag} type="action" />
                 ))}
@@ -314,7 +313,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
           />
         </Stack>
         <Card className="p-3">
-          <Stack align="center" direction="row" spacing="gap-x-2">
+          <Stack alignItems="center" direction="row" spacing={2}>
             <Text variant="button-sm">{needToMakeChangesLabel}</Text>
             <Button
               variant="outline"
@@ -330,7 +329,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
 
       <Divider />
 
-      <Stack direction="row" padding="p-4" spacing="gap-x-2" align="center" justify="end">
+      <Stack direction="row" spacing={2} alignItems="center" justifyContent="end" className="p-4">
         <Button variant="link" onClick={onClickCancel}>
           {backButtonLabel}
         </Button>

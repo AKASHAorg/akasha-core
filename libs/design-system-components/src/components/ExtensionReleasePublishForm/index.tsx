@@ -3,7 +3,7 @@ import * as z from 'zod';
 import { Controller } from 'react-hook-form';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import { apply, tw } from '@twind/core';
 import { useForm } from 'react-hook-form';
@@ -136,8 +136,8 @@ const ExtensionReleasePublish: React.FC<ExtensionReleasePublishProps> = props =>
   return (
     <>
       <form className={tw(apply`h-full`)}>
-        <Stack direction="column" spacing="gap-y-4">
-          <Stack padding="px-4 pb-16" spacing="gap-y-4">
+        <Stack direction="column" spacing={4}>
+          <Stack spacing={4} className="px-4 pb-16">
             <Controller
               control={control}
               name={FieldName.versionNumber}
@@ -204,7 +204,7 @@ const ExtensionReleasePublish: React.FC<ExtensionReleasePublishProps> = props =>
           </Stack>
           <Divider />
 
-          <Stack direction="row" justify="end" spacing="gap-x-2" customStyle="px-4 pb-4">
+          <Stack direction="row" justifyContent="end" spacing={2} className="px-4 pb-4">
             <Button
               variant="link"
               onClick={cancelButton.handleClick}

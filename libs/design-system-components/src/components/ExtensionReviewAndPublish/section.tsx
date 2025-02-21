@@ -1,7 +1,7 @@
 import React from 'react';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Label from '@akashaorg/design-system-core/lib/components/Label';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 
 export type TSectionProps = {
@@ -16,8 +16,8 @@ const Section: React.FC<React.PropsWithChildren<TSectionProps>> = props => {
 
   return (
     <>
-      <Stack spacing="gap-y-2">
-        <Stack direction="row" align="center" justify="between">
+      <Stack spacing={2}>
+        <Stack direction="row" alignItems="center" justifyContent="between">
           <Label required={required}>{title}</Label>
           {hasToggle && <Toggle checked={isToggleChecked} disabled={true} />}
         </Stack>
