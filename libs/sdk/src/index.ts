@@ -1,57 +1,53 @@
 /**
- * AKASHA SDK is a modular set of utilities and apis that can be used to build
- * your own app.
- * @packageDocumentation
+ * @packageDocumentation The AKASHA SDK is used in every world instance and
+ * provides the core functionality to interact with different services and 3rd parties
+ * (ex. Metamask, Lit Protocol, Ceramic, ComposeDB, Infura, etc.).
+ * It is a wrapper around the services and APIs that are used in the AKASHA world.
  */
 import 'reflect-metadata';
-// import 'systemjs-webpack-interop/auto-public-path';
 import * as typings from '@akashaorg/typings/lib/sdk';
-import container /*, { importLazy }*/ from './container';
+import container from './container';
+
+import type AWF_Auth from './auth';
+import type DB from './db';
+import type Gql from './gql';
+import type AWF_Profile from './profiles';
 import type Logging from './logging';
 import type Settings from './settings';
-import type Gql from './gql';
-
-import type DB from './db';
-import type Stash from './stash';
-import type Web3Connector from './common/web3.connector';
-import type EventBus from './common/event-bus';
-import type AWF_Auth from './auth/index';
-import type AWF_Profile from './profiles/index';
-import type AWF_IpfsConnector from './common/ipfs.connector';
 import type AppSettings from './settings/apps';
-import type AWF_Misc from './common/misc';
+import type Stash from './stash';
 import type AWF_Ceramic from './common/ceramic';
+import type EventBus from './common/event-bus';
+import type AWF_IpfsConnector from './common/ipfs.connector';
 import type AWF_Lit from './common/lit';
+import type AWF_Misc from './common/misc';
 import type Notification from './common/notification/notification';
+import type Web3Connector from './common/web3.connector';
 
 export { Logger } from 'pino';
 
-export interface SDK_API {
-  globalChannel: EventBus;
-  auth: AWF_Auth;
-  profile: AWF_Profile;
-}
-
-export interface SDK_Services {
-  log: Logging;
-  gql: Gql;
-  stash: Stash;
-  settings: Settings;
-  appSettings: AppSettings;
-  ceramic: AWF_Ceramic;
-  db: DB;
-  common: {
-    web3: Web3Connector;
-    ipfs: AWF_IpfsConnector;
-    misc: AWF_Misc;
-    lit: AWF_Lit;
-    notification: Notification;
-  };
-}
-
 export type AWF_SDK = {
-  services: SDK_Services;
-  api: SDK_API;
+  services: {
+    log: Logging;
+    gql: Gql;
+    stash: Stash;
+    settings: Settings;
+    appSettings: AppSettings;
+    ceramic: AWF_Ceramic;
+    db: DB;
+    common: {
+      web3: Web3Connector;
+      ipfs: AWF_IpfsConnector;
+      misc: AWF_Misc;
+      lit: AWF_Lit;
+      notification: Notification;
+    };
+  };
+  api: {
+    globalChannel: EventBus;
+    auth: AWF_Auth;
+    profile: AWF_Profile;
+  };
 };
 
 let sdk: AWF_SDK;
@@ -62,10 +58,11 @@ let sdk: AWF_SDK;
  * @example
  * ```ts
  * import getSDK from '@akashaorg/core-sdk';
+ *
  * const sdk = getSDK();
+ * // do something with SDK
  * ```
  */
-
 export default function getSDK(): AWF_SDK {
   if (!sdk) {
     sdk = init();
@@ -76,13 +73,15 @@ export default function getSDK(): AWF_SDK {
 /**
  * Creates a new SDK instance.
  * @public
- * @example
+ * @example Example usage
  * ```ts
- * import {init} from '@akashaorg/core-sdk';
+ * import { init } from '@akashaorg/core-sdk';
+ *
  * const sdk = init();
+ *
+ * const { log, gql, stash, settings, appSettings, ceramic, db, common } = sdk.services;
  * ```
  */
-
 export function init(): AWF_SDK {
   const { TYPES } = typings;
   const log = container.get<Logging>(TYPES.Log);
@@ -98,15 +97,6 @@ export function init(): AWF_SDK {
   const appSettings = container.get<AppSettings>(TYPES.AppSettings);
   const misc = container.get<AWF_Misc>(TYPES.Misc);
   const notification = container.get<Notification>(TYPES.Notification);
-  // const fetchService = async () => {
-  //   // await importLazy();
-  //   const gqlNew = container.get<Gql>(TYPES.Gql);
-  //   console.info('new gql client', gqlNew);
-  //   return gqlNew;
-  // };
-  //
-  // console.log('lazy load gql client', fetchService);
-
   const ceramic = container.get<AWF_Ceramic>(TYPES.Ceramic);
   const lit = container.get<AWF_Lit>(TYPES.Lit);
 
@@ -134,5 +124,3 @@ export function init(): AWF_SDK {
     },
   };
 }
-
-export { typings };
