@@ -38,7 +38,7 @@ const ExtensionCard = ({
     <ExtensionCardContext.Provider value={{ extensionId, extensionType }}>
       <div
         data-slot="extension-card"
-        className={cn('grid grid-cols-[60px_auto_1fr] gap-1', className)}
+        className={cn('grid grid-cols-[60px_auto_1fr] gap-2', className)}
         {...props}
       />
     </ExtensionCardContext.Provider>
