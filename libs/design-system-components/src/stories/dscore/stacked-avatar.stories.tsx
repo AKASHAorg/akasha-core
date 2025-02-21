@@ -4,11 +4,10 @@ import StackedAvatar, {
 } from '@akashaorg/design-system-core/lib/components/StackedAvatar';
 import { userData } from '@akashaorg/design-system-core/lib/utils';
 
-StackedAvatar.displayName = 'StackedAvatar';
-
-const meta: Meta<Stack edAvatarProps> = {
+const meta: Meta<StackedAvatarProps> = {
   title: 'DSCore/Avatars/StackedAvatar',
   component: StackedAvatar,
+  tags: ['autodocs'],
   argTypes: {
     userData: { crontrol: 'object' },
     maxAvatars: { control: 'number' },
@@ -16,21 +15,21 @@ const meta: Meta<Stack edAvatarProps> = {
   },
 };
 
-type Story = StoryObj<Stack edAvatarProps>;
+type Story = StoryObj<StackedAvatarProps>;
 
-export const Default: Story = {
+const baseArgs: Story = {
   args: {
     userData: userData.map(item => ({ ...item, avatar: item.avatar?.default })),
     maxAvatars: 4,
   },
 };
 
+export const Default: Story = {
+  args: { ...baseArgs.args },
+};
+
 export const StackedAvatarWithSize: Story = {
-  args: {
-    userData: userData.map(item => ({ ...item, avatar: item.avatar?.default })),
-    maxAvatars: 4,
-    size: 'xl',
-  },
+  args: { ...baseArgs.args, size: 'xl' },
 };
 
 export default meta;
