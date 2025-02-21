@@ -60,19 +60,19 @@ const AppAvatar: React.FC<AppAvatarProps> = props => {
   if (!avatar?.src) {
     switch (appType) {
       case AkashaAppApplicationType.App:
-        avatarFallback = `${publicImgPath}/App-${seed}.webp`;
+        avatarFallback = `${publicImgPath}/app-${seed}.webp`;
         break;
       case AkashaAppApplicationType.Widget:
-        avatarFallback = `${publicImgPath}/Widget-${seed}.webp`;
+        avatarFallback = `${publicImgPath}/widget-${seed}.webp`;
         break;
       case AkashaAppApplicationType.Plugin:
-        avatarFallback = `${publicImgPath}/Plugin-${seed}.webp`;
+        avatarFallback = `${publicImgPath}/plugin-${seed}.webp`;
         break;
       case AkashaAppApplicationType.Other:
-        avatarFallback = `${publicImgPath}/Other-${seed}.webp`;
+        avatarFallback = `${publicImgPath}/other-${seed}.webp`;
         break;
       default:
-        avatarFallback = `${publicImgPath}/App-${seed}.webp`;
+        avatarFallback = `${publicImgPath}/app-${seed}.webp`;
         break;
     }
   }

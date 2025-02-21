@@ -239,7 +239,7 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
         />
       )}
       {!error && allMyExtensions?.length > 0 && (
-        <Card className="shadow-none">
+        <Card className="shadow-none overflow-visible">
           <DynamicInfiniteScroll
             count={allMyExtensions.length}
             estimatedHeight={ENTRY_HEIGHT}

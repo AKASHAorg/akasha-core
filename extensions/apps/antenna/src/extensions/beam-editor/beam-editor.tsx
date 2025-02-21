@@ -306,7 +306,7 @@ export const BeamEditor: React.FC = () => {
   const handleModalClose = () => setNewUrl(null);
 
   return (
-    <Card className="p-0 divide-y divide-border h-[80vh] justify-between">
+    <Card className="p-0 divide-y divide-border h-[80vh] flex flex-col">
       {!!newUrl && (
         <UnsavedChangesModal
           showModal={!!newUrl}
