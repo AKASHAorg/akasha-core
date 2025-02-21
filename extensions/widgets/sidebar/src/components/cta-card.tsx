@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { XMarkIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export type SidebarCTACardProps = {
@@ -18,8 +18,8 @@ const SidebarCTACard: React.FC<SidebarCTACardProps> = props => {
   const { t } = useTranslation('ui-widget-sidebar');
 
   return (
-    <Stack direction="column" spacing="gap-y-4" customStyle="px-6 py-4 bg(grey9 dark:grey3)">
-      <Stack direction="row" justify="between" align="start">
+    <Stack direction="column" spacing={4} className="px-6 py-4 bg(grey9 dark:grey3)">
+      <Stack direction="row" justifyContent="between" alignItems="start">
         <Text
           variant="footnotes2"
           color={{ light: 'grey4', dark: 'grey7' }}
@@ -33,7 +33,7 @@ const SidebarCTACard: React.FC<SidebarCTACardProps> = props => {
         </Button>
       </Stack>
 
-      <Stack customStyle="w-fit h-fit self-end">
+      <Stack className="w-fit h-fit self-end">
         <Button onClick={onClickCTAButton} label={t('Check them out')} variant="secondary" />
       </Stack>
     </Stack>

@@ -5,7 +5,7 @@ import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 
 export type FallbackHeaderProps = {
   authenticatedDID: string;
@@ -20,13 +20,12 @@ const FallbackHeader: React.FC<FallbackHeaderProps> = ({ authenticatedDID, isLog
   return (
     <Stack
       direction="row"
-      justifyItems="stretch"
-      customStyle={`p-4 border-b-1 border(grey9 dark:grey3) rounded-t-2xl ${headerBackground}`}
+      className={`justify-items-stretch p-4 border-b-1 border(grey9 dark:grey3) rounded-t-2xl ${headerBackground}`}
     >
-      <Stack customStyle="w-fit h-fit mr-2">
+      <Stack className="w-fit h-fit mr-2">
         <Avatar profileId={authenticatedDID} avatar={null} isClickable={false} />
       </Stack>
-      <Stack justify="center" customStyle={'w-fit flex-grow'}>
+      <Stack justifyContent="center" className="w-fit flex-grow">
         {isLoggedIn && <Text variant="button-md">{t('Fetching your info...')}</Text>}
         <DidField
           did={authenticatedDID}
@@ -35,7 +34,7 @@ const FallbackHeader: React.FC<FallbackHeaderProps> = ({ authenticatedDID, isLog
           copiedLabel={t('Copied')}
         />
       </Stack>
-      <Stack customStyle="w-fit h-fit self-start">
+      <Stack className="w-fit h-fit self-start">
         <Button variant="primary" size="sm" loading />
       </Stack>
     </Stack>
