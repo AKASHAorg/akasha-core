@@ -55,10 +55,10 @@ const NotificationsPreferencesOption: React.FC = () => {
         .getSettingsOfUser()
         .then(async fetchedPreferences => {
           if (fetchedPreferences.length > 0) {
-            setAppPreferences(getAppInfoFromUserSetting(fetchedPreferences));
+            setAppPreferences(getAppInfoFromUserSetting(fetchedPreferences, t));
           } else {
             const channelSettings = await sdk.services.common.notification.getSettingsOfChannel();
-            setAppPreferences(getAppInfoFromChannelSetting(channelSettings, false));
+            setAppPreferences(getAppInfoFromChannelSetting(channelSettings, false, t));
           }
           setInitialLoading(false);
         })
