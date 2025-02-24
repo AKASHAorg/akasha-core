@@ -272,13 +272,12 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
             />
           )}
           <Stack direction="row" alignItems="center" spacing={1}>
-            <Stack
+            <div
               className={`w-2 h-2 rounded-full ${getStatusIndicatorStyle(isExtensionLocalDraft, appStreamStatus)}`}
-            >
-              <Text variant="footnotes2" weight="normal">
-                {getExtensionStatus(isExtensionLocalDraft, appStreamStatus)}
-              </Text>
-            </Stack>
+            />
+            <Text variant="footnotes2" weight="normal">
+              {getExtensionStatus(isExtensionLocalDraft, appStreamStatus)}
+            </Text>
           </Stack>
         </Stack>
         {showDivider && <Divider />}
