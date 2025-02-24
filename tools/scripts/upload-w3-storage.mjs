@@ -132,7 +132,7 @@ async function uploadExtensions () {
         console.info(`Created ${pkgName} with ID ${pkgID}`);
       }
       console.log(`Uploading ${pkgName}`);
-      const files = await filesFromPaths([pkgMapping[pkgName]]);
+      const files = await filesFromPaths([pkgPath]);
       const directoryCid = await client.uploadDirectory(files);
 
       console.log(`Uploaded ${pkgName} ${directoryCid}`);
