@@ -7,25 +7,6 @@ enum AppName {
   VIBES = 'Vibes App',
 }
 
-const appInformation = [
-  {
-    appName: AppName.ANTENNA,
-    title: 'Antenna',
-    description:
-      'Get notifications about new reflections on your beams people you follow & your interests.',
-  },
-  {
-    appName: AppName.PROFILE,
-    title: 'Profile',
-    description: 'Get notifications about new followers',
-  },
-  {
-    appName: AppName.VIBES,
-    title: 'Vibes',
-    description: 'Get notifications from Vibes app',
-  },
-];
-
 export type AppInfo = {
   index: number;
   enabled: boolean;
@@ -66,13 +47,30 @@ export const getAppInfoFromChannelSetting = (
 };
 
 const getAppInfoByAppName = (appName: string, t: TFunction) => {
-  const appInfo = appInformation.find(appInfo => appInfo.appName === appName);
-  // In case a new Option is added in the PushProtocol's channel and we did not cover the title and the description in the appInformation array this will generate a default title and description so it be present in the list of apps
-  if (!appInfo) {
-    return {
-      title: t(appName),
-      description: t(`Get notifications from ${appName}`),
-    };
+  switch (appName) {
+    case AppName.ANTENNA:
+      return {
+        title: t('Antenna'),
+        description: t(
+          'Get notifications about new reflections on your beams people you follow & your interests.',
+        ),
+      };
+      break;
+    case AppName.PROFILE:
+      return {
+        title: t('Profile'),
+        description: t('Get notifications about new followers'),
+      };
+      break;
+    case AppName.VIBES:
+      return {
+        title: t('Vibes'),
+        description: t('Get notifications from Vibes app'),
+      };
+    default:
+      return {
+        title: appName,
+        description: t(`Get notifications from {{appName}}`, { appName }),
+      };
   }
-  return appInfo;
 };
