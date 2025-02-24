@@ -87,7 +87,12 @@ async function uploadExtensions () {
   sdk.services.ceramic.getComposeClient().setDID(did);
   if (affected.length && Array.isArray(affected)) {
     for (const pkgName of affected) {
-      if (!pkgMapping[pkgName]) {
+      let extensionType;
+      if (pkgMapping.apps[pkgName]) {
+        extensionType = AkashaAppApplicationType.App;
+      } else if(pkgMapping.widgets[pkgName]){
+        extensionType = AkashaAppApplicationType.Widget;
+      } else {
         console.warn(`Could not find ${pkgName} in pkg.mapping.js`);
         continue;
       }
@@ -114,7 +119,7 @@ async function uploadExtensions () {
               name: pkgName,
               description: pkgInfo.description,
               license: pkgInfo.license,
-              applicationType: AkashaAppApplicationType.App,
+              applicationType: extensionType,
               createdAt: new Date().toISOString(),
               displayName: pkgInfo.displayName,
             },

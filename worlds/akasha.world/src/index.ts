@@ -2,7 +2,7 @@ import '@akashaorg/ui/main.css';
 import '@akashaorg/ui/globals.css';
 
 import { WorldConfig } from '@akashaorg/typings/lib/ui';
-import { AkashaApp, AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { AkashaApp } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 declare const __DEV__: boolean;
 declare const __LOAD_LOCAL_SOURCES__: boolean;
@@ -11,34 +11,7 @@ declare const __LOAD_LOCAL_SOURCES__: boolean;
   const { default: AppLoader } = await System.import('@akashaorg/ui-app-loader');
   const { default: getSDK } = await System.import('@akashaorg/core-sdk');
 
-  const origin = window.location.origin;
-  let registryOverrides: (Partial<AkashaApp> & { source: string })[] = [
-    {
-      name: '@akashaorg/ui-widget-layout',
-      applicationType: AkashaAppApplicationType.Widget,
-      source: `${origin}/widgets/layout/index.js`,
-    },
-    {
-      name: '@akashaorg/ui-widget-sidebar',
-      applicationType: AkashaAppApplicationType.Widget,
-      source: `${origin}/widgets/sidebar/index.js`,
-    },
-    {
-      name: '@akashaorg/ui-widget-topbar',
-      applicationType: AkashaAppApplicationType.Widget,
-      source: `${origin}/widgets/top-bar/index.js`,
-    },
-    {
-      name: '@akashaorg/ui-widget-mini-profile',
-      applicationType: AkashaAppApplicationType.Widget,
-      source: `${origin}/widgets/mini-profile/index.js`,
-    },
-    {
-      name: '@akashaorg/ui-widget-test-mode-notifier',
-      applicationType: AkashaAppApplicationType.Widget,
-      source: `${origin}/widgets/test-mode-notifier/index.js`,
-    },
-  ];
+  let registryOverrides: (Partial<AkashaApp> & { source: string })[] = [];
 
   if (__DEV__ || __LOAD_LOCAL_SOURCES__) {
     registryOverrides = (await import('./registry-overrides')).default;

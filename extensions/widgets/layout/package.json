@@ -1,6 +1,6 @@
 {
   "name": "@akashaorg/ui-widget-layout",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "description": "AKASHA specific page-layout widget",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
