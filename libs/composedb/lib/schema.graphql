@@ -409,6 +409,134 @@ type Query {
     sorting: AkashaReflectStreamSortingInput
   ): AkashaReflectStreamConnection
   akashaReflectStreamCount(filters: AkashaReflectStreamFiltersInput): Int!
+  akashaWorldIndex(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    filters: AkashaWorldFiltersInput
+    sorting: AkashaWorldSortingInput
+  ): AkashaWorldConnection
+  akashaWorldCount(filters: AkashaWorldFiltersInput): Int!
+  akashaWorldConfigIndex(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    filters: AkashaWorldConfigFiltersInput
+    sorting: AkashaWorldConfigSortingInput
+  ): AkashaWorldConfigConnection
+  akashaWorldConfigCount(filters: AkashaWorldConfigFiltersInput): Int!
+  akashaWorldConfigExtensionIndex(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    filters: AkashaWorldConfigExtensionFiltersInput
+    sorting: AkashaWorldConfigExtensionSortingInput
+  ): AkashaWorldConfigExtensionConnection
+  akashaWorldConfigExtensionCount(filters: AkashaWorldConfigExtensionFiltersInput): Int!
+  akashaWorldConfigExtensionInterfaceIndex(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    filters: AkashaWorldConfigExtensionInterfaceFiltersInput
+    sorting: AkashaWorldConfigExtensionInterfaceSortingInput
+  ): AkashaWorldConfigExtensionInterfaceConnection
+  akashaWorldConfigExtensionInterfaceCount(filters: AkashaWorldConfigExtensionInterfaceFiltersInput): Int!
+  akashaWorldConfigInterfaceIndex(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    filters: AkashaWorldConfigInterfaceFiltersInput
+    sorting: AkashaWorldConfigInterfaceSortingInput
+  ): AkashaWorldConfigInterfaceConnection
+  akashaWorldConfigInterfaceCount(filters: AkashaWorldConfigInterfaceFiltersInput): Int!
+  akashaWorldInterfaceIndex(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    filters: AkashaWorldInterfaceFiltersInput
+    sorting: AkashaWorldInterfaceSortingInput
+  ): AkashaWorldInterfaceConnection
+  akashaWorldInterfaceCount(filters: AkashaWorldInterfaceFiltersInput): Int!
+  akashaWorldMetaInfoIndex(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    filters: AkashaWorldMetaInfoFiltersInput
+    sorting: AkashaWorldMetaInfoSortingInput
+  ): AkashaWorldMetaInfoConnection
+  akashaWorldMetaInfoCount(filters: AkashaWorldMetaInfoFiltersInput): Int!
+  akashaWorldMetaInfoInterfaceIndex(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    filters: AkashaWorldMetaInfoInterfaceFiltersInput
+    sorting: AkashaWorldMetaInfoInterfaceSortingInput
+  ): AkashaWorldMetaInfoInterfaceConnection
+  akashaWorldMetaInfoInterfaceCount(filters: AkashaWorldMetaInfoInterfaceFiltersInput): Int!
 }
 
 """An object with an ID"""
@@ -804,6 +932,138 @@ type CeramicAccount implements Node {
     sorting: AkashaReflectStreamSortingInput
   ): AkashaReflectStreamConnection
   akashaReflectStreamListCount(filters: AkashaReflectStreamFiltersInput): Int!
+  akashaWorld(with: WithAkashaWorldInput!): AkashaWorld
+  akashaWorldConfig(with: WithAkashaWorldConfigInput!): AkashaWorldConfig
+  akashaWorldConfigExtension(with: WithAkashaWorldConfigExtensionInput!): AkashaWorldConfigExtension
+  akashaWorldConfigExtensionInterfaceList(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    filters: AkashaWorldConfigExtensionInterfaceFiltersInput
+    sorting: AkashaWorldConfigExtensionInterfaceSortingInput
+  ): AkashaWorldConfigExtensionInterfaceConnection
+  akashaWorldConfigExtensionInterfaceListCount(filters: AkashaWorldConfigExtensionInterfaceFiltersInput): Int!
+  akashaWorldConfigExtensionList(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    filters: AkashaWorldConfigExtensionFiltersInput
+    sorting: AkashaWorldConfigExtensionSortingInput
+  ): AkashaWorldConfigExtensionConnection
+  akashaWorldConfigExtensionListCount(filters: AkashaWorldConfigExtensionFiltersInput): Int!
+  akashaWorldConfigInterfaceList(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    filters: AkashaWorldConfigInterfaceFiltersInput
+    sorting: AkashaWorldConfigInterfaceSortingInput
+  ): AkashaWorldConfigInterfaceConnection
+  akashaWorldConfigInterfaceListCount(filters: AkashaWorldConfigInterfaceFiltersInput): Int!
+  akashaWorldConfigList(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    filters: AkashaWorldConfigFiltersInput
+    sorting: AkashaWorldConfigSortingInput
+  ): AkashaWorldConfigConnection
+  akashaWorldConfigListCount(filters: AkashaWorldConfigFiltersInput): Int!
+  akashaWorldInterfaceList(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    filters: AkashaWorldInterfaceFiltersInput
+    sorting: AkashaWorldInterfaceSortingInput
+  ): AkashaWorldInterfaceConnection
+  akashaWorldInterfaceListCount(filters: AkashaWorldInterfaceFiltersInput): Int!
+  akashaWorldList(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    filters: AkashaWorldFiltersInput
+    sorting: AkashaWorldSortingInput
+  ): AkashaWorldConnection
+  akashaWorldListCount(filters: AkashaWorldFiltersInput): Int!
+  akashaWorldMetaInfo(with: WithAkashaWorldMetaInfoInput!): AkashaWorldMetaInfo
+  akashaWorldMetaInfoInterfaceList(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    filters: AkashaWorldMetaInfoInterfaceFiltersInput
+    sorting: AkashaWorldMetaInfoInterfaceSortingInput
+  ): AkashaWorldMetaInfoInterfaceConnection
+  akashaWorldMetaInfoInterfaceListCount(filters: AkashaWorldMetaInfoInterfaceFiltersInput): Int!
+  akashaWorldMetaInfoList(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    filters: AkashaWorldMetaInfoFiltersInput
+    sorting: AkashaWorldMetaInfoSortingInput
+  ): AkashaWorldMetaInfoConnection
+  akashaWorldMetaInfoListCount(filters: AkashaWorldMetaInfoFiltersInput): Int!
 }
 
 type AkashaApp implements Node & AkashaAppInterface {
@@ -850,6 +1110,29 @@ type AkashaApp implements Node & AkashaAppInterface {
     """Counts only documents created by the provided account"""
     account: ID
     filters: AkashaAppReleaseInterfaceFiltersInput
+  ): Int!
+  worldConfigs(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+
+    """Returns only documents created by the provided account"""
+    account: ID
+    filters: AkashaWorldConfigExtensionInterfaceFiltersInput
+    sorting: AkashaWorldConfigExtensionInterfaceSortingInput
+  ): AkashaWorldConfigExtensionInterfaceConnection!
+  worldsConfigsCount(
+    """Counts only documents created by the provided account"""
+    account: ID
+    filters: AkashaWorldConfigExtensionInterfaceFiltersInput
   ): Int!
 }
 
@@ -997,6 +1280,123 @@ enum SortOrder {
   DESC
 }
 
+"""A connection to a list of items."""
+type AkashaWorldConfigExtensionInterfaceConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [AkashaWorldConfigExtensionInterfaceEdge]
+}
+
+"""An edge in a connection."""
+type AkashaWorldConfigExtensionInterfaceEdge {
+  """The item at the end of the edge"""
+  node: AkashaWorldConfigExtensionInterface
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+interface AkashaWorldConfigExtensionInterface implements Node {
+  id: ID!
+  type: String
+  active: Boolean!
+  optional: Boolean
+  position: Int
+  createdAt: DateTime!
+  extensionID: CeramicStreamID!
+  worldConfigID: CeramicStreamID!
+
+  """Account controlling the document"""
+  creator: CeramicAccount!
+  extension: AkashaAppInterface
+  worldConfig: AkashaWorldConfigInterface
+}
+
+interface AkashaWorldConfigInterface implements Node {
+  id: ID!
+  active: Boolean!
+  worldID: CeramicStreamID!
+  createdAt: DateTime!
+  layoutExtension: CeramicStreamID!
+  homepageExtension: CeramicStreamID!
+  registryExtension: CeramicStreamID!
+  world: AkashaWorldInterface
+
+  """Account controlling the document"""
+  creator: CeramicAccount!
+}
+
+interface AkashaWorldInterface implements Node {
+  id: ID!
+  icon: AkashaWorldImageVersions
+  name: String!
+  active: Boolean!
+  createdAt: DateTime!
+  instanceURL: URI
+  extensionPublishers: [CeramicAccount]
+
+  """Account controlling the document"""
+  creator: CeramicAccount!
+}
+
+type AkashaWorldImageVersions {
+  default: AkashaWorldImageSource!
+  alternatives: [AkashaWorldImageSource]
+}
+
+type AkashaWorldImageSource {
+  src: URI!
+  sizes: String
+  width: Int
+  height: Int
+}
+
+input AkashaWorldConfigExtensionInterfaceFiltersInput {
+  where: AkashaWorldConfigExtensionInterfaceObjectFilterInput
+  and: [AkashaWorldConfigExtensionInterfaceFiltersInput!]
+  or: [AkashaWorldConfigExtensionInterfaceFiltersInput!]
+  not: AkashaWorldConfigExtensionInterfaceFiltersInput
+}
+
+input AkashaWorldConfigExtensionInterfaceObjectFilterInput {
+  type: StringValueFilterInput
+  active: BooleanValueFilterInput
+  optional: BooleanValueFilterInput
+  position: IntValueFilterInput
+  createdAt: StringValueFilterInput
+  extensionID: StringValueFilterInput
+  worldConfigID: StringValueFilterInput
+}
+
+input BooleanValueFilterInput {
+  isNull: Boolean
+  equalTo: Boolean
+}
+
+input IntValueFilterInput {
+  isNull: Boolean
+  equalTo: Int
+  notEqualTo: Int
+  in: [Int!]
+  notIn: [Int!]
+  lessThan: Int
+  lessThanOrEqualTo: Int
+  greaterThan: Int
+  greaterThanOrEqualTo: Int
+}
+
+input AkashaWorldConfigExtensionInterfaceSortingInput {
+  type: SortOrder
+  active: SortOrder
+  optional: SortOrder
+  position: SortOrder
+  createdAt: SortOrder
+  extensionID: SortOrder
+  worldConfigID: SortOrder
+}
+
 input WithAkashaAppInput {
   name: String!
 }
@@ -1033,11 +1433,6 @@ input AkashaAppInterfaceObjectFilterInput {
   createdAt: StringValueFilterInput
   description: StringValueFilterInput
   displayName: StringValueFilterInput
-}
-
-input BooleanValueFilterInput {
-  isNull: Boolean
-  equalTo: Boolean
 }
 
 input AkashaAppInterfaceSortingInput {
@@ -2528,6 +2923,427 @@ input AkashaReflectStreamSortingInput {
   reflectionID: SortOrder
 }
 
+type AkashaWorld implements Node & AkashaWorldInterface {
+  id: ID!
+  icon: AkashaWorldImageVersions
+  name: String!
+  active: Boolean!
+  createdAt: DateTime!
+  instanceURL: URI
+  extensionPublishers: [CeramicAccount]
+
+  """Account controlling the document"""
+  creator: CeramicAccount!
+  configInfo(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+
+    """Returns only documents created by the provided account"""
+    account: ID
+    filters: AkashaWorldConfigInterfaceFiltersInput
+    sorting: AkashaWorldConfigInterfaceSortingInput
+  ): AkashaWorldConfigInterfaceConnection!
+  metaInfo(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+
+    """Returns only documents created by the provided account"""
+    account: ID
+    filters: AkashaWorldMetaInfoInterfaceFiltersInput
+    sorting: AkashaWorldMetaInfoInterfaceSortingInput
+  ): AkashaWorldMetaInfoInterfaceConnection!
+}
+
+"""A connection to a list of items."""
+type AkashaWorldConfigInterfaceConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [AkashaWorldConfigInterfaceEdge]
+}
+
+"""An edge in a connection."""
+type AkashaWorldConfigInterfaceEdge {
+  """The item at the end of the edge"""
+  node: AkashaWorldConfigInterface
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+input AkashaWorldConfigInterfaceFiltersInput {
+  where: AkashaWorldConfigInterfaceObjectFilterInput
+  and: [AkashaWorldConfigInterfaceFiltersInput!]
+  or: [AkashaWorldConfigInterfaceFiltersInput!]
+  not: AkashaWorldConfigInterfaceFiltersInput
+}
+
+input AkashaWorldConfigInterfaceObjectFilterInput {
+  active: BooleanValueFilterInput
+  worldID: StringValueFilterInput
+  createdAt: StringValueFilterInput
+  layoutExtension: StringValueFilterInput
+  homepageExtension: StringValueFilterInput
+  registryExtension: StringValueFilterInput
+}
+
+input AkashaWorldConfigInterfaceSortingInput {
+  active: SortOrder
+  worldID: SortOrder
+  createdAt: SortOrder
+  layoutExtension: SortOrder
+  homepageExtension: SortOrder
+  registryExtension: SortOrder
+}
+
+"""A connection to a list of items."""
+type AkashaWorldMetaInfoInterfaceConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [AkashaWorldMetaInfoInterfaceEdge]
+}
+
+"""An edge in a connection."""
+type AkashaWorldMetaInfoInterfaceEdge {
+  """The item at the end of the edge"""
+  node: AkashaWorldMetaInfoInterface
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+interface AkashaWorldMetaInfoInterface implements Node {
+  id: ID!
+  worldID: CeramicStreamID!
+  keywords: [String]
+  description: String
+  socialLinks: [SocialLink]
+  guidelinesUrl: URI
+  world: AkashaWorldInterface
+}
+
+type SocialLink {
+  href: URI!
+  name: String!
+}
+
+input AkashaWorldMetaInfoInterfaceFiltersInput {
+  where: AkashaWorldMetaInfoInterfaceObjectFilterInput
+  and: [AkashaWorldMetaInfoInterfaceFiltersInput!]
+  or: [AkashaWorldMetaInfoInterfaceFiltersInput!]
+  not: AkashaWorldMetaInfoInterfaceFiltersInput
+}
+
+input AkashaWorldMetaInfoInterfaceObjectFilterInput {
+  worldID: StringValueFilterInput
+  description: StringValueFilterInput
+  guidelinesUrl: StringValueFilterInput
+}
+
+input AkashaWorldMetaInfoInterfaceSortingInput {
+  worldID: SortOrder
+  description: SortOrder
+  guidelinesUrl: SortOrder
+}
+
+input WithAkashaWorldInput {
+  name: String!
+  active: Boolean!
+}
+
+type AkashaWorldConfig implements Node & AkashaWorldConfigInterface {
+  id: ID!
+  active: Boolean!
+  worldID: CeramicStreamID!
+  createdAt: DateTime!
+  layoutExtension: CeramicStreamID!
+  homepageExtension: CeramicStreamID!
+  registryExtension: CeramicStreamID!
+  world: AkashaWorldInterface
+
+  """Account controlling the document"""
+  creator: CeramicAccount!
+  extensions(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+
+    """Returns only documents created by the provided account"""
+    account: ID
+    filters: AkashaWorldConfigExtensionInterfaceFiltersInput
+    sorting: AkashaWorldConfigExtensionInterfaceSortingInput
+  ): AkashaWorldConfigExtensionInterfaceConnection!
+}
+
+input WithAkashaWorldConfigInput {
+  worldID: CeramicStreamID!
+  active: Boolean!
+}
+
+type AkashaWorldConfigExtension implements Node & AkashaWorldConfigExtensionInterface {
+  id: ID!
+  type: String
+  active: Boolean!
+  optional: Boolean
+  position: Int
+  createdAt: DateTime!
+  extensionID: CeramicStreamID!
+  worldConfigID: CeramicStreamID!
+
+  """Account controlling the document"""
+  creator: CeramicAccount!
+  extension: AkashaAppInterface
+  worldConfig: AkashaWorldConfigInterface
+}
+
+input WithAkashaWorldConfigExtensionInput {
+  extensionID: CeramicStreamID!
+  worldConfigID: CeramicStreamID!
+  active: Boolean!
+}
+
+"""A connection to a list of items."""
+type AkashaWorldConfigExtensionConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [AkashaWorldConfigExtensionEdge]
+}
+
+"""An edge in a connection."""
+type AkashaWorldConfigExtensionEdge {
+  """The item at the end of the edge"""
+  node: AkashaWorldConfigExtension
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+input AkashaWorldConfigExtensionFiltersInput {
+  where: AkashaWorldConfigExtensionObjectFilterInput
+  and: [AkashaWorldConfigExtensionFiltersInput!]
+  or: [AkashaWorldConfigExtensionFiltersInput!]
+  not: AkashaWorldConfigExtensionFiltersInput
+}
+
+input AkashaWorldConfigExtensionObjectFilterInput {
+  type: StringValueFilterInput
+  active: BooleanValueFilterInput
+  optional: BooleanValueFilterInput
+  position: IntValueFilterInput
+  createdAt: StringValueFilterInput
+  extensionID: StringValueFilterInput
+  worldConfigID: StringValueFilterInput
+}
+
+input AkashaWorldConfigExtensionSortingInput {
+  type: SortOrder
+  active: SortOrder
+  optional: SortOrder
+  position: SortOrder
+  createdAt: SortOrder
+  extensionID: SortOrder
+  worldConfigID: SortOrder
+}
+
+"""A connection to a list of items."""
+type AkashaWorldConfigConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [AkashaWorldConfigEdge]
+}
+
+"""An edge in a connection."""
+type AkashaWorldConfigEdge {
+  """The item at the end of the edge"""
+  node: AkashaWorldConfig
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+input AkashaWorldConfigFiltersInput {
+  where: AkashaWorldConfigObjectFilterInput
+  and: [AkashaWorldConfigFiltersInput!]
+  or: [AkashaWorldConfigFiltersInput!]
+  not: AkashaWorldConfigFiltersInput
+}
+
+input AkashaWorldConfigObjectFilterInput {
+  active: BooleanValueFilterInput
+  worldID: StringValueFilterInput
+  createdAt: StringValueFilterInput
+  layoutExtension: StringValueFilterInput
+  homepageExtension: StringValueFilterInput
+  registryExtension: StringValueFilterInput
+}
+
+input AkashaWorldConfigSortingInput {
+  active: SortOrder
+  worldID: SortOrder
+  createdAt: SortOrder
+  layoutExtension: SortOrder
+  homepageExtension: SortOrder
+  registryExtension: SortOrder
+}
+
+"""A connection to a list of items."""
+type AkashaWorldInterfaceConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [AkashaWorldInterfaceEdge]
+}
+
+"""An edge in a connection."""
+type AkashaWorldInterfaceEdge {
+  """The item at the end of the edge"""
+  node: AkashaWorldInterface
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+input AkashaWorldInterfaceFiltersInput {
+  where: AkashaWorldInterfaceObjectFilterInput
+  and: [AkashaWorldInterfaceFiltersInput!]
+  or: [AkashaWorldInterfaceFiltersInput!]
+  not: AkashaWorldInterfaceFiltersInput
+}
+
+input AkashaWorldInterfaceObjectFilterInput {
+  name: StringValueFilterInput
+  active: BooleanValueFilterInput
+  createdAt: StringValueFilterInput
+  instanceURL: StringValueFilterInput
+}
+
+input AkashaWorldInterfaceSortingInput {
+  name: SortOrder
+  active: SortOrder
+  createdAt: SortOrder
+  instanceURL: SortOrder
+}
+
+"""A connection to a list of items."""
+type AkashaWorldConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [AkashaWorldEdge]
+}
+
+"""An edge in a connection."""
+type AkashaWorldEdge {
+  """The item at the end of the edge"""
+  node: AkashaWorld
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+input AkashaWorldFiltersInput {
+  where: AkashaWorldObjectFilterInput
+  and: [AkashaWorldFiltersInput!]
+  or: [AkashaWorldFiltersInput!]
+  not: AkashaWorldFiltersInput
+}
+
+input AkashaWorldObjectFilterInput {
+  name: StringValueFilterInput
+  active: BooleanValueFilterInput
+  createdAt: StringValueFilterInput
+}
+
+input AkashaWorldSortingInput {
+  name: SortOrder
+  active: SortOrder
+  createdAt: SortOrder
+}
+
+type AkashaWorldMetaInfo implements Node & AkashaWorldMetaInfoInterface {
+  id: ID!
+  worldID: CeramicStreamID!
+  keywords: [String]
+  description: String
+  socialLinks: [SocialLink]
+  guidelinesUrl: URI
+  world: AkashaWorldInterface
+}
+
+input WithAkashaWorldMetaInfoInput {
+  worldID: CeramicStreamID!
+}
+
+"""A connection to a list of items."""
+type AkashaWorldMetaInfoConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [AkashaWorldMetaInfoEdge]
+}
+
+"""An edge in a connection."""
+type AkashaWorldMetaInfoEdge {
+  """The item at the end of the edge"""
+  node: AkashaWorldMetaInfo
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+input AkashaWorldMetaInfoFiltersInput {
+  where: AkashaWorldMetaInfoObjectFilterInput
+  and: [AkashaWorldMetaInfoFiltersInput!]
+  or: [AkashaWorldMetaInfoFiltersInput!]
+  not: AkashaWorldMetaInfoFiltersInput
+}
+
+input AkashaWorldMetaInfoObjectFilterInput {
+  worldID: StringValueFilterInput
+  guidelinesUrl: StringValueFilterInput
+}
+
+input AkashaWorldMetaInfoSortingInput {
+  worldID: SortOrder
+  guidelinesUrl: SortOrder
+}
+
 """A connection to a list of items."""
 type AkashaProfileConnection {
   """Information to aid in pagination."""
@@ -2638,6 +3454,18 @@ type Mutation {
   setAkashaReflectStream(input: SetAkashaReflectStreamInput!): SetAkashaReflectStreamPayload
   updateAkashaReflectStream(input: UpdateAkashaReflectStreamInput!): UpdateAkashaReflectStreamPayload
   enableIndexingAkashaReflectStream(input: EnableIndexingAkashaReflectStreamInput!): EnableIndexingAkashaReflectStreamPayload
+  setAkashaWorld(input: SetAkashaWorldInput!): SetAkashaWorldPayload
+  updateAkashaWorld(input: UpdateAkashaWorldInput!): UpdateAkashaWorldPayload
+  enableIndexingAkashaWorld(input: EnableIndexingAkashaWorldInput!): EnableIndexingAkashaWorldPayload
+  setAkashaWorldConfig(input: SetAkashaWorldConfigInput!): SetAkashaWorldConfigPayload
+  updateAkashaWorldConfig(input: UpdateAkashaWorldConfigInput!): UpdateAkashaWorldConfigPayload
+  enableIndexingAkashaWorldConfig(input: EnableIndexingAkashaWorldConfigInput!): EnableIndexingAkashaWorldConfigPayload
+  setAkashaWorldConfigExtension(input: SetAkashaWorldConfigExtensionInput!): SetAkashaWorldConfigExtensionPayload
+  updateAkashaWorldConfigExtension(input: UpdateAkashaWorldConfigExtensionInput!): UpdateAkashaWorldConfigExtensionPayload
+  enableIndexingAkashaWorldConfigExtension(input: EnableIndexingAkashaWorldConfigExtensionInput!): EnableIndexingAkashaWorldConfigExtensionPayload
+  setAkashaWorldMetaInfo(input: SetAkashaWorldMetaInfoInput!): SetAkashaWorldMetaInfoPayload
+  updateAkashaWorldMetaInfo(input: UpdateAkashaWorldMetaInfoInput!): UpdateAkashaWorldMetaInfoPayload
+  enableIndexingAkashaWorldMetaInfo(input: EnableIndexingAkashaWorldMetaInfoInput!): EnableIndexingAkashaWorldMetaInfoPayload
 }
 
 type SetAkashaAppPayload {
@@ -3943,6 +4771,316 @@ type EnableIndexingAkashaReflectStreamPayload {
 }
 
 input EnableIndexingAkashaReflectStreamInput {
+  id: ID!
+  shouldIndex: Boolean!
+  clientMutationId: String
+}
+
+type SetAkashaWorldPayload {
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Account currently authenticated on the Ceramic instance, if set"""
+  viewer: CeramicAccount
+  document: AkashaWorld!
+  clientMutationId: String
+}
+
+input SetAkashaWorldInput {
+  content: AkashaWorldInput!
+  options: SetOptionsInput
+  clientMutationId: String
+}
+
+input AkashaWorldInput {
+  icon: AkashaWorldImageVersionsInput
+  name: String!
+  active: Boolean!
+  createdAt: DateTime!
+  instanceURL: URI
+  extensionPublishers: [DID]
+}
+
+input AkashaWorldImageVersionsInput {
+  default: AkashaWorldImageSourceInput!
+  alternatives: [AkashaWorldImageSourceInput]
+}
+
+input AkashaWorldImageSourceInput {
+  src: URI!
+  sizes: String
+  width: Int
+  height: Int
+}
+
+type UpdateAkashaWorldPayload {
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Account currently authenticated on the Ceramic instance, if set"""
+  viewer: CeramicAccount
+  document: AkashaWorld!
+  clientMutationId: String
+}
+
+input UpdateAkashaWorldInput {
+  id: ID!
+  options: UpdateOptionsInput
+  content: PartialAkashaWorldInput!
+  clientMutationId: String
+}
+
+input PartialAkashaWorldInput {
+  icon: AkashaWorldImageVersionsInput
+  instanceURL: URI
+  extensionPublishers: [DID]
+}
+
+type EnableIndexingAkashaWorldPayload {
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Account currently authenticated on the Ceramic instance, if set"""
+  viewer: CeramicAccount
+  document: AkashaWorld
+  clientMutationId: String
+}
+
+input EnableIndexingAkashaWorldInput {
+  id: ID!
+  shouldIndex: Boolean!
+  clientMutationId: String
+}
+
+type SetAkashaWorldConfigPayload {
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Account currently authenticated on the Ceramic instance, if set"""
+  viewer: CeramicAccount
+  document: AkashaWorldConfig!
+  clientMutationId: String
+}
+
+input SetAkashaWorldConfigInput {
+  content: AkashaWorldConfigInput!
+  options: SetOptionsInput
+  clientMutationId: String
+}
+
+input AkashaWorldConfigInput {
+  active: Boolean!
+  worldID: CeramicStreamID!
+  createdAt: DateTime!
+  layoutExtension: CeramicStreamID!
+  homepageExtension: CeramicStreamID!
+  registryExtension: CeramicStreamID!
+}
+
+type UpdateAkashaWorldConfigPayload {
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Account currently authenticated on the Ceramic instance, if set"""
+  viewer: CeramicAccount
+  document: AkashaWorldConfig!
+  clientMutationId: String
+}
+
+input UpdateAkashaWorldConfigInput {
+  id: ID!
+  options: UpdateOptionsInput
+  content: PartialAkashaWorldConfigInput!
+  clientMutationId: String
+}
+
+input PartialAkashaWorldConfigInput {
+  layoutExtension: CeramicStreamID
+  homepageExtension: CeramicStreamID
+  registryExtension: CeramicStreamID
+}
+
+type EnableIndexingAkashaWorldConfigPayload {
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Account currently authenticated on the Ceramic instance, if set"""
+  viewer: CeramicAccount
+  document: AkashaWorldConfig
+  clientMutationId: String
+}
+
+input EnableIndexingAkashaWorldConfigInput {
+  id: ID!
+  shouldIndex: Boolean!
+  clientMutationId: String
+}
+
+type SetAkashaWorldConfigExtensionPayload {
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Account currently authenticated on the Ceramic instance, if set"""
+  viewer: CeramicAccount
+  document: AkashaWorldConfigExtension!
+  clientMutationId: String
+}
+
+input SetAkashaWorldConfigExtensionInput {
+  content: AkashaWorldConfigExtensionInput!
+  options: SetOptionsInput
+  clientMutationId: String
+}
+
+input AkashaWorldConfigExtensionInput {
+  type: String
+  active: Boolean!
+  optional: Boolean
+  position: Int
+  createdAt: DateTime!
+  extensionID: CeramicStreamID!
+  worldConfigID: CeramicStreamID!
+}
+
+type UpdateAkashaWorldConfigExtensionPayload {
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Account currently authenticated on the Ceramic instance, if set"""
+  viewer: CeramicAccount
+  document: AkashaWorldConfigExtension!
+  clientMutationId: String
+}
+
+input UpdateAkashaWorldConfigExtensionInput {
+  id: ID!
+  options: UpdateOptionsInput
+  content: PartialAkashaWorldConfigExtensionInput!
+  clientMutationId: String
+}
+
+input PartialAkashaWorldConfigExtensionInput {
+  type: String
+  optional: Boolean
+  position: Int
+}
+
+type EnableIndexingAkashaWorldConfigExtensionPayload {
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Account currently authenticated on the Ceramic instance, if set"""
+  viewer: CeramicAccount
+  document: AkashaWorldConfigExtension
+  clientMutationId: String
+}
+
+input EnableIndexingAkashaWorldConfigExtensionInput {
+  id: ID!
+  shouldIndex: Boolean!
+  clientMutationId: String
+}
+
+type SetAkashaWorldMetaInfoPayload {
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Account currently authenticated on the Ceramic instance, if set"""
+  viewer: CeramicAccount
+  document: AkashaWorldMetaInfo!
+  clientMutationId: String
+}
+
+input SetAkashaWorldMetaInfoInput {
+  content: AkashaWorldMetaInfoInput!
+  options: SetOptionsInput
+  clientMutationId: String
+}
+
+input AkashaWorldMetaInfoInput {
+  worldID: CeramicStreamID!
+  keywords: [String]
+  description: String
+  socialLinks: [SocialLinkInput]
+  guidelinesUrl: URI
+}
+
+input SocialLinkInput {
+  href: URI!
+  name: String!
+}
+
+type UpdateAkashaWorldMetaInfoPayload {
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Account currently authenticated on the Ceramic instance, if set"""
+  viewer: CeramicAccount
+  document: AkashaWorldMetaInfo!
+  clientMutationId: String
+}
+
+input UpdateAkashaWorldMetaInfoInput {
+  id: ID!
+  options: UpdateOptionsInput
+  content: PartialAkashaWorldMetaInfoInput!
+  clientMutationId: String
+}
+
+input PartialAkashaWorldMetaInfoInput {
+  keywords: [String]
+  description: String
+  socialLinks: [SocialLinkInput]
+  guidelinesUrl: URI
+}
+
+type EnableIndexingAkashaWorldMetaInfoPayload {
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Account currently authenticated on the Ceramic instance, if set"""
+  viewer: CeramicAccount
+  document: AkashaWorldMetaInfo
+  clientMutationId: String
+}
+
+input EnableIndexingAkashaWorldMetaInfoInput {
   id: ID!
   shouldIndex: Boolean!
   clientMutationId: String

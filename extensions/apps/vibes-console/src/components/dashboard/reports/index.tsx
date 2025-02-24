@@ -1,5 +1,5 @@
 import React from 'react';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { ReportsHeader, ReportsHeaderProps } from './header';
 import { ReportItem, ReportItemProps, TReport } from './item';
@@ -23,7 +23,7 @@ export const ItemReports: React.FC<TItemReportsProps> = props => {
   } = props;
   if (!reports.length) {
     return (
-      <Card>
+      <Card className="shadow-none">
         <NoItemFound title="No reports found. Please try again later" />
       </Card>
     );

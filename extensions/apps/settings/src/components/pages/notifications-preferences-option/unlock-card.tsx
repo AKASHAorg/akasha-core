@@ -2,8 +2,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Lock } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 
@@ -18,7 +18,7 @@ const UnlockCard: React.FC<IUnlockCardProps> = ({ onClick, loading }) => {
   const { t } = useTranslation('app-settings-ewa');
 
   return (
-    <Card background={{ light: 'grey9', dark: 'grey3' }} padding="p-3">
+    <Card className="p-4">
       <Stack direction="row" spacing="gap-x-3">
         <Icon
           icon={<Lock />}
@@ -34,15 +34,9 @@ const UnlockCard: React.FC<IUnlockCardProps> = ({ onClick, loading }) => {
             {t('Click “Unlock” to unlock preferences. You will be prompted with 1 signature.')}
           </Text>
           {
-            <Button
-              onClick={onClick}
-              variant="text"
-              size="md"
-              color="dark:secondaryLight secondaryDark"
-              label={t('Unlock')}
-              customStyle="mr-auto"
-              loading={loading}
-            />
+            <Button onClick={onClick} variant="link" loading={loading} className="mr-auto">
+              {t('Unlock')}
+            </Button>
           }
         </Stack>
       </Stack>

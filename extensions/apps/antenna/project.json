@@ -8,6 +8,7 @@
       "dependsOn": [
         "@akashaorg/ui-core-hooks:build",
         "@akashaorg/design-system-core:prepare",
+        "@akashaorg/ui:prepare",
         "@akashaorg/design-system-components:prepare",
         "@akashaorg/core-sdk:build",
         "@akashaorg/ui-lib-extensions:prepare",
@@ -30,10 +31,7 @@
         "cwd": "extensions/apps/antenna",
         "command": "webpack --config webpack.config.cjs"
       },
-      "outputs": [
-        "{projectRoot}/lib",
-        "{workspaceRoot}/dist/apps/antenna"
-      ]
+      "outputs": ["{projectRoot}/lib", "{workspaceRoot}/dist/apps/antenna"]
     },
     "translations": {
       "executor": "./tools/executors/i18n:extract",

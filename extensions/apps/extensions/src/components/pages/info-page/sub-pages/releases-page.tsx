@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import {
@@ -14,7 +14,7 @@ import DynamicInfiniteScroll from '@akashaorg/design-system-components/lib/compo
 import { useGetAppsReleasesQuery } from '@akashaorg/ui-core-hooks/lib/generated';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
 import { NetworkStatus } from '@apollo/client';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import {
@@ -88,7 +88,7 @@ export const ReleasesPage = (props: ReleasesPageProps) => {
 
   return (
     <>
-      <Card padding="p-4">
+      <Card className="p-4">
         <Stack spacing="gap-y-4">
           <InfoSubRouteHeader
             pageTitle={t('Releases')}
@@ -161,18 +161,8 @@ export const ReleasesPage = (props: ReleasesPageProps) => {
                         {!description && t('This release has no description added')}
                       </Text>
                       {!isExpanded && description && (
-                        <Button
-                          plain={true}
-                          variant="text"
-                          onClick={handleReadMoreClick(release.node?.id)}
-                        >
-                          <Text
-                            variant="footnotes2"
-                            color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-                            customStyle="whitespace-nowrap"
-                          >
-                            {t('Read More')}
-                          </Text>
+                        <Button variant="link" onClick={handleReadMoreClick(release.node?.id)}>
+                          {t('Read More')}
                         </Button>
                       )}
                     </Stack>

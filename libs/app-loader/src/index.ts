@@ -18,7 +18,9 @@ import {
   getUserInstalledExtensions,
   getWorldDefaultExtensions,
 } from './extensions';
-import getSDK, { SDK_API, SDK_Services } from '@akashaorg/core-sdk';
+import getSDK from '@akashaorg/core-sdk';
+import type EventBus from '@akashaorg/core-sdk/lib/common/event-bus';
+import type Logging from '@akashaorg/core-sdk/lib/logging';
 import { InstalledExtensionSchema } from '@akashaorg/core-sdk/lib/db/installed-extensions.schema';
 import {
   CorePlugins,
@@ -71,11 +73,11 @@ export default class AppLoader {
   extensionData: Awaited<ReturnType<typeof getWorldDefaultExtensions>>;
   layoutConfig: IAppConfig;
   logger: ILogger;
-  parentLogger: SDK_Services['log'];
+  parentLogger: Logging;
   plugins: IPlugin & {
     core: CorePlugins;
   };
-  globalChannel: SDK_API['globalChannel'];
+  globalChannel: EventBus;
   user: { id: string };
   globalChannelSub: Subscription;
   userExtensions: InstalledExtensionSchema[];
@@ -83,6 +85,7 @@ export default class AppLoader {
   erroredApps: string[];
   isLoadingUserExtensions: boolean;
   navigationCanceledExtensions: Set<string>;
+
   constructor(worldConfig: WorldConfig) {
     this.worldConfig = worldConfig;
     this.uiEvents = new Subject<UIEventData>();
@@ -329,7 +332,12 @@ export default class AppLoader {
       try {
         const source = this.getUriFromSource(extensionData.source);
         if (source) {
-          return System.import<SystemModuleType>(`${source}`);
+          System.addImportMap({
+            imports: {
+              [extensionData.name]: source,
+            },
+          });
+          return System.import<SystemModuleType>(extensionData.name);
         }
       } catch (err) {
         this.logger.error(
@@ -356,6 +364,11 @@ export default class AppLoader {
       try {
         const source = this.getUriFromSource(latestRelease.node.source);
         if (source) {
+          System.addImportMap({
+            imports: {
+              [extensionData.name]: source,
+            },
+          });
           return System.import<SystemModuleType>(`${source}`);
         }
       } catch (err) {

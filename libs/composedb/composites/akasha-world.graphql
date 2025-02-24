@@ -1,0 +1,48 @@
+type AkashaWorldImageSource {
+  width: Int @int(min: 24, max: 8000)
+  height: Int @int(min: 24, max: 8000)
+  sizes: String @string(minLength: 2, maxLength: 120) # 32x32, 64x64, 128x128
+  src: URI!
+}
+
+type AkashaWorldImageVersions{
+  default: AkashaWorldImageSource!
+  alternatives: [AkashaWorldImageSource] @list(maxLength: 12)
+}
+
+interface AkashaWorldInterface
+@createModel(
+  description: "AKASHA World model interface v0.1"
+)
+{
+  createdAt: DateTime! @immutable
+  creator: DID! @documentAccount
+  active: Boolean!
+  instanceURL: URI
+  icon: AkashaWorldImageVersions
+  name: String! @string(minLength: 2, maxLength: 120) @immutable
+  # for displaying extensions
+  extensionPublishers: [DID] @list(maxLength: 32)
+
+}
+
+type AkashaWorld implements AkashaWorldInterface
+@createModel(
+  accountRelation: SET,
+  accountRelationFields: ["name", "active"],
+  description: "AKASHA World model v0.1"
+)
+@createIndex(fields:[{path:["name"]}])
+@createIndex(fields:[{path:["active"]}])
+@createIndex(fields:[{path:["createdAt"]}])
+{
+  createdAt: DateTime! @immutable
+  creator: DID! @documentAccount
+  active: Boolean!
+  instanceURL: URI
+  icon: AkashaWorldImageVersions
+  name: String! @string(minLength: 2, maxLength: 120) @immutable
+  # for displaying extensions
+  extensionPublishers: [DID] @list(maxLength: 32)
+
+}

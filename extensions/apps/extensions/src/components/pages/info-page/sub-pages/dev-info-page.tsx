@@ -2,7 +2,7 @@ import React, { useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import AppList from '@akashaorg/design-system-components/lib/components/AppList';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -15,7 +15,7 @@ import {
   selectApps,
   selectPageInfo,
 } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-by-publisher-did-query';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import { NetworkStatus } from '@apollo/client';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
@@ -124,14 +124,14 @@ export const DevInfoPage = (props: DevInfoPageProps) => {
           defaultLabel: t('Default'),
           nsfwLabel: t('NSFW'),
           nsfw: app?.nsfw,
-          action: <Button onClick={handleAppOpen(app.name)} label={t('Open')} />,
+          action: <Button onClick={handleAppOpen(app.name)}>{t('Open')}</Button>,
         })),
     [appsReq.data, handleAppOpen, t],
   );
 
   return (
     <>
-      <Card padding="p-4">
+      <Card className="p-4">
         <Stack spacing="gap-y-4">
           <Text variant="h5">{t('Developer')}</Text>
           <ProfileAvatarButton

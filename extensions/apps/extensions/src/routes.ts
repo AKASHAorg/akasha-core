@@ -1,5 +1,4 @@
 export const HOME = 'Explore';
-export const EXTENSIONS = 'Extensions Hub';
 export const INSTALLED = 'Installed Extensions';
 export const MY_EXTENSIONS = 'My Extensions';
 export const DEVELOPER_MODE = 'Developer Mode';
@@ -13,7 +12,6 @@ export const GALLERY_MANAGER = 'Gallery Manager';
 export default {
   default: '/explore',
   [HOME]: '/explore',
-  [EXTENSIONS]: '/extensions-hub',
   [INSTALLED]: '/installed-extensions',
   [MY_EXTENSIONS]: '/my-extensions',
   [DEVELOPER_MODE]: '/developer-mode',

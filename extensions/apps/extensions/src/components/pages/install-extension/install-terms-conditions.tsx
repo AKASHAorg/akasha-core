@@ -1,9 +1,9 @@
 import React, { ChangeEvent, useCallback, useEffect, useRef } from 'react';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
 import { useTranslation } from 'react-i18next';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import {
   ArrowPathIcon,
   ArrowTopRightOnSquareIcon,
@@ -160,7 +160,7 @@ export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
           appDisplayName,
         })}
       >
-        <Button label={t('Login')} onClick={handleLoginClick} />
+        <Button onClick={handleLoginClick}>{t('Login')}</Button>
       </ErrorLoader>
     );
   }
@@ -176,7 +176,7 @@ export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
   }
 
   return (
-    <Card padding="p-0">
+    <Card className="p-0">
       <TermsHeader
         isLoading={isAppInfoLoading}
         appDisplayName={selectAppDisplayName(appInfo)}
@@ -221,13 +221,12 @@ export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
         spacing="gap-y-4"
         padding="p-4"
       >
-        <Button
-          variant={'primary'}
-          label={t('Continue')}
-          disabled={!allTermsAccepted}
-          onClick={handleContinue}
-        />
-        <Button variant="text" label={t('Cancel installation')} onClick={handleCancel} />
+        <Button disabled={!allTermsAccepted} onClick={handleContinue}>
+          {t('Continue')}
+        </Button>
+        <Button variant="link" onClick={handleCancel}>
+          {t('Cancel installation')}
+        </Button>
       </Stack>
     </Card>
   );

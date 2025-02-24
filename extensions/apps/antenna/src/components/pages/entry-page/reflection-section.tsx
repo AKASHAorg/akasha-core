@@ -37,7 +37,7 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
       spacing="gap-y-2"
       customStyle={`grow ${activeReflection ? 'mb-2' : ''}`}
     >
-      <Card customStyle="grow" type="plain">
+      <Card className="p-0 border-none grow">
         <ReflectionCard
           reflectionData={reflectionData}
           contentClickable={false}

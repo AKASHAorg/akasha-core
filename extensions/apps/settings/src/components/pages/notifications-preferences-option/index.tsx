@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { tw } from '@twind/core';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { useAkashaStore, useNotifications, useRootComponentProps } from '@akashaorg/ui-core-hooks';
+import { tw } from '@twind/core';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import appRoutes, { PREFERENCES } from '../../../routes';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import getSDK from '@akashaorg/core-sdk';
 import { UserSetting } from '@pushprotocol/restapi/src/lib';
@@ -60,7 +60,6 @@ const NotificationsPreferencesOption: React.FC = () => {
             const channelSettings = await sdk.services.common.notification.getSettingsOfChannel();
             setAppPreferences(getAppInfoFromChannelSetting(channelSettings, false));
           }
-          setAppPreferences([]);
           setInitialLoading(false);
         })
         .catch(() => {
@@ -150,12 +149,7 @@ const NotificationsPreferencesOption: React.FC = () => {
           title={t('Uh-oh! You are not connected!')}
           details={t('To check notifications preferences options you must be connected ⚡️')}
         >
-          <Button
-            label={t('Connect')}
-            size="md"
-            variant="primary"
-            onClick={handleConnectButtonClick}
-          />
+          <Button onClick={handleConnectButtonClick}>{t('Connect')}</Button>
         </ErrorLoader>
       </Stack>
     );
@@ -167,7 +161,8 @@ const NotificationsPreferencesOption: React.FC = () => {
         <>
           {/* This case happens only if the Channel creator has not inserted any apps */}
           {appPreferences.length === 0 && !initialLoading && (
-            <Card background={{ light: 'grey9', dark: 'grey3' }} padding="p-3">
+            // card background={{ light: 'grey9', dark: 'grey3' }} padding="p-3"
+            <Card>
               <Text>{t('There are no apps to subscribe')}</Text>
             </Card>
           )}
@@ -177,11 +172,11 @@ const NotificationsPreferencesOption: React.FC = () => {
               {!notificationsEnabled && (
                 <UnlockCard onClick={handleUnlockPreferences} loading={waitingForSignature} />
               )}
+              {/* padding="pb-3" customStyle={tw(`${!notificationsEnabled && 'opacity-50 pointer-events-none'}`)} */}
               <Card
-                padding="pb-3"
-                customStyle={tw(`${!notificationsEnabled && 'opacity-50 pointer-events-none'}`)}
+                className={tw(`${!notificationsEnabled && 'opacity-50 pointer-events-none'} p-0`)}
               >
-                <Stack padding="px-3 pb-6">
+                <Stack customStyle="p-4 pt-0">
                   <EnableAllSetting
                     isSelected={enableAllChecked}
                     onChange={e => handleToggleAll(e.target.checked)}
@@ -207,12 +202,10 @@ const NotificationsPreferencesOption: React.FC = () => {
                           )}
                         </>
                       ))}
-
-                      <Card
-                        padding="p-3"
+                      {/*  padding="p-3"
                         customStyle="mt-4"
-                        background={{ light: 'grey9', dark: 'grey3' }}
-                      >
+                        background={{ light: 'grey9', dark: 'grey3' }} */}
+                      <Card className="mt-4 bg-grey9 dark:bg-grey3">
                         <Stack direction="row" spacing="gap-x-3" align="center">
                           <Icon
                             icon={<Info />}
@@ -230,24 +223,38 @@ const NotificationsPreferencesOption: React.FC = () => {
                 </Stack>
 
                 {/* Buttons */}
-                <Stack direction="row" customStyle="border(t-1 solid grey8 dark:grey5) pt-4 px-3">
-                  <Button
-                    onClick={handleReset}
+                <Stack
+                  direction="row"
+                  justify="end"
+                  customStyle="border(t-1 solid grey8 dark:grey5) p-3 pt-4"
+                  spacing="gap-4"
+                >
+                  {/*
                     variant="text"
                     size="md"
-                    color="dark:secondaryLight secondaryDark"
                     label={t('Reset')}
                     customStyle="ml-auto"
-                  />
+                  */}
                   <Button
-                    onClick={handleSave}
+                    variant="link"
+                    onClick={handleReset}
+                    color="dark:secondaryLight secondaryDark"
+                  >
+                    {t('Reset')}
+                  </Button>
+                  {/*
                     variant="primary"
                     size="md"
-                    color="dark:secondaryLight secondaryDark"
                     label={t('Save')}
                     customStyle="ml-4"
+                  */}
+                  <Button
+                    onClick={handleSave}
+                    color="dark:secondaryLight secondaryDark"
                     loading={loading}
-                  />
+                  >
+                    {t('Save')}
+                  </Button>
                 </Stack>
               </Card>
             </>

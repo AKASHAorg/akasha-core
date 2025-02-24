@@ -1,9 +1,9 @@
 import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { useAkashaStore, useRootComponentProps, withProviders } from '@akashaorg/ui-core-hooks';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import {
   MinusIcon,
@@ -72,23 +72,17 @@ const TestModeWidget = () => {
       {testExtensions.length > 0 && (
         <>
           {isMinimized && (
-            <Button
-              variant="primary"
-              iconOnly={true}
-              onClick={toggleMinimize}
-              icon={<BeakerIcon />}
-            />
+            <Button variant="outline" size="icon" onClick={toggleMinimize}>
+              <BeakerIcon />
+            </Button>
           )}
           {!isMinimized && (
-            <Card padding="p-4" fullWidth={true}>
+            <Card className="p-4 w-full">
               <Stack direction="row" justify="between" align={'baseline'}>
                 <Text variant="h6">{t('Testing Environment')}</Text>
-                <Button
-                  icon={<MinusIcon />}
-                  iconOnly={true}
-                  plainIcon={true}
-                  onClick={toggleMinimize}
-                />
+                <Button variant="outline" size="icon" onClick={toggleMinimize}>
+                  <MinusIcon />
+                </Button>
               </Stack>
               <Stack customStyle="my-2 rounded-xl" background={{ light: 'grey9', dark: 'grey3' }}>
                 {error && (
@@ -133,12 +127,9 @@ const TestModeWidget = () => {
                           </Text>
                         </Stack>
                       </Stack>
-                      <Button
-                        variant={'text'}
-                        label={t('Edit')}
-                        customStyle="pr-2"
-                        onClick={onEdit(ext.applicationID)}
-                      />
+                      <Button variant="link" onClick={onEdit(ext.applicationID)} className="pr-2">
+                        {t('Edit')}
+                      </Button>
                     </Stack>
                     {idx < testExtensions.length - 1 && (
                       <Divider customStyle="border-grey6 dark:border-grey5 px-2" />
@@ -148,18 +139,13 @@ const TestModeWidget = () => {
               </Stack>
               <Stack spacing="gap-y-2">
                 <Stack customStyle="md:flex-row" fullWidth={true} spacing="gap-2">
-                  <Button
-                    label={t('Reload')}
-                    customStyle="w-full"
-                    onClick={() => window.location.reload()}
-                  />
+                  <Button onClick={() => window.location.reload()} className="w-full">
+                    {t('Reload')}
+                  </Button>
                 </Stack>
-                <Button
-                  variant="text"
-                  label={t('Leave Environment')}
-                  customStyle="w-full py-2"
-                  onClick={onLeave}
-                />
+                <Button variant="link" onClick={onLeave} className="w-full py-2">
+                  {t('Leave Environment')}
+                </Button>
               </Stack>
             </Card>
           )}

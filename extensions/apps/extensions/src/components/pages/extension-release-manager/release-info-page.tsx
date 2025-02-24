@@ -1,17 +1,16 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { Extension, NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import { ExtensionElement } from '../my-extensions/extension-element';
 import { DRAFT_EXTENSIONS, PROPERTY, PROVIDER } from '../../../constants';
 import { useGetAppReleaseByIdQuery } from '@akashaorg/ui-core-hooks/lib/generated';
-import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
 import {
@@ -100,11 +99,7 @@ export const ExtensionReleaseInfoPage: React.FC<ExtensionReleaseInfoPageProps> =
     extensionLogoImage,
   ]);
 
-  const {
-    data: releaseByIdReq,
-    loading: loadingReleaseByIdQuery,
-    error: releaseByIdError,
-  } = useGetAppReleaseByIdQuery({
+  const { data: releaseByIdReq, loading: loadingReleaseByIdQuery } = useGetAppReleaseByIdQuery({
     variables: { id: releaseId },
     fetchPolicy: 'cache-first',
     notifyOnNetworkStatusChange: true,
@@ -141,20 +136,15 @@ export const ExtensionReleaseInfoPage: React.FC<ExtensionReleaseInfoPageProps> =
         title={`${t('Uh-oh')}! ${t('You are not connected')}!`}
         details={`${t('To check your extensions you must be connected')} ⚡️`}
       >
-        <Button
-          variant="primary"
-          size="md"
-          label={t('Connect')}
-          onClick={handleConnectButtonClick}
-        />
+        <Button onClick={handleConnectButtonClick}>{t('Connect')}</Button>
       </ErrorLoader>
     );
   }
 
   return (
-    <Card padding={16} background={{ light: 'white', dark: 'grey2' }}>
+    <Card className="p-4">
       <Stack spacing="gap-y-6">
-        <Card padding={8} background={{ light: 'grey9', dark: 'grey3' }}>
+        <Card className="p-2">
           {loadingReleaseByIdQuery && (
             <Stack align="center" justify="center">
               <Spinner />

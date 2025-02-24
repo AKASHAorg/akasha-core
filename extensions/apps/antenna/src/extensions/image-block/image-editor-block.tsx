@@ -25,10 +25,10 @@ import {
   type BlockLabeledValue,
   SortOrder,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 import ImageBlockGallery from '@akashaorg/design-system-components/lib/components/ImageBlockGallery';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
@@ -398,7 +398,7 @@ export const ImageEditorBlock = (
   return (
     <>
       {uiState === 'menu' && (
-        <Card background={{ dark: 'grey3', light: 'grey9' }}>
+        <Card className="shadow-none rounded-2xl">
           <Stack direction="column">
             {imageGalleryImages.length > 0 && (
               <Stack direction="row" justify="end">
@@ -409,12 +409,12 @@ export const ImageEditorBlock = (
             )}
             <Stack customStyle="pb-8">
               <Button
-                label={t('Add an image from device')}
-                variant="primary"
-                customStyle="w-full sm:w-48"
                 onClick={handleMediaClick}
                 disabled={imageUploadDisabled || maxImagesLimitReached}
-              />
+                className="w-full sm:w-48"
+              >
+                {t('Add an image from device')}
+              </Button>
             </Stack>
             <Divider />
             <Stack direction="column" spacing="gap-2" customStyle="py-8">
@@ -431,11 +431,12 @@ export const ImageEditorBlock = (
                   customStyle="w-5/6"
                 />
                 <Button
-                  label={t('Add')}
-                  variant="secondary"
+                  variant="outline"
                   disabled={disableURLUpload || maxImagesLimitReached}
                   onClick={() => uploadNewImage(imageLink, true)}
-                />
+                >
+                  {t('Add')}
+                </Button>
               </Stack>
             </Stack>
             <Divider />

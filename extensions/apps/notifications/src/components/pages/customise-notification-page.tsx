@@ -17,8 +17,8 @@ import {
 } from '@akashaorg/ui-core-hooks';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -247,7 +247,7 @@ const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
   }
 
   return (
-    <Card radius={16} padding={'py-2,px-0'} customStyle="h-full md:h-min space-y-4">
+    <Card className="h-full md:h-min space-y-4 rounded-2xl py-2 px-0">
       <Text variant="h5" align="center" customStyle="pb-2">
         {initial ? t('Customise Your Notifications') : t('Notification Settings')}
       </Text>
@@ -327,28 +327,19 @@ const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
         <Stack fullWidth direction="row" justify="end" customStyle="space-x-4 pr-2 pb-2 pt-32">
           {initial ? (
             <>
-              <Button
-                variant="text"
-                label={t('Do it later')}
-                color="secondaryLight dark:secondaryDark"
-                onClick={skipHandler}
-              />
-              <Button variant="primary" label={t('Confirm')} onClick={confirmHandler} />
+              <Button variant="link" onClick={skipHandler}>
+                {t('Do it later')}
+              </Button>
+              <Button onClick={confirmHandler}>{t('Confirm')}</Button>
             </>
           ) : (
             <>
-              <Button
-                variant="text"
-                label={t('Cancel')}
-                color="secondaryLight dark:secondaryDark"
-                onClick={skipHandler}
-              />
-              <Button
-                variant="primary"
-                label={t('Update')}
-                onClick={confirmHandler}
-                disabled={!isChanged}
-              />
+              <Button variant="link" onClick={skipHandler}>
+                {t('Cancel')}
+              </Button>
+              <Button onClick={confirmHandler} disabled={!isChanged}>
+                {t('Update')}
+              </Button>
             </>
           )}
         </Stack>

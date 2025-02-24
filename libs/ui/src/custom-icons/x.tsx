@@ -1,7 +1,7 @@
-import React from 'react';
+import * as React from 'react';
 import { LucideProps } from 'lucide-react';
 
-export const X = React.forwardRef<SVGSVGElement, Omit<LucideProps, 'ref'>>((props, ref) => (
+export const X = (props: LucideProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="24"
@@ -12,10 +12,8 @@ export const X = React.forwardRef<SVGSVGElement, Omit<LucideProps, 'ref'>>((prop
     strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
-    ref={ref}
     {...props}
   >
     <path d="m10.802 12.811-6.955 7.938M18.962 3.251l-6.185 7.284M3.305 3.25l13.72 17.5h3.78L7.085 3.25h-3.78Z" />
   </svg>
-));
-X.displayName = 'X';
+);

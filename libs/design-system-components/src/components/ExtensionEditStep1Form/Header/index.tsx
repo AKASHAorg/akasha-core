@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import AppCoverImage from '@akashaorg/design-system-core/lib/components/AppCoverImage';
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
@@ -239,16 +239,15 @@ export const Header: React.FC<HeaderProps> = ({
             customStyle="absolute bottom-4 right-4"
           >
             <Button
-              icon={<PencilSquareIcon />}
-              size="xs"
-              variant="primary"
+              variant="outline"
+              size="icon"
               onClick={() => {
                 setShowCoverDropdown(!showCoverActions);
                 setAppImageType('cover-image');
               }}
-              greyBg
-              iconOnly
-            />
+            >
+              <PencilSquareIcon />
+            </Button>
             {showCoverActions && (
               <List items={dropDownActions} customStyle="absolute right-0 top-7 w-auto z-10" />
             )}
@@ -284,28 +283,24 @@ export const Header: React.FC<HeaderProps> = ({
             />
             <Stack customStyle="absolute">
               <Button
-                icon={<PencilSquareIcon />}
-                size="xs"
-                variant="primary"
+                size="icon"
+                variant="outline"
                 onClick={() => {
                   setShowLogoImageActions(!showLogoImageActions);
                   setAppImageType('logo-image');
                 }}
-                greyBg
-                iconOnly
-              />
+              >
+                <PencilSquareIcon />
+              </Button>
               {showLogoImageActions && (
                 <List items={dropDownActions} customStyle="absolute top-7 w-auto z-10" />
               )}
             </Stack>
           </Stack>
-          <Button
-            icon={<InformationCircleIcon />}
-            iconDirection="left"
-            variant="text"
-            label={logoGuidelines.titleLabel}
-            onClick={() => setShowLogoGuidelineModal(true)}
-          />
+          <Button variant="link" onClick={() => setShowLogoGuidelineModal(true)}>
+            <InformationCircleIcon />
+            {logoGuidelines.titleLabel}
+          </Button>
         </Stack>
         {showExtraInfo && (
           <Stack

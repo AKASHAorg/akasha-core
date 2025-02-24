@@ -5,7 +5,8 @@ import * as AvatarPrimitive from '@radix-ui/react-avatar';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { EyeOff } from 'lucide-react';
 
-import { cn } from '@/library/utils';
+import { cn } from '@/ui/library/utils';
+import { getImageFromSeed } from '@/ui/library/get-image-from-seed';
 
 const profileAvatarVariants = cva(
   'relative flex shrink-0 justify-center items-center overflow-hidden rounded-full',
@@ -25,13 +26,9 @@ const profileAvatarVariants = cva(
   },
 );
 
-export interface ProfileAvatarProps
-  extends React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root>,
-    VariantProps<typeof profileAvatarVariants> {
-  nsfw?: boolean;
-}
-
 const ProfileAvatarContext = React.createContext<{
+  profileDID: string;
+  publicImgPath: string;
   nsfw: boolean;
 } | null>(null);
 
@@ -43,14 +40,23 @@ const useAvatarContext = () => {
   return context;
 };
 
-const ProfileAvatar = React.forwardRef<
-  React.ElementRef<typeof AvatarPrimitive.Root>,
-  ProfileAvatarProps
->(({ className, size, nsfw = false, ...props }, ref) => {
+const ProfileAvatar = ({
+  profileDID = '',
+  publicImgPath = '/images',
+  nsfw = false,
+  size,
+  className,
+  ...props
+}: React.ComponentProps<typeof AvatarPrimitive.Root> &
+  VariantProps<typeof profileAvatarVariants> & {
+    profileDID?: string;
+    publicImgPath?: string;
+    nsfw?: boolean;
+  }) => {
   return (
-    <ProfileAvatarContext.Provider value={{ nsfw }}>
+    <ProfileAvatarContext.Provider value={{ nsfw, profileDID, publicImgPath }}>
       <AvatarPrimitive.Root
-        ref={ref}
+        data-slot="profile-avatar"
         className={cn(
           profileAvatarVariants({
             size,
@@ -62,47 +68,61 @@ const ProfileAvatar = React.forwardRef<
       />
     </ProfileAvatarContext.Provider>
   );
-});
-ProfileAvatar.displayName = 'ProfileAvatar';
+};
 
-const ProfileAvatarImage = React.forwardRef<
-  React.ElementRef<typeof AvatarPrimitive.Image>,
-  React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Image> & {
-    nsfw?: boolean;
-  }
->(({ className, ...props }, ref) => {
+const ProfileAvatarImage = ({
+  className,
+  ...props
+}: React.ComponentProps<typeof AvatarPrimitive.Image> & {
+  nsfw?: boolean;
+}) => {
   const { nsfw } = useAvatarContext();
   return nsfw ? (
     <EyeOff className={cn('text-destructive', className)} />
   ) : (
     <AvatarPrimitive.Image
-      ref={ref}
+      data-slot="profile-avatar-image"
       className={cn('aspect-square h-full w-full', className)}
       {...props}
       onLoadingStatusChange={() => {}}
     />
   );
-});
-ProfileAvatarImage.displayName = 'ProfileAvatarImage';
+};
 
-const ProfileAvatarFallback = React.forwardRef<
-  React.ElementRef<typeof AvatarPrimitive.Fallback>,
-  React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Fallback>
->(({ className, ...props }, ref) => {
-  const { nsfw } = useAvatarContext();
+const ProfileAvatarFallback = ({
+  children,
+  className,
+  ...props
+}: React.ComponentProps<typeof AvatarPrimitive.Fallback>) => {
+  const { profileDID, publicImgPath, nsfw } = useAvatarContext();
+
+  const seed = getImageFromSeed(profileDID, 7);
+  const avatarFallback = `${publicImgPath}/avatar-${seed}-min.webp`;
   return (
     !nsfw && (
       <AvatarPrimitive.Fallback
-        ref={ref}
+        data-slot="profile-avatar-fallback"
         className={cn(
           'flex h-full w-full items-center justify-center rounded-full bg-muted',
           className,
         )}
         {...props}
-      />
+      >
+        {React.Children.count(children) ? (
+          children
+        ) : (
+          <img
+            data-slot="image"
+            loading="lazy"
+            decoding="async"
+            src={avatarFallback}
+            alt="fallback"
+            className="object-contain"
+          />
+        )}
+      </AvatarPrimitive.Fallback>
     )
   );
-});
-ProfileAvatarFallback.displayName = 'ProfileAvatarFallback';
+};
 
 export { ProfileAvatar, ProfileAvatarImage, ProfileAvatarFallback, profileAvatarVariants };

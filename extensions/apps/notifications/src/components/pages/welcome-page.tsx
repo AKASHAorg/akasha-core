@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRootComponentProps, useAkashaStore, useNotifications } from '@akashaorg/ui-core-hooks';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import NotificationSettingsCard from '@akashaorg/design-system-components/lib/components/NotificationSettingsCard';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -46,12 +46,7 @@ const WelcomePage: React.FC<WelcomePageProps> = () => {
         details={`${t('To check your notifications you must be connected')} ⚡️`}
         dataTestId="notifications"
       >
-        <Button
-          variant="primary"
-          label={t('Connect')}
-          size="md"
-          onClick={handleConnectButtonClick}
-        />
+        <Button onClick={handleConnectButtonClick}>{t('Connect')}</Button>
       </ErrorLoader>
     );
 

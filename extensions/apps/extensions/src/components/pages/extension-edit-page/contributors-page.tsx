@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useContext, useEffect, useMemo, useState } from 'react';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import {
@@ -10,7 +10,7 @@ import {
 } from '@akashaorg/typings/lib/ui';
 import SearchBar from '@akashaorg/design-system-components/lib/components/SearchBar';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import { CheckIcon, ExclamationTriangleIcon, TrashIcon } from '@heroicons/react/24/outline';
@@ -190,12 +190,7 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
           )}
           {showSuggestions && searchValue?.length > 1 && (
             <Stack direction="row" customStyle={'relative z-10'}>
-              <Card
-                padding={0}
-                radius={20}
-                elevation="2"
-                customStyle="absolute max-h-96 w-full overflow-y-auto scrollbar"
-              >
+              <Card className="p-0 absolute max-h-96 w-full overflow-y-auto scrollbar">
                 {contributors?.length === 0 && (
                   <Stack padding={16} spacing="gap-y-2">
                     <Text variant="body2" weight="bold" color={{ light: 'grey4', dark: 'grey6' }}>
@@ -209,7 +204,7 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
                 {contributors?.length > 0 && (
                   <Stack direction="column" spacing="gap-2">
                     {contributors?.map((profile, index) => (
-                      <Button key={index} plain onClick={() => handleAddContributor(profile)}>
+                      <button key={index} onClick={() => handleAddContributor(profile)}>
                         <Stack
                           padding={16}
                           direction="row"
@@ -229,7 +224,7 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
                             contrib => contrib?.did?.id === profile?.did?.id,
                           ) && <Icon icon={<CheckIcon />} accentColor />}
                         </Stack>
-                      </Button>
+                      </button>
                     ))}
                   </Stack>
                 )}
@@ -288,14 +283,14 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
                       transformSource(alternative),
                     )}
                   />
-                  <Button plain onClick={() => handleRemoveContributor(profile)}>
+                  <button onClick={() => handleRemoveContributor(profile)}>
                     <Icon
                       icon={<TrashIcon />}
                       solid={false}
                       size="md"
                       color={{ light: 'errorLight', dark: 'errorDark' }}
                     />
-                  </Button>
+                  </button>
                 </Stack>
               ))}
             </Stack>
@@ -304,13 +299,12 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
       </Stack>
       <Divider />
       <Stack padding={16} direction="row" align="center" justify="end" spacing="gap-4">
-        <Button variant="text" label={t('Cancel')} onClick={handleNavigateBack} />
-        <Button
-          variant="primary"
-          label={t('Save')}
-          onClick={handleSave}
-          disabled={addedContributors?.length === 0}
-        />
+        <Button variant="link" onClick={handleNavigateBack}>
+          {t('Cancel')}
+        </Button>
+        <Button onClick={handleSave} disabled={addedContributors?.length === 0}>
+          {t('Save')}
+        </Button>
       </Stack>
     </Stack>
   );

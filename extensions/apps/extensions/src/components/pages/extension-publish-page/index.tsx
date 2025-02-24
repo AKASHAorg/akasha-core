@@ -4,8 +4,8 @@ import { useNavigate } from '@tanstack/react-router';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import StackedAvatar from '@akashaorg/design-system-core/lib/components/StackedAvatar';
 import ExtensionReviewAndPublish from '@akashaorg/design-system-components/lib/components/ExtensionReviewAndPublish';
@@ -220,12 +220,7 @@ export const ExtensionPublishPage: React.FC<ExtensionPublishPageProps> = ({ exte
         title={`${t('Uh-oh')}! ${t('You are not connected')}!`}
         details={`${t('To check your extensions you must be connected')} ⚡️`}
       >
-        <Button
-          variant="primary"
-          size="md"
-          label={t('Connect')}
-          onClick={handleConnectButtonClick}
-        />
+        <Button onClick={handleConnectButtonClick}>{t('Connect')}</Button>
       </ErrorLoader>
     );
   }
@@ -244,7 +239,7 @@ export const ExtensionPublishPage: React.FC<ExtensionPublishPageProps> = ({ exte
   };
 
   return (
-    <Card padding={0}>
+    <Card className="shadow-none p-0">
       <Stack spacing="gap-y-2">
         <Stack padding={16}>
           <Text variant="h5" weight="semibold" align="center">
@@ -311,12 +306,9 @@ export const ExtensionPublishPage: React.FC<ExtensionPublishPageProps> = ({ exte
                       >{`and ${profilesData.length - 1} ${t('more')}`}</Text>
                     )}
                   </Stack>
-                  <Button
-                    variant="text"
-                    label={t('View All')}
-                    onClick={onViewAllClick}
-                    customStyle="ml-auto"
-                  />
+                  <Button variant="link" onClick={onViewAllClick} className="ml-auto">
+                    {t('View All')}
+                  </Button>
                 </Stack>
               )}
             </>

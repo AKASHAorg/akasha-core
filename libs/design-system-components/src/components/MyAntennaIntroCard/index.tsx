@@ -1,7 +1,7 @@
 import React from 'react';
 import { tw } from '@twind/core';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
@@ -35,7 +35,7 @@ const MyAntennaIntroCard: React.FC<MyAntennaIntroCardProps> = ({
   ctaLabel,
 }: MyAntennaIntroCardProps) => {
   return (
-    <Card padding={0}>
+    <Card className="p-0">
       <Stack
         padding="p-4"
         spacing="gap-y-3"
@@ -71,11 +71,13 @@ const MyAntennaIntroCard: React.FC<MyAntennaIntroCardProps> = ({
           {isMinified && <Text variant="subtitle2">{secondaryDescription}</Text>}
 
           <Button
-            variant={isMinified ? 'secondary' : 'primary'}
-            label={ctaLabel}
-            customStyle="w-(1/2 md:auto)"
+            variant={isMinified ? 'outline' : 'default'}
+            size="sm"
+            className="w-(1/2 md:auto)"
             onClick={onClickCTA}
-          />
+          >
+            {ctaLabel}
+          </Button>
         </Stack>
       </Stack>
     </Card>

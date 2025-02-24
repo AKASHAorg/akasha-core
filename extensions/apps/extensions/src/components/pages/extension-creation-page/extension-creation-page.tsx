@@ -7,14 +7,14 @@ import {
   useAkashaStore,
   useValidateUniqueExtensionProp,
 } from '@akashaorg/ui-core-hooks';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import ExtensionCreationForm from '@akashaorg/design-system-components/lib/components/ExtensionCreationForm';
 import { DRAFT_EXTENSIONS } from '../../../constants';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Extension, NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 
 export const ExtensionCreationPage: React.FC<unknown> = () => {
@@ -78,18 +78,13 @@ export const ExtensionCreationPage: React.FC<unknown> = () => {
         title={`${t('Uh-oh')}! ${t('You are not connected')}!`}
         details={`${t('To create an extension you must be connected')} ⚡️`}
       >
-        <Button
-          variant="primary"
-          size="md"
-          label={t('Connect')}
-          onClick={handleConnectButtonClick}
-        />
+        <Button onClick={handleConnectButtonClick}>{t('Connect')}</Button>
       </ErrorLoader>
     );
   }
 
   return (
-    <Card padding="py-4 px-0" margin="mb-2">
+    <Card className="py-4 px-0 mb-2">
       <Stack spacing="gap-y-4">
         <Text variant="h5" weight="semibold" align="center">
           {t('Create an Extension')}

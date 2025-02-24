@@ -197,3 +197,155 @@ query GetAppReleaseByID($id: ID!) {
     }
   }
 }
+
+
+fragment AkashaWorldFragment on AkashaWorld{
+  id
+  icon {
+    default {
+      sizes
+      src
+      width
+      height
+    }
+  }
+  active
+  instanceURL
+  createdAt
+  creator {
+    id
+  }
+  extensionPublishers {
+    id
+    akashaProfile {
+      name
+      id
+      avatar {
+        default {
+          src
+          width
+          height
+        }
+      }
+    }
+  }
+}
+
+fragment AkashaWorldConfigFragment on AkashaWorldConfig{
+  id
+  worldID
+  creator {
+    id
+  }
+  active
+  createdAt
+  homepageExtension
+  registryExtension
+  layoutExtension
+}
+
+fragment AkashaWorldConfigExtensionFragment on AkashaWorldConfigExtension{
+  id
+  active
+  createdAt
+  worldConfigID
+  extensionID
+  extension {
+    name
+    displayName
+    author {
+      id
+    }
+    logoImage {
+      src
+      width
+      height
+    }
+  }
+  creator {
+    id
+  }
+}
+
+query GetWorldByID($id: ID!) {
+  node(id: $id){
+    ... on AkashaWorld {
+      ...AkashaWorldFragment
+    }
+  }
+}
+
+query GetWorldByName($name: String!) {
+ akashaWorldIndex(first: 2, filters: {and: [{where: {name: {equalTo: $name}}}, {where: {active: {equalTo: true}}}]}) {
+   edges {
+     node {
+       ...AkashaWorldFragment
+     }
+   }
+ }
+}
+
+query GetWorldConfig($worldID: String!, $creator: ID){
+ akashaWorldConfigIndex(first: 1, filters: {and: [{where: {worldID: {equalTo: $worldID}}}, {where: {active: {equalTo: true}}}]}){
+   edges {
+     node {
+      ...AkashaWorldConfigFragment
+       extensions(account:  $creator, first: 100){
+         edges {
+           node {
+             ...AkashaWorldConfigExtensionFragment
+           }
+         }
+       }
+     }
+   }
+ }
+}
+
+query GetWorldConfigByID($configID: ID!){
+  node(id: $configID){
+    ... on AkashaWorldConfig {
+      ...AkashaWorldConfigFragment
+    }
+  }
+}
+
+query GetWorldConfigExtensions($configID: String!){
+ akashaWorldConfigExtensionIndex(first: 100, filters: {and: [{where: {worldConfigID: {equalTo: $configID}}}, {where: {active: {equalTo: true}}}]}) {
+   edges {
+     node {
+       ...AkashaWorldConfigExtensionFragment
+     }
+   }
+ }
+}
+
+query GetWorldFullInfo($id: ID!, $creator: ID){
+  node(id: $id){
+    ... on AkashaWorld {
+      ...AkashaWorldFragment
+      metaInfo(first: 1, account: $creator){
+        edges {
+          node {
+            description
+            id
+            guidelinesUrl
+            socialLinks {
+              href
+              name
+            }
+            keywords
+            worldID
+          }
+        }
+      }
+      configInfo(first: 1, filters: {and: [{where: {active: {equalTo: true}}}]}, account: $creator){
+        edges {
+          node {
+           ...AkashaWorldConfigFragment
+          }
+        }
+      }
+    }
+  }
+}

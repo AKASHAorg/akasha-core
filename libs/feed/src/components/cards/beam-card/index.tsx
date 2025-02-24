@@ -1,17 +1,14 @@
-import React, { useMemo, useRef, useState } from 'react';
-import EntryCard, {
-  EntryCardProps,
-} from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
+import React, { Fragment, useMemo, useRef, useState } from 'react';
+import EntryCard, { EntryCardProps } from '../entry-card';
 import ContentBlockRenderer from './content-block-renderer';
 import ActionButtons from './action-buttons';
 import AuthorProfileAvatar from '../author-profile-avatar';
 import { sortByKey, useAkashaStore } from '@akashaorg/ui-core-hooks';
-import { EntityTypes } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps, useNsfwToggling } from '@akashaorg/ui-core-hooks';
 import { Trans, useTranslation } from 'react-i18next';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { GetBeamByIdQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 import {
   selectAppId,
@@ -25,6 +22,8 @@ import {
   selectReflectionsCount,
 } from '@akashaorg/ui-core-hooks/lib/selectors/get-beam-by-id-query';
 import getSDK from '@akashaorg/core-sdk';
+import { FlagIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { TrashIcon } from '@heroicons/react/24/outline';
 
 type BeamCardProps = Pick<
   EntryCardProps,
@@ -111,12 +110,41 @@ const BeamCard: React.FC<BeamCardProps> = props => {
     return [];
   }, [beamData]);
 
+  const isSelectBeamActive = selectBeamActive(beamData);
+  const isViewer = authenticatedDID === beamAuthor.id;
+  const flagAsLabel = t('Flag');
+  const removeEntryLabel = t('Remove');
+  const menuItems = [
+    ...(!isViewer && flagAsLabel
+      ? [
+          {
+            icon: <FlagIcon />,
+            label: flagAsLabel,
+            color: { light: 'errorLight', dark: 'errorDark' } as const,
+            disabled: false,
+            onClick: handleFlagBeam,
+          },
+        ]
+      : []),
+    ...(isViewer && removeEntryLabel
+      ? [
+          {
+            icon: <TrashIcon />,
+            label: t('Remove'),
+            color: { light: 'errorLight', dark: 'errorDark' } as const,
+            onClick: handleEntryRemove,
+          },
+        ]
+      : []),
+  ];
+
   return (
     <EntryCard
       dataTestId="beam-card"
+      nsfwText={t('To view explicit or sensitive content, please connect to confirm your consent.')}
       entryData={{
         id: beamId,
-        active: selectBeamActive(beamData),
+        active: isSelectBeamActive,
         authorId: selectBeamAuthor(beamData).id,
         createdAt: selectCreatedAt(beamData),
         nsfw: selectNsfw(beamData),
@@ -124,8 +152,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       }}
       reflectionsCount={reflectionsCount}
       reflectAnchorLink="/@akashaorg/app-antenna/beam"
-      sortedContents={sortedEntryContent}
-      isViewer={authenticatedDID === beamAuthor.id}
+      isViewer={isViewer}
       removed={{
         author: (
           <Trans
@@ -162,11 +189,9 @@ const BeamCard: React.FC<BeamCardProps> = props => {
               txt: <Text variant="button-sm" />,
               lnk: <Link to={''} />,
               btn: (
-                <Button
-                  variant="text"
-                  onClick={() => console.log('tap to view')}
-                  label={t('Tap to view')}
-                />
+                <Button variant="link" onClick={() => console.log('tap to view')}>
+                  {t('Tap to view')}
+                </Button>
               ),
             }}
           />
@@ -193,7 +218,6 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       nsfwUserSetting={showNsfw}
       showLoginModal={showLoginModal}
       isLoggedIn={!!authenticatedDID}
-      itemType={EntityTypes.BEAM}
       onTagClick={handleTagClick}
       onReflect={() => {
         if (!authenticatedDID) {
@@ -210,13 +234,9 @@ const BeamCard: React.FC<BeamCardProps> = props => {
           createdAt={selectCreatedAt(beamData)}
         />
       }
-      // add these props only when beam is active
-      {...(selectBeamActive(beamData) && {
-        flagAsLabel: t('Flag'),
-        removeEntryLabel: t('Remove'),
-        onEntryFlag: handleFlagBeam,
-        onEntryRemove: handleEntryRemove,
-        actionsRight: (
+      menuItems={isSelectBeamActive && menuItems}
+      actionsRight={
+        isSelectBeamActive && (
           <ActionButtons
             appId={selectAppId(beamData)}
             showBlockName={showBlockName}
@@ -225,21 +245,23 @@ const BeamCard: React.FC<BeamCardProps> = props => {
               setShowBlockName(!showBlockName);
             }}
           />
-        ),
-      })}
+        )
+      }
       {...rest}
     >
-      {({ blockID }) => (
-        <React.Suspense fallback={null}>
-          <ContentBlockRenderer
-            blockID={blockID}
-            authenticatedDID={authenticatedDID}
-            showHiddenContent={showHiddenContent}
-            beamIsNsfw={showNSFWCard}
-            showBlockName={showBlockName}
-          />
-        </React.Suspense>
-      )}
+      {sortedEntryContent?.map(item => (
+        <Fragment key={item.blockID}>
+          <React.Suspense fallback={null}>
+            <ContentBlockRenderer
+              blockID={item.blockID}
+              authenticatedDID={authenticatedDID}
+              showHiddenContent={showHiddenContent}
+              beamIsNsfw={showNSFWCard}
+              showBlockName={showBlockName}
+            />
+          </React.Suspense>
+        </Fragment>
+      ))}
     </EntryCard>
   );
 };

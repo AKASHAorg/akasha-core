@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { useTranslation } from 'react-i18next';
 import { useRootComponentProps } from '@akashaorg/ui-core-hooks';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 
 export const NotFoundComponent = (props: { error?: Error; reset?: (key: string) => void }) => {
   const { t } = useTranslation();
@@ -30,7 +30,7 @@ export const NotFoundComponent = (props: { error?: Error; reset?: (key: string) 
         { worldTitle: worldConfig.title },
       )}
     >
-      <Button label={t('Home')} variant="primary" size="md" onClick={navigateHome} />
+      <Button onClick={navigateHome}>{t('Home')}</Button>
     </ErrorLoader>
   );
 };

@@ -2,14 +2,14 @@ import React, { ReactElement, useMemo } from 'react';
 import { tw } from '@twind/core';
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import Accordion from '@akashaorg/design-system-core/lib/components/Accordion';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import ExtensionIcon from '@akashaorg/design-system-core/lib/components/ExtensionIcon';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Label from '@akashaorg/design-system-core/lib/components/Label';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Section from './section';
@@ -226,7 +226,9 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
                   <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey7' }}>
                     {`${galleryImagesWithSource?.length} ${imageUploadedLabel}`}
                   </Text>
-                  <Button variant="text" label={viewAllLabel} onClick={onViewGalleryClick} />
+                  <Button variant="link" onClick={onViewGalleryClick}>
+                    {viewAllLabel}
+                  </Button>
                 </Stack>
               </Stack>
             }
@@ -311,20 +313,17 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
             handleClick={extensionData?.keywords?.length > 0 ? onAccordionClick : () => {}}
           />
         </Stack>
-        <Card
-          padding="p-3"
-          elevation="none"
-          radius={10}
-          background={{ light: 'grey9', dark: 'grey3' }}
-        >
+        <Card className="p-3">
           <Stack align="center" direction="row" spacing="gap-x-2">
             <Text variant="button-sm">{needToMakeChangesLabel}</Text>
             <Button
-              variant="secondary"
-              label={editExtension.label}
+              variant="outline"
+              size="sm"
               onClick={editExtension.handleClick}
-              customStyle="ml-auto"
-            />
+              className="ml-auto"
+            >
+              {editExtension.label}
+            </Button>
           </Stack>
         </Card>
       </Stack>
@@ -332,16 +331,17 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
       <Divider />
 
       <Stack direction="row" padding="p-4" spacing="gap-x-2" align="center" justify="end">
-        <Button variant="text" size="md" label={backButtonLabel} onClick={onClickCancel} />
+        <Button variant="link" onClick={onClickCancel}>
+          {backButtonLabel}
+        </Button>
         <Button
-          variant="primary"
-          size="md"
           loading={loading}
           disabled={disablePublish || loading}
-          label={publishButtonLabel}
           onClick={onClickSubmit}
-          customStyle="w-36"
-        />
+          className="w-36"
+        >
+          {publishButtonLabel}
+        </Button>
       </Stack>
     </>
   );

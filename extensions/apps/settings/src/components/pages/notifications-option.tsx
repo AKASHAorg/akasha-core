@@ -4,7 +4,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import PageLayout from './base-layout';
 import { useAkashaStore, useRootComponentProps, useNotifications } from '@akashaorg/ui-core-hooks';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import { ISettingsItem, SettingsOption } from '../../utils/settings-items';
@@ -77,12 +77,7 @@ const NotificationsOption: React.FC = () => {
           title={t('Uh-oh! You are not connected!')}
           details={t('To check notifications options you must be connected ⚡️')}
         >
-          <Button
-            label={t('Connect')}
-            size="md"
-            variant="primary"
-            onClick={handleConnectButtonClick}
-          />
+          <Button onClick={handleConnectButtonClick}>{t('Connect')} </Button>
         </ErrorLoader>
       </Stack>
     );
@@ -141,13 +136,12 @@ const NotificationsOption: React.FC = () => {
             return (
               <React.Fragment key={`${item.label}`}>
                 {item.clickable && (
-                  <Button
-                    plain={true}
-                    customStyle={`w-full ${baseStyle}`}
+                  <button
                     onClick={handleSettingsOptionClick(item.label)}
+                    className={`w-full ${baseStyle}`}
                   >
                     {children}
-                  </Button>
+                  </button>
                 )}
                 {!item.clickable && <Stack customStyle={baseStyle}>{children}</Stack>}
               </React.Fragment>

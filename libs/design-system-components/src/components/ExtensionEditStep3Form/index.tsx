@@ -1,7 +1,7 @@
 import React, { SyntheticEvent, useEffect, useMemo, useState } from 'react';
 import * as z from 'zod';
 import { Controller, useWatch } from 'react-hook-form';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
@@ -223,14 +223,10 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
             <Stack spacing="gap-y-1" direction="column">
               <Stack direction="row" spacing="gap-x-2" justify="between" align="center">
                 <Text variant="h6">{collaboratorsFieldLabel}</Text>
-                <Button
-                  variant="text"
-                  size="md"
-                  icon={<PlusIcon />}
-                  iconDirection="left"
-                  label={contributorsProfiles.length > 0 ? addAndEditLabel : addLabel}
-                  onClick={handleAddContributors}
-                />
+                <Button variant="link" onClick={handleAddContributors}>
+                  <PlusIcon />
+                  {contributorsProfiles.length > 0 ? addAndEditLabel : addLabel}
+                </Button>
               </Stack>
               <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
                 {collaboratorsDescriptionLabel}
@@ -333,19 +329,15 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
 
         <Stack direction="row" justify="end" spacing="gap-x-2" customStyle="px-4 pb-4">
           <Button
-            variant="text"
-            size="md"
-            label={cancelButton.label}
+            variant="link"
             onClick={cancelButton.handleClick}
             disabled={cancelButton.disabled}
-          />
-          <Button
-            variant="primary"
-            size="md"
-            label={nextButton.label}
-            disabled={!isValid}
-            onClick={onSave}
-          />
+          >
+            {cancelButton.label}
+          </Button>
+          <Button disabled={!isValid} onClick={onSave}>
+            {nextButton.label}
+          </Button>
         </Stack>
       </Stack>
     </form>

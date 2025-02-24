@@ -1,8 +1,7 @@
 import React from 'react';
 
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text, { TextProps } from '@akashaorg/design-system-core/lib/components/Text';
 import { ChatBubbleLeftRightIcon, HeartIcon, UsersIcon } from '@heroicons/react/24/outline';
@@ -49,11 +48,11 @@ const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following })
   ];
 
   return (
-    <Card radius={20} padding={'p-4'}>
+    <Card className="p-4">
       <Stack spacing="gap-4" fullWidth>
         <Stack direction="row" justify="between">
           {stats.map((stat, index) => (
-            <Button onClick={stat.onClick} key={stat.label + index} disabled={stat.disabled} plain>
+            <button onClick={stat.onClick} key={stat.label + index} disabled={stat.disabled}>
               <Stack align="center" customStyle="group">
                 <AppIcon
                   placeholderIcon={stat.icon}
@@ -70,7 +69,7 @@ const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following })
                   {stat.total}
                 </Text>
               </Stack>
-            </Button>
+            </button>
           ))}
         </Stack>
       </Stack>

@@ -8,6 +8,7 @@
       "dependsOn": [
         "@akashaorg/ui-core-hooks:build",
         "@akashaorg/design-system-components:prepare",
+        "@akashaorg/ui:prepare",
         "@akashaorg/core-sdk:build",
         "@akashaorg/typings:prepare"
       ],

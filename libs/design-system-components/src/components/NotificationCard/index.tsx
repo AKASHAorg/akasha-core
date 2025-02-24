@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { InboxNotification } from '@akashaorg/typings/lib/ui';
@@ -12,7 +11,7 @@ export interface NotificationCardEventProps {
 
 export type NotificationCardProps = NotificationCardEventProps & InboxNotification;
 
-const NotificationCard: React.FC<NotificationCardProps> = (props) => {
+const NotificationCard: React.FC<NotificationCardProps> = props => {
   const {
     notificationTypeIcon,
     notificationTypeTitle,
@@ -72,7 +71,7 @@ const NotificationCard: React.FC<NotificationCardProps> = (props) => {
           {date}
         </Text>
         {ctaLinkUrl && (
-          <Button plain={true} onClick={() => onClick(props)}>
+          <button onClick={() => onClick(props)}>
             <Stack>
               <Text
                 variant="footnotes2"
@@ -83,7 +82,7 @@ const NotificationCard: React.FC<NotificationCardProps> = (props) => {
                 {ctaLinkTitle}
               </Text>
             </Stack>
-          </Button>
+          </button>
         )}
       </Stack>
     </Stack>

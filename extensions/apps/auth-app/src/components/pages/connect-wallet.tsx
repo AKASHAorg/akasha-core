@@ -250,7 +250,7 @@ const ConnectWallet: React.FC = () => {
             </Stack>
           )}
           <Stack align="center" justify="center">
-            <Card onClick={handleDisconnect} type="plain">
+            <Card onClick={handleDisconnect} className="shadow-none">
               <Stack align="center" spacing="gap-x-2" customStyle="md:flex-row">
                 <Icon icon={<ArrowsRightLeftIcon />} accentColor={true} />
                 <Text

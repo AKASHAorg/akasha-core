@@ -1,11 +1,10 @@
 import React from 'react';
 import AppList from '@akashaorg/design-system-components/lib/components/AppList';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { ExtensionCardProps } from '@akashaorg/design-system-components/lib/components/ExtensionCard';
-
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 export type TExtensionsHubProps = {
   titleLabel: string;
   publicImgPath?: string;
@@ -32,12 +31,12 @@ export const ExtensionsHub: React.FC<TExtensionsHubProps> = props => {
     <Stack spacing="gap-y-4" customStyle="mb-2">
       <Text variant="h5">{titleLabel}</Text>
       {extensions.length > 0 && (
-        <Card padding="p-4">
+        <Card className="p-4">
           <AppList apps={extensions} onLoadMore={() => null} />
         </Card>
       )}
       {sections.map((section, idx) => (
-        <Card key={section.title + idx} padding="p-4">
+        <Card key={section.title + idx} className="p-4">
           <Stack spacing="gap-y-3">
             <Text variant="h6">{section.title}</Text>
             {section.assetName && (

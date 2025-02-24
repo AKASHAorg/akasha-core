@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Link from '@akashaorg/design-system-core/lib/components/Link';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
@@ -109,12 +108,9 @@ const PrivacyOption: React.FC = () => {
             {t(
               " and keeping it secure, stable, and optimized, so you'll feel like this is your kind of thing — to use, celebrate, and grow. If you're a privacy geek like us, you'll find ",
             )}
-            <Button
-              size="lg"
-              variant="text"
-              label={t('our privacy policy')}
-              onClick={handlePrivacyPolicyClick}
-            />
+            <Button variant="link" onClick={handlePrivacyPolicyClick}>
+              {t('our privacy policy')}
+            </Button>
             {t(' makes for perfect bedtime reading. ')}
             {t(
               "The best thing is that when we write “our app” and “our Privacy Policy”, that means “your app” and “your Privacy Policy” because we're doing this together.",
@@ -144,28 +140,24 @@ const PrivacyOption: React.FC = () => {
             {t(
               ' is used so we can all work all the more brilliantly to improve it, you can opt-in to our own ',
             )}
-            <Link target="_blank" to={'https://matomo.org'}>
-              <Text
-                as="span"
-                weight="bold"
-                color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-              >
+            <Button variant="link" asChild>
+              <a rel="noreferrer" target="_blank" href="https://matomo.org">
                 {'Matomo'}
-              </Text>
-            </Link>
+              </a>
+            </Button>
             {t(
               " analytics. We don't store personal identifiable information (PII) and you can opt-out at any time. ",
             )}
-            <Link
-              target="_blank"
-              to={
-                'https://forum.akasha.org/t/implementing-analytics-on-ethereum-world-an-open-discussion-on-the-rationale-and-your-choices/100'
-              }
-            >
-              <Text as="span" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
+
+            <Button variant="link" asChild>
+              <a
+                rel="noreferrer"
+                target="_blank"
+                href="https://forum.akasha.org/t/implementing-analytics-on-ethereum-world-an-open-discussion-on-the-rationale-and-your-choices/100"
+              >
                 {t('Click here')}
-              </Text>
-            </Link>
+              </a>
+            </Button>
             {t(' to learn more.')}
           </Text>
         </Stack>
@@ -176,14 +168,8 @@ const PrivacyOption: React.FC = () => {
           </Stack>
           <Text>
             {t("Discover more about AKASHA World's Legal and Terms of Use")}{' '}
-            <Button plain={true} onClick={handleLegalAppNav}>
-              <Text
-                as="span"
-                color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-                align="center"
-              >
-                {t('here')}
-              </Text>
+            <Button variant="link" onClick={handleLegalAppNav}>
+              {t('here')}
             </Button>
           </Text>
         </Stack>

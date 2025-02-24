@@ -19,6 +19,7 @@ type ExtensionTestModeConfig = {
     info: AkashaAppEdgeNode,
     extensionModule: SystemModuleType,
     extensionConfig: IAppConfig & { name: string },
+    isDevMode?: boolean,
   ) => void;
 };
 
@@ -57,8 +58,10 @@ export class TestModeLoader implements ITestModeLoaderPlugin {
         if (evObj.event === AUTH_EVENTS.SIGN_IN) {
           const userData: { id?: string } = evObj.data;
           if ('id' in userData && userData.hasOwnProperty('id')) {
-            this.#user = userData;
-            this.loadStoredExtensions();
+            if (!this.#user.id || this.#user.id !== userData.id) {
+              this.#user = userData;
+              this.loadStoredExtensions();
+            }
           }
         }
         if (evObj.event === AUTH_EVENTS.SIGN_OUT) {
@@ -71,6 +74,7 @@ export class TestModeLoader implements ITestModeLoaderPlugin {
   getTestSessionKey = () => {
     return `EXTENSIONS_IN_TEST_MODE_${this.#user.id}`;
   };
+
   getStaticStatusCodes() {
     return staticInstallStatusCodes;
   }
@@ -83,9 +87,7 @@ export class TestModeLoader implements ITestModeLoaderPlugin {
       try {
         extensions = JSON.parse(storage);
         if (extensions.length) {
-          extensions.forEach(ext => {
-            this.load(ext);
-          });
+          extensions.forEach(ext => this.load(ext));
         }
       } catch (err) {
         this.#logger.error('Failed to load test mode extensions %s', err.message);

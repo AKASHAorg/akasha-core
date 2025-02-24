@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
@@ -27,7 +27,7 @@ const ProfileNotFound: React.FC<ProfileNotFoundProps> = ({
   const publicImgPath = '/images';
 
   return (
-    <Card radius={16} padding={'p-2'}>
+    <Card className="p-2">
       <Stack direction="column" spacing="gap-y-4" fullWidth>
         <Stack direction="column">
           <Default404Image url={`${publicImgPath}/new404.webp`} />
@@ -36,7 +36,7 @@ const ProfileNotFound: React.FC<ProfileNotFoundProps> = ({
           </Text>
         </Stack>
         <Stack direction="row" customStyle="pr-2 pb-2" justify="end" fullWidth>
-          <Button variant="primary" label={buttonLabel} onClick={onClickGoToHomepage} />
+          <Button onClick={onClickGoToHomepage}>{buttonLabel}</Button>
         </Stack>
       </Stack>
     </Card>

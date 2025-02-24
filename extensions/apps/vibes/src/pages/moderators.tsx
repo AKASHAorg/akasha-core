@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { Moderator } from '@akashaorg/typings/lib/ui';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import TabList from '@akashaorg/design-system-core/lib/components/TabList';
@@ -38,7 +38,7 @@ export const Moderators: React.FC<ModeratorPageProps> = props => {
   };
 
   return (
-    <Card padding={0}>
+    <Card className="p-0">
       <TabList
         selected={activeTab}
         onChange={setActiveTab}

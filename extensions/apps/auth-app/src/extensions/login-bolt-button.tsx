@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { BoltIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { useRootComponentProps, withProviders } from '@akashaorg/ui-core-hooks';
 
@@ -16,12 +16,13 @@ const LoginBoltButton = () => {
 
   return (
     <Button
-      iconOnly={true}
-      icon={<BoltIcon />}
       onClick={onLoginClick}
-      variant="primary"
-      customStyle="md:invisible" // show only on mobile screens
-    />
+      variant="outline"
+      size="icon"
+      className="md:invisible" // show only on mobile screens
+    >
+      {<BoltIcon />}
+    </Button>
   );
 };
 

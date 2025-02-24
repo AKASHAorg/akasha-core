@@ -2,10 +2,10 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
@@ -249,12 +249,7 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
         title={`${t('Uh-oh')}! ${t('You are not connected')}!`}
         details={`${t('To check your extensions you must be connected')} ⚡️`}
       >
-        <Button
-          variant="primary"
-          size="md"
-          label={t('Connect')}
-          onClick={handleConnectButtonClick}
-        />
+        <Button onClick={handleConnectButtonClick}>{t('Connect')}</Button>
       </ErrorLoader>
     );
   }
@@ -276,16 +271,16 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
                   )}
                 </Text>
               </Stack>
-              <Button plain={true} onClick={dismissCard}>
+              <button onClick={dismissCard}>
                 <Icon icon={<XMarkIcon />} size="sm" />
-              </Button>
+              </button>
             </Stack>
           </Stack>
         )}
         <Text variant="h5" weight="semibold" align="start">
           {t('Release Manager')}
         </Text>
-        <Card padding={8} background={{ light: 'grey9', dark: 'grey2' }}>
+        <Card className="p-2">
           {extensionDataReqLoading && (
             <Stack align="center" justify="center" fullWidth customStyle="h-full">
               <Spinner />
@@ -309,10 +304,12 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
           <Text variant="h6" weight="semibold">
             {t('Local Release')}
           </Text>
-          <Button label={t('Test release')} variant="secondary" onClick={handleTestReleaseNav} />
+          <Button variant="outline" size="sm" onClick={handleTestReleaseNav}>
+            {t('Test release')}
+          </Button>
         </Stack>
         {testRelease && (
-          <Card padding={16} background={{ light: 'grey9', dark: 'grey2' }}>
+          <Card className="p-4">
             <Stack spacing="gap-4">
               <Text variant="body2" weight="semibold">
                 {`Release ${testRelease?.version || '0.0.1'}`}
@@ -325,11 +322,9 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
           <Text variant="h6" weight="semibold">
             {t('Published Releases')}
           </Text>
-          <Button
-            label={t('Create release')}
-            variant="primary"
-            onClick={handleClickPublishReleaseButton}
-          />
+          <Button size="sm" onClick={handleClickPublishReleaseButton}>
+            {t('Create release')}
+          </Button>
         </Stack>
         {appReleases?.length === 0 && (
           <InfoCard
@@ -338,7 +333,7 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
           />
         )}
         {appReleases?.length > 0 && (
-          <Card padding={16} background={{ light: 'grey9', dark: 'grey2' }}>
+          <Card className="p-4">
             <DynamicInfiniteScroll
               count={appReleases?.length}
               estimatedHeight={ENTRY_HEIGHT}
@@ -361,7 +356,7 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
                   : '';
                 return (
                   <Stack spacing="gap-y-4">
-                    <Button plain onClick={() => handleNavigateToReleaseInfoPage(releaseData.id)}>
+                    <button onClick={() => handleNavigateToReleaseInfoPage(releaseData.id)}>
                       <Stack direction="row" justify="between" align="center">
                         <Stack spacing="gap-y-4">
                           <Stack direction="row" spacing="gap-x-2" align="center">
@@ -380,7 +375,7 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
                         </Stack>
                         <Icon icon={<ChevronRightIcon />} accentColor={true} size="xl" />
                       </Stack>
-                    </Button>
+                    </button>
                     {itemIndex < appReleases?.length - 1 && <Divider />}
                   </Stack>
                 );

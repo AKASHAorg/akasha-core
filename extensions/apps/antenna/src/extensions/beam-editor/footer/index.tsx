@@ -1,8 +1,8 @@
 import * as React from 'react';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { AddBlockButtonProps, AddBlock } from './add-block-button';
 import { EditorUIState } from '../types';
 
@@ -58,7 +58,7 @@ export const Footer: React.FC<TFooterProps> = props => {
       justify="between"
       align="center"
       direction="row"
-      customStyle="rounded-b-2xl"
+      customStyle="rounded-b-2xl mt-auto"
     >
       {/* render content based on the value of uiState */}
       {uiState === 'blocks' && (
@@ -67,21 +67,21 @@ export const Footer: React.FC<TFooterProps> = props => {
             variant="footnotes2"
             color="grey7"
           >{`${blocksNumber}/${maxBlocks} ${blocksLabel}`}</Text>
-          <Button variant="secondary" size="md" label={cancelLabel} onClick={handleClickCancel} />
+          <Button variant="outline" onClick={handleClickCancel}>
+            {cancelLabel}
+          </Button>
         </>
       )}
       {uiState === 'tags' && (
         <>
           <Text variant="footnotes2" color="grey7">{`${tagsNumber}/${maxTags} ${tagsLabel}`}</Text>
           <Stack direction="row" spacing="gap-2">
-            <Button variant="text" label={cancelLabel} onClick={handleClickCancel} />
-            <Button
-              variant="primary"
-              size="md"
-              disabled={disableTagsSave}
-              label={saveTagsLabel}
-              onClick={handleClickSave}
-            />
+            <Button variant="link" onClick={handleClickCancel}>
+              {cancelLabel}
+            </Button>
+            <Button disabled={disableTagsSave} onClick={handleClickSave}>
+              {saveTagsLabel}
+            </Button>
           </Stack>
         </>
       )}
@@ -115,15 +115,13 @@ export const Footer: React.FC<TFooterProps> = props => {
                   {tagsNumber}
                 </Text>
               </Stack>
-              <Button variant="text" label={tagsLabel} onClick={handleClickTags} />
+              <Button variant="link" onClick={handleClickTags}>
+                {tagsLabel}
+              </Button>
             </Stack>
-            <Button
-              variant="primary"
-              size="md"
-              disabled={disableBeamPublishing}
-              label={publishLabel}
-              onClick={handleBeamPublish}
-            />
+            <Button disabled={disableBeamPublishing} onClick={handleBeamPublish}>
+              {publishLabel}
+            </Button>
           </Stack>
         </>
       )}

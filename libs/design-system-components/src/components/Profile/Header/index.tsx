@@ -1,10 +1,10 @@
 import React, { ReactElement } from 'react';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import ProfileNameField from '@akashaorg/design-system-core/lib/components/ProfileNameField';
 import ImageOverlay from '../../ImageOverlay';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Menu, { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
@@ -15,6 +15,7 @@ import {
 import { getImageFromSeed, getColorClasses } from '@akashaorg/design-system-core/lib/utils';
 import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
+import { cn } from '@akashaorg/ui/lib/library/utils';
 
 type ProfileBadge = {
   toolTipLabel: string;
@@ -91,17 +92,16 @@ const Header: React.FC<HeaderProps> = ({
   return (
     <Stack customStyle={customStyle}>
       <Card
-        dataTestId="cover-image"
-        elevation={plain ? 'none' : '1'}
-        radius={{ top: 20 }}
-        background={{ light: 'grey7', dark: 'grey5' }}
-        customStyle={`h-32 bg(center no-repeat cover [url(${backgroundUrl})])`}
+        data-testid="cover-image"
+        className="h-32 bg-center bg-no-repeat bg-cover bg-muted rounded-b-none border-none"
+        style={{ backgroundImage: `url(${backgroundUrl})` }}
         {...(background && { onClick: onClickCoverImage })}
       />
       <Card
-        elevation={plain ? 'none' : '1'}
-        radius={plain ? '' : { bottom: 20 }}
-        padding="px-[0.5rem] pb-[1rem] pt-0"
+        className={cn(
+          'px-[0.5rem] pb-[1rem] pt-0 rounded-t-none overflow-visible',
+          plain && 'rounded-none border-b-0 border-x-0',
+        )}
       >
         <Stack direction="column" customStyle="pl-2" fullWidth>
           <Stack direction="row" spacing="gap-x-2" customStyle="-ml-2">
@@ -127,9 +127,9 @@ const Header: React.FC<HeaderProps> = ({
             </Stack>
             <Stack direction="column" spacing="gap-y-1">
               <Stack direction="row" align="center" spacing="gap-x-1">
-                <Button plain={true} onClick={onClickProfileName}>
+                <button onClick={onClickProfileName}>
                   <ProfileNameField did={profileId} profileName={profileName} size="lg" />
-                </Button>
+                </button>
               </Stack>
               <DidField
                 did={profileId}
@@ -155,14 +155,9 @@ const Header: React.FC<HeaderProps> = ({
             <Stack customStyle="relative ml-auto mt-2">
               <Stack direction="row" align="center" spacing="gap-x-2">
                 {viewerIsOwner ? (
-                  <Button
-                    aria-label="edit"
-                    icon={<Cog6ToothIcon />}
-                    variant="primary"
-                    onClick={handleEdit}
-                    greyBg
-                    iconOnly
-                  />
+                  <Button aria-label="edit" variant="outline" size="icon" onClick={handleEdit}>
+                    <Cog6ToothIcon />
+                  </Button>
                 ) : (
                   <>
                     {actionElement}

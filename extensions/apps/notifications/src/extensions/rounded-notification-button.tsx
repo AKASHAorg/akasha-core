@@ -7,7 +7,7 @@ import {
   BellIcon,
   BellSnoozeIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import getSDK from '@akashaorg/core-sdk';
 import { NOTIFICATION_EVENTS } from '@akashaorg/typings/lib/sdk';
 
@@ -107,13 +107,9 @@ const RoundedNotificationButton = () => {
   }, [hasNewNotifications, snoozeNotifications]);
 
   return (
-    <Button
-      iconOnly={true}
-      icon={notificationIcon}
-      onClick={handleNotificationClick}
-      greyBg={true}
-      variant="primary"
-    />
+    <Button variant="outline" size="icon" onClick={handleNotificationClick}>
+      {notificationIcon}
+    </Button>
   );
 };
 export default withProviders(RoundedNotificationButton);
