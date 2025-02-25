@@ -3,7 +3,7 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const pkgMapping = {
+const appsMapping = {
   '@akashaorg/app-antenna': path.resolve(__dirname, '../../dist', 'apps/antenna'),
   '@akashaorg/app-profile': path.resolve(__dirname, '../../dist', 'apps/profile'),
   '@akashaorg/app-auth-ewa': path.resolve(__dirname, '../../dist', 'apps/auth-app'),
@@ -17,4 +17,18 @@ const pkgMapping = {
   '@akashaorg/app-world-builder': path.resolve(__dirname, '../../dist', 'apps/world-builder'),
 };
 
-export default pkgMapping;
+const widgetsMapping = {
+  '@akashaorg/ui-widget-layout': path.resolve(__dirname, '../../dist', 'widgets/layout'),
+  '@akashaorg/ui-widget-sidebar': path.resolve(__dirname, '../../dist', 'widgets/sidebar'),
+  '@akashaorg/ui-widget-topbar': path.resolve(__dirname, '../../dist', 'widgets/top-bar'),
+  '@akashaorg/ui-widget-analytics': path.resolve(__dirname, '../../dist', 'widgets/analytics'),
+  '@akashaorg/ui-widget-trending': path.resolve(__dirname, '../../dist', 'widgets/trending'),
+  '@akashaorg/ui-widget-mini-profile': path.resolve(__dirname, '../../dist', 'widgets/mini-profile'),
+  '@akashaorg/ui-widget-test-mode-notifier': path.resolve(__dirname, '../../dist', 'widgets/test-mode-notifier'),
+
+}
+
+export default {
+  apps: appsMapping,
+  widgets: widgetsMapping
+};

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { cn } from '@akashaorg/ui/lib/library/utils';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { useAkashaStore, useNotifications, useRootComponentProps } from '@akashaorg/ui-core-hooks';
+import { tw } from '@twind/core';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
@@ -11,24 +11,15 @@ import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import getSDK from '@akashaorg/core-sdk';
 import { UserSetting } from '@pushprotocol/restapi/src/lib';
-import AntennaSetting from './antenna-setting';
 import UnlockCard from './unlock-card';
-import ProfileSetting from './profile-setting';
 import EnableAllSetting from './enable-all-setting';
-import { findAppIndex, preferencesObjectFactory } from './utils';
+import { getAppInfoFromUserSetting, AppInfo, getAppInfoFromChannelSetting } from './utils';
 import LoadingSettingsPlaceholder from './loading-settings-placeholder';
-import { UserSettingType } from '@akashaorg/typings/lib/sdk';
 import ConnectErrorCard from '@akashaorg/design-system-components/lib/components/ConnectErrorCard';
-
-export enum AppName {
-  ANTENNA = 'Antenna App',
-  PROFILE = 'Profile App',
-  VIBES = 'Vibes App',
-}
-
-const DEFAULT_PREFERENCES: UserSettingType[] = preferencesObjectFactory(false);
-const ANTENNA_ARR_INDEX = findAppIndex(AppName.ANTENNA, DEFAULT_PREFERENCES);
-const PROFILE_ARR_INDEX = findAppIndex(AppName.PROFILE, DEFAULT_PREFERENCES);
+import AppSetting from './app-setting';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { Info } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
+import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 
 const NotificationsPreferencesOption: React.FC = () => {
   const sdk = getSDK();
@@ -43,7 +34,7 @@ const NotificationsPreferencesOption: React.FC = () => {
   } = useAkashaStore();
   const isLoggedIn = !!authenticatedDID;
 
-  const [preferences, setPreferences] = useState<UserSettingType[]>(DEFAULT_PREFERENCES);
+  const [appPreferences, setAppPreferences] = useState<AppInfo[]>([]);
   const [enableAllChecked, setEnableAllChecked] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [initialLoading, setInitialLoading] = useState<boolean>(true);
@@ -51,13 +42,23 @@ const NotificationsPreferencesOption: React.FC = () => {
 
   useEffect(() => {
     if ((notificationsEnabled || readOnlyMode) && initialLoading) {
+      /**
+       * Note: The PushProtocol API does not automatically subscribe the user to all channel notifications.
+       *
+       * When fetching the user's notification settings via `getSettingsOfUser()`, an empty array may be returned
+       * if the user has not explicitly opted in to any notifications. In this case, we:
+       *   1. Fetch the default channel settings using `getSettingsOfChannel()`.
+       *   2. Mark these channel notifications as not selected (disabled) so that the user must perform
+       *      an additional action to enable them.
+       */
       sdk.services.common.notification
         .getSettingsOfUser()
-        .then(fetchedPreferences => {
+        .then(async fetchedPreferences => {
           if (fetchedPreferences.length > 0) {
-            setPreferences(fetchedPreferences);
+            setAppPreferences(getAppInfoFromUserSetting(fetchedPreferences, t));
           } else {
-            setPreferences(DEFAULT_PREFERENCES);
+            const channelSettings = await sdk.services.common.notification.getSettingsOfChannel();
+            setAppPreferences(getAppInfoFromChannelSetting(channelSettings, false, t));
           }
           setInitialLoading(false);
         })
@@ -69,10 +70,8 @@ const NotificationsPreferencesOption: React.FC = () => {
   }, [sdk.services.common.notification, notificationsEnabled, readOnlyMode, initialLoading]);
 
   useEffect(() => {
-    setEnableAllChecked(
-      preferences[ANTENNA_ARR_INDEX].enabled && preferences[PROFILE_ARR_INDEX].enabled,
-    );
-  }, [preferences]);
+    setEnableAllChecked(appPreferences?.every(item => item.enabled === true));
+  }, [appPreferences]);
 
   const handleConnectButtonClick = () => {
     navigateTo?.({
@@ -100,24 +99,32 @@ const NotificationsPreferencesOption: React.FC = () => {
   };
 
   const handleToggleAll = (val: boolean) => {
-    setPreferences(preferencesObjectFactory(val));
+    setAppPreferences(
+      appPreferences.map(appPreference => {
+        return { ...appPreference, enabled: val };
+      }),
+    );
     setEnableAllChecked(val);
   };
 
   const handleSetPreference = (value: boolean, index: number) => {
-    setPreferences(prevState =>
+    setAppPreferences(prevState =>
       prevState?.map((item, idx) => (idx === index ? { ...item, enabled: value } : item)),
     );
   };
 
   const handleReset = () => {
-    setPreferences(preferencesObjectFactory(false));
+    setAppPreferences(
+      appPreferences.map(appPreference => {
+        return { ...appPreference, enabled: false };
+      }),
+    );
   };
 
   const handleSave = async () => {
     let success: boolean = undefined;
     setLoading(true);
-    const preferencesPayload: UserSetting[] = preferences?.map(({ enabled }) => ({
+    const preferencesPayload: UserSetting[] = appPreferences?.map(({ enabled }) => ({
       enabled,
     }));
 
@@ -152,50 +159,90 @@ const NotificationsPreferencesOption: React.FC = () => {
     <Stack spacing="gap-y-4" customStyle="mb-2">
       {!errorInFetchingPreferences && (
         <>
-          <Text variant="h5">{t('Notification Preferences')}</Text>
-          {!notificationsEnabled && (
-            <UnlockCard onClick={handleUnlockPreferences} loading={waitingForSignature} />
+          {/* This case happens only if the Channel creator has not inserted any apps */}
+          {appPreferences.length === 0 && !initialLoading && (
+            // card background={{ light: 'grey9', dark: 'grey3' }} padding="p-3"
+            <Card>
+              <Text>{t('There are no apps to subscribe')}</Text>
+            </Card>
           )}
-          <Card
-            className={cn(
-              'pb-3',
-              !notificationsEnabled && 'opacity-50 pointer-events-none',
-            )}
-          >
-            <Stack padding="px-3 pb-6">
-              <EnableAllSetting
-                isSelected={enableAllChecked}
-                onChange={e => handleToggleAll(e.target.checked)}
-              />
-              <Text variant="h6">{t('Default Extensions')}</Text>
-
-              {initialLoading ? (
-                <LoadingSettingsPlaceholder />
-              ) : (
-                <>
-                  <ProfileSetting
-                    isSelected={preferences[PROFILE_ARR_INDEX].enabled}
-                    onChange={e => handleSetPreference(e.target.checked, PROFILE_ARR_INDEX)}
-                  />
-
-                  <AntennaSetting
-                    isSelected={preferences[ANTENNA_ARR_INDEX].enabled}
-                    onChange={e => handleSetPreference(e.target.checked, ANTENNA_ARR_INDEX)}
-                  />
-                </>
+          {appPreferences.length > 0 && (
+            <>
+              <Text variant="h5">{t('Notification Preferences')}</Text>
+              {!notificationsEnabled && (
+                <UnlockCard onClick={handleUnlockPreferences} loading={waitingForSignature} />
               )}
-            </Stack>
+              <Card
+                className={tw(`${!notificationsEnabled && 'opacity-50 pointer-events-none'} p-0`)}
+              >
+                <Stack customStyle="p-4 pt-0">
+                  <EnableAllSetting
+                    isSelected={enableAllChecked}
+                    onChange={e => handleToggleAll(e.target.checked)}
+                  />
+                  <Text variant="h6" customStyle="mb-4">
+                    {t('Default Extensions')}
+                  </Text>
+                  {initialLoading ? (
+                    <LoadingSettingsPlaceholder />
+                  ) : (
+                    <>
+                      {appPreferences.map((appInfo, index) => (
+                        <>
+                          <AppSetting
+                            key={appInfo.index}
+                            title={appInfo.title}
+                            description={appInfo.description}
+                            isSelected={appInfo.enabled}
+                            onChange={e => handleSetPreference(e.target.checked, index)}
+                          />
+                          {appPreferences.length - 1 !== index && (
+                            <Divider customStyle={`dark:border-grey5 my-4`} />
+                          )}
+                        </>
+                      ))}
+                      <Card className="mt-4 bg-grey9 dark:bg-grey3">
+                        <Stack direction="row" spacing="gap-x-3" align="center">
+                          <Icon
+                            icon={<Info />}
+                            size="lg"
+                            solid={true}
+                            color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                          />
+                          <Text variant="body1" customStyle="text-sm">
+                            {t('Changing notifications preferences requires a signature')}
+                          </Text>
+                        </Stack>
+                      </Card>
+                    </>
+                  )}
+                </Stack>
 
-            {/* Buttons */}
-            <Stack direction="row" customStyle="border(t-1 solid grey8 dark:grey5) pt-4 px-3">
-              <Button onClick={handleReset} variant="link" className="ml-auto">
-                {t('Reset')}
-              </Button>
-              <Button onClick={handleSave} loading={loading} className="ml-4">
-                {t('Save')}
-              </Button>
-            </Stack>
-          </Card>
+                {/* Buttons */}
+                <Stack
+                  direction="row"
+                  justify="end"
+                  customStyle="border(t-1 solid grey8 dark:grey5) p-3 pt-4"
+                  spacing="gap-4"
+                >
+                  <Button
+                    variant="link"
+                    onClick={handleReset}
+                    color="dark:secondaryLight secondaryDark"
+                  >
+                    {t('Reset')}
+                  </Button>
+                  <Button
+                    onClick={handleSave}
+                    color="dark:secondaryLight secondaryDark"
+                    loading={loading}
+                  >
+                    {t('Save')}
+                  </Button>
+                </Stack>
+              </Card>
+            </>
+          )}
         </>
       )}
       {errorInFetchingPreferences && !initialLoading && (
