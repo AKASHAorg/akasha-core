@@ -18,7 +18,7 @@ const UnlockCard: React.FC<IUnlockCardProps> = ({ onClick, loading }) => {
   const { t } = useTranslation('app-settings-ewa');
 
   return (
-    <Card className="p-3">
+    <Card className="p-4">
       <Stack direction="row" spacing="gap-x-3">
         <Icon
           icon={<Lock />}
