@@ -227,7 +227,7 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
         </CardDescription>
       </CardHeader>
       <CardContent className="gap-4 flex flex-col">
-        <Card className="p-0 h-[30rem]">
+        <Card className="p-0 h-[30rem] **:data-[slot=infinite-scroll-container]:h-full bg-nested-card">
           <InfiniteScroll
             count={akashaApps?.length}
             estimatedHeight={60}
