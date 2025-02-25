@@ -172,7 +172,6 @@ const NotificationsPreferencesOption: React.FC = () => {
               {!notificationsEnabled && (
                 <UnlockCard onClick={handleUnlockPreferences} loading={waitingForSignature} />
               )}
-              {/* padding="pb-3" customStyle={tw(`${!notificationsEnabled && 'opacity-50 pointer-events-none'}`)} */}
               <Card
                 className={tw(`${!notificationsEnabled && 'opacity-50 pointer-events-none'} p-0`)}
               >
@@ -202,9 +201,6 @@ const NotificationsPreferencesOption: React.FC = () => {
                           )}
                         </>
                       ))}
-                      {/*  padding="p-3"
-                        customStyle="mt-4"
-                        background={{ light: 'grey9', dark: 'grey3' }} */}
                       <Card className="mt-4 bg-grey9 dark:bg-grey3">
                         <Stack direction="row" spacing="gap-x-3" align="center">
                           <Icon
@@ -229,12 +225,6 @@ const NotificationsPreferencesOption: React.FC = () => {
                   customStyle="border(t-1 solid grey8 dark:grey5) p-3 pt-4"
                   spacing="gap-4"
                 >
-                  {/*
-                    variant="text"
-                    size="md"
-                    label={t('Reset')}
-                    customStyle="ml-auto"
-                  */}
                   <Button
                     variant="link"
                     onClick={handleReset}
@@ -242,12 +232,6 @@ const NotificationsPreferencesOption: React.FC = () => {
                   >
                     {t('Reset')}
                   </Button>
-                  {/*
-                    variant="primary"
-                    size="md"
-                    label={t('Save')}
-                    customStyle="ml-4"
-                  */}
                   <Button
                     onClick={handleSave}
                     color="dark:secondaryLight secondaryDark"
