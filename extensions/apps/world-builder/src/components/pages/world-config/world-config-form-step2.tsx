@@ -57,7 +57,7 @@ import { X } from 'lucide-react';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import getSDK from '@akashaorg/core-sdk';
 import { selectWorldData } from '@akashaorg/ui-core-hooks/lib/selectors/get-world-by-id-query';
-import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { AkashaAppApplicationType, SortOrder } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 type WorldConfigFormStep2Props = {
   worldId: string;
@@ -227,80 +227,78 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
         </CardDescription>
       </CardHeader>
       <CardContent className="gap-4 flex flex-col">
-        <Card className="p-0.5">
-          <Stack className="h-[30rem] overflow-auto">
-            <InfiniteScroll
-              count={akashaApps?.length}
-              estimatedHeight={60}
-              overScan={10}
-              loading={loadingGetAppsQuery}
-              hasNextPage={pageInfo?.hasNextPage}
-              onLoadMore={() => {
-                return fetchMore({
-                  variables: {
-                    after: pageInfo?.endCursor,
-                  },
-                });
-              }}
-            >
-              <InfiniteScrollList>
-                {index => {
-                  const extensionData = akashaApps[index];
-                  return (
-                    <ExtensionCard className="p-4">
-                      <ExtensionCardAvatar>
-                        <ExtensionAvatar size="lg" extensionId="">
-                          <ExtensionAvatarImage
-                            src={transformSource(extensionData?.logoImage)?.src}
+        <Card className="p-0 h-[30rem]">
+          <InfiniteScroll
+            count={akashaApps?.length}
+            estimatedHeight={60}
+            overScan={10}
+            loading={loadingGetAppsQuery}
+            scrollElementType="element"
+            hasNextPage={pageInfo && pageInfo.hasNextPage}
+            onLoadMore={() => {
+              return fetchMore({
+                variables: {
+                  after: pageInfo?.endCursor,
+                },
+              });
+            }}
+          >
+            <InfiniteScrollList>
+              {index => {
+                const extensionData = akashaApps[index];
+                return (
+                  <ExtensionCard className="p-4">
+                    <ExtensionCardAvatar>
+                      <ExtensionAvatar size="lg" extensionId="">
+                        <ExtensionAvatarImage
+                          src={transformSource(extensionData?.logoImage)?.src}
+                        />
+                        <ExtensionAvatarFallback />
+                      </ExtensionAvatar>
+                    </ExtensionCardAvatar>
+                    <ExtensionCardContent>
+                      <ExtensionCardName>{extensionData?.displayName}</ExtensionCardName>
+                      <ProfileAvatarButton
+                        size="sm"
+                        profileDID={extensionData?.author?.akashaProfile?.did?.id}
+                      >
+                        <ProfileAvatarButton.Avatar>
+                          <ProfileAvatarButton.AvatarImage
+                            src={
+                              transformSource(extensionData?.author?.akashaProfile?.avatar?.default)
+                                ?.src
+                            }
                           />
-                          <ExtensionAvatarFallback />
-                        </ExtensionAvatar>
-                      </ExtensionCardAvatar>
-                      <ExtensionCardContent>
-                        <ExtensionCardName>{extensionData?.displayName}</ExtensionCardName>
-                        <ProfileAvatarButton
-                          size="sm"
-                          profileDID={extensionData?.author?.akashaProfile?.did?.id}
-                        >
-                          <ProfileAvatarButton.Avatar>
-                            <ProfileAvatarButton.AvatarImage
-                              src={
-                                transformSource(
-                                  extensionData?.author?.akashaProfile?.avatar?.default,
-                                )?.src
-                              }
-                            />
-                            <ProfileAvatarButton.AvatarFallback />
-                          </ProfileAvatarButton.Avatar>
-                          <ProfileName>{extensionData?.author?.akashaProfile?.name}</ProfileName>
-                          <ProfileDidField />
-                        </ProfileAvatarButton>
-                        <ExtensionCardDescription>
-                          {extensionData?.description}
-                        </ExtensionCardDescription>
-                      </ExtensionCardContent>
-                      <ExtensionCardAction active={selectedExtensions.indexOf(extensionData) > -1}>
-                        <ExtensionCardActionInactive
-                          onClick={() => {
-                            addExtension(extensionData);
-                          }}
-                        >
-                          {t('Add')}
-                        </ExtensionCardActionInactive>
-                        <ExtensionCardActionActive
-                          onClick={() => {
-                            removeExtension(extensionData?.id);
-                          }}
-                        >
-                          {t('Added')}
-                        </ExtensionCardActionActive>
-                      </ExtensionCardAction>
-                    </ExtensionCard>
-                  );
-                }}
-              </InfiniteScrollList>
-            </InfiniteScroll>
-          </Stack>
+                          <ProfileAvatarButton.AvatarFallback />
+                        </ProfileAvatarButton.Avatar>
+                        <ProfileName>{extensionData?.author?.akashaProfile?.name}</ProfileName>
+                        <ProfileDidField />
+                      </ProfileAvatarButton>
+                      <ExtensionCardDescription>
+                        {extensionData?.description}
+                      </ExtensionCardDescription>
+                    </ExtensionCardContent>
+                    <ExtensionCardAction active={selectedExtensions.indexOf(extensionData) > -1}>
+                      <ExtensionCardActionInactive
+                        onClick={() => {
+                          addExtension(extensionData);
+                        }}
+                      >
+                        {t('Add')}
+                      </ExtensionCardActionInactive>
+                      <ExtensionCardActionActive
+                        onClick={() => {
+                          removeExtension(extensionData?.id);
+                        }}
+                      >
+                        {t('Added')}
+                      </ExtensionCardActionActive>
+                    </ExtensionCardAction>
+                  </ExtensionCard>
+                );
+              }}
+            </InfiniteScrollList>
+          </InfiniteScroll>
         </Card>
         <Stack direction="column" spacing={2}>
           <Typography variant="h6">{t('You have selected:')}</Typography>
