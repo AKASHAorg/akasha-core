@@ -49,29 +49,33 @@ const dashboardRoute = createRoute({
   },
 });
 
+export type WorldSuccessSearch = { worldId: string; worldName: string };
+
 const configSuccessRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `/config-success`,
   notFoundComponent: () => <NotFoundComponent />,
+  validateSearch: (search: Record<string, unknown>): WorldSuccessSearch => {
+    return { worldId: search.worldId as string, worldName: search.worldName as string };
+  },
   component: () => {
+    const { worldId, worldName } = createSuccessRoute.useSearch();
     return (
       <CatchBoundary
         getResetKey={() => 'config_success_main_reset'}
         errorComponent={RouteErrorComponent}
       >
-        <ConfigSuccessPage />
+        <ConfigSuccessPage worldId={worldId} worldName={worldName} />
       </CatchBoundary>
     );
   },
 });
 
-export type WorldCreateSuccessSearch = { worldId: string; worldName: string };
-
 const createSuccessRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: `/create-success`,
   notFoundComponent: () => <NotFoundComponent />,
-  validateSearch: (search: Record<string, unknown>): WorldCreateSuccessSearch => {
+  validateSearch: (search: Record<string, unknown>): WorldSuccessSearch => {
     return { worldId: search.worldId as string, worldName: search.worldName as string };
   },
   component: () => {

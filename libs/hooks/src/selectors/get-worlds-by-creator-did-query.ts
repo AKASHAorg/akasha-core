@@ -1,6 +1,5 @@
 import { GetWorldsByCreatorDidQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 import { AkashaWorldEdge } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { isNodeObject } from './selector-utils';
 
 const isEdgeList = (
   resp: GetWorldsByCreatorDidQuery,

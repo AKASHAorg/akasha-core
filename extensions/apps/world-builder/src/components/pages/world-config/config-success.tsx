@@ -13,7 +13,12 @@ import {
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Image, ImageRoot } from '@akashaorg/ui/lib/akasha-components/image';
 
-export const ConfigSuccessPage: React.FC = () => {
+type ConfigSuccessPageProps = {
+  worldId: string;
+  worldName: string;
+};
+
+export const ConfigSuccessPage: React.FC<ConfigSuccessPageProps> = ({ worldId, worldName }) => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-world-builder');
 
@@ -21,12 +26,10 @@ export const ConfigSuccessPage: React.FC = () => {
     navigate({ to: '/dashboard' });
   };
 
+  // TODO: add after preview is available
   const handleOpenPreview = () => {
     navigate({ to: '/dashboard' });
   };
-
-  // TODO fetch real data
-  const worldName = 'Test World';
 
   return (
     <Card>
@@ -41,7 +44,7 @@ export const ConfigSuccessPage: React.FC = () => {
         <ImageRoot className="flex justify-center">
           <Image
             showLoadingIndicator={true}
-            src="/images/worldsuccess.webp"
+            src="/images/vibe-report.webp"
             width={150}
             height={200}
           />

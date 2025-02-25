@@ -19,10 +19,14 @@ import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { HOME } from '../../../routes';
 import { LandingPageComponent } from './landing-page-component';
-import { useGetWorldsByCreatorDidQuery } from '@akashaorg/ui-core-hooks/lib/generated';
+import {
+  useGetWorldConfigQuery,
+  useGetWorldsByCreatorDidQuery,
+} from '@akashaorg/ui-core-hooks/lib/generated';
 import { Eye, Loader2, Pencil } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { selectWorldData } from '@akashaorg/ui-core-hooks/lib/selectors/get-worlds-by-creator-did-query';
+import { selectWorldConfigData } from '@akashaorg/ui-core-hooks/lib/selectors/get-world-config-query';
 
 export const DashboardPage: React.FC = () => {
   const navigate = useNavigate();
@@ -55,6 +59,17 @@ export const DashboardPage: React.FC = () => {
   });
 
   const worldData = selectWorldData(worldsByCreatorDidReq);
+
+  const {
+    data: worldConfigReq,
+    loading: loadingWorldConfigQuery,
+    error: worldConfigError,
+  } = useGetWorldConfigQuery({
+    variables: { worldID: worldData?.id },
+    skip: !worldData?.id,
+  });
+
+  const worldConfig = selectWorldConfigData(worldConfigReq);
 
   const handleNavToConfigfForm = () => {
     navigate({ to: '/world-config-form/$worldId/step1', params: { worldId: worldData?.id } });

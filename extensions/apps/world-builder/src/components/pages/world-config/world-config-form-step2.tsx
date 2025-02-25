@@ -1,9 +1,16 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Stepper } from '@akashaorg/ui/lib/akasha-components/stepper';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@akashaorg/ui/lib/components/select';
 import {
   Card,
   CardContent,
@@ -13,10 +20,10 @@ import {
   CardTitle,
 } from '@akashaorg/ui/lib/akasha-components/card';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
-// import {
-//   InfiniteScroll,
-//   InfiniteScrollList,
-// } from "@akashaorg/ui/lib/akasha-components/infinite-scroll";
+import {
+  InfiniteScroll,
+  InfiniteScrollList,
+} from '@akashaorg/ui/lib/akasha-components/infinite-scroll';
 import {
   ExtensionCard,
   ExtensionCardAction,
@@ -34,14 +41,23 @@ import {
 } from '@/ui/extension-avatar';
 import { ProfileAvatarButton, ProfileDidField, ProfileName } from '@/ui/profile-avatar-button';
 
-import { useGetAppsQuery } from '@akashaorg/ui-core-hooks/lib/generated';
+import {
+  useCreateAkashaWorldConfigExtensionMutation,
+  useCreateAkashaWorldConfigMutation,
+  useGetAppsQuery,
+  useGetWorldByIdQuery,
+} from '@akashaorg/ui-core-hooks/lib/generated';
 import {
   selectAkashaApps,
   selectAkashaAppsPageInfo,
 } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-query';
-import { transformSource } from '@akashaorg/ui-core-hooks';
+import { transformSource, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { Badge } from '@akashaorg/ui/lib/components/badge';
 import { X } from 'lucide-react';
+import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
+import getSDK from '@akashaorg/core-sdk';
+import { selectWorldData } from '@akashaorg/ui-core-hooks/lib/selectors/get-world-by-id-query';
+import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 type WorldConfigFormStep2Props = {
   worldId: string;
@@ -51,13 +67,41 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
   const { t } = useTranslation('app-extensions');
 
   const navigate = useNavigate();
+  const { uiEvents } = useRootComponentProps();
+  const sdk = React.useRef(getSDK());
 
-  const handleSave = () => {
-    navigate({ to: '/dashboard' });
-  };
-  const handleNavBack = () => {
-    navigate({ to: '/world-config-form/$worldId/step1', params: { worldId } });
-  };
+  const uiEventsRef = React.useRef(uiEvents);
+
+  const showErrorNotification = React.useCallback((title: string, errorMessage?: string) => {
+    uiEventsRef.current.next({
+      event: NotificationEvents.ShowNotification,
+      data: {
+        type: NotificationTypes.Error,
+        title,
+        description: errorMessage,
+      },
+    });
+  }, []);
+
+  const formValue = useMemo(() => {
+    try {
+      return JSON.parse(sessionStorage.getItem(worldId)) || {};
+    } catch (error) {
+      showErrorNotification(error);
+    }
+  }, [worldId, showErrorNotification]);
+
+  const {
+    data: getWorldByIdReq,
+    loading: loadingWorldByIdQuery,
+    error: getWorldByIdError,
+  } = useGetWorldByIdQuery({
+    variables: {
+      id: worldId,
+    },
+  });
+
+  const worldData = selectWorldData(getWorldByIdReq);
 
   const {
     data: getAppsReq,
@@ -65,7 +109,9 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
     error: getAppsError,
     fetchMore,
   } = useGetAppsQuery({
-    variables: { first: 10 },
+    variables: {
+      first: 10,
+    },
   });
 
   const akashaApps = selectAkashaApps(getAppsReq);
@@ -80,11 +126,90 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
   };
 
   const removeExtension = extId => {
-    setSelectedExtensions(prev => prev.filter(ext => ext.id === extId));
+    setSelectedExtensions(prev =>
+      prev.filter(ext => {
+        return ext.id !== extId;
+      }),
+    );
+  };
+
+  const [homepage, setHomepage] = useState(null);
+
+  const [createWorldConfigExtensionMutation, { loading: loadingWorldConfigExtensionMutation }] =
+    useCreateAkashaWorldConfigExtensionMutation({
+      context: { source: sdk.current.services.gql.contextSources.composeDB },
+      onError: error => {
+        showErrorNotification(
+          `${t(`Something went wrong when creating the world configuration extensions`)}.`,
+          error.message,
+        );
+      },
+    });
+
+  const [createWorldConfigMutation, { loading: loadingWorldConfigMutation }] =
+    useCreateAkashaWorldConfigMutation({
+      context: { source: sdk.current.services.gql.contextSources.composeDB },
+      onCompleted: data => {
+        const defaultExtensionsIDs = selectedExtensions
+          ?.map(ext => ext.id)
+          .concat([formValue?.layoutExtension, formValue?.registryExtension]);
+        Promise.all(
+          [...new Set(defaultExtensionsIDs)]?.map(extensionID => {
+            const worldConfigExtensionData = {
+              active: true,
+              createdAt: new Date().toISOString(),
+              worldConfigID: data?.setAkashaWorldConfig?.document?.id,
+              extensionID: extensionID,
+            };
+            createWorldConfigExtensionMutation({
+              variables: {
+                i: {
+                  content: worldConfigExtensionData,
+                },
+              },
+            });
+          }),
+        ).then(() =>
+          navigate({
+            to: '/config-success',
+            search: {
+              worldId: worldId,
+              worldName: worldData?.name,
+            },
+          }),
+        );
+      },
+      onError: error => {
+        showErrorNotification(
+          `${t(`Something went wrong when creating the world configuration`)}.`,
+          error.message,
+        );
+      },
+    });
+
+  const handleSave = () => {
+    const worldConfigData = {
+      layoutExtension: formValue?.layoutExtension,
+      registryExtension: formValue?.registryExtension,
+      homepageExtension: homepage,
+      worldID: worldId,
+      active: true,
+      createdAt: new Date().toISOString(),
+    };
+    createWorldConfigMutation({
+      variables: {
+        i: {
+          content: worldConfigData,
+        },
+      },
+    });
+  };
+  const handleNavBack = () => {
+    navigate({ to: '/world-config-form/$worldId/step1', params: { worldId } });
   };
 
   return (
-    <Card>
+    <>
       <CardHeader>
         <Stack className="items-center">
           <Stepper currentStep={1} numberOfSteps={2} className="max-w-[112px]" />
@@ -92,7 +217,7 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
         <CardTitle className="text-center">
           <Typography variant="h5">{t('Choose Your Extensions')}</Typography>
         </CardTitle>
-        <CardDescription className="flex justify-start">
+        <CardDescription className="flex flex-col justify-start text-left">
           <Typography variant="h6">{t('World Extensions')}</Typography>
           <Typography variant="sm">
             {t(
@@ -101,14 +226,15 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
           </Typography>
         </CardDescription>
       </CardHeader>
-      <CardContent className="gap-4">
-        <Card>
-          <CardContent className="bg-zinc-50">
+      <CardContent className="gap-4 flex flex-col">
+        <Card className="p-0.5">
+          <Stack className="h-[30rem] overflow-auto">
             <InfiniteScroll
               count={akashaApps?.length}
               estimatedHeight={60}
               overScan={10}
-              itemSpacing={0}
+              loading={loadingGetAppsQuery}
+              hasNextPage={pageInfo?.hasNextPage}
               onLoadMore={() => {
                 return fetchMore({
                   variables: {
@@ -121,12 +247,11 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
                 {index => {
                   const extensionData = akashaApps[index];
                   return (
-                    <ExtensionCard>
+                    <ExtensionCard className="p-4">
                       <ExtensionCardAvatar>
                         <ExtensionAvatar size="lg" extensionId="">
                           <ExtensionAvatarImage
                             src={transformSource(extensionData?.logoImage)?.src}
-                            alt="extension logo image"
                           />
                           <ExtensionAvatarFallback />
                         </ExtensionAvatar>
@@ -142,9 +267,8 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
                               src={
                                 transformSource(
                                   extensionData?.author?.akashaProfile?.avatar?.default,
-                                ).src
+                                )?.src
                               }
-                              alt="author profile avatar"
                             />
                             <ProfileAvatarButton.AvatarFallback />
                           </ProfileAvatarButton.Avatar>
@@ -176,10 +300,10 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
                 }}
               </InfiniteScrollList>
             </InfiniteScroll>
-          </CardContent>
+          </Stack>
         </Card>
         <Stack direction="column" spacing={2}>
-          <Typography variant="h5">{t('You have selected:')}</Typography>
+          <Typography variant="h6">{t('You have selected:')}</Typography>
           {selectedExtensions?.length === 0 && (
             <Typography variant="sm">{t('You haven’t selected any extensions yet.')}</Typography>
           )}
@@ -201,6 +325,27 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
             </div>
           )}
         </Stack>
+        <Stack direction="column" spacing={4}>
+          <Typography variant="h6">{t('Homepage')}</Typography>
+          <Typography variant="sm">
+            {t(
+              'Selecting an extension sets it as the default homepage when members enter the world.',
+            )}
+          </Typography>
+          <Select onValueChange={setHomepage} disabled={!selectedExtensions?.length}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder={t('Choose a homepage')} />
+            </SelectTrigger>
+            <SelectContent>
+              {selectedExtensions?.length > 0 &&
+                selectedExtensions?.map(ext => (
+                  <SelectItem key={ext.id} value={ext.id}>
+                    {ext.displayName}
+                  </SelectItem>
+                ))}
+            </SelectContent>
+          </Select>
+        </Stack>
       </CardContent>
       <CardFooter>
         <Button className="px-6 h-8" variant="outline" onClick={handleNavBack}>
@@ -210,6 +355,6 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
           {t('Save Config')}
         </Button>
       </CardFooter>
-    </Card>
+    </>
   );
 };

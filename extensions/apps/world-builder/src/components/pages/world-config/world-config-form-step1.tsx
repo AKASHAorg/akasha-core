@@ -1,11 +1,17 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Stepper } from '@akashaorg/ui/lib/akasha-components/stepper';
 import {
-  Card,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@akashaorg/ui/lib/components/select';
+import {
   CardContent,
   CardFooter,
   CardHeader,
@@ -24,7 +30,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@akashaorg/ui/lib/akasha-components/form';
-import { Autocomplete, Option } from '@akashaorg/ui/lib/akasha-components/autocomplete';
 import { useAtom } from 'jotai';
 import { AtomContext, FormData } from './world-config-main-page';
 
@@ -37,11 +42,18 @@ export const WorldConfigFormStep1Page: React.FC<WorldConfigFormStep1Props> = ({ 
 
   const navigate = useNavigate();
 
+  // TODO: use hooks to fetch realtime data and provide alternative options
   const registryExtensionOptions = [
-    { label: 'Akasha Extension App', value: '@akashaorg/app-extensions' },
+    {
+      label: 'Akasha Extension App',
+      value: 'k2t6wzhkhabz0ur6eqr9trbna7fswc7xm39jtxkqthznvg01dwtx40dmr163b3',
+    },
   ];
   const layoutExtensionOptions = [
-    { label: 'Akasha World Default Layout', value: '@akashaorg/ui-widget-layout' },
+    {
+      label: 'Akasha World Default Layout',
+      value: 'k2t6wzhkhabz0ypl6g42iejy2klea2gdilrw23pow1irm0uc8nem5klh66gle7',
+    },
   ];
 
   const FormSchema = z.object({
@@ -55,23 +67,10 @@ export const WorldConfigFormStep1Page: React.FC<WorldConfigFormStep1Props> = ({ 
       layoutExtension: '',
       registryExtension: '',
     },
+    mode: 'onChange',
   });
 
-  const [selectedLayoutValue, setSelectedLayoutValue] = useState<Option>(null);
-
-  const handleLayoutValueChange = (value: Option) => {
-    if (!value) return;
-    setSelectedLayoutValue(value);
-    form.setValue('layoutExtension', value.value);
-  };
-
-  const [selectedRegistryValue, setSelectedRegistryValue] = useState<Option>(null);
-
-  const handleRegistryValueChange = (value: Option) => {
-    if (!value) return;
-    setSelectedRegistryValue(value);
-    form.setValue('layoutExtension', value.value);
-  };
+  const { isDirty, isValid } = form.formState;
 
   const handleCancel = () => {
     navigate({ to: '/dashboard' });
@@ -90,7 +89,7 @@ export const WorldConfigFormStep1Page: React.FC<WorldConfigFormStep1Props> = ({ 
   };
 
   return (
-    <Card>
+    <>
       <CardHeader>
         <Stack className="items-center">
           <Stepper currentStep={1} numberOfSteps={2} className="max-w-[112px]" />
@@ -105,7 +104,7 @@ export const WorldConfigFormStep1Page: React.FC<WorldConfigFormStep1Props> = ({ 
             <FormField
               control={form.control}
               name="layoutExtension"
-              render={() => (
+              render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t('Layout')}</FormLabel>
                   <FormDescription>
@@ -113,15 +112,23 @@ export const WorldConfigFormStep1Page: React.FC<WorldConfigFormStep1Props> = ({ 
                       `The world’s layout is how the content is seen in a page. AKASHA World uses the default layout which is divided into 3 columns. `,
                     )}
                   </FormDescription>
-                  <FormControl>
-                    <Autocomplete
-                      placeholder={t('Select a layout extension')}
-                      emptyMessage={t('No layout extensions available')}
-                      value={selectedLayoutValue}
-                      onValueChange={value => handleLayoutValueChange(value)}
-                      options={layoutExtensionOptions}
-                    />
-                  </FormControl>
+
+                  <Select onValueChange={field.onChange} required>
+                    <FormControl>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder={t('Select a layout extension')} />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {layoutExtensionOptions?.length > 0 &&
+                        layoutExtensionOptions?.map(opt => (
+                          <SelectItem key={opt.value} value={opt.value}>
+                            {opt.label}
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
+
                   <FormMessage />
                 </FormItem>
               )}
@@ -129,7 +136,7 @@ export const WorldConfigFormStep1Page: React.FC<WorldConfigFormStep1Props> = ({ 
             <FormField
               control={form.control}
               name="registryExtension"
-              render={() => (
+              render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t('Extension App')}</FormLabel>
                   <FormDescription>
@@ -137,15 +144,21 @@ export const WorldConfigFormStep1Page: React.FC<WorldConfigFormStep1Props> = ({ 
                       `Choose the default extension app where you will find installable extensions and publish yours.`,
                     )}
                   </FormDescription>
-                  <FormControl>
-                    <Autocomplete
-                      placeholder={t('Select a registry extension')}
-                      emptyMessage={t('No registry extensions available')}
-                      value={selectedRegistryValue}
-                      onValueChange={value => handleRegistryValueChange(value)}
-                      options={registryExtensionOptions}
-                    />
-                  </FormControl>
+                  <Select onValueChange={field.onChange} required>
+                    <FormControl>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder={t('Select a registry extension')} />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {registryExtensionOptions?.length > 0 &&
+                        registryExtensionOptions?.map(opt => (
+                          <SelectItem key={opt.value} value={opt.value}>
+                            {opt.label}
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
@@ -155,12 +168,12 @@ export const WorldConfigFormStep1Page: React.FC<WorldConfigFormStep1Props> = ({ 
             <Button className="px-6 h-8" variant="outline" onClick={handleCancel}>
               {t('Cancel')}
             </Button>
-            <Button type="submit" className="px-6 h-8">
+            <Button type="submit" className="px-6 h-8" disabled={!isDirty || !isValid}>
               {t('Next')}
             </Button>
           </CardFooter>
         </form>
       </Form>
-    </Card>
+    </>
   );
 };
