@@ -253,7 +253,7 @@ const ExtensionEditPublishedForm: React.FC<ExtensionEditPublishedFormProps> = pr
           >
             {cancelButton.label}
           </Button>
-          <Button loading={loading} disabled={!isValid || loading} onClick={onSave}>
+          <Button loading={loading} disabled={!isValid || loading} onClick={onSave} type="submit">
             {nextButton.label}
           </Button>
         </Stack>
