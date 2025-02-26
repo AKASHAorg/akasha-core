@@ -169,7 +169,7 @@ const ExtensionEditStep1Form: React.FC<ExtensionEditStep1FormProps> = props => {
           >
             {cancelButton.label}
           </Button>
-          <Button disabled={!isValid || loading} onClick={onSave}>
+          <Button disabled={!isValid || loading} onClick={onSave} type="submit">
             {nextButton.label}
           </Button>
         </Stack>
