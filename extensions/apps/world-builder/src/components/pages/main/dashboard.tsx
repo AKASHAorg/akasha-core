@@ -20,18 +20,24 @@ import { transformSource, useAkashaStore, useRootComponentProps } from '@akashao
 import { HOME } from '../../../routes';
 import { LandingPageComponent } from './landing-page-component';
 import {
-  useGetWorldConfigQuery,
+  useGetWorldConfigExtensionsQuery,
+  useGetWorldFullInfoQuery,
   useGetWorldsByCreatorDidQuery,
 } from '@akashaorg/ui-core-hooks/lib/generated';
 import { Eye, Loader2, Pencil } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { selectWorldData } from '@akashaorg/ui-core-hooks/lib/selectors/get-worlds-by-creator-did-query';
-import { selectWorldConfigData } from '@akashaorg/ui-core-hooks/lib/selectors/get-world-config-query';
+import {
+  selectWorldConfigData,
+  selectWorldMetaInfoData,
+} from '@akashaorg/ui-core-hooks/lib/selectors/get-world-full-info-query';
+import { selectWorldConfigExtensions } from '@akashaorg/ui-core-hooks/lib/selectors/get-world-config-extensions-query';
 import {
   ExtensionAvatar,
   ExtensionAvatarFallback,
   ExtensionAvatarImage,
 } from '@/ui/extension-avatar';
+import { Image, ImageRoot } from '@akashaorg/ui/lib/akasha-components/image';
 
 export const DashboardPage: React.FC = () => {
   const navigate = useNavigate();
@@ -66,18 +72,34 @@ export const DashboardPage: React.FC = () => {
   const worldData = selectWorldData(worldsByCreatorDidReq);
 
   const {
-    data: worldConfigReq,
-    loading: loadingWorldConfigQuery,
-    error: worldConfigError,
-  } = useGetWorldConfigQuery({
-    variables: { worldID: worldData?.id },
+    data: worldFullInfoReq,
+    loading: loadingWorldFullInfoQuery,
+    error: worldFullInfoError,
+  } = useGetWorldFullInfoQuery({
+    variables: { id: worldData?.id, creator: authenticatedDID },
     skip: !worldData?.id,
   });
 
-  const worldConfig = selectWorldConfigData(worldConfigReq);
+  const worldConfig = selectWorldConfigData(worldFullInfoReq);
+  const worldMetaInfo = selectWorldMetaInfoData(worldFullInfoReq);
 
-  const handleNavToConfigfForm = () => {
+  const {
+    data: worldConfigExtensionsReq,
+    loading: loadingWorldConfigExtensionsQuery,
+    error: worldConfigExtensionsError,
+  } = useGetWorldConfigExtensionsQuery({
+    variables: { configID: worldConfig?.id },
+    skip: !worldConfig?.id,
+  });
+
+  const worldConfigExtensions = selectWorldConfigExtensions(worldConfigExtensionsReq);
+
+  const handleNavToConfigForm = () => {
     navigate({ to: '/world-config-form/$worldId/step1', params: { worldId: worldData?.id } });
+  };
+
+  const handleNavToCustomizeForm = () => {
+    navigate({ to: '/world-customize-form', params: { worldId: worldData?.id } });
   };
 
   const handleNavToWorldCreate = () => {
@@ -128,7 +150,7 @@ export const DashboardPage: React.FC = () => {
         </CardHeader>
         <CardContent className="flex-col gap-4">
           <Stack direction="row" spacing={4}>
-            <ExtensionAvatar size="lg" extensionId={worldData?.id}>
+            <ExtensionAvatar size="xl" extensionId={worldData?.id}>
               <ExtensionAvatarImage src={transformSource(worldData?.icon?.default)?.src} />
               <ExtensionAvatarFallback />
             </ExtensionAvatar>
@@ -150,16 +172,90 @@ export const DashboardPage: React.FC = () => {
           <Stack direction="column" spacing={4}>
             <Stack direction="row" justifyContent="between">
               <Typography variant="h6">{t('World Creation')}</Typography>
-              <Button onClick={handleNavToWorldCreate}>
+              <Button variant="secondary" onClick={handleNavToWorldCreate}>
                 <Pencil />
               </Button>
             </Stack>
+            {worldData?.extensionPublishers?.length > 0 && (
+              <Stack direction="column" spacing={2}>
+                <Typography variant="sm" bold>
+                  {t('Extension Publishers')}
+                </Typography>
+                <div className="flex flex-wrap gap-2">
+                  {worldData?.extensionPublishers?.map((extPublisher, idx) => (
+                    <Typography key={idx} variant="sm">
+                      {extPublisher?.id}
+                    </Typography>
+                  ))}
+                </div>
+              </Stack>
+            )}
+            {worldData?.icon && (
+              <Stack direction="column" spacing={2}>
+                <Typography variant="sm" bold>
+                  {t('Icon')}
+                </Typography>
+                <ImageRoot>
+                  <Image
+                    width={24}
+                    height={24}
+                    src={transformSource(worldData?.icon?.default)?.src}
+                  />
+                </ImageRoot>
+              </Stack>
+            )}
+            {worldData?.instanceURL && (
+              <Stack direction="column" spacing={2}>
+                <Typography variant="sm" bold>
+                  {t('Instance URL')}
+                </Typography>
+                <Typography variant="sm">{worldData?.instanceURL}</Typography>
+              </Stack>
+            )}
           </Stack>
           <Stack direction="column" spacing={4}>
             <Stack direction="row" justifyContent="between">
               <Typography variant="h6">{t('World Config')}</Typography>
-              <Button onClick={handleNavToConfigfForm}>
+              <Button onClick={handleNavToConfigForm}>
                 {worldConfig?.id ? <Pencil /> : t('Configure World')}
+              </Button>
+            </Stack>
+            <Stack direction="column" spacing={2}>
+              <Typography variant="sm" bold>
+                {t('Layout')}
+              </Typography>
+              <Typography variant="sm">{worldConfig?.layoutExtension}</Typography>
+            </Stack>
+            <Stack direction="column" spacing={2}>
+              <Typography variant="sm" bold>
+                {t('Extension App')}
+              </Typography>
+              <Typography variant="sm">{worldConfig?.registryExtension}</Typography>
+            </Stack>
+            <Stack direction="column" spacing={2}>
+              <Typography variant="sm" bold>
+                {t('World Extensions')}
+              </Typography>
+              <div className="flex flex-wrap gap-2">
+                {worldConfigExtensions?.map((extension, idx) => (
+                  <Typography key={idx} variant="sm">
+                    {extension?.extensionID}
+                  </Typography>
+                ))}
+              </div>
+            </Stack>
+            <Stack direction="column" spacing={2}>
+              <Typography variant="sm" bold>
+                {t('Homepage')}
+              </Typography>
+              <Typography variant="sm">{worldConfig?.homepageExtension}</Typography>
+            </Stack>
+          </Stack>
+          <Stack direction="column" spacing={4}>
+            <Stack direction="row" justifyContent="between">
+              <Typography variant="h6">{t('World Customisation')}</Typography>
+              <Button onClick={handleNavToCustomizeForm}>
+                {worldMetaInfo?.id ? <Pencil /> : t('Customise your World')}
               </Button>
             </Stack>
           </Stack>
