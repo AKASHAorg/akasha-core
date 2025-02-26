@@ -16,7 +16,7 @@ import {
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
+import { transformSource, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { HOME } from '../../../routes';
 import { LandingPageComponent } from './landing-page-component';
 import {
@@ -27,6 +27,11 @@ import { Eye, Loader2, Pencil } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { selectWorldData } from '@akashaorg/ui-core-hooks/lib/selectors/get-worlds-by-creator-did-query';
 import { selectWorldConfigData } from '@akashaorg/ui-core-hooks/lib/selectors/get-world-config-query';
+import {
+  ExtensionAvatar,
+  ExtensionAvatarFallback,
+  ExtensionAvatarImage,
+} from '@/ui/extension-avatar';
 
 export const DashboardPage: React.FC = () => {
   const navigate = useNavigate();
@@ -122,19 +127,25 @@ export const DashboardPage: React.FC = () => {
           </CardDescription>
         </CardHeader>
         <CardContent className="flex-col gap-4">
-          <Stack direction="column" spacing={4}>
-            <Stack direction="row" justifyContent="between">
-              <Typography variant="h6">{worldData?.name}</Typography>
-              <Button variant="outline" size="sm">
-                <Eye />
-                {t('Preview')}
-              </Button>
+          <Stack direction="row" spacing={4}>
+            <ExtensionAvatar size="lg" extensionId={worldData?.id}>
+              <ExtensionAvatarImage src={transformSource(worldData?.icon?.default)?.src} />
+              <ExtensionAvatarFallback />
+            </ExtensionAvatar>
+            <Stack direction="column" spacing={4}>
+              <Stack direction="row" justifyContent="between">
+                <Typography variant="h6">{worldData?.name}</Typography>
+                <Button variant="outline" size="sm">
+                  <Eye />
+                  {t('Preview')}
+                </Button>
+              </Stack>
+              <Typography variant="sm">
+                {t(
+                  'Your world doesn’t have a description yet! Let’s bring it to life by adding one in the World Customizer section.',
+                )}
+              </Typography>
             </Stack>
-            <Typography variant="sm">
-              {t(
-                'Your world doesn’t have a description yet! Let’s bring it to life by adding one in the World Customizer section.',
-              )}
-            </Typography>
           </Stack>
           <Stack direction="column" spacing={4}>
             <Stack direction="row" justifyContent="between">
@@ -147,7 +158,9 @@ export const DashboardPage: React.FC = () => {
           <Stack direction="column" spacing={4}>
             <Stack direction="row" justifyContent="between">
               <Typography variant="h6">{t('World Config')}</Typography>
-              <Button onClick={handleNavToConfigfForm}>{t('Configure World')}</Button>
+              <Button onClick={handleNavToConfigfForm}>
+                {worldConfig?.id ? <Pencil /> : t('Configure World')}
+              </Button>
             </Stack>
           </Stack>
         </CardContent>
