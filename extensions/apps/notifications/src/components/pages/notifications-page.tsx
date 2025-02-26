@@ -231,7 +231,7 @@ const NotificationsPage: React.FC = () => {
                   image={'/images/no-notifications-found.webp'}
                 />
               )}
-              <Card className="p-0 rounded-2xl">
+              <Card className="p-0 rounded-2xl border-none">
                 <DynamicInfiniteScroll
                   count={notifications.length}
                   overScan={8}

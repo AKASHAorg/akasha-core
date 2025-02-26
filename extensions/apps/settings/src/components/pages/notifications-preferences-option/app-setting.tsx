@@ -1,27 +1,26 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
 
-export interface IProfileSettingProps {
+export interface IAppSettingProps {
+  title;
+  description;
   // data
   isSelected: boolean;
   // handlers
   onChange?: (ev: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const ProfileSetting: React.FC<IProfileSettingProps> = ({ isSelected, onChange }) => {
-  const { t } = useTranslation('app-settings-ewa');
-
+const AppSetting: React.FC<IAppSettingProps> = ({ title, description, isSelected, onChange }) => {
   return (
     <Stack className="border-b border-border mb-4 pb-4">
       <Stack direction="row" justifyContent="between" alignItems="center" className="mt-4">
-        <Text variant="body1">{t('Profile')}</Text>
+        <Text variant="body1">{title}</Text>
         <Checkbox
-          id="profile-checkbox"
-          value="Profile"
-          name="profile"
+          id="checkbox"
+          value="app-setting"
+          name="app-setting"
           isSelected={isSelected}
           handleChange={onChange}
           size="large"
@@ -30,10 +29,10 @@ const ProfileSetting: React.FC<IProfileSettingProps> = ({ isSelected, onChange }
       </Stack>
 
       <Text variant="footnotes2" weight="normal" customStyle="dark:text-grey6 text-grey4 mt-2">
-        {t('Get notifications about new followers')}
+        {description}
       </Text>
     </Stack>
   );
 };
 
-export default ProfileSetting;
+export default AppSetting;

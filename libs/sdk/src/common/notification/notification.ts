@@ -19,7 +19,6 @@ import { z } from 'zod';
 
 import {
   type InitializeOptions,
-  type ChannelSettings,
   InitializeOptionsSchema,
   ChannelInfoResponseSchema,
   ChannelUserSettingsSchema,
@@ -28,6 +27,7 @@ import {
 import {
   TYPES,
   NOTIFICATION_EVENTS,
+  type ChannelSettings,
   type ChannelOptionIndex,
   type NotificationMetaTypes,
   type NotificationParsedMetaData,

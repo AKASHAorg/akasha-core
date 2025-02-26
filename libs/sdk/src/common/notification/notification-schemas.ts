@@ -2,6 +2,8 @@ import { z, boolean } from 'zod';
 import {
   ChannelOptionIndexes,
   type UserSettingType,
+  ChannelSettings,
+  NotificationSettingTypeSchema
 } from '@akashaorg/typings/lib/sdk/notification';
 
 export const setNewSettingsSchema = z.array(
@@ -20,12 +22,6 @@ export const InitializeOptionsSchema = z
 
 export type InitializeOptions = z.infer<typeof InitializeOptionsSchema>;
 
-const NotificationSettingTypeSchema = z.object({
-  index: z.number(),
-  default: z.boolean(),
-  description: z.string(),
-});
-
 export const ChannelInfoResponseSchema = z
   .object({
     channel_settings: z.string(),
@@ -43,8 +39,6 @@ export const ChannelInfoResponseSchema = z
       return z.NEVER;
     }
   });
-
-export type ChannelSettings = z.infer<typeof NotificationSettingTypeSchema>;
 
 export const ChannelUserSettingsSchema = z
   .object({
