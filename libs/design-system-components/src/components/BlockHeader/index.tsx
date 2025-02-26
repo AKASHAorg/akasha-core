@@ -66,9 +66,7 @@ export const BlockHeader: React.FC<BlockHeaderProps> = props => {
         <Stack
           alignItems="center"
           justifyContent="center"
-          className="
-            'h-8 w-8 group relative rounded-full bg(secondaryLight/30 dark:secondaryDark)'
-          "
+          className="h-8 w-8 group relative rounded-full bg(secondaryLight/30 dark:secondaryDark)"
         >
           <Icon size="sm" icon={icon} />
         </Stack>
