@@ -57,7 +57,6 @@ import { X } from 'lucide-react';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import getSDK from '@akashaorg/core-sdk';
 import { selectWorldData } from '@akashaorg/ui-core-hooks/lib/selectors/get-world-by-id-query';
-import { AkashaAppApplicationType, SortOrder } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 type WorldConfigFormStep2Props = {
   worldId: string;
@@ -146,38 +145,51 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
       },
     });
 
+  const getUniqueExtensionIds = () => {
+    const defaultExtensionsIDs = selectedExtensions
+      ?.map(ext => ext.id)
+      .concat([formValue?.layoutExtension, formValue?.registryExtension]);
+    return defaultExtensionsIDs;
+  };
+
+  const createExtensions = (worldConfigId: string, extensionIds: string[]) => {
+    return Promise.all(
+      [...new Set(extensionIds)]?.map(extensionID => {
+        const worldConfigExtensionData = {
+          worldConfigID: worldConfigId,
+          extensionID: extensionID,
+          active: true,
+          createdAt: new Date().toISOString(),
+        };
+        createWorldConfigExtensionMutation({
+          variables: {
+            i: {
+              content: worldConfigExtensionData,
+            },
+          },
+        });
+      }),
+    );
+  };
+
+  const navToConfigSuccessPage = () => {
+    navigate({
+      to: '/config-success',
+      search: {
+        worldId: worldId,
+        worldName: worldData?.name,
+      },
+    });
+  };
+
   const [createWorldConfigMutation, { loading: loadingWorldConfigMutation }] =
     useCreateAkashaWorldConfigMutation({
       context: { source: sdk.current.services.gql.contextSources.composeDB },
-      onCompleted: data => {
-        const defaultExtensionsIDs = selectedExtensions
-          ?.map(ext => ext.id)
-          .concat([formValue?.layoutExtension, formValue?.registryExtension]);
-        Promise.all(
-          [...new Set(defaultExtensionsIDs)]?.map(extensionID => {
-            const worldConfigExtensionData = {
-              active: true,
-              createdAt: new Date().toISOString(),
-              worldConfigID: data?.setAkashaWorldConfig?.document?.id,
-              extensionID: extensionID,
-            };
-            createWorldConfigExtensionMutation({
-              variables: {
-                i: {
-                  content: worldConfigExtensionData,
-                },
-              },
-            });
-          }),
-        ).then(() =>
-          navigate({
-            to: '/config-success',
-            search: {
-              worldId: worldId,
-              worldName: worldData?.name,
-            },
-          }),
-        );
+      onCompleted: async data => {
+        const worldConfigId = data?.setAkashaWorldConfig?.document?.id;
+        const uniqueExtIds = getUniqueExtensionIds();
+        await createExtensions(worldConfigId, uniqueExtIds);
+        navToConfigSuccessPage();
       },
       onError: error => {
         showErrorNotification(
@@ -353,7 +365,11 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
         <Button className="px-6" variant="outline" onClick={handleNavBack}>
           {t('Back')}
         </Button>
-        <Button className="px-6" onClick={handleSave}>
+        <Button
+          className="px-6"
+          onClick={handleSave}
+          loading={loadingWorldConfigMutation || loadingWorldConfigExtensionMutation}
+        >
           {t('Save Config')}
         </Button>
       </CardFooter>

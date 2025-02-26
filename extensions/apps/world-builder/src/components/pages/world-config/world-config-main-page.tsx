@@ -18,7 +18,6 @@ export const AtomContext = createContext(null);
 const storage = createJSONStorage(() => sessionStorage);
 
 export type FormData = {
-  lastCompletedStep?: number;
   layoutExtension?: string;
   registryExtension?: string;
   homepageExtension?: string;
@@ -55,7 +54,6 @@ export const WorldConfigMainPage: React.FC<WorldConfigMainPageProps> = ({ worldI
       atomWithStorage<FormData>(
         worldId,
         {
-          lastCompletedStep: 0,
           layoutExtension: '',
           registryExtension: '',
           homepageExtension: '',

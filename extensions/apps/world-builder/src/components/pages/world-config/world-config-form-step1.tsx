@@ -120,12 +120,11 @@ export const WorldConfigFormStep1Page: React.FC<WorldConfigFormStep1Props> = ({ 
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {layoutExtensionOptions?.length > 0 &&
-                        layoutExtensionOptions?.map(opt => (
-                          <SelectItem key={opt.value} value={opt.value}>
-                            {opt.label}
-                          </SelectItem>
-                        ))}
+                      {layoutExtensionOptions?.map(opt => (
+                        <SelectItem key={opt.value} value={opt.value}>
+                          {opt.label}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
 
@@ -151,12 +150,11 @@ export const WorldConfigFormStep1Page: React.FC<WorldConfigFormStep1Props> = ({ 
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {registryExtensionOptions?.length > 0 &&
-                        registryExtensionOptions?.map(opt => (
-                          <SelectItem key={opt.value} value={opt.value}>
-                            {opt.label}
-                          </SelectItem>
-                        ))}
+                      {registryExtensionOptions?.map(opt => (
+                        <SelectItem key={opt.value} value={opt.value}>
+                          {opt.label}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                   <FormMessage />
