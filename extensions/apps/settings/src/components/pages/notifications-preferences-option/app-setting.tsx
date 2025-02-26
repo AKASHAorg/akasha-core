@@ -14,8 +14,8 @@ export interface IAppSettingProps {
 
 const AppSetting: React.FC<IAppSettingProps> = ({ title, description, isSelected, onChange }) => {
   return (
-    <Stack className="border-b border-border mb-4 pb-4">
-      <Stack direction="row" justifyContent="between" alignItems="center" className="mt-4">
+    <Stack>
+      <Stack direction="row" justifyContent="between" alignItems="center">
         <Text variant="body1">{title}</Text>
         <Checkbox
           id="checkbox"

@@ -202,7 +202,7 @@ const NotificationsPreferencesOption: React.FC = () => {
                         </>
                       ))}
                       <Card className="mt-4 bg-grey9 dark:bg-grey3">
-                        <Stack direction="row" spacing="gap-x-3" align="center">
+                        <Stack direction="row" spacing={3} alignItems="center">
                           <Icon
                             icon={<Info />}
                             size="lg"
@@ -219,11 +219,16 @@ const NotificationsPreferencesOption: React.FC = () => {
                 </Stack>
 
                 {/* Buttons */}
-                <Stack direction="row" className="border-t border-border pt-4 px-3">
+                <Stack
+                  direction="row"
+                  className="border-t border-border py-4 px-3"
+                  justifyContent="end"
+                >
                   <Button
                     variant="link"
                     onClick={handleReset}
                     color="dark:secondaryLight secondaryDark"
+                    className="mr-4"
                   >
                     {t('Reset')}
                   </Button>

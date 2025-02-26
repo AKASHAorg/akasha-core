@@ -398,7 +398,7 @@ export const ImageEditorBlock = (
   return (
     <>
       {uiState === 'menu' && (
-        <Card className="shadow-none rounded-2xl">
+        <Card className="shadow-none rounded-2xl bg-nested-card">
           <Stack direction="column">
             {imageGalleryImages.length > 0 && (
               <Stack direction="row" justifyContent="end">
@@ -411,7 +411,7 @@ export const ImageEditorBlock = (
               <Button
                 onClick={handleMediaClick}
                 disabled={imageUploadDisabled || maxImagesLimitReached}
-                className="w-full sm:w-48"
+                className="md:w-fit sm:w-full"
               >
                 {t('Add an image from device')}
               </Button>

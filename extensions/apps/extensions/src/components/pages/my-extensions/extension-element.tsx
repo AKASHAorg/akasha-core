@@ -280,8 +280,8 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
             </Text>
           </Stack>
         </Stack>
-        {showDivider && <Divider />}
       </Stack>
+      {showDivider && <Divider />}
     </Stack>
   );
 };

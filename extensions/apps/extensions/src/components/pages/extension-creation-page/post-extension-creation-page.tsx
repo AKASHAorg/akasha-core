@@ -72,7 +72,7 @@ export const PostExtensionCreationPage: React.FC<{ extensionId: string }> = ({ e
           direction="row"
           alignItems="center"
           spacing={2}
-          className="bg-inherit rounded-[0.625rem] p-2"
+          className="bg-inherit rounded-[0.625rem] p-2 bg-nested-card"
         >
           <AppAvatar avatar={extensionData.avatar} appType={extensionData.applicationType} />
           <Stack direction="column" justifyContent="between">
@@ -99,7 +99,7 @@ You can add more details to your extension, such as a description, gallery & mor
           </Button>
           <Button onClick={handleNavigateToReleaseManager}>{t('Manage Releases')}</Button>
         </Stack>
-        <Card className="shadow-none">
+        <Card className="shadow-none bg-nested-card">
           <Stack direction="column" spacing={2}>
             <Stack direction="row" spacing={1} alignItems="center" justifyContent="center">
               <Icon

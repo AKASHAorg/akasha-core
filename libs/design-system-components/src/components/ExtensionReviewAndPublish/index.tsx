@@ -312,7 +312,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
             handleClick={extensionData?.keywords?.length > 0 ? onAccordionClick : () => {}}
           />
         </Stack>
-        <Card className="p-3">
+        <Card className="p-3 bg-nested-card">
           <Stack alignItems="center" direction="row" spacing={2}>
             <Text variant="button-sm">{needToMakeChangesLabel}</Text>
             <Button

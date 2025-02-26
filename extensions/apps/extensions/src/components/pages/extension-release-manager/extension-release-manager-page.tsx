@@ -276,7 +276,7 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
         <Text variant="h5" weight="semibold" align="start">
           {t('Release Manager')}
         </Text>
-        <Card className="p-2">
+        <Card className="p-2 bg-nested-card">
           {extensionDataReqLoading && (
             <Stack alignItems="center" justifyContent="center" className="w-full h-full">
               <Spinner />
@@ -305,7 +305,7 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
           </Button>
         </Stack>
         {testRelease && (
-          <Card className="p-4">
+          <Card className="p-4 bg-nested-card">
             <Stack spacing={4}>
               <Text variant="body2" weight="semibold">
                 {`Release ${testRelease?.version || '0.0.1'}`}

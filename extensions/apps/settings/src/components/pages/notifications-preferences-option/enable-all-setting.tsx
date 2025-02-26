@@ -15,7 +15,7 @@ const EnableAllSetting: React.FC<IEnableAllSettingProps> = ({ isSelected, onChan
   const { t } = useTranslation('app-settings-ewa');
 
   return (
-    <Stack className="border border-border mb-4">
+    <Stack className="mb-4">
       <Stack direction="row" justifyContent="between" alignItems="center" className="my-4">
         <Text variant="body1">{t('Enable all')}</Text>
         <Checkbox

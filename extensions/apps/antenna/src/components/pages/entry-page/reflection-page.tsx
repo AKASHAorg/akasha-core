@@ -110,7 +110,7 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
   }, []);
 
   return (
-    <Card className="shadow-none mb-4">
+    <Card className="shadow-none mb-4 p-0">
       <ReflectFeed
         reflectToId={reflectionData.id}
         header={
