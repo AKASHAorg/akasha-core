@@ -14,9 +14,8 @@
     "paths": {
       "@akashaorg/package-utils-plugin": ["./tools/package-utils-plugin/src/index.ts"],
       "@akashaorg/core-sdk": ["./dist/npm/core-sdk/lib"],
-      "@akashaorg/core-sdk/lib/*": [
-        "./dist/npm/core-sdk/lib/*"
-      ],
+      "@akashaorg/core-sdk/lib/*": ["./dist/npm/core-sdk/lib/*"],
+      "@/*": ["src/*"]
     }
   },
   "exclude": ["node_modules", "**/*.spec.ts", "**/*.spec.tsx", "tmp", "dist"]

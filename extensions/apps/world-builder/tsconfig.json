@@ -3,14 +3,7 @@
   "compilerOptions": {
     "outDir": "./lib",
     "rootDir": "./src",
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"],
-      "@akashaorg/core-sdk": ["../../../dist/npm/core-sdk/lib"],
-      "@akashaorg/core-sdk/lib/*": [
-        "../../../dist/npm/core-sdk/lib/*"
-      ],
-    }
+    "baseUrl": "."
   },
   "include": ["./src"]
 }
