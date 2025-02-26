@@ -55,10 +55,10 @@ export const ConfigSuccessPage: React.FC<ConfigSuccessPageProps> = ({ worldId, w
         <Typography variant="p">{t(`The preview will open in a new tab`)}</Typography>
       </CardDescription>
       <CardFooter>
-        <Button className="px-6 h-8" onClick={handleNavToDashboard}>
+        <Button className="px-6" onClick={handleNavToDashboard}>
           {t('Do it later')}
         </Button>
-        <Button className="px-6 h-8" onClick={handleOpenPreview}>
+        <Button className="px-6" onClick={handleOpenPreview}>
           {t('Preview World')}
         </Button>
       </CardFooter>

@@ -58,10 +58,10 @@ export const CreateSuccessPage: React.FC<CreateSuccessPageProps> = ({ worldId, w
         </Typography>
       </CardDescription>
       <CardFooter>
-        <Button className="px-6 h-8" onClick={handleNavToDashboard}>
+        <Button className="px-6" onClick={handleNavToDashboard}>
           {t('Do it later')}
         </Button>
-        <Button className="px-6 h-8" onClick={handleNavToConfigureWorldForm}>
+        <Button className="px-6" onClick={handleNavToConfigureWorldForm}>
           {t('Configure World')}
         </Button>
       </CardFooter>

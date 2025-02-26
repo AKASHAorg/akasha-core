@@ -249,7 +249,11 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
                 return (
                   <ExtensionCard className="p-4">
                     <ExtensionCardAvatar>
-                      <ExtensionAvatar size="lg" extensionId="">
+                      <ExtensionAvatar
+                        size="lg"
+                        extensionId={extensionData?.id}
+                        extensionType={extensionData?.applicationType}
+                      >
                         <ExtensionAvatarImage
                           src={transformSource(extensionData?.logoImage)?.src}
                         />
@@ -346,10 +350,10 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
         </Stack>
       </CardContent>
       <CardFooter>
-        <Button className="px-6 h-8" variant="outline" onClick={handleNavBack}>
+        <Button className="px-6" variant="outline" onClick={handleNavBack}>
           {t('Back')}
         </Button>
-        <Button className="px-6 h-8" onClick={handleSave}>
+        <Button className="px-6" onClick={handleSave}>
           {t('Save Config')}
         </Button>
       </CardFooter>

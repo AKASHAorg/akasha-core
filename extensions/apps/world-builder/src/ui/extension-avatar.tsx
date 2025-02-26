@@ -6,8 +6,8 @@ import { EyeOff } from 'lucide-react';
 
 import { cn } from '@/ui/library/utils';
 import { getImageFromSeed } from '@/ui/library/get-image-from-seed';
-import { ExtensionType } from '@/ui/types/extension-type';
 import { Image, ImageFallback, ImageRoot } from '@akashaorg/ui/lib/akasha-components/image';
+import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 const extensionVariants = cva(
   'flex justify-center items-center rounded-lg overflow-hidden shrink-0',
@@ -28,7 +28,7 @@ const extensionVariants = cva(
 
 const ExtensionAvatarContext = React.createContext<{
   extensionId: string;
-  extensionType: ExtensionType;
+  extensionType: AkashaAppApplicationType;
   nsfw: boolean;
   publicImgPath: string;
 } | null>(null);
@@ -46,7 +46,7 @@ const useExtensionAvatarContext = () => {
 const ExtensionAvatar = ({
   extensionId = '',
   size = 'lg',
-  extensionType = ExtensionType.Widget,
+  extensionType = AkashaAppApplicationType.Widget,
   publicImgPath = '/images',
   nsfw = false,
   className,
@@ -54,7 +54,7 @@ const ExtensionAvatar = ({
 }: React.ComponentProps<'div'> &
   VariantProps<typeof extensionVariants> & {
     extensionId?: string;
-    extensionType?: ExtensionType;
+    extensionType?: AkashaAppApplicationType;
     nsfw?: boolean;
     publicImgPath?: string;
   }) => (
@@ -91,16 +91,16 @@ const ExtensionAvatarFallback = ({
   let avatarFallback: string;
 
   switch (extensionType) {
-    case ExtensionType.App:
+    case AkashaAppApplicationType.App:
       avatarFallback = `${publicImgPath}/app-${seed}.webp`;
       break;
-    case ExtensionType.Widget:
+    case AkashaAppApplicationType.Widget:
       avatarFallback = `${publicImgPath}/widget-${seed}.webp`;
       break;
-    case ExtensionType.Plugin:
+    case AkashaAppApplicationType.Plugin:
       avatarFallback = `${publicImgPath}/plugin-${seed}.webp`;
       break;
-    case ExtensionType.Other:
+    case AkashaAppApplicationType.Other:
       avatarFallback = `${publicImgPath}/other-${seed}.webp`;
       break;
     default:

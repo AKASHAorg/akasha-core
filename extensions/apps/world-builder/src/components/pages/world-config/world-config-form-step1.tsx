@@ -165,10 +165,10 @@ export const WorldConfigFormStep1Page: React.FC<WorldConfigFormStep1Props> = ({ 
             />
           </CardContent>
           <CardFooter>
-            <Button className="px-6 h-8" variant="outline" onClick={handleCancel}>
+            <Button className="px-6" variant="outline" onClick={handleCancel}>
               {t('Cancel')}
             </Button>
-            <Button type="submit" className="px-6 h-8" disabled={!isDirty || !isValid}>
+            <Button type="submit" className="px-6" disabled={!isDirty || !isValid}>
               {t('Next')}
             </Button>
           </CardFooter>

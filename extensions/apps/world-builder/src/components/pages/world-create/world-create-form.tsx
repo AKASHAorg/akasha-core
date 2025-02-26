@@ -318,10 +318,10 @@ export const WorldCreateFormPage: React.FC = () => {
             />
           </CardContent>
           <CardFooter>
-            <Button className="px-6 h-8" variant="outline" onClick={handleCancel}>
+            <Button className="px-6" variant="outline" onClick={handleCancel}>
               {t('Cancel')}
             </Button>
-            <Button type="submit" className="px-6 h-8" loading={loadingWorldMutation}>
+            <Button type="submit" className="px-6" loading={loadingWorldMutation}>
               {t('Create')}
             </Button>
           </CardFooter>
