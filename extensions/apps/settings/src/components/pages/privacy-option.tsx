@@ -90,7 +90,7 @@ const PrivacyOption: React.FC = () => {
     <PageLayout title={t('Privacy')}>
       <Stack className="px-4">
         {/* essential cookies */}
-        <Stack className="py-4">
+        <Stack className="py-4 border-b border-border">
           <Stack direction="row" justifyContent="between" alignItems="center" className="mb-2">
             <Text weight="bold">{t('Essential Cookies')}</Text>
 
@@ -119,7 +119,7 @@ const PrivacyOption: React.FC = () => {
         </Stack>
 
         {/* tracking analytics */}
-        <Stack className="py-4">
+        <Stack className="py-4 border-b border-border">
           <Stack direction="row" justifyContent="between" alignItems="center" className="mb-2">
             <Text weight="bold">{t('Tracking and Analytics')}</Text>
 
