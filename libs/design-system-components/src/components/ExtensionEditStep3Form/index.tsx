@@ -3,7 +3,7 @@ import * as z from 'zod';
 import { Controller, useWatch } from 'react-hook-form';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import DropDown from '@akashaorg/design-system-core/lib/components/Dropdown';
@@ -180,8 +180,8 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
 
   return (
     <form onSubmit={onSave} className={tw(apply`h-full`)}>
-      <Stack direction="column" spacing="gap-y-4">
-        <Stack padding="px-4 pb-16" spacing="gap-y-4">
+      <Stack direction="column" spacing={4}>
+        <Stack spacing={4} className="px-4 pb-16">
           <Controller
             control={control}
             name={FieldName.license}
@@ -219,9 +219,9 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
             />
           )}
           <Divider />
-          <Stack direction="column" spacing="gap-y-4">
-            <Stack spacing="gap-y-1" direction="column">
-              <Stack direction="row" spacing="gap-x-2" justify="between" align="center">
+          <Stack direction="column" spacing={4}>
+            <Stack spacing={1} direction="column">
+              <Stack direction="row" spacing={2} justifyContent="between" alignItems="center">
                 <Text variant="h6">{collaboratorsFieldLabel}</Text>
                 <Button variant="link" onClick={handleAddContributors}>
                   <PlusIcon />
@@ -243,13 +243,13 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
               </Stack>
             )}
             {contributorAvatars?.length > 0 && (
-              <Stack direction="row" spacing="gap-2" align="center">
+              <Stack direction="row" spacing={2} alignItems="center">
                 <StackedAvatar
                   userData={contributorAvatars}
                   maxAvatars={maxContributorsDisplay}
                   size="md"
                 />
-                <Stack align="center" justify="center">
+                <Stack alignItems="center" justifyContent="center">
                   <Text variant="body2" weight="bold">
                     {contributorsProfiles[0]?.name}
                   </Text>
@@ -267,7 +267,7 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
 
           <Divider />
 
-          <Stack direction="column" spacing="gap-2">
+          <Stack direction="column" spacing={2}>
             <Label required={true}>{tagsLabel}</Label>
             <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
               {tagsDescriptionLabel}
@@ -311,8 +311,8 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
             </Text>
           </Stack>
           <Divider />
-          <Stack direction="column" spacing="gap-2">
-            <Stack direction="row" align="center" spacing="gap-x-1">
+          <Stack direction="column" spacing={2}>
+            <Stack direction="row" alignItems="center" spacing={1}>
               <Icon
                 icon={<ExclamationTriangleIcon />}
                 size="sm"
@@ -327,7 +327,7 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
         </Stack>
         <Divider />
 
-        <Stack direction="row" justify="end" spacing="gap-x-2" customStyle="px-4 pb-4">
+        <Stack direction="row" justifyContent="end" spacing={2} className="px-4 pb-4">
           <Button
             variant="link"
             onClick={cancelButton.handleClick}
@@ -335,7 +335,7 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
           >
             {cancelButton.label}
           </Button>
-          <Button disabled={!isValid} onClick={onSave}>
+          <Button disabled={!isValid} onClick={onSave} type="submit">
             {nextButton.label}
           </Button>
         </Stack>

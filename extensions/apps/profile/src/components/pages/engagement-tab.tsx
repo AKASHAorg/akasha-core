@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, useMemo } from 'react';
 import TabList from '@akashaorg/design-system-core/lib/components/TabList';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { useTranslation } from 'react-i18next';
 import { useMatchRoute, useNavigate, useRouterState } from '@tanstack/react-router';
 
@@ -46,7 +46,7 @@ const EngagementTab: React.FC<PropsWithChildren<EngagementTabProps>> = props => 
         onChange={selectedIndex => onTabChange(selectedIndex)}
         customStyle="sticky top-52 z-10"
       />
-      <Stack customStyle="my-4">{children}</Stack>
+      <Stack className="my-4">{children}</Stack>
     </>
   );
 };

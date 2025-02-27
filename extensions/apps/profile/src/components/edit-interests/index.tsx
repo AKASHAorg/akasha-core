@@ -9,7 +9,7 @@ import {
   XMarkIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { ButtonType } from '@akashaorg/design-system-components/lib/components/types/common.types';
 import UnsavedChangesModal from '@akashaorg/design-system-components/lib/components/UnsavedChangesModal';
@@ -170,9 +170,9 @@ const EditInterests: React.FC<EditInterestsProps> = ({
           handleLeavePage={handleLeavePage}
         />
       )}
-      <Stack direction="column" justify="between" spacing="gap-y-11" customStyle="h-full">
+      <Stack direction="column" justifyContent="between" spacing={8} className="h-full">
         <Stack direction="column">
-          <Stack direction="row" align="center" spacing="gap-x-1">
+          <Stack direction="row" alignItems="center" spacing={1}>
             <Text variant="h6">{title}</Text>
             <Text variant="footnotes2" color="grey7">
               {subTitle}
@@ -181,7 +181,7 @@ const EditInterests: React.FC<EditInterestsProps> = ({
           <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
             {description}
           </Text>
-          <Stack direction="row" spacing="gap-2" customStyle="flex-wrap mt-2">
+          <Stack direction="row" spacing={2} className="flex-wrap mt-2">
             {[...allMyInterests].map((interest, index) => (
               <Pill
                 key={`${index}-${interest.value}`}
@@ -234,7 +234,7 @@ const EditInterests: React.FC<EditInterestsProps> = ({
             multiple
           />
         </Stack>
-        <Stack direction="row" spacing="gap-x-2" customStyle="ml-auto mt-auto">
+        <Stack direction="row" spacing={2} className="ml-auto mt-auto">
           <Button
             variant="link"
             onClick={cancelButton.handleClick}

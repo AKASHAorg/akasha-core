@@ -16,7 +16,7 @@ import { useClickAway } from 'react-use';
 import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
 import { Widget } from '@akashaorg/ui-lib-extensions/lib/react/widget';
 import { ModalExtension } from '@akashaorg/ui-lib-extensions/lib/react/modal-extension';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { ExclamationTriangleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -188,13 +188,13 @@ const Layout: React.FC<unknown> = () => {
   });
 
   return (
-    <Stack customStyle={containerStyle}>
-      <Stack customStyle="h-full m-auto w-full min-h-screen">
-        <Stack customStyle={layoutStyle}>
-          <Stack customStyle={mobileLayoverStyle}>
-            <Stack customStyle={sidebarSlotStyle}>
+    <Stack className={containerStyle}>
+      <Stack className="h-full m-auto w-full min-h-screen">
+        <Stack className={layoutStyle}>
+          <Stack className={mobileLayoverStyle}>
+            <Stack className={sidebarSlotStyle}>
               {needSidebarToggling ? (
-                <Stack padding="pt-0 xl:pt-4" customStyle="h-screen" ref={wrapperRef}>
+                <Stack ref={wrapperRef} className="pt-0 xl:pt-4 h-screen">
                   <Widget
                     fullHeight
                     name={layoutSlots.sidebarSlotId}
@@ -202,7 +202,7 @@ const Layout: React.FC<unknown> = () => {
                   />
                 </Stack>
               ) : (
-                <Stack padding="pt-0 xl:pt-4" customStyle="h-screen">
+                <Stack className="pt-0 xl:pt-4 h-screen">
                   <Widget
                     fullHeight
                     name={layoutSlots.sidebarSlotId}
@@ -213,17 +213,11 @@ const Layout: React.FC<unknown> = () => {
             </Stack>
           </Stack>
 
-          <Stack
-            customStyle={`${showWidgets ? '' : 'lg:(col-start-2 col-end-3) col-start-1'}`}
-            padding="px-2"
-          >
-            <Stack
-              padding="pt-4"
-              customStyle="sticky top-0 z-10 bg(white dark:black) rounded-b-3xl"
-            >
+          <Stack className={`px-2 ${showWidgets ? '' : 'lg:(col-start-2 col-end-3) col-start-1'}`}>
+            <Stack className="pt-4 sticky top-0 z-10 bg(white dark:black) rounded-b-3xl">
               <Widget name={layoutSlots.topbarSlotId} loadingIndicator={topbarLoadingIndicator} />
             </Stack>
-            <Stack padding="pt-4" spacing="gap-y-4">
+            <Stack spacing={4} className="pt-4">
               {!isPlatformHealthy && (
                 <Card className="mb-4 border-warning-foreground background-warning">
                   <Stack direction="row">
@@ -246,7 +240,7 @@ const Layout: React.FC<unknown> = () => {
                 </Card>
               )}
               <div id={layoutSlots.applicationSlotId} />
-              <Stack customStyle="sticky bottom-2">
+              <Stack className="sticky bottom-2">
                 <Extension name={layoutSlots.snackbarNotifSlotId} />
               </Stack>
             </Stack>
@@ -254,29 +248,29 @@ const Layout: React.FC<unknown> = () => {
 
           <Stack
             ref={widgetContainerRef}
-            padding="pr-2" // right padding to match with main area on screen sizes when sidebar visibility toggles
-            customStyle={`relative min-h-[${contentHeight}px] h-full`}
+            className={`pr-2 relative min-h-[${contentHeight}px] h-full`}
           >
-            <Stack customStyle="h-full hidden lg:flex">
-              <Stack customStyle={`mt-[${offset}px]`} />
-              <Stack
-                ref={widgetContentRef}
-                customStyle={`${position} ${stickyPos} ${showWidgets ? '' : 'hidden'} self-start`}
-              >
-                <Stack customStyle="my-4">
-                  <Widget
-                    name={layoutSlots.contextualWidgetSlotId}
-                    loadingIndicator={miniProfileLoadingIndicator}
-                  />
-                  <Widget
-                    name={layoutSlots.widgetSlotId}
-                    loadingIndicator={trendingWidgetLoadingIndicator}
-                  />
+            <Stack className="h-full hidden lg:flex">
+              <Stack className={`mt-[${offset}]px`}>
+                <Stack
+                  ref={widgetContentRef}
+                  className={`${position} ${stickyPos} ${showWidgets ? '' : 'hidden'} self-start`}
+                >
+                  <Stack className="my-4">
+                    <Widget
+                      name={layoutSlots.contextualWidgetSlotId}
+                      loadingIndicator={miniProfileLoadingIndicator}
+                    />
+                    <Widget
+                      name={layoutSlots.widgetSlotId}
+                      loadingIndicator={trendingWidgetLoadingIndicator}
+                    />
+                  </Stack>
                 </Stack>
               </Stack>
-            </Stack>
-            <Stack customStyle="fixed bottom-2 lg:(w-[21rem])">
-              <Widget name={layoutSlots.cookieWidgetSlotId} />
+              <Stack className="fixed bottom-2 lg:(w-[21rem])">
+                <Widget name={layoutSlots.cookieWidgetSlotId} />
+              </Stack>
             </Stack>
           </Stack>
         </Stack>

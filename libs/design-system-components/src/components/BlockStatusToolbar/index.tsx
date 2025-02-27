@@ -1,5 +1,5 @@
 import React from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { ArrowPathIcon, CheckIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
@@ -43,11 +43,11 @@ const BlockStatusToolbar: React.FC<IBlockStatusToolbar> = props => {
 
   if (blockCreationStatus === BlockCreationStatus.PENDING) {
     return (
-      <Stack direction="row" align="center" spacing="gap-2">
+      <Stack direction="row" alignItems="center" spacing={2}>
         <Stack
-          align="center"
-          justify="center"
-          customStyle={'h-8 w-8 group relative rounded-full bg(grey9 dark:grey5)'}
+          alignItems="center"
+          justifyContent="center"
+          className="h-8 w-8 group relative rounded-full bg(grey9 dark:grey5)"
         >
           <Icon size="sm" icon={<ArrowPathIcon />} rotateAnimation={true} />
         </Stack>
@@ -56,11 +56,11 @@ const BlockStatusToolbar: React.FC<IBlockStatusToolbar> = props => {
     );
   } else if (blockCreationStatus === BlockCreationStatus.SUCCESS) {
     return (
-      <Stack direction="row" align="center" spacing="gap-2">
+      <Stack direction="row" alignItems="center" spacing={2}>
         <Stack
-          align="center"
-          justify="center"
-          customStyle={'h-8 w-8 group relative rounded-full bg-success/30'}
+          alignItems="center"
+          justifyContent="center"
+          className="h-8 w-8 group relative rounded-full bg-success/30"
         >
           <Icon size="sm" icon={<CheckIcon />} color={{ light: 'success', dark: 'success' }} />
         </Stack>
@@ -69,11 +69,11 @@ const BlockStatusToolbar: React.FC<IBlockStatusToolbar> = props => {
     );
   } else if (blockCreationStatus === BlockCreationStatus.ERROR) {
     return (
-      <Stack direction="row" align="center" spacing="gap-2">
+      <Stack direction="row" alignItems="center" spacing={2}>
         <Stack
-          align="center"
-          justify="center"
-          customStyle={'h-8 w-8 group relative rounded-full bg(errorLight/30 dark:errorDark/30)'}
+          alignItems="center"
+          justifyContent="center"
+          className="h-8 w-8 group relative rounded-full bg(errorLight/30 dark:errorDark/30)"
         >
           <Icon
             size="sm"

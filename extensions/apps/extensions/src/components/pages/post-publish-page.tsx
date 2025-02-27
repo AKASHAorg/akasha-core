@@ -4,7 +4,7 @@ import { useNavigate } from '@tanstack/react-router';
 import { CREATE_EXTENSION } from '../../routes';
 import { useRootComponentProps, useAkashaStore } from '@akashaorg/ui-core-hooks';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
@@ -51,7 +51,7 @@ export const PostPublishPage: React.FC = () => {
 
   return (
     <Card className="py-6 px-4">
-      <Stack spacing="gap-y-8" align="center">
+      <Stack spacing={8} alignItems="center">
         <Text variant="h5" weight="semibold" align="center">
           {t('Extension Published')}
         </Text>

@@ -6,7 +6,7 @@ import { UserCircleIcon } from '@akashaorg/design-system-core/lib/components/Ico
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { TagButton } from './tag-button';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 
 export type OnboardingSuggestionsCardProps = {
   topicsLabel?: string;
@@ -66,13 +66,13 @@ const OnboardingSuggestionsCard: React.FC<OnboardingSuggestionsCardProps> = prop
 
   return (
     <Card className="shadow-none">
-      <Stack spacing="gap-4">
-        <Stack spacing="gap-4">
+      <Stack spacing={4}>
+        <Stack spacing={4}>
           <Text variant="h5">{topicsLabel}</Text>
 
-          <Stack direction="row" spacing="gap-2" customStyle="flex-wrap">
+          <Stack direction="row" spacing={2} className="flex-wrap">
             {tags?.map((tag, index) => (
-              <Stack key={index} padding="pb-2">
+              <Stack key={index} className="pb-2">
                 <TagButton
                   tagName={tag.name}
                   onClickTag={() => onClickTag(tag.name)}
@@ -82,11 +82,11 @@ const OnboardingSuggestionsCard: React.FC<OnboardingSuggestionsCardProps> = prop
             ))}
           </Stack>
         </Stack>
-        <Stack spacing="gap-4">
+        <Stack spacing={4}>
           <Text variant="h5">{peopleLabel}</Text>
 
           {profiles?.map((profile, index) => (
-            <Stack key={index} direction="row" align="center" justify="between">
+            <Stack key={index} direction="row" alignItems="center" justifyContent="between">
               <ProfileAvatarButton
                 profileId={profile?.did?.id}
                 onClick={() => onClickProfile(profile?.did?.id)}

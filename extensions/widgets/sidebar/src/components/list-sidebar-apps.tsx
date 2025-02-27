@@ -3,7 +3,7 @@ import React, { SetStateAction, useEffect, useMemo } from 'react';
 import { IMenuItem } from '@akashaorg/typings/lib/ui';
 
 import Accordion from '@akashaorg/design-system-core/lib/components/Accordion';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 
 import MenuItemLabel from './menu-item-label';
 import MenuSubItems from './menu-sub-items';
@@ -73,7 +73,7 @@ const ListSidebarApps: React.FC<ListSidebarAppsProps> = props => {
   const activeMenuItemBg = 'bg(grey9 dark:grey1)';
 
   return (
-    <Stack direction="column" customStyle={`py-2 ${borderStyle}`}>
+    <Stack direction="column" className={`py-2 ${borderStyle}`}>
       {appsWithSubroutes.map((app, idx) => {
         const isActiveMenu = getIsActiveMenu(app.name);
         return (
@@ -102,8 +102,7 @@ const ListSidebarApps: React.FC<ListSidebarAppsProps> = props => {
         return (
           <button key={app.label + idx} onClick={handleMenuItemClick(app)}>
             <Stack
-              padding="py-2 px-6"
-              customStyle={`bg(hover:grey8 dark:hover:grey5)  ${
+              className={`py-2 px-6 bg(hover:grey8 dark:hover:grey5) ${
                 isActiveMenu ? activeMenuItemBg : ''
               }`}
             >

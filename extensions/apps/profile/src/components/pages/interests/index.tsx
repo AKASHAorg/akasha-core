@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { CheckIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { ProfileInterestsLoading } from '@akashaorg/design-system-components/lib/components/Profile';
 import { useTranslation } from 'react-i18next';
@@ -163,10 +163,10 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
     return <ProfileInterestsLoading />;
 
   return (
-    <Stack direction="column" spacing="gap-y-4" fullWidth>
+    <Stack direction="column" spacing={4} className="w-full">
       <Card className="p-4 rounded-[1.25px]">
         {profileDID !== authenticatedDID && (
-          <Stack direction="column" spacing="gap-y-2.5">
+          <Stack direction="column" spacing={2}>
             <Text variant="h5">{t('Interests')} </Text>
             <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey7' }}>
               {t(
@@ -176,11 +176,10 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
 
             <Stack
               direction="row"
-              align="center"
-              justify="start"
-              spacing="gap-2"
-              customStyle="flex-wrap"
-              fullWidth
+              alignItems="center"
+              justifyContent="start"
+              spacing={2}
+              className="flex-wrap w-full"
             >
               {profileInterests?.map((interest, idx) => {
                 const isActive = !!activeInterests.find(ac => ac.value === interest.value);

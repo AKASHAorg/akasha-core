@@ -5,7 +5,7 @@ import ExtensionGalleryManager, {
 import ImageOverlay from '@akashaorg/design-system-components/lib/components/ImageOverlay';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import { useTranslation } from 'react-i18next';
@@ -70,7 +70,7 @@ export const ExtensionGalleryManagerPage: React.FC<ExtensionGalleryManagerPagePr
           {
             //@TODO replace with Loader component once its created
           }
-          <Stack spacing="gap-y-5" align="center">
+          <Stack spacing={5} alignItems="center">
             <Spinner />
             <Text variant="button-md">{t('Loading gallery images')}</Text>
           </Stack>

@@ -6,7 +6,7 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import MiniProfileCTA, {
   MiniProfileCTAProps,
 } from '../../components/VibesConsoleContentCard/mini-profile-cta';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 MiniProfileCTA.displayName = 'MiniProfileCTA';
@@ -53,10 +53,9 @@ export const IconButtonCTAExt: Story = {
     ctaExt: (
       <Stack
         direction="row"
-        align="center"
-        spacing="gap-x-1"
-        padding="py-2 px-3"
-        customStyle="w-fit rounded-full bg-(secondaryLight/30 dark:secondaryDark)"
+        alignItems="center"
+        spacing={1}
+        className="py-2 px-3 w-fit rounded-full bg-(secondaryLight/30 dark:secondaryDark)"
       >
         <Icon icon={<FlagIcon />} size="sm" color={{ light: 'secondaryLight', dark: 'grey2' }} />
         <Text variant="footnotes2" color={{ light: 'secondaryLight', dark: 'grey2' }}>

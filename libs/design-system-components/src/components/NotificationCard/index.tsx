@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { InboxNotification } from '@akashaorg/typings/lib/ui';
 
@@ -26,10 +26,10 @@ const NotificationCard: React.FC<NotificationCardProps> = props => {
   } = props;
 
   return (
-    <Stack customStyle="flex flex-col w-full" spacing="gap-y-2">
+    <Stack spacing={2} className="flex flex-col w-full">
       {/* Notification type & Is notification 'seen' dot indicator */}
-      <Stack customStyle="flex flex-row items-center justify-between w-full">
-        <Stack customStyle="flex flex-row" spacing="gap-x-2">
+      <Stack className="flex flex-row items-center justify-between w-full">
+        <Stack spacing={2} className="flex flex-row">
           <Icon
             size="sm"
             icon={notificationTypeIcon}
@@ -41,16 +41,13 @@ const NotificationCard: React.FC<NotificationCardProps> = props => {
           </Text>
         </Stack>
         {!isSeen && (
-          <Stack
-            customStyle="w-2 h-2 rounded-full"
-            background={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-          />
+          <Stack className="w-2 h-2 rounded-full bg(secondaryLight dark:secondaryDark)" />
         )}
       </Stack>
-      <Stack customStyle="flex flex-row" spacing="gap-x-2">
+      <Stack spacing={2} className="flex flex-row">
         {notificationAppIcon}
         {/* Title and body */}
-        <Stack customStyle="flex flex-column" spacing="gap-x-2">
+        <Stack spacing={2} className="flex flex-column">
           <Text variant="h6" breakWord={true}>
             {title}
           </Text>
@@ -66,7 +63,7 @@ const NotificationCard: React.FC<NotificationCardProps> = props => {
       </Stack>
 
       {/* Date and Button Section */}
-      <Stack customStyle="flex flex-row justify-between items-center ml-10">
+      <Stack className="flex flex-row justify-between items-center ml-10">
         <Text variant="footnotes2" color={{ dark: 'grey6', light: 'grey4' }}>
           {date}
         </Text>

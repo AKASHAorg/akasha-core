@@ -1,5 +1,5 @@
 import React from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
 import { useAnalytics, useRootComponentProps } from '@akashaorg/ui-core-hooks';
@@ -21,7 +21,7 @@ const ProfileBeamsPage: React.FC<ProfileBeamsPageProps> = props => {
   const navigateTo = React.useRef(getCorePlugins().routing.navigateTo);
 
   return (
-    <Stack direction="column" spacing="gap-y-4" fullWidth>
+    <Stack direction="column" spacing={4} className="w-full">
       <BeamFeedByAuthor
         did={profileDID}
         scrollRestorationStorageKey={`app-profile_${profileDID}_beams`}

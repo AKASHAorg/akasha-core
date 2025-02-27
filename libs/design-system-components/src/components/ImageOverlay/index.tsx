@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { tw, apply, tx } from '@twind/core';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import {
   ArrowLeftIcon,
   ArrowRightIcon,
@@ -82,9 +82,9 @@ const ImageOverlay: React.FC<IImageOverlay> = props => {
 
   return (
     <Portal>
-      <Stack customStyle="fixed top-0 w-screen h-screen bg-black/80 z-[105]">
-        <Stack direction="row" customStyle="justify-end sm:justify-between p-4 sm:p-12">
-          <Stack direction="row" spacing="gap-3">
+      <Stack className="fixed top-0 w-screen h-screen bg-black/80 z-[105]">
+        <Stack direction="row" className="justify-end sm:justify-between p-4 sm:p-12">
+          <Stack direction="row" spacing={3}>
             {images.length > 1 && (
               <button className={tx(`${closeDivClass}`)} onClick={handlePrevImg}>
                 <Icon icon={<ArrowLeftIcon />} accentColor />
@@ -97,7 +97,7 @@ const ImageOverlay: React.FC<IImageOverlay> = props => {
             )}
           </Stack>
 
-          <Stack direction="row" spacing="gap-3">
+          <Stack direction="row" spacing={3}>
             <button className={tx(`${closeDivClass}`)} onClick={handleZoomIn}>
               <Icon icon={<MagnifyingGlassPlusIcon />} accentColor />
             </button>
@@ -110,7 +110,7 @@ const ImageOverlay: React.FC<IImageOverlay> = props => {
           </Stack>
         </Stack>
         {currentImg && (
-          <Stack customStyle="h-full" align="center" justify="center">
+          <Stack alignItems="center" justifyContent="center" className="h-full">
             <TransformWrapper
               key={currentImg.src}
               ref={transformRef}

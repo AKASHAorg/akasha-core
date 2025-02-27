@@ -4,7 +4,7 @@ import { useRootComponentProps, useAkashaStore, useNotifications } from '@akasha
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import NotificationSettingsCard from '@akashaorg/design-system-components/lib/components/NotificationSettingsCard';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export type WelcomePageProps = {
@@ -52,7 +52,7 @@ const WelcomePage: React.FC<WelcomePageProps> = () => {
 
   // notifications can be displayed even if user has not signed them in current session (readOnly mode)
   return notificationsEnabled || previouslyEnabled ? (
-    <Stack padding="p-4">
+    <Stack className="p-4">
       <Text>TODO - Notifications show up here</Text>
     </Stack>
   ) : (

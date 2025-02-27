@@ -7,7 +7,7 @@ import {
   FlagIcon,
   ShareIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { useTranslation } from 'react-i18next';
 import { transformSource, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { formatDate, truncateDid } from '@akashaorg/design-system-core/lib/utils';
@@ -228,7 +228,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
         <>
           <AppCoverImage src={coverImageSrc} appType={appData.applicationType} />
           <Stack>
-            <Stack spacing="gap-y-6">
+            <Stack spacing={6}>
               <Card className="p-4 mb-2 rounded-t-none">
                 <AppInfoHeader
                   displayName={appData.displayName}
@@ -288,7 +288,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                 <Section title={t('Developer')} dividerPosition={DividerPosition.Top}>
                   {appData.author?.akashaProfile && (
                     <Card className="shadow-none p-0 border-none" onClick={handleDeveloperClick}>
-                      <Stack direction="row" align="center">
+                      <Stack direction="row" alignItems="center">
                         <ProfileAvatarButton
                           profileId={appData.author?.id}
                           label={appData.author?.akashaProfile?.name}
@@ -329,8 +329,8 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                 )}
 
                 <Section title={t('General Information')} dividerPosition={DividerPosition.Top}>
-                  <Stack spacing="gap-y-2">
-                    <Stack direction="row" justify="between">
+                  <Stack spacing={2}>
+                    <Stack direction="row" justifyContent="between">
                       <Text variant="body2" color={{ light: 'grey4', dark: 'grey7' }}>
                         {t('Package name')}
                       </Text>
@@ -348,7 +348,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                       </CopyToClipboard>
                     </Stack>
                     <Divider />
-                    <Stack direction="row" justify="between">
+                    <Stack direction="row" justifyContent="between">
                       <Text variant="body2" color={{ light: 'grey4', dark: 'grey7' }}>
                         {t('Extension ID')}
                       </Text>
@@ -369,7 +369,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                       </CopyToClipboard>
                     </Stack>
                     <Divider />
-                    <Stack direction="row" justify="between">
+                    <Stack direction="row" justifyContent="between">
                       <Text variant="body2" color={{ light: 'grey4', dark: 'grey7' }}>
                         {t('Latest update')}
                       </Text>
@@ -378,7 +378,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                       </Button>
                     </Stack>
                     <Divider />
-                    <Stack direction="row" justify="between">
+                    <Stack direction="row" justifyContent="between">
                       <Text variant="body2" color={{ light: 'grey4', dark: 'grey7' }}>
                         {t('License')}
                       </Text>
@@ -387,7 +387,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                       </Button>
                     </Stack>
                     <Divider />
-                    <Stack direction="row" justify="between">
+                    <Stack direction="row" justifyContent="between">
                       <Text variant="body2" color={{ light: 'grey4', dark: 'grey7' }}>
                         {t('Created on')}
                       </Text>
@@ -397,7 +397,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                 </Section>
                 {appData.links?.length > 0 && (
                   <Section title={t('Useful Links')} dividerPosition={DividerPosition.Top}>
-                    <Stack customStyle="flex-wrap">
+                    <Stack className="flex-wrap">
                       {appData.links?.map((link, idx) => (
                         <CopyToClipboard key={`${link.href}_${idx}`} stringToBeCopied={link.href}>
                           <Text
@@ -417,7 +417,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                       className="shadow-none p-0 border-none"
                       onClick={handleCollaboratorsClick}
                     >
-                      <Stack direction="row" align="center">
+                      <Stack direction="row" alignItems="center">
                         <StackedAvatar userData={contributorAvatars} maxAvatars={4} size="xs" />
                         <Icon
                           icon={<ChevronRightIcon />}
@@ -436,7 +436,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                   onClickviewMoreLabel={handleReleasesClick}
                 >
                   {!!latestRelease && (
-                    <Stack spacing="gap-y-4">
+                    <Stack spacing={4}>
                       <Stack>
                         <Text variant="body1" color={{ light: 'grey4', dark: 'grey7' }}>
                           {t('Version')} {latestRelease?.node?.version}
@@ -458,7 +458,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
 
                 {appData.keywords?.length > 0 && (
                   <Section title={''} dividerPosition={DividerPosition.Top}>
-                    <Stack direction="row" spacing="gap-x-2">
+                    <Stack direction="row" spacing={2}>
                       {appData.keywords?.map((keyword, idx) => (
                         <Pill
                           borderColor={{ light: 'secondaryLight', dark: 'secondaryDark' }}

@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import TopbarComponent from '../topbar-component';
 
 const TanStackRouterDevtools =
@@ -15,7 +15,7 @@ const RootComponent = () => {
   return (
     <>
       <Suspense fallback={<></>}>
-        <Stack customStyle="fixed">
+        <Stack className="fixed">
           <TanStackRouterDevtools />
         </Stack>
       </Suspense>

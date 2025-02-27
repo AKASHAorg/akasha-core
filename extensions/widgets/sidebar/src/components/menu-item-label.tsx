@@ -3,7 +3,7 @@ import React from 'react';
 import { IMenuItem } from '@akashaorg/typings/lib/ui';
 
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export type MenuItemLabelProps = {
@@ -16,7 +16,7 @@ const MenuItemLabel: React.FC<MenuItemLabelProps> = props => {
   const { menuItem, isActiveMenu } = props;
 
   return (
-    <Stack direction="row" align="center">
+    <Stack direction="row" alignItems="center">
       {menuItem.logo.type === 'icon' && (
         <AppIcon
           size="md"

@@ -18,7 +18,7 @@ import {
   Walletconnect,
 } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import { ArrowsRightLeftIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import { useNavigate } from '@tanstack/react-router';
@@ -176,7 +176,7 @@ const ConnectWallet: React.FC = () => {
   const textColor = { light: 'grey4', dark: 'grey7' } as const;
 
   return (
-    <Stack spacing="gap-y-8">
+    <Stack spacing={8}>
       <Stack>
         <Text variant="body1" align="center" weight="bold">
           {t('Connecting to {{worldName}}', { worldName })}
@@ -185,7 +185,7 @@ const ConnectWallet: React.FC = () => {
           {t('using your wallet')}
         </Text>
       </Stack>
-      <Stack direction="row" align="center" justify="center">
+      <Stack direction="row" alignItems="center" justifyContent="center">
         <AppIcon
           placeholderIcon={<Walletconnect />}
           background={{ gradient: 'gradient-to-b', from: 'orange-50', to: 'orange-200' }}
@@ -225,10 +225,10 @@ const ConnectWallet: React.FC = () => {
       ))}
 
       {!hasErrors && (
-        <Stack spacing="gap-y-6">
+        <Stack spacing={6}>
           {!!connectWalletCall.data?.length && (
-            <Stack spacing="gap-y-8">
-              <Stack spacing="gap-y-2">
+            <Stack spacing={8}>
+              <Stack spacing={2}>
                 <Text variant="h6" weight="bold" align="center">
                   {isLoggedIn ? t('Authorized 🙌🏽') : t('Authorizing')}
                 </Text>
@@ -239,7 +239,7 @@ const ConnectWallet: React.FC = () => {
                 </Text>
               </Stack>
 
-              <Stack spacing="gap-y-2">
+              <Stack spacing={2}>
                 <Text variant="button-sm" weight="bold" align="center">
                   {t('Your Address')}
                 </Text>
@@ -249,9 +249,9 @@ const ConnectWallet: React.FC = () => {
               </Stack>
             </Stack>
           )}
-          <Stack align="center" justify="center">
+          <Stack alignItems="center" justifyContent="center">
             <Card onClick={handleDisconnect} className="shadow-none">
-              <Stack align="center" spacing="gap-x-2" customStyle="md:flex-row">
+              <Stack alignItems="center" spacing={2} className="md:flex-row">
                 <Icon icon={<ArrowsRightLeftIcon />} accentColor={true} />
                 <Text
                   variant="button-lg"

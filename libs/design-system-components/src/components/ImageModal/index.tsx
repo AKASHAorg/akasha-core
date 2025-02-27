@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import Modal, { ModalProps } from '@akashaorg/design-system-core/lib/components/Modal';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Img from '@akashaorg/design-system-core/lib/components/Image';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
@@ -135,7 +135,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
       showDivider={true}
     >
       {images.length >= 2 && (
-        <Stack direction="row" justify="start" align="center" spacing="gap-2">
+        <Stack direction="row" justifyContent="start" alignItems="center" spacing={2}>
           {images.map((imageData, index) => {
             const imageUrl = typeof imageData === 'string' ? imageData : imageData?.src;
             return (
@@ -169,7 +169,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
         />
       </Card>
       {showCropError && (
-        <Stack direction="row" spacing="gap-x-1" align="center">
+        <Stack direction="row" spacing={1} alignItems="center">
           <Icon
             icon={<XCircleIcon />}
             size="lg"
@@ -188,8 +188,8 @@ const ImageModal: React.FC<ImageModalProps> = ({
       <Text variant="footnotes2" align="center" weight="normal">
         {dragToRepositionLabel}
       </Text>
-      <Stack direction="column" spacing="gap-y-4" fullWidth={true} customStyle="mb-2">
-        <Stack direction="row" align="center" spacing="gap-x-2">
+      <Stack direction="column" spacing={4} className="w-full mb-2">
+        <Stack direction="row" alignItems="center" spacing={2}>
           <Icon icon={<MagnifyingGlassMinusIcon />} size="lg" />
           <input
             aria-label="range-input"

@@ -16,7 +16,7 @@ import {
   useAkashaStore,
 } from '@akashaorg/ui-core-hooks';
 
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
@@ -254,9 +254,9 @@ const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
       <Divider customStyle="!mt-0" />
       {!initial && (
         <>
-          <Stack direction="column" customStyle="px-6 !my-0 py-2">
+          <Stack direction="column" className="px-6 !my-0 py-2">
             <>
-              <Stack justify="between" direction="row">
+              <Stack justifyContent="between" direction="row">
                 <Text variant="footnotes2">
                   <>{t('Snooze Notifications')}</>
                 </Text>
@@ -272,7 +272,7 @@ const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
           <Divider customStyle="!mt-0" />
         </>
       )}
-      <Stack direction="column" customStyle="mx-4">
+      <Stack direction="column" className="mx-4">
         {initial ? (
           <Text variant="footnotes2" weight="normal" color={{ dark: 'grey6', light: 'grey4' }}>
             <>
@@ -300,7 +300,7 @@ const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
         />
       </Stack>
       <Divider customStyle="!mt-0" />
-      <Stack direction="column" customStyle="min-h-[80%] !mt-0 gap-y-2 pt-2">
+      <Stack direction="column" className="min-h-[80%] !mt-0 gap-y-2 pt-2">
         {Object.keys(allStates).length > 0 &&
           !Object.keys(allStates).find(key => key === SnoozeOption) &&
           Object.entries(allStates).map(appState => (
@@ -308,7 +308,7 @@ const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
               direction="column"
               key={appState[0].concat(String(Math.round(Math.random() * 100)))}
             >
-              <Stack direction="row" justify="between" align="center" customStyle="px-6">
+              <Stack direction="row" justifyContent="between" alignItems="center" className="px-6">
                 <Text variant="h6">{appState[0]}</Text>
                 <Checkbox
                   value={appState[0]}
@@ -324,7 +324,7 @@ const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
           ))}
       </Stack>
       {!saveSettingsLoading && (
-        <Stack fullWidth direction="row" justify="end" customStyle="space-x-4 pr-2 pb-2 pt-32">
+        <Stack direction="row" justifyContent="end" className="w-full space-x-4 pr-2 pb-2 pt-32">
           {initial ? (
             <>
               <Button variant="link" onClick={skipHandler}>

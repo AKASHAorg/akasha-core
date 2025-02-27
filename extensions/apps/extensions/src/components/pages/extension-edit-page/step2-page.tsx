@@ -1,7 +1,7 @@
 import React, { useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ExtensionEditStep2Form, {
   ExtensionEditStep2FormValues,
@@ -117,11 +117,11 @@ export const ExtensionEditStep2Page: React.FC<ExtensionEditStep2PageProps> = ({ 
 
   return (
     <>
-      <Stack padding={16} justify="center" align="center">
+      <Stack justifyContent="center" alignItems="center" className="p-4">
         <Stepper length={3} currentStep={formValue.lastCompletedStep + 1} />
       </Stack>
-      <Stack spacing="gap-y-4">
-        <Stack padding={16}>
+      <Stack spacing={4}>
+        <Stack className="p-4">
           <Text variant="h5" weight="semibold" align="center">
             {t('Present your Extension')}
           </Text>

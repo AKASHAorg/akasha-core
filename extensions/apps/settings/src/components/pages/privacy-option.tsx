@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 
@@ -88,10 +88,10 @@ const PrivacyOption: React.FC = () => {
 
   return (
     <PageLayout title={t('Privacy')}>
-      <Stack padding="px-4">
+      <Stack className="px-4">
         {/* essential cookies */}
-        <Stack padding="py-4" customStyle="border(b-1 solid grey8 dark:grey5)">
-          <Stack direction="row" justify="between" align="center" customStyle="mb-2">
+        <Stack className="py-4 border-b border-border">
+          <Stack direction="row" justifyContent="between" alignItems="center" className="mb-2">
             <Text weight="bold">{t('Essential Cookies')}</Text>
 
             {/* always checked and cannot be toggled */}
@@ -119,8 +119,8 @@ const PrivacyOption: React.FC = () => {
         </Stack>
 
         {/* tracking analytics */}
-        <Stack padding="py-4" customStyle="border(b-1 solid grey8 dark:grey5)">
-          <Stack direction="row" justify="between" align="center" customStyle="mb-2">
+        <Stack className="py-4 border-b border-border">
+          <Stack direction="row" justifyContent="between" alignItems="center" className="mb-2">
             <Text weight="bold">{t('Tracking and Analytics')}</Text>
 
             <Toggle
@@ -162,8 +162,8 @@ const PrivacyOption: React.FC = () => {
           </Text>
         </Stack>
         {/* legal notice */}
-        <Stack padding="py-4">
-          <Stack direction="row" justify="start" align="center" customStyle="mb-2">
+        <Stack className="py-4">
+          <Stack direction="row" justifyContent="start" alignItems="center" className="mb-2">
             <Text weight="bold">{t('Legal and Terms of Use')}</Text>
           </Stack>
           <Text>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export type TDeveloperMode = {
@@ -19,17 +19,17 @@ export const DeveloperMode: React.FC<TDeveloperMode> = props => {
 
   return (
     <Card className="p-0 mb-4">
-      <Stack padding="p-4" customStyle="border(b-1 solid grey8 dark:grey5)">
+      <Stack className="p-4 border-b border-border">
         <Text variant="h5" align="center">
           {titleLabel}
         </Text>
       </Stack>
-      <Stack padding="p-4" spacing="gap-y-4">
+      <Stack spacing={4} className="p-4">
         {sections.map(({ title, toggleButtonNode, descriptionNode, ctaNode }, idx) => (
           <React.Fragment key={title + idx}>
             {idx > 0 && <Divider />}
-            <Stack key={title + idx} spacing="gap-y-2">
-              <Stack direction="row" justify="between" align="center" customStyle="mb-2">
+            <Stack key={title + idx} spacing={2}>
+              <Stack direction="row" justifyContent="between" alignItems="center" className="mb-2">
                 <Text weight="bold">{title}</Text>
                 {toggleButtonNode}
               </Stack>

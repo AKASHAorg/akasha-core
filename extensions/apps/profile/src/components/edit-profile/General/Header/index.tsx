@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import List, { ListProps } from '@akashaorg/design-system-core/lib/components/List';
 import ImageModal from '@akashaorg/design-system-components/lib/components/ImageModal';
@@ -194,20 +194,20 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <Stack direction="column" spacing="gap-y-2">
+    <Stack direction="column" spacing={2}>
       <Text variant="h6">{title}</Text>
-      <Stack customStyle="relative mb-8">
+      <Stack className="relative mb-8">
         <Card
           data-testid="cover-image"
           className={`rounded-[1.25rem] flex p-4 h-28 w-full bg-no-repeat bg-center bg-cover bg-[url(${
             coverImageUrl?.src ?? coverImageFallback
-          })]`}
+          })] overflow-visible`}
         >
           <Stack
             ref={editCoverRef}
             direction="column"
-            spacing="gap-y-1"
-            customStyle="relative mt-auto ml-auto"
+            spacing={1}
+            className="relative mt-auto ml-auto"
           >
             <Button
               aria-label="cover-image"
@@ -226,10 +226,10 @@ export const Header: React.FC<HeaderProps> = ({
           </Stack>
         </Card>
         <Stack
-          align="center"
-          justify="center"
-          customStyle="absolute left-6 -bottom-8"
+          alignItems="center"
+          justifyContent="center"
           ref={editAvatarRef}
+          className="absolute left-6 -bottom-8"
         >
           <Avatar
             profileId={profileId}
@@ -250,7 +250,7 @@ export const Header: React.FC<HeaderProps> = ({
               'bg',
             )}`}
           />
-          <Stack customStyle="absolute">
+          <Stack className="absolute">
             <Button
               aria-label="avatar"
               onClick={() => {

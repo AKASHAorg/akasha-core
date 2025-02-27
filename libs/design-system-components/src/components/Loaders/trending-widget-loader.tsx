@@ -1,5 +1,5 @@
 import React from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import TrendingWidgetLoadingCard from '../TrendingWidgetLoadingCard';
 
 /**
@@ -8,7 +8,7 @@ import TrendingWidgetLoadingCard from '../TrendingWidgetLoadingCard';
  */
 const TrendingWidgetLoader: React.FC = () => {
   return (
-    <Stack direction="column" spacing="gap-y-3" align="center">
+    <Stack direction="column" spacing={3} alignItems="center">
       {Array.from({ length: 2 }, (_el, index: number) => (
         <TrendingWidgetLoadingCard key={index} />
       ))}

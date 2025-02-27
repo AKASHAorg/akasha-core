@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import ProfileStatsView from '../../profile-stats';
 import ProfileNotFound from '@akashaorg/design-system-components/lib/components/ProfileNotFound';
 import NSFW from './nsfw';
@@ -142,7 +142,7 @@ const ProfileInfoPage: React.FC<ProfileInfoPageProps> = props => {
   return (
     <>
       <ProfileHeader profileDID={profileDID} />
-      <Stack direction="column" spacing="gap-y-4" fullWidth>
+      <Stack direction="column" spacing={4} className="w-full">
         {profileData?.description && (
           <ProfileBio title={t('Bio')} biography={profileData.description} />
         )}
