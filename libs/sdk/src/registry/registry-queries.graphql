@@ -210,6 +210,7 @@ fragment AkashaWorldFragment on AkashaWorld{
     }
   }
   active
+  name
   instanceURL
   createdAt
   creator {
@@ -283,6 +284,27 @@ query GetWorldByName($name: String!) {
      }
    }
  }
+}
+
+query GetWorldsByCreatorDID($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
+  node(id: $id) {
+    ...on CeramicAccount {
+      akashaWorldList(after: $after, before: $before, first: $first, last: $last){
+        edges {
+          node {
+            ...AkashaWorldFragment
+          }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+      }
+    }
+  }
 }
 
 query GetWorldConfig($worldID: String!, $creator: ID){

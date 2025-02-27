@@ -20,6 +20,16 @@ export const selectAkashaApp = (data: GetAppsQuery): AkashaApp => {
   }
 };
 
+export const selectAkashaApps = (data: GetAppsQuery): AkashaApp[] => {
+  if (isAkashaAppEdgeNode(data)) {
+    return data.akashaAppIndex.edges.map(edge => edge?.node);
+  }
+};
+
+export const selectAkashaAppsPageInfo = (respData: GetAppsQuery) => {
+  return respData?.akashaAppIndex?.pageInfo;
+};
+
 const isNodeWithReleases = (data: AkashaApp) => {
   return (
     data.releases &&

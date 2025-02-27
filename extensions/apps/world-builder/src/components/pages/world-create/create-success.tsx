@@ -8,27 +8,34 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
+  Card,
 } from '@akashaorg/ui/lib/akasha-components/card';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Image, ImageRoot } from '@akashaorg/ui/lib/akasha-components/image';
 
-export const SaveConfigSuccessPage: React.FC = () => {
+type CreateSuccessPageProps = {
+  worldId: string;
+  worldName: string;
+};
+
+export const CreateSuccessPage: React.FC<CreateSuccessPageProps> = ({ worldId, worldName }) => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-world-builder');
 
-  const handleOpenPreview = () => {
-    navigate({ to: '/save-config/success' });
+  const handleNavToDashboard = () => {
+    navigate({ to: '/dashboard' });
   };
 
-  // TODO fetch real data
-  const worldName = 'Test World';
+  const handleNavToConfigureWorldForm = () => {
+    navigate({ to: '/world-config-form/$worldId/step1', params: { worldId } });
+  };
 
   return (
-    <>
+    <Card>
       <CardHeader className="justify-center">
         <CardTitle className="text-center">
           <Typography variant="h5">
-            {t(`{{worldName}} was configured successfully!`, { worldName })}
+            {t(`{{worldName}} was created successfully!`, { worldName })}
           </Typography>
         </CardTitle>
       </CardHeader>
@@ -43,14 +50,21 @@ export const SaveConfigSuccessPage: React.FC = () => {
         </ImageRoot>
       </CardContent>
       <CardDescription className="px-6 pb-6 text-center">
-        <Typography variant="p">{t(`You can now preview this world!`)}</Typography>
-        <Typography variant="p">{t(`The preview will open in a new tab`)}</Typography>
+        <Typography variant="p">{t(`You’re almost there!`)}</Typography>
+        <Typography variant="p">
+          {t(
+            `🌍 Complete your World’s configuration! A little flavor goes a long way in bringing your World to life! 🚀🔥`,
+          )}
+        </Typography>
       </CardDescription>
-      <CardFooter className="justify-center">
-        <Button className="px-6 h-8" onClick={handleOpenPreview}>
-          {t('Preview World')}
+      <CardFooter>
+        <Button className="px-6" onClick={handleNavToDashboard}>
+          {t('Do it later')}
+        </Button>
+        <Button className="px-6" onClick={handleNavToConfigureWorldForm}>
+          {t('Configure World')}
         </Button>
       </CardFooter>
-    </>
+    </Card>
   );
 };

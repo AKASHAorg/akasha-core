@@ -367,6 +367,7 @@ export const AkashaWorldFragmentMFragmentDoc = /*#__PURE__*/ gql`
     }
   }
   active
+  name
   instanceURL
   createdAt
   creator {
@@ -574,6 +575,7 @@ export const AkashaWorldFragmentDoc = /*#__PURE__*/ gql`
     }
   }
   active
+  name
   instanceURL
   createdAt
   creator {
@@ -3747,6 +3749,65 @@ export type GetWorldByNameQueryHookResult = ReturnType<typeof useGetWorldByNameQ
 export type GetWorldByNameLazyQueryHookResult = ReturnType<typeof useGetWorldByNameLazyQuery>;
 export type GetWorldByNameSuspenseQueryHookResult = ReturnType<typeof useGetWorldByNameSuspenseQuery>;
 export type GetWorldByNameQueryResult = Apollo.QueryResult<Types.GetWorldByNameQuery, Types.GetWorldByNameQueryVariables>;
+export const GetWorldsByCreatorDidDocument = /*#__PURE__*/ gql`
+    query GetWorldsByCreatorDID($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
+  node(id: $id) {
+    ... on CeramicAccount {
+      akashaWorldList(after: $after, before: $before, first: $first, last: $last) {
+        edges {
+          node {
+            ...AkashaWorldFragment
+          }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+      }
+    }
+  }
+}
+    ${AkashaWorldFragmentDoc}`;
+
+/**
+ * __useGetWorldsByCreatorDidQuery__
+ *
+ * To run a query within a React component, call `useGetWorldsByCreatorDidQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetWorldsByCreatorDidQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetWorldsByCreatorDidQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      after: // value for 'after'
+ *      before: // value for 'before'
+ *      first: // value for 'first'
+ *      last: // value for 'last'
+ *   },
+ * });
+ */
+export function useGetWorldsByCreatorDidQuery(baseOptions: Apollo.QueryHookOptions<Types.GetWorldsByCreatorDidQuery, Types.GetWorldsByCreatorDidQueryVariables> & ({ variables: Types.GetWorldsByCreatorDidQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<Types.GetWorldsByCreatorDidQuery, Types.GetWorldsByCreatorDidQueryVariables>(GetWorldsByCreatorDidDocument, options);
+      }
+export function useGetWorldsByCreatorDidLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Types.GetWorldsByCreatorDidQuery, Types.GetWorldsByCreatorDidQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<Types.GetWorldsByCreatorDidQuery, Types.GetWorldsByCreatorDidQueryVariables>(GetWorldsByCreatorDidDocument, options);
+        }
+export function useGetWorldsByCreatorDidSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<Types.GetWorldsByCreatorDidQuery, Types.GetWorldsByCreatorDidQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<Types.GetWorldsByCreatorDidQuery, Types.GetWorldsByCreatorDidQueryVariables>(GetWorldsByCreatorDidDocument, options);
+        }
+export type GetWorldsByCreatorDidQueryHookResult = ReturnType<typeof useGetWorldsByCreatorDidQuery>;
+export type GetWorldsByCreatorDidLazyQueryHookResult = ReturnType<typeof useGetWorldsByCreatorDidLazyQuery>;
+export type GetWorldsByCreatorDidSuspenseQueryHookResult = ReturnType<typeof useGetWorldsByCreatorDidSuspenseQuery>;
+export type GetWorldsByCreatorDidQueryResult = Apollo.QueryResult<Types.GetWorldsByCreatorDidQuery, Types.GetWorldsByCreatorDidQueryVariables>;
 export const GetWorldConfigDocument = /*#__PURE__*/ gql`
     query GetWorldConfig($worldID: String!, $creator: ID) {
   akashaWorldConfigIndex(

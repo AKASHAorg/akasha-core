@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Check } from 'lucide-react';
 
 import { cn } from '@/ui/library/utils';
-import { ExtensionType } from '@/ui/types/extension-type';
 import { Badge } from '@akashaorg/ui/lib/components/badge';
 import {
   ExtensionAvatar,
@@ -11,10 +10,11 @@ import {
 } from '@/ui/extension-avatar';
 import { ExtensionTypeIcon } from '@/ui/extension-type-icon';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
+import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 const ExtensionCardContext = React.createContext<{
   extensionId?: string;
-  extensionType?: ExtensionType;
+  extensionType?: AkashaAppApplicationType;
 } | null>(null);
 
 const useExtensionCardContext = () => {
@@ -27,12 +27,12 @@ const useExtensionCardContext = () => {
 
 const ExtensionCard = ({
   extensionId = '',
-  extensionType = ExtensionType.App,
+  extensionType = AkashaAppApplicationType.App,
   className,
   ...props
 }: React.ComponentProps<'div'> & {
   extensionId?: string;
-  extensionType?: ExtensionType;
+  extensionType?: AkashaAppApplicationType;
 }) => {
   return (
     <ExtensionCardContext.Provider value={{ extensionId, extensionType }}>
@@ -73,7 +73,7 @@ const ExtensionCardContent = ({ className, ...props }: React.ComponentProps<'div
   return (
     <div
       data-slot="extension-card-content"
-      className={cn('flex flex-col gap-1', className)}
+      className={cn('flex flex-col gap-1 min-w-0', className)}
       {...props}
     />
   );
@@ -103,7 +103,7 @@ const ExtensionCardDescription = ({
     <Typography
       variant="xs"
       data-slot="extension-card-description"
-      className={cn('text-muted-foreground line-clamp-1', className)}
+      className={cn('text-muted-foreground line-clamp-1 truncate block', className)}
       {...props}
     />
   );

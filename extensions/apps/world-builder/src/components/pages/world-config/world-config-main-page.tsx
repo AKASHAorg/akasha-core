@@ -1,8 +1,9 @@
-import React, { createContext } from 'react';
-import { Outlet } from '@tanstack/react-router';
-import { atomWithStorage, createJSONStorage } from 'jotai/utils';
-import appRoutes, { SAVE_CONFIG } from '../../../routes';
+import React, { createContext, useMemo } from 'react';
+import appRoutes, { WORLD_CONFIG_FORM } from '../../../routes';
 import { useTranslation } from 'react-i18next';
+import { Outlet } from '@tanstack/react-router';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import {
   ErrorLoader,
@@ -10,50 +11,58 @@ import {
   ErrorLoaderDescription,
   ErrorLoaderFooter,
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
-import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-
-export const SAVE_WORLD_CONFIG_FORM = 'save-world-config-form';
+import { atomWithStorage, createJSONStorage } from 'jotai/utils';
 
 export const AtomContext = createContext(null);
 
 const storage = createJSONStorage(() => sessionStorage);
 
 export type FormData = {
-  lastCompletedStep?: number;
-  name?: string;
+  layoutExtension?: string;
+  registryExtension?: string;
+  homepageExtension?: string;
+  extensions?: string[];
 };
 
-export const SaveConfigMainPage: React.FC = () => {
+type WorldConfigMainPageProps = {
+  worldId: string;
+};
+
+export const WorldConfigMainPage: React.FC<WorldConfigMainPageProps> = ({ worldId }) => {
   const { t } = useTranslation('app-extensions');
 
   const { baseRouteName, getCorePlugins } = useRootComponentProps();
-
   const navigateTo = getCorePlugins().routing.navigateTo;
 
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
 
-  const formData = atomWithStorage<FormData>(
-    SAVE_WORLD_CONFIG_FORM,
-    {
-      lastCompletedStep: 0,
-      name: '',
-    },
-    storage,
-  );
-
   const handleConnectButtonClick = () => {
     navigateTo?.({
       appName: '@akashaorg/app-auth-ewa',
       getNavigationUrl: (routes: Record<string, string>) => {
         return `${routes.Connect}?${new URLSearchParams({
-          redirectTo: `${baseRouteName}/${appRoutes[SAVE_CONFIG]}/step1`,
+          redirectTo: `${baseRouteName}/${appRoutes[WORLD_CONFIG_FORM]}/step1`,
         }).toString()}`;
       },
     });
   };
+
+  const formData = useMemo(
+    () =>
+      atomWithStorage<FormData>(
+        worldId,
+        {
+          layoutExtension: '',
+          registryExtension: '',
+          homepageExtension: '',
+          extensions: [],
+        },
+        storage,
+      ),
+    [worldId],
+  );
 
   if (!authenticatedDID) {
     return (
