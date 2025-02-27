@@ -2,7 +2,7 @@ import React from 'react';
 
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { ButtonProps } from '@akashaorg/design-system-core/lib/components/Button/types';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 
 export type PageButtonsProps = {
   cancelButtonLabel?: string;
@@ -43,7 +43,7 @@ export const PageButtons: React.FC<PageButtonsProps> = props => {
   };
 
   return (
-    <Stack direction="row" spacing="gap-x-4" align="center" justify="end">
+    <Stack direction="row" spacing={4} alignItems="center" justifyContent="end">
       {cancelButtonLabel && (
         <>
           {cancelButtonVariant && (

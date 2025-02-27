@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { useTranslation } from 'react-i18next';
@@ -17,7 +17,7 @@ const EditorPage: React.FC<unknown> = () => {
 
   return (
     <HelmetProvider>
-      <Stack fullWidth={true}>
+      <Stack className="w-full">
         <Helmet>
           <title>{t('Beam Editor')}</title>
         </Helmet>
@@ -43,7 +43,7 @@ const EditorPage: React.FC<unknown> = () => {
           </Stack>
         )}
         {authenticatedDID && (
-          <Stack customStyle="mb-1">
+          <Stack className="mb-1">
             <Extension name="beam-editor_feed_page" />
           </Stack>
         )}

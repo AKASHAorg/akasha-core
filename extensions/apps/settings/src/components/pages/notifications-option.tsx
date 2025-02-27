@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import PageLayout from './base-layout';
 import { useAkashaStore, useRootComponentProps, useNotifications } from '@akashaorg/ui-core-hooks';
@@ -99,7 +99,7 @@ const NotificationsOption: React.FC = () => {
   return (
     <PageLayout title={t('Notifications Settings')}>
       {!notificationsEnabled && (
-        <Stack padding="p-4">
+        <Stack className="p-4">
           <NotificationSettingsCard
             image={'notificationsDefault'}
             isLoading={waitingForSignature}
@@ -118,7 +118,7 @@ const NotificationsOption: React.FC = () => {
         </Stack>
       )}
       {notificationsEnabled && (
-        <Stack padding="p-4">
+        <Stack className="p-4">
           {notificationsSettingsItems.map((item: ISettingsItem, idx: number) => {
             const baseStyle = `flex py-4 justify-between items-center ${
               idx !== notificationsSettingsItems.length - 1
@@ -143,7 +143,7 @@ const NotificationsOption: React.FC = () => {
                     {children}
                   </button>
                 )}
-                {!item.clickable && <Stack customStyle={baseStyle}>{children}</Stack>}
+                {!item.clickable && <Stack className={baseStyle}>{children}</Stack>}
               </React.Fragment>
             );
           })}

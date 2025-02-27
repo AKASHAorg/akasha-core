@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
@@ -41,7 +41,7 @@ export const ContributorsPage = (props: ContributorsPageProps) => {
   return (
     <>
       <Card className="p-4">
-        <Stack spacing="gap-y-4">
+        <Stack spacing={4}>
           <ExtensionSubRouteHeader
             pageTitle={t('Contributors')}
             appName={extensionDisplayName ?? localExtensionData?.displayName}
@@ -50,9 +50,9 @@ export const ContributorsPage = (props: ContributorsPageProps) => {
             appLogo={extensionLogo ?? localExtensionData?.logoImage}
           />
           <Divider />
-          <Stack direction="column" spacing="gap-y-4">
+          <Stack direction="column" spacing={4}>
             {loading && (
-              <Stack align="center" justify="center">
+              <Stack alignItems="center" justifyContent="center">
                 <Spinner />
               </Stack>
             )}
@@ -66,7 +66,7 @@ export const ContributorsPage = (props: ContributorsPageProps) => {
               </Stack>
             )}
             {contributorsProfile?.map((contributor, index) => (
-              <Stack key={contributor.id} direction="column" spacing="gap-y-4">
+              <Stack key={contributor.id} direction="column" spacing={4}>
                 <Card
                   onClick={() => {
                     navigate({
@@ -79,7 +79,7 @@ export const ContributorsPage = (props: ContributorsPageProps) => {
                   }}
                   className="p-0 shadow-noneborder-none"
                 >
-                  <Stack direction="row" align="center">
+                  <Stack direction="row" alignItems="center">
                     <ProfileAvatarButton
                       profileId={contributor?.did.id}
                       label={contributor?.name}

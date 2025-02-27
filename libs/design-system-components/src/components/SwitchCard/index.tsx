@@ -1,7 +1,8 @@
 import React, { ReactNode } from 'react';
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
+import { cn } from '@akashaorg/ui/lib/library/utils';
 
 export type SwitchCardProps = {
   isLoggedIn: boolean;
@@ -18,8 +19,8 @@ export interface IStickyBoxProps {
 const StickyBox: React.FC<IStickyBoxProps> = props => {
   const { userSignedIn, children } = props;
   return (
-    <Stack customStyle={`sticky flex top-${userSignedIn ? '[3rem]' : '[6rem]'}`} fullWidth>
-      <Stack customStyle="grid grid-cols-3 w-full">{children}</Stack>
+    <Stack className={cn('sticky flex  w-full', userSignedIn ? 'top-[3rem]' : 'top-[6rem]')}>
+      <Stack className="grid grid-cols-3 w-full">{children}</Stack>
     </Stack>
   );
 };
@@ -50,9 +51,12 @@ const SwitchCard: React.FC<SwitchCardProps> = props => {
         {buttonValues.map((el: { value: string; label: string }, idx: number) => (
           <button key={idx} onClick={onTabClick(buttonValues[idx].value)}>
             <Stack
-              customStyle={`py-2 px-3 ${baseStyle} ${hoverStyle} ${
-                el.value === activeButton ? activeStyle : ''
-              }`}
+              className={cn(
+                'py-2 px-3',
+                baseStyle,
+                hoverStyle,
+                el.value === activeButton ? activeStyle : '',
+              )}
             >
               <Text
                 color={

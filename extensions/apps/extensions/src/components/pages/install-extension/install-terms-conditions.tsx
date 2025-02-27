@@ -10,7 +10,7 @@ import {
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { useNavigate } from '@tanstack/react-router';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
 import {
   AkashaAppApplicationType,
@@ -187,9 +187,9 @@ export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
       <Text variant="subtitle2" selectable={false} customStyle="m-4">
         {t('I agree to:')}
       </Text>
-      <Stack direction="column" spacing="gap-y-4" customStyle="mx-4 mb-4">
+      <Stack direction="column" spacing={4} className="mx-4 mb-4">
         {Object.keys(acceptedTerms).map(stateKey => (
-          <Stack direction="row" spacing="gap-x-2" key={stateKey} align={'center'}>
+          <Stack direction="row" spacing={2} key={stateKey} alignItems={'center'}>
             <Checkbox
               key={stateKey}
               id={stateKey}
@@ -215,12 +215,7 @@ export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
         ))}
       </Stack>
       <Divider />
-      <Stack
-        customStyle="flex-column md:flex-row-reverse"
-        justify="between"
-        spacing="gap-y-4"
-        padding="p-4"
-      >
+      <Stack justifyContent="between" spacing={4} className="flex-column md:flex-row-reverse p-4">
         <Button disabled={!allTermsAccepted} onClick={handleContinue}>
           {t('Continue')}
         </Button>
@@ -245,9 +240,9 @@ const TermsHeader = ({
 }) => {
   const { t } = useTranslation();
   return (
-    <Stack padding="p-3">
+    <Stack className="p-3">
       <Text variant="h5">{t('User Agreement')}</Text>
-      <Stack direction="row" spacing="gap-x-2" customStyle="mt-3" align="center">
+      <Stack direction="row" spacing={2} alignItems="center" className="mt-3">
         {isLoading && <Icon icon={<ArrowPathIcon />} />}
         {!isLoading && (
           <AppAvatar
@@ -256,7 +251,7 @@ const TermsHeader = ({
             avatar={appLogo}
           />
         )}
-        <Stack direction="column" justify="between">
+        <Stack direction="column" justifyContent="between">
           {isLoading && (
             <Text variant="button-sm" selectable={false}>
               {t('Loading extension info...')}

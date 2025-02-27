@@ -17,7 +17,7 @@ import { BeamContentResolver, TagFeed } from '@akashaorg/ui-lib-feed';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import getSDK from '@akashaorg/core-sdk';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import TagProfileCard from '@akashaorg/design-system-components/lib/components/TagProfileCard';
 import TagFeedHeaderLoader from './tag-feed-header-loader';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
@@ -186,7 +186,7 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
 
   return (
     <HelmetProvider>
-      <Stack fullWidth={true}>
+      <Stack className="w-full">
         <Helmet>
           <title>{worldConfig.title}</title>
         </Helmet>
@@ -199,7 +199,7 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
           />
         )}
         {!loadingCount && (
-          <Stack customStyle="mb-2">
+          <Stack className="mb-2">
             <TagProfileCard
               tag={{
                 name: tagName,
@@ -217,7 +217,7 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
           </Stack>
         )}
         {beamCount === 0 && (
-          <Stack customStyle="mt-8">
+          <Stack className="mt-8">
             <InfoCard
               titleLabel={
                 <>

@@ -4,7 +4,7 @@ import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { ExclamationTriangleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 
@@ -28,9 +28,9 @@ const MiniProfileCTA: React.FC<MiniProfileCTAProps> = props => {
   const { itemData, nsfwLabel, ctaExt } = props;
 
   return (
-    <Stack direction="row" align="center" justify="between">
-      <Stack spacing="gap-y-3">
-        <Stack direction="row" spacing="gap-x-2" align="center">
+    <Stack direction="row" alignItems="center" justifyContent="between">
+      <Stack spacing={3}>
+        <Stack direction="row" spacing={2} alignItems="center">
           <Avatar
             size="md"
             avatar={itemData.avatar}
@@ -54,11 +54,9 @@ const MiniProfileCTA: React.FC<MiniProfileCTAProps> = props => {
         {itemData.nsfw && (
           <Stack
             direction="row"
-            align="center"
-            padding="py-1 px-2"
-            spacing="gap-x-1"
-            background={{ light: 'warningLight/30', dark: 'warningDark/30' }}
-            customStyle="rounded-[0.25rem]"
+            alignItems="center"
+            spacing={1}
+            className="py-1 px-2 bg(warningLight/30 dark:warningDark/30) rounded-[0.25rem]"
           >
             <Icon
               icon={<ExclamationTriangleIcon />}

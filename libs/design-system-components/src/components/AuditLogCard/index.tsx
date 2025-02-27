@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import { Image } from '@akashaorg/typings/lib/ui';
@@ -21,10 +21,10 @@ const AuditLogCard: React.FC<AuditLogCardProps> = ({
   changeNotes,
 }) => {
   return (
-    <Stack spacing="gap-y-4">
-      <Stack direction="row" align="center" spacing="gap-x-2">
+    <Stack spacing={4}>
+      <Stack direction="row" alignItems="center" spacing={2}>
         <Avatar profileId={changeAuthorProfileName} avatar={changeAuthorAvatar} />
-        <Stack direction="row" align="center" spacing="gap-x-2">
+        <Stack direction="row" alignItems="center" spacing={2}>
           <ProfileNameField
             did="12102010201001"
             profileName={changeAuthorProfileName}

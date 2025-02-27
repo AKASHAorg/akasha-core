@@ -11,7 +11,7 @@ import {
 } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TrendingWidgetLoadingCard from '@akashaorg/design-system-components/lib/components/TrendingWidgetLoadingCard';
 import { TopicRow } from './topic-row';
@@ -282,7 +282,7 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
 
   return (
     <Card className="p-4">
-      <Stack customStyle="mb-4">
+      <Stack className="mb-4">
         <Text variant="button-md" weight="bold">
           {titleLabel}
         </Text>
@@ -291,14 +291,14 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
       <Stack>
         <ul>
           {tags.length === 0 && !isLoadingTags && (
-            <Stack direction="column" spacing="gap-y-6" align="start">
-              <Stack align="center" justify="center">
+            <Stack direction="column" spacing={6} alignItems="start">
+              <Stack alignItems="center" justifyContent="center">
                 <Text>{noTagsLabel}</Text>
               </Stack>
             </Stack>
           )}
 
-          <Stack spacing="gap-y-4">
+          <Stack spacing={4}>
             {tags.length > 0 &&
               tags
                 .slice(0, 4)

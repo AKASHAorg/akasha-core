@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { useSlate } from 'slate-react';
 import Icon, { IconProps } from '@akashaorg/design-system-core/lib/components/Icon';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 
 import { CustomEditor, TEXT_ALIGN_TYPES } from './helpers';
+import { cn } from '@akashaorg/ui/lib/library/utils';
 
 export type ToolbarButtonProps = {
   format: string;
@@ -29,12 +30,13 @@ export const BlockButton: React.FC<ToolbarButtonProps> = ({ format, icon, style,
       }}
     >
       <Stack
-        align="center"
-        justify="center"
-        customStyle={`relative w-8 h-8 ${style}`}
-        background={
-          active ? { light: 'secondaryLight/30', dark: 'grey4' } : { light: 'grey8', dark: 'grey3' }
-        }
+        alignItems="center"
+        justifyContent="center"
+        className={cn(
+          `relative w-8 h-8 bg-inherit`,
+          active ? 'bg(secondaryLight/30 dark:grey4)' : 'bg(grey8 dark:grey3)',
+          style,
+        )}
       >
         <Icon size="lg" icon={icon} customStyle="absolute" solid accentColor />
       </Stack>
@@ -60,12 +62,13 @@ export const MarkButton: React.FC<ToolbarButtonProps> = ({
       }}
     >
       <Stack
-        align="center"
-        justify="center"
-        customStyle={`relative w-8 h-8 ${style}`}
-        background={
-          active ? { light: 'secondaryLight/30', dark: 'grey4' } : { light: 'grey8', dark: 'grey3' }
-        }
+        alignItems="center"
+        justifyContent="center"
+        className={cn(
+          `relative w-8 h-8 bg-inherit`,
+          active ? 'bg(secondaryLight/30 dark:grey4)' : 'bg(grey8 dark:grey3)',
+          style,
+        )}
       >
         <Icon size={iconSize} icon={icon} customStyle="absolute" solid accentColor />
       </Stack>

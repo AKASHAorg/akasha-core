@@ -4,7 +4,7 @@ import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Pagination, {
   PaginationProps,
 } from '@akashaorg/design-system-core/lib/components/Pagination';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Table, { TableProps } from '@akashaorg/design-system-core/lib/components/Table';
 
 /**
@@ -12,7 +12,7 @@ import Table, { TableProps } from '@akashaorg/design-system-core/lib/components/
  */
 const PaginatedTable: React.FC<TableProps & PaginationProps> = props => {
   return (
-    <Stack spacing="gap-y-3">
+    <Stack spacing={3}>
       <Card className="p-0">
         <Table {...props} />
       </Card>

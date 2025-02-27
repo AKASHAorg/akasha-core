@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { ChevronRightIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -30,7 +30,7 @@ const SettingsPage: React.FC = () => {
 
   return (
     <PageLayout title={t('Settings')}>
-      <Stack padding="px-4">
+      <Stack className="px-4">
         {settingsOptions.map((item: ISettingsItem, idx: number) => {
           const baseStyle = `flex py-4 justify-between items-center ${
             idx !== settingsOptions.length - 1
@@ -55,7 +55,7 @@ const SettingsPage: React.FC = () => {
                   {children}
                 </button>
               )}
-              {!item.clickable && <Stack customStyle={baseStyle}>{children}</Stack>}
+              {!item.clickable && <Stack className={baseStyle}>{children}</Stack>}
             </React.Fragment>
           );
         })}

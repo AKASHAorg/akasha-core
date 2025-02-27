@@ -1,7 +1,7 @@
 import React from 'react';
 import getSDK from '@akashaorg/core-sdk';
 import AppList from '@akashaorg/design-system-components/lib/components/AppList';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
@@ -72,8 +72,8 @@ export const DefaultExtensionsList = () => {
   }));
 
   return (
-    <Stack spacing="gap-y-4">
-      <Stack spacing="gap-y-2">
+    <Stack spacing={4}>
+      <Stack spacing={2}>
         <Text variant="h6">{t('Default Extensions')}</Text>
         <Text variant="body2" color={{ light: 'grey5', dark: 'grey6' }}>
           {t(
@@ -85,7 +85,7 @@ export const DefaultExtensionsList = () => {
         //@TODO replace with Loader component once its created
       }
       {loading && (
-        <Stack spacing="gap-y-5" align="center">
+        <Stack spacing={5} alignItems="center">
           <Spinner />
           <Text variant="button-md">{t('Loading default extensions')}</Text>
         </Stack>

@@ -1,5 +1,5 @@
 import React from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
@@ -11,22 +11,23 @@ import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 const MiniProfileWidgetLoader: React.FC = () => {
   return (
     <Card className="mb-4 p-0 max-h-[30rem]">
-      <Stack
-        background={{ light: 'grey7', dark: 'grey5' }}
-        align="center"
-        customStyle="h-28 rounded-t-2xl"
-        fullWidth
-      >
-        <Stack customStyle="relative top-16">
+      <Stack alignItems="center" className="bg-inherit h-28 rounded-t-2xl w-full">
+        <Stack className="relative top-16">
           <TextLine round="rounded-full" height="h-20" width="w-20" customStyle="shrink-0" />
         </Stack>
       </Stack>
-      <Stack spacing="gap-y-4" align="center" padding="p-4 pt-6" fullWidth>
-        <Stack spacing="gap-y-1" padding="pt-3" align="center" fullWidth>
+      <Stack spacing={4} alignItems="center" className="p-4 pt-6 w-full">
+        <Stack spacing={1} alignItems="center" className="pt-3 w-full">
           <TextLine width="w-3/6" height="h-5" animated />
           <TextLine width="w-3/6" height="h-5" animated />
         </Stack>
-        <Stack direction="row" justify="center" align="center" spacing="gap-x-2" fullWidth>
+        <Stack
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+          spacing={2}
+          className="w-full"
+        >
           <TextLine width="w-2/6" height="h-5" animated />
           <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey6' }}>
             |

@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from 'react';
 
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Text, { TextProps } from '@akashaorg/design-system-core/lib/components/Text';
 import { PageButtonsProps, PageButtons } from '../PageButtons';
@@ -32,7 +32,7 @@ export const PageHeader: React.FC<PropsWithChildren<PageHeaderProps>> = props =>
     <Card className={`p-0 mb-4 ${customStyle}`}>
       {label && (
         <>
-          <Stack padding="px-4 py-6">
+          <Stack className="px-4 py-6">
             <Text variant={labelTextVariant} align="center">
               {label}
             </Text>
@@ -42,7 +42,7 @@ export const PageHeader: React.FC<PropsWithChildren<PageHeaderProps>> = props =>
         </>
       )}
 
-      <Stack padding="p-4" spacing="gap-y-3">
+      <Stack spacing={3} className="p-4">
         {children}
 
         {/* show buttons only when the labels are specified */}

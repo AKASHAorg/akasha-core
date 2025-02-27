@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import TrendingWidgetItemLoader from '@akashaorg/design-system-components/lib/components/TrendingWidgetLoadingCard/trending-widget-item-loader';
 import { IRootComponentProps } from '@akashaorg/typings/lib/ui';
@@ -39,10 +39,10 @@ export const LatestProfiles: React.FC<LatestProfilesProps> = props => {
       <Stack
         key={profileData.id}
         direction="row"
-        align="center"
-        justify="between"
-        spacing="gap-x-3"
-        customStyle="w-(full xl:[19rem])"
+        alignItems="center"
+        justifyContent="between"
+        spacing={3}
+        className="w-(full xl:[19rem])"
       >
         <ProfileAvatarButton
           profileId={profileData.did.id}

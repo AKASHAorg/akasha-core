@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Color } from '@akashaorg/design-system-core/lib/components/types/common.types';
 
 export type AppInfoPillsProps = {
@@ -12,12 +12,10 @@ export const AppInfoPill: React.FC<PropsWithChildren<AppInfoPillsProps>> = props
   return (
     <Stack
       direction="row"
-      align="center"
-      justify="center"
-      padding="px-2"
-      spacing="gap-x-1"
-      background={background}
-      customStyle={`m-h-[18px] m-w-[18px] rounded-3xl ${customStyle}`}
+      alignItems="center"
+      justifyContent="center"
+      spacing={1}
+      className={`px-2 bg-inherit m-h-[18px] m-w-[18px] rounded-3xl bg-${background} ${customStyle}`}
     >
       {children}
     </Stack>

@@ -1,7 +1,7 @@
 import React from 'react';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { FlagIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 
@@ -24,16 +24,16 @@ const ReportReasonPill: React.FC<ReportReasonPillProps> = props => {
     <Button plain={true} onClick={handleClick}>
       <Stack
         direction="row"
-        customStyle="w-fit rounded-full bg-(secondaryLight/30 dark:secondaryDark)"
+        className="w-fit rounded-full bg-(secondaryLight/30 dark:secondaryDark)"
       >
-        <Stack direction="row" align="center" spacing="gap-x-1" padding="p-2">
+        <Stack direction="row" alignItems="center" spacing={1} className="p-2">
           <Icon icon={<FlagIcon />} size="sm" color={{ light: 'secondaryLight', dark: 'grey2' }} />
           <Text variant="footnotes2" color={{ light: 'secondaryLight', dark: 'grey2' }}>
             {reportCount}
           </Text>
         </Stack>
 
-        <Stack padding="p-2" customStyle="border(l-1 solid white dark:grey2)">
+        <Stack className="p-2 border(l-1 solid white dark:grey2)">
           <Text variant="footnotes2" color={{ light: 'secondaryLight', dark: 'grey2' }}>
             {reason}
           </Text>

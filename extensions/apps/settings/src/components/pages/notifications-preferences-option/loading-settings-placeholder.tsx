@@ -1,12 +1,12 @@
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import React from 'react';
 
 const LoadingSettingsPlaceholder: React.FC = () => (
   <>
-    <Stack customStyle="border(b-1 solid grey8 dark:grey5) mb-4 pb-4">
-      <Stack direction="row" justify="between" align="center" customStyle="mt-4">
+    <Stack className="border-b border-border mb-4 pb-4">
+      <Stack direction="row" justifyContent="between" alignItems="center" className="mt-4">
         <TextLine animated={true} width="w-1/4" height="h-[1.5rem]" round="rounded" />
         <TextLine animated={true} width="w-[1.5rem]" height="h-[1.5rem]" round="rounded" />
       </Stack>
@@ -17,7 +17,7 @@ const LoadingSettingsPlaceholder: React.FC = () => (
     </Stack>
 
     <Stack>
-      <Stack direction="row" justify="between" align="center" customStyle="mt-4">
+      <Stack direction="row" justifyContent="between" alignItems="center" className="mt-4">
         <TextLine animated={true} width="w-1/4" height="h-[1.5rem]" round="rounded" />
         <TextLine animated={true} width="w-[1.5rem]" height="h-[1.5rem]" round="rounded" />
       </Stack>

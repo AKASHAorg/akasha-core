@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
@@ -40,7 +40,7 @@ const NotificationSettingsCard: React.FC<NotificationSettingsCardProps> = ({
   handleButtonClick,
 }) => {
   const content = (
-    <Stack padding="p-5" align="center">
+    <Stack alignItems="center" className="p-5">
       <Image
         customStyle="w-[180px] h-[180px] object-contain mb-4"
         src={IMAGES[image]}

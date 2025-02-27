@@ -8,7 +8,7 @@ import {
   HashtagIcon,
   XMarkIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import SubtitleTextIcon from '@akashaorg/design-system-core/lib/components/SubtitleTextIcon';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 
@@ -63,10 +63,10 @@ export const TopicRow: React.FC<TopicRowProps> = props => {
   return (
     <Stack
       direction="row"
-      align="center"
-      justify="between"
-      spacing="gap-x-3"
-      customStyle="w-(full xl:[19rem])"
+      alignItems="center"
+      justifyContent="between"
+      spacing={3}
+      className="w-(full xl:[19rem])"
     >
       <SubtitleTextIcon
         label={tag}

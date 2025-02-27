@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
 import WorldVersionInfoCard from '@akashaorg/design-system-components/lib/components/WorldVersionInfoCard';
@@ -57,11 +57,11 @@ const GlobalAntennaPage: React.FC<unknown> = () => {
   }, [authenticatedDID, navigate, showLoginModal]);
 
   return (
-    <Stack fullWidth={true}>
+    <Stack className="w-full">
       <Helmet helmetData={helmetData}>
         <title>{worldConfig.title}</title>
       </Helmet>
-      <Stack spacing="gap-y-4">
+      <Stack spacing={4}>
         {!dismissed && (
           <WorldVersionInfoCard
             titleLabel={t('Attention: Testing Environment')}

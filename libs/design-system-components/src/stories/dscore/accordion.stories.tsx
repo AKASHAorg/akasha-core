@@ -2,7 +2,7 @@ import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import Accordion, { AccordionProps } from '@akashaorg/design-system-core/lib/components/Accordion';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 Accordion.displayName = 'Accordion';
@@ -18,7 +18,7 @@ const meta: Meta<AccordionProps> = {
 type Story = StoryObj<AccordionProps>;
 
 const titleNode = (
-  <Stack align="center" direction="row">
+  <Stack alignItems="center" direction="row">
     <Avatar
       profileId="did:pkh:eip155:5:0x36c703c4d22af437dc883e2e0884e57404e16493"
       avatar={{ src: 'https://placebeard.it/360x360', height: 360, width: 360 }}

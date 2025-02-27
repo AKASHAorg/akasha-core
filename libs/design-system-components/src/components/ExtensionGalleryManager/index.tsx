@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
@@ -57,10 +57,10 @@ export const ExtensionGalleryManager: React.FC<ExtensionGalleryManagerProps> = p
   const uploadInputRef = useRef(null);
 
   return (
-    <Stack spacing="gap-y-4" customStyle="relative">
-      <Stack direction="column" spacing="gap-y-4" padding="p-4">
-        <Stack spacing="gap-y-2" direction="column" customStyle="">
-          <Stack direction="row" spacing="gap-x-2" justify="between" align="center">
+    <Stack spacing={4} className="relative">
+      <Stack direction="column" spacing={4} className="p-4">
+        <Stack spacing={2} direction="column">
+          <Stack direction="row" spacing={2} justifyContent="between" alignItems="center">
             <Text variant="h6">{galleryManagerTitle}</Text>
             <Button
               variant="link"
@@ -77,7 +77,7 @@ export const ExtensionGalleryManager: React.FC<ExtensionGalleryManagerProps> = p
           </Text>
         </Stack>
         {images.length ? (
-          <Stack customStyle="grid grid-cols-[repeat(auto-fill,_minmax(min(10rem,_100%),_1fr))] gap-4">
+          <Stack className="grid grid-cols-[repeat(auto-fill,_minmax(min(10rem,_100%),_1fr))] gap-4">
             {images.map(image => (
               <GalleryImage
                 key={image.id}
@@ -124,14 +124,9 @@ export const ExtensionGalleryManager: React.FC<ExtensionGalleryManagerProps> = p
           hidden
         />
       </Stack>
-      <Stack
-        background={{ light: 'white', dark: 'grey2' }}
-        spacing="gap-y-4"
-        customStyle="sticky bottom-0 rounded-b-2xl"
-        fullWidth
-      >
+      <Stack spacing={4} className="bg-inherit sticky bottom-0 rounded-b-2xl w-full">
         <Divider />
-        <Stack direction="row" align="center" spacing="gap-x-2" customStyle="px-4 mb-4">
+        <Stack direction="row" alignItems="center" spacing={2} className="px-4 mb-4">
           <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey6' }} weight="normal">
             {images.length}/{maxGalleryImages} {imagesLabel}
           </Text>

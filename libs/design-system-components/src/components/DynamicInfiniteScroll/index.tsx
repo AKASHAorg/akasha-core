@@ -7,7 +7,7 @@ import React, {
   useLayoutEffect,
   useRef,
 } from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import { Virtualizer, measureElement, useWindowVirtualizer } from '@tanstack/react-virtual';
@@ -142,7 +142,7 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollProps> = props => {
   const virtualListUi = (
     <>
       {header && (
-        <Stack ref={headerRef} customStyle={headerHeightStyle.current}>
+        <Stack ref={headerRef} className={headerHeightStyle.current}>
           {header}
         </Stack>
       )}
@@ -176,7 +176,7 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollProps> = props => {
               {children({ index, itemIndex: virtualItem.index, itemsSize: items.length })}
             </Card>
           ))}
-          <Stack align="center" justify="center" fullWidth>
+          <Stack alignItems="center" justifyContent="center" className="w-full">
             {loadingMore && <Spinner />}
           </Stack>
         </Card>

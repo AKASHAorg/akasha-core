@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import ImageOverlay from '../../ImageOverlay';
@@ -47,9 +47,9 @@ export const Gallery: React.FC<GalleryProps> = props => {
   };
 
   return (
-    <Stack spacing="gap-y-4" direction="column">
-      <Stack spacing="gap-y-2" direction="column">
-        <Stack direction="row" spacing="gap-x-2" justify="between" align="center">
+    <Stack spacing={4} direction="column">
+      <Stack spacing={2} direction="column">
+        <Stack direction="row" spacing={2} justifyContent="between" alignItems="center">
           <Text variant="h6" as="label">
             {galleryFieldLabel}
           </Text>
@@ -66,11 +66,11 @@ export const Gallery: React.FC<GalleryProps> = props => {
         </Text>
       </Stack>
       {galleryHasImages && (
-        <Stack customStyle="grid grid-cols-[repeat(auto-fill,_minmax(min(10rem,_100%),_1fr))] gap-4">
+        <Stack className="grid grid-cols-[repeat(auto-fill,_minmax(min(10rem,_100%),_1fr))] gap-4">
           {displayImages.map((image, index) => (
             <Stack
               key={index}
-              customStyle="w-[6.125rem] h-[6.125rem] sm:w-[10.625rem] sm:h-[10.625rem] overflow-hidden object-cover rounded-[0.5rem] cursor-pointer"
+              className="w-[6.125rem] h-[6.125rem] sm:w-[10.625rem] sm:h-[10.625rem] overflow-hidden object-cover rounded-[0.5rem] cursor-pointer"
             >
               <Image
                 alt={image.name}
