@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import TrendingWidgetLoadingCard from '@akashaorg/design-system-components/lib/components/TrendingWidgetLoadingCard';
@@ -102,7 +102,7 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
   };
 
   return (
-    <Stack spacing="gap-y-4">
+    <Stack spacing={4}>
       {(latestTopicsError || latestProfileStreamReq.error) && (
         <ErrorLoader
           type="script-error"
@@ -154,20 +154,18 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
             {latestProfileStreamReq.data && (
               <>
                 {latestProfileIDs?.length === 0 ? (
-                  <Stack justify="center" align="center" customStyle="py-2">
+                  <Stack justifyContent="center" alignItems="center" className="py-2">
                     <Text>{t('No profiles found!')}</Text>
                   </Stack>
                 ) : (
                   <Card className="p-4">
-                    <Stack customStyle="mb-4">
+                    <Stack className="mb-4">
                       <Text variant="button-md" weight="bold">
                         {t('Start Following')}
                       </Text>
                     </Stack>
-                    <Stack
-                      customStyle={'ring(white opacity-60  offset(2 blue-400)) focus:outline-none'}
-                    >
-                      <Stack spacing="gap-y-4">
+                    <Stack className="ring(white opacity-60  offset(2 blue-400)) focus:outline-none">
+                      <Stack spacing={4}>
                         {latestProfileIDs.map(profileID => (
                           <LatestProfiles
                             key={profileID}

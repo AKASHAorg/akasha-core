@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import {
   AkashaAppApplicationType,
@@ -89,7 +89,7 @@ export const ReleasesPage = (props: ReleasesPageProps) => {
   return (
     <>
       <Card className="p-4">
-        <Stack spacing="gap-y-4">
+        <Stack spacing={4}>
           <InfoSubRouteHeader
             pageTitle={t('Releases')}
             appName={extensionDisplayName}
@@ -139,7 +139,7 @@ export const ReleasesPage = (props: ReleasesPageProps) => {
                 return (
                   <Stack direction="column">
                     <Divider />
-                    <Stack direction="row" justify="between" customStyle="mt-3 mb-2">
+                    <Stack direction="row" justifyContent="between" className="mt-3 mb-2">
                       <Text variant="h6">
                         {t('Version')} {release.node?.version}
                       </Text>
@@ -147,7 +147,7 @@ export const ReleasesPage = (props: ReleasesPageProps) => {
                         {formatDate(release.node?.createdAt, 'DD MMM YYYY')}
                       </Text>
                     </Stack>
-                    <Stack direction="row" justify="between">
+                    <Stack direction="row" justifyContent="between">
                       <Text
                         variant="footnotes2"
                         customStyle={`${isExpanded ? 'whitespace-pre-line' : 'truncate max-w-[45ch]'}`}
@@ -172,7 +172,7 @@ export const ReleasesPage = (props: ReleasesPageProps) => {
             </DynamicInfiniteScroll>
           )}
           {releasesReq.loading && (
-            <Stack direction="column" align="center">
+            <Stack direction="column" alignItems="center">
               <Spinner />
             </Stack>
           )}

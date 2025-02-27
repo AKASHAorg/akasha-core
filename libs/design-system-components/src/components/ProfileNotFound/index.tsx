@@ -3,7 +3,7 @@ import React from 'react';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 
 import Default404Image from '../Default404Image';
 
@@ -28,14 +28,14 @@ const ProfileNotFound: React.FC<ProfileNotFoundProps> = ({
 
   return (
     <Card className="p-2">
-      <Stack direction="column" spacing="gap-y-4" fullWidth>
+      <Stack direction="column" spacing={4} className="w-full">
         <Stack direction="column">
           <Default404Image url={`${publicImgPath}/new404.webp`} />
           <Text variant={'h6'} align="center">
             {titleLabel}
           </Text>
         </Stack>
-        <Stack direction="row" customStyle="pr-2 pb-2" justify="end" fullWidth>
+        <Stack direction="row" justifyContent="end" className="pr-2 pb-2 w-full">
           <Button onClick={onClickGoToHomepage}>{buttonLabel}</Button>
         </Stack>
       </Stack>

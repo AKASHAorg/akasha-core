@@ -1,6 +1,6 @@
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import React from 'react';
 import { EyeSlashIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
@@ -26,8 +26,8 @@ const NSFW: React.FC<NSFWProps> = props => {
     onClickToView,
   } = props;
   return (
-    <Stack align="center" justify="center" spacing="gap-y-2">
-      <Stack direction="row" spacing="gap-x-1">
+    <Stack alignItems="center" justifyContent="center" spacing={2}>
+      <Stack direction="row" spacing={1}>
         <Icon icon={<EyeSlashIcon />} color="errorLight" />
         <Text variant="h6" color="errorLight">
           {sensitiveContentLabel}
@@ -41,7 +41,7 @@ const NSFW: React.FC<NSFWProps> = props => {
           {descriptionSecondLine}
         </Text>
       </Stack>
-      <Stack direction="row" spacing="gap-x-4">
+      <Stack direction="row" spacing={4}>
         <Button variant="outline" onClick={onCancel}>
           {cancelLabel}
         </Button>

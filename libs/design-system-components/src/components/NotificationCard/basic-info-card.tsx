@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export type BasicInfoCardProps = {
@@ -20,13 +20,13 @@ const BasicInfoCard: React.FC<BasicInfoCardProps> = ({
 }) => {
   return (
     <Card className={`p-2 border-none ${customStyle}`}>
-      <Stack direction="column" align="center" justify="center" customStyle="mb-32">
+      <Stack direction="column" alignItems="center" justifyContent="center" className="mb-32">
         {image ? (
           <Image src={image} customStyle="w-[11.25rem] h-[11.25rem] m-auto my-4" />
         ) : (
           <Card className="bg-grey8 dark:bg-grey5 w-[11.25rem] h-[11.25rem] m-auto my-4 rounded-xl" />
         )}
-        <Stack customStyle="w-[70%] m-auto gap-4">
+        <Stack className="w-[70%] m-auto gap-4">
           {titleLabel && (
             <Text variant="h6" align="center">
               {titleLabel}

@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import DropDown, { DropdownMenuItemGroupType } from '../BaseDropdownFilter';
 
 export type DropDownFilterProps = {
@@ -19,8 +19,8 @@ const DropDownFilter: React.FC<DropDownFilterProps> = ({
   resetHandler,
 }) => {
   return (
-    <Stack direction="row" justify="between" align="center" customStyle="my-6">
-      <Stack direction="row" customStyle="w-8/12 lg:w-2/6">
+    <Stack direction="row" justifyContent="between" alignItems="center" className="my-6">
+      <Stack direction="row" className="w-8/12 lg:w-2/6">
         <DropDown
           menuItems={dropdownMenuItems}
           selected={selected}

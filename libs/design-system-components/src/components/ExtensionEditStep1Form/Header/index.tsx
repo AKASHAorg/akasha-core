@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import AppCoverImage from '@akashaorg/design-system-core/lib/components/AppCoverImage';
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
 import List, { ListProps } from '@akashaorg/design-system-core/lib/components/List';
@@ -220,13 +220,9 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <Stack direction="column" spacing="gap-y-2">
-      <Stack customStyle="relative mb-8">
-        <Stack
-          fullWidth
-          background={{ light: 'grey7', dark: 'grey5' }}
-          customStyle={`h-28 rounded-2xl`}
-        >
+    <Stack direction="column" spacing={2}>
+      <Stack className="relative mb-8">
+        <Stack className="w-full bg-inherit h-28 rounded-2xl">
           <AppCoverImage
             src={coverImageUrl?.src}
             appType={extensionType}
@@ -235,8 +231,8 @@ export const Header: React.FC<HeaderProps> = ({
           <Stack
             ref={editCoverRef}
             direction="column"
-            spacing="gap-y-1"
-            customStyle="absolute bottom-4 right-4"
+            spacing={1}
+            className="absolute bottom-4 right-4"
           >
             <Button
               variant="outline"
@@ -253,13 +249,8 @@ export const Header: React.FC<HeaderProps> = ({
             )}
           </Stack>
         </Stack>
-        <Stack
-          direction="row"
-          align="end"
-          spacing="gap-x-2"
-          customStyle="absolute left-6 -bottom-8"
-        >
-          <Stack align="center" justify="center" ref={editLogoImageRef}>
+        <Stack direction="row" alignItems="end" spacing={2} className="absolute left-6 -bottom-8">
+          <Stack alignItems="center" justifyContent="center" ref={editLogoImageRef}>
             <AppAvatar
               appType={extensionType}
               avatar={logoImageUrl}
@@ -281,7 +272,7 @@ export const Header: React.FC<HeaderProps> = ({
                 'bg',
               )}`}
             />
-            <Stack customStyle="absolute">
+            <Stack className="absolute">
               <Button
                 size="icon"
                 variant="outline"
@@ -305,10 +296,10 @@ export const Header: React.FC<HeaderProps> = ({
         {showExtraInfo && (
           <Stack
             direction="row"
-            spacing="gap-2"
-            justify="end"
-            align="center"
-            customStyle="absolute right-0 -bottom-8"
+            spacing={2}
+            justifyContent="end"
+            alignItems="center"
+            className="absolute right-0 -bottom-8"
           >
             <Pill
               type="info"
@@ -364,7 +355,7 @@ export const Header: React.FC<HeaderProps> = ({
         title={{ label: logoGuidelines.titleLabel, variant: 'h6' }}
         onClose={() => setShowLogoGuidelineModal(false)}
       >
-        <Stack align="center" spacing="gap-y-4" padding="p-4">
+        <Stack alignItems="center" spacing={4} className="p-4">
           <ul className="list-disc ml-2 text(black dark:white)">
             {logoGuidelines.guidelines.map((guideline, index) => (
               <li key={index}>
@@ -372,7 +363,7 @@ export const Header: React.FC<HeaderProps> = ({
               </li>
             ))}
           </ul>
-          <Stack align="center" spacing="gap-y-4" customStyle="relative">
+          <Stack alignItems="center" spacing={4} className="relative">
             <Img
               src={`${publicImagePath}/extension-logo-guidelines.webp`}
               alt="extensions-logo-guideline"

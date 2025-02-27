@@ -2,7 +2,7 @@ import React from 'react';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import type { Image, Profile } from '@akashaorg/typings/lib/ui';
@@ -44,12 +44,12 @@ const MiniProfileCard: React.FC<MiniProfileCardProps> = props => {
   return (
     <Card className="p-0 mb-4 max-h-[30rem]">
       <Stack
-        align="center"
-        customStyle={`h-28 rounded-t-2xl bg(center cover [url(${
+        alignItems="center"
+        className={`h-28 rounded-t-2xl bg(center cover [url(${
           coverImage?.src ?? coverImageFallback
         })])`}
       >
-        <Stack customStyle="relative top-16">
+        <Stack className="relative top-16">
           <Avatar
             size="xl"
             border="sm"
@@ -64,9 +64,9 @@ const MiniProfileCard: React.FC<MiniProfileCardProps> = props => {
           />
         </Stack>
       </Stack>
-      <Stack spacing="gap-y-4" align="center" padding="pt-6 pb-4 px-4">
-        <Stack spacing="gap-y-2" align="center">
-          <Stack spacing="gap-y-1" align="center" customStyle="mt-3">
+      <Stack spacing={4} alignItems="center" className="pt-6 pb-4 px-4">
+        <Stack spacing={2} alignItems="center">
+          <Stack spacing={1} alignItems="center" className="mt-3">
             {profileData?.name && (
               <Text
                 variant="h6"
@@ -83,7 +83,7 @@ const MiniProfileCard: React.FC<MiniProfileCardProps> = props => {
               <DidField did={profileData.did.id} isValid={true} copiable={false} />
             )}
           </Stack>
-          <Stack direction="row" spacing="gap-x-1" align="center" justify="center">
+          <Stack direction="row" spacing={1} alignItems="center" justifyContent="center">
             {statsLoading ? (
               <>
                 <TextLine width="w-14" height="h-5" animated />

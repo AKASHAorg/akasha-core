@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
@@ -240,8 +240,8 @@ export const ExtensionPublishPage: React.FC<ExtensionPublishPageProps> = ({ exte
 
   return (
     <Card className="shadow-none p-0">
-      <Stack spacing="gap-y-2">
-        <Stack padding={16}>
+      <Stack spacing={2}>
+        <Stack className="p-4">
           <Text variant="h5" weight="semibold" align="center">
             {t('Review and Publish Extension')}
           </Text>
@@ -276,7 +276,7 @@ export const ExtensionPublishPage: React.FC<ExtensionPublishPageProps> = ({ exte
           contributorsUi={
             <>
               {loadingProfilesData && (
-                <Stack align="center" justify="center">
+                <Stack alignItems="center" justifyContent="center">
                   <Spinner />
                 </Stack>
               )}
@@ -290,7 +290,7 @@ export const ExtensionPublishPage: React.FC<ExtensionPublishPageProps> = ({ exte
                 </Stack>
               )}
               {profilesData?.length > 0 && (
-                <Stack direction="row" spacing="gap-2" align="center">
+                <Stack direction="row" spacing={2} alignItems="center">
                   <StackedAvatar
                     userData={contributorAvatars}
                     maxAvatars={MAX_CONTRIBUTORS_DISPLAY}

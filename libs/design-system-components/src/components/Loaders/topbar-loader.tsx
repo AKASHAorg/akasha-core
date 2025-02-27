@@ -1,7 +1,7 @@
 import React from 'react';
 import { startWidgetsTogglingBreakpoint } from '@akashaorg/design-system-core/lib/utils/breakpoints';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 
 /**
@@ -12,7 +12,7 @@ const TopbarLoader: React.FC = () => {
   return (
     <div>
       <Card className="p-0 flex flex-row justify-between items-center py-1.5 px-2 space-x-4 w-full xs:fixed xs:top-0 xs:z-[8]">
-        <Stack direction="row" spacing="gap-x-2">
+        <Stack direction="row" spacing={2}>
           {Array.from({ length: 2 }).map((el, index: number) => (
             <TextLine
               round="rounded-full"
@@ -31,7 +31,7 @@ const TopbarLoader: React.FC = () => {
           customStyle="shrink-0"
           animated={true}
         />
-        <Stack direction="row" spacing="gap-x-2">
+        <Stack direction="row" spacing={2}>
           {window.matchMedia(startWidgetsTogglingBreakpoint).matches ? (
             <TextLine
               round="rounded-full"

@@ -3,7 +3,8 @@ import { apply, tw } from '@twind/core';
 
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { MagnifyingGlassIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
+import { cn } from '@akashaorg/ui/lib/library/utils';
 
 export type SearchBarProps = {
   inputValue: string;
@@ -53,11 +54,13 @@ const SearchBar: React.FC<SearchBarProps> = props => {
   return (
     <Stack
       direction="row"
-      spacing="gap-x-2"
-      align="center"
-      padding="px-2.5"
-      fullWidth={fullWidth}
-      customStyle={`bg(grey9 dark:grey3) rounded-full focus-within:border focus-within:border-secondaryLight dark:focus-within:border-secondaryDark ${customStyle}`}
+      spacing={2}
+      alignItems="center"
+      className={cn(
+        'px-2.5 bg(grey9 dark:grey3) rounded-full focus-within:border focus-within:border-secondaryLight dark:focus-within:border-secondaryDark',
+        fullWidth && 'w-full',
+        customStyle,
+      )}
     >
       <input
         type="text"

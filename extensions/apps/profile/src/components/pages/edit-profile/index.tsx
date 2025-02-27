@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -204,7 +204,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
   };
 
   return (
-    <Stack direction="column" spacing="gap-y-4" customStyle="h-full">
+    <Stack direction="column" spacing={4} className="h-full">
       <Card className="py-4 h-full rounded-[1.25rem]">
         <EditProfile
           defaultValues={{
@@ -312,7 +312,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
           },
         ]}
       >
-        <Stack direction="column" spacing="gap-y-4">
+        <Stack direction="column" spacing={4}>
           <Text variant="body1">
             {t('Before you proceed,')}{' '}
             <Text variant="h6" as="span">

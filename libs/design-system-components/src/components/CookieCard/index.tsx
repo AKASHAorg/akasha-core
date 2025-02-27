@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export type CookieCardProps = {
@@ -49,10 +49,10 @@ const CookieCard: React.FC<CookieCardProps> = props => {
 
   return (
     <Card className="p-4">
-      <Stack direction="column" spacing="gap-y-2">
+      <Stack direction="column" spacing={2}>
         <Text variant="h6">{titleLabel}</Text>
 
-        <Stack spacing="gap-y-1">
+        <Stack spacing={1}>
           <Text variant="body2">{paragraphOneLabel}</Text>
 
           <Text variant="body2">
@@ -81,7 +81,7 @@ const CookieCard: React.FC<CookieCardProps> = props => {
           </Text>
         </Stack>
 
-        <Stack direction="row" spacing="gap-x-4" customStyle="mt-4 ml-auto">
+        <Stack direction="row" spacing={4} className="mt-4 ml-auto">
           <Button variant="link" onClick={onClickOnlyEssential}>
             {onlyEssentialLabel}
           </Button>

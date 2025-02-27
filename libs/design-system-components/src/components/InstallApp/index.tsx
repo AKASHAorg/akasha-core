@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Text, { TextProps } from '@akashaorg/design-system-core/lib/components/Text';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import ErrorIcon from './error-icon';
 import InstallIcon from './install-icon';
 import SuccessIcon from './success-icon';
@@ -84,17 +84,11 @@ const InstallApp = ({
 }: InstallAppProps) => {
   return (
     <Card className="p-6">
-      <Stack align="center" direction="column" spacing="gap-y-8">
+      <Stack alignItems="center" direction="column" spacing={8}>
         <Text variant="h5">{title}</Text>
-        <Stack
-          direction="row"
-          spacing="gap-x-4"
-          padding={{ x: 8, y: 10 }}
-          background={{ light: 'grey9', dark: 'grey3' }}
-          customStyle="rounded-xl"
-        >
+        <Stack direction="row" spacing={4} className="px-2 py-2.5 bg(grey9 dark:grey5) rounded-xl">
           <AppAvatar appType={appType} avatar={appAvatar} width={4} height={4} />
-          <Stack direction="column" justify="between">
+          <Stack direction="column" justifyContent="between">
             <Text variant="button-lg">{appName}</Text>
             <Stack>
               <Text variant="footnotes2">{publisherName}</Text>
@@ -109,10 +103,10 @@ const InstallApp = ({
             </Stack>
           </Stack>
         </Stack>
-        <Stack direction="column" customStyle="max-w-xs">
-          <Stack align="center" direction="column" spacing="gap-y-4">
+        <Stack direction="column" className="max-w-xs">
+          <Stack alignItems="center" direction="column" spacing={4}>
             {status === 'authorize-request' && (
-              <Stack direction="row" align="center" justify="center">
+              <Stack direction="row" alignItems="center" justifyContent="center">
                 <AppIcon
                   placeholderIcon={<Walletconnect />}
                   background={{ gradient: 'gradient-to-b', from: 'orange-50', to: 'orange-200' }}
@@ -141,7 +135,7 @@ const InstallApp = ({
             )}
             {status === 'in-progress' && <InstallIcon className={installStyle} />}
             {status === 'complete' && (
-              <Stack direction="row" spacing="gap-x-4" align="center">
+              <Stack direction="row" spacing={4} alignItems="center">
                 <div className={tw('relative')}>
                   <SuccessIcon className={tw(apply`${successAnimationStyle}`)} />
                   <SuccessIcon className={tw(apply`${successStyle}`)} />

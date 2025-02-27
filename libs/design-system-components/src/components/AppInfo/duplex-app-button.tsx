@@ -1,7 +1,7 @@
 import React from 'react';
 import { TrashIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 
 export type DuplexAppButtonProps = {
   onUninstall: () => void;
@@ -12,9 +12,9 @@ export const DuplexAppButton: React.FC<DuplexAppButtonProps> = ({ onUninstall })
     <button onClick={onUninstall}>
       <Stack
         direction="row"
-        align="center"
-        justify="center"
-        customStyle={'bg(grey8 dark:grey3) rounded-full w-8 h-8'}
+        alignItems="center"
+        justifyContent="center"
+        className="bg(grey8 dark:grey3) rounded-full w-8 h-8"
       >
         <Icon
           icon={<TrashIcon />}

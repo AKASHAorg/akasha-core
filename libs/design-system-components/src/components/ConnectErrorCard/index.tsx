@@ -4,7 +4,7 @@ import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { ExclamationTriangleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export type ConnectErrorCardProps = {
@@ -21,9 +21,9 @@ export type ConnectErrorCardProps = {
 const ConnectErrorCard: React.FC<ConnectErrorCardProps> = ({ title, message, action }) => {
   return (
     <Card className="p-4">
-      <Stack direction="column" spacing="gap-y-2">
-        <Stack justify="between">
-          <Stack direction="row" align="center" spacing="gap-x-2">
+      <Stack direction="column" spacing={2}>
+        <Stack justifyContent="between">
+          <Stack direction="row" alignItems="center" spacing={2}>
             <Icon
               icon={<ExclamationTriangleIcon />}
               color={{ light: 'errorLight', dark: 'errorDark' }}

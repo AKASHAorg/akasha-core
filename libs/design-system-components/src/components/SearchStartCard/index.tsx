@@ -3,7 +3,7 @@ import React, { PropsWithChildren } from 'react';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { Cog8ToothIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import SearchBar from '../SearchBar';
@@ -41,7 +41,7 @@ const SearchStartCard: React.FC<SearchStartProps> = ({
 
   return (
     <>
-      <Stack direction="row" justify="between" customStyle="my-3">
+      <Stack direction="row" justifyContent="between" className="my-3">
         <Text variant="h5" align="center">
           {titleLabel}
         </Text>

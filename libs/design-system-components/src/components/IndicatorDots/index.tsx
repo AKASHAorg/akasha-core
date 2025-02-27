@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import {
   CheckIcon,
@@ -51,21 +51,21 @@ const IndicatorDots: React.FC<TIndicatorDotsProps> = props => {
   const dotColor = React.useMemo(() => getDotColor(isSuccess, hasErrors), [isSuccess, hasErrors]);
 
   return (
-    <Stack direction="row" align="center" justify="center" customStyle="mx-4">
+    <Stack direction="row" alignItems="center" justifyContent="center" className="mx-4">
       <Stack
-        customStyle={`rounded-full w-${dotSizes.first} h-${dotSizes.first} ${dotColor} opacity-50`}
+        className={`rounded-full w-${dotSizes.first} h-${dotSizes.first} ${dotColor} opacity-50`}
       />
       <Stack
         direction="row"
-        align="center"
-        justify="center"
-        customStyle={`rounded-full w-${dotSizes.middle} h-${dotSizes.middle} ${dotColor} mx-2`}
+        alignItems="center"
+        justifyContent="center"
+        className={`rounded-full w-${dotSizes.middle} h-${dotSizes.middle} ${dotColor} mx-2`}
       >
         {isSuccess && <Icon icon={<CheckIcon />} color="white" size="xs" />}
         {hasErrors && <Icon icon={<ExclamationTriangleIcon />} color="white" size="xs" />}
       </Stack>
       <Stack
-        customStyle={`rounded-full w-${dotSizes.last} h-${dotSizes.last} ${dotColor} opacity-50`}
+        className={`rounded-full w-${dotSizes.last} h-${dotSizes.last} ${dotColor} opacity-50`}
       />
     </Stack>
   );

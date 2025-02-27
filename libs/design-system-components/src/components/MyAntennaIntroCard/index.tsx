@@ -2,8 +2,9 @@ import React from 'react';
 import { tw } from '@twind/core';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { cn } from '@akashaorg/ui/lib/library/utils';
 
 export type MyAntennaIntroCardProps = {
   heading: string;
@@ -37,11 +38,8 @@ const MyAntennaIntroCard: React.FC<MyAntennaIntroCardProps> = ({
   return (
     <Card className="p-0">
       <Stack
-        padding="p-4"
-        spacing="gap-y-3"
-        fullWidth={true}
-        customStyle="rounded-2xl"
-        {...(isMinified && { background: { light: 'grey9', dark: 'grey3' } })}
+        spacing={3}
+        className={cn('p-4 w-full rounded-2xl', isMinified && 'bg(grey9 dark:grey3)')}
       >
         {!isMinified && (
           <>
@@ -64,9 +62,9 @@ const MyAntennaIntroCard: React.FC<MyAntennaIntroCardProps> = ({
 
         <Stack
           direction="row"
-          spacing="gap-x-3"
-          align="center"
-          justify={isMinified ? 'between' : 'end'}
+          spacing={3}
+          alignItems="center"
+          justifyContent={isMinified ? 'between' : 'end'}
         >
           {isMinified && <Text variant="subtitle2">{secondaryDescription}</Text>}
 

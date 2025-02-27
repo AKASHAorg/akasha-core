@@ -18,7 +18,7 @@ import {
   Telegram,
   Twitter,
 } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ListSidebarApps from './list-sidebar-apps';
 import SidebarCTACard from './cta-card';
@@ -206,7 +206,7 @@ const SidebarComponent: React.FC<unknown> = () => {
         {/*
           this container will grow up to a max height of 68vh, 32vh currently accounts for the height of other sections and paddings. Adjust accordingly, if necessary.
         */}
-        <Stack direction="column" customStyle="overflow-auto">
+        <Stack direction="column" className="overflow-auto">
           {/* container for world apps */}
           {worldApps?.length > 0 && (
             <ListSidebarApps
@@ -237,9 +237,9 @@ const SidebarComponent: React.FC<unknown> = () => {
           <SidebarCTACard onClickCTAButton={handleClickExplore} onDismissCard={dismissCard} />
         )}
         {modSocialLinks.length > 0 && (
-          <Stack padding="px-8 py-4" customStyle="border-t-1 border(grey9 dark:grey3)">
+          <Stack className="px-8 py-4 border-t-1 border(grey9 dark:grey3)">
             <Text variant="footnotes2">{t('Get in touch')}</Text>
-            <Stack direction="row" spacing="gap-x-4" customStyle="w-fit h-fit mt-6">
+            <Stack direction="row" spacing={4} className="w-fit h-fit mt-6">
               {modSocialLinks.map((socialLink, idx) => (
                 <Link key={idx} to={socialLink.link} target="_blank">
                   <Button

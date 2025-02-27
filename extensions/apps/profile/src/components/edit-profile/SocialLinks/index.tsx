@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { SocialLink } from './social-link';
 import { PlusIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
@@ -29,9 +29,9 @@ export const SocialLinks: React.FC<SocialLinksProps> = ({
   };
 
   return (
-    <Stack direction="column" spacing="gap-y-4" customStyle={customStyle}>
-      <Stack spacing="gap-y-1" direction="column">
-        <Stack direction="row" spacing="gap-x-2" justify="between" align="center">
+    <Stack direction="column" spacing={4} className="customStyle">
+      <Stack spacing={1} direction="column">
+        <Stack direction="row" spacing={2} justifyContent="between" alignItems="center">
           <Text variant="h6">{linkLabel}</Text>
           <Button variant="link" onClick={onAddNew}>
             <PlusIcon />

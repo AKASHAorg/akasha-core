@@ -3,7 +3,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/library/utils';
 
-const stackVariants = cva('flex divide-accent', {
+const stackVariants = cva('flex', {
   variants: {
     justifyContent: {
       start: 'justify-start',
@@ -28,8 +28,8 @@ const stackVariants = cva('flex divide-accent', {
       columnReverse: 'flex-col-reverse',
     },
     divider: {
-      row: 'divide-x',
-      column: 'divide-y',
+      row: 'divide-accent divide-x',
+      column: 'divide-accent divide-y',
     },
   },
   defaultVariants: {
@@ -40,7 +40,7 @@ const stackVariants = cva('flex divide-accent', {
 export interface StackProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof stackVariants> {
-  spacing?: 0.5 | 1 | 1.5 | 2 | 2.5 | 3 | 3.5 | 4 | 5 | 6 | 7 | 8;
+  spacing?: 0.5 | 1 | 1.5 | 2 | 2.5 | 3 | 3.5 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 }
 
 const Stack = React.forwardRef<HTMLDivElement, StackProps>(

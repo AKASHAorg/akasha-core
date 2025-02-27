@@ -1,6 +1,6 @@
 import React from 'react';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
 
 export interface IAppSettingProps {
@@ -15,7 +15,7 @@ export interface IAppSettingProps {
 const AppSetting: React.FC<IAppSettingProps> = ({ title, description, isSelected, onChange }) => {
   return (
     <Stack>
-      <Stack direction="row" justify="between" align="center">
+      <Stack direction="row" justifyContent="between" alignItems="center">
         <Text variant="body1">{title}</Text>
         <Checkbox
           id="checkbox"

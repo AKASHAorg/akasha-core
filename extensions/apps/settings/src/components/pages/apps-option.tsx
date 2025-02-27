@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 
@@ -24,10 +24,10 @@ const AppsOption: React.FC = () => {
 
   return (
     <PageLayout title={t('Apps')}>
-      <Stack padding="px-4">
+      <Stack className="px-4">
         {/* automatic updates */}
-        <Stack padding="py-4" customStyle="border(b-1 solid grey8 dark:grey5)">
-          <Stack justify="between" align="center" customStyle="mb-2">
+        <Stack className="py-4 border border-border">
+          <Stack justifyContent="between" alignItems="center" className="mb-2">
             <Text weight="bold">{t('Automatic Updates')}</Text>
 
             <Toggle
@@ -43,8 +43,8 @@ const AppsOption: React.FC = () => {
         </Stack>
 
         {/* data and analytics */}
-        <Stack padding="py-4" customStyle="border(b-1 solid grey8 dark:grey5)">
-          <Stack justify="between" align="center" customStyle="mb-2">
+        <Stack className="py-4 border border-border">
+          <Stack justifyContent="between" alignItems="center" className="mb-2">
             <Text weight="bold">{t('Data & Analytics')}</Text>
 
             <Toggle
