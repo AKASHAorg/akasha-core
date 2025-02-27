@@ -39,27 +39,24 @@ function getTag(variant: Variant) {
   return 'div';
 }
 
-export interface TypographyProps
+interface TypographyProps
   extends React.ButtonHTMLAttributes<HTMLHeadingElement | HTMLParagraphElement>,
     VariantProps<typeof typographyVariants> {
   asChild?: boolean;
   bold?: boolean;
 }
 
-const Typography = React.forwardRef<HTMLHeadingElement | HTMLParagraphElement, TypographyProps>(
-  ({ className, variant, bold, asChild, ...props }, ref) => {
-    const tag = getTag(variant);
-    const Comp = asChild ? Slot : tag;
+const Typography = ({ className, variant, bold, asChild, ...props }: TypographyProps) => {
+  const tag = getTag(variant);
+  const Comp = asChild ? Slot : tag;
 
-    return (
-      <Comp
-        className={cn(typographyVariants({ variant, className }), bold && 'font-bold')}
-        ref={ref}
-        {...props}
-      />
-    );
-  },
-);
-Typography.displayName = 'Typography';
+  return (
+    <Comp
+      data-slot="typography"
+      className={cn(typographyVariants({ variant, className }), bold && 'font-bold')}
+      {...props}
+    />
+  );
+};
 
 export { Typography, typographyVariants };

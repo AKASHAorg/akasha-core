@@ -27,42 +27,44 @@ const stackVariants = cva('flex divide-accent', {
       column: 'flex-col',
       columnReverse: 'flex-col-reverse',
     },
-    divider: {
-      row: 'divide-x',
-      column: 'divide-y',
-    },
   },
   defaultVariants: {
     direction: 'column',
   },
 });
 
-export interface StackProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof stackVariants> {
-  spacing?: 0.5 | 1 | 1.5 | 2 | 2.5 | 3 | 3.5 | 4 | 5 | 6 | 7 | 8;
-}
-
-const Stack = React.forwardRef<HTMLDivElement, StackProps>(
-  ({ className, justifyContent, alignItems, direction, divider, spacing, ...props }, ref) => {
-    return (
-      <div
-        className={cn(
-          stackVariants({
-            justifyContent,
-            alignItems,
-            direction,
-            divider,
-            className,
-          }),
-          spacing && `gap-${spacing}`,
-        )}
-        ref={ref}
-        {...props}
-      />
-    );
-  },
-);
-Stack.displayName = 'Stack';
+const Stack = ({
+  className,
+  justifyContent,
+  alignItems,
+  direction = 'column',
+  divider,
+  spacing,
+  ...props
+}: React.ComponentProps<'div'> &
+  VariantProps<typeof stackVariants> & {
+    spacing?: number;
+    divider?: boolean;
+  }) => {
+  return (
+    <div
+      data-slot="stack"
+      className={cn(
+        stackVariants({
+          justifyContent,
+          alignItems,
+          direction,
+          className,
+        }),
+        spacing && `gap-${spacing}`,
+        divider && {
+          'divide-y': direction === 'column' || direction === 'columnReverse',
+          'divide-x': direction === 'row' || direction === 'rowReverse',
+        },
+      )}
+      {...props}
+    />
+  );
+};
 
 export { Stack, stackVariants };
