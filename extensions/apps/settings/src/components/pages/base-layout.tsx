@@ -11,7 +11,7 @@ const BaseLayout: React.FC<PropsWithChildren<IBaseLayout>> = props => {
   const { title, children } = props;
   return (
     <Card className="shadow-none p-0 mb-4">
-      <Stack className="p-4 border border-border">
+      <Stack className="p-4 border-b border-border">
         <Text variant="h5" align="center">
           {title}
         </Text>
