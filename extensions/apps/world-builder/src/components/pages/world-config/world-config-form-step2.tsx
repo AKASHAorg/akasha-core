@@ -52,7 +52,7 @@ import {
   selectAkashaAppsPageInfo,
 } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-query';
 import { transformSource, useRootComponentProps } from '@akashaorg/ui-core-hooks';
-import { Badge } from '@akashaorg/ui/lib/components/badge';
+import { Badge } from '@akashaorg/ui/lib/akasha-components/badge';
 import { X } from 'lucide-react';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import getSDK from '@akashaorg/core-sdk';

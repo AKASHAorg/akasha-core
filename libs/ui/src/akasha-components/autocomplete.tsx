@@ -12,7 +12,7 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/command';
-import { Input } from '@/components//input';
+import { Input } from '@/akasha-components/input';
 
 export type Option = Record<'value' | 'label', string>;
 

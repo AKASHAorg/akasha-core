@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Check } from 'lucide-react';
 
 import { cn } from '@/ui/library/utils';
-import { Badge } from '@akashaorg/ui/lib/components/badge';
+import { Badge } from '@akashaorg/ui/lib/akasha-components/badge';
 import {
   ExtensionAvatar,
   ExtensionAvatarFallback,
