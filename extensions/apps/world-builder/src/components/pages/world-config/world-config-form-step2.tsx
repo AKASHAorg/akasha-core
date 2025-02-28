@@ -30,8 +30,6 @@ import {
   ExtensionCardActionActive,
   ExtensionCardActionInactive,
   ExtensionCardAvatar,
-  ExtensionCardAvatarFallback,
-  ExtensionCardAvatarImage,
   ExtensionCardContent,
   ExtensionCardDescription,
   ExtensionCardName,
@@ -262,11 +260,11 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
                     className="p-4"
                   >
                     <ExtensionCardAvatar>
-                      <ExtensionCardAvatarImage
+                      <ExtensionCardAvatar.Image
                         src={transformSource(extensionData?.logoImage)?.src}
                       >
-                        <ExtensionCardAvatarFallback />
-                      </ExtensionCardAvatarImage>
+                        <ExtensionCardAvatar.Fallback />
+                      </ExtensionCardAvatar.Image>
                     </ExtensionCardAvatar>
                     <ExtensionCardContent>
                       <ExtensionCardName>{extensionData?.displayName}</ExtensionCardName>
