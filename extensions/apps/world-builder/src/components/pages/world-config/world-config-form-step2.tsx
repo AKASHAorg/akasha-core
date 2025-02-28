@@ -261,7 +261,7 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
                     extensionType={extensionData?.applicationType}
                     className="p-4"
                   >
-                    <ExtensionCardAvatar size="lg">
+                    <ExtensionCardAvatar>
                       <ExtensionCardAvatarImage
                         src={transformSource(extensionData?.logoImage)?.src}
                       >

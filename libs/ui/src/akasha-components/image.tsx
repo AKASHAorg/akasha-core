@@ -4,7 +4,7 @@ import { Loader2 } from 'lucide-react';
 import { cn } from '@/library/utils';
 
 const ImageContext = React.createContext<{
-  hasError: boolean;
+  error: boolean;
 } | null>(null);
 
 const useImageContext = () => {
@@ -16,8 +16,8 @@ const useImageContext = () => {
 };
 
 const ImageFallback = ({ children }: React.ComponentProps<'span'>) => {
-  const { hasError } = useImageContext();
-  return hasError && <span data-slot="image-fallback">{children}</span>;
+  const { error } = useImageContext();
+  return error && <span data-slot="image-fallback">{children}</span>;
 };
 
 const DelayLoad = ({
@@ -50,14 +50,21 @@ const Image = ({
   showLoadingIndicator?: boolean;
 }) => {
   const [loading, setLoading] = React.useState(true);
-  const [hasError, setError] = React.useState(false);
+  const [error, setError] = React.useState(false);
 
   React.useEffect(() => {
     setLoading(true);
   }, [setLoading]);
 
+  React.useEffect(() => {
+    if (!src) {
+      setError(true);
+      setLoading(false);
+    }
+  }, [src]);
+
   return (
-    <ImageContext.Provider value={{ hasError }}>
+    <ImageContext.Provider value={{ error }}>
       <div data-slot="image-container" className="relative">
         {showLoadingIndicator && loading && (
           <DelayLoad>
@@ -66,7 +73,7 @@ const Image = ({
             </div>
           </DelayLoad>
         )}
-        {!hasError && (
+        {!error && (
           <img
             data-slot="image"
             src={src}
