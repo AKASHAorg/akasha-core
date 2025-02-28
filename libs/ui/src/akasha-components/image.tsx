@@ -82,7 +82,7 @@ const Image = ({
               setLoading(false);
               onError?.(event);
             }}
-            className={cn('h-full w-full object-cover', className)}
+            className={cn('object-contain', className)}
             {...props}
           />
         )}

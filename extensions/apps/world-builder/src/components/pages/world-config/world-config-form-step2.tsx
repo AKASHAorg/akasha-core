@@ -30,15 +30,12 @@ import {
   ExtensionCardActionActive,
   ExtensionCardActionInactive,
   ExtensionCardAvatar,
+  ExtensionCardAvatarFallback,
+  ExtensionCardAvatarImage,
   ExtensionCardContent,
   ExtensionCardDescription,
   ExtensionCardName,
 } from '@/ui/extension-card';
-import {
-  ExtensionAvatar,
-  ExtensionAvatarImage,
-  ExtensionAvatarFallback,
-} from '@/ui/extension-avatar';
 import { ProfileAvatarButton, ProfileDidField, ProfileName } from '@/ui/profile-avatar-button';
 
 import {
@@ -259,17 +256,17 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
               {index => {
                 const extensionData = akashaApps[index];
                 return (
-                  <ExtensionCard className="p-4">
-                    <ExtensionCardAvatar>
-                      <ExtensionAvatar
-                        size="lg"
-                        extensionId={extensionData?.id}
-                        extensionType={extensionData?.applicationType}
+                  <ExtensionCard
+                    extensionId={extensionData?.id}
+                    extensionType={extensionData?.applicationType}
+                    className="p-4"
+                  >
+                    <ExtensionCardAvatar size="lg">
+                      <ExtensionCardAvatarImage
+                        src={transformSource(extensionData?.logoImage)?.src}
                       >
-                        <ExtensionAvatarImage src={transformSource(extensionData?.logoImage)?.src}>
-                          <ExtensionAvatarFallback />
-                        </ExtensionAvatarImage>
-                      </ExtensionAvatar>
+                        <ExtensionCardAvatarFallback />
+                      </ExtensionCardAvatarImage>
                     </ExtensionCardAvatar>
                     <ExtensionCardContent>
                       <ExtensionCardName>{extensionData?.displayName}</ExtensionCardName>
