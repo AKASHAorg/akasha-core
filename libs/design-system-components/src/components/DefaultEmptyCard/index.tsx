@@ -3,7 +3,7 @@ import React from 'react';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { cn } from '@akashaorg/ui/lib/library/utils';
 
@@ -59,7 +59,7 @@ const DefaultEmptyCard: React.FC<DefaultEmptyCardProps> = ({
       <Text variant="h6" align="center">
         {infoText}
       </Text>
-      <Stack justify="end" fullWidth spacing="gap-y-4" customStyle="pt-2">
+      <Stack justifyContent="end" spacing={4} className="w-full pt-2">
         {buttonLabel && (
           <Button variant="primary" label={buttonLabel} onClick={buttonClickHandler} />
         )}

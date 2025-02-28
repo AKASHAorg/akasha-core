@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { useAkashaStore, useNotifications, useRootComponentProps } from '@akashaorg/ui-core-hooks';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { tw } from '@twind/core';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import appRoutes, { PREFERENCES } from '../../../routes';
@@ -156,7 +156,7 @@ const NotificationsPreferencesOption: React.FC = () => {
   }
 
   return (
-    <Stack spacing="gap-y-4" customStyle="mb-2">
+    <Stack spacing={4} className="mb-2">
       {!errorInFetchingPreferences && (
         <>
           {/* This case happens only if the Channel creator has not inserted any apps */}
@@ -175,7 +175,7 @@ const NotificationsPreferencesOption: React.FC = () => {
               <Card
                 className={tw(`${!notificationsEnabled && 'opacity-50 pointer-events-none'} p-0`)}
               >
-                <Stack customStyle="p-4 pt-0">
+                <Stack className="p-4 pt-0">
                   <EnableAllSetting
                     isSelected={enableAllChecked}
                     onChange={e => handleToggleAll(e.target.checked)}
@@ -202,7 +202,7 @@ const NotificationsPreferencesOption: React.FC = () => {
                         </>
                       ))}
                       <Card className="mt-4 bg-grey9 dark:bg-grey3">
-                        <Stack direction="row" spacing="gap-x-3" align="center">
+                        <Stack direction="row" spacing={3} alignItems="center">
                           <Icon
                             icon={<Info />}
                             size="lg"
@@ -221,14 +221,14 @@ const NotificationsPreferencesOption: React.FC = () => {
                 {/* Buttons */}
                 <Stack
                   direction="row"
-                  justify="end"
-                  customStyle="border(t-1 solid grey8 dark:grey5) p-3 pt-4"
-                  spacing="gap-4"
+                  className="border-t border-border py-4 px-3"
+                  justifyContent="end"
                 >
                   <Button
                     variant="link"
                     onClick={handleReset}
                     color="dark:secondaryLight secondaryDark"
+                    className="mr-4"
                   >
                     {t('Reset')}
                   </Button>

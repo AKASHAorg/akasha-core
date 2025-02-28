@@ -3,7 +3,8 @@ import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import ProfileNameField from '@akashaorg/design-system-core/lib/components/ProfileNameField';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
+import { cn } from '@akashaorg/ui/lib/library/utils';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { transformSource, hasOwn } from '@akashaorg/ui-core-hooks';
 import { useTranslation } from 'react-i18next';
@@ -68,12 +69,14 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
   return (
     <Stack
       direction="row"
-      padding="p-4"
-      background={isAuthenticating ? { light: 'secondaryLight/30', dark: 'grey5' } : null}
-      customStyle={`border(b-1 grey9 dark:grey3) rounded-t-2xl ${headerPadding}`}
+      className={cn(
+        `p-4 border(b-1 grey9 dark:grey3) rounded-t-2xl`,
+        headerPadding,
+        isAuthenticating && 'bg-secondaryLight/30 dark:bg-grey5',
+      )}
     >
-      <Stack direction="row" customStyle="grow group">
-        <Stack customStyle="w-fit h-fit mr-2">
+      <Stack direction="row" className="grow group">
+        <Stack className="w-fit h-fit mr-2">
           <Avatar
             profileId={authenticatedDID}
             avatar={transformSource(avatar?.default)}
@@ -84,7 +87,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
             onClick={() => handleProfileAvatarClick(authenticatedDID)}
           />
         </Stack>
-        <Stack justify="center" customStyle={'w-fit flex-grow'}>
+        <Stack justifyContent="center" className="w-fit flex-grow">
           {!isLoggedIn && <Text variant="button-md"> {t('Guest')}</Text>}
           {isLoggedIn && (
             <Suspense fallback={<Text variant="button-md">{t('Fetching your info...')}</Text>}>
@@ -126,7 +129,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
           )}
         </Stack>
       </Stack>
-      <Stack customStyle="w-fit h-fit self-start">
+      <Stack className="w-fit h-fit self-start">
         {isAuthenticating && (
           <Button
             variant="primary"

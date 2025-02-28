@@ -1,6 +1,6 @@
 import React from 'react';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
 import MyAntennaIntroCard from '@akashaorg/design-system-components/lib/components/MyAntennaIntroCard';
@@ -85,12 +85,12 @@ const MyAntennaPage: React.FC<unknown> = () => {
         <title>{worldConfig.title}</title>
       </Helmet>
       {loadingTagSubs && (
-        <Stack align="center">
+        <Stack alignItems="center">
           <Spinner />
         </Stack>
       )}
       {!loadingTagSubs && (
-        <Stack spacing="gap-y-4" fullWidth={true}>
+        <Stack spacing={4} className="w-full">
           <MyAntennaIntroCard
             assetName="news-feed"
             heading={t('Add some magic to your feed 🪄')}

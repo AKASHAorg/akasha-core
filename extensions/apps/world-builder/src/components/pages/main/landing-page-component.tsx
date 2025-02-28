@@ -9,45 +9,20 @@ import {
   CardHeader,
   CardTitle,
 } from '@akashaorg/ui/lib/akasha-components/card';
-import {
-  ErrorLoader,
-  ErrorLoaderTitle,
-  ErrorLoaderDescription,
-  ErrorLoaderFooter,
-} from '@akashaorg/ui/lib/akasha-components/error-loader';
+
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Image } from '@akashaorg/ui/lib/akasha-components/image';
 import { Checkbox } from '@akashaorg/ui/lib/components/checkbox';
-import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
-import { HOME } from '../../routes';
 
 const TERMS_OF_USE = '/@akashaorg/app-legal/terms-of-use';
 
-export const HomePage: React.FC = () => {
+export const LandingPageComponent: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-world-builder');
 
-  const { baseRouteName, getCorePlugins } = useRootComponentProps();
-  const navigateTo = getCorePlugins().routing.navigateTo;
-
-  const {
-    data: { authenticatedDID },
-  } = useAkashaStore();
-
-  const handleConnectButtonClick = () => {
-    navigateTo?.({
-      appName: '@akashaorg/app-auth-ewa',
-      getNavigationUrl: (routes: Record<string, string>) => {
-        return `${routes.Connect}?${new URLSearchParams({
-          redirectTo: `${baseRouteName}/${routes[HOME]}`,
-        }).toString()}`;
-      },
-    });
-  };
-
   const handleNavigateToForm = () => {
-    navigate({ to: '/save-config/step1' });
+    navigate({ to: '/world-create-form' });
   };
 
   const [acceptedTerms, setAcceptedTerms] = React.useState(false);
@@ -55,22 +30,6 @@ export const HomePage: React.FC = () => {
   const handleCheckTerms = () => {
     setAcceptedTerms(!acceptedTerms);
   };
-
-  if (!authenticatedDID) {
-    return (
-      <ErrorLoader type="not-authenticated">
-        <ErrorLoaderTitle>{`${t('Uh-oh')}! ${t('You are not connected')}!`}</ErrorLoaderTitle>
-        <ErrorLoaderDescription>
-          {`${t('To create a world configuration you must be connected')} ⚡️`}
-        </ErrorLoaderDescription>
-        <ErrorLoaderFooter>
-          <Button variant="default" size="default" onClick={handleConnectButtonClick}>
-            {t('Connect')}
-          </Button>
-        </ErrorLoaderFooter>
-      </ErrorLoader>
-    );
-  }
 
   return (
     <Card>

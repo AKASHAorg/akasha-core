@@ -8,13 +8,15 @@ import {
   redirect,
 } from '@tanstack/react-router';
 import { ICreateRouter, IRouterContext } from '@akashaorg/typings/lib/ui';
-import { HomePage } from '../pages/index';
 import {
-  SaveConfigMainPage,
-  SaveConfigStep1Page,
-  SaveConfigStep2Page,
-  SaveConfigStep3Page,
-  SaveConfigSuccessPage,
+  DashboardPage,
+  WorldConfigMainPage,
+  WorldConfigFormStep1Page,
+  WorldConfigFormStep2Page,
+  ConfigSuccessPage,
+  WorldCustomizeFormPage,
+  WorldCreateFormPage,
+  CreateSuccessPage,
 } from '../pages/index';
 import { NotFoundComponent } from './not-found-component';
 import { RouteErrorComponent } from './error-component';
@@ -28,93 +30,145 @@ const defaultRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/',
   beforeLoad: () => {
-    throw redirect({ to: '/home', replace: true });
+    throw redirect({ to: '/dashboard', replace: true });
   },
 });
 
-const homeRoute = createRoute({
+const dashboardRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/home',
+  path: '/dashboard',
   component: () => {
     return (
-      <CatchBoundary getResetKey={() => 'home_page_reset'} errorComponent={RouteErrorComponent}>
-        <HomePage />
+      <CatchBoundary
+        getResetKey={() => 'dashboard_main_reset'}
+        errorComponent={RouteErrorComponent}
+      >
+        <DashboardPage />
       </CatchBoundary>
     );
   },
 });
 
-const saveConfigMainRoute = createRoute({
+export type WorldSuccessSearch = { worldId: string; worldName: string };
+
+const configSuccessRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: `/save-config`,
+  path: `/config-success`,
+  notFoundComponent: () => <NotFoundComponent />,
+  validateSearch: (search: Record<string, unknown>): WorldSuccessSearch => {
+    return { worldId: search.worldId as string, worldName: search.worldName as string };
+  },
+  component: () => {
+    const { worldId, worldName } = createSuccessRoute.useSearch();
+    return (
+      <CatchBoundary
+        getResetKey={() => 'config_success_main_reset'}
+        errorComponent={RouteErrorComponent}
+      >
+        <ConfigSuccessPage worldId={worldId} worldName={worldName} />
+      </CatchBoundary>
+    );
+  },
+});
+
+const createSuccessRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: `/create-success`,
+  notFoundComponent: () => <NotFoundComponent />,
+  validateSearch: (search: Record<string, unknown>): WorldSuccessSearch => {
+    return { worldId: search.worldId as string, worldName: search.worldName as string };
+  },
+  component: () => {
+    const { worldId, worldName } = createSuccessRoute.useSearch();
+    return (
+      <CatchBoundary
+        getResetKey={() => 'create_success_main_reset'}
+        errorComponent={RouteErrorComponent}
+      >
+        <CreateSuccessPage worldId={worldId} worldName={worldName} />
+      </CatchBoundary>
+    );
+  },
+});
+
+const worldCreateRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: `/world-create-form`,
   notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return (
       <CatchBoundary
-        getResetKey={() => 'save_config_main_reset'}
+        getResetKey={() => 'world_create_form_main_reset'}
         errorComponent={RouteErrorComponent}
       >
-        <SaveConfigMainPage />
+        <WorldCreateFormPage />
       </CatchBoundary>
     );
   },
 });
 
-const saveConfigStep1Route = createRoute({
-  getParentRoute: () => saveConfigMainRoute,
-  path: '/step1',
+const worldConfigMainRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: `/world-config-form/$worldId`,
+  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
+    const { worldId } = worldConfigMainRoute.useParams();
     return (
       <CatchBoundary
-        getResetKey={() => 'save_config_step1_reset'}
+        getResetKey={() => 'world_config_main_main_reset'}
         errorComponent={RouteErrorComponent}
       >
-        <SaveConfigStep1Page />
+        <WorldConfigMainPage worldId={worldId} />
       </CatchBoundary>
     );
   },
 });
 
-const saveConfigStep2Route = createRoute({
-  getParentRoute: () => saveConfigMainRoute,
-  path: '/step2',
+const worldConfigStep1Route = createRoute({
+  getParentRoute: () => worldConfigMainRoute,
+  path: `/step1`,
+  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
+    const { worldId } = worldConfigMainRoute.useParams();
     return (
       <CatchBoundary
-        getResetKey={() => 'save_config_step2_reset'}
+        getResetKey={() => 'world_config_form_step1_reset'}
         errorComponent={RouteErrorComponent}
       >
-        <SaveConfigStep2Page />
+        <WorldConfigFormStep1Page worldId={worldId} />
       </CatchBoundary>
     );
   },
 });
 
-const saveConfigStep3Route = createRoute({
-  getParentRoute: () => saveConfigMainRoute,
-  path: '/step3',
+const worldConfigStep2Route = createRoute({
+  getParentRoute: () => worldConfigMainRoute,
+  path: `/step2`,
+  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
+    const { worldId } = worldConfigMainRoute.useParams();
     return (
       <CatchBoundary
-        getResetKey={() => 'save_config_step3_reset'}
+        getResetKey={() => 'world_config_form_step2_reset'}
         errorComponent={RouteErrorComponent}
       >
-        <SaveConfigStep3Page />
+        <WorldConfigFormStep2Page worldId={worldId} />
       </CatchBoundary>
     );
   },
 });
 
-const saveConfigSuccessRoute = createRoute({
-  getParentRoute: () => saveConfigMainRoute,
-  path: '/success',
+const worldCustomizeRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: `/world-customize-form`,
+  notFoundComponent: () => <NotFoundComponent />,
   component: () => {
     return (
       <CatchBoundary
-        getResetKey={() => 'save_config_success_page_reset'}
+        getResetKey={() => 'world_customize_form_main_reset'}
         errorComponent={RouteErrorComponent}
       >
-        <SaveConfigSuccessPage />
+        <WorldCustomizeFormPage />
       </CatchBoundary>
     );
   },
@@ -122,13 +176,12 @@ const saveConfigSuccessRoute = createRoute({
 
 const routeTree = rootRoute.addChildren([
   defaultRoute,
-  homeRoute,
-  saveConfigMainRoute.addChildren([
-    saveConfigStep1Route,
-    saveConfigStep2Route,
-    saveConfigStep3Route,
-    saveConfigSuccessRoute,
-  ]),
+  configSuccessRoute,
+  dashboardRoute,
+  createSuccessRoute,
+  worldCreateRoute,
+  worldConfigMainRoute.addChildren([worldConfigStep1Route, worldConfigStep2Route]),
+  worldCustomizeRoute,
 ]);
 
 export const router = ({ baseRouteName, apolloClient }: ICreateRouter) =>

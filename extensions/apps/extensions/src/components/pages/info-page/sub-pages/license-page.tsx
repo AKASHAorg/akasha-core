@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import InfoSubRouteHeader from '../InfoSubroutePageHeader';
 import {
@@ -29,7 +29,7 @@ export const LicensePage = (props: LicensePageProps) => {
   return (
     <>
       <Card className="p-4">
-        <Stack spacing="gap-y-4">
+        <Stack spacing={4}>
           <InfoSubRouteHeader
             pageTitle={t('License')}
             appName={extensionDisplayName}
@@ -40,7 +40,7 @@ export const LicensePage = (props: LicensePageProps) => {
           <Divider />
           <Text variant="h6">{`"${license}"`}</Text>
           {!!mockLicenseData && (
-            <Stack spacing="gap-y-4">
+            <Stack spacing={4}>
               <Text variant="body2">{t('{{licenseText}}', { licenseText: mockLicenseData })}</Text>
             </Stack>
           )}

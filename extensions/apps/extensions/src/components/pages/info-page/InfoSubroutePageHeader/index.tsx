@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
 import {
@@ -32,15 +32,14 @@ const ExtensionHeader: React.FC<ExtensionHeaderProps> = ({
   appName,
   packageName,
   appType,
-  nsfw,
   appLogo,
 }) => {
   return (
-    <Stack spacing="gap-y-4">
+    <Stack spacing={4}>
       {pageTitle && <Text variant="h5">{pageTitle}</Text>}
-      <Stack direction="row" align="center" spacing="gap-x-2">
+      <Stack direction="row" alignItems="center" spacing={2}>
         <AppAvatar height={3} width={3} appType={appType} avatar={transformSource(appLogo)} />
-        <Stack direction="column" spacing="gap-y-0">
+        <Stack direction="column">
           <Text variant="h6">{appName}</Text>
           <Text
             variant="footnotes2"

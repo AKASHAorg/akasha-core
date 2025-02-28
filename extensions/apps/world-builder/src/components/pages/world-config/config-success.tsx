@@ -8,23 +8,31 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
+  Card,
 } from '@akashaorg/ui/lib/akasha-components/card';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Image } from '@akashaorg/ui/lib/akasha-components/image';
 
-export const SaveConfigSuccessPage: React.FC = () => {
+type ConfigSuccessPageProps = {
+  worldId: string;
+  worldName: string;
+};
+
+export const ConfigSuccessPage: React.FC<ConfigSuccessPageProps> = ({ worldId, worldName }) => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-world-builder');
 
-  const handleOpenPreview = () => {
-    navigate({ to: '/save-config/success' });
+  const handleNavToDashboard = () => {
+    navigate({ to: '/dashboard' });
   };
 
-  // TODO fetch real data
-  const worldName = 'Test World';
+  // TODO: add after preview is available
+  const handleOpenPreview = () => {
+    navigate({ to: '/dashboard' });
+  };
 
   return (
-    <>
+    <Card>
       <CardHeader className="justify-center">
         <CardTitle className="text-center">
           <Typography variant="h5">
@@ -36,7 +44,7 @@ export const SaveConfigSuccessPage: React.FC = () => {
         <div className="flex justify-center">
           <Image
             showLoadingIndicator={true}
-            src="/images/worldsuccess.webp"
+            src="/images/vibe-report.webp"
             width={150}
             height={200}
           />
@@ -46,11 +54,14 @@ export const SaveConfigSuccessPage: React.FC = () => {
         <Typography variant="p">{t(`You can now preview this world!`)}</Typography>
         <Typography variant="p">{t(`The preview will open in a new tab`)}</Typography>
       </CardDescription>
-      <CardFooter className="justify-center">
-        <Button className="px-6 h-8" onClick={handleOpenPreview}>
+      <CardFooter>
+        <Button className="px-6" onClick={handleNavToDashboard}>
+          {t('Do it later')}
+        </Button>
+        <Button className="px-6" onClick={handleOpenPreview}>
           {t('Preview World')}
         </Button>
       </CardFooter>
-    </>
+    </Card>
   );
 };

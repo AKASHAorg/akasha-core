@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { apply, tw, tx } from '@twind/core';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
@@ -82,7 +82,7 @@ const DropdownFilter: React.FC<IDropdownFilterProps> = ({
   };
 
   return (
-    <Stack ref={anchorRef} fullWidth customStyle={`relative`} direction="row">
+    <Stack ref={anchorRef} direction="row" className="w-full relative">
       {label && <Text variant="label">{label}</Text>}
 
       <button
@@ -101,7 +101,7 @@ const DropdownFilter: React.FC<IDropdownFilterProps> = ({
 
       {/* <!-- Dropdown menu --> */}
       {dropOpen && (
-        <Stack fullWidth customStyle={optionsWrapperStyle} direction="row">
+        <Stack direction="row" className={optionsWrapperStyle}>
           <ul aria-labelledby="dropdownDefaultButton" className="w-full">
             {menuItems.map((menuItem, idx) => {
               const isSelected = selected?.id === menuItem.id;
@@ -109,7 +109,7 @@ const DropdownFilter: React.FC<IDropdownFilterProps> = ({
                 if (menuItem.type === 'optgroup') {
                   return (
                     <>
-                      <Stack direction="row" align="center" customStyle={`pt-3 pl-3`} key={idx}>
+                      <Stack direction="row" alignItems="center" key={idx} className="pt-3 pl-3">
                         <Text
                           variant="body2"
                           customStyle="cursor-not-allowed"
@@ -133,16 +133,12 @@ const DropdownFilter: React.FC<IDropdownFilterProps> = ({
                                 cursor-pointer`,
                               )}
                             >
-                              <Card
-                                onClick={handleChange(item)}
-                                className="w-full border-none p-0"
-                              >
+                              <Card onClick={handleChange(item)} className="w-full border-none p-0">
                                 <Stack
                                   direction="row"
-                                  align="center"
-                                  spacing="gap-x-2"
-                                  fullWidth
-                                  customStyle={`${
+                                  alignItems="center"
+                                  spacing={2}
+                                  className={`w-full ${
                                     selected.id === item.id ? 'text-secondaryLight' : 'text-black'
                                   }`}
                                 >
@@ -187,10 +183,9 @@ const DropdownFilter: React.FC<IDropdownFilterProps> = ({
                       <Button onClick={handleChange(menuItem)} plain customStyle="w-full">
                         <Stack
                           direction="row"
-                          align="center"
-                          spacing="gap-x-2"
-                          fullWidth
-                          customStyle={`${isSelected ? 'text-secondaryLight' : 'text-black'}`}
+                          alignItems="center"
+                          spacing={2}
+                          className={`w-full ${isSelected ? 'text-secondaryLight' : 'text-black'}`}
                         >
                           {menuItem?.icon && (
                             <Icon
@@ -227,16 +222,12 @@ const DropdownFilter: React.FC<IDropdownFilterProps> = ({
                       } cursor-pointer`,
                     )}
                   >
-                    <Card
-                      onClick={handleChange(menuItem)}
-                      className="w-full border-none p-0"
-                    >
+                    <Card onClick={handleChange(menuItem)} className="w-full border-none p-0">
                       <Stack
                         direction="row"
-                        align="center"
-                        spacing="gap-x-2"
-                        fullWidth
-                        customStyle={`${isSelected ? 'text-secondaryLight' : 'text-black'}`}
+                        alignItems="center"
+                        spacing={2}
+                        className={`w-full ${isSelected ? 'text-secondaryLight' : 'text-black'}`}
                       >
                         {menuItem?.icon && (
                           <Icon

@@ -6,7 +6,7 @@ import ProfileNameField from '@akashaorg/design-system-core/lib/components/Profi
 import ImageOverlay from '../../ImageOverlay';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Menu, { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import {
   Cog6ToothIcon,
@@ -90,7 +90,7 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <Stack customStyle={customStyle}>
+    <Stack className={customStyle}>
       <Card
         data-testid="cover-image"
         className="h-32 bg-center bg-no-repeat bg-cover bg-muted rounded-b-none border-none"
@@ -103,9 +103,9 @@ const Header: React.FC<HeaderProps> = ({
           plain && 'rounded-none border-b-0 border-x-0',
         )}
       >
-        <Stack direction="column" customStyle="pl-2" fullWidth>
-          <Stack direction="row" spacing="gap-x-2" customStyle="-ml-2">
-            <Stack customStyle={avatarContainer}>
+        <Stack direction="column" className="pl-2 w-full">
+          <Stack direction="row" spacing={2} className="-ml-2">
+            <Stack className={avatarContainer}>
               <Avatar
                 profileId={profileId}
                 size="xl"
@@ -125,8 +125,8 @@ const Header: React.FC<HeaderProps> = ({
                 onClick={onClickAvatar}
               />
             </Stack>
-            <Stack direction="column" spacing="gap-y-1">
-              <Stack direction="row" align="center" spacing="gap-x-1">
+            <Stack direction="column" spacing={1}>
+              <Stack direction="row" alignItems="center" spacing={1}>
                 <button onClick={onClickProfileName}>
                   <ProfileNameField did={profileId} profileName={profileName} size="lg" />
                 </button>
@@ -138,7 +138,7 @@ const Header: React.FC<HeaderProps> = ({
                 copyLabel={copyLabel}
                 copiedLabel={copiedLabel}
               />
-              <Stack direction="row" spacing="gap-2" customStyle="flex-wrap">
+              <Stack direction="row" spacing={2} className="flex-wrap">
                 {badges?.map(badge => (
                   <Tooltip key={badge.label} content={badge.toolTipLabel} placement="bottom">
                     <Pill
@@ -152,8 +152,8 @@ const Header: React.FC<HeaderProps> = ({
                 ))}
               </Stack>
             </Stack>
-            <Stack customStyle="relative ml-auto mt-2">
-              <Stack direction="row" align="center" spacing="gap-x-2">
+            <Stack className="relative ml-auto mt-2">
+              <Stack direction="row" alignItems="center" spacing={2}>
                 {viewerIsOwner ? (
                   <Button aria-label="edit" variant="outline" size="icon" onClick={handleEdit}>
                     <Cog6ToothIcon />
@@ -166,7 +166,7 @@ const Header: React.FC<HeaderProps> = ({
                 )}
 
                 {menuItems && (
-                  <Stack customStyle="mt-1">
+                  <Stack className="mt-1">
                     <Menu
                       anchor={{
                         icon: <EllipsisVerticalIcon />,

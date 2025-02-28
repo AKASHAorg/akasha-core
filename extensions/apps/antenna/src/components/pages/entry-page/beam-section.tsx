@@ -1,7 +1,7 @@
 import React, { ReactElement, useState } from 'react';
 import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import BeamCard from '@akashaorg/ui-lib-feed/lib/components/cards/beam-card';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import routes, { REFLECT } from '../../../routes';
@@ -33,11 +33,11 @@ const BeamSection: React.FC<BeamSectionProps> = props => {
 
   return (
     <Stack
-      dataTestId="beam-section"
-      spacing="gap-y-2"
-      customStyle={`min-h-[inherit] ${isActive ? 'mb-2' : ''}`}
+      data-testid="beam-section"
+      spacing={2}
+      className={`min-h-[inherit] ${isActive ? 'mb-2' : ''}`}
     >
-      <Stack customStyle="grow">
+      <Stack className="grow">
         <BeamCard
           beamData={beamData}
           noWrapperCard={true}
@@ -59,7 +59,7 @@ const BeamSection: React.FC<BeamSectionProps> = props => {
         {isActive && <Divider />}
       </Stack>
       {isActive && (
-        <Stack padding="px-2" customStyle="mt-auto">
+        <Stack className="px-2 mt-auto">
           {!isLoggedIn && (
             <EditorPlaceholder
               onClick={() =>

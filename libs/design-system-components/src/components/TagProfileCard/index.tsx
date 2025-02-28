@@ -8,7 +8,7 @@ import {
   HashtagIcon,
   XMarkIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import SubtitleTextIcon from '@akashaorg/design-system-core/lib/components/SubtitleTextIcon';
 import { cn } from '@akashaorg/ui/lib/library/utils';
 
@@ -47,7 +47,7 @@ const TagProfileCard: React.FC<TagProfileCard> = props => {
 
   return (
     <Card className={cn(className)}>
-      <Stack direction="row" align="center" justify="between" spacing="gap-x-3">
+      <Stack direction="row" alignItems="center" justifyContent="between" spacing={3}>
         <SubtitleTextIcon
           label={tag.name}
           subtitle={mentionsLabel}

@@ -4,7 +4,7 @@ import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import appRoutes, { HOME, INSTALLED } from '../../../routes';
@@ -101,7 +101,7 @@ export const InstalledExtensionsList = () => {
         {
           //@TODO replace with Loader component once its created
         }
-        <Stack spacing="gap-y-5" align="center">
+        <Stack spacing={5} alignItems="center">
           <Spinner />
           <Text variant="button-md">{t('Loading installed extensions')}</Text>
         </Stack>
@@ -127,17 +127,17 @@ export const InstalledExtensionsList = () => {
         />
       )}
       {installedExtensions && (
-        <Stack spacing="gap-y-3" align="center">
+        <Stack spacing={3} alignItems="center">
           {!installedExtensions.length && (
             <>
-              <Stack customStyle="h-52 w-52">
+              <Stack className="h-52 w-52">
                 <Image
                   customStyle="object-contain"
                   src={`${PUBLIC_IMAGE_PATH}/longbeam-notfound.webp`}
                 />
               </Stack>
               <Text variant="h6">{t('No extensions installed yet!')}</Text>
-              <Stack align="center">
+              <Stack alignItems="center">
                 <Text as="span" variant="body2" color={{ light: 'grey5', dark: 'grey6' }}>
                   <Button variant="link" onClick={handleDiscoverClick} className="inline-block">
                     {t('Discover')}

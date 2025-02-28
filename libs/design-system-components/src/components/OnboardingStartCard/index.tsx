@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import SearchBar from '../SearchBar';
 
@@ -36,8 +36,8 @@ const OnboardingStartCard = ({
 
   return (
     <Card className="shadow-none">
-      <Stack align="center" spacing="gap-y-8" fullWidth={true}>
-        <Stack direction="row" justify="between" fullWidth={true}>
+      <Stack alignItems="center" spacing={8} className="w-full">
+        <Stack direction="row" justifyContent="between" className="w-full">
           <Text variant="h5">{titleLabel}</Text>
           {buttonLabel && (
             <Button disabled={!isButtonEnabled} onClick={handleButtonClick} label={buttonLabel} />

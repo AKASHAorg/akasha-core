@@ -1,6 +1,6 @@
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import React from 'react';
 import { EyeSlashIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
@@ -17,7 +17,7 @@ const NSFW: React.FC<NSFWProps> = props => {
   return (
     <Card className="w-full p-4 flex place-content-center bg-muted">
       <Card className={'max-w-min'}>
-        <Stack direction={'row'} align="center" spacing="gap-x-2">
+        <Stack direction={'row'} alignItems="center" spacing={2}>
           <Icon icon={<EyeSlashIcon />} color={{ light: 'errorLight', dark: 'errorDark' }} />
           <Text
             variant="button-sm"

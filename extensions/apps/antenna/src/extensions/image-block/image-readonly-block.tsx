@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BlockInstanceMethods, ContentBlockRootProps } from '@akashaorg/typings/lib/ui';
 import ImageBlockGallery from '@akashaorg/design-system-components/lib/components/ImageBlockGallery';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { transformSource } from '@akashaorg/ui-core-hooks';
 
@@ -15,7 +15,7 @@ export const ImageReadonlyBlock = (
     return transformSource(imageObj);
   });
   return (
-    <Stack align={content.align || 'start'} spacing="gap-1">
+    <Stack alignItems={content.align || 'start'} spacing={1}>
       <ImageBlockGallery imageNotLoadedLabel={t('Cannot load image')} images={transformedImages} />
       {content.caption && <Text customStyle="break-all">{content.caption}</Text>}
     </Stack>

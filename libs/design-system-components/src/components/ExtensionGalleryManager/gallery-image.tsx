@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
@@ -29,7 +29,7 @@ export const GalleryImage: React.FC<GalleryImageProps> = props => {
   const { name, src, state, uploadingLabel, uploadingErrorLabel, handleClickImage, onDelete } =
     props;
   return (
-    <Stack customStyle="relative w-[9.125rem] h-[9.125rem] min-[400px]:w-[10.625rem] min-[400px]:h-[10.625rem] overflow-hidden rounded-[0.5rem] cursor-pointer">
+    <Stack className="relative w-[9.125rem] h-[9.125rem] min-[400px]:w-[10.625rem] min-[400px]:h-[10.625rem] overflow-hidden rounded-[0.5rem] cursor-pointer">
       <Image
         alt={name}
         src={src}
@@ -40,7 +40,7 @@ export const GalleryImage: React.FC<GalleryImageProps> = props => {
       {
         //action buttons
       }
-      <Stack direction="row" spacing="gap-x-2" customStyle="absolute top-2 right-2">
+      <Stack direction="row" spacing={2} className="absolute top-2 right-2">
         <button
           onClick={onDelete}
           disabled={state === GalleryImageState.LOADING}
@@ -58,11 +58,10 @@ export const GalleryImage: React.FC<GalleryImageProps> = props => {
       </Stack>
       {state && (
         <Stack
-          align="center"
-          justify="center"
-          spacing="gap-y-2"
-          customStyle="absolute top-[50%] left-[50%] -translate-y-1/2 -translate-x-1/2"
-          fullWidth
+          alignItems="center"
+          justifyContent="center"
+          spacing={2}
+          className="absolute top-[50%] left-[50%] -translate-y-1/2 -translate-x-1/2 w-full"
         >
           {state === GalleryImageState.ERROR && (
             <Icon icon={<XCircleIcon />} color="error" size="lg" />

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Antenna, Profile } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import MiniProfileCTA, { ItemType, ProfileItemData } from './mini-profile-cta';
@@ -55,12 +55,11 @@ const VibesConsoleContentCard: React.FC<VibesConsoleContentCardProps> = props =>
     <Card className="p-0">
       <Stack
         direction="row"
-        align="center"
-        justify="between"
-        padding="p-5"
-        customStyle="border(b-1 solid grey8 dark:grey5)"
+        alignItems="center"
+        justifyContent="between"
+        className="p-5 border(b-1 solid grey8 dark:grey5)"
       >
-        <Stack direction="row" align="center" spacing="gap-x-2">
+        <Stack direction="row" alignItems="center" spacing={2}>
           <Button
             aria-label="itemType"
             icon={entry.itemType === 'Profile' ? <Profile /> : <Antenna />}
@@ -90,7 +89,7 @@ const VibesConsoleContentCard: React.FC<VibesConsoleContentCardProps> = props =>
         </Text>
       </Stack>
 
-      <Stack padding="p-5" spacing="gap-y-4">
+      <Stack spacing={4} className="p-5">
         {/*  {entry.itemType !== 'Profile' && (
           <EntryCard {...(entry.itemData as EntryCardProps)} customStyle={shadowStyle} />
         )} */}
@@ -105,7 +104,7 @@ const VibesConsoleContentCard: React.FC<VibesConsoleContentCardProps> = props =>
           </Card>
         )}
 
-        <Stack direction="row" spacing="gap-x-1">
+        <Stack direction="row" spacing={1}>
           <Text variant="button-sm" weight="normal" color={textColor}>
             {reportedForLabels.first}
           </Text>
@@ -133,10 +132,9 @@ const VibesConsoleContentCard: React.FC<VibesConsoleContentCardProps> = props =>
 
       <Stack
         direction="row"
-        align="center"
-        spacing="gap-x-4"
-        padding="p-5"
-        customStyle="border(t-1 solid grey8 dark:grey5) justify(center md:end)"
+        alignItems="center"
+        spacing={4}
+        className="p-5 border(t-1 solid grey8 dark:grey5) justify(center md:end)"
       >
         <Button
           variant="secondary"

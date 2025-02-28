@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
@@ -143,10 +143,10 @@ export const ExtensionReleaseInfoPage: React.FC<ExtensionReleaseInfoPageProps> =
 
   return (
     <Card className="p-4">
-      <Stack spacing="gap-y-6">
+      <Stack spacing={6}>
         <Card className="p-2">
           {loadingReleaseByIdQuery && (
-            <Stack align="center" justify="center">
+            <Stack alignItems="center" justifyContent="center">
               <Spinner />
             </Stack>
           )}
@@ -162,11 +162,11 @@ export const ExtensionReleaseInfoPage: React.FC<ExtensionReleaseInfoPageProps> =
             />
           )}
         </Card>
-        <Stack direction="row" justify="between">
+        <Stack direction="row" justifyContent="between">
           <Text variant="h6" weight="semibold">
             {t('Version Number')}
           </Text>
-          <Stack direction="row" spacing="gap-x-2">
+          <Stack direction="row" spacing={2}>
             <Text variant="body2">{releaseData?.version}</Text>
             {/* @TODO: find a way to tell this is the latest release */}
             {/* <Pill
@@ -179,7 +179,7 @@ export const ExtensionReleaseInfoPage: React.FC<ExtensionReleaseInfoPageProps> =
 
         <Divider />
 
-        <Stack spacing="gap-y-4">
+        <Stack spacing={4}>
           <Text variant="h6" weight="semibold" breakWord>
             {t('Description')}
           </Text>
@@ -190,7 +190,7 @@ export const ExtensionReleaseInfoPage: React.FC<ExtensionReleaseInfoPageProps> =
 
         <Divider />
 
-        <Stack spacing="gap-y-4">
+        <Stack spacing={4}>
           <Text variant="h6" weight="semibold">
             {t('Source URL')}
           </Text>
@@ -201,7 +201,7 @@ export const ExtensionReleaseInfoPage: React.FC<ExtensionReleaseInfoPageProps> =
 
         <Divider />
 
-        <Stack direction="row" justify="between">
+        <Stack direction="row" justifyContent="between">
           <Text variant="h6" weight="semibold">
             {t('Published on')}
           </Text>

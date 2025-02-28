@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Section from '@akashaorg/design-system-core/lib/components/Section';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export type VersionInfoProps = {
@@ -26,7 +26,7 @@ const VersionInfo: React.FC<VersionInfoProps> = ({
 }) => {
   return (
     <Card className="p-4">
-      <Stack direction="column" spacing="gap-y-4">
+      <Stack direction="column" spacing={4}>
         <Section title={integrationName}>
           <Text variant="footnotes2" weight="normal" color="grey7">
             {packageName}

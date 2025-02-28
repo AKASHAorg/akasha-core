@@ -3,7 +3,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/library/utils';
 
-const stackVariants = cva('flex divide-accent', {
+const stackVariants = cva('flex', {
   variants: {
     justifyContent: {
       start: 'justify-start',

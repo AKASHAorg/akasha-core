@@ -93,6 +93,7 @@ fragment AkashaWorldFragmentM on AkashaWorld{
     }
   }
   active
+  name
   instanceURL
   createdAt
   creator {

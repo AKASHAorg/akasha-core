@@ -3,7 +3,7 @@ import * as z from 'zod';
 import { Controller, useWatch } from 'react-hook-form';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import DropDown from '@akashaorg/design-system-core/lib/components/Dropdown';
 import { apply, tw } from '@twind/core';
@@ -139,8 +139,8 @@ const ExtensionCreationForm: React.FC<ExtensionCreationFormProps> = ({
 
   return (
     <form onSubmit={onSave} className={tw(apply`h-full`)}>
-      <Stack direction="column" spacing="gap-y-4">
-        <Stack padding="px-4 pb-3" spacing="gap-y-4">
+      <Stack direction="column" spacing={4}>
+        <Stack spacing={4} className="px-4 pb-3">
           <Controller
             control={control}
             name={FieldName.applicationType}
@@ -246,7 +246,7 @@ const ExtensionCreationForm: React.FC<ExtensionCreationFormProps> = ({
 
         <Divider />
 
-        <Stack direction="row" spacing="gap-x-2" customStyle="ml-auto mt-auto px-4">
+        <Stack direction="row" spacing={2} className="ml-auto mt-auto px-4">
           <Button
             variant="link"
             onClick={cancelButton.handleClick}

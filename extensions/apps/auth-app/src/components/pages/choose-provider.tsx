@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Walletconnect } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import Web3ConnectCard from '@akashaorg/design-system-components/lib/components/Web3ConnectCard';
@@ -23,16 +23,16 @@ const ChooseProvider: React.FC<unknown> = () => {
   };
 
   return (
-    <Stack dataTestId="providers-list" spacing="gap-y-4">
+    <Stack data-testid="providers-list" spacing={4}>
       <Text variant="h5" align="center">
         {`✨ ${t('Welcome to AKASHA World')} ✨`}
       </Text>
 
-      <Stack alignSelf="center" customStyle="h-44 w-44">
+      <Stack className="self-center h-44 w-44">
         <Image customStyle="object-contain" src="/images/auth.webp" />
       </Stack>
 
-      <Stack spacing="gap-y-2" customStyle="md:px-2">
+      <Stack spacing={2} className="md:px-2">
         <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey7' }}>
           {t('Connect your wallet')}
         </Text>
@@ -45,7 +45,7 @@ const ChooseProvider: React.FC<unknown> = () => {
         />
       </Stack>
 
-      <Stack customStyle="md:px-4">
+      <Stack className="md:px-4">
         <Text
           align="center"
           variant="button-sm"

@@ -3,7 +3,7 @@ import * as z from 'zod';
 import { Controller } from 'react-hook-form';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import { apply, tw } from '@twind/core';
 import { useForm } from 'react-hook-form';
@@ -139,8 +139,8 @@ const ExtensionEditPublishedForm: React.FC<ExtensionEditPublishedFormProps> = pr
 
   return (
     <form onSubmit={onSave} className={tw(apply`h-full`)}>
-      <Stack direction="column" spacing="gap-y-4">
-        <Stack padding="pt-4 px-4">
+      <Stack direction="column" spacing={4}>
+        <Stack className="pt-4 px-4">
           <Header
             {...header}
             extensionType={displayOnlyValues.applicationType}
@@ -154,10 +154,10 @@ const ExtensionEditPublishedForm: React.FC<ExtensionEditPublishedFormProps> = pr
             }}
           />
         </Stack>
-        <Stack padding="px-4">
+        <Stack className="px-4">
           <Divider />
         </Stack>
-        <Stack padding="px-4">
+        <Stack className="px-4">
           <Accordion
             accordionId={extensionInformationLabel}
             open={showAccordion}
@@ -167,26 +167,26 @@ const ExtensionEditPublishedForm: React.FC<ExtensionEditPublishedFormProps> = pr
               </Text>
             }
             contentNode={
-              <Stack spacing="gap-y-4">
+              <Stack spacing={4}>
                 <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey6' }}>
                   {extensionInformationDescriptionLabel}
                 </Text>
-                <Stack spacing="gap-y-4">
-                  <Stack spacing="gap-y-2">
+                <Stack spacing={4}>
+                  <Stack spacing={2}>
                     <Text variant="h6" weight="bold">
                       {extensionIdLabel}
                     </Text>
                     <Text variant="body2">{displayOnlyValues?.name}</Text>
                   </Stack>
                   <Divider />
-                  <Stack spacing="gap-y-2">
+                  <Stack spacing={2}>
                     <Text variant="h6" weight="bold">
                       {extensionDisplayNameLabel}
                     </Text>
                     <Text variant="body2">{displayOnlyValues?.displayName}</Text>
                   </Stack>
                   <Divider />
-                  <Stack spacing="gap-y-2">
+                  <Stack spacing={2}>
                     <Text variant="h6" weight="bold">
                       {extensionLicenseLabel}
                     </Text>
@@ -198,7 +198,7 @@ const ExtensionEditPublishedForm: React.FC<ExtensionEditPublishedFormProps> = pr
             handleClick={handleToggleAccordion}
           />
         </Stack>
-        <Stack padding="px-4 pb-16" spacing="gap-y-4">
+        <Stack spacing={4} className="px-4 pb-16">
           <Divider />
           <Controller
             control={control}
@@ -245,7 +245,7 @@ const ExtensionEditPublishedForm: React.FC<ExtensionEditPublishedFormProps> = pr
           />
         </Stack>
         <Divider />
-        <Stack direction="row" justify="end" spacing="gap-x-2" customStyle="px-4 pb-4">
+        <Stack direction="row" justifyContent="end" spacing={2} className="px-4 pb-4">
           <Button
             variant="link"
             onClick={cancelButton.handleClick}

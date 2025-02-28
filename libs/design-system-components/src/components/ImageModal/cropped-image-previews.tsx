@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Img from '@akashaorg/design-system-core/lib/components/Image';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Area } from 'react-easy-crop';
@@ -33,9 +33,9 @@ export const CroppedImagePreviews: React.FC<CroppedImagePreviewProps> = props =>
     y: `${-croppedArea.y * scale}%`,
   };
   return (
-    <Stack spacing="gap-y-2.5">
+    <Stack spacing={2}>
       <Text variant="button-md">{previewTitle}</Text>
-      <Stack direction="row" spacing="gap-x-3.5" align="end">
+      <Stack direction="row" spacing={3} alignItems="end">
         {previews.map((preview, index) => (
           <Card
             key={index}

@@ -1,7 +1,7 @@
 import React, { ReactElement, useState } from 'react';
 import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { ReflectEditorProps } from '../../reflect-editor';
 import ReflectionCard from '@akashaorg/ui-lib-feed/lib/components/cards/reflection-card';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
@@ -33,9 +33,9 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
 
   return (
     <Stack
-      dataTestId="reflection-section"
-      spacing="gap-y-2"
-      customStyle={`grow ${activeReflection ? 'mb-2' : ''}`}
+      data-testid="reflection-section"
+      spacing={2}
+      className={`grow ${activeReflection ? 'mb-2' : ''}`}
     >
       <Card className="p-0 border-none grow">
         <ReflectionCard
@@ -55,7 +55,7 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
         {activeReflection && <Divider />}
       </Card>
       {activeReflection && (
-        <Stack padding="px-2" customStyle="mt-auto">
+        <Stack className="px-2 mt-auto">
           {!isLoggedIn && (
             <EditorPlaceholder
               onClick={() =>

@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useContext, useEffect, useMemo, useState } from 'react';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import {
   AkashaProfile,
@@ -153,18 +153,24 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
   };
 
   return (
-    <Stack padding={0} customStyle="max-h-100vh min-h-100vh md:min-h-[566px]">
-      <Stack padding={16} direction="row" spacing="gap-x-2" justify="center" align="center">
+    <Stack className="p-0 max-h-100vh min-h-100vh md:min-h-[566px]">
+      <Stack
+        direction="row"
+        spacing={2}
+        justifyContent="center"
+        alignItems="center"
+        className="p-4"
+      >
         <Text variant="h6">{t('Add Contributors')}</Text>
       </Stack>
       <Divider />
-      <Stack padding={16} direction="column" spacing="gap-y-6" customStyle="overflow-auto grow">
-        <Stack spacing="gap-y-1" direction="column">
+      <Stack direction="column" spacing={6} className="p-4 overflow-auto grow">
+        <Stack spacing={1} direction="column">
           <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
             {t('Add anyone who contributed to the creation of this extension.')}
           </Text>
         </Stack>
-        <Stack direction="column" justify="center" spacing="gap-y-2" ref={autoCompleteRef}>
+        <Stack direction="column" justifyContent="center" spacing={2} ref={autoCompleteRef}>
           <SearchBar
             inputPlaceholderLabel={t('Search for a contributor')}
             fullWidth
@@ -173,7 +179,7 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
             onFocus={() => setShowSuggestions(true)}
           />
           {addedContributors?.length === MAX_CONTRIBUTORS && (
-            <Stack direction="row" spacing="gap-2">
+            <Stack direction="row" spacing={2}>
               <Icon
                 icon={<ExclamationTriangleIcon />}
                 size="sm"
@@ -189,10 +195,10 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
             </Stack>
           )}
           {showSuggestions && searchValue?.length > 1 && (
-            <Stack direction="row" customStyle={'relative z-10'}>
+            <Stack direction="row" className="relative z-10">
               <Card className="p-0 absolute max-h-96 w-full overflow-y-auto scrollbar">
                 {contributors?.length === 0 && (
-                  <Stack padding={16} spacing="gap-y-2">
+                  <Stack spacing={2} className="p-4">
                     <Text variant="body2" weight="bold" color={{ light: 'grey4', dark: 'grey6' }}>
                       {t('No matches found.')}
                     </Text>
@@ -202,15 +208,14 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
                   </Stack>
                 )}
                 {contributors?.length > 0 && (
-                  <Stack direction="column" spacing="gap-2">
+                  <Stack direction="column" spacing={2}>
                     {contributors?.map((profile, index) => (
                       <button key={index} onClick={() => handleAddContributor(profile)}>
                         <Stack
-                          padding={16}
                           direction="row"
-                          justify="between"
-                          align="center"
-                          customStyle="dark:hover:bg-tertiaryDark light:hover:bg-tertiaryLight"
+                          justifyContent="between"
+                          alignItems="center"
+                          className="p-4 hover:bg-secondary"
                         >
                           <ProfileAvatarButton
                             profileId={profile?.did?.id}
@@ -232,13 +237,13 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
             </Stack>
           )}
         </Stack>
-        <Stack spacing="gap-4">
-          <Stack direction="row" justify="between">
+        <Stack spacing={4}>
+          <Stack direction="row" justifyContent="between">
             <Text variant="h6" weight="bold">
               {t('Extension Contributors')}
             </Text>
             {loading && (
-              <Stack align="center" justify="center">
+              <Stack alignItems="center" justifyContent="center">
                 <Spinner />
               </Stack>
             )}
@@ -272,9 +277,15 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
             </Text>
           )}
           {addedContributors?.length > 0 && (
-            <Stack direction="column" spacing="gap-4">
+            <Stack direction="column" spacing={4}>
               {addedContributors?.map((profile, index) => (
-                <Stack key={index} direction="row" justify="between" align="center" spacing="gap-2">
+                <Stack
+                  key={index}
+                  direction="row"
+                  justifyContent="between"
+                  alignItems="center"
+                  spacing={2}
+                >
                   <ProfileAvatarButton
                     profileId={profile?.did?.id}
                     label={profile?.name}
@@ -298,7 +309,7 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
         </Stack>
       </Stack>
       <Divider />
-      <Stack padding={16} direction="row" align="center" justify="end" spacing="gap-4">
+      <Stack direction="row" alignItems="center" justifyContent="end" spacing={4} className="p-4">
         <Button variant="link" onClick={handleNavigateBack}>
           {t('Cancel')}
         </Button>

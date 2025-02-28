@@ -1,11 +1,12 @@
 import React from 'react';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import FollowProfileButton from '../follow-profile-button';
 import { AkashaProfile, IModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import { useGetProfileByIdQuery } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
 import { selectProfileData } from '@akashaorg/ui-core-hooks/lib/selectors/get-profile-by-id-query';
 import { transformSource, useRootComponentProps } from '@akashaorg/ui-core-hooks';
+import { cn } from '@akashaorg/ui/lib/library/utils';
 
 type EngagementsEntryProps = {
   profileID: string;
@@ -65,11 +66,9 @@ export const EngagementsEntry: React.FC<EngagementsEntryProps> = props => {
   return (
     <Stack
       direction="row"
-      align="center"
-      justify="between"
-      padding="px-4"
-      customStyle={customStyle}
-      fullWidth
+      alignItems="center"
+      justifyContent="between"
+      className={cn('px-4 customStyle w-full', customStyle)}
     >
       <ProfileAvatarButton
         profileId={

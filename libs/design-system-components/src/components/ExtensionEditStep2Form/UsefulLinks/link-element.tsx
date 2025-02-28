@@ -2,7 +2,7 @@ import React from 'react';
 
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { TrashIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { AppLinkSource } from '@akashaorg/typings/lib/sdk/graphql-types-new';
@@ -28,8 +28,8 @@ export const LinkElement: React.FC<LinkElementProps> = ({
   inputRef,
 }) => {
   return (
-    <Stack fullWidth direction="column" spacing="gap-2">
-      <Stack fullWidth direction="row" justify="between" align="center">
+    <Stack direction="column" spacing={2} className="w-full">
+      <Stack direction="row" justifyContent="between" alignItems="center" className="w-full">
         <Text variant="h6" as="label">
           {`${linkElementLabel} ${value._id}`}
         </Text>

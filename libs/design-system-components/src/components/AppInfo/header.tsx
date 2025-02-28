@@ -4,7 +4,7 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { EllipsisVerticalIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
 import Menu from '@akashaorg/design-system-core/lib/components/Menu';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { AppInfoPill } from './info-pill';
 import {
@@ -69,13 +69,13 @@ export const AppInfoHeader: React.FC<AppInfoHeaderProps> = props => {
   } = props;
 
   return (
-    <Stack direction="row" align="start" justify="between" padding="pb-3">
-      <Stack direction="column" spacing="gap-6">
-        <Stack direction="row" align="stretch" spacing="gap-x-2" customStyle={'flex-grow'}>
+    <Stack direction="row" alignItems="start" justifyContent="between" className="pb-3">
+      <Stack direction="column" spacing={6}>
+        <Stack direction="row" alignItems="stretch" spacing={2} className="flex-grow">
           <AppAvatar appType={extensionType} avatar={extensionAvatar} width={7} height={7} />
-          <Stack justify="between" customStyle={'flex-grow'}>
+          <Stack justifyContent="between" className="flex-grow">
             <Stack>
-              <Stack direction="row" align="start" spacing="gap-x-2" justify="between">
+              <Stack direction="row" alignItems="start" spacing={2} justifyContent="between">
                 <Text variant="h6" weight="semibold">
                   {displayName}
                 </Text>
@@ -102,7 +102,7 @@ export const AppInfoHeader: React.FC<AppInfoHeaderProps> = props => {
                   />
                 )}
               </Stack>
-              <Stack direction="row" spacing="gap-x-1" customStyle="flex-wrap">
+              <Stack direction="row" spacing={1} className="flex-wrap">
                 {isDefaultWorldExtension && (
                   <AppInfoPill
                     background={{
@@ -132,7 +132,7 @@ export const AppInfoHeader: React.FC<AppInfoHeaderProps> = props => {
               </Stack>
             </Stack>
             {(isInstalled || isDefaultWorldExtension) && (
-              <Stack direction="row" spacing="gap-x-1">
+              <Stack direction="row" spacing={1}>
                 {!isDefaultWorldExtension && (
                   <Button
                     variant="outline"
@@ -152,7 +152,7 @@ export const AppInfoHeader: React.FC<AppInfoHeaderProps> = props => {
               </Stack>
             )}
             {!isInstalled && !isDefaultWorldExtension && isInstallable && (
-              <Stack direction="row" spacing="gap-x-1" customStyle="flex-wrap w-full md:w-min">
+              <Stack direction="row" spacing={1} className="flex-wrap w-full md:w-min">
                 <Button size="sm" onClick={onInstallClick} className="w-full md:w-min">
                   {installExtensionLabel}
                 </Button>
@@ -162,8 +162,8 @@ export const AppInfoHeader: React.FC<AppInfoHeaderProps> = props => {
         </Stack>
         {isInReview && (
           <Card className="p-4 bg-nested-card">
-            <Stack direction="column" spacing="gap-2">
-              <Stack direction="row" align="center" spacing="gap-2">
+            <Stack direction="column" spacing={2}>
+              <Stack direction="row" alignItems="center" spacing={2}>
                 <Icon
                   icon={<ExclamationTriangleIcon />}
                   size="md"

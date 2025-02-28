@@ -8,7 +8,7 @@ import {
   useValidateUniqueExtensionProp,
 } from '@akashaorg/ui-core-hooks';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import ExtensionCreationForm from '@akashaorg/design-system-components/lib/components/ExtensionCreationForm';
@@ -85,7 +85,7 @@ export const ExtensionCreationPage: React.FC<unknown> = () => {
 
   return (
     <Card className="py-4 px-0 mb-2">
-      <Stack spacing="gap-y-4">
+      <Stack spacing={4}>
         <Text variant="h5" weight="semibold" align="center">
           {t('Create an Extension')}
         </Text>

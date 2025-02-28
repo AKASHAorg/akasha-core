@@ -12,7 +12,7 @@ type BackToOriginalBeamProps = {
 const BackToOriginalBeam: React.FC<BackToOriginalBeamProps> = props => {
   const { label, onClick } = props;
   return (
-    <Card className="p-4">
+    <Card className="p-4 rounded-none border-none bg-nested-card">
       <Stack direction="row" spacing="gap-x-2">
         <Button variant="link" onClick={onClick}>
           <ArrowLongLeftIcon />

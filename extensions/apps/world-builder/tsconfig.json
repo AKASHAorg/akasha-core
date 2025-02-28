@@ -5,7 +5,11 @@
     "rootDir": "./src",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@akashaorg/core-sdk": ["../../../dist/npm/core-sdk/lib"],
+      "@akashaorg/core-sdk/lib/*": [
+        "../../../dist/npm/core-sdk/lib/*"
+      ],
     }
   },
   "include": ["./src"]

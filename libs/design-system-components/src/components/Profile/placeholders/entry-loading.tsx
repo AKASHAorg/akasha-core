@@ -1,5 +1,5 @@
 import React from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 
 type EntryLoadingProps = {
@@ -9,8 +9,13 @@ const EntryLoading: React.FC<EntryLoadingProps> = props => {
   const { customStyle } = props;
 
   return (
-    <Stack direction="row" align="center" justify="between" customStyle={`pb-4 ${customStyle}`}>
-      <Stack direction="row" spacing="gap-1">
+    <Stack
+      direction="row"
+      alignItems="center"
+      justifyContent="between"
+      className={`pb-4 ${customStyle}`}
+    >
+      <Stack direction="row" spacing={1}>
         <TextLine
           round="rounded-full"
           height="h-10"
@@ -18,7 +23,7 @@ const EntryLoading: React.FC<EntryLoadingProps> = props => {
           customStyle="shrink-0"
           animated={true}
         />
-        <Stack direction="column" justify="center" spacing="gap-y-1">
+        <Stack direction="column" justifyContent="center" spacing={1}>
           <TextLine width="w-24" height="h-4" animated />
           <TextLine width="w-24" height="h-4" animated />
         </Stack>

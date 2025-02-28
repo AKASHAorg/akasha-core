@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { InformationCircleIcon } from '@heroicons/react/24/solid';
 
@@ -23,14 +23,14 @@ export const AppInfoNotificationCards: React.FC<AppInfoNotificationCardsProps> =
   return (
     <>
       <Card className="p-4">
-        <Stack spacing="gap-x-3" fullWidth direction="row" align="start">
+        <Stack spacing={3} direction="row" alignItems="start" className="w-full">
           <Icon
             icon={<InformationCircleIcon />}
             solid={true}
             size="lg"
             color={{ light: 'errorLight', dark: 'errorDark' }}
           />
-          <Stack spacing="gap-y-1">
+          <Stack spacing={1}>
             <Text variant="button-md">{title}</Text>
             <Text variant="body2">{message}</Text>
             {action}
@@ -39,7 +39,7 @@ export const AppInfoNotificationCards: React.FC<AppInfoNotificationCardsProps> =
       </Card>
       {updateButtonLabel && (
         <Card className="p-4">
-          <Stack direction="row" align="center" justify="between">
+          <Stack direction="row" alignItems="center" justifyContent="between">
             <Text as="span">
               <Button variant="link">{version}</Button>
               {versionLabel}

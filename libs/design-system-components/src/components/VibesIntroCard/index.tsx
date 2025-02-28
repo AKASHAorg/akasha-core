@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 
@@ -25,7 +25,7 @@ const VibesIntroCard: React.FC<VibesIntroCardProps> = props => {
 
   return (
     <Card className="p-4 shadow-nones">
-      <Stack spacing="gap-4">
+      <Stack spacing={4}>
         <Text variant="h5">{titleLabel}</Text>
 
         {subtitleLabel && (
@@ -35,7 +35,7 @@ const VibesIntroCard: React.FC<VibesIntroCardProps> = props => {
         )}
 
         {overviewCTAArr && overviewCTAArr.length > 0 && (
-          <Stack justify="between" spacing="gap-y-4">
+          <Stack justifyContent="between" spacing={4}>
             {overviewCTAArr.map(({ url, label, handler }, idx) => (
               <Stack key={label + idx}>
                 {handler && typeof handler === 'function' ? (

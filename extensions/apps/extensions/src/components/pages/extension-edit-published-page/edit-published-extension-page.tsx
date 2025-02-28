@@ -3,7 +3,7 @@ import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { useTranslation } from 'react-i18next';
 import { transformSource, useRootComponentProps, useSaveImage } from '@akashaorg/ui-core-hooks';
 import { useGetAppsByIdQuery, useUpdateAppMutation } from '@akashaorg/ui-core-hooks/lib/generated';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
@@ -201,7 +201,12 @@ export const EditPublishedExtensionPage: React.FC<EditPublishedExtensionPageProp
   if (extensionDataLoading) {
     return (
       <Card className="shadow-none">
-        <Stack align="center" justify="center" spacing="gap-2" customStyle="h-full md:h-[563px]">
+        <Stack
+          alignItems="center"
+          justifyContent="center"
+          spacing={2}
+          className="h-full md:h-[563px]"
+        >
           <Icon
             icon={<ArrowPathIcon />}
             color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
