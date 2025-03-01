@@ -12,7 +12,7 @@ import {
 
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import { ImageRoot, Image } from '@akashaorg/ui/lib/akasha-components/image';
+import { Image } from '@akashaorg/ui/lib/akasha-components/image';
 import { Checkbox } from '@akashaorg/ui/lib/components/checkbox';
 
 const TERMS_OF_USE = '/@akashaorg/app-legal/terms-of-use';
@@ -34,14 +34,14 @@ export const LandingPageComponent: React.FC = () => {
   return (
     <Card>
       <CardHeader className="justify-center">
-        <ImageRoot className="flex justify-center">
+        <div className="flex justify-center">
           <Image
             showLoadingIndicator={true}
             src="/images/worldbuilder.webp"
             width={150}
             height={200}
           />
-        </ImageRoot>
+        </div>
         <CardTitle className="text-center">
           <Typography variant="h5">{t('Build a World 🌍')}</Typography>
         </CardTitle>

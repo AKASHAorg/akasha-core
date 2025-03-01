@@ -8,14 +8,14 @@
 To use a component import it from the **ui** package:
 
 ### Shadcn components
-Components added from shadcn are inside the `components` folder of the ui package and they are imported as follows :
+Components from shadcn/ui are inside the `components` folder of the ui package and are imported like so:
 
 ```tsx
-import { Input } from '@akashaorg/ui/lib/components/input';
+import { Switch } from '@akashaorg/ui/lib/components/switch';
 ```
 
 ### AKASHA components
-Components added from akasha ui registry are inside the `akasha-components` folder of the ui package and they are imported as follows :
+Whereas components from the akasha-ui are placed in the `akasha-components` folder of the ui package and imported like so:
 
 ```tsx
 import { IconContainer } from '@akashaorg/ui/lib/akasha-components/icon-container';

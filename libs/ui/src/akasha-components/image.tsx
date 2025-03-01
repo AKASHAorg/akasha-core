@@ -4,85 +4,80 @@ import { Loader2 } from 'lucide-react';
 import { cn } from '@/library/utils';
 
 const ImageContext = React.createContext<{
-  isLoading: boolean;
-  hasError: boolean;
-  setLoading: (loading: boolean) => void;
-  setError: (error: boolean) => void;
+  error: boolean;
 } | null>(null);
 
 const useImageContext = () => {
   const context = React.useContext(ImageContext);
   if (!context) {
-    throw new Error('`useImageContext` must be used within an `ImageRoot` component');
+    throw new Error('`useImageContext` must be used within an `Image` component');
   }
   return context;
 };
 
-const ImageRoot = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ children, ...props }, ref) => {
-    const [isLoading, setLoading] = React.useState(true);
-    const [hasError, setError] = React.useState(false);
+const ImageFallback = ({ children }: React.ComponentProps<'span'>) => {
+  const { error } = useImageContext();
+  return error && <span data-slot="image-fallback">{children}</span>;
+};
 
-    return (
-      <ImageContext.Provider value={{ isLoading, hasError, setLoading, setError }}>
-        <div ref={ref} {...props}>
-          {children}
-        </div>
-      </ImageContext.Provider>
-    );
-  },
-);
-
-const ImageFallback = React.forwardRef<
-  HTMLSpanElement,
-  React.ButtonHTMLAttributes<HTMLSpanElement>
->(({ children }, ref) => {
-  const { hasError } = useImageContext();
-  return hasError ? <span ref={ref}>{children}</span> : null;
-});
-
-interface DelayLoadProps {
+const DelayLoad = ({
+  children,
+  loadAfter = 300,
+}: {
   children: React.ReactNode;
   loadAfter?: number;
-}
-
-export const DelayLoad: React.FC<DelayLoadProps> = ({ children, loadAfter = 300 }) => {
+}) => {
   const [show, setShow] = React.useState(false);
 
   React.useEffect(() => {
-    const timer = setTimeout(() => {
-      setShow(true);
-    }, loadAfter);
+    const timer = setTimeout(() => setShow(true), loadAfter);
     return () => clearTimeout(timer);
   }, [loadAfter]);
 
-  return <>{show ? children : null}</>;
+  return show ? <>{children}</> : null;
 };
 
-interface ImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
+const Image = ({
+  src,
+  alt,
+  showLoadingIndicator,
+  className,
+  children,
+  onLoad,
+  onError,
+  ...props
+}: React.ComponentProps<'img'> & {
   showLoadingIndicator?: boolean;
-}
+}) => {
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState(false);
 
-const Image = React.forwardRef<HTMLImageElement, ImageProps>(
-  ({ alt, showLoadingIndicator, className, onLoad, onError, ...props }, ref) => {
-    const { setLoading, setError, isLoading, hasError } = useImageContext();
+  React.useEffect(() => {
+    setLoading(true);
+  }, [setLoading]);
 
-    React.useEffect(() => {
-      setLoading(true);
-    }, [setLoading]);
+  React.useEffect(() => {
+    if (!src) {
+      setError(true);
+      setLoading(false);
+    }
+  }, [src]);
 
-    return (
-      <>
-        {showLoadingIndicator && isLoading && (
+  return (
+    <ImageContext.Provider value={{ error }}>
+      <div data-slot="image-container" className="relative">
+        {showLoadingIndicator && loading && (
           <DelayLoad>
-            <div className={cn('flex items-center justify-center', className)}>
-              <Loader2 className={cn('animate-spin text-muted')} />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <Loader2 className="h-6 w-6 animate-spin text-muted" />
             </div>
           </DelayLoad>
         )}
-        {!hasError && (
+        {!error && (
           <img
-            ref={ref}
+            data-slot="image"
+            src={src}
+            alt={alt}
             loading="lazy"
             decoding="async"
             onLoad={event => {
@@ -94,15 +89,14 @@ const Image = React.forwardRef<HTMLImageElement, ImageProps>(
               setLoading(false);
               onError?.(event);
             }}
-            alt={alt}
             className={cn('object-contain', className)}
             {...props}
           />
         )}
-      </>
-    );
-  },
-);
-Image.displayName = 'Image';
+        {children}
+      </div>
+    </ImageContext.Provider>
+  );
+};
 
-export { ImageRoot, ImageFallback, Image };
+export { Image, ImageFallback };

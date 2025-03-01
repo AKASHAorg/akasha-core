@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Image, ImageFallback, ImageRoot } from '@/akasha-components/image';
+import { Image, ImageFallback } from '@/akasha-components/image';
 import { Card, CardTitle, CardDescription, CardFooter } from '@/akasha-components/card';
 import { cn } from '@/library/utils';
 
@@ -56,14 +56,15 @@ const ErrorLoader = ({
 
   return (
     <Card data-slot="error-loader" className={cn(className)} {...props}>
-      <ImageRoot className={cn('flex justify-center px-6')}>
+      <div className={cn('flex justify-center px-6')}>
         <Image
           src={imageSrc}
           alt="Error Image"
           className="size-[12.5rem] object-contain rounded-lg"
-        />
-        <ImageFallback>Failed to load image</ImageFallback>
-      </ImageRoot>
+        >
+          <ImageFallback>Failed to load image</ImageFallback>
+        </Image>
+      </div>
       {children}
     </Card>
   );

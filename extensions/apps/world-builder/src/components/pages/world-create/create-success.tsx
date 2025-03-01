@@ -11,7 +11,7 @@ import {
   Card,
 } from '@akashaorg/ui/lib/akasha-components/card';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
-import { Image, ImageRoot } from '@akashaorg/ui/lib/akasha-components/image';
+import { Image } from '@akashaorg/ui/lib/akasha-components/image';
 
 type CreateSuccessPageProps = {
   worldId: string;
@@ -40,14 +40,14 @@ export const CreateSuccessPage: React.FC<CreateSuccessPageProps> = ({ worldId, w
         </CardTitle>
       </CardHeader>
       <CardContent className="justify-center">
-        <ImageRoot className="flex justify-center">
+        <div className="flex justify-center">
           <Image
             showLoadingIndicator={true}
             src="/images/worldsuccess.webp"
             width={150}
             height={200}
           />
-        </ImageRoot>
+        </div>
       </CardContent>
       <CardDescription className="px-6 pb-6 text-center">
         <Typography variant="p">{t(`You’re almost there!`)}</Typography>

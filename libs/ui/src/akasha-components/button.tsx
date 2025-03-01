@@ -59,7 +59,7 @@ function Button({
           [typographyVariants({ variant: 'xs' })]: size === 'sm',
         },
         buttonVariants({ variant, size, className }),
-        { 'p-0': variant === 'link' || asChild },
+        { 'p-0': variant === 'link' && asChild },
       )}
       type={type}
       disabled={loading || disabled}

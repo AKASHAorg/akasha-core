@@ -34,11 +34,6 @@ import {
   ExtensionCardDescription,
   ExtensionCardName,
 } from '@/ui/extension-card';
-import {
-  ExtensionAvatar,
-  ExtensionAvatarImage,
-  ExtensionAvatarFallback,
-} from '@/ui/extension-avatar';
 import { ProfileAvatarButton, ProfileDidField, ProfileName } from '@/ui/profile-avatar-button';
 
 import {
@@ -52,7 +47,7 @@ import {
   selectAkashaAppsPageInfo,
 } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-query';
 import { transformSource, useRootComponentProps } from '@akashaorg/ui-core-hooks';
-import { Badge } from '@akashaorg/ui/lib/components/badge';
+import { Badge } from '@akashaorg/ui/lib/akasha-components/badge';
 import { X } from 'lucide-react';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import getSDK from '@akashaorg/core-sdk';
@@ -259,18 +254,17 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
               {index => {
                 const extensionData = akashaApps[index];
                 return (
-                  <ExtensionCard className="p-4">
+                  <ExtensionCard
+                    extensionId={extensionData?.id}
+                    extensionType={extensionData?.applicationType}
+                    className="p-4"
+                  >
                     <ExtensionCardAvatar>
-                      <ExtensionAvatar
-                        size="lg"
-                        extensionId={extensionData?.id}
-                        extensionType={extensionData?.applicationType}
+                      <ExtensionCardAvatar.Image
+                        src={transformSource(extensionData?.logoImage)?.src}
                       >
-                        <ExtensionAvatarImage
-                          src={transformSource(extensionData?.logoImage)?.src}
-                        />
-                        <ExtensionAvatarFallback />
-                      </ExtensionAvatar>
+                        <ExtensionCardAvatar.Fallback />
+                      </ExtensionCardAvatar.Image>
                     </ExtensionCardAvatar>
                     <ExtensionCardContent>
                       <ExtensionCardName>{extensionData?.displayName}</ExtensionCardName>

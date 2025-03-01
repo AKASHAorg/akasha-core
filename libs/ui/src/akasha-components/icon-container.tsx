@@ -6,7 +6,7 @@ import { cn } from '@/library/utils';
 const iconContainerStyles = cva('flex items-center justify-center relative bg-muted', {
   variants: {
     variant: {
-      square: 'rounded-[0.5rem]',
+      square: 'rounded-lg',
       round: 'rounded-full',
     },
     size: {
@@ -21,7 +21,7 @@ const iconContainerStyles = cva('flex items-center justify-center relative bg-mu
     {
       variant: 'square',
       size: 'xs',
-      class: 'rounded-[0.25rem]',
+      class: 'rounded-sm',
     },
   ],
   defaultVariants: {
@@ -30,29 +30,34 @@ const iconContainerStyles = cva('flex items-center justify-center relative bg-mu
   },
 });
 
-export interface IconContainerProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof iconContainerStyles> {
-  showNotificationDot?: boolean; // If true, show the notification dot
-}
-
-const IconContainer = React.forwardRef<HTMLDivElement, IconContainerProps>(
-  ({ variant, size, className, showNotificationDot = false, children, ...props }, ref) => {
-    return (
-      <div ref={ref} className={iconContainerStyles({ variant, size, className })} {...props}>
-        {children}
-        {showNotificationDot && (
-          <div
-            className={cn(
-              'absolute rounded-full w-3 h-3 bg-orange-500 top-0 right-0',
-              variant === 'square' && '-right-1',
-            )}
-          />
-        )}
-      </div>
-    );
-  },
-);
-IconContainer.displayName = 'IconContainer';
+const IconContainer = ({
+  variant,
+  size,
+  className,
+  showNotificationDot = false,
+  children,
+  ...props
+}: React.ComponentProps<'div'> &
+  VariantProps<typeof iconContainerStyles> & {
+    showNotificationDot?: boolean; // If true, show the notification dot
+  }) => {
+  return (
+    <div
+      data-slot="icon-container"
+      className={iconContainerStyles({ variant, size, className })}
+      {...props}
+    >
+      {children}
+      {showNotificationDot && (
+        <div
+          className={cn(
+            'absolute rounded-full w-3 h-3 bg-orange-500 top-0 right-0',
+            variant === 'square' && '-right-1',
+          )}
+        />
+      )}
+    </div>
+  );
+};
 
 export { IconContainer };
