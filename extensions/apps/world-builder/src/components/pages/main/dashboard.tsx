@@ -40,7 +40,7 @@ import {
   ExtensionAvatarFallback,
   ExtensionAvatarImage,
 } from '@/ui/extension-avatar';
-import { Image, ImageRoot } from '@akashaorg/ui/lib/akasha-components/image';
+import { Image } from '@akashaorg/ui/lib/akasha-components/image';
 import { IconContainer } from '@akashaorg/ui/lib/akasha-components/icon-container';
 
 export const DashboardPage: React.FC = () => {
@@ -215,13 +215,11 @@ export const DashboardPage: React.FC = () => {
                 <Typography variant="sm" bold>
                   {t('Icon')}
                 </Typography>
-                <ImageRoot>
-                  <Image
-                    width={24}
-                    height={24}
-                    src={transformSource(worldData?.icon?.default)?.src}
-                  />
-                </ImageRoot>
+                <Image
+                  width={24}
+                  height={24}
+                  src={transformSource(worldData?.icon?.default)?.src}
+                />
               </Stack>
             )}
             {worldData?.instanceURL && (
