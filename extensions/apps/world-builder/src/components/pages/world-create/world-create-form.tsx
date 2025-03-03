@@ -44,10 +44,10 @@ import {
   FormLabel,
   FormMessage,
 } from '@akashaorg/ui/lib/akasha-components/form';
-import { Input } from '@akashaorg/ui/lib/components/input';
+import { Input } from '@akashaorg/ui/lib/akasha-components/input';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import getSDK from '@akashaorg/core-sdk';
-import { Image, ImageRoot } from '@akashaorg/ui/lib/akasha-components/image';
+import { Image } from '@akashaorg/ui/lib/akasha-components/image';
 import {
   useCreateWorldMutation,
   useGetWorldsByCreatorDidQuery,
@@ -302,9 +302,9 @@ export const WorldCreateFormPage: React.FC = () => {
                   )}
                   {!isSavingWorldImage && (
                     <Stack direction="row" spacing={2}>
-                      <ImageRoot className="w-4 h-4">
+                      <div className="w-4 h-4">
                         <Image src={transformSource(worldImage || worldData?.icon?.default)?.src} />
-                      </ImageRoot>
+                      </div>
                       <Typography variant="p">{imageName}</Typography>
                     </Stack>
                   )}

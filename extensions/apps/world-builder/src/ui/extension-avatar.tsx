@@ -6,8 +6,8 @@ import { EyeOff } from 'lucide-react';
 
 import { cn } from '@/ui/library/utils';
 import { getImageFromSeed } from '@/ui/library/get-image-from-seed';
-import { Image, ImageFallback, ImageRoot } from '@akashaorg/ui/lib/akasha-components/image';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { Image, ImageFallback } from '@akashaorg/ui/lib/akasha-components/image';
 
 const extensionVariants = cva(
   'flex justify-center items-center rounded-lg overflow-hidden shrink-0',
@@ -59,7 +59,7 @@ const ExtensionAvatar = ({
     publicImgPath?: string;
   }) => (
   <ExtensionAvatarContext.Provider value={{ extensionId, extensionType, nsfw, publicImgPath }}>
-    <ImageRoot
+    <div
       data-slot="extension-avatar"
       className={cn(extensionVariants({ size }), nsfw && 'bg-muted', className)}
       {...props}

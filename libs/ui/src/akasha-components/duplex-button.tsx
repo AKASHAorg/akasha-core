@@ -27,14 +27,15 @@ const DuplexButton = ({
   const [hovered, setHovered] = React.useState(false);
   return (
     <DuplexButtonContext.Provider
-      data-slot="duplex-button"
       value={{
         active,
         hovered,
         onHovered: hovered => setHovered(hovered),
       }}
     >
-      <div {...props}>{children}</div>
+      <div data-slot="duplex-button" {...props}>
+        {children}
+      </div>
     </DuplexButtonContext.Provider>
   );
 };

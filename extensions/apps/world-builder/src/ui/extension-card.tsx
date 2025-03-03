@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Check } from 'lucide-react';
 
 import { cn } from '@/ui/library/utils';
-import { Badge } from '@akashaorg/ui/lib/components/badge';
+import { Badge } from '@akashaorg/ui/lib/akasha-components/badge';
 import {
   ExtensionAvatar,
   ExtensionAvatarFallback,
@@ -178,11 +178,12 @@ const ExtensionCardActionActive = ({
   );
 };
 
+ExtensionCardAvatar.Image = ExtensionCardAvatarImage;
+ExtensionCardAvatar.Fallback = ExtensionCardAvatarFallback;
+
 export {
   ExtensionCard,
   ExtensionCardAvatar,
-  ExtensionCardAvatarFallback,
-  ExtensionCardAvatarImage,
   ExtensionCardContent,
   ExtensionCardName,
   ExtensionCardDescription,
