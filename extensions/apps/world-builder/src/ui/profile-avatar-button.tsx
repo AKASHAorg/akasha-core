@@ -197,10 +197,15 @@ const ProfileDidField = ({ className }: React.ComponentProps<'div'>) => {
   );
 };
 
-ProfileAvatarButton.Avatar = ProfileAvatar;
+const ProfileAvatarButtonAvatar = ProfileAvatar;
+const ProfileAvatarButtonAvatarFallback = ProfileAvatarFallback;
+const ProfileAvatarButtonAvatarImage = ProfileAvatarImage;
 
-ProfileAvatarButton.AvatarFallback = ProfileAvatarFallback;
-
-ProfileAvatarButton.AvatarImage = ProfileAvatarImage;
-
-export { ProfileAvatarButton, ProfileName, ProfileDidField };
+export {
+  ProfileAvatarButton,
+  ProfileName,
+  ProfileDidField,
+  ProfileAvatarButtonAvatar,
+  ProfileAvatarButtonAvatarFallback,
+  ProfileAvatarButtonAvatarImage,
+};
