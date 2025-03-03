@@ -345,7 +345,6 @@ query GetWorldConfigExtensions($configID: String!){
 query GetWorldFullInfo($id: ID!, $creator: ID){
   node(id: $id){
     ... on AkashaWorld {
-      ...AkashaWorldFragment
       metaInfo(first: 1, account: $creator){
         edges {
           node {
@@ -368,6 +367,7 @@ query GetWorldFullInfo($id: ID!, $creator: ID){
           }
         }
       }
+      ...AkashaWorldFragment
     }
   }
 }

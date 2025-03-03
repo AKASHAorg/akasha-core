@@ -1573,6 +1573,13 @@ export const UpdateAkashaWorldConfigExtensionDocument = /*#__PURE__*/ gql`
   }
 }
     ${AkashaWorldConfigExtensionMFragmentDoc}`;
+export const DeleteAkashaWorldConfigExtensionDocument = /*#__PURE__*/ gql`
+    mutation DeleteAkashaWorldConfigExtension($i: EnableIndexingAkashaWorldConfigExtensionInput!) {
+  enableIndexingAkashaWorldConfigExtension(input: $i) {
+    clientMutationId
+  }
+}
+    `;
 export const GetAppsDocument = /*#__PURE__*/ gql`
     query GetApps($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaAppFiltersInput, $sorting: AkashaAppSortingInput) {
   akashaAppIndex(
@@ -1835,7 +1842,6 @@ export const GetWorldFullInfoDocument = /*#__PURE__*/ gql`
     query GetWorldFullInfo($id: ID!, $creator: ID) {
   node(id: $id) {
     ... on AkashaWorld {
-      ...AkashaWorldFragment
       metaInfo(first: 1, account: $creator) {
         edges {
           node {
@@ -1862,11 +1868,12 @@ export const GetWorldFullInfoDocument = /*#__PURE__*/ gql`
           }
         }
       }
+      ...AkashaWorldFragment
     }
   }
 }
-    ${AkashaWorldFragmentDoc}
-${AkashaWorldConfigFragmentDoc}`;
+    ${AkashaWorldConfigFragmentDoc}
+${AkashaWorldFragmentDoc}`;
 export type Requester<C = {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
 export function getSdk<C>(requester: Requester<C>) {
   return {
@@ -2028,6 +2035,9 @@ export function getSdk<C>(requester: Requester<C>) {
     },
     UpdateAkashaWorldConfigExtension(variables: Types.UpdateAkashaWorldConfigExtensionMutationVariables, options?: C): Promise<Types.UpdateAkashaWorldConfigExtensionMutation> {
       return requester<Types.UpdateAkashaWorldConfigExtensionMutation, Types.UpdateAkashaWorldConfigExtensionMutationVariables>(UpdateAkashaWorldConfigExtensionDocument, variables, options) as Promise<Types.UpdateAkashaWorldConfigExtensionMutation>;
+    },
+    DeleteAkashaWorldConfigExtension(variables: Types.DeleteAkashaWorldConfigExtensionMutationVariables, options?: C): Promise<Types.DeleteAkashaWorldConfigExtensionMutation> {
+      return requester<Types.DeleteAkashaWorldConfigExtensionMutation, Types.DeleteAkashaWorldConfigExtensionMutationVariables>(DeleteAkashaWorldConfigExtensionDocument, variables, options) as Promise<Types.DeleteAkashaWorldConfigExtensionMutation>;
     },
     GetApps(variables?: Types.GetAppsQueryVariables, options?: C): Promise<Types.GetAppsQuery> {
       return requester<Types.GetAppsQuery, Types.GetAppsQueryVariables>(GetAppsDocument, variables, options) as Promise<Types.GetAppsQuery>;

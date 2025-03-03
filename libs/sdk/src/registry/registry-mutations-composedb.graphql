@@ -205,3 +205,11 @@ mutation UpdateAkashaWorldConfigExtension($i: UpdateAkashaWorldConfigExtensionIn
     clientMutationId
   }
 }
+
+mutation DeleteAkashaWorldConfigExtension($i: EnableIndexingAkashaWorldConfigExtensionInput!){
+  enableIndexingAkashaWorldConfigExtension(input: $i){
+    clientMutationId
+  }
+}
+
+
