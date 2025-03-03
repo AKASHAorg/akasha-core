@@ -178,12 +178,11 @@ const ExtensionCardActionActive = ({
   );
 };
 
-ExtensionCardAvatar.Image = ExtensionCardAvatarImage;
-ExtensionCardAvatar.Fallback = ExtensionCardAvatarFallback;
-
 export {
   ExtensionCard,
   ExtensionCardAvatar,
+  ExtensionCardAvatarImage,
+  ExtensionCardAvatarFallback,
   ExtensionCardContent,
   ExtensionCardName,
   ExtensionCardDescription,
