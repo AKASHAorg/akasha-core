@@ -30,12 +30,20 @@ import {
   ExtensionCardActionActive,
   ExtensionCardActionInactive,
   ExtensionCardAvatar,
+  ExtensionCardAvatarFallback,
+  ExtensionCardAvatarImage,
   ExtensionCardContent,
   ExtensionCardDescription,
   ExtensionCardName,
 } from '@/ui/extension-card';
-import { ProfileAvatarButton, ProfileDidField, ProfileName } from '@/ui/profile-avatar-button';
-
+import {
+  ProfileAvatarButton,
+  ProfileAvatarButtonAvatar,
+  ProfileAvatarButtonAvatarFallback,
+  ProfileAvatarButtonAvatarImage,
+  ProfileDidField,
+  ProfileName,
+} from '@/ui/profile-avatar-button';
 import {
   useCreateAkashaWorldConfigExtensionMutation,
   useCreateAkashaWorldConfigMutation,
@@ -260,11 +268,11 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
                     className="p-4"
                   >
                     <ExtensionCardAvatar>
-                      <ExtensionCardAvatar.Image
+                      <ExtensionCardAvatarImage
                         src={transformSource(extensionData?.logoImage)?.src}
                       >
-                        <ExtensionCardAvatar.Fallback />
-                      </ExtensionCardAvatar.Image>
+                        <ExtensionCardAvatarFallback />
+                      </ExtensionCardAvatarImage>
                     </ExtensionCardAvatar>
                     <ExtensionCardContent>
                       <ExtensionCardName>{extensionData?.displayName}</ExtensionCardName>
@@ -272,15 +280,15 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
                         size="sm"
                         profileDID={extensionData?.author?.akashaProfile?.did?.id}
                       >
-                        <ProfileAvatarButton.Avatar>
-                          <ProfileAvatarButton.AvatarImage
+                        <ProfileAvatarButtonAvatar>
+                          <ProfileAvatarButtonAvatarImage
                             src={
                               transformSource(extensionData?.author?.akashaProfile?.avatar?.default)
                                 ?.src
                             }
                           />
-                          <ProfileAvatarButton.AvatarFallback />
-                        </ProfileAvatarButton.Avatar>
+                          <ProfileAvatarButtonAvatarFallback />
+                        </ProfileAvatarButtonAvatar>
                         <ProfileName>{extensionData?.author?.akashaProfile?.name}</ProfileName>
                         <ProfileDidField />
                       </ProfileAvatarButton>
