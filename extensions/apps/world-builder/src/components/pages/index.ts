@@ -5,4 +5,4 @@ export * from './world-config/world-config-main-page';
 export * from './world-config/world-config-form-step1';
 export * from './world-config/world-config-form-step2';
 export * from './world-config/config-success';
-export * from './world-customize/world-customize-form';
+export * from './world-customise/world-customise-form';

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import appRoutes, { WORLD_CREATE_FORM } from '../../../routes';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
@@ -9,7 +9,6 @@ import {
   useSaveImage,
 } from '@akashaorg/ui-core-hooks';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import { Badge } from '@akashaorg/ui/lib/components/badge';
 import {
   Card,
   CardContent,
@@ -17,6 +16,13 @@ import {
   CardHeader,
   CardTitle,
 } from '@akashaorg/ui/lib/akasha-components/card';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@akashaorg/ui/lib/components/select';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import {
@@ -25,11 +31,10 @@ import {
   ErrorLoaderDescription,
   ErrorLoaderFooter,
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
-import { Autocomplete, Option } from '@akashaorg/ui/lib/akasha-components/autocomplete';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { X, Loader2, Image as LucideImage } from 'lucide-react';
+import { Loader2, Image as LucideImage } from 'lucide-react';
 import {
   Form,
   FormControl,
@@ -43,7 +48,11 @@ import { Input } from '@akashaorg/ui/lib/components/input';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import getSDK from '@akashaorg/core-sdk';
 import { Image, ImageRoot } from '@akashaorg/ui/lib/akasha-components/image';
-import { useCreateWorldMutation } from '@akashaorg/ui-core-hooks/lib/generated';
+import {
+  useCreateWorldMutation,
+  useGetWorldsByCreatorDidQuery,
+} from '@akashaorg/ui-core-hooks/lib/generated';
+import { selectWorldData } from '@akashaorg/ui-core-hooks/lib/selectors/get-worlds-by-creator-did-query';
 
 export const WorldCreateFormPage: React.FC = () => {
   const { t } = useTranslation('app-extensions');
@@ -90,13 +99,23 @@ export const WorldCreateFormPage: React.FC = () => {
     });
   }, []);
 
+  const {
+    data: worldsByCreatorDidReq,
+    loading: loadingWorldsByCreatorDidQuery,
+    error: worldsByCreatorDidError,
+  } = useGetWorldsByCreatorDidQuery({
+    variables: { id: authenticatedDID, first: 10 },
+  });
+
+  const worldData = selectWorldData(worldsByCreatorDidReq);
+
   const FormSchema = z.object({
     name: z.string().min(2, {
       message: t('World name must be at least 2 characters.'),
     }),
     icon: z.any().optional(),
     instanceUrl: z.string().url({ message: 'Must be URL' }).optional().or(z.literal('')),
-    extensionPublishers: z.any(),
+    extensionPublishers: z.string(),
   });
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -105,9 +124,19 @@ export const WorldCreateFormPage: React.FC = () => {
       name: '',
       icon: null,
       instanceUrl: '',
-      extensionPublishers: [],
+      extensionPublishers: '',
     },
   });
+
+  const { isValid } = form.formState;
+
+  useEffect(() => {
+    if (worldData?.id) {
+      form.setValue('name', worldData?.name);
+      form.setValue('instanceUrl', worldData?.instanceURL);
+      form.setValue('extensionPublishers', worldData?.extensionPublishers[0]?.id);
+    }
+  }, [worldData, form]);
 
   const {
     image: worldImage,
@@ -132,18 +161,23 @@ export const WorldCreateFormPage: React.FC = () => {
   };
 
   const onSubmit = (data: z.infer<typeof FormSchema>) => {
-    const worldData = {
-      name: data.name,
-      icon: { default: worldImage },
+    const existingWorldIcon = {
+      src: worldData?.icon?.default?.src,
+      height: worldData?.icon?.default?.height,
+      width: worldData?.icon?.default?.width,
+    };
+    const worldDataContent = {
+      name: worldData?.name ?? data.name,
+      icon: { default: worldImage || existingWorldIcon },
       instanceURL: data.instanceUrl,
-      extensionPublishers: data.extensionPublishers?.map(option => option.value),
-      createdAt: new Date().toISOString(),
+      extensionPublishers: [data.extensionPublishers],
+      createdAt: worldData?.createdAt ?? new Date().toISOString(),
       active: true,
     };
     createWorldMutation({
       variables: {
         i: {
-          content: worldData,
+          content: worldDataContent,
         },
       },
     });
@@ -151,18 +185,6 @@ export const WorldCreateFormPage: React.FC = () => {
 
   const handleCancel = () => {
     navigate({ to: '/dashboard' });
-  };
-
-  const [selectedValues, setSelectedValues] = useState<Option[]>([]);
-
-  const handleValueChange = (value: Option[]) => {
-    if (!value) return;
-    setSelectedValues(value);
-    form.setValue('extensionPublishers', value);
-  };
-
-  const handleRemove = (valueToRemove: string) => {
-    setSelectedValues(prev => prev.filter(item => item.value !== valueToRemove));
   };
 
   const [createWorldMutation, { loading: loadingWorldMutation }] = useCreateWorldMutation({
@@ -217,7 +239,13 @@ export const WorldCreateFormPage: React.FC = () => {
                     {t(`Remember, the world's name cannot be changed once it is set.`)}
                   </FormDescription>
                   <FormControl>
-                    <Input placeholder="E.g. Nana World" {...field} />
+                    <Input
+                      placeholder="E.g. Nana World"
+                      {...field}
+                      disabled={!!worldData?.name}
+                      value={field.value || worldData?.name}
+                      onChange={field.onChange}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -230,7 +258,12 @@ export const WorldCreateFormPage: React.FC = () => {
                 <FormItem>
                   <FormLabel>{t('Instance URL')}</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g. http://www.myworld.com" {...field} />
+                    <Input
+                      placeholder="e.g. http://www.myworld.com"
+                      {...field}
+                      value={field.value || worldData?.instanceURL}
+                      onChange={field.onChange}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -270,7 +303,7 @@ export const WorldCreateFormPage: React.FC = () => {
                   {!isSavingWorldImage && (
                     <Stack direction="row" spacing={2}>
                       <ImageRoot className="w-4 h-4">
-                        <Image src={transformSource(worldImage)?.src} />
+                        <Image src={transformSource(worldImage || worldData?.icon?.default)?.src} />
                       </ImageRoot>
                       <Typography variant="p">{imageName}</Typography>
                     </Stack>
@@ -286,33 +319,24 @@ export const WorldCreateFormPage: React.FC = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t('Extension Publishers')}</FormLabel>
-                  <FormControl>
-                    <Autocomplete
-                      placeholder={t('Select an extension publisher')}
-                      emptyMessage={t('No publishers available')}
-                      value={selectedValues}
-                      onValueChange={value => handleValueChange(value)}
-                      options={extensionPublishersOptions}
-                      multiple
-                      {...field}
-                    />
-                  </FormControl>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedValues.length > 0 &&
-                      selectedValues.map(framework => (
-                        <Badge key={framework?.value} variant="secondary">
-                          {framework?.label}
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="h-auto p-1 ml-2"
-                            onClick={() => handleRemove(framework?.value)}
-                          >
-                            <X className="h-3 w-3" />
-                          </Button>
-                        </Badge>
+                  <Select
+                    onValueChange={field.onChange}
+                    required
+                    value={field.value || worldData?.extensionPublishers[0]?.id}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder={t('Select an extension publisher')} />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {extensionPublishersOptions?.map(opt => (
+                        <SelectItem key={opt.value} value={opt.value}>
+                          {opt.label}
+                        </SelectItem>
                       ))}
-                  </div>
+                    </SelectContent>
+                  </Select>
                 </FormItem>
               )}
             />
@@ -321,7 +345,12 @@ export const WorldCreateFormPage: React.FC = () => {
             <Button className="px-6" variant="outline" onClick={handleCancel}>
               {t('Cancel')}
             </Button>
-            <Button type="submit" className="px-6" loading={loadingWorldMutation}>
+            <Button
+              type="submit"
+              className="px-6"
+              loading={loadingWorldMutation}
+              disabled={!isValid}
+            >
               {t('Create')}
             </Button>
           </CardFooter>
