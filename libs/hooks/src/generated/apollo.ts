@@ -3233,6 +3233,39 @@ export function useUpdateAkashaWorldConfigExtensionMutation(baseOptions?: Apollo
 export type UpdateAkashaWorldConfigExtensionMutationHookResult = ReturnType<typeof useUpdateAkashaWorldConfigExtensionMutation>;
 export type UpdateAkashaWorldConfigExtensionMutationResult = Apollo.MutationResult<Types.UpdateAkashaWorldConfigExtensionMutation>;
 export type UpdateAkashaWorldConfigExtensionMutationOptions = Apollo.BaseMutationOptions<Types.UpdateAkashaWorldConfigExtensionMutation, Types.UpdateAkashaWorldConfigExtensionMutationVariables>;
+export const DeleteAkashaWorldConfigExtensionDocument = /*#__PURE__*/ gql`
+    mutation DeleteAkashaWorldConfigExtension($i: EnableIndexingAkashaWorldConfigExtensionInput!) {
+  enableIndexingAkashaWorldConfigExtension(input: $i) {
+    clientMutationId
+  }
+}
+    `;
+export type DeleteAkashaWorldConfigExtensionMutationFn = Apollo.MutationFunction<Types.DeleteAkashaWorldConfigExtensionMutation, Types.DeleteAkashaWorldConfigExtensionMutationVariables>;
+
+/**
+ * __useDeleteAkashaWorldConfigExtensionMutation__
+ *
+ * To run a mutation, you first call `useDeleteAkashaWorldConfigExtensionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteAkashaWorldConfigExtensionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteAkashaWorldConfigExtensionMutation, { data, loading, error }] = useDeleteAkashaWorldConfigExtensionMutation({
+ *   variables: {
+ *      i: // value for 'i'
+ *   },
+ * });
+ */
+export function useDeleteAkashaWorldConfigExtensionMutation(baseOptions?: Apollo.MutationHookOptions<Types.DeleteAkashaWorldConfigExtensionMutation, Types.DeleteAkashaWorldConfigExtensionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<Types.DeleteAkashaWorldConfigExtensionMutation, Types.DeleteAkashaWorldConfigExtensionMutationVariables>(DeleteAkashaWorldConfigExtensionDocument, options);
+      }
+export type DeleteAkashaWorldConfigExtensionMutationHookResult = ReturnType<typeof useDeleteAkashaWorldConfigExtensionMutation>;
+export type DeleteAkashaWorldConfigExtensionMutationResult = Apollo.MutationResult<Types.DeleteAkashaWorldConfigExtensionMutation>;
+export type DeleteAkashaWorldConfigExtensionMutationOptions = Apollo.BaseMutationOptions<Types.DeleteAkashaWorldConfigExtensionMutation, Types.DeleteAkashaWorldConfigExtensionMutationVariables>;
 export const GetAppsDocument = /*#__PURE__*/ gql`
     query GetApps($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaAppFiltersInput, $sorting: AkashaAppSortingInput) {
   akashaAppIndex(
@@ -3957,7 +3990,6 @@ export const GetWorldFullInfoDocument = /*#__PURE__*/ gql`
     query GetWorldFullInfo($id: ID!, $creator: ID) {
   node(id: $id) {
     ... on AkashaWorld {
-      ...AkashaWorldFragment
       metaInfo(first: 1, account: $creator) {
         edges {
           node {
@@ -3984,11 +4016,12 @@ export const GetWorldFullInfoDocument = /*#__PURE__*/ gql`
           }
         }
       }
+      ...AkashaWorldFragment
     }
   }
 }
-    ${AkashaWorldFragmentDoc}
-${AkashaWorldConfigFragmentDoc}`;
+    ${AkashaWorldConfigFragmentDoc}
+${AkashaWorldFragmentDoc}`;
 
 /**
  * __useGetWorldFullInfoQuery__
