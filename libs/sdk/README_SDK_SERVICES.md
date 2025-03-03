@@ -2,171 +2,80 @@
 
 Definitive list of Services available in the AKASHA SDK.
 
-## DB
+## AppSettings
 
-The DB service is useful in managing a local database instance. It provides methods for creating and retrieving a database instance, accessing collections, and ensuring that the database is open before performing any operations. The database instance is encapsulated in a `DbWrapper` object.
-
-**Constructor**
-
-```ts
-constructor();
-```
-
-The constructor initializes the class with two properties: `_dbName`, which stores the name of the database, and `_db`, which will hold an instance of the DbWrapper. Initially, `_db` is set to undefined, and the `_dbName` is set to an empty string.
-
-**Methods**
-
-### create
-
-Creates a new `DbWrapper` instance, which represents the local database. It also assigns the name parameter to the `_dbName` property. This method is used to initialize the database before it can be used. The `validate decorator` ensures that the name parameter is a string.
-
-```ts
-@validate(z.string())
-create(name: string): DbWrapper
-```
-
-**Parameters**
-`name (string)`: The name of the database to be created.
-
-**Returns**: An instance of `DbWrapper` after initializing it with the provided name.
-
-### getDb
-
-Returns the current database instance after calling the private method `_ensureDbOpened` to verify that the database has been opened. If the database is not yet opened, it will throw an error indicating that the database needs to be created first.
-
-```ts
-async getDb(): Promise<DbWrapper>
-```
-
-**Returns**: A Promise that resolves to an instance of `DbWrapper`.
-
-### getCollections
-
-Provides access to specific collections within the database. If the database has not been created, it may return undefined values for the collections.
-
-```ts
-getCollections(): { installedExtensions?: any, settings?: any }
-```
-
-**Returns**: An object containing `installedExtensions` and `settings` collections from the `_db` instance.
-
-### _ensureDbOpened
-
-This private method ensures that the database has been opened before performing any operations. If the `_db` is undefined (indicating the database has not been created), it throws a static `NOT_OPENED_ERROR` error
-
-```ts
-private _ensureDbOpened(): void
-```
-
-**Returns**: void.
-
----
-
-## GraphQL
-
-The GraphQL service is in charge of managing Apollo GraphQL requests and mutations sent from the client. Besides generating an Apollo client instance, it also acts as a middle man that, depending on the context source, will route the GraphQL operation to either the federated GraphQL or the Ceramic node for processing. It also manages cache resets, viewer identification, and mutation notifications.
+The AppSettings service is useful in managing the configuration and lifecycle of installed apps in a world. It provides methods for retrieving, installing, uninstalling, and updating the settings of applications. It interacts with a database to store and retrieve app-related data and uses a logger for logging events. It also integrates with an event bus for event-driven communication.
 
 **Constructor**
 
 ```ts
-public constructor(
-  @inject(TYPES.Log) log: Logging,
-  @inject(TYPES.Ceramic) ceramic: CeramicService,
-  @inject(TYPES.EventBus) globalChannel: EventBus,
-  @inject(TYPES.Config) config: AWF_Config,
-)
+constructor(
+@inject(TYPES.Log) log: Logging, @inject(TYPES.Db) db: DB, @inject(TYPES.EventBus) globalChannel: EventBus, )
 ```
 
 - `log (Logging)`: Logger to log events, warnings, and errors for debugging and monitoring.
-- `ceramic (CeramicService)`: The service for managing interactions with the Ceramic network.
+- `db (DB)`: The database instance for interacting with app configuration data.
 - `globalChannel (EventBus)`: Global event bus for handling app-wide events.
-- `config (AWF_Config)`: A configuration service used to retrieve application configuration options.
-
-**Properties**
-
-- `queryClient (type: ApolloClient)`: Provides access to the Apollo client, which can be used to send queries and mutations to the GraphQL API. Returns the Apollo client instance `this.apolloClient`.
-
-- `contextSources (type: { default: symbol; composeDB: symbol })`: Provides context source symbols for operations within the GraphQL API. Returns the `_contextSources` object, which contains symbols for different context sources (default and composeDB).
-
-- `labelTypes (type: LabelTypes)`: Provides access to the available label types (used for specific operations within the API). Returns the `LabelTypes` object.
-
-- `indexingDID (type: string)`: Provides the DID used for indexing purposes. Returns the indexing DID from the configuration `this._config.getOption('indexing_did')`.
-
-- `mutationNotificationConfig (type: Object)`: Provides configuration for mutation notifications. Returns an object with a notification option name `EmitNotification`.
-
-- `client (type: Sdk)`: Provides access to the SDK used for interacting with the GraphQL API. Returns the client instance `this._client`.
 
 **Methods**
 
-### requester
+### get
 
-Sends a GraphQL operation (query or mutation) to the Apollo client and handles errors. For mutations, it generates a UUID, publishes mutation notifications via the global event bus, stores errors in sessionStorage, and throws errors if present. For queries, it simply sends the request and returns the result data. It also handles the context headers by including the viewerID if available.
+Fetches the configuration object for a specific app based on its name. It will throw an error if the app does not exist in the database or if there is an issue with the database query.
 
 ```ts
-public requester = async <R, V>(
-doc: DocumentNode | string,
-vars?: V,
-options?: Record<string, any>,
-): Promise<R>
+get(appName: IntegrationName): Promise<any>
 ```
 
 **Parameters**
 
-- `doc (DocumentNode | string)`: The GraphQL query or mutation document. It can either be a string (which will be converted to a DocumentNode) or an already parsed DocumentNode.
-- `vars (V | undefined)`: Optional variables to be passed with the query or mutation.
-- `options (Record<string, any> | undefined)`: Optional context or headers for the request.
+- `appName (IntegrationName)`: The name of the app whose configuration is being retrieved.
 
-**Returns**: A Promise that resolves to the result data of the GraphQL operation.
+**Returns**: A promise that resolves to the formatted configuration object for the specified app.
 
-### resetCache
+### getAll
 
-Resets the Apollo client cache by calling `this._apolloCache.reset()`.
+Fetches the configurations for all installed apps.
 
 ```ts
-async resetCache(): Promise<void>
+getAll(): Promise<any>
 ```
 
-**Returns**: A Promise that resolves once the cache has been reset.
+**Returns**: A promise that resolves to an array of formatted configuration objects for all installed apps.
 
-### setContextViewerID
+### install
 
-Sets the viewerID and resets the Apollo client cache by calling `this.resetCache()`.
-
-```ts
-async setContextViewerID(id: string): Promise<void>
-```
-
-**Parameters**
-
-- `id (string)`: The viewer's ID to be set.
-
-**Returns**: A Promise that resolves once the viewer ID is set.
-
-### consumeMutationNotificationObject
-
-Retrieves the mutation notification from sessionStorage using the provided `uuid`, removes the notification from sessionStorage, and returns the parsed data. If parsing fails, it logs a warning and returns `undefined`.
+Installs a new app or updates the version of an existing app in the system. It will throw an error if the app installation or update fails.
 
 ```ts
-@validate(z.string().min(20))
-consumeMutationNotificationObject(uuid: string): any
+install(release: { appName: string; releaseId: string; version: string; source: string; applicationType: AkashaAppApplicationType; termsAccepted?: boolean; }): Promise<void>
 ```
 
 **Parameters**
 
-- `uuid (string)`: The UUID of the mutation notification to be consumed.
+- `release (object)`: Contains information about the app being installed or updated. The object includes:
+- `appName (string)`: The name of the app.
+- `releaseId (string)`: The release identifier of the app.
+- `version (string)`: The version of the app being installed.
+- `source (string)`: The source from which the app was installed.
+- `applicationType (AkashaAppApplicationType)`: The type of the application.
+- `termsAccepted (boolean, optional)`: A flag indicating whether the user has accepted the terms. Defaults to false if not provided.
 
-**Returns**: The parsed notification object (or `undefined` if the object could not be found or parsed).
+**Returns**: A promise that resolves when the app has been successfully installed or updated.
 
-### getAPI (Deprecated)
+### uninstall
 
-This method is deprecated and is provided for backward compatibility. It serves as an alias for `this.client`.
+Uninstalls an app by name. It will throw an error if the app does not exist or if the uninstallation process fails
 
 ```ts
-@deprecated
-getAPI(): Sdk
+uninstall(appName: IntegrationName): Promise<void>
 ```
 
-**Returns**: The client instance `this._client`.
+**Parameters**
+
+- `appName (IntegrationName)`: The name of the app to be uninstalled.
+
+**Returns**: A promise that resolves when the app has been successfully uninstalled.
 
 ---
 
@@ -299,6 +208,153 @@ async disconnect(): Promise<void>
 
 ---
 
+## DB
+
+The DB service is useful in managing a local database instance. It provides methods for creating and retrieving a database instance, accessing collections, and ensuring that the database is open before performing any operations. The database instance is encapsulated in a `DbWrapper` object.
+
+**Constructor**
+
+```ts
+constructor();
+```
+
+The constructor initializes the class with two properties: `_dbName`, which stores the name of the database, and `_db`, which will hold an instance of the DbWrapper. Initially, `_db` is set to undefined, and the `_dbName` is set to an empty string.
+
+**Methods**
+
+### create
+
+Creates a new `DbWrapper` instance, which represents the local database. It also assigns the name parameter to the `_dbName` property. This method is used to initialize the database before it can be used. The `validate decorator` ensures that the name parameter is a string.
+
+```ts
+@validate(z.string())
+create(name: string): DbWrapper
+```
+
+**Parameters**
+`name (string)`: The name of the database to be created.
+
+**Returns**: An instance of `DbWrapper` after initializing it with the provided name.
+
+### getDb
+
+Returns the current database instance after calling the private method `_ensureDbOpened` to verify that the database has been opened. If the database is not yet opened, it will throw an error indicating that the database needs to be created first.
+
+```ts
+async getDb(): Promise<DbWrapper>
+```
+
+**Returns**: A Promise that resolves to an instance of `DbWrapper`.
+
+### getCollections
+
+Provides access to specific collections within the database. If the database has not been created, it may return undefined values for the collections.
+
+```ts
+getCollections(): { installedExtensions?: any, settings?: any }
+```
+
+**Returns**: An object containing `installedExtensions` and `settings` collections from the `_db` instance.
+
+---
+
+## GraphQL
+
+The GraphQL service is in charge of managing Apollo GraphQL requests and mutations sent from the client. Besides generating an Apollo client instance, it also acts as a middle man that, depending on the context source, will route the GraphQL operation to either the federated GraphQL or the Ceramic node for processing. It also manages cache resets, viewer identification, and mutation notifications.
+
+**Constructor**
+
+```ts
+public constructor(
+  @inject(TYPES.Log) log: Logging,
+  @inject(TYPES.Ceramic) ceramic: CeramicService,
+  @inject(TYPES.EventBus) globalChannel: EventBus,
+  @inject(TYPES.Config) config: AWF_Config,
+)
+```
+
+- `log (Logging)`: Logger to log events, warnings, and errors for debugging and monitoring.
+- `ceramic (CeramicService)`: The service for managing interactions with the Ceramic network.
+- `globalChannel (EventBus)`: Global event bus for handling app-wide events.
+- `config (AWF_Config)`: A configuration service used to retrieve application configuration options.
+
+**Properties**
+
+- `queryClient (type: ApolloClient)`: Provides access to the Apollo client, which can be used to send queries and mutations to the GraphQL API. Returns the Apollo client instance `this.apolloClient`.
+
+- `contextSources (type: { default: symbol; composeDB: symbol })`: Provides context source symbols for operations within the GraphQL API. Returns the `_contextSources` object, which contains symbols for different context sources (default and composeDB).
+
+- `labelTypes (type: LabelTypes)`: Provides access to the available label types (used for specific operations within the API). Returns the `LabelTypes` object.
+
+- `indexingDID (type: string)`: Provides the DID used for indexing purposes. Returns the indexing DID from the configuration `this._config.getOption('indexing_did')`.
+
+- `mutationNotificationConfig (type: Object)`: Provides configuration for mutation notifications. Returns an object with a notification option name `EmitNotification`.
+
+- `client (type: Sdk)`: Provides access to the SDK used for interacting with the GraphQL API. Returns the client instance `this._client`.
+
+**Methods**
+
+### requester
+
+Sends a GraphQL operation (query or mutation) to the Apollo client and handles errors. For mutations, it generates a UUID, publishes mutation notifications via the global event bus, stores errors in sessionStorage, and throws errors if present. For queries, it simply sends the request and returns the result data. It also handles the context headers by including the viewerID if available.
+
+```ts
+public requester = async <R, V>(
+doc: DocumentNode | string,
+vars?: V,
+options?: Record<string, any>,
+): Promise<R>
+```
+
+**Parameters**
+
+- `doc (DocumentNode | string)`: The GraphQL query or mutation document. It can either be a string (which will be converted to a DocumentNode) or an already parsed DocumentNode.
+- `vars (V | undefined)`: Optional variables to be passed with the query or mutation.
+- `options (Record<string, any> | undefined)`: Optional context or headers for the request.
+
+**Returns**: A Promise that resolves to the result data of the GraphQL operation.
+
+### resetCache
+
+Resets the Apollo client cache by calling `this._apolloCache.reset()`.
+
+```ts
+async resetCache(): Promise<void>
+```
+
+**Returns**: A Promise that resolves once the cache has been reset.
+
+### setContextViewerID
+
+Sets the viewerID and resets the Apollo client cache by calling `this.resetCache()`.
+
+```ts
+async setContextViewerID(id: string): Promise<void>
+```
+
+**Parameters**
+
+- `id (string)`: The viewer's ID to be set.
+
+**Returns**: A Promise that resolves once the viewer ID is set.
+
+### consumeMutationNotificationObject
+
+Retrieves the mutation notification from sessionStorage using the provided `uuid`, removes the notification from sessionStorage, and returns the parsed data. If parsing fails, it logs a warning and returns `undefined`.
+
+```ts
+@validate(z.string().min(20))
+consumeMutationNotificationObject(uuid: string): any
+```
+
+**Parameters**
+
+- `uuid (string)`: The UUID of the mutation notification to be consumed.
+
+**Returns**: The parsed notification object (or `undefined` if the object could not be found or parsed).
+
+---
+
 ## IPFS
 
 The IPFS service facilitates interactions with the InterPlanetary File System (IPFS) via the Web3 Storage API. It handles file upload and retrieval, and the construction of IPFS-related links. It uses a client `w3upClient` to interact with IPFS storage, leveraging Ceramic as a decentralized storage solution for the session management.
@@ -332,26 +388,6 @@ getSettings(): { pathGateway: string, originGateway: string, fallbackGateway: st
 - `pathGateway`: string
 - `originGateway`: string,
 - `fallbackGateway`: string
-
-### _createClient
-
-Creates an instance of `w3upClient`. It checks if a Ceramic session exists, retrieves the session key, derives a principal using `Signer.generate()`, and then instantiates the w3upClient
-
-```ts
-private async _createClient(): Promise<void>
-```
-
-**Returns**: A Promise that resolves when the client is created successfully.
-
-### _getStorageProof
-
-Retrieves a storage proof from the storage delegate URL `w3_storage_delegate_base_url`. It constructs a URL to request the proof, fetches the data, and deserializes it.
-
-```ts
-private async _getStorageProof(): Promise<Delegation>
-```
-
-**Returns**: A Promise that returns a storage delegation proof.
 
 ### uploadFile
 
@@ -512,7 +548,7 @@ async multiAddrToUri(addrList: string | string[]): Promise<string[] | string>
 
 ## Lit
 
-The Lit service utilizes Lit Protocol for secure encryption and decryption of data using Ethereum-based wallets. It provides methods to connect to the Lit Node, create sessions for cryptographic operations, and encrypt/decrypt text data with access control conditions. It  uses Web3 for wallet integration and works with Ethereum network addresses.
+The Lit service utilizes Lit Protocol for secure encryption and decryption of data using Ethereum-based wallets. It provides methods to connect to the Lit Node, create sessions for cryptographic operations, and encrypt/decrypt text data with access control conditions. It uses Web3 for wallet integration and works with Ethereum network addresses.
 
 **Constructor**
 
@@ -628,7 +664,21 @@ create(nameSpace?: string): ILogger
 
 **Returns**:
 
-- `ILogger`: A child logger instance created using the main _appLogger. This logger inherits the configuration of the main logger and can be used for logging messages in a specific module or part of the application. The level of the logger is inherited from the main logger, and the logger will have the module field set to the provided namespace.
+- `ILogger`: A child logger instance created using the main \_appLogger. This logger inherits the configuration of the main logger and can be used for logging messages in a specific module or part of the application. The level of the logger is inherited from the main logger, and the logger will have the module field set to the provided namespace.
+
+---
+
+## Misc
+
+The Misc service provides various utility functions related to API status, DID resolution, and account information retrieval. This class allows interaction with APIs, resolving decentralized identifiers (DIDs), and parsing account-related information based on serialized identifiers.
+
+**Constructor**
+
+```ts
+constructor(config: AWF_Config)
+```
+
+- `config (AWF_Config)`: A configuration object that provides access to various configuration options like the `api_status_path` and `graphql_uri`.
 
 ---
 
@@ -699,6 +749,7 @@ stopListeningToNotificationEvents(): Promise<void>
 **Returns**: A Promise that resolves when the notification stream is successfully stopped.
 
 ### disconnect
+
 Disconnects the notification service and sets the `_pushClient` to undefined, stopping all related processes.
 
 ```ts
@@ -864,118 +915,15 @@ remove(serviceName: string): Promise<void>
 
 ---
 
-## AppSettings
+## Stash
 
-The AppSettings service is useful in managing the configuration and lifecycle of installed apps in a world. It provides methods for retrieving, installing, uninstalling, and updating the settings of applications. It interacts with a database to store and retrieve app-related data and uses a logger for logging events. It also integrates with an event bus for event-driven communication.
+The Stash service helps in managing cache storage, specifically aimed at UI-related data. The cache is implemented using the `QuickLRU` class, which offers a least-recently-used (LRU) caching mechanism, with configurable size limits and expiration times (defaults to a maximum size of 999 entries and an expiration time of 5 minutes - 300,000 milliseconds). It provides methods for creating custom cache instances, accessing a default UI cache, generating cache keys based on input objects and computing unique cache keys.
 
 **Constructor**
 
 ```ts
-constructor(
-@inject(TYPES.Log) log: Logging, @inject(TYPES.Db) db: DB, @inject(TYPES.EventBus) globalChannel: EventBus, )
+constructor();
 ```
-
-- `log (Logging)`: Logger to log events, warnings, and errors for debugging and monitoring.
-- `db (DB)`: The database instance for interacting with app configuration data.
-- `globalChannel (EventBus)`: Global event bus for handling app-wide events.
-
-**Methods**
-
-### get
-
-Fetches the configuration object for a specific app based on its name. It will throw an error if the app does not exist in the database or if there is an issue with the database query.
-
-```ts
-get(appName: IntegrationName): Promise<any>
-```
-
-**Parameters**
-
-- `appName (IntegrationName)`: The name of the app whose configuration is being retrieved.
-
-**Returns**: A promise that resolves to the formatted configuration object for the specified app.
-
-### getAll
-
-Fetches the configurations for all installed apps.
-
-```ts
-getAll(): Promise<any>
-```
-
-**Returns**: A promise that resolves to an array of formatted configuration objects for all installed apps.
-
-### install
-
-Installs a new app or updates the version of an existing app in the system. It will throw an error if the app installation or update fails.
-
-```ts
-install(release: { appName: string; releaseId: string; version: string; source: string; applicationType: AkashaAppApplicationType; termsAccepted?: boolean; }): Promise<void>
-```
-
-**Parameters**
-
-- `release (object)`: Contains information about the app being installed or updated. The object includes:
-- `appName (string)`: The name of the app.
-- `releaseId (string)`: The release identifier of the app.
-- `version (string)`: The version of the app being installed.
-- `source (string)`: The source from which the app was installed.
-- `applicationType (AkashaAppApplicationType)`: The type of the application.
-- `termsAccepted (boolean, optional)`: A flag indicating whether the user has accepted the terms. Defaults to false if not provided.
-
-**Returns**: A promise that resolves when the app has been successfully installed or updated.
-
-### uninstall
-
-Uninstalls an app by name. It will throw an error if the app does not exist or if the uninstallation process fails
-
-```ts
-uninstall(appName: IntegrationName): Promise<void>
-```
-
-**Parameters**
-
-- `appName (IntegrationName)`: The name of the app to be uninstalled.
-
-**Returns**: A promise that resolves when the app has been successfully uninstalled.
-
-### (WIP) toggleAppStatus
-
-Toggles the status of an app.
-
-```ts
-toggleAppStatus(appName: IntegrationName): Promise<boolean>
-```
-
-**Parameters**
-
-- `appName (IntegrationName)`: The name of the app whose status is being toggled.
-
-### (WIP) updateVersion
-
-Updates the version of a specified app.
-
-```ts
-updateVersion(app: { appName: string; releaseVersion: string }): Promise<void>
-```
-
-**Parameters**
-
-- ` app (object)`: The app object containing:
-- `appName (string)`: The name of the app.
-- `releaseVersion (string)`: The version to update to.
-
-### (WIP) updateConfig
-
-Updates the configuration of an app.
-
-```ts
-updateConfig(app: ConfigInfo): Promise<void>
-```
-
-**Parameters**
-
-- `app (ConfigInfo)`: The configuration information for the app.
 
 ---
 
@@ -1066,14 +1014,6 @@ toggleDarkTheme(enable?: boolean)
 
 - `enable (boolean, optional)`: If true, forces the dark theme to be enabled.
 
-### _registerWalletChangeEvents
-
-Registers event listeners for wallet provider changes and is automatically called during the constructor. It subscribes to changes in the provider and emits events when the wallet is connected or disconnected.
-
-```ts
-_registerWalletChangeEvents();
-```
-
 ### disconnect
 
 Disconnects the Web3 provider and resets the Web3 instance and provider type to `null`.
@@ -1143,29 +1083,3 @@ checkCurrentNetwork();
 ```
 
 **Returns**: A promise that resolves if the network matches.
-
----
-
-## Stash
-
-The Stash service helps in managing cache storage, specifically aimed at UI-related data. The cache is implemented using the `QuickLRU` class, which offers a least-recently-used (LRU) caching mechanism, with configurable size limits and expiration times (defaults to a maximum size of 999 entries and an expiration time of 5 minutes - 300,000 milliseconds). It provides methods for creating custom cache instances, accessing a default UI cache, generating cache keys based on input objects and computing unique cache keys.
-
-**Constructor**
-
-```ts
-constructor();
-```
-
----
-
-## Misc
-
-The Misc service provides various utility functions related to API status, DID resolution, and account information retrieval. This class allows interaction with APIs, resolving decentralized identifiers (DIDs), and parsing account-related information based on serialized identifiers.
-
-**Constructor**
-
-```ts
-constructor(config: AWF_Config)
-```
-
-- `config (AWF_Config)`: A configuration object that provides access to various configuration options like the `api_status_path` and `graphql_uri`.

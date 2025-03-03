@@ -101,21 +101,6 @@ signOut();
 
 **Returns**: A Promise that resolves to `true` if the sign-out process is successful.
 
-### (WIP) signData
-
-Signs arbitrary data using the user's identity key.
-
-```ts
-signData(data: Record<string, unknown> | string | Record<string, unknown>[], base64Format = false)
-```
-
-**Parameters**
-
-- `data (Record<string, unknown> | string | Record<string, unknown>[])`: The data to be signed.
-- `base64Format (optional)`: A flag to indicate if the signature should be in base64 format.
-
-**Returns**: A Promise that resolves to the signed data.
-
 ### signDataWithDID
 
 Signs data using a decentralized identity (DID) key.
@@ -187,60 +172,6 @@ createEncryptedMessage(to: string, message: string)
 - `message (string)`: The message content.
 
 **Returns**: A Promise that resolves to the encrypted message.
-
-### (WIP) getToken
-
-Returns a mock token (for testing or simulating purposes).
-
-```ts
-getToken();
-```
-
-**Returns**: A Promise that returns The mock token.
-
-### _signIn
-
-Handles the internal sign-in logic, including connecting the Ethereum address, checking registration, and initializing the DID session.
-
-```ts
-_signIn(args);
-```
-
-**Parameters**
-
-- `args`: The arguments for signing in, including provider, check registration flag, and resume sign-in flag.
-
-**Returns**: A Promise that resolves to the authenticated user object or null if an error occurs.
-
-### _getSession
-
-Retrieves the session of the currently authenticated user, prompting sign-in if necessary.
-
-```ts
-_getSession();
-```
-
-**Returns**: A Promise that resolves to the current authenticated user object or null.
-
-### _connectAddress
-
-Connects to an Ethereum address and returns the address if successful.
-
-```ts
-_connectAddress();
-```
-
-**Returns**: A Promise that resolves to the Ethereum address if successful, or `null` if connection fails.
-
-### _signOut
-
-Clears session data, disconnects services, and notifies the event bus on sign-out.
-
-```ts
-_signOut();
-```
-
-**Returns**: A Promise that resolves to `true` if the sign-out process was successful.
 
 ---
 
