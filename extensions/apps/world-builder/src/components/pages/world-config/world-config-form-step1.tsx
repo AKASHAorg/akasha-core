@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
@@ -32,6 +32,12 @@ import {
 } from '@akashaorg/ui/lib/akasha-components/form';
 import { useAtom } from 'jotai';
 import { AtomContext, FormData } from './world-config-main-page';
+import {
+  useGetWorldByIdQuery,
+  useGetWorldConfigQuery,
+} from '@akashaorg/ui-core-hooks/lib/generated';
+import { selectWorldData } from '@akashaorg/ui-core-hooks/lib/selectors/get-world-by-id-query';
+import { selectWorldConfigData } from '@akashaorg/ui-core-hooks/lib/selectors/get-world-config-query';
 
 type WorldConfigFormStep1Props = {
   worldId: string;
@@ -41,6 +47,29 @@ export const WorldConfigFormStep1Page: React.FC<WorldConfigFormStep1Props> = ({ 
   const { t } = useTranslation('app-extensions');
 
   const navigate = useNavigate();
+
+  const {
+    data: getWorldByIdReq,
+    loading: loadingWorldByIdQuery,
+    error: getWorldByIdError,
+  } = useGetWorldByIdQuery({
+    variables: {
+      id: worldId,
+    },
+  });
+
+  const worldData = selectWorldData(getWorldByIdReq);
+
+  const {
+    data: worldConfigReq,
+    loading: loadingWorldConfigQuery,
+    error: worldConfigError,
+  } = useGetWorldConfigQuery({
+    variables: { worldID: worldData?.id },
+    skip: !worldData?.id,
+  });
+
+  const worldConfig = selectWorldConfigData(worldConfigReq);
 
   // TODO: use hooks to fetch realtime data and provide alternative options
   const registryExtensionOptions = [
@@ -64,13 +93,22 @@ export const WorldConfigFormStep1Page: React.FC<WorldConfigFormStep1Props> = ({ 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      layoutExtension: '',
-      registryExtension: '',
+      layoutExtension: worldConfig?.layoutExtension || '',
+      registryExtension: worldConfig?.registryExtension || '',
     },
     mode: 'onChange',
   });
 
-  const { isDirty, isValid } = form.formState;
+  const { isValid } = form.formState;
+
+  useEffect(() => {
+    if (worldConfig?.layoutExtension) {
+      form.setValue('layoutExtension', worldConfig?.layoutExtension);
+    }
+    if (worldConfig?.registryExtension) {
+      form.setValue('registryExtension', worldConfig?.registryExtension);
+    }
+  }, [worldConfig, form]);
 
   const handleCancel = () => {
     navigate({ to: '/dashboard' });
@@ -113,7 +151,11 @@ export const WorldConfigFormStep1Page: React.FC<WorldConfigFormStep1Props> = ({ 
                     )}
                   </FormDescription>
 
-                  <Select onValueChange={field.onChange} required>
+                  <Select
+                    onValueChange={field.onChange}
+                    required
+                    value={field.value || worldConfig?.layoutExtension}
+                  >
                     <FormControl>
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder={t('Select a layout extension')} />
@@ -143,7 +185,11 @@ export const WorldConfigFormStep1Page: React.FC<WorldConfigFormStep1Props> = ({ 
                       `Choose the default extension app where you will find installable extensions and publish yours.`,
                     )}
                   </FormDescription>
-                  <Select onValueChange={field.onChange} required>
+                  <Select
+                    onValueChange={field.onChange}
+                    required
+                    value={field.value || worldConfig?.registryExtension}
+                  >
                     <FormControl>
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder={t('Select a registry extension')} />
@@ -166,7 +212,7 @@ export const WorldConfigFormStep1Page: React.FC<WorldConfigFormStep1Props> = ({ 
             <Button className="px-6" variant="outline" onClick={handleCancel}>
               {t('Cancel')}
             </Button>
-            <Button type="submit" className="px-6" disabled={!isDirty || !isValid}>
+            <Button type="submit" className="px-6" disabled={!isValid}>
               {t('Next')}
             </Button>
           </CardFooter>

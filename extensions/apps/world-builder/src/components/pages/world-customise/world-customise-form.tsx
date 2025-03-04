@@ -19,7 +19,7 @@ import {
   ErrorLoaderFooter,
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
 
-export const WorldCustomizeFormPage: React.FC = () => {
+export const WorldCustomiseFormPage: React.FC = () => {
   const { t } = useTranslation('app-extensions');
 
   const { baseRouteName, getCorePlugins } = useRootComponentProps();
@@ -53,7 +53,7 @@ export const WorldCustomizeFormPage: React.FC = () => {
       <ErrorLoader type="not-authenticated">
         <ErrorLoaderTitle>{`${t('Uh-oh')}! ${t('You are not connected')}!`}</ErrorLoaderTitle>
         <ErrorLoaderDescription>
-          {`${t('To create a world configuration you must be connected')} ⚡️`}
+          {`${t('To customise your world you must be connected')} ⚡️`}
         </ErrorLoaderDescription>
         <ErrorLoaderFooter>
           <Button variant="default" size="default" onClick={handleConnectButtonClick}>
