@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
@@ -49,6 +49,8 @@ import {
   useCreateAkashaWorldConfigMutation,
   useGetAppsQuery,
   useGetWorldByIdQuery,
+  useGetWorldConfigQuery,
+  useDeleteAkashaWorldConfigExtensionMutation,
 } from '@akashaorg/ui-core-hooks/lib/generated';
 import {
   selectAkashaApps,
@@ -60,6 +62,8 @@ import { X } from 'lucide-react';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import getSDK from '@akashaorg/core-sdk';
 import { selectWorldData } from '@akashaorg/ui-core-hooks/lib/selectors/get-world-by-id-query';
+import { selectWorldConfigData } from '@akashaorg/ui-core-hooks/lib/selectors/get-world-config-query';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 
 type WorldConfigFormStep2Props = {
   worldId: string;
@@ -106,6 +110,17 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
   const worldData = selectWorldData(getWorldByIdReq);
 
   const {
+    data: worldConfigReq,
+    loading: loadingWorldConfigQuery,
+    error: worldConfigError,
+  } = useGetWorldConfigQuery({
+    variables: { worldID: worldData?.id },
+    skip: !worldData?.id,
+  });
+
+  const worldConfig = selectWorldConfigData(worldConfigReq);
+
+  const {
     data: getAppsReq,
     loading: loadingGetAppsQuery,
     error: getAppsError,
@@ -120,6 +135,22 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
   const pageInfo = selectAkashaAppsPageInfo(getAppsReq);
 
   const [selectedExtensions, setSelectedExtensions] = useState([]);
+
+  // if there is already a configuration for this world prefill the extensions in the UI
+  useEffect(() => {
+    if (worldConfig?.extensions?.edges?.length > 0) {
+      const extensions = worldConfig.extensions.edges?.map(extNode => {
+        const extData = extNode?.node;
+        return {
+          id: extData.extensionID,
+          ...extData.extension,
+        };
+      });
+      setSelectedExtensions(prev => {
+        return [...new Set([...prev, ...extensions])];
+      });
+    }
+  }, [worldConfig?.extensions]);
 
   const addExtension = ext => {
     setSelectedExtensions(prev => {
@@ -137,41 +168,100 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
 
   const [homepage, setHomepage] = useState(null);
 
-  const [createWorldConfigExtensionMutation, { loading: loadingWorldConfigExtensionMutation }] =
-    useCreateAkashaWorldConfigExtensionMutation({
-      context: { source: sdk.current.services.gql.contextSources.composeDB },
-      onError: error => {
-        showErrorNotification(
-          `${t(`Something went wrong when creating the world configuration extensions`)}.`,
-          error.message,
-        );
-      },
+  const [
+    createWorldConfigExtensionMutation,
+    { loading: loadingWorldConfigCreateExtensionMutation },
+  ] = useCreateAkashaWorldConfigExtensionMutation({
+    context: { source: sdk.current.services.gql.contextSources.composeDB },
+    onError: error => {
+      showErrorNotification(
+        `${t(`Something went wrong when creating the world configuration extensions`)}.`,
+        error.message,
+      );
+    },
+  });
+
+  const [
+    deleteWorldConfigExtensionMutation,
+    { loading: loadingWorldConfigUpdateExtensionMutation },
+  ] = useDeleteAkashaWorldConfigExtensionMutation({
+    context: { source: sdk.current.services.gql.contextSources.composeDB },
+    onError: error => {
+      showErrorNotification(
+        `${t(`Something went wrong when deleting the world configuration extension`)}.`,
+        error.message,
+      );
+    },
+  });
+
+  const getUniqueExtensionsData = (worldConfigId: string) => {
+    const selectedExtensionsIDs = new Set(
+      selectedExtensions
+        ?.map(ext => ext.id)
+        .concat([formValue?.layoutExtension, formValue?.registryExtension]),
+    );
+
+    const oldExtensionsIDs = new Set(
+      worldConfig?.extensions?.edges?.map(ext => ext.node?.extensionID),
+    );
+
+    const newExtensionsIDs = selectedExtensionsIDs.difference(oldExtensionsIDs);
+
+    const oldExtensionsToBeRemovedSet = oldExtensionsIDs.difference(selectedExtensionsIDs);
+
+    const newExtensionsData = [...newExtensionsIDs].map(extensionID => {
+      const createdAt = worldConfig?.extensions.edges?.find(
+        extData => extData?.node?.extensionID === extensionID,
+      )?.node?.createdAt;
+      const worldConfigExtensionData = {
+        worldConfigID: worldConfigId,
+        extensionID: extensionID,
+        active: true,
+        createdAt: createdAt ?? new Date().toISOString(),
+      };
+      return worldConfigExtensionData;
     });
 
-  const getUniqueExtensionIds = () => {
-    const defaultExtensionsIDs = selectedExtensions
-      ?.map(ext => ext.id)
-      .concat([formValue?.layoutExtension, formValue?.registryExtension]);
-    return defaultExtensionsIDs;
+    const oldExtensionsData = worldConfig?.extensions?.edges?.map(ext => ext.node);
+
+    const extensionsToBeRemovedIds = [...oldExtensionsToBeRemovedSet].map(extensionID => {
+      const extData = oldExtensionsData?.find(ext => ext?.extensionID === extensionID);
+      if (extData) {
+        return extData.id;
+      }
+    });
+
+    return { newExtensionsData, extensionsToBeRemovedIds };
   };
 
-  const createExtensions = (worldConfigId: string, extensionIds: string[]) => {
+  const createExtensions = (worldConfigId: string) => {
+    const extensions = getUniqueExtensionsData(worldConfigId)?.newExtensionsData;
     return Promise.all(
-      [...new Set(extensionIds)]?.map(extensionID => {
-        const worldConfigExtensionData = {
-          worldConfigID: worldConfigId,
-          extensionID: extensionID,
-          active: true,
-          createdAt: new Date().toISOString(),
-        };
+      extensions.map(extData =>
         createWorldConfigExtensionMutation({
           variables: {
             i: {
-              content: worldConfigExtensionData,
+              content: extData,
             },
           },
-        });
-      }),
+        }),
+      ),
+    );
+  };
+
+  const deleteExtensions = (worldConfigId: string) => {
+    const extensions = getUniqueExtensionsData(worldConfigId)?.extensionsToBeRemovedIds;
+    return Promise.all(
+      extensions.map(extData =>
+        deleteWorldConfigExtensionMutation({
+          variables: {
+            i: {
+              id: extData,
+              shouldIndex: false,
+            },
+          },
+        }),
+      ),
     );
   };
 
@@ -190,8 +280,8 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
       context: { source: sdk.current.services.gql.contextSources.composeDB },
       onCompleted: async data => {
         const worldConfigId = data?.setAkashaWorldConfig?.document?.id;
-        const uniqueExtIds = getUniqueExtensionIds();
-        await createExtensions(worldConfigId, uniqueExtIds);
+        await createExtensions(worldConfigId);
+        await deleteExtensions(worldConfigId);
         navToConfigSuccessPage();
       },
       onError: error => {
@@ -206,10 +296,10 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
     const worldConfigData = {
       layoutExtension: formValue?.layoutExtension,
       registryExtension: formValue?.registryExtension,
-      homepageExtension: homepage,
+      homepageExtension: homepage || worldConfig?.homepageExtension,
       worldID: worldId,
       active: true,
-      createdAt: new Date().toISOString(),
+      createdAt: worldConfig?.createdAt ?? new Date().toISOString(),
     };
     createWorldConfigMutation({
       variables: {
@@ -262,57 +352,67 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
               {index => {
                 const extensionData = akashaApps[index];
                 return (
-                  <ExtensionCard
-                    extensionId={extensionData?.id}
-                    extensionType={extensionData?.applicationType}
-                    className="p-4"
-                  >
-                    <ExtensionCardAvatar>
-                      <ExtensionCardAvatarImage
-                        src={transformSource(extensionData?.logoImage)?.src}
+                  <>
+                    <ExtensionCard className="p-4">
+                      <ExtensionCardAvatar size="lg" extensionId={extensionData?.id}>
+                        <ExtensionCardAvatarImage
+                          src={transformSource(extensionData?.logoImage)?.src}
+                        >
+                          <ExtensionCardAvatarFallback />
+                        </ExtensionCardAvatarImage>
+                      </ExtensionCardAvatar>
+                      <ExtensionCardContent>
+                        <ExtensionCardName>{extensionData?.displayName}</ExtensionCardName>
+                        <ProfileAvatarButton
+                          size="sm"
+                          profileDID={extensionData?.author?.akashaProfile?.did?.id}
+                        >
+                          <ProfileAvatarButtonAvatar>
+                            <ProfileAvatarButtonAvatarImage
+                              src={
+                                transformSource(
+                                  extensionData?.author?.akashaProfile?.avatar?.default,
+                                )?.src
+                              }
+                            />
+                            <ProfileAvatarButtonAvatarFallback />
+                          </ProfileAvatarButtonAvatar>
+                          <ProfileName>{extensionData?.author?.akashaProfile?.name}</ProfileName>
+                          <ProfileDidField />
+                        </ProfileAvatarButton>
+                        <ExtensionCardDescription>
+                          {extensionData?.description}
+                        </ExtensionCardDescription>
+                      </ExtensionCardContent>
+                      <ExtensionCardAction
+                        active={
+                          selectedExtensions.findIndex(
+                            selectedExtData => selectedExtData?.id === extensionData?.id,
+                          ) > -1
+                        }
                       >
-                        <ExtensionCardAvatarFallback />
-                      </ExtensionCardAvatarImage>
-                    </ExtensionCardAvatar>
-                    <ExtensionCardContent>
-                      <ExtensionCardName>{extensionData?.displayName}</ExtensionCardName>
-                      <ProfileAvatarButton
-                        size="sm"
-                        profileDID={extensionData?.author?.akashaProfile?.did?.id}
-                      >
-                        <ProfileAvatarButtonAvatar>
-                          <ProfileAvatarButtonAvatarImage
-                            src={
-                              transformSource(extensionData?.author?.akashaProfile?.avatar?.default)
-                                ?.src
-                            }
-                          />
-                          <ProfileAvatarButtonAvatarFallback />
-                        </ProfileAvatarButtonAvatar>
-                        <ProfileName>{extensionData?.author?.akashaProfile?.name}</ProfileName>
-                        <ProfileDidField />
-                      </ProfileAvatarButton>
-                      <ExtensionCardDescription>
-                        {extensionData?.description}
-                      </ExtensionCardDescription>
-                    </ExtensionCardContent>
-                    <ExtensionCardAction active={selectedExtensions.indexOf(extensionData) > -1}>
-                      <ExtensionCardActionInactive
-                        onClick={() => {
-                          addExtension(extensionData);
-                        }}
-                      >
-                        {t('Add')}
-                      </ExtensionCardActionInactive>
-                      <ExtensionCardActionActive
-                        onClick={() => {
-                          removeExtension(extensionData?.id);
-                        }}
-                      >
-                        {t('Added')}
-                      </ExtensionCardActionActive>
-                    </ExtensionCardAction>
-                  </ExtensionCard>
+                        <ExtensionCardActionInactive
+                          onClick={() => {
+                            addExtension(extensionData);
+                          }}
+                        >
+                          {t('Add')}
+                        </ExtensionCardActionInactive>
+                        <ExtensionCardActionActive
+                          onClick={() => {
+                            removeExtension(extensionData?.id);
+                          }}
+                        >
+                          {t('Added')}
+                        </ExtensionCardActionActive>
+                      </ExtensionCardAction>
+                    </ExtensionCard>
+                    {index < akashaApps?.length - 1 && (
+                      <Stack className="px-4">
+                        <Separator />
+                      </Stack>
+                    )}
+                  </>
                 );
               }}
             </InfiniteScrollList>
@@ -348,7 +448,11 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
               'Selecting an extension sets it as the default homepage when members enter the world.',
             )}
           </Typography>
-          <Select onValueChange={setHomepage} disabled={!selectedExtensions?.length}>
+          <Select
+            onValueChange={setHomepage}
+            disabled={!selectedExtensions?.length}
+            value={homepage || worldConfig?.homepageExtension}
+          >
             <SelectTrigger className="w-full">
               <SelectValue placeholder={t('Choose a homepage')} />
             </SelectTrigger>
@@ -370,7 +474,7 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
         <Button
           className="px-6"
           onClick={handleSave}
-          loading={loadingWorldConfigMutation || loadingWorldConfigExtensionMutation}
+          loading={loadingWorldConfigMutation || loadingWorldConfigCreateExtensionMutation}
         >
           {t('Save Config')}
         </Button>

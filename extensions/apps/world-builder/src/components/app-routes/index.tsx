@@ -14,7 +14,7 @@ import {
   WorldConfigFormStep1Page,
   WorldConfigFormStep2Page,
   ConfigSuccessPage,
-  WorldCustomizeFormPage,
+  WorldCustomiseFormPage,
   WorldCreateFormPage,
   CreateSuccessPage,
 } from '../pages/index';
@@ -59,7 +59,7 @@ const configSuccessRoute = createRoute({
     return { worldId: search.worldId as string, worldName: search.worldName as string };
   },
   component: () => {
-    const { worldId, worldName } = createSuccessRoute.useSearch();
+    const { worldId, worldName } = configSuccessRoute.useSearch();
     return (
       <CatchBoundary
         getResetKey={() => 'config_success_main_reset'}
@@ -168,7 +168,7 @@ const worldCustomizeRoute = createRoute({
         getResetKey={() => 'world_customize_form_main_reset'}
         errorComponent={RouteErrorComponent}
       >
-        <WorldCustomizeFormPage />
+        <WorldCustomiseFormPage />
       </CatchBoundary>
     );
   },

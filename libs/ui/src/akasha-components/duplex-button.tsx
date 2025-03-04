@@ -16,14 +16,10 @@ const useDuplexButtonContext = () => {
   return context;
 };
 
-const DuplexButton = ({
-  children,
-  active,
-  ...props
-}: React.ComponentProps<'div'> & {
-  active: boolean;
-  children: React.ReactNode;
-}) => {
+const DuplexButton = React.forwardRef<
+  React.ElementRef<'div'>,
+  React.ComponentProps<'div'> & { active: boolean; children: React.ReactNode }
+>(({ children, active, ...props }, ref) => {
   const [hovered, setHovered] = React.useState(false);
   return (
     <DuplexButtonContext.Provider
@@ -33,42 +29,55 @@ const DuplexButton = ({
         onHovered: hovered => setHovered(hovered),
       }}
     >
-      <div data-slot="duplex-button" {...props}>
+      <div ref={ref} data-slot="duplex-button" {...props}>
         {children}
       </div>
     </DuplexButtonContext.Provider>
   );
-};
+});
 
-const DuplexButtonActive = ({
-  ...props
-}: React.ComponentProps<'button'> & React.ComponentProps<typeof Button>) => {
+const DuplexButtonActive = React.forwardRef<
+  React.ElementRef<'button'>,
+  React.ComponentProps<'button'> & React.ComponentProps<typeof Button>
+>(({ ...props }, ref) => {
   const { active, hovered, onHovered } = useDuplexButtonContext();
   return (
     active &&
     !hovered && (
-      <Button data-slot="duplex-button-active" onMouseEnter={() => onHovered(true)} {...props} />
+      <Button
+        ref={ref}
+        data-slot="duplex-button-active"
+        onMouseEnter={() => onHovered(true)}
+        {...props}
+      />
     )
   );
-};
+});
 
-const DuplexButtonHover = ({
-  ...props
-}: React.ComponentProps<'button'> & React.ComponentProps<typeof Button>) => {
+const DuplexButtonHover = React.forwardRef<
+  React.ElementRef<'button'>,
+  React.ComponentProps<'button'> & React.ComponentProps<typeof Button>
+>(({ ...props }, ref) => {
   const { active, hovered, onHovered } = useDuplexButtonContext();
   return (
     active &&
     hovered && (
-      <Button data-slot="duplex-button-hover" onMouseLeave={() => onHovered(false)} {...props} />
+      <Button
+        ref={ref}
+        data-slot="duplex-button-hover"
+        onMouseLeave={() => onHovered(false)}
+        {...props}
+      />
     )
   );
-};
+});
 
-const DuplexButtonInactive = ({
-  ...props
-}: React.ComponentProps<'button'> & React.ComponentProps<typeof Button>) => {
+const DuplexButtonInactive = React.forwardRef<
+  React.ElementRef<'button'>,
+  React.ComponentProps<'button'> & React.ComponentProps<typeof Button>
+>(({ ...props }, ref) => {
   const { active } = useDuplexButtonContext();
-  return !active && <Button data-slot="duplex-button-inactive" {...props} />;
-};
+  return !active && <Button ref={ref} data-slot="duplex-button-inactive" {...props} />;
+});
 
 export { DuplexButton, DuplexButtonActive, DuplexButtonHover, DuplexButtonInactive };
