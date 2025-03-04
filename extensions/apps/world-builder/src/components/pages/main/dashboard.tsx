@@ -169,8 +169,9 @@ export const DashboardPage: React.FC = () => {
         <CardContent className="flex-col gap-4">
           <Stack direction="row" spacing={4}>
             <ExtensionAvatar size="xl" extensionId={worldData?.id}>
-              <ExtensionAvatarImage src={transformSource(worldData?.icon?.default)?.src} />
-              <ExtensionAvatarFallback />
+              <ExtensionAvatarImage src={transformSource(worldData?.icon?.default)?.src}>
+                <ExtensionAvatarFallback />
+              </ExtensionAvatarImage>
             </ExtensionAvatar>
             <Stack direction="column" spacing={4}>
               <Stack direction="row" justifyContent="between">

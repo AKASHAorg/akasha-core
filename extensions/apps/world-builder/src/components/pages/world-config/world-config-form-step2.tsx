@@ -357,8 +357,9 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
                       <ExtensionCardAvatar size="lg" extensionId={extensionData?.id}>
                         <ExtensionCardAvatarImage
                           src={transformSource(extensionData?.logoImage)?.src}
-                        />
-                        <ExtensionCardAvatarFallback />
+                        >
+                          <ExtensionCardAvatarFallback />
+                        </ExtensionCardAvatarImage>
                       </ExtensionCardAvatar>
                       <ExtensionCardContent>
                         <ExtensionCardName>{extensionData?.displayName}</ExtensionCardName>
@@ -383,7 +384,13 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
                           {extensionData?.description}
                         </ExtensionCardDescription>
                       </ExtensionCardContent>
-                      <ExtensionCardAction active={selectedExtensions.indexOf(extensionData) > -1}>
+                      <ExtensionCardAction
+                        active={
+                          selectedExtensions.findIndex(
+                            selectedExtData => selectedExtData?.id === extensionData?.id,
+                          ) > -1
+                        }
+                      >
                         <ExtensionCardActionInactive
                           onClick={() => {
                             addExtension(extensionData);
@@ -400,7 +407,11 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
                         </ExtensionCardActionActive>
                       </ExtensionCardAction>
                     </ExtensionCard>
-                    {pageInfo?.hasNextPage && index < akashaApps?.length - 1 && <Separator />}
+                    {index < akashaApps?.length - 1 && (
+                      <Stack className="px-4">
+                        <Separator />
+                      </Stack>
+                    )}
                   </>
                 );
               }}
