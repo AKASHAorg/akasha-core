@@ -4,36 +4,52 @@ import { Image, ImageFallback } from '@/akasha-components/image';
 import { Card, CardTitle, CardDescription, CardFooter } from '@/akasha-components/card';
 import { cn } from '@/library/utils';
 
-const ErrorLoaderTitle = ({ className, ...props }: React.ComponentProps<'div'>) => (
-  <CardTitle data-slot="error-loader-title" className={cn('pt-4', className)} {...props} />
+const ErrorLoaderTitle = React.forwardRef<React.ElementRef<'div'>, React.ComponentProps<'div'>>(
+  ({ className, ...props }, ref) => (
+    <CardTitle
+      ref={ref}
+      data-slot="error-loader-title"
+      className={cn('pt-4', className)}
+      {...props}
+    />
+  ),
 );
 
-const ErrorLoaderDescription = ({ className, ...props }: React.ComponentProps<'div'>) => (
+const ErrorLoaderDescription = React.forwardRef<
+  React.ElementRef<'div'>,
+  React.ComponentProps<'div'>
+>(({ className, ...props }, ref) => (
   <CardDescription
+    ref={ref}
     data-slot="error-loader-description"
     className={cn('pt-2', className)}
     {...props}
   />
+));
+
+const ErrorLoaderFooter = React.forwardRef<React.ElementRef<'div'>, React.ComponentProps<'div'>>(
+  ({ className, ...props }, ref) => (
+    <CardFooter
+      ref={ref}
+      data-slot="error-loader-footer"
+      className={cn('justify-center', className)}
+      {...props}
+    />
+  ),
 );
 
-const ErrorLoaderFooter = ({ className, ...props }: React.ComponentProps<'div'>) => (
-  <CardFooter
-    data-slot="error-loader-footer"
-    className={cn('justify-center', className)}
-    {...props}
-  />
-);
-
-const ErrorLoader = ({
-  children,
-  publicImgPath = '/images',
-  type,
-  className,
-  ...props
-}: React.ComponentProps<'div'> & {
-  type: 'no-apps' | 'not-authenticated' | 'script-error' | 'page-not-found' | 'list-not-available';
-  publicImgPath?: string;
-}) => {
+const ErrorLoader = React.forwardRef<
+  React.ElementRef<'div'>,
+  React.ComponentProps<'div'> & {
+    type:
+      | 'no-apps'
+      | 'not-authenticated'
+      | 'script-error'
+      | 'page-not-found'
+      | 'list-not-available';
+    publicImgPath?: string;
+  }
+>(({ children, publicImgPath = '/images', type, className, ...props }, ref) => {
   let imageSrc: string;
 
   switch (type) {
@@ -55,7 +71,7 @@ const ErrorLoader = ({
   }
 
   return (
-    <Card data-slot="error-loader" className={cn(className)} {...props}>
+    <Card ref={ref} data-slot="error-loader" className={cn(className)} {...props}>
       <div className={cn('flex justify-center px-6')}>
         <Image
           src={imageSrc}
@@ -68,6 +84,6 @@ const ErrorLoader = ({
       {children}
     </Card>
   );
-};
+});
 
 export { ErrorLoader, ErrorLoaderTitle, ErrorLoaderDescription, ErrorLoaderFooter };

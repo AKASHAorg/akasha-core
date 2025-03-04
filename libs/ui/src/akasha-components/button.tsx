@@ -33,41 +33,50 @@ const buttonVariants = cva(
   },
 );
 
-function Button({
-  className,
-  variant,
-  size = 'default',
-  loading,
-  asChild = false,
-  type = 'button',
-  disabled,
-  children,
-  ...props
-}: React.ComponentProps<'button'> &
-  VariantProps<typeof buttonVariants> & {
-    loading?: boolean;
-    asChild?: boolean;
-  }) {
-  const Comp = asChild ? Slot : 'button';
+const Button = React.forwardRef<
+  React.ElementRef<'button'>,
+  React.ComponentProps<'button'> &
+    VariantProps<typeof buttonVariants> & {
+      loading?: boolean;
+      asChild?: boolean;
+    }
+>(
+  (
+    {
+      className,
+      variant,
+      size = 'default',
+      loading,
+      asChild = false,
+      type = 'button',
+      disabled,
+      children,
+      ...props
+    },
+    ref,
+  ) => {
+    const Comp = asChild ? Slot : 'button';
 
-  return (
-    <Comp
-      data-slot="button"
-      className={cn(
-        {
-          [typographyVariants({ variant: 'sm' })]: size === 'default',
-          [typographyVariants({ variant: 'xs' })]: size === 'sm',
-        },
-        buttonVariants({ variant, size, className }),
-        { 'p-0': variant === 'link' && asChild },
-      )}
-      type={type}
-      disabled={loading || disabled}
-      {...props}
-    >
-      {loading ? <Loader2 className="animate-spin" /> : children}
-    </Comp>
-  );
-}
+    return (
+      <Comp
+        ref={ref}
+        data-slot="button"
+        className={cn(
+          {
+            [typographyVariants({ variant: 'sm' })]: size === 'default',
+            [typographyVariants({ variant: 'xs' })]: size === 'sm',
+          },
+          buttonVariants({ variant, size, className }),
+          { 'p-0': variant === 'link' && asChild },
+        )}
+        type={type}
+        disabled={loading || disabled}
+        {...props}
+      >
+        {loading ? <Loader2 className="animate-spin" /> : children}
+      </Comp>
+    );
+  },
+);
 
 export { Button, buttonVariants };

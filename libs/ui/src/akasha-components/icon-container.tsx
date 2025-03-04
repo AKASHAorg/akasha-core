@@ -30,19 +30,16 @@ const iconContainerStyles = cva('flex items-center justify-center relative bg-mu
   },
 });
 
-const IconContainer = ({
-  variant,
-  size,
-  className,
-  showNotificationDot = false,
-  children,
-  ...props
-}: React.ComponentProps<'div'> &
-  VariantProps<typeof iconContainerStyles> & {
-    showNotificationDot?: boolean; // If true, show the notification dot
-  }) => {
+const IconContainer = React.forwardRef<
+  React.ElementRef<'div'>,
+  React.ComponentProps<'div'> &
+    VariantProps<typeof iconContainerStyles> & {
+      showNotificationDot?: boolean;
+    }
+>(({ variant, size, className, showNotificationDot = false, children, ...props }, ref) => {
   return (
     <div
+      ref={ref}
       data-slot="icon-container"
       className={iconContainerStyles({ variant, size, className })}
       {...props}
@@ -58,6 +55,6 @@ const IconContainer = ({
       )}
     </div>
   );
-};
+});
 
 export { IconContainer };

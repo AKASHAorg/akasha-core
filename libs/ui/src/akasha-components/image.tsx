@@ -15,10 +15,16 @@ const useImageContext = () => {
   return context;
 };
 
-const ImageFallback = ({ children }: React.ComponentProps<'span'>) => {
-  const { error } = useImageContext();
-  return error && <span data-slot="image-fallback">{children}</span>;
-};
+const ImageFallback = React.forwardRef<React.ElementRef<'span'>, React.ComponentProps<'span'>>(
+  ({ children, ...props }, ref) => {
+    const { error } = useImageContext();
+    return error ? (
+      <span ref={ref} data-slot="image-fallback" {...props}>
+        {children}
+      </span>
+    ) : null;
+  },
+);
 
 const DelayLoad = ({
   children,
@@ -37,18 +43,10 @@ const DelayLoad = ({
   return show ? <>{children}</> : null;
 };
 
-const Image = ({
-  src,
-  alt,
-  showLoadingIndicator,
-  className,
-  children,
-  onLoad,
-  onError,
-  ...props
-}: React.ComponentProps<'img'> & {
-  showLoadingIndicator?: boolean;
-}) => {
+const Image = React.forwardRef<
+  React.ElementRef<'img'>,
+  React.ComponentProps<'img'> & { showLoadingIndicator?: boolean }
+>(({ src, alt, showLoadingIndicator, className, children, onLoad, onError, ...props }, ref) => {
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(false);
 
@@ -65,7 +63,7 @@ const Image = ({
 
   return (
     <ImageContext.Provider value={{ error }}>
-      <div data-slot="image-container" className="relative">
+      <div ref={ref} data-slot="image-container" className="relative">
         {showLoadingIndicator && loading && (
           <DelayLoad>
             <div className="absolute inset-0 flex items-center justify-center">
@@ -97,6 +95,6 @@ const Image = ({
       </div>
     </ImageContext.Provider>
   );
-};
+});
 
 export { Image, ImageFallback };
