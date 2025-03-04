@@ -27,13 +27,12 @@ const variantToIconMap = {
   destructive: <CircleX size={16} className="text-destructive" />,
 };
 
-const InlineNotification = ({
-  className,
-  variant = 'info',
-  children,
-  ...props
-}: React.ComponentProps<'div'> & VariantProps<typeof inlineNotificationVariants>) => (
+const InlineNotification = React.forwardRef<
+  React.ElementRef<'div'>,
+  React.ComponentProps<'div'> & VariantProps<typeof inlineNotificationVariants>
+>(({ className, variant = 'info', children, ...props }, ref) => (
   <div
+    ref={ref}
     data-slot="inline-notification"
     role="alert"
     className={cn(inlineNotificationVariants({ variant }), className)}
@@ -42,10 +41,14 @@ const InlineNotification = ({
     {variant && variantToIconMap[variant]}
     {children}
   </div>
-);
+));
 
-const InlineNotificationTitle = ({ className, ...props }: React.ComponentProps<'h5'>) => (
+const InlineNotificationTitle = React.forwardRef<
+  React.ElementRef<'h5'>,
+  React.ComponentProps<'h5'>
+>(({ className, ...props }, ref) => (
   <h5
+    ref={ref}
     data-slot="inline-notification-title"
     className={cn(
       'col-start-2 line-clamp-1 min-h-4',
@@ -57,10 +60,14 @@ const InlineNotificationTitle = ({ className, ...props }: React.ComponentProps<'
   >
     {props.children}
   </h5>
-);
+));
 
-const InlineNotificationDescription = ({ className, ...props }: React.ComponentProps<'div'>) => (
+const InlineNotificationDescription = React.forwardRef<
+  React.ElementRef<'div'>,
+  React.ComponentProps<'div'>
+>(({ className, ...props }, ref) => (
   <div
+    ref={ref}
     data-slot="inline-notification-description"
     className={cn(
       'col-start-2 grid justify-items-start gap-1',
@@ -69,6 +76,6 @@ const InlineNotificationDescription = ({ className, ...props }: React.ComponentP
     )}
     {...props}
   />
-);
+));
 
 export { InlineNotification, InlineNotificationTitle, InlineNotificationDescription };
