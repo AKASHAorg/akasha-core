@@ -40,8 +40,15 @@ import {
   ExtensionAvatarFallback,
   ExtensionAvatarImage,
 } from '@/ui/extension-avatar';
+import {
+  ProfileAvatarButton,
+  ProfileAvatarButtonAvatar,
+  ProfileAvatarButtonAvatarFallback,
+  ProfileAvatarButtonAvatarImage,
+  ProfileDidField,
+  ProfileName,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
 import { Image } from '@akashaorg/ui/lib/akasha-components/image';
-import { IconContainer } from '@akashaorg/ui/lib/akasha-components/icon-container';
 
 export const DashboardPage: React.FC = () => {
   const navigate = useNavigate();
@@ -119,6 +126,20 @@ export const DashboardPage: React.FC = () => {
     navigate({ to: '/world-create-form' });
   };
 
+  const handleNavToProfile = (profileDID: string) => {
+    navigateTo({
+      appName: '@akashaorg/app-profile',
+      getNavigationUrl: () => `/${profileDID}`,
+    });
+  };
+
+  const handleNavToApp = (extensionID: string) => {
+    navigateTo({
+      appName: '@akashaorg/app-extensions',
+      getNavigationUrl: () => `info/${extensionID}`,
+    });
+  };
+
   const getExtensionDataById = (extId: string) => {
     const extension = worldConfigExtensions?.find(ext => ext.extensionID === extId);
     return extension?.extension;
@@ -191,11 +212,9 @@ export const DashboardPage: React.FC = () => {
           <Stack direction="column" spacing={4}>
             <Stack direction="row" justifyContent="between" alignItems="center">
               <Typography variant="h6">{t('World Creation')}</Typography>
-              <button onClick={handleNavToWorldCreate}>
-                <IconContainer className="bg-secondary">
-                  <Pencil />
-                </IconContainer>
-              </button>
+              <Button variant="secondary" size="icon" onClick={handleNavToWorldCreate}>
+                <Pencil />
+              </Button>
             </Stack>
             {worldData?.extensionPublishers?.length > 0 && (
               <Stack direction="column" spacing={2}>
@@ -204,9 +223,20 @@ export const DashboardPage: React.FC = () => {
                 </Typography>
                 <div className="flex flex-wrap gap-2">
                   {worldData?.extensionPublishers?.map((extPublisher, idx) => (
-                    <Typography key={idx} variant="sm">
-                      {extPublisher?.id}
-                    </Typography>
+                    <ProfileAvatarButton
+                      key={idx}
+                      profileDID={extPublisher?.akashaProfile?.did?.id}
+                      onClick={() => handleNavToProfile(extPublisher?.akashaProfile?.did?.id)}
+                    >
+                      <ProfileAvatarButtonAvatar>
+                        <ProfileAvatarButtonAvatarImage
+                          src={transformSource(extPublisher?.akashaProfile?.avatar?.default)?.src}
+                        />
+                        <ProfileAvatarButtonAvatarFallback />
+                      </ProfileAvatarButtonAvatar>
+                      <ProfileName>{extPublisher?.akashaProfile?.name}</ProfileName>
+                      <ProfileDidField />
+                    </ProfileAvatarButton>
                   ))}
                 </div>
               </Stack>
@@ -238,11 +268,9 @@ export const DashboardPage: React.FC = () => {
               <Typography variant="h6">{t('World Config')}</Typography>
 
               {worldConfig?.id ? (
-                <button onClick={handleNavToConfigForm}>
-                  <IconContainer className="bg-secondary">
-                    <Pencil />
-                  </IconContainer>
-                </button>
+                <Button variant="secondary" size="icon" onClick={handleNavToConfigForm}>
+                  <Pencil />
+                </Button>
               ) : (
                 <Button onClick={handleNavToConfigForm}>{t('Configure World')}</Button>
               )}
@@ -251,17 +279,27 @@ export const DashboardPage: React.FC = () => {
               <Typography variant="sm" bold>
                 {t('Layout')}
               </Typography>
-              <Typography variant="sm">
+              <Button
+                variant="link"
+                onClick={() =>
+                  handleNavToApp(getExtensionDataById(worldConfig?.layoutExtension)?.id)
+                }
+              >
                 {getExtensionDataById(worldConfig?.layoutExtension)?.displayName}
-              </Typography>
+              </Button>
             </Stack>
             <Stack direction="column" spacing={2}>
               <Typography variant="sm" bold>
                 {t('Extension App')}
               </Typography>
-              <Typography variant="sm">
+              <Button
+                variant="link"
+                onClick={() =>
+                  handleNavToApp(getExtensionDataById(worldConfig?.registryExtension)?.id)
+                }
+              >
                 {getExtensionDataById(worldConfig?.registryExtension)?.displayName}
-              </Typography>
+              </Button>
             </Stack>
             <Stack direction="column" spacing={2}>
               <Typography variant="sm" bold>
@@ -269,9 +307,13 @@ export const DashboardPage: React.FC = () => {
               </Typography>
               <div className="flex flex-wrap gap-2">
                 {worldConfigExtensions?.map((extension, idx) => (
-                  <Typography key={idx} variant="sm">
+                  <Button
+                    key={idx}
+                    variant="link"
+                    onClick={() => handleNavToApp(extension.extensionID)}
+                  >
                     {extension?.extension?.displayName}
-                  </Typography>
+                  </Button>
                 ))}
               </div>
             </Stack>
@@ -279,9 +321,14 @@ export const DashboardPage: React.FC = () => {
               <Typography variant="sm" bold>
                 {t('Homepage')}
               </Typography>
-              <Typography variant="sm">
+              <Button
+                variant="link"
+                onClick={() =>
+                  handleNavToApp(getExtensionDataById(worldConfig?.homepageExtension)?.id)
+                }
+              >
                 {getExtensionDataById(worldConfig?.homepageExtension)?.displayName}
-              </Typography>
+              </Button>
             </Stack>
           </Stack>
           <Separator />
@@ -289,11 +336,9 @@ export const DashboardPage: React.FC = () => {
             <Stack direction="row" justifyContent="between" alignItems="center">
               <Typography variant="h6">{t('World Customisation')}</Typography>
               {worldMetaInfo?.id ? (
-                <button onClick={handleNavToCustomiseForm}>
-                  <IconContainer className="bg-secondary">
-                    <Pencil />
-                  </IconContainer>
-                </button>
+                <Button variant="secondary" size="icon" onClick={handleNavToCustomiseForm}>
+                  <Pencil />
+                </Button>
               ) : (
                 <Button onClick={handleNavToCustomiseForm}>{t('Customise World')}</Button>
               )}
