@@ -50,8 +50,8 @@ export const WorldConfigFormStep1Page: React.FC<WorldConfigFormStep1Props> = ({ 
 
   const {
     data: getWorldByIdReq,
-    loading: loadingWorldByIdQuery,
-    error: getWorldByIdError,
+    // loading: loadingWorldByIdQuery,
+    // error: getWorldByIdError,
   } = useGetWorldByIdQuery({
     variables: {
       id: worldId,
@@ -62,8 +62,8 @@ export const WorldConfigFormStep1Page: React.FC<WorldConfigFormStep1Props> = ({ 
 
   const {
     data: worldConfigReq,
-    loading: loadingWorldConfigQuery,
-    error: worldConfigError,
+    // loading: loadingWorldConfigQuery,
+    // error: worldConfigError,
   } = useGetWorldConfigQuery({
     variables: { worldID: worldData?.id },
     skip: !worldData?.id,
