@@ -90,6 +90,7 @@ export const filterExtensionsByLocation = (extNames: string[], worldConfig: Worl
   // if registryOverrides is undefined then it means that all the extensions are remote
   if (!worldConfig.registryOverrides) {
     return {
+      local: [],
       remote: extNames.map(ext => ({ name: ext })),
     };
   }
