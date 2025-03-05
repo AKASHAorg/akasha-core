@@ -93,12 +93,10 @@ export const filterExtensionsByLocation = (extNames: string[], worldConfig: Worl
       remote: extNames.map(ext => ({ name: ext })),
     };
   }
-
   const result = {
     remote: [] as { name: string }[],
     local: [] as (Partial<AkashaApp> & { source: string; isLocal: boolean })[],
   };
-  
   extNames.forEach(ext => {
     const localExtension = worldConfig.registryOverrides.find(extension => extension.name === ext);
     if (localExtension) {
