@@ -173,7 +173,7 @@ const SidebarComponent: React.FC<unknown> = () => {
   /**
    * this assigns the corresponding icons to the social links from root components
    */
-  const modSocialLinks = socialLinks.map(el => {
+  const modSocialLinks = socialLinks?.map(el => {
     if (el.icon === 'Github') return { ...el, icon: <Github /> };
     if (el.icon === 'Discord') return { ...el, icon: <Discord /> };
     if (el.icon === 'Telegram') return { ...el, icon: <Telegram /> };
@@ -236,7 +236,7 @@ const SidebarComponent: React.FC<unknown> = () => {
         {!dismissed && (
           <SidebarCTACard onClickCTAButton={handleClickExplore} onDismissCard={dismissCard} />
         )}
-        {modSocialLinks.length > 0 && (
+        {modSocialLinks?.length > 0 && (
           <Stack className="px-8 py-4 border-t-1 border(grey9 dark:grey3)">
             <Text variant="footnotes2">{t('Get in touch')}</Text>
             <Stack direction="row" spacing={4} className="w-fit h-fit mt-6">

@@ -50,8 +50,8 @@ export const WorldConfigFormStep1Page: React.FC<WorldConfigFormStep1Props> = ({ 
 
   const {
     data: getWorldByIdReq,
-    loading: loadingWorldByIdQuery,
-    error: getWorldByIdError,
+    // loading: loadingWorldByIdQuery,
+    // error: getWorldByIdError,
   } = useGetWorldByIdQuery({
     variables: {
       id: worldId,
@@ -62,8 +62,8 @@ export const WorldConfigFormStep1Page: React.FC<WorldConfigFormStep1Props> = ({ 
 
   const {
     data: worldConfigReq,
-    loading: loadingWorldConfigQuery,
-    error: worldConfigError,
+    // loading: loadingWorldConfigQuery,
+    // error: worldConfigError,
   } = useGetWorldConfigQuery({
     variables: { worldID: worldData?.id },
     skip: !worldData?.id,
@@ -81,7 +81,7 @@ export const WorldConfigFormStep1Page: React.FC<WorldConfigFormStep1Props> = ({ 
   const layoutExtensionOptions = [
     {
       label: 'Akasha World Default Layout',
-      value: 'k2t6wzhkhabz0ypl6g42iejy2klea2gdilrw23pow1irm0uc8nem5klh66gle7',
+      value: 'k2t6wzhkhabz43vvkorvxxtc9qapgkgeyhgq9sakaixbslif3gc1bekjvl0st3',
     },
   ];
 
