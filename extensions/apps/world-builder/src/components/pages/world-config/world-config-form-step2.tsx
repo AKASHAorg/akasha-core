@@ -70,7 +70,7 @@ type WorldConfigFormStep2Props = {
 };
 
 export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ worldId }) => {
-  const { t } = useTranslation('app-extensions');
+  const { t } = useTranslation('app-world-builder');
 
   const navigate = useNavigate();
   const { uiEvents } = useRootComponentProps();

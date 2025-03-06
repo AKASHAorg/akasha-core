@@ -29,7 +29,7 @@ type WorldConfigMainPageProps = {
 };
 
 export const WorldConfigMainPage: React.FC<WorldConfigMainPageProps> = ({ worldId }) => {
-  const { t } = useTranslation('app-extensions');
+  const { t } = useTranslation('app-world-builder');
 
   const { baseRouteName, getCorePlugins } = useRootComponentProps();
   const navigateTo = getCorePlugins().routing.navigateTo;

@@ -55,7 +55,7 @@ import {
 import { selectWorldData } from '@akashaorg/ui-core-hooks/lib/selectors/get-worlds-by-creator-did-query';
 
 export const WorldCreateFormPage: React.FC = () => {
-  const { t } = useTranslation('app-extensions');
+  const { t } = useTranslation('app-world-builder');
 
   const { uiEvents, baseRouteName, getCorePlugins } = useRootComponentProps();
 

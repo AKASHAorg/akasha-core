@@ -47,7 +47,7 @@ import {
   ProfileAvatarButtonAvatarImage,
   ProfileDidField,
   ProfileName,
-} from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
+} from '@/ui/profile-avatar-button';
 import { Image } from '@akashaorg/ui/lib/akasha-components/image';
 
 export const DashboardPage: React.FC = () => {
@@ -136,7 +136,7 @@ export const DashboardPage: React.FC = () => {
   const handleNavToApp = (extensionID: string) => {
     navigateTo({
       appName: '@akashaorg/app-extensions',
-      getNavigationUrl: () => `info/${extensionID}`,
+      getNavigationUrl: () => `/info/${extensionID}`,
     });
   };
 
@@ -225,8 +225,8 @@ export const DashboardPage: React.FC = () => {
                   {worldData?.extensionPublishers?.map((extPublisher, idx) => (
                     <ProfileAvatarButton
                       key={idx}
-                      profileDID={extPublisher?.akashaProfile?.did?.id}
-                      onClick={() => handleNavToProfile(extPublisher?.akashaProfile?.did?.id)}
+                      profileDID={extPublisher?.id}
+                      onClick={() => handleNavToProfile(extPublisher?.id)}
                     >
                       <ProfileAvatarButtonAvatar>
                         <ProfileAvatarButtonAvatarImage
@@ -279,12 +279,7 @@ export const DashboardPage: React.FC = () => {
               <Typography variant="sm" bold>
                 {t('Layout')}
               </Typography>
-              <Button
-                variant="link"
-                onClick={() =>
-                  handleNavToApp(getExtensionDataById(worldConfig?.layoutExtension)?.id)
-                }
-              >
+              <Button variant="link" onClick={() => handleNavToApp(worldConfig?.layoutExtension)}>
                 {getExtensionDataById(worldConfig?.layoutExtension)?.displayName}
               </Button>
             </Stack>
@@ -292,12 +287,7 @@ export const DashboardPage: React.FC = () => {
               <Typography variant="sm" bold>
                 {t('Extension App')}
               </Typography>
-              <Button
-                variant="link"
-                onClick={() =>
-                  handleNavToApp(getExtensionDataById(worldConfig?.registryExtension)?.id)
-                }
-              >
+              <Button variant="link" onClick={() => handleNavToApp(worldConfig?.registryExtension)}>
                 {getExtensionDataById(worldConfig?.registryExtension)?.displayName}
               </Button>
             </Stack>

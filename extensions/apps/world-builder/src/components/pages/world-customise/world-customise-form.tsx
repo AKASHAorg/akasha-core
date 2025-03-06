@@ -24,7 +24,6 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -35,10 +34,15 @@ import { Input } from '@akashaorg/ui/lib/akasha-components/input';
 import { Textarea } from '@akashaorg/ui/lib/akasha-components/textarea';
 import { Badge } from '@akashaorg/ui/lib/akasha-components/badge';
 import { X } from 'lucide-react';
+import { SocialLink } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { SocialLinks } from './SocialLinks';
 
-const MAX_KEYWORDS = 32;
-
-const MIN_KEYWORD_CHARACTERS = 3;
+export type WorldCustomiseFormValues = {
+  description?: string;
+  keywords?: string[];
+  guidelinesURL?: string;
+  socialLinks?: SocialLink[];
+};
 
 export enum FieldName {
   description = 'description',
@@ -48,7 +52,7 @@ export enum FieldName {
 }
 
 export const WorldCustomiseFormPage: React.FC = () => {
-  const { t } = useTranslation('app-extensions');
+  const { t } = useTranslation('app-world-builder');
 
   const { baseRouteName, getCorePlugins } = useRootComponentProps();
   const navigate = useNavigate();
@@ -86,24 +90,27 @@ export const WorldCustomiseFormPage: React.FC = () => {
           message: t('Keywords must be less than 48 characters.'),
         }),
       )
-      .max(32, { message: t('Must have maximum of 32 keywords') }),
+      .max(32, { message: t('Must have maximum of 32 keywords') })
+      .optional(),
     guidelinesURL: z.string().url({ message: 'Must be URL' }).optional().or(z.literal('')),
-    socialLinks: z.array(
-      z.object({
-        name: z
-          .string()
-          .min(2, {
-            message: t('Social links name must be at least 2 characters.'),
-          })
-          .max(48, {
-            message: t('Social links name must be less than 48 characters.'),
-          }),
-        href: z.string().url({ message: 'Must be URL' }),
-      }),
-    ),
+    socialLinks: z
+      .array(
+        z.object({
+          name: z
+            .string()
+            .min(2, {
+              message: t('Social links name must be at least 2 characters.'),
+            })
+            .max(48, {
+              message: t('Social links name must be less than 48 characters.'),
+            }),
+          href: z.string().url({ message: 'Must be URL' }),
+        }),
+      )
+      .optional(),
   });
 
-  const formDefaultValues = useMemo(() => {
+  const formDefaultValues: WorldCustomiseFormValues = useMemo(() => {
     return {
       description: '',
       keywords: [],
@@ -112,7 +119,7 @@ export const WorldCustomiseFormPage: React.FC = () => {
     };
   }, []);
 
-  const form = useForm<z.infer<typeof FormSchema>>({
+  const form = useForm<WorldCustomiseFormValues>({
     resolver: zodResolver(FormSchema),
     defaultValues: formDefaultValues,
   });
@@ -188,36 +195,34 @@ export const WorldCustomiseFormPage: React.FC = () => {
                 return (
                   <FormItem>
                     <FormLabel>{t('World keywords')}</FormLabel>
-
                     <FormControl>
                       <Input onChange={onChange} placeholder={t('Add a keyword')} />
-                      {keywords?.length > 0 && (
-                        <div className="flex flex-wrap gap-2">
-                          {keywords.map((keyword, idx) => (
-                            <Badge key={idx} variant="outline">
-                              {keyword}
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="h-auto p-1 ml-2"
-                                onClick={() =>
-                                  setKeywords(prev =>
-                                    prev.filter(prevKeyword => prevKeyword !== keyword),
-                                  )
-                                }
-                              >
-                                <X className="h-3 w-3" />
-                              </Button>
-                            </Badge>
-                          ))}
-                        </div>
-                      )}
                     </FormControl>
+
                     <FormMessage />
                   </FormItem>
                 );
               }}
             />
+            {keywords?.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {keywords.map((keyword, idx) => (
+                  <Badge key={idx} variant="outline">
+                    {keyword}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-auto p-1 ml-2"
+                      onClick={() =>
+                        setKeywords(prev => prev.filter(prevKeyword => prevKeyword !== keyword))
+                      }
+                    >
+                      <X className="h-3 w-3" />
+                    </Button>
+                  </Badge>
+                ))}
+              </div>
+            )}
             <FormField
               control={form.control}
               name={FieldName.guidelinesURL}

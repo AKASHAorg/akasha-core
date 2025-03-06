@@ -1,76 +1,65 @@
 import React from 'react';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { LinkElement } from './link-element';
 import { PlusIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import { Controller, Control, useFieldArray } from 'react-hook-form';
-import { ExtensionEditStep2FormValues } from '..';
+import { Control, useFieldArray } from 'react-hook-form';
+import { WorldCustomiseFormValues } from '../world-customise-form';
+import { FieldName } from '../world-customise-form';
+import { FormField, FormItem, FormMessage } from '@akashaorg/ui/lib/akasha-components/form';
+import { useTranslation } from 'react-i18next';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 
-export type UsefulLinksProps = {
-  usefulLinksTitleLabel: string;
-  addNewLinkButtonLabel: string;
-  usefulLinksDescriptionLabel: string;
-  linkElementLabel?: string;
-  linkTitlePlaceholderLabel?: string;
-  customStyle?: string;
-  control: Control<ExtensionEditStep2FormValues>;
+export type SocialLinksProps = {
+  control: Control<WorldCustomiseFormValues>;
   onDeleteLink: () => void;
 };
 
-export const UsefulLinks: React.FC<UsefulLinksProps> = ({
-  usefulLinksTitleLabel,
-  addNewLinkButtonLabel,
-  usefulLinksDescriptionLabel,
-  linkElementLabel,
-  linkTitlePlaceholderLabel,
-  customStyle = '',
-  control,
-  onDeleteLink,
-}) => {
-  const { fields, append, remove } = useFieldArray({ control, name: 'links' });
+export const SocialLinks: React.FC<SocialLinksProps> = ({ control, onDeleteLink }) => {
+  const { t } = useTranslation('app-world-builder');
+
+  const { fields, append, remove } = useFieldArray({ control, name: FieldName.socialLinks });
 
   const onAddNew = () => {
-    if (fields?.length < 10) {
-      append({ href: '', label: '' });
+    if (fields?.length < 12) {
+      append({ href: '', name: '' });
     }
   };
 
   return (
-    <Stack direction="column" spacing={4} className={customStyle}>
+    <Stack direction="column" spacing={4}>
       <Stack spacing={1} direction="column">
         <Stack direction="row" spacing={2} justifyContent="between" alignItems="center">
-          <Text variant="h6" as="label">
-            {usefulLinksTitleLabel}
-          </Text>
+          <Typography variant="h6">{t('Social links')}</Typography>
           <Button variant="link" onClick={onAddNew}>
             {<PlusIcon />}
-            {addNewLinkButtonLabel}
+            {t('Link')}
           </Button>
         </Stack>
-        <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
-          {usefulLinksDescriptionLabel}
-        </Text>
+        <Typography variant="xs">
+          {t('Add up to 5 social links that would help people to get in touch with world creator.')}
+        </Typography>
       </Stack>
       {fields?.map((link, index) => {
         return (
-          <Controller
+          <FormField
             key={link.id}
             control={control}
-            name={`links.${index}`}
+            name={`socialLinks.${index}`}
             render={({ field: { value, onChange, ref }, fieldState: { error } }) => (
-              <LinkElement
-                linkElementLabel={linkElementLabel}
-                linkTitlePlaceholder={linkTitlePlaceholderLabel}
-                onDelete={() => {
-                  remove(index);
-                  onDeleteLink();
-                }}
-                value={{ ...value, _id: index + 1 }}
-                onChange={onChange}
-                error={error as unknown}
-                inputRef={ref}
-              />
+              <FormItem>
+                <LinkElement
+                  onDelete={() => {
+                    remove(index);
+                    onDeleteLink();
+                  }}
+                  value={{ ...value, _id: index + 1 }}
+                  onChange={onChange}
+                  error={error as unknown}
+                  inputRef={ref}
+                />
+                <FormMessage />
+              </FormItem>
             )}
             shouldUnregister={true}
             defaultValue={link}

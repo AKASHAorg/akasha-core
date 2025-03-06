@@ -44,7 +44,7 @@ type WorldConfigFormStep1Props = {
 };
 
 export const WorldConfigFormStep1Page: React.FC<WorldConfigFormStep1Props> = ({ worldId }) => {
-  const { t } = useTranslation('app-extensions');
+  const { t } = useTranslation('app-world-builder');
 
   const navigate = useNavigate();
 
