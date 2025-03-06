@@ -35,7 +35,7 @@ import { Textarea } from '@akashaorg/ui/lib/akasha-components/textarea';
 import { Badge } from '@akashaorg/ui/lib/akasha-components/badge';
 import { X } from 'lucide-react';
 import { SocialLink } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { SocialLinks } from './SocialLinks';
+import { SocialLinks } from './links';
 
 export type WorldCustomiseFormValues = {
   description?: string;
