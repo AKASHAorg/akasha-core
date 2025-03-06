@@ -87,6 +87,13 @@ export const getRemoteLatestExtensionInfos = async (
 };
 
 export const filterExtensionsByLocation = (extNames: string[], worldConfig: WorldConfig) => {
+  // if registryOverrides is undefined then it means that all the extensions are remote
+  if (!worldConfig.registryOverrides) {
+    return {
+      local: [],
+      remote: extNames.map(ext => ({ name: ext })),
+    };
+  }
   const result = {
     remote: [] as { name: string }[],
     local: [] as (Partial<AkashaApp> & { source: string; isLocal: boolean })[],
