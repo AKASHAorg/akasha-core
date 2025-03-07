@@ -168,7 +168,7 @@ const ExtensionCardActionActive = ({
       <Badge
         data-slot="extension-card-action-active"
         variant="secondary"
-        className={cn('[&_svg]:size-4 cursor-pointer', className)}
+        className={cn('[&_svg]:size-4 cursor-pointer rounded-full', className)}
         {...props}
       >
         <Check />
