@@ -195,7 +195,8 @@ const AutocompleteItem = React.forwardRef<
       onValueChange?.(newSelected);
       return;
     } else {
-      //TODO: revisit types
+      //TODO: revisit type
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       onValueChange?.(value as any);
       setSearchValue(searchValue);
       setOpen(false);
