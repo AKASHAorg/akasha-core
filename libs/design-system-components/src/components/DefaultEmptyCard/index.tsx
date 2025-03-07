@@ -2,11 +2,10 @@ import React from 'react';
 
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Image from '@akashaorg/design-system-core/lib/components/Image';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Image } from '@akashaorg/ui/lib/akasha-components/image';
 import { cn } from '@akashaorg/ui/lib/library/utils';
-
 type CardSize = { width?: string | number; height?: string | number };
 
 export type DefaultEmptyCardProps = {
@@ -51,7 +50,7 @@ const DefaultEmptyCard: React.FC<DefaultEmptyCardProps> = ({
       {assetName ? (
         <Image
           src={`${publicImagePath}/${assetName}.${assetExtension}`}
-          customStyle="w-[180px] h-[180px] m-auto my-4"
+          className="w-[180px] h-[180px] m-auto my-4"
         />
       ) : (
         <Card className={cn('bg-muted shrink-0 m-auto my-4', cardSize)} />

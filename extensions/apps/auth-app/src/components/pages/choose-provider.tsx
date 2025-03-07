@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import Image from '@akashaorg/design-system-core/lib/components/Image';
+
+import { Image } from '@akashaorg/ui/lib/akasha-components/image';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Walletconnect } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
@@ -29,7 +30,7 @@ const ChooseProvider: React.FC<unknown> = () => {
       </Text>
 
       <Stack className="self-center h-44 w-44">
-        <Image customStyle="object-contain" src="/images/auth.webp" />
+        <Image src="/images/auth.webp" />
       </Stack>
 
       <Stack spacing={2} className="md:px-2">
