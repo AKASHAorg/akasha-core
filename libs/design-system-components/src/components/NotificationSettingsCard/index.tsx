@@ -4,7 +4,7 @@ import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Image from '@akashaorg/design-system-core/lib/components/Image';
+import { Image } from '@akashaorg/ui/lib/akasha-components/image';
 
 const IMAGES = {
   notificationsDefault: '/images/notificationapp-welcome-min.webp',
@@ -42,7 +42,7 @@ const NotificationSettingsCard: React.FC<NotificationSettingsCardProps> = ({
   const content = (
     <Stack alignItems="center" className="p-5">
       <Image
-        customStyle="w-[180px] h-[180px] object-contain mb-4"
+        className="w-[180px] h-[180px] object-contain mb-4"
         src={IMAGES[image]}
         alt="Notification illustration"
       />

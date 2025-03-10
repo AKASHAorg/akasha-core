@@ -426,6 +426,19 @@ export const AkashaWorldConfigExtensionMFragmentDoc = /*#__PURE__*/ gql`
   }
 }
     `;
+export const AkashaWorldMetaInfoMFragmentDoc = /*#__PURE__*/ gql`
+    fragment AkashaWorldMetaInfoM on AkashaWorldMetaInfo {
+  id
+  socialLinks {
+    name
+    href
+  }
+  worldID
+  keywords
+  description
+  guidelinesUrl
+}
+    `;
 export const UserProfileFragmentDoc = /*#__PURE__*/ gql`
     fragment UserProfileFragment on AkashaProfile {
   id
@@ -560,6 +573,19 @@ export const AppReleaseFragmentDoc = /*#__PURE__*/ gql`
     property
     value
   }
+}
+    `;
+export const AkashaWorldMetaInfoFragmentDoc = /*#__PURE__*/ gql`
+    fragment AkashaWorldMetaInfoFragment on AkashaWorldMetaInfo {
+  id
+  socialLinks {
+    name
+    href
+  }
+  worldID
+  keywords
+  description
+  guidelinesUrl
 }
     `;
 export const AkashaWorldFragmentDoc = /*#__PURE__*/ gql`
@@ -1580,6 +1606,33 @@ export const DeleteAkashaWorldConfigExtensionDocument = /*#__PURE__*/ gql`
   }
 }
     `;
+export const CreateAkashaWorldMetaInfoDocument = /*#__PURE__*/ gql`
+    mutation CreateAkashaWorldMetaInfo($i: SetAkashaWorldMetaInfoInput!) {
+  setAkashaWorldMetaInfo(input: $i) {
+    document {
+      ...AkashaWorldMetaInfoM
+    }
+    clientMutationId
+  }
+}
+    ${AkashaWorldMetaInfoMFragmentDoc}`;
+export const UpdateAkashaWorldMetaInfoDocument = /*#__PURE__*/ gql`
+    mutation UpdateAkashaWorldMetaInfo($i: UpdateAkashaWorldMetaInfoInput!) {
+  updateAkashaWorldMetaInfo(input: $i) {
+    document {
+      ...AkashaWorldMetaInfoM
+    }
+    clientMutationId
+  }
+}
+    ${AkashaWorldMetaInfoMFragmentDoc}`;
+export const DeleteAkashaWorldMetaInfoDocument = /*#__PURE__*/ gql`
+    mutation DeleteAkashaWorldMetaInfo($i: EnableIndexingAkashaWorldMetaInfoInput!) {
+  enableIndexingAkashaWorldMetaInfo(input: $i) {
+    clientMutationId
+  }
+}
+    `;
 export const GetAppsDocument = /*#__PURE__*/ gql`
     query GetApps($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaAppFiltersInput, $sorting: AkashaAppSortingInput) {
   akashaAppIndex(
@@ -1815,6 +1868,17 @@ export const GetWorldConfigDocument = /*#__PURE__*/ gql`
 }
     ${AkashaWorldConfigFragmentDoc}
 ${AkashaWorldConfigExtensionFragmentDoc}`;
+export const GetWorldMetaInfoDocument = /*#__PURE__*/ gql`
+    query GetWorldMetaInfo($worldID: CeramicStreamID!, $creator: ID!) {
+  node(id: $creator) {
+    ... on CeramicAccount {
+      akashaWorldMetaInfo(with: {worldID: $worldID}) {
+        ...AkashaWorldMetaInfoFragment
+      }
+    }
+  }
+}
+    ${AkashaWorldMetaInfoFragmentDoc}`;
 export const GetWorldConfigByIdDocument = /*#__PURE__*/ gql`
     query GetWorldConfigByID($configID: ID!) {
   node(id: $configID) {
@@ -1845,15 +1909,7 @@ export const GetWorldFullInfoDocument = /*#__PURE__*/ gql`
       metaInfo(first: 1, account: $creator) {
         edges {
           node {
-            description
-            id
-            guidelinesUrl
-            socialLinks {
-              href
-              name
-            }
-            keywords
-            worldID
+            ...AkashaWorldMetaInfoFragment
           }
         }
       }
@@ -1872,7 +1928,8 @@ export const GetWorldFullInfoDocument = /*#__PURE__*/ gql`
     }
   }
 }
-    ${AkashaWorldConfigFragmentDoc}
+    ${AkashaWorldMetaInfoFragmentDoc}
+${AkashaWorldConfigFragmentDoc}
 ${AkashaWorldFragmentDoc}`;
 export type Requester<C = {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
 export function getSdk<C>(requester: Requester<C>) {
@@ -2039,6 +2096,15 @@ export function getSdk<C>(requester: Requester<C>) {
     DeleteAkashaWorldConfigExtension(variables: Types.DeleteAkashaWorldConfigExtensionMutationVariables, options?: C): Promise<Types.DeleteAkashaWorldConfigExtensionMutation> {
       return requester<Types.DeleteAkashaWorldConfigExtensionMutation, Types.DeleteAkashaWorldConfigExtensionMutationVariables>(DeleteAkashaWorldConfigExtensionDocument, variables, options) as Promise<Types.DeleteAkashaWorldConfigExtensionMutation>;
     },
+    CreateAkashaWorldMetaInfo(variables: Types.CreateAkashaWorldMetaInfoMutationVariables, options?: C): Promise<Types.CreateAkashaWorldMetaInfoMutation> {
+      return requester<Types.CreateAkashaWorldMetaInfoMutation, Types.CreateAkashaWorldMetaInfoMutationVariables>(CreateAkashaWorldMetaInfoDocument, variables, options) as Promise<Types.CreateAkashaWorldMetaInfoMutation>;
+    },
+    UpdateAkashaWorldMetaInfo(variables: Types.UpdateAkashaWorldMetaInfoMutationVariables, options?: C): Promise<Types.UpdateAkashaWorldMetaInfoMutation> {
+      return requester<Types.UpdateAkashaWorldMetaInfoMutation, Types.UpdateAkashaWorldMetaInfoMutationVariables>(UpdateAkashaWorldMetaInfoDocument, variables, options) as Promise<Types.UpdateAkashaWorldMetaInfoMutation>;
+    },
+    DeleteAkashaWorldMetaInfo(variables: Types.DeleteAkashaWorldMetaInfoMutationVariables, options?: C): Promise<Types.DeleteAkashaWorldMetaInfoMutation> {
+      return requester<Types.DeleteAkashaWorldMetaInfoMutation, Types.DeleteAkashaWorldMetaInfoMutationVariables>(DeleteAkashaWorldMetaInfoDocument, variables, options) as Promise<Types.DeleteAkashaWorldMetaInfoMutation>;
+    },
     GetApps(variables?: Types.GetAppsQueryVariables, options?: C): Promise<Types.GetAppsQuery> {
       return requester<Types.GetAppsQuery, Types.GetAppsQueryVariables>(GetAppsDocument, variables, options) as Promise<Types.GetAppsQuery>;
     },
@@ -2071,6 +2137,9 @@ export function getSdk<C>(requester: Requester<C>) {
     },
     GetWorldConfig(variables: Types.GetWorldConfigQueryVariables, options?: C): Promise<Types.GetWorldConfigQuery> {
       return requester<Types.GetWorldConfigQuery, Types.GetWorldConfigQueryVariables>(GetWorldConfigDocument, variables, options) as Promise<Types.GetWorldConfigQuery>;
+    },
+    GetWorldMetaInfo(variables: Types.GetWorldMetaInfoQueryVariables, options?: C): Promise<Types.GetWorldMetaInfoQuery> {
+      return requester<Types.GetWorldMetaInfoQuery, Types.GetWorldMetaInfoQueryVariables>(GetWorldMetaInfoDocument, variables, options) as Promise<Types.GetWorldMetaInfoQuery>;
     },
     GetWorldConfigByID(variables: Types.GetWorldConfigByIdQueryVariables, options?: C): Promise<Types.GetWorldConfigByIdQuery> {
       return requester<Types.GetWorldConfigByIdQuery, Types.GetWorldConfigByIdQueryVariables>(GetWorldConfigByIdDocument, variables, options) as Promise<Types.GetWorldConfigByIdQuery>;

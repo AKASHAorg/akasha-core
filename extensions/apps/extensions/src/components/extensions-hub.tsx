@@ -1,10 +1,10 @@
 import React from 'react';
 import AppList from '@akashaorg/design-system-components/lib/components/AppList';
-import Image from '@akashaorg/design-system-core/lib/components/Image';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { ExtensionCardProps } from '@akashaorg/design-system-components/lib/components/ExtensionCard';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
+import { Image } from '@akashaorg/ui/lib/akasha-components/image';
 export type TExtensionsHubProps = {
   titleLabel: string;
   publicImgPath?: string;
@@ -41,10 +41,7 @@ export const ExtensionsHub: React.FC<TExtensionsHubProps> = props => {
             <Text variant="h6">{section.title}</Text>
             {section.assetName && (
               <Stack className="self-center h-52 w-52">
-                <Image
-                  customStyle="object-contain"
-                  src={`${publicImgPath}/${section.assetName}.${assetExtension}`}
-                />
+                <Image src={`${publicImgPath}/${section.assetName}.${assetExtension}`} />
               </Stack>
             )}
             <Text variant="body2">{section.description}</Text>

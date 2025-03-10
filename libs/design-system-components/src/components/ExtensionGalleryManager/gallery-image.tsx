@@ -1,5 +1,5 @@
 import React from 'react';
-import Image from '@akashaorg/design-system-core/lib/components/Image';
+import { Image } from '@akashaorg/ui/lib/akasha-components/image';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
@@ -34,7 +34,7 @@ export const GalleryImage: React.FC<GalleryImageProps> = props => {
         alt={name}
         src={src}
         onClick={handleClickImage}
-        customStyle={`object-cover w-full h-full ${state === GalleryImageState.ERROR || state === GalleryImageState.LOADING ? 'opacity-20' : ''}`}
+        className={`object-cover w-full h-full ${state === GalleryImageState.ERROR || state === GalleryImageState.LOADING ? 'opacity-20' : ''}`}
         showLoadingIndicator
       />
       {
