@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from '@akashaorg/ui/lib/components/select';
 import {
+  Card,
   CardContent,
   CardFooter,
   CardHeader,
@@ -38,6 +39,11 @@ import {
 } from '@akashaorg/ui-core-hooks/lib/generated';
 import { selectWorldData } from '@akashaorg/ui-core-hooks/lib/selectors/get-world-by-id-query';
 import { selectWorldConfigData } from '@akashaorg/ui-core-hooks/lib/selectors/get-world-config-query';
+import {
+  ErrorLoader,
+  ErrorLoaderDescription,
+  ErrorLoaderTitle,
+} from '@akashaorg/ui/lib/akasha-components/error-loader';
 
 type WorldConfigFormStep1Props = {
   worldId: string;
@@ -48,11 +54,7 @@ export const WorldConfigFormStep1Page: React.FC<WorldConfigFormStep1Props> = ({ 
 
   const navigate = useNavigate();
 
-  const {
-    data: getWorldByIdReq,
-    // loading: loadingWorldByIdQuery,
-    // error: getWorldByIdError,
-  } = useGetWorldByIdQuery({
+  const { data: getWorldByIdReq, error: getWorldByIdError } = useGetWorldByIdQuery({
     variables: {
       id: worldId,
     },
@@ -60,11 +62,7 @@ export const WorldConfigFormStep1Page: React.FC<WorldConfigFormStep1Props> = ({ 
 
   const worldData = selectWorldData(getWorldByIdReq);
 
-  const {
-    data: worldConfigReq,
-    // loading: loadingWorldConfigQuery,
-    // error: worldConfigError,
-  } = useGetWorldConfigQuery({
+  const { data: worldConfigReq, error: worldConfigError } = useGetWorldConfigQuery({
     variables: { worldID: worldData?.id },
     skip: !worldData?.id,
   });
@@ -126,8 +124,30 @@ export const WorldConfigFormStep1Page: React.FC<WorldConfigFormStep1Props> = ({ 
     navigate({ to: '/world-config-form/$worldId/step2', params: { worldId } });
   };
 
+  if (worldConfigError) {
+    return (
+      <ErrorLoader type="script-error">
+        <ErrorLoaderTitle>
+          {t('Sorry, there was an error when fetching the world config data')}
+        </ErrorLoaderTitle>
+        <ErrorLoaderDescription>{worldConfigError?.message}</ErrorLoaderDescription>
+      </ErrorLoader>
+    );
+  }
+
+  if (getWorldByIdError) {
+    return (
+      <ErrorLoader type="script-error">
+        <ErrorLoaderTitle>
+          {t('Sorry, there was an error when fetching the world data')}
+        </ErrorLoaderTitle>
+        <ErrorLoaderDescription>{getWorldByIdError?.message}</ErrorLoaderDescription>
+      </ErrorLoader>
+    );
+  }
+
   return (
-    <>
+    <Card>
       <CardHeader>
         <Stack className="items-center">
           <Stepper currentStep={1} numberOfSteps={2} className="max-w-[112px]" />
@@ -218,6 +238,6 @@ export const WorldConfigFormStep1Page: React.FC<WorldConfigFormStep1Props> = ({ 
           </CardFooter>
         </form>
       </Form>
-    </>
+    </Card>
   );
 };

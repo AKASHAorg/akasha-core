@@ -183,20 +183,24 @@ export const WorldCreateFormPage: React.FC = () => {
     });
   };
 
-  const handleCancel = () => {
+  const handleNavToDashboard = () => {
     navigate({ to: '/dashboard' });
   };
 
   const [createWorldMutation, { loading: loadingWorldMutation }] = useCreateWorldMutation({
     context: { source: sdk.current.services.gql.contextSources.composeDB },
     onCompleted: data => {
-      navigate({
-        to: '/create-success',
-        search: {
-          worldId: data?.setAkashaWorld?.document?.id,
-          worldName: data?.setAkashaWorld?.document?.name,
-        },
-      });
+      if (worldData?.createdAt) {
+        handleNavToDashboard();
+      } else {
+        navigate({
+          to: '/create-success',
+          search: {
+            worldId: data?.setAkashaWorld?.document?.id,
+            worldName: data?.setAkashaWorld?.document?.name,
+          },
+        });
+      }
     },
     onError: error => {
       showErrorNotification(`${t(`Something went wrong when creating the world`)}.`, error.message);
@@ -215,6 +219,17 @@ export const WorldCreateFormPage: React.FC = () => {
             {t('Connect')}
           </Button>
         </ErrorLoaderFooter>
+      </ErrorLoader>
+    );
+  }
+
+  if (worldsByCreatorDidError) {
+    return (
+      <ErrorLoader type="script-error">
+        <ErrorLoaderTitle>
+          {t('Sorry, there was an error when fetching the world data')}
+        </ErrorLoaderTitle>
+        <ErrorLoaderDescription>{worldsByCreatorDidError?.message}</ErrorLoaderDescription>
       </ErrorLoader>
     );
   }
@@ -342,14 +357,14 @@ export const WorldCreateFormPage: React.FC = () => {
             />
           </CardContent>
           <CardFooter>
-            <Button className="px-6" variant="outline" onClick={handleCancel}>
+            <Button className="px-6" variant="outline" onClick={handleNavToDashboard}>
               {t('Cancel')}
             </Button>
             <Button
               type="submit"
               className="px-6"
               loading={loadingWorldMutation}
-              disabled={!isValid}
+              disabled={!isValid || loadingWorldsByCreatorDidQuery}
             >
               {t('Create')}
             </Button>

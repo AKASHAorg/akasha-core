@@ -64,6 +64,11 @@ import getSDK from '@akashaorg/core-sdk';
 import { selectWorldData } from '@akashaorg/ui-core-hooks/lib/selectors/get-world-by-id-query';
 import { selectWorldConfigData } from '@akashaorg/ui-core-hooks/lib/selectors/get-world-config-query';
 import { Separator } from '@akashaorg/ui/lib/components/separator';
+import {
+  ErrorLoader,
+  ErrorLoaderDescription,
+  ErrorLoaderTitle,
+} from '@akashaorg/ui/lib/akasha-components/error-loader';
 
 type WorldConfigFormStep2Props = {
   worldId: string;
@@ -97,11 +102,7 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
     }
   }, [worldId, showErrorNotification]);
 
-  const {
-    data: getWorldByIdReq,
-    loading: loadingWorldByIdQuery,
-    error: getWorldByIdError,
-  } = useGetWorldByIdQuery({
+  const { data: getWorldByIdReq, error: getWorldByIdError } = useGetWorldByIdQuery({
     variables: {
       id: worldId,
     },
@@ -109,11 +110,7 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
 
   const worldData = selectWorldData(getWorldByIdReq);
 
-  const {
-    data: worldConfigReq,
-    loading: loadingWorldConfigQuery,
-    error: worldConfigError,
-  } = useGetWorldConfigQuery({
+  const { data: worldConfigReq, error: worldConfigError } = useGetWorldConfigQuery({
     variables: { worldID: worldData?.id },
     skip: !worldData?.id,
   });
@@ -183,7 +180,7 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
 
   const [
     deleteWorldConfigExtensionMutation,
-    { loading: loadingWorldConfigUpdateExtensionMutation },
+    { loading: loadingWorldConfigDeleteExtensionMutation },
   ] = useDeleteAkashaWorldConfigExtensionMutation({
     context: { source: sdk.current.services.gql.contextSources.composeDB },
     onError: error => {
@@ -275,6 +272,10 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
     });
   };
 
+  const navToDashboard = () => {
+    navigate({ to: '/dashboard' });
+  };
+
   const [createWorldConfigMutation, { loading: loadingWorldConfigMutation }] =
     useCreateAkashaWorldConfigMutation({
       context: { source: sdk.current.services.gql.contextSources.composeDB },
@@ -282,7 +283,11 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
         const worldConfigId = data?.setAkashaWorldConfig?.document?.id;
         await createExtensions(worldConfigId);
         await deleteExtensions(worldConfigId);
-        navToConfigSuccessPage();
+        if (worldConfig?.createdAt) {
+          navToDashboard();
+        } else {
+          navToConfigSuccessPage();
+        }
       },
       onError: error => {
         showErrorNotification(
@@ -313,8 +318,41 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
     navigate({ to: '/world-config-form/$worldId/step1', params: { worldId } });
   };
 
+  if (worldConfigError) {
+    return (
+      <ErrorLoader type="script-error">
+        <ErrorLoaderTitle>
+          {t('Sorry, there was an error when fetching the world config data')}
+        </ErrorLoaderTitle>
+        <ErrorLoaderDescription>{worldConfigError?.message}</ErrorLoaderDescription>
+      </ErrorLoader>
+    );
+  }
+
+  if (getWorldByIdError) {
+    return (
+      <ErrorLoader type="script-error">
+        <ErrorLoaderTitle>
+          {t('Sorry, there was an error when fetching the world data')}
+        </ErrorLoaderTitle>
+        <ErrorLoaderDescription>{getWorldByIdError?.message}</ErrorLoaderDescription>
+      </ErrorLoader>
+    );
+  }
+
+  if (getAppsError) {
+    return (
+      <ErrorLoader type="script-error">
+        <ErrorLoaderTitle>
+          {t('Sorry, there was an error when fetching extensions data')}
+        </ErrorLoaderTitle>
+        <ErrorLoaderDescription>{getAppsError?.message}</ErrorLoaderDescription>
+      </ErrorLoader>
+    );
+  }
+
   return (
-    <>
+    <Card>
       <CardHeader>
         <Stack className="items-center">
           <Stepper currentStep={1} numberOfSteps={2} className="max-w-[112px]" />
@@ -474,11 +512,15 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
         <Button
           className="px-6"
           onClick={handleSave}
-          loading={loadingWorldConfigMutation || loadingWorldConfigCreateExtensionMutation}
+          loading={
+            loadingWorldConfigMutation ||
+            loadingWorldConfigCreateExtensionMutation ||
+            loadingWorldConfigDeleteExtensionMutation
+          }
         >
           {t('Save Config')}
         </Button>
       </CardFooter>
-    </>
+    </Card>
   );
 };

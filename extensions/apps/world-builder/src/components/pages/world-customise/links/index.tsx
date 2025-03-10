@@ -46,7 +46,7 @@ export const SocialLinks: React.FC<SocialLinksProps> = ({ control, onDeleteLink 
             key={link.id}
             control={control}
             name={`socialLinks.${index}`}
-            render={({ field: { value, onChange, ref }, fieldState: { error } }) => (
+            render={({ field: { value, onChange } }) => (
               <FormItem>
                 <LinkElement
                   onDelete={() => {
@@ -55,8 +55,6 @@ export const SocialLinks: React.FC<SocialLinksProps> = ({ control, onDeleteLink 
                   }}
                   value={{ ...value, _id: index + 1 }}
                   onChange={onChange}
-                  error={error as unknown}
-                  inputRef={ref}
                 />
                 <FormMessage />
               </FormItem>

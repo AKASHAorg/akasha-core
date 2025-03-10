@@ -3,7 +3,6 @@ import appRoutes, { WORLD_CONFIG_FORM } from '../../../routes';
 import { useTranslation } from 'react-i18next';
 import { Outlet } from '@tanstack/react-router';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import {
   ErrorLoader,
@@ -81,10 +80,8 @@ export const WorldConfigMainPage: React.FC<WorldConfigMainPageProps> = ({ worldI
   }
 
   return (
-    <Card>
-      <AtomContext.Provider value={formData}>
-        <Outlet />
-      </AtomContext.Provider>
-    </Card>
+    <AtomContext.Provider value={formData}>
+      <Outlet />
+    </AtomContext.Provider>
   );
 };

@@ -1,8 +1,6 @@
 import React from 'react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { SocialLink } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { FieldError } from 'react-hook-form';
-import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Link, Trash2 } from 'lucide-react';
 import { Input } from '@akashaorg/ui/lib/akasha-components/input';
 import { Github } from '@akashaorg/ui/lib/custom-icons/github';
@@ -21,12 +19,10 @@ export type LinkElementProps = {
   onDelete: () => void;
   onChange: (...event: any[]) => void;
   value: SocialLink & { _id?: number };
-  error?: { href?: FieldError; label?: FieldError };
-  inputRef?: React.LegacyRef<HTMLInputElement> & React.LegacyRef<HTMLTextAreaElement>;
 };
 
 export const LinkElement: React.FC<LinkElementProps> = props => {
-  const { onDelete, onChange, value, error, inputRef } = props;
+  const { onDelete, onChange, value } = props;
 
   const iconsMap = {
     github: <Github />,
@@ -63,15 +59,15 @@ export const LinkElement: React.FC<LinkElementProps> = props => {
           </Select>
 
           <Input
-            className=""
+            className="w-full"
             placeholder="e.g. http://www.dadada.com"
             value={value.href}
             onChange={ev => onChange({ ...value, href: ev.target.value })}
           />
         </Stack>
-        <Button variant="ghost" size="sm" onClick={onDelete}>
-          <Trash2 color="warning" />
-        </Button>
+        <button onClick={onDelete}>
+          <Trash2 color="destructive" />
+        </button>
       </Stack>
     </Stack>
   );

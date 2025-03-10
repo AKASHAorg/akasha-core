@@ -48,13 +48,12 @@ import {
   ProfileDidField,
   ProfileName,
 } from '@/ui/profile-avatar-button';
-import { Image } from '@akashaorg/ui/lib/akasha-components/image';
 
 export const DashboardPage: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-world-builder');
 
-  const { baseRouteName, getCorePlugins } = useRootComponentProps();
+  const { baseRouteName, getCorePlugins, encodeAppName } = useRootComponentProps();
   const navigateTo = getCorePlugins().routing.navigateTo;
 
   const {
@@ -91,11 +90,7 @@ export const DashboardPage: React.FC = () => {
     skip: !worldData?.id,
   });
 
-  const {
-    data: worldConfigReq,
-    loading: loadingWorldConfigQuery,
-    error: worldConfigError,
-  } = useGetWorldConfigQuery({
+  const { data: worldConfigReq, error: worldConfigError } = useGetWorldConfigQuery({
     variables: { worldID: worldData?.id },
     skip: !worldData?.id,
   });
@@ -145,6 +140,10 @@ export const DashboardPage: React.FC = () => {
     return extension?.extension;
   };
 
+  const getEncodedAppName = extData => {
+    return encodeAppName(getExtensionDataById(extData)?.name);
+  };
+
   if (!authenticatedDID) {
     return (
       <ErrorLoader type="not-authenticated">
@@ -160,6 +159,39 @@ export const DashboardPage: React.FC = () => {
       </ErrorLoader>
     );
   }
+  if (worldConfigError) {
+    return (
+      <ErrorLoader type="script-error">
+        <ErrorLoaderTitle>
+          {t('Sorry, there was an error when fetching the world config data')}
+        </ErrorLoaderTitle>
+        <ErrorLoaderDescription>{worldConfigError?.message}</ErrorLoaderDescription>
+      </ErrorLoader>
+    );
+  }
+
+  if (worldsByCreatorDidError) {
+    return (
+      <ErrorLoader type="script-error">
+        <ErrorLoaderTitle>
+          {t('Sorry, there was an error when fetching the world data')}
+        </ErrorLoaderTitle>
+        <ErrorLoaderDescription>{worldsByCreatorDidError?.message}</ErrorLoaderDescription>
+      </ErrorLoader>
+    );
+  }
+
+  if (worldConfigExtensionsError) {
+    return (
+      <ErrorLoader type="script-error">
+        <ErrorLoaderTitle>
+          {t('Sorry, there was an error when fetching world config extensions data')}
+        </ErrorLoaderTitle>
+        <ErrorLoaderDescription>{worldConfigExtensionsError?.message}</ErrorLoaderDescription>
+      </ErrorLoader>
+    );
+  }
+
   if (loadingWorldsByCreatorDidQuery) {
     return (
       <Card>
@@ -189,7 +221,7 @@ export const DashboardPage: React.FC = () => {
         </CardHeader>
         <CardContent className="flex-col gap-4">
           <Stack direction="row" spacing={4}>
-            <ExtensionAvatar size="xl" extensionId={worldData?.id}>
+            <ExtensionAvatar size="lg" extensionId={worldData?.id}>
               <ExtensionAvatarImage src={transformSource(worldData?.icon?.default)?.src}>
                 <ExtensionAvatarFallback />
               </ExtensionAvatarImage>
@@ -241,18 +273,6 @@ export const DashboardPage: React.FC = () => {
                 </div>
               </Stack>
             )}
-            {worldData?.icon && (
-              <Stack direction="column" spacing={2}>
-                <Typography variant="sm" bold>
-                  {t('Icon')}
-                </Typography>
-                <Image
-                  width={24}
-                  height={24}
-                  src={transformSource(worldData?.icon?.default)?.src}
-                />
-              </Stack>
-            )}
             {worldData?.instanceURL && (
               <Stack direction="column" spacing={2}>
                 <Typography variant="sm" bold>
@@ -264,34 +284,44 @@ export const DashboardPage: React.FC = () => {
           </Stack>
           <Separator />
           <Stack direction="column" spacing={4}>
-            <Stack direction="row" justifyContent="between" alignItems="center">
-              <Typography variant="h6">{t('World Config')}</Typography>
-
-              {worldConfig?.id ? (
-                <Button variant="secondary" size="icon" onClick={handleNavToConfigForm}>
-                  <Pencil />
-                </Button>
-              ) : (
-                <Button onClick={handleNavToConfigForm}>{t('Configure World')}</Button>
-              )}
-            </Stack>
-            <Stack direction="column" spacing={2}>
+            {loadingWorldConfigExtensionsQuery && <Loader2 className="animate-spin" />}
+            {!loadingWorldConfigExtensionsQuery && (
+              <Stack direction="row" justifyContent="between" alignItems="center">
+                <Typography variant="h6">{t('World Config')}</Typography>
+                {worldConfig?.id ? (
+                  <Button variant="secondary" size="icon" onClick={handleNavToConfigForm}>
+                    <Pencil />
+                  </Button>
+                ) : (
+                  <Button onClick={handleNavToConfigForm}>{t('Configure World')}</Button>
+                )}
+              </Stack>
+            )}
+            <Stack direction="column" alignItems="start" spacing={2}>
               <Typography variant="sm" bold>
                 {t('Layout')}
               </Typography>
-              <Button variant="link" onClick={() => handleNavToApp(worldConfig?.layoutExtension)}>
+              <Button
+                className="p-0"
+                variant="link"
+                onClick={() => handleNavToApp(getEncodedAppName(worldConfig?.layoutExtension))}
+              >
                 {getExtensionDataById(worldConfig?.layoutExtension)?.displayName}
               </Button>
             </Stack>
-            <Stack direction="column" spacing={2}>
+            <Stack direction="column" alignItems="start" spacing={2}>
               <Typography variant="sm" bold>
                 {t('Extension App')}
               </Typography>
-              <Button variant="link" onClick={() => handleNavToApp(worldConfig?.registryExtension)}>
+              <Button
+                className="p-0"
+                variant="link"
+                onClick={() => handleNavToApp(getEncodedAppName(worldConfig?.registryExtension))}
+              >
                 {getExtensionDataById(worldConfig?.registryExtension)?.displayName}
               </Button>
             </Stack>
-            <Stack direction="column" spacing={2}>
+            <Stack direction="column" alignItems="start" spacing={2}>
               <Typography variant="sm" bold>
                 {t('World Extensions')}
               </Typography>
@@ -299,23 +329,23 @@ export const DashboardPage: React.FC = () => {
                 {worldConfigExtensions?.map((extension, idx) => (
                   <Button
                     key={idx}
+                    className="p-0"
                     variant="link"
-                    onClick={() => handleNavToApp(extension.extensionID)}
+                    onClick={() => handleNavToApp(getEncodedAppName(extension.extension))}
                   >
                     {extension?.extension?.displayName}
                   </Button>
                 ))}
               </div>
             </Stack>
-            <Stack direction="column" spacing={2}>
+            <Stack direction="column" alignItems="start" spacing={2}>
               <Typography variant="sm" bold>
                 {t('Homepage')}
               </Typography>
               <Button
+                className="p-0"
                 variant="link"
-                onClick={() =>
-                  handleNavToApp(getExtensionDataById(worldConfig?.homepageExtension)?.id)
-                }
+                onClick={() => handleNavToApp(getEncodedAppName(worldConfig?.homepageExtension))}
               >
                 {getExtensionDataById(worldConfig?.homepageExtension)?.displayName}
               </Button>
