@@ -427,6 +427,19 @@ export const AkashaWorldConfigExtensionMFragmentDoc = /*#__PURE__*/ gql`
   }
 }
     `;
+export const AkashaWorldMetaInfoMFragmentDoc = /*#__PURE__*/ gql`
+    fragment AkashaWorldMetaInfoM on AkashaWorldMetaInfo {
+  id
+  socialLinks {
+    name
+    href
+  }
+  worldID
+  keywords
+  description
+  guidelinesUrl
+}
+    `;
 export const UserProfileFragmentDoc = /*#__PURE__*/ gql`
     fragment UserProfileFragment on AkashaProfile {
   id
@@ -561,6 +574,19 @@ export const AppReleaseFragmentDoc = /*#__PURE__*/ gql`
     property
     value
   }
+}
+    `;
+export const AkashaWorldMetaInfoFragmentDoc = /*#__PURE__*/ gql`
+    fragment AkashaWorldMetaInfoFragment on AkashaWorldMetaInfo {
+  id
+  socialLinks {
+    name
+    href
+  }
+  worldID
+  keywords
+  description
+  guidelinesUrl
 }
     `;
 export const AkashaWorldFragmentDoc = /*#__PURE__*/ gql`
@@ -3266,6 +3292,111 @@ export function useDeleteAkashaWorldConfigExtensionMutation(baseOptions?: Apollo
 export type DeleteAkashaWorldConfigExtensionMutationHookResult = ReturnType<typeof useDeleteAkashaWorldConfigExtensionMutation>;
 export type DeleteAkashaWorldConfigExtensionMutationResult = Apollo.MutationResult<Types.DeleteAkashaWorldConfigExtensionMutation>;
 export type DeleteAkashaWorldConfigExtensionMutationOptions = Apollo.BaseMutationOptions<Types.DeleteAkashaWorldConfigExtensionMutation, Types.DeleteAkashaWorldConfigExtensionMutationVariables>;
+export const CreateAkashaWorldMetaInfoDocument = /*#__PURE__*/ gql`
+    mutation CreateAkashaWorldMetaInfo($i: SetAkashaWorldMetaInfoInput!) {
+  setAkashaWorldMetaInfo(input: $i) {
+    document {
+      ...AkashaWorldMetaInfoM
+    }
+    clientMutationId
+  }
+}
+    ${AkashaWorldMetaInfoMFragmentDoc}`;
+export type CreateAkashaWorldMetaInfoMutationFn = Apollo.MutationFunction<Types.CreateAkashaWorldMetaInfoMutation, Types.CreateAkashaWorldMetaInfoMutationVariables>;
+
+/**
+ * __useCreateAkashaWorldMetaInfoMutation__
+ *
+ * To run a mutation, you first call `useCreateAkashaWorldMetaInfoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateAkashaWorldMetaInfoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createAkashaWorldMetaInfoMutation, { data, loading, error }] = useCreateAkashaWorldMetaInfoMutation({
+ *   variables: {
+ *      i: // value for 'i'
+ *   },
+ * });
+ */
+export function useCreateAkashaWorldMetaInfoMutation(baseOptions?: Apollo.MutationHookOptions<Types.CreateAkashaWorldMetaInfoMutation, Types.CreateAkashaWorldMetaInfoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<Types.CreateAkashaWorldMetaInfoMutation, Types.CreateAkashaWorldMetaInfoMutationVariables>(CreateAkashaWorldMetaInfoDocument, options);
+      }
+export type CreateAkashaWorldMetaInfoMutationHookResult = ReturnType<typeof useCreateAkashaWorldMetaInfoMutation>;
+export type CreateAkashaWorldMetaInfoMutationResult = Apollo.MutationResult<Types.CreateAkashaWorldMetaInfoMutation>;
+export type CreateAkashaWorldMetaInfoMutationOptions = Apollo.BaseMutationOptions<Types.CreateAkashaWorldMetaInfoMutation, Types.CreateAkashaWorldMetaInfoMutationVariables>;
+export const UpdateAkashaWorldMetaInfoDocument = /*#__PURE__*/ gql`
+    mutation UpdateAkashaWorldMetaInfo($i: UpdateAkashaWorldMetaInfoInput!) {
+  updateAkashaWorldMetaInfo(input: $i) {
+    document {
+      ...AkashaWorldMetaInfoM
+    }
+    clientMutationId
+  }
+}
+    ${AkashaWorldMetaInfoMFragmentDoc}`;
+export type UpdateAkashaWorldMetaInfoMutationFn = Apollo.MutationFunction<Types.UpdateAkashaWorldMetaInfoMutation, Types.UpdateAkashaWorldMetaInfoMutationVariables>;
+
+/**
+ * __useUpdateAkashaWorldMetaInfoMutation__
+ *
+ * To run a mutation, you first call `useUpdateAkashaWorldMetaInfoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateAkashaWorldMetaInfoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateAkashaWorldMetaInfoMutation, { data, loading, error }] = useUpdateAkashaWorldMetaInfoMutation({
+ *   variables: {
+ *      i: // value for 'i'
+ *   },
+ * });
+ */
+export function useUpdateAkashaWorldMetaInfoMutation(baseOptions?: Apollo.MutationHookOptions<Types.UpdateAkashaWorldMetaInfoMutation, Types.UpdateAkashaWorldMetaInfoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<Types.UpdateAkashaWorldMetaInfoMutation, Types.UpdateAkashaWorldMetaInfoMutationVariables>(UpdateAkashaWorldMetaInfoDocument, options);
+      }
+export type UpdateAkashaWorldMetaInfoMutationHookResult = ReturnType<typeof useUpdateAkashaWorldMetaInfoMutation>;
+export type UpdateAkashaWorldMetaInfoMutationResult = Apollo.MutationResult<Types.UpdateAkashaWorldMetaInfoMutation>;
+export type UpdateAkashaWorldMetaInfoMutationOptions = Apollo.BaseMutationOptions<Types.UpdateAkashaWorldMetaInfoMutation, Types.UpdateAkashaWorldMetaInfoMutationVariables>;
+export const DeleteAkashaWorldMetaInfoDocument = /*#__PURE__*/ gql`
+    mutation DeleteAkashaWorldMetaInfo($i: EnableIndexingAkashaWorldMetaInfoInput!) {
+  enableIndexingAkashaWorldMetaInfo(input: $i) {
+    clientMutationId
+  }
+}
+    `;
+export type DeleteAkashaWorldMetaInfoMutationFn = Apollo.MutationFunction<Types.DeleteAkashaWorldMetaInfoMutation, Types.DeleteAkashaWorldMetaInfoMutationVariables>;
+
+/**
+ * __useDeleteAkashaWorldMetaInfoMutation__
+ *
+ * To run a mutation, you first call `useDeleteAkashaWorldMetaInfoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteAkashaWorldMetaInfoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteAkashaWorldMetaInfoMutation, { data, loading, error }] = useDeleteAkashaWorldMetaInfoMutation({
+ *   variables: {
+ *      i: // value for 'i'
+ *   },
+ * });
+ */
+export function useDeleteAkashaWorldMetaInfoMutation(baseOptions?: Apollo.MutationHookOptions<Types.DeleteAkashaWorldMetaInfoMutation, Types.DeleteAkashaWorldMetaInfoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<Types.DeleteAkashaWorldMetaInfoMutation, Types.DeleteAkashaWorldMetaInfoMutationVariables>(DeleteAkashaWorldMetaInfoDocument, options);
+      }
+export type DeleteAkashaWorldMetaInfoMutationHookResult = ReturnType<typeof useDeleteAkashaWorldMetaInfoMutation>;
+export type DeleteAkashaWorldMetaInfoMutationResult = Apollo.MutationResult<Types.DeleteAkashaWorldMetaInfoMutation>;
+export type DeleteAkashaWorldMetaInfoMutationOptions = Apollo.BaseMutationOptions<Types.DeleteAkashaWorldMetaInfoMutation, Types.DeleteAkashaWorldMetaInfoMutationVariables>;
 export const GetAppsDocument = /*#__PURE__*/ gql`
     query GetApps($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaAppFiltersInput, $sorting: AkashaAppSortingInput) {
   akashaAppIndex(
@@ -3897,6 +4028,51 @@ export type GetWorldConfigQueryHookResult = ReturnType<typeof useGetWorldConfigQ
 export type GetWorldConfigLazyQueryHookResult = ReturnType<typeof useGetWorldConfigLazyQuery>;
 export type GetWorldConfigSuspenseQueryHookResult = ReturnType<typeof useGetWorldConfigSuspenseQuery>;
 export type GetWorldConfigQueryResult = Apollo.QueryResult<Types.GetWorldConfigQuery, Types.GetWorldConfigQueryVariables>;
+export const GetWorldMetaInfoDocument = /*#__PURE__*/ gql`
+    query GetWorldMetaInfo($worldID: CeramicStreamID!, $creator: ID!) {
+  node(id: $creator) {
+    ... on CeramicAccount {
+      akashaWorldMetaInfo(with: {worldID: $worldID}) {
+        ...AkashaWorldMetaInfoFragment
+      }
+    }
+  }
+}
+    ${AkashaWorldMetaInfoFragmentDoc}`;
+
+/**
+ * __useGetWorldMetaInfoQuery__
+ *
+ * To run a query within a React component, call `useGetWorldMetaInfoQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetWorldMetaInfoQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetWorldMetaInfoQuery({
+ *   variables: {
+ *      worldID: // value for 'worldID'
+ *      creator: // value for 'creator'
+ *   },
+ * });
+ */
+export function useGetWorldMetaInfoQuery(baseOptions: Apollo.QueryHookOptions<Types.GetWorldMetaInfoQuery, Types.GetWorldMetaInfoQueryVariables> & ({ variables: Types.GetWorldMetaInfoQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<Types.GetWorldMetaInfoQuery, Types.GetWorldMetaInfoQueryVariables>(GetWorldMetaInfoDocument, options);
+      }
+export function useGetWorldMetaInfoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Types.GetWorldMetaInfoQuery, Types.GetWorldMetaInfoQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<Types.GetWorldMetaInfoQuery, Types.GetWorldMetaInfoQueryVariables>(GetWorldMetaInfoDocument, options);
+        }
+export function useGetWorldMetaInfoSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<Types.GetWorldMetaInfoQuery, Types.GetWorldMetaInfoQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<Types.GetWorldMetaInfoQuery, Types.GetWorldMetaInfoQueryVariables>(GetWorldMetaInfoDocument, options);
+        }
+export type GetWorldMetaInfoQueryHookResult = ReturnType<typeof useGetWorldMetaInfoQuery>;
+export type GetWorldMetaInfoLazyQueryHookResult = ReturnType<typeof useGetWorldMetaInfoLazyQuery>;
+export type GetWorldMetaInfoSuspenseQueryHookResult = ReturnType<typeof useGetWorldMetaInfoSuspenseQuery>;
+export type GetWorldMetaInfoQueryResult = Apollo.QueryResult<Types.GetWorldMetaInfoQuery, Types.GetWorldMetaInfoQueryVariables>;
 export const GetWorldConfigByIdDocument = /*#__PURE__*/ gql`
     query GetWorldConfigByID($configID: ID!) {
   node(id: $configID) {
@@ -3993,15 +4169,7 @@ export const GetWorldFullInfoDocument = /*#__PURE__*/ gql`
       metaInfo(first: 1, account: $creator) {
         edges {
           node {
-            description
-            id
-            guidelinesUrl
-            socialLinks {
-              href
-              name
-            }
-            keywords
-            worldID
+            ...AkashaWorldMetaInfoFragment
           }
         }
       }
@@ -4020,7 +4188,8 @@ export const GetWorldFullInfoDocument = /*#__PURE__*/ gql`
     }
   }
 }
-    ${AkashaWorldConfigFragmentDoc}
+    ${AkashaWorldMetaInfoFragmentDoc}
+${AkashaWorldConfigFragmentDoc}
 ${AkashaWorldFragmentDoc}`;
 
 /**

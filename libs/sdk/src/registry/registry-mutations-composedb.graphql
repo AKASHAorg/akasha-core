@@ -212,4 +212,39 @@ mutation DeleteAkashaWorldConfigExtension($i: EnableIndexingAkashaWorldConfigExt
   }
 }
 
+fragment AkashaWorldMetaInfoM on AkashaWorldMetaInfo{
+  id
+  socialLinks {
+    name
+    href
+  }
+  worldID
+  keywords
+  description
+  guidelinesUrl
+}
+
+mutation CreateAkashaWorldMetaInfo($i: SetAkashaWorldMetaInfoInput!){
+  setAkashaWorldMetaInfo(input: $i){
+    document {
+      ...AkashaWorldMetaInfoM
+    }
+    clientMutationId
+  }
+}
+
+mutation UpdateAkashaWorldMetaInfo($i: UpdateAkashaWorldMetaInfoInput!){
+  updateAkashaWorldMetaInfo(input: $i){
+    document {
+      ...AkashaWorldMetaInfoM
+    }
+    clientMutationId
+  }
+}
+
+mutation DeleteAkashaWorldMetaInfo($i: EnableIndexingAkashaWorldMetaInfoInput!){
+  enableIndexingAkashaWorldMetaInfo(input: $i){
+    clientMutationId
+  }
+}
 

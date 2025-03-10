@@ -505,9 +505,34 @@ export type DeleteAkashaWorldConfigExtensionMutationVariables = Types.Exact<{
 
 export type DeleteAkashaWorldConfigExtensionMutation = { enableIndexingAkashaWorldConfigExtension?: { clientMutationId?: string | null } | null };
 
+export type AkashaWorldMetaInfoMFragment = { id: string, worldID: any, keywords?: Array<string | null> | null, description?: string | null, guidelinesUrl?: any | null, socialLinks?: Array<{ name: string, href: any } | null> | null };
+
+export type CreateAkashaWorldMetaInfoMutationVariables = Types.Exact<{
+  i: Types.SetAkashaWorldMetaInfoInput;
+}>;
+
+
+export type CreateAkashaWorldMetaInfoMutation = { setAkashaWorldMetaInfo?: { clientMutationId?: string | null, document: { id: string, worldID: any, keywords?: Array<string | null> | null, description?: string | null, guidelinesUrl?: any | null, socialLinks?: Array<{ name: string, href: any } | null> | null } } | null };
+
+export type UpdateAkashaWorldMetaInfoMutationVariables = Types.Exact<{
+  i: Types.UpdateAkashaWorldMetaInfoInput;
+}>;
+
+
+export type UpdateAkashaWorldMetaInfoMutation = { updateAkashaWorldMetaInfo?: { clientMutationId?: string | null, document: { id: string, worldID: any, keywords?: Array<string | null> | null, description?: string | null, guidelinesUrl?: any | null, socialLinks?: Array<{ name: string, href: any } | null> | null } } | null };
+
+export type DeleteAkashaWorldMetaInfoMutationVariables = Types.Exact<{
+  i: Types.EnableIndexingAkashaWorldMetaInfoInput;
+}>;
+
+
+export type DeleteAkashaWorldMetaInfoMutation = { enableIndexingAkashaWorldMetaInfo?: { clientMutationId?: string | null } | null };
+
 export type AkashaAppFragmentFragment = { id: string, applicationType?: Types.AkashaAppApplicationType | null, description: string, license: string, name: string, displayName: string, keywords?: Array<string | null> | null, nsfw?: boolean | null, createdAt: any, releasesCount: number, releases: { edges?: Array<{ cursor: string, node?: { id: string, createdAt: any, source: any, version: string, meta?: Array<{ property: string, provider: string, value: string } | null> | null } | null } | null> | null }, author: { id: string, isViewer: boolean, akashaProfile?: { id: string, name: string, description?: string | null, appVersionID: any, appID: any, createdAt: any, nsfw?: boolean | null, did: { id: string, isViewer: boolean }, links?: Array<{ href: any, label?: string | null } | null> | null, background?: { alternatives?: Array<{ src: any, width: number, height: number } | null> | null, default: { src: any, width: number, height: number } } | null, avatar?: { default: { src: any, width: number, height: number }, alternatives?: Array<{ src: any, width: number, height: number } | null> | null } | null, followers: { pageInfo: { startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean, hasNextPage: boolean } } } | null }, logoImage?: { height?: number | null, width?: number | null, src: any } | null, coverImage?: { height?: number | null, width?: number | null, src: any } | null, gallery?: Array<{ height?: number | null, width?: number | null, src: any } | null> | null, links?: Array<{ href: any, label?: string | null } | null> | null, contributors?: Array<{ id: string, isViewer: boolean, akashaProfile?: { id: string, name: string, description?: string | null, appVersionID: any, appID: any, createdAt: any, nsfw?: boolean | null, did: { id: string, isViewer: boolean }, links?: Array<{ href: any, label?: string | null } | null> | null, background?: { alternatives?: Array<{ src: any, width: number, height: number } | null> | null, default: { src: any, width: number, height: number } } | null, avatar?: { default: { src: any, width: number, height: number }, alternatives?: Array<{ src: any, width: number, height: number } | null> | null } | null, followers: { pageInfo: { startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean, hasNextPage: boolean } } } | null } | null> | null, meta?: Array<{ property: string, provider: string, value: string } | null> | null };
 
 export type AppReleaseFragmentFragment = { applicationID: any, id: string, source: any, version: string, createdAt: any, application?: { id: string, applicationType?: Types.AkashaAppApplicationType | null, description: string, license: string, name: string, displayName: string, keywords?: Array<string | null> | null, nsfw?: boolean | null, createdAt: any, releasesCount: number, releases: { edges?: Array<{ cursor: string, node?: { id: string, createdAt: any, source: any, version: string, meta?: Array<{ property: string, provider: string, value: string } | null> | null } | null } | null> | null }, author: { id: string, isViewer: boolean, akashaProfile?: { id: string, name: string, description?: string | null, appVersionID: any, appID: any, createdAt: any, nsfw?: boolean | null, did: { id: string, isViewer: boolean }, links?: Array<{ href: any, label?: string | null } | null> | null, background?: { alternatives?: Array<{ src: any, width: number, height: number } | null> | null, default: { src: any, width: number, height: number } } | null, avatar?: { default: { src: any, width: number, height: number }, alternatives?: Array<{ src: any, width: number, height: number } | null> | null } | null, followers: { pageInfo: { startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean, hasNextPage: boolean } } } | null }, logoImage?: { height?: number | null, width?: number | null, src: any } | null, coverImage?: { height?: number | null, width?: number | null, src: any } | null, gallery?: Array<{ height?: number | null, width?: number | null, src: any } | null> | null, links?: Array<{ href: any, label?: string | null } | null> | null, contributors?: Array<{ id: string, isViewer: boolean, akashaProfile?: { id: string, name: string, description?: string | null, appVersionID: any, appID: any, createdAt: any, nsfw?: boolean | null, did: { id: string, isViewer: boolean }, links?: Array<{ href: any, label?: string | null } | null> | null, background?: { alternatives?: Array<{ src: any, width: number, height: number } | null> | null, default: { src: any, width: number, height: number } } | null, avatar?: { default: { src: any, width: number, height: number }, alternatives?: Array<{ src: any, width: number, height: number } | null> | null } | null, followers: { pageInfo: { startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean, hasNextPage: boolean } } } | null } | null> | null, meta?: Array<{ property: string, provider: string, value: string } | null> | null } | null, meta?: Array<{ provider: string, property: string, value: string } | null> | null };
+
+export type AkashaWorldMetaInfoFragmentFragment = { id: string, worldID: any, keywords?: Array<string | null> | null, description?: string | null, guidelinesUrl?: any | null, socialLinks?: Array<{ name: string, href: any } | null> | null };
 
 export type GetAppsQueryVariables = Types.Exact<{
   after?: Types.InputMaybe<Types.Scalars['String']['input']>;
@@ -625,6 +650,14 @@ export type GetWorldConfigQueryVariables = Types.Exact<{
 
 export type GetWorldConfigQuery = { akashaWorldConfigIndex?: { edges?: Array<{ node?: { id: string, worldID: any, active: boolean, createdAt: any, homepageExtension: any, registryExtension: any, layoutExtension: any, extensions: { edges?: Array<{ node?: { id: string, active: boolean, createdAt: any, worldConfigID: any, extensionID: any, extension?: { name: string, displayName: string, author: { id: string }, logoImage?: { src: any, width?: number | null, height?: number | null } | null } | null, creator: { id: string } } | null } | null> | null }, creator: { id: string } } | null } | null> | null } | null };
 
+export type GetWorldMetaInfoQueryVariables = Types.Exact<{
+  worldID: Types.Scalars['CeramicStreamID']['input'];
+  creator: Types.Scalars['ID']['input'];
+}>;
+
+
+export type GetWorldMetaInfoQuery = { node?: { akashaWorldMetaInfo?: { id: string, worldID: any, keywords?: Array<string | null> | null, description?: string | null, guidelinesUrl?: any | null, socialLinks?: Array<{ name: string, href: any } | null> | null } | null } | {} | null };
+
 export type GetWorldConfigByIdQueryVariables = Types.Exact<{
   configID: Types.Scalars['ID']['input'];
 }>;
@@ -645,4 +678,4 @@ export type GetWorldFullInfoQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetWorldFullInfoQuery = { node?: { id: string, active: boolean, name: string, instanceURL?: any | null, createdAt: any, metaInfo: { edges?: Array<{ node?: { description?: string | null, id: string, guidelinesUrl?: any | null, keywords?: Array<string | null> | null, worldID: any, socialLinks?: Array<{ href: any, name: string } | null> | null } | null } | null> | null }, configInfo: { edges?: Array<{ node?: { id: string, worldID: any, active: boolean, createdAt: any, homepageExtension: any, registryExtension: any, layoutExtension: any, creator: { id: string } } | null } | null> | null }, icon?: { default: { sizes?: string | null, src: any, width?: number | null, height?: number | null } } | null, creator: { id: string }, extensionPublishers?: Array<{ id: string, akashaProfile?: { name: string, id: string, avatar?: { default: { src: any, width: number, height: number } } | null } | null } | null> | null } | {} | null };
+export type GetWorldFullInfoQuery = { node?: { id: string, active: boolean, name: string, instanceURL?: any | null, createdAt: any, metaInfo: { edges?: Array<{ node?: { id: string, worldID: any, keywords?: Array<string | null> | null, description?: string | null, guidelinesUrl?: any | null, socialLinks?: Array<{ name: string, href: any } | null> | null } | null } | null> | null }, configInfo: { edges?: Array<{ node?: { id: string, worldID: any, active: boolean, createdAt: any, homepageExtension: any, registryExtension: any, layoutExtension: any, creator: { id: string } } | null } | null> | null }, icon?: { default: { sizes?: string | null, src: any, width?: number | null, height?: number | null } } | null, creator: { id: string }, extensionPublishers?: Array<{ id: string, akashaProfile?: { name: string, id: string, avatar?: { default: { src: any, width: number, height: number } } | null } | null } | null> | null } | {} | null };

@@ -81,6 +81,18 @@ fragment AppReleaseFragment on AkashaAppRelease{
   }
 }
 
+fragment AkashaWorldMetaInfoFragment on AkashaWorldMetaInfo{
+  id
+  socialLinks {
+    name
+    href
+  }
+  worldID
+  keywords
+  description
+  guidelinesUrl
+}
+
 query GetApps($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaAppFiltersInput, $sorting: AkashaAppSortingInput){
   akashaAppIndex(after: $after, before: $before, first: $first, last: $last, filters: $filters, sorting:  $sorting){
     edges {
@@ -324,6 +336,16 @@ query GetWorldConfig($worldID: String!, $creator: ID){
  }
 }
 
+query GetWorldMetaInfo($worldID: CeramicStreamID!, $creator: ID!){
+  node(id: $creator) {
+    ...on CeramicAccount {
+      akashaWorldMetaInfo(with: {worldID: $worldID}){
+        ...AkashaWorldMetaInfoFragment
+      }
+    }
+  }
+}
+
 query GetWorldConfigByID($configID: ID!){
   node(id: $configID){
     ... on AkashaWorldConfig {
@@ -348,15 +370,7 @@ query GetWorldFullInfo($id: ID!, $creator: ID){
       metaInfo(first: 1, account: $creator){
         edges {
           node {
-            description
-            id
-            guidelinesUrl
-            socialLinks {
-              href
-              name
-            }
-            keywords
-            worldID
+           ...AkashaWorldMetaInfoFragment
           }
         }
       }
