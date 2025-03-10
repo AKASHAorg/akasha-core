@@ -28,11 +28,11 @@ import {
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
+import { Image } from '@akashaorg/ui/lib/akasha-components/image';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 import ImageBlockGallery from '@akashaorg/design-system-components/lib/components/ImageBlockGallery';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import Image from '@akashaorg/design-system-core/lib/components/Image';
 import ImageBlockToolbar from '@akashaorg/design-system-components/lib/components/ImageBlockToolbar';
 import ImageModal from '@akashaorg/design-system-components/lib/components/ImageModal';
 import { type GalleryImage } from '@akashaorg/typings/lib/ui';
@@ -451,7 +451,7 @@ export const ImageEditorBlock = (
                     <Image
                       alt={imageObj.name}
                       src={imageObj.originalSrc}
-                      customStyle="object-contain w-8 h-8 rounded-[0.5rem]"
+                      className="object-contain w-8 h-8 rounded-[0.5rem]"
                     />
                     <Text>{imageObj.name}</Text>
                   </Stack>

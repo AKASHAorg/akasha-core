@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Image from '@akashaorg/design-system-core/lib/components/Image';
+import { Image } from '@akashaorg/ui/lib/akasha-components/image';
 import ImageOverlay from '../../ImageOverlay';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { type GalleryImage } from '@akashaorg/typings/lib/ui';
@@ -76,7 +76,7 @@ export const Gallery: React.FC<GalleryProps> = props => {
                 alt={image.name}
                 src={image.originalSrc || image.displaySrc || image.src}
                 onClick={() => handleClickImage(image)}
-                customStyle="object-cover w-full h-full"
+                className="object-cover w-full h-full"
                 showLoadingIndicator
               />
               {showOverlay && (

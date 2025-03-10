@@ -3,7 +3,7 @@ import AppList from '@akashaorg/design-system-components/lib/components/AppList'
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import Image from '@akashaorg/design-system-core/lib/components/Image';
+import { Image } from '@akashaorg/ui/lib/akasha-components/image';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
@@ -131,10 +131,7 @@ export const InstalledExtensionsList = () => {
           {!installedExtensions.length && (
             <>
               <Stack className="h-52 w-52">
-                <Image
-                  customStyle="object-contain"
-                  src={`${PUBLIC_IMAGE_PATH}/longbeam-notfound.webp`}
-                />
+                <Image src={`${PUBLIC_IMAGE_PATH}/longbeam-notfound.webp`} />
               </Stack>
               <Text variant="h6">{t('No extensions installed yet!')}</Text>
               <Stack alignItems="center">
