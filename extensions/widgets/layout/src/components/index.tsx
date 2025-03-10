@@ -251,26 +251,25 @@ const Layout: React.FC<unknown> = () => {
             className={`pr-2 relative min-h-[${contentHeight}px] h-full`}
           >
             <Stack className="h-full hidden lg:flex">
-              <Stack className={`mt-[${offset}]px`}>
-                <Stack
-                  ref={widgetContentRef}
-                  className={`${position} ${stickyPos} ${showWidgets ? '' : 'hidden'} self-start`}
-                >
-                  <Stack className="my-4">
-                    <Widget
-                      name={layoutSlots.contextualWidgetSlotId}
-                      loadingIndicator={miniProfileLoadingIndicator}
-                    />
-                    <Widget
-                      name={layoutSlots.widgetSlotId}
-                      loadingIndicator={trendingWidgetLoadingIndicator}
-                    />
-                  </Stack>
+              <Stack className={`mt-[${offset}px]`} />
+              <Stack
+                ref={widgetContentRef}
+                className={`${position} ${stickyPos} ${showWidgets ? '' : 'hidden'} self-start`}
+              >
+                <Stack className="my-4">
+                  <Widget
+                    name={layoutSlots.contextualWidgetSlotId}
+                    loadingIndicator={miniProfileLoadingIndicator}
+                  />
+                  <Widget
+                    name={layoutSlots.widgetSlotId}
+                    loadingIndicator={trendingWidgetLoadingIndicator}
+                  />
                 </Stack>
               </Stack>
-              <Stack className="fixed bottom-2 lg:(w-[21rem])">
-                <Widget name={layoutSlots.cookieWidgetSlotId} />
-              </Stack>
+            </Stack>
+            <Stack className="fixed bottom-2 lg:(w-[21rem])">
+              <Widget name={layoutSlots.cookieWidgetSlotId} />
             </Stack>
           </Stack>
         </Stack>
