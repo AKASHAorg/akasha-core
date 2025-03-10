@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 @source "../ui";
 /* This is temporary will change once twind is removed */
-@source "../../extensions/apps/world-builder";
+@source "../../extensions";
 
 @theme inline {
   --animate-accordion-down: accordion-down 0.2s ease-out;
@@ -134,6 +134,7 @@
   }
 
   [data-slot='button'],
+  [data-slot*='duplex-button'],
   [data-slot='badge'] {
     --radius: 1.5rem;
   }

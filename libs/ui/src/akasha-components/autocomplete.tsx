@@ -17,18 +17,19 @@ import { Input } from '@/akasha-components/input';
 
 const AutocompleteContext = React.createContext<
   | ((
-      | { multiple: true; onValueChange?: (value: string[]) => void }
+      | {
+          multiple: true;
+          onValueChange?: (value: string[]) => void;
+        }
       | { multiple?: false; onValueChange?: (value: string) => void }
     ) & {
       searchValue: string;
       open: boolean;
       emptyMessage: string;
       loading?: boolean;
-      inputRef: React.MutableRefObject<HTMLInputElement | null>;
       selectedValues: string[];
       setSearchValue: React.Dispatch<React.SetStateAction<string>>;
       setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-      registerOption: (value: string, label: React.ReactNode) => void;
     })
   | null
 >(null);
@@ -49,23 +50,25 @@ const Autocomplete = React.forwardRef<
     className?: string;
     children?: React.ReactNode;
   } & (
-    | { multiple: true; value?: string[]; onValueChange?: (value: string[]) => void }
-    | { multiple?: false; value?: string; onValueChange?: (value: string) => void }
+    | {
+        multiple: true;
+        value?: string[];
+        onValueChange?: (value: string[]) => void;
+      }
+    | {
+        multiple?: false;
+        value?: string;
+        onValueChange?: (value: string) => void;
+      }
   )
 >(({ emptyMessage = '', loading = false, className, children, ...props }, ref) => {
-  const inputRef = React.useRef<HTMLInputElement>(null);
   const [open, setOpen] = React.useState(false);
   const [searchValue, setSearchValue] = React.useState('');
-  const [, setOptions] = React.useState<Record<string, React.ReactNode>>({});
 
-  const registerOption = React.useCallback((value: string, label: React.ReactNode) => {
-    setOptions(prev => ({ ...prev, [value]: label }));
-  }, []);
-
-  const getSelectedValues = React.useCallback((multiple: boolean, value?: string | string[]) => {
-    if (multiple) return Array.isArray(value) ? value : [];
-    return typeof value === 'string' ? [value] : [];
-  }, []);
+  const getSelectedValues = React.useCallback(() => {
+    if (props.multiple) return props.value || [];
+    return typeof props.value === 'string' ? [props.value] : [];
+  }, [props.multiple, props.value]);
 
   return (
     <AutocompleteContext.Provider
@@ -74,12 +77,10 @@ const Autocomplete = React.forwardRef<
         searchValue,
         emptyMessage,
         open,
-        selectedValues: getSelectedValues(props.multiple, props.value),
+        selectedValues: getSelectedValues(),
         loading,
-        inputRef,
         setOpen,
         setSearchValue,
-        registerOption,
       }}
     >
       <Command
@@ -104,38 +105,47 @@ const AutocompleteTrigger = React.forwardRef<
   React.ElementRef<typeof Input>,
   | { asChild: true; children?: React.ReactNode }
   | (React.ComponentProps<'input'> & { asChild?: false })
->(({ asChild, ...props }, ref) => {
-  const { searchValue, setSearchValue, setOpen, inputRef, multiple } = useAutocompleteContext();
+>((props, ref) => {
+  const { searchValue, setSearchValue, setOpen, multiple } = useAutocompleteContext();
 
+  const { asChild, ...rest } = props;
   const Comp = asChild ? (Slot as typeof Input) : Input;
 
-  const handleBlur = React.useCallback(() => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(event.target.value);
+    setOpen(true);
+    if (asChild === false) {
+      props.onChange?.(event);
+    }
+  };
+
+  const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
+    setOpen(true);
+    if (asChild === false) {
+      props.onFocus?.(event);
+    }
+  };
+
+  const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     setOpen(false);
     if (!multiple) {
       setSearchValue(searchValue || '');
     }
-  }, [setOpen, setSearchValue, searchValue, multiple]);
+    if (asChild === false) {
+      props.onBlur?.(event);
+    }
+  };
 
   return (
     <Comp
+      ref={ref}
       data-slot="autocomplete-trigger"
-      ref={node => {
-        inputRef.current = node;
-        if (typeof ref === 'function') {
-          ref(node);
-        } else {
-          ref.current = node;
-        }
-      }}
       value={searchValue}
       type="search"
-      onChange={event => {
-        setSearchValue(event.target.value);
-        setOpen(true);
-      }}
-      onFocus={() => setOpen(true)}
+      onChange={handleChange}
+      onFocus={handleFocus}
       onBlur={handleBlur}
-      {...props}
+      {...rest}
     />
   );
 });
@@ -153,7 +163,9 @@ const AutocompleteList = React.forwardRef<
       data-slot="autocomplete-list"
       className={cn(
         'absolute top-11 animate-in fade-in-0 zoom-in-95 z-10 w-full border rounded-lg bg-card p-1',
-        { hidden: !open },
+        {
+          hidden: !open,
+        },
         !emptyMessage && "has-[[data-slot='command-group'][hidden]]:hidden",
         className,
       )}
@@ -177,30 +189,25 @@ const AutocompleteItem = React.forwardRef<
   React.ElementRef<typeof CommandItem>,
   { value: string; children: React.ReactNode } & React.ComponentProps<typeof CommandItem>
 >(({ value, children, className, onMouseDown, onSelect, ...props }, ref) => {
-  const { selectedValues, setSearchValue, setOpen, registerOption, multiple, onValueChange } =
+  const { selectedValues, setSearchValue, setOpen, multiple, onValueChange } =
     useAutocompleteContext();
-
-  React.useEffect(() => {
-    registerOption(value, children);
-  }, [value, children, registerOption]);
 
   const isSelected = selectedValues.includes(value);
   const searchValue = typeof children === 'string' ? children : value;
 
   const handleSelect = () => {
-    if (multiple) {
+    if (multiple === true) {
       const newSelected = isSelected
         ? selectedValues.filter(item => item !== value)
         : [...selectedValues, value];
+
       onValueChange?.(newSelected);
-      return;
     } else {
-      //TODO: revisit type
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      onValueChange?.(value as any);
+      onValueChange?.(value);
       setSearchValue(searchValue);
       setOpen(false);
     }
+    onSelect?.(value);
   };
 
   return (
@@ -213,10 +220,7 @@ const AutocompleteItem = React.forwardRef<
         event.stopPropagation();
         onMouseDown?.(event);
       }}
-      onSelect={value => {
-        handleSelect();
-        onSelect?.(value);
-      }}
+      onSelect={handleSelect}
       className={cn('flex w-full items-center gap-2', !isSelected && 'pl-8', className)}
       {...props}
     >

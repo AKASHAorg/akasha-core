@@ -1,11 +1,13 @@
 import * as React from 'react';
 
 import { Button } from '@/akasha-components/button';
+import { cn } from '@/library/utils';
 
 const DuplexButtonContext = React.createContext<{
   active: boolean;
-  hovered: boolean;
-  onHovered: (value: boolean) => void;
+  size: React.ComponentProps<typeof Button>['size'];
+  loading?: boolean;
+  disabled?: boolean;
 } | null>(null);
 
 const useDuplexButtonContext = () => {
@@ -18,18 +20,29 @@ const useDuplexButtonContext = () => {
 
 const DuplexButton = React.forwardRef<
   React.ElementRef<'div'>,
-  React.ComponentProps<'div'> & { active: boolean; children: React.ReactNode }
->(({ children, active, ...props }, ref) => {
-  const [hovered, setHovered] = React.useState(false);
+  React.ComponentProps<'div'> & {
+    active: boolean;
+    size?: React.ComponentProps<typeof Button>['size'];
+    loading?: boolean;
+    disabled?: boolean;
+    children: React.ReactNode;
+  }
+>(({ size = 'default', active, loading, disabled, className, children, ...props }, ref) => {
   return (
     <DuplexButtonContext.Provider
       value={{
         active,
-        hovered,
-        onHovered: hovered => setHovered(hovered),
+        size,
+        loading,
+        disabled,
       }}
     >
-      <div ref={ref} data-slot="duplex-button" {...props}>
+      <div
+        ref={ref}
+        data-slot="duplex-button"
+        className={cn('group/duplex-button [&_button]:w-full space-2', className)}
+        {...props}
+      >
         {children}
       </div>
     </DuplexButtonContext.Provider>
@@ -39,45 +52,63 @@ const DuplexButton = React.forwardRef<
 const DuplexButtonActive = React.forwardRef<
   React.ElementRef<'button'>,
   React.ComponentProps<'button'> & React.ComponentProps<typeof Button>
->(({ ...props }, ref) => {
-  const { active, hovered, onHovered } = useDuplexButtonContext();
+>(({ className, ...props }, ref) => {
+  const { active, loading, disabled, size } = useDuplexButtonContext();
+  if (!active) return null;
   return (
-    active &&
-    !hovered && (
-      <Button
-        ref={ref}
-        data-slot="duplex-button-active"
-        onMouseEnter={() => onHovered(true)}
-        {...props}
-      />
-    )
+    <Button
+      ref={ref}
+      data-slot="duplex-button-active"
+      loading={loading}
+      disabled={disabled}
+      size={size}
+      className={cn(
+        {
+          'group-hover/duplex-button:hidden': !loading && !disabled,
+        },
+        className,
+      )}
+      {...props}
+    />
   );
 });
 
 const DuplexButtonHover = React.forwardRef<
   React.ElementRef<'button'>,
   React.ComponentProps<'button'> & React.ComponentProps<typeof Button>
->(({ ...props }, ref) => {
-  const { active, hovered, onHovered } = useDuplexButtonContext();
+>(({ className, ...props }, ref) => {
+  const { active, loading, disabled, size } = useDuplexButtonContext();
+  if (loading || disabled || !active) return null;
   return (
-    active &&
-    hovered && (
-      <Button
-        ref={ref}
-        data-slot="duplex-button-hover"
-        onMouseLeave={() => onHovered(false)}
-        {...props}
-      />
-    )
+    <Button
+      ref={ref}
+      data-slot="duplex-button-hover"
+      size={size}
+      className={cn(
+        'hidden group-hover/duplex-button:flex border border-destructive text-destructive bg-transparent hover:bg-transparent',
+        className,
+      )}
+      {...props}
+    />
   );
 });
 
 const DuplexButtonInactive = React.forwardRef<
   React.ElementRef<'button'>,
   React.ComponentProps<'button'> & React.ComponentProps<typeof Button>
->(({ ...props }, ref) => {
-  const { active } = useDuplexButtonContext();
-  return !active && <Button ref={ref} data-slot="duplex-button-inactive" {...props} />;
+>((props, ref) => {
+  const { active, loading, disabled, size } = useDuplexButtonContext();
+  if (active) return null;
+  return (
+    <Button
+      ref={ref}
+      data-slot="duplex-button-inactive"
+      size={size}
+      loading={loading}
+      disabled={disabled}
+      {...props}
+    />
+  );
 });
 
 export { DuplexButton, DuplexButtonActive, DuplexButtonHover, DuplexButtonInactive };
