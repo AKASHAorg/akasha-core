@@ -28,7 +28,11 @@ import { useNavigate } from '@tanstack/react-router';
 import { AtomContext } from './main-page';
 import { useAtom } from 'jotai';
 import { DRAFT_EXTENSIONS, MAX_CONTRIBUTORS } from '../../../constants';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import {
+  ErrorLoader,
+  ErrorLoaderDescription,
+  ErrorLoaderTitle,
+} from '@akashaorg/ui/lib/akasha-components/error-loader';
 
 export type ExtensionEditContributorsPageProps = {
   extensionId: string;
@@ -249,11 +253,12 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
             )}
             {error && (
               <Stack>
-                <ErrorLoader
-                  type="script-error"
-                  title={t('There was an error loading the contributors')}
-                  details={error.message}
-                />
+                <ErrorLoader type="script-error">
+                  <ErrorLoaderTitle>
+                    {t('There was an error loading the contribu tors')}
+                  </ErrorLoaderTitle>
+                  <ErrorLoaderDescription>{error.message}</ErrorLoaderDescription>
+                </ErrorLoader>
               </Stack>
             )}
             {addedContributors?.length > 0 && (

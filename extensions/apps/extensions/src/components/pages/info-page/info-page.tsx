@@ -1,7 +1,11 @@
 import * as React from 'react';
 import { useMemo, useRef, useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import {
+  ErrorLoader,
+  ErrorLoaderDescription,
+  ErrorLoaderTitle,
+} from '@akashaorg/ui/lib/akasha-components/error-loader';
 import {
   ChevronRightIcon,
   FlagIcon,
@@ -210,19 +214,21 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
     <>
       {appReq.error && (
         <Stack>
-          <ErrorLoader
-            type="script-error"
-            title={t('There was an error loading the app info')}
-            details={t('We cannot show this app right now')}
-          />
+          <ErrorLoader type="script-error">
+            <ErrorLoaderTitle>{t('There was an error loading the app info')}</ErrorLoaderTitle>
+            <ErrorLoaderDescription>
+              {t('We cannot show this app right now')}
+            </ErrorLoaderDescription>
+          </ErrorLoader>
         </Stack>
       )}
       {!appReq.error && appReq.networkStatus === NetworkStatus.ready && !appData && (
-        <ErrorLoader
-          type="no-apps"
-          title={t('Extension not found!')}
-          details={t('The extension you are trying to view cannot be found.')}
-        />
+        <ErrorLoader type="no-apps">
+          <ErrorLoaderTitle>{t('Extension not found!')}</ErrorLoaderTitle>
+          <ErrorLoaderDescription>
+            {t('The extension you are trying to view cannot be found.')}
+          </ErrorLoaderDescription>
+        </ErrorLoader>
       )}
       {!appReq.error && appReq.networkStatus === NetworkStatus.ready && !!appData && (
         <>

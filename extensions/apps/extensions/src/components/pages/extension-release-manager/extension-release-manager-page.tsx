@@ -4,7 +4,12 @@ import { useNavigate } from '@tanstack/react-router';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import {
+  ErrorLoader,
+  ErrorLoaderDescription,
+  ErrorLoaderFooter,
+  ErrorLoaderTitle,
+} from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
@@ -224,32 +229,30 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
 
   if (extensionDataReqErr) {
     return (
-      <ErrorLoader
-        type="script-error"
-        title={t('Error loading extension data')}
-        details={extensionDataReqErr.message}
-      />
+      <ErrorLoader type="script-error">
+        <ErrorLoaderTitle>{t('Error loading extension data')}</ErrorLoaderTitle>
+        <ErrorLoaderDescription>{extensionDataReqErr.message}</ErrorLoaderDescription>
+      </ErrorLoader>
     );
   }
 
   if (appsReleasesError) {
     return (
-      <ErrorLoader
-        type="script-error"
-        title={t('Error loading extension data')}
-        details={appsReleasesError.message}
-      />
+      <ErrorLoader type="script-error">
+        <ErrorLoaderTitle>{t('Error loading extension data')}</ErrorLoaderTitle>
+        <ErrorLoaderDescription>{appsReleasesError.message}</ErrorLoaderDescription>
+      </ErrorLoader>
     );
   }
 
   if (!authenticatedDID && !isAuthenticating) {
     return (
-      <ErrorLoader
-        type="not-authenticated"
-        title={`${t('Uh-oh')}! ${t('You are not connected')}!`}
-        details={`${t('To check your extensions you must be connected')} ⚡️`}
-      >
-        <Button onClick={handleConnectButtonClick}>{t('Connect')}</Button>
+      <ErrorLoader type="not-authenticated">
+        <ErrorLoaderTitle>{`${t('Uh-oh')}! ${t('You are not connected')}!`}</ErrorLoaderTitle>
+        <ErrorLoaderDescription>{`${t('To check your extensions you must be connected')} ⚡️`}</ErrorLoaderDescription>
+        <ErrorLoaderFooter>
+          <Button onClick={handleConnectButtonClick}>{t('Connect')}</Button>
+        </ErrorLoaderFooter>
       </ErrorLoader>
     );
   }

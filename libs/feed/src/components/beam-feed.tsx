@@ -6,11 +6,14 @@ import React, {
   useMemo,
   useRef,
 } from 'react';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import {
+  ErrorLoader,
+  ErrorLoaderDescription,
+  ErrorLoaderTitle,
+} from '@akashaorg/ui/lib/akasha-components/error-loader';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import DynamicInfiniteScroll from '@akashaorg/design-system-components/lib/components/DynamicInfiniteScroll';
-import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import getSDK from '@akashaorg/core-sdk';
 import { AnalyticsEventData } from '@akashaorg/typings/lib/ui';
 import {
@@ -162,11 +165,10 @@ const BeamFeed = (props: BeamFeedProps) => {
     <>
       {beamStreamQuery.loading && beams.length === 0 && loadingIndicatorRef.current()}
       {beamStreamQuery.error && (
-        <ErrorLoader
-          type="script-error"
-          title={'Sorry, there was an error when fetching beams'}
-          details={beamStreamQuery.error.message}
-        />
+        <ErrorLoader type="script-error">
+          <ErrorLoaderTitle>{'Sorry, there was an error when fetching beams'}</ErrorLoaderTitle>
+          <ErrorLoaderDescription>{beamStreamQuery.error.message}</ErrorLoaderDescription>
+        </ErrorLoader>
       )}
       {beams && (
         <div ref={vListContainerRef}>

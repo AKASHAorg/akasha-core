@@ -4,7 +4,12 @@ import InstallApp, {
 } from '@akashaorg/design-system-components/lib/components/InstallApp';
 import { useTranslation } from 'react-i18next';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import {
+  ErrorLoader,
+  ErrorLoaderDescription,
+  ErrorLoaderFooter,
+  ErrorLoaderTitle,
+} from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { useGetAppsByPublisherDidQuery } from '@akashaorg/ui-core-hooks/lib/generated';
 import {
@@ -275,25 +280,28 @@ export const InstallExtensionPage = ({ appId }: { appId: string }) => {
 
   if (error) {
     return (
-      <ErrorLoader
-        type="no-apps"
-        title={t('Error loading app')}
-        details={t('Looks like this app is not available to install.')}
-      />
+      <ErrorLoader type="no-apps">
+        <ErrorLoaderTitle>{t('Error loading app')}</ErrorLoaderTitle>
+        <ErrorLoaderDescription>
+          {t('Looks like this app is not available to install.')}
+        </ErrorLoaderDescription>
+      </ErrorLoader>
     );
   }
 
   return (
     <>
       {!authenticatedDID && !isAuthenticating && called && !loading && (
-        <ErrorLoader
-          type="not-authenticated"
-          title={t('Login Required')}
-          details={t('You must be logged in to install {{appDisplayName}}', {
-            appDisplayName: selectAppDisplayName(data),
-          })}
-        >
-          <Button onClick={handleLoginClick}>{t('Login')}</Button>
+        <ErrorLoader type="not-authenticated">
+          <ErrorLoaderTitle>{t('Login Required')}</ErrorLoaderTitle>
+          <ErrorLoaderDescription>
+            {t('You must be logged in to install {{appDisplayName}}', {
+              appDisplayName: selectAppDisplayName(data),
+            })}
+          </ErrorLoaderDescription>
+          <ErrorLoaderFooter>
+            <Button onClick={handleLoginClick}>{t('Login')}</Button>
+          </ErrorLoaderFooter>
         </ErrorLoader>
       )}
       {authenticatedDID && called && !loading && (

@@ -16,7 +16,11 @@ import {
 import { BeamContentResolver, TagFeed } from '@akashaorg/ui-lib-feed';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import getSDK from '@akashaorg/core-sdk';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import {
+  ErrorLoader,
+  ErrorLoaderDescription,
+  ErrorLoaderTitle,
+} from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import TagProfileCard from '@akashaorg/design-system-components/lib/components/TagProfileCard';
 import TagFeedHeaderLoader from './tag-feed-header-loader';
@@ -192,11 +196,10 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
         </Helmet>
         {loadingCount && <TagFeedHeaderLoader />}
         {countQueryError && (
-          <ErrorLoader
-            type="script-error"
-            title={t('Error loading tag data')}
-            details={countQueryError?.message}
-          />
+          <ErrorLoader type="script-error">
+            <ErrorLoaderTitle>{t('Error loading tag data')}</ErrorLoaderTitle>
+            <ErrorLoaderDescription>{countQueryError?.message}</ErrorLoaderDescription>
+          </ErrorLoader>
         )}
         {!loadingCount && (
           <Stack className="mb-2">

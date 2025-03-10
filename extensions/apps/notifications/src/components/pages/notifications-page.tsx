@@ -22,7 +22,12 @@ import { UserSettingType } from '@akashaorg/typings/lib/sdk';
 
 import { useGetAppsByPublisherDidQuery } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
 import { selectApps } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-by-publisher-did-query';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import {
+  ErrorLoader,
+  ErrorLoaderDescription,
+  ErrorLoaderTitle,
+  ErrorLoaderFooter,
+} from '@akashaorg/ui/lib/akasha-components/error-loader';
 
 const NotificationsPage: React.FC = () => {
   const sdk = getSDK();
@@ -170,12 +175,14 @@ const NotificationsPage: React.FC = () => {
   if (!isLoggedIn && !isAuthenticating) {
     return (
       <Stack>
-        <ErrorLoader
-          type={'not-authenticated'}
-          title={t('Uh-oh! You are not connected!')}
-          details={t('To check notifications you must be connected ⚡️')}
-        >
-          <Button onClick={handleConnectButtonClick}>{t('Connect')}</Button>
+        <ErrorLoader type="not-authenticated">
+          <ErrorLoaderTitle>{t('Uh-oh! You are not connected!')}</ErrorLoaderTitle>
+          <ErrorLoaderDescription>
+            {t('To check notifications you must be connected ⚡️')}
+          </ErrorLoaderDescription>
+          <ErrorLoaderFooter>
+            <Button onClick={handleConnectButtonClick}>{t('Connect')}</Button>
+          </ErrorLoaderFooter>
         </ErrorLoader>
       </Stack>
     );

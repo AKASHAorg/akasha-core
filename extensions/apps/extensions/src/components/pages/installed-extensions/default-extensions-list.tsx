@@ -5,7 +5,11 @@ import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import {
+  ErrorLoader,
+  ErrorLoaderDescription,
+  ErrorLoaderTitle,
+} from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { transformSource, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { useGetAppsByPublisherDidQuery } from '@akashaorg/ui-core-hooks/lib/generated';
 import { selectApps } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-by-publisher-did-query';
@@ -91,21 +95,15 @@ export const DefaultExtensionsList = () => {
         </Stack>
       )}
       {error && (
-        <ErrorLoader
-          title={
-            <Text variant="h5" align="center" selectable={false}>
-              {t(`Uh-oh! We couldn't load`)} <br />
-              {t(`the extensions list!`)}
-            </Text>
-          }
-          details={
-            <Text variant="body2" align="center" selectable={false} customStyle="w-60 sm:w-auto">
-              {t(`It seems there's a problem with the server. Please try again later!`)}
-            </Text>
-          }
-          type="list-not-available"
-          noWrapperCard={true}
-        />
+        <ErrorLoader type="list-not-available" className="border-none bg-transparent">
+          <ErrorLoaderTitle>
+            {t(`Uh-oh! We couldn't load`)} <br />
+            {t(`the extensions list!`)}
+          </ErrorLoaderTitle>
+          <ErrorLoaderDescription>
+            {t(`It seems there's a problem with the server. Please try again later!`)}
+          </ErrorLoaderDescription>
+        </ErrorLoader>
       )}
       {defaultExtensions?.length > 0 && (
         <AppList

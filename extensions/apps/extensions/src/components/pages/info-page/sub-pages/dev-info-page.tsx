@@ -18,7 +18,11 @@ import {
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import { NetworkStatus } from '@apollo/client';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import {
+  ErrorLoader,
+  ErrorLoaderDescription,
+  ErrorLoaderTitle,
+} from '@akashaorg/ui/lib/akasha-components/error-loader';
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
 import { getExtensionTypeLabel } from '../../../../utils/extension-utils';
 
@@ -144,12 +148,10 @@ export const DevInfoPage = (props: DevInfoPageProps) => {
           {appsReq.error && (
             <>
               <Divider />
-              <ErrorLoader
-                noWrapperCard={true}
-                type="list-not-available"
-                title={`${t('Uh-oh')}!${t("We couldn't load the extension list")}!`}
-                details={`${t('It seems there is a problem retreving the list of extensions')}. ${t('Please try again later')}!`}
-              />
+              <ErrorLoader type="list-not-available">
+                <ErrorLoaderTitle>{`${t('Uh-oh')}!${t("We couldn't load the extension list")}!`}</ErrorLoaderTitle>
+                <ErrorLoaderDescription>{`${t('It seems there is a problem retreving the list of extensions')}. ${t('Please try again later')}!`}</ErrorLoaderDescription>
+              </ErrorLoader>
             </>
           )}
           {appsReq.networkStatus === NetworkStatus.ready && !apps?.length && (
