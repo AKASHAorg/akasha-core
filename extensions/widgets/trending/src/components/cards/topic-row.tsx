@@ -9,8 +9,13 @@ import {
   XMarkIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
+import {
+  DuplexButton,
+  DuplexButtonInactive,
+  DuplexButtonActive,
+  DuplexButtonHover,
+} from '@akashaorg/ui/lib/akasha-components/duplex-button';
 import SubtitleTextIcon from '@akashaorg/design-system-core/lib/components/SubtitleTextIcon';
-import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 
 export type TopicRowProps = {
   tag: string;
@@ -81,19 +86,28 @@ export const TopicRow: React.FC<TopicRowProps> = props => {
       />
 
       <DuplexButton
-        inactiveLabel={subscribeLabel}
-        activeLabel={subscribedLabel}
-        activeHoverLabel={unsubscribeLabel}
         active={!!subscribedTags?.includes(tag)}
-        iconDirection="left"
-        activeIcon={<CheckIcon />}
-        activeHoverIcon={<XMarkIcon />}
-        inactiveVariant="secondary"
+        size="sm"
         loading={isLoading}
-        fixedWidth={'w-[7rem]'}
-        onClickActive={() => handleTopicSubscription(tag, false)}
-        onClickInactive={() => handleTopicSubscription(tag)}
-      />
+        className="w-[7rem]"
+      >
+        <DuplexButtonInactive onClick={() => handleTopicSubscription(tag)} variant={'outline'}>
+          {subscribeLabel}
+        </DuplexButtonInactive>
+
+        <DuplexButtonHover
+          variant="destructive"
+          onClick={() => handleTopicSubscription(tag, false)}
+        >
+          <XMarkIcon />
+          {unsubscribeLabel}
+        </DuplexButtonHover>
+
+        <DuplexButtonActive variant={'outline'}>
+          <CheckIcon />
+          {subscribedLabel}
+        </DuplexButtonActive>
+      </DuplexButton>
     </Stack>
   );
 };

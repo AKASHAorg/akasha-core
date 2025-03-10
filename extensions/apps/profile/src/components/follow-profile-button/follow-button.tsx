@@ -1,9 +1,12 @@
 import React from 'react';
 import getSDK from '@akashaorg/core-sdk';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import DuplexButton, {
-  DuplexButtonProps,
-} from '@akashaorg/design-system-core/lib/components/DuplexButton';
+import {
+  DuplexButton,
+  DuplexButtonActive,
+  DuplexButtonHover,
+  DuplexButtonInactive,
+} from '@akashaorg/ui/lib/akasha-components/duplex-button';
 import { Following } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import {
   CheckIcon,
@@ -23,12 +26,16 @@ import {
 } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
 import { updateFollowMutationCache } from './update-follow-mutation-cache';
 
-export type FollowButtonProps = Pick<DuplexButtonProps, 'activeVariant' | 'inactiveVariant'> & {
+type ButtonProps = React.ComponentProps<typeof Button>;
+
+export type FollowButtonProps = {
   profileID: string;
   followDocumentId: string;
   iconOnly?: boolean;
   isFollowing: boolean;
   isLoggedIn: boolean;
+  activeVariant?: ButtonProps['variant'];
+  inactiveVariant?: ButtonProps['variant'];
   showLoginModal: (redirectTo?: { modal: IModalNavigationOptions }) => void;
 };
 export const FollowButton = ({
@@ -116,7 +123,6 @@ export const FollowButton = ({
   const loading = createFollowLoading || updateFollowLoading;
 
   const disableActions = !profileID;
-  const disabledStyle = disableActions ? 'opacity-50' : '';
 
   const handleFollow = (profileID: string, followId: string, isFollowing: boolean) => {
     if (disableActions) {
@@ -150,26 +156,41 @@ export const FollowButton = ({
       loading={loading}
       variant="outline"
       size="icon"
-      className={disabledStyle}
+      disabled={disableActions}
     >
       {isFollowing ? <Following role="img" aria-label="following" /> : <UserPlusIcon />}
     </Button>
   ) : (
     <DuplexButton
-      inactiveLabel={t('Follow')}
-      activeLabel={t('Following')}
-      activeHoverLabel={t('Unfollow')}
-      activeVariant={activeVariant ?? 'secondary'}
       active={isFollowing}
-      iconDirection="left"
-      activeIcon={<CheckIcon />}
-      activeHoverIcon={<XMarkIcon />}
-      inactiveVariant={inactiveVariant ?? 'secondary'}
+      size="sm"
       loading={loading}
-      fixedWidth={'w-[7rem]'}
-      customStyle={disabledStyle}
-      onClickInactive={() => handleFollow(profileID, followDocumentId, !isFollowing)}
-      onClickActive={() => handleFollow(profileID, followDocumentId, !isFollowing)}
-    />
+      disabled={disableActions}
+      className="w-[7rem]"
+    >
+      <DuplexButtonInactive
+        onClick={() => {
+          handleFollow(profileID, followDocumentId, !isFollowing);
+        }}
+        variant={inactiveVariant ?? 'outline'}
+      >
+        {t('Follow')}
+      </DuplexButtonInactive>
+
+      <DuplexButtonHover
+        variant="destructive"
+        onClick={() => {
+          handleFollow(profileID, followDocumentId, !isFollowing);
+        }}
+      >
+        <XMarkIcon />
+        {t('Unfollow')}
+      </DuplexButtonHover>
+
+      <DuplexButtonActive variant={activeVariant ?? 'outline'}>
+        <CheckIcon />
+        {t('Following')}
+      </DuplexButtonActive>
+    </DuplexButton>
   );
 };

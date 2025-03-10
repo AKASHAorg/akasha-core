@@ -2,7 +2,12 @@ import React from 'react';
 import { tw } from '@twind/core';
 import { Tag } from '@akashaorg/typings/lib/ui';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
+import {
+  DuplexButton,
+  DuplexButtonActive,
+  DuplexButtonHover,
+  DuplexButtonInactive,
+} from '@akashaorg/ui/lib/akasha-components/duplex-button';
 import {
   CheckIcon,
   HashtagIcon,
@@ -59,19 +64,31 @@ const TagProfileCard: React.FC<TagProfileCard> = props => {
         <div className={tw(`w-28 py-1 shrink-0`)}>
           {tag && (
             <DuplexButton
-              inactiveLabel={subscribeLabel}
-              activeLabel={subscribedLabel}
-              activeHoverLabel={unsubscribeLabel}
-              activeIcon={<CheckIcon />}
-              activeHoverIcon={<XMarkIcon />}
-              fixedWidth={'w-[7rem]'}
-              iconDirection="left"
-              inactiveVariant="secondary"
-              loading={isLoading}
-              onClickInactive={() => handleSubscribeTag(tag.name)}
-              onClickActive={() => handleUnsubscribeTag(tag.name)}
               active={subscribedTags?.includes(tag.name)}
-            />
+              size="sm"
+              loading={isLoading}
+              className="w-[7rem]"
+            >
+              <DuplexButtonInactive
+                onClick={() => handleSubscribeTag(tag.name)}
+                variant={'outline'}
+              >
+                {subscribeLabel}
+              </DuplexButtonInactive>
+
+              <DuplexButtonHover
+                variant="destructive"
+                onClick={() => handleUnsubscribeTag(tag.name)}
+              >
+                <XMarkIcon />
+                {unsubscribeLabel}
+              </DuplexButtonHover>
+
+              <DuplexButtonActive variant={'outline'}>
+                <CheckIcon />
+                {subscribedLabel}
+              </DuplexButtonActive>
+            </DuplexButton>
           )}
         </div>
       </Stack>
