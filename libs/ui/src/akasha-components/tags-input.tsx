@@ -18,7 +18,7 @@ const TagsInputContext = React.createContext<TagsInputContextProps | null>(null)
 function useTagsInputContext() {
   const context = React.useContext(TagsInputContext);
   if (!context) {
-    throw new Error('TagsInput must be used within TagsInput');
+    throw new Error('useTagsInputContext must be used within TagsInput.');
   }
   return context;
 }
@@ -27,24 +27,26 @@ function isSeparator(code: string, separators: Separator[]): code is Separator {
   return !!separators.find(separator => separator === code);
 }
 
-const TagsInputList = ({ className, children, ...props }: React.ComponentProps<'div'>) => {
-  return (
-    <div
-      data-slot="tags-input-list"
-      className={cn('w-full flex items-center gap-2 flex-wrap', className)}
-      {...props}
-    >
-      {children}
-    </div>
-  );
-};
+const TagsInputList = React.forwardRef<HTMLDivElement, React.ComponentProps<'div'>>(
+  ({ className, children, ...props }, ref) => {
+    return (
+      <div
+        ref={ref}
+        data-slot="tags-input-list"
+        className={cn('w-full flex items-center gap-2 flex-wrap', className)}
+        {...props}
+      >
+        {children}
+      </div>
+    );
+  },
+);
+TagsInputList.displayName = 'TagsInputList';
 
-const TagsInputItem = ({
-  tag,
-  children,
-  className,
-  ...props
-}: React.ComponentProps<typeof Badge> & { tag: string }) => {
+const TagsInputItem = React.forwardRef<
+  HTMLSpanElement,
+  React.ComponentProps<typeof Badge> & { tag: string }
+>(({ tag, children, className, ...props }, ref) => {
   const { tags, registerTag, handleRemove } = useTagsInputContext();
 
   React.useEffect(() => {
@@ -55,6 +57,7 @@ const TagsInputItem = ({
 
   return (
     <Badge
+      ref={ref}
       data-slot="tags-input-item"
       variant="outline"
       className={cn('rounded-full', className)}
@@ -66,69 +69,91 @@ const TagsInputItem = ({
       </button>
     </Badge>
   );
-};
+});
+TagsInputItem.displayName = 'TagsInputItem';
 
-const TagsInput = ({
-  ref,
-  value,
-  separators = ['Enter'],
-  className,
-  children,
-  onTagsChange,
-  onChange,
-  onKeyDown,
-  ...props
-}: React.ComponentProps<typeof Input> & {
-  separators?: Separator[];
-  onTagsChange?: (tags: Set<string>, newTagAdded?: boolean) => void;
-}) => {
-  const [tags, setTags] = React.useState<Set<string>>(new Set());
-  const [inputValue, setInputValue] = React.useState('');
+const TagsInput = React.forwardRef<
+  HTMLInputElement,
+  React.ComponentProps<typeof Input> & {
+    separators?: Separator[];
+    onTagsChange?: (tags: Set<string>) => void;
+  }
+>(
+  (
+    { separators = ['Enter'], className, children, onTagsChange, onChange, onKeyDown, ...props },
+    ref,
+  ) => {
+    const [tags, setTags] = React.useState<Set<string>>(new Set());
+    const [inputValue, setInputValue] = React.useState('');
+    const inputRef = React.useRef<HTMLInputElement>(null);
 
-  const registerTag = (tag: string) => {
-    setTags(prev => new Set(prev).add(tag));
-  };
+    const registerTag = (tag: string) => {
+      setTags(prev => new Set(prev).add(tag));
+    };
 
-  const handleRemove = (tag: string) => {
-    const newTags = new Set(tags);
-    newTags.delete(tag);
-    setTags(newTags);
-    onTagsChange?.(newTags);
-  };
+    const handleRemove = (tag: string) => {
+      const newTags = new Set(tags);
+      newTags.delete(tag);
+      setTags(newTags);
+      onTagsChange?.(newTags);
+    };
 
-  return (
-    <TagsInputContext.Provider value={{ tags, registerTag, handleRemove }}>
-      <div data-slot="tags-input" className={cn('flex flex-col gap-3', className)}>
-        <Input
-          ref={ref}
-          data-slot="tags-input-field"
-          type="search"
-          value={value || inputValue}
-          onChange={event => {
-            setInputValue(event.target.value);
-            onChange?.(event);
-          }}
-          onKeyDown={event => {
-            if (isSeparator(event.code, separators) && typeof inputValue === 'string') {
-              if (separators.includes('Comma') && event.key === ',') {
-                event.preventDefault();
+    return (
+      <TagsInputContext.Provider value={{ tags, registerTag, handleRemove }}>
+        <div data-slot="tags-input" className={cn('flex flex-col gap-3', className)}>
+          <Input
+            ref={node => {
+              inputRef.current = node;
+              if (typeof ref === 'function') {
+                ref(node);
+              } else if (ref) {
+                ref.current = node;
               }
-              if (inputValue) {
+            }}
+            data-slot="tags-input-field"
+            type="search"
+            value={inputValue}
+            onChange={event => {
+              setInputValue(event.target.value);
+              onChange?.(event);
+            }}
+            onKeyDown={event => {
+              if (isSeparator(event.code, separators) && inputValue) {
+                if (separators.includes('Comma') && event.key === ',') {
+                  event.preventDefault();
+                }
                 const newTags = new Set(tags);
                 newTags.add(inputValue);
-                onTagsChange?.(newTags, true);
+                onTagsChange?.(newTags);
                 registerTag(inputValue);
-                setInputValue('');
+
+                // Clear controlled input via native setter to propagate change event.
+                const newEvent = new Event('change', { bubbles: true });
+                const input = event.target;
+
+                const nativeValueSetter = Object.getOwnPropertyDescriptor(
+                  HTMLInputElement.prototype,
+                  'value',
+                )?.set;
+
+                if (nativeValueSetter) {
+                  nativeValueSetter.call(input, '');
+                }
+
+                input.dispatchEvent(newEvent);
+
+                inputRef.current?.blur();
               }
-            }
-            onKeyDown?.(event);
-          }}
-          {...props}
-        />
-        {children}
-      </div>
-    </TagsInputContext.Provider>
-  );
-};
+              onKeyDown?.(event);
+            }}
+            {...props}
+          />
+          {children}
+        </div>
+      </TagsInputContext.Provider>
+    );
+  },
+);
+TagsInput.displayName = 'TagsInput';
 
 export { TagsInput, TagsInputList, TagsInputItem };
