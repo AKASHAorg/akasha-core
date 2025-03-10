@@ -1,12 +1,12 @@
-interface AkashaContentBlockInterface @loadModel(id: "kjzl6hvfrbw6camingc354x7fs0zfvcdntuls7514mom4gpzntbv0gtyaeqduwg") {
+interface AkashaContentBlockInterface @loadModel(id: "kjzl6hvfrbw6cah5m7mmzg6f7r5r2r7qn2jx5a8zv7fkuqh2k1ix4mjan61lz0r") {
   id: ID!
 }
 
-interface AkashaAppReleaseInterface @loadModel(id: "kjzl6hvfrbw6c8lieadu4bugco13jdp0j9agrrsflezai2uuhtzkv97xnantmdu") {
+interface AkashaAppReleaseInterface @loadModel(id: "kjzl6hvfrbw6c6bfjbzy162x807w1a4gw6m22hqxddr9dvk6cbajfoxfei55kgy") {
   id: ID!
 }
 
-interface AkashaAppInterface @loadModel(id: "kjzl6hvfrbw6c7mp2kgev6yk8hrxqkwj28l92a74x3p6wi1gcms00yx9ckxsokn") {
+interface AkashaAppInterface @loadModel(id: "kjzl6hvfrbw6cagb8umrsun2on3uisf1ahs3ohbb38nhp15qt7a6dzytsls3me4") {
   id: ID!
 
 }

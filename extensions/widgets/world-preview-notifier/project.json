@@ -1,0 +1,47 @@
+{
+  "name": "@akashaorg/ui-widget-world-preview-notifier",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "extensions/widgets/world-preview-notifier/src",
+  "projectType": "application",
+  "targets": {
+    "prepare": {
+      "dependsOn": [
+        "@akashaorg/ui-core-hooks:build",
+        "@akashaorg/design-system-components:prepare",
+        "@akashaorg/ui:prepare",
+        "@akashaorg/core-sdk:build",
+        "@akashaorg/ui-lib-extensions:prepare",
+        "@akashaorg/typings:prepare"
+      ],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "extensions/widgets/world-preview-notifier",
+        "command": "tsc --build"
+      }
+    },
+    "build": {
+      "dependsOn": [
+        "prepare"
+      ],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "extensions/widgets/world-preview-notifier",
+        "command": "webpack --config webpack.config.cjs"
+      },
+      "outputs": [
+        "{projectRoot}/lib",
+        "{workspaceRoot}/dist/widgets/world-preview"
+      ]
+    },
+    "translations": {
+      "executor": "./tools/executors/i18n:extract",
+      "options": {
+        "cwd": "extensions/widgets/world-preview-notifier"
+      }
+    }
+  },
+  "tags": [
+    "scope:extension",
+    "type:widget"
+  ]
+}

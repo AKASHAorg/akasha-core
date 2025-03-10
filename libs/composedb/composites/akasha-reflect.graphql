@@ -5,7 +5,7 @@ type ReflectProviderValue{
   value: String! @string(minLength: 3, maxLength: 3000)
 }
 
-interface AkashaBeamInterface @loadModel(id: "kjzl6hvfrbw6c5rvaehvw3bo06g91zzskdmqcamf87cou0c3rcjfga8otgn1dmh") {
+interface AkashaBeamInterface @loadModel(id: "kjzl6hvfrbw6ca0vfvj4zjjclhixqok8hdrl75aqbpg8r960tboumpn58yash2z") {
   id: ID!
 }
 

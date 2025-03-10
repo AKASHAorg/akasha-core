@@ -42,6 +42,7 @@ import {
 } from '@/ui/extension-avatar';
 import { Image } from '@akashaorg/ui/lib/akasha-components/image';
 import { IconContainer } from '@akashaorg/ui/lib/akasha-components/icon-container';
+import { openWorldConfigInNewTab } from '../../../utils';
 
 export const DashboardPage: React.FC = () => {
   const navigate = useNavigate();
@@ -119,6 +120,12 @@ export const DashboardPage: React.FC = () => {
     navigate({ to: '/world-create-form' });
   };
 
+  const navigateToWorldPreview = () => {
+    const extension = getExtensionDataById(worldConfig.homepageExtension);
+    console.log(extension);
+    openWorldConfigInNewTab(extension.name, worldData.id);
+  };
+
   const getExtensionDataById = (extId: string) => {
     const extension = worldConfigExtensions?.find(ext => ext.extensionID === extId);
     return extension?.extension;
@@ -176,7 +183,7 @@ export const DashboardPage: React.FC = () => {
             <Stack direction="column" spacing={4}>
               <Stack direction="row" justifyContent="between">
                 <Typography variant="h6">{worldData?.name}</Typography>
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" onClick={navigateToWorldPreview}>
                   <Eye />
                   {t('Preview')}
                 </Button>

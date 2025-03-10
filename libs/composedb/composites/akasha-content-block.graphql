@@ -1,4 +1,4 @@
-interface AkashaAppReleaseInterface @loadModel(id: "kjzl6hvfrbw6c8lieadu4bugco13jdp0j9agrrsflezai2uuhtzkv97xnantmdu") {
+interface AkashaAppReleaseInterface @loadModel(id: "kjzl6hvfrbw6c6bfjbzy162x807w1a4gw6m22hqxddr9dvk6cbajfoxfei55kgy") {
   id: ID!
 }
 

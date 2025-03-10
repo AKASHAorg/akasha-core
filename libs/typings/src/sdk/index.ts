@@ -41,4 +41,5 @@ const ServiceTypes = {
   Config: Symbol.for('awf-Config'),
   ScrollState: Symbol.for('awf-scroll-state'),
   Notification: Symbol.for('awf-Notification'),
+  WorldConfig: Symbol.for('awf-World-Config'),
 };

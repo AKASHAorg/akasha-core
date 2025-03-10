@@ -266,11 +266,15 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
   };
 
   const navToConfigSuccessPage = () => {
+    const extension = selectedExtensions.find(
+      extension => extension.id === worldConfig.homepageExtension,
+    );
     navigate({
       to: '/config-success',
       search: {
         worldId: worldId,
         worldName: worldData?.name,
+        homepageExtensionName: extension.name,
       },
     });
   };

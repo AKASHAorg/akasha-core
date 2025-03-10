@@ -18,11 +18,11 @@ type ProfileLabeled{
   value: String! @string(minLength:2, maxLength: 60)
 }
 
-interface AkashaAppReleaseInterface @loadModel(id: "kjzl6hvfrbw6c8lieadu4bugco13jdp0j9agrrsflezai2uuhtzkv97xnantmdu") {
+interface AkashaAppReleaseInterface @loadModel(id: "kjzl6hvfrbw6c6bfjbzy162x807w1a4gw6m22hqxddr9dvk6cbajfoxfei55kgy") {
   id: ID!
 }
 
-interface AkashaAppInterface @loadModel(id: "kjzl6hvfrbw6c7mp2kgev6yk8hrxqkwj28l92a74x3p6wi1gcms00yx9ckxsokn") {
+interface AkashaAppInterface @loadModel(id: "kjzl6hvfrbw6cagb8umrsun2on3uisf1ahs3ohbb38nhp15qt7a6dzytsls3me4") {
   id: ID!
 
 }

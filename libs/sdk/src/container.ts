@@ -16,6 +16,7 @@ import AWF_Lit from './common/lit';
 import AWF_Ceramic from './common/ceramic';
 import AWF_Config from './common/config';
 import Notification from './common/notification/notification';
+import WorldConfig from './world-config/world-config';
 
 const diContainer = new Container({
   defaultScope: 'Singleton',
@@ -36,6 +37,7 @@ diContainer.bind<AppSettings>(TYPES.AppSettings).to(AppSettings);
 diContainer.bind<AWF_Lit>(TYPES.Lit).to(AWF_Lit);
 diContainer.bind<AWF_Ceramic>(TYPES.Ceramic).to(AWF_Ceramic);
 diContainer.bind<Notification>(TYPES.Notification).to(Notification);
+diContainer.bind<WorldConfig>(TYPES.WorldConfig).to(WorldConfig);
 //@Todo: implement init watcher to prevent ambiguous service
 // export const importLazy = async () => {
 //   const r = await import('./gql/index.new');

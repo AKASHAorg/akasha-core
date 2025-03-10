@@ -1,29 +1,29 @@
-interface AkashaWorldConfigExtensionInterface @loadModel(id: "kjzl6hvfrbw6c7ig149oppeo7doizirlhwrnzvggifpcbpl2d5eppxknjzpxkzk") {
+interface AkashaWorldConfigExtensionInterface @loadModel(id: "kjzl6hvfrbw6c7k6iyw6s8gcf8givfrrjx13jpas057ucmbmwljdtxpt40a3vpd") {
     id: ID!
   }
 
 
-  type AkashaApp @loadModel(id: "kjzl6hvfrbw6c55lze6s2ab18ebzwg51e9q1xrw5uxl1pf3z10dg39lxruh7heo") {
+  type AkashaApp @loadModel(id: "kjzl6hvfrbw6c60my2sbyqyt980u1jq26ci8m19d996qscgcg87kpwp447iu15p") {
     id: ID!
     worldConfigs: [AkashaWorldConfigExtensionInterface] @relationFrom(model: "AkashaWorldConfigExtensionInterface", property: "extensionID")
     worldsConfigsCount: Int! @relationCountFrom(model: "AkashaWorldConfigExtensionInterface", property: "extensionID")
   }
 
-  interface AkashaWorldConfigInterface @loadModel(id: "kjzl6hvfrbw6c63gmxylppyl2rrl9vukj5b2wrm0yqs91gihepveef303bmw2gk") {
+  interface AkashaWorldConfigInterface @loadModel(id: "kjzl6hvfrbw6c65njjzje95z9n2kb4mbjs85bzlytunkl2m2w10p4rcthpmw7zg") {
     id: ID!
   }
 
-    interface AkashaWorldMetaInfoInterface @loadModel(id: "kjzl6hvfrbw6c7pnrxhwgq923dna7og4m49e00kur83qnb2f4sqrnl8lqrxla0g") {
+    interface AkashaWorldMetaInfoInterface @loadModel(id: "kjzl6hvfrbw6c5zvl21tkam3io2bk85tanc9hdbtkau1zwpaud8l9bj9rfaqhrd") {
     id: ID!
   }
 
-  type AkashaWorldConfig @loadModel(id: "kjzl6hvfrbw6cajh75htc40ommsetqkjlw0vlmi7u2fqumezuxprmbnoktdclp9") {
+  type AkashaWorldConfig @loadModel(id: "kjzl6hvfrbw6c7y848mgsxu0cc34alfejwfqjjwrkab99hms4xbbe57j1kx3pcz") {
     id: ID!
     extensions: [AkashaWorldConfigExtensionInterface] @relationFrom(model: "AkashaWorldConfigExtensionInterface", property: "worldConfigID")
   }
 
 
-  type AkashaWorld @loadModel(id: "kjzl6hvfrbw6c5o0dfdyz2dxc7724qkb9jhtdb3w2fvpbf74aplweuqbfk7yw7l") {
+  type AkashaWorld @loadModel(id: "kjzl6hvfrbw6c5k0h7zbzuksfgxoqkd2u41i9n4skcqi09drkxskef3kaae35vd") {
     id: ID!
     configInfo: [AkashaWorldConfigInterface] @relationFrom(model: "AkashaWorldConfigInterface", property: "worldID")
     metaInfo: [AkashaWorldMetaInfoInterface] @relationFrom(model: "AkashaWorldMetaInfoInterface", property: "worldID")

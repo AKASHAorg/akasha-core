@@ -23,6 +23,7 @@ import type AWF_Lit from './common/lit';
 import type AWF_Misc from './common/misc';
 import type Notification from './common/notification/notification';
 import type Web3Connector from './common/web3.connector';
+import AWF_WORLD_CONFIG from './world-config/world-config';
 
 export { Logger } from 'pino';
 
@@ -35,6 +36,7 @@ export type AWF_SDK = {
     appSettings: AppSettings;
     ceramic: AWF_Ceramic;
     db: DB;
+    worldConfig: AWF_WORLD_CONFIG;
     common: {
       web3: Web3Connector;
       ipfs: AWF_IpfsConnector;
@@ -99,6 +101,7 @@ export function init(): AWF_SDK {
   const notification = container.get<Notification>(TYPES.Notification);
   const ceramic = container.get<AWF_Ceramic>(TYPES.Ceramic);
   const lit = container.get<AWF_Lit>(TYPES.Lit);
+  const worldConfig = container.get<AWF_WORLD_CONFIG>(TYPES.WorldConfig);
 
   return {
     services: {
@@ -109,6 +112,7 @@ export function init(): AWF_SDK {
       appSettings,
       ceramic,
       db,
+      worldConfig,
       common: {
         web3,
         ipfs,

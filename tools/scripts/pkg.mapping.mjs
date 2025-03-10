@@ -25,7 +25,7 @@ const widgetsMapping = {
   '@akashaorg/ui-widget-trending': path.resolve(__dirname, '../../dist', 'widgets/trending'),
   '@akashaorg/ui-widget-mini-profile': path.resolve(__dirname, '../../dist', 'widgets/mini-profile'),
   '@akashaorg/ui-widget-test-mode-notifier': path.resolve(__dirname, '../../dist', 'widgets/test-mode-notifier'),
-
+  '@akashaorg/ui-world-preview-notifier': path.resolve(__dirname, '../../dist', 'widgets/world-preview-notifier'),
 }
 
 export default {

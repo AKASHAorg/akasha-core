@@ -1,8 +1,8 @@
-interface AkashaAppInterface @loadModel(id: "kjzl6hvfrbw6c7mp2kgev6yk8hrxqkwj28l92a74x3p6wi1gcms00yx9ckxsokn") {
+interface AkashaAppInterface @loadModel(id: "kjzl6hvfrbw6cagb8umrsun2on3uisf1ahs3ohbb38nhp15qt7a6dzytsls3me4") {
     id: ID!
   }
 
-  interface AkashaWorldConfigInterface @loadModel(id: "kjzl6hvfrbw6c63gmxylppyl2rrl9vukj5b2wrm0yqs91gihepveef303bmw2gk") {
+  interface AkashaWorldConfigInterface @loadModel(id: "kjzl6hvfrbw6c65njjzje95z9n2kb4mbjs85bzlytunkl2m2w10p4rcthpmw7zg") {
     id: ID!
   }
 

@@ -1,21 +1,21 @@
 
-interface AkashaBeamInterface @loadModel(id: "kjzl6hvfrbw6c5rvaehvw3bo06g91zzskdmqcamf87cou0c3rcjfga8otgn1dmh") {
+interface AkashaBeamInterface @loadModel(id: "kjzl6hvfrbw6ca0vfvj4zjjclhixqok8hdrl75aqbpg8r960tboumpn58yash2z") {
   id: ID!
 }
 
-interface AkashaContentBlockInterface @loadModel(id: "kjzl6hvfrbw6camingc354x7fs0zfvcdntuls7514mom4gpzntbv0gtyaeqduwg") {
+interface AkashaContentBlockInterface @loadModel(id: "kjzl6hvfrbw6cah5m7mmzg6f7r5r2r7qn2jx5a8zv7fkuqh2k1ix4mjan61lz0r") {
   id: ID!
 }
 
-interface AkashaProfileInterface @loadModel(id: "kjzl6hvfrbw6c8iuza101yr8ovi9pu4qub5ghbeqhr1g15xv6xm1bkeuof4dxxd") {
+interface AkashaProfileInterface @loadModel(id: "kjzl6hvfrbw6c94cqp334nuo83ultdrfcv22nbynodympztj1jzlzibuubspnqu") {
   id: ID!
 }
 
-interface AkashaReflectInterface @loadModel(id: "kjzl6hvfrbw6c9aglcacfejq5fxzy0pxc8eraoyy03b9lv2mlx5o9u85zqnrhf5") {
+interface AkashaReflectInterface @loadModel(id: "kjzl6hvfrbw6c5s58h090n64zwpyufchs69f1ux0sniagw4684tp1ewcyk9ho33") {
   id: ID!
 }
 
-interface AkashaAppInterface @loadModel(id: "kjzl6hvfrbw6c7mp2kgev6yk8hrxqkwj28l92a74x3p6wi1gcms00yx9ckxsokn") {
+interface AkashaAppInterface @loadModel(id: "kjzl6hvfrbw6cagb8umrsun2on3uisf1ahs3ohbb38nhp15qt7a6dzytsls3me4") {
   id: ID!
 }
 

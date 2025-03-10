@@ -12,13 +12,19 @@ import {
 } from '@akashaorg/ui/lib/akasha-components/card';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Image } from '@akashaorg/ui/lib/akasha-components/image';
+import { openWorldConfigInNewTab } from '../../../utils';
 
 type ConfigSuccessPageProps = {
   worldId: string;
   worldName: string;
+  homepageExtensionName: string;
 };
 
-export const ConfigSuccessPage: React.FC<ConfigSuccessPageProps> = ({ worldId, worldName }) => {
+export const ConfigSuccessPage: React.FC<ConfigSuccessPageProps> = ({
+  worldId,
+  worldName,
+  homepageExtensionName,
+}) => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-world-builder');
 
@@ -26,9 +32,8 @@ export const ConfigSuccessPage: React.FC<ConfigSuccessPageProps> = ({ worldId, w
     navigate({ to: '/dashboard' });
   };
 
-  // TODO: add after preview is available
   const handleOpenPreview = () => {
-    navigate({ to: '/dashboard' });
+    openWorldConfigInNewTab(homepageExtensionName, worldId);
   };
 
   return (
