@@ -255,7 +255,7 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
               <Stack>
                 <ErrorLoader type="script-error">
                   <ErrorLoaderTitle>
-                    {t('There was an error loading the contribu tors')}
+                    {t('There was an error loading the contributors')}
                   </ErrorLoaderTitle>
                   <ErrorLoaderDescription>{error.message}</ErrorLoaderDescription>
                 </ErrorLoader>
