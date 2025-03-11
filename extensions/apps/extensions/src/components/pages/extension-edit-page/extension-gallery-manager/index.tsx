@@ -234,7 +234,7 @@ export const ExtensionGalleryManagerPage: React.FC<ExtensionGalleryManagerPagePr
   };
 
   return (
-    <Card className="p-0">
+    <Card className="p-0 border-none">
       {galleryImages && (
         <>
           <ExtensionGalleryManager

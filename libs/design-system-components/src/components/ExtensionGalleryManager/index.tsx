@@ -102,7 +102,9 @@ export const ExtensionGalleryManager: React.FC<ExtensionGalleryManagerProps> = p
         ) : (
           <ErrorLoader type="list-not-available" className="bg-transparent border-none">
             <ErrorLoaderTitle>
-              <Text variant="h6">{emptyGalleryLabel}</Text>
+              <Text variant="h6" className="text-center">
+                {emptyGalleryLabel}
+              </Text>
             </ErrorLoaderTitle>
             <ErrorLoaderDescription>
               <Button
