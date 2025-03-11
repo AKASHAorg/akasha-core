@@ -26,7 +26,7 @@ interface AkashaAppInterface @loadModel(id: "kjzl6hvfrbw6c7mp2kgev6yk8hrxqkwj28l
   type AkashaWorldConfig implements AkashaWorldConfigInterface
   @createModel(
     accountRelation: SET,
-    accountRelationFields: ["worldID", "active"],
+    accountRelationFields: ["worldID"],
     description: "AKASHA World Config"
   )
   @createIndex(fields:[{path:["active"]}])

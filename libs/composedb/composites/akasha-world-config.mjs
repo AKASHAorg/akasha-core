@@ -27,7 +27,7 @@ export default function compose (akashaAppInterface, akashaWorldInterface) {
   type AkashaWorldConfig implements AkashaWorldConfigInterface
   @createModel(
     accountRelation: SET,
-    accountRelationFields: ["worldID", "active"],
+    accountRelationFields: ["worldID"],
     description: "AKASHA World Config"
   )
   @createIndex(fields:[{path:["active"]}])
