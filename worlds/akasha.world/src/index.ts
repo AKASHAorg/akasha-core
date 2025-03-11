@@ -23,12 +23,20 @@ const WORLD_ID = null;
 
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
-  // previewing a world always takes precedence over everything else
-  const previewWorldId = urlParams.get('previewWorldId') || WORLD_ID;
+  
+  const storageWorldId = sessionStorage.getItem('previewWorldId');
 
-  if (previewWorldId) {
+  // previewing a world always takes precedence over everything else
+  const worldId = urlParams.get('previewWorldId') || storageWorldId || WORLD_ID;
+
+  if (urlParams.has('previewWorldId') && worldId && worldId !== storageWorldId) {
+    // save the world id to the session storage
+    sessionStorage.setItem('previewWorldId', worldId);
+  }
+
+  if (worldId) {
     try {
-      const previewConfig = await getWorldConfig(previewWorldId);
+      const previewConfig = await getWorldConfig(worldId);
       if (!previewConfig) {
         // show an error message?
         console.error('World config not found.');
