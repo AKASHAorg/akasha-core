@@ -119,6 +119,10 @@ export const DashboardPage: React.FC = () => {
     navigate({ to: '/world-create-form' });
   };
 
+  const handlePreviewClick = () => {
+    window.open(`${location.origin}?previewWorldId=${worldData?.id}`);
+  }
+
   const getExtensionDataById = (extId: string) => {
     const extension = worldConfigExtensions?.find(ext => ext.extensionID === extId);
     return extension?.extension;
@@ -176,7 +180,7 @@ export const DashboardPage: React.FC = () => {
             <Stack direction="column" spacing={4}>
               <Stack direction="row" justifyContent="between">
                 <Typography variant="h6">{worldData?.name}</Typography>
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" onClick={handlePreviewClick}>
                   <Eye />
                   {t('Preview')}
                 </Button>

@@ -28,7 +28,7 @@ export const ConfigSuccessPage: React.FC<ConfigSuccessPageProps> = ({ worldId, w
 
   // TODO: add after preview is available
   const handleOpenPreview = () => {
-    navigate({ to: '/dashboard' });
+    window.open(`${location.origin}?previewWorldId=${worldId}`, '_blank');
   };
 
   return (
