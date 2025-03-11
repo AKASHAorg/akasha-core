@@ -29,10 +29,7 @@ import {
 import { Eye, Loader2, Pencil } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { selectWorldData } from '@akashaorg/ui-core-hooks/lib/selectors/get-worlds-by-creator-did-query';
-import {
-  selectWorldConfigData,
-  selectWorldMetaInfoData,
-} from '@akashaorg/ui-core-hooks/lib/selectors/get-world-full-info-query';
+import { selectWorldMetaInfoData } from '@akashaorg/ui-core-hooks/lib/selectors/get-world-full-info-query';
 import { selectWorldConfigData as selectWorldConfigInfo } from '@akashaorg/ui-core-hooks/lib/selectors/get-world-config-query';
 import { selectWorldConfigExtensions } from '@akashaorg/ui-core-hooks/lib/selectors/get-world-config-extensions-query';
 import {
@@ -68,7 +65,7 @@ export const DashboardPage: React.FC = () => {
   const {
     data: worldsByCreatorDidReq,
     loading: loadingWorldsByCreatorDidQuery,
-    error: worldsByCreatorDidError,
+    // error: worldsByCreatorDidError,
   } = useGetWorldsByCreatorDidQuery({
     variables: { id: authenticatedDID, first: 10 },
   });
@@ -77,8 +74,8 @@ export const DashboardPage: React.FC = () => {
 
   const {
     data: worldFullInfoReq,
-    loading: loadingWorldFullInfoQuery,
-    error: worldFullInfoError,
+    // loading: loadingWorldFullInfoQuery,
+    // error: worldFullInfoError,
   } = useGetWorldFullInfoQuery({
     variables: { id: worldData?.id, creator: worldData?.creator?.id },
     skip: !worldData?.id,
@@ -86,8 +83,8 @@ export const DashboardPage: React.FC = () => {
 
   const {
     data: worldConfigReq,
-    loading: loadingWorldConfigQuery,
-    error: worldConfigError,
+    // loading: loadingWorldConfigQuery,
+    // error: worldConfigError,
   } = useGetWorldConfigQuery({
     variables: { worldID: worldData?.id },
     skip: !worldData?.id,
@@ -98,8 +95,8 @@ export const DashboardPage: React.FC = () => {
 
   const {
     data: worldConfigExtensionsReq,
-    loading: loadingWorldConfigExtensionsQuery,
-    error: worldConfigExtensionsError,
+    // loading: loadingWorldConfigExtensionsQuery,
+    // error: worldConfigExtensionsError,
   } = useGetWorldConfigExtensionsQuery({
     variables: { configID: worldConfig?.id },
     skip: !worldConfig?.id,
@@ -121,7 +118,7 @@ export const DashboardPage: React.FC = () => {
 
   const handlePreviewClick = () => {
     window.open(`${location.origin}?previewWorldId=${worldData?.id}`);
-  }
+  };
 
   const getExtensionDataById = (extId: string) => {
     const extension = worldConfigExtensions?.find(ext => ext.extensionID === extId);
