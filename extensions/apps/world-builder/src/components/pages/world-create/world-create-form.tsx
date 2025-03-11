@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import appRoutes, { WORLD_CREATE_FORM } from '../../../routes';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
@@ -59,14 +59,14 @@ export const WorldCreateFormPage: React.FC = () => {
 
   const { uiEvents, baseRouteName, getCorePlugins } = useRootComponentProps();
 
-  const uiEventsRef = React.useRef(uiEvents);
+  const uiEventsRef = useRef(uiEvents);
 
   const navigate = useNavigate();
   const navigateTo = getCorePlugins().routing.navigateTo;
 
-  const sdk = React.useRef(getSDK());
+  const sdk = useRef(getSDK());
 
-  const uploadInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
+  const uploadInputRef: React.RefObject<HTMLInputElement> = useRef(null);
 
   const indexingDID = sdk.current.services.gql.indexingDID;
 

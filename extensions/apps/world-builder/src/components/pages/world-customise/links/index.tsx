@@ -21,7 +21,7 @@ export const SocialLinks: React.FC<SocialLinksProps> = ({ control, onDeleteLink 
   const { fields, append, remove } = useFieldArray({ control, name: FieldName.socialLinks });
 
   const onAddNew = () => {
-    if (fields?.length < 12) {
+    if (fields?.length < 5) {
       append({ href: '', name: '' });
     }
   };
@@ -37,7 +37,9 @@ export const SocialLinks: React.FC<SocialLinksProps> = ({ control, onDeleteLink 
           </Button>
         </Stack>
         <Typography variant="xs">
-          {t('Add up to 5 social links that would help people to get in touch with world creator.')}
+          {t(
+            'Add up to 5 social links that would help people to get in touch with the world creator.',
+          )}
         </Typography>
       </Stack>
       {fields?.map((link, index) => {

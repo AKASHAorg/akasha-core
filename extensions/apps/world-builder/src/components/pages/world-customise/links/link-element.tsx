@@ -15,60 +15,60 @@ import {
   SelectValue,
 } from '@akashaorg/ui/lib/components/select';
 
+type LinkElementValue = SocialLink & { _id?: number };
+
 export type LinkElementProps = {
   onDelete: () => void;
-  onChange: (...event: any[]) => void;
-  value: SocialLink & { _id?: number };
+  onChange: (value: LinkElementValue) => void;
+  value: LinkElementValue;
+};
+
+export const iconsMap = {
+  github: <Github />,
+  telegram: <Telegram />,
+  discord: <Discord />,
+  twitter: <X />,
+  other: <Link />,
 };
 
 export const LinkElement: React.FC<LinkElementProps> = props => {
   const { onDelete, onChange, value } = props;
 
-  const iconsMap = {
-    github: <Github />,
-    telegram: <Telegram />,
-    discord: <Discord />,
-    x: <X />,
-    other: <Link />,
-  };
-
   return (
-    <Stack direction="column" spacing={2} className="w-full">
-      <Stack
-        direction="row"
-        justifyContent="between"
-        alignItems="center"
-        spacing={4}
-        className="w-full"
-      >
-        <Stack direction="row" alignItems="center" spacing={2}>
-          <Select
-            value={value.name || 'github'}
-            onValueChange={newValue => onChange({ ...value, name: newValue })}
-          >
-            <SelectTrigger className="w-[68px]">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {Object.keys(iconsMap).map((iconName, idx) => (
-                <SelectItem key={idx} value={iconName}>
-                  {iconsMap[iconName]}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+    <Stack
+      direction="row"
+      justifyContent="between"
+      alignItems="center"
+      spacing={4}
+      className="w-full"
+    >
+      <Stack direction="row" className="w-full" alignItems="center" spacing={2}>
+        <Select
+          value={value.name || 'other'}
+          onValueChange={newValue => onChange({ ...value, name: newValue })}
+        >
+          <SelectTrigger className="w-[68px]">
+            <SelectValue defaultValue={'other'} />
+          </SelectTrigger>
+          <SelectContent>
+            {Object.keys(iconsMap).map((iconName, idx) => (
+              <SelectItem key={idx} value={iconName}>
+                {iconsMap[iconName]}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
 
-          <Input
-            className="w-full"
-            placeholder="e.g. http://www.dadada.com"
-            value={value.href}
-            onChange={ev => onChange({ ...value, href: ev.target.value })}
-          />
-        </Stack>
-        <button onClick={onDelete}>
-          <Trash2 color="destructive" />
-        </button>
+        <Input
+          className="w-full"
+          placeholder="e.g. http://www.social.com"
+          value={value.href}
+          onChange={ev => onChange({ ...value, href: ev.target.value })}
+        />
       </Stack>
+      <button onClick={onDelete}>
+        <Trash2 color="destructive" />
+      </button>
     </Stack>
   );
 };

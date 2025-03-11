@@ -23,16 +23,13 @@ import { LandingPageComponent } from './landing-page-component';
 import {
   useGetWorldConfigExtensionsQuery,
   useGetWorldConfigQuery,
-  useGetWorldFullInfoQuery,
+  useGetWorldMetaInfoQuery,
   useGetWorldsByCreatorDidQuery,
 } from '@akashaorg/ui-core-hooks/lib/generated';
 import { Eye, Loader2, Pencil } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { selectWorldData } from '@akashaorg/ui-core-hooks/lib/selectors/get-worlds-by-creator-did-query';
-import {
-  selectWorldConfigData,
-  selectWorldMetaInfoData,
-} from '@akashaorg/ui-core-hooks/lib/selectors/get-world-full-info-query';
+import { selectWorldMetaInfoData } from '@akashaorg/ui-core-hooks/lib/selectors/get-world-meta-info-query';
 import { selectWorldConfigData as selectWorldConfigInfo } from '@akashaorg/ui-core-hooks/lib/selectors/get-world-config-query';
 import { selectWorldConfigExtensions } from '@akashaorg/ui-core-hooks/lib/selectors/get-world-config-extensions-query';
 import {
@@ -48,6 +45,8 @@ import {
   ProfileDidField,
   ProfileName,
 } from '@/ui/profile-avatar-button';
+import { Badge } from '@akashaorg/ui/lib/akasha-components/badge';
+import { iconsMap } from '../world-customise/links/link-element';
 
 export const DashboardPage: React.FC = () => {
   const navigate = useNavigate();
@@ -82,11 +81,11 @@ export const DashboardPage: React.FC = () => {
   const worldData = selectWorldData(worldsByCreatorDidReq);
 
   const {
-    data: worldFullInfoReq,
-    loading: loadingWorldFullInfoQuery,
-    error: worldFullInfoError,
-  } = useGetWorldFullInfoQuery({
-    variables: { id: worldData?.id, creator: worldData?.creator?.id },
+    data: worldMetaInfoReq,
+    loading: loadingWorldMetaInfoQuery,
+    error: worldMetaInfoError,
+  } = useGetWorldMetaInfoQuery({
+    variables: { worldID: worldData?.id, creator: worldData?.creator?.id },
     skip: !worldData?.id,
   });
 
@@ -96,7 +95,7 @@ export const DashboardPage: React.FC = () => {
   });
 
   const worldConfig = selectWorldConfigInfo(worldConfigReq);
-  const worldMetaInfo = selectWorldMetaInfoData(worldFullInfoReq);
+  const worldMetaInfo = selectWorldMetaInfoData(worldMetaInfoReq);
 
   const {
     data: worldConfigExtensionsReq,
@@ -114,7 +113,7 @@ export const DashboardPage: React.FC = () => {
   };
 
   const handleNavToCustomiseForm = () => {
-    navigate({ to: '/world-customize-form', params: { worldId: worldData?.id } });
+    navigate({ to: '/world-customise-form/$worldId', params: { worldId: worldData?.id } });
   };
 
   const handleNavToWorldCreate = () => {
@@ -159,6 +158,7 @@ export const DashboardPage: React.FC = () => {
       </ErrorLoader>
     );
   }
+
   if (worldConfigError) {
     return (
       <ErrorLoader type="script-error">
@@ -166,6 +166,17 @@ export const DashboardPage: React.FC = () => {
           {t('Sorry, there was an error when fetching the world config data')}
         </ErrorLoaderTitle>
         <ErrorLoaderDescription>{worldConfigError?.message}</ErrorLoaderDescription>
+      </ErrorLoader>
+    );
+  }
+
+  if (worldMetaInfoError) {
+    return (
+      <ErrorLoader type="script-error">
+        <ErrorLoaderTitle>
+          {t('Sorry, there was an error when fetching the world meta info data')}
+        </ErrorLoaderTitle>
+        <ErrorLoaderDescription>{worldMetaInfoError?.message}</ErrorLoaderDescription>
       </ErrorLoader>
     );
   }
@@ -221,7 +232,7 @@ export const DashboardPage: React.FC = () => {
         </CardHeader>
         <CardContent className="flex-col gap-4">
           <Stack direction="row" spacing={4}>
-            <ExtensionAvatar size="lg" extensionId={worldData?.id}>
+            <ExtensionAvatar size="xl" extensionId={worldData?.id}>
               <ExtensionAvatarImage src={transformSource(worldData?.icon?.default)?.src}>
                 <ExtensionAvatarFallback />
               </ExtensionAvatarImage>
@@ -257,6 +268,7 @@ export const DashboardPage: React.FC = () => {
                   {worldData?.extensionPublishers?.map((extPublisher, idx) => (
                     <ProfileAvatarButton
                       key={idx}
+                      size="sm"
                       profileDID={extPublisher?.id}
                       onClick={() => handleNavToProfile(extPublisher?.id)}
                     >
@@ -274,11 +286,15 @@ export const DashboardPage: React.FC = () => {
               </Stack>
             )}
             {worldData?.instanceURL && (
-              <Stack direction="column" spacing={2}>
+              <Stack direction="column" alignItems="start" spacing={2}>
                 <Typography variant="sm" bold>
                   {t('Instance URL')}
                 </Typography>
-                <Typography variant="sm">{worldData?.instanceURL}</Typography>
+                <Button variant="link" className="p-0" asChild>
+                  <a rel="noreferrer" target="__blank" href={worldData?.instanceURL}>
+                    {worldData?.instanceURL}
+                  </a>
+                </Button>
               </Stack>
             )}
           </Stack>
@@ -297,72 +313,159 @@ export const DashboardPage: React.FC = () => {
                 )}
               </Stack>
             )}
-            <Stack direction="column" alignItems="start" spacing={2}>
+            {!worldConfig?.id && (
               <Typography variant="sm" bold>
-                {t('Layout')}
+                {t('You haven’t configured your world yet!')}
               </Typography>
-              <Button
-                className="p-0"
-                variant="link"
-                onClick={() => handleNavToApp(getEncodedAppName(worldConfig?.layoutExtension))}
-              >
-                {getExtensionDataById(worldConfig?.layoutExtension)?.displayName}
-              </Button>
-            </Stack>
-            <Stack direction="column" alignItems="start" spacing={2}>
-              <Typography variant="sm" bold>
-                {t('Extension App')}
-              </Typography>
-              <Button
-                className="p-0"
-                variant="link"
-                onClick={() => handleNavToApp(getEncodedAppName(worldConfig?.registryExtension))}
-              >
-                {getExtensionDataById(worldConfig?.registryExtension)?.displayName}
-              </Button>
-            </Stack>
-            <Stack direction="column" alignItems="start" spacing={2}>
-              <Typography variant="sm" bold>
-                {t('World Extensions')}
-              </Typography>
-              <div className="flex flex-wrap gap-2">
-                {worldConfigExtensions?.map((extension, idx) => (
+            )}
+            {worldConfig?.id && (
+              <>
+                <Stack direction="column" alignItems="start" spacing={2}>
+                  <Typography variant="sm" bold>
+                    {t('Layout')}
+                  </Typography>
                   <Button
-                    key={idx}
                     className="p-0"
                     variant="link"
-                    onClick={() => handleNavToApp(getEncodedAppName(extension.extension))}
+                    onClick={() => handleNavToApp(getEncodedAppName(worldConfig?.layoutExtension))}
                   >
-                    {extension?.extension?.displayName}
+                    {getExtensionDataById(worldConfig?.layoutExtension)?.displayName}
                   </Button>
-                ))}
-              </div>
-            </Stack>
-            <Stack direction="column" alignItems="start" spacing={2}>
-              <Typography variant="sm" bold>
-                {t('Homepage')}
-              </Typography>
-              <Button
-                className="p-0"
-                variant="link"
-                onClick={() => handleNavToApp(getEncodedAppName(worldConfig?.homepageExtension))}
-              >
-                {getExtensionDataById(worldConfig?.homepageExtension)?.displayName}
-              </Button>
-            </Stack>
+                </Stack>
+                <Stack direction="column" alignItems="start" spacing={2}>
+                  <Typography variant="sm" bold>
+                    {t('Extension App')}
+                  </Typography>
+                  <Button
+                    className="p-0"
+                    variant="link"
+                    onClick={() =>
+                      handleNavToApp(getEncodedAppName(worldConfig?.registryExtension))
+                    }
+                  >
+                    {getExtensionDataById(worldConfig?.registryExtension)?.displayName}
+                  </Button>
+                </Stack>
+                <Stack direction="column" alignItems="start" spacing={2}>
+                  <Typography variant="sm" bold>
+                    {t('World Extensions')}
+                  </Typography>
+                  <div className="flex flex-wrap gap-2">
+                    {worldConfigExtensions?.map((extension, idx) => (
+                      <Button
+                        key={idx}
+                        className="p-0"
+                        variant="link"
+                        onClick={() => handleNavToApp(getEncodedAppName(extension.extension))}
+                      >
+                        {extension?.extension?.displayName}
+                      </Button>
+                    ))}
+                  </div>
+                </Stack>
+                <Stack direction="column" alignItems="start" spacing={2}>
+                  <Typography variant="sm" bold>
+                    {t('Homepage')}
+                  </Typography>
+                  <Button
+                    className="p-0"
+                    variant="link"
+                    onClick={() =>
+                      handleNavToApp(getEncodedAppName(worldConfig?.homepageExtension))
+                    }
+                  >
+                    {getExtensionDataById(worldConfig?.homepageExtension)?.displayName}
+                  </Button>
+                </Stack>
+              </>
+            )}
           </Stack>
           <Separator />
           <Stack direction="column" spacing={4}>
-            <Stack direction="row" justifyContent="between" alignItems="center">
-              <Typography variant="h6">{t('World Customisation')}</Typography>
-              {worldMetaInfo?.id ? (
-                <Button variant="secondary" size="icon" onClick={handleNavToCustomiseForm}>
-                  <Pencil />
-                </Button>
-              ) : (
-                <Button onClick={handleNavToCustomiseForm}>{t('Customise World')}</Button>
-              )}
-            </Stack>
+            {loadingWorldMetaInfoQuery && <Loader2 className="animate-spin" />}
+            {!loadingWorldMetaInfoQuery && (
+              <>
+                <Stack direction="row" justifyContent="between" alignItems="center">
+                  <Typography variant="h6">{t('World Customisation')}</Typography>
+                  {worldMetaInfo?.id ? (
+                    <Button variant="secondary" size="icon" onClick={handleNavToCustomiseForm}>
+                      <Pencil />
+                    </Button>
+                  ) : (
+                    <Button onClick={handleNavToCustomiseForm}>{t('Customise World')}</Button>
+                  )}
+                </Stack>
+                {!worldMetaInfo?.id && (
+                  <Typography variant="sm">
+                    {t('You haven’t customized your world configuration yet!')}
+                  </Typography>
+                )}
+                {worldMetaInfo?.id && (
+                  <>
+                    <Stack direction="column" spacing={2}>
+                      <Typography variant="sm" bold>
+                        {t('World Description')}
+                      </Typography>
+                      <Typography variant="sm">
+                        {worldMetaInfo?.description ?? t('You haven’t added any description yet.')}
+                      </Typography>
+                    </Stack>
+                    <Stack direction="column" spacing={2}>
+                      <Typography variant="sm" bold>
+                        {t('Keywords')}
+                      </Typography>
+                      <div className="flex flex-wrap gap-2">
+                        {worldMetaInfo?.keywords?.length > 0 ? (
+                          worldMetaInfo?.keywords?.map((keyword, idx) => (
+                            <Badge key={idx} variant="secondary">
+                              {keyword}
+                            </Badge>
+                          ))
+                        ) : (
+                          <Typography variant="sm">
+                            {t('You haven’t added any keywords yet.')}
+                          </Typography>
+                        )}
+                      </div>
+                    </Stack>
+                    <Stack direction="column" alignItems="start" spacing={2}>
+                      <Typography variant="sm" bold>
+                        {t('Guidelines URL')}
+                      </Typography>
+                      <Button variant="link" className="p-0" asChild>
+                        <a rel="noreferrer" target="__blank" href={worldMetaInfo?.guidelinesUrl}>
+                          {worldMetaInfo?.guidelinesUrl}
+                        </a>
+                      </Button>
+                    </Stack>
+                    <Stack direction="column" spacing={2}>
+                      <Typography variant="sm" bold>
+                        {t('Socials')}
+                      </Typography>
+                      <Stack direction="column" alignItems="start" spacing={2}>
+                        {worldMetaInfo?.socialLinks?.length > 0 ? (
+                          worldMetaInfo?.socialLinks?.map((link, idx) => (
+                            // <Stack key={idx} direction="row" spacing={2}>
+                            <Button key={idx} variant="link" className="p-0" asChild>
+                              {iconsMap[link?.name]}
+
+                              <a rel="noreferrer" target="__blank" href={link?.href}>
+                                {link?.href}
+                              </a>
+                            </Button>
+                            // </Stack>
+                          ))
+                        ) : (
+                          <Typography variant="sm">
+                            {t('You haven’t added any social links yet.')}
+                          </Typography>
+                        )}
+                      </Stack>
+                    </Stack>
+                  </>
+                )}
+              </>
+            )}
           </Stack>
         </CardContent>
       </Card>

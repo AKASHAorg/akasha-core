@@ -158,17 +158,18 @@ const worldConfigStep2Route = createRoute({
   },
 });
 
-const worldCustomizeRoute = createRoute({
+const worldCustomiseRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: `/world-customize-form`,
+  path: `/world-customise-form/$worldId`,
   notFoundComponent: () => <NotFoundComponent />,
   component: () => {
+    const { worldId } = worldCustomiseRoute.useParams();
     return (
       <CatchBoundary
-        getResetKey={() => 'world_customize_form_main_reset'}
+        getResetKey={() => 'world_customise_form_main_reset'}
         errorComponent={RouteErrorComponent}
       >
-        <WorldCustomiseFormPage />
+        <WorldCustomiseFormPage worldId={worldId} />
       </CatchBoundary>
     );
   },
@@ -181,7 +182,7 @@ const routeTree = rootRoute.addChildren([
   createSuccessRoute,
   worldCreateRoute,
   worldConfigMainRoute.addChildren([worldConfigStep1Route, worldConfigStep2Route]),
-  worldCustomizeRoute,
+  worldCustomiseRoute,
 ]);
 
 export const router = ({ baseRouteName, apolloClient }: ICreateRouter) =>

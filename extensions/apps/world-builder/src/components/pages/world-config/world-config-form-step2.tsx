@@ -50,7 +50,6 @@ import {
   useGetAppsQuery,
   useGetWorldByIdQuery,
   useGetWorldConfigQuery,
-  useDeleteAkashaWorldConfigExtensionMutation,
 } from '@akashaorg/ui-core-hooks/lib/generated';
 import {
   selectAkashaApps,
@@ -69,6 +68,7 @@ import {
   ErrorLoaderDescription,
   ErrorLoaderTitle,
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
+import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 type WorldConfigFormStep2Props = {
   worldId: string;
@@ -178,19 +178,6 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
     },
   });
 
-  const [
-    deleteWorldConfigExtensionMutation,
-    { loading: loadingWorldConfigDeleteExtensionMutation },
-  ] = useDeleteAkashaWorldConfigExtensionMutation({
-    context: { source: sdk.current.services.gql.contextSources.composeDB },
-    onError: error => {
-      showErrorNotification(
-        `${t(`Something went wrong when deleting the world configuration extension`)}.`,
-        error.message,
-      );
-    },
-  });
-
   const getUniqueExtensionsData = (worldConfigId: string) => {
     const selectedExtensionsIDs = new Set(
       selectedExtensions
@@ -201,15 +188,15 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
     const oldExtensionsIDs = new Set(
       worldConfig?.extensions?.edges?.map(ext => ext.node?.extensionID),
     );
-
+    const oldExtensionsData = worldConfig?.extensions?.edges?.map(ext => ext.node);
     const newExtensionsIDs = selectedExtensionsIDs.difference(oldExtensionsIDs);
 
-    const oldExtensionsToBeRemovedSet = oldExtensionsIDs.difference(selectedExtensionsIDs);
+    const oldExtensionsToBeRemovedIDs = oldExtensionsIDs.difference(selectedExtensionsIDs);
 
     const newExtensionsData = [...newExtensionsIDs].map(extensionID => {
-      const createdAt = worldConfig?.extensions.edges?.find(
-        extData => extData?.node?.extensionID === extensionID,
-      )?.node?.createdAt;
+      const createdAt = oldExtensionsData?.find(
+        extData => extData?.extensionID === extensionID,
+      )?.createdAt;
       const worldConfigExtensionData = {
         worldConfigID: worldConfigId,
         extensionID: extensionID,
@@ -219,42 +206,30 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
       return worldConfigExtensionData;
     });
 
-    const oldExtensionsData = worldConfig?.extensions?.edges?.map(ext => ext.node);
-
-    const extensionsToBeRemovedIds = [...oldExtensionsToBeRemovedSet].map(extensionID => {
+    const extensionsToBeRemovedData = [...oldExtensionsToBeRemovedIDs].map(extensionID => {
       const extData = oldExtensionsData?.find(ext => ext?.extensionID === extensionID);
       if (extData) {
-        return extData.id;
+        const worldConfigExtensionData = {
+          worldConfigID: worldConfigId,
+          extensionID: extensionID,
+          active: false,
+          createdAt: extData.createdAt,
+        };
+        return worldConfigExtensionData;
       }
     });
 
-    return { newExtensionsData, extensionsToBeRemovedIds };
+    return [...newExtensionsData, ...extensionsToBeRemovedData];
   };
 
   const createExtensions = (worldConfigId: string) => {
-    const extensions = getUniqueExtensionsData(worldConfigId)?.newExtensionsData;
+    const extensions = getUniqueExtensionsData(worldConfigId);
     return Promise.all(
       extensions.map(extData =>
         createWorldConfigExtensionMutation({
           variables: {
             i: {
               content: extData,
-            },
-          },
-        }),
-      ),
-    );
-  };
-
-  const deleteExtensions = (worldConfigId: string) => {
-    const extensions = getUniqueExtensionsData(worldConfigId)?.extensionsToBeRemovedIds;
-    return Promise.all(
-      extensions.map(extData =>
-        deleteWorldConfigExtensionMutation({
-          variables: {
-            i: {
-              id: extData,
-              shouldIndex: false,
             },
           },
         }),
@@ -282,7 +257,6 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
       onCompleted: async data => {
         const worldConfigId = data?.setAkashaWorldConfig?.document?.id;
         await createExtensions(worldConfigId);
-        await deleteExtensions(worldConfigId);
         if (worldConfig?.createdAt) {
           navToDashboard();
         } else {
@@ -496,11 +470,13 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
             </SelectTrigger>
             <SelectContent>
               {selectedExtensions?.length > 0 &&
-                selectedExtensions?.map(ext => (
-                  <SelectItem key={ext.id} value={ext.id}>
-                    {ext.displayName}
-                  </SelectItem>
-                ))}
+                selectedExtensions
+                  ?.filter(ext => ext.applicationType === AkashaAppApplicationType.App)
+                  .map(ext => (
+                    <SelectItem key={ext.id} value={ext.id}>
+                      {ext.displayName}
+                    </SelectItem>
+                  ))}
             </SelectContent>
           </Select>
         </Stack>
@@ -512,11 +488,7 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
         <Button
           className="px-6"
           onClick={handleSave}
-          loading={
-            loadingWorldConfigMutation ||
-            loadingWorldConfigCreateExtensionMutation ||
-            loadingWorldConfigDeleteExtensionMutation
-          }
+          loading={loadingWorldConfigMutation || loadingWorldConfigCreateExtensionMutation}
         >
           {t('Save Config')}
         </Button>

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import appRoutes, { WORLD_CUSTOMIZE_FORM } from '../../../routes';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
@@ -29,32 +29,54 @@ import {
   FormLabel,
   FormMessage,
 } from '@akashaorg/ui/lib/akasha-components/form';
-import { Autocomplete } from '@akashaorg/ui/lib/akasha-components/autocomplete';
+import {
+  Autocomplete,
+  AutocompleteItem,
+  AutocompleteList,
+  AutocompleteTrigger,
+} from '@akashaorg/ui/lib/akasha-components/autocomplete';
+import {
+  TagsInput,
+  TagsInputItem,
+  TagsInputList,
+} from '@akashaorg/ui/lib/akasha-components/tags-input';
 import { Input } from '@akashaorg/ui/lib/akasha-components/input';
 import { Textarea } from '@akashaorg/ui/lib/akasha-components/textarea';
 import { Badge } from '@akashaorg/ui/lib/akasha-components/badge';
 import { X } from 'lucide-react';
 import { SocialLink } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { SocialLinks } from './links';
+import {
+  useCreateAkashaWorldMetaInfoMutation,
+  useGetWorldMetaInfoQuery,
+} from '@akashaorg/ui-core-hooks/lib/generated';
+import { selectWorldMetaInfoData } from '@akashaorg/ui-core-hooks/lib/selectors/get-world-meta-info-query';
+import getSDK from '@akashaorg/core-sdk';
+import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 
 export type WorldCustomiseFormValues = {
   description?: string;
   keywords?: string[];
-  guidelinesURL?: string;
+  guidelinesUrl?: string;
   socialLinks?: SocialLink[];
 };
 
 export enum FieldName {
   description = 'description',
   keywords = 'keywords',
-  guidelinesURL = 'guidelinesURL',
+  guidelinesUrl = 'guidelinesUrl',
   socialLinks = 'socialLinks',
 }
 
-export const WorldCustomiseFormPage: React.FC = () => {
+export const WorldCustomiseFormPage: React.FC<{ worldId?: string }> = ({ worldId }) => {
   const { t } = useTranslation('app-world-builder');
 
-  const { baseRouteName, getCorePlugins } = useRootComponentProps();
+  const sdk = useRef(getSDK());
+
+  const { uiEvents, baseRouteName, getCorePlugins } = useRootComponentProps();
+
+  const uiEventsRef = useRef(uiEvents);
+
   const navigate = useNavigate();
   const navigateTo = getCorePlugins().routing.navigateTo;
 
@@ -72,6 +94,38 @@ export const WorldCustomiseFormPage: React.FC = () => {
       },
     });
   };
+
+  const showErrorNotification = React.useCallback((title: string, errorMessage?: string) => {
+    uiEventsRef.current.next({
+      event: NotificationEvents.ShowNotification,
+      data: {
+        type: NotificationTypes.Error,
+        title,
+        description: errorMessage,
+      },
+    });
+  }, []);
+
+  const { data: worldMetaInfoReq, error: worldMetaInfoError } = useGetWorldMetaInfoQuery({
+    variables: { worldID: worldId, creator: authenticatedDID },
+    skip: !worldId,
+  });
+
+  const worldMetaInfo = selectWorldMetaInfoData(worldMetaInfoReq);
+
+  const [createWorldMetaInfoMutation, { loading: loadingWorldMetaInfoMutation }] =
+    useCreateAkashaWorldMetaInfoMutation({
+      context: { source: sdk.current.services.gql.contextSources.composeDB },
+      onCompleted: () => {
+        handleNavToDashboard();
+      },
+      onError: error => {
+        showErrorNotification(
+          `${t(`Something went wrong when creating the world meta info`)}.`,
+          error.message,
+        );
+      },
+    });
 
   const FormSchema = z.object({
     description: z
@@ -92,14 +146,14 @@ export const WorldCustomiseFormPage: React.FC = () => {
       )
       .max(32, { message: t('Must have maximum of 32 keywords') })
       .optional(),
-    guidelinesURL: z.string().url({ message: 'Must be URL' }).optional().or(z.literal('')),
+    guidelinesUrl: z.string().url({ message: 'Must be URL' }).optional().or(z.literal('')),
     socialLinks: z
       .array(
         z.object({
           name: z
             .string()
             .min(2, {
-              message: t('Social links name must be at least 2 characters.'),
+              message: t('Social links name must be at least 1 characters.'),
             })
             .max(48, {
               message: t('Social links name must be less than 48 characters.'),
@@ -114,7 +168,7 @@ export const WorldCustomiseFormPage: React.FC = () => {
     return {
       description: '',
       keywords: [],
-      guidelinesURL: '',
+      guidelinesUrl: '',
       socialLinks: [],
     };
   }, []);
@@ -126,23 +180,47 @@ export const WorldCustomiseFormPage: React.FC = () => {
 
   const { isValid } = form.formState;
 
-  // useEffect(() => {
-  //   if (worldMetaInfo?.id) {
-  //     form.setValue('description', worldMetaInfo?.description);
-  //     form.setValue('guidelinesUrl', worldMetaInfo?.instanceURL);
+  useEffect(() => {
+    if (worldMetaInfo?.id) {
+      form.setValue('description', worldMetaInfo?.description);
+      form.setValue('guidelinesUrl', worldMetaInfo?.guidelinesUrl);
+      form.setValue('keywords', worldMetaInfo?.keywords);
+      form.setValue('socialLinks', worldMetaInfo?.socialLinks);
+    }
+  }, [worldMetaInfo, form]);
 
-  //   }
-  // }, [worldMetaInfo, form]);
-
-  const handleCancel = () => {
+  const handleNavToDashboard = () => {
     navigate({ to: '/dashboard' });
   };
 
-  const onSubmit = (data: z.infer<typeof FormSchema>) => {
-    navigate({ to: '/dashboard' });
+  const onSubmit = (data: WorldCustomiseFormValues) => {
+    const worldMetaInfoContent = {
+      description: worldMetaInfo?.description ?? data.description,
+      guidelinesUrl: data.guidelinesUrl,
+      keywords: data.keywords,
+      socialLinks: data.socialLinks,
+      worldID: worldId,
+    };
+    createWorldMetaInfoMutation({
+      variables: {
+        i: {
+          content: worldMetaInfoContent,
+        },
+      },
+    });
   };
 
   const [keywords, setKeywords] = useState(formDefaultValues?.keywords);
+
+  const [value, setValue] = useState('');
+  const [selectedValues, setSelectedValues] = useState<string[]>(formDefaultValues?.keywords);
+
+  const handleValueChange = (value: string[]) => {
+    setSelectedValues(value);
+    form.setValue('keywords', value);
+  };
+
+  const existingKeywords = [];
 
   if (!authenticatedDID) {
     return (
@@ -156,6 +234,17 @@ export const WorldCustomiseFormPage: React.FC = () => {
             {t('Connect')}
           </Button>
         </ErrorLoaderFooter>
+      </ErrorLoader>
+    );
+  }
+
+  if (worldMetaInfoError) {
+    return (
+      <ErrorLoader type="script-error">
+        <ErrorLoaderTitle>
+          {t('Sorry, there was an error when fetching the world meta info')}
+        </ErrorLoaderTitle>
+        <ErrorLoaderDescription>{worldMetaInfoError?.message}</ErrorLoaderDescription>
       </ErrorLoader>
     );
   }
@@ -180,7 +269,6 @@ export const WorldCustomiseFormPage: React.FC = () => {
                     <Textarea
                       placeholder="E.g. World for people who like number 7 in Japanese."
                       {...field}
-                      // value={field.value || worldMetaInfo?.description}
                       onChange={field.onChange}
                     />
                   </FormControl>
@@ -191,12 +279,53 @@ export const WorldCustomiseFormPage: React.FC = () => {
             <FormField
               control={form.control}
               name={FieldName.keywords}
-              render={({ field: { value, onChange } }) => {
+              render={() => {
                 return (
                   <FormItem>
                     <FormLabel>{t('World keywords')}</FormLabel>
                     <FormControl>
-                      <Input onChange={onChange} placeholder={t('Add a keyword')} />
+                      <div className="flex flex-col gap-2 items-center w-full">
+                        <Autocomplete
+                          multiple
+                          value={selectedValues}
+                          onValueChange={handleValueChange}
+                          className="w-full"
+                          emptyMessage={t('No keywords found')}
+                        >
+                          <AutocompleteTrigger asChild>
+                            <TagsInput
+                              value={value}
+                              onChange={event => setValue(event.target.value)}
+                              onTagsChange={tags => {
+                                handleValueChange([...tags]);
+                              }}
+                              placeholder={t('Add a keyword')}
+                            >
+                              <TagsInputList>
+                                {selectedValues.map(interest => (
+                                  <TagsInputItem key={interest} tag={interest}>
+                                    {
+                                      existingKeywords.find(
+                                        existingKeyword => existingKeyword.value === interest,
+                                      )?.label
+                                    }
+                                  </TagsInputItem>
+                                ))}
+                              </TagsInputList>
+                            </TagsInput>
+                          </AutocompleteTrigger>
+                          <AutocompleteList>
+                            {existingKeywords.map(existingKeyword => (
+                              <AutocompleteItem
+                                key={existingKeyword.value}
+                                value={existingKeyword.value}
+                              >
+                                {existingKeyword.label}
+                              </AutocompleteItem>
+                            ))}
+                          </AutocompleteList>
+                        </Autocomplete>
+                      </div>
                     </FormControl>
 
                     <FormMessage />
@@ -225,7 +354,7 @@ export const WorldCustomiseFormPage: React.FC = () => {
             )}
             <FormField
               control={form.control}
-              name={FieldName.guidelinesURL}
+              name={FieldName.guidelinesUrl}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t('Guidelines URL')}</FormLabel>
@@ -233,7 +362,6 @@ export const WorldCustomiseFormPage: React.FC = () => {
                     <Input
                       placeholder="e.g. ipfs://bafybeibx/guidelines-nanaworld"
                       {...field}
-                      // value={field.value || worldmetaInfo?.guidelinesURL}
                       onChange={field.onChange}
                     />
                   </FormControl>
@@ -249,13 +377,13 @@ export const WorldCustomiseFormPage: React.FC = () => {
             />
           </CardContent>
           <CardFooter>
-            <Button className="px-6" variant="outline" onClick={handleCancel}>
+            <Button className="px-6" variant="outline" onClick={handleNavToDashboard}>
               {t('Cancel')}
             </Button>
             <Button
               type="submit"
               className="px-6"
-              // loading={loadingWorldMetaInfoMutation}
+              loading={loadingWorldMetaInfoMutation}
               disabled={!isValid}
             >
               {t('Save')}
