@@ -59,21 +59,21 @@ const overrides = [
   //   applicationType: AkashaAppApplicationType.Widget,
   //   source: `${origin}/widgets/sidebar/index.js`,
   // },
-  // {
-  //   name: '@akashaorg/ui-widget-topbar',
-  //   applicationType: AkashaAppApplicationType.Widget,
-  //   source: `${origin}/widgets/top-bar/index.js`,
-  // },
+  {
+    name: '@akashaorg/ui-widget-topbar',
+    applicationType: AkashaAppApplicationType.Widget,
+    source: `${origin}/widgets/top-bar/index.js`,
+  },
   // {
   //   name: '@akashaorg/ui-widget-trending',
   //   applicationType: AkashaAppApplicationType.Widget,
   //   source: `${origin}/widgets/trending/index.js`,
   // },
-  // {
-  //   name: '@akashaorg/ui-widget-layout',
-  //   applicationType: AkashaAppApplicationType.Widget,
-  //   source: `${origin}/widgets/layout/index.js`,
-  // },
+  {
+    name: '@akashaorg/ui-widget-layout',
+    applicationType: AkashaAppApplicationType.Widget,
+    source: `${origin}/widgets/layout/index.js`,
+  },
   // {
   //   name: '@akashaorg/ui-widget-analytics',
   //   applicationType: AkashaAppApplicationType.Widget,
