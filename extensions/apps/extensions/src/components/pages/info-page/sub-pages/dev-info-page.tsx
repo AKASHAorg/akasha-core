@@ -148,7 +148,7 @@ export const DevInfoPage = (props: DevInfoPageProps) => {
           {appsReq.error && (
             <>
               <Divider />
-              <ErrorLoader type="list-not-available">
+              <ErrorLoader type="list-not-available" className="border-none">
                 <ErrorLoaderTitle>{`${t('Uh-oh')}!${t("We couldn't load the extension list")}!`}</ErrorLoaderTitle>
                 <ErrorLoaderDescription>{`${t('It seems there is a problem retreving the list of extensions')}. ${t('Please try again later')}!`}</ErrorLoaderDescription>
               </ErrorLoader>
