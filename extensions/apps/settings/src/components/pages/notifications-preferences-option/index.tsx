@@ -72,7 +72,7 @@ const NotificationsPreferencesOption: React.FC = () => {
           setInitialLoading(false);
         });
     }
-  }, [sdk.services.common.notification, notificationsEnabled, readOnlyMode, initialLoading]);
+  }, [sdk.services.common.notification, notificationsEnabled, readOnlyMode, initialLoading, t]);
 
   useEffect(() => {
     setEnableAllChecked(appPreferences?.every(item => item.enabled === true));
