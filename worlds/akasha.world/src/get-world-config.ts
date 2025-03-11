@@ -2,7 +2,10 @@ import { WorldConfig } from '@akashaorg/typings/lib/ui';
 import type { Sdk } from '@akashaorg/composedb-models/lib/__generated__/graphql-api';
 import { selectWorldData } from '@akashaorg/ui-core-hooks/lib/selectors/get-world-by-id-query';
 import { selectWorldConfigData } from '@akashaorg/ui-core-hooks/lib/selectors/get-world-config-query';
-import { selectApplicationType, selectAppName } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-by-id-query';
+import {
+  selectApplicationType,
+  selectAppName,
+} from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-by-id-query';
 import { GetWorldConfigQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
@@ -14,22 +17,24 @@ const getExtensionInfo = async (extensionId: string, gqlClient: Sdk) => {
     name: selectAppName(extRes),
     applicationType: selectApplicationType(extRes),
   };
-}
+};
 
 const selectExtensionIdsFromEdges = (resp: GetWorldConfigQuery) => {
   const config = selectWorldConfigData(resp);
   if (config.extensions.edges && config.extensions.edges.length > 0) {
-    return config.extensions.edges.map((edge) => {
-      if (edge && edge.node && 'id' in edge.node) {
-        return edge.node.extensionID;
-      }
-      return null;
-    }).filter(Boolean);
+    return config.extensions.edges
+      .map(edge => {
+        if (edge && edge.node && 'id' in edge.node) {
+          return edge.node.extensionID;
+        }
+        return null;
+      })
+      .filter(Boolean);
   }
-}
+};
 
 export const getWorldConfig = async (id: string): Promise<WorldConfig | null> => {
- const { default: getSDK } = await System.import('@akashaorg/core-sdk');
+  const { default: getSDK } = await System.import('@akashaorg/core-sdk');
 
   const gqlClient: Sdk = getSDK().services.gql.client;
   // GET world
@@ -41,7 +46,7 @@ export const getWorldConfig = async (id: string): Promise<WorldConfig | null> =>
   if (!worldInfo) {
     return null;
   }
-  const formattedWorldConfig : WorldConfig = {
+  const formattedWorldConfig: WorldConfig = {
     title: worldInfo.name,
     defaultApps: [],
     defaultWidgets: [],
@@ -60,9 +65,15 @@ export const getWorldConfig = async (id: string): Promise<WorldConfig | null> =>
     return null;
   }
 
-  formattedWorldConfig.homepageApp = (await getExtensionInfo(worldConfig.homepageExtension, gqlClient)).name;
-  formattedWorldConfig.layout = (await getExtensionInfo(worldConfig.layoutExtension, gqlClient)).name;
-  formattedWorldConfig.extensionsApp = (await getExtensionInfo(worldConfig.registryExtension, gqlClient)).name;
+  formattedWorldConfig.homepageApp = (
+    await getExtensionInfo(worldConfig.homepageExtension, gqlClient)
+  ).name;
+  formattedWorldConfig.layout = (
+    await getExtensionInfo(worldConfig.layoutExtension, gqlClient)
+  ).name;
+  formattedWorldConfig.extensionsApp = (
+    await getExtensionInfo(worldConfig.registryExtension, gqlClient)
+  ).name;
 
   if (worldConfig.extensions.edges && worldConfig.extensions.edges.length === 0) {
     return formattedWorldConfig;
@@ -87,4 +98,4 @@ export const getWorldConfig = async (id: string): Promise<WorldConfig | null> =>
   }
 
   return formattedWorldConfig;
-}
+};

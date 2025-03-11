@@ -4,7 +4,6 @@ import '@akashaorg/ui/globals.css';
 import { getWorldConfig } from './get-world-config';
 import { akashaWorldConfig } from './akasha-world.conf';
 
-
 /**
  * Replace this world id to permanently load
  * an existing configuration
@@ -51,5 +50,5 @@ const WORLD_ID = null;
   //   registryOverrides = (await import('./registry-overrides')).default;
   // }
 
-  // @ts-ignore-next-line
+  // @ts-expect-error Systemjs exists in the global scope
 })(globalThis.System);
