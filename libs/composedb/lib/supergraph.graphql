@@ -4515,6 +4515,7 @@ input PartialAkashaWorldConfigExtensionInput
 @join__type(graph: COMPOSEDB)
 {
   type: String
+  active: Boolean
   optional: Boolean
   position: Int
 }
@@ -4522,6 +4523,7 @@ input PartialAkashaWorldConfigExtensionInput
 input PartialAkashaWorldConfigInput
 @join__type(graph: COMPOSEDB)
 {
+  active: Boolean
   layoutExtension: CeramicStreamID
   homepageExtension: CeramicStreamID
   registryExtension: CeramicStreamID
@@ -4531,6 +4533,7 @@ input PartialAkashaWorldInput
 @join__type(graph: COMPOSEDB)
 {
   icon: AkashaWorldImageVersionsInput
+  active: Boolean
   instanceURL: URI
   extensionPublishers: [DID]
 }
@@ -6178,21 +6181,18 @@ input WithAkashaWorldConfigExtensionInput
 {
   extensionID: CeramicStreamID!
   worldConfigID: CeramicStreamID!
-  active: Boolean!
 }
 
 input WithAkashaWorldConfigInput
 @join__type(graph: COMPOSEDB)
 {
   worldID: CeramicStreamID!
-  active: Boolean!
 }
 
 input WithAkashaWorldInput
 @join__type(graph: COMPOSEDB)
 {
   name: String!
-  active: Boolean!
 }
 
 input WithAkashaWorldMetaInfoInput

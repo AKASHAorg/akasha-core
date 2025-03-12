@@ -32,7 +32,7 @@ export default function compose (akashaAppInterface, akashaWorldConfigInterface)
   type AkashaWorldConfigExtension implements AkashaWorldConfigExtensionInterface
   @createModel(
     accountRelation: SET,
-    accountRelationFields: ["extensionID", "worldConfigID", "active"],
+    accountRelationFields: ["extensionID", "worldConfigID"],
     description: "Extension defined for a world v0.1"
   )
   @createIndex(fields:[{path:["createdAt"]}])

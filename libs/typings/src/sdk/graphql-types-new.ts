@@ -4068,18 +4068,21 @@ export type PartialAkashaReflectStreamInput = {
 };
 
 export type PartialAkashaWorldConfigExtensionInput = {
+  active?: InputMaybe<Scalars['Boolean']['input']>;
   optional?: InputMaybe<Scalars['Boolean']['input']>;
   position?: InputMaybe<Scalars['Int']['input']>;
   type?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type PartialAkashaWorldConfigInput = {
+  active?: InputMaybe<Scalars['Boolean']['input']>;
   homepageExtension?: InputMaybe<Scalars['CeramicStreamID']['input']>;
   layoutExtension?: InputMaybe<Scalars['CeramicStreamID']['input']>;
   registryExtension?: InputMaybe<Scalars['CeramicStreamID']['input']>;
 };
 
 export type PartialAkashaWorldInput = {
+  active?: InputMaybe<Scalars['Boolean']['input']>;
   extensionPublishers?: InputMaybe<Array<InputMaybe<Scalars['DID']['input']>>>;
   icon?: InputMaybe<AkashaWorldImageVersionsInput>;
   instanceURL?: InputMaybe<Scalars['URI']['input']>;
@@ -5565,18 +5568,15 @@ export type WithAkashaReflectStreamInput = {
 };
 
 export type WithAkashaWorldConfigExtensionInput = {
-  active: Scalars['Boolean']['input'];
   extensionID: Scalars['CeramicStreamID']['input'];
   worldConfigID: Scalars['CeramicStreamID']['input'];
 };
 
 export type WithAkashaWorldConfigInput = {
-  active: Scalars['Boolean']['input'];
   worldID: Scalars['CeramicStreamID']['input'];
 };
 
 export type WithAkashaWorldInput = {
-  active: Scalars['Boolean']['input'];
   name: Scalars['String']['input'];
 };
 
