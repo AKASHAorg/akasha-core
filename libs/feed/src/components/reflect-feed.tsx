@@ -1,5 +1,9 @@
 import React, { ReactElement, useEffect, useMemo } from 'react';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import {
+  ErrorLoader,
+  ErrorLoaderDescription,
+  ErrorLoaderTitle,
+} from '@akashaorg/ui/lib/akasha-components/error-loader';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import DynamicInfiniteScroll from '@akashaorg/design-system-components/lib/components/DynamicInfiniteScroll';
@@ -183,11 +187,12 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
   return (
     <Card className="p-0 border-none">
       {reflectionStreamQuery.error && (
-        <ErrorLoader
-          type="script-error"
-          title={'Sorry, there was an error when fetching reflections'}
-          details={reflectionStreamQuery.error.message}
-        />
+        <ErrorLoader type="script-error">
+          <ErrorLoaderTitle>
+            {'Sorry, there was an error when fetching reflections'}
+          </ErrorLoaderTitle>
+          <ErrorLoaderDescription>{reflectionStreamQuery.error.message}</ErrorLoaderDescription>
+        </ErrorLoader>
       )}
       {reflections && (
         <DynamicInfiniteScroll

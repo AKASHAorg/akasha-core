@@ -8,7 +8,12 @@ import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import { ISettingsItem, SettingsOption } from '../../utils/settings-items';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import {
+  ErrorLoader,
+  ErrorLoaderDescription,
+  ErrorLoaderTitle,
+  ErrorLoaderFooter,
+} from '@akashaorg/ui/lib/akasha-components/error-loader';
 import NotificationSettingsCard from '@akashaorg/design-system-components/lib/components/NotificationSettingsCard';
 import appRoutes, { NOTIFICATIONS } from '../../routes';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
@@ -72,12 +77,14 @@ const NotificationsOption: React.FC = () => {
   if (!isLoggedIn && !isAuthenticating) {
     return (
       <Stack>
-        <ErrorLoader
-          type={'not-authenticated'}
-          title={t('Uh-oh! You are not connected!')}
-          details={t('To check notifications options you must be connected ⚡️')}
-        >
-          <Button onClick={handleConnectButtonClick}>{t('Connect')} </Button>
+        <ErrorLoader type="not-authenticated">
+          <ErrorLoaderTitle>{t('Uh-oh! You are not connected!')}</ErrorLoaderTitle>
+          <ErrorLoaderDescription>
+            {t('To check notifications options you must be connected ⚡️')}
+          </ErrorLoaderDescription>
+          <ErrorLoaderFooter>
+            <Button onClick={handleConnectButtonClick}>{t('Connect')} </Button>
+          </ErrorLoaderFooter>
         </ErrorLoader>
       </Stack>
     );

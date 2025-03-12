@@ -2,7 +2,12 @@ import React from 'react';
 import AppList from '@akashaorg/design-system-components/lib/components/AppList';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import {
+  ErrorLoader,
+  ErrorLoaderDescription,
+  ErrorLoaderTitle,
+  ErrorLoaderFooter,
+} from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { Image } from '@akashaorg/ui/lib/akasha-components/image';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -86,12 +91,14 @@ export const InstalledExtensionsList = () => {
 
   if (!authenticatedDID && !isAuthenticating)
     return (
-      <ErrorLoader
-        type="not-authenticated"
-        title={`${t('Uh-oh')}! ${t('You are not connected')}!`}
-        details={`${t('To check installed extensions you must be connected')} ⚡️`}
-      >
-        <Button onClick={handleConnectButtonClick}>{t('Connect')}</Button>
+      <ErrorLoader type="not-authenticated">
+        <ErrorLoaderTitle>{t('Uh-oh! You are not connected!')}</ErrorLoaderTitle>
+        <ErrorLoaderDescription>
+          {t('To check installed extensions you must be connected')} ⚡️
+        </ErrorLoaderDescription>
+        <ErrorLoaderFooter>
+          <Button onClick={handleConnectButtonClick}>{t('Connect')}</Button>
+        </ErrorLoaderFooter>
       </ErrorLoader>
     );
 
@@ -111,20 +118,15 @@ export const InstalledExtensionsList = () => {
   return (
     <>
       {error && (
-        <ErrorLoader
-          title={
-            <Text variant="h5" align="center" selectable={false}>
-              {t(`Uh-oh! We couldn't load`)} <br />
-              {t(`the extensions list!`)}
-            </Text>
-          }
-          details={
-            <Text variant="body2" align="center" selectable={false} customStyle="w-60 sm:w-auto">
-              {t('There might be an issue with the database. Please try again later!')}
-            </Text>
-          }
-          type="list-not-available"
-        />
+        <ErrorLoader type="list-not-available">
+          <ErrorLoaderTitle>
+            {t(`Uh-oh! We couldn't load`)} <br />
+            {t(`the extensions list!`)}
+          </ErrorLoaderTitle>
+          <ErrorLoaderDescription>
+            {t('There might be an issue with the database. Please try again later!')}
+          </ErrorLoaderDescription>
+        </ErrorLoader>
       )}
       {installedExtensions && (
         <Stack spacing={3} alignItems="center">

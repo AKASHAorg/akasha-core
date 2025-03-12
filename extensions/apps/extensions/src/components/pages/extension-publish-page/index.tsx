@@ -3,7 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import {
+  ErrorLoader,
+  ErrorLoaderDescription,
+  ErrorLoaderFooter,
+  ErrorLoaderTitle,
+} from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
@@ -215,12 +220,12 @@ export const ExtensionPublishPage: React.FC<ExtensionPublishPageProps> = ({ exte
 
   if (!authenticatedDID) {
     return (
-      <ErrorLoader
-        type="not-authenticated"
-        title={`${t('Uh-oh')}! ${t('You are not connected')}!`}
-        details={`${t('To check your extensions you must be connected')} ⚡️`}
-      >
-        <Button onClick={handleConnectButtonClick}>{t('Connect')}</Button>
+      <ErrorLoader type="not-authenticated">
+        <ErrorLoaderTitle>{`${t('Uh-oh')}! ${t('You are not connected')}!`}</ErrorLoaderTitle>
+        <ErrorLoaderDescription>{`${t('To check your extensions you must be connected')} ⚡️`}</ErrorLoaderDescription>
+        <ErrorLoaderFooter>
+          <Button onClick={handleConnectButtonClick}>{t('Connect')}</Button>
+        </ErrorLoaderFooter>
       </ErrorLoader>
     );
   }
@@ -282,11 +287,12 @@ export const ExtensionPublishPage: React.FC<ExtensionPublishPageProps> = ({ exte
               )}
               {errorProfilesData && (
                 <Stack>
-                  <ErrorLoader
-                    type="script-error"
-                    title={t('There was an error loading the contributors')}
-                    details={errorProfilesData.message}
-                  />
+                  <ErrorLoader type="script-error">
+                    <ErrorLoaderTitle>
+                      {t('There was an error loading the contributors')}
+                    </ErrorLoaderTitle>
+                    <ErrorLoaderDescription>{errorProfilesData.message}</ErrorLoaderDescription>
+                  </ErrorLoader>
                 </Stack>
               )}
               {profilesData?.length > 0 && (

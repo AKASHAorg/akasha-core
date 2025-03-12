@@ -1,6 +1,10 @@
 import React from 'react';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { useTranslation } from 'react-i18next';
+import {
+  ErrorLoader,
+  ErrorLoaderDescription,
+  ErrorLoaderTitle,
+} from '@akashaorg/ui/lib/akasha-components/error-loader';
 
 type ErrorComponentProps = {
   error: string;
@@ -9,7 +13,12 @@ type ErrorComponentProps = {
 const ErrorComponent: React.FC<ErrorComponentProps> = props => {
   const { error } = props;
   const { t } = useTranslation('app-antenna');
-  return <ErrorLoader type="script-error" title={t('Error in antenna app')} details={error} />;
+  return (
+    <ErrorLoader type="script-error">
+      <ErrorLoaderTitle>{t('Error in antenna app')}</ErrorLoaderTitle>
+      <ErrorLoaderDescription>{error}</ErrorLoaderDescription>
+    </ErrorLoader>
+  );
 };
 
 export default ErrorComponent;
