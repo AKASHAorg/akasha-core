@@ -15,7 +15,11 @@ import { useGetAppsReleasesQuery } from '@akashaorg/ui-core-hooks/lib/generated'
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
 import { NetworkStatus } from '@apollo/client';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import {
+  ErrorLoader,
+  ErrorLoaderDescription,
+  ErrorLoaderTitle,
+} from '@akashaorg/ui/lib/akasha-components/error-loader';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import {
   selectAppsReleases,
@@ -100,12 +104,12 @@ export const ReleasesPage = (props: ReleasesPageProps) => {
           {hasErrors && (
             <>
               <Divider />
-              <ErrorLoader
-                noWrapperCard={true}
-                type="list-not-available"
-                title={t('Loading error')}
-                details={t('There was an error loading the releases')}
-              />
+              <ErrorLoader type="list-not-available" className="border-none bg-transparent">
+                <ErrorLoaderTitle>{t('Loading error')}</ErrorLoaderTitle>
+                <ErrorLoaderDescription>
+                  {t('There was an error loading the releases')}
+                </ErrorLoaderDescription>
+              </ErrorLoader>
             </>
           )}
           {releasesReq.networkStatus === NetworkStatus.ready && !releases.length && (

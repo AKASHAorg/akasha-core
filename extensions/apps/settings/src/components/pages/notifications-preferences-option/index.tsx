@@ -4,7 +4,12 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { useAkashaStore, useNotifications, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { tw } from '@twind/core';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import {
+  ErrorLoader,
+  ErrorLoaderDescription,
+  ErrorLoaderTitle,
+  ErrorLoaderFooter,
+} from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import appRoutes, { PREFERENCES } from '../../../routes';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
@@ -67,7 +72,7 @@ const NotificationsPreferencesOption: React.FC = () => {
           setInitialLoading(false);
         });
     }
-  }, [sdk.services.common.notification, notificationsEnabled, readOnlyMode, initialLoading]);
+  }, [sdk.services.common.notification, notificationsEnabled, readOnlyMode, initialLoading, t]);
 
   useEffect(() => {
     setEnableAllChecked(appPreferences?.every(item => item.enabled === true));
@@ -144,12 +149,14 @@ const NotificationsPreferencesOption: React.FC = () => {
   if (!isLoggedIn && !isAuthenticating) {
     return (
       <Stack>
-        <ErrorLoader
-          type={'not-authenticated'}
-          title={t('Uh-oh! You are not connected!')}
-          details={t('To check notifications preferences options you must be connected ⚡️')}
-        >
-          <Button onClick={handleConnectButtonClick}>{t('Connect')}</Button>
+        <ErrorLoader type="not-authenticated">
+          <ErrorLoaderTitle>{t('Uh-oh! You are not connected!')}</ErrorLoaderTitle>
+          <ErrorLoaderDescription>
+            {t('To check notifications preferences options you must be connected ⚡️')}
+          </ErrorLoaderDescription>
+          <ErrorLoaderFooter>
+            <Button onClick={handleConnectButtonClick}>{t('Connect')}</Button>
+          </ErrorLoaderFooter>
         </ErrorLoader>
       </Stack>
     );

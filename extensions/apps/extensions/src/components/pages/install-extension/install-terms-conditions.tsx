@@ -21,7 +21,12 @@ import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import { useGetAppsByPublisherDidQuery } from '@akashaorg/ui-core-hooks/lib/generated';
 import getSDK from '@akashaorg/core-sdk';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import {
+  ErrorLoader,
+  ErrorLoaderDescription,
+  ErrorLoaderFooter,
+  ErrorLoaderTitle,
+} from '@akashaorg/ui/lib/akasha-components/error-loader';
 import {
   selectAkashaApp,
   selectAppDisplayName,
@@ -153,25 +158,28 @@ export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
   if (!authenticatedDID && !isAuthenticating) {
     const appDisplayName = isAppInfoLoading ? t('this app') : selectAppDisplayName(appInfo);
     return (
-      <ErrorLoader
-        type="not-authenticated"
-        title={t('Login Required')}
-        details={t('You must be logged in to install {{appDisplayName}}', {
-          appDisplayName,
-        })}
-      >
-        <Button onClick={handleLoginClick}>{t('Login')}</Button>
+      <ErrorLoader type="not-authenticated">
+        <ErrorLoaderTitle>{t('Login Required')}</ErrorLoaderTitle>
+        <ErrorLoaderDescription>
+          {t('You must be logged in to install {{appDisplayName}}', {
+            appDisplayName,
+          })}
+        </ErrorLoaderDescription>
+        <ErrorLoaderFooter>
+          <Button onClick={handleLoginClick}>{t('Login')}</Button>
+        </ErrorLoaderFooter>
       </ErrorLoader>
     );
   }
 
   if (appInfoQueryError) {
     return (
-      <ErrorLoader
-        type={'no-apps'}
-        title={t('Oops, failed to get extension info')}
-        details={t('This error means we cannot get extension information at this moment.')}
-      />
+      <ErrorLoader type="no-apps">
+        <ErrorLoaderTitle>{t('Oops, failed to get extension info')}</ErrorLoaderTitle>
+        <ErrorLoaderDescription>
+          {t('This error means we cannot get extension information at this moment.')}
+        </ErrorLoaderDescription>
+      </ErrorLoader>
     );
   }
 

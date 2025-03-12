@@ -5,7 +5,11 @@ import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import {
+  ErrorLoader,
+  ErrorLoaderDescription,
+  ErrorLoaderTitle,
+} from '@akashaorg/ui/lib/akasha-components/error-loader';
 import ExtensionSubRouteHeader from '../../InfoSubroutePageHeader';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
@@ -58,11 +62,12 @@ export const ContributorsPage = (props: ContributorsPageProps) => {
             )}
             {error && (
               <Stack>
-                <ErrorLoader
-                  type="script-error"
-                  title={t('There was an error loading the contributors')}
-                  details={error.message}
-                />
+                <ErrorLoader type="script-error">
+                  <ErrorLoaderTitle>
+                    {t('There was an error loading the contributors')}
+                  </ErrorLoaderTitle>
+                  <ErrorLoaderDescription>{error.message}</ErrorLoaderDescription>
+                </ErrorLoader>
               </Stack>
             )}
             {contributorsProfile?.map((contributor, index) => (

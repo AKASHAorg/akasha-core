@@ -1,6 +1,10 @@
 import React, { Suspense, useCallback, useMemo } from 'react';
 import routes, { EDIT } from '../../routes';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import {
+  ErrorLoader,
+  ErrorLoaderDescription,
+  ErrorLoaderTitle,
+} from '@akashaorg/ui/lib/akasha-components/error-loader';
 import FollowProfileButton from '../follow-profile-button';
 import {
   FlagIcon,
@@ -136,11 +140,12 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
 
   if (error)
     return (
-      <ErrorLoader
-        type="script-error"
-        title={t('There was an error loading the profile header')}
-        details={t('We cannot show this profile header right now')}
-      />
+      <ErrorLoader type="script-error">
+        <ErrorLoaderTitle>{t('There was an error loading the profile header')}</ErrorLoaderTitle>
+        <ErrorLoaderDescription>
+          {t('We cannot show this profile header right now')}
+        </ErrorLoaderDescription>
+      </ErrorLoader>
     );
 
   return (

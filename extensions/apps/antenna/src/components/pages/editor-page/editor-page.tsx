@@ -1,6 +1,11 @@
 import * as React from 'react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import {
+  ErrorLoader,
+  ErrorLoaderDescription,
+  ErrorLoaderFooter,
+  ErrorLoaderTitle,
+} from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { useTranslation } from 'react-i18next';
 import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
@@ -23,22 +28,24 @@ const EditorPage: React.FC<unknown> = () => {
         </Helmet>
         {!authenticatedDID && (
           <Stack>
-            <ErrorLoader
-              type={'not-authenticated'}
-              title={t('Uh-oh! You are not connected!')}
-              details={t('To create Beams you must be connected ⚡️')}
-            >
-              <Button
-                onClick={() =>
-                  navigateTo.current({
-                    appName: '@akashaorg/app-auth-ewa',
-                    getNavigationUrl: navRoutes =>
-                      `${navRoutes.Connect}?redirectTo=${encodeURIComponent(location.pathname)}`,
-                  })
-                }
-              >
-                {t('Connect')}
-              </Button>
+            <ErrorLoader type={'not-authenticated'}>
+              <ErrorLoaderTitle>{t('Uh-oh! You are not connected!')}</ErrorLoaderTitle>
+              <ErrorLoaderDescription>
+                {t('To create Beams you must be connected ⚡️')}
+              </ErrorLoaderDescription>
+              <ErrorLoaderFooter>
+                <Button
+                  onClick={() =>
+                    navigateTo.current({
+                      appName: '@akashaorg/app-auth-ewa',
+                      getNavigationUrl: navRoutes =>
+                        `${navRoutes.Connect}?redirectTo=${encodeURIComponent(location.pathname)}`,
+                    })
+                  }
+                >
+                  {t('Connect')}
+                </Button>
+              </ErrorLoaderFooter>
             </ErrorLoader>
           </Stack>
         )}

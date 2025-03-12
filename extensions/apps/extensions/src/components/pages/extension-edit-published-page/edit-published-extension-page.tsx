@@ -6,7 +6,11 @@ import { useGetAppsByIdQuery, useUpdateAppMutation } from '@akashaorg/ui-core-ho
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import {
+  ErrorLoader,
+  ErrorLoaderDescription,
+  ErrorLoaderTitle,
+} from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import ExtensionEditPublishedForm, {
   ExtensionEditPublishedFormValues,
@@ -190,11 +194,10 @@ export const EditPublishedExtensionPage: React.FC<EditPublishedExtensionPageProp
 
   if (extensionDataError) {
     return (
-      <ErrorLoader
-        type="script-error"
-        title={t('Error loading extension data')}
-        details={extensionDataError.message}
-      />
+      <ErrorLoader type="script-error">
+        <ErrorLoaderTitle>{t('Error loading extension data')}</ErrorLoaderTitle>
+        <ErrorLoaderDescription>{extensionDataError.message}</ErrorLoaderDescription>
+      </ErrorLoader>
     );
   }
 
