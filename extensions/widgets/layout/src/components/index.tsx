@@ -227,23 +227,21 @@ const Layout: React.FC<unknown> = () => {
           <Stack className={`px-2 ${showWidgets ? '' : 'lg:(col-start-2 col-end-3) col-start-1'}`}>
             <Stack className="pt-4 sticky top-0 z-10 bg(white dark:black) rounded-b-3xl">
               {worldConfig.isPreview && (
-                <Stack>
-                  <Card className="p-4">
-                    <Stack direction="row">
-                      <Icon
-                        color={{ light: 'primary', dark: 'primary' }}
-                        icon={exclamationCircleIcon}
-                        customStyle="mr-4"
-                      />
-                      <Text variant="subtitle2">
-                        {t('You are previewing "{{worldName}}"', { worldName: worldConfig.title })}.
-                      </Text>
-                    </Stack>
-                    <Button variant="link" onClick={handleExitPreview}>
-                      {t('Leave Preview')}
-                    </Button>
-                  </Card>
-                </Stack>
+                <Card className="p-4 mb-4">
+                  <Stack direction="row">
+                    <Icon
+                      color={{ light: 'primary', dark: 'primary' }}
+                      icon={exclamationCircleIcon}
+                      customStyle="mr-4"
+                    />
+                    <Text variant="subtitle2">
+                      {t('You are previewing "{{worldName}}"', { worldName: worldConfig.title })}.
+                    </Text>
+                  </Stack>
+                  <Button variant="link" onClick={handleExitPreview}>
+                    {t('Leave Preview')}
+                  </Button>
+                </Card>
               )}
               <Widget name={layoutSlots.topbarSlotId} loadingIndicator={topbarLoadingIndicator} />
             </Stack>

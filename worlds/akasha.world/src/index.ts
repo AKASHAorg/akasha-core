@@ -4,6 +4,7 @@ import '@akashaorg/ui/globals.css';
 import { getWorldConfig } from './get-world-config';
 import { akashaWorldConfig } from './akasha-world.conf';
 import { AkashaApp } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { displayError, hideError } from './errors';
 
 /**
  * Replace this world id to permanently load
@@ -40,11 +41,13 @@ declare const __LOAD_LOCAL_SOURCES__: boolean;
       if (!previewConfig) {
         // show an error message?
         console.error('World config not found.');
+        displayError('World config not found.');
         return;
       }
       worldConfig = previewConfig;
     } catch (err) {
       console.error('cannot load preview', err);
+      return;
     }
   }
 
@@ -63,7 +66,7 @@ declare const __LOAD_LOCAL_SOURCES__: boolean;
     ...worldConfig,
     isPreview: !!sessionStorage.getItem('previewWorldId'),
   });
-
+  hideError();
   appLoader.start();
 
   // @ts-expect-error Systemjs exists in the global scope

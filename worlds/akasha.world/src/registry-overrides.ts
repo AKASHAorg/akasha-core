@@ -18,11 +18,11 @@ const overrides = [
     applicationType: AkashaAppApplicationType.App,
     source: `${origin}/apps/vibes/index.js`,
   },
-  // {
-  //   name: '@akashaorg/app-vibes-console',
-  //   applicationType: AkashaAppApplicationType.App,
-  //   source: `${origin}/apps/vibes-console/index.js`,
-  // },
+  {
+    name: '@akashaorg/app-vibes-console',
+    applicationType: AkashaAppApplicationType.App,
+    source: `${origin}/apps/vibes-console/index.js`,
+  },
   {
     name: '@akashaorg/app-auth-ewa',
     applicationType: AkashaAppApplicationType.App,
@@ -38,12 +38,11 @@ const overrides = [
     applicationType: AkashaAppApplicationType.App,
     source: `${origin}/apps/notifications/index.js`,
   },
-  // {
-  //   name: '@akashaorg/app-legal',
-  //   applicationType: AkashaAppApplicationType.App,
-  //   source: `${origin}/apps/legal/index.js`,
-  //
-  // },
+  {
+    name: '@akashaorg/app-legal',
+    applicationType: AkashaAppApplicationType.App,
+    source: `${origin}/apps/legal/index.js`,
+  },
   {
     name: '@akashaorg/app-search',
     applicationType: AkashaAppApplicationType.App,
@@ -54,41 +53,46 @@ const overrides = [
     applicationType: AkashaAppApplicationType.App,
     source: `${origin}/apps/settings/index.js`,
   },
-  // {
-  //   name: '@akashaorg/ui-widget-sidebar',
-  //   applicationType: AkashaAppApplicationType.Widget,
-  //   source: `${origin}/widgets/sidebar/index.js`,
-  // },
+  {
+    name: '@akashaorg/app-world-builder',
+    applicationType: AkashaAppApplicationType.App,
+    source: `${origin}/apps/world-builder/index.js`,
+  },
+  {
+    name: '@akashaorg/ui-widget-sidebar',
+    applicationType: AkashaAppApplicationType.Widget,
+    source: `${origin}/widgets/sidebar/index.js`,
+  },
   {
     name: '@akashaorg/ui-widget-topbar',
     applicationType: AkashaAppApplicationType.Widget,
     source: `${origin}/widgets/top-bar/index.js`,
   },
-  // {
-  //   name: '@akashaorg/ui-widget-trending',
-  //   applicationType: AkashaAppApplicationType.Widget,
-  //   source: `${origin}/widgets/trending/index.js`,
-  // },
+  {
+    name: '@akashaorg/ui-widget-trending',
+    applicationType: AkashaAppApplicationType.Widget,
+    source: `${origin}/widgets/trending/index.js`,
+  },
   {
     name: '@akashaorg/ui-widget-layout',
     applicationType: AkashaAppApplicationType.Widget,
     source: `${origin}/widgets/layout/index.js`,
   },
-  // {
-  //   name: '@akashaorg/ui-widget-analytics',
-  //   applicationType: AkashaAppApplicationType.Widget,
-  //   source: `${origin}/widgets/analytics/index.js`,
-  // },
-  // {
-  //   name: '@akashaorg/ui-widget-mini-profile',
-  //   applicationType: AkashaAppApplicationType.Widget,
-  //   source: `${origin}/widgets/mini-profile/index.js`,
-  // },
-  // {
-  //   name: '@akashaorg/ui-widget-test-mode-notifier',
-  //   applicationType: AkashaAppApplicationType.Widget,
-  //   source: `${origin}/widgets/test-mode-notifier/index.js`,
-  // },
+  {
+    name: '@akashaorg/ui-widget-analytics',
+    applicationType: AkashaAppApplicationType.Widget,
+    source: `${origin}/widgets/analytics/index.js`,
+  },
+  {
+    name: '@akashaorg/ui-widget-mini-profile',
+    applicationType: AkashaAppApplicationType.Widget,
+    source: `${origin}/widgets/mini-profile/index.js`,
+  },
+  {
+    name: '@akashaorg/ui-widget-test-mode-notifier',
+    applicationType: AkashaAppApplicationType.Widget,
+    source: `${origin}/widgets/test-mode-notifier/index.js`,
+  },
 ];
 
 export default overrides;
