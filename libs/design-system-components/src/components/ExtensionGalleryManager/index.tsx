@@ -3,7 +3,11 @@ import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import {
+  ErrorLoader,
+  ErrorLoaderDescription,
+  ErrorLoaderTitle,
+} from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { GalleryImage, GalleryImageProps } from './gallery-image';
 import { getGalleryState } from './get-gallery-state';
 import { AppImageSource } from '@akashaorg/typings/lib/sdk/graphql-types-new';
@@ -96,9 +100,13 @@ export const ExtensionGalleryManager: React.FC<ExtensionGalleryManagerProps> = p
             ))}
           </Stack>
         ) : (
-          <ErrorLoader
-            title={<Text variant="h6">{emptyGalleryLabel}</Text>}
-            details={
+          <ErrorLoader type="list-not-available" className="bg-transparent border-none">
+            <ErrorLoaderTitle>
+              <Text variant="h6" className="text-center">
+                {emptyGalleryLabel}
+              </Text>
+            </ErrorLoaderTitle>
+            <ErrorLoaderDescription>
               <Button
                 onClick={() => {
                   uploadInputRef.current.click();
@@ -107,10 +115,8 @@ export const ExtensionGalleryManager: React.FC<ExtensionGalleryManagerProps> = p
               >
                 {startUploadingLabel}
               </Button>
-            }
-            type="list-not-available"
-            noWrapperCard
-          />
+            </ErrorLoaderDescription>
+          </ErrorLoader>
         )}
         <input
           ref={uploadInputRef}

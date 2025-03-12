@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import ProfileStatsView from '../../profile-stats';
 import ProfileNotFound from '@akashaorg/design-system-components/lib/components/ProfileNotFound';
@@ -24,6 +23,11 @@ import {
 } from '@akashaorg/ui-core-hooks';
 import { useGetProfileByDidSuspenseQuery } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
 import { selectProfileData } from '@akashaorg/ui-core-hooks/lib/selectors/get-profile-by-did-query';
+import {
+  ErrorLoader,
+  ErrorLoaderDescription,
+  ErrorLoaderTitle,
+} from '@akashaorg/ui/lib/akasha-components/error-loader';
 
 type ProfileInfoPageProps = {
   profileDID: string;
@@ -85,11 +89,12 @@ const ProfileInfoPage: React.FC<ProfileInfoPageProps> = props => {
 
   if (error)
     return (
-      <ErrorLoader
-        type="script-error"
-        title={t('There was an error loading this profile')}
-        details={t('We cannot show this profile right now')}
-      />
+      <ErrorLoader type="script-error">
+        <ErrorLoaderTitle>{t('There was an error loading this profile')}</ErrorLoaderTitle>
+        <ErrorLoaderDescription>
+          {t('We cannot show this profile right now')}
+        </ErrorLoaderDescription>
+      </ErrorLoader>
     );
 
   if (!hasProfile && !validDid)

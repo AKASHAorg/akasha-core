@@ -13,9 +13,14 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import ExtensionCreationForm from '@akashaorg/design-system-components/lib/components/ExtensionCreationForm';
 import { DRAFT_EXTENSIONS } from '../../../constants';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Extension, NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
+import {
+  ErrorLoader,
+  ErrorLoaderDescription,
+  ErrorLoaderFooter,
+  ErrorLoaderTitle,
+} from '@akashaorg/ui/lib/akasha-components/error-loader';
 
 export const ExtensionCreationPage: React.FC<unknown> = () => {
   const navigate = useNavigate();
@@ -73,12 +78,12 @@ export const ExtensionCreationPage: React.FC<unknown> = () => {
 
   if (!authenticatedDID) {
     return (
-      <ErrorLoader
-        type="not-authenticated"
-        title={`${t('Uh-oh')}! ${t('You are not connected')}!`}
-        details={`${t('To create an extension you must be connected')} ⚡️`}
-      >
-        <Button onClick={handleConnectButtonClick}>{t('Connect')}</Button>
+      <ErrorLoader type="not-authenticated">
+        <ErrorLoaderTitle>{`${t('Uh-oh')}! ${t('You are not connected')}!`}</ErrorLoaderTitle>
+        <ErrorLoaderDescription>{`${t('To create an extension you must be connected')} ⚡️`}</ErrorLoaderDescription>
+        <ErrorLoaderFooter>
+          <Button onClick={handleConnectButtonClick}>{t('Connect')}</Button>
+        </ErrorLoaderFooter>
       </ErrorLoader>
     );
   }

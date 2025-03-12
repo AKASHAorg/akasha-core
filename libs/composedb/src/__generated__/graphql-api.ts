@@ -1855,7 +1855,11 @@ export const GetWorldConfigDocument = /*#__PURE__*/ gql`
     edges {
       node {
         ...AkashaWorldConfigFragment
-        extensions(account: $creator, first: 100) {
+        extensions(
+          account: $creator
+          first: 100
+          filters: {where: {active: {equalTo: true}}}
+        ) {
           edges {
             node {
               ...AkashaWorldConfigExtensionFragment

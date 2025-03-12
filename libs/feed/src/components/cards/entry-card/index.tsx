@@ -149,7 +149,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
           )}
           {entryData.active && (
             <Card
-              className={`p-0 border-none flex flex-col justify-start items-center w-full overflow-hidden grow ${showHiddenStyle} ${contentClickableStyle}`}
+              className={`p-0 border-none flex flex-col justify-start items-center w-full overflow-hidden grow bg-transparent ${showHiddenStyle} ${contentClickableStyle}`}
               /**
                * attach onClick handler if
                * 'showNSFWContent' and 'noWrapperCard' are both true

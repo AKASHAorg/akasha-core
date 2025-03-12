@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { RefObject, useCallback, useEffect } from 'react';
-import { ParcelConfig } from 'single-spa';
+import { type ParcelConfig } from 'single-spa';
 import { MatchingBlock } from './content-block';
 import { ContentBlockModes } from '@akashaorg/typings/lib/ui';
 

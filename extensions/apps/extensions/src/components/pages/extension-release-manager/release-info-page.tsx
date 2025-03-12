@@ -3,7 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import {
+  ErrorLoader,
+  ErrorLoaderDescription,
+  ErrorLoaderFooter,
+  ErrorLoaderTitle,
+} from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
@@ -131,12 +136,12 @@ export const ExtensionReleaseInfoPage: React.FC<ExtensionReleaseInfoPageProps> =
 
   if (!authenticatedDID) {
     return (
-      <ErrorLoader
-        type="not-authenticated"
-        title={`${t('Uh-oh')}! ${t('You are not connected')}!`}
-        details={`${t('To check your extensions you must be connected')} ⚡️`}
-      >
-        <Button onClick={handleConnectButtonClick}>{t('Connect')}</Button>
+      <ErrorLoader type="not-authenticated">
+        <ErrorLoaderTitle>{`${t('Uh-oh')}! ${t('You are not connected')}!`}</ErrorLoaderTitle>
+        <ErrorLoaderDescription>{`${t('To check your extensions you must be connected')} ⚡️`}</ErrorLoaderDescription>
+        <ErrorLoaderFooter>
+          <Button onClick={handleConnectButtonClick}>{t('Connect')}</Button>
+        </ErrorLoaderFooter>
       </ErrorLoader>
     );
   }

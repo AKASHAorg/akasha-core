@@ -8,7 +8,12 @@ import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { DRAFT_EXTENSIONS } from '../../../constants';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import {
+  ErrorLoader,
+  ErrorLoaderDescription,
+  ErrorLoaderFooter,
+  ErrorLoaderTitle,
+} from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
@@ -51,12 +56,12 @@ export const PostExtensionCreationPage: React.FC<{ extensionId: string }> = ({ e
 
   if (!authenticatedDID) {
     return (
-      <ErrorLoader
-        type="not-authenticated"
-        title={`${t('Uh-oh')}! ${t('You are not connected')}!`}
-        details={`${t('To view this page you must be connected')} ⚡️`}
-      >
-        <Button onClick={handleConnectButtonClick}>{t('Connect')}</Button>
+      <ErrorLoader type="not-authenticated">
+        <ErrorLoaderTitle>{`${t('Uh-oh')}! ${t('You are not connected')}!`}</ErrorLoaderTitle>
+        <ErrorLoaderDescription>{`${t('To view this page you must be connected')} ⚡️`}</ErrorLoaderDescription>
+        <ErrorLoaderFooter>
+          <Button onClick={handleConnectButtonClick}>{t('Connect')}</Button>
+        </ErrorLoaderFooter>
       </ErrorLoader>
     );
   }

@@ -3,7 +3,11 @@ import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import {
+  ErrorLoader,
+  ErrorLoaderDescription,
+  ErrorLoaderTitle,
+} from '@akashaorg/ui/lib/akasha-components/error-loader';
 import getSDK from '@akashaorg/core-sdk';
 import { useTranslation } from 'react-i18next';
 import {
@@ -107,11 +111,12 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
 
   if (error)
     return (
-      <ErrorLoader
-        type="script-error"
-        title={t('There was an error loading this profile')}
-        details={t('We cannot show this profile right now')}
-      />
+      <ErrorLoader type="script-error">
+        <ErrorLoaderTitle>{t('There was an error loading this profile')}</ErrorLoaderTitle>
+        <ErrorLoaderDescription>
+          {t('We cannot show this profile right now')}
+        </ErrorLoaderDescription>
+      </ErrorLoader>
     );
 
   const navigateToProfileInfoPage = () => {

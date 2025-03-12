@@ -5,7 +5,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import { BlockParcel, BlockParcelProps } from '../block-parcel';
-import { ParcelConfigObject } from 'single-spa';
+import { type ParcelConfigObject } from 'single-spa';
 import { MatchingBlock } from '../common.types';
 import { GetContentBlockByIdQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
