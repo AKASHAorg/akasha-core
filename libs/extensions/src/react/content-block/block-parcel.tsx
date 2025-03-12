@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { RootParcel } from '../root-parcel';
 import { MatchingBlock } from './common.types';
 import { BlockInstanceMethods, ContentBlockModes } from '@akashaorg/typings/lib/ui';
@@ -57,7 +56,7 @@ const BlockParcelRoot: React.FC<BlockParcelProps> = props => {
   }, [matchingBlock.blockInfo, rest]);
 
   return (
-    <Stack fullWidth id={parcelId} key={parcelId}>
+    <div className="flex flex-col w-full" id={parcelId} key={parcelId}>
       <RootParcel
         config={parcelConfig}
         {...getContext()}
@@ -67,7 +66,7 @@ const BlockParcelRoot: React.FC<BlockParcelProps> = props => {
         content={matchingBlock.content}
         handleError={handleParcelError(parcelId)}
       />
-    </Stack>
+    </div>
   );
 };
 
