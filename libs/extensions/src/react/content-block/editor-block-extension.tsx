@@ -3,7 +3,7 @@ import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { ContentBlockModes, BlockInstanceMethods } from '@akashaorg/typings/lib/ui';
-import { ParcelConfigObject } from 'single-spa';
+import { type ParcelConfigObject } from 'single-spa';
 import { BlockParcel } from './block-parcel';
 import { MatchingBlock } from './common.types';
 import { resolveConfigs } from './resolve-configs';

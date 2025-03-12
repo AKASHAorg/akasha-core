@@ -6,7 +6,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { ParcelConfigObject } from 'single-spa';
+import { type ParcelConfigObject } from 'single-spa';
 import { hasOwn, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { BlockInstanceMethods, ContentBlockModes } from '@akashaorg/typings/lib/ui';
 import { GetContentBlockByIdQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
