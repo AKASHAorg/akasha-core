@@ -17,13 +17,13 @@ interface AkashaWorldConfigExtensionInterface @loadModel(id: "kjzl6hvfrbw6c7ig14
     id: ID!
   }
 
-  type AkashaWorldConfig @loadModel(id: "kjzl6hvfrbw6cajh75htc40ommsetqkjlw0vlmi7u2fqumezuxprmbnoktdclp9") {
+  type AkashaWorldConfig @loadModel(id: "kjzl6hvfrbw6c9wucr3ebil6wafdf9sr6xfei8dvsb6lnw03iviitrb7b6ckbcp") {
     id: ID!
     extensions: [AkashaWorldConfigExtensionInterface] @relationFrom(model: "AkashaWorldConfigExtensionInterface", property: "worldConfigID")
   }
 
 
-  type AkashaWorld @loadModel(id: "kjzl6hvfrbw6c5o0dfdyz2dxc7724qkb9jhtdb3w2fvpbf74aplweuqbfk7yw7l") {
+  type AkashaWorld @loadModel(id: "kjzl6hvfrbw6c6sw3lrslrc3tf60xh0dj28tz5v5v8osunjm51wuaptan3k50v2") {
     id: ID!
     configInfo: [AkashaWorldConfigInterface] @relationFrom(model: "AkashaWorldConfigInterface", property: "worldID")
     metaInfo: [AkashaWorldMetaInfoInterface] @relationFrom(model: "AkashaWorldMetaInfoInterface", property: "worldID")

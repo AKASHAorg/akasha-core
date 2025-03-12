@@ -29,7 +29,7 @@ interface AkashaWorldInterface
 type AkashaWorld implements AkashaWorldInterface
 @createModel(
   accountRelation: SET,
-  accountRelationFields: ["name", "active"],
+  accountRelationFields: ["name"],
   description: "AKASHA World model v0.1"
 )
 @createIndex(fields:[{path:["name"]}])

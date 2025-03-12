@@ -3069,7 +3069,6 @@ input AkashaWorldMetaInfoInterfaceSortingInput {
 
 input WithAkashaWorldInput {
   name: String!
-  active: Boolean!
 }
 
 type AkashaWorldConfig implements Node & AkashaWorldConfigInterface {
@@ -3106,7 +3105,6 @@ type AkashaWorldConfig implements Node & AkashaWorldConfigInterface {
 
 input WithAkashaWorldConfigInput {
   worldID: CeramicStreamID!
-  active: Boolean!
 }
 
 type AkashaWorldConfigExtension implements Node & AkashaWorldConfigExtensionInterface {
@@ -3128,7 +3126,6 @@ type AkashaWorldConfigExtension implements Node & AkashaWorldConfigExtensionInte
 input WithAkashaWorldConfigExtensionInput {
   extensionID: CeramicStreamID!
   worldConfigID: CeramicStreamID!
-  active: Boolean!
 }
 
 """A connection to a list of items."""
@@ -4838,6 +4835,7 @@ input UpdateAkashaWorldInput {
 
 input PartialAkashaWorldInput {
   icon: AkashaWorldImageVersionsInput
+  active: Boolean
   instanceURL: URI
   extensionPublishers: [DID]
 }
@@ -4910,6 +4908,7 @@ input UpdateAkashaWorldConfigInput {
 }
 
 input PartialAkashaWorldConfigInput {
+  active: Boolean
   layoutExtension: CeramicStreamID
   homepageExtension: CeramicStreamID
   registryExtension: CeramicStreamID
@@ -4985,6 +4984,7 @@ input UpdateAkashaWorldConfigExtensionInput {
 
 input PartialAkashaWorldConfigExtensionInput {
   type: String
+  active: Boolean
   optional: Boolean
   position: Int
 }
