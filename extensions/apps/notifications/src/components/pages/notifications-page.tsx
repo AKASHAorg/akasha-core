@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAkashaStore, useNotifications, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
@@ -22,7 +22,12 @@ import { UserSettingType } from '@akashaorg/typings/lib/sdk';
 
 import { useGetAppsByPublisherDidQuery } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
 import { selectApps } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-by-publisher-did-query';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import {
+  ErrorLoader,
+  ErrorLoaderDescription,
+  ErrorLoaderTitle,
+  ErrorLoaderFooter,
+} from '@akashaorg/ui/lib/akasha-components/error-loader';
 
 const NotificationsPage: React.FC = () => {
   const sdk = getSDK();
@@ -58,23 +63,6 @@ const NotificationsPage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(true);
 
-  useEffect(() => {
-    const initData = async () => {
-      /* Check first if the user has already subscribed to the channel */
-      if (previouslyEnabled) {
-        await notificationService.initialize();
-        await getSubscribedAppsOptions();
-      }
-    };
-    initData();
-  }, []);
-
-  useEffect(() => {
-    if (appOptions.length > 0) {
-      fetchNotifications();
-    }
-  }, [appOptions]);
-
   /**
    * On option change we need to fetch the notifications from that app.
    * If 'All' option is clicked then an empty array is sent.
@@ -94,7 +82,7 @@ const NotificationsPage: React.FC = () => {
    *  Get the apps that the user has subscribed to
    *  Insert in the active options the option 'All' notifications which will fetch notification from each app
    *  */
-  const getSubscribedAppsOptions = async () => {
+  const getSubscribedAppsOptions = useCallback(async () => {
     const userSettings = await sdk.services.common.notification.getSettingsOfUser();
     setAppOptions([
       {
@@ -105,13 +93,13 @@ const NotificationsPage: React.FC = () => {
       },
       ...userSettings.filter(appOption => appOption.enabled),
     ]);
-  };
+  }, [t, sdk.services.common.notification]);
 
   /**
    * Fetch notifications from Notification Service
    * Handle the pagination
    */
-  const fetchNotifications = async () => {
+  const fetchNotifications = useCallback(async () => {
     try {
       setNotificationLoading(true);
       const fetchedNotifications = await notificationService.getNotifications(
@@ -140,7 +128,7 @@ const NotificationsPage: React.FC = () => {
     } finally {
       setNotificationLoading(false);
     }
-  };
+  }, [currentPage, notificationService, appOptions, t, apps, notifications]);
 
   const clickNotification = (notification: InboxNotification) => {
     navigateTo({
@@ -167,15 +155,34 @@ const NotificationsPage: React.FC = () => {
     });
   };
 
+  useEffect(() => {
+    const initData = async () => {
+      /* Check first if the user has already subscribed to the channel */
+      if (previouslyEnabled) {
+        await notificationService.initialize();
+        await getSubscribedAppsOptions();
+      }
+    };
+    initData();
+  }, [getSubscribedAppsOptions, notificationService, previouslyEnabled]);
+
+  useEffect(() => {
+    if (appOptions.length > 0) {
+      fetchNotifications();
+    }
+  }, [appOptions, fetchNotifications]);
+
   if (!isLoggedIn && !isAuthenticating) {
     return (
       <Stack>
-        <ErrorLoader
-          type={'not-authenticated'}
-          title={t('Uh-oh! You are not connected!')}
-          details={t('To check notifications you must be connected ⚡️')}
-        >
-          <Button onClick={handleConnectButtonClick}>{t('Connect')}</Button>
+        <ErrorLoader type="not-authenticated">
+          <ErrorLoaderTitle>{t('Uh-oh! You are not connected!')}</ErrorLoaderTitle>
+          <ErrorLoaderDescription>
+            {t('To check notifications you must be connected ⚡️')}
+          </ErrorLoaderDescription>
+          <ErrorLoaderFooter>
+            <Button onClick={handleConnectButtonClick}>{t('Connect')}</Button>
+          </ErrorLoaderFooter>
         </ErrorLoader>
       </Stack>
     );

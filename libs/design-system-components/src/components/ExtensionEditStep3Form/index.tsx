@@ -20,8 +20,12 @@ import { AkashaProfile, Image } from '@akashaorg/typings/lib/ui';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/solid';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { ApolloError } from '@apollo/client';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Label from '@akashaorg/design-system-core/lib/components/Label';
+import {
+  ErrorLoader,
+  ErrorLoaderDescription,
+  ErrorLoaderTitle,
+} from '@akashaorg/ui/lib/akasha-components/error-loader';
 
 const MAX_TAGS = 4;
 
@@ -235,11 +239,10 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
             {loadingProfilesData && <Spinner />}
             {errorProfilesData && (
               <Stack>
-                <ErrorLoader
-                  type="script-error"
-                  title={errorProfilesDataLabel}
-                  details={errorProfilesData.message}
-                />
+                <ErrorLoader type="script-error">
+                  <ErrorLoaderTitle>{errorProfilesDataLabel}</ErrorLoaderTitle>
+                  <ErrorLoaderDescription>{errorProfilesData.message}</ErrorLoaderDescription>
+                </ErrorLoader>
               </Stack>
             )}
             {contributorAvatars?.length > 0 && (

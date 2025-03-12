@@ -23,7 +23,12 @@ import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Dropdown from '@akashaorg/design-system-core/lib/components/Dropdown';
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
 import DynamicInfiniteScroll from '@akashaorg/design-system-components/lib/components/DynamicInfiniteScroll';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import {
+  ErrorLoader,
+  ErrorLoaderDescription,
+  ErrorLoaderTitle,
+  ErrorLoaderFooter,
+} from '@akashaorg/ui/lib/akasha-components/error-loader';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
@@ -178,12 +183,14 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
 
   if (!authenticatedDID) {
     return (
-      <ErrorLoader
-        type="not-authenticated"
-        title={`${t('Uh-oh')}! ${t('You are not connected')}!`}
-        details={`${t('To check your extensions you must be connected')} ⚡️`}
-      >
-        <Button onClick={handleConnectButtonClick}>{t('Connect')}</Button>
+      <ErrorLoader type="not-authenticated">
+        <ErrorLoaderTitle>{t('Uh-oh! You are not connected!')}</ErrorLoaderTitle>
+        <ErrorLoaderDescription>
+          {t('To check your extensions you must be connected')} ⚡️
+        </ErrorLoaderDescription>
+        <ErrorLoaderFooter>
+          <Button onClick={handleConnectButtonClick}>{t('Connect')}</Button>
+        </ErrorLoaderFooter>
       </ErrorLoader>
     );
   }
@@ -225,11 +232,10 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
         </Button>
       </Stack>
       {error && (
-        <ErrorLoader
-          type="script-error"
-          title={'Sorry, there was an error when fetching apps'}
-          details={error.message}
-        />
+        <ErrorLoader type="script-error">
+          <ErrorLoaderTitle>Sorry, there was an error when fetching apps</ErrorLoaderTitle>
+          <ErrorLoaderDescription>{error.message}</ErrorLoaderDescription>
+        </ErrorLoader>
       )}
       {!error && allMyExtensions?.length === 0 && (
         <DefaultEmptyCard

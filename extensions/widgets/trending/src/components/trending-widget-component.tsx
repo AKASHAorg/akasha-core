@@ -1,7 +1,11 @@
 import React, { useMemo } from 'react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import {
+  ErrorLoader,
+  ErrorLoaderDescription,
+  ErrorLoaderTitle,
+} from '@akashaorg/ui/lib/akasha-components/error-loader';
 import TrendingWidgetLoadingCard from '@akashaorg/design-system-components/lib/components/TrendingWidgetLoadingCard';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
@@ -104,13 +108,12 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
   return (
     <Stack spacing={4}>
       {(latestTopicsError || latestProfileStreamReq.error) && (
-        <ErrorLoader
-          type="script-error"
-          title={t('Oops, this widget has an error')}
-          details={
-            latestTopicsError ? t('Cannot load latest topics') : t('Cannot load latest profiles')
-          }
-        />
+        <ErrorLoader type="script-error">
+          <ErrorLoaderTitle>{t('Oops, this widget has an error')}</ErrorLoaderTitle>
+          <ErrorLoaderDescription>
+            {latestTopicsError ? t('Cannot load latest topics') : t('Cannot load latest profiles')}
+          </ErrorLoaderDescription>
+        </ErrorLoader>
       )}
 
       {!latestTopicsError && (
