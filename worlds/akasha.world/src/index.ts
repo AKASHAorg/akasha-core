@@ -4,7 +4,8 @@ import '@akashaorg/ui/globals.css';
 import { getWorldConfig } from './get-world-config';
 import { akashaWorldConfig } from './akasha-world.conf';
 import { AkashaApp } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { displayError, hideError } from './errors';
+import { displayError } from './errors';
+const ROOT_NODE = 'root';
 
 /**
  * Replace this world id to permanently load
@@ -21,6 +22,10 @@ declare const __LOAD_LOCAL_SOURCES__: boolean;
   console.log('initial sdk instance', sdk);
 
   let worldConfig = akashaWorldConfig;
+
+  let hideError: () => void = () => {
+    // noop
+  };
 
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
@@ -39,14 +44,22 @@ declare const __LOAD_LOCAL_SOURCES__: boolean;
     try {
       const previewConfig = await getWorldConfig(worldId);
       if (!previewConfig) {
-        // show an error message?
-        console.error('World config not found.');
-        displayError('World config not found.');
+        hideError = displayError('World config not found.', ROOT_NODE);
         return;
       }
       worldConfig = previewConfig;
     } catch (err) {
-      console.error('cannot load preview', err);
+      if (urlParams.get('previewWorldId')) {
+        hideError = displayError(
+          `Error loading preview for worldId: ${worldId}. Please make sure that the world exists and the id is correct.`,
+          ROOT_NODE,
+        );
+      } else {
+        hideError = displayError(
+          `There was an error when loading world with id: ${worldId}`,
+          ROOT_NODE,
+        );
+      }
       return;
     }
   }
@@ -66,6 +79,7 @@ declare const __LOAD_LOCAL_SOURCES__: boolean;
     ...worldConfig,
     isPreview: !!sessionStorage.getItem('previewWorldId'),
   });
+
   hideError();
   appLoader.start();
 

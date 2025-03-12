@@ -80,21 +80,21 @@
 </template>
 <template id="four-oh-four-tpl">
   <div id="four-oh-four-root" class="text-black dark:text-white">
-    <div class="flex flex-col items-center bg-white dark:bg-grey2 px-4 py-8 rounded-2xl">
+    <div id="four-oh-four-card" class="flex flex-col items-center bg-white dark:bg-grey2 px-4 py-8 rounded-2xl">
       <img src="/images/new404.webp" alt="Error"
            class="h-auto mx-auto my-0 px-0 pb-8 max-w-[12rem]" />
-      <h1 class="font-bold text-xl mt-2 text-xl">Oops! Extension not found</h1>
+      <h1 id="title" class="font-bold text-xl mt-2 text-xl">Oops! Extension not found</h1>
       <div class="items-start my-4 text-grey4 dark:text-grey6 text-sm">
-        <p>
+        <p id="message">
           It appears that the extension <span id="app-name" class="font-bold"></span> does not exist on <span
           id="world-title"></span>.
           It may have been moved, deleted, or the URL might be incorrect.
         </p>
-        <p class="mt-4">
+        <p id="message_extra" class="mt-4">
           You might need to install it from the Extensions App.
         </p>
       </div>
-      <div class="flex flex-row gap-2">
+      <div id="actions" class="flex flex-row gap-2">
         <a href="#" onclick="singleSpaNavigate(event)" id="search-extension-button"
            class="rounded-3xl py-2 px-4 bg-gradient-to-r from-primaryStart to-primaryStop">
           <span class="font-bold text-sm">Go to Extensions</span>
