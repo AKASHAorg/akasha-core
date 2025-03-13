@@ -3,21 +3,17 @@ import { Check, Dot } from 'lucide-react';
 
 import { cn } from '@/library/utils';
 
-const Stepper = React.forwardRef<
-  React.ElementRef<'nav'>,
-  React.ComponentProps<'nav'> & {
-    currentStep: number;
-    numberOfSteps: number;
-  }
->(({ currentStep, numberOfSteps, className, ...props }, ref) => {
+const Stepper = ({
+  currentStep,
+  numberOfSteps,
+  className,
+  ...props
+}: React.ComponentProps<'nav'> & {
+  currentStep: number;
+  numberOfSteps: number;
+}) => {
   return (
-    <nav
-      ref={ref}
-      data-slot="stepper"
-      className={cn('w-full', className)}
-      {...props}
-      aria-label="Progress"
-    >
+    <nav data-slot="stepper" className={cn('w-full', className)} {...props} aria-label="Progress">
       <ol className="flex items-center justify-between">
         {[...Array(numberOfSteps)].map((_, index) => {
           const stepNumber = index + 1;
@@ -27,7 +23,7 @@ const Stepper = React.forwardRef<
 
           const completedStyle = isCompleted
             ? 'border-primary bg-primary'
-            : 'border-muted bg-background';
+            : 'border-muted bg-transparent';
 
           return (
             <li
@@ -38,7 +34,7 @@ const Stepper = React.forwardRef<
               {!isLast && (
                 <div
                   className={cn(
-                    'absolute left-0 top-1/2 h-0.5 w-full -translate-y-1/2 transition-colors duration-300',
+                    'absolute left-8 top-1/2 h-0.5 w-[calc(100%-32px)] -translate-y-1/2 transition-colors duration-300',
                     isCompleted ? 'bg-primary' : 'bg-muted',
                   )}
                   aria-hidden="true"
@@ -47,7 +43,7 @@ const Stepper = React.forwardRef<
               <div
                 className={cn(
                   'relative flex h-8 w-8 items-center justify-center rounded-full border-2 transition-all duration-300',
-                  isActive ? 'border-primary bg-background' : completedStyle,
+                  isActive ? 'border-primary bg-transparent' : completedStyle,
                 )}
                 aria-label={`Step ${stepNumber}`}
               >
@@ -73,6 +69,6 @@ const Stepper = React.forwardRef<
       </ol>
     </nav>
   );
-});
+};
 
 export { Stepper };
