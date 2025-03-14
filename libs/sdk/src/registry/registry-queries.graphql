@@ -257,7 +257,7 @@ fragment AkashaWorldConfigFragment on AkashaWorldConfig{
   layoutExtension
 }
 
-fragment AkashaWorldConfigExtensionFragment on AkashaWorldConfigExtension{
+fragment AkashaWorldConfigExtensionFragment on AkashaWorldConfigExtension {
   id
   active
   createdAt
@@ -268,8 +268,9 @@ fragment AkashaWorldConfigExtensionFragment on AkashaWorldConfigExtension{
     displayName
     description
     author {
+      id
       akashaProfile {
-       ...UserProfileFragment
+        ...UserProfileFragment
       }
     }
     logoImage {

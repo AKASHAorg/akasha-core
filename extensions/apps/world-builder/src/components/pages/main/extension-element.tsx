@@ -58,10 +58,7 @@ export const ExtensionElement: React.FC<ExtensionElementProps> = props => {
           </ExtensionCardAvatar>
           <ExtensionCardContent className="max-w-80">
             <ExtensionCardName>{extensionData?.displayName}</ExtensionCardName>
-            <ProfileAvatarButton
-              size="sm"
-              profileDID={extensionData?.author?.akashaProfile?.did?.id}
-            >
+            <ProfileAvatarButton size="sm" profileDID={extensionData?.author?.id}>
               <ProfileAvatarButtonAvatar>
                 <ProfileAvatarButtonAvatarImage
                   src={transformSource(extensionData?.author?.akashaProfile?.avatar?.default)?.src}

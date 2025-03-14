@@ -649,6 +649,7 @@ export const AkashaWorldConfigExtensionFragmentDoc = /*#__PURE__*/ gql`
     displayName
     description
     author {
+      id
       akashaProfile {
         ...UserProfileFragment
       }
