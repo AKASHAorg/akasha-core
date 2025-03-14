@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import AppCoverImage from '@akashaorg/design-system-core/lib/components/AppCoverImage';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
@@ -9,6 +9,7 @@ import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import ProfileNameField from '@akashaorg/design-system-core/lib/components/ProfileNameField';
 import ExtensionIcon from '@akashaorg/design-system-core/lib/components/ExtensionIcon';
 import { Extension, Image } from '@akashaorg/typings/lib/ui';
+import { cn } from '@akashaorg/ui/lib/library/utils';
 
 export type ExtensionCardProps = {
   coverImageSrc: string;
@@ -50,7 +51,7 @@ const ExtensionCard: React.FC<ExtensionCardProps> = props => {
   } = props;
 
   return (
-    <Card elevation="1" padding={16} radius={20} customStyle={customStyle}>
+    <Card className={cn('p-4', customStyle)}>
       <Stack spacing={4}>
         <AppCoverImage
           src={coverImageSrc}
