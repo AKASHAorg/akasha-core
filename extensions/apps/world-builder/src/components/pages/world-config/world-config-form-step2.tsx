@@ -47,6 +47,7 @@ import {
 import {
   useCreateAkashaWorldConfigExtensionMutation,
   useCreateAkashaWorldConfigMutation,
+  useGetAppsByIdLazyQuery,
   useGetAppsQuery,
   useGetWorldByIdQuery,
   useGetWorldConfigQuery,
@@ -55,13 +56,14 @@ import {
   selectAkashaApps,
   selectAkashaAppsPageInfo,
 } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-query';
+import { selectAppData } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-by-id-query';
+import { selectWorldData } from '@akashaorg/ui-core-hooks/lib/selectors/get-world-by-id-query';
+import { selectWorldConfigData } from '@akashaorg/ui-core-hooks/lib/selectors/get-world-config-query';
 import { transformSource, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { Badge } from '@akashaorg/ui/lib/akasha-components/badge';
 import { X } from 'lucide-react';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import getSDK from '@akashaorg/core-sdk';
-import { selectWorldData } from '@akashaorg/ui-core-hooks/lib/selectors/get-world-by-id-query';
-import { selectWorldConfigData } from '@akashaorg/ui-core-hooks/lib/selectors/get-world-config-query';
 import { Separator } from '@akashaorg/ui/lib/components/separator';
 import {
   ErrorLoader,
@@ -83,24 +85,27 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
 
   const uiEventsRef = React.useRef(uiEvents);
 
-  const showErrorNotification = React.useCallback((title: string, errorMessage?: string) => {
-    uiEventsRef.current.next({
-      event: NotificationEvents.ShowNotification,
-      data: {
-        type: NotificationTypes.Error,
-        title,
-        description: errorMessage,
-      },
-    });
-  }, []);
+  const showNotification = React.useCallback(
+    (type: NotificationTypes, title: string, errorMessage?: string) => {
+      uiEventsRef.current.next({
+        event: NotificationEvents.ShowNotification,
+        data: {
+          type,
+          title,
+          description: errorMessage,
+        },
+      });
+    },
+    [],
+  );
 
   const formValue = useMemo(() => {
     try {
       return JSON.parse(sessionStorage.getItem(worldId)) || {};
     } catch (error) {
-      showErrorNotification(error);
+      showNotification(NotificationTypes.Error, error);
     }
-  }, [worldId, showErrorNotification]);
+  }, [worldId, showNotification]);
 
   const { data: getWorldByIdReq, error: getWorldByIdError } = useGetWorldByIdQuery({
     variables: {
@@ -133,21 +138,33 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
 
   const [selectedExtensions, setSelectedExtensions] = useState([]);
 
-  // if there is already a configuration for this world prefill the extensions in the UI
-  useEffect(() => {
-    if (worldConfig?.extensions?.edges?.length > 0) {
-      const extensions = worldConfig.extensions.edges?.map(extNode => {
-        const extData = extNode?.node;
-        return {
-          id: extData.extensionID,
-          ...extData.extension,
-        };
-      });
+  const [getAppsByIdReq, { error: getAppsByIdError }] = useGetAppsByIdLazyQuery();
+
+  const fetchAppsData = React.useCallback(
+    async (extensionIds: string[]) => {
+      const results = await Promise.all(
+        extensionIds?.map(id =>
+          getAppsByIdReq({ variables: { id: id }, fetchPolicy: 'cache-first' }),
+        ),
+      );
+      const extensions = results.map(res => selectAppData(res.data));
       setSelectedExtensions(prev => {
         return [...new Set([...prev, ...extensions])];
       });
+    },
+    [getAppsByIdReq],
+  );
+
+  // if there is already a configuration for this world prefill the extensions in the UI
+  useEffect(() => {
+    if (worldConfig?.extensions?.edges?.length > 0) {
+      const extensionIds = worldConfig.extensions.edges?.map(extNode => {
+        const extData = extNode?.node;
+        return extData.extensionID;
+      });
+      fetchAppsData(extensionIds);
     }
-  }, [worldConfig?.extensions]);
+  }, [worldConfig?.extensions, fetchAppsData]);
 
   const addExtension = ext => {
     setSelectedExtensions(prev => {
@@ -171,8 +188,9 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
   ] = useCreateAkashaWorldConfigExtensionMutation({
     context: { source: sdk.current.services.gql.contextSources.composeDB },
     onError: error => {
-      showErrorNotification(
-        `${t(`Something went wrong when creating the world configuration extensions`)}.`,
+      showNotification(
+        NotificationTypes.Error,
+        t(`Something went wrong when creating the world configuration extensions`),
         error.message,
       );
     },
@@ -212,8 +230,8 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
         const worldConfigExtensionData = {
           worldConfigID: worldConfigId,
           extensionID: extensionID,
-          active: false,
           createdAt: extData.createdAt,
+          active: false,
         };
         return worldConfigExtensionData;
       }
@@ -258,14 +276,19 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
         const worldConfigId = data?.setAkashaWorldConfig?.document?.id;
         await createExtensions(worldConfigId);
         if (worldConfig?.createdAt) {
+          showNotification(
+            NotificationTypes.Success,
+            t(`Success, you have updated the world configuration!`),
+          );
           navToDashboard();
         } else {
           navToConfigSuccessPage();
         }
       },
       onError: error => {
-        showErrorNotification(
-          `${t(`Something went wrong when creating the world configuration`)}.`,
+        showNotification(
+          NotificationTypes.Error,
+          t(`Something went wrong when creating the world configuration`),
           error.message,
         );
       },
@@ -321,6 +344,17 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
           {t('Sorry, there was an error when fetching extensions data')}
         </ErrorLoaderTitle>
         <ErrorLoaderDescription>{getAppsError?.message}</ErrorLoaderDescription>
+      </ErrorLoader>
+    );
+  }
+
+  if (getAppsByIdError) {
+    return (
+      <ErrorLoader type="script-error">
+        <ErrorLoaderTitle>
+          {t('Sorry, there was an error when fetching extensions by id data')}
+        </ErrorLoaderTitle>
+        <ErrorLoaderDescription>{getAppsByIdError?.message}</ErrorLoaderDescription>
       </ErrorLoader>
     );
   }

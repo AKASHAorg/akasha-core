@@ -7,7 +7,7 @@ const Input = React.forwardRef<React.ElementRef<'input'>, React.ComponentProps<'
   ({ className, type, ...props }, ref) => {
     const isSearch = type === 'search';
     return (
-      <div className="relative">
+      <div className="relative w-full" data-slot="input-container">
         <input
           ref={ref}
           type={type}

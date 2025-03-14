@@ -95,16 +95,19 @@ export const WorldCustomiseFormPage: React.FC<{ worldId?: string }> = ({ worldId
     });
   };
 
-  const showErrorNotification = React.useCallback((title: string, errorMessage?: string) => {
-    uiEventsRef.current.next({
-      event: NotificationEvents.ShowNotification,
-      data: {
-        type: NotificationTypes.Error,
-        title,
-        description: errorMessage,
-      },
-    });
-  }, []);
+  const showNotification = React.useCallback(
+    (type: NotificationTypes, title: string, errorMessage?: string) => {
+      uiEventsRef.current.next({
+        event: NotificationEvents.ShowNotification,
+        data: {
+          type,
+          title,
+          description: errorMessage,
+        },
+      });
+    },
+    [],
+  );
 
   const { data: worldMetaInfoReq, error: worldMetaInfoError } = useGetWorldMetaInfoQuery({
     variables: { worldID: worldId, creator: authenticatedDID },
@@ -117,10 +120,15 @@ export const WorldCustomiseFormPage: React.FC<{ worldId?: string }> = ({ worldId
     useCreateAkashaWorldMetaInfoMutation({
       context: { source: sdk.current.services.gql.contextSources.composeDB },
       onCompleted: () => {
+        showNotification(
+          NotificationTypes.Success,
+          `${t(`Success, the world meta info has been updated!`)}.`,
+        );
         handleNavToDashboard();
       },
       onError: error => {
-        showErrorNotification(
+        showNotification(
+          NotificationTypes.Error,
           `${t(`Something went wrong when creating the world meta info`)}.`,
           error.message,
         );
@@ -195,10 +203,10 @@ export const WorldCustomiseFormPage: React.FC<{ worldId?: string }> = ({ worldId
 
   const onSubmit = (data: WorldCustomiseFormValues) => {
     const worldMetaInfoContent = {
-      description: worldMetaInfo?.description ?? data.description,
-      guidelinesUrl: data.guidelinesUrl,
-      keywords: data.keywords,
-      socialLinks: data.socialLinks,
+      ...(data.description && { description: data.description }),
+      ...(data.guidelinesUrl && { guidelinesUrl: data.guidelinesUrl }),
+      ...(data.keywords?.length > 0 && { keywords: data.keywords }),
+      ...(data.socialLinks?.length > 0 && { socialLinks: data.socialLinks }),
       worldID: worldId,
     };
     createWorldMetaInfoMutation({

@@ -67,7 +67,7 @@ export const LinkElement: React.FC<LinkElementProps> = props => {
         />
       </Stack>
       <button onClick={onDelete}>
-        <Trash2 color="destructive" />
+        <Trash2 className="text-destructive" />
       </button>
     </Stack>
   );

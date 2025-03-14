@@ -266,9 +266,11 @@ fragment AkashaWorldConfigExtensionFragment on AkashaWorldConfigExtension{
   extension {
     name
     displayName
-    applicationType
+    description
     author {
-      id
+      akashaProfile {
+       ...UserProfileFragment
+      }
     }
     logoImage {
       src

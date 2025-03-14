@@ -88,16 +88,19 @@ export const WorldCreateFormPage: React.FC = () => {
     });
   };
 
-  const showErrorNotification = React.useCallback((title: string, errorMessage?: string) => {
-    uiEventsRef.current.next({
-      event: NotificationEvents.ShowNotification,
-      data: {
-        type: NotificationTypes.Error,
-        title,
-        description: errorMessage,
-      },
-    });
-  }, []);
+  const showNotification = React.useCallback(
+    (type: NotificationTypes, title: string, errorMessage?: string) => {
+      uiEventsRef.current.next({
+        event: NotificationEvents.ShowNotification,
+        data: {
+          type,
+          title,
+          description: errorMessage,
+        },
+      });
+    },
+    [],
+  );
 
   const {
     data: worldsByCreatorDidReq,
@@ -145,7 +148,10 @@ export const WorldCreateFormPage: React.FC = () => {
   } = useSaveImage();
 
   const onSaveImageError = () => {
-    showErrorNotification(t("The image wasn't uploaded correctly. Please try again!"));
+    showNotification(
+      NotificationTypes.Error,
+      t("The image wasn't uploaded correctly. Please try again!"),
+    );
   };
 
   const handleUploadClick = () => {
@@ -161,15 +167,12 @@ export const WorldCreateFormPage: React.FC = () => {
   };
 
   const onSubmit = (data: z.infer<typeof FormSchema>) => {
-    const existingWorldIcon = {
-      src: worldData?.icon?.default?.src,
-      height: worldData?.icon?.default?.height,
-      width: worldData?.icon?.default?.width,
-    };
     const worldDataContent = {
       name: worldData?.name ?? data.name,
-      icon: { default: worldImage || existingWorldIcon },
-      instanceURL: data.instanceUrl,
+      ...((worldData?.icon?.default?.src || worldImage) && {
+        icon: { default: worldImage || worldData?.icon?.default },
+      }),
+      ...(data.instanceUrl && { instanceURL: data.instanceUrl }),
       extensionPublishers: [data.extensionPublishers],
       createdAt: worldData?.createdAt ?? new Date().toISOString(),
       active: true,
@@ -191,6 +194,10 @@ export const WorldCreateFormPage: React.FC = () => {
     context: { source: sdk.current.services.gql.contextSources.composeDB },
     onCompleted: data => {
       if (worldData?.createdAt) {
+        showNotification(
+          NotificationTypes.Success,
+          t(`Success, you have updated the world model!`),
+        );
         handleNavToDashboard();
       } else {
         navigate({
@@ -203,7 +210,11 @@ export const WorldCreateFormPage: React.FC = () => {
       }
     },
     onError: error => {
-      showErrorNotification(`${t(`Something went wrong when creating the world`)}.`, error.message);
+      showNotification(
+        NotificationTypes.Error,
+        t(`Something went wrong when creating the world`),
+        error.message,
+      );
     },
   });
 
@@ -258,7 +269,6 @@ export const WorldCreateFormPage: React.FC = () => {
                       placeholder="E.g. Nana World"
                       {...field}
                       disabled={!!worldData?.name}
-                      value={field.value || worldData?.name}
                       onChange={field.onChange}
                     />
                   </FormControl>
@@ -276,7 +286,6 @@ export const WorldCreateFormPage: React.FC = () => {
                     <Input
                       placeholder="e.g. http://www.myworld.com"
                       {...field}
-                      value={field.value || worldData?.instanceURL}
                       onChange={field.onChange}
                     />
                   </FormControl>
@@ -334,11 +343,7 @@ export const WorldCreateFormPage: React.FC = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t('Extension Publishers')}</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    required
-                    value={field.value || worldData?.extensionPublishers[0]?.id}
-                  >
+                  <Select onValueChange={field.onChange} required>
                     <FormControl>
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder={t('Select an extension publisher')} />
@@ -366,7 +371,7 @@ export const WorldCreateFormPage: React.FC = () => {
               loading={loadingWorldMutation}
               disabled={!isValid || loadingWorldsByCreatorDidQuery}
             >
-              {t('Create')}
+              {worldData?.active ? t('Update') : t('Create')}
             </Button>
           </CardFooter>
         </form>
