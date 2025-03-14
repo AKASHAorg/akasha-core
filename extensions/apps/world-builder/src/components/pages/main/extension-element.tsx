@@ -49,7 +49,7 @@ export const ExtensionElement: React.FC<ExtensionElementProps> = props => {
           {extensionData?.displayName}
         </Button>
       </HoverCardTrigger>
-      <HoverCardContent className="w-full">
+      <HoverCardContent className="w-full p-0">
         <ExtensionCard className="p-4">
           <ExtensionCardAvatar size="lg" extensionId={extensionData?.id}>
             <ExtensionCardAvatarImage src={transformSource(extensionData?.logoImage)?.src}>
