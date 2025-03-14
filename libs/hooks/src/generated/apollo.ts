@@ -647,8 +647,12 @@ export const AkashaWorldConfigExtensionFragmentDoc = /*#__PURE__*/ gql`
   extension {
     name
     displayName
+    description
     author {
       id
+      akashaProfile {
+        ...UserProfileFragment
+      }
     }
     logoImage {
       src
@@ -3997,7 +4001,8 @@ export const GetWorldConfigDocument = /*#__PURE__*/ gql`
   }
 }
     ${AkashaWorldConfigFragmentDoc}
-${AkashaWorldConfigExtensionFragmentDoc}`;
+${AkashaWorldConfigExtensionFragmentDoc}
+${UserProfileFragmentDoc}`;
 
 /**
  * __useGetWorldConfigQuery__
@@ -4132,7 +4137,8 @@ export const GetWorldConfigExtensionsDocument = /*#__PURE__*/ gql`
     }
   }
 }
-    ${AkashaWorldConfigExtensionFragmentDoc}`;
+    ${AkashaWorldConfigExtensionFragmentDoc}
+${UserProfileFragmentDoc}`;
 
 /**
  * __useGetWorldConfigExtensionsQuery__

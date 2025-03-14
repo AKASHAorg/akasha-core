@@ -18,3 +18,11 @@ export const selectWorldConfigData = (respData: GetWorldConfigQuery) => {
     return respData.akashaWorldConfigIndex.edges[0]?.node;
   }
 };
+
+export const selectWorldConfigExtensions = (respData: GetWorldConfigQuery) => {
+  if (isWorldConfigEdgeNode(respData)) {
+    return respData.akashaWorldConfigIndex.edges[0]?.node?.extensions?.edges.map(
+      edge => edge?.node,
+    );
+  }
+};
