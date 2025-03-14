@@ -47,30 +47,37 @@ import {
 import {
   useCreateAkashaWorldConfigExtensionMutation,
   useCreateAkashaWorldConfigMutation,
+  useGetAppsByIdLazyQuery,
   useGetAppsQuery,
   useGetWorldByIdQuery,
   useGetWorldConfigQuery,
-  useDeleteAkashaWorldConfigExtensionMutation,
 } from '@akashaorg/ui-core-hooks/lib/generated';
 import {
   selectAkashaApps,
   selectAkashaAppsPageInfo,
 } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-query';
+import { selectAppData } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-by-id-query';
+import { selectWorldData } from '@akashaorg/ui-core-hooks/lib/selectors/get-world-by-id-query';
+import { selectWorldConfigData } from '@akashaorg/ui-core-hooks/lib/selectors/get-world-config-query';
 import { transformSource, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { Badge } from '@akashaorg/ui/lib/akasha-components/badge';
 import { X } from 'lucide-react';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import getSDK from '@akashaorg/core-sdk';
-import { selectWorldData } from '@akashaorg/ui-core-hooks/lib/selectors/get-world-by-id-query';
-import { selectWorldConfigData } from '@akashaorg/ui-core-hooks/lib/selectors/get-world-config-query';
 import { Separator } from '@akashaorg/ui/lib/components/separator';
+import {
+  ErrorLoader,
+  ErrorLoaderDescription,
+  ErrorLoaderTitle,
+} from '@akashaorg/ui/lib/akasha-components/error-loader';
+import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 type WorldConfigFormStep2Props = {
   worldId: string;
 };
 
 export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ worldId }) => {
-  const { t } = useTranslation('app-extensions');
+  const { t } = useTranslation('app-world-builder');
 
   const navigate = useNavigate();
   const { uiEvents } = useRootComponentProps();
@@ -78,30 +85,29 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
 
   const uiEventsRef = React.useRef(uiEvents);
 
-  const showErrorNotification = React.useCallback((title: string, errorMessage?: string) => {
-    uiEventsRef.current.next({
-      event: NotificationEvents.ShowNotification,
-      data: {
-        type: NotificationTypes.Error,
-        title,
-        description: errorMessage,
-      },
-    });
-  }, []);
+  const showNotification = React.useCallback(
+    (type: NotificationTypes, title: string, errorMessage?: string) => {
+      uiEventsRef.current.next({
+        event: NotificationEvents.ShowNotification,
+        data: {
+          type,
+          title,
+          description: errorMessage,
+        },
+      });
+    },
+    [],
+  );
 
   const formValue = useMemo(() => {
     try {
       return JSON.parse(sessionStorage.getItem(worldId)) || {};
     } catch (error) {
-      showErrorNotification(error);
+      showNotification(NotificationTypes.Error, error);
     }
-  }, [worldId, showErrorNotification]);
+  }, [worldId, showNotification]);
 
-  const {
-    data: getWorldByIdReq,
-    loading: loadingWorldByIdQuery,
-    error: getWorldByIdError,
-  } = useGetWorldByIdQuery({
+  const { data: getWorldByIdReq, error: getWorldByIdError } = useGetWorldByIdQuery({
     variables: {
       id: worldId,
     },
@@ -109,11 +115,7 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
 
   const worldData = selectWorldData(getWorldByIdReq);
 
-  const {
-    data: worldConfigReq,
-    loading: loadingWorldConfigQuery,
-    error: worldConfigError,
-  } = useGetWorldConfigQuery({
+  const { data: worldConfigReq, error: worldConfigError } = useGetWorldConfigQuery({
     variables: { worldID: worldData?.id },
     skip: !worldData?.id,
   });
@@ -136,21 +138,33 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
 
   const [selectedExtensions, setSelectedExtensions] = useState([]);
 
-  // if there is already a configuration for this world prefill the extensions in the UI
-  useEffect(() => {
-    if (worldConfig?.extensions?.edges?.length > 0) {
-      const extensions = worldConfig.extensions.edges?.map(extNode => {
-        const extData = extNode?.node;
-        return {
-          id: extData.extensionID,
-          ...extData.extension,
-        };
-      });
+  const [getAppsByIdReq, { error: getAppsByIdError }] = useGetAppsByIdLazyQuery();
+
+  const fetchAppsData = React.useCallback(
+    async (extensionIds: string[]) => {
+      const results = await Promise.all(
+        extensionIds?.map(id =>
+          getAppsByIdReq({ variables: { id: id }, fetchPolicy: 'cache-first' }),
+        ),
+      );
+      const extensions = results.map(res => selectAppData(res.data));
       setSelectedExtensions(prev => {
         return [...new Set([...prev, ...extensions])];
       });
+    },
+    [getAppsByIdReq],
+  );
+
+  // if there is already a configuration for this world prefill the extensions in the UI
+  useEffect(() => {
+    if (worldConfig?.extensions?.edges?.length > 0) {
+      const extensionIds = worldConfig.extensions.edges?.map(extNode => {
+        const extData = extNode?.node;
+        return extData.extensionID;
+      });
+      fetchAppsData(extensionIds);
     }
-  }, [worldConfig?.extensions]);
+  }, [worldConfig?.extensions, fetchAppsData]);
 
   const addExtension = ext => {
     setSelectedExtensions(prev => {
@@ -174,21 +188,9 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
   ] = useCreateAkashaWorldConfigExtensionMutation({
     context: { source: sdk.current.services.gql.contextSources.composeDB },
     onError: error => {
-      showErrorNotification(
-        `${t(`Something went wrong when creating the world configuration extensions`)}.`,
-        error.message,
-      );
-    },
-  });
-
-  const [
-    deleteWorldConfigExtensionMutation,
-    { loading: loadingWorldConfigUpdateExtensionMutation },
-  ] = useDeleteAkashaWorldConfigExtensionMutation({
-    context: { source: sdk.current.services.gql.contextSources.composeDB },
-    onError: error => {
-      showErrorNotification(
-        `${t(`Something went wrong when deleting the world configuration extension`)}.`,
+      showNotification(
+        NotificationTypes.Error,
+        t(`Something went wrong when creating the world configuration extensions`),
         error.message,
       );
     },
@@ -204,15 +206,15 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
     const oldExtensionsIDs = new Set(
       worldConfig?.extensions?.edges?.map(ext => ext.node?.extensionID),
     );
-
+    const oldExtensionsData = worldConfig?.extensions?.edges?.map(ext => ext.node);
     const newExtensionsIDs = selectedExtensionsIDs.difference(oldExtensionsIDs);
 
-    const oldExtensionsToBeRemovedSet = oldExtensionsIDs.difference(selectedExtensionsIDs);
+    const oldExtensionsToBeRemovedIDs = oldExtensionsIDs.difference(selectedExtensionsIDs);
 
     const newExtensionsData = [...newExtensionsIDs].map(extensionID => {
-      const createdAt = worldConfig?.extensions.edges?.find(
-        extData => extData?.node?.extensionID === extensionID,
-      )?.node?.createdAt;
+      const createdAt = oldExtensionsData?.find(
+        extData => extData?.extensionID === extensionID,
+      )?.createdAt;
       const worldConfigExtensionData = {
         worldConfigID: worldConfigId,
         extensionID: extensionID,
@@ -222,42 +224,30 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
       return worldConfigExtensionData;
     });
 
-    const oldExtensionsData = worldConfig?.extensions?.edges?.map(ext => ext.node);
-
-    const extensionsToBeRemovedIds = [...oldExtensionsToBeRemovedSet].map(extensionID => {
+    const extensionsToBeRemovedData = [...oldExtensionsToBeRemovedIDs].map(extensionID => {
       const extData = oldExtensionsData?.find(ext => ext?.extensionID === extensionID);
       if (extData) {
-        return extData.id;
+        const worldConfigExtensionData = {
+          worldConfigID: worldConfigId,
+          extensionID: extensionID,
+          createdAt: extData.createdAt,
+          active: false,
+        };
+        return worldConfigExtensionData;
       }
     });
 
-    return { newExtensionsData, extensionsToBeRemovedIds };
+    return [...newExtensionsData, ...extensionsToBeRemovedData];
   };
 
   const createExtensions = (worldConfigId: string) => {
-    const extensions = getUniqueExtensionsData(worldConfigId)?.newExtensionsData;
+    const extensions = getUniqueExtensionsData(worldConfigId);
     return Promise.all(
       extensions.map(extData =>
         createWorldConfigExtensionMutation({
           variables: {
             i: {
               content: extData,
-            },
-          },
-        }),
-      ),
-    );
-  };
-
-  const deleteExtensions = (worldConfigId: string) => {
-    const extensions = getUniqueExtensionsData(worldConfigId)?.extensionsToBeRemovedIds;
-    return Promise.all(
-      extensions.map(extData =>
-        deleteWorldConfigExtensionMutation({
-          variables: {
-            i: {
-              id: extData,
-              shouldIndex: false,
             },
           },
         }),
@@ -275,18 +265,30 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
     });
   };
 
+  const navToDashboard = () => {
+    navigate({ to: '/dashboard' });
+  };
+
   const [createWorldConfigMutation, { loading: loadingWorldConfigMutation }] =
     useCreateAkashaWorldConfigMutation({
       context: { source: sdk.current.services.gql.contextSources.composeDB },
       onCompleted: async data => {
         const worldConfigId = data?.setAkashaWorldConfig?.document?.id;
         await createExtensions(worldConfigId);
-        await deleteExtensions(worldConfigId);
-        navToConfigSuccessPage();
+        if (worldConfig?.createdAt) {
+          showNotification(
+            NotificationTypes.Success,
+            t(`Success, you have updated the world configuration!`),
+          );
+          navToDashboard();
+        } else {
+          navToConfigSuccessPage();
+        }
       },
       onError: error => {
-        showErrorNotification(
-          `${t(`Something went wrong when creating the world configuration`)}.`,
+        showNotification(
+          NotificationTypes.Error,
+          t(`Something went wrong when creating the world configuration`),
           error.message,
         );
       },
@@ -313,8 +315,52 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
     navigate({ to: '/world-config-form/$worldId/step1', params: { worldId } });
   };
 
+  if (worldConfigError) {
+    return (
+      <ErrorLoader type="script-error">
+        <ErrorLoaderTitle>
+          {t('Sorry, there was an error when fetching the world config data')}
+        </ErrorLoaderTitle>
+        <ErrorLoaderDescription>{worldConfigError?.message}</ErrorLoaderDescription>
+      </ErrorLoader>
+    );
+  }
+
+  if (getWorldByIdError) {
+    return (
+      <ErrorLoader type="script-error">
+        <ErrorLoaderTitle>
+          {t('Sorry, there was an error when fetching the world data')}
+        </ErrorLoaderTitle>
+        <ErrorLoaderDescription>{getWorldByIdError?.message}</ErrorLoaderDescription>
+      </ErrorLoader>
+    );
+  }
+
+  if (getAppsError) {
+    return (
+      <ErrorLoader type="script-error">
+        <ErrorLoaderTitle>
+          {t('Sorry, there was an error when fetching extensions data')}
+        </ErrorLoaderTitle>
+        <ErrorLoaderDescription>{getAppsError?.message}</ErrorLoaderDescription>
+      </ErrorLoader>
+    );
+  }
+
+  if (getAppsByIdError) {
+    return (
+      <ErrorLoader type="script-error">
+        <ErrorLoaderTitle>
+          {t('Sorry, there was an error when fetching extensions by id data')}
+        </ErrorLoaderTitle>
+        <ErrorLoaderDescription>{getAppsByIdError?.message}</ErrorLoaderDescription>
+      </ErrorLoader>
+    );
+  }
+
   return (
-    <>
+    <Card>
       <CardHeader>
         <Stack className="items-center">
           <Stepper currentStep={1} numberOfSteps={2} className="max-w-[112px]" />
@@ -458,11 +504,13 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
             </SelectTrigger>
             <SelectContent>
               {selectedExtensions?.length > 0 &&
-                selectedExtensions?.map(ext => (
-                  <SelectItem key={ext.id} value={ext.id}>
-                    {ext.displayName}
-                  </SelectItem>
-                ))}
+                selectedExtensions
+                  ?.filter(ext => ext.applicationType === AkashaAppApplicationType.App)
+                  .map(ext => (
+                    <SelectItem key={ext.id} value={ext.id}>
+                      {ext.displayName}
+                    </SelectItem>
+                  ))}
             </SelectContent>
           </Select>
         </Stack>
@@ -479,6 +527,6 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
           {t('Save Config')}
         </Button>
       </CardFooter>
-    </>
+    </Card>
   );
 };
