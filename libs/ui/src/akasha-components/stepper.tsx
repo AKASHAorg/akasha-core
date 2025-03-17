@@ -3,17 +3,21 @@ import { Check, Dot } from 'lucide-react';
 
 import { cn } from '@/library/utils';
 
-const Stepper = ({
-  currentStep,
-  numberOfSteps,
-  className,
-  ...props
-}: React.ComponentProps<'nav'> & {
-  currentStep: number;
-  numberOfSteps: number;
-}) => {
+const Stepper = React.forwardRef<
+  React.ElementRef<'nav'>,
+  React.ComponentProps<'nav'> & {
+    currentStep: number;
+    numberOfSteps: number;
+  }
+>(({ currentStep, numberOfSteps, className, ...props }, ref) => {
   return (
-    <nav data-slot="stepper" className={cn('w-full', className)} {...props} aria-label="Progress">
+    <nav
+      ref={ref}
+      data-slot="stepper"
+      className={cn('w-full', className)}
+      {...props}
+      aria-label="Progress"
+    >
       <ol className="flex items-center justify-between">
         {[...Array(numberOfSteps)].map((_, index) => {
           const stepNumber = index + 1;
@@ -69,6 +73,6 @@ const Stepper = ({
       </ol>
     </nav>
   );
-};
+});
 
 export { Stepper };
