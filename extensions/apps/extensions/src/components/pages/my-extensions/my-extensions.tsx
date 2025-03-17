@@ -207,7 +207,7 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
         direction="row"
         justifyContent="between"
         alignItems="center"
-        className="p-3 bg-inherit rounded-[1.25rem] bg-muted"
+        className="p-3 bg-inherit rounded-[1.25rem] bg-nested-card"
       >
         <Text variant="body1">{t('Create an extension ✨ 🚀')}</Text>
         <Button size="sm" onClick={handleNavigateToCreateApp}>
