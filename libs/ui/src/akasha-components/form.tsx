@@ -82,8 +82,8 @@ const FormItem = React.forwardRef<React.ElementRef<'div'>, React.ComponentProps<
 
 const FormLabel = React.forwardRef<
   React.ElementRef<typeof LabelPrimitive.Root>,
-  React.ComponentProps<typeof LabelPrimitive.Root>
->(({ className, ...props }, ref) => {
+  React.ComponentProps<typeof LabelPrimitive.Root> & { required?: boolean }
+>(({ required = false, className, ...props }, ref) => {
   const { error, formItemId } = useFormField();
 
   return (
@@ -91,7 +91,13 @@ const FormLabel = React.forwardRef<
       ref={ref}
       data-slot="form-label"
       data-error={!!error}
-      className={cn('data-[error=true]:text-destructive', 'text-base', className)}
+      data-required={!!required}
+      className={cn(
+        'data-[error=true]:text-destructive',
+        'text-base',
+        "after:content-['_*'] after:text-destructive data-[required=false]:after:hidden",
+        className,
+      )}
       htmlFor={formItemId}
       {...props}
     />

@@ -150,7 +150,7 @@ const ExtensionCardActionInactive = ({
       <Badge
         data-slot="extension-card-action-inactive"
         variant="outline"
-        className={cn('cursor-pointer', className)}
+        className={cn('cursor-pointer rounded-full bg-transparent', className)}
         {...props}
       />
     )
@@ -168,7 +168,7 @@ const ExtensionCardActionActive = ({
       <Badge
         data-slot="extension-card-action-active"
         variant="secondary"
-        className={cn('[&_svg]:size-4 cursor-pointer rounded-full', className)}
+        className={cn('[&_svg]:size-4 cursor-pointer rounded-full bg-transparent', className)}
         {...props}
       >
         <Check />
