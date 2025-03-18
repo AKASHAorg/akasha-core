@@ -94,6 +94,7 @@ const ProfileAvatarButton = ({
             'flex items-center': size === 'sm',
           },
           'gap-1',
+          'cursor-pointer',
           className,
         )}
         {...props}

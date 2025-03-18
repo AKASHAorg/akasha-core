@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from '@tanstack/react-router';
 import {
   Card,
   CardContent,
@@ -16,32 +15,28 @@ import {
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
+import { CopyToClipboard } from '@akashaorg/ui/lib/akasha-components/copy-to-clipboard';
 import { Separator } from '@akashaorg/ui/lib/components/separator';
 import { transformSource, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { HOME } from '../../../routes';
 import { LandingPageComponent } from './landing-page-component';
-import {
-  useGetWorldConfigExtensionsQuery,
-  useGetWorldConfigQuery,
-  useGetWorldFullInfoQuery,
-  useGetWorldsByCreatorDidQuery,
-} from '@akashaorg/ui-core-hooks/lib/generated';
-import { Eye, Loader2, Pencil } from 'lucide-react';
+import { useGetWorldsByCreatorDidQuery } from '@akashaorg/ui-core-hooks/lib/generated';
+import { ArrowRight, Eye, Loader2 } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { selectWorldData } from '@akashaorg/ui-core-hooks/lib/selectors/get-worlds-by-creator-did-query';
-import { selectWorldMetaInfoData } from '@akashaorg/ui-core-hooks/lib/selectors/get-world-full-info-query';
-import { selectWorldConfigData as selectWorldConfigInfo } from '@akashaorg/ui-core-hooks/lib/selectors/get-world-config-query';
-import { selectWorldConfigExtensions } from '@akashaorg/ui-core-hooks/lib/selectors/get-world-config-extensions-query';
 import {
   ExtensionAvatar,
   ExtensionAvatarFallback,
   ExtensionAvatarImage,
 } from '@/ui/extension-avatar';
-import { Image } from '@akashaorg/ui/lib/akasha-components/image';
-import { IconContainer } from '@akashaorg/ui/lib/akasha-components/icon-container';
+import { WorldCreationSection } from './world-creation-section';
+import { WorldConfigurationSection } from './world-configuration-section';
+import { WorldCustomisationSection } from './world-customisation-section';
+
+const truncateMiddle = (str: string, startChars = 8, endChars = 8) =>
+  str ? `${str.substring(0, startChars)}...${str.substring(str.length - endChars)}` : '';
 
 export const DashboardPage: React.FC = () => {
-  const navigate = useNavigate();
   const { t } = useTranslation('app-world-builder');
 
   const { baseRouteName, getCorePlugins } = useRootComponentProps();
@@ -71,60 +66,12 @@ export const DashboardPage: React.FC = () => {
   });
 
   const worldData = selectWorldData(worldsByCreatorDidReq);
-
-  const {
-    data: worldFullInfoReq,
-    // loading: loadingWorldFullInfoQuery,
-    // error: worldFullInfoError,
-  } = useGetWorldFullInfoQuery({
-    variables: { id: worldData?.id, creator: worldData?.creator?.id },
-    skip: !worldData?.id,
-  });
-
-  const {
-    data: worldConfigReq,
-    // loading: loadingWorldConfigQuery,
-    // error: worldConfigError,
-  } = useGetWorldConfigQuery({
-    variables: { worldID: worldData?.id },
-    skip: !worldData?.id,
-  });
-
-  const worldConfig = selectWorldConfigInfo(worldConfigReq);
-  const worldMetaInfo = selectWorldMetaInfoData(worldFullInfoReq);
-
-  const {
-    data: worldConfigExtensionsReq,
-    // loading: loadingWorldConfigExtensionsQuery,
-    // error: worldConfigExtensionsError,
-  } = useGetWorldConfigExtensionsQuery({
-    variables: { configID: worldConfig?.id },
-    skip: !worldConfig?.id,
-  });
-
-  const worldConfigExtensions = selectWorldConfigExtensions(worldConfigExtensionsReq);
-
-  const handleNavToConfigForm = () => {
-    navigate({ to: '/world-config-form/$worldId/step1', params: { worldId: worldData?.id } });
-  };
-
-  const handleNavToCustomiseForm = () => {
-    navigate({ to: '/world-customize-form', params: { worldId: worldData?.id } });
-  };
-
-  const handleNavToWorldCreate = () => {
-    navigate({ to: '/world-create-form' });
-  };
-
+  
+  
   const handlePreviewClick = () => {
     window.open(`${location.origin}?previewWorldId=${worldData?.id}`);
   };
-
-  const getExtensionDataById = (extId: string) => {
-    const extension = worldConfigExtensions?.find(ext => ext.extensionID === extId);
-    return extension?.extension;
-  };
-
+  
   if (!authenticatedDID) {
     return (
       <ErrorLoader type="not-authenticated">
@@ -140,6 +87,18 @@ export const DashboardPage: React.FC = () => {
       </ErrorLoader>
     );
   }
+
+  if (worldsByCreatorDidError) {
+    return (
+      <ErrorLoader type="script-error">
+        <ErrorLoaderTitle>
+          {t('Sorry, there was an error when fetching the world data')}
+        </ErrorLoaderTitle>
+        <ErrorLoaderDescription>{worldsByCreatorDidError?.message}</ErrorLoaderDescription>
+      </ErrorLoader>
+    );
+  }
+
   if (loadingWorldsByCreatorDidQuery) {
     return (
       <Card>
@@ -174,132 +133,58 @@ export const DashboardPage: React.FC = () => {
                 <ExtensionAvatarFallback />
               </ExtensionAvatarImage>
             </ExtensionAvatar>
-            <Stack direction="column" spacing={4}>
-              <Stack direction="row" justifyContent="between">
-                <Typography variant="h6">{worldData?.name}</Typography>
-                <Button variant="outline" size="sm" onClick={handlePreviewClick}>
-                  <Eye />
-                  {t('Preview')}
-                </Button>
+            <Stack direction="column" alignItems="start" spacing={1}>
+              <Typography variant="h6">{worldData?.name}</Typography>
+              <Stack direction="row" alignItems="baseline" spacing={1}>
+                <Typography variant="xs" bold>
+                  {'World ID:'}
+                </Typography>
+                <CopyToClipboard
+                  textToCopy={worldData?.id}
+                  ctaText={t('Copy to clipboard')}
+                  successText={t('Copied ✓')}
+                >
+                  <Typography variant="xs" className="text-primary">
+                    {truncateMiddle(worldData?.id)}
+                  </Typography>
+                </CopyToClipboard>
               </Stack>
-              <Typography variant="sm">
+              <Typography variant="xs">
                 {t(
-                  'Your world doesn’t have a description yet! Let’s bring it to life by adding one in the World Customizer section.',
+                  'You can setup your own world using the configuration saved here! Check the developer documentation to learn how.',
                 )}
               </Typography>
-            </Stack>
-          </Stack>
-          <Stack direction="column" spacing={4}>
-            <Stack direction="row" justifyContent="between" alignItems="center">
-              <Typography variant="h6">{t('World Creation')}</Typography>
-              <button onClick={handleNavToWorldCreate}>
-                <IconContainer className="bg-secondary">
-                  <Pencil />
-                </IconContainer>
-              </button>
-            </Stack>
-            {worldData?.extensionPublishers?.length > 0 && (
-              <Stack direction="column" spacing={2}>
-                <Typography variant="sm" bold>
-                  {t('Extension Publishers')}
-                </Typography>
-                <div className="flex flex-wrap gap-2">
-                  {worldData?.extensionPublishers?.map((extPublisher, idx) => (
-                    <Typography key={idx} variant="sm">
-                      {extPublisher?.id}
-                    </Typography>
-                  ))}
-                </div>
-              </Stack>
-            )}
-            {worldData?.icon && (
-              <Stack direction="column" spacing={2}>
-                <Typography variant="sm" bold>
-                  {t('Icon')}
-                </Typography>
-                <Image
-                  width={24}
-                  height={24}
-                  src={transformSource(worldData?.icon?.default)?.src}
-                />
-              </Stack>
-            )}
-            {worldData?.instanceURL && (
-              <Stack direction="column" spacing={2}>
-                <Typography variant="sm" bold>
-                  {t('Instance URL')}
-                </Typography>
-                <Typography variant="sm">{worldData?.instanceURL}</Typography>
-              </Stack>
-            )}
-          </Stack>
-          <Separator />
-          <Stack direction="column" spacing={4}>
-            <Stack direction="row" justifyContent="between" alignItems="center">
-              <Typography variant="h6">{t('World Config')}</Typography>
-
-              {worldConfig?.id ? (
-                <button onClick={handleNavToConfigForm}>
-                  <IconContainer className="bg-secondary">
-                    <Pencil />
-                  </IconContainer>
-                </button>
-              ) : (
-                <Button onClick={handleNavToConfigForm}>{t('Configure World')}</Button>
-              )}
-            </Stack>
-            <Stack direction="column" spacing={2}>
-              <Typography variant="sm" bold>
-                {t('Layout')}
-              </Typography>
-              <Typography variant="sm">
-                {getExtensionDataById(worldConfig?.layoutExtension)?.displayName}
-              </Typography>
-            </Stack>
-            <Stack direction="column" spacing={2}>
-              <Typography variant="sm" bold>
-                {t('Extension App')}
-              </Typography>
-              <Typography variant="sm">
-                {getExtensionDataById(worldConfig?.registryExtension)?.displayName}
-              </Typography>
-            </Stack>
-            <Stack direction="column" spacing={2}>
-              <Typography variant="sm" bold>
-                {t('World Extensions')}
-              </Typography>
-              <div className="flex flex-wrap gap-2">
-                {worldConfigExtensions?.map((extension, idx) => (
-                  <Typography key={idx} variant="sm">
-                    {extension?.extension?.displayName}
-                  </Typography>
-                ))}
-              </div>
-            </Stack>
-            <Stack direction="column" spacing={2}>
-              <Typography variant="sm" bold>
-                {t('Homepage')}
-              </Typography>
-              <Typography variant="sm">
-                {getExtensionDataById(worldConfig?.homepageExtension)?.displayName}
-              </Typography>
+              <Button variant="link" asChild className="p-0">
+                <a rel="noreferrer" target="__blank" href={'https://docs.akasha.world'}>
+                  {t('Learn how to setup your world')} <ArrowRight />
+                </a>
+              </Button>
             </Stack>
           </Stack>
           <Separator />
           <Stack direction="column" spacing={4}>
             <Stack direction="row" justifyContent="between" alignItems="center">
-              <Typography variant="h6">{t('World Customisation')}</Typography>
-              {worldMetaInfo?.id ? (
-                <button onClick={handleNavToCustomiseForm}>
-                  <IconContainer className="bg-secondary">
-                    <Pencil />
-                  </IconContainer>
-                </button>
-              ) : (
-                <Button onClick={handleNavToCustomiseForm}>{t('Customise World')}</Button>
-              )}
+              <Typography variant="h6">{t('World Preview')}</Typography>
+              <Button variant="outline" size="sm" onClick={handlePreviewClick}>
+                <Eye />
+                {t('Preview')}
+              </Button>
             </Stack>
+            <Typography variant="xs">
+              {t(
+                `A new tab will open, bringing you to a preview environment. You will no longer be in AKASHA World; instead, you'll be previewing the world you've created. `,
+              )}
+            </Typography>
           </Stack>
+          <Separator />
+          <WorldCreationSection worldData={worldData} />
+          <Separator />
+          <WorldConfigurationSection worldId={worldData?.id} />
+          <Separator />
+          <WorldCustomisationSection
+            worldId={worldData?.id}
+            worldCreatorId={worldData?.creator?.id}
+          />
         </CardContent>
       </Card>
     );

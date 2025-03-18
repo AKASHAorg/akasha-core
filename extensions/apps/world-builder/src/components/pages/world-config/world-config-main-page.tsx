@@ -3,7 +3,6 @@ import appRoutes, { WORLD_CONFIG_FORM } from '../../../routes';
 import { useTranslation } from 'react-i18next';
 import { Outlet } from '@tanstack/react-router';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import {
   ErrorLoader,
@@ -29,7 +28,7 @@ type WorldConfigMainPageProps = {
 };
 
 export const WorldConfigMainPage: React.FC<WorldConfigMainPageProps> = ({ worldId }) => {
-  const { t } = useTranslation('app-extensions');
+  const { t } = useTranslation('app-world-builder');
 
   const { baseRouteName, getCorePlugins } = useRootComponentProps();
   const navigateTo = getCorePlugins().routing.navigateTo;
@@ -81,10 +80,8 @@ export const WorldConfigMainPage: React.FC<WorldConfigMainPageProps> = ({ worldI
   }
 
   return (
-    <Card>
-      <AtomContext.Provider value={formData}>
-        <Outlet />
-      </AtomContext.Provider>
-    </Card>
+    <AtomContext.Provider value={formData}>
+      <Outlet />
+    </AtomContext.Provider>
   );
 };
