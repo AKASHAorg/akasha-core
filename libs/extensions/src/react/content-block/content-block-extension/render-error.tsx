@@ -1,5 +1,4 @@
 import React, { MouseEventHandler } from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { type BlockError, BlockErrorCard } from '../block-error-card';
 
 export type RenderErrorProps = {
@@ -22,7 +21,7 @@ export const RenderError: React.FC<RenderErrorProps> = props => {
   } = props;
 
   return (
-    <Stack spacing="gap-y-2">
+    <div className="flex flex-col gap-y-2">
       {hasContentLoadError && (
         <BlockErrorCard
           errorTitle={contentLoadError.errorTitle}
@@ -37,6 +36,6 @@ export const RenderError: React.FC<RenderErrorProps> = props => {
           onRefresh={handleRefresh}
         />
       )}
-    </Stack>
+    </div>
   );
 };
