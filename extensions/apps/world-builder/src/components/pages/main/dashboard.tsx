@@ -60,7 +60,7 @@ export const DashboardPage: React.FC = () => {
   const {
     data: worldsByCreatorDidReq,
     loading: loadingWorldsByCreatorDidQuery,
-    // error: worldsByCreatorDidError,
+    error: worldsByCreatorDidError,
   } = useGetWorldsByCreatorDidQuery({
     variables: { id: authenticatedDID, first: 10 },
   });
