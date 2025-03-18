@@ -3,7 +3,6 @@ import { useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { useRoutingEvents } from './use-routing-events';
 import { WidgetInterface, IWidgetStorePlugin } from '@akashaorg/typings/lib/ui';
 import Parcel from 'single-spa-react/parcel';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { createLifecycles } from '../utils/create-lifecycles';
 
 export type WidgetExtensionProps = {
@@ -100,7 +99,7 @@ const WidgetComponent: React.FC<WidgetExtensionProps> = props => {
   const isLoading = widgets.length > parcelConfigs.length || loadingConfiguredParcel;
 
   return (
-    <Stack customStyle={`${customStyle} ${fullHeight ? 'h-full' : ''}`} id={name}>
+    <div className={`flex ${customStyle} ${fullHeight ? 'h-full' : ''}`} id={name}>
       {isLoading && loadingIndicator}
       {parcelConfigs.map((parcelConf, index) => (
         <Parcel
@@ -116,7 +115,7 @@ const WidgetComponent: React.FC<WidgetExtensionProps> = props => {
           handleError={handleParcelError(parcelConf.widget, index)}
         />
       ))}
-    </Stack>
+    </div>
   );
 };
 

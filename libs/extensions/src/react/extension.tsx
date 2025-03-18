@@ -2,7 +2,6 @@ import * as React from 'react';
 import { useRoutingEvents } from './use-routing-events';
 import { useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { ExtensionPointInterface, IExtensionPointStorePlugin } from '@akashaorg/typings/lib/ui';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { RootParcel } from './root-parcel';
 import { createLifecycles } from '../utils/create-lifecycles';
 
@@ -80,7 +79,7 @@ export const ExtensionRoot = <D,>(props: ExtensionComponentProps<D>) => {
   const isLoading = extensions.length > parcelConfigs.length && !isEmpty;
 
   return (
-    <Stack customStyle={customStyle} id={name}>
+    <div className={`flex flex-col ${customStyle}`} id={name}>
       {isLoading && loadingIndicator}
       {isEmpty && emptyIndicator}
       {parcelConfigs.map(parcel => (
@@ -92,7 +91,7 @@ export const ExtensionRoot = <D,>(props: ExtensionComponentProps<D>) => {
           handleError={handleParcelError(parcel.extension)}
         />
       ))}
-    </Stack>
+    </div>
   );
 };
 
