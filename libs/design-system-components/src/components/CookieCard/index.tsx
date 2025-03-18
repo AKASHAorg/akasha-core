@@ -59,14 +59,14 @@ const CookieCard: React.FC<CookieCardProps> = props => {
             {paragraphTwo.introLabel}
 
             <Button variant="link" asChild>
-              <a rel="noreferrer" href={paragraphTwo.analyticsURL}>
+              <a rel="noreferrer" href={paragraphTwo.analyticsURL} className="p-0 h-min">
                 {paragraphTwo.analyticsLabel}
               </a>
             </Button>
 
             {paragraphTwo.middleParagraphLabeL}
 
-            <Button variant="link" onClick={paragraphTwo.onSettingsClick}>
+            <Button variant="link" onClick={paragraphTwo.onSettingsClick} className="p-0 h-min">
               {paragraphTwo.settingsLabel}
             </Button>
 
@@ -75,13 +75,13 @@ const CookieCard: React.FC<CookieCardProps> = props => {
 
           <Text variant="body2">
             {paragraphThree.introLabel}{' '}
-            <Button variant="link" onClick={paragraphThree.onPrivacyClick}>
+            <Button variant="link" onClick={paragraphThree.onPrivacyClick} className="p-0 h-min">
               {paragraphThree.ctaLabel}
             </Button>
           </Text>
         </Stack>
 
-        <Stack direction="row" spacing={4} className="mt-4 ml-auto">
+        <Stack direction="row" spacing={4} className="mt-4" justifyContent="end">
           <Button variant="link" onClick={onClickOnlyEssential}>
             {onlyEssentialLabel}
           </Button>
