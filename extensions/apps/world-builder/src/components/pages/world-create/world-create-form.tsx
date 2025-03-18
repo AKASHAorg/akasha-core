@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import appRoutes, { WORLD_CREATE_FORM } from '../../../routes';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
@@ -55,18 +55,18 @@ import {
 import { selectWorldData } from '@akashaorg/ui-core-hooks/lib/selectors/get-worlds-by-creator-did-query';
 
 export const WorldCreateFormPage: React.FC = () => {
-  const { t } = useTranslation('app-extensions');
+  const { t } = useTranslation('app-world-builder');
 
   const { uiEvents, baseRouteName, getCorePlugins } = useRootComponentProps();
 
-  const uiEventsRef = React.useRef(uiEvents);
+  const uiEventsRef = useRef(uiEvents);
 
   const navigate = useNavigate();
   const navigateTo = getCorePlugins().routing.navigateTo;
 
-  const sdk = React.useRef(getSDK());
+  const sdk = useRef(getSDK());
 
-  const uploadInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
+  const uploadInputRef: React.RefObject<HTMLInputElement> = useRef(null);
 
   const indexingDID = sdk.current.services.gql.indexingDID;
 
@@ -88,16 +88,19 @@ export const WorldCreateFormPage: React.FC = () => {
     });
   };
 
-  const showErrorNotification = React.useCallback((title: string, errorMessage?: string) => {
-    uiEventsRef.current.next({
-      event: NotificationEvents.ShowNotification,
-      data: {
-        type: NotificationTypes.Error,
-        title,
-        description: errorMessage,
-      },
-    });
-  }, []);
+  const showNotification = React.useCallback(
+    (type: NotificationTypes, title: string, errorMessage?: string) => {
+      uiEventsRef.current.next({
+        event: NotificationEvents.ShowNotification,
+        data: {
+          type,
+          title,
+          description: errorMessage,
+        },
+      });
+    },
+    [],
+  );
 
   const {
     data: worldsByCreatorDidReq,
@@ -145,7 +148,10 @@ export const WorldCreateFormPage: React.FC = () => {
   } = useSaveImage();
 
   const onSaveImageError = () => {
-    showErrorNotification(t("The image wasn't uploaded correctly. Please try again!"));
+    showNotification(
+      NotificationTypes.Error,
+      t("The image wasn't uploaded correctly. Please try again!"),
+    );
   };
 
   const handleUploadClick = () => {
@@ -161,15 +167,12 @@ export const WorldCreateFormPage: React.FC = () => {
   };
 
   const onSubmit = (data: z.infer<typeof FormSchema>) => {
-    const existingWorldIcon = {
-      src: worldData?.icon?.default?.src,
-      height: worldData?.icon?.default?.height,
-      width: worldData?.icon?.default?.width,
-    };
     const worldDataContent = {
       name: worldData?.name ?? data.name,
-      icon: { default: worldImage || existingWorldIcon },
-      instanceURL: data.instanceUrl,
+      ...((worldData?.icon?.default?.src || worldImage) && {
+        icon: { default: worldImage || worldData?.icon?.default },
+      }),
+      ...(data.instanceUrl && { instanceURL: data.instanceUrl }),
       extensionPublishers: [data.extensionPublishers],
       createdAt: worldData?.createdAt ?? new Date().toISOString(),
       active: true,
@@ -183,23 +186,35 @@ export const WorldCreateFormPage: React.FC = () => {
     });
   };
 
-  const handleCancel = () => {
+  const handleNavToDashboard = () => {
     navigate({ to: '/dashboard' });
   };
 
   const [createWorldMutation, { loading: loadingWorldMutation }] = useCreateWorldMutation({
     context: { source: sdk.current.services.gql.contextSources.composeDB },
     onCompleted: data => {
-      navigate({
-        to: '/create-success',
-        search: {
-          worldId: data?.setAkashaWorld?.document?.id,
-          worldName: data?.setAkashaWorld?.document?.name,
-        },
-      });
+      if (worldData?.createdAt) {
+        showNotification(
+          NotificationTypes.Success,
+          t(`Success, you have updated the world model!`),
+        );
+        handleNavToDashboard();
+      } else {
+        navigate({
+          to: '/create-success',
+          search: {
+            worldId: data?.setAkashaWorld?.document?.id,
+            worldName: data?.setAkashaWorld?.document?.name,
+          },
+        });
+      }
     },
     onError: error => {
-      showErrorNotification(`${t(`Something went wrong when creating the world`)}.`, error.message);
+      showNotification(
+        NotificationTypes.Error,
+        t(`Something went wrong when creating the world`),
+        error.message,
+      );
     },
   });
 
@@ -215,6 +230,17 @@ export const WorldCreateFormPage: React.FC = () => {
             {t('Connect')}
           </Button>
         </ErrorLoaderFooter>
+      </ErrorLoader>
+    );
+  }
+
+  if (worldsByCreatorDidError) {
+    return (
+      <ErrorLoader type="script-error">
+        <ErrorLoaderTitle>
+          {t('Sorry, there was an error when fetching the world data')}
+        </ErrorLoaderTitle>
+        <ErrorLoaderDescription>{worldsByCreatorDidError?.message}</ErrorLoaderDescription>
       </ErrorLoader>
     );
   }
@@ -243,7 +269,6 @@ export const WorldCreateFormPage: React.FC = () => {
                       placeholder="E.g. Nana World"
                       {...field}
                       disabled={!!worldData?.name}
-                      value={field.value || worldData?.name}
                       onChange={field.onChange}
                     />
                   </FormControl>
@@ -261,7 +286,6 @@ export const WorldCreateFormPage: React.FC = () => {
                     <Input
                       placeholder="e.g. http://www.myworld.com"
                       {...field}
-                      value={field.value || worldData?.instanceURL}
                       onChange={field.onChange}
                     />
                   </FormControl>
@@ -319,11 +343,7 @@ export const WorldCreateFormPage: React.FC = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t('Extension Publishers')}</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    required
-                    value={field.value || worldData?.extensionPublishers[0]?.id}
-                  >
+                  <Select onValueChange={field.onChange} required>
                     <FormControl>
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder={t('Select an extension publisher')} />
@@ -342,16 +362,16 @@ export const WorldCreateFormPage: React.FC = () => {
             />
           </CardContent>
           <CardFooter>
-            <Button className="px-6" variant="outline" onClick={handleCancel}>
+            <Button className="px-6" variant="outline" onClick={handleNavToDashboard}>
               {t('Cancel')}
             </Button>
             <Button
               type="submit"
               className="px-6"
               loading={loadingWorldMutation}
-              disabled={!isValid}
+              disabled={!isValid || loadingWorldsByCreatorDidQuery}
             >
-              {t('Create')}
+              {worldData?.active ? t('Update') : t('Create')}
             </Button>
           </CardFooter>
         </form>

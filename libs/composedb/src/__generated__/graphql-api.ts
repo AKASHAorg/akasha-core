@@ -646,8 +646,12 @@ export const AkashaWorldConfigExtensionFragmentDoc = /*#__PURE__*/ gql`
   extension {
     name
     displayName
+    description
     author {
       id
+      akashaProfile {
+        ...UserProfileFragment
+      }
     }
     logoImage {
       src
@@ -1871,7 +1875,8 @@ export const GetWorldConfigDocument = /*#__PURE__*/ gql`
   }
 }
     ${AkashaWorldConfigFragmentDoc}
-${AkashaWorldConfigExtensionFragmentDoc}`;
+${AkashaWorldConfigExtensionFragmentDoc}
+${UserProfileFragmentDoc}`;
 export const GetWorldMetaInfoDocument = /*#__PURE__*/ gql`
     query GetWorldMetaInfo($worldID: CeramicStreamID!, $creator: ID!) {
   node(id: $creator) {
@@ -1905,7 +1910,8 @@ export const GetWorldConfigExtensionsDocument = /*#__PURE__*/ gql`
     }
   }
 }
-    ${AkashaWorldConfigExtensionFragmentDoc}`;
+    ${AkashaWorldConfigExtensionFragmentDoc}
+${UserProfileFragmentDoc}`;
 export const GetWorldFullInfoDocument = /*#__PURE__*/ gql`
     query GetWorldFullInfo($id: ID!, $creator: ID) {
   node(id: $id) {
