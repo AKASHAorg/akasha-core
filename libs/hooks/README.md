@@ -61,7 +61,7 @@ export default (
 
 Subscribe to changes in the application's authentication state, trigger login and logout actions, and access logged user's profile information
 
-> The useAkashaStore hook utilizes React's `useSyncExternalStore` hook to subscribe to a singleton instance of the `AuthenticationStore` class (under the hood), ensuring that the subscribing component automatically re-renders when the authentication state changes. The AuthenticationStore handles the logic for managing user authentication, by providing methods for logging in, logging out, restoring sessions, subscribing to state changes, and getting the current authentication state. Its static method `getInstance` ensures that only one instance of the AuthenticationStore exists (creates a new instance, if none exists).
+> The useAkashaStore hook provides access to the authentication state and authenticated user profile. It subscribes to AuthenticationStore via React’s useSyncExternalStore, ensuring components update when authentication state changes. The AuthenticationStore manages authentication logic, including login, logout, session state, and authentication state updates.
 
 **Example usage**
 
