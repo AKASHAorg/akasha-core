@@ -66,12 +66,11 @@ export const DashboardPage: React.FC = () => {
   });
 
   const worldData = selectWorldData(worldsByCreatorDidReq);
-  
-  
+
   const handlePreviewClick = () => {
     window.open(`${location.origin}?previewWorldId=${worldData?.id}`);
   };
-  
+
   if (!authenticatedDID) {
     return (
       <ErrorLoader type="not-authenticated">
