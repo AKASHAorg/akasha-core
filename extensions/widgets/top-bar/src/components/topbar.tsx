@@ -22,7 +22,7 @@ export interface ITopbarProps {
   currentLocation?: string;
   // sidebar
   sidebarVisible: boolean;
-  // isLoggedIn ?
+  // isLoggedIn
   isLoggedIn: boolean;
   // handlers
   onSidebarToggle?: () => void;
@@ -134,7 +134,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
         </Stack>
       </button>
       <Stack direction="row" spacing={2}>
-        {!isLoggedIn && <Extension name="topbar_login_button" />}
+        {!isLoggedIn && <Extension name="topbar_login_button" customStyle="flex-row gap-2" />}
         {isLoggedIn && (
           <>
             {displayWidgetTogglingButton && (
@@ -142,9 +142,10 @@ const Topbar: React.FC<ITopbarProps> = props => {
                 <Akasha />
               </Button>
             )}
-            <Extension name="topbar_notification_button" />
+            <Extension name="topbar_notification_button" customStyle="flex-row gap-2" />
           </>
         )}
+        <Extension name="topbar_extension_right" customStyle="flex-row gap-2" />
       </Stack>
     </Card>
   );
