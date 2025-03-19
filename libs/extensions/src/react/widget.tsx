@@ -99,7 +99,7 @@ const WidgetComponent: React.FC<WidgetExtensionProps> = props => {
   const isLoading = widgets.length > parcelConfigs.length || loadingConfiguredParcel;
 
   return (
-    <div className={`flex ${customStyle} ${fullHeight ? 'h-full' : ''}`} id={name}>
+    <div className={`flex flex-col ${customStyle} ${fullHeight ? 'h-full' : ''}`} id={name}>
       {isLoading && loadingIndicator}
       {parcelConfigs.map((parcelConf, index) => (
         <Parcel
