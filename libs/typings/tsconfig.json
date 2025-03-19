@@ -4,7 +4,8 @@
     "outDir": "./lib",
     "rootDir": "./src",
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "preserveConstEnums": true
   },
   "include": ["./src"],
   "exclude": ["node_modules", "**/*.spec.*"]
