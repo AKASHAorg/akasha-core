@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
@@ -94,19 +94,11 @@ export const WorldConfigFormStep1Page: React.FC<WorldConfigFormStep1Props> = ({ 
       layoutExtension: worldConfig?.layoutExtension || '',
       registryExtension: worldConfig?.registryExtension || '',
     },
+    values: worldConfig,
     mode: 'onChange',
   });
 
   const { isValid } = form.formState;
-
-  useEffect(() => {
-    if (worldConfig?.layoutExtension) {
-      form.setValue('layoutExtension', worldConfig?.layoutExtension);
-    }
-    if (worldConfig?.registryExtension) {
-      form.setValue('registryExtension', worldConfig?.registryExtension);
-    }
-  }, [worldConfig, form]);
 
   const handleCancel = () => {
     navigate({ to: '/dashboard' });
@@ -171,11 +163,7 @@ export const WorldConfigFormStep1Page: React.FC<WorldConfigFormStep1Props> = ({ 
                     )}
                   </FormDescription>
 
-                  <Select
-                    onValueChange={field.onChange}
-                    required
-                    value={field.value || worldConfig?.layoutExtension}
-                  >
+                  <Select onValueChange={field.onChange} required value={field.value}>
                     <FormControl>
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder={t('Select a layout extension')} />
@@ -205,11 +193,7 @@ export const WorldConfigFormStep1Page: React.FC<WorldConfigFormStep1Props> = ({ 
                       `Choose the default extension app where you will find installable extensions and publish yours.`,
                     )}
                   </FormDescription>
-                  <Select
-                    onValueChange={field.onChange}
-                    required
-                    value={field.value || worldConfig?.registryExtension}
-                  >
+                  <Select onValueChange={field.onChange} required value={field.value}>
                     <FormControl>
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder={t('Select a registry extension')} />

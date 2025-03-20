@@ -84,7 +84,7 @@ export const WorldCustomisationSection: React.FC<WorldCustomisationSectionProps>
       )}
       {worldMetaInfo?.id && (
         <>
-          <Stack direction="column" spacing={2}>
+          <Stack direction="column" spacing={1}>
             <Typography variant="sm" bold>
               {t('World Description')}
             </Typography>
@@ -108,12 +108,12 @@ export const WorldCustomisationSection: React.FC<WorldCustomisationSectionProps>
               )}
             </div>
           </Stack>
-          <Stack direction="column" alignItems="start" spacing={2}>
+          <Stack direction="column" alignItems="start" spacing={1}>
             <Typography variant="sm" bold>
               {t('Guidelines URL')}
             </Typography>
             {worldMetaInfo?.guidelinesUrl ? (
-              <Button variant="link" className="p-0" asChild>
+              <Button variant="link" className="p-0 h-5" asChild>
                 <a rel="noreferrer" target="__blank" href={worldMetaInfo?.guidelinesUrl}>
                   {worldMetaInfo?.guidelinesUrl}
                 </a>
@@ -122,14 +122,14 @@ export const WorldCustomisationSection: React.FC<WorldCustomisationSectionProps>
               <Typography variant="sm">{t('You haven’t added the guidelines URL yet.')}</Typography>
             )}
           </Stack>
-          <Stack direction="column" spacing={2}>
+          <Stack direction="column" spacing={1}>
             <Typography variant="sm" bold>
               {t('Socials')}
             </Typography>
             <Stack direction="column" alignItems="start" spacing={2}>
               {worldMetaInfo?.socialLinks?.length > 0 ? (
                 worldMetaInfo?.socialLinks?.map((link, idx) => (
-                  <Button key={idx} variant="link" className="p-0" asChild>
+                  <Button key={idx} variant="link" className="p-0 h-5" asChild>
                     <Stack direction="row" spacing={1} alignItems="center">
                       {iconsMap[link?.name]}
                       <a rel="noreferrer" target="__blank" href={link?.href}>

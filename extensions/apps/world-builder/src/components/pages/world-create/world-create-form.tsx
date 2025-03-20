@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import appRoutes, { WORLD_CREATE_FORM } from '../../../routes';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
@@ -121,25 +121,26 @@ export const WorldCreateFormPage: React.FC = () => {
     extensionPublishers: z.string(),
   });
 
+  const defaultValues = useMemo(() => {
+    return {
+      name: worldData?.name || '',
+      instanceUrl: worldData?.instanceURL || '',
+      extensionPublishers: worldData?.extensionPublishers[0]?.id || indexingDID,
+    };
+  }, [worldData, indexingDID]);
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: {
-      name: '',
-      icon: null,
-      instanceUrl: '',
-      extensionPublishers: '',
-    },
+    defaultValues,
   });
 
   const { isValid } = form.formState;
 
   useEffect(() => {
     if (worldData?.id) {
-      form.setValue('name', worldData?.name);
-      form.setValue('instanceUrl', worldData?.instanceURL);
-      form.setValue('extensionPublishers', worldData?.extensionPublishers[0]?.id);
+      form.reset(defaultValues);
     }
-  }, [worldData, form]);
+  }, [worldData, form, defaultValues]);
 
   const {
     image: worldImage,
@@ -343,7 +344,11 @@ export const WorldCreateFormPage: React.FC = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t('Extension Publishers')}</FormLabel>
-                  <Select onValueChange={field.onChange} required>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={defaultValues.extensionPublishers}
+                    required
+                  >
                     <FormControl>
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder={t('Select an extension publisher')} />
@@ -369,7 +374,7 @@ export const WorldCreateFormPage: React.FC = () => {
               type="submit"
               className="px-6"
               loading={loadingWorldMutation}
-              disabled={!isValid || loadingWorldsByCreatorDidQuery}
+              disabled={!isValid || loadingWorldsByCreatorDidQuery || isSavingWorldImage}
             >
               {worldData?.active ? t('Update') : t('Create')}
             </Button>

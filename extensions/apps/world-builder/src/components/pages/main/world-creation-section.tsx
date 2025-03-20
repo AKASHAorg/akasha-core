@@ -46,11 +46,12 @@ export const WorldCreationSection: React.FC<WorldCreationSectionProps> = ({ worl
           <Pencil />
         </Button>
       </Stack>
-      {worldData?.extensionPublishers?.length > 0 && (
-        <Stack direction="column" spacing={2}>
-          <Typography variant="sm" bold>
-            {t('Extension Publishers')}
-          </Typography>
+
+      <Stack direction="column" spacing={2}>
+        <Typography variant="sm" bold>
+          {t('Extension Publishers')}
+        </Typography>
+        {worldData?.extensionPublishers?.length > 0 ? (
           <div className="flex flex-wrap gap-2">
             {worldData?.extensionPublishers?.map((extPublisher, idx) => (
               <ProfileAvatarButton
@@ -70,20 +71,27 @@ export const WorldCreationSection: React.FC<WorldCreationSectionProps> = ({ worl
               </ProfileAvatarButton>
             ))}
           </div>
-        </Stack>
-      )}
-      {worldData?.instanceURL && (
-        <Stack direction="column" alignItems="start" spacing={2}>
-          <Typography variant="sm" bold>
-            {t('Instance URL')}
+        ) : (
+          <Typography variant="sm">
+            {t('You haven’t added any extension publishers yet.')}
           </Typography>
-          <Button variant="link" className="p-0" asChild>
+        )}
+      </Stack>
+
+      <Stack direction="column" alignItems="start" spacing={1}>
+        <Typography variant="sm" bold>
+          {t('Instance URL')}
+        </Typography>
+        {worldData?.instanceURL ? (
+          <Button variant="link" className="p-0 h-5" asChild>
             <a rel="noreferrer" target="__blank" href={worldData?.instanceURL}>
               {worldData?.instanceURL}
             </a>
           </Button>
-        </Stack>
-      )}
+        ) : (
+          <Typography variant="sm">{t('You haven’t added the instance URL yet.')}</Typography>
+        )}
+      </Stack>
     </Stack>
   );
 };
