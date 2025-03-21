@@ -32,6 +32,7 @@ export class TestModeLoader implements ITestModeLoaderPlugin {
   readonly #initializeExtension: ExtensionTestModeConfig['initializeExtension'];
   readonly #registerExtension: ExtensionTestModeConfig['registerExtension'];
   readonly #finalizeInstall: ExtensionTestModeConfig['finalizeInstall'];
+  #testExtensions: LocalReleaseData[];
   listeners: (({
     currentStatus,
     errorStatus,
@@ -49,6 +50,7 @@ export class TestModeLoader implements ITestModeLoaderPlugin {
     this.#registerAdditionalResources = config.registerAdditionalResources;
     this.#finalizeInstall = config.finalizeInstall;
     this.#registerExtension = config.registerExtension;
+    this.#testExtensions = [];
     this.listeners = [];
   }
 
@@ -79,6 +81,14 @@ export class TestModeLoader implements ITestModeLoaderPlugin {
     return staticInstallStatusCodes;
   }
 
+  getTestExtensions() {
+    return this.#testExtensions;
+  }
+
+  removeTestExtensions() {
+    this.#testExtensions = [];
+  }
+
   loadStoredExtensions() {
     const storage = sessionStorage.getItem(this.getTestSessionKey());
 
@@ -87,7 +97,8 @@ export class TestModeLoader implements ITestModeLoaderPlugin {
       try {
         extensions = JSON.parse(storage);
         if (extensions.length) {
-          extensions.forEach(ext => this.load(ext));
+          this.#testExtensions = extensions;
+          this.#testExtensions.forEach(ext => this.load(ext));
         }
       } catch (err) {
         this.#logger.error('Failed to load test mode extensions %s', err.message);

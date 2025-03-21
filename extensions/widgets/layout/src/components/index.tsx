@@ -17,8 +17,12 @@ import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
 import { Widget } from '@akashaorg/ui-lib-extensions/lib/react/widget';
 import { ModalExtension } from '@akashaorg/ui-lib-extensions/lib/react/modal-extension';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { ExclamationTriangleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import {
+  ExclamationTriangleIcon,
+  ExclamationCircleIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import TopbarLoader from '@akashaorg/design-system-components/lib/components/Loaders/topbar-loader';
@@ -33,6 +37,7 @@ const miniProfileLoadingIndicator = <MiniProfileWidgetLoader />;
 const trendingWidgetLoadingIndicator = <TrendingWidgetLoader />;
 const topbarLoadingIndicator = <TopbarLoader />;
 const exclamationTriangleIcon = <ExclamationTriangleIcon />;
+const exclamationCircleIcon = <ExclamationCircleIcon />;
 
 const Layout: React.FC<unknown> = () => {
   const widgetContainerRef = useRef<HTMLDivElement>(null);
@@ -45,7 +50,7 @@ const Layout: React.FC<unknown> = () => {
     !window.matchMedia(startMobileSidebarHidingBreakpoint).matches,
   );
 
-  const { uiEvents, layoutSlots } = useRootComponentProps();
+  const { uiEvents, layoutSlots, worldConfig } = useRootComponentProps();
   // initialise fallback theme, if none is set
   useTheme();
 
@@ -160,6 +165,13 @@ const Layout: React.FC<unknown> = () => {
     };
   }, [handleWidgetsShow]);
 
+  const handleExitPreview = () => {
+    if (sessionStorage.getItem('previewWorldId')) {
+      sessionStorage.removeItem('previewWorldId');
+      window.location.reload();
+    }
+  };
+
   const layoutStyle = `grid min-h-full lg:${showWidgets ? 'grid-cols-[8fr_4fr]' : 'grid-cols-[2fr_8fr_2fr]'} ${showSidebar ? 'xl:grid-cols-[3fr_6fr_3fr] ' : 'xl:grid-cols-[1.5fr_6fr_3fr_1.5fr]'} xl:max-w-7xl xl:mx-auto gap-x-3 w-full`;
 
   // the bg(black/30 dark:white/30) is for the overlay background when the sidebar is open on mobile
@@ -212,9 +224,25 @@ const Layout: React.FC<unknown> = () => {
               )}
             </Stack>
           </Stack>
-
           <Stack className={`px-2 ${showWidgets ? '' : 'lg:(col-start-2 col-end-3) col-start-1'}`}>
             <Stack className="pt-4 sticky top-0 z-10 bg(white dark:black) rounded-b-3xl">
+              {worldConfig.isPreview && (
+                <Card className="p-4 mb-4">
+                  <Stack direction="row">
+                    <Icon
+                      color={{ light: 'primary', dark: 'primary' }}
+                      icon={exclamationCircleIcon}
+                      customStyle="mr-4"
+                    />
+                    <Text variant="subtitle2">
+                      {t('You are previewing "{{worldName}}"', { worldName: worldConfig.title })}.
+                    </Text>
+                  </Stack>
+                  <Button variant="link" onClick={handleExitPreview}>
+                    {t('Leave Preview')}
+                  </Button>
+                </Card>
+              )}
               <Widget name={layoutSlots.topbarSlotId} loadingIndicator={topbarLoadingIndicator} />
             </Stack>
             <Stack spacing={4} className="pt-4">
