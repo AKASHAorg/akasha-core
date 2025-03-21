@@ -1,4 +1,4 @@
-/* eslint-disable unicorn/consistent-function-scoping */
+/* eslint-disable unicorn/consistent-function-scoping, @typescript-eslint/no-explicit-any */
 import { IRootComponentProps } from '@akashaorg/typings/lib/ui';
 import { genWorldConfig } from './world-config';
 import { uiEventsMock } from '../mocks/uiEvents';
