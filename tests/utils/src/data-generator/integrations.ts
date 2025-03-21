@@ -57,6 +57,8 @@ const corePluginsMock = {
     // eslint-disable-next-line unicorn/consistent-function-scoping
     subscribe: () => () => {},
     getTestSessionKey: () => 'test-session-key',
+    getTestExtensions: () => [],
+    removeTestExtensions: () => {},
   },
 };
 
