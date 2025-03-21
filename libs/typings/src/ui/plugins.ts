@@ -10,6 +10,8 @@ import { AkashaApp, AkashaAppApplicationType } from '../sdk/graphql-types-new';
  */
 export interface IPlugin {
   [namespace: string]: {
+    // @TODO: needs a better type definition
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [key: string]: any;
   };
 }
