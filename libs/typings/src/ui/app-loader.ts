@@ -112,6 +112,10 @@ export type WorldConfig = {
   };
   registryOverrides?: (Partial<AkashaApp> & { source: string })[];
   socialLinks?: { icon: IconType; link: string }[];
+  /**
+   * True when the world is in preview mode
+   */
+  isPreview?: boolean;
 };
 
 /**

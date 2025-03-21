@@ -67,6 +67,10 @@ export const DashboardPage: React.FC = () => {
 
   const worldData = selectWorldData(worldsByCreatorDidReq);
 
+  const handlePreviewClick = () => {
+    window.open(`${location.origin}?previewWorldId=${worldData?.id}`);
+  };
+
   if (!authenticatedDID) {
     return (
       <ErrorLoader type="not-authenticated">
@@ -160,7 +164,7 @@ export const DashboardPage: React.FC = () => {
           <Stack direction="column" spacing={4}>
             <Stack direction="row" justifyContent="between" alignItems="center">
               <Typography variant="h6">{t('World Preview')}</Typography>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" onClick={handlePreviewClick}>
                 <Eye />
                 {t('Preview')}
               </Button>
