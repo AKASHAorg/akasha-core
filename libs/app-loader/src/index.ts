@@ -470,9 +470,12 @@ export default class AppLoader {
    **/
   handleLogout = async () => {
     const mounted = singleSpa.getMountedApps();
+    const testExtensions = this.plugins.core.testModeLoader.getTestExtensions();
 
-    const isUserExtMounted = mounted.some(name =>
-      this.userExtensions.some(ext => ext.appName === name),
+    const isUserExtMounted = mounted.some(
+      name =>
+        this.userExtensions.some(ext => ext.appName === name) ||
+        testExtensions.some(ext => ext.appName === name),
     );
 
     // unload user extensions
@@ -500,6 +503,15 @@ export default class AppLoader {
         this.userExtensions = this.userExtensions.filter(uExt => uExt.appName === ext.appName);
       }
       this.plugins.core.routing.unregisterRoute(ext.appName);
+    }
+
+    if (testExtensions.length) {
+      testExtensions.forEach(ext => {
+        singleSpa.unregisterApplication(ext.appName);
+        this.plugins.core.routing.unregisterRoute(ext.appName);
+        System.delete(System.resolve(ext.appName));
+      });
+      this.plugins.core.testModeLoader.removeTestExtensions();
     }
     // if any of the mounted extensions are the user installed ones redirect to homepageApp
     if (isUserExtMounted) {

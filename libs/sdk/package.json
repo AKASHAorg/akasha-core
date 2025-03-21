@@ -1,6 +1,6 @@
 {
   "name": "@akashaorg/core-sdk",
-  "version": "0.1.19-alpha",
+  "version": "0.1.20-alpha",
   "keywords": [
     "web3",
     "ethereum",
@@ -8,10 +8,14 @@
     "ceramic",
     "akasha"
   ],
-  "main": "./lib/index.js",
-  "module": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "type": "module",
+  "main": "./lib/index.js",
+  "exports": {
+    ".": {
+      "import": "./lib/index.js"
+    }
+  },
   "description": "SDK for building decentralized applications on akasha.world",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "bugs": "https://github.com/AKASHAorg/akasha-core/issues",

@@ -31,6 +31,7 @@ export default class CeramicService {
   private _didSession?: DIDSession;
   private _ceramic_endpoint: string;
   private _config: AWF_Config;
+  private _extraResources: Set<string> = new Set();
 
   constructor(
     @inject(TYPES.Db) db: DB,
@@ -98,11 +99,15 @@ Functionality:
 
     const authMethod = await EthereumWebAuth.getAuthMethod(web3Provider, accountId);
     this._didSession = await DIDSession.get(accountId, authMethod, {
-      resources: this._composeClient.resources,
+      resources: this._composeClient.resources.concat(Array.from(this._extraResources)),
       expiresInSecs: 60 * 60 * 24 * 7, // 1 week
     });
     this._composeClient.setDID(this._didSession.did);
     return this._didSession;
+  }
+
+  setExtraResource(resourceID: string) {
+    this._extraResources.add(resourceID);
   }
 
   @validate(z.string().length(64))
@@ -116,14 +121,17 @@ Functionality:
     this._composeClient.setDID(did);
     return did;
   }
-
+  // getComposeClient() =
   getComposeClient() {
     return this._composeClient;
   }
 
   async hasSession(): Promise<boolean> {
     const accountId = await this.getAccountID();
-    return DIDSession.hasSessionFor(accountId, this._composeClient.resources);
+    return DIDSession.hasSessionFor(
+      accountId,
+      this._composeClient.resources.concat(Array.from(this._extraResources)),
+    );
   }
 
   async geResourcesHash() {

@@ -26,6 +26,7 @@ const TestModeWidget = () => {
 
   useEffect(() => {
     if (!authenticatedDID) {
+      setTestExtensions(null);
       return;
     }
     const sessionKey = testModeLoaderPlugin.current?.getTestSessionKey?.();
