@@ -42,14 +42,14 @@ export const ExtensionElement: React.FC<ExtensionElementProps> = props => {
     <HoverCard>
       <HoverCardTrigger>
         <Button
-          className="p-0"
+          className="p-0 h-5"
           variant="link"
           onClick={() => handleNavToApp(encodeAppName(extensionData?.name))}
         >
           {extensionData?.displayName}
         </Button>
       </HoverCardTrigger>
-      <HoverCardContent className="w-full p-0">
+      <HoverCardContent className="w-full p-0 z-[99]">
         <ExtensionCard className="p-4">
           <ExtensionCardAvatar size="lg" extensionId={extensionData?.id}>
             <ExtensionCardAvatarImage src={transformSource(extensionData?.logoImage)?.src}>

@@ -153,7 +153,7 @@ export const DashboardPage: React.FC = () => {
                   'You can setup your own world using the configuration saved here! Check the developer documentation to learn how.',
                 )}
               </Typography>
-              <Button variant="link" asChild className="p-0">
+              <Button variant="link" asChild className="p-0 h-5">
                 <a rel="noreferrer" target="__blank" href={'https://docs.akasha.world'}>
                   {t('Learn how to setup your world')} <ArrowRight />
                 </a>

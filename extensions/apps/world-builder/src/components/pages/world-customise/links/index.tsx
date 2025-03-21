@@ -48,15 +48,15 @@ export const SocialLinks: React.FC<SocialLinksProps> = ({ control, onDeleteLink 
             key={link.id}
             control={control}
             name={`socialLinks.${index}`}
-            render={({ field: { value, onChange } }) => (
+            render={({ field }) => (
               <FormItem>
                 <LinkElement
                   onDelete={() => {
                     remove(index);
                     onDeleteLink();
                   }}
-                  value={{ ...value, _id: index + 1 }}
-                  onChange={onChange}
+                  value={{ ...field.value, _id: index + 1 }}
+                  onChange={field.onChange}
                 />
                 <FormMessage />
               </FormItem>

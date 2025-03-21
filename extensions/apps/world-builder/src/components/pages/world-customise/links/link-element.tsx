@@ -44,7 +44,7 @@ export const LinkElement: React.FC<LinkElementProps> = props => {
     >
       <Stack direction="row" className="w-full" alignItems="center" spacing={2}>
         <Select
-          value={value.name || 'other'}
+          value={value.name}
           onValueChange={newValue => onChange({ ...value, name: newValue })}
         >
           <SelectTrigger className="w-[68px]">

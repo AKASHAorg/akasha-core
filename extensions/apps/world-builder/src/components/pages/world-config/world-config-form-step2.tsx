@@ -133,7 +133,12 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
     },
   });
 
-  const akashaApps = selectAkashaApps(getAppsReq);
+  const akashaApps = selectAkashaApps(getAppsReq)?.filter(ext => {
+    if (ext.id === formValue?.layoutExtension || ext.id === formValue?.registryExtension) {
+      return null;
+    }
+    return ext;
+  });
   const pageInfo = selectAkashaAppsPageInfo(getAppsReq);
 
   const [selectedExtensions, setSelectedExtensions] = useState([]);
@@ -311,9 +316,17 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
       },
     });
   };
+
   const handleNavBack = () => {
     navigate({ to: '/world-config-form/$worldId/step1', params: { worldId } });
   };
+
+  const filteredSelecteExtensions = selectedExtensions.filter(ext => {
+    if (ext.id === formValue?.layoutExtension || ext.id === formValue?.registryExtension) {
+      return null;
+    }
+    return ext;
+  });
 
   if (worldConfigError) {
     return (
@@ -363,7 +376,7 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
     <Card>
       <CardHeader>
         <Stack className="items-center">
-          <Stepper currentStep={1} numberOfSteps={2} className="max-w-[112px]" />
+          <Stepper currentStep={2} numberOfSteps={2} className="max-w-[112px]" />
         </Stack>
         <CardTitle className="text-center">
           <Typography variant="h5">{t('Choose Your Extensions')}</Typography>
@@ -469,9 +482,9 @@ export const WorldConfigFormStep2Page: React.FC<WorldConfigFormStep2Props> = ({ 
           {selectedExtensions?.length === 0 && (
             <Typography variant="sm">{t('You haven’t selected any extensions yet.')}</Typography>
           )}
-          {selectedExtensions?.length > 0 && (
+          {filteredSelecteExtensions?.length > 0 && (
             <div className="flex flex-wrap gap-2">
-              {selectedExtensions.map(ext => (
+              {filteredSelecteExtensions.map(ext => (
                 <Badge key={ext?.id} variant="secondary">
                   {ext?.displayName}
                   <Button

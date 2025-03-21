@@ -53,6 +53,9 @@ import {
 import { selectWorldMetaInfoData } from '@akashaorg/ui-core-hooks/lib/selectors/get-world-meta-info-query';
 import getSDK from '@akashaorg/core-sdk';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
+import { CircularProgress } from '@/ui/circular-progress';
+
+const WORLD_DESCRIPTION_MAX_LENGTH = 420;
 
 export type WorldCustomiseFormValues = {
   description?: string;
@@ -141,8 +144,10 @@ export const WorldCustomiseFormPage: React.FC<{ worldId?: string }> = ({ worldId
       .min(3, {
         message: t('World description must be at least 3 characters.'),
       })
-      .max(420, {
-        message: t('World description must be less than 420 characters.'),
+      .max(WORLD_DESCRIPTION_MAX_LENGTH, {
+        message: t(`World description must be less than {{maxLength}} characters.`, {
+          maxLength: WORLD_DESCRIPTION_MAX_LENGTH,
+        }),
       })
       .optional()
       .or(z.literal('')),
@@ -174,12 +179,12 @@ export const WorldCustomiseFormPage: React.FC<{ worldId?: string }> = ({ worldId
 
   const formDefaultValues: WorldCustomiseFormValues = useMemo(() => {
     return {
-      description: '',
-      keywords: [],
-      guidelinesUrl: '',
-      socialLinks: [],
+      description: worldMetaInfo?.description || '',
+      keywords: worldMetaInfo?.keywords || [],
+      guidelinesUrl: worldMetaInfo?.guidelinesUrl || '',
+      socialLinks: worldMetaInfo?.socialLinks || [{ name: 'other', href: '' }],
     };
-  }, []);
+  }, [worldMetaInfo]);
 
   const form = useForm<WorldCustomiseFormValues>({
     resolver: zodResolver(FormSchema),
@@ -190,12 +195,10 @@ export const WorldCustomiseFormPage: React.FC<{ worldId?: string }> = ({ worldId
 
   useEffect(() => {
     if (worldMetaInfo?.id) {
-      form.setValue('description', worldMetaInfo?.description);
-      form.setValue('guidelinesUrl', worldMetaInfo?.guidelinesUrl);
-      form.setValue('keywords', worldMetaInfo?.keywords);
-      form.setValue('socialLinks', worldMetaInfo?.socialLinks);
+      form.reset(formDefaultValues);
+      setSelectedValues(worldMetaInfo?.keywords);
     }
-  }, [worldMetaInfo, form]);
+  }, [formDefaultValues, form, worldMetaInfo]);
 
   const handleNavToDashboard = () => {
     navigate({ to: '/dashboard' });
@@ -274,11 +277,18 @@ export const WorldCustomiseFormPage: React.FC<{ worldId?: string }> = ({ worldId
                 <FormItem>
                   <FormLabel>{t('World Description')}</FormLabel>
                   <FormControl>
-                    <Textarea
-                      placeholder="E.g. World for people who like number 7 in Japanese."
-                      {...field}
-                      onChange={field.onChange}
-                    />
+                    <div className="relative">
+                      <Textarea
+                        className="w-0 min-w-full"
+                        placeholder="E.g. World for people who like number 7 in Japanese."
+                        {...field}
+                        onChange={field.onChange}
+                      />
+                      <CircularProgress
+                        value={(field.value?.length / WORLD_DESCRIPTION_MAX_LENGTH) * 100}
+                        className="absolute bottom-1 right-1"
+                      />
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
