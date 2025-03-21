@@ -162,6 +162,8 @@ export interface ITestModeLoaderPlugin {
   ): () => void;
 
   getTestSessionKey(): string;
+  getTestExtensions(): LocalReleaseData[];
+  removeTestExtensions(): void;
 }
 
 export type CorePlugins = {
