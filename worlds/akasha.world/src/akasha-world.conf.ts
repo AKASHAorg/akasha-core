@@ -29,7 +29,7 @@ export const akashaWorldConfig: WorldConfig = {
     '@akashaorg/app-notifications',
     '@akashaorg/app-settings-ewa',
     '@akashaorg/app-legal',
-    '@akashaorg/app-world-builder',
+    // '@akashaorg/app-world-builder',
     // '@akashaorg/app-vibes-console',
   ],
   // pre-installed widgets;

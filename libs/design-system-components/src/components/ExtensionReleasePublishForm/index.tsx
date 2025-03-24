@@ -216,7 +216,6 @@ const ExtensionReleasePublish: React.FC<ExtensionReleasePublishProps> = props =>
               loading={loading}
               disabled={!isValid || !isFormDirty}
               onClick={showModalFlow ? onConfirmationModalOpen : onSave}
-              type="submit"
             >
               {nextButton.label}
             </Button>
