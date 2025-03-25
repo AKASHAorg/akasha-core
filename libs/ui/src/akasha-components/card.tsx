@@ -63,9 +63,7 @@ const CardAction = React.forwardRef<React.ElementRef<'div'>, React.ComponentProp
 );
 
 const CardContent = React.forwardRef<React.ElementRef<'div'>, React.ComponentProps<'div'>>(
-  ({ className, ...props }, ref) => (
-    <div ref={ref} data-slot="card-content" className={cn(className)} {...props} />
-  ),
+  (props, ref) => <div ref={ref} data-slot="card-content" {...props} />,
 );
 
 const CardFooter = React.forwardRef<React.ElementRef<'div'>, React.ComponentProps<'div'>>(
