@@ -109,8 +109,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
 
   const entryCardUi = useMemo(
     () => (
-      <Card
-        className="flex flex-col grow p-0 border-none"
+      <div
         data-testid={dataTestId}
         /**
          * attach onClick handler if;
@@ -226,7 +225,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
             />
           )}
         </Stack>
-      </Card>
+      </div>
     ),
     [
       actionsRight,
