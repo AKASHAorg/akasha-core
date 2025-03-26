@@ -1,8 +1,11 @@
 import React from 'react';
 import { BlockInstanceMethods, ContentBlockRootProps } from '@akashaorg/typings/lib/ui';
 import ReadOnlyEditor from '@akashaorg/design-system-components/lib/components/ReadOnlyEditor';
-import { decodeb64SlateContent, useRootComponentProps } from '@akashaorg/ui-core-hooks';
-import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
+import {
+  decodeb64SlateContent,
+  triggerNavigation,
+  useRootComponentProps,
+} from '@akashaorg/ui-core-hooks';
 
 export const SlateReadonlyBlock = (
   props: ContentBlockRootProps & { blockRef?: React.RefObject<BlockInstanceMethods> },
@@ -19,9 +22,17 @@ export const SlateReadonlyBlock = (
       getNavigationUrl: () => `/${profileDID}`,
     });
   };
+
   return (
-    <Stack>
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events
+    <div
+      onClick={() => {
+        triggerNavigation();
+      }}
+      role="button"
+      tabIndex={0}
+    >
       <ReadOnlyEditor content={content} handleMentionClick={handleMentionClick} />
-    </Stack>
+    </div>
   );
 };

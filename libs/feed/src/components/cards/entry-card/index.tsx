@@ -10,6 +10,7 @@ import { getColorClasses } from '@akashaorg/design-system-core/lib/utils';
 import { type EntryData } from '@akashaorg/typings/lib/ui';
 import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
+import { shouldNavigate } from '@akashaorg/ui-core-hooks';
 
 export type EntryCardProps = {
   entryData: EntryData;
@@ -92,6 +93,12 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     children,
   } = props;
 
+  const handleContentClick = React.useCallback(() => {
+    if (shouldNavigate()) {
+      onContentClick();
+    }
+  }, [onContentClick]);
+
   /**
    * showNSFWContent determines whether to display the content underneath the overlay,
    * so if the showNSFWCard prop is true (which means to show the overlay), showNSFWContent should be false.
@@ -115,7 +122,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
          * attach onClick handler if;
          * 'showNSFWContent' state (initially derived from the inverse of the 'showNSFWCard' prop) and contentClickable are true
          */
-        {...(contentClickable && showNSFWContent && { onClick: onContentClick })}
+        {...(contentClickable && showNSFWContent && { onClick: handleContentClick })}
       >
         <Stack spacing="gap-y-2" padding="p-4" customStyle={`grow ${hoverStyle}`}>
           <Stack direction="row" justify="between">
@@ -153,7 +160,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
                * attach onClick handler if
                * 'showNSFWContent' and 'noWrapperCard' are both true
                */
-              {...(showNSFWContent && noWrapperCard && { onClick: onContentClick })}
+              {...(showNSFWContent && noWrapperCard && { onClick: handleContentClick })}
             >
               {/* show the overlay in two cases: the user not logged in, or the beam is nsfw and
               the nsfw setting is off */}
@@ -246,7 +253,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
       nsfw,
       nsfwText,
       nsfwUserSetting,
-      onContentClick,
+      handleContentClick,
       onReflect,
       onTagClick,
       profileAvatar,

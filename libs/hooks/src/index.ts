@@ -11,6 +11,7 @@ export * from './store';
 export { hasOwn } from './utils/has-own';
 export { sortByKey } from './utils/sort-by-key';
 export { createReactiveVar } from './utils/create-reactive-var';
+export { shouldNavigate, triggerNavigation } from './utils/navigate';
 export {
   useRequiredNetwork,
   switchToRequiredNetwork,
