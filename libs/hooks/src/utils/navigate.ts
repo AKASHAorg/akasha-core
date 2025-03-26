@@ -1,22 +1,22 @@
 const NAVIGATE_KEY = '__navigate__';
 
 /**
- * Sets a navigation trigger flag in localStorage.
+ * Sets a navigation trigger flag in sessionStorage.
  * This is meant to be read once by another component,
  * and cleared immediately after reading.
  */
 function triggerNavigation(): void {
-  localStorage.setItem(NAVIGATE_KEY, 'true');
+  sessionStorage.setItem(NAVIGATE_KEY, 'true');
 }
 
 /**
  * Checks if navigation should occur.
- * This reads the one-time flag from localStorage and clears it after use.
+ * This reads the one-time flag from sessionStorage and clears it after use.
  * @returns true if navigation was triggered; false otherwise.
  */
 function shouldNavigate(): boolean {
-  const value = localStorage.getItem(NAVIGATE_KEY);
-  localStorage.removeItem(NAVIGATE_KEY);
+  const value = sessionStorage.getItem(NAVIGATE_KEY);
+  sessionStorage.setItem(NAVIGATE_KEY, 'false');
   return value === 'true';
 }
 
