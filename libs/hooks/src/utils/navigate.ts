@@ -12,7 +12,7 @@ function triggerNavigation(): void {
 /**
  * Checks if navigation should occur.
  * This reads the one-time flag from localStorage and clears it after use.
- * @returns { boolean } true if navigation was triggered; false otherwise.
+ * @returns true if navigation was triggered; false otherwise.
  */
 function shouldNavigate(): boolean {
   const value = localStorage.getItem(NAVIGATE_KEY);
