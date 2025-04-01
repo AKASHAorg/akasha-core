@@ -13,6 +13,7 @@ import {
   selectReflectionId,
   selectReflectionNsfw,
 } from '@akashaorg/ui-core-hooks/lib/selectors/get-reflection-by-id-query';
+import { triggerNavigation } from '@akashaorg/ui-core-hooks';
 
 export type EditableReflectionResolverProps = {
   reflectID: string;
@@ -68,7 +69,10 @@ export const EditableReflectionResolver = ({
           beamID: selectReflectionBeamId(reflectionReq.data),
         }}
         contentClickable={true}
-        onContentClick={onContentClick}
+        onContentClick={() => {
+          triggerNavigation();
+          onContentClick();
+        }}
         onReflect={onReflect}
       />
     </React.Suspense>
