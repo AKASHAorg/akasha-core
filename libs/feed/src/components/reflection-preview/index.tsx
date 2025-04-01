@@ -8,6 +8,7 @@ import { EntityTypes, IContentClickDetails } from '@akashaorg/typings/lib/ui';
 import { useTranslation } from 'react-i18next';
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils';
 import { NetworkErrorCard } from '../cards/network-error-card';
+import { triggerNavigation } from '@akashaorg/ui-core-hooks';
 
 const MAXIMUM_REFLECTION_PREVIEWS = 2;
 
@@ -78,12 +79,13 @@ const ReflectionPreview: React.FC<ReflectionPreviewProps> = props => {
                   EntityTypes.REFLECT,
                 );
               }}
-              onContentClick={() =>
+              onContentClick={() => {
+                triggerNavigation();
                 onNavigate(
                   { authorId: reflection?.author.id, id: reflection.id },
                   EntityTypes.REFLECT,
-                )
-              }
+                );
+              }}
             />
           ))}
         </Stack>
