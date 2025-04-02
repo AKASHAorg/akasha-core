@@ -1024,6 +1024,63 @@ disconnect(): Promise<void>
 
 **Returns**: A promise that resolves when the disconnection from Web3 provider is complete.
 
+### getSigner
+
+Gets the signer (a wallet instance) for signing messages or transactions. It throws a warning through the logger, if no Web3 provider is available.
+
+```ts
+// ...
+const sdk = getSDK();
+const signer = await sdk.services.common.web3.getSigner();
+// ...
+```
+
+**Returns**: An instance of the signer.
+
+### get state
+
+Getter method that retrieves the current state of the Web3 provider.
+
+```ts
+// ...
+const sdk = getSDK();
+const currentState = sdk.services.common.web3.state;
+// ...
+```
+
+**Returns**: An oject containing;
+
+- `providerType`: the provider type
+- `connected`: the connected state of the provider
+- `address`: the currently connected address
+- `chainId`: the current network Id
+
+### get provider
+
+Getter method that retrieves the current Web3 provider instance.
+
+```ts
+// ...
+const sdk = getSDK();
+const provider = sdk.services.common.web3.provider;
+// ...
+```
+
+**Returns**: The current web3 provider instance (which could also be null, if none is connected)
+
+### get walletProvider
+
+Getter method that retrieves the wallet provider from Web3Modal for wallet interactions
+
+```ts
+
+// ...
+const sdk = getSDK();
+const walletProvider = sdk.services.common.web3.walletProvider;
+// ...
+
+```
+
 ### signMessage
 
 Signs a human-readable message using the current wallet provider. It uses `personal_sign` for message signing.
@@ -1053,6 +1110,20 @@ lookupAddress(address: string): Promise<{ ens: string | null }>
 **Returns**: A promise that resolves to an object containing:
 
 - `ens (string | null)`: The ENS name if found, or `null` if no ENS name exists for the address.
+
+### getCurrentEthAddress
+
+Retrieves the current Ethereum address from the connected provider.
+
+```ts
+// ...
+const sdk = getSDK();
+const currentEthAddress = await sdk.services.common.web3.getCurrentEthAddress();
+// ...
+
+```
+
+**Returns**: The address of the currently connected wallet or null if none is connected.
 
 ### getRequiredNetwork
 
