@@ -27,7 +27,7 @@ Create an application
 
 ```tsx
 import { useCreateAppMutation } from  '@akashaorg/ui-core-hooks/lib/generated/apollo';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 
 const sdk = getSDK();
 const [createApp, { data, error, loading }] = useCreateAppMutation(
@@ -76,7 +76,7 @@ Create a beam
 
 ```tsx
 import { useCreateBeamMutation } from  '@akashaorg/ui-core-hooks/lib/generated/apollo';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 
 const sdk = getSDK();
 const [createBeam, { data, error, loading }] = useCreateBeamMutation(
@@ -138,7 +138,7 @@ Create a [content block](../../../extensions/editor/content_blocks.md)
 
 ```tsx
 import { useCreateContentBlockMutation } from  '@akashaorg/ui-core-hooks/lib/generated/apollo';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 
 const [createContentBlock, { data, error, loading }] = useCreateContentBlockMutation(
   {
@@ -190,7 +190,7 @@ Create a follow document to a profile
 
 ```tsx
 import { useCreateFollowMutation } from  '@akashaorg/ui-core-hooks/lib/generated/apollo';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 
 const sdk = getSDK();
 const [createFollow, { data, error, loading }] = useCreateFollowMutation(
@@ -244,7 +244,7 @@ Create an interest or list of interests
 
 ```tsx
 import { useCreateInterestsMutation } from  '@akashaorg/ui-core-hooks/lib/generated/apollo';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 
 const sdk = getSDK();
 const [createInterests, { data, error, loading }] = useCreateInterestsMutation(
@@ -303,7 +303,7 @@ Create a profile
 
 ```tsx
 import { useCreateProfileMutation } from  '@akashaorg/ui-core-hooks/lib/generated/apollo';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 
 const sdk = getSDK();
 const [createProfile, { data, error, loading }] = useCreateProfileMutation(
@@ -359,7 +359,7 @@ Create a reflection to a beam or a beam's reflection
 
 ```tsx
 import { useCreateReflectMutation } from  '@akashaorg/ui-core-hooks/lib/generated/apollo';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 
 const sdk = getSDK();
 const [createReflection, { data, error, loading }] = useCreateReflectMutation(
@@ -413,7 +413,7 @@ Create an application's release
 
 ```tsx
 import { useSetAppReleaseMutation } from  '@akashaorg/ui-core-hooks/lib/generated/apollo';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 
 const sdk = getSDK();
 const [setAppRelease, { data, error, loading }] = useSetAppReleaseMutation(
@@ -466,7 +466,7 @@ Update an application
 
 ```tsx
 import { useUpdateAppMutation } from  '@akashaorg/ui-core-hooks/lib/generated/apollo';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 
 const sdk = getSDK();
 const [updateApp, { data, error, loading }] = useUpdateAppMutation(
@@ -512,7 +512,7 @@ Update a beam
 
 ```tsx
 import { useUpdateBeamMutation } from  '@akashaorg/ui-core-hooks/lib/generated/apollo';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 
 const sdk = getSDK();
 const [updateBeam, { data, error, loading }] = useUpdateBeamMutation(
@@ -568,7 +568,7 @@ Update a follow document to a profile
 
 ```tsx
 import { useUpdateFollowMutation } from  '@akashaorg/ui-core-hooks/lib/generated/apollo';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 
 const sdk = getSDK();
 const [updateFollow, { data, error, loading }] = useUpdateFollowMutation(
@@ -621,7 +621,7 @@ Update an interest or list of interests
 
 ```tsx
 import { useUpdateInterestsMutation } from  '@akashaorg/ui-core-hooks/lib/generated/apollo';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 
 const sdk = getSDK();
 const [updateInterests, { data, error, loading }] = useUpdateInterestsMutation(
@@ -681,7 +681,7 @@ Update a profile data
 
 ```tsx
 import { useUpdateProfileMutation } from  '@akashaorg/ui-core-hooks/lib/generated/apollo';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 
 const sdk = getSDK();
 const [updateProfile, { data, error, loading }] = useUpdateProfileMutation(
@@ -737,7 +737,7 @@ Update a reflection to a beam or a beam's reflection
 
 ```tsx
 import { useUpdateAkashaReflectMutation } from  '@akashaorg/ui-core-hooks/lib/generated/apollo';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 
 const sdk = getSDK();
 const [editReflection, { data, error, loading }] = useUpdateAkashaReflectMutation(
@@ -1116,7 +1116,7 @@ If the query is successful, the `data` object will contain
 
 ```tsx
 import { useGetAppsByPublisherDidQuery } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 
 const sdk = getSDK();
 
@@ -1280,7 +1280,7 @@ If the query is successful, the `data` object will contain
 
 ```tsx
 import { useGetBeamsByAuthorDidQuery } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 
 const sdk = getSDK();
 
@@ -1976,7 +1976,7 @@ There are only a few use-cases in which this hook is needed. In general we prefe
 **Example usage**
 
 ```tsx
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 import { AkashaIndexedStreamStreamType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import {useGetIndexedStreamQuery} from '@akashaorg/ui-core-hooks/lib/generated/apollo';
 
@@ -2024,7 +2024,7 @@ A hook that supports advanced querying capabilities through `filters` field that
 **Example usage**
 
 ```tsx
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 import { AkashaIndexedStreamStreamType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import {useGetIndexedStreamCountQuery} from '@akashaorg/ui-core-hooks/lib/generated/apollo';
 
@@ -2061,7 +2061,7 @@ Get a list of apps from the indexing service
 
 ```tsx
 import { useGetAppsStreamQuery } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 
 const sdk = getSDK();
 
@@ -2092,7 +2092,7 @@ Get a list of beams from the indexing service
 
 ```tsx
 import { useGetBeamStreamQuery } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 
 const sdk = getSDK();
 
@@ -2123,7 +2123,7 @@ Get a list of interests from the indexing service
 
 ```tsx
 import { useGetInterestsStreamQuery } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 
 const sdk = getSDK();
 
@@ -2154,7 +2154,7 @@ Get a list of profiles from the indexing service
 
 ```tsx
 import { useGetProfileStreamQuery } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 
 const sdk = getSDK();
 
@@ -2185,7 +2185,7 @@ Get a list of reflections from the indexing service
 
 ```tsx
 import { useGetReflectionStreamQuery } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 
 const sdk = getSDK();
 
@@ -2229,7 +2229,7 @@ A beam can contain 1 or more content-blocks. This hook only returns content-bloc
 
 ```tsx
 import { useGetContentBlockStreamQuery } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK from '@akashaorg/core-sdk';
 
 const ContentBlockList = () => {
   const { data, loading, error, fetchMore } = useGetContentBlockStreamQuery({
