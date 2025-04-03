@@ -35,7 +35,7 @@ In terms of folder structure, the SDK consists of the following modules:
 To instantiate the SDK, you can use one of the methods it exports:
 
 ```tsx title="./component-requiring-sdk.tsx"
-import getSDK from "@akashaorg/awf-sdk";
+import getSDK from "@akashaorg/core-sdk";
 
 const sdk = getSDK();
 
@@ -45,7 +45,7 @@ const sdk = getSDK();
 or:
 
 ```tsx
-import { init } from "@akashaorg/awf-sdk";
+import { init } from "@akashaorg/core-sdk";
 
 const sdk = init();
 ```
