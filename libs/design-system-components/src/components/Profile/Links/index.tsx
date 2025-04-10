@@ -2,7 +2,7 @@ import React from 'react';
 
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import CopyToClipboard from '@akashaorg/design-system-core/lib/components/CopyToClipboard';
+import { CopyToClipboard } from '@akashaorg/ui/lib/akasha-components/copy-to-clipboard';
 import { LinkIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import {
   Discord,
@@ -43,7 +43,7 @@ const Links: React.FC<LinksProps> = ({ title, links }) => {
             : { icon: <LinkIcon />, solid: false };
 
           return (
-            <CopyToClipboard key={`${link.href}${index}`} stringToBeCopied={link.href}>
+            <CopyToClipboard key={`${link.href}${index}`} textToCopy={link.href}>
               <Stack direction="row" alignItems="center" spacing={2}>
                 <AppIcon placeholderIcon={icon} solid={solid} size="xs" accentColor />
                 <Text
