@@ -3,6 +3,11 @@ import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
+import {
+  ProfileAvatar,
+  ProfileAvatarImage,
+  ProfileAvatarFallback,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import List, { ListProps } from '@akashaorg/design-system-core/lib/components/List';
 import ImageModal from '@akashaorg/design-system-components/lib/components/ImageModal';
@@ -15,7 +20,6 @@ import {
 import { CropperProps } from 'react-easy-crop';
 import { ProfileImageType, Profile, type Image } from '@akashaorg/typings/lib/ui';
 import { ModalProps } from '@akashaorg/design-system-core/lib/components/Modal';
-import { getColorClasses } from '@akashaorg/design-system-core/lib/utils';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils/useCloseActions';
 import { DeleteImageModal } from './DeleteImageModal';
 import { getImageFromSeed } from '@akashaorg/design-system-core/lib/utils';
@@ -231,25 +235,10 @@ export const Header: React.FC<HeaderProps> = ({
           ref={editAvatarRef}
           className="absolute left-6 -bottom-8"
         >
-          <Avatar
-            profileId={profileId}
-            size="lg"
-            avatar={avatarUrl}
-            alternativeAvatars={alternativeAvatars.current}
-            customStyle={`border-2 ${getColorClasses(
-              {
-                light: 'white',
-                dark: 'grey2',
-              },
-              'border',
-            )} ${getColorClasses(
-              {
-                light: 'grey8',
-                dark: 'grey4',
-              },
-              'bg',
-            )}`}
-          />
+          <ProfileAvatar profileDID={profileId} size="xl" className="border-2 border-white">
+            <ProfileAvatarImage src={avatarUrl?.src} />
+            <ProfileAvatarFallback />
+          </ProfileAvatar>
           <Stack className="absolute">
             <Button
               aria-label="avatar"

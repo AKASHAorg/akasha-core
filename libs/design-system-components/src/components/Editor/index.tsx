@@ -23,7 +23,6 @@ import { Editable, Slate, withReact, ReactEditor, RenderElementProps } from 'sla
 
 import type { IMetadata, IPublishData, Image, Profile } from '@akashaorg/typings/lib/ui';
 
-import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
@@ -56,6 +55,11 @@ import { withMentions, withLinks } from './plugins';
 import { MarkButton, BlockButton } from './formatting-buttons';
 import { tw } from '@twind/core';
 import { cn } from '@akashaorg/ui/lib/library/utils';
+import {
+  ProfileAvatar,
+  ProfileAvatarFallback,
+  ProfileAvatarImage,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar';
 
 const MAX_TEXT_LENGTH = 500;
 
@@ -471,13 +475,10 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
       >
         {showAvatar && (
           <Stack className="pb-2 shrink-0">
-            <Avatar
-              avatar={transformSource(avatar?.default)}
-              alternativeAvatars={avatar?.alternatives?.map(alternative =>
-                transformSource(alternative),
-              )}
-              profileId={profileId}
-            />
+            <ProfileAvatar profileDID={profileId} size="lg">
+              <ProfileAvatarImage src={transformSource(avatar?.default)?.src} />
+              <ProfileAvatarFallback />
+            </ProfileAvatar>
           </Stack>
         )}
         {/* w-0 min-w-full is used to prevent parent width expansion without setting a fixed width */}
