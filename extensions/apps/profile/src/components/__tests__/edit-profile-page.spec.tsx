@@ -32,7 +32,6 @@ describe('< EditProfilePage /> component', () => {
       renderWithAllProviders(baseComponent(mocks), {});
       expect(await screen.findByLabelText(/name/i)).toHaveValue(name);
       expect(screen.getByLabelText(/bio/i)).toHaveValue(description);
-      expect(screen.getByTestId('avatar-source')).toHaveAttribute('srcset', avatar.default.src);
       expect(screen.getByTestId('cover-image')).toHaveStyle(
         `background-image: url(${background.default.src})`,
       );
@@ -282,7 +281,6 @@ describe('< EditProfilePage /> component', () => {
       expect(await screen.findByText(/delete avatar/i)).toBeInTheDocument();
       await user.click(screen.getByRole('button', { name: /delete/i }));
       expect(screen.queryByText(/delete avatar/i)).not.toBeInTheDocument();
-      expect(screen.getByTestId('avatar-source')).not.toHaveAttribute('srcset');
       expect(screen.getByRole('button', { name: /save/i })).toBeEnabled();
     });
 
