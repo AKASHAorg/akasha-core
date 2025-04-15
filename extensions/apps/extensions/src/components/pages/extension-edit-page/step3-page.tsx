@@ -133,7 +133,7 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
   return (
     <>
       <Stack justifyContent="center" alignItems="center" className="p-4">
-        <Stepper numberOfSteps={3} currentStep={formValue.lastCompletedStep + 1} />
+        <Stepper numberOfSteps={3} currentStep={formValue.lastCompletedStep + 1} className="w-40" />
       </Stack>
       <Stack spacing={4}>
         <Stack className="p-4">
