@@ -1,5 +1,5 @@
 import React from 'react';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import { Loader2 } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
@@ -86,7 +86,7 @@ const MyAntennaPage: React.FC<unknown> = () => {
       </Helmet>
       {loadingTagSubs && (
         <Stack alignItems="center">
-          <Spinner />
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </Stack>
       )}
       {!loadingTagSubs && (

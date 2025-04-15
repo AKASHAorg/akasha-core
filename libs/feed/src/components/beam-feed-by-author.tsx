@@ -11,7 +11,7 @@ import {
   ErrorLoaderDescription,
   ErrorLoaderTitle,
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import { Loader2 } from 'lucide-react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import DynamicInfiniteScroll from '@akashaorg/design-system-components/lib/components/DynamicInfiniteScroll';
 import getSDK from '@akashaorg/core-sdk';
@@ -149,7 +149,7 @@ const BeamFeedByAuthor = (props: BeamFeedByAuthorProps) => {
   if (!loadingIndicatorRef.current) {
     loadingIndicatorRef.current = () => (
       <Stack align="center">
-        <Spinner />
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </Stack>
     );
   }

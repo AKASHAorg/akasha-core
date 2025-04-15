@@ -13,7 +13,7 @@ import {
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import { Loader2 } from 'lucide-react';
 import DynamicInfiniteScroll from '@akashaorg/design-system-components/lib/components/DynamicInfiniteScroll';
 import { useAkashaStore, useDismissedCard, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { Extension, NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
@@ -282,7 +282,7 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
         <Card className="p-2 bg-nested-card">
           {extensionDataReqLoading && (
             <Stack alignItems="center" justifyContent="center" className="w-full h-full">
-              <Spinner />
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
             </Stack>
           )}
           {!extensionDataReqLoading && (
