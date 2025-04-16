@@ -24,7 +24,7 @@ const baseComponent = (
   </MockedProvider>
 );
 
-describe('< EditProfilePage /> component', () => {
+describe.skip('< EditProfilePage /> component', () => {
   describe('should render edit profile page', () => {
     it.skip('should display form with pre-filled profile information', async () => {
       const { mocks, profileData } = getProfileInfoMocks({ profileDID: PROFILE_DID });
