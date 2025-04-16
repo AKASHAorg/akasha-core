@@ -6,7 +6,6 @@ import CardActions from './card-actions';
 import { EllipsisHorizontalIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import NSFW, { NSFWProps } from '@akashaorg/design-system-components/lib/components/Entry/NSFW';
 import Menu from '@akashaorg/design-system-core/lib/components/Menu';
-import { getColorClasses } from '@akashaorg/design-system-core/lib/utils';
 import { type EntryData } from '@akashaorg/typings/lib/ui';
 import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';

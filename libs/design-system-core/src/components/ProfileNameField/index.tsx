@@ -5,7 +5,6 @@ import Stack from '../Stack';
 import Icon from '../Icon';
 import { ExclamationTriangleIcon } from '../Icon/hero-icons-outline';
 import { getDidNetworkType, truncateDid } from '../../utils/did-utils';
-import { getColorClasses } from '../../utils';
 import { Color } from '../types/common.types';
 
 export type ProfileNameFieldProps = {
