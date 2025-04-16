@@ -1,6 +1,5 @@
 import React, { forwardRef } from 'react';
 import Text, { TextProps } from '../Text';
-import { tw, apply } from '@twind/core';
 import { ArrowPathIcon } from '../Icon/hero-icons-outline';
 import { ButtonIcon } from './button-icon';
 import { IconOnlyButton } from './IconOnlyButton';
@@ -81,7 +80,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
       <button
         ref={ref}
         type="button"
-        className={tw(apply`${disabledStyle} ${hoverStyle} ${customStyle}`)}
+        className={`${disabledStyle} ${hoverStyle} ${customStyle}`}
         disabled={disabled}
         {...rest}
       >
@@ -133,9 +132,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
     <button
       ref={ref}
       type="button"
-      className={tw(
-        apply`flex justify-center items-center gap-x-1 group ${containerStyle} ${buttonSizeStyle} ${breakPointStyle} ${buttonPaddingStyle} ${customStyle}`,
-      )}
+      className={`flex justify-center items-center gap-x-1 group ${containerStyle} ${buttonSizeStyle} ${breakPointStyle} ${buttonPaddingStyle} ${customStyle}`}
       {...rest}
       disabled={disabled}
     >

@@ -15,7 +15,6 @@ import {
 import { CropperProps } from 'react-easy-crop';
 import { ProfileImageType, Profile, type Image } from '@akashaorg/typings/lib/ui';
 import { ModalProps } from '@akashaorg/design-system-core/lib/components/Modal';
-import { getColorClasses } from '@akashaorg/design-system-core/lib/utils';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils/useCloseActions';
 import { DeleteImageModal } from './DeleteImageModal';
 import { getImageFromSeed } from '@akashaorg/design-system-core/lib/utils';
@@ -236,19 +235,7 @@ export const Header: React.FC<HeaderProps> = ({
             size="lg"
             avatar={avatarUrl}
             alternativeAvatars={alternativeAvatars.current}
-            customStyle={`border-2 ${getColorClasses(
-              {
-                light: 'white',
-                dark: 'grey2',
-              },
-              'border',
-            )} ${getColorClasses(
-              {
-                light: 'grey8',
-                dark: 'grey4',
-              },
-              'bg',
-            )}`}
+            customStyle={`border-2 border-white dark:border-grey2 bg-grey8 dark:bg-grey4`}
           />
           <Stack className="absolute">
             <Button

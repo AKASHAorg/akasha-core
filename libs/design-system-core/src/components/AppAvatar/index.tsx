@@ -4,11 +4,12 @@ import Link from '../Link';
 import AvatarImage from '../Avatar/avatar-image';
 import Stack from '../Stack';
 import { getImageFromSeed } from '../../utils';
-import { getColorClasses, getRadiusClasses } from '../../utils';
+import { getRadiusClasses } from '../../utils';
 import {
   AkashaAppApplicationType,
   AppImageSource,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { cssVars } from '../../utils/to-css-var';
 
 export type AppAvatarProps = {
   appType: AkashaAppApplicationType;
@@ -77,14 +78,14 @@ const AppAvatar: React.FC<AppAvatarProps> = props => {
     }
   }
 
-  const className = `shrink-0 overflow-hidden	${getRadiusClasses(10)} ${getColorClasses(
-    { light: 'grey6', dark: 'grey5' },
-    'bg',
-  )} w-[${width}rem] h-[${height}rem] ${customStyle}`;
+  const className = `shrink-0 overflow-hidden	${getRadiusClasses(10)} bg-grey6 dark:bg-grey5 w-[var(--width)] h-[var(--height)] ${customStyle}`;
 
   return (
     <Link onClick={onClick} tabIndex={-1}>
-      <Stack customStyle={className}>
+      <Stack
+        style={cssVars({ '--width': `${width}rem`, '--height': `${height}rem` })}
+        customStyle={className}
+      >
         <React.Suspense fallback={<></>}>
           <AvatarImage url={avatar?.src} fallbackUrl={avatarFallback} />
         </React.Suspense>

@@ -1,16 +1,16 @@
 import React from 'react';
-import { apply, tw } from '@twind/core';
 
 import Stack from '../Stack';
 
-import { BasicIconSize, BasicSize, BreakPointSize, Color } from '../types/common.types';
-import { getWidthClasses, getHeightClasses, getColorClasses } from '../../utils';
+import { BasicSize, BreakPointSize, Color } from '../types/common.types';
+import { getColorClasses } from '../../utils';
 
 export interface IconProps {
   color?: Color;
   ref?: React.Ref<HTMLDivElement>;
   icon?: React.ReactElement;
-  size?: BasicIconSize;
+  iconClassname?: string;
+  size?: BasicSize;
   breakPointSize?: BreakPointSize;
   accentColor?: boolean;
   disabled?: boolean;
@@ -50,6 +50,7 @@ const Icon: React.FC<IconProps> = props => {
     ref,
     accentColor = false,
     size = 'md',
+    iconClassname,
     breakPointSize,
     color,
     disabled,
@@ -64,10 +65,7 @@ const Icon: React.FC<IconProps> = props => {
   const breakPointStyle = breakPointSize
     ? ICON_SIZE_MAP_BY_BREAKPOINT(breakPointSize.breakPoint)[breakPointSize.size]
     : '';
-  const sizeStyle =
-    typeof size === 'object'
-      ? `${getWidthClasses(size?.width)} ${getHeightClasses(size?.height)}`
-      : `${ICON_SIZE_MAP[size]} ${breakPointStyle}`;
+  const sizeStyle = `${ICON_SIZE_MAP[size]} ${breakPointStyle}`;
 
   const baseStyle = `select-none ${
     hover
@@ -102,12 +100,12 @@ const Icon: React.FC<IconProps> = props => {
 
   const rotateStyle = rotateAnimation ? 'animate-spin' : '';
 
-  const iconStyle = `${baseStyle} ${activeIconColorStyle} ${sizeStyle} ${disabledStyle} ${rotateStyle}`;
+  const iconStyle = `${baseStyle} ${activeIconColorStyle} ${sizeStyle} ${disabledStyle} ${rotateStyle} ${iconClassname}`;
 
   return (
     <Stack ref={ref} customStyle={customStyle}>
       {React.cloneElement(icon, {
-        className: tw(apply(iconStyle)),
+        className: iconStyle,
         'data-testid': dataTestId,
       })}
     </Stack>

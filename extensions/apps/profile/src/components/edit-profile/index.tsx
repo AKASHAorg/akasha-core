@@ -1,6 +1,6 @@
 import React, { SyntheticEvent, useEffect, useMemo, useState } from 'react';
 import * as z from 'zod';
-import { apply, tw } from '@twind/core';
+
 import { useTranslation } from 'react-i18next';
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -144,7 +144,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
   const handleModalClose = () => setNewUrl(null);
 
   return (
-    <form data-testid="edit-profile" onSubmit={onSave} className={tw(apply`h-full ${customStyle}`)}>
+    <form data-testid="edit-profile" onSubmit={onSave} className={`h-full ${customStyle}`}>
       {!!newUrl && (
         <UnsavedChangesModal
           showModal={!!newUrl}

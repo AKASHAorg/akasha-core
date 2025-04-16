@@ -167,18 +167,16 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
                         {t('Start Following')}
                       </Text>
                     </Stack>
-                    <Stack className="ring(white opacity-60  offset(2 blue-400)) focus:outline-none">
-                      <Stack spacing={4}>
-                        {latestProfileIDs.map(profileID => (
-                          <LatestProfiles
-                            key={profileID}
-                            profileID={profileID}
-                            authenticatedDID={authenticatedDID}
-                            uiEvents={uiEvents}
-                            onClickProfile={handleProfileClick}
-                          />
-                        ))}
-                      </Stack>
+                    <Stack spacing={4}>
+                      {latestProfileIDs.map(profileID => (
+                        <LatestProfiles
+                          key={profileID}
+                          profileID={profileID}
+                          authenticatedDID={authenticatedDID}
+                          uiEvents={uiEvents}
+                          onClickProfile={handleProfileClick}
+                        />
+                      ))}
                     </Stack>
                   </Card>
                 )}

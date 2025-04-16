@@ -83,11 +83,8 @@ export const getPresentationDataFromNotification = (
   returnObj.notificationAppIcon = (
     <AppIcon
       iconColor={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-      size={{ width: 16, height: 16 }}
-      backgroundSize={32}
       placeholderIcon={placeholderIcon}
-      background={'grey5'}
-      customStyle="min-w-8"
+      customStyle="min-w-8 bg-grey5 size-8"
       solid
     />
   );

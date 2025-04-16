@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { apply, tw, tx } from '@twind/core';
 import Card from '../Card';
 import Icon from '../Icon';
 import Label from '../Label';
@@ -67,9 +66,9 @@ const Dropdown: React.FC<DropdownProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const optionsWrapperStyle = apply`absolute w-full z-10 max-h-60 ${label ? 'mt-[70px]' : 'mt-[2.5rem]'} rounded-[0.5rem] overflow-auto bg-(white dark:grey3)`;
+  const optionsWrapperStyle = `absolute w-full z-10 max-h-60 ${label ? 'mt-[70px]' : 'mt-[2.5rem]'} rounded-[0.5rem] overflow-auto bg(white dark:grey3) shadow-[0_0_4px_rgba(0,0,0,0.2)] dark:shadow-[0_0_2px_rgba(255,255,255,0.15)]`;
 
-  const optionStyle = apply`flex items-center justify-between py-1.5 px-2 bg-(hover:grey8 dark:hover:grey5)`;
+  const optionStyle = `flex items-center justify-between py-1.5 px-2 bg(hover:grey8 dark:hover:grey5)`;
 
   const handleDropClick = () => {
     setDropOpen(!dropOpen);
@@ -88,9 +87,11 @@ const Dropdown: React.FC<DropdownProps> = props => {
     <Stack customStyle={`relative min-w-[8rem] gap-y-2 ${customStyle}`} ref={anchorRef}>
       {label && <Label required={required}>{label}</Label>}
       <button
-        className={tx`inline-flex items-center justify-between min-w-[8rem] p-2 rounded-[0.5rem] bg-(white dark:grey3) rounded-[0.5rem] border-(1 solid ${
-          dropOpen ? 'secondaryLight dark:secondark-dark' : 'grey6 dark:grey5'
-        })`}
+        className={`inline-flex items-center justify-between min-w-[8rem] p-2 rounded-[0.5rem] bg(white dark:grey3) rounded-[0.5rem] border-1 border-solid ${
+          dropOpen
+            ? 'border-secondaryLight dark:border-secondaryDark'
+            : 'border-grey6 dark:border-grey5'
+        }`}
         onClick={handleDropClick}
         aria-label="dropdown"
         type="button"
@@ -113,7 +114,7 @@ const Dropdown: React.FC<DropdownProps> = props => {
 
       {/* <!-- Dropdown menu --> */}
       {dropOpen && (
-        <Card padding="p-0" elevation="1" customStyle={optionsWrapperStyle}>
+        <Card padding="p-0" customStyle={optionsWrapperStyle}>
           <ul aria-labelledby="dropdownDefaultButton">
             {menuItems.map((menuItem, idx) => {
               const isSelected = selected === menuItem;
@@ -128,7 +129,7 @@ const Dropdown: React.FC<DropdownProps> = props => {
                     direction="row"
                     align="center"
                     spacing="gap-x-2"
-                    customStyle={`${isSelected ? 'text-secondaryLight' : 'text-black'} hover:bg-(grey8 dark:grey5)`}
+                    customStyle={`${isSelected ? 'text-secondaryLight' : 'text-black'} hover:bg(grey8 dark:grey5)`}
                   >
                     <Text
                       variant="body2"
@@ -142,7 +143,7 @@ const Dropdown: React.FC<DropdownProps> = props => {
                     </Text>
                   </Stack>
                   {isSelected && (
-                    <span className={tw('ml-4')}>
+                    <span className={'ml-4'}>
                       <Icon
                         icon={<CheckIcon />}
                         color={{ light: 'secondaryLight', dark: 'secondaryDark' }}

@@ -1,11 +1,7 @@
-import { install } from '@twind/core';
-import twindConfig from './src/twind/twind.config.js';
 import ResizeObserver from 'resize-observer-polyfill';
 import '@testing-library/jest-dom';
 
 global.ResizeObserver = ResizeObserver;
-
-install(twindConfig);
 
 jest.mock('@akashaorg/typings/lib/ui', () => ({
   ...jest.requireActual('@akashaorg/typings/lib/ui'),

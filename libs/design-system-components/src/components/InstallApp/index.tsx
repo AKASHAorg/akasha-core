@@ -6,8 +6,7 @@ import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import ErrorIcon from './error-icon';
 import InstallIcon from './install-icon';
 import SuccessIcon from './success-icon';
-import { getColorClasses } from '@akashaorg/design-system-core/lib/utils';
-import { apply, tw } from '@twind/core';
+
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
 import {
   AkashaAppApplicationType,
@@ -33,15 +32,12 @@ export type InstallAppProps = {
   successLabel: string;
 };
 
-const errorStyle = getColorClasses({ light: 'errorLight', dark: 'errorDark' }, '[&>*]:fill');
+const errorStyle = '[&>*]:fill-errorLight dark:[&>*]:fill-errorDark';
 const errorAnimationStyle = `animate-ping absolute h-full w-full ${errorStyle} opacity-75`;
 
-const installStyle = `animate-bounce ${getColorClasses(
-  { light: 'secondaryLight', dark: 'secondaryDark' },
-  '[&>*]:fill',
-)}`;
+const installStyle = `animate-bounce [&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark`;
 
-const successStyle = getColorClasses('success', '[&>*]:fill');
+const successStyle = '[&>*]:fill:success';
 const successAnimationStyle = `animate-ping absolute h-full w-full ${successStyle} opacity-75`;
 
 const TruncateText = ({
@@ -109,36 +105,32 @@ const InstallApp = ({
               <Stack direction="row" alignItems="center" justifyContent="center">
                 <AppIcon
                   placeholderIcon={<Walletconnect />}
-                  background={{ gradient: 'gradient-to-b', from: 'orange-50', to: 'orange-200' }}
                   radius={24}
-                  size={{ width: 40, height: 40 }}
-                  backgroundSize={40}
                   iconColor="self-color"
+                  customStyle="bg-gradient-to-b orange-50 orange-200 size-10"
                 />
                 <IndicatorDots size="sm" />
                 <AppIcon
                   placeholderIcon={<Akasha />}
                   solid={true}
-                  background={{ gradient: 'gradient-to-b', from: 'blue-200', to: 'red-200' }}
                   radius={8}
-                  size={{ width: 24, height: 24 }}
-                  backgroundSize={40}
                   iconColor="black"
+                  customStyle="bg-gradient-to-b from-blue-200 to-red-200 size-6"
                 />
               </Stack>
             )}
             {status === 'error' && (
-              <div className={tw('relative')}>
-                <ErrorIcon className={tw(apply`${errorAnimationStyle}`)} />
-                <ErrorIcon className={tw(apply`${errorStyle}`)} />
+              <div className={'relative'}>
+                <ErrorIcon className={`${errorAnimationStyle}`} />
+                <ErrorIcon className={`${errorStyle}`} />
               </div>
             )}
             {status === 'in-progress' && <InstallIcon className={installStyle} />}
             {status === 'complete' && (
               <Stack direction="row" spacing={4} alignItems="center">
-                <div className={tw('relative')}>
-                  <SuccessIcon className={tw(apply`${successAnimationStyle}`)} />
-                  <SuccessIcon className={tw(apply`${successStyle}`)} />
+                <div className={'relative'}>
+                  <SuccessIcon className={`${successAnimationStyle}`} />
+                  <SuccessIcon className={`${successStyle}`} />
                 </div>
                 <Text color="success" variant="button-lg">
                   {successLabel}

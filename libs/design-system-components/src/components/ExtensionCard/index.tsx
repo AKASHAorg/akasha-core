@@ -4,12 +4,17 @@ import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import AppCoverImage from '@akashaorg/design-system-core/lib/components/AppCoverImage';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
-import DidField from '@akashaorg/design-system-core/lib/components/DidField';
-import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
-import ProfileNameField from '@akashaorg/design-system-core/lib/components/ProfileNameField';
 import ExtensionIcon from '@akashaorg/design-system-core/lib/components/ExtensionIcon';
 import { Extension, Image } from '@akashaorg/typings/lib/ui';
 import { cn } from '@akashaorg/ui/lib/library/utils';
+import {
+  ProfileAvatarButton,
+  ProfileAvatarButtonAvatar,
+  ProfileAvatarButtonAvatarFallback,
+  ProfileAvatarButtonAvatarImage,
+  ProfileDidField,
+  ProfileName,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
 
 export type ExtensionCardProps = {
   coverImageSrc: string;
@@ -67,52 +72,51 @@ const ExtensionCard: React.FC<ExtensionCardProps> = props => {
           <Stack direction="row" spacing={2}>
             <Pill
               color={{ light: 'secondaryLight', dark: 'white' }}
-              background={{ light: 'tertiaryLight', dark: 'tertiaryDark' }}
               icon={<ExtensionIcon type={applicationType} size="xs" />}
               weight="normal"
               size="xs"
               label={extensionTypeLabel}
               type="info"
+              customStyle="bg-tertiaryLight dark:bg-tertiaryDark"
             />
             {isDefaultWorldExtension && (
               <Pill
                 color={{ light: 'white', dark: 'black' }}
-                background={{ light: 'secondaryLight', dark: 'secondaryDark' }}
                 weight="normal"
                 size="xs"
                 label={defaultLabel}
                 type="info"
+                customStyle="bg-secondaryLight dark:bg-secondaryDark"
               />
             )}
             {nsfw && (
               <Pill
                 color={{ light: 'errorLight', dark: 'white' }}
-                background={{ light: 'errorFade', dark: 'errorDark' }}
                 weight="normal"
                 size="xs"
                 label={nsfwLabel}
                 type="info"
+                customStyle="bg-errorFade dark:bg-errorDark"
               />
             )}
           </Stack>
           <Stack direction="row" alignItems="center" spacing={2}>
-            <Avatar
-              avatar={author?.avatar}
-              alternativeAvatars={author?.alternativeAvatars}
-              profileId={author?.profileDID}
-              isNSFW={author?.nsfw}
-              customStyle="shrink-0 cursor-pointer h-4 w-4"
-            />
-            <ProfileNameField
-              did={author?.profileDID}
-              profileName={author?.name}
-              color={{ light: 'grey4', dark: 'grey6' }}
-              weight="normal"
-              truncateText={true}
+            <ProfileAvatarButton
+              profileDID={author?.profileDID}
+              nsfw={author?.nsfw}
+              nsfwLabel="NSFW"
               size="sm"
-              hover={true}
-            />
-            <DidField did={author?.profileDID} isValid={true} copiable={true} />
+            >
+              <ProfileAvatarButtonAvatar className="shrink-0 cursor-pointer h-4 w-4">
+                <ProfileAvatarButtonAvatarImage
+                  src={author?.avatar?.src || author?.alternativeAvatars?.[0]?.src}
+                  alt="Author Avatar"
+                />
+                <ProfileAvatarButtonAvatarFallback />
+              </ProfileAvatarButtonAvatar>
+              <ProfileName>{author?.name}</ProfileName>
+              <ProfileDidField />
+            </ProfileAvatarButton>
           </Stack>
           <Text variant="body2" {...(!featured && { lineClamp: 2 })}>
             {description}

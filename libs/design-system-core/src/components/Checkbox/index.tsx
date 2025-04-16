@@ -1,7 +1,6 @@
 import React, { ChangeEvent } from 'react';
 import Text from '../Text';
 import Stack from '../Stack';
-import { tw, apply } from '@twind/core';
 import { getBgColor } from './getBgColor';
 import { getTextColor } from './getTextColor';
 import { getInputColor } from './getInputColor';
@@ -116,7 +115,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
 
   const cursorStyle = isDisabled ? 'cursor-not-allowed' : 'cursor-pointer';
 
-  const instancePseudoCheckboxStyle = apply`
+  const instancePseudoCheckboxStyle = `
   ${basePseudoCheckboxStyles}
   ${checkboxSizes}
   ${tickMarkSizes}
@@ -125,12 +124,12 @@ const Checkbox: React.FC<CheckboxProps> = ({
   ${bgColor}
   `;
 
-  const minusMarkStyles = apply`
+  const minusMarkStyles = `
   ${minusMarkSizes}
   after:${minusMarkColor}
   `;
 
-  const instanceIndeterminateCheckboxStyle = apply`
+  const instanceIndeterminateCheckboxStyle = `
   ${basePseudoCheckboxStyles}
   ${checkboxSizes}
   ${minusMarkStyles}
@@ -139,13 +138,13 @@ const Checkbox: React.FC<CheckboxProps> = ({
   invisible w-4 h-4 relative
   `;
 
-  const selectedPseudoCheckboxStyle = apply`
+  const selectedPseudoCheckboxStyle = `
     ${instancePseudoCheckboxStyle}
     ${cursorStyle}
     invisible w-4 h-4 relative
     `;
 
-  const unselectedPseudoCheckboxStyle = apply`
+  const unselectedPseudoCheckboxStyle = `
     ${instancePseudoCheckboxStyle}
     ${cursorStyle}
     after:content-none invisible w-4 h-4 relative
@@ -189,7 +188,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
         aria-labelledby={value}
         checked={isSelected}
         onChange={handleChange}
-        className={tw(getInputClassname())}
+        className={getInputClassname()}
       />
       {labelDirection === 'right' && labelUi}
     </Stack>

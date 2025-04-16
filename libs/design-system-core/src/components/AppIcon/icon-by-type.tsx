@@ -1,5 +1,4 @@
 import React from 'react';
-import { apply, tw } from '@twind/core';
 
 import { LogoTypeSource } from '@akashaorg/typings/lib/ui';
 
@@ -42,7 +41,7 @@ const IconByType: React.FC<AppImgProps> = ({
         loading="lazy"
         decoding="async"
         alt={appImg?.type}
-        className={tw(apply`rounded-[50%] object-contain`)}
+        className={`rounded-[50%] object-contain`}
         src={appImg?.value}
       />
     );

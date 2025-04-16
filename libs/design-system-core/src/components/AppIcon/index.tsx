@@ -1,19 +1,12 @@
 import * as React from 'react';
-import { apply, tw } from '@twind/core';
 
 import { LogoSourceType } from '@akashaorg/typings/lib/ui';
 
 import Stack from '../Stack';
 
 import IconByType from './icon-by-type';
-import { BasicIconSize, BasicSize, BreakPointSize, Color, Radius } from '../types/common.types';
-import {
-  getWidthClasses,
-  getHeightClasses,
-  getElevationClasses,
-  getRadiusClasses,
-  getColorClasses,
-} from '../../utils';
+import { BasicSize, BreakPointSize, Color, Radius } from '../types/common.types';
+import { getColorClasses, getRadiusClasses } from '../../utils';
 import { IconProps } from '../Icon';
 
 export type AppIconProps = {
@@ -24,14 +17,13 @@ export type AppIconProps = {
   // props for notifications icon
   stackedIcon?: boolean;
   hasNewNotifs?: boolean;
-  size?: BasicIconSize;
+  size?: BasicSize;
   iconSize?: IconProps['size'];
   breakPointSize?: BreakPointSize;
   hover?: boolean;
   active?: boolean;
   iconColor?: Color;
   background?: Color;
-  backgroundSize?: number | { width: number; height: number };
   radius?: Radius;
   customStyle?: string;
 };
@@ -50,7 +42,6 @@ export type AppIconProps = {
  *    background={{ gradient: 'gradient-to-b', from: 'orange-50', to: 'orange-200' }}
  *    radius={24}
  *    size={{ width: 80, height: 80 }}
- *    backgroundSize={80}
  *    iconColor="self-color"
  *   />
  * ```
@@ -71,7 +62,6 @@ const AppIcon: React.FC<AppIconProps> = props => {
     active,
     iconColor,
     background,
-    backgroundSize,
     radius,
     customStyle = '',
   } = props;
@@ -80,31 +70,18 @@ const AppIcon: React.FC<AppIconProps> = props => {
     ? APP_ICON_CONTAINER_SIZE_MAP_BY_BREAKPOINT(breakPointSize.breakPoint)[breakPointSize.size]
     : '';
 
-  const sizeStyle = `${
-    typeof size === 'object'
-      ? `${getWidthClasses(size?.width)} ${getHeightClasses(size?.height)}`
-      : APP_ICON_CONTAINER_SIZE_MAP[size]
-  } ${breakPointStyle}`;
+  const sizeStyle = `${APP_ICON_CONTAINER_SIZE_MAP[size]} ${breakPointStyle}`;
 
   const hoverStyle = hover
-    ? `${`hover:${getElevationClasses('4')}`} ${`group-hover:${getElevationClasses('4')}`}`
+    ? `${`hover:shadow-[0_0_6px_rgba(186,154,224,0.8)]`} ${`group-hover:shadow-[0_0_6px_rgba(186,154,224,0.8)]`}`
     : '';
 
   const activeStyle = active ? 'bg-secondaryLight/30 hover:bg-secondaryDark' : '';
   const iconContainerRadius = radius ? getRadiusClasses(radius) : '';
-  const iconContainerBackgroundSize = backgroundSize
-    ? `${getWidthClasses(
-        typeof backgroundSize === 'object' ? backgroundSize.width : backgroundSize,
-      )} ${getHeightClasses(
-        typeof backgroundSize === 'object' ? backgroundSize.height : backgroundSize,
-      )}`
-    : '';
+
   const iconContainerBackground = background ? getColorClasses(background, 'bg') : '';
-  const iconContainerStyle = apply`group relative rounded-full bg-grey9 dark:bg-grey3 ${sizeStyle} ${hoverStyle} ${activeStyle} ${iconContainerBackground} ${iconContainerRadius} ${iconContainerBackgroundSize} ${customStyle}`;
-  const notifyStyle =
-    typeof size === 'object'
-      ? `${getWidthClasses(size?.width)} ${getHeightClasses(size?.height)}`
-      : NOTIFY_MAP[size];
+  const iconContainerStyle = `group relative rounded-full bg-grey9 dark:bg-grey3 ${sizeStyle} ${hoverStyle} ${activeStyle} ${iconContainerBackground} ${iconContainerRadius} ${customStyle}`;
+  const notifyStyle = NOTIFY_MAP[size];
 
   if (stackedIcon)
     return (
@@ -119,7 +96,7 @@ const AppIcon: React.FC<AppIconProps> = props => {
           color={iconColor}
         />
         {hasNewNotifs && (
-          <div className={tw(`rounded-full absolute top-0  bg-secondaryDark ${notifyStyle})`)} />
+          <div className={`rounded-full absolute top-0  bg-secondaryDark ${notifyStyle})`} />
         )}
       </Stack>
     );

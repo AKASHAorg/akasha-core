@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { apply, tw, tx } from '@twind/core';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
@@ -64,9 +63,9 @@ const DropdownFilter: React.FC<IDropdownFilterProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const optionsWrapperStyle = apply`absolute z-10 max-h-60 mt-14 py-0 rounded-[0.5rem] overflow-auto bg-(white dark:grey3) border(1 grey8 dark:grey5)`;
+  const optionsWrapperStyle = `absolute z-10 max-h-60 mt-14 py-0 rounded-[0.5rem] overflow-auto bg-(white dark:grey3) border(1 grey8 dark:grey5)`;
 
-  const optionStyle = apply`flex items-center justify-between p-3 bg-(hover:grey8 dark:hover:grey3)`;
+  const optionStyle = `flex items-center justify-between p-3 bg-(hover:grey8 dark:hover:grey3)`;
 
   const handleDropClick = () => {
     setDropOpen(!dropOpen);
@@ -86,7 +85,7 @@ const DropdownFilter: React.FC<IDropdownFilterProps> = ({
       {label && <Text variant="label">{label}</Text>}
 
       <button
-        className={tx`inline-flex items-center justify-between w-full ${padding} rounded-[0.5rem] bg-(white dark:grey3) rounded-[0.5rem] border-(1 solid ${
+        className={`inline-flex items-center justify-between w-full ${padding} rounded-[0.5rem] bg-(white dark:grey3) rounded-[0.5rem] border-(1 solid ${
           dropOpen ? 'secondaryLight dark:secondark-dark' : 'grey8 dark:grey3'
         }) ${customStyle}`}
         onClick={handleDropClick}
@@ -123,15 +122,13 @@ const DropdownFilter: React.FC<IDropdownFilterProps> = ({
                           return (
                             <li
                               key={idx}
-                              className={tw(
-                                `${optionStyle}
+                              className={`${optionStyle}
                                 // $ {
                                 //   idx < menuItem.children.length - 1
                                 //     ? 'border-b(1 grey8 dark:grey3)'
                                 //     : ''
                                 // }
-                                cursor-pointer`,
-                              )}
+                                cursor-pointer`}
                             >
                               <Card onClick={handleChange(item)} className="w-full border-none p-0">
                                 <Stack
@@ -174,11 +171,9 @@ const DropdownFilter: React.FC<IDropdownFilterProps> = ({
                   return (
                     <li
                       key={idx}
-                      className={tw(
-                        `${optionStyle}
+                      className={`${optionStyle}
                         ${idx < menuItems.length - 1 ? 'border-b(1 grey8 dark:grey5)' : ''}
-                        cursor-pointer`,
-                      )}
+                        cursor-pointer`}
                     >
                       <Button onClick={handleChange(menuItem)} plain customStyle="w-full">
                         <Stack
@@ -216,11 +211,9 @@ const DropdownFilter: React.FC<IDropdownFilterProps> = ({
                 return (
                   <li
                     key={idx}
-                    className={tw(
-                      `${optionStyle} ${
-                        idx < menuItems.length - 1 ? 'border-b(1 grey8 dark:grey3)' : ''
-                      } cursor-pointer`,
-                    )}
+                    className={`${optionStyle} ${
+                      idx < menuItems.length - 1 ? 'border-b(1 grey8 dark:grey3)' : ''
+                    } cursor-pointer`}
                   >
                     <Card onClick={handleChange(menuItem)} className="w-full border-none p-0">
                       <Stack
@@ -250,7 +243,7 @@ const DropdownFilter: React.FC<IDropdownFilterProps> = ({
                           {menuItem.title}
                         </Text>
                         {isSelected && (
-                          <span className={tw('ml-4')}>
+                          <span className={'ml-4'}>
                             <Icon
                               icon={<CheckIcon />}
                               color={{ light: 'secondaryLight', dark: 'secondaryDark' }}

@@ -14884,95 +14884,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@twind/core@npm:1.1.3":
-  version: 1.1.3
-  resolution: "@twind/core@npm:1.1.3"
-  dependencies:
-    csstype: "npm:^3.1.1"
-  peerDependencies:
-    typescript: ^4.8.4
-  peerDependenciesMeta:
-    typescript:
-      optional: true
-  checksum: 10/72302d6fc9ecc84b673dd2af5564e85fb7cf6881c697d110e26664f9ea25d80dfd1b608a0ecc187f700d6c1766fef5b891cda72e7a47fc2d7432fd1495230783
-  languageName: node
-  linkType: hard
-
-"@twind/preset-autoprefix@npm:1.0.7":
-  version: 1.0.7
-  resolution: "@twind/preset-autoprefix@npm:1.0.7"
-  dependencies:
-    style-vendorizer: "npm:^2.2.3"
-  peerDependencies:
-    "@twind/core": ^1.1.0
-    typescript: ^4.8.4
-  peerDependenciesMeta:
-    typescript:
-      optional: true
-  checksum: 10/6400fd0a0982fbafc9e5e05e56d5a0c8dfe45590853c6754cab9a6a255a876e1964cc486301460b4130538d635ba36d6fdce1318f8c12a2ea6baaff3a87d0046
-  languageName: node
-  linkType: hard
-
-"@twind/preset-container-queries@npm:1.0.7":
-  version: 1.0.7
-  resolution: "@twind/preset-container-queries@npm:1.0.7"
-  peerDependencies:
-    "@twind/core": ^1.1.0
-    typescript: ^4.8.4
-  peerDependenciesMeta:
-    typescript:
-      optional: true
-  checksum: 10/54d38305c1c5866752e8161e3f49ff3785536fb2f4063d53f88312a2f9fdcf9d51726831d2e57ad0f8f6aa9f852aeb9c6fe28fae9cbdef165e62fc21fc5aeb34
-  languageName: node
-  linkType: hard
-
-"@twind/preset-line-clamp@npm:1.0.7":
-  version: 1.0.7
-  resolution: "@twind/preset-line-clamp@npm:1.0.7"
-  peerDependencies:
-    "@twind/core": ^1.1.0
-    typescript: ^4.8.4
-  peerDependenciesMeta:
-    typescript:
-      optional: true
-  checksum: 10/2eb55086d3d1f324d4bc1e117a0847963b676bc62ea859f0d7eb1bbe87d5c11a5ef4e8f511e59a8b34ca11a0bde352f4237bbe9ee335bd533032eebcf10af565
-  languageName: node
-  linkType: hard
-
-"@twind/preset-tailwind@npm:1.1.4":
-  version: 1.1.4
-  resolution: "@twind/preset-tailwind@npm:1.1.4"
-  peerDependencies:
-    "@twind/core": ^1.1.0
-    typescript: ^4.8.4
-  peerDependenciesMeta:
-    typescript:
-      optional: true
-  checksum: 10/e119e30403b1fb07f5a992de1ffddf3dcacfea0de39e95c77736e5bb41c89d52290a0a22c3528648672c1ead539a0b58b831a66b7c4d93ed342b64ebdbf0cff0
-  languageName: node
-  linkType: hard
-
-"@twind/with-react@npm:1.1.3":
-  version: 1.1.3
-  resolution: "@twind/with-react@npm:1.1.3"
-  dependencies:
-    fast-diff: "npm:^1.2.0"
-  peerDependencies:
-    "@twind/core": ^1.1.0
-    react: ^16.6.0 || 17.x || 18.x
-    react-dom: ^16.6.0 || 17.x || 18.x
-    typescript: ^4.8.4
-  peerDependenciesMeta:
-    react:
-      optional: true
-    react-dom:
-      optional: true
-    typescript:
-      optional: true
-  checksum: 10/74b64c2310d2687e070b651ce79625365b53d878d36fac3941368bc76830e84b858f54d84f6b11bc91c16498eebdf9048b8ee3173526b05f37908f513b7a2693
-  languageName: node
-  linkType: hard
-
 "@types/abstract-leveldown@npm:^5.0.1":
   version: 5.0.2
   resolution: "@types/abstract-leveldown@npm:5.0.2"
@@ -21457,7 +21368,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"csstype@npm:^3.0.2, csstype@npm:^3.1.1, csstype@npm:^3.1.2":
+"csstype@npm:^3.0.2, csstype@npm:^3.1.2":
   version: 3.1.3
   resolution: "csstype@npm:3.1.3"
   checksum: 10/f593cce41ff5ade23f44e77521e3a1bcc2c64107041e1bf6c3c32adc5187d0d60983292fda326154d20b01079e24931aa5b08e4467cc488b60bb1e7f6d478ade
@@ -24315,7 +24226,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-diff@npm:^1.1.2, fast-diff@npm:^1.2.0":
+"fast-diff@npm:^1.1.2":
   version: 1.3.0
   resolution: "fast-diff@npm:1.3.0"
   checksum: 10/9e57415bc69cd6efcc720b3b8fe9fdaf42dcfc06f86f0f45378b1fa512598a8aac48aa3928c8751d58e2f01bb4ba4f07e4f3d9bc0d57586d45f1bd1e872c6cde
@@ -36691,12 +36602,6 @@ __metadata:
     "@testing-library/react-hooks": "npm:8.0.1"
     "@testing-library/user-event": "npm:14.4.3"
     "@tsconfig/node20": "npm:^20.1.4"
-    "@twind/core": "npm:1.1.3"
-    "@twind/preset-autoprefix": "npm:1.0.7"
-    "@twind/preset-container-queries": "npm:1.0.7"
-    "@twind/preset-line-clamp": "npm:1.0.7"
-    "@twind/preset-tailwind": "npm:1.1.4"
-    "@twind/with-react": "npm:1.1.3"
     "@types/emoji-mart": "npm:3.0.9"
     "@types/faker": "npm:5.5.8"
     "@types/is-url": "npm:1.2.30"
@@ -38767,13 +38672,6 @@ __metadata:
   dependencies:
     inline-style-parser: "npm:0.2.3"
   checksum: 10/f8a969098423ca793ca01334c6df4c4e7973dd5711acf8070f603c79e7d84fb3243954717c73f685775b605bc606eadf42ae4d554261b7fb08eec7708488d583
-  languageName: node
-  linkType: hard
-
-"style-vendorizer@npm:^2.2.3":
-  version: 2.2.3
-  resolution: "style-vendorizer@npm:2.2.3"
-  checksum: 10/1460f40d6f496d9f04353d3ec1870dc74b536e8829bf3c14db8e94db46132949609b96d27b9188944d84a550135e9e831a0297a6c16a6d20c19293f42723561b
   languageName: node
   linkType: hard
 

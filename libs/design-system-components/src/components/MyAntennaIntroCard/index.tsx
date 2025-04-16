@@ -1,5 +1,5 @@
 import React from 'react';
-import { tw } from '@twind/core';
+
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
@@ -47,7 +47,7 @@ const MyAntennaIntroCard: React.FC<MyAntennaIntroCardProps> = ({
               <img
                 loading="lazy"
                 alt={assetName}
-                className={tw('max-w-[1/2] mx-auto pr-2')}
+                className={'max-w-[1/2] mx-auto pr-2'}
                 src={`${publicImgPath}/${assetName}.${assetExtension}`}
               />
             )}

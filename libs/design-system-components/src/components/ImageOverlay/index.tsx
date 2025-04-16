@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { tw, apply, tx } from '@twind/core';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import {
@@ -19,9 +18,8 @@ export interface IImageOverlay {
   closeModal: () => void;
 }
 
-const closeDivClass = apply(
-  'flex items-center justify-center z-1 w-12 h-12 rounded-full bg(grey9 dark:grey3)',
-);
+const closeDivClass =
+  'flex items-center justify-center z-1 w-12 h-12 rounded-full bg(grey9 dark:grey3)';
 
 /**
  * Component that renders the full screen image modal that is triggered on image click
@@ -86,25 +84,25 @@ const ImageOverlay: React.FC<IImageOverlay> = props => {
         <Stack direction="row" className="justify-end sm:justify-between p-4 sm:p-12">
           <Stack direction="row" spacing={3}>
             {images.length > 1 && (
-              <button className={tx(`${closeDivClass}`)} onClick={handlePrevImg}>
+              <button className={`${closeDivClass}`} onClick={handlePrevImg}>
                 <Icon icon={<ArrowLeftIcon />} accentColor />
               </button>
             )}
             {images.length > 1 && (
-              <button className={tx(`${closeDivClass}`)} onClick={handleNextImg}>
+              <button className={`${closeDivClass}`} onClick={handleNextImg}>
                 <Icon icon={<ArrowRightIcon />} accentColor />
               </button>
             )}
           </Stack>
 
           <Stack direction="row" spacing={3}>
-            <button className={tx(`${closeDivClass}`)} onClick={handleZoomIn}>
+            <button className={`${closeDivClass}`} onClick={handleZoomIn}>
               <Icon icon={<MagnifyingGlassPlusIcon />} accentColor />
             </button>
-            <button className={tx(`${closeDivClass}`)} onClick={handleZoomOut}>
+            <button className={`${closeDivClass}`} onClick={handleZoomOut}>
               <Icon icon={<MagnifyingGlassMinusIcon />} accentColor />
             </button>
-            <button className={tx(`${closeDivClass}`)} onClick={closeModal}>
+            <button className={`${closeDivClass}`} onClick={closeModal}>
               <Icon icon={<XMarkIcon />} accentColor />
             </button>
           </Stack>
@@ -123,9 +121,7 @@ const ImageOverlay: React.FC<IImageOverlay> = props => {
             >
               <TransformComponent wrapperStyle={{ height: '100%', width: '100%' }}>
                 <img
-                  className={tw(
-                    `block max-w-full max-h-full ${imgLoaded ? 'opacity-100' : 'opacity-0'}`,
-                  )}
+                  className={`block max-w-full max-h-full ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
                   loading="lazy"
                   decoding="async"
                   src={currentImg.src}

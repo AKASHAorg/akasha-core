@@ -1,12 +1,11 @@
 import React from 'react';
 import Meter from '../Meter';
 import Text from '../Text';
-import { Color } from '../types/common.types';
 
 export type EditorMeterProps = {
   max: number;
   value: number;
-  background?: Color;
+  background?: string;
   customStyle?: string;
 };
 
@@ -24,19 +23,19 @@ export type EditorMeterProps = {
  * ```
  **/
 const EditorMeter: React.FC<EditorMeterProps> = props => {
-  const { value, max, background = { light: 'grey8', dark: 'grey4' }, customStyle } = props;
+  const { value, max, background = 'bg(grey8 dark:grey4)', customStyle } = props;
   const remainingChars = max - value;
   let displayCounter: null | number = null;
-  let progressStyle: Color = { light: 'secondaryLight', dark: 'secondaryDark' };
+  let progressStyle = 'bg(secondaryLight dark:secondaryDark)';
 
   if (remainingChars < 0) {
     displayCounter = Math.max(remainingChars, -99);
-    progressStyle = { light: 'errorLight', dark: 'errorDark' };
+    progressStyle = 'bg(errorLight dark:errorDark)';
   }
 
   if (remainingChars === 1 || remainingChars === 0) {
     displayCounter = remainingChars;
-    progressStyle = { light: 'warningLight', dark: 'warningDark' };
+    progressStyle = 'bg(warningLight dark:warningDark)';
   }
 
   return (
@@ -50,7 +49,7 @@ const EditorMeter: React.FC<EditorMeterProps> = props => {
       customStyle={customStyle}
     >
       {displayCounter !== null && (
-        <Text variant="footnotes2" color={progressStyle} weight="normal">
+        <Text variant="footnotes2" weight="normal" customStyle={progressStyle}>
           {displayCounter}
         </Text>
       )}

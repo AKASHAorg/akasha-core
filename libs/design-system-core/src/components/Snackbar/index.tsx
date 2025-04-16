@@ -61,7 +61,7 @@ const Snackbar: React.FC<SnackbarProps> = ({
 
   const textColor: Color = { dark: 'white', light: 'black' };
 
-  const instanceStyle = `p-4 border(l-8 solid ${colorLight}/30 dark:${colorDark}/30)`;
+  const instanceStyle = `p-4 border(l-8 solid ${colorLight}/30 dark:${colorDark}/30) shadow-[0_0_4px_rgba(0,0,0,0.2)] dark:shadow-[0_0_2px_rgba(255,255,255,0.15)]`;
 
   const typeIconsMap: Record<NotificationTypes, React.ReactElement> = {
     info: <InformationCircleIcon />,
@@ -71,11 +71,7 @@ const Snackbar: React.FC<SnackbarProps> = ({
   };
 
   return (
-    <Card
-      radius={8}
-      background={{ light: 'white', dark: 'grey1' }}
-      customStyle={`${instanceStyle} ${customStyle}`}
-    >
+    <Card radius={8} customStyle={`${instanceStyle} ${customStyle} bg-white dark:bg-grey1`}>
       <Stack spacing="gap-x-3" fullWidth direction="row">
         <Icon
           icon={typeIconsMap[type]}

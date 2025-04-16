@@ -29,7 +29,7 @@ import TopbarLoader from '@akashaorg/design-system-components/lib/components/Loa
 import MiniProfileWidgetLoader from '@akashaorg/design-system-components/lib/components/Loaders/mini-profile-widget-loader';
 import TrendingWidgetLoader from '@akashaorg/design-system-components/lib/components/Loaders/trending-widget-loader';
 import SidebarLoader from '@akashaorg/design-system-components/lib/components/Loaders/sidebar-loader';
-import { css } from '@twind/core';
+import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
 import { useSticky } from './use-sticky';
 
 const sidebarLoadingIndicator = <SidebarLoader />;
@@ -188,19 +188,23 @@ const Layout: React.FC<unknown> = () => {
       } ${needSidebarToggling ? 'fixed left-0' : ''}
       `;
 
-  const containerStyle = css({
-    '@apply': 'bg(white dark:black) min-h-screen',
-    /** since the 100vw is including the scrollbar and
-     * 100% is the width excluding the scrollbar
-     * we can add a left padding (when the scrollbar is visible)
-     * to readjust the middle of the page, thus compensating the presence
-     * of the scrollbar
-     */
-    'padding-left': 'calc(100vw - 100%)',
-  });
-
   return (
-    <Stack className={containerStyle}>
+    <Stack
+      style={{
+        ...cssVars({
+          '--content-height': `${contentHeight}px`,
+          '--offset': `${offset}px`,
+        }),
+        /** since the 100vw is including the scrollbar and
+         * 100% is the width excluding the scrollbar
+         * we can add a left padding (when the scrollbar is visible)
+         * to readjust the middle of the page, thus compensating the presence
+         * of the scrollbar
+         */
+        paddingLeft: 'calc(100vw - 100%)',
+      }}
+      className="bg(white dark:black) min-h-screen"
+    >
       <Stack className="h-full m-auto w-full min-h-screen">
         <Stack className={layoutStyle}>
           <Stack className={mobileLayoverStyle}>
@@ -276,13 +280,20 @@ const Layout: React.FC<unknown> = () => {
 
           <Stack
             ref={widgetContainerRef}
-            className={`pr-2 relative min-h-[${contentHeight}px] h-full`}
+            style={cssVars({
+              '--content-height': `${contentHeight}px`,
+            })}
+            className={`pr-2 relative min-h-[var(--content-height)] h-full`}
           >
             <Stack className="h-full hidden lg:flex">
-              <Stack className={`mt-[${offset}px]`} />
+              <Stack
+                style={cssVars({ '--offset': `${offset}px` })}
+                className={`mt-[var(--offset)]`}
+              />
               <Stack
                 ref={widgetContentRef}
-                className={`${position} ${stickyPos} ${showWidgets ? '' : 'hidden'} self-start`}
+                style={stickyPos.cssVar}
+                className={`${position} ${stickyPos.className} ${showWidgets ? '' : 'hidden'} self-start`}
               >
                 <Stack className="my-4">
                   <Widget
@@ -296,7 +307,7 @@ const Layout: React.FC<unknown> = () => {
                 </Stack>
               </Stack>
             </Stack>
-            <Stack className="fixed bottom-2 lg:(w-[21.125rem])">
+            <Stack className="fixed bottom-2 lg:w-[21.125rem]">
               <Widget name={layoutSlots.cookieWidgetSlotId} />
             </Stack>
           </Stack>

@@ -1,11 +1,11 @@
-import React, { AriaAttributes, DOMAttributes, HTMLAttributes, PropsWithChildren } from 'react';
-import { apply, tw } from '@twind/core';
+import React, { AriaAttributes, HTMLAttributes, PropsWithChildren } from 'react';
 
 import { getTag } from './getTag';
 import { getAlignmentClasses } from './getAlignmentClasses';
 import { getWeightClasses } from './getWeightClasses';
 import { Color } from '../types/common.types';
 import { getColorClasses } from '../../utils';
+import { cssVars } from '../../utils/to-css-var';
 
 export type Heading = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 
@@ -111,7 +111,7 @@ const Text: React.FC<TextProps> = ({
   const colorStyle = getColorClasses(color, 'text');
   const truncateStyle = truncate ? 'truncate' : '';
   const wordBreakStyle = breakWord ? 'break-all' : '';
-  const lineClampStyle = lineClamp ? `line-clamp-${lineClamp}` : '';
+  const lineClampStyle = lineClamp ? `line-clamp-[var(--line-clamp)]` : '';
   const weightStyle = weight ? getWeightClasses(weight) : '';
   const noSelectClass = selectable ? '' : 'select-none';
 
@@ -122,9 +122,8 @@ const Text: React.FC<TextProps> = ({
 
     {
       id,
-      className: tw(
-        apply`${noSelectClass} ${baseStyles} ${colorStyle} ${alignmentStyle} ${truncateStyle} ${wordBreakStyle} ${weightStyle} ${lineClampStyle} ${customStyle}`,
-      ),
+      className: `${noSelectClass} ${baseStyles} ${colorStyle} ${alignmentStyle} ${truncateStyle} ${wordBreakStyle} ${weightStyle} ${lineClampStyle} ${customStyle}`,
+      style: cssVars({ '--line-clamp': lineClamp }),
       ...rest,
     },
     children,

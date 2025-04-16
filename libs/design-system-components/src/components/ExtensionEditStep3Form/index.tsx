@@ -11,7 +11,7 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import AutoComplete from '@akashaorg/design-system-core/lib/components/AutoComplete';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import StackedAvatar from '@akashaorg/design-system-core/lib/components/StackedAvatar';
-import { apply, tw } from '@twind/core';
+
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ButtonType } from '../types/common.types';
@@ -183,7 +183,7 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
   };
 
   return (
-    <form onSubmit={onSave} className={tw(apply`h-full`)}>
+    <form onSubmit={onSave} className={`h-full`}>
       <Stack direction="column" spacing={4}>
         <Stack spacing={4} className="px-4 pb-16">
           <Controller

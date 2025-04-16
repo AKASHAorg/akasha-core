@@ -36,8 +36,10 @@ const MenuSubItems: React.FC<MenuSubItemsProps> = props => {
           >
             <Stack direction="row" className="bg(hover:grey8 dark:hover:grey5)">
               <Stack
-                className={`ml-10 border(l-4 ${
-                  isActive ? 'secondaryLight dark:secondaryDark' : 'grey9 dark:grey3'
+                className={`ml-10 border-l-4 ${
+                  isActive
+                    ? 'border-secondaryLight dark:border-secondaryDark'
+                    : 'border-grey9 dark:border-grey3'
                 }`}
               >
                 <Text

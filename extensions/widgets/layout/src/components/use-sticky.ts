@@ -1,16 +1,28 @@
-import { RefObject, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { RefObject, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useResizeObserver } from './useResizeObserver';
+import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
 
 export const useSticky = (
   containerRef: RefObject<HTMLElement>,
   contentRef: RefObject<HTMLElement>,
   extraBottomOffset = 0,
-) => {
+): [
+  string,
+  {
+    className: string;
+    cssVar?: React.CSSProperties;
+  },
+  number,
+  number,
+] => {
   const prevScrollY = useRef(0);
   const wasScrollingDown = useRef(false);
 
   const [position, setPosition] = useState('sticky');
-  const [stickyPosition, setStickyPosition] = useState('top-0');
+  const [stickyPosition, setStickyPosition] = useState<{
+    className: string;
+    cssVar?: React.CSSProperties;
+  }>({ className: 'top-0' });
   const [contentHeight, setContentHeight] = useState(0);
   const [offset, setOffset] = useState(0);
 
@@ -37,13 +49,25 @@ export const useSticky = (
       const scrollChanged = wasScrollingDown.current !== isScrollingDown;
       if (innerHeight - contentRect.height >= containerTop) {
         setPosition('sticky');
-        setStickyPosition('top-0');
+        setStickyPosition({ className: 'top-0' });
         setContentHeight(contentRect.height);
         setOffset(0);
       } else {
         setPosition('sticky');
         setStickyPosition(
-          isScrollingDown ? `top-[${scrollDownOffset}px]` : `bottom-[${scrollUpOffset}px]`,
+          isScrollingDown
+            ? {
+                className: 'top-[var(--scroll-down-offset)]',
+                cssVar: cssVars({
+                  '--scroll-down-offset': `${scrollDownOffset}px`,
+                }),
+              }
+            : {
+                className: 'bottom-[var(--scroll-up-offset)]',
+                cssVar: cssVars({
+                  '--scroll-up-offset': `${scrollUpOffset}px`,
+                }),
+              },
         );
         setContentHeight(contentRect.height);
         setOffset(prev => (scrollChanged ? containerOffset : prev));

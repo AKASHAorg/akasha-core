@@ -1,5 +1,5 @@
 import React, { forwardRef, useState } from 'react';
-import { apply, tw } from '@twind/core';
+
 import { MultlineProps } from '../types';
 import EditorMeter from '../../EditorMeter';
 import Stack from '../../Stack';
@@ -29,7 +29,7 @@ export const Multiline: React.FC<MultlineProps> = forwardRef((props, ref) => {
       <textarea
         ref={ref}
         aria-labelledby={id}
-        className={tw(apply(`resize-none w-full ${textAreaStyle}`))}
+        className={`resize-none w-full ${textAreaStyle}`}
         maxLength={rest.maxLength ?? MAX_LENGTH}
         onChange={event => {
           setLetterCount(event.target.value.length);
@@ -40,7 +40,6 @@ export const Multiline: React.FC<MultlineProps> = forwardRef((props, ref) => {
       <EditorMeter
         max={rest.maxLength ?? MAX_LENGTH}
         value={letterCount}
-        background="grey6"
         customStyle="ml-auto mt-auto shrink-0"
       />
     </Stack>

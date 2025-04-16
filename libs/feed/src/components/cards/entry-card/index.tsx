@@ -103,9 +103,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     contentClickable && !showNSFWCard ? 'cursor-pointer' : 'cursor-default';
 
   const hoverStyleLastEntry = lastEntry ? 'rounded-b-2xl' : '';
-  const hoverStyle = hover
-    ? `${getColorClasses({ light: 'grey9/60', dark: 'grey3' }, 'hover:bg')} ${hoverStyleLastEntry}`
-    : '';
+  const hoverStyle = hover ? `hover:bg-grey9/60 hover:bg-grey3 ${hoverStyleLastEntry}` : '';
 
   const entryCardUi = useMemo(
     () => (

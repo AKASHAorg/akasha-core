@@ -51,8 +51,7 @@ const AppCoverImage = (props: AppCoverImageProps) => {
       <Stack
         align="center"
         justify="center"
-        background={{ light: 'grey9', dark: 'grey5' }}
-        customStyle={customStyle}
+        customStyle={`bg-grey9 dark:bg-grey5 ${customStyle}`}
         fullWidth
       >
         {isNSFW && (

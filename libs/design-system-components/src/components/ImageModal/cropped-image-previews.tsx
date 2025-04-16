@@ -5,6 +5,7 @@ import Img from '@akashaorg/design-system-core/lib/components/Image';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Area } from 'react-easy-crop';
 import { cn } from '@akashaorg/ui/lib/library/utils';
+import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
 
 export type ImagePreview = {
   dimension: number;
@@ -36,23 +37,31 @@ export const CroppedImagePreviews: React.FC<CroppedImagePreviewProps> = props =>
     <Stack spacing={2}>
       <Text variant="button-md">{previewTitle}</Text>
       <Stack direction="row" spacing={3} alignItems="end">
-        {previews.map((preview, index) => (
-          <Card
-            key={index}
-            className={cn(
-              preview.circular ? 'rounded-full' : 'rounded-[0.625rem]',
-              `p-0 relative overflow-hidden w-[${preview.dimension}px] h-[${preview.dimension}px]`,
-            )}
-          >
-            <Img
-              src={imageUrl}
-              style={{
-                transform: `translate3d(${transform.x}, ${transform.y}, 0) scale3d(${scale},${scale},1)`,
-              }}
-              customStyle="absolute top-0 left-0 origin-top-left w-full"
-            />
-          </Card>
-        ))}
+        {previews.map((preview, index) => {
+          return (
+            <Card
+              key={index}
+              style={cssVars({
+                '--size': `${preview.dimension}px`,
+                '--transform-x': transform.x,
+                '--transform-y': transform.y,
+                '--scale': `${scale}`,
+              })}
+              className={cn(
+                preview.circular ? 'rounded-full' : 'rounded-[0.625rem]',
+                `p-0 relative overflow-hidden  size-[var(--size)]`,
+              )}
+            >
+              <Img
+                src={imageUrl}
+                style={{
+                  transform: `translate3d(var(--transform-x), var(--transform-y), 0) scale3d(var(--scale),var(--scale),1)`,
+                }}
+                customStyle="absolute top-0 left-0 origin-top-left w-full"
+              />
+            </Card>
+          );
+        })}
       </Stack>
     </Stack>
   );

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { apply, tw } from '@twind/core';
 
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { MagnifyingGlassIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
@@ -64,9 +63,7 @@ const SearchBar: React.FC<SearchBarProps> = props => {
     >
       <input
         type="text"
-        className={tw(
-          apply`peer focus:outline-none w-full bg-transparent py-[0.4375rem] text-[0.875rem] leading-[1.375rem] font-light text(grey5 dark:grey6) placeholder(grey5 dark:grey6)`,
-        )}
+        className={`peer focus:outline-none w-full bg-transparent py-[0.4375rem] text-[0.875rem] leading-[1.375rem] font-light text(grey5 dark:grey6) placeholder(grey5 dark:grey6)`}
         placeholder={inputPlaceholderLabel}
         value={inputValue}
         onChange={onInputChange}

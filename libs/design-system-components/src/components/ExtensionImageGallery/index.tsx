@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { tw, apply } from '@twind/core';
 import { ImageBlockGridItem } from '../ImageBlockGallery/image-block-grid-item';
 import ImageOverlay from '../ImageOverlay';
 
@@ -25,7 +24,7 @@ const ExtensionImageGallery: React.FC<ExtensionImageGalleryProps> = props => {
     setClickedImg(img);
   };
 
-  const gridStyle = apply(`grid grid-cols-6 gap-3`);
+  const gridStyle = `grid grid-cols-6 gap-3`;
 
   const style = {
     gridColumnEnd: `span 2`,
@@ -34,7 +33,7 @@ const ExtensionImageGallery: React.FC<ExtensionImageGalleryProps> = props => {
 
   return (
     <>
-      <div className={images?.length === 1 ? tw('flex') : tw(`${gridStyle}`)}>
+      <div className={images?.length === 1 ? 'flex' : `${gridStyle}`}>
         {images?.map((image, index) => (
           <ImageBlockGridItem
             imageNotLoadedLabel={imageNotLoadedLabel}

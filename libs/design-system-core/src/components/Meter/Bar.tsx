@@ -1,9 +1,7 @@
 import React, { PropsWithChildren } from 'react';
-import { tw } from '@twind/core';
 
 import Stack from '../Stack';
 
-import { getColorClasses } from '../../utils';
 import { MeterProps } from '.';
 
 const Bar: React.FC<PropsWithChildren<MeterProps>> = ({
@@ -17,8 +15,8 @@ const Bar: React.FC<PropsWithChildren<MeterProps>> = ({
   direction = 'horizontal',
   customStyle = '',
 }) => {
-  const progressStyle = getColorClasses(progressBg || 'black', 'stroke');
-  const backgroundStyle = getColorClasses(background || 'grey8', 'stroke');
+  const progressStyle = `stroke(${progressBg} || 'black')`;
+  const backgroundStyle = `stroke(${background} || 'grey8')`;
   const capOffset = 0;
   const mid = thickness / 2;
   const start = direction === 'horizontal' ? capOffset : (max * (size - 2 * capOffset)) / max;
@@ -47,7 +45,7 @@ const Bar: React.FC<PropsWithChildren<MeterProps>> = ({
         height={direction === 'horizontal' ? thickness : size}
       >
         <path
-          className={tw(backgroundStyle)}
+          className={backgroundStyle}
           strokeWidth={thickness}
           stroke="currentColor"
           fill="transparent"
@@ -55,7 +53,7 @@ const Bar: React.FC<PropsWithChildren<MeterProps>> = ({
           d={backgroundPath}
         />
         <path
-          className={tw(progressStyle)}
+          className={progressStyle}
           strokeWidth={direction === 'horizontal' ? thickness : size}
           stroke="currentColor"
           fill="transparent"
@@ -63,7 +61,7 @@ const Bar: React.FC<PropsWithChildren<MeterProps>> = ({
           d={d}
         />
       </svg>
-      <div className={tw('absolute')}> {children} </div>
+      <div className={'absolute'}> {children} </div>
     </Stack>
   );
 };
