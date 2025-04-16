@@ -34,6 +34,7 @@ import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import CopyToClipboard from '@akashaorg/design-system-core/lib/components/CopyToClipboard';
+import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import { useInstalledExtensions } from '@akashaorg/ui-core-hooks/lib/use-installed-extensions';
 import { UninstallModal } from './uninstall-modal';
@@ -43,14 +44,6 @@ import { AppInfoNotificationCards } from '@akashaorg/design-system-components/li
 import { getExtensionStatus, getExtensionTypeLabel } from '../../../utils/extension-utils';
 import getSDK from '@akashaorg/core-sdk';
 import { ExtensionStatus } from '@akashaorg/typings/lib/ui';
-import {
-  ProfileAvatarButton,
-  ProfileAvatarButtonAvatar,
-  ProfileAvatarButtonAvatarFallback,
-  ProfileAvatarButtonAvatarImage,
-  ProfileDidField,
-  ProfileName,
-} from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
 
 type InfoPageProps = {
   appId: string;
@@ -302,23 +295,14 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                   {appData.author?.akashaProfile && (
                     <Card className="shadow-none p-0 border-none" onClick={handleDeveloperClick}>
                       <Stack direction="row" alignItems="center">
-                        <ProfileAvatarButton profileDID={appData.author?.id}>
-                          <ProfileAvatarButtonAvatar>
-                            <ProfileAvatarButtonAvatarImage
-                              src={
-                                transformSource(appData.author?.akashaProfile?.avatar?.default)
-                                  ?.src ||
-                                appData.author?.akashaProfile?.avatar?.alternatives?.map(
-                                  alternative => transformSource(alternative),
-                                )?.[0]?.src
-                              }
-                              alt="Author Avatar"
-                            />
-                            <ProfileAvatarButtonAvatarFallback />
-                          </ProfileAvatarButtonAvatar>
-                          <ProfileName>{appData.author?.akashaProfile?.name}</ProfileName>
-                          <ProfileDidField />
-                        </ProfileAvatarButton>
+                        <ProfileAvatarButton
+                          profileId={appData.author?.id}
+                          label={appData.author?.akashaProfile?.name}
+                          avatar={transformSource(appData.author?.akashaProfile?.avatar?.default)}
+                          alternativeAvatars={appData.author?.akashaProfile?.avatar?.alternatives?.map(
+                            alternative => transformSource(alternative),
+                          )}
+                        />
                         <Icon
                           icon={<ChevronRightIcon />}
                           size="sm"

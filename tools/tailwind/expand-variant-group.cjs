@@ -19,11 +19,10 @@ function expandVariantGroup(code, replacement) {
 
   // Apply the Tailwind replacement
   const tailwindRegex =
-    /(?:!?(?:\[.*\])?[a-zA-Z0-9-:]+)[(](?:\[?[a-zA-Z0-9.:/-]\]?)+(?:\s+(?:\[?[a-zA-Z0-9:]\[?)+[/-]?[a-zA-Z0-9\]]*)+[)]/g;
+    /(?:!?(?:\[[^\]]*\])?[a-zA-Z0-9-:]+)\((?:\[[^\]]*\]|[a-zA-Z0-9.:/-])+(?:\s+(?:\[[^\]]*\]|[a-zA-Z0-9:])+[/-]?[a-zA-Z0-9]*)+\)/g;
 
   markedCode = markedCode.replaceAll(tailwindRegex, replacement);
 
-  
   // Restore comments
   commentMarkers.forEach((comment, index) => {
     markedCode = markedCode.replace(`__COMMENT_${index}__`, comment);

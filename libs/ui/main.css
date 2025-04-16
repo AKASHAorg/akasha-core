@@ -168,7 +168,7 @@
   --color-grey7: var(--system-grey-7);
   --color-grey8: var(--system-grey-8);
   --color-grey9: var(--system-grey-9);
-  --color-success: var(--feedback-success);
+  --color-feedback-success: var(--feedback-success);
   --color-warningLight: var(--feedback-warning);
   --color-warningDark: var(--feedback-warning-dark);
   --color-errorLight: var(--feedback-error);
