@@ -94,8 +94,8 @@ const Header: React.FC<HeaderProps> = ({
     <Stack className={customStyle}>
       <Card
         data-testid="cover-image"
-        className="h-32 bg-center bg-no-repeat bg-cover bg-muted rounded-b-none border-none bg-[url(var(--background-url))]"
-        style={cssVars({ '--background-url': backgroundUrl })}
+        className="h-32 bg-center bg-no-repeat bg-cover bg-muted rounded-b-none border-none bg-(image:--background-url)"
+        style={cssVars({ '--background-url': `url('${backgroundUrl}')` })}
         {...(background && { onClick: onClickCoverImage })}
       />
       <Card

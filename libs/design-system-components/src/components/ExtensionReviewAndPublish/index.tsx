@@ -143,8 +143,8 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
 
         <Stack spacing={3} className="w-full">
           <Stack
-            style={cssVars({ '--background-url': backgroundUrl })}
-            className={`relative h-24 rounded-2xl  bg(center no-repeat cover) bg-[url(var(--background-url))]`}
+            style={cssVars({ '--background-url': `url('${backgroundUrl}')` })}
+            className={`relative h-24 rounded-2xl  bg(center no-repeat cover) bg-(image:--background-url)`}
           >
             <AppAvatar
               appType={extensionData?.applicationType}
