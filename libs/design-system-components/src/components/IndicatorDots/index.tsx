@@ -61,8 +61,10 @@ const IndicatorDots: React.FC<TIndicatorDotsProps> = props => {
         justifyContent="center"
         className={`rounded-full w-${dotSizes.middle} h-${dotSizes.middle} ${dotColor} mx-2`}
       >
-        {isSuccess && <Icon icon={<CheckIcon />} color="white" size="xs" />}
-        {hasErrors && <Icon icon={<ExclamationTriangleIcon />} color="white" size="xs" />}
+        {isSuccess && <Icon icon={<CheckIcon />} size="xs" customStyle={'[&>*]:stroke-white'} />}
+        {hasErrors && (
+          <Icon icon={<ExclamationTriangleIcon />} size="xs" customStyle={'[&>*]:stroke-white'} />
+        )}
       </Stack>
       <Stack
         className={`rounded-full w-${dotSizes.last} h-${dotSizes.last} ${dotColor} opacity-50`}

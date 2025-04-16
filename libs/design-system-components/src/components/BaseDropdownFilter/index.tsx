@@ -86,7 +86,7 @@ const DropdownFilter: React.FC<IDropdownFilterProps> = ({
 
       <button
         className={`inline-flex items-center justify-between w-full ${padding} rounded-[0.5rem] bg-(white dark:grey3) rounded-[0.5rem] border-(1 solid ${
-          dropOpen ? 'secondaryLight dark:secondark-dark' : 'grey8 dark:grey3'
+          dropOpen ? 'secondaryLight dark:secondaryDark' : 'grey8 dark:grey3'
         }) ${customStyle}`}
         onClick={handleDropClick}
       >
@@ -142,10 +142,10 @@ const DropdownFilter: React.FC<IDropdownFilterProps> = ({
                                   {item?.icon && (
                                     <Icon
                                       icon={item.icon}
-                                      color={
+                                      customStyle={
                                         selected.id === item.id
-                                          ? { light: 'secondaryLight', dark: 'secondaryDark' }
-                                          : { light: 'black', dark: 'white' }
+                                          ? '[&>*]:stroke(secondaryLight dark:secondaryDark)'
+                                          : '[&>*]:stroke(black dark:white)'
                                       }
                                     />
                                   )}
@@ -185,10 +185,10 @@ const DropdownFilter: React.FC<IDropdownFilterProps> = ({
                           {menuItem?.icon && (
                             <Icon
                               icon={menuItem.icon}
-                              color={
+                              customStyle={
                                 isSelected
-                                  ? { light: 'secondaryLight', dark: 'secondaryDark' }
-                                  : { light: 'black', dark: 'white' }
+                                  ? '[&>*]:stroke(secondaryLight dark:secondaryDark)'
+                                  : '[&>*]:stroke(black dark:white)'
                               }
                             />
                           )}
@@ -225,10 +225,10 @@ const DropdownFilter: React.FC<IDropdownFilterProps> = ({
                         {menuItem?.icon && (
                           <Icon
                             icon={menuItem.icon}
-                            color={
+                            customStyle={
                               isSelected
-                                ? { light: 'secondaryLight', dark: 'secondaryDark' }
-                                : { light: 'black', dark: 'white' }
+                                ? '[&>*]:stroke(secondaryLight dark:secondaryDark)'
+                                : '[&>*]:stroke(black dark:white)'
                             }
                           />
                         )}
@@ -246,7 +246,7 @@ const DropdownFilter: React.FC<IDropdownFilterProps> = ({
                           <span className={'ml-4'}>
                             <Icon
                               icon={<CheckIcon />}
-                              color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                              customStyle={'[&>*]:stroke(secondaryLight dark:secondaryDark)'}
                             />
                           </span>
                         )}

@@ -120,7 +120,7 @@ export const BlockHeader: React.FC<BlockHeaderProps> = props => {
               <Icon
                 icon={<TrashIcon />}
                 size="sm"
-                color={{ light: 'errorLight', dark: 'errorDark' }}
+                customStyle={'[&>*]:stroke(errorLight dark:errorDark)'}
               />
             </Stack>
           </button>

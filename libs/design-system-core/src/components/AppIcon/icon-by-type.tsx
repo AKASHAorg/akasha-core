@@ -4,14 +4,11 @@ import { LogoTypeSource } from '@akashaorg/typings/lib/ui';
 
 import Icon from '../Icon';
 import { AppIconProps } from '.';
-import { Color } from '../types/common.types';
 
 export type AppImgProps = Pick<
   AppIconProps,
   'appImg' | 'size' | 'placeholderIcon' | 'breakPointSize' | 'accentColor' | 'solid'
-> & {
-  color?: Color;
-};
+>;
 
 const IconByType: React.FC<AppImgProps> = ({
   appImg,
@@ -20,7 +17,6 @@ const IconByType: React.FC<AppImgProps> = ({
   solid = false,
   breakPointSize,
   accentColor,
-  color,
 }) => {
   if (appImg?.type === LogoTypeSource.ICON) {
     return (
@@ -29,7 +25,6 @@ const IconByType: React.FC<AppImgProps> = ({
         size={size}
         breakPointSize={breakPointSize}
         accentColor={accentColor}
-        color={color}
         solid={solid}
       />
     );
@@ -53,7 +48,6 @@ const IconByType: React.FC<AppImgProps> = ({
       size={size}
       breakPointSize={breakPointSize}
       accentColor={accentColor}
-      color={color}
     />
   );
 };

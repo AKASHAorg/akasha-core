@@ -27,7 +27,11 @@ const ReportReasonPill: React.FC<ReportReasonPillProps> = props => {
         className="w-fit rounded-full bg-(secondaryLight/30 dark:secondaryDark)"
       >
         <Stack direction="row" alignItems="center" spacing={1} className="p-2">
-          <Icon icon={<FlagIcon />} size="sm" color={{ light: 'secondaryLight', dark: 'grey2' }} />
+          <Icon
+            icon={<FlagIcon />}
+            size="sm"
+            customStyle="[&>*]:stroke(secondaryLight dark:grey2)"
+          />
           <Text variant="footnotes2" color={{ light: 'secondaryLight', dark: 'grey2' }}>
             {reportCount}
           </Text>

@@ -55,7 +55,7 @@ export const ReportItem: React.FC<ReportItemProps> = props => {
               <Icon
                 icon={<FlagIcon />}
                 size="sm"
-                color={{ light: 'secondaryLight', dark: 'grey2' }}
+                customStyle="[&>*]:stroke(secondaryLight dark:grey2)"
               />
               <Text variant="footnotes2" color={{ light: 'secondaryLight', dark: 'grey2' }}>
                 {report.flags.length}

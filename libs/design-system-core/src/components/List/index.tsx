@@ -3,7 +3,6 @@ import Card from '../Card';
 import Stack from '../Stack';
 import Tooltip from '../Tooltip';
 import ListElement from './list-element';
-import { getColorClasses } from '../../utils';
 import { TextProps } from '../Text';
 
 type Selected = { index: number; label?: string };

@@ -16,6 +16,7 @@ import { getImageFromSeed } from '@akashaorg/design-system-core/lib/utils';
 import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import { cn } from '@akashaorg/ui/lib/library/utils';
+import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
 
 type ProfileBadge = {
   toolTipLabel: string;
@@ -93,8 +94,8 @@ const Header: React.FC<HeaderProps> = ({
     <Stack className={customStyle}>
       <Card
         data-testid="cover-image"
-        className="h-32 bg-center bg-no-repeat bg-cover bg-muted rounded-b-none border-none"
-        style={{ backgroundImage: `url(${backgroundUrl})` }}
+        className="h-32 bg-center bg-no-repeat bg-cover bg-muted rounded-b-none border-none bg-[url(var(--background-url))]"
+        style={cssVars({ '--background-url': backgroundUrl })}
         {...(background && { onClick: onClickCoverImage })}
       />
       <Card

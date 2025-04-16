@@ -61,7 +61,7 @@ const MiniProfileCTA: React.FC<MiniProfileCTAProps> = props => {
             <Icon
               icon={<ExclamationTriangleIcon />}
               size="xs"
-              color={{ light: 'warningLight', dark: 'warningDark' }}
+              customStyle="[&>*]:stroke(warningLight dark:warningDark)"
             />
             <Text variant="footnotes2" weight="normal">
               {nsfwLabel}

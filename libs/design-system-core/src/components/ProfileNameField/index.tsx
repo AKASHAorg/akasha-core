@@ -104,7 +104,7 @@ const ProfileNameField: React.FC<ProfileNameFieldProps> = ({
         >
           <Icon
             icon={<ExclamationTriangleIcon />}
-            color={{ light: 'errorLight', dark: 'errorDark' }}
+            customStyle="[&>*]:stroke(errorLight dark:errorDark)"
           />
         </Tooltip>
       )}

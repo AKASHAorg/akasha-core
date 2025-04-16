@@ -62,7 +62,7 @@ const BlockStatusToolbar: React.FC<IBlockStatusToolbar> = props => {
           justifyContent="center"
           className="h-8 w-8 group relative rounded-full bg-success/30"
         >
-          <Icon size="sm" icon={<CheckIcon />} color={{ light: 'success', dark: 'success' }} />
+          <Icon size="sm" icon={<CheckIcon />} customStyle={'[&>*]:stroke-stroke'} />
         </Stack>
         <Text color={{ light: 'success', dark: 'success' }}>{successLabel}</Text>
       </Stack>
@@ -78,7 +78,7 @@ const BlockStatusToolbar: React.FC<IBlockStatusToolbar> = props => {
           <Icon
             size="sm"
             icon={<ExclamationTriangleIcon />}
-            color={{ light: 'errorLight', dark: 'errorDark' }}
+            customStyle={'[&>*]:stroke(errorLight dark:errorDark)'}
           />
         </Stack>
         <Text color={{ light: 'errorLight', dark: 'errorDark' }}>{errorLabel}</Text>

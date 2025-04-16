@@ -94,7 +94,7 @@
     "siwe": "2.3.2",
     "systemjs-webpack-interop": "2.3.7",
     "tailwind-merge": "2.6.0",
-    "tailwindcss": "4.0.0",
+    "tailwindcss": "4.1.4",
     "tailwindcss-animate": "1.0.7",
     "uint8arrays": "4.0.4",
     "url-loader": "4.1.1",

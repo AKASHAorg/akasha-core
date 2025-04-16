@@ -38,7 +38,7 @@ export const LinkElement: React.FC<LinkElementProps> = ({
             <Icon
               icon={<TrashIcon />}
               size="md"
-              color={{ light: 'errorLight', dark: 'errorDark' }}
+              customStyle={'[&>*]:stroke(errorLight dark:errorDark)'}
             />
           </button>
         </div>

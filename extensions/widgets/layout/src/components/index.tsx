@@ -234,9 +234,8 @@ const Layout: React.FC<unknown> = () => {
                 <Card className="p-4 mb-4">
                   <Stack direction="row">
                     <Icon
-                      color={{ light: 'primary', dark: 'primary' }}
                       icon={exclamationCircleIcon}
-                      customStyle="mr-4"
+                      customStyle="mr-4 [&>*]:stroke(secondaryLight dark:secondaryDark)"
                     />
                     <Text variant="subtitle2">
                       {t('You are previewing "{{worldName}}"', { worldName: worldConfig.title })}.
@@ -254,9 +253,8 @@ const Layout: React.FC<unknown> = () => {
                 <Card className="mb-4 border-warning-foreground background-warning">
                   <Stack direction="row">
                     <Icon
-                      color={{ light: 'grey3', dark: 'grey3' }}
                       icon={exclamationTriangleIcon}
-                      customStyle="mr-4"
+                      customStyle="mr-4 [&>*]:stroke(grey3 dark:grey3)"
                     />
                     <Stack>
                       <Text variant="footnotes2" color={{ light: 'grey3', dark: 'grey3' }}>

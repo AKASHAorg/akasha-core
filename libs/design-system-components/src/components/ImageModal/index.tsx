@@ -179,7 +179,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
             icon={<XCircleIcon />}
             size="lg"
             solid
-            color={{ light: 'errorLight', dark: 'errorDark' }}
+            customStyle={'[&>*]:fill(errorLight dark:errorDark)'}
           />
           <Text
             variant="footnotes2"

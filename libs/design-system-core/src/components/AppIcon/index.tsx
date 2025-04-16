@@ -93,7 +93,6 @@ const AppIcon: React.FC<AppIconProps> = props => {
           placeholderIcon={placeholderIcon}
           solid={solid}
           accentColor={accentColor}
-          color={iconColor}
         />
         {hasNewNotifs && (
           <div className={`rounded-full absolute top-0  bg-secondaryDark ${notifyStyle})`} />
@@ -110,7 +109,6 @@ const AppIcon: React.FC<AppIconProps> = props => {
         placeholderIcon={placeholderIcon}
         solid={solid}
         accentColor={accentColor}
-        color={iconColor}
       />
     </Stack>
   );

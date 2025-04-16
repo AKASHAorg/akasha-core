@@ -19,6 +19,7 @@ import { Extension, Image } from '@akashaorg/typings/lib/ui';
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
 import { getImageFromSeed } from '@akashaorg/design-system-core/lib/utils';
 import { XCircleIcon } from '@heroicons/react/24/outline';
+import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
 
 export type ExtensionReviewAndPublishProps = {
   extensionData: Extension;
@@ -117,7 +118,9 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
         <Icon
           icon={fieldHasData ? <CheckCircleIcon /> : <XCircleIcon />}
           solid={fieldHasData}
-          color={fieldHasData ? 'success' : { light: 'warningLight', dark: 'warningDark' }}
+          customStyle={
+            fieldHasData ? '[&>*]:stroke-success' : '[&>*]:stroke(warningLight dark:warningLight)'
+          }
         />
         <Label required={isRequired}>{title}</Label>
       </Stack>
@@ -140,7 +143,8 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
 
         <Stack spacing={3} className="w-full">
           <Stack
-            className={`relative h-24 rounded-2xl  bg(center no-repeat cover [url(${backgroundUrl})])`}
+            style={cssVars({ '--background-url': backgroundUrl })}
+            className={`relative h-24 rounded-2xl  bg(center no-repeat cover) bg-[url(var(--background-url))]`}
           >
             <AppAvatar
               appType={extensionData?.applicationType}

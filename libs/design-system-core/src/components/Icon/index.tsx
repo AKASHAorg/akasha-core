@@ -2,11 +2,9 @@ import React from 'react';
 
 import Stack from '../Stack';
 
-import { BasicSize, BreakPointSize, Color } from '../types/common.types';
-import { getColorClasses } from '../../utils';
+import { BasicSize, BreakPointSize } from '../types/common.types';
 
 export interface IconProps {
-  color?: Color;
   ref?: React.Ref<HTMLDivElement>;
   icon?: React.ReactElement;
   iconClassname?: string;
@@ -14,10 +12,8 @@ export interface IconProps {
   breakPointSize?: BreakPointSize;
   accentColor?: boolean;
   disabled?: boolean;
-  hover?: boolean;
   dataTestId?: string;
   customStyle?: string;
-  hoverColor?: Color;
   solid?: boolean;
   rotateAnimation?: boolean;
 }
@@ -33,10 +29,8 @@ export interface IconProps {
  * @param breakPointSize - (optional) specify breakpoint sizes if needed
  * @param accentColor - boolean (optional) whether your icon will have the default accent color scheme
  * @param disabled - boolean (optional) a disabled icon looks different
- * @param hover - boolean (optional) a hovered icon has a different shade
  * @param dataTestId - (optional) useful when writing tests for the component
  * @param customStyle - (optional) apply your custom styling (Make sure to use standard Tailwind classes)
- * @param hoverColor - (optional) specify a color for hover state here (Please note that you can specify colors for light and dark mode separately)
  * @param solid - boolean (optional) a solid icon looks different from an outlined one
  * @param rotateAnimation - boolean (optional) for those who want to add rotate animation to their icon
  * @example
@@ -52,12 +46,9 @@ const Icon: React.FC<IconProps> = props => {
     size = 'md',
     iconClassname,
     breakPointSize,
-    color,
     disabled,
-    hover,
     dataTestId,
     customStyle = '',
-    hoverColor,
     solid = false,
     rotateAnimation = false,
   } = props;
@@ -67,23 +58,7 @@ const Icon: React.FC<IconProps> = props => {
     : '';
   const sizeStyle = `${ICON_SIZE_MAP[size]} ${breakPointStyle}`;
 
-  const baseStyle = `select-none ${
-    hover
-      ? `cursor-pointer ${getColorClasses(
-          hoverColor,
-          solid ? 'group-hover:[&>*]:fill' : 'group-hover:[&>*]:stroke',
-        )}`
-      : ''
-  }`;
-
-  let colorStyle: string;
-  if (color) {
-    colorStyle = `${getColorClasses(color, solid ? '[&>*]:fill' : '[&>*]:stroke')}`;
-  } else {
-    colorStyle = solid
-      ? '[&>*]:fill-black dark:[&>*]:fill-white'
-      : '[&>*]:stroke-black dark:[&>*]:stroke-white';
-  }
+  const baseStyle = `select-none`;
 
   const accentColorStyle = accentColor
     ? `${
@@ -93,8 +68,7 @@ const Icon: React.FC<IconProps> = props => {
       }`
     : '';
 
-  // Note: setting accentColor to true will overrride other color styles
-  const activeIconColorStyle = accentColor ? accentColorStyle : colorStyle;
+  const activeIconColorStyle = accentColor ? accentColorStyle : '';
 
   const disabledStyle = disabled ? 'opacity-50' : '';
 

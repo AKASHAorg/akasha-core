@@ -319,7 +319,7 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
               <Icon
                 icon={<ExclamationTriangleIcon />}
                 size="sm"
-                color={{ light: 'warningLight', dark: 'warningDark' }}
+                customStyle={'[&>*]:stroke(warningLight dark:warningDark)'}
               />
               <Text variant="button-md">{noteLabel}</Text>
             </Stack>

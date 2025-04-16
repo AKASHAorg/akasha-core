@@ -98,8 +98,7 @@ const Toggle: React.FC<ToggleProps> = ({
           <Icon
             size={'sm'}
             icon={checked ? iconChecked : iconUnchecked}
-            color="white"
-            customStyle={size === 'small' ? 'size-3' : ''}
+            customStyle={`[&>*]:stroke-white ${size === 'small' ? 'size-3' : ''}`}
           />
         </div>
       )}

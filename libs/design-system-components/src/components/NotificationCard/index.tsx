@@ -33,8 +33,7 @@ const NotificationCard: React.FC<NotificationCardProps> = props => {
           <Icon
             size="sm"
             icon={notificationTypeIcon}
-            color={{ dark: 'grey6', light: 'black' }}
-            customStyle="space-x-1"
+            customStyle="space-x-1 [&>*]:stroke(grey6 dark:black)"
           />
           <Text variant="footnotes1" color={{ dark: 'grey6', light: 'grey4' }} weight="bold">
             {notificationTypeTitle}

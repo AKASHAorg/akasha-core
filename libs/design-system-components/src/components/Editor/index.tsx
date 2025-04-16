@@ -571,7 +571,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
             >
               <Icon
                 icon={<ExclamationTriangleIcon />}
-                color={{ light: 'errorLight', dark: 'errorDark' }}
+                customStyle={'[&>*]:stroke(errorLight dark:errorDark)'}
               />
               <Text>{maxEncodedLengthErrLabel}</Text>
             </Stack>

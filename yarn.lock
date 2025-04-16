@@ -36743,7 +36743,7 @@ __metadata:
     systemjs: "npm:6.15.1"
     systemjs-webpack-interop: "npm:2.3.7"
     tailwind-merge: "npm:2.6.0"
-    tailwindcss: "npm:4.0.0"
+    tailwindcss: "npm:4.1.4"
     tailwindcss-animate: "npm:1.0.7"
     ts-jest: "npm:^29.1.0"
     ts-loader: "npm:9.4.1"
@@ -38905,6 +38905,13 @@ __metadata:
   version: 4.0.0
   resolution: "tailwindcss@npm:4.0.0"
   checksum: 10/3491d86a7c3ad08209eb988fcf36d893e5f5a4c48c63da706a8788f6111e141386e1b5c8fa46f2650b08200c1b8011251d97b6d65514bdc14aa06597871d1f7d
+  languageName: node
+  linkType: hard
+
+"tailwindcss@npm:4.1.4":
+  version: 4.1.4
+  resolution: "tailwindcss@npm:4.1.4"
+  checksum: 10/632510378ca0c73fb4ebd88d365480eab66a8f043cdefe3885afd45eaf71b9b1449ecbb17ead1b513de936cc98748fa5dc1759c8d91d8cd89887fecffa10648e
   languageName: node
   linkType: hard
 

@@ -64,7 +64,11 @@ export const GalleryImage: React.FC<GalleryImageProps> = props => {
           className="absolute top-[50%] left-[50%] -translate-y-1/2 -translate-x-1/2 w-full"
         >
           {state === GalleryImageState.ERROR && (
-            <Icon icon={<XCircleIcon />} color="error" size="lg" />
+            <Icon
+              icon={<XCircleIcon />}
+              size="lg"
+              customStyle={'[&>*]:stroke(errorLight dark:errorDark)'}
+            />
           )}
           {state === GalleryImageState.LOADING && <Spinner />}
           {state === GalleryImageState.ERROR && (

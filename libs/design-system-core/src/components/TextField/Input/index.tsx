@@ -35,13 +35,7 @@ export const Input: React.FC<InputProps> = forwardRef((props, ref) => {
       fullWidth={fullWidth}
       customStyle={`${containerStyle} ${radiusStyle}`}
     >
-      {iconLeft && (
-        <Icon
-          icon={iconLeft}
-          color={isFocused && !status ? iconFocusColor : iconColor}
-          disabled={disabled}
-        />
-      )}
+      {iconLeft && <Icon icon={iconLeft} disabled={disabled} />}
       <input
         ref={ref}
         type="text"
@@ -53,13 +47,7 @@ export const Input: React.FC<InputProps> = forwardRef((props, ref) => {
         onFocus={handleFocus}
         onBlur={handleBlur}
       />
-      {iconRight && (
-        <Icon
-          icon={iconRight}
-          color={isFocused && !status ? iconFocusColor : iconColor}
-          disabled={disabled}
-        />
-      )}
+      {iconRight && <Icon icon={iconRight} disabled={disabled} />}
     </Stack>
   );
 });

@@ -44,7 +44,7 @@ const MonthSelector: React.FC<MonthSelectorProps> = ({
       <div className={'flex justify-between items-center'}>
         <div>
           <Button onClick={goToPreviousYear} plain={true}>
-            <Icon icon={<ChevronLeftIcon />} accentColor={true} hover={true} />
+            <Icon icon={<ChevronLeftIcon />} accentColor={true} />
           </Button>
         </div>
         <div>
@@ -54,7 +54,7 @@ const MonthSelector: React.FC<MonthSelectorProps> = ({
         </div>
         <div>
           <Button onClick={goToNextYear} plain={true}>
-            <Icon icon={<ChevronRightIcon />} accentColor={true} hover={true} hoverColor="white" />
+            <Icon icon={<ChevronRightIcon />} accentColor={true} />
           </Button>
         </div>
       </div>

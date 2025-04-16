@@ -100,14 +100,12 @@ const Dropdown: React.FC<DropdownProps> = props => {
         {dropOpen ? (
           <Icon
             icon={<ChevronUpIcon />}
-            customStyle="ml-4"
-            color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+            customStyle="ml-4 [&>*]:stroke(secondaryLight dark:secondaryDark)"
           />
         ) : (
           <Icon
             icon={<ChevronDownIcon />}
-            customStyle="ml-4"
-            color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+            customStyle="ml-4 [&>*]:stroke(secondaryLight dark:secondaryDark)"
           />
         )}
       </button>
@@ -146,7 +144,7 @@ const Dropdown: React.FC<DropdownProps> = props => {
                     <span className={'ml-4'}>
                       <Icon
                         icon={<CheckIcon />}
-                        color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                        customStyle="[&>*]:stroke(secondaryLight dark:secondaryDark)"
                       />
                     </span>
                   )}

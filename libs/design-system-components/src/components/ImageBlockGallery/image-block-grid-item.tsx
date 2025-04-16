@@ -98,7 +98,7 @@ export const ImageBlockGridItem: React.FC<IGridItemProps> = props => {
           style={cssVars({ '--height': `${imageSrc?.size?.height}` })}
           className={`p-4 bg(grey9 dark:grey5) rounded w-full h-[var(--height)] ${heightStyle} ${multipleImageStyle}`}
         >
-          <Icon icon={<ImageCrossed />} color={{ light: 'grey5', dark: 'white' }} />
+          <Icon icon={<ImageCrossed />} customStyle={'[&>*]:stroke(grey5 dark:white)'} />
           <Text variant="footnotes2" color={{ light: 'grey5', dark: 'white' }}>
             {imageNotLoadedLabel}
           </Text>
