@@ -1,5 +1,5 @@
 import React, { Fragment, PropsWithChildren } from 'react';
-import { tw } from '@twind/core';
+
 import { Dialog, Transition } from '@headlessui/react';
 
 import Button from '../Button';
@@ -60,7 +60,7 @@ const Modal: React.FC<ModalProps> = ({
 }) => {
   return (
     <Transition show={show} as={Fragment}>
-      <Dialog as="div" onClose={onClose} className={tw('relative z-[11]')}>
+      <Dialog as="div" onClose={onClose} className={'relative z-[11]'}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"

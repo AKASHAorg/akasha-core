@@ -1,5 +1,4 @@
 import React, { PropsWithChildren } from 'react';
-import { apply, tw } from '@twind/core';
 
 import { FontWeight } from '../Text';
 import { getWeightClasses } from '../Text/getWeightClasses';
@@ -32,7 +31,7 @@ const Link: React.FC<LinkProps> = props => {
   const baseStyle =
     'inline-block cursor-pointer no-underline text(secondaryLight dark:secondaryDark)';
 
-  const className = apply`${baseStyle} ${weightStyle} ${customStyle}`;
+  const className = `${baseStyle} ${weightStyle} ${customStyle}`;
 
   const handleClick = (ev: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     if (typeof onClick === 'function') {
@@ -46,7 +45,7 @@ const Link: React.FC<LinkProps> = props => {
   return (
     <a
       href={to}
-      className={tw(className)}
+      className={className}
       target={target}
       rel="noreferrer noopener"
       data-testid={dataTestId}

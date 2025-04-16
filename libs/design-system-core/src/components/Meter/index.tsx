@@ -3,15 +3,13 @@ import React, { PropsWithChildren } from 'react';
 import Bar from './Bar';
 import Circle from './Circle';
 
-import { Color } from '../types/common.types';
-
 export type MeterProps = PropsWithChildren<{
   size: number;
   thickness: number;
   value: number;
   max?: number;
-  progressBg?: Color;
-  background?: Color;
+  progressBg?: string;
+  background?: string;
   type?: 'circle' | 'bar';
   direction?: 'horizontal' | 'vertical';
   customStyle?: string;

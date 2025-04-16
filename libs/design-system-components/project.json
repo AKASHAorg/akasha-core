@@ -13,7 +13,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "libs/design-system-components",
-        "command": "tsc --build"
+        "command": "tsc --build && node '../../tools/tailwind/tsc-build.transform.cjs'"
       }
     },
     "test": {

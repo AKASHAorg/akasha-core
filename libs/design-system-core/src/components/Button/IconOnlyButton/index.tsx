@@ -1,5 +1,5 @@
 import React, { forwardRef, HTMLAttributes } from 'react';
-import { apply, tw } from '@twind/core';
+
 import { ButtonIcon } from '../button-icon';
 import { ButtonProps, ButtonSize } from '../types';
 import { ArrowPathIcon } from '../../Icon/hero-icons-outline';
@@ -65,9 +65,7 @@ export const IconOnlyButton: React.FC<IconOnlyButtonProps & HTMLAttributes<HTMLB
         <button
           ref={ref}
           type="button"
-          className={tw(
-            apply`flex ${plainIcon ? '' : 'justify-center'} items-center group rounded-full ${containerStyle} ${BUTTON_SIZE_MAP[size]} ${breakPointStyle} ${plainIconStyle} ${customStyle}`,
-          )}
+          className={`flex ${plainIcon ? '' : 'justify-center'} items-center group rounded-full ${containerStyle} ${BUTTON_SIZE_MAP[size]} ${breakPointStyle} ${plainIconStyle} ${customStyle}`}
           disabled={disabled}
           {...rest}
         >

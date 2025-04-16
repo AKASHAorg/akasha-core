@@ -2,7 +2,6 @@ import React from 'react';
 import Icon from '../Icon';
 import { ChevronLeftIcon, ChevronRightIcon } from '../Icon/hero-icons-outline';
 import { MONTHS_IN_A_YEAR } from './calendarHelpers';
-import { tw, tx } from '@twind/core';
 import Button from '../Button';
 import Text from '../Text';
 
@@ -41,8 +40,8 @@ const MonthSelector: React.FC<MonthSelectorProps> = ({
   ));
 
   return (
-    <div className={tw(wrapperStyle)}>
-      <div className={tw('flex justify-between items-center')}>
+    <div className={wrapperStyle}>
+      <div className={'flex justify-between items-center'}>
         <div>
           <Button onClick={goToPreviousYear} plain={true}>
             <Icon icon={<ChevronLeftIcon />} accentColor={true} hover={true} />
@@ -59,7 +58,7 @@ const MonthSelector: React.FC<MonthSelectorProps> = ({
           </Button>
         </div>
       </div>
-      <div className={tx('grid grid-cols-3 justify-items-center mt-3')}>{displayMonths}</div>
+      <div className={'grid grid-cols-3 justify-items-center mt-3'}>{displayMonths}</div>
     </div>
   );
 };

@@ -3,7 +3,6 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import ProfileAvatarLoading from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton/ProfileAvatarLoading';
-import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import { formatDate, formatRelativeTime } from '@akashaorg/design-system-core/lib/utils';
 import {
   hasOwn,
@@ -14,6 +13,14 @@ import {
 } from '@akashaorg/ui-core-hooks';
 import { useTranslation } from 'react-i18next';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
+import {
+  ProfileAvatarButton,
+  ProfileAvatarButtonAvatar,
+  ProfileAvatarButtonAvatarFallback,
+  ProfileAvatarButtonAvatarImage,
+  ProfileDidField,
+  ProfileName,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
 
 type AuthorProfileAvatarProps = {
   authorId: string;
@@ -55,19 +62,13 @@ const AuthorProfileAvatar: React.FC<AuthorProfileAvatarProps> = props => {
       : null;
 
   return (
+    //      href={`/@akashaorg/app-profile/${authorId}`}
     <ProfileAvatarButton
-      variant="3"
-      profileId={authorId}
-      href={`/@akashaorg/app-profile/${authorId}`}
-      label={profileData?.name}
+      profileDID={authorId}
       {...(profileData?.nsfw && {
         nsfwLabel: 'NSFW',
-        nsfwAvatar: !(authenticatedDID === profileData?.did?.id || showNsfw),
+        nsfw: !(authenticatedDID === profileData?.did?.id || showNsfw),
       })}
-      avatar={transformSource(profileData?.avatar?.default)}
-      alternativeAvatars={profileData?.avatar?.alternatives?.map(alternative =>
-        transformSource(alternative),
-      )}
       metadata={
         <>
           {publishTime && !hidePublishTime && (
@@ -104,7 +105,21 @@ const AuthorProfileAvatar: React.FC<AuthorProfileAvatarProps> = props => {
       onClick={() => {
         onAvatarClick(authorId);
       }}
-    />
+    >
+      <ProfileAvatarButtonAvatar>
+        <ProfileAvatarButtonAvatarImage
+          src={
+            transformSource(profileData?.avatar?.default)?.src ||
+            profileData?.avatar?.alternatives?.map(alternative => transformSource(alternative))?.[0]
+              ?.src
+          }
+          alt="Author Avatar"
+        />
+        <ProfileAvatarButtonAvatarFallback />
+      </ProfileAvatarButtonAvatar>
+      <ProfileName>{profileData?.name}</ProfileName>
+      <ProfileDidField />
+    </ProfileAvatarButton>
   );
 };
 

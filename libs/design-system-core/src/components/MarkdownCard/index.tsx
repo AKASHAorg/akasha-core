@@ -1,5 +1,5 @@
 import React from 'react';
-import { tw } from '@twind/core';
+
 import remarkGfm from 'remark-gfm';
 import ReactMarkdown from 'react-markdown';
 
@@ -27,7 +27,7 @@ const MarkdownCard: React.FC<MarkdownCardProps> = props => {
   return (
     <div data-testid="md-card">
       {!hasWrapper && (
-        <div className={tw(`flex p-4 sm:p-0`)}>
+        <div className={`flex p-4 sm:p-0`}>
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{mdText}</ReactMarkdown>
         </div>
       )}

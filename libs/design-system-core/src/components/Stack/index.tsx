@@ -7,7 +7,7 @@ import {
   getJustifyItemsClasses,
   getJustifySelfClasses,
 } from './getJustifyClasses';
-import { apply, tw } from '@twind/core';
+
 import { Color, Padding } from '../types/common.types';
 
 export type Direction = 'column' | 'column-reverse' | 'row' | 'row-reverse';
@@ -27,6 +27,7 @@ export type StackProps = PropsWithChildren<{
   align?: Align;
   background?: Color;
   spacing?: `gap-x-${number}` | `gap-y-${number}` | `gap-${number}`;
+  style?: React.CSSProperties;
   customStyle?: string;
   fullWidth?: boolean;
   dataTestId?: string;
@@ -73,6 +74,7 @@ const Stack = forwardRef<HTMLDivElement, StackProps>(
       alignSelf,
       align,
       spacing = '',
+      style,
       customStyle = '',
       fullWidth,
       dataTestId,
@@ -94,9 +96,8 @@ const Stack = forwardRef<HTMLDivElement, StackProps>(
     return (
       <div
         id={id}
-        className={tw(
-          apply`${baseStyle} ${directionStyle} ${backgroundStyle} ${paddingStyle} ${justifyStyle} ${alignSelfStyle} ${justifyItemsStyle} ${justifySelfStyle} ${alignStyle} ${spacing} ${fullWidthStyle} ${customStyle}`,
-        )}
+        style={style}
+        className={`${baseStyle} ${directionStyle} ${backgroundStyle} ${paddingStyle} ${justifyStyle} ${alignSelfStyle} ${justifyItemsStyle} ${justifySelfStyle} ${alignStyle} ${spacing} ${fullWidthStyle} ${customStyle}`}
         data-testid={dataTestId}
         ref={ref}
       >

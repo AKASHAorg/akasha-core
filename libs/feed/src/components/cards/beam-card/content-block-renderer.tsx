@@ -158,8 +158,7 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
         <Stack
           justify="center"
           direction="row"
-          background={{ light: 'grey9', dark: 'grey5' }}
-          customStyle="rounded-[0.625rem]"
+          customStyle="rounded-[0.625rem] bg-grey9 dark:bg-grey5"
         >
           <Card className="bg-background m-3.5 p-2 w-fit h-[3.75rem]">
             {/* showHiddenContent is the flag used to hide nsfw blocks in the

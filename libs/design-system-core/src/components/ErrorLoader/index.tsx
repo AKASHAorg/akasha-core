@@ -19,8 +19,8 @@ export type ErrorLoaderProps = React.PropsWithChildren<{
   details?: React.ReactNode;
   dataTestId?: string;
   noWrapperCard?: boolean;
-  imageBoxStyle?: string; // use valid twind classes
-  customStyle?: string; // use valid twind classes
+  imageBoxStyle?: string;
+  customStyle?: string;
 }>;
 
 /**
@@ -31,8 +31,8 @@ export type ErrorLoaderProps = React.PropsWithChildren<{
  * @param title - error title
  * @param details - additional details about the error
  * @param noWrapperCard - flag to determine whether to wrap the ErrorLoader with Card component or not
- * @param imageBoxStyle - provide custom twind classes for image container, if needed
- * @param customStyle - provide custom twind classes for general Card wrapper, if needed
+ * @param imageBoxStyle - provide custom classes for image container, if needed
+ * @param customStyle - provide custom classes for general Card wrapper, if needed
  * @example
  * ```tsx
  *  <ErrorLoader type="script-error" title="Error in akasha app" details={error.message} />

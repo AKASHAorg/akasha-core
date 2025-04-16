@@ -1,6 +1,5 @@
 import React from 'react';
 import Text from '../Text';
-import { tw } from '@twind/core';
 
 export type LabelProps = React.PropsWithChildren<{
   id?: string;
@@ -26,7 +25,7 @@ const Label: React.FC<LabelProps> = props => {
     >
       {children}
       {required && (
-        <sup className={tw('-top-0.5 left-1 text-base  text(errorLight dark:errorDark)')}>*</sup>
+        <sup className={'-top-0.5 left-1 text-base  text(errorLight dark:errorDark)'}>*</sup>
       )}
     </Text>
   );

@@ -1,5 +1,5 @@
 import React from 'react';
-import { tw } from '@twind/core';
+
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
@@ -37,8 +37,8 @@ const EditorPlaceholder: React.FC<EditorPlaceholderType> = props => {
   } = props;
   return (
     <Card className="p-0 cursor-pointer bg-nested-card" onClick={onClick}>
-      <div className={tw(`flex justify-between p-4 `)}>
-        <div className={tw(`flex flex-row items-center gap-4 flex-1`)}>
+      <div className={`flex justify-between p-4`}>
+        <div className={`flex flex-row items-center gap-4 flex-1`}>
           <Avatar
             avatar={transformSource(avatar?.default)}
             alternativeAvatars={avatar?.alternatives?.map(alternative =>
@@ -50,7 +50,7 @@ const EditorPlaceholder: React.FC<EditorPlaceholderType> = props => {
           <Text
             variant="subtitle2"
             {...(isReflection && { color: 'grey7' })}
-            customStyle={`${!isReflection ? 'max-w([9.5rem] md:fit)' : ''} whitespace-normal`}
+            customStyle={`${!isReflection ? 'max-w([9.5rem] md:fit) w-full' : ''} whitespace-normal`}
           >
             {placeholderLabel}
           </Text>

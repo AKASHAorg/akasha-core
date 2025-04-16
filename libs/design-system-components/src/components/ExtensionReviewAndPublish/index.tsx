@@ -1,5 +1,5 @@
 import React, { ReactElement, useMemo } from 'react';
-import { tw } from '@twind/core';
+
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import Accordion from '@akashaorg/design-system-core/lib/components/Accordion';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
@@ -129,7 +129,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
     [extensionData?.gallery, transformSource],
   );
 
-  const asteriskStyle = tw(`-top-0.5 left-1 text-base text(errorLight dark:errorDark)`);
+  const asteriskStyle = `-top-0.5 left-1 text-base text(errorLight dark:errorDark`;
 
   return (
     <>
@@ -150,10 +150,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
             />
           </Stack>
 
-          <AppInfoPill
-            background={{ light: 'tertiaryLight', dark: 'tertiaryDark' }}
-            customStyle="w-fit self-end"
-          >
+          <AppInfoPill customStyle="w-fit self-end bg-tertiaryLight dark:bg-tertiaryDark">
             <ExtensionIcon type={extensionData?.applicationType} />
             <Text variant="footnotes2" color={{ light: 'secondaryLight', dark: 'white' }}>
               {extensionData?.applicationType}

@@ -1,5 +1,4 @@
 import { getColorClasses } from '../../utils/get-color-classes';
-import { getElevationClasses } from '../../utils/get-elevation-classes';
 import { ButtonProps } from './types';
 interface IContainerClasses {
   greyBg: ButtonProps['greyBg'];
@@ -40,17 +39,13 @@ interface IPrimaryClasses {
 
 function getPrimaryClasses({ greyBg, loading, disabled, active, hover }: IPrimaryClasses) {
   let backgroundStyle = `bg-gradient-to-r from-primaryStart to-primaryStop`;
-  const hoverStyle = !loading && !disabled && hover ? `hover:${getElevationClasses('4')}` : '';
-  const activeStyle = !loading && !disabled && active ? `${getElevationClasses('4')}` : '';
+  const hoverStyle =
+    !loading && !disabled && hover ? `hover:shadow-[0_0_6px_rgba(186,154,224,0.8)]` : '';
+  const activeStyle =
+    !loading && !disabled && active ? `shadow-[0_0_6px_rgba(186,154,224,0.8)]` : '';
 
   if (greyBg) {
-    backgroundStyle = getColorClasses(
-      {
-        light: 'grey9',
-        dark: 'grey3',
-      },
-      'bg',
-    );
+    backgroundStyle = 'bg-grey9 dark:bg-grey3';
   }
   return `${
     disabled ? 'opacity-50 cursor-not-allowed' : ''
@@ -66,13 +61,7 @@ interface ISecondaryClasses {
 
 function getSecondaryClasses({ loading, disabled, active, hover, hoverColors }: ISecondaryClasses) {
   const backgroundStyle = 'bg-transparent';
-  const borderStyle = getColorClasses(
-    {
-      light: 'secondaryLight',
-      dark: 'secondaryDark',
-    },
-    'border',
-  );
+  const borderStyle = 'border-secondaryLight dark:border-secondaryDark';
   const hoverBorderColor = hoverColors?.border
     ? getColorClasses(
         hoverColors.border,
@@ -80,26 +69,10 @@ function getSecondaryClasses({ loading, disabled, active, hover, hoverColors }: 
         'hover:border',
       )
     : '';
-  const hoverBgColor = getColorClasses(
-    hoverColors?.background
-      ? hoverColors.background
-      : {
-          light: 'secondaryLight/30',
-          dark: 'secondaryDark',
-        },
-    'hover:bg',
-  );
+  const hoverBgColor = 'hover:bg:secondaryLight/30 dark:hover:bg-secondaryDark';
   const hoverStyle = !loading && !disabled && hover ? `${hoverBgColor} ${hoverBorderColor}` : '';
   const activeStyle =
-    !loading && !disabled && active
-      ? `${getColorClasses(
-          {
-            light: 'secondaryLight/30',
-            dark: 'secondaryDark',
-          },
-          'bg',
-        )}`
-      : '';
+    !loading && !disabled && active ? 'bg-secondaryLight/30 dark:bg-secondaryDark' : '';
   return `${
     disabled ? 'opacity-50 cursor-not-allowed' : ''
   } border ${backgroundStyle} ${hoverStyle} ${activeStyle} ${borderStyle}`;

@@ -10,7 +10,6 @@ import {
   useRootComponentProps,
 } from '@akashaorg/ui-core-hooks';
 import IndicatorDots from '@akashaorg/design-system-components/lib/components/IndicatorDots';
-import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 import ConnectErrorCard from '@akashaorg/design-system-components/lib/components/ConnectErrorCard';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import {
@@ -186,24 +185,11 @@ const ConnectWallet: React.FC = () => {
         </Text>
       </Stack>
       <Stack direction="row" alignItems="center" justifyContent="center">
-        <AppIcon
-          placeholderIcon={<Walletconnect />}
-          background={{ gradient: 'gradient-to-b', from: 'orange-50', to: 'orange-200' }}
-          radius={24}
-          size={{ width: 80, height: 80 }}
-          backgroundSize={80}
-          iconColor="self-color"
-        />
+        <Walletconnect height={80} width={80} />
         <IndicatorDots isSuccess={isLoggedIn} hasErrors={hasErrors} />
-        <AppIcon
-          placeholderIcon={<Akasha />}
-          solid={true}
-          background={{ gradient: 'gradient-to-b', from: 'blue-200', to: 'red-200' }}
-          radius={24}
-          size={{ width: 54, height: 54 }}
-          backgroundSize={80}
-          iconColor="black"
-        />
+        <div className="flex justify-center items-center bg-gradient-to-b from-blue-200 to-red-200 rounded-[24px] size-20 [&>*]:fill-black">
+          <Akasha height={54} width={54} />
+        </div>
       </Stack>
       {networkNotSupportedError && (
         <ConnectErrorCard

@@ -6,7 +6,6 @@ import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import { ProfileImageVersions } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { transformSource, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { useGetAppsByPublisherDidQuery } from '@akashaorg/ui-core-hooks/lib/generated';
@@ -25,6 +24,14 @@ import {
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
 import { getExtensionTypeLabel } from '../../../../utils/extension-utils';
+import {
+  ProfileAvatarButton,
+  ProfileAvatarButtonAvatar,
+  ProfileAvatarButtonAvatarFallback,
+  ProfileAvatarButtonAvatarImage,
+  ProfileDidField,
+  ProfileName,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
 
 type DevInfoPageProps = {
   devDid: string;
@@ -138,13 +145,20 @@ export const DevInfoPage = (props: DevInfoPageProps) => {
       <Card className="p-4">
         <Stack spacing={4}>
           <Text variant="h5">{t('Developer')}</Text>
-          <ProfileAvatarButton
-            profileId={devDid}
-            label={name}
-            avatar={transformSource(avatar?.default)}
-            alternativeAvatars={avatar?.alternatives?.map(alt => transformSource(alt))}
-            onClick={handleProfileClick}
-          />
+          <ProfileAvatarButton profileDID={devDid} onClick={handleProfileClick}>
+            <ProfileAvatarButtonAvatar>
+              <ProfileAvatarButtonAvatarImage
+                src={
+                  transformSource(avatar?.default)?.src ||
+                  avatar?.alternatives?.map(alternative => transformSource(alternative))?.[0]?.src
+                }
+                alt="Developer Avatar"
+              />
+              <ProfileAvatarButtonAvatarFallback />
+            </ProfileAvatarButtonAvatar>
+            <ProfileName>{name}</ProfileName>
+            <ProfileDidField />
+          </ProfileAvatarButton>
           {appsReq.error && (
             <>
               <Divider />

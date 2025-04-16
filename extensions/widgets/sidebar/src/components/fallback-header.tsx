@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
@@ -35,7 +35,7 @@ const FallbackHeader: React.FC<FallbackHeaderProps> = ({ authenticatedDID, isLog
         />
       </Stack>
       <Stack className="w-fit h-fit self-start">
-        <Button variant="primary" size="sm" loading />
+        <Button variant="default" size="sm" loading />
       </Stack>
     </Stack>
   );

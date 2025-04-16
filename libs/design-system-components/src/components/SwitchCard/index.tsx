@@ -1,5 +1,4 @@
 import React, { ReactNode } from 'react';
-import { getColorClasses } from '@akashaorg/design-system-core/lib/utils';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { cn } from '@akashaorg/ui/lib/library/utils';
@@ -30,20 +29,8 @@ const SwitchCard: React.FC<SwitchCardProps> = props => {
 
   const baseStyle = 'group p-2';
 
-  const activeStyle = `border-b ${getColorClasses(
-    {
-      light: 'secondaryLight',
-      dark: 'secondaryDark',
-    },
-    'border',
-  )}`;
-  const hoverStyle = `hover:border-b ${getColorClasses(
-    {
-      light: 'secondaryLight',
-      dark: 'secondaryDark',
-    },
-    'hover:border',
-  )}`;
+  const activeStyle = `border-b border-secondaryLight dark:border-secondaryDark`;
+  const hoverStyle = `hover:border-b hover:border-secondaryLight dark: dark:hover:border-secondaryDark`;
 
   return (
     <>
@@ -69,13 +56,7 @@ const SwitchCard: React.FC<SwitchCardProps> = props => {
                 }
                 weight={el.value === activeButton ? 'bold' : 'normal'}
                 align="center"
-                customStyle={getColorClasses(
-                  {
-                    light: 'secondaryLight',
-                    dark: 'secondaryDark',
-                  },
-                  'group-hover:text',
-                )}
+                customStyle={'group-hover:text-secondaryLight dark:group-hover:text-secondaryDark'}
               >
                 {el.label}
               </Text>

@@ -16,7 +16,6 @@ import {
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { ExtensionImageType, type Image } from '@akashaorg/typings/lib/ui';
 import Modal, { ModalProps } from '@akashaorg/design-system-core/lib/components/Modal';
-import { getColorClasses } from '@akashaorg/design-system-core/lib/utils';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils/useCloseActions';
 import { DeleteImageModal } from './DeleteImageModal';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
@@ -258,19 +257,7 @@ export const Header: React.FC<HeaderProps> = ({
                 setShowLogoImageActions(!showLogoImageActions);
                 setAppImageType('logo-image');
               }}
-              customStyle={`border-2 ${getColorClasses(
-                {
-                  light: 'white',
-                  dark: 'grey2',
-                },
-                'border',
-              )} ${getColorClasses(
-                {
-                  light: 'grey8',
-                  dark: 'grey4',
-                },
-                'bg',
-              )}`}
+              customStyle={`border-2 border-white dark:border-grey2 bg-grey8 dark:bg-grey4`}
             />
             <Stack className="absolute">
               <Button
@@ -305,17 +292,15 @@ export const Header: React.FC<HeaderProps> = ({
               type="info"
               label={capitalize(extensionType?.toLowerCase())}
               icon={<ExtensionIcon size={'sm'} type={extensionType} />}
-              background={{ light: 'tertiaryLight', dark: 'tertiaryDark' }}
               color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-              customStyle="py-0.5"
+              customStyle="py-0.5 bg-tertiaryLight dark:bg-tertiaryDark"
             />
             {nsfw && (
               <Pill
                 type="info"
                 label={'NSFW'}
-                background={{ light: 'errorFade', dark: 'errorDark' }}
                 color={{ light: 'errorDark', dark: 'white' }}
-                customStyle="py-0.5"
+                customStyle="py-0.5 bg-errorFade dark:bg-errorDark"
               />
             )}
           </Stack>

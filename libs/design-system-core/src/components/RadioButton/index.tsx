@@ -1,5 +1,4 @@
 import React from 'react';
-import { tw, apply } from '@twind/core';
 
 type RadioButtonSize = 'small' | 'large';
 
@@ -57,17 +56,17 @@ export const RadioButton: React.FC<RadioButtonProps> = props => {
   const buttonSize = size === 'small' ? 'w-4 h-4' : 'w-6 h-6';
   const pseudoCircleSize = size === 'small' ? 'after:w-2 after:h-2' : 'after:w-4 after:h-4 ';
 
-  const instanceStyles = apply`
+  const instanceStyles = `
     ${baseStyles}
   `;
 
-  const instanceButtonStyles = apply`
+  const instanceButtonStyles = `
   ${baseButtonStyles}
   border(& ${inputColor})
 `;
 
   return (
-    <div className={tw(instanceStyles)}>
+    <div className={instanceStyles}>
       <input
         id={id}
         type="radio"
@@ -77,13 +76,13 @@ export const RadioButton: React.FC<RadioButtonProps> = props => {
         aria-labelledby={value}
         onChange={handleChange}
       />
-      <label htmlFor={id} className={tw(`flex items-center cursor-pointer text-sm ${textColor}`)}>
+      <label htmlFor={id} className={`flex items-center cursor-pointer text-sm ${textColor}`}>
         <span
-          className={tw(
+          className={
             isSelected
               ? `${buttonSize} ${instanceButtonStyles} after:block after:bg-(${inputColor}) after:rounded-full ${pseudoCircleSize}`
-              : `${buttonSize} ${instanceButtonStyles} after:hidden`,
-          )}
+              : `${buttonSize} ${instanceButtonStyles} after:hidden`
+          }
         ></span>
         {label}
       </label>

@@ -19,8 +19,8 @@ export const DuplexAppButton: React.FC<DuplexAppButtonProps> = ({ onUninstall })
         <Icon
           icon={<TrashIcon />}
           solid={false}
-          size={{ width: 'w-4', height: 'h-5' }}
           color={{ light: 'errorLight', dark: 'errorDark' }}
+          customStyle="size-4"
         />
       </Stack>
     </button>

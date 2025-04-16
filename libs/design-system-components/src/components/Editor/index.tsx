@@ -54,8 +54,8 @@ import { renderElement, renderLeaf } from './renderers';
 import { withMentions, withLinks } from './plugins';
 
 import { MarkButton, BlockButton } from './formatting-buttons';
-import { tw } from '@twind/core';
 import { cn } from '@akashaorg/ui/lib/library/utils';
+import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
 
 const MAX_TEXT_LENGTH = 500;
 
@@ -463,10 +463,14 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
         direction="row"
         justifyContent="start"
         spacing={2}
+        style={cssVars({
+          '--min-height': minHeight,
+          '--mention-popover-width': `${mentionPopoverWidth.current}px`,
+        })}
         className={cn(
           'h-full',
           showAvatar && 'w-10/12 md:w-11/12  w-full',
-          minHeight && `min-h-[${minHeight}]`,
+          minHeight && `min-h-[var(--min-height)]`,
         )}
       >
         {showAvatar && (
@@ -486,7 +490,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
             <InlineNotification
               message={mentionsLimit.label}
               type="warning"
-              background={{ light: 'warningDark/30', dark: 'warningDark/30' }}
+              customStyle="bg-warningDark/30"
             />
           )}
           <Slate
@@ -503,7 +507,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
               renderElement={renderElementFn}
               renderLeaf={renderLeaf}
               onKeyDown={onKeyDown}
-              className={tw('focus:outline-none')}
+              className={'focus:outline-none'}
             />
             {mentionTargetRange && (
               <MentionPopover
@@ -513,7 +517,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
                 setIndex={setIndex}
                 transformSource={transformSource}
                 noMentionsLabel={noMentionsLabel}
-                customStyle={`w-[${mentionPopoverWidth.current}px] sm:w-[272px] `}
+                customStyle={`w-[var(--mention-popover-width)] sm:w-[272px] `}
               />
             )}
             <Stack

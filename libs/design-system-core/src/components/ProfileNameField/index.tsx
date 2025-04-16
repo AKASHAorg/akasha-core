@@ -59,13 +59,7 @@ const ProfileNameField: React.FC<ProfileNameFieldProps> = ({
 }) => {
   const textTruncateStyle = `${truncateText ? `max-w(${nsfwLabel.length ? '[5rem]' : '[7rem]'} xs:[2rem])` : ''}`;
   const textHoverStyle = hover
-    ? `cursor-pointer hover:underline ${getColorClasses(
-        { light: 'black', dark: 'white' },
-        'hover:decoration',
-      )} group-hover:underline ${getColorClasses(
-        { light: 'black', dark: 'white' },
-        'group-hover:decoration',
-      )}`
+    ? `cursor-pointer hover:underline hover:decoration-black dark:hover:decoration-white group-hover:underline group-hover:decoration-black dark:group-hover:decoration-white`
     : '';
 
   const networkType = getDidNetworkType(did);

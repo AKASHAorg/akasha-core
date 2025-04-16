@@ -1,5 +1,5 @@
 import React, { forwardRef, useState } from 'react';
-import { apply, tw } from '@twind/core';
+
 import { InputProps } from '../types';
 import { Color } from '../../types/common.types';
 import Icon from '../../Icon';
@@ -46,7 +46,7 @@ export const Input: React.FC<InputProps> = forwardRef((props, ref) => {
         ref={ref}
         type="text"
         aria-labelledby={id}
-        className={tw(apply`${inputStyle}`)}
+        className={`${inputStyle}`}
         disabled={disabled}
         readOnly={readOnly}
         {...rest}

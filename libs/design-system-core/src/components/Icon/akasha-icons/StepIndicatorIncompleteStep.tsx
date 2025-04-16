@@ -1,5 +1,4 @@
 import React from 'react';
-import { tx } from '@twind/core';
 
 //Not imported into Icon because this one has both stroke and fill color that needs to be specified for both circles
 const StepIndicatorIncompletedStep = ({ colorLight = 'grey5', colorDark = 'grey6' }) => {
@@ -16,10 +15,10 @@ const StepIndicatorIncompletedStep = ({ colorLight = 'grey5', colorDark = 'grey6
           cx="16"
           cy="16"
           r="15"
-          className={tx(`stroke-${colorLight} dark:stroke-${colorDark}`)}
+          className={`stroke-${colorLight} dark:stroke-${colorDark}`}
           strokeWidth="2"
         />
-        <circle cx="16" cy="16" r="5" className={tx(`fill-${colorLight} dark:fill-${colorDark}`)} />
+        <circle cx="16" cy="16" r="5" className={`fill-${colorLight} dark:fill-${colorDark}`} />
       </svg>
     </div>
   );

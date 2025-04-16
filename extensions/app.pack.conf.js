@@ -30,9 +30,6 @@ module.exports = {
       if (/^@tanstack\/react-query$/.test(request)) {
         return callback(null, 'ReactQuery', 'root');
       }
-      if (/^@twind\/core$/.test(request)) {
-        return callback(null, 'twind', 'root');
-      }
       if (/^systemjs$/.test(request)) {
         return callback(null, 'System', 'root');
       }

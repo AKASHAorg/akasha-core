@@ -14,6 +14,7 @@ import { Virtualizer, measureElement, useWindowVirtualizer } from '@tanstack/rea
 import { useScrollRestoration } from './use-scroll-restoration';
 import { getMinHeight, restoreScrollConfig } from './use-scroll-restoration/utils';
 import { useMedia } from 'react-use';
+import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
 
 type DynamicInfiniteScrollItem = {
   index: number;
@@ -67,7 +68,6 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollProps> = props => {
   const parentOffsetRef = React.useRef(0);
   const isMobileScreen = useMedia('(max-width: 640px)');
   const headerRef = useRef<HTMLDivElement>(null);
-  const headerHeightStyle = useRef('');
 
   const getHeaderHeight = useCallback(() => {
     const scrollConfig = restoreScrollConfig(scrollRestorationStorageKeyRef.current);
@@ -97,7 +97,11 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollProps> = props => {
 
   useLayoutEffect(() => {
     const headerHeight = getHeaderHeight();
-    if (headerHeight) headerHeightStyle.current = `min-h-[${headerHeight}px]`;
+    headerRef.current?.setAttribute('style', `--min-height: min-h-[${headerHeight}px]`);
+    headerRef.current?.setAttribute(
+      'className',
+      `${headerRef.current.className} min-h-[var(--min-height)]`,
+    );
   }, [getHeaderHeight]);
 
   const virtualizer = useWindowVirtualizer({
@@ -141,46 +145,53 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollProps> = props => {
 
   const virtualListUi = (
     <>
-      {header && (
-        <Stack ref={headerRef} className={headerHeightStyle.current}>
-          {header}
-        </Stack>
-      )}
-      <Card
+      {header && <Stack ref={headerRef}>{header}</Stack>}
+      <div
         ref={parentRef}
-        customStyle={`relative w-full min-h-[${virtualizer.isScrolling && loading && hasNextPage ? totalSize + overScan * estimatedHeight : totalSize}px] ${customStyle}`}
-        dataTestId={dataTestId}
-        type="plain"
+        style={cssVars({
+          '--min-height': `${virtualizer.isScrolling && loading && hasNextPage ? totalSize + overScan * estimatedHeight : totalSize}px`,
+          '--offset': `${vListOffset}px`,
+          '--item-spacing': `${itemSpacing}px`,
+          '--estimated-height': `${estimatedHeight}px`,
+        })}
+        className={`relative w-full min-h-[var(--min-height)] ${cssVars} ${customStyle}`}
+        data-test-id={dataTestId}
       >
         <Card
           data-offset={vListOffset}
-          customStyle={`flex flex-col absolute w-full top-0 left-0 translate-y-[${vListOffset}px] gap-y-[${itemSpacing}px] ${listWrapperStyle}`}
+          customStyle={`flex flex-col absolute w-full top-0 left-0 translate-y-[var(--offset)] gap-y-[var(--item-spacing)] ${listWrapperStyle}`}
           type="plain"
         >
           {virtualItems.map((virtualItem, index, items) => (
-            <Card
+            <div
               key={virtualItem.key}
               data-index={virtualItem.index}
               ref={virtualizer.measureElement}
-              type="plain"
-              customStyle={
+              style={
+                getMinHeight({
+                  virtualizer,
+                  virtualItemIndex: virtualItem.index,
+                  virtualItemSize: virtualItem.size,
+                })?.style
+              }
+              className={
                 loading
-                  ? `min-h-[${estimatedHeight}px]`
+                  ? `min-h-[var(--estimated-height)]`
                   : getMinHeight({
                       virtualizer,
                       virtualItemIndex: virtualItem.index,
                       virtualItemSize: virtualItem.size,
-                    })
+                    })?.className ?? ''
               }
             >
               {children({ index, itemIndex: virtualItem.index, itemsSize: items.length })}
-            </Card>
+            </div>
           ))}
           <Stack alignItems="center" justifyContent="center" className="w-full">
             {loadingMore && <Spinner />}
           </Stack>
         </Card>
-      </Card>
+      </div>
     </>
   );
 

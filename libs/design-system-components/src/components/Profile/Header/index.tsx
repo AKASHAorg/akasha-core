@@ -12,7 +12,7 @@ import {
   Cog6ToothIcon,
   EllipsisVerticalIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import { getImageFromSeed, getColorClasses } from '@akashaorg/design-system-core/lib/utils';
+import { getImageFromSeed } from '@akashaorg/design-system-core/lib/utils';
 import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import { cn } from '@akashaorg/ui/lib/library/utils';
@@ -115,13 +115,7 @@ const Header: React.FC<HeaderProps> = ({
                 )}
                 customStyle={`absolute -top-6 border-2 border-white dark:border-grey2 ${
                   avatar ? 'cursor-pointer' : ''
-                } ${getColorClasses(
-                  {
-                    light: 'grey8',
-                    dark: 'grey4',
-                  },
-                  'bg',
-                )}`}
+                } bg-grey8 dark:bg-grey4`}
                 onClick={onClickAvatar}
               />
             </Stack>
@@ -144,8 +138,7 @@ const Header: React.FC<HeaderProps> = ({
                     <Pill
                       label={badge.label}
                       color={{ light: 'errorDark2', dark: 'white' }}
-                      background={{ light: 'errorFade', dark: 'errorDark2' }}
-                      customStyle="px-2"
+                      customStyle="px-2 bg-errorFade dark:bg-errorDark2"
                       type="info"
                     />
                   </Tooltip>

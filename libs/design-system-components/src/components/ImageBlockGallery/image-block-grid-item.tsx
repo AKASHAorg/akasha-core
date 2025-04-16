@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { apply, tw, tx } from '@twind/core';
 import { DelayLoad } from '@akashaorg/design-system-core/lib/utils/delay-load';
 import { type GalleryImage } from '@akashaorg/typings/lib/ui';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { ImageCrossed } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
 
 export interface IGridItemProps {
   imageNotLoadedLabel: string;
@@ -43,12 +43,12 @@ export const ImageBlockGridItem: React.FC<IGridItemProps> = props => {
     return clearTimeout(timer);
   }, [imgLoaded]);
 
-  const multipleImageStyle = apply`${images.length > 1 && aspectRatio}`;
-  const heightStyle = apply`${images.length === 1 && 'max-h-40 sm:max-h-60'}`;
+  const multipleImageStyle = `${images.length > 1 && aspectRatio}`;
+  const heightStyle = `${images.length === 1 && 'max-h-40 sm:max-h-60'}`;
 
   return (
     <button
-      className={tw('flex relative border(solid grey1) rounded')}
+      className={'flex relative border(solid grey1) rounded'}
       style={gridStyle}
       onClick={ev => {
         if (handleClickImage && typeof handleClickImage === 'function' && imgLoaded) {
@@ -61,13 +61,13 @@ export const ImageBlockGridItem: React.FC<IGridItemProps> = props => {
     >
       {/* when we have a single image we need to keep the original aspect ratio,
           otherwise give images a 1:1 ratio */}
-      <picture className={tw('flex w-full')}>
+      <picture className={'flex w-full'}>
         <source srcSet={imageSrc?.originalSrc} />
 
         <img
           decoding="async"
           alt={imageSrc?.src}
-          className={tx(`rounded object-cover w-full ${heightStyle} ${multipleImageStyle}`)}
+          className={`rounded object-cover w-full ${heightStyle} ${multipleImageStyle}`}
           src={imageSrc?.src}
           onLoad={() => setImgLoaded(true)}
           hidden={!imgLoaded}
@@ -77,12 +77,12 @@ export const ImageBlockGridItem: React.FC<IGridItemProps> = props => {
 
       {!imgLoaded && !showImgFailedToLoad && (
         <DelayLoad>
-          <div className={tw('flex')}>
+          <div className={'flex'}>
             <img
               loading="lazy"
               decoding="async"
               alt={'placeholder'}
-              className={tx(`rounded object-cover w-full ${heightStyle} ${multipleImageStyle}`)}
+              className={`rounded object-cover w-full ${heightStyle} ${multipleImageStyle}`}
               src={'/images/image-placeholder.webp'}
               height={images.length === 1 ? imageSrc?.size?.height : ''}
             />
@@ -95,7 +95,8 @@ export const ImageBlockGridItem: React.FC<IGridItemProps> = props => {
           alignItems="center"
           justifyContent="center"
           spacing={2}
-          className={`p-4 bg(grey9 dark:grey5) rounded w-full h-[${imageSrc?.size?.height}] ${heightStyle} ${multipleImageStyle}`}
+          style={cssVars({ '--height': `${imageSrc?.size?.height}` })}
+          className={`p-4 bg(grey9 dark:grey5) rounded w-full h-[var(--height)] ${heightStyle} ${multipleImageStyle}`}
         >
           <Icon icon={<ImageCrossed />} color={{ light: 'grey5', dark: 'white' }} />
           <Text variant="footnotes2" color={{ light: 'grey5', dark: 'white' }}>

@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, forwardRef } from 'react';
-import { apply, tw } from '@twind/core';
+
 import {
   getColorClasses,
   getElevationClasses,
@@ -59,7 +59,7 @@ const Card = forwardRef<HTMLDivElement, TCardProps>((props, ref) => {
     return (
       <div
         {...rest}
-        className={tw(customStyle)}
+        className={customStyle}
         role={rest.onClick ? 'button' : 'presentation'}
         ref={ref}
         data-testid={dataTestId}
@@ -117,11 +117,11 @@ const RegularCard: React.FC<PropsWithChildren<CommonCardProps & RegularCardType>
     const fullWidthStyle = fullWidth ? 'w-full' : '';
     const noBorderStyle = noBorderRadius ? 'rounded-none' : radiusStyle;
 
-    const className = apply`flex flex-col ${elevationStyle} w-full ${paddingStyle} ${margin} ${backgroundStyle} ${noBorderStyle} ${generatedBorder} ${fullWidthStyle} ${customStyle}`;
+    const className = `flex flex-col ${elevationStyle} w-full ${paddingStyle} ${margin} ${backgroundStyle} ${noBorderStyle} ${generatedBorder} ${fullWidthStyle} ${customStyle}`;
 
     return (
       <div
-        className={tw(className)}
+        className={className}
         role={rest.onClick ? 'button' : 'presentation'}
         ref={ref}
         data-testid={dataTestId}

@@ -507,6 +507,7 @@ export const ImageEditorBlock = (
             />
           )}
           <ImageModal
+            rightAlignActions={undefined}
             show={showEditModal}
             title={{ label: t('Edit Image') }}
             cancelLabel={t('Cancel')}

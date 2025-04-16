@@ -17,6 +17,10 @@ const exp = {
   target: ['web', 'es2017'],
   module: {
     rules: [
+      {
+        test: /\.tsx$/,
+        use: path.resolve(__dirname, '../tools/tailwind/variant-group.loader.js'),
+      },
       { test: /\.ts(x)?$/, use: 'ts-loader' },
       {
         test: /\.m?js/,

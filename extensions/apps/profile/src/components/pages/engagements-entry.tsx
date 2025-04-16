@@ -1,5 +1,4 @@
 import React from 'react';
-import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import FollowProfileButton from '../follow-profile-button';
 import { AkashaProfile, IModalNavigationOptions } from '@akashaorg/typings/lib/ui';
@@ -7,6 +6,14 @@ import { useGetProfileByIdQuery } from '@akashaorg/ui-core-hooks/lib/generated/a
 import { selectProfileData } from '@akashaorg/ui-core-hooks/lib/selectors/get-profile-by-id-query';
 import { transformSource, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { cn } from '@akashaorg/ui/lib/library/utils';
+import {
+  ProfileAvatarButton,
+  ProfileAvatarButtonAvatar,
+  ProfileAvatarButtonAvatarFallback,
+  ProfileAvatarButtonAvatarImage,
+  ProfileDidField,
+  ProfileName,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
 
 type EngagementsEntryProps = {
   profileID: string;
@@ -15,7 +22,8 @@ type EngagementsEntryProps = {
   authenticatedDID: string;
   showNsfw: boolean;
   profileAnchorLink: string;
-  customStyle?: string;
+  style?: React.CSSProperties;
+  className?: string;
 };
 
 export const EngagementsEntry: React.FC<EngagementsEntryProps> = props => {
@@ -26,7 +34,8 @@ export const EngagementsEntry: React.FC<EngagementsEntryProps> = props => {
     authenticatedDID,
     showNsfw,
     profileAnchorLink,
-    customStyle = '',
+    style,
+    className,
   } = props;
   const { getCorePlugins, navigateToModal } = useRootComponentProps();
 
@@ -68,27 +77,37 @@ export const EngagementsEntry: React.FC<EngagementsEntryProps> = props => {
       direction="row"
       alignItems="center"
       justifyContent="between"
-      className={cn('px-4 customStyle w-full', customStyle)}
+      style={style}
+      className={cn('px-4 w-full', className)}
     >
+      {
+        // href={entryProfileDID ? `${profileAnchorLink}/${entryProfileDID}` : ''}
+      }
       <ProfileAvatarButton
-        profileId={
-          //@todo provide only the profile DID, if entryProfileDID is null then the entry info will be filtered out instead of displaying profile stream id
-          entryProfileDID ?? profileID
-        }
-        avatar={transformSource(profileData?.avatar?.default)}
-        alternativeAvatars={profileData?.avatar?.alternatives?.map(alternative =>
-          transformSource(alternative),
-        )}
-        label={profileData?.name}
+        profileDID={entryProfileDID ?? profileID}
         {...(profileData?.nsfw && {
-          nsfwAvatar: !(viewerIsOwner || showNsfw),
+          nsfw: !(viewerIsOwner || showNsfw),
           nsfwLabel: 'NSFW',
         })}
-        href={entryProfileDID ? `${profileAnchorLink}/${entryProfileDID}` : ''}
         onClick={() => {
           if (profileDID) onProfileClick(profileDID);
         }}
-      />
+      >
+        <ProfileAvatarButtonAvatar>
+          <ProfileAvatarButtonAvatarImage
+            src={
+              transformSource(profileData?.avatar?.default)?.src ||
+              profileData?.avatar?.alternatives?.map(alternative =>
+                transformSource(alternative),
+              )?.[0]?.src
+            }
+            alt="@akashaorg"
+          />
+          <ProfileAvatarButtonAvatarFallback />
+        </ProfileAvatarButtonAvatar>
+        <ProfileName>{profileData?.name}</ProfileName>
+        <ProfileDidField />
+      </ProfileAvatarButton>
       {!viewerIsOwner && (
         <FollowProfileButton profileID={profileID} showLoginModal={showLoginModal} />
       )}

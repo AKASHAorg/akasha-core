@@ -26,7 +26,7 @@ const Stepper: React.FC<StepperProps> = props => {
           <React.Fragment key={el}>
             {index > 1 && (
               <Stack
-                customStyle={`w-7 h-[0.1rem] bg(${index > currentStep ? 'grey6' : 'secondaryLight dark:SecondaryDark'})`}
+                customStyle={`w-7 h-[0.1rem] ${index > currentStep ? 'bg-grey6' : 'bg(secondaryLight dark:SecondaryDark)'}`}
               />
             )}
             <Stack
@@ -39,12 +39,9 @@ const Stepper: React.FC<StepperProps> = props => {
                 <Icon icon={<CheckIcon />} color="white" solid={true} />
               ) : (
                 <Stack
-                  background={
-                    index > currentStep
-                      ? 'grey6'
-                      : { light: 'secondaryLight', dark: 'secondaryDark' }
-                  }
-                  customStyle="w-4 h-4 rounded-full"
+                  customStyle={`w-4 h-4 rounded-full ${
+                    index > currentStep ? 'grey6' : 'bg-secondaryLight dark:bg-secondaryDark'
+                  }`}
                 />
               )}
             </Stack>
