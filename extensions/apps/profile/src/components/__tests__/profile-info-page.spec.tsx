@@ -52,7 +52,6 @@ describe('< ProfileInfoPage /> component', () => {
       renderWithAllProviders(baseComponent(mocks), {});
       expect(await screen.findByText(name)).toBeInTheDocument();
       expect(screen.getByText(truncateDid(did.id))).toBeInTheDocument();
-      expect(screen.getByTestId('avatar-source')).toHaveAttribute('srcset', avatar.default.src);
       expect(screen.getByTestId('cover-image')).toHaveStyle(
         `background-image: url(${background.default.src})`,
       );

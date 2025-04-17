@@ -1,8 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
+import {
+  ProfileAvatar,
+  ProfileAvatarImage,
+  ProfileAvatarFallback,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import List, { ListProps } from '@akashaorg/design-system-core/lib/components/List';
 import ImageModal from '@akashaorg/design-system-components/lib/components/ImageModal';
@@ -230,13 +234,10 @@ export const Header: React.FC<HeaderProps> = ({
           ref={editAvatarRef}
           className="absolute left-6 -bottom-8"
         >
-          <Avatar
-            profileId={profileId}
-            size="lg"
-            avatar={avatarUrl}
-            alternativeAvatars={alternativeAvatars.current}
-            customStyle={`border-2 border-white dark:border-grey2 bg-grey8 dark:bg-grey4`}
-          />
+          <ProfileAvatar profileDID={profileId} size="xl" className="border-2 border-white">
+            <ProfileAvatarImage src={avatarUrl?.src || alternativeAvatars?.[0]?.src} />
+            <ProfileAvatarFallback />
+          </ProfileAvatar>
           <Stack className="absolute">
             <Button
               aria-label="avatar"

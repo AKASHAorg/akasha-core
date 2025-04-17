@@ -1,11 +1,15 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
+import {
+  ProfileAvatar,
+  ProfileAvatarFallback,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar';
+
 
 export type FallbackHeaderProps = {
   authenticatedDID: string;
@@ -23,7 +27,9 @@ const FallbackHeader: React.FC<FallbackHeaderProps> = ({ authenticatedDID, isLog
       className={`justify-items-stretch p-4 border-b-1 border-grey9 dark:border-grey3 rounded-t-2xl ${headerBackground}`}
     >
       <Stack className="w-fit h-fit mr-2">
-        <Avatar profileId={authenticatedDID} avatar={null} isClickable={false} />
+        <ProfileAvatar profileDID={authenticatedDID} size="lg">
+          <ProfileAvatarFallback />
+        </ProfileAvatar>
       </Stack>
       <Stack justifyContent="center" className="w-fit flex-grow">
         {isLoggedIn && <Text variant="button-md">{t('Fetching your info...')}</Text>}

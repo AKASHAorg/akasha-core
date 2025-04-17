@@ -1,5 +1,4 @@
 import React from 'react';
-import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
@@ -7,6 +6,11 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 import { getImageFromSeed } from '@akashaorg/design-system-core/lib/utils';
+import {
+  ProfileAvatar,
+  ProfileAvatarFallback,
+  ProfileAvatarImage,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar';
 
 export type MiniProfileCardProps = {
   publicImagePath?: string;
@@ -50,18 +54,17 @@ const MiniProfileCard: React.FC<MiniProfileCardProps> = props => {
         })]`}
       >
         <Stack className="relative top-16">
-          <Avatar
-            size="xl"
-            border="sm"
-            borderColor="white"
-            avatar={transformSource(profileData?.avatar?.default)}
-            alternativeAvatars={profileData?.avatar?.alternatives?.map(alternative =>
-              transformSource(alternative),
-            )}
-            profileId={profileData?.did?.id}
-            customStyle="cursor-pointer"
-            onClick={handleClick}
-          />
+          <button onClick={handleClick}>
+            <ProfileAvatar
+              profileDID={profileData?.did?.id}
+              size="xl"
+              nsfw={profileData?.nsfw}
+              className="border-2 border-border"
+            >
+              <ProfileAvatarImage src={transformSource(profileData?.avatar?.default)?.src} />
+              <ProfileAvatarFallback />
+            </ProfileAvatar>
+          </button>
         </Stack>
       </Stack>
       <Stack spacing={4} alignItems="center" className="pt-6 pb-4 px-4">
