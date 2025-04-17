@@ -5,9 +5,9 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 export type TApplicationStatus = 'pending' | 'approved' | 'rejected' | 'withdrawn';
 
 export const getApplicationStatusColor = (status: TApplicationStatus) => {
-  if (status === 'pending') return 'bg(warningLight dark:warningDark)';
+  if (status === 'pending') return 'bg-warningLight dark:bg-warningDark';
   if (status === 'approved') return 'bg-success';
-  if (status === 'rejected') return 'bg(errorLight dark: errorDark)';
+  if (status === 'rejected') return 'bg-errorLight bg-errorDark';
   return 'bg-grey6';
 };
 

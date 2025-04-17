@@ -82,7 +82,11 @@ const InstallApp = ({
     <Card className="p-6">
       <Stack alignItems="center" direction="column" spacing={8}>
         <Text variant="h5">{title}</Text>
-        <Stack direction="row" spacing={4} className="px-2 py-2.5 bg(grey9 dark:grey5) rounded-xl">
+        <Stack
+          direction="row"
+          spacing={4}
+          className="px-2 py-2.5 bg-grey9 dark:bg-grey5 rounded-xl"
+        >
           <AppAvatar appType={appType} avatar={appAvatar} width={4} height={4} />
           <Stack direction="column" justifyContent="between">
             <Text variant="button-lg">{appName}</Text>

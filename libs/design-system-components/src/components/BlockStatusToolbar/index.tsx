@@ -47,7 +47,7 @@ const BlockStatusToolbar: React.FC<IBlockStatusToolbar> = props => {
         <Stack
           alignItems="center"
           justifyContent="center"
-          className="h-8 w-8 group relative rounded-full bg(grey9 dark:grey5)"
+          className="h-8 w-8 group relative rounded-full bg-grey9 dark:bg-grey5"
         >
           <Icon size="sm" icon={<ArrowPathIcon />} rotateAnimation={true} />
         </Stack>
@@ -73,12 +73,12 @@ const BlockStatusToolbar: React.FC<IBlockStatusToolbar> = props => {
         <Stack
           alignItems="center"
           justifyContent="center"
-          className="h-8 w-8 group relative rounded-full bg(errorLight/30 dark:errorDark/30)"
+          className="h-8 w-8 group relative rounded-full bg-errorLight/30 dark:bg-errorDark/30"
         >
           <Icon
             size="sm"
             icon={<ExclamationTriangleIcon />}
-            customStyle={'[&>*]:stroke(errorLight dark:errorDark)'}
+            customStyle={'[&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark'}
           />
         </Stack>
         <Text color={{ light: 'errorLight', dark: 'errorDark' }}>{errorLabel}</Text>

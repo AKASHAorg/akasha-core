@@ -45,9 +45,9 @@ const MiniProfileCard: React.FC<MiniProfileCardProps> = props => {
     <Card className="p-0 mb-4 max-h-[30rem]">
       <Stack
         alignItems="center"
-        className={`h-28 rounded-t-2xl bg(center cover [url(${
+        className={`h-28 rounded-t-2xl bg-center bg-cover bg-[url(${
           coverImage?.src ?? coverImageFallback
-        })])`}
+        })]`}
       >
         <Stack className="relative top-16">
           <Avatar

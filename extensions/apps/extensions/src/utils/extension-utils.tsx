@@ -33,7 +33,7 @@ export const getStatusIndicatorStyle = (
     case ExtensionStatus.Published:
       return 'bg-success';
     case ExtensionStatus.InReview:
-      return 'bg-(warningLight dark:warningDark)';
+      return 'bg-warningLight dark:bg-warningDark';
     default:
       return 'bg-grey6';
   }

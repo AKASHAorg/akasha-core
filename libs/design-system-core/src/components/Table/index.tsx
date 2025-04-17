@@ -72,7 +72,7 @@ const Table: React.FC<TableProps> = props => {
         <Stack
           padding="py-4 px-5"
           fullWidth={true}
-          customStyle="border(b-1 solid grey8 dark:grey5)"
+          customStyle="border-b-1 border-solid border-grey8 dark:border-grey5"
         >
           <Text weight="bold" align="center">
             {tableTitle}
@@ -97,7 +97,7 @@ const Table: React.FC<TableProps> = props => {
             <tr
               key={idx}
               className={`${
-                !theadValues && idx === 0 ? 'border-none' : 'border(t-1 grey8 dark:grey5)'
+                !theadValues && idx === 0 ? 'border-none' : 'border-t-1 border-grey8 dark:border-grey5'
               } cursor-${typeof row.clickHandler == 'function' ? 'pointer' : 'default'}`}
               onClick={row.clickHandler}
             >

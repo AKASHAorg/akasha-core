@@ -119,7 +119,9 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
           icon={fieldHasData ? <CheckCircleIcon /> : <XCircleIcon />}
           solid={fieldHasData}
           customStyle={
-            fieldHasData ? '[&>*]:stroke-success' : '[&>*]:stroke(warningLight dark:warningLight)'
+            fieldHasData
+              ? '[&>*]:stroke-success'
+              : '[&>*]:stroke-warningLight dark:[&>*]:stroke-warningLight'
           }
         />
         <Label required={isRequired}>{title}</Label>
@@ -144,7 +146,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
         <Stack spacing={3} className="w-full">
           <Stack
             style={cssVars({ '--background-url': `url('${backgroundUrl}')` })}
-            className={`relative h-24 rounded-2xl  bg(center no-repeat cover) bg-(image:--background-url)`}
+            className={`relative h-24 rounded-2xl  bg-center bg-no-repeat bg-cover bg-(image:--background-url)`}
           >
             <AppAvatar
               appType={extensionData?.applicationType}

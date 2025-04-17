@@ -4,7 +4,6 @@
 @source "../design-system-core";
 @source "../feed";
 @source "../../extensions";
-@source "../../dist";
 
 @custom-variant dark (&:where(.dark, .dark *));
 

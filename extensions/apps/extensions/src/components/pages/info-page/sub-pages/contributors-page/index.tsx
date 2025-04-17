@@ -111,7 +111,7 @@ export const ContributorsPage = (props: ContributorsPageProps) => {
                     <Icon
                       icon={<ChevronRightIcon />}
                       size="sm"
-                      customStyle="ml-auto [&>*]:stroke(secondaryLight dark:secondaryDark)"
+                      customStyle="ml-auto [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark"
                     />
                   </Stack>
                 </Card>

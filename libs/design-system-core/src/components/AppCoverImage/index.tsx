@@ -55,7 +55,10 @@ const AppCoverImage = (props: AppCoverImageProps) => {
         fullWidth
       >
         {isNSFW && (
-          <Icon icon={<EyeSlashIcon />} customStyle="[&>*]:stroke(errorLight dark:errorDark)" />
+          <Icon
+            icon={<EyeSlashIcon />}
+            customStyle="[&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark"
+          />
         )}
       </Stack>
     );

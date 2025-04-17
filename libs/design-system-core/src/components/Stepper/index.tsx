@@ -12,10 +12,10 @@ const Stepper: React.FC<StepperProps> = props => {
   const { length, currentStep } = props;
 
   const getRingStyle = (index: number): string => {
-    if (index < currentStep) return 'bg(secondaryLight dark:secondaryDark)';
-    if (index > currentStep) return 'border(2 grey6)';
+    if (index < currentStep) return 'bg-secondaryLight dark:bg-secondaryDark';
+    if (index > currentStep) return 'border-2 border-grey6';
 
-    return 'border(2 secondaryLight dark:secondaryDark)';
+    return 'border-2 border-secondaryLight dark:border-secondaryDark';
   };
 
   return (
@@ -26,7 +26,7 @@ const Stepper: React.FC<StepperProps> = props => {
           <React.Fragment key={el}>
             {index > 1 && (
               <Stack
-                customStyle={`w-7 h-[0.1rem] ${index > currentStep ? 'bg-grey6' : 'bg(secondaryLight dark:SecondaryDark)'}`}
+                customStyle={`w-7 h-[0.1rem] ${index > currentStep ? 'bg-grey6' : 'bg-secondaryLight dark:bg-SecondaryDark'}`}
               />
             )}
             <Stack

@@ -18,7 +18,7 @@ const InfoCard: React.FC<InfoCardProps> = props => {
       <Stack direction="row" align="center" spacing="gap-x-2">
         <Icon
           icon={<ExclamationTriangleIcon />}
-          customStyle="[&>*]:stroke(errorLight dark:errorDark)"
+          customStyle="[&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark"
         />
         <Text variant="button-sm" weight="bold">
           {titleLabel}

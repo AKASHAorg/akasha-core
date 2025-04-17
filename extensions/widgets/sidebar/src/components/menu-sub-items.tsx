@@ -34,7 +34,7 @@ const MenuSubItems: React.FC<MenuSubItemsProps> = props => {
               onOptionClick(menuItem, subRoute);
             }}
           >
-            <Stack direction="row" className="bg(hover:grey8 dark:hover:grey5)">
+            <Stack direction="row" className="hover:bg-grey8 dark:hover:bg-grey5">
               <Stack
                 className={`ml-10 border-l-4 ${
                   isActive

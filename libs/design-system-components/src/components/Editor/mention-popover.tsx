@@ -54,7 +54,7 @@ export const MentionPopover = React.forwardRef<HTMLDivElement, MentionPopoverPro
             '--profile-avatar-height': `${PROFILE_AVATAR_HEIGHT}px`,
           })}
           className={cn(
-            'absolute -top-[9999px] -left-[9999px] z-50 rounded-[0.5rem] border(grey8 dark:grey8) overflow-auto',
+            'absolute -top-[9999px] -left-[9999px] z-50 rounded-[0.5rem] border-grey8 dark:border-grey8 overflow-auto',
             boxShadow,
             `max-h-[var(--max-height)]`,
             customStyle,

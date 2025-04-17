@@ -28,7 +28,7 @@ export const AppInfoNotificationCards: React.FC<AppInfoNotificationCardsProps> =
             icon={<InformationCircleIcon />}
             solid={true}
             size="lg"
-            customStyle="[&>*]:fill(errorLight dark:errorLight)"
+            customStyle="[&>*]:fill-errorLight dark:[&>*]:fill-errorLight"
           />
           <Stack spacing={1}>
             <Text variant="button-md">{title}</Text>

@@ -567,11 +567,11 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
             <Stack
               direction="row"
               alignItems="center"
-              className="bg(errorLight dark:errorDark) w-full rounded p-4"
+              className="bg-errorLight dark:bg-errorDark w-full rounded p-4"
             >
               <Icon
                 icon={<ExclamationTriangleIcon />}
-                customStyle={'[&>*]:stroke(errorLight dark:errorDark)'}
+                customStyle={'[&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark'}
               />
               <Text>{maxEncodedLengthErrLabel}</Text>
             </Stack>

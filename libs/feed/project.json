@@ -16,7 +16,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "libs/feed",
-        "command": "tsc --build && node '../ui/tailwind/tsc-build.transform.cjs'"
+        "command": "tsc --build"
       }
     },
     "test": {

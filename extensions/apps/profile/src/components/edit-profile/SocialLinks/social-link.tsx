@@ -18,7 +18,7 @@ export const SocialLink: React.FC<SocialLinkProps> = ({ onDelete, ...textProps }
           <Icon
             icon={<TrashIcon />}
             size="md"
-            customStyle="[&>*]:stroke(errorLight dark:errorDark)"
+            customStyle="[&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark"
           />
         </button>
       </Stack>

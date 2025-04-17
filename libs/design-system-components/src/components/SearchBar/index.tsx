@@ -56,14 +56,14 @@ const SearchBar: React.FC<SearchBarProps> = props => {
       spacing={2}
       alignItems="center"
       className={cn(
-        'px-2.5 bg(grey9 dark:grey3) rounded-full focus-within:border focus-within:border-secondaryLight dark:focus-within:border-secondaryDark',
+        'px-2.5 bg-grey9 dark:bg-grey3 rounded-full focus-within:border focus-within:border-secondaryLight dark:focus-within:border-secondaryDark',
         fullWidth && 'w-full',
         customStyle,
       )}
     >
       <input
         type="text"
-        className={`peer focus:outline-none w-full bg-transparent py-[0.4375rem] text-[0.875rem] leading-[1.375rem] font-light text(grey5 dark:grey6) placeholder(grey5 dark:grey6)`}
+        className={`peer focus:outline-none w-full bg-transparent py-[0.4375rem] text-[0.875rem] leading-[1.375rem] font-light text-grey5 dark:text-grey6 placeholder-grey5 dark:placeholder-grey6`}
         placeholder={inputPlaceholderLabel}
         value={inputValue}
         onChange={onInputChange}

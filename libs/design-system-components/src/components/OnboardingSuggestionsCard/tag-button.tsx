@@ -18,7 +18,7 @@ export const TagButton: React.FC<ITagButton> = props => {
   const flexClass = ' flex flex-row items-center justify-center';
   return (
     <button
-      className={`max-w-[150px] border(grey8 dark:grey3) rounded-[0.5rem] px-4 py-1 gap-2 ${bgClass} ${flexClass}`}
+      className={`max-w-[150px] border-grey8 dark:border-grey3 rounded-[0.5rem] px-4 py-1 gap-2 ${bgClass} ${flexClass}`}
       onClick={onClickTag}
     >
       <Text truncate={true}>{tagName}</Text>

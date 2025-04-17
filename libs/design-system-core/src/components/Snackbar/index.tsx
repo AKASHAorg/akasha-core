@@ -57,7 +57,7 @@ const Snackbar: React.FC<SnackbarProps> = ({
 }) => {
   const textColor: Color = { dark: 'white', light: 'black' };
 
-  const instanceStyle = `p-4 border(l-8 solid) ${borderColorMap[type]}  shadow-[0_0_4px_rgba(0,0,0,0.2)] dark:shadow-[0_0_2px_rgba(255,255,255,0.15)]`;
+  const instanceStyle = `p-4 border-l-8 border-solid ${borderColorMap[type]}  shadow-[0_0_4px_rgba(0,0,0,0.2)] dark:shadow-[0_0_2px_rgba(255,255,255,0.15)]`;
 
   const typeIconsMap: Record<NotificationTypes, React.ReactElement> = {
     info: <InformationCircleIcon />,
@@ -109,17 +109,17 @@ const Snackbar: React.FC<SnackbarProps> = ({
 };
 
 const iconColorMap: Record<NotificationTypes, string> = {
-  [NotificationTypes.Error]: '[&>*]:fill(errorLight dark:errorDark)',
-  [NotificationTypes.Caution]: '[&>*]:fill(warningLight dark:warningDark)',
+  [NotificationTypes.Error]: '[&>*]:fill-errorLight dark:[&>*]:fill-errorDark',
+  [NotificationTypes.Caution]: '[&>*]:fill-warningLight dark:[&>*]:fill-warningDark',
   [NotificationTypes.Success]: '[&>*]:fill-success',
-  [NotificationTypes.Info]: '[&>*]:fill(secondaryLight dark:secondaryDark)',
+  [NotificationTypes.Info]: '[&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark',
 };
 
 const borderColorMap: Record<NotificationTypes, string> = {
-  [NotificationTypes.Error]: 'border(errorLight dark:errorDark)',
-  [NotificationTypes.Caution]: 'border(warningLight dark:warningDark)',
+  [NotificationTypes.Error]: 'border-errorLight dark:border-errorDark',
+  [NotificationTypes.Caution]: 'border-warningLight dark:border-warningDark',
   [NotificationTypes.Success]: 'border-success',
-  [NotificationTypes.Info]: 'border(secondaryLight dark:secondaryDark)',
+  [NotificationTypes.Info]: 'border-secondaryLight dark:border-secondaryDark',
 };
 
 export default Snackbar;

@@ -179,7 +179,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
             icon={<XCircleIcon />}
             size="lg"
             solid
-            customStyle={'[&>*]:fill(errorLight dark:errorDark)'}
+            customStyle={'[&>*]:fill-errorLight dark:[&>*]:fill-errorDark'}
           />
           <Text
             variant="footnotes2"
@@ -204,7 +204,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
             max={MAX_ZOOM}
             step={ZOOM_STEP}
             className={
-              'grow h-2 bg(gray-200 dark:gray-700) rounded-[0.5rem] appearance-none cursor-pointer'
+              'grow h-2 bg-gray-200 dark:bg-gray-700 rounded-[0.5rem] appearance-none cursor-pointer'
             }
             onChange={e => setZoom(Number(e.target.value))}
           />

@@ -65,14 +65,14 @@ const ImageBlockGallery: React.FC<IImageGallery> = props => {
           />
         ))}
         {uploading && (
-          <div className={'flex relative border(solid grey1) rounded'} style={style}>
+          <div className={'flex relative border-solid border-grey1 rounded'} style={style}>
             <Stack
               max-w-max
               aspect-square
               justifyContent="center"
               alignItems="center"
               style={cssVars({ '--height': `${images[0]?.size?.height}px` })}
-              className={`rounded h-full w-[var(--height)] bg(grey8 dark:grey5) max-w-max aspect-square`}
+              className={`rounded h-full w-[var(--height)] bg-grey8 dark:bg-grey5 max-w-max aspect-square`}
             >
               <Icon icon={<ArrowPathIcon />} rotateAnimation />
             </Stack>

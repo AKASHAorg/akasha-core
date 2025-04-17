@@ -341,7 +341,7 @@ export const Header: React.FC<HeaderProps> = ({
         onClose={() => setShowLogoGuidelineModal(false)}
       >
         <Stack alignItems="center" spacing={4} className="p-4">
-          <ul className="list-disc ml-2 text(black dark:white)">
+          <ul className="list-disc ml-2 text-black dark:text-white">
             {logoGuidelines.guidelines.map((guideline, index) => (
               <li key={index}>
                 <Text variant="body1">{guideline}</Text>

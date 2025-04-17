@@ -15,7 +15,7 @@ export function PendingReflect(props: PendingReflectProps) {
     <Stack>
       <Divider />
       <Stack
-        customStyle={`border border(grey8 dark:grey3) bg-secondaryLight/10 dark:bg-secondaryDark/10 ${customStyle}`}
+        customStyle={`border border-grey8 dark:border-grey3 bg-secondaryLight/10 dark:bg-secondaryDark/10 ${customStyle}`}
       >
         <ReflectionCard
           reflectionData={reflectionData}

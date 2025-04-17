@@ -34,7 +34,7 @@ const SettingsPage: React.FC = () => {
         {settingsOptions.map((item: ISettingsItem, idx: number) => {
           const baseStyle = `flex py-4 justify-between items-center ${
             idx !== settingsOptions.length - 1
-              ? 'border(b-1 solid grey8 dark:grey5)'
+              ? 'border-b-1 border-solid border-grey8 dark:border-grey5'
               : 'border-none'
           }`;
 

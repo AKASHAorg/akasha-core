@@ -53,7 +53,7 @@ const TransparencyLogItemCard: React.FC<TransparencyLogItemCardProps> = props =>
         <Stack direction="row" align="center" spacing="gap-x-1.5">
           <Stack
             customStyle={`w-2 h-2 rounded-full ${
-              item.status === 'Kept' ? 'bg-success' : 'bg-(errorLight dark:errorDark)'
+              item.status === 'Kept' ? 'bg-success' : 'bg-errorLight dark:bg-errorDark'
             }`}
           />
           <Text variant="footnotes2" weight="normal">

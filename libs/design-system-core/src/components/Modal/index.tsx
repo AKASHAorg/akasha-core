@@ -95,7 +95,7 @@ const Modal: React.FC<ModalProps> = ({
                           <Icon
                             icon={<XMarkIcon />}
                             size="md"
-                            customStyle="[&>*]:stroke(grey4 dark:grey7)"
+                            customStyle="[&>*]:stroke-grey4 dark:[&>*]:stroke-grey7"
                           />
                         </Button>
                       </Dialog.Title>

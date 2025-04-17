@@ -23,7 +23,7 @@ export const RespondAdmin: React.FC<RespondAdminProps> = props => {
             {introLabel}:
           </Text>
         </Text>
-        <ul className="ml-4 list-disc text(black dark:white)">
+        <ul className="ml-4 list-disc text-black dark:text-white">
           {tasks.map(t => (
             <li key={t}>
               <Text variant="body1" weight="normal">

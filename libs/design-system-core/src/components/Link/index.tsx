@@ -29,7 +29,7 @@ const Link: React.FC<LinkProps> = props => {
   const weightStyle = weight ? getWeightClasses(weight) : '';
 
   const baseStyle =
-    'inline-block cursor-pointer no-underline text(secondaryLight dark:secondaryDark)';
+    'inline-block cursor-pointer no-underline text-secondaryLight dark:text-secondaryDark';
 
   const className = `${baseStyle} ${weightStyle} ${customStyle}`;
 

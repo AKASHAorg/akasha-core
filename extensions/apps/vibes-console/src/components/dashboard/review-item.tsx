@@ -46,7 +46,7 @@ export const ReviewItem: React.FC<ReviewItemProps> = props => {
     <PageHeader {...props}>
       <Stack spacing="gap-y-4" customStyle="mb-24">
         <Text variant="h6">{section1Label}</Text>
-        <Stack customStyle="gap-y-2 md:(flex-row gap-x-2)">
+        <Stack customStyle="gap-y-2 md:flex-row md:gap-x-2">
           <ReportReasonPill
             reason="Bullying and harassment"
             reportCount={46}

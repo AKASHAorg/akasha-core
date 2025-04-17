@@ -212,7 +212,7 @@ export const EditPublishedExtensionPage: React.FC<EditPublishedExtensionPageProp
         >
           <Icon
             icon={<ArrowPathIcon />}
-            customStyle="[&>*]:stroke(secondaryLight dark:secondaryDark)"
+            customStyle="[&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark"
             size="lg"
           />
           <Text variant="body2" weight="bold">

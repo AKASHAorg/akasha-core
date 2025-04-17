@@ -24,20 +24,20 @@ const ReportReasonPill: React.FC<ReportReasonPillProps> = props => {
     <Button plain={true} onClick={handleClick}>
       <Stack
         direction="row"
-        className="w-fit rounded-full bg-(secondaryLight/30 dark:secondaryDark)"
+        className="w-fit rounded-full bg-secondaryLight/30 dark:bg-secondaryDark"
       >
         <Stack direction="row" alignItems="center" spacing={1} className="p-2">
           <Icon
             icon={<FlagIcon />}
             size="sm"
-            customStyle="[&>*]:stroke(secondaryLight dark:grey2)"
+            customStyle="[&>*]:stroke-secondaryLight dark:[&>*]:stroke-grey2"
           />
           <Text variant="footnotes2" color={{ light: 'secondaryLight', dark: 'grey2' }}>
             {reportCount}
           </Text>
         </Stack>
 
-        <Stack className="p-2 border(l-1 solid white dark:grey2)">
+        <Stack className="p-2 border-l-1 border-solid border-white dark:border-grey2">
           <Text variant="footnotes2" color={{ light: 'secondaryLight', dark: 'grey2' }}>
             {reason}
           </Text>

@@ -306,7 +306,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                         <Icon
                           icon={<ChevronRightIcon />}
                           size="sm"
-                          customStyle="ml-auto [&>*]:stroke(secondaryLight dark:secondaryDark)"
+                          customStyle="ml-auto [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark"
                         />
                       </Stack>
                     </Card>
@@ -427,7 +427,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                         <Icon
                           icon={<ChevronRightIcon />}
                           size="sm"
-                          customStyle="ml-auto [&>*]:stroke(secondaryLight dark:secondaryDark)"
+                          customStyle="ml-auto [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark"
                         />
                       </Stack>
                     </Card>

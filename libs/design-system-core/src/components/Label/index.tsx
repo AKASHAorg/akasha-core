@@ -21,11 +21,11 @@ const Label: React.FC<LabelProps> = props => {
       as="label"
       id={id}
       variant="h6"
-      {...(disabled && { customStyle: 'text(grey4 dark:grey6)' })}
+      {...(disabled && { customStyle: 'text-grey4 dark:text-grey6' })}
     >
       {children}
       {required && (
-        <sup className={'-top-0.5 left-1 text-base  text(errorLight dark:errorDark)'}>*</sup>
+        <sup className={'-top-0.5 left-1 text-base  text-errorLight dark:text-errorDark'}>*</sup>
       )}
     </Text>
   );

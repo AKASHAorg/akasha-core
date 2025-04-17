@@ -31,7 +31,10 @@ export const ReportItem: React.FC<ReportItemProps> = props => {
 
   return (
     <Card className="shadow-none p-0">
-      <Stack padding="p-4" customStyle="border-b(1 solid grey8 dark:grey5)">
+      <Stack
+        padding="p-4"
+        customStyle="border-b-1 border-b-solid border-b-grey8 dark:border-b-grey5"
+      >
         <MiniProfileCTA
           itemData={{
             avatar: {
@@ -50,12 +53,12 @@ export const ReportItem: React.FC<ReportItemProps> = props => {
               align="center"
               spacing="gap-x-1"
               padding="py-2 px-3"
-              customStyle="w-fit rounded-full bg-(secondaryLight/30 dark:secondaryDark)"
+              customStyle="w-fit rounded-full bg-secondaryLight/30 dark:bg-secondaryDark"
             >
               <Icon
                 icon={<FlagIcon />}
                 size="sm"
-                customStyle="[&>*]:stroke(secondaryLight dark:grey2)"
+                customStyle="[&>*]:stroke-secondaryLight dark:[&>*]:stroke-grey2"
               />
               <Text variant="footnotes2" color={{ light: 'secondaryLight', dark: 'grey2' }}>
                 {report.flags.length}

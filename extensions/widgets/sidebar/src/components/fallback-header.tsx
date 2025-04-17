@@ -15,12 +15,12 @@ export type FallbackHeaderProps = {
 const FallbackHeader: React.FC<FallbackHeaderProps> = ({ authenticatedDID, isLoggedIn }) => {
   const { t } = useTranslation('ui-widget-sidebar');
 
-  const headerBackground = 'bg(secondaryLight/30 dark:grey5)';
+  const headerBackground = 'bg-secondaryLight/30 dark:bg-grey5';
 
   return (
     <Stack
       direction="row"
-      className={`justify-items-stretch p-4 border-b-1 border(grey9 dark:grey3) rounded-t-2xl ${headerBackground}`}
+      className={`justify-items-stretch p-4 border-b-1 border-grey9 dark:border-grey3 rounded-t-2xl ${headerBackground}`}
     >
       <Stack className="w-fit h-fit mr-2">
         <Avatar profileId={authenticatedDID} avatar={null} isClickable={false} />

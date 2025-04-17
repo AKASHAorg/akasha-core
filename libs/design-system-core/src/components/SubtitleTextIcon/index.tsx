@@ -63,7 +63,7 @@ const SubtitleTextIcon: React.FC<SubtitleTextIconProps> = props => {
   } = props;
 
   const iconBackgroundStyle = `${backgroundSize ? backgroundSize : 'w-10 h-10'} ${
-    backgroundColor ? 'bg(grey8 dark:grey3) rounded-full' : 'none'
+    backgroundColor ? 'bg-grey8 dark:bg-grey3 rounded-full' : 'none'
   }`;
 
   return (
@@ -84,8 +84,8 @@ const SubtitleTextIcon: React.FC<SubtitleTextIconProps> = props => {
               iconClassname="w-4 h-5"
               customStyle={
                 solid
-                  ? '[&>*]:fill(secondaryLight dark:secondaryDark)'
-                  : '[&>*]:stroke(secondaryLight dark:secondaryDark)'
+                  ? '[&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark'
+                  : '[&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark'
               }
             />
           </Stack>

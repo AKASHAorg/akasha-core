@@ -50,7 +50,7 @@ const EditorPlaceholder: React.FC<EditorPlaceholderType> = props => {
           <Text
             variant="subtitle2"
             {...(isReflection && { color: 'grey7' })}
-            customStyle={`${!isReflection ? 'max-w([9.5rem] md:fit) w-full' : ''} whitespace-normal`}
+            customStyle={`${!isReflection ? 'max-w-[9.5rem] md:max-w-fit w-full' : ''} whitespace-normal`}
           >
             {placeholderLabel}
           </Text>

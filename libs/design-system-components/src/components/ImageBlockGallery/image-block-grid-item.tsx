@@ -48,7 +48,7 @@ export const ImageBlockGridItem: React.FC<IGridItemProps> = props => {
 
   return (
     <button
-      className={'flex relative border(solid grey1) rounded'}
+      className={'flex relative border-solid border-grey1 rounded'}
       style={gridStyle}
       onClick={ev => {
         if (handleClickImage && typeof handleClickImage === 'function' && imgLoaded) {
@@ -96,9 +96,12 @@ export const ImageBlockGridItem: React.FC<IGridItemProps> = props => {
           justifyContent="center"
           spacing={2}
           style={cssVars({ '--height': `${imageSrc?.size?.height}` })}
-          className={`p-4 bg(grey9 dark:grey5) rounded w-full h-[var(--height)] ${heightStyle} ${multipleImageStyle}`}
+          className={`p-4 bg-grey9 dark:bg-grey5 rounded w-full h-[var(--height)] ${heightStyle} ${multipleImageStyle}`}
         >
-          <Icon icon={<ImageCrossed />} customStyle={'[&>*]:stroke(grey5 dark:white)'} />
+          <Icon
+            icon={<ImageCrossed />}
+            customStyle={'[&>*]:stroke-grey5 dark:[&>*]:stroke-white'}
+          />
           <Text variant="footnotes2" color={{ light: 'grey5', dark: 'white' }}>
             {imageNotLoadedLabel}
           </Text>

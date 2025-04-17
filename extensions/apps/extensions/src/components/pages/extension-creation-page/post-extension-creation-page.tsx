@@ -110,7 +110,7 @@ You can add more details to your extension, such as a description, gallery & mor
               <Icon
                 icon={<ExclamationTriangleIcon />}
                 size="sm"
-                customStyle="[&>*]:stroke(warningLight dark:warningDark)"
+                customStyle="[&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark"
               />
               <Text variant="subtitle2">{t('Important Note: ')}</Text>
             </Stack>

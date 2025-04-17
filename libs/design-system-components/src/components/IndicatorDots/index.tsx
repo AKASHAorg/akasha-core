@@ -14,14 +14,14 @@ export type TIndicatorDotsProps = {
 
 const getDotColor = (success: boolean, error: boolean) => {
   if (success) {
-    return 'bg(success dark:success)';
+    return 'bg-success dark:bg-success';
   }
 
   if (error) {
-    return 'bg(errorLight dark:errorDark)';
+    return 'bg-errorLight dark:bg-errorDark';
   }
 
-  return 'bg(secondaryLight dark:secondaryDark)';
+  return 'bg-secondaryLight dark:bg-secondaryDark';
 };
 
 /**

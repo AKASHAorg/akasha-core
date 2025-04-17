@@ -33,14 +33,14 @@ const NotificationCard: React.FC<NotificationCardProps> = props => {
           <Icon
             size="sm"
             icon={notificationTypeIcon}
-            customStyle="space-x-1 [&>*]:stroke(grey6 dark:black)"
+            customStyle="space-x-1 [&>*]:stroke-grey6 dark:[&>*]:stroke-black"
           />
           <Text variant="footnotes1" color={{ dark: 'grey6', light: 'grey4' }} weight="bold">
             {notificationTypeTitle}
           </Text>
         </Stack>
         {!isSeen && (
-          <Stack className="w-2 h-2 rounded-full bg(secondaryLight dark:secondaryDark)" />
+          <Stack className="w-2 h-2 rounded-full bg-secondaryLight dark:bg-secondaryDark" />
         )}
       </Stack>
       <Stack spacing={2} className="flex flex-row">

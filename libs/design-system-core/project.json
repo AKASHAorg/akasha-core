@@ -9,7 +9,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "libs/design-system-core",
-        "command": "tsc --build && node '../ui/tailwind/tsc-build.transform.cjs'"
+        "command": "tsc --build"
       }
     },
     "test": {

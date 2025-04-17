@@ -24,7 +24,7 @@ const UnlockCard: React.FC<IUnlockCardProps> = ({ onClick, loading }) => {
           icon={<Lock />}
           size="md"
           solid={true}
-          customStyle="[&>*]:fill(secondaryLight dark:secondaryDark)"
+          customStyle="[&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark"
         />
         <Stack direction="column" spacing={1}>
           <Text variant="button-md" color={{ dark: 'white', light: 'black' }}>

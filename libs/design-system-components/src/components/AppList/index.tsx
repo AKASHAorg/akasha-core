@@ -58,7 +58,7 @@ const AppList: React.FC<AppListProps> = ({
               <Icon
                 icon={<XCircleIcon />}
                 solid={true}
-                customStyle="mb-4 [&>*]:fill(errorLight dark:errorLight)"
+                customStyle="mb-4 [&>*]:fill-errorLight dark:[&>*]:fill-errorLight"
               />
               <Text variant="button-md">{loadErrorMessage?.title}</Text>
               <Text variant="body2">{loadErrorMessage?.message}</Text>

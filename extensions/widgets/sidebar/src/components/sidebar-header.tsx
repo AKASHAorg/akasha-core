@@ -70,7 +70,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
     <Stack
       direction="row"
       className={cn(
-        `p-4 border(b-1 grey9 dark:grey3) rounded-t-2xl`,
+        `p-4 border-b-1 border-grey9 dark:border-grey3 rounded-t-2xl`,
         headerPadding,
         isAuthenticating && 'bg-secondaryLight/30 dark:bg-grey5',
       )}

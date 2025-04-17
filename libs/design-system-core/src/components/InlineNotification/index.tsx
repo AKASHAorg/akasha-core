@@ -80,19 +80,25 @@ const InlineNotification: React.FC<InlineNotificationProps> = ({
 };
 
 const TYPE_ICON_MAP: Record<NotificationTypes, ReactElement> = {
-  error: <Icon icon={<XCircleIcon />} solid customStyle="[&>*]:fill(errorLight dark:errorDark)" />,
+  error: (
+    <Icon
+      icon={<XCircleIcon />}
+      solid
+      customStyle="[&>*]:fill-errorLight dark:[&>*]:fill-errorDark"
+    />
+  ),
   warning: (
     <Icon
       icon={<ExclamationTriangleIcon />}
       solid
-      customStyle="[&>*]:fill(warningLight dark:warningDark)"
+      customStyle="[&>*]:fill-warningLight dark:[&>*]:fill-warningDark"
     />
   ),
   success: <Icon icon={<CheckCircleIcon />} solid customStyle="[&>*]:fill-success" />,
   info: (
     <Icon
       icon={<InformationCircleIcon />}
-      customStyle="[&>*]:fill(secondaryLight dark:secondaryDark)"
+      customStyle="[&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark"
     />
   ),
 };

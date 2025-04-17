@@ -93,14 +93,14 @@ const RegularCard: React.FC<PropsWithChildren<CommonCardProps & RegularCardType>
 
     const generatedBorder = React.useMemo(() => {
       if (dashedBorder) {
-        return 'border(2 dashed grey5)';
+        return 'border-2 border-dashed border-grey5';
       }
 
       if (border) {
-        return 'border(1 solid grey9 dark:grey3)';
+        return 'border-1 border-solid border-grey9 dark:border-grey3';
       }
       if (accentBorder) {
-        return 'border(1 solid secondaryLight dark:secondaryDark)';
+        return 'border-1 border-solid border-secondaryLight dark:border-secondaryDark';
       }
 
       /**

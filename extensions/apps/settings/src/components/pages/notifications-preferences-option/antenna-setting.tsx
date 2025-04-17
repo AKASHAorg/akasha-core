@@ -43,7 +43,7 @@ const AntennaSetting: React.FC<IAntennaSettingProps> = ({ isSelected, onChange }
             icon={<Info />}
             size="lg"
             solid={true}
-            customStyle="[&>*]:fill(secondaryLight dark:secondaryDark)"
+            customStyle="[&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark"
           />
           <Text variant="body1" customStyle="text-sm">
             {t('Changing notifications preferences requires a signature')}

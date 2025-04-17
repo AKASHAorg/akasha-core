@@ -67,7 +67,7 @@ export const GalleryImage: React.FC<GalleryImageProps> = props => {
             <Icon
               icon={<XCircleIcon />}
               size="lg"
-              customStyle={'[&>*]:stroke(errorLight dark:errorDark)'}
+              customStyle={'[&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark'}
             />
           )}
           {state === GalleryImageState.LOADING && <Spinner />}

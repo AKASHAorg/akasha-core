@@ -18,7 +18,7 @@ const SidebarCTACard: React.FC<SidebarCTACardProps> = props => {
   const { t } = useTranslation('ui-widget-sidebar');
 
   return (
-    <Stack direction="column" spacing={4} className="px-6 py-4 bg(grey9 dark:grey3)">
+    <Stack direction="column" spacing={4} className="px-6 py-4 bg-grey9 dark:bg-grey3">
       <Stack direction="row" justifyContent="between" alignItems="start">
         <Text
           variant="footnotes2"

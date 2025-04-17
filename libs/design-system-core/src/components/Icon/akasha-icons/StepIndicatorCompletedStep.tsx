@@ -15,7 +15,7 @@ const StepIndicatorCompletedStep = () => {
           cx="16"
           cy="16"
           r="16"
-          className={`fill-secondaryLight hover:fill-secondaryDark dark:(fill-secondaryDark hover:fill-secondaryLight)`}
+          className={`fill-secondaryLight hover:fill-secondaryDark dark:fill-secondaryDark dark:hover:fill-secondaryLight`}
         />
         <path
           d="M10.1667 16.8333L13.5 20.1667L21.8333 11.8333"

@@ -178,7 +178,7 @@ const Layout: React.FC<unknown> = () => {
   const mobileLayoverStyle = `
       fixed xl:sticky h-full z-[99] ${
         showSidebar && window.matchMedia(startMobileSidebarHidingBreakpoint).matches
-          ? 'min-w([100vw] xl:max) bg(black/30 dark:white/10) z-[99] left-0 right-0'
+          ? 'min-w-[100vw] xl:min-w-max bg-black/30 dark:bg-white/10 z-[99] left-0 right-0'
           : ''
       }`;
 
@@ -203,7 +203,7 @@ const Layout: React.FC<unknown> = () => {
          */
         paddingLeft: 'calc(100vw - 100%)',
       }}
-      className="bg(white dark:black) min-h-screen"
+      className="bg-white dark:bg-black min-h-screen"
     >
       <Stack className="h-full m-auto w-full min-h-screen">
         <Stack className={layoutStyle}>
@@ -228,14 +228,14 @@ const Layout: React.FC<unknown> = () => {
               )}
             </Stack>
           </Stack>
-          <Stack className={`px-2 ${showWidgets ? '' : 'lg:(col-start-2 col-end-3) col-start-1'}`}>
-            <Stack className="pt-4 sticky top-0 z-10 bg(white dark:black) rounded-b-3xl">
+          <Stack className={`px-2 ${showWidgets ? '' : 'lg:col-start-2 lg:col-end-3 col-start-1'}`}>
+            <Stack className="pt-4 sticky top-0 z-10 bg-white dark:bg-black rounded-b-3xl">
               {worldConfig.isPreview && (
                 <Card className="p-4 mb-4">
                   <Stack direction="row">
                     <Icon
                       icon={exclamationCircleIcon}
-                      customStyle="mr-4 [&>*]:stroke(secondaryLight dark:secondaryDark)"
+                      customStyle="mr-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark"
                     />
                     <Text variant="subtitle2">
                       {t('You are previewing "{{worldName}}"', { worldName: worldConfig.title })}.
@@ -254,7 +254,7 @@ const Layout: React.FC<unknown> = () => {
                   <Stack direction="row">
                     <Icon
                       icon={exclamationTriangleIcon}
-                      customStyle="mr-4 [&>*]:stroke(grey3 dark:grey3)"
+                      customStyle="mr-4 [&>*]:stroke-grey3 dark:[&>*]:stroke-grey3"
                     />
                     <Stack>
                       <Text variant="footnotes2" color={{ light: 'grey3', dark: 'grey3' }}>

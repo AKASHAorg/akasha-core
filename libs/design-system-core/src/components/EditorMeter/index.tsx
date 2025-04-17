@@ -23,19 +23,19 @@ export type EditorMeterProps = {
  * ```
  **/
 const EditorMeter: React.FC<EditorMeterProps> = props => {
-  const { value, max, background = 'bg(grey8 dark:grey4)', customStyle } = props;
+  const { value, max, background = 'bg-grey8 dark:bg-grey4', customStyle } = props;
   const remainingChars = max - value;
   let displayCounter: null | number = null;
-  let progressStyle = 'bg(secondaryLight dark:secondaryDark)';
+  let progressStyle = 'bg-secondaryLight dark:bg-secondaryDark';
 
   if (remainingChars < 0) {
     displayCounter = Math.max(remainingChars, -99);
-    progressStyle = 'bg(errorLight dark:errorDark)';
+    progressStyle = 'bg-errorLight dark:bg-errorDark';
   }
 
   if (remainingChars === 1 || remainingChars === 0) {
     displayCounter = remainingChars;
-    progressStyle = 'bg(warningLight dark:warningDark)';
+    progressStyle = 'bg-warningLight dark:bg-warningDark';
   }
 
   return (

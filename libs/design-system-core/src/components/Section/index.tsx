@@ -75,7 +75,7 @@ const Section: React.FC<PropsWithChildren<SectionProps>> = ({
             <Icon
               icon={viewMoreIcon}
               size="sm"
-              customStyle="ml-auto [&>*]:stroke(errorLight dark:errorDark)"
+              customStyle="ml-auto [&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark"
             />
           )}
         </Stack>

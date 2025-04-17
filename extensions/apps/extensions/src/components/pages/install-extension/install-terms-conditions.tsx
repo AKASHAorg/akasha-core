@@ -215,7 +215,7 @@ export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
               className="p-1.5"
             >
               <Icon
-                customStyle="[&>*]:stroke(secondaryLight dark:secondaryDark)"
+                customStyle="[&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark"
                 icon={<ArrowTopRightOnSquareIcon />}
               />
             </a>

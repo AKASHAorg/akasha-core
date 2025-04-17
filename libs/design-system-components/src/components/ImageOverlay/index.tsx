@@ -19,7 +19,7 @@ export interface IImageOverlay {
 }
 
 const closeDivClass =
-  'flex items-center justify-center z-1 w-12 h-12 rounded-full bg(grey9 dark:grey3)';
+  'flex items-center justify-center z-1 w-12 h-12 rounded-full bg-grey9 dark:bg-grey3';
 
 /**
  * Component that renders the full screen image modal that is triggered on image click

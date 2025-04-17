@@ -161,7 +161,7 @@ export const AppInfoHeader: React.FC<AppInfoHeaderProps> = props => {
                 <Icon
                   icon={<ExclamationTriangleIcon />}
                   size="md"
-                  customStyle="size-4 [&>*]:stroke(warningLight dark:warningDark)"
+                  customStyle="size-4 [&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark"
                 />
                 <Text variant="h6" weight="bold">
                   {isInReviewTitleLabel}
