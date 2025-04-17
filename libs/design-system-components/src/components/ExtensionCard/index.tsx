@@ -10,6 +10,9 @@ import ProfileNameField from '@akashaorg/design-system-core/lib/components/Profi
 import ExtensionIcon from '@akashaorg/design-system-core/lib/components/ExtensionIcon';
 import { Extension, Image } from '@akashaorg/typings/lib/ui';
 import { cn } from '@akashaorg/ui/lib/library/utils';
+import { ProfileAvatarImage } from '@akashaorg/ui/lib/akasha-components/profile-avatar';
+import { ProfileAvatarFallback } from '@akashaorg/ui/lib/akasha-components/profile-avatar';
+import { ProfileAvatar } from '@akashaorg/ui/lib/akasha-components/profile-avatar';
 
 export type ExtensionCardProps = {
   coverImageSrc: string;
@@ -96,13 +99,11 @@ const ExtensionCard: React.FC<ExtensionCardProps> = props => {
             )}
           </Stack>
           <Stack direction="row" alignItems="center" spacing={2}>
-            <Avatar
-              avatar={author?.avatar}
-              alternativeAvatars={author?.alternativeAvatars}
-              profileId={author?.profileDID}
-              isNSFW={author?.nsfw}
-              customStyle="shrink-0 cursor-pointer h-4 w-4"
-            />
+            <ProfileAvatar profileDID={author?.profileDID} size="xs" nsfw={author?.nsfw}>
+              <ProfileAvatarImage src={author?.avatar?.src} />
+              <ProfileAvatarFallback />
+            </ProfileAvatar>
+
             <ProfileNameField
               did={author?.profileDID}
               profileName={author?.name}

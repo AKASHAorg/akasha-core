@@ -5,6 +5,9 @@ import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import type { Image, Profile } from '@akashaorg/typings/lib/ui';
+import { ProfileAvatarImage } from '@akashaorg/ui/lib/akasha-components/profile-avatar';
+import { ProfileAvatarFallback } from '@akashaorg/ui/lib/akasha-components/profile-avatar';
+import { ProfileAvatar } from '@akashaorg/ui/lib/akasha-components/profile-avatar';
 
 export type EditorPlaceholderType = {
   avatar?: Profile['avatar'];
@@ -39,14 +42,10 @@ const EditorPlaceholder: React.FC<EditorPlaceholderType> = props => {
     <Card className="p-0 cursor-pointer bg-nested-card" onClick={onClick}>
       <div className={tw(`flex justify-between p-4 `)}>
         <div className={tw(`flex flex-row items-center gap-4 flex-1`)}>
-          <Avatar
-            avatar={transformSource(avatar?.default)}
-            alternativeAvatars={avatar?.alternatives?.map(alternative =>
-              transformSource(alternative),
-            )}
-            profileId={profileId}
-            size="sm"
-          />
+          <ProfileAvatar profileDID={profileId} size="sm">
+            <ProfileAvatarImage src={transformSource(avatar?.default)?.src} />
+            <ProfileAvatarFallback />
+          </ProfileAvatar>
           <Text
             variant="subtitle2"
             {...(isReflection && { color: 'grey7' })}

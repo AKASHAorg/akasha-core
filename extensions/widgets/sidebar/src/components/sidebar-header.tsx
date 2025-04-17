@@ -13,6 +13,8 @@ import {
   PowerIcon,
   XMarkIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { ProfileAvatarFallback, ProfileAvatarImage } from '@akashaorg/ui/lib/akasha-components/profile-avatar';
+import { ProfileAvatar } from '@akashaorg/ui/lib/akasha-components/profile-avatar';
 
 export type SidebarHeaderProps = {
   authenticatedDID: string;
@@ -77,15 +79,12 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
     >
       <Stack direction="row" className="grow group">
         <Stack className="w-fit h-fit mr-2">
-          <Avatar
-            profileId={authenticatedDID}
-            avatar={transformSource(avatar?.default)}
-            alternativeAvatars={avatar?.alternatives?.map(alternative =>
-              transformSource(alternative),
-            )}
-            isClickable={isLoggedIn}
-            onClick={() => handleProfileAvatarClick(authenticatedDID)}
-          />
+          <button onClick={() => handleProfileAvatarClick(authenticatedDID)} disabled={!isLoggedIn}>
+            <ProfileAvatar profileDID={authenticatedDID} size="lg">
+              <ProfileAvatarImage src={transformSource(avatar?.default)?.src} />
+              <ProfileAvatarFallback />
+            </ProfileAvatar>
+          </button>
         </Stack>
         <Stack justifyContent="center" className="w-fit flex-grow">
           {!isLoggedIn && <Text variant="button-md"> {t('Guest')}</Text>}
