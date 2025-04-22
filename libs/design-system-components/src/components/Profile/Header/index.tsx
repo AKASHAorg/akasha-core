@@ -1,6 +1,5 @@
 import React, { ReactElement } from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import ProfileNameField from '@akashaorg/design-system-core/lib/components/ProfileNameField';
 import ImageOverlay from '../../ImageOverlay';
@@ -12,10 +11,15 @@ import {
   Cog6ToothIcon,
   EllipsisVerticalIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import { getImageFromSeed, getColorClasses } from '@akashaorg/design-system-core/lib/utils';
+import { getImageFromSeed } from '@akashaorg/design-system-core/lib/utils';
 import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import { cn } from '@akashaorg/ui/lib/library/utils';
+import {
+  ProfileAvatar,
+  ProfileAvatarFallback,
+  ProfileAvatarImage,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar';
 
 type ProfileBadge = {
   toolTipLabel: string;
@@ -106,24 +110,16 @@ const Header: React.FC<HeaderProps> = ({
         <Stack direction="column" className="pl-2 w-full">
           <Stack direction="row" spacing={2} className="-ml-2">
             <Stack className={avatarContainer}>
-              <Avatar
-                profileId={profileId}
-                size="xl"
-                avatar={transformedAvatar}
-                alternativeAvatars={avatar?.alternatives?.map(alternative =>
-                  transformSource(alternative),
-                )}
-                customStyle={`absolute -top-6 border-2 border-white dark:border-grey2 ${
-                  avatar ? 'cursor-pointer' : ''
-                } ${getColorClasses(
-                  {
-                    light: 'grey8',
-                    dark: 'grey4',
-                  },
-                  'bg',
-                )}`}
-                onClick={onClickAvatar}
-              />
+              <button onClick={onClickAvatar}>
+                <ProfileAvatar
+                  profileDID={profileId}
+                  size="xl"
+                  className="absolute -top-6 border-2 border-border"
+                >
+                  <ProfileAvatarImage src={transformedAvatar?.src} />
+                  <ProfileAvatarFallback />
+                </ProfileAvatar>
+              </button>
             </Stack>
             <Stack direction="column" spacing={1}>
               <Stack direction="row" alignItems="center" spacing={1}>

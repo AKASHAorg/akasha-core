@@ -11,7 +11,7 @@ import { NotificationEvents, NotificationTypes, Extension } from '@akashaorg/typ
 import { DRAFT_EXTENSIONS, ExtType, MAX_GALLERY_IMAGES } from '../../../constants';
 import { useAtom } from 'jotai';
 import { AtomContext, FormData } from './main-page';
-import Stepper from '@akashaorg/design-system-core/lib/components/Stepper';
+import { Stepper } from '@akashaorg/ui/lib/akasha-components/stepper';
 
 type ExtensionEditStep2PageProps = {
   extensionId: string;
@@ -118,7 +118,7 @@ export const ExtensionEditStep2Page: React.FC<ExtensionEditStep2PageProps> = ({ 
   return (
     <>
       <Stack justifyContent="center" alignItems="center" className="p-4">
-        <Stepper length={3} currentStep={formValue.lastCompletedStep + 1} />
+        <Stepper numberOfSteps={3} currentStep={formValue.lastCompletedStep + 1} className="w-40" />
       </Stack>
       <Stack spacing={4}>
         <Stack className="p-4">

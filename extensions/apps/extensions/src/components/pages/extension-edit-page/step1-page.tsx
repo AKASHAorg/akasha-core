@@ -4,7 +4,7 @@ import { useNavigate } from '@tanstack/react-router';
 import routes, { MY_EXTENSIONS } from '../../../routes';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Stepper from '@akashaorg/design-system-core/lib/components/Stepper';
+import { Stepper } from '@akashaorg/ui/lib/akasha-components/stepper';
 import ExtensionEditStep1Form from '@akashaorg/design-system-components/lib/components/ExtensionEditStep1Form';
 import {
   transformSource,
@@ -107,7 +107,7 @@ export const ExtensionEditStep1Page: React.FC<ExtensionEditStep1PageProps> = ({ 
   return (
     <>
       <Stack justifyContent="center" alignItems="center" className="p-4">
-        <Stepper length={3} currentStep={formValue.lastCompletedStep + 1} />
+        <Stepper numberOfSteps={3} currentStep={formValue.lastCompletedStep + 1} className="w-40" />
       </Stack>
       <Stack spacing={4}>
         <Stack className="p-4">
