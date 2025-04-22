@@ -1,11 +1,11 @@
 import React from 'react';
 import Icon from '../Icon';
 import Stack from '../Stack';
-import Text from '../Text';
-import CopyToClipboard from '../CopyToClipboard';
+import { CopyToClipboard } from '@akashaorg/ui/lib/akasha-components/copy-to-clipboard';
 import { Eth, Solana, DidKey, NoEth } from '../Icon/akasha-icons';
 import { Color } from '../types/common.types';
 import { getDidNetworkType, truncateDid } from '../../utils/did-utils';
+import Text from '../Text';
 
 const didNetworkIconMapping = {
   eth: <Eth />,
@@ -61,7 +61,7 @@ const DidField: React.FC<DidFieldProps> = ({
   );
 
   return copiable ? (
-    <CopyToClipboard stringToBeCopied={did} copyText={copyLabel} copiedText={copiedLabel}>
+    <CopyToClipboard textToCopy={did} ctaText={copyLabel} successText={copiedLabel}>
       {didDisplayBlock}
     </CopyToClipboard>
   ) : (

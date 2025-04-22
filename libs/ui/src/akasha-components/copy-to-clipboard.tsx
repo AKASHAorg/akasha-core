@@ -14,6 +14,7 @@ function CopyToClipboard({
   resetDuration = 5000,
   asChild,
   children,
+  side = 'top',
   ...props
 }: React.ComponentProps<typeof TooltipProvider> &
   React.PropsWithChildren<{
@@ -22,6 +23,7 @@ function CopyToClipboard({
     successText?: string;
     resetDuration?: number;
     asChild?: boolean;
+    side?: 'top' | 'right' | 'bottom' | 'left';
   }>) {
   const [copied, setCopied] = React.useState(false);
   const [open, setOpen] = React.useState(false);
@@ -62,7 +64,7 @@ function CopyToClipboard({
         >
           {children}
         </TooltipTrigger>
-        <TooltipContent onPointerDownOutside={handlePointerDown}>
+        <TooltipContent onPointerDownOutside={handlePointerDown} side={side}>
           {copied ? successText : ctaText}
         </TooltipContent>
       </Tooltip>
