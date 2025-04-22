@@ -186,7 +186,11 @@ const EditInterests: React.FC<EditInterestsProps> = ({
               <Pill
                 key={`${index}-${interest.value}`}
                 label={interest.value}
-                icon={myActiveInterests.has(interest) ? <CheckIcon /> : null}
+                icon={
+                  myActiveInterests.has(interest) ? (
+                    <CheckIcon className="[&>*]:stroke-black" />
+                  ) : null
+                }
                 iconDirection="right"
                 active={myActiveInterests.has(interest)}
                 hover={

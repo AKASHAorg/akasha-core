@@ -3,11 +3,11 @@ import React from 'react';
 import Stack from '../Stack';
 
 import { BasicSize, BreakPointSize } from '../types/common.types';
+import { cn } from '@akashaorg/ui/lib/library/utils';
 
 export interface IconProps {
   ref?: React.Ref<HTMLDivElement>;
   icon?: React.ReactElement;
-  iconClassname?: string;
   size?: BasicSize;
   breakPointSize?: BreakPointSize;
   accentColor?: boolean;
@@ -44,7 +44,6 @@ const Icon: React.FC<IconProps> = props => {
     ref,
     accentColor = false,
     size = 'md',
-    iconClassname,
     breakPointSize,
     disabled,
     dataTestId,
@@ -68,13 +67,22 @@ const Icon: React.FC<IconProps> = props => {
       }`
     : '';
 
-  const activeIconColorStyle = accentColor ? accentColorStyle : '';
+  let colorStyle: string;
+  if (!customStyle.includes('stroke') && !customStyle.includes('fill')) {
+    colorStyle = solid
+      ? '[&>*]:fill-black dark:[&>*]:fill-white'
+      : '[&>*]:stroke-black dark:[&>*]:stroke-white';
+  }
+
+  const activeIconColorStyle = accentColor ? accentColorStyle : colorStyle;
 
   const disabledStyle = disabled ? 'opacity-50' : '';
 
   const rotateStyle = rotateAnimation ? 'animate-spin' : '';
 
-  const iconStyle = `${baseStyle} ${activeIconColorStyle} ${sizeStyle} ${disabledStyle} ${rotateStyle} ${iconClassname}`;
+  const iconStyle = cn(
+    `${baseStyle} ${activeIconColorStyle} ${sizeStyle} ${disabledStyle} ${rotateStyle}`,
+  );
 
   return (
     <Stack ref={ref} customStyle={customStyle}>

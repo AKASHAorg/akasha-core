@@ -9,6 +9,7 @@ import {
 } from './getJustifyClasses';
 
 import { Color, Padding } from '../types/common.types';
+import { cn } from '@akashaorg/ui/lib/library/utils';
 
 export type Direction = 'column' | 'column-reverse' | 'row' | 'row-reverse';
 export type Align = 'start' | 'end' | 'center' | 'stretch' | 'baseline';
@@ -97,7 +98,9 @@ const Stack = forwardRef<HTMLDivElement, StackProps>(
       <div
         id={id}
         style={style}
-        className={`${baseStyle} ${directionStyle} ${backgroundStyle} ${paddingStyle} ${justifyStyle} ${alignSelfStyle} ${justifyItemsStyle} ${justifySelfStyle} ${alignStyle} ${spacing} ${fullWidthStyle} ${customStyle}`}
+        className={cn(
+          `${baseStyle} ${directionStyle} ${backgroundStyle} ${paddingStyle} ${justifyStyle} ${alignSelfStyle} ${justifyItemsStyle} ${justifySelfStyle} ${alignStyle} ${spacing} ${fullWidthStyle} ${customStyle}`,
+        )}
         data-testid={dataTestId}
         ref={ref}
       >

@@ -81,12 +81,11 @@ const SubtitleTextIcon: React.FC<SubtitleTextIconProps> = props => {
             <Icon
               icon={icon}
               solid={solid}
-              iconClassname="w-4 h-5"
-              customStyle={
+              customStyle={`[&>svg]:w-4 [&>svg]:h-5 ${
                 solid
                   ? '[&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark'
                   : '[&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark'
-              }
+              }`}
             />
           </Stack>
         )}

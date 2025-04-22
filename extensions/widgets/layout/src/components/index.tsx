@@ -174,7 +174,6 @@ const Layout: React.FC<unknown> = () => {
 
   const layoutStyle = `grid min-h-full lg:${showWidgets ? 'grid-cols-[8fr_4fr]' : 'grid-cols-[2fr_8fr_2fr]'} ${showSidebar ? 'xl:grid-cols-[3fr_6fr_3fr] ' : 'xl:grid-cols-[1.5fr_6fr_3fr_1.5fr]'} xl:max-w-7xl xl:mx-auto gap-x-3 w-full`;
 
-  // the bg(black/30 dark:white/30) is for the overlay background when the sidebar is open on mobile
   const mobileLayoverStyle = `
       fixed xl:sticky h-full z-[99] ${
         showSidebar && window.matchMedia(startMobileSidebarHidingBreakpoint).matches

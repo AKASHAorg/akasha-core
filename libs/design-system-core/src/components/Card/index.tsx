@@ -7,6 +7,7 @@ import {
   getRadiusClasses,
 } from '../../utils';
 import { Color, Elevation, Padding, Radius } from '../types/common.types';
+import { cn } from '@akashaorg/ui/lib/library/utils';
 
 type RegularCardType = {
   elevation?: Elevation;
@@ -117,7 +118,9 @@ const RegularCard: React.FC<PropsWithChildren<CommonCardProps & RegularCardType>
     const fullWidthStyle = fullWidth ? 'w-full' : '';
     const noBorderStyle = noBorderRadius ? 'rounded-none' : radiusStyle;
 
-    const className = `flex flex-col ${elevationStyle} w-full ${paddingStyle} ${margin} ${backgroundStyle} ${noBorderStyle} ${generatedBorder} ${fullWidthStyle} ${customStyle}`;
+    const className = cn(
+      `flex flex-col ${elevationStyle} w-full ${paddingStyle} ${margin} ${backgroundStyle} ${noBorderStyle} ${generatedBorder} ${fullWidthStyle} ${customStyle}`,
+    );
 
     return (
       <div

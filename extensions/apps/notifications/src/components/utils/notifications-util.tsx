@@ -82,8 +82,8 @@ export const getPresentationDataFromNotification = (
 
   returnObj.notificationAppIcon = (
     <AppIcon
-      iconColor={{ light: 'secondaryLight', dark: 'secondaryDark' }}
       placeholderIcon={placeholderIcon}
+      iconStyle="[&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark"
       customStyle="min-w-8 bg-grey5 size-8"
       solid
     />

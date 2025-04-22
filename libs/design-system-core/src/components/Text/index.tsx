@@ -5,7 +5,8 @@ import { getAlignmentClasses } from './getAlignmentClasses';
 import { getWeightClasses } from './getWeightClasses';
 import { Color } from '../types/common.types';
 import { getColorClasses } from '../../utils';
-import { cssVars } from '../../utils/to-css-var';
+import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
+import { cn } from '@akashaorg/ui/lib/library/utils';
 
 export type Heading = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 
@@ -122,7 +123,9 @@ const Text: React.FC<TextProps> = ({
 
     {
       id,
-      className: `${noSelectClass} ${baseStyles} ${colorStyle} ${alignmentStyle} ${truncateStyle} ${wordBreakStyle} ${weightStyle} ${lineClampStyle} ${customStyle}`,
+      className: cn(
+        `${noSelectClass} ${baseStyles} ${colorStyle} ${alignmentStyle} ${truncateStyle} ${wordBreakStyle} ${weightStyle} ${lineClampStyle} ${customStyle}`,
+      ),
       style: cssVars({ '--line-clamp': lineClamp }),
       ...rest,
     },

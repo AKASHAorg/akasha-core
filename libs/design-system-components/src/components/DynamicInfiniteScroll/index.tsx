@@ -15,6 +15,7 @@ import { useScrollRestoration } from './use-scroll-restoration';
 import { getMinHeight, restoreScrollConfig } from './use-scroll-restoration/utils';
 import { useMedia } from 'react-use';
 import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
+import { cn } from '@akashaorg/ui/lib/library/utils';
 
 type DynamicInfiniteScrollItem = {
   index: number;
@@ -154,7 +155,7 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollProps> = props => {
           '--item-spacing': `${itemSpacing}px`,
           '--estimated-height': `${estimatedHeight}px`,
         })}
-        className={`relative w-full min-h-[var(--min-height)] ${cssVars} ${customStyle}`}
+        className={cn(`relative w-full min-h-[var(--min-height)] ${cssVars} ${customStyle}`)}
         data-test-id={dataTestId}
       >
         <Card

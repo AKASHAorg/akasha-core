@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@source inline("gap-{1,1.5,2,2.5,{3..8}}");
 @source '../ui';
 @source "../design-system-components";
 @source "../design-system-core";

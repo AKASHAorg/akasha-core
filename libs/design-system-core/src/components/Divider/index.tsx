@@ -1,3 +1,4 @@
+import { cn } from '@akashaorg/ui/lib/library/utils';
 import React from 'react';
 
 export interface DividerProps {
@@ -13,7 +14,9 @@ export interface DividerProps {
  **/
 const Divider: React.FC<DividerProps> = ({ customStyle = '' }) => {
   return (
-    <hr className={`rounded-[1.25rem] h-px w-full border-grey8 dark:border-grey3 ${customStyle}`} />
+    <hr
+      className={cn(`rounded-[1.25rem] h-px w-full border-grey8 dark:border-grey3 ${customStyle}`)}
+    />
   );
 };
 

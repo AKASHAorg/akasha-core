@@ -48,9 +48,9 @@ export const GalleryImage: React.FC<GalleryImageProps> = props => {
         >
           <AppIcon
             placeholderIcon={<TrashIcon />}
-            iconColor="white"
             size="xs"
             iconSize="sm"
+            iconStyle="[&>*]:stroke-white"
             customStyle="bg-black/50"
             hover
           />

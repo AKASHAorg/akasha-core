@@ -61,9 +61,9 @@ const Toggle: React.FC<ToggleProps> = ({
 
   const color = disabled
     ? 'bg-grey7 after:bg-grey4 border-1 border-grey4 after:border-grey7'
-    : `bg(white dark:grey3 ${
-        iconUnchecked ? 'after:secondaryDark' : 'after:grey6'
-      } dark:after:secondaryDark peer-checked:after:secondaryLight peer-checked:dark:after:secondaryLight) peer-checked:after:border-secondaryLight border-1 border-secondaryLight dark:border-secondaryDark peer-checked:after:border-red-500 dark:peer-checked:after:border-red-500`;
+    : `bg-white dark:bg-grey3 ${
+        iconUnchecked ? 'after:bg-secondaryDark' : 'after:bg-grey6'
+      } dark:after:bg-secondaryDark peer-checked:after:bg-secondaryLight peer-checked:dark:after:bg-secondaryLight peer-checked:after:border-secondaryLight border-1 border-secondaryLight dark:border-secondaryDark peer-checked:after:border-red-500 peer-checked:dark:after:border-red-500`;
 
   const transitionStyle = 'after:transition-all after:duration-300';
 

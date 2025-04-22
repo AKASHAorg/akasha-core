@@ -120,8 +120,8 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
           solid={fieldHasData}
           customStyle={
             fieldHasData
-              ? '[&>*]:stroke-success'
-              : '[&>*]:stroke-warningLight dark:[&>*]:stroke-warningLight'
+              ? '[&>*]:fill-success'
+              : '[&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark'
           }
         />
         <Label required={isRequired}>{title}</Label>

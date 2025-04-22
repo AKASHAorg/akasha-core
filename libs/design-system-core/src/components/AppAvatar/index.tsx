@@ -9,7 +9,7 @@ import {
   AkashaAppApplicationType,
   AppImageSource,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { cssVars } from '../../utils/to-css-var';
+import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
 
 export type AppAvatarProps = {
   appType: AkashaAppApplicationType;

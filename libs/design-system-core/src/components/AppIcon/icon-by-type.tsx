@@ -8,7 +8,7 @@ import { AppIconProps } from '.';
 export type AppImgProps = Pick<
   AppIconProps,
   'appImg' | 'size' | 'placeholderIcon' | 'breakPointSize' | 'accentColor' | 'solid'
->;
+> & { customStyle?: string };
 
 const IconByType: React.FC<AppImgProps> = ({
   appImg,
@@ -17,6 +17,7 @@ const IconByType: React.FC<AppImgProps> = ({
   solid = false,
   breakPointSize,
   accentColor,
+  customStyle = '',
 }) => {
   if (appImg?.type === LogoTypeSource.ICON) {
     return (
@@ -26,6 +27,7 @@ const IconByType: React.FC<AppImgProps> = ({
         breakPointSize={breakPointSize}
         accentColor={accentColor}
         solid={solid}
+        customStyle={customStyle}
       />
     );
   }
@@ -48,6 +50,7 @@ const IconByType: React.FC<AppImgProps> = ({
       size={size}
       breakPointSize={breakPointSize}
       accentColor={accentColor}
+      customStyle={customStyle}
     />
   );
 };

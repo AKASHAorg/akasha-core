@@ -22,6 +22,7 @@ import { ModalProps } from '@akashaorg/design-system-core/lib/components/Modal';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils/useCloseActions';
 import { DeleteImageModal } from './DeleteImageModal';
 import { getImageFromSeed } from '@akashaorg/design-system-core/lib/utils';
+import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
 
 export type HeaderProps = {
   coverImage: Profile['background'];
@@ -202,9 +203,10 @@ export const Header: React.FC<HeaderProps> = ({
       <Stack className="relative mb-8">
         <Card
           data-testid="cover-image"
-          className={`rounded-[1.25rem] flex p-4 h-28 w-full bg-no-repeat bg-center bg-cover bg-[url(${
-            coverImageUrl?.src ?? coverImageFallback
-          })] overflow-visible`}
+          style={cssVars({
+            '--background-url': `url('${coverImageUrl?.src ?? coverImageFallback}')`,
+          })}
+          className={`rounded-[1.25rem] flex p-4 h-28 w-full bg-no-repeat bg-center bg-cover bg-(image:--background-url) overflow-visible`}
         >
           <Stack
             ref={editCoverRef}

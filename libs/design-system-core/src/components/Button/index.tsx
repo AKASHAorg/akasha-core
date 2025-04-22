@@ -7,6 +7,7 @@ import { ButtonProps, ButtonSize } from './types';
 import { getTextClasses } from './getTextClasses';
 import { getContainerClasses } from './getContainerClasses';
 import { getColorClasses } from '../../utils';
+import { cn } from '@akashaorg/ui/lib/library/utils';
 
 /**
  * A Button allows users to take actions when appropriate with a tap(on touch-screen devices)
@@ -80,7 +81,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
       <button
         ref={ref}
         type="button"
-        className={`${disabledStyle} ${hoverStyle} ${customStyle}`}
+        className={cn(`${disabledStyle} ${hoverStyle} ${customStyle}`)}
         disabled={disabled}
         {...rest}
       >
@@ -132,7 +133,9 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
     <button
       ref={ref}
       type="button"
-      className={`flex justify-center items-center gap-x-1 group ${containerStyle} ${buttonSizeStyle} ${breakPointStyle} ${buttonPaddingStyle} ${customStyle}`}
+      className={cn(
+        `flex justify-center items-center gap-x-1 group ${containerStyle} ${buttonSizeStyle} ${breakPointStyle} ${buttonPaddingStyle} ${customStyle}`,
+      )}
       {...rest}
       disabled={disabled}
     >

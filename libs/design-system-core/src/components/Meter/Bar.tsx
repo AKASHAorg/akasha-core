@@ -15,8 +15,8 @@ const Bar: React.FC<PropsWithChildren<MeterProps>> = ({
   direction = 'horizontal',
   customStyle = '',
 }) => {
-  const progressStyle = `stroke(${progressBg} || 'black')`;
-  const backgroundStyle = `stroke(${background} || 'grey8')`;
+  const progressStyle = progressBg || 'stroke-black';
+  const backgroundStyle = background || 'stroke-grey8';
   const capOffset = 0;
   const mid = thickness / 2;
   const start = direction === 'horizontal' ? capOffset : (max * (size - 2 * capOffset)) / max;

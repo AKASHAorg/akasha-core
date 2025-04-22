@@ -16,8 +16,8 @@ const Circle: React.FC<PropsWithChildren<MeterProps>> = ({
   background,
   customStyle = '',
 }) => {
-  const progressStyle = `stroke(${progressBg} || 'black')`;
-  const backgroundStyle = `stroke(${background} || 'grey8')`;
+  const progressStyle = progressBg || 'stroke-black';
+  const backgroundStyle = background || 'stroke-grey8';
 
   if (size < 0 || thickness < 0 || value < 0) {
     throw Error('Invalid prop ...');

@@ -19,6 +19,7 @@ export type AppIconProps = {
   hasNewNotifs?: boolean;
   size?: BasicSize;
   iconSize?: IconProps['size'];
+  iconStyle?: string;
   breakPointSize?: BreakPointSize;
   hover?: boolean;
   active?: boolean;
@@ -54,13 +55,13 @@ const AppIcon: React.FC<AppIconProps> = props => {
     solid,
     size = 'md',
     iconSize,
+    iconStyle = '',
     breakPointSize,
     accentColor,
     stackedIcon,
     hasNewNotifs,
     hover,
     active,
-    iconColor,
     background,
     radius,
     customStyle = '',
@@ -93,6 +94,7 @@ const AppIcon: React.FC<AppIconProps> = props => {
           placeholderIcon={placeholderIcon}
           solid={solid}
           accentColor={accentColor}
+          customStyle={iconStyle}
         />
         {hasNewNotifs && (
           <div className={`rounded-full absolute top-0  bg-secondaryDark ${notifyStyle})`} />
@@ -109,6 +111,7 @@ const AppIcon: React.FC<AppIconProps> = props => {
         placeholderIcon={placeholderIcon}
         solid={solid}
         accentColor={accentColor}
+        customStyle={iconStyle}
       />
     </Stack>
   );

@@ -37,7 +37,7 @@ const errorAnimationStyle = `animate-ping absolute h-full w-full ${errorStyle} o
 
 const installStyle = `animate-bounce [&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark`;
 
-const successStyle = '[&>*]:fill:success';
+const successStyle = '[&>*]:fill-success';
 const successAnimationStyle = `animate-ping absolute h-full w-full ${successStyle} opacity-75`;
 
 const TruncateText = ({
@@ -107,20 +107,11 @@ const InstallApp = ({
           <Stack alignItems="center" direction="column" spacing={4}>
             {status === 'authorize-request' && (
               <Stack direction="row" alignItems="center" justifyContent="center">
-                <AppIcon
-                  placeholderIcon={<Walletconnect />}
-                  radius={24}
-                  iconColor="self-color"
-                  customStyle="bg-gradient-to-b orange-50 orange-200 size-10"
-                />
+                <Walletconnect height={40} width={40} />
                 <IndicatorDots size="sm" />
-                <AppIcon
-                  placeholderIcon={<Akasha />}
-                  solid={true}
-                  radius={8}
-                  iconColor="black"
-                  customStyle="bg-gradient-to-b from-blue-200 to-red-200 size-6"
-                />
+                <div className="flex justify-center items-center bg-gradient-to-b from-blue-200 to-red-200 rounded-[8px] size-10 [&>*]:fill-black">
+                  <Akasha height={24} width={24} />
+                </div>
               </Stack>
             )}
             {status === 'error' && (

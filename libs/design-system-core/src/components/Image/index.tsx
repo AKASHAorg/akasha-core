@@ -3,6 +3,7 @@ import Spinner from '../Spinner';
 import Stack from '../Stack';
 
 import { DelayLoad } from '../../utils/delay-load';
+import { cn } from '@akashaorg/ui/lib/library/utils';
 
 export type ImageProps = PropsWithChildren<
   React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement> & {
@@ -29,7 +30,9 @@ export type ImageProps = PropsWithChildren<
 const Image: React.FC<ImageProps> = props => {
   const { src, customStyle = '', dataTestId, showLoadingIndicator, onLoad, ...rest } = props;
   const [imageLoaded, setImageLoaded] = useState(false);
-  const className = `object-contain ${customStyle} ${showLoadingIndicator && !imageLoaded ? '!w-0 !h-0' : ''}`;
+  const className = cn(
+    `object-contain ${customStyle} ${showLoadingIndicator && !imageLoaded ? '!w-0 !h-0' : ''}`,
+  );
 
   const handleImageLoad = (event: React.SyntheticEvent<HTMLImageElement>) => {
     if (showLoadingIndicator) setImageLoaded(true);

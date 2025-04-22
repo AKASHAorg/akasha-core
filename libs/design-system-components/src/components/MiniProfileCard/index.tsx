@@ -11,6 +11,7 @@ import {
   ProfileAvatarFallback,
   ProfileAvatarImage,
 } from '@akashaorg/ui/lib/akasha-components/profile-avatar';
+import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
 
 export type MiniProfileCardProps = {
   publicImagePath?: string;
@@ -49,9 +50,8 @@ const MiniProfileCard: React.FC<MiniProfileCardProps> = props => {
     <Card className="p-0 mb-4 max-h-[30rem]">
       <Stack
         alignItems="center"
-        className={`h-28 rounded-t-2xl bg-center bg-cover bg-[url(${
-          coverImage?.src ?? coverImageFallback
-        })]`}
+        style={cssVars({ '--background-url': `url('${coverImage?.src ?? coverImageFallback}')` })}
+        className={`h-28 rounded-t-2xl bg-center bg-cover bg-(image:--background-url)`}
       >
         <Stack className="relative top-16">
           <button onClick={handleClick}>
