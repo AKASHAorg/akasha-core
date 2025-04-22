@@ -26,7 +26,7 @@ export const ButtonIcon: React.FC<
         (variant === 'secondary' && !active) ||
         (variant === 'primary' && greyBg)
       }
-      customStyle={loading ? 'animate-spin' : ''}
+      customStyle={`[&>*]:stroke-black ${loading ? 'animate-spin' : ''}`}
       disabled={disabled}
     />
   );

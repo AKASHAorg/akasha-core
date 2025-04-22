@@ -40,9 +40,7 @@ export const CategoryPills: React.FC<CategoryPillsProps> = props => {
           key={label + idx}
           label={label}
           active={categories.includes(value)}
-          icon={
-            categories.includes(value) ? <XMarkIcon className="[&>*]:stroke-black" /> : undefined
-          }
+          icon={categories.includes(value) ? <XMarkIcon /> : undefined}
           iconDirection="right"
           customStyle="mt-3 mr-3"
           onPillClick={onPillClick({ label, value })}

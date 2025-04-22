@@ -470,7 +470,7 @@ export const BeamEditor: React.FC = () => {
                     key={index}
                     label={tag}
                     active={!editorTags.includes(tag)}
-                    icon={<XMarkIcon className="[&>*]:stroke-black" />}
+                    icon={<XMarkIcon />}
                     iconDirection="right"
                     onPillClick={() => handleDeleteTag(tag)}
                     type="action"

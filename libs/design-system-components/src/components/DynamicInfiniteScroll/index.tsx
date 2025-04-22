@@ -156,7 +156,7 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollProps> = props => {
           '--estimated-height': `${estimatedHeight}px`,
         })}
         className={cn(`relative w-full min-h-[var(--min-height)] ${cssVars} ${customStyle}`)}
-        data-test-id={dataTestId}
+        data-testid={dataTestId}
       >
         <Card
           data-offset={vListOffset}
