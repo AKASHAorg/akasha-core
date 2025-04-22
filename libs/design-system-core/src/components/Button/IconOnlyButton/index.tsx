@@ -78,6 +78,7 @@ export const IconOnlyButton: React.FC<IconOnlyButtonProps & HTMLAttributes<HTMLB
             loading={loading}
             breakPointSize={breakPointSize}
             disabled={disabled}
+            iconOnly={true}
           />
         </button>
       );

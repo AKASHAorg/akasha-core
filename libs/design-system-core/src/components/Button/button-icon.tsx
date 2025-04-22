@@ -12,8 +12,20 @@ export const ButtonIcon: React.FC<
     breakPointSize: ButtonProps['breakPointSize'];
     disabled: ButtonProps['disabled'];
     active?: ButtonProps['active'];
+    iconOnly?: boolean;
   }
-> = ({ size, icon, solid, variant, greyBg, loading, breakPointSize, disabled, active }) => {
+> = ({
+  size,
+  icon,
+  solid,
+  variant,
+  greyBg,
+  loading,
+  breakPointSize,
+  disabled,
+  active,
+  iconOnly,
+}) => {
   return (
     <Icon
       icon={icon}
@@ -26,7 +38,7 @@ export const ButtonIcon: React.FC<
         (variant === 'secondary' && !active) ||
         (variant === 'primary' && greyBg)
       }
-      customStyle={`[&>*]:stroke-black ${loading ? 'animate-spin' : ''}`}
+      customStyle={`${iconOnly ? '' : '[&>*]:stroke-black'} ${loading ? 'animate-spin' : ''}`}
       disabled={disabled}
     />
   );
