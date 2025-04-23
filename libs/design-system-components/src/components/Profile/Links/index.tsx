@@ -34,7 +34,7 @@ const Links: React.FC<LinksProps> = ({ title, links }) => {
 
   return (
     <Card className="p-4">
-      <Stack direction="column" spacing={2}>
+      <Stack direction="column" spacing={2} className="w-fit">
         <Text variant="label">{title}</Text>
         {links.map((link, index) => {
           const iconType = getIconFromLink(link.href);
@@ -43,13 +43,14 @@ const Links: React.FC<LinksProps> = ({ title, links }) => {
             : { icon: <LinkIcon />, solid: false };
 
           return (
-            <CopyToClipboard key={`${link.href}${index}`} textToCopy={link.href} side="right">
+            <CopyToClipboard key={`${link.href}${index}`} textToCopy={link.href}>
               <Stack direction="row" alignItems="center" spacing={2} className="w-fit">
                 <AppIcon placeholderIcon={icon} solid={solid} size="xs" accentColor />
                 <Text
                   variant="body2"
                   color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
                   breakWord
+                  className="w-fit"
                 >
                   {link.href}
                 </Text>
