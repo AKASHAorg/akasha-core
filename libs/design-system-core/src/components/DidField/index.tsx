@@ -1,7 +1,7 @@
 import React from 'react';
 import Icon from '../Icon';
-import Stack from '../Stack';
 import { CopyToClipboard } from '@akashaorg/ui/lib/akasha-components/copy-to-clipboard';
+import Stack from '../Stack';
 import { Eth, Solana, DidKey, NoEth } from '../Icon/akasha-icons';
 import { Color } from '../types/common.types';
 import { getDidNetworkType, truncateDid } from '../../utils/did-utils';
