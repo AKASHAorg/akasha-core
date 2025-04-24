@@ -4,7 +4,7 @@ import { Controller, useWatch } from 'react-hook-form';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import { Loader2 } from 'lucide-react';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import DropDown from '@akashaorg/design-system-core/lib/components/Dropdown';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -236,7 +236,7 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
                 {collaboratorsDescriptionLabel}
               </Text>
             </Stack>
-            {loadingProfilesData && <Spinner />}
+            {loadingProfilesData && <Loader2 className="h-8 w-8 animate-spin text-primary" />}
             {errorProfilesData && (
               <Stack>
                 <ErrorLoader type="script-error">

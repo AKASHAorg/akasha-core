@@ -8,7 +8,7 @@ import React, {
   useRef,
 } from 'react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import { Loader2 } from 'lucide-react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import { Virtualizer, measureElement, useWindowVirtualizer } from '@tanstack/react-virtual';
 import { useScrollRestoration } from './use-scroll-restoration';
@@ -189,7 +189,7 @@ const DynamicInfiniteScroll: React.FC<DynamicInfiniteScrollProps> = props => {
             </div>
           ))}
           <Stack alignItems="center" justifyContent="center" className="w-full">
-            {loadingMore && <Spinner />}
+            {loadingMore && <Loader2 className="h-8 w-8 animate-spin text-primary" />}
           </Stack>
         </Card>
       </div>

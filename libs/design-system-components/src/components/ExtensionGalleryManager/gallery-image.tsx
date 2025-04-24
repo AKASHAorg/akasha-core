@@ -3,7 +3,7 @@ import { Image } from '@akashaorg/ui/lib/akasha-components/image';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import { Loader2 } from 'lucide-react';
 import {
   TrashIcon,
   XCircleIcon,
@@ -70,7 +70,9 @@ export const GalleryImage: React.FC<GalleryImageProps> = props => {
               customStyle={'[&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark'}
             />
           )}
-          {state === GalleryImageState.LOADING && <Spinner />}
+          {state === GalleryImageState.LOADING && (
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          )}
           {state === GalleryImageState.ERROR && (
             <Text variant="button-sm" align="center">
               {uploadingErrorLabel}

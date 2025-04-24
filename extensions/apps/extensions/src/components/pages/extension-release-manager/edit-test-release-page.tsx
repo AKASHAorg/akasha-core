@@ -17,7 +17,7 @@ import ExtensionReleasePublishForm from '@akashaorg/design-system-components/lib
 import { DRAFT_EXTENSIONS, DRAFT_RELEASES } from '../../../constants';
 import { NetworkStatus } from '@apollo/client';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import { Loader2 } from 'lucide-react';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 type EditTestReleasePageProps = {
@@ -201,7 +201,7 @@ export const EditTestReleasePage: React.FC<EditTestReleasePageProps> = ({
   return (
     <>
       <Modal show={isLoadingTestMode}>
-        <Spinner />
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
         <Text variant="body2" customStyle="px-4 py-2">
           {t('Loading test mode')}
         </Text>

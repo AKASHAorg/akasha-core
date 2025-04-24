@@ -4,7 +4,7 @@ import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import { Loader2 } from 'lucide-react';
 import {
   ErrorLoader,
   ErrorLoaderDescription,
@@ -57,7 +57,7 @@ export const ContributorsPage = (props: ContributorsPageProps) => {
           <Stack direction="column" spacing={4}>
             {loading && (
               <Stack alignItems="center" justifyContent="center">
-                <Spinner />
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
               </Stack>
             )}
             {error && (

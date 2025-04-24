@@ -7,7 +7,7 @@ import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import { Loader2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import {
   saveMediaFile,
@@ -71,7 +71,7 @@ export const ExtensionGalleryManagerPage: React.FC<ExtensionGalleryManagerPagePr
             //@TODO replace with Loader component once its created
           }
           <Stack spacing={5} alignItems="center">
-            <Spinner />
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
             <Text variant="button-md">{t('Loading gallery images')}</Text>
           </Stack>
         </>

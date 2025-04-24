@@ -11,7 +11,7 @@ import {
 import SearchBar from '@akashaorg/design-system-components/lib/components/SearchBar';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import { Loader2 } from 'lucide-react';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import { CheckIcon, ExclamationTriangleIcon, TrashIcon } from '@heroicons/react/24/outline';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
@@ -248,7 +248,7 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
             </Text>
             {loading && (
               <Stack alignItems="center" justifyContent="center">
-                <Spinner />
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
               </Stack>
             )}
             {error && (
