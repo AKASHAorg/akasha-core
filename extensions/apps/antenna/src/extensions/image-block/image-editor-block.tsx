@@ -477,7 +477,7 @@ export const ImageEditorBlock = (
       )}
       {uiState === 'gallery' && imageGalleryImages.length > 0 && (
         <Stack spacing={1}>
-          <Stack>
+          <Stack alignItems={alignState}>
             <ImageBlockGallery
               imageNotLoadedLabel={t('Cannot load image')}
               images={imageGalleryImages}
