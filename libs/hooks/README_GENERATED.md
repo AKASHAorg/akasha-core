@@ -924,7 +924,7 @@ const appRelease = useMemo(() => {
 
 // the 'loading' state can be used to render a spinner;
 if (loading) {
-  return <Spinner />;
+  return <Loader2 className="h-8 w-8 animate-spin text-primary" />;
 }
 
 if (error) {
@@ -1065,7 +1065,7 @@ const extension = useMemo(() => {
 
 // you can use the 'loading' state to show a spinner
 if (loading) {
-  return <Spinner />;
+  return <Loader2 className="h-8 w-8 animate-spin text-primary" />;
 }
 
 if (error) {

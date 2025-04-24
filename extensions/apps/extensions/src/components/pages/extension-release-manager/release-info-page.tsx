@@ -10,7 +10,7 @@ import {
   ErrorLoaderTitle,
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import { Loader2 } from 'lucide-react';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { Extension, NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import { ExtensionElement } from '../my-extensions/extension-element';
@@ -152,7 +152,7 @@ export const ExtensionReleaseInfoPage: React.FC<ExtensionReleaseInfoPageProps> =
         <Card className="p-2">
           {loadingReleaseByIdQuery && (
             <Stack alignItems="center" justifyContent="center">
-              <Spinner />
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
             </Stack>
           )}
           {!loadingReleaseByIdQuery && (

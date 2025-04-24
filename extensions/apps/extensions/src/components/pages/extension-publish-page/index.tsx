@@ -11,7 +11,7 @@ import {
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import { Loader2 } from 'lucide-react';
 import StackedAvatar from '@akashaorg/design-system-core/lib/components/StackedAvatar';
 import ExtensionReviewAndPublish from '@akashaorg/design-system-components/lib/components/ExtensionReviewAndPublish';
 import {
@@ -282,7 +282,7 @@ export const ExtensionPublishPage: React.FC<ExtensionPublishPageProps> = ({ exte
             <>
               {loadingProfilesData && (
                 <Stack alignItems="center" justifyContent="center">
-                  <Spinner />
+                  <Loader2 className="h-8 w-8 animate-spin text-primary" />
                 </Stack>
               )}
               {errorProfilesData && (

@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import getSDK from '@akashaorg/core-sdk';
 import Modal, { ModalProps } from '@akashaorg/design-system-core/lib/components/Modal';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import { Loader2 } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { useTranslation } from 'react-i18next';
 import { useRootComponentProps } from '@akashaorg/ui-core-hooks';
@@ -121,7 +121,7 @@ export const UninstallModal: React.FC<UninstallModalProps> = props => {
       }
       {modalState === UninstallModalStates.LOADING && (
         <Stack spacing={5} alignItems="center">
-          <Spinner />
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
           <Text variant="button-md">{t('Uninstalling extension...')}</Text>
         </Stack>
       )}
