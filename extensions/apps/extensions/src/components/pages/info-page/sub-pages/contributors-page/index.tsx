@@ -2,6 +2,7 @@ import React from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
+import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import {
@@ -20,14 +21,6 @@ import {
 import { selectExtensionContributors } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-query';
 import { useContributors } from './use-contributors';
 import { ChevronRightIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import {
-  ProfileAvatarButton,
-  ProfileAvatarButtonAvatar,
-  ProfileAvatarButtonAvatarFallback,
-  ProfileAvatarButtonAvatarImage,
-  ProfileDidField,
-  ProfileName,
-} from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
 
 type ContributorsPageProps = {
   appId: string;
@@ -92,22 +85,14 @@ export const ContributorsPage = (props: ContributorsPageProps) => {
                   className="p-0 shadow-noneborder-none"
                 >
                   <Stack direction="row" alignItems="center">
-                    <ProfileAvatarButton profileDID={contributor?.did?.id}>
-                      <ProfileAvatarButtonAvatar>
-                        <ProfileAvatarButtonAvatarImage
-                          src={
-                            transformSource(contributor?.avatar?.default)?.src ||
-                            contributor?.avatar?.alternatives?.map(alternative =>
-                              transformSource(alternative),
-                            )?.[0]?.src
-                          }
-                          alt="Contributor Avatar"
-                        />
-                        <ProfileAvatarButtonAvatarFallback />
-                      </ProfileAvatarButtonAvatar>
-                      <ProfileName>{contributor?.name}</ProfileName>
-                      <ProfileDidField />
-                    </ProfileAvatarButton>
+                    <ProfileAvatarButton
+                      profileId={contributor?.did.id}
+                      label={contributor?.name}
+                      avatar={transformSource(contributor?.avatar?.default)}
+                      alternativeAvatars={contributor?.avatar?.alternatives?.map(alternative =>
+                        transformSource(alternative),
+                      )}
+                    />
                     <Icon
                       icon={<ChevronRightIcon />}
                       size="sm"

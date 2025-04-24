@@ -12,6 +12,7 @@ import SearchBar from '@akashaorg/design-system-components/lib/components/Search
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import { CheckIcon, ExclamationTriangleIcon, TrashIcon } from '@heroicons/react/24/outline';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import {
@@ -32,14 +33,6 @@ import {
   ErrorLoaderDescription,
   ErrorLoaderTitle,
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
-import {
-  ProfileAvatarButton,
-  ProfileAvatarButtonAvatar,
-  ProfileAvatarButtonAvatarFallback,
-  ProfileAvatarButtonAvatarImage,
-  ProfileDidField,
-  ProfileName,
-} from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
 
 export type ExtensionEditContributorsPageProps = {
   extensionId: string;
@@ -228,22 +221,14 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
                           alignItems="center"
                           className="p-4 hover:bg-secondary"
                         >
-                          <ProfileAvatarButton profileDID={profile?.did?.id}>
-                            <ProfileAvatarButtonAvatar>
-                              <ProfileAvatarButtonAvatarImage
-                                src={
-                                  transformSource(profile?.avatar?.default)?.src ||
-                                  profile?.avatar?.alternatives?.map(alternative =>
-                                    transformSource(alternative),
-                                  )?.[0]?.src
-                                }
-                                alt="Contributor Avatar"
-                              />
-                              <ProfileAvatarButtonAvatarFallback />
-                            </ProfileAvatarButtonAvatar>
-                            <ProfileName>{profile?.name}</ProfileName>
-                            <ProfileDidField />
-                          </ProfileAvatarButton>
+                          <ProfileAvatarButton
+                            profileId={profile?.did?.id}
+                            label={profile?.name}
+                            avatar={transformSource(profile?.avatar?.default)}
+                            alternativeAvatars={profile?.avatar?.alternatives?.map(alternative =>
+                              transformSource(alternative),
+                            )}
+                          />
                           {addedContributors?.some(
                             contrib => contrib?.did?.id === profile?.did?.id,
                           ) && <Icon icon={<CheckIcon />} accentColor />}
@@ -306,22 +291,14 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
                   alignItems="center"
                   spacing={2}
                 >
-                  <ProfileAvatarButton profileDID={profile?.did?.id}>
-                    <ProfileAvatarButtonAvatar>
-                      <ProfileAvatarButtonAvatarImage
-                        src={
-                          transformSource(profile?.avatar?.default)?.src ||
-                          profile?.avatar?.alternatives?.map(alternative =>
-                            transformSource(alternative),
-                          )?.[0]?.src
-                        }
-                        alt="Contributor Avatar"
-                      />
-                      <ProfileAvatarButtonAvatarFallback />
-                    </ProfileAvatarButtonAvatar>
-                    <ProfileName>{profile?.name}</ProfileName>
-                    <ProfileDidField />
-                  </ProfileAvatarButton>
+                  <ProfileAvatarButton
+                    profileId={profile?.did?.id}
+                    label={profile?.name}
+                    avatar={transformSource(profile?.avatar?.default)}
+                    alternativeAvatars={profile?.avatar?.alternatives?.map(alternative =>
+                      transformSource(alternative),
+                    )}
+                  />
                   <button onClick={() => handleRemoveContributor(profile)}>
                     <Icon
                       icon={<TrashIcon />}

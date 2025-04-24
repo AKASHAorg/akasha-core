@@ -4,17 +4,16 @@ import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import AppCoverImage from '@akashaorg/design-system-core/lib/components/AppCoverImage';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
+import DidField from '@akashaorg/design-system-core/lib/components/DidField';
+import ProfileNameField from '@akashaorg/design-system-core/lib/components/ProfileNameField';
 import ExtensionIcon from '@akashaorg/design-system-core/lib/components/ExtensionIcon';
 import { Extension, Image } from '@akashaorg/typings/lib/ui';
 import { cn } from '@akashaorg/ui/lib/library/utils';
 import {
-  ProfileAvatarButton,
-  ProfileAvatarButtonAvatar,
-  ProfileAvatarButtonAvatarFallback,
-  ProfileAvatarButtonAvatarImage,
-  ProfileDidField,
-  ProfileName,
-} from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
+  ProfileAvatarImage,
+  ProfileAvatarFallback,
+  ProfileAvatar,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar';
 
 export type ExtensionCardProps = {
   coverImageSrc: string;
@@ -101,22 +100,18 @@ const ExtensionCard: React.FC<ExtensionCardProps> = props => {
             )}
           </Stack>
           <Stack direction="row" alignItems="center" spacing={2}>
-            <ProfileAvatarButton
-              profileDID={author?.profileDID}
-              nsfw={author?.nsfw}
-              nsfwLabel="NSFW"
-              size="sm"
-            >
-              <ProfileAvatarButtonAvatar className="shrink-0 cursor-pointer h-4 w-4">
-                <ProfileAvatarButtonAvatarImage
-                  src={author?.avatar?.src || author?.alternativeAvatars?.[0]?.src}
-                  alt="Author Avatar"
-                />
-                <ProfileAvatarButtonAvatarFallback />
-              </ProfileAvatarButtonAvatar>
-              <ProfileName>{author?.name}</ProfileName>
-              <ProfileDidField />
-            </ProfileAvatarButton>
+            <ProfileAvatar profileDID={author?.profileDID} size="xs" nsfw={author?.nsfw}>
+              <ProfileAvatarImage src={author?.avatar?.src} />
+              <ProfileAvatarFallback />
+            </ProfileAvatar>
+            <ProfileNameField
+              did={author?.profileDID}
+              profileName={author?.name}
+              color={{ light: 'grey4', dark: 'grey6' }}
+              weight="normal"
+              truncateText={true}
+            />
+            <DidField did={author?.profileDID} isValid={true} copiable={true} />
           </Stack>
           <Text variant="body2" {...(!featured && { lineClamp: 2 })}>
             {description}

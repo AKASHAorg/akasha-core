@@ -1,4 +1,5 @@
 import React from 'react';
+import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -7,14 +8,6 @@ import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 import { getElevationClasses } from '@akashaorg/design-system-core/lib/utils';
 import { cn } from '@akashaorg/ui/lib/library/utils';
 import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
-import {
-  ProfileAvatarButton,
-  ProfileAvatarButtonAvatar,
-  ProfileAvatarButtonAvatarFallback,
-  ProfileAvatarButtonAvatarImage,
-  ProfileDidField,
-  ProfileName,
-} from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
 
 const MAX_MENTIONS_DISPLAY = 3;
 
@@ -79,22 +72,14 @@ export const MentionPopover = React.forwardRef<HTMLDivElement, MentionPopoverPro
                 }}
                 className={`px-4 py-2 h-[var(--profile-avatar-height)]`}
               >
-                <ProfileAvatarButton profileDID={value.did.id}>
-                  <ProfileAvatarButtonAvatar>
-                    <ProfileAvatarButtonAvatarImage
-                      src={
-                        transformSource(value?.avatar?.default)?.src ||
-                        value?.avatar?.alternatives?.map(alternative =>
-                          transformSource(alternative),
-                        )?.[0]?.src
-                      }
-                      alt="Author Avatar"
-                    />
-                    <ProfileAvatarButtonAvatarFallback />
-                  </ProfileAvatarButtonAvatar>
-                  <ProfileName>{value.name}</ProfileName>
-                  <ProfileDidField />
-                </ProfileAvatarButton>
+                <ProfileAvatarButton
+                  label={value.name}
+                  avatar={transformSource(value?.avatar?.default)}
+                  alternativeAvatars={value?.avatar?.alternatives?.map(alternative =>
+                    transformSource(alternative),
+                  )}
+                  profileId={value.did.id}
+                />
               </button>
             ))}
         </Stack>
