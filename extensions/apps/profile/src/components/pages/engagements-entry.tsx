@@ -85,7 +85,6 @@ export const EngagementsEntry: React.FC<EngagementsEntryProps> = props => {
         label={profileData?.name}
         {...(profileData?.nsfw && {
           nsfwAvatar: !(viewerIsOwner || showNsfw),
-          nsfw: !(viewerIsOwner || showNsfw),
           nsfwLabel: 'NSFW',
         })}
         href={entryProfileDID ? `${profileAnchorLink}/${entryProfileDID}` : ''}
