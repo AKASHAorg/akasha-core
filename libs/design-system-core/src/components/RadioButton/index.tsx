@@ -52,7 +52,9 @@ export const RadioButton: React.FC<RadioButtonProps> = props => {
   } = props;
 
   const textColor = error ? 'text-errorLight dark:text-errorDark' : 'text-black dark:text-white';
-  const inputColor = error ? 'errorLight dark:errorDark' : 'secondaryLight dark:secondaryDark';
+  const inputColor = error
+    ? 'after:bg-errorLight dark:after:bg-errorDark'
+    : 'after:bg-secondaryLight dark:after:bg-secondaryDark';
   const buttonSize = size === 'small' ? 'w-4 h-4' : 'w-6 h-6';
   const pseudoCircleSize = size === 'small' ? 'after:w-2 after:h-2' : 'after:w-4 after:h-4 ';
 
@@ -80,7 +82,7 @@ export const RadioButton: React.FC<RadioButtonProps> = props => {
         <span
           className={
             isSelected
-              ? `${buttonSize} ${instanceButtonStyles} after:block after:bg-(${inputColor}) after:rounded-full ${pseudoCircleSize}`
+              ? `${buttonSize} ${instanceButtonStyles} after:block ${inputColor} after:rounded-full ${pseudoCircleSize}`
               : `${buttonSize} ${instanceButtonStyles} after:hidden`
           }
         ></span>

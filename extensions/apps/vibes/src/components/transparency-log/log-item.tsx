@@ -34,9 +34,11 @@ const TransparencyLogItemCard: React.FC<TransparencyLogItemCardProps> = props =>
       <Stack
         spacing="gap-y-1"
         padding="p-4"
-        customStyle={`rounded-t-2xl bg-(${
-          item.status === 'Kept' ? 'success/10 dark:success/30' : 'errorLight/10 dark:errorDark/40'
-        })`}
+        customStyle={`rounded-t-2xl ${
+          item.status === 'Kept'
+            ? 'bg-success/10 dark:bg-success/30'
+            : 'bg-errorLight/10 dark:bg-errorDark/40'
+        }`}
       >
         <Stack direction="row" align="center" justify="between">
           <Text variant="h5">{item.type}</Text>

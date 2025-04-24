@@ -47,7 +47,7 @@ const VibesConsoleContentCard: React.FC<VibesConsoleContentCardProps> = props =>
 
   const textColor = { light: 'grey4', dark: 'grey7' } as const;
 
-  const buttonStyle = 'w-(full md:[9.25rem])';
+  const buttonStyle = 'w-full md:w-[9.25rem]';
 
   const secondaryButtonAction = entry.itemType === 'Profile' ? 'Suspend' : 'Delist';
 

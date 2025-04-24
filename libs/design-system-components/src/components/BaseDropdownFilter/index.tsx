@@ -85,9 +85,11 @@ const DropdownFilter: React.FC<IDropdownFilterProps> = ({
       {label && <Text variant="label">{label}</Text>}
 
       <button
-        className={`inline-flex items-center justify-between w-full ${padding} rounded-[0.5rem] bg-white dark:bg-grey3 rounded-[0.5rem] border-(1 solid ${
-          dropOpen ? 'secondaryLight dark:secondaryDark' : 'grey8 dark:grey3'
-        }) ${customStyle}`}
+        className={`inline-flex items-center justify-between w-full ${padding} rounded-[0.5rem] bg-white dark:bg-grey3 rounded-[0.5rem] border-1 border-solid ${
+          dropOpen
+            ? 'border-secondaryLight dark:border-secondaryDark'
+            : 'border-grey8 dark:border-grey3'
+        } ${customStyle}`}
         onClick={handleDropClick}
       >
         <Text variant="body1">{selected?.altTitle || selected?.title}</Text>
