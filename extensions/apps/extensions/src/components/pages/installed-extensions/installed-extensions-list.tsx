@@ -11,7 +11,7 @@ import {
 import { Image } from '@akashaorg/ui/lib/akasha-components/image';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import { Loader2 } from 'lucide-react';
 import appRoutes, { HOME, INSTALLED } from '../../../routes';
 import { useTranslation } from 'react-i18next';
 import {
@@ -109,7 +109,7 @@ export const InstalledExtensionsList = () => {
           //@TODO replace with Loader component once its created
         }
         <Stack spacing={5} alignItems="center">
-          <Spinner />
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
           <Text variant="button-md">{t('Loading installed extensions')}</Text>
         </Stack>
       </Card>

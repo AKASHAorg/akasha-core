@@ -20,7 +20,7 @@ import {
   ErrorLoaderDescription,
   ErrorLoaderTitle,
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import { Loader2 } from 'lucide-react';
 import {
   selectAppsReleases,
   selectAppsReleasesPageInfo,
@@ -177,7 +177,7 @@ export const ReleasesPage = (props: ReleasesPageProps) => {
           )}
           {releasesReq.loading && (
             <Stack direction="column" alignItems="center">
-              <Spinner />
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
             </Stack>
           )}
         </Stack>

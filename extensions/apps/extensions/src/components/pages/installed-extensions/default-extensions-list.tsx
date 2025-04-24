@@ -3,7 +3,7 @@ import getSDK from '@akashaorg/core-sdk';
 import AppList from '@akashaorg/design-system-components/lib/components/AppList';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import { Loader2 } from 'lucide-react';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import {
   ErrorLoader,
@@ -90,7 +90,7 @@ export const DefaultExtensionsList = () => {
       }
       {loading && (
         <Stack spacing={5} alignItems="center">
-          <Spinner />
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
           <Text variant="button-md">{t('Loading default extensions')}</Text>
         </Stack>
       )}

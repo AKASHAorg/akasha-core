@@ -16,7 +16,7 @@ import {
   selectPageInfo,
 } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-by-publisher-did-query';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import { Loader2 } from 'lucide-react';
 import { NetworkStatus } from '@apollo/client';
 import {
   ErrorLoader,
@@ -177,7 +177,7 @@ export const DevInfoPage = (props: DevInfoPageProps) => {
           )}
           {appsReq.loading && (
             <Stack direction="column" alignItems="center">
-              <Spinner />
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
             </Stack>
           )}
         </Stack>

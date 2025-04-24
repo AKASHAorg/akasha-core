@@ -9,7 +9,7 @@ import NotificationCard from '@akashaorg/design-system-components/lib/components
 import BasicInfoCard from '@akashaorg/design-system-components/lib/components/NotificationCard/basic-info-card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import { Loader2 } from 'lucide-react';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import DynamicInfiniteScroll from '@akashaorg/design-system-components/lib/components/DynamicInfiniteScroll';
@@ -229,7 +229,7 @@ const NotificationsPage: React.FC = () => {
             </Stack>
             <Stack>
               {/** while notifications are being fetched show the spinner*/}
-              {notifications.length === 0 && notificationLoading && <Spinner />}
+              {notifications.length === 0 && notificationLoading && <Loader2 className="h-8 w-8 animate-spin text-primary" />}
               {/** if there is no notifications for this app option*/}
               {notifications.length === 0 && !notificationLoading && (
                 <BasicInfoCard
