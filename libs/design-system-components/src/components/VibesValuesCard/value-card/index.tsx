@@ -72,7 +72,7 @@ const VibesValueCard: React.FC<VibesValueCardProps> = props => {
               {ctaLabel && (
                 <Link
                   to={ctaUrl}
-                  customStyle="text-sm self-end font-bold no-underline text(secondaryLight dark:secondaryDark)"
+                  customStyle="text-sm self-end font-bold no-underline text-secondaryLight dark:text-secondaryDark"
                   target="_blank"
                 >
                   {ctaLabel}

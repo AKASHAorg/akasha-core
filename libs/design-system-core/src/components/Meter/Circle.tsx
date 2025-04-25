@@ -1,11 +1,10 @@
 import React, { PropsWithChildren } from 'react';
-import { tw } from '@twind/core';
 
 import Stack from '../Stack';
 
 import { MeterProps } from '.';
 
-import { getColorClasses, calculateEndAngle, arcCommands } from '../../utils';
+import { calculateEndAngle, arcCommands } from '../../utils';
 
 const Circle: React.FC<PropsWithChildren<MeterProps>> = ({
   size,
@@ -17,8 +16,8 @@ const Circle: React.FC<PropsWithChildren<MeterProps>> = ({
   background,
   customStyle = '',
 }) => {
-  const progressStyle = getColorClasses(progressBg || 'black', 'stroke');
-  const backgroundStyle = getColorClasses(background || 'grey8', 'stroke');
+  const progressStyle = progressBg || 'stroke-black';
+  const backgroundStyle = background || 'stroke-grey8';
 
   if (size < 0 || thickness < 0 || value < 0) {
     throw Error('Invalid prop ...');
@@ -51,7 +50,7 @@ const Circle: React.FC<PropsWithChildren<MeterProps>> = ({
     >
       <svg viewBox={`0 0 ${size} ${size}`} width={size} height={size}>
         <circle
-          className={tw(backgroundStyle)}
+          className={backgroundStyle}
           strokeWidth={thickness}
           stroke="currentColor"
           fill="transparent"
@@ -60,7 +59,7 @@ const Circle: React.FC<PropsWithChildren<MeterProps>> = ({
           cy={centerY}
         />
         <path
-          className={tw(`${progressStyle}`)}
+          className={`${progressStyle}`}
           d={d}
           strokeWidth={thickness}
           strokeLinecap="butt"
@@ -68,7 +67,7 @@ const Circle: React.FC<PropsWithChildren<MeterProps>> = ({
           fill="transparent"
         />
       </svg>
-      <div className={tw('absolute')}> {children} </div>
+      <div className={'absolute'}> {children} </div>
     </Stack>
   );
 };

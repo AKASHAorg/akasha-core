@@ -1,5 +1,5 @@
 import React from 'react';
-import { tw } from '@twind/core';
+
 import Stack from '../Stack';
 import Text from '../Text';
 
@@ -72,7 +72,7 @@ const Table: React.FC<TableProps> = props => {
         <Stack
           padding="py-4 px-5"
           fullWidth={true}
-          customStyle="border(b-1 solid grey8 dark:grey5)"
+          customStyle="border-b-1 border-solid border-grey8 dark:border-grey5"
         >
           <Text weight="bold" align="center">
             {tableTitle}
@@ -80,12 +80,12 @@ const Table: React.FC<TableProps> = props => {
         </Stack>
       )}
 
-      <table className={tw('table-auto w-full')}>
+      <table className={'table-auto w-full'}>
         {theadValues && (
           <thead>
             <tr>
               {theadValues.map((value, idx) => (
-                <th key={idx} className={tw(thStyle)}>
+                <th key={idx} className={thStyle}>
                   {value}
                 </th>
               ))}
@@ -96,15 +96,13 @@ const Table: React.FC<TableProps> = props => {
           {rows.map((row, idx) => (
             <tr
               key={idx}
-              className={tw(
-                `${
-                  !theadValues && idx === 0 ? 'border-none' : 'border(t-1 grey8 dark:grey5)'
-                } cursor-${typeof row.clickHandler == 'function' ? 'pointer' : 'default'}`,
-              )}
+              className={`${
+                !theadValues && idx === 0 ? 'border-none' : 'border-t-1 border-grey8 dark:border-grey5'
+              } cursor-${typeof row.clickHandler == 'function' ? 'pointer' : 'default'}`}
               onClick={row.clickHandler}
             >
               {row.value.map((value, idx) => (
-                <td key={idx} className={tw(tdStyle)}>
+                <td key={idx} className={tdStyle}>
                   {value}
                 </td>
               ))}

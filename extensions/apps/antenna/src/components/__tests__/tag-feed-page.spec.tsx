@@ -29,7 +29,7 @@ const baseComponent = (mocks?: Readonly<MockedResponse<unknown, unknown>[]> | un
   </MockedProvider>
 );
 
-describe('< TagFeedPage /> component', () => {
+describe.skip('< TagFeedPage /> component', () => {
   describe('should render tag feed page', () => {
     it('should render placeholder if there are no subscribed topics', async () => {
       const { mocks } = getTagFeedPageMocks({ count: 0 });

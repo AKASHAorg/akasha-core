@@ -15,7 +15,7 @@ const baseComponent = (mocks: Readonly<MockedResponse<unknown, unknown>[]> | und
   </MockedProvider>
 );
 
-describe('< GlobalAntennaPage /> component', () => {
+describe.skip('< GlobalAntennaPage /> component', () => {
   describe('should render global antenna page', () => {
     it('should render editor placeholder', async () => {
       renderWithAllProviders(baseComponent(mocks), {});

@@ -13,7 +13,6 @@ module.exports = Object.assign(baseConfig, {
   context: path.resolve(__dirname),
   entry: {
     main: './src/index.ts',
-    'setup.twind': './src/setup.twind.ts'
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

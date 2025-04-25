@@ -187,7 +187,7 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
               <Icon
                 icon={<ExclamationTriangleIcon />}
                 size="sm"
-                color={{ light: 'warningLight', dark: 'warningDark' }}
+                customStyle="[&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark"
               />
               <Text
                 variant="body2"
@@ -304,7 +304,7 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
                       icon={<TrashIcon />}
                       solid={false}
                       size="md"
-                      color={{ light: 'errorLight', dark: 'errorDark' }}
+                      customStyle="[&>*]:fill-errorLight dark:[&>*]:fill-errorDark"
                     />
                   </button>
                 </Stack>

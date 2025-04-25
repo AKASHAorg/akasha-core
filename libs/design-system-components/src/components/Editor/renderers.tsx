@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { RenderElementProps, RenderLeafProps } from 'slate-react';
-import { tw } from '@twind/core';
 
 /*
  ** A workaround for a chromium bug that incorrectly positions a cursor inside an inline element
@@ -21,7 +20,7 @@ const MentionElement = (props: any) => {
   const displayedMention = `${mention && mention.startsWith('@') ? mention : `@${mention}`} `;
   return (
     <button
-      className={tw(`text-secondaryLight dark:text-secondaryDark text-${element.align}`)}
+      className={`text-secondaryLight dark:text-secondaryDark text-${element.align}`}
       {...attributes}
       contentEditable={false}
       onClick={(ev: Event) => {
@@ -56,9 +55,7 @@ const LinkElement = ({ attributes, children, element, handleLinkClick }: any) =>
 
   return (
     <a
-      className={tw(
-        `text-secondaryLight dark:text-secondaryDark no-underline text-${element.align}`,
-      )}
+      className={`text-secondaryLight dark:text-secondaryDark no-underline text-${element.align}`}
       {...attributes}
       href={safeUrl}
       size="large"
@@ -96,7 +93,7 @@ const renderElement = (
     case 'list-item':
       return (
         <li
-          className={tw(`text-black dark:text-white ${textAlignStyle} list-item`)}
+          className={`text-black dark:text-white ${textAlignStyle} list-item`}
           {...props.attributes}
         >
           {props.children}
@@ -104,13 +101,13 @@ const renderElement = (
       );
     case 'bulleted-list':
       return (
-        <ul className={tw(`${textAlignStyle} list-disc ml-8`)} {...props.attributes}>
+        <ul className={`${textAlignStyle} list-disc ml-8`} {...props.attributes}>
           {props.children}
         </ul>
       );
     case 'numbered-list':
       return (
-        <ol className={tw(`${textAlignStyle} list-decimal ml-8`)} {...props.attributes}>
+        <ol className={`${textAlignStyle} list-decimal ml-8`} {...props.attributes}>
           {props.children}
         </ol>
       );
@@ -118,7 +115,7 @@ const renderElement = (
     default:
       return (
         <p
-          className={tw(`text-black dark:text-white ${textAlignStyle}`)}
+          className={`text-black dark:text-white ${textAlignStyle}`}
           style={{ overflowWrap: 'anywhere' }}
           {...props.attributes}
         >
@@ -141,7 +138,7 @@ const Leaf = ({ attributes, children, leaf }: RenderLeafProps) => {
   }
 
   return (
-    <span className={tw(textStyle)} {...attributes}>
+    <span className={textStyle} {...attributes}>
       {children}
     </span>
   );

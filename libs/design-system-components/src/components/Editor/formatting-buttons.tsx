@@ -34,7 +34,7 @@ export const BlockButton: React.FC<ToolbarButtonProps> = ({ format, icon, style,
         justifyContent="center"
         className={cn(
           `relative w-8 h-8 bg-inherit`,
-          active ? 'bg(secondaryLight/30 dark:grey4)' : 'bg(grey8 dark:grey3)',
+          active ? 'bg-secondaryLight/30 dark:bg-grey4' : 'bg-grey8 dark:bg-grey3',
           style,
         )}
       >
@@ -66,7 +66,7 @@ export const MarkButton: React.FC<ToolbarButtonProps> = ({
         justifyContent="center"
         className={cn(
           `relative w-8 h-8 bg-inherit`,
-          active ? 'bg(secondaryLight/30 dark:grey4)' : 'bg(grey8 dark:grey3)',
+          active ? 'bg-secondaryLight/30 dark:bg-grey4' : 'bg-grey8 dark:bg-grey3',
           style,
         )}
       >

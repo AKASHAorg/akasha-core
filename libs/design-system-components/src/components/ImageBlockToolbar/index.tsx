@@ -49,7 +49,7 @@ const ImageBlockToolbar: React.FC<ImageBlockToolbar> = props => {
             justifyContent="center"
             className={cn(
               'relative w-8 h-8 rounded-l-[0.125rem]',
-              showCaption ? 'bg(secondaryLight/30 dark:grey7)' : 'bg(grey8 dark:grey5)',
+              showCaption ? 'bg-secondaryLight/30 dark:bg-grey7' : 'bg-grey8 dark:bg-grey5',
             )}
           >
             <Icon size="lg" icon={<Caption />} customStyle="absolute" accentColor />
@@ -61,7 +61,9 @@ const ImageBlockToolbar: React.FC<ImageBlockToolbar> = props => {
             justifyContent="center"
             className={cn(
               'relative w-8 h-8',
-              alignState === 'start' ? 'bg(secondaryLight/30 dark:grey7)' : 'bg(grey8 dark:grey5)',
+              alignState === 'start'
+                ? 'bg-secondaryLight/30 dark:bg-grey7'
+                : 'bg-grey8 dark:bg-grey5',
             )}
           >
             <Icon size="lg" icon={<AlignLeft />} customStyle="absolute" accentColor />
@@ -73,7 +75,9 @@ const ImageBlockToolbar: React.FC<ImageBlockToolbar> = props => {
             justifyContent="center"
             className={cn(
               'relative w-8 h-8',
-              alignState === 'center' ? 'bg(secondaryLight/30 dark:grey7)' : 'bg(grey8 dark:grey5)',
+              alignState === 'center'
+                ? 'bg-secondaryLight/30 dark:bg-grey7'
+                : 'bg-grey8 dark:bg-grey5',
             )}
           >
             <Icon size="lg" icon={<AlignCenter />} customStyle="absolute" accentColor />
@@ -85,7 +89,9 @@ const ImageBlockToolbar: React.FC<ImageBlockToolbar> = props => {
             justifyContent="center"
             className={cn(
               'relative w-8 h-8 rounded-r-[0.125rem]',
-              alignState === 'end' ? 'bg(secondaryLight/30 dark:grey7)' : 'bg(grey8 dark:grey5)',
+              alignState === 'end'
+                ? 'bg-secondaryLight/30 dark:bg-grey7'
+                : 'bg-grey8 dark:bg-grey5',
             )}
           >
             <Icon size="lg" icon={<AlignRight />} customStyle="absolute" accentColor />
@@ -97,7 +103,7 @@ const ImageBlockToolbar: React.FC<ImageBlockToolbar> = props => {
           <Stack
             alignItems="center"
             justifyContent="center"
-            className={cn('h-8 w-8 group relative rounded-full bg(grey9 dark:grey5)')}
+            className={cn('h-8 w-8 group relative rounded-full bg-grey9 dark:bg-grey5')}
           >
             <Icon size="md" icon={<PencilIcon />} accentColor />
           </Stack>
@@ -106,7 +112,7 @@ const ImageBlockToolbar: React.FC<ImageBlockToolbar> = props => {
           <Stack
             alignItems="center"
             justifyContent="center"
-            className={cn('h-8 w-8 group relative rounded-full bg(grey9 dark:grey5)')}
+            className={cn('h-8 w-8 group relative rounded-full bg-grey9 dark:bg-grey5')}
           >
             <Icon size="md" icon={<PlusIcon />} accentColor />
           </Stack>

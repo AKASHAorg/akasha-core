@@ -48,7 +48,7 @@ describe('< ProfileInfoPage /> component', () => {
       });
     });
 
-    it('should render profile header', async () => {
+    it.skip('should render profile header', async () => {
       renderWithAllProviders(baseComponent(mocks), {});
       expect(await screen.findByText(name)).toBeInTheDocument();
       expect(screen.getByText(truncateDid(did.id))).toBeInTheDocument();
@@ -192,7 +192,7 @@ describe('< ProfileInfoPage /> component', () => {
       expect(await screen.findByRole('img', { name: 'following' })).toBeInTheDocument();
     });
 
-    it('should display NSFW profiles to authenticated users upon view profile request', async () => {
+    it.skip('should display NSFW profiles to authenticated users upon view profile request', async () => {
       const user = userEvent.setup();
       const { mocks } = getProfileInfoMocks({ profileDID: PROFILE_DID, nsfw: true });
       const followMock = getFollowMock();

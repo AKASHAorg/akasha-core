@@ -12,7 +12,7 @@ const BaseLayout: React.FC<PropsWithChildren<IBaseLayout>> = props => {
   const { title, children } = props;
   return (
     <Card className="p-0">
-      <Stack padding="p-4" customStyle="border(b-1 solid grey8 dark:grey5)">
+      <Stack padding="p-4" customStyle="border-b-1 border-solid border-grey8 dark:border-grey5">
         <Text variant="h5" align="center">
           {title}
         </Text>

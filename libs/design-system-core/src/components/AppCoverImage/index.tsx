@@ -3,6 +3,7 @@ import Stack from '../Stack';
 import Icon from '../Icon';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { EyeSlashIcon } from '../Icon/hero-icons-outline';
+import { cn } from '@akashaorg/ui/lib/library/utils';
 
 export type AppCoverImageProps = {
   src?: string;
@@ -51,19 +52,21 @@ const AppCoverImage = (props: AppCoverImageProps) => {
       <Stack
         align="center"
         justify="center"
-        background={{ light: 'grey9', dark: 'grey5' }}
-        customStyle={customStyle}
+        customStyle={cn(`bg-grey9 dark:bg-grey5 ${customStyle}`)}
         fullWidth
       >
         {isNSFW && (
-          <Icon icon={<EyeSlashIcon />} color={{ light: 'errorLight', dark: 'errorDark' }} />
+          <Icon
+            icon={<EyeSlashIcon />}
+            customStyle="[&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark"
+          />
         )}
       </Stack>
     );
   }
 
   return (
-    <picture className={`w-full overflow-hidden ${customStyle}`}>
+    <picture className={cn(`w-full overflow-hidden ${customStyle}`)}>
       {src && <source srcSet={src} />}
       {!src && (
         <>
@@ -82,7 +85,7 @@ const AppCoverImage = (props: AppCoverImageProps) => {
         </>
       )}
       <img
-        className={`w-full ${customStyle}`}
+        className={cn(`w-full ${customStyle}`)}
         src={src || `${publicImgPath}/${coverByType.desktop}.webp`}
         alt="App Cover"
       />

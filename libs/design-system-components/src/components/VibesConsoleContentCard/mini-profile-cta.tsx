@@ -56,12 +56,12 @@ const MiniProfileCTA: React.FC<MiniProfileCTAProps> = props => {
             direction="row"
             alignItems="center"
             spacing={1}
-            className="py-1 px-2 bg(warningLight/30 dark:warningDark/30) rounded-[0.25rem]"
+            className="py-1 px-2 bg-warningLight/30 dark:bg-warningDark/30 rounded-[0.25rem]"
           >
             <Icon
               icon={<ExclamationTriangleIcon />}
               size="xs"
-              color={{ light: 'warningLight', dark: 'warningDark' }}
+              customStyle="[&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark"
             />
             <Text variant="footnotes2" weight="normal">
               {nsfwLabel}

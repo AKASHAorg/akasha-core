@@ -3,7 +3,7 @@ import Button from '../Button';
 import Card from '../Card';
 import Stack from '../Stack';
 import List, { ListProps } from '../List';
-import { tw } from '@twind/core';
+
 import { ButtonProps } from '../Button/types';
 import { useCloseActions } from '../../utils';
 
@@ -92,9 +92,9 @@ const Menu: React.FC<MenuProps> = ({ anchor, disabled, onMenuClick, ...rest }) =
             }}
           />
 
-          <div className={tw('relative')}>
+          <div className={'relative'}>
             {showList && (
-              <div className={tw('absolute right-0 z-50')}>
+              <div className={'absolute right-0 z-50'}>
                 <List {...rest} onSelected={handleCloseList} />
               </div>
             )}

@@ -1,5 +1,4 @@
 import React from 'react';
-import { apply, tw } from '@twind/core';
 
 import Avatar, { AvatarSize } from '../Avatar';
 import type { Image, Profile } from '@akashaorg/typings/lib/ui';
@@ -66,10 +65,10 @@ const StackedAvatar: React.FC<StackedAvatarProps> = props => {
   const renderStack = (level: number) => {
     const zIndex = level + 1;
 
-    const className = apply`inline-flex z-[${zIndex}] -ml-${zIndex > 1 ? '3' : '0'}`;
+    const className = `inline-flex z-[${zIndex}] -ml-${zIndex > 1 ? '3' : '0'}`;
 
     return (
-      <div className={tw(className)}>
+      <div className={className}>
         <Avatar
           // clickable avatars
           onClick={() => {
@@ -86,7 +85,7 @@ const StackedAvatar: React.FC<StackedAvatarProps> = props => {
     );
   };
 
-  return <div className={tw('flex flex-row')}>{renderStack(0)}</div>;
+  return <div className={'flex flex-row'}>{renderStack(0)}</div>;
 };
 
 export default StackedAvatar;

@@ -3,11 +3,11 @@ import DynamicInfiniteScroll, {
   DynamicInfiniteScrollProps,
 } from '@akashaorg/design-system-components/lib/components/DynamicInfiniteScroll';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
-import { getColorClasses } from '@akashaorg/design-system-core/lib/utils';
 import { ENTRY_HEIGHT, ITEM_SPACING } from '../constants';
 import { GetFollowersListByDidQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 import { selectFollowers } from '@akashaorg/ui-core-hooks/lib/selectors/get-followers-list-by-did-query';
 import { EngagementsEntry } from '../engagements-entry';
+import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
 
 export type FollowersProps = {
   followersData: GetFollowersListByDidQuery;
@@ -42,13 +42,7 @@ const Followers: React.FC<FollowersProps> = ({
     );
   }
 
-  const borderBottomStyle = `pb-[${ITEM_SPACING / 16}rem] border-b ${getColorClasses(
-    {
-      light: 'grey8',
-      dark: 'grey5',
-    },
-    'border',
-  )}`;
+  const borderBottomStyle = `pb-[var(--item-spacing)] border-b border-grey8 dark:border-grey5`;
 
   return (
     <DynamicInfiniteScroll
@@ -71,7 +65,8 @@ const Followers: React.FC<FollowersProps> = ({
             authenticatedDID={authenticatedDID}
             showNsfw={showNsfw}
             profileAnchorLink={profileAnchorLink}
-            customStyle={index + 1 !== itemsSize ? borderBottomStyle : ''}
+            style={cssVars({ '--item-spacing': `${ITEM_SPACING / 16}rem` })}
+            className={index + 1 !== itemsSize ? borderBottomStyle : ''}
           />
         );
       }}

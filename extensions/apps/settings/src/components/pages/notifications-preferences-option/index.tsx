@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { useAkashaStore, useNotifications, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import { tw } from '@twind/core';
+
 import {
   ErrorLoader,
   ErrorLoaderDescription,
@@ -179,9 +179,7 @@ const NotificationsPreferencesOption: React.FC = () => {
               {!notificationsEnabled && (
                 <UnlockCard onClick={handleUnlockPreferences} loading={waitingForSignature} />
               )}
-              <Card
-                className={tw(`${!notificationsEnabled && 'opacity-50 pointer-events-none'} p-0`)}
-              >
+              <Card className={`${!notificationsEnabled && 'opacity-50 pointer-events-none'} p-0`}>
                 <Stack className="p-4 pt-0">
                   <EnableAllSetting
                     isSelected={enableAllChecked}
@@ -214,7 +212,7 @@ const NotificationsPreferencesOption: React.FC = () => {
                             icon={<Info />}
                             size="lg"
                             solid={true}
-                            color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                            customStyle="[&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark"
                           />
                           <Text variant="body1" customStyle="text-sm">
                             {t('Changing notifications preferences requires a signature')}

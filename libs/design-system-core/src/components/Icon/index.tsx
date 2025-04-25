@@ -1,23 +1,19 @@
 import React from 'react';
-import { apply, tw } from '@twind/core';
 
 import Stack from '../Stack';
 
-import { BasicIconSize, BasicSize, BreakPointSize, Color } from '../types/common.types';
-import { getWidthClasses, getHeightClasses, getColorClasses } from '../../utils';
+import { BasicSize, BreakPointSize } from '../types/common.types';
+import { cn } from '@akashaorg/ui/lib/library/utils';
 
 export interface IconProps {
-  color?: Color;
   ref?: React.Ref<HTMLDivElement>;
   icon?: React.ReactElement;
-  size?: BasicIconSize;
+  size?: BasicSize;
   breakPointSize?: BreakPointSize;
   accentColor?: boolean;
   disabled?: boolean;
-  hover?: boolean;
   dataTestId?: string;
   customStyle?: string;
-  hoverColor?: Color;
   solid?: boolean;
   rotateAnimation?: boolean;
 }
@@ -33,10 +29,8 @@ export interface IconProps {
  * @param breakPointSize - (optional) specify breakpoint sizes if needed
  * @param accentColor - boolean (optional) whether your icon will have the default accent color scheme
  * @param disabled - boolean (optional) a disabled icon looks different
- * @param hover - boolean (optional) a hovered icon has a different shade
  * @param dataTestId - (optional) useful when writing tests for the component
  * @param customStyle - (optional) apply your custom styling (Make sure to use standard Tailwind classes)
- * @param hoverColor - (optional) specify a color for hover state here (Please note that you can specify colors for light and dark mode separately)
  * @param solid - boolean (optional) a solid icon looks different from an outlined one
  * @param rotateAnimation - boolean (optional) for those who want to add rotate animation to their icon
  * @example
@@ -51,12 +45,9 @@ const Icon: React.FC<IconProps> = props => {
     accentColor = false,
     size = 'md',
     breakPointSize,
-    color,
     disabled,
-    hover,
     dataTestId,
     customStyle = '',
-    hoverColor,
     solid = false,
     rotateAnimation = false,
   } = props;
@@ -64,28 +55,9 @@ const Icon: React.FC<IconProps> = props => {
   const breakPointStyle = breakPointSize
     ? ICON_SIZE_MAP_BY_BREAKPOINT(breakPointSize.breakPoint)[breakPointSize.size]
     : '';
-  const sizeStyle =
-    typeof size === 'object'
-      ? `${getWidthClasses(size?.width)} ${getHeightClasses(size?.height)}`
-      : `${ICON_SIZE_MAP[size]} ${breakPointStyle}`;
+  const sizeStyle = `${ICON_SIZE_MAP[size]} ${breakPointStyle}`;
 
-  const baseStyle = `select-none ${
-    hover
-      ? `cursor-pointer ${getColorClasses(
-          hoverColor,
-          solid ? 'group-hover:[&>*]:fill' : 'group-hover:[&>*]:stroke',
-        )}`
-      : ''
-  }`;
-
-  let colorStyle: string;
-  if (color) {
-    colorStyle = `${getColorClasses(color, solid ? '[&>*]:fill' : '[&>*]:stroke')}`;
-  } else {
-    colorStyle = solid
-      ? '[&>*]:fill-black dark:[&>*]:fill-white'
-      : '[&>*]:stroke-black dark:[&>*]:stroke-white';
-  }
+  const baseStyle = `select-none`;
 
   const accentColorStyle = accentColor
     ? `${
@@ -95,19 +67,27 @@ const Icon: React.FC<IconProps> = props => {
       }`
     : '';
 
-  // Note: setting accentColor to true will overrride other color styles
+  let colorStyle: string;
+  if (!customStyle.includes('stroke') && !customStyle.includes('fill')) {
+    colorStyle = solid
+      ? '[&>*]:fill-black dark:[&>*]:fill-white'
+      : '[&>*]:stroke-black dark:[&>*]:stroke-white';
+  }
+
   const activeIconColorStyle = accentColor ? accentColorStyle : colorStyle;
 
   const disabledStyle = disabled ? 'opacity-50' : '';
 
   const rotateStyle = rotateAnimation ? 'animate-spin' : '';
 
-  const iconStyle = `${baseStyle} ${activeIconColorStyle} ${sizeStyle} ${disabledStyle} ${rotateStyle}`;
+  const iconStyle = cn(
+    `${baseStyle} ${activeIconColorStyle} ${sizeStyle} ${disabledStyle} ${rotateStyle}`,
+  );
 
   return (
     <Stack ref={ref} customStyle={customStyle}>
       {React.cloneElement(icon, {
-        className: tw(apply(iconStyle)),
+        className: iconStyle,
         'data-testid': dataTestId,
       })}
     </Stack>

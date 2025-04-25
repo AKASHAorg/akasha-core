@@ -71,7 +71,7 @@ export const TopicRow: React.FC<TopicRowProps> = props => {
       alignItems="center"
       justifyContent="between"
       spacing={3}
-      className="w-(full xl:[19rem])"
+      className="w-full xl:w-[19rem]"
     >
       <SubtitleTextIcon
         label={tag}

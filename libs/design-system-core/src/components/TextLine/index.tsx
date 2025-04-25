@@ -1,7 +1,4 @@
 import React from 'react';
-import { tw, apply } from '@twind/core';
-
-import { getWidthClasses, getHeightClasses } from '../../utils';
 
 export type TextLineProps = {
   title?: string;
@@ -39,18 +36,15 @@ const TextLine: React.FC<TextLineProps> = props => {
 
   const baseStyle = `bg-gradient-to-r from-grey6 via-grey8 to-white dark:from-grey5 dark:via-grey7 dark:to-white`;
 
-  const widthStyle = getWidthClasses(width);
-  const heightStyle = getHeightClasses(height);
-
-  const instanceStyles = apply`
+  const instanceStyles = `
     ${baseStyle}
     ${animated ? 'animate-pulse' : ''}
-    ${widthStyle}
-    ${heightStyle}
+    ${width}
+    ${height}
     ${round}
     ${customStyle}
   `;
 
-  return <div title={title} className={tw(instanceStyles)} />;
+  return <div title={title} className={instanceStyles} />;
 };
 export default TextLine;

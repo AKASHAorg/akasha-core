@@ -2,7 +2,6 @@ import React, { ReactNode } from 'react';
 import Card from '../Card';
 import Stack from '../Stack';
 import Text, { TextProps } from '../Text';
-import { tw } from '@twind/core';
 
 export type InfoCardProps = {
   assetName?: string;
@@ -62,7 +61,7 @@ const InfoCard: React.FC<InfoCardProps> = ({
         <img
           loading="lazy"
           decoding="async"
-          className={tw('object-contain h-[11.25rem]')}
+          className={'object-contain h-[11.25rem]'}
           aria-label={assetName}
           src={`${publicImgPath}/${assetName}.${assetExtension}`}
           alt={assetName}
@@ -71,8 +70,7 @@ const InfoCard: React.FC<InfoCardProps> = ({
         <Card
           elevation="none"
           radius={20}
-          background={{ light: 'grey8', dark: 'grey5' }}
-          customStyle="h-32 w-32 sm:h-52 sm:w-52"
+          customStyle="h-32 w-32 sm:h-52 sm:w-52 bg-grey8 dark:bg-grey5"
         ></Card>
       )}
       <Stack

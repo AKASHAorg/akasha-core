@@ -1,6 +1,6 @@
 # Design System Core
 
-> A library of core UI components built with [Twind](https://twind.dev/), a tailwind-in-js solution.
+> A library of core UI components
  
 The components implement the visual design language of AKASHA, and can be customised with tailwind style directives through the `customStyle` property.
 

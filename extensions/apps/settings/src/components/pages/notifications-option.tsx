@@ -129,7 +129,7 @@ const NotificationsOption: React.FC = () => {
           {notificationsSettingsItems.map((item: ISettingsItem, idx: number) => {
             const baseStyle = `flex py-4 justify-between items-center ${
               idx !== notificationsSettingsItems.length - 1
-                ? 'border(b-1 solid grey8 dark:grey5)'
+                ? 'border-b-1 border-solid border-grey8 dark:border-grey5'
                 : 'border-none'
             }`;
 

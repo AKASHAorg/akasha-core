@@ -15,7 +15,7 @@ const WorldVersionInfoCard: React.FC<TWorldVersionInfoCard> = props => {
   const { titleLabel, description, onDismissCard } = props;
 
   return (
-    <Stack spacing={1} className="p-4 bg(warningLight/30 dark:warningDark/30) rounded-3xl">
+    <Stack spacing={1} className="p-4 bg-warningLight/30 dark:bg-warningDark/30 rounded-3xl">
       <Stack direction="row" alignItems="center" justifyContent="between">
         <Stack direction="row" alignItems="center" spacing={1}>
           <Icon icon={<ExclamationTriangleIcon />} size="sm" />

@@ -5,12 +5,13 @@ import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import type { Image, Profile } from '@akashaorg/typings/lib/ui';
-import { getColorClasses, getImageFromSeed } from '@akashaorg/design-system-core/lib/utils';
+import { getImageFromSeed } from '@akashaorg/design-system-core/lib/utils';
 import {
   ProfileAvatar,
   ProfileAvatarFallback,
   ProfileAvatarImage,
 } from '@akashaorg/ui/lib/akasha-components/profile-avatar';
+import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
 
 export type MiniProfileCardProps = {
   publicImagePath?: string;
@@ -49,9 +50,8 @@ const MiniProfileCard: React.FC<MiniProfileCardProps> = props => {
     <Card className="p-0 mb-4 max-h-[30rem]">
       <Stack
         alignItems="center"
-        className={`h-28 rounded-t-2xl bg(center cover [url(${
-          coverImage?.src ?? coverImageFallback
-        })])`}
+        style={cssVars({ '--background-url': `url('${coverImage?.src ?? coverImageFallback}')` })}
+        className={`h-28 rounded-t-2xl bg-center bg-cover bg-(image:--background-url)`}
       >
         <Stack className="relative top-16">
           <button onClick={handleClick}>
@@ -74,10 +74,7 @@ const MiniProfileCard: React.FC<MiniProfileCardProps> = props => {
               <Text
                 variant="h6"
                 breakWord={true}
-                customStyle={`cursor-pointer hover:underline ${getColorClasses(
-                  { light: 'black', dark: 'white' },
-                  'hover:decoration',
-                )}`}
+                customStyle={`cursor-pointer hover:underline hover:decoration-black dark:hover:decoration-white`}
               >
                 {profileData.name}
               </Text>

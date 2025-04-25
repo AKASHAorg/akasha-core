@@ -72,7 +72,7 @@ export const ModeratorDetailPage: React.FC<ModeratorDetailPageProps> = () => {
             customStyle={`w-2 h-2 rounded-full ${
               ['Kept', 'Accepted'].includes(el.status)
                 ? 'bg-success'
-                : 'bg(errorLight dark:errorDark)'
+                : 'bg-errorLight dark:bg-errorDark'
             }`}
           />
           <Text variant="body2">{t('{{status}}', { status: el.status })}</Text>

@@ -33,7 +33,7 @@ const ScrollTopButton = React.forwardRef<HTMLDivElement, ScrollTopButtonProps>(
           customStyle={styledDiv}
         >
           <div ref={ref}>
-            <Icon icon={<ArrowUpIcon />} hover={true} accentColor={true} />
+            <Icon icon={<ArrowUpIcon />} accentColor={true} />
           </div>
         </Button>
       )

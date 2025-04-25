@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
@@ -19,12 +19,12 @@ export type FallbackHeaderProps = {
 const FallbackHeader: React.FC<FallbackHeaderProps> = ({ authenticatedDID, isLoggedIn }) => {
   const { t } = useTranslation('ui-widget-sidebar');
 
-  const headerBackground = 'bg(secondaryLight/30 dark:grey5)';
+  const headerBackground = 'bg-secondaryLight/30 dark:bg-grey5';
 
   return (
     <Stack
       direction="row"
-      className={`justify-items-stretch p-4 border-b-1 border(grey9 dark:grey3) rounded-t-2xl ${headerBackground}`}
+      className={`justify-items-stretch p-4 border-b-1 border-grey9 dark:border-grey3 rounded-t-2xl ${headerBackground}`}
     >
       <Stack className="w-fit h-fit mr-2">
         <ProfileAvatar profileDID={authenticatedDID} size="lg">
@@ -41,7 +41,7 @@ const FallbackHeader: React.FC<FallbackHeaderProps> = ({ authenticatedDID, isLog
         />
       </Stack>
       <Stack className="w-fit h-fit self-start">
-        <Button variant="primary" size="sm" loading />
+        <Button variant="default" size="sm" loading />
       </Stack>
     </Stack>
   );
