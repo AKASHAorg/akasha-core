@@ -14,13 +14,12 @@ export const DuplexAppButton: React.FC<DuplexAppButtonProps> = ({ onUninstall })
         direction="row"
         alignItems="center"
         justifyContent="center"
-        className="bg(grey8 dark:grey3) rounded-full w-8 h-8"
+        className="bg-grey8 dark:bg-grey3 rounded-full w-8 h-8"
       >
         <Icon
           icon={<TrashIcon />}
           solid={false}
-          size={{ width: 'w-4', height: 'h-5' }}
-          color={{ light: 'errorLight', dark: 'errorDark' }}
+          customStyle="size-4 [&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark"
         />
       </Stack>
     </button>

@@ -3,7 +3,6 @@ import React from 'react';
 import Button from '../Button';
 import Text, { TextProps } from '../Text';
 
-import { getColorClasses } from '../../utils';
 import Stack from '../Stack';
 
 export type TabListProps = {
@@ -43,23 +42,9 @@ const TabList: React.FC<TabListProps> = ({
   onChange,
 }) => {
   const baseStyle = 'group p-2';
-  const activeStyle = `border-b ${getColorClasses(
-    {
-      light: 'secondaryLight',
-      dark: 'secondaryDark',
-    },
-    'border',
-  )}`;
-  const hoverStyle = `hover:border-b ${getColorClasses(
-    {
-      light: 'secondaryLight',
-      dark: 'secondaryDark',
-    },
-    'hover:border',
-  )}`;
-  const tabListDividerStyle = tabListDivider
-    ? `border-b ${getColorClasses({ light: 'grey8', dark: 'grey5' }, 'border')}`
-    : '';
+  const activeStyle = `border-b border-secondaryLight dark:border-secondaryDark`;
+  const hoverStyle = `hover:border-b hover:border-secondaryLight dark:hover:border-secondaryDark`;
+  const tabListDividerStyle = tabListDivider ? `border-b border-grey8 dark:border-grey5` : '';
 
   return (
     <Stack customStyle={`grid grid-cols-${labels.length} ${tabListDividerStyle} ${customStyle}`}>
@@ -83,13 +68,7 @@ const TabList: React.FC<TabListProps> = ({
             }
             weight={selected === index ? 'bold' : 'normal'}
             align="center"
-            customStyle={getColorClasses(
-              {
-                light: 'secondaryLight',
-                dark: 'secondaryDark',
-              },
-              'group-hover:text',
-            )}
+            customStyle={'group-hover:text-secondaryLight group-hover:text-secondaryDark'}
           >
             {label}
           </Text>

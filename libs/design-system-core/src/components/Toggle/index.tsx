@@ -1,5 +1,4 @@
 import React from 'react';
-import { tw, apply } from '@twind/core';
 
 import Icon from '../Icon';
 import Text from '../Text';
@@ -61,16 +60,16 @@ const Toggle: React.FC<ToggleProps> = ({
   };
 
   const color = disabled
-    ? 'bg(grey7 after:grey4) border(1 grey4 after:grey7)'
-    : `bg(white dark:grey3 ${
-        iconUnchecked ? 'after:secondaryDark' : 'after:grey6'
-      } dark:after:secondaryDark peer-checked:after:secondaryLight peer-checked:dark:after:secondaryLight) peer-checked:after:border-secondaryLight border(1 secondaryLight dark:secondaryDark peer-checked:after:red-500 peer-checked:dark:after:red-500)`;
+    ? 'bg-grey7 after:bg-grey4 border-1 border-grey4 after:border-grey7'
+    : `bg-white dark:bg-grey3 ${
+        iconUnchecked ? 'after:bg-secondaryDark' : 'after:bg-grey6'
+      } dark:after:bg-secondaryDark peer-checked:after:bg-secondaryLight peer-checked:dark:after:bg-secondaryLight peer-checked:after:border-secondaryLight border-1 border-secondaryLight dark:border-secondaryDark peer-checked:after:border-red-500 peer-checked:dark:after:border-red-500`;
 
-  const transitionStyle = 'transition-all duration-300';
+  const transitionStyle = 'after:transition-all after:duration-300';
 
-  const knobStyle = apply`after:top-px after:left-0.5 ${sizeMap[size].dimension} relative rounded(full after:full) hover:shadow-md peer-focus:outline-none peer after:content-[''] after:absolute after:${transitionStyle} ${color}`;
+  const knobStyle = `after:top-px after:left-0.5 ${sizeMap[size].dimension} relative rounded-full after:rounded-full hover:shadow-md peer-focus:outline-none peer after:content-[''] after:absolute ${transitionStyle} ${color}`;
 
-  const iconStyle = apply`flex items-center justify-center ${sizeMap[size].iconSize} absolute ml-1 rounded(full after:full) hover:shadow-md peer-focus:outline-none peer after:content-[''] after:absolute after:${transitionStyle}`;
+  const iconStyle = `flex items-center justify-center ${sizeMap[size].iconSize} absolute ml-1 rounded-full after:rounded-full hover:shadow-md peer-focus:outline-none peer after:content-[''] after:absolute ${transitionStyle}`;
 
   const handleChange = e => {
     if (typeof onChange === 'function') {
@@ -80,7 +79,7 @@ const Toggle: React.FC<ToggleProps> = ({
   };
 
   return (
-    <label className={tw('inline-flex items-center cursor-pointer')}>
+    <label className={'inline-flex items-center cursor-pointer'}>
       <input
         id={id}
         name={name}
@@ -90,16 +89,16 @@ const Toggle: React.FC<ToggleProps> = ({
         checked={checked}
         disabled={disabled}
         onChange={handleChange}
-        className={tw('sr-only peer relative invisible')} // adding 'invisible' to remove the small blue dot on Firefox
+        className={'sr-only peer relative invisible'} // adding 'invisible' to remove the small blue dot on Firefox
       />
-      <div className={tw(knobStyle)} />
+      <div className={knobStyle} />
 
       {iconChecked && iconUnchecked && (
-        <div className={tw(iconStyle)}>
+        <div className={iconStyle}>
           <Icon
-            size={size === 'small' ? { width: 'w-3', height: 'h-3' } : 'sm'}
+            size={'sm'}
             icon={checked ? iconChecked : iconUnchecked}
-            color="white"
+            customStyle={`[&>*]:stroke-white ${size === 'small' ? 'size-3' : ''}`}
           />
         </div>
       )}

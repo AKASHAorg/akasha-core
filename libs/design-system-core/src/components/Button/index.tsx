@@ -1,6 +1,5 @@
 import React, { forwardRef } from 'react';
 import Text, { TextProps } from '../Text';
-import { tw, apply } from '@twind/core';
 import { ArrowPathIcon } from '../Icon/hero-icons-outline';
 import { ButtonIcon } from './button-icon';
 import { IconOnlyButton } from './IconOnlyButton';
@@ -8,6 +7,7 @@ import { ButtonProps, ButtonSize } from './types';
 import { getTextClasses } from './getTextClasses';
 import { getContainerClasses } from './getContainerClasses';
 import { getColorClasses } from '../../utils';
+import { cn } from '@akashaorg/ui/lib/library/utils';
 
 /**
  * A Button allows users to take actions when appropriate with a tap(on touch-screen devices)
@@ -81,7 +81,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
       <button
         ref={ref}
         type="button"
-        className={tw(apply`${disabledStyle} ${hoverStyle} ${customStyle}`)}
+        className={cn(`${disabledStyle} ${hoverStyle} ${customStyle}`)}
         disabled={disabled}
         {...rest}
       >
@@ -133,8 +133,8 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
     <button
       ref={ref}
       type="button"
-      className={tw(
-        apply`flex justify-center items-center gap-x-1 group ${containerStyle} ${buttonSizeStyle} ${breakPointStyle} ${buttonPaddingStyle} ${customStyle}`,
+      className={cn(
+        `flex justify-center items-center gap-x-1 group ${containerStyle} ${buttonSizeStyle} ${breakPointStyle} ${buttonPaddingStyle} ${customStyle}`,
       )}
       {...rest}
       disabled={disabled}
@@ -163,7 +163,6 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
               breakPointSize={breakPointSize}
               disabled={disabled}
               active={active}
-              hoverColor={hover ? hoverColors?.icon : null}
             />
           )}
           <Text variant={BUTTON_SIZE_TEXT_MAP[size]} as="span" customStyle={textStyle}>
@@ -180,7 +179,6 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
               breakPointSize={breakPointSize}
               disabled={disabled}
               active={active}
-              hoverColor={hover ? hoverColors?.icon : null}
             />
           )}
         </>

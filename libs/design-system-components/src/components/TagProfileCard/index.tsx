@@ -1,5 +1,5 @@
 import React from 'react';
-import { tw } from '@twind/core';
+
 import { Tag } from '@akashaorg/typings/lib/ui';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import {
@@ -61,7 +61,7 @@ const TagProfileCard: React.FC<TagProfileCard> = props => {
           labelSize={'button-lg'}
         />
 
-        <div className={tw(`w-28 py-1 shrink-0`)}>
+        <div className={`w-28 py-1 shrink-0`}>
           {tag && (
             <DuplexButton
               active={subscribedTags?.includes(tag.name)}

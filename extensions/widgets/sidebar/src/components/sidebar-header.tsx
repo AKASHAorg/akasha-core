@@ -1,6 +1,6 @@
 import React, { Suspense, useMemo, useState } from 'react';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import ProfileNameField from '@akashaorg/design-system-core/lib/components/ProfileNameField';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
@@ -72,7 +72,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
     <Stack
       direction="row"
       className={cn(
-        `p-4 border(b-1 grey9 dark:grey3) rounded-t-2xl`,
+        `p-4 border-b-1 border-grey9 dark:border-grey3 rounded-t-2xl`,
         headerPadding,
         isAuthenticating && 'bg-secondaryLight/30 dark:bg-grey5',
       )}
@@ -90,7 +90,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
           {!isLoggedIn && <Text variant="button-md"> {t('Guest')}</Text>}
           {isLoggedIn && (
             <Suspense fallback={<Text variant="button-md">{t('Fetching your info...')}</Text>}>
-              <Button onClick={() => handleProfileAvatarClick(authenticatedDID)} plain>
+              <button onClick={() => handleProfileAvatarClick(authenticatedDID)}>
                 <ProfileNameField
                   did={authenticatedDID}
                   profileName={profileName}
@@ -102,7 +102,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
                   )}
                   hover={true}
                 />
-              </Button>
+              </button>
             </Suspense>
           )}
           {isLoggedIn && (
@@ -131,27 +131,31 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
       <Stack className="w-fit h-fit self-start">
         {isAuthenticating && (
           <Button
-            variant="primary"
+            variant="default"
             size="sm"
             onClick={logoutClickHandler}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-            {...(!isHovered && { loading: true })}
-            {...(isHovered && { label: cancelLabel, iconDirection: 'right', icon: <XMarkIcon /> })}
-          />
+            loading={!isHovered}
+          >
+            {isHovered && (
+              <>
+                {cancelLabel} <XMarkIcon />
+              </>
+            )}
+          </Button>
         )}
         {!isAuthenticating && (
           <>
             {isLoggedIn && (
-              <Button icon={<PowerIcon />} size="sm" iconOnly={true} onClick={logoutClickHandler} />
+              <Button variant="outline" size="icon" onClick={logoutClickHandler}>
+                <PowerIcon />
+              </Button>
             )}
             {!isLoggedIn && (
-              <Button
-                size="sm"
-                variant="primary"
-                label={connectLabel}
-                onClick={loginClickHandler}
-              />
+              <Button size="sm" onClick={loginClickHandler}>
+                {connectLabel}
+              </Button>
             )}
           </>
         )}

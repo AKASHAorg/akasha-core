@@ -15,7 +15,11 @@ export const SocialLink: React.FC<SocialLinkProps> = ({ onDelete, ...textProps }
       <TextField {...textProps} customStyle="grow" />
       <Stack className="relative w-5 h-5">
         <button onClick={onDelete} className="absolute top-1 right-0">
-          <Icon icon={<TrashIcon />} size="md" color={{ light: 'errorLight', dark: 'errorDark' }} />
+          <Icon
+            icon={<TrashIcon />}
+            size="md"
+            customStyle="[&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark"
+          />
         </button>
       </Stack>
     </Stack>

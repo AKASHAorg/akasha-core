@@ -1,5 +1,5 @@
+import { cn } from '@akashaorg/ui/lib/library/utils';
 import React from 'react';
-import { apply, tw } from '@twind/core';
 
 export interface DividerProps {
   customStyle?: string;
@@ -15,9 +15,7 @@ export interface DividerProps {
 const Divider: React.FC<DividerProps> = ({ customStyle = '' }) => {
   return (
     <hr
-      className={tw(
-        apply`rounded-[1.25rem] h-px w-full border-grey8 dark:border-grey3 ${customStyle}`,
-      )}
+      className={cn(`rounded-[1.25rem] h-px w-full border-grey8 dark:border-grey3 ${customStyle}`)}
     />
   );
 };

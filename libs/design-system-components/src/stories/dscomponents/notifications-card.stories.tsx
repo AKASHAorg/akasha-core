@@ -23,11 +23,9 @@ export const Default: Story = {
     notificationAppIcon: (
       <AppIcon
         iconColor={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-        size={{ width: 16, height: 16 }}
         backgroundSize={32}
         placeholderIcon={<Antenna />}
-        background={'grey5'}
-        customStyle="min-w-8"
+        customStyle="min-w-8 bg-grey5 size-4"
         solid
       />
     ),

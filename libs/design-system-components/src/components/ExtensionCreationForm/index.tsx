@@ -6,7 +6,7 @@ import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import DropDown from '@akashaorg/design-system-core/lib/components/Dropdown';
-import { apply, tw } from '@twind/core';
+
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
@@ -138,7 +138,7 @@ const ExtensionCreationForm: React.FC<ExtensionCreationFormProps> = ({
   }, [isDuplicateExtProp, setError, clearErrors, validatedField]);
 
   return (
-    <form onSubmit={onSave} className={tw(apply`h-full`)}>
+    <form onSubmit={onSave} className={`h-full`}>
       <Stack direction="column" spacing={4}>
         <Stack spacing={4} className="px-4 pb-3">
           <Controller

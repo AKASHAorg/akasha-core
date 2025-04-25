@@ -15,9 +15,9 @@ const PageBubble: React.FC<PageBubbleProps> = props => {
 
   const basePageWrapperStyle = 'w-8 h-8 rounded-full';
 
-  const activePageWrapperBg = 'bg-(secondaryLight dark:secondaryDark)';
+  const activePageWrapperBg = 'bg-secondaryLight dark:bg-secondaryDark';
 
-  const regularPageWrapperBg = 'bg-(grey8 dark:grey3)';
+  const regularPageWrapperBg = 'bg-grey8 dark:bg-grey3';
   return (
     <Card type="plain" onClick={() => onClickPage(page)}>
       <Stack

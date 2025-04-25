@@ -1,5 +1,5 @@
 import React, { forwardRef, useState } from 'react';
-import { apply, tw } from '@twind/core';
+
 import { InputProps } from '../types';
 import { Color } from '../../types/common.types';
 import Icon from '../../Icon';
@@ -35,31 +35,19 @@ export const Input: React.FC<InputProps> = forwardRef((props, ref) => {
       fullWidth={fullWidth}
       customStyle={`${containerStyle} ${radiusStyle}`}
     >
-      {iconLeft && (
-        <Icon
-          icon={iconLeft}
-          color={isFocused && !status ? iconFocusColor : iconColor}
-          disabled={disabled}
-        />
-      )}
+      {iconLeft && <Icon icon={iconLeft} disabled={disabled} />}
       <input
         ref={ref}
         type="text"
         aria-labelledby={id}
-        className={tw(apply`${inputStyle}`)}
+        className={`${inputStyle}`}
         disabled={disabled}
         readOnly={readOnly}
         {...rest}
         onFocus={handleFocus}
         onBlur={handleBlur}
       />
-      {iconRight && (
-        <Icon
-          icon={iconRight}
-          color={isFocused && !status ? iconFocusColor : iconColor}
-          disabled={disabled}
-        />
-      )}
+      {iconRight && <Icon icon={iconRight} disabled={disabled} />}
     </Stack>
   );
 });

@@ -1,4 +1,5 @@
 import { Virtualizer, VirtualizerOptions } from '@tanstack/react-virtual';
+import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
 
 const SCROLL_RESTORATION_CONFIG = 'scroll-restoration-config';
 
@@ -211,11 +212,22 @@ interface IGetMinHeight {
  **/
 export function getMinHeight({ virtualizer, virtualItemSize, virtualItemIndex }: IGetMinHeight) {
   if (virtualizer.options.initialMeasurementsCache?.[virtualItemIndex]) {
-    return `min-h-[${virtualizer.options.initialMeasurementsCache[virtualItemIndex].size}px]`;
+    return {
+      style: cssVars({
+        '--min-height': `${virtualizer.options.initialMeasurementsCache[virtualItemIndex].size}px`,
+      }),
+      className: 'min-h-[var(--min-height)]',
+    };
   }
   /*
    * While scrolling set the min height to the size of the virtual item to avoid flicker
    **/
-  if (virtualizer.isScrolling) return `min-h-[${virtualItemSize}px]`;
-  return '';
+  if (virtualizer.isScrolling)
+    return {
+      style: cssVars({
+        '--min-height': `${virtualItemSize}px`,
+      }),
+      className: 'min-h-[var(--min-height)]',
+    };
+  return null;
 }

@@ -43,10 +43,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = props => {
           <Stack
             align="center"
             justify="center"
-            background={
-              showBlockName ? { light: 'secondaryLight/30', dark: 'grey5' } : 'transparent'
-            }
-            customStyle={showBlockNameStyle}
+            customStyle={`${showBlockName ? 'bg-secondaryLight/30 dark:bg-grey5' : 'transparent'} ${showBlockNameStyle}`}
           >
             <Icon icon={<Blocks />} accentColor={true} />
           </Stack>

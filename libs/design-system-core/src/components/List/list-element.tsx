@@ -19,7 +19,7 @@ const ListElement: React.FC<ListItemProps> = props => {
   return (
     <Button customStyle={customStyle} onClick={handleButtonClick} disabled={disabled} plain>
       <Stack direction="row" align="center" spacing="gap-x-1" customStyle="py-2 px-4">
-        {icon && <Icon icon={icon} color={color} size="sm" />}
+        {icon && <Icon icon={icon} size="sm" />}
         <Text variant="body1" color={color} {...rest}>
           {label}
         </Text>

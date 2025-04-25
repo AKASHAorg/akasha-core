@@ -55,7 +55,7 @@ export const IconButtonCTAExt: Story = {
         direction="row"
         alignItems="center"
         spacing={1}
-        className="py-2 px-3 w-fit rounded-full bg-(secondaryLight/30 dark:secondaryDark)"
+        className="py-2 px-3 w-fit rounded-full bg-secondaryLight/30 dark:bg-secondaryDark"
       >
         <Icon icon={<FlagIcon />} size="sm" color={{ light: 'secondaryLight', dark: 'grey2' }} />
         <Text variant="footnotes2" color={{ light: 'secondaryLight', dark: 'grey2' }}>

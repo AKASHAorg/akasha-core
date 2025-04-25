@@ -101,7 +101,7 @@ export const ApplicantDataCard: React.FC<ApplicantDataCardProps> = props => {
           padding="p-4"
           align="center"
           justify="between"
-          customStyle="border(t-1 solid grey8 dark:grey5"
+          customStyle="border-t-1 border-solid border-grey8 dark:border-grey5"
         >
           <Button label={viewProfileLabel} onClick={onClickViewProfile} />
           {viewApplicationLabel && (

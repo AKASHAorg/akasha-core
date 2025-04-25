@@ -154,8 +154,7 @@ const ProfileInfoPage: React.FC<ProfileInfoPageProps> = props => {
         {!isLoggedIn && !profileData && (
           <DefaultEmptyCard
             infoText={t("It seems this user hasn't filled in their information just yet. 🤔")}
-            customCardSize={{ width: '140px', height: '85px' }}
-            assetName="profile-not-filled"
+            assetName="profile-not-filled w-[140px] h-[85px]"
           />
         )}
         {isLoggedIn && !profileData && isViewer && (

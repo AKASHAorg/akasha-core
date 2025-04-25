@@ -18,7 +18,10 @@ const NSFW: React.FC<NSFWProps> = props => {
     <Card className="w-full p-4 flex place-content-center bg-muted">
       <Card className={'max-w-min'}>
         <Stack direction={'row'} alignItems="center" spacing={2}>
-          <Icon icon={<EyeSlashIcon />} color={{ light: 'errorLight', dark: 'errorDark' }} />
+          <Icon
+            icon={<EyeSlashIcon />}
+            customStyle={'[&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark'}
+          />
           <Text
             variant="button-sm"
             color={{ light: 'errorLight', dark: 'errorDark' }}

@@ -19,7 +19,7 @@ export const ReportsHeader: React.FC<ReportsHeaderProps> = props => {
           </Text>
           <Stack
             padding="p-2"
-            customStyle="w-fit rounded-full bg-(secondaryLight/30 dark:secondaryDark)"
+            customStyle="w-fit rounded-full bg-secondaryLight/30 dark:bg-secondaryDark"
           >
             <Text variant="footnotes2" color={{ light: 'secondaryLight', dark: 'grey2' }}>
               {reportLabel}

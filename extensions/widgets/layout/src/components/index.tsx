@@ -29,7 +29,7 @@ import TopbarLoader from '@akashaorg/design-system-components/lib/components/Loa
 import MiniProfileWidgetLoader from '@akashaorg/design-system-components/lib/components/Loaders/mini-profile-widget-loader';
 import TrendingWidgetLoader from '@akashaorg/design-system-components/lib/components/Loaders/trending-widget-loader';
 import SidebarLoader from '@akashaorg/design-system-components/lib/components/Loaders/sidebar-loader';
-import { css } from '@twind/core';
+import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
 import { useSticky } from './use-sticky';
 
 const sidebarLoadingIndicator = <SidebarLoader />;
@@ -174,11 +174,10 @@ const Layout: React.FC<unknown> = () => {
 
   const layoutStyle = `grid min-h-full lg:${showWidgets ? 'grid-cols-[8fr_4fr]' : 'grid-cols-[2fr_8fr_2fr]'} ${showSidebar ? 'xl:grid-cols-[3fr_6fr_3fr] ' : 'xl:grid-cols-[1.5fr_6fr_3fr_1.5fr]'} xl:max-w-7xl xl:mx-auto gap-x-3 w-full`;
 
-  // the bg(black/30 dark:white/30) is for the overlay background when the sidebar is open on mobile
   const mobileLayoverStyle = `
       fixed xl:sticky h-full z-[99] ${
         showSidebar && window.matchMedia(startMobileSidebarHidingBreakpoint).matches
-          ? 'min-w([100vw] xl:max) bg(black/30 dark:white/10) z-[99] left-0 right-0'
+          ? 'min-w-[100vw] xl:min-w-max bg-black/30 dark:bg-white/10 z-[99] left-0 right-0'
           : ''
       }`;
 
@@ -188,19 +187,23 @@ const Layout: React.FC<unknown> = () => {
       } ${needSidebarToggling ? 'fixed left-0' : ''}
       `;
 
-  const containerStyle = css({
-    '@apply': 'bg(white dark:black) min-h-screen',
-    /** since the 100vw is including the scrollbar and
-     * 100% is the width excluding the scrollbar
-     * we can add a left padding (when the scrollbar is visible)
-     * to readjust the middle of the page, thus compensating the presence
-     * of the scrollbar
-     */
-    'padding-left': 'calc(100vw - 100%)',
-  });
-
   return (
-    <Stack className={containerStyle}>
+    <Stack
+      style={{
+        ...cssVars({
+          '--content-height': `${contentHeight}px`,
+          '--offset': `${offset}px`,
+        }),
+        /** since the 100vw is including the scrollbar and
+         * 100% is the width excluding the scrollbar
+         * we can add a left padding (when the scrollbar is visible)
+         * to readjust the middle of the page, thus compensating the presence
+         * of the scrollbar
+         */
+        paddingLeft: 'calc(100vw - 100%)',
+      }}
+      className="bg-white dark:bg-black min-h-screen"
+    >
       <Stack className="h-full m-auto w-full min-h-screen">
         <Stack className={layoutStyle}>
           <Stack className={mobileLayoverStyle}>
@@ -224,15 +227,14 @@ const Layout: React.FC<unknown> = () => {
               )}
             </Stack>
           </Stack>
-          <Stack className={`px-2 ${showWidgets ? '' : 'lg:(col-start-2 col-end-3) col-start-1'}`}>
-            <Stack className="pt-4 sticky top-0 z-10 bg(white dark:black) rounded-b-3xl">
+          <Stack className={`px-2 ${showWidgets ? '' : 'lg:col-start-2 lg:col-end-3 col-start-1'}`}>
+            <Stack className="pt-4 sticky top-0 z-10 bg-white dark:bg-black rounded-b-3xl">
               {worldConfig.isPreview && (
                 <Card className="p-4 mb-4">
                   <Stack direction="row">
                     <Icon
-                      color={{ light: 'primary', dark: 'primary' }}
                       icon={exclamationCircleIcon}
-                      customStyle="mr-4"
+                      customStyle="mr-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark"
                     />
                     <Text variant="subtitle2">
                       {t('You are previewing "{{worldName}}"', { worldName: worldConfig.title })}.
@@ -250,9 +252,8 @@ const Layout: React.FC<unknown> = () => {
                 <Card className="mb-4 border-warning-foreground background-warning">
                   <Stack direction="row">
                     <Icon
-                      color={{ light: 'grey3', dark: 'grey3' }}
                       icon={exclamationTriangleIcon}
-                      customStyle="mr-4"
+                      customStyle="mr-4 [&>*]:stroke-grey3 dark:[&>*]:stroke-grey3"
                     />
                     <Stack>
                       <Text variant="footnotes2" color={{ light: 'grey3', dark: 'grey3' }}>
@@ -276,13 +277,20 @@ const Layout: React.FC<unknown> = () => {
 
           <Stack
             ref={widgetContainerRef}
-            className={`pr-2 relative min-h-[${contentHeight}px] h-full`}
+            style={cssVars({
+              '--content-height': `${contentHeight}px`,
+            })}
+            className={`pr-2 relative min-h-[var(--content-height)] h-full`}
           >
             <Stack className="h-full hidden lg:flex">
-              <Stack className={`mt-[${offset}px]`} />
+              <Stack
+                style={cssVars({ '--offset': `${offset}px` })}
+                className={`mt-[var(--offset)]`}
+              />
               <Stack
                 ref={widgetContentRef}
-                className={`${position} ${stickyPos} ${showWidgets ? '' : 'hidden'} self-start`}
+                style={stickyPos.cssVar}
+                className={`${position} ${stickyPos.className} ${showWidgets ? '' : 'hidden'} self-start`}
               >
                 <Stack className="my-4">
                   <Widget
@@ -296,7 +304,7 @@ const Layout: React.FC<unknown> = () => {
                 </Stack>
               </Stack>
             </Stack>
-            <Stack className="fixed bottom-2 lg:(w-[21.125rem])">
+            <Stack className="fixed bottom-2 lg:w-[21.125rem]">
               <Widget name={layoutSlots.cookieWidgetSlotId} />
             </Stack>
           </Stack>

@@ -24,7 +24,7 @@ export type ModeratorDetailMiniCardProps = {
 const ModeratorDetailMiniCard: React.FC<ModeratorDetailMiniCardProps> = props => {
   const { moderator, hasBorderBottom, tenureInfoLabel, moderatedItemsLabel, onCardClick } = props;
 
-  const borderBottomStyle = `${hasBorderBottom ? 'border(b-1 solid grey8 dark:grey3)' : ''}`;
+  const borderBottomStyle = `${hasBorderBottom ? 'border-b-1 border-solid border-grey8 dark:border-grey3' : ''}`;
 
   const textStyle = 'max-w([12.5rem] md:[7.5rem]) w-fit cursor-default';
 

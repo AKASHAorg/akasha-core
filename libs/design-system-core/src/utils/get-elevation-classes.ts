@@ -10,12 +10,12 @@ export function getElevationClasses(elevation: Elevation) {
        * used mostly on beam cards
        * and other cards without an explicitly defined elevation level
        * */
-      return 'shadow([0_0_4px_rgba(0,0,0,0.2)] dark:[0_0_2px_rgba(255,255,255,0.15)])';
+      return 'shadow-[0_0_4px_rgba(0,0,0,0.2)] dark:shadow-[0_0_2px_rgba(255,255,255,0.15)]';
     case '2':
       /**
        * for dropdowns and popovers
        */
-      return 'shadow([0_0_10px_rgba(0,0,0,0.2)] dark:[0_0_4px_rgba(255,255,255,0.4)])';
+      return 'shadow-[0_0_10px_rgba(0,0,0,0.2)] dark:shadow-[0_0_4px_rgba(255,255,255,0.4)]';
     case '3':
       /**
        * for cards in a card

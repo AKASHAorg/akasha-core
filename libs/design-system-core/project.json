@@ -22,10 +22,7 @@
         "cwd": "libs/design-system-core",
         "command": "copyfiles -f ./src/static/img/* ../../dist/images && tsc --build"
       },
-      "outputs": [
-        "{projectRoot}/lib",
-        "{workspaceRoot}/dist/images"
-      ]
+      "outputs": ["{projectRoot}/lib", "{workspaceRoot}/dist/images"]
     }
   },
   "tags": ["scope:extension", "type:lib"]
