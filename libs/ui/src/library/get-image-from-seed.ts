@@ -1,3 +1,9 @@
+/**
+ * Utility function to generate avatar placeholders from seed (could be ETH address or DID etc).
+ * Helpful for when avatar is null or undefined
+ * @param seed - string or null
+ * @returns placeholder image number
+ */
 export const getImageFromSeed = (seed: string | null, numberOfPlaceholders: number) => {
   let str = seed;
 

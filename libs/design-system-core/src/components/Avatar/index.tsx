@@ -79,7 +79,10 @@ const AvatarContent: React.FC<AvatarContentProps> = props => {
     <Card dataTestId={dataTestId} type="plain" onClick={onClick}>
       <Stack direction="row" align="center" justify="center" customStyle={containerStyle}>
         {isNSFW && (
-          <Icon icon={<EyeSlashIcon />} color={{ light: 'errorLight', dark: 'errorDark' }} />
+          <Icon
+            icon={<EyeSlashIcon />}
+            customStyle="[&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark"
+          />
         )}
         {!isNSFW && (
           <>

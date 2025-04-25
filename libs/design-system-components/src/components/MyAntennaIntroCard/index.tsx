@@ -1,5 +1,5 @@
 import React from 'react';
-import { tw } from '@twind/core';
+
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
@@ -39,7 +39,7 @@ const MyAntennaIntroCard: React.FC<MyAntennaIntroCardProps> = ({
     <Card className="p-0">
       <Stack
         spacing={3}
-        className={cn('p-4 w-full rounded-2xl', isMinified && 'bg(grey9 dark:grey3)')}
+        className={cn('p-4 w-full rounded-2xl', isMinified && 'bg-grey9 dark:bg-grey3')}
       >
         {!isMinified && (
           <>
@@ -47,7 +47,7 @@ const MyAntennaIntroCard: React.FC<MyAntennaIntroCardProps> = ({
               <img
                 loading="lazy"
                 alt={assetName}
-                className={tw('max-w-[1/2] mx-auto pr-2')}
+                className={'max-w-[1/2] mx-auto pr-2'}
                 src={`${publicImgPath}/${assetName}.${assetExtension}`}
               />
             )}
@@ -71,7 +71,7 @@ const MyAntennaIntroCard: React.FC<MyAntennaIntroCardProps> = ({
           <Button
             variant={isMinified ? 'outline' : 'default'}
             size="sm"
-            className="w-(1/2 md:auto)"
+            className="w-1/2 md:w-auto"
             onClick={onClickCTA}
           >
             {ctaLabel}

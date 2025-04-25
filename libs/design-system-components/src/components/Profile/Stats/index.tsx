@@ -56,8 +56,7 @@ const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following })
               <Stack alignItems="center" className="group">
                 <AppIcon
                   placeholderIcon={stat.icon}
-                  size="sm"
-                  breakPointSize={{ breakPoint: 'sm', size: 'lg' }}
+                  size="lg"
                   customStyle={stat.className}
                   accentColor
                   hover={!stat.disabled}

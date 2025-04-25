@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { XMarkIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
@@ -18,7 +18,7 @@ const SidebarCTACard: React.FC<SidebarCTACardProps> = props => {
   const { t } = useTranslation('ui-widget-sidebar');
 
   return (
-    <Stack direction="column" spacing={4} className="px-6 py-4 bg(grey9 dark:grey3)">
+    <Stack direction="column" spacing={4} className="px-6 py-4 bg-grey9 dark:bg-grey3">
       <Stack direction="row" justifyContent="between" alignItems="start">
         <Text
           variant="footnotes2"
@@ -28,13 +28,15 @@ const SidebarCTACard: React.FC<SidebarCTACardProps> = props => {
           {`🪄${t('Add magic to your world by installing cool apps developed by the community')}`}
         </Text>
 
-        <Button plain={true} onClick={onDismissCard}>
+        <button onClick={onDismissCard}>
           <Icon icon={<XMarkIcon />} size="sm" accentColor={true} />
-        </Button>
+        </button>
       </Stack>
 
       <Stack className="w-fit h-fit self-end">
-        <Button onClick={onClickCTAButton} label={t('Check them out')} variant="secondary" />
+        <Button onClick={onClickCTAButton} variant="outline" size="sm">
+          {t('Check them out')}
+        </Button>
       </Stack>
     </Stack>
   );

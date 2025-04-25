@@ -19,22 +19,10 @@ export function getTextClasses({
   active,
 }: ITextClasses) {
   if (variant === 'text') {
-    const textColorStyle = getColorClasses(
-      {
-        light: 'secondaryLight',
-        dark: 'secondaryDark',
-      },
-      'text',
-    );
+    const textColorStyle = 'text-secondaryLight dark:text-secondaryDark';
     const hoverStyle =
       !loading && !disabled && hover
-        ? getColorClasses(
-            {
-              light: 'secondaryDark',
-              dark: 'white',
-            },
-            'group-hover:text',
-          )
+        ? 'group-hover:text-secondaryDark dark:group-hover:text-white'
         : '';
     return `${disabled ? 'opacity-50 cursor-not-allowed' : ''} ${textColorStyle} ${hoverStyle}`;
   }
@@ -44,13 +32,7 @@ export function getTextClasses({
   }
 
   if (variant === 'secondary') {
-    const textColorStyle = getColorClasses(
-      {
-        light: 'secondaryLight',
-        dark: active ? 'grey1' : 'secondaryDark',
-      },
-      'text',
-    );
+    const textColorStyle = `text-secondaryLight ${active ? 'dark:text-grey1' : 'dark:text-secondaryDark'}`;
     const hoverTextColor = hoverColors?.text
       ? getColorClasses(hoverColors.text, 'group-hover:text')
       : 'dark:group-hover:text-white';

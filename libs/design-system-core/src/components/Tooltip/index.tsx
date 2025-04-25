@@ -2,7 +2,7 @@ import React, { useState, PropsWithChildren, ReactNode } from 'react';
 import Card from '../Card';
 import Stack from '../Stack';
 import Text, { TextProps } from '../Text';
-import { apply, tw } from '@twind/core';
+
 import { usePopper } from 'react-popper';
 import { useClickAway } from 'react-use';
 import { Placement } from '@popperjs/core';
@@ -149,7 +149,7 @@ const Tooltip: React.FC<TooltipProps> = props => {
 
   return (
     <Stack customStyle={customStyle}>
-      <div {...eventHandlers} className={tw(apply`w-fit cursor-pointer`)} ref={setReferenceElement}>
+      <div {...eventHandlers} className={`w-fit cursor-pointer`} ref={setReferenceElement}>
         {children}
       </div>
       {('open' in props ? props.open : showTooltip) && (
@@ -160,7 +160,7 @@ const Tooltip: React.FC<TooltipProps> = props => {
             zIndex: 99,
           }}
           {...attributes.popper}
-          className={tw(getContentClasses(contextualPlacement, ARROW_SIZE))}
+          className={getContentClasses(contextualPlacement, ARROW_SIZE)}
         >
           {arrow && (
             <div
@@ -170,7 +170,7 @@ const Tooltip: React.FC<TooltipProps> = props => {
                 zIndex: 99,
                 [PLACEMENT_TO_CSS_POSITION_MAP[contextualPlacement]]: `-${ARROW_SIZE}px`,
               }}
-              className={tw(getArrowClasses(contextualPlacement, ARROW_SIZE, backgroundColor))}
+              className={getArrowClasses(contextualPlacement, ARROW_SIZE, backgroundColor)}
             />
           )}
           <Card

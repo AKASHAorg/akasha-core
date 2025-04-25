@@ -15,6 +15,7 @@ import { getImageFromSeed } from '@akashaorg/design-system-core/lib/utils';
 import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import { cn } from '@akashaorg/ui/lib/library/utils';
+import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
 import {
   ProfileAvatar,
   ProfileAvatarFallback,
@@ -97,8 +98,8 @@ const Header: React.FC<HeaderProps> = ({
     <Stack className={customStyle}>
       <Card
         data-testid="cover-image"
-        className="h-32 bg-center bg-no-repeat bg-cover bg-muted rounded-b-none border-none"
-        style={{ backgroundImage: `url(${backgroundUrl})` }}
+        className="h-32 bg-center bg-no-repeat bg-cover bg-muted rounded-b-none border-none bg-(image:--background-url)"
+        style={cssVars({ '--background-url': `url('${backgroundUrl}')` })}
         {...(background && { onClick: onClickCoverImage })}
       />
       <Card
@@ -140,8 +141,7 @@ const Header: React.FC<HeaderProps> = ({
                     <Pill
                       label={badge.label}
                       color={{ light: 'errorDark2', dark: 'white' }}
-                      background={{ light: 'errorFade', dark: 'errorDark2' }}
-                      customStyle="px-2"
+                      customStyle="px-2 bg-errorFade dark:bg-errorDark2"
                       type="info"
                     />
                   </Tooltip>

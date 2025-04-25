@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { tw, apply } from '@twind/core';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { ArrowPathIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { ImageBlockGridItem } from './image-block-grid-item';
 import ImageOverlay from '../ImageOverlay';
 import { type GalleryImage } from '@akashaorg/typings/lib/ui';
+import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
 
 export interface IImageGallery {
   imageNotLoadedLabel: string;
@@ -33,7 +33,7 @@ const ImageBlockGallery: React.FC<IImageGallery> = props => {
     setClickedImg(img);
   };
 
-  const gridStyle = apply(`grid grid-cols-6 gap-1`);
+  const gridStyle = `grid grid-cols-6 gap-1`;
 
   const getGridSpan = () => {
     switch (uploading ? images.length + 1 : images.length) {
@@ -53,7 +53,7 @@ const ImageBlockGallery: React.FC<IImageGallery> = props => {
 
   return (
     <>
-      <div className={images.length === 1 ? tw('flex') : tw(`${gridStyle}`)}>
+      <div className={images.length === 1 ? 'flex' : `${gridStyle}`}>
         {images.map((image, index) => (
           <ImageBlockGridItem
             imageNotLoadedLabel={imageNotLoadedLabel}
@@ -65,13 +65,14 @@ const ImageBlockGallery: React.FC<IImageGallery> = props => {
           />
         ))}
         {uploading && (
-          <div className={tw('flex relative border(solid grey1) rounded')} style={style}>
+          <div className={'flex relative border-solid border-grey1 rounded'} style={style}>
             <Stack
               max-w-max
               aspect-square
               justifyContent="center"
               alignItems="center"
-              className={`rounded h-full w-[${images[0]?.size?.height}px] bg(grey8 dark:grey5) max-w-max aspect-square`}
+              style={cssVars({ '--height': `${images[0]?.size?.height}px` })}
+              className={`rounded h-full w-[var(--height)] bg-grey8 dark:bg-grey5 max-w-max aspect-square`}
             >
               <Icon icon={<ArrowPathIcon />} rotateAnimation />
             </Stack>

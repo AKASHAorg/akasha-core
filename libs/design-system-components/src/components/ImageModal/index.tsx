@@ -7,7 +7,7 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Cropper, { Area, CropperProps, Point } from 'react-easy-crop';
-import { tw } from '@twind/core';
+
 import { type Image } from '@akashaorg/typings/lib/ui';
 import { CroppedImagePreviewProps, CroppedImagePreviews } from './cropped-image-previews';
 import {
@@ -16,7 +16,7 @@ import {
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { getCroppedImage } from './get-cropped-image';
 import { XCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-solid';
-import { getColorClasses } from '@akashaorg/design-system-core/lib/utils';
+import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
 
 const MIN_ZOOM = 1;
 const MAX_ZOOM = 3;
@@ -37,7 +37,7 @@ export type ImageModalProps = {
   width?: number;
   height?: number;
   onSave: (image: Blob, indexOfEditedImage?: number) => void;
-} & Pick<ModalProps, 'rightAlignActions' | 'onClose'> &
+} & Partial<Pick<ModalProps, 'rightAlignActions' | 'onClose'>> &
   Partial<Pick<CropperProps, 'aspect' | 'objectFit' | 'cropShape'>> &
   Partial<Pick<CroppedImagePreviewProps, 'previewTitle' | 'previews'>>;
 
@@ -113,7 +113,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
   };
 
   const imageContainerBorderStyle = showCropError
-    ? `border-4 ${getColorClasses({ light: 'errorLight', dark: 'errorDark' }, 'border')}`
+    ? `border-4 border-errorLight dark:border-errorDark`
     : '';
 
   return (
@@ -146,35 +146,40 @@ const ImageModal: React.FC<ImageModalProps> = ({
           })}
         </Stack>
       )}
-      <Card
-        padding="p-0"
-        elevation="none"
-        radius={20}
-        border={showCropError}
-        customStyle={`relative w-[${width / 16}rem] h-[${
-          height / 16
-        }rem] overflow-hidden bg-transparent ${imageContainerBorderStyle}`}
+      <div
+        style={cssVars({
+          '--width': `${width / 16}rem`,
+          '--height': `${height / 16}rem`,
+        })}
       >
-        <Cropper
-          image={imageUrl}
-          crop={crop}
-          zoom={zoom}
-          objectFit={objectFit}
-          cropShape={cropShape}
-          aspect={aspectRatio}
-          onCropChange={setCrop}
-          onCropComplete={onCropComplete}
-          onCropAreaChange={setCroppedArea}
-          onZoomChange={setZoom}
-        />
-      </Card>
+        <Card
+          padding="p-0"
+          elevation="none"
+          radius={20}
+          border={showCropError}
+          customStyle={`relative w-[var(--width)] h-[var(--height)] overflow-hidden bg-transparent ${imageContainerBorderStyle}`}
+        >
+          <Cropper
+            image={imageUrl}
+            crop={crop}
+            zoom={zoom}
+            objectFit={objectFit}
+            cropShape={cropShape}
+            aspect={aspectRatio}
+            onCropChange={setCrop}
+            onCropComplete={onCropComplete}
+            onCropAreaChange={setCroppedArea}
+            onZoomChange={setZoom}
+          />
+        </Card>
+      </div>
       {showCropError && (
         <Stack direction="row" spacing={1} alignItems="center">
           <Icon
             icon={<XCircleIcon />}
             size="lg"
             solid
-            color={{ light: 'errorLight', dark: 'errorDark' }}
+            customStyle={'[&>*]:fill-errorLight dark:[&>*]:fill-errorDark'}
           />
           <Text
             variant="footnotes2"
@@ -198,9 +203,9 @@ const ImageModal: React.FC<ImageModalProps> = ({
             min={MIN_ZOOM}
             max={MAX_ZOOM}
             step={ZOOM_STEP}
-            className={tw(
-              'grow h-2 bg(gray-200 dark:gray-700) rounded-[0.5rem] appearance-none cursor-pointer',
-            )}
+            className={
+              'grow h-2 bg-gray-200 dark:bg-gray-700 rounded-[0.5rem] appearance-none cursor-pointer'
+            }
             onChange={e => setZoom(Number(e.target.value))}
           />
           <Icon icon={<MagnifyingGlassPlusIcon />} size="lg" />

@@ -1,5 +1,5 @@
 import React from 'react';
-import { tw } from '@twind/core';
+
 import Image from '../Image';
 import Stack from '../Stack';
 import Text from '../Text';
@@ -17,7 +17,7 @@ const ErrorCard: React.FC<
         loading="lazy"
         decoding="async"
         alt="error-card"
-        className={tw(imageBoxStyle)}
+        className={imageBoxStyle}
       />
 
       <Stack spacing="gap-y-1" align="center">

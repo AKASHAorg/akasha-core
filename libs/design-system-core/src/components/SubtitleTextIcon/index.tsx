@@ -3,7 +3,6 @@ import Stack from '../Stack';
 import Icon from '../Icon';
 import Text from '../Text';
 import Button from '../Button';
-import { getColorClasses } from '../../utils';
 import { IconType } from '@akashaorg/typings/lib/ui';
 
 export type SubtitleTextIconProps = {
@@ -64,7 +63,7 @@ const SubtitleTextIcon: React.FC<SubtitleTextIconProps> = props => {
   } = props;
 
   const iconBackgroundStyle = `${backgroundSize ? backgroundSize : 'w-10 h-10'} ${
-    backgroundColor ? 'bg(grey8 dark:grey3) rounded-full' : 'none'
+    backgroundColor ? 'bg-grey8 dark:bg-grey3 rounded-full' : 'none'
   }`;
 
   return (
@@ -75,16 +74,18 @@ const SubtitleTextIcon: React.FC<SubtitleTextIconProps> = props => {
         spacing="gap-x-2"
         align="center"
         justify="center"
-        background={{ light: 'white', dark: 'grey2' }}
-        customStyle={`group ${maxWidth} ${customStyle}`}
+        customStyle={`group bg-white dark:bg-grey2 ${maxWidth} ${customStyle}`}
       >
         {icon && (
           <Stack direction="row" align="center" justify="center" customStyle={iconBackgroundStyle}>
             <Icon
               icon={icon}
               solid={solid}
-              size={{ width: 'w-4', height: 'h-5' }}
-              color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+              customStyle={`[&>svg]:w-4 [&>svg]:h-5 ${
+                solid
+                  ? '[&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark'
+                  : '[&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark'
+              }`}
             />
           </Stack>
         )}
@@ -93,10 +94,7 @@ const SubtitleTextIcon: React.FC<SubtitleTextIconProps> = props => {
             variant={labelSize}
             weight="bold"
             truncate={true}
-            customStyle={`cursor-pointer group-hover:underline ${getColorClasses(
-              { light: 'black', dark: 'white' },
-              'group-hover:decoration',
-            )}`}
+            customStyle={`cursor-pointer group-hover:underline group-hover:decoration-black dark:group-hover:decoration-white`}
           >
             {label}
           </Text>

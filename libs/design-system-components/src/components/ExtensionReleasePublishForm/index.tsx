@@ -5,7 +5,7 @@ import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import { apply, tw } from '@twind/core';
+
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ButtonType } from '../types/common.types';
@@ -135,7 +135,7 @@ const ExtensionReleasePublish: React.FC<ExtensionReleasePublishProps> = props =>
 
   return (
     <>
-      <form className={tw(apply`h-full`)}>
+      <form className={`h-full`}>
         <Stack direction="column" spacing={4}>
           <Stack spacing={4} className="px-4 pb-16">
             <Controller

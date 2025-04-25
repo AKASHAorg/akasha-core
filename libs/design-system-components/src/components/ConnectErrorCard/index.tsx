@@ -26,7 +26,7 @@ const ConnectErrorCard: React.FC<ConnectErrorCardProps> = ({ title, message, act
           <Stack direction="row" alignItems="center" spacing={2}>
             <Icon
               icon={<ExclamationTriangleIcon />}
-              color={{ light: 'errorLight', dark: 'errorDark' }}
+              customStyle={'[&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark'}
             />
             <Text
               variant="button-md"

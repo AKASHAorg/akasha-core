@@ -18,7 +18,7 @@ const EntryCardRemoved: React.FC<EntryCardRemovedProps> = props => {
       )}
     >
       <Stack direction="row" spacing="gap-x-1">
-        <Icon color="errorLight" icon={<ExclamationTriangleIcon />} />
+        <Icon icon={<ExclamationTriangleIcon />} customStyle="[&>*]:stroke-errorLight" />
         <Stack spacing="gap-y-1" customStyle="grow">
           {props.message}
         </Stack>

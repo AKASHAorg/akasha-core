@@ -21,7 +21,9 @@ const MainPage: React.FC = () => {
       <Stack padding="px-4">
         {legalItems.map((item: ILegalItem, idx: number) => {
           const baseStyle = `flex py-4 justify-between items-center ${
-            idx !== legalItems.length - 1 ? 'border(b-1 solid grey8 dark:grey5)' : 'border-none'
+            idx !== legalItems.length - 1
+              ? 'border-b-1 border-solid border-grey8 dark:border-grey5'
+              : 'border-none'
           }`;
 
           const children = (

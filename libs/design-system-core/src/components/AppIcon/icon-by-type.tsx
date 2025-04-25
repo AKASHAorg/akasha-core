@@ -1,18 +1,14 @@
 import React from 'react';
-import { apply, tw } from '@twind/core';
 
 import { LogoTypeSource } from '@akashaorg/typings/lib/ui';
 
 import Icon from '../Icon';
 import { AppIconProps } from '.';
-import { Color } from '../types/common.types';
 
 export type AppImgProps = Pick<
   AppIconProps,
   'appImg' | 'size' | 'placeholderIcon' | 'breakPointSize' | 'accentColor' | 'solid'
-> & {
-  color?: Color;
-};
+> & { customStyle?: string };
 
 const IconByType: React.FC<AppImgProps> = ({
   appImg,
@@ -21,7 +17,7 @@ const IconByType: React.FC<AppImgProps> = ({
   solid = false,
   breakPointSize,
   accentColor,
-  color,
+  customStyle = '',
 }) => {
   if (appImg?.type === LogoTypeSource.ICON) {
     return (
@@ -30,8 +26,8 @@ const IconByType: React.FC<AppImgProps> = ({
         size={size}
         breakPointSize={breakPointSize}
         accentColor={accentColor}
-        color={color}
         solid={solid}
+        customStyle={customStyle}
       />
     );
   }
@@ -42,7 +38,7 @@ const IconByType: React.FC<AppImgProps> = ({
         loading="lazy"
         decoding="async"
         alt={appImg?.type}
-        className={tw(apply`rounded-[50%] object-contain`)}
+        className={`rounded-[50%] object-contain`}
         src={appImg?.value}
       />
     );
@@ -54,7 +50,7 @@ const IconByType: React.FC<AppImgProps> = ({
       size={size}
       breakPointSize={breakPointSize}
       accentColor={accentColor}
-      color={color}
+      customStyle={customStyle}
     />
   );
 };

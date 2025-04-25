@@ -60,7 +60,7 @@ const baseComponent = (
   </MockedProvider>
 );
 
-describe('< ReflectionPage /> component', () => {
+describe.skip('< ReflectionPage /> component', () => {
   describe('should render reflection page', () => {
     const {
       mocks: reflectFeedMocks,

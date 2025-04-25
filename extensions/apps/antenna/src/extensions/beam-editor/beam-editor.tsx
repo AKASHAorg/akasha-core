@@ -391,7 +391,7 @@ export const BeamEditor: React.FC = () => {
                       <Stack
                         alignItems="center"
                         justifyContent="center"
-                        className="h-8 w-8 group relative rounded-full bg(grey9 dark:grey5)"
+                        className="h-8 w-8 group relative rounded-full bg-grey9 dark:bg-grey5"
                       >
                         <Icon size="sm" icon={block.icon} />
                       </Stack>

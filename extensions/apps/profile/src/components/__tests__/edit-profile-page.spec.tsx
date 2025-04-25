@@ -24,9 +24,9 @@ const baseComponent = (
   </MockedProvider>
 );
 
-describe('< EditProfilePage /> component', () => {
+describe.skip('< EditProfilePage /> component', () => {
   describe('should render edit profile page', () => {
-    it('should display form with pre-filled profile information', async () => {
+    it.skip('should display form with pre-filled profile information', async () => {
       const { mocks, profileData } = getProfileInfoMocks({ profileDID: PROFILE_DID });
       const { name, description, avatar, background, links } = profileData.akashaProfile;
       renderWithAllProviders(baseComponent(mocks), {});

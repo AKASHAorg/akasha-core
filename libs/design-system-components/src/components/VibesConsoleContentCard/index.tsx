@@ -47,7 +47,7 @@ const VibesConsoleContentCard: React.FC<VibesConsoleContentCardProps> = props =>
 
   const textColor = { light: 'grey4', dark: 'grey7' } as const;
 
-  const buttonStyle = 'w-(full md:[9.25rem])';
+  const buttonStyle = 'w-full md:w-[9.25rem]';
 
   const secondaryButtonAction = entry.itemType === 'Profile' ? 'Suspend' : 'Delist';
 
@@ -57,7 +57,7 @@ const VibesConsoleContentCard: React.FC<VibesConsoleContentCardProps> = props =>
         direction="row"
         alignItems="center"
         justifyContent="between"
-        className="p-5 border(b-1 solid grey8 dark:grey5)"
+        className="p-5 border-b-1 border-solid border-grey8 dark:border-grey5"
       >
         <Stack direction="row" alignItems="center" spacing={2}>
           <Button
@@ -134,7 +134,7 @@ const VibesConsoleContentCard: React.FC<VibesConsoleContentCardProps> = props =>
         direction="row"
         alignItems="center"
         spacing={4}
-        className="p-5 border(t-1 solid grey8 dark:grey5) justify(center md:end)"
+        className="p-5 border-t-1 border-solid border-grey8 dark:border-grey5 justify-center md:justify-end"
       >
         <Button
           variant="secondary"

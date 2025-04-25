@@ -1,13 +1,11 @@
 import React, { ChangeEvent } from 'react';
 import Text from '../Text';
 import Stack from '../Stack';
-import { tw, apply } from '@twind/core';
 import { getBgColor } from './getBgColor';
 import { getTextColor } from './getTextColor';
 import { getInputColor } from './getInputColor';
 import { getCheckmarkColor } from './getCheckmarkColor';
-import { Color } from '../types/common.types';
-import { getColorClasses } from '../../utils';
+import { cn } from '@akashaorg/ui/lib/library/utils';
 
 export type CheckboxSize = 'small' | 'large';
 
@@ -15,7 +13,7 @@ export type CheckboxProps = {
   id: string;
   label?: string;
   labelDirection?: 'left' | 'right';
-  labelColor?: Color;
+  labelColor?: string;
   value: string;
   name: string;
   size?: CheckboxSize;
@@ -72,7 +70,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
   id,
   label,
   labelDirection = 'right',
-  labelColor = { light: 'black', dark: 'white' },
+  labelColor = 'text-black dark:text-white',
   value,
   name,
   size = 'small',
@@ -92,10 +90,10 @@ const Checkbox: React.FC<CheckboxProps> = ({
     }
   }, [indeterminate]);
 
-  const textColor = getTextColor(isDisabled, error, getColorClasses(labelColor, 'text'));
+  const textColor = getTextColor(isDisabled, error, labelColor);
   const textColorIndeterminate = isDisabled
     ? 'text-black dark:text-grey4'
-    : getColorClasses(labelColor, 'text');
+    : 'text-black dark:text-white';
   const inputColor = getInputColor(isDisabled, error);
   const checkmarkColor = getCheckmarkColor(isDisabled, error);
   const minusMarkColor = isDisabled ? 'bg-grey6 dark:bg-grey5' : 'bg-white';
@@ -116,36 +114,36 @@ const Checkbox: React.FC<CheckboxProps> = ({
 
   const cursorStyle = isDisabled ? 'cursor-not-allowed' : 'cursor-pointer';
 
-  const instancePseudoCheckboxStyle = apply`
+  const instancePseudoCheckboxStyle = `
   ${basePseudoCheckboxStyles}
   ${checkboxSizes}
   ${tickMarkSizes}
-  before:border(1 ${inputColor})
-  after:border(l-[1px] ${checkmarkColor}) after:border(b-[1px] ${checkmarkColor}) after:-rotate-45
+  before:border-1 ${inputColor}
+  after:border-l-[1px] ${checkmarkColor} after:border-b-[1px] after:-rotate-45
   ${bgColor}
   `;
 
-  const minusMarkStyles = apply`
+  const minusMarkStyles = `
   ${minusMarkSizes}
   after:${minusMarkColor}
   `;
 
-  const instanceIndeterminateCheckboxStyle = apply`
+  const instanceIndeterminateCheckboxStyle = `
   ${basePseudoCheckboxStyles}
   ${checkboxSizes}
   ${minusMarkStyles}
-  before:border(1 ${isDisabled ? 'grey4' : 'secondaryLight dark:secondaryDark'})
-  before:${isDisabled ? 'bg-grey4' : 'bg-(secondaryLight dark:secondaryDark)'}
+  before:border-1 ${isDisabled ? 'before:border-grey4' : 'before:border-secondaryLight dark:before:border-secondaryDark'}
+  ${isDisabled ? 'before:bg-grey4' : 'before:bg-secondaryLight dark:before:bg-secondaryDark'}
   invisible w-4 h-4 relative
   `;
 
-  const selectedPseudoCheckboxStyle = apply`
+  const selectedPseudoCheckboxStyle = `
     ${instancePseudoCheckboxStyle}
     ${cursorStyle}
     invisible w-4 h-4 relative
     `;
 
-  const unselectedPseudoCheckboxStyle = apply`
+  const unselectedPseudoCheckboxStyle = `
     ${instancePseudoCheckboxStyle}
     ${cursorStyle}
     after:content-none invisible w-4 h-4 relative
@@ -164,8 +162,11 @@ const Checkbox: React.FC<CheckboxProps> = ({
   const labelUi = (
     <>
       {label && (
-        <label htmlFor={id} className={'select-none'}>
-          <Text variant="body2" customStyle={indeterminate ? textColorIndeterminate : textColor}>
+        <label htmlFor={id} className="select-none">
+          <Text
+            variant="body2"
+            customStyle={cn(indeterminate ? textColorIndeterminate : textColor)}
+          >
             {label}
           </Text>
         </label>
@@ -177,7 +178,9 @@ const Checkbox: React.FC<CheckboxProps> = ({
     <Stack
       direction="row"
       spacing="gap-x-2"
-      customStyle={`cursor-pointer leading-6 hover:text-secondaryLight dark:hover:text-secondaryDark ${customStyle}`}
+      customStyle={cn(
+        `cursor-pointer leading-6 hover:text-secondaryLight dark:hover:text-secondaryDark ${customStyle}`,
+      )}
     >
       {labelDirection === 'left' && labelUi}
       <input
@@ -189,7 +192,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
         aria-labelledby={value}
         checked={isSelected}
         onChange={handleChange}
-        className={tw(getInputClassname())}
+        className={cn(getInputClassname())}
       />
       {labelDirection === 'right' && labelUi}
     </Stack>

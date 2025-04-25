@@ -45,13 +45,13 @@ const VibesValuesCard: React.FC<VibesValuesCardProps> = props => {
 
           <Link
             to={ctaUrl}
-            customStyle="flex md:hidden text-sm text-center font-bold no-underline text(secondaryLight dark:secondaryDark)"
+            customStyle="flex md:hidden text-sm text-center font-bold no-underline text-secondaryLight dark:text-secondaryDark"
             target="_blank"
           >
             <Stack
               alignItems="center"
               justifyContent="center"
-              className="p-3 w-full h-32 bg(grey9 dark:grey3) rounded-2xl cursor-pointer"
+              className="p-3 w-full h-32 bg-grey9 dark:bg-grey3 rounded-2xl cursor-pointer"
             >
               <Text
                 variant="footnotes1"
@@ -70,11 +70,11 @@ const VibesValuesCard: React.FC<VibesValuesCardProps> = props => {
         {ctaLabel && (
           <Stack
             justifyContent="center"
-            className="p-5 hidden md:flex bg(grey9 dark:grey3) rounded-2xl cursor-pointer"
+            className="p-5 hidden md:flex bg-grey9 dark:bg-grey3 rounded-2xl cursor-pointer"
           >
             <Link
               to={ctaUrl}
-              customStyle="text-sm text-center font-bold no-underline text(secondaryLight dark:secondaryDark)"
+              customStyle="text-sm text-center font-bold no-underline text-secondaryLight dark:text-secondaryDark"
               target="_blank"
             >
               {ctaLabel}

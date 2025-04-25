@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { apply, tw } from '@twind/core';
+
 import { useTranslation } from 'react-i18next';
 import { ProfileLabeled } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
@@ -156,7 +156,7 @@ const EditInterests: React.FC<EditInterestsProps> = ({
   const handleModalClose = () => setNewUrl(null);
 
   return (
-    <form className={tw(apply`h-full ${customStyle}`)}>
+    <form className={`h-full ${customStyle}`}>
       {!!newUrl && (
         <UnsavedChangesModal
           showModal={!!newUrl}

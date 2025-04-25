@@ -12,10 +12,10 @@ const Stepper: React.FC<StepperProps> = props => {
   const { length, currentStep } = props;
 
   const getRingStyle = (index: number): string => {
-    if (index < currentStep) return 'bg(secondaryLight dark:secondaryDark)';
-    if (index > currentStep) return 'border(2 grey6)';
+    if (index < currentStep) return 'bg-secondaryLight dark:bg-secondaryDark';
+    if (index > currentStep) return 'border-2 border-grey6';
 
-    return 'border(2 secondaryLight dark:secondaryDark)';
+    return 'border-2 border-secondaryLight dark:border-secondaryDark';
   };
 
   return (
@@ -26,7 +26,7 @@ const Stepper: React.FC<StepperProps> = props => {
           <React.Fragment key={el}>
             {index > 1 && (
               <Stack
-                customStyle={`w-7 h-[0.1rem] bg(${index > currentStep ? 'grey6' : 'secondaryLight dark:SecondaryDark'})`}
+                customStyle={`w-7 h-[0.1rem] ${index > currentStep ? 'bg-grey6' : 'bg-secondaryLight dark:bg-SecondaryDark'}`}
               />
             )}
             <Stack
@@ -36,15 +36,12 @@ const Stepper: React.FC<StepperProps> = props => {
               customStyle={`w-8 h-8 rounded-full ${getRingStyle(index)}`}
             >
               {index < currentStep ? (
-                <Icon icon={<CheckIcon />} color="white" solid={true} />
+                <Icon icon={<CheckIcon />} solid={true} customStyle="[&>*]:fill-white" />
               ) : (
                 <Stack
-                  background={
-                    index > currentStep
-                      ? 'grey6'
-                      : { light: 'secondaryLight', dark: 'secondaryDark' }
-                  }
-                  customStyle="w-4 h-4 rounded-full"
+                  customStyle={`w-4 h-4 rounded-full ${
+                    index > currentStep ? 'grey6' : 'bg-secondaryLight dark:bg-secondaryDark'
+                  }`}
                 />
               )}
             </Stack>

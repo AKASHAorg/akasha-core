@@ -48,10 +48,10 @@ export const GalleryImage: React.FC<GalleryImageProps> = props => {
         >
           <AppIcon
             placeholderIcon={<TrashIcon />}
-            background={'black/50'}
-            iconColor="white"
             size="xs"
             iconSize="sm"
+            iconStyle="[&>*]:stroke-white"
+            customStyle="bg-black/50"
             hover
           />
         </button>
@@ -64,7 +64,11 @@ export const GalleryImage: React.FC<GalleryImageProps> = props => {
           className="absolute top-[50%] left-[50%] -translate-y-1/2 -translate-x-1/2 w-full"
         >
           {state === GalleryImageState.ERROR && (
-            <Icon icon={<XCircleIcon />} color="error" size="lg" />
+            <Icon
+              icon={<XCircleIcon />}
+              size="lg"
+              customStyle={'[&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark'}
+            />
           )}
           {state === GalleryImageState.LOADING && (
             <Loader2 className="h-8 w-8 animate-spin text-primary" />

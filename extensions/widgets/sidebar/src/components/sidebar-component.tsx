@@ -237,7 +237,7 @@ const SidebarComponent: React.FC<unknown> = () => {
           <SidebarCTACard onClickCTAButton={handleClickExplore} onDismissCard={dismissCard} />
         )}
         {modSocialLinks?.length > 0 && (
-          <Stack className="px-8 py-4 border-t-1 border(grey9 dark:grey3)">
+          <Stack className="px-8 py-4 border-t-1 border-grey9 dark:border-grey3">
             <Text variant="footnotes2">{t('Get in touch')}</Text>
             <Stack direction="row" spacing={4} className="w-fit h-fit mt-6">
               {modSocialLinks?.map((socialLink, idx) => (

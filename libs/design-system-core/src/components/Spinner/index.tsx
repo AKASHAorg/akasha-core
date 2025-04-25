@@ -1,5 +1,4 @@
 import React from 'react';
-import { tw, apply } from '@twind/core';
 
 import { Color } from '../types/common.types';
 import { getColorClasses } from '../../utils';
@@ -46,18 +45,14 @@ const Spinner: React.FC<SpinnerProps> = props => {
     return (
       <div
         role="status"
-        className={tw(
-          apply(
-            `inline-block ${
-              spinnerSizesMap[size]
-            } animate-spin rounded-full border-4 border-solid ${getColorClasses(
-              partialSpinnerColor,
-              'border',
-            )} border-r-transparent dark:border-r-white align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]`,
-          ),
-        )}
+        className={`inline-block ${
+          spinnerSizesMap[size]
+        } animate-spin rounded-full border-4 border-solid ${getColorClasses(
+          partialSpinnerColor,
+          'border',
+        )} border-r-transparent dark:border-r-white align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]`}
       >
-        <span className={tw('sr-only')}>{loadingLabel}</span>
+        <span className={'sr-only'}>{loadingLabel}</span>
       </div>
     );
   }
@@ -66,9 +61,7 @@ const Spinner: React.FC<SpinnerProps> = props => {
     <div role="status">
       <svg
         aria-hidden="true"
-        className={tw(
-          `${spinnerSizesMap[size]} mr-2 text(gray-200 dark:gray-600) animate-spin fill(secondaryLight dark:secondaryDark)`,
-        )}
+        className={`${spinnerSizesMap[size]} mr-2 text-gray-200 dark:text-gray-600 animate-spin fill-secondaryLight dark:fill-secondaryDark`}
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -83,7 +76,7 @@ const Spinner: React.FC<SpinnerProps> = props => {
         />
       </svg>
       {/* hides element but is still readable by screen readers */}
-      <span className={tw('sr-only')}>{loadingLabel}</span>
+      <span className={'sr-only'}>{loadingLabel}</span>
     </div>
   );
 };

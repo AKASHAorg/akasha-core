@@ -6,6 +6,7 @@ import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Image } from '@akashaorg/ui/lib/akasha-components/image';
 import { cn } from '@akashaorg/ui/lib/library/utils';
+import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
 type CardSize = { width?: string | number; height?: string | number };
 
 export type DefaultEmptyCardProps = {
@@ -38,10 +39,6 @@ const DefaultEmptyCard: React.FC<DefaultEmptyCardProps> = ({
   customCardSize,
   buttonClickHandler,
 }) => {
-  const cardSize = ` w-[${customCardSize?.width ? customCardSize.width : '180px'}] h-[${
-    customCardSize?.height ? customCardSize.height : '180px'
-  }]`;
-
   return (
     <Card
       className="p-4"
@@ -53,7 +50,13 @@ const DefaultEmptyCard: React.FC<DefaultEmptyCardProps> = ({
           className="w-[180px] h-[180px] m-auto my-4"
         />
       ) : (
-        <Card className={cn('bg-muted shrink-0 m-auto my-4', cardSize)} />
+        <Card
+          style={cssVars({
+            '--width': customCardSize?.width ? `${customCardSize.width}` : '180px',
+            '--height': customCardSize?.height ? `${customCardSize.height}` : '180px',
+          })}
+          className={cn('bg-muted shrink-0 m-auto my-4', 'w-[var(--width)] h-[var(--height)]')}
+        />
       )}
       <Text variant="h6" align="center">
         {infoText}

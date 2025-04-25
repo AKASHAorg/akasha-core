@@ -6,7 +6,6 @@ import ReflectionCard from '../cards/reflection-card';
 import { useGetReflectReflectionsQuery } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
 import { EntityTypes, IContentClickDetails } from '@akashaorg/typings/lib/ui';
 import { useTranslation } from 'react-i18next';
-import { getColorClasses } from '@akashaorg/design-system-core/lib/utils';
 import { NetworkErrorCard } from '../cards/network-error-card';
 
 const MAXIMUM_REFLECTION_PREVIEWS = 2;
@@ -29,10 +28,7 @@ const ReflectionPreview: React.FC<ReflectionPreviewProps> = props => {
     beamID: edge.node.beam?.id,
   }));
 
-  const leftBorderStyle = `border-l ${getColorClasses(
-    { light: 'secondaryLight', dark: 'secondaryDark' },
-    'border',
-  )}`;
+  const leftBorderStyle = `border-l border-secondaryLight dark:border-secondaryDark`;
 
   if (reflectOfReflectionReq.error)
     return (
