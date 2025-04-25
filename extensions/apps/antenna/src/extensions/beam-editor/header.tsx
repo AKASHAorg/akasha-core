@@ -46,7 +46,7 @@ export const Header: React.FC<HeaderProps> = props => {
     >
       <Text variant="h4">{renderTitle()}</Text>
       {uiState === 'editor' && (
-        <div className="flex items-center space-x-2">
+        <Stack direction="row" alignItems="center" spacing={2}>
           <Checkbox
             id="nsfw"
             name="nsfw"
@@ -58,7 +58,7 @@ export const Header: React.FC<HeaderProps> = props => {
           <label htmlFor="nsfw">
             <Typography variant="sm">NSFW</Typography>
           </label>
-        </div>
+        </Stack>
       )}
     </Stack>
   );
