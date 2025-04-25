@@ -118,7 +118,6 @@ const EditInterests: React.FC<EditInterestsProps> = ({
   );
 
   const getNewInterest = useCallback(() => {
-    console.log('query', query);
     if (query) {
       const foundInterest = findInterest(query);
       if (!foundInterest) {
