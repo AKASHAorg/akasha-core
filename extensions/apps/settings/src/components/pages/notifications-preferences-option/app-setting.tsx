@@ -1,7 +1,7 @@
 import React from 'react';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
+import { Checkbox } from '@akashaorg/ui/lib/components/checkbox';
 
 export interface IAppSettingProps {
   title;
@@ -21,10 +21,20 @@ const AppSetting: React.FC<IAppSettingProps> = ({ title, description, isSelected
           id="checkbox"
           value="app-setting"
           name="app-setting"
-          isSelected={isSelected}
-          handleChange={onChange}
-          size="large"
-          customStyle="w-6 h-6"
+          checked={isSelected}
+          onCheckedChange={checked => {
+            const event = {
+              target: {
+                checked,
+                id: 'checkbox',
+                name: 'app-setting',
+                value: 'app-setting',
+                type: 'checkbox',
+              },
+            } as React.ChangeEvent<HTMLInputElement>;
+            onChange(event);
+          }}
+          className="w-6 h-6"
         />
       </Stack>
 

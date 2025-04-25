@@ -19,7 +19,8 @@ import {
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
+import { Checkbox } from '@akashaorg/ui/lib/components/checkbox';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
@@ -286,18 +287,23 @@ const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
             <>{t('Receiving Notifications')}</>
           </Text>
         )}
-        <Checkbox
-          id="receive-all-notifications-checkbox"
-          label={t('I want to receive all types of notifications')}
-          value="I want to receive all types of notifications"
-          name="check-all"
-          isSelected={selected}
-          handleChange={() => {
-            setSelected(!selected);
-            !initial && setIsChanged(true);
-          }}
-          customStyle="ml-2 my-4"
-        />
+        <Stack direction="row" alignItems="center" spacing={2} className="ml-2 my-4">
+          <Checkbox
+            id="receive-all-notifications-checkbox"
+            name="check-all"
+            value="I want to receive all types of notifications"
+            checked={selected}
+            onCheckedChange={() => {
+              setSelected(!selected);
+              !initial && setIsChanged(true);
+            }}
+          />
+          <label htmlFor="receive-all-notifications-checkbox">
+            <Typography variant="sm">
+              {t('I want to receive all types of notifications')}
+            </Typography>
+          </label>
+        </Stack>
       </Stack>
       <Divider customStyle="!mt-0" />
       <Stack direction="column" className="min-h-[80%] !mt-0 gap-y-2 pt-2">
@@ -313,10 +319,9 @@ const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
                 <Checkbox
                   value={appState[0]}
                   id={appState[0].concat(String(Math.round(Math.random() * 100)))}
-                  isSelected={Boolean(appState[1])}
-                  handleChange={() => changeHandler(appState[0])}
                   name={appState[0]}
-                  customStyle="mb-4"
+                  checked={Boolean(appState[1])}
+                  onCheckedChange={() => changeHandler(appState[0])}
                 />
               </Stack>
               <Divider customStyle="!mt-0" />

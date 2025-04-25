@@ -1,7 +1,8 @@
 import * as React from 'react';
-import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
+import { Checkbox } from '@akashaorg/ui/lib/components/checkbox';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import {
   ArrowDownIcon,
   ArrowUpIcon,
@@ -71,14 +72,16 @@ export const BlockHeader: React.FC<BlockHeaderProps> = props => {
           <Icon size="sm" icon={icon} />
         </Stack>
         {isFocusedBlock && (
-          <Checkbox
-            id="nsfw"
-            label={'NSFW'}
-            name="nsfw"
-            value="nsfw"
-            handleChange={handleNsfwChange}
-            isSelected={isNsfwCheckboxSelected}
-          />
+          <Stack direction="row" alignItems="center" spacing={2}>
+            <Checkbox
+              id="nsfw"
+              name="nsfw"
+              value="nsfw"
+              onCheckedChange={handleNsfwChange}
+              checked={isNsfwCheckboxSelected}
+            />
+            <Typography variant="sm">{'NSFW'}</Typography>
+          </Stack>
         )}
       </Stack>
       <BlockStatusToolbar {...rest} />
