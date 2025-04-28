@@ -33,7 +33,7 @@ import ExtensionImageGallery from '@akashaorg/design-system-components/lib/compo
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import CopyToClipboard from '@akashaorg/design-system-core/lib/components/CopyToClipboard';
+import { CopyToClipboard } from '@akashaorg/ui/lib/akasha-components/copy-to-clipboard';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import { useInstalledExtensions } from '@akashaorg/ui-core-hooks/lib/use-installed-extensions';
@@ -340,9 +340,9 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                         {t('Package name')}
                       </Text>
                       <CopyToClipboard
-                        stringToBeCopied={appData.name}
-                        copyText={t('Copy to clipboard')}
-                        copiedText={t('Copied')}
+                        textToCopy={appData.name}
+                        ctaText={t('Copy to clipboard')}
+                        successText={t('Copied')}
                       >
                         <Text
                           variant="button-md"
@@ -358,9 +358,9 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                         {t('Extension ID')}
                       </Text>
                       <CopyToClipboard
-                        copyText={t('Copy to clipboard')}
-                        copiedText={t('Copied')}
-                        stringToBeCopied={appData.id}
+                        textToCopy={appData.id}
+                        ctaText={t('Copy to clipboard')}
+                        successText={t('Copied')}
                       >
                         <Text
                           variant="button-md"
@@ -404,7 +404,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                   <Section title={t('Useful Links')} dividerPosition={DividerPosition.Top}>
                     <Stack className="flex-wrap">
                       {appData.links?.map((link, idx) => (
-                        <CopyToClipboard key={`${link.href}_${idx}`} stringToBeCopied={link.href}>
+                        <CopyToClipboard key={`${link.href}_${idx}`} textToCopy={link.href}>
                           <Text
                             variant="subtitle2"
                             color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
