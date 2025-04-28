@@ -96,7 +96,7 @@ export const ContributorsPage = (props: ContributorsPageProps) => {
                       <ProfileAvatarButtonAvatar>
                         <ProfileAvatarButtonAvatarImage
                           src={transformSource(contributor?.avatar?.default)?.src}
-                          alt="Author Avatar"
+                          alt="Contributor Avatar"
                         />
                         <ProfileAvatarButtonAvatarFallback
                           alternativeSrc={contributor?.avatar?.alternatives?.map(

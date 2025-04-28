@@ -232,7 +232,7 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
                             <ProfileAvatarButtonAvatar>
                               <ProfileAvatarButtonAvatarImage
                                 src={transformSource(profile?.avatar?.default)?.src}
-                                alt="Author Avatar"
+                                alt="Contributor Avatar"
                               />
                               <ProfileAvatarButtonAvatarFallback
                                 alternativeSrc={profile?.avatar?.alternatives?.map(
@@ -309,7 +309,7 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
                     <ProfileAvatarButtonAvatar>
                       <ProfileAvatarButtonAvatarImage
                         src={transformSource(profile?.avatar?.default)?.src}
-                        alt="Author Avatar"
+                        alt="Contributor Avatar"
                       />
                       <ProfileAvatarButtonAvatarFallback
                         alternativeSrc={profile?.avatar?.alternatives?.map(

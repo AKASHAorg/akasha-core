@@ -149,7 +149,7 @@ export const DevInfoPage = (props: DevInfoPageProps) => {
             <ProfileAvatarButtonAvatar>
               <ProfileAvatarButtonAvatarImage
                 src={transformSource(avatar?.default)?.src}
-                alt="Author Avatar"
+                alt="Developer Avatar"
               />
               <ProfileAvatarButtonAvatarFallback
                 alternativeSrc={avatar?.alternatives?.map(alt => transformSource(alt)?.src)}

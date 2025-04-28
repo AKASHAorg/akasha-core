@@ -62,7 +62,7 @@ export const LatestProfiles: React.FC<LatestProfilesProps> = props => {
           <ProfileAvatarButtonAvatar>
             <ProfileAvatarButtonAvatarImage
               src={transformSource(profileData?.avatar?.default)?.src}
-              alt="Contributor Avatar"
+              alt="Profile Avatar"
             />
             <ProfileAvatarButtonAvatarFallback
               alternativeSrc={profileData?.avatar?.alternatives?.map(

@@ -20,6 +20,7 @@ import {
   ProfileAvatarButton,
   ProfileDidField,
 } from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
+import { CopyToClipboard } from '@akashaorg/ui/lib/akasha-components/copy-to-clipboard';
 
 export type SidebarHeaderProps = {
   authenticatedDID: string;
@@ -112,7 +113,13 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
           )}
           {isLoggedIn && (
             <ProfileAvatarButton profileDID={authenticatedDID}>
-              <ProfileDidField />
+              <CopyToClipboard
+                textToCopy={authenticatedDID}
+                ctaText="Copy to clipboard"
+                successText="Copied"
+              >
+                <ProfileDidField />
+              </CopyToClipboard>
             </ProfileAvatarButton>
           )}
           {!isLoggedIn && (

@@ -24,6 +24,7 @@ import {
   ProfileName,
   ProfileDidField,
 } from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
+import { CopyToClipboard } from '@akashaorg/ui/lib/akasha-components/copy-to-clipboard';
 
 type ProfileBadge = {
   toolTipLabel: string;
@@ -135,7 +136,13 @@ const Header: React.FC<HeaderProps> = ({
               </Stack>
 
               <ProfileAvatarButton profileDID={profileId}>
-                <ProfileDidField />
+                <CopyToClipboard
+                  textToCopy={profileId}
+                  ctaText="Copy to clipboard"
+                  successText="Copied"
+                >
+                  <ProfileDidField />
+                </CopyToClipboard>
               </ProfileAvatarButton>
               <Stack direction="row" spacing={2} className="flex-wrap">
                 {badges?.map(badge => (

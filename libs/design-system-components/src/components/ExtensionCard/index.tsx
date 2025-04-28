@@ -15,6 +15,7 @@ import {
 import ExtensionIcon from '@akashaorg/design-system-core/lib/components/ExtensionIcon';
 import { Extension, Image } from '@akashaorg/typings/lib/ui';
 import { cn } from '@akashaorg/ui/lib/library/utils';
+import { CopyToClipboard } from '@akashaorg/ui/lib/akasha-components/copy-to-clipboard';
 
 export type ExtensionCardProps = {
   coverImageSrc: string;
@@ -107,7 +108,13 @@ const ExtensionCard: React.FC<ExtensionCardProps> = props => {
                 <ProfileAvatarButtonAvatarFallback />
               </ProfileAvatarButtonAvatar>
               <ProfileName>{author?.name}</ProfileName>
-              <ProfileDidField />
+              <CopyToClipboard
+                textToCopy={author?.profileDID}
+                ctaText="Copy to clipboard"
+                successText="Copied"
+              >
+                <ProfileDidField />
+              </CopyToClipboard>
             </ProfileAvatarButton>
           </Stack>
           <Text variant="body2" {...(!featured && { lineClamp: 2 })}>
