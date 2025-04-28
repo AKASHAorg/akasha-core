@@ -9,6 +9,7 @@
         "@akashaorg/ui-core-hooks:build",
         "@akashaorg/design-system-components:prepare",
         "@akashaorg/core-sdk:build",
+        "@akashaorg/ui:prepare",
         "@akashaorg/ui-lib-extensions:prepare",
         "@akashaorg/ui-lib-feed:prepare",
         "@akashaorg/typings:prepare"
@@ -26,10 +27,7 @@
         "cwd": "extensions/widgets/sidebar",
         "command": "webpack --config webpack.config.cjs"
       },
-      "outputs": [
-        "{projectRoot}/lib",
-        "{workspaceRoot}/dist/widgets/sidebar"
-      ]
+      "outputs": ["{projectRoot}/lib", "{workspaceRoot}/dist/widgets/sidebar"]
     },
     "translations": {
       "executor": "./tools/executors/i18n:extract",
