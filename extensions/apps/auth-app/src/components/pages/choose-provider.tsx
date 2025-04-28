@@ -5,9 +5,9 @@ import { Image } from '@akashaorg/ui/lib/akasha-components/image';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Walletconnect } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
-import Web3ConnectCard from '@akashaorg/design-system-components/lib/components/Web3ConnectCard';
 import routes, { CONNECT, WEB3MODAL } from '../../routes';
 import { useNavigate } from '@tanstack/react-router';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 
 const ChooseProvider: React.FC<unknown> = () => {
   const { t } = useTranslation('app-auth-ewa');
@@ -38,12 +38,20 @@ const ChooseProvider: React.FC<unknown> = () => {
           {t('Connect your wallet')}
         </Text>
 
-        <Web3ConnectCard
-          leftIconType={<Walletconnect />}
-          subtitleLabel={t('Connect your wallet using MetaMask, WalletConnect, Coinbase etc ...')}
-          titleLabel="Web3Modal"
-          handleClick={handleProviderClick}
-        />
+        <Card
+          className="p-2 select-none hover:secondary border-accent w-full cursor-pointer"
+          onClick={handleProviderClick}
+        >
+          <Stack direction="row" alignItems="center" spacing={2}>
+            <Walletconnect width={58} height={58} />
+            <Stack spacing={2}>
+              <Text variant="h6">{t('Web3Modal')}</Text>
+              <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey7' }}>
+                {t('Connect your wallet using MetaMask, WalletConnect, Coinbase etc ...')}
+              </Text>
+            </Stack>
+          </Stack>
+        </Card>
       </Stack>
 
       <Stack className="md:px-4">

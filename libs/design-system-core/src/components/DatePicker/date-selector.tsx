@@ -196,7 +196,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({
       <Stack direction="row" align="center" justify="between">
         <Stack>
           <Button onClick={() => getPreviousMonth(month, year)} plain={true}>
-            <Icon icon={<ChevronLeftIcon />} accentColor={true} hover={true} />
+            <Icon icon={<ChevronLeftIcon />} accentColor={true} />
           </Button>
         </Stack>
         <Button onClick={handleMonthSelectToggle} plain={true}>
@@ -211,7 +211,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({
         </Button>
         <Stack>
           <Button onClick={() => getNextMonth(month, year)} plain={true}>
-            <Icon icon={<ChevronRightIcon />} accentColor={true} hover={true} />
+            <Icon icon={<ChevronRightIcon />} accentColor={true} />
           </Button>
         </Stack>
       </Stack>

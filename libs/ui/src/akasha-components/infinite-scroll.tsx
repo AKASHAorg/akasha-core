@@ -223,11 +223,13 @@ const WindowScrollRestoration = ({
       scrollConfigStorageKey,
       lastScrollRestorationKey,
     });
-    if (headerHeight)
+    if (headerHeight) {
+      headerRef.current?.setAttribute('style', `--min-height: ${headerHeight}px`);
       headerRef.current?.setAttribute(
         'className',
-        `${headerRef.current.className} min-h-[${headerHeight}px]`,
+        `${headerRef.current.className} min-h-[var(--min-height)]`,
       );
+    }
   }, [headerRef, lastScrollRestorationKey, scrollConfigStorageKey]);
 
   useScrollRestoration({

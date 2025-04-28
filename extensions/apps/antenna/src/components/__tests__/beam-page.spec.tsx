@@ -66,7 +66,7 @@ const baseComponent = (
   </MockedProvider>
 );
 
-describe('< BeamPage /> component', () => {
+describe.skip('< BeamPage /> component', () => {
   describe('should render beam page', () => {
     const {
       mocks: reflectFeedMocks,

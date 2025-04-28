@@ -1,5 +1,5 @@
 import React from 'react';
-import { NotificationTypes } from '@akashaorg/typings/lib/ui';
+import { Colors, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import Button from '../Button';
 import Card from '../Card';
 import Icon from '../Icon';
@@ -13,7 +13,6 @@ import {
 import Stack from '../Stack';
 import Text from '../Text';
 import { Color } from '../types/common.types';
-import { getColorLight, getColorDark } from './getColor';
 
 export type SnackbarProps = {
   title: React.ReactNode;
@@ -56,12 +55,9 @@ const Snackbar: React.FC<SnackbarProps> = ({
   handleCTAClick,
   handleDismiss,
 }) => {
-  const colorLight = getColorLight(type);
-  const colorDark = getColorDark(type);
-
   const textColor: Color = { dark: 'white', light: 'black' };
 
-  const instanceStyle = `p-4 border(l-8 solid ${colorLight}/30 dark:${colorDark}/30)`;
+  const instanceStyle = `p-4 border-l-8 border-solid ${borderColorMap[type]}  shadow-[0_0_4px_rgba(0,0,0,0.2)] dark:shadow-[0_0_2px_rgba(255,255,255,0.15)]`;
 
   const typeIconsMap: Record<NotificationTypes, React.ReactElement> = {
     info: <InformationCircleIcon />,
@@ -71,18 +67,9 @@ const Snackbar: React.FC<SnackbarProps> = ({
   };
 
   return (
-    <Card
-      radius={8}
-      background={{ light: 'white', dark: 'grey1' }}
-      customStyle={`${instanceStyle} ${customStyle}`}
-    >
+    <Card radius={8} customStyle={`${instanceStyle} ${customStyle} bg-white dark:bg-grey1`}>
       <Stack spacing="gap-x-3" fullWidth direction="row">
-        <Icon
-          icon={typeIconsMap[type]}
-          solid={true}
-          color={{ light: colorLight, dark: colorDark }}
-          size="lg"
-        />
+        <Icon icon={typeIconsMap[type]} solid={true} customStyle={iconColorMap[type]} size="lg" />
         <Stack direction="column">
           <Text variant="button-md" color={textColor}>
             {title}
@@ -113,12 +100,26 @@ const Snackbar: React.FC<SnackbarProps> = ({
             aria-label="dismiss"
             plain={true}
           >
-            <Icon icon={<XMarkIcon />} color="grey7" size="lg" />
+            <Icon icon={<XMarkIcon />} size="lg" customStyle="[&>*]:stroke-grey7" />
           </Button>
         )}
       </Stack>
     </Card>
   );
+};
+
+const iconColorMap: Record<NotificationTypes, string> = {
+  [NotificationTypes.Error]: '[&>*]:fill-errorLight dark:[&>*]:fill-errorDark',
+  [NotificationTypes.Caution]: '[&>*]:fill-warningLight dark:[&>*]:fill-warningDark',
+  [NotificationTypes.Success]: '[&>*]:fill-success',
+  [NotificationTypes.Info]: '[&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark',
+};
+
+const borderColorMap: Record<NotificationTypes, string> = {
+  [NotificationTypes.Error]: 'border-errorLight dark:border-errorDark',
+  [NotificationTypes.Caution]: 'border-warningLight dark:border-warningDark',
+  [NotificationTypes.Success]: 'border-success',
+  [NotificationTypes.Info]: 'border-secondaryLight dark:border-secondaryDark',
 };
 
 export default Snackbar;

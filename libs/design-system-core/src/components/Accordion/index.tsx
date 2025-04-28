@@ -64,7 +64,7 @@ const Accordion: React.FC<AccordionProps> = props => {
         {titleNode}
         <Icon
           accentColor={true}
-          customStyle="h-4, w-4"
+          customStyle="size-4"
           icon={open ? <ChevronUpIcon /> : <ChevronDownIcon />}
         />
       </Stack>
@@ -74,7 +74,7 @@ const Accordion: React.FC<AccordionProps> = props => {
 
   return (
     <>
-      <Card type="plain" onClick={handleToggle} customStyle="w-full">
+      <Card type="plain" onClick={handleToggle} customStyle="w-full cursor-pointer">
         {headerDivider ? (
           <Stack direction="column" spacing="gap-y-4">
             {headerUi}

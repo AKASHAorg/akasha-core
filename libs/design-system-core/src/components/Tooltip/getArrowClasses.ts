@@ -1,4 +1,3 @@
-import { apply } from '@twind/core';
 import { TooltipProps } from './index';
 import { Color } from '../types/common.types';
 import { getColorClasses } from '../../utils';
@@ -9,7 +8,7 @@ const getClass = (
   arrowSize: number,
   color: Color,
 ) =>
-  apply`h-0 w-0 border-${axis}-${arrowSize} border-${axis}-transparent border-${direction}-[${arrowSize}px] drop-shadow-[${dropShadowByDirection[direction]}_rgba(0,0,0,0.2)] dark:drop-shadow-none ${getColorClasses(
+  `h-0 w-0 border-${axis}-${arrowSize} border-${axis}-transparent border-${direction}-[${arrowSize}px] drop-shadow-[${dropShadowByDirection[direction]}_rgba(0,0,0,0.2)] dark:drop-shadow-none ${getColorClasses(
     color,
     `border-${direction}`,
   )}`;

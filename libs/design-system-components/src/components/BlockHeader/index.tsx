@@ -67,7 +67,7 @@ export const BlockHeader: React.FC<BlockHeaderProps> = props => {
         <Stack
           alignItems="center"
           justifyContent="center"
-          className="h-8 w-8 group relative rounded-full bg(secondaryLight/30 dark:secondaryDark)"
+          className="h-8 w-8 group relative rounded-full bg-secondaryLight/30 dark:bg-secondaryDark"
         >
           <Icon size="sm" icon={icon} />
         </Stack>
@@ -92,7 +92,7 @@ export const BlockHeader: React.FC<BlockHeaderProps> = props => {
               <Stack
                 alignItems="center"
                 justifyContent="center"
-                className="h-8 w-8 group relative rounded-full bg(grey9 dark:grey5)"
+                className="h-8 w-8 group relative rounded-full bg-grey9 dark:bg-grey5"
               >
                 <Icon icon={<ArrowUpIcon />} size="sm" accentColor disabled={blockOrder === 0} />
               </Stack>
@@ -103,7 +103,7 @@ export const BlockHeader: React.FC<BlockHeaderProps> = props => {
               <Stack
                 alignItems="center"
                 justifyContent="center"
-                className="h-8 w-8 group relative rounded-full bg(grey9 dark:grey5)"
+                className="h-8 w-8 group relative rounded-full bg-grey9 dark:bg-grey5"
               >
                 <Icon
                   icon={<ArrowDownIcon />}
@@ -118,12 +118,12 @@ export const BlockHeader: React.FC<BlockHeaderProps> = props => {
             <Stack
               alignItems="center"
               justifyContent="center"
-              className="h-8 w-8 group relative rounded-full bg(grey9 dark:grey5)"
+              className="h-8 w-8 group relative rounded-full bg-grey9 dark:bg-grey5"
             >
               <Icon
                 icon={<TrashIcon />}
                 size="sm"
-                color={{ light: 'errorLight', dark: 'errorDark' }}
+                customStyle={'[&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark'}
               />
             </Stack>
           </button>

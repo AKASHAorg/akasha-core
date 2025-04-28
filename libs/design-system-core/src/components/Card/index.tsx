@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, forwardRef } from 'react';
-import { apply, tw } from '@twind/core';
+
 import {
   getColorClasses,
   getElevationClasses,
@@ -7,6 +7,7 @@ import {
   getRadiusClasses,
 } from '../../utils';
 import { Color, Elevation, Padding, Radius } from '../types/common.types';
+import { cn } from '@akashaorg/ui/lib/library/utils';
 
 type RegularCardType = {
   elevation?: Elevation;
@@ -59,7 +60,7 @@ const Card = forwardRef<HTMLDivElement, TCardProps>((props, ref) => {
     return (
       <div
         {...rest}
-        className={tw(customStyle)}
+        className={customStyle}
         role={rest.onClick ? 'button' : 'presentation'}
         ref={ref}
         data-testid={dataTestId}
@@ -93,14 +94,14 @@ const RegularCard: React.FC<PropsWithChildren<CommonCardProps & RegularCardType>
 
     const generatedBorder = React.useMemo(() => {
       if (dashedBorder) {
-        return 'border(2 dashed grey5)';
+        return 'border-2 border-dashed border-grey5';
       }
 
       if (border) {
-        return 'border(1 solid grey9 dark:grey3)';
+        return 'border-1 border-solid border-grey9 dark:border-grey3';
       }
       if (accentBorder) {
-        return 'border(1 solid secondaryLight dark:secondaryDark)';
+        return 'border-1 border-solid border-secondaryLight dark:border-secondaryDark';
       }
 
       /**
@@ -117,11 +118,13 @@ const RegularCard: React.FC<PropsWithChildren<CommonCardProps & RegularCardType>
     const fullWidthStyle = fullWidth ? 'w-full' : '';
     const noBorderStyle = noBorderRadius ? 'rounded-none' : radiusStyle;
 
-    const className = apply`flex flex-col ${elevationStyle} w-full ${paddingStyle} ${margin} ${backgroundStyle} ${noBorderStyle} ${generatedBorder} ${fullWidthStyle} ${customStyle}`;
+    const className = cn(
+      `flex flex-col ${elevationStyle} w-full ${paddingStyle} ${margin} ${backgroundStyle} ${noBorderStyle} ${generatedBorder} ${fullWidthStyle} ${customStyle}`,
+    );
 
     return (
       <div
-        className={tw(className)}
+        className={className}
         role={rest.onClick ? 'button' : 'presentation'}
         ref={ref}
         data-testid={dataTestId}

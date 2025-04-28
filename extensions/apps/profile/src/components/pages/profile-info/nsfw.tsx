@@ -28,7 +28,7 @@ const NSFW: React.FC<NSFWProps> = props => {
   return (
     <Stack alignItems="center" justifyContent="center" spacing={2}>
       <Stack direction="row" spacing={1}>
-        <Icon icon={<EyeSlashIcon />} color="errorLight" />
+        <Icon icon={<EyeSlashIcon />} customStyle="[&>*]:stroke-errorLight" />
         <Text variant="h6" color="errorLight">
           {sensitiveContentLabel}
         </Text>

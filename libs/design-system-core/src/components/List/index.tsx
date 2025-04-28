@@ -3,7 +3,6 @@ import Card from '../Card';
 import Stack from '../Stack';
 import Tooltip from '../Tooltip';
 import ListElement from './list-element';
-import { getColorClasses } from '../../utils';
 import { TextProps } from '../Text';
 
 type Selected = { index: number; label?: string };
@@ -45,17 +44,9 @@ export type ListProps = {
  **/
 const List = forwardRef<HTMLDivElement, ListProps>(
   ({ items, showDivider = true, customStyle = '', onSelected }, ref) => {
-    const borderStyle = showDivider
-      ? `border-b ${getColorClasses(
-          {
-            light: 'grey8',
-            dark: 'grey3',
-          },
-          'border',
-        )}`
-      : '';
+    const borderStyle = showDivider ? `border-b border-grey8 dark:border-grey3` : '';
     const baseStyle = borderStyle;
-    const hoverStyle = getColorClasses({ light: 'grey8', dark: 'grey5' }, 'hover:bg');
+    const hoverStyle = 'hover:bg-grey8 dark:hover:bg-grey5';
 
     const handleItemClick = (item: ListItem, index: number) => () => {
       if (item.onClick) {

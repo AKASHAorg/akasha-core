@@ -69,8 +69,8 @@ const ListSidebarApps: React.FC<ListSidebarAppsProps> = props => {
     onClickMenuItem(app);
   };
 
-  const borderStyle = hasBorderTop ? 'border(t-1 grey9 dark:grey3)' : '';
-  const activeMenuItemBg = 'bg(grey9 dark:grey1)';
+  const borderStyle = hasBorderTop ? 'border-t-1 border-grey9 dark:border-grey3' : '';
+  const activeMenuItemBg = 'bg-grey9 dark:bg-grey1';
 
   return (
     <Stack direction="column" className={`py-2 ${borderStyle}`}>
@@ -90,7 +90,7 @@ const ListSidebarApps: React.FC<ListSidebarAppsProps> = props => {
               />
             }
             handleClick={handleAccordionClick}
-            customStyle={`py-2 px-6 bg(hover:grey8 dark:hover:grey5) ${
+            customStyle={`py-2 px-6 hover:bg-grey8 dark:hover:bg-grey5 ${
               isActiveMenu ? activeMenuItemBg : ''
             }`}
           />
@@ -102,7 +102,7 @@ const ListSidebarApps: React.FC<ListSidebarAppsProps> = props => {
         return (
           <button key={app.label + idx} onClick={handleMenuItemClick(app)}>
             <Stack
-              className={`py-2 px-6 bg(hover:grey8 dark:hover:grey5) ${
+              className={`py-2 px-6 hover:bg-grey8 dark:hover:bg-grey5 ${
                 isActiveMenu ? activeMenuItemBg : ''
               }`}
             >

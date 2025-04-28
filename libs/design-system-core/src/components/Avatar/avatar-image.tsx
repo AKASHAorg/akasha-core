@@ -1,5 +1,4 @@
 import React from 'react';
-import { apply, tw } from '@twind/core';
 
 export type AvatarImageProps = {
   url?: string;
@@ -11,7 +10,7 @@ export type AvatarImageProps = {
 const AvatarImage: React.FC<AvatarImageProps> = props => {
   const { url, alt = 'avatar', fallbackUrl, faded } = props;
 
-  const className = apply`opacity-${faded ? '50' : '100'}`;
+  const className = faded ? 'opacity-50' : 'opacity-100';
 
   const Image = React.createElement('img', {
     src: fallbackUrl,
@@ -23,7 +22,7 @@ const AvatarImage: React.FC<AvatarImageProps> = props => {
   });
 
   return (
-    <picture className={tw(className)}>
+    <picture className={className}>
       <source data-testid="avatar-source" srcSet={url} />
       {Image}
     </picture>

@@ -104,26 +104,20 @@ export const AppInfoHeader: React.FC<AppInfoHeaderProps> = props => {
               </Stack>
               <Stack direction="row" spacing={1} className="flex-wrap">
                 {isDefaultWorldExtension && (
-                  <AppInfoPill
-                    background={{
-                      gradient: 'gradient-to-r',
-                      from: 'primaryStart',
-                      to: 'primaryStop',
-                    }}
-                  >
+                  <AppInfoPill customStyle="bg-gradient-to-r from-primaryStart to-primaryStop">
                     <Text variant="footnotes2" color={{ light: 'white', dark: 'white' }}>
                       {defaultAppPillLabel}
                     </Text>
                   </AppInfoPill>
                 )}
-                <AppInfoPill background={{ light: 'tertiaryLight', dark: 'tertiaryDark' }}>
+                <AppInfoPill customStyle="bg-tertiaryLight dark:bg-tertiaryDark">
                   <ExtensionIcon type={extensionType} />
                   <Text variant="footnotes2" color={{ light: 'secondaryLight', dark: 'white' }}>
                     {extensionTypeLabel}
                   </Text>
                 </AppInfoPill>
                 {nsfw && (
-                  <AppInfoPill background={{ light: 'errorFade', dark: 'errorDark' }}>
+                  <AppInfoPill customStyle="bg-errorFade dark:bg-errorDark">
                     <Text variant="footnotes2" color={{ light: 'errorDark', dark: 'white' }}>
                       {nsfwLabel}
                     </Text>
@@ -167,7 +161,7 @@ export const AppInfoHeader: React.FC<AppInfoHeaderProps> = props => {
                 <Icon
                   icon={<ExclamationTriangleIcon />}
                   size="md"
-                  color={{ light: 'warningLight', dark: 'warningDark' }}
+                  customStyle="size-4 [&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark"
                 />
                 <Text variant="h6" weight="bold">
                   {isInReviewTitleLabel}

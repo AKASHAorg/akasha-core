@@ -5,7 +5,6 @@ import Stack from '../Stack';
 import Icon from '../Icon';
 import { ExclamationTriangleIcon } from '../Icon/hero-icons-outline';
 import { getDidNetworkType, truncateDid } from '../../utils/did-utils';
-import { getColorClasses } from '../../utils';
 import { Color } from '../types/common.types';
 
 export type ProfileNameFieldProps = {
@@ -59,13 +58,7 @@ const ProfileNameField: React.FC<ProfileNameFieldProps> = ({
 }) => {
   const textTruncateStyle = `${truncateText ? `max-w(${nsfwLabel.length ? '[5rem]' : '[7rem]'} xs:[2rem])` : ''}`;
   const textHoverStyle = hover
-    ? `cursor-pointer hover:underline ${getColorClasses(
-        { light: 'black', dark: 'white' },
-        'hover:decoration',
-      )} group-hover:underline ${getColorClasses(
-        { light: 'black', dark: 'white' },
-        'group-hover:decoration',
-      )}`
+    ? `cursor-pointer hover:underline hover:decoration-black dark:hover:decoration-white group-hover:underline group-hover:decoration-black dark:group-hover:decoration-white`
     : '';
 
   const networkType = getDidNetworkType(did);
@@ -110,7 +103,7 @@ const ProfileNameField: React.FC<ProfileNameFieldProps> = ({
         >
           <Icon
             icon={<ExclamationTriangleIcon />}
-            color={{ light: 'errorLight', dark: 'errorDark' }}
+            customStyle="[&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark"
           />
         </Tooltip>
       )}

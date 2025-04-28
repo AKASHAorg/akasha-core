@@ -1,9 +1,9 @@
 export function getCheckmarkColor(isDisabled: boolean, error: boolean) {
   if (error) {
-    return 'white dark:black';
+    return 'after:border-white dark:after:border-black';
   }
   if (isDisabled) {
-    return 'grey6 dark:grey5';
+    return 'after:border-grey6 dark:after:border-grey5';
   }
-  return 'white';
+  return 'after:border-white';
 }

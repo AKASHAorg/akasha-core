@@ -38,7 +38,7 @@ export const ResignConfirmation: React.FC<ResignConfirmationProps> = props => {
             dataTestId={`${assetName}-image`}
           />
         </Stack>
-        <Text variant="subtitle2" align="center" weight="light" customStyle="w-(full md:[55%])">
+        <Text variant="subtitle2" align="center" weight="light" customStyle="w-full md:w-[55%]">
           {subtitleLabel}!
         </Text>
         <Button plain={true} onClick={onContinueClick}>

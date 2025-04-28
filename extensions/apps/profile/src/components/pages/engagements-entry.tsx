@@ -15,7 +15,8 @@ type EngagementsEntryProps = {
   authenticatedDID: string;
   showNsfw: boolean;
   profileAnchorLink: string;
-  customStyle?: string;
+  style?: React.CSSProperties;
+  className?: string;
 };
 
 export const EngagementsEntry: React.FC<EngagementsEntryProps> = props => {
@@ -26,7 +27,8 @@ export const EngagementsEntry: React.FC<EngagementsEntryProps> = props => {
     authenticatedDID,
     showNsfw,
     profileAnchorLink,
-    customStyle = '',
+    style,
+    className,
   } = props;
   const { getCorePlugins, navigateToModal } = useRootComponentProps();
 
@@ -68,7 +70,8 @@ export const EngagementsEntry: React.FC<EngagementsEntryProps> = props => {
       direction="row"
       alignItems="center"
       justifyContent="between"
-      className={cn('px-4 customStyle w-full', customStyle)}
+      style={style}
+      className={cn('px-4 w-full', className)}
     >
       <ProfileAvatarButton
         profileId={

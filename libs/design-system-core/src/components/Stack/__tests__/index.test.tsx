@@ -38,6 +38,6 @@ describe('<Stack /> Component', () => {
   it('has the correct flex direction css property', () => {
     const { container } = componentWrapper;
     const wrapper = container.querySelector('div');
-    expect(getComputedStyle(wrapper)['flex-direction']).toBe('column');
+    expect(wrapper).toHaveClass('flex-col');
   });
 });
