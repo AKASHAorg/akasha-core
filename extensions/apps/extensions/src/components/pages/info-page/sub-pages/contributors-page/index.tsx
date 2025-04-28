@@ -2,7 +2,14 @@ import React from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
+import {
+  ProfileAvatarButton,
+  ProfileAvatarButtonAvatar,
+  ProfileAvatarButtonAvatarFallback,
+  ProfileAvatarButtonAvatarImage,
+  ProfileDidField,
+  ProfileName,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { Loader2 } from 'lucide-react';
 import {
@@ -85,14 +92,21 @@ export const ContributorsPage = (props: ContributorsPageProps) => {
                   className="p-0 shadow-noneborder-none"
                 >
                   <Stack direction="row" alignItems="center">
-                    <ProfileAvatarButton
-                      profileId={contributor?.did.id}
-                      label={contributor?.name}
-                      avatar={transformSource(contributor?.avatar?.default)}
-                      alternativeAvatars={contributor?.avatar?.alternatives?.map(alternative =>
-                        transformSource(alternative),
-                      )}
-                    />
+                    <ProfileAvatarButton profileDID={contributor?.did.id}>
+                      <ProfileAvatarButtonAvatar>
+                        <ProfileAvatarButtonAvatarImage
+                          src={transformSource(contributor?.avatar?.default)?.src}
+                          alt="Author Avatar"
+                        />
+                        <ProfileAvatarButtonAvatarFallback
+                          alternativeSrc={contributor?.avatar?.alternatives?.map(
+                            alternative => transformSource(alternative)?.src,
+                          )}
+                        />
+                      </ProfileAvatarButtonAvatar>
+                      <ProfileName>{contributor?.name}</ProfileName>
+                      <ProfileDidField />
+                    </ProfileAvatarButton>
                     <Icon
                       icon={<ChevronRightIcon />}
                       size="sm"

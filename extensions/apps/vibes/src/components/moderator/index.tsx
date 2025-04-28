@@ -4,13 +4,16 @@ import { Moderator } from '@akashaorg/typings/lib/ui';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
 import { getModeratorStatusIndicator } from '../../utils';
+import {
+  ProfileAvatarButton,
+  ProfileDidField,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
 
 export type ModeratorDetailCardProps = {
   moderator: Moderator;
@@ -53,7 +56,9 @@ const ModeratorDetailCard: React.FC<ModeratorDetailCardProps> = props => {
               />
             </Stack>
 
-            <DidField did={moderator.did.id} />
+            <ProfileAvatarButton profileDID={moderator.did.id}>
+              <ProfileDidField />
+            </ProfileAvatarButton>
           </Stack>
         </Stack>
 

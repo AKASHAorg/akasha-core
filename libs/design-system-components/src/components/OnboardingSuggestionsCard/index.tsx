@@ -3,10 +3,17 @@ import { Tag, type Image, Profile } from '@akashaorg/typings/lib/ui';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import { UserCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { TagButton } from './tag-button';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
+import {
+  ProfileAvatarButton,
+  ProfileAvatarButtonAvatar,
+  ProfileAvatarButtonAvatarFallback,
+  ProfileAvatarButtonAvatarImage,
+  ProfileDidField,
+  ProfileName,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
 
 export type OnboardingSuggestionsCardProps = {
   topicsLabel?: string;
@@ -87,15 +94,21 @@ const OnboardingSuggestionsCard: React.FC<OnboardingSuggestionsCardProps> = prop
 
           {profiles?.map((profile, index) => (
             <Stack key={index} direction="row" alignItems="center" justifyContent="between">
-              <ProfileAvatarButton
-                profileId={profile?.did?.id}
-                onClick={() => onClickProfile(profile?.did?.id)}
-                label={profile?.name}
-                avatar={transformSource(profile?.avatar?.default)}
-                alternativeAvatars={profile?.avatar?.alternatives?.map(alternative =>
-                  transformSource(alternative),
-                )}
-              />
+              <ProfileAvatarButton profileDID={profile?.did?.id}>
+                <ProfileAvatarButtonAvatar>
+                  <ProfileAvatarButtonAvatarImage
+                    src={transformSource(profile?.avatar?.default)?.src}
+                    alt="Profile Avatar"
+                  />
+                  <ProfileAvatarButtonAvatarFallback
+                    alternativeSrc={profile?.avatar?.alternatives?.map(
+                      alternative => transformSource(alternative)?.src,
+                    )}
+                  />
+                </ProfileAvatarButtonAvatar>
+                <ProfileName>{profile?.name}</ProfileName>
+                <ProfileDidField />
+              </ProfileAvatarButton>
               {loggedUserDID !== profile?.did?.id && (
                 <DuplexButton
                   inactiveLabel={followLabel}
