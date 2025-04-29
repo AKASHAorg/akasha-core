@@ -11,11 +11,16 @@ import {
   AkashaAppApplicationType,
   AppImageSource,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import { InformationCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipProvider,
+} from '@akashaorg/ui/lib/akasha-components/tooltip';
 
 export type AppInfoHeaderProps = {
   displayName: string;
@@ -80,14 +85,16 @@ export const AppInfoHeader: React.FC<AppInfoHeaderProps> = props => {
                   {displayName}
                 </Text>
                 {isDefaultWorldExtension && (
-                  <Tooltip
-                    placement={'bottom'}
-                    content={defaultExtensionTooltipContent}
-                    customStyle="self-center"
-                    contentCustomStyle="max-w-sm"
-                  >
-                    <Icon size="md" icon={<InformationCircleIcon />} />
-                  </Tooltip>
+                  <TooltipProvider delayDuration={0}>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <Icon size="md" icon={<InformationCircleIcon />} />
+                      </TooltipTrigger>
+                      <TooltipContent side="bottom">
+                        {defaultExtensionTooltipContent}
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 )}
                 {!isDefaultWorldExtension && (
                   <Menu

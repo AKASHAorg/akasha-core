@@ -6,7 +6,12 @@ import ImageOverlay from '../../ImageOverlay';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Menu, { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipProvider,
+} from '@akashaorg/ui/lib/akasha-components/tooltip';
 import {
   Cog6ToothIcon,
   EllipsisVerticalIcon,
@@ -137,14 +142,19 @@ const Header: React.FC<HeaderProps> = ({
               />
               <Stack direction="row" spacing={2} className="flex-wrap">
                 {badges?.map(badge => (
-                  <Tooltip key={badge.label} content={badge.toolTipLabel} placement="bottom">
-                    <Pill
-                      label={badge.label}
-                      color={{ light: 'errorDark2', dark: 'white' }}
-                      customStyle="px-2 bg-errorFade dark:bg-errorDark2"
-                      type="info"
-                    />
-                  </Tooltip>
+                  <TooltipProvider delayDuration={0} key={badge.label}>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <Pill
+                          label={badge.label}
+                          color={{ light: 'errorDark2', dark: 'white' }}
+                          customStyle="px-2 bg-errorFade dark:bg-errorDark2"
+                          type="info"
+                        />
+                      </TooltipTrigger>
+                      <TooltipContent side="bottom">{badge.toolTipLabel}</TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 ))}
               </Stack>
             </Stack>
