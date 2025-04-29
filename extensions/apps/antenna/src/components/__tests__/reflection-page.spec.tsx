@@ -29,7 +29,7 @@ import {
 } from '../__mocks__';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { InMemoryCache } from '@apollo/client';
-import { EditorActions } from '@akashaorg/design-system-components/lib/components/Editor';
+import { EditorActions } from '@akashaorg/ui-lib-feed';
 
 const {
   mocks: reflectionSectionMocks,

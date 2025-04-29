@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import DynamicInfiniteScroll, {
   DynamicInfiniteScrollProps,
-} from '@akashaorg/design-system-components/lib/components/DynamicInfiniteScroll';
+} from '@akashaorg/design-system-core/lib/components/DynamicInfiniteScroll';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import { ENTRY_HEIGHT, ITEM_SPACING } from '../constants';
 import { GetFollowersListByDidQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';

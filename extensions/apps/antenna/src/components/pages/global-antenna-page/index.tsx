@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react';
-import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
+import { EditorPlaceholder } from '@akashaorg/ui-lib-feed';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
-import WorldVersionInfoCard from '@akashaorg/design-system-components/lib/components/WorldVersionInfoCard';
+import WorldVersionInfoCard from '../../world-version-info-card';
 import BeamFeed from '@akashaorg/ui-lib-feed/lib/components/beam-feed';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';

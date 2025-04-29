@@ -1,6 +1,7 @@
 import React from 'react';
 import getSDK from '@akashaorg/core-sdk';
-import AppList from '@akashaorg/design-system-components/lib/components/AppList';
+import AppList from '../../app-list';
+
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Loader2 } from 'lucide-react';

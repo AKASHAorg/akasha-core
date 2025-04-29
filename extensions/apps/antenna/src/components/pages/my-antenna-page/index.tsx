@@ -3,7 +3,7 @@ import { Loader2 } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
-import MyAntennaIntroCard from '@akashaorg/design-system-components/lib/components/MyAntennaIntroCard';
+import MyAntennaIntroCard from '../../my-antenna-intro-card';
 import { useTranslation } from 'react-i18next';
 import { IModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import { useGetInterestsByDidQuery } from '@akashaorg/ui-core-hooks/lib/generated/apollo';

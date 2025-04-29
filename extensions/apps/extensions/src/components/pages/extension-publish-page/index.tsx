@@ -13,7 +13,7 @@ import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Loader2 } from 'lucide-react';
 import StackedAvatar from '@akashaorg/design-system-core/lib/components/StackedAvatar';
-import ExtensionReviewAndPublish from '@akashaorg/design-system-components/lib/components/ExtensionReviewAndPublish';
+import ExtensionReviewAndPublish from '../../extension-review-and-publish';
 import {
   transformSource,
   useAkashaStore,

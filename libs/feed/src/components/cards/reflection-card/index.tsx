@@ -8,7 +8,7 @@ import { ReflectionData } from '@akashaorg/typings/lib/ui';
 import { decodeb64SlateContent, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { Trans, useTranslation } from 'react-i18next';
 import { canDecodeContent } from '../../../utils/can-decode-content';
-import ReadOnlyEditor from '@akashaorg/design-system-components/lib/components/ReadOnlyEditor';
+import ReadOnlyEditor from '../../read-only-editor';
 import InlineNotification from '@akashaorg/design-system-core/lib/components/InlineNotification';
 import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
 import { FlagIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';

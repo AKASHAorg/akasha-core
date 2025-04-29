@@ -11,7 +11,7 @@ import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import ExtensionCreationForm from '@akashaorg/design-system-components/lib/components/ExtensionCreationForm';
+import ExtensionCreationForm from '../../extension-creation-form';
 import { DRAFT_EXTENSIONS } from '../../../constants';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Extension, NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
