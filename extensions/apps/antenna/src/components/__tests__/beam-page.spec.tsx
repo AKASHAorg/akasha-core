@@ -32,7 +32,7 @@ import {
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { InMemoryCache } from '@apollo/client';
 import { RawBeamData } from '@akashaorg/typings/lib/ui';
-import { EditorActions } from '../editor';
+import { EditorActions } from '@akashaorg/ui-lib-feed';
 
 const {
   mocks: beamSectionMocks,
