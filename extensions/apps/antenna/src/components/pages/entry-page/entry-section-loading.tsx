@@ -1,6 +1,5 @@
 import React from 'react';
-import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
-import EditorPlaceholderLoading from '@akashaorg/design-system-components/lib/components/EditorPlaceholder/EditorPlaceholderLoading';
+import { EditorPlaceholderLoading, EntryCardLoading } from '@akashaorg/ui-lib-feed';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';

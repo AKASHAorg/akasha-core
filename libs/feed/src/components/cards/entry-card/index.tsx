@@ -4,7 +4,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import EntryCardRemoved from './entry-card-removed';
 import CardActions from './card-actions';
 import { EllipsisHorizontalIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import NSFW, { NSFWProps } from '@akashaorg/design-system-components/lib/components/Entry/NSFW';
+import NSFW, { NSFWProps } from '../nsfw-card';
 import Menu from '@akashaorg/design-system-core/lib/components/Menu';
 import { type EntryData } from '@akashaorg/typings/lib/ui';
 import { ListItem } from '@akashaorg/design-system-core/lib/components/List';

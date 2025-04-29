@@ -1,7 +1,7 @@
 import React, { useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
-import AppList from '@akashaorg/design-system-components/lib/components/AppList';
+import AppList from '../../../app-list';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';

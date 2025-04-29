@@ -2,8 +2,8 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { transformSource, useRootComponentProps, useAkashaStore } from '@akashaorg/ui-core-hooks';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import OnboardingSuggestionsCard from '@akashaorg/design-system-components/lib/components/OnboardingSuggestionsCard';
-import OnboardingStartCard from '@akashaorg/design-system-components/lib/components/OnboardingStartCard';
+import OnboardingSuggestionsCard from '../onboarding-suggestions-card';
+import OnboardingStartCard from '../onboarding-start-card';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 const OnboardingPage: React.FC = () => {

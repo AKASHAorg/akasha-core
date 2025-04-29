@@ -1,5 +1,5 @@
 import React, { RefObject, useCallback, useImperativeHandle, useRef, useState } from 'react';
-import EditorBox from '@akashaorg/design-system-components/lib/components/Editor';
+import { EditorBox } from '@akashaorg/ui-lib-feed';
 import {
   encodeSlateToBase64,
   transformSource,

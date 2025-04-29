@@ -13,7 +13,7 @@ import {
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
-import ExtensionReleasePublishForm from '@akashaorg/design-system-components/lib/components/ExtensionReleasePublishForm';
+import ExtensionReleasePublishForm from '../../extension-release-publish-form';
 import { DRAFT_EXTENSIONS, DRAFT_RELEASES } from '../../../constants';
 import { NetworkStatus } from '@apollo/client';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';

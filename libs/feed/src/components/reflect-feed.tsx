@@ -6,7 +6,7 @@ import {
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { Loader2 } from 'lucide-react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import DynamicInfiniteScroll from '@akashaorg/design-system-components/lib/components/DynamicInfiniteScroll';
+import DynamicInfiniteScroll from '@akashaorg/design-system-core/lib/components/DynamicInfiniteScroll';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import getSDK from '@akashaorg/core-sdk';
 import { AnalyticsEventData, EntityTypes } from '@akashaorg/typings/lib/ui';

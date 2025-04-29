@@ -39,7 +39,7 @@ import {
 } from './data-loaders';
 import { mapReflectEntryData } from '@akashaorg/ui-core-hooks';
 import { NotFoundComponent } from './not-found-component';
-import { EditorActions } from '@akashaorg/design-system-components/lib/components/Editor';
+import { EditorActions } from '@akashaorg/ui-lib-feed';
 
 const editorActionsRef = createRef<EditorActions>();
 

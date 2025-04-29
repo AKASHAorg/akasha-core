@@ -8,7 +8,7 @@ import {
   MagnifyingGlassPlusIcon,
   XMarkIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import { Portal } from '../Editor/helpers';
+import { Portal } from '../../utils/portal';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import { type GalleryImage } from '@akashaorg/typings/lib/ui';
 
