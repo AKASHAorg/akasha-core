@@ -9,7 +9,7 @@ export interface IAppSettingProps {
   // data
   isSelected: boolean;
   // handlers
-  onChange?: (ev: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (checked: boolean) => void;
 }
 
 const AppSetting: React.FC<IAppSettingProps> = ({ title, description, isSelected, onChange }) => {
@@ -22,18 +22,7 @@ const AppSetting: React.FC<IAppSettingProps> = ({ title, description, isSelected
           value="app-setting"
           name="app-setting"
           checked={isSelected}
-          onCheckedChange={checked => {
-            const event = {
-              target: {
-                checked,
-                id: 'checkbox',
-                name: 'app-setting',
-                value: 'app-setting',
-                type: 'checkbox',
-              },
-            } as React.ChangeEvent<HTMLInputElement>;
-            onChange(event);
-          }}
+          onCheckedChange={onChange}
           className="w-6 h-6"
         />
       </Stack>

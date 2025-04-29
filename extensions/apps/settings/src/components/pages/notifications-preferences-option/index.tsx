@@ -183,7 +183,7 @@ const NotificationsPreferencesOption: React.FC = () => {
                 <Stack className="p-4 pt-0">
                   <EnableAllSetting
                     isSelected={enableAllChecked}
-                    onChange={e => handleToggleAll(e.target.checked)}
+                    onChange={checked => handleToggleAll(checked)}
                   />
                   <Text variant="h6" customStyle="mb-4">
                     {t('Default Extensions')}
@@ -199,7 +199,7 @@ const NotificationsPreferencesOption: React.FC = () => {
                             title={appInfo.title}
                             description={appInfo.description}
                             isSelected={appInfo.enabled}
-                            onChange={e => handleSetPreference(e.target.checked, index)}
+                            onChange={checked => handleSetPreference(checked, index)}
                           />
                           {appPreferences.length - 1 !== index && (
                             <Divider customStyle={`dark:border-grey5 my-4`} />

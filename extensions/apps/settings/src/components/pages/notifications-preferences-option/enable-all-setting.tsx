@@ -7,7 +7,7 @@ export interface IEnableAllSettingProps {
   // data
   isSelected: boolean;
   // handlers
-  onChange?: (ev: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (checked: boolean) => void;
 }
 
 const EnableAllSetting: React.FC<IEnableAllSettingProps> = ({ isSelected, onChange }) => {
@@ -22,18 +22,7 @@ const EnableAllSetting: React.FC<IEnableAllSettingProps> = ({ isSelected, onChan
           value="Enable all"
           name="enable-all"
           checked={isSelected}
-          onCheckedChange={checked => {
-            const event = {
-              target: {
-                checked,
-                id: 'enable-all-notifications-checkbox',
-                name: 'enable-all',
-                value: 'Enable all',
-                type: 'checkbox',
-              },
-            } as React.ChangeEvent<HTMLInputElement>;
-            onChange(event);
-          }}
+          onCheckedChange={onChange}
           className="w-6 h-6"
         />
       </Stack>
