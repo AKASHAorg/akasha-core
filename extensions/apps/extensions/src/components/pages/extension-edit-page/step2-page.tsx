@@ -5,7 +5,7 @@ import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ExtensionEditStep2Form, {
   ExtensionEditStep2FormValues,
-} from '@akashaorg/design-system-components/lib/components/ExtensionEditStep2Form';
+} from '../../extension-edit-step2-form';
 import { useAkashaStore, transformSource, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { NotificationEvents, NotificationTypes, Extension } from '@akashaorg/typings/lib/ui';
 import { DRAFT_EXTENSIONS, ExtType, MAX_GALLERY_IMAGES } from '../../../constants';

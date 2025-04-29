@@ -5,14 +5,14 @@ import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Cog8ToothIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
-import NotificationCard from '@akashaorg/design-system-components/lib/components/NotificationCard';
-import BasicInfoCard from '@akashaorg/design-system-components/lib/components/NotificationCard/basic-info-card';
+import NotificationCard from '../notification-card';
+import BasicInfoCard from '../notification-card/basic-info-card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Loader2 } from 'lucide-react';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import DynamicInfiniteScroll from '@akashaorg/design-system-components/lib/components/DynamicInfiniteScroll';
+import DynamicInfiniteScroll from '@akashaorg/design-system-core/lib/components/DynamicInfiniteScroll';
 
 import { type InboxNotification } from '@akashaorg/typings/lib/ui';
 import getSDK from '@akashaorg/core-sdk';
@@ -229,7 +229,9 @@ const NotificationsPage: React.FC = () => {
             </Stack>
             <Stack>
               {/** while notifications are being fetched show the spinner*/}
-              {notifications.length === 0 && notificationLoading && <Loader2 className="h-8 w-8 animate-spin text-primary" />}
+              {notifications.length === 0 && notificationLoading && (
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              )}
               {/** if there is no notifications for this app option*/}
               {notifications.length === 0 && !notificationLoading && (
                 <BasicInfoCard

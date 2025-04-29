@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import VibesValueCard from '@akashaorg/design-system-components/lib/components/VibesValuesCard/value-card';
+import VibesValueCard from '../components/vibes-values-card/value-card';
 import { values } from '../services/values';
 import { externalLinks } from '../utils';
 

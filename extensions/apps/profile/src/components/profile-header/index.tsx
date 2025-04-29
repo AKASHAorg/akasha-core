@@ -10,10 +10,7 @@ import {
   FlagIcon,
   LinkIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import {
-  ProfileHeaderLoading,
-  ProfileHeader as ProfileHeaderPresentation,
-} from '@akashaorg/design-system-components/lib/components/Profile';
+import { ProfileHeaderLoading, ProfileHeader as ProfileHeaderPresentation } from '../profile';
 import { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
 import {
   IModalNavigationOptions,

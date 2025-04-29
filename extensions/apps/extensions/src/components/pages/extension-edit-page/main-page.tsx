@@ -6,7 +6,7 @@ import appRoutes, { EDIT_EXTENSION } from '../../../routes';
 import { useTranslation } from 'react-i18next';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { AppImageSource } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { ExtensionEditStep2FormValues } from '@akashaorg/design-system-components/lib/components/ExtensionEditStep2Form';
+import { ExtensionEditStep2FormValues } from '../../extension-edit-step2-form';
 import {
   ErrorLoader,
   ErrorLoaderDescription,

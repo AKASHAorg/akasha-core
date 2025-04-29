@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import VibesConsoleContentCard from '@akashaorg/design-system-components/lib/components/VibesConsoleContentCard';
+import VibesConsoleContentCard from '../components/vibes-console-content-card';
 import { DashboardHeader } from '../components/dashboard';
 import routes, { REVIEW_ITEM, SETTINGS, VIEW_ALL_REPORTS } from '../routes';
 import { NoItemFound } from '../components/no-item-found';

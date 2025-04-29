@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
-import ReflectionCard from '../components/cards/reflection-card';
+import EntryCardLoading from './cards/entry-card-loading';
+import ReflectionCard from './cards/reflection-card';
 import { useGetReflectionByIdQuery } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
 import { useTranslation } from 'react-i18next';
-import { NetworkErrorCard } from '../components/cards/network-error-card';
+import { NetworkErrorCard } from './cards/network-error-card';
 import {
   selectReflectionActive,
   selectReflectionAuthorId,

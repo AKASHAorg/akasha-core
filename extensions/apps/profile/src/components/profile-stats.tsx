@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { NavigateToParams, IModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import { useAkashaStore } from '@akashaorg/ui-core-hooks';
 
-import { ProfileStats as ProfileStatsPresentation } from '@akashaorg/design-system-components/lib/components/Profile';
+import { ProfileStats as ProfileStatsPresentation } from './profile';
 
 export type ProfileStatsProps = {
   profileDID: string;

@@ -1,7 +1,5 @@
 import React, { useRef, useState } from 'react';
-import ReflectionEditor, {
-  ReflectionEditorProps,
-} from '@akashaorg/design-system-components/lib/components/ReflectionEditor';
+import { ReflectionEditor, ReflectionEditorProps } from '@akashaorg/ui-lib-feed';
 import getSDK from '@akashaorg/core-sdk';
 import {
   transformSource,
@@ -26,7 +24,7 @@ import {
   PENDING_REFLECTION_PREFIX,
 } from '@akashaorg/ui-core-hooks/lib/use-pending-reflections';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
-import { isEditorEmpty } from '@akashaorg/design-system-components/lib/components/Editor/helpers';
+import { isEditorEmpty } from '@akashaorg/ui-lib-feed';
 
 export type ReflectEditorProps = {
   beamId: string;

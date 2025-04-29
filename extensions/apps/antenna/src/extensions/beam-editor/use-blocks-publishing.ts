@@ -9,7 +9,7 @@ import type { AkashaBeamInput } from '@akashaorg/typings/lib/sdk/graphql-types-n
 import { useCreateBeamMutation } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
 import getSDK from '@akashaorg/core-sdk';
 import type { CreateBeamMutation } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
-import { BlockCreationStatus } from '@akashaorg/design-system-components/lib/components/BlockStatusToolbar';
+import { BlockCreationStatus } from '../../components/block-status-toolbar';
 
 /**
  * Steps when publishBeam is called:

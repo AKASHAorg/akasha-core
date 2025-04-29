@@ -1,5 +1,5 @@
 import React, { ReactElement, useState } from 'react';
-import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
+import { EditorPlaceholder } from '@akashaorg/ui-lib-feed';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { ReflectEditorProps } from '../../reflect-editor';

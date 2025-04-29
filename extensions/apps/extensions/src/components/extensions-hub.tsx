@@ -1,8 +1,9 @@
 import React from 'react';
-import AppList from '@akashaorg/design-system-components/lib/components/AppList';
+import AppList from '../components/app-list';
+
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import { ExtensionCardProps } from '@akashaorg/design-system-components/lib/components/ExtensionCard';
+import { ExtensionCardProps } from '../components/extension-card';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Image } from '@akashaorg/ui/lib/akasha-components/image';
 export type TExtensionsHubProps = {

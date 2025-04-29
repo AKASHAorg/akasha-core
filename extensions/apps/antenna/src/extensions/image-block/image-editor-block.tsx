@@ -33,7 +33,7 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 import ImageBlockGallery from '@akashaorg/design-system-components/lib/components/ImageBlockGallery';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import ImageBlockToolbar from '@akashaorg/design-system-components/lib/components/ImageBlockToolbar';
+import ImageBlockToolbar from '../../components/image-block-toolbar';
 import ImageModal from '@akashaorg/design-system-components/lib/components/ImageModal';
 import { type GalleryImage } from '@akashaorg/typings/lib/ui';
 import {
