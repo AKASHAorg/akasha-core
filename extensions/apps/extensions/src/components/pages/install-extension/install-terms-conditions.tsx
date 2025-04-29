@@ -83,8 +83,6 @@ export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
     data: { authenticatedDID, isAuthenticating },
   } = useAkashaStore();
 
-  useEffect(() => { }, []);
-
   const navigate = useNavigate();
   const [acceptedTerms, setAcceptedTerms] = React.useState<AcceptedTerms>({
     [TermsFields.PRIVACY_POLICY]: false,
@@ -202,7 +200,7 @@ export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
               <Checkbox
                 id={stateKey}
                 name={stateKey}
-                value={'value'}
+                value={stateKey}
                 onCheckedChange={checked => handleCheckboxChange(stateKey, checked as boolean)}
                 checked={acceptedTerms[stateKey]}
               />
