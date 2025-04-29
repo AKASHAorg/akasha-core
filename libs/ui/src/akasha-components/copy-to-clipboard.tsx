@@ -62,7 +62,7 @@ function CopyToClipboard({
         >
           {children}
         </TooltipTrigger>
-        <TooltipContent onPointerDownOutside={handlePointerDown}>
+        <TooltipContent onPointerDownOutside={handlePointerDown} side="bottom">
           {copied ? successText : ctaText}
         </TooltipContent>
       </Tooltip>

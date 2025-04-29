@@ -2,19 +2,24 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { ProfileLabeled } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import AutoComplete from '@akashaorg/design-system-core/lib/components/AutoComplete';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
+import {
+  TagsInput,
+  TagsInputItem,
+  TagsInputList,
+} from '@akashaorg/ui/lib/akasha-components/tags-input';
 import {
   CheckIcon,
   XMarkIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { CircleX } from 'lucide-react';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { ButtonType } from '@akashaorg/design-system-components/lib/components/types/common.types';
 import UnsavedChangesModal from '@akashaorg/design-system-components/lib/components/UnsavedChangesModal';
 import { useRootComponentProps } from '@akashaorg/ui-core-hooks';
-
 export type EditInterestsProps = {
   title: string;
   subTitle: string;
@@ -52,7 +57,6 @@ const EditInterests: React.FC<EditInterestsProps> = ({
   moreInterestDescription,
   moreInterestPlaceholder,
   myInterests,
-  interests,
   labelType,
   maxInterestsErrorMessage,
   cancelButton,
@@ -83,10 +87,6 @@ const EditInterests: React.FC<EditInterestsProps> = ({
       return;
     }
     setMyActiveInterests(newMyActiveInterests.add(interest));
-  };
-
-  const updateAllMyInterests = (interest: ProfileLabeled) => {
-    setAllMyInterests(new Set(allMyInterests).add(interest));
   };
 
   const onSave = (interests: ProfileLabeled[]) => {
@@ -209,30 +209,28 @@ const EditInterests: React.FC<EditInterestsProps> = ({
           <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
             {moreInterestDescription}
           </Text>
-          <AutoComplete
-            value={query}
-            options={interests.map(interest => interest.value)}
-            placeholder={moreInterestPlaceholder}
-            tags={tags}
-            separators={['Comma', 'Space', 'Enter']}
-            customStyle="grow mt-2"
-            caption={maximumInterestsSelected ? maxInterestsErrorMessage : null}
-            status={maximumInterestsSelected ? 'error' : null}
-            onSelected={({ index }) => {
-              updateMyActiveInterests(interests[index]);
-              updateAllMyInterests(interests[index]);
-              setQuery('');
-            }}
-            onChange={value => {
-              if (typeof value === 'string') {
-                setQuery(value);
-                return;
-              }
-              setTags(new Set(value));
-            }}
+          <TagsInput
+            className="mt-1.5"
             disabled={maximumInterestsSelected}
-            multiple
-          />
+            placeholder={moreInterestPlaceholder}
+            separators={['Comma', 'Space', 'Enter']}
+            onTagsChange={value => {
+              setTags(value);
+            }}
+            onChange={e => {
+              setQuery(e.target.value);
+            }}
+          >
+            {maximumInterestsSelected && (
+              <Typography variant="p" className="items-center text-xs text-destructive flex gap-1">
+                <CircleX size={12} />
+                {maxInterestsErrorMessage}
+              </Typography>
+            )}
+            <TagsInputList>
+              {tags && Array.from(tags).map(tag => <TagsInputItem key={tag} tag={tag} />)}
+            </TagsInputList>
+          </TagsInput>
         </Stack>
         <Stack direction="row" spacing={2} className="ml-auto mt-auto">
           <Button
