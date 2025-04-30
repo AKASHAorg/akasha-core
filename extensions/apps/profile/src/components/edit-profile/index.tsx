@@ -1,6 +1,6 @@
 import React, { SyntheticEvent, useEffect, useMemo, useState } from 'react';
 import * as z from 'zod';
-
+import { Form } from '@akashaorg/ui/lib/akasha-components/form';
 import { useTranslation } from 'react-i18next';
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -71,12 +71,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
   const { t } = useTranslation('app-profile');
   const { singleSpa, cancelNavigation } = useRootComponentProps();
-  const {
-    control,
-    setValue,
-    getValues,
-    formState: { dirtyFields, errors },
-  } = useForm<EditProfileFormValues>({
+  const form = useForm<EditProfileFormValues>({
     defaultValues: {
       ...defaultValues,
       links: defaultValues.links.map(link => ({ id: crypto.randomUUID(), href: link })),
@@ -84,6 +79,13 @@ const EditProfile: React.FC<EditProfileProps> = ({
     resolver: zodResolver(schema),
     mode: 'onChange',
   });
+
+  const {
+    control,
+    setValue,
+    getValues,
+    formState: { dirtyFields, errors },
+  } = form;
 
   const links = useWatch({ name: 'links', control });
 
@@ -144,61 +146,68 @@ const EditProfile: React.FC<EditProfileProps> = ({
   const handleModalClose = () => setNewUrl(null);
 
   return (
-    <form data-testid="edit-profile" onSubmit={onSave} className={`h-full ${customStyle}`}>
-      {!!newUrl && (
-        <UnsavedChangesModal
-          showModal={!!newUrl}
-          cancelButtonLabel={t('Cancel')}
-          leavePageButtonLabel={t('Leave page')}
-          title={t('Unsaved changes')}
-          description={t(
-            "Are you sure you want to leave this page? The changes you've made will not be saved.",
-          )}
-          handleModalClose={handleModalClose}
-          handleLeavePage={handleLeavePage}
-        />
-      )}
-      <Stack direction="column" spacing={6}>
-        <General
-          header={header}
-          name={name}
-          bio={bio}
-          control={control}
-          onAvatarChange={avatar => {
-            setValue('avatar', avatar, { shouldDirty: true });
-          }}
-          onCoverImageChange={coverImage => {
-            setValue('coverImage', coverImage, { shouldDirty: true });
-          }}
-        />
-        <SocialLinks
-          linkLabel={linkLabel}
-          addNewLinkButtonLabel={addNewLinkButtonLabel}
-          description={description}
-          control={control}
-        />
-        <NSFW
-          nsfw={nsfw}
-          nsfwFieldLabel={nsfwFieldLabel}
-          control={control}
-          name={'nsfw'}
-          disabled={nsfw.initialValue}
-          defaultValue={nsfw.initialValue}
-        />
-        <Stack direction="row" spacing={2} className="ml-auto mt-auto">
-          <Button
-            variant="link"
-            onClick={cancelButton.handleClick}
-            disabled={cancelButton.disabled}
-          >
-            {cancelButton.label}
-          </Button>
-          <Button loading={saveButton.loading} disabled={isDisabled} onClick={onSave} type="submit">
-            {saveButton.label}
-          </Button>
+    <Form {...form}>
+      <form data-testid="edit-profile" onSubmit={onSave} className={`h-full ${customStyle}`}>
+        {!!newUrl && (
+          <UnsavedChangesModal
+            showModal={!!newUrl}
+            cancelButtonLabel={t('Cancel')}
+            leavePageButtonLabel={t('Leave page')}
+            title={t('Unsaved changes')}
+            description={t(
+              "Are you sure you want to leave this page? The changes you've made will not be saved.",
+            )}
+            handleModalClose={handleModalClose}
+            handleLeavePage={handleLeavePage}
+          />
+        )}
+        <Stack direction="column" spacing={6}>
+          <General
+            header={header}
+            name={name}
+            bio={bio}
+            control={control}
+            onAvatarChange={avatar => {
+              setValue('avatar', avatar, { shouldDirty: true });
+            }}
+            onCoverImageChange={coverImage => {
+              setValue('coverImage', coverImage, { shouldDirty: true });
+            }}
+          />
+          <SocialLinks
+            linkLabel={linkLabel}
+            addNewLinkButtonLabel={addNewLinkButtonLabel}
+            description={description}
+            control={control}
+          />
+          <NSFW
+            nsfw={nsfw}
+            nsfwFieldLabel={nsfwFieldLabel}
+            control={control}
+            name={'nsfw'}
+            disabled={nsfw.initialValue}
+            defaultValue={nsfw.initialValue}
+          />
+          <Stack direction="row" spacing={2} className="ml-auto mt-auto">
+            <Button
+              variant="link"
+              onClick={cancelButton.handleClick}
+              disabled={cancelButton.disabled}
+            >
+              {cancelButton.label}
+            </Button>
+            <Button
+              loading={saveButton.loading}
+              disabled={isDisabled}
+              onClick={onSave}
+              type="submit"
+            >
+              {saveButton.label}
+            </Button>
+          </Stack>
         </Stack>
-      </Stack>
-    </form>
+      </form>
+    </Form>
   );
 };
 

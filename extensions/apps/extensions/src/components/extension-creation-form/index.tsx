@@ -1,13 +1,20 @@
 import React, { SyntheticEvent, useEffect, useState } from 'react';
 import * as z from 'zod';
-import { Controller, useWatch } from 'react-hook-form';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@akashaorg/ui/lib/akasha-components/form';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
+import { Input } from '@akashaorg/ui/lib/akasha-components/input';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import DropDown from '@akashaorg/design-system-core/lib/components/Dropdown';
 
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { ButtonType } from '@akashaorg/design-system-components/lib/components/types/common.types';
@@ -81,18 +88,18 @@ const ExtensionCreationForm: React.FC<ExtensionCreationFormProps> = ({
   extensionTypeFieldLabel,
   disclaimerLabel,
 }) => {
+  const form = useForm<ExtensionCreationFormValues>({
+    defaultValues,
+    resolver: zodResolver(schema),
+    mode: 'onChange',
+  });
   const {
     control,
     getValues,
     setError,
     clearErrors,
     formState: { errors, dirtyFields },
-  } = useForm<ExtensionCreationFormValues>({
-    defaultValues,
-    resolver: zodResolver(schema),
-    mode: 'onChange',
-  });
-
+  } = form;
   const extensionLicenseValue = useWatch({ control, name: FieldName.license });
 
   const extensionTypes = [
@@ -138,133 +145,138 @@ const ExtensionCreationForm: React.FC<ExtensionCreationFormProps> = ({
   }, [isDuplicateExtProp, setError, clearErrors, validatedField]);
 
   return (
-    <form onSubmit={onSave} className={`h-full`}>
-      <Stack direction="column" spacing={4}>
-        <Stack spacing={4} className="px-4 pb-3">
-          <Controller
-            control={control}
-            name={FieldName.applicationType}
-            render={({ field: { name, value, onChange } }) => (
-              <DropDown
-                label={extensionTypeFieldLabel}
-                name={name}
-                selected={value}
-                menuItems={extensionTypes}
-                setSelected={onChange}
-                required={true}
-              />
-            )}
-          />
-          <Divider />
-          <Controller
-            control={control}
-            name={FieldName.name}
-            render={({ field: { name, value, onChange, ref }, fieldState: { error } }) => (
-              <TextField
-                id={name}
-                type="text"
-                name={name}
-                label={extensionNameFieldLabel}
-                placeholder={extensionNamePlaceholderLabel}
-                value={value}
-                caption={error?.message}
-                status={error?.message ? 'error' : null}
-                onChange={onChange}
-                onBlur={() => {
-                  setValidatedField(FieldName.name);
-                  handleCheckExtProp(FieldName.name, value);
-                }}
-                inputRef={ref}
-                required={true}
-              />
-            )}
-          />
-          <Divider />
-          <Controller
-            control={control}
-            name={FieldName.displayName}
-            render={({ field: { name, value, onChange, ref }, fieldState: { error } }) => (
-              <TextField
-                id={name}
-                type="text"
-                name={name}
-                label={extensionDisplayNameFieldLabel}
-                placeholder={extensionDisplayNamePlaceholderLabel}
-                value={value}
-                caption={error?.message}
-                status={error?.message ? 'error' : null}
-                onChange={onChange}
-                inputRef={ref}
-                required={true}
-              />
-            )}
-          />
-          <Divider />
-          <Controller
-            control={control}
-            name={FieldName.license}
-            render={({ field: { name, value, onChange } }) => (
-              <>
-                <DropDown
-                  label={extensionLicenseFieldLabel}
-                  name={name}
-                  selected={value}
-                  menuItems={extensionLicenses}
-                  setSelected={onChange}
-                  required={true}
-                />
-              </>
-            )}
-            defaultValue={extensionLicenses[0]}
-          />
-          {extensionLicenseValue === Licenses.OTHER && (
-            <Controller
+    <Form {...form}>
+      <form onSubmit={onSave} className={`h-full`}>
+        <Stack direction="column" spacing={4}>
+          <Stack spacing={4} className="px-4 pb-3">
+            <FormField
               control={control}
-              name={FieldName.licenseOther}
-              render={({ field: { name, value, onChange, ref }, fieldState: { error } }) => (
-                <TextField
-                  id={name}
-                  customStyle="mt-2"
-                  value={value}
-                  placeholder={extensionLicenseOtherPlaceholderLabel}
-                  type={'text'}
-                  caption={error?.message}
-                  status={error?.message ? 'error' : null}
-                  onChange={onChange}
-                  inputRef={ref}
-                  required={true}
-                />
+              name={FieldName.applicationType}
+              render={({ field: { name, value, onChange } }) => (
+                <FormItem>
+                  <FormLabel>{extensionTypeFieldLabel}</FormLabel>
+                  <FormControl>
+                    <DropDown
+                      name={name}
+                      selected={value}
+                      menuItems={extensionTypes}
+                      setSelected={onChange}
+                      required={true}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
               )}
-              defaultValue=""
             />
-          )}
+            <Divider />
+            <FormField
+              control={control}
+              name={FieldName.name}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{extensionNameFieldLabel}</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder={extensionNamePlaceholderLabel}
+                      {...field}
+                      onChange={field.onChange}
+                      onBlur={() => {
+                        setValidatedField(FieldName.name);
+                        handleCheckExtProp(FieldName.name, field.value);
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Divider />
+            <FormField
+              control={control}
+              name={FieldName.displayName}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{extensionDisplayNameFieldLabel}</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder={extensionDisplayNamePlaceholderLabel}
+                      {...field}
+                      onChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Divider />
+            <FormField
+              control={control}
+              name={FieldName.license}
+              render={({ field: { name, value, onChange } }) => (
+                <FormItem>
+                  <FormLabel>{extensionLicenseFieldLabel}</FormLabel>
+                  <FormControl>
+                    <DropDown
+                      label={extensionLicenseFieldLabel}
+                      name={name}
+                      selected={value}
+                      menuItems={extensionLicenses}
+                      setSelected={onChange}
+                      required={true}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+              defaultValue={extensionLicenses[0]}
+            />
+            {extensionLicenseValue === Licenses.OTHER && (
+              <FormField
+                control={control}
+                name={FieldName.licenseOther}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        placeholder={extensionLicenseOtherPlaceholderLabel}
+                        {...field}
+                        onChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+                defaultValue=""
+              />
+            )}
 
-          <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
-            {disclaimerLabel}
-          </Text>
+            <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
+              {disclaimerLabel}
+            </Text>
+          </Stack>
+
+          <Divider />
+
+          <Stack direction="row" spacing={2} className="ml-auto mt-auto px-4">
+            <Button
+              variant="link"
+              onClick={cancelButton.handleClick}
+              disabled={cancelButton.disabled}
+            >
+              {cancelButton.label}
+            </Button>
+            <Button
+              loading={createButton.loading}
+              disabled={!isFormDirty || !isValid || loading}
+              onClick={onSave}
+              type="submit"
+            >
+              {createButton.label}
+            </Button>
+          </Stack>
         </Stack>
-
-        <Divider />
-
-        <Stack direction="row" spacing={2} className="ml-auto mt-auto px-4">
-          <Button
-            variant="link"
-            onClick={cancelButton.handleClick}
-            disabled={cancelButton.disabled}
-          >
-            {cancelButton.label}
-          </Button>
-          <Button
-            loading={createButton.loading}
-            disabled={!isFormDirty || !isValid || loading}
-            onClick={onSave}
-            type="submit"
-          >
-            {createButton.label}
-          </Button>
-        </Stack>
-      </Stack>
-    </form>
+      </form>
+    </Form>
   );
 };
 

@@ -12,7 +12,7 @@ import {
   SubtitleRendererProps,
 } from '@akashaorg/design-system-components/lib/components/SubtitleRenderer';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import TextField from '@akashaorg/design-system-core/lib/components/TextField';
+import { Textarea } from '@akashaorg/ui/lib/akasha-components/textarea';
 
 export type ReviewItemProps = PageHeaderProps &
   SubtitleRendererProps & {
@@ -80,9 +80,8 @@ export const ReviewItem: React.FC<ReviewItemProps> = props => {
         )}
 
         <Text variant="h6">{section3Label}</Text>
-        <TextField
+        <Textarea
           placeholder={reasonPlaceholderLabel}
-          type="multiline"
           onChange={() => {
             /** */
           }}
