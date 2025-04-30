@@ -2,7 +2,7 @@ import React from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { FlagIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import MiniProfileCTA from '@akashaorg/design-system-components/lib/components/VibesConsoleContentCard/mini-profile-cta';
+import MiniProfileCTA from '../../vibes-console-content-card/mini-profile-cta';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';

@@ -11,7 +11,7 @@ import {
 import { useRootComponentProps, withProviders } from '@akashaorg/ui-core-hooks';
 import { EventTypes } from '@akashaorg/typings/lib/ui';
 
-import CookieCard from '@akashaorg/design-system-components/lib/components/CookieCard';
+import CookieCard from './cookie-card';
 
 export const COOKIE_CONSENT_NAME = 'ewa-cookie-consent';
 

@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import DynamicInfiniteScroll, {
   DynamicInfiniteScrollProps,
-} from '@akashaorg/design-system-components/lib/components/DynamicInfiniteScroll';
+} from '@akashaorg/design-system-core/lib/components/DynamicInfiniteScroll';
 import { ENTRY_HEIGHT, ITEM_SPACING } from '../constants';
 import { GetFollowingListByDidQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 import { selectFollowings } from '@akashaorg/ui-core-hooks/lib/selectors/get-followings-list-by-did-query';

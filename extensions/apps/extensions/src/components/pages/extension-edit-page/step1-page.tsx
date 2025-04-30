@@ -5,7 +5,7 @@ import routes, { MY_EXTENSIONS } from '../../../routes';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Stepper } from '@akashaorg/ui/lib/akasha-components/stepper';
-import ExtensionEditStep1Form from '@akashaorg/design-system-components/lib/components/ExtensionEditStep1Form';
+import ExtensionEditStep1Form from '../../extension-edit-step1-form';
 import {
   transformSource,
   useAkashaStore,

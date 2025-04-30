@@ -15,7 +15,7 @@ import UnsavedChangesModal from '@akashaorg/design-system-components/lib/compone
 import { EditorBlockExtension } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
 import { Header } from './header';
 import { Footer } from './footer';
-import { BlockHeader } from '@akashaorg/design-system-components/lib/components/BlockHeader';
+import { BlockHeader } from '../../components/block-header';
 import { useBlocksPublishing } from './use-blocks-publishing';
 import { useGetProfileByDidSuspenseQuery } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
 import { EditorUIState } from './types';

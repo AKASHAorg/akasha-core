@@ -1,7 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import InstallApp, {
-  InstallAppProps,
-} from '@akashaorg/design-system-components/lib/components/InstallApp';
+import InstallApp, { InstallAppProps } from '../../install-app';
 import { useTranslation } from 'react-i18next';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import {

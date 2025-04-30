@@ -26,10 +26,10 @@ import {
 } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-query';
 import { selectAkashaAppStreamStatus } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-stream-query';
 import { NetworkStatus } from '@apollo/client';
-import { AppInfoHeader } from '@akashaorg/design-system-components/lib/components/AppInfo/header';
+import { AppInfoHeader } from '../../app-info/header';
 import Section, { DividerPosition } from '@akashaorg/design-system-core/lib/components/Section';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import ExtensionImageGallery from '@akashaorg/design-system-components/lib/components/ExtensionImageGallery';
+import ExtensionImageGallery from '../../extension-image-gallery';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
@@ -40,7 +40,7 @@ import { useInstalledExtensions } from '@akashaorg/ui-core-hooks/lib/use-install
 import { UninstallModal } from './uninstall-modal';
 import AppCoverImage from './AppCoverImage';
 import StackedAvatar from '@akashaorg/design-system-core/lib/components/StackedAvatar';
-import { AppInfoNotificationCards } from '@akashaorg/design-system-components/lib/components/AppInfo/notification-cards';
+import { AppInfoNotificationCards } from '../../app-info/notification-cards';
 import { getExtensionStatus, getExtensionTypeLabel } from '../../../utils/extension-utils';
 import getSDK from '@akashaorg/core-sdk';
 import { ExtensionStatus } from '@akashaorg/typings/lib/ui';

@@ -2,16 +2,12 @@ import React, { useState } from 'react';
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import ProfileStatsView from '../../profile-stats';
-import ProfileNotFound from '@akashaorg/design-system-components/lib/components/ProfileNotFound';
+import ProfileNotFound from '../../profile-not-found';
 import NSFW from './nsfw';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import ProfileHeader from '../../profile-header';
 import routes, { EDIT } from '../../../routes';
-import {
-  ProfileBio,
-  ProfileLinks,
-  ProfileLoading,
-} from '@akashaorg/design-system-components/lib/components/Profile';
+import { ProfileBio, ProfileLinks, ProfileLoading } from '../../profile';
 import { useTranslation } from 'react-i18next';
 import { EventTypes, IModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import {

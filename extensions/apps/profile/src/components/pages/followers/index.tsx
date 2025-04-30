@@ -4,7 +4,7 @@ import EngagementTab from '../engagement-tab';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import ProfileEngagementLoading from '@akashaorg/design-system-components/lib/components/Profile/placeholders/profile-engagement-loading';
+import ProfileEngagementLoading from '../../profile/placeholders/profile-engagement-loading';
 import routes, { FOLLOWERS } from '../../../routes';
 import {
   useGetFollowersListByDidQuery,

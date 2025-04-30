@@ -1,6 +1,6 @@
 import React from 'react';
 import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
-import MiniProfileCard from '@akashaorg/design-system-components/lib/components/MiniProfileCard';
+import MiniProfileCard from './components/mini-profile-card';
 import MiniProfileWidgetLoader from '@akashaorg/design-system-components/lib/components/Loaders/mini-profile-widget-loader';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import {

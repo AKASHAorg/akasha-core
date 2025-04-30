@@ -1,4 +1,4 @@
-import { Image } from '@akashaorg/design-system-components/lib/components/ExtensionGalleryManager';
+import { Image } from '../../../extension-gallery-manager';
 import { type Extension, NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import { transformSource, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { useCallback, useEffect, useRef, useState } from 'react';
