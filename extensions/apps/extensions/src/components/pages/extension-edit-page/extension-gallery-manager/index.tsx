@@ -1,7 +1,5 @@
 import React, { useCallback, useContext, useRef, useState } from 'react';
-import ExtensionGalleryManager, {
-  type Image,
-} from '@akashaorg/design-system-components/lib/components/ExtensionGalleryManager';
+import ExtensionGalleryManager, { type Image } from '../../../extension-gallery-manager';
 import ImageOverlay from '@akashaorg/design-system-components/lib/components/ImageOverlay';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';

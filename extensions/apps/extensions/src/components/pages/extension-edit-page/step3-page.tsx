@@ -4,7 +4,7 @@ import { useNavigate } from '@tanstack/react-router';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Stepper } from '@akashaorg/ui/lib/akasha-components/stepper';
-import ExtensionEditStep3Form from '@akashaorg/design-system-components/lib/components/ExtensionEditStep3Form';
+import ExtensionEditStep3Form from '../../extension-edit-step3-form';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { transformSource, useProfilesList } from '@akashaorg/ui-core-hooks';
 import { DRAFT_EXTENSIONS, MAX_CONTRIBUTORS_DISPLAY } from '../../../constants';

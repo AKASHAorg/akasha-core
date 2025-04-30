@@ -14,7 +14,7 @@ import {
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import ExtensionEditPublishedForm, {
   ExtensionEditPublishedFormValues,
-} from '@akashaorg/design-system-components/lib/components/ExtensionEditPublishedForm';
+} from '../../extension-edit-published-form';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import { useNavigate } from '@tanstack/react-router';
 import getSDK from '@akashaorg/core-sdk';

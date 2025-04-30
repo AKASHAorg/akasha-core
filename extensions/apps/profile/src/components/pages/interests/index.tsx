@@ -4,7 +4,7 @@ import { CheckIcon } from '@akashaorg/design-system-core/lib/components/Icon/her
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import { ProfileInterestsLoading } from '@akashaorg/design-system-components/lib/components/Profile';
+import ProfileInterestsLoading from '../../profile/placeholders/profile-interests-loading';
 import { useTranslation } from 'react-i18next';
 import {
   useGetInterestsByDidQuery,

@@ -10,7 +10,7 @@ import ProfileHeader from '../profile-header';
 import ProfileWithAuthorization from '../profile-with-authorization';
 import menuRoute, { BEAMS, EDIT, INTERESTS, FOLLOWERS, FOLLOWING } from '../../routes';
 import getSDK from '@akashaorg/core-sdk';
-import { ProfileLoading } from '@akashaorg/design-system-components/lib/components/Profile';
+import { ProfileLoading } from '../profile';
 import {
   CatchBoundary,
   createRootRouteWithContext,

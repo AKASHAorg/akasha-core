@@ -1,11 +1,10 @@
 import React from 'react';
-import AppList from '@akashaorg/design-system-components/lib/components/AppList';
+import AppList from './app-list';
+
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import ExtensionCard, {
-  ExtensionCardProps,
-} from '@akashaorg/design-system-components/lib/components/ExtensionCard';
+import ExtensionCard, { ExtensionCardProps } from '../components/extension-card';
 import { ReactNode } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 import { getExtensionTypeLabel } from '../utils/extension-utils';

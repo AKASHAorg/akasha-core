@@ -1,5 +1,5 @@
 import React from 'react';
-import AppList from '@akashaorg/design-system-components/lib/components/AppList';
+import AppList from '../../app-list';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import {

@@ -10,7 +10,7 @@ import {
   SortOrder,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import InfoSubRouteHeader from '../InfoSubroutePageHeader';
-import DynamicInfiniteScroll from '@akashaorg/design-system-components/lib/components/DynamicInfiniteScroll';
+import DynamicInfiniteScroll from '@akashaorg/design-system-core/lib/components/DynamicInfiniteScroll';
 import { useGetAppsReleasesQuery } from '@akashaorg/ui-core-hooks/lib/generated';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
 import { NetworkStatus } from '@apollo/client';

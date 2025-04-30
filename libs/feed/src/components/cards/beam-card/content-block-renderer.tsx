@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useRef } from 'react';
-import NSFW from '@akashaorg/design-system-components/lib/components/Entry/NSFW';
+import NSFW from '../nsfw-card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';

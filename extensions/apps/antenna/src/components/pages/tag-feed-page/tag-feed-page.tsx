@@ -22,7 +22,7 @@ import {
   ErrorLoaderTitle,
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import TagProfileCard from '@akashaorg/design-system-components/lib/components/TagProfileCard';
+import TagProfileCard from '../../tag-profile-card';
 import TagFeedHeaderLoader from './tag-feed-header-loader';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';

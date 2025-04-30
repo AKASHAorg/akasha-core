@@ -1,6 +1,6 @@
 import React from 'react';
 import { BlockInstanceMethods, ContentBlockRootProps } from '@akashaorg/typings/lib/ui';
-import ReadOnlyEditor from '@akashaorg/design-system-components/lib/components/ReadOnlyEditor';
+import { ReadOnlyEditor } from '@akashaorg/ui-lib-feed';
 import {
   decodeb64SlateContent,
   triggerNavigation,
