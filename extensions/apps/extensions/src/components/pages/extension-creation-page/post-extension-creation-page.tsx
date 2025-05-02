@@ -16,8 +16,7 @@ import {
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+import { TriangleAlertIcon } from 'lucide-react';
 
 export const PostExtensionCreationPage: React.FC<{ extensionId: string }> = ({ extensionId }) => {
   const navigate = useNavigate();
@@ -107,11 +106,7 @@ You can add more details to your extension, such as a description, gallery & mor
         <Card className="shadow-none bg-nested-card">
           <Stack direction="column" spacing={2}>
             <Stack direction="row" spacing={1} alignItems="center" justifyContent="center">
-              <Icon
-                icon={<ExclamationTriangleIcon />}
-                size="sm"
-                customStyle="[&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark"
-              />
+              <TriangleAlertIcon className="h-4 w-4 [&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark" />
               <Text variant="subtitle2">{t('Important Note: ')}</Text>
             </Stack>
             <Text variant="subtitle2" align="center">

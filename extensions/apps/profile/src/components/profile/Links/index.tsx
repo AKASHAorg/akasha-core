@@ -3,7 +3,7 @@ import React from 'react';
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { CopyToClipboard } from '@akashaorg/ui/lib/akasha-components/copy-to-clipboard';
-import { LinkIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { LinkIcon } from 'lucide-react';
 import {
   Discord,
   Github,

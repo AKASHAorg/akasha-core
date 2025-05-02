@@ -4,8 +4,8 @@ import { hasOwn, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-cor
 import { type ContentBlock } from '@akashaorg/typings/lib/ui';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { XMarkIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+
+import { XIcon } from 'lucide-react';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import SearchBar from '@akashaorg/design-system-components/lib/components/SearchBar';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
@@ -393,7 +393,7 @@ export const BeamEditor: React.FC = () => {
                         justifyContent="center"
                         className="h-8 w-8 group relative rounded-full bg-grey9 dark:bg-grey5"
                       >
-                        <Icon size="sm" icon={block.icon} />
+                        {block.icon}
                       </Stack>
                       <Text>{block.displayName}</Text>
                     </Stack>
@@ -470,7 +470,7 @@ export const BeamEditor: React.FC = () => {
                     key={index}
                     label={tag}
                     active={!editorTags.includes(tag)}
-                    icon={<XMarkIcon />}
+                    icon={<XIcon className="h-5 w-5" />}
                     iconDirection="right"
                     onPillClick={() => handleDeleteTag(tag)}
                     type="action"

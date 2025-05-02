@@ -1,7 +1,7 @@
 import React from 'react';
 import { act, fireEvent } from '@testing-library/react';
 
-import { XMarkIcon } from '../../Icon/hero-icons-outline';
+import { XIcon } from 'lucide-react';
 import Pill from '../';
 import { customRender } from '../../../test-utils';
 
@@ -16,7 +16,7 @@ describe('<Pill /> Component', () => {
       componentWrapper = customRender(
         <Pill
           label={label}
-          icon={<XMarkIcon />}
+          icon={<XIcon className="h-5 w-5" />}
           iconDirection="right"
           onPillClick={mockChangeHandler}
           type="action"

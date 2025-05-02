@@ -3,7 +3,7 @@ import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { LinkElement } from './link-element';
-import { PlusIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { PlusIcon } from 'lucide-react';
 import { Controller, Control, useFieldArray } from 'react-hook-form';
 import { ExtensionEditStep2FormValues } from '..';
 
@@ -44,7 +44,7 @@ export const UsefulLinks: React.FC<UsefulLinksProps> = ({
             {usefulLinksTitleLabel}
           </Text>
           <Button variant="link" onClick={onAddNew}>
-            {<PlusIcon />}
+            {<PlusIcon className="h-5 w-5" />}
             {addNewLinkButtonLabel}
           </Button>
         </Stack>

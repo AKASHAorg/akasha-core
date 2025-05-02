@@ -2,7 +2,6 @@ import * as React from 'react';
 
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { InboxNotification } from '@akashaorg/typings/lib/ui';
 
 export interface NotificationCardEventProps {
@@ -30,11 +29,8 @@ const NotificationCard: React.FC<NotificationCardProps> = props => {
       {/* Notification type & Is notification 'seen' dot indicator */}
       <Stack className="flex flex-row items-center justify-between w-full">
         <Stack spacing={2} className="flex flex-row">
-          <Icon
-            size="sm"
-            icon={notificationTypeIcon}
-            customStyle="space-x-1 [&>*]:stroke-grey6 dark:[&>*]:stroke-black"
-          />
+          {notificationTypeIcon}
+
           <Text variant="footnotes1" color={{ dark: 'grey6', light: 'grey4' }} weight="bold">
             {notificationTypeTitle}
           </Text>

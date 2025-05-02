@@ -2,7 +2,7 @@ import React from 'react';
 
 import { ModerationCategory } from '@akashaorg/typings/lib/ui';
 
-import { XMarkIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { XIcon } from 'lucide-react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 
@@ -40,7 +40,7 @@ export const CategoryPills: React.FC<CategoryPillsProps> = props => {
           key={label + idx}
           label={label}
           active={categories.includes(value)}
-          icon={categories.includes(value) ? <XMarkIcon /> : undefined}
+          icon={categories.includes(value) ? <XIcon className="h-5 w-5" /> : undefined}
           iconDirection="right"
           customStyle="mt-3 mr-3"
           onPillClick={onPillClick({ label, value })}

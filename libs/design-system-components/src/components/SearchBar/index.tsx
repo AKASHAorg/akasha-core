@@ -1,7 +1,6 @@
 import * as React from 'react';
 
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { MagnifyingGlassIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { SearchIcon } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { cn } from '@akashaorg/ui/lib/library/utils';
 
@@ -71,7 +70,7 @@ const SearchBar: React.FC<SearchBarProps> = props => {
         onKeyUp={handleKeyUp}
         onFocus={onFocus}
       />
-      <Icon icon={<MagnifyingGlassIcon />} />
+      <SearchIcon className="h-5 w-5" />
     </Stack>
   );
 };

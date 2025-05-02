@@ -1,7 +1,6 @@
 import React from 'react';
 
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { TrashIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { TrashIcon } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -35,11 +34,7 @@ export const LinkElement: React.FC<LinkElementProps> = ({
         </Text>
         <div className="relative w-5 h-5">
           <button onClick={onDelete} className="absolute top-1 right-0">
-            <Icon
-              icon={<TrashIcon />}
-              size="md"
-              customStyle={'[&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark'}
-            />
+            <TrashIcon className="h-5 w-5 [&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark" />
           </button>
         </div>
       </Stack>

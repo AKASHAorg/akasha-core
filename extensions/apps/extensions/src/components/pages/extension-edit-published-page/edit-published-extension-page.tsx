@@ -5,13 +5,12 @@ import { transformSource, useRootComponentProps, useSaveImage } from '@akashaorg
 import { useGetAppsByIdQuery, useUpdateAppMutation } from '@akashaorg/ui-core-hooks/lib/generated';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import {
   ErrorLoader,
   ErrorLoaderDescription,
   ErrorLoaderTitle,
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
-import { ArrowPathIcon } from '@heroicons/react/24/outline';
+import { Loader2 } from 'lucide-react';
 import ExtensionEditPublishedForm, {
   ExtensionEditPublishedFormValues,
 } from '../../extension-edit-published-form';
@@ -210,11 +209,7 @@ export const EditPublishedExtensionPage: React.FC<EditPublishedExtensionPageProp
           spacing={2}
           className="h-full md:h-[563px]"
         >
-          <Icon
-            icon={<ArrowPathIcon />}
-            customStyle="[&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark"
-            size="lg"
-          />
+          <Loader2 className="h-6 w-6 animate-spin [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
           <Text variant="body2" weight="bold">
             {t('Loading edit form')}
           </Text>

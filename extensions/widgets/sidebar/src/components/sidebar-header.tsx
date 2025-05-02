@@ -1,5 +1,4 @@
 import React, { Suspense, useMemo, useState } from 'react';
-import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import ProfileNameField from '@akashaorg/design-system-core/lib/components/ProfileNameField';
@@ -9,11 +8,11 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { transformSource, hasOwn } from '@akashaorg/ui-core-hooks';
 import { useTranslation } from 'react-i18next';
 import { useGetProfileByDidSuspenseQuery } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
+import { PowerIcon, XIcon } from 'lucide-react';
 import {
-  PowerIcon,
-  XMarkIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import { ProfileAvatarFallback, ProfileAvatarImage } from '@akashaorg/ui/lib/akasha-components/profile-avatar';
+  ProfileAvatarFallback,
+  ProfileAvatarImage,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar';
 import { ProfileAvatar } from '@akashaorg/ui/lib/akasha-components/profile-avatar';
 
 export type SidebarHeaderProps = {
@@ -140,7 +139,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
           >
             {isHovered && (
               <>
-                {cancelLabel} <XMarkIcon />
+                {cancelLabel} <XIcon className="h-5 w-5" />
               </>
             )}
           </Button>
@@ -149,7 +148,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
           <>
             {isLoggedIn && (
               <Button variant="outline" size="icon" onClick={logoutClickHandler}>
-                <PowerIcon />
+                <PowerIcon className="h-5 w-5" />
               </Button>
             )}
             {!isLoggedIn && (

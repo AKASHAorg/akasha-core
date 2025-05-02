@@ -1,11 +1,9 @@
 import React, { ReactNode, useState } from 'react';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import { ChatBubbleLeftRightIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import { ChatBubbleLeftRightIcon as ChatBubbleLeftRightIconSolid } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-solid';
+import { MessageCircleIcon } from 'lucide-react';
 
 export type CardActionProps = {
   itemId: string;
@@ -38,16 +36,9 @@ const CardActions: React.FC<CardActionProps> = props => {
       }}
       className="p-0 border-none"
     >
-      {hovered ? (
-        <Icon
-          icon={<ChatBubbleLeftRightIconSolid />}
-          disabled={disableActions}
-          accentColor={true}
-          solid
-        />
-      ) : (
-        <Icon icon={<ChatBubbleLeftRightIcon />} disabled={disableActions} accentColor={true} />
-      )}
+      <MessageCircleIcon
+        className={`h-5 w-5 ${hovered ? '[&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark' : '[&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark'}`}
+      />
     </Card>
   );
   return (

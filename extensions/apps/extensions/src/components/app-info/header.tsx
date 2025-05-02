@@ -1,7 +1,7 @@
 import React, { MouseEventHandler } from 'react';
 import ExtensionIcon from '@akashaorg/design-system-core/lib/components/ExtensionIcon';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { EllipsisVerticalIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+
+import { EllipsisVerticalIcon, TriangleAlertIcon, InfoIcon } from 'lucide-react';
 import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
 import Menu from '@akashaorg/design-system-core/lib/components/Menu';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
@@ -12,7 +12,6 @@ import {
   AppImageSource,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
-import { InformationCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
@@ -86,7 +85,7 @@ export const AppInfoHeader: React.FC<AppInfoHeaderProps> = props => {
                     customStyle="self-center"
                     contentCustomStyle="max-w-sm"
                   >
-                    <Icon size="md" icon={<InformationCircleIcon />} />
+                    <InfoIcon className="h-4 w-4" />
                   </Tooltip>
                 )}
                 {!isDefaultWorldExtension && (
@@ -158,11 +157,8 @@ export const AppInfoHeader: React.FC<AppInfoHeaderProps> = props => {
           <Card className="p-4 bg-nested-card">
             <Stack direction="column" spacing={2}>
               <Stack direction="row" alignItems="center" spacing={2}>
-                <Icon
-                  icon={<ExclamationTriangleIcon />}
-                  size="md"
-                  customStyle="size-4 [&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark"
-                />
+                <TriangleAlertIcon className="h-5 w-5 [&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark" />
+
                 <Text variant="h6" weight="bold">
                   {isInReviewTitleLabel}
                 </Text>

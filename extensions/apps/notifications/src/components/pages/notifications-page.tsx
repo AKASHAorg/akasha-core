@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useAkashaStore, useNotifications, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import { Cog8ToothIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { SettingsIcon } from 'lucide-react';
 
 import NotificationCard from '../notification-card';
 import BasicInfoCard from '../notification-card/basic-info-card';
@@ -197,7 +197,7 @@ const NotificationsPage: React.FC = () => {
           </Text>
           <Stack direction="column" spacing={1} className="absolute right-0">
             <Button variant="outline" size="icon" onClick={goToSettings}>
-              <Cog8ToothIcon />
+              <SettingsIcon className="h-5 w-5" />
             </Button>
           </Stack>
         </Stack>

@@ -4,7 +4,7 @@ import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Image } from '@akashaorg/ui/lib/akasha-components/image';
 import ImageOverlay from '@akashaorg/design-system-components/lib/components/ImageOverlay';
-import { PlusIcon } from '@heroicons/react/24/outline';
+import { PlusIcon } from 'lucide-react';
 import { type GalleryImage } from '@akashaorg/typings/lib/ui';
 
 const MAX_IMAGES_DISPLAY = 3;
@@ -55,7 +55,10 @@ export const Gallery: React.FC<GalleryProps> = props => {
           </Text>
           <Button
             variant="link"
-            {...(!galleryHasImages && { icon: <PlusIcon />, iconDirection: 'left' })}
+            {...(!galleryHasImages && {
+              icon: <PlusIcon className="h-5 w-5" />,
+              iconDirection: 'left',
+            })}
             onClick={handleMediaClick}
           >
             {galleryHasImages ? updateGalleryLabel : addLabel}

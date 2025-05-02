@@ -8,7 +8,7 @@ import {
   LogoTypeSource,
 } from '@akashaorg/typings/lib/ui';
 import React from 'react';
-import { DocumentTextIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { FileTextIcon } from 'lucide-react';
 
 export const register = (opts: IntegrationRegistrationOptions): IAppConfig => ({
   mountsIn: opts.layoutSlots?.applicationSlotId,
@@ -25,7 +25,7 @@ export const register = (opts: IntegrationRegistrationOptions): IAppConfig => ({
   menuItems: {
     label: 'Legal',
     type: MenuItemType.App,
-    logo: { type: LogoTypeSource.ICON, value: <DocumentTextIcon /> },
+    logo: { type: LogoTypeSource.ICON, value: <FileTextIcon className="h-5 w-5" /> },
     area: [MenuItemAreaType.OtherArea],
     subRoutes: Object.keys(routes).map((routeLabel, idx) => ({
       label: routeLabel,

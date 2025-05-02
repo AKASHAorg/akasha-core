@@ -1,7 +1,6 @@
 import React from 'react';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import { ExclamationTriangleIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { TriangleAlertIcon, XIcon } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
@@ -18,11 +17,11 @@ const WorldVersionInfoCard: React.FC<TWorldVersionInfoCard> = props => {
     <Stack spacing={1} className="p-4 bg-warningLight/30 dark:bg-warningDark/30 rounded-3xl">
       <Stack direction="row" alignItems="center" justifyContent="between">
         <Stack direction="row" alignItems="center" spacing={1}>
-          <Icon icon={<ExclamationTriangleIcon />} size="sm" />
+          <TriangleAlertIcon className="h-4 w-4" />
           <Text variant="button-md">{titleLabel}</Text>
         </Stack>
         <Button plain={true} onClick={onDismissCard}>
-          <Icon icon={<XMarkIcon />} size="sm" />
+          <XIcon className="h-4 w-4" />
         </Button>
       </Stack>
       <Text variant="body2" weight="light">

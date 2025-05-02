@@ -8,11 +8,7 @@ import {
   DuplexButtonHover,
   DuplexButtonInactive,
 } from '@akashaorg/ui/lib/akasha-components/duplex-button';
-import {
-  CheckIcon,
-  HashtagIcon,
-  XMarkIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { CheckIcon, HashIcon, XIcon } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import SubtitleTextIcon from '@akashaorg/design-system-core/lib/components/SubtitleTextIcon';
 import { cn } from '@akashaorg/ui/lib/library/utils';
@@ -56,7 +52,7 @@ const TagProfileCard: React.FC<TagProfileCard> = props => {
         <SubtitleTextIcon
           label={tag.name}
           subtitle={mentionsLabel}
-          icon={<HashtagIcon />}
+          icon={<HashIcon className="h-5 w-5" />}
           backgroundColor={true}
           labelSize={'button-lg'}
         />
@@ -80,7 +76,7 @@ const TagProfileCard: React.FC<TagProfileCard> = props => {
                 variant="destructive"
                 onClick={() => handleUnsubscribeTag(tag.name)}
               >
-                <XMarkIcon />
+                <XIcon className="h-5 w-5" />
                 {unsubscribeLabel}
               </DuplexButtonHover>
 

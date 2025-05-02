@@ -3,7 +3,7 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import SearchBar from '@akashaorg/design-system-components/lib/components/SearchBar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import { Cog6ToothIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { SettingsIcon } from 'lucide-react';
 
 export type DashboardHeaderProps = {
   titleLabel: string;
@@ -22,7 +22,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = props => {
         <Text variant="h5">{titleLabel}</Text>
         <Button
           aria-label="settings"
-          icon={<Cog6ToothIcon />}
+          icon={<SettingsIcon className="h-5 w-5" />}
           variant="primary"
           onClick={onSettingsButtonClick}
           greyBg

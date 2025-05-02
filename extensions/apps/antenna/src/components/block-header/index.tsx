@@ -1,12 +1,7 @@
 import * as React from 'react';
 import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
+import { MoveUpIcon, MoveDownIcon, TrashIcon } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import {
-  ArrowDownIcon,
-  ArrowUpIcon,
-  TrashIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import BlockStatusToolbar, { IBlockStatusToolbar } from '../block-status-toolbar';
 
 export interface BlockHeaderProps extends IBlockStatusToolbar {
@@ -68,7 +63,7 @@ export const BlockHeader: React.FC<BlockHeaderProps> = props => {
           justifyContent="center"
           className="h-8 w-8 group relative rounded-full bg-secondaryLight/30 dark:bg-secondaryDark"
         >
-          <Icon size="sm" icon={icon} />
+          {icon}
         </Stack>
         {isFocusedBlock && (
           <Checkbox
@@ -85,29 +80,24 @@ export const BlockHeader: React.FC<BlockHeaderProps> = props => {
       {isFocusedBlock && (
         <Stack direction="row" spacing={1} alignItems="center">
           {totalBlocksLength > 0 && (
-            <button onClick={decreaseBlockOrder}>
+            <button onClick={decreaseBlockOrder} disabled={blockOrder === 0}>
               <Stack
                 alignItems="center"
                 justifyContent="center"
                 className="h-8 w-8 group relative rounded-full bg-grey9 dark:bg-grey5"
               >
-                <Icon icon={<ArrowUpIcon />} size="sm" accentColor disabled={blockOrder === 0} />
+                <MoveUpIcon className="h-4 w-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
               </Stack>
             </button>
           )}
           {totalBlocksLength > 0 && (
-            <button onClick={increaseBlockOrder}>
+            <button onClick={increaseBlockOrder} disabled={blockOrder > totalBlocksLength - 2}>
               <Stack
                 alignItems="center"
                 justifyContent="center"
                 className="h-8 w-8 group relative rounded-full bg-grey9 dark:bg-grey5"
               >
-                <Icon
-                  icon={<ArrowDownIcon />}
-                  size="sm"
-                  accentColor
-                  disabled={blockOrder > totalBlocksLength - 2}
-                />
+                <MoveDownIcon className="h-4 w-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
               </Stack>
             </button>
           )}
@@ -117,11 +107,7 @@ export const BlockHeader: React.FC<BlockHeaderProps> = props => {
               justifyContent="center"
               className="h-8 w-8 group relative rounded-full bg-grey9 dark:bg-grey5"
             >
-              <Icon
-                icon={<TrashIcon />}
-                size="sm"
-                customStyle={'[&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark'}
-              />
+              <TrashIcon className="h-4 w-4 [&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark" />
             </Stack>
           </button>
         </Stack>

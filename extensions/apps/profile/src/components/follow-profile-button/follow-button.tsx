@@ -8,11 +8,7 @@ import {
   DuplexButtonInactive,
 } from '@akashaorg/ui/lib/akasha-components/duplex-button';
 import { Following } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
-import {
-  CheckIcon,
-  UserPlusIcon,
-  XMarkIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { CheckIcon, UserPlusIcon, XIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import {
   IModalNavigationOptions,
@@ -158,7 +154,11 @@ export const FollowButton = ({
       size="icon"
       disabled={disableActions}
     >
-      {isFollowing ? <Following role="img" aria-label="following" /> : <UserPlusIcon />}
+      {isFollowing ? (
+        <Following role="img" aria-label="following" />
+      ) : (
+        <UserPlusIcon className="h-5 w-5" />
+      )}
     </Button>
   ) : (
     <DuplexButton
@@ -183,12 +183,12 @@ export const FollowButton = ({
           handleFollow(profileID, followDocumentId, !isFollowing);
         }}
       >
-        <XMarkIcon />
+        <XIcon className="h-5 w-5" />
         {t('Unfollow')}
       </DuplexButtonHover>
 
       <DuplexButtonActive variant={activeVariant ?? 'outline'}>
-        <CheckIcon />
+        <CheckIcon className="h-5 w-5" />
         {t('Following')}
       </DuplexButtonActive>
     </DuplexButton>

@@ -1,8 +1,7 @@
 import * as React from 'react';
 
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { RssIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { RssIcon } from 'lucide-react';
 
 export interface ITagButton {
   tagName: string;
@@ -22,7 +21,7 @@ export const TagButton: React.FC<ITagButton> = props => {
       onClick={onClickTag}
     >
       <Text truncate={true}>{tagName}</Text>
-      <Icon icon={<RssIcon />} />
+      <RssIcon className="h-5 w-5" />
     </button>
   );
 };

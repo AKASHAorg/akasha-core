@@ -9,7 +9,7 @@ import {
 } from '@akashaorg/typings/lib/ui';
 import React from 'react';
 import { Antenna, TextIcon } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
-import { PhotoIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { ImageIcon } from 'lucide-react';
 
 /**
  * Initialization of the integration is optional.
@@ -78,7 +78,7 @@ export const register = (opts: IntegrationRegistrationOptions): IAppConfig => ({
     },
     {
       propertyType: 'image-block',
-      icon: <PhotoIcon />,
+      icon: <ImageIcon className="h-5 w-5" />,
       displayName: 'Image block',
       rootComponent: () => import('./extensions/image-block'),
     },

@@ -3,11 +3,7 @@ import getSDK from '@akashaorg/core-sdk';
 import { hasOwn } from '@akashaorg/ui-core-hooks';
 import { useGetIndexedStreamCountQuery } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
 import { AkashaIndexedStreamStreamType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import {
-  CheckIcon,
-  HashtagIcon,
-  XMarkIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { CheckIcon, HashIcon, XIcon } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import {
   DuplexButton,
@@ -80,7 +76,7 @@ export const TopicRow: React.FC<TopicRowProps> = props => {
             ? `${beamCount} ${tagSubtitleLabel}s`
             : `${beamCount} ${tagSubtitleLabel}`
         }
-        icon={<HashtagIcon />}
+        icon={<HashIcon className="h-5 w-5" />}
         backgroundColor={true}
         onClick={() => onClickTopic(tag)}
       />
@@ -99,12 +95,12 @@ export const TopicRow: React.FC<TopicRowProps> = props => {
           variant="destructive"
           onClick={() => handleTopicSubscription(tag, false)}
         >
-          <XMarkIcon />
+          <XIcon className="h-5 w-5" />
           {unsubscribeLabel}
         </DuplexButtonHover>
 
         <DuplexButtonActive variant={'outline'}>
-          <CheckIcon />
+          <CheckIcon className="h-5 w-5" />
           {subscribedLabel}
         </DuplexButtonActive>
       </DuplexButton>

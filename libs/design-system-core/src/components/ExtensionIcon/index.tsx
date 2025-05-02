@@ -1,6 +1,6 @@
 import React from 'react';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { Squares2X2Icon } from '@heroicons/react/24/outline';
+import { Layers2Icon } from 'lucide-react';
 import Icon, { IconProps } from '../Icon';
 import { Plugin, Widget } from '../Icon/akasha-icons';
 
@@ -15,13 +15,13 @@ const ExtensionIcon: React.FC<ExtensionIconProps> = props => {
     solid = false,
     accentColor = true,
     type,
-    defaultIcon = <Squares2X2Icon />,
+    defaultIcon = <Layers2Icon className="h-5 w-5" />,
   } = props;
 
   const getIconByType = (_type: AkashaAppApplicationType) => {
     switch (_type) {
       case AkashaAppApplicationType.App:
-        return <Squares2X2Icon />;
+        return <Layers2Icon />;
       case AkashaAppApplicationType.Plugin:
         return <Plugin />;
       case AkashaAppApplicationType.Widget:

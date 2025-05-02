@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLongLeftIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { MoveLeftIcon } from 'lucide-react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
@@ -15,7 +15,7 @@ const BackToOriginalBeam: React.FC<BackToOriginalBeamProps> = props => {
     <Card className="p-4 rounded-none border-none bg-nested-card">
       <Stack direction="row" spacing="gap-x-2">
         <Button variant="link" onClick={onClick}>
-          <ArrowLongLeftIcon />
+          <MoveLeftIcon className="h-5 w-5" />
           {label}
         </Button>
       </Stack>

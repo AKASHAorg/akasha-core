@@ -8,7 +8,7 @@ import {
   LogoTypeSource,
 } from '@akashaorg/typings/lib/ui';
 import React from 'react';
-import { MagnifyingGlassIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { SearchIcon } from 'lucide-react';
 
 /**
  * All the plugins must export an object like this:
@@ -21,7 +21,7 @@ export const register = (opts: IntegrationRegistrationOptions): IAppConfig => ({
     label: 'Search',
     area: [MenuItemAreaType.SearchArea, MenuItemAreaType.AppArea],
     type: MenuItemType.App,
-    logo: { type: LogoTypeSource.ICON, value: <MagnifyingGlassIcon /> },
+    logo: { type: LogoTypeSource.ICON, value: <SearchIcon className="h-5 w-5" /> },
     subRoutes: [],
   },
   routes: {

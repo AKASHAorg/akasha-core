@@ -10,13 +10,13 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Menu from '@akashaorg/design-system-core/lib/components/Menu';
 import {
   EyeIcon,
-  PaperAirplaneIcon,
+  SendHorizonalIcon,
   PencilIcon,
-  RectangleStackIcon,
+  Layers2Icon,
   TrashIcon,
-} from '@heroicons/react/24/outline';
+  EllipsisIcon,
+} from 'lucide-react';
 import { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
-import { EllipsisHorizontalIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { transformSource, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { selectAkashaAppStreamStatus } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-stream-query';
 import { useGetAppsStreamQuery } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
@@ -128,22 +128,22 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
         return [
           {
             label: t('View Extension'),
-            icon: <EyeIcon />,
+            icon: <EyeIcon className="h-5 w-5" />,
             onClick: handleNavigateToExtensionInfoPage,
           },
           {
             label: t('Edit Extension'),
-            icon: <PencilIcon />,
+            icon: <PencilIcon className="h-5 w-5" />,
             onClick: handleEditPublishedExtension,
           },
           {
             label: t('Release Manager'),
-            icon: <RectangleStackIcon />,
+            icon: <Layers2Icon className="h-5 w-5" />,
             onClick: handleReleaseManager,
           },
           {
             label: t('Delete Extension'),
-            icon: <TrashIcon />,
+            icon: <TrashIcon className="h-5 w-5" />,
             onClick: handleExtensionRemove,
             color: { light: 'errorLight', dark: 'errorDark' },
           },
@@ -152,22 +152,22 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
         return [
           {
             label: t('View Extension'),
-            icon: <EyeIcon />,
+            icon: <EyeIcon className="h-5 w-5" />,
             onClick: handleNavigateToExtensionInfoPage,
           },
           {
             label: t('Edit Extension'),
-            icon: <PencilIcon />,
+            icon: <PencilIcon className="h-5 w-5" />,
             onClick: handleEditPublishedExtension,
           },
           {
             label: t('Release Manager'),
-            icon: <RectangleStackIcon />,
+            icon: <Layers2Icon className="h-5 w-5" />,
             onClick: handleReleaseManager,
           },
           {
             label: t('Delete Extension'),
-            icon: <TrashIcon />,
+            icon: <TrashIcon className="h-5 w-5" />,
             onClick: handleExtensionRemove,
             color: { light: 'errorLight', dark: 'errorDark' },
           },
@@ -176,7 +176,7 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
         return [
           {
             label: t('Publish Extension'),
-            icon: <PaperAirplaneIcon />,
+            icon: <SendHorizonalIcon />,
             onClick: handleExtensionSubmit,
           },
           {
@@ -186,7 +186,7 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
           },
           {
             label: t('Release Manager'),
-            icon: <RectangleStackIcon />,
+            icon: <Layers2Icon />,
             onClick: handleReleaseManager,
           },
           {
@@ -261,7 +261,7 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
           {showMenu && (
             <Menu
               anchor={{
-                icon: <EllipsisHorizontalIcon />,
+                icon: <EllipsisIcon />,
                 variant: 'primary',
                 greyBg: true,
                 iconOnly: true,

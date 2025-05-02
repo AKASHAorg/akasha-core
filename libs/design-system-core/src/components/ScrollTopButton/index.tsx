@@ -1,7 +1,5 @@
 import * as React from 'react';
-
-import Icon from '../Icon';
-import { ArrowUpIcon } from '../Icon/hero-icons-outline';
+import { MoveUpIcon } from 'lucide-react';
 import Button from '../Button';
 
 export type ScrollTopButtonProps = {
@@ -33,7 +31,7 @@ const ScrollTopButton = React.forwardRef<HTMLDivElement, ScrollTopButtonProps>(
           customStyle={styledDiv}
         >
           <div ref={ref}>
-            <Icon icon={<ArrowUpIcon />} accentColor={true} />
+            <MoveUpIcon className="h-4 w-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
           </div>
         </Button>
       )

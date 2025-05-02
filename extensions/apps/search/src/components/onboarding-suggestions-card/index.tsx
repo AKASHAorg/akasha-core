@@ -2,7 +2,7 @@ import React from 'react';
 import { Tag, type Image, Profile } from '@akashaorg/typings/lib/ui';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
-import { UserCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { UserCircleIcon } from 'lucide-react';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { TagButton } from './tag-button';
@@ -104,7 +104,7 @@ const OnboardingSuggestionsCard: React.FC<OnboardingSuggestionsCardProps> = prop
                   onClickInactive={() => onClickFollow(profile?.did?.id)}
                   onClickActive={() => onClickUnfollow(profile?.did?.id)}
                   active={followedProfiles?.includes(profile?.did?.id)}
-                  icon={<UserCircleIcon />}
+                  icon={<UserCircleIcon className="h-5 w-5" />}
                 />
               )}
             </Stack>

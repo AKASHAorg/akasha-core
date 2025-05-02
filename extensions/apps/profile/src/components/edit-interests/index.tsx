@@ -8,10 +8,7 @@ import {
   TagsInputItem,
   TagsInputList,
 } from '@akashaorg/ui/lib/akasha-components/tags-input';
-import {
-  CheckIcon,
-  XMarkIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { CheckIcon, XIcon } from 'lucide-react';
 import { CircleX } from 'lucide-react';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
@@ -186,11 +183,13 @@ const EditInterests: React.FC<EditInterestsProps> = ({
               <Pill
                 key={`${index}-${interest.value}`}
                 label={interest.value}
-                icon={myActiveInterests.has(interest) ? <CheckIcon /> : null}
+                icon={myActiveInterests.has(interest) ? <CheckIcon className="h-5 w-5" /> : null}
                 iconDirection="right"
                 active={myActiveInterests.has(interest)}
                 hover={
-                  myActiveInterests.has(interest) ? { icon: <XMarkIcon />, active: false } : null
+                  myActiveInterests.has(interest)
+                    ? { icon: <XIcon className="h-5 w-5" />, active: false }
+                    : null
                 }
                 onPillClick={active => {
                   if (active) {

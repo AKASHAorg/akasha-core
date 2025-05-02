@@ -11,7 +11,7 @@ import { canDecodeContent } from '../../../utils/can-decode-content';
 import ReadOnlyEditor from '../../read-only-editor';
 import InlineNotification from '@akashaorg/design-system-core/lib/components/InlineNotification';
 import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
-import { FlagIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { FlagIcon } from 'lucide-react';
 
 export type ReflectionCardProps = Pick<
   EntryCardProps,
@@ -61,7 +61,7 @@ const ReflectionCard: React.FC<ReflectionCardProps> = props => {
   const menuItems: ListItem[] = !isViewer
     ? [
         {
-          icon: <FlagIcon />,
+          icon: <FlagIcon className="h-5 w-5" />,
           label: t('Flag'),
           color: { light: 'errorLight', dark: 'errorDark' } as const,
           disabled: false,

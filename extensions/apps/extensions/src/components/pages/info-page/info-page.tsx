@@ -6,11 +6,7 @@ import {
   ErrorLoaderDescription,
   ErrorLoaderTitle,
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
-import {
-  ChevronRightIcon,
-  FlagIcon,
-  ShareIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { ChevronRightIcon, FlagIcon, ShareIcon } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { useTranslation } from 'react-i18next';
 import { transformSource, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
@@ -32,7 +28,6 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ExtensionImageGallery from '../../extension-image-gallery';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { CopyToClipboard } from '@akashaorg/ui/lib/akasha-components/copy-to-clipboard';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
@@ -252,7 +247,9 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                   share={{ label: t('Share'), icon: <ShareIcon /> }}
                   report={{
                     label: t('Flag'),
-                    icon: <FlagIcon />,
+                    icon: (
+                      <FlagIcon className="h-5 w-5 [&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark" />
+                    ),
                     onClick: handleExtensionReportClick,
                     color: { light: 'errorLight', dark: 'errorDark' },
                   }}
@@ -303,11 +300,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                             alternative => transformSource(alternative),
                           )}
                         />
-                        <Icon
-                          icon={<ChevronRightIcon />}
-                          size="sm"
-                          customStyle="ml-auto [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark"
-                        />
+                        <ChevronRightIcon className="h-4 w-4 ml-auto [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
                       </Stack>
                     </Card>
                   )}
@@ -424,11 +417,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                     >
                       <Stack direction="row" alignItems="center">
                         <StackedAvatar userData={contributorAvatars} maxAvatars={4} size="xs" />
-                        <Icon
-                          icon={<ChevronRightIcon />}
-                          size="sm"
-                          customStyle="ml-auto [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark"
-                        />
+                        <ChevronRightIcon className="h-4 w-4 ml-auto [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
                       </Stack>
                     </Card>
                   </Section>

@@ -9,7 +9,7 @@ import {
 } from '@akashaorg/typings/lib/ui';
 import { NotificationPlugin } from './plugins/notification-plugin';
 import React from 'react';
-import { BellIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { BellIcon } from 'lucide-react';
 
 export const register = (opts: IntegrationRegistrationOptions): IAppConfig => ({
   rootComponent: () => import('./components'),
@@ -18,7 +18,7 @@ export const register = (opts: IntegrationRegistrationOptions): IAppConfig => ({
   menuItems: {
     label: 'Notifications',
     area: [MenuItemAreaType.AppArea],
-    logo: { type: LogoTypeSource.ICON, value: <BellIcon /> },
+    logo: { type: LogoTypeSource.ICON, value: <BellIcon className="h-5 w-5" /> },
     subRoutes: [],
   },
   extensionPoints: [

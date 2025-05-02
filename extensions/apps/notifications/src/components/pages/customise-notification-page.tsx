@@ -29,10 +29,7 @@ import routes, {
   CUSTOMISE_NOTIFICATION_CONFIRMATION_PAGE,
   SHOW_NOTIFICATIONS_PAGE,
 } from '../../routes';
-import {
-  BellSnoozeIcon,
-  BellAlertIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { BellOffIcon, BellRingIcon } from 'lucide-react';
 
 import { useNavigate } from '@tanstack/react-router';
 
@@ -261,8 +258,8 @@ const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
                   <>{t('Snooze Notifications')}</>
                 </Text>
                 <Toggle
-                  iconChecked={<BellSnoozeIcon />}
-                  iconUnchecked={<BellAlertIcon />}
+                  iconChecked={<BellOffIcon className="h-5 w-5" />}
+                  iconUnchecked={<BellRingIcon className="h-5 w-5" />}
                   checked={snoozed}
                   onChange={snoozeChangeHandler}
                 />

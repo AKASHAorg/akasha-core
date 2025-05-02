@@ -25,7 +25,6 @@ import type { IMetadata, IPublishData, Image, Profile } from '@akashaorg/typings
 
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import InlineNotification from '@akashaorg/design-system-core/lib/components/InlineNotification';
 
@@ -39,10 +38,7 @@ import {
   AlignTextLeft,
   AlignTextRight,
 } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
-import {
-  ArrowPathIcon,
-  ExclamationTriangleIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { Loader2, TriangleAlertIcon } from 'lucide-react';
 import EditorMeter from '@akashaorg/design-system-core/lib/components/EditorMeter';
 
 import { countMentions, CustomEditor, getSlateMentions } from './helpers';
@@ -557,7 +553,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
                 {showCancelButton && <Button onClick={onCancelClick}>{cancelButtonLabel}</Button>}
                 {showPostButton && (
                   <Button onClick={handlePublish} disabled={publishDisabled}>
-                    {disablePublish && <ArrowPathIcon />}
+                    {disablePublish && <Loader2 className="h-5 w-5 animate-spin" />}
                     {disablePublish ? disableActionLabel : actionLabel}
                   </Button>
                 )}
@@ -570,10 +566,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
               alignItems="center"
               className="bg-errorLight dark:bg-errorDark w-full rounded p-4"
             >
-              <Icon
-                icon={<ExclamationTriangleIcon />}
-                customStyle={'[&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark'}
-              />
+              <TriangleAlertIcon className="h-5 w-5 [&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark" />
               <Text>{maxEncodedLengthErrLabel}</Text>
             </Stack>
           )}

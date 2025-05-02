@@ -6,7 +6,7 @@ import {
   LogoTypeSource,
 } from '@akashaorg/typings/lib/ui';
 import React from 'react';
-import { GlobeAltIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { GlobeIcon } from 'lucide-react';
 
 export const register = (opts: IntegrationRegistrationOptions): IAppConfig => {
   return {
@@ -18,7 +18,7 @@ export const register = (opts: IntegrationRegistrationOptions): IAppConfig => {
     menuItems: {
       label: 'Authentication App',
       area: [],
-      logo: { type: LogoTypeSource.ICON, value: <GlobeAltIcon /> },
+      logo: { type: LogoTypeSource.ICON, value: <GlobeIcon className="h-5 w-5" /> },
       subRoutes: [],
     },
     extensionPoints: [

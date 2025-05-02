@@ -1,10 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '@akashaorg/ui-core-hooks';
-import {
-  MoonIcon,
-  SunIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { MoonIcon, SunIcon } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
@@ -32,8 +29,8 @@ const ThemeOption: React.FC = () => {
 
           <Toggle
             checked={theme === 'Light-Theme'}
-            iconChecked={<SunIcon />}
-            iconUnchecked={<MoonIcon />}
+            iconChecked={<SunIcon className="h-5 w-5" />}
+            iconUnchecked={<MoonIcon className="h-5 w-5" />}
             onChange={handleThemeSelect}
           />
         </Stack>

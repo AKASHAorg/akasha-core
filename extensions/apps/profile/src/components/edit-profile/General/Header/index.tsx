@@ -10,12 +10,7 @@ import {
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import List, { ListProps } from '@akashaorg/design-system-core/lib/components/List';
 import ImageModal from '@akashaorg/design-system-components/lib/components/ImageModal';
-import {
-  ArrowUpOnSquareIcon,
-  PencilIcon,
-  PencilSquareIcon,
-  TrashIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { SquareArrowUpIcon, PencilIcon, SquarePenIcon, TrashIcon } from 'lucide-react';
 import { CropperProps } from 'react-easy-crop';
 import { ProfileImageType, Profile, type Image } from '@akashaorg/typings/lib/ui';
 import { ModalProps } from '@akashaorg/design-system-core/lib/components/Modal';
@@ -113,7 +108,7 @@ export const Header: React.FC<HeaderProps> = ({
   const dropDownActions: ListProps['items'] = [
     {
       label: 'Upload',
-      icon: <ArrowUpOnSquareIcon />,
+      icon: <SquareArrowUpIcon className="h-5 w-5" />,
       onClick: () => {
         if (uploadInputRef.current) uploadInputRef.current.click();
         closeActionsDropDown();
@@ -223,7 +218,7 @@ export const Header: React.FC<HeaderProps> = ({
                 setProfileImageType('cover-image');
               }}
             >
-              <PencilSquareIcon />
+              <SquarePenIcon className="h-5 w-5" />
             </Button>
             {showCoverActions && (
               <List items={dropDownActions} customStyle="absolute right-0 top-7 w-auto z-10" />
@@ -250,7 +245,7 @@ export const Header: React.FC<HeaderProps> = ({
               variant="outline"
               size="icon"
             >
-              <PencilSquareIcon />
+              <SquarePenIcon className="h-5 w-5" />
             </Button>
             {showAvatarActions && (
               <List items={dropDownActions} customStyle="absolute top-7 w-auto z-10" />

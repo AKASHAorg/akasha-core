@@ -3,7 +3,7 @@ import React from 'react';
 import { Tag } from '@akashaorg/typings/lib/ui';
 
 import Link from '@akashaorg/design-system-core/lib/components/Link';
-import { HashtagIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { HashIcon } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
@@ -51,7 +51,7 @@ const TagSearchCard: React.FC<TagSearchCardProps> = props => {
               onClick={onClickTag}
               label={tag.name}
               subtitle={`${tag.totalPosts} Beams`}
-              icon={<HashtagIcon />}
+              icon={<HashIcon className="h-5 w-5" />}
               backgroundColor={true}
             />
           )}

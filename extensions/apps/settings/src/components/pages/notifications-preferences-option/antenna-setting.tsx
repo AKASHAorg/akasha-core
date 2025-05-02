@@ -5,7 +5,7 @@ import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Info } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { InfoIcon } from 'lucide-react';
 
 export interface IAntennaSettingProps {
   // data
@@ -39,12 +39,7 @@ const AntennaSetting: React.FC<IAntennaSettingProps> = ({ isSelected, onChange }
       </Text>
       <Card className="p-3 mt-4">
         <Stack direction="row" spacing={3} alignItems="center">
-          <Icon
-            icon={<Info />}
-            size="lg"
-            solid={true}
-            customStyle="[&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark"
-          />
+          <InfoIcon className="h-6 w-6 [&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark" />
           <Text variant="body1" customStyle="text-sm">
             {t('Changing notifications preferences requires a signature')}
           </Text>

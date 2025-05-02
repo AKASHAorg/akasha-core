@@ -2,7 +2,7 @@ import React, { forwardRef, HTMLAttributes } from 'react';
 
 import { ButtonIcon } from '../button-icon';
 import { ButtonProps, ButtonSize } from '../types';
-import { ArrowPathIcon } from '../../Icon/hero-icons-outline';
+import { Loader2 } from 'lucide-react';
 import { getContainerClasses } from '../getContainerClasses';
 
 type IconOnlyButtonProps = {
@@ -71,7 +71,7 @@ export const IconOnlyButton: React.FC<IconOnlyButtonProps & HTMLAttributes<HTMLB
         >
           <ButtonIcon
             size={size}
-            icon={loading ? <ArrowPathIcon /> : icon}
+            icon={loading ? <Loader2 className="h-5 w-5 animate-spin" /> : icon}
             solid={solidIcon}
             variant={variant}
             greyBg={greyBg}

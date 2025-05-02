@@ -9,7 +9,6 @@ import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import DropDown from '@akashaorg/design-system-core/lib/components/Dropdown';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import AutoComplete from '@akashaorg/design-system-core/lib/components/AutoComplete';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import StackedAvatar from '@akashaorg/design-system-core/lib/components/StackedAvatar';
 
 import { useForm } from 'react-hook-form';
@@ -17,8 +16,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ButtonType } from '@akashaorg/design-system-components/lib/components/types/common.types';
 import { Licenses } from '../extension-creation-form';
 import { AkashaProfile, Image } from '@akashaorg/typings/lib/ui';
-import { ExclamationTriangleIcon } from '@heroicons/react/24/solid';
-import { PlusIcon } from '@heroicons/react/24/outline';
+import { PlusIcon, TriangleAlertIcon } from 'lucide-react';
 import { ApolloError } from '@apollo/client';
 import Label from '@akashaorg/design-system-core/lib/components/Label';
 import {
@@ -228,7 +226,7 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
               <Stack direction="row" spacing={2} justifyContent="between" alignItems="center">
                 <Text variant="h6">{collaboratorsFieldLabel}</Text>
                 <Button variant="link" onClick={handleAddContributors}>
-                  <PlusIcon />
+                  <PlusIcon className="h-5 w-5" />
                   {contributorsProfiles.length > 0 ? addAndEditLabel : addLabel}
                 </Button>
               </Stack>
@@ -316,11 +314,7 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
           <Divider />
           <Stack direction="column" spacing={2}>
             <Stack direction="row" alignItems="center" spacing={1}>
-              <Icon
-                icon={<ExclamationTriangleIcon />}
-                size="sm"
-                customStyle={'[&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark'}
-              />
+              <TriangleAlertIcon className="h-4 w-4 [&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark" />
               <Text variant="button-md">{noteLabel}</Text>
             </Stack>
             <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">

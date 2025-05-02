@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Button from '../Button';
-import Icon from '../Icon';
-import { ChevronLeftIcon, ChevronRightIcon } from '../Icon/hero-icons-outline';
+import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import Stack from '../Stack';
 import Text from '../Text';
 import { selectedCellStyle, unselectedCellStyle, wrapperStyle } from './month-selector';
@@ -196,7 +195,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({
       <Stack direction="row" align="center" justify="between">
         <Stack>
           <Button onClick={() => getPreviousMonth(month, year)} plain={true}>
-            <Icon icon={<ChevronLeftIcon />} accentColor={true} />
+            <ChevronLeftIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
           </Button>
         </Stack>
         <Button onClick={handleMonthSelectToggle} plain={true}>
@@ -211,7 +210,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({
         </Button>
         <Stack>
           <Button onClick={() => getNextMonth(month, year)} plain={true}>
-            <Icon icon={<ChevronRightIcon />} accentColor={true} />
+            <ChevronRightIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
           </Button>
         </Stack>
       </Stack>

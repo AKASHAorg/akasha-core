@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react';
 import Text, { TextProps } from '../Text';
-import { ArrowPathIcon } from '../Icon/hero-icons-outline';
+import { Loader2 } from 'lucide-react';
 import { ButtonIcon } from './button-icon';
 import { IconOnlyButton } from './IconOnlyButton';
 import { ButtonProps, ButtonSize } from './types';
@@ -142,7 +142,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
       {loading ? (
         <ButtonIcon
           size={size}
-          icon={<ArrowPathIcon />}
+          icon={<Loader2 className="h-5 w-5 animate-spin" />}
           variant={variant}
           greyBg={greyBg}
           loading={true}
