@@ -157,7 +157,7 @@ export const FollowButton = ({
       {isFollowing ? (
         <Following role="img" aria-label="following" />
       ) : (
-        <UserPlusIcon className="h-5 w-5" />
+        <UserPlusIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
       )}
     </Button>
   ) : (
@@ -183,12 +183,12 @@ export const FollowButton = ({
           handleFollow(profileID, followDocumentId, !isFollowing);
         }}
       >
-        <XIcon className="h-5 w-5" />
+        <XIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
         {t('Unfollow')}
       </DuplexButtonHover>
 
       <DuplexButtonActive variant={activeVariant ?? 'outline'}>
-        <CheckIcon className="h-5 w-5" />
+        <CheckIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
         {t('Following')}
       </DuplexButtonActive>
     </DuplexButton>

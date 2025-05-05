@@ -117,7 +117,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
     ...(!isViewer && flagAsLabel
       ? [
           {
-            icon: <FlagIcon className="h-5 w-5" />,
+            icon: <FlagIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
             label: flagAsLabel,
             color: { light: 'errorLight', dark: 'errorDark' } as const,
             disabled: false,

@@ -104,7 +104,7 @@ const OnboardingSuggestionsCard: React.FC<OnboardingSuggestionsCardProps> = prop
                   onClickInactive={() => onClickFollow(profile?.did?.id)}
                   onClickActive={() => onClickUnfollow(profile?.did?.id)}
                   active={followedProfiles?.includes(profile?.did?.id)}
-                  icon={<UserCircleIcon className="h-5 w-5" />}
+                  icon={<UserCircleIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />}
                 />
               )}
             </Stack>

@@ -18,7 +18,7 @@ export const register = (opts: IntegrationRegistrationOptions): IAppConfig => {
     menuItems: {
       label: 'Authentication App',
       area: [],
-      logo: { type: LogoTypeSource.ICON, value: <GlobeIcon className="h-5 w-5" /> },
+      logo: { type: LogoTypeSource.ICON, value: <GlobeIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" /> },
       subRoutes: [],
     },
     extensionPoints: [

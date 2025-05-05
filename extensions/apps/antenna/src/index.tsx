@@ -78,7 +78,7 @@ export const register = (opts: IntegrationRegistrationOptions): IAppConfig => ({
     },
     {
       propertyType: 'image-block',
-      icon: <ImageIcon className="h-5 w-5" />,
+      icon: <ImageIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
       displayName: 'Image block',
       rootComponent: () => import('./extensions/image-block'),
     },

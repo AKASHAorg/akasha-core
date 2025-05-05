@@ -226,7 +226,7 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
               <Stack direction="row" spacing={2} justifyContent="between" alignItems="center">
                 <Text variant="h6">{collaboratorsFieldLabel}</Text>
                 <Button variant="link" onClick={handleAddContributors}>
-                  <PlusIcon className="h-5 w-5" />
+                  <PlusIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
                   {contributorsProfiles.length > 0 ? addAndEditLabel : addLabel}
                 </Button>
               </Stack>

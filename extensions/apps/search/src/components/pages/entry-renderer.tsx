@@ -79,7 +79,7 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
     ...(!isViewer
       ? [
           {
-            icon: <FlagIcon className="h-5 w-5" />,
+            icon: <FlagIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
             label: t('Flag'),
             color: { light: 'errorLight', dark: 'errorDark' } as const,
             disabled: undefined, //disableReporting, - missing prop
@@ -90,7 +90,7 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
     ...(isViewer && itemType === EntityTypes.BEAM
       ? [
           {
-            icon: <TrashIcon className="h-5 w-5" />,
+            icon: <TrashIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
             label: t('Delete Post'),
             color: { light: 'errorLight', dark: 'errorDark' } as const,
             onClick: handleEntryRemove,

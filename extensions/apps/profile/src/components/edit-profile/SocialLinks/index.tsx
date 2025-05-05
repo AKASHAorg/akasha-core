@@ -34,7 +34,7 @@ export const SocialLinks: React.FC<SocialLinksProps> = ({
         <Stack direction="row" spacing={2} justifyContent="between" alignItems="center">
           <Text variant="h6">{linkLabel}</Text>
           <Button variant="link" onClick={onAddNew}>
-            <PlusIcon className="h-5 w-5" />
+            <PlusIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
             {addNewLinkButtonLabel}
           </Button>
         </Stack>

@@ -76,7 +76,7 @@ export const TopicRow: React.FC<TopicRowProps> = props => {
             ? `${beamCount} ${tagSubtitleLabel}s`
             : `${beamCount} ${tagSubtitleLabel}`
         }
-        icon={<HashIcon className="h-5 w-5" />}
+        icon={<HashIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />}
         backgroundColor={true}
         onClick={() => onClickTopic(tag)}
       />
@@ -95,12 +95,12 @@ export const TopicRow: React.FC<TopicRowProps> = props => {
           variant="destructive"
           onClick={() => handleTopicSubscription(tag, false)}
         >
-          <XIcon className="h-5 w-5" />
+          <XIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
           {unsubscribeLabel}
         </DuplexButtonHover>
 
         <DuplexButtonActive variant={'outline'}>
-          <CheckIcon className="h-5 w-5" />
+          <CheckIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
           {subscribedLabel}
         </DuplexButtonActive>
       </DuplexButton>

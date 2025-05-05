@@ -21,7 +21,7 @@ export const TagButton: React.FC<ITagButton> = props => {
       onClick={onClickTag}
     >
       <Text truncate={true}>{tagName}</Text>
-      <RssIcon className="h-5 w-5" />
+      <RssIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
     </button>
   );
 };

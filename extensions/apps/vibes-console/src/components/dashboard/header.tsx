@@ -22,7 +22,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = props => {
         <Text variant="h5">{titleLabel}</Text>
         <Button
           aria-label="settings"
-          icon={<SettingsIcon className="h-5 w-5" />}
+          icon={<SettingsIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />}
           variant="primary"
           onClick={onSettingsButtonClick}
           greyBg

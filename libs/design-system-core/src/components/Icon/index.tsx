@@ -71,7 +71,7 @@ const Icon: React.FC<IconProps> = props => {
   if (!customStyle.includes('stroke') && !customStyle.includes('fill')) {
     colorStyle = solid
       ? '[&>*]:fill-black dark:[&>*]:fill-white'
-      : '[&>*]:stroke-black dark:[&>*]:stroke-white';
+      : '[&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark';
   }
 
   const activeIconColorStyle = accentColor ? accentColorStyle : colorStyle;

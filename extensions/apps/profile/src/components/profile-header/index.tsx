@@ -109,14 +109,14 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
   const menuItems: MenuProps['items'] = [
     {
       label: t('Copy link'),
-      icon: <LinkIcon className="h-5 w-5" />,
+      icon: <LinkIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
       onClick: handleCopy,
     },
     ...(!isViewer
       ? ([
           {
             label: t('Flag'),
-            icon: <FlagIcon className="h-5 w-5" />,
+            icon: <FlagIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
             onClick: handleFlagProfile,
             color: { light: 'errorLight', dark: 'errorDark' },
           },

@@ -119,7 +119,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
             {profileAvatar}
             <Menu
               anchor={{
-                icon: <EllipsisIcon className="h-5 w-5" />,
+                icon: <EllipsisIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
                 plainIcon: true,
                 iconOnly: true,
                 size: 'md',

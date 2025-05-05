@@ -18,7 +18,7 @@ export const register = (opts: IntegrationRegistrationOptions): IAppConfig => ({
     label: 'Settings',
     type: MenuItemType.App,
     area: [MenuItemAreaType.AppArea],
-    logo: { type: LogoTypeSource.ICON, value: <SettingsIcon className="h-5 w-5" /> },
+    logo: { type: LogoTypeSource.ICON, value: <SettingsIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" /> },
     subRoutes: [],
   },
   routes: {

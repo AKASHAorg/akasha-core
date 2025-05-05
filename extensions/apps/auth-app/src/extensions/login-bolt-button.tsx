@@ -21,7 +21,7 @@ const LoginBoltButton = () => {
       size="icon"
       className="md:invisible" // show only on mobile screens
     >
-      {<BoltIcon className="h-5 w-5" />}
+      {<BoltIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />}
     </Button>
   );
 };

@@ -71,7 +71,7 @@ const TestModeWidget = () => {
         <>
           {isMinimized && (
             <Button variant="outline" size="icon" onClick={toggleMinimize}>
-              <BeakerIcon className="h-5 w-5" />
+              <BeakerIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
             </Button>
           )}
           {!isMinimized && (
@@ -79,7 +79,7 @@ const TestModeWidget = () => {
               <Stack direction="row" justifyContent="between" alignItems={'baseline'}>
                 <Text variant="h6">{t('Testing Environment')}</Text>
                 <Button variant="outline" size="icon" onClick={toggleMinimize}>
-                  <MinusIcon className="h-5 w-5" />
+                  <MinusIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
                 </Button>
               </Stack>
               <Stack className="my-2 rounded-xl bg-inherit bg-grey9 dark:bg-grey3">

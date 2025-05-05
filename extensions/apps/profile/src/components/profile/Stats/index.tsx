@@ -41,10 +41,10 @@ const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following })
   };
 
   const stats: (Stat & { icon: React.ReactElement; className?: string })[] = [
-    { ...posts, icon: <MessageCircleIcon className="h-5 w-5" /> },
-    { ...interests, icon: <HeartIcon className="h-5 w-5" /> },
-    { ...followers, icon: <UsersIcon className="h-5 w-5" />, className: 'scale-x-flip' },
-    { ...following, icon: <UsersIcon className="h-5 w-5" /> },
+    { ...posts, icon: <MessageCircleIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" /> },
+    { ...interests, icon: <HeartIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" /> },
+    { ...followers, icon: <UsersIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />, className: 'scale-x-flip' },
+    { ...following, icon: <UsersIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" /> },
   ];
 
   return (

@@ -149,7 +149,7 @@ const Header: React.FC<HeaderProps> = ({
               <Stack direction="row" alignItems="center" spacing={2}>
                 {viewerIsOwner ? (
                   <Button aria-label="edit" variant="outline" size="icon" onClick={handleEdit}>
-                    <SettingsIcon className="h-5 w-5" />
+                    <SettingsIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
                   </Button>
                 ) : (
                   <>
@@ -162,7 +162,7 @@ const Header: React.FC<HeaderProps> = ({
                   <Stack className="mt-1">
                     <Menu
                       anchor={{
-                        icon: <EllipsisVerticalIcon className="h-5 w-5" />,
+                        icon: <EllipsisVerticalIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
                         variant: 'primary',
                         greyBg: true,
                         iconOnly: true,

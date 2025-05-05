@@ -44,7 +44,7 @@ export const getPresentationDataFromNotification = (
     title: notification.payload.data.asub,
     body: notification.payload.data.amsg,
     // Title and icon for broadcast TBD decided in future iterations
-    notificationTypeIcon: <GlobeIcon className="h-5 w-5" />,
+    notificationTypeIcon: <GlobeIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
     notificationTypeTitle: 'BROADCAST',
     notificationAppIcon: null,
     ctaLinkTitle: null,
@@ -58,12 +58,12 @@ export const getPresentationDataFromNotification = (
   switch (notification.payload.data.type) {
     case 3:
       returnObj.notificationTypeTitle = 'ACTIVITY';
-      returnObj.notificationTypeIcon = <BoltIcon className="h-5 w-5" />;
+      returnObj.notificationTypeIcon = <BoltIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />;
       break;
     case 4:
       // Title and icon for group TBD decided in future iterations
       returnObj.ctaLinkTitle = 'GROUP';
-      returnObj.notificationTypeIcon = <Layers2Icon className="h-5 w-5" />;
+      returnObj.notificationTypeIcon = <Layers2Icon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />;
   }
   const parsedMetaData = notification.payload.data.parsedMetaData;
   const parsedData = parsedMetaData?.data;

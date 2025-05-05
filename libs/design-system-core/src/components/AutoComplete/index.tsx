@@ -111,7 +111,7 @@ const AutoComplete: React.FC<AutoCompleteProps> = props => {
       <TextField
         type="text"
         placeholder={placeholder}
-        iconRight={<SearchIcon className="h-5 w-5" />}
+        iconRight={<SearchIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />}
         value={value}
         label={label}
         caption={caption}

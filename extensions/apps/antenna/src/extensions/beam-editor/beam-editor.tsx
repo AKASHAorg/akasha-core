@@ -470,7 +470,7 @@ export const BeamEditor: React.FC = () => {
                     key={index}
                     label={tag}
                     active={!editorTags.includes(tag)}
-                    icon={<XIcon className="h-5 w-5" />}
+                    icon={<XIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />}
                     iconDirection="right"
                     onPillClick={() => handleDeleteTag(tag)}
                     type="action"

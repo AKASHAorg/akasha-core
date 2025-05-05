@@ -53,10 +53,10 @@ const Snackbar: React.FC<SnackbarProps> = ({
   const instanceStyle = `p-4 border-l-8 border-solid ${borderColorMap[type]}  shadow-[0_0_4px_rgba(0,0,0,0.2)] dark:shadow-[0_0_2px_rgba(255,255,255,0.15)]`;
 
   const typeIconsMap: Record<NotificationTypes, React.ReactElement> = {
-    info: <InfoIcon className="h-5 w-5" />,
-    caution: <TriangleAlertIcon className="h-5 w-5" />,
-    success: <CheckCircleIcon className="h-5 w-5" />,
-    error: <XCircleIcon className="h-5 w-5" />,
+    info: <InfoIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
+    caution: <TriangleAlertIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
+    success: <CheckCircleIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
+    error: <XCircleIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
   };
 
   return (

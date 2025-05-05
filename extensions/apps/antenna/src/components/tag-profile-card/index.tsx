@@ -52,7 +52,7 @@ const TagProfileCard: React.FC<TagProfileCard> = props => {
         <SubtitleTextIcon
           label={tag.name}
           subtitle={mentionsLabel}
-          icon={<HashIcon className="h-5 w-5" />}
+          icon={<HashIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />}
           backgroundColor={true}
           labelSize={'button-lg'}
         />
@@ -76,7 +76,7 @@ const TagProfileCard: React.FC<TagProfileCard> = props => {
                 variant="destructive"
                 onClick={() => handleUnsubscribeTag(tag.name)}
               >
-                <XIcon className="h-5 w-5" />
+                <XIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
                 {unsubscribeLabel}
               </DuplexButtonHover>
 

@@ -21,7 +21,7 @@ export const register = (opts: IntegrationRegistrationOptions): IAppConfig => ({
     label: 'Search',
     area: [MenuItemAreaType.SearchArea, MenuItemAreaType.AppArea],
     type: MenuItemType.App,
-    logo: { type: LogoTypeSource.ICON, value: <SearchIcon className="h-5 w-5" /> },
+    logo: { type: LogoTypeSource.ICON, value: <SearchIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" /> },
     subRoutes: [],
   },
   routes: {

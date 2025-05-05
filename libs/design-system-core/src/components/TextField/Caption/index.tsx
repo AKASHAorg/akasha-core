@@ -28,9 +28,9 @@ const Caption: React.FC<PropsWithChildren<CaptionProps>> = ({
 };
 
 const STATUS_TO_ICON_MAP: Record<Status, React.ReactElement> = {
-  success: <CheckCircleIcon className="h-5 w-5" />,
-  error: <XCircleIcon className="h-5 w-5" />,
-  warning: <TriangleAlertIcon className="h-5 w-5" />,
+  success: <CheckCircleIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
+  error: <XCircleIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
+  warning: <TriangleAlertIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
 };
 
 export default Caption;

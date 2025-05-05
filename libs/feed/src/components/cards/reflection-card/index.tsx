@@ -61,7 +61,7 @@ const ReflectionCard: React.FC<ReflectionCardProps> = props => {
   const menuItems: ListItem[] = !isViewer
     ? [
         {
-          icon: <FlagIcon className="h-5 w-5" />,
+          icon: <FlagIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
           label: t('Flag'),
           color: { light: 'errorLight', dark: 'errorDark' } as const,
           disabled: false,

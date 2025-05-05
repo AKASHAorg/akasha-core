@@ -97,7 +97,7 @@ export const ExplorePage: React.FC<unknown> = () => {
         action: (
           <Button variant="link" className="w-fit self-end" onClick={handleCTAClick}>
             {t('Start your journey')}
-            <MoveRightIcon className="h-5 w-5" />
+            <MoveRightIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
           </Button>
         ),
       }}

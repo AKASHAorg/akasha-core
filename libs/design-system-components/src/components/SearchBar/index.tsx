@@ -70,7 +70,7 @@ const SearchBar: React.FC<SearchBarProps> = props => {
         onKeyUp={handleKeyUp}
         onFocus={onFocus}
       />
-      <SearchIcon className="h-5 w-5" />
+      <SearchIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
     </Stack>
   );
 };

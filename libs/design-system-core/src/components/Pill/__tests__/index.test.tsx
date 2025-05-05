@@ -16,7 +16,7 @@ describe('<Pill /> Component', () => {
       componentWrapper = customRender(
         <Pill
           label={label}
-          icon={<XIcon className="h-5 w-5" />}
+          icon={<XIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />}
           iconDirection="right"
           onPillClick={mockChangeHandler}
           type="action"

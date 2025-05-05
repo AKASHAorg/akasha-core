@@ -139,7 +139,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
           >
             {isHovered && (
               <>
-                {cancelLabel} <XIcon className="h-5 w-5" />
+                {cancelLabel} <XIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
               </>
             )}
           </Button>
@@ -148,7 +148,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
           <>
             {isLoggedIn && (
               <Button variant="outline" size="icon" onClick={logoutClickHandler}>
-                <PowerIcon className="h-5 w-5" />
+                <PowerIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
               </Button>
             )}
             {!isLoggedIn && (

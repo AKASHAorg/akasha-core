@@ -51,7 +51,7 @@ const TagSearchCard: React.FC<TagSearchCardProps> = props => {
               onClick={onClickTag}
               label={tag.name}
               subtitle={`${tag.totalPosts} Beams`}
-              icon={<HashIcon className="h-5 w-5" />}
+              icon={<HashIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />}
               backgroundColor={true}
             />
           )}

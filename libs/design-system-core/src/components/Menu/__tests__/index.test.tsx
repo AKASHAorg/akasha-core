@@ -14,11 +14,11 @@ describe('<Menu /> Component', () => {
   const handleDelete = jest.fn(/** */);
 
   const items: ListItem[] = [
-    { label: 'Upload', icon: <SquareArrowUpIcon className="h-5 w-5" />, onClick: handleUpload },
-    { label: 'Edit', icon: <PencilIcon className="h-5 w-5" />, onClick: handleEdit },
+    { label: 'Upload', icon: <SquareArrowUpIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />, onClick: handleUpload },
+    { label: 'Edit', icon: <PencilIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />, onClick: handleEdit },
     {
       label: 'Delete',
-      icon: <TrashIcon className="h-5 w-5" />,
+      icon: <TrashIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
       color: { light: 'errorLight', dark: 'errorDark' },
       onClick: handleDelete,
     },

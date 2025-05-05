@@ -40,7 +40,7 @@ export const CategoryPills: React.FC<CategoryPillsProps> = props => {
           key={label + idx}
           label={label}
           active={categories.includes(value)}
-          icon={categories.includes(value) ? <XIcon className="h-5 w-5" /> : undefined}
+          icon={categories.includes(value) ? <XIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" /> : undefined}
           iconDirection="right"
           customStyle="mt-3 mr-3"
           onPillClick={onPillClick({ label, value })}

@@ -128,22 +128,22 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
         return [
           {
             label: t('View Extension'),
-            icon: <EyeIcon className="h-5 w-5" />,
+            icon: <EyeIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
             onClick: handleNavigateToExtensionInfoPage,
           },
           {
             label: t('Edit Extension'),
-            icon: <PencilIcon className="h-5 w-5" />,
+            icon: <PencilIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
             onClick: handleEditPublishedExtension,
           },
           {
             label: t('Release Manager'),
-            icon: <Layers2Icon className="h-5 w-5" />,
+            icon: <Layers2Icon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
             onClick: handleReleaseManager,
           },
           {
             label: t('Delete Extension'),
-            icon: <TrashIcon className="h-5 w-5" />,
+            icon: <TrashIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
             onClick: handleExtensionRemove,
             color: { light: 'errorLight', dark: 'errorDark' },
           },
@@ -152,22 +152,22 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
         return [
           {
             label: t('View Extension'),
-            icon: <EyeIcon className="h-5 w-5" />,
+            icon: <EyeIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
             onClick: handleNavigateToExtensionInfoPage,
           },
           {
             label: t('Edit Extension'),
-            icon: <PencilIcon className="h-5 w-5" />,
+            icon: <PencilIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
             onClick: handleEditPublishedExtension,
           },
           {
             label: t('Release Manager'),
-            icon: <Layers2Icon className="h-5 w-5" />,
+            icon: <Layers2Icon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
             onClick: handleReleaseManager,
           },
           {
             label: t('Delete Extension'),
-            icon: <TrashIcon className="h-5 w-5" />,
+            icon: <TrashIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
             onClick: handleExtensionRemove,
             color: { light: 'errorLight', dark: 'errorDark' },
           },

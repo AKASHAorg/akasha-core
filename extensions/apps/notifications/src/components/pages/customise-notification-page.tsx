@@ -258,8 +258,8 @@ const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
                   <>{t('Snooze Notifications')}</>
                 </Text>
                 <Toggle
-                  iconChecked={<BellOffIcon className="h-5 w-5" />}
-                  iconUnchecked={<BellRingIcon className="h-5 w-5" />}
+                  iconChecked={<BellOffIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />}
+                  iconUnchecked={<BellRingIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />}
                   checked={snoozed}
                   onChange={snoozeChangeHandler}
                 />

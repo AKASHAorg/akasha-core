@@ -32,7 +32,7 @@ export const SocialLinks: React.FC<SocialLinksProps> = ({ control, onDeleteLink 
         <Stack direction="row" spacing={2} justifyContent="between" alignItems="center">
           <Typography variant="h6">{t('Social links')}</Typography>
           <Button variant="link" onClick={onAddNew}>
-            {<PlusIcon className="h-5 w-5" />}
+            {<PlusIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />}
             {t('Link')}
           </Button>
         </Stack>

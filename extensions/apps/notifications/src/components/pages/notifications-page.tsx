@@ -197,7 +197,7 @@ const NotificationsPage: React.FC = () => {
           </Text>
           <Stack direction="column" spacing={1} className="absolute right-0">
             <Button variant="outline" size="icon" onClick={goToSettings}>
-              <SettingsIcon className="h-5 w-5" />
+              <SettingsIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
             </Button>
           </Stack>
         </Stack>

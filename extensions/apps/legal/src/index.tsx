@@ -25,7 +25,7 @@ export const register = (opts: IntegrationRegistrationOptions): IAppConfig => ({
   menuItems: {
     label: 'Legal',
     type: MenuItemType.App,
-    logo: { type: LogoTypeSource.ICON, value: <FileTextIcon className="h-5 w-5" /> },
+    logo: { type: LogoTypeSource.ICON, value: <FileTextIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" /> },
     area: [MenuItemAreaType.OtherArea],
     subRoutes: Object.keys(routes).map((routeLabel, idx) => ({
       label: routeLabel,

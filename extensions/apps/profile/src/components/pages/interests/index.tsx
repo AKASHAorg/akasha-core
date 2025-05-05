@@ -191,7 +191,7 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
                     onPillClick={() => handleInterestClick(interest)}
                     active={isActive}
                     type="action"
-                    {...(isActive && { icon: <CheckIcon className="h-5 w-5" /> })}
+                    {...(isActive && { icon: <CheckIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" /> })}
                   />
                 );
               })}

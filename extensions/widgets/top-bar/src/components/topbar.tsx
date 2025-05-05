@@ -105,18 +105,20 @@ const Topbar: React.FC<ITopbarProps> = props => {
     };
   }, []);
 
+  const style = 'h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark';
+
   return (
     <Card className="flex flex-row justify-between items-center py-1.5 px-2 space-x-4 xs:fixed xs:top-0 xs:z-8">
       <Stack direction="row" spacing={2}>
         <Button variant="outline" size="icon" onClick={onSidebarToggle}>
           {sidebarVisible ? (
-            <PanelLeftOpenIcon className="h-5 w-5" />
+            <PanelLeftOpenIcon className={style} />
           ) : (
-            <PanelRightOpenIcon className="h-5 w-5" />
+            <PanelRightOpenIcon className={style} />
           )}{' '}
         </Button>
         <Button variant="outline" size="icon" onClick={onBackClick}>
-          <ChevronLeftIcon />
+          <ChevronLeftIcon className={style} />
         </Button>
       </Stack>
       <button onClick={onBrandClick} className="p-0 !ml-0 cursor-pointer">

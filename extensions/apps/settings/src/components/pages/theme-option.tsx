@@ -29,8 +29,8 @@ const ThemeOption: React.FC = () => {
 
           <Toggle
             checked={theme === 'Light-Theme'}
-            iconChecked={<SunIcon className="h-5 w-5" />}
-            iconUnchecked={<MoonIcon className="h-5 w-5" />}
+            iconChecked={<SunIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />}
+            iconUnchecked={<MoonIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />}
             onChange={handleThemeSelect}
           />
         </Stack>

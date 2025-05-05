@@ -15,7 +15,7 @@ const ExtensionIcon: React.FC<ExtensionIconProps> = props => {
     solid = false,
     accentColor = true,
     type,
-    defaultIcon = <Layers2Icon className="h-5 w-5" />,
+    defaultIcon = <Layers2Icon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
   } = props;
 
   const getIconByType = (_type: AkashaAppApplicationType) => {

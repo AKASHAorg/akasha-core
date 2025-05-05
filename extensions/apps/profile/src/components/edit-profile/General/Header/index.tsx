@@ -108,7 +108,7 @@ export const Header: React.FC<HeaderProps> = ({
   const dropDownActions: ListProps['items'] = [
     {
       label: 'Upload',
-      icon: <SquareArrowUpIcon className="h-5 w-5" />,
+      icon: <SquareArrowUpIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
       onClick: () => {
         if (uploadInputRef.current) uploadInputRef.current.click();
         closeActionsDropDown();
@@ -218,7 +218,7 @@ export const Header: React.FC<HeaderProps> = ({
                 setProfileImageType('cover-image');
               }}
             >
-              <SquarePenIcon className="h-5 w-5" />
+              <SquarePenIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
             </Button>
             {showCoverActions && (
               <List items={dropDownActions} customStyle="absolute right-0 top-7 w-auto z-10" />
@@ -245,7 +245,7 @@ export const Header: React.FC<HeaderProps> = ({
               variant="outline"
               size="icon"
             >
-              <SquarePenIcon className="h-5 w-5" />
+              <SquarePenIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
             </Button>
             {showAvatarActions && (
               <List items={dropDownActions} customStyle="absolute top-7 w-auto z-10" />
