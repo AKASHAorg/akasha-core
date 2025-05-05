@@ -1,6 +1,7 @@
 import React from 'react';
 import { act } from '@testing-library/react';
 import { customRender } from '../../../test-utils';
+import Icon from '../';
 import { Akasha } from '../akasha-icons';
 
 describe('<Icon /> Component', () => {
@@ -8,7 +9,10 @@ describe('<Icon /> Component', () => {
 
   beforeEach(() => {
     act(() => {
-      componentWrapper = customRender(<Akasha />, {});
+      componentWrapper = customRender(
+        <Icon icon={<Akasha />} solid={true} dataTestId="akasha-icon" />,
+        {},
+      );
     });
   });
 
