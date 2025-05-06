@@ -1,5 +1,4 @@
 import React from 'react';
-import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import FollowProfileButton from '../follow-profile-button';
 import { AkashaProfile, IModalNavigationOptions } from '@akashaorg/typings/lib/ui';
@@ -7,6 +6,14 @@ import { useGetProfileByIdQuery } from '@akashaorg/ui-core-hooks/lib/generated/a
 import { selectProfileData } from '@akashaorg/ui-core-hooks/lib/selectors/get-profile-by-id-query';
 import { transformSource, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { cn } from '@akashaorg/ui/lib/library/utils';
+import {
+  ProfileAvatarButton,
+  ProfileAvatarButtonAvatar,
+  ProfileAvatarButtonAvatarFallback,
+  ProfileAvatarButtonAvatarImage,
+  ProfileDidField,
+  ProfileName,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
 
 type EngagementsEntryProps = {
   profileID: string;
@@ -73,25 +80,38 @@ export const EngagementsEntry: React.FC<EngagementsEntryProps> = props => {
       style={style}
       className={cn('px-4 w-full', className)}
     >
-      <ProfileAvatarButton
-        profileId={
-          //@todo provide only the profile DID, if entryProfileDID is null then the entry info will be filtered out instead of displaying profile stream id
-          entryProfileDID ?? profileID
-        }
-        avatar={transformSource(profileData?.avatar?.default)}
-        alternativeAvatars={profileData?.avatar?.alternatives?.map(alternative =>
-          transformSource(alternative),
-        )}
-        label={profileData?.name}
-        {...(profileData?.nsfw && {
-          nsfwAvatar: !(viewerIsOwner || showNsfw),
-          nsfwLabel: 'NSFW',
-        })}
+      <a
         href={entryProfileDID ? `${profileAnchorLink}/${entryProfileDID}` : ''}
-        onClick={() => {
-          if (profileDID) onProfileClick(profileDID);
+        rel="noreferrer noopener"
+        onClick={event => {
+          event.preventDefault();
+          event.stopPropagation();
         }}
-      />
+      >
+        <ProfileAvatarButton
+          profileDID={
+            //@todo provide only the profile DID, if entryProfileDID is null then the entry info will be filtered out instead of displaying profile stream id
+            entryProfileDID ?? profileID
+          }
+          onClick={() => {
+            if (profileDID) onProfileClick(profileDID);
+          }}
+        >
+          <ProfileAvatarButtonAvatar>
+            <ProfileAvatarButtonAvatarImage
+              src={transformSource(profileData?.avatar?.default)?.src}
+              alt="Profile Avatar"
+            />
+            <ProfileAvatarButtonAvatarFallback
+              alternativeSrc={profileData?.avatar?.alternatives?.map(
+                alternative => transformSource(alternative)?.src,
+              )}
+            />
+          </ProfileAvatarButtonAvatar>
+          <ProfileName>{profileData?.name}</ProfileName>
+          <ProfileDidField />
+        </ProfileAvatarButton>
+      </a>
       {!viewerIsOwner && (
         <FollowProfileButton profileID={profileID} showLoginModal={showLoginModal} />
       )}

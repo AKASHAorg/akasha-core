@@ -1,7 +1,5 @@
 import React, { Suspense, useMemo, useState } from 'react';
-import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import ProfileNameField from '@akashaorg/design-system-core/lib/components/ProfileNameField';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { cn } from '@akashaorg/ui/lib/library/utils';
@@ -13,8 +11,16 @@ import {
   PowerIcon,
   XMarkIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import { ProfileAvatarFallback, ProfileAvatarImage } from '@akashaorg/ui/lib/akasha-components/profile-avatar';
-import { ProfileAvatar } from '@akashaorg/ui/lib/akasha-components/profile-avatar';
+import {
+  ProfileAvatar,
+  ProfileAvatarFallback,
+  ProfileAvatarImage,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar';
+import {
+  ProfileAvatarButton,
+  ProfileDidField,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
+import { CopyToClipboard } from '@akashaorg/ui/lib/akasha-components/copy-to-clipboard';
 
 export type SidebarHeaderProps = {
   authenticatedDID: string;
@@ -106,12 +112,15 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
             </Suspense>
           )}
           {isLoggedIn && (
-            <DidField
-              did={authenticatedDID}
-              textColor="grey7"
-              copyLabel={t('Copy to clipboard')}
-              copiedLabel={t('Copied')}
-            />
+            <ProfileAvatarButton profileDID={authenticatedDID}>
+              <CopyToClipboard
+                textToCopy={authenticatedDID}
+                ctaText="Copy to clipboard"
+                successText="Copied"
+              >
+                <ProfileDidField />
+              </CopyToClipboard>
+            </ProfileAvatarButton>
           )}
           {!isLoggedIn && (
             <Text
