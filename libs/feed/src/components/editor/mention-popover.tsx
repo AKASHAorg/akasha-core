@@ -1,5 +1,5 @@
 import React from 'react';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { getElevationClasses } from '@akashaorg/design-system-core/lib/utils';
 import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
@@ -14,13 +14,9 @@ import {
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
 import { cn } from '@akashaorg/ui/lib/library/utils';
-
 import { Portal } from './helpers';
-
 const MAX_MENTIONS_DISPLAY = 3;
-
 const PROFILE_AVATAR_HEIGHT = 52;
-
 export type MentionPopoverProps = {
   values: Profile[];
   setIndex: React.Dispatch<React.SetStateAction<number>>;
@@ -29,7 +25,6 @@ export type MentionPopoverProps = {
   noMentionsLabel?: string;
   customStyle?: string;
 };
-
 export const MentionPopover = React.forwardRef<HTMLDivElement, MentionPopoverProps>(
   (props, ref) => {
     const {
@@ -40,12 +35,10 @@ export const MentionPopover = React.forwardRef<HTMLDivElement, MentionPopoverPro
       handleSelect,
       transformSource,
     } = props;
-
     const boxShadow = getElevationClasses('2');
 
     // create portal on editor page, so that it clears when the component unmounts
     const beamEditorPage = document.getElementById('beam-editor_feed_page');
-
     return (
       <Portal targetNode={beamEditorPage}>
         <Stack
@@ -63,9 +56,9 @@ export const MentionPopover = React.forwardRef<HTMLDivElement, MentionPopoverPro
         >
           {values.length === 0 && (
             <Card className="py-2 px-4 border-none">
-              <Text variant="body2" align="start" color={{ light: 'grey4', dark: 'grey6' }}>
+              <Typography variant="sm" className="text-grey4 dark:text-grey6">
                 {noMentionsLabel}
-              </Text>
+              </Typography>
             </Card>
           )}
           {values.length > 0 &&

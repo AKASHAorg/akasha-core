@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useCallback, useEffect, useRef } from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
@@ -34,36 +34,29 @@ import {
   selectPublisherName,
 } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-by-publisher-did-query';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
-
 enum TermsFields {
   PRIVACY_POLICY = 'privacyPolicy',
   TERMS_OF_USE = 'termsOfUse',
   CODE_OF_CONDUCT = 'codeOfConduct',
   DISCLAIMERS = 'disclaimers',
 }
-
 const TermsLinks = {
   [TermsFields.PRIVACY_POLICY]: '/@akashaorg/app-legal/privacy-policy',
   [TermsFields.TERMS_OF_USE]: '/@akashaorg/app-legal/terms-of-use',
   [TermsFields.CODE_OF_CONDUCT]: '/@akashaorg/app-legal/code-of-conduct',
   [TermsFields.DISCLAIMERS]: '#',
 };
-
 type AcceptedTerms = {
   [TermsFields.PRIVACY_POLICY]: boolean;
   [TermsFields.TERMS_OF_USE]: boolean;
   [TermsFields.CODE_OF_CONDUCT]: boolean;
   [TermsFields.DISCLAIMERS]: boolean;
 };
-
 export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
   const { decodeAppName, getCorePlugins, uiEvents } = useRootComponentProps();
   const decodeName = useRef(decodeAppName);
-
   const installerPlugin = getCorePlugins().extensionInstaller;
-
   const idxDid = getSDK().services.gql.indexingDID;
-
   const {
     data: appInfo,
     loading: loadingAppInfo,
@@ -73,17 +66,22 @@ export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
     variables: {
       id: idxDid,
       first: 1,
-      filters: { where: { name: { equalTo: decodeName.current(appId) } } },
-      sorting: { createdAt: SortOrder.Desc },
+      filters: {
+        where: {
+          name: {
+            equalTo: decodeName.current(appId),
+          },
+        },
+      },
+      sorting: {
+        createdAt: SortOrder.Desc,
+      },
     },
   });
-
   const {
     data: { authenticatedDID, isAuthenticating },
   } = useAkashaStore();
-
   useEffect(() => {}, []);
-
   const navigate = useNavigate();
   const [acceptedTerms, setAcceptedTerms] = React.useState<AcceptedTerms>({
     [TermsFields.PRIVACY_POLICY]: false,
@@ -91,9 +89,7 @@ export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
     [TermsFields.CODE_OF_CONDUCT]: false,
     [TermsFields.DISCLAIMERS]: false,
   });
-
   const { t } = useTranslation();
-
   const handleCheckboxChange = (ev: ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = ev.target;
     setAcceptedTerms(prev => ({
@@ -101,7 +97,6 @@ export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
       [name]: checked,
     }));
   };
-
   const handleLoginClick = useCallback(() => {
     getCorePlugins().routing.navigateTo({
       appName: '@akashaorg/app-auth-ewa',
@@ -112,26 +107,25 @@ export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
       },
     });
   }, [getCorePlugins]);
-
   const handleContinue = async () => {
     if (!allTermsAccepted) return;
-
     await installerPlugin.acceptUserAgreement(selectAkashaApp(appInfo));
-
     await navigate({
       to: '/install/$appId/progress',
-      params: { appId },
+      params: {
+        appId,
+      },
       replace: true,
     });
   };
-
   const handleCancel = () => {
     navigate({
       to: `/info/$appId`,
-      params: { appId },
+      params: {
+        appId,
+      },
       replace: true,
     }).catch(err => console.error('Failed to navigate!', err));
-
     uiEvents.next({
       event: NotificationEvents.ShowNotification,
       data: {
@@ -140,21 +134,17 @@ export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
       },
     });
   };
-
   const allTermsAccepted = Object.values(acceptedTerms).every(Boolean);
-
   const fieldLabels = {
     [TermsFields.PRIVACY_POLICY]: t('Privacy Policy'),
     [TermsFields.TERMS_OF_USE]: t('Terms of Use'),
     [TermsFields.CODE_OF_CONDUCT]: t('Code of Conduct'),
     [TermsFields.DISCLAIMERS]: t('Disclaimers'),
   };
-
   const isAppInfoLoading = loadingAppInfo && appInfoQueryCalled;
   if (isAuthenticating) {
     return null;
   }
-
   if (!authenticatedDID && !isAuthenticating) {
     const appDisplayName = isAppInfoLoading ? t('this app') : selectAppDisplayName(appInfo);
     return (
@@ -171,7 +161,6 @@ export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
       </ErrorLoader>
     );
   }
-
   if (appInfoQueryError) {
     return (
       <ErrorLoader type="no-apps">
@@ -182,7 +171,6 @@ export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
       </ErrorLoader>
     );
   }
-
   return (
     <Card className="p-0">
       <TermsHeader
@@ -192,9 +180,9 @@ export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
         appLogo={selectAppLogoImage(appInfo)}
       />
       <Divider />
-      <Text variant="subtitle2" selectable={false} customStyle="m-4">
+      <Typography variant="sm" className="font-light m-4 select-none">
         {t('I agree to:')}
-      </Text>
+      </Typography>
       <Stack direction="column" spacing={4} className="mx-4 mb-4">
         {Object.keys(acceptedTerms).map(stateKey => (
           <Stack direction="row" spacing={2} key={stateKey} alignItems={'center'}>
@@ -234,7 +222,6 @@ export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
     </Card>
   );
 };
-
 const TermsHeader = ({
   appDisplayName,
   appPublisher,
@@ -249,7 +236,7 @@ const TermsHeader = ({
   const { t } = useTranslation();
   return (
     <Stack className="p-3">
-      <Text variant="h5">{t('User Agreement')}</Text>
+      <Typography variant="h5">{t('User Agreement')}</Typography>
       <Stack direction="row" spacing={2} alignItems="center" className="mt-3">
         {isLoading && <Icon icon={<ArrowPathIcon />} />}
         {!isLoading && (
@@ -261,23 +248,21 @@ const TermsHeader = ({
         )}
         <Stack direction="column" justifyContent="between">
           {isLoading && (
-            <Text variant="button-sm" selectable={false}>
+            <Typography variant="xs" bold className="select-none">
               {t('Loading extension info...')}
-            </Text>
+            </Typography>
           )}
           {!isLoading && (
             <>
-              <Text variant="button-md" selectable={false}>
+              <Typography variant="sm" bold className="select-none">
                 {appDisplayName}
-              </Text>
-              <Text
-                variant="footnotes2"
-                color={{ light: 'grey7', dark: 'grey4' }}
-                customStyle="max-w-[35ch] sm:max-w-full truncate"
-                selectable={false}
+              </Typography>
+              <Typography
+                variant="xs"
+                className="font-medium text-grey7 dark:text-grey4 max-w-[35ch] sm:max-w-full truncate select-none"
               >
                 {appPublisher}
-              </Text>
+              </Typography>
             </>
           )}
         </Stack>

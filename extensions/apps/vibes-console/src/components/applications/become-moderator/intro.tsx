@@ -2,7 +2,7 @@ import React from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import {
   PageButtonsProps,
   PageButtons,
@@ -11,7 +11,6 @@ import {
   SubtitleRendererProps,
   SubtitleRenderer,
 } from '@akashaorg/design-system-components/lib/components/SubtitleRenderer';
-
 export type BMIntroProps = PageButtonsProps &
   SubtitleRendererProps & {
     assetName?: string;
@@ -19,7 +18,6 @@ export type BMIntroProps = PageButtonsProps &
     assetExtension?: string;
     titleLabel: string;
   };
-
 export const BMIntro: React.FC<BMIntroProps> = props => {
   const {
     assetName = 'vibe-overview',
@@ -27,13 +25,12 @@ export const BMIntro: React.FC<BMIntroProps> = props => {
     publicImgPath = '/images',
     titleLabel,
   } = props;
-
   return (
     <Card className="p-4">
       <Stack spacing="gap-y-4">
-        <Text variant="h5" align="center">
+        <Typography variant="h5" className="text-center">
           {titleLabel}
-        </Text>
+        </Typography>
 
         <Stack customStyle="w-[11.25rem] h-[11.25rem] my-2 mx-auto">
           <Image
@@ -42,7 +39,7 @@ export const BMIntro: React.FC<BMIntroProps> = props => {
           />
         </Stack>
 
-        <SubtitleRenderer {...props} textAlign="start" fontWeight="normal" />
+        <SubtitleRenderer {...props} />
 
         <PageButtons {...props} />
       </Stack>

@@ -4,7 +4,7 @@ import { useNavigate } from '@tanstack/react-router';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import PaginatedTable from '@akashaorg/design-system-components/lib/components/PaginatedTable';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { renderChevron, renderDate, renderStatus } from '../utils';
 import routes, { MY_APPLICATION_DETAIL } from '../routes';
 import { NoItemFound } from '../components/no-item-found';
@@ -35,7 +35,7 @@ export const MyApplications: React.FC<unknown> = () => {
   }));
   return (
     <Stack spacing="gap-y-4">
-      <Text variant="h5">{t('Your Applications')}</Text>
+      <Typography variant="h5">{t('Your Applications')}</Typography>
       <PaginatedTable
         rows={loggedUserApplicationsRows}
         pageCount={1}

@@ -1,20 +1,20 @@
 import React, { ReactNode } from 'react';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { cn } from '@akashaorg/ui/lib/library/utils';
-
 export type SwitchCardProps = {
   isLoggedIn: boolean;
   activeButton: string;
-  buttonValues: { value: string; label: string }[];
+  buttonValues: {
+    value: string;
+    label: string;
+  }[];
   onTabClick: (value: string) => () => void;
 };
-
 export interface IStickyBoxProps {
   readonly userSignedIn?: boolean;
   children?: ReactNode;
 }
-
 const StickyBox: React.FC<IStickyBoxProps> = props => {
   const { userSignedIn, children } = props;
   return (
@@ -23,49 +23,38 @@ const StickyBox: React.FC<IStickyBoxProps> = props => {
     </Stack>
   );
 };
-
 const SwitchCard: React.FC<SwitchCardProps> = props => {
   const { isLoggedIn, activeButton, buttonValues, onTabClick } = props;
-
   const baseStyle = 'group p-2';
-
   const activeStyle = `border-b border-secondaryLight dark:border-secondaryDark`;
   const hoverStyle = `hover:border-b hover:border-secondaryLight dark: dark:hover:border-secondaryDark`;
-
   return (
     <>
       <StickyBox userSignedIn={isLoggedIn}>
-        {buttonValues.map((el: { value: string; label: string }, idx: number) => (
-          <button key={idx} onClick={onTabClick(buttonValues[idx].value)}>
-            <Stack
-              className={cn(
-                'py-2 px-3',
-                baseStyle,
-                hoverStyle,
-                el.value === activeButton ? activeStyle : '',
-              )}
-            >
-              <Text
-                color={
-                  el.value === activeButton
-                    ? {
-                        light: 'secondaryLight',
-                        dark: 'secondaryDark',
-                      }
-                    : 'grey7'
-                }
-                weight={el.value === activeButton ? 'bold' : 'normal'}
-                align="center"
-                customStyle={'group-hover:text-secondaryLight dark:group-hover:text-secondaryDark'}
+        {buttonValues.map(
+          (
+            el: {
+              value: string;
+              label: string;
+            },
+            idx: number,
+          ) => (
+            <button key={idx} onClick={onTabClick(buttonValues[idx].value)}>
+              <Stack
+                className={cn(
+                  'py-2 px-3',
+                  baseStyle,
+                  hoverStyle,
+                  el.value === activeButton ? activeStyle : '',
+                )}
               >
-                {el.label}
-              </Text>
-            </Stack>
-          </button>
-        ))}
+                <Typography className="text-center">{el.label}</Typography>
+              </Stack>
+            </button>
+          ),
+        )}
       </StickyBox>
     </>
   );
 };
-
 export default SwitchCard;

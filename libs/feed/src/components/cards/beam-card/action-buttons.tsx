@@ -1,20 +1,18 @@
 import React from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { Blocks } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import { Antenna } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import { useTranslation } from 'react-i18next';
 import { useGetAppsByIdQuery } from '@akashaorg/ui-core-hooks/lib/generated';
 import { selectAppDisplayName } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-by-id-query';
-
 type ActionButtonsProps = {
   appId: string;
   showHiddenContent: boolean;
   showBlockName: boolean;
   onShowBlockName: () => void;
 };
-
 const ActionButtons: React.FC<ActionButtonsProps> = props => {
   const { appId, showHiddenContent, showBlockName, onShowBlockName } = props;
   const { t } = useTranslation('ui-lib-feed');
@@ -25,17 +23,17 @@ const ActionButtons: React.FC<ActionButtonsProps> = props => {
     skip: !appId,
   });
   const appDisplayName = selectAppDisplayName(appReq.data);
-  const showBlockNameStyle = `${
-    showBlockName ? 'rounded-full h-9 w-9' : ''
-  } transition-all ease-linear duration-300`;
+  const showBlockNameStyle = `${showBlockName ? 'rounded-full h-9 w-9' : ''} transition-all ease-linear duration-300`;
   return (
     <>
       {appDisplayName && (
         <Stack direction="row" align="center" spacing="gap-x-2" customStyle="mr-auto">
           <Icon icon={<Antenna />} solid={true} accentColor size="sm" />
-          <Text variant="footnotes2" weight="normal" color={{ light: 'grey7', dark: 'grey6' }}>
-            {t('Published via {{name}}', { name: appDisplayName })}
-          </Text>
+          <Typography variant="xs" className="font-medium font-normal text-grey7 dark:text-grey6">
+            {t('Published via {{name}}', {
+              name: appDisplayName,
+            })}
+          </Typography>
         </Stack>
       )}
       {showHiddenContent && (
@@ -52,5 +50,4 @@ const ActionButtons: React.FC<ActionButtonsProps> = props => {
     </>
   );
 };
-
 export default ActionButtons;

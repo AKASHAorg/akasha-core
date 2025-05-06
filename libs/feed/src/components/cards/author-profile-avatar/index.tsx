@@ -1,6 +1,6 @@
 import React from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import ProfileAvatarLoading from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton/ProfileAvatarLoading';
 import {
@@ -21,14 +21,12 @@ import {
 } from '@akashaorg/ui-core-hooks';
 import { useTranslation } from 'react-i18next';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
-
 type AuthorProfileAvatarProps = {
   authorId: string;
   createdAt: string;
   hidePublishTime?: boolean;
   pending?: boolean;
 };
-
 const AuthorProfileAvatar: React.FC<AuthorProfileAvatarProps> = props => {
   const { authorId, createdAt, hidePublishTime, pending } = props;
   const {
@@ -40,27 +38,24 @@ const AuthorProfileAvatar: React.FC<AuthorProfileAvatarProps> = props => {
   const locale = getTranslationPlugin().i18n?.languages?.[0] || 'en';
   const publishTime = createdAt ? formatRelativeTime(createdAt, locale) : '';
   const profileQuery = useGetProfileByDidQuery({
-    variables: { id: authorId },
+    variables: {
+      id: authorId,
+    },
     fetchPolicy: 'cache-first',
   });
   const { showNsfw } = useNsfwToggling();
-
   const onAvatarClick = (id: string) => {
     navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: routes => `${routes.rootRoute}/${id}`,
     });
   };
-
   if (profileQuery?.loading) return <ProfileAvatarLoading />;
-
   if (profileQuery?.error) return null;
-
   const profileData =
     profileQuery.data?.node && hasOwn(profileQuery.data.node, 'isViewer')
       ? profileQuery.data.node.akashaProfile
       : null;
-
   return (
     <a
       href={`/@akashaorg/app-profile/${authorId}`}
@@ -80,43 +75,39 @@ const AuthorProfileAvatar: React.FC<AuthorProfileAvatarProps> = props => {
           <>
             {publishTime && !hidePublishTime && (
               <Stack direction="row" align="center" spacing="gap-x-1">
-                <Text
-                  variant="footnotes2"
-                  weight="normal"
-                  color={{ light: 'grey4', dark: 'grey7' }}
+                <Typography
+                  variant="xs"
+                  className="font-medium font-normal text-grey4 dark:text-grey7"
                 >
                   ·
-                </Text>
+                </Typography>
                 <Tooltip
                   placement={'top'}
                   content={createdAt ? formatDate(createdAt, 'H[:]mm [·] D MMM YYYY', locale) : ''}
                 >
-                  <Text
-                    variant="footnotes2"
-                    weight="normal"
-                    color={{ light: 'grey4', dark: 'grey7' }}
+                  <Typography
+                    variant="xs"
+                    className="font-medium font-normal text-grey4 dark:text-grey7"
                   >
                     {publishTime}
-                  </Text>
+                  </Typography>
                 </Tooltip>
               </Stack>
             )}
             {pending && (
               <Stack direction="row" align="center" spacing="gap-x-1">
-                <Text
-                  variant="footnotes2"
-                  weight="normal"
-                  color={{ light: 'grey4', dark: 'grey7' }}
+                <Typography
+                  variant="xs"
+                  className="font-medium font-normal text-grey4 dark:text-grey7"
                 >
                   ·
-                </Text>
-                <Text
-                  variant="footnotes2"
-                  weight="normal"
-                  color={{ light: 'grey4', dark: 'grey7' }}
+                </Typography>
+                <Typography
+                  variant="xs"
+                  className="font-medium font-normal text-grey4 dark:text-grey7"
                 >
                   {t('Pending')}...
-                </Text>
+                </Typography>
               </Stack>
             )}
           </>
@@ -142,5 +133,4 @@ const AuthorProfileAvatar: React.FC<AuthorProfileAvatarProps> = props => {
     </a>
   );
 };
-
 export default AuthorProfileAvatar;

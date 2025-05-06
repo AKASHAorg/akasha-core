@@ -4,10 +4,9 @@ import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Img from '@akashaorg/design-system-core/lib/components/Image';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Cropper, { Area, CropperProps, Point } from 'react-easy-crop';
-
 import { type Image } from '@akashaorg/typings/lib/ui';
 import { CroppedImagePreviewProps, CroppedImagePreviews } from './cropped-image-previews';
 import {
@@ -17,14 +16,11 @@ import {
 import { getCroppedImage } from './get-cropped-image';
 import { XCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-solid';
 import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
-
 const MIN_ZOOM = 1;
 const MAX_ZOOM = 3;
 const ZOOM_STEP = 0.01;
-
 const CROPPER_WIDTH = 320;
 const CROPPER_HEIGHT = 224;
-
 export type ImageModalProps = {
   title: ModalProps['title'];
   show: ModalProps['show'];
@@ -83,11 +79,13 @@ const ImageModal: React.FC<ImageModalProps> = ({
     height,
   });
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area>(null);
-  const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
+  const [crop, setCrop] = useState<Point>({
+    x: 0,
+    y: 0,
+  });
   const [zoom, setZoom] = useState(1);
   const [selectedImageIndex, setSelectedIndexImage] = useState(0);
   const [showCropError, setShowCropError] = useState(false);
-
   const aspectRatio = aspect ? aspect : width / height;
   const selectedImage = images[selectedImageIndex];
   const imageUrl = typeof selectedImage === 'string' ? selectedImage : selectedImage?.src;
@@ -99,7 +97,6 @@ const ImageModal: React.FC<ImageModalProps> = ({
     },
     [imageUrl],
   );
-
   const handleSaveClick = async () => {
     if (croppedAreaPixels) {
       const response = await getCroppedImage(imageUrl, croppedAreaPixels, 0);
@@ -111,11 +108,9 @@ const ImageModal: React.FC<ImageModalProps> = ({
     }
     setShowCropError(true);
   };
-
   const imageContainerBorderStyle = showCropError
     ? `border-4 border-errorLight dark:border-errorDark`
     : '';
-
   return (
     <Modal
       title={title}
@@ -123,7 +118,12 @@ const ImageModal: React.FC<ImageModalProps> = ({
       onClose={onClose}
       rightAlignActions={rightAlignActions}
       actions={[
-        { variant: 'text', disabled: isSavingImage, label: cancelLabel, onClick: onClose },
+        {
+          variant: 'text',
+          disabled: isSavingImage,
+          label: cancelLabel,
+          onClick: onClose,
+        },
         {
           variant: 'primary',
           label: saveLabel,
@@ -181,18 +181,17 @@ const ImageModal: React.FC<ImageModalProps> = ({
             solid
             customStyle={'[&>*]:fill-errorLight dark:[&>*]:fill-errorDark'}
           />
-          <Text
-            variant="footnotes2"
-            weight="normal"
-            color={{ light: 'errorLight', dark: 'errorDark' }}
+          <Typography
+            variant="xs"
+            className="font-medium font-normal text-errorLight dark:text-errorDark"
           >
             {errorLabel}
-          </Text>
+          </Typography>
         </Stack>
       )}
-      <Text variant="footnotes2" align="center" weight="normal">
+      <Typography variant="xs" className="font-medium text-center font-normal">
         {dragToRepositionLabel}
-      </Text>
+      </Typography>
       <Stack direction="column" spacing={4} className="w-full mb-2">
         <Stack direction="row" alignItems="center" spacing={2}>
           <Icon icon={<MagnifyingGlassMinusIcon />} size="lg" />
@@ -222,5 +221,4 @@ const ImageModal: React.FC<ImageModalProps> = ({
     </Modal>
   );
 };
-
 export default ImageModal;

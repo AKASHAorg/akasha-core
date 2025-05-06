@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useRef } from 'react';
 import NSFW from '../nsfw-card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { hasOwn, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import {
   ContentBlockExtension,
@@ -16,7 +16,6 @@ import {
   selectBlockData,
 } from '@akashaorg/ui-core-hooks/lib/selectors/get-content-block-by-id-query';
 import { NetworkStatus } from '@apollo/client';
-
 type ContentBlockRendererProps = {
   blockID: string;
   authenticatedDID: string;
@@ -25,7 +24,6 @@ type ContentBlockRendererProps = {
   showBlockName: boolean;
   onContentClick?: () => void;
 };
-
 const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
   const { blockID, authenticatedDID, showHiddenContent, beamIsNsfw, showBlockName } = props;
   const { navigateToModal, getCorePlugins, encodeAppName } = useRootComponentProps();
@@ -33,25 +31,22 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
   const { t } = useTranslation('ui-lib-feed');
   const navigateTo = getCorePlugins().routing.navigateTo;
   const contentBlockReq = useGetContentBlockByIdQuery({
-    variables: { id: blockID },
+    variables: {
+      id: blockID,
+    },
     fetchPolicy: 'cache-first',
     nextFetchPolicy: 'network-only',
   });
-
   const blockData = selectBlockData(contentBlockReq.data);
   const blockApp = selectBlockApp(contentBlockReq.data);
-
   const matchingBlocks: MatchingBlock[] = useMemo(() => {
     return !blockData || !blockApp ? [] : contentBlockStoreRef.current.getMatchingBlocks(blockData);
   }, [blockData, blockApp]);
-
   const foundBlock = matchingBlocks.find(matchingBlock => {
     if (matchingBlock.blockData && hasOwn(matchingBlock.blockData, 'id'))
       return matchingBlock.blockData?.id === blockID;
-
     return false;
   });
-
   const blockDisplayName = foundBlock?.blockInfo?.displayName ?? '';
 
   /**
@@ -63,7 +58,6 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
    */
 
   const showNSFWCard = beamIsNsfw && !authenticatedDID;
-
   const fetchErrorMsg = useMemo(
     () => ({
       errorTitle: !blockApp ? t('Cannot display content') : t('Network error occurred'),
@@ -73,7 +67,6 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
     }),
     [blockApp, t],
   );
-
   const contentLoadErrorMsg = useMemo(
     () => ({
       errorTitle: t('Content not loaded correctly'),
@@ -87,14 +80,12 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
       message: 'To view explicit or sensitive content, please connect to confirm your consent.',
     });
   }, [navigateToModal]);
-
   const onViewNSFWClick = useCallback(() => {
     if (!authenticatedDID) {
       showLoginModal();
       return;
     }
   }, [authenticatedDID, showLoginModal]);
-
   const handleClickInstall = useCallback(
     (e: React.SyntheticEvent) => {
       e.stopPropagation();
@@ -105,11 +96,11 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
     },
     [blockApp, navigateTo],
   );
-
   const onContentBlockRefresh = useCallback(() => {
-    contentBlockReq.refetch({ id: blockID });
+    contentBlockReq.refetch({
+      id: blockID,
+    });
   }, [blockID, contentBlockReq]);
-
   const contentBlockErrors = useMemo(() => {
     if (contentBlockReq.error) {
       return contentBlockReq.error?.message;
@@ -119,7 +110,6 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
     }
     return '';
   }, [contentBlockReq, blockApp]);
-
   return (
     <Card className="p-0 border-none w-full rounded-none">
       {!showNSFWCard && (
@@ -133,9 +123,11 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
             leaveTo="h-0"
             show={showBlockName && !!blockDisplayName}
           >
-            <Text variant="footnotes2" weight="normal" color={{ light: 'grey7', dark: 'grey6' }}>
-              {t('{{blockDisplayName}}', { blockDisplayName })}
-            </Text>
+            <Typography variant="xs" className="font-medium font-normal text-grey7 dark:text-grey6">
+              {t('{{blockDisplayName}}', {
+                blockDisplayName,
+              })}
+            </Typography>
           </Transition>
           <ContentBlockExtension
             blockData={blockData}
@@ -176,5 +168,4 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
     </Card>
   );
 };
-
 export default ContentBlockRenderer;

@@ -14,11 +14,10 @@ import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Loader2 } from 'lucide-react';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import DropDown from '@akashaorg/design-system-core/lib/components/Dropdown';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import AutoComplete from '@akashaorg/design-system-core/lib/components/AutoComplete';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import StackedAvatar from '@akashaorg/design-system-core/lib/components/StackedAvatar';
-
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ButtonType } from '@akashaorg/design-system-components/lib/components/types/common.types';
@@ -33,24 +32,19 @@ import {
   ErrorLoaderDescription,
   ErrorLoaderTitle,
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
-
 const MAX_TAGS = 4;
-
 const MIN_TAG_CHARACTERS = 3;
-
 export enum FieldName {
   license = 'license',
   licenseOther = 'licenseOther',
   keywords = 'keywords',
 }
-
 export type ExtensionEditStep3FormValues = {
   license?: string;
   licenseOther?: string;
   contactInfo?: string[];
   keywords?: string[];
 };
-
 export type ExtensionEditStep3FormProps = {
   licenseFieldLabel?: string;
   licenseOtherPlaceholderLabel?: string;
@@ -79,7 +73,6 @@ export type ExtensionEditStep3FormProps = {
   handleNavigateToContributorsPage?: (data: ExtensionEditStep3FormValues) => void;
   transformSource: (src: Image) => Image;
 };
-
 const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
   const {
     defaultValues = {
@@ -111,41 +104,37 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
     noteDescriptionLabel,
     errorProfilesDataLabel,
   } = props;
-
   const form = useForm<
-    Omit<ExtensionEditStep3FormValues, 'keywords'> & { keywords?: string | string[] }
+    Omit<ExtensionEditStep3FormValues, 'keywords'> & {
+      keywords?: string | string[];
+    }
   >({
     defaultValues,
     resolver: zodResolver(schema),
     mode: 'onChange',
   });
-
   const {
     control,
     getValues,
     setValue,
     formState: { errors },
   } = form;
-
   const licenses: Licenses | string[] = useMemo(
     () => [Licenses.MIT, Licenses.GPL, Licenses.APACHE, Licenses.BSD, Licenses.MPL, Licenses.OTHER],
     [],
   );
-
   const isValid = !Object.keys(errors).length;
-
-  const licenseValue = useWatch({ control, name: FieldName.license });
-
+  const licenseValue = useWatch({
+    control,
+    name: FieldName.license,
+  });
   useEffect(() => {
     if (!licenses.includes(defaultValues.license)) {
       setValue('license', Licenses.OTHER);
     }
   }, [licenses, defaultValues.license, setValue]);
-
   const [keywords, setKeywords] = useState(new Set(defaultValues.keywords));
-
   const maxTagsSelected = keywords.size >= MAX_TAGS;
-
   const contributorAvatars = useMemo(() => {
     if (contributorsProfiles?.length) {
       return contributorsProfiles
@@ -161,15 +150,12 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
 
   //@TODO: here it should be a list of available indexed keywords for extensions
   const availableKeywords = [];
-
   const onSave = (event: SyntheticEvent) => {
     event.preventDefault();
     const formValues = getValues();
-
     if (formValues.license === Licenses.OTHER) {
       formValues.license = formValues.licenseOther;
     }
-
     if (isValid) {
       nextButton.handleClick({
         ...formValues,
@@ -177,14 +163,11 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
       });
     }
   };
-
   const handleAddContributors = () => {
     const formValues = getValues();
-
     if (formValues.license === Licenses.OTHER) {
       formValues.license = formValues.licenseOther;
     }
-
     if (isValid) {
       handleNavigateToContributorsPage({
         ...formValues,
@@ -192,7 +175,6 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
       });
     }
   };
-
   return (
     <Form {...form}>
       <form onSubmit={onSave} className={`h-full`}>
@@ -243,15 +225,15 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
             <Stack direction="column" spacing={4}>
               <Stack spacing={1} direction="column">
                 <Stack direction="row" spacing={2} justifyContent="between" alignItems="center">
-                  <Text variant="h6">{collaboratorsFieldLabel}</Text>
+                  <Typography variant="h6">{collaboratorsFieldLabel}</Typography>
                   <Button variant="link" onClick={handleAddContributors}>
                     <PlusIcon />
                     {contributorsProfiles.length > 0 ? addAndEditLabel : addLabel}
                   </Button>
                 </Stack>
-                <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
+                <Typography variant="sm" className="text-grey4 dark:text-grey6 font-light">
                   {collaboratorsDescriptionLabel}
-                </Text>
+                </Typography>
               </Stack>
               {loadingProfilesData && <Loader2 className="h-8 w-8 animate-spin text-primary" />}
               {errorProfilesData && (
@@ -270,15 +252,14 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
                     size="md"
                   />
                   <Stack alignItems="center" justifyContent="center">
-                    <Text variant="body2" weight="bold">
+                    <Typography variant="sm" bold>
                       {contributorsProfiles[0]?.name}
-                    </Text>
+                    </Typography>
                     {contributorsProfiles.length > 1 && (
-                      <Text
-                        variant="footnotes2"
-                        color={{ light: 'grey4', dark: 'grey6' }}
-                        weight="light"
-                      >{`and ${contributorsProfiles.length - 1} ${moreLabel}`}</Text>
+                      <Typography
+                        variant="xs"
+                        className="font-medium text-grey4 dark:text-grey6 font-light"
+                      >{`and ${contributorsProfiles.length - 1} ${moreLabel}`}</Typography>
                     )}
                   </Stack>
                 </Stack>
@@ -289,9 +270,9 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
 
             <Stack direction="column" spacing={2}>
               <Label required={true}>{tagsLabel}</Label>
-              <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
+              <Typography variant="sm" className="font-light text-grey4 dark:text-grey6 font-light">
                 {tagsDescriptionLabel}
-              </Text>
+              </Typography>
               <FormField
                 control={control}
                 name={FieldName.keywords}
@@ -331,9 +312,9 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
                 }}
               />
 
-              <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
+              <Typography variant="sm" className="font-light text-grey4 dark:text-grey6 font-light">
                 {`${keywords.size}/${MAX_TAGS} ${tagsAddedLabel}`}
-              </Text>
+              </Typography>
             </Stack>
             <Divider />
             <Stack direction="column" spacing={2}>
@@ -343,11 +324,13 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
                   size="sm"
                   customStyle={'[&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark'}
                 />
-                <Text variant="button-md">{noteLabel}</Text>
+                <Typography variant="sm" bold>
+                  {noteLabel}
+                </Typography>
               </Stack>
-              <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
+              <Typography variant="sm" className="text-grey4 dark:text-grey6 font-light">
                 {noteDescriptionLabel}
-              </Text>
+              </Typography>
             </Stack>
           </Stack>
           <Divider />
@@ -369,9 +352,7 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
     </Form>
   );
 };
-
 export default ExtensionEditStep3Form;
-
 const schema = z.object({
   extensionLicense: z.string(),
   keywords: z

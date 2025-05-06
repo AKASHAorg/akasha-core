@@ -1,15 +1,12 @@
 import * as React from 'react';
-
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { RssIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-
 export interface ITagButton {
   tagName: string;
   isSubscribed?: boolean;
   onClickTag?: () => void;
 }
-
 export const TagButton: React.FC<ITagButton> = props => {
   const { tagName, isSubscribed, onClickTag } = props;
   const bgClass = isSubscribed
@@ -21,7 +18,7 @@ export const TagButton: React.FC<ITagButton> = props => {
       className={`max-w-[150px] border-grey8 dark:border-grey3 rounded-[0.5rem] px-4 py-1 gap-2 ${bgClass} ${flexClass}`}
       onClick={onClickTag}
     >
-      <Text truncate={true}>{tagName}</Text>
+      <Typography className="truncate">{tagName}</Typography>
       <Icon icon={<RssIcon />} />
     </button>
   );

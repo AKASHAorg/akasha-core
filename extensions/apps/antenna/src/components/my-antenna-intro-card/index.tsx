@@ -1,11 +1,9 @@
 import React from 'react';
-
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { cn } from '@akashaorg/ui/lib/library/utils';
-
 export type MyAntennaIntroCardProps = {
   heading: string;
   description: string;
@@ -51,12 +49,10 @@ const MyAntennaIntroCard: React.FC<MyAntennaIntroCardProps> = ({
                 src={`${publicImgPath}/${assetName}.${assetExtension}`}
               />
             )}
-            <Text variant="h6" align="center">
+            <Typography variant="h6" className="text-center">
               {heading}
-            </Text>
-            <Text variant="body1" align="center" customStyle="px-8">
-              {description}
-            </Text>
+            </Typography>
+            <Typography className="text-center px-8">{description}</Typography>
           </>
         )}
 
@@ -66,7 +62,11 @@ const MyAntennaIntroCard: React.FC<MyAntennaIntroCardProps> = ({
           alignItems="center"
           justifyContent={isMinified ? 'between' : 'end'}
         >
-          {isMinified && <Text variant="subtitle2">{secondaryDescription}</Text>}
+          {isMinified && (
+            <Typography variant="sm" className="font-light">
+              {secondaryDescription}
+            </Typography>
+          )}
 
           <Button
             variant={isMinified ? 'outline' : 'default'}
@@ -81,5 +81,4 @@ const MyAntennaIntroCard: React.FC<MyAntennaIntroCardProps> = ({
     </Card>
   );
 };
-
 export default MyAntennaIntroCard;

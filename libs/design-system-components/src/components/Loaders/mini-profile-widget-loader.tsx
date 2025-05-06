@@ -1,7 +1,7 @@
 import React from 'react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 
 /**
@@ -29,13 +29,13 @@ const MiniProfileWidgetLoader: React.FC = () => {
           className="w-full"
         >
           <TextLine width="w-2/6" height="h-5" animated />
-          <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey6' }}>
+          <Typography variant="sm" className="font-light text-grey4 dark:text-grey6">
             |
-          </Text>
+          </Typography>
           <TextLine width="w-2/6" height="h-5" animated />
-          <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey6' }}>
+          <Typography variant="sm" className="font-light text-grey4 dark:text-grey6">
             |
-          </Text>
+          </Typography>
           <TextLine width="w-2/6" height="h-5" animated />
         </Stack>
         <TextLine width="w-full" height="h-5" animated />
@@ -50,5 +50,4 @@ const MiniProfileWidgetLoader: React.FC = () => {
     </Card>
   );
 };
-
 export default MiniProfileWidgetLoader;

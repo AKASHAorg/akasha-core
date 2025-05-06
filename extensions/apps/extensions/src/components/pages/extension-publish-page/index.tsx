@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import {
   ErrorLoader,
   ErrorLoaderDescription,
@@ -30,21 +30,16 @@ import { selectAkashaApp } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps
 import appRoutes, { SUBMIT_EXTENSION } from '../../../routes';
 import { DRAFT_EXTENSIONS, DRAFT_RELEASES, MAX_CONTRIBUTORS_DISPLAY } from '../../../constants';
 import { createAppMutationCache } from './create-app-mutation-cache';
-
 type ExtensionPublishPageProps = {
   extensionId: string;
 };
-
 export const ExtensionPublishPage: React.FC<ExtensionPublishPageProps> = ({ extensionId }) => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
-
   const { uiEvents, baseRouteName, getCorePlugins, encodeAppName } = useRootComponentProps();
   const uiEventsRef = React.useRef(uiEvents);
-
   const navigateTo = getCorePlugins().routing.navigateTo;
   const sdk = useRef(getSDK());
-
   const showErrorNotification = React.useCallback((title: string, description?: string) => {
     uiEventsRef.current.next({
       event: NotificationEvents.ShowNotification,
@@ -55,7 +50,6 @@ export const ExtensionPublishPage: React.FC<ExtensionPublishPageProps> = ({ exte
       },
     });
   }, []);
-
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
@@ -68,9 +62,7 @@ export const ExtensionPublishPage: React.FC<ExtensionPublishPageProps> = ({ exte
       showErrorNotification(error);
     }
   }, [authenticatedDID, showErrorNotification]);
-
   const extensionData = draftExtensions?.find(draftExtension => draftExtension.id === extensionId);
-
   const draftReleases = useMemo(() => {
     try {
       return JSON.parse(localStorage.getItem(`${DRAFT_RELEASES}-${authenticatedDID}`)) || [];
@@ -78,13 +70,13 @@ export const ExtensionPublishPage: React.FC<ExtensionPublishPageProps> = ({ exte
       showErrorNotification(error);
     }
   }, [authenticatedDID, showErrorNotification]);
-
   const localRelease = draftReleases?.find(
     draftRelease => draftRelease.applicationID === extensionId,
   );
-
   const [createAppMutation, { loading: loadingAppMutation }] = useCreateAppMutation({
-    context: { source: sdk.current.services.gql.contextSources.composeDB },
+    context: {
+      source: sdk.current.services.gql.contextSources.composeDB,
+    },
     update: (
       cache,
       {
@@ -93,7 +85,11 @@ export const ExtensionPublishPage: React.FC<ExtensionPublishPageProps> = ({ exte
         },
       },
     ) => {
-      createAppMutationCache({ cache, authenticatedDID, document });
+      createAppMutationCache({
+        cache,
+        authenticatedDID,
+        document,
+      });
     },
     onCompleted: data => {
       // after the extension has been published to the ceramic model
@@ -112,7 +108,10 @@ export const ExtensionPublishPage: React.FC<ExtensionPublishPageProps> = ({ exte
         draftRelease => draftRelease.applicationID !== extensionId,
       );
       // update the local draft release to reflect the published app id
-      const newLocalRelease = { ...localRelease, applicationID: data?.setAkashaApp?.document?.id };
+      const newLocalRelease = {
+        ...localRelease,
+        applicationID: data?.setAkashaApp?.document?.id,
+      };
       // save the new list of local draft releases in local storage
       localStorage.setItem(
         `${DRAFT_RELEASES}-${authenticatedDID}`,
@@ -120,7 +119,9 @@ export const ExtensionPublishPage: React.FC<ExtensionPublishPageProps> = ({ exte
       );
       navigate({
         to: '/post-publish/$extensionId',
-        params: { extensionId },
+        params: {
+          extensionId,
+        },
       });
     },
     onError: error => {
@@ -130,7 +131,6 @@ export const ExtensionPublishPage: React.FC<ExtensionPublishPageProps> = ({ exte
       );
     },
   });
-
   const handleConnectButtonClick = () => {
     navigateTo?.({
       appName: '@akashaorg/app-auth-ewa',
@@ -141,7 +141,6 @@ export const ExtensionPublishPage: React.FC<ExtensionPublishPageProps> = ({ exte
       },
     });
   };
-
   const {
     data: appInfoName,
     loading: loadingAppInfoName,
@@ -151,27 +150,29 @@ export const ExtensionPublishPage: React.FC<ExtensionPublishPageProps> = ({ exte
     variables: {
       id: authenticatedDID,
       first: 1,
-      filters: { where: { name: { equalTo: extensionData?.name } } },
+      filters: {
+        where: {
+          name: {
+            equalTo: extensionData?.name,
+          },
+        },
+      },
     },
     fetchPolicy: 'cache-first',
     notifyOnNetworkStatusChange: true,
     skip: !extensionData?.name || !authenticatedDID,
   });
-
   const {
     profilesData,
     loading: loadingProfilesData,
     error: errorProfilesData,
   } = useProfilesList(extensionData?.contributors);
-
   const isDuplicatePublishedExtName = useMemo(() => !!selectAkashaApp(appInfoName), [appInfoName]);
-
   useEffect(() => {
     if (appInfoQueryErrorName) {
       showErrorNotification(appInfoQueryErrorName.message);
     }
   }, [appInfoQueryErrorName, showErrorNotification]);
-
   const contributorAvatars = useMemo(() => {
     if (profilesData?.length) {
       return profilesData
@@ -184,7 +185,6 @@ export const ExtensionPublishPage: React.FC<ExtensionPublishPageProps> = ({ exte
         });
     }
   }, [profilesData]);
-
   const handleClickPublish = () => {
     if (calledAppInfoName && !loadingAppInfoName && !isDuplicatePublishedExtName) {
       const extData = {
@@ -211,13 +211,11 @@ export const ExtensionPublishPage: React.FC<ExtensionPublishPageProps> = ({ exte
       });
     }
   };
-
   const handleClickCancel = () => {
     navigate({
       to: '/my-extensions',
     });
   };
-
   if (!authenticatedDID) {
     return (
       <ErrorLoader type="not-authenticated">
@@ -229,27 +227,31 @@ export const ExtensionPublishPage: React.FC<ExtensionPublishPageProps> = ({ exte
       </ErrorLoader>
     );
   }
-
   const onViewAllClick = () => {
     if (extensionData?.name) {
       navigate({
         to: '/info/$appId/contributors',
-        params: { appId: encodeAppName(extensionData.name) },
+        params: {
+          appId: encodeAppName(extensionData.name),
+        },
       });
     }
   };
-
   const onEditExtensionClick = () => {
-    navigate({ to: '/edit-extension/$extensionId/step1', params: { extensionId } });
+    navigate({
+      to: '/edit-extension/$extensionId/step1',
+      params: {
+        extensionId,
+      },
+    });
   };
-
   return (
     <Card className="shadow-none p-0">
       <Stack spacing={2}>
         <Stack className="p-4">
-          <Text variant="h5" weight="semibold" align="center">
+          <Typography variant="h5" className="font-semibold text-center">
             {t('Review and Publish Extension')}
-          </Text>
+          </Typography>
         </Stack>
         <ExtensionReviewAndPublish
           extensionData={extensionData}
@@ -303,13 +305,14 @@ export const ExtensionPublishPage: React.FC<ExtensionPublishPageProps> = ({ exte
                     size="md"
                   />
                   <Stack>
-                    <Text variant="button-sm">{profilesData[0]?.name}</Text>
+                    <Typography variant="xs" bold>
+                      {profilesData[0]?.name}
+                    </Typography>
                     {profilesData.length > 1 && (
-                      <Text
-                        variant="footnotes2"
-                        color="grey7"
-                        weight="normal"
-                      >{`and ${profilesData.length - 1} ${t('more')}`}</Text>
+                      <Typography
+                        variant="xs"
+                        className="font-medium text-grey7 font-normal"
+                      >{`and ${profilesData.length - 1} ${t('more')}`}</Typography>
                     )}
                   </Stack>
                   <Button variant="link" onClick={onViewAllClick} className="ml-auto">
@@ -320,7 +323,10 @@ export const ExtensionPublishPage: React.FC<ExtensionPublishPageProps> = ({ exte
             </>
           }
           needToMakeChangesLabel={t('Need to make changes?')}
-          editExtension={{ handleClick: onEditExtensionClick, label: t('Edit extension') }}
+          editExtension={{
+            handleClick: onEditExtensionClick,
+            label: t('Edit extension'),
+          }}
           transformSource={transformSource}
           onClickCancel={handleClickCancel}
           onClickSubmit={handleClickPublish}

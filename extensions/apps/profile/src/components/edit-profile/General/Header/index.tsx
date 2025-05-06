@@ -7,7 +7,7 @@ import {
   ProfileAvatarImage,
   ProfileAvatarFallback,
 } from '@akashaorg/ui/lib/akasha-components/profile-avatar';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import List, { ListProps } from '@akashaorg/design-system-core/lib/components/List';
 import ImageModal from '@akashaorg/design-system-components/lib/components/ImageModal';
 import {
@@ -199,7 +199,7 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <Stack direction="column" spacing={2}>
-      <Text variant="h6">{title}</Text>
+      <Typography variant="h6">{title}</Typography>
       <Stack className="relative mb-8">
         <Card
           data-testid="cover-image"

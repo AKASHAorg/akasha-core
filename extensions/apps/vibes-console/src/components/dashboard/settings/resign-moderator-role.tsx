@@ -4,9 +4,8 @@ import {
   PageHeader,
 } from '@akashaorg/design-system-components/lib/components/PageHeader';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Textarea } from '@akashaorg/ui/lib/akasha-components/textarea';
-
 export type ResignRoleProps = PageHeaderProps & {
   textLine1Label: string;
   reasonTitleLabel: string;
@@ -14,7 +13,6 @@ export type ResignRoleProps = PageHeaderProps & {
   optionalLabel: string;
   textLine2Label: string;
 };
-
 export const ResignRole: React.FC<ResignRoleProps> = props => {
   const {
     textLine1Label,
@@ -23,16 +21,15 @@ export const ResignRole: React.FC<ResignRoleProps> = props => {
     optionalLabel,
     textLine2Label,
   } = props;
-
   return (
     <PageHeader {...props}>
       <Stack spacing="gap-y-4" customStyle="mb-8">
-        <Text>{textLine1Label}</Text>
+        <Typography>{textLine1Label}</Typography>
 
         <Stack spacing="gap-y-2">
           <Stack spacing="gap-x-2">
-            <Text weight="bold">{reasonTitleLabel}</Text>
-            <Text customStyle="text-[0.875rem] leading-[1.375rem] font-light">{`(${optionalLabel})`}</Text>
+            <Typography bold>{reasonTitleLabel}</Typography>
+            <Typography className="text-[0.875rem] leading-[1.375rem] font-light">{`(${optionalLabel})`}</Typography>
           </Stack>
 
           <Textarea
@@ -43,7 +40,7 @@ export const ResignRole: React.FC<ResignRoleProps> = props => {
           />
         </Stack>
 
-        <Text>{textLine2Label}</Text>
+        <Typography>{textLine2Label}</Typography>
       </Stack>
     </PageHeader>
   );

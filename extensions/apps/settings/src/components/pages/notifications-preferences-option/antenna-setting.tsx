@@ -1,26 +1,23 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Info } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-
 export interface IAntennaSettingProps {
   // data
   isSelected: boolean;
   // handlers
   onChange?: (ev: React.ChangeEvent<HTMLInputElement>) => void;
 }
-
 const AntennaSetting: React.FC<IAntennaSettingProps> = ({ isSelected, onChange }) => {
   const { t } = useTranslation('app-settings-ewa');
-
   return (
     <Stack>
       <Stack direction="row" justifyContent="between" alignItems="center">
-        <Text variant="body1">{t('Antenna')}</Text>
+        <Typography>{t('Antenna')}</Typography>
         <Checkbox
           id="antenna-checkbox"
           value="Antenna"
@@ -32,11 +29,11 @@ const AntennaSetting: React.FC<IAntennaSettingProps> = ({ isSelected, onChange }
         />
       </Stack>
 
-      <Text variant="footnotes2" weight="normal" customStyle="dark:text-grey6 text-grey4 mt-2">
+      <Typography variant="xs" className="font-medium font-normal dark:text-grey6 text-grey4 mt-2">
         {t(
           'Get notifications about new reflections on your beams people you follow & your interests.',
         )}
-      </Text>
+      </Typography>
       <Card className="p-3 mt-4">
         <Stack direction="row" spacing={3} alignItems="center">
           <Icon
@@ -45,13 +42,12 @@ const AntennaSetting: React.FC<IAntennaSettingProps> = ({ isSelected, onChange }
             solid={true}
             customStyle="[&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark"
           />
-          <Text variant="body1" customStyle="text-sm">
+          <Typography className="text-sm">
             {t('Changing notifications preferences requires a signature')}
-          </Text>
+          </Typography>
         </Stack>
       </Card>
     </Stack>
   );
 };
-
 export default AntennaSetting;

@@ -28,7 +28,7 @@ import { selectAkashaAppStreamStatus } from '@akashaorg/ui-core-hooks/lib/select
 import { NetworkStatus } from '@apollo/client';
 import { AppInfoHeader } from '../../app-info/header';
 import Section, { DividerPosition } from '@akashaorg/design-system-core/lib/components/Section';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import ExtensionImageGallery from '../../extension-image-gallery';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
@@ -44,11 +44,9 @@ import { AppInfoNotificationCards } from '../../app-info/notification-cards';
 import { getExtensionStatus, getExtensionTypeLabel } from '../../../utils/extension-utils';
 import getSDK from '@akashaorg/core-sdk';
 import { ExtensionStatus } from '@akashaorg/typings/lib/ui';
-
 type InfoPageProps = {
   appId: string;
 };
-
 export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
   const navigate = useNavigate();
   const sdk = useRef(getSDK());
@@ -56,28 +54,29 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
   const { navigateToModal, decodeAppName, getDefaultExtensionNames, getCorePlugins, logger } =
     useRootComponentProps();
   const [showUninstallModal, setShowUninstallModal] = useState(false);
-
   const [showImageGalleryOverlay, setShowImageGalleryOverlay] = useState(false);
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
-
   const navigateTo = useRef(getCorePlugins().routing.navigateTo);
-
   const appReq = useGetAppsQuery({
     variables: {
       first: 1,
-      filters: { where: { name: { equalTo: decodeAppName(appId) } } },
+      filters: {
+        where: {
+          name: {
+            equalTo: decodeAppName(appId),
+          },
+        },
+      },
     },
   });
-
   const installedExtensionsReq = useInstalledExtensions();
   const isInstalled = useMemo(() => {
     if (installedExtensionsReq.data) {
       return installedExtensionsReq.data.some(ext => ext.name === decodeAppName(appId));
     }
   }, [appId, decodeAppName, installedExtensionsReq.data]);
-
   const handleInstallClick = () => {
     if (!authenticatedDID) {
       return navigateToModal({
@@ -85,7 +84,6 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
         redirectTo: location.pathname,
       });
     }
-
     navigate({
       to: '/install/$appId',
       params: {
@@ -93,25 +91,21 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
       },
     }).catch(err => logger.error('cannot navigate to /install/$appId : %o', err));
   };
-
   const handleUninstallClick = () => {
     setShowUninstallModal(true);
   };
-
   const handleOpenClick = () => {
     navigateTo.current({
       appName: decodeAppName(appId),
       getNavigationUrl: () => '/',
     });
   };
-
   const handleExtensionReportClick = () => {
     navigateTo.current({
       appName: '@akashaorg/app-vibes',
       getNavigationUrl: () => `/report/extension/${appData.id}`,
     });
   };
-
   const handleReleasesClick = () => {
     navigate({
       to: '/info/$appId/releases',
@@ -120,7 +114,6 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
       },
     }).catch(err => logger.error('cannot navigate to /info/$appId/versions : %o', err));
   };
-
   const handleDeveloperClick = () => {
     navigate({
       to: '/info/$appId/developer/$devDid',
@@ -130,7 +123,6 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
       },
     }).catch(err => logger.error('cannot navigate to /info/$appId/developer/$devDid : %o', err));
   };
-
   const handleCollaboratorsClick = () => {
     navigate({
       to: '/info/$appId/contributors',
@@ -139,7 +131,6 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
       },
     }).catch(err => logger.error('cannot navigate to /info/$appId/contributors : %o', err));
   };
-
   const handleLicenseClick = () => {
     navigate({
       to: '/info/$appId/license',
@@ -148,7 +139,6 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
       },
     }).catch(err => logger.error('cannot navigate to /info/$appId/license : %o', err));
   };
-
   const handleDescriptionClick = () => {
     navigate({
       to: '/info/$appId/description',
@@ -157,10 +147,8 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
       },
     }).catch(err => logger.error('cannot navigate to /info/$appId/license : %o', err));
   };
-
   const appData = selectAkashaApp(appReq.data);
   const latestRelease = useMemo(() => selectLatestRelease(appReq.data), [appReq.data]);
-
   const { data: appStreamReq } = useGetAppsStreamQuery({
     variables: {
       indexer: sdk.current.services.gql.indexingDID,
@@ -177,26 +165,20 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
     notifyOnNetworkStatusChange: true,
     skip: !appData?.id || !appData?.id?.trim() || appData?.id?.length < 10,
   });
-
   const appStreamStatus = selectAkashaAppStreamStatus(appStreamReq);
-
   const extStatus = getExtensionStatus(false, appStreamStatus);
-
   const coverImageSrc = useMemo(() => {
     if (appData?.coverImage?.src) {
       return transformSource(appData.coverImage)?.src;
     }
     return null;
   }, [appData]);
-
   const isDefaultWorldExtension = useMemo(() => {
     if (!appId) {
       return false;
     }
-
     return getDefaultExtensionNames().includes(decodeAppName(appId));
   }, [appId, decodeAppName, getDefaultExtensionNames]);
-
   const contributorAvatars = useMemo(() => {
     if (appData?.contributors?.length) {
       return appData.contributors
@@ -209,7 +191,6 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
         });
     }
   }, [appData?.contributors]);
-
   return (
     <>
       {appReq.error && (
@@ -249,12 +230,18 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                   extensionTypeLabel={t('{{extensionTypeLabel}}', {
                     extensionTypeLabel: getExtensionTypeLabel(appData?.applicationType),
                   })}
-                  share={{ label: t('Share'), icon: <ShareIcon /> }}
+                  share={{
+                    label: t('Share'),
+                    icon: <ShareIcon />,
+                  }}
                   report={{
                     label: t('Flag'),
                     icon: <FlagIcon />,
                     onClick: handleExtensionReportClick,
-                    color: { light: 'errorLight', dark: 'errorDark' },
+                    color: {
+                      light: 'errorLight',
+                      dark: 'errorDark',
+                    },
                   }}
                   onInstallClick={handleInstallClick}
                   onUninstallClick={handleUninstallClick}
@@ -286,9 +273,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                     viewMoreLabel={t('Read More')}
                     onClickviewMoreLabel={handleDescriptionClick}
                   >
-                    <Text lineClamp={2} variant="body1">
-                      {appData.description}
-                    </Text>
+                    <Typography className="line-clamp-2">{appData.description}</Typography>
                   </Section>
                 )}
                 <Section title={t('Developer')} dividerPosition={DividerPosition.Top}>
@@ -336,67 +321,68 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                 <Section title={t('General Information')} dividerPosition={DividerPosition.Top}>
                   <Stack spacing={2}>
                     <Stack direction="row" justifyContent="between">
-                      <Text variant="body2" color={{ light: 'grey4', dark: 'grey7' }}>
+                      <Typography variant="sm" className="text-grey4 dark:text-grey7">
                         {t('Package name')}
-                      </Text>
+                      </Typography>
                       <CopyToClipboard
                         textToCopy={appData.name}
                         ctaText={t('Copy to clipboard')}
                         successText={t('Copied')}
                       >
-                        <Text
-                          variant="button-md"
-                          color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                        <Typography
+                          variant="sm"
+                          bold
+                          className="text-secondaryLight dark:text-secondaryDark"
                         >
                           {appData.name}
-                        </Text>
+                        </Typography>
                       </CopyToClipboard>
                     </Stack>
                     <Divider />
                     <Stack direction="row" justifyContent="between">
-                      <Text variant="body2" color={{ light: 'grey4', dark: 'grey7' }}>
+                      <Typography variant="sm" className="text-grey4 dark:text-grey7">
                         {t('Extension ID')}
-                      </Text>
+                      </Typography>
                       <CopyToClipboard
                         textToCopy={appData.id}
                         ctaText={t('Copy to clipboard')}
                         successText={t('Copied')}
                       >
-                        <Text
-                          variant="button-md"
-                          color={{
-                            light: 'secondaryLight',
-                            dark: 'secondaryDark',
-                          }}
+                        <Typography
+                          variant="sm"
+                          bold
+                          className="text-secondaryLight dark:text-secondaryDark"
                         >
                           {truncateDid(appData.id)}
-                        </Text>
+                        </Typography>
                       </CopyToClipboard>
                     </Stack>
                     <Divider />
                     <Stack direction="row" justifyContent="between">
-                      <Text variant="body2" color={{ light: 'grey4', dark: 'grey7' }}>
+                      <Typography variant="sm" className="text-grey4 dark:text-grey7">
                         {t('Latest update')}
-                      </Text>
+                      </Typography>
                       <Button variant="link" onClick={handleReleasesClick}>
                         {formatDate(latestRelease?.node?.createdAt, 'DD MMM YYYY')}
                       </Button>
                     </Stack>
                     <Divider />
                     <Stack direction="row" justifyContent="between">
-                      <Text variant="body2" color={{ light: 'grey4', dark: 'grey7' }}>
+                      <Typography variant="sm" className="text-grey4 dark:text-grey7">
                         {t('License')}
-                      </Text>
+                      </Typography>
                       <Button variant="link" onClick={handleLicenseClick}>
                         {appData.license}
                       </Button>
                     </Stack>
                     <Divider />
                     <Stack direction="row" justifyContent="between">
-                      <Text variant="body2" color={{ light: 'grey4', dark: 'grey7' }}>
+                      <Typography variant="sm" className="text-grey4 dark:text-grey7">
                         {t('Created on')}
-                      </Text>
-                      <Text variant="body2">{formatDate(appData.createdAt, 'DD MMM YYYY')}</Text>
+                      </Typography>
+                      <Typography variant="sm">
+                        {formatDate(appData.createdAt, 'DD MMM YYYY')}
+                      </Typography>
                     </Stack>
                   </Stack>
                 </Section>
@@ -405,12 +391,12 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                     <Stack className="flex-wrap">
                       {appData.links?.map((link, idx) => (
                         <CopyToClipboard key={`${link.href}_${idx}`} textToCopy={link.href}>
-                          <Text
-                            variant="subtitle2"
-                            color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                          <Typography
+                            variant="sm"
+                            className="font-light text-secondaryLight dark:text-secondaryDark"
                           >
                             {link.label}
-                          </Text>
+                          </Typography>
                         </CopyToClipboard>
                       ))}
                     </Stack>
@@ -442,21 +428,21 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                   {!!latestRelease && (
                     <Stack spacing={4}>
                       <Stack>
-                        <Text variant="body1" color={{ light: 'grey4', dark: 'grey7' }}>
+                        <Typography className="text-grey4 dark:text-grey7">
                           {t('Version')} {latestRelease?.node?.version}
-                        </Text>
-                        <Text variant="footnotes2">
+                        </Typography>
+                        <Typography variant="xs" className="font-medium">
                           {formatDate(latestRelease?.node?.createdAt, 'MMM YYYY')}
-                        </Text>
+                        </Typography>
                       </Stack>
-                      <Text lineClamp={2} variant="subtitle2">
+                      <Typography variant="sm" className="line-clamp-2 font-light">
                         {latestRelease?.node?.meta?.find(meta => meta.property === 'description')
                           ?.value || t('This release has no description added.')}
-                      </Text>
+                      </Typography>
                     </Stack>
                   )}
                   {!latestRelease && (
-                    <Text variant="body1">{t('This extension does not have a release yet.')}</Text>
+                    <Typography>{t('This extension does not have a release yet.')}</Typography>
                   )}
                 </Section>
 
@@ -465,7 +451,10 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                     <Stack direction="row" spacing={2}>
                       {appData.keywords?.map((keyword, idx) => (
                         <Pill
-                          borderColor={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                          borderColor={{
+                            light: 'secondaryLight',
+                            dark: 'secondaryDark',
+                          }}
                           type="info"
                           key={`${keyword}_${idx}`}
                           label={keyword}

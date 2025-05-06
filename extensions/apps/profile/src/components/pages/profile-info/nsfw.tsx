@@ -1,10 +1,9 @@
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import React from 'react';
 import { EyeSlashIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-
 export type NSFWProps = {
   sensitiveContentLabel: string;
   descriptionFirstLine: string;
@@ -14,7 +13,6 @@ export type NSFWProps = {
   onCancel: (event: React.SyntheticEvent<HTMLButtonElement>) => void;
   onClickToView: (event: React.SyntheticEvent<HTMLButtonElement>) => void;
 };
-
 const NSFW: React.FC<NSFWProps> = props => {
   const {
     sensitiveContentLabel,
@@ -29,17 +27,13 @@ const NSFW: React.FC<NSFWProps> = props => {
     <Stack alignItems="center" justifyContent="center" spacing={2}>
       <Stack direction="row" spacing={1}>
         <Icon icon={<EyeSlashIcon />} customStyle="[&>*]:stroke-errorLight" />
-        <Text variant="h6" color="errorLight">
+        <Typography variant="h6" className="text-errorLight">
           {sensitiveContentLabel}
-        </Text>
+        </Typography>
       </Stack>
       <Stack>
-        <Text variant="body1" align="center">
-          {descriptionFirstLine}
-        </Text>
-        <Text variant="body1" align="center">
-          {descriptionSecondLine}
-        </Text>
+        <Typography className="text-center">{descriptionFirstLine}</Typography>
+        <Typography className="text-center">{descriptionSecondLine}</Typography>
       </Stack>
       <Stack direction="row" spacing={4}>
         <Button variant="outline" onClick={onCancel}>
@@ -50,5 +44,4 @@ const NSFW: React.FC<NSFWProps> = props => {
     </Stack>
   );
 };
-
 export default NSFW;

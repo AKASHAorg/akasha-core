@@ -4,9 +4,8 @@ import { type GalleryImage } from '@akashaorg/typings/lib/ui';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { ImageCrossed } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
-
 export interface IGridItemProps {
   imageNotLoadedLabel: string;
   image: GalleryImage;
@@ -18,7 +17,6 @@ export interface IGridItemProps {
   aspectRatio?: 'aspect-video' | 'aspect-auto' | 'aspect-square';
   handleClickImage: (image: GalleryImage) => void;
 }
-
 export const ImageBlockGridItem: React.FC<IGridItemProps> = props => {
   const {
     imageNotLoadedLabel,
@@ -28,12 +26,9 @@ export const ImageBlockGridItem: React.FC<IGridItemProps> = props => {
     aspectRatio = 'aspect-square',
     handleClickImage,
   } = props;
-
   const imageSrc = React.useMemo(() => image, [image]);
-
   const [imgLoaded, setImgLoaded] = React.useState(false);
   const [showImgFailedToLoad, setShowImgFailedToLoad] = React.useState(false);
-
   React.useEffect(() => {
     const timer = setTimeout(() => {
       if (!imgLoaded) {
@@ -42,10 +37,8 @@ export const ImageBlockGridItem: React.FC<IGridItemProps> = props => {
     }, 60000);
     return clearTimeout(timer);
   }, [imgLoaded]);
-
   const multipleImageStyle = `${images.length > 1 && aspectRatio}`;
   const heightStyle = `${images.length === 1 && 'max-h-40 sm:max-h-60'}`;
-
   return (
     <button
       className={'flex relative border-solid border-grey1 rounded'}
@@ -95,16 +88,18 @@ export const ImageBlockGridItem: React.FC<IGridItemProps> = props => {
           alignItems="center"
           justifyContent="center"
           spacing={2}
-          style={cssVars({ '--height': `${imageSrc?.size?.height}` })}
+          style={cssVars({
+            '--height': `${imageSrc?.size?.height}`,
+          })}
           className={`p-4 bg-grey9 dark:bg-grey5 rounded w-full h-[var(--height)] ${heightStyle} ${multipleImageStyle}`}
         >
           <Icon
             icon={<ImageCrossed />}
             customStyle={'[&>*]:stroke-grey5 dark:[&>*]:stroke-white'}
           />
-          <Text variant="footnotes2" color={{ light: 'grey5', dark: 'white' }}>
+          <Typography variant="xs" className="font-medium text-grey5 dark:text-white">
             {imageNotLoadedLabel}
-          </Text>
+          </Typography>
         </Stack>
       )}
     </button>

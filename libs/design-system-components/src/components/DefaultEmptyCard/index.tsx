@@ -1,14 +1,15 @@
 import React from 'react';
-
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Image } from '@akashaorg/ui/lib/akasha-components/image';
 import { cn } from '@akashaorg/ui/lib/library/utils';
 import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
-type CardSize = { width?: string | number; height?: string | number };
-
+type CardSize = {
+  width?: string | number;
+  height?: string | number;
+};
 export type DefaultEmptyCardProps = {
   publicImagePath?: string;
   assetExtension?: string;
@@ -58,9 +59,9 @@ const DefaultEmptyCard: React.FC<DefaultEmptyCardProps> = ({
           className={cn('bg-muted shrink-0 m-auto my-4', 'w-[var(--width)] h-[var(--height)]')}
         />
       )}
-      <Text variant="h6" align="center">
+      <Typography variant="h6" className="text-center">
         {infoText}
-      </Text>
+      </Typography>
       <Stack justifyContent="end" spacing={4} className="w-full pt-2">
         {buttonLabel && (
           <Button variant="primary" label={buttonLabel} onClick={buttonClickHandler} />
@@ -69,5 +70,4 @@ const DefaultEmptyCard: React.FC<DefaultEmptyCardProps> = ({
     </Card>
   );
 };
-
 export default DefaultEmptyCard;

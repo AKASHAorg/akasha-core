@@ -1,24 +1,19 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import MarkdownCard from '@akashaorg/design-system-core/lib/components/MarkdownCard';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 export type PageRendererProps = {
   doc: string | null;
   error?: Error | null;
   title: string;
 };
-
 const PageRenderer: React.FC<PageRendererProps> = props => {
   const { doc, error, title } = props;
-
   const { t } = useTranslation('app-legal');
-
   if (error) {
     return (
       <ErrorLoader
@@ -28,7 +23,6 @@ const PageRenderer: React.FC<PageRendererProps> = props => {
       />
     );
   }
-
   return (
     <Card className="p-0">
       <Stack
@@ -37,7 +31,7 @@ const PageRenderer: React.FC<PageRendererProps> = props => {
         justify="center"
         customStyle="border-b-1 border-solid border-grey8 dark:border-grey5"
       >
-        <Text weight="bold">{title}</Text>
+        <Typography bold>{title}</Typography>
       </Stack>
       <Stack padding={16}>
         {!doc && <Spinner />}
@@ -46,5 +40,4 @@ const PageRenderer: React.FC<PageRendererProps> = props => {
     </Card>
   );
 };
-
 export default PageRenderer;

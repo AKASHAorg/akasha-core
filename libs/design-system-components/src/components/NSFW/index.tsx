@@ -1,11 +1,13 @@
 import React from 'react';
 import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Controller, Control, FieldValues, Path, PathValue } from 'react-hook-form';
-
-export type InputType = { label: string; description?: string; initialValue: boolean };
-
+export type InputType = {
+  label: string;
+  description?: string;
+  initialValue: boolean;
+};
 export type NSFWProps<T extends FieldValues> = {
   nsfw: InputType;
   nsfwFieldLabel: string;
@@ -15,7 +17,6 @@ export type NSFWProps<T extends FieldValues> = {
   disabled?: boolean;
   customStyle?: string;
 };
-
 export const NSFW = <T extends FieldValues>({
   nsfw,
   nsfwFieldLabel,
@@ -27,18 +28,16 @@ export const NSFW = <T extends FieldValues>({
 }: NSFWProps<T>) => {
   return (
     <Stack direction="column" spacing={2} className={customStyle}>
-      <Text variant="h6" as="label">
-        {nsfwFieldLabel}
-      </Text>
+      <Typography variant="h6">{nsfwFieldLabel}</Typography>
       <Controller
         control={control}
         name={name}
         render={({ field: { name, value, onChange } }) => (
           <Stack spacing={1}>
             <Stack direction="row" justifyContent="between">
-              <Text variant="body2" as="label" color={{ light: 'grey4', dark: 'grey6' }}>
+              <Typography variant="sm" className="text-grey4 dark:text-grey6">
                 {nsfw.label}
-              </Text>
+              </Typography>
               <Toggle
                 id={name}
                 name={name}
@@ -49,9 +48,9 @@ export const NSFW = <T extends FieldValues>({
               />
             </Stack>
             {nsfw.description && (
-              <Text variant="button-md" as="label" color={{ light: 'grey4', dark: 'grey6' }}>
+              <Typography variant="sm" bold className="text-grey4 dark:text-grey6">
                 {nsfw.description}
-              </Text>
+              </Typography>
             )}
           </Stack>
         )}

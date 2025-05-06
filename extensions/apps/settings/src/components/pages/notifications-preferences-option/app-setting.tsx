@@ -1,8 +1,7 @@
 import React from 'react';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
-
 export interface IAppSettingProps {
   title;
   description;
@@ -11,12 +10,11 @@ export interface IAppSettingProps {
   // handlers
   onChange?: (ev: React.ChangeEvent<HTMLInputElement>) => void;
 }
-
 const AppSetting: React.FC<IAppSettingProps> = ({ title, description, isSelected, onChange }) => {
   return (
     <Stack>
       <Stack direction="row" justifyContent="between" alignItems="center">
-        <Text variant="body1">{title}</Text>
+        <Typography>{title}</Typography>
         <Checkbox
           id="checkbox"
           value="app-setting"
@@ -28,11 +26,10 @@ const AppSetting: React.FC<IAppSettingProps> = ({ title, description, isSelected
         />
       </Stack>
 
-      <Text variant="footnotes2" weight="normal" customStyle="dark:text-grey6 text-grey4 mt-2">
+      <Typography variant="xs" className="font-medium font-normal dark:text-grey6 text-grey4 mt-2">
         {description}
-      </Text>
+      </Typography>
     </Stack>
   );
 };
-
 export default AppSetting;

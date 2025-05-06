@@ -1,12 +1,9 @@
 import React from 'react';
-
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-
 import Default404Image from '../default-404-image';
-
 export type ProfileNotFoundProps = {
   titleLabel: string;
   buttonLabel: string;
@@ -25,15 +22,14 @@ const ProfileNotFound: React.FC<ProfileNotFoundProps> = ({
   onClickGoToHomepage,
 }) => {
   const publicImgPath = '/images';
-
   return (
     <Card className="p-2">
       <Stack direction="column" spacing={4} className="w-full">
         <Stack direction="column">
           <Default404Image url={`${publicImgPath}/new404.webp`} />
-          <Text variant={'h6'} align="center">
+          <Typography variant={'h6'} className="text-center">
             {titleLabel}
-          </Text>
+          </Typography>
         </Stack>
         <Stack direction="row" justifyContent="end" className="pr-2 pb-2 w-full">
           <Button onClick={onClickGoToHomepage}>{buttonLabel}</Button>
@@ -42,5 +38,4 @@ const ProfileNotFound: React.FC<ProfileNotFoundProps> = ({
     </Card>
   );
 };
-
 export default ProfileNotFound;

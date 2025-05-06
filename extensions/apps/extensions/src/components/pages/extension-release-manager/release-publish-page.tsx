@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import {
   ErrorLoader,
   ErrorLoaderDescription,
@@ -18,28 +18,25 @@ import { useSetAppReleaseMutation } from '@akashaorg/ui-core-hooks/lib/generated
 import getSDK from '@akashaorg/core-sdk';
 import { PROPERTY, PROVIDER } from '../../../constants';
 import { createReleaseMutationCache } from './create-release-mutation-cache';
-
 type ExtensionReleasePublishPageProps = {
   extensionId: string;
 };
-
 export const ExtensionReleasePublishPage: React.FC<ExtensionReleasePublishPageProps> = ({
   extensionId,
 }) => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
   const sdk = useRef(getSDK());
-
   const { uiEvents, baseRouteName, getCorePlugins } = useRootComponentProps();
   const navigateTo = getCorePlugins().routing.navigateTo;
   const uiEventsRef = React.useRef(uiEvents);
-
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
-
   const [setAppReleaseMutation, { loading }] = useSetAppReleaseMutation({
-    context: { source: sdk.current.services.gql.contextSources.composeDB },
+    context: {
+      source: sdk.current.services.gql.contextSources.composeDB,
+    },
     update: (
       cache,
       {
@@ -57,7 +54,10 @@ export const ExtensionReleasePublishPage: React.FC<ExtensionReleasePublishPagePr
     onCompleted: data => {
       navigate({
         to: `/release-manager/$extensionId/release-info/$releaseId`,
-        params: { extensionId, releaseId: data.setAkashaAppRelease?.document?.id },
+        params: {
+          extensionId,
+          releaseId: data.setAkashaAppRelease?.document?.id,
+        },
       });
     },
     onError: () => {
@@ -66,7 +66,6 @@ export const ExtensionReleasePublishPage: React.FC<ExtensionReleasePublishPagePr
       );
     },
   });
-
   const showErrorNotification = React.useCallback((title: string) => {
     uiEventsRef.current.next({
       event: NotificationEvents.ShowNotification,
@@ -76,7 +75,6 @@ export const ExtensionReleasePublishPage: React.FC<ExtensionReleasePublishPagePr
       },
     });
   }, []);
-
   const handleConnectButtonClick = () => {
     navigateTo?.({
       appName: '@akashaorg/app-auth-ewa',
@@ -87,7 +85,6 @@ export const ExtensionReleasePublishPage: React.FC<ExtensionReleasePublishPagePr
       },
     });
   };
-
   const handleClickSubmit = appReleaseFormData => {
     const appReleaseContent = {
       applicationID: extensionId,
@@ -110,14 +107,14 @@ export const ExtensionReleasePublishPage: React.FC<ExtensionReleasePublishPagePr
       },
     });
   };
-
   const handleClickCancel = () => {
     navigate({
       to: '/release-manager/$extensionId',
-      params: { extensionId },
+      params: {
+        extensionId,
+      },
     });
   };
-
   if (!authenticatedDID) {
     return (
       <ErrorLoader type="not-authenticated">
@@ -129,14 +126,13 @@ export const ExtensionReleasePublishPage: React.FC<ExtensionReleasePublishPagePr
       </ErrorLoader>
     );
   }
-
   return (
     <Card className="p-0">
       <Stack spacing={2}>
         <Stack className="p-4">
-          <Text variant="h5" weight="semibold" align="center">
+          <Typography variant="h5" className="font-semibold text-center">
             {t('Release Notes')}
-          </Text>
+          </Typography>
           <ExtensionReleasePublishForm
             validationLabels={{
               version: t('Version should follow Semantic Versioning standard'),

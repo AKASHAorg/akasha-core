@@ -13,25 +13,21 @@ import { Input } from '@akashaorg/ui/lib/akasha-components/input';
 import { Textarea } from '@akashaorg/ui/lib/akasha-components/textarea';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ButtonType } from '@akashaorg/design-system-components/lib/components/types/common.types';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 export enum FieldName {
   versionNumber = 'versionNumber',
   description = 'description',
   sourceURL = 'sourceURL',
 }
-
 export type ExtensionReleasePublishValues = {
   versionNumber?: string;
   description?: string;
   sourceURL?: string;
 };
-
 export type ExtensionReleasePublishProps = {
   versionNumberLabel: string;
   descriptionFieldLabel: string;
@@ -59,7 +55,6 @@ export type ExtensionReleasePublishProps = {
   requireDescription?: boolean;
   showModalFlow?: boolean;
 };
-
 const ExtensionReleasePublish: React.FC<ExtensionReleasePublishProps> = props => {
   const {
     defaultValues = {
@@ -84,7 +79,6 @@ const ExtensionReleasePublish: React.FC<ExtensionReleasePublishProps> = props =>
     cancelLabel,
     showModalFlow,
   } = props;
-
   const schema = z.object({
     versionNumber: z
       .string()
@@ -98,27 +92,28 @@ const ExtensionReleasePublish: React.FC<ExtensionReleasePublishProps> = props =>
     description: z
       .string()
       .trim()
-      .min(10, { message: validationLabels.descriptionMin })
-      .max(2000, { message: validationLabels.descriptionMax }),
-    sourceURL: z.string().url({ message: validationLabels.sourceURL }),
+      .min(10, {
+        message: validationLabels.descriptionMin,
+      })
+      .max(2000, {
+        message: validationLabels.descriptionMax,
+      }),
+    sourceURL: z.string().url({
+      message: validationLabels.sourceURL,
+    }),
   });
-
   const form = useForm<ExtensionReleasePublishValues>({
     defaultValues,
     resolver: zodResolver(schema),
     mode: 'onChange',
   });
-
   const {
     control,
     getValues,
     formState: { errors, dirtyFields },
   } = form;
-
   const isFormDirty = Object.keys(dirtyFields).includes(FieldName.sourceURL);
-
   const isValid = !Object.keys(errors).length;
-
   const onSave = (event: SyntheticEvent) => {
     event.preventDefault();
     const formValues = getValues();
@@ -129,20 +124,16 @@ const ExtensionReleasePublish: React.FC<ExtensionReleasePublishProps> = props =>
     }
   };
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-
   const onConfirmationModalClose = () => {
     setShowConfirmationModal(false);
   };
-
   const onConfirmationModalOpen = () => {
     setShowConfirmationModal(true);
   };
-
   const handleSave = ev => {
     onConfirmationModalClose();
     onSave(ev);
   };
-
   return (
     <Form {...form}>
       <form className={`h-full`}>
@@ -231,7 +222,9 @@ const ExtensionReleasePublish: React.FC<ExtensionReleasePublishProps> = props =>
         </Stack>
       </form>
       <Modal
-        title={{ label: confirmationModalTitleLabel }}
+        title={{
+          label: confirmationModalTitleLabel,
+        }}
         show={showConfirmationModal}
         onClose={onConfirmationModalClose}
         customStyle="max-w-[615px]"
@@ -248,10 +241,9 @@ const ExtensionReleasePublish: React.FC<ExtensionReleasePublishProps> = props =>
           },
         ]}
       >
-        <Text variant="body1">{confirmationModalDescriptionLabel}</Text>
+        <Typography>{confirmationModalDescriptionLabel}</Typography>
       </Modal>
     </Form>
   );
 };
-
 export default ExtensionReleasePublish;

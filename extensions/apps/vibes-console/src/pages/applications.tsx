@@ -4,7 +4,7 @@ import { useNavigate } from '@tanstack/react-router';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { IModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { JoinVibesCard } from '../components/applications/join-vibes-card';
 import { SectionRenderer } from '../components/applications/section-renderer';
 import routes, { BECOME_MODERATOR } from '../routes';
@@ -70,12 +70,12 @@ export const Applications: React.FC<unknown> = () => {
         noItemLabel={t('There are no moderator applications yet')}
         customThStyle="text-left"
         theadValues={[
-          <Text key={0} variant="h6">
+          <Typography key={0} variant="h6">
             {t('Applicant')}
-          </Text>,
-          <Text key={1} variant="h6">
+          </Typography>,
+          <Typography key={1} variant="h6">
             {t('Status')}
-          </Text>,
+          </Typography>,
         ]}
         rows={[]}
         onButtonClick={() => handleViewAllApplications('applications')}

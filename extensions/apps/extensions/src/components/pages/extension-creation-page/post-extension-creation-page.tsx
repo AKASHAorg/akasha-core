@@ -5,7 +5,7 @@ import { CREATE_EXTENSION } from '../../../routes';
 import { useRootComponentProps, useAkashaStore } from '@akashaorg/ui-core-hooks';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { DRAFT_EXTENSIONS } from '../../../constants';
 import {
   ErrorLoader,
@@ -21,19 +21,16 @@ import {
   ProfileAvatarButton,
   ProfileDidField,
 } from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
-
-export const PostExtensionCreationPage: React.FC<{ extensionId: string }> = ({ extensionId }) => {
+export const PostExtensionCreationPage: React.FC<{
+  extensionId: string;
+}> = ({ extensionId }) => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
-
   const { baseRouteName, getCorePlugins } = useRootComponentProps();
-
   const navigateTo = getCorePlugins().routing.navigateTo;
-
   const {
     data: { authenticatedDID, authenticatedProfile },
   } = useAkashaStore();
-
   const handleConnectButtonClick = () => {
     navigateTo?.({
       appName: '@akashaorg/app-auth-ewa',
@@ -44,19 +41,25 @@ export const PostExtensionCreationPage: React.FC<{ extensionId: string }> = ({ e
       },
     });
   };
-
   const handleNavigateToEdit = () => {
-    navigate({ to: '/edit-extension/$extensionId/step1', params: { extensionId } });
+    navigate({
+      to: '/edit-extension/$extensionId/step1',
+      params: {
+        extensionId,
+      },
+    });
   };
-
   const handleNavigateToReleaseManager = () => {
-    navigate({ to: '/release-manager/$extensionId', params: { extensionId } });
+    navigate({
+      to: '/release-manager/$extensionId',
+      params: {
+        extensionId,
+      },
+    });
   };
-
   const existingDraftExtensions =
     JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [];
   const extensionData = existingDraftExtensions.find(ext => ext.id === extensionId);
-
   if (!authenticatedDID) {
     return (
       <ErrorLoader type="not-authenticated">
@@ -68,13 +71,12 @@ export const PostExtensionCreationPage: React.FC<{ extensionId: string }> = ({ e
       </ErrorLoader>
     );
   }
-
   return (
     <Card className="px-4">
       <Stack spacing={8} alignItems="center">
-        <Text variant="h5" weight="semibold" align="center">
+        <Typography variant="h5" className="font-semibold text-center">
           {t('Your extension has been created locally')}
-        </Text>
+        </Typography>
 
         <Stack
           direction="row"
@@ -84,11 +86,13 @@ export const PostExtensionCreationPage: React.FC<{ extensionId: string }> = ({ e
         >
           <AppAvatar avatar={extensionData.avatar} appType={extensionData.applicationType} />
           <Stack direction="column" justifyContent="between">
-            <Text variant="h6" truncate>
+            <Typography variant="h6" className="truncate">
               {extensionData.displayName || extensionData.name}
-            </Text>
+            </Typography>
             <Stack direction="column">
-              <Text variant="footnotes1">{authenticatedProfile.name}</Text>
+              <Typography variant="xs" bold>
+                {authenticatedProfile.name}
+              </Typography>
               <ProfileAvatarButton profileDID={authenticatedDID}>
                 <ProfileDidField />
               </ProfileAvatarButton>
@@ -96,12 +100,10 @@ export const PostExtensionCreationPage: React.FC<{ extensionId: string }> = ({ e
           </Stack>
         </Stack>
 
-        <Text variant="subtitle2" align="center">
-          {t(
-            `You're almost there!
-You can add more details to your extension, such as a description, gallery & more! You can also manage releases to set it up locally or submit a release when you're ready.`,
-          )}
-        </Text>
+        <Typography variant="sm" className="font-light text-center">
+          {t(`You're almost there!
+You can add more details to your extension, such as a description, gallery & more! You can also manage releases to set it up locally or submit a release when you're ready.`)}
+        </Typography>
 
         <Stack direction="row" spacing={4}>
           <Button variant="outline" onClick={handleNavigateToEdit}>
@@ -117,13 +119,15 @@ You can add more details to your extension, such as a description, gallery & mor
                 size="sm"
                 customStyle="[&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark"
               />
-              <Text variant="subtitle2">{t('Important Note: ')}</Text>
+              <Typography variant="sm" className="font-light">
+                {t('Important Note: ')}
+              </Typography>
             </Stack>
-            <Text variant="subtitle2" align="center">
+            <Typography variant="sm" className="font-light text-center">
               {t(
                 'Extensions that are saved locally will be lost if cache is cleared or if accessed from a different device.',
               )}
-            </Text>
+            </Typography>
           </Stack>
         </Card>
       </Stack>

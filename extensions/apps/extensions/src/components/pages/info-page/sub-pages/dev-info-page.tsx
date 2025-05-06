@@ -5,7 +5,7 @@ import AppList from '../../../app-list';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import {
   ProfileAvatarButton,
   ProfileAvatarButtonAvatar,
@@ -144,7 +144,7 @@ export const DevInfoPage = (props: DevInfoPageProps) => {
     <>
       <Card className="p-4">
         <Stack spacing={4}>
-          <Text variant="h5">{t('Developer')}</Text>
+          <Typography variant="h5">{t('Developer')}</Typography>
           <ProfileAvatarButton profileDID={devDid} onClick={handleProfileClick}>
             <ProfileAvatarButtonAvatar>
               <ProfileAvatarButtonAvatarImage

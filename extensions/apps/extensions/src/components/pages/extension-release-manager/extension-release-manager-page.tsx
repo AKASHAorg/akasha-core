@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import {
   ErrorLoader,
   ErrorLoaderDescription,
@@ -24,7 +24,6 @@ import {
   AppImageSource,
   SortOrder,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-
 import { ExtensionElement } from '../my-extensions/extension-element';
 import {
   selectAppsReleases,
@@ -36,9 +35,7 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { ChevronRightIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 import { ApolloError, NetworkStatus } from '@apollo/client';
-
 const ENTRY_HEIGHT = 82;
-
 type ExtensionReleaseManagerPageProps = {
   extensionId: string;
   extensionName?: string;
@@ -50,7 +47,6 @@ type ExtensionReleaseManagerPageProps = {
   extensionDataReqErr?: ApolloError;
   extensionDataReqLoading?: boolean;
 };
-
 export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPageProps> = ({
   extensionId,
   extensionName,
@@ -64,26 +60,20 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
 }) => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
-
   const { uiEvents, baseRouteName, getCorePlugins, getTranslationPlugin } = useRootComponentProps();
   const locale = getTranslationPlugin().i18n?.languages?.[0] || 'en';
   const navigateTo = getCorePlugins().routing.navigateTo;
   const uiEventsRef = React.useRef(uiEvents);
-
   const [dismissed, dismissCard] = useDismissedCard(
     '@akashaorg/ui-release-manager_draft-info-card',
   );
-
   const [showModal, setShowModal] = useState(false);
-
   const handleModalClose = () => {
     setShowModal(false);
   };
-
   const {
     data: { authenticatedDID, isAuthenticating },
   } = useAkashaStore();
-
   const showErrorNotification = React.useCallback((title: string) => {
     uiEventsRef.current.next({
       event: NotificationEvents.ShowNotification,
@@ -93,8 +83,10 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
       },
     });
   }, []);
-
-  const draftExtension: { loaded: boolean; data: Extension } = useMemo(() => {
+  const draftExtension: {
+    loaded: boolean;
+    data: Extension;
+  } = useMemo(() => {
     try {
       if (!authenticatedDID) {
         return {
@@ -105,15 +97,23 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
       const drafts =
         JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [];
       if (!drafts) {
-        return { loaded: true, data: null };
+        return {
+          loaded: true,
+          data: null,
+        };
       }
-      return { loaded: true, data: drafts.find(ext => ext.id === extensionId) };
+      return {
+        loaded: true,
+        data: drafts.find(ext => ext.id === extensionId),
+      };
     } catch (error) {
       showErrorNotification(error);
-      return { loaded: true, data: null };
+      return {
+        loaded: true,
+        data: null,
+      };
     }
   }, [authenticatedDID, extensionId, showErrorNotification]);
-
   const baseAppInfo = useMemo(() => {
     // if a published extension exists for this id use the data from it
     if (networkStatus === NetworkStatus.ready && extensionName && extensionApplicationType) {
@@ -140,7 +140,6 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
     extensionDescription,
     extensionLogoImage,
   ]);
-
   const draftReleases = useMemo(() => {
     try {
       return JSON.parse(localStorage.getItem(`${DRAFT_RELEASES}-${authenticatedDID}`)) || [];
@@ -148,9 +147,7 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
       showErrorNotification(error);
     }
   }, [authenticatedDID, showErrorNotification]);
-
   const localRelease = draftReleases.find(release => release.applicationID === extensionId);
-
   const newRelease = useMemo(() => {
     return {
       applicationID: extensionId,
@@ -159,9 +156,7 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
       source: '',
     };
   }, [extensionId]);
-
   const testRelease = localRelease || newRelease;
-
   useEffect(() => {
     // if there is no local test release create it now
     if (!localRelease) {
@@ -171,7 +166,6 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
       );
     }
   }, [localRelease, authenticatedDID, draftReleases, extensionId, newRelease]);
-
   const {
     data: appsReleasesReq,
     loading: loadingAppsReleasesQuery,
@@ -180,17 +174,22 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
   } = useGetAppsReleasesQuery({
     variables: {
       first: 10,
-      filters: { where: { applicationID: { equalTo: extensionId } } },
-      sorting: { createdAt: SortOrder.Desc },
+      filters: {
+        where: {
+          applicationID: {
+            equalTo: extensionId,
+          },
+        },
+      },
+      sorting: {
+        createdAt: SortOrder.Desc,
+      },
     },
     fetchPolicy: 'cache-first',
     notifyOnNetworkStatusChange: true,
   });
-
   const appReleases = selectAppsReleases(appsReleasesReq);
-
   const pageInfo = selectAppsReleasesPageInfo(appsReleasesReq);
-
   const handleConnectButtonClick = () => {
     navigateTo?.({
       appName: '@akashaorg/app-auth-ewa',
@@ -201,32 +200,44 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
       },
     });
   };
-
   const handleTestReleaseNav = () => {
-    navigate({ to: '/release-manager/$extensionId/edit-test-release', params: { extensionId } });
+    navigate({
+      to: '/release-manager/$extensionId/edit-test-release',
+      params: {
+        extensionId,
+      },
+    });
   };
-
   const handlePublishReleaseNav = () => {
-    navigate({ to: '/release-manager/$extensionId/publish-release', params: { extensionId } });
+    navigate({
+      to: '/release-manager/$extensionId/publish-release',
+      params: {
+        extensionId,
+      },
+    });
   };
-
   const handlePublishExtensionNav = () => {
-    navigate({ to: '/publish-extension/$extensionId', params: { extensionId } });
+    navigate({
+      to: '/publish-extension/$extensionId',
+      params: {
+        extensionId,
+      },
+    });
   };
-
   const handleNavigateToReleaseInfoPage = (releaseId: string) => {
     navigate({
       to: '/release-manager/$extensionId/release-info/$releaseId',
-      params: { extensionId, releaseId },
+      params: {
+        extensionId,
+        releaseId,
+      },
     });
   };
-
   const handleClickPublishReleaseButton = () => {
     networkStatus === NetworkStatus.ready && extensionName
       ? handlePublishReleaseNav()
       : setShowModal(true);
   };
-
   if (extensionDataReqErr) {
     return (
       <ErrorLoader type="script-error">
@@ -235,7 +246,6 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
       </ErrorLoader>
     );
   }
-
   if (appsReleasesError) {
     return (
       <ErrorLoader type="script-error">
@@ -244,7 +254,6 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
       </ErrorLoader>
     );
   }
-
   if (!authenticatedDID && !isAuthenticating) {
     return (
       <ErrorLoader type="not-authenticated">
@@ -256,7 +265,6 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
       </ErrorLoader>
     );
   }
-
   return (
     <>
       <Stack spacing={6} className="p-4">
@@ -264,11 +272,11 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
           <Stack className="p-4 bg-card rounded-3xl">
             <Stack direction="row" alignItems="start" justifyContent="between">
               <Stack className="w-9/12">
-                <Text variant="body2" weight="light">
+                <Typography variant="sm" className="font-light">
                   {t(
                     'We’ve generated a first draft release for you as soon as you created your extension. You can use it to submit your first release or test it locally!',
                   )}
-                </Text>
+                </Typography>
               </Stack>
               <button onClick={dismissCard}>
                 <Icon icon={<XMarkIcon />} size="sm" />
@@ -276,9 +284,9 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
             </Stack>
           </Stack>
         )}
-        <Text variant="h5" weight="semibold" align="start">
+        <Typography variant="h5" className="font-semibold">
           {t('Release Manager')}
-        </Text>
+        </Typography>
         <Card className="p-2 bg-nested-card">
           {extensionDataReqLoading && (
             <Stack alignItems="center" justifyContent="center" className="w-full h-full">
@@ -300,9 +308,9 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
           )}
         </Card>
         <Stack direction="row" justifyContent="between">
-          <Text variant="h6" weight="semibold">
+          <Typography variant="h6" className="font-semibold">
             {t('Local Release')}
-          </Text>
+          </Typography>
           <Button variant="outline" size="sm" onClick={handleTestReleaseNav}>
             {t('Test release')}
           </Button>
@@ -310,17 +318,20 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
         {testRelease && (
           <Card className="p-4 bg-nested-card">
             <Stack spacing={4}>
-              <Text variant="body2" weight="semibold">
+              <Typography variant="sm" className="font-semibold">
                 {`Release ${testRelease?.version || '0.0.1'}`}
-              </Text>
-              <Text variant="footnotes2">{`Release ${testRelease?.description || t('A local test release')}`}</Text>
+              </Typography>
+              <Typography
+                variant="xs"
+                className="font-medium"
+              >{`Release ${testRelease?.description || t('A local test release')}`}</Typography>
             </Stack>
           </Card>
         )}
         <Stack direction="row" justifyContent="between">
-          <Text variant="h6" weight="semibold">
+          <Typography variant="h6" className="font-semibold">
             {t('Published Releases')}
-          </Text>
+          </Typography>
           <Button size="sm" onClick={handleClickPublishReleaseButton}>
             {t('Create release')}
           </Button>
@@ -359,18 +370,23 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
                       <Stack direction="row" justifyContent="between" alignItems="center">
                         <Stack spacing={4}>
                           <Stack direction="row" spacing={2} alignItems="center">
-                            <Text variant="body2" weight="semibold">
+                            <Typography variant="sm" className="font-semibold">
                               {`Release ${releaseData?.version}`}
-                            </Text>
+                            </Typography>
                             {itemIndex === 0 && (
                               <Pill
                                 type="info"
-                                borderColor={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                                borderColor={{
+                                  light: 'secondaryLight',
+                                  dark: 'secondaryDark',
+                                }}
                                 label={t('Current')}
                               />
                             )}
                           </Stack>
-                          <Text variant="footnotes2">{createdAt}</Text>
+                          <Typography variant="xs" className="font-medium">
+                            {createdAt}
+                          </Typography>
                         </Stack>
                         <Icon icon={<ChevronRightIcon />} accentColor={true} size="xl" />
                       </Stack>
@@ -390,7 +406,6 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
           {
             label: t('Cancel'),
             variant: 'secondary',
-
             onClick: handleModalClose,
           },
           {
@@ -399,14 +414,16 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
             onClick: handlePublishExtensionNav,
           },
         ]}
-        title={{ label: t('Release Cannot Be Published') }}
+        title={{
+          label: t('Release Cannot Be Published'),
+        }}
       >
         <Stack className="max-w-[567px]">
-          <Text variant="body1" align="center">
+          <Typography className="text-center">
             {t(
               'It appears your extension is currently in draft mode. To proceed with publishing a release, you’ll need to publish the extension first.',
             )}
-          </Text>
+          </Typography>
         </Stack>
       </Modal>
     </>

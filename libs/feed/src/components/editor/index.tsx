@@ -26,7 +26,7 @@ import type { IMetadata, IPublishData, Image, Profile } from '@akashaorg/typings
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import InlineNotification from '@akashaorg/design-system-core/lib/components/InlineNotification';
 
 import {
@@ -574,7 +574,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
                 icon={<ExclamationTriangleIcon />}
                 customStyle={'[&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark'}
               />
-              <Text>{maxEncodedLengthErrLabel}</Text>
+              <Typography>{maxEncodedLengthErrLabel}</Typography>
             </Stack>
           )}
         </Stack>

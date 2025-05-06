@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import {
   ErrorLoader,
   ErrorLoaderDescription,
@@ -19,14 +19,12 @@ import { NetworkStatus } from '@apollo/client';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 import { Loader2 } from 'lucide-react';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-
 type EditTestReleasePageProps = {
   extensionId: string;
   networkStatus: NetworkStatus;
   extensionName?: string;
   extensionType?: AkashaAppApplicationType;
 };
-
 const getDraftExtension = (extensionId: string, authenticatedDID: string) => {
   try {
     const draftExtensions = JSON.parse(
@@ -40,7 +38,6 @@ const getDraftExtension = (extensionId: string, authenticatedDID: string) => {
     return error;
   }
 };
-
 export const EditTestReleasePage: React.FC<EditTestReleasePageProps> = ({
   extensionId,
   extensionName,
@@ -49,17 +46,14 @@ export const EditTestReleasePage: React.FC<EditTestReleasePageProps> = ({
 }) => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
-
   const { uiEvents, baseRouteName, getCorePlugins } = useRootComponentProps();
   const navigateTo = getCorePlugins().routing.navigateTo;
   const uiEventsRef = React.useRef(uiEvents);
   const [isLoadingTestMode, setIsLoadingTestMode] = useState(false);
   const testModeRedirectUrl = useRef<string>();
-
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
-
   const showErrorNotification = React.useCallback((title: string) => {
     uiEventsRef.current.next({
       event: NotificationEvents.ShowNotification,
@@ -69,7 +63,6 @@ export const EditTestReleasePage: React.FC<EditTestReleasePageProps> = ({
       },
     });
   }, []);
-
   const draftReleases = useMemo(() => {
     try {
       return JSON.parse(localStorage.getItem(`${DRAFT_RELEASES}-${authenticatedDID}`)) || [];
@@ -77,12 +70,9 @@ export const EditTestReleasePage: React.FC<EditTestReleasePageProps> = ({
       showErrorNotification(error);
     }
   }, [authenticatedDID, showErrorNotification]);
-
   const localRelease = draftReleases.find(release => release.applicationID === extensionId);
-
   const draftExtension = getDraftExtension(extensionId, authenticatedDID);
   const draftExtensionError = draftExtension instanceof Error || false;
-
   const baseAppInfo = useMemo(() => {
     if (draftExtension) {
       return {
@@ -100,13 +90,11 @@ export const EditTestReleasePage: React.FC<EditTestReleasePageProps> = ({
       };
     }
   }, [draftExtension, networkStatus, extensionName, extensionType, extensionId]);
-
   useEffect(() => {
     if (draftExtensionError) {
       showErrorNotification(draftExtension);
     }
   }, [draftExtension, draftExtensionError, showErrorNotification]);
-
   useEffect(() => {
     const testModeLoader = getCorePlugins().testModeLoader;
     let unsubscribe;
@@ -134,7 +122,6 @@ export const EditTestReleasePage: React.FC<EditTestReleasePageProps> = ({
       }
     };
   }, [baseAppInfo, getCorePlugins, navigateTo]);
-
   const handleConnectButtonClick = () => {
     navigateTo?.({
       appName: '@akashaorg/app-auth-ewa',
@@ -145,7 +132,6 @@ export const EditTestReleasePage: React.FC<EditTestReleasePageProps> = ({
       },
     });
   };
-
   const handleClickSubmit = appReleaseFormData => {
     // remove the old local test release so we can update it
     const newLocalDraftReleases = draftReleases.filter(
@@ -164,11 +150,9 @@ export const EditTestReleasePage: React.FC<EditTestReleasePageProps> = ({
       JSON.stringify([...newLocalDraftReleases, newLocalRelease]),
     );
     const testModeLoader = getCorePlugins().testModeLoader;
-
     if (!baseAppInfo) {
       return showErrorNotification(`This release does not belong to an extension.`);
     }
-
     testModeLoader.load({
       applicationID: localRelease.applicationID,
       source: appReleaseFormData.sourceURL,
@@ -178,14 +162,14 @@ export const EditTestReleasePage: React.FC<EditTestReleasePageProps> = ({
     testModeRedirectUrl.current = `${baseAppInfo.name}`;
     setIsLoadingTestMode(true);
   };
-
   const handleClickCancel = () => {
     navigate({
       to: '/release-manager/$extensionId',
-      params: { extensionId },
+      params: {
+        extensionId,
+      },
     });
   };
-
   if (!authenticatedDID) {
     return (
       <ErrorLoader type="not-authenticated">
@@ -197,21 +181,20 @@ export const EditTestReleasePage: React.FC<EditTestReleasePageProps> = ({
       </ErrorLoader>
     );
   }
-
   return (
     <>
       <Modal show={isLoadingTestMode}>
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <Text variant="body2" customStyle="px-4 py-2">
+        <Typography variant="sm" className="px-4 py-2">
           {t('Loading test mode')}
-        </Text>
+        </Typography>
       </Modal>
       <Card className="shadow-none p-0">
         <Stack spacing={2}>
           <Stack className="p-4">
-            <Text variant="h5" weight="semibold" align="center">
+            <Typography variant="h5" className="font-semibold text-center">
               {t('Release Notes')}
-            </Text>
+            </Typography>
             <ExtensionReleasePublishForm
               defaultValues={{
                 versionNumber: localRelease?.version || '',

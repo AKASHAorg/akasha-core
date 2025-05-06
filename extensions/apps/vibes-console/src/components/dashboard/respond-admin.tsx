@@ -4,31 +4,23 @@ import {
   PageHeader,
 } from '@akashaorg/design-system-components/lib/components/PageHeader';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 export type RespondAdminProps = PageHeaderProps & {
   introLabel: string;
   tasks: string[];
 };
-
 export const RespondAdmin: React.FC<RespondAdminProps> = props => {
   const { introLabel, tasks } = props;
-
   return (
     <PageHeader {...props}>
       <Stack spacing="gap-y-4" customStyle="mb-24">
-        <Text variant="button-lg" color={{ light: 'secondaryLight', dark: 'secondaryLight' }}>
-          @helloKitty{' '}
-          <Text as="span" variant="body1" weight="normal">
-            {introLabel}:
-          </Text>
-        </Text>
+        <Typography bold className="text-secondaryLight dark:text-secondaryLight">
+          @helloKitty <Typography className="font-normal">{introLabel}:</Typography>
+        </Typography>
         <ul className="ml-4 list-disc text-black dark:text-white">
           {tasks.map(t => (
             <li key={t}>
-              <Text variant="body1" weight="normal">
-                {t}.
-              </Text>
+              <Typography className="font-normal">{t}.</Typography>
             </li>
           ))}
         </ul>

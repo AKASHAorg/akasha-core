@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { transformSource, useRootComponentProps, useSaveImage } from '@akashaorg/ui-core-hooks';
 import { useGetAppsByIdQuery, useUpdateAppMutation } from '@akashaorg/ui-core-hooks/lib/generated';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import {
   ErrorLoader,
@@ -34,23 +34,17 @@ const getImageObject = (imageWithExtraProps: AppImageSource) => {
     };
   } else return null;
 };
-
 type EditPublishedExtensionPageProps = {
   extensionId: string;
 };
-
 export const EditPublishedExtensionPage: React.FC<EditPublishedExtensionPageProps> = ({
   extensionId,
 }) => {
   const { t } = useTranslation('app-extensions');
-
   const navigate = useNavigate();
-
   const sdk = useRef(getSDK());
-
   const { uiEvents } = useRootComponentProps();
   const uiEventsRef = React.useRef(uiEvents);
-
   const showErrorNotification = React.useCallback((title: string, description?: string) => {
     uiEventsRef.current.next({
       event: NotificationEvents.ShowNotification,
@@ -61,7 +55,6 @@ export const EditPublishedExtensionPage: React.FC<EditPublishedExtensionPageProp
       },
     });
   }, []);
-
   const formValue = useMemo(() => {
     try {
       return JSON.parse(sessionStorage.getItem(extensionId)) || {};
@@ -69,9 +62,7 @@ export const EditPublishedExtensionPage: React.FC<EditPublishedExtensionPageProp
       showErrorNotification(error);
     }
   }, [extensionId, showErrorNotification]);
-
   const [, setForm] = useAtom<FormData>(useContext(AtomContext));
-
   const storeFormData = (data: ExtensionEditPublishedFormValues) => {
     const formData = {
       ...data,
@@ -91,19 +82,19 @@ export const EditPublishedExtensionPage: React.FC<EditPublishedExtensionPageProp
       };
     });
   };
-
   const {
     data: extensionReq,
     loading: extensionDataLoading,
     error: extensionDataError,
-  } = useGetAppsByIdQuery({ variables: { id: extensionId } });
-
+  } = useGetAppsByIdQuery({
+    variables: {
+      id: extensionId,
+    },
+  });
   const extensionData = selectAppData(extensionReq);
-
   const defaultValues = useMemo(() => {
     return formValue.dataSavedToForm ? formValue : extensionData;
   }, [extensionData, formValue]);
-
   const formDefault = useMemo(() => {
     return {
       logoImage: getImageObject(defaultValues?.logoImage),
@@ -113,16 +104,22 @@ export const EditPublishedExtensionPage: React.FC<EditPublishedExtensionPageProp
       links: defaultValues?.links,
     };
   }, [defaultValues]);
-
   const [updateAppMutation, { loading: loadingAppMutation }] = useUpdateAppMutation({
-    context: { source: sdk.current.services.gql.contextSources.composeDB },
+    context: {
+      source: sdk.current.services.gql.contextSources.composeDB,
+    },
     onCompleted: data => {
       setForm(prev => {
-        return { ...prev, ...formDefaultData };
+        return {
+          ...prev,
+          ...formDefaultData,
+        };
       });
       navigate({
         to: '/info/$appId',
-        params: { appId: data?.updateAkashaApp?.document?.name },
+        params: {
+          appId: data?.updateAkashaApp?.document?.name,
+        },
       });
     },
     onError: error => {
@@ -132,7 +129,6 @@ export const EditPublishedExtensionPage: React.FC<EditPublishedExtensionPageProp
       );
     },
   });
-
   const handleClickSubmit = formData => {
     const extData = {
       logoImage: logoImage || formDefault?.logoImage,
@@ -156,17 +152,13 @@ export const EditPublishedExtensionPage: React.FC<EditPublishedExtensionPageProp
       },
     });
   };
-
   const { image: logoImage, saveImage: saveLogoImage, loading: isSavingLogoImage } = useSaveImage();
-
   const {
     image: coverImage,
     saveImage: saveCoverImage,
     loading: isSavingCoverImage,
   } = useSaveImage();
-
   const isSavingImage = isSavingLogoImage || isSavingCoverImage;
-
   const galleryImages = useMemo(() => {
     const gallery = Array.isArray(formValue?.gallery) ? formValue.gallery : formDefault?.gallery;
     return gallery?.map(img => {
@@ -187,11 +179,9 @@ export const EditPublishedExtensionPage: React.FC<EditPublishedExtensionPageProp
       };
     });
   }, [formDefault?.gallery, formValue.gallery, showErrorNotification]);
-
   const onSaveImageError = () => {
     showErrorNotification(t("The image wasn't uploaded correctly. Please try again!"));
   };
-
   if (extensionDataError) {
     return (
       <ErrorLoader type="script-error">
@@ -200,7 +190,6 @@ export const EditPublishedExtensionPage: React.FC<EditPublishedExtensionPageProp
       </ErrorLoader>
     );
   }
-
   if (extensionDataLoading) {
     return (
       <Card className="shadow-none">
@@ -215,14 +204,13 @@ export const EditPublishedExtensionPage: React.FC<EditPublishedExtensionPageProp
             customStyle="[&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark"
             size="lg"
           />
-          <Text variant="body2" weight="bold">
+          <Typography variant="sm" bold>
             {t('Loading edit form')}
-          </Text>
+          </Typography>
         </Stack>
       </Card>
     );
   }
-
   return (
     <ExtensionEditPublishedForm
       extensionInformationLabel={t('Extension information')}
@@ -262,7 +250,9 @@ export const EditPublishedExtensionPage: React.FC<EditPublishedExtensionPageProp
         storeFormData(formData);
         navigate({
           to: '/edit-published-extension/$extensionId/gallery-manager',
-          search: { type: ExtType.PUBLISHED },
+          search: {
+            type: ExtType.PUBLISHED,
+          },
           params: {
             extensionId,
           },
@@ -278,12 +268,20 @@ export const EditPublishedExtensionPage: React.FC<EditPublishedExtensionPageProp
         saveLabel: t('Save'),
         logoPreviewTitle: t('Logo preview'),
         imageTitle: {
-          logoImage: { label: t('Edit Logo') },
-          coverImage: { label: t('Edit Cover') },
+          logoImage: {
+            label: t('Edit Logo'),
+          },
+          coverImage: {
+            label: t('Edit Cover'),
+          },
         },
         deleteTitle: {
-          logoImage: { label: t('Delete Logo') },
-          coverImage: { label: t('Delete Cover') },
+          logoImage: {
+            label: t('Delete Logo'),
+          },
+          coverImage: {
+            label: t('Delete Cover'),
+          },
         },
         confirmationLabel: {
           logoImage: t(`Are you sure you want to delete the extension's logo image?`),
@@ -306,10 +304,18 @@ export const EditPublishedExtensionPage: React.FC<EditPublishedExtensionPageProp
         onImageSave: (type, image) => {
           switch (type) {
             case 'logo-image':
-              saveLogoImage({ name: 'logo-image', image, onError: onSaveImageError });
+              saveLogoImage({
+                name: 'logo-image',
+                image,
+                onError: onSaveImageError,
+              });
               break;
             case 'cover-image':
-              saveCoverImage({ name: 'cover-image', image, onError: onSaveImageError });
+              saveCoverImage({
+                name: 'cover-image',
+                image,
+                onError: onSaveImageError,
+              });
               break;
           }
         },

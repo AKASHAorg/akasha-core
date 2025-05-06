@@ -1,10 +1,8 @@
 import React from 'react';
-
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 export type CookieCardProps = {
   titleLabel: string;
   paragraphOneLabel: string;
@@ -17,7 +15,11 @@ export type CookieCardProps = {
     settingsLabel: string;
     onSettingsClick: () => void;
   };
-  paragraphThree: { introLabel: string; ctaLabel: string; onPrivacyClick: () => void };
+  paragraphThree: {
+    introLabel: string;
+    ctaLabel: string;
+    onPrivacyClick: () => void;
+  };
   onlyEssentialLabel: string;
   acceptAllLabel: string;
   onClickAcceptAll: () => void;
@@ -46,16 +48,15 @@ const CookieCard: React.FC<CookieCardProps> = props => {
     onClickAcceptAll,
     onClickOnlyEssential,
   } = props;
-
   return (
     <Card className="p-4">
       <Stack direction="column" spacing={2}>
-        <Text variant="h6">{titleLabel}</Text>
+        <Typography variant="h6">{titleLabel}</Typography>
 
         <Stack spacing={1}>
-          <Text variant="body2">{paragraphOneLabel}</Text>
+          <Typography variant="sm">{paragraphOneLabel}</Typography>
 
-          <Text variant="body2">
+          <Typography variant="sm">
             {paragraphTwo.introLabel}
 
             <Button variant="link" asChild>
@@ -71,14 +72,14 @@ const CookieCard: React.FC<CookieCardProps> = props => {
             </Button>
 
             {paragraphTwo.lastParagraphLabel}
-          </Text>
+          </Typography>
 
-          <Text variant="body2">
+          <Typography variant="sm">
             {paragraphThree.introLabel}{' '}
             <Button variant="link" onClick={paragraphThree.onPrivacyClick} className="p-0 h-min">
               {paragraphThree.ctaLabel}
             </Button>
-          </Text>
+          </Typography>
         </Stack>
 
         <Stack direction="row" spacing={4} className="mt-4" justifyContent="end">
@@ -94,5 +95,4 @@ const CookieCard: React.FC<CookieCardProps> = props => {
     </Card>
   );
 };
-
 export default CookieCard;

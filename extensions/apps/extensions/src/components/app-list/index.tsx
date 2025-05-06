@@ -6,8 +6,7 @@ import ExtensionCard, { ExtensionCardProps } from '../extension-card';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { XCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-solid';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 export type AppListProps = {
   apps: ExtensionCardProps[];
   loadErrorMessage?: {
@@ -15,9 +14,7 @@ export type AppListProps = {
     message: string;
   };
 } & Pick<DynamicInfiniteScrollProps, 'overScan' | 'hasNextPage' | 'loading' | 'onLoadMore'>;
-
 const ENTRY_HEIGHT = 92;
-
 const ITEM_SPACING = 16;
 
 /**
@@ -62,12 +59,13 @@ const AppList: React.FC<AppListProps> = ({
                 solid={true}
                 customStyle="mb-4 [&>*]:fill-errorLight dark:[&>*]:fill-errorLight"
               />
-              <Text variant="button-md">{loadErrorMessage?.title}</Text>
-              <Text variant="body2">{loadErrorMessage?.message}</Text>
+              <Typography variant="sm" bold>
+                {loadErrorMessage?.title}
+              </Typography>
+              <Typography variant="sm">{loadErrorMessage?.message}</Typography>
             </Card>
           );
         }
-
         const {
           coverImageSrc,
           displayName,
@@ -82,7 +80,6 @@ const AppList: React.FC<AppListProps> = ({
           nsfw,
           featured,
         } = apps[itemIndex];
-
         return (
           <ExtensionCard
             coverImageSrc={coverImageSrc}
@@ -104,5 +101,4 @@ const AppList: React.FC<AppListProps> = ({
     </DynamicInfiniteScroll>
   );
 };
-
 export default AppList;

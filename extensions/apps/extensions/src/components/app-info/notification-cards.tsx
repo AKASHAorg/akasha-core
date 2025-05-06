@@ -3,16 +3,18 @@ import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { InformationCircleIcon } from '@heroicons/react/24/solid';
-
 export type AppInfoNotificationCardsProps = {
-  notification: { title: string; message: string; action?: React.ReactNode };
+  notification: {
+    title: string;
+    message: string;
+    action?: React.ReactNode;
+  };
   version?: string;
   versionLabel?: string;
   updateButtonLabel?: string;
 };
-
 export const AppInfoNotificationCards: React.FC<AppInfoNotificationCardsProps> = props => {
   const {
     notification: { title, message, action },
@@ -31,8 +33,10 @@ export const AppInfoNotificationCards: React.FC<AppInfoNotificationCardsProps> =
             customStyle="[&>*]:fill-errorLight dark:[&>*]:fill-errorLight"
           />
           <Stack spacing={1}>
-            <Text variant="button-md">{title}</Text>
-            <Text variant="body2">{message}</Text>
+            <Typography variant="sm" bold>
+              {title}
+            </Typography>
+            <Typography variant="sm">{message}</Typography>
             {action}
           </Stack>
         </Stack>
@@ -40,10 +44,10 @@ export const AppInfoNotificationCards: React.FC<AppInfoNotificationCardsProps> =
       {updateButtonLabel && (
         <Card className="p-4">
           <Stack direction="row" alignItems="center" justifyContent="between">
-            <Text as="span">
+            <Typography>
               <Button variant="link">{version}</Button>
               {versionLabel}
-            </Text>
+            </Typography>
             <Button>{updateButtonLabel}</Button>
           </Stack>
         </Card>

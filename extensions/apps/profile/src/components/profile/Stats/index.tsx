@@ -3,7 +3,7 @@ import React from 'react';
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text, { TextProps } from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { ChatBubbleLeftRightIcon, HeartIcon, UsersIcon } from '@heroicons/react/24/outline';
 
 type Stat = {
@@ -21,23 +21,15 @@ export type StatsProps = {
 };
 
 const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following }) => {
-  const labelProp: TextProps = {
-    variant: 'footnotes2',
-    as: 'label',
-    weight: 'normal',
-    color: {
-      light: 'grey4',
-      dark: 'grey7',
-    },
+  const labelProp: React.ComponentProps<typeof Typography> = {
+    variant: 'xs',
+    className: 'text-grey4 dark:text-grey7',
   };
 
-  const totalProp: TextProps = {
-    variant: 'button-sm',
-    weight: 'bold',
-    color: {
-      light: 'secondaryLight',
-      dark: 'secondaryDark',
-    },
+  const totalProp: React.ComponentProps<typeof Typography> = {
+    variant: 'xs',
+    bold: true,
+    className: 'text-secondaryLight dark:text-secondaryDark',
   };
 
   const stats: (Stat & { icon: React.ReactElement; className?: string })[] = [
@@ -61,12 +53,12 @@ const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following })
                   accentColor
                   hover={!stat.disabled}
                 />
-                <Text id={stat.label} {...labelProp}>
+                <Typography id={stat.label} {...labelProp}>
                   {stat.label}
-                </Text>
-                <Text aria-labelledby={stat.label} {...totalProp}>
+                </Typography>
+                <Typography aria-labelledby={stat.label} {...totalProp}>
                   {stat.total}
-                </Text>
+                </Typography>
               </Stack>
             </button>
           ))}

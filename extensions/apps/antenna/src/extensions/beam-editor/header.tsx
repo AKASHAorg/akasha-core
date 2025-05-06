@@ -1,7 +1,7 @@
 import React from 'react';
 import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { EditorUIState } from './types';
 
 export interface HeaderProps {
@@ -43,7 +43,7 @@ export const Header: React.FC<HeaderProps> = props => {
       alignItems="center"
       className="p-4 rounded-t-2xl"
     >
-      <Text variant="h4">{renderTitle()}</Text>
+      <Typography variant="h4">{renderTitle()}</Typography>
       {uiState === 'editor' && (
         <Checkbox
           id="nsfw"

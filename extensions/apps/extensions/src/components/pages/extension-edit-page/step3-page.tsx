@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Stepper } from '@akashaorg/ui/lib/akasha-components/stepper';
 import ExtensionEditStep3Form from '../../extension-edit-step3-form';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
@@ -11,21 +11,17 @@ import { DRAFT_EXTENSIONS, MAX_CONTRIBUTORS_DISPLAY } from '../../../constants';
 import { Extension, NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import { AtomContext } from './main-page';
 import { useAtom } from 'jotai';
-
 type ExtensionEditStep3PageProps = {
   extensionId: string;
 };
-
 export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ extensionId }) => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
   const { uiEvents } = useRootComponentProps();
   const uiEventsRef = React.useRef(uiEvents);
-
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
-
   const showNotification = React.useCallback(
     (type: NotificationTypes, title: string, description?: string) => {
       uiEventsRef.current.next({
@@ -48,9 +44,7 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
       showNotification(NotificationTypes.Error, error);
     }
   }, [authenticatedDID, showNotification]);
-
   const extensionData = draftExtensions.find(draftExtension => draftExtension.id === extensionId);
-
   const formValue = useMemo(() => {
     try {
       return JSON.parse(sessionStorage.getItem(extensionId)) || {};
@@ -58,21 +52,17 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
       showNotification(NotificationTypes.Error, error);
     }
   }, [extensionId, showNotification]);
-
   const defaultValues = useMemo(() => {
     return formValue.lastCompletedStep > 2 ? formValue : extensionData;
   }, [extensionData, formValue]);
-
   const defaultContributorsDIDs = useMemo(() => {
     return formValue.lastCompletedStep > 2 ? formValue?.contributors : extensionData?.contributors;
   }, [extensionData, formValue]);
-
   const {
     profilesData,
     loading: loadingProfilesData,
     error: errorProfilesData,
   } = useProfilesList(defaultContributorsDIDs);
-
   const formDefault = useMemo(() => {
     return {
       license: defaultValues?.license,
@@ -80,30 +70,33 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
       keywords: defaultValues?.keywords,
     };
   }, [defaultValues]);
-
   const handleUpdateExtension = step3Data => {
     const newDraftExtensions = draftExtensions.map(oldDraftExt =>
-      oldDraftExt.id === extensionId ? { ...oldDraftExt, ...formValue, ...step3Data } : oldDraftExt,
+      oldDraftExt.id === extensionId
+        ? {
+            ...oldDraftExt,
+            ...formValue,
+            ...step3Data,
+          }
+        : oldDraftExt,
     );
     localStorage.setItem(
       `${DRAFT_EXTENSIONS}-${authenticatedDID}`,
       JSON.stringify(newDraftExtensions),
     );
     sessionStorage.removeItem(extensionId);
-
     showNotification(
       NotificationTypes.Success,
       t('Extension Info Updated'),
-      t('{{extensionName}} updated succesfully', { extensionName: formValue.name }),
+      t('{{extensionName}} updated succesfully', {
+        extensionName: formValue.name,
+      }),
     );
-
     navigate({
       to: '/my-extensions',
     });
   };
-
   const [, setForm] = useAtom<FormData>(useContext(AtomContext));
-
   useEffect(() => {
     // since adding the contributors is not part of the form steps anymore
     // we need to initialise the form value with the locally saved contributors
@@ -111,11 +104,13 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
     // contributors page
     if (extensionData?.contributors?.length > 0 && formValue?.contributors?.length === 0) {
       setForm(prev => {
-        return { ...prev, contributors: extensionData?.contributors };
+        return {
+          ...prev,
+          contributors: extensionData?.contributors,
+        };
       });
     }
   }, [extensionData?.contributors]);
-
   const handleNavigateToContributorsPage = data => {
     setForm(prev => {
       return {
@@ -127,9 +122,13 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
         ...data,
       };
     });
-    navigate({ to: '/edit-extension/$extensionId/contributors', params: { extensionId } });
+    navigate({
+      to: '/edit-extension/$extensionId/contributors',
+      params: {
+        extensionId,
+      },
+    });
   };
-
   return (
     <>
       <Stack justifyContent="center" alignItems="center" className="p-4">
@@ -137,9 +136,9 @@ export const ExtensionEditStep3Page: React.FC<ExtensionEditStep3PageProps> = ({ 
       </Stack>
       <Stack spacing={4}>
         <Stack className="p-4">
-          <Text variant="h5" weight="semibold" align="center">
+          <Typography variant="h5" className="font-semibold text-center">
             {t('Present your Extension')}
-          </Text>
+          </Typography>
         </Stack>
         <ExtensionEditStep3Form
           addLabel={t('Add')}

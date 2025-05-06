@@ -1,16 +1,13 @@
 import React from 'react';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 export interface ISearchResultCountProps {
   countLabel: string;
 }
-
 const SearchResultCount: React.FC<ISearchResultCountProps> = ({ countLabel }) => {
   return (
-    <Text variant="button-md" weight="bold" customStyle="mb-4">
+    <Typography variant="sm" bold className="mb-4">
       {countLabel}
-    </Text>
+    </Typography>
   );
 };
-
 export default SearchResultCount;

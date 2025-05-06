@@ -2,10 +2,9 @@ import React from 'react';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { cn } from '@akashaorg/ui/lib/library/utils';
-
 export type VibesValueCardProps = {
   publicImgPath?: string;
   assetExtension?: string;
@@ -17,7 +16,6 @@ export type VibesValueCardProps = {
   isMini?: boolean;
   onClick?: () => void;
 };
-
 const VibesValueCard: React.FC<VibesValueCardProps> = props => {
   const {
     publicImgPath = '/images',
@@ -30,7 +28,6 @@ const VibesValueCard: React.FC<VibesValueCardProps> = props => {
     isMini = false,
     onClick,
   } = props;
-
   return (
     <Button plain={true} onClick={onClick}>
       <Card className="p-0 rounded-2xl cursor-pointer">
@@ -48,26 +45,19 @@ const VibesValueCard: React.FC<VibesValueCardProps> = props => {
             />
           </Stack>
 
-          <Text
-            variant={isMini ? 'button-sm' : 'h5'}
-            align={isMini ? 'center' : 'start'}
-            weight="bold"
-            color={{
-              light: isMini ? 'secondaryLight' : 'black',
-              dark: isMini ? 'secondaryDark' : 'white',
-            }}
-            {...(isMini && { customStyle: 'px-4' })}
+          <Typography
+            variant={isMini ? 'xs' : 'h5'}
+            bold
+            {...(isMini && {
+              customStyle: 'px-4',
+            })}
           >
             {label}
-          </Text>
+          </Typography>
 
           {!isMini && (
             <Stack spacing={4}>
-              {description && (
-                <Text variant="body1" weight="light">
-                  {description}
-                </Text>
-              )}
+              {description && <Typography className="font-light">{description}</Typography>}
 
               {ctaLabel && (
                 <Link
@@ -85,5 +75,4 @@ const VibesValueCard: React.FC<VibesValueCardProps> = props => {
     </Button>
   );
 };
-
 export default VibesValueCard;

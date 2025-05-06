@@ -1,8 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import {
   ProfileAvatar,
@@ -12,17 +11,13 @@ import {
   ProfileAvatarButton,
   ProfileDidField,
 } from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
-
 export type FallbackHeaderProps = {
   authenticatedDID: string;
   isLoggedIn: boolean;
 };
-
 const FallbackHeader: React.FC<FallbackHeaderProps> = ({ authenticatedDID, isLoggedIn }) => {
   const { t } = useTranslation('ui-widget-sidebar');
-
   const headerBackground = 'bg-secondaryLight/30 dark:bg-grey5';
-
   return (
     <Stack
       direction="row"
@@ -34,7 +29,11 @@ const FallbackHeader: React.FC<FallbackHeaderProps> = ({ authenticatedDID, isLog
         </ProfileAvatar>
       </Stack>
       <Stack justifyContent="center" className="w-fit flex-grow">
-        {isLoggedIn && <Text variant="button-md">{t('Fetching your info...')}</Text>}
+        {isLoggedIn && (
+          <Typography variant="sm" bold>
+            {t('Fetching your info...')}
+          </Typography>
+        )}
         <ProfileAvatarButton profileDID={authenticatedDID}>
           <ProfileDidField />
         </ProfileAvatarButton>
@@ -45,5 +44,4 @@ const FallbackHeader: React.FC<FallbackHeaderProps> = ({ authenticatedDID, isLog
     </Stack>
   );
 };
-
 export default FallbackHeader;

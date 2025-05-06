@@ -1,17 +1,15 @@
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import React from 'react';
 import { EyeSlashIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-
 export type NSFWProps = {
   sensitiveContentLabel: string;
   clickToViewLabel: string;
   onClickToView: (event: React.SyntheticEvent<HTMLButtonElement>) => void;
 };
-
 const NSFW: React.FC<NSFWProps> = props => {
   const { sensitiveContentLabel, clickToViewLabel, onClickToView } = props;
   return (
@@ -22,13 +20,13 @@ const NSFW: React.FC<NSFWProps> = props => {
             icon={<EyeSlashIcon />}
             customStyle={'[&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark'}
           />
-          <Text
-            variant="button-sm"
-            color={{ light: 'errorLight', dark: 'errorDark' }}
-            customStyle="whitespace-nowrap"
+          <Typography
+            variant="xs"
+            bold
+            className="text-errorLight dark:text-errorDark whitespace-nowrap"
           >
             {sensitiveContentLabel}
-          </Text>
+          </Typography>
         </Stack>
         <Button variant="link" onClick={onClickToView}>
           {clickToViewLabel}
@@ -37,5 +35,4 @@ const NSFW: React.FC<NSFWProps> = props => {
     </Card>
   );
 };
-
 export default NSFW;

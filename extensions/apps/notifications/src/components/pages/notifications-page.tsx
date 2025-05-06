@@ -4,22 +4,19 @@ import { useAkashaStore, useNotifications, useRootComponentProps } from '@akasha
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Cog8ToothIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-
 import NotificationCard from '../notification-card';
 import BasicInfoCard from '../notification-card/basic-info-card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Loader2 } from 'lucide-react';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import DynamicInfiniteScroll from '@akashaorg/design-system-core/lib/components/DynamicInfiniteScroll';
-
 import { type InboxNotification } from '@akashaorg/typings/lib/ui';
 import getSDK from '@akashaorg/core-sdk';
 import NotificationSettingsCard from '@akashaorg/design-system-components/lib/components/NotificationSettingsCard';
 import { getPresentationDataFromNotification } from '../utils/notifications-util';
 import { UserSettingType } from '@akashaorg/typings/lib/sdk';
-
 import { useGetAppsByPublisherDidQuery } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
 import { selectApps } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-by-publisher-did-query';
 import {
@@ -28,7 +25,6 @@ import {
   ErrorLoaderTitle,
   ErrorLoaderFooter,
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
-
 const NotificationsPage: React.FC = () => {
   const sdk = getSDK();
   const notificationService = sdk.services.common.notification;
@@ -39,7 +35,6 @@ const NotificationsPage: React.FC = () => {
     data: { authenticatedDID, isAuthenticating },
   } = useAkashaStore();
   const isLoggedIn = !!authenticatedDID;
-
   const defaultApps = getDefaultExtensionNames();
   const indexingDid = sdk.services.common.misc.getIndexingDID();
   const { data } = useGetAppsByPublisherDidQuery({
@@ -47,10 +42,11 @@ const NotificationsPage: React.FC = () => {
       id: indexingDid,
       first: defaultApps.length,
     },
-    context: { source: sdk.services.gql.contextSources.default },
+    context: {
+      source: sdk.services.gql.contextSources.default,
+    },
   });
   const apps = selectApps(data);
-
   const navigateTo = getCorePlugins().routing.navigateTo;
   const _uiEvents = useRef(uiEvents);
 
@@ -58,7 +54,6 @@ const NotificationsPage: React.FC = () => {
   const [notifications, setNotifications] = useState<InboxNotification[]>([]);
   const [appOptions, setAppOptions] = useState<UserSettingType[]>([]);
   const { previouslyEnabled } = useNotifications();
-
   const [notificationLoading, setNotificationLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(true);
@@ -107,7 +102,6 @@ const NotificationsPage: React.FC = () => {
         20,
         appOptions.filter(option => option.index > 0 && option.active).map(option => option.index),
       );
-
       if (fetchedNotifications.length === 0) {
         setHasNextPage(false);
       } else {
@@ -129,14 +123,12 @@ const NotificationsPage: React.FC = () => {
       setNotificationLoading(false);
     }
   }, [currentPage, notificationService, appOptions, t, apps, notifications]);
-
   const clickNotification = (notification: InboxNotification) => {
     navigateTo({
       appName: notification.appName,
       getNavigationUrl: () => notification.ctaLinkUrl,
     });
   };
-
   const goToSettings = () => {
     navigateTo?.({
       appName: '@akashaorg/app-settings-ewa',
@@ -154,7 +146,6 @@ const NotificationsPage: React.FC = () => {
       },
     });
   };
-
   useEffect(() => {
     const initData = async () => {
       /* Check first if the user has already subscribed to the channel */
@@ -165,13 +156,11 @@ const NotificationsPage: React.FC = () => {
     };
     initData();
   }, [getSubscribedAppsOptions, notificationService, previouslyEnabled]);
-
   useEffect(() => {
     if (appOptions.length > 0) {
       fetchNotifications();
     }
   }, [appOptions, fetchNotifications]);
-
   if (!isLoggedIn && !isAuthenticating) {
     return (
       <Stack>
@@ -187,14 +176,13 @@ const NotificationsPage: React.FC = () => {
       </Stack>
     );
   }
-
   return (
     <>
       <Stack direction="column" className="pb-32">
         <Stack direction="row" className="pb-4 relative">
-          <Text variant="h5" align="center">
+          <Typography variant="h5" className="text-center">
             <>{t('Notifications')}</>
-          </Text>
+          </Typography>
           <Stack direction="column" spacing={1} className="absolute right-0">
             <Button variant="outline" size="icon" onClick={goToSettings}>
               <Cog8ToothIcon />

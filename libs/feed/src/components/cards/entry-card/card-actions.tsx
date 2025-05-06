@@ -2,11 +2,10 @@ import React, { ReactNode, useState } from 'react';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { ChatBubbleLeftRightIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { ChatBubbleLeftRightIcon as ChatBubbleLeftRightIconSolid } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-solid';
-
 export type CardActionProps = {
   itemId: string;
   reflectAnchorLink?: string;
@@ -16,7 +15,6 @@ export type CardActionProps = {
   onReflect: () => void;
   customStyle?: string;
 };
-
 const CardActions: React.FC<CardActionProps> = props => {
   const {
     itemId,
@@ -63,17 +61,15 @@ const CardActions: React.FC<CardActionProps> = props => {
         {reflectionsCount ? (
           <Stack dataTestId="reflections-count" direction="row" align="end" spacing="gap-x-1">
             {reflectIconUi}
-            <Text
-              variant="body2"
-              weight="normal"
-              color={{
-                light: 'secondaryLight',
-                dark: 'secondaryDark',
-              }}
-              {...(disableActions && { customStyle: 'opacity-50' })}
+            <Typography
+              variant="sm"
+              {...(disableActions && {
+                customStyle: 'opacity-50',
+              })}
+              className="font-normal text-secondaryLight dark:text-secondaryDark"
             >
               {reflectionsCount}
-            </Text>
+            </Typography>
           </Stack>
         ) : (
           reflectIconUi
@@ -82,5 +78,4 @@ const CardActions: React.FC<CardActionProps> = props => {
     </Stack>
   );
 };
-
 export default CardActions;

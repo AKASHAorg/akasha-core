@@ -3,15 +3,13 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Table, { TableProps } from '@akashaorg/design-system-core/lib/components/Table';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 export type SectionHeaderProps = TableProps & {
   titleLabel: string;
   buttonLabel: string;
   noItemLabel: string;
   onButtonClick: () => void;
 };
-
 export const SectionRenderer: React.FC<SectionHeaderProps> = props => {
   const {
     titleLabel,
@@ -26,16 +24,16 @@ export const SectionRenderer: React.FC<SectionHeaderProps> = props => {
   return (
     <Stack spacing="gap-y-4">
       <Stack direction="row" justify="between">
-        <Text variant="h5">{titleLabel}</Text>
+        <Typography variant="h5">{titleLabel}</Typography>
         {!!rows.length && (
           <Button variant="text" size="md" label={buttonLabel} onClick={onButtonClick} />
         )}
       </Stack>
       {!rows.length && (
         <Card>
-          <Text variant="button-sm" weight="bold" color={{ light: 'grey4', dark: 'grey6' }}>
+          <Typography variant="xs" bold className="text-grey4 dark:text-grey6">
             {noItemLabel}
-          </Text>
+          </Typography>
         </Card>
       )}
 
