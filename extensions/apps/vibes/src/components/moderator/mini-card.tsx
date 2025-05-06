@@ -2,7 +2,6 @@ import React from 'react';
 
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
@@ -11,6 +10,10 @@ import { getModeratorStatusIndicator } from '../../utils';
 import { Moderator } from '@akashaorg/typings/lib/ui';
 import { ChevronRightIcon } from 'lucide-react';
 import { transformSource } from '@akashaorg/ui-core-hooks';
+import {
+  ProfileAvatarButton,
+  ProfileDidField,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
 
 export type ModeratorDetailMiniCardProps = {
   moderator: Moderator;
@@ -56,7 +59,9 @@ const ModeratorDetailMiniCard: React.FC<ModeratorDetailMiniCardProps> = props =>
             />
           </Stack>
 
-          <DidField did={moderator.did.id} />
+          <ProfileAvatarButton profileDID={moderator.did.id}>
+            <ProfileDidField />
+          </ProfileAvatarButton>
         </Stack>
       </Stack>
 

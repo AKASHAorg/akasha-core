@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { MoveUpIcon } from 'lucide-react';
-import Button from '../Button';
+import { cn } from '@akashaorg/ui/lib/library/utils';
 
 export type ScrollTopButtonProps = {
   onClick: () => void;
@@ -19,21 +19,20 @@ export type ScrollTopButtonProps = {
  **/
 const ScrollTopButton = React.forwardRef<HTMLDivElement, ScrollTopButtonProps>(
   ({ onClick, hide }, ref) => {
-    //@TODO: fix style
-    const styledDiv = `flex items-center justify-center w-12 h-12 rounded-3xl bg-grey6 cursor-pointer hover:(bg-grey4 [&>*]:stroke-[#fff])`;
-
     return (
       !hide && (
-        <Button
+        <button
           aria-label="scroll-to-top"
-          plain={true}
-          onClick={() => onClick()}
-          customStyle={styledDiv}
+          onClick={onClick}
+          className={cn(
+            //@TODO: fix style
+            `flex items-center justify-center w-12 h-12 rounded-3xl bg-grey6 cursor-pointer hover:bg-grey4 hover:[&>*]:stroke-[#fff]`,
+          )}
         >
           <div ref={ref}>
             <MoveUpIcon className="h-4 w-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
           </div>
-        </Button>
+        </button>
       )
     );
   },

@@ -20,7 +20,6 @@ export const SocialLinks: React.FC<SocialLinksProps> = ({
   addNewLinkButtonLabel,
   description,
   control,
-  customStyle = '',
 }) => {
   const { fields, append, remove } = useFieldArray({ name: 'links', control });
 
@@ -49,20 +48,15 @@ export const SocialLinks: React.FC<SocialLinksProps> = ({
             key={link.id}
             control={control}
             name={`links.${index}.href`}
-            render={({ field: { name, value, onChange, ref }, fieldState: { error } }) => (
+            render={({ field: { value, onChange } }) => (
               <SocialLink
-                type="text"
                 onDelete={() => {
                   const foundIndex = fields.findIndex(field => field.id === link.id);
                   if (foundIndex !== -1) remove(foundIndex);
                 }}
                 aria-label={`link.${index}`}
-                name={name}
                 value={value || ''}
-                caption={error?.message}
-                status={error?.message ? 'error' : null}
                 onChange={onChange}
-                inputRef={ref}
               />
             )}
             {...defaultValue}

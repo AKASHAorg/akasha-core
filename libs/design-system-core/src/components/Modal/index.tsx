@@ -81,7 +81,7 @@ const Modal: React.FC<ModalProps> = ({
           leaveTo="opacity-0 scale-95"
         >
           <Stack align="center" justify="center" customStyle="fixed inset-0">
-            <Stack customStyle="w-fit -ml(md:6)">
+            <Stack customStyle="w-fit -ml-md:6">
               <Dialog.Panel>
                 <Card radius={20} padding={'py-4'} customStyle={`${customStyle} relative`}>
                   <Stack direction="column" spacing="gap-y-4">

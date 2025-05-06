@@ -1,8 +1,15 @@
 import React, { SyntheticEvent, useEffect, useMemo, useState } from 'react';
 import * as z from 'zod';
-import { Controller, useWatch } from 'react-hook-form';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@akashaorg/ui/lib/akasha-components/form';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import TextField from '@akashaorg/design-system-core/lib/components/TextField';
+import { Input } from '@akashaorg/ui/lib/akasha-components/input';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Loader2 } from 'lucide-react';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
@@ -11,7 +18,7 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import AutoComplete from '@akashaorg/design-system-core/lib/components/AutoComplete';
 import StackedAvatar from '@akashaorg/design-system-core/lib/components/StackedAvatar';
 
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ButtonType } from '@akashaorg/design-system-components/lib/components/types/common.types';
 import { Licenses } from '../extension-creation-form';
@@ -103,16 +110,20 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
     errorProfilesDataLabel,
   } = props;
 
+  const form = useForm<
+    Omit<ExtensionEditStep3FormValues, 'keywords'> & { keywords?: string | string[] }
+  >({
+    defaultValues,
+    resolver: zodResolver(schema),
+    mode: 'onChange',
+  });
+
   const {
     control,
     getValues,
     setValue,
     formState: { errors },
-  } = useForm<Omit<ExtensionEditStep3FormValues, 'keywords'> & { keywords?: string | string[] }>({
-    defaultValues,
-    resolver: zodResolver(schema),
-    mode: 'onChange',
-  });
+  } = form;
 
   const licenses: Licenses | string[] = useMemo(
     () => [Licenses.MIT, Licenses.GPL, Licenses.APACHE, Licenses.BSD, Licenses.MPL, Licenses.OTHER],
@@ -181,163 +192,175 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
   };
 
   return (
-    <form onSubmit={onSave} className={`h-full`}>
-      <Stack direction="column" spacing={4}>
-        <Stack spacing={4} className="px-4 pb-16">
-          <Controller
-            control={control}
-            name={FieldName.license}
-            render={({ field: { name, value, onChange } }) => (
-              <DropDown
-                label={licenseFieldLabel}
-                name={name}
-                selected={value}
-                menuItems={licenses}
-                setSelected={onChange}
-                required={true}
+    <Form {...form}>
+      <form onSubmit={onSave} className={`h-full`}>
+        <Stack direction="column" spacing={4}>
+          <Stack spacing={4} className="px-4 pb-16">
+            <FormField
+              control={control}
+              name={FieldName.license}
+              render={({ field: { name, value, onChange } }) => (
+                <FormItem>
+                  <FormLabel>{licenseFieldLabel}</FormLabel>
+                  <FormControl>
+                    <DropDown
+                      label={licenseFieldLabel}
+                      name={name}
+                      selected={value}
+                      menuItems={licenses}
+                      setSelected={onChange}
+                      required={true}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+              defaultValue={defaultValues.license}
+            />
+            {licenseValue === Licenses.OTHER && (
+              <FormField
+                control={control}
+                name={FieldName.licenseOther}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        placeholder={licenseOtherPlaceholderLabel}
+                        {...field}
+                        onChange={field.onChange}
+                        required={true}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+                defaultValue={licenses.includes(defaultValues.license) ? '' : defaultValues.license}
               />
             )}
-            defaultValue={defaultValues.license}
-          />
-          {licenseValue === Licenses.OTHER && (
-            <Controller
-              control={control}
-              name={FieldName.licenseOther}
-              render={({ field: { name, value, onChange, ref }, fieldState: { error } }) => (
-                <TextField
-                  id={name}
-                  customStyle="mt-2"
-                  value={value}
-                  placeholder={licenseOtherPlaceholderLabel}
-                  type={'text'}
-                  caption={error?.message}
-                  status={error?.message ? 'error' : null}
-                  onChange={onChange}
-                  inputRef={ref}
-                  required={true}
-                />
-              )}
-              defaultValue={licenses.includes(defaultValues.license) ? '' : defaultValues.license}
-            />
-          )}
-          <Divider />
-          <Stack direction="column" spacing={4}>
-            <Stack spacing={1} direction="column">
-              <Stack direction="row" spacing={2} justifyContent="between" alignItems="center">
-                <Text variant="h6">{collaboratorsFieldLabel}</Text>
-                <Button variant="link" onClick={handleAddContributors}>
-                  <PlusIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
-                  {contributorsProfiles.length > 0 ? addAndEditLabel : addLabel}
-                </Button>
+            <Divider />
+            <Stack direction="column" spacing={4}>
+              <Stack spacing={1} direction="column">
+                <Stack direction="row" spacing={2} justifyContent="between" alignItems="center">
+                  <Text variant="h6">{collaboratorsFieldLabel}</Text>
+                  <Button variant="link" onClick={handleAddContributors}>
+                    <PlusIcon />
+                    {contributorsProfiles.length > 0 ? addAndEditLabel : addLabel}
+                  </Button>
+                </Stack>
+                <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
+                  {collaboratorsDescriptionLabel}
+                </Text>
               </Stack>
-              <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
-                {collaboratorsDescriptionLabel}
+              {loadingProfilesData && <Loader2 className="h-8 w-8 animate-spin text-primary" />}
+              {errorProfilesData && (
+                <Stack>
+                  <ErrorLoader type="script-error">
+                    <ErrorLoaderTitle>{errorProfilesDataLabel}</ErrorLoaderTitle>
+                    <ErrorLoaderDescription>{errorProfilesData.message}</ErrorLoaderDescription>
+                  </ErrorLoader>
+                </Stack>
+              )}
+              {contributorAvatars?.length > 0 && (
+                <Stack direction="row" spacing={2} alignItems="center">
+                  <StackedAvatar
+                    userData={contributorAvatars}
+                    maxAvatars={maxContributorsDisplay}
+                    size="md"
+                  />
+                  <Stack alignItems="center" justifyContent="center">
+                    <Text variant="body2" weight="bold">
+                      {contributorsProfiles[0]?.name}
+                    </Text>
+                    {contributorsProfiles.length > 1 && (
+                      <Text
+                        variant="footnotes2"
+                        color={{ light: 'grey4', dark: 'grey6' }}
+                        weight="light"
+                      >{`and ${contributorsProfiles.length - 1} ${moreLabel}`}</Text>
+                    )}
+                  </Stack>
+                </Stack>
+              )}
+            </Stack>
+
+            <Divider />
+
+            <Stack direction="column" spacing={2}>
+              <Label required={true}>{tagsLabel}</Label>
+              <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
+                {tagsDescriptionLabel}
+              </Text>
+              <FormField
+                control={control}
+                name={FieldName.keywords}
+                render={({ field: { value, onChange }, fieldState: { error } }) => {
+                  const errorMessage = error?.message ?? '';
+                  return (
+                    <FormItem>
+                      <FormControl>
+                        <AutoComplete
+                          value={typeof value === 'string' ? value : ''}
+                          options={availableKeywords}
+                          placeholder={addTagsPlaceholderLabel}
+                          tags={keywords}
+                          caption={errorMessage ? errorMessage : ''}
+                          status={errorMessage ? 'error' : null}
+                          separators={['Comma', 'Space', 'Enter']}
+                          customStyle="grow mt-2"
+                          onSelected={({ index }) => {
+                            const newKeyWords = keywords.add(availableKeywords[index]);
+                            onChange([...newKeyWords]);
+                            setKeywords(newKeyWords);
+                          }}
+                          onChange={value => {
+                            onChange(value);
+                            if (Array.isArray(value)) {
+                              if (!errorMessage) setKeywords(new Set(value));
+                            }
+                          }}
+                          disabled={maxTagsSelected}
+                          required={true}
+                          multiple
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
+              />
+
+              <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
+                {`${keywords.size}/${MAX_TAGS} ${tagsAddedLabel}`}
               </Text>
             </Stack>
-            {loadingProfilesData && <Loader2 className="h-8 w-8 animate-spin text-primary" />}
-            {errorProfilesData && (
-              <Stack>
-                <ErrorLoader type="script-error">
-                  <ErrorLoaderTitle>{errorProfilesDataLabel}</ErrorLoaderTitle>
-                  <ErrorLoaderDescription>{errorProfilesData.message}</ErrorLoaderDescription>
-                </ErrorLoader>
+            <Divider />
+            <Stack direction="column" spacing={2}>
+              <Stack direction="row" alignItems="center" spacing={1}>
+                <TriangleAlertIcon className="h-4 w-4 [&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark" />
+                <Text variant="button-md">{noteLabel}</Text>
               </Stack>
-            )}
-            {contributorAvatars?.length > 0 && (
-              <Stack direction="row" spacing={2} alignItems="center">
-                <StackedAvatar
-                  userData={contributorAvatars}
-                  maxAvatars={maxContributorsDisplay}
-                  size="md"
-                />
-                <Stack alignItems="center" justifyContent="center">
-                  <Text variant="body2" weight="bold">
-                    {contributorsProfiles[0]?.name}
-                  </Text>
-                  {contributorsProfiles.length > 1 && (
-                    <Text
-                      variant="footnotes2"
-                      color={{ light: 'grey4', dark: 'grey6' }}
-                      weight="light"
-                    >{`and ${contributorsProfiles.length - 1} ${moreLabel}`}</Text>
-                  )}
-                </Stack>
-              </Stack>
-            )}
-          </Stack>
-
-          <Divider />
-
-          <Stack direction="column" spacing={2}>
-            <Label required={true}>{tagsLabel}</Label>
-            <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
-              {tagsDescriptionLabel}
-            </Text>
-            <Controller
-              control={control}
-              name={FieldName.keywords}
-              render={({ field: { value, onChange }, fieldState: { error } }) => {
-                const errorMessage = error?.message ?? '';
-                return (
-                  <AutoComplete
-                    value={typeof value === 'string' ? value : ''}
-                    options={availableKeywords}
-                    placeholder={addTagsPlaceholderLabel}
-                    tags={keywords}
-                    caption={errorMessage ? errorMessage : ''}
-                    status={errorMessage ? 'error' : null}
-                    separators={['Comma', 'Space', 'Enter']}
-                    customStyle="grow mt-2"
-                    onSelected={({ index }) => {
-                      const newKeyWords = keywords.add(availableKeywords[index]);
-                      onChange([...newKeyWords]);
-                      setKeywords(newKeyWords);
-                    }}
-                    onChange={value => {
-                      onChange(value);
-                      if (Array.isArray(value)) {
-                        if (!errorMessage) setKeywords(new Set(value));
-                      }
-                    }}
-                    disabled={maxTagsSelected}
-                    required={true}
-                    multiple
-                  />
-                );
-              }}
-            />
-
-            <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
-              {`${keywords.size}/${MAX_TAGS} ${tagsAddedLabel}`}
-            </Text>
-          </Stack>
-          <Divider />
-          <Stack direction="column" spacing={2}>
-            <Stack direction="row" alignItems="center" spacing={1}>
-              <TriangleAlertIcon className="h-4 w-4 [&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark" />
-              <Text variant="button-md">{noteLabel}</Text>
+              <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
+                {noteDescriptionLabel}
+              </Text>
             </Stack>
-            <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
-              {noteDescriptionLabel}
-            </Text>
+          </Stack>
+          <Divider />
+
+          <Stack direction="row" justifyContent="end" spacing={2} className="px-4 pb-4">
+            <Button
+              variant="link"
+              onClick={cancelButton.handleClick}
+              disabled={cancelButton.disabled}
+            >
+              {cancelButton.label}
+            </Button>
+            <Button disabled={!isValid} onClick={onSave} type="submit">
+              {nextButton.label}
+            </Button>
           </Stack>
         </Stack>
-        <Divider />
-
-        <Stack direction="row" justifyContent="end" spacing={2} className="px-4 pb-4">
-          <Button
-            variant="link"
-            onClick={cancelButton.handleClick}
-            disabled={cancelButton.disabled}
-          >
-            {cancelButton.label}
-          </Button>
-          <Button disabled={!isValid} onClick={onSave} type="submit">
-            {nextButton.label}
-          </Button>
-        </Stack>
-      </Stack>
-    </form>
+      </form>
+    </Form>
   );
 };
 

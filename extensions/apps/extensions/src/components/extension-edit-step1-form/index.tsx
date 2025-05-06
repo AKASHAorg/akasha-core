@@ -1,8 +1,15 @@
 import React, { SyntheticEvent, useEffect, useState } from 'react';
 import * as z from 'zod';
-import { Controller } from 'react-hook-form';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@akashaorg/ui/lib/akasha-components/form';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import TextField from '@akashaorg/design-system-core/lib/components/TextField';
+import { Input } from '@akashaorg/ui/lib/akasha-components/input';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 
@@ -63,6 +70,12 @@ const ExtensionEditStep1Form: React.FC<ExtensionEditStep1FormProps> = props => {
     extensionDisplayNameLabel,
   } = props;
 
+  const form = useForm<ExtensionEditStep1FormValues>({
+    defaultValues,
+    resolver: zodResolver(schema),
+    mode: 'onChange',
+  });
+
   const {
     control,
     setValue,
@@ -70,11 +83,7 @@ const ExtensionEditStep1Form: React.FC<ExtensionEditStep1FormProps> = props => {
     setError,
     clearErrors,
     formState: { errors },
-  } = useForm<ExtensionEditStep1FormValues>({
-    defaultValues,
-    resolver: zodResolver(schema),
-    mode: 'onChange',
-  });
+  } = form;
 
   const isValid = !Object.keys(errors).length;
 
@@ -98,83 +107,83 @@ const ExtensionEditStep1Form: React.FC<ExtensionEditStep1FormProps> = props => {
   }, [isDuplicateExtProp, setError, clearErrors, validatedField]);
 
   return (
-    <form onSubmit={onSave} className={`h-full`}>
-      <Stack direction="column" spacing={4}>
-        <Stack className="px-4">
-          <Header
-            {...header}
-            extensionType={extensionType}
-            onLogoImageChange={logoImage => {
-              setValue('logoImage', logoImage, { shouldDirty: true });
-            }}
-            onCoverImageChange={coverImage => {
-              setValue('coverImage', coverImage, { shouldDirty: true });
-            }}
-          />
-        </Stack>
-        <Stack spacing={4} className="px-4 pb-16">
-          <Controller
-            control={control}
-            name={FieldName.name}
-            render={({ field: { name, value, onChange, ref }, fieldState: { error } }) => (
-              <TextField
-                id={name}
-                type="text"
-                name={name}
-                label={extensionIdLabel}
-                placeholder="unique extension identifier"
-                value={value}
-                caption={error?.message}
-                status={error?.message ? 'error' : null}
-                onChange={onChange}
-                onBlur={() => {
-                  setValidatedField(FieldName.name);
-                  handleCheckExtProp(FieldName.name, value);
-                }}
-                inputRef={ref}
-                required={true}
-              />
-            )}
-            defaultValue={defaultValues.name}
-          />
+    <Form {...form}>
+      <form onSubmit={onSave} className={`h-full`}>
+        <Stack direction="column" spacing={4}>
+          <Stack className="px-4">
+            <Header
+              {...header}
+              extensionType={extensionType}
+              onLogoImageChange={logoImage => {
+                setValue('logoImage', logoImage, { shouldDirty: true });
+              }}
+              onCoverImageChange={coverImage => {
+                setValue('coverImage', coverImage, { shouldDirty: true });
+              }}
+            />
+          </Stack>
+          <Stack spacing={4} className="px-4 pb-16">
+            <FormField
+              control={control}
+              name={FieldName.name}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{extensionIdLabel}</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder={'unique extension identifier'}
+                      {...field}
+                      onChange={field.onChange}
+                      onBlur={() => {
+                        setValidatedField(FieldName.name);
+                        handleCheckExtProp(FieldName.name, field.value);
+                      }}
+                      required={true}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+              defaultValue={defaultValues.name}
+            />
+            <Divider />
+            <FormField
+              control={control}
+              name={FieldName.displayName}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{extensionDisplayNameLabel}</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder={'extension x'}
+                      {...field}
+                      onChange={field.onChange}
+                      required={true}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+              defaultValue={defaultValues.displayName}
+            />
+          </Stack>
           <Divider />
-          <Controller
-            control={control}
-            name={FieldName.displayName}
-            render={({ field: { name, value, onChange, ref }, fieldState: { error } }) => (
-              <TextField
-                id={name}
-                type="text"
-                name={name}
-                label={extensionDisplayNameLabel}
-                placeholder="extension x"
-                value={value}
-                caption={error?.message}
-                status={error?.message ? 'error' : null}
-                onChange={onChange}
-                inputRef={ref}
-                required={true}
-              />
-            )}
-            defaultValue={defaultValues.displayName}
-          />
-        </Stack>
-        <Divider />
 
-        <Stack direction="row" justifyContent="end" spacing={2} className="px-4 pb-4">
-          <Button
-            variant="link"
-            onClick={cancelButton.handleClick}
-            disabled={cancelButton.disabled}
-          >
-            {cancelButton.label}
-          </Button>
-          <Button disabled={!isValid || loading} onClick={onSave} type="submit">
-            {nextButton.label}
-          </Button>
+          <Stack direction="row" justifyContent="end" spacing={2} className="px-4 pb-4">
+            <Button
+              variant="link"
+              onClick={cancelButton.handleClick}
+              disabled={cancelButton.disabled}
+            >
+              {cancelButton.label}
+            </Button>
+            <Button disabled={!isValid || loading} onClick={onSave} type="submit">
+              {nextButton.label}
+            </Button>
+          </Stack>
         </Stack>
-      </Stack>
-    </form>
+      </form>
+    </Form>
   );
 };
 

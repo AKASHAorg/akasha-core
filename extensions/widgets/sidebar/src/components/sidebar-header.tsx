@@ -1,6 +1,5 @@
 import React, { Suspense, useMemo, useState } from 'react';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import ProfileNameField from '@akashaorg/design-system-core/lib/components/ProfileNameField';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { cn } from '@akashaorg/ui/lib/library/utils';
@@ -10,10 +9,15 @@ import { useTranslation } from 'react-i18next';
 import { useGetProfileByDidSuspenseQuery } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
 import { PowerIcon, XIcon } from 'lucide-react';
 import {
+  ProfileAvatar,
   ProfileAvatarFallback,
   ProfileAvatarImage,
 } from '@akashaorg/ui/lib/akasha-components/profile-avatar';
-import { ProfileAvatar } from '@akashaorg/ui/lib/akasha-components/profile-avatar';
+import {
+  ProfileAvatarButton,
+  ProfileDidField,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
+import { CopyToClipboard } from '@akashaorg/ui/lib/akasha-components/copy-to-clipboard';
 
 export type SidebarHeaderProps = {
   authenticatedDID: string;
@@ -105,12 +109,15 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
             </Suspense>
           )}
           {isLoggedIn && (
-            <DidField
-              did={authenticatedDID}
-              textColor="grey7"
-              copyLabel={t('Copy to clipboard')}
-              copiedLabel={t('Copied')}
-            />
+            <ProfileAvatarButton profileDID={authenticatedDID}>
+              <CopyToClipboard
+                textToCopy={authenticatedDID}
+                ctaText="Copy to clipboard"
+                successText="Copied"
+              >
+                <ProfileDidField />
+              </CopyToClipboard>
+            </ProfileAvatarButton>
           )}
           {!isLoggedIn && (
             <Text
@@ -139,7 +146,8 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
           >
             {isHovered && (
               <>
-                {cancelLabel} <XIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+                {cancelLabel}{' '}
+                <XIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
               </>
             )}
           </Button>

@@ -1,7 +1,7 @@
 import React from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import TextField from '@akashaorg/design-system-core/lib/components/TextField';
+import { Textarea } from '@akashaorg/ui/lib/akasha-components/textarea';
 import {
   PageHeaderProps,
   PageHeader,
@@ -57,9 +57,8 @@ export const ReportItem: React.FC<ReportItemProps> = props => {
 
         {step === 1 && (
           <>
-            <TextField
+            <Textarea
               placeholder={reasonPlaceholderLabel}
-              type="multiline"
               onChange={() => {
                 /** */
               }}

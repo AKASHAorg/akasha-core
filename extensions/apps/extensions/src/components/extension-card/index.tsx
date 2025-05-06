@@ -4,16 +4,18 @@ import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import AppCoverImage from '@akashaorg/design-system-core/lib/components/AppCoverImage';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
-import DidField from '@akashaorg/design-system-core/lib/components/DidField';
-import ProfileNameField from '@akashaorg/design-system-core/lib/components/ProfileNameField';
+import {
+  ProfileAvatarButton,
+  ProfileAvatarButtonAvatar,
+  ProfileAvatarButtonAvatarFallback,
+  ProfileAvatarButtonAvatarImage,
+  ProfileDidField,
+  ProfileName,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
 import ExtensionIcon from '@akashaorg/design-system-core/lib/components/ExtensionIcon';
 import { Extension, Image } from '@akashaorg/typings/lib/ui';
 import { cn } from '@akashaorg/ui/lib/library/utils';
-import {
-  ProfileAvatarImage,
-  ProfileAvatarFallback,
-  ProfileAvatar,
-} from '@akashaorg/ui/lib/akasha-components/profile-avatar';
+import { CopyToClipboard } from '@akashaorg/ui/lib/akasha-components/copy-to-clipboard';
 
 export type ExtensionCardProps = {
   coverImageSrc: string;
@@ -100,18 +102,20 @@ const ExtensionCard: React.FC<ExtensionCardProps> = props => {
             )}
           </Stack>
           <Stack direction="row" alignItems="center" spacing={2}>
-            <ProfileAvatar profileDID={author?.profileDID} size="xs" nsfw={author?.nsfw}>
-              <ProfileAvatarImage src={author?.avatar?.src} />
-              <ProfileAvatarFallback />
-            </ProfileAvatar>
-            <ProfileNameField
-              did={author?.profileDID}
-              profileName={author?.name}
-              color={{ light: 'grey4', dark: 'grey6' }}
-              weight="normal"
-              truncateText={true}
-            />
-            <DidField did={author?.profileDID} isValid={true} copiable={true} />
+            <ProfileAvatarButton profileDID={author?.profileDID} size="sm">
+              <ProfileAvatarButtonAvatar>
+                <ProfileAvatarButtonAvatarImage src={author?.avatar?.src} alt="Author Avatar" />
+                <ProfileAvatarButtonAvatarFallback />
+              </ProfileAvatarButtonAvatar>
+              <ProfileName>{author?.name}</ProfileName>
+              <CopyToClipboard
+                textToCopy={author?.profileDID}
+                ctaText="Copy to clipboard"
+                successText="Copied"
+              >
+                <ProfileDidField />
+              </CopyToClipboard>
+            </ProfileAvatarButton>
           </Stack>
           <Text variant="body2" {...(!featured && { lineClamp: 2 })}>
             {description}
