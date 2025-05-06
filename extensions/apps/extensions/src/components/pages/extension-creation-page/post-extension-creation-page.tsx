@@ -5,7 +5,6 @@ import { CREATE_EXTENSION } from '../../../routes';
 import { useRootComponentProps, useAkashaStore } from '@akashaorg/ui-core-hooks';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { DRAFT_EXTENSIONS } from '../../../constants';
 import {
@@ -18,6 +17,10 @@ import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+import {
+  ProfileAvatarButton,
+  ProfileDidField,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
 
 export const PostExtensionCreationPage: React.FC<{ extensionId: string }> = ({ extensionId }) => {
   const navigate = useNavigate();
@@ -86,7 +89,9 @@ export const PostExtensionCreationPage: React.FC<{ extensionId: string }> = ({ e
             </Text>
             <Stack direction="column">
               <Text variant="footnotes1">{authenticatedProfile.name}</Text>
-              <DidField did={authenticatedDID} />
+              <ProfileAvatarButton profileDID={authenticatedDID}>
+                <ProfileDidField />
+              </ProfileAvatarButton>
             </Stack>
           </Stack>
         </Stack>

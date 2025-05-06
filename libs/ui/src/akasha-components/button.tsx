@@ -15,7 +15,7 @@ const buttonVariants = cva(
           'bg-gradient-to-r from-primary-start to-primary-end text-primary-foreground hover:opacity-70',
         destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
         outline:
-          'border border-input bg-card text-primary hover:bg-accent hover:text-accent-foreground',
+          'border border-input bg-transparent text-primary hover:bg-accent hover:text-accent-foreground',
         secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline',
@@ -67,7 +67,8 @@ const Button = React.forwardRef<
             [typographyVariants({ variant: 'xs' })]: size === 'sm',
           },
           buttonVariants({ variant, size, className }),
-          { 'p-0': variant === 'link' && asChild },
+          { 'p-0': variant === 'link' },
+          { 'h-fit': variant === 'link' && asChild },
         )}
         type={type}
         disabled={loading || disabled}
