@@ -30,7 +30,7 @@ import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Image } from '@akashaorg/ui/lib/akasha-components/image';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import TextField from '@akashaorg/design-system-core/lib/components/TextField';
+import { Input } from '@akashaorg/ui/lib/akasha-components/input';
 import ImageBlockGallery from '@akashaorg/design-system-components/lib/components/ImageBlockGallery';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import ImageBlockToolbar from '../../components/image-block-toolbar';
@@ -420,16 +420,14 @@ export const ImageEditorBlock = (
             <Stack direction="column" spacing={2} className="py-8">
               <Text variant="h6">{t('From URL')}</Text>
               <Stack direction="row" justifyContent="between">
-                <TextField
-                  value={imageLink}
+                <Input
                   placeholder={t('Paste image link')}
-                  altBg
-                  fullWidth
-                  type={'text'}
+                  value={imageLink}
                   onChange={handleChange}
+                  className="w-5/6"
                   disabled={imageUploadDisabled || maxImagesLimitReached}
-                  customStyle="w-5/6"
                 />
+
                 <Button
                   variant="outline"
                   disabled={disableURLUpload || maxImagesLimitReached}
@@ -485,12 +483,11 @@ export const ImageEditorBlock = (
             />
           </Stack>
           {showCaption && (
-            <TextField
+            <Input
               // eslint-disable-next-line
               autoFocus
               value={caption}
               placeholder={t('Write caption here')}
-              type={'text'}
               onChange={handleCaptionChange}
             />
           )}

@@ -1,11 +1,18 @@
 import React, { useMemo } from 'react';
-import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import TrendingWidgetItemLoader from '@akashaorg/design-system-components/lib/components/TrendingWidgetLoadingCard/trending-widget-item-loader';
 import { IRootComponentProps } from '@akashaorg/typings/lib/ui';
 import { hasOwn, transformSource, useNsfwToggling } from '@akashaorg/ui-core-hooks';
-import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
 import { useGetProfileByIdQuery } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
+import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
+import {
+  ProfileAvatarButton,
+  ProfileAvatarButtonAvatar,
+  ProfileAvatarButtonAvatarFallback,
+  ProfileAvatarButtonAvatarImage,
+  ProfileDidField,
+  ProfileName,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 
 export type LatestProfilesProps = {
   // data
@@ -42,18 +49,32 @@ export const LatestProfiles: React.FC<LatestProfilesProps> = props => {
         alignItems="center"
         justifyContent="between"
         spacing={3}
-        className="w-full xl:w-[19rem]"
+        className="w-(full xl:[19rem])"
       >
         <ProfileAvatarButton
-          profileId={profileData.did.id}
-          label={profileData.name}
-          {...(profileData.nsfw && { nsfwLabel: 'NSFW', nsfwAvatar: !(isViewer || showNsfw) })}
-          avatar={transformSource(profileData?.avatar?.default)}
-          alternativeAvatars={profileData?.avatar?.alternatives?.map(alternative =>
-            transformSource(alternative),
-          )}
+          profileDID={profileData.did.id}
           onClick={() => onClickProfile(profileData.did.id)}
-        />
+          {...(profileData.nsfw && {
+            nsfwLabel: 'NSFW',
+            nsfw: !(isViewer || showNsfw),
+          })}
+        >
+          <ProfileAvatarButtonAvatar>
+            <ProfileAvatarButtonAvatarImage
+              src={transformSource(profileData?.avatar?.default)?.src}
+              alt="Profile Avatar"
+            />
+            <ProfileAvatarButtonAvatarFallback
+              alternativeSrc={profileData?.avatar?.alternatives?.map(
+                alternative => transformSource(alternative)?.src,
+              )}
+            />
+          </ProfileAvatarButtonAvatar>
+          <ProfileName className="text-[0.75rem] leading-[1.125rem]">
+            {profileData.name}
+          </ProfileName>
+          <ProfileDidField />
+        </ProfileAvatarButton>
 
         {!isViewer && (
           <Extension

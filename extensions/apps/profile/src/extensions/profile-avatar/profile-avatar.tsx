@@ -1,18 +1,23 @@
 import React from 'react';
-import ProfileAvatarButton, {
-  ProfileAvatarButtonProps,
-} from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import ProfileAvatarLoading from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton/ProfileAvatarLoading';
 import { hasOwn, transformSource } from '@akashaorg/ui-core-hooks';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
+import {
+  ProfileAvatarButton,
+  ProfileAvatarButtonAvatar,
+  ProfileAvatarButtonAvatarFallback,
+  ProfileAvatarButtonAvatarImage,
+  ProfileDidField,
+  ProfileName,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
 
 export type ProfileAvatarProps = Pick<
-  ProfileAvatarButtonProps,
-  'truncateText' | 'href' | 'metadata' | 'customStyle' | 'onClick'
+  React.ComponentProps<typeof ProfileAvatarButton>,
+  'metadata' | 'className' | 'onClick'
 > & { profileDID: string };
 
 const ProfileAvatar = (props: ProfileAvatarProps) => {
-  const { profileDID, ...rest } = props;
+  const { profileDID, metadata, className, onClick } = props;
   const profileQuery = useGetProfileByDidQuery({
     variables: { id: profileDID },
     fetchPolicy: 'cache-first',
@@ -29,14 +34,25 @@ const ProfileAvatar = (props: ProfileAvatarProps) => {
 
   return (
     <ProfileAvatarButton
-      profileId={profileDID}
-      label={profileData?.name}
-      avatar={transformSource(profileData?.avatar?.default)}
-      alternativeAvatars={profileData?.avatar?.alternatives?.map(alternative =>
-        transformSource(alternative),
-      )}
-      {...rest}
-    />
+      profileDID={profileDID}
+      metadata={metadata}
+      className={className}
+      onClick={onClick}
+    >
+      <ProfileAvatarButtonAvatar>
+        <ProfileAvatarButtonAvatarImage
+          src={transformSource(profileData?.avatar?.default)?.src}
+          alt="Profile Avatar"
+        />
+        <ProfileAvatarButtonAvatarFallback
+          alternativeSrc={profileData?.avatar?.alternatives?.map(
+            alternative => transformSource(alternative)?.src,
+          )}
+        />
+      </ProfileAvatarButtonAvatar>
+      <ProfileName>{profileData?.name}</ProfileName>
+      <ProfileDidField />
+    </ProfileAvatarButton>
   );
 };
 

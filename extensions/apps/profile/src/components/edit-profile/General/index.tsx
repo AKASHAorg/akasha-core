@@ -1,6 +1,14 @@
 import React from 'react';
-import TextField from '@akashaorg/design-system-core/lib/components/TextField';
-import { Controller, Control } from 'react-hook-form';
+import { Input } from '@akashaorg/ui/lib/akasha-components/input';
+import { Textarea } from '@akashaorg/ui/lib/akasha-components/textarea';
+import { Control } from 'react-hook-form';
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@akashaorg/ui/lib/akasha-components/form';
 import { Header, HeaderProps } from './Header';
 import { EditProfileFormValues } from '../types';
 import { ButtonType } from '@akashaorg/design-system-components/lib/components/types/common.types';
@@ -31,40 +39,36 @@ export const General: React.FC<GeneralProps> = ({
   return (
     <React.Fragment>
       <Header {...header} onAvatarChange={onAvatarChange} onCoverImageChange={onCoverImageChange} />
-      <Controller
+      <FormField
         control={control}
         name="name"
-        render={({ field: { name, value, onChange, ref }, fieldState: { error } }) => (
-          <TextField
-            id={name}
-            type="text"
-            name={name}
-            label={nameField.label}
-            value={value}
-            onChange={onChange}
-            inputRef={ref}
-            status={error ? 'error' : null}
-            caption={error ? error.message : null}
-            required
-          />
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>{nameField.label}</FormLabel>
+            <FormControl>
+              <Input {...field} onChange={field.onChange} required />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
         )}
         defaultValue={nameField.initialValue || ''}
       />
-      <Controller
+      <FormField
         control={control}
         name="bio"
-        render={({ field: { name, value, onChange, ref } }) => (
-          <TextField
-            id={name}
-            name={name}
-            label={bioField.label}
-            value={value}
-            onChange={onChange}
-            inputRef={ref}
-            maxLength={MAX_BIO_LENGTH}
-            type="multiline"
-            customStyle="py-0"
-          />
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>{bioField.label}</FormLabel>
+            <FormControl>
+              <Textarea
+                className="w-0 min-w-full py-0"
+                {...field}
+                onChange={field.onChange}
+                maxLength={MAX_BIO_LENGTH}
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
         )}
         defaultValue={bioField.initialValue || ''}
       />

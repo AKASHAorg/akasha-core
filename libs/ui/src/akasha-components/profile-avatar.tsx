@@ -84,44 +84,53 @@ const ProfileAvatarImage = ({
       data-slot="profile-avatar-image"
       className={cn('aspect-square h-full w-full', className)}
       {...props}
-      onLoadingStatusChange={() => {}}
     />
   );
 };
 
 const ProfileAvatarFallback = ({
   children,
+  alternativeSrc,
   className,
   ...props
-}: React.ComponentProps<typeof AvatarPrimitive.Fallback>) => {
+}: React.ComponentProps<typeof AvatarPrimitive.Fallback> & {
+  alternativeSrc?: string[];
+}) => {
   const { profileDID, publicImgPath, nsfw } = useAvatarContext();
 
   const seed = getImageFromSeed(profileDID, 7);
   const avatarFallback = `${publicImgPath}/avatar-${seed}-min.webp`;
-  return (
-    !nsfw && (
-      <AvatarPrimitive.Fallback
-        data-slot="profile-avatar-fallback"
-        className={cn(
-          'flex h-full w-full items-center justify-center rounded-full bg-muted',
-          className,
-        )}
-        {...props}
-      >
-        {React.Children.count(children) ? (
-          children
-        ) : (
-          <img
-            data-slot="image"
-            loading="lazy"
-            decoding="async"
-            src={avatarFallback}
-            alt="fallback"
-            className="object-contain"
-          />
-        )}
-      </AvatarPrimitive.Fallback>
-    )
+  const fallbackUi = !nsfw && (
+    <AvatarPrimitive.Fallback
+      data-slot="profile-avatar-fallback"
+      className={cn(
+        'flex h-full w-full items-center justify-center rounded-full bg-muted',
+        className,
+      )}
+      {...props}
+    >
+      {React.Children.count(children) ? (
+        children
+      ) : (
+        <img
+          data-slot="image"
+          loading="lazy"
+          decoding="async"
+          src={avatarFallback}
+          alt="fallback"
+          className="object-contain"
+        />
+      )}
+    </AvatarPrimitive.Fallback>
+  );
+
+  return alternativeSrc ? (
+    <picture>
+      <source srcSet={alternativeSrc.filter(Boolean).join(', ')} />
+      {fallbackUi}
+    </picture>
+  ) : (
+    fallbackUi
   );
 };
 

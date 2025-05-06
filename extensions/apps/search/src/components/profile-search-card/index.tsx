@@ -4,7 +4,14 @@ import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
-import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
+import {
+  ProfileAvatarButton,
+  ProfileAvatarButtonAvatar,
+  ProfileAvatarButtonAvatarFallback,
+  ProfileAvatarButtonAvatarImage,
+  ProfileDidField,
+  ProfileName,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
 
 export type ProfileSearchCardProps = {
   isFollowing: boolean;
@@ -47,23 +54,27 @@ const ProfileSearchCard = ({
   profileData,
   followingLabel,
   authenticatedDID,
-  onClickProfile,
   transformSource,
   followLabel = 'Follow',
   unfollowLabel = 'Unfollow',
 }: ProfileSearchCardProps) => {
   return (
     <Stack direction="row" alignItems="center" justifyContent="between" className="py-2">
-      <ProfileAvatarButton
-        onClick={onClickProfile}
-        label={profileData?.name}
-        avatar={transformSource(profileData?.avatar?.default)}
-        alternativeAvatars={profileData?.avatar?.alternatives?.map(alternative =>
-          transformSource(alternative),
-        )}
-        truncateText={false}
-        profileId={profileData?.did?.id}
-      />
+      <ProfileAvatarButton profileDID={profileData?.did?.id}>
+        <ProfileAvatarButtonAvatar>
+          <ProfileAvatarButtonAvatarImage
+            src={transformSource(profileData?.avatar?.default)?.src}
+            alt="Profile Avatar"
+          />
+          <ProfileAvatarButtonAvatarFallback
+            alternativeSrc={profileData?.avatar?.alternatives?.map(
+              alternative => transformSource(alternative)?.src,
+            )}
+          />
+        </ProfileAvatarButtonAvatar>
+        <ProfileName>{profileData?.name}</ProfileName>
+        <ProfileDidField />
+      </ProfileAvatarButton>
 
       {!authenticatedDID && (
         <div>

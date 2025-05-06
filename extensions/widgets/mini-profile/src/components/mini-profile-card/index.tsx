@@ -1,6 +1,5 @@
 import React from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
@@ -12,6 +11,10 @@ import {
   ProfileAvatarImage,
 } from '@akashaorg/ui/lib/akasha-components/profile-avatar';
 import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
+import {
+  ProfileAvatarButton,
+  ProfileDidField,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
 
 export type MiniProfileCardProps = {
   publicImagePath?: string;
@@ -80,7 +83,9 @@ const MiniProfileCard: React.FC<MiniProfileCardProps> = props => {
               </Text>
             )}
             {profileData?.did?.id && (
-              <DidField did={profileData.did.id} isValid={true} copiable={false} />
+              <ProfileAvatarButton profileDID={profileData.did.id}>
+                <ProfileDidField />
+              </ProfileAvatarButton>
             )}
           </Stack>
           <Stack direction="row" spacing={1} alignItems="center" justifyContent="center">
