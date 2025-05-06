@@ -1,8 +1,16 @@
 import React, { SyntheticEvent, useState } from 'react';
 import * as z from 'zod';
-import { Controller } from 'react-hook-form';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@akashaorg/ui/lib/akasha-components/form';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import TextField from '@akashaorg/design-system-core/lib/components/TextField';
+import { Input } from '@akashaorg/ui/lib/akasha-components/input';
+import { Textarea } from '@akashaorg/ui/lib/akasha-components/textarea';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 
@@ -95,15 +103,17 @@ const ExtensionReleasePublish: React.FC<ExtensionReleasePublishProps> = props =>
     sourceURL: z.string().url({ message: validationLabels.sourceURL }),
   });
 
-  const {
-    control,
-    getValues,
-    formState: { errors, dirtyFields },
-  } = useForm<ExtensionReleasePublishValues>({
+  const form = useForm<ExtensionReleasePublishValues>({
     defaultValues,
     resolver: zodResolver(schema),
     mode: 'onChange',
   });
+
+  const {
+    control,
+    getValues,
+    formState: { errors, dirtyFields },
+  } = form;
 
   const isFormDirty = Object.keys(dirtyFields).includes(FieldName.sourceURL);
 
@@ -134,70 +144,68 @@ const ExtensionReleasePublish: React.FC<ExtensionReleasePublishProps> = props =>
   };
 
   return (
-    <>
+    <Form {...form}>
       <form className={`h-full`}>
         <Stack direction="column" spacing={4}>
           <Stack spacing={4} className="px-4 pb-16">
-            <Controller
+            <FormField
               control={control}
               name={FieldName.versionNumber}
-              render={({ field: { name, value, onChange, ref }, fieldState: { error } }) => (
-                <TextField
-                  id={name}
-                  type="text"
-                  name={name}
-                  label={versionNumberLabel}
-                  placeholder="e.g. 1.0.0"
-                  value={value}
-                  caption={error?.message}
-                  status={error?.message ? 'error' : null}
-                  onChange={onChange}
-                  inputRef={ref}
-                  required={requireVersionNumber}
-                />
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{versionNumberLabel}</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder={'e.g. 1.0.0'}
+                      {...field}
+                      onChange={field.onChange}
+                      required={requireVersionNumber}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
               )}
               defaultValue={defaultValues.versionNumber}
             />
             <Divider />
-            <Controller
+            <FormField
               control={control}
               name={FieldName.description}
-              render={({ field: { name, value, onChange, ref }, fieldState: { error } }) => (
-                <TextField
-                  id={name}
-                  name={name}
-                  label={descriptionFieldLabel}
-                  placeholder={descriptionPlaceholderLabel}
-                  value={value}
-                  onChange={onChange}
-                  caption={error?.message}
-                  status={error?.message ? 'error' : null}
-                  inputRef={ref}
-                  type="multiline"
-                  maxLength={2000}
-                  required={requireDescription}
-                />
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{descriptionFieldLabel}</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      className="w-0 min-w-full"
+                      placeholder={descriptionPlaceholderLabel}
+                      {...field}
+                      onChange={field.onChange}
+                      maxLength={2000}
+                      required={requireDescription}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
               )}
               defaultValue={defaultValues.description}
             />
             <Divider />
-            <Controller
+            <FormField
               control={control}
               name={FieldName.sourceURL}
-              render={({ field: { name, value, onChange, ref }, fieldState: { error } }) => (
-                <TextField
-                  id={name}
-                  type="text"
-                  name={name}
-                  label={sourceURLFieldLabel}
-                  placeholder={sourceURLPlaceholderLabel}
-                  value={value}
-                  caption={error?.message}
-                  status={error?.message ? 'error' : null}
-                  onChange={onChange}
-                  inputRef={ref}
-                  required={true}
-                />
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{sourceURLFieldLabel}</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder={sourceURLPlaceholderLabel}
+                      {...field}
+                      onChange={field.onChange}
+                      required={true}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
               )}
               defaultValue={defaultValues.sourceURL}
             />
@@ -242,7 +250,7 @@ const ExtensionReleasePublish: React.FC<ExtensionReleasePublishProps> = props =>
       >
         <Text variant="body1">{confirmationModalDescriptionLabel}</Text>
       </Modal>
-    </>
+    </Form>
   );
 };
 
