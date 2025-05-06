@@ -54,17 +54,15 @@ const BeamContentResolver: React.FC<BeamContentResolverProps> = ({
 
   if (beamReq.error)
     return (
-      <Card className="p-0">
-        <NetworkErrorCard
-          title={t('Beam can’t be loaded')}
-          message={t('Unable to load beam content. Click “Reload” to reload the beam.')}
-          reloadCount={reloadCount}
-          onReload={async () => {
-            setReloadCount(reloadCount + 1);
-            await beamReq.refetch();
-          }}
-        />
-      </Card>
+      <NetworkErrorCard
+        title={t('Beam can’t be loaded')}
+        message={t('Unable to load beam content. Click “Reload” to reload the beam.')}
+        reloadCount={reloadCount}
+        onReload={async () => {
+          setReloadCount(reloadCount + 1);
+          await beamReq.refetch();
+        }}
+      />
     );
 
   return (

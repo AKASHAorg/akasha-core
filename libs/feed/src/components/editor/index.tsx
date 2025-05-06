@@ -27,7 +27,10 @@ import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
-import InlineNotification from '@akashaorg/design-system-core/lib/components/InlineNotification';
+import {
+  InlineNotification,
+  InlineNotificationDescription,
+} from '@akashaorg/ui/lib/akasha-components/inline-notification';
 
 import {
   Bold,
@@ -488,11 +491,9 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
         {/* w-0 min-w-full is used to prevent parent width expansion without setting a fixed width */}
         <Stack ref={editorContainerRef} className="w-0 min-w-full">
           {mentionsLimitReached && (
-            <InlineNotification
-              message={mentionsLimit.label}
-              type="warning"
-              customStyle="bg-warningDark/30"
-            />
+            <InlineNotification variant="destructive">
+              <InlineNotificationDescription>{mentionsLimit.label}</InlineNotificationDescription>
+            </InlineNotification>
           )}
           <Slate
             editor={editor}
