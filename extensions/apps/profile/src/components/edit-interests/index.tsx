@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react';
-
 import { useTranslation } from 'react-i18next';
 import { ProfileLabeled } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
@@ -20,6 +19,7 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { ButtonType } from '@akashaorg/design-system-components/lib/components/types/common.types';
 import UnsavedChangesModal from '@akashaorg/design-system-components/lib/components/UnsavedChangesModal';
 import { useRootComponentProps } from '@akashaorg/ui-core-hooks';
+
 export type EditInterestsProps = {
   title: string;
   subTitle: string;

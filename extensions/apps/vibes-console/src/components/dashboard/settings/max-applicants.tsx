@@ -1,7 +1,7 @@
 import React from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import TextField from '@akashaorg/design-system-core/lib/components/TextField';
+import { Input } from '@akashaorg/ui/lib/akasha-components/input';
 import {
   PageHeader,
   PageHeaderProps,
@@ -22,10 +22,11 @@ export const MaxApplicants: React.FC<MaxApplicantsProps> = props => {
         <Text variant="footnotes2" color={{ light: 'black', dark: 'grey6' }}>
           {introLabel}
         </Text>
-        <TextField
-          label={`${maxApplicantsLabel}.`}
+        <Text variant="footnotes2" color={{ light: 'black', dark: 'grey6' }}>
+          {maxApplicantsLabel}
+        </Text>
+        <Input
           placeholder={maxApplicantsPlaceholderLabel}
-          type="text"
           onChange={() => {
             /** */
           }}

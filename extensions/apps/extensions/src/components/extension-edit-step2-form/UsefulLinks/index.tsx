@@ -4,7 +4,8 @@ import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { LinkElement } from './link-element';
 import { PlusIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import { Controller, Control, useFieldArray } from 'react-hook-form';
+import { Control, useFieldArray } from 'react-hook-form';
+import { FormField, FormItem, FormMessage } from '@akashaorg/ui/lib/akasha-components/form';
 import { ExtensionEditStep2FormValues } from '..';
 
 export type UsefulLinksProps = {
@@ -54,23 +55,24 @@ export const UsefulLinks: React.FC<UsefulLinksProps> = ({
       </Stack>
       {fields?.map((link, index) => {
         return (
-          <Controller
+          <FormField
             key={link.id}
             control={control}
             name={`links.${index}`}
-            render={({ field: { value, onChange, ref }, fieldState: { error } }) => (
-              <LinkElement
-                linkElementLabel={linkElementLabel}
-                linkTitlePlaceholder={linkTitlePlaceholderLabel}
-                onDelete={() => {
-                  remove(index);
-                  onDeleteLink();
-                }}
-                value={{ ...value, _id: index + 1 }}
-                onChange={onChange}
-                error={error as unknown}
-                inputRef={ref}
-              />
+            render={({ field: { value, onChange } }) => (
+              <FormItem>
+                <LinkElement
+                  linkElementLabel={linkElementLabel}
+                  linkTitlePlaceholder={linkTitlePlaceholderLabel}
+                  onDelete={() => {
+                    remove(index);
+                    onDeleteLink();
+                  }}
+                  value={{ ...value, _id: index + 1 }}
+                  onChange={onChange}
+                />
+                <FormMessage />
+              </FormItem>
             )}
             shouldUnregister={true}
             defaultValue={link}

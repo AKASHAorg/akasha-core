@@ -134,7 +134,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
     [extensionData?.gallery, transformSource],
   );
 
-  const asteriskStyle = `-top-0.5 left-1 text-base text(errorLight dark:errorDark`;
+  const asteriskStyle = `-top-0.5 left-1 text-base text-errorLight dark:text-errorDark`;
 
   return (
     <>

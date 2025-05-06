@@ -1,3 +1,4 @@
+import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
 import React, { PropsWithChildren } from 'react';
 
 export type ScrollTopWrapperProps = {
@@ -20,7 +21,12 @@ const ScrollTopWrapper: React.FC<PropsWithChildren<ScrollTopWrapperProps>> = ({
   children,
 }) => {
   return (
-    <div className={`fixed bottom-[20px] z-10 ${placement && `ml-[${placement}]`}`}>{children}</div>
+    <div
+      style={cssVars({ '--margin-left': placement })}
+      className={`fixed bottom-[20px] z-10 ml-[var(--margin-left)]`}
+    >
+      {children}
+    </div>
   );
 };
 
