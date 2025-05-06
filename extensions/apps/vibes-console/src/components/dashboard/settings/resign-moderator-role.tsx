@@ -5,7 +5,7 @@ import {
 } from '@akashaorg/design-system-components/lib/components/PageHeader';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import TextField from '@akashaorg/design-system-core/lib/components/TextField';
+import { Textarea } from '@akashaorg/ui/lib/akasha-components/textarea';
 
 export type ResignRoleProps = PageHeaderProps & {
   textLine1Label: string;
@@ -35,9 +35,8 @@ export const ResignRole: React.FC<ResignRoleProps> = props => {
             <Text customStyle="text-[0.875rem] leading-[1.375rem] font-light">{`(${optionalLabel})`}</Text>
           </Stack>
 
-          <TextField
+          <Textarea
             placeholder={reasonPlaceholderLabel}
-            type="multiline"
             onChange={() => {
               /** */
             }}
