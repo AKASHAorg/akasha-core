@@ -4,7 +4,7 @@ import { LayoutGrid, LayoutPanelLeft, Puzzle } from 'lucide-react';
 import { cn } from '@/ui/library/utils';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
-const Icon = ({ extensionType }: { extensionType: AkashaAppApplicationType }) => {
+const IconByExtension = ({ extensionType }: { extensionType: AkashaAppApplicationType }) => {
   switch (extensionType) {
     case AkashaAppApplicationType.App:
       return <LayoutGrid />;
@@ -33,7 +33,7 @@ const ExtensionTypeIcon = ({
       )}
       {...props}
     >
-      <Icon extensionType={extensionType} />
+      <IconByExtension extensionType={extensionType} />
     </div>
   );
 };

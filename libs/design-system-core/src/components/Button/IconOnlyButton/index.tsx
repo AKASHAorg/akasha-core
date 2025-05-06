@@ -1,6 +1,5 @@
 import React, { forwardRef, HTMLAttributes } from 'react';
 
-import { ButtonIcon } from '../button-icon';
 import { ButtonProps, ButtonSize } from '../types';
 import { Loader2 } from 'lucide-react';
 import { getContainerClasses } from '../getContainerClasses';
@@ -69,17 +68,7 @@ export const IconOnlyButton: React.FC<IconOnlyButtonProps & HTMLAttributes<HTMLB
           disabled={disabled}
           {...rest}
         >
-          <ButtonIcon
-            size={size}
-            icon={loading ? <Loader2 className="h-5 w-5 animate-spin" /> : icon}
-            solid={solidIcon}
-            variant={variant}
-            greyBg={greyBg}
-            loading={loading}
-            breakPointSize={breakPointSize}
-            disabled={disabled}
-            iconOnly={true}
-          />
+          {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : icon}
         </button>
       );
     },
