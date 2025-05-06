@@ -167,7 +167,6 @@ const ExtensionReleasePublish: React.FC<ExtensionReleasePublishProps> = props =>
                   <FormLabel>{descriptionFieldLabel}</FormLabel>
                   <FormControl>
                     <Textarea
-                      className="w-0 min-w-full"
                       placeholder={descriptionPlaceholderLabel}
                       {...field}
                       onChange={field.onChange}

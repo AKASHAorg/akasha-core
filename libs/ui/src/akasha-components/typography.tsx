@@ -12,7 +12,7 @@ const typographyVariants = cva('text-foreground', {
       h3: 'scroll-m-20 text-3xl	font-bold',
       h4: 'scroll-m-20 text-2xl	font-bold',
       h5: 'scroll-m-20 text-xl font-bold',
-      h6: 'scroll-m-20 text-l font-bold',
+      h6: 'scroll-m-20 text-lg font-bold',
       p: 'text-base',
       sm: 'text-sm',
       xs: 'text-xs',
@@ -29,7 +29,9 @@ type Heading = 'h1' | 'h2' | 'h3' | 'h4' | 'h5';
 
 function isHeading(variant: Variant): variant is Heading {
   return (
-    variant !== null && variant !== undefined && ['h1', 'h2', 'h3', 'h4', 'h5'].includes(variant)
+    variant !== null &&
+    variant !== undefined &&
+    ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(variant)
   );
 }
 
@@ -50,6 +52,8 @@ const Typography = React.forwardRef<HTMLHeadingElement | HTMLParagraphElement, T
   ({ className, variant, bold, asChild, ...props }, ref) => {
     const tag = getTag(variant);
     const Comp = asChild ? Slot : tag;
+
+    console.log(cn(typographyVariants({ variant, className }), bold && 'font-bold'));
 
     return (
       <Comp

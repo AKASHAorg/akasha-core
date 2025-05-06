@@ -134,7 +134,6 @@ const ExtensionEditStep2Form: React.FC<ExtensionEditStep2FormProps> = props => {
                   <FormLabel>{descriptionFieldLabel}</FormLabel>
                   <FormControl>
                     <Textarea
-                      className="w-0 min-w-full"
                       placeholder={descriptionPlaceholderLabel}
                       {...field}
                       onChange={field.onChange}
