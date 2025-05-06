@@ -37,7 +37,6 @@ const ReflectionPreview: React.FC<ReflectionPreviewProps> = props => {
           title={t('Reflection can’t be loaded')}
           message={t('Unable to load reflection content. Click “Reload” to reload the reflection.')}
           reloadCount={reloadCount}
-          borderRadius={0}
           onReload={async () => {
             setReloadCount(reloadCount + 1);
             await reflectOfReflectionReq.refetch();
