@@ -3,7 +3,8 @@ import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
 import RadioButton from '@akashaorg/design-system-core/lib/components/RadioButton';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import TextField from '@akashaorg/design-system-core/lib/components/TextField';
+import { Textarea } from '@akashaorg/ui/lib/akasha-components/textarea';
+import { Input } from '@akashaorg/ui/lib/akasha-components/input';
 import {
   PageHeaderProps,
   PageHeader,
@@ -67,12 +68,9 @@ export const BMDetails: React.FC<BMDetailsProps> = props => {
           <Text variant="footnotes2" weight="light">
             {section1.extra}:
           </Text>
-          <TextField
+          <Input
             placeholder={`${section1.placeholder} ...`}
-            type="text"
             maxLength={100}
-            caption={`${section1.caption}.`}
-            justifyCaption="end"
             onChange={() => {
               /** */
             }}
@@ -81,12 +79,9 @@ export const BMDetails: React.FC<BMDetailsProps> = props => {
 
         <Stack spacing="gap-y-2">
           <Text variant="label">{section2.title}?</Text>
-          <TextField
+          <Textarea
             placeholder={`${section2.placeholder} ...`}
-            type="multiline"
             maxLength={200}
-            caption={`${section2.caption}.`}
-            justifyCaption="end"
             onChange={() => {
               /** */
             }}

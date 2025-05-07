@@ -1,8 +1,15 @@
 import React, { SyntheticEvent } from 'react';
 import * as z from 'zod';
-import { Controller } from 'react-hook-form';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@akashaorg/ui/lib/akasha-components/form';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import TextField from '@akashaorg/design-system-core/lib/components/TextField';
+import { Textarea } from '@akashaorg/ui/lib/akasha-components/textarea';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 
@@ -69,16 +76,18 @@ const ExtensionEditStep2Form: React.FC<ExtensionEditStep2FormProps> = props => {
     handleManageGalleryClick,
   } = props;
 
+  const form = useForm<ExtensionEditStep2FormValues>({
+    defaultValues,
+    resolver: zodResolver(schema),
+    mode: 'onChange',
+  });
+
   const {
     control,
     getValues,
     trigger,
     formState: { errors },
-  } = useForm<ExtensionEditStep2FormValues>({
-    defaultValues,
-    resolver: zodResolver(schema),
-    mode: 'onChange',
-  });
+  } = form;
 
   const isValid = !Object.keys(errors)?.length;
 
@@ -104,80 +113,81 @@ const ExtensionEditStep2Form: React.FC<ExtensionEditStep2FormProps> = props => {
   };
 
   return (
-    <form onSubmit={onSave} className={`h-full`}>
-      <Stack direction="column" spacing={4}>
-        <Stack spacing={4} className="px-4 pb-16">
-          <NSFW
-            control={control}
-            name={'nsfw'}
-            nsfw={{ label: nsfwDescriptionLabel, initialValue: defaultValues.nsfw }}
-            nsfwFieldLabel={nsfwFieldLabel}
-            defaultValue={defaultValues.nsfw}
-          />
+    <Form {...form}>
+      <form onSubmit={onSave} className={`h-full`}>
+        <Stack direction="column" spacing={4}>
+          <Stack spacing={4} className="px-4 pb-16">
+            <NSFW
+              control={control}
+              name={'nsfw'}
+              nsfw={{ label: nsfwDescriptionLabel, initialValue: defaultValues.nsfw }}
+              nsfwFieldLabel={nsfwFieldLabel}
+              defaultValue={defaultValues.nsfw}
+            />
+            <Divider />
+
+            <FormField
+              control={control}
+              name={FieldName.description}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{descriptionFieldLabel}</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      className="w-0 min-w-full"
+                      placeholder={descriptionPlaceholderLabel}
+                      {...field}
+                      onChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+              defaultValue={defaultValues.description}
+            />
+            <Divider />
+
+            <Gallery
+              galleryFieldLabel={galleryFieldLabel}
+              galleryDescriptionLabel={galleryDescriptionLabel}
+              addLabel={addLabel}
+              updateGalleryLabel={updateGalleryLabel}
+              imagesUploadedLabel={imagesUploadedLabel}
+              images={images}
+              maxGalleryImages={maxGalleryImages}
+              handleMediaClick={() => handleManageGalleryClick(getValues())}
+            />
+            <Divider />
+
+            <UsefulLinks
+              usefulLinksTitleLabel={usefulLinksFieldLabel}
+              usefulLinksDescriptionLabel={usefulLinksDescriptionLabel}
+              linkElementLabel={linkTitleLabel}
+              linkTitlePlaceholderLabel={linkPlaceholderLabel}
+              addNewLinkButtonLabel={addLabel}
+              control={control}
+              onDeleteLink={async () => {
+                await trigger();
+              }}
+            />
+          </Stack>
           <Divider />
 
-          <Controller
-            control={control}
-            name={FieldName.description}
-            render={({ field: { name, value, onChange, ref }, fieldState: { error } }) => (
-              <TextField
-                id={name}
-                name={name}
-                label={descriptionFieldLabel}
-                placeholder={descriptionPlaceholderLabel}
-                value={value}
-                onChange={onChange}
-                caption={error?.message}
-                status={error?.message ? 'error' : null}
-                inputRef={ref}
-                type="multiline"
-                required={true}
-              />
-            )}
-            defaultValue={defaultValues.description}
-          />
-          <Divider />
-
-          <Gallery
-            galleryFieldLabel={galleryFieldLabel}
-            galleryDescriptionLabel={galleryDescriptionLabel}
-            addLabel={addLabel}
-            updateGalleryLabel={updateGalleryLabel}
-            imagesUploadedLabel={imagesUploadedLabel}
-            images={images}
-            maxGalleryImages={maxGalleryImages}
-            handleMediaClick={() => handleManageGalleryClick(getValues())}
-          />
-          <Divider />
-
-          <UsefulLinks
-            usefulLinksTitleLabel={usefulLinksFieldLabel}
-            usefulLinksDescriptionLabel={usefulLinksDescriptionLabel}
-            linkElementLabel={linkTitleLabel}
-            linkTitlePlaceholderLabel={linkPlaceholderLabel}
-            addNewLinkButtonLabel={addLabel}
-            control={control}
-            onDeleteLink={async () => {
-              await trigger();
-            }}
-          />
+          <Stack direction="row" justifyContent="end" spacing={2} className="px-4 pb-4">
+            <Button
+              variant="link"
+              onClick={cancelButton.handleClick}
+              disabled={cancelButton.disabled}
+            >
+              {cancelButton.label}
+            </Button>
+            <Button disabled={!isValid} onClick={onSave} type="submit">
+              {nextButton.label}
+            </Button>
+          </Stack>
         </Stack>
-        <Divider />
-
-        <Stack direction="row" justifyContent="end" spacing={2} className="px-4 pb-4">
-          <Button
-            variant="link"
-            onClick={cancelButton.handleClick}
-            disabled={cancelButton.disabled}
-          >
-            {cancelButton.label}
-          </Button>
-          <Button disabled={!isValid} onClick={onSave} type="submit">
-            {nextButton.label}
-          </Button>
-        </Stack>
-      </Stack>
-    </form>
+      </form>
+    </Form>
   );
 };
 

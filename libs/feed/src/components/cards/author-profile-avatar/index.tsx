@@ -8,7 +8,14 @@ import {
   TooltipProvider,
 } from '@akashaorg/ui/lib/akasha-components/tooltip';
 import ProfileAvatarLoading from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton/ProfileAvatarLoading';
-import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
+import {
+  ProfileAvatarButton,
+  ProfileAvatarButtonAvatar,
+  ProfileAvatarButtonAvatarFallback,
+  ProfileAvatarButtonAvatarImage,
+  ProfileDidField,
+  ProfileName,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
 import { formatDate, formatRelativeTime } from '@akashaorg/design-system-core/lib/utils';
 import {
   hasOwn,
@@ -60,61 +67,88 @@ const AuthorProfileAvatar: React.FC<AuthorProfileAvatarProps> = props => {
       : null;
 
   return (
-    <ProfileAvatarButton
-      variant="3"
-      profileId={authorId}
+    <a
       href={`/@akashaorg/app-profile/${authorId}`}
-      label={profileData?.name}
-      {...(profileData?.nsfw && {
-        nsfwLabel: 'NSFW',
-        nsfwAvatar: !(authenticatedDID === profileData?.did?.id || showNsfw),
-      })}
-      avatar={transformSource(profileData?.avatar?.default)}
-      alternativeAvatars={profileData?.avatar?.alternatives?.map(alternative =>
-        transformSource(alternative),
-      )}
-      metadata={
-        <>
-          {publishTime && !hidePublishTime && (
-            <Stack direction="row" align="center" spacing="gap-x-1">
-              <Text variant="footnotes2" weight="normal" color={{ light: 'grey4', dark: 'grey7' }}>
-                ·
-              </Text>
-
-              <TooltipProvider delayDuration={0}>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <Text
-                      variant="footnotes2"
-                      weight="normal"
-                      color={{ light: 'grey4', dark: 'grey7' }}
-                    >
-                      {publishTime}
-                    </Text>
-                  </TooltipTrigger>
-                  <TooltipContent side="top">
-                    {createdAt ? formatDate(createdAt, 'H[:]mm [·] D MMM YYYY', locale) : ''}
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </Stack>
-          )}
-          {pending && (
-            <Stack direction="row" align="center" spacing="gap-x-1">
-              <Text variant="footnotes2" weight="normal" color={{ light: 'grey4', dark: 'grey7' }}>
-                ·
-              </Text>
-              <Text variant="footnotes2" weight="normal" color={{ light: 'grey4', dark: 'grey7' }}>
-                {t('Pending')}...
-              </Text>
-            </Stack>
-          )}
-        </>
-      }
-      onClick={() => {
-        onAvatarClick(authorId);
+      rel="noreferrer noopener"
+      onClick={event => {
+        event.preventDefault();
+        event.stopPropagation();
       }}
-    />
+    >
+      <ProfileAvatarButton
+        {...(profileData?.nsfw && {
+          nsfwLabel: 'NSFW',
+          nsfw: !(authenticatedDID === profileData?.did?.id || showNsfw),
+        })}
+        profileDID={authorId}
+        metadata={
+          <>
+            {publishTime && !hidePublishTime && (
+              <Stack direction="row" align="center" spacing="gap-x-1">
+                <Text
+                  variant="footnotes2"
+                  weight="normal"
+                  color={{ light: 'grey4', dark: 'grey7' }}
+                >
+                  ·
+                </Text>
+                <TooltipProvider delayDuration={0}>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Text
+                        variant="footnotes2"
+                        weight="normal"
+                        color={{ light: 'grey4', dark: 'grey7' }}
+                      >
+                        {publishTime}
+                      </Text>
+                    </TooltipTrigger>
+                    <TooltipContent side="top">
+                      {createdAt ? formatDate(createdAt, 'H[:]mm [·] D MMM YYYY', locale) : ''}
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </Stack>
+            )}
+            {pending && (
+              <Stack direction="row" align="center" spacing="gap-x-1">
+                <Text
+                  variant="footnotes2"
+                  weight="normal"
+                  color={{ light: 'grey4', dark: 'grey7' }}
+                >
+                  ·
+                </Text>
+                <Text
+                  variant="footnotes2"
+                  weight="normal"
+                  color={{ light: 'grey4', dark: 'grey7' }}
+                >
+                  {t('Pending')}...
+                </Text>
+              </Stack>
+            )}
+          </>
+        }
+        onClick={() => {
+          onAvatarClick(authorId);
+        }}
+      >
+        <ProfileAvatarButtonAvatar>
+          <ProfileAvatarButtonAvatarImage
+            src={transformSource(profileData?.avatar?.default)?.src}
+            alt="Author Avatar"
+          />
+          <ProfileAvatarButtonAvatarFallback
+            alternativeSrc={profileData?.avatar?.alternatives?.map(
+              alternative => transformSource(alternative)?.src,
+            )}
+          />
+        </ProfileAvatarButtonAvatar>
+        <ProfileName>{profileData?.name}</ProfileName>
+        <ProfileDidField />
+      </ProfileAvatarButton>
+    </a>
   );
 };
 

@@ -3,13 +3,15 @@ import { useTranslation } from 'react-i18next';
 
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import {
   ProfileAvatar,
   ProfileAvatarFallback,
 } from '@akashaorg/ui/lib/akasha-components/profile-avatar';
-
+import {
+  ProfileAvatarButton,
+  ProfileDidField,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
 
 export type FallbackHeaderProps = {
   authenticatedDID: string;
@@ -33,12 +35,9 @@ const FallbackHeader: React.FC<FallbackHeaderProps> = ({ authenticatedDID, isLog
       </Stack>
       <Stack justifyContent="center" className="w-fit flex-grow">
         {isLoggedIn && <Text variant="button-md">{t('Fetching your info...')}</Text>}
-        <DidField
-          did={authenticatedDID}
-          textColor="grey7"
-          copyLabel={t('Copy to clipboard')}
-          copiedLabel={t('Copied')}
-        />
+        <ProfileAvatarButton profileDID={authenticatedDID}>
+          <ProfileDidField />
+        </ProfileAvatarButton>
       </Stack>
       <Stack className="w-fit h-fit self-start">
         <Button variant="default" size="sm" loading />

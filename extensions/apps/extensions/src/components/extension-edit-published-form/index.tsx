@@ -1,8 +1,15 @@
 import React, { SyntheticEvent, useState } from 'react';
 import * as z from 'zod';
-import { Controller } from 'react-hook-form';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@akashaorg/ui/lib/akasha-components/form';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import TextField from '@akashaorg/design-system-core/lib/components/TextField';
+import { Textarea } from '@akashaorg/ui/lib/akasha-components/textarea';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 
@@ -96,17 +103,19 @@ const ExtensionEditPublishedForm: React.FC<ExtensionEditPublishedFormProps> = pr
     handleManageGalleryClick,
   } = props;
 
+  const form = useForm<ExtensionEditPublishedFormValues>({
+    defaultValues,
+    resolver: zodResolver(schema),
+    mode: 'onChange',
+  });
+
   const {
     control,
     setValue,
     getValues,
     trigger,
     formState: { errors },
-  } = useForm<ExtensionEditPublishedFormValues>({
-    defaultValues,
-    resolver: zodResolver(schema),
-    mode: 'onChange',
-  });
+  } = form;
 
   const isValid = !Object.keys(errors).length;
 
@@ -138,127 +147,129 @@ const ExtensionEditPublishedForm: React.FC<ExtensionEditPublishedFormProps> = pr
   };
 
   return (
-    <form onSubmit={onSave} className={`h-full`}>
-      <Stack direction="column" spacing={4}>
-        <Stack className="pt-4 px-4">
-          <Header
-            {...header}
-            extensionType={displayOnlyValues.applicationType}
-            nsfw={displayOnlyValues.nsfw}
-            showExtraInfo={true}
-            onLogoImageChange={logoImage => {
-              setValue('logoImage', logoImage, { shouldDirty: true });
-            }}
-            onCoverImageChange={coverImage => {
-              setValue('coverImage', coverImage, { shouldDirty: true });
-            }}
-          />
-        </Stack>
-        <Stack className="px-4">
-          <Divider />
-        </Stack>
-        <Stack className="px-4">
-          <Accordion
-            accordionId={extensionInformationLabel}
-            open={showAccordion}
-            titleNode={
-              <Text variant="h6" weight="bold">
-                {extensionInformationLabel}
-              </Text>
-            }
-            contentNode={
-              <Stack spacing={4}>
-                <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey6' }}>
-                  {extensionInformationDescriptionLabel}
+    <Form {...form}>
+      <form onSubmit={onSave} className={`h-full`}>
+        <Stack direction="column" spacing={4}>
+          <Stack className="pt-4 px-4">
+            <Header
+              {...header}
+              extensionType={displayOnlyValues.applicationType}
+              nsfw={displayOnlyValues.nsfw}
+              showExtraInfo={true}
+              onLogoImageChange={logoImage => {
+                setValue('logoImage', logoImage, { shouldDirty: true });
+              }}
+              onCoverImageChange={coverImage => {
+                setValue('coverImage', coverImage, { shouldDirty: true });
+              }}
+            />
+          </Stack>
+          <Stack className="px-4">
+            <Divider />
+          </Stack>
+          <Stack className="px-4">
+            <Accordion
+              accordionId={extensionInformationLabel}
+              open={showAccordion}
+              titleNode={
+                <Text variant="h6" weight="bold">
+                  {extensionInformationLabel}
                 </Text>
+              }
+              contentNode={
                 <Stack spacing={4}>
-                  <Stack spacing={2}>
-                    <Text variant="h6" weight="bold">
-                      {extensionIdLabel}
-                    </Text>
-                    <Text variant="body2">{displayOnlyValues?.name}</Text>
-                  </Stack>
-                  <Divider />
-                  <Stack spacing={2}>
-                    <Text variant="h6" weight="bold">
-                      {extensionDisplayNameLabel}
-                    </Text>
-                    <Text variant="body2">{displayOnlyValues?.displayName}</Text>
-                  </Stack>
-                  <Divider />
-                  <Stack spacing={2}>
-                    <Text variant="h6" weight="bold">
-                      {extensionLicenseLabel}
-                    </Text>
-                    <Text variant="body2">{displayOnlyValues?.license}</Text>
+                  <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey6' }}>
+                    {extensionInformationDescriptionLabel}
+                  </Text>
+                  <Stack spacing={4}>
+                    <Stack spacing={2}>
+                      <Text variant="h6" weight="bold">
+                        {extensionIdLabel}
+                      </Text>
+                      <Text variant="body2">{displayOnlyValues?.name}</Text>
+                    </Stack>
+                    <Divider />
+                    <Stack spacing={2}>
+                      <Text variant="h6" weight="bold">
+                        {extensionDisplayNameLabel}
+                      </Text>
+                      <Text variant="body2">{displayOnlyValues?.displayName}</Text>
+                    </Stack>
+                    <Divider />
+                    <Stack spacing={2}>
+                      <Text variant="h6" weight="bold">
+                        {extensionLicenseLabel}
+                      </Text>
+                      <Text variant="body2">{displayOnlyValues?.license}</Text>
+                    </Stack>
                   </Stack>
                 </Stack>
-              </Stack>
-            }
-            handleClick={handleToggleAccordion}
-          />
-        </Stack>
-        <Stack spacing={4} className="px-4 pb-16">
-          <Divider />
-          <Controller
-            control={control}
-            name={FieldName.description}
-            render={({ field: { name, value, onChange, ref }, fieldState: { error } }) => (
-              <TextField
-                id={name}
-                name={name}
-                label={descriptionFieldLabel}
-                placeholder={descriptionPlaceholderLabel}
-                value={value}
-                onChange={onChange}
-                caption={error?.message}
-                status={error?.message ? 'error' : null}
-                inputRef={ref}
-                type="multiline"
-              />
-            )}
-            defaultValue={defaultValues.description}
-          />
-          <Divider />
-          <Gallery
-            galleryFieldLabel={galleryFieldLabel}
-            galleryDescriptionLabel={galleryDescriptionLabel}
-            addLabel={addLabel}
-            updateGalleryLabel={updateGalleryLabel}
-            imagesUploadedLabel={imagesUploadedLabel}
-            images={images}
-            maxGalleryImages={maxGalleryImages}
-            handleMediaClick={() => handleManageGalleryClick(getValues())}
-          />
-          <Divider />
+              }
+              handleClick={handleToggleAccordion}
+            />
+          </Stack>
+          <Stack spacing={4} className="px-4 pb-16">
+            <Divider />
+            <FormField
+              control={control}
+              name={FieldName.description}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{descriptionFieldLabel}</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      className="w-0 min-w-full"
+                      placeholder={descriptionPlaceholderLabel}
+                      {...field}
+                      onChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+              defaultValue={defaultValues.description}
+            />
+            <Divider />
+            <Gallery
+              galleryFieldLabel={galleryFieldLabel}
+              galleryDescriptionLabel={galleryDescriptionLabel}
+              addLabel={addLabel}
+              updateGalleryLabel={updateGalleryLabel}
+              imagesUploadedLabel={imagesUploadedLabel}
+              images={images}
+              maxGalleryImages={maxGalleryImages}
+              handleMediaClick={() => handleManageGalleryClick(getValues())}
+            />
+            <Divider />
 
-          <UsefulLinks
-            usefulLinksTitleLabel={usefulLinksFieldLabel}
-            usefulLinksDescriptionLabel={usefulLinksDescriptionLabel}
-            linkElementLabel={linkTitleLabel}
-            linkTitlePlaceholderLabel={linkPlaceholderLabel}
-            addNewLinkButtonLabel={addLabel}
-            control={control}
-            onDeleteLink={async () => {
-              await trigger();
-            }}
-          />
+            <UsefulLinks
+              usefulLinksTitleLabel={usefulLinksFieldLabel}
+              usefulLinksDescriptionLabel={usefulLinksDescriptionLabel}
+              linkElementLabel={linkTitleLabel}
+              linkTitlePlaceholderLabel={linkPlaceholderLabel}
+              addNewLinkButtonLabel={addLabel}
+              control={control}
+              onDeleteLink={async () => {
+                await trigger();
+              }}
+            />
+          </Stack>
+          <Divider />
+          <Stack direction="row" justifyContent="end" spacing={2} className="px-4 pb-4">
+            <Button
+              variant="link"
+              onClick={cancelButton.handleClick}
+              disabled={cancelButton.disabled}
+            >
+              {cancelButton.label}
+            </Button>
+            <Button loading={loading} disabled={!isValid || loading} onClick={onSave} type="submit">
+              {nextButton.label}
+            </Button>
+          </Stack>
         </Stack>
-        <Divider />
-        <Stack direction="row" justifyContent="end" spacing={2} className="px-4 pb-4">
-          <Button
-            variant="link"
-            onClick={cancelButton.handleClick}
-            disabled={cancelButton.disabled}
-          >
-            {cancelButton.label}
-          </Button>
-          <Button loading={loading} disabled={!isValid || loading} onClick={onSave} type="submit">
-            {nextButton.label}
-          </Button>
-        </Stack>
-      </Stack>
-    </form>
+      </form>
+    </Form>
   );
 };
 
