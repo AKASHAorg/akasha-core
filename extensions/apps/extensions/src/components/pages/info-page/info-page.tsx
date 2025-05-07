@@ -6,7 +6,7 @@ import {
   ErrorLoaderDescription,
   ErrorLoaderTitle,
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
-import { ChevronRightIcon, FlagIcon, ShareIcon } from 'lucide-react';
+import { ChevronRightIcon, FlagIcon, Share2Icon } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { useTranslation } from 'react-i18next';
 import { transformSource, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
@@ -244,11 +244,11 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                   extensionTypeLabel={t('{{extensionTypeLabel}}', {
                     extensionTypeLabel: getExtensionTypeLabel(appData?.applicationType),
                   })}
-                  share={{ label: t('Share'), icon: <ShareIcon /> }}
+                  share={{ label: t('Share'), icon: <Share2Icon className="h-4 w-4" /> }}
                   report={{
                     label: t('Flag'),
                     icon: (
-                      <FlagIcon className="h-5 w-5 [&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark" />
+                      <FlagIcon className="h-4 w-4 [&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark" />
                     ),
                     onClick: handleExtensionReportClick,
                     color: { light: 'errorLight', dark: 'errorDark' },

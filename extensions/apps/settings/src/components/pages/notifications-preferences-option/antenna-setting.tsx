@@ -39,7 +39,7 @@ const AntennaSetting: React.FC<IAntennaSettingProps> = ({ isSelected, onChange }
       </Text>
       <Card className="p-3 mt-4">
         <Stack direction="row" spacing={3} alignItems="center">
-          <InfoIcon className="h-6 w-6 [&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark" />
+          <InfoIcon className="h-6 w-6 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
           <Text variant="body1" customStyle="text-sm">
             {t('Changing notifications preferences requires a signature')}
           </Text>

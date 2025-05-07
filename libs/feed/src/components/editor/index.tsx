@@ -461,6 +461,9 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
   const publishDisabled = publishDisabledInternal || disablePublish;
   const [, forceUpdate] = React.useReducer(x => x + 1, 0);
 
+  const style1 = 'h-5 w-5 [&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark';
+  const style2 = 'h-4 w-4 [&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark';
+
   return (
     <Stack justifyContent="between" className={cn('bg-inherit w-full', customStyle)}>
       <Stack
@@ -528,23 +531,43 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
                 <Stack direction="row">
                   <MarkButton
                     format="bold"
-                    icon={<Bold />}
+                    icon={<Bold className={style2} />}
                     style={'rounded-l-[0.125rem]'}
                     callback={forceUpdate}
                   />
-                  <MarkButton format="italic" icon={<Italic />} callback={forceUpdate} />
-                  <MarkButton format="underline" icon={<Underline />} callback={forceUpdate} />
-                  <BlockButton format="left" icon={<AlignTextLeft />} callback={forceUpdate} />
-                  <BlockButton format="center" icon={<AlignTextCenter />} callback={forceUpdate} />
-                  <BlockButton format="right" icon={<AlignTextRight />} callback={forceUpdate} />
+                  <MarkButton
+                    format="italic"
+                    icon={<Italic className={style2} />}
+                    callback={forceUpdate}
+                  />
+                  <MarkButton
+                    format="underline"
+                    icon={<Underline className={style2} />}
+                    callback={forceUpdate}
+                  />
+                  <BlockButton
+                    format="left"
+                    icon={<AlignTextLeft className={style1} />}
+                    callback={forceUpdate}
+                  />
+                  <BlockButton
+                    format="center"
+                    icon={<AlignTextCenter className={style1} />}
+                    callback={forceUpdate}
+                  />
+                  <BlockButton
+                    format="right"
+                    icon={<AlignTextRight className={style1} />}
+                    callback={forceUpdate}
+                  />
                   <BlockButton
                     format="numbered-list"
-                    icon={<ListNumbered />}
+                    icon={<ListNumbered className={style1} />}
                     callback={forceUpdate}
                   />
                   <BlockButton
                     format="bulleted-list"
-                    icon={<ListBulleted />}
+                    icon={<ListBulleted className={style1} />}
                     style={'rounded-r-[0.125rem]'}
                     callback={forceUpdate}
                   />

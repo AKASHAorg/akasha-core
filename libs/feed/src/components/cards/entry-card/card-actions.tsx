@@ -3,7 +3,7 @@ import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import { MessageCircleIcon } from 'lucide-react';
+import { MessagesSquareIcon } from 'lucide-react';
 
 export type CardActionProps = {
   itemId: string;
@@ -36,7 +36,7 @@ const CardActions: React.FC<CardActionProps> = props => {
       }}
       className="p-0 border-none"
     >
-      <MessageCircleIcon
+      <MessagesSquareIcon
         className={`h-5 w-5 ${hovered ? '[&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark' : '[&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark'}`}
       />
     </Card>

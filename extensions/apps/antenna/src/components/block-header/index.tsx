@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
-import { MoveUpIcon, MoveDownIcon, TrashIcon } from 'lucide-react';
+import { ArrowUpIcon, ArrowDownIcon, TrashIcon } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import BlockStatusToolbar, { IBlockStatusToolbar } from '../block-status-toolbar';
 
@@ -86,7 +86,7 @@ export const BlockHeader: React.FC<BlockHeaderProps> = props => {
                 justifyContent="center"
                 className="h-8 w-8 group relative rounded-full bg-grey9 dark:bg-grey5"
               >
-                <MoveUpIcon className="h-4 w-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+                <ArrowUpIcon className="h-4 w-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
               </Stack>
             </button>
           )}
@@ -97,7 +97,7 @@ export const BlockHeader: React.FC<BlockHeaderProps> = props => {
                 justifyContent="center"
                 className="h-8 w-8 group relative rounded-full bg-grey9 dark:bg-grey5"
               >
-                <MoveDownIcon className="h-4 w-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+                <ArrowDownIcon className="h-4 w-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
               </Stack>
             </button>
           )}

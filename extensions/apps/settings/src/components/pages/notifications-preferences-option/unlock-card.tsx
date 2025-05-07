@@ -19,7 +19,7 @@ const UnlockCard: React.FC<IUnlockCardProps> = ({ onClick, loading }) => {
   return (
     <Card className="p-4">
       <Stack direction="row" spacing={3}>
-        <LockIcon className="h-5 w-5 [&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark" />
+        <LockIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
         <Stack direction="column" spacing={1}>
           <Text variant="button-md" color={{ dark: 'white', light: 'black' }}>
             {t('Unlock preferences')}

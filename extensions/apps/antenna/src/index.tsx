@@ -52,7 +52,13 @@ export const register = (opts: IntegrationRegistrationOptions): IAppConfig => ({
   menuItems: {
     label: 'Antenna',
     type: MenuItemType.App,
-    logo: { type: LogoTypeSource.ICON, value: <Antenna />, solidIcon: true },
+    logo: {
+      type: LogoTypeSource.ICON,
+      value: (
+        <Antenna className="h-5 w-5 [&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark" />
+      ),
+      solidIcon: true,
+    },
     area: [MenuItemAreaType.AppArea],
     subRoutes: [
       {
@@ -72,13 +78,15 @@ export const register = (opts: IntegrationRegistrationOptions): IAppConfig => ({
   contentBlocks: [
     {
       propertyType: 'slate-block',
-      icon: <TextIcon />,
+      icon: <TextIcon className="h-5 w-5 [&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark" />,
       displayName: 'Slate text block',
       rootComponent: () => import('./extensions/slate-block'),
     },
     {
       propertyType: 'image-block',
-      icon: <ImageIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
+      icon: (
+        <ImageIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+      ),
       displayName: 'Image block',
       rootComponent: () => import('./extensions/image-block'),
     },

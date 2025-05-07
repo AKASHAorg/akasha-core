@@ -28,7 +28,7 @@ const SidebarCTACard: React.FC<SidebarCTACardProps> = props => {
         </Text>
 
         <button onClick={onDismissCard}>
-          <XIcon className='h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark' />
+          <XIcon className='h-4 w-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark' />
         </button>
       </Stack>
 

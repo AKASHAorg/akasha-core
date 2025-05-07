@@ -20,7 +20,12 @@ export const register = (opts: IntegrationRegistrationOptions): IAppConfig => ({
   menuItems: {
     label: 'Vibes',
     type: MenuItemType.App,
-    logo: { type: LogoTypeSource.ICON, value: <Vibes /> },
+    logo: {
+      type: LogoTypeSource.ICON,
+      value: (
+        <Vibes className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+      ),
+    },
     area: [MenuItemAreaType.AppArea],
     subRoutes: [
       {

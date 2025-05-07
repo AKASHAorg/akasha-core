@@ -91,7 +91,7 @@ export const AppInfoHeader: React.FC<AppInfoHeaderProps> = props => {
                 {!isDefaultWorldExtension && (
                   <Menu
                     anchor={{
-                      icon: <EllipsisVerticalIcon />,
+                      icon: <EllipsisVerticalIcon className='h-4 w-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark' />,
                       variant: 'primary',
                       size: 'xs',
                       greyBg: true,
@@ -157,7 +157,7 @@ export const AppInfoHeader: React.FC<AppInfoHeaderProps> = props => {
           <Card className="p-4 bg-nested-card">
             <Stack direction="column" spacing={2}>
               <Stack direction="row" alignItems="center" spacing={2}>
-                <TriangleAlertIcon className="h-5 w-5 [&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark" />
+                <TriangleAlertIcon className="h-4 w-4 [&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark" />
 
                 <Text variant="h6" weight="bold">
                   {isInReviewTitleLabel}

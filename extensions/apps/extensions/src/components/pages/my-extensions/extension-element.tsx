@@ -12,7 +12,7 @@ import {
   EyeIcon,
   SendHorizonalIcon,
   PencilIcon,
-  Layers2Icon,
+  Grid2X2Icon,
   TrashIcon,
   EllipsisIcon,
 } from 'lucide-react';
@@ -122,28 +122,31 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
     });
   };
 
+  const style = 'h-4 w-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark';
+  const style2 = 'h-4 w-4 [&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark';
+
   const menuItems = (extensionStatus: string): MenuProps['items'] | [] => {
     switch (extensionStatus) {
       case ExtensionStatus.InReview:
         return [
           {
             label: t('View Extension'),
-            icon: <EyeIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
+            icon: <EyeIcon className={style} />,
             onClick: handleNavigateToExtensionInfoPage,
           },
           {
             label: t('Edit Extension'),
-            icon: <PencilIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
+            icon: <PencilIcon className={style} />,
             onClick: handleEditPublishedExtension,
           },
           {
             label: t('Release Manager'),
-            icon: <Layers2Icon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
+            icon: <Grid2X2Icon className={style} />,
             onClick: handleReleaseManager,
           },
           {
             label: t('Delete Extension'),
-            icon: <TrashIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
+            icon: <TrashIcon className={style2} />,
             onClick: handleExtensionRemove,
             color: { light: 'errorLight', dark: 'errorDark' },
           },
@@ -152,22 +155,22 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
         return [
           {
             label: t('View Extension'),
-            icon: <EyeIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
+            icon: <EyeIcon className={style} />,
             onClick: handleNavigateToExtensionInfoPage,
           },
           {
             label: t('Edit Extension'),
-            icon: <PencilIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
+            icon: <PencilIcon className={style} />,
             onClick: handleEditPublishedExtension,
           },
           {
             label: t('Release Manager'),
-            icon: <Layers2Icon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
+            icon: <Grid2X2Icon className={style} />,
             onClick: handleReleaseManager,
           },
           {
             label: t('Delete Extension'),
-            icon: <TrashIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
+            icon: <TrashIcon className={style2} />,
             onClick: handleExtensionRemove,
             color: { light: 'errorLight', dark: 'errorDark' },
           },
@@ -176,22 +179,22 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
         return [
           {
             label: t('Publish Extension'),
-            icon: <SendHorizonalIcon />,
+            icon: <SendHorizonalIcon className={style} />,
             onClick: handleExtensionSubmit,
           },
           {
             label: t('Edit Extension'),
-            icon: <PencilIcon />,
+            icon: <PencilIcon className={style} />,
             onClick: handleEditLocalExtension,
           },
           {
             label: t('Release Manager'),
-            icon: <Layers2Icon />,
+            icon: <Grid2X2Icon className={style} />,
             onClick: handleReleaseManager,
           },
           {
             label: t('Delete Extension'),
-            icon: <TrashIcon />,
+            icon: <TrashIcon className={style2} />,
             onClick: handleExtensionRemove,
             color: { light: 'errorLight', dark: 'errorDark' },
           },
