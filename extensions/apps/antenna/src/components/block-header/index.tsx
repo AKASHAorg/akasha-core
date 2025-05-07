@@ -55,6 +55,8 @@ export const BlockHeader: React.FC<BlockHeaderProps> = props => {
     handleRemoveBlock(blockOrder);
   };
 
+  const accentColor = '[&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark';
+
   return (
     <Stack direction="row" justifyContent="between">
       <Stack direction="row" spacing={1} alignItems="center">
@@ -86,7 +88,9 @@ export const BlockHeader: React.FC<BlockHeaderProps> = props => {
                 justifyContent="center"
                 className="h-8 w-8 group relative rounded-full bg-grey9 dark:bg-grey5"
               >
-                <ArrowUpIcon className="h-4 w-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+                <ArrowUpIcon
+                  className={`h-4 w-4 ${accentColor} ${blockOrder === 0 && 'opacity-50'} `}
+                />
               </Stack>
             </button>
           )}
@@ -97,7 +101,9 @@ export const BlockHeader: React.FC<BlockHeaderProps> = props => {
                 justifyContent="center"
                 className="h-8 w-8 group relative rounded-full bg-grey9 dark:bg-grey5"
               >
-                <ArrowDownIcon className="h-4 w-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+                <ArrowDownIcon
+                  className={`h-4 w-4 ${accentColor} ${blockOrder > totalBlocksLength - 2 && 'opacity-50'}`}
+                />
               </Stack>
             </button>
           )}
