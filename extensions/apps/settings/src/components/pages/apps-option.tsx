@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
-import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
+import { Switch } from '@akashaorg/ui/lib/components/switch';
 import PageLayout from './base-layout';
 const AppsOption: React.FC = () => {
   const { t } = useTranslation('app-settings-ewa');
@@ -23,10 +23,9 @@ const AppsOption: React.FC = () => {
         <Stack className="py-4 border border-border">
           <Stack justifyContent="between" alignItems="center" className="mb-2">
             <Typography bold>{t('Automatic Updates')}</Typography>
-
-            <Toggle
+            <Switch
               checked={checkedAutoUpdates}
-              onChange={handleAutoUpdatesChange}
+              onCheckedChange={handleAutoUpdatesChange}
               disabled={true}
             />
           </Stack>
@@ -41,9 +40,9 @@ const AppsOption: React.FC = () => {
           <Stack justifyContent="between" alignItems="center" className="mb-2">
             <Typography bold>{t('Data & Analytics')}</Typography>
 
-            <Toggle
+            <Switch
               checked={checkedDataAnalytics}
-              onChange={handleDataAnalyticsChange}
+              onCheckedChange={handleDataAnalyticsChange}
               disabled={true}
             />
           </Stack>

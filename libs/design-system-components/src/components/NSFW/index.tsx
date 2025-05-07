@@ -1,13 +1,11 @@
 import React from 'react';
-import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Controller, Control, FieldValues, Path, PathValue } from 'react-hook-form';
-export type InputType = {
-  label: string;
-  description?: string;
-  initialValue: boolean;
-};
+import { Switch } from '@akashaorg/ui/lib/components/switch';
+
+export type InputType = { label: string; description?: string; initialValue: boolean };
+
 export type NSFWProps<T extends FieldValues> = {
   nsfw: InputType;
   nsfwFieldLabel: string;
@@ -38,12 +36,11 @@ export const NSFW = <T extends FieldValues>({
               <Typography variant="sm" className="text-grey4 dark:text-grey6">
                 {nsfw.label}
               </Typography>
-              <Toggle
+              <Switch
                 id={name}
                 name={name}
                 checked={value}
-                onChange={onChange}
-                size="small"
+                onCheckedChange={onChange}
                 disabled={disabled}
               />
             </Stack>

@@ -3,9 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { NotificationTypes, NotificationEvents } from '@akashaorg/typings/lib/ui';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
-import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 import PageLayout from './base-layout';
 import { useAkashaStore, useNsfwToggling, useRootComponentProps } from '@akashaorg/ui-core-hooks';
+import { Switch } from '@akashaorg/ui/lib/components/switch';
+
 const NsfwOption: React.FC = () => {
   const { t } = useTranslation('app-settings-ewa');
   const {
@@ -39,7 +40,7 @@ const NsfwOption: React.FC = () => {
       <Stack className="p-4">
         <Stack direction="row" justifyContent="between" alignItems="center" className="mb-2">
           <Typography bold>{t('Show NSFW Content')}</Typography>
-          <Toggle checked={showNsfw} onChange={handleNsfwToggle} />
+          <Switch onCheckedChange={handleNsfwToggle} checked={showNsfw} />
         </Stack>
 
         <Typography>

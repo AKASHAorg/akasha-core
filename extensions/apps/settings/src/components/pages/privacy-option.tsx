@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
-import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 import PageLayout from './base-layout';
 import {
   useRootComponentProps,
@@ -11,6 +10,8 @@ import {
   CookieConsentTypes,
 } from '@akashaorg/ui-core-hooks';
 import { EventTypes, UIEventData } from '@akashaorg/typings/lib/ui';
+import { Switch } from '@akashaorg/ui/lib/components/switch';
+
 const PrivacyOption: React.FC = () => {
   const { t } = useTranslation('app-settings-ewa');
   const [cookieType, setCookieType] = useState(window.localStorage.getItem(COOKIE_CONSENT_NAME));
@@ -54,10 +55,11 @@ const PrivacyOption: React.FC = () => {
       getNavigationUrl: navRoutes => navRoutes.legal,
     });
   };
-  const handleTrackingOptionChange = event => {
-    setCheckedTracking(event.target.checked);
+
+  const handleTrackingOptionChange = checked => {
+    setCheckedTracking(checked);
     if (cookieType) {
-      if (event.target.checked) {
+      if (checked) {
         if (cookieType === CookieConsentTypes.ESSENTIAL) {
           window.localStorage.setItem(COOKIE_CONSENT_NAME, CookieConsentTypes.ALL);
           if (window['_paq']) {
@@ -81,7 +83,7 @@ const PrivacyOption: React.FC = () => {
             <Typography bold>{t('Essential Cookies')}</Typography>
 
             {/* always checked and cannot be toggled */}
-            <Toggle checked={true} disabled={true} />
+            <Switch checked={true} disabled={true} />
           </Stack>
 
           <Typography>
@@ -109,9 +111,9 @@ const PrivacyOption: React.FC = () => {
           <Stack direction="row" justifyContent="between" alignItems="center" className="mb-2">
             <Typography bold>{t('Tracking and Analytics')}</Typography>
 
-            <Toggle
+            <Switch
               checked={checkedTracking}
-              onChange={handleTrackingOptionChange}
+              onCheckedChange={handleTrackingOptionChange}
               disabled={!cookieType}
             />
           </Stack>
