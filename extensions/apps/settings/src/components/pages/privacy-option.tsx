@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 
 import PageLayout from './base-layout';
 
@@ -14,6 +13,7 @@ import {
   CookieConsentTypes,
 } from '@akashaorg/ui-core-hooks';
 import { EventTypes, UIEventData } from '@akashaorg/typings/lib/ui';
+import { Switch } from '@akashaorg/ui/lib/components/switch';
 
 const PrivacyOption: React.FC = () => {
   const { t } = useTranslation('app-settings-ewa');
@@ -67,10 +67,10 @@ const PrivacyOption: React.FC = () => {
     });
   };
 
-  const handleTrackingOptionChange = event => {
-    setCheckedTracking(event.target.checked);
+  const handleTrackingOptionChange = checked => {
+    setCheckedTracking(checked);
     if (cookieType) {
-      if (event.target.checked) {
+      if (checked) {
         if (cookieType === CookieConsentTypes.ESSENTIAL) {
           window.localStorage.setItem(COOKIE_CONSENT_NAME, CookieConsentTypes.ALL);
           if (window['_paq']) {
@@ -95,7 +95,7 @@ const PrivacyOption: React.FC = () => {
             <Text weight="bold">{t('Essential Cookies')}</Text>
 
             {/* always checked and cannot be toggled */}
-            <Toggle checked={true} disabled={true} />
+            <Switch checked={true} disabled={true} />
           </Stack>
 
           <Text>
@@ -123,9 +123,9 @@ const PrivacyOption: React.FC = () => {
           <Stack direction="row" justifyContent="between" alignItems="center" className="mb-2">
             <Text weight="bold">{t('Tracking and Analytics')}</Text>
 
-            <Toggle
+            <Switch
               checked={checkedTracking}
-              onChange={handleTrackingOptionChange}
+              onCheckedChange={handleTrackingOptionChange}
               disabled={!cookieType}
             />
           </Stack>

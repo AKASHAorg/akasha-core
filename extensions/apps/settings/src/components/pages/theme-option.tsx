@@ -1,12 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '@akashaorg/ui-core-hooks';
-import { MoonIcon, SunIcon } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 
 import PageLayout from './base-layout';
+import { Switch } from '@akashaorg/ui/lib/components/switch';
 
 export type theme = 'Light-Theme' | 'Dark-Theme';
 
@@ -27,12 +26,7 @@ const ThemeOption: React.FC = () => {
         <Stack direction="row" justifyContent="between" alignItems="center">
           <Text weight="bold">{t('What mode are you feeling today?')}</Text>
 
-          <Toggle
-            checked={theme === 'Light-Theme'}
-            iconChecked={<SunIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />}
-            iconUnchecked={<MoonIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />}
-            onChange={handleThemeSelect}
-          />
+          <Switch checked={theme === 'Light-Theme'} onCheckedChange={handleThemeSelect} />
         </Stack>
 
         <Text>
