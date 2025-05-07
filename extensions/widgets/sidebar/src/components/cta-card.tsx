@@ -34,7 +34,7 @@ const SidebarCTACard: React.FC<SidebarCTACardProps> = props => {
       </Stack>
 
       <Stack className="w-fit h-fit self-end">
-        <Button onClick={onClickCTAButton} variant="outline" size="sm">
+        <Button onClick={onClickCTAButton} variant="outline" size="sm" className="bg-transparent">
           {t('Check them out')}
         </Button>
       </Stack>

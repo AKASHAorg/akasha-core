@@ -4,6 +4,7 @@ import { useNavigate } from '@tanstack/react-router';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
+import { Switch } from '@akashaorg/ui/lib/components/switch';
 import {
   ErrorLoader,
   ErrorLoaderDescription,
@@ -12,7 +13,6 @@ import {
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 import { DeveloperMode } from '../developer-mode';
 import { DEV_MODE_KEY } from '../../constants';
 import appRoutes, { DEVELOPER_MODE, MY_EXTENSIONS } from '../../routes';
@@ -94,7 +94,7 @@ export const DeveloperModePage: React.FC<unknown> = () => {
         {
           title: t('Extensions Developer Mode'),
           toggleButtonNode: (
-            <Toggle checked={devMode === DevMode.ENABLED} onChange={handleToggleDevMode} />
+            <Switch onCheckedChange={handleToggleDevMode} checked={devMode === DevMode.ENABLED} />
           ),
           descriptionNode: (
             <Text as="span" color={{ light: 'grey4', dark: 'grey6' }}>
