@@ -20,7 +20,13 @@ import {
 import { SortOrder, AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Dropdown from '@akashaorg/design-system-core/lib/components/Dropdown';
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from '@akashaorg/ui/lib/components/select';
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
 import DynamicInfiniteScroll from '@akashaorg/design-system-core/lib/components/DynamicInfiniteScroll';
 import {
@@ -68,29 +74,27 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
 
   const extensionTypeMenuItems = useMemo(
     () => [
-      t('Type'),
       capitalize(AkashaAppApplicationType.App),
       capitalize(AkashaAppApplicationType.Widget),
       capitalize(AkashaAppApplicationType.Plugin),
       capitalize(AkashaAppApplicationType.Other),
     ],
-    [t],
+    [],
   );
 
   const extensionStatusMenuItems = [
-    t('Status'),
     ExtensionStatus.LocalDraft,
     ExtensionStatus.Draft,
     ExtensionStatus.InReview,
     ExtensionStatus.Published,
   ];
 
-  const [selectedType, setSelectedType] = React.useState<string>(extensionTypeMenuItems[0]);
-  const [selectedStatus, setSelectedStatus] = React.useState<string>(extensionStatusMenuItems[0]);
+  const [selectedType, setSelectedType] = React.useState<string>('');
+  const [selectedStatus, setSelectedStatus] = React.useState<string>('');
 
   const handleResetClick = () => {
-    setSelectedStatus(extensionStatusMenuItems[0]);
-    setSelectedType(extensionTypeMenuItems[0]);
+    setSelectedStatus('');
+    setSelectedType('');
   };
 
   const {
@@ -124,12 +128,9 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
 
   const appElements = useMemo(() => {
     return appsData?.filter(ext => {
-      if (selectedType === extensionTypeMenuItems[0]) {
-        return true;
-      }
       return ext?.applicationType === selectedType.toUpperCase();
     });
-  }, [appsData, selectedType, extensionTypeMenuItems]);
+  }, [appsData, selectedType]);
 
   const [draftExtensions, setDraftExtensions] = useState([]);
 
@@ -215,18 +216,31 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
         </Button>
       </Stack>
       <Stack direction="row" justifyContent="between" alignItems="center" spacing={4}>
-        <Dropdown
-          menuItems={extensionTypeMenuItems}
-          selected={selectedType}
-          setSelected={setSelectedType}
-          customStyle="grow"
-        />
-        <Dropdown
-          menuItems={extensionStatusMenuItems}
-          selected={selectedStatus}
-          setSelected={setSelectedStatus}
-          customStyle="grow"
-        />
+        <Select value={selectedType} onValueChange={setSelectedType}>
+          <SelectTrigger className="grow text-foreground">
+            <SelectValue placeholder={t('Type')} />
+          </SelectTrigger>
+          <SelectContent>
+            {extensionTypeMenuItems.map(item => (
+              <SelectItem key={item} value={item}>
+                {item}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+          <SelectTrigger className="grow text-foreground">
+            <SelectValue placeholder={t('Status')} />
+          </SelectTrigger>
+          <SelectContent>
+            {extensionStatusMenuItems.map(item => (
+              <SelectItem key={item} value={item}>
+                {item}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
         <Button variant="link" size="sm" onClick={handleResetClick}>
           {t('Reset')}
         </Button>
