@@ -37,7 +37,7 @@ const CardActions: React.FC<CardActionProps> = props => {
       className="p-0 border-none"
     >
       <MessagesSquareIcon
-        className={`h-5 w-5 ${hovered ? '[&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark' : '[&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark'}`}
+        className={`h-5 w-5 ${hovered ? 'stroke-0 [&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark' : '[&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark'}`}
       />
     </Card>
   );

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { act, fireEvent } from '@testing-library/react';
 import List, { ListItem } from '../';
-import { SquareArrowUpIcon, PencilIcon, TrashIcon } from 'lucide-react';
+import { UploadIcon, PencilIcon, TrashIcon } from 'lucide-react';
 import { customRender } from '../../../test-utils';
 
 describe('<List /> Component', () => {
@@ -12,11 +12,11 @@ describe('<List /> Component', () => {
   const handleDelete = jest.fn(/** */);
 
   const items: ListItem[] = [
-    { label: 'Upload', icon: <SquareArrowUpIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />, onClick: handleUpload },
-    { label: 'Edit', icon: <PencilIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />, onClick: handleEdit },
+    { label: 'Upload', icon: <UploadIcon className="h-4 w-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />, onClick: handleUpload },
+    { label: 'Edit', icon: <PencilIcon className="h-4 w-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />, onClick: handleEdit },
     {
       label: 'Delete',
-      icon: <TrashIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
+      icon: <TrashIcon className="h-4 w-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
       color: { light: 'errorLight', dark: 'errorDark' },
       onClick: handleDelete,
     },

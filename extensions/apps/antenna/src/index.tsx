@@ -78,14 +78,14 @@ export const register = (opts: IntegrationRegistrationOptions): IAppConfig => ({
   contentBlocks: [
     {
       propertyType: 'slate-block',
-      icon: <TextIcon className="h-5 w-5 [&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark" />,
+      icon: <TextIcon className="h-5 w-5 [&>*]:fill-secondaryLight dark:[&>*]:fill-white" />,
       displayName: 'Slate text block',
       rootComponent: () => import('./extensions/slate-block'),
     },
     {
       propertyType: 'image-block',
       icon: (
-        <ImageIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+        <ImageIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-white" />
       ),
       displayName: 'Image block',
       rootComponent: () => import('./extensions/image-block'),

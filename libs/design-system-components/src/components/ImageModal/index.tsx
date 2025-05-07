@@ -186,7 +186,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
       </Text>
       <Stack direction="column" spacing={4} className="w-full mb-2">
         <Stack direction="row" alignItems="center" spacing={2}>
-          <ZoomOutIcon className="h-6 w-6" />
+          <ZoomOutIcon className="h-6 w-6 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
           <input
             aria-label="range-input"
             type="range"
@@ -199,7 +199,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
             }
             onChange={e => setZoom(Number(e.target.value))}
           />
-          <ZoomInIcon className="h-6 w-6" />
+          <ZoomInIcon className="h-6 w-6 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
         </Stack>
         {previews?.length > 0 && (
           <CroppedImagePreviews

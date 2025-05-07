@@ -9,7 +9,7 @@ import ImageModal, {
 } from '@akashaorg/design-system-components/lib/components/ImageModal';
 import Img from '@akashaorg/design-system-core/lib/components/Image';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import { SquareArrowUpIcon, PencilIcon, SquarePenIcon, TrashIcon, InfoIcon } from 'lucide-react';
+import { UploadIcon, PencilIcon, SquarePenIcon, InfoIcon, Trash2Icon } from 'lucide-react';
 import { ExtensionImageType, type Image } from '@akashaorg/typings/lib/ui';
 import Modal, { ModalProps } from '@akashaorg/design-system-core/lib/components/Modal';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils/useCloseActions';
@@ -113,7 +113,7 @@ export const Header: React.FC<HeaderProps> = ({
   const dropDownActions: ListProps['items'] = [
     {
       label: 'Upload',
-      icon: <SquareArrowUpIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
+      icon: <UploadIcon className="h-4 w-4" />,
       onClick: () => {
         if (uploadInputRef.current) uploadInputRef.current.click();
         closeActionsDropDown();
@@ -123,7 +123,7 @@ export const Header: React.FC<HeaderProps> = ({
       ? [
           {
             label: 'Edit',
-            icon: <PencilIcon />,
+            icon: <PencilIcon className="h-4 w-4" />,
             onClick: () => {
               switch (appImageType) {
                 case 'logo-image':
@@ -138,7 +138,9 @@ export const Header: React.FC<HeaderProps> = ({
           },
           {
             label: 'Delete',
-            icon: <TrashIcon />,
+            icon: (
+              <Trash2Icon className="h-4 w-4 [&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark" />
+            ),
             color: { light: 'errorLight', dark: 'errorDark' } as const,
             onClick: () => {
               setShowDeleteImage(true);

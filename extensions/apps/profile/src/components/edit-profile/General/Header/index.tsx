@@ -10,7 +10,7 @@ import {
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import List, { ListProps } from '@akashaorg/design-system-core/lib/components/List';
 import ImageModal from '@akashaorg/design-system-components/lib/components/ImageModal';
-import { SquareArrowUpIcon, PencilIcon, SquarePenIcon, TrashIcon } from 'lucide-react';
+import { UploadIcon, PencilIcon, SquarePenIcon, Trash2Icon } from 'lucide-react';
 import { CropperProps } from 'react-easy-crop';
 import { ProfileImageType, Profile, type Image } from '@akashaorg/typings/lib/ui';
 import { ModalProps } from '@akashaorg/design-system-core/lib/components/Modal';
@@ -108,7 +108,7 @@ export const Header: React.FC<HeaderProps> = ({
   const dropDownActions: ListProps['items'] = [
     {
       label: 'Upload',
-      icon: <SquareArrowUpIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
+      icon: <UploadIcon className="h-4 w-4" />,
       onClick: () => {
         if (uploadInputRef.current) uploadInputRef.current.click();
         closeActionsDropDown();
@@ -118,7 +118,7 @@ export const Header: React.FC<HeaderProps> = ({
       ? [
           {
             label: 'Edit',
-            icon: <PencilIcon />,
+            icon: <PencilIcon className="h-4 w-4" />,
             onClick: () => {
               switch (profileImageType) {
                 case 'avatar':
@@ -133,7 +133,9 @@ export const Header: React.FC<HeaderProps> = ({
           },
           {
             label: 'Delete',
-            icon: <TrashIcon />,
+            icon: (
+              <Trash2Icon className="h-4 w-4 [&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark" />
+            ),
             color: { light: 'errorLight', dark: 'errorDark' } as const,
             onClick: () => {
               setShowDeleteImage(true);
