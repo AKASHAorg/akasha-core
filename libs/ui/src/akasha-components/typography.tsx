@@ -53,8 +53,6 @@ const Typography = React.forwardRef<HTMLHeadingElement | HTMLParagraphElement, T
     const tag = getTag(variant);
     const Comp = asChild ? Slot : tag;
 
-    console.log(cn(typographyVariants({ variant, className }), bold && 'font-bold'));
-
     return (
       <Comp
         ref={ref}
