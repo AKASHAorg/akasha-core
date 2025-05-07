@@ -2,7 +2,7 @@ import React from 'react';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Label from '@akashaorg/design-system-core/lib/components/Label';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
+import { Switch } from '@akashaorg/ui/lib/components/switch';
 
 export type TSectionProps = {
   title: string;
@@ -19,7 +19,7 @@ const Section: React.FC<React.PropsWithChildren<TSectionProps>> = props => {
       <Stack spacing={2}>
         <Stack direction="row" alignItems="center" justifyContent="between">
           <Label required={required}>{title}</Label>
-          {hasToggle && <Toggle checked={isToggleChecked} disabled={true} />}
+          {hasToggle && <Switch checked={isToggleChecked} disabled={true} />}
         </Stack>
         {children}
       </Stack>

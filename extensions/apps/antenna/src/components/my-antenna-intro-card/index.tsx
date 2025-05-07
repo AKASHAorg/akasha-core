@@ -71,7 +71,7 @@ const MyAntennaIntroCard: React.FC<MyAntennaIntroCardProps> = ({
           <Button
             variant={isMinified ? 'outline' : 'default'}
             size="sm"
-            className="w-1/2 md:w-auto"
+            className="w-1/2 md:w-auto bg-transparent"
             onClick={onClickCTA}
           >
             {ctaLabel}
