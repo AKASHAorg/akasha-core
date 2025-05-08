@@ -3,7 +3,7 @@ import { act, fireEvent } from '@testing-library/react';
 
 import Menu from '../';
 import { ListItem } from '../../List';
-import { UploadIcon, EllipsisVerticalIcon, PencilIcon, TrashIcon } from 'lucide-react';
+import { UploadIcon, EllipsisVerticalIcon, PencilIcon, Trash2Icon } from 'lucide-react';
 import { customRender } from '../../../test-utils';
 
 describe('<Menu /> Component', () => {
@@ -18,7 +18,7 @@ describe('<Menu /> Component', () => {
     { label: 'Edit', icon: <PencilIcon className="h-4 w-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />, onClick: handleEdit },
     {
       label: 'Delete',
-      icon: <TrashIcon className="h-4 w-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
+      icon: <Trash2Icon className="h-4 w-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
       color: { light: 'errorLight', dark: 'errorDark' },
       onClick: handleDelete,
     },

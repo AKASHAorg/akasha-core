@@ -76,8 +76,11 @@ export const TopicRow: React.FC<TopicRowProps> = props => {
             ? `${beamCount} ${tagSubtitleLabel}s`
             : `${beamCount} ${tagSubtitleLabel}`
         }
-        icon={<HashIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />}
+        icon={
+          <HashIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+        }
         backgroundColor={true}
+        customStyle="dark:bg-transparent"
         onClick={() => onClickTopic(tag)}
       />
 

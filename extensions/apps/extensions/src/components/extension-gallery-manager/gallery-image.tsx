@@ -3,7 +3,7 @@ import { Image } from '@akashaorg/ui/lib/akasha-components/image';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 import { Loader2 } from 'lucide-react';
-import { TrashIcon, XCircleIcon } from 'lucide-react';
+import { Trash2Icon, XCircleIcon } from 'lucide-react';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export enum GalleryImageState {
@@ -43,7 +43,7 @@ export const GalleryImage: React.FC<GalleryImageProps> = props => {
           className={state === GalleryImageState.LOADING ? 'cursor-not-allowed' : ''}
         >
           <AppIcon
-            placeholderIcon={<TrashIcon className='h-3 w-3 [&>*]:stroke-white'/>}
+            placeholderIcon={<Trash2Icon className='h-3 w-3 [&>*]:stroke-white'/>}
             size="xs"
             iconSize="sm"
             iconStyle="[&>*]:stroke-white"

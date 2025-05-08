@@ -55,7 +55,7 @@ const SubtitleTextIcon: React.FC<SubtitleTextIconProps> = props => {
     label,
     labelSize = 'button-sm',
     subtitle,
-    maxWidth,
+    maxWidth = '',
     dataTestId,
     customStyle = '',
     onClick,

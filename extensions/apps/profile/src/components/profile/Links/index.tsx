@@ -24,12 +24,15 @@ export type LinksProps = {
 };
 
 const Links: React.FC<LinksProps> = ({ title, links }) => {
+  const outlineStyle = 'h-3 w-3 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark';
+  const solidStyle = 'h-3 w-3 [&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark';
+
   const iconsMap: Record<string, { icon: React.ReactElement; solid: boolean }> = {
-    Github: { icon: <Github />, solid: false },
-    Twitter: { icon: <Twitter />, solid: true },
-    Discord: { icon: <Discord />, solid: true },
-    Telegram: { icon: <Telegram />, solid: true },
-    LinkIcon: { icon: <LinkIcon />, solid: false },
+    Github: { icon: <Github className={outlineStyle} />, solid: false },
+    Twitter: { icon: <Twitter className={solidStyle} />, solid: true },
+    Discord: { icon: <Discord className={solidStyle} />, solid: true },
+    Telegram: { icon: <Telegram className={solidStyle} />, solid: true },
+    LinkIcon: { icon: <LinkIcon className={outlineStyle} />, solid: false },
   };
 
   return (

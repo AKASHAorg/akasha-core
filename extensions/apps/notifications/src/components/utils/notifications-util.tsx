@@ -10,7 +10,7 @@ import {
   PushOrgNotification,
 } from '@akashaorg/typings/lib/sdk';
 import { InboxNotification } from '@akashaorg/typings/lib/ui';
-import { BoltIcon, GlobeIcon, Grid2X2Icon } from 'lucide-react';
+import { BoltIcon, GlobeIcon, LayoutGridIcon } from 'lucide-react';
 import React from 'react';
 
 import dayjs from 'dayjs';
@@ -68,7 +68,7 @@ export const getPresentationDataFromNotification = (
       // Title and icon for group TBD decided in future iterations
       returnObj.ctaLinkTitle = 'GROUP';
       returnObj.notificationTypeIcon = (
-        <Grid2X2Icon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+        <LayoutGridIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
       );
   }
   const parsedMetaData = notification.payload.data.parsedMetaData;

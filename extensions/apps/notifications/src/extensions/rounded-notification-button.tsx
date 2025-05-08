@@ -96,10 +96,12 @@ const RoundedNotificationButton = () => {
   }, []);
 
   const notificationIcon = React.useMemo(() => {
+    const style = 'h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark';
+
     if (snoozeNotifications) {
-      return <BellOffIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />;
+      return <BellOffIcon className={style} />;
     }
-    return hasNewNotifications ? <BellAlert /> : <BellIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />;
+    return hasNewNotifications ? <BellAlert className={style} /> : <BellIcon className={style} />;
   }, [hasNewNotifications, snoozeNotifications]);
 
   return (

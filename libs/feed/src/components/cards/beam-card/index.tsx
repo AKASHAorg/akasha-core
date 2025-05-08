@@ -22,7 +22,7 @@ import {
   selectReflectionsCount,
 } from '@akashaorg/ui-core-hooks/lib/selectors/get-beam-by-id-query';
 import getSDK from '@akashaorg/core-sdk';
-import { FlagIcon, TrashIcon } from 'lucide-react';
+import { FlagIcon, Trash2Icon } from 'lucide-react';
 
 type BeamCardProps = Pick<
   EntryCardProps,
@@ -129,7 +129,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       ? [
           {
             icon: (
-              <TrashIcon className="h-5 w-5 [&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark" />
+              <Trash2Icon className="h-5 w-5 [&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark" />
             ),
             label: t('Remove'),
             onClick: handleEntryRemove,

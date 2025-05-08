@@ -12,8 +12,8 @@ import {
   EyeIcon,
   SendHorizonalIcon,
   PencilIcon,
-  Grid2X2Icon,
-  TrashIcon,
+  LayoutGridIcon,
+  Trash2Icon,
   EllipsisIcon,
 } from 'lucide-react';
 import { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
@@ -141,12 +141,12 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
           },
           {
             label: t('Release Manager'),
-            icon: <Grid2X2Icon className={style} />,
+            icon: <LayoutGridIcon className={style} />,
             onClick: handleReleaseManager,
           },
           {
             label: t('Delete Extension'),
-            icon: <TrashIcon className={style2} />,
+            icon: <Trash2Icon className={style2} />,
             onClick: handleExtensionRemove,
             color: { light: 'errorLight', dark: 'errorDark' },
           },
@@ -165,12 +165,12 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
           },
           {
             label: t('Release Manager'),
-            icon: <Grid2X2Icon className={style} />,
+            icon: <LayoutGridIcon className={style} />,
             onClick: handleReleaseManager,
           },
           {
             label: t('Delete Extension'),
-            icon: <TrashIcon className={style2} />,
+            icon: <Trash2Icon className={style2} />,
             onClick: handleExtensionRemove,
             color: { light: 'errorLight', dark: 'errorDark' },
           },
@@ -189,12 +189,12 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
           },
           {
             label: t('Release Manager'),
-            icon: <Grid2X2Icon className={style} />,
+            icon: <LayoutGridIcon className={style} />,
             onClick: handleReleaseManager,
           },
           {
             label: t('Delete Extension'),
-            icon: <TrashIcon className={style2} />,
+            icon: <Trash2Icon className={style2} />,
             onClick: handleExtensionRemove,
             color: { light: 'errorLight', dark: 'errorDark' },
           },
