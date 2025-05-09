@@ -2,7 +2,13 @@ import React, { ReactElement } from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import ImageOverlay from '@akashaorg/design-system-components/lib/components/ImageOverlay';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Menu, { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from '@akashaorg/ui/lib/components/dropdown-menu';
+import { ListItem } from '@akashaorg/ui/lib/library/list-item';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import {
   Tooltip,
@@ -40,7 +46,7 @@ export type HeaderProps = {
   avatar?: Profile['avatar'];
   profileName: Profile['name'];
   viewerIsOwner?: boolean;
-  menuItems?: MenuProps['items'];
+  menuItems?: ListItem[];
   copyLabel?: string;
   copiedLabel?: string;
   followElement?: ReactElement;
@@ -60,14 +66,12 @@ export type HeaderProps = {
 
 const Header: React.FC<HeaderProps> = ({
   profileId,
-  validAddress = true,
   background,
   avatar,
   profileName,
   viewerIsOwner,
   menuItems,
-  copyLabel,
-  copiedLabel,
+
   followElement,
   publicImagePath = '/images',
   badges,
@@ -179,19 +183,28 @@ const Header: React.FC<HeaderProps> = ({
 
                 {menuItems && (
                   <Stack className="mt-1">
-                    <Menu
-                      anchor={{
-                        icon: (
-                          <EllipsisVerticalIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
-                        ),
-                        variant: 'primary',
-                        greyBg: true,
-                        iconOnly: true,
-                        'aria-label': 'settings',
-                      }}
-                      items={menuItems}
-                      customStyle="w-max z-99"
-                    />
+                    <DropdownMenu>
+                      <DropdownMenuTrigger>
+                        <Button size="icon" variant="outline">
+                          <EllipsisVerticalIcon
+                            aria-label="settings"
+                            className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark"
+                          />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        {menuItems.map(item => (
+                          <DropdownMenuItem
+                            key={item.label}
+                            onClick={() => item.onClick(item.label)}
+                            className={item?.color}
+                          >
+                            {item?.icon}
+                            {item.label}
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </Stack>
                 )}
               </Stack>

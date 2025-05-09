@@ -2,9 +2,14 @@ import React, { MouseEventHandler } from 'react';
 import ExtensionIcon from '@akashaorg/design-system-core/lib/components/ExtensionIcon';
 
 import { EllipsisVerticalIcon, TriangleAlertIcon, InfoIcon } from 'lucide-react';
-import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
-import Menu from '@akashaorg/design-system-core/lib/components/Menu';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from '@akashaorg/ui/lib/components/dropdown-menu';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
+import { ListItem } from '@akashaorg/ui/lib/library/list-item';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { AppInfoPill } from './info-pill';
 import {
@@ -94,18 +99,29 @@ export const AppInfoHeader: React.FC<AppInfoHeaderProps> = props => {
                   </TooltipProvider>
                 )}
                 {!isDefaultWorldExtension && (
-                  <Menu
-                    anchor={{
-                      icon: (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger>
+                      <Button size="icon" variant="outline">
                         <EllipsisVerticalIcon className="h-4 w-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
-                      ),
-                      variant: 'primary',
-                      size: 'xs',
-                      greyBg: true,
-                      iconOnly: true,
-                    }}
-                    items={[share, report]}
-                  />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem
+                        onClick={() => share?.onClick(share.label)}
+                        className={share?.color}
+                      >
+                        {share?.icon}
+                        {share.label}
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => report?.onClick(report.label)}
+                        className={report?.color}
+                      >
+                        {report?.icon}
+                        {report.label}
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 )}
               </Stack>
               <Stack direction="row" spacing={1} className="flex-wrap">

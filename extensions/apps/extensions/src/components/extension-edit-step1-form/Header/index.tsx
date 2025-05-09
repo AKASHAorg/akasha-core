@@ -3,7 +3,13 @@ import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import AppCoverImage from '@akashaorg/design-system-core/lib/components/AppCoverImage';
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
-import List, { ListProps } from '@akashaorg/design-system-core/lib/components/List';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from '@akashaorg/ui/lib/components/dropdown-menu';
 import ImageModal, {
   ImageModalProps,
 } from '@akashaorg/design-system-components/lib/components/ImageModal';
@@ -12,7 +18,7 @@ import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { UploadIcon, PencilIcon, SquarePenIcon, InfoIcon, Trash2Icon } from 'lucide-react';
 import { ExtensionImageType, type Image } from '@akashaorg/typings/lib/ui';
 import Modal, { ModalProps } from '@akashaorg/design-system-core/lib/components/Modal';
-import { useCloseActions } from '@akashaorg/design-system-core/lib/utils/useCloseActions';
+import { ListItem } from '@akashaorg/ui/lib/library/list-item';
 import { DeleteImageModal } from './DeleteImageModal';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
@@ -78,8 +84,6 @@ export const Header: React.FC<HeaderProps> = ({
   onImageDelete,
 }) => {
   const uploadInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
-  const [showLogoImageActions, setShowLogoImageActions] = useState(false);
-  const [showCoverActions, setShowCoverDropdown] = useState(false);
   const [appImageType, setAppImageType] = useState<ExtensionImageType>();
   const [showEditImage, setShowEditImage] = useState(false);
   const [showDeleteImage, setShowDeleteImage] = useState(false);
@@ -92,32 +96,17 @@ export const Header: React.FC<HeaderProps> = ({
       setShowEditImage(false);
     }
   }, [isSavingImage]);
-  const editLogoImageRef = useCloseActions(() => {
-    setShowLogoImageActions(false);
-  });
-  const editCoverRef = useCloseActions(() => {
-    setShowCoverDropdown(false);
-  });
-  const closeActionsDropDown = () => {
-    switch (appImageType) {
-      case 'logo-image':
-        setShowLogoImageActions(false);
-        return;
-      case 'cover-image':
-        setShowCoverDropdown(false);
-        return;
-    }
-  };
+
   const showEditAndDeleteMenuOptions =
     (appImageType === 'logo-image' && !!logoImageUrl?.src) ||
     (appImageType === 'cover-image' && !!coverImageUrl?.src);
-  const dropDownActions: ListProps['items'] = [
+
+  const dropDownActions: ListItem[] = [
     {
       label: 'Upload',
       icon: <UploadIcon className="h-4 w-4" />,
       onClick: () => {
         if (uploadInputRef.current) uploadInputRef.current.click();
-        closeActionsDropDown();
       },
     },
     ...(showEditAndDeleteMenuOptions
@@ -134,7 +123,6 @@ export const Header: React.FC<HeaderProps> = ({
                   setImages([coverImageUrl]);
               }
               setShowEditImage(true);
-              closeActionsDropDown();
             },
           },
           {
@@ -142,10 +130,9 @@ export const Header: React.FC<HeaderProps> = ({
             icon: (
               <Trash2Icon className="h-4 w-4 [&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark" />
             ),
-            color: { light: 'errorLight', dark: 'errorDark' } as const,
+            color: 'text-errorLight dark:text-errorDark',
             onClick: () => {
               setShowDeleteImage(true);
-              closeActionsDropDown();
             },
           },
         ]
@@ -257,53 +244,71 @@ export const Header: React.FC<HeaderProps> = ({
             appType={extensionType}
             customStyle={'h-28 rounded-2xl'}
           />
-          <Stack
-            ref={editCoverRef}
-            direction="column"
-            spacing={1}
-            className="absolute bottom-4 right-4"
-          >
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => {
-                setShowCoverDropdown(!showCoverActions);
+          <Stack direction="column" spacing={1} className="absolute bottom-4 right-4">
+            <DropdownMenu
+              onOpenChange={() => {
                 setAppImageType('cover-image');
               }}
             >
-              <SquarePenIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
-            </Button>
-            {showCoverActions && (
-              <List items={dropDownActions} customStyle="absolute right-0 top-7 w-auto z-10" />
-            )}
+              <DropdownMenuTrigger asChild>
+                <Button size="icon" variant="outline" className="bg-card">
+                  <SquarePenIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                {dropDownActions.map((item, index) => (
+                  <>
+                    <DropdownMenuItem
+                      className={item?.color}
+                      key={item.label}
+                      onClick={() => item.onClick(item.label)}
+                    >
+                      {item?.icon}
+                      {item.label}
+                    </DropdownMenuItem>
+                    {index < dropDownActions.length - 1 && <DropdownMenuSeparator />}
+                  </>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </Stack>
         </Stack>
         <Stack direction="row" alignItems="end" spacing={2} className="absolute left-6 -bottom-8">
-          <Stack alignItems="center" justifyContent="center" ref={editLogoImageRef}>
+          <Stack alignItems="center" justifyContent="center">
             <AppAvatar
               appType={extensionType}
               avatar={logoImageUrl}
               onClick={() => {
-                setShowLogoImageActions(!showLogoImageActions);
                 setAppImageType('logo-image');
               }}
               customStyle={`border-2 border-white dark:border-grey2 bg-grey8 dark:bg-grey4`}
             />
-            <Stack className="absolute">
-              <Button
-                size="icon"
-                variant="outline"
-                onClick={() => {
-                  setShowLogoImageActions(!showLogoImageActions);
-                  setAppImageType('logo-image');
-                }}
-              >
-                <SquarePenIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
-              </Button>
-              {showLogoImageActions && (
-                <List items={dropDownActions} customStyle="absolute top-7 w-auto z-10" />
-              )}
-            </Stack>
+            <DropdownMenu
+              onOpenChange={() => {
+                setAppImageType('logo-image');
+              }}
+            >
+              <DropdownMenuTrigger className="absolute" asChild>
+                <Button size="icon" variant="outline" className="bg-card">
+                  <SquarePenIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                {dropDownActions.map((item, index) => (
+                  <>
+                    <DropdownMenuItem
+                      key={item.label}
+                      className={item?.color}
+                      onClick={() => item.onClick(item.label)}
+                    >
+                      {item?.icon}
+                      {item.label}
+                    </DropdownMenuItem>
+                    {index < dropDownActions.length - 1 && <DropdownMenuSeparator />}
+                  </>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </Stack>
           <Button variant="link" onClick={() => setShowLogoGuidelineModal(true)}>
             <InfoIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />

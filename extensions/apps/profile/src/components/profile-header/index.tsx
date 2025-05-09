@@ -8,7 +8,7 @@ import {
 import FollowProfileButton from '../follow-profile-button';
 import { FlagIcon, LinkIcon } from 'lucide-react';
 import { ProfileHeaderLoading, ProfileHeader as ProfileHeaderPresentation } from '../profile';
-import { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
+import { ListItem } from '@akashaorg/ui/lib/library/list-item';
 import {
   IModalNavigationOptions,
   NotificationEvents,
@@ -106,21 +106,25 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
     });
   };
 
-  const menuItems: MenuProps['items'] = [
+  const menuItems: ListItem[] = [
     {
       label: t('Copy link'),
-      icon: <LinkIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
+      icon: (
+        <LinkIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+      ),
       onClick: handleCopy,
     },
     ...(!isViewer
-      ? ([
+      ? [
           {
             label: t('Flag'),
-            icon: <FlagIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
+            icon: (
+              <FlagIcon className="h-5 w-5 [&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark" />
+            ),
             onClick: handleFlagProfile,
-            color: { light: 'errorLight', dark: 'errorDark' },
+            color: 'text-errorLight dark:text-errorDark',
           },
-        ] as MenuProps['items'])
+        ]
       : []),
   ];
 
