@@ -1,10 +1,5 @@
 import React, { PropsWithChildren } from 'react';
-import Icon from '../../Icon';
-import {
-  CheckCircleIcon,
-  ExclamationTriangleIcon,
-  XCircleIcon,
-} from '../../Icon/hero-icons-outline';
+import { CheckCircleIcon, TriangleAlertIcon, XCircleIcon } from 'lucide-react';
 import Text from '../../Text';
 import Stack from '../../Stack';
 import { Color, Status } from '../../types/common.types';
@@ -24,7 +19,7 @@ const Caption: React.FC<PropsWithChildren<CaptionProps>> = ({
 
   return (
     <Stack direction="row" align="center" spacing="gap-1.5" justify={justifyContents}>
-      {status && <Icon icon={STATUS_TO_ICON_MAP[status]} />}
+      {status && STATUS_TO_ICON_MAP[status]}
       <Text color={textColor} variant="footnotes2" weight="normal">
         {children}
       </Text>
@@ -33,9 +28,9 @@ const Caption: React.FC<PropsWithChildren<CaptionProps>> = ({
 };
 
 const STATUS_TO_ICON_MAP: Record<Status, React.ReactElement> = {
-  success: <CheckCircleIcon />,
-  error: <XCircleIcon />,
-  warning: <ExclamationTriangleIcon />,
+  success: <CheckCircleIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
+  error: <XCircleIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
+  warning: <TriangleAlertIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
 };
 
 export default Caption;

@@ -2,14 +2,8 @@ import React, { ReactElement } from 'react';
 import Stack from '../Stack';
 import Text from '../Text';
 import Button from '../Button';
-import Icon from '../Icon';
 import { Color, Radius, Status } from '../types/common.types';
-import {
-  ExclamationTriangleIcon,
-  XCircleIcon,
-  CheckCircleIcon,
-  InformationCircleIcon,
-} from '../Icon/hero-icons-solid';
+import { TriangleAlertIcon, XCircleIcon, CheckCircleIcon, InfoIcon } from 'lucide-react';
 import { getRadiusClasses } from '../../utils';
 
 type NotificationTypes = Status | 'info';
@@ -80,27 +74,12 @@ const InlineNotification: React.FC<InlineNotificationProps> = ({
 };
 
 const TYPE_ICON_MAP: Record<NotificationTypes, ReactElement> = {
-  error: (
-    <Icon
-      icon={<XCircleIcon />}
-      solid
-      customStyle="[&>*]:fill-errorLight dark:[&>*]:fill-errorDark"
-    />
-  ),
+  error: <XCircleIcon className="h-5 w-5 [&>*]:fill-errorLight dark:[&>*]:fill-errorDark" />,
   warning: (
-    <Icon
-      icon={<ExclamationTriangleIcon />}
-      solid
-      customStyle="[&>*]:fill-warningLight dark:[&>*]:fill-warningDark"
-    />
+    <TriangleAlertIcon className="h-5 w-5 [&>*]:fill-warningLight dark:[&>*]:fill-warningDark" />
   ),
-  success: <Icon icon={<CheckCircleIcon />} solid customStyle="[&>*]:fill-success" />,
-  info: (
-    <Icon
-      icon={<InformationCircleIcon />}
-      customStyle="[&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark"
-    />
-  ),
+  success: <CheckCircleIcon className="h-5 w-5 [&>*]:fill-success" />,
+  info: <InfoIcon className="h-5 w-5 [&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDar" />,
 };
 
 export default InlineNotification;

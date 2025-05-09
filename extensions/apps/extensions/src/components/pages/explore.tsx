@@ -4,7 +4,7 @@ import routes, { DEVELOPER_MODE, HOME } from '../../routes';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { transformSource, useRootComponentProps } from '@akashaorg/ui-core-hooks';
-import { ArrowLongRightIcon } from '@heroicons/react/24/outline';
+import { MoveRightIcon } from 'lucide-react';
 import { Explore } from '../explore';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { getExtensionTypeLabel } from '../../utils/extension-utils';
@@ -97,7 +97,7 @@ export const ExplorePage: React.FC<unknown> = () => {
         action: (
           <Button variant="link" className="w-fit self-end" onClick={handleCTAClick}>
             {t('Start your journey')}
-            <ArrowLongRightIcon />
+            <MoveRightIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
           </Button>
         ),
       }}

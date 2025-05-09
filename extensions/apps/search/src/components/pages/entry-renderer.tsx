@@ -17,10 +17,7 @@ import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 
 import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
-import {
-  FlagIcon,
-  TrashIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { FlagIcon, Trash2Icon } from 'lucide-react';
 
 export type EntryCardRendererProps = {
   itemData?: AkashaBeam;
@@ -82,7 +79,7 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
     ...(!isViewer
       ? [
           {
-            icon: <FlagIcon />,
+            icon: <FlagIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
             label: t('Flag'),
             color: { light: 'errorLight', dark: 'errorDark' } as const,
             disabled: undefined, //disableReporting, - missing prop
@@ -93,7 +90,7 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
     ...(isViewer && itemType === EntityTypes.BEAM
       ? [
           {
-            icon: <TrashIcon />,
+            icon: <Trash2Icon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
             label: t('Delete Post'),
             color: { light: 'errorLight', dark: 'errorDark' } as const,
             onClick: handleEntryRemove,

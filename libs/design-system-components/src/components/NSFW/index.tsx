@@ -48,7 +48,11 @@ export const NSFW = <T extends FieldValues>({
               />
             </Stack>
             {nsfw.description && (
-              <Text variant="button-md" as="label" color={{ light: 'grey4', dark: 'grey6' }}>
+              <Text
+                variant="button-md"
+                as="label"
+                color={{ light: 'errorLight', dark: 'errorDark' }}
+              >
                 {nsfw.description}
               </Text>
             )}

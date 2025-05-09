@@ -32,14 +32,10 @@ import { Image } from '@akashaorg/ui/lib/akasha-components/image';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Input } from '@akashaorg/ui/lib/akasha-components/input';
 import ImageBlockGallery from '@akashaorg/design-system-components/lib/components/ImageBlockGallery';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import ImageBlockToolbar from '../../components/image-block-toolbar';
 import ImageModal from '@akashaorg/design-system-components/lib/components/ImageModal';
 import { type GalleryImage } from '@akashaorg/typings/lib/ui';
-import {
-  XMarkIcon,
-  ArrowPathIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { XIcon, Loader2 } from 'lucide-react';
 import getSDK from '@akashaorg/core-sdk';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import { selectLatestAppVersionId } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-by-publisher-did-query';
@@ -395,6 +391,8 @@ export const ImageEditorBlock = (
 
   const maxImagesLimitReached = contentBlockImages.length === 4;
 
+  const accentColor = 'h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark';
+
   return (
     <>
       {uiState === 'menu' && (
@@ -403,7 +401,7 @@ export const ImageEditorBlock = (
             {imageGalleryImages.length > 0 && (
               <Stack direction="row" justifyContent="end">
                 <button onClick={handleCloseMenu}>
-                  <Icon icon={<XMarkIcon />} accentColor />
+                  <XIcon className={accentColor} />
                 </button>
               </Stack>
             )}
@@ -454,7 +452,7 @@ export const ImageEditorBlock = (
                     <Text>{imageObj.name}</Text>
                   </Stack>
                   <button onClick={() => handleDeleteImage(imageObj)}>
-                    <Icon accentColor icon={<XMarkIcon />} />
+                    <XIcon className={accentColor} />
                   </button>
                 </Stack>
               ))}
@@ -469,7 +467,7 @@ export const ImageEditorBlock = (
           spacing={2}
           className="w-4/5 h-48 sm:h-60 rounded-xl bg-background"
         >
-          <Icon icon={<ArrowPathIcon />} rotateAnimation />
+          <Loader2 className="h-5 w-5 animate-spin" />
           <Text>{t('Uploading image')}</Text>
         </Stack>
       )}

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useClickAway } from 'react-use';
 import Button from '../Button';
-import Icon from '../Icon';
-import { CalendarIcon } from '../Icon/hero-icons-outline';
+import { CalendarIcon } from 'lucide-react';
 import Stack from '../Stack';
 import Text from '../Text';
 import MonthSelector from './month-selector';
@@ -102,7 +101,7 @@ const DatePicker: React.FC<TDatePickerProps> = props => {
               : ''
           })`}
         >
-          <Icon icon={<CalendarIcon />} accentColor={true} />
+          <CalendarIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
           <Text variant="body2" color={{ light: 'black', dark: 'grey6' }} customStyle="ml-2">
             {datepickerValue.toString()}
           </Text>
