@@ -34,11 +34,17 @@ import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import { useInstalledExtensions } from '@akashaorg/ui-core-hooks/lib/use-installed-extensions';
 import { UninstallModal } from './uninstall-modal';
 import AppCoverImage from './AppCoverImage';
-import StackedAvatar from '@akashaorg/design-system-core/lib/components/StackedAvatar';
 import { AppInfoNotificationCards } from '../../app-info/notification-cards';
 import { getExtensionStatus, getExtensionTypeLabel } from '../../../utils/extension-utils';
 import getSDK from '@akashaorg/core-sdk';
 import { ExtensionStatus } from '@akashaorg/typings/lib/ui';
+import { StackedAvatar } from '@akashaorg/ui/lib/akasha-components/stacked-avatar';
+import {
+  ProfileAvatar,
+  ProfileAvatarFallback,
+  ProfileAvatarImage,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar';
+
 
 type InfoPageProps = {
   appId: string;
@@ -416,7 +422,17 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                       onClick={handleCollaboratorsClick}
                     >
                       <Stack direction="row" alignItems="center">
-                        <StackedAvatar userData={contributorAvatars} maxAvatars={4} size="xs" />
+                        <StackedAvatar count={contributorAvatars.length}>
+                          {index => (
+                            <ProfileAvatar>
+                              <ProfileAvatarImage
+                                src={contributorAvatars[index].avatar?.src}
+                                alt={contributorAvatars[index].name}
+                              />
+                              <ProfileAvatarFallback />
+                            </ProfileAvatar>
+                          )}
+                        </StackedAvatar>
                         <ChevronRightIcon className="h-4 w-4 ml-auto [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
                       </Stack>
                     </Card>

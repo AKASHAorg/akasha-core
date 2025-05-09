@@ -11,11 +11,16 @@ import {
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Input } from '@akashaorg/ui/lib/akasha-components/input';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
+import { StackedAvatar } from '@akashaorg/ui/lib/akasha-components/stacked-avatar';
+import {
+  ProfileAvatar,
+  ProfileAvatarFallback,
+  ProfileAvatarImage,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar';
 import { Loader2 } from 'lucide-react';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import DropDown from '@akashaorg/design-system-core/lib/components/Dropdown';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import StackedAvatar from '@akashaorg/design-system-core/lib/components/StackedAvatar';
 
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -109,7 +114,6 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
     tagsDescriptionLabel,
     tagsAddedLabel,
     noteLabel,
-    maxContributorsDisplay,
     noteDescriptionLabel,
     errorProfilesDataLabel,
   } = props;
@@ -266,11 +270,17 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
               )}
               {contributorAvatars?.length > 0 && (
                 <Stack direction="row" spacing={2} alignItems="center">
-                  <StackedAvatar
-                    userData={contributorAvatars}
-                    maxAvatars={maxContributorsDisplay}
-                    size="md"
-                  />
+                  <StackedAvatar count={contributorAvatars.length}>
+                    {index => (
+                      <ProfileAvatar>
+                        <ProfileAvatarImage
+                          src={contributorAvatars[index].avatar?.src}
+                          alt={contributorAvatars[index].name}
+                        />
+                        <ProfileAvatarFallback />
+                      </ProfileAvatar>
+                    )}
+                  </StackedAvatar>
                   <Stack alignItems="center" justifyContent="center">
                     <Text variant="body2" weight="bold">
                       {contributorsProfiles[0]?.name}
