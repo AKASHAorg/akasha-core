@@ -7,7 +7,7 @@ import {
   LogoTypeSource,
 } from '@akashaorg/typings/lib/ui';
 import React from 'react';
-import { Vibes } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
+import { HeartHandshakeIcon } from 'lucide-react';
 import routes, { HISTORY, HOME, MODERATORS } from './routes';
 
 export const register = (opts: IntegrationRegistrationOptions): IAppConfig => ({
@@ -20,7 +20,12 @@ export const register = (opts: IntegrationRegistrationOptions): IAppConfig => ({
   menuItems: {
     label: 'Vibes',
     type: MenuItemType.App,
-    logo: { type: LogoTypeSource.ICON, value: <Vibes /> },
+    logo: {
+      type: LogoTypeSource.ICON,
+      value: (
+        <HeartHandshakeIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+      ),
+    },
     area: [MenuItemAreaType.AppArea],
     subRoutes: [
       {

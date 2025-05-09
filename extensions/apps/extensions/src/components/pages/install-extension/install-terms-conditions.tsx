@@ -4,12 +4,8 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import {
-  ArrowPathIcon,
-  ArrowTopRightOnSquareIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { Loader2, SquareArrowUpRight } from 'lucide-react';
 import { useNavigate } from '@tanstack/react-router';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
 import {
@@ -214,10 +210,7 @@ export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
               rel="noopener noreferrer"
               className="p-1.5"
             >
-              <Icon
-                customStyle="[&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark"
-                icon={<ArrowTopRightOnSquareIcon />}
-              />
+              <SquareArrowUpRight className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
             </a>
           </Stack>
         ))}
@@ -251,7 +244,7 @@ const TermsHeader = ({
     <Stack className="p-3">
       <Text variant="h5">{t('User Agreement')}</Text>
       <Stack direction="row" spacing={2} alignItems="center" className="mt-3">
-        {isLoading && <Icon icon={<ArrowPathIcon />} />}
+        {isLoading && <Loader2 className="h-5 w-5 animate-spin" />}
         {!isLoading && (
           <AppAvatar
             customStyle="w-10 h-10 cursor-default"

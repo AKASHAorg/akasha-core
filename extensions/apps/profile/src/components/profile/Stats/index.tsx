@@ -4,7 +4,7 @@ import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text, { TextProps } from '@akashaorg/design-system-core/lib/components/Text';
-import { ChatBubbleLeftRightIcon, HeartIcon, UsersIcon } from '@heroicons/react/24/outline';
+import { MessagesSquareIcon, HeartIcon, UsersRoundIcon } from 'lucide-react';
 
 type Stat = {
   label: string;
@@ -40,11 +40,13 @@ const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following })
     },
   };
 
+  const style = 'h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark';
+
   const stats: (Stat & { icon: React.ReactElement; className?: string })[] = [
-    { ...posts, icon: <ChatBubbleLeftRightIcon /> },
-    { ...interests, icon: <HeartIcon /> },
-    { ...followers, icon: <UsersIcon />, className: 'scale-x-flip' },
-    { ...following, icon: <UsersIcon /> },
+    { ...posts, icon: <MessagesSquareIcon className={style} /> },
+    { ...interests, icon: <HeartIcon className={style} /> },
+    { ...followers, icon: <UsersRoundIcon className={style} />, className: 'scale-x-flip' },
+    { ...following, icon: <UsersRoundIcon className={style} /> },
   ];
 
   return (

@@ -2,7 +2,6 @@ import React from 'react';
 
 import { LogoTypeSource } from '@akashaorg/typings/lib/ui';
 
-import Icon from '../Icon';
 import { AppIconProps } from '.';
 
 export type AppImgProps = Pick<
@@ -20,16 +19,7 @@ const IconByType: React.FC<AppImgProps> = ({
   customStyle = '',
 }) => {
   if (appImg?.type === LogoTypeSource.ICON) {
-    return (
-      <Icon
-        icon={appImg?.value}
-        size={size}
-        breakPointSize={breakPointSize}
-        accentColor={accentColor}
-        solid={solid}
-        customStyle={customStyle}
-      />
-    );
+    return appImg?.value;
   }
 
   if (appImg?.type === LogoTypeSource.STRING || appImg?.type === LogoTypeSource.IPFS) {
@@ -43,16 +33,7 @@ const IconByType: React.FC<AppImgProps> = ({
       />
     );
   }
-  return (
-    <Icon
-      icon={placeholderIcon}
-      solid={solid}
-      size={size}
-      breakPointSize={breakPointSize}
-      accentColor={accentColor}
-      customStyle={customStyle}
-    />
-  );
+  return placeholderIcon;
 };
 
 export default IconByType;

@@ -3,7 +3,6 @@ import Divider from '../Divider';
 import Stack from '../Stack';
 import Text, { TextProps } from '../Text';
 import Button from '../Button';
-import Icon from '../Icon';
 
 export enum DividerPosition {
   Top,
@@ -71,13 +70,7 @@ const Section: React.FC<PropsWithChildren<SectionProps>> = ({
           {!!viewMoreLabel && (
             <Button size="md" variant="text" label={viewMoreLabel} onClick={onClickviewMoreLabel} />
           )}
-          {!!viewMoreIcon && (
-            <Icon
-              icon={viewMoreIcon}
-              size="sm"
-              customStyle="ml-auto [&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark"
-            />
-          )}
+          {!!viewMoreIcon && viewMoreIcon}
         </Stack>
         {children}
       </Stack>

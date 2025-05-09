@@ -10,7 +10,7 @@ import {
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import { Loader2, Pencil, Link } from 'lucide-react';
+import { Loader2, Pencil, LinkIcon } from 'lucide-react';
 import { useGetWorldMetaInfoQuery } from '@akashaorg/ui-core-hooks/lib/generated';
 import { selectWorldMetaInfoData } from '@akashaorg/ui-core-hooks/lib/selectors/get-world-meta-info-query';
 import { Github } from '@akashaorg/ui/lib/custom-icons/github';
@@ -23,12 +23,15 @@ type WorldCustomisationSectionProps = {
   worldCreatorId: string;
 };
 
+const outlineStyle = 'h-3 w-3 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark';
+const solidStyle = 'h-3 w-3 [&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark';
+
 export const iconsMap = {
-  github: <Github />,
-  telegram: <Telegram />,
-  discord: <Discord />,
-  twitter: <X />,
-  other: <Link />,
+  github: <Github className={outlineStyle} />,
+  twitter: <X className={outlineStyle} />,
+  discord: <Discord className={solidStyle} />,
+  telegram: <Telegram className={solidStyle} />,
+  other: <LinkIcon className={outlineStyle} />,
 };
 
 export const WorldCustomisationSection: React.FC<WorldCustomisationSectionProps> = ({

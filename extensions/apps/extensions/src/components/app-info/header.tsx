@@ -1,7 +1,7 @@
 import React, { MouseEventHandler } from 'react';
 import ExtensionIcon from '@akashaorg/design-system-core/lib/components/ExtensionIcon';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { EllipsisVerticalIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+
+import { EllipsisVerticalIcon, TriangleAlertIcon, InfoIcon } from 'lucide-react';
 import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
 import Menu from '@akashaorg/design-system-core/lib/components/Menu';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
@@ -11,7 +11,6 @@ import {
   AkashaAppApplicationType,
   AppImageSource,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { InformationCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
@@ -88,7 +87,7 @@ export const AppInfoHeader: React.FC<AppInfoHeaderProps> = props => {
                   <TooltipProvider delayDuration={0}>
                     <Tooltip>
                       <TooltipTrigger>
-                        <Icon size="md" icon={<InformationCircleIcon />} />
+                        <InfoIcon className="h-4 w-4" />
                       </TooltipTrigger>
                       <TooltipContent side="bottom">
                         {defaultExtensionTooltipContent}
@@ -99,7 +98,9 @@ export const AppInfoHeader: React.FC<AppInfoHeaderProps> = props => {
                 {!isDefaultWorldExtension && (
                   <Menu
                     anchor={{
-                      icon: <EllipsisVerticalIcon />,
+                      icon: (
+                        <EllipsisVerticalIcon className="h-4 w-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+                      ),
                       variant: 'primary',
                       size: 'xs',
                       greyBg: true,
@@ -165,11 +166,8 @@ export const AppInfoHeader: React.FC<AppInfoHeaderProps> = props => {
           <Card className="p-4 bg-nested-card">
             <Stack direction="column" spacing={2}>
               <Stack direction="row" alignItems="center" spacing={2}>
-                <Icon
-                  icon={<ExclamationTriangleIcon />}
-                  size="md"
-                  customStyle="size-4 [&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark"
-                />
+                <TriangleAlertIcon className="h-4 w-4 [&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark" />
+
                 <Text variant="h6" weight="bold">
                   {isInReviewTitleLabel}
                 </Text>

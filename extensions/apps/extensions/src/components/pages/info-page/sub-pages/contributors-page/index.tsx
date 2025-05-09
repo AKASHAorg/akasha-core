@@ -10,7 +10,6 @@ import {
   ProfileDidField,
   ProfileName,
 } from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { Loader2 } from 'lucide-react';
 import {
   ErrorLoader,
@@ -27,7 +26,7 @@ import {
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { selectExtensionContributors } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-query';
 import { useContributors } from './use-contributors';
-import { ChevronRightIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { ChevronRightIcon } from 'lucide-react';
 
 type ContributorsPageProps = {
   appId: string;
@@ -107,11 +106,7 @@ export const ContributorsPage = (props: ContributorsPageProps) => {
                       <ProfileName>{contributor?.name}</ProfileName>
                       <ProfileDidField />
                     </ProfileAvatarButton>
-                    <Icon
-                      icon={<ChevronRightIcon />}
-                      size="sm"
-                      customStyle="ml-auto [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark"
-                    />
+                    <ChevronRightIcon className="h-4 w-4 ml-auto [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
                   </Stack>
                 </Card>
                 {index < contributorsProfile.length - 1 && <Divider />}

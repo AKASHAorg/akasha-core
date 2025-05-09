@@ -1,7 +1,6 @@
 import React from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { ExclamationTriangleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { TriangleAlertIcon } from 'lucide-react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
@@ -16,10 +15,7 @@ const InfoCard: React.FC<InfoCardProps> = props => {
   return (
     <Card className="p-4 bg-destructive opacity-30">
       <Stack direction="row" align="center" spacing="gap-x-2">
-        <Icon
-          icon={<ExclamationTriangleIcon />}
-          customStyle="[&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark"
-        />
+        <TriangleAlertIcon className="h-5 w-5 [&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark" />
         <Text variant="button-sm" weight="bold">
           {titleLabel}
         </Text>

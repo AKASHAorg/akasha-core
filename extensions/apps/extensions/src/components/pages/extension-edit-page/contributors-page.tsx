@@ -20,8 +20,7 @@ import {
   ProfileDidField,
   ProfileName,
 } from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
-import { CheckIcon, ExclamationTriangleIcon, TrashIcon } from '@heroicons/react/24/outline';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { CheckIcon, Trash2Icon, TriangleAlertIcon } from 'lucide-react';
 import {
   transformSource,
   useAkashaStore,
@@ -191,11 +190,7 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
           />
           {addedContributors?.length === MAX_CONTRIBUTORS && (
             <Stack direction="row" spacing={2}>
-              <Icon
-                icon={<ExclamationTriangleIcon />}
-                size="sm"
-                customStyle="[&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark"
-              />
+              <TriangleAlertIcon className="h-4 w-4 [&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark" />
               <Text
                 variant="body2"
                 color={{ light: 'warningLight', dark: 'warningDark' }}
@@ -245,7 +240,9 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
                           </ProfileAvatarButton>
                           {addedContributors?.some(
                             contrib => contrib?.did?.id === profile?.did?.id,
-                          ) && <Icon icon={<CheckIcon />} accentColor />}
+                          ) && (
+                            <CheckIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+                          )}
                         </Stack>
                       </button>
                     ))}
@@ -321,12 +318,7 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
                     <ProfileDidField />
                   </ProfileAvatarButton>
                   <button onClick={() => handleRemoveContributor(profile)}>
-                    <Icon
-                      icon={<TrashIcon />}
-                      solid={false}
-                      size="md"
-                      customStyle="[&>*]:fill-errorLight dark:[&>*]:fill-errorDark"
-                    />
+                    <Trash2Icon className="h-5 w-5 [&>*]:fill-errorLight dark:[&>*]:fill-errorDark" />
                   </button>
                 </Stack>
               ))}

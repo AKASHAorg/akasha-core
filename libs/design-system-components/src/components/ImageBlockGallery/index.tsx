@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { ArrowPathIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { Loader2 } from 'lucide-react';
 import { ImageBlockGridItem } from './image-block-grid-item';
 import ImageOverlay from '../ImageOverlay';
 import { type GalleryImage } from '@akashaorg/typings/lib/ui';
@@ -74,7 +73,7 @@ const ImageBlockGallery: React.FC<IImageGallery> = props => {
               style={cssVars({ '--height': `${images[0]?.size?.height}px` })}
               className={`rounded h-full w-[var(--height)] bg-grey8 dark:bg-grey5 max-w-max aspect-square`}
             >
-              <Icon icon={<ArrowPathIcon />} rotateAnimation />
+              <Loader2 className="h-5 w-5 animate-spin" />
             </Stack>
           </div>
         )}

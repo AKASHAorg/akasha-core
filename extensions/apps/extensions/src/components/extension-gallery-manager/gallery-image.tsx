@@ -2,12 +2,8 @@ import React from 'react';
 import { Image } from '@akashaorg/ui/lib/akasha-components/image';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { Loader2 } from 'lucide-react';
-import {
-  TrashIcon,
-  XCircleIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { Trash2Icon, XCircleIcon } from 'lucide-react';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export enum GalleryImageState {
@@ -47,7 +43,7 @@ export const GalleryImage: React.FC<GalleryImageProps> = props => {
           className={state === GalleryImageState.LOADING ? 'cursor-not-allowed' : ''}
         >
           <AppIcon
-            placeholderIcon={<TrashIcon />}
+            placeholderIcon={<Trash2Icon className='h-3 w-3 [&>*]:stroke-white'/>}
             size="xs"
             iconSize="sm"
             iconStyle="[&>*]:stroke-white"
@@ -64,11 +60,7 @@ export const GalleryImage: React.FC<GalleryImageProps> = props => {
           className="absolute top-[50%] left-[50%] -translate-y-1/2 -translate-x-1/2 w-full"
         >
           {state === GalleryImageState.ERROR && (
-            <Icon
-              icon={<XCircleIcon />}
-              size="lg"
-              customStyle={'[&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark'}
-            />
+            <XCircleIcon className="h-6 w-6 [&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark" />
           )}
           {state === GalleryImageState.LOADING && (
             <Loader2 className="h-8 w-8 animate-spin text-primary" />

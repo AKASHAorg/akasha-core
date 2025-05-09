@@ -1,10 +1,6 @@
 import React, { useMemo } from 'react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import {
-  CheckIcon,
-  ExclamationTriangleIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { CheckIcon, TriangleAlertIcon } from 'lucide-react';
 
 export type TIndicatorDotsProps = {
   isSuccess?: boolean;
@@ -61,10 +57,8 @@ const IndicatorDots: React.FC<TIndicatorDotsProps> = props => {
         justifyContent="center"
         className={`rounded-full w-${dotSizes.middle} h-${dotSizes.middle} ${dotColor} mx-2`}
       >
-        {isSuccess && <Icon icon={<CheckIcon />} size="xs" customStyle={'[&>*]:stroke-white'} />}
-        {hasErrors && (
-          <Icon icon={<ExclamationTriangleIcon />} size="xs" customStyle={'[&>*]:stroke-white'} />
-        )}
+        {isSuccess && <CheckIcon className="h-3 w-3 [&>*]:stroke-white" />}
+        {hasErrors && <TriangleAlertIcon className="h-3 w-3 [&>*]:stroke-white" />}
       </Stack>
       <Stack
         className={`rounded-full w-${dotSizes.last} h-${dotSizes.last} ${dotColor} opacity-50`}

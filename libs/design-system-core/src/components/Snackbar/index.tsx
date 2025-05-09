@@ -2,14 +2,7 @@ import React from 'react';
 import { Colors, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import Button from '../Button';
 import Card from '../Card';
-import Icon from '../Icon';
-import {
-  CheckCircleIcon,
-  ExclamationTriangleIcon,
-  InformationCircleIcon,
-  XCircleIcon,
-  XMarkIcon,
-} from '../Icon/hero-icons-solid';
+import { CheckCircleIcon, TriangleAlertIcon, InfoIcon, XCircleIcon, XIcon } from 'lucide-react';
 import Stack from '../Stack';
 import Text from '../Text';
 import { Color } from '../types/common.types';
@@ -60,16 +53,16 @@ const Snackbar: React.FC<SnackbarProps> = ({
   const instanceStyle = `p-4 border-l-8 border-solid ${borderColorMap[type]}  shadow-[0_0_4px_rgba(0,0,0,0.2)] dark:shadow-[0_0_2px_rgba(255,255,255,0.15)]`;
 
   const typeIconsMap: Record<NotificationTypes, React.ReactElement> = {
-    info: <InformationCircleIcon />,
-    caution: <ExclamationTriangleIcon />,
-    success: <CheckCircleIcon />,
-    error: <XCircleIcon />,
+    info: <InfoIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
+    caution: <TriangleAlertIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
+    success: <CheckCircleIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
+    error: <XCircleIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
   };
 
   return (
     <Card radius={8} customStyle={`${instanceStyle} ${customStyle} bg-white dark:bg-grey1`}>
       <Stack spacing="gap-x-3" fullWidth direction="row">
-        <Icon icon={typeIconsMap[type]} solid={true} customStyle={iconColorMap[type]} size="lg" />
+        {typeIconsMap[type]}
         <Stack direction="column">
           <Text variant="button-md" color={textColor}>
             {title}
@@ -100,7 +93,7 @@ const Snackbar: React.FC<SnackbarProps> = ({
             aria-label="dismiss"
             plain={true}
           >
-            <Icon icon={<XMarkIcon />} size="lg" customStyle="[&>*]:stroke-grey7" />
+            <XIcon className="h-6 w-6 [&>*]:stroke-grey7" />
           </Button>
         )}
       </Stack>

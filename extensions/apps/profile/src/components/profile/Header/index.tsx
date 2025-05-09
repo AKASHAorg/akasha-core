@@ -10,10 +10,7 @@ import {
   TooltipContent,
   TooltipProvider,
 } from '@akashaorg/ui/lib/akasha-components/tooltip';
-import {
-  Cog6ToothIcon,
-  EllipsisVerticalIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { SettingsIcon, EllipsisVerticalIcon } from 'lucide-react';
 import { getImageFromSeed } from '@akashaorg/design-system-core/lib/utils';
 import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
@@ -171,7 +168,7 @@ const Header: React.FC<HeaderProps> = ({
               <Stack direction="row" alignItems="center" spacing={2}>
                 {viewerIsOwner ? (
                   <Button aria-label="edit" variant="outline" size="icon" onClick={handleEdit}>
-                    <Cog6ToothIcon />
+                    <SettingsIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
                   </Button>
                 ) : (
                   <>
@@ -184,7 +181,9 @@ const Header: React.FC<HeaderProps> = ({
                   <Stack className="mt-1">
                     <Menu
                       anchor={{
-                        icon: <EllipsisVerticalIcon />,
+                        icon: (
+                          <EllipsisVerticalIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+                        ),
                         variant: 'primary',
                         greyBg: true,
                         iconOnly: true,
