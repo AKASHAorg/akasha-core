@@ -3,7 +3,7 @@ import React from 'react';
 import { Trash2Icon } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Input } from '@akashaorg/ui/lib/akasha-components/input';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { AppLinkSource } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 export type LinkElementProps = {
@@ -24,9 +24,7 @@ export const LinkElement: React.FC<LinkElementProps> = ({
   return (
     <Stack direction="column" spacing={2} className="w-full">
       <Stack direction="row" justifyContent="between" alignItems="center" className="w-full">
-        <Text variant="h6" as="label">
-          {`${linkElementLabel} ${value._id}`}
-        </Text>
+        <Typography variant="h6">{`${linkElementLabel} ${value._id}`}</Typography>
         <div className="relative w-5 h-5">
           <button onClick={onDelete} className="absolute top-1 right-0">
             <Trash2Icon className="h-5 w-5 [&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark" />

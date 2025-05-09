@@ -2,15 +2,13 @@ import React from 'react';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-
 export type OverviewCTA = {
   label: string;
   url: string;
   handler?: () => void;
 };
-
 export type VibesIntroCardProps = {
   titleLabel: string;
   subtitleLabel: string;
@@ -22,16 +20,15 @@ export type VibesIntroCardProps = {
  */
 const VibesIntroCard: React.FC<VibesIntroCardProps> = props => {
   const { titleLabel, subtitleLabel, overviewCTAArr } = props;
-
   return (
     <Card className="p-4 shadow-nones">
       <Stack spacing={4}>
-        <Text variant="h5">{titleLabel}</Text>
+        <Typography variant="h5">{titleLabel}</Typography>
 
         {subtitleLabel && (
-          <Text variant="body2" weight="light" color={{ light: 'grey5', dark: 'grey6' }}>
+          <Typography variant="sm" className="font-light text-grey5 dark:text-grey6">
             {subtitleLabel}.
-          </Text>
+          </Typography>
         )}
 
         {overviewCTAArr && overviewCTAArr.length > 0 && (
@@ -40,13 +37,13 @@ const VibesIntroCard: React.FC<VibesIntroCardProps> = props => {
               <Stack key={label + idx}>
                 {handler && typeof handler === 'function' ? (
                   <Button plain={true} onClick={handler}>
-                    <Text
-                      weight="bold"
-                      variant="button-md"
-                      color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                    <Typography
+                      bold
+                      variant="sm"
+                      className="text-secondaryLight dark:text-secondaryDark"
                     >
                       {label}
-                    </Text>
+                    </Typography>
                   </Button>
                 ) : (
                   <Link to={url} dataTestId={`${label}-link`} customStyle="text-sm font-bold">
@@ -61,5 +58,4 @@ const VibesIntroCard: React.FC<VibesIntroCardProps> = props => {
     </Card>
   );
 };
-
 export default VibesIntroCard;

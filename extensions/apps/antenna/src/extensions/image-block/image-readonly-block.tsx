@@ -3,11 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { BlockInstanceMethods, ContentBlockRootProps } from '@akashaorg/typings/lib/ui';
 import ImageBlockGallery from '@akashaorg/design-system-components/lib/components/ImageBlockGallery';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { transformSource } from '@akashaorg/ui-core-hooks';
-
 export const ImageReadonlyBlock = (
-  props: ContentBlockRootProps & { blockRef?: React.RefObject<BlockInstanceMethods> },
+  props: ContentBlockRootProps & {
+    blockRef?: React.RefObject<BlockInstanceMethods>;
+  },
 ) => {
   const { t } = useTranslation('app-antenna');
   const content = JSON.parse(props.content.value);
@@ -17,7 +18,7 @@ export const ImageReadonlyBlock = (
   return (
     <Stack alignItems={content.align || 'start'} spacing={1}>
       <ImageBlockGallery imageNotLoadedLabel={t('Cannot load image')} images={transformedImages} />
-      {content.caption && <Text customStyle="break-all">{content.caption}</Text>}
+      {content.caption && <Typography className="break-all">{content.caption}</Typography>}
     </Stack>
   );
 };

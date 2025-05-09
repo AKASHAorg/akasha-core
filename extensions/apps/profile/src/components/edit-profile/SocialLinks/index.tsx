@@ -1,12 +1,11 @@
 import React from 'react';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { SocialLink } from './social-link';
 import { PlusIcon } from 'lucide-react';
 import { Controller, Control, useFieldArray } from 'react-hook-form';
 import { EditProfileFormValues } from '../types';
-
 export type SocialLinksProps = {
   linkLabel: string;
   addNewLinkButtonLabel: string;
@@ -14,35 +13,42 @@ export type SocialLinksProps = {
   description: string;
   customStyle?: string;
 };
-
 export const SocialLinks: React.FC<SocialLinksProps> = ({
   linkLabel,
   addNewLinkButtonLabel,
   description,
   control,
 }) => {
-  const { fields, append, remove } = useFieldArray({ name: 'links', control });
-
+  const { fields, append, remove } = useFieldArray({
+    name: 'links',
+    control,
+  });
   const onAddNew = () => {
-    append({ id: crypto.randomUUID(), href: '' });
+    append({
+      id: crypto.randomUUID(),
+      href: '',
+    });
   };
-
   return (
     <Stack direction="column" spacing={4} className="customStyle">
       <Stack spacing={1} direction="column">
         <Stack direction="row" spacing={2} justifyContent="between" alignItems="center">
-          <Text variant="h6">{linkLabel}</Text>
+          <Typography variant="h6">{linkLabel}</Typography>
           <Button variant="link" onClick={onAddNew}>
             <PlusIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
             {addNewLinkButtonLabel}
           </Button>
         </Stack>
-        <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
+        <Typography variant="sm" className="text-grey4 dark:text-grey6 font-light">
           {description}
-        </Text>
+        </Typography>
       </Stack>
       {fields.map((link, index) => {
-        const defaultValue = link.href ? { defaultValue: link.href } : {};
+        const defaultValue = link.href
+          ? {
+              defaultValue: link.href,
+            }
+          : {};
         return (
           <Controller
             key={link.id}

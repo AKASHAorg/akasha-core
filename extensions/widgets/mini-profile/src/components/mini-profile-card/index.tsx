@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 import { getImageFromSeed } from '@akashaorg/design-system-core/lib/utils';
@@ -15,7 +15,6 @@ import {
   ProfileAvatarButton,
   ProfileDidField,
 } from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
-
 export type MiniProfileCardProps = {
   publicImagePath?: string;
   profileData: Profile | null;
@@ -24,12 +23,15 @@ export type MiniProfileCardProps = {
   followersLabel?: string;
   followingLabel?: string;
   statsLoading: boolean;
-  stats: { followers: number; following: number; beams: number };
+  stats: {
+    followers: number;
+    following: number;
+    beams: number;
+  };
   transformSource: (src: Image) => Image;
   handleClick?: () => void;
   footerExt?: React.ReactNode;
 };
-
 const MiniProfileCard: React.FC<MiniProfileCardProps> = props => {
   const {
     publicImagePath = '/images',
@@ -44,16 +46,16 @@ const MiniProfileCard: React.FC<MiniProfileCardProps> = props => {
     handleClick,
     footerExt,
   } = props;
-
   const seed = getImageFromSeed(profileData?.did?.id, 3);
   const coverImageFallback = `${publicImagePath}/profile-cover-${seed}.webp`;
   const coverImage = transformSource(profileData?.background?.default);
-
   return (
     <Card className="p-0 mb-4 max-h-[30rem]">
       <Stack
         alignItems="center"
-        style={cssVars({ '--background-url': `url('${coverImage?.src ?? coverImageFallback}')` })}
+        style={cssVars({
+          '--background-url': `url('${coverImage?.src ?? coverImageFallback}')`,
+        })}
         className={`h-28 rounded-t-2xl bg-center bg-cover bg-(image:--background-url)`}
       >
         <Stack className="relative top-16">
@@ -74,13 +76,9 @@ const MiniProfileCard: React.FC<MiniProfileCardProps> = props => {
         <Stack spacing={2} alignItems="center">
           <Stack spacing={1} alignItems="center" className="mt-3">
             {profileData?.name && (
-              <Text
-                variant="h6"
-                breakWord={true}
-                customStyle={`cursor-pointer hover:underline hover:decoration-black dark:hover:decoration-white`}
-              >
+              <Typography variant="h6" className="break-all">
                 {profileData.name}
-              </Text>
+              </Typography>
             )}
             {profileData?.did?.id && (
               <ProfileAvatarButton profileDID={profileData.did.id}>
@@ -108,9 +106,9 @@ const MiniProfileCard: React.FC<MiniProfileCardProps> = props => {
             )}
           </Stack>
           {profileData?.description && (
-            <Text variant="footnotes2" breakWord={true} align="center" lineClamp={3}>
+            <Typography variant="xs" className="font-medium break-all text-center line-clamp-3">
               {profileData.description}
-            </Text>
+            </Typography>
           )}
         </Stack>
         {authenticatedDID !== profileData?.did?.id && footerExt}
@@ -118,11 +116,9 @@ const MiniProfileCard: React.FC<MiniProfileCardProps> = props => {
     </Card>
   );
 };
-
 const RenderText = ({ label }: { label: string }) => (
-  <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey7' }}>
+  <Typography variant="xs" className="font-medium text-grey4 dark:text-grey7">
     {label}
-  </Text>
+  </Typography>
 );
-
 export default MiniProfileCard;

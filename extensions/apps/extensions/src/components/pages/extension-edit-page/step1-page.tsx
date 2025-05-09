@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import routes, { MY_EXTENSIONS } from '../../../routes';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Stepper } from '@akashaorg/ui/lib/akasha-components/stepper';
 import ExtensionEditStep1Form from '../../extension-edit-step1-form';
 import {
@@ -17,22 +17,17 @@ import { Extension, NotificationEvents, NotificationTypes } from '@akashaorg/typ
 import { DRAFT_EXTENSIONS } from '../../../constants';
 import { useAtom } from 'jotai';
 import { AtomContext, FormData } from './main-page';
-
 type ExtensionEditStep1PageProps = {
   extensionId: string;
 };
-
 export const ExtensionEditStep1Page: React.FC<ExtensionEditStep1PageProps> = ({ extensionId }) => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
-
   const { uiEvents } = useRootComponentProps();
   const uiEventsRef = React.useRef(uiEvents);
-
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
-
   const showErrorNotification = React.useCallback((title: string) => {
     uiEventsRef.current.next({
       event: NotificationEvents.ShowNotification,
@@ -51,7 +46,6 @@ export const ExtensionEditStep1Page: React.FC<ExtensionEditStep1PageProps> = ({ 
       showErrorNotification(error);
     }
   }, [authenticatedDID, showErrorNotification]);
-
   const formValue = useMemo(() => {
     try {
       return JSON.parse(sessionStorage.getItem(extensionId)) || {};
@@ -59,23 +53,17 @@ export const ExtensionEditStep1Page: React.FC<ExtensionEditStep1PageProps> = ({ 
       showErrorNotification(error);
     }
   }, [extensionId, showErrorNotification]);
-
   const extensionData = draftExtensions.find(draftExtension => draftExtension.id === extensionId);
-
   const { image: logoImage, saveImage: saveLogoImage, loading: isSavingLogoImage } = useSaveImage();
-
   const {
     image: coverImage,
     saveImage: saveCoverImage,
     loading: isSavingCoverImage,
   } = useSaveImage();
-
   const isSavingImage = isSavingLogoImage || isSavingCoverImage;
-
   const defaultValues = useMemo(() => {
     return formValue.lastCompletedStep > 0 ? formValue : extensionData;
   }, [extensionData, formValue]);
-
   const formDefault = useMemo(() => {
     return {
       name: defaultValues?.name,
@@ -84,26 +72,21 @@ export const ExtensionEditStep1Page: React.FC<ExtensionEditStep1PageProps> = ({ 
       coverImage: defaultValues?.coverImage,
     };
   }, [defaultValues]);
-
   const [, setForm] = useAtom<FormData>(useContext(AtomContext));
-
   const onSaveImageError = () => {
     showErrorNotification(t("The image wasn't uploaded correctly. Please try again!"));
   };
-
   const {
     loading: loadingAppInfo,
     error: appInfoQueryError,
     handleCheckExtProp,
     isDuplicateExtProp,
   } = useValidateUniqueExtensionProp(authenticatedDID, draftExtensions, extensionData.id);
-
   useEffect(() => {
     if (appInfoQueryError) {
       showErrorNotification(appInfoQueryError.message);
     }
   }, [appInfoQueryError, showErrorNotification]);
-
   return (
     <>
       <Stack justifyContent="center" alignItems="center" className="p-4">
@@ -111,9 +94,9 @@ export const ExtensionEditStep1Page: React.FC<ExtensionEditStep1PageProps> = ({ 
       </Stack>
       <Stack spacing={4}>
         <Stack className="p-4">
-          <Text variant="h5" weight="semibold" align="center">
+          <Typography variant="h5" className="font-semibold text-center">
             {t('Edit Extension Presentation')}
-          </Text>
+          </Typography>
         </Stack>
         <ExtensionEditStep1Form
           extensionIdLabel={t('Extension ID')}
@@ -130,12 +113,20 @@ export const ExtensionEditStep1Page: React.FC<ExtensionEditStep1PageProps> = ({ 
             saveLabel: t('Save'),
             logoPreviewTitle: t('Logo preview'),
             imageTitle: {
-              logoImage: { label: t('Edit Logo') },
-              coverImage: { label: t('Edit Cover') },
+              logoImage: {
+                label: t('Edit Logo'),
+              },
+              coverImage: {
+                label: t('Edit Cover'),
+              },
             },
             deleteTitle: {
-              logoImage: { label: t('Delete Logo') },
-              coverImage: { label: t('Delete Cover') },
+              logoImage: {
+                label: t('Delete Logo'),
+              },
+              coverImage: {
+                label: t('Delete Cover'),
+              },
             },
             confirmationLabel: {
               logoImage: t(`Are you sure you want to delete the extension's logo image?`),
@@ -158,10 +149,18 @@ export const ExtensionEditStep1Page: React.FC<ExtensionEditStep1PageProps> = ({ 
             onImageSave: (type, image) => {
               switch (type) {
                 case 'logo-image':
-                  saveLogoImage({ name: 'logo-image', image, onError: onSaveImageError });
+                  saveLogoImage({
+                    name: 'logo-image',
+                    image,
+                    onError: onSaveImageError,
+                  });
                   break;
                 case 'cover-image':
-                  saveCoverImage({ name: 'cover-image', image, onError: onSaveImageError });
+                  saveCoverImage({
+                    name: 'cover-image',
+                    image,
+                    onError: onSaveImageError,
+                  });
                   break;
               }
             },

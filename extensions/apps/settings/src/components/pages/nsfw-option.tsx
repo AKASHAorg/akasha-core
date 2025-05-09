@@ -2,25 +2,21 @@ import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NotificationTypes, NotificationEvents } from '@akashaorg/typings/lib/ui';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import PageLayout from './base-layout';
 import { useAkashaStore, useNsfwToggling, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { Switch } from '@akashaorg/ui/lib/components/switch';
 
 const NsfwOption: React.FC = () => {
   const { t } = useTranslation('app-settings-ewa');
-
   const {
     data: { authenticatedDID, isAuthenticating },
   } = useAkashaStore();
   const isLoggedIn = !!authenticatedDID;
-
   const { getCorePlugins, uiEvents } = useRootComponentProps();
   const routingPlugin = useRef(getCorePlugins().routing);
   const _uiEvents = React.useRef(uiEvents);
-
   const { showNsfw, toggleShowNsfw } = useNsfwToggling();
-
   if (!isLoggedIn && !isAuthenticating) {
     // if not logged in, redirect to homepage
     routingPlugin.current?.navigateTo?.({
@@ -28,7 +24,6 @@ const NsfwOption: React.FC = () => {
       getNavigationUrl: () => '/',
     });
   }
-
   const handleNsfwToggle = () => {
     toggleShowNsfw(!showNsfw);
     const notifMsg = t(`NSFW Settings updated`);
@@ -40,23 +35,21 @@ const NsfwOption: React.FC = () => {
       },
     });
   };
-
   return (
     <PageLayout title={t('NSFW Content')}>
       <Stack className="p-4">
         <Stack direction="row" justifyContent="between" alignItems="center" className="mb-2">
-          <Text weight="bold">{t('Show NSFW Content')}</Text>
+          <Typography bold>{t('Show NSFW Content')}</Typography>
           <Switch onCheckedChange={handleNsfwToggle} checked={showNsfw} />
         </Stack>
 
-        <Text>
+        <Typography>
           {t(
             'If you enable NSFW content, any sensitive content will show up in your search results when you lookup anything.',
           )}
-        </Text>
+        </Typography>
       </Stack>
     </PageLayout>
   );
 };
-
 export default NsfwOption;

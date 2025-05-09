@@ -25,10 +25,9 @@ import type { IMetadata, IPublishData, Image, Profile } from '@akashaorg/typings
 
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import {
   InlineNotification,
-  InlineNotificationTitle,
   InlineNotificationDescription,
 } from '@akashaorg/ui/lib/akasha-components/inline-notification';
 
@@ -592,7 +591,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
               className="bg-errorLight dark:bg-errorDark w-full rounded p-4"
             >
               <TriangleAlertIcon className="h-5 w-5 [&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark" />
-              <Text>{maxEncodedLengthErrLabel}</Text>
+              <Typography>{maxEncodedLengthErrLabel}</Typography>
             </Stack>
           )}
         </Stack>

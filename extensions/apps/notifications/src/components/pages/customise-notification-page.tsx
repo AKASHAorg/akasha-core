@@ -7,7 +7,6 @@ import React, {
   useSyncExternalStore,
 } from 'react';
 import { useTranslation } from 'react-i18next';
-
 import { MenuItemAreaType, NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import {
   useRootComponentProps,
@@ -15,67 +14,52 @@ import {
   useGetSettings,
   useAkashaStore,
 } from '@akashaorg/ui-core-hooks';
-
 import { Switch } from '@akashaorg/ui/lib/components/switch';
-
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Checkbox } from '@akashaorg/ui/lib/components/checkbox';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import routes, {
   CUSTOMISE_NOTIFICATION_WELCOME_PAGE,
   CUSTOMISE_NOTIFICATION_CONFIRMATION_PAGE,
   SHOW_NOTIFICATIONS_PAGE,
 } from '../../routes';
-
 import { useNavigate } from '@tanstack/react-router';
-
 export type CustomiseNotificationPageProps = {
   initial?: boolean;
 };
 export const NOTIF_REF = 'notification-preference-set';
 const Appname = '@akashaorg/app-notifications';
 const SnoozeOption = 'snoozed';
-
 const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
   initial = true,
 }) => {
   const { t } = useTranslation('app-notifications');
   const { uiEvents, getCorePlugins } = useRootComponentProps();
-
   const navigate = useNavigate();
-
   const {
     data: { authenticatedDID, isAuthenticating: loading },
   } = useAkashaStore();
   const isLoggedIn = !!authenticatedDID;
-
   const fetchSettingsQuery = useGetSettings(Appname);
-  const existingSettings: { [k: string]: string | number | boolean } | null =
-    fetchSettingsQuery.data;
-
+  const existingSettings: {
+    [k: string]: string | number | boolean;
+  } | null = fetchSettingsQuery.data;
   const { saveNotificationSettings } = useSaveSettings();
-
   const routeData = useSyncExternalStore(
     getCorePlugins().routing.subscribe,
     getCorePlugins().routing.getSnapshot,
   );
-
   const [appNames, setAppNames] = useState<string[]>([]);
-
   const allowedApps = React.useMemo(
     () => ['@akashaorg/app-antenna', '@akashaorg/app-vibes', '@akashaorg/app-extensions'],
     [],
   );
-
   const defaultInstalledApps = useMemo(() => {
     return routeData?.byArea?.[MenuItemAreaType.AppArea];
   }, [routeData]);
-
   React.useEffect(() => {
     if (defaultInstalledApps) {
       defaultInstalledApps.map(app => {
@@ -83,26 +67,22 @@ const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
       });
     }
   }, [allowedApps, defaultInstalledApps]);
-
   const [selected, setSelected] = useState(false);
-  const [allStates, setAllStates] = useState<{ [k: string]: string | number | boolean }>({});
+  const [allStates, setAllStates] = useState<{
+    [k: string]: string | number | boolean;
+  }>({});
   const [saveSettingsLoading, setSaveSettingsLoading] = useState(false);
-
   const setDefaultValues = useCallback(() => {
     setAllStates(Object.fromEntries(appNames.map(app => [[app], true])));
   }, [appNames]);
-
   React.useEffect(() => {
     if (appNames) {
       if (existingSettings) {
         const appStates = Object.fromEntries(
           Object.entries(existingSettings).filter(app => appNames.includes(app[0])),
         );
-
         Object.keys(appStates).length !== 0 ? setAllStates(appStates) : setDefaultValues();
-
         const snoozePref = Object.entries(existingSettings).find(key => key.includes(SnoozeOption));
-
         if (snoozePref && typeof snoozePref[1] === 'boolean') {
           setSnoozed(snoozePref[1]);
         }
@@ -111,10 +91,8 @@ const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
       }
     }
   }, [appNames, existingSettings, setDefaultValues]);
-
   const [snoozed, setSnoozed] = React.useState(false);
   const [isChanged, setIsChanged] = useState(false);
-
   const snoozeChangeHandler = () => {
     setSnoozed(!snoozed);
     setIsChanged(true);
@@ -122,7 +100,6 @@ const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
 
   // added for emitting snooze notification event
   const _uiEvents = useRef(uiEvents);
-
   const changeHandler = (appName): void => {
     const newStates = Object.entries(allStates).map(state => {
       if (state[0] === appName) {
@@ -130,7 +107,6 @@ const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
       }
       return state;
     });
-
     setAllStates(Object.fromEntries(newStates));
     setIsChanged(true);
   };
@@ -141,7 +117,6 @@ const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
       setAllStates(Object.fromEntries(appNames.map(app => [[app], true])));
     }
   }, [appNames, selected]);
-
   React.useEffect(() => {
     if (Object.keys(allStates).length !== 0) {
       if (Object.entries(allStates).filter(app => app[1] === false).length > 0) {
@@ -151,7 +126,6 @@ const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
       }
     }
   }, [allStates]);
-
   const goToNextStep = () => {
     // navigate to final step or go back to notifications page depending whether it's the first time accessing the app or not
     navigate({
@@ -160,37 +134,33 @@ const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
         : `${routes[SHOW_NOTIFICATIONS_PAGE]}`,
     });
   };
-
   const skipHandler = () => {
     setAllStates(Object.fromEntries(appNames.map(app => [[app], true])));
 
     // navigate to final step
     goToNextStep();
   };
-
   const confirmHandler = () => {
     setSaveSettingsLoading(true);
-
     try {
       const allPrefs = structuredClone(allStates);
 
       //add snooze pref
       allPrefs[SnoozeOption] = snoozed;
-
       saveNotificationSettings(
         {
           app: Appname,
           options: allPrefs,
         },
-        { onComplete: () => setSaveSettingsLoading(false) },
+        {
+          onComplete: () => setSaveSettingsLoading(false),
+        },
       );
-
       if (snoozed) {
         // emit snooze notification event so the topbar's notification icon can be updated
         _uiEvents.current.next({
           event: NotificationEvents.SnoozeNotifications,
         });
-
         _uiEvents.current.next({
           event: NotificationEvents.ShowNotification,
           data: {
@@ -199,13 +169,11 @@ const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
           },
         });
       }
-
       if (!snoozed) {
         // emit unsnooze notification event so the topbar's notification icon can be updated
         _uiEvents.current.next({
           event: NotificationEvents.UnsnoozeNotifications,
         });
-
         _uiEvents.current.next({
           event: NotificationEvents.ShowNotification,
           data: {
@@ -214,7 +182,6 @@ const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
           },
         });
       }
-
       _uiEvents.current.next({
         event: NotificationEvents.ShowNotification,
         data: {
@@ -222,14 +189,12 @@ const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
           title: 'Notification settings updated successfully',
         },
       });
-
       setIsChanged(false);
 
       // navigate to final step
       initial && goToNextStep();
     } catch (error) {
       setSaveSettingsLoading(false);
-
       _uiEvents.current.next({
         event: NotificationEvents.ShowNotification,
         data: {
@@ -239,25 +204,25 @@ const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
       });
     }
   };
-
   if (!isLoggedIn && !loading) {
-    navigate({ to: routes[CUSTOMISE_NOTIFICATION_WELCOME_PAGE] });
+    navigate({
+      to: routes[CUSTOMISE_NOTIFICATION_WELCOME_PAGE],
+    });
   }
-
   return (
     <Card className="h-full md:h-min space-y-4 rounded-2xl py-2 px-0">
-      <Text variant="h5" align="center" customStyle="pb-2">
+      <Typography variant="h5" className="text-center pb-2">
         {initial ? t('Customise Your Notifications') : t('Notification Settings')}
-      </Text>
+      </Typography>
       <Divider customStyle="!mt-0" />
       {!initial && (
         <>
           <Stack direction="column" className="px-6 !my-0 py-2">
             <>
               <Stack justifyContent="between" direction="row">
-                <Text variant="footnotes2">
+                <Typography variant="xs" className="font-medium">
                   <>{t('Snooze Notifications')}</>
-                </Text>
+                </Typography>
                 <Switch checked={snoozed} onCheckedChange={snoozeChangeHandler} />
               </Stack>
             </>
@@ -267,17 +232,17 @@ const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
       )}
       <Stack direction="column" className="mx-4">
         {initial ? (
-          <Text variant="footnotes2" weight="normal" color={{ dark: 'grey6', light: 'grey4' }}>
+          <Typography variant="xs" className="font-medium font-normal text-grey4 dark:text-grey6">
             <>
               {t(
                 'Choose the notifications that you would like to receive from other applications. Remember, you can change this anytime from the notifications settings.',
               )}
             </>
-          </Text>
+          </Typography>
         ) : (
-          <Text variant="h6">
+          <Typography variant="h6">
             <>{t('Receiving Notifications')}</>
-          </Text>
+          </Typography>
         )}
         <Stack direction="row" alignItems="center" spacing={2} className="ml-2 my-4">
           <Checkbox
@@ -307,7 +272,7 @@ const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
               key={appState[0].concat(String(Math.round(Math.random() * 100)))}
             >
               <Stack direction="row" justifyContent="between" alignItems="center" className="px-6">
-                <Text variant="h6">{appState[0]}</Text>
+                <Typography variant="h6">{appState[0]}</Typography>
                 <Checkbox
                   value={appState[0]}
                   id={appState[0].concat(String(Math.round(Math.random() * 100)))}

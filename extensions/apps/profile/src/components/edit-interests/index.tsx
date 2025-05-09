@@ -12,7 +12,6 @@ import { CircleX } from 'lucide-react';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { ButtonType } from '@akashaorg/design-system-components/lib/components/types/common.types';
 import UnsavedChangesModal from '@akashaorg/design-system-components/lib/components/UnsavedChangesModal';
 import { useRootComponentProps } from '@akashaorg/ui-core-hooks';
@@ -170,14 +169,14 @@ const EditInterests: React.FC<EditInterestsProps> = ({
       <Stack direction="column" justifyContent="between" spacing={8} className="h-full">
         <Stack direction="column">
           <Stack direction="row" alignItems="center" spacing={1}>
-            <Text variant="h6">{title}</Text>
-            <Text variant="footnotes2" color="grey7">
+            <Typography variant="h6">{title}</Typography>
+            <Typography variant="xs" bold className="text-grey7 font-medium">
               {subTitle}
-            </Text>
+            </Typography>
           </Stack>
-          <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
+          <Typography variant="sm" className="font-light text-grey4 dark:text-grey6">
             {description}
-          </Text>
+          </Typography>
           <Stack direction="row" spacing={2} className="flex-wrap mt-2">
             {[...allMyInterests].map((interest, index) => (
               <Pill
@@ -204,10 +203,10 @@ const EditInterests: React.FC<EditInterestsProps> = ({
           </Stack>
         </Stack>
         <Stack direction="column">
-          <Text variant="h6">{moreInterestTitle}</Text>
-          <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
+          <Typography variant="h6">{moreInterestTitle}</Typography>
+          <Typography variant="sm" className="font-light text-grey4 dark:text-grey6">
             {moreInterestDescription}
-          </Text>
+          </Typography>
           <TagsInput
             className="mt-1.5"
             disabled={maximumInterestsSelected}

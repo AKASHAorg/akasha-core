@@ -11,7 +11,7 @@ import {
   SubtitleRenderer,
   SubtitleRendererProps,
 } from '@akashaorg/design-system-components/lib/components/SubtitleRenderer';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Textarea } from '@akashaorg/ui/lib/akasha-components/textarea';
 
 export type ReviewItemProps = PageHeaderProps &
@@ -40,12 +40,10 @@ export const ReviewItem: React.FC<ReviewItemProps> = props => {
     handleReasonClick,
   } = props;
 
-  const textColor = { light: 'grey7', dark: 'grey6' } as const;
-
   return (
     <PageHeader {...props}>
       <Stack spacing="gap-y-4" customStyle="mb-24">
-        <Text variant="h6">{section1Label}</Text>
+        <Typography variant="h6">{section1Label}</Typography>
         <Stack customStyle="gap-y-2 md:flex-row md:gap-x-2">
           <ReportReasonPill
             reason="Bullying and harassment"
@@ -61,7 +59,7 @@ export const ReviewItem: React.FC<ReviewItemProps> = props => {
 
         {section2Label && (
           <Stack spacing="gap-y-2">
-            <Text variant="h6">{section2Label}</Text>
+            <Typography variant="h6">{section2Label}</Typography>
             <Stack direction="row" customStyle="gap-x-3 md:gap-x-6">
               {radioButtons.map(r => (
                 <RadioButton
@@ -79,20 +77,14 @@ export const ReviewItem: React.FC<ReviewItemProps> = props => {
           </Stack>
         )}
 
-        <Text variant="h6">{section3Label}</Text>
+        <Typography variant="h6">{section3Label}</Typography>
         <Textarea
           placeholder={reasonPlaceholderLabel}
           onChange={() => {
             /** */
           }}
         />
-        <SubtitleRenderer
-          {...props}
-          textVariant="footnotes2"
-          textAlign="start"
-          fontWeight="normal"
-          textColor={textColor}
-        />
+        <SubtitleRenderer {...props} textVariant="xs" className="text-grey7 dark:text-grey6" />
       </Stack>
     </PageHeader>
   );

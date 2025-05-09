@@ -12,16 +12,14 @@ import {
   ErrorLoaderTitle,
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { DeveloperMode } from '../developer-mode';
 import { DEV_MODE_KEY } from '../../constants';
 import appRoutes, { DEVELOPER_MODE, MY_EXTENSIONS } from '../../routes';
-
 export enum DevMode {
   ENABLED = 'ENABLED',
   DISABLED = 'DISABLED',
 }
-
 export const DeveloperModePage: React.FC<unknown> = () => {
   const navigate = useNavigate();
   const { baseRouteName, uiEvents, getCorePlugins } = useRootComponentProps();
@@ -32,9 +30,7 @@ export const DeveloperModePage: React.FC<unknown> = () => {
   const navigateTo = getCorePlugins().routing.navigateTo;
   // get the dev mode preference, if any, from local storage
   const localValue = window.localStorage.getItem(DEV_MODE_KEY);
-
   const [devMode, setDevMode] = useState<string>(localValue);
-
   const handleToggleDevMode = () => {
     const value = devMode === DevMode.ENABLED ? DevMode.DISABLED : DevMode.ENABLED;
     setDevMode(value);
@@ -57,13 +53,11 @@ export const DeveloperModePage: React.FC<unknown> = () => {
       window.location.reload();
     }, 2500);
   };
-
   const handleCTAClick = () => {
     navigate({
       to: appRoutes[MY_EXTENSIONS],
     });
   };
-
   const handleConnectButtonClick = () => {
     navigateTo?.({
       appName: '@akashaorg/app-auth-ewa',
@@ -74,7 +68,6 @@ export const DeveloperModePage: React.FC<unknown> = () => {
       },
     });
   };
-
   if (!authenticatedProfile?.did.id) {
     return (
       <ErrorLoader type="not-authenticated">
@@ -86,7 +79,6 @@ export const DeveloperModePage: React.FC<unknown> = () => {
       </ErrorLoader>
     );
   }
-
   return (
     <DeveloperMode
       titleLabel={t('Developer Mode')}
@@ -97,13 +89,11 @@ export const DeveloperModePage: React.FC<unknown> = () => {
             <Switch onCheckedChange={handleToggleDevMode} checked={devMode === DevMode.ENABLED} />
           ),
           descriptionNode: (
-            <Text as="span" color={{ light: 'grey4', dark: 'grey6' }}>
+            <Typography className="text-grey4 dark:text-grey6">
               {`🌟 ${t("When you enable Dev Mode, you'll unlock the ability to create awesome extensions in the Extensions app! 🚀 Once enabled, a new sub menu item called")} `}
-              <Text as="span" weight="bold">
-                {`"${t('My Extensions')}"`}
-              </Text>
+              <Typography bold>{`"${t('My Extensions')}"`}</Typography>
               {` ${t('will appear on the sidebar')}. 💻✨`}
-            </Text>
+            </Typography>
           ),
           ...(devMode === DevMode.ENABLED && {
             ctaNode: (
@@ -116,9 +106,9 @@ export const DeveloperModePage: React.FC<unknown> = () => {
         {
           title: t('AKASHA World Developer Guide'),
           descriptionNode: (
-            <Text color={{ light: 'grey4', dark: 'grey6' }}>
+            <Typography className="text-grey4 dark:text-grey6">
               {`🌐 ${t('Become a developer in AKASHA World, create your first extension, and join our vibrant developer community! ')}🌐`}
-            </Text>
+            </Typography>
           ),
           ctaNode: (
             <Link target="_blank" to="https://docs.akasha.world" customStyle="w-fit self-end">

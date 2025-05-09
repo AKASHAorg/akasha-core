@@ -1,15 +1,11 @@
 import * as React from 'react';
-
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { InboxNotification } from '@akashaorg/typings/lib/ui';
-
 export interface NotificationCardEventProps {
   onClick?: (notification: InboxNotification) => void;
 }
-
 export type NotificationCardProps = NotificationCardEventProps & InboxNotification;
-
 const NotificationCard: React.FC<NotificationCardProps> = props => {
   const {
     notificationTypeIcon,
@@ -23,17 +19,15 @@ const NotificationCard: React.FC<NotificationCardProps> = props => {
     ctaLinkTitle,
     onClick,
   } = props;
-
   return (
     <Stack spacing={2} className="flex flex-col w-full">
       {/* Notification type & Is notification 'seen' dot indicator */}
       <Stack className="flex flex-row items-center justify-between w-full">
         <Stack spacing={2} className="flex flex-row">
           {notificationTypeIcon}
-
-          <Text variant="footnotes1" color={{ dark: 'grey6', light: 'grey4' }} weight="bold">
+          <Typography variant="xs" bold className="text-grey4 dark:text-grey6">
             {notificationTypeTitle}
-          </Text>
+          </Typography>
         </Stack>
         {!isSeen && (
           <Stack className="w-2 h-2 rounded-full bg-secondaryLight dark:bg-secondaryDark" />
@@ -43,36 +37,33 @@ const NotificationCard: React.FC<NotificationCardProps> = props => {
         {notificationAppIcon}
         {/* Title and body */}
         <Stack spacing={2} className="flex flex-column">
-          <Text variant="h6" breakWord={true}>
+          <Typography variant="h6" className="break-all">
             {title}
-          </Text>
-          <Text
-            variant="subtitle2"
-            breakWord={true}
-            weight="normal"
-            color={{ dark: 'white', light: 'black' }}
+          </Typography>
+          <Typography
+            variant="sm"
+            className="font-light break-all font-normal text-black dark:text-white"
           >
             {body}
-          </Text>
+          </Typography>
         </Stack>
       </Stack>
 
       {/* Date and Button Section */}
       <Stack className="flex flex-row justify-between items-center ml-10">
-        <Text variant="footnotes2" color={{ dark: 'grey6', light: 'grey4' }}>
+        <Typography variant="xs" className="font-medium text-grey4 dark:text-grey6">
           {date}
-        </Text>
+        </Typography>
         {ctaLinkUrl && (
           <button onClick={() => onClick(props)}>
             <Stack>
-              <Text
-                variant="footnotes2"
-                weight="bold"
-                align="center"
-                color={{ dark: 'secondaryDark', light: 'secondaryLight' }}
+              <Typography
+                variant="xs"
+                bold
+                className="font-medium text-center text-secondaryLight dark:text-secondaryDark"
               >
                 {ctaLinkTitle}
-              </Text>
+              </Typography>
             </Stack>
           </button>
         )}
@@ -80,5 +71,4 @@ const NotificationCard: React.FC<NotificationCardProps> = props => {
     </Stack>
   );
 };
-
 export default NotificationCard;

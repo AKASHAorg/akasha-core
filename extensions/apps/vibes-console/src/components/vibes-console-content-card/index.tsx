@@ -2,12 +2,11 @@ import React from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Antenna, Profile } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import MiniProfileCTA, { ItemType, ProfileItemData } from './mini-profile-cta';
 import ReportReasonPill from '@akashaorg/design-system-components/lib/components/ReportReasonPill';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
-
 export type ReportEntry = {
   id: string;
   itemData: /* EntryCardProps | */ ProfileItemData;
@@ -17,20 +16,21 @@ export type ReportEntry = {
   reportCount: number;
   lastReportDate: Date;
 };
-
 export type VibesConsoleContentCardProps = {
   entry: ReportEntry;
   caseLabel: string;
   nsfwLabel: string;
   viewProfileLabel: string;
-  reportedForLabels: { first: string; second: string };
+  reportedForLabels: {
+    first: string;
+    second: string;
+  };
   lastReportLabel: string;
   primaryButtonLabel: string;
   secondaryButtonLabel: string;
   onReasonClick: (id: string) => void;
   onButtonClick: (action: string, itemType: ItemType, id: string) => () => void;
 };
-
 const VibesConsoleContentCard: React.FC<VibesConsoleContentCardProps> = props => {
   const {
     entry,
@@ -44,13 +44,12 @@ const VibesConsoleContentCard: React.FC<VibesConsoleContentCardProps> = props =>
     onReasonClick,
     onButtonClick,
   } = props;
-
-  const textColor = { light: 'grey4', dark: 'grey7' } as const;
-
+  const textColor = {
+    light: 'grey4',
+    dark: 'grey7',
+  } as const;
   const buttonStyle = 'w-full md:w-[9.25rem]';
-
   const secondaryButtonAction = entry.itemType === 'Profile' ? 'Suspend' : 'Delist';
-
   return (
     <Card className="p-0">
       <Stack
@@ -71,28 +70,28 @@ const VibesConsoleContentCard: React.FC<VibesConsoleContentCardProps> = props =>
             greyBg
             iconOnly
           />
-          <Text variant="h6" weight="bold">
+          <Typography variant="h6" bold>
             {entry.appName}{' '}
             {entry.itemType && entry.itemType !== 'Profile' && (
-              <Text as="span" variant="footnotes2">
+              <Typography variant="xs" className="font-medium">
                 - {entry.itemType}
-              </Text>
+              </Typography>
             )}
-          </Text>
+          </Typography>
         </Stack>
 
-        <Text variant="button-sm">
+        <Typography variant="xs" bold>
           {caseLabel}#{' '}
-          <Text as="span" variant="footnotes2" color={textColor}>
+          <Typography variant="xs" className="font-medium">
             {entry.id}
-          </Text>
-        </Text>
+          </Typography>
+        </Typography>
       </Stack>
 
       <Stack spacing={4} className="p-5">
         {/*  {entry.itemType !== 'Profile' && (
           <EntryCard {...(entry.itemData as EntryCardProps)} customStyle={shadowStyle} />
-        )} */}
+         )} */}
 
         {entry.itemType === 'Profile' && (
           <Card className="p-4">
@@ -105,15 +104,15 @@ const VibesConsoleContentCard: React.FC<VibesConsoleContentCardProps> = props =>
         )}
 
         <Stack direction="row" spacing={1}>
-          <Text variant="button-sm" weight="normal" color={textColor}>
+          <Typography variant="xs" bold className="font-normal">
             {reportedForLabels.first}
-          </Text>
-          <Text as="span" variant="button-sm" color={textColor}>
+          </Typography>
+          <Typography variant="xs" bold>
             {entry.itemType ?? entry.appName}
-          </Text>
-          <Text variant="button-sm" weight="normal" color={textColor}>
+          </Typography>
+          <Typography variant="xs" bold className="font-normal">
             {reportedForLabels.second}
-          </Text>
+          </Typography>
         </Stack>
 
         <ReportReasonPill
@@ -122,12 +121,12 @@ const VibesConsoleContentCard: React.FC<VibesConsoleContentCardProps> = props =>
           handleClick={() => onReasonClick(entry.id)}
         />
 
-        <Text variant="footnotes2">
+        <Typography variant="xs" className="font-medium">
           {lastReportLabel}:{' '}
-          <Text as="span" variant="footnotes2" color={textColor}>
+          <Typography variant="xs" className="font-medium">
             {formatDate(entry.lastReportDate.toISOString(), 'DD MMM YYYY')}
-          </Text>
-        </Text>
+          </Typography>
+        </Typography>
       </Stack>
 
       <Stack
@@ -152,5 +151,4 @@ const VibesConsoleContentCard: React.FC<VibesConsoleContentCardProps> = props =>
     </Card>
   );
 };
-
 export default VibesConsoleContentCard;

@@ -1,6 +1,5 @@
 import * as React from 'react';
-
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { RssIcon } from 'lucide-react';
 
 export interface ITagButton {
@@ -8,7 +7,6 @@ export interface ITagButton {
   isSubscribed?: boolean;
   onClickTag?: () => void;
 }
-
 export const TagButton: React.FC<ITagButton> = props => {
   const { tagName, isSubscribed, onClickTag } = props;
   const bgClass = isSubscribed
@@ -20,7 +18,7 @@ export const TagButton: React.FC<ITagButton> = props => {
       className={`max-w-[150px] border-grey8 dark:border-grey3 rounded-[0.5rem] px-4 py-1 gap-2 ${bgClass} ${flexClass}`}
       onClick={onClickTag}
     >
-      <Text truncate={true}>{tagName}</Text>
+      <Typography className="truncate">{tagName}</Typography>
       <RssIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
     </button>
   );

@@ -29,7 +29,7 @@ import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Image } from '@akashaorg/ui/lib/akasha-components/image';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Input } from '@akashaorg/ui/lib/akasha-components/input';
 import ImageBlockGallery from '@akashaorg/design-system-components/lib/components/ImageBlockGallery';
 import ImageBlockToolbar from '../../components/image-block-toolbar';
@@ -39,42 +39,49 @@ import { XIcon, Loader2 } from 'lucide-react';
 import getSDK from '@akashaorg/core-sdk';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import { selectLatestAppVersionId } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-by-publisher-did-query';
-
 const isImgUrl = async url => {
-  const response = await fetch(url, { method: 'HEAD' });
+  const response = await fetch(url, {
+    method: 'HEAD',
+  });
   const isImg = response?.headers?.get('Content-Type')?.startsWith('image');
   return isImg;
 };
-
 export const ImageEditorBlock = (
-  props: ContentBlockRootProps & { blockRef?: React.RefObject<BlockInstanceMethods> },
+  props: ContentBlockRootProps & {
+    blockRef?: React.RefObject<BlockInstanceMethods>;
+  },
 ) => {
   const { t } = useTranslation('app-antenna');
   const sdk = useRef(getSDK());
-
   const indexingDid = sdk.current.services.common.misc.getIndexingDID();
-
   const appReq = useGetAppsByPublisherDidQuery({
     variables: {
       id: indexingDid,
       first: 1,
-      filters: { where: { name: { equalTo: props.blockInfo.appName } } },
-      sorting: { createdAt: SortOrder.Desc },
+      filters: {
+        where: {
+          name: {
+            equalTo: props.blockInfo.appName,
+          },
+        },
+      },
+      sorting: {
+        createdAt: SortOrder.Desc,
+      },
     },
-    context: { source: sdk.current.services.gql.contextSources.default },
+    context: {
+      source: sdk.current.services.gql.contextSources.default,
+    },
   });
   const appVersionID = selectLatestAppVersionId(appReq.data);
   const { uiEvents, logger } = useRootComponentProps();
   const _uiEvents = useRef(uiEvents);
   const [createContentBlock, contentBlockQuery] = useCreateContentBlockMutation();
   const retryCount = useRef<number>();
-
   const [imageLink, setImageLink] = useState('');
   const [urlNotImage, setURLNotImage] = useState(false);
   const disableURLUpload = !imageLink || urlNotImage;
-
   const [uiState, setUiState] = useState('menu');
-
   const [contentBlockImages, setContentBlockImages] = useState<GalleryImage[]>([]);
   const imageGalleryImages = useMemo(
     () =>
@@ -96,7 +103,6 @@ export const ImageEditorBlock = (
   const [showCaption, setShowCaption] = useState(false);
   const [caption, setCaption] = useState('');
   const [showEditModal, setShowEditModal] = useState(false);
-
   React.useEffect(() => {
     const disablePublish =
       imageGalleryImages.length === 0 || !!imageGalleryImages.find(image => !image.name);
@@ -104,7 +110,6 @@ export const ImageEditorBlock = (
       props.blockInfo.externalHandler(disablePublish);
     }
   }, [imageGalleryImages, props.blockInfo]);
-
   const createBlock = useCallback(
     async ({ nsfw }: CreateContentBlock) => {
       if (!appVersionID) {
@@ -148,10 +153,14 @@ export const ImageEditorBlock = (
               },
             },
           },
-          context: { source: sdk.current.services.gql.contextSources.composeDB },
+          context: {
+            source: sdk.current.services.gql.contextSources.composeDB,
+          },
         });
         return {
-          response: { blockID: resp.data.createAkashaContentBlock.document.id },
+          response: {
+            blockID: resp.data.createAkashaContentBlock.document.id,
+          },
           blockInfo: props.blockInfo,
           retryCount: retryCount.current,
         };
@@ -178,7 +187,6 @@ export const ImageEditorBlock = (
       t,
     ],
   );
-
   const retryCreate = useCallback(
     async (arg: CreateContentBlock) => {
       if (contentBlockQuery.called) {
@@ -189,7 +197,6 @@ export const ImageEditorBlock = (
     },
     [contentBlockQuery, createBlock],
   );
-
   useImperativeHandle(
     props.blockRef,
     () => ({
@@ -199,7 +206,6 @@ export const ImageEditorBlock = (
     }),
     [createBlock, retryCreate],
   );
-
   const handleChange = async e => {
     const imageUrl = e.currentTarget.value;
     setImageLink(imageUrl);
@@ -228,24 +234,19 @@ export const ImageEditorBlock = (
       });
     }
   };
-
   const uploadInputRef: RefObject<HTMLInputElement> = useRef(null);
   const [uploading, setUploading] = useState(false);
   const [imageUploadDisabled, setImageUploadDisabled] = useState(false);
-
   const handleMediaClick = () => {
     if (uploadInputRef.current && !imageUploadDisabled) {
       uploadInputRef.current.click();
     }
   };
-
   const onUpload = async (image: File | string, isUrl?: boolean) => {
     if (!image) return null;
     setUiState('gallery');
     setUploading(true);
-
     const imageName = typeof image === 'string' ? image : image.name || 'beam-block-image';
-
     try {
       const mediaFile = await saveMediaFile({
         name: imageName,
@@ -254,19 +255,18 @@ export const ImageEditorBlock = (
       });
       setUploading(false);
       if (!mediaFile) return null;
-
       const mediaUri = `ipfs://${mediaFile.CID}`;
-
       const mediaUrl = getMediaUrl(mediaUri);
-
       const imageObj = {
-        size: { height: mediaFile.size.height, width: mediaFile.size.width },
+        size: {
+          height: mediaFile.size.height,
+          width: mediaFile.size.width,
+        },
         displaySrc: mediaUrl.originLink || mediaUrl.fallbackLink,
         src: mediaUri,
         name: imageName,
         originalSrc: typeof image === 'string' ? image : URL.createObjectURL(image),
       };
-
       return imageObj;
     } catch (error) {
       setUploading(false);
@@ -281,7 +281,6 @@ export const ImageEditorBlock = (
       return null;
     }
   };
-
   const uploadNewImage = async (image: File | string, isUrl?: boolean) => {
     const uploadedImage = await onUpload(image, isUrl);
     setContentBlockImages(prev => [
@@ -296,7 +295,6 @@ export const ImageEditorBlock = (
     ]);
     uploadInputRef.current.value = '';
   };
-
   const uploadEditedImage = async (image: File, indexOfEditedImage: number) => {
     const uploadedImage = await onUpload(image);
     const oldImage = contentBlockImages[indexOfEditedImage];
@@ -313,7 +311,6 @@ export const ImageEditorBlock = (
     ]);
     setCanCloseModal(true);
   };
-
   const [canCloseModal, setCanCloseModal] = useState(false);
   useEffect(() => {
     if (!uploading && showEditModal && canCloseModal) {
@@ -321,14 +318,11 @@ export const ImageEditorBlock = (
       setCanCloseModal(false);
     }
   }, [uploading, showEditModal, canCloseModal]);
-
   const handleCloseModal = () => {
     setCanCloseModal(true);
   };
-
   const handleDeleteImage = (element: GalleryImage) => {
     const newImages = contentBlockImages.filter(image => image.src !== element.src);
-
     if (newImages.length < 4) {
       setImageUploadDisabled(false);
     }
@@ -345,22 +339,18 @@ export const ImageEditorBlock = (
       },
     });
   };
-
   const handleClickAddImage = () => {
     setUiState('menu');
   };
-
   const handleClickEdit = () => {
     setShowEditModal(true);
   };
-
   const handleCaptionClick = () => {
     if (showCaption === true) {
       setCaption('');
     }
     setShowCaption(!showCaption);
   };
-
   const handleLeftAlignClick = () => {
     setAlignState('start');
   };
@@ -370,15 +360,12 @@ export const ImageEditorBlock = (
   const handleRightAlignClick = () => {
     setAlignState('end');
   };
-
   const handleCaptionChange = e => {
     setCaption(e.currentTarget.value);
   };
-
   const handleCloseMenu = () => {
     setUiState('gallery');
   };
-
   const [isFocusedEditor, setIsFocusedEditor] = useState(false);
   /**
    * this is used to display/hide elements only when a block instance is focused
@@ -388,7 +375,6 @@ export const ImageEditorBlock = (
   const handleFocusBlock = (focus: boolean) => {
     setIsFocusedEditor(focus);
   };
-
   const maxImagesLimitReached = contentBlockImages.length === 4;
 
   const accentColor = 'h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark';
@@ -416,7 +402,7 @@ export const ImageEditorBlock = (
             </Stack>
             <Divider />
             <Stack direction="column" spacing={2} className="py-8">
-              <Text variant="h6">{t('From URL')}</Text>
+              <Typography variant="h6">{t('From URL')}</Typography>
               <Stack direction="row" justifyContent="between">
                 <Input
                   placeholder={t('Paste image link')}
@@ -438,8 +424,11 @@ export const ImageEditorBlock = (
             <Divider />
             <Stack direction="column" spacing={2} className="overflow-auto pt-8">
               <Stack direction="row" justifyContent="between">
-                <Text variant="h6">{t('Uploaded images')} </Text>
-                <Text variant="subtitle2">{`${contentBlockImages.length}/4 ${t('images')}`}</Text>
+                <Typography variant="h6">{t('Uploaded images')} </Typography>
+                <Typography
+                  variant="sm"
+                  className="font-light"
+                >{`${contentBlockImages.length}/4 ${t('images')}`}</Typography>
               </Stack>
               {contentBlockImages.map((imageObj, index) => (
                 <Stack key={index} direction="row" justifyContent="between">
@@ -449,7 +438,7 @@ export const ImageEditorBlock = (
                       src={imageObj.originalSrc}
                       className="object-contain w-8 h-8 rounded-[0.5rem]"
                     />
-                    <Text>{imageObj.name}</Text>
+                    <Typography>{imageObj.name}</Typography>
                   </Stack>
                   <button onClick={() => handleDeleteImage(imageObj)}>
                     <XIcon className={accentColor} />
@@ -468,7 +457,7 @@ export const ImageEditorBlock = (
           className="w-4/5 h-48 sm:h-60 rounded-xl bg-background"
         >
           <Loader2 className="h-5 w-5 animate-spin" />
-          <Text>{t('Uploading image')}</Text>
+          <Typography>{t('Uploading image')}</Typography>
         </Stack>
       )}
       {uiState === 'gallery' && imageGalleryImages.length > 0 && (
@@ -503,7 +492,9 @@ export const ImageEditorBlock = (
           )}
           <ImageModal
             show={showEditModal}
-            title={{ label: t('Edit Image') }}
+            title={{
+              label: t('Edit Image'),
+            }}
             cancelLabel={t('Cancel')}
             saveLabel={t('Save')}
             onClose={handleCloseModal}

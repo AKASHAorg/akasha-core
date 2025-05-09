@@ -3,7 +3,7 @@ import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import ProfileNameField from '@akashaorg/design-system-core/lib/components/ProfileNameField';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { cn } from '@akashaorg/ui/lib/library/utils';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { transformSource, hasOwn } from '@akashaorg/ui-core-hooks';
 import { useTranslation } from 'react-i18next';
 import { useGetProfileByDidSuspenseQuery } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
@@ -18,7 +18,6 @@ import {
   ProfileDidField,
 } from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
 import { CopyToClipboard } from '@akashaorg/ui/lib/akasha-components/copy-to-clipboard';
-
 export type SidebarHeaderProps = {
   authenticatedDID: string;
   connectLabel: string;
@@ -29,7 +28,6 @@ export type SidebarHeaderProps = {
   loginClickHandler: () => void;
   handleProfileAvatarClick: (authenticatedDID: string) => void;
 };
-
 const SidebarHeader: React.FC<SidebarHeaderProps> = ({
   authenticatedDID,
   connectLabel,
@@ -41,36 +39,29 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
   handleProfileAvatarClick,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
-
   const { t } = useTranslation('ui-widget-sidebar');
-
   const { data, error } = useGetProfileByDidSuspenseQuery({
     variables: {
       id: authenticatedDID,
     },
     skip: !authenticatedDID,
   });
-
   const profileName = useMemo(() => {
     if (data) {
       return hasOwn(data?.node, 'akashaProfile') ? data?.node?.akashaProfile?.name : '';
     }
   }, [data]);
-
   const avatar = useMemo(() => {
     if (data) {
       return hasOwn(data?.node, 'akashaProfile') ? data?.node?.akashaProfile?.avatar : null;
     }
   }, [data]);
-
   const handleMouseEnter = () => setIsHovered(true);
   const handleMouseLeave = () => setIsHovered(false);
 
   // this padding style will adjust the header's vertical space to maintain the same height through different states
   const headerPadding = profileName && isLoggedIn && !isAuthenticating ? 'pb-[2.125rem]' : '';
-
   if (error) return null;
-
   return (
     <Stack
       direction="row"
@@ -90,9 +81,20 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
           </button>
         </Stack>
         <Stack justifyContent="center" className="w-fit flex-grow">
-          {!isLoggedIn && <Text variant="button-md"> {t('Guest')}</Text>}
+          {!isLoggedIn && (
+            <Typography variant="sm" bold>
+              {' '}
+              {t('Guest')}
+            </Typography>
+          )}
           {isLoggedIn && (
-            <Suspense fallback={<Text variant="button-md">{t('Fetching your info...')}</Text>}>
+            <Suspense
+              fallback={
+                <Typography variant="sm" bold>
+                  {t('Fetching your info...')}
+                </Typography>
+              }
+            >
               <button onClick={() => handleProfileAvatarClick(authenticatedDID)}>
                 <ProfileNameField
                   did={authenticatedDID}
@@ -120,17 +122,14 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
             </ProfileAvatarButton>
           )}
           {!isLoggedIn && (
-            <Text
-              variant="footnotes2"
-              color="grey7"
-              customStyle="whitespace-normal"
-              truncate
-              breakWord
+            <Typography
+              variant="xs"
+              className="font-medium text-grey7 whitespace-normal truncate break-all"
             >
               {t('Connect to see')}
               <br />
               {t('member only features.')}
-            </Text>
+            </Typography>
           )}
         </Stack>
       </Stack>
@@ -170,5 +169,4 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
     </Stack>
   );
 };
-
 export default SidebarHeader;

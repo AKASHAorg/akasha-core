@@ -1,13 +1,12 @@
 import React from 'react';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { LinkElement } from './link-element';
 import { PlusIcon } from 'lucide-react';
 import { Control, useFieldArray } from 'react-hook-form';
 import { FormField, FormItem, FormMessage } from '@akashaorg/ui/lib/akasha-components/form';
 import { ExtensionEditStep2FormValues } from '..';
-
 export type UsefulLinksProps = {
   usefulLinksTitleLabel: string;
   addNewLinkButtonLabel: string;
@@ -18,7 +17,6 @@ export type UsefulLinksProps = {
   control: Control<ExtensionEditStep2FormValues>;
   onDeleteLink: () => void;
 };
-
 export const UsefulLinks: React.FC<UsefulLinksProps> = ({
   usefulLinksTitleLabel,
   addNewLinkButtonLabel,
@@ -29,29 +27,31 @@ export const UsefulLinks: React.FC<UsefulLinksProps> = ({
   control,
   onDeleteLink,
 }) => {
-  const { fields, append, remove } = useFieldArray({ control, name: 'links' });
-
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'links',
+  });
   const onAddNew = () => {
     if (fields?.length < 10) {
-      append({ href: '', label: '' });
+      append({
+        href: '',
+        label: '',
+      });
     }
   };
-
   return (
     <Stack direction="column" spacing={4} className={customStyle}>
       <Stack spacing={1} direction="column">
         <Stack direction="row" spacing={2} justifyContent="between" alignItems="center">
-          <Text variant="h6" as="label">
-            {usefulLinksTitleLabel}
-          </Text>
+          <Typography variant="h6">{usefulLinksTitleLabel}</Typography>
           <Button variant="link" onClick={onAddNew}>
             <PlusIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
             {addNewLinkButtonLabel}
           </Button>
         </Stack>
-        <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
+        <Typography variant="sm" className="text-grey4 dark:text-grey6 font-light">
           {usefulLinksDescriptionLabel}
-        </Text>
+        </Typography>
       </Stack>
       {fields?.map((link, index) => {
         return (
@@ -68,7 +68,10 @@ export const UsefulLinks: React.FC<UsefulLinksProps> = ({
                     remove(index);
                     onDeleteLink();
                   }}
-                  value={{ ...value, _id: index + 1 }}
+                  value={{
+                    ...value,
+                    _id: index + 1,
+                  }}
                   onChange={onChange}
                 />
                 <FormMessage />

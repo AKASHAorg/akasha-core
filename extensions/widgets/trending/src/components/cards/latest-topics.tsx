@@ -12,11 +12,9 @@ import {
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import TrendingWidgetLoadingCard from '@akashaorg/design-system-components/lib/components/TrendingWidgetLoadingCard';
-
 import { TopicRow } from './topic-row';
-
 export type LatestTopicsProps = {
   // data
   tags: string[];
@@ -47,10 +45,8 @@ export type LatestTopicsProps = {
 const getTagsDiff = (arr1: string[], arr2: string[]) => {
   const setA = new Set(arr1);
   const setB = new Set(arr2);
-
   return Array.from(setA.symmetricDifference(setB));
 };
-
 export const LatestTopics: React.FC<LatestTopicsProps> = props => {
   const {
     onClickTopic,
@@ -69,7 +65,6 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
     showLoginModal,
     refetchTagSubscriptions,
   } = props;
-
   const [tagsQueue, setTagsQueue] = useState([]);
   const [localSubscribedTags, setLocalSubscribedTags] = useState([]);
   const timer = useRef(null);
@@ -88,7 +83,6 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
       subscriptionId.current = null;
     }
   }, [isLoggedIn]);
-
   useEffect(() => {
     if (receivedTags && !localTagsInitialized.current) {
       setLocalSubscribedTags([...new Set(receivedTags)]);
@@ -99,27 +93,25 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
       localSubscribedTagsRef.current = receivedTags;
     }
   }, [receivedTags, localTagsInitialized, tagsQueue.length]);
-
   useEffect(() => {
     if (tagSubscriptionsId) {
       subscriptionId.current = tagSubscriptionsId;
     }
   }, [tagSubscriptionsId]);
-
   const sdk = getSDK();
-
   const [createInterestsMutation, { loading }] = useCreateInterestsMutation({
-    context: { source: sdk.services.gql.contextSources.composeDB },
+    context: {
+      source: sdk.services.gql.contextSources.composeDB,
+    },
   });
-
   const [updateInterestsMutation, { loading: updateLoading }] = useUpdateInterestsMutation({
-    context: { source: sdk.services.gql.contextSources.composeDB },
+    context: {
+      source: sdk.services.gql.contextSources.composeDB,
+    },
   });
-
   useEffect(() => {
     if (!localTagsInitialized.current || receivedTags === null) return;
     if (loading || updateLoading) return;
-
     if (!isEqual(localSubscribedTagsRef.current, receivedTags)) {
       if (subscriptionId.current) {
         updateInterestsMutation({
@@ -138,7 +130,9 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
             updateAkashaProfileInterests: {
               clientMutationId: null,
               document: {
-                did: { id: authenticatedDID },
+                did: {
+                  id: authenticatedDID,
+                },
                 topics: localSubscribedTagsRef.current.map(tag => ({
                   value: tag,
                   labelType: sdk.services.gql.labelTypes.INTEREST,
@@ -151,24 +145,18 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
             const returnedData = data.updateAkashaProfileInterests.document.topics.map(
               topic => topic.value,
             );
-
             const tagsDiff = getTagsDiff(returnedData, receivedTags);
-
             const subscribing = returnedData.length > receivedTags.length;
-
             showSuccessSnackbar(tagsDiff, subscribing);
-
             const arrDifference = difference(returnedData, receivedTags).concat(
               difference(receivedTags, returnedData),
             );
-
             setTagsQueue(prev => pullAll(prev, arrDifference));
           },
           onError: () => {
             const arrDifference = receivedTags
               .filter(x => !localSubscribedTags.includes(x))
               .concat(localSubscribedTags.filter(x => !receivedTags.includes(x)));
-
             setTagsQueue(prev => pullAll(prev, arrDifference));
             refetchTagSubscriptions();
           },
@@ -187,21 +175,15 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
           },
           onCompleted: data => {
             subscriptionId.current = data.setAkashaProfileInterests?.document.id;
-
             const returnedData = data.setAkashaProfileInterests?.document.topics.map(
               topic => topic.value,
             );
-
             const tagsDiff = getTagsDiff(returnedData, localSubscribedTags);
-
             const subscribing = returnedData.length > localSubscribedTags.length;
-
             showSuccessSnackbar(tagsDiff, subscribing);
-
             const arrDifference = difference(returnedData, localSubscribedTags).concat(
               difference(localSubscribedTags, returnedData),
             );
-
             setTagsQueue(prev => pullAll(prev, arrDifference));
             refetchTagSubscriptions();
           },
@@ -209,7 +191,6 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
             const arrDifference = difference(receivedTags, localSubscribedTags).concat(
               difference(localSubscribedTags, receivedTags),
             );
-
             setTagsQueue(prev => pullAll(prev, arrDifference));
             refetchTagSubscriptions();
           },
@@ -217,15 +198,12 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
       }
     }
   }, [localSubscribedTags, updateLoading, loading]);
-
   const showSuccessSnackbar = (tags: string[], subscribing: boolean) => {
     if (!tags.length) return;
-
     const tagsString = tags.join(', ');
     const pluralize = tags.length > 1;
     const modifier1 = pluralize ? t('topics') : t('topic');
     const modifier2 = pluralize ? t('have') : t('has');
-
     uiEvents.next({
       event: NotificationEvents.ShowNotification,
       data: {
@@ -239,7 +217,6 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
       },
     });
   };
-
   const handleTopicSubscription = (tag: string, subscribing = true) => {
     // if not logged in, show modal
     if (!isLoggedIn) {
@@ -261,15 +238,11 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
       });
       return;
     }
-
     setTagsQueue(prev => [...prev, tag]);
-
     const newInterests = subscribing
       ? [...localSubscribedTagsRef.current, tag]
       : localSubscribedTagsRef.current.filter(topic => topic !== tag);
-
     localSubscribedTagsRef.current = newInterests;
-
     if (timer.current !== null) {
       window.clearTimeout(timer.current);
     }
@@ -278,15 +251,13 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
       700,
     );
   };
-
   if (tags.length === 0 && isLoadingTags) return <TrendingWidgetLoadingCard />;
-
   return (
     <Card className="p-4">
       <Stack className="mb-4">
-        <Text variant="button-md" weight="bold">
+        <Typography variant="sm" bold>
           {titleLabel}
-        </Text>
+        </Typography>
       </Stack>
 
       <Stack>
@@ -294,7 +265,7 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
           {tags.length === 0 && !isLoadingTags && (
             <Stack direction="column" spacing={6} alignItems="start">
               <Stack alignItems="center" justifyContent="center">
-                <Text>{noTagsLabel}</Text>
+                <Typography>{noTagsLabel}</Typography>
               </Stack>
             </Stack>
           )}

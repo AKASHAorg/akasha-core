@@ -9,9 +9,8 @@ import { XIcon } from 'lucide-react';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import SearchBar from '@akashaorg/design-system-components/lib/components/SearchBar';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import UnsavedChangesModal from '@akashaorg/design-system-components/lib/components/UnsavedChangesModal';
-
 import { EditorBlockExtension } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
 import { Header } from './header';
 import { Footer } from './footer';
@@ -19,7 +18,6 @@ import { BlockHeader } from '../../components/block-header';
 import { useBlocksPublishing } from './use-blocks-publishing';
 import { useGetProfileByDidSuspenseQuery } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
 import { EditorUIState } from './types';
-
 export const BeamEditor: React.FC = () => {
   const [uiState, setUiState] = useState<EditorUIState>('editor');
   const [focusedBlock, setFocusedBlock] = useState(null);
@@ -31,11 +29,8 @@ export const BeamEditor: React.FC = () => {
   const [nsfwBlocks, setNsfwBlocks] = useState(new Map<number, boolean>());
   const [disablePublishing, setDisablePublishing] = useState(true);
   const [newUrl, setNewUrl] = useState<string | null>(null);
-
   const bottomRef = useRef<HTMLDivElement>(null);
-
   const { t } = useTranslation('app-antenna');
-
   const { singleSpa, cancelNavigation, getCorePlugins } = useRootComponentProps();
 
   /*
@@ -51,7 +46,6 @@ export const BeamEditor: React.FC = () => {
     },
     skip: !authenticatedDID || authenticating,
   });
-
   const {
     availableBlocks,
     createContentBlocks,
@@ -72,15 +66,16 @@ export const BeamEditor: React.FC = () => {
       });
     },
   });
-
   const { akashaProfile: profileData } =
-    data?.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
-
+    data?.node && hasOwn(data.node, 'akashaProfile')
+      ? data.node
+      : {
+          akashaProfile: null,
+        };
   const disableBeamPublishing = useMemo(
     () => isPublishing || disablePublishing,
     [disablePublishing, isPublishing],
   );
-
   useEffect(() => {
     if (profileData?.nsfw) {
       setIsNsfw(true);
@@ -98,7 +93,6 @@ export const BeamEditor: React.FC = () => {
     // that's why we only care about the length here
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [blocksInUse.length]);
-
   useEffect(() => {
     if (blocksInUse.length) {
       bottomRef.current?.scrollIntoView({
@@ -107,7 +101,6 @@ export const BeamEditor: React.FC = () => {
       });
     }
   }, [blocksInUse.length]);
-
   useEffect(() => {
     if (blocksInUse.some(block => block.disablePublish === true)) {
       setDisablePublishing(true);
@@ -115,7 +108,6 @@ export const BeamEditor: React.FC = () => {
       setDisablePublishing(false);
     }
   }, [blocksInUse]);
-
   useEffect(() => {
     let navigationUnsubscribe: () => void;
     /**
@@ -128,7 +120,6 @@ export const BeamEditor: React.FC = () => {
         setNewUrl(url);
       });
     }
-
     return () => {
       if (typeof navigationUnsubscribe === 'function') {
         navigationUnsubscribe();
@@ -136,29 +127,27 @@ export const BeamEditor: React.FC = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [disableBeamPublishing]);
-
   const onBlockSelectAfter = (newSelection: ContentBlock) => {
     if (!newSelection?.propertyType) {
       return;
     }
-    addBlockToList({ propertyType: newSelection.propertyType, appName: newSelection.appName });
+    addBlockToList({
+      propertyType: newSelection.propertyType,
+      appName: newSelection.appName,
+    });
   };
-
   const handleBeamPublish = () => {
     createContentBlocks(isNsfw, editorTags, nsfwBlocks);
   };
-
   const handleNsfwCheckbox = () => {
     /*
      * If the profile is marked as NSFW, Beam NSFW checkbox should be marked as checked by default
      * and the user shouldn't be able to change it
      */
     if (profileData?.nsfw) return;
-
     setIsNsfw(!isNsfw);
     const numberOfBlocks = blocksInUse.length;
     const newNsfwBlocks = new Map();
-
     if (!isNsfw) {
       for (let key = 0; key < numberOfBlocks; key++) {
         newNsfwBlocks.set(key, true);
@@ -166,17 +155,14 @@ export const BeamEditor: React.FC = () => {
       setNsfwBlocks(newNsfwBlocks);
       return;
     }
-
     for (let key = 0; key < numberOfBlocks; key++) {
       newNsfwBlocks.set(key, false);
     }
     setNsfwBlocks(newNsfwBlocks);
   };
-
   const handleAddBlockBtn = () => {
     setUiState('blocks');
   };
-
   const handleTagsBtn = () => {
     setUiState('tags');
     /**
@@ -196,17 +182,14 @@ export const BeamEditor: React.FC = () => {
     onBlockSelectAfter(newBlock);
     setUiState('editor');
   };
-
   const targetKeys = [' ', ',', 'Enter'];
   const targetCodes = ['Space', 'Comma', 'Enter'];
   const allTags = [...new Set([...editorTags, ...newTags])];
-
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const tag = e.currentTarget.value;
     if (targetKeys.includes(tag.charAt(tag.length - 1))) return;
     setTagValue(tag);
   };
-
   const handleKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
     if (newTags.length === 10) {
       setErrorMessage('Tags limit reached');
@@ -221,7 +204,6 @@ export const BeamEditor: React.FC = () => {
       addTag();
     }
   };
-
   const addTag = () => {
     /**
      * if tag length is at least 2 and total number of tags
@@ -238,7 +220,6 @@ export const BeamEditor: React.FC = () => {
       setTagValue('');
     }
   };
-
   const handleDeleteTag = (tag: string) => {
     if (newTags.includes(tag)) {
       setNewTags(newTags.filter(_tag => _tag !== tag));
@@ -247,13 +228,11 @@ export const BeamEditor: React.FC = () => {
       setErrorMessage(null);
     }
   };
-
   const handleClickSave = () => {
     setEditorTags(newTags);
     setNewTags([]);
     setUiState('editor');
   };
-
   const handleClickCancel = () => {
     /**
      * if uiState is 'tags', reset newTags and tagValue states,
@@ -265,9 +244,7 @@ export const BeamEditor: React.FC = () => {
     }
     setUiState('editor');
   };
-
   const blocksWithActiveNsfw = [...nsfwBlocks].filter(([, value]) => !!value);
-
   useEffect(() => {
     if (blocksWithActiveNsfw.length && blocksWithActiveNsfw.length >= 1) {
       setIsNsfw(true);
@@ -294,7 +271,6 @@ export const BeamEditor: React.FC = () => {
       }
     });
   }, [blocksInUse, focusedBlock]);
-
   const handleLeavePage = () => {
     // reset states
     setDisablePublishing(true);
@@ -302,9 +278,7 @@ export const BeamEditor: React.FC = () => {
     // navigate away from editor to the desired url using singleSpa.
     singleSpa.navigateToUrl(newUrl);
   };
-
   const handleModalClose = () => setNewUrl(null);
-
   return (
     <Card className="p-0 divide-y divide-border h-[80vh] flex flex-col">
       {!!newUrl && (
@@ -374,7 +348,9 @@ export const BeamEditor: React.FC = () => {
             {blocksInUse.length > 9 && (
               <button onClick={handleClickCancel}>
                 <Stack alignItems="center" justifyContent="center" className="p-8 w-full">
-                  <Text>{t('You have reached the maximum number of blocks for a beam.')}</Text>
+                  <Typography>
+                    {t('You have reached the maximum number of blocks for a beam.')}
+                  </Typography>
                 </Stack>
               </button>
             )}
@@ -395,7 +371,7 @@ export const BeamEditor: React.FC = () => {
                       >
                         {block.icon}
                       </Stack>
-                      <Text>{block.displayName}</Text>
+                      <Typography>{block.displayName}</Typography>
                     </Stack>
                   </Stack>
                 </button>
@@ -406,16 +382,16 @@ export const BeamEditor: React.FC = () => {
           <Stack className="bg-background absolute top-0 left-0 h-full w-full overflow-auto z-[99]">
             <Stack spacing={4} className="p-4">
               <Stack direction="row" spacing={1} alignItems="center">
-                <Text variant="h6">{t('Beam Tags')}</Text>
-                <Text variant="footnotes2" color="grey7">
+                <Typography variant="h6">{t('Beam Tags')}</Typography>
+                <Typography variant="xs" className="font-medium text-grey7">
                   ({t('10 max')}.)
-                </Text>
+                </Typography>
               </Stack>
-              <Text variant="subtitle2" color="grey7">
+              <Typography variant="sm" className="font-light text-grey7">
                 {t(
                   'Use up to 10 tags to categorize your posts on AKASHA World, helping others discover your content more easily.',
                 )}
-              </Text>
+              </Typography>
               <Stack spacing={1}>
                 <SearchBar
                   inputValue={tagValue}
@@ -426,23 +402,24 @@ export const BeamEditor: React.FC = () => {
                     /** */
                   }}
                   fullWidth={true}
-                  customStyle={`${
-                    errorMessage
-                      ? 'focus-within:border-errorLight dark:focus-within:border-errorDark))'
-                      : ''
-                  }`}
+                  customStyle={`${errorMessage ? 'focus-within:border-errorLight dark:focus-within:border-errorDark))' : ''}`}
                 />
 
                 {errorMessage && (
-                  <Text variant="footnotes2" color={{ light: 'errorLight', dark: 'errorDark' }}>
-                    {t('{{errorMessage}}', { errorMessage })}
-                  </Text>
+                  <Typography
+                    variant="xs"
+                    className="font-medium text-errorLight dark:text-errorDark"
+                  >
+                    {t('{{errorMessage}}', {
+                      errorMessage,
+                    })}
+                  </Typography>
                 )}
               </Stack>
               {newTags.length === 0 && (
-                <Text variant="body2" weight="bold">
+                <Typography variant="sm" bold>
                   {t("You haven't added any tags yet")}
-                </Text>
+                </Typography>
               )}
               <Stack
                 direction="row"

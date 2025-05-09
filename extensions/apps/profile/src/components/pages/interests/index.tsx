@@ -3,7 +3,7 @@ import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { CheckIcon } from 'lucide-react';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import ProfileInterestsLoading from '../../profile/placeholders/profile-interests-loading';
 import { useTranslation } from 'react-i18next';
 import {
@@ -17,16 +17,13 @@ import getSDK from '@akashaorg/core-sdk';
 import { useApolloClient } from '@apollo/client';
 import { ProfileLabeled } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import EditInterests from '../../edit-interests';
-
 type InterestsPageProps = {
   profileDID: string;
 };
-
 type Topic = {
   value: string;
   labelType: string;
 };
-
 const InterestsPage: React.FC<InterestsPageProps> = props => {
   const { profileDID } = props;
   const { t } = useTranslation('app-profile');
@@ -39,16 +36,18 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
   const isLoggedIn = !!authenticatedDID;
   const navigateTo = getCorePlugins().routing.navigateTo;
   const apolloClient = useApolloClient();
-
   const { data: profileInterestsQueryData, loading: loadingProfileInterests } =
     useGetInterestsByDidQuery({
-      variables: { id: profileDID },
+      variables: {
+        id: profileDID,
+      },
       skip: !isLoggedIn,
     });
-
   const { data: loggedUserInterestsQueryData, loading: loadingLoggedUserInterests } =
     useGetInterestsByDidQuery({
-      variables: { id: authenticatedDID },
+      variables: {
+        id: authenticatedDID,
+      },
       skip: !isLoggedIn,
     });
 
@@ -77,13 +76,11 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
         }))
       : [];
   }, [isLoggedIn, loggedUserInterestsQueryData]);
-
   useEffect(() => {
     if (loggedUserInterests && loggedUserInterests.length) {
       setActiveInterests(loggedUserInterests);
     }
   }, [loggedUserInterests]);
-
   const interestSubscriptionId = useMemo(() => {
     if (!isLoggedIn) return null;
     return loggedUserInterestsQueryData &&
@@ -91,17 +88,17 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
       ? loggedUserInterestsQueryData.node.akashaProfileInterests?.id
       : null;
   }, [isLoggedIn, loggedUserInterestsQueryData]);
-
   const sdk = getSDK();
-
   const [createInterestsMutation] = useCreateInterestsMutation({
-    context: { source: sdk.services.gql.contextSources.composeDB },
+    context: {
+      source: sdk.services.gql.contextSources.composeDB,
+    },
   });
-
   const [updateInterestsMutation] = useUpdateInterestsMutation({
-    context: { source: sdk.services.gql.contextSources.composeDB },
+    context: {
+      source: sdk.services.gql.contextSources.composeDB,
+    },
   });
-
   const handleInterestClick = (topic: Topic) => {
     navigateTo?.({
       appName: '@akashaorg/app-antenna',
@@ -109,14 +106,12 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
         `${navRoutes.Tags}/${topic.value}`,
     });
   };
-
   const navigateToProfileInfoPage = () => {
     navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => `/${profileDID}`,
     });
   };
-
   const runMutations = (interests: ProfileLabeled[]) => {
     setIsProcessing(true);
     if (interestSubscriptionId) {
@@ -130,7 +125,9 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
           },
         },
         onCompleted: async () => {
-          await apolloClient.refetchQueries({ include: [GetInterestsByDidDocument] });
+          await apolloClient.refetchQueries({
+            include: [GetInterestsByDidDocument],
+          });
           setActiveInterests(interests);
           setIsProcessing(false);
         },
@@ -148,7 +145,9 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
           },
         },
         onCompleted: async () => {
-          await apolloClient.refetchQueries({ include: [GetInterestsByDidDocument] });
+          await apolloClient.refetchQueries({
+            include: [GetInterestsByDidDocument],
+          });
           setActiveInterests(interests);
           setIsProcessing(false);
         },
@@ -158,21 +157,19 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
       });
     }
   };
-
   if (loadingProfileInterests || loadingLoggedUserInterests || authenticating)
     return <ProfileInterestsLoading />;
-
   return (
     <Stack direction="column" spacing={4} className="w-full">
       <Card className="p-4 rounded-[1.25px]">
         {profileDID !== authenticatedDID && (
           <Stack direction="column" spacing={2}>
-            <Text variant="h5">{t('Interests')} </Text>
-            <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey7' }}>
+            <Typography variant="h5">{t('Interests')} </Typography>
+            <Typography variant="sm" className="font-light text-grey4 dark:text-grey7">
               {t(
                 "Spot something interesting?  You can subscribe to any  of your fellow member interests and they'll shape the beams in your antenna! ",
               )}
-            </Text>
+            </Typography>
 
             <Stack
               direction="row"
@@ -209,8 +206,8 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
             moreInterestDescription={t('Separate your interests by comma or space!')}
             moreInterestPlaceholder={t('Interests')}
             myInterests={loggedUserInterests}
-            interests={[]} /* TODO: when indexed list of interests hook is ready connect it */
-            maxInterests={10}
+            interests={[]}
+            /* TODO: when indexed list of interests hook is ready connect it */ maxInterests={10}
             labelType={sdk.services.gql.labelTypes.INTEREST}
             maxInterestsErrorMessage={t(
               'Max interests reached. Remove some interests to add more.',
@@ -232,5 +229,4 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
     </Stack>
   );
 };
-
 export default InterestsPage;

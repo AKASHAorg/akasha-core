@@ -4,13 +4,12 @@ import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 import { Loader2 } from 'lucide-react';
 import { Trash2Icon, XCircleIcon } from 'lucide-react';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 
 export enum GalleryImageState {
   ERROR = 'error',
   LOADING = 'Loading',
 }
-
 export type GalleryImageProps = {
   name: string;
   src: string;
@@ -20,7 +19,6 @@ export type GalleryImageProps = {
   handleClickImage?: () => void;
   onDelete: () => void;
 };
-
 export const GalleryImage: React.FC<GalleryImageProps> = props => {
   const { name, src, state, uploadingLabel, uploadingErrorLabel, handleClickImage, onDelete } =
     props;
@@ -43,7 +41,7 @@ export const GalleryImage: React.FC<GalleryImageProps> = props => {
           className={state === GalleryImageState.LOADING ? 'cursor-not-allowed' : ''}
         >
           <AppIcon
-            placeholderIcon={<Trash2Icon className='h-3 w-3 [&>*]:stroke-white'/>}
+            placeholderIcon={<Trash2Icon className="h-3 w-3 [&>*]:stroke-white" />}
             size="xs"
             iconSize="sm"
             iconStyle="[&>*]:stroke-white"
@@ -66,14 +64,14 @@ export const GalleryImage: React.FC<GalleryImageProps> = props => {
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
           )}
           {state === GalleryImageState.ERROR && (
-            <Text variant="button-sm" align="center">
+            <Typography variant="xs" bold className="text-center">
               {uploadingErrorLabel}
-            </Text>
+            </Typography>
           )}
           {state === GalleryImageState.LOADING && (
-            <Text variant="button-sm" align="center">
+            <Typography variant="xs" bold className="text-center">
               {uploadingLabel}
-            </Text>
+            </Typography>
           )}
         </Stack>
       )}

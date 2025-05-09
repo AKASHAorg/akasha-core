@@ -19,7 +19,7 @@ import { ModalExtension } from '@akashaorg/ui-lib-extensions/lib/react/modal-ext
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { TriangleAlertIcon, CircleAlertIcon } from 'lucide-react';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import TopbarLoader from '@akashaorg/design-system-components/lib/components/Loaders/topbar-loader';
 import MiniProfileWidgetLoader from '@akashaorg/design-system-components/lib/components/Loaders/mini-profile-widget-loader';
@@ -27,12 +27,10 @@ import TrendingWidgetLoader from '@akashaorg/design-system-components/lib/compon
 import SidebarLoader from '@akashaorg/design-system-components/lib/components/Loaders/sidebar-loader';
 import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
 import { useSticky } from './use-sticky';
-
 const sidebarLoadingIndicator = <SidebarLoader />;
 const miniProfileLoadingIndicator = <MiniProfileWidgetLoader />;
 const trendingWidgetLoadingIndicator = <TrendingWidgetLoader />;
 const topbarLoadingIndicator = <TopbarLoader />;
-
 const Layout: React.FC<unknown> = () => {
   const widgetContainerRef = useRef<HTMLDivElement>(null);
   const widgetContentRef = useRef<HTMLDivElement>(null);
@@ -43,26 +41,20 @@ const Layout: React.FC<unknown> = () => {
   const [showSidebar, setShowSidebar] = useState(
     !window.matchMedia(startMobileSidebarHidingBreakpoint).matches,
   );
-
   const { uiEvents, layoutSlots, worldConfig } = useRootComponentProps();
   // initialise fallback theme, if none is set
   useTheme();
-
   const [position, stickyPos, contentHeight, offset] = useSticky(
     widgetContainerRef,
     widgetContentRef,
     8,
   );
-
   useEffect(() => {
     const mql = window.matchMedia(startMobileSidebarHidingBreakpoint);
-
     const resize = () => {
       setShowSidebar(!mql.matches);
     };
-
     window.addEventListener('resize', resize);
-
     return () => {
       window.removeEventListener('resize', resize);
     };
@@ -72,7 +64,6 @@ const Layout: React.FC<unknown> = () => {
   const [showWidgets, setshowWidgets] = useState(
     window.matchMedia(startWidgetsTogglingBreakpoint).matches,
   );
-
   useLayoutEffect(() => {
     const handleResize = () => {
       setshowWidgets(window.matchMedia(startWidgetsTogglingBreakpoint).matches);
@@ -83,9 +74,7 @@ const Layout: React.FC<unknown> = () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
-
   const maintenanceReq = usePlaformHealthCheck();
-
   const isPlatformHealthy = useMemo(() => {
     if (!maintenanceReq.isLoading) {
       return maintenanceReq.data.success;
@@ -93,35 +82,27 @@ const Layout: React.FC<unknown> = () => {
     // defaults to healthy.
     return true;
   }, [maintenanceReq.isLoading, maintenanceReq.data]);
-
   const _uiEvents = useRef(uiEvents);
   const { t } = useTranslation('ui-widget-layout');
-
   const handleSidebarShow = () => {
     setShowSidebar(true);
   };
-
   const handleSidebarHide = () => {
     setShowSidebar(false);
   };
-
   const handleWidgetsShow = React.useCallback(() => {
     if (showWidgets) return;
     setshowWidgets(true);
   }, [showWidgets]);
-
   const handleWidgetsHide = () => {
     setshowWidgets(false);
   };
-
   const wrapperRef = useRef(null);
-
   useClickAway(wrapperRef, () => {
     _uiEvents.current.next({
       event: EventTypes.HideSidebar,
     });
   });
-
   useEffect(() => {
     const eventsSub = _uiEvents.current
       .pipe(
@@ -158,29 +139,18 @@ const Layout: React.FC<unknown> = () => {
       }
     };
   }, [handleWidgetsShow]);
-
   const handleExitPreview = () => {
     if (sessionStorage.getItem('previewWorldId')) {
       sessionStorage.removeItem('previewWorldId');
       window.location.reload();
     }
   };
-
   const layoutStyle = `grid min-h-full lg:${showWidgets ? 'grid-cols-[8fr_4fr]' : 'grid-cols-[2fr_8fr_2fr]'} ${showSidebar ? 'xl:grid-cols-[3fr_6fr_3fr] ' : 'xl:grid-cols-[1.5fr_6fr_3fr_1.5fr]'} xl:max-w-7xl xl:mx-auto gap-x-3 w-full`;
-
   const mobileLayoverStyle = `
-      fixed xl:sticky h-full z-[99] ${
-        showSidebar && window.matchMedia(startMobileSidebarHidingBreakpoint).matches
-          ? 'min-w-[100vw] xl:min-w-max bg-black/30 dark:bg-white/10 z-[99] left-0 right-0'
-          : ''
-      }`;
-
+      fixed xl:sticky h-full z-[99] ${showSidebar && window.matchMedia(startMobileSidebarHidingBreakpoint).matches ? 'min-w-[100vw] xl:min-w-max bg-black/30 dark:bg-white/10 z-[99] left-0 right-0' : ''}`;
   const sidebarSlotStyle = `
-      sticky top-0 h-screen transition-all duration-200 transform z-[99] ${
-        showSidebar ? 'w-fit translate-x-0' : '-translate-x-full xl:hidden'
-      } ${needSidebarToggling ? 'fixed left-0' : ''}
+      sticky top-0 h-screen transition-all duration-200 transform z-[99] ${showSidebar ? 'w-fit translate-x-0' : '-translate-x-full xl:hidden'} ${needSidebarToggling ? 'fixed left-0' : ''}
       `;
-
   return (
     <Stack
       style={{
@@ -227,9 +197,12 @@ const Layout: React.FC<unknown> = () => {
                 <Card className="p-4 mb-4">
                   <Stack direction="row">
                     <CircleAlertIcon className="h-5 w-5 mr-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
-                    <Text variant="subtitle2">
-                      {t('You are previewing "{{worldName}}"', { worldName: worldConfig.title })}.
-                    </Text>
+                    <Typography variant="sm" className="font-light">
+                      {t('You are previewing "{{worldName}}"', {
+                        worldName: worldConfig.title,
+                      })}
+                      .
+                    </Typography>
                   </Stack>
                   <Button variant="link" onClick={handleExitPreview}>
                     {t('Leave Preview')}
@@ -244,14 +217,13 @@ const Layout: React.FC<unknown> = () => {
                   <Stack direction="row">
                     <TriangleAlertIcon className="h-5 w-5 mr-4 [&>*]:stroke-grey3 dark:[&>*]:stroke-grey3" />
                     <Stack>
-                      <Text variant="footnotes2" color={{ light: 'grey3', dark: 'grey3' }}>
-                        {`${t(
-                          'AKASHA is undergoing maintenance and you may experience difficulties accessing some of the apps right now',
-                        )}. ${t('Please check back soon')}.`}
-                      </Text>
-                      <Text variant="footnotes2" color={{ light: 'grey3', dark: 'grey3' }}>{`${t(
-                        'Thank you for your patience',
-                      )} 😸`}</Text>
+                      <Typography variant="xs" className="font-medium text-grey3 dark:text-grey3">
+                        {`${t('AKASHA is undergoing maintenance and you may experience difficulties accessing some of the apps right now')}. ${t('Please check back soon')}.`}
+                      </Typography>
+                      <Typography
+                        variant="xs"
+                        className="font-medium text-grey3 dark:text-grey3"
+                      >{`${t('Thank you for your patience')} 😸`}</Typography>
                     </Stack>
                   </Stack>
                 </Card>
@@ -272,7 +244,9 @@ const Layout: React.FC<unknown> = () => {
           >
             <Stack className="h-full hidden lg:flex">
               <Stack
-                style={cssVars({ '--offset': `${offset}px` })}
+                style={cssVars({
+                  '--offset': `${offset}px`,
+                })}
                 className={`mt-[var(--offset)]`}
               />
               <Stack
@@ -302,15 +276,12 @@ const Layout: React.FC<unknown> = () => {
     </Stack>
   );
 };
-
 const LayoutWidget = () => {
   const { getTranslationPlugin } = useRootComponentProps();
-
   return (
     <I18nextProvider i18n={getTranslationPlugin().i18n}>
       <Layout />
     </I18nextProvider>
   );
 };
-
 export default withProviders(LayoutWidget);

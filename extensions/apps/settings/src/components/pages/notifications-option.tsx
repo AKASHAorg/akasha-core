@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import PageLayout from './base-layout';
 import { useAkashaStore, useRootComponentProps, useNotifications } from '@akashaorg/ui-core-hooks';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
@@ -134,7 +134,7 @@ const NotificationsOption: React.FC = () => {
 
             const children = (
               <>
-                <Text>{`${t('{{itemLabel}}', { itemLabel: item.label as string })}`}</Text>
+                <Typography>{`${t('{{itemLabel}}', { itemLabel: item.label as string })}`}</Typography>
                 {!item.isSubheading && (
                   <ChevronRightIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
                 )}

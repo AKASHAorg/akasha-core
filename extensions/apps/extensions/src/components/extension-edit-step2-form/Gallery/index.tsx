@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Image } from '@akashaorg/ui/lib/akasha-components/image';
 import ImageOverlay from '@akashaorg/design-system-components/lib/components/ImageOverlay';
 import { PlusIcon } from 'lucide-react';
 import { type GalleryImage } from '@akashaorg/typings/lib/ui';
-
 const MAX_IMAGES_DISPLAY = 3;
-
 export type GalleryProps = {
   galleryFieldLabel: string;
   galleryDescriptionLabel: string;
@@ -19,7 +17,6 @@ export type GalleryProps = {
   maxGalleryImages: number;
   handleMediaClick: () => void;
 };
-
 export const Gallery: React.FC<GalleryProps> = props => {
   const {
     galleryFieldLabel,
@@ -31,28 +28,22 @@ export const Gallery: React.FC<GalleryProps> = props => {
     maxGalleryImages,
     handleMediaClick,
   } = props;
-
   const galleryHasImages = images?.length > 0;
   const displayImages = galleryHasImages ? images.slice(0, MAX_IMAGES_DISPLAY) : [];
   const [showOverlay, setShowOverlay] = useState(false);
   const [selectedImage, setSelectedImage] = useState<GalleryImage>(null);
-
   const handleCloseOverlay = () => {
     setShowOverlay(false);
   };
-
   const handleClickImage = (image: GalleryImage) => {
     setShowOverlay(true);
     setSelectedImage(image);
   };
-
   return (
     <Stack spacing={4} direction="column">
       <Stack spacing={2} direction="column">
         <Stack direction="row" spacing={2} justifyContent="between" alignItems="center">
-          <Text variant="h6" as="label">
-            {galleryFieldLabel}
-          </Text>
+          <Typography variant="h6">{galleryFieldLabel}</Typography>
           <Button
             variant="link"
             {...(!galleryHasImages && {
@@ -64,9 +55,9 @@ export const Gallery: React.FC<GalleryProps> = props => {
             {galleryHasImages ? updateGalleryLabel : addLabel}
           </Button>
         </Stack>
-        <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
+        <Typography variant="sm" className="text-grey4 dark:text-grey6 font-light">
           {galleryDescriptionLabel}
-        </Text>
+        </Typography>
       </Stack>
       {galleryHasImages && (
         <Stack className="grid grid-cols-[repeat(auto-fill,_minmax(min(10rem,_100%),_1fr))] gap-4">
@@ -101,9 +92,9 @@ export const Gallery: React.FC<GalleryProps> = props => {
           ))}
         </Stack>
       )}
-      <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey6' }} weight="normal">
+      <Typography variant="xs" className="font-medium text-grey4 dark:text-grey6 font-normal">
         {images?.length ?? 0}/{maxGalleryImages} {imagesUploadedLabel}
-      </Text>
+      </Typography>
     </Stack>
   );
 };

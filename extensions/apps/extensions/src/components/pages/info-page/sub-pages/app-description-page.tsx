@@ -1,5 +1,5 @@
 import React from 'react';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
@@ -9,7 +9,6 @@ import {
   AkashaAppApplicationType,
   AppImageSource,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-
 type AppDescriptionPageProps = {
   appId: string;
   description?: string;
@@ -18,11 +17,9 @@ type AppDescriptionPageProps = {
   extensionDisplayName?: string;
   extensionType?: AkashaAppApplicationType;
 };
-
 export const AppDescriptionPage = (props: AppDescriptionPageProps) => {
   const { description, extensionLogo, extensionDisplayName, extensionName, extensionType } = props;
   const { t } = useTranslation();
-
   return (
     <>
       <Card className="p-4">
@@ -36,7 +33,7 @@ export const AppDescriptionPage = (props: AppDescriptionPageProps) => {
           />
           <Divider />
           <Stack spacing={4}>
-            <Text variant="body2">{description}</Text>
+            <Typography variant="sm">{description}</Typography>
           </Stack>
         </Stack>
       </Card>

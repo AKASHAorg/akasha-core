@@ -2,7 +2,7 @@ import React, { useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import ExtensionEditStep2Form, {
   ExtensionEditStep2FormValues,
 } from '../../extension-edit-step2-form';
@@ -12,21 +12,17 @@ import { DRAFT_EXTENSIONS, ExtType, MAX_GALLERY_IMAGES } from '../../../constant
 import { useAtom } from 'jotai';
 import { AtomContext, FormData } from './main-page';
 import { Stepper } from '@akashaorg/ui/lib/akasha-components/stepper';
-
 type ExtensionEditStep2PageProps = {
   extensionId: string;
 };
-
 export const ExtensionEditStep2Page: React.FC<ExtensionEditStep2PageProps> = ({ extensionId }) => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
   const { uiEvents } = useRootComponentProps();
   const uiEventsRef = React.useRef(uiEvents);
-
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
-
   const showErrorNotification = React.useCallback((title: string) => {
     uiEventsRef.current.next({
       event: NotificationEvents.ShowNotification,
@@ -45,9 +41,7 @@ export const ExtensionEditStep2Page: React.FC<ExtensionEditStep2PageProps> = ({ 
       showErrorNotification(error);
     }
   }, [authenticatedDID, showErrorNotification]);
-
   const extensionData = draftExtensions?.find(draftExtension => draftExtension.id === extensionId);
-
   const formValue = useMemo(() => {
     try {
       return JSON.parse(sessionStorage.getItem(extensionId)) || {};
@@ -55,22 +49,21 @@ export const ExtensionEditStep2Page: React.FC<ExtensionEditStep2PageProps> = ({ 
       showErrorNotification(error);
     }
   }, [extensionId, showErrorNotification]);
-
   const defaultValues = useMemo(() => {
     return formValue.lastCompletedStep > 1 ? formValue : extensionData;
   }, [extensionData, formValue]);
-
   const formDefault: FormData = useMemo(() => {
     return {
       nsfw: defaultValues?.nsfw,
       description: defaultValues?.description,
       gallery: defaultValues?.gallery,
-      links: defaultValues?.links?.map((link, index) => ({ _id: index + 1, ...link })),
+      links: defaultValues?.links?.map((link, index) => ({
+        _id: index + 1,
+        ...link,
+      })),
     };
   }, [defaultValues]);
-
   const [, setForm] = useAtom<FormData>(useContext(AtomContext));
-
   const galleryImages = useMemo(() => {
     const gallery = Array.isArray(formValue?.gallery) ? formValue.gallery : formDefault?.gallery;
     return gallery?.map(img => {
@@ -91,7 +84,6 @@ export const ExtensionEditStep2Page: React.FC<ExtensionEditStep2PageProps> = ({ 
       };
     });
   }, [formDefault?.gallery, formValue.gallery, showErrorNotification]);
-
   const storeFormData = (data: ExtensionEditStep2FormValues) => {
     const step2Data = {
       ...data,
@@ -114,7 +106,6 @@ export const ExtensionEditStep2Page: React.FC<ExtensionEditStep2PageProps> = ({ 
       };
     });
   };
-
   return (
     <>
       <Stack justifyContent="center" alignItems="center" className="p-4">
@@ -122,9 +113,9 @@ export const ExtensionEditStep2Page: React.FC<ExtensionEditStep2PageProps> = ({ 
       </Stack>
       <Stack spacing={4}>
         <Stack className="p-4">
-          <Text variant="h5" weight="semibold" align="center">
+          <Typography variant="h5" className="font-semibold text-center">
             {t('Present your Extension')}
-          </Text>
+          </Typography>
         </Stack>
         <ExtensionEditStep2Form
           nsfwFieldLabel={t('Extension NSFW?')}
@@ -151,7 +142,9 @@ export const ExtensionEditStep2Page: React.FC<ExtensionEditStep2PageProps> = ({ 
             storeFormData(formData);
             navigate({
               to: '/edit-extension/$extensionId/gallery-manager',
-              search: { type: ExtType.LOCAL },
+              search: {
+                type: ExtType.LOCAL,
+              },
               params: {
                 extensionId,
               },

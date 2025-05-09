@@ -9,7 +9,7 @@ import {
 } from '@akashaorg/ui-core-hooks';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import ExtensionCreationForm from '../../extension-creation-form';
 import { DRAFT_EXTENSIONS } from '../../../constants';
@@ -21,19 +21,15 @@ import {
   ErrorLoaderFooter,
   ErrorLoaderTitle,
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
-
 export const ExtensionCreationPage: React.FC<unknown> = () => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
-
   const { uiEvents, baseRouteName, getCorePlugins } = useRootComponentProps();
   const uiEventsRef = React.useRef(uiEvents);
   const navigateTo = getCorePlugins().routing.navigateTo;
-
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
-
   const handleConnectButtonClick = () => {
     navigateTo?.({
       appName: '@akashaorg/app-auth-ewa',
@@ -44,7 +40,6 @@ export const ExtensionCreationPage: React.FC<unknown> = () => {
       },
     });
   };
-
   const showErrorNotification = React.useCallback((title: string) => {
     uiEventsRef.current.next({
       event: NotificationEvents.ShowNotification,
@@ -54,7 +49,6 @@ export const ExtensionCreationPage: React.FC<unknown> = () => {
       },
     });
   }, []);
-
   const draftExtensions: Extension[] = useMemo(() => {
     try {
       return JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [];
@@ -62,20 +56,17 @@ export const ExtensionCreationPage: React.FC<unknown> = () => {
       showErrorNotification(error);
     }
   }, [authenticatedDID, showErrorNotification]);
-
   const {
     loading: loadingAppInfo,
     error: appInfoQueryError,
     handleCheckExtProp,
     isDuplicateExtProp,
   } = useValidateUniqueExtensionProp(authenticatedDID, draftExtensions);
-
   useEffect(() => {
     if (appInfoQueryError) {
       showErrorNotification(appInfoQueryError.message);
     }
   }, [appInfoQueryError, showErrorNotification]);
-
   if (!authenticatedDID) {
     return (
       <ErrorLoader type="not-authenticated">
@@ -87,13 +78,12 @@ export const ExtensionCreationPage: React.FC<unknown> = () => {
       </ErrorLoader>
     );
   }
-
   return (
     <Card className="py-4 px-0 mb-2">
       <Stack spacing={4}>
-        <Text variant="h5" weight="semibold" align="center">
+        <Typography variant="h5" className="font-semibold text-center">
           {t('Create an Extension')}
-        </Text>
+        </Typography>
         <Divider />
         <Stack>
           <ExtensionCreationForm
@@ -133,15 +123,15 @@ export const ExtensionCreationPage: React.FC<unknown> = () => {
                   name: data?.name,
                   localDraft: true,
                 };
-
                 localStorage.setItem(
                   `${DRAFT_EXTENSIONS}-${authenticatedDID}`,
                   JSON.stringify([...draftExtensions, newExtension]),
                 );
-
                 navigate({
                   to: `/create-extension/$extensionId`,
-                  params: { extensionId: newExtension.id },
+                  params: {
+                    extensionId: newExtension.id,
+                  },
                 });
               },
             }}

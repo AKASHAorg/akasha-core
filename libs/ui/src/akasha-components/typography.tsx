@@ -12,7 +12,7 @@ const typographyVariants = cva('text-foreground', {
       h3: 'scroll-m-20 text-3xl	font-bold',
       h4: 'scroll-m-20 text-2xl	font-bold',
       h5: 'scroll-m-20 text-xl font-bold',
-      h6: 'scroll-m-20 text-l font-bold',
+      h6: 'scroll-m-20 text-lg font-bold',
       p: 'text-base',
       sm: 'text-sm',
       xs: 'text-xs',

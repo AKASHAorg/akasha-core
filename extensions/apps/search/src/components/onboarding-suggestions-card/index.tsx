@@ -3,7 +3,7 @@ import { Tag, type Image, Profile } from '@akashaorg/typings/lib/ui';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import { UserCircleIcon } from 'lucide-react';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { TagButton } from './tag-button';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import {
@@ -75,7 +75,7 @@ const OnboardingSuggestionsCard: React.FC<OnboardingSuggestionsCardProps> = prop
     <Card className="shadow-none">
       <Stack spacing={4}>
         <Stack spacing={4}>
-          <Text variant="h5">{topicsLabel}</Text>
+          <Typography variant="h5">{topicsLabel}</Typography>
 
           <Stack direction="row" spacing={2} className="flex-wrap">
             {tags?.map((tag, index) => (
@@ -90,7 +90,7 @@ const OnboardingSuggestionsCard: React.FC<OnboardingSuggestionsCardProps> = prop
           </Stack>
         </Stack>
         <Stack spacing={4}>
-          <Text variant="h5">{peopleLabel}</Text>
+          <Typography variant="h5">{peopleLabel}</Typography>
 
           {profiles?.map((profile, index) => (
             <Stack key={index} direction="row" alignItems="center" justifyContent="between">

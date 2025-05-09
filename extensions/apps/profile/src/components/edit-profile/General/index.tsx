@@ -60,12 +60,7 @@ export const General: React.FC<GeneralProps> = ({
           <FormItem>
             <FormLabel>{bioField.label}</FormLabel>
             <FormControl>
-              <Textarea
-                className="w-0 min-w-full py-0"
-                {...field}
-                onChange={field.onChange}
-                maxLength={MAX_BIO_LENGTH}
-              />
+              <Textarea {...field} onChange={field.onChange} maxLength={MAX_BIO_LENGTH} />
             </FormControl>
             <FormMessage />
           </FormItem>

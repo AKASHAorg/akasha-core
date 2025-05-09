@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { ChevronRightIcon } from 'lucide-react';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import PageLayout from './base-layout';
 import { ILegalItem, legalItems } from '../../utils/legal-items';
 import { useNavigate } from '@tanstack/react-router';
@@ -27,7 +27,7 @@ const MainPage: React.FC = () => {
 
           const children = (
             <>
-              <Text>{`${t('{{itemLabel}}', { itemLabel: item.label as string })}`}</Text>
+              <Typography>{`${t('{{itemLabel}}', { itemLabel: item.label as string })}`}</Typography>
               <ChevronRightIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
             </>
           );

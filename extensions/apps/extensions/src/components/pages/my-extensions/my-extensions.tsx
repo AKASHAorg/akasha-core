@@ -37,22 +37,17 @@ import {
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { ExtensionElement } from './extension-element';
 import appRoutes, { MY_EXTENSIONS } from '../../../routes';
 import { DRAFT_EXTENSIONS } from '../../../constants';
-
 const ENTRY_HEIGHT = 92;
-
 export const MyExtensionsPage: React.FC<unknown> = () => {
   const { uiEvents, baseRouteName, getCorePlugins } = useRootComponentProps();
   const uiEventsRef = React.useRef(uiEvents);
-
   const { t } = useTranslation('app-extensions');
-
   const navigate = useNavigate();
   const navigateTo = getCorePlugins().routing.navigateTo;
-
   const showErrorNotification = React.useCallback((title: string) => {
     uiEventsRef.current.next({
       event: NotificationEvents.ShowNotification,
@@ -62,15 +57,14 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
       },
     });
   }, []);
-
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
-
   const handleNavigateToCreateApp = () => {
-    navigate({ to: '/create-extension' });
+    navigate({
+      to: '/create-extension',
+    });
   };
-
   const extensionTypeMenuItems = useMemo(
     () => [
       capitalize(AkashaAppApplicationType.App),
@@ -80,7 +74,6 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
     ],
     [],
   );
-
   const extensionStatusMenuItems = [
     ExtensionStatus.LocalDraft,
     ExtensionStatus.Draft,
@@ -95,7 +88,6 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
     setSelectedStatus('');
     setSelectedType('');
   };
-
   const {
     data: appsByPubReqData,
     error,
@@ -105,7 +97,9 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
     variables: {
       id: authenticatedDID,
       first: 10,
-      sorting: { createdAt: SortOrder.Desc },
+      sorting: {
+        createdAt: SortOrder.Desc,
+      },
     },
     fetchPolicy: 'cache-first',
     notifyOnNetworkStatusChange: true,
@@ -116,15 +110,12 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
       ? appsByPubReqData.node.akashaAppList
       : null;
   }, [appsByPubReqData]);
-
   const appsData = useMemo(() => {
     return appsList?.edges?.map(edge => edge.node) || [];
   }, [appsList]);
-
   const pageInfo = useMemo(() => {
     return appsList?.pageInfo;
   }, [appsList]);
-
   const appElements = useMemo(() => {
     return appsData?.filter(ext => {
       return ext?.applicationType === selectedType.toUpperCase();
@@ -144,7 +135,6 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
       setDraftExtensions([]);
     }
   }, [authenticatedDID, showErrorNotification]);
-
   useEffect(() => {
     getDraftExtensions();
     // subscribe and listen to events
@@ -157,14 +147,12 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
           }
         },
       });
-
     return () => {
       if (eventsSub) {
         eventsSub.unsubscribe();
       }
     };
   }, [authenticatedDID, getDraftExtensions]);
-
   const handleConnectButtonClick = () => {
     navigateTo?.({
       appName: '@akashaorg/app-auth-ewa',
@@ -175,12 +163,10 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
       },
     });
   };
-
   const allMyExtensions = useMemo(
     () => [...draftExtensions, ...appElements],
     [draftExtensions, appElements],
   );
-
   if (!authenticatedDID) {
     return (
       <ErrorLoader type="not-authenticated">
@@ -194,11 +180,10 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
       </ErrorLoader>
     );
   }
-
   return (
     <Stack spacing={4}>
       <Stack direction="row" justifyContent="between">
-        <Text variant="h5">{t('My extensions')}</Text>
+        <Typography variant="h5">{t('My extensions')}</Typography>
         <Link target="_blank" to="https://docs.akasha.world" customStyle="w-fit self-end">
           <BookOpenIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
         </Link>
@@ -209,7 +194,7 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
         alignItems="center"
         className="p-3 bg-inherit rounded-[1.25rem] bg-nested-card"
       >
-        <Text variant="body1">{t('Create an extension ✨ 🚀')}</Text>
+        <Typography>{t('Create an extension ✨ 🚀')}</Typography>
         <Button size="sm" onClick={handleNavigateToCreateApp}>
           {t('Create')}
         </Button>

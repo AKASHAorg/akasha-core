@@ -12,7 +12,6 @@ import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Textarea } from '@akashaorg/ui/lib/akasha-components/textarea';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ButtonType } from '@akashaorg/design-system-components/lib/components/types/common.types';
@@ -26,8 +25,7 @@ import {
   AppLinkSource,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import Accordion from '@akashaorg/design-system-core/lib/components/Accordion';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 export enum FieldName {
   logoImage = 'logoImage',
   coverImage = 'coverImage',
@@ -35,15 +33,15 @@ export enum FieldName {
   gallery = 'gallery',
   links = 'links',
 }
-
 export type ExtensionEditPublishedFormValues = {
   logoImage?: Image | File | null;
   coverImage?: Image | File | null;
   description?: string;
   gallery?: AppImageSource[];
-  links?: (AppLinkSource & { _id?: number })[];
+  links?: (AppLinkSource & {
+    _id?: number;
+  })[];
 };
-
 export type ExtensionEditPublishedFormProps = {
   header: Omit<HeaderProps, 'onLogoImageChange' | 'onCoverImageChange'>;
   defaultValues?: ExtensionEditPublishedFormValues;
@@ -73,7 +71,6 @@ export type ExtensionEditPublishedFormProps = {
   linkPlaceholderLabel?: string;
   handleManageGalleryClick?: (formData: ExtensionEditPublishedFormValues) => void;
 } & Omit<GalleryProps, 'handleMediaClick'>;
-
 const ExtensionEditPublishedForm: React.FC<ExtensionEditPublishedFormProps> = props => {
   const {
     header,
@@ -102,13 +99,11 @@ const ExtensionEditPublishedForm: React.FC<ExtensionEditPublishedFormProps> = pr
     maxGalleryImages,
     handleManageGalleryClick,
   } = props;
-
   const form = useForm<ExtensionEditPublishedFormValues>({
     defaultValues,
     resolver: zodResolver(schema),
     mode: 'onChange',
   });
-
   const {
     control,
     setValue,
@@ -116,9 +111,7 @@ const ExtensionEditPublishedForm: React.FC<ExtensionEditPublishedFormProps> = pr
     trigger,
     formState: { errors },
   } = form;
-
   const isValid = !Object.keys(errors).length;
-
   const onSave = (event: SyntheticEvent) => {
     event.preventDefault();
     const formValues = getValues();
@@ -139,13 +132,10 @@ const ExtensionEditPublishedForm: React.FC<ExtensionEditPublishedFormProps> = pr
       });
     }
   };
-
   const [showAccordion, setShowAccordion] = useState(false);
-
   const handleToggleAccordion = () => {
     setShowAccordion(!showAccordion);
   };
-
   return (
     <Form {...form}>
       <form onSubmit={onSave} className={`h-full`}>
@@ -157,10 +147,14 @@ const ExtensionEditPublishedForm: React.FC<ExtensionEditPublishedFormProps> = pr
               nsfw={displayOnlyValues.nsfw}
               showExtraInfo={true}
               onLogoImageChange={logoImage => {
-                setValue('logoImage', logoImage, { shouldDirty: true });
+                setValue('logoImage', logoImage, {
+                  shouldDirty: true,
+                });
               }}
               onCoverImageChange={coverImage => {
-                setValue('coverImage', coverImage, { shouldDirty: true });
+                setValue('coverImage', coverImage, {
+                  shouldDirty: true,
+                });
               }}
             />
           </Stack>
@@ -172,35 +166,35 @@ const ExtensionEditPublishedForm: React.FC<ExtensionEditPublishedFormProps> = pr
               accordionId={extensionInformationLabel}
               open={showAccordion}
               titleNode={
-                <Text variant="h6" weight="bold">
+                <Typography variant="h6" bold>
                   {extensionInformationLabel}
-                </Text>
+                </Typography>
               }
               contentNode={
                 <Stack spacing={4}>
-                  <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey6' }}>
+                  <Typography variant="xs" className="font-medium text-grey4 dark:text-grey6">
                     {extensionInformationDescriptionLabel}
-                  </Text>
+                  </Typography>
                   <Stack spacing={4}>
                     <Stack spacing={2}>
-                      <Text variant="h6" weight="bold">
+                      <Typography variant="h6" bold>
                         {extensionIdLabel}
-                      </Text>
-                      <Text variant="body2">{displayOnlyValues?.name}</Text>
+                      </Typography>
+                      <Typography variant="sm">{displayOnlyValues?.name}</Typography>
                     </Stack>
                     <Divider />
                     <Stack spacing={2}>
-                      <Text variant="h6" weight="bold">
+                      <Typography variant="h6" bold>
                         {extensionDisplayNameLabel}
-                      </Text>
-                      <Text variant="body2">{displayOnlyValues?.displayName}</Text>
+                      </Typography>
+                      <Typography variant="sm">{displayOnlyValues?.displayName}</Typography>
                     </Stack>
                     <Divider />
                     <Stack spacing={2}>
-                      <Text variant="h6" weight="bold">
+                      <Typography variant="h6" bold>
                         {extensionLicenseLabel}
-                      </Text>
-                      <Text variant="body2">{displayOnlyValues?.license}</Text>
+                      </Typography>
+                      <Typography variant="sm">{displayOnlyValues?.license}</Typography>
                     </Stack>
                   </Stack>
                 </Stack>
@@ -218,7 +212,6 @@ const ExtensionEditPublishedForm: React.FC<ExtensionEditPublishedFormProps> = pr
                   <FormLabel>{descriptionFieldLabel}</FormLabel>
                   <FormControl>
                     <Textarea
-                      className="w-0 min-w-full"
                       placeholder={descriptionPlaceholderLabel}
                       {...field}
                       onChange={field.onChange}
@@ -272,9 +265,7 @@ const ExtensionEditPublishedForm: React.FC<ExtensionEditPublishedFormProps> = pr
     </Form>
   );
 };
-
 export default ExtensionEditPublishedForm;
-
 const schema = z.object({
   logoImage: z.any().optional(),
   coverImage: z.any().optional(),
@@ -283,8 +274,12 @@ const schema = z.object({
       z
         .string()
         .trim()
-        .min(30, { message: 'Must be at least 30 characters' })
-        .max(2000, { message: 'Must be less than 2000 characters' }),
+        .min(30, {
+          message: 'Must be at least 30 characters',
+        })
+        .max(2000, {
+          message: 'Must be less than 2000 characters',
+        }),
       z.string().length(0),
     ])
     .optional()
@@ -295,10 +290,18 @@ const schema = z.object({
         label: z
           .string()
           .trim()
-          .min(4, { message: 'Must be at least 4 characters' })
-          .max(24, { message: 'Must be less than 24 characters' }),
-        href: z.string().url({ message: 'Must be URL' }),
+          .min(4, {
+            message: 'Must be at least 4 characters',
+          })
+          .max(24, {
+            message: 'Must be less than 24 characters',
+          }),
+        href: z.string().url({
+          message: 'Must be URL',
+        }),
       }),
     )
-    .max(10, { message: 'Maximum 10 links' }),
+    .max(10, {
+      message: 'Maximum 10 links',
+    }),
 });

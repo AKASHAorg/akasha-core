@@ -2,7 +2,7 @@ import React from 'react';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import SearchBar from '@akashaorg/design-system-components/lib/components/SearchBar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { SettingsIcon } from 'lucide-react';
 
 export type DashboardHeaderProps = {
@@ -19,7 +19,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = props => {
   return (
     <Stack spacing="gap-y-4">
       <Stack direction="row" justify="between">
-        <Text variant="h5">{titleLabel}</Text>
+        <Typography variant="h5">{titleLabel}</Typography>
         <Button
           aria-label="settings"
           icon={<SettingsIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />}

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import {
   ErrorLoader,
   ErrorLoaderDescription,
@@ -25,11 +25,9 @@ import {
 import { getAvatarImage, getCoverImage } from './get-profile-images';
 import { selectProfileData } from '@akashaorg/ui-core-hooks/lib/selectors/get-profile-by-did-query';
 import EditProfile from '../../edit-profile';
-
 type EditProfilePageProps = {
   profileDID: string;
 };
-
 const EditProfilePage: React.FC<EditProfilePageProps> = props => {
   const { profileDID } = props;
   const { t } = useTranslation('app-profile');
@@ -49,14 +47,14 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
   const [nsfwFormValues, setNsfwFormValues] = useState<PublishProfileData>();
   const navigateTo = getCorePlugins().routing.navigateTo;
   const { data, error } = useGetProfileByDidSuspenseQuery({
-    variables: { id: profileDID },
+    variables: {
+      id: profileDID,
+    },
   });
-
   const profileData = selectProfileData(data);
   const background = profileData?.background;
   const avatar = profileData?.avatar;
   const sdk = getSDK();
-
   const onSuccess = () => {
     uiEvents.next({
       event: NotificationEvents.ShowNotification,
@@ -67,7 +65,6 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
     });
     navigateToProfileInfoPage();
   };
-
   const onError = () => {
     uiEvents.next({
       event: NotificationEvents.ShowNotification,
@@ -78,7 +75,6 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
     });
     navigateToProfileInfoPage();
   };
-
   const onSaveImageError = () => {
     uiEvents.next({
       event: NotificationEvents.ShowNotification,
@@ -88,9 +84,10 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
       },
     });
   };
-
   const [createProfileMutation, { loading: createProfileProcessing }] = useCreateProfileMutation({
-    context: { source: sdk.services.gql.contextSources.composeDB },
+    context: {
+      source: sdk.services.gql.contextSources.composeDB,
+    },
     onCompleted: () => {
       onSuccess();
     },
@@ -100,7 +97,9 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
     },
   });
   const [updateProfileMutation, { loading: updateProfileProcessing }] = useUpdateProfileMutation({
-    context: { source: sdk.services.gql.contextSources.composeDB },
+    context: {
+      source: sdk.services.gql.contextSources.composeDB,
+    },
     onCompleted: onSuccess,
     onError: error => {
       onError();
@@ -108,7 +107,6 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
     },
   });
   const isProcessing = createProfileProcessing || updateProfileProcessing;
-
   if (error)
     return (
       <ErrorLoader type="script-error">
@@ -118,21 +116,25 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
         </ErrorLoaderDescription>
       </ErrorLoader>
     );
-
   const navigateToProfileInfoPage = () => {
     navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => `/${profileDID}`,
     });
   };
-
   const createProfile = async (
     publishProfileData: PublishProfileData,
     profileImages: Pick<PartialAkashaProfileInput, 'avatar' | 'background'>,
   ) => {
     const info = await sdk.services.gql.getAPI().GetAppsByPublisherDID({
       id: sdk.services.gql.indexingDID,
-      filters: { where: { name: { equalTo: '@akashaorg/app-profile' } } },
+      filters: {
+        where: {
+          name: {
+            equalTo: '@akashaorg/app-profile',
+          },
+        },
+      },
       last: 1,
     });
     if (!info.node || !('akashaAppList' in info.node)) {
@@ -144,7 +146,9 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
           content: {
             name: publishProfileData.name,
             description: publishProfileData.bio,
-            links: publishProfileData.links.map(link => ({ href: link })),
+            links: publishProfileData.links.map(link => ({
+              href: link,
+            })),
             nsfw: publishProfileData.nsfw,
             appID: info.node.akashaAppList.edges[0].node.id,
             appVersionID: info.node.akashaAppList.edges[0].node.releases.edges[0].node.id,
@@ -155,7 +159,6 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
       },
     });
   };
-
   const updateProfile = async (
     publishProfileData: PublishProfileData,
     profileImages: Pick<PartialAkashaProfileInput, 'avatar' | 'background'>,
@@ -167,7 +170,9 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
           content: {
             name: publishProfileData.name,
             description: publishProfileData.bio,
-            links: publishProfileData.links.map(link => ({ href: link })),
+            links: publishProfileData.links.map(link => ({
+              href: link,
+            })),
             // composedDB strips immutable fields on update
             // nsfw: publishProfileData.nsfw,
             ...profileImages,
@@ -176,7 +181,6 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
       },
     });
   };
-
   const onProfileSave = async (publishProfileData: PublishProfileData) => {
     const isNewProfile = !profileData?.id;
     const newAvatarImage = avatarImage
@@ -207,7 +211,6 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
     }
     updateProfile(publishProfileData, profileImages);
   };
-
   return (
     <Stack direction="column" spacing={4} className="h-full">
       <Card className="py-4 h-full rounded-[1.25rem]">
@@ -233,12 +236,20 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
             deleteLabel: t('Delete'),
             saveLabel: t('Save'),
             imageTitle: {
-              avatar: { label: t('Edit Avatar') },
-              coverImage: { label: t('Edit Cover') },
+              avatar: {
+                label: t('Edit Avatar'),
+              },
+              coverImage: {
+                label: t('Edit Cover'),
+              },
             },
             deleteTitle: {
-              avatar: { label: t('Delete Avatar') },
-              coverImage: { label: t('Delete Cover') },
+              avatar: {
+                label: t('Delete Avatar'),
+              },
+              coverImage: {
+                label: t('Delete Cover'),
+              },
             },
             confirmationLabel: {
               avatar: t('Are you sure you want to delete your avatar?'),
@@ -249,17 +260,31 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
             onImageSave: (type, image) => {
               switch (type) {
                 case 'avatar':
-                  saveAvatarImage({ name: 'avatar', image, onError: onSaveImageError });
+                  saveAvatarImage({
+                    name: 'avatar',
+                    image,
+                    onError: onSaveImageError,
+                  });
                   break;
                 case 'cover-image':
-                  saveCoverImage({ name: 'cover-image', image, onError: onSaveImageError });
+                  saveCoverImage({
+                    name: 'cover-image',
+                    image,
+                    onError: onSaveImageError,
+                  });
                   break;
               }
             },
             transformSource,
           }}
-          name={{ label: t('Name'), initialValue: profileData?.name }}
-          bio={{ label: t('Bio'), initialValue: profileData?.description }}
+          name={{
+            label: t('Name'),
+            initialValue: profileData?.name,
+          }}
+          bio={{
+            label: t('Bio'),
+            initialValue: profileData?.description,
+          }}
           nsfw={{
             label: t('Select NSFW if your profile contains mature or explicit content.'),
             description: t('Note: this is an irreversible action.'),
@@ -291,7 +316,9 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
         />
       </Card>
       <Modal
-        title={{ label: t('Changing to NSFW Profile') }}
+        title={{
+          label: t('Changing to NSFW Profile'),
+        }}
         show={showNsfwModal}
         onClose={() => {
           setShowNsfwModal(false);
@@ -318,34 +345,30 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
         ]}
       >
         <Stack direction="column" spacing={4}>
-          <Text variant="body1">
-            {t('Before you proceed,')}{' '}
-            <Text variant="h6" as="span">
-              {t('please be aware:')}
-            </Text>
-          </Text>
-          <Text variant="body1">
-            <Text variant="h6" color={{ light: 'errorLight', dark: 'errorDark' }} as="span">
+          <Typography>
+            {t('Before you proceed,')} <Typography variant="h6">{t('please be aware:')}</Typography>
+          </Typography>
+          <Typography>
+            <Typography variant="h6" className="text-errorLight dark:text-errorDark">
               {t('Irreversible Action:')}{' '}
-            </Text>
+            </Typography>
             {t('Changing your profile to NSFW (Not Safe For Work)')}
             <br /> {t(
               'means all current and future posts will be marked as NSFW. This action is',
             )}{' '}
             <br />
             {t('permanent and cannot be undone')}.
-          </Text>
-          <Text variant="body1">
-            <Text variant="h6" color={{ light: 'errorLight', dark: 'errorDark' }} as="span">
+          </Typography>
+          <Typography>
+            <Typography variant="h6" className="text-errorLight dark:text-errorDark">
               {t('Content Impact: ')}{' '}
-            </Text>
+            </Typography>
             {t('Once your profile is set to NSFW, it will affect how your')} <br />{' '}
             {t('content is viewed and accessed by others in the community.')}
-          </Text>
+          </Typography>
         </Stack>
       </Modal>
     </Stack>
   );
 };
-
 export default EditProfilePage;

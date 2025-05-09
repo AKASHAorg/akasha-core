@@ -6,7 +6,7 @@ import { useRootComponentProps, useAkashaStore } from '@akashaorg/ui-core-hooks'
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import {
   ErrorLoader,
   ErrorLoaderDescription,
@@ -14,19 +14,14 @@ import {
   ErrorLoaderTitle,
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-
 export const PostPublishPage: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
-
   const { baseRouteName, getCorePlugins } = useRootComponentProps();
-
   const navigateTo = getCorePlugins().routing.navigateTo;
-
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
-
   const handleConnectButtonClick = () => {
     navigateTo?.({
       appName: '@akashaorg/app-auth-ewa',
@@ -37,11 +32,11 @@ export const PostPublishPage: React.FC = () => {
       },
     });
   };
-
   const handleNavigate = () => {
-    navigate({ to: '/my-extensions' });
+    navigate({
+      to: '/my-extensions',
+    });
   };
-
   if (!authenticatedDID) {
     return (
       <ErrorLoader type="not-authenticated">
@@ -53,13 +48,12 @@ export const PostPublishPage: React.FC = () => {
       </ErrorLoader>
     );
   }
-
   return (
     <Card className="py-6 px-4">
       <Stack spacing={8} alignItems="center">
-        <Text variant="h5" weight="semibold" align="center">
+        <Typography variant="h5" className="font-semibold text-center">
           {t('Extension Published')}
-        </Text>
+        </Typography>
         <InfoCard
           bodyLabel={
             <>

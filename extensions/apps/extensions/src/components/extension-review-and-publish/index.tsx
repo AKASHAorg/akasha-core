@@ -1,5 +1,4 @@
 import React, { ReactElement, useMemo } from 'react';
-
 import Accordion from '@akashaorg/design-system-core/lib/components/Accordion';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
@@ -9,7 +8,7 @@ import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import Section from './section';
 import { AppInfoPill } from '../app-info/info-pill';
 import ExtensionImageGallery from '../extension-image-gallery';
@@ -18,11 +17,13 @@ import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
 import { getImageFromSeed } from '@akashaorg/design-system-core/lib/utils';
 import { CheckCircleIcon, XCircleIcon } from 'lucide-react';
 import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
-
 export type ExtensionReviewAndPublishProps = {
   extensionData: Extension;
   title: string;
-  subtitle: { part1: string; part2: string };
+  subtitle: {
+    part1: string;
+    part2: string;
+  };
   extensionNameLabel: string;
   extensionDisplayNameLabel: string;
   nsfwLabel: string;
@@ -44,13 +45,15 @@ export type ExtensionReviewAndPublishProps = {
   isDuplicateExtName?: boolean;
   contributorsUi: ReactElement;
   needToMakeChangesLabel: string;
-  editExtension: { handleClick: () => void; label };
+  editExtension: {
+    handleClick: () => void;
+    label;
+  };
   onViewGalleryClick?: () => void;
   onClickCancel: () => void;
   onClickSubmit: () => void;
   transformSource: (src: Image) => Image;
 };
-
 const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = props => {
   const {
     extensionData,
@@ -82,14 +85,11 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
     onClickSubmit,
     transformSource,
   } = props;
-
   const [activeAccordionId, setActiveAccordionId] = React.useState(null);
-
   const transformedCoverImage = transformSource(extensionData?.coverImage);
   const seed = getImageFromSeed(extensionData?.id, 3);
   const coverImageFallback = `${publicImagePath}/extension-cover-desktop-${seed}.webp`;
   const backgroundUrl = transformedCoverImage?.src ?? coverImageFallback;
-
   const disablePublish = useMemo(
     () =>
       !extensionData?.applicationType ||
@@ -101,7 +101,6 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
       isDuplicateExtName,
     [extensionData, isDuplicateExtName],
   );
-
   const onAccordionClick = accordionId => {
     if (activeAccordionId === accordionId) {
       setActiveAccordionId(null);
@@ -109,7 +108,6 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
       setActiveAccordionId(accordionId);
     }
   };
-
   const getAccordionTitleNode = (title: string, fieldHasData: boolean, isRequired = true) => {
     return (
       <Stack direction="row" spacing={1} alignItems="center">
@@ -122,24 +120,23 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
       </Stack>
     );
   };
-
   const galleryImagesWithSource = useMemo(
     () => extensionData?.gallery?.map(img => transformSource(img)) || [],
     [extensionData?.gallery, transformSource],
   );
-
   const asteriskStyle = `-top-0.5 left-1 text-base text-errorLight dark:text-errorDark`;
-
   return (
     <>
       <Stack spacing={4} className="p-4 mb-4 w-full">
-        <Text as="span" variant="body2" color={{ light: 'grey4', dark: 'grey6' }}>
+        <Typography variant="sm" className="text-grey4 dark:text-grey6">
           {subtitle.part1} <span className={asteriskStyle}>*</span> {subtitle.part2}
-        </Text>
+        </Typography>
 
         <Stack spacing={3} className="w-full">
           <Stack
-            style={cssVars({ '--background-url': `url('${backgroundUrl}')` })}
+            style={cssVars({
+              '--background-url': `url('${backgroundUrl}')`,
+            })}
             className={`relative h-24 rounded-2xl  bg-center bg-no-repeat bg-cover bg-(image:--background-url)`}
           >
             <AppAvatar
@@ -152,33 +149,33 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
 
           <AppInfoPill customStyle="w-fit self-end bg-tertiaryLight dark:bg-tertiaryDark">
             <ExtensionIcon type={extensionData?.applicationType} />
-            <Text variant="footnotes2" color={{ light: 'secondaryLight', dark: 'white' }}>
+            <Typography variant="xs" className="font-medium text-secondaryLight dark:text-white">
               {extensionData?.applicationType}
-            </Text>
+            </Typography>
           </AppInfoPill>
         </Stack>
 
         <Section title={extensionNameLabel} required>
-          <Text variant="body2" truncate>
+          <Typography variant="sm" className="truncate">
             {extensionData?.name}
-          </Text>
+          </Typography>
           {isDuplicateExtName && (
-            <Text variant="body2" color={{ light: 'errorLight', dark: 'errorDark' }}>
+            <Typography variant="sm" className="text-errorLight dark:text-errorDark">
               {duplicateExtNameErrLabel}
-            </Text>
+            </Typography>
           )}
         </Section>
 
         <Section title={extensionDisplayNameLabel} required>
-          <Text variant="body2" truncate>
+          <Typography variant="sm" className="truncate">
             {extensionData?.displayName}
-          </Text>
+          </Typography>
         </Section>
 
         <Section title={nsfwLabel} required hasToggle isToggleChecked={extensionData?.nsfw}>
-          <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }}>
+          <Typography variant="sm" className="text-grey4 dark:text-grey6">
             {nsfwDescription}
-          </Text>
+          </Typography>
         </Section>
 
         {/* wrap each accordion in a Stack to guard against the main wrapper's spacing */}
@@ -188,9 +185,9 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
             open={descriptionLabel === activeAccordionId}
             titleNode={getAccordionTitleNode(descriptionLabel, !!extensionData?.description)}
             contentNode={
-              <Text variant="body2" breakWord>
+              <Typography variant="sm" className="break-all">
                 {extensionData?.description}
-              </Text>
+              </Typography>
             }
             handleClick={extensionData?.description ? onAccordionClick : () => {}}
           />
@@ -212,16 +209,19 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
                   imageNotLoadedLabel={imageNotLoadedLabel}
                   images={galleryImagesWithSource?.slice(0, 3).map((image, idx) => ({
                     src: image?.src,
-                    size: { width: image?.width, height: image?.height },
+                    size: {
+                      width: image?.width,
+                      height: image?.height,
+                    },
                     name: image?.src + idx,
                   }))}
                   showOverlay={false}
                   toggleOverlay={() => ({})}
                 />
                 <Stack direction="row" alignItems="center" justifyContent="between">
-                  <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey7' }}>
+                  <Typography variant="xs" className="font-medium text-grey4 dark:text-grey7">
                     {`${galleryImagesWithSource?.length} ${imageUploadedLabel}`}
-                  </Text>
+                  </Typography>
                   <Button variant="link" onClick={onViewGalleryClick}>
                     {viewAllLabel}
                   </Button>
@@ -246,14 +246,16 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
               <Stack spacing={3}>
                 {extensionData?.links?.map((link, index) => (
                   <Stack key={index}>
-                    <Text variant="button-md">{link.label}</Text>
+                    <Typography variant="sm" bold>
+                      {link.label}
+                    </Typography>
                     <Link to={link.href} target="_blank">
-                      <Text
-                        variant="body2"
-                        color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                      <Typography
+                        variant="sm"
+                        className="text-secondaryLight dark:text-secondaryDark"
                       >
                         {link.href}
-                      </Text>
+                      </Typography>
                     </Link>
                   </Stack>
                 ))}
@@ -271,7 +273,9 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
             titleNode={getAccordionTitleNode(licenseLabel, !!extensionData?.license)}
             contentNode={
               <Stack>
-                <Text variant="button-md">{extensionData?.license}</Text>
+                <Typography variant="sm" bold>
+                  {extensionData?.license}
+                </Typography>
               </Stack>
             }
             handleClick={extensionData?.license ? onAccordionClick : () => {}}
@@ -311,7 +315,9 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
         </Stack>
         <Card className="p-3 bg-nested-card">
           <Stack alignItems="center" direction="row" spacing={2}>
-            <Text variant="button-sm">{needToMakeChangesLabel}</Text>
+            <Typography variant="xs" bold>
+              {needToMakeChangesLabel}
+            </Typography>
             <Button
               variant="outline"
               size="sm"
@@ -342,5 +348,4 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
     </>
   );
 };
-
 export default ExtensionReviewAndPublish;

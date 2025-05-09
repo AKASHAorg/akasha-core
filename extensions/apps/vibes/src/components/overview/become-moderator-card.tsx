@@ -1,10 +1,8 @@
 import React from 'react';
-
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 export type BecomeModeratorCardProps = {
   titleLabel: string;
   subtitleLabel: string;
@@ -13,16 +11,15 @@ export type BecomeModeratorCardProps = {
 };
 const BecomeModeratorCard: React.FC<BecomeModeratorCardProps> = props => {
   const { titleLabel, subtitleLabel, buttonLabel, onClickApply } = props;
-
   return (
     <Card className="p-4">
       <Stack spacing="gap-y-6">
-        <Text variant="h5" weight="bold">
+        <Typography variant="h5" bold>
           {titleLabel}
-        </Text>
-        <Text variant="body2" weight="light" color={{ light: 'grey5', dark: 'grey6' }}>
+        </Typography>
+        <Typography variant="sm" className="font-light text-grey5 dark:text-grey6">
           {subtitleLabel}
-        </Text>
+        </Typography>
         <Button
           variant="primary"
           label={buttonLabel}
@@ -33,5 +30,4 @@ const BecomeModeratorCard: React.FC<BecomeModeratorCardProps> = props => {
     </Card>
   );
 };
-
 export default BecomeModeratorCard;

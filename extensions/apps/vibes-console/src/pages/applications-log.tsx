@@ -11,11 +11,10 @@ import {
   SelectItem,
 } from '@akashaorg/ui/lib/components/select';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { ApplicantDataCard } from '../components/applications/application';
 import { NoItemFound } from '../components/no-item-found';
 import routes, { APPLICATION_DETAIL } from '../routes';
-
 export const ApplicationsLog: React.FC<unknown> = () => {
   const navigate = useNavigate();
   const { t } = useTranslation('vibes-console');
@@ -47,7 +46,7 @@ export const ApplicationsLog: React.FC<unknown> = () => {
   }
   return (
     <Stack spacing="gap-y-4">
-      <Text variant="h5">{t('Applications Log')}</Text>
+      <Typography variant="h5">{t('Applications Log')}</Typography>
       <Stack direction="row" align="center" justify="between">
         <Stack direction="row" align="center" spacing="gap-x-3">
           <Select name="filterByStatus" value={filterByStatus} onValueChange={setfilterByStatus}>
@@ -77,9 +76,9 @@ export const ApplicationsLog: React.FC<unknown> = () => {
           </Select>
         </Stack>
         <Button plain={true} onClick={resetFilters}>
-          <Text variant="button-sm" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
+          <Typography variant="xs" bold className="text-secondaryLight dark:text-secondaryDark">
             {`${t('Reset')}`}
-          </Text>
+          </Typography>
         </Button>
       </Stack>
       <>

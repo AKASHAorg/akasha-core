@@ -1,13 +1,11 @@
 import React from 'react';
-
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { Discord } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 export type ReportItemConfirmationProps = {
   assetName?: string;
   publicImgPath?: string;
@@ -20,7 +18,6 @@ export type ReportItemConfirmationProps = {
   ctaUrl: string;
   onContinueClick: () => void;
 };
-
 export const ReportItemConfirmation: React.FC<ReportItemConfirmationProps> = props => {
   const {
     assetName = 'vibe-report',
@@ -34,13 +31,12 @@ export const ReportItemConfirmation: React.FC<ReportItemConfirmationProps> = pro
     onContinueClick,
     ctaUrl,
   } = props;
-
   return (
     <Card className="md:p-4">
       <Stack spacing="gap-y-4" align="center">
-        <Text variant="h5" align="center">
+        <Typography variant="h5" className="text-center">
           {titleLabel} 🙌🏽
-        </Text>
+        </Typography>
 
         <Stack customStyle="w-45 h-45 my-2 mx-auto">
           <Image
@@ -49,34 +45,27 @@ export const ReportItemConfirmation: React.FC<ReportItemConfirmationProps> = pro
           />
         </Stack>
 
-        <Text
-          variant="body2"
-          weight="normal"
-          align="center"
-          color={{ light: 'grey5', dark: 'grey6' }}
-        >
+        <Typography variant="sm" className="font-normal text-center text-grey5 dark:text-grey6">
           {subtitleLabel}
-        </Text>
+        </Typography>
 
         <Button variant="text" size="md" label={continueLabel} onClick={onContinueClick} />
 
         <Stack align="center" justifySelf="end" spacing="gap-y-2">
-          <Text variant="footnotes2" weight="normal" align="center">
+          <Typography variant="xs" className="font-medium font-normal text-center">
             {footnoteLabel}
-          </Text>
+          </Typography>
 
           <Link to={ctaUrl} target="_blank">
             <Stack direction="row" align="center" spacing="gap-x-2">
               <Discord className="h-4 w-4 mx-auto my-0 [&>*]:fill-secondaryLight dark:[&>*]:stroke-secondaryDark" />
 
-              <Text
-                variant="footnotes2"
-                weight="normal"
-                align="center"
-                color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+              <Typography
+                variant="xs"
+                className="font-medium font-normal text-center text-secondaryLight dark:text-secondaryDark"
               >
                 {ctaLabel}
-              </Text>
+              </Typography>
             </Stack>
           </Link>
         </Stack>

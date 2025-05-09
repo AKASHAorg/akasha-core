@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import AppCoverImage from '@akashaorg/design-system-core/lib/components/AppCoverImage';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import {
   ProfileAvatarButton,
@@ -16,7 +16,6 @@ import ExtensionIcon from '@akashaorg/design-system-core/lib/components/Extensio
 import { Extension, Image } from '@akashaorg/typings/lib/ui';
 import { cn } from '@akashaorg/ui/lib/library/utils';
 import { CopyToClipboard } from '@akashaorg/ui/lib/akasha-components/copy-to-clipboard';
-
 export type ExtensionCardProps = {
   coverImageSrc: string;
   displayName: string;
@@ -38,7 +37,6 @@ export type ExtensionCardProps = {
   action?: ReactNode;
   customStyle?: string;
 };
-
 const ExtensionCard: React.FC<ExtensionCardProps> = props => {
   const {
     coverImageSrc,
@@ -55,7 +53,6 @@ const ExtensionCard: React.FC<ExtensionCardProps> = props => {
     action,
     customStyle = '',
   } = props;
-
   return (
     <Card className={cn('p-4', customStyle)}>
       <Stack spacing={4}>
@@ -67,12 +64,15 @@ const ExtensionCard: React.FC<ExtensionCardProps> = props => {
         />
         <Stack spacing={3}>
           <Stack justifyContent="between" alignItems="center" direction="row" spacing={1}>
-            <Text variant="h6">{displayName}</Text>
+            <Typography variant="h6">{displayName}</Typography>
             <>{action}</>
           </Stack>
           <Stack direction="row" spacing={2}>
             <Pill
-              color={{ light: 'secondaryLight', dark: 'white' }}
+              color={{
+                light: 'secondaryLight',
+                dark: 'white',
+              }}
               icon={<ExtensionIcon type={applicationType} size="xs" />}
               weight="normal"
               size="xs"
@@ -82,7 +82,10 @@ const ExtensionCard: React.FC<ExtensionCardProps> = props => {
             />
             {isDefaultWorldExtension && (
               <Pill
-                color={{ light: 'white', dark: 'black' }}
+                color={{
+                  light: 'white',
+                  dark: 'black',
+                }}
                 weight="normal"
                 size="xs"
                 label={defaultLabel}
@@ -92,7 +95,10 @@ const ExtensionCard: React.FC<ExtensionCardProps> = props => {
             )}
             {nsfw && (
               <Pill
-                color={{ light: 'errorLight', dark: 'white' }}
+                color={{
+                  light: 'errorLight',
+                  dark: 'white',
+                }}
                 weight="normal"
                 size="xs"
                 label={nsfwLabel}
@@ -117,13 +123,17 @@ const ExtensionCard: React.FC<ExtensionCardProps> = props => {
               </CopyToClipboard>
             </ProfileAvatarButton>
           </Stack>
-          <Text variant="body2" {...(!featured && { lineClamp: 2 })}>
+          <Typography
+            variant="sm"
+            {...(!featured && {
+              className: 'line-clamp-2',
+            })}
+          >
             {description}
-          </Text>
+          </Typography>
         </Stack>
       </Stack>
     </Card>
   );
 };
-
 export default ExtensionCard;

@@ -2,25 +2,22 @@ import React from 'react';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 export type JoinVibesCardProps = {
   title: string;
   description: string;
   ctaButtonLabel: string;
   onCtaButtonClick: () => void;
 };
-
 export const JoinVibesCard: React.FC<JoinVibesCardProps> = props => {
   const { title, description, ctaButtonLabel, onCtaButtonClick } = props;
-
   return (
     <Card className="shadow-none">
       <Stack spacing="gap-y-2">
-        <Text variant="h6">{title}</Text>
-        <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }}>
+        <Typography variant="h6">{title}</Typography>
+        <Typography variant="sm" className="text-grey4 dark:text-grey6">
           {description}!🛡️
-        </Text>
+        </Typography>
         <Button
           variant="primary"
           label={ctaButtonLabel}

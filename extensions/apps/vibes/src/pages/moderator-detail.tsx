@@ -3,18 +3,15 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { ChevronRightIcon } from 'lucide-react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import PaginatedTable from '@akashaorg/design-system-components/lib/components/PaginatedTable';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
 import ModeratorDetailCard from '../components/moderator';
 import InfoCard from '../components/moderator/info-card';
-
 import { generateTenureInfoLabel, generateDismissalReason } from '../utils';
-
 export type ModeratorDetailPageProps = {
   moderatorId: string;
 };
-
 export const ModeratorDetailPage: React.FC<ModeratorDetailPageProps> = () => {
   const [pages] = React.useState([]);
   const [curPage, setCurPage] = React.useState<number>(1);
@@ -25,27 +22,21 @@ export const ModeratorDetailPage: React.FC<ModeratorDetailPageProps> = () => {
   // const { moderatorProfileId } = useParams<{ moderatorProfileId: string }>();
   const { t } = useTranslation('app-vibes');
   const navigate = useNavigate();
-
   const moderator = null;
-
   const tenureInfoLabel = generateTenureInfoLabel(moderator.status);
-
   const handleClickPage = (page: number) => () => {
     setCurPage(page);
   };
-
   const handleClickPrev = () => {
     if (!(curPage === 1)) {
       setCurPage(curPage - 1);
     }
   };
-
   const handleClickNext = () => {
     if (!(curPage === pages.length - 1)) {
       setCurPage(curPage + 1);
     }
   };
-
   const handleRowClick = (itemId: string) => {
     navigate({
       to: '/history/$itemId',
@@ -54,38 +45,34 @@ export const ModeratorDetailPage: React.FC<ModeratorDetailPageProps> = () => {
       },
     });
   };
-
   const trimmedRows =
     pages[curPage - 1]?.map(el => ({
       value: [
-        <Text key={0} variant="body2">
+        <Typography key={0} variant="sm">
           {formatDate(el.moderatedDate.toISOString(), 'DD MMM YYYY')}
-        </Text>,
-
-        <Text key={1} variant="body2">
-          {t('{{type}}', { type: el.type })}
-        </Text>,
-
+        </Typography>,
+        <Typography key={1} variant="sm">
+          {t('{{type}}', {
+            type: el.type,
+          })}
+        </Typography>,
         <Stack key={2} direction="row" align="center" spacing="gap-x-1">
           <Stack
-            customStyle={`w-2 h-2 rounded-full ${
-              ['Kept', 'Accepted'].includes(el.status)
-                ? 'bg-success'
-                : 'bg-errorLight dark:bg-errorDark'
-            }`}
+            customStyle={`w-2 h-2 rounded-full ${['Kept', 'Accepted'].includes(el.status) ? 'bg-success' : 'bg-errorLight dark:bg-errorDark'}`}
           />
-          <Text variant="body2">{t('{{status}}', { status: el.status })}</Text>
+          <Typography variant="sm">
+            {t('{{status}}', {
+              status: el.status,
+            })}
+          </Typography>
         </Stack>,
-
         <Stack key={3} align="end">
           <ChevronRightIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
         </Stack>,
       ],
       clickHandler: () => handleRowClick(el.contentId),
     })) ?? [];
-
   const dismissalReason = generateDismissalReason();
-
   return (
     <Stack spacing="gap-y-4">
       {moderator.status === 'dismissed' && (
@@ -104,7 +91,9 @@ export const ModeratorDetailPage: React.FC<ModeratorDetailPageProps> = () => {
         viewProfileLabel={t('View Profile')}
         moderatedLabel={t('Moderated')}
         moderatedItemsLabel={t('items')}
-        tenureInfoLabel={t('{{tenureInfoLabel}}', { tenureInfoLabel })}
+        tenureInfoLabel={t('{{tenureInfoLabel}}', {
+          tenureInfoLabel,
+        })}
       />
 
       <PaginatedTable

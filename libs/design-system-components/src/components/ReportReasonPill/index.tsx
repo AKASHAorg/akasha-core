@@ -1,9 +1,8 @@
 import React from 'react';
 import { FlagIcon } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-
 export type ReportReasonPillProps = {
   reportCount: number;
   reason: string;
@@ -18,7 +17,6 @@ export type ReportReasonPillProps = {
  */
 const ReportReasonPill: React.FC<ReportReasonPillProps> = props => {
   const { reason, reportCount, handleClick } = props;
-
   return (
     <Button plain={true} onClick={handleClick}>
       <Stack
@@ -27,19 +25,18 @@ const ReportReasonPill: React.FC<ReportReasonPillProps> = props => {
       >
         <Stack direction="row" alignItems="center" spacing={1} className="p-2">
           <FlagIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-grey2" />
-          <Text variant="footnotes2" color={{ light: 'secondaryLight', dark: 'grey2' }}>
+          <Typography variant="xs" className="font-medium text-secondaryLight dark:text-grey2">
             {reportCount}
-          </Text>
+          </Typography>
         </Stack>
 
         <Stack className="p-2 border-l-1 border-solid border-white dark:border-grey2">
-          <Text variant="footnotes2" color={{ light: 'secondaryLight', dark: 'grey2' }}>
+          <Typography variant="xs" className="font-medium text-secondaryLight dark:text-grey2">
             {reason}
-          </Text>
+          </Typography>
         </Stack>
       </Stack>
     </Button>
   );
 };
-
 export default ReportReasonPill;

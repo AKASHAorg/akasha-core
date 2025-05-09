@@ -6,7 +6,7 @@ import AuthorProfileAvatar from '../author-profile-avatar';
 import { shouldNavigate, sortByKey, useAkashaStore } from '@akashaorg/ui-core-hooks';
 import { useRootComponentProps, useNsfwToggling } from '@akashaorg/ui-core-hooks';
 import { Trans, useTranslation } from 'react-i18next';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { GetBeamByIdQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
@@ -40,7 +40,6 @@ type BeamCardProps = Pick<
   showNSFWCard: boolean;
   showLoginModal?: () => void;
 };
-
 const BeamCard: React.FC<BeamCardProps> = props => {
   const { t } = useTranslation('ui-lib-feed');
   const {
@@ -53,18 +52,14 @@ const BeamCard: React.FC<BeamCardProps> = props => {
     onContentClick,
     ...rest
   } = props;
-
   const sdk = useRef(getSDK());
-
   const { getCorePlugins, navigateToModal } = useRootComponentProps();
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
   const [showBlockName, setShowBlockName] = useState(false);
   const navigateTo = getCorePlugins().routing.navigateTo;
-
   const { showNsfw } = useNsfwToggling();
-
   const handleFlagBeam = () => {
     if (!beamId) return;
     navigateTo({
@@ -72,33 +67,27 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       getNavigationUrl: () => `/report/beam/${beamId}`,
     });
   };
-
   const beamContent = selectBeamContent(beamData);
   const reflectionsCount = selectReflectionsCount(beamData);
   const beamAuthor = selectBeamAuthor(beamData);
-
   const beamId = useMemo<string | null>(() => {
     return selectBeamId(beamData);
   }, [beamData]);
-
   const handleTagClick = (tag: string) => {
     navigateTo({
       appName: '@akashaorg/app-antenna',
       getNavigationUrl: routes => `${routes.Tags}/${tag}`,
     });
   };
-
   const handleEntryRemove = () => {
     navigateToModal({
       name: `remove-beam-confirmation`,
       beamId,
     });
   };
-
   const sortedEntryContent = React.useMemo(() => {
     return sortByKey(beamContent, 'order');
   }, [beamContent]);
-
   const beamTagsList = useMemo(() => {
     const tags = selectBeamTags(beamData);
     if (tags?.length) {
@@ -108,7 +97,6 @@ const BeamCard: React.FC<BeamCardProps> = props => {
     }
     return [];
   }, [beamData]);
-
   const isSelectBeamActive = selectBeamActive(beamData);
   const isViewer = authenticatedDID === beamAuthor.id;
   const flagAsLabel = t('Flag');
@@ -119,7 +107,10 @@ const BeamCard: React.FC<BeamCardProps> = props => {
           {
             icon: <FlagIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
             label: flagAsLabel,
-            color: { light: 'errorLight', dark: 'errorDark' } as const,
+            color: {
+              light: 'errorLight',
+              dark: 'errorDark',
+            } as const,
             disabled: false,
             onClick: handleFlagBeam,
           },
@@ -137,7 +128,6 @@ const BeamCard: React.FC<BeamCardProps> = props => {
         ]
       : []),
   ];
-
   return (
     <EntryCard
       dataTestId="beam-card"
@@ -161,7 +151,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
               <txt>Some users may still be able to see it in the antenna.</txt>
             `}
             components={{
-              txt: <Text variant="button-sm" />,
+              txt: <Typography variant="xs" bold />,
             }}
           />
         ),
@@ -172,7 +162,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
               <txt>All reflections are disabled.</txt>
             `}
             components={{
-              txt: <Text variant="button-sm" />,
+              txt: <Typography variant="xs" bold />,
             }}
           />
         ),
@@ -186,7 +176,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
               <btn></btn>
             `}
             components={{
-              txt: <Text variant="button-sm" />,
+              txt: <Typography variant="xs" bold />,
               lnk: <Link to={''} />,
               btn: (
                 <Button variant="link" onClick={() => console.log('tap to view')}>
@@ -203,7 +193,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
               <txt>All reflections are disabled.</txt>
             `}
             components={{
-              txt: <Text variant="button-sm" />,
+              txt: <Typography variant="xs" bold />,
               lnk: <Link to={''} />,
             }}
           />
@@ -269,5 +259,4 @@ const BeamCard: React.FC<BeamCardProps> = props => {
     </EntryCard>
   );
 };
-
 export default BeamCard;

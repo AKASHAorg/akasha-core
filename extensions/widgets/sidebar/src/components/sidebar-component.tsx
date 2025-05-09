@@ -19,12 +19,11 @@ import {
   Twitter,
 } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import ListSidebarApps from './list-sidebar-apps';
 import SidebarCTACard from './cta-card';
 import SidebarHeader from './sidebar-header';
 import FallbackHeader from './fallback-header';
-
 const SidebarComponent: React.FC<unknown> = () => {
   const {
     logger,
@@ -32,12 +31,10 @@ const SidebarComponent: React.FC<unknown> = () => {
     worldConfig: { defaultApps, socialLinks },
     getCorePlugins,
   } = useRootComponentProps();
-
   const {
     data: { authenticatedDID, isAuthenticating },
     authenticationStore,
   } = useAkashaStore();
-
   const { t } = useTranslation('ui-widget-sidebar');
   const [isMobile, setIsMobile] = useState(
     window.matchMedia(startMobileSidebarHidingBreakpoint).matches,
@@ -45,19 +42,20 @@ const SidebarComponent: React.FC<unknown> = () => {
   const routing = getCorePlugins().routing;
   const routeData = useSyncExternalStore(routing.subscribe, routing.getSnapshot);
   const [activeOption, setActiveOption] = useState<IMenuItem | null>(null);
-  const [clickedOptions, setClickedOptions] = useState<{ name: string; route: IMenuItem }[]>([]);
+  const [clickedOptions, setClickedOptions] = useState<
+    {
+      name: string;
+      route: IMenuItem;
+    }[]
+  >([]);
   const isLoggedIn = !!authenticatedDID;
-
   const { activeAccordionId, setActiveAccordionId, handleAccordionClick } = useAccordion();
   const [dismissed, dismissCard] = useDismissedCard('@akashaorg/ui-widget-sidebar_cta-card');
-
   useEffect(() => {
     const mql = window.matchMedia(startMobileSidebarHidingBreakpoint);
-
     const resize = () => {
       setIsMobile(mql.matches);
     };
-
     window.addEventListener('resize', resize);
     return () => {
       window.removeEventListener('resize', resize);
@@ -75,18 +73,15 @@ const SidebarComponent: React.FC<unknown> = () => {
       return 0;
     });
   }, [defaultApps, routeData]);
-
   const userInstalledApps = useMemo(() => {
     return routeData.byArea[MenuItemAreaType.UserAppArea];
   }, [routeData]);
-
   const handleNavigation = (appName: string, route: string) => {
     routing?.navigateTo({
       appName,
       getNavigationUrl: () => route,
     });
   };
-
   const handleProfileAvatarClick = (id: string) => {
     if (!id) {
       return;
@@ -95,45 +90,37 @@ const SidebarComponent: React.FC<unknown> = () => {
       appName: '@akashaorg/app-profile',
       getNavigationUrl: routes => `${routes.rootRoute}/${id}`,
     });
-
     if (isMobile) {
       handleSidebarClose();
     }
   };
-
   const handleClickExplore = () => {
     routing?.navigateTo({
       appName: '@akashaorg/app-extensions',
       getNavigationUrl: routes => routes.explore,
     });
-
     if (isMobile) {
       handleSidebarClose();
     }
   };
-
   const handleSidebarClose = () => {
     // emit HideSidebar event to trigger corresponding action in associated widgets
     uiEvents.next({
       event: EventTypes.HideSidebar,
     });
   };
-
   function handleLoginClick() {
     handleNavigation('@akashaorg/app-auth-ewa', '/');
     if (isMobile) {
       handleSidebarClose();
     }
   }
-
   function handleLogout() {
     authenticationStore.logout();
   }
-
   const handleLogoutClick = () => {
     handleLogout();
   };
-
   const handleAppIconClick = (menuItem: IMenuItem) => {
     if (menuItem.subRoutes && menuItem.subRoutes.length === 0) {
       setActiveOption(null);
@@ -143,11 +130,13 @@ const SidebarComponent: React.FC<unknown> = () => {
       }
     }
   };
-
   const handleOptionClick = (menuItem: IMenuItem, subrouteMenuItem: IMenuItem) => {
     setClickedOptions(oldClickedOptions => [
       ...oldClickedOptions,
-      { name: menuItem.name, route: subrouteMenuItem },
+      {
+        name: menuItem.name,
+        route: subrouteMenuItem,
+      },
     ]);
     setActiveOption(subrouteMenuItem);
     handleNavigation(menuItem.name, subrouteMenuItem.route);
@@ -155,16 +144,13 @@ const SidebarComponent: React.FC<unknown> = () => {
       handleSidebarClose();
     }
   };
-
   const handleBackNavEvent = () => {
     const matchedRoute = clickedOptions.find(option =>
       location.pathname.includes(`${option.name}${option.route?.route}`),
     );
-
     if (matchedRoute) setActiveOption(matchedRoute.route);
     else setActiveOption(null);
   };
-
   useEffect(() => {
     window.addEventListener('popstate', handleBackNavEvent);
     return () => window.removeEventListener('popstate', handleBackNavEvent);
@@ -198,7 +184,6 @@ const SidebarComponent: React.FC<unknown> = () => {
         icon: <Twitter className={solidStyle} />,
       };
   });
-
   return (
     <ErrorBoundary
       errorObj={{
@@ -224,7 +209,7 @@ const SidebarComponent: React.FC<unknown> = () => {
         </Suspense>
         {/*
           this container will grow up to a max height of 68vh, 32vh currently accounts for the height of other sections and paddings. Adjust accordingly, if necessary.
-        */}
+         */}
         <Stack direction="column" className="overflow-auto">
           {/* container for world apps */}
           {worldApps?.length > 0 && (
@@ -257,7 +242,9 @@ const SidebarComponent: React.FC<unknown> = () => {
         )}
         {modSocialLinks?.length > 0 && (
           <Stack className="px-8 py-4 border-t-1 border-grey9 dark:border-grey3">
-            <Text variant="footnotes2">{t('Get in touch')}</Text>
+            <Typography variant="xs" className="font-medium">
+              {t('Get in touch')}
+            </Typography>
             <Stack direction="row" spacing={4} className="w-fit h-fit mt-6">
               {modSocialLinks?.map((socialLink, idx) => (
                 <Link key={idx} to={socialLink.link} target="_blank">

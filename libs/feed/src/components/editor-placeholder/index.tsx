@@ -1,13 +1,11 @@
 import React from 'react';
-
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 import { ProfileAvatarImage } from '@akashaorg/ui/lib/akasha-components/profile-avatar';
 import { ProfileAvatarFallback } from '@akashaorg/ui/lib/akasha-components/profile-avatar';
 import { ProfileAvatar } from '@akashaorg/ui/lib/akasha-components/profile-avatar';
-
 export type EditorPlaceholderType = {
   avatar?: Profile['avatar'];
   profileId: string | null;
@@ -45,13 +43,15 @@ const EditorPlaceholder: React.FC<EditorPlaceholderType> = props => {
             <ProfileAvatarImage src={transformSource(avatar?.default)?.src} />
             <ProfileAvatarFallback />
           </ProfileAvatar>
-          <Text
-            variant="subtitle2"
-            {...(isReflection && { color: 'grey7' })}
-            customStyle={`${!isReflection ? 'max-w-[9.5rem] md:max-w-fit w-full' : ''} whitespace-normal`}
+          <Typography
+            variant="sm"
+            {...(isReflection && {
+              color: 'grey7',
+            })}
+            className="font-light"
           >
             {placeholderLabel}
-          </Text>
+          </Typography>
         </div>
 
         <Button size="sm">{actionLabel}</Button>
@@ -59,5 +59,4 @@ const EditorPlaceholder: React.FC<EditorPlaceholderType> = props => {
     </Card>
   );
 };
-
 export default EditorPlaceholder;

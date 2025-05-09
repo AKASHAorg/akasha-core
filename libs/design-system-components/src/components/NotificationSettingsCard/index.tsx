@@ -1,11 +1,9 @@
 import React from 'react';
-
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Image } from '@akashaorg/ui/lib/akasha-components/image';
-
 const IMAGES = {
   notificationsDefault: '/images/notificationapp-welcome-min.webp',
   browserDefault: '/images/notification-browser.webp',
@@ -13,9 +11,7 @@ const IMAGES = {
   browserDisabled: '/images/notification-browser-disabled.webp',
   noNotifications: '/images/notificationapp-welcome-min.webp',
 };
-
 export type NotificationsImageSrc = keyof typeof IMAGES;
-
 export type NotificationSettingsCardProps = {
   // data
   title: string;
@@ -28,7 +24,6 @@ export type NotificationSettingsCardProps = {
   // handlers
   handleButtonClick: () => void;
 };
-
 const NotificationSettingsCard: React.FC<NotificationSettingsCardProps> = ({
   title,
   text,
@@ -46,12 +41,12 @@ const NotificationSettingsCard: React.FC<NotificationSettingsCardProps> = ({
         src={IMAGES[image]}
         alt="Notification illustration"
       />
-      <Text variant="h5" customStyle="mb-2 text-center">
+      <Typography variant="h5" className="mb-2 text-center">
         {title}
-      </Text>
-      <Text variant="body2" customStyle="mb-4 text-center">
+      </Typography>
+      <Typography variant="sm" className="mb-4 text-center">
         {text}
-      </Text>
+      </Typography>
 
       {showButton && (
         <Button loading={isLoading} onClick={handleButtonClick} className="w-fit">
@@ -60,8 +55,6 @@ const NotificationSettingsCard: React.FC<NotificationSettingsCardProps> = ({
       )}
     </Stack>
   );
-
   return noWrapperCard ? content : <Card className="p-0 w-full grow flex-wrap">{content}</Card>;
 };
-
 export default NotificationSettingsCard;

@@ -1,20 +1,15 @@
 import React from 'react';
-
 import { IMenuItem } from '@akashaorg/typings/lib/ui';
-
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 export type MenuItemLabelProps = {
   menuItem: IMenuItem;
   isActiveMenu: boolean;
   hasNewNotifs?: boolean;
 };
-
 const MenuItemLabel: React.FC<MenuItemLabelProps> = props => {
   const { menuItem, isActiveMenu } = props;
-
   return (
     <Stack direction="row" alignItems="center">
       {menuItem.logo.type === 'icon' && (
@@ -28,19 +23,10 @@ const MenuItemLabel: React.FC<MenuItemLabelProps> = props => {
         />
       )}
 
-      <Text
-        variant="button-md"
-        color={
-          isActiveMenu
-            ? { light: 'secondaryLight', dark: 'secondaryDark' }
-            : { light: 'black', dark: 'white' }
-        }
-        customStyle="ml-2.5"
-      >
+      <Typography variant="sm" bold className="ml-2.5">
         {menuItem.label}
-      </Text>
+      </Typography>
     </Stack>
   );
 };
-
 export default MenuItemLabel;

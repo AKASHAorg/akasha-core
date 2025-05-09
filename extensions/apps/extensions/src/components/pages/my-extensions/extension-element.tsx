@@ -6,7 +6,7 @@ import ExtensionIcon from '@akashaorg/design-system-core/lib/components/Extensio
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import Menu from '@akashaorg/design-system-core/lib/components/Menu';
 import {
   EyeIcon,
@@ -26,7 +26,6 @@ import {
   AkashaAppApplicationType,
   AppImageSource,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-
 type ExtensionElement = {
   extensionId: string;
   extensionName?: string;
@@ -40,7 +39,6 @@ type ExtensionElement = {
   filterShowAllOptionValue?: string;
   showMenu?: boolean;
 };
-
 export const ExtensionElement: React.FC<ExtensionElement> = ({
   extensionId,
   extensionName,
@@ -56,11 +54,8 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
 }) => {
   const { t } = useTranslation('app-extensions');
   const sdk = React.useRef(getSDK());
-
   const { navigateToModal } = useRootComponentProps();
-
   const navigate = useNavigate();
-
   const { data: appStreamReq } = useGetAppsStreamQuery({
     variables: {
       indexer: sdk.current.services.gql.indexingDID,
@@ -77,48 +72,51 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
     notifyOnNetworkStatusChange: true,
     skip: !extensionId || !extensionId?.trim() || extensionId?.length < 10 || isExtensionLocalDraft,
   });
-
   const appStreamStatus = selectAkashaAppStreamStatus(appStreamReq);
-
   const handleExtensionRemove = () => {
     navigateToModal({
       name: `remove-extension-confirmation`,
       extensionId: extensionId,
     });
   };
-
   const handleEditLocalExtension = () => {
     navigate({
       to: `/edit-extension/$extensionId/step1`,
-      params: { extensionId: extensionId },
+      params: {
+        extensionId: extensionId,
+      },
     });
   };
-
   const handleEditPublishedExtension = () => {
     navigate({
       to: `/edit-published-extension/$extensionId/form`,
-      params: { extensionId: extensionId },
+      params: {
+        extensionId: extensionId,
+      },
     });
   };
-
   const handleNavigateToExtensionInfoPage = () => {
     navigate({
       to: `/info/$appId`,
-      params: { appId: extensionName },
+      params: {
+        appId: extensionName,
+      },
     });
   };
-
   const handleExtensionSubmit = () => {
     navigate({
       to: `/publish-extension/$extensionId`,
-      params: { extensionId: extensionId },
+      params: {
+        extensionId: extensionId,
+      },
     });
   };
-
   const handleReleaseManager = () => {
     navigate({
       to: `/release-manager/$extensionId`,
-      params: { extensionId: extensionId },
+      params: {
+        extensionId: extensionId,
+      },
     });
   };
 
@@ -148,7 +146,10 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
             label: t('Delete Extension'),
             icon: <Trash2Icon className={style2} />,
             onClick: handleExtensionRemove,
-            color: { light: 'errorLight', dark: 'errorDark' },
+            color: {
+              light: 'errorLight',
+              dark: 'errorDark',
+            },
           },
         ];
       case ExtensionStatus.Published:
@@ -172,7 +173,10 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
             label: t('Delete Extension'),
             icon: <Trash2Icon className={style2} />,
             onClick: handleExtensionRemove,
-            color: { light: 'errorLight', dark: 'errorDark' },
+            color: {
+              light: 'errorLight',
+              dark: 'errorDark',
+            },
           },
         ];
       case ExtensionStatus.LocalDraft:
@@ -196,14 +200,16 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
             label: t('Delete Extension'),
             icon: <Trash2Icon className={style2} />,
             onClick: handleExtensionRemove,
-            color: { light: 'errorLight', dark: 'errorDark' },
+            color: {
+              light: 'errorLight',
+              dark: 'errorDark',
+            },
           },
         ];
       default:
         return [];
     }
   };
-
   const showElement = () => {
     if (!filter) {
       return true;
@@ -214,11 +220,8 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
       return filter === getExtensionStatus(isExtensionLocalDraft, appStreamStatus);
     }
   };
-
   const iconType = useMemo(() => extensionApplicationType, [extensionApplicationType]);
-
   if (!showElement()) return null;
-
   return (
     <Stack spacing={4}>
       <Stack direction="row" justifyContent="between" spacing={8} className="w-full">
@@ -230,9 +233,9 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
           />
           <Stack direction="column" justifyContent="between" className="w-0 min-w-full">
             <Stack direction="row" spacing={2}>
-              <Text variant="button-sm" truncate>
+              <Typography variant="xs" bold className="truncate">
                 {extensionName}
-              </Text>
+              </Typography>
 
               {extensionApplicationType && (
                 <Stack
@@ -244,14 +247,12 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
                 </Stack>
               )}
             </Stack>
-            <Text
-              variant="footnotes2"
-              weight="normal"
-              color={{ light: 'grey4', dark: 'grey7' }}
-              truncate
+            <Typography
+              variant="xs"
+              className="font-medium font-normal text-grey4 dark:text-grey7 truncate"
             >
               {extensionDescription || extensionDisplayName}
-            </Text>
+            </Typography>
           </Stack>
         </Stack>
 
@@ -278,9 +279,9 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
             <div
               className={`w-2 h-2 rounded-full ${getStatusIndicatorStyle(isExtensionLocalDraft, appStreamStatus)}`}
             />
-            <Text variant="footnotes2" weight="normal">
+            <Typography variant="xs" className="font-medium font-normal">
               {getExtensionStatus(isExtensionLocalDraft, appStreamStatus)}
-            </Text>
+            </Typography>
           </Stack>
         </Stack>
       </Stack>
