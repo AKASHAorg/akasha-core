@@ -1,7 +1,12 @@
 import React from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
-import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipProvider,
+} from '@akashaorg/ui/lib/akasha-components/tooltip';
 import ProfileAvatarLoading from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton/ProfileAvatarLoading';
 import {
   ProfileAvatarButton,
@@ -81,17 +86,21 @@ const AuthorProfileAvatar: React.FC<AuthorProfileAvatarProps> = props => {
                 >
                   ·
                 </Typography>
-                <Tooltip
-                  placement={'top'}
-                  content={createdAt ? formatDate(createdAt, 'H[:]mm [·] D MMM YYYY', locale) : ''}
-                >
-                  <Typography
-                    variant="xs"
-                    className="font-medium font-normal text-grey4 dark:text-grey7"
-                  >
-                    {publishTime}
-                  </Typography>
-                </Tooltip>
+                <TooltipProvider delayDuration={0}>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Typography
+                        variant="xs"
+                        className="font-medium font-normal text-grey4 dark:text-grey7"
+                      >
+                        {publishTime}
+                      </Typography>
+                    </TooltipTrigger>
+                    <TooltipContent side="top">
+                      {createdAt ? formatDate(createdAt, 'H[:]mm [·] D MMM YYYY', locale) : ''}
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </Stack>
             )}
             {pending && (
