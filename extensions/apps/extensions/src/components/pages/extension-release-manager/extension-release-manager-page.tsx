@@ -13,7 +13,7 @@ import {
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
-import { Loader2 } from 'lucide-react';
+import { ChevronRightIcon, XIcon, Loader2 } from 'lucide-react';
 import DynamicInfiniteScroll from '@akashaorg/design-system-core/lib/components/DynamicInfiniteScroll';
 import { useAkashaStore, useDismissedCard, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { Extension, NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
@@ -31,8 +31,6 @@ import {
 } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-releases-query';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { ChevronRightIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 import { ApolloError, NetworkStatus } from '@apollo/client';
 const ENTRY_HEIGHT = 82;
@@ -279,7 +277,7 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
                 </Typography>
               </Stack>
               <button onClick={dismissCard}>
-                <Icon icon={<XMarkIcon />} size="sm" />
+                <XIcon className="h-4 w-4" />
               </button>
             </Stack>
           </Stack>
@@ -388,7 +386,7 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
                             {createdAt}
                           </Typography>
                         </Stack>
-                        <Icon icon={<ChevronRightIcon />} accentColor={true} size="xl" />
+                        <ChevronRightIcon className="h-8 w-8 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
                       </Stack>
                     </button>
                     {itemIndex < appReleases?.length - 1 && <Divider />}

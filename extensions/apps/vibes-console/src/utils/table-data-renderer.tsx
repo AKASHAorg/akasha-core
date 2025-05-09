@@ -1,6 +1,5 @@
 import React from 'react';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { ChevronRightIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { ChevronRightIcon } from 'lucide-react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
@@ -21,6 +20,6 @@ export const renderStatus = (status: TApplicationStatus) => (
 );
 export const renderChevron = () => (
   <Stack align="end">
-    <Icon icon={<ChevronRightIcon />} accentColor={true} />
+    <ChevronRightIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
   </Stack>
 );

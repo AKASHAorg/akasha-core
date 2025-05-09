@@ -3,7 +3,6 @@ import { DelayLoad } from '@akashaorg/design-system-core/lib/utils/delay-load';
 import { type GalleryImage } from '@akashaorg/typings/lib/ui';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { ImageCrossed } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
 export interface IGridItemProps {
@@ -93,10 +92,7 @@ export const ImageBlockGridItem: React.FC<IGridItemProps> = props => {
           })}
           className={`p-4 bg-grey9 dark:bg-grey5 rounded w-full h-[var(--height)] ${heightStyle} ${multipleImageStyle}`}
         >
-          <Icon
-            icon={<ImageCrossed />}
-            customStyle={'[&>*]:stroke-grey5 dark:[&>*]:stroke-white'}
-          />
+          <ImageCrossed className="h-5 w-5 [&>*]:stroke-grey5 dark:[&>*]:stroke-white" />
           <Typography variant="xs" className="font-medium text-grey5 dark:text-white">
             {imageNotLoadedLabel}
           </Typography>

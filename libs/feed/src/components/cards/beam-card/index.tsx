@@ -22,8 +22,8 @@ import {
   selectReflectionsCount,
 } from '@akashaorg/ui-core-hooks/lib/selectors/get-beam-by-id-query';
 import getSDK from '@akashaorg/core-sdk';
-import { FlagIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import { TrashIcon } from '@heroicons/react/24/outline';
+import { FlagIcon, Trash2Icon } from 'lucide-react';
+
 type BeamCardProps = Pick<
   EntryCardProps,
   | 'contentClickable'
@@ -105,7 +105,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
     ...(!isViewer && flagAsLabel
       ? [
           {
-            icon: <FlagIcon />,
+            icon: <FlagIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
             label: flagAsLabel,
             color: {
               light: 'errorLight',
@@ -119,12 +119,10 @@ const BeamCard: React.FC<BeamCardProps> = props => {
     ...(isViewer && removeEntryLabel
       ? [
           {
-            icon: <TrashIcon />,
+            icon: (
+              <Trash2Icon className="h-5 w-5 [&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark" />
+            ),
             label: t('Remove'),
-            color: {
-              light: 'errorLight',
-              dark: 'errorDark',
-            } as const,
             onClick: handleEntryRemove,
           },
         ]

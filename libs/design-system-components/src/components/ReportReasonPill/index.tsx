@@ -1,6 +1,5 @@
 import React from 'react';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { FlagIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { FlagIcon } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
@@ -25,11 +24,7 @@ const ReportReasonPill: React.FC<ReportReasonPillProps> = props => {
         className="w-fit rounded-full bg-secondaryLight/30 dark:bg-secondaryDark"
       >
         <Stack direction="row" alignItems="center" spacing={1} className="p-2">
-          <Icon
-            icon={<FlagIcon />}
-            size="sm"
-            customStyle="[&>*]:stroke-secondaryLight dark:[&>*]:stroke-grey2"
-          />
+          <FlagIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-grey2" />
           <Typography variant="xs" className="font-medium text-secondaryLight dark:text-grey2">
             {reportCount}
           </Typography>

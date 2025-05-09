@@ -6,10 +6,7 @@ import {
   ErrorLoaderTitle,
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
 import FollowProfileButton from '../follow-profile-button';
-import {
-  FlagIcon,
-  LinkIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { FlagIcon, LinkIcon } from 'lucide-react';
 import { ProfileHeaderLoading, ProfileHeader as ProfileHeaderPresentation } from '../profile';
 import { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
 import {
@@ -112,14 +109,14 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
   const menuItems: MenuProps['items'] = [
     {
       label: t('Copy link'),
-      icon: <LinkIcon />,
+      icon: <LinkIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
       onClick: handleCopy,
     },
     ...(!isViewer
       ? ([
           {
             label: t('Flag'),
-            icon: <FlagIcon />,
+            icon: <FlagIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
             onClick: handleFlagProfile,
             color: { light: 'errorLight', dark: 'errorDark' },
           },

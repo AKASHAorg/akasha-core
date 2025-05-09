@@ -1,6 +1,5 @@
 import React from 'react';
 import Stack from '../Stack';
-import Icon from '../Icon';
 import Text from '../Text';
 import Button from '../Button';
 import { IconType } from '@akashaorg/typings/lib/ui';
@@ -56,7 +55,7 @@ const SubtitleTextIcon: React.FC<SubtitleTextIconProps> = props => {
     label,
     labelSize = 'button-sm',
     subtitle,
-    maxWidth,
+    maxWidth = '',
     dataTestId,
     customStyle = '',
     onClick,
@@ -78,15 +77,7 @@ const SubtitleTextIcon: React.FC<SubtitleTextIconProps> = props => {
       >
         {icon && (
           <Stack direction="row" align="center" justify="center" customStyle={iconBackgroundStyle}>
-            <Icon
-              icon={icon}
-              solid={solid}
-              customStyle={`[&>svg]:w-4 [&>svg]:h-5 ${
-                solid
-                  ? '[&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark'
-                  : '[&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark'
-              }`}
-            />
+            {icon}
           </Stack>
         )}
         <Stack customStyle="max-w(xl:[8rem] lg:[10rem] md:[6rem] xs:[2rem])">

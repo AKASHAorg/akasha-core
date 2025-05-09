@@ -25,7 +25,7 @@ const typographyVariants = cva('text-foreground', {
 
 type Variant = VariantProps<typeof typographyVariants>['variant'];
 
-type Heading = 'h1' | 'h2' | 'h3' | 'h4' | 'h5';
+type Heading = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 
 function isHeading(variant: Variant): variant is Heading {
   return (

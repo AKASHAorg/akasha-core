@@ -1,7 +1,6 @@
 import React from 'react';
 import Stack from '../Stack';
 import Text from '../Text';
-import Icon from '../Icon';
 import Button from '../Button';
 import { ListItem } from '.';
 
@@ -19,7 +18,7 @@ const ListElement: React.FC<ListItemProps> = props => {
   return (
     <Button customStyle={customStyle} onClick={handleButtonClick} disabled={disabled} plain>
       <Stack direction="row" align="center" spacing="gap-x-1" customStyle="py-2 px-4">
-        {icon && <Icon icon={icon} size="sm" />}
+        {icon}
         <Text variant="body1" color={color} {...rest}>
           {label}
         </Text>

@@ -5,16 +5,12 @@ import Img from '@akashaorg/design-system-core/lib/components/Image';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Cropper, { Area, CropperProps, Point } from 'react-easy-crop';
 import { type Image } from '@akashaorg/typings/lib/ui';
 import { CroppedImagePreviewProps, CroppedImagePreviews } from './cropped-image-previews';
-import {
-  MagnifyingGlassMinusIcon,
-  MagnifyingGlassPlusIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { ZoomOutIcon, ZoomInIcon } from 'lucide-react';
 import { getCroppedImage } from './get-cropped-image';
-import { XCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-solid';
+import { XCircleIcon } from 'lucide-react';
 import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
 const MIN_ZOOM = 1;
 const MAX_ZOOM = 3;
@@ -175,12 +171,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
       </div>
       {showCropError && (
         <Stack direction="row" spacing={1} alignItems="center">
-          <Icon
-            icon={<XCircleIcon />}
-            size="lg"
-            solid
-            customStyle={'[&>*]:fill-errorLight dark:[&>*]:fill-errorDark'}
-          />
+          <XCircleIcon className="h-6 w-6 [&>*]:fill-errorLight dark:[&>*]:fill-errorDark" />
           <Typography
             variant="xs"
             className="font-medium font-normal text-errorLight dark:text-errorDark"
@@ -194,7 +185,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
       </Typography>
       <Stack direction="column" spacing={4} className="w-full mb-2">
         <Stack direction="row" alignItems="center" spacing={2}>
-          <Icon icon={<MagnifyingGlassMinusIcon />} size="lg" />
+          <ZoomOutIcon className="h-6 w-6 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
           <input
             aria-label="range-input"
             type="range"
@@ -207,7 +198,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
             }
             onChange={e => setZoom(Number(e.target.value))}
           />
-          <Icon icon={<MagnifyingGlassPlusIcon />} size="lg" />
+          <ZoomInIcon className="h-6 w-6 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
         </Stack>
         {previews?.length > 0 && (
           <CroppedImagePreviews

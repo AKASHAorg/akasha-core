@@ -1,5 +1,4 @@
 import React from 'react';
-import Icon from '../Icon';
 import { CopyToClipboard } from '@akashaorg/ui/lib/akasha-components/copy-to-clipboard';
 import Stack from '../Stack';
 import { Eth, Solana, DidKey, NoEth } from '../Icon/akasha-icons';
@@ -53,7 +52,7 @@ const DidField: React.FC<DidFieldProps> = ({
 
   const didDisplayBlock = (
     <Stack direction="row" spacing="gap-x-1.5" align="center" customStyle={customStyle}>
-      {networkType && <Icon icon={isValid ? didNetworkIconMapping[networkType] : <NoEth />} />}
+      {networkType && isValid ? didNetworkIconMapping[networkType] : <NoEth />}
       <Text variant="footnotes1" color={textColor}>
         {truncatedDid}
       </Text>

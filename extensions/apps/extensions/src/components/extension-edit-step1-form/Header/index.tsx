@@ -9,13 +9,7 @@ import ImageModal, {
 } from '@akashaorg/design-system-components/lib/components/ImageModal';
 import Img from '@akashaorg/design-system-core/lib/components/Image';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
-import {
-  ArrowUpOnSquareIcon,
-  PencilIcon,
-  PencilSquareIcon,
-  TrashIcon,
-  InformationCircleIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { UploadIcon, PencilIcon, SquarePenIcon, InfoIcon, Trash2Icon } from 'lucide-react';
 import { ExtensionImageType, type Image } from '@akashaorg/typings/lib/ui';
 import Modal, { ModalProps } from '@akashaorg/design-system-core/lib/components/Modal';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils/useCloseActions';
@@ -120,7 +114,7 @@ export const Header: React.FC<HeaderProps> = ({
   const dropDownActions: ListProps['items'] = [
     {
       label: 'Upload',
-      icon: <ArrowUpOnSquareIcon />,
+      icon: <UploadIcon className="h-4 w-4" />,
       onClick: () => {
         if (uploadInputRef.current) uploadInputRef.current.click();
         closeActionsDropDown();
@@ -130,7 +124,7 @@ export const Header: React.FC<HeaderProps> = ({
       ? [
           {
             label: 'Edit',
-            icon: <PencilIcon />,
+            icon: <PencilIcon className="h-4 w-4" />,
             onClick: () => {
               switch (appImageType) {
                 case 'logo-image':
@@ -145,11 +139,10 @@ export const Header: React.FC<HeaderProps> = ({
           },
           {
             label: 'Delete',
-            icon: <TrashIcon />,
-            color: {
-              light: 'errorLight',
-              dark: 'errorDark',
-            } as const,
+            icon: (
+              <Trash2Icon className="h-4 w-4 [&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark" />
+            ),
+            color: { light: 'errorLight', dark: 'errorDark' } as const,
             onClick: () => {
               setShowDeleteImage(true);
               closeActionsDropDown();
@@ -278,7 +271,7 @@ export const Header: React.FC<HeaderProps> = ({
                 setAppImageType('cover-image');
               }}
             >
-              <PencilSquareIcon />
+              <SquarePenIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
             </Button>
             {showCoverActions && (
               <List items={dropDownActions} customStyle="absolute right-0 top-7 w-auto z-10" />
@@ -305,7 +298,7 @@ export const Header: React.FC<HeaderProps> = ({
                   setAppImageType('logo-image');
                 }}
               >
-                <PencilSquareIcon />
+                <SquarePenIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
               </Button>
               {showLogoImageActions && (
                 <List items={dropDownActions} customStyle="absolute top-7 w-auto z-10" />
@@ -313,7 +306,7 @@ export const Header: React.FC<HeaderProps> = ({
             </Stack>
           </Stack>
           <Button variant="link" onClick={() => setShowLogoGuidelineModal(true)}>
-            <InformationCircleIcon />
+            <InfoIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
             {logoGuidelines.titleLabel}
           </Button>
         </Stack>

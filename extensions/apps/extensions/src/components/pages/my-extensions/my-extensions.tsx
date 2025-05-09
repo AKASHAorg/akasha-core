@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { capitalize } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
-import { BookOpenIcon } from '@heroicons/react/24/outline';
+import { BookOpenIcon } from 'lucide-react';
 import {
   filterEvents,
   hasOwn,
@@ -20,7 +20,13 @@ import {
 import { SortOrder, AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Dropdown from '@akashaorg/design-system-core/lib/components/Dropdown';
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from '@akashaorg/ui/lib/components/select';
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
 import DynamicInfiniteScroll from '@akashaorg/design-system-core/lib/components/DynamicInfiniteScroll';
 import {
@@ -29,7 +35,6 @@ import {
   ErrorLoaderTitle,
   ErrorLoaderFooter,
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
@@ -62,26 +67,26 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
   };
   const extensionTypeMenuItems = useMemo(
     () => [
-      t('Type'),
       capitalize(AkashaAppApplicationType.App),
       capitalize(AkashaAppApplicationType.Widget),
       capitalize(AkashaAppApplicationType.Plugin),
       capitalize(AkashaAppApplicationType.Other),
     ],
-    [t],
+    [],
   );
   const extensionStatusMenuItems = [
-    t('Status'),
     ExtensionStatus.LocalDraft,
     ExtensionStatus.Draft,
     ExtensionStatus.InReview,
     ExtensionStatus.Published,
   ];
-  const [selectedType, setSelectedType] = React.useState<string>(extensionTypeMenuItems[0]);
-  const [selectedStatus, setSelectedStatus] = React.useState<string>(extensionStatusMenuItems[0]);
+
+  const [selectedType, setSelectedType] = React.useState<string>('');
+  const [selectedStatus, setSelectedStatus] = React.useState<string>('');
+
   const handleResetClick = () => {
-    setSelectedStatus(extensionStatusMenuItems[0]);
-    setSelectedType(extensionTypeMenuItems[0]);
+    setSelectedStatus('');
+    setSelectedType('');
   };
   const {
     data: appsByPubReqData,
@@ -113,12 +118,10 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
   }, [appsList]);
   const appElements = useMemo(() => {
     return appsData?.filter(ext => {
-      if (selectedType === extensionTypeMenuItems[0]) {
-        return true;
-      }
       return ext?.applicationType === selectedType.toUpperCase();
     });
-  }, [appsData, selectedType, extensionTypeMenuItems]);
+  }, [appsData, selectedType]);
+
   const [draftExtensions, setDraftExtensions] = useState([]);
 
   // fetch the draft extensions that are saved only on local storage
@@ -182,7 +185,7 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
       <Stack direction="row" justifyContent="between">
         <Typography variant="h5">{t('My extensions')}</Typography>
         <Link target="_blank" to="https://docs.akasha.world" customStyle="w-fit self-end">
-          <Icon icon={<BookOpenIcon />} accentColor />
+          <BookOpenIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
         </Link>
       </Stack>
       <Stack
@@ -197,18 +200,31 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
         </Button>
       </Stack>
       <Stack direction="row" justifyContent="between" alignItems="center" spacing={4}>
-        <Dropdown
-          menuItems={extensionTypeMenuItems}
-          selected={selectedType}
-          setSelected={setSelectedType}
-          customStyle="grow"
-        />
-        <Dropdown
-          menuItems={extensionStatusMenuItems}
-          selected={selectedStatus}
-          setSelected={setSelectedStatus}
-          customStyle="grow"
-        />
+        <Select value={selectedType} onValueChange={setSelectedType}>
+          <SelectTrigger className="grow text-foreground">
+            <SelectValue placeholder={t('Type')} />
+          </SelectTrigger>
+          <SelectContent>
+            {extensionTypeMenuItems.map(item => (
+              <SelectItem key={item} value={item}>
+                {item}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+          <SelectTrigger className="grow text-foreground">
+            <SelectValue placeholder={t('Status')} />
+          </SelectTrigger>
+          <SelectContent>
+            {extensionStatusMenuItems.map(item => (
+              <SelectItem key={item} value={item}>
+                {item}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
         <Button variant="link" size="sm" onClick={handleResetClick}>
           {t('Reset')}
         </Button>

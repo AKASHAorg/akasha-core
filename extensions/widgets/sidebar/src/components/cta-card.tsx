@@ -1,8 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { XMarkIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { XIcon } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 export type SidebarCTACardProps = {
@@ -20,7 +19,7 @@ const SidebarCTACard: React.FC<SidebarCTACardProps> = props => {
         </Typography>
 
         <button onClick={onDismissCard}>
-          <Icon icon={<XMarkIcon />} size="sm" accentColor={true} />
+          <XIcon className='h-4 w-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark' />
         </button>
       </Stack>
 

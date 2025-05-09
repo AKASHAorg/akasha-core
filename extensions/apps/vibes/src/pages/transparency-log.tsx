@@ -2,7 +2,13 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IModerationLogItem } from '@akashaorg/typings/lib/ui';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Dropdown from '@akashaorg/design-system-core/lib/components/Dropdown';
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from '@akashaorg/ui/lib/components/select';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 import TransparencyLogItemCard from '../components/transparency-log/log-item';
@@ -19,12 +25,12 @@ export const TransparencyLog: React.FC<unknown> = () => {
   const defaultDecision = 'Decision';
   const defaultCategory = 'Category';
 
-  const [filterByDecision, setfilterByDecision] = useState(defaultDecision);
-  const [filterByCategory, setfilterByCategory] = useState(defaultCategory);
+  const [filterByDecision, setfilterByDecision] = useState('');
+  const [filterByCategory, setfilterByCategory] = useState('');
 
   const resetFilters = () => {
-    setfilterByDecision(defaultDecision);
-    setfilterByCategory(defaultCategory);
+    setfilterByDecision('');
+    setfilterByCategory('');
   };
 
   const moderationEntries = [];
@@ -44,20 +50,39 @@ export const TransparencyLog: React.FC<unknown> = () => {
     <Stack spacing="gap-y-4">
       <Stack direction="row" align="center" justify="between">
         <Stack direction="row" align="center" spacing="gap-x-3">
-          <Dropdown
+          <Select
             name="filterByDecision"
-            placeholderLabel={defaultDecision}
-            selected={filterByDecision}
-            menuItems={['Kept', 'Delisted', 'Suspended']}
-            setSelected={setfilterByDecision}
-          />
-          <Dropdown
+            value={filterByDecision}
+            onValueChange={setfilterByDecision}
+          >
+            <SelectTrigger className="grow text-foreground">
+              <SelectValue placeholder={defaultDecision} />
+            </SelectTrigger>
+            <SelectContent>
+              {['Kept', 'Delisted', 'Suspended'].map(item => (
+                <SelectItem key={item} value={item}>
+                  {item}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <Select
             name="filterByCategory"
-            placeholderLabel={defaultCategory}
-            selected={filterByCategory}
-            menuItems={['Beam', 'Reflection', 'Profile']}
-            setSelected={setfilterByCategory}
-          />
+            value={filterByCategory}
+            onValueChange={setfilterByCategory}
+          >
+            <SelectTrigger className="grow text-foreground">
+              <SelectValue placeholder={defaultCategory} />
+            </SelectTrigger>
+            <SelectContent>
+              {['Beam', 'Reflection', 'Profile'].map(item => (
+                <SelectItem key={item} value={item}>
+                  {item}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </Stack>
         <Button variant="text" size="md" label={`${t('Reset')}`} onClick={resetFilters} />
       </Stack>

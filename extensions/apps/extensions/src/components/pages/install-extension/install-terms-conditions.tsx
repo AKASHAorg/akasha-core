@@ -1,16 +1,12 @@
-import React, { ChangeEvent, useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
-import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import {
-  ArrowPathIcon,
-  ArrowTopRightOnSquareIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { Loader2, SquareArrowUpRight } from 'lucide-react';
 import { useNavigate } from '@tanstack/react-router';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
+import { Checkbox } from '@akashaorg/ui/lib/components/checkbox';
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
 import {
   AkashaAppApplicationType,
@@ -81,7 +77,6 @@ export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
   const {
     data: { authenticatedDID, isAuthenticating },
   } = useAkashaStore();
-  useEffect(() => {}, []);
   const navigate = useNavigate();
   const [acceptedTerms, setAcceptedTerms] = React.useState<AcceptedTerms>({
     [TermsFields.PRIVACY_POLICY]: false,
@@ -90,8 +85,8 @@ export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
     [TermsFields.DISCLAIMERS]: false,
   });
   const { t } = useTranslation();
-  const handleCheckboxChange = (ev: ChangeEvent<HTMLInputElement>) => {
-    const { name, checked } = ev.target;
+
+  const handleCheckboxChange = (name: string, checked: boolean) => {
     setAcceptedTerms(prev => ({
       ...prev,
       [name]: checked,
@@ -186,26 +181,25 @@ export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
       <Stack direction="column" spacing={4} className="mx-4 mb-4">
         {Object.keys(acceptedTerms).map(stateKey => (
           <Stack direction="row" spacing={2} key={stateKey} alignItems={'center'}>
-            <Checkbox
-              key={stateKey}
-              id={stateKey}
-              isSelected={acceptedTerms[stateKey]}
-              name={stateKey}
-              label={fieldLabels[stateKey]}
-              handleChange={handleCheckboxChange}
-              value={'value'}
-              customStyle={'gap-x-3'}
-            />
+            <Stack direction="row" alignItems="center" spacing={2}>
+              <Checkbox
+                id={stateKey}
+                name={stateKey}
+                value={stateKey}
+                onCheckedChange={checked => handleCheckboxChange(stateKey, checked as boolean)}
+                checked={acceptedTerms[stateKey]}
+              />
+              <label htmlFor={stateKey}>
+                <Typography variant="sm">{fieldLabels[stateKey]}</Typography>
+              </label>
+            </Stack>
             <a
               href={TermsLinks[stateKey]}
               target="_blank"
               rel="noopener noreferrer"
               className="p-1.5"
             >
-              <Icon
-                customStyle="[&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark"
-                icon={<ArrowTopRightOnSquareIcon />}
-              />
+              <SquareArrowUpRight className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
             </a>
           </Stack>
         ))}
@@ -238,7 +232,7 @@ const TermsHeader = ({
     <Stack className="p-3">
       <Typography variant="h5">{t('User Agreement')}</Typography>
       <Stack direction="row" spacing={2} alignItems="center" className="mt-3">
-        {isLoading && <Icon icon={<ArrowPathIcon />} />}
+        {isLoading && <Loader2 className="h-5 w-5 animate-spin" />}
         {!isLoading && (
           <AppAvatar
             customStyle="w-10 h-10 cursor-default"

@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from 'react';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { Cog8ToothIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+
+import { SettingsIcon } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import SearchBar from '@akashaorg/design-system-components/lib/components/SearchBar';
@@ -42,7 +42,7 @@ const SearchStartCard: React.FC<SearchStartProps> = ({
         </Typography>
         <Stack>
           <Button customStyle="relative" plain={true} onClick={() => handleTopMenuClick()}>
-            <Icon icon={<Cog8ToothIcon />} accentColor={true} />
+            <SettingsIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
           </Button>
         </Stack>
       </Stack>

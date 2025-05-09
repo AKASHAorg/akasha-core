@@ -1,7 +1,6 @@
 import React from 'react';
 
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { TrashIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { Trash2Icon } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Input } from '@akashaorg/ui/lib/akasha-components/input';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
@@ -28,11 +27,7 @@ export const LinkElement: React.FC<LinkElementProps> = ({
         <Typography variant="h6">{`${linkElementLabel} ${value._id}`}</Typography>
         <div className="relative w-5 h-5">
           <button onClick={onDelete} className="absolute top-1 right-0">
-            <Icon
-              icon={<TrashIcon />}
-              size="md"
-              customStyle={'[&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark'}
-            />
+            <Trash2Icon className="h-5 w-5 [&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark" />
           </button>
         </div>
       </Stack>

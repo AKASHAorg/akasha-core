@@ -5,7 +5,7 @@ import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Lock } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { LockIcon } from 'lucide-react';
 export interface IUnlockCardProps {
   // data
   loading?: boolean;
@@ -17,12 +17,7 @@ const UnlockCard: React.FC<IUnlockCardProps> = ({ onClick, loading }) => {
   return (
     <Card className="p-4">
       <Stack direction="row" spacing={3}>
-        <Icon
-          icon={<Lock />}
-          size="md"
-          solid={true}
-          customStyle="[&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark"
-        />
+        <LockIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
         <Stack direction="column" spacing={1}>
           <Typography variant="sm" bold className="text-black dark:text-white">
             {t('Unlock preferences')}

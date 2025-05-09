@@ -5,8 +5,7 @@ import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import PageLayout from './base-layout';
 import { useAkashaStore, useRootComponentProps, useNotifications } from '@akashaorg/ui-core-hooks';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { ChevronRightIcon } from '@heroicons/react/24/outline';
+import { ChevronRightIcon } from 'lucide-react';
 import { ISettingsItem, SettingsOption } from '../../utils/settings-items';
 import {
   ErrorLoader,
@@ -136,7 +135,9 @@ const NotificationsOption: React.FC = () => {
             const children = (
               <>
                 <Typography>{`${t('{{itemLabel}}', { itemLabel: item.label as string })}`}</Typography>
-                {!item.isSubheading && <Icon icon={<ChevronRightIcon />} accentColor={true} />}
+                {!item.isSubheading && (
+                  <ChevronRightIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+                )}
               </>
             );
 

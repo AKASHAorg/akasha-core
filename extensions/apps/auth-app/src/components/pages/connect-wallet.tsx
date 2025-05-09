@@ -11,16 +11,16 @@ import {
 } from '@akashaorg/ui-core-hooks';
 import IndicatorDots from '@akashaorg/design-system-components/lib/components/IndicatorDots';
 import ConnectErrorCard from '@akashaorg/design-system-components/lib/components/ConnectErrorCard';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import {
   Akasha,
   Walletconnect,
 } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
-import { ArrowsRightLeftIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import { useNavigate } from '@tanstack/react-router';
+import { ArrowRightLeftIcon } from 'lucide-react';
+
 const ConnectWallet: React.FC = () => {
   const { t } = useTranslation('app-auth-ewa');
   const navigate = useNavigate();
@@ -253,7 +253,7 @@ const ConnectWallet: React.FC = () => {
           <Stack alignItems="center" justifyContent="center">
             <Card onClick={handleDisconnect} className="shadow-none">
               <Stack alignItems="center" spacing={2} className="md:flex-row">
-                <Icon icon={<ArrowsRightLeftIcon />} accentColor={true} />
+                <ArrowRightLeftIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
                 <Typography
                   bold
                   className="text-secondaryLight dark:text-secondaryDark text-center"

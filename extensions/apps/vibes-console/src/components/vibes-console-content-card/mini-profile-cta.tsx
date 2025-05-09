@@ -1,10 +1,9 @@
 import React from 'react';
 import { Image } from '@akashaorg/typings/lib/ui';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { ExclamationTriangleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
+import { TriangleAlertIcon } from 'lucide-react';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import {
   ProfileAvatarButton,
@@ -60,11 +59,7 @@ const MiniProfileCTA: React.FC<MiniProfileCTAProps> = props => {
             spacing={1}
             className="py-1 px-2 bg-warningLight/30 dark:bg-warningDark/30 rounded-[0.25rem]"
           >
-            <Icon
-              icon={<ExclamationTriangleIcon />}
-              size="xs"
-              customStyle="[&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark"
-            />
+            <TriangleAlertIcon className="h-3 w-3 [&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark" />
             <Typography variant="xs" className="font-medium font-normal">
               {nsfwLabel}
             </Typography>

@@ -3,12 +3,7 @@ import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import {
-  CheckIcon,
-  ChevronDownIcon,
-  ChevronUpIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 export type DropdownMenuItemGroupType = {
@@ -81,9 +76,9 @@ const DropdownFilter: React.FC<IDropdownFilterProps> = ({
       >
         <Typography>{selected?.altTitle || selected?.title}</Typography>
         {dropOpen ? (
-          <Icon icon={<ChevronUpIcon />} customStyle="ml-4" />
+          <ChevronUpIcon className="h-5 w-5 ml-4" />
         ) : (
-          <Icon icon={<ChevronDownIcon />} customStyle="ml-4" />
+          <ChevronDownIcon className="h-5 w-5 ml-4" />
         )}
       </button>
 
@@ -125,16 +120,7 @@ const DropdownFilter: React.FC<IDropdownFilterProps> = ({
                                   spacing={2}
                                   className={`w-full ${selected.id === item.id ? 'text-secondaryLight' : 'text-black'}`}
                                 >
-                                  {item?.icon && (
-                                    <Icon
-                                      icon={item.icon}
-                                      customStyle={
-                                        selected.id === item.id
-                                          ? '[&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark'
-                                          : '[&>*]:stroke-black dark:[&>*]:stroke-white'
-                                      }
-                                    />
-                                  )}
+                                  {item.icon}
                                   <Typography>{item.title}</Typography>
                                 </Stack>
                               </Card>
@@ -159,16 +145,7 @@ const DropdownFilter: React.FC<IDropdownFilterProps> = ({
                           spacing={2}
                           className={`w-full ${isSelected ? 'text-secondaryLight' : 'text-black'}`}
                         >
-                          {menuItem?.icon && (
-                            <Icon
-                              icon={menuItem.icon}
-                              customStyle={
-                                isSelected
-                                  ? '[&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark'
-                                  : '[&>*]:stroke-black dark:[&>*]:stroke-white'
-                              }
-                            />
-                          )}
+                          {menuItem.icon}
                           <Typography>{menuItem.title}</Typography>
                         </Stack>
                       </Button>
@@ -188,25 +165,11 @@ const DropdownFilter: React.FC<IDropdownFilterProps> = ({
                         spacing={2}
                         className={`w-full ${isSelected ? 'text-secondaryLight' : 'text-black'}`}
                       >
-                        {menuItem?.icon && (
-                          <Icon
-                            icon={menuItem.icon}
-                            customStyle={
-                              isSelected
-                                ? '[&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark'
-                                : '[&>*]:stroke-black dark:[&>*]:stroke-white'
-                            }
-                          />
-                        )}
+                        {menuItem.icon}
                         <Typography>{menuItem.title}</Typography>
                         {isSelected && (
                           <span className={'ml-4'}>
-                            <Icon
-                              icon={<CheckIcon />}
-                              customStyle={
-                                '[&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark'
-                              }
-                            />
+                            <CheckIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
                           </span>
                         )}
                       </Stack>

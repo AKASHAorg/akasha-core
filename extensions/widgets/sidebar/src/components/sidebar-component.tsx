@@ -156,6 +156,9 @@ const SidebarComponent: React.FC<unknown> = () => {
     return () => window.removeEventListener('popstate', handleBackNavEvent);
   });
 
+  const outlineStyle = 'h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark';
+  const solidStyle = 'h-5 w-5 [&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark';
+
   /**
    * this assigns the corresponding icons to the social links from root components
    */
@@ -163,22 +166,22 @@ const SidebarComponent: React.FC<unknown> = () => {
     if (el.icon === 'Github')
       return {
         ...el,
-        icon: <Github />,
+        icon: <Github className={outlineStyle} />,
       };
     if (el.icon === 'Discord')
       return {
         ...el,
-        icon: <Discord />,
+        icon: <Discord className={solidStyle} />,
       };
     if (el.icon === 'Telegram')
       return {
         ...el,
-        icon: <Telegram />,
+        icon: <Telegram className={solidStyle} />,
       };
     if (el.icon === 'Twitter')
       return {
         ...el,
-        icon: <Twitter />,
+        icon: <Twitter className={solidStyle} />,
       };
   });
   return (

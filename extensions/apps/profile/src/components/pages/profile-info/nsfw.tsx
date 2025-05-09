@@ -1,9 +1,10 @@
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import React from 'react';
-import { EyeSlashIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { EyeOffIcon } from 'lucide-react';
+
 export type NSFWProps = {
   sensitiveContentLabel: string;
   descriptionFirstLine: string;
@@ -26,8 +27,8 @@ const NSFW: React.FC<NSFWProps> = props => {
   return (
     <Stack alignItems="center" justifyContent="center" spacing={2}>
       <Stack direction="row" spacing={1}>
-        <Icon icon={<EyeSlashIcon />} customStyle="[&>*]:stroke-errorLight" />
-        <Typography variant="h6" className="text-errorLight">
+        <EyeOffIcon className="h-5 w-5 [&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark" />
+       <Typography variant="h6" className="text-errorLight">
           {sensitiveContentLabel}
         </Typography>
       </Stack>

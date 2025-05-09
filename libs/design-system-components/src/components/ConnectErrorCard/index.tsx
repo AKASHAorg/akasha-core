@@ -1,8 +1,7 @@
 import React from 'react';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { ExclamationTriangleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { TriangleAlertIcon } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 export type ConnectErrorCardProps = {
@@ -25,10 +24,7 @@ const ConnectErrorCard: React.FC<ConnectErrorCardProps> = ({ title, message, act
       <Stack direction="column" spacing={2}>
         <Stack justifyContent="between">
           <Stack direction="row" alignItems="center" spacing={2}>
-            <Icon
-              icon={<ExclamationTriangleIcon />}
-              customStyle={'[&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark'}
-            />
+            <TriangleAlertIcon className="h-5 w-5[&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark" />
             <Typography variant="sm" bold className="grow text-errorLight dark:text-errorDark">
               {title}
             </Typography>

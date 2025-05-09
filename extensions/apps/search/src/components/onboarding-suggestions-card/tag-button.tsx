@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { RssIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { RssIcon } from 'lucide-react';
+
 export interface ITagButton {
   tagName: string;
   isSubscribed?: boolean;
@@ -19,7 +19,7 @@ export const TagButton: React.FC<ITagButton> = props => {
       onClick={onClickTag}
     >
       <Typography className="truncate">{tagName}</Typography>
-      <Icon icon={<RssIcon />} />
+      <RssIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
     </button>
   );
 };

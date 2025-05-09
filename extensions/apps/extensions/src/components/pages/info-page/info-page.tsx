@@ -6,11 +6,7 @@ import {
   ErrorLoaderDescription,
   ErrorLoaderTitle,
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
-import {
-  ChevronRightIcon,
-  FlagIcon,
-  ShareIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { ChevronRightIcon, FlagIcon, Share2Icon } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { useTranslation } from 'react-i18next';
 import { transformSource, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
@@ -32,18 +28,23 @@ import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import ExtensionImageGallery from '../../extension-image-gallery';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { CopyToClipboard } from '@akashaorg/ui/lib/akasha-components/copy-to-clipboard';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import { useInstalledExtensions } from '@akashaorg/ui-core-hooks/lib/use-installed-extensions';
 import { UninstallModal } from './uninstall-modal';
 import AppCoverImage from './AppCoverImage';
-import StackedAvatar from '@akashaorg/design-system-core/lib/components/StackedAvatar';
 import { AppInfoNotificationCards } from '../../app-info/notification-cards';
 import { getExtensionStatus, getExtensionTypeLabel } from '../../../utils/extension-utils';
 import getSDK from '@akashaorg/core-sdk';
 import { ExtensionStatus } from '@akashaorg/typings/lib/ui';
+import { StackedAvatar } from '@akashaorg/ui/lib/akasha-components/stacked-avatar';
+import {
+  ProfileAvatar,
+  ProfileAvatarFallback,
+  ProfileAvatarImage,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar';
+
 type InfoPageProps = {
   appId: string;
 };
@@ -230,13 +231,12 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                   extensionTypeLabel={t('{{extensionTypeLabel}}', {
                     extensionTypeLabel: getExtensionTypeLabel(appData?.applicationType),
                   })}
-                  share={{
-                    label: t('Share'),
-                    icon: <ShareIcon />,
-                  }}
+                  share={{ label: t('Share'), icon: <Share2Icon className="h-4 w-4" /> }}
                   report={{
                     label: t('Flag'),
-                    icon: <FlagIcon />,
+                    icon: (
+                      <FlagIcon className="h-4 w-4 [&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark" />
+                    ),
                     onClick: handleExtensionReportClick,
                     color: {
                       light: 'errorLight',
@@ -288,11 +288,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                             alternative => transformSource(alternative),
                           )}
                         />
-                        <Icon
-                          icon={<ChevronRightIcon />}
-                          size="sm"
-                          customStyle="ml-auto [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark"
-                        />
+                        <ChevronRightIcon className="h-4 w-4 ml-auto [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
                       </Stack>
                     </Card>
                   )}
@@ -409,12 +405,18 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                       onClick={handleCollaboratorsClick}
                     >
                       <Stack direction="row" alignItems="center">
-                        <StackedAvatar userData={contributorAvatars} maxAvatars={4} size="xs" />
-                        <Icon
-                          icon={<ChevronRightIcon />}
-                          size="sm"
-                          customStyle="ml-auto [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark"
-                        />
+                        <StackedAvatar count={contributorAvatars.length}>
+                          {index => (
+                            <ProfileAvatar>
+                              <ProfileAvatarImage
+                                src={contributorAvatars[index].avatar?.src}
+                                alt={contributorAvatars[index].name}
+                              />
+                              <ProfileAvatarFallback />
+                            </ProfileAvatar>
+                          )}
+                        </StackedAvatar>
+                        <ChevronRightIcon className="h-4 w-4 ml-auto [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
                       </Stack>
                     </Card>
                   </Section>

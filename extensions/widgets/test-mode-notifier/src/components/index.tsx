@@ -5,10 +5,7 @@ import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import {
-  MinusIcon,
-  BeakerIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { MinusIcon, BeakerIcon } from 'lucide-react';
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import { LocalReleaseData } from '@akashaorg/typings/lib/ui';
@@ -67,7 +64,7 @@ const TestModeWidget = () => {
         <>
           {isMinimized && (
             <Button variant="outline" size="icon" onClick={toggleMinimize}>
-              <BeakerIcon />
+              <BeakerIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
             </Button>
           )}
           {!isMinimized && (
@@ -75,7 +72,7 @@ const TestModeWidget = () => {
               <Stack direction="row" justifyContent="between" alignItems={'baseline'}>
                 <Typography variant="h6">{t('Testing Environment')}</Typography>
                 <Button variant="outline" size="icon" onClick={toggleMinimize}>
-                  <MinusIcon />
+                  <MinusIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
                 </Button>
               </Stack>
               <Stack className="my-2 rounded-xl bg-inherit bg-grey9 dark:bg-grey3">

@@ -1,7 +1,6 @@
 import React from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { Blocks } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import { Antenna } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import { useTranslation } from 'react-i18next';
@@ -28,7 +27,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = props => {
     <>
       {appDisplayName && (
         <Stack direction="row" align="center" spacing="gap-x-2" customStyle="mr-auto">
-          <Icon icon={<Antenna />} solid={true} accentColor size="sm" />
+          <Antenna className="h-4 w-4 [&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark" />
           <Typography variant="xs" className="font-medium font-normal text-grey7 dark:text-grey6">
             {t('Published via {{name}}', {
               name: appDisplayName,
@@ -43,7 +42,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = props => {
             justify="center"
             customStyle={`${showBlockName ? 'bg-secondaryLight/30 dark:bg-grey5' : 'transparent'} ${showBlockNameStyle}`}
           >
-            <Icon icon={<Blocks />} accentColor={true} />
+            <Blocks className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
           </Stack>
         </button>
       )}

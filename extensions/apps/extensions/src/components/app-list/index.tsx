@@ -4,9 +4,9 @@ import DynamicInfiniteScroll, {
 } from '@akashaorg/design-system-core/lib/components/DynamicInfiniteScroll';
 import ExtensionCard, { ExtensionCardProps } from '../extension-card';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { XCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-solid';
+import { XCircleIcon } from 'lucide-react';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
+
 export type AppListProps = {
   apps: ExtensionCardProps[];
   loadErrorMessage?: {
@@ -54,11 +54,7 @@ const AppList: React.FC<AppListProps> = ({
         if (!apps[itemIndex]) {
           return (
             <Card className="h-full flex flex-col justify-center items-center">
-              <Icon
-                icon={<XCircleIcon />}
-                solid={true}
-                customStyle="mb-4 [&>*]:fill-errorLight dark:[&>*]:fill-errorLight"
-              />
+              <XCircleIcon className="h-5 w-5 mb-4 [&>*]:fill-errorLight dark:[&>*]:fill-errorLight" />
               <Typography variant="sm" bold>
                 {loadErrorMessage?.title}
               </Typography>

@@ -21,8 +21,7 @@ import { getAppInfoFromUserSetting, AppInfo, getAppInfoFromChannelSetting } from
 import LoadingSettingsPlaceholder from './loading-settings-placeholder';
 import ConnectErrorCard from '@akashaorg/design-system-components/lib/components/ConnectErrorCard';
 import AppSetting from './app-setting';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { Info } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
+import { InfoIcon } from 'lucide-react';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 const NotificationsPreferencesOption: React.FC = () => {
   const sdk = getSDK();
@@ -89,7 +88,7 @@ const NotificationsPreferencesOption: React.FC = () => {
         event: NotificationEvents.ShowNotification,
         data: {
           type: NotificationTypes.Error,
-          title: t('Couldn’t unlock preferences'),
+          title: t("Couldn't unlock preferences"),
           description: enabled ? undefined : t('Signature verification failed. Please try again.'),
         },
       });
@@ -181,7 +180,7 @@ const NotificationsPreferencesOption: React.FC = () => {
                 <Stack className="p-4 pt-0">
                   <EnableAllSetting
                     isSelected={enableAllChecked}
-                    onChange={e => handleToggleAll(e.target.checked)}
+                    onChange={checked => handleToggleAll(checked)}
                   />
                   <Typography variant="h6" className="mb-4">
                     {t('Default Extensions')}
@@ -197,7 +196,7 @@ const NotificationsPreferencesOption: React.FC = () => {
                             title={appInfo.title}
                             description={appInfo.description}
                             isSelected={appInfo.enabled}
-                            onChange={e => handleSetPreference(e.target.checked, index)}
+                            onChange={checked => handleSetPreference(checked, index)}
                           />
                           {appPreferences.length - 1 !== index && (
                             <Divider customStyle={`dark:border-grey5 my-4`} />
@@ -206,12 +205,7 @@ const NotificationsPreferencesOption: React.FC = () => {
                       ))}
                       <Card className="mt-4 bg-grey9 dark:bg-grey3">
                         <Stack direction="row" spacing={3} alignItems="center">
-                          <Icon
-                            icon={<Info />}
-                            size="lg"
-                            solid={true}
-                            customStyle="[&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark"
-                          />
+                          <InfoIcon className="h-6 w-6 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
                           <Typography className="text-sm">
                             {t('Changing notifications preferences requires a signature')}
                           </Typography>

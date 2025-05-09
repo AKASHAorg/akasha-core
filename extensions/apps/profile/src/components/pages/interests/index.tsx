@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import { CheckIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { CheckIcon } from 'lucide-react';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
@@ -188,9 +188,7 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
                     onPillClick={() => handleInterestClick(interest)}
                     active={isActive}
                     type="action"
-                    {...(isActive && {
-                      icon: <CheckIcon />,
-                    })}
+                    {...(isActive && { icon: <CheckIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" /> })}
                   />
                 );
               })}

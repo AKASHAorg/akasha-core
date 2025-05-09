@@ -11,19 +11,22 @@ import {
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Input } from '@akashaorg/ui/lib/akasha-components/input';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
+import { StackedAvatar } from '@akashaorg/ui/lib/akasha-components/stacked-avatar';
+import {
+  ProfileAvatar,
+  ProfileAvatarFallback,
+  ProfileAvatarImage,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar';
 import { Loader2 } from 'lucide-react';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import DropDown from '@akashaorg/design-system-core/lib/components/Dropdown';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import StackedAvatar from '@akashaorg/design-system-core/lib/components/StackedAvatar';
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ButtonType } from '@akashaorg/design-system-components/lib/components/types/common.types';
 import { Licenses } from '../extension-creation-form';
 import { AkashaProfile, Image } from '@akashaorg/typings/lib/ui';
-import { ExclamationTriangleIcon } from '@heroicons/react/24/solid';
-import { PlusIcon } from '@heroicons/react/24/outline';
+import { PlusIcon, TriangleAlertIcon } from 'lucide-react';
 import { ApolloError } from '@apollo/client';
 import Label from '@akashaorg/design-system-core/lib/components/Label';
 import {
@@ -105,7 +108,6 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
     tagsDescriptionLabel,
     tagsAddedLabel,
     noteLabel,
-    maxContributorsDisplay,
     noteDescriptionLabel,
     errorProfilesDataLabel,
   } = props;
@@ -251,11 +253,17 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
               )}
               {contributorAvatars?.length > 0 && (
                 <Stack direction="row" spacing={2} alignItems="center">
-                  <StackedAvatar
-                    userData={contributorAvatars}
-                    maxAvatars={maxContributorsDisplay}
-                    size="md"
-                  />
+                  <StackedAvatar count={contributorAvatars.length}>
+                    {index => (
+                      <ProfileAvatar>
+                        <ProfileAvatarImage
+                          src={contributorAvatars[index].avatar?.src}
+                          alt={contributorAvatars[index].name}
+                        />
+                        <ProfileAvatarFallback />
+                      </ProfileAvatar>
+                    )}
+                  </StackedAvatar>
                   <Stack alignItems="center" justifyContent="center">
                     <Typography variant="sm" bold>
                       {contributorsProfiles[0]?.name}
@@ -316,11 +324,7 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
             <Divider />
             <Stack direction="column" spacing={2}>
               <Stack direction="row" alignItems="center" spacing={1}>
-                <Icon
-                  icon={<ExclamationTriangleIcon />}
-                  size="sm"
-                  customStyle={'[&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark'}
-                />
+                <TriangleAlertIcon className="h-4 w-4 [&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark" />
                 <Typography variant="sm" bold>
                   {noteLabel}
                 </Typography>

@@ -1,10 +1,8 @@
 import React, { ReactElement, useMemo } from 'react';
-import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import Accordion from '@akashaorg/design-system-core/lib/components/Accordion';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import ExtensionIcon from '@akashaorg/design-system-core/lib/components/ExtensionIcon';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Label from '@akashaorg/design-system-core/lib/components/Label';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
@@ -17,7 +15,7 @@ import ExtensionImageGallery from '../extension-image-gallery';
 import { Extension, Image } from '@akashaorg/typings/lib/ui';
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
 import { getImageFromSeed } from '@akashaorg/design-system-core/lib/utils';
-import { XCircleIcon } from '@heroicons/react/24/outline';
+import { CheckCircleIcon, XCircleIcon } from 'lucide-react';
 import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
 export type ExtensionReviewAndPublishProps = {
   extensionData: Extension;
@@ -113,15 +111,11 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
   const getAccordionTitleNode = (title: string, fieldHasData: boolean, isRequired = true) => {
     return (
       <Stack direction="row" spacing={1} alignItems="center">
-        <Icon
-          icon={fieldHasData ? <CheckCircleIcon /> : <XCircleIcon />}
-          solid={fieldHasData}
-          customStyle={
-            fieldHasData
-              ? '[&>*]:fill-success'
-              : '[&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark'
-          }
-        />
+        {fieldHasData ? (
+          <CheckCircleIcon className="h-5 w-5 [&>*]:fill-success" />
+        ) : (
+          <XCircleIcon className="h-5 w-5 [&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark" />
+        )}
         <Label required={isRequired}>{title}</Label>
       </Stack>
     );
