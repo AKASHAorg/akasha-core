@@ -11,10 +11,15 @@ import {
   AkashaAppApplicationType,
   AppImageSource,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipProvider,
+} from '@akashaorg/ui/lib/akasha-components/tooltip';
 
 export type AppInfoHeaderProps = {
   displayName: string;
@@ -79,19 +84,23 @@ export const AppInfoHeader: React.FC<AppInfoHeaderProps> = props => {
                   {displayName}
                 </Text>
                 {isDefaultWorldExtension && (
-                  <Tooltip
-                    placement={'bottom'}
-                    content={defaultExtensionTooltipContent}
-                    customStyle="self-center"
-                    contentCustomStyle="max-w-sm"
-                  >
-                    <InfoIcon className="h-4 w-4" />
-                  </Tooltip>
+                  <TooltipProvider delayDuration={0}>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <InfoIcon className="h-4 w-4" />
+                      </TooltipTrigger>
+                      <TooltipContent side="bottom">
+                        {defaultExtensionTooltipContent}
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 )}
                 {!isDefaultWorldExtension && (
                   <Menu
                     anchor={{
-                      icon: <EllipsisVerticalIcon className='h-4 w-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark' />,
+                      icon: (
+                        <EllipsisVerticalIcon className="h-4 w-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+                      ),
                       variant: 'primary',
                       size: 'xs',
                       greyBg: true,
