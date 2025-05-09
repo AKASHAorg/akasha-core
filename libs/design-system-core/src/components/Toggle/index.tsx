@@ -1,6 +1,4 @@
 import React from 'react';
-
-import Icon from '../Icon';
 import Text from '../Text';
 
 export type toggleSize = 'small' | 'large';
@@ -94,13 +92,7 @@ const Toggle: React.FC<ToggleProps> = ({
       <div className={knobStyle} />
 
       {iconChecked && iconUnchecked && (
-        <div className={iconStyle}>
-          <Icon
-            size={'sm'}
-            icon={checked ? iconChecked : iconUnchecked}
-            customStyle={`[&>*]:stroke-white ${size === 'small' ? 'size-3' : ''}`}
-          />
-        </div>
+        <div className={iconStyle}>{checked ? iconChecked : iconUnchecked}</div>
       )}
 
       {label && (

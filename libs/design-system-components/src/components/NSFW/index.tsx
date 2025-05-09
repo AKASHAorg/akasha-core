@@ -1,8 +1,8 @@
 import React from 'react';
-import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Controller, Control, FieldValues, Path, PathValue } from 'react-hook-form';
+import { Switch } from '@akashaorg/ui/lib/components/switch';
 
 export type InputType = { label: string; description?: string; initialValue: boolean };
 
@@ -39,17 +39,20 @@ export const NSFW = <T extends FieldValues>({
               <Text variant="body2" as="label" color={{ light: 'grey4', dark: 'grey6' }}>
                 {nsfw.label}
               </Text>
-              <Toggle
+              <Switch
                 id={name}
                 name={name}
                 checked={value}
-                onChange={onChange}
-                size="small"
+                onCheckedChange={onChange}
                 disabled={disabled}
               />
             </Stack>
             {nsfw.description && (
-              <Text variant="button-md" as="label" color={{ light: 'grey4', dark: 'grey6' }}>
+              <Text
+                variant="button-md"
+                as="label"
+                color={{ light: 'errorLight', dark: 'errorDark' }}
+              >
                 {nsfw.description}
               </Text>
             )}

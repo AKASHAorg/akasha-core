@@ -6,8 +6,7 @@ import Button from '../Button';
 import { ButtonProps } from '../Button/types';
 import Card from '../Card';
 import Divider from '../Divider';
-import Icon from '../Icon';
-import { XMarkIcon } from '../Icon/hero-icons-outline';
+import { XIcon } from 'lucide-react';
 import Stack from '../Stack';
 import Text, { TextProps } from '../Text';
 
@@ -82,7 +81,7 @@ const Modal: React.FC<ModalProps> = ({
           leaveTo="opacity-0 scale-95"
         >
           <Stack align="center" justify="center" customStyle="fixed inset-0">
-            <Stack customStyle="w-fit -ml(md:6)">
+            <Stack customStyle="w-fit -ml-md:6">
               <Dialog.Panel>
                 <Card radius={20} padding={'py-4'} customStyle={`${customStyle} relative`}>
                   <Stack direction="column" spacing="gap-y-4">
@@ -92,11 +91,7 @@ const Modal: React.FC<ModalProps> = ({
                           {title.label}
                         </Text>
                         <Button onClick={onClose} plain customStyle="absolute top-4 right-4">
-                          <Icon
-                            icon={<XMarkIcon />}
-                            size="md"
-                            customStyle="[&>*]:stroke-grey4 dark:[&>*]:stroke-grey7"
-                          />
+                          <XIcon className="h-5 w-5 [&>*]:stroke-grey4 dark:[&>*]:stroke-grey7" />
                         </Button>
                       </Dialog.Title>
                     )}

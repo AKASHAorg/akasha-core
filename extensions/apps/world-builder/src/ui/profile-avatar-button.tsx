@@ -44,15 +44,14 @@ const useProfileAvatarButtonContext = () => {
 const truncateMiddle = (str: string, startChars = 6, endChars = 4) =>
   str ? `${str.substring(0, startChars)}...${str.substring(str.length - endChars)}` : '';
 
-const truncateDid = (didKey: string, type = 'eth') => {
+const truncateDid = (didKey: string, type = 'ethereum') => {
   if (!didKey) return '';
   if (didKey.length <= 12) return didKey;
   const address = didKey.split(':').pop() || '';
-  return truncateMiddle(address, type === 'eth' || type === 'solana' ? 6 : 5, 6);
+  return truncateMiddle(address, type === 'ethereum' || type === 'solana' ? 6 : 5, 6);
 };
 
 const getDidFieldIconType = (didKey: string) => {
-  if (!didKey) return 'noDid';
   if (didKey.includes('eip155')) return 'ethereum';
   return didKey.includes('solana') ? 'solana' : 'did';
 };
@@ -80,6 +79,8 @@ const ProfileAvatarButton = ({
     }
 ) &
   React.ComponentProps<'div'>) => {
+  const childrenArray = React.Children.toArray(children);
+  const childCount = childrenArray.length;
   return (
     <ProfileAvatarButtonContext.Provider
       value={{ profileDID, nsfw, nsfwLabel, size, metadata, vertical }}
@@ -87,14 +88,13 @@ const ProfileAvatarButton = ({
       <div
         data-slot="profile-avatar-button"
         className={cn(
-          {
-            'grid grid-cols-[0.5fr_1fr] grid-rows-2': size === 'lg' && !vertical,
-            'grid grid-cols-[0fr_1fr] grid-rows-2': size === 'md',
-            'flex items-center flex-col': size === 'lg' && vertical,
-            'flex items-center': size === 'sm',
+          'group flex items-center cursor-pointer',
+          childCount > 1 && {
+            'flex flex-col items-center gap-1': size === 'lg' && vertical,
+            'grid grid-cols-[auto_1fr] gap-x-2 gap-y-1':
+              (size === 'md' || size === 'lg') && !vertical,
+            'flex items-center gap-1': size === 'sm',
           },
-          'gap-1',
-          'cursor-pointer',
           className,
         )}
         {...props}
@@ -138,10 +138,13 @@ const ProfileName = ({ className, children, ...props }: React.ComponentProps<'di
         direction="row"
         alignItems="center"
         spacing={1}
-        className={cn({
-          'self-end': size === 'lg' && !vertical,
-          'justify-self-start': size === 'md' || (size === 'lg' && !vertical),
-        })}
+        className={cn(
+          'hover:underline hover:decoration-black dark:hover:decoration-white group-hover:underline group-hover:decoration-black dark:group-hover:decoration-white',
+          {
+            'self-end': size === 'lg' && !vertical,
+            'justify-self-start': size === 'md' || (size === 'lg' && !vertical),
+          },
+        )}
         {...props}
       >
         <Typography
@@ -166,7 +169,6 @@ const didNetworkIconMapping = {
   ethereum: <Ethereum />,
   solana: <Solana />,
   did: <DidKey />,
-  noDid: <NoEth />,
 };
 
 const ProfileDidField = ({ className }: React.ComponentProps<'div'>) => {
@@ -189,10 +191,12 @@ const ProfileDidField = ({ className }: React.ComponentProps<'div'>) => {
       )}
     >
       <IconContainer size="xs" className="text-secondary-foreground">
-        {isValidDID ? didNetworkIconMapping[networkType] : <NoEth />}
+        {isValidDID || profileDID.startsWith('k') ? didNetworkIconMapping[networkType] : <NoEth />}
       </IconContainer>
-      <Typography variant="xs" className="text-secondary-foreground">
-        {isValidDID ? truncateDid(profileDID, networkType) : 'Invalid DID'}
+      <Typography variant="xs" className="text-secondary-foreground tracking-[0.075em]">
+        {isValidDID || profileDID.startsWith('k')
+          ? truncateDid(profileDID, networkType)
+          : 'Invalid DID'}
       </Typography>
     </Stack>
   );

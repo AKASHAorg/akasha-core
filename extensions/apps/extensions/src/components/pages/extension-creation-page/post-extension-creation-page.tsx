@@ -5,7 +5,6 @@ import { CREATE_EXTENSION } from '../../../routes';
 import { useRootComponentProps, useAkashaStore } from '@akashaorg/ui-core-hooks';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { DRAFT_EXTENSIONS } from '../../../constants';
 import {
@@ -16,8 +15,11 @@ import {
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+import { TriangleAlertIcon } from 'lucide-react';
+import {
+  ProfileAvatarButton,
+  ProfileDidField,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
 
 export const PostExtensionCreationPage: React.FC<{ extensionId: string }> = ({ extensionId }) => {
   const navigate = useNavigate();
@@ -86,7 +88,9 @@ export const PostExtensionCreationPage: React.FC<{ extensionId: string }> = ({ e
             </Text>
             <Stack direction="column">
               <Text variant="footnotes1">{authenticatedProfile.name}</Text>
-              <DidField did={authenticatedDID} />
+              <ProfileAvatarButton profileDID={authenticatedDID}>
+                <ProfileDidField />
+              </ProfileAvatarButton>
             </Stack>
           </Stack>
         </Stack>
@@ -107,11 +111,7 @@ You can add more details to your extension, such as a description, gallery & mor
         <Card className="shadow-none bg-nested-card">
           <Stack direction="column" spacing={2}>
             <Stack direction="row" spacing={1} alignItems="center" justifyContent="center">
-              <Icon
-                icon={<ExclamationTriangleIcon />}
-                size="sm"
-                customStyle="[&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark"
-              />
+              <TriangleAlertIcon className="h-4 w-4 [&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark" />
               <Text variant="subtitle2">{t('Important Note: ')}</Text>
             </Stack>
             <Text variant="subtitle2" align="center">

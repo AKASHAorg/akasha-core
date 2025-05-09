@@ -25,9 +25,12 @@ import type { IMetadata, IPublishData, Image, Profile } from '@akashaorg/typings
 
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import InlineNotification from '@akashaorg/design-system-core/lib/components/InlineNotification';
+import {
+  InlineNotification,
+  InlineNotificationTitle,
+  InlineNotificationDescription,
+} from '@akashaorg/ui/lib/akasha-components/inline-notification';
 
 import {
   Bold,
@@ -39,10 +42,7 @@ import {
   AlignTextLeft,
   AlignTextRight,
 } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
-import {
-  ArrowPathIcon,
-  ExclamationTriangleIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { Loader2, TriangleAlertIcon } from 'lucide-react';
 import EditorMeter from '@akashaorg/design-system-core/lib/components/EditorMeter';
 
 import { countMentions, CustomEditor, getSlateMentions } from './helpers';
@@ -461,6 +461,9 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
   const publishDisabled = publishDisabledInternal || disablePublish;
   const [, forceUpdate] = React.useReducer(x => x + 1, 0);
 
+  const style1 = 'h-5 w-5 [&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark';
+  const style2 = 'h-4 w-4 [&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark';
+
   return (
     <Stack justifyContent="between" className={cn('bg-inherit w-full', customStyle)}>
       <Stack
@@ -488,11 +491,9 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
         {/* w-0 min-w-full is used to prevent parent width expansion without setting a fixed width */}
         <Stack ref={editorContainerRef} className="w-0 min-w-full">
           {mentionsLimitReached && (
-            <InlineNotification
-              message={mentionsLimit.label}
-              type="warning"
-              customStyle="bg-warningDark/30"
-            />
+            <InlineNotification variant="destructive">
+              <InlineNotificationDescription>{mentionsLimit.label}</InlineNotificationDescription>
+            </InlineNotification>
           )}
           <Slate
             editor={editor}
@@ -530,23 +531,43 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
                 <Stack direction="row">
                   <MarkButton
                     format="bold"
-                    icon={<Bold />}
+                    icon={<Bold className={style2} />}
                     style={'rounded-l-[0.125rem]'}
                     callback={forceUpdate}
                   />
-                  <MarkButton format="italic" icon={<Italic />} callback={forceUpdate} />
-                  <MarkButton format="underline" icon={<Underline />} callback={forceUpdate} />
-                  <BlockButton format="left" icon={<AlignTextLeft />} callback={forceUpdate} />
-                  <BlockButton format="center" icon={<AlignTextCenter />} callback={forceUpdate} />
-                  <BlockButton format="right" icon={<AlignTextRight />} callback={forceUpdate} />
+                  <MarkButton
+                    format="italic"
+                    icon={<Italic className={style2} />}
+                    callback={forceUpdate}
+                  />
+                  <MarkButton
+                    format="underline"
+                    icon={<Underline className={style2} />}
+                    callback={forceUpdate}
+                  />
+                  <BlockButton
+                    format="left"
+                    icon={<AlignTextLeft className={style1} />}
+                    callback={forceUpdate}
+                  />
+                  <BlockButton
+                    format="center"
+                    icon={<AlignTextCenter className={style1} />}
+                    callback={forceUpdate}
+                  />
+                  <BlockButton
+                    format="right"
+                    icon={<AlignTextRight className={style1} />}
+                    callback={forceUpdate}
+                  />
                   <BlockButton
                     format="numbered-list"
-                    icon={<ListNumbered />}
+                    icon={<ListNumbered className={style1} />}
                     callback={forceUpdate}
                   />
                   <BlockButton
                     format="bulleted-list"
-                    icon={<ListBulleted />}
+                    icon={<ListBulleted className={style1} />}
                     style={'rounded-r-[0.125rem]'}
                     callback={forceUpdate}
                   />
@@ -557,7 +578,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
                 {showCancelButton && <Button onClick={onCancelClick}>{cancelButtonLabel}</Button>}
                 {showPostButton && (
                   <Button onClick={handlePublish} disabled={publishDisabled}>
-                    {disablePublish && <ArrowPathIcon />}
+                    {disablePublish && <Loader2 className="h-5 w-5 animate-spin" />}
                     {disablePublish ? disableActionLabel : actionLabel}
                   </Button>
                 )}
@@ -570,10 +591,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
               alignItems="center"
               className="bg-errorLight dark:bg-errorDark w-full rounded p-4"
             >
-              <Icon
-                icon={<ExclamationTriangleIcon />}
-                customStyle={'[&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark'}
-              />
+              <TriangleAlertIcon className="h-5 w-5 [&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark" />
               <Text>{maxEncodedLengthErrLabel}</Text>
             </Stack>
           )}

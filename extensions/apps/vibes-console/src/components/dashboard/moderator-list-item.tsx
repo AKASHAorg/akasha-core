@@ -2,11 +2,14 @@ import React from 'react';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Profile } from '@akashaorg/typings/lib/ui';
 import { transformSource } from '@akashaorg/ui-core-hooks';
+import {
+  ProfileAvatarButton,
+  ProfileDidField,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
 
 export type ModeratorListItemProps = {
   assignButtonLabel: string;
@@ -37,7 +40,9 @@ const ModeratorListItem: React.FC<ModeratorListItemProps> = props => {
             truncate={true}
           >{`${selectedModerator.name}`}</Text>
 
-          <DidField did={selectedModerator.did.id} />
+          <ProfileAvatarButton profileDID={selectedModerator.did.id}>
+            <ProfileDidField />
+          </ProfileAvatarButton>
         </Stack>
       </Stack>
     );
@@ -59,7 +64,9 @@ const ModeratorListItem: React.FC<ModeratorListItemProps> = props => {
               <Stack>
                 <Text variant="button-md" weight="bold" truncate={true}>{`${moderator.name}`}</Text>
 
-                <DidField did={moderator.did.id} />
+                <ProfileAvatarButton profileDID={moderator.did.id}>
+                  <ProfileDidField />
+                </ProfileAvatarButton>
               </Stack>
             </Stack>
 

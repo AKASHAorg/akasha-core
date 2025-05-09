@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import { BoltIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { BoltIcon } from 'lucide-react';
 import { useRootComponentProps, withProviders } from '@akashaorg/ui-core-hooks';
 
 const LoginBoltButton = () => {
@@ -21,7 +21,7 @@ const LoginBoltButton = () => {
       size="icon"
       className="md:invisible" // show only on mobile screens
     >
-      {<BoltIcon />}
+      {<BoltIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />}
     </Button>
   );
 };

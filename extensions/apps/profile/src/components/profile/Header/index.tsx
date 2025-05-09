@@ -1,16 +1,11 @@
 import React, { ReactElement } from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import DidField from '@akashaorg/design-system-core/lib/components/DidField';
-import ProfileNameField from '@akashaorg/design-system-core/lib/components/ProfileNameField';
 import ImageOverlay from '@akashaorg/design-system-components/lib/components/ImageOverlay';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Menu, { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
-import {
-  Cog6ToothIcon,
-  EllipsisVerticalIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { SettingsIcon, EllipsisVerticalIcon } from 'lucide-react';
 import { getImageFromSeed } from '@akashaorg/design-system-core/lib/utils';
 import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
@@ -21,6 +16,12 @@ import {
   ProfileAvatarFallback,
   ProfileAvatarImage,
 } from '@akashaorg/ui/lib/akasha-components/profile-avatar';
+import {
+  ProfileAvatarButton,
+  ProfileName,
+  ProfileDidField,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
+import { CopyToClipboard } from '@akashaorg/ui/lib/akasha-components/copy-to-clipboard';
 
 type ProfileBadge = {
   toolTipLabel: string;
@@ -125,16 +126,21 @@ const Header: React.FC<HeaderProps> = ({
             <Stack direction="column" spacing={1}>
               <Stack direction="row" alignItems="center" spacing={1}>
                 <button onClick={onClickProfileName}>
-                  <ProfileNameField did={profileId} profileName={profileName} size="lg" />
+                  <ProfileAvatarButton profileDID={profileId}>
+                    <ProfileName>{profileName}</ProfileName>
+                  </ProfileAvatarButton>
                 </button>
               </Stack>
-              <DidField
-                did={profileId}
-                isValid={validAddress}
-                copiable={Boolean(copyLabel && copiedLabel)}
-                copyLabel={copyLabel}
-                copiedLabel={copiedLabel}
-              />
+
+              <ProfileAvatarButton profileDID={profileId}>
+                <CopyToClipboard
+                  textToCopy={profileId}
+                  ctaText="Copy to clipboard"
+                  successText="Copied"
+                >
+                  <ProfileDidField />
+                </CopyToClipboard>
+              </ProfileAvatarButton>
               <Stack direction="row" spacing={2} className="flex-wrap">
                 {badges?.map(badge => (
                   <Tooltip key={badge.label} content={badge.toolTipLabel} placement="bottom">
@@ -152,7 +158,7 @@ const Header: React.FC<HeaderProps> = ({
               <Stack direction="row" alignItems="center" spacing={2}>
                 {viewerIsOwner ? (
                   <Button aria-label="edit" variant="outline" size="icon" onClick={handleEdit}>
-                    <Cog6ToothIcon />
+                    <SettingsIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
                   </Button>
                 ) : (
                   <>
@@ -165,7 +171,7 @@ const Header: React.FC<HeaderProps> = ({
                   <Stack className="mt-1">
                     <Menu
                       anchor={{
-                        icon: <EllipsisVerticalIcon />,
+                        icon: <EllipsisVerticalIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
                         variant: 'primary',
                         greyBg: true,
                         iconOnly: true,

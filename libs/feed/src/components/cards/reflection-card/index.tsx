@@ -9,9 +9,13 @@ import { decodeb64SlateContent, useRootComponentProps } from '@akashaorg/ui-core
 import { Trans, useTranslation } from 'react-i18next';
 import { canDecodeContent } from '../../../utils/can-decode-content';
 import ReadOnlyEditor from '../../read-only-editor';
-import InlineNotification from '@akashaorg/design-system-core/lib/components/InlineNotification';
 import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
-import { FlagIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { FlagIcon } from 'lucide-react';
+import {
+  InlineNotification,
+  InlineNotificationTitle,
+  InlineNotificationDescription,
+} from '@akashaorg/ui/lib/akasha-components/inline-notification';
 
 export type ReflectionCardProps = Pick<
   EntryCardProps,
@@ -61,7 +65,9 @@ const ReflectionCard: React.FC<ReflectionCardProps> = props => {
   const menuItems: ListItem[] = !isViewer
     ? [
         {
-          icon: <FlagIcon />,
+          icon: (
+            <FlagIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+          ),
           label: t('Flag'),
           color: { light: 'errorLight', dark: 'errorDark' } as const,
           disabled: false,
@@ -151,11 +157,12 @@ const ReflectionCard: React.FC<ReflectionCardProps> = props => {
           }}
         />
       ) : (
-        <InlineNotification
-          title={t('Reflection can’t be loaded')}
-          message={t('Unable to decode reflection content.')}
-          type="error"
-        />
+        <InlineNotification variant="destructive">
+          <InlineNotificationTitle>{t('Reflection can’t be loaded')}</InlineNotificationTitle>
+          <InlineNotificationDescription>
+            {t('Unable to decode reflection content.')}
+          </InlineNotificationDescription>
+        </InlineNotification>
       )}
     </EntryCard>
   );

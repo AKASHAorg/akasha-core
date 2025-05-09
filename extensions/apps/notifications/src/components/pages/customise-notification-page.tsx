@@ -16,23 +16,20 @@ import {
   useAkashaStore,
 } from '@akashaorg/ui-core-hooks';
 
+import { Switch } from '@akashaorg/ui/lib/components/switch';
+
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 
 import routes, {
   CUSTOMISE_NOTIFICATION_WELCOME_PAGE,
   CUSTOMISE_NOTIFICATION_CONFIRMATION_PAGE,
   SHOW_NOTIFICATIONS_PAGE,
 } from '../../routes';
-import {
-  BellSnoozeIcon,
-  BellAlertIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
 import { useNavigate } from '@tanstack/react-router';
 
@@ -260,12 +257,7 @@ const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
                 <Text variant="footnotes2">
                   <>{t('Snooze Notifications')}</>
                 </Text>
-                <Toggle
-                  iconChecked={<BellSnoozeIcon />}
-                  iconUnchecked={<BellAlertIcon />}
-                  checked={snoozed}
-                  onChange={snoozeChangeHandler}
-                />
+                <Switch checked={snoozed} onCheckedChange={snoozeChangeHandler} />
               </Stack>
             </>
           </Stack>

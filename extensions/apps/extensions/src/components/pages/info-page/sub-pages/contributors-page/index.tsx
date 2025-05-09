@@ -2,8 +2,14 @@ import React from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import {
+  ProfileAvatarButton,
+  ProfileAvatarButtonAvatar,
+  ProfileAvatarButtonAvatarFallback,
+  ProfileAvatarButtonAvatarImage,
+  ProfileDidField,
+  ProfileName,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
 import { Loader2 } from 'lucide-react';
 import {
   ErrorLoader,
@@ -20,7 +26,7 @@ import {
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { selectExtensionContributors } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-query';
 import { useContributors } from './use-contributors';
-import { ChevronRightIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { ChevronRightIcon } from 'lucide-react';
 
 type ContributorsPageProps = {
   appId: string;
@@ -85,19 +91,22 @@ export const ContributorsPage = (props: ContributorsPageProps) => {
                   className="p-0 shadow-noneborder-none"
                 >
                   <Stack direction="row" alignItems="center">
-                    <ProfileAvatarButton
-                      profileId={contributor?.did.id}
-                      label={contributor?.name}
-                      avatar={transformSource(contributor?.avatar?.default)}
-                      alternativeAvatars={contributor?.avatar?.alternatives?.map(alternative =>
-                        transformSource(alternative),
-                      )}
-                    />
-                    <Icon
-                      icon={<ChevronRightIcon />}
-                      size="sm"
-                      customStyle="ml-auto [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark"
-                    />
+                    <ProfileAvatarButton profileDID={contributor?.did.id}>
+                      <ProfileAvatarButtonAvatar>
+                        <ProfileAvatarButtonAvatarImage
+                          src={transformSource(contributor?.avatar?.default)?.src}
+                          alt="Contributor Avatar"
+                        />
+                        <ProfileAvatarButtonAvatarFallback
+                          alternativeSrc={contributor?.avatar?.alternatives?.map(
+                            alternative => transformSource(alternative)?.src,
+                          )}
+                        />
+                      </ProfileAvatarButtonAvatar>
+                      <ProfileName>{contributor?.name}</ProfileName>
+                      <ProfileDidField />
+                    </ProfileAvatarButton>
+                    <ChevronRightIcon className="h-4 w-4 ml-auto [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
                   </Stack>
                 </Card>
                 {index < contributorsProfile.length - 1 && <Divider />}

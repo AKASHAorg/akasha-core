@@ -155,7 +155,7 @@ const ProfileInfoPage: React.FC<ProfileInfoPageProps> = props => {
         )}
         {isLoggedIn && !profileData && isViewer && (
           <DefaultEmptyCard
-            infoText={t('Uh-uh! it looks like you haven’t filled your information!')}
+            infoText={t("Uh-uh! it looks like you haven't filled your information!")}
             buttonLabel={t('Fill my info')}
             buttonClickHandler={goToEditProfile}
             assetName="profile-not-filled"
