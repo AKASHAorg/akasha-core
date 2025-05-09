@@ -5,7 +5,7 @@ import { Moderator } from '@akashaorg/typings/lib/ui';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
-import TabList from '@akashaorg/design-system-core/lib/components/TabList';
+import { Tabs, TabsList, TabsTrigger } from '@akashaorg/ui/lib/components/tabs';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ModeratorDetailMiniCard from '../components/moderator/mini-card';
 import { generateModeratorStatusLabel } from '../utils';
@@ -18,7 +18,7 @@ export type ModeratorPageProps = BasePageProps & {
 
 export const Moderators: React.FC<ModeratorPageProps> = props => {
   const { moderators, isFetchingModerators } = props;
-  const [activeTab, setActiveTab] = useState<number>(0);
+  const [activeTab, setActiveTab] = useState<string>('0');
   const { t } = useTranslation('app-vibes');
   const navigate = useNavigate();
 
@@ -39,12 +39,15 @@ export const Moderators: React.FC<ModeratorPageProps> = props => {
 
   return (
     <Card className="p-0">
-      <TabList
-        selected={activeTab}
-        onChange={setActiveTab}
-        labels={tabs.map(tab => t('{{tab}}', { tab }))}
-        tabListDivider
-      />
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full m-4">
+        <TabsList className="px-4 justify-between w-[95%]">
+          {tabs.map((item, index) => (
+            <TabsTrigger key={item} value={`${index}`} className="grow">
+              {t('{{item}}', { item })}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </Tabs>
 
       {isFetchingModerators && (
         <Stack align="center" justify="center" customStyle="p-4">
