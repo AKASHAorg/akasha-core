@@ -4,12 +4,16 @@ import ImageOverlay from '@akashaorg/design-system-components/lib/components/Ima
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Menu, { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
+<<<<<<< HEAD
 import {
   Tooltip,
   TooltipTrigger,
   TooltipContent,
   TooltipProvider,
 } from '@akashaorg/ui/lib/akasha-components/tooltip';
+=======
+import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
+>>>>>>> next
 import { SettingsIcon, EllipsisVerticalIcon } from 'lucide-react';
 import { getImageFromSeed } from '@akashaorg/design-system-core/lib/utils';
 import type { Image, Profile } from '@akashaorg/typings/lib/ui';
@@ -181,9 +185,13 @@ const Header: React.FC<HeaderProps> = ({
                   <Stack className="mt-1">
                     <Menu
                       anchor={{
+<<<<<<< HEAD
                         icon: (
                           <EllipsisVerticalIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
                         ),
+=======
+                        icon: <EllipsisVerticalIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
+>>>>>>> next
                         variant: 'primary',
                         greyBg: true,
                         iconOnly: true,
