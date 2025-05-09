@@ -14,13 +14,10 @@ import {
   useGetSettings,
   useAkashaStore,
 } from '@akashaorg/ui-core-hooks';
-
 import { Switch } from '@akashaorg/ui/lib/components/switch';
-
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Checkbox } from '@akashaorg/ui/lib/components/checkbox';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
