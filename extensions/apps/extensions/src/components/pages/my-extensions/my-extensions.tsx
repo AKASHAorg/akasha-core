@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { capitalize } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
-import { BookOpenIcon } from '@heroicons/react/24/outline';
+import { BookOpenIcon } from 'lucide-react';
 import {
   filterEvents,
   hasOwn,
@@ -29,7 +29,6 @@ import {
   ErrorLoaderTitle,
   ErrorLoaderFooter,
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -200,7 +199,7 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
       <Stack direction="row" justifyContent="between">
         <Text variant="h5">{t('My extensions')}</Text>
         <Link target="_blank" to="https://docs.akasha.world" customStyle="w-fit self-end">
-          <Icon icon={<BookOpenIcon />} accentColor />
+          <BookOpenIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
         </Link>
       </Stack>
       <Stack

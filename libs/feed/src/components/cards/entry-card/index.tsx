@@ -3,7 +3,7 @@ import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import EntryCardRemoved from './entry-card-removed';
 import CardActions from './card-actions';
-import { EllipsisHorizontalIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { EllipsisIcon } from 'lucide-react';
 import NSFW, { NSFWProps } from '../nsfw-card';
 import Menu from '@akashaorg/design-system-core/lib/components/Menu';
 import { type EntryData } from '@akashaorg/typings/lib/ui';
@@ -119,7 +119,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
             {profileAvatar}
             <Menu
               anchor={{
-                icon: <EllipsisHorizontalIcon />,
+                icon: <EllipsisIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
                 plainIcon: true,
                 iconOnly: true,
                 size: 'md',

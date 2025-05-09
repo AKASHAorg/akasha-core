@@ -2,8 +2,7 @@ import React from 'react';
 import Text, { FontWeight } from '../Text';
 import Tooltip from '../Tooltip';
 import Stack from '../Stack';
-import Icon from '../Icon';
-import { ExclamationTriangleIcon } from '../Icon/hero-icons-outline';
+import { TriangleAlertIcon } from 'lucide-react';
 import { getDidNetworkType, truncateDid } from '../../utils/did-utils';
 import { Color } from '../types/common.types';
 
@@ -101,10 +100,7 @@ const ProfileNameField: React.FC<ProfileNameFieldProps> = ({
           customStyle="justify-center"
           contentCustomStyle="w-52"
         >
-          <Icon
-            icon={<ExclamationTriangleIcon />}
-            customStyle="[&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark"
-          />
+          <TriangleAlertIcon className="h-5 w-5 [&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark" />
         </Tooltip>
       )}
     </Stack>

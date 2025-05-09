@@ -3,8 +3,7 @@ import Card from '../../Card';
 import Stack from '../../Stack';
 import Text from '../../Text';
 import Button from '../../Button';
-import Icon from '../../Icon';
-import { XMarkIcon } from '../../Icon/hero-icons-outline';
+import { XIcon } from 'lucide-react';
 
 type TagProps = {
   tag: string;
@@ -21,7 +20,7 @@ const Tag: React.FC<TagProps> = props => {
           {tag}
         </Text>
         <Button onClick={onRemove} plain>
-          <Icon icon={<XMarkIcon />} size="sm" accentColor />
+          <XIcon className="h-4 w-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
         </Button>
       </Stack>
     </Card>

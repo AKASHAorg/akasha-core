@@ -2,7 +2,6 @@ import React, { forwardRef, useState } from 'react';
 
 import { InputProps } from '../types';
 import { Color } from '../../types/common.types';
-import Icon from '../../Icon';
 import Stack from '../../Stack';
 import { getIconClasses } from '../utils/get-icon-classes';
 import { getInputClasses } from '../utils/get-input-classes';
@@ -35,7 +34,7 @@ export const Input: React.FC<InputProps> = forwardRef((props, ref) => {
       fullWidth={fullWidth}
       customStyle={`${containerStyle} ${radiusStyle}`}
     >
-      {iconLeft && <Icon icon={iconLeft} disabled={disabled} />}
+      {iconLeft}
       <input
         ref={ref}
         type="text"
@@ -47,7 +46,7 @@ export const Input: React.FC<InputProps> = forwardRef((props, ref) => {
         onFocus={handleFocus}
         onBlur={handleBlur}
       />
-      {iconRight && <Icon icon={iconRight} disabled={disabled} />}
+      {iconRight}
     </Stack>
   );
 });

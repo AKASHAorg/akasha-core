@@ -2,7 +2,7 @@ import * as React from 'react';
 import { act, fireEvent } from '@testing-library/react';
 
 import Button from '../';
-import { PlusIcon } from '../../Icon/hero-icons-outline';
+import { PlusIcon } from 'lucide-react';
 import { customRender } from '../../../test-utils';
 
 const label = 'Default button';

@@ -7,10 +7,7 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { transformSource, hasOwn } from '@akashaorg/ui-core-hooks';
 import { useTranslation } from 'react-i18next';
 import { useGetProfileByDidSuspenseQuery } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
-import {
-  PowerIcon,
-  XMarkIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { PowerIcon, XIcon } from 'lucide-react';
 import {
   ProfileAvatar,
   ProfileAvatarFallback,
@@ -149,7 +146,8 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
           >
             {isHovered && (
               <>
-                {cancelLabel} <XMarkIcon />
+                {cancelLabel}{' '}
+                <XIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
               </>
             )}
           </Button>
@@ -158,7 +156,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
           <>
             {isLoggedIn && (
               <Button variant="outline" size="icon" onClick={logoutClickHandler}>
-                <PowerIcon />
+                <PowerIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
               </Button>
             )}
             {!isLoggedIn && (
