@@ -1,6 +1,7 @@
 import React from 'react';
-import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
+import { Checkbox } from '@akashaorg/ui/lib/components/checkbox';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { EditorUIState } from './types';
 
@@ -45,15 +46,19 @@ export const Header: React.FC<HeaderProps> = props => {
     >
       <Text variant="h4">{renderTitle()}</Text>
       {uiState === 'editor' && (
-        <Checkbox
-          id="nsfw"
-          label="NSFW"
-          name="nsfw"
-          value="nsfw"
-          handleChange={onSelectCheckbox}
-          isSelected={checkboxIsSelected}
-          isDisabled={checkboxIsDisabled}
-        />
+        <Stack direction="row" alignItems="center" spacing={2}>
+          <Checkbox
+            id="nsfw"
+            name="nsfw"
+            value="nsfw"
+            onCheckedChange={onSelectCheckbox}
+            checked={checkboxIsSelected}
+            disabled={checkboxIsDisabled}
+          />
+          <label htmlFor="nsfw">
+            <Typography variant="sm">NSFW</Typography>
+          </label>
+        </Stack>
       )}
     </Stack>
   );

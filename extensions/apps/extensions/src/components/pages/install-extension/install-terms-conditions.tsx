@@ -1,12 +1,13 @@
-import React, { ChangeEvent, useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Loader2, SquareArrowUpRight } from 'lucide-react';
 import { useNavigate } from '@tanstack/react-router';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
+import { Checkbox } from '@akashaorg/ui/lib/components/checkbox';
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
 import {
   AkashaAppApplicationType,
@@ -78,8 +79,6 @@ export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
     data: { authenticatedDID, isAuthenticating },
   } = useAkashaStore();
 
-  useEffect(() => {}, []);
-
   const navigate = useNavigate();
   const [acceptedTerms, setAcceptedTerms] = React.useState<AcceptedTerms>({
     [TermsFields.PRIVACY_POLICY]: false,
@@ -90,8 +89,7 @@ export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
 
   const { t } = useTranslation();
 
-  const handleCheckboxChange = (ev: ChangeEvent<HTMLInputElement>) => {
-    const { name, checked } = ev.target;
+  const handleCheckboxChange = (name: string, checked: boolean) => {
     setAcceptedTerms(prev => ({
       ...prev,
       [name]: checked,
@@ -194,16 +192,18 @@ export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
       <Stack direction="column" spacing={4} className="mx-4 mb-4">
         {Object.keys(acceptedTerms).map(stateKey => (
           <Stack direction="row" spacing={2} key={stateKey} alignItems={'center'}>
-            <Checkbox
-              key={stateKey}
-              id={stateKey}
-              isSelected={acceptedTerms[stateKey]}
-              name={stateKey}
-              label={fieldLabels[stateKey]}
-              handleChange={handleCheckboxChange}
-              value={'value'}
-              customStyle={'gap-x-3'}
-            />
+            <Stack direction="row" alignItems="center" spacing={2}>
+              <Checkbox
+                id={stateKey}
+                name={stateKey}
+                value={stateKey}
+                onCheckedChange={checked => handleCheckboxChange(stateKey, checked as boolean)}
+                checked={acceptedTerms[stateKey]}
+              />
+              <label htmlFor={stateKey}>
+                <Typography variant="sm">{fieldLabels[stateKey]}</Typography>
+              </label>
+            </Stack>
             <a
               href={TermsLinks[stateKey]}
               target="_blank"
