@@ -2,14 +2,13 @@ import React from 'react';
 
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
 import { getModeratorStatusIndicator } from '../../utils';
 import { Moderator } from '@akashaorg/typings/lib/ui';
-import { ChevronRightIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { ChevronRightIcon } from 'lucide-react';
 import { transformSource } from '@akashaorg/ui-core-hooks';
 import {
   ProfileAvatarButton,
@@ -86,7 +85,7 @@ const ModeratorDetailMiniCard: React.FC<ModeratorDetailMiniCardProps> = props =>
         </Stack>
 
         <Button plain={true} onClick={() => onCardClick(moderator.did.id)}>
-          <Icon icon={<ChevronRightIcon />} accentColor={true} customStyle="justify-end" />
+          <ChevronRightIcon className="h-5 w-5 justify-end [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
         </Button>
       </Stack>
     </Stack>

@@ -22,8 +22,7 @@ import { getAppInfoFromUserSetting, AppInfo, getAppInfoFromChannelSetting } from
 import LoadingSettingsPlaceholder from './loading-settings-placeholder';
 import ConnectErrorCard from '@akashaorg/design-system-components/lib/components/ConnectErrorCard';
 import AppSetting from './app-setting';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { Info } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
+import { InfoIcon } from 'lucide-react';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 
 const NotificationsPreferencesOption: React.FC = () => {
@@ -96,7 +95,7 @@ const NotificationsPreferencesOption: React.FC = () => {
         event: NotificationEvents.ShowNotification,
         data: {
           type: NotificationTypes.Error,
-          title: t('Couldn’t unlock preferences'),
+          title: t("Couldn't unlock preferences"),
           description: enabled ? undefined : t('Signature verification failed. Please try again.'),
         },
       });
@@ -208,12 +207,7 @@ const NotificationsPreferencesOption: React.FC = () => {
                       ))}
                       <Card className="mt-4 bg-grey9 dark:bg-grey3">
                         <Stack direction="row" spacing={3} alignItems="center">
-                          <Icon
-                            icon={<Info />}
-                            size="lg"
-                            solid={true}
-                            customStyle="[&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark"
-                          />
+                          <InfoIcon className="h-6 w-6 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
                           <Text variant="body1" customStyle="text-sm">
                             {t('Changing notifications preferences requires a signature')}
                           </Text>

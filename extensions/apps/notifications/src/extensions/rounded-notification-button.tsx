@@ -1,12 +1,8 @@
 import React from 'react';
 import { useNotifications, useRootComponentProps, withProviders } from '@akashaorg/ui-core-hooks';
 import { BellAlert } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
-
+import { BellIcon, BellOffIcon } from 'lucide-react';
 import { NotificationEvents, type UIEventData } from '@akashaorg/typings/lib/ui';
-import {
-  BellIcon,
-  BellSnoozeIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import getSDK from '@akashaorg/core-sdk';
 import { NOTIFICATION_EVENTS } from '@akashaorg/typings/lib/sdk';
@@ -100,10 +96,12 @@ const RoundedNotificationButton = () => {
   }, []);
 
   const notificationIcon = React.useMemo(() => {
+    const style = 'h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark';
+
     if (snoozeNotifications) {
-      return <BellSnoozeIcon />;
+      return <BellOffIcon className={style} />;
     }
-    return hasNewNotifications ? <BellAlert /> : <BellIcon />;
+    return hasNewNotifications ? <BellAlert className={style} /> : <BellIcon className={style} />;
   }, [hasNewNotifications, snoozeNotifications]);
 
   return (

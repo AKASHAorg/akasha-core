@@ -1,7 +1,6 @@
 import React, { forwardRef } from 'react';
 import Text, { TextProps } from '../Text';
-import { ArrowPathIcon } from '../Icon/hero-icons-outline';
-import { ButtonIcon } from './button-icon';
+import { Loader2 } from 'lucide-react';
 import { IconOnlyButton } from './IconOnlyButton';
 import { ButtonProps, ButtonSize } from './types';
 import { getTextClasses } from './getTextClasses';
@@ -140,47 +139,14 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
       disabled={disabled}
     >
       {loading ? (
-        <ButtonIcon
-          size={size}
-          icon={<ArrowPathIcon />}
-          variant={variant}
-          greyBg={greyBg}
-          loading={true}
-          breakPointSize={breakPointSize}
-          disabled={disabled}
-          customStyle={customStyle}
-        />
+        <Loader2 className="h-5 w-5 animate-spin" />
       ) : (
         <>
-          {icon && iconDirection === 'left' && (
-            <ButtonIcon
-              size={size}
-              icon={icon}
-              solid={solidIcon}
-              variant={variant}
-              greyBg={greyBg}
-              loading={false}
-              breakPointSize={breakPointSize}
-              disabled={disabled}
-              active={active}
-            />
-          )}
+          {icon && iconDirection === 'left' && icon}
           <Text variant={BUTTON_SIZE_TEXT_MAP[size]} as="span" customStyle={textStyle}>
             {label}
           </Text>
-          {icon && iconDirection === 'right' && (
-            <ButtonIcon
-              size={size}
-              icon={icon}
-              solid={solidIcon}
-              variant={variant}
-              greyBg={greyBg}
-              loading={false}
-              breakPointSize={breakPointSize}
-              disabled={disabled}
-              active={active}
-            />
-          )}
+          {icon && iconDirection === 'right' && icon}
         </>
       )}
     </button>

@@ -1,16 +1,12 @@
 import React from 'react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import {
   Caption,
   AlignCenter,
   AlignLeft,
   AlignRight,
 } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
-import {
-  PencilIcon,
-  PlusIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { PencilIcon, PlusIcon } from 'lucide-react';
 import { cn } from '@akashaorg/ui/lib/library/utils';
 
 export type ImageBlockToolbar = {
@@ -40,6 +36,11 @@ const ImageBlockToolbar: React.FC<ImageBlockToolbar> = props => {
     showCaption,
     alignState,
   } = props;
+
+  const style = 'absolute stroke-secondaryLight dark:stroke-secondaryDark';
+  const lgStyle = `h-6 w-6 ${style}`;
+  const mdStyle = `h-5 w-5 ${style}`;
+
   return (
     <Stack direction="row" justifyContent="between">
       <Stack direction="row">
@@ -52,7 +53,7 @@ const ImageBlockToolbar: React.FC<ImageBlockToolbar> = props => {
               showCaption ? 'bg-secondaryLight/30 dark:bg-grey7' : 'bg-grey8 dark:bg-grey5',
             )}
           >
-            <Icon size="lg" icon={<Caption />} customStyle="absolute" accentColor />
+            <Caption className={lgStyle} />
           </Stack>
         </button>
         <button onClick={handleLeftAlignClick}>
@@ -66,7 +67,7 @@ const ImageBlockToolbar: React.FC<ImageBlockToolbar> = props => {
                 : 'bg-grey8 dark:bg-grey5',
             )}
           >
-            <Icon size="lg" icon={<AlignLeft />} customStyle="absolute" accentColor />
+            <AlignLeft className={lgStyle} />
           </Stack>
         </button>
         <button onClick={handleCenterAlignClick}>
@@ -80,7 +81,7 @@ const ImageBlockToolbar: React.FC<ImageBlockToolbar> = props => {
                 : 'bg-grey8 dark:bg-grey5',
             )}
           >
-            <Icon size="lg" icon={<AlignCenter />} customStyle="absolute" accentColor />
+            <AlignCenter className={lgStyle} />
           </Stack>
         </button>
         <button onClick={handleRightAlignClick}>
@@ -94,7 +95,7 @@ const ImageBlockToolbar: React.FC<ImageBlockToolbar> = props => {
                 : 'bg-grey8 dark:bg-grey5',
             )}
           >
-            <Icon size="lg" icon={<AlignRight />} customStyle="absolute" accentColor />
+            <AlignRight className={lgStyle} />
           </Stack>
         </button>
       </Stack>
@@ -105,7 +106,7 @@ const ImageBlockToolbar: React.FC<ImageBlockToolbar> = props => {
             justifyContent="center"
             className={cn('h-8 w-8 group relative rounded-full bg-grey9 dark:bg-grey5')}
           >
-            <Icon size="md" icon={<PencilIcon />} accentColor />
+            <PencilIcon className={mdStyle} />
           </Stack>
         </button>
         <button onClick={handleAddClick}>
@@ -114,7 +115,7 @@ const ImageBlockToolbar: React.FC<ImageBlockToolbar> = props => {
             justifyContent="center"
             className={cn('h-8 w-8 group relative rounded-full bg-grey9 dark:bg-grey5')}
           >
-            <Icon size="md" icon={<PlusIcon />} accentColor />
+            <PlusIcon className={mdStyle} />
           </Stack>
         </button>
       </Stack>

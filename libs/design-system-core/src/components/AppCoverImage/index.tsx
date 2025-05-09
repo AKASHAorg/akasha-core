@@ -1,8 +1,7 @@
 import React, { useMemo } from 'react';
 import Stack from '../Stack';
-import Icon from '../Icon';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { EyeSlashIcon } from '../Icon/hero-icons-outline';
+import { EyeOffIcon } from 'lucide-react';
 import { cn } from '@akashaorg/ui/lib/library/utils';
 
 export type AppCoverImageProps = {
@@ -56,10 +55,7 @@ const AppCoverImage = (props: AppCoverImageProps) => {
         fullWidth
       >
         {isNSFW && (
-          <Icon
-            icon={<EyeSlashIcon />}
-            customStyle="[&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark"
-          />
+          <EyeOffIcon className="h-5 w-5 [&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark" />
         )}
       </Stack>
     );

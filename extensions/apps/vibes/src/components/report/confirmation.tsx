@@ -4,7 +4,6 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { Discord } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -68,13 +67,7 @@ export const ReportItemConfirmation: React.FC<ReportItemConfirmationProps> = pro
 
           <Link to={ctaUrl} target="_blank">
             <Stack direction="row" align="center" spacing="gap-x-2">
-              <Icon
-                size="sm"
-                accentColor={true}
-                icon={<Discord />}
-                solid={true}
-                customStyle="mx-auto my-0"
-              />
+              <Discord className="h-4 w-4 mx-auto my-0 [&>*]:fill-secondaryLight dark:[&>*]:stroke-secondaryDark" />
 
               <Text
                 variant="footnotes2"

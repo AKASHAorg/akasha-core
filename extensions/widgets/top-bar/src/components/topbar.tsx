@@ -2,12 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useTheme } from '@akashaorg/ui-core-hooks';
 import { ThemingEvents } from '@akashaorg/typings/lib/ui';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import {
-  ArrowLeftEndOnRectangleIcon,
-  ArrowRightEndOnRectangleIcon,
-  ChevronLeftIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+
+import { PanelLeftOpenIcon, ChevronLeftIcon, PanelRightOpenIcon } from 'lucide-react';
 import { Akasha } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
@@ -78,7 +74,7 @@ const WorldIcon = (props: WorldIconProps) => {
       />
     );
   }
-  return <Icon icon={fallback} solid={true} customStyle="w-18 h-7" />;
+  return fallback;
 };
 
 const Topbar: React.FC<ITopbarProps> = props => {
@@ -109,14 +105,20 @@ const Topbar: React.FC<ITopbarProps> = props => {
     };
   }, []);
 
+  const style = 'h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark';
+
   return (
     <Card className="flex flex-row justify-between items-center py-1.5 px-2 space-x-4 xs:fixed xs:top-0 xs:z-8">
       <Stack direction="row" spacing={2}>
         <Button variant="outline" size="icon" onClick={onSidebarToggle}>
-          {sidebarVisible ? <ArrowLeftEndOnRectangleIcon /> : <ArrowRightEndOnRectangleIcon />}{' '}
+          {sidebarVisible ? (
+            <PanelLeftOpenIcon className={style} />
+          ) : (
+            <PanelRightOpenIcon className={style} />
+          )}{' '}
         </Button>
         <Button variant="outline" size="icon" onClick={onBackClick}>
-          <ChevronLeftIcon />
+          <ChevronLeftIcon className={style} />
         </Button>
       </Stack>
       <button onClick={onBrandClick} className="p-0 !ml-0 cursor-pointer">

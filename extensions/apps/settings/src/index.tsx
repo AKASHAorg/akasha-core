@@ -7,7 +7,7 @@ import {
   LogoTypeSource,
 } from '@akashaorg/typings/lib/ui';
 import React from 'react';
-import { Cog8ToothIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { SettingsIcon } from 'lucide-react';
 import routes from './routes';
 
 export const register = (opts: IntegrationRegistrationOptions): IAppConfig => ({
@@ -18,7 +18,7 @@ export const register = (opts: IntegrationRegistrationOptions): IAppConfig => ({
     label: 'Settings',
     type: MenuItemType.App,
     area: [MenuItemAreaType.AppArea],
-    logo: { type: LogoTypeSource.ICON, value: <Cog8ToothIcon /> },
+    logo: { type: LogoTypeSource.ICON, value: <SettingsIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" /> },
     subRoutes: [],
   },
   routes: {

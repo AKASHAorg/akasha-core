@@ -5,7 +5,7 @@ const Akasha = (props: React.SVGProps<SVGSVGElement>) => (
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
     viewBox="0 0 18 18"
-    strokeWidth={1.5}
+    strokeWidth={2}
     aria-hidden="true"
     {...props}
   >

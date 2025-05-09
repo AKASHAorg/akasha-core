@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import Stack from '../Stack';
-import { MagnifyingGlassIcon } from '../Icon/hero-icons-outline';
+import { SearchIcon } from 'lucide-react';
 import List, { ListItem } from '../List';
 import TextField from '../TextField';
 import Tag from './Tag';
@@ -111,7 +111,7 @@ const AutoComplete: React.FC<AutoCompleteProps> = props => {
       <TextField
         type="text"
         placeholder={placeholder}
-        iconRight={<MagnifyingGlassIcon />}
+        iconRight={<SearchIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />}
         value={value}
         label={label}
         caption={caption}

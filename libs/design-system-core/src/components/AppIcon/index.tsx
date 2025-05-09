@@ -7,7 +7,19 @@ import Stack from '../Stack';
 import IconByType from './icon-by-type';
 import { BasicSize, BreakPointSize, Color, Radius } from '../types/common.types';
 import { getColorClasses, getRadiusClasses } from '../../utils';
-import { IconProps } from '../Icon';
+
+export interface IconProps {
+  ref?: React.Ref<HTMLDivElement>;
+  icon?: React.ReactElement;
+  size?: BasicSize;
+  breakPointSize?: BreakPointSize;
+  accentColor?: boolean;
+  disabled?: boolean;
+  dataTestId?: string;
+  customStyle?: string;
+  solid?: boolean;
+  rotateAnimation?: boolean;
+}
 
 export type AppIconProps = {
   appImg?: LogoSourceType;

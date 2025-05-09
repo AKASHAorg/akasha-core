@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useSlate } from 'slate-react';
-import Icon, { IconProps } from '@akashaorg/design-system-core/lib/components/Icon';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 
 import { CustomEditor, TEXT_ALIGN_TYPES } from './helpers';
@@ -9,7 +8,6 @@ import { cn } from '@akashaorg/ui/lib/library/utils';
 export type ToolbarButtonProps = {
   format: string;
   icon: JSX.Element;
-  iconSize?: IconProps['size'];
   style?: string;
   callback?: () => void;
 };
@@ -38,19 +36,13 @@ export const BlockButton: React.FC<ToolbarButtonProps> = ({ format, icon, style,
           style,
         )}
       >
-        <Icon size="lg" icon={icon} customStyle="absolute" solid accentColor />
+        {icon}
       </Stack>
     </button>
   );
 };
 
-export const MarkButton: React.FC<ToolbarButtonProps> = ({
-  format,
-  icon,
-  iconSize = 'sm',
-  style,
-  callback,
-}) => {
+export const MarkButton: React.FC<ToolbarButtonProps> = ({ format, icon, style, callback }) => {
   const editor = useSlate();
   const active = CustomEditor.isMarkActive(editor, format);
   return (
@@ -70,7 +62,7 @@ export const MarkButton: React.FC<ToolbarButtonProps> = ({
           style,
         )}
       >
-        <Icon size={iconSize} icon={icon} customStyle="absolute" solid accentColor />
+        {icon}
       </Stack>
     </button>
   );

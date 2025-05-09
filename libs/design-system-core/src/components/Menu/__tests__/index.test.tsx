@@ -3,12 +3,7 @@ import { act, fireEvent } from '@testing-library/react';
 
 import Menu from '../';
 import { ListItem } from '../../List';
-import {
-  ArrowUpOnSquareIcon,
-  EllipsisVerticalIcon,
-  PencilIcon,
-  TrashIcon,
-} from '../../Icon/hero-icons-outline';
+import { UploadIcon, EllipsisVerticalIcon, PencilIcon, Trash2Icon } from 'lucide-react';
 import { customRender } from '../../../test-utils';
 
 describe('<Menu /> Component', () => {
@@ -19,11 +14,11 @@ describe('<Menu /> Component', () => {
   const handleDelete = jest.fn(/** */);
 
   const items: ListItem[] = [
-    { label: 'Upload', icon: <ArrowUpOnSquareIcon />, onClick: handleUpload },
-    { label: 'Edit', icon: <PencilIcon />, onClick: handleEdit },
+    { label: 'Upload', icon: <UploadIcon className="h-4 w-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />, onClick: handleUpload },
+    { label: 'Edit', icon: <PencilIcon className="h-4 w-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />, onClick: handleEdit },
     {
       label: 'Delete',
-      icon: <TrashIcon />,
+      icon: <Trash2Icon className="h-4 w-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
       color: { light: 'errorLight', dark: 'errorDark' },
       onClick: handleDelete,
     },

@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { LinkElement } from './link-element';
-import { PlusIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { PlusIcon } from 'lucide-react';
 import { Control, useFieldArray } from 'react-hook-form';
 import { WorldCustomiseFormValues } from '../world-customise-form';
 import { FieldName } from '../world-customise-form';
@@ -32,7 +32,7 @@ export const SocialLinks: React.FC<SocialLinksProps> = ({ control, onDeleteLink 
         <Stack direction="row" spacing={2} justifyContent="between" alignItems="center">
           <Typography variant="h6">{t('Social links')}</Typography>
           <Button variant="link" onClick={onAddNew}>
-            {<PlusIcon />}
+            {<PlusIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />}
             {t('Link')}
           </Button>
         </Stack>

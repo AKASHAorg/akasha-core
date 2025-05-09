@@ -15,8 +15,6 @@ import { Loader2 } from 'lucide-react';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import DropDown from '@akashaorg/design-system-core/lib/components/Dropdown';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import AutoComplete from '@akashaorg/design-system-core/lib/components/AutoComplete';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import StackedAvatar from '@akashaorg/design-system-core/lib/components/StackedAvatar';
 
 import { useForm, useWatch } from 'react-hook-form';
@@ -24,8 +22,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ButtonType } from '@akashaorg/design-system-components/lib/components/types/common.types';
 import { Licenses } from '../extension-creation-form';
 import { AkashaProfile, Image } from '@akashaorg/typings/lib/ui';
-import { ExclamationTriangleIcon } from '@heroicons/react/24/solid';
-import { PlusIcon } from '@heroicons/react/24/outline';
+import { PlusIcon, TriangleAlertIcon } from 'lucide-react';
 import { ApolloError } from '@apollo/client';
 import Label from '@akashaorg/design-system-core/lib/components/Label';
 import {
@@ -33,6 +30,11 @@ import {
   ErrorLoaderDescription,
   ErrorLoaderTitle,
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
+import {
+  TagsInput,
+  TagsInputItem,
+  TagsInputList,
+} from '@akashaorg/ui/lib/akasha-components/tags-input';
 
 const MAX_TAGS = 4;
 
@@ -295,35 +297,27 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
               <FormField
                 control={control}
                 name={FieldName.keywords}
-                render={({ field: { value, onChange }, fieldState: { error } }) => {
-                  const errorMessage = error?.message ?? '';
+                render={({ field: { onChange } }) => {
                   return (
                     <FormItem>
                       <FormControl>
-                        <AutoComplete
-                          value={typeof value === 'string' ? value : ''}
-                          options={availableKeywords}
-                          placeholder={addTagsPlaceholderLabel}
-                          tags={keywords}
-                          caption={errorMessage ? errorMessage : ''}
-                          status={errorMessage ? 'error' : null}
-                          separators={['Comma', 'Space', 'Enter']}
-                          customStyle="grow mt-2"
-                          onSelected={({ index }) => {
-                            const newKeyWords = keywords.add(availableKeywords[index]);
-                            onChange([...newKeyWords]);
-                            setKeywords(newKeyWords);
-                          }}
-                          onChange={value => {
-                            onChange(value);
-                            if (Array.isArray(value)) {
-                              if (!errorMessage) setKeywords(new Set(value));
-                            }
-                          }}
+                        <TagsInput
+                          className="mt-1.5"
                           disabled={maxTagsSelected}
-                          required={true}
-                          multiple
-                        />
+                          placeholder={addTagsPlaceholderLabel}
+                          separators={['Comma', 'Space', 'Enter']}
+                          onTagsChange={value => {
+                            setKeywords(value);
+                          }}
+                          onChange={onChange}
+                        >
+                          <TagsInputList>
+                            {keywords &&
+                              Array.from(keywords).map(tag => (
+                                <TagsInputItem key={tag} tag={tag} />
+                              ))}
+                          </TagsInputList>
+                        </TagsInput>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -338,11 +332,7 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
             <Divider />
             <Stack direction="column" spacing={2}>
               <Stack direction="row" alignItems="center" spacing={1}>
-                <Icon
-                  icon={<ExclamationTriangleIcon />}
-                  size="sm"
-                  customStyle={'[&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark'}
-                />
+                <TriangleAlertIcon className="h-4 w-4 [&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark" />
                 <Text variant="button-md">{noteLabel}</Text>
               </Stack>
               <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">

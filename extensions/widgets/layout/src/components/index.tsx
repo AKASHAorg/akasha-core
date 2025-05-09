@@ -18,11 +18,7 @@ import { Widget } from '@akashaorg/ui-lib-extensions/lib/react/widget';
 import { ModalExtension } from '@akashaorg/ui-lib-extensions/lib/react/modal-extension';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import {
-  ExclamationTriangleIcon,
-  ExclamationCircleIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { TriangleAlertIcon, CircleAlertIcon } from 'lucide-react';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import TopbarLoader from '@akashaorg/design-system-components/lib/components/Loaders/topbar-loader';
@@ -36,8 +32,6 @@ const sidebarLoadingIndicator = <SidebarLoader />;
 const miniProfileLoadingIndicator = <MiniProfileWidgetLoader />;
 const trendingWidgetLoadingIndicator = <TrendingWidgetLoader />;
 const topbarLoadingIndicator = <TopbarLoader />;
-const exclamationTriangleIcon = <ExclamationTriangleIcon />;
-const exclamationCircleIcon = <ExclamationCircleIcon />;
 
 const Layout: React.FC<unknown> = () => {
   const widgetContainerRef = useRef<HTMLDivElement>(null);
@@ -232,10 +226,7 @@ const Layout: React.FC<unknown> = () => {
               {worldConfig.isPreview && (
                 <Card className="p-4 mb-4">
                   <Stack direction="row">
-                    <Icon
-                      icon={exclamationCircleIcon}
-                      customStyle="mr-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark"
-                    />
+                    <CircleAlertIcon className="h-5 w-5 mr-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
                     <Text variant="subtitle2">
                       {t('You are previewing "{{worldName}}"', { worldName: worldConfig.title })}.
                     </Text>
@@ -251,10 +242,7 @@ const Layout: React.FC<unknown> = () => {
               {!isPlatformHealthy && (
                 <Card className="mb-4 border-warning-foreground background-warning">
                   <Stack direction="row">
-                    <Icon
-                      icon={exclamationTriangleIcon}
-                      customStyle="mr-4 [&>*]:stroke-grey3 dark:[&>*]:stroke-grey3"
-                    />
+                    <TriangleAlertIcon className="h-5 w-5 mr-4 [&>*]:stroke-grey3 dark:[&>*]:stroke-grey3" />
                     <Stack>
                       <Text variant="footnotes2" color={{ light: 'grey3', dark: 'grey3' }}>
                         {`${t(
