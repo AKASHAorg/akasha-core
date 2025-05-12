@@ -123,7 +123,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
           <Stack direction="row" justify="between">
             {profileAvatar}
 
-            <DropdownMenu>
+            <DropdownMenu modal={false}>
               <DropdownMenuTrigger disabled={disableActions} asChild>
                 <EllipsisIcon
                   aria-label="settings"

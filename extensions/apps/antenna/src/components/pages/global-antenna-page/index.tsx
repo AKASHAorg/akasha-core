@@ -60,11 +60,6 @@ const GlobalAntennaPage: React.FC<unknown> = () => {
     <Stack className="w-full">
       <Helmet helmetData={helmetData}>
         <title>{worldConfig.title}</title>
-        <style>{`
-          [data-scroll-locked][data-scroll-locked] {
-            overflow-y: scroll !important;
-          }
-        `}</style>
       </Helmet>
       <Stack spacing={4}>
         {!dismissed && (
