@@ -35,6 +35,7 @@
     "@lottiefiles/react-lottie-player": "3.4.9",
     "@multiformats/multiaddr-to-uri": "9.0.1",
     "@pushprotocol/restapi": "^1.7.28",
+    "@radix-ui/react-accordion": "1.2.10",
     "@radix-ui/react-alert-dialog": "1.1.5",
     "@radix-ui/react-avatar": "1.1.2",
     "@radix-ui/react-checkbox": "1.1.3",
