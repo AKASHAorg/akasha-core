@@ -1,10 +1,10 @@
 import React from 'react';
 import { Image } from '@akashaorg/ui/lib/akasha-components/image';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 import { Loader2 } from 'lucide-react';
 import { Trash2Icon, XCircleIcon } from 'lucide-react';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 
 export enum GalleryImageState {
   ERROR = 'error',
@@ -35,20 +35,15 @@ export const GalleryImage: React.FC<GalleryImageProps> = props => {
         //action buttons
       }
       <Stack direction="row" spacing={2} className="absolute top-2 right-2">
-        <button
-          onClick={onDelete}
+        <Button
+          size="icon"
+          variant="ghost"
           disabled={state === GalleryImageState.LOADING}
-          className={state === GalleryImageState.LOADING ? 'cursor-not-allowed' : ''}
+          onClick={onDelete}
+          className={`bg-black/50 size-6 [&_*]:stroke-white  hover:[&_*]:stroke-black ${state === GalleryImageState.LOADING ? 'cursor-not-allowed' : ''}`}
         >
-          <AppIcon
-            placeholderIcon={<Trash2Icon className="h-3 w-3 [&>*]:stroke-white" />}
-            size="xs"
-            iconSize="sm"
-            iconStyle="[&>*]:stroke-white"
-            customStyle="bg-black/50"
-            hover
-          />
-        </button>
+          <Trash2Icon className="h-3 w-3" />
+        </Button>
       </Stack>
       {state && (
         <Stack
