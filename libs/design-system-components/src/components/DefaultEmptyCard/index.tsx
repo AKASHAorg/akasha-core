@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
@@ -63,9 +63,7 @@ const DefaultEmptyCard: React.FC<DefaultEmptyCardProps> = ({
         {infoText}
       </Typography>
       <Stack justifyContent="end" spacing={4} className="w-full pt-2">
-        {buttonLabel && (
-          <Button variant="primary" label={buttonLabel} onClick={buttonClickHandler} />
-        )}
+        {buttonLabel && <Button onClick={buttonClickHandler}>{buttonLabel}</Button>}
       </Stack>
     </Card>
   );

@@ -2,7 +2,7 @@ import React from 'react';
 import { transformSource } from '@akashaorg/ui-core-hooks';
 import { Moderator } from '@akashaorg/typings/lib/ui';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -24,7 +24,6 @@ export type ModeratorDetailCardProps = {
 const ModeratorDetailCard: React.FC<ModeratorDetailCardProps> = props => {
   const { moderator, tenureInfoLabel, moderatedLabel, moderatedItemsLabel, viewProfileLabel } =
     props;
-  const textStyle = 'max-w([12.5rem] md:[7.5rem]) w-fit cursor-default';
   return (
     <Card className="p-4 space-y-4">
       <Stack direction="row" justify="between">
@@ -52,7 +51,7 @@ const ModeratorDetailCard: React.FC<ModeratorDetailCardProps> = props => {
           </Stack>
         </Stack>
 
-        <Button label={viewProfileLabel} />
+        <Button>{viewProfileLabel}</Button>
       </Stack>
 
       <Divider />

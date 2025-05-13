@@ -2,7 +2,6 @@ import React, { useCallback, useState } from 'react';
 import Modal, { ModalProps } from '@akashaorg/design-system-core/lib/components/Modal';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Img from '@akashaorg/design-system-core/lib/components/Image';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import Cropper, { Area, CropperProps, Point } from 'react-easy-crop';
@@ -135,9 +134,9 @@ const ImageModal: React.FC<ImageModalProps> = ({
           {images.map((imageData, index) => {
             const imageUrl = typeof imageData === 'string' ? imageData : imageData?.src;
             return (
-              <Button key={index} onClick={() => setSelectedIndexImage(index)} plain>
+              <button key={index} onClick={() => setSelectedIndexImage(index)}>
                 <Img src={imageUrl} customStyle="object-contain w-10 h-10 rounded-[0.5rem]" />
-              </Button>
+              </button>
             );
           })}
         </Stack>

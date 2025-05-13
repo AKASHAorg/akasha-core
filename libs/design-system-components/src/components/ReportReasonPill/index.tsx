@@ -2,7 +2,6 @@ import React from 'react';
 import { FlagIcon } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 export type ReportReasonPillProps = {
   reportCount: number;
   reason: string;
@@ -18,7 +17,7 @@ export type ReportReasonPillProps = {
 const ReportReasonPill: React.FC<ReportReasonPillProps> = props => {
   const { reason, reportCount, handleClick } = props;
   return (
-    <Button plain={true} onClick={handleClick}>
+    <button onClick={handleClick}>
       <Stack
         direction="row"
         className="w-fit rounded-full bg-secondaryLight/30 dark:bg-secondaryDark"
@@ -36,7 +35,7 @@ const ReportReasonPill: React.FC<ReportReasonPillProps> = props => {
           </Typography>
         </Stack>
       </Stack>
-    </Button>
+    </button>
   );
 };
 export default ReportReasonPill;

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
@@ -138,7 +137,7 @@ const DropdownFilter: React.FC<IDropdownFilterProps> = ({
                         ${idx < menuItems.length - 1 ? 'border-b-1 border-b-grey8 dark:border-b-grey5' : ''}
                         cursor-pointer`}
                     >
-                      <Button onClick={handleChange(menuItem)} plain customStyle="w-full">
+                      <button onClick={handleChange(menuItem)} className="w-full">
                         <Stack
                           direction="row"
                           alignItems="center"
@@ -148,7 +147,7 @@ const DropdownFilter: React.FC<IDropdownFilterProps> = ({
                           {menuItem.icon}
                           <Typography>{menuItem.title}</Typography>
                         </Stack>
-                      </Button>
+                      </button>
                     </li>
                   );
                 }

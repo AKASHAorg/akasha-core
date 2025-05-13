@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -49,7 +49,9 @@ export const ReportItemConfirmation: React.FC<ReportItemConfirmationProps> = pro
           {subtitleLabel}
         </Typography>
 
-        <Button variant="text" size="md" label={continueLabel} onClick={onContinueClick} />
+        <Button variant="link" onClick={onContinueClick}>
+          {continueLabel}
+        </Button>
 
         <Stack align="center" justifySelf="end" spacing="gap-y-2">
           <Typography variant="xs" className="font-medium font-normal text-center">
