@@ -22,7 +22,7 @@ import LoadingSettingsPlaceholder from './loading-settings-placeholder';
 import ConnectErrorCard from '@akashaorg/design-system-components/lib/components/ConnectErrorCard';
 import AppSetting from './app-setting';
 import { InfoIcon } from 'lucide-react';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 const NotificationsPreferencesOption: React.FC = () => {
   const sdk = getSDK();
   const { notificationsEnabled, waitingForSignature, readOnlyMode, enableNotifications } =
@@ -199,7 +199,7 @@ const NotificationsPreferencesOption: React.FC = () => {
                             onChange={checked => handleSetPreference(checked, index)}
                           />
                           {appPreferences.length - 1 !== index && (
-                            <Divider customStyle={`dark:border-grey5 my-4`} />
+                            <Separator className="dark:border-grey5 my-4" />
                           )}
                         </>
                       ))}

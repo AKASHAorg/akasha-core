@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
@@ -127,7 +127,7 @@ const DropdownFilter: React.FC<IDropdownFilterProps> = ({
                             </li>
                           );
                         })}
-                      {divider && <Divider />}
+                      {divider && <Separator />}
                     </>
                   );
                 } else {

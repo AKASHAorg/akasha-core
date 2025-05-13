@@ -1,5 +1,5 @@
 import React from 'react';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
@@ -49,7 +49,7 @@ export const ApplicationDetail: React.FC<ApplicationDetailProps> = props => {
             )}
           </Stack>
 
-          {idx < sections.length - 1 && <Divider />}
+          {idx < sections.length - 1 && <Separator />}
         </React.Fragment>
       ))}
     </PageHeader>

@@ -37,7 +37,7 @@ import ImageModal from '@akashaorg/design-system-components/lib/components/Image
 import { type GalleryImage } from '@akashaorg/typings/lib/ui';
 import { XIcon, Loader2 } from 'lucide-react';
 import getSDK from '@akashaorg/core-sdk';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import { selectLatestAppVersionId } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-by-publisher-did-query';
 const isImgUrl = async url => {
   const response = await fetch(url, {
@@ -400,7 +400,7 @@ export const ImageEditorBlock = (
                 {t('Add an image from device')}
               </Button>
             </Stack>
-            <Divider />
+            <Separator />
             <Stack direction="column" spacing={2} className="py-8">
               <Typography variant="h6">{t('From URL')}</Typography>
               <Stack direction="row" justifyContent="between">
@@ -421,7 +421,7 @@ export const ImageEditorBlock = (
                 </Button>
               </Stack>
             </Stack>
-            <Divider />
+            <Separator />
             <Stack direction="column" spacing={2} className="overflow-auto pt-8">
               <Stack direction="row" justifyContent="between">
                 <Typography variant="h6">{t('Uploaded images')} </Typography>

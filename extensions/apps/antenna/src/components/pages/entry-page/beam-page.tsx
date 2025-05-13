@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import BeamSection, { BeamSectionProps } from './beam-section';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import {
   useAkashaStore,
@@ -97,7 +97,7 @@ const BeamPage: React.FC<BeamPageProps> = props => {
               logger={logger}
             >
               <div>
-                <Divider />
+                <Separator />
                 <EditableReflectionResolver
                   reflectID={itemData.reflectionID}
                   onContentClick={() => {

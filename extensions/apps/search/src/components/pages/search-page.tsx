@@ -17,7 +17,7 @@ import {
 import EntryCardRenderer from './entry-renderer';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import ProfileSearchCard from '../profile-search-card';
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
@@ -435,7 +435,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                         handleSubscribeTag={handleTagSubscribe(true)}
                         handleUnsubscribeTag={handleTagSubscribe(false)}
                       />
-                      {index < searchTagsState?.length - 1 && <Divider />}
+                      {index < searchTagsState?.length - 1 && <Separator />}
                     </Stack>
                   ))}
                 </Card>

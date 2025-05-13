@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 export type ExtensionVersionBulletPointCardProps = {
   featureTitle: string;
   itemList: string[];
@@ -24,7 +24,7 @@ const ExtensionVersionBulletPointCard: React.FC<ExtensionVersionBulletPointCardP
           ))}
         </ul>
       </Stack>
-      <Divider />
+      <Separator />
     </Stack>
   );
 };

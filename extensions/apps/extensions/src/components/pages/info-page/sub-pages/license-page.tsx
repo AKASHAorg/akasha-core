@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import InfoSubRouteHeader from '../InfoSubroutePageHeader';
 import {
   AkashaAppApplicationType,
@@ -35,7 +35,7 @@ export const LicensePage = (props: LicensePageProps) => {
             appLogo={extensionLogo}
             appType={extensionType}
           />
-          <Divider />
+          <Separator />
           <Typography variant="h6">{`"${license}"`}</Typography>
           {!!mockLicenseData && (
             <Stack spacing={4}>

@@ -1,5 +1,6 @@
 import React, { PropsWithChildren } from 'react';
-import Divider from '../Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
+
 import Stack from '../Stack';
 import Text, { TextProps } from '../Text';
 import Button from '../Button';
@@ -63,7 +64,7 @@ const Section: React.FC<PropsWithChildren<SectionProps>> = ({
 
   const BaseCompnt = (
     <Stack direction="column" spacing="gap-y-6" padding="py-3">
-      {showDivider && dividerPosition === DividerPosition.Top && <Divider />}
+      {showDivider && dividerPosition === DividerPosition.Top && <Separator />}
       <Stack direction="column" spacing="gap-y-2">
         <Stack justify="between" direction="row">
           <Text variant={titleVariant}>{title}</Text>
@@ -74,7 +75,7 @@ const Section: React.FC<PropsWithChildren<SectionProps>> = ({
         </Stack>
         {children}
       </Stack>
-      {showDivider && dividerPosition === DividerPosition.Bottom && <Divider />}
+      {showDivider && dividerPosition === DividerPosition.Bottom && <Separator />}
     </Stack>
   );
   if (viewMoreIcon) {
