@@ -1,5 +1,5 @@
-import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
 import React, { PropsWithChildren } from 'react';
+import { cssVars } from '../library/to-css-var';
 
 export type ScrollTopWrapperProps = {
   placement?: React.CSSProperties['marginLeft'];
@@ -30,4 +30,4 @@ const ScrollTopWrapper: React.FC<PropsWithChildren<ScrollTopWrapperProps>> = ({
   );
 };
 
-export default ScrollTopWrapper;
+export { ScrollTopWrapper };
