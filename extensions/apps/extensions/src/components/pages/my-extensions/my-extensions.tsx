@@ -263,6 +263,7 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
               const extensionData = allMyExtensions[itemIndex];
               return (
                 <ExtensionElement
+                  key={itemIndex}
                   extensionId={extensionData?.id}
                   extensionName={extensionData?.name}
                   extensionDisplayName={extensionData?.displayName}

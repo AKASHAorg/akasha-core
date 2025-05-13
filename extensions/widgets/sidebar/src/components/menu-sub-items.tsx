@@ -15,7 +15,7 @@ const MenuSubItems: React.FC<MenuSubItemsProps> = props => {
     });
   }, [menuItem.subRoutes]);
   return (
-    <Stack className="cursor-pointer">
+    <Stack className="cursor-pointer ">
       {subRoutes.map((subRoute, idx) => {
         const isActive =
           subRoute?.route === activeOption?.route || location.pathname.includes(subRoute?.route);
