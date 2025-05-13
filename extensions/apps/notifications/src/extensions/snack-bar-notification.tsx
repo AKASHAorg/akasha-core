@@ -1,7 +1,4 @@
 import React, { useState, useEffect, useMemo, useSyncExternalStore, ReactElement } from 'react';
-import ReactDOMClient from 'react-dom/client';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import singleSpaReact from 'single-spa-react';
 import {
   withProviders,
   hasOwn,
@@ -17,7 +14,7 @@ import {
   NotificationTypes,
   LogoTypeSource,
 } from '@akashaorg/typings/lib/ui';
-import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
+import { IconContainer } from '@akashaorg/ui/lib/akasha-components/icon-container';
 import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 
@@ -113,15 +110,11 @@ const SnackBarNotification: React.FC<IRootExtensionProps> = () => {
   };
   // @TODO: icon typings are generally wrong!
   const icon = (
-    <AppIcon
-      size="xs"
-      accentColor={true}
-      placeholderIcon={
-        findAppIcon(appTitle)?.logo?.type === LogoTypeSource.ICON
-          ? (findAppIcon(appTitle).logo?.value as ReactElement)
-          : null
-      }
-    />
+    <IconContainer size="xs" className="[&_*]:fill-secondaryLight dark:[&_*]:fill-secondaryDark">
+      {findAppIcon(appTitle)?.logo?.type === LogoTypeSource.ICON
+        ? (findAppIcon(appTitle).logo?.value as ReactElement)
+        : null}
+    </IconContainer>
   );
 
   return (

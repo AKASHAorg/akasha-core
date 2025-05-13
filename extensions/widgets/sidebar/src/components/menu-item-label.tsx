@@ -1,6 +1,6 @@
 import React from 'react';
 import { IMenuItem } from '@akashaorg/typings/lib/ui';
-import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
+import { IconContainer } from '@akashaorg/ui/lib/akasha-components/icon-container';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 export type MenuItemLabelProps = {
@@ -10,18 +10,20 @@ export type MenuItemLabelProps = {
 };
 
 const MenuItemLabel: React.FC<MenuItemLabelProps> = props => {
-  const { menuItem, isActiveMenu } = props;
+  const { menuItem } = props;
   return (
     <Stack direction="row" alignItems="center">
       {menuItem.logo.type === 'icon' && (
-        <AppIcon
+        <IconContainer
           size="md"
-          accentColor={true}
-          stackedIcon={menuItem.label === 'Notifications'}
-          placeholderIcon={menuItem.logo.value}
-          solid={menuItem.logo.solidIcon}
-          customStyle="bg-grey8 dark:bg-grey5"
-        />
+          className={`"bg-grey8 dark:bg-grey5" ${
+            menuItem.logo.solidIcon
+              ? '[&_*]:fill-secondaryLight dark:[&_*]:fill-secondaryDark'
+              : '[&_*]:stroke-secondaryLight dark:[&_*]:stroke-secondaryDark'
+          }`}
+        >
+          {menuItem.logo.value}
+        </IconContainer>
       )}
 
       <Typography variant="sm" bold className="ml-2.5">
