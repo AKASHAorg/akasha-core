@@ -5,7 +5,7 @@ import { useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 import routes, { RESULTS } from '../../routes';
@@ -84,7 +84,7 @@ const SettingsPage: React.FC = () => {
         {t('Search Settings')}
       </Typography>
 
-      <Divider customStyle="my-2" />
+      <Separator className="my-2" />
       <Stack justify="between" direction="row">
         <Typography variant="h6">
           <>{t('Show NSFW Content')}</>

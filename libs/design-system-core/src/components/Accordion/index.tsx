@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
-
-import Divider from '../Divider';
 import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
+
 import Stack from '../Stack';
 import Card from '../Card';
 
@@ -75,7 +75,7 @@ const Accordion: React.FC<AccordionProps> = props => {
         {headerDivider ? (
           <Stack direction="column" spacing="gap-y-4">
             {headerUi}
-            <Divider />
+            <Separator />
           </Stack>
         ) : (
           headerUi

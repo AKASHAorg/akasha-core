@@ -10,7 +10,7 @@ import {
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import ExtensionCreationForm from '../../extension-creation-form';
 import { DRAFT_EXTENSIONS } from '../../../constants';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
@@ -84,7 +84,7 @@ export const ExtensionCreationPage: React.FC<unknown> = () => {
         <Typography variant="h5" className="font-semibold text-center">
           {t('Create an Extension')}
         </Typography>
-        <Divider />
+        <Separator />
         <Stack>
           <ExtensionCreationForm
             extensionDisplayNameFieldLabel={t('Extension Display Name')}

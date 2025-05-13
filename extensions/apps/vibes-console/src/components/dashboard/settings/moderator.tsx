@@ -1,5 +1,5 @@
 import React from 'react';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import {
   PageHeader,
   PageHeaderProps,
@@ -28,7 +28,7 @@ export const ModeratorSettings: React.FC<ModeratorSettingsProps> = props => {
             01-Jan-2015
           </Typography>
         </Stack>
-        <Divider />
+        <Separator />
         <Stack direction="row" align="start" justify="between">
           <Stack spacing="gap-y-3">
             <Typography variant="sm" bold className="text-black dark:text-grey6">

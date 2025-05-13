@@ -4,7 +4,7 @@ import { Profile } from '@akashaorg/typings/lib/ui';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
@@ -73,7 +73,7 @@ export const ApplicantDataCard: React.FC<ApplicantDataCardProps> = props => {
           {!isMini && renderStatusDetail(applicant.status)}
         </Stack>
 
-        <Divider />
+        <Separator />
 
         <Stack direction="row" justify="between">
           <Stack>

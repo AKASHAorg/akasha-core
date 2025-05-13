@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import {
   PageHeader,
   PageHeaderProps,
@@ -39,7 +39,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = props => {
             01-Jan-2015
           </Typography>
         </Stack>
-        <Divider />
+        <Separator />
         <Stack direction="row" align="start" justify="between">
           <Stack spacing="gap-y-3">
             <Typography variant="sm" bold className="text-black dark:text-grey6">
@@ -59,7 +59,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = props => {
             {changeLimitLabel}
           </Button>
         </Stack>
-        <Divider />
+        <Separator />
         <Stack>
           <Typography variant="sm" bold className="text-black dark:text-grey6">
             {three.title}

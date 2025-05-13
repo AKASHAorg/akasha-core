@@ -16,7 +16,7 @@ import { Extension, NotificationEvents, NotificationTypes } from '@akashaorg/typ
 import { ExtensionElement } from '../my-extensions/extension-element';
 import { DRAFT_EXTENSIONS, PROPERTY, PROVIDER } from '../../../constants';
 import { useGetAppReleaseByIdQuery } from '@akashaorg/ui-core-hooks/lib/generated';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
 import {
   AkashaAppApplicationType,
@@ -168,7 +168,7 @@ export const ExtensionReleaseInfoPage: React.FC<ExtensionReleaseInfoPageProps> =
           </Stack>
         </Stack>
 
-        <Divider />
+        <Separator />
 
         <Stack spacing={4}>
           <Typography variant="h6" className="font-semibold break-all">
@@ -179,7 +179,7 @@ export const ExtensionReleaseInfoPage: React.FC<ExtensionReleaseInfoPageProps> =
           </Typography>
         </Stack>
 
-        <Divider />
+        <Separator />
 
         <Stack spacing={4}>
           <Typography variant="h6" className="font-semibold">
@@ -190,7 +190,7 @@ export const ExtensionReleaseInfoPage: React.FC<ExtensionReleaseInfoPageProps> =
           </Typography>
         </Stack>
 
-        <Divider />
+        <Separator />
 
         <Stack direction="row" justifyContent="between">
           <Typography variant="h6" className="font-semibold">

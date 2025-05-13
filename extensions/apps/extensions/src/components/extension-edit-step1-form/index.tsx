@@ -11,7 +11,7 @@ import {
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Input } from '@akashaorg/ui/lib/akasha-components/input';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -146,7 +146,7 @@ const ExtensionEditStep1Form: React.FC<ExtensionEditStep1FormProps> = props => {
               )}
               defaultValue={defaultValues.name}
             />
-            <Divider />
+            <Separator />
             <FormField
               control={control}
               name={FieldName.displayName}
@@ -167,7 +167,7 @@ const ExtensionEditStep1Form: React.FC<ExtensionEditStep1FormProps> = props => {
               defaultValue={defaultValues.displayName}
             />
           </Stack>
-          <Divider />
+          <Separator />
 
           <Stack direction="row" justifyContent="end" spacing={2} className="px-4 pb-4">
             <Button

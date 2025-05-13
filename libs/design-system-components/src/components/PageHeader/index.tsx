@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { PageButtonsProps, PageButtons } from '../PageButtons';
 export type PageHeaderProps = PageButtonsProps & {
@@ -35,7 +35,7 @@ export const PageHeader: React.FC<PropsWithChildren<PageHeaderProps>> = props =>
             </Typography>
           </Stack>
 
-          <Divider />
+          <Separator />
         </>
       )}
 

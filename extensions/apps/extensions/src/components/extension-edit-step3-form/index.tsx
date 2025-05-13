@@ -18,7 +18,7 @@ import {
   ProfileAvatarImage,
 } from '@akashaorg/ui/lib/akasha-components/profile-avatar';
 import { Loader2 } from 'lucide-react';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import DropDown from '@akashaorg/design-system-core/lib/components/Dropdown';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { useForm, useWatch } from 'react-hook-form';
@@ -228,7 +228,7 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
                 defaultValue={licenses.includes(defaultValues.license) ? '' : defaultValues.license}
               />
             )}
-            <Divider />
+            <Separator />
             <Stack direction="column" spacing={4}>
               <Stack spacing={1} direction="column">
                 <Stack direction="row" spacing={2} justifyContent="between" alignItems="center">
@@ -279,7 +279,7 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
               )}
             </Stack>
 
-            <Divider />
+            <Separator />
 
             <Stack direction="column" spacing={2}>
               <Label required={true}>{tagsLabel}</Label>
@@ -321,7 +321,7 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
                 {`${keywords.size}/${MAX_TAGS} ${tagsAddedLabel}`}
               </Typography>
             </Stack>
-            <Divider />
+            <Separator />
             <Stack direction="column" spacing={2}>
               <Stack direction="row" alignItems="center" spacing={1}>
                 <TriangleAlertIcon className="h-4 w-4 [&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark" />
@@ -334,7 +334,7 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
               </Typography>
             </Stack>
           </Stack>
-          <Divider />
+          <Separator />
 
           <Stack direction="row" justifyContent="end" spacing={2} className="px-4 pb-4">
             <Button

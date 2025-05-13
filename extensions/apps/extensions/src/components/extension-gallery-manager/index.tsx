@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import {
   ErrorLoader,
   ErrorLoaderDescription,
@@ -129,7 +129,7 @@ export const ExtensionGalleryManager: React.FC<ExtensionGalleryManagerProps> = p
         />
       </Stack>
       <Stack spacing={4} className="bg-inherit sticky bottom-0 rounded-b-2xl w-full">
-        <Divider />
+        <Separator />
         <Stack direction="row" alignItems="center" spacing={2} className="px-4 mb-4">
           <Typography variant="xs" className="font-medium text-grey4 dark:text-grey6 font-normal">
             {images.length}/{maxGalleryImages} {imagesLabel}

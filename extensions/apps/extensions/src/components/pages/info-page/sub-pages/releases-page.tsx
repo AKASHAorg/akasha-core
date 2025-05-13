@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import {
   AkashaAppApplicationType,
   AppImageSource,
@@ -101,7 +101,7 @@ export const ReleasesPage = (props: ReleasesPageProps) => {
           />
           {hasErrors && (
             <>
-              <Divider />
+              <Separator />
               <ErrorLoader type="list-not-available" className="border-none bg-transparent">
                 <ErrorLoaderTitle>{t('Loading error')}</ErrorLoaderTitle>
                 <ErrorLoaderDescription>
@@ -112,7 +112,7 @@ export const ReleasesPage = (props: ReleasesPageProps) => {
           )}
           {releasesReq.networkStatus === NetworkStatus.ready && !releases.length && (
             <>
-              <Divider />
+              <Separator />
               <DefaultEmptyCard
                 noBorder={true}
                 assetName="longbeam-notfound"
@@ -139,7 +139,7 @@ export const ReleasesPage = (props: ReleasesPageProps) => {
                 )?.value;
                 return (
                   <Stack direction="column">
-                    <Divider />
+                    <Separator />
                     <Stack direction="row" justifyContent="between" className="mt-3 mb-2">
                       <Typography variant="h6">
                         {t('Version')} {release.node?.version}

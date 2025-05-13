@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import AppList from '../../../app-list';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import {
@@ -160,7 +160,7 @@ export const DevInfoPage = (props: DevInfoPageProps) => {
           </ProfileAvatarButton>
           {appsReq.error && (
             <>
-              <Divider />
+              <Separator />
               <ErrorLoader type="list-not-available" className="border-none">
                 <ErrorLoaderTitle>{`${t('Uh-oh')}!${t("We couldn't load the extension list")}!`}</ErrorLoaderTitle>
                 <ErrorLoaderDescription>{`${t('It seems there is a problem retreving the list of extensions')}. ${t('Please try again later')}!`}</ErrorLoaderDescription>
@@ -169,7 +169,7 @@ export const DevInfoPage = (props: DevInfoPageProps) => {
           )}
           {appsReq.networkStatus === NetworkStatus.ready && !apps?.length && (
             <>
-              <Divider />
+              <Separator />
               <DefaultEmptyCard
                 noBorder={true}
                 assetName="longbeam-notfound"
@@ -179,7 +179,7 @@ export const DevInfoPage = (props: DevInfoPageProps) => {
           )}
           {apps && apps.length > 0 && (
             <>
-              <Divider />
+              <Separator />
               <AppList
                 hasNextPage={pageInfo?.hasNextPage}
                 loading={appsReq.loading}

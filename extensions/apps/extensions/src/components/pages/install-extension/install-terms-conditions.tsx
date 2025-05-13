@@ -13,7 +13,7 @@ import {
   AppImageSource,
   SortOrder,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import { useGetAppsByPublisherDidQuery } from '@akashaorg/ui-core-hooks/lib/generated';
 import getSDK from '@akashaorg/core-sdk';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
@@ -174,7 +174,7 @@ export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
         appPublisher={selectPublisherName(appInfo)}
         appLogo={selectAppLogoImage(appInfo)}
       />
-      <Divider />
+      <Separator />
       <Typography variant="sm" className="font-light m-4 select-none">
         {t('I agree to:')}
       </Typography>
@@ -204,7 +204,7 @@ export const ExtensionInstallTerms = ({ appId }: { appId: string }) => {
           </Stack>
         ))}
       </Stack>
-      <Divider />
+      <Separator />
       <Stack justifyContent="between" spacing={4} className="flex-column md:flex-row-reverse p-4">
         <Button disabled={!allTermsAccepted} onClick={handleContinue}>
           {t('Continue')}
