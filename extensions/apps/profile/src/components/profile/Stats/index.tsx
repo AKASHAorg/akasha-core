@@ -1,6 +1,6 @@
 import React from 'react';
 
-import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
+import { IconContainer } from '@akashaorg/ui/lib/akasha-components/icon-container';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
@@ -32,12 +32,12 @@ const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following })
     className: 'text-secondaryLight dark:text-secondaryDark',
   };
 
-  const style = 'h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark';
+  const style = '[&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark';
 
   const stats: (Stat & { icon: React.ReactElement; className?: string })[] = [
     { ...posts, icon: <MessagesSquareIcon className={style} /> },
     { ...interests, icon: <HeartIcon className={style} /> },
-    { ...followers, icon: <UsersRoundIcon className={style} />, className: 'scale-x-flip' },
+    { ...followers, icon: <UsersRoundIcon className={style} />, className: '[&>*]:scale-x-[-1]' },
     { ...following, icon: <UsersRoundIcon className={style} /> },
   ];
 
@@ -48,13 +48,12 @@ const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following })
           {stats.map((stat, index) => (
             <button onClick={stat.onClick} key={stat.label + index} disabled={stat.disabled}>
               <Stack alignItems="center" className="group">
-                <AppIcon
-                  placeholderIcon={stat.icon}
+                <IconContainer
                   size="lg"
-                  customStyle={stat.className}
-                  accentColor
-                  hover={!stat.disabled}
-                />
+                  className={`[&_svg]:size-5 border bg-transparent group-hover:[&_*]:stroke-black group-hover:bg-accent ${stat.className ?? ''}`}
+                >
+                  {stat.icon}
+                </IconContainer>
                 <Typography id={stat.label} {...labelProp}>
                   {stat.label}
                 </Typography>

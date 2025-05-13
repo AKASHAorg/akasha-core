@@ -1,6 +1,6 @@
 import React from 'react';
 
-import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
+import { IconContainer } from '@akashaorg/ui/lib/akasha-components/icon-container';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { CopyToClipboard } from '@akashaorg/ui/lib/akasha-components/copy-to-clipboard';
 import { LinkIcon } from 'lucide-react';
@@ -48,7 +48,16 @@ const Links: React.FC<LinksProps> = ({ title, links }) => {
           return (
             <CopyToClipboard key={`${link.href}${index}`} textToCopy={link.href}>
               <Stack direction="row" alignItems="center" spacing={2} className="w-fit">
-                <AppIcon placeholderIcon={icon} solid={solid} size="xs" accentColor />
+                <IconContainer
+                  size="xs"
+                  className={`[&_*]:size-3 ${
+                    solid
+                      ? '[&_*]:fill-secondaryLight dark:[&_*]:fill-secondaryDark'
+                      : '[&_*]:stroke-secondaryLight dark:[&_*]:stroke-secondaryDark'
+                  }`}
+                >
+                  {icon}
+                </IconContainer>
                 <Typography variant="p" className="w-fit text-primary">
                   {link.href}
                 </Typography>
