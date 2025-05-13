@@ -8,7 +8,7 @@ import {
 } from '@akashaorg/typings/lib/ui';
 import React from 'react';
 import routes, { HOME, DASHBOARD } from './routes';
-import { SquareSquareIcon } from 'lucide-react';
+import { LayoutGridIcon } from 'lucide-react';
 
 export const register = (opts: IntegrationRegistrationOptions): IAppConfig => ({
   rootComponent: () => import('./components'),
@@ -20,7 +20,12 @@ export const register = (opts: IntegrationRegistrationOptions): IAppConfig => ({
   menuItems: {
     label: 'Vibes Console',
     type: MenuItemType.App,
-    logo: { type: LogoTypeSource.ICON, value: <SquareSquareIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" /> },
+    logo: {
+      type: LogoTypeSource.ICON,
+      value: (
+        <LayoutGridIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+      ),
+    },
     area: [MenuItemAreaType.UserAppArea],
     subRoutes: [
       {
