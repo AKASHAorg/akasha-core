@@ -42,7 +42,7 @@ import {
   AlignTextRight,
 } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import { Loader2, TriangleAlertIcon } from 'lucide-react';
-import EditorMeter from '@akashaorg/design-system-core/lib/components/EditorMeter';
+import { CircularProgress } from '@akashaorg/ui/lib/akasha-components/circular-progress';
 
 import { countMentions, CustomEditor, getSlateMentions } from './helpers';
 import { serializeToPlainText } from './serialize';
@@ -573,7 +573,11 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
                 </Stack>
               )}
               <Stack direction="row" alignItems="center" spacing={2}>
-                {withMeter && <EditorMeter value={letterCount} max={MAX_TEXT_LENGTH} />}
+                {withMeter && (
+                  <CircularProgress
+                    value={Math.min(Math.floor((letterCount / MAX_TEXT_LENGTH) * 100), 100)}
+                  />
+                )}
                 {showCancelButton && <Button onClick={onCancelClick}>{cancelButtonLabel}</Button>}
                 {showPostButton && (
                   <Button onClick={handlePublish} disabled={publishDisabled}>
