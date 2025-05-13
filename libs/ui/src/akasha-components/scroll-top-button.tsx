@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { MoveUpIcon } from 'lucide-react';
-import { cn } from '@akashaorg/ui/lib/library/utils';
+import { cn } from '../library/utils';
 
 export type ScrollTopButtonProps = {
   onClick: () => void;
@@ -38,4 +38,4 @@ const ScrollTopButton = React.forwardRef<HTMLDivElement, ScrollTopButtonProps>(
   },
 );
 
-export default ScrollTopButton;
+export { ScrollTopButton };

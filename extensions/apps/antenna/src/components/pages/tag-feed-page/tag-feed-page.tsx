@@ -24,8 +24,8 @@ import {
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import TagProfileCard from '../../tag-profile-card';
 import TagFeedHeaderLoader from './tag-feed-header-loader';
-import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
-import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
+import { ScrollTopWrapper } from '@akashaorg/ui/lib/akasha-components/scroll-top-wrapper'
+import { ScrollTopButton } from '@akashaorg/ui/lib/akasha-components/scroll-top-button'
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 
 type TagFeedPageProps = {
