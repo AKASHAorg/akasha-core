@@ -1,6 +1,7 @@
 import React from 'react';
 import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
-import RadioButton from '@akashaorg/design-system-core/lib/components/RadioButton';
+import { RadioGroup, RadioGroupItem } from '@akashaorg/ui/lib/components/radio-group';
+import { Label } from '@akashaorg/ui/lib/components/label';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Textarea } from '@akashaorg/ui/lib/akasha-components/textarea';
@@ -13,6 +14,7 @@ import {
   SubtitleRenderer,
   SubtitleRendererProps,
 } from '@akashaorg/design-system-components/lib/components/SubtitleRenderer';
+
 export type BMDetailsProps = PageHeaderProps &
   SubtitleRendererProps & {
     selectedButton: string | null;
@@ -36,15 +38,10 @@ export type BMDetailsProps = PageHeaderProps &
     onRadioButtonChange: (value: string) => void;
     onCheckboxChange: () => void;
   };
+
 export const BMDetails: React.FC<BMDetailsProps> = props => {
-  const {
-    selectedButton,
-    footerChecked,
-    section1,
-    section2,
-    onRadioButtonChange,
-    onCheckboxChange,
-  } = props;
+  const { footerChecked, section1, section2, onRadioButtonChange, onCheckboxChange } = props;
+
   return (
     <PageHeader {...props}>
       <Stack spacing="gap-y-4">
@@ -54,16 +51,18 @@ export const BMDetails: React.FC<BMDetailsProps> = props => {
             {section1.subtitle}
           </Typography>
           <Stack direction="row" spacing="gap-x-4">
-            {section1.radioButtons.map(b => (
-              <RadioButton
-                id={b.value}
-                key={b.label}
-                label={b.label}
-                value={b.value}
-                isSelected={selectedButton === b.value}
-                handleChange={() => onRadioButtonChange(b.value)}
-              />
-            ))}
+            <RadioGroup
+              defaultValue={section1.radioButtons[0].value}
+              onValueChange={onRadioButtonChange}
+              className="flex space-x-2"
+            >
+              {section1.radioButtons.map(b => (
+                <div key={b.label} className="space-x-2">
+                  <RadioGroupItem id={b.value} value={b.value} />
+                  <Label htmlFor={b.value}>{b.value}</Label>
+                </div>
+              ))}
+            </RadioGroup>
           </Stack>
           <Typography variant="xs" className="font-medium font-light">
             {section1.extra}:

@@ -4,7 +4,8 @@ import {
   PageHeaderProps,
   PageHeader,
 } from '@akashaorg/design-system-components/lib/components/PageHeader';
-import RadioButton from '@akashaorg/design-system-core/lib/components/RadioButton';
+import { RadioGroup, RadioGroupItem } from '@akashaorg/ui/lib/components/radio-group';
+
 import ReportReasonPill from '@akashaorg/design-system-components/lib/components/ReportReasonPill';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import {
@@ -13,6 +14,7 @@ import {
 } from '@akashaorg/design-system-components/lib/components/SubtitleRenderer';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Textarea } from '@akashaorg/ui/lib/akasha-components/textarea';
+import { Label } from '@akashaorg/ui/lib/components/label';
 
 export type ReviewItemProps = PageHeaderProps &
   SubtitleRendererProps & {
@@ -61,16 +63,14 @@ export const ReviewItem: React.FC<ReviewItemProps> = props => {
           <Stack spacing="gap-y-2">
             <Typography variant="h6">{section2Label}</Typography>
             <Stack direction="row" customStyle="gap-x-3 md:gap-x-6">
-              {radioButtons.map(r => (
-                <RadioButton
-                  key={r.value}
-                  id={r.label}
-                  label={r.label}
-                  value={r.value}
-                  isSelected={selectedPeriod === r.value}
-                  handleChange={() => handleRadioChange(r.value)}
-                />
-              ))}
+              <RadioGroup onValueChange={handleRadioChange} defaultValue={selectedPeriod}>
+                {radioButtons.map(buttonInfo => (
+                  <div key={buttonInfo.label} className="">
+                    <RadioGroupItem id={buttonInfo.value} value={buttonInfo.value} />
+                    <Label htmlFor={buttonInfo.value}>{buttonInfo.label}</Label>
+                  </div>
+                ))}
+              </RadioGroup>
             </Stack>
             {/* show date picker if selectedPeriod is 'Other' */}
             {selectedPeriod === 'Other' && <DatePicker placeholderLabel={datePlaceholderLabel} />}
