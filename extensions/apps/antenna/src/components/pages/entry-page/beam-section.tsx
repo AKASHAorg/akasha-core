@@ -1,6 +1,6 @@
 import React, { ReactElement, useState } from 'react';
 import { EditorPlaceholder } from '@akashaorg/ui-lib-feed';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import BeamCard from '@akashaorg/ui-lib-feed/lib/components/cards/beam-card';
 import routes, { REFLECT } from '../../../routes';
@@ -55,7 +55,7 @@ const BeamSection: React.FC<BeamSectionProps> = props => {
             setIsReflecting(!isReflecting);
           }}
         />
-        {isActive && <Divider />}
+        {isActive && <Separator />}
       </Stack>
       {isActive && (
         <Stack className="px-2 mt-auto">

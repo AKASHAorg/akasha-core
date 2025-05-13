@@ -2,7 +2,7 @@ import React from 'react';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import InfoSubRoutePageHeader from '../InfoSubroutePageHeader';
 import { useTranslation } from 'react-i18next';
 import {
@@ -31,7 +31,7 @@ export const AppDescriptionPage = (props: AppDescriptionPageProps) => {
             appLogo={extensionLogo}
             appType={extensionType}
           />
-          <Divider />
+          <Separator />
           <Stack spacing={4}>
             <Typography variant="sm">{description}</Typography>
           </Stack>

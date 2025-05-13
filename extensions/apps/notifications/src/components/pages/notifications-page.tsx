@@ -10,7 +10,7 @@ import BasicInfoCard from '../notification-card/basic-info-card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Loader2 } from 'lucide-react';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import DynamicInfiniteScroll from '@akashaorg/design-system-core/lib/components/DynamicInfiniteScroll';
 import { type InboxNotification } from '@akashaorg/typings/lib/ui';
@@ -271,7 +271,7 @@ const NotificationsPage: React.FC = () => {
                         </Stack>
                         {/* the last item does not need a divider */}
                         {itemIndex !== notifications.length - 1 && (
-                          <Divider customStyle={`dark:border-grey5`} />
+                          <Separator className={`dark:border-grey5`} />
                         )}
                         {itemIndex == notifications.length - 1 && <Stack className="pb-4" />}
                       </Stack>

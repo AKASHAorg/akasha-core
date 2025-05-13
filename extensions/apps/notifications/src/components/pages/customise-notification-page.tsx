@@ -19,7 +19,7 @@ import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Checkbox } from '@akashaorg/ui/lib/components/checkbox';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import routes, {
   CUSTOMISE_NOTIFICATION_WELCOME_PAGE,
@@ -214,7 +214,7 @@ const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
       <Typography variant="h5" className="text-center pb-2">
         {initial ? t('Customise Your Notifications') : t('Notification Settings')}
       </Typography>
-      <Divider customStyle="!mt-0" />
+      <Separator className="!mt-0" />
       {!initial && (
         <>
           <Stack direction="column" className="px-6 !my-0 py-2">
@@ -227,7 +227,7 @@ const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
               </Stack>
             </>
           </Stack>
-          <Divider customStyle="!mt-0" />
+          <Separator className="!mt-0" />
         </>
       )}
       <Stack direction="column" className="mx-4">
@@ -262,7 +262,7 @@ const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
           </label>
         </Stack>
       </Stack>
-      <Divider customStyle="!mt-0" />
+      <Separator className="!mt-0" />
       <Stack direction="column" className="min-h-[80%] !mt-0 gap-y-2 pt-2">
         {Object.keys(allStates).length > 0 &&
           !Object.keys(allStates).find(key => key === SnoozeOption) &&
@@ -281,7 +281,7 @@ const CustomiseNotificationPage: React.FC<CustomiseNotificationPageProps> = ({
                   onCheckedChange={() => changeHandler(appState[0])}
                 />
               </Stack>
-              <Divider customStyle="!mt-0" />
+              <Separator className="!mt-0" />
             </Stack>
           ))}
       </Stack>

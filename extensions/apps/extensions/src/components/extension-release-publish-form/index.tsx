@@ -12,7 +12,7 @@ import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Input } from '@akashaorg/ui/lib/akasha-components/input';
 import { Textarea } from '@akashaorg/ui/lib/akasha-components/textarea';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ButtonType } from '@akashaorg/design-system-components/lib/components/types/common.types';
@@ -158,7 +158,7 @@ const ExtensionReleasePublish: React.FC<ExtensionReleasePublishProps> = props =>
               )}
               defaultValue={defaultValues.versionNumber}
             />
-            <Divider />
+            <Separator />
             <FormField
               control={control}
               name={FieldName.description}
@@ -179,7 +179,7 @@ const ExtensionReleasePublish: React.FC<ExtensionReleasePublishProps> = props =>
               )}
               defaultValue={defaultValues.description}
             />
-            <Divider />
+            <Separator />
             <FormField
               control={control}
               name={FieldName.sourceURL}
@@ -200,7 +200,7 @@ const ExtensionReleasePublish: React.FC<ExtensionReleasePublishProps> = props =>
               defaultValue={defaultValues.sourceURL}
             />
           </Stack>
-          <Divider />
+          <Separator />
 
           <Stack direction="row" justifyContent="end" spacing={2} className="px-4 pb-4">
             <Button

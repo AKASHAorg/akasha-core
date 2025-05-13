@@ -2,7 +2,7 @@ import React from 'react';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Profile } from '@akashaorg/typings/lib/ui';
 import { transformSource } from '@akashaorg/ui-core-hooks';
@@ -73,7 +73,7 @@ const ModeratorListItem: React.FC<ModeratorListItemProps> = props => {
             <Button label={assignButtonLabel} onClick={onClickAssign} />
           </Stack>
 
-          {idx < activeModerators.length - 1 && <Divider />}
+          {idx < activeModerators.length - 1 && <Separator />}
         </React.Fragment>
       ))}
     </Stack>

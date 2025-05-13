@@ -1,6 +1,6 @@
 import React from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import ReflectionCard from '../cards/reflection-card';
 import { type ReflectionData } from '@akashaorg/typings/lib/ui';
 
@@ -13,7 +13,7 @@ export function PendingReflect(props: PendingReflectProps) {
   const { reflectionData, customStyle = '' } = props;
   return (
     <Stack>
-      <Divider />
+      <Separator />
       <Stack
         customStyle={`border border-grey8 dark:border-grey3 bg-secondaryLight/10 dark:bg-secondaryDark/10 ${customStyle}`}
       >

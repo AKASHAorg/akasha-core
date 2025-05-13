@@ -1,5 +1,5 @@
 import React from 'react';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import Label from '@akashaorg/design-system-core/lib/components/Label';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Switch } from '@akashaorg/ui/lib/components/switch';
@@ -23,7 +23,7 @@ const Section: React.FC<React.PropsWithChildren<TSectionProps>> = props => {
         </Stack>
         {children}
       </Stack>
-      <Divider />
+      <Separator />
     </>
   );
 };

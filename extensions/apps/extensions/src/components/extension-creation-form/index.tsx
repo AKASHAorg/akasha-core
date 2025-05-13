@@ -11,7 +11,7 @@ import {
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Input } from '@akashaorg/ui/lib/akasha-components/input';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import DropDown from '@akashaorg/design-system-core/lib/components/Dropdown';
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -161,7 +161,7 @@ const ExtensionCreationForm: React.FC<ExtensionCreationFormProps> = ({
                 </FormItem>
               )}
             />
-            <Divider />
+            <Separator />
             <FormField
               control={control}
               name={FieldName.name}
@@ -183,7 +183,7 @@ const ExtensionCreationForm: React.FC<ExtensionCreationFormProps> = ({
                 </FormItem>
               )}
             />
-            <Divider />
+            <Separator />
             <FormField
               control={control}
               name={FieldName.displayName}
@@ -201,7 +201,7 @@ const ExtensionCreationForm: React.FC<ExtensionCreationFormProps> = ({
                 </FormItem>
               )}
             />
-            <Divider />
+            <Separator />
             <FormField
               control={control}
               name={FieldName.license}
@@ -248,7 +248,7 @@ const ExtensionCreationForm: React.FC<ExtensionCreationFormProps> = ({
             </Typography>
           </Stack>
 
-          <Divider />
+          <Separator />
 
           <Stack direction="row" spacing={2} className="ml-auto mt-auto px-4">
             <Button

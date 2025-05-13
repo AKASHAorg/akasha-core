@@ -26,7 +26,7 @@ import { AppInfoHeader } from '../../app-info/header';
 import Section, { DividerPosition } from '@akashaorg/design-system-core/lib/components/Section';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import ExtensionImageGallery from '../../extension-image-gallery';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { CopyToClipboard } from '@akashaorg/ui/lib/akasha-components/copy-to-clipboard';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
@@ -331,7 +331,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                         </Typography>
                       </CopyToClipboard>
                     </Stack>
-                    <Divider />
+                    <Separator />
                     <Stack direction="row" justifyContent="between">
                       <Typography variant="sm" className="text-grey4 dark:text-grey7">
                         {t('Extension ID')}
@@ -350,7 +350,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                         </Typography>
                       </CopyToClipboard>
                     </Stack>
-                    <Divider />
+                    <Separator />
                     <Stack direction="row" justifyContent="between">
                       <Typography variant="sm" className="text-grey4 dark:text-grey7">
                         {t('Latest update')}
@@ -359,7 +359,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                         {formatDate(latestRelease?.node?.createdAt, 'DD MMM YYYY')}
                       </Button>
                     </Stack>
-                    <Divider />
+                    <Separator />
                     <Stack direction="row" justifyContent="between">
                       <Typography variant="sm" className="text-grey4 dark:text-grey7">
                         {t('License')}
@@ -368,7 +368,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                         {appData.license}
                       </Button>
                     </Stack>
-                    <Divider />
+                    <Separator />
                     <Stack direction="row" justifyContent="between">
                       <Typography variant="sm" className="text-grey4 dark:text-grey7">
                         {t('Created on')}

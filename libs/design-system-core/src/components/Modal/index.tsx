@@ -1,11 +1,10 @@
 import React, { Fragment, PropsWithChildren } from 'react';
-
 import { Dialog, Transition } from '@headlessui/react';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 
 import Button from '../Button';
 import { ButtonProps } from '../Button/types';
 import Card from '../Card';
-import Divider from '../Divider';
 import { XIcon } from 'lucide-react';
 import Stack from '../Stack';
 import Text, { TextProps } from '../Text';
@@ -96,7 +95,7 @@ const Modal: React.FC<ModalProps> = ({
                       </Dialog.Title>
                     )}
 
-                    {showDivider && <Divider />}
+                    {showDivider && <Separator />}
 
                     <Stack
                       align="center"

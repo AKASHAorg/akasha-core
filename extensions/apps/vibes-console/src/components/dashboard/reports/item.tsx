@@ -5,7 +5,7 @@ import MiniProfileCTA from '../../vibes-console-content-card/mini-profile-cta';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 export type TReport = {
   name: string;
@@ -86,7 +86,7 @@ export const ReportItem: React.FC<ReportItemProps> = props => {
                 {r.explanation.length ? r.explanation : noExplanationLabel}
               </Typography>
             </Stack>
-            {id < ar.length - 1 && <Divider />}
+            {id < ar.length - 1 && <Separator />}
           </Stack>
         ))}
         {/* show view more button only if there are more than 2 flags */}

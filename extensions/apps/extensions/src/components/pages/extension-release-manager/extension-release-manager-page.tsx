@@ -29,7 +29,7 @@ import {
   selectAppsReleases,
   selectAppsReleasesPageInfo,
 } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-releases-query';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 import { ApolloError, NetworkStatus } from '@apollo/client';
@@ -389,7 +389,7 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
                         <ChevronRightIcon className="h-8 w-8 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
                       </Stack>
                     </button>
-                    {itemIndex < appReleases?.length - 1 && <Divider />}
+                    {itemIndex < appReleases?.length - 1 && <Separator />}
                   </Stack>
                 );
               }}

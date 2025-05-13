@@ -29,7 +29,7 @@ import {
   useRootComponentProps,
 } from '@akashaorg/ui-core-hooks';
 import { useTranslation } from 'react-i18next';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import { useNavigate } from '@tanstack/react-router';
 import { AtomContext } from './main-page';
 import { useAtom } from 'jotai';
@@ -156,7 +156,7 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
       >
         <Typography variant="h6">{t('Add Contributors')}</Typography>
       </Stack>
-      <Divider />
+      <Separator />
       <Stack direction="column" spacing={6} className="p-4 overflow-auto grow">
         <Stack spacing={1} direction="column">
           <Typography variant="sm" className="text-grey4 dark:text-grey6 font-light">
@@ -310,7 +310,7 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
           )}
         </Stack>
       </Stack>
-      <Divider />
+      <Separator />
       <Stack direction="row" alignItems="center" justifyContent="end" spacing={4} className="p-4">
         <Button variant="link" onClick={handleNavigateBack}>
           {t('Cancel')}

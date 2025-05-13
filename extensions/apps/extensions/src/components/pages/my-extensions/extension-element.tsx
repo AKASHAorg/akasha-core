@@ -5,7 +5,7 @@ import getSDK from '@akashaorg/core-sdk';
 import ExtensionIcon from '@akashaorg/design-system-core/lib/components/ExtensionIcon';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import {
   DropdownMenu,
@@ -300,7 +300,7 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
           </Stack>
         </Stack>
       </Stack>
-      {showDivider && <Divider />}
+      {showDivider && <Separator />}
     </Stack>
   );
 };

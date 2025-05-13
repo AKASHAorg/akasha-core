@@ -6,7 +6,7 @@ import {
   AccordionTrigger,
 } from '@akashaorg/ui/lib/components/accordion';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import ExtensionIcon from '@akashaorg/design-system-core/lib/components/ExtensionIcon';
 import Label from '@akashaorg/design-system-core/lib/components/Label';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
@@ -191,7 +191,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
             </AccordionItem>
           </Accordion>
         </Stack>
-        <Divider />
+        <Separator />
 
         <Stack spacing={3}>
           <Accordion type="single" collapsible className="w-full">
@@ -227,7 +227,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
             </AccordionItem>
           </Accordion>
         </Stack>
-        <Divider />
+        <Separator />
 
         <Stack spacing={3}>
           <Accordion type="single" collapsible className="w-full">
@@ -257,7 +257,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
             </AccordionItem>
           </Accordion>
         </Stack>
-        <Divider />
+        <Separator />
 
         <Stack spacing={3}>
           <Accordion type="single" collapsible className="w-full">
@@ -275,7 +275,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
             </AccordionItem>
           </Accordion>
         </Stack>
-        <Divider />
+        <Separator />
 
         <Stack spacing={3}>
           <Accordion type="single" collapsible className="w-full">
@@ -294,7 +294,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
             </AccordionItem>
           </Accordion>
         </Stack>
-        <Divider />
+        <Separator />
 
         <Stack spacing={3}>
           <Accordion type="single" collapsible className="w-full">
@@ -329,7 +329,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
         </Card>
       </Stack>
 
-      <Divider />
+      <Separator />
 
       <Stack direction="row" spacing={2} alignItems="center" justifyContent="end" className="p-4">
         <Button variant="link" onClick={onClickCancel}>

@@ -11,7 +11,7 @@ import {
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Textarea } from '@akashaorg/ui/lib/akasha-components/textarea';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ButtonType } from '@akashaorg/design-system-components/lib/components/types/common.types';
@@ -161,7 +161,7 @@ const ExtensionEditPublishedForm: React.FC<ExtensionEditPublishedFormProps> = pr
             />
           </Stack>
           <Stack className="px-4">
-            <Divider />
+            <Separator />
           </Stack>
           <Stack className="px-4">
             <Accordion type="single" collapsible className="w-full">
@@ -183,14 +183,14 @@ const ExtensionEditPublishedForm: React.FC<ExtensionEditPublishedFormProps> = pr
                         </Typography>
                         <Typography variant="sm">{displayOnlyValues?.name}</Typography>
                       </Stack>
-                      <Divider />
+                      <Separator />
                       <Stack spacing={2}>
                         <Typography variant="h6" bold>
                           {extensionDisplayNameLabel}
                         </Typography>
                         <Typography variant="sm">{displayOnlyValues?.displayName}</Typography>
                       </Stack>
-                      <Divider />
+                      <Separator />
                       <Stack spacing={2}>
                         <Typography variant="h6" bold>
                           {extensionLicenseLabel}
@@ -204,7 +204,7 @@ const ExtensionEditPublishedForm: React.FC<ExtensionEditPublishedFormProps> = pr
             </Accordion>
           </Stack>
           <Stack spacing={4} className="px-4 pb-16">
-            <Divider />
+            <Separator />
             <FormField
               control={control}
               name={FieldName.description}
@@ -223,7 +223,7 @@ const ExtensionEditPublishedForm: React.FC<ExtensionEditPublishedFormProps> = pr
               )}
               defaultValue={defaultValues.description}
             />
-            <Divider />
+            <Separator />
             <Gallery
               galleryFieldLabel={galleryFieldLabel}
               galleryDescriptionLabel={galleryDescriptionLabel}
@@ -234,7 +234,7 @@ const ExtensionEditPublishedForm: React.FC<ExtensionEditPublishedFormProps> = pr
               maxGalleryImages={maxGalleryImages}
               handleMediaClick={() => handleManageGalleryClick(getValues())}
             />
-            <Divider />
+            <Separator />
 
             <UsefulLinks
               usefulLinksTitleLabel={usefulLinksFieldLabel}
@@ -248,7 +248,7 @@ const ExtensionEditPublishedForm: React.FC<ExtensionEditPublishedFormProps> = pr
               }}
             />
           </Stack>
-          <Divider />
+          <Separator />
           <Stack direction="row" justifyContent="end" spacing={2} className="px-4 pb-4">
             <Button
               variant="link"

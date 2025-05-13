@@ -4,7 +4,7 @@ import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import BackToOriginalBeam from '@akashaorg/ui-lib-feed/lib/components/back-to-original-beam';
 import ReflectionSection, { ReflectionSectionProps } from './reflection-section';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import { EntityTypes, ReflectionData } from '@akashaorg/typings/lib/ui';
 import {
@@ -146,7 +146,7 @@ const ReflectionPage: React.FC<ReflectionPageProps> = props => {
             logger={logger}
           >
             <div>
-              <Divider />
+              <Separator />
               <EditableReflectionResolver
                 reflectID={itemData.reflectionID}
                 onContentClick={() => {

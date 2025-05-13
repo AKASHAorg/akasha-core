@@ -7,7 +7,7 @@ import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { MinusIcon, BeakerIcon } from 'lucide-react';
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import { LocalReleaseData } from '@akashaorg/typings/lib/ui';
 const TestModeWidget = () => {
   const [testExtensions, setTestExtensions] = useState<LocalReleaseData[]>(null);
@@ -121,7 +121,7 @@ const TestModeWidget = () => {
                       </Button>
                     </Stack>
                     {idx < testExtensions.length - 1 && (
-                      <Divider customStyle="border-grey6 dark:border-grey5 px-2" />
+                      <Separator className="border-grey6 dark:border-grey5 px-2" />
                     )}
                   </Fragment>
                 ))}
