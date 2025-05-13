@@ -8,6 +8,7 @@ export type MenuItemLabelProps = {
   isActiveMenu: boolean;
   hasNewNotifs?: boolean;
 };
+
 const MenuItemLabel: React.FC<MenuItemLabelProps> = props => {
   const { menuItem, isActiveMenu } = props;
   return (

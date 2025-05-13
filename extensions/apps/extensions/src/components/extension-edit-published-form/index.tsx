@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useState } from 'react';
+import React, { SyntheticEvent } from 'react';
 import * as z from 'zod';
 import {
   Form,
@@ -24,7 +24,12 @@ import {
   AppImageSource,
   AppLinkSource,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import Accordion from '@akashaorg/design-system-core/lib/components/Accordion';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@akashaorg/ui/lib/components/accordion';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 export enum FieldName {
   logoImage = 'logoImage',
@@ -132,10 +137,7 @@ const ExtensionEditPublishedForm: React.FC<ExtensionEditPublishedFormProps> = pr
       });
     }
   };
-  const [showAccordion, setShowAccordion] = useState(false);
-  const handleToggleAccordion = () => {
-    setShowAccordion(!showAccordion);
-  };
+
   return (
     <Form {...form}>
       <form onSubmit={onSave} className={`h-full`}>
@@ -162,45 +164,44 @@ const ExtensionEditPublishedForm: React.FC<ExtensionEditPublishedFormProps> = pr
             <Divider />
           </Stack>
           <Stack className="px-4">
-            <Accordion
-              accordionId={extensionInformationLabel}
-              open={showAccordion}
-              titleNode={
-                <Typography variant="h6" bold>
-                  {extensionInformationLabel}
-                </Typography>
-              }
-              contentNode={
-                <Stack spacing={4}>
-                  <Typography variant="xs" className="font-medium text-grey4 dark:text-grey6">
-                    {extensionInformationDescriptionLabel}
+            <Accordion type="single" collapsible className="w-full">
+              <AccordionItem value={extensionInformationLabel}>
+                <AccordionTrigger className="hover:no-underline py-2">
+                  <Typography variant="h6" bold>
+                    {extensionInformationLabel}
                   </Typography>
+                </AccordionTrigger>
+                <AccordionContent>
                   <Stack spacing={4}>
-                    <Stack spacing={2}>
-                      <Typography variant="h6" bold>
-                        {extensionIdLabel}
-                      </Typography>
-                      <Typography variant="sm">{displayOnlyValues?.name}</Typography>
-                    </Stack>
-                    <Divider />
-                    <Stack spacing={2}>
-                      <Typography variant="h6" bold>
-                        {extensionDisplayNameLabel}
-                      </Typography>
-                      <Typography variant="sm">{displayOnlyValues?.displayName}</Typography>
-                    </Stack>
-                    <Divider />
-                    <Stack spacing={2}>
-                      <Typography variant="h6" bold>
-                        {extensionLicenseLabel}
-                      </Typography>
-                      <Typography variant="sm">{displayOnlyValues?.license}</Typography>
+                    <Typography variant="xs" className="font-medium text-grey4 dark:text-grey6">
+                      {extensionInformationDescriptionLabel}
+                    </Typography>
+                    <Stack spacing={4}>
+                      <Stack spacing={2}>
+                        <Typography variant="h6" bold>
+                          {extensionIdLabel}
+                        </Typography>
+                        <Typography variant="sm">{displayOnlyValues?.name}</Typography>
+                      </Stack>
+                      <Divider />
+                      <Stack spacing={2}>
+                        <Typography variant="h6" bold>
+                          {extensionDisplayNameLabel}
+                        </Typography>
+                        <Typography variant="sm">{displayOnlyValues?.displayName}</Typography>
+                      </Stack>
+                      <Divider />
+                      <Stack spacing={2}>
+                        <Typography variant="h6" bold>
+                          {extensionLicenseLabel}
+                        </Typography>
+                        <Typography variant="sm">{displayOnlyValues?.license}</Typography>
+                      </Stack>
                     </Stack>
                   </Stack>
-                </Stack>
-              }
-              handleClick={handleToggleAccordion}
-            />
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           </Stack>
           <Stack spacing={4} className="px-4 pb-16">
             <Divider />

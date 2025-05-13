@@ -1,5 +1,10 @@
 import React, { ReactElement, useMemo } from 'react';
-import Accordion from '@akashaorg/design-system-core/lib/components/Accordion';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@akashaorg/ui/lib/components/accordion';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import ExtensionIcon from '@akashaorg/design-system-core/lib/components/ExtensionIcon';
@@ -85,7 +90,6 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
     onClickSubmit,
     transformSource,
   } = props;
-  const [activeAccordionId, setActiveAccordionId] = React.useState(null);
   const transformedCoverImage = transformSource(extensionData?.coverImage);
   const seed = getImageFromSeed(extensionData?.id, 3);
   const coverImageFallback = `${publicImagePath}/extension-cover-desktop-${seed}.webp`;
@@ -101,13 +105,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
       isDuplicateExtName,
     [extensionData, isDuplicateExtName],
   );
-  const onAccordionClick = accordionId => {
-    if (activeAccordionId === accordionId) {
-      setActiveAccordionId(null);
-    } else {
-      setActiveAccordionId(accordionId);
-    }
-  };
+
   const getAccordionTitleNode = (title: string, fieldHasData: boolean, isRequired = true) => {
     return (
       <Stack direction="row" spacing={1} alignItems="center">
@@ -180,138 +178,139 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
 
         {/* wrap each accordion in a Stack to guard against the main wrapper's spacing */}
         <Stack spacing={3}>
-          <Accordion
-            accordionId={descriptionLabel}
-            open={descriptionLabel === activeAccordionId}
-            titleNode={getAccordionTitleNode(descriptionLabel, !!extensionData?.description)}
-            contentNode={
-              <Typography variant="sm" className="break-all">
-                {extensionData?.description}
-              </Typography>
-            }
-            handleClick={extensionData?.description ? onAccordionClick : () => {}}
-          />
-        </Stack>
-        <Divider />
-
-        <Stack spacing={3}>
-          <Accordion
-            accordionId={galleryLabel}
-            open={galleryLabel === activeAccordionId}
-            titleNode={getAccordionTitleNode(
-              galleryLabel,
-              galleryImagesWithSource?.length > 0,
-              false,
-            )}
-            contentNode={
-              <Stack spacing={3}>
-                <ExtensionImageGallery
-                  imageNotLoadedLabel={imageNotLoadedLabel}
-                  images={galleryImagesWithSource?.slice(0, 3).map((image, idx) => ({
-                    src: image?.src,
-                    size: {
-                      width: image?.width,
-                      height: image?.height,
-                    },
-                    name: image?.src + idx,
-                  }))}
-                  showOverlay={false}
-                  toggleOverlay={() => ({})}
-                />
-                <Stack direction="row" alignItems="center" justifyContent="between">
-                  <Typography variant="xs" className="font-medium text-grey4 dark:text-grey7">
-                    {`${galleryImagesWithSource?.length} ${imageUploadedLabel}`}
-                  </Typography>
-                  <Button variant="link" onClick={onViewGalleryClick}>
-                    {viewAllLabel}
-                  </Button>
-                </Stack>
-              </Stack>
-            }
-            handleClick={galleryImagesWithSource?.length > 0 ? onAccordionClick : () => {}}
-          />
-        </Stack>
-        <Divider />
-
-        <Stack spacing={3}>
-          <Accordion
-            accordionId={usefulLinksLabel}
-            open={usefulLinksLabel === activeAccordionId}
-            titleNode={getAccordionTitleNode(
-              usefulLinksLabel,
-              extensionData?.links?.length > 0,
-              false,
-            )}
-            contentNode={
-              <Stack spacing={3}>
-                {extensionData?.links?.map((link, index) => (
-                  <Stack key={index}>
-                    <Typography variant="sm" bold>
-                      {link.label}
-                    </Typography>
-                    <Link to={link.href} target="_blank">
-                      <Typography
-                        variant="sm"
-                        className="text-secondaryLight dark:text-secondaryDark"
-                      >
-                        {link.href}
-                      </Typography>
-                    </Link>
-                  </Stack>
-                ))}
-              </Stack>
-            }
-            handleClick={extensionData?.links?.length > 0 ? onAccordionClick : () => {}}
-          />
-        </Stack>
-        <Divider />
-
-        <Stack spacing={3}>
-          <Accordion
-            accordionId={licenseLabel}
-            open={licenseLabel === activeAccordionId}
-            titleNode={getAccordionTitleNode(licenseLabel, !!extensionData?.license)}
-            contentNode={
-              <Stack>
-                <Typography variant="sm" bold>
-                  {extensionData?.license}
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value={descriptionLabel} disabled={!extensionData?.description}>
+              <AccordionTrigger className="hover:no-underline py-2">
+                {getAccordionTitleNode(descriptionLabel, !!extensionData?.description)}
+              </AccordionTrigger>
+              <AccordionContent>
+                <Typography variant="sm" className="break-all">
+                  {extensionData?.description}
                 </Typography>
-              </Stack>
-            }
-            handleClick={extensionData?.license ? onAccordionClick : () => {}}
-          />
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </Stack>
         <Divider />
 
         <Stack spacing={3}>
-          <Accordion
-            accordionId={contributorsLabel}
-            open={contributorsLabel === activeAccordionId}
-            titleNode={getAccordionTitleNode(
-              contributorsLabel,
-              extensionData?.contributors?.length > 0,
-              false,
-            )}
-            contentNode={contributorsUi}
-            handleClick={extensionData?.contributors?.length > 0 ? onAccordionClick : () => {}}
-          />
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value={galleryLabel} disabled={!galleryImagesWithSource?.length}>
+              <AccordionTrigger className="hover:no-underline py-2">
+                {getAccordionTitleNode(galleryLabel, galleryImagesWithSource?.length > 0, false)}
+              </AccordionTrigger>
+              <AccordionContent>
+                <Stack spacing={3}>
+                  <ExtensionImageGallery
+                    imageNotLoadedLabel={imageNotLoadedLabel}
+                    images={galleryImagesWithSource?.slice(0, 3).map((image, idx) => ({
+                      src: image?.src,
+                      size: {
+                        width: image?.width,
+                        height: image?.height,
+                      },
+                      name: image?.src + idx,
+                    }))}
+                    showOverlay={false}
+                    toggleOverlay={() => ({})}
+                  />
+                  <Stack direction="row" alignItems="center" justifyContent="between">
+                    <Typography variant="xs" className="font-medium text-grey4 dark:text-grey7">
+                      {`${galleryImagesWithSource?.length} ${imageUploadedLabel}`}
+                    </Typography>
+                    <Button variant="link" onClick={onViewGalleryClick}>
+                      {viewAllLabel}
+                    </Button>
+                  </Stack>
+                </Stack>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </Stack>
         <Divider />
 
         <Stack spacing={3}>
-          <Accordion
-            accordionId={tagsLabel}
-            open={tagsLabel === activeAccordionId}
-            titleNode={getAccordionTitleNode(tagsLabel, extensionData?.keywords?.length > 0)}
-            contentNode={
-              <Stack direction="row" spacing={2} className="flex-wrap">
-                {extensionData?.keywords?.map((tag, idx) => (
-                  <Pill key={tag + idx} label={tag} type="action" />
-                ))}
-              </Stack>
-            }
-            handleClick={extensionData?.keywords?.length > 0 ? onAccordionClick : () => {}}
-          />
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value={usefulLinksLabel} disabled={!extensionData?.links?.length}>
+              <AccordionTrigger className="hover:no-underline py-2">
+                {getAccordionTitleNode(usefulLinksLabel, extensionData?.links?.length > 0, false)}
+              </AccordionTrigger>
+              <AccordionContent>
+                <Stack spacing={3}>
+                  {extensionData?.links?.map((link, index) => (
+                    <Stack key={index}>
+                      <Typography variant="sm" bold>
+                        {link.label}
+                      </Typography>
+                      <Link to={link.href} target="_blank">
+                        <Typography
+                          variant="sm"
+                          className="text-secondaryLight dark:text-secondaryDark"
+                        >
+                          {link.href}
+                        </Typography>
+                      </Link>
+                    </Stack>
+                  ))}
+                </Stack>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </Stack>
+        <Divider />
+
+        <Stack spacing={3}>
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value={licenseLabel} disabled={!extensionData?.license}>
+              <AccordionTrigger className="hover:no-underline py-2">
+                {getAccordionTitleNode(licenseLabel, !!extensionData?.license)}
+              </AccordionTrigger>
+              <AccordionContent>
+                <Stack>
+                  <Typography variant="sm" bold>
+                    {extensionData?.license}
+                  </Typography>
+                </Stack>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </Stack>
+        <Divider />
+
+        <Stack spacing={3}>
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem
+              value={contributorsLabel}
+              disabled={!extensionData?.contributors?.length}
+            >
+              <AccordionTrigger className="hover:no-underline py-2">
+                {getAccordionTitleNode(
+                  contributorsLabel,
+                  extensionData?.contributors?.length > 0,
+                  false,
+                )}
+              </AccordionTrigger>
+              <AccordionContent>{contributorsUi}</AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </Stack>
+        <Divider />
+
+        <Stack spacing={3}>
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value={tagsLabel} disabled={!extensionData?.keywords?.length}>
+              <AccordionTrigger className="hover:no-underline py-2">
+                {getAccordionTitleNode(tagsLabel, extensionData?.keywords?.length > 0)}
+              </AccordionTrigger>
+              <AccordionContent>
+                <Stack direction="row" spacing={2} className="flex-wrap">
+                  {extensionData?.keywords?.map((tag, idx) => (
+                    <Pill key={tag + idx} label={tag} type="action" />
+                  ))}
+                </Stack>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </Stack>
         <Card className="p-3 bg-nested-card">
           <Stack alignItems="center" direction="row" spacing={2}>

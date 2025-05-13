@@ -257,17 +257,16 @@ export const Header: React.FC<HeaderProps> = ({
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 {dropDownActions.map((item, index) => (
-                  <>
+                  <div key={item.label}>
                     <DropdownMenuItem
                       className={item?.color}
-                      key={item.label}
                       onClick={() => item.onClick(item.label)}
                     >
                       {item?.icon}
                       {item.label}
                     </DropdownMenuItem>
                     {index < dropDownActions.length - 1 && <DropdownMenuSeparator />}
-                  </>
+                  </div>
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
@@ -295,9 +294,8 @@ export const Header: React.FC<HeaderProps> = ({
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 {dropDownActions.map((item, index) => (
-                  <>
+                  <div key={item.label}>
                     <DropdownMenuItem
-                      key={item.label}
                       className={item?.color}
                       onClick={() => item.onClick(item.label)}
                     >
@@ -305,7 +303,7 @@ export const Header: React.FC<HeaderProps> = ({
                       {item.label}
                     </DropdownMenuItem>
                     {index < dropDownActions.length - 1 && <DropdownMenuSeparator />}
-                  </>
+                  </div>
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
