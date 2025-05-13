@@ -41,7 +41,7 @@ const IconContainer = React.forwardRef<
     <div
       ref={ref}
       data-slot="icon-container"
-      className={iconContainerStyles({ variant, size, className })}
+      className={cn(iconContainerStyles({ variant, size, className }))}
       {...props}
     >
       {children}

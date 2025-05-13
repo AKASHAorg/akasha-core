@@ -1,4 +1,4 @@
-import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
+import { IconContainer } from '@akashaorg/ui/lib/akasha-components/icon-container';
 import {
   Antenna,
   Profile,
@@ -87,12 +87,9 @@ export const getPresentationDataFromNotification = (
     placeholderIcons[parsedMetaData?.channelIndex || ChannelOptionIndexes.ANTENNA];
 
   returnObj.notificationAppIcon = (
-    <AppIcon
-      placeholderIcon={placeholderIcon}
-      iconStyle="[&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark"
-      customStyle="min-w-8 bg-grey5 size-8"
-      solid
-    />
+    <IconContainer className="min-w-8 bg-grey5 size-8 [&_*]:fill-secondaryLight dark:[&_*]:fill-secondaryDark">
+      {placeholderIcon}
+    </IconContainer>
   );
 
   if (notification.timestamp) {
