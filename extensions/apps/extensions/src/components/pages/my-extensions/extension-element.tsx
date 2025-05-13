@@ -7,7 +7,13 @@ import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
-import Menu from '@akashaorg/design-system-core/lib/components/Menu';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from '@akashaorg/ui/lib/components/dropdown-menu';
 import {
   EyeIcon,
   SendHorizonalIcon,
@@ -16,7 +22,7 @@ import {
   Trash2Icon,
   EllipsisIcon,
 } from 'lucide-react';
-import { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
+import { ListItem } from '@akashaorg/ui/lib/library/list-item';
 import { transformSource, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { selectAkashaAppStreamStatus } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-stream-query';
 import { useGetAppsStreamQuery } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
@@ -123,7 +129,7 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
   const style = 'h-4 w-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark';
   const style2 = 'h-4 w-4 [&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark';
 
-  const menuItems = (extensionStatus: string): MenuProps['items'] | [] => {
+  const menuItems = (extensionStatus: string): ListItem[] | [] => {
     switch (extensionStatus) {
       case ExtensionStatus.InReview:
         return [
@@ -146,10 +152,7 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
             label: t('Delete Extension'),
             icon: <Trash2Icon className={style2} />,
             onClick: handleExtensionRemove,
-            color: {
-              light: 'errorLight',
-              dark: 'errorDark',
-            },
+            color: 'text-errorLight dark:text-errorDark',
           },
         ];
       case ExtensionStatus.Published:
@@ -173,10 +176,7 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
             label: t('Delete Extension'),
             icon: <Trash2Icon className={style2} />,
             onClick: handleExtensionRemove,
-            color: {
-              light: 'errorLight',
-              dark: 'errorDark',
-            },
+            color: 'text-errorLight dark:text-errorDark',
           },
         ];
       case ExtensionStatus.LocalDraft:
@@ -200,10 +200,7 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
             label: t('Delete Extension'),
             icon: <Trash2Icon className={style2} />,
             onClick: handleExtensionRemove,
-            color: {
-              light: 'errorLight',
-              dark: 'errorDark',
-            },
+            color: 'text-errorLight dark:text-errorDark',
           },
         ];
       default:
@@ -221,6 +218,12 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
     }
   };
   const iconType = useMemo(() => extensionApplicationType, [extensionApplicationType]);
+
+  const dropDownActions = useMemo(
+    () => menuItems(getExtensionStatus(isExtensionLocalDraft, appStreamStatus)),
+    [appStreamStatus, isExtensionLocalDraft, menuItems],
+  );
+
   if (!showElement()) return null;
   return (
     <Stack spacing={4}>
@@ -263,17 +266,29 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
           className="shrink-0"
         >
           {showMenu && (
-            <Menu
-              anchor={{
-                icon: <EllipsisIcon />,
-                variant: 'primary',
-                greyBg: true,
-                iconOnly: true,
-                'aria-label': 'settings',
-              }}
-              items={menuItems(getExtensionStatus(isExtensionLocalDraft, appStreamStatus))}
-              customStyle="w-max z-99"
-            />
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <EllipsisIcon
+                  aria-label="settings"
+                  className="size-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark"
+                />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {dropDownActions.map((item, index) => (
+                  <>
+                    <DropdownMenuItem
+                      key={item.label}
+                      onClick={() => item.onClick(item.label)}
+                      className={item?.color}
+                    >
+                      {item?.icon}
+                      {item.label}
+                    </DropdownMenuItem>
+                    {index < dropDownActions.length - 1 && <DropdownMenuSeparator />}
+                  </>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           )}
           <Stack direction="row" alignItems="center" spacing={1}>
             <div

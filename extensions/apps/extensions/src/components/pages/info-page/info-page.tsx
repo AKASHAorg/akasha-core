@@ -238,10 +238,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                       <FlagIcon className="h-4 w-4 [&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark" />
                     ),
                     onClick: handleExtensionReportClick,
-                    color: {
-                      light: 'errorLight',
-                      dark: 'errorDark',
-                    },
+                    color: 'text-errorLight dark:text-errorDark',
                   }}
                   onInstallClick={handleInstallClick}
                   onUninstallClick={handleUninstallClick}
