@@ -1,10 +1,9 @@
 import React from 'react';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import VibesValueCard from './value-card';
-
 type VibesValue = {
   path: string;
   title: string;
@@ -25,13 +24,14 @@ export interface VibesValuesCardProps {
  */
 const VibesValuesCard: React.FC<VibesValuesCardProps> = props => {
   const { titleLabel, subtitleLabel, ctaLabel, ctaUrl, values, onValueClick } = props;
-
   return (
     <Card className="p-4">
       <Stack spacing={4}>
-        <Text variant="h5">{titleLabel}</Text>
+        <Typography variant="h5">{titleLabel}</Typography>
 
-        <Text variant="subtitle2">{subtitleLabel}</Text>
+        <Typography variant="sm" className="font-light">
+          {subtitleLabel}
+        </Typography>
         <Stack className="grid gap-4 grid-cols-2 md:grid-cols-3">
           {values.map((value, idx) => (
             <VibesValueCard
@@ -53,17 +53,13 @@ const VibesValuesCard: React.FC<VibesValuesCardProps> = props => {
               justifyContent="center"
               className="p-3 w-full h-32 bg-grey9 dark:bg-grey3 rounded-2xl cursor-pointer"
             >
-              <Text
-                variant="footnotes1"
-                align="center"
-                color={{
-                  light: 'secondaryLight',
-                  dark: 'secondaryDark',
-                }}
-                weight="bold"
+              <Typography
+                variant="xs"
+                bold
+                className="text-center text-secondaryLight dark:text-secondaryDark"
               >
                 {ctaLabel}
-              </Text>
+              </Typography>
             </Stack>
           </Link>
         </Stack>
@@ -85,5 +81,4 @@ const VibesValuesCard: React.FC<VibesValuesCardProps> = props => {
     </Card>
   );
 };
-
 export default VibesValuesCard;

@@ -4,9 +4,9 @@ import { Profile } from '@akashaorg/typings/lib/ui';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
 import { TApplicationStatus, renderStatusDetail } from '../../../utils';
@@ -14,11 +14,12 @@ import {
   ProfileAvatarButton,
   ProfileDidField,
 } from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
-
 export type ApplicantDataCardProps = {
   applicant: {
     name: string;
-    did: { id: string };
+    did: {
+      id: string;
+    };
     status: TApplicationStatus;
     avatar: Profile['avatar'];
     appliedOn: Date;
@@ -32,7 +33,6 @@ export type ApplicantDataCardProps = {
   onClickViewProfile: () => void;
   onClickViewApplication?: () => void;
 };
-
 export const ApplicantDataCard: React.FC<ApplicantDataCardProps> = props => {
   const {
     applicant,
@@ -44,9 +44,7 @@ export const ApplicantDataCard: React.FC<ApplicantDataCardProps> = props => {
     onClickViewProfile,
     onClickViewApplication,
   } = props;
-
   const textStyle = 'max-w([12.5rem] md:[7.5rem]) w-fit cursor-default';
-
   return (
     <Card className="p-0">
       <Stack padding="p-4" spacing="gap-y-4">
@@ -61,9 +59,9 @@ export const ApplicantDataCard: React.FC<ApplicantDataCardProps> = props => {
             />
             <Stack>
               <Tooltip content={applicant.name} placement="right">
-                <Text variant="body2" weight="bold" customStyle={textStyle}>
+                <Typography variant="sm" bold>
                   {applicant.name}
-                </Text>
+                </Typography>
               </Tooltip>
 
               <ProfileAvatarButton profileDID={applicant.did.id}>
@@ -76,27 +74,27 @@ export const ApplicantDataCard: React.FC<ApplicantDataCardProps> = props => {
           {!isMini && renderStatusDetail(applicant.status)}
         </Stack>
 
-        <Divider />
+        <Separator />
 
         <Stack direction="row" justify="between">
           <Stack>
-            <Text variant="button-md" weight="bold">
+            <Typography variant="sm" bold>
               {appliedOnLabel}:
-            </Text>
+            </Typography>
 
-            <Text variant="footnotes2" weight="light" color={{ light: 'grey4', dark: 'grey6' }}>
+            <Typography variant="xs" className="font-medium font-light text-grey4 dark:text-grey6">
               {formatDate(applicant.appliedOn.toISOString(), 'DD MMM YYYY')}
-            </Text>
+            </Typography>
           </Stack>
 
           <Stack>
-            <Text variant="button-md" weight="bold">
+            <Typography variant="sm" bold>
               {tenureInfoLabel}:
-            </Text>
+            </Typography>
 
-            <Text variant="footnotes2" weight="light" color={{ light: 'grey4', dark: 'grey6' }}>
+            <Typography variant="xs" className="font-medium font-light text-grey4 dark:text-grey6">
               {formatDate(applicant.memberSince.toISOString(), 'DD MMM YYYY')}
-            </Text>
+            </Typography>
           </Stack>
         </Stack>
       </Stack>

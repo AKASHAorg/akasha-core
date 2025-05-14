@@ -1,11 +1,10 @@
 import * as React from 'react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { AddBlockButtonProps, AddBlock } from './add-block-button';
 import { EditorUIState } from '../types';
-
 export type TFooterProps = AddBlockButtonProps & {
   uiState: EditorUIState;
   tagsLabel: string;
@@ -26,7 +25,6 @@ export type TFooterProps = AddBlockButtonProps & {
   handleClickCancel: () => void;
   handleBeamPublish: () => void;
 };
-
 export const Footer: React.FC<TFooterProps> = props => {
   const {
     uiState,
@@ -50,7 +48,6 @@ export const Footer: React.FC<TFooterProps> = props => {
     handleBeamPublish,
     handleClickAddBlock,
   } = props;
-
   return (
     <Stack
       justifyContent="between"
@@ -61,10 +58,10 @@ export const Footer: React.FC<TFooterProps> = props => {
       {/* render content based on the value of uiState */}
       {uiState === 'blocks' && (
         <>
-          <Text
-            variant="footnotes2"
-            color="grey7"
-          >{`${blocksNumber}/${maxBlocks} ${blocksLabel}`}</Text>
+          <Typography
+            variant="xs"
+            className="font-medium text-grey7"
+          >{`${blocksNumber}/${maxBlocks} ${blocksLabel}`}</Typography>
           <Button variant="outline" onClick={handleClickCancel}>
             {cancelLabel}
           </Button>
@@ -72,7 +69,10 @@ export const Footer: React.FC<TFooterProps> = props => {
       )}
       {uiState === 'tags' && (
         <>
-          <Text variant="footnotes2" color="grey7">{`${tagsNumber}/${maxTags} ${tagsLabel}`}</Text>
+          <Typography
+            variant="xs"
+            className="font-medium text-grey7"
+          >{`${tagsNumber}/${maxTags} ${tagsLabel}`}</Typography>
           <Stack direction="row" spacing={2}>
             <Button variant="link" onClick={handleClickCancel}>
               {cancelLabel}
@@ -105,12 +105,12 @@ export const Footer: React.FC<TFooterProps> = props => {
                 justifyContent="center"
                 className="w-[18px] h-[18px] rounded-[3px] bg-card"
               >
-                <Text
-                  variant="footnotes2"
-                  color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                <Typography
+                  variant="xs"
+                  className="font-medium text-secondaryLight dark:text-secondaryDark"
                 >
                   {tagsNumber}
-                </Text>
+                </Typography>
               </Stack>
               <Button variant="link" onClick={handleClickTags}>
                 {tagsLabel}

@@ -2,11 +2,9 @@ import React from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import ReportReasonPill from '@akashaorg/design-system-components/lib/components/ReportReasonPill';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
-
 export type TransparencyLogItemType = 'Beam' | 'Reflection' | 'Profile';
-
 export type TransparencyLogItem = {
   id: string;
   type: TransparencyLogItemType;
@@ -17,69 +15,63 @@ export type TransparencyLogItem = {
   reports: number;
   reason: string;
 };
-
 export type TransparencyLogItemCardProps = {
   item: TransparencyLogItem;
   caseLabel: string;
   reportedLabel: string;
   resolvedLabel: string;
 };
-
 const TransparencyLogItemCard: React.FC<TransparencyLogItemCardProps> = props => {
   const { item, caseLabel, reportedLabel, resolvedLabel } = props;
-  const textColor = { light: 'grey5', dark: 'grey7' } as const;
-
+  const textColor = {
+    light: 'grey5',
+    dark: 'grey7',
+  } as const;
   return (
     <Card className="p-0">
       <Stack
         spacing="gap-y-1"
         padding="p-4"
-        customStyle={`rounded-t-2xl ${
-          item.status === 'Kept'
-            ? 'bg-success/10 dark:bg-success/30'
-            : 'bg-errorLight/10 dark:bg-errorDark/40'
-        }`}
+        customStyle={`rounded-t-2xl ${item.status === 'Kept' ? 'bg-success/10 dark:bg-success/30' : 'bg-errorLight/10 dark:bg-errorDark/40'}`}
       >
         <Stack direction="row" align="center" justify="between">
-          <Text variant="h5">{item.type}</Text>
+          <Typography variant="h5">{item.type}</Typography>
           <Stack direction="row" spacing="gap-x-1">
-            <Text variant="footnotes2" weight="normal" color={textColor}>
+            <Typography variant="xs" className="font-medium font-normal">
               {`${caseLabel} # `}
-            </Text>
-            <Text variant="footnotes2" weight="normal">
+            </Typography>
+            <Typography variant="xs" className="font-medium font-normal">
               {`${item.type.substring(0, 1).toLocaleUpperCase()}-${item.contentId}`}
-            </Text>
+            </Typography>
           </Stack>
         </Stack>
 
         <Stack direction="row" align="center" spacing="gap-x-1.5">
           <Stack
-            customStyle={`w-2 h-2 rounded-full ${
-              item.status === 'Kept' ? 'bg-success' : 'bg-errorLight dark:bg-errorDark'
-            }`}
+            customStyle={`w-2 h-2 rounded-full ${item.status === 'Kept' ? 'bg-success' : 'bg-errorLight dark:bg-errorDark'}`}
           />
-          <Text variant="footnotes2" weight="normal">
+          <Typography variant="xs" className="font-medium font-normal">
             {item.status}
-          </Text>
+          </Typography>
         </Stack>
 
         <Stack direction="row" align="center" justify="between">
           <Stack direction="row" spacing="gap-x-1">
-            <Text variant="footnotes2" weight="normal" color={textColor}>
+            <Typography variant="xs" className="font-medium font-normal">
               {`${reportedLabel} `}
-            </Text>
-            <Text variant="footnotes2" weight="normal">
+            </Typography>
+            <Typography variant="xs" className="font-medium font-normal">
               {formatDate(item.reportedDate.toISOString(), 'DD-MM-YYYY')}
-            </Text>
+            </Typography>
           </Stack>
 
           <Stack direction="row" spacing="gap-x-1">
-            <Text variant="footnotes2" weight="normal" color={textColor}>
+            <Typography variant="xs" className="font-medium font-normal">
               {`${resolvedLabel} `}
-            </Text>
-            <Text variant="footnotes2" weight="normal">
+            </Typography>
+            <Typography variant="xs" className="font-medium font-normal">
               {formatDate(item.moderatedDate.toISOString(), 'DD-MM-YYYY')}
-            </Text>
+            </Typography>
           </Stack>
         </Stack>
       </Stack>
@@ -92,9 +84,9 @@ const TransparencyLogItemCard: React.FC<TransparencyLogItemCardProps> = props =>
       )}
 
       <Stack padding="p-4" spacing="gap-y-2">
-        <Text variant="body1" color={textColor}>
+        <Typography>
           {`This ${item.type} has been ${item.status === 'Delisted' ? 'delisted' : 'reported'} for`}
-        </Text>
+        </Typography>
         <ReportReasonPill
           reason={item.reason}
           reportCount={item.reports}
@@ -106,5 +98,4 @@ const TransparencyLogItemCard: React.FC<TransparencyLogItemCardProps> = props =>
     </Card>
   );
 };
-
 export default TransparencyLogItemCard;

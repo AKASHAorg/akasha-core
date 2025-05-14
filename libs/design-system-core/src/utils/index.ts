@@ -8,7 +8,6 @@ export * from './get-elevation-classes';
 export * from './get-padding-classes';
 export * from './get-radius-classes';
 export * from './graphics';
-export * from './helmet';
 export * from './intersection-observer';
 export * from './string-utils';
 export * from './time';

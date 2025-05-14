@@ -1,8 +1,7 @@
 import React, { useMemo } from 'react';
+import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 
-import Divider from '../Divider';
-import Icon from '../Icon';
-import { ChevronDownIcon, ChevronUpIcon } from '../Icon/hero-icons-outline';
 import Stack from '../Stack';
 import Card from '../Card';
 
@@ -58,15 +57,13 @@ const Accordion: React.FC<AccordionProps> = props => {
 
   const handleToggle = () => handleClick(accordionId);
 
+  const style = 'h-4 w-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark';
+
   const headerUi = useMemo(
     () => (
       <Stack direction="row" align="center" justify="between" customStyle={customStyle}>
         {titleNode}
-        <Icon
-          accentColor={true}
-          customStyle="size-4"
-          icon={open ? <ChevronUpIcon /> : <ChevronDownIcon />}
-        />
+        {open ? <ChevronUpIcon className={style} /> : <ChevronDownIcon className={style} />}
       </Stack>
     ),
     [customStyle, open, titleNode],
@@ -78,7 +75,7 @@ const Accordion: React.FC<AccordionProps> = props => {
         {headerDivider ? (
           <Stack direction="column" spacing="gap-y-4">
             {headerUi}
-            <Divider />
+            <Separator />
           </Stack>
         ) : (
           headerUi

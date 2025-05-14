@@ -1,20 +1,15 @@
 import React from 'react';
 import { Image } from '@akashaorg/ui/lib/akasha-components/image';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { Loader2 } from 'lucide-react';
-import {
-  TrashIcon,
-  XCircleIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Trash2Icon, XCircleIcon } from 'lucide-react';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 
 export enum GalleryImageState {
   ERROR = 'error',
   LOADING = 'Loading',
 }
-
 export type GalleryImageProps = {
   name: string;
   src: string;
@@ -24,7 +19,6 @@ export type GalleryImageProps = {
   handleClickImage?: () => void;
   onDelete: () => void;
 };
-
 export const GalleryImage: React.FC<GalleryImageProps> = props => {
   const { name, src, state, uploadingLabel, uploadingErrorLabel, handleClickImage, onDelete } =
     props;
@@ -41,20 +35,15 @@ export const GalleryImage: React.FC<GalleryImageProps> = props => {
         //action buttons
       }
       <Stack direction="row" spacing={2} className="absolute top-2 right-2">
-        <button
-          onClick={onDelete}
+        <Button
+          size="icon"
+          variant="ghost"
           disabled={state === GalleryImageState.LOADING}
-          className={state === GalleryImageState.LOADING ? 'cursor-not-allowed' : ''}
+          onClick={onDelete}
+          className={`bg-black/50 size-6 [&_*]:stroke-white  hover:[&_*]:stroke-black ${state === GalleryImageState.LOADING ? 'cursor-not-allowed' : ''}`}
         >
-          <AppIcon
-            placeholderIcon={<TrashIcon />}
-            size="xs"
-            iconSize="sm"
-            iconStyle="[&>*]:stroke-white"
-            customStyle="bg-black/50"
-            hover
-          />
-        </button>
+          <Trash2Icon className="h-3 w-3" />
+        </Button>
       </Stack>
       {state && (
         <Stack
@@ -64,24 +53,20 @@ export const GalleryImage: React.FC<GalleryImageProps> = props => {
           className="absolute top-[50%] left-[50%] -translate-y-1/2 -translate-x-1/2 w-full"
         >
           {state === GalleryImageState.ERROR && (
-            <Icon
-              icon={<XCircleIcon />}
-              size="lg"
-              customStyle={'[&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark'}
-            />
+            <XCircleIcon className="h-6 w-6 [&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark" />
           )}
           {state === GalleryImageState.LOADING && (
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
           )}
           {state === GalleryImageState.ERROR && (
-            <Text variant="button-sm" align="center">
+            <Typography variant="xs" bold className="text-center">
               {uploadingErrorLabel}
-            </Text>
+            </Typography>
           )}
           {state === GalleryImageState.LOADING && (
-            <Text variant="button-sm" align="center">
+            <Typography variant="xs" bold className="text-center">
               {uploadingLabel}
-            </Text>
+            </Typography>
           )}
         </Stack>
       )}

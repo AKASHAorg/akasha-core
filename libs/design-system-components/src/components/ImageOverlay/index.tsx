@@ -1,13 +1,6 @@
 import * as React from 'react';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import {
-  ArrowLeftIcon,
-  ArrowRightIcon,
-  MagnifyingGlassMinusIcon,
-  MagnifyingGlassPlusIcon,
-  XMarkIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { MoveLeftIcon, MoveRightIcon, ZoomOutIcon, ZoomInIcon, XIcon } from 'lucide-react';
 import { Portal } from '../../utils/portal';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import { type GalleryImage } from '@akashaorg/typings/lib/ui';
@@ -85,25 +78,25 @@ const ImageOverlay: React.FC<IImageOverlay> = props => {
           <Stack direction="row" spacing={3}>
             {images.length > 1 && (
               <button className={`${closeDivClass}`} onClick={handlePrevImg}>
-                <Icon icon={<ArrowLeftIcon />} accentColor />
+                <MoveLeftIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
               </button>
             )}
             {images.length > 1 && (
               <button className={`${closeDivClass}`} onClick={handleNextImg}>
-                <Icon icon={<ArrowRightIcon />} accentColor />
+                <MoveRightIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
               </button>
             )}
           </Stack>
 
           <Stack direction="row" spacing={3}>
             <button className={`${closeDivClass}`} onClick={handleZoomIn}>
-              <Icon icon={<MagnifyingGlassPlusIcon />} accentColor />
+              <ZoomInIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
             </button>
             <button className={`${closeDivClass}`} onClick={handleZoomOut}>
-              <Icon icon={<MagnifyingGlassMinusIcon />} accentColor />
+              <ZoomOutIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
             </button>
             <button className={`${closeDivClass}`} onClick={closeModal}>
-              <Icon icon={<XMarkIcon />} accentColor />
+              <XIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
             </button>
           </Stack>
         </Stack>

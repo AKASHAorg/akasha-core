@@ -1,7 +1,7 @@
 import React from 'react';
 import EntryCard, { EntryCardProps } from '../entry-card';
 import AuthorProfileAvatar from '../author-profile-avatar';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import { useAkashaStore } from '@akashaorg/ui-core-hooks';
 import { ReflectionData } from '@akashaorg/typings/lib/ui';
@@ -9,13 +9,13 @@ import { decodeb64SlateContent, useRootComponentProps } from '@akashaorg/ui-core
 import { Trans, useTranslation } from 'react-i18next';
 import { canDecodeContent } from '../../../utils/can-decode-content';
 import ReadOnlyEditor from '../../read-only-editor';
-import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
-import { FlagIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { FlagIcon } from 'lucide-react';
 import {
   InlineNotification,
   InlineNotificationTitle,
   InlineNotificationDescription,
 } from '@akashaorg/ui/lib/akasha-components/inline-notification';
+import { ListItem } from '@akashaorg/ui/lib/library/list-item';
 
 export type ReflectionCardProps = Pick<
   EntryCardProps,
@@ -35,7 +35,6 @@ export type ReflectionCardProps = Pick<
   hidePublishTime?: boolean;
   pending?: boolean;
 };
-
 const ReflectionCard: React.FC<ReflectionCardProps> = props => {
   const { t } = useTranslation('ui-lib-feed');
   const { reflectionData, hidePublishTime, pending, onReflect, ...rest } = props;
@@ -44,36 +43,33 @@ const ReflectionCard: React.FC<ReflectionCardProps> = props => {
     data: { authenticatedDID },
   } = useAkashaStore();
   const isLoggedIn = !!authenticatedDID;
-
   const navigateTo = getCorePlugins().routing.navigateTo;
-
   const handleMentionClick = profileDID => {
     navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => `/${profileDID}`,
     });
   };
-
   const handleFlagReflection = () => {
     navigateTo({
       appName: '@akashaorg/app-vibes',
       getNavigationUrl: () => `/report/reflection/${reflectionData.id}`,
     });
   };
-
   const isViewer = authenticatedDID === reflectionData.authorId;
   const menuItems: ListItem[] = !isViewer
     ? [
         {
-          icon: <FlagIcon />,
+          icon: (
+            <FlagIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+          ),
           label: t('Flag'),
-          color: { light: 'errorLight', dark: 'errorDark' } as const,
+          color: 'text-errorLight dark:text-errorDark',
           disabled: false,
           onClick: handleFlagReflection,
         },
       ]
     : [];
-
   return (
     <EntryCard
       menuItems={menuItems}
@@ -92,7 +88,7 @@ const ReflectionCard: React.FC<ReflectionCardProps> = props => {
                 {textComponent}Some users may still be able to see it in the beam page.{textComponent}
                 `}
             components={{
-              textComponent: <Text variant="button-sm" />,
+              textComponent: <Typography variant="xs" bold />,
             }}
           />
         ),
@@ -102,7 +98,7 @@ const ReflectionCard: React.FC<ReflectionCardProps> = props => {
                 {textComponent}All reflections are disabled.{textComponent}
                 `,
           {
-            textComponent: <Text />,
+            textComponent: <Typography />,
           },
         ),
       }}
@@ -115,7 +111,7 @@ const ReflectionCard: React.FC<ReflectionCardProps> = props => {
                 {linkComponent}Code of conduct{linkComponent}
                 `}
             component={{
-              textComponent: <Text />,
+              textComponent: <Typography />,
               linkComponent: <Link />,
             }}
           />
@@ -127,7 +123,7 @@ const ReflectionCard: React.FC<ReflectionCardProps> = props => {
                 {textComponent}All reflections are disabled.{textComponent}
                 `}
             components={{
-              textComponent: <Text />,
+              textComponent: <Typography />,
             }}
           />
         ),
@@ -151,7 +147,9 @@ const ReflectionCard: React.FC<ReflectionCardProps> = props => {
           disabled={reflectionData.nsfw}
           handleMentionClick={handleMentionClick}
           handleLinkClick={url => {
-            navigateTo?.({ getNavigationUrl: () => url });
+            navigateTo?.({
+              getNavigationUrl: () => url,
+            });
           }}
         />
       ) : (
@@ -165,5 +163,4 @@ const ReflectionCard: React.FC<ReflectionCardProps> = props => {
     </EntryCard>
   );
 };
-
 export default ReflectionCard;

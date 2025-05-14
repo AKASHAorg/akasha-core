@@ -1,12 +1,11 @@
 import React, { useMemo } from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Text, { TextProps } from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import ErrorIcon from './error-icon';
 import InstallIcon from './install-icon';
 import SuccessIcon from './success-icon';
-
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
 import {
   AkashaAppApplicationType,
@@ -17,7 +16,6 @@ import {
   Walletconnect,
 } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import IndicatorDots from '@akashaorg/design-system-components/lib/components/IndicatorDots';
-
 export type InstallAppProps = {
   title: string;
   appName: string;
@@ -27,18 +25,17 @@ export type InstallAppProps = {
   publisherDID: string;
   progressInfo: string;
   status: 'in-progress' | 'error' | 'complete' | 'authorize-request';
-  actions?: { label: string; onClick: () => void }[];
+  actions?: {
+    label: string;
+    onClick: () => void;
+  }[];
   successLabel: string;
 };
-
 const errorStyle = '[&>*]:fill-errorLight dark:[&>*]:fill-errorDark';
 const errorAnimationStyle = `animate-ping absolute h-full w-full ${errorStyle} opacity-75`;
-
 const installStyle = `animate-bounce [&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark`;
-
 const successStyle = '[&>*]:fill-success';
 const successAnimationStyle = `animate-ping absolute h-full w-full ${successStyle} opacity-75`;
-
 const TruncateText = ({
   text,
   visibleCount,
@@ -46,14 +43,13 @@ const TruncateText = ({
 }: {
   text: string;
   visibleCount: number;
-  textProps: TextProps;
+  textProps: React.ComponentProps<typeof Typography>;
 }) => {
   const [first, last] = useMemo(() => {
     return [text.slice(0, text.length - visibleCount), text.slice(text.length - visibleCount)];
   }, [text, visibleCount]);
-
   return (
-    <Text {...textProps} customStyle={`${textProps.customStyle} flex`}>
+    <Typography {...textProps}>
       <span
         title={text}
         className="max-w-[20ch] md:max-w-[30ch] overflow-hidden truncate inline-block"
@@ -61,10 +57,9 @@ const TruncateText = ({
         {first}
       </span>
       <span className="inline-block">{last}</span>
-    </Text>
+    </Typography>
   );
 };
-
 const InstallApp = ({
   title,
   appName,
@@ -80,7 +75,7 @@ const InstallApp = ({
   return (
     <Card className="p-6">
       <Stack alignItems="center" direction="column" spacing={8}>
-        <Text variant="h5">{title}</Text>
+        <Typography variant="h5">{title}</Typography>
         <Stack
           direction="row"
           spacing={4}
@@ -88,15 +83,17 @@ const InstallApp = ({
         >
           <AppAvatar appType={appType} avatar={appAvatar} width={4} height={4} />
           <Stack direction="column" justifyContent="between">
-            <Text variant="button-lg">{appName}</Text>
+            <Typography bold>{appName}</Typography>
             <Stack>
-              <Text variant="footnotes2">{publisherName}</Text>
+              <Typography variant="xs" className="font-medium">
+                {publisherName}
+              </Typography>
               <TruncateText
                 text={publisherDID}
                 visibleCount={6}
                 textProps={{
-                  variant: 'footnotes2',
-                  color: { light: 'secondaryLight', dark: 'secondaryDark' },
+                  variant: 'xs',
+                  className: 'font-medium text-secondaryLight dark:text-secondaryDark',
                 }}
               />
             </Stack>
@@ -126,19 +123,14 @@ const InstallApp = ({
                   <SuccessIcon className={`${successAnimationStyle}`} />
                   <SuccessIcon className={`${successStyle}`} />
                 </div>
-                <Text color="success" variant="button-lg">
+                <Typography bold className="text-success">
                   {successLabel}
-                </Text>
+                </Typography>
               </Stack>
             )}
-            <Text
-              align="center"
-              variant="subtitle1"
-              weight="light"
-              color={{ light: 'grey4', dark: 'grey6' }}
-            >
+            <Typography className="text-center font-light font-light text-grey4 dark:text-grey6">
               {progressInfo}
-            </Text>
+            </Typography>
           </Stack>
         </Stack>
         <Stack>
@@ -152,5 +144,4 @@ const InstallApp = ({
     </Card>
   );
 };
-
 export default InstallApp;

@@ -10,7 +10,7 @@ import {
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { Image } from '@akashaorg/ui/lib/akasha-components/image';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Loader2 } from 'lucide-react';
 import appRoutes, { HOME, INSTALLED } from '../../../routes';
 import { useTranslation } from 'react-i18next';
@@ -21,29 +21,25 @@ import {
 import { transformSource, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { useNavigate } from '@tanstack/react-router';
 import { getExtensionTypeLabel } from '../../../utils/extension-utils';
-
 const PUBLIC_IMAGE_PATH = '/images';
-
 export const InstalledExtensionsList = () => {
   const navigate = useNavigate();
   const { getCorePlugins, encodeAppName, baseRouteName } = useRootComponentProps();
   const { t } = useTranslation('app-extensions');
-
   const navigateTo = getCorePlugins().routing.navigateTo;
-
   const handleAppClick = (appName: string) => {
     navigate({
       to: '/info/$appId',
-      params: { appId: encodeAppName(appName) },
+      params: {
+        appId: encodeAppName(appName),
+      },
     });
   };
-
   const handleDiscoverClick = () => {
     navigate({
       to: appRoutes[HOME], // @TODO: update this flow
     });
   };
-
   const handleConnectButtonClick = () => {
     navigateTo?.({
       appName: '@akashaorg/app-auth-ewa',
@@ -54,12 +50,10 @@ export const InstalledExtensionsList = () => {
       },
     });
   };
-
   const {
     data: { authenticatedDID, isAuthenticating },
   } = useAkashaStore();
   const { data, error, loading } = useInstalledExtensions();
-
   const addAction = (ext: InstalledExtension) => ({
     coverImageSrc: ext?.coverImage?.src,
     displayName: ext?.displayName,
@@ -86,9 +80,7 @@ export const InstalledExtensionsList = () => {
       </Button>
     ),
   });
-
   const installedExtensions = data?.map(addAction);
-
   if (!authenticatedDID && !isAuthenticating)
     return (
       <ErrorLoader type="not-authenticated">
@@ -101,7 +93,6 @@ export const InstalledExtensionsList = () => {
         </ErrorLoaderFooter>
       </ErrorLoader>
     );
-
   if (loading || isAuthenticating)
     return (
       <Card className="p-4">
@@ -110,11 +101,12 @@ export const InstalledExtensionsList = () => {
         }
         <Stack spacing={5} alignItems="center">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          <Text variant="button-md">{t('Loading installed extensions')}</Text>
+          <Typography variant="sm" bold>
+            {t('Loading installed extensions')}
+          </Typography>
         </Stack>
       </Card>
     );
-
   return (
     <>
       {error && (
@@ -135,17 +127,17 @@ export const InstalledExtensionsList = () => {
               <Stack className="h-52 w-52">
                 <Image src={`${PUBLIC_IMAGE_PATH}/longbeam-notfound.webp`} />
               </Stack>
-              <Text variant="h6">{t('No extensions installed yet!')}</Text>
+              <Typography variant="h6">{t('No extensions installed yet!')}</Typography>
               <Stack alignItems="center">
-                <Text as="span" variant="body2" color={{ light: 'grey5', dark: 'grey6' }}>
+                <Typography variant="sm" className="text-grey5 dark:text-grey6">
                   <Button variant="link" onClick={handleDiscoverClick} className="inline-block">
                     {t('Discover')}
                   </Button>
                   {t(' cool extensions and install them')}
-                </Text>
-                <Text variant="body2" color={{ light: 'grey5', dark: 'grey6' }}>
+                </Typography>
+                <Typography variant="sm" className="text-grey5 dark:text-grey6">
                   {t('to customize your world')}
-                </Text>
+                </Typography>
               </Stack>
             </>
           )}

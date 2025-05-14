@@ -2,15 +2,14 @@ import React from 'react';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Profile } from '@akashaorg/typings/lib/ui';
 import { transformSource } from '@akashaorg/ui-core-hooks';
 import {
   ProfileAvatarButton,
   ProfileDidField,
 } from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
-
 export type ModeratorListItemProps = {
   assignButtonLabel: string;
   assignedAdmin: boolean;
@@ -18,11 +17,9 @@ export type ModeratorListItemProps = {
   activeModerators: Profile[];
   onClickAssign: () => void;
 };
-
 const ModeratorListItem: React.FC<ModeratorListItemProps> = props => {
   const { assignButtonLabel, activeModerators, selectedModerator, assignedAdmin, onClickAssign } =
     props;
-
   if (assignedAdmin) {
     return (
       <Stack direction="row" spacing="gap-x-2" align="center" customStyle="mb-24">
@@ -34,11 +31,11 @@ const ModeratorListItem: React.FC<ModeratorListItemProps> = props => {
         />
 
         <Stack>
-          <Text
-            variant="button-md"
-            weight="bold"
-            truncate={true}
-          >{`${selectedModerator.name}`}</Text>
+          <Typography
+            variant="sm"
+            bold
+            className="truncate"
+          >{`${selectedModerator.name}`}</Typography>
 
           <ProfileAvatarButton profileDID={selectedModerator.did.id}>
             <ProfileDidField />
@@ -47,7 +44,6 @@ const ModeratorListItem: React.FC<ModeratorListItemProps> = props => {
       </Stack>
     );
   }
-
   return (
     <Stack spacing="gap-y-4">
       {activeModerators.map((moderator, idx) => (
@@ -62,7 +58,11 @@ const ModeratorListItem: React.FC<ModeratorListItemProps> = props => {
               />
 
               <Stack>
-                <Text variant="button-md" weight="bold" truncate={true}>{`${moderator.name}`}</Text>
+                <Typography
+                  variant="sm"
+                  bold
+                  className="truncate"
+                >{`${moderator.name}`}</Typography>
 
                 <ProfileAvatarButton profileDID={moderator.did.id}>
                   <ProfileDidField />
@@ -73,11 +73,10 @@ const ModeratorListItem: React.FC<ModeratorListItemProps> = props => {
             <Button label={assignButtonLabel} onClick={onClickAssign} />
           </Stack>
 
-          {idx < activeModerators.length - 1 && <Divider />}
+          {idx < activeModerators.length - 1 && <Separator />}
         </React.Fragment>
       ))}
     </Stack>
   );
 };
-
 export default ModeratorListItem;

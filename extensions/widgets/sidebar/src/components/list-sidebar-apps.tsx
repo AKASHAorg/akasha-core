@@ -2,7 +2,12 @@ import React, { SetStateAction, useEffect, useMemo } from 'react';
 
 import { IMenuItem } from '@akashaorg/typings/lib/ui';
 
-import Accordion from '@akashaorg/design-system-core/lib/components/Accordion';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@akashaorg/ui/lib/components/accordion';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 
 import MenuItemLabel from './menu-item-label';
@@ -78,22 +83,27 @@ const ListSidebarApps: React.FC<ListSidebarAppsProps> = props => {
         const isActiveMenu = getIsActiveMenu(app.name);
         return (
           <Accordion
+            type="single"
+            collapsible
             key={app.label + idx}
-            accordionId={`${app.name}${idx}`}
-            open={`${app.name}${idx}` === activeAccordionId}
-            titleNode={<MenuItemLabel menuItem={app} isActiveMenu={isActiveMenu} />}
-            contentNode={
-              <MenuSubItems
-                menuItem={app}
-                activeOption={activeOption}
-                onOptionClick={onOptionClick}
-              />
-            }
-            handleClick={handleAccordionClick}
-            customStyle={`py-2 px-6 hover:bg-grey8 dark:hover:bg-grey5 ${
-              isActiveMenu ? activeMenuItemBg : ''
-            }`}
-          />
+            value={activeAccordionId}
+            onValueChange={handleAccordionClick}
+          >
+            <AccordionItem value={`${app.name}${idx}`}>
+              <AccordionTrigger
+                className={` ${isActiveMenu ? activeMenuItemBg : ''} flex items-center py-2 px-6 rounded-none hover:bg-grey8 dark:hover:bg-grey5 hover:no-underline`}
+              >
+                <MenuItemLabel menuItem={app} isActiveMenu={isActiveMenu} />
+              </AccordionTrigger>
+              <AccordionContent className="pb-0">
+                <MenuSubItems
+                  menuItem={app}
+                  activeOption={activeOption}
+                  onOptionClick={onOptionClick}
+                />
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         );
       })}
 

@@ -1,8 +1,8 @@
 import React, { useRef } from 'react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import {
   ErrorLoader,
   ErrorLoaderDescription,
@@ -11,15 +11,15 @@ import {
 import { GalleryImage, GalleryImageProps } from './gallery-image';
 import { getGalleryState } from './get-gallery-state';
 import { AppImageSource } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-
 type ActionButton = {
   label: string;
   disabled: boolean;
   handleClick: () => void;
 };
-
-export type Image = { id: string; name: string } & AppImageSource;
-
+export type Image = {
+  id: string;
+  name: string;
+} & AppImageSource;
 type ExtensionGalleryManagerProps = {
   galleryManagerTitle: string;
   galleryManagerDescription: string;
@@ -37,7 +37,6 @@ type ExtensionGalleryManagerProps = {
   onDelete: (image: Image) => void;
   onUploadImagesClick: (fileList: FileList) => void;
 } & Pick<GalleryImageProps, 'uploadingLabel' | 'uploadingErrorLabel'>;
-
 export const ExtensionGalleryManager: React.FC<ExtensionGalleryManagerProps> = props => {
   const {
     galleryManagerTitle,
@@ -59,13 +58,12 @@ export const ExtensionGalleryManager: React.FC<ExtensionGalleryManagerProps> = p
     onUploadImagesClick,
   } = props;
   const uploadInputRef = useRef(null);
-
   return (
     <Stack spacing={4} className="relative">
       <Stack direction="column" spacing={4} className="p-4">
         <Stack spacing={2} direction="column">
           <Stack direction="row" spacing={2} justifyContent="between" alignItems="center">
-            <Text variant="h6">{galleryManagerTitle}</Text>
+            <Typography variant="h6">{galleryManagerTitle}</Typography>
             <Button
               variant="link"
               onClick={() => {
@@ -76,9 +74,9 @@ export const ExtensionGalleryManager: React.FC<ExtensionGalleryManagerProps> = p
               {uploadImagesLabel}
             </Button>
           </Stack>
-          <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
+          <Typography variant="sm" className="text-grey4 dark:text-grey6 font-light">
             {galleryManagerDescription}
-          </Text>
+          </Typography>
         </Stack>
         {images.length ? (
           <Stack className="grid grid-cols-[repeat(auto-fill,_minmax(min(10rem,_100%),_1fr))] gap-4">
@@ -102,9 +100,9 @@ export const ExtensionGalleryManager: React.FC<ExtensionGalleryManagerProps> = p
         ) : (
           <ErrorLoader type="list-not-available" className="bg-transparent border-none">
             <ErrorLoaderTitle>
-              <Text variant="h6" className="text-center">
+              <Typography variant="h6" className="text-center">
                 {emptyGalleryLabel}
-              </Text>
+              </Typography>
             </ErrorLoaderTitle>
             <ErrorLoaderDescription>
               <Button
@@ -131,11 +129,11 @@ export const ExtensionGalleryManager: React.FC<ExtensionGalleryManagerProps> = p
         />
       </Stack>
       <Stack spacing={4} className="bg-inherit sticky bottom-0 rounded-b-2xl w-full">
-        <Divider />
+        <Separator />
         <Stack direction="row" alignItems="center" spacing={2} className="px-4 mb-4">
-          <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey6' }} weight="normal">
+          <Typography variant="xs" className="font-medium text-grey4 dark:text-grey6 font-normal">
             {images.length}/{maxGalleryImages} {imagesLabel}
-          </Text>
+          </Typography>
           <Button
             variant="link"
             disabled={cancelButton.disabled}
@@ -156,5 +154,4 @@ export const ExtensionGalleryManager: React.FC<ExtensionGalleryManagerProps> = p
     </Stack>
   );
 };
-
 export default ExtensionGalleryManager;

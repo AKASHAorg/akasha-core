@@ -2,13 +2,21 @@ import React, { ReactElement } from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import ImageOverlay from '@akashaorg/design-system-components/lib/components/ImageOverlay';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Menu, { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
-import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import {
-  Cog6ToothIcon,
-  EllipsisVerticalIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from '@akashaorg/ui/lib/components/dropdown-menu';
+import { ListItem } from '@akashaorg/ui/lib/library/list-item';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipProvider,
+} from '@akashaorg/ui/lib/akasha-components/tooltip';
+import { SettingsIcon, EllipsisVerticalIcon } from 'lucide-react';
 import { getImageFromSeed } from '@akashaorg/design-system-core/lib/utils';
 import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
@@ -38,7 +46,7 @@ export type HeaderProps = {
   avatar?: Profile['avatar'];
   profileName: Profile['name'];
   viewerIsOwner?: boolean;
-  menuItems?: MenuProps['items'];
+  menuItems?: ListItem[];
   copyLabel?: string;
   copiedLabel?: string;
   followElement?: ReactElement;
@@ -58,14 +66,12 @@ export type HeaderProps = {
 
 const Header: React.FC<HeaderProps> = ({
   profileId,
-  validAddress = true,
   background,
   avatar,
   profileName,
   viewerIsOwner,
   menuItems,
-  copyLabel,
-  copiedLabel,
+
   followElement,
   publicImagePath = '/images',
   badges,
@@ -146,14 +152,19 @@ const Header: React.FC<HeaderProps> = ({
               </ProfileAvatarButton>
               <Stack direction="row" spacing={2} className="flex-wrap">
                 {badges?.map(badge => (
-                  <Tooltip key={badge.label} content={badge.toolTipLabel} placement="bottom">
-                    <Pill
-                      label={badge.label}
-                      color={{ light: 'errorDark2', dark: 'white' }}
-                      customStyle="px-2 bg-errorFade dark:bg-errorDark2"
-                      type="info"
-                    />
-                  </Tooltip>
+                  <TooltipProvider delayDuration={0} key={badge.label}>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <Pill
+                          label={badge.label}
+                          color={{ light: 'errorDark2', dark: 'white' }}
+                          customStyle="px-2 bg-errorFade dark:bg-errorDark2"
+                          type="info"
+                        />
+                      </TooltipTrigger>
+                      <TooltipContent side="bottom">{badge.toolTipLabel}</TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 ))}
               </Stack>
             </Stack>
@@ -161,7 +172,7 @@ const Header: React.FC<HeaderProps> = ({
               <Stack direction="row" alignItems="center" spacing={2}>
                 {viewerIsOwner ? (
                   <Button aria-label="edit" variant="outline" size="icon" onClick={handleEdit}>
-                    <Cog6ToothIcon />
+                    <SettingsIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
                   </Button>
                 ) : (
                   <>
@@ -172,17 +183,28 @@ const Header: React.FC<HeaderProps> = ({
 
                 {menuItems && (
                   <Stack className="mt-1">
-                    <Menu
-                      anchor={{
-                        icon: <EllipsisVerticalIcon />,
-                        variant: 'primary',
-                        greyBg: true,
-                        iconOnly: true,
-                        'aria-label': 'settings',
-                      }}
-                      items={menuItems}
-                      customStyle="w-max z-99"
-                    />
+                    <DropdownMenu>
+                      <DropdownMenuTrigger>
+                        <Button size="icon" variant="outline">
+                          <EllipsisVerticalIcon
+                            aria-label="settings"
+                            className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark"
+                          />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        {menuItems.map(item => (
+                          <DropdownMenuItem
+                            key={item.label}
+                            onClick={() => item.onClick(item.label)}
+                            className={item?.color}
+                          >
+                            {item?.icon}
+                            {item.label}
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </Stack>
                 )}
               </Stack>

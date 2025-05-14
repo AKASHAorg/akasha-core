@@ -11,21 +11,22 @@ import {
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Input } from '@akashaorg/ui/lib/akasha-components/input';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
+import { StackedAvatar } from '@akashaorg/ui/lib/akasha-components/stacked-avatar';
+import {
+  ProfileAvatar,
+  ProfileAvatarFallback,
+  ProfileAvatarImage,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar';
 import { Loader2 } from 'lucide-react';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import DropDown from '@akashaorg/design-system-core/lib/components/Dropdown';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-import AutoComplete from '@akashaorg/design-system-core/lib/components/AutoComplete';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import StackedAvatar from '@akashaorg/design-system-core/lib/components/StackedAvatar';
-
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ButtonType } from '@akashaorg/design-system-components/lib/components/types/common.types';
 import { Licenses } from '../extension-creation-form';
 import { AkashaProfile, Image } from '@akashaorg/typings/lib/ui';
-import { ExclamationTriangleIcon } from '@heroicons/react/24/solid';
-import { PlusIcon } from '@heroicons/react/24/outline';
+import { PlusIcon, TriangleAlertIcon } from 'lucide-react';
 import { ApolloError } from '@apollo/client';
 import Label from '@akashaorg/design-system-core/lib/components/Label';
 import {
@@ -33,24 +34,25 @@ import {
   ErrorLoaderDescription,
   ErrorLoaderTitle,
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
+import {
+  TagsInput,
+  TagsInputItem,
+  TagsInputList,
+} from '@akashaorg/ui/lib/akasha-components/tags-input';
 
 const MAX_TAGS = 4;
-
 const MIN_TAG_CHARACTERS = 3;
-
 export enum FieldName {
   license = 'license',
   licenseOther = 'licenseOther',
   keywords = 'keywords',
 }
-
 export type ExtensionEditStep3FormValues = {
   license?: string;
   licenseOther?: string;
   contactInfo?: string[];
   keywords?: string[];
 };
-
 export type ExtensionEditStep3FormProps = {
   licenseFieldLabel?: string;
   licenseOtherPlaceholderLabel?: string;
@@ -79,7 +81,6 @@ export type ExtensionEditStep3FormProps = {
   handleNavigateToContributorsPage?: (data: ExtensionEditStep3FormValues) => void;
   transformSource: (src: Image) => Image;
 };
-
 const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
   const {
     defaultValues = {
@@ -107,45 +108,40 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
     tagsDescriptionLabel,
     tagsAddedLabel,
     noteLabel,
-    maxContributorsDisplay,
     noteDescriptionLabel,
     errorProfilesDataLabel,
   } = props;
-
   const form = useForm<
-    Omit<ExtensionEditStep3FormValues, 'keywords'> & { keywords?: string | string[] }
+    Omit<ExtensionEditStep3FormValues, 'keywords'> & {
+      keywords?: string | string[];
+    }
   >({
     defaultValues,
     resolver: zodResolver(schema),
     mode: 'onChange',
   });
-
   const {
     control,
     getValues,
     setValue,
     formState: { errors },
   } = form;
-
   const licenses: Licenses | string[] = useMemo(
     () => [Licenses.MIT, Licenses.GPL, Licenses.APACHE, Licenses.BSD, Licenses.MPL, Licenses.OTHER],
     [],
   );
-
   const isValid = !Object.keys(errors).length;
-
-  const licenseValue = useWatch({ control, name: FieldName.license });
-
+  const licenseValue = useWatch({
+    control,
+    name: FieldName.license,
+  });
   useEffect(() => {
     if (!licenses.includes(defaultValues.license)) {
       setValue('license', Licenses.OTHER);
     }
   }, [licenses, defaultValues.license, setValue]);
-
   const [keywords, setKeywords] = useState(new Set(defaultValues.keywords));
-
   const maxTagsSelected = keywords.size >= MAX_TAGS;
-
   const contributorAvatars = useMemo(() => {
     if (contributorsProfiles?.length) {
       return contributorsProfiles
@@ -161,15 +157,12 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
 
   //@TODO: here it should be a list of available indexed keywords for extensions
   const availableKeywords = [];
-
   const onSave = (event: SyntheticEvent) => {
     event.preventDefault();
     const formValues = getValues();
-
     if (formValues.license === Licenses.OTHER) {
       formValues.license = formValues.licenseOther;
     }
-
     if (isValid) {
       nextButton.handleClick({
         ...formValues,
@@ -177,14 +170,11 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
       });
     }
   };
-
   const handleAddContributors = () => {
     const formValues = getValues();
-
     if (formValues.license === Licenses.OTHER) {
       formValues.license = formValues.licenseOther;
     }
-
     if (isValid) {
       handleNavigateToContributorsPage({
         ...formValues,
@@ -192,7 +182,6 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
       });
     }
   };
-
   return (
     <Form {...form}>
       <form onSubmit={onSave} className={`h-full`}>
@@ -239,19 +228,19 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
                 defaultValue={licenses.includes(defaultValues.license) ? '' : defaultValues.license}
               />
             )}
-            <Divider />
+            <Separator />
             <Stack direction="column" spacing={4}>
               <Stack spacing={1} direction="column">
                 <Stack direction="row" spacing={2} justifyContent="between" alignItems="center">
-                  <Text variant="h6">{collaboratorsFieldLabel}</Text>
+                  <Typography variant="h6">{collaboratorsFieldLabel}</Typography>
                   <Button variant="link" onClick={handleAddContributors}>
                     <PlusIcon />
                     {contributorsProfiles.length > 0 ? addAndEditLabel : addLabel}
                   </Button>
                 </Stack>
-                <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
+                <Typography variant="sm" className="text-grey4 dark:text-grey6 font-light">
                   {collaboratorsDescriptionLabel}
-                </Text>
+                </Typography>
               </Stack>
               {loadingProfilesData && <Loader2 className="h-8 w-8 animate-spin text-primary" />}
               {errorProfilesData && (
@@ -264,66 +253,63 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
               )}
               {contributorAvatars?.length > 0 && (
                 <Stack direction="row" spacing={2} alignItems="center">
-                  <StackedAvatar
-                    userData={contributorAvatars}
-                    maxAvatars={maxContributorsDisplay}
-                    size="md"
-                  />
+                  <StackedAvatar count={contributorAvatars.length}>
+                    {index => (
+                      <ProfileAvatar>
+                        <ProfileAvatarImage
+                          src={contributorAvatars[index].avatar?.src}
+                          alt={contributorAvatars[index].name}
+                        />
+                        <ProfileAvatarFallback />
+                      </ProfileAvatar>
+                    )}
+                  </StackedAvatar>
                   <Stack alignItems="center" justifyContent="center">
-                    <Text variant="body2" weight="bold">
+                    <Typography variant="sm" bold>
                       {contributorsProfiles[0]?.name}
-                    </Text>
+                    </Typography>
                     {contributorsProfiles.length > 1 && (
-                      <Text
-                        variant="footnotes2"
-                        color={{ light: 'grey4', dark: 'grey6' }}
-                        weight="light"
-                      >{`and ${contributorsProfiles.length - 1} ${moreLabel}`}</Text>
+                      <Typography
+                        variant="xs"
+                        className="font-medium text-grey4 dark:text-grey6 font-light"
+                      >{`and ${contributorsProfiles.length - 1} ${moreLabel}`}</Typography>
                     )}
                   </Stack>
                 </Stack>
               )}
             </Stack>
 
-            <Divider />
+            <Separator />
 
             <Stack direction="column" spacing={2}>
               <Label required={true}>{tagsLabel}</Label>
-              <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
+              <Typography variant="sm" className="font-light text-grey4 dark:text-grey6 font-light">
                 {tagsDescriptionLabel}
-              </Text>
+              </Typography>
               <FormField
                 control={control}
                 name={FieldName.keywords}
-                render={({ field: { value, onChange }, fieldState: { error } }) => {
-                  const errorMessage = error?.message ?? '';
+                render={({ field: { onChange } }) => {
                   return (
                     <FormItem>
                       <FormControl>
-                        <AutoComplete
-                          value={typeof value === 'string' ? value : ''}
-                          options={availableKeywords}
-                          placeholder={addTagsPlaceholderLabel}
-                          tags={keywords}
-                          caption={errorMessage ? errorMessage : ''}
-                          status={errorMessage ? 'error' : null}
-                          separators={['Comma', 'Space', 'Enter']}
-                          customStyle="grow mt-2"
-                          onSelected={({ index }) => {
-                            const newKeyWords = keywords.add(availableKeywords[index]);
-                            onChange([...newKeyWords]);
-                            setKeywords(newKeyWords);
-                          }}
-                          onChange={value => {
-                            onChange(value);
-                            if (Array.isArray(value)) {
-                              if (!errorMessage) setKeywords(new Set(value));
-                            }
-                          }}
+                        <TagsInput
+                          className="mt-1.5"
                           disabled={maxTagsSelected}
-                          required={true}
-                          multiple
-                        />
+                          placeholder={addTagsPlaceholderLabel}
+                          separators={['Comma', 'Space', 'Enter']}
+                          onTagsChange={value => {
+                            setKeywords(value);
+                          }}
+                          onChange={onChange}
+                        >
+                          <TagsInputList>
+                            {keywords &&
+                              Array.from(keywords).map(tag => (
+                                <TagsInputItem key={tag} tag={tag} />
+                              ))}
+                          </TagsInputList>
+                        </TagsInput>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -331,26 +317,24 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
                 }}
               />
 
-              <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
+              <Typography variant="sm" className="font-light text-grey4 dark:text-grey6 font-light">
                 {`${keywords.size}/${MAX_TAGS} ${tagsAddedLabel}`}
-              </Text>
+              </Typography>
             </Stack>
-            <Divider />
+            <Separator />
             <Stack direction="column" spacing={2}>
               <Stack direction="row" alignItems="center" spacing={1}>
-                <Icon
-                  icon={<ExclamationTriangleIcon />}
-                  size="sm"
-                  customStyle={'[&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark'}
-                />
-                <Text variant="button-md">{noteLabel}</Text>
+                <TriangleAlertIcon className="h-4 w-4 [&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark" />
+                <Typography variant="sm" bold>
+                  {noteLabel}
+                </Typography>
               </Stack>
-              <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
+              <Typography variant="sm" className="text-grey4 dark:text-grey6 font-light">
                 {noteDescriptionLabel}
-              </Text>
+              </Typography>
             </Stack>
           </Stack>
-          <Divider />
+          <Separator />
 
           <Stack direction="row" justifyContent="end" spacing={2} className="px-4 pb-4">
             <Button
@@ -369,9 +353,7 @@ const ExtensionEditStep3Form: React.FC<ExtensionEditStep3FormProps> = props => {
     </Form>
   );
 };
-
 export default ExtensionEditStep3Form;
-
 const schema = z.object({
   extensionLicense: z.string(),
   keywords: z

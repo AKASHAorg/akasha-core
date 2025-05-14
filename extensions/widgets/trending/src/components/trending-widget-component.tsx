@@ -7,7 +7,7 @@ import {
   ErrorLoaderTitle,
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
 import TrendingWidgetLoadingCard from '@akashaorg/design-system-components/lib/components/TrendingWidgetLoadingCard';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { useTranslation } from 'react-i18next';
 import { hasOwn, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
@@ -19,7 +19,6 @@ import {
 import { LatestProfiles, LatestTopics } from './cards';
 import { useGetIndexingDID } from '@akashaorg/ui-core-hooks/lib/use-settings';
 import { SortOrder } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-
 const TrendingWidgetComponent: React.FC<unknown> = () => {
   const { t } = useTranslation('ui-widget-trending');
   const {
@@ -28,7 +27,6 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
   const isLoggedIn = !!authenticatedDID;
   const { uiEvents, logger, navigateToModal, getCorePlugins } = useRootComponentProps();
   const navigateTo = getCorePlugins().routing.navigateTo;
-
   const currentIndexingDID = useGetIndexingDID();
   const {
     data: latestTopicsReqData,
@@ -42,14 +40,18 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
   });
   const { data: tagSubscriptionsData, refetch: refetchTagSubscriptions } =
     useGetInterestsByDidQuery({
-      variables: { id: authenticatedDID },
+      variables: {
+        id: authenticatedDID,
+      },
       skip: !isLoggedIn,
     });
   const latestProfileStreamReq = useGetProfileStreamQuery({
     variables: {
       first: 4,
       indexer: currentIndexingDID,
-      sorting: { createdAt: SortOrder.Desc },
+      sorting: {
+        createdAt: SortOrder.Desc,
+      },
     },
   });
   const latestProfileIDs: string[] = useMemo(() => {
@@ -65,12 +67,10 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
     }
     return [];
   }, [latestProfileStreamReq.data]);
-
   const latestTopics =
     latestTopicsReqData?.node && hasOwn(latestTopicsReqData.node, 'akashaInterestsStreamList')
       ? latestTopicsReqData?.node.akashaInterestsStreamList?.edges.map(edge => edge.node.value)
       : [];
-
   const tagSubscriptions = useMemo(() => {
     if (!isLoggedIn) return null;
     return tagSubscriptionsData &&
@@ -79,32 +79,29 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
       ? tagSubscriptionsData.node.akashaProfileInterests?.topics.map(topic => topic.value)
       : [];
   }, [isLoggedIn, tagSubscriptionsData]);
-
   const tagSubscriptionsId = useMemo(() => {
     if (!isLoggedIn) return null;
     return tagSubscriptionsData && hasOwn(tagSubscriptionsData.node, 'akashaProfileInterests')
       ? tagSubscriptionsData.node.akashaProfileInterests?.id
       : null;
   }, [isLoggedIn, tagSubscriptionsData]);
-
   const showLoginModal = () => {
-    navigateToModal({ name: 'login' });
+    navigateToModal({
+      name: 'login',
+    });
   };
-
   const handleTopicClick = (topic: string) => {
     navigateTo?.({
       appName: '@akashaorg/app-antenna',
       getNavigationUrl: navRoutes => `${navRoutes.Tags}/${topic}`,
     });
   };
-
   const handleProfileClick = (did: string) => {
     navigateTo?.({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${did}`,
     });
   };
-
   return (
     <Stack spacing={4}>
       {(latestTopicsError || latestProfileStreamReq.error) && (
@@ -158,14 +155,14 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
               <>
                 {latestProfileIDs?.length === 0 ? (
                   <Stack justifyContent="center" alignItems="center" className="py-2">
-                    <Text>{t('No profiles found!')}</Text>
+                    <Typography>{t('No profiles found!')}</Typography>
                   </Stack>
                 ) : (
                   <Card className="p-4">
                     <Stack className="mb-4">
-                      <Text variant="button-md" weight="bold">
+                      <Typography variant="sm" bold>
                         {t('Start Following')}
-                      </Text>
+                      </Typography>
                     </Stack>
                     <Stack spacing={4}>
                       {latestProfileIDs.map(profileID => (
@@ -188,5 +185,4 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
     </Stack>
   );
 };
-
 export default TrendingWidgetComponent;

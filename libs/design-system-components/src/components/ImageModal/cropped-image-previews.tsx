@@ -2,16 +2,14 @@ import React from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Img from '@akashaorg/design-system-core/lib/components/Image';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Area } from 'react-easy-crop';
 import { cn } from '@akashaorg/ui/lib/library/utils';
 import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
-
 export type ImagePreview = {
   dimension: number;
   circular?: boolean;
 };
-
 export type CroppedImagePreviewProps = {
   previewTitle: string;
   previews: ImagePreview[];
@@ -35,7 +33,9 @@ export const CroppedImagePreviews: React.FC<CroppedImagePreviewProps> = props =>
   };
   return (
     <Stack spacing={2}>
-      <Text variant="button-md">{previewTitle}</Text>
+      <Typography variant="sm" bold>
+        {previewTitle}
+      </Typography>
       <Stack direction="row" spacing={3} alignItems="end">
         {previews.map((preview, index) => {
           return (

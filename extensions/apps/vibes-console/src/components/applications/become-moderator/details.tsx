@@ -1,8 +1,9 @@
 import React from 'react';
 import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
-import RadioButton from '@akashaorg/design-system-core/lib/components/RadioButton';
+import { RadioGroup, RadioGroupItem } from '@akashaorg/ui/lib/components/radio-group';
+import { Label } from '@akashaorg/ui/lib/components/label';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Textarea } from '@akashaorg/ui/lib/akasha-components/textarea';
 import { Input } from '@akashaorg/ui/lib/akasha-components/input';
 import {
@@ -21,7 +22,10 @@ export type BMDetailsProps = PageHeaderProps &
     section1: {
       title: string;
       subtitle: string;
-      radioButtons: { label: string; value: string }[];
+      radioButtons: {
+        label: string;
+        value: string;
+      }[];
       extra: string;
       placeholder: string;
       caption: string;
@@ -36,38 +40,33 @@ export type BMDetailsProps = PageHeaderProps &
   };
 
 export const BMDetails: React.FC<BMDetailsProps> = props => {
-  const {
-    selectedButton,
-    footerChecked,
-    section1,
-    section2,
-    onRadioButtonChange,
-    onCheckboxChange,
-  } = props;
+  const { footerChecked, section1, section2, onRadioButtonChange, onCheckboxChange } = props;
 
   return (
     <PageHeader {...props}>
       <Stack spacing="gap-y-4">
         <Stack spacing="gap-y-2">
-          <Text variant="label">{section1.title}?</Text>
-          <Text variant="footnotes2" weight="light">
+          <Typography className="font-medium">{section1.title}?</Typography>
+          <Typography variant="xs" className="font-medium font-light">
             {section1.subtitle}
-          </Text>
+          </Typography>
           <Stack direction="row" spacing="gap-x-4">
-            {section1.radioButtons.map(b => (
-              <RadioButton
-                id={b.value}
-                key={b.label}
-                label={b.label}
-                value={b.value}
-                isSelected={selectedButton === b.value}
-                handleChange={() => onRadioButtonChange(b.value)}
-              />
-            ))}
+            <RadioGroup
+              defaultValue={section1.radioButtons[0].value}
+              onValueChange={onRadioButtonChange}
+              className="flex space-x-2"
+            >
+              {section1.radioButtons.map(b => (
+                <div key={b.label} className="space-x-2">
+                  <RadioGroupItem id={b.value} value={b.value} />
+                  <Label htmlFor={b.value}>{b.value}</Label>
+                </div>
+              ))}
+            </RadioGroup>
           </Stack>
-          <Text variant="footnotes2" weight="light">
+          <Typography variant="xs" className="font-medium font-light">
             {section1.extra}:
-          </Text>
+          </Typography>
           <Input
             placeholder={`${section1.placeholder} ...`}
             maxLength={100}
@@ -78,7 +77,7 @@ export const BMDetails: React.FC<BMDetailsProps> = props => {
         </Stack>
 
         <Stack spacing="gap-y-2">
-          <Text variant="label">{section2.title}?</Text>
+          <Typography className="font-medium">{section2.title}?</Typography>
           <Textarea
             placeholder={`${section2.placeholder} ...`}
             maxLength={200}
@@ -96,12 +95,7 @@ export const BMDetails: React.FC<BMDetailsProps> = props => {
             handleChange={onCheckboxChange}
             isSelected={footerChecked}
           />
-          <SubtitleRenderer
-            {...props}
-            textVariant="footnotes2"
-            textAlign="start"
-            fontWeight="normal"
-          />
+          <SubtitleRenderer {...props} textVariant="xs" />
         </Stack>
       </Stack>
     </PageHeader>

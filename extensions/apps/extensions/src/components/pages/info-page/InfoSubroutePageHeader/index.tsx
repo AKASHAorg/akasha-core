@@ -1,13 +1,12 @@
 import * as React from 'react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
 import {
   AkashaAppApplicationType,
   AppImageSource,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { transformSource } from '@akashaorg/ui-core-hooks/lib/utils/media-utils';
-
 export type ExtensionHeaderProps = {
   pageTitle?: string;
   appName: string;
@@ -36,23 +35,20 @@ const ExtensionHeader: React.FC<ExtensionHeaderProps> = ({
 }) => {
   return (
     <Stack spacing={4}>
-      {pageTitle && <Text variant="h5">{pageTitle}</Text>}
+      {pageTitle && <Typography variant="h5">{pageTitle}</Typography>}
       <Stack direction="row" alignItems="center" spacing={2}>
         <AppAvatar height={3} width={3} appType={appType} avatar={transformSource(appLogo)} />
         <Stack direction="column">
-          <Text variant="h6">{appName}</Text>
-          <Text
-            variant="footnotes2"
-            weight="normal"
-            color={{ light: 'grey4', dark: 'grey7' }}
-            truncate={true}
+          <Typography variant="h6">{appName}</Typography>
+          <Typography
+            variant="xs"
+            className="font-medium font-normal text-grey4 dark:text-grey7 truncate"
           >
             {packageName}
-          </Text>
+          </Typography>
         </Stack>
       </Stack>
     </Stack>
   );
 };
-
 export default ExtensionHeader;

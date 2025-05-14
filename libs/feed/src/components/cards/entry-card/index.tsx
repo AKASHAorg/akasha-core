@@ -3,12 +3,17 @@ import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import EntryCardRemoved from './entry-card-removed';
 import CardActions from './card-actions';
-import { EllipsisHorizontalIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { EllipsisIcon } from 'lucide-react';
 import NSFW, { NSFWProps } from '../nsfw-card';
-import Menu from '@akashaorg/design-system-core/lib/components/Menu';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from '@akashaorg/ui/lib/components/dropdown-menu';
 import { type EntryData } from '@akashaorg/typings/lib/ui';
-import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
+import { ListItem } from '@akashaorg/ui/lib/library/list-item';
 
 export type EntryCardProps = {
   entryData: EntryData;
@@ -117,18 +122,27 @@ const EntryCard: React.FC<EntryCardProps> = props => {
         <Stack spacing="gap-y-2" padding="p-4" customStyle={`grow ${hoverStyle}`}>
           <Stack direction="row" justify="between">
             {profileAvatar}
-            <Menu
-              anchor={{
-                icon: <EllipsisHorizontalIcon />,
-                plainIcon: true,
-                iconOnly: true,
-                size: 'md',
-              }}
-              items={menuItems}
-              disabled={disableActions}
-              customStyle="shrink-0"
-              onMenuClick={e => e.stopPropagation()}
-            />
+
+            <DropdownMenu modal={false}>
+              <DropdownMenuTrigger disabled={disableActions} asChild>
+                <EllipsisIcon
+                  aria-label="settings"
+                  className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark"
+                />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {menuItems.map(item => (
+                  <DropdownMenuItem
+                    key={item.label}
+                    onClick={() => item.onClick(item.label)}
+                    className={item?.color}
+                  >
+                    {item?.icon}
+                    {item.label}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </Stack>
           {!entryData.active && (
             <EntryCardRemoved

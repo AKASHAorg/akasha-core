@@ -1,11 +1,10 @@
 import * as React from 'react';
 import Card from '../Card';
-import Icon from '../Icon';
 import Label from '../Label';
 import Link from '../Link';
 import Stack from '../Stack';
 import Text from '../Text';
-import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from '../Icon/hero-icons-outline';
+import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
 import { useCloseActions } from '../../utils';
 
 export type DropdownProps = {
@@ -98,15 +97,9 @@ const Dropdown: React.FC<DropdownProps> = props => {
       >
         <Text variant="body2">{selected}</Text>
         {dropOpen ? (
-          <Icon
-            icon={<ChevronUpIcon />}
-            customStyle="ml-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark"
-          />
+          <ChevronUpIcon className="h-5 w-5 ml-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
         ) : (
-          <Icon
-            icon={<ChevronDownIcon />}
-            customStyle="ml-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark"
-          />
+          <ChevronDownIcon className="h-5 w-5 ml-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
         )}
       </button>
 
@@ -142,10 +135,7 @@ const Dropdown: React.FC<DropdownProps> = props => {
                   </Stack>
                   {isSelected && (
                     <span className={'ml-4'}>
-                      <Icon
-                        icon={<CheckIcon />}
-                        customStyle="[&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark"
-                      />
+                      <CheckIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
                     </span>
                   )}
                 </Link>

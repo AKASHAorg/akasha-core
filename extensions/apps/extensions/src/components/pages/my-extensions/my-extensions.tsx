@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { capitalize } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
-import { BookOpenIcon } from '@heroicons/react/24/outline';
+import { BookOpenIcon } from 'lucide-react';
 import {
   filterEvents,
   hasOwn,
@@ -20,7 +20,13 @@ import {
 import { SortOrder, AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Dropdown from '@akashaorg/design-system-core/lib/components/Dropdown';
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from '@akashaorg/ui/lib/components/select';
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
 import DynamicInfiniteScroll from '@akashaorg/design-system-core/lib/components/DynamicInfiniteScroll';
 import {
@@ -29,25 +35,19 @@ import {
   ErrorLoaderTitle,
   ErrorLoaderFooter,
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { ExtensionElement } from './extension-element';
 import appRoutes, { MY_EXTENSIONS } from '../../../routes';
 import { DRAFT_EXTENSIONS } from '../../../constants';
-
 const ENTRY_HEIGHT = 92;
-
 export const MyExtensionsPage: React.FC<unknown> = () => {
   const { uiEvents, baseRouteName, getCorePlugins } = useRootComponentProps();
   const uiEventsRef = React.useRef(uiEvents);
-
   const { t } = useTranslation('app-extensions');
-
   const navigate = useNavigate();
   const navigateTo = getCorePlugins().routing.navigateTo;
-
   const showErrorNotification = React.useCallback((title: string) => {
     uiEventsRef.current.next({
       event: NotificationEvents.ShowNotification,
@@ -57,42 +57,37 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
       },
     });
   }, []);
-
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
-
   const handleNavigateToCreateApp = () => {
-    navigate({ to: '/create-extension' });
+    navigate({
+      to: '/create-extension',
+    });
   };
-
   const extensionTypeMenuItems = useMemo(
     () => [
-      t('Type'),
       capitalize(AkashaAppApplicationType.App),
       capitalize(AkashaAppApplicationType.Widget),
       capitalize(AkashaAppApplicationType.Plugin),
       capitalize(AkashaAppApplicationType.Other),
     ],
-    [t],
+    [],
   );
-
   const extensionStatusMenuItems = [
-    t('Status'),
     ExtensionStatus.LocalDraft,
     ExtensionStatus.Draft,
     ExtensionStatus.InReview,
     ExtensionStatus.Published,
   ];
 
-  const [selectedType, setSelectedType] = React.useState<string>(extensionTypeMenuItems[0]);
-  const [selectedStatus, setSelectedStatus] = React.useState<string>(extensionStatusMenuItems[0]);
+  const [selectedType, setSelectedType] = React.useState<string>('');
+  const [selectedStatus, setSelectedStatus] = React.useState<string>('');
 
   const handleResetClick = () => {
-    setSelectedStatus(extensionStatusMenuItems[0]);
-    setSelectedType(extensionTypeMenuItems[0]);
+    setSelectedStatus('');
+    setSelectedType('');
   };
-
   const {
     data: appsByPubReqData,
     error,
@@ -102,7 +97,9 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
     variables: {
       id: authenticatedDID,
       first: 10,
-      sorting: { createdAt: SortOrder.Desc },
+      sorting: {
+        createdAt: SortOrder.Desc,
+      },
     },
     fetchPolicy: 'cache-first',
     notifyOnNetworkStatusChange: true,
@@ -113,23 +110,17 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
       ? appsByPubReqData.node.akashaAppList
       : null;
   }, [appsByPubReqData]);
-
   const appsData = useMemo(() => {
     return appsList?.edges?.map(edge => edge.node) || [];
   }, [appsList]);
-
   const pageInfo = useMemo(() => {
     return appsList?.pageInfo;
   }, [appsList]);
-
   const appElements = useMemo(() => {
     return appsData?.filter(ext => {
-      if (selectedType === extensionTypeMenuItems[0]) {
-        return true;
-      }
       return ext?.applicationType === selectedType.toUpperCase();
     });
-  }, [appsData, selectedType, extensionTypeMenuItems]);
+  }, [appsData, selectedType]);
 
   const [draftExtensions, setDraftExtensions] = useState([]);
 
@@ -144,7 +135,6 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
       setDraftExtensions([]);
     }
   }, [authenticatedDID, showErrorNotification]);
-
   useEffect(() => {
     getDraftExtensions();
     // subscribe and listen to events
@@ -157,14 +147,12 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
           }
         },
       });
-
     return () => {
       if (eventsSub) {
         eventsSub.unsubscribe();
       }
     };
   }, [authenticatedDID, getDraftExtensions]);
-
   const handleConnectButtonClick = () => {
     navigateTo?.({
       appName: '@akashaorg/app-auth-ewa',
@@ -175,12 +163,10 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
       },
     });
   };
-
   const allMyExtensions = useMemo(
     () => [...draftExtensions, ...appElements],
     [draftExtensions, appElements],
   );
-
   if (!authenticatedDID) {
     return (
       <ErrorLoader type="not-authenticated">
@@ -194,13 +180,12 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
       </ErrorLoader>
     );
   }
-
   return (
     <Stack spacing={4}>
       <Stack direction="row" justifyContent="between">
-        <Text variant="h5">{t('My extensions')}</Text>
+        <Typography variant="h5">{t('My extensions')}</Typography>
         <Link target="_blank" to="https://docs.akasha.world" customStyle="w-fit self-end">
-          <Icon icon={<BookOpenIcon />} accentColor />
+          <BookOpenIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
         </Link>
       </Stack>
       <Stack
@@ -209,24 +194,37 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
         alignItems="center"
         className="p-3 bg-inherit rounded-[1.25rem] bg-nested-card"
       >
-        <Text variant="body1">{t('Create an extension ✨ 🚀')}</Text>
+        <Typography>{t('Create an extension ✨ 🚀')}</Typography>
         <Button size="sm" onClick={handleNavigateToCreateApp}>
           {t('Create')}
         </Button>
       </Stack>
       <Stack direction="row" justifyContent="between" alignItems="center" spacing={4}>
-        <Dropdown
-          menuItems={extensionTypeMenuItems}
-          selected={selectedType}
-          setSelected={setSelectedType}
-          customStyle="grow"
-        />
-        <Dropdown
-          menuItems={extensionStatusMenuItems}
-          selected={selectedStatus}
-          setSelected={setSelectedStatus}
-          customStyle="grow"
-        />
+        <Select value={selectedType} onValueChange={setSelectedType}>
+          <SelectTrigger className="grow text-foreground">
+            <SelectValue placeholder={t('Type')} />
+          </SelectTrigger>
+          <SelectContent>
+            {extensionTypeMenuItems.map(item => (
+              <SelectItem key={item} value={item}>
+                {item}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+          <SelectTrigger className="grow text-foreground">
+            <SelectValue placeholder={t('Status')} />
+          </SelectTrigger>
+          <SelectContent>
+            {extensionStatusMenuItems.map(item => (
+              <SelectItem key={item} value={item}>
+                {item}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
         <Button variant="link" size="sm" onClick={handleResetClick}>
           {t('Reset')}
         </Button>
@@ -265,6 +263,7 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
               const extensionData = allMyExtensions[itemIndex];
               return (
                 <ExtensionElement
+                  key={itemIndex}
                   extensionId={extensionData?.id}
                   extensionName={extensionData?.name}
                   extensionDisplayName={extensionData?.displayName}

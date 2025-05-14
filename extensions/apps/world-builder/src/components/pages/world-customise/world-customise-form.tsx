@@ -285,7 +285,10 @@ export const WorldCustomiseFormPage: React.FC<{ worldId?: string }> = ({ worldId
                         onChange={field.onChange}
                       />
                       <CircularProgress
-                        value={(field.value?.length / WORLD_DESCRIPTION_MAX_LENGTH) * 100}
+                        value={Math.min(
+                          Math.floor((field?.value?.length / WORLD_DESCRIPTION_MAX_LENGTH) * 100),
+                          100,
+                        )}
                         className="absolute bottom-1 right-1"
                       />
                     </div>

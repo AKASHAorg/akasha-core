@@ -1,7 +1,6 @@
 import React from 'react';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 export type UnsavedChangesModalProps = {
   showModal: boolean;
   cancelButtonLabel: string;
@@ -51,11 +50,8 @@ const UnsavedChangesModal: React.FC<UnsavedChangesModalProps> = props => {
       customStyle="py-4 px-6 md:px-24"
       onClose={handleModalClose}
     >
-      <Text variant="body1" weight="light">
-        {description}
-      </Text>
+      <Typography className="font-light">{description}</Typography>
     </Modal>
   );
 };
-
 export default UnsavedChangesModal;

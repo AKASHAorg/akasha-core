@@ -1,21 +1,30 @@
 import React, { MouseEventHandler } from 'react';
 import ExtensionIcon from '@akashaorg/design-system-core/lib/components/ExtensionIcon';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { EllipsisVerticalIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
-import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
-import Menu from '@akashaorg/design-system-core/lib/components/Menu';
+
+import { EllipsisVerticalIcon, TriangleAlertIcon, InfoIcon } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from '@akashaorg/ui/lib/components/dropdown-menu';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { ListItem } from '@akashaorg/ui/lib/library/list-item';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { AppInfoPill } from './info-pill';
 import {
   AkashaAppApplicationType,
   AppImageSource,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
-import { InformationCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipProvider,
+} from '@akashaorg/ui/lib/akasha-components/tooltip';
 
 export type AppInfoHeaderProps = {
   displayName: string;
@@ -41,7 +50,6 @@ export type AppInfoHeaderProps = {
   isInReviewTitleLabel: string;
   isInReviewDescriptionLabel: string;
 };
-
 export const AppInfoHeader: React.FC<AppInfoHeaderProps> = props => {
   const {
     displayName,
@@ -67,7 +75,6 @@ export const AppInfoHeader: React.FC<AppInfoHeaderProps> = props => {
     openExtensionLabel = 'Open',
     defaultExtensionTooltipContent = `This extension is preinstalled in this world and cannot be uninstalled`,
   } = props;
-
   return (
     <Stack direction="row" alignItems="start" justifyContent="between" className="pb-3">
       <Stack direction="column" spacing={6}>
@@ -76,51 +83,69 @@ export const AppInfoHeader: React.FC<AppInfoHeaderProps> = props => {
           <Stack justifyContent="between" className="flex-grow">
             <Stack>
               <Stack direction="row" alignItems="start" spacing={2} justifyContent="between">
-                <Text variant="h6" weight="semibold">
+                <Typography variant="h6" className="font-semibold">
                   {displayName}
-                </Text>
+                </Typography>
                 {isDefaultWorldExtension && (
-                  <Tooltip
-                    placement={'bottom'}
-                    content={defaultExtensionTooltipContent}
-                    customStyle="self-center"
-                    contentCustomStyle="max-w-sm"
-                  >
-                    <Icon size="md" icon={<InformationCircleIcon />} />
-                  </Tooltip>
+                  <TooltipProvider delayDuration={0}>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <InfoIcon className="h-4 w-4" />
+                      </TooltipTrigger>
+                      <TooltipContent side="bottom">
+                        {defaultExtensionTooltipContent}
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 )}
                 {!isDefaultWorldExtension && (
-                  <Menu
-                    anchor={{
-                      icon: <EllipsisVerticalIcon />,
-                      variant: 'primary',
-                      size: 'xs',
-                      greyBg: true,
-                      iconOnly: true,
-                    }}
-                    items={[share, report]}
-                  />
+                  <DropdownMenu>
+                    <DropdownMenuTrigger>
+                      <Button size="icon" variant="outline">
+                        <EllipsisVerticalIcon className="h-4 w-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem
+                        onClick={() => share?.onClick(share.label)}
+                        className={share?.color}
+                      >
+                        {share?.icon}
+                        {share.label}
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => report?.onClick(report.label)}
+                        className={report?.color}
+                      >
+                        {report?.icon}
+                        {report.label}
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 )}
               </Stack>
               <Stack direction="row" spacing={1} className="flex-wrap">
                 {isDefaultWorldExtension && (
                   <AppInfoPill customStyle="bg-gradient-to-r from-primaryStart to-primaryStop">
-                    <Text variant="footnotes2" color={{ light: 'white', dark: 'white' }}>
+                    <Typography variant="xs" className="font-medium text-white dark:text-white">
                       {defaultAppPillLabel}
-                    </Text>
+                    </Typography>
                   </AppInfoPill>
                 )}
                 <AppInfoPill customStyle="bg-tertiaryLight dark:bg-tertiaryDark">
                   <ExtensionIcon type={extensionType} />
-                  <Text variant="footnotes2" color={{ light: 'secondaryLight', dark: 'white' }}>
+                  <Typography
+                    variant="xs"
+                    className="font-medium text-secondaryLight dark:text-white"
+                  >
                     {extensionTypeLabel}
-                  </Text>
+                  </Typography>
                 </AppInfoPill>
                 {nsfw && (
                   <AppInfoPill customStyle="bg-errorFade dark:bg-errorDark">
-                    <Text variant="footnotes2" color={{ light: 'errorDark', dark: 'white' }}>
+                    <Typography variant="xs" className="font-medium text-errorDark dark:text-white">
                       {nsfwLabel}
-                    </Text>
+                    </Typography>
                   </AppInfoPill>
                 )}
               </Stack>
@@ -158,18 +183,15 @@ export const AppInfoHeader: React.FC<AppInfoHeaderProps> = props => {
           <Card className="p-4 bg-nested-card">
             <Stack direction="column" spacing={2}>
               <Stack direction="row" alignItems="center" spacing={2}>
-                <Icon
-                  icon={<ExclamationTriangleIcon />}
-                  size="md"
-                  customStyle="size-4 [&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark"
-                />
-                <Text variant="h6" weight="bold">
+                <TriangleAlertIcon className="h-4 w-4 [&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark" />
+
+                <Typography variant="h6" bold>
                   {isInReviewTitleLabel}
-                </Text>
+                </Typography>
               </Stack>
-              <Text variant="body2" weight="light" customStyle="pl-6">
+              <Typography variant="sm" className="font-light pl-6">
                 {isInReviewDescriptionLabel}
-              </Text>
+              </Typography>
             </Stack>
           </Card>
         )}

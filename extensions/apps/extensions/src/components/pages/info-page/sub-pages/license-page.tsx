@@ -1,15 +1,14 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import InfoSubRouteHeader from '../InfoSubroutePageHeader';
 import {
   AkashaAppApplicationType,
   AppImageSource,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-
 type LicensePageProps = {
   appId: string;
   license?: string;
@@ -18,7 +17,6 @@ type LicensePageProps = {
   extensionDisplayName?: string;
   extensionType?: AkashaAppApplicationType;
 };
-
 export const LicensePage = (props: LicensePageProps) => {
   const { license, extensionDisplayName, extensionName, extensionLogo, extensionType } = props;
   const { t } = useTranslation('app-extensions');
@@ -37,11 +35,15 @@ export const LicensePage = (props: LicensePageProps) => {
             appLogo={extensionLogo}
             appType={extensionType}
           />
-          <Divider />
-          <Text variant="h6">{`"${license}"`}</Text>
+          <Separator />
+          <Typography variant="h6">{`"${license}"`}</Typography>
           {!!mockLicenseData && (
             <Stack spacing={4}>
-              <Text variant="body2">{t('{{licenseText}}', { licenseText: mockLicenseData })}</Text>
+              <Typography variant="sm">
+                {t('{{licenseText}}', {
+                  licenseText: mockLicenseData,
+                })}
+              </Typography>
             </Stack>
           )}
         </Stack>

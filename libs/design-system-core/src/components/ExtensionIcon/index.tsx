@@ -1,8 +1,7 @@
 import React from 'react';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { Squares2X2Icon } from '@heroicons/react/24/outline';
-import Icon, { IconProps } from '../Icon';
-import { Plugin, Widget } from '../Icon/akasha-icons';
+import { LayoutGridIcon, LayoutPanelLeftIcon, PuzzleIcon } from 'lucide-react';
+import { IconProps } from '../AppIcon';
 
 export type ExtensionIconProps = IconProps & {
   type: AkashaAppApplicationType;
@@ -10,37 +9,24 @@ export type ExtensionIconProps = IconProps & {
 };
 
 const ExtensionIcon: React.FC<ExtensionIconProps> = props => {
-  const {
-    size = 'sm',
-    solid = false,
-    accentColor = true,
-    type,
-    defaultIcon = <Squares2X2Icon />,
-  } = props;
+  const style = 'h-3 w-3 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark';
+
+  const { type, defaultIcon = <LayoutGridIcon className={style} /> } = props;
 
   const getIconByType = (_type: AkashaAppApplicationType) => {
     switch (_type) {
       case AkashaAppApplicationType.App:
-        return <Squares2X2Icon />;
+        return <LayoutGridIcon className={style} />;
       case AkashaAppApplicationType.Plugin:
-        return <Plugin />;
+        return <PuzzleIcon className={style} />;
       case AkashaAppApplicationType.Widget:
-        return <Widget />;
+        return <LayoutPanelLeftIcon className={style} />;
       default:
         return defaultIcon;
     }
   };
 
-  return (
-    <Icon
-      size={size}
-      solid={
-        [AkashaAppApplicationType.Plugin, AkashaAppApplicationType.Widget].includes(type) || solid
-      }
-      accentColor={accentColor}
-      icon={getIconByType(type)}
-    />
-  );
+  return getIconByType(type);
 };
 
 export default ExtensionIcon;

@@ -1,10 +1,10 @@
 import React from 'react';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 export type NoItemFoundProps = {
   title: string;
 };
-
 export const NoItemFound: React.FC<NoItemFoundProps> = ({ title }) => (
-  <Text variant="subtitle2">{title}</Text>
+  <Typography variant="sm" className="font-light">
+    {title}
+  </Typography>
 );

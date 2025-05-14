@@ -1,21 +1,22 @@
 import React from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { FlagIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { FlagIcon } from 'lucide-react';
 import MiniProfileCTA from '../../vibes-console-content-card/mini-profile-cta';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-
 export type TReport = {
   name: string;
-  did: { id: string };
-  flags: { explanation: string }[];
+  did: {
+    id: string;
+  };
+  flags: {
+    explanation: string;
+  }[];
   date: Date;
 };
-
 export type ReportItemProps = {
   report: TReport;
   sliceIndex?: number;
@@ -23,12 +24,12 @@ export type ReportItemProps = {
   viewMoreLabel?: string;
   onClickViewMore?: (reportId: string) => void;
 };
-
 export const ReportItem: React.FC<ReportItemProps> = props => {
   const { report, sliceIndex, noExplanationLabel, viewMoreLabel, onClickViewMore } = props;
-
-  const textColor = { light: 'grey5', dark: 'grey6' } as const;
-
+  const textColor = {
+    light: 'grey5',
+    dark: 'grey6',
+  } as const;
   return (
     <Card className="shadow-none p-0">
       <Stack
@@ -55,14 +56,10 @@ export const ReportItem: React.FC<ReportItemProps> = props => {
               padding="py-2 px-3"
               customStyle="w-fit rounded-full bg-secondaryLight/30 dark:bg-secondaryDark"
             >
-              <Icon
-                icon={<FlagIcon />}
-                size="sm"
-                customStyle="[&>*]:stroke-secondaryLight dark:[&>*]:stroke-grey2"
-              />
-              <Text variant="footnotes2" color={{ light: 'secondaryLight', dark: 'grey2' }}>
+              <FlagIcon className="h-4 w-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-grey2" />
+              <Typography variant="xs" className="font-medium text-secondaryLight dark:text-grey2">
                 {report.flags.length}
-              </Text>
+              </Typography>
             </Stack>
           }
         />
@@ -72,18 +69,24 @@ export const ReportItem: React.FC<ReportItemProps> = props => {
           <Stack key={id} spacing="gap-y-3">
             <Stack spacing="gap-y-3">
               <Stack direction="row" align="center" justify="between">
-                <Text variant="button-sm" color={textColor}>
+                <Typography variant="xs" bold>
                   Flag #{id + 1}
-                </Text>
-                <Text variant="footnotes2" color={textColor}>
+                </Typography>
+                <Typography variant="xs" className="font-medium">
                   {formatDate(report.date.toISOString(), 'DD MMM YYYY')}
-                </Text>
+                </Typography>
               </Stack>
-              <Text variant="footnotes2" {...(!r.explanation && { color: 'grey7' })}>
+              <Typography
+                variant="xs"
+                {...(!r.explanation && {
+                  color: 'grey7',
+                })}
+                className="font-medium"
+              >
                 {r.explanation.length ? r.explanation : noExplanationLabel}
-              </Text>
+              </Typography>
             </Stack>
-            {id < ar.length - 1 && <Divider />}
+            {id < ar.length - 1 && <Separator />}
           </Stack>
         ))}
         {/* show view more button only if there are more than 2 flags */}

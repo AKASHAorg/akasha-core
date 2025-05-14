@@ -11,15 +11,13 @@ import {
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Input } from '@akashaorg/ui/lib/akasha-components/input';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import DropDown from '@akashaorg/design-system-core/lib/components/Dropdown';
-
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { ButtonType } from '@akashaorg/design-system-components/lib/components/types/common.types';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 export enum FieldName {
   applicationType = 'applicationType',
   name = 'name',
@@ -27,7 +25,6 @@ export enum FieldName {
   license = 'license',
   licenseOther = 'licenseOther',
 }
-
 export enum Licenses {
   MIT = 'MIT',
   GPL = 'GNU General Public License',
@@ -36,7 +33,6 @@ export enum Licenses {
   MPL = 'MPL 2.0',
   OTHER = 'Other',
 }
-
 type ExtensionCreationFormValues = {
   applicationType: AkashaAppApplicationType;
   name: string;
@@ -44,7 +40,6 @@ type ExtensionCreationFormValues = {
   license: Licenses | string;
   licenseOther: string;
 };
-
 export type ExtensionCreationFormProps = {
   extensionNameFieldLabel?: string;
   extensionNamePlaceholderLabel?: string;
@@ -65,7 +60,6 @@ export type ExtensionCreationFormProps = {
     handleClick: (data: ExtensionCreationFormValues) => void;
   };
 };
-
 const ExtensionCreationForm: React.FC<ExtensionCreationFormProps> = ({
   defaultValues = {
     applicationType: AkashaAppApplicationType.App,
@@ -100,14 +94,15 @@ const ExtensionCreationForm: React.FC<ExtensionCreationFormProps> = ({
     clearErrors,
     formState: { errors, dirtyFields },
   } = form;
-  const extensionLicenseValue = useWatch({ control, name: FieldName.license });
-
+  const extensionLicenseValue = useWatch({
+    control,
+    name: FieldName.license,
+  });
   const extensionTypes = [
     AkashaAppApplicationType.App,
     AkashaAppApplicationType.Plugin,
     AkashaAppApplicationType.Widget,
   ];
-
   const extensionLicenses = [
     Licenses.MIT,
     Licenses.GPL,
@@ -116,12 +111,10 @@ const ExtensionCreationForm: React.FC<ExtensionCreationFormProps> = ({
     Licenses.MPL,
     Licenses.OTHER,
   ];
-
   const isFormDirty =
     Object.keys(dirtyFields).includes(FieldName.name) &&
     Object.keys(dirtyFields).includes(FieldName.displayName);
   const isValid = !Object.keys(errors).length;
-
   const onSave = (event: SyntheticEvent) => {
     event.preventDefault();
     const formValues = getValues();
@@ -134,16 +127,16 @@ const ExtensionCreationForm: React.FC<ExtensionCreationFormProps> = ({
       });
     }
   };
-
   const [validatedField, setValidatedField] = useState<FieldName.name>();
   useEffect(() => {
     if (isDuplicateExtProp) {
-      setError(validatedField, { message: `Extension ${validatedField} must be unique!` });
+      setError(validatedField, {
+        message: `Extension ${validatedField} must be unique!`,
+      });
     } else {
       clearErrors(validatedField);
     }
   }, [isDuplicateExtProp, setError, clearErrors, validatedField]);
-
   return (
     <Form {...form}>
       <form onSubmit={onSave} className={`h-full`}>
@@ -168,7 +161,7 @@ const ExtensionCreationForm: React.FC<ExtensionCreationFormProps> = ({
                 </FormItem>
               )}
             />
-            <Divider />
+            <Separator />
             <FormField
               control={control}
               name={FieldName.name}
@@ -190,7 +183,7 @@ const ExtensionCreationForm: React.FC<ExtensionCreationFormProps> = ({
                 </FormItem>
               )}
             />
-            <Divider />
+            <Separator />
             <FormField
               control={control}
               name={FieldName.displayName}
@@ -208,7 +201,7 @@ const ExtensionCreationForm: React.FC<ExtensionCreationFormProps> = ({
                 </FormItem>
               )}
             />
-            <Divider />
+            <Separator />
             <FormField
               control={control}
               name={FieldName.license}
@@ -250,12 +243,12 @@ const ExtensionCreationForm: React.FC<ExtensionCreationFormProps> = ({
               />
             )}
 
-            <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
+            <Typography variant="sm" className="text-grey4 dark:text-grey6 font-light">
               {disclaimerLabel}
-            </Text>
+            </Typography>
           </Stack>
 
-          <Divider />
+          <Separator />
 
           <Stack direction="row" spacing={2} className="ml-auto mt-auto px-4">
             <Button
@@ -279,15 +272,17 @@ const ExtensionCreationForm: React.FC<ExtensionCreationFormProps> = ({
     </Form>
   );
 };
-
 export default ExtensionCreationForm;
-
 const schema = z.object({
   name: z
     .string()
     .trim()
-    .min(6, { message: 'Must be at least 6 characters' })
-    .max(48, { message: 'Must be maximum 48 characters' })
+    .min(6, {
+      message: 'Must be at least 6 characters',
+    })
+    .max(48, {
+      message: 'Must be maximum 48 characters',
+    })
     .refine(
       value => /^[a-zA-Z0-9-_.]+$/.test(value),
       'ID should contain only alphabets, numbers or -_.',
@@ -296,8 +291,14 @@ const schema = z.object({
   displayName: z
     .string()
     .trim()
-    .min(4, { message: 'Must be at least 4 characters' })
-    .max(24, { message: 'Must be maximum 24 characters' }),
+    .min(4, {
+      message: 'Must be at least 4 characters',
+    })
+    .max(24, {
+      message: 'Must be maximum 24 characters',
+    }),
   license: z.string(),
-  licenseOther: z.string().trim().min(3, { message: 'Must be at least 3 characters' }),
+  licenseOther: z.string().trim().min(3, {
+    message: 'Must be at least 3 characters',
+  }),
 });

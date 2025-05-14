@@ -1,9 +1,9 @@
 import React, { Fragment, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import {
   AkashaAppApplicationType,
   AppImageSource,
@@ -26,7 +26,6 @@ import {
   selectAppsReleasesPageInfo,
 } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-releases-query';
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
-
 type ReleasesPageProps = {
   appName: string;
   appId: string;
@@ -36,7 +35,6 @@ type ReleasesPageProps = {
   extensionType: AkashaAppApplicationType;
   releasesCount: number;
 };
-
 export const ReleasesPage = (props: ReleasesPageProps) => {
   const {
     extensionDisplayName,
@@ -48,25 +46,29 @@ export const ReleasesPage = (props: ReleasesPageProps) => {
   } = props;
   const { t } = useTranslation('app-extensions');
   const [expandedRelease, setExpandedRelease] = useState(null);
-
   const releasesReq = useGetAppsReleasesQuery({
     variables: {
       first: Math.min(10, releasesCount),
-      filters: { where: { applicationID: { equalTo: appId } } },
-      sorting: { createdAt: SortOrder.Desc },
+      filters: {
+        where: {
+          applicationID: {
+            equalTo: appId,
+          },
+        },
+      },
+      sorting: {
+        createdAt: SortOrder.Desc,
+      },
     },
   });
-
   const handleReadMoreClick = (releaseId?: string) => () => {
     if (releaseId) {
       setExpandedRelease(releaseId);
     }
   };
-
   const handleLoadMoreReleases = () => {
     const edges = selectAppsReleases(releasesReq.data);
     const pageInfo = selectAppsReleasesPageInfo(releasesReq.data);
-
     if (edges.length < releasesCount && pageInfo.endCursor.length) {
       releasesReq.fetchMore({
         variables: {
@@ -75,21 +77,17 @@ export const ReleasesPage = (props: ReleasesPageProps) => {
       });
     }
   };
-
   const releases = useMemo(() => {
     return releasesReq.data?.akashaAppReleaseIndex.edges || [];
   }, [releasesReq]);
-
   useEffect(() => {
     if (releases && releases.length > 0 && !expandedRelease) {
       setExpandedRelease(releases[0].node?.id);
     }
   }, [expandedRelease, releases]);
-
   const hasErrors = useMemo(() => {
     return releasesReq.networkStatus === NetworkStatus.error;
   }, [releasesReq]);
-
   return (
     <>
       <Card className="p-4">
@@ -103,7 +101,7 @@ export const ReleasesPage = (props: ReleasesPageProps) => {
           />
           {hasErrors && (
             <>
-              <Divider />
+              <Separator />
               <ErrorLoader type="list-not-available" className="border-none bg-transparent">
                 <ErrorLoaderTitle>{t('Loading error')}</ErrorLoaderTitle>
                 <ErrorLoaderDescription>
@@ -114,7 +112,7 @@ export const ReleasesPage = (props: ReleasesPageProps) => {
           )}
           {releasesReq.networkStatus === NetworkStatus.ready && !releases.length && (
             <>
-              <Divider />
+              <Separator />
               <DefaultEmptyCard
                 noBorder={true}
                 assetName="longbeam-notfound"
@@ -139,31 +137,22 @@ export const ReleasesPage = (props: ReleasesPageProps) => {
                 const description = release.node?.meta?.find(
                   m => m.property === 'description',
                 )?.value;
-
                 return (
                   <Stack direction="column">
-                    <Divider />
+                    <Separator />
                     <Stack direction="row" justifyContent="between" className="mt-3 mb-2">
-                      <Text variant="h6">
+                      <Typography variant="h6">
                         {t('Version')} {release.node?.version}
-                      </Text>
-                      <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey6' }}>
+                      </Typography>
+                      <Typography variant="xs" className="font-medium text-grey4 dark:text-grey6">
                         {formatDate(release.node?.createdAt, 'DD MMM YYYY')}
-                      </Text>
+                      </Typography>
                     </Stack>
                     <Stack direction="row" justifyContent="between">
-                      <Text
-                        variant="footnotes2"
-                        customStyle={`${isExpanded ? 'whitespace-pre-line' : 'truncate max-w-[45ch]'}`}
-                        color={
-                          description
-                            ? { light: 'black', dark: 'white' }
-                            : { light: 'grey4', dark: 'grey6' }
-                        }
-                      >
+                      <Typography variant="xs" className="font-medium">
                         {description}
                         {!description && t('This release has no description added')}
-                      </Text>
+                      </Typography>
                       {!isExpanded && description && (
                         <Button variant="link" onClick={handleReadMoreClick(release.node?.id)}>
                           {t('Read More')}

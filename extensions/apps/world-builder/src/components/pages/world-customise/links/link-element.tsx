@@ -1,12 +1,8 @@
 import React from 'react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { SocialLink } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { Link, Trash2 } from 'lucide-react';
+import { Trash2Icon } from 'lucide-react';
 import { Input } from '@akashaorg/ui/lib/akasha-components/input';
-import { Github } from '@akashaorg/ui/lib/custom-icons/github';
-import { Telegram } from '@akashaorg/ui/lib/custom-icons/telegram';
-import { Discord } from '@akashaorg/ui/lib/custom-icons/discord';
-import { X } from '@akashaorg/ui/lib/custom-icons/x';
 import {
   Select,
   SelectContent,
@@ -14,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@akashaorg/ui/lib/components/select';
+import { iconsMap } from '../../main/world-customisation-section';
 
 type LinkElementValue = SocialLink & { _id?: number };
 
@@ -21,14 +18,6 @@ export type LinkElementProps = {
   onDelete: () => void;
   onChange: (value: LinkElementValue) => void;
   value: LinkElementValue;
-};
-
-export const iconsMap = {
-  github: <Github />,
-  telegram: <Telegram />,
-  discord: <Discord />,
-  twitter: <X />,
-  other: <Link />,
 };
 
 export const LinkElement: React.FC<LinkElementProps> = props => {
@@ -67,7 +56,7 @@ export const LinkElement: React.FC<LinkElementProps> = props => {
         />
       </Stack>
       <button onClick={onDelete}>
-        <Trash2 className="text-destructive" />
+        <Trash2Icon className="text-destructive" />
       </button>
     </Stack>
   );

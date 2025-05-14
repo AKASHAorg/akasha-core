@@ -1,7 +1,6 @@
 import React from 'react';
 import Stack from '../Stack';
-import Icon from '../Icon';
-import { CheckIcon } from '@heroicons/react/24/solid';
+import { CheckIcon } from 'lucide-react';
 
 export type StepperProps = {
   length: number;
@@ -36,7 +35,7 @@ const Stepper: React.FC<StepperProps> = props => {
               customStyle={`w-8 h-8 rounded-full ${getRingStyle(index)}`}
             >
               {index < currentStep ? (
-                <Icon icon={<CheckIcon />} solid={true} customStyle="[&>*]:fill-white" />
+                <CheckIcon className="h-5 w-5 [&>*]:fill-white" />
               ) : (
                 <Stack
                   customStyle={`w-4 h-4 rounded-full ${

@@ -1,10 +1,10 @@
 import React from 'react';
 
-import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
+import { IconContainer } from '@akashaorg/ui/lib/akasha-components/icon-container';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text, { TextProps } from '@akashaorg/design-system-core/lib/components/Text';
-import { ChatBubbleLeftRightIcon, HeartIcon, UsersIcon } from '@heroicons/react/24/outline';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
+import { MessagesSquareIcon, HeartIcon, UsersRoundIcon } from 'lucide-react';
 
 type Stat = {
   label: string;
@@ -21,30 +21,24 @@ export type StatsProps = {
 };
 
 const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following }) => {
-  const labelProp: TextProps = {
-    variant: 'footnotes2',
-    as: 'label',
-    weight: 'normal',
-    color: {
-      light: 'grey4',
-      dark: 'grey7',
-    },
+  const labelProp: React.ComponentProps<typeof Typography> = {
+    variant: 'xs',
+    className: 'text-grey4 dark:text-grey7',
   };
 
-  const totalProp: TextProps = {
-    variant: 'button-sm',
-    weight: 'bold',
-    color: {
-      light: 'secondaryLight',
-      dark: 'secondaryDark',
-    },
+  const totalProp: React.ComponentProps<typeof Typography> = {
+    variant: 'xs',
+    bold: true,
+    className: 'text-secondaryLight dark:text-secondaryDark',
   };
+
+  const style = '[&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark';
 
   const stats: (Stat & { icon: React.ReactElement; className?: string })[] = [
-    { ...posts, icon: <ChatBubbleLeftRightIcon /> },
-    { ...interests, icon: <HeartIcon /> },
-    { ...followers, icon: <UsersIcon />, className: 'scale-x-flip' },
-    { ...following, icon: <UsersIcon /> },
+    { ...posts, icon: <MessagesSquareIcon className={style} /> },
+    { ...interests, icon: <HeartIcon className={style} /> },
+    { ...followers, icon: <UsersRoundIcon className={style} />, className: '[&>*]:scale-x-[-1]' },
+    { ...following, icon: <UsersRoundIcon className={style} /> },
   ];
 
   return (
@@ -54,19 +48,18 @@ const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following })
           {stats.map((stat, index) => (
             <button onClick={stat.onClick} key={stat.label + index} disabled={stat.disabled}>
               <Stack alignItems="center" className="group">
-                <AppIcon
-                  placeholderIcon={stat.icon}
+                <IconContainer
                   size="lg"
-                  customStyle={stat.className}
-                  accentColor
-                  hover={!stat.disabled}
-                />
-                <Text id={stat.label} {...labelProp}>
+                  className={`[&_svg]:size-5 border bg-transparent group-hover:[&_*]:stroke-black group-hover:bg-accent ${stat.className ?? ''}`}
+                >
+                  {stat.icon}
+                </IconContainer>
+                <Typography id={stat.label} {...labelProp}>
                   {stat.label}
-                </Text>
-                <Text aria-labelledby={stat.label} {...totalProp}>
+                </Typography>
+                <Typography aria-labelledby={stat.label} {...totalProp}>
                   {stat.total}
-                </Text>
+                </Typography>
               </Stack>
             </button>
           ))}

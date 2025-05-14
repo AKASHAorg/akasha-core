@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useContext, useEffect, useMemo, useState } from 'react';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import {
   AkashaProfile,
   Extension,
@@ -20,8 +20,7 @@ import {
   ProfileDidField,
   ProfileName,
 } from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
-import { CheckIcon, ExclamationTriangleIcon, TrashIcon } from '@heroicons/react/24/outline';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { CheckIcon, Trash2Icon, TriangleAlertIcon } from 'lucide-react';
 import {
   transformSource,
   useAkashaStore,
@@ -30,7 +29,7 @@ import {
   useRootComponentProps,
 } from '@akashaorg/ui-core-hooks';
 import { useTranslation } from 'react-i18next';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import { useNavigate } from '@tanstack/react-router';
 import { AtomContext } from './main-page';
 import { useAtom } from 'jotai';
@@ -40,24 +39,19 @@ import {
   ErrorLoaderDescription,
   ErrorLoaderTitle,
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
-
 export type ExtensionEditContributorsPageProps = {
   extensionId: string;
 };
-
 export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPageProps> = ({
   extensionId,
 }) => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
-
   const { uiEvents } = useRootComponentProps();
   const uiEventsRef = React.useRef(uiEvents);
-
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
-
   const showNotification = React.useCallback(
     (type: NotificationTypes, title: string, description?: string) => {
       uiEventsRef.current.next({
@@ -71,7 +65,6 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
     },
     [],
   );
-
   const formValue = useMemo(() => {
     try {
       return JSON.parse(sessionStorage.getItem(extensionId)) || {};
@@ -88,17 +81,13 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
       showNotification(NotificationTypes.Error, error);
     }
   }, [authenticatedDID, showNotification]);
-
   const extensionData = draftExtensions.find(draftExtension => draftExtension.id === extensionId);
-
   const [showSuggestions, setShowSuggestions] = useState(false);
   const autoCompleteRef = useCloseActions(() => {
     setShowSuggestions(false);
   });
-
   const [searchValue, setSearchValue] = useState('');
   const [addedContributors, setAddedContributors] = useState([]);
-
   const defaultContributorsDIDs = useMemo(() => {
     return formValue.lastCompletedStep > 2 ? formValue?.contributors : extensionData?.contributors;
   }, [extensionData, formValue]);
@@ -119,14 +108,12 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
   const handleGetContributors = (query: string) => {
     setMentionQuery(query);
   };
-
   const handleChange = (ev: ChangeEvent<HTMLInputElement>) => {
     const query = ev.currentTarget.value;
     setSearchValue(query);
     handleGetContributors(query);
     setShowSuggestions(true);
   };
-
   const handleAddContributor = (profile: AkashaProfile) => {
     if (addedContributors?.length < MAX_CONTRIBUTORS) {
       setAddedContributors(prev => {
@@ -137,19 +124,15 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
       setShowSuggestions(false);
     }
   };
-
   const handleRemoveContributor = (profile: AkashaProfile) => {
     setAddedContributors(prev => prev.filter(addedProfile => profile.id !== addedProfile?.id));
   };
-
   const handleNavigateBack = () => {
     navigate({
       to: '/edit-extension/$extensionId/step3',
     });
   };
-
   const [, setForm] = useAtom<FormData>(useContext(AtomContext));
-
   const handleSave = () => {
     setForm(prev => {
       return {
@@ -162,7 +145,6 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
       to: '/edit-extension/$extensionId/step3',
     });
   };
-
   return (
     <Stack className="p-0 max-h-100vh min-h-100vh md:min-h-[566px]">
       <Stack
@@ -172,14 +154,14 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
         alignItems="center"
         className="p-4"
       >
-        <Text variant="h6">{t('Add Contributors')}</Text>
+        <Typography variant="h6">{t('Add Contributors')}</Typography>
       </Stack>
-      <Divider />
+      <Separator />
       <Stack direction="column" spacing={6} className="p-4 overflow-auto grow">
         <Stack spacing={1} direction="column">
-          <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
+          <Typography variant="sm" className="text-grey4 dark:text-grey6 font-light">
             {t('Add anyone who contributed to the creation of this extension.')}
-          </Text>
+          </Typography>
         </Stack>
         <Stack direction="column" justifyContent="center" spacing={2} ref={autoCompleteRef}>
           <SearchBar
@@ -191,18 +173,13 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
           />
           {addedContributors?.length === MAX_CONTRIBUTORS && (
             <Stack direction="row" spacing={2}>
-              <Icon
-                icon={<ExclamationTriangleIcon />}
-                size="sm"
-                customStyle="[&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark"
-              />
-              <Text
-                variant="body2"
-                color={{ light: 'warningLight', dark: 'warningDark' }}
-                weight="light"
+              <TriangleAlertIcon className="h-4 w-4 [&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark" />
+              <Typography
+                variant="sm"
+                className="text-warningLight dark:text-warningDark font-light"
               >
                 {t('You reached the 16 contributors limit.')}
-              </Text>
+              </Typography>
             </Stack>
           )}
           {showSuggestions && searchValue?.length > 1 && (
@@ -210,12 +187,12 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
               <Card className="p-0 absolute max-h-96 w-full overflow-y-auto scrollbar">
                 {contributors?.length === 0 && (
                   <Stack spacing={2} className="p-4">
-                    <Text variant="body2" weight="bold" color={{ light: 'grey4', dark: 'grey6' }}>
+                    <Typography variant="sm" bold className="text-grey4 dark:text-grey6">
                       {t('No matches found.')}
-                    </Text>
-                    <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }}>
+                    </Typography>
+                    <Typography variant="sm" className="text-grey4 dark:text-grey6">
                       {t('To add a user as a contributor, you should follow each other.')}
-                    </Text>
+                    </Typography>
                   </Stack>
                 )}
                 {contributors?.length > 0 && (
@@ -245,7 +222,9 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
                           </ProfileAvatarButton>
                           {addedContributors?.some(
                             contrib => contrib?.did?.id === profile?.did?.id,
-                          ) && <Icon icon={<CheckIcon />} accentColor />}
+                          ) && (
+                            <CheckIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+                          )}
                         </Stack>
                       </button>
                     ))}
@@ -257,9 +236,9 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
         </Stack>
         <Stack spacing={4}>
           <Stack direction="row" justifyContent="between">
-            <Text variant="h6" weight="bold">
+            <Typography variant="h6" bold>
               {t('Extension Contributors')}
-            </Text>
+            </Typography>
             {loading && (
               <Stack alignItems="center" justifyContent="center">
                 <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -277,23 +256,25 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
             )}
             {addedContributors?.length > 0 && (
               <Stack direction="row">
-                <Text
-                  variant="footnotes2"
-                  color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-                  weight="light"
+                <Typography
+                  variant="xs"
+                  className="font-medium text-secondaryLight dark:text-secondaryDark font-light"
                 >
                   {addedContributors.length}
-                </Text>
-                <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
+                </Typography>
+                <Typography
+                  variant="xs"
+                  className="font-medium text-grey4 dark:text-grey6 font-light"
+                >
                   {`/${MAX_CONTRIBUTORS}`}
-                </Text>
+                </Typography>
               </Stack>
             )}
           </Stack>
           {addedContributors?.length === 0 && (
-            <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
+            <Typography variant="sm" className="text-grey4 dark:text-grey6 font-light">
               {t('You haven’t added any contributors yet.')}
-            </Text>
+            </Typography>
           )}
           {addedContributors?.length > 0 && (
             <Stack direction="column" spacing={4}>
@@ -321,12 +302,7 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
                     <ProfileDidField />
                   </ProfileAvatarButton>
                   <button onClick={() => handleRemoveContributor(profile)}>
-                    <Icon
-                      icon={<TrashIcon />}
-                      solid={false}
-                      size="md"
-                      customStyle="[&>*]:fill-errorLight dark:[&>*]:fill-errorDark"
-                    />
+                    <Trash2Icon className="h-5 w-5 [&>*]:fill-errorLight dark:[&>*]:fill-errorDark" />
                   </button>
                 </Stack>
               ))}
@@ -334,7 +310,7 @@ export const ExtensionEditContributorsPage: React.FC<ExtensionEditContributorsPa
           )}
         </Stack>
       </Stack>
-      <Divider />
+      <Separator />
       <Stack direction="row" alignItems="center" justifyContent="end" spacing={4} className="p-4">
         <Button variant="link" onClick={handleNavigateBack}>
           {t('Cancel')}

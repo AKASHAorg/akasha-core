@@ -1,14 +1,12 @@
 import React, { PropsWithChildren } from 'react';
-
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import Text, { TextProps } from '@akashaorg/design-system-core/lib/components/Text';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { PageButtonsProps, PageButtons } from '../PageButtons';
-
 export type PageHeaderProps = PageButtonsProps & {
   label?: string;
-  labelTextVariant?: TextProps['variant'];
+  labelTextVariant?: React.ComponentProps<typeof Typography>['variant'];
   customStyle?: string;
 };
 
@@ -27,18 +25,17 @@ export const PageHeader: React.FC<PropsWithChildren<PageHeaderProps>> = props =>
     children,
     customStyle,
   } = props;
-
   return (
     <Card className={`p-0 mb-4 ${customStyle}`}>
       {label && (
         <>
           <Stack className="px-4 py-6">
-            <Text variant={labelTextVariant} align="center">
+            <Typography variant={labelTextVariant} className="text-center">
               {label}
-            </Text>
+            </Typography>
           </Stack>
 
-          <Divider />
+          <Separator />
         </>
       )}
 

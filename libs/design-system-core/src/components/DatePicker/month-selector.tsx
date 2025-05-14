@@ -1,6 +1,5 @@
 import React from 'react';
-import Icon from '../Icon';
-import { ChevronLeftIcon, ChevronRightIcon } from '../Icon/hero-icons-outline';
+import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import { MONTHS_IN_A_YEAR } from './calendarHelpers';
 import Button from '../Button';
 import Text from '../Text';
@@ -45,7 +44,7 @@ const MonthSelector: React.FC<MonthSelectorProps> = ({
       <div className={'flex justify-between items-center'}>
         <div>
           <Button onClick={goToPreviousYear} plain={true}>
-            <Icon icon={<ChevronLeftIcon />} accentColor={true} />
+            <ChevronLeftIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
           </Button>
         </div>
         <div>
@@ -55,7 +54,7 @@ const MonthSelector: React.FC<MonthSelectorProps> = ({
         </div>
         <div>
           <Button onClick={goToNextYear} plain={true}>
-            <Icon icon={<ChevronRightIcon />} accentColor={true} />
+            <ChevronRightIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
           </Button>
         </div>
       </div>

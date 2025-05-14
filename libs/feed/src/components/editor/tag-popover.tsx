@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Tag } from '@akashaorg/typings/lib/ui';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Portal } from './helpers';
 
 export interface ITagPopover {
@@ -35,10 +35,8 @@ export const TagPopover = React.forwardRef<HTMLDivElement, ITagPopover>((props, 
                 i === currentIndex && 'bg-grey3'
               }`}
             >
-              <Text>{`#${value.name}`}</Text>
-              <Text customStyle={'text-sm'} variant={'subtitle1'}>
-                {`${value.totalPosts} ${postsLabel}`}
-              </Text>
+              <Typography>{`#${value.name}`}</Typography>
+              <Typography className="text-sm font-light">{`${value.totalPosts} ${postsLabel}`}</Typography>
             </div>
           </button>
         ))}

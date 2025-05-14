@@ -1,13 +1,11 @@
 import React, { Fragment, PropsWithChildren } from 'react';
-
 import { Dialog, Transition } from '@headlessui/react';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 
 import Button from '../Button';
 import { ButtonProps } from '../Button/types';
 import Card from '../Card';
-import Divider from '../Divider';
-import Icon from '../Icon';
-import { XMarkIcon } from '../Icon/hero-icons-outline';
+import { XIcon } from 'lucide-react';
 import Stack from '../Stack';
 import Text, { TextProps } from '../Text';
 
@@ -92,16 +90,12 @@ const Modal: React.FC<ModalProps> = ({
                           {title.label}
                         </Text>
                         <Button onClick={onClose} plain customStyle="absolute top-4 right-4">
-                          <Icon
-                            icon={<XMarkIcon />}
-                            size="md"
-                            customStyle="[&>*]:stroke-grey4 dark:[&>*]:stroke-grey7"
-                          />
+                          <XIcon className="h-5 w-5 [&>*]:stroke-grey4 dark:[&>*]:stroke-grey7" />
                         </Button>
                       </Dialog.Title>
                     )}
 
-                    {showDivider && <Divider />}
+                    {showDivider && <Separator />}
 
                     <Stack
                       align="center"

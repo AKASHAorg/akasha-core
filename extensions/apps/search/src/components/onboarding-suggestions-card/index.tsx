@@ -2,8 +2,8 @@ import React from 'react';
 import { Tag, type Image, Profile } from '@akashaorg/typings/lib/ui';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
-import { UserCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { UserCircleIcon } from 'lucide-react';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { TagButton } from './tag-button';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import {
@@ -75,7 +75,7 @@ const OnboardingSuggestionsCard: React.FC<OnboardingSuggestionsCardProps> = prop
     <Card className="shadow-none">
       <Stack spacing={4}>
         <Stack spacing={4}>
-          <Text variant="h5">{topicsLabel}</Text>
+          <Typography variant="h5">{topicsLabel}</Typography>
 
           <Stack direction="row" spacing={2} className="flex-wrap">
             {tags?.map((tag, index) => (
@@ -90,7 +90,7 @@ const OnboardingSuggestionsCard: React.FC<OnboardingSuggestionsCardProps> = prop
           </Stack>
         </Stack>
         <Stack spacing={4}>
-          <Text variant="h5">{peopleLabel}</Text>
+          <Typography variant="h5">{peopleLabel}</Typography>
 
           {profiles?.map((profile, index) => (
             <Stack key={index} direction="row" alignItems="center" justifyContent="between">
@@ -117,7 +117,9 @@ const OnboardingSuggestionsCard: React.FC<OnboardingSuggestionsCardProps> = prop
                   onClickInactive={() => onClickFollow(profile?.did?.id)}
                   onClickActive={() => onClickUnfollow(profile?.did?.id)}
                   active={followedProfiles?.includes(profile?.did?.id)}
-                  icon={<UserCircleIcon />}
+                  icon={
+                    <UserCircleIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+                  }
                 />
               )}
             </Stack>

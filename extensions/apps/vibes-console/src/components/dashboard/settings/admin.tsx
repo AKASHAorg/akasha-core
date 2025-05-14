@@ -1,18 +1,16 @@
 import React from 'react';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import {
   PageHeader,
   PageHeaderProps,
 } from '@akashaorg/design-system-components/lib/components/PageHeader';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 export type TSection = {
   title: string;
   description?: string;
 };
-
 export type AdminSettingsProps = PageHeaderProps & {
   changeLimitLabel: string;
   currentNumberLabel: string;
@@ -23,7 +21,6 @@ export type AdminSettingsProps = PageHeaderProps & {
   };
   onChangeButtonClick: () => void;
 };
-
 export const AdminSettings: React.FC<AdminSettingsProps> = props => {
   const {
     sections: { one, two, three },
@@ -31,44 +28,43 @@ export const AdminSettings: React.FC<AdminSettingsProps> = props => {
     changeLimitLabel,
     onChangeButtonClick,
   } = props;
-
   return (
     <PageHeader {...props}>
       <Stack spacing="gap-y-4" customStyle="mb-8">
         <Stack direction="row" align="center" justify="between">
-          <Text variant="button-md" color={{ light: 'black', dark: 'grey6' }}>
+          <Typography variant="sm" bold className="text-black dark:text-grey6">
             {one.title}
-          </Text>
-          <Text variant="footnotes2" weight="normal" color={{ light: 'grey4', dark: 'grey7' }}>
+          </Typography>
+          <Typography variant="xs" className="font-medium font-normal text-grey4 dark:text-grey7">
             01-Jan-2015
-          </Text>
+          </Typography>
         </Stack>
-        <Divider />
+        <Separator />
         <Stack direction="row" align="start" justify="between">
           <Stack spacing="gap-y-3">
-            <Text variant="button-md" color={{ light: 'black', dark: 'grey6' }}>
+            <Typography variant="sm" bold className="text-black dark:text-grey6">
               {two.title}
-            </Text>
-            <Text variant="footnotes2" weight="normal">
+            </Typography>
+            <Typography variant="xs" className="font-medium font-normal">
               {two.description}
-            </Text>
-            <Text variant="button-sm" color={{ light: 'grey4', dark: 'grey7' }}>
+            </Typography>
+            <Typography variant="xs" bold className="text-grey4 dark:text-grey7">
               {currentNumberLabel}:{' '}
-              <Text as="span" variant="footnotes2">
+              <Typography variant="xs" className="font-medium">
                 65
-              </Text>
-            </Text>
+              </Typography>
+            </Typography>
           </Stack>
           <Button variant="text" size="md" label={changeLimitLabel} onClick={onChangeButtonClick} />
         </Stack>
-        <Divider />
+        <Separator />
         <Stack>
-          <Text variant="button-md" color={{ light: 'black', dark: 'grey6' }}>
+          <Typography variant="sm" bold className="text-black dark:text-grey6">
             {three.title}
-          </Text>
-          <Text variant="footnotes2" weight="normal">
+          </Typography>
+          <Typography variant="xs" className="font-medium font-normal">
             {three.description}
-          </Text>
+          </Typography>
         </Stack>
       </Stack>
     </PageHeader>

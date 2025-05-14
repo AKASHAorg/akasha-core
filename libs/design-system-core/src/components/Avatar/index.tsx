@@ -1,8 +1,7 @@
 import React from 'react';
 import { type Image } from '@akashaorg/typings/lib/ui';
 import Card from '../Card';
-import { EyeSlashIcon } from '../Icon/hero-icons-outline';
-import Icon from '../Icon';
+import { EyeOffIcon } from 'lucide-react';
 import Link from '../Link';
 import Stack from '../Stack';
 import AvatarImage from './avatar-image';
@@ -79,10 +78,7 @@ const AvatarContent: React.FC<AvatarContentProps> = props => {
     <Card dataTestId={dataTestId} type="plain" onClick={onClick}>
       <Stack direction="row" align="center" justify="center" customStyle={containerStyle}>
         {isNSFW && (
-          <Icon
-            icon={<EyeSlashIcon />}
-            customStyle="[&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark"
-          />
+          <EyeOffIcon className="h-5 w-5 [&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark" />
         )}
         {!isNSFW && (
           <>

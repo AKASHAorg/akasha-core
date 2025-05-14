@@ -19,7 +19,7 @@ import {
   Twitter,
 } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import ListSidebarApps from './list-sidebar-apps';
 import SidebarCTACard from './cta-card';
 import SidebarHeader from './sidebar-header';
@@ -33,19 +33,21 @@ const SidebarComponent: React.FC<unknown> = () => {
     worldConfig: { defaultApps, socialLinks },
     getCorePlugins,
   } = useRootComponentProps();
-
   const {
     data: { authenticatedDID, isAuthenticating },
     authenticationStore,
   } = useAkashaStore();
-
   const { t } = useTranslation('ui-widget-sidebar');
   const routing = getCorePlugins().routing;
   const routeData = useSyncExternalStore(routing.subscribe, routing.getSnapshot);
   const [activeOption, setActiveOption] = useState<IMenuItem | null>(null);
-  const [clickedOptions, setClickedOptions] = useState<{ name: string; route: IMenuItem }[]>([]);
+  const [clickedOptions, setClickedOptions] = useState<
+    {
+      name: string;
+      route: IMenuItem;
+    }[]
+  >([]);
   const isLoggedIn = !!authenticatedDID;
-
   const { activeAccordionId, setActiveAccordionId, handleAccordionClick } = useAccordion();
   const [dismissed, dismissCard] = useDismissedCard('@akashaorg/ui-widget-sidebar_cta-card');
   const { setOpen, openMobile, setOpenMobile, toggleSidebar, isMobile } = Shadcn.useSidebar();
@@ -102,18 +104,15 @@ const SidebarComponent: React.FC<unknown> = () => {
       return 0;
     });
   }, [defaultApps, routeData]);
-
   const userInstalledApps = useMemo(() => {
     return routeData.byArea[MenuItemAreaType.UserAppArea];
   }, [routeData]);
-
   const handleNavigation = (appName: string, route: string) => {
     routing?.navigateTo({
       appName,
       getNavigationUrl: () => route,
     });
   };
-
   const handleProfileAvatarClick = (id: string) => {
     if (!id) {
       return;
@@ -122,45 +121,37 @@ const SidebarComponent: React.FC<unknown> = () => {
       appName: '@akashaorg/app-profile',
       getNavigationUrl: routes => `${routes.rootRoute}/${id}`,
     });
-
     if (isMobile) {
       handleSidebarClose();
     }
   };
-
   const handleClickExplore = () => {
     routing?.navigateTo({
       appName: '@akashaorg/app-extensions',
       getNavigationUrl: routes => routes.explore,
     });
-
     if (isMobile) {
       handleSidebarClose();
     }
   };
-
   const handleSidebarClose = () => {
     // emit HideSidebar event to trigger corresponding action in associated widgets
     uiEvents.next({
       event: EventTypes.HideSidebar,
     });
   };
-
   function handleLoginClick() {
     handleNavigation('@akashaorg/app-auth-ewa', '/');
     if (isMobile) {
       handleSidebarClose();
     }
   }
-
   function handleLogout() {
     authenticationStore.logout();
   }
-
   const handleLogoutClick = () => {
     handleLogout();
   };
-
   const handleAppIconClick = (menuItem: IMenuItem) => {
     if (menuItem.subRoutes && menuItem.subRoutes.length === 0) {
       setActiveOption(null);
@@ -170,11 +161,13 @@ const SidebarComponent: React.FC<unknown> = () => {
       }
     }
   };
-
   const handleOptionClick = (menuItem: IMenuItem, subrouteMenuItem: IMenuItem) => {
     setClickedOptions(oldClickedOptions => [
       ...oldClickedOptions,
-      { name: menuItem.name, route: subrouteMenuItem },
+      {
+        name: menuItem.name,
+        route: subrouteMenuItem,
+      },
     ]);
     setActiveOption(subrouteMenuItem);
     handleNavigation(menuItem.name, subrouteMenuItem.route);
@@ -182,31 +175,46 @@ const SidebarComponent: React.FC<unknown> = () => {
       handleSidebarClose();
     }
   };
-
   const handleBackNavEvent = () => {
     const matchedRoute = clickedOptions.find(option =>
       location.pathname.includes(`${option.name}${option.route?.route}`),
     );
-
     if (matchedRoute) setActiveOption(matchedRoute.route);
     else setActiveOption(null);
   };
-
   useEffect(() => {
     window.addEventListener('popstate', handleBackNavEvent);
     return () => window.removeEventListener('popstate', handleBackNavEvent);
   });
 
+  const outlineStyle = 'h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark';
+  const solidStyle = 'h-5 w-5 [&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark';
+
   /**
    * this assigns the corresponding icons to the social links from root components
    */
   const modSocialLinks = socialLinks?.map(el => {
-    if (el.icon === 'Github') return { ...el, icon: <Github /> };
-    if (el.icon === 'Discord') return { ...el, icon: <Discord /> };
-    if (el.icon === 'Telegram') return { ...el, icon: <Telegram /> };
-    if (el.icon === 'Twitter') return { ...el, icon: <Twitter /> };
+    if (el.icon === 'Github')
+      return {
+        ...el,
+        icon: <Github className={outlineStyle} />,
+      };
+    if (el.icon === 'Discord')
+      return {
+        ...el,
+        icon: <Discord className={solidStyle} />,
+      };
+    if (el.icon === 'Telegram')
+      return {
+        ...el,
+        icon: <Telegram className={solidStyle} />,
+      };
+    if (el.icon === 'Twitter')
+      return {
+        ...el,
+        icon: <Twitter className={solidStyle} />,
+      };
   });
-
   return (
     <ErrorBoundary
       errorObj={{
@@ -271,7 +279,7 @@ const SidebarComponent: React.FC<unknown> = () => {
             )}
             {modSocialLinks?.length > 0 && (
               <Stack className="px-8 py-4 border-t-1 border-grey9 dark:border-grey3">
-                <Text variant="footnotes2">{t('Get in touch')}</Text>
+                <Typography variant="p">{t('Get in touch')}</Typography>
                 <Stack direction="row" spacing={4} className="w-fit h-fit mt-6">
                   {modSocialLinks?.map((socialLink, idx) => (
                     <Link key={idx} to={socialLink.link} target="_blank">

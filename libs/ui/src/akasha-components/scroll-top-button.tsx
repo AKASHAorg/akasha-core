@@ -1,8 +1,6 @@
 import * as React from 'react';
-
-import Icon from '../Icon';
-import { ArrowUpIcon } from '../Icon/hero-icons-outline';
-import { cn } from '@akashaorg/ui/lib/library/utils';
+import { MoveUpIcon } from 'lucide-react';
+import { cn } from '../library/utils';
 
 export type ScrollTopButtonProps = {
   onClick: () => void;
@@ -32,7 +30,7 @@ const ScrollTopButton = React.forwardRef<HTMLDivElement, ScrollTopButtonProps>(
           )}
         >
           <div ref={ref}>
-            <Icon icon={<ArrowUpIcon />} accentColor={true} />
+            <MoveUpIcon className="h-4 w-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
           </div>
         </button>
       )
@@ -40,4 +38,4 @@ const ScrollTopButton = React.forwardRef<HTMLDivElement, ScrollTopButtonProps>(
   },
 );
 
-export default ScrollTopButton;
+export { ScrollTopButton };

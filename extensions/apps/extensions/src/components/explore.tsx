@@ -1,9 +1,8 @@
 import React from 'react';
 import AppList from './app-list';
-
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import ExtensionCard, { ExtensionCardProps } from '../components/extension-card';
 import { ReactNode } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
@@ -21,7 +20,6 @@ export type TExploreProps = {
   };
   onViewAllClick: () => void;
 };
-
 export const Explore: React.FC<TExploreProps> = props => {
   const {
     titleLabel,
@@ -32,10 +30,9 @@ export const Explore: React.FC<TExploreProps> = props => {
     onViewAllClick,
   } = props;
   const { t } = useTranslation('app-extensions');
-
   return (
     <Stack spacing={4} className="mb-2">
-      <Text variant="h5">{titleLabel}</Text>
+      <Typography variant="h5">{titleLabel}</Typography>
       {popularExtensions?.length > 0 && (
         <ExtensionCard
           coverImageSrc={popularExtensions[0]?.coverImageSrc}
@@ -53,7 +50,7 @@ export const Explore: React.FC<TExploreProps> = props => {
       {popularExtensions?.length > 1 && (
         <Stack spacing={4}>
           <Stack direction="row" alignItems="center" spacing={2}>
-            <Text variant="h6">{popularExtensionsLabel}</Text>
+            <Typography variant="h6">{popularExtensionsLabel}</Typography>
             <Button variant="link" onClick={onViewAllClick} className="ml-auto">
               {viewAllLabel}
             </Button>
@@ -63,8 +60,8 @@ export const Explore: React.FC<TExploreProps> = props => {
       )}
       <Card className="p-4">
         <Stack spacing={3}>
-          <Text variant="h6">{cta.title}</Text>
-          <Text variant="body2">{cta.description}</Text>
+          <Typography variant="h6">{cta.title}</Typography>
+          <Typography variant="sm">{cta.description}</Typography>
           {cta.action}
         </Stack>
       </Card>

@@ -1,16 +1,13 @@
 import React from 'react';
+import { CheckIcon, TriangleAlertIcon, Loader2 } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-import { ArrowPathIcon, CheckIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-
 export enum BlockCreationStatus {
   PENDING,
   ERROR,
   SUCCESS,
 }
-
 export interface IBlockStatusToolbar {
   creatingBlockLabel?: string;
   successLabel?: string;
@@ -40,7 +37,6 @@ const BlockStatusToolbar: React.FC<IBlockStatusToolbar> = props => {
     blockCreationStatus,
     handleRetry,
   } = props;
-
   if (blockCreationStatus === BlockCreationStatus.PENDING) {
     return (
       <Stack direction="row" alignItems="center" spacing={2}>
@@ -49,9 +45,9 @@ const BlockStatusToolbar: React.FC<IBlockStatusToolbar> = props => {
           justifyContent="center"
           className="h-8 w-8 group relative rounded-full bg-grey9 dark:bg-grey5"
         >
-          <Icon size="sm" icon={<ArrowPathIcon />} rotateAnimation={true} />
+          <Loader2 className="h-4 w-4 animate-spin" />
         </Stack>
-        <Text>{creatingBlockLabel}</Text>
+        <Typography>{creatingBlockLabel}</Typography>
       </Stack>
     );
   } else if (blockCreationStatus === BlockCreationStatus.SUCCESS) {
@@ -62,9 +58,9 @@ const BlockStatusToolbar: React.FC<IBlockStatusToolbar> = props => {
           justifyContent="center"
           className="h-8 w-8 group relative rounded-full bg-success/30"
         >
-          <Icon size="sm" icon={<CheckIcon />} customStyle={'[&>*]:stroke-stroke'} />
+          <CheckIcon className="h-4 w-4 [&>*]:stroke-stroke" />
         </Stack>
-        <Text color={{ light: 'success', dark: 'success' }}>{successLabel}</Text>
+        <Typography className="text-success dark:text-success">{successLabel}</Typography>
       </Stack>
     );
   } else if (blockCreationStatus === BlockCreationStatus.ERROR) {
@@ -75,13 +71,9 @@ const BlockStatusToolbar: React.FC<IBlockStatusToolbar> = props => {
           justifyContent="center"
           className="h-8 w-8 group relative rounded-full bg-errorLight/30 dark:bg-errorDark/30"
         >
-          <Icon
-            size="sm"
-            icon={<ExclamationTriangleIcon />}
-            customStyle={'[&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark'}
-          />
+          <TriangleAlertIcon className="h-4 w-4 [&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark" />
         </Stack>
-        <Text color={{ light: 'errorLight', dark: 'errorDark' }}>{errorLabel}</Text>
+        <Typography className="text-errorLight dark:text-errorDark">{errorLabel}</Typography>
         {!!handleRetry && (
           <Button variant="link" onClick={handleRetry}>
             {retryLabel}
@@ -91,5 +83,4 @@ const BlockStatusToolbar: React.FC<IBlockStatusToolbar> = props => {
     );
   }
 };
-
 export default BlockStatusToolbar;

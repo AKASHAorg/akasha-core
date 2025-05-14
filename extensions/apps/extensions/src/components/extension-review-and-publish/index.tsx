@@ -1,30 +1,34 @@
 import React, { ReactElement, useMemo } from 'react';
-
-import { CheckCircleIcon } from '@heroicons/react/24/solid';
-import Accordion from '@akashaorg/design-system-core/lib/components/Accordion';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@akashaorg/ui/lib/components/accordion';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import ExtensionIcon from '@akashaorg/design-system-core/lib/components/ExtensionIcon';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Label from '@akashaorg/design-system-core/lib/components/Label';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import Section from './section';
 import { AppInfoPill } from '../app-info/info-pill';
 import ExtensionImageGallery from '../extension-image-gallery';
 import { Extension, Image } from '@akashaorg/typings/lib/ui';
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
 import { getImageFromSeed } from '@akashaorg/design-system-core/lib/utils';
-import { XCircleIcon } from '@heroicons/react/24/outline';
+import { CheckCircleIcon, XCircleIcon } from 'lucide-react';
 import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
-
 export type ExtensionReviewAndPublishProps = {
   extensionData: Extension;
   title: string;
-  subtitle: { part1: string; part2: string };
+  subtitle: {
+    part1: string;
+    part2: string;
+  };
   extensionNameLabel: string;
   extensionDisplayNameLabel: string;
   nsfwLabel: string;
@@ -46,13 +50,15 @@ export type ExtensionReviewAndPublishProps = {
   isDuplicateExtName?: boolean;
   contributorsUi: ReactElement;
   needToMakeChangesLabel: string;
-  editExtension: { handleClick: () => void; label };
+  editExtension: {
+    handleClick: () => void;
+    label;
+  };
   onViewGalleryClick?: () => void;
   onClickCancel: () => void;
   onClickSubmit: () => void;
   transformSource: (src: Image) => Image;
 };
-
 const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = props => {
   const {
     extensionData,
@@ -84,14 +90,10 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
     onClickSubmit,
     transformSource,
   } = props;
-
-  const [activeAccordionId, setActiveAccordionId] = React.useState(null);
-
   const transformedCoverImage = transformSource(extensionData?.coverImage);
   const seed = getImageFromSeed(extensionData?.id, 3);
   const coverImageFallback = `${publicImagePath}/extension-cover-desktop-${seed}.webp`;
   const backgroundUrl = transformedCoverImage?.src ?? coverImageFallback;
-
   const disablePublish = useMemo(
     () =>
       !extensionData?.applicationType ||
@@ -104,48 +106,35 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
     [extensionData, isDuplicateExtName],
   );
 
-  const onAccordionClick = accordionId => {
-    if (activeAccordionId === accordionId) {
-      setActiveAccordionId(null);
-    } else {
-      setActiveAccordionId(accordionId);
-    }
-  };
-
   const getAccordionTitleNode = (title: string, fieldHasData: boolean, isRequired = true) => {
     return (
       <Stack direction="row" spacing={1} alignItems="center">
-        <Icon
-          icon={fieldHasData ? <CheckCircleIcon /> : <XCircleIcon />}
-          solid={fieldHasData}
-          customStyle={
-            fieldHasData
-              ? '[&>*]:fill-success'
-              : '[&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark'
-          }
-        />
+        {fieldHasData ? (
+          <CheckCircleIcon className="h-5 w-5 [&>*]:fill-success" />
+        ) : (
+          <XCircleIcon className="h-5 w-5 [&>*]:stroke-warningLight dark:[&>*]:stroke-warningDark" />
+        )}
         <Label required={isRequired}>{title}</Label>
       </Stack>
     );
   };
-
   const galleryImagesWithSource = useMemo(
     () => extensionData?.gallery?.map(img => transformSource(img)) || [],
     [extensionData?.gallery, transformSource],
   );
-
   const asteriskStyle = `-top-0.5 left-1 text-base text-errorLight dark:text-errorDark`;
-
   return (
     <>
       <Stack spacing={4} className="p-4 mb-4 w-full">
-        <Text as="span" variant="body2" color={{ light: 'grey4', dark: 'grey6' }}>
+        <Typography variant="sm" className="text-grey4 dark:text-grey6">
           {subtitle.part1} <span className={asteriskStyle}>*</span> {subtitle.part2}
-        </Text>
+        </Typography>
 
         <Stack spacing={3} className="w-full">
           <Stack
-            style={cssVars({ '--background-url': `url('${backgroundUrl}')` })}
+            style={cssVars({
+              '--background-url': `url('${backgroundUrl}')`,
+            })}
             className={`relative h-24 rounded-2xl  bg-center bg-no-repeat bg-cover bg-(image:--background-url)`}
           >
             <AppAvatar
@@ -158,166 +147,176 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
 
           <AppInfoPill customStyle="w-fit self-end bg-tertiaryLight dark:bg-tertiaryDark">
             <ExtensionIcon type={extensionData?.applicationType} />
-            <Text variant="footnotes2" color={{ light: 'secondaryLight', dark: 'white' }}>
+            <Typography variant="xs" className="font-medium text-secondaryLight dark:text-white">
               {extensionData?.applicationType}
-            </Text>
+            </Typography>
           </AppInfoPill>
         </Stack>
 
         <Section title={extensionNameLabel} required>
-          <Text variant="body2" truncate>
+          <Typography variant="sm" className="truncate">
             {extensionData?.name}
-          </Text>
+          </Typography>
           {isDuplicateExtName && (
-            <Text variant="body2" color={{ light: 'errorLight', dark: 'errorDark' }}>
+            <Typography variant="sm" className="text-errorLight dark:text-errorDark">
               {duplicateExtNameErrLabel}
-            </Text>
+            </Typography>
           )}
         </Section>
 
         <Section title={extensionDisplayNameLabel} required>
-          <Text variant="body2" truncate>
+          <Typography variant="sm" className="truncate">
             {extensionData?.displayName}
-          </Text>
+          </Typography>
         </Section>
 
         <Section title={nsfwLabel} required hasToggle isToggleChecked={extensionData?.nsfw}>
-          <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }}>
+          <Typography variant="sm" className="text-grey4 dark:text-grey6">
             {nsfwDescription}
-          </Text>
+          </Typography>
         </Section>
 
         {/* wrap each accordion in a Stack to guard against the main wrapper's spacing */}
         <Stack spacing={3}>
-          <Accordion
-            accordionId={descriptionLabel}
-            open={descriptionLabel === activeAccordionId}
-            titleNode={getAccordionTitleNode(descriptionLabel, !!extensionData?.description)}
-            contentNode={
-              <Text variant="body2" breakWord>
-                {extensionData?.description}
-              </Text>
-            }
-            handleClick={extensionData?.description ? onAccordionClick : () => {}}
-          />
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value={descriptionLabel} disabled={!extensionData?.description}>
+              <AccordionTrigger className="hover:no-underline py-2">
+                {getAccordionTitleNode(descriptionLabel, !!extensionData?.description)}
+              </AccordionTrigger>
+              <AccordionContent>
+                <Typography variant="sm" className="break-all">
+                  {extensionData?.description}
+                </Typography>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </Stack>
-        <Divider />
+        <Separator />
 
         <Stack spacing={3}>
-          <Accordion
-            accordionId={galleryLabel}
-            open={galleryLabel === activeAccordionId}
-            titleNode={getAccordionTitleNode(
-              galleryLabel,
-              galleryImagesWithSource?.length > 0,
-              false,
-            )}
-            contentNode={
-              <Stack spacing={3}>
-                <ExtensionImageGallery
-                  imageNotLoadedLabel={imageNotLoadedLabel}
-                  images={galleryImagesWithSource?.slice(0, 3).map((image, idx) => ({
-                    src: image?.src,
-                    size: { width: image?.width, height: image?.height },
-                    name: image?.src + idx,
-                  }))}
-                  showOverlay={false}
-                  toggleOverlay={() => ({})}
-                />
-                <Stack direction="row" alignItems="center" justifyContent="between">
-                  <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey7' }}>
-                    {`${galleryImagesWithSource?.length} ${imageUploadedLabel}`}
-                  </Text>
-                  <Button variant="link" onClick={onViewGalleryClick}>
-                    {viewAllLabel}
-                  </Button>
-                </Stack>
-              </Stack>
-            }
-            handleClick={galleryImagesWithSource?.length > 0 ? onAccordionClick : () => {}}
-          />
-        </Stack>
-        <Divider />
-
-        <Stack spacing={3}>
-          <Accordion
-            accordionId={usefulLinksLabel}
-            open={usefulLinksLabel === activeAccordionId}
-            titleNode={getAccordionTitleNode(
-              usefulLinksLabel,
-              extensionData?.links?.length > 0,
-              false,
-            )}
-            contentNode={
-              <Stack spacing={3}>
-                {extensionData?.links?.map((link, index) => (
-                  <Stack key={index}>
-                    <Text variant="button-md">{link.label}</Text>
-                    <Link to={link.href} target="_blank">
-                      <Text
-                        variant="body2"
-                        color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-                      >
-                        {link.href}
-                      </Text>
-                    </Link>
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value={galleryLabel} disabled={!galleryImagesWithSource?.length}>
+              <AccordionTrigger className="hover:no-underline py-2">
+                {getAccordionTitleNode(galleryLabel, galleryImagesWithSource?.length > 0, false)}
+              </AccordionTrigger>
+              <AccordionContent>
+                <Stack spacing={3}>
+                  <ExtensionImageGallery
+                    imageNotLoadedLabel={imageNotLoadedLabel}
+                    images={galleryImagesWithSource?.slice(0, 3).map((image, idx) => ({
+                      src: image?.src,
+                      size: {
+                        width: image?.width,
+                        height: image?.height,
+                      },
+                      name: image?.src + idx,
+                    }))}
+                    showOverlay={false}
+                    toggleOverlay={() => ({})}
+                  />
+                  <Stack direction="row" alignItems="center" justifyContent="between">
+                    <Typography variant="xs" className="font-medium text-grey4 dark:text-grey7">
+                      {`${galleryImagesWithSource?.length} ${imageUploadedLabel}`}
+                    </Typography>
+                    <Button variant="link" onClick={onViewGalleryClick}>
+                      {viewAllLabel}
+                    </Button>
                   </Stack>
-                ))}
-              </Stack>
-            }
-            handleClick={extensionData?.links?.length > 0 ? onAccordionClick : () => {}}
-          />
+                </Stack>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </Stack>
-        <Divider />
+        <Separator />
 
         <Stack spacing={3}>
-          <Accordion
-            accordionId={licenseLabel}
-            open={licenseLabel === activeAccordionId}
-            titleNode={getAccordionTitleNode(licenseLabel, !!extensionData?.license)}
-            contentNode={
-              <Stack>
-                <Text variant="button-md">{extensionData?.license}</Text>
-              </Stack>
-            }
-            handleClick={extensionData?.license ? onAccordionClick : () => {}}
-          />
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value={usefulLinksLabel} disabled={!extensionData?.links?.length}>
+              <AccordionTrigger className="hover:no-underline py-2">
+                {getAccordionTitleNode(usefulLinksLabel, extensionData?.links?.length > 0, false)}
+              </AccordionTrigger>
+              <AccordionContent>
+                <Stack spacing={3}>
+                  {extensionData?.links?.map((link, index) => (
+                    <Stack key={index}>
+                      <Typography variant="sm" bold>
+                        {link.label}
+                      </Typography>
+                      <Link to={link.href} target="_blank">
+                        <Typography
+                          variant="sm"
+                          className="text-secondaryLight dark:text-secondaryDark"
+                        >
+                          {link.href}
+                        </Typography>
+                      </Link>
+                    </Stack>
+                  ))}
+                </Stack>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </Stack>
-        <Divider />
+        <Separator />
 
         <Stack spacing={3}>
-          <Accordion
-            accordionId={contributorsLabel}
-            open={contributorsLabel === activeAccordionId}
-            titleNode={getAccordionTitleNode(
-              contributorsLabel,
-              extensionData?.contributors?.length > 0,
-              false,
-            )}
-            contentNode={contributorsUi}
-            handleClick={extensionData?.contributors?.length > 0 ? onAccordionClick : () => {}}
-          />
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value={licenseLabel} disabled={!extensionData?.license}>
+              <AccordionTrigger className="hover:no-underline py-2">
+                {getAccordionTitleNode(licenseLabel, !!extensionData?.license)}
+              </AccordionTrigger>
+              <AccordionContent>
+                <Stack>
+                  <Typography variant="sm" bold>
+                    {extensionData?.license}
+                  </Typography>
+                </Stack>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </Stack>
-        <Divider />
+        <Separator />
 
         <Stack spacing={3}>
-          <Accordion
-            accordionId={tagsLabel}
-            open={tagsLabel === activeAccordionId}
-            titleNode={getAccordionTitleNode(tagsLabel, extensionData?.keywords?.length > 0)}
-            contentNode={
-              <Stack direction="row" spacing={2} className="flex-wrap">
-                {extensionData?.keywords?.map((tag, idx) => (
-                  <Pill key={tag + idx} label={tag} type="action" />
-                ))}
-              </Stack>
-            }
-            handleClick={extensionData?.keywords?.length > 0 ? onAccordionClick : () => {}}
-          />
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem
+              value={contributorsLabel}
+              disabled={!extensionData?.contributors?.length}
+            >
+              <AccordionTrigger className="hover:no-underline py-2">
+                {getAccordionTitleNode(
+                  contributorsLabel,
+                  extensionData?.contributors?.length > 0,
+                  false,
+                )}
+              </AccordionTrigger>
+              <AccordionContent>{contributorsUi}</AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </Stack>
+        <Separator />
+
+        <Stack spacing={3}>
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value={tagsLabel} disabled={!extensionData?.keywords?.length}>
+              <AccordionTrigger className="hover:no-underline py-2">
+                {getAccordionTitleNode(tagsLabel, extensionData?.keywords?.length > 0)}
+              </AccordionTrigger>
+              <AccordionContent>
+                <Stack direction="row" spacing={2} className="flex-wrap">
+                  {extensionData?.keywords?.map((tag, idx) => (
+                    <Pill key={tag + idx} label={tag} type="action" />
+                  ))}
+                </Stack>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </Stack>
         <Card className="p-3 bg-nested-card">
           <Stack alignItems="center" direction="row" spacing={2}>
-            <Text variant="button-sm">{needToMakeChangesLabel}</Text>
+            <Typography variant="xs" bold>
+              {needToMakeChangesLabel}
+            </Typography>
             <Button
               variant="outline"
               size="sm"
@@ -330,7 +329,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
         </Card>
       </Stack>
 
-      <Divider />
+      <Separator />
 
       <Stack direction="row" spacing={2} alignItems="center" justifyContent="end" className="p-4">
         <Button variant="link" onClick={onClickCancel}>
@@ -348,5 +347,4 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
     </>
   );
 };
-
 export default ExtensionReviewAndPublish;

@@ -2,9 +2,8 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { ChevronRightIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { ChevronRightIcon } from 'lucide-react';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import PageLayout from './base-layout';
 import { ILegalItem, legalItems } from '../../utils/legal-items';
 import { useNavigate } from '@tanstack/react-router';
@@ -28,8 +27,8 @@ const MainPage: React.FC = () => {
 
           const children = (
             <>
-              <Text>{`${t('{{itemLabel}}', { itemLabel: item.label as string })}`}</Text>
-              {<Icon icon={<ChevronRightIcon />} accentColor={true} />}
+              <Typography>{`${t('{{itemLabel}}', { itemLabel: item.label as string })}`}</Typography>
+              <ChevronRightIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
             </>
           );
 

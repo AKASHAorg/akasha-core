@@ -2,16 +2,10 @@ import * as React from 'react';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import {
-  CheckIcon,
-  ChevronDownIcon,
-  ChevronUpIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
+import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-
 export type DropdownMenuItemGroupType = {
   id: string;
   title: string;
@@ -20,7 +14,6 @@ export type DropdownMenuItemGroupType = {
   type?: 'optgroup' | 'opt';
   children?: DropdownMenuItemGroupType[];
 };
-
 export type IDropdownFilterProps = {
   name?: string;
   label?: string;
@@ -49,7 +42,6 @@ const DropdownFilter: React.FC<IDropdownFilterProps> = ({
   padding = 'p-3',
 }) => {
   const [dropOpen, setDropOpen] = React.useState<boolean>(false);
-
   React.useEffect(() => {
     if (placeholderLabel) {
       setSelected({
@@ -62,41 +54,31 @@ const DropdownFilter: React.FC<IDropdownFilterProps> = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   const optionsWrapperStyle = `absolute z-10 max-h-60 mt-14 py-0 rounded-[0.5rem] overflow-auto bg-white dark:bg-grey3 border-1 border-grey8 dark:border-grey5`;
-
   const optionStyle = `flex items-center justify-between p-3 hover:bg-grey8 dark:hover:bg-grey3`;
-
   const handleDropClick = () => {
     setDropOpen(!dropOpen);
   };
-
   const anchorRef = useCloseActions(() => {
     setDropOpen(false);
   });
-
   const handleChange = (menuItem: DropdownMenuItemGroupType) => () => {
     setSelected(menuItem);
     setDropOpen(!dropOpen);
   };
-
   return (
     <Stack ref={anchorRef} direction="row" className="w-full relative">
-      {label && <Text variant="label">{label}</Text>}
+      {label && <Typography className="font-medium">{label}</Typography>}
 
       <button
-        className={`inline-flex items-center justify-between w-full ${padding} rounded-[0.5rem] bg-white dark:bg-grey3 rounded-[0.5rem] border-1 border-solid ${
-          dropOpen
-            ? 'border-secondaryLight dark:border-secondaryDark'
-            : 'border-grey8 dark:border-grey3'
-        } ${customStyle}`}
+        className={`inline-flex items-center justify-between w-full ${padding} rounded-[0.5rem] bg-white dark:bg-grey3 rounded-[0.5rem] border-1 border-solid ${dropOpen ? 'border-secondaryLight dark:border-secondaryDark' : 'border-grey8 dark:border-grey3'} ${customStyle}`}
         onClick={handleDropClick}
       >
-        <Text variant="body1">{selected?.altTitle || selected?.title}</Text>
+        <Typography>{selected?.altTitle || selected?.title}</Typography>
         {dropOpen ? (
-          <Icon icon={<ChevronUpIcon />} customStyle="ml-4" />
+          <ChevronUpIcon className="h-5 w-5 ml-4" />
         ) : (
-          <Icon icon={<ChevronDownIcon />} customStyle="ml-4" />
+          <ChevronDownIcon className="h-5 w-5 ml-4" />
         )}
       </button>
 
@@ -111,13 +93,12 @@ const DropdownFilter: React.FC<IDropdownFilterProps> = ({
                   return (
                     <>
                       <Stack direction="row" alignItems="center" key={idx} className="pt-3 pl-3">
-                        <Text
-                          variant="body2"
-                          customStyle="cursor-not-allowed"
-                          color={{ light: 'grey5', dark: 'grey8' }}
+                        <Typography
+                          variant="sm"
+                          className="cursor-not-allowed text-grey5 dark:text-grey8"
                         >
                           {menuItem.title}
-                        </Text>
+                        </Typography>
                       </Stack>
                       {menuItem?.children &&
                         menuItem.children.map((item, idx) => {
@@ -137,36 +118,16 @@ const DropdownFilter: React.FC<IDropdownFilterProps> = ({
                                   direction="row"
                                   alignItems="center"
                                   spacing={2}
-                                  className={`w-full ${
-                                    selected.id === item.id ? 'text-secondaryLight' : 'text-black'
-                                  }`}
+                                  className={`w-full ${selected.id === item.id ? 'text-secondaryLight' : 'text-black'}`}
                                 >
-                                  {item?.icon && (
-                                    <Icon
-                                      icon={item.icon}
-                                      customStyle={
-                                        selected.id === item.id
-                                          ? '[&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark'
-                                          : '[&>*]:stroke-black dark:[&>*]:stroke-white'
-                                      }
-                                    />
-                                  )}
-                                  <Text
-                                    variant="body1"
-                                    color={
-                                      selected.id === item.id
-                                        ? { light: 'secondaryLight', dark: 'secondaryDark' }
-                                        : { light: 'black', dark: 'white' }
-                                    }
-                                  >
-                                    {item.title}
-                                  </Text>
+                                  {item.icon}
+                                  <Typography>{item.title}</Typography>
                                 </Stack>
                               </Card>
                             </li>
                           );
                         })}
-                      {divider && <Divider />}
+                      {divider && <Separator />}
                     </>
                   );
                 } else {
@@ -184,26 +145,8 @@ const DropdownFilter: React.FC<IDropdownFilterProps> = ({
                           spacing={2}
                           className={`w-full ${isSelected ? 'text-secondaryLight' : 'text-black'}`}
                         >
-                          {menuItem?.icon && (
-                            <Icon
-                              icon={menuItem.icon}
-                              customStyle={
-                                isSelected
-                                  ? '[&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark'
-                                  : '[&>*]:stroke-black dark:[&>*]:stroke-white'
-                              }
-                            />
-                          )}
-                          <Text
-                            variant="body1"
-                            color={
-                              isSelected
-                                ? { light: 'secondaryLight', dark: 'secondaryDark' }
-                                : { light: 'black', dark: 'white' }
-                            }
-                          >
-                            {menuItem.title}
-                          </Text>
+                          {menuItem.icon}
+                          <Typography>{menuItem.title}</Typography>
                         </Stack>
                       </Button>
                     </li>
@@ -213,11 +156,7 @@ const DropdownFilter: React.FC<IDropdownFilterProps> = ({
                 return (
                   <li
                     key={idx}
-                    className={`${optionStyle} ${
-                      idx < menuItems.length - 1
-                        ? 'border-b-1 border-b-grey8 dark:border-b-grey3'
-                        : ''
-                    } cursor-pointer`}
+                    className={`${optionStyle} ${idx < menuItems.length - 1 ? 'border-b-1 border-b-grey8 dark:border-b-grey3' : ''} cursor-pointer`}
                   >
                     <Card onClick={handleChange(menuItem)} className="w-full border-none p-0">
                       <Stack
@@ -226,34 +165,11 @@ const DropdownFilter: React.FC<IDropdownFilterProps> = ({
                         spacing={2}
                         className={`w-full ${isSelected ? 'text-secondaryLight' : 'text-black'}`}
                       >
-                        {menuItem?.icon && (
-                          <Icon
-                            icon={menuItem.icon}
-                            customStyle={
-                              isSelected
-                                ? '[&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark'
-                                : '[&>*]:stroke-black dark:[&>*]:stroke-white'
-                            }
-                          />
-                        )}
-                        <Text
-                          variant="body1"
-                          color={
-                            isSelected
-                              ? { light: 'secondaryLight', dark: 'secondaryDark' }
-                              : { light: 'black', dark: 'white' }
-                          }
-                        >
-                          {menuItem.title}
-                        </Text>
+                        {menuItem.icon}
+                        <Typography>{menuItem.title}</Typography>
                         {isSelected && (
                           <span className={'ml-4'}>
-                            <Icon
-                              icon={<CheckIcon />}
-                              customStyle={
-                                '[&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark'
-                              }
-                            />
+                            <CheckIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
                           </span>
                         )}
                       </Stack>
@@ -268,5 +184,4 @@ const DropdownFilter: React.FC<IDropdownFilterProps> = ({
     </Stack>
   );
 };
-
 export default DropdownFilter;

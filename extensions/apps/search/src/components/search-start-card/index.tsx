@@ -1,13 +1,10 @@
 import React, { PropsWithChildren } from 'react';
-
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { Cog8ToothIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+
+import { SettingsIcon } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import SearchBar from '@akashaorg/design-system-components/lib/components/SearchBar';
-
 export type SearchStartProps = PropsWithChildren<{
   titleLabel: string;
   inputPlaceholderLabel: string;
@@ -34,20 +31,18 @@ const SearchStartCard: React.FC<SearchStartProps> = ({
   children,
 }: SearchStartProps) => {
   const [inputValue, setInputValue] = React.useState<string>(searchKeyword);
-
   React.useEffect(() => {
     setInputValue(searchKeyword);
   }, [searchKeyword]);
-
   return (
     <>
       <Stack direction="row" justifyContent="between" className="my-3">
-        <Text variant="h5" align="center">
+        <Typography variant="h5" className="text-center">
           {titleLabel}
-        </Text>
+        </Typography>
         <Stack>
           <Button customStyle="relative" plain={true} onClick={() => handleTopMenuClick()}>
-            <Icon icon={<Cog8ToothIcon />} accentColor={true} />
+            <SettingsIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
           </Button>
         </Stack>
       </Stack>
@@ -62,5 +57,4 @@ const SearchStartCard: React.FC<SearchStartProps> = ({
     </>
   );
 };
-
 export default SearchStartCard;

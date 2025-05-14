@@ -1,12 +1,8 @@
 import * as React from 'react';
-import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import {
-  ArrowDownIcon,
-  ArrowUpIcon,
-  TrashIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { Checkbox } from '@akashaorg/ui/lib/components/checkbox';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
+import { ArrowUpIcon, ArrowDownIcon, Trash2Icon } from 'lucide-react';
 import BlockStatusToolbar, { IBlockStatusToolbar } from '../block-status-toolbar';
 
 export interface BlockHeaderProps extends IBlockStatusToolbar {
@@ -60,6 +56,8 @@ export const BlockHeader: React.FC<BlockHeaderProps> = props => {
     handleRemoveBlock(blockOrder);
   };
 
+  const accentColor = '[&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark';
+
   return (
     <Stack direction="row" justifyContent="between">
       <Stack direction="row" spacing={1} alignItems="center">
@@ -68,45 +66,46 @@ export const BlockHeader: React.FC<BlockHeaderProps> = props => {
           justifyContent="center"
           className="h-8 w-8 group relative rounded-full bg-secondaryLight/30 dark:bg-secondaryDark"
         >
-          <Icon size="sm" icon={icon} />
+          {icon}
         </Stack>
         {isFocusedBlock && (
-          <Checkbox
-            id="nsfw"
-            label={'NSFW'}
-            name="nsfw"
-            value="nsfw"
-            handleChange={handleNsfwChange}
-            isSelected={isNsfwCheckboxSelected}
-          />
+          <Stack direction="row" alignItems="center" spacing={2}>
+            <Checkbox
+              id="nsfw"
+              name="nsfw"
+              value="nsfw"
+              onCheckedChange={handleNsfwChange}
+              checked={isNsfwCheckboxSelected}
+            />
+            <Typography variant="sm">{'NSFW'}</Typography>
+          </Stack>
         )}
       </Stack>
       <BlockStatusToolbar {...rest} />
       {isFocusedBlock && (
         <Stack direction="row" spacing={1} alignItems="center">
           {totalBlocksLength > 0 && (
-            <button onClick={decreaseBlockOrder}>
+            <button onClick={decreaseBlockOrder} disabled={blockOrder === 0}>
               <Stack
                 alignItems="center"
                 justifyContent="center"
                 className="h-8 w-8 group relative rounded-full bg-grey9 dark:bg-grey5"
               >
-                <Icon icon={<ArrowUpIcon />} size="sm" accentColor disabled={blockOrder === 0} />
+                <ArrowUpIcon
+                  className={`h-4 w-4 ${accentColor} ${blockOrder === 0 && 'opacity-50'} `}
+                />
               </Stack>
             </button>
           )}
           {totalBlocksLength > 0 && (
-            <button onClick={increaseBlockOrder}>
+            <button onClick={increaseBlockOrder} disabled={blockOrder > totalBlocksLength - 2}>
               <Stack
                 alignItems="center"
                 justifyContent="center"
                 className="h-8 w-8 group relative rounded-full bg-grey9 dark:bg-grey5"
               >
-                <Icon
-                  icon={<ArrowDownIcon />}
-                  size="sm"
-                  accentColor
-                  disabled={blockOrder > totalBlocksLength - 2}
+                <ArrowDownIcon
+                  className={`h-4 w-4 ${accentColor} ${blockOrder > totalBlocksLength - 2 && 'opacity-50'}`}
                 />
               </Stack>
             </button>
@@ -117,11 +116,7 @@ export const BlockHeader: React.FC<BlockHeaderProps> = props => {
               justifyContent="center"
               className="h-8 w-8 group relative rounded-full bg-grey9 dark:bg-grey5"
             >
-              <Icon
-                icon={<TrashIcon />}
-                size="sm"
-                customStyle={'[&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark'}
-              />
+              <Trash2Icon className="h-4 w-4 [&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark" />
             </Stack>
           </button>
         </Stack>

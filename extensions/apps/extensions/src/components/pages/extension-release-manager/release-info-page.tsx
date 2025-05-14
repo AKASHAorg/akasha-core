@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import {
   ErrorLoader,
   ErrorLoaderDescription,
@@ -16,14 +16,13 @@ import { Extension, NotificationEvents, NotificationTypes } from '@akashaorg/typ
 import { ExtensionElement } from '../my-extensions/extension-element';
 import { DRAFT_EXTENSIONS, PROPERTY, PROVIDER } from '../../../constants';
 import { useGetAppReleaseByIdQuery } from '@akashaorg/ui-core-hooks/lib/generated';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
 import {
   AkashaAppApplicationType,
   AppImageSource,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { NetworkStatus } from '@apollo/client';
-
 type ExtensionReleaseInfoPageProps = {
   extensionId: string;
   extensionName?: string;
@@ -34,7 +33,6 @@ type ExtensionReleaseInfoPageProps = {
   networkStatus: NetworkStatus;
   releaseId: string;
 };
-
 export const ExtensionReleaseInfoPage: React.FC<ExtensionReleaseInfoPageProps> = ({
   extensionId,
   extensionName,
@@ -47,16 +45,12 @@ export const ExtensionReleaseInfoPage: React.FC<ExtensionReleaseInfoPageProps> =
 }) => {
   const { t } = useTranslation('app-extensions');
   const { uiEvents, baseRouteName, getCorePlugins, getTranslationPlugin } = useRootComponentProps();
-
   const locale = getTranslationPlugin().i18n?.languages?.[0] || 'en';
-
   const navigateTo = getCorePlugins().routing.navigateTo;
   const uiEventsRef = React.useRef(uiEvents);
-
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
-
   const showErrorNotification = React.useCallback((title: string) => {
     uiEventsRef.current.next({
       event: NotificationEvents.ShowNotification,
@@ -66,7 +60,6 @@ export const ExtensionReleaseInfoPage: React.FC<ExtensionReleaseInfoPageProps> =
       },
     });
   }, []);
-
   const draftExtensions: Extension[] = useMemo(() => {
     try {
       return JSON.parse(localStorage.getItem(`${DRAFT_EXTENSIONS}-${authenticatedDID}`)) || [];
@@ -74,9 +67,7 @@ export const ExtensionReleaseInfoPage: React.FC<ExtensionReleaseInfoPageProps> =
       showErrorNotification(error);
     }
   }, [authenticatedDID, showErrorNotification]);
-
   const draftExtension = draftExtensions.find(ext => ext.id === extensionId);
-
   const baseAppInfo = useMemo(() => {
     // if a published extension exists for this id use the data from it
     if (networkStatus === NetworkStatus.ready && extensionName && extensionApplicationType) {
@@ -103,26 +94,23 @@ export const ExtensionReleaseInfoPage: React.FC<ExtensionReleaseInfoPageProps> =
     extensionDescription,
     extensionLogoImage,
   ]);
-
   const { data: releaseByIdReq, loading: loadingReleaseByIdQuery } = useGetAppReleaseByIdQuery({
-    variables: { id: releaseId },
+    variables: {
+      id: releaseId,
+    },
     fetchPolicy: 'cache-first',
     notifyOnNetworkStatusChange: true,
   });
-
   const releaseData = useMemo(() => {
     if (releaseByIdReq?.node && 'id' in releaseByIdReq.node) {
       return releaseByIdReq.node;
     }
     return null;
   }, [releaseByIdReq]);
-
   const createdAt = releaseData ? formatDate(releaseData.createdAt, 'D MMM YYYY', locale) : '';
-
   const description = releaseData?.meta.find(
     metaProperty => metaProperty.property === PROPERTY && metaProperty.provider === PROVIDER,
   )?.value;
-
   const handleConnectButtonClick = () => {
     navigateTo?.({
       appName: '@akashaorg/app-auth-ewa',
@@ -133,7 +121,6 @@ export const ExtensionReleaseInfoPage: React.FC<ExtensionReleaseInfoPageProps> =
       },
     });
   };
-
   if (!authenticatedDID) {
     return (
       <ErrorLoader type="not-authenticated">
@@ -145,7 +132,6 @@ export const ExtensionReleaseInfoPage: React.FC<ExtensionReleaseInfoPageProps> =
       </ErrorLoader>
     );
   }
-
   return (
     <Card className="p-4">
       <Stack spacing={6}>
@@ -168,49 +154,49 @@ export const ExtensionReleaseInfoPage: React.FC<ExtensionReleaseInfoPageProps> =
           )}
         </Card>
         <Stack direction="row" justifyContent="between">
-          <Text variant="h6" weight="semibold">
+          <Typography variant="h6" className="font-semibold">
             {t('Version Number')}
-          </Text>
+          </Typography>
           <Stack direction="row" spacing={2}>
-            <Text variant="body2">{releaseData?.version}</Text>
+            <Typography variant="sm">{releaseData?.version}</Typography>
             {/* @TODO: find a way to tell this is the latest release */}
             {/* <Pill
               type="info"
               borderColor={{ light: 'secondaryLight', dark: 'secondaryDark' }}
               label={t('Current')}
-            /> */}
+             /> */}
           </Stack>
         </Stack>
 
-        <Divider />
+        <Separator />
 
         <Stack spacing={4}>
-          <Text variant="h6" weight="semibold" breakWord>
+          <Typography variant="h6" className="font-semibold break-all">
             {t('Description')}
-          </Text>
-          <Text variant="body2" breakWord>
+          </Typography>
+          <Typography variant="sm" className="break-all">
             {description}
-          </Text>
+          </Typography>
         </Stack>
 
-        <Divider />
+        <Separator />
 
         <Stack spacing={4}>
-          <Text variant="h6" weight="semibold">
+          <Typography variant="h6" className="font-semibold">
             {t('Source URL')}
-          </Text>
-          <Text variant="body2" color={{ light: 'secondaryLight', dark: 'secondaryDark' }} truncate>
+          </Typography>
+          <Typography variant="sm" className="text-secondaryLight dark:text-secondaryDark truncate">
             {releaseData?.source}
-          </Text>
+          </Typography>
         </Stack>
 
-        <Divider />
+        <Separator />
 
         <Stack direction="row" justifyContent="between">
-          <Text variant="h6" weight="semibold">
+          <Typography variant="h6" className="font-semibold">
             {t('Published on')}
-          </Text>
-          <Text variant="body2">{createdAt}</Text>
+          </Typography>
+          <Typography variant="sm">{createdAt}</Typography>
         </Stack>
       </Stack>
     </Card>

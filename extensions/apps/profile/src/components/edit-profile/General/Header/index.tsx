@@ -7,22 +7,23 @@ import {
   ProfileAvatarImage,
   ProfileAvatarFallback,
 } from '@akashaorg/ui/lib/akasha-components/profile-avatar';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-import List, { ListProps } from '@akashaorg/design-system-core/lib/components/List';
-import ImageModal from '@akashaorg/design-system-components/lib/components/ImageModal';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import {
-  ArrowUpOnSquareIcon,
-  PencilIcon,
-  PencilSquareIcon,
-  TrashIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from '@akashaorg/ui/lib/components/dropdown-menu';
+import ImageModal from '@akashaorg/design-system-components/lib/components/ImageModal';
+import { UploadIcon, PencilIcon, SquarePenIcon, Trash2Icon } from 'lucide-react';
 import { CropperProps } from 'react-easy-crop';
 import { ProfileImageType, Profile, type Image } from '@akashaorg/typings/lib/ui';
 import { ModalProps } from '@akashaorg/design-system-core/lib/components/Modal';
-import { useCloseActions } from '@akashaorg/design-system-core/lib/utils/useCloseActions';
 import { DeleteImageModal } from './DeleteImageModal';
 import { getImageFromSeed } from '@akashaorg/design-system-core/lib/utils';
 import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
+import { ListItem } from '@akashaorg/ui/lib/library/list-item';
 
 export type HeaderProps = {
   coverImage: Profile['background'];
@@ -66,8 +67,6 @@ export const Header: React.FC<HeaderProps> = ({
   onImageSave,
 }) => {
   const uploadInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
-  const [showAvatarActions, setShowAvatarActions] = useState(false);
-  const [showCoverActions, setShowCoverDropdown] = useState(false);
   const [profileImageType, setProfileImageType] = useState<ProfileImageType>();
   const [showEditImage, setShowEditImage] = useState(false);
   const [showDeleteImage, setShowDeleteImage] = useState(false);
@@ -87,43 +86,23 @@ export const Header: React.FC<HeaderProps> = ({
     }
   }, [isSavingImage]);
 
-  const editAvatarRef = useCloseActions(() => {
-    setShowAvatarActions(false);
-  });
-
-  const editCoverRef = useCloseActions(() => {
-    setShowCoverDropdown(false);
-  });
-
-  const closeActionsDropDown = () => {
-    switch (profileImageType) {
-      case 'avatar':
-        setShowAvatarActions(false);
-        return;
-      case 'cover-image':
-        setShowCoverDropdown(false);
-        return;
-    }
-  };
-
   const showEditAndDeleteMenuOptions =
     (profileImageType === 'avatar' && !!avatarUrl) ||
     (profileImageType === 'cover-image' && !!coverImageUrl);
 
-  const dropDownActions: ListProps['items'] = [
+  const dropDownActions: ListItem[] = [
     {
       label: 'Upload',
-      icon: <ArrowUpOnSquareIcon />,
+      icon: <UploadIcon className="h-4 w-4" />,
       onClick: () => {
         if (uploadInputRef.current) uploadInputRef.current.click();
-        closeActionsDropDown();
       },
     },
     ...(showEditAndDeleteMenuOptions
       ? [
           {
             label: 'Edit',
-            icon: <PencilIcon />,
+            icon: <PencilIcon className="h-4 w-4" />,
             onClick: () => {
               switch (profileImageType) {
                 case 'avatar':
@@ -133,16 +112,16 @@ export const Header: React.FC<HeaderProps> = ({
                   setImages([coverImageUrl]);
               }
               setShowEditImage(true);
-              closeActionsDropDown();
             },
           },
           {
             label: 'Delete',
-            icon: <TrashIcon />,
-            color: { light: 'errorLight', dark: 'errorDark' } as const,
+            icon: (
+              <Trash2Icon className="h-4 w-4 [&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark" />
+            ),
+            color: 'text-errorLight dark:text-errorDark',
             onClick: () => {
               setShowDeleteImage(true);
-              closeActionsDropDown();
             },
           },
         ]
@@ -199,7 +178,7 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <Stack direction="column" spacing={2}>
-      <Text variant="h6">{title}</Text>
+      <Typography variant="h6">{title}</Typography>
       <Stack className="relative mb-8">
         <Card
           data-testid="cover-image"
@@ -208,54 +187,66 @@ export const Header: React.FC<HeaderProps> = ({
           })}
           className={`rounded-[1.25rem] flex p-4 h-28 w-full bg-no-repeat bg-center bg-cover bg-(image:--background-url) overflow-visible`}
         >
-          <Stack
-            ref={editCoverRef}
-            direction="column"
-            spacing={1}
-            className="relative mt-auto ml-auto"
-          >
-            <Button
-              aria-label="cover-image"
-              variant="outline"
-              size="icon"
-              onClick={() => {
-                setShowCoverDropdown(!showCoverActions);
+          <Stack direction="column" spacing={1} className="relative mt-auto ml-auto">
+            <DropdownMenu
+              onOpenChange={() => {
                 setProfileImageType('cover-image');
               }}
             >
-              <PencilSquareIcon />
-            </Button>
-            {showCoverActions && (
-              <List items={dropDownActions} customStyle="absolute right-0 top-7 w-auto z-10" />
-            )}
+              <DropdownMenuTrigger asChild>
+                <Button size="icon" variant="outline" className="bg-card">
+                  <SquarePenIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                {dropDownActions.map((item, index) => (
+                  <React.Fragment key={item.label}>
+                    <DropdownMenuItem
+                      onClick={() => item.onClick(item.label)}
+                      className={item?.color}
+                    >
+                      {item?.icon}
+                      {item.label}
+                    </DropdownMenuItem>
+                    {index < dropDownActions.length - 1 && <DropdownMenuSeparator />}
+                  </React.Fragment>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </Stack>
         </Card>
-        <Stack
-          alignItems="center"
-          justifyContent="center"
-          ref={editAvatarRef}
-          className="absolute left-6 -bottom-8"
-        >
+        <Stack alignItems="center" justifyContent="center" className="absolute left-6 -bottom-8">
           <ProfileAvatar profileDID={profileId} size="xl" className="border-2 border-white">
             <ProfileAvatarImage src={avatarUrl?.src || alternativeAvatars?.[0]?.src} />
             <ProfileAvatarFallback />
           </ProfileAvatar>
-          <Stack className="absolute">
-            <Button
-              aria-label="avatar"
-              onClick={() => {
-                setShowAvatarActions(!showAvatarActions);
-                setProfileImageType('avatar');
-              }}
-              variant="outline"
-              size="icon"
-            >
-              <PencilSquareIcon />
-            </Button>
-            {showAvatarActions && (
-              <List items={dropDownActions} customStyle="absolute top-7 w-auto z-10" />
-            )}
-          </Stack>
+
+          <DropdownMenu
+            onOpenChange={() => {
+              setProfileImageType('avatar');
+            }}
+          >
+            <DropdownMenuTrigger className="absolute" asChild>
+              <Button size="icon" variant="outline" className="bg-card">
+                <SquarePenIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              {dropDownActions.map((item, index) => (
+                <>
+                  <DropdownMenuItem
+                    key={item.label}
+                    onClick={() => item.onClick(item.label)}
+                    className={item?.color}
+                  >
+                    {item?.icon}
+                    {item.label}
+                  </DropdownMenuItem>
+                  {index < dropDownActions.length - 1 && <DropdownMenuSeparator />}
+                </>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </Stack>
       </Stack>
       <ImageModal

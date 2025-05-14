@@ -1,12 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import PageLayout from './base-layout';
-
 import {
   useRootComponentProps,
   COOKIE_CONSENT_NAME,
@@ -17,17 +14,13 @@ import { Switch } from '@akashaorg/ui/lib/components/switch';
 
 const PrivacyOption: React.FC = () => {
   const { t } = useTranslation('app-settings-ewa');
-
   const [cookieType, setCookieType] = useState(window.localStorage.getItem(COOKIE_CONSENT_NAME));
-
   const [checkedTracking, setCheckedTracking] = useState<boolean>(
     cookieType === CookieConsentTypes.ALL,
   );
-
   const { uiEvents, getCorePlugins } = useRootComponentProps();
   const routingPlugin = useRef(getCorePlugins().routing);
   const uiEventsRef = useRef(uiEvents);
-
   useEffect(() => {
     const eventsSub = uiEventsRef.current.subscribe({
       next: (eventInfo: UIEventData) => {
@@ -40,26 +33,22 @@ const PrivacyOption: React.FC = () => {
           if (_cookieType === CookieConsentTypes.ALL) {
             setCheckedTracking(true);
           }
-
           setCookieType(_cookieType);
         }
       },
     });
-
     return () => {
       if (eventsSub) {
         eventsSub.unsubscribe();
       }
     };
   }, []);
-
   const handlePrivacyPolicyClick = () => {
     routingPlugin.current?.navigateTo?.({
       appName: '@akashaorg/app-legal',
       getNavigationUrl: navRoutes => navRoutes.privacyPolicy,
     });
   };
-
   const handleLegalAppNav = () => {
     routingPlugin.current?.navigateTo?.({
       appName: '@akashaorg/app-legal',
@@ -85,26 +74,25 @@ const PrivacyOption: React.FC = () => {
       }
     }
   };
-
   return (
     <PageLayout title={t('Privacy')}>
       <Stack className="px-4">
         {/* essential cookies */}
         <Stack className="py-4 border-b border-border">
           <Stack direction="row" justifyContent="between" alignItems="center" className="mb-2">
-            <Text weight="bold">{t('Essential Cookies')}</Text>
+            <Typography bold>{t('Essential Cookies')}</Typography>
 
             {/* always checked and cannot be toggled */}
             <Switch checked={true} disabled={true} />
           </Stack>
 
-          <Text>
+          <Typography>
             {t(
               "We've gotta have essential cookies. The clue's in the name. They're essential to initiating your experience of ",
             )}
-            <Text customStyle="inline-block" as="span" weight="bold">
+            <Typography bold className="inline-block">
               {'AKASHA World'}
-            </Text>
+            </Typography>
             {t(
               " and keeping it secure, stable, and optimized, so you'll feel like this is your kind of thing — to use, celebrate, and grow. If you're a privacy geek like us, you'll find ",
             )}
@@ -115,13 +103,13 @@ const PrivacyOption: React.FC = () => {
             {t(
               "The best thing is that when we write “our app” and “our Privacy Policy”, that means “your app” and “your Privacy Policy” because we're doing this together.",
             )}
-          </Text>
+          </Typography>
         </Stack>
 
         {/* tracking analytics */}
         <Stack className="py-4 border-b border-border">
           <Stack direction="row" justifyContent="between" alignItems="center" className="mb-2">
-            <Text weight="bold">{t('Tracking and Analytics')}</Text>
+            <Typography bold>{t('Tracking and Analytics')}</Typography>
 
             <Switch
               checked={checkedTracking}
@@ -130,13 +118,13 @@ const PrivacyOption: React.FC = () => {
             />
           </Stack>
 
-          <Text>
+          <Typography>
             {t(
               "As we've said ☝🏽, we're doing this together. If you want to contribute some insight into how ",
             )}
-            <Text customStyle="inline-block" as="span" weight="bold">
+            <Typography bold className="inline-block">
               {'AKASHA World'}
-            </Text>
+            </Typography>
             {t(
               ' is used so we can all work all the more brilliantly to improve it, you can opt-in to our own ',
             )}
@@ -159,23 +147,22 @@ const PrivacyOption: React.FC = () => {
               </a>
             </Button>
             {t(' to learn more.')}
-          </Text>
+          </Typography>
         </Stack>
         {/* legal notice */}
         <Stack className="py-4">
           <Stack direction="row" justifyContent="start" alignItems="center" className="mb-2">
-            <Text weight="bold">{t('Legal and Terms of Use')}</Text>
+            <Typography bold>{t('Legal and Terms of Use')}</Typography>
           </Stack>
-          <Text>
+          <Typography>
             {t("Discover more about AKASHA World's Legal and Terms of Use")}{' '}
             <Button variant="link" onClick={handleLegalAppNav}>
               {t('here')}
             </Button>
-          </Text>
+          </Typography>
         </Stack>
       </Stack>
     </PageLayout>
   );
 };
-
 export default PrivacyOption;

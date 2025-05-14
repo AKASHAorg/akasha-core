@@ -1,5 +1,10 @@
 import React from 'react';
-import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
+import {
+  Tooltip,
+  TooltipProvider,
+  TooltipTrigger,
+  TooltipContent,
+} from '@akashaorg/ui/lib/akasha-components/tooltip';
 import { useTranslation } from 'react-i18next';
 import { useGetFollowDocumentsByDidQuery } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
 import { hasOwn, useAkashaStore } from '@akashaorg/ui-core-hooks';
@@ -50,14 +55,14 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
   );
 
   return disableActions ? (
-    <Tooltip
-      placement="bottom"
-      content={t('Unfollowable profile due to missing basic information like name and Bio.')}
-      trigger="click"
-      contentCustomStyle="w-52"
-    >
-      {followButtonUi}
-    </Tooltip>
+    <TooltipProvider delayDuration={0}>
+      <Tooltip>
+        <TooltipTrigger>{followButtonUi}</TooltipTrigger>
+        <TooltipContent side="bottom">
+          {t('Unfollowable profile due to missing basic information like name and Bio.')}
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   ) : (
     <> {followButtonUi}</>
   );

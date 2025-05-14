@@ -2,17 +2,13 @@ import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { useAkashaStore, useRootComponentProps, withProviders } from '@akashaorg/ui-core-hooks';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import {
-  MinusIcon,
-  BeakerIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { MinusIcon, BeakerIcon } from 'lucide-react';
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import { LocalReleaseData } from '@akashaorg/typings/lib/ui';
-
 const TestModeWidget = () => {
   const [testExtensions, setTestExtensions] = useState<LocalReleaseData[]>(null);
   const [error, setError] = useState<Error | null>(null);
@@ -23,7 +19,6 @@ const TestModeWidget = () => {
     data: { authenticatedDID },
   } = useAkashaStore();
   const testModeLoaderPlugin = useRef(getCorePlugins().testModeLoader);
-
   useEffect(() => {
     if (!authenticatedDID) {
       setTestExtensions(null);
@@ -45,20 +40,16 @@ const TestModeWidget = () => {
       }
     }
   }, [authenticatedDID, logger]);
-
   if (!testExtensions) {
     return null;
   }
-
   const toggleMinimize = () => {
     setIsMinimized(!isMinimized);
   };
-
   const onLeave = async () => {
     await testModeLoaderPlugin.current?.unload();
     window.location.href = `${window.location.origin}/${worldConfig.homepageApp}`;
   };
-
   const onEdit = (applicationID: string) => () => {
     getCorePlugins().routing.navigateTo({
       appName: worldConfig.extensionsApp,
@@ -67,29 +58,28 @@ const TestModeWidget = () => {
       },
     });
   };
-
   return (
     <>
       {testExtensions.length > 0 && (
         <>
           {isMinimized && (
             <Button variant="outline" size="icon" onClick={toggleMinimize}>
-              <BeakerIcon />
+              <BeakerIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
             </Button>
           )}
           {!isMinimized && (
             <Card className="p-4 w-full">
               <Stack direction="row" justifyContent="between" alignItems={'baseline'}>
-                <Text variant="h6">{t('Testing Environment')}</Text>
+                <Typography variant="h6">{t('Testing Environment')}</Typography>
                 <Button variant="outline" size="icon" onClick={toggleMinimize}>
-                  <MinusIcon />
+                  <MinusIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
                 </Button>
               </Stack>
               <Stack className="my-2 rounded-xl bg-inherit bg-grey9 dark:bg-grey3">
                 {error && (
-                  <Text variant="subtitle2" color="error">
+                  <Typography variant="sm" className="font-light text-error">
                     {t('Failed to load app info. Please check console for more details.')}
-                  </Text>
+                  </Typography>
                 )}
                 {testExtensions.map((ext, idx) => (
                   <Fragment key={ext.appName}>
@@ -109,23 +99,21 @@ const TestModeWidget = () => {
                           appType={ext.applicationType}
                         />
                         <Stack direction="column" alignItems="start">
-                          <Text
-                            variant={'button-lg'}
-                            customStyle="max-w-[15ch]"
+                          <Typography
                             title={ext.appName}
                             key={ext.appName}
-                            truncate={true}
+                            bold
+                            className="max-w-[15ch] truncate"
                           >
                             {ext.appName}
-                          </Text>
-                          <Text
-                            variant={'subtitle2'}
+                          </Typography>
+                          <Typography
+                            variant={'sm'}
                             title={ext.source}
-                            customStyle="max-w-[20ch]"
-                            truncate={true}
+                            className="max-w-[20ch] truncate font-light"
                           >
                             {ext.source}
-                          </Text>
+                          </Typography>
                         </Stack>
                       </Stack>
                       <Button variant="link" onClick={onEdit(ext.applicationID)} className="pr-2">
@@ -133,7 +121,7 @@ const TestModeWidget = () => {
                       </Button>
                     </Stack>
                     {idx < testExtensions.length - 1 && (
-                      <Divider customStyle="border-grey6 dark:border-grey5 px-2" />
+                      <Separator className="border-grey6 dark:border-grey5 px-2" />
                     )}
                   </Fragment>
                 ))}
@@ -155,7 +143,6 @@ const TestModeWidget = () => {
     </>
   );
 };
-
 const Widget = () => {
   const { getTranslationPlugin } = useRootComponentProps();
   return (
@@ -164,5 +151,4 @@ const Widget = () => {
     </I18nextProvider>
   );
 };
-
 export default withProviders(Widget);

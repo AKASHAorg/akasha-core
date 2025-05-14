@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { useAkashaStore, useNotifications, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-
 import {
   ErrorLoader,
   ErrorLoaderDescription,
@@ -22,10 +21,8 @@ import { getAppInfoFromUserSetting, AppInfo, getAppInfoFromChannelSetting } from
 import LoadingSettingsPlaceholder from './loading-settings-placeholder';
 import ConnectErrorCard from '@akashaorg/design-system-components/lib/components/ConnectErrorCard';
 import AppSetting from './app-setting';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { Info } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-
+import { InfoIcon } from 'lucide-react';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 const NotificationsPreferencesOption: React.FC = () => {
   const sdk = getSDK();
   const { notificationsEnabled, waitingForSignature, readOnlyMode, enableNotifications } =
@@ -38,13 +35,11 @@ const NotificationsPreferencesOption: React.FC = () => {
     data: { authenticatedDID, isAuthenticating },
   } = useAkashaStore();
   const isLoggedIn = !!authenticatedDID;
-
   const [appPreferences, setAppPreferences] = useState<AppInfo[]>([]);
   const [enableAllChecked, setEnableAllChecked] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [initialLoading, setInitialLoading] = useState<boolean>(true);
   const [errorInFetchingPreferences, setErrorInFetchingPreferences] = useState<boolean>(false);
-
   useEffect(() => {
     if ((notificationsEnabled || readOnlyMode) && initialLoading) {
       /**
@@ -73,11 +68,9 @@ const NotificationsPreferencesOption: React.FC = () => {
         });
     }
   }, [sdk.services.common.notification, notificationsEnabled, readOnlyMode, initialLoading, t]);
-
   useEffect(() => {
     setEnableAllChecked(appPreferences?.every(item => item.enabled === true));
   }, [appPreferences]);
-
   const handleConnectButtonClick = () => {
     navigateTo?.({
       appName: '@akashaorg/app-auth-ewa',
@@ -88,7 +81,6 @@ const NotificationsPreferencesOption: React.FC = () => {
       },
     });
   };
-
   const handleUnlockPreferences = async () => {
     const enabled = await enableNotifications();
     if (!enabled) {
@@ -96,45 +88,52 @@ const NotificationsPreferencesOption: React.FC = () => {
         event: NotificationEvents.ShowNotification,
         data: {
           type: NotificationTypes.Error,
-          title: t('Couldn’t unlock preferences'),
+          title: t("Couldn't unlock preferences"),
           description: enabled ? undefined : t('Signature verification failed. Please try again.'),
         },
       });
     }
   };
-
   const handleToggleAll = (val: boolean) => {
     setAppPreferences(
       appPreferences.map(appPreference => {
-        return { ...appPreference, enabled: val };
+        return {
+          ...appPreference,
+          enabled: val,
+        };
       }),
     );
     setEnableAllChecked(val);
   };
-
   const handleSetPreference = (value: boolean, index: number) => {
     setAppPreferences(prevState =>
-      prevState?.map((item, idx) => (idx === index ? { ...item, enabled: value } : item)),
+      prevState?.map((item, idx) =>
+        idx === index
+          ? {
+              ...item,
+              enabled: value,
+            }
+          : item,
+      ),
     );
   };
-
   const handleReset = () => {
     setAppPreferences(
       appPreferences.map(appPreference => {
-        return { ...appPreference, enabled: false };
+        return {
+          ...appPreference,
+          enabled: false,
+        };
       }),
     );
   };
-
   const handleSave = async () => {
     let success: boolean = undefined;
     setLoading(true);
     const preferencesPayload: UserSetting[] = appPreferences?.map(({ enabled }) => ({
       enabled,
     }));
-
     success = await sdk.services.common.notification.setSettings(preferencesPayload);
-
     _uiEvents.current.next({
       event: NotificationEvents.ShowNotification,
       data: {
@@ -145,7 +144,6 @@ const NotificationsPreferencesOption: React.FC = () => {
     });
     setLoading(false);
   };
-
   if (!isLoggedIn && !isAuthenticating) {
     return (
       <Stack>
@@ -161,7 +159,6 @@ const NotificationsPreferencesOption: React.FC = () => {
       </Stack>
     );
   }
-
   return (
     <Stack spacing={4} className="mb-2">
       {!errorInFetchingPreferences && (
@@ -170,12 +167,12 @@ const NotificationsPreferencesOption: React.FC = () => {
           {appPreferences.length === 0 && !initialLoading && (
             // card background={{ light: 'grey9', dark: 'grey3' }} padding="p-3"
             <Card>
-              <Text>{t('There are no apps to subscribe')}</Text>
+              <Typography>{t('There are no apps to subscribe')}</Typography>
             </Card>
           )}
           {appPreferences.length > 0 && (
             <>
-              <Text variant="h5">{t('Notification Preferences')}</Text>
+              <Typography variant="h5">{t('Notification Preferences')}</Typography>
               {!notificationsEnabled && (
                 <UnlockCard onClick={handleUnlockPreferences} loading={waitingForSignature} />
               )}
@@ -183,11 +180,11 @@ const NotificationsPreferencesOption: React.FC = () => {
                 <Stack className="p-4 pt-0">
                   <EnableAllSetting
                     isSelected={enableAllChecked}
-                    onChange={e => handleToggleAll(e.target.checked)}
+                    onChange={checked => handleToggleAll(checked)}
                   />
-                  <Text variant="h6" customStyle="mb-4">
+                  <Typography variant="h6" className="mb-4">
                     {t('Default Extensions')}
-                  </Text>
+                  </Typography>
                   {initialLoading ? (
                     <LoadingSettingsPlaceholder />
                   ) : (
@@ -199,24 +196,19 @@ const NotificationsPreferencesOption: React.FC = () => {
                             title={appInfo.title}
                             description={appInfo.description}
                             isSelected={appInfo.enabled}
-                            onChange={e => handleSetPreference(e.target.checked, index)}
+                            onChange={checked => handleSetPreference(checked, index)}
                           />
                           {appPreferences.length - 1 !== index && (
-                            <Divider customStyle={`dark:border-grey5 my-4`} />
+                            <Separator className="dark:border-grey5 my-4" />
                           )}
                         </>
                       ))}
                       <Card className="mt-4 bg-grey9 dark:bg-grey3">
                         <Stack direction="row" spacing={3} alignItems="center">
-                          <Icon
-                            icon={<Info />}
-                            size="lg"
-                            solid={true}
-                            customStyle="[&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark"
-                          />
-                          <Text variant="body1" customStyle="text-sm">
+                          <InfoIcon className="h-6 w-6 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+                          <Typography className="text-sm">
                             {t('Changing notifications preferences requires a signature')}
-                          </Text>
+                          </Typography>
                         </Stack>
                       </Card>
                     </>
@@ -261,5 +253,4 @@ const NotificationsPreferencesOption: React.FC = () => {
     </Stack>
   );
 };
-
 export default NotificationsPreferencesOption;

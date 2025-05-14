@@ -1,16 +1,14 @@
 import React from 'react';
-
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Text, { TextProps } from '@akashaorg/design-system-core/lib/components/Text';
-
-export type SubtitleLabel = { label: string; link?: string };
-
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
+export type SubtitleLabel = {
+  label: string;
+  link?: string;
+};
 export type SubtitleRendererProps = {
-  textVariant?: TextProps['variant'];
-  textAlign?: TextProps['align'];
-  textColor?: TextProps['color'];
-  fontWeight?: TextProps['weight'];
+  textVariant?: React.ComponentProps<typeof Typography>['variant'];
   subtitleLabels: SubtitleLabel[];
+  className?: string;
   onLinkClick: (link?: string) => void;
 };
 
@@ -19,21 +17,12 @@ export type SubtitleRendererProps = {
  * create clickable text from a list of subtitles
  */
 export const SubtitleRenderer: React.FC<SubtitleRendererProps> = props => {
-  const {
-    textVariant,
-    textAlign = 'center',
-    textColor,
-    fontWeight,
-    subtitleLabels,
-    onLinkClick,
-  } = props;
-
+  const { textVariant, subtitleLabels, className = '', onLinkClick } = props;
   const handleLinkClick = (link: string) => () => {
     onLinkClick(link);
   };
-
   return (
-    <Text align={textAlign} variant={textVariant} color={textColor} weight={fontWeight}>
+    <Typography variant={textVariant} className={className}>
       {subtitleLabels.map(el => (
         <React.Fragment key={el.label}>
           {!el.link && <>{el.label} </>}
@@ -41,20 +30,17 @@ export const SubtitleRenderer: React.FC<SubtitleRendererProps> = props => {
           {el.link && (
             <>
               <Button plain={true} onClick={handleLinkClick(el.link)}>
-                <Text
-                  as="span"
+                <Typography
                   variant={textVariant}
-                  color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-                  weight={fontWeight}
-                  align="center"
+                  className="text-secondaryLight dark:text-secondaryDark text-center"
                 >
                   {el.label}
-                </Text>
+                </Typography>
               </Button>{' '}
             </>
           )}
         </React.Fragment>
       ))}
-    </Text>
+    </Typography>
   );
 };

@@ -4,9 +4,9 @@ import { Moderator } from '@akashaorg/typings/lib/ui';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
 import { getModeratorStatusIndicator } from '../../utils';
@@ -14,7 +14,6 @@ import {
   ProfileAvatarButton,
   ProfileDidField,
 } from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
-
 export type ModeratorDetailCardProps = {
   moderator: Moderator;
   tenureInfoLabel: string;
@@ -22,13 +21,10 @@ export type ModeratorDetailCardProps = {
   moderatedItemsLabel: string;
   viewProfileLabel: string;
 };
-
 const ModeratorDetailCard: React.FC<ModeratorDetailCardProps> = props => {
   const { moderator, tenureInfoLabel, moderatedLabel, moderatedItemsLabel, viewProfileLabel } =
     props;
-
   const textStyle = 'max-w([12.5rem] md:[7.5rem]) w-fit cursor-default';
-
   return (
     <Card className="p-4 space-y-4">
       <Stack direction="row" justify="between">
@@ -43,16 +39,10 @@ const ModeratorDetailCard: React.FC<ModeratorDetailCardProps> = props => {
           <Stack>
             <Stack direction="row" align="center" spacing="gap-x-1">
               <Tooltip content={moderator.name} placement="right">
-                <Text
-                  variant="body2"
-                  weight="bold"
-                  customStyle={textStyle}
-                >{`${moderator.name}`}</Text>
+                <Typography variant="sm" bold>{`${moderator.name}`}</Typography>
               </Tooltip>
               <Stack
-                customStyle={`w-1.5 h-1.5 rounded-full ${getModeratorStatusIndicator(
-                  moderator.status,
-                )}`}
+                customStyle={`w-1.5 h-1.5 rounded-full ${getModeratorStatusIndicator(moderator.status)}`}
               />
             </Stack>
 
@@ -65,36 +55,32 @@ const ModeratorDetailCard: React.FC<ModeratorDetailCardProps> = props => {
         <Button label={viewProfileLabel} />
       </Stack>
 
-      <Divider />
+      <Separator />
 
       <Stack direction="row" justify="between">
         <Stack>
-          <Text variant="footnotes2" weight="normal" color={{ light: 'grey4', dark: 'grey6' }}>
+          <Typography variant="xs" className="font-medium font-normal text-grey4 dark:text-grey6">
             {tenureInfoLabel}:
-          </Text>
+          </Typography>
 
-          <Text variant="footnotes2" weight="normal">
+          <Typography variant="xs" className="font-medium font-normal">
             {moderator.status === 'active'
               ? formatDate(new Date(moderator.createdAt).toISOString(), 'DD MMM YYYY')
-              : `${formatDate(moderator.createdAt.toISOString(), 'MMM YYYY')} - ${formatDate(
-                  moderator.moderatorEndDate.toISOString(),
-                  'DD MMM YYYY',
-                )}`}
-          </Text>
+              : `${formatDate(moderator.createdAt.toISOString(), 'MMM YYYY')} - ${formatDate(moderator.moderatorEndDate.toISOString(), 'DD MMM YYYY')}`}
+          </Typography>
         </Stack>
 
         <Stack>
-          <Text variant="footnotes2" weight="normal" color={{ light: 'grey4', dark: 'grey6' }}>
+          <Typography variant="xs" className="font-medium font-normal text-grey4 dark:text-grey6">
             {moderatedLabel}:
-          </Text>
+          </Typography>
 
-          <Text variant="footnotes2" weight="normal">
+          <Typography variant="xs" className="font-medium font-normal">
             {`${moderator.moderatedItems} ${moderatedItemsLabel}`}
-          </Text>
+          </Typography>
         </Stack>
       </Stack>
     </Card>
   );
 };
-
 export default ModeratorDetailCard;

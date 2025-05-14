@@ -1,14 +1,13 @@
 import React from 'react';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
 import {
   PageHeaderProps,
   PageHeader,
 } from '@akashaorg/design-system-components/lib/components/PageHeader';
 import { TApplicationStatus, renderStatusDetail } from '../../../utils';
-
 export type ApplicationDetailProps = PageHeaderProps & {
   sections: {
     title: string;
@@ -18,39 +17,39 @@ export type ApplicationDetailProps = PageHeaderProps & {
     resolvedDate?: Date;
   }[];
 };
-
 export const ApplicationDetail: React.FC<ApplicationDetailProps> = props => {
   const { sections } = props;
-
   return (
     <PageHeader {...props}>
       {sections.map(({ title, description, status, resolvedDate, value }, idx) => (
         <React.Fragment key={title}>
           <Stack spacing="gap-y-1">
             <Stack direction="row" align="center" justify="between">
-              <Text variant="button-md">{title}</Text>
+              <Typography variant="sm" bold>
+                {title}
+              </Typography>
               {status && renderStatusDetail(status)}
 
               {resolvedDate && (
-                <Text variant="body2" weight="light">
+                <Typography variant="sm" className="font-light">
                   {formatDate(new Date(resolvedDate).toISOString(), 'DD MMM YYYY')}
-                </Text>
+                </Typography>
               )}
 
               {value && (
-                <Text variant="body2" weight="light">
+                <Typography variant="sm" className="font-light">
                   {value}
-                </Text>
+                </Typography>
               )}
             </Stack>
             {description && (
-              <Text variant="footnotes2" weight="light">
+              <Typography variant="xs" className="font-medium font-light">
                 {description}
-              </Text>
+              </Typography>
             )}
           </Stack>
 
-          {idx < sections.length - 1 && <Divider />}
+          {idx < sections.length - 1 && <Separator />}
         </React.Fragment>
       ))}
     </PageHeader>

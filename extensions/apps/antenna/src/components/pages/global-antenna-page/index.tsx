@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
 import { EditorPlaceholder } from '@akashaorg/ui-lib-feed';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
-import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
+import { ScrollTopWrapper } from '@akashaorg/ui/lib/akasha-components/scroll-top-wrapper'
+import { ScrollTopButton } from '@akashaorg/ui/lib/akasha-components/scroll-top-button'
 import WorldVersionInfoCard from '../../world-version-info-card';
 import BeamFeed from '@akashaorg/ui-lib-feed/lib/components/beam-feed';
 import { useTranslation } from 'react-i18next';
@@ -16,7 +16,7 @@ import {
   useNsfwToggling,
   useDismissedCard,
 } from '@akashaorg/ui-core-hooks';
-import { Helmet, helmetData } from '@akashaorg/design-system-core/lib/utils';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { IModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import { BeamContentResolver, getNsfwFiltersForBeamFeed } from '@akashaorg/ui-lib-feed';
 import { useInstalledAndDefaultApps } from '../../../utils/use-installed-and-default-apps';
@@ -57,74 +57,76 @@ const GlobalAntennaPage: React.FC<unknown> = () => {
   }, [authenticatedDID, navigate, showLoginModal]);
 
   return (
-    <Stack className="w-full">
-      <Helmet helmetData={helmetData}>
-        <title>{worldConfig.title}</title>
-      </Helmet>
-      <Stack spacing={4}>
-        {!dismissed && (
-          <WorldVersionInfoCard
-            titleLabel={t('Attention: Testing Environment')}
-            description={t(
-              'Things might be a bit unstable, and all data may be lost during updates.',
-            )}
-            onDismissCard={dismissCard}
-          />
-        )}
-        <EditorPlaceholder
-          profileId={authenticatedDID}
-          avatar={authenticatedProfile?.avatar}
-          actionLabel={t(`Start Beaming`)}
-          placeholderLabel={t(`From Your Mind to the World 🧠 🌏 ✨`)}
-          onClick={handleEditorPlaceholderClick}
-          transformSource={transformSource}
-        />
-        <BeamFeed
-          dataTestId="beam-feed"
-          scrollRestorationStorageKey="akasha-global-antenna"
-          estimatedHeight={150}
-          itemSpacing={16}
-          scrollOptions={{ overScan: 5 }}
-          scrollTopIndicator={(listRect, onScrollToTop) => (
-            <ScrollTopWrapper placement={listRect.left}>
-              <ScrollTopButton hide={false} onClick={onScrollToTop} />
-            </ScrollTopWrapper>
+    <HelmetProvider>
+      <Stack className="w-full">
+        <Helmet>
+          <title>{worldConfig.title}</title>
+        </Helmet>
+        <Stack spacing={4}>
+          {!dismissed && (
+            <WorldVersionInfoCard
+              titleLabel={t('Attention: Testing Environment')}
+              description={t(
+                'Things might be a bit unstable, and all data may be lost during updates.',
+              )}
+              onDismissCard={dismissCard}
+            />
           )}
-          filters={{
-            and: [
-              { where: { active: { equalTo: true } } },
-              {
-                or: [
-                  ...getNsfwFiltersForBeamFeed({
-                    showNsfw: showNsfw,
-                    isLoggedIn: !!authenticatedDID,
-                  }),
-                ],
-              },
-            ],
-          }}
-          trackEvent={analyticsActions.trackEvent}
-          renderItem={itemData => {
-            if (!hasOwn(itemData, 'content')) {
-              /**
-               * Set the showNSFWCard prop to false
-               * so as to prevent NSFW beams from being displayed
-               * in the antenna feed when NSFW setting is off
-               */
-              return (
-                <BeamContentResolver
-                  beamId={itemData.beamID}
-                  showNSFWCard={false}
-                  preventNavigation={
-                    !installedAndDefaultApps?.find(app => app.id === itemData.appID)
-                  }
-                />
-              );
-            }
-          }}
-        />
+          <EditorPlaceholder
+            profileId={authenticatedDID}
+            avatar={authenticatedProfile?.avatar}
+            actionLabel={t(`Start Beaming`)}
+            placeholderLabel={t(`From Your Mind to the World 🧠 🌏 ✨`)}
+            onClick={handleEditorPlaceholderClick}
+            transformSource={transformSource}
+          />
+          <BeamFeed
+            dataTestId="beam-feed"
+            scrollRestorationStorageKey="akasha-global-antenna"
+            estimatedHeight={150}
+            itemSpacing={16}
+            scrollOptions={{ overScan: 5 }}
+            scrollTopIndicator={(listRect, onScrollToTop) => (
+              <ScrollTopWrapper placement={listRect.left}>
+                <ScrollTopButton hide={false} onClick={onScrollToTop} />
+              </ScrollTopWrapper>
+            )}
+            filters={{
+              and: [
+                { where: { active: { equalTo: true } } },
+                {
+                  or: [
+                    ...getNsfwFiltersForBeamFeed({
+                      showNsfw: showNsfw,
+                      isLoggedIn: !!authenticatedDID,
+                    }),
+                  ],
+                },
+              ],
+            }}
+            trackEvent={analyticsActions.trackEvent}
+            renderItem={itemData => {
+              if (!hasOwn(itemData, 'content')) {
+                /**
+                 * Set the showNSFWCard prop to false
+                 * so as to prevent NSFW beams from being displayed
+                 * in the antenna feed when NSFW setting is off
+                 */
+                return (
+                  <BeamContentResolver
+                    beamId={itemData.beamID}
+                    showNSFWCard={false}
+                    preventNavigation={
+                      !installedAndDefaultApps?.find(app => app.id === itemData.appID)
+                    }
+                  />
+                );
+              }
+            }}
+          />
+        </Stack>
       </Stack>
-    </Stack>
+    </HelmetProvider>
   );
 };
 

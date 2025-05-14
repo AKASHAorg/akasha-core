@@ -1,8 +1,8 @@
 import React from 'react';
 import { Loader2 } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
-import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
+import { ScrollTopWrapper } from '@akashaorg/ui/lib/akasha-components/scroll-top-wrapper'
+import { ScrollTopButton } from '@akashaorg/ui/lib/akasha-components/scroll-top-button'
 import MyAntennaIntroCard from '../../my-antenna-intro-card';
 import { useTranslation } from 'react-i18next';
 import { IModalNavigationOptions } from '@akashaorg/typings/lib/ui';

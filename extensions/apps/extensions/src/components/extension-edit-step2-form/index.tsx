@@ -11,7 +11,7 @@ import {
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Textarea } from '@akashaorg/ui/lib/akasha-components/textarea';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import { Separator } from '@akashaorg/ui/lib/components/separator';
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -124,7 +124,7 @@ const ExtensionEditStep2Form: React.FC<ExtensionEditStep2FormProps> = props => {
               nsfwFieldLabel={nsfwFieldLabel}
               defaultValue={defaultValues.nsfw}
             />
-            <Divider />
+            <Separator />
 
             <FormField
               control={control}
@@ -134,7 +134,6 @@ const ExtensionEditStep2Form: React.FC<ExtensionEditStep2FormProps> = props => {
                   <FormLabel>{descriptionFieldLabel}</FormLabel>
                   <FormControl>
                     <Textarea
-                      className="w-0 min-w-full"
                       placeholder={descriptionPlaceholderLabel}
                       {...field}
                       onChange={field.onChange}
@@ -145,7 +144,7 @@ const ExtensionEditStep2Form: React.FC<ExtensionEditStep2FormProps> = props => {
               )}
               defaultValue={defaultValues.description}
             />
-            <Divider />
+            <Separator />
 
             <Gallery
               galleryFieldLabel={galleryFieldLabel}
@@ -157,7 +156,7 @@ const ExtensionEditStep2Form: React.FC<ExtensionEditStep2FormProps> = props => {
               maxGalleryImages={maxGalleryImages}
               handleMediaClick={() => handleManageGalleryClick(getValues())}
             />
-            <Divider />
+            <Separator />
 
             <UsefulLinks
               usefulLinksTitleLabel={usefulLinksFieldLabel}
@@ -171,7 +170,7 @@ const ExtensionEditStep2Form: React.FC<ExtensionEditStep2FormProps> = props => {
               }}
             />
           </Stack>
-          <Divider />
+          <Separator />
 
           <Stack direction="row" justifyContent="end" spacing={2} className="px-4 pb-4">
             <Button

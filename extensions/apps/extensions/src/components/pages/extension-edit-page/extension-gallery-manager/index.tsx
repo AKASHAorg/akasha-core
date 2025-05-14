@@ -4,7 +4,7 @@ import ImageOverlay from '@akashaorg/design-system-components/lib/components/Ima
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Loader2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -20,12 +20,10 @@ import { useAtom } from 'jotai';
 import { AtomContext as EditLocalAtomContext, FormData } from '../main-page';
 import { AtomContext as EditPublishedAtomContext } from '../../extension-edit-published-page/main-page';
 import { MAX_GALLERY_IMAGES, MAX_UPLOAD_RETRIES } from '../../../../constants';
-
 type ExtensionGalleryManagerPageProps = {
   type: 'local' | 'published';
   extensionId: string;
 };
-
 export const ExtensionGalleryManagerPage: React.FC<ExtensionGalleryManagerPageProps> = ({
   type,
   extensionId,
@@ -38,18 +36,16 @@ export const ExtensionGalleryManagerPage: React.FC<ExtensionGalleryManagerPagePr
   const [imageIdsWithError, setImageIdsWithError] = useState<Set<string>>(new Set());
   const [showOverlay, setShowOverlay] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
-
   const navigate = useNavigate();
   const uiEventsRef = useRef(uiEvents);
   const {
     data: { isAuthenticating },
   } = useAkashaStore();
-
-  const { galleryImages, setGalleryImages } = useGalleryImages({ extensionId });
-
+  const { galleryImages, setGalleryImages } = useGalleryImages({
+    extensionId,
+  });
   const atomContext = type === 'local' ? EditLocalAtomContext : EditPublishedAtomContext;
   const [, setForm] = useAtom<FormData>(useContext(atomContext));
-
   const showErrorNotification = useCallback((title: string, description?: string) => {
     uiEventsRef.current.next({
       event: NotificationEvents.ShowNotification,
@@ -60,7 +56,6 @@ export const ExtensionGalleryManagerPage: React.FC<ExtensionGalleryManagerPagePr
       },
     });
   }, []);
-
   if (isAuthenticating)
     return (
       <Card className="p-4">
@@ -70,39 +65,34 @@ export const ExtensionGalleryManagerPage: React.FC<ExtensionGalleryManagerPagePr
           }
           <Stack spacing={5} alignItems="center">
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
-            <Text variant="button-md">{t('Loading gallery images')}</Text>
+            <Typography variant="sm" bold>
+              {t('Loading gallery images')}
+            </Typography>
           </Stack>
         </>
       </Card>
     );
-
   const onDelete = (image: Image) => {
     setShowDeleteModal(true);
     setSelectedImage(image);
   };
-
   const onDeleteConfirmed = (imageId: string) => {
     const newGalleryImages = galleryImages.filter(image => image.id !== imageId);
     setGalleryImages(newGalleryImages);
     onDeleteModalClose();
-
     if (!newGalleryImages.some(image => imageIdsWithError.has(image.id))) {
       setRetryCount(0);
     }
   };
-
   const onDeleteModalClose = () => {
     setShowDeleteModal(false);
     setSelectedImage(null);
   };
-
   const onUploadImagesClick = (fileList: FileList) => {
     const numImagesCanBeUploaded = MAX_GALLERY_IMAGES - galleryImages.length;
-
     if (galleryImages.length + fileList.length > MAX_GALLERY_IMAGES) {
       showErrorNotification(t('Maximum image limit reached. Please delete some to add new ones.'));
     }
-
     if (numImagesCanBeUploaded > 0) {
       setGalleryImages([
         ...galleryImages,
@@ -119,15 +109,23 @@ export const ExtensionGalleryManagerPage: React.FC<ExtensionGalleryManagerPagePr
       ]);
     }
   };
-
   const handleNavigate = () => {
     if (type === 'local') {
-      navigate({ to: '/edit-extension/$extensionId/step2', params: { extensionId } });
+      navigate({
+        to: '/edit-extension/$extensionId/step2',
+        params: {
+          extensionId,
+        },
+      });
     } else if (type === 'published') {
-      navigate({ to: '/edit-published-extension/$extensionId/form', params: { extensionId } });
+      navigate({
+        to: '/edit-published-extension/$extensionId/form',
+        params: {
+          extensionId,
+        },
+      });
     }
   };
-
   const onSave = async () => {
     if (retryCount === MAX_UPLOAD_RETRIES) {
       showErrorNotification(
@@ -136,7 +134,6 @@ export const ExtensionGalleryManagerPage: React.FC<ExtensionGalleryManagerPagePr
       );
       return;
     }
-
     const newImageIdsWithError: Set<string> = new Set();
     const imagesMap = new Map<string, Image>();
 
@@ -144,9 +141,7 @@ export const ExtensionGalleryManagerPage: React.FC<ExtensionGalleryManagerPagePr
     galleryImages.forEach(image => {
       imagesMap.set(image.id, image);
     });
-
     setUploading(true);
-
     await Promise.allSettled(
       galleryImages.map(async image => {
         //upload blob images to w3.storage
@@ -164,9 +159,7 @@ export const ExtensionGalleryManagerPage: React.FC<ExtensionGalleryManagerPagePr
               newImageIdsWithError.add(image.id);
               return;
             }
-
             const mediaUri = `ipfs://${mediaFile.CID}`;
-
             imagesMap.set(image.id, {
               ...image,
               height: mediaFile.size.height,
@@ -181,28 +174,31 @@ export const ExtensionGalleryManagerPage: React.FC<ExtensionGalleryManagerPagePr
         }
       }),
     );
-
     setUploading(false);
-
     setGalleryImages([
       ...Array.from(imagesMap.values()).map(image => {
         if (image.src.startsWith('ipfs://')) {
           const transformedSource = transformSource(image);
-          return { ...image, src: transformedSource.src };
+          return {
+            ...image,
+            src: transformedSource.src,
+          };
         }
         return image;
       }),
     ]);
-
     setImageIdsWithError(newImageIdsWithError);
-
     setForm(prev => ({
       ...prev,
       gallery: [
         ...Array.from(imagesMap.values())
           //filter images which have been uploaded to w3.storage
           .filter(image => !newImageIdsWithError.has(image.id))
-          .map(image => ({ src: image.src, width: image.width, height: image.height })),
+          .map(image => ({
+            src: image.src,
+            width: image.width,
+            height: image.height,
+          })),
       ],
     }));
 
@@ -218,19 +214,15 @@ export const ExtensionGalleryManagerPage: React.FC<ExtensionGalleryManagerPagePr
       );
       return;
     }
-
     handleNavigate();
   };
-
   const onCloseOverlay = () => {
     setShowOverlay(false);
   };
-
   const handleClickImage = (image: Image) => {
     setSelectedImage(image);
     setShowOverlay(true);
   };
-
   return (
     <Card className="p-0 border-none rounded-3xl">
       {galleryImages && (
@@ -271,12 +263,18 @@ export const ExtensionGalleryManagerPage: React.FC<ExtensionGalleryManagerPagePr
               images={galleryImages.map(image => ({
                 name: image.name,
                 src: image.src,
-                size: { width: image.width, height: image.height },
+                size: {
+                  width: image.width,
+                  height: image.height,
+                },
               }))}
               clickedImg={{
                 name: selectedImage.name,
                 src: selectedImage.src,
-                size: { width: selectedImage.width, height: selectedImage.height },
+                size: {
+                  width: selectedImage.width,
+                  height: selectedImage.height,
+                },
               }}
               closeModal={onCloseOverlay}
             />
@@ -284,7 +282,9 @@ export const ExtensionGalleryManagerPage: React.FC<ExtensionGalleryManagerPagePr
         </>
       )}
       <Modal
-        title={{ label: t('Delete Image') }}
+        title={{
+          label: t('Delete Image'),
+        }}
         show={showDeleteModal}
         onClose={onDeleteModalClose}
         actions={[
@@ -300,9 +300,9 @@ export const ExtensionGalleryManagerPage: React.FC<ExtensionGalleryManagerPagePr
           },
         ]}
       >
-        <Text variant="body1">
+        <Typography>
           {t('Are you sure you want to delete this image? This action cannot be undone.')}
-        </Text>
+        </Typography>
       </Modal>
     </Card>
   );

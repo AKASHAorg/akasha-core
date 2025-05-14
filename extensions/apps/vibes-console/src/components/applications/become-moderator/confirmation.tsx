@@ -2,12 +2,11 @@ import React from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import {
   PageButtonsProps,
   PageButtons,
 } from '@akashaorg/design-system-components/lib/components/PageButtons';
-
 export type BMConfirmationProps = PageButtonsProps & {
   assetName?: string;
   publicImgPath?: string;
@@ -15,7 +14,6 @@ export type BMConfirmationProps = PageButtonsProps & {
   titleLabel: string;
   descriptionLabels: string[];
 };
-
 export const BMConfirmation: React.FC<BMConfirmationProps> = props => {
   const {
     assetName = 'vibe-received',
@@ -24,13 +22,12 @@ export const BMConfirmation: React.FC<BMConfirmationProps> = props => {
     titleLabel,
     descriptionLabels,
   } = props;
-
   return (
     <Card className="p-4">
       <Stack spacing="gap-y-4">
-        <Text variant="h5" align="center">
+        <Typography variant="h5" className="text-center">
           {titleLabel}
-        </Text>
+        </Typography>
 
         <Stack customStyle="w-[11.25rem] h-[11.25rem] my-2 mx-auto">
           <Image
@@ -41,10 +38,10 @@ export const BMConfirmation: React.FC<BMConfirmationProps> = props => {
 
         <Stack spacing="gap-y-0.5" customStyle="mb-32">
           {descriptionLabels.map((d, idx) => (
-            <Text key={d} align="center" variant="body1">
+            <Typography key={d} className="text-center">
               {d}
               {idx === 0 ? '.' : '!'}
-            </Text>
+            </Typography>
           ))}
         </Stack>
 

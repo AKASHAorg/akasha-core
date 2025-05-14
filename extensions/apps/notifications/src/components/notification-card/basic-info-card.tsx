@@ -1,17 +1,14 @@
 import React from 'react';
-
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Image } from '@akashaorg/ui/lib/akasha-components/image';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 export type BasicInfoCardProps = {
   titleLabel: string;
   subtitleLabel?: string;
   image?: string;
   customStyle?: string;
 };
-
 const BasicInfoCard: React.FC<BasicInfoCardProps> = ({
   titleLabel,
   subtitleLabel,
@@ -28,15 +25,15 @@ const BasicInfoCard: React.FC<BasicInfoCardProps> = ({
         )}
         <Stack className="w-[70%] m-auto gap-4">
           {titleLabel && (
-            <Text variant="h6" align="center">
+            <Typography variant="h6" className="text-center">
               {titleLabel}
-            </Text>
+            </Typography>
           )}
 
           {subtitleLabel && (
-            <Text variant="subtitle2" align="center">
+            <Typography variant="sm" className="font-light text-center">
               {subtitleLabel}
-            </Text>
+            </Typography>
           )}
         </Stack>
       </Stack>

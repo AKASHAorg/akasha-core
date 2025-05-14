@@ -6,7 +6,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { RouterProvider } from '@tanstack/react-router';
 import { router } from './app-routes';
 import { useApolloClient } from '@apollo/client';
-import { Helmet, helmetData } from '@akashaorg/design-system-core/lib/utils';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 const App: React.FC<unknown> = () => {
   const { getTranslationPlugin, baseRouteName, worldConfig } = useRootComponentProps();
@@ -14,19 +14,21 @@ const App: React.FC<unknown> = () => {
 
   return (
     <React.Suspense fallback={<Spinner />}>
-      <I18nextProvider i18n={getTranslationPlugin().i18n}>
-        <Helmet helmetData={helmetData}>
-          <title>Search | {worldConfig.title}</title>
-        </Helmet>
-        <Stack dataTestId="search-box">
-          <RouterProvider
-            router={router({
-              baseRouteName,
-              apolloClient,
-            })}
-          />
-        </Stack>
-      </I18nextProvider>
+      <HelmetProvider>
+        <I18nextProvider i18n={getTranslationPlugin().i18n}>
+          <Helmet>
+            <title>Search | {worldConfig.title}</title>
+          </Helmet>
+          <Stack dataTestId="search-box">
+            <RouterProvider
+              router={router({
+                baseRouteName,
+                apolloClient,
+              })}
+            />
+          </Stack>
+        </I18nextProvider>
+      </HelmetProvider>
     </React.Suspense>
   );
 };

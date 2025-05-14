@@ -1,19 +1,15 @@
 import React from 'react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
-
 import { IRootExtensionProps } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps, withProviders, useModalData } from '@akashaorg/ui-core-hooks';
-
 const LoginModal = () => {
   const { t } = useTranslation('app-profile');
   const location = window.location;
   const { getCorePlugins } = useRootComponentProps();
-
   const { modalData } = useModalData();
-
   const message = React.useRef('To continue you need an AKASHA World account');
   if (modalData?.message) {
     message.current = modalData.message;
@@ -22,18 +18,15 @@ const LoginModal = () => {
   if (modalData?.title) {
     messageTitle.current = modalData.title;
   }
-
   React.useEffect(() => {
     return () => {
       message.current = null;
       messageTitle.current = null;
     };
   }, []);
-
   const handleModalClose = () => {
     window.history.replaceState(null, null, location.pathname);
   };
-
   const handleConnectClick = () => {
     getCorePlugins().routing.navigateTo?.(
       {
@@ -48,25 +41,36 @@ const LoginModal = () => {
       true,
     );
   };
-
   return (
     <Modal
       show={modalData?.name === 'login'}
       title={{
-        label: t('{{messageTitle}}', { messageTitle: messageTitle.current }),
+        label: t('{{messageTitle}}', {
+          messageTitle: messageTitle.current,
+        }),
         variant: 'h6',
       }}
       actions={[
-        { label: t('Cancel'), variant: 'secondary', onClick: handleModalClose },
-        { label: t('Connect'), variant: 'primary', onClick: handleConnectClick },
+        {
+          label: t('Cancel'),
+          variant: 'secondary',
+          onClick: handleModalClose,
+        },
+        {
+          label: t('Connect'),
+          variant: 'primary',
+          onClick: handleConnectClick,
+        },
       ]}
       onClose={handleModalClose}
       customStyle="py-4 px-6 md:px-24"
     >
       <Stack alignItems="center" spacing={2} className="w-full">
-        <Text variant="body1" align="center">
-          {t('{{message}}', { message: message.current })}
-        </Text>
+        <Typography className="text-center">
+          {t('{{message}}', {
+            message: message.current,
+          })}
+        </Typography>
       </Stack>
     </Modal>
   );
@@ -81,5 +85,4 @@ const Wrapped = (_: IRootExtensionProps) => {
     </I18nextProvider>
   );
 };
-
 export default withProviders(Wrapped);

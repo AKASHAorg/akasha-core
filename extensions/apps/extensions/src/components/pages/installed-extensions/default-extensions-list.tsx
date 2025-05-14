@@ -1,9 +1,8 @@
 import React from 'react';
 import getSDK from '@akashaorg/core-sdk';
 import AppList from '../../app-list';
-
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Loader2 } from 'lucide-react';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import {
@@ -18,34 +17,39 @@ import { useTranslation } from 'react-i18next';
 import { SortOrder } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { useNavigate } from '@tanstack/react-router';
 import { getExtensionTypeLabel } from '../../../utils/extension-utils';
-
 export const DefaultExtensionsList = () => {
   const { t } = useTranslation('app-extensions');
   const navigate = useNavigate();
   const { encodeAppName, getDefaultExtensionNames } = useRootComponentProps();
   const sdk = getSDK();
   const defaultApps = getDefaultExtensionNames();
-
   const { data, error, loading } = useGetAppsByPublisherDidQuery({
     variables: {
       id: sdk.services.gql.indexingDID,
       filters: {
-        or: defaultApps.map(app => ({ where: { name: { equalTo: app } } })),
+        or: defaultApps.map(app => ({
+          where: {
+            name: {
+              equalTo: app,
+            },
+          },
+        })),
       },
       first: defaultApps.length,
-      sorting: { createdAt: SortOrder.Asc },
+      sorting: {
+        createdAt: SortOrder.Asc,
+      },
     },
   });
-
   const handleAppClick = (appName: string) => {
     navigate({
       to: '/info/$appId',
-      params: { appId: encodeAppName(appName) },
+      params: {
+        appId: encodeAppName(appName),
+      },
     });
   };
-
   const apps = selectApps(data);
-
   const defaultExtensions = apps?.map(app => ({
     coverImageSrc: app?.coverImage?.src,
     displayName: app?.displayName,
@@ -75,16 +79,15 @@ export const DefaultExtensionsList = () => {
       </Button>
     ),
   }));
-
   return (
     <Stack spacing={4}>
       <Stack spacing={2}>
-        <Text variant="h6">{t('Default Extensions')}</Text>
-        <Text variant="body2" color={{ light: 'grey5', dark: 'grey6' }}>
+        <Typography variant="h6">{t('Default Extensions')}</Typography>
+        <Typography variant="sm" className="text-grey5 dark:text-grey6">
           {t(
             'The default extensions are the ones that come preinstalled with AKASHA World. You cannot uninstall them.',
           )}
-        </Text>
+        </Typography>
       </Stack>
       {
         //@TODO replace with Loader component once its created
@@ -92,7 +95,9 @@ export const DefaultExtensionsList = () => {
       {loading && (
         <Stack spacing={5} alignItems="center">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          <Text variant="button-md">{t('Loading default extensions')}</Text>
+          <Typography variant="sm" bold>
+            {t('Loading default extensions')}
+          </Typography>
         </Stack>
       )}
       {error && (

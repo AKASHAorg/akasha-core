@@ -10,7 +10,7 @@ import {
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
 import NotificationSettingsCard from '@akashaorg/design-system-components/lib/components/NotificationSettingsCard';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 
 export type WelcomePageProps = {
   finalStep?: boolean;
@@ -57,7 +57,7 @@ const WelcomePage: React.FC<WelcomePageProps> = () => {
   // notifications can be displayed even if user has not signed them in current session (readOnly mode)
   return notificationsEnabled || previouslyEnabled ? (
     <Stack className="p-4">
-      <Text>TODO - Notifications show up here</Text>
+      <Typography>TODO - Notifications show up here</Typography>
     </Stack>
   ) : (
     <NotificationSettingsCard

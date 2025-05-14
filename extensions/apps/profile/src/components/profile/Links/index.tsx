@@ -1,9 +1,9 @@
 import React from 'react';
 
-import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
+import { IconContainer } from '@akashaorg/ui/lib/akasha-components/icon-container';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { CopyToClipboard } from '@akashaorg/ui/lib/akasha-components/copy-to-clipboard';
-import { LinkIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { LinkIcon } from 'lucide-react';
 import {
   Discord,
   Github,
@@ -24,12 +24,15 @@ export type LinksProps = {
 };
 
 const Links: React.FC<LinksProps> = ({ title, links }) => {
+  const outlineStyle = 'h-3 w-3 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark';
+  const solidStyle = 'h-3 w-3 [&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark';
+
   const iconsMap: Record<string, { icon: React.ReactElement; solid: boolean }> = {
-    Github: { icon: <Github />, solid: false },
-    Twitter: { icon: <Twitter />, solid: true },
-    Discord: { icon: <Discord />, solid: true },
-    Telegram: { icon: <Telegram />, solid: true },
-    LinkIcon: { icon: <LinkIcon />, solid: false },
+    Github: { icon: <Github className={outlineStyle} />, solid: false },
+    Twitter: { icon: <Twitter className={solidStyle} />, solid: true },
+    Discord: { icon: <Discord className={solidStyle} />, solid: true },
+    Telegram: { icon: <Telegram className={solidStyle} />, solid: true },
+    LinkIcon: { icon: <LinkIcon className={outlineStyle} />, solid: false },
   };
 
   return (
@@ -45,7 +48,16 @@ const Links: React.FC<LinksProps> = ({ title, links }) => {
           return (
             <CopyToClipboard key={`${link.href}${index}`} textToCopy={link.href}>
               <Stack direction="row" alignItems="center" spacing={2} className="w-fit">
-                <AppIcon placeholderIcon={icon} solid={solid} size="xs" accentColor />
+                <IconContainer
+                  size="xs"
+                  className={`[&_*]:size-3 ${
+                    solid
+                      ? '[&_*]:fill-secondaryLight dark:[&_*]:fill-secondaryDark'
+                      : '[&_*]:stroke-secondaryLight dark:[&_*]:stroke-secondaryDark'
+                  }`}
+                >
+                  {icon}
+                </IconContainer>
                 <Typography variant="p" className="w-fit text-primary">
                   {link.href}
                 </Typography>

@@ -17,12 +17,8 @@ import { Widget } from '@akashaorg/ui-lib-extensions/lib/react/widget';
 import { ModalExtension } from '@akashaorg/ui-lib-extensions/lib/react/modal-extension';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import {
-  ExclamationTriangleIcon,
-  ExclamationCircleIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { TriangleAlertIcon, CircleAlertIcon } from 'lucide-react';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import TopbarLoader from '@akashaorg/design-system-components/lib/components/Loaders/topbar-loader';
 import MiniProfileWidgetLoader from '@akashaorg/design-system-components/lib/components/Loaders/mini-profile-widget-loader';
@@ -30,14 +26,10 @@ import TrendingWidgetLoader from '@akashaorg/design-system-components/lib/compon
 import SidebarLoader from '@akashaorg/design-system-components/lib/components/Loaders/sidebar-loader';
 import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
 import { useSticky } from './use-sticky';
-
 const sidebarLoadingIndicator = <SidebarLoader />;
 const miniProfileLoadingIndicator = <MiniProfileWidgetLoader />;
 const trendingWidgetLoadingIndicator = <TrendingWidgetLoader />;
 const topbarLoadingIndicator = <TopbarLoader />;
-const exclamationTriangleIcon = <ExclamationTriangleIcon />;
-const exclamationCircleIcon = <ExclamationCircleIcon />;
-
 const Layout: React.FC<unknown> = () => {
   const widgetContainerRef = useRef<HTMLDivElement>(null);
   const widgetContentRef = useRef<HTMLDivElement>(null);
@@ -48,26 +40,20 @@ const Layout: React.FC<unknown> = () => {
   const [showSidebar, setShowSidebar] = useState(
     !window.matchMedia(startMobileSidebarHidingBreakpoint).matches,
   );
-
   const { uiEvents, layoutSlots, worldConfig } = useRootComponentProps();
   // initialise fallback theme, if none is set
   useTheme();
-
   const [position, stickyPos, contentHeight, offset] = useSticky(
     widgetContainerRef,
     widgetContentRef,
     8,
   );
-
   useEffect(() => {
     const mql = window.matchMedia(startMobileSidebarHidingBreakpoint);
-
     const resize = () => {
       setShowSidebar(!mql.matches);
     };
-
     window.addEventListener('resize', resize);
-
     return () => {
       window.removeEventListener('resize', resize);
     };
@@ -77,7 +63,6 @@ const Layout: React.FC<unknown> = () => {
   const [showWidgets, setshowWidgets] = useState(
     window.matchMedia(startWidgetsTogglingBreakpoint).matches,
   );
-
   useLayoutEffect(() => {
     const handleResize = () => {
       setshowWidgets(window.matchMedia(startWidgetsTogglingBreakpoint).matches);
@@ -88,9 +73,7 @@ const Layout: React.FC<unknown> = () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
-
   const maintenanceReq = usePlaformHealthCheck();
-
   const isPlatformHealthy = useMemo(() => {
     if (!maintenanceReq.isLoading) {
       return maintenanceReq.data.success;
@@ -98,27 +81,21 @@ const Layout: React.FC<unknown> = () => {
     // defaults to healthy.
     return true;
   }, [maintenanceReq.isLoading, maintenanceReq.data]);
-
   const _uiEvents = useRef(uiEvents);
   const { t } = useTranslation('ui-widget-layout');
-
   const handleSidebarShow = () => {
     setShowSidebar(true);
   };
-
   const handleSidebarHide = () => {
     setShowSidebar(false);
   };
-
   const handleWidgetsShow = React.useCallback(() => {
     if (showWidgets) return;
     setshowWidgets(true);
   }, [showWidgets]);
-
   const handleWidgetsHide = () => {
     setshowWidgets(false);
   };
-
   useEffect(() => {
     const eventsSub = _uiEvents.current
       .pipe(
@@ -155,14 +132,12 @@ const Layout: React.FC<unknown> = () => {
       }
     };
   }, [handleWidgetsShow]);
-
   const handleExitPreview = () => {
     if (sessionStorage.getItem('previewWorldId')) {
       sessionStorage.removeItem('previewWorldId');
       window.location.reload();
     }
   };
-
   const layoutStyle = `grid min-h-full lg:${showWidgets ? 'grid-cols-[8fr_4fr]' : 'grid-cols-[2fr_8fr_2fr]'} ${showSidebar ? 'xl:grid-cols-[3fr_6fr_3fr] ' : 'xl:grid-cols-[1.5fr_6fr_3fr_1.5fr]'} xl:max-w-7xl xl:mx-auto gap-x-3 w-full`;
 
   const sidebarSlotStyle = `
@@ -170,7 +145,6 @@ const Layout: React.FC<unknown> = () => {
         showSidebar && 'w-fit translate-x-0'
       } ${needSidebarToggling ? 'fixed left-0' : ''}
       `;
-
   return (
     <Stack
       style={{
@@ -204,13 +178,13 @@ const Layout: React.FC<unknown> = () => {
               {worldConfig.isPreview && (
                 <Card className="p-4 mb-4">
                   <Stack direction="row">
-                    <Icon
-                      icon={exclamationCircleIcon}
-                      customStyle="mr-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark"
-                    />
-                    <Text variant="subtitle2">
-                      {t('You are previewing "{{worldName}}"', { worldName: worldConfig.title })}.
-                    </Text>
+                    <CircleAlertIcon className="h-5 w-5 mr-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+                    <Typography variant="sm" className="font-light">
+                      {t('You are previewing "{{worldName}}"', {
+                        worldName: worldConfig.title,
+                      })}
+                      .
+                    </Typography>
                   </Stack>
                   <Button variant="link" onClick={handleExitPreview}>
                     {t('Leave Preview')}
@@ -223,19 +197,15 @@ const Layout: React.FC<unknown> = () => {
               {!isPlatformHealthy && (
                 <Card className="mb-4 border-warning-foreground background-warning">
                   <Stack direction="row">
-                    <Icon
-                      icon={exclamationTriangleIcon}
-                      customStyle="mr-4 [&>*]:stroke-grey3 dark:[&>*]:stroke-grey3"
-                    />
+                    <TriangleAlertIcon className="h-5 w-5 mr-4 [&>*]:stroke-grey3 dark:[&>*]:stroke-grey3" />
                     <Stack>
-                      <Text variant="footnotes2" color={{ light: 'grey3', dark: 'grey3' }}>
-                        {`${t(
-                          'AKASHA is undergoing maintenance and you may experience difficulties accessing some of the apps right now',
-                        )}. ${t('Please check back soon')}.`}
-                      </Text>
-                      <Text variant="footnotes2" color={{ light: 'grey3', dark: 'grey3' }}>{`${t(
-                        'Thank you for your patience',
-                      )} 😸`}</Text>
+                      <Typography variant="xs" className="font-medium text-grey3 dark:text-grey3">
+                        {`${t('AKASHA is undergoing maintenance and you may experience difficulties accessing some of the apps right now')}. ${t('Please check back soon')}.`}
+                      </Typography>
+                      <Typography
+                        variant="xs"
+                        className="font-medium text-grey3 dark:text-grey3"
+                      >{`${t('Thank you for your patience')} 😸`}</Typography>
                     </Stack>
                   </Stack>
                 </Card>
@@ -256,7 +226,9 @@ const Layout: React.FC<unknown> = () => {
           >
             <Stack className="h-full hidden lg:flex">
               <Stack
-                style={cssVars({ '--offset': `${offset}px` })}
+                style={cssVars({
+                  '--offset': `${offset}px`,
+                })}
                 className={`mt-[var(--offset)]`}
               />
               <Stack
@@ -286,15 +258,12 @@ const Layout: React.FC<unknown> = () => {
     </Stack>
   );
 };
-
 const LayoutWidget = () => {
   const { getTranslationPlugin } = useRootComponentProps();
-
   return (
     <I18nextProvider i18n={getTranslationPlugin().i18n}>
       <Layout />
     </I18nextProvider>
   );
 };
-
 export default withProviders(LayoutWidget);

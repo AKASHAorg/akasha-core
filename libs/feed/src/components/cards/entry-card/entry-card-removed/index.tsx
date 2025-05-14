@@ -1,7 +1,6 @@
 import React from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { ExclamationTriangleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { TriangleAlertIcon } from 'lucide-react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { cn } from '@akashaorg/ui/lib/library/utils';
 
@@ -18,7 +17,7 @@ const EntryCardRemoved: React.FC<EntryCardRemovedProps> = props => {
       )}
     >
       <Stack direction="row" spacing="gap-x-1">
-        <Icon icon={<ExclamationTriangleIcon />} customStyle="[&>*]:stroke-errorLight" />
+        <TriangleAlertIcon className="[&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark" />
         <Stack spacing="gap-y-1" customStyle="grow">
           {props.message}
         </Stack>

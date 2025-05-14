@@ -1,35 +1,25 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { XMarkIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { XIcon } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 export type SidebarCTACardProps = {
   onDismissCard: () => void;
   onClickCTAButton: () => void;
 };
-
 const SidebarCTACard: React.FC<SidebarCTACardProps> = props => {
   const { onDismissCard, onClickCTAButton } = props;
-
   const { t } = useTranslation('ui-widget-sidebar');
-
   return (
     <Stack direction="column" spacing={4} className="px-6 py-4 bg-grey9 dark:bg-grey3">
       <Stack direction="row" justifyContent="between" alignItems="start">
-        <Text
-          variant="footnotes2"
-          color={{ light: 'grey4', dark: 'grey7' }}
-          customStyle="max-w-[90%]"
-        >
+        <Typography variant="xs" className="font-medium text-grey4 dark:text-grey7 max-w-[90%]">
           {`🪄${t('Add magic to your world by installing cool apps developed by the community')}`}
-        </Text>
+        </Typography>
 
         <button onClick={onDismissCard}>
-          <Icon icon={<XMarkIcon />} size="sm" accentColor={true} />
+          <XIcon className='h-4 w-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark' />
         </button>
       </Stack>
 
@@ -41,5 +31,4 @@ const SidebarCTACard: React.FC<SidebarCTACardProps> = props => {
     </Stack>
   );
 };
-
 export default SidebarCTACard;

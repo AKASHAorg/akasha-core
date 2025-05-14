@@ -3,28 +3,27 @@ import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import AppCoverImage from '@akashaorg/design-system-core/lib/components/AppCoverImage';
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
-import List, { ListProps } from '@akashaorg/design-system-core/lib/components/List';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from '@akashaorg/ui/lib/components/dropdown-menu';
 import ImageModal, {
   ImageModalProps,
 } from '@akashaorg/design-system-components/lib/components/ImageModal';
 import Img from '@akashaorg/design-system-core/lib/components/Image';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-import {
-  ArrowUpOnSquareIcon,
-  PencilIcon,
-  PencilSquareIcon,
-  TrashIcon,
-  InformationCircleIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
+import { UploadIcon, PencilIcon, SquarePenIcon, InfoIcon, Trash2Icon } from 'lucide-react';
 import { ExtensionImageType, type Image } from '@akashaorg/typings/lib/ui';
 import Modal, { ModalProps } from '@akashaorg/design-system-core/lib/components/Modal';
-import { useCloseActions } from '@akashaorg/design-system-core/lib/utils/useCloseActions';
+import { ListItem } from '@akashaorg/ui/lib/library/list-item';
 import { DeleteImageModal } from './DeleteImageModal';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import { capitalize } from 'lodash';
 import ExtensionIcon from '@akashaorg/design-system-core/lib/components/ExtensionIcon';
-
 export type HeaderProps = {
   extensionType?: AkashaAppApplicationType;
   nsfw?: boolean;
@@ -34,9 +33,18 @@ export type HeaderProps = {
   cancelLabel: string;
   deleteLabel: string;
   saveLabel: string;
-  imageTitle: { logoImage: ModalProps['title']; coverImage: ModalProps['title'] };
-  deleteTitle: { logoImage: ModalProps['title']; coverImage: ModalProps['title'] };
-  confirmationLabel: { logoImage: string; coverImage: string };
+  imageTitle: {
+    logoImage: ModalProps['title'];
+    coverImage: ModalProps['title'];
+  };
+  deleteTitle: {
+    logoImage: ModalProps['title'];
+    coverImage: ModalProps['title'];
+  };
+  confirmationLabel: {
+    logoImage: string;
+    coverImage: string;
+  };
   dragToRepositionLabel: string;
   cropErrorLabel: string;
   isSavingImage: boolean;
@@ -52,7 +60,6 @@ export type HeaderProps = {
   onImageSave: (type: ExtensionImageType, image?: File) => void;
   onImageDelete: (type: ExtensionImageType) => void;
 };
-
 export const Header: React.FC<HeaderProps> = ({
   extensionType,
   nsfw,
@@ -77,8 +84,6 @@ export const Header: React.FC<HeaderProps> = ({
   onImageDelete,
 }) => {
   const uploadInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
-  const [showLogoImageActions, setShowLogoImageActions] = useState(false);
-  const [showCoverActions, setShowCoverDropdown] = useState(false);
   const [appImageType, setAppImageType] = useState<ExtensionImageType>();
   const [showEditImage, setShowEditImage] = useState(false);
   const [showDeleteImage, setShowDeleteImage] = useState(false);
@@ -86,50 +91,29 @@ export const Header: React.FC<HeaderProps> = ({
   const [coverImageUrl, setCoverImageUrl] = useState(coverImage);
   const [showLogoGuidelineModal, setShowLogoGuidelineModal] = useState(false);
   const [images, setImages] = useState([]);
-
   useEffect(() => {
     if (!isSavingImage) {
       setShowEditImage(false);
     }
   }, [isSavingImage]);
 
-  const editLogoImageRef = useCloseActions(() => {
-    setShowLogoImageActions(false);
-  });
-
-  const editCoverRef = useCloseActions(() => {
-    setShowCoverDropdown(false);
-  });
-
-  const closeActionsDropDown = () => {
-    switch (appImageType) {
-      case 'logo-image':
-        setShowLogoImageActions(false);
-        return;
-      case 'cover-image':
-        setShowCoverDropdown(false);
-        return;
-    }
-  };
-
   const showEditAndDeleteMenuOptions =
     (appImageType === 'logo-image' && !!logoImageUrl?.src) ||
     (appImageType === 'cover-image' && !!coverImageUrl?.src);
 
-  const dropDownActions: ListProps['items'] = [
+  const dropDownActions: ListItem[] = [
     {
       label: 'Upload',
-      icon: <ArrowUpOnSquareIcon />,
+      icon: <UploadIcon className="h-4 w-4" />,
       onClick: () => {
         if (uploadInputRef.current) uploadInputRef.current.click();
-        closeActionsDropDown();
       },
     },
     ...(showEditAndDeleteMenuOptions
       ? [
           {
             label: 'Edit',
-            icon: <PencilIcon />,
+            icon: <PencilIcon className="h-4 w-4" />,
             onClick: () => {
               switch (appImageType) {
                 case 'logo-image':
@@ -139,56 +123,77 @@ export const Header: React.FC<HeaderProps> = ({
                   setImages([coverImageUrl]);
               }
               setShowEditImage(true);
-              closeActionsDropDown();
             },
           },
           {
             label: 'Delete',
-            icon: <TrashIcon />,
-            color: { light: 'errorLight', dark: 'errorDark' } as const,
+            icon: (
+              <Trash2Icon className="h-4 w-4 [&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark" />
+            ),
+            color: 'text-errorLight dark:text-errorDark',
             onClick: () => {
               setShowDeleteImage(true);
-              closeActionsDropDown();
             },
           },
         ]
       : []),
   ];
-
   const imageModalProps: Partial<ImageModalProps> =
     appImageType === 'logo-image'
       ? {
           previewTitle: logoPreviewTitle,
           previews: [
-            { dimension: 110 },
-            { dimension: 60 },
-            { dimension: 40, circular: true },
-            { dimension: 32, circular: true },
-            { dimension: 16, circular: true },
+            {
+              dimension: 110,
+            },
+            {
+              dimension: 60,
+            },
+            {
+              dimension: 40,
+              circular: true,
+            },
+            {
+              dimension: 32,
+              circular: true,
+            },
+            {
+              dimension: 16,
+              circular: true,
+            },
           ],
           width: 312,
           height: 224,
           aspect: 1 / 1,
           cropShape: 'rect',
         }
-      : { aspect: 560 / 169, objectFit: 'contain' };
-
+      : {
+          aspect: 560 / 169,
+          objectFit: 'contain',
+        };
   const onSave = (image: File) => {
     if (image) {
       switch (appImageType) {
         case 'logo-image':
           onImageSave('logo-image', image);
           onLogoImageChange(image);
-          setLogoImageUrl({ src: URL.createObjectURL(image), width: 0, height: 0 });
+          setLogoImageUrl({
+            src: URL.createObjectURL(image),
+            width: 0,
+            height: 0,
+          });
           break;
         case 'cover-image':
           onImageSave('cover-image', image);
           onCoverImageChange(image);
-          setCoverImageUrl({ src: URL.createObjectURL(image), width: 0, height: 0 });
+          setCoverImageUrl({
+            src: URL.createObjectURL(image),
+            width: 0,
+            height: 0,
+          });
       }
     }
   };
-
   const onDelete = () => {
     switch (appImageType) {
       case 'logo-image':
@@ -203,23 +208,33 @@ export const Header: React.FC<HeaderProps> = ({
     }
     setShowDeleteImage(false);
   };
-
   const onUpload = (image: File) => {
     if (image) {
       switch (appImageType) {
         case 'logo-image':
           onLogoImageChange(image);
-          setImages([{ src: URL.createObjectURL(image), width: 0, height: 0 }]);
+          setImages([
+            {
+              src: URL.createObjectURL(image),
+              width: 0,
+              height: 0,
+            },
+          ]);
           break;
         case 'cover-image':
           onCoverImageChange(image);
-          setImages([{ src: URL.createObjectURL(image), width: 0, height: 0 }]);
+          setImages([
+            {
+              src: URL.createObjectURL(image),
+              width: 0,
+              height: 0,
+            },
+          ]);
       }
       setShowEditImage(true);
     }
     uploadInputRef.current.value = '';
   };
-
   return (
     <Stack direction="column" spacing={2}>
       <Stack className="relative mb-8">
@@ -229,56 +244,72 @@ export const Header: React.FC<HeaderProps> = ({
             appType={extensionType}
             customStyle={'h-28 rounded-2xl'}
           />
-          <Stack
-            ref={editCoverRef}
-            direction="column"
-            spacing={1}
-            className="absolute bottom-4 right-4"
-          >
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => {
-                setShowCoverDropdown(!showCoverActions);
+          <Stack direction="column" spacing={1} className="absolute bottom-4 right-4">
+            <DropdownMenu
+              onOpenChange={() => {
                 setAppImageType('cover-image');
               }}
             >
-              <PencilSquareIcon />
-            </Button>
-            {showCoverActions && (
-              <List items={dropDownActions} customStyle="absolute right-0 top-7 w-auto z-10" />
-            )}
+              <DropdownMenuTrigger asChild>
+                <Button size="icon" variant="outline" className="bg-card">
+                  <SquarePenIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                {dropDownActions.map((item, index) => (
+                  <div key={item.label}>
+                    <DropdownMenuItem
+                      className={item?.color}
+                      onClick={() => item.onClick(item.label)}
+                    >
+                      {item?.icon}
+                      {item.label}
+                    </DropdownMenuItem>
+                    {index < dropDownActions.length - 1 && <DropdownMenuSeparator />}
+                  </div>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </Stack>
         </Stack>
         <Stack direction="row" alignItems="end" spacing={2} className="absolute left-6 -bottom-8">
-          <Stack alignItems="center" justifyContent="center" ref={editLogoImageRef}>
+          <Stack alignItems="center" justifyContent="center">
             <AppAvatar
               appType={extensionType}
               avatar={logoImageUrl}
               onClick={() => {
-                setShowLogoImageActions(!showLogoImageActions);
                 setAppImageType('logo-image');
               }}
               customStyle={`border-2 border-white dark:border-grey2 bg-grey8 dark:bg-grey4`}
             />
-            <Stack className="absolute">
-              <Button
-                size="icon"
-                variant="outline"
-                onClick={() => {
-                  setShowLogoImageActions(!showLogoImageActions);
-                  setAppImageType('logo-image');
-                }}
-              >
-                <PencilSquareIcon />
-              </Button>
-              {showLogoImageActions && (
-                <List items={dropDownActions} customStyle="absolute top-7 w-auto z-10" />
-              )}
-            </Stack>
+            <DropdownMenu
+              onOpenChange={() => {
+                setAppImageType('logo-image');
+              }}
+            >
+              <DropdownMenuTrigger className="absolute" asChild>
+                <Button size="icon" variant="outline" className="bg-card">
+                  <SquarePenIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                {dropDownActions.map((item, index) => (
+                  <div key={item.label}>
+                    <DropdownMenuItem
+                      className={item?.color}
+                      onClick={() => item.onClick(item.label)}
+                    >
+                      {item?.icon}
+                      {item.label}
+                    </DropdownMenuItem>
+                    {index < dropDownActions.length - 1 && <DropdownMenuSeparator />}
+                  </div>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </Stack>
           <Button variant="link" onClick={() => setShowLogoGuidelineModal(true)}>
-            <InformationCircleIcon />
+            <InfoIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
             {logoGuidelines.titleLabel}
           </Button>
         </Stack>
@@ -294,14 +325,20 @@ export const Header: React.FC<HeaderProps> = ({
               type="info"
               label={capitalize(extensionType?.toLowerCase())}
               icon={<ExtensionIcon size={'sm'} type={extensionType} />}
-              color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+              color={{
+                light: 'secondaryLight',
+                dark: 'secondaryDark',
+              }}
               customStyle="py-0.5 bg-tertiaryLight dark:bg-tertiaryDark"
             />
             {nsfw && (
               <Pill
                 type="info"
                 label={'NSFW'}
-                color={{ light: 'errorDark', dark: 'white' }}
+                color={{
+                  light: 'errorDark',
+                  dark: 'white',
+                }}
                 customStyle="py-0.5 bg-errorFade dark:bg-errorDark"
               />
             )}
@@ -339,14 +376,17 @@ export const Header: React.FC<HeaderProps> = ({
       />
       <Modal
         show={showLogoGuidelineModal}
-        title={{ label: logoGuidelines.titleLabel, variant: 'h6' }}
+        title={{
+          label: logoGuidelines.titleLabel,
+          variant: 'h6',
+        }}
         onClose={() => setShowLogoGuidelineModal(false)}
       >
         <Stack alignItems="center" spacing={4} className="p-4">
           <ul className="list-disc ml-2 text-black dark:text-white">
             {logoGuidelines.guidelines.map((guideline, index) => (
               <li key={index}>
-                <Text variant="body1">{guideline}</Text>
+                <Typography>{guideline}</Typography>
               </li>
             ))}
           </ul>
@@ -356,13 +396,12 @@ export const Header: React.FC<HeaderProps> = ({
               alt="extensions-logo-guideline"
               customStyle={`w-[12.5rem]`}
             />
-            <Text
-              variant="footnotes2"
-              color={{ light: 'grey4', dark: 'grey6' }}
-              customStyle="absolute bottom-0"
+            <Typography
+              variant="xs"
+              className="font-medium text-grey4 dark:text-grey6 absolute bottom-0"
             >
               {logoGuidelines.imageDescription}
-            </Text>
+            </Typography>
           </Stack>
         </Stack>
       </Modal>

@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { ChevronRightIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { ChevronRightIcon } from 'lucide-react';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import PageLayout from './base-layout';
 import { ISettingsItem, settingsItems, SettingsOption } from '../../utils/settings-items';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
@@ -40,8 +39,10 @@ const SettingsPage: React.FC = () => {
 
           const children = (
             <>
-              <Text>{`${t('{{itemLabel}}', { itemLabel: item.label as string })}`}</Text>
-              {!item.isSubheading && <Icon icon={<ChevronRightIcon />} accentColor={true} />}
+              <Typography>{`${t('{{itemLabel}}', { itemLabel: item.label as string })}`}</Typography>
+              {!item.isSubheading && (
+                <ChevronRightIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+              )}
             </>
           );
 
