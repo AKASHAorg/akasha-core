@@ -2,7 +2,8 @@ import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import getSDK from '@akashaorg/core-sdk';
-import ExtensionIcon from '@akashaorg/design-system-core/lib/components/ExtensionIcon';
+import { ExtensionTypeIcon } from '@akashaorg/ui/lib/akasha-components/extension-type-icon';
+
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
 import { Separator } from '@akashaorg/ui/lib/components/separator';
@@ -246,7 +247,7 @@ export const ExtensionElement: React.FC<ExtensionElement> = ({
                   alignItems="center"
                   className="w-[18px] h-[18px] rounded-full shrink-0 bg-inherit"
                 >
-                  <ExtensionIcon size="xs" type={iconType} />
+                  <ExtensionTypeIcon extensionType={iconType} className="h-3 w-3" />
                 </Stack>
               )}
             </Stack>

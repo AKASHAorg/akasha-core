@@ -17,9 +17,11 @@ import { Extension, NotificationEvents, NotificationTypes } from '@akashaorg/typ
 import { DRAFT_EXTENSIONS } from '../../../constants';
 import { useAtom } from 'jotai';
 import { AtomContext, FormData } from './main-page';
+
 type ExtensionEditStep1PageProps = {
   extensionId: string;
 };
+
 export const ExtensionEditStep1Page: React.FC<ExtensionEditStep1PageProps> = ({ extensionId }) => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');

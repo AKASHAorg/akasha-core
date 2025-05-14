@@ -1,5 +1,6 @@
 import React, { MouseEventHandler } from 'react';
-import ExtensionIcon from '@akashaorg/design-system-core/lib/components/ExtensionIcon';
+import { ExtensionTypeIcon } from '@akashaorg/ui/lib/akasha-components/extension-type-icon';
+
 
 import { EllipsisVerticalIcon, TriangleAlertIcon, InfoIcon } from 'lucide-react';
 import {
@@ -133,7 +134,7 @@ export const AppInfoHeader: React.FC<AppInfoHeaderProps> = props => {
                   </AppInfoPill>
                 )}
                 <AppInfoPill customStyle="bg-tertiaryLight dark:bg-tertiaryDark">
-                  <ExtensionIcon type={extensionType} />
+                  <ExtensionTypeIcon extensionType={extensionType} />
                   <Typography
                     variant="xs"
                     className="font-medium text-secondaryLight dark:text-white"
