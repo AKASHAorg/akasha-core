@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
+import { Skeleton } from '@akashaorg/ui/lib/components/skeleton';
 import { cn } from '@akashaorg/ui/lib/library/utils';
 
 type ProfileHeaderLoadingProps = {
@@ -21,33 +21,16 @@ const ProfileHeaderLoading: React.FC<ProfileHeaderLoadingProps> = props => {
         <Stack className="pl-2 w-full">
           <Stack direction="row" spacing={2} className="-ml-2">
             <Stack className="relative w-20 h-[3.5rem] shrink-0">
-              <TextLine
-                round="rounded-full"
-                height="h-20"
-                width="w-20"
-                customStyle="shrink-0 absolute -top-6"
-              />
+              <Skeleton className="rounded-full h-20 w-20 shrink-0 absolute -top-6" />
             </Stack>
             <Stack spacing={1} className="mt-1">
-              <TextLine width="w-36" animated />
-              <TextLine width="w-28" animated />
-              <TextLine width="w-28" animated />
+              <Skeleton className="w-36" />
+              <Skeleton className="w-28" />
+              <Skeleton className="w-28" />
             </Stack>
             <Stack direction="row" alignItems="center" spacing={2} className="ml-auto">
-              <TextLine
-                round="rounded-full"
-                height="h-8"
-                width="w-8"
-                customStyle="shrink-0"
-                animated={true}
-              />
-              <TextLine
-                round="rounded-full"
-                height="h-8"
-                width="w-8"
-                customStyle=" shrink-0"
-                animated={true}
-              />
+              <Skeleton className="rounded-full h-8 w-8 shrink-0" />
+              <Skeleton className="rounded-full h-8 w-8 shrink-0" />
             </Stack>
           </Stack>
         </Stack>
