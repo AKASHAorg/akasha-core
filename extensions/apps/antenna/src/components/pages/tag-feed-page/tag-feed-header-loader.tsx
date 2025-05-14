@@ -15,7 +15,7 @@ const TagFeedHeaderLoader: React.FC = () => {
             className="max-w(xl:[10rem] lg:[8rem] md:[10rem] xs:[2rem])"
           >
             <Skeleton title="tagName" className="w-[110px] h-[1rem]" />
-            <Skeleton title="tagName" className="w-[110px] h-[1rem]" />
+            <Skeleton title="tagName" className="w-[88px] h-[1rem]" />
           </Stack>
         </Stack>
 
