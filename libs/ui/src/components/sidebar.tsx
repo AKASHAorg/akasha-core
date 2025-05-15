@@ -5,8 +5,8 @@ import { PanelLeftIcon } from 'lucide-react';
 
 import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/library/utils';
-import { Button } from '@/components/button';
-import { Input } from '@/components/input';
+import { Button } from '@/akasha-components/button';
+import { Input } from '@/akasha-components/input';
 import { Separator } from '@/components/separator';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/sheet';
 import { Skeleton } from '@/components/skeleton';

@@ -24,7 +24,7 @@ import ListSidebarApps from './list-sidebar-apps';
 import SidebarCTACard from './cta-card';
 import SidebarHeader from './sidebar-header';
 import FallbackHeader from './fallback-header';
-import * as Shadcn from '@akashaorg/ui/lib/components/sidebar';
+import * as ShadcnSidebar from '@akashaorg/ui/lib/components/sidebar';
 
 const SidebarComponent: React.FC<unknown> = () => {
   const {
@@ -50,7 +50,8 @@ const SidebarComponent: React.FC<unknown> = () => {
   const isLoggedIn = !!authenticatedDID;
   const { activeAccordionId, setActiveAccordionId, handleAccordionClick } = useAccordion();
   const [dismissed, dismissCard] = useDismissedCard('@akashaorg/ui-widget-sidebar_cta-card');
-  const { setOpen, openMobile, setOpenMobile, toggleSidebar, isMobile } = Shadcn.useSidebar();
+  const { setOpen, openMobile, setOpenMobile, toggleSidebar, isMobile } =
+    ShadcnSidebar.useSidebar();
 
   useEffect(() => {
     const eventsSub = uiEvents
@@ -223,9 +224,9 @@ const SidebarComponent: React.FC<unknown> = () => {
       }}
       logger={logger}
     >
-      <Shadcn.Sidebar>
+      <ShadcnSidebar.Sidebar>
         <Card className="p-0 rounded-r-2xl xl:rounded-2xl max-h-screen xl:max-h-[calc(100vh-20px) h-full xl:h-fit">
-          <Shadcn.SidebarHeader>
+          <ShadcnSidebar.SidebarHeader>
             <Suspense
               fallback={
                 <FallbackHeader authenticatedDID={authenticatedDID} isLoggedIn={isLoggedIn} />
@@ -242,8 +243,8 @@ const SidebarComponent: React.FC<unknown> = () => {
                 handleProfileAvatarClick={handleProfileAvatarClick}
               />
             </Suspense>
-          </Shadcn.SidebarHeader>
-          <Shadcn.SidebarContent>
+          </ShadcnSidebar.SidebarHeader>
+          <ShadcnSidebar.SidebarContent>
             {/*
           this container will grow up to a max height of 68vh, 32vh currently accounts for the height of other sections and paddings. Adjust accordingly, if necessary.
         */}
@@ -295,10 +296,10 @@ const SidebarComponent: React.FC<unknown> = () => {
                 </Stack>
               </Stack>
             )}
-          </Shadcn.SidebarContent>
-          <Shadcn.SidebarFooter />
+          </ShadcnSidebar.SidebarContent>
+          <ShadcnSidebar.SidebarFooter />
         </Card>
-      </Shadcn.Sidebar>
+      </ShadcnSidebar.Sidebar>
     </ErrorBoundary>
   );
 };
