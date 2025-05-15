@@ -12,7 +12,8 @@ import {
   ProfileDidField,
   ProfileName,
 } from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
-import ExtensionIcon from '@akashaorg/design-system-core/lib/components/ExtensionIcon';
+import { ExtensionTypeIcon } from '@akashaorg/ui/lib/akasha-components/extension-type-icon';
+
 import { Extension, Image } from '@akashaorg/typings/lib/ui';
 import { cn } from '@akashaorg/ui/lib/library/utils';
 import { CopyToClipboard } from '@akashaorg/ui/lib/akasha-components/copy-to-clipboard';
@@ -73,7 +74,7 @@ const ExtensionCard: React.FC<ExtensionCardProps> = props => {
                 light: 'secondaryLight',
                 dark: 'white',
               }}
-              icon={<ExtensionIcon type={applicationType} size="xs" />}
+              icon={<ExtensionTypeIcon extensionType={applicationType} className="h-3 w-3" />}
               weight="normal"
               size="xs"
               label={extensionTypeLabel}
