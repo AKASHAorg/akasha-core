@@ -1,5 +1,4 @@
 import React, { PropsWithChildren } from 'react';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 
 import { SettingsIcon } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
@@ -41,9 +40,9 @@ const SearchStartCard: React.FC<SearchStartProps> = ({
           {titleLabel}
         </Typography>
         <Stack>
-          <Button customStyle="relative" plain={true} onClick={() => handleTopMenuClick()}>
+          <button onClick={() => handleTopMenuClick()} className="relative">
             <SettingsIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
-          </Button>
+          </button>
         </Stack>
       </Stack>
       <SearchBar

@@ -6,7 +6,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
 import { Separator } from '@akashaorg/ui/lib/components/separator';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 export type TReport = {
   name: string;
   did: {
@@ -26,10 +26,6 @@ export type ReportItemProps = {
 };
 export const ReportItem: React.FC<ReportItemProps> = props => {
   const { report, sliceIndex, noExplanationLabel, viewMoreLabel, onClickViewMore } = props;
-  const textColor = {
-    light: 'grey5',
-    dark: 'grey6',
-  } as const;
   return (
     <Card className="shadow-none p-0">
       <Stack
@@ -92,11 +88,12 @@ export const ReportItem: React.FC<ReportItemProps> = props => {
         {/* show view more button only if there are more than 2 flags */}
         {report.flags.length > 2 && viewMoreLabel && (
           <Button
-            variant="text"
-            label={viewMoreLabel}
+            variant="link"
             onClick={() => onClickViewMore(report.did.id)}
-            customStyle="self-end"
-          />
+            className="self-end"
+          >
+            {viewMoreLabel}
+          </Button>
         )}
       </Stack>
     </Card>

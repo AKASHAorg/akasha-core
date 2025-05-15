@@ -1,5 +1,4 @@
 import React from 'react';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 export type SubtitleLabel = {
   label: string;
@@ -29,14 +28,14 @@ export const SubtitleRenderer: React.FC<SubtitleRendererProps> = props => {
 
           {el.link && (
             <>
-              <Button plain={true} onClick={handleLinkClick(el.link)}>
+              <button onClick={handleLinkClick(el.link)}>
                 <Typography
                   variant={textVariant}
                   className="text-secondaryLight dark:text-secondaryDark text-center"
                 >
                   {el.label}
                 </Typography>
-              </Button>{' '}
+              </button>
             </>
           )}
         </React.Fragment>

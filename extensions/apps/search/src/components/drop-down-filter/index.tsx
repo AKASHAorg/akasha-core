@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import DropDown, { DropdownMenuItemGroupType } from '../base-dropdown-filter';
 
@@ -30,13 +30,7 @@ const DropDownFilter: React.FC<DropDownFilterProps> = ({
         />
       </Stack>
       {typeof resetHandler === 'function' && (
-        <Button
-          variant="text"
-          size="md"
-          plain={true}
-          customStyle="text-grey4 dark:text-grey7"
-          onClick={resetHandler}
-        >
+        <Button variant="link" className="text-grey4 dark:text-grey7" onClick={resetHandler}>
           {resetLabel}
         </Button>
       )}

@@ -3,7 +3,6 @@ import Link from '@akashaorg/design-system-core/lib/components/Link';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 export type OverviewCTA = {
   label: string;
   url: string;
@@ -36,7 +35,7 @@ const VibesIntroCard: React.FC<VibesIntroCardProps> = props => {
             {overviewCTAArr.map(({ url, label, handler }, idx) => (
               <Stack key={label + idx}>
                 {handler && typeof handler === 'function' ? (
-                  <Button plain={true} onClick={handler}>
+                  <button onClick={handler}>
                     <Typography
                       bold
                       variant="sm"
@@ -44,7 +43,7 @@ const VibesIntroCard: React.FC<VibesIntroCardProps> = props => {
                     >
                       {label}
                     </Typography>
-                  </Button>
+                  </button>
                 ) : (
                   <Link to={url} dataTestId={`${label}-link`} customStyle="text-sm font-bold">
                     {label}

@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -41,13 +41,9 @@ export const ApplicationApprovedCard: React.FC<ApplicationApprovedCardProps> = p
           {descriptionLabel}! ✨
         </Typography>
 
-        <Button
-          variant="text"
-          size="md"
-          label={buttonLabel}
-          customStyle="w-fit self-center"
-          onClick={onButtonClick}
-        />
+        <Button variant="link" onClick={onButtonClick} className="w-fit self-center">
+          {buttonLabel}
+        </Button>
       </Stack>
     </Card>
   );

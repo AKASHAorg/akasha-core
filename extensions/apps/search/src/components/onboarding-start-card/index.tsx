@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
@@ -40,7 +40,9 @@ const OnboardingStartCard = ({
         <Stack direction="row" justifyContent="between" className="w-full">
           <Typography variant="h5">{titleLabel}</Typography>
           {buttonLabel && (
-            <Button disabled={!isButtonEnabled} onClick={handleButtonClick} label={buttonLabel} />
+            <Button onClick={handleButtonClick} disabled={!isButtonEnabled}>
+              {buttonLabel}
+            </Button>
           )}
         </Stack>
 

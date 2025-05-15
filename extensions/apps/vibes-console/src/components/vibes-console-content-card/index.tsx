@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Antenna, Profile } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
@@ -44,10 +44,6 @@ const VibesConsoleContentCard: React.FC<VibesConsoleContentCardProps> = props =>
     onReasonClick,
     onButtonClick,
   } = props;
-  const textColor = {
-    light: 'grey4',
-    dark: 'grey7',
-  } as const;
   const buttonStyle = 'w-full md:w-[9.25rem]';
   const secondaryButtonAction = entry.itemType === 'Profile' ? 'Suspend' : 'Delist';
   return (
@@ -59,17 +55,9 @@ const VibesConsoleContentCard: React.FC<VibesConsoleContentCardProps> = props =>
         className="p-5 border-b-1 border-solid border-grey8 dark:border-grey5"
       >
         <Stack direction="row" alignItems="center" spacing={2}>
-          <Button
-            aria-label="itemType"
-            icon={entry.itemType === 'Profile' ? <Profile /> : <Antenna />}
-            solidIcon={entry.itemType !== 'Profile'}
-            variant="primary"
-            onClick={() => {
-              /** */
-            }}
-            greyBg
-            iconOnly
-          />
+          <Button size="icon" aria-label="itemType">
+            {entry.itemType === 'Profile' ? <Profile /> : <Antenna />}
+          </Button>
           <Typography variant="h6" bold>
             {entry.appName}{' '}
             {entry.itemType && entry.itemType !== 'Profile' && (
@@ -98,7 +86,7 @@ const VibesConsoleContentCard: React.FC<VibesConsoleContentCardProps> = props =>
             <MiniProfileCTA
               itemData={entry.itemData as ProfileItemData}
               nsfwLabel={nsfwLabel}
-              ctaExt={<Button variant="text" size="md" label={viewProfileLabel} />}
+              ctaExt={<Button variant="link">{viewProfileLabel}</Button>}
             />
           </Card>
         )}
@@ -136,17 +124,15 @@ const VibesConsoleContentCard: React.FC<VibesConsoleContentCardProps> = props =>
         className="p-5 border-t-1 border-solid border-grey8 dark:border-grey5 justify-center md:justify-end"
       >
         <Button
-          variant="secondary"
-          label={secondaryButtonLabel}
-          customStyle={buttonStyle}
+          variant="outline"
+          className={buttonStyle}
           onClick={onButtonClick(secondaryButtonAction, entry.itemType, entry.id)}
-        />
-        <Button
-          variant="primary"
-          label={primaryButtonLabel}
-          customStyle={buttonStyle}
-          onClick={onButtonClick('Keep', entry.itemType, entry.id)}
-        />
+        >
+          {secondaryButtonLabel}
+        </Button>
+        <Button className={buttonStyle} onClick={onButtonClick('Keep', entry.itemType, entry.id)}>
+          {primaryButtonLabel}
+        </Button>
       </Stack>
     </Card>
   );

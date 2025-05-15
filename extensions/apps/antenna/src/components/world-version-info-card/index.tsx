@@ -1,5 +1,4 @@
 import React from 'react';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { TriangleAlertIcon, XIcon } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
@@ -19,9 +18,9 @@ const WorldVersionInfoCard: React.FC<TWorldVersionInfoCard> = props => {
             {titleLabel}
           </Typography>
         </Stack>
-        <Button plain={true} onClick={onDismissCard}>
+        <button onClick={onDismissCard}>
           <XIcon className="h-4 w-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
-        </Button>
+        </button>
       </Stack>
       <Typography variant="sm" className="font-light">
         {description}

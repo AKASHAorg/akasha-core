@@ -1,5 +1,4 @@
 import React from 'react';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -38,11 +37,11 @@ export const ResignConfirmation: React.FC<ResignConfirmationProps> = props => {
         <Typography variant="sm" className="font-light text-center font-light w-full md:w-[55%]">
           {subtitleLabel}!
         </Typography>
-        <Button plain={true} onClick={onContinueClick}>
+        <button onClick={onContinueClick}>
           <Typography variant="sm" bold className="text-secondaryLight dark:text-secondaryDark">
             {continueLabel}
           </Typography>
-        </Button>
+        </button>
       </Stack>
     </Card>
   );

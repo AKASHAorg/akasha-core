@@ -3,7 +3,12 @@ import React from 'react';
 import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
+import {
+  DuplexButton,
+  DuplexButtonActive,
+  DuplexButtonHover,
+  DuplexButtonInactive,
+} from '@akashaorg/ui/lib/akasha-components/duplex-button';
 import {
   ProfileAvatarButton,
   ProfileAvatarButtonAvatar,
@@ -78,14 +83,17 @@ const ProfileSearchCard = ({
 
       {!authenticatedDID && (
         <div>
-          <DuplexButton
-            inactiveLabel={followLabel}
-            activeLabel={followingLabel}
-            activeHoverLabel={unfollowLabel}
-            onClickInactive={() => handleFollow}
-            onClickActive={() => handleUnfollow}
-            active={isFollowing}
-          />
+          <DuplexButton active={isFollowing}>
+            <DuplexButtonInactive onClick={handleFollow} variant="outline">
+              {followLabel}
+            </DuplexButtonInactive>
+
+            <DuplexButtonHover variant="destructive" onClick={handleUnfollow}>
+              {unfollowLabel}
+            </DuplexButtonHover>
+
+            <DuplexButtonActive variant="outline">{followingLabel}</DuplexButtonActive>
+          </DuplexButton>
         </div>
       )}
     </Stack>
