@@ -54,7 +54,6 @@ export const Settings: React.FC<unknown> = () => {
         }}
         cancelButtonLabel="Back"
         confirmButtonLabel="Resign from admin role"
-        confirmButtonVariant="secondary"
         onChangeButtonClick={handleChangeButtonClick}
         onCancelButtonClick={handleCancelButtonClick}
         onConfirmButtonClick={handleConfirmButtonClick}
@@ -78,7 +77,6 @@ export const Settings: React.FC<unknown> = () => {
       }}
       cancelButtonLabel="Back"
       confirmButtonLabel="Resign as a moderator"
-      confirmButtonVariant="secondary"
       onCancelButtonClick={handleCancelButtonClick}
       onConfirmButtonClick={handleConfirmButtonClick}
     />
