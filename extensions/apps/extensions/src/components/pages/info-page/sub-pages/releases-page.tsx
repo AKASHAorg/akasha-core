@@ -131,11 +131,12 @@ export const ReleasesPage = (props: ReleasesPageProps) => {
               count={releases.length}
               overScan={5}
               estimatedHeight={80}
+              gap={16}
               onLoadMore={handleLoadMoreReleases}
               loading={releasesReq.loading}
               hasNextPage={releasesReq.data?.akashaAppReleaseIndex?.pageInfo.hasNextPage}
             >
-              <InfiniteScrollList className="gap-4">
+              <InfiniteScrollList>
                 {itemIndex => {
                   const release = releases[itemIndex];
                   if (!release) return null;
