@@ -1,7 +1,8 @@
 import React, { ReactElement } from 'react';
-import DynamicInfiniteScroll, {
-  DynamicInfiniteScrollProps,
-} from '@akashaorg/design-system-core/lib/components/DynamicInfiniteScroll';
+import {
+  InfiniteScroll,
+  InfiniteScrollList,
+} from '@akashaorg/ui/lib/akasha-components/infinite-scroll';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import { ENTRY_HEIGHT, ITEM_SPACING } from '../constants';
 import { GetFollowersListByDidQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
@@ -16,7 +17,10 @@ export type FollowersProps = {
   emptyEntryBodyLabel: ReactElement;
   showNsfw: boolean;
   profileAnchorLink: string;
-} & Pick<DynamicInfiniteScrollProps, 'hasNextPage' | 'loading' | 'onLoadMore'>;
+  hasNextPage?: boolean;
+  loading?: boolean;
+  onLoadMore?: () => void;
+};
 
 const Followers: React.FC<FollowersProps> = ({
   followersData,
@@ -45,32 +49,33 @@ const Followers: React.FC<FollowersProps> = ({
   const borderBottomStyle = `pb-[var(--item-spacing)] border-b border-grey8 dark:border-grey5`;
 
   return (
-    <DynamicInfiniteScroll
+    <InfiniteScroll
       count={followers.length}
       estimatedHeight={ENTRY_HEIGHT}
       overScan={1}
-      itemSpacing={ITEM_SPACING}
       hasNextPage={hasNextPage}
       loading={loading}
       onLoadMore={onLoadMore}
     >
-      {({ index, itemIndex, itemsSize }) => {
-        const follower = followers[itemIndex];
-        const profileInfo = follower?.did?.akashaProfile;
-        return (
-          <EngagementsEntry
-            profileID={profileInfo?.id}
-            profileDID={profileInfo?.did.id ?? follower?.did?.id}
-            profileInfo={profileInfo}
-            authenticatedDID={authenticatedDID}
-            showNsfw={showNsfw}
-            profileAnchorLink={profileAnchorLink}
-            style={cssVars({ '--item-spacing': `${ITEM_SPACING / 16}rem` })}
-            className={index + 1 !== itemsSize ? borderBottomStyle : ''}
-          />
-        );
-      }}
-    </DynamicInfiniteScroll>
+      <InfiniteScrollList className="gap-4 relative">
+        {itemIndex => {
+          const follower = followers[itemIndex];
+          const profileInfo = follower?.did?.akashaProfile;
+          return (
+            <EngagementsEntry
+              profileID={profileInfo?.id}
+              profileDID={profileInfo?.did.id ?? follower?.did?.id}
+              profileInfo={profileInfo}
+              authenticatedDID={authenticatedDID}
+              showNsfw={showNsfw}
+              profileAnchorLink={profileAnchorLink}
+              style={cssVars({ '--item-spacing': `${ITEM_SPACING / 16}rem` })}
+              className={itemIndex !== followers.length - 1 ? borderBottomStyle : ''}
+            />
+          );
+        }}
+      </InfiniteScrollList>
+    </InfiniteScroll>
   );
 };
 

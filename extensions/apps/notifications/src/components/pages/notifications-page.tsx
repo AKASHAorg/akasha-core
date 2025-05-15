@@ -12,7 +12,10 @@ import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Loader2 } from 'lucide-react';
 import { Separator } from '@akashaorg/ui/lib/components/separator';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import DynamicInfiniteScroll from '@akashaorg/design-system-core/lib/components/DynamicInfiniteScroll';
+import {
+  InfiniteScroll,
+  InfiniteScrollList,
+} from '@akashaorg/ui/lib/akasha-components/infinite-scroll';
 import { type InboxNotification } from '@akashaorg/typings/lib/ui';
 import getSDK from '@akashaorg/core-sdk';
 import NotificationSettingsCard from '@akashaorg/design-system-components/lib/components/NotificationSettingsCard';
@@ -230,7 +233,7 @@ const NotificationsPage: React.FC = () => {
                 />
               )}
               <Card className="p-0 rounded-2xl border-none">
-                <DynamicInfiniteScroll
+                <InfiniteScroll
                   count={notifications.length}
                   overScan={8}
                   estimatedHeight={140}
@@ -240,44 +243,46 @@ const NotificationsPage: React.FC = () => {
                     fetchNotifications();
                   }}
                 >
-                  {({ itemIndex }) => {
-                    const notification = notifications[itemIndex];
-                    return (
-                      <Stack className="pl-4 pr-4 pt-4 gap-y-4">
-                        <Stack key={itemIndex} className="flex-row">
-                          <NotificationCard
-                            onClick={() => clickNotification(notification)}
-                            title={t(`{{title}}`, {
-                              title: notification.title,
-                            })}
-                            body={t(`{{body}}`, {
-                              body: notification.body,
-                            })}
-                            date={notification.date}
-                            isSeen={notification.isSeen}
-                            notificationTypeIcon={notification.notificationTypeIcon}
-                            notificationTypeTitle={t(`{{notificationTypeTitle}}`, {
-                              notificationTypeTitle: notification.notificationTypeTitle,
-                            })}
-                            notificationAppIcon={notification.notificationAppIcon}
-                            ctaLinkTitle={
-                              notification.ctaLinkTitle &&
-                              t(`{{ctaLinkTitle}}`, {
-                                ctaLinkTitle: notification.ctaLinkTitle,
-                              })
-                            }
-                            ctaLinkUrl={notification.ctaLinkUrl}
-                          />
+                  <InfiniteScrollList>
+                    {itemIndex => {
+                      const notification = notifications[itemIndex];
+                      return (
+                        <Stack className="pl-4 pr-4 pt-4 gap-y-4">
+                          <Stack key={itemIndex} className="flex-row">
+                            <NotificationCard
+                              onClick={() => clickNotification(notification)}
+                              title={t(`{{title}}`, {
+                                title: notification.title,
+                              })}
+                              body={t(`{{body}}`, {
+                                body: notification.body,
+                              })}
+                              date={notification.date}
+                              isSeen={notification.isSeen}
+                              notificationTypeIcon={notification.notificationTypeIcon}
+                              notificationTypeTitle={t(`{{notificationTypeTitle}}`, {
+                                notificationTypeTitle: notification.notificationTypeTitle,
+                              })}
+                              notificationAppIcon={notification.notificationAppIcon}
+                              ctaLinkTitle={
+                                notification.ctaLinkTitle &&
+                                t(`{{ctaLinkTitle}}`, {
+                                  ctaLinkTitle: notification.ctaLinkTitle,
+                                })
+                              }
+                              ctaLinkUrl={notification.ctaLinkUrl}
+                            />
+                          </Stack>
+                          {/* the last item does not need a divider */}
+                          {itemIndex !== notifications.length - 1 && (
+                            <Separator className={`dark:border-grey5`} />
+                          )}
+                          {itemIndex == notifications.length - 1 && <Stack className="pb-4" />}
                         </Stack>
-                        {/* the last item does not need a divider */}
-                        {itemIndex !== notifications.length - 1 && (
-                          <Separator className={`dark:border-grey5`} />
-                        )}
-                        {itemIndex == notifications.length - 1 && <Stack className="pb-4" />}
-                      </Stack>
-                    );
-                  }}
-                </DynamicInfiniteScroll>
+                      );
+                    }}
+                  </InfiniteScrollList>
+                </InfiniteScroll>
               </Card>
             </Stack>
           </>

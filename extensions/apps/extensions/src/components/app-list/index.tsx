@@ -1,7 +1,8 @@
 import React from 'react';
-import DynamicInfiniteScroll, {
-  DynamicInfiniteScrollProps,
-} from '@akashaorg/design-system-core/lib/components/DynamicInfiniteScroll';
+import {
+  InfiniteScroll,
+  InfiniteScrollList,
+} from '@akashaorg/ui/lib/akasha-components/infinite-scroll';
 import ExtensionCard, { ExtensionCardProps } from '../extension-card';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { XCircleIcon } from 'lucide-react';
@@ -13,9 +14,12 @@ export type AppListProps = {
     title: string;
     message: string;
   };
-} & Pick<DynamicInfiniteScrollProps, 'overScan' | 'hasNextPage' | 'loading' | 'onLoadMore'>;
+  hasNextPage?: boolean;
+  loading?: boolean;
+  overScan?: number;
+  onLoadMore?: () => void;
+};
 const ENTRY_HEIGHT = 92;
-const ITEM_SPACING = 16;
 
 /**
  * Component that renders a list of apps
@@ -35,66 +39,67 @@ const AppList: React.FC<AppListProps> = ({
   loadErrorMessage,
 }) => {
   return (
-    <DynamicInfiniteScroll
+    <InfiniteScroll
       count={apps.length}
       estimatedHeight={ENTRY_HEIGHT}
       overScan={overScan}
-      itemSpacing={ITEM_SPACING}
       lanes={2}
       hasNextPage={hasNextPage}
       loading={loading}
       onLoadMore={onLoadMore}
-      listWrapperStyle={
+      className={
         apps.length > 1
           ? 'grid grid-cols-[repeat(auto-fit,_minmax(min(16rem,_100%),_1fr))] gap-4'
           : 'flex'
       }
     >
-      {({ itemIndex }) => {
-        if (!apps[itemIndex]) {
+      <InfiniteScrollList className="gap-4">
+        {itemIndex => {
+          if (!apps[itemIndex]) {
+            return (
+              <Card className="h-full flex flex-col justify-center items-center">
+                <XCircleIcon className="h-5 w-5 mb-4 [&>*]:fill-errorLight dark:[&>*]:fill-errorLight" />
+                <Typography variant="sm" bold>
+                  {loadErrorMessage?.title}
+                </Typography>
+                <Typography variant="sm">{loadErrorMessage?.message}</Typography>
+              </Card>
+            );
+          }
+          const {
+            coverImageSrc,
+            displayName,
+            applicationType,
+            extensionTypeLabel,
+            author,
+            description,
+            action,
+            defaultLabel,
+            nsfwLabel,
+            isDefaultWorldExtension,
+            nsfw,
+            featured,
+          } = apps[itemIndex];
           return (
-            <Card className="h-full flex flex-col justify-center items-center">
-              <XCircleIcon className="h-5 w-5 mb-4 [&>*]:fill-errorLight dark:[&>*]:fill-errorLight" />
-              <Typography variant="sm" bold>
-                {loadErrorMessage?.title}
-              </Typography>
-              <Typography variant="sm">{loadErrorMessage?.message}</Typography>
-            </Card>
+            <ExtensionCard
+              coverImageSrc={coverImageSrc}
+              displayName={displayName}
+              applicationType={applicationType}
+              extensionTypeLabel={extensionTypeLabel}
+              author={author}
+              description={description}
+              action={action}
+              nsfw={nsfw}
+              featured={featured || apps.length === 1}
+              defaultLabel={defaultLabel}
+              nsfwLabel={nsfwLabel}
+              isDefaultWorldExtension={isDefaultWorldExtension}
+              customStyle="h-full"
+            />
           );
-        }
-        const {
-          coverImageSrc,
-          displayName,
-          applicationType,
-          extensionTypeLabel,
-          author,
-          description,
-          action,
-          defaultLabel,
-          nsfwLabel,
-          isDefaultWorldExtension,
-          nsfw,
-          featured,
-        } = apps[itemIndex];
-        return (
-          <ExtensionCard
-            coverImageSrc={coverImageSrc}
-            displayName={displayName}
-            applicationType={applicationType}
-            extensionTypeLabel={extensionTypeLabel}
-            author={author}
-            description={description}
-            action={action}
-            nsfw={nsfw}
-            featured={featured || apps.length === 1}
-            defaultLabel={defaultLabel}
-            nsfwLabel={nsfwLabel}
-            isDefaultWorldExtension={isDefaultWorldExtension}
-            customStyle="h-full"
-          />
-        );
-      }}
-    </DynamicInfiniteScroll>
+        }}
+      </InfiniteScrollList>
+    </InfiniteScroll>
   );
 };
 export default AppList;

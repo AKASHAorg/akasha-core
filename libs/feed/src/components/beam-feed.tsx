@@ -13,7 +13,10 @@ import {
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { Loader2 } from 'lucide-react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import DynamicInfiniteScroll from '@akashaorg/design-system-core/lib/components/DynamicInfiniteScroll';
+import {
+  InfiniteScroll,
+  InfiniteScrollList,
+} from '@akashaorg/ui/lib/akasha-components/infinite-scroll';
 import getSDK from '@akashaorg/core-sdk';
 import { AnalyticsEventData } from '@akashaorg/typings/lib/ui';
 import {
@@ -31,11 +34,9 @@ import { useApolloClient } from '@apollo/client';
 import { GetBeamStreamQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 
 export type BeamFeedProps = {
-  scrollRestorationStorageKey: string;
   filters?: AkashaBeamFiltersInput;
   sorting?: AkashaBeamSortingInput;
   estimatedHeight?: number;
-  itemSpacing?: number;
   scrollOptions?: {
     overScan: number;
   };
@@ -49,11 +50,9 @@ export type BeamFeedProps = {
 const BeamFeed = (props: BeamFeedProps) => {
   const {
     dataTestId,
-    scrollRestorationStorageKey,
     filters,
     sorting,
     estimatedHeight = 150,
-    itemSpacing,
     scrollOptions = { overScan: 10 },
     loadingIndicator,
     renderItem,
@@ -172,14 +171,11 @@ const BeamFeed = (props: BeamFeedProps) => {
       )}
       {beams && (
         <div ref={vListContainerRef}>
-          <DynamicInfiniteScroll
-            dataTestId={dataTestId}
+          <InfiniteScroll
+            data-testid={dataTestId}
             count={beams.length}
-            scrollRestorationStorageKey={scrollRestorationStorageKey}
-            enableScrollRestoration={true}
             estimatedHeight={estimatedHeight}
             overScan={scrollOptions.overScan}
-            itemSpacing={itemSpacing}
             hasNextPage={pageInfo && pageInfo.hasNextPage}
             loading={beamStreamQuery.loading}
             onLoadMore={async () => {
@@ -195,13 +191,15 @@ const BeamFeed = (props: BeamFeedProps) => {
                 });
               }
             }}
-            customStyle="mb-4"
+            className="mb-4"
           >
-            {({ itemIndex }) => {
-              const beam = beams[itemIndex];
-              return renderItem(beam.node);
-            }}
-          </DynamicInfiniteScroll>
+            <InfiniteScrollList className="gap-4">
+              {itemIndex => {
+                const beam = beams[itemIndex];
+                return renderItem(beam.node);
+              }}
+            </InfiniteScrollList>
+          </InfiniteScroll>
         </div>
       )}
     </>

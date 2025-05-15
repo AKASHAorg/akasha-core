@@ -13,7 +13,10 @@ import {
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { Loader2 } from 'lucide-react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import DynamicInfiniteScroll from '@akashaorg/design-system-core/lib/components/DynamicInfiniteScroll';
+import {
+  InfiniteScroll,
+  InfiniteScrollList,
+} from '@akashaorg/ui/lib/akasha-components/infinite-scroll';
 import getSDK from '@akashaorg/core-sdk';
 import { AnalyticsEventData } from '@akashaorg/typings/lib/ui';
 import {
@@ -51,11 +54,9 @@ export type BeamFeedByAuthorProps = {
 const BeamFeedByAuthor = (props: BeamFeedByAuthorProps) => {
   const {
     did,
-    scrollRestorationStorageKey,
     filters,
     sorting,
     estimatedHeight = 150,
-    itemSpacing,
     scrollOptions = { overScan: 10 },
     loadingIndicator,
     renderItem,
@@ -167,13 +168,10 @@ const BeamFeedByAuthor = (props: BeamFeedByAuthorProps) => {
       )}
       {beams.length > 0 && (
         <div ref={vListContainerRef}>
-          <DynamicInfiniteScroll
+          <InfiniteScroll
             count={beams.length}
-            scrollRestorationStorageKey={scrollRestorationStorageKey}
-            enableScrollRestoration={true}
             estimatedHeight={estimatedHeight}
             overScan={scrollOptions.overScan}
-            itemSpacing={itemSpacing}
             hasNextPage={pageInfo && pageInfo.hasNextPage}
             loading={beamQuery.loading}
             onLoadMore={async () => {
@@ -189,13 +187,15 @@ const BeamFeedByAuthor = (props: BeamFeedByAuthorProps) => {
                 });
               }
             }}
-            customStyle="mb-4"
+            className="mb-4"
           >
-            {({ itemIndex }) => {
-              const beam = beams[itemIndex];
-              return renderItem(beam);
-            }}
-          </DynamicInfiniteScroll>
+            <InfiniteScrollList className="gap-4">
+              {itemIndex => {
+                const beam = beams[itemIndex];
+                return renderItem(beam);
+              }}
+            </InfiniteScrollList>
+          </InfiniteScroll>
         </div>
       )}
     </>

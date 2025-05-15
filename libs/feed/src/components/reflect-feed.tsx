@@ -6,7 +6,10 @@ import {
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { Loader2 } from 'lucide-react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import DynamicInfiniteScroll from '@akashaorg/design-system-core/lib/components/DynamicInfiniteScroll';
+import {
+  InfiniteScroll,
+  InfiniteScrollList,
+} from '@akashaorg/ui/lib/akasha-components/infinite-scroll';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import getSDK from '@akashaorg/core-sdk';
 import { AnalyticsEventData, EntityTypes } from '@akashaorg/typings/lib/ui';
@@ -30,13 +33,10 @@ import { useApolloClient } from '@apollo/client';
 export type ReflectFeedProps = {
   reflectToId: string;
   header?: ReactElement;
-  scrollRestorationStorageKey: string;
-  lastScrollRestorationKey: string;
   itemType: EntityTypes;
   filters?: AkashaReflectStreamFiltersInput;
   sorting?: AkashaReflectStreamSortingInput;
   estimatedHeight: number;
-  itemSpacing?: number;
   scrollOptions?: {
     overScan: number;
   };
@@ -51,18 +51,16 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
   const {
     reflectToId,
     header,
-    scrollRestorationStorageKey,
-    lastScrollRestorationKey,
     itemType,
     filters,
     sorting,
     estimatedHeight = 150,
-    itemSpacing,
     scrollOptions = { overScan: 10 },
     dataTestId,
     loadingIndicator,
     renderItem,
   } = props;
+
   const apolloClient = useApolloClient();
   const { pendingReflections, removePendingReflection } = usePendingReflections();
   const indexingDID = React.useRef(getSDK().services.gql.indexingDID);
@@ -195,7 +193,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
         </ErrorLoader>
       )}
       {reflections && (
-        <DynamicInfiniteScroll
+        <InfiniteScroll
           header={
             <Card className="min-h-[inherit] p-0 border-none">
               {header}
@@ -208,14 +206,10 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
               ))}
             </Card>
           }
-          dataTestId={dataTestId}
-          scrollRestorationStorageKey={scrollRestorationStorageKey}
-          lastScrollRestorationKey={lastScrollRestorationKey}
-          enableScrollRestoration={true}
+          data-testid={dataTestId}
           count={reflections.length}
           estimatedHeight={estimatedHeight}
           overScan={scrollOptions.overScan}
-          itemSpacing={itemSpacing}
           hasNextPage={pageInfo && pageInfo.hasNextPage}
           loading={reflectionStreamQuery.loading}
           onLoadMore={async () => {
@@ -232,12 +226,14 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
             }
           }}
         >
-          {({ itemIndex }) => {
-            const reflection = reflections[itemIndex];
-            if (!reflection?.node) return null;
-            return <>{renderItem(reflection.node)}</>;
-          }}
-        </DynamicInfiniteScroll>
+          <InfiniteScrollList className="gap-4">
+            {itemIndex => {
+              const reflection = reflections[itemIndex];
+              if (!reflection?.node) return null;
+              return <>{renderItem(reflection.node)}</>;
+            }}
+          </InfiniteScrollList>
+        </InfiniteScroll>
       )}
     </Card>
   );
