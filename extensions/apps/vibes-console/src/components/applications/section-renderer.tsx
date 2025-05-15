@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Table, { TableProps } from '@akashaorg/design-system-core/lib/components/Table';
@@ -26,7 +26,9 @@ export const SectionRenderer: React.FC<SectionHeaderProps> = props => {
       <Stack direction="row" justify="between">
         <Typography variant="h5">{titleLabel}</Typography>
         {!!rows.length && (
-          <Button variant="text" size="md" label={buttonLabel} onClick={onButtonClick} />
+          <Button variant="link" onClick={onButtonClick}>
+            {buttonLabel}
+          </Button>
         )}
       </Stack>
       {!rows.length && (

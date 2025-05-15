@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 export type BecomeModeratorCardProps = {
   titleLabel: string;
@@ -20,12 +20,9 @@ const BecomeModeratorCard: React.FC<BecomeModeratorCardProps> = props => {
         <Typography variant="sm" className="font-light text-grey5 dark:text-grey6">
           {subtitleLabel}
         </Typography>
-        <Button
-          variant="primary"
-          label={buttonLabel}
-          customStyle="w-fit self-end"
-          onClick={() => onClickApply()}
-        />
+        <Button size="sm" className="w-fit self-end" onClick={() => onClickApply()}>
+          {buttonLabel}
+        </Button>
       </Stack>
     </Card>
   );

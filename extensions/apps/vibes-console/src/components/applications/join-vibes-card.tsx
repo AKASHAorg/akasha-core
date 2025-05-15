@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
@@ -18,12 +18,10 @@ export const JoinVibesCard: React.FC<JoinVibesCardProps> = props => {
         <Typography variant="sm" className="text-grey4 dark:text-grey6">
           {description}!🛡️
         </Typography>
-        <Button
-          variant="primary"
-          label={ctaButtonLabel}
-          customStyle="w-fit self-end"
-          onClick={() => onCtaButtonClick()}
-        />
+
+        <Button size="sm" onClick={onCtaButtonClick} className="w-fit self-end">
+          {ctaButtonLabel}
+        </Button>
       </Stack>
     </Card>
   );

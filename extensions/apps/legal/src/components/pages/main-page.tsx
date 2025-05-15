@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { ChevronRightIcon } from 'lucide-react';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import PageLayout from './base-layout';
@@ -34,13 +33,12 @@ const MainPage: React.FC = () => {
 
           return (
             <React.Fragment key={`${idx}${item.label}`}>
-              <Button
-                plain={true}
-                customStyle={`w-full ${baseStyle}`}
+              <button
+                className={`w-full ${baseStyle}`}
                 onClick={handleLegalOptionClick(item.route)}
               >
                 {children}
-              </Button>
+              </button>
             </React.Fragment>
           );
         })}
