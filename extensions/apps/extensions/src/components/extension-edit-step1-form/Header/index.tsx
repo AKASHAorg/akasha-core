@@ -23,7 +23,8 @@ import { DeleteImageModal } from './DeleteImageModal';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import { capitalize } from 'lodash';
-import ExtensionIcon from '@akashaorg/design-system-core/lib/components/ExtensionIcon';
+import { ExtensionTypeIcon } from '@akashaorg/ui/lib/akasha-components/extension-type-icon';
+
 export type HeaderProps = {
   extensionType?: AkashaAppApplicationType;
   nsfw?: boolean;
@@ -324,7 +325,7 @@ export const Header: React.FC<HeaderProps> = ({
             <Pill
               type="info"
               label={capitalize(extensionType?.toLowerCase())}
-              icon={<ExtensionIcon size={'sm'} type={extensionType} />}
+              icon={<ExtensionTypeIcon extensionType={extensionType} className="h-4 w-4" />}
               color={{
                 light: 'secondaryLight',
                 dark: 'secondaryDark',

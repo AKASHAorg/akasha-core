@@ -7,7 +7,8 @@ import {
 } from '@akashaorg/ui/lib/components/accordion';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Separator } from '@akashaorg/ui/lib/components/separator';
-import ExtensionIcon from '@akashaorg/design-system-core/lib/components/ExtensionIcon';
+import { ExtensionTypeIcon } from '@akashaorg/ui/lib/akasha-components/extension-type-icon';
+
 import Label from '@akashaorg/design-system-core/lib/components/Label';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
@@ -146,7 +147,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
           </Stack>
 
           <AppInfoPill customStyle="w-fit self-end bg-tertiaryLight dark:bg-tertiaryDark">
-            <ExtensionIcon type={extensionData?.applicationType} />
+            <ExtensionTypeIcon extensionType={extensionData?.applicationType} />
             <Typography variant="xs" className="font-medium text-secondaryLight dark:text-white">
               {extensionData?.applicationType}
             </Typography>
