@@ -24,7 +24,13 @@ import ListSidebarApps from './list-sidebar-apps';
 import SidebarCTACard from './cta-card';
 import SidebarHeader from './sidebar-header';
 import FallbackHeader from './fallback-header';
-import * as ShadcnSidebar from '@akashaorg/ui/lib/components/sidebar';
+import {
+  Sidebar,
+  SidebarHeader as Header,
+  SidebarContent,
+  SidebarFooter,
+  useSidebar,
+} from '@akashaorg/ui/lib/components/sidebar';
 
 const SidebarComponent: React.FC<unknown> = () => {
   const {
@@ -50,8 +56,7 @@ const SidebarComponent: React.FC<unknown> = () => {
   const isLoggedIn = !!authenticatedDID;
   const { activeAccordionId, setActiveAccordionId, handleAccordionClick } = useAccordion();
   const [dismissed, dismissCard] = useDismissedCard('@akashaorg/ui-widget-sidebar_cta-card');
-  const { setOpen, openMobile, setOpenMobile, toggleSidebar, isMobile } =
-    ShadcnSidebar.useSidebar();
+  const { setOpen, openMobile, setOpenMobile, toggleSidebar, isMobile } = useSidebar();
 
   useEffect(() => {
     const eventsSub = uiEvents
@@ -224,9 +229,9 @@ const SidebarComponent: React.FC<unknown> = () => {
       }}
       logger={logger}
     >
-      <ShadcnSidebar.Sidebar>
+      <Sidebar>
         <Card className="p-0 rounded-r-2xl xl:rounded-2xl max-h-screen xl:max-h-[calc(100vh-20px) h-full xl:h-fit">
-          <ShadcnSidebar.SidebarHeader>
+          <Header>
             <Suspense
               fallback={
                 <FallbackHeader authenticatedDID={authenticatedDID} isLoggedIn={isLoggedIn} />
@@ -243,8 +248,8 @@ const SidebarComponent: React.FC<unknown> = () => {
                 handleProfileAvatarClick={handleProfileAvatarClick}
               />
             </Suspense>
-          </ShadcnSidebar.SidebarHeader>
-          <ShadcnSidebar.SidebarContent>
+          </Header>
+          <SidebarContent>
             {/*
           this container will grow up to a max height of 68vh, 32vh currently accounts for the height of other sections and paddings. Adjust accordingly, if necessary.
         */}
@@ -280,7 +285,7 @@ const SidebarComponent: React.FC<unknown> = () => {
             )}
             {modSocialLinks?.length > 0 && (
               <Stack className="px-8 py-4 border-t-1 border-grey9 dark:border-grey3">
-                <Typography variant="p">{t('Get in touch')}</Typography>
+                <Typography variant="xs">{t('Get in touch')}</Typography>
                 <Stack direction="row" spacing={4} className="w-fit h-fit mt-6">
                   {modSocialLinks?.map((socialLink, idx) => (
                     <Link key={idx} to={socialLink.link} target="_blank">
@@ -296,10 +301,10 @@ const SidebarComponent: React.FC<unknown> = () => {
                 </Stack>
               </Stack>
             )}
-          </ShadcnSidebar.SidebarContent>
-          <ShadcnSidebar.SidebarFooter />
+          </SidebarContent>
+          <SidebarFooter />
         </Card>
-      </ShadcnSidebar.Sidebar>
+      </Sidebar>
     </ErrorBoundary>
   );
 };
