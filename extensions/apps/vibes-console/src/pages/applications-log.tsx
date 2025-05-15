@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import {
   Select,
@@ -75,11 +74,11 @@ export const ApplicationsLog: React.FC<unknown> = () => {
             </SelectContent>
           </Select>
         </Stack>
-        <Button plain={true} onClick={resetFilters}>
+        <button onClick={resetFilters}>
           <Typography variant="xs" bold className="text-secondaryLight dark:text-secondaryDark">
             {`${t('Reset')}`}
           </Typography>
-        </Button>
+        </button>
       </Stack>
       <>
         {applications.map(a => (

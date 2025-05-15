@@ -5,7 +5,12 @@ import { Tag } from '@akashaorg/typings/lib/ui';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import { HashIcon } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
+import {
+  DuplexButton,
+  DuplexButtonActive,
+  DuplexButtonHover,
+  DuplexButtonInactive,
+} from '@akashaorg/ui/lib/akasha-components/duplex-button';
 import { Skeleton } from '@akashaorg/ui/lib/components/skeleton';
 import SubtitleTextIcon from '@akashaorg/design-system-core/lib/components/SubtitleTextIcon';
 
@@ -68,14 +73,17 @@ const TagSearchCard: React.FC<TagSearchCardProps> = props => {
       </Link>
       {tag && (
         <Stack>
-          <DuplexButton
-            inactiveLabel={subscribeLabel}
-            activeLabel={subscribedLabel}
-            activeHoverLabel={unsubscribeLabel}
-            onClickInactive={() => handleSubscribeTag(tag.name)}
-            onClickActive={() => handleUnsubscribeTag(tag.name)}
-            active={subscribedTags?.includes(tag.name)}
-          />
+          <DuplexButton active={subscribedTags?.includes(tag.name)}>
+            <DuplexButtonInactive onClick={() => handleSubscribeTag(tag.name)} variant="outline">
+              {subscribeLabel}
+            </DuplexButtonInactive>
+
+            <DuplexButtonHover variant="destructive" onClick={() => handleUnsubscribeTag(tag.name)}>
+              {unsubscribeLabel}
+            </DuplexButtonHover>
+
+            <DuplexButtonActive variant="outline">{subscribedLabel}</DuplexButtonActive>
+          </DuplexButton>
         </Stack>
       )}
     </Stack>
