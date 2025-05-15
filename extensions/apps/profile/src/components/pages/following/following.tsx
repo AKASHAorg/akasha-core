@@ -52,12 +52,13 @@ const Following: React.FC<FollowingProps> = ({
     <InfiniteScroll
       count={followings.length}
       estimatedHeight={ENTRY_HEIGHT}
+      gap={ITEM_SPACING}
       overScan={1}
       hasNextPage={hasNextPage}
       loading={loading}
       onLoadMore={onLoadMore}
     >
-      <InfiniteScrollList className="gap-4 relative">
+      <InfiniteScrollList>
         {itemIndex => {
           const following = followings[itemIndex];
           const profileInfo = following?.profile;

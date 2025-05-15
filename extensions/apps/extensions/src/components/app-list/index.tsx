@@ -20,6 +20,7 @@ export type AppListProps = {
   onLoadMore?: () => void;
 };
 const ENTRY_HEIGHT = 92;
+const ITEM_SPACING = 16;
 
 /**
  * Component that renders a list of apps
@@ -42,6 +43,7 @@ const AppList: React.FC<AppListProps> = ({
     <InfiniteScroll
       count={apps.length}
       estimatedHeight={ENTRY_HEIGHT}
+      gap={ITEM_SPACING}
       overScan={overScan}
       lanes={2}
       hasNextPage={hasNextPage}
@@ -53,7 +55,7 @@ const AppList: React.FC<AppListProps> = ({
           : 'flex'
       }
     >
-      <InfiniteScrollList className="gap-4">
+      <InfiniteScrollList>
         {itemIndex => {
           if (!apps[itemIndex]) {
             return (

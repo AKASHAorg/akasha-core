@@ -40,6 +40,7 @@ const TagFeed = (props: TagFeedProps) => {
   const {
     dataTestId,
     estimatedHeight = 150,
+    itemSpacing,
     scrollOptions = { overScan: 10 },
     loadingIndicator,
     renderItem,
@@ -110,6 +111,7 @@ const TagFeed = (props: TagFeedProps) => {
           data-testid={dataTestId}
           count={beams.length}
           estimatedHeight={estimatedHeight}
+          gap={itemSpacing}
           overScan={scrollOptions.overScan}
           hasNextPage={pageInfo && pageInfo.hasNextPage}
           loading={indexedStreamQuery.loading}
@@ -128,7 +130,7 @@ const TagFeed = (props: TagFeedProps) => {
           }}
           className="mb-4"
         >
-          <InfiniteScrollList className="gap-4">
+          <InfiniteScrollList>
             {itemIndex => {
               const beam = beams[itemIndex];
               return renderItem(beam.node);

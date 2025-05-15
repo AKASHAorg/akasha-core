@@ -16,6 +16,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import {
   InfiniteScroll,
   InfiniteScrollList,
+  ScrollRestoration,
 } from '@akashaorg/ui/lib/akasha-components/infinite-scroll';
 import getSDK from '@akashaorg/core-sdk';
 import { AnalyticsEventData } from '@akashaorg/typings/lib/ui';
@@ -34,12 +35,14 @@ import { useApolloClient } from '@apollo/client';
 import { GetBeamStreamQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 
 export type BeamFeedProps = {
+  scrollRestorationStorageKey: string;
   filters?: AkashaBeamFiltersInput;
   sorting?: AkashaBeamSortingInput;
   estimatedHeight?: number;
   scrollOptions?: {
     overScan: number;
   };
+  itemSpacing?: number;
   dataTestId?: string;
   scrollTopIndicator?: (listRect: DOMRect, onScrollToTop: () => void) => React.ReactNode;
   loadingIndicator?: () => ReactElement;
@@ -50,9 +53,11 @@ export type BeamFeedProps = {
 const BeamFeed = (props: BeamFeedProps) => {
   const {
     dataTestId,
+    scrollRestorationStorageKey,
     filters,
     sorting,
     estimatedHeight = 150,
+    itemSpacing,
     scrollOptions = { overScan: 10 },
     loadingIndicator,
     renderItem,
@@ -175,6 +180,7 @@ const BeamFeed = (props: BeamFeedProps) => {
             data-testid={dataTestId}
             count={beams.length}
             estimatedHeight={estimatedHeight}
+            gap={itemSpacing}
             overScan={scrollOptions.overScan}
             hasNextPage={pageInfo && pageInfo.hasNextPage}
             loading={beamStreamQuery.loading}
@@ -193,12 +199,14 @@ const BeamFeed = (props: BeamFeedProps) => {
             }}
             className="mb-4"
           >
-            <InfiniteScrollList className="gap-4">
-              {itemIndex => {
-                const beam = beams[itemIndex];
-                return renderItem(beam.node);
-              }}
-            </InfiniteScrollList>
+            <ScrollRestoration scrollConfigStorageKey={scrollRestorationStorageKey}>
+              <InfiniteScrollList>
+                {itemIndex => {
+                  const beam = beams[itemIndex];
+                  return renderItem(beam.node);
+                }}
+              </InfiniteScrollList>
+            </ScrollRestoration>
           </InfiniteScroll>
         </div>
       )}

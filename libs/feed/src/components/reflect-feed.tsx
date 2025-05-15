@@ -9,6 +9,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import {
   InfiniteScroll,
   InfiniteScrollList,
+  ScrollRestoration,
 } from '@akashaorg/ui/lib/akasha-components/infinite-scroll';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import getSDK from '@akashaorg/core-sdk';
@@ -33,10 +34,13 @@ import { useApolloClient } from '@apollo/client';
 export type ReflectFeedProps = {
   reflectToId: string;
   header?: ReactElement;
+  scrollRestorationStorageKey: string;
+  lastScrollRestorationKey: string;
   itemType: EntityTypes;
   filters?: AkashaReflectStreamFiltersInput;
   sorting?: AkashaReflectStreamSortingInput;
   estimatedHeight: number;
+  itemSpacing?: number;
   scrollOptions?: {
     overScan: number;
   };
@@ -51,10 +55,13 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
   const {
     reflectToId,
     header,
+    scrollRestorationStorageKey,
+    lastScrollRestorationKey,
     itemType,
     filters,
     sorting,
     estimatedHeight = 150,
+    itemSpacing,
     scrollOptions = { overScan: 10 },
     dataTestId,
     loadingIndicator,
@@ -209,6 +216,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
           data-testid={dataTestId}
           count={reflections.length}
           estimatedHeight={estimatedHeight}
+          gap={itemSpacing}
           overScan={scrollOptions.overScan}
           hasNextPage={pageInfo && pageInfo.hasNextPage}
           loading={reflectionStreamQuery.loading}
@@ -226,13 +234,18 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
             }
           }}
         >
-          <InfiniteScrollList className="gap-4">
-            {itemIndex => {
-              const reflection = reflections[itemIndex];
-              if (!reflection?.node) return null;
-              return <>{renderItem(reflection.node)}</>;
-            }}
-          </InfiniteScrollList>
+          <ScrollRestoration
+            scrollConfigStorageKey={scrollRestorationStorageKey}
+            lastScrollRestorationKey={lastScrollRestorationKey}
+          >
+            <InfiniteScrollList>
+              {itemIndex => {
+                const reflection = reflections[itemIndex];
+                if (!reflection?.node) return null;
+                return <>{renderItem(reflection.node)}</>;
+              }}
+            </InfiniteScrollList>
+          </ScrollRestoration>
         </InfiniteScroll>
       )}
     </Card>

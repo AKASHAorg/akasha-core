@@ -16,6 +16,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import {
   InfiniteScroll,
   InfiniteScrollList,
+  ScrollRestoration,
 } from '@akashaorg/ui/lib/akasha-components/infinite-scroll';
 import getSDK from '@akashaorg/core-sdk';
 import { AnalyticsEventData } from '@akashaorg/typings/lib/ui';
@@ -54,9 +55,11 @@ export type BeamFeedByAuthorProps = {
 const BeamFeedByAuthor = (props: BeamFeedByAuthorProps) => {
   const {
     did,
+    scrollRestorationStorageKey,
     filters,
     sorting,
     estimatedHeight = 150,
+    itemSpacing,
     scrollOptions = { overScan: 10 },
     loadingIndicator,
     renderItem,
@@ -171,6 +174,7 @@ const BeamFeedByAuthor = (props: BeamFeedByAuthorProps) => {
           <InfiniteScroll
             count={beams.length}
             estimatedHeight={estimatedHeight}
+            gap={itemSpacing}
             overScan={scrollOptions.overScan}
             hasNextPage={pageInfo && pageInfo.hasNextPage}
             loading={beamQuery.loading}
@@ -189,12 +193,14 @@ const BeamFeedByAuthor = (props: BeamFeedByAuthorProps) => {
             }}
             className="mb-4"
           >
-            <InfiniteScrollList className="gap-4">
-              {itemIndex => {
-                const beam = beams[itemIndex];
-                return renderItem(beam);
-              }}
-            </InfiniteScrollList>
+            <ScrollRestoration scrollConfigStorageKey={scrollRestorationStorageKey}>
+              <InfiniteScrollList>
+                {itemIndex => {
+                  const beam = beams[itemIndex];
+                  return renderItem(beam);
+                }}
+              </InfiniteScrollList>
+            </ScrollRestoration>
           </InfiniteScroll>
         </div>
       )}

@@ -348,6 +348,7 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
             <InfiniteScroll
               count={appReleases?.length}
               estimatedHeight={ENTRY_HEIGHT}
+              gap={16}
               overScan={1}
               hasNextPage={pageInfo && pageInfo?.hasNextPage}
               loading={loadingAppsReleasesQuery}
@@ -359,7 +360,7 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
                 });
               }}
             >
-              <InfiniteScrollList className="gap-4">
+              <InfiniteScrollList>
                 {itemIndex => {
                   const releaseData = appReleases[itemIndex]?.node;
                   const createdAt = releaseData
