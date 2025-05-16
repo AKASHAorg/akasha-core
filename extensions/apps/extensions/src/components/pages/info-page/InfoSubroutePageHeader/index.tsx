@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
-import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
+import AppAvatar from '@akashaorg/design-system-components/lib/components/AppAvatar';
 import {
   AkashaAppApplicationType,
   AppImageSource,

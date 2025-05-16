@@ -10,7 +10,7 @@ import {
 } from '@akashaorg/ui/lib/akasha-components/duplex-button';
 import { CheckIcon, HashIcon, XIcon } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import SubtitleTextIcon from '@akashaorg/design-system-core/lib/components/SubtitleTextIcon';
+import SubtitleTextIcon from '@akashaorg/design-system-components/lib/components/SubtitleTextIcon';
 import { cn } from '@akashaorg/ui/lib/library/utils';
 
 export type TagProfileCard = {
@@ -52,9 +52,11 @@ const TagProfileCard: React.FC<TagProfileCard> = props => {
         <SubtitleTextIcon
           label={tag.name}
           subtitle={mentionsLabel}
-          icon={<HashIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />}
+          icon={
+            <HashIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+          }
           backgroundColor={true}
-          labelSize={'button-lg'}
+          labelSize="p"
         />
 
         <div className={`w-28 py-1 shrink-0`}>

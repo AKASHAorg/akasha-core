@@ -1,9 +1,8 @@
 import React, { PropsWithChildren } from 'react';
 import { Separator } from '@akashaorg/ui/lib/components/separator';
-
-import Stack from '../Stack';
-import Text, { TextProps } from '../Text';
-import Button from '../Button';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 
 export enum DividerPosition {
   Top,
@@ -15,7 +14,7 @@ export type SectionProps = {
   viewMoreLabel?: string;
   viewMoreIcon?: React.ReactElement; //only speficy either viewMoreLabel or viewMoreIcon, not both
   onClickviewMoreLabel?: () => void;
-  titleVariant?: TextProps['variant'];
+  titleVariant?: React.ComponentProps<typeof Typography>['variant'];
   showDivider?: boolean;
   dividerPosition?: DividerPosition;
 };
@@ -55,21 +54,19 @@ const Section: React.FC<PropsWithChildren<SectionProps>> = ({
   children,
 }) => {
   const ClickWrapper = ({ children }) => {
-    return (
-      <Button plain onClick={onClickviewMoreLabel}>
-        {children}
-      </Button>
-    );
+    return <button onClick={onClickviewMoreLabel}>{children}</button>;
   };
 
   const BaseCompnt = (
-    <Stack direction="column" spacing="gap-y-6" padding="py-3">
+    <Stack spacing={6} direction="column" className="py-3">
       {showDivider && dividerPosition === DividerPosition.Top && <Separator />}
-      <Stack direction="column" spacing="gap-y-2">
-        <Stack justify="between" direction="row">
-          <Text variant={titleVariant}>{title}</Text>
+      <Stack direction="column" spacing={2}>
+        <Stack justifyContent="between" direction="row">
+          <Typography variant={titleVariant}>{title}</Typography>
           {!!viewMoreLabel && (
-            <Button size="md" variant="text" label={viewMoreLabel} onClick={onClickviewMoreLabel} />
+            <Button variant="link" onClick={onClickviewMoreLabel}>
+              {viewMoreLabel}
+            </Button>
           )}
           {!!viewMoreIcon && viewMoreIcon}
         </Stack>
