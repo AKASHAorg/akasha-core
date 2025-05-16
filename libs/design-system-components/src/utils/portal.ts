@@ -1,3 +1,4 @@
+import React, { ReactPortal } from 'react';
 import ReactDOM from 'react-dom';
 
 interface IPortal {
@@ -5,7 +6,9 @@ interface IPortal {
   targetNode?: HTMLElement;
 }
 
-export const Portal: React.FC<IPortal> = ({ children, targetNode }) => {
+export const Portal = (props: IPortal): ReactPortal | null => {
+  const { children, targetNode } = props as IPortal;
+
   if (targetNode) {
     return ReactDOM.createPortal(children, targetNode);
   }

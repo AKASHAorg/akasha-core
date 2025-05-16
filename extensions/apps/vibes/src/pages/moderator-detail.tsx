@@ -4,11 +4,20 @@ import { useNavigate } from '@tanstack/react-router';
 import { ChevronRightIcon } from 'lucide-react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
-import PaginatedTable from '@akashaorg/design-system-components/lib/components/PaginatedTable';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationPrevious,
+  PaginationNext,
+  PaginationEllipsis,
+} from '@akashaorg/ui/lib/akasha-components/pagination';
 import ModeratorDetailCard from '../components/moderator';
 import InfoCard from '../components/moderator/info-card';
 import { generateTenureInfoLabel, generateDismissalReason } from '../utils';
+
 export type ModeratorDetailPageProps = {
   moderatorId: string;
 };
@@ -24,19 +33,6 @@ export const ModeratorDetailPage: React.FC<ModeratorDetailPageProps> = () => {
   const navigate = useNavigate();
   const moderator = null;
   const tenureInfoLabel = generateTenureInfoLabel(moderator.status);
-  const handleClickPage = (page: number) => () => {
-    setCurPage(page);
-  };
-  const handleClickPrev = () => {
-    if (!(curPage === 1)) {
-      setCurPage(curPage - 1);
-    }
-  };
-  const handleClickNext = () => {
-    if (!(curPage === pages.length - 1)) {
-      setCurPage(curPage + 1);
-    }
-  };
   const handleRowClick = (itemId: string) => {
     navigate({
       to: '/history/$itemId',
@@ -73,6 +69,7 @@ export const ModeratorDetailPage: React.FC<ModeratorDetailPageProps> = () => {
       clickHandler: () => handleRowClick(el.contentId),
     })) ?? [];
   const dismissalReason = generateDismissalReason();
+
   return (
     <Stack spacing="gap-y-4">
       {moderator.status === 'dismissed' && (
@@ -95,20 +92,23 @@ export const ModeratorDetailPage: React.FC<ModeratorDetailPageProps> = () => {
           tenureInfoLabel,
         })}
       />
-
-      <PaginatedTable
-        tableTitle={t('Moderation History')}
-        rows={trimmedRows}
-        pageCount={pages.length}
-        currentPage={curPage}
-        prevButtonLabel={t('Prev')}
-        nextButtonLabel={t('Next')}
-        prevButtonDisabled={curPage === 1}
-        nextButtonDisabled={curPage === pages.length - 1}
-        onClickPage={handleClickPage}
-        onClickPrev={handleClickPrev}
-        onClickNext={handleClickNext}
-      />
+      {/* update design or add pagination to the table, if needed */}
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious href="#" />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink href="#">1</PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationEllipsis />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationNext href="#" />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
     </Stack>
   );
 };

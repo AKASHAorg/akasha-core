@@ -39,16 +39,7 @@ export const SectionRenderer: React.FC<SectionHeaderProps> = props => {
         </Card>
       )}
 
-      {!!rows.length && (
-        <Card className="p-0">
-          <Table
-            theadValues={theadValues}
-            rows={rows}
-            customThStyle={customThStyle}
-            customTdStyle={customTdStyle}
-          />
-        </Card>
-      )}
+      {/* update table when needed */}
     </Stack>
   );
 };
