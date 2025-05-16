@@ -12,7 +12,7 @@ import {
   DuplexButtonInactive,
 } from '@akashaorg/ui/lib/akasha-components/duplex-button';
 import { Skeleton } from '@akashaorg/ui/lib/components/skeleton';
-import SubtitleTextIcon from '@akashaorg/design-system-core/lib/components/SubtitleTextIcon';
+import SubtitleTextIcon from '@akashaorg/design-system-components/lib/components/SubtitleTextIcon';
 
 export type TagSearchCardProps = {
   // data

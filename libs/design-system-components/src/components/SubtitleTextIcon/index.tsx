@@ -1,8 +1,7 @@
 import React from 'react';
-import Stack from '../Stack';
-import Text from '../Text';
-import Button from '../Button';
 import { IconType } from '@akashaorg/typings/lib/ui';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 
 export type SubtitleTextIconProps = {
   icon?: React.ReactElement;
@@ -10,7 +9,7 @@ export type SubtitleTextIconProps = {
   backgroundSize?: string;
   backgroundColor?: boolean;
   label?: string | number;
-  labelSize?: 'button-sm' | 'button-lg';
+  labelSize?: React.ComponentProps<typeof Typography>['variant'];
   subtitle?: string;
   subtitleIcon?: IconType;
   gap?: 'xxsmall' | 'xsmall' | 'small' | 'medium' | 'large';
@@ -49,11 +48,10 @@ export type SubtitleTextIconProps = {
 const SubtitleTextIcon: React.FC<SubtitleTextIconProps> = props => {
   const {
     icon,
-    solid,
     backgroundColor,
     backgroundSize,
     label,
-    labelSize = 'button-sm',
+    labelSize = 'xs',
     subtitle,
     maxWidth = '',
     dataTestId,
@@ -66,35 +64,39 @@ const SubtitleTextIcon: React.FC<SubtitleTextIconProps> = props => {
   }`;
 
   return (
-    <Button onClick={onClick} plain>
+    <button onClick={onClick}>
       <Stack
         data-testid={dataTestId}
         direction="row"
-        spacing="gap-x-2"
-        align="center"
-        justify="center"
-        customStyle={`group bg-white dark:bg-grey2 ${maxWidth} ${customStyle}`}
+        spacing={2}
+        alignItems="center"
+        justifyContent="center"
+        className={`group bg-white dark:bg-grey2 ${maxWidth} ${customStyle}`}
       >
         {icon && (
-          <Stack direction="row" align="center" justify="center" customStyle={iconBackgroundStyle}>
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="center"
+            className={iconBackgroundStyle}
+          >
             {icon}
           </Stack>
         )}
-        <Stack customStyle="max-w(xl:[8rem] lg:[10rem] md:[6rem] xs:[2rem])">
-          <Text
+        <Stack className="xl:max-w-[8rem] lg:max-w-[10rem] md:max-w-[6rem] xs:max-w-[2rem]">
+          <Typography
             variant={labelSize}
-            weight="bold"
-            truncate={true}
-            customStyle={`cursor-pointer group-hover:underline group-hover:decoration-black dark:group-hover:decoration-white`}
+            bold
+            className="cursor-pointer group-hover:underline group-hover:decoration-black dark:group-hover:decoration-white truncate"
           >
             {label}
-          </Text>
-          <Text variant="footnotes2" color="grey7" truncate={true}>
+          </Typography>
+          <Typography variant="xs" className="text-left font-medium grey7 truncate">
             {subtitle}
-          </Text>
+          </Typography>
         </Stack>
       </Stack>
-    </Button>
+    </button>
   );
 };
 
