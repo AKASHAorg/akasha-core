@@ -8,7 +8,7 @@ import {
   ExtensionAvatarFallback,
   ExtensionAvatarImage,
 } from '@/ui/extension-avatar';
-import { ExtensionTypeIcon } from '@/ui/extension-type-icon';
+import { ExtensionTypeIcon } from '@akashaorg/ui/lib/akasha-components/extension-type-icon';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 

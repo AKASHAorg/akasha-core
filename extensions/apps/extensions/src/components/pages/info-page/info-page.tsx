@@ -16,6 +16,7 @@ import {
   useGetAppsStreamQuery,
 } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
+import { Badge } from '@akashaorg/ui/lib/akasha-components/badge';
 import {
   selectAkashaApp,
   selectLatestRelease,
@@ -30,7 +31,6 @@ import { Separator } from '@akashaorg/ui/lib/components/separator';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { CopyToClipboard } from '@akashaorg/ui/lib/akasha-components/copy-to-clipboard';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
-import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import { useInstalledExtensions } from '@akashaorg/ui-core-hooks/lib/use-installed-extensions';
 import { UninstallModal } from './uninstall-modal';
 import AppCoverImage from './AppCoverImage';
@@ -449,15 +449,9 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                   <Section title={''} dividerPosition={DividerPosition.Top}>
                     <Stack direction="row" spacing={2}>
                       {appData.keywords?.map((keyword, idx) => (
-                        <Pill
-                          borderColor={{
-                            light: 'secondaryLight',
-                            dark: 'secondaryDark',
-                          }}
-                          type="info"
-                          key={`${keyword}_${idx}`}
-                          label={keyword}
-                        />
+                        <Badge key={`${keyword}_${idx}`} variant="outline">
+                          <Typography variant="xs">{keyword}</Typography>
+                        </Badge>
                       ))}
                     </Stack>
                   </Section>

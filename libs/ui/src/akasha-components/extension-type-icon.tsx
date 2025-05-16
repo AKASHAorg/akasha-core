@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { LayoutGrid, LayoutPanelLeft, Puzzle } from 'lucide-react';
 
-import { cn } from '@/ui/library/utils';
+import { cn } from '@/library/utils';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 const IconByExtension = ({ extensionType }: { extensionType: AkashaAppApplicationType }) => {

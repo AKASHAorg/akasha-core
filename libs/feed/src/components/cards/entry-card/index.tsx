@@ -12,9 +12,9 @@ import {
   DropdownMenuItem,
 } from '@akashaorg/ui/lib/components/dropdown-menu';
 import { type EntryData } from '@akashaorg/typings/lib/ui';
-import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import { ListItem } from '@akashaorg/ui/lib/library/list-item';
-
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
+import { Badge } from '@akashaorg/ui/lib/akasha-components/badge';
 export type EntryCardProps = {
   entryData: EntryData;
   profileAvatar: ReactNode;
@@ -209,16 +209,19 @@ const EntryCard: React.FC<EntryCardProps> = props => {
                   fullWidth
                 >
                   {entryData.tags?.map((tag, index) => (
-                    <Pill
+                    <button
                       key={index}
-                      label={tag}
-                      onPillClick={() => {
+                      type="button"
+                      onClick={() => {
                         if (typeof onTagClick === 'function') {
                           onTagClick(tag);
                         }
                       }}
-                      type="action"
-                    />
+                    >
+                      <Badge variant="outline">
+                        <Typography variant="xs">{tag}</Typography>
+                      </Badge>
+                    </button>
                   ))}
                 </Stack>
               )}

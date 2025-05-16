@@ -10,8 +10,8 @@ import { Separator } from '@akashaorg/ui/lib/components/separator';
 import ExtensionIcon from '@akashaorg/design-system-core/lib/components/ExtensionIcon';
 import Label from '@akashaorg/design-system-core/lib/components/Label';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
-import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
+import { Badge } from '@akashaorg/ui/lib/akasha-components/badge';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import Section from './section';
@@ -305,7 +305,9 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
               <AccordionContent>
                 <Stack direction="row" spacing={2} className="flex-wrap">
                   {extensionData?.keywords?.map((tag, idx) => (
-                    <Pill key={tag + idx} label={tag} type="action" />
+                    <Badge key={tag + idx} variant="outline">
+                      <Typography variant="xs">{tag}</Typography>
+                    </Badge>
                   ))}
                 </Stack>
               </AccordionContent>
