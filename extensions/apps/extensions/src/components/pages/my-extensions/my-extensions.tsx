@@ -237,7 +237,6 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
       )}
       {!error && allMyExtensions?.length === 0 && (
         <DefaultEmptyCard
-          noBorder={true}
           infoText={t("You haven't created any extensions yet")}
           assetName="longbeam-notfound"
         />

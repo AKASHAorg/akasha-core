@@ -11,7 +11,6 @@ import {
   ErrorLoaderTitle,
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import { ChevronRightIcon, XIcon, Loader2 } from 'lucide-react';
 import DynamicInfiniteScroll from '@akashaorg/design-system-core/lib/components/DynamicInfiniteScroll';
@@ -33,6 +32,7 @@ import { Separator } from '@akashaorg/ui/lib/components/separator';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 import { ApolloError, NetworkStatus } from '@apollo/client';
+import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
 const ENTRY_HEIGHT = 82;
 type ExtensionReleaseManagerPageProps = {
   extensionId: string;
@@ -335,9 +335,9 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
           </Button>
         </Stack>
         {appReleases?.length === 0 && (
-          <InfoCard
+          <DefaultEmptyCard
             assetName="longbeam-notfound"
-            titleLabel={t('You haven’t published any releases yet')}
+            infoText={t('You haven’t published any releases yet')}
           />
         )}
         {appReleases?.length > 0 && (

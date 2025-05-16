@@ -1,5 +1,4 @@
 import React, { ReactElement } from 'react';
-import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import DynamicInfiniteScroll, {
   DynamicInfiniteScrollProps,
 } from '@akashaorg/design-system-core/lib/components/DynamicInfiniteScroll';
@@ -8,6 +7,12 @@ import { GetFollowingListByDidQuery } from '@akashaorg/typings/lib/sdk/graphql-o
 import { selectFollowings } from '@akashaorg/ui-core-hooks/lib/selectors/get-followings-list-by-did-query';
 import { EngagementsEntry } from '../engagements-entry';
 import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
+import {
+  InlineNotification,
+  InlineNotificationDescription,
+  InlineNotificationTitle,
+} from '@akashaorg/ui/lib/akasha-components/inline-notification';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 
 export type FollowingProps = {
   followingsData: GetFollowingListByDidQuery;
@@ -33,12 +38,12 @@ const Following: React.FC<FollowingProps> = ({
 
   if (followings.length === 0) {
     return (
-      <InfoCard
-        titleLabel={emptyEntryTitleLabel}
-        bodyLabel={emptyEntryBodyLabel}
-        assetName="longbeam-notfound"
-        customStyle="px-4"
-      />
+      <Stack direction="column" className="p-4">
+        <InlineNotification variant="info" className="p-4">
+          <InlineNotificationTitle>{emptyEntryTitleLabel}</InlineNotificationTitle>
+          <InlineNotificationDescription>{emptyEntryBodyLabel}</InlineNotificationDescription>
+        </InlineNotification>
+      </Stack>
     );
   }
 

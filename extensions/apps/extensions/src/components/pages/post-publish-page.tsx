@@ -5,7 +5,6 @@ import { CREATE_EXTENSION } from '../../routes';
 import { useRootComponentProps, useAkashaStore } from '@akashaorg/ui-core-hooks';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import {
   ErrorLoader,
@@ -14,6 +13,7 @@ import {
   ErrorLoaderTitle,
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
+import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
 export const PostPublishPage: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
@@ -54,16 +54,12 @@ export const PostPublishPage: React.FC = () => {
         <Typography variant="h5" className="font-semibold text-center">
           {t('Extension Published')}
         </Typography>
-        <InfoCard
-          bodyLabel={
-            <>
-              {t(
-                'Your submission is under review, this process might take sometime to ensure that your extension doesn’t violate our Code of Conduct.',
-              )}
-            </>
-          }
-          bodyVariant="body1"
+        <DefaultEmptyCard
+          className="border-none"
           assetName="under-review"
+          infoText={t(
+            'Your submission is under review, this process might take sometime to ensure that your extension doesn’t violate our Code of Conduct.',
+          )}
         />
         <Button variant="link" onClick={handleNavigate}>
           {t('Go to My Extensions')}

@@ -2,7 +2,6 @@ import React from 'react';
 import Following from './following';
 import EngagementTab from '../engagement-tab';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import ProfileEngagementLoading from '../../profile/placeholders/profile-engagement-loading';
 import routes, { FOLLOWING } from '../../../routes';
@@ -15,6 +14,11 @@ import { useTranslation } from 'react-i18next';
 import { ENTRY_PER_PAGE, ITEM_SPACING } from '../constants';
 import { selectProfileData } from '@akashaorg/ui-core-hooks/lib/selectors/get-profile-by-did-query';
 import { selectPageInfo } from '@akashaorg/ui-core-hooks/lib/selectors/get-followings-list-by-did-query';
+import {
+  InlineNotification,
+  InlineNotificationDescription,
+  InlineNotificationTitle,
+} from '@akashaorg/ui/lib/akasha-components/inline-notification';
 
 type FollowingPageProps = {
   profileDID: string;
@@ -74,21 +78,19 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
   return (
     <EngagementTab profileDID={profileDID}>
       {error && (
-        <Stack className="mt-8">
-          <InfoCard
-            titleLabel={t('Oops! Something went wrong!')}
-            bodyLabel={
-              <>
-                {t('Click')}{' '}
-                {
-                  <Button variant="link" onClick={onError}>
-                    {t('here')}
-                  </Button>
-                }{' '}
+        <Stack className="mt-8 p-4">
+          <InlineNotification variant="destructive">
+            <InlineNotificationTitle>{t('Oops! Something went wrong!')}</InlineNotificationTitle>
+            <InlineNotificationDescription>
+              <Stack direction="row" alignItems="center" spacing={1}>
+                {t('Click')}
+                <Button variant="link" onClick={onError}>
+                  {t('here')}
+                </Button>
                 {t('to try again!')}
-              </>
-            }
-          />
+              </Stack>
+            </InlineNotificationDescription>
+          </InlineNotification>
         </Stack>
       )}
       {data && (
