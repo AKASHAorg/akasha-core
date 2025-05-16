@@ -23,7 +23,9 @@ import {
 import { selectAkashaAppStreamStatus } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-stream-query';
 import { NetworkStatus } from '@apollo/client';
 import { AppInfoHeader } from '../../app-info/header';
-import Section, { DividerPosition } from '@akashaorg/design-system-core/lib/components/Section';
+import Section, {
+  DividerPosition,
+} from '@akashaorg/design-system-components/lib/components/Section';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import ExtensionImageGallery from '../../extension-image-gallery';
 import { Separator } from '@akashaorg/ui/lib/components/separator';

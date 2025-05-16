@@ -61,23 +61,12 @@ export const Applications: React.FC<unknown> = () => {
         titleLabel={t('Your Applications')}
         buttonLabel={t('View all')}
         noItemLabel={t('You have no application history')}
-        rows={[]}
         onButtonClick={() => handleViewAllApplications('my-applications')}
       />
       <SectionRenderer
         titleLabel={t('Applications Log')}
         buttonLabel={t('View all')}
         noItemLabel={t('There are no moderator applications yet')}
-        customThStyle="text-left"
-        theadValues={[
-          <Typography key={0} variant="h6">
-            {t('Applicant')}
-          </Typography>,
-          <Typography key={1} variant="h6">
-            {t('Status')}
-          </Typography>,
-        ]}
-        rows={[]}
         onButtonClick={() => handleViewAllApplications('applications')}
       />
     </Stack>
