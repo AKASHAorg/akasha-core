@@ -10,13 +10,12 @@ export type SectionHeaderProps = {
   onButtonClick: () => void;
 };
 export const SectionRenderer: React.FC<SectionHeaderProps> = props => {
-  const { titleLabel, buttonLabel, noItemLabel, onButtonClick } = props;
+  const { titleLabel } = props;
   return (
     <Stack spacing="gap-y-4">
       <Stack direction="row" justify="between">
         <Typography variant="h5">{titleLabel}</Typography>
       </Stack>
-      {/* update table when needed */}
     </Stack>
   );
 };
