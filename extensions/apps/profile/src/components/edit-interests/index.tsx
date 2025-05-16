@@ -181,26 +181,6 @@ const EditInterests: React.FC<EditInterestsProps> = ({
           </Typography>
           <Stack direction="row" spacing={2} className="flex-wrap mt-2">
             {[...allMyInterests].map((interest, index) => (
-              /*   <Pill
-                key={`${index}-${interest.value}`}
-                label={interest.value}
-                icon={myActiveInterests.has(interest) ? <CheckIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" /> : null}
-                iconDirection="right"
-                active={myActiveInterests.has(interest)}
-                hover={
-                  myActiveInterests.has(interest)
-                    ? { icon: <XIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />, active: false }
-                    : null
-                }
-                onPillClick={active => {
-                  if (active) {
-                    updateMyActiveInterests(interest);
-                    return;
-                  }
-                  updateMyActiveInterests(interest, true);
-                }}
-                type="action"
-              /> */
               <button
                 type="button"
                 key={`${index}-${interest.value}`}
