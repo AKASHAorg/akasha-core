@@ -27,7 +27,7 @@ import {
   SelectContent,
   SelectItem,
 } from '@akashaorg/ui/lib/components/select';
-import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
+import EmptyCard from '@akashaorg/design-system-components/lib/components/EmptyCard';
 import DynamicInfiniteScroll from '@akashaorg/design-system-core/lib/components/DynamicInfiniteScroll';
 import {
   ErrorLoader,
@@ -236,7 +236,7 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
         </ErrorLoader>
       )}
       {!error && allMyExtensions?.length === 0 && (
-        <DefaultEmptyCard
+        <EmptyCard
           noBorder={true}
           infoText={t("You haven't created any extensions yet")}
           assetName="longbeam-notfound"
