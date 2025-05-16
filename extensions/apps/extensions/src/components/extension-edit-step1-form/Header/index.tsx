@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Badge } from '@akashaorg/ui/lib/akasha-components/badge';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import AppCoverImage from '@akashaorg/design-system-core/lib/components/AppCoverImage';
-import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
+import AppCoverImage from '@akashaorg/design-system-components/lib/components/AppCoverImage';
+import AppAvatar from '@akashaorg/design-system-components/lib/components/AppAvatar';
 import {
   DropdownMenu,
   DropdownMenuTrigger,

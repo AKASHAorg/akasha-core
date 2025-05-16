@@ -6,7 +6,7 @@ import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import ErrorIcon from './error-icon';
 import InstallIcon from './install-icon';
 import SuccessIcon from './success-icon';
-import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
+import AppAvatar from '@akashaorg/design-system-components/lib/components/AppAvatar';
 import {
   AkashaAppApplicationType,
   AppImageSource,

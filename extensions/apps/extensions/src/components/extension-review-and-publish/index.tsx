@@ -19,7 +19,7 @@ import Section from './section';
 import { AppInfoPill } from '../app-info/info-pill';
 import ExtensionImageGallery from '../extension-image-gallery';
 import { Extension, Image } from '@akashaorg/typings/lib/ui';
-import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
+import AppAvatar from '@akashaorg/design-system-components/lib/components/AppAvatar';
 import { getImageFromSeed } from '@akashaorg/design-system-core/lib/utils';
 import { CheckCircleIcon, XCircleIcon } from 'lucide-react';
 import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';

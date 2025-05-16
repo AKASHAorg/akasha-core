@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
-import Stack from '../Stack';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { EyeOffIcon } from 'lucide-react';
 import { cn } from '@akashaorg/ui/lib/library/utils';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 
 export type AppCoverImageProps = {
   src?: string;
@@ -49,10 +49,9 @@ const AppCoverImage = (props: AppCoverImageProps) => {
   if (isNSFW) {
     return (
       <Stack
-        align="center"
-        justify="center"
-        customStyle={cn(`bg-grey9 dark:bg-grey5 ${customStyle}`)}
-        fullWidth
+        alignItems="center"
+        justifyContent="center"
+        className={`bg-grey9 dark:bg-grey5 w-full ${customStyle}`}
       >
         {isNSFW && (
           <EyeOffIcon className="h-5 w-5 [&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark" />
