@@ -15,7 +15,7 @@ import {
   LogoTypeSource,
 } from '@akashaorg/typings/lib/ui';
 import { IconContainer } from '@akashaorg/ui/lib/akasha-components/icon-container';
-import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
+import Snackbar from '../components/snackbar';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 
 const SnackBarNotification: React.FC<IRootExtensionProps> = () => {

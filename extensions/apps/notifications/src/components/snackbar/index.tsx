@@ -1,11 +1,10 @@
 import React from 'react';
-import { Colors, NotificationTypes } from '@akashaorg/typings/lib/ui';
-import Button from '../Button';
-import Card from '../Card';
+import { NotificationTypes } from '@akashaorg/typings/lib/ui';
+
 import { CheckCircleIcon, TriangleAlertIcon, InfoIcon, XCircleIcon, XIcon } from 'lucide-react';
-import Stack from '../Stack';
-import Text from '../Text';
-import { Color } from '../types/common.types';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 
 export type SnackbarProps = {
   title: React.ReactNode;
@@ -48,64 +47,54 @@ const Snackbar: React.FC<SnackbarProps> = ({
   handleCTAClick,
   handleDismiss,
 }) => {
-  const textColor: Color = { dark: 'white', light: 'black' };
+  const textColor = 'text-dark dark:text-white';
 
   const instanceStyle = `p-4 border-l-8 border-solid ${borderColorMap[type]}  shadow-[0_0_4px_rgba(0,0,0,0.2)] dark:shadow-[0_0_2px_rgba(255,255,255,0.15)]`;
 
   const typeIconsMap: Record<NotificationTypes, React.ReactElement> = {
-    info: <InfoIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
-    caution: <TriangleAlertIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
-    success: <CheckCircleIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
-    error: <XCircleIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />,
+    info: (
+      <InfoIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+    ),
+    caution: (
+      <TriangleAlertIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+    ),
+    success: (
+      <CheckCircleIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+    ),
+    error: (
+      <XCircleIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+    ),
   };
 
   return (
-    <Card radius={8} customStyle={`${instanceStyle} ${customStyle} bg-white dark:bg-grey1`}>
-      <Stack spacing="gap-x-3" fullWidth direction="row">
+    <Card className={`${instanceStyle} ${customStyle} bg-white dark:bg-grey1 rounded-[8px]`}>
+      <Stack spacing={3} direction="row" className="w-full">
         {typeIconsMap[type]}
         <Stack direction="column">
-          <Text variant="button-md" color={textColor}>
+          <Typography variant="sm" bold className={textColor}>
             {title}
-          </Text>
+          </Typography>
           {description && (
-            <Text variant="body2" color={textColor}>
+            <Typography variant="sm" className={textColor}>
               {description}
-            </Text>
+            </Typography>
           )}
           {ctaLabel && (
-            <Button onClick={handleCTAClick} plain>
-              <Text
-                variant="button-md"
-                color={{
-                  light: 'secondaryLight',
-                  dark: 'secondaryDark',
-                }}
-              >
+            <button onClick={handleCTAClick}>
+              <Typography variant="sm" className="text-secondaryLight dark:text-secondaryDark">
                 {ctaLabel}
-              </Text>
-            </Button>
+              </Typography>
+            </button>
           )}
         </Stack>
         {dismissable && (
-          <Button
-            onClick={handleDismiss}
-            customStyle="self-start	ml-auto"
-            aria-label="dismiss"
-            plain={true}
-          >
+          <button onClick={handleDismiss} className="self-start	ml-auto" aria-label="dismiss">
             <XIcon className="h-6 w-6 [&>*]:stroke-grey7" />
-          </Button>
+          </button>
         )}
       </Stack>
     </Card>
   );
-};
-
-const iconColorMap: Record<NotificationTypes, string> = {
-  [NotificationTypes.Error]: '[&>*]:fill-errorLight dark:[&>*]:fill-errorDark',
-  [NotificationTypes.Caution]: '[&>*]:fill-warningLight dark:[&>*]:fill-warningDark',
-  [NotificationTypes.Success]: '[&>*]:fill-success',
-  [NotificationTypes.Info]: '[&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark',
 };
 
 const borderColorMap: Record<NotificationTypes, string> = {
