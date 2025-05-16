@@ -11,7 +11,7 @@ import {
   DuplexButtonActive,
   DuplexButtonHover,
 } from '@akashaorg/ui/lib/akasha-components/duplex-button';
-import SubtitleTextIcon from '@akashaorg/design-system-core/lib/components/SubtitleTextIcon';
+import SubtitleTextIcon from '@akashaorg/design-system-components/lib/components/SubtitleTextIcon';
 
 export type TopicRowProps = {
   tag: string;

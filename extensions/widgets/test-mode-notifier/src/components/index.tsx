@@ -6,7 +6,7 @@ import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { MinusIcon, BeakerIcon } from 'lucide-react';
-import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
+import AppAvatar from '@akashaorg/design-system-components/lib/components/AppAvatar';
 import { Separator } from '@akashaorg/ui/lib/components/separator';
 import { LocalReleaseData } from '@akashaorg/typings/lib/ui';
 const TestModeWidget = () => {

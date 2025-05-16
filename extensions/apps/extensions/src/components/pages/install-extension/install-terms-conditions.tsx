@@ -7,7 +7,7 @@ import { Loader2, SquareArrowUpRight } from 'lucide-react';
 import { useNavigate } from '@tanstack/react-router';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Checkbox } from '@akashaorg/ui/lib/components/checkbox';
-import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
+import AppAvatar from '@akashaorg/design-system-components/lib/components/AppAvatar';
 import {
   AkashaAppApplicationType,
   AppImageSource,

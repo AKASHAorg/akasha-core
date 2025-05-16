@@ -1,15 +1,13 @@
 import React from 'react';
+import { getImageFromSeed } from '@akashaorg/ui/lib/library/get-image-from-seed';
 
-import Link from '../Link';
-import AvatarImage from '../Avatar/avatar-image';
-import Stack from '../Stack';
-import { getImageFromSeed } from '../../utils';
-import { getRadiusClasses } from '../../utils';
 import {
   AkashaAppApplicationType,
   AppImageSource,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
+import { Image, ImageFallback } from '@akashaorg/ui/lib/akasha-components/image';
 
 export type AppAvatarProps = {
   appType: AkashaAppApplicationType;
@@ -78,19 +76,18 @@ const AppAvatar: React.FC<AppAvatarProps> = props => {
     }
   }
 
-  const className = `shrink-0 overflow-hidden	${getRadiusClasses(10)} bg-grey6 dark:bg-grey5 w-[var(--width)] h-[var(--height)] ${customStyle}`;
+  const className = `shrink-0 overflow-hidden	rounded-[10px] bg-grey6 dark:bg-grey5 w-[var(--width)] h-[var(--height)] ${customStyle}`;
 
   return (
-    <Link onClick={onClick} tabIndex={-1}>
-      <Stack
-        style={cssVars({ '--width': `${width}rem`, '--height': `${height}rem` })}
-        customStyle={className}
-      >
-        <React.Suspense fallback={<></>}>
-          <AvatarImage url={avatar?.src} fallbackUrl={avatarFallback} />
-        </React.Suspense>
-      </Stack>
-    </Link>
+    <Stack
+      style={cssVars({ '--width': `${width}rem`, '--height': `${height}rem` })}
+      onClick={onClick}
+      className={className}
+    >
+      <React.Suspense fallback={<></>}>
+        <Image src={avatar?.src || avatarFallback} alt="App Avatar Image" />
+      </React.Suspense>
+    </Stack>
   );
 };
 

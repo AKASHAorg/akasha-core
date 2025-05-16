@@ -14,7 +14,7 @@ import {
   ErrorLoaderTitle,
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
+import AppAvatar from '@akashaorg/design-system-components/lib/components/AppAvatar';
 import { TriangleAlertIcon } from 'lucide-react';
 import {
   ProfileAvatarButton,
