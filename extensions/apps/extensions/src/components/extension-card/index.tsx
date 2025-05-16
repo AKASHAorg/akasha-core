@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import AppCoverImage from '@akashaorg/design-system-core/lib/components/AppCoverImage';
+import AppCoverImage from '@akashaorg/design-system-components/lib/components/AppCoverImage';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import {

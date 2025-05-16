@@ -1,7 +1,6 @@
 import React, { MouseEventHandler } from 'react';
 import { ExtensionTypeIcon } from '@akashaorg/ui/lib/akasha-components/extension-type-icon';
 
-
 import { EllipsisVerticalIcon, TriangleAlertIcon, InfoIcon } from 'lucide-react';
 import {
   DropdownMenu,
@@ -18,7 +17,7 @@ import {
   AppImageSource,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
+import AppAvatar from '@akashaorg/design-system-components/lib/components/AppAvatar';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import {
   Tooltip,
