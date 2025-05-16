@@ -1,10 +1,21 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import PaginatedTable from '@akashaorg/design-system-components/lib/components/PaginatedTable';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
+import { formatDate } from '@akashaorg/design-system-core/lib/utils';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationPrevious,
+  PaginationNext,
+  PaginationEllipsis,
+} from '@akashaorg/ui/lib/akasha-components/pagination';
 import ModeratorDetailCard from '../components/moderator';
 import InfoCard from '../components/moderator/info-card';
 import { generateTenureInfoLabel, generateDismissalReason } from '../utils';
+
 export type ModeratorDetailPageProps = {
   moderatorId: string;
 };
@@ -34,6 +45,7 @@ export const ModeratorDetailPage: React.FC<ModeratorDetailPageProps> = () => {
   };
 
   const dismissalReason = generateDismissalReason();
+
   return (
     <Stack spacing="gap-y-4">
       {moderator.status === 'dismissed' && (
@@ -56,18 +68,23 @@ export const ModeratorDetailPage: React.FC<ModeratorDetailPageProps> = () => {
           tenureInfoLabel,
         })}
       />
-
-      <PaginatedTable
-        pageCount={pages.length}
-        currentPage={curPage}
-        prevButtonLabel={t('Prev')}
-        nextButtonLabel={t('Next')}
-        prevButtonDisabled={curPage === 1}
-        nextButtonDisabled={curPage === pages.length - 1}
-        onClickPage={handleClickPage}
-        onClickPrev={handleClickPrev}
-        onClickNext={handleClickNext}
-      />
+      {/* update design or add pagination to the table, if needed */}
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious href="#" />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink href="#">1</PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationEllipsis />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationNext href="#" />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
     </Stack>
   );
 };
